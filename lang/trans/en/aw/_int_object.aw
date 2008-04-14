@@ -1,7 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["object::save(): object (%s) cannot be saved, needed properties are not set (parent, class_id)"] = "object::save(): object (%s) cannot be saved, needed properties are not set (parent, class_id)";
 $GLOBALS["TRANS"]["object::delete(): no current object loaded"] = "object::delete(): no current object loaded";
-$GLOBALS["TRANS"]["object::delete(): no delete access for current object (%s)"] = "object::delete(): no delete access for current object (%s)";
 $GLOBALS["TRANS"]["object::connect(%s): parameter must be an array of connection parameters!"] = "object::connect(%s): parameter must be an array of connection parameters!";
 $GLOBALS["TRANS"]["object::connect(): no view access for both endpoints (%s and %s)!"] = "object::connect(): no view access for both endpoints (%s and %s)!";
 $GLOBALS["TRANS"]["object::disconnect(%s): parameter must be an array!"] = "object::disconnect(%s): parameter must be an array!";
@@ -29,7 +28,6 @@ $GLOBALS["TRANS"]["object::set_flag(%s, %s): value must be integer!"] = "object:
 $GLOBALS["TRANS"]["object::set_prop(%s, %s): no property %s defined for current object!"] = "object::set_prop(%s, %s): no property %s defined for current object!";
 $GLOBALS["TRANS"]["object::instance(): no object loaded or class id not set!"] = "object::instance(): no object loaded or class id not set!";
 $GLOBALS["TRANS"]["object::create_brother(%s): no parent!"] = "object::create_brother(%s): no parent!";
-$GLOBALS["TRANS"]["object::load(%s): no view access for object %s!"] = "object::load(%s): no view access for object %s!";
 $GLOBALS["TRANS"]["object::path(%s): error in object hierarchy, infinite loop!"] = "object::path(%s): error in object hierarchy, infinite loop!";
 $GLOBALS["TRANS"]["object::save(): no acess to save object %s under %s !"] = "object::save(): no acess to save object %s under %s !";
 $GLOBALS["TRANS"]["object::save(): no access to add object under folder %s (gidlist = %s)!"] = "object::save(): no access to add object under folder %s (gidlist = %s)!";

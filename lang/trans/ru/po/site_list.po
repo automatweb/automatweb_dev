@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,114 +9,118 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/install/site_list.aw:25
+#: classes/install/site_list.aw:class_317_help
+msgid "Klassi AW Saitide nimekiri help"
+msgstr ""
+
+#: classes/install/site_list.aw:27
 msgid "AW Saitide list"
 msgstr ""
 
-#: classes/install/site_list.aw:33 classes/install/site_list.aw:231
-#: classes/install/site_list.aw:546
+#: classes/install/site_list.aw:35 classes/install/site_list.aw:233
+#: classes/install/site_list.aw:548
 msgid "ID"
 msgstr ""
 
-#: classes/install/site_list.aw:39 classes/install/site_list.aw:238
-#: classes/install/site_list.aw:553
+#: classes/install/site_list.aw:41 classes/install/site_list.aw:240
+#: classes/install/site_list.aw:555
 msgid "Nimi"
 msgstr ""
 
-#: classes/install/site_list.aw:44 classes/install/site_list.aw:561
+#: classes/install/site_list.aw:46 classes/install/site_list.aw:563
 msgid "URL"
 msgstr ""
 
-#: classes/install/site_list.aw:49 classes/install/site_list.aw:164
-#: classes/install/site_list.aw:569
+#: classes/install/site_list.aw:51 classes/install/site_list.aw:166
+#: classes/install/site_list.aw:571
 msgid "Server"
 msgstr ""
 
-#: classes/install/site_list.aw:54
+#: classes/install/site_list.aw:56
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/install/site_list.aw:59
+#: classes/install/site_list.aw:61
 msgid "Koodi versioon"
 msgstr ""
 
-#: classes/install/site_list.aw:64
+#: classes/install/site_list.aw:66
 msgid "Viimane uuendus"
 msgstr ""
 
-#: classes/install/site_list.aw:72
+#: classes/install/site_list.aw:74
 msgid "Sünkroniseeri andmebaas"
 msgstr ""
 
-#: classes/install/site_list.aw:76 classes/install/site_list.aw:250
-#: classes/install/site_list.aw:258
+#: classes/install/site_list.aw:78 classes/install/site_list.aw:252
+#: classes/install/site_list.aw:260
 msgid "Muuda"
 msgstr ""
 
-#: classes/install/site_list.aw:105
+#: classes/install/site_list.aw:107
 msgid "Sünkroniseeri"
 msgstr ""
 
-#: classes/install/site_list.aw:117
+#: classes/install/site_list.aw:119
 msgid "Jah"
 msgstr ""
 
-#: classes/install/site_list.aw:117
+#: classes/install/site_list.aw:119
 msgid "Ei"
 msgstr ""
 
-#: classes/install/site_list.aw:128
+#: classes/install/site_list.aw:130
 msgid "Kokku %s saiti<br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:129
+#: classes/install/site_list.aw:131
 msgid "Kasutusel %s saiti <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:130
+#: classes/install/site_list.aw:132
 msgid "Serverite kaupa: <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:132
+#: classes/install/site_list.aw:134
 msgid "Koodiversioonide kaupa: <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:169 classes/install/site_list.aw:199
+#: classes/install/site_list.aw:171 classes/install/site_list.aw:201
 msgid "Mitu"
 msgstr ""
 
-#: classes/install/site_list.aw:194
+#: classes/install/site_list.aw:196
 msgid "Koodiversioon"
 msgstr ""
 
-#: classes/install/site_list.aw:223 classes/install/site_list.aw:648
+#: classes/install/site_list.aw:225 classes/install/site_list.aw:650
 msgid "AW Serverite list"
 msgstr ""
 
-#: classes/install/site_list.aw:244
+#: classes/install/site_list.aw:246
 msgid "IP aadress"
 msgstr ""
 
-#: classes/install/site_list.aw:577
+#: classes/install/site_list.aw:579
 msgid "Used?"
 msgstr ""
 
-#: classes/install/site_list.aw:585
+#: classes/install/site_list.aw:587
 msgid "Code branch"
 msgstr ""
 
-#: classes/install/site_list.aw:592
+#: classes/install/site_list.aw:594
 msgid "Basedir"
 msgstr ""
 
-#: classes/install/site_list.aw:599
+#: classes/install/site_list.aw:601
 msgid "Updater"
 msgstr ""
 
-#: classes/install/site_list.aw:606
+#: classes/install/site_list.aw:608
 msgid "Last update"
 msgstr ""
 
-#: classes/install/site_list.aw:649
+#: classes/install/site_list.aw:651
 msgid "/ Muuda serverit"
 msgstr ""

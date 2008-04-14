@@ -307,6 +307,14 @@ msgstr "Attachment"
 msgid "Seose Meiliaadress (RELTYPE_MAIL_ADDRESS) tekst"
 msgstr ""
 
+#: classes/applications/messenger/mail_message.aw:rel_RELTYPE_REGISTER_DATA
+msgid "Seose Registri andmed (RELTYPE_REGISTER_DATA) tekst"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:rel_RELTYPE_RELTYPE_REGISTER_DATA
+msgid "Seose Registri andmed (RELTYPE_RELTYPE_REGISTER_DATA) tekst"
+msgstr ""
+
 #: classes/applications/messenger/mail_message.aw:rel_RELTYPE_CUSTOMER
 msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
 msgstr ""
@@ -315,80 +323,80 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:226
+#: classes/applications/messenger/mail_message.aw:229
 msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 msgstr "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 
-#: classes/applications/messenger/mail_message.aw:365
+#: classes/applications/messenger/mail_message.aw:368
 msgid "Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:897
+#: classes/applications/messenger/mail_message.aw:900
 msgid "Saada"
 msgstr "Sent"
 
-#: classes/applications/messenger/mail_message.aw:904
+#: classes/applications/messenger/mail_message.aw:907
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/applications/messenger/mail_message.aw:927
+#: classes/applications/messenger/mail_message.aw:930
 msgid "Vasta"
 msgstr "Reply"
 
-#: classes/applications/messenger/mail_message.aw:934
+#: classes/applications/messenger/mail_message.aw:937
 msgid "Vasta/k&otilde;igile"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:941
+#: classes/applications/messenger/mail_message.aw:944
 msgid "Edasta"
 msgstr "Forward"
 
-#: classes/applications/messenger/mail_message.aw:949
+#: classes/applications/messenger/mail_message.aw:952
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr "Delete this message? (can not be undone!)"
 
-#: classes/applications/messenger/mail_message.aw:950
+#: classes/applications/messenger/mail_message.aw:953
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/messenger/mail_message.aw:972
+#: classes/applications/messenger/mail_message.aw:975
 msgid "Lisa kalendrisse"
 msgstr "Add to calendar"
 
-#: classes/applications/messenger/mail_message.aw:1004
-#: classes/applications/messenger/mail_message.aw:1074
+#: classes/applications/messenger/mail_message.aw:1007
+#: classes/applications/messenger/mail_message.aw:1077
 msgid "Lisa bugiks"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1086
+#: classes/applications/messenger/mail_message.aw:1089
 msgid "P&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1091
+#: classes/applications/messenger/mail_message.aw:1094
 msgid "Tavaline"
 msgstr "Regular"
 
-#: classes/applications/messenger/mail_message.aw:1097
+#: classes/applications/messenger/mail_message.aw:1100
 msgid "K&otilde;ik p&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1166
+#: classes/applications/messenger/mail_message.aw:1169
 msgid "Meilide kaust"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1473
+#: classes/applications/messenger/mail_message.aw:1476
 msgid "kustutatud!"
 msgstr "deleted!"
 
-#: classes/applications/messenger/mail_message.aw:1475
+#: classes/applications/messenger/mail_message.aw:1478
 msgid "sulge aken"
 msgstr "close window"
 
-#: classes/applications/messenger/mail_message.aw:1554
+#: classes/applications/messenger/mail_message.aw:1557
 msgid "saadetud<p>"
 msgstr "sent<p>"
 
-#: classes/applications/messenger/mail_message.aw:1677
+#: classes/applications/messenger/mail_message.aw:1680
 msgid "----Forwarded message-----\n"
 msgstr "----Forwarded message-----\n"
 

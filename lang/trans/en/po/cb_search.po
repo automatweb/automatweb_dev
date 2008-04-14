@@ -239,14 +239,12 @@ msgstr ""
 msgid "Omaduse Salvestamise kontroller (submit_handler_controller) help"
 msgstr ""
 
-# classes/cfg/cb_search.aw:group_props
 #: classes/cfg/cb_search.aw:group_props
-msgid "Grupi Väljad (props) pealkiri"
-msgstr "Fields"
+msgid "Grupi V&auml;ljad (props) pealkiri"
+msgstr ""
 
-# classes/cfg/cb_search.aw:group_props_help
 #: classes/cfg/cb_search.aw:group_props_help
-msgid "Grupi Väljad (props) help"
+msgid "Grupi V&auml;ljad (props) help"
 msgstr ""
 
 # classes/cfg/cb_search.aw:group_mktbl
@@ -332,8 +330,8 @@ msgid "Omadus"
 msgstr "Property"
 
 #: classes/cfg/cb_search.aw:190
-msgid "Näita vormis"
-msgstr "Display in form"
+msgid "N&auml;ita vormis"
+msgstr ""
 
 #: classes/cfg/cb_search.aw:195
 msgid "Otsing komaga eraldatud"
@@ -344,8 +342,8 @@ msgid "Tekstikast otsimiseks"
 msgstr "Textbox for search"
 
 #: classes/cfg/cb_search.aw:205
-msgid "Tüüp"
-msgstr "Type"
+msgid "T&uuml;&uuml;p"
+msgstr ""
 
 #: classes/cfg/cb_search.aw:210
 msgid "Vaikimisi"
@@ -355,7 +353,7 @@ msgstr "Default"
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/cfg/cb_search.aw:220 classes/cfg/cb_search.aw:990
+#: classes/cfg/cb_search.aw:220 classes/cfg/cb_search.aw:994
 msgid "J&auml;rjekord"
 msgstr "Order"
 
@@ -379,74 +377,84 @@ msgstr "Radiobutton"
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/cfg/cb_search.aw:949
+#: classes/cfg/cb_search.aw:953
 msgid "T&auml;istekstiotsing"
 msgstr "Fulltext search"
 
-#: classes/cfg/cb_search.aw:955
+#: classes/cfg/cb_search.aw:959
 msgid "Kataloog"
 msgstr "Folder"
 
-#: classes/cfg/cb_search.aw:961
+#: classes/cfg/cb_search.aw:965
 msgid "Mitu kirjet lehel"
 msgstr "How many rows per page"
 
-#: classes/cfg/cb_search.aw:997
+#: classes/cfg/cb_search.aw:1001
 msgid "Element"
 msgstr "Element"
 
-#: classes/cfg/cb_search.aw:1003
+#: classes/cfg/cb_search.aw:1007
 msgid "Tabelis"
 msgstr "In table"
 
-#: classes/cfg/cb_search.aw:1009
+#: classes/cfg/cb_search.aw:1013
 msgid "Hind"
 msgstr "Price"
 
-#: classes/cfg/cb_search.aw:1015
+#: classes/cfg/cb_search.aw:1019
 msgid "Sorditav"
 msgstr "Sortable"
 
-#: classes/cfg/cb_search.aw:1021
+#: classes/cfg/cb_search.aw:1025
 msgid "Vaikimisi sort"
 msgstr "Default sort"
 
-#: classes/cfg/cb_search.aw:1027
+#: classes/cfg/cb_search.aw:1031
 msgid "Vaata tulp"
 msgstr "View column"
 
-#: classes/cfg/cb_search.aw:1033
+#: classes/cfg/cb_search.aw:1037
 msgid "Tulba pealkiri"
 msgstr "Column title"
 
-#: classes/cfg/cb_search.aw:1049
+#: classes/cfg/cb_search.aw:1053
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/cfg/cb_search.aw:1050
+#: classes/cfg/cb_search.aw:1054
 msgid "Vaata"
 msgstr "View"
 
-#: classes/cfg/cb_search.aw:1051
+#: classes/cfg/cb_search.aw:1055
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/cfg/cb_search.aw:1151
+#: classes/cfg/cb_search.aw:1155
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/cb_search.aw:1434
+#: classes/cfg/cb_search.aw:1438
 msgid "OID"
 msgstr "OID"
 
-#: classes/cfg/cb_search.aw:1441
+#: classes/cfg/cb_search.aw:1445
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/cfg/cb_search.aw:1448
+#: classes/cfg/cb_search.aw:1452
 msgid "Kasuta?"
 msgstr "Use?"
 
-#: classes/cfg/cb_search.aw:1454
+#: classes/cfg/cb_search.aw:1458
 msgid "K.A. Alamkataloogid?"
 msgstr "Incl. subfolders?"
+
+# classes/cfg/cb_search.aw:group_props
+#~ msgid "Grupi Väljad (props) pealkiri"
+#~ msgstr "Fields"
+
+#~ msgid "Näita vormis"
+#~ msgstr "Display in form"
+
+#~ msgid "Tüüp"
+#~ msgstr "Type"

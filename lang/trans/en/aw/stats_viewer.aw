@@ -72,7 +72,6 @@ $GLOBALS["TRANS"]["Juurobjekt"] = "Root object";
 $GLOBALS["TRANS"]["Kasutajagrupp"] = "User group";
 $GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Kasutaja"] = "User";
-$GLOBALS["TRANS"]["Kustuta"] = "Delete";
 $GLOBALS["TRANS"]["Objekt"] = "Object";
 $GLOBALS["TRANS"]["Tegevus"] = "Action";
 $GLOBALS["TRANS"]["Aeg"] = "Time";
@@ -96,8 +95,8 @@ $GLOBALS["TRANS"]["Salvesta HTML"] = "Save HTML";
 $GLOBALS["TRANS"]["Lehek&uuml;lg"] = "Page";
 $GLOBALS["TRANS"]["Sisenemisi"] = "Entries";
 $GLOBALS["TRANS"]["V&auml;ljumisi"] = "Exits";
+$GLOBALS["TRANS"]["Kustuta"] = "Delete";
 $GLOBALS["TRANS"]["Loodud"] = "Created";
 $GLOBALS["TRANS"]["Looja"] = "Created by";
 $GLOBALS["TRANS"]["Vaata"] = "View";
-$GLOBALS["TRANS"]["Tundmatu"] = "Unknown";
 ?>

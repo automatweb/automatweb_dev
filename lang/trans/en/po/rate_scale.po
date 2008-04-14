@@ -109,7 +109,7 @@ msgstr ""
 msgid "Seose Kehtiv kataloog (RELTYPE_FOLDER) tekst"
 msgstr "folder"
 
-#: classes/contentmgmt/rate/rate_scale.aw:185
+#: classes/contentmgmt/rate/rate_scale.aw:192
 msgid "ei hinda"
 msgstr "no rating"
 

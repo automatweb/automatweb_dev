@@ -33,42 +33,42 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/core/run_in_background.aw:68
+#: classes/core/run_in_background.aw:70
 msgid "Reset"
 msgstr ""
 
-#: classes/core/run_in_background.aw:92
+#: classes/core/run_in_background.aw:94
 msgid "Peata"
 msgstr ""
 
-#: classes/core/run_in_background.aw:114
+#: classes/core/run_in_background.aw:116
 msgid "K&auml;ivita"
 msgstr ""
 
-#: classes/core/run_in_background.aw:237
+#: classes/core/run_in_background.aw:239
 msgid "Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:253
+#: classes/core/run_in_background.aw:255
 msgid "Protsess l&otilde;petab t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/core/run_in_background.aw:354
+#: classes/core/run_in_background.aw:356
 msgid "<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:386
+#: classes/core/run_in_background.aw:388
 msgid "<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:416
+#: classes/core/run_in_background.aw:418
 msgid "<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"
 msgstr ""
 
-#: classes/core/run_in_background.aw:691
+#: classes/core/run_in_background.aw:693
 msgid "all done"
 msgstr ""
 
-#: classes/core/run_in_background.aw:780
+#: classes/core/run_in_background.aw:782
 msgid "Halt"
 msgstr ""

@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/groupware/project_files_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/groupware/project_files_impl.aw:19
 msgid "Kataloog"
 msgstr ""

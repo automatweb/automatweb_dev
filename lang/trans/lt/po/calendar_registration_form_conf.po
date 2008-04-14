@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:class_849_help
 msgid "Klassi S&uuml;ndmusele registreerimine help"
@@ -218,27 +217,30 @@ msgstr ""
 msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:163
+#: classes/applications/calendar/calendar_registration_form_conf.aw:156
+msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>\t\t\t\t\t#date# - kohtumise kuup&auml;ev<br>\t\t\t\t\t#time_from# - kohtumise alguskellaaeg<br>\t\t\t\t\t#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:161
 msgid "&Auml;ra kuva"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:164
+#: classes/applications/calendar/calendar_registration_form_conf.aw:162
 msgid "Kuva dokumendis s&uuml;ndmuse infot"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:185
+#: classes/applications/calendar/calendar_registration_form_conf.aw:183
 msgid "Isikute kaust (%s)"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:253
+#: classes/applications/calendar/calendar_registration_form_conf.aw:251
 msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:272
+#: classes/applications/calendar/calendar_registration_form_conf.aw:270
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:666
+#: classes/applications/calendar/calendar_registration_form_conf.aw:664
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr ""
-

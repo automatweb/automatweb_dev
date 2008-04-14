@@ -161,30 +161,30 @@ msgstr ""
 msgid "Salvesta ja lisa uus"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:100
+#: classes/applications/groupware/task_quick_entry.aw:101
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:100
+#: classes/applications/groupware/task_quick_entry.aw:101
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:130
+#: classes/applications/groupware/task_quick_entry.aw:131
 msgid "--Vali--"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:163
+#: classes/applications/groupware/task_quick_entry.aw:164
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:643
+#: classes/applications/groupware/task_quick_entry.aw:644
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:665
+#: classes/applications/groupware/task_quick_entry.aw:666
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:688
+#: classes/applications/groupware/task_quick_entry.aw:689
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""

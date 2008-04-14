@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/xml_editor/xml_editor.aw:class_817_help
 msgid "Klassi XML editor help"
 msgstr ""
@@ -26,30 +25,6 @@ msgstr ""
 msgid "Omaduse XML fail (xml_file) help"
 msgstr ""
 
-#: classes/applications/xml_editor/xml_editor.aw:prop_excisting_xml_files
-msgid "Omaduse files/xml kaustas olevad xml failid (excisting_xml_files) caption"
-msgstr ""
-
-#: classes/applications/xml_editor/xml_editor.aw:prop_excisting_xml_files_comment
-msgid "Omaduse files/xml kaustas olevad xml failid (excisting_xml_files) kommentaar"
-msgstr ""
-
-#: classes/applications/xml_editor/xml_editor.aw:prop_excisting_xml_files_help
-msgid "Omaduse files/xml kaustas olevad xml failid (excisting_xml_files) help"
-msgstr ""
-
-#: classes/applications/xml_editor/xml_editor.aw:prop_add_xml_file_to_server
-msgid "Omaduse lisa uus xml fail serverisse (add_xml_file_to_server) caption"
-msgstr ""
-
-#: classes/applications/xml_editor/xml_editor.aw:prop_add_xml_file_to_server_comment
-msgid "Omaduse lisa uus xml fail serverisse (add_xml_file_to_server) kommentaar"
-msgstr ""
-
-#: classes/applications/xml_editor/xml_editor.aw:prop_add_xml_file_to_server_help
-msgid "Omaduse lisa uus xml fail serverisse (add_xml_file_to_server) help"
-msgstr ""
-
 #: classes/applications/xml_editor/xml_editor.aw:prop_xml_content
 msgid "Omaduse xml-i sisu tabel (xml_content) caption"
 msgstr ""
@@ -62,11 +37,6 @@ msgstr ""
 msgid "Omaduse xml-i sisu tabel (xml_content) help"
 msgstr ""
 
-#: classes/applications/xml_editor/xml_editor.aw:group_content
-msgid "Grupi Sisu (content) pealkiri"
+#: classes/applications/xml_editor/xml_editor.aw:91
+msgid "xml elements"
 msgstr ""
-
-#: classes/applications/xml_editor/xml_editor.aw:group_content_help
-msgid "Grupi Sisu (content) help"
-msgstr ""
-

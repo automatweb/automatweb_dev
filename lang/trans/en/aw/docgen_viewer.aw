@@ -5,6 +5,5 @@ $GLOBALS["TRANS"]["Grupi Seaded (more_options) pealkiri"] = "Options";
 $GLOBALS["TRANS"]["Seose foorum (RELTYPE_FORUM) tekst"] = "forum";
 $GLOBALS["TRANS"]["Classes"] = "Classes";
 $GLOBALS["TRANS"]["Open DocGen"] = "Open DocGen";
-$GLOBALS["TRANS"]["ALL DONE"] = "ALL DONE";
 $GLOBALS["TRANS"]["Foorum"] = "Forum";
 ?>

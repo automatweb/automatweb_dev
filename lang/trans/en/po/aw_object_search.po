@@ -1,13 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:class_1132_help
 msgid "Klassi AW Objektide otsing help"
@@ -363,7 +364,7 @@ msgstr "Timing"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:136
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:149
 msgid "Kasutajatest"
@@ -444,10 +445,19 @@ msgid "Muutja"
 msgstr "Modified by"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:369
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:417
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:418
 msgid "Ava"
 msgstr "Open"
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:634
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
+msgid "Leiti"
+msgstr "Found"
+
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
+msgid "objekti"
+msgstr "objects"
+
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:635
 msgid "AW Objektide otsing"
 msgstr "Search for objects"
+

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -435,11 +435,15 @@ msgid "Omaduse Kuup&auml;ev 2 (udef_date2) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_member.aw:group_udef_fields
-msgid "Grupi Muud väljad (udef_fields) pealkiri"
+msgid "Grupi Muud v&auml;ljad (udef_fields) pealkiri"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_member.aw:group_udef_fields_help
-msgid "Grupi Muud väljad (udef_fields) help"
+msgid "Grupi Muud v&auml;ljad (udef_fields) help"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_member.aw:rel_RELTYPE_BELONGTO
+msgid "Seose E-postiaadressiga seotud objekt (RELTYPE_BELONGTO) tekst"
 msgstr ""
 
 # classes/applications/mailinglist/ml_member.aw:group_udef_fields

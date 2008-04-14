@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -15,15 +15,15 @@ msgid "Klassi Ametinimetus help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id
-msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
+msgid "Omaduse Siduss&uuml;steemi ID (ext_id) caption"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id_comment
-msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
+msgid "Omaduse Siduss&uuml;steemi ID (ext_id) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id_help
-msgid "Omaduse Sidussüsteemi ID (ext_id) help"
+msgid "Omaduse Siduss&uuml;steemi ID (ext_id) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_hr_price
@@ -39,15 +39,15 @@ msgid "Omaduse Tunnihind (hr_price) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk
-msgid "Omaduse Järk (jrk) caption"
+msgid "Omaduse J&auml;rk (jrk) caption"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk_comment
-msgid "Omaduse Järk (jrk) kommentaar"
+msgid "Omaduse J&auml;rk (jrk) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk_help
-msgid "Omaduse Järk (jrk) help"
+msgid "Omaduse J&auml;rk (jrk) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_directive_link
@@ -101,24 +101,32 @@ msgstr ""
 msgid "Omaduse P&auml;devused (skills) help"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_trans
-msgid "Omaduse Tõlkimine (trans) caption"
+#: classes/crm/crm_profession.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_trans_comment
-msgid "Omaduse Tõlkimine (trans) kommentaar"
+#: classes/crm/crm_profession.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_trans_help
-msgid "Omaduse Tõlkimine (trans) help"
+#: classes/crm/crm_profession.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans
-msgid "Grupi Tõlkimine (trans) pealkiri"
+msgid "Grupi T&otilde;lkimine (trans) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans_help
-msgid "Grupi Tõlkimine (trans) help"
+msgid "Grupi T&otilde;lkimine (trans) help"
 msgstr ""
 
 # classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION

@@ -13,6 +13,19 @@ msgstr ""
 msgid "Klassi &Uuml;ksus help"
 msgstr ""
 
+# classes/crm/crm_section.aw:group_general
+#: classes/crm/crm_section.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr "Code"
+
+#: classes/crm/crm_section.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
 # classes/crm/crm_section.aw:prop_jrk
 #: classes/crm/crm_section.aw:prop_jrk
 msgid "Omaduse Järk (jrk) caption"
@@ -101,7 +114,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_link_document
 msgid "Omaduse Dokument (link_document) caption"
-msgstr ""
+msgstr "Document"
 
 #: classes/crm/crm_section.aw:prop_link_document_comment
 msgid "Omaduse Dokument (link_document) kommentaar"
@@ -113,7 +126,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_public
 msgid "Omaduse Avalik (public) caption"
-msgstr ""
+msgstr "Public"
 
 #: classes/crm/crm_section.aw:prop_public_comment
 msgid "Omaduse Avalik (public) kommentaar"
@@ -125,7 +138,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_contact
 msgid "Omaduse Aadress (contact) caption"
-msgstr ""
+msgstr "Address"
 
 #: classes/crm/crm_section.aw:prop_contact_comment
 msgid "Omaduse Aadress (contact) kommentaar"
@@ -137,7 +150,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_phone_id
 msgid "Omaduse Telefon (phone_id) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/crm/crm_section.aw:prop_phone_id_comment
 msgid "Omaduse Telefon (phone_id) kommentaar"
@@ -149,7 +162,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_telefax_id
 msgid "Omaduse Faks (telefax_id) caption"
-msgstr ""
+msgstr "Fax"
 
 #: classes/crm/crm_section.aw:prop_telefax_id_comment
 msgid "Omaduse Faks (telefax_id) kommentaar"
@@ -161,7 +174,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_email_id
 msgid "Omaduse E-posti aadress (email_id) caption"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/crm/crm_section.aw:prop_email_id_comment
 msgid "Omaduse E-posti aadress (email_id) kommentaar"
@@ -171,9 +184,22 @@ msgstr ""
 msgid "Omaduse E-posti aadress (email_id) help"
 msgstr ""
 
+# classes/crm/crm_section.aw:group_Kontaktid
+#: classes/crm/crm_section.aw:prop_url
+msgid "Omaduse Veebiaadress (url) caption"
+msgstr "WWW"
+
+#: classes/crm/crm_section.aw:prop_url_comment
+msgid "Omaduse Veebiaadress (url) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_url_help
+msgid "Omaduse Veebiaadress (url) help"
+msgstr ""
+
 #: classes/crm/crm_section.aw:prop_wpls
 msgid "Omaduse T&ouml;&ouml;kohad (wpls) caption"
-msgstr ""
+msgstr "Positions"
 
 #: classes/crm/crm_section.aw:prop_wpls_comment
 msgid "Omaduse T&ouml;&ouml;kohad (wpls) kommentaar"
@@ -185,7 +211,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
-msgstr ""
+msgstr "Translate"
 
 #: classes/crm/crm_section.aw:prop_transl_comment
 msgid "Omaduse T&otilde;lgi (transl) kommentaar"
@@ -197,7 +223,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:group_wpls
 msgid "Grupi T&ouml;&ouml;kohad (wpls) pealkiri"
-msgstr ""
+msgstr "Positions"
 
 #: classes/crm/crm_section.aw:group_wpls_help
 msgid "Grupi T&ouml;&ouml;kohad (wpls) help"
@@ -205,7 +231,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
-msgstr ""
+msgstr "Translate"
 
 #: classes/crm/crm_section.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
@@ -213,7 +239,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:group_Kontaktid
 msgid "Grupi Kontaktid (Kontaktid) pealkiri"
-msgstr ""
+msgstr "Contacts"
 
 #: classes/crm/crm_section.aw:group_Kontaktid_help
 msgid "Grupi Kontaktid (Kontaktid) help"
@@ -268,8 +294,6 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;koht (RELTYPE_WORKPLACE) tekst"
 msgstr ""
 
-#~ msgid "Seose Alam&uuml;ksus (RELTYPE_SECTION) tekst"
-#~ msgstr "Subsection"
-
-#~ msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
-#~ msgstr "Job offer"
+#: classes/crm/crm_section.aw:rel_RELTYPE_URL
+msgid "Seose Veebiaadress (RELTYPE_URL) tekst"
+msgstr ""

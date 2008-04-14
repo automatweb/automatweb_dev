@@ -13,30 +13,10 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/object_complex_query.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/core/obj/object_complex_query.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/core/obj/object_complex_query.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/core/obj/object_complex_query.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/core/obj/object_complex_query.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/core/obj/object_complex_query.aw:35
+#: classes/core/obj/object_complex_query.aw:38
 msgid "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
 msgstr ""
 
-#: classes/core/obj/object_complex_query.aw:98
+#: classes/core/obj/object_complex_query.aw:101
 msgid "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
 msgstr ""

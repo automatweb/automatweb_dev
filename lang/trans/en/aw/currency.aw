@@ -9,11 +9,8 @@ $GLOBALS["TRANS"]["Grupi T&otilde;lge (translate) pealkiri"] = "Translation";
 $GLOBALS["TRANS"]["Keel"] = "Language";
 $GLOBALS["TRANS"]["&Uuml;hik"] = "Unit";
 $GLOBALS["TRANS"]["Peenraha"] = "Small unit";
-$GLOBALS["TRANS"]["Alguskuupäev"] = "From";
-$GLOBALS["TRANS"]["Lõppkuupäev"] = "To";
 $GLOBALS["TRANS"]["Valuuta"] = "Currency";
 $GLOBALS["TRANS"]["Kurss"] = "Rate";
 $GLOBALS["TRANS"]["Ostukurss"] = "Buying rate";
-$GLOBALS["TRANS"]["Müügikurss"] = "Selling rate";
 $GLOBALS["TRANS"]["Kursid"] = "Rates";
 ?>

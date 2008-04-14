@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/questionary/questionnaire.aw:class_1393_help
-msgid "Klassi Dünaamiline küsimustik help"
+msgid "Klassi D&uuml;naamiline k&uuml;simustik help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire.aw:prop_dsply_qcomment
@@ -306,19 +305,23 @@ msgstr ""
 msgid "Seose Vastaja (RELTYPE_ANSWERER) tekst"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:127 classes/applications/questionary/questionnaire.aw:138
+#: classes/applications/questionary/questionnaire.aw:127
+#: classes/applications/questionary/questionnaire.aw:138
 msgid "Mitte kunagi"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:128 classes/applications/questionary/questionnaire.aw:139
+#: classes/applications/questionary/questionnaire.aw:128
+#: classes/applications/questionary/questionnaire.aw:139
 msgid "Alati"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:129 classes/applications/questionary/questionnaire.aw:140
+#: classes/applications/questionary/questionnaire.aw:129
+#: classes/applications/questionary/questionnaire.aw:140
 msgid "Ainult &otilde;ige vastuse korral"
 msgstr ""
 
-#: classes/applications/questionary/questionnaire.aw:130 classes/applications/questionary/questionnaire.aw:141
+#: classes/applications/questionary/questionnaire.aw:130
+#: classes/applications/questionary/questionnaire.aw:141
 msgid "Ainult vale vastuse korral"
 msgstr ""
 
@@ -365,4 +368,3 @@ msgstr ""
 #: classes/applications/questionary/questionnaire.aw:465
 msgid "L&otilde;peta"
 msgstr ""
-

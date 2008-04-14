@@ -45,7 +45,7 @@ msgstr "Date"
 msgid "Autor"
 msgstr "Author"
 
-#: classes/contentmgmt/document.aw:2957
+#: classes/contentmgmt/document.aw:3005
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
@@ -53,63 +53,63 @@ msgstr ""
 "<font face='arial'>Static page generation is taking place, please wait!<br /><br />\n"
 "\n"
 
-#: classes/contentmgmt/document.aw:2987
+#: classes/contentmgmt/document.aw:3035
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr "Static pages created"
 
-#: classes/contentmgmt/document.aw:2989
+#: classes/contentmgmt/document.aw:3037
 msgid "tagasi dokumendi muutmise juurde"
 msgstr "back to document editing"
 
-#: classes/contentmgmt/document.aw:3435
+#: classes/contentmgmt/document.aw:3483
 msgid "jaanuar"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3436
+#: classes/contentmgmt/document.aw:3484
 msgid "veebruar"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3437
-msgid "märts"
+#: classes/contentmgmt/document.aw:3485
+msgid "m&auml;rts"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3438
+#: classes/contentmgmt/document.aw:3486
 msgid "aprill"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3439
+#: classes/contentmgmt/document.aw:3487
 msgid "mai"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3440
+#: classes/contentmgmt/document.aw:3488
 msgid "juuni"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3441
+#: classes/contentmgmt/document.aw:3489
 msgid "juuli"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3442
+#: classes/contentmgmt/document.aw:3490
 msgid "august"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3443
+#: classes/contentmgmt/document.aw:3491
 msgid "september"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3444
+#: classes/contentmgmt/document.aw:3492
 msgid "oktoober"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3445
+#: classes/contentmgmt/document.aw:3493
 msgid "november"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3446
+#: classes/contentmgmt/document.aw:3494
 msgid "detsember"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3453
+#: classes/contentmgmt/document.aw:3501
 msgid "Just postitatud"
 msgstr ""
 

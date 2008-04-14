@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,32 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/popup_menu.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/popup_menu.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/vcl/popup_menu.aw:49 classes/vcl/popup_menu.aw:178
+#: classes/vcl/popup_menu.aw:51 classes/vcl/popup_menu.aw:180
 msgid "Valik"
 msgstr ""
-

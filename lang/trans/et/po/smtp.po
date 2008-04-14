@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:53 +0300\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,36 +9,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/protocols/mail/smtp.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/smtp.aw:18
+#: classes/protocols/mail/smtp.aw:21
 msgid "smtp: error, something wrong with server"
 msgstr ""
 
-#: classes/smtp.aw:24
+#: classes/protocols/mail/smtp.aw:27
 msgid "smtp: error '%s' after HELO %s"
 msgstr ""
 
-#: classes/smtp.aw:30
+#: classes/protocols/mail/smtp.aw:33
 msgid "smtp: error '%s' after MAIL FROM:<%s>"
 msgstr ""
 
-#: classes/smtp.aw:36
+#: classes/protocols/mail/smtp.aw:41
 msgid "smtp: error '%s' after RCPT TO:<%s>"
 msgstr ""
 
-#: classes/smtp.aw:42
+#: classes/protocols/mail/smtp.aw:47
 msgid "smtp: error '%s' after DATA"
 msgstr ""
 
-#: classes/smtp.aw:60
+#: classes/protocols/mail/smtp.aw:65
 msgid "smtp: error '%s' after message"
 msgstr ""
 
-#: classes/smtp.aw:66
+#: classes/protocols/mail/smtp.aw:71
 msgid "smtp: error '%s' after QUIT"
 msgstr ""
 
-#: classes/smtp.aw:77
+#: classes/protocols/mail/smtp.aw:82
 msgid "smtp: error connecting, %s , %s"
 msgstr ""
-

@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_for_not_logged_on_users
 msgid "Omaduse Sisselogimata kasutajatele (for_not_logged_on_users) caption"
-msgstr ""
+msgstr "No logged users"
 
 #: classes/core/users/group.aw:prop_for_not_logged_on_users_comment
 msgid "Omaduse Sisselogimata kasutajatele (for_not_logged_on_users) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_picture
 msgid "Omaduse Pilt/foto (picture) caption"
-msgstr ""
+msgstr "Image/photo"
 
 #: classes/core/users/group.aw:prop_picture_comment
 msgid "Omaduse Pilt/foto (picture) kommentaar"
@@ -279,7 +279,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_if_acls_set
 msgid "Omaduse Liidese &otilde;igused on piiratud (if_acls_set) caption"
-msgstr ""
+msgstr "Limited UI rights"
 
 #: classes/core/users/group.aw:prop_if_acls_set_comment
 msgid "Omaduse Liidese &otilde;igused on piiratud (if_acls_set) kommentaar"
@@ -291,7 +291,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_can_quick_add
 msgid "Omaduse Kas saab kasutada kiirlisamist (can_quick_add) caption"
-msgstr ""
+msgstr "Quick add?"
 
 #: classes/core/users/group.aw:prop_can_quick_add_comment
 msgid "Omaduse Kas saab kasutada kiirlisamist (can_quick_add) kommentaar"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_can_bm
 msgid "Omaduse Kas saab kasutada j&auml;rjehoidjat (can_bm) caption"
-msgstr ""
+msgstr "Bookmarks?"
 
 #: classes/core/users/group.aw:prop_can_bm_comment
 msgid "Omaduse Kas saab kasutada j&auml;rjehoidjat (can_bm) kommentaar"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_can_history
 msgid "Omaduse Kas saab kasutada ajalugu (can_history) caption"
-msgstr ""
+msgstr "History?"
 
 #: classes/core/users/group.aw:prop_can_history_comment
 msgid "Omaduse Kas saab kasutada ajalugu (can_history) kommentaar"
@@ -327,7 +327,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_can_search
 msgid "Omaduse Kas saab kasutada otsingut (can_search) caption"
-msgstr ""
+msgstr "Search?"
 
 #: classes/core/users/group.aw:prop_can_search_comment
 msgid "Omaduse Kas saab kasutada otsingut (can_search) kommentaar"
@@ -339,7 +339,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_default_yah_ct
 msgid "Omaduse Vaikimisi asukohariba (default_yah_ct) caption"
-msgstr ""
+msgstr "Default YAH"
 
 #: classes/core/users/group.aw:prop_default_yah_ct_comment
 msgid "Omaduse Vaikimisi asukohariba (default_yah_ct) kommentaar"
@@ -351,7 +351,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_disp_person
 msgid "Omaduse Kuva isikut (disp_person) caption"
-msgstr ""
+msgstr "Shoe person"
 
 #: classes/core/users/group.aw:prop_disp_person_comment
 msgid "Omaduse Kuva isikut (disp_person) kommentaar"
@@ -363,7 +363,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_disp_co_edit
 msgid "Omaduse Kuva organisatsiooni muutmisvaadet (disp_co_edit) caption"
-msgstr ""
+msgstr "Show organisation edit view"
 
 #: classes/core/users/group.aw:prop_disp_co_edit_comment
 msgid "Omaduse Kuva organisatsiooni muutmisvaadet (disp_co_edit) kommentaar"
@@ -375,7 +375,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_disp_co_view
 msgid "Omaduse Kuva organisatsiooni vaatamisvaadet (disp_co_view) caption"
-msgstr ""
+msgstr "Show organisation view"
 
 #: classes/core/users/group.aw:prop_disp_co_view_comment
 msgid "Omaduse Kuva organisatsiooni vaatamisvaadet (disp_co_view) kommentaar"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_disp_object_type
 msgid "Omaduse Kuva objektit&uuml;&uuml;pi (disp_object_type) caption"
-msgstr ""
+msgstr "Show object type"
 
 #: classes/core/users/group.aw:prop_disp_object_type_comment
 msgid "Omaduse Kuva objektit&uuml;&uuml;pi (disp_object_type) kommentaar"
@@ -399,7 +399,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_disp_object_link
 msgid "Omaduse Kuva objekti muutmislinki (disp_object_link) caption"
-msgstr ""
+msgstr "Show object edit link"
 
 #: classes/core/users/group.aw:prop_disp_object_link_comment
 msgid "Omaduse Kuva objekti muutmislinki (disp_object_link) kommentaar"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_editable_settings
 msgid "Omaduse Vali muudetavad seaded (editable_settings) caption"
-msgstr ""
+msgstr "Select editable settings"
 
 #: classes/core/users/group.aw:prop_editable_settings_comment
 msgid "Omaduse Vali muudetavad seaded (editable_settings) kommentaar"
@@ -447,7 +447,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:group_admin_rm
 msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) pealkiri"
-msgstr ""
+msgstr "Admin root folder"
 
 #: classes/core/users/group.aw:group_admin_rm_help
 msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) help"
@@ -455,7 +455,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:group_img
 msgid "Grupi Pilt (img) pealkiri"
-msgstr ""
+msgstr "Image"
 
 #: classes/core/users/group.aw:group_img_help
 msgid "Grupi Pilt (img) help"
@@ -463,7 +463,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:group_if_acl
 msgid "Grupi Liidese &otilde;igused (if_acl) pealkiri"
-msgstr ""
+msgstr "UI rights"
 
 #: classes/core/users/group.aw:group_if_acl_help
 msgid "Grupi Liidese &otilde;igused (if_acl) help"
@@ -493,88 +493,81 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_CFG_FORM) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:200
-msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
+#: classes/core/users/group.aw:rel_RELTYPE_BOOKMARK
+msgid "Seose Kohustuslik j&auml;rjehoidja (RELTYPE_BOOKMARK) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:243
+#: classes/core/users/group.aw:201
+msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
+msgstr "You have no rights to change rights for object %s!"
+
+#: classes/core/users/group.aw:244
 msgid "Tavaline"
 msgstr "Regular"
 
-#: classes/core/users/group.aw:244
+#: classes/core/users/group.aw:245
 msgid "D&uuml;naamiline"
 msgstr "Dynamic"
 
-#: classes/core/users/group.aw:245
+#: classes/core/users/group.aw:246
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
-#: classes/core/users/group.aw:254
+#: classes/core/users/group.aw:255
 msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />\t\t\t\t\tkasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />\t\t\t\t\tv&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />\t\t\t\t\tkuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />\t\t\t\t\tn&auml;ide: <br />\t\t\t\t\tkix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />\t\t\t\t\t<br />\t\t\t\t\tv&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
 msgstr ""
 
-#: classes/core/users/group.aw:310
+#: classes/core/users/group.aw:300
 msgid "Impordin kasutajaid ... <br />"
-msgstr "Importing users...<br>"
+msgstr "Importing users...<br />"
 
-#: classes/core/users/group.aw:468
+#: classes/core/users/group.aw:458
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/core/users/group.aw:497
+#: classes/core/users/group.aw:487
 msgid "Objekti Nimi"
 msgstr "Object name"
 
-#: classes/core/users/group.aw:506
+#: classes/core/users/group.aw:496
 msgid "Objekti Asukoht"
 msgstr "Object location"
 
-#: classes/core/users/group.aw:515
+#: classes/core/users/group.aw:505
 msgid "Grupi Nimi"
 msgstr "Group name"
 
-#: classes/core/users/group.aw:524
+#: classes/core/users/group.aw:514
 msgid "&Otilde;igused"
 msgstr "ACL"
 
-#: classes/core/users/group.aw:545
+#: classes/core/users/group.aw:535
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr "Change object %s ACL"
 
-#: classes/core/users/group.aw:610
+#: classes/core/users/group.aw:598
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
-#: classes/core/users/group.aw:638
+#: classes/core/users/group.aw:626
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr "Admin interface root folder"
 
-#: classes/core/users/group.aw:668
+#: classes/core/users/group.aw:656
 msgid "Esileht (%s)"
 msgstr "Frontpage (%s)"
 
-#: classes/core/users/group.aw:859
+#: classes/core/users/group.aw:775
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
-msgstr ""
+msgstr "Users default group cannot be deleted, please delete user!"
 
-#: classes/core/users/group.aw:905
+#: classes/core/users/group.aw:819
 msgid "Default &otilde;igused seose loomisel"
 msgstr "Default ACL on connection create"
 
-#~ msgid "Seose otsinguvorm (RELTYPE_SEARCHFORM) tekst"
-#~ msgstr "Search form"
+#: classes/core/users/group.aw:1082
+msgid "could not find the group oid for gid %s"
+msgstr ""
 
-#~ msgid "Seose liige (RELTYPE_MEMBER) tekst"
-#~ msgstr "Member"
-
-#~ msgid "Seose acl (RELTYPE_ACL) tekst"
-#~ msgstr "ACL"
-
-#~ msgid "Seose rootmen&uuml;&uuml; (RELTYPE_ADMIN_ROOT) tekst"
-#~ msgstr "Root folder"
-
-#~ msgid "Seose lisamise puu (RELTYPE_ADD_TREE) tekst"
-#~ msgstr "Add tree config"
-
-#~ msgid " / Muuda"
-#~ msgstr " / Change"
+#~ msgid "Impordin kasutajaid ... &lt;br /&gt;"
+#~ msgstr "Importing users..."

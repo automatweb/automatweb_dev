@@ -134,7 +134,7 @@ msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
 #: classes/common/address/address.aw:89
-msgid "Haldusjaotus m‰‰ramata."
+msgid "Haldusjaotus m22ramata."
 msgstr ""
 
 #: classes/common/address/address.aw:108

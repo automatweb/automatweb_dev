@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -30,42 +30,34 @@ msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) help"
 msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:72
-msgid ""
-"server_folder::show_file(%s): the fid parameter does not contain a valid "
-"object id!"
+msgid "server_folder::show_file(%s): the fid parameter does not contain a valid object id!"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:98
-msgid ""
-"server_folder::del_file(%s): the fid parameter does not contain a valid "
-"object id!"
+#: classes/contentmgmt/server_folder.aw:99
+msgid "server_folder::del_file(%s): the fid parameter does not contain a valid object id!"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:126
-#: classes/contentmgmt/server_folder.aw:149
-msgid ""
-"server_folder::change_file(%s): the fid parameter does not contain a valid "
-"object id!"
+#: classes/contentmgmt/server_folder.aw:127
+#: classes/contentmgmt/server_folder.aw:150
+msgid "server_folder::change_file(%s): the fid parameter does not contain a valid object id!"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:225
-msgid ""
-"server_folder::submit_addfile(%s): the id parameter does not contain a valid "
-"object id!"
-msgstr ""
-
-#: classes/contentmgmt/server_folder.aw:303
-msgid "Nimi"
+#: classes/contentmgmt/server_folder.aw:226
+msgid "server_folder::submit_addfile(%s): the id parameter does not contain a valid object id!"
 msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:304
-msgid "Faili suurus"
+msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:305
-msgid "Loomise kuup&auml;ev"
+msgid "Faili suurus"
 msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:306
+msgid "Loomise kuup&auml;ev"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:307
 msgid "Muutmise kuup&auml;ev"
 msgstr ""

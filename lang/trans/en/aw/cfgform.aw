@@ -35,7 +35,6 @@ $GLOBALS["TRANS"]["Omadus"] = "Property";
 $GLOBALS["TRANS"]["this is not a valid config form - class_id not specified"] = "this is not a valid config form - class_id not specified";
 $GLOBALS["TRANS"]["Pealkiri"] = "Title";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
-$GLOBALS["TRANS"]["Kustuta valitud omadused"] = "Use selected properties";
 $GLOBALS["TRANS"]["Liiguta"] = "Move";
 $GLOBALS["TRANS"]["T&ouml;&ouml;riistariba"] = "Toolbar";
 $GLOBALS["TRANS"]["Aktiivne"] = "Active";

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -26,15 +26,15 @@ msgid "Omaduse Algab (start) help"
 msgstr ""
 
 #: classes/applications/calendar/event_time.aw:prop_end
-msgid "Omaduse Lõpeb (end) caption"
+msgid "Omaduse L&otilde;peb (end) caption"
 msgstr ""
 
 #: classes/applications/calendar/event_time.aw:prop_end_comment
-msgid "Omaduse Lõpeb (end) kommentaar"
+msgid "Omaduse L&otilde;peb (end) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/event_time.aw:prop_end_help
-msgid "Omaduse Lõpeb (end) help"
+msgid "Omaduse L&otilde;peb (end) help"
 msgstr ""
 
 #: classes/applications/calendar/event_time.aw:prop_location
@@ -49,6 +49,22 @@ msgstr ""
 msgid "Omaduse Toimumiskoht (location) help"
 msgstr ""
 
+#: classes/applications/calendar/event_time.aw:prop_event
+msgid "Omaduse S&uuml;ndmus (event) caption"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_event_comment
+msgid "Omaduse S&uuml;ndmus (event) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:prop_event_help
+msgid "Omaduse S&uuml;ndmus (event) help"
+msgstr ""
+
 #: classes/applications/calendar/event_time.aw:rel_RELTYPE_LOCATION
 msgid "Seose Toimumiskoht (RELTYPE_LOCATION) tekst"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:rel_RELTYPE_EVENT
+msgid "Seose Toimumiskoht (RELTYPE_EVENT) tekst"
 msgstr ""

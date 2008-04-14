@@ -25,18 +25,18 @@ msgstr ""
 msgid "Omaduse  (sel) help"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:67
+#: classes/admin/add_tree_conf.aw:63
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:72
+#: classes/admin/add_tree_conf.aw:68
 msgid "N&auml;htav"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:78
+#: classes/admin/add_tree_conf.aw:74
 msgid "Kasutatav"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:85
+#: classes/admin/add_tree_conf.aw:81
 msgid "Aliasena lisatav"
 msgstr ""

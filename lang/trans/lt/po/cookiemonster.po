@@ -9,14 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/unittest/cookiemonster.aw:class__help
+#: classes/core/dbg/cookiemonster.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/unittest/cookiemonster.aw:50
+#: classes/core/dbg/cookiemonster.aw:52
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/unittest/cookiemonster.aw:56
+#: classes/core/dbg/cookiemonster.aw:58
 msgid "V‰‰rtus"
 msgstr ""

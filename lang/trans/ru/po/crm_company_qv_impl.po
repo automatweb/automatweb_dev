@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/crm/crm_company_qv_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_qv_impl.aw:22
 msgid "Kuup&auml;ev"
 msgstr ""
@@ -39,7 +43,7 @@ msgid "<b>Projektid</b>"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:94
-msgid "<b>Projektid (5 värskemat)</b>"
+msgid "<b>Projektid (5 v&auml;rskemat)</b>"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:146
@@ -51,7 +55,7 @@ msgid "<b>Tegevused</b>"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:209
-msgid "<b>Tegevused (10 värskemat)</b>"
+msgid "<b>Tegevused (10 v&auml;rskemat)</b>"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:264
@@ -71,7 +75,7 @@ msgid "<span style='font-size: 0px;'>y</span><b>Arved</b>"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:305
-msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
+msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 v&auml;rskemat)</b>"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:343

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/package_management/package.aw:class_1371_help
 msgid "Klassi Pakk help"
 msgstr ""
@@ -38,6 +37,18 @@ msgstr ""
 msgid "Omaduse Kirjeldus (description) help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:prop_dep_toolbar
+msgid "Omaduse Seoste toolbar (dep_toolbar) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_dep_toolbar_comment
+msgid "Omaduse Seoste toolbar (dep_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_dep_toolbar_help
+msgid "Omaduse Seoste toolbar (dep_toolbar) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:prop_dependencies
 msgid "Omaduse S&otilde;ltuvused (dependencies) caption"
 msgstr ""
@@ -50,23 +61,46 @@ msgstr ""
 msgid "Omaduse S&otilde;ltuvused (dependencies) help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:group_dependencies
+msgid "Grupi S&otilde;ltuvused (dependencies) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:group_dependencies_help
+msgid "Grupi S&otilde;ltuvused (dependencies) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:rel_RELTYPE_DEPENDENCY
 msgid "Seose S&otilde;ltuvus (RELTYPE_DEPENDENCY) tekst"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:52
+#: classes/applications/package_management/package.aw:rel_RELTYPE_FILE
+msgid "Seose Fail (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:64
+msgid "Uus pakk"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:76
+msgid "Kustuta s&otilde;ltuvused"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:78
+msgid "Oled kindel et soovid valitud s&otilde;ltuvused kustutada?"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:102
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:56
+#: classes/applications/package_management/package.aw:106
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:60
+#: classes/applications/package_management/package.aw:110
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:65
+#: classes/applications/package_management/package.aw:115
 msgid "Kirjeldus"
 msgstr ""
-

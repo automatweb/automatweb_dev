@@ -17,10 +17,10 @@ msgstr ""
 msgid "object_data_list::object_data_list($param): parameter must be array!"
 msgstr ""
 
-#: classes/core/obj/object_data_list.aw:163
+#: classes/core/obj/object_data_list.aw:165
 msgid "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 
-#: classes/core/obj/object_data_list.aw:170
+#: classes/core/obj/object_data_list.aw:172
 msgid "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""

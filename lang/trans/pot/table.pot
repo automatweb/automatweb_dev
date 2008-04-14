@@ -10,15 +10,47 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/contentmgmt/table.aw:class_3_help
+#: classes/vcl/table.aw:class_3_help
 msgid "Klassi Tabel help"
 msgstr ""
 
-#: classes/contentmgmt/table.aw:117
-msgid "no such table %s (tables.class->load_table)!"
+#: classes/vcl/table.aw:795
+msgid "Vaata/Muuda"
 msgstr ""
 
-#: classes/contentmgmt/table.aw:2474
-msgid "table->import: No file uploaded!"
+#: classes/vcl/table.aw:799
+msgid "Sisseastuja Nr."
+msgstr ""
+
+#: classes/vcl/table.aw:811
+msgid "Muuda"
+msgstr ""
+
+#: classes/vcl/table.aw:2309
+msgid "Vali"
+msgstr ""
+
+#: classes/vcl/table.aw:2570
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/vcl/table.aw:2796
+msgid "Nimi"
+msgstr ""
+
+#: classes/vcl/table.aw:2797
+msgid "Looja"
+msgstr ""
+
+#: classes/vcl/table.aw:2798
+msgid "Loodud"
+msgstr ""
+
+#: classes/vcl/table.aw:2799
+msgid "Muutja"
+msgstr ""
+
+#: classes/vcl/table.aw:2800
+msgid "Muudetud"
 msgstr ""
 

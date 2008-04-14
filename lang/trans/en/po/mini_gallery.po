@@ -99,15 +99,15 @@ msgid "Omaduse Piltide j&auml;rjestamine (sorter) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_addheight
-msgid "Omaduse Pildi aknale lisatav kõrgus (addheight) caption"
+msgid "Omaduse Pildi aknale lisatav k&otilde;rgus (addheight) caption"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_addheight_comment
-msgid "Omaduse Pildi aknale lisatav kõrgus (addheight) kommentaar"
+msgid "Omaduse Pildi aknale lisatav k&otilde;rgus (addheight) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_addheight_help
-msgid "Omaduse Pildi aknale lisatav kõrgus (addheight) help"
+msgid "Omaduse Pildi aknale lisatav k&otilde;rgus (addheight) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_addwidth

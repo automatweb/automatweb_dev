@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/calendar/party.aw:class_914_help
 msgid "Klassi Pidu help"
@@ -166,27 +165,22 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:144
-msgid "Otsi"
-msgstr ""
-
-#: classes/applications/calendar/party.aw:154
+#: classes/applications/calendar/party.aw:149
 msgid "Eemalda esineja"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:156
+#: classes/applications/calendar/party.aw:151
 msgid "Oled kindel, et soovid valitud esinejad eemaldada?"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:166
+#: classes/applications/calendar/party.aw:161
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:171
+#: classes/applications/calendar/party.aw:166
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/calendar/party.aw:176
+#: classes/applications/calendar/party.aw:171
 msgid "Amet"
 msgstr ""
-

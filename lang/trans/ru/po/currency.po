@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -126,11 +126,11 @@ msgid "Peenraha"
 msgstr ""
 
 #: classes/formgen/currency.aw:184
-msgid "Alguskuupäev"
+msgid "Alguskuup&auml;ev"
 msgstr ""
 
 #: classes/formgen/currency.aw:188
-msgid "Lõppkuupäev"
+msgid "L&otilde;ppkuup&auml;ev"
 msgstr ""
 
 #: classes/formgen/currency.aw:192
@@ -146,13 +146,13 @@ msgid "Ostukurss"
 msgstr ""
 
 #: classes/formgen/currency.aw:204
-msgid "Müügikurss"
+msgid "M&uuml;&uuml;gikurss"
 msgstr ""
 
 #: classes/formgen/currency.aw:238
 msgid "Kursid"
 msgstr ""
 
-#: classes/formgen/currency.aw:327
-msgid "currency::convert - kas %s või %s pole valuutadaobjektide id'd"
+#: classes/formgen/currency.aw:316
+msgid "currency::convert - kas %s v&otilde;i %s pole valuutadaobjektide id'd"
 msgstr ""

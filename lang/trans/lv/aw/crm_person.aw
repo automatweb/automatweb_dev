@@ -2,7 +2,4 @@
 $GLOBALS["TRANS"]["Vallaline"] = "neprecçjies";
 $GLOBALS["TRANS"]["Abielus"] = "precçjies";
 $GLOBALS["TRANS"]["Lahutatud"] = "ðíîries";
-$GLOBALS["TRANS"]["Vabaabielus"] = " ";
-$GLOBALS["TRANS"]["mees"] = "vîrietis";
-$GLOBALS["TRANS"]["naine"] = "sieviete";
 ?>

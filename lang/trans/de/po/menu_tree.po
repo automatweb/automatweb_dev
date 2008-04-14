@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -129,22 +129,22 @@ msgstr ""
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:372
+#: classes/contentmgmt/menu_tree.aw:373
 msgid "Men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:406
+#: classes/contentmgmt/menu_tree.aw:407
 msgid "Lisa men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:409
+#: classes/contentmgmt/menu_tree.aw:410
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:413
+#: classes/contentmgmt/menu_tree.aw:414
 msgid "Eemalda men&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:445
+#: classes/contentmgmt/menu_tree.aw:446
 msgid "Avamisaeg"
 msgstr ""

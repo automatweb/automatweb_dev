@@ -11,139 +11,127 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/vcl/reminder.aw:class_871_help
-#: classes/contentmgmt/reminder.aw:class_871_help
+#: classes/vcl/reminder.aw:class_871_help
 msgid "Klassi Meeldetuletus help"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_remind
-#: classes/contentmgmt/reminder.aw:prop_remind
+#: classes/vcl/reminder.aw:prop_remind
 msgid "Omaduse Millal meelde tuletab (remind) caption"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_remind_comment
-#: classes/contentmgmt/reminder.aw:prop_remind_comment
+#: classes/vcl/reminder.aw:prop_remind_comment
 msgid "Omaduse Millal meelde tuletab (remind) kommentaar"
 msgstr "kuupäeva ja kellaaja valik, millal seostatud objektide link saadetakse soovitud e-maili aadressidele"
 
 # classes/vcl/reminder.aw:prop_remind_help
-#: classes/contentmgmt/reminder.aw:prop_remind_help
+#: classes/vcl/reminder.aw:prop_remind_help
 msgid "Omaduse Millal meelde tuletab (remind) help"
 msgstr "kuupäeva ja kellaaja valik, millal seostatud objektide link saadetakse soovitud e-maili aadressidele"
 
 # classes/vcl/reminder.aw:prop_sender
-#: classes/contentmgmt/reminder.aw:prop_sender
+#: classes/vcl/reminder.aw:prop_sender
 msgid "Omaduse Saatja e-mail  (sender) caption"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_sender_comment
-#: classes/contentmgmt/reminder.aw:prop_sender_comment
+#: classes/vcl/reminder.aw:prop_sender_comment
 msgid "Omaduse Saatja e-mail  (sender) kommentaar"
 msgstr "e-maili aadress, millelt meeldetuletuse mail välja saadetakse"
 
 # classes/vcl/reminder.aw:prop_sender_help
-#: classes/contentmgmt/reminder.aw:prop_sender_help
+#: classes/vcl/reminder.aw:prop_sender_help
 msgid "Omaduse Saatja e-mail  (sender) help"
 msgstr "e-maili aadress, millelt meeldetuletuse mail välja saadetakse"
 
 # classes/vcl/reminder.aw:prop_emails_text
-#: classes/contentmgmt/reminder.aw:prop_emails_text
+#: classes/vcl/reminder.aw:prop_emails_text
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) caption"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_emails_text_comment
-#: classes/contentmgmt/reminder.aw:prop_emails_text_comment
+#: classes/vcl/reminder.aw:prop_emails_text_comment
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) kommentaar"
 msgstr "e-maili aadressid, kellele meeldetuletus saadetakse"
 
 # classes/vcl/reminder.aw:prop_emails_text_help
-#: classes/contentmgmt/reminder.aw:prop_emails_text_help
+#: classes/vcl/reminder.aw:prop_emails_text_help
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) help"
 msgstr "e-maili aadressid, kellele meeldetuletus saadetakse"
 
 # classes/vcl/reminder.aw:prop_subject
-#: classes/contentmgmt/reminder.aw:prop_subject
+#: classes/vcl/reminder.aw:prop_subject
 msgid "Omaduse Teade (subject) caption"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_subject_comment
-#: classes/contentmgmt/reminder.aw:prop_subject_comment
+#: classes/vcl/reminder.aw:prop_subject_comment
 msgid "Omaduse Teade (subject) kommentaar"
 msgstr "sõnum, mis lisatakse e-maili sisusse koos objekti lingiga"
 
 # classes/vcl/reminder.aw:prop_subject_help
-#: classes/contentmgmt/reminder.aw:prop_subject_help
+#: classes/vcl/reminder.aw:prop_subject_help
 msgid "Omaduse Teade (subject) help"
 msgstr "sõnum, mis lisatakse e-maili sisusse koos objekti lingiga"
 
 # classes/vcl/reminder.aw:prop_objects_toolbar
-#: classes/contentmgmt/reminder.aw:prop_objects_toolbar
+#: classes/vcl/reminder.aw:prop_objects_toolbar
 msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects_toolbar_comment
-#: classes/contentmgmt/reminder.aw:prop_objects_toolbar_comment
+#: classes/vcl/reminder.aw:prop_objects_toolbar_comment
 msgid "Omaduse Objektide toolbar (objects_toolbar) kommentaar"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects_toolbar_help
-#: classes/contentmgmt/reminder.aw:prop_objects_toolbar_help
+#: classes/vcl/reminder.aw:prop_objects_toolbar_help
 msgid "Omaduse Objektide toolbar (objects_toolbar) help"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects
-#: classes/contentmgmt/reminder.aw:prop_objects
+#: classes/vcl/reminder.aw:prop_objects
 msgid "Omaduse Seotud objektid (objects) caption"
 msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects_comment
-#: classes/contentmgmt/reminder.aw:prop_objects_comment
+#: classes/vcl/reminder.aw:prop_objects_comment
 msgid "Omaduse Seotud objektid (objects) kommentaar"
 msgstr "Selles vaates on võimalik näha kõiki objekte millele seadistatud meeldetuletus mõjub."
 
 # classes/vcl/reminder.aw:prop_objects_help
-#: classes/contentmgmt/reminder.aw:prop_objects_help
+#: classes/vcl/reminder.aw:prop_objects_help
 msgid "Omaduse Seotud objektid (objects) help"
 msgstr "Selles vaates on võimalik näha kõiki objekte millele seadistatud meeldetuletus mõjub. Eemaldada saab objekte nimekirjast neid valides ning punase risti abil kustutades."
 
 # classes/vcl/reminder.aw:group_objects
-#: classes/contentmgmt/reminder.aw:group_objects
+#: classes/vcl/reminder.aw:group_objects
 msgid "Grupi Seotud objektid (objects) pealkiri"
 msgstr ""
 
 # classes/vcl/reminder.aw:group_objects_help
-#: classes/contentmgmt/reminder.aw:group_objects_help
+#: classes/vcl/reminder.aw:group_objects_help
 msgid "Grupi Seotud objektid (objects) help"
 msgstr ""
 
 # classes/vcl/reminder.aw:rel_RELTYPE_REMINDER_OBJECT
-#: classes/contentmgmt/reminder.aw:rel_RELTYPE_REMINDER_OBJECT
+#: classes/vcl/reminder.aw:rel_RELTYPE_REMINDER_OBJECT
 msgid "Seose Seotud objekt (RELTYPE_REMINDER_OBJECT) tekst"
 msgstr ""
 
-#: classes/contentmgmt/reminder.aw:180
-msgid "Eemalda valitud objektid"
+#: classes/vcl/reminder.aw:40
+msgid "Meeldetuletus e-postiga"
 msgstr ""
 
-#: classes/contentmgmt/reminder.aw:182
-msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
+#: classes/vcl/reminder.aw:57
+msgid "E-posti aadress"
 msgstr ""
 
-#: classes/contentmgmt/reminder.aw:192
-msgid "ID"
+#: classes/vcl/reminder.aw:64
+msgid "Minutid"
 msgstr ""
 
-#: classes/contentmgmt/reminder.aw:193
-msgid "Nimi"
-msgstr ""
-
-#: classes/contentmgmt/reminder.aw:194
-msgid "Tüüp"
-msgstr ""
-
-#: classes/contentmgmt/reminder.aw:270
-msgid "aw"
-msgstr ""
-
-#: classes/contentmgmt/reminder.aw:271
-msgid "Meeldetuletus"
+#: classes/vcl/reminder.aw:79
+msgid "Saadetud?"
 msgstr ""

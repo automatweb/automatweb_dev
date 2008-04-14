@@ -69,20 +69,17 @@ msgstr "Falshi rakenduse laius pikselites. "
 msgid "Omaduse Laius (width) help"
 msgstr "Falshi rakenduse laius pikselites. "
 
-# classes/contentmgmt/flash.aw:prop_height
 #: classes/contentmgmt/flash.aw:prop_height
-msgid "Omaduse Kõrgus (height) caption"
+msgid "Omaduse K&otilde;rgus (height) caption"
 msgstr ""
 
-# classes/contentmgmt/flash.aw:prop_height_comment
 #: classes/contentmgmt/flash.aw:prop_height_comment
-msgid "Omaduse Kõrgus (height) kommentaar"
-msgstr "Falshi rakenduse kõrgus pikselites."
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
+msgstr ""
 
-# classes/contentmgmt/flash.aw:prop_height_help
 #: classes/contentmgmt/flash.aw:prop_height_help
-msgid "Omaduse Kõrgus (height) help"
-msgstr "Falshi rakenduse kõrgus pikselites."
+msgid "Omaduse K&otilde;rgus (height) help"
+msgstr ""
 
 # classes/contentmgmt/flash.aw:prop_preview
 #: classes/contentmgmt/flash.aw:prop_preview
@@ -118,3 +115,11 @@ msgstr ""
 #: classes/contentmgmt/flash.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
+
+# classes/contentmgmt/flash.aw:prop_height_comment
+#~ msgid "Omaduse Kõrgus (height) kommentaar"
+#~ msgstr "Falshi rakenduse kõrgus pikselites."
+
+# classes/contentmgmt/flash.aw:prop_height_help
+#~ msgid "Omaduse Kõrgus (height) help"
+#~ msgstr "Falshi rakenduse kõrgus pikselites."

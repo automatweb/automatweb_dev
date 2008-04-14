@@ -444,10 +444,18 @@ msgid "Muutja"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:369
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:417
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:418
 msgid "Ava"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:634
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
+msgid "Leiti"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
+msgid "objekti"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:635
 msgid "AW Objektide otsing"
 msgstr ""

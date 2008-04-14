@@ -17,7 +17,6 @@ $GLOBALS["TRANS"]["Pilt"] = "Image";
 $GLOBALS["TRANS"]["Sisu"] = "Content";
 $GLOBALS["TRANS"]["Lisa uus esineja"] = "Add new performer";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
-$GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Eemalda esineja"] = "Remove performer";
 $GLOBALS["TRANS"]["Oled kindel, et soovid valitud esinejad eemaldada?"] = "Are you sure you want to delete selected performers?";
 $GLOBALS["TRANS"]["Nimi"] = "Name";

@@ -241,6 +241,5 @@ $GLOBALS["TRANS"]["Outboxi toolbar"] = "Otbox toolbar";
 $GLOBALS["TRANS"]["Väljasaadetud kirjad"] = "Sent letters";
 $GLOBALS["TRANS"]["Arhiivi toolbar"] = "Archive toolbar";
 $GLOBALS["TRANS"]["Arhiveeritud kirjad"] = "Archived letters";
-$GLOBALS["TRANS"]["aga sellist kasutajat pole üldse olemas"] = "no such user exists";
 $GLOBALS["TRANS"]["Kasutajanimi"] = "Username";
 ?>

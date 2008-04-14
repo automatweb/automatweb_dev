@@ -672,9 +672,8 @@ msgstr ""
 msgid "Klassi Profiil (256) nimi"
 msgstr ""
 
-# aw.ini:class_266
 #: aw.ini:class_266
-msgid "Klassi Keel (266) nimi"
+msgid "Klassi S&uuml;steemikeel (266) nimi"
 msgstr ""
 
 # aw.ini:class_275
@@ -2500,7 +2499,7 @@ msgid "Klassi Konverentsi kalendrivaade (1210) nimi"
 msgstr ""
 
 #: aw.ini:class_1211
-msgid "Klassi URI (Internetiaadress) (1211) nimi"
+msgid "Klassi Pakiserver (1211) nimi"
 msgstr ""
 
 #: aw.ini:class_1212
@@ -2751,6 +2750,10 @@ msgstr ""
 msgid "Klassi Personali import (1386) nimi"
 msgstr ""
 
+#: aw.ini:class_1387
+msgid "Klassi Broneeringu kiirlisamine (1387) nimi"
+msgstr ""
+
 #: aw.ini:class_1388
 msgid "Klassi V&auml;ljasaadetud meilid (1388) nimi"
 msgstr ""
@@ -2768,23 +2771,23 @@ msgid "Klassi XML andmeallikas (1391) nimi"
 msgstr ""
 
 #: aw.ini:class_1392
-msgid "Klassi Mobi SMS haldur (1392) nimi"
+msgid "Klassi T&ouml;&ouml;aegade stsenaarium (1392) nimi"
 msgstr ""
 
 #: aw.ini:class_1393
-msgid "Klassi Dünaamiline küsimustik (1393) nimi"
+msgid "Klassi D&uuml;naamiline k&uuml;simustik (1393) nimi"
 msgstr ""
 
 #: aw.ini:class_1394
-msgid "Klassi Dünaamilise küsimustiku küsimus (1394) nimi"
+msgid "Klassi D&uuml;naamilise k&uuml;simustiku k&uuml;simus (1394) nimi"
 msgstr ""
 
 #: aw.ini:class_1395
-msgid "Klassi Dünaamilise küsimustiku vastus (1395) nimi"
+msgid "Klassi D&uuml;naamilise k&uuml;simustiku vastus (1395) nimi"
 msgstr ""
 
 #: aw.ini:class_1396
-msgid "Klassi Dünaamilise küsimustiku vastaja (1396) nimi"
+msgid "Klassi Mobi SMS haldur (1396) nimi"
 msgstr ""
 
 #: aw.ini:class_1397
@@ -2793,6 +2796,46 @@ msgstr ""
 
 #: aw.ini:class_1398
 msgid "Klassi Haridustase (1398) nimi"
+msgstr ""
+
+#: aw.ini:class_1399
+msgid "Klassi Keel (1399) nimi"
+msgstr ""
+
+#: aw.ini:class_1400
+msgid "Klassi Oskus (1400) nimi"
+msgstr ""
+
+#: aw.ini:class_1401
+msgid "Klassi Oskuse tase (1401) nimi"
+msgstr ""
+
+#: aw.ini:class_1405
+msgid "Klassi Organisatoorne kuuluvus (1405) nimi"
+msgstr ""
+
+#: aw.ini:class_1406
+msgid "Klassi Soovitus (1406) nimi"
+msgstr ""
+
+#: aw.ini:class_1407
+msgid "Klassi Oskuste haldur (1407) nimi"
+msgstr ""
+
+#: aw.ini:class_1408
+msgid "Klassi Salvestatud CV otsing (1408) nimi"
+msgstr ""
+
+#: aw.ini:class_1410
+msgid "Klassi Sugulusside (1410) nimi"
+msgstr ""
+
+#: aw.ini:class_1411
+msgid "Klassi Reval Klienditsoon (1411) nimi"
+msgstr ""
+
+#: aw.ini:class_1412
+msgid "Klassi Tellimiskeskkonna toodete filter (1412) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29
@@ -5446,6 +5489,14 @@ msgstr ""
 msgid "syslog.type.ST_RSS_IMPORT"
 msgstr ""
 
+#: aw.ini:syslogtypes_1411
+msgid "syslog.type.ST_REVAL_CUSTOMER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1412
+msgid "syslog.type.ST_SHOP_ORDER_CENTER_FILTER_ENTRY"
+msgstr ""
+
 #: aw.ini:syslogactions_1
 msgid "syslog.action.SA_CHANGE"
 msgstr ""
@@ -5548,6 +5599,78 @@ msgstr ""
 
 #: aw.ini:syslogactions_26
 msgid "syslog.action.SA_FINAL_DELETE"
+msgstr ""
+
+#: aw.ini:languages_list_1
+msgid "languages.list.et"
+msgstr ""
+
+#: aw.ini:languages_list_2
+msgid "languages.list.en"
+msgstr ""
+
+#: aw.ini:languages_list_3
+msgid "languages.list.ru"
+msgstr ""
+
+#: aw.ini:languages_list_4
+msgid "languages.list.es"
+msgstr ""
+
+#: aw.ini:languages_list_5
+msgid "languages.list.fr"
+msgstr ""
+
+#: aw.ini:languages_list_6
+msgid "languages.list.de"
+msgstr ""
+
+#: aw.ini:languages_list_7
+msgid "languages.list.lv"
+msgstr ""
+
+#: aw.ini:languages_list_8
+msgid "languages.list.lt"
+msgstr ""
+
+#: aw.ini:languages_list_9
+msgid "languages.list.el"
+msgstr ""
+
+#: aw.ini:languages_list_10
+msgid "languages.list.nl"
+msgstr ""
+
+#: aw.ini:languages_list_11
+msgid "languages.list.it"
+msgstr ""
+
+#: aw.ini:languages_list_12
+msgid "languages.list.sv"
+msgstr ""
+
+#: aw.ini:languages_list_13
+msgid "languages.list.fi"
+msgstr ""
+
+#: aw.ini:languages_list_14
+msgid "languages.list.da"
+msgstr ""
+
+#: aw.ini:languages_list_15
+msgid "languages.list.no"
+msgstr ""
+
+#: aw.ini:languages_list_16
+msgid "languages.list.bg"
+msgstr ""
+
+#: aw.ini:languages_list_17
+msgid "languages.list.la"
+msgstr ""
+
+#: aw.ini:languages_list_18
+msgid "languages.list.zh"
 msgstr ""
 
 #~ msgid "Klassi Kohtumine (224) comment"

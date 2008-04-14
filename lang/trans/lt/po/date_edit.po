@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,52 +9,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/vcl/date_edit.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/vcl/date_edit.aw:184
+#: classes/vcl/date_edit.aw:187
 msgid "Jaanuar"
 msgstr "Sausis"
 
-#: classes/vcl/date_edit.aw:185
+#: classes/vcl/date_edit.aw:188
 msgid "Veebruar"
 msgstr "Vasaris"
 
-#: classes/vcl/date_edit.aw:186
+#: classes/vcl/date_edit.aw:189
 msgid "M&auml;rts"
 msgstr "Kovas"
 
-#: classes/vcl/date_edit.aw:187
+#: classes/vcl/date_edit.aw:190
 msgid "Aprill"
 msgstr "Balandis"
 
-#: classes/vcl/date_edit.aw:188
+#: classes/vcl/date_edit.aw:191
 msgid "Mai"
 msgstr "Geguþë"
 
-#: classes/vcl/date_edit.aw:189
+#: classes/vcl/date_edit.aw:192
 msgid "Juuni"
 msgstr "Birþelis"
 
-#: classes/vcl/date_edit.aw:190
+#: classes/vcl/date_edit.aw:193
 msgid "Juuli"
 msgstr "Liepa"
 
-#: classes/vcl/date_edit.aw:191
+#: classes/vcl/date_edit.aw:194
 msgid "August"
 msgstr "Rugpjûtis"
 
-#: classes/vcl/date_edit.aw:192
+#: classes/vcl/date_edit.aw:195
 msgid "September"
 msgstr "Rugsëjis"
 
-#: classes/vcl/date_edit.aw:193
+#: classes/vcl/date_edit.aw:196
 msgid "Oktoober"
 msgstr "Spalis"
 
-#: classes/vcl/date_edit.aw:194
+#: classes/vcl/date_edit.aw:197
 msgid "November"
 msgstr "Lapkritis"
 
-#: classes/vcl/date_edit.aw:195
+#: classes/vcl/date_edit.aw:198
 msgid "Detsember"
 msgstr "Gruodis"
-

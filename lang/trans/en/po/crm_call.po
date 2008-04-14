@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: 2005-12-04 19:21+0200\n"
-"Last-Translator: Erki <erki@struktuur.ee>\n"
-"Language-Team: \n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
 
 # classes/crm/crm_call.aw:class_223_help
 #: classes/crm/crm_call.aw:class_223_help
@@ -17,7 +17,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_predicates
 msgid "Omaduse Eeldustegevused (predicates) caption"
-msgstr ""
+msgstr "Predicates"
 
 #: classes/crm/crm_call.aw:prop_predicates_comment
 msgid "Omaduse Eeldustegevused (predicates) kommentaar"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_is_goal
 msgid "Omaduse Verstapost (is_goal) caption"
-msgstr ""
+msgstr "Milestone"
 
 #: classes/crm/crm_call.aw:prop_is_goal_comment
 msgid "Omaduse Verstapost (is_goal) kommentaar"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_add_clauses
 msgid "Omaduse Lisatingimused (add_clauses) caption"
-msgstr ""
+msgstr "Additional info"
 
 #: classes/crm/crm_call.aw:prop_add_clauses_comment
 msgid "Omaduse Lisatingimused (add_clauses) kommentaar"
@@ -68,7 +68,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_end
 msgid "Omaduse L&otilde;pp (end) caption"
-msgstr ""
+msgstr "End"
 
 #: classes/crm/crm_call.aw:prop_end_comment
 msgid "Omaduse L&otilde;pp (end) kommentaar"
@@ -167,7 +167,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Customer"
 
 #: classes/crm/crm_call.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -179,7 +179,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_project
 msgid "Omaduse Projekt (project) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/crm/crm_call.aw:prop_project_comment
 msgid "Omaduse Projekt (project) kommentaar"
@@ -230,7 +230,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_is_personal
 msgid "Omaduse Isiklik (is_personal) caption"
-msgstr ""
+msgstr "Personal"
 
 #: classes/crm/crm_call.aw:prop_is_personal_comment
 msgid "Omaduse Isiklik (is_personal) kommentaar"
@@ -242,7 +242,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_send_bill
 msgid "Omaduse Saata arve (send_bill) caption"
-msgstr ""
+msgstr "Send invoice"
 
 #: classes/crm/crm_call.aw:prop_send_bill_comment
 msgid "Omaduse Saata arve (send_bill) kommentaar"
@@ -254,7 +254,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_is_work
 msgid "Omaduse T&ouml;&ouml;aeg (is_work) caption"
-msgstr ""
+msgstr "Worktime"
 
 #: classes/crm/crm_call.aw:prop_is_work_comment
 msgid "Omaduse T&ouml;&ouml;aeg (is_work) kommentaar"
@@ -266,7 +266,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_bill_no
 msgid "Omaduse Arve number (bill_no) caption"
-msgstr ""
+msgstr "Invoice no"
 
 #: classes/crm/crm_call.aw:prop_bill_no_comment
 msgid "Omaduse Arve number (bill_no) kommentaar"
@@ -290,7 +290,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_time_real
 msgid "Omaduse Tegelik tundide arv (time_real) caption"
-msgstr ""
+msgstr "Elapsed"
 
 #: classes/crm/crm_call.aw:prop_time_real_comment
 msgid "Omaduse Tegelik tundide arv (time_real) kommentaar"
@@ -302,7 +302,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_time_to_cust
 msgid "Omaduse Tundide arv kliendile (time_to_cust) caption"
-msgstr ""
+msgstr "Hours to customer"
 
 #: classes/crm/crm_call.aw:prop_time_to_cust_comment
 msgid "Omaduse Tundide arv kliendile (time_to_cust) kommentaar"
@@ -494,7 +494,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:prop_new_call_date
 msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) caption"
-msgstr ""
+msgstr "New call"
 
 #: classes/crm/crm_call.aw:prop_new_call_date_comment
 msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) kommentaar"
@@ -568,7 +568,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:group_other_calls
 msgid "Grupi Eelmised k&otilde;ned (other_calls) pealkiri"
-msgstr ""
+msgstr "Last calls"
 
 #: classes/crm/crm_call.aw:group_other_calls_help
 msgid "Grupi Eelmised k&otilde;ned (other_calls) help"
@@ -576,7 +576,7 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:group_predicates
 msgid "Grupi Eeldused (predicates) pealkiri"
-msgstr ""
+msgstr "Predicates"
 
 #: classes/crm/crm_call.aw:group_predicates_help
 msgid "Grupi Eeldused (predicates) help"
@@ -605,107 +605,109 @@ msgstr ""
 
 #: classes/crm/crm_call.aw:layout_top_bit
 msgid "Kujundusosa P&otilde;hiandmed (top_bit) pealkiri"
-msgstr ""
+msgstr "Main data"
 
 #: classes/crm/crm_call.aw:layout_center_bit_left_ct
 msgid "Kujundusosa Sisu (center_bit_left_ct) pealkiri"
-msgstr ""
+msgstr "Content"
 
 #: classes/crm/crm_call.aw:layout_center_bit_right_top
 msgid "Kujundusosa Osapooled (center_bit_right_top) pealkiri"
-msgstr ""
+msgstr "Participants"
 
 #: classes/crm/crm_call.aw:layout_center_bit_right_bottom
 msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
-msgstr ""
+msgstr "Attachments"
 
 #: classes/crm/crm_call.aw:279
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
-#: classes/crm/crm_call.aw:280 classes/crm/crm_call.aw:786
+#: classes/crm/crm_call.aw:280 classes/crm/crm_call.aw:793
 msgid "Tehtud"
-msgstr ""
+msgstr "Done"
 
 #: classes/crm/crm_call.aw:281
 msgid "Isiklik"
-msgstr ""
+msgstr "Personal"
 
-#: classes/crm/crm_call.aw:282 classes/crm/crm_call.aw:793
+#: classes/crm/crm_call.aw:282 classes/crm/crm_call.aw:800
 msgid "Arvele"
-msgstr ""
+msgstr "To invoice"
 
 #: classes/crm/crm_call.aw:283
 msgid "T&ouml;&ouml;aeg"
-msgstr ""
+msgstr "Worktime"
 
-#: classes/crm/crm_call.aw:475
+#: classes/crm/crm_call.aw:483
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/crm/crm_call.aw:484
+#: classes/crm/crm_call.aw:492
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/crm/crm_call.aw:493
+#: classes/crm/crm_call.aw:501
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_call.aw:570
+#: classes/crm/crm_call.aw:578
 msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
-msgstr ""
+msgstr "New call can not be in the past"
 
-#: classes/crm/crm_call.aw:708
-msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
-msgstr ""
+#: classes/crm/crm_call.aw:715
+msgid "Nimi, osaleja ja projekt peavad olema t&auml;idetud!"
+msgstr "Name, participant and project are obligatory"
 
-#: classes/crm/crm_call.aw:904
-msgid "Millal"
-msgstr ""
+#: classes/crm/crm_call.aw:776
+msgid "Nimi"
+msgstr "Name"
+
+#: classes/crm/crm_call.aw:781
+msgid "Osaleja"
+msgstr "Participant"
+
+#: classes/crm/crm_call.aw:787
+msgid "Projekt"
+msgstr "Project"
+
+#: classes/crm/crm_call.aw:805
+msgid "Kirjeldus"
+msgstr "Description"
 
 #: classes/crm/crm_call.aw:911
+msgid "Millal"
+msgstr "When"
+
+#: classes/crm/crm_call.aw:918
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
-#: classes/crm/crm_call.aw:916
+#: classes/crm/crm_call.aw:923
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 
-#: classes/crm/crm_call.aw:995
+#: classes/crm/crm_call.aw:1002
 msgid "Prognoositav tundide arv"
-msgstr ""
+msgstr "Prognosis"
 
-#: classes/crm/crm_call.aw:1000
+#: classes/crm/crm_call.aw:1007
 msgid "Tegelik tundide arv"
-msgstr ""
+msgstr "Elapsed"
 
-#: classes/crm/crm_call.aw:1005
+#: classes/crm/crm_call.aw:1012
 msgid "Tundide arv kliendile"
-msgstr ""
+msgstr "To customer"
 
-#: classes/crm/crm_call.aw:1010
+#: classes/crm/crm_call.aw:1017
 msgid "Arve number"
-msgstr ""
+msgstr "Invoice no"
 
-#: classes/crm/crm_call.aw:1044
+#: classes/crm/crm_call.aw:1051
 msgid "Loo uus arve"
-msgstr ""
+msgstr "Create new invoice"
 
-# classes/crm/crm_call.aw:prop_info_on_object
-#~ msgid "Omaduse Osalejad (info_on_object) caption"
-#~ msgstr "Participants"
+# classes/crm/crm_call.aw:group_general
+msgid "Omaduse Prognoositav tundide arv 	 (time_guess) caption"
+msgstr "Prognosis"
 
-# classes/crm/crm_call.aw:prop_end
-#~ msgid "Omaduse Lõpp (end) caption"
-#~ msgstr "End"
-
-# classes/crm/crm_call.aw:prop_aliasmgr
-#~ msgid "Omaduse Aliastehaldur (aliasmgr) caption"
-#~ msgstr "Connection manager"
-
-# classes/crm/crm_call.aw:rel_RELTYPE_CALLER
-#~ msgid "Seose Helistaja (RELTYPE_CALLER) tekst"
-#~ msgstr "Caller"
-
-#~ msgid "Grupi Üldine (general) pealkiri"
-#~ msgstr "General"

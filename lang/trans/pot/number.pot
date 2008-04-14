@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/locale/es/number.aw:class__help
+#: classes/core/locale/ru/number.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,10 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/common/country/country_administrative_structure_object.aw:80
+#: classes/common/country/country_administrative_structure_object.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/common/country/country_administrative_structure_object.aw:83
 msgid "administrative_structure::save(): object (%s) couldn't be saved."
 msgstr ""
 
-#: classes/common/country/country_administrative_structure_object.aw:121
+#: classes/common/country/country_administrative_structure_object.aw:124
 msgid "administrative_structure::as_get_addresses_by_unit(): invalid unit parameter."
 msgstr ""

@@ -17,15 +17,23 @@ msgstr ""
 msgid "kommentaari"
 msgstr ""
 
-#: classes/vcl/comments.aw:93
+#: classes/vcl/comments.aw:82
+msgid "Muuda"
+msgstr ""
+
+#: classes/vcl/comments.aw:88
+msgid "Kustuta"
+msgstr ""
+
+#: classes/vcl/comments.aw:111
 msgid "Lisa kommentaar"
 msgstr "Add comment"
 
-#: classes/vcl/comments.aw:98
+#: classes/vcl/comments.aw:116
 msgid "Kasutaja"
 msgstr "User"
 
-#: classes/vcl/comments.aw:104
+#: classes/vcl/comments.aw:122
 msgid "Kommentaar"
 msgstr "Comment"
 

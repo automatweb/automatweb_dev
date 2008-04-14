@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -116,6 +116,18 @@ msgstr ""
 msgid "Omaduse Pildi muundamise kontroller (controller) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_comm_edit_grp
+msgid "Omaduse Kommentaaride muutmise grupid (comm_edit_grp) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_comm_edit_grp_comment
+msgid "Omaduse Kommentaaride muutmise grupid (comm_edit_grp) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_comm_edit_grp_help
+msgid "Omaduse Kommentaaride muutmise grupid (comm_edit_grp) help"
+msgstr ""
+
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop
 msgid "Omaduse Muuda suurust enne kadreerimist (resize_before_crop) caption"
@@ -168,8 +180,7 @@ msgstr "Number of pixels on left of subimage "
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_left_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_left_comment
-msgid ""
-"Omaduse Mitu pikslit vasakult kaader algab (v_tn_subimage_left) kommentaar"
+msgid "Omaduse Mitu pikslit vasakult kaader algab (v_tn_subimage_left) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_left_help
@@ -179,14 +190,12 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_top
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_top
-msgid ""
-"Omaduse Mitu pikslit &uuml;levalt kaader algab (v_tn_subimage_top) caption"
+msgid "Omaduse Mitu pikslit &uuml;levalt kaader algab (v_tn_subimage_top) caption"
 msgstr "Number of pixels to top of subimage"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_top_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_top_comment
-msgid ""
-"Omaduse Mitu pikslit &uuml;levalt kaader algab (v_tn_subimage_top) kommentaar"
+msgid "Omaduse Mitu pikslit &uuml;levalt kaader algab (v_tn_subimage_top) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_v_tn_subimage_top_help
@@ -321,8 +330,7 @@ msgstr "Number of pixels on left of subimage"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_left_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_left_comment
-msgid ""
-"Omaduse Mitu pikslit vasakult kaader algab (h_tn_subimage_left) kommentaar"
+msgid "Omaduse Mitu pikslit vasakult kaader algab (h_tn_subimage_left) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_left_help
@@ -332,14 +340,12 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_top
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_top
-msgid ""
-"Omaduse Mitu pikslit &uuml;levalt kaader algab (h_tn_subimage_top) caption"
+msgid "Omaduse Mitu pikslit &uuml;levalt kaader algab (h_tn_subimage_top) caption"
 msgstr "Number of pixels on top of subimage"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_top_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_top_comment
-msgid ""
-"Omaduse Mitu pikslit &uuml;levalt kaader algab (h_tn_subimage_top) kommentaar"
+msgid "Omaduse Mitu pikslit &uuml;levalt kaader algab (h_tn_subimage_top) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_h_tn_subimage_top_help
@@ -514,62 +520,47 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_transparency
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_transparency
-msgid ""
-"Omaduse Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;"
-"bipaistev) (logo_transparency) caption"
+msgid "Omaduse Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev) (logo_transparency) caption"
 msgstr "Logo transparency"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_transparency_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_transparency_comment
-msgid ""
-"Omaduse Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;"
-"bipaistev) (logo_transparency) kommentaar"
+msgid "Omaduse Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev) (logo_transparency) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_transparency_help
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_transparency_help
-msgid ""
-"Omaduse Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;"
-"bipaistev) (logo_transparency) help"
+msgid "Omaduse Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev) (logo_transparency) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_text
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_text
-msgid ""
-"Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (logo_text) "
-"caption"
+msgid "Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (logo_text) caption"
 msgstr "Logo text"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_text_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_text_comment
-msgid ""
-"Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (logo_text) "
-"kommentaar"
+msgid "Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (logo_text) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_text_help
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_logo_text_help
-msgid ""
-"Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (logo_text) help"
+msgid "Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (logo_text) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_insert_logo
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_insert_logo
-msgid ""
-"Omaduse Kas v&auml;ikesele pildile kleepida lisapilt (tn_insert_logo) caption"
+msgid "Omaduse Kas v&auml;ikesele pildile kleepida lisapilt (tn_insert_logo) caption"
 msgstr "Insert logo on thumbnail"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_insert_logo_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_insert_logo_comment
-msgid ""
-"Omaduse Kas v&auml;ikesele pildile kleepida lisapilt (tn_insert_logo) "
-"kommentaar"
+msgid "Omaduse Kas v&auml;ikesele pildile kleepida lisapilt (tn_insert_logo) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_insert_logo_help
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_insert_logo_help
-msgid ""
-"Omaduse Kas v&auml;ikesele pildile kleepida lisapilt (tn_insert_logo) help"
+msgid "Omaduse Kas v&auml;ikesele pildile kleepida lisapilt (tn_insert_logo) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_img
@@ -624,8 +615,7 @@ msgstr "Number of pixels from horizontal edge"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_dist_y_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_dist_y_comment
-msgid ""
-"Omaduse Mitu pikslit horisontaalsest servast (tn_logo_dist_y) kommentaar"
+msgid "Omaduse Mitu pikslit horisontaalsest servast (tn_logo_dist_y) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_dist_y_help
@@ -635,44 +625,32 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_transparency
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_transparency
-msgid ""
-"Omaduse Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev) "
-"(tn_logo_transparency) caption"
+msgid "Omaduse Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev) (tn_logo_transparency) caption"
 msgstr "Logo transparency"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_transparency_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_transparency_comment
-msgid ""
-"Omaduse Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev) "
-"(tn_logo_transparency) kommentaar"
+msgid "Omaduse Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev) (tn_logo_transparency) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_transparency_help
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_transparency_help
-msgid ""
-"Omaduse Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev) "
-"(tn_logo_transparency) help"
+msgid "Omaduse Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev) (tn_logo_transparency) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_text
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_text
-msgid ""
-"Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (tn_logo_text) "
-"caption"
+msgid "Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (tn_logo_text) caption"
 msgstr "Logo text (%nimi% gets replaced by gallery name)"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_text_comment
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_text_comment
-msgid ""
-"Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (tn_logo_text) "
-"kommentaar"
+msgid "Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (tn_logo_text) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_text_help
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_tn_logo_text_help
-msgid ""
-"Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (tn_logo_text) "
-"help"
+msgid "Omaduse Lisapildi tekst (%nimi% asendatakse galerii nimega) (tn_logo_text) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:group_imgsize
@@ -723,3 +701,7 @@ msgstr "gallery page layout"
 #: classes/contentmgmt/gallery/gallery_conf.aw:rel_RELTYPE_CONTROLLER
 msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "Controller"
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:rel_RELTYPE_EDIT_GRP
+msgid "Seose Muutmise grupp (RELTYPE_EDIT_GRP) tekst"
+msgstr ""

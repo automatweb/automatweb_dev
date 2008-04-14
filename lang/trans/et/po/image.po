@@ -371,6 +371,30 @@ msgstr ""
 msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) help"
 msgstr ""
 
+#: classes/contentmgmt/image.aw:prop_comments_tb
+msgid "Omaduse  (comments_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_comments_tb_comment
+msgid "Omaduse  (comments_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_comments_tb_help
+msgid "Omaduse  (comments_tb) help"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_comments_tbl
+msgid "Omaduse  (comments_tbl) caption"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_comments_tbl_comment
+msgid "Omaduse  (comments_tbl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_comments_tbl_help
+msgid "Omaduse  (comments_tbl) help"
+msgstr ""
+
 #: classes/contentmgmt/image.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -437,6 +461,14 @@ msgstr ""
 msgid "Grupi M&auml;rk&otilde;nad (keywords) help"
 msgstr ""
 
+#: classes/contentmgmt/image.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
+msgstr ""
+
 #: classes/contentmgmt/image.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
@@ -458,32 +490,48 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:372
+#: classes/contentmgmt/image.aw:380
 msgid "kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:372
+#: classes/contentmgmt/image.aw:380
 msgid "kommentaari"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1027
+#: classes/contentmgmt/image.aw:1060
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1028
+#: classes/contentmgmt/image.aw:1061
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1041
+#: classes/contentmgmt/image.aw:1074
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1650
+#: classes/contentmgmt/image.aw:1690
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2205
+#: classes/contentmgmt/image.aw:2245
 msgid "Salvesta ja paiguta dokumenti"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:2304
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:2308
+msgid "Sisu"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:2312
+msgid "Autor"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:2319
+msgid "Aeg"
 msgstr ""
 
 # classes/image.aw:prop_dimensions_comment

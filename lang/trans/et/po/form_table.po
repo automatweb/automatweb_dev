@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,90 +9,94 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/formgen/form_table.aw:13
-msgid "Change"
-msgstr ""
-
-#: classes/formgen/form_table.aw:14
-msgid "View"
-msgstr ""
-
-#: classes/formgen/form_table.aw:15
-msgid "Special"
+#: classes/formgen/form_table.aw:class_66_help
+msgid "Klassi Tabelv&auml;ljund help"
 msgstr ""
 
 #: classes/formgen/form_table.aw:16
-msgid "Delete"
+msgid "Change"
 msgstr ""
 
 #: classes/formgen/form_table.aw:17
-msgid "Created"
+msgid "View"
 msgstr ""
 
 #: classes/formgen/form_table.aw:18
-msgid "Modified"
+msgid "Special"
 msgstr ""
 
 #: classes/formgen/form_table.aw:19
-msgid "UID"
+msgid "Delete"
 msgstr ""
 
 #: classes/formgen/form_table.aw:20
-msgid "Active"
+msgid "Created"
 msgstr ""
 
 #: classes/formgen/form_table.aw:21
-msgid "Move"
+msgid "Modified"
 msgstr ""
 
 #: classes/formgen/form_table.aw:22
-msgid "Order"
+msgid "UID"
 msgstr ""
 
 #: classes/formgen/form_table.aw:23
-msgid "Select"
+msgid "Active"
 msgstr ""
 
 #: classes/formgen/form_table.aw:24
-msgid "Peidetud Select"
+msgid "Move"
 msgstr ""
 
 #: classes/formgen/form_table.aw:25
-msgid "Jrk"
+msgid "Order"
 msgstr ""
 
 #: classes/formgen/form_table.aw:26
-msgid "Count"
+msgid "Select"
 msgstr ""
 
 #: classes/formgen/form_table.aw:27
-msgid "Koguse element"
+msgid "Peidetud Select"
 msgstr ""
 
 #: classes/formgen/form_table.aw:28
-msgid "Hinna element"
+msgid "Jrk"
 msgstr ""
 
 #: classes/formgen/form_table.aw:29
-msgid "Sisestuse ID"
+msgid "Count"
 msgstr ""
 
 #: classes/formgen/form_table.aw:30
+msgid "Koguse element"
+msgstr ""
+
+#: classes/formgen/form_table.aw:31
+msgid "Hinna element"
+msgstr ""
+
+#: classes/formgen/form_table.aw:32
+msgid "Sisestuse ID"
+msgstr ""
+
+#: classes/formgen/form_table.aw:33
 msgid "Tekst"
 msgstr ""
 
-#: classes/formgen/form_table.aw:34
+#: classes/formgen/form_table.aw:37
 msgid "Salvesta"
 msgstr ""
 
-#: classes/formgen/form_table.aw:34
+#: classes/formgen/form_table.aw:37
 msgid "Lisa"
 msgstr ""
 
-#: classes/formgen/form_table.aw:34
+#: classes/formgen/form_table.aw:37
 msgid "Kustuta"
 msgstr ""
 
-#: classes/formgen/form_table.aw:34
+#: classes/formgen/form_table.aw:37
 msgid "Liiguta"
 msgstr ""

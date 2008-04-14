@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -85,6 +85,18 @@ msgstr ""
 msgid "Omaduse Foto kohast (photo) help"
 msgstr ""
 
+#: classes/applications/scm/scm_location.aw:prop_owner
+msgid "Omaduse Omanik (owner) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_owner_comment
+msgid "Omaduse Omanik (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_owner_help
+msgid "Omaduse Omanik (owner) help"
+msgstr ""
+
 #: classes/applications/scm/scm_location.aw:prop_make_copy
 msgid "Omaduse Tee koopia (make_copy) caption"
 msgstr ""
@@ -95,6 +107,18 @@ msgstr ""
 
 #: classes/applications/scm/scm_location.aw:prop_make_copy_help
 msgid "Omaduse Tee koopia (make_copy) help"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_usercheckbox1
+msgid "Omaduse User-defined checkbox 1 (usercheckbox1) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_usercheckbox1_comment
+msgid "Omaduse User-defined checkbox 1 (usercheckbox1) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:prop_usercheckbox1_help
+msgid "Omaduse User-defined checkbox 1 (usercheckbox1) help"
 msgstr ""
 
 #: classes/applications/scm/scm_location.aw:prop_transl
@@ -127,4 +151,8 @@ msgstr ""
 
 #: classes/applications/scm/scm_location.aw:rel_RELTYPE_ADDRESS
 msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_location.aw:rel_RELTYPE_OWNER
+msgid "Seose Aadress (RELTYPE_OWNER) tekst"
 msgstr ""

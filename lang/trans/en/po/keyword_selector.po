@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,24 +9,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/keyword_selector.aw:79 classes/vcl/keyword_selector.aw:91
-#: classes/vcl/keyword_selector.aw:103
+#: classes/vcl/keyword_selector.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:81 classes/vcl/keyword_selector.aw:93
+#: classes/vcl/keyword_selector.aw:105
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/vcl/keyword_selector.aw:85 classes/vcl/keyword_selector.aw:97
-#: classes/vcl/keyword_selector.aw:109
+#: classes/vcl/keyword_selector.aw:87 classes/vcl/keyword_selector.aw:99
+#: classes/vcl/keyword_selector.aw:111
 msgid "Vali"
 msgstr "Select"
 
-#: classes/vcl/keyword_selector.aw:216 classes/vcl/keyword_selector.aw:221
+#: classes/vcl/keyword_selector.aw:218 classes/vcl/keyword_selector.aw:223
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/vcl/keyword_selector.aw:227
+#: classes/vcl/keyword_selector.aw:229
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:238
+#: classes/vcl/keyword_selector.aw:240
 msgid "Valitud:"
 msgstr "Selected:"

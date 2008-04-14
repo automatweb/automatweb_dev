@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/sys.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/sys.aw:36
+msgid "Tabeli nimi"
+msgstr ""
+
+#: classes/sys.aw:41
+msgid "Suurus"
+msgstr ""
+
+#: classes/sys.aw:68
+msgid "Total"
+msgstr ""
+
+#: classes/sys.aw:414
+msgid "L&otilde;i saidi andmebaasi tabelid"
+msgstr ""
+
+#: classes/sys.aw:471
+msgid "all done!"
+msgstr ""
+
+#: classes/sys.aw:511
+msgid "Nimi"
+msgstr ""
+
+#: classes/sys.aw:515
+msgid "Klass"
+msgstr ""
+
+#: classes/sys.aw:519
+msgid "Muutja"
+msgstr ""
+
+#: classes/sys.aw:523
+msgid "Muutmise aeg"
+msgstr ""
+
+#: classes/sys.aw:691
+msgid "all done!! database seems to be relatively ok!"
+msgstr ""
+
+#: classes/sys.aw:751
+msgid "All done"
+msgstr ""
+
+#: classes/sys.aw:839
+msgid "$fn"
+msgstr ""
+

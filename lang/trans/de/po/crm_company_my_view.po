@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/crm/crm_company_my_view.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_my_view.aw:33
 msgid "Toimetus"
 msgstr ""

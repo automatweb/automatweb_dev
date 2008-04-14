@@ -17,14 +17,14 @@ msgstr ""
 msgid "Teil pole &otilde;igusi selle lehe vaatamiseks!"
 msgstr ""
 
-#: classes/core/orb/orb.aw:768
+#: classes/core/orb/orb.aw:781
 msgid "Could not load request handler for request method '%s'"
 msgstr "Could not load request handler for request method '%s'"
 
-#: classes/core/orb/orb.aw:915
+#: classes/core/orb/orb.aw:928
 msgid "orb::handle_rpc_call - Could not load request handler for request method '%s'"
 msgstr "orb::handle_rpc_call - Could not load request handler for request method '%s'"
 
-#: classes/core/orb/orb.aw:1171
+#: classes/core/orb/orb.aw:1184
 msgid "orb::check_class_access(%s): no permissions to access the class! (denied by %s)"
 msgstr "orb::check_class_access(%s): no permissions to access the class! (denied by %s)"

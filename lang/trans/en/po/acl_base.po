@@ -13,50 +13,38 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:76
+#: classes/core/obj/acl_base.aw:75
 msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:83
+#: classes/core/obj/acl_base.aw:82
 msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:111
+#: classes/core/obj/acl_base.aw:110
 msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:118
+#: classes/core/obj/acl_base.aw:117
 msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:143
-msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given gid is incorrect"
-msgstr ""
-
-#: classes/core/obj/acl_base.aw:150
+#: classes/core/obj/acl_base.aw:145
 msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:179
+#: classes/core/obj/acl_base.aw:172
 msgid "acl_base::save_acl(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:186
+#: classes/core/obj/acl_base.aw:179
 msgid "acl_base::save_acl(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:222
-msgid "acl_base::save_acl_masked(%s, %s,..): the given gid is incorrect"
-msgstr ""
-
-#: classes/core/obj/acl_base.aw:229
-msgid "acl_base::save_acl_masked(%s, %s,..): the given oid is incorrect"
-msgstr ""
-
-#: classes/core/obj/acl_base.aw:410
+#: classes/core/obj/acl_base.aw:339
 msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 
-#: classes/core/obj/acl_base.aw:585
+#: classes/core/obj/acl_base.aw:516
 msgid "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
 msgstr "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"

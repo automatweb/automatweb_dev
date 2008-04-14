@@ -1,0 +1,320 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/common/digidoc/ddoc.aw:class_1186_help
+msgid "Klassi DigiDoc help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_ddoc
+msgid "Omaduse Vali fail (ddoc) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_ddoc_comment
+msgid "Omaduse Vali fail (ddoc) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_ddoc_help
+msgid "Omaduse Vali fail (ddoc) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_ddoc_location
+msgid "Omaduse asukoht (ddoc_location) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_ddoc_location_comment
+msgid "Omaduse asukoht (ddoc_location) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_ddoc_location_help
+msgid "Omaduse asukoht (ddoc_location) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_tb
+msgid "Omaduse  (files_tb) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_tb_comment
+msgid "Omaduse  (files_tb) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_tb_help
+msgid "Omaduse  (files_tb) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_tbl
+msgid "Omaduse  (files_tbl) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_tbl_comment
+msgid "Omaduse  (files_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_tbl_help
+msgid "Omaduse  (files_tbl) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_search_result_file
+msgid "Omaduse  (search_result_file) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_search_result_file_comment
+msgid "Omaduse  (search_result_file) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_search_result_file_help
+msgid "Omaduse  (search_result_file) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_tb
+msgid "Omaduse  (signatures_tb) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_tb_comment
+msgid "Omaduse  (signatures_tb) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_tb_help
+msgid "Omaduse  (signatures_tb) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_tbl
+msgid "Omaduse  (signatures_tbl) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_tbl_comment
+msgid "Omaduse  (signatures_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_tbl_help
+msgid "Omaduse  (signatures_tbl) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files
+msgid "Omaduse  (files) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_comment
+msgid "Omaduse  (files) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_files_help
+msgid "Omaduse  (files) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures
+msgid "Omaduse  (signatures) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_comment
+msgid "Omaduse  (signatures) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_signatures_help
+msgid "Omaduse  (signatures) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:group_files
+msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:group_files_help
+msgid "Grupi Failid (files) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:group_signatures
+msgid "Grupi Allkirjad (signatures) pealkiri"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:group_signatures_help
+msgid "Grupi Allkirjad (signatures) help"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:rel_RELTYPE_SIGNED_FILE
+msgid "Seose Allkirjastatud fail (RELTYPE_SIGNED_FILE) tekst"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:rel_RELTYPE_SIGNER
+msgid "Seose Allkirjastaja (RELTYPE_SIGNER) tekst"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:140
+msgid "Lisa fail"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:143 classes/common/digidoc/ddoc.aw:156
+msgid "Antud DigiDoc on ALLKIRJASTATUD, faili lisamisega eemaldatatakse automaatselt allkirjad! Kas te soovite j"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:147
+msgid "Eemalda fail"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:150
+msgid "Antud DigiDoc on ALLKIRJASTATUD, faili(de) eemaldamisega eemaldatakse ka allkirjad! Kas te soovite j"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:168
+msgid "Fail"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:172
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:176
+msgid "Suurus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:193
+msgid "kB"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:193
+msgid "B"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:205
+msgid "Lisa allkiri"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:212
+msgid "Eemalda allkiri"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:226
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:230
+msgid "Perekonnanimi"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:234
+msgid "Isikukood"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:238
+msgid "Aeg"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:242
+msgid "Roll"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:246
+msgid "Asukoht"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:264
+msgid "M&aauml;&aauml;ramata"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:429
+msgid "Ei suutnud eemaldada allkirju"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:516
+msgid "Faili lisamine eba&otilde;nnestus!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:577
+msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:586
+msgid "Ei saanud k&auml;tte DigiDoc konteinerit:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:603 classes/common/digidoc/ddoc.aw:673
+msgid "DigiDoc'i faili sisu seadmine eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:634
+msgid "Eemaldatava faili id ei ole korrektne"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:641
+msgid "Vale objekti id!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:648
+msgid "Ei saa eemaldada faile allkirjastatud DigiDoc'ilt"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:666
+msgid "Ei saanud DigiDoc'i sisu k&auml;tte:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:697
+msgid "Vale objetki id!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:779
+msgid "&Uuml;henduse probleemid. Hetkel ei ole kahjuks v&otilde;imalik allkirjastada!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:782
+msgid "Viga sessiooni loomisel!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:930 classes/common/digidoc/ddoc.aw:1000 classes/common/digidoc/ddoc.aw:1057
+msgid "Ei saanud lisada faili konteinerisse:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:942 classes/common/digidoc/ddoc.aw:1012 classes/common/digidoc/ddoc.aw:1067
+msgid "Ei saanud DigiDoc konteinerit k&auml;tte:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:950 classes/common/digidoc/ddoc.aw:1020 classes/common/digidoc/ddoc.aw:1075
+msgid "DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1375
+msgid "#"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1476 classes/common/digidoc/ddoc.aw:1508
+msgid "Uue t&uuml;hja digidoc konteineri loomine eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1486 classes/common/digidoc/ddoc.aw:1518
+msgid "Faili lisamine digidoc konteinerisse eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1625
+msgid "Allkirjastamise ettevalmistusetapp eba&otilde;nnestus! Palun proovige uuesti!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1626 classes/common/digidoc/ddoc.aw:1664 classes/common/digidoc/ddoc.aw:1677 classes/common/digidoc/ddoc.aw:1690
+msgid "T&auml;psem veateade: %s"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1663
+msgid "Allkirjastamise l&otilde;puetapp eba&otilde;nnestus! Palun proovige uuesti."
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1676
+msgid "Allkirjastatud digidoc konteineri saamine eba&otilde;nnestus."
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1689
+msgid "DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1767
+msgid "Ei suutnud eemaldada allkirja digidoc konteinerist:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1776
+msgid "Ei suutnud saada uut digidoc konteinerit:"
+msgstr ""
+

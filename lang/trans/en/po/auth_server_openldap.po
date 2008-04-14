@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -209,27 +209,39 @@ msgstr ""
 msgid "Omaduse &Auml;ra salvesta AW'sse kasutaja parooli (no_save_pwd) help"
 msgstr ""
 
+#: classes/core/users/auth/auth_server_openldap.aw:prop_aw_user_prefix
+msgid "Omaduse Kasutajanime prefiks (aw_user_prefix) caption"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_openldap.aw:prop_aw_user_prefix_comment
+msgid "Omaduse Kasutajanime prefiks (aw_user_prefix) kommentaar"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_openldap.aw:prop_aw_user_prefix_help
+msgid "Omaduse Kasutajanime prefiks (aw_user_prefix) help"
+msgstr ""
+
 # classes/core/users/auth/auth_server_openldap.aw:rel_RELTYPE_GROUP
 #: classes/core/users/auth/auth_server_openldap.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:120
+#: classes/core/users/auth/auth_server_openldap.aw:123
 msgid "auth_server_openldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:124
+#: classes/core/users/auth/auth_server_openldap.aw:127
 msgid "LDAP Moodul pole installeeritud!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:136
+#: classes/core/users/auth/auth_server_openldap.aw:146
 msgid "Ei saanud &uuml;hendust LDAP serveriga %s"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:178
+#: classes/core/users/auth/auth_server_openldap.aw:190
 msgid "Sellist kasutajat pole v&otilde;i parool on vale!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:192
+#: classes/core/users/auth/auth_server_openldap.aw:210
 msgid "Ei saanud serveriga &uuml;hendust!"
 msgstr ""

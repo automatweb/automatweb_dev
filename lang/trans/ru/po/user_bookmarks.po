@@ -137,117 +137,117 @@ msgstr ""
 msgid "Kujundusosa Puu (shared_tree) pealkiri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:92
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:94
 msgid "&Uuml;ksteise all"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:93
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:95
 msgid "Kasutajate kaupa"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:151
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:153
 msgid "%s j&auml;rjehoidja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:169
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:171
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:173
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:175
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:178
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:428
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:717
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:180
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:430
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:719
 msgid "Link"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:191
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:614
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:193
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:616
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:197
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:199
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:204
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:206
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:211
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:213
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:220
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:222
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:412
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:414
 msgid "Jaga"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:417
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:706
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:419
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:708
 msgid "Ikoon"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:423
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:712
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:425
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:714
 msgid "Objekti nimi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:433
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:435
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:438
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:440
 msgid "Tee kohustuslikuks"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:443
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:445
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:448
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:450
 msgid "Kasutaja tekst"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:505
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:507
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:644
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:945
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1145
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:646
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:947
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1155
 msgid "j&auml;rjehoidja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:701
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:703
 msgid "Kuva endal"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:722
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:724
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:772
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:774
 msgid "j&auml;rjehoidjad"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:985
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:987
 msgid "Pane j&auml;rjehoidjasse"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:989
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:991
 msgid "Eemalda j&auml;rjehoidjast"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:993
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:995
 msgid "Toimeta j&auml;rjehoidjat"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:999
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1001
 msgid "J&auml;rjehoidja"
 msgstr ""

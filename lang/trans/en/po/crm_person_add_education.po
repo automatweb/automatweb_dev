@@ -9,25 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 #: classes/applications/crm/crm_person_add_education.aw:class_645_help
 msgid "Klassi T&auml;ienduskoolitus help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_org
-msgid "Omaduse Ettevõte (org) caption"
-msgstr ""
+msgid "Omaduse Ettev&otilde;te (org) caption"
+msgstr "Organisation"
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_org_comment
-msgid "Omaduse Ettevõte (org) kommentaar"
+msgid "Omaduse Ettev&otilde;te (org) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_org_help
-msgid "Omaduse Ettevõte (org) help"
+msgid "Omaduse Ettev&otilde;te (org) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_field
 msgid "Omaduse Teema (field) caption"
-msgstr ""
+msgstr "Subject"
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_field_comment
 msgid "Omaduse Teema (field) kommentaar"
@@ -38,25 +39,50 @@ msgid "Omaduse Teema (field) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_time
-msgid "Omaduse Aeg (time) caption"
-msgstr ""
+msgid "Omaduse Algus (time) caption"
+msgstr "Start"
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_time_comment
-msgid "Omaduse Aeg (time) kommentaar"
+msgid "Omaduse Algus (time) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_time_help
-msgid "Omaduse Aeg (time) help"
+msgid "Omaduse Algus (time) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_time_text
+msgid "Omaduse Aeg (time_text) caption"
+msgstr "End"
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_time_text_comment
+msgid "Omaduse Aeg (time_text) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_time_text_help
+msgid "Omaduse Aeg (time_text) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_length_hrs
+msgid "Omaduse Kestvus tundides (length_hrs) caption"
+msgstr "Lenght in hours"
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_length_hrs_comment
+msgid "Omaduse Kestvus tundides (length_hrs) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_add_education.aw:prop_length_hrs_help
+msgid "Omaduse Kestvus tundides (length_hrs) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_length
-msgid "Omaduse Kestvus päevades (length) caption"
-msgstr ""
+msgid "Omaduse Kestvus p&auml;evades (length) caption"
+msgstr "Lenght in days"
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_length_comment
-msgid "Omaduse Kestvus päevades (length) kommentaar"
+msgid "Omaduse Kestvus p&auml;evades (length) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_add_education.aw:prop_length_help
-msgid "Omaduse Kestvus päevades (length) help"
+msgid "Omaduse Kestvus p&auml;evades (length) help"
 msgstr ""
+

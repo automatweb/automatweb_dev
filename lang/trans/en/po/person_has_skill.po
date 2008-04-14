@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill
 msgid "Omaduse P&auml;devus (skill) caption"
-msgstr ""
+msgstr "Skill"
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_comment
 msgid "Omaduse P&auml;devus (skill) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_acquired
 msgid "Omaduse Omandatud (skill_acquired) caption"
-msgstr ""
+msgstr "Start"
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_acquired_comment
 msgid "Omaduse Omandatud (skill_acquired) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_lost
 msgid "Omaduse Kaotatud (skill_lost) caption"
-msgstr ""
+msgstr "Lost"
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_lost_comment
 msgid "Omaduse Kaotatud (skill_lost) kommentaar"

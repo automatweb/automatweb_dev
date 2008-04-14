@@ -49,6 +49,18 @@ msgstr ""
 msgid "Omaduse Tellimuse e-maili subjekt (email_subj) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order_cart.aw:prop_subject_handler
+msgid "Omaduse Subjekti kontroller (subject_handler) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:prop_subject_handler_comment
+msgid "Omaduse Subjekti kontroller (subject_handler) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:prop_subject_handler_help
+msgid "Omaduse Subjekti kontroller (subject_handler) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_cart.aw:prop_update_handler
 msgid "Omaduse Korvi uuendamise kontroller (update_handler) caption"
 msgstr ""
@@ -81,16 +93,16 @@ msgstr ""
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:162
-#: classes/applications/shop/shop_order_cart.aw:988
-#: classes/applications/shop/shop_order_cart.aw:1258
+#: classes/applications/shop/shop_order_cart.aw:165
+#: classes/applications/shop/shop_order_cart.aw:1020
+#: classes/applications/shop/shop_order_cart.aw:1290
 msgid "shop_order_cart::show(): no product layout set for cart (%s)"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:415
+#: classes/applications/shop/shop_order_cart.aw:424
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:766
+#: classes/applications/shop/shop_order_cart.aw:798
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr ""

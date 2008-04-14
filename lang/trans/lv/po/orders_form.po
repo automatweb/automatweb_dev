@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -313,31 +313,31 @@ msgstr ""
 msgid "Seose Maili aadress (RELTYPE_MAIL_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:980
+#: classes/applications/orders/orders_form.aw:984
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1039
-#: classes/applications/orders/orders_form.aw:1049
+#: classes/applications/orders/orders_form.aw:1043
+#: classes/applications/orders/orders_form.aw:1053
 msgid "\n"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1060
+#: classes/applications/orders/orders_form.aw:1064
 msgid "Kauba t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1066
+#: classes/applications/orders/orders_form.aw:1070
 msgid "Min. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1072
+#: classes/applications/orders/orders_form.aw:1076
 msgid "Max. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1078
+#: classes/applications/orders/orders_form.aw:1082
 msgid "Esmase sissemakse %"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:1084
+#: classes/applications/orders/orders_form.aw:1088
 msgid "Intressi %"
 msgstr ""

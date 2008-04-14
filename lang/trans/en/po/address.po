@@ -134,8 +134,8 @@ msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr "Administrative structure"
 
 #: classes/common/address/address.aw:89
-msgid "Haldusjaotus m‰‰ramata."
-msgstr "Administrative structure not defined"
+msgid "Haldusjaotus m22ramata."
+msgstr ""
 
 #: classes/common/address/address.aw:108
 msgid "Riik/haldusjaotus peab olema valitud!"
@@ -152,6 +152,9 @@ msgstr ""
 #: classes/common/address/address.aw:347
 msgid "T&auml;nav"
 msgstr ""
+
+#~ msgid "Haldusjaotus m‰‰ramata."
+#~ msgstr "Administrative structure not defined"
 
 #~ msgid "T‰nav"
 #~ msgstr "Street"

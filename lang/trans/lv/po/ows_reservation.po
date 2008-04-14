@@ -553,6 +553,30 @@ msgstr ""
 msgid "Omaduse Charge currency (charge_currency) help"
 msgstr ""
 
+#: classes/applications/ows_bron/ows_reservation.aw:prop_cancel_type
+msgid "Omaduse T&uuml;histamise p&otilde;hjus (cancel_type) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_cancel_type_comment
+msgid "Omaduse T&uuml;histamise p&otilde;hjus (cancel_type) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_cancel_type_help
+msgid "Omaduse T&uuml;histamise p&otilde;hjus (cancel_type) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_cancel_other
+msgid "Omaduse Muu p&otilde;hjus (cancel_other) caption"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_cancel_other_comment
+msgid "Omaduse Muu p&otilde;hjus (cancel_other) kommentaar"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:prop_cancel_other_help
+msgid "Omaduse Muu p&otilde;hjus (cancel_other) help"
+msgstr ""
+
 #: classes/applications/ows_bron/ows_reservation.aw:group_cust_data
 msgid "Grupi Sisestatud andmed (cust_data) pealkiri"
 msgstr ""
@@ -567,6 +591,14 @@ msgstr ""
 
 #: classes/applications/ows_bron/ows_reservation.aw:group_bron_data_help
 msgid "Grupi Reserveeringu andmed (bron_data) help"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:group_cancel_data
+msgid "Grupi T&uuml;histamise p&otilde;hjus (cancel_data) pealkiri"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_reservation.aw:group_cancel_data_help
+msgid "Grupi T&uuml;histamise p&otilde;hjus (cancel_data) help"
 msgstr ""
 
 #: classes/applications/ows_bron/ows_reservation.aw:rel_RELTYPE_OWS_BRON

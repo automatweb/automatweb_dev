@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-06 12:54+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
 "Language-Team: \n"
@@ -128,12 +128,12 @@ msgid "Peenraha"
 msgstr "Small unit"
 
 #: classes/formgen/currency.aw:184
-msgid "Alguskuupäev"
-msgstr "From"
+msgid "Alguskuup&auml;ev"
+msgstr ""
 
 #: classes/formgen/currency.aw:188
-msgid "Lõppkuupäev"
-msgstr "To"
+msgid "L&otilde;ppkuup&auml;ev"
+msgstr ""
 
 #: classes/formgen/currency.aw:192
 msgid "Valuuta"
@@ -148,16 +148,25 @@ msgid "Ostukurss"
 msgstr "Buying rate"
 
 #: classes/formgen/currency.aw:204
-msgid "Müügikurss"
-msgstr "Selling rate"
+msgid "M&uuml;&uuml;gikurss"
+msgstr ""
 
 #: classes/formgen/currency.aw:238
 msgid "Kursid"
 msgstr "Rates"
 
-#: classes/formgen/currency.aw:327
-msgid "currency::convert - kas %s või %s pole valuutadaobjektide id'd"
+#: classes/formgen/currency.aw:316
+msgid "currency::convert - kas %s v&otilde;i %s pole valuutadaobjektide id'd"
 msgstr ""
+
+#~ msgid "Alguskuupäev"
+#~ msgstr "From"
+
+#~ msgid "Lõppkuupäev"
+#~ msgstr "To"
+
+#~ msgid "Müügikurss"
+#~ msgstr "Selling rate"
 
 # classes/formgen/currency.aw:prop_comment
 #~ msgid "Omaduse Kurss saksa marga suhtes (comment) caption"

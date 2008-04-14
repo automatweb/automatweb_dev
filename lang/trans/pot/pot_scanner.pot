@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/trans/pot_scanner.aw:811
+#: classes/core/trans/pot_scanner.aw:820
 msgid "\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"
 msgstr ""
 

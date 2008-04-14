@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -23,6 +23,18 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_candidate.aw:prop_person_help
 msgid "Omaduse Isik (person) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_job_offer
+msgid "Omaduse T&ouml;&ouml;pakkumine (job_offer) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_job_offer_comment
+msgid "Omaduse T&ouml;&ouml;pakkumine (job_offer) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_job_offer_help
+msgid "Omaduse T&ouml;&ouml;pakkumine (job_offer) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro_file
@@ -49,6 +61,18 @@ msgstr ""
 msgid "Omaduse Kaaskiri tekstina (intro) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_addinfo
+msgid "Omaduse Lisainfo (addinfo) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_addinfo_comment
+msgid "Omaduse Lisainfo (addinfo) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_addinfo_help
+msgid "Omaduse Lisainfo (addinfo) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_PERSON
 msgid "Seose Kandideerja (RELTYPE_PERSON) tekst"
 msgstr ""
@@ -57,10 +81,14 @@ msgstr ""
 msgid "Seose Kaaskiri failina (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:50
+#: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_JOB_OFFER
+msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:92
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:60
+#: classes/applications/personnel_management/personnel_management_candidate.aw:102
 msgid "%s kandidatuur kohale %s"
 msgstr ""

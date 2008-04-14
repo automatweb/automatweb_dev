@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,8 +9,138 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/package_management/package_server.aw:class_1211_help
 msgid "Klassi Pakiserver help"
 msgstr ""
 
+#: classes/applications/package_management/package_server.aw:prop_packages_folder_aw
+msgid "Omaduse Pakkide kaust AW-s (packages_folder_aw) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_packages_folder_aw_comment
+msgid "Omaduse Pakkide kaust AW-s (packages_folder_aw) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_packages_folder_aw_help
+msgid "Omaduse Pakkide kaust AW-s (packages_folder_aw) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_packages_folder_fs
+msgid "Omaduse Pakkide kaust failis&uuml;steemis (packages_folder_fs) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_packages_folder_fs_comment
+msgid "Omaduse Pakkide kaust failis&uuml;steemis (packages_folder_fs) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_packages_folder_fs_help
+msgid "Omaduse Pakkide kaust failis&uuml;steemis (packages_folder_fs) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_toolbar
+msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_toolbar_comment
+msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_toolbar_help
+msgid "Omaduse T&ouml;&ouml;riistariba (toolbar) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_name
+msgid "Omaduse Nimi (search_name) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_name_comment
+msgid "Omaduse Nimi (search_name) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_name_help
+msgid "Omaduse Nimi (search_name) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_version
+msgid "Omaduse Versioon (search_version) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_version_comment
+msgid "Omaduse Versioon (search_version) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_version_help
+msgid "Omaduse Versioon (search_version) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_button
+msgid "Omaduse Otsi (search_button) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_button_comment
+msgid "Omaduse Otsi (search_button) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_button_help
+msgid "Omaduse Otsi (search_button) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_list
+msgid "Omaduse Pakkide nimekiri (list) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_list_comment
+msgid "Omaduse Pakkide nimekiri (list) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_list_help
+msgid "Omaduse Pakkide nimekiri (list) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:group_packages
+msgid "Grupi Pakid (packages) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:group_packages_help
+msgid "Grupi Pakid (packages) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:rel_RELTYPE_PACKAGES_FOLDER_AW
+msgid "Seose Pakkide kaust AW-s (RELTYPE_PACKAGES_FOLDER_AW) tekst"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:85
+msgid "Uus pakk"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:95
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:97
+msgid "Oled kindel et soovid valitud objektid kustutada?"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:108
+msgid "Pakkide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:118
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:122
+msgid "Versioon"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:127
+msgid "Kirjeldus"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:132
+msgid "S&otilde;ltuvused"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:240
+msgid "Pole sellist ajsa nagu pakihalduse serveri objekt!"
+msgstr ""

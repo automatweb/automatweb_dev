@@ -493,70 +493,78 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_CFG_FORM) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:200
+#: classes/core/users/group.aw:rel_RELTYPE_BOOKMARK
+msgid "Seose Kohustuslik j&auml;rjehoidja (RELTYPE_BOOKMARK) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:201
 msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/group.aw:243
+#: classes/core/users/group.aw:244
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:244
+#: classes/core/users/group.aw:245
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:245
+#: classes/core/users/group.aw:246
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/core/users/group.aw:254
+#: classes/core/users/group.aw:255
 msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />\t\t\t\t\tkasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />\t\t\t\t\tv&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />\t\t\t\t\tkuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />\t\t\t\t\tn&auml;ide: <br />\t\t\t\t\tkix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />\t\t\t\t\t<br />\t\t\t\t\tv&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
 msgstr ""
 
-#: classes/core/users/group.aw:310
+#: classes/core/users/group.aw:300
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:468
+#: classes/core/users/group.aw:458
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:497
+#: classes/core/users/group.aw:487
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:506
+#: classes/core/users/group.aw:496
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:515
+#: classes/core/users/group.aw:505
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:524
+#: classes/core/users/group.aw:514
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:545
+#: classes/core/users/group.aw:535
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:610
+#: classes/core/users/group.aw:598
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:638
+#: classes/core/users/group.aw:626
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:668
+#: classes/core/users/group.aw:656
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:859
+#: classes/core/users/group.aw:775
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:905
+#: classes/core/users/group.aw:819
 msgid "Default &otilde;igused seose loomisel"
+msgstr ""
+
+#: classes/core/users/group.aw:1082
+msgid "could not find the group oid for gid %s"
 msgstr ""

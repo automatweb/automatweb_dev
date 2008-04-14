@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -101,38 +101,38 @@ msgstr ""
 msgid "Seose Muutuja (RELTYPE_META_ELEMENTS) tekst"
 msgstr ""
 
-#: classes/admin/object_type.aw:191
+#: classes/admin/object_type.aw:192
 msgid "-vali-"
 msgstr ""
 
-#: classes/admin/object_type.aw:192
+#: classes/admin/object_type.aw:193
 msgid "multiple select"
 msgstr ""
 
-#: classes/admin/object_type.aw:193
+#: classes/admin/object_type.aw:194
 msgid "select"
 msgstr ""
 
-#: classes/admin/object_type.aw:194
+#: classes/admin/object_type.aw:195
 msgid "checkboxid"
 msgstr ""
 
-#: classes/admin/object_type.aw:195
+#: classes/admin/object_type.aw:196
 msgid "radiobuttons"
 msgstr ""
 
-#: classes/admin/object_type.aw:212
+#: classes/admin/object_type.aw:213
 msgid "Oks"
 msgstr ""
 
-#: classes/admin/object_type.aw:220
+#: classes/admin/object_type.aw:221
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/object_type.aw:236
+#: classes/admin/object_type.aw:237
 msgid "Vaikimisi v&auml;limus"
 msgstr ""
 
-#: classes/admin/object_type.aw:286
+#: classes/admin/object_type.aw:287
 msgid "K&otilde;ik"
 msgstr ""

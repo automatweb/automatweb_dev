@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi &Uuml;ksus help"
 msgstr ""
 
+#: classes/crm/crm_section.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
 #: classes/crm/crm_section.aw:prop_jrk
 msgid "Omaduse Järk (jrk) caption"
 msgstr ""
@@ -169,6 +181,18 @@ msgstr ""
 msgid "Omaduse E-posti aadress (email_id) help"
 msgstr ""
 
+#: classes/crm/crm_section.aw:prop_url
+msgid "Omaduse Veebiaadress (url) caption"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_url_comment
+msgid "Omaduse Veebiaadress (url) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_url_help
+msgid "Omaduse Veebiaadress (url) help"
+msgstr ""
+
 #: classes/crm/crm_section.aw:prop_wpls
 msgid "Omaduse T&ouml;&ouml;kohad (wpls) caption"
 msgstr ""
@@ -262,4 +286,8 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_WORKPLACE
 msgid "Seose T&ouml;&ouml;koht (RELTYPE_WORKPLACE) tekst"
+msgstr ""
+
+#: classes/crm/crm_section.aw:rel_RELTYPE_URL
+msgid "Seose Veebiaadress (RELTYPE_URL) tekst"
 msgstr ""

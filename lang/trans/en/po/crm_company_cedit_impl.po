@@ -63,6 +63,11 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
+#: classes/applications/crm/crm_company_cedit_impl.aw:812
+#: classes/applications/crm/crm_company_cedit_impl.aw:813
+msgid "M&auml;&auml;ramata"
+msgstr ""
+
 #: classes/applications/crm/crm_company_cedit_impl.aw:907
 msgid "--vali--"
 msgstr "--select--"

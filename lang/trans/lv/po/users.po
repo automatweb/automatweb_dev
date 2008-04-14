@@ -9,82 +9,90 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/users.aw:class__help
+#: classes/core/users/users.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/users.aw:77
+#: classes/core/users/users.aw:66
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud"
 msgstr ""
 
-#: classes/users.aw:81
+#: classes/core/users/users.aw:70
 msgid "Uus parool ja parooli kordus ei ole samad"
 msgstr ""
 
-#: classes/users.aw:85
+#: classes/core/users/users.aw:74
 msgid "Te ei tohi panna uuesti sama vana parooli"
 msgstr ""
 
-#: classes/users.aw:89
+#: classes/core/users/users.aw:78
 msgid "Vigane v&otilde;i vale parool"
 msgstr ""
 
-#: classes/users.aw:94
-msgid "Vigane kasutajanimimi %s"
-msgstr ""
-
-#: classes/users.aw:106
+#: classes/core/users/users.aw:93
 msgid "Vana parool on vale"
 msgstr ""
 
-#: classes/users.aw:203
+#: classes/core/users/users.aw:129
+msgid "Paroolid peavad olema samad!"
+msgstr ""
+
+#: classes/core/users/users.aw:134
+msgid "Uus parool sisaldab lubamatuid m&auml;rke<br />"
+msgstr ""
+
+#: classes/core/users/users.aw:156
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: classes/users.aw:239 classes/users.aw:306
+#: classes/core/users/users.aw:166
+msgid "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>"
+msgstr ""
+
+#: classes/core/users/users.aw:188 classes/core/users/users.aw:266
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/users.aw:244
+#: classes/core/users/users.aw:193
 msgid "Vigane e-posti aadress"
 msgstr ""
 
-#: classes/users.aw:264
-msgid "Kasutajal $uid puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole"
+#: classes/core/users/users.aw:217
+msgid "Kasutajal %s puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole"
 msgstr ""
 
-#: classes/users.aw:282
+#: classes/core/users/users.aw:236
 msgid "Paroolivahetus saidil %s"
 msgstr ""
 
-#: classes/users.aw:285
+#: classes/core/users/users.aw:242
 msgid "Parooli muutmise link saadeti  aadressile <b>%s</b>. Vaata oma postkasti<br />T&auml;name!<br />"
 msgstr ""
 
-#: classes/users.aw:318 classes/users.aw:366
+#: classes/core/users/users.aw:285 classes/core/users/users.aw:338
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:329 classes/users.aw:375
+#: classes/core/users/users.aw:299 classes/core/users/users.aw:345
 msgid "Sellist v&otilde;tit pole v&auml;ljastatud"
 msgstr ""
 
-#: classes/users.aw:341
+#: classes/core/users/users.aw:312
 msgid "See v&otilde;ti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:341
+#: classes/core/users/users.aw:312
 msgid "Telli uusi v&otilde;ti"
 msgstr ""
 
-#: classes/users.aw:381
+#: classes/core/users/users.aw:351
 msgid "Parool sisaldab keelatud m&auml;rke"
 msgstr ""
 
-#: classes/users.aw:387
+#: classes/core/users/users.aw:357
 msgid "Paroolid peavad olema &uuml;hesugused"
 msgstr ""
 
-#: classes/users.aw:396
+#: classes/core/users/users.aw:366
 msgid "Parool on edukalt vahetatud."
 msgstr ""

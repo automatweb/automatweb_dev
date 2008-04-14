@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/crm/crm_company_qv_impl.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_qv_impl.aw:22
 msgid "Kuup&auml;ev"
 msgstr "Date"
@@ -39,8 +43,8 @@ msgid "<b>Projektid</b>"
 msgstr "<b>Projects</b>"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:94
-msgid "<b>Projektid (5 värskemat)</b>"
-msgstr "<b>Projects (5 latest)</b>"
+msgid "<b>Projektid (5 v&auml;rskemat)</b>"
+msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:146
 msgid "Valitud ajavahemikus ei ole &uuml;htegi projekti!"
@@ -51,8 +55,8 @@ msgid "<b>Tegevused</b>"
 msgstr "<b>Tasks</b>"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:209
-msgid "<b>Tegevused (10 värskemat)</b>"
-msgstr "<b>Tasks (10 latest)</b>"
+msgid "<b>Tegevused (10 v&auml;rskemat)</b>"
+msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:264
 msgid "Tehtud"
@@ -71,8 +75,8 @@ msgid "<span style='font-size: 0px;'>y</span><b>Arved</b>"
 msgstr "<span style='font-size: 0px;'>y</span><b>Bills</b>"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:305
-msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
-msgstr "<span style='font-size: 0px;'>y</span><b>Bills (10 latest)</b>"
+msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 v&auml;rskemat)</b>"
+msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:343
 msgid "Valitud ajavahemikus ei ole &uuml;htegi arvet!"
@@ -173,3 +177,12 @@ msgstr "Total work sum"
 #: classes/applications/crm/crm_company_qv_impl.aw:487
 msgid "Esitatud arveid summas"
 msgstr "Invoices sent for sum"
+
+#~ msgid "<b>Projektid (5 värskemat)</b>"
+#~ msgstr "<b>Projects (5 latest)</b>"
+
+#~ msgid "<b>Tegevused (10 värskemat)</b>"
+#~ msgstr "<b>Tasks (10 latest)</b>"
+
+#~ msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
+#~ msgstr "<span style='font-size: 0px;'>y</span><b>Bills (10 latest)</b>"

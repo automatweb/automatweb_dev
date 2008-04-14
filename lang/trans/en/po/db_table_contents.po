@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -194,6 +194,6 @@ msgstr "database login"
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr "data transformer"
 
-#: classes/applications/awmyadmin/db_table_contents.aw:208
+#: classes/applications/awmyadmin/db_table_contents.aw:209
 msgid "Salvesta"
 msgstr ""

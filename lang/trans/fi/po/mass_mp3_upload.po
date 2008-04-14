@@ -9,58 +9,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:class_1351_help
+#: classes/applications/mp3player/mass_mp3_upload.aw:class_1351_help
 msgid "Klassi Impordi minu MP3d help"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_importfolder
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_importfolder
 msgid "Omaduse Impordikaust (importfolder) caption"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_importfolder_comment
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_importfolder_comment
 msgid "Omaduse Impordikaust (importfolder) kommentaar"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_importfolder_help
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_importfolder_help
 msgid "Omaduse Impordikaust (importfolder) help"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_do_import
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_do_import
 msgid "Omaduse Impordi (do_import) caption"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_do_import_comment
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_do_import_comment
 msgid "Omaduse Impordi (do_import) kommentaar"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_do_import_help
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_do_import_help
 msgid "Omaduse Impordi (do_import) help"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_import_list_table
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_import_list_table
 msgid "Omaduse  (import_list_table) caption"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_import_list_table_comment
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_import_list_table_comment
 msgid "Omaduse  (import_list_table) kommentaar"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:prop_import_list_table_help
+#: classes/applications/mp3player/mass_mp3_upload.aw:prop_import_list_table_help
 msgid "Omaduse  (import_list_table) help"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:group_import_list
+#: classes/applications/mp3player/mass_mp3_upload.aw:group_import_list
 msgid "Grupi Nimekiri imporditavatest failidest (import_list) pealkiri"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:group_import_list_help
+#: classes/applications/mp3player/mass_mp3_upload.aw:group_import_list_help
 msgid "Grupi Nimekiri imporditavatest failidest (import_list) help"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:rel_RELTYPE_IMPORTFOLDER
+#: classes/applications/mp3player/mass_mp3_upload.aw:rel_RELTYPE_IMPORTFOLDER
 msgid "Seose Impordi kaust (RELTYPE_IMPORTFOLDER) tekst"
 msgstr ""
 
-#: classes/applications/awplayer/mass_mp3_upload.aw:71
+#: classes/applications/mp3player/mass_mp3_upload.aw:72
 msgid "Nimi"
 msgstr ""

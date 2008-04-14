@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,7 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/aw_code_analyzer/parser.aw:178
+#: classes/core/aw_code_analyzer/parser.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/parser.aw:180
 msgid ""
 "class count = %s <br />\n"
 "function count = %s <br />\n"
@@ -17,19 +21,19 @@ msgid ""
 "<br />max level in file %s on line %s <br />\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:331
+#: classes/core/aw_code_analyzer/parser.aw:333
 msgid "error - end of file after class in line %s <br />"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:588
+#: classes/core/aw_code_analyzer/parser.aw:590
 msgid "error in p_get_string (line: %s , pos = %s ) , called without string start <br />\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:614
+#: classes/core/aw_code_analyzer/parser.aw:616
 msgid "error in line %s file ended with open string! <br />\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/parser.aw:665
-#: classes/core/aw_code_analyzer/parser.aw:719
+#: classes/core/aw_code_analyzer/parser.aw:667
+#: classes/core/aw_code_analyzer/parser.aw:721
 msgid "copy of %s to %s failed, stopping <br />\n"
 msgstr ""

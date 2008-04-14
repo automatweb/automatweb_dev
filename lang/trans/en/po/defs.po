@@ -21,6 +21,6 @@ msgstr ""
 msgid "Loo uus objekt"
 msgstr ""
 
-#: classes/defs.aw:1118 classes/defs.aw:1135
+#: classes/defs.aw:1123 classes/defs.aw:1140
 msgid "(nimetu)"
 msgstr "(unnamed)"

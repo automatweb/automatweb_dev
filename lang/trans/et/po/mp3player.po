@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/mp3player/mp3player.aw:class_1353_help
 msgid "Klassi MP3 pleier help"
@@ -58,35 +57,42 @@ msgstr ""
 msgid "Grupi Seaded (settings) help"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:81
+#: classes/applications/mp3player/mp3player.aw:43
+msgid "mp3 player"
+msgstr ""
+
+#: classes/applications/mp3player/mp3player.aw:72
+msgid "m&auml;ngi"
+msgstr ""
+
+#: classes/applications/mp3player/mp3player.aw:90
 msgid "Loo nimi"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:88
+#: classes/applications/mp3player/mp3player.aw:97
 msgid "Kestvus"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:95
+#: classes/applications/mp3player/mp3player.aw:104
 msgid "Artist"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:102
+#: classes/applications/mp3player/mp3player.aw:111
 msgid "Album"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:109
-msgid "Zanr"
+#: classes/applications/mp3player/mp3player.aw:118
+msgid "&#142;anr"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:116
+#: classes/applications/mp3player/mp3player.aw:125
 msgid "Rate"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:123
-msgid "Mängitud"
+#: classes/applications/mp3player/mp3player.aw:132
+msgid "M&auml;ngitud"
 msgstr ""
 
-#: classes/applications/mp3player/mp3player.aw:130
-msgid "Mängi"
+#: classes/applications/mp3player/mp3player.aw:139
+msgid "M&auml;ngi"
 msgstr ""
-

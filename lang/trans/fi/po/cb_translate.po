@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -63,6 +63,11 @@ msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:layout_translation_vsplit_right
 msgid "Kujundusosa Tolgitavad_asjad (translation_vsplit_right) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_trans/cb_translate.aw:77
+#: classes/applications/cb_trans/cb_translate.aw:224
+msgid "AW KLASSIDE T&Otilde;LKIMINE"
 msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:108
@@ -180,6 +185,10 @@ msgstr ""
 #: classes/applications/cb_trans/cb_translate.aw:1473
 #: classes/applications/cb_trans/cb_translate.aw:1656
 msgid "Klass"
+msgstr ""
+
+#: classes/applications/cb_trans/cb_translate.aw:1333
+msgid "Klass '%s', Grupp '%s'"
 msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:1394

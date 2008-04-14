@@ -573,26 +573,26 @@ msgstr ""
 msgid "K"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:850
+#: classes/applications/bug_o_matic_3000/development_order.aw:832
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:857
+#: classes/applications/bug_o_matic_3000/development_order.aw:839
 msgid "Lisa korvi"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:921
+#: classes/applications/bug_o_matic_3000/development_order.aw:903
 msgid "Eemalda korvist"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:949
+#: classes/applications/bug_o_matic_3000/development_order.aw:931
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:954
+#: classes/applications/bug_o_matic_3000/development_order.aw:936
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:959
+#: classes/applications/bug_o_matic_3000/development_order.aw:941
 msgid "L&otilde;ppt&auml;htaeg"
 msgstr ""

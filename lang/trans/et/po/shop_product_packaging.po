@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -608,6 +608,42 @@ msgstr ""
 msgid "Omaduse &Otilde;igused (acl) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits
+msgid "Omaduse  (amount_limits) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_comment
+msgid "Omaduse  (amount_limits) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_help
+msgid "Omaduse  (amount_limits) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb
+msgid "Omaduse  (amount_limits_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb_comment
+msgid "Omaduse  (amount_limits_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tb_help
+msgid "Omaduse  (amount_limits_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl
+msgid "Omaduse  (amount_limits_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl_comment
+msgid "Omaduse  (amount_limits_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl_help
+msgid "Omaduse  (amount_limits_tbl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -646,6 +682,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:group_acl_help
 msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_amount_limits
+msgid "Grupi Kogusepiirangud (amount_limits) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_amount_limits_help
+msgid "Grupi Kogusepiirangud (amount_limits) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:group_transl
@@ -701,18 +745,30 @@ msgstr ""
 msgid "Seose muutuja5 (RELTYPE_USERVAR5) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:206
+#: classes/applications/shop/shop_product_packaging.aw:222
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:207
+#: classes/applications/shop/shop_product_packaging.aw:223
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:506
+#: classes/applications/shop/shop_product_packaging.aw:240
+msgid "Kasutajagrupp"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:245
+msgid "Minimaalne kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:250
+msgid "Maksimaalne kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:591
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:511
+#: classes/applications/shop/shop_product_packaging.aw:596
 msgid "Valuuta"
 msgstr ""

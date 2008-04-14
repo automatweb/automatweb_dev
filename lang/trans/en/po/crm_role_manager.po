@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/crm/crm_role_manager.aw:143
+#: classes/crm/crm_role_manager.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/crm/crm_role_manager.aw:145
 msgid "Vali roll"
 msgstr "Select role"
 
-#: classes/crm/crm_role_manager.aw:188
+#: classes/crm/crm_role_manager.aw:190
 msgid "Anna rollid"
 msgstr "Give roles"
 
-#: classes/crm/crm_role_manager.aw:285
+#: classes/crm/crm_role_manager.aw:287
 msgid "Vali"
 msgstr "Select"
 
-#: classes/crm/crm_role_manager.aw:291
+#: classes/crm/crm_role_manager.aw:293
 msgid "Halda"
 msgstr "Manage"
 
-#: classes/crm/crm_role_manager.aw:305
+#: classes/crm/crm_role_manager.aw:307
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/crm/crm_role_manager.aw:319
+#: classes/crm/crm_role_manager.aw:321
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_role_manager.aw:325
+#: classes/crm/crm_role_manager.aw:327
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/crm/crm_role_manager.aw:331
+#: classes/crm/crm_role_manager.aw:333
 msgid "E-post"
 msgstr "E-mail"
 
-#: classes/crm/crm_role_manager.aw:337
+#: classes/crm/crm_role_manager.aw:339
 msgid "&Uuml;ksus"
 msgstr "Unit"
 
-#: classes/crm/crm_role_manager.aw:343
+#: classes/crm/crm_role_manager.aw:345
 msgid "Ametinimetus"
 msgstr "Profession"

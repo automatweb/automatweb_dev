@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:41 +0300\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/calendar/calendar_registration_form_conf.aw:class_849_help
+msgid "Klassi S&uuml;ndmusele registreerimine help"
+msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:prop_event
 msgid "Omaduse S&uuml;ndmus millele registreeruda (event) caption"
@@ -194,6 +197,10 @@ msgstr ""
 msgid "Grupi E-mailid (emails) pealkiri"
 msgstr "E-mails"
 
+#: classes/applications/calendar/calendar_registration_form_conf.aw:group_emails_help
+msgid "Grupi E-mailid (emails) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_EVENT
 msgid "Seose S&uuml;ndmus (RELTYPE_EVENT) tekst"
 msgstr "Event"
@@ -210,23 +217,30 @@ msgstr "Person folder"
 msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr "Event form"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:148
+#: classes/applications/calendar/calendar_registration_form_conf.aw:156
+msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>\t\t\t\t\t#date# - kohtumise kuup&auml;ev<br>\t\t\t\t\t#time_from# - kohtumise alguskellaaeg<br>\t\t\t\t\t#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:161
 msgid "&Auml;ra kuva"
 msgstr "Do not display"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:149
+#: classes/applications/calendar/calendar_registration_form_conf.aw:162
 msgid "Kuva dokumendis s&uuml;ndmuse infot"
 msgstr "Display event info in document"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:218
+#: classes/applications/calendar/calendar_registration_form_conf.aw:183
+msgid "Isikute kaust (%s)"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:251
 msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
 msgstr "Webform with event registration form can only be used via event registration"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:237
+#: classes/applications/calendar/calendar_registration_form_conf.aw:270
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr "calendar_registration_form::show(%s): event and object type must be related!"
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:594
+#: classes/applications/calendar/calendar_registration_form_conf.aw:664
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr "calendar_registration_form::show_data(%s): event and object type must be related!"
-

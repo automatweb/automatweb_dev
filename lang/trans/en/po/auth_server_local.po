@@ -14,14 +14,14 @@ msgstr ""
 msgid "Klassi Autentimsserver Kohalik help"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_local.aw:55
+#: classes/core/users/auth/auth_server_local.aw:54
 msgid "Vigane v&otilde;i vale parool"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_local.aw:60
+#: classes/core/users/auth/auth_server_local.aw:59
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_local.aw:124
+#: classes/core/users/auth/auth_server_local.aw:123
 msgid "Sellelt aadressilt (%s) pole ligip&auml;&auml;s lubatud!"
 msgstr "Access is denied from your current address (%s)!"

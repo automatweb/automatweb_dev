@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -49,6 +49,42 @@ msgstr ""
 msgid "Omaduse  (extern_id) help"
 msgstr ""
 
+#: classes/crm/crm_category.aw:prop_list
+msgid "Omaduse  (list) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_comment
+msgid "Omaduse  (list) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_help
+msgid "Omaduse  (list) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_tb
+msgid "Omaduse  (list_tb) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_tb_comment
+msgid "Omaduse  (list_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_tb_help
+msgid "Omaduse  (list_tb) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_tbl
+msgid "Omaduse  (list_tbl) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_tbl_comment
+msgid "Omaduse  (list_tbl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_list_tbl_help
+msgid "Omaduse  (list_tbl) help"
+msgstr ""
+
 #: classes/crm/crm_category.aw:prop_balance
 msgid "Omaduse  (balance) caption"
 msgstr ""
@@ -61,6 +97,14 @@ msgstr ""
 msgid "Omaduse  (balance) help"
 msgstr ""
 
+#: classes/crm/crm_category.aw:group_list
+msgid "Grupi Nimekiri (list) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_category.aw:group_list_help
+msgid "Grupi Nimekiri (list) help"
+msgstr ""
+
 #: classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
@@ -71,4 +115,16 @@ msgstr ""
 
 #: classes/crm/crm_category.aw:rel_RELTYPE_CUSTOMER
 msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/crm/crm_category.aw:71
+msgid "Kustuta seosed"
+msgstr ""
+
+#: classes/crm/crm_category.aw:74
+msgid "Oled kindel, et soovid valitud seosed kustutada?"
+msgstr ""
+
+#: classes/crm/crm_category.aw:94
+msgid "Nimi"
 msgstr ""

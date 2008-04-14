@@ -13,14 +13,14 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/error.aw:36 classes/core/error.aw:94
+#: classes/core/error.aw:40 classes/core/error.aw:104
 msgid "class::function(): parameter %s is not set!"
 msgstr ""
 
-#: classes/core/error.aw:65 classes/core/error.aw:66 classes/core/error.aw:67
+#: classes/core/error.aw:75 classes/core/error.aw:76 classes/core/error.aw:77
 msgid "not specified"
 msgstr ""
 
-#: classes/core/error.aw:70
+#: classes/core/error.aw:80
 msgid "Acl error, access %s was denied for object %s in function %s"
 msgstr ""

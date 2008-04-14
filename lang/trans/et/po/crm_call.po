@@ -622,7 +622,7 @@ msgstr ""
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_call.aw:280 classes/crm/crm_call.aw:786
+#: classes/crm/crm_call.aw:280 classes/crm/crm_call.aw:793
 msgid "Tehtud"
 msgstr ""
 
@@ -630,7 +630,7 @@ msgstr ""
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_call.aw:282 classes/crm/crm_call.aw:793
+#: classes/crm/crm_call.aw:282 classes/crm/crm_call.aw:800
 msgid "Arvele"
 msgstr ""
 
@@ -638,54 +638,70 @@ msgstr ""
 msgid "T&ouml;&ouml;aeg"
 msgstr ""
 
-#: classes/crm/crm_call.aw:475
+#: classes/crm/crm_call.aw:483
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:484
+#: classes/crm/crm_call.aw:492
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_call.aw:493
+#: classes/crm/crm_call.aw:501
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_call.aw:570
+#: classes/crm/crm_call.aw:578
 msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:708
-msgid "Nimi, osaleja ja projekt peavad olema täidetud!"
+#: classes/crm/crm_call.aw:715
+msgid "Nimi, osaleja ja projekt peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:904
-msgid "Millal"
+#: classes/crm/crm_call.aw:776
+msgid "Nimi"
+msgstr ""
+
+#: classes/crm/crm_call.aw:781
+msgid "Osaleja"
+msgstr ""
+
+#: classes/crm/crm_call.aw:787
+msgid "Projekt"
+msgstr ""
+
+#: classes/crm/crm_call.aw:805
+msgid "Kirjeldus"
 msgstr ""
 
 #: classes/crm/crm_call.aw:911
+msgid "Millal"
+msgstr ""
+
+#: classes/crm/crm_call.aw:918
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:916
+#: classes/crm/crm_call.aw:923
 msgid "Vaata"
 msgstr ""
 
-#: classes/crm/crm_call.aw:995
+#: classes/crm/crm_call.aw:1002
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1000
+#: classes/crm/crm_call.aw:1007
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1005
+#: classes/crm/crm_call.aw:1012
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1010
+#: classes/crm/crm_call.aw:1017
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1044
+#: classes/crm/crm_call.aw:1051
 msgid "Loo uus arve"
 msgstr ""

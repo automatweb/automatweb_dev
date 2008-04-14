@@ -13,94 +13,94 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:30 classes/vcl/mail_notify.aw:349
+#: classes/vcl/mail_notify.aw:29 classes/vcl/mail_notify.aw:350
 msgid "Valitud isikud"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:37 classes/vcl/mail_notify.aw:178
+#: classes/vcl/mail_notify.aw:36 classes/vcl/mail_notify.aw:179
 msgid "Isik"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:44 classes/vcl/mail_notify.aw:185
-#: classes/vcl/mail_notify.aw:304
+#: classes/vcl/mail_notify.aw:43 classes/vcl/mail_notify.aw:186
+#: classes/vcl/mail_notify.aw:305
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:51 classes/vcl/mail_notify.aw:52
-#: classes/vcl/mail_notify.aw:193
+#: classes/vcl/mail_notify.aw:50 classes/vcl/mail_notify.aw:51
+#: classes/vcl/mail_notify.aw:194
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:59 classes/vcl/mail_notify.aw:258
+#: classes/vcl/mail_notify.aw:58 classes/vcl/mail_notify.aw:259
 msgid "Otsingu tulemused"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:106 classes/vcl/mail_notify.aw:107
+#: classes/vcl/mail_notify.aw:107 classes/vcl/mail_notify.aw:108
 msgid "Maili seaded"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:118
+#: classes/vcl/mail_notify.aw:119
 msgid "V&otilde;imalikud asendused"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:118
+#: classes/vcl/mail_notify.aw:119
 msgid "faili nimi"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:118
+#: classes/vcl/mail_notify.aw:119
 msgid "link failile"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:118
+#: classes/vcl/mail_notify.aw:119
 msgid "muutja nimi"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:128
+#: classes/vcl/mail_notify.aw:129
 msgid "Teema"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:139
+#: classes/vcl/mail_notify.aw:140
 msgid "Kellelt"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:152
+#: classes/vcl/mail_notify.aw:153
 msgid "Sisu"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:213
+#: classes/vcl/mail_notify.aw:214
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:245
+#: classes/vcl/mail_notify.aw:246
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:299
+#: classes/vcl/mail_notify.aw:300
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:309
+#: classes/vcl/mail_notify.aw:310
 msgid "Telefon"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:315
+#: classes/vcl/mail_notify.aw:316
 msgid "E-mail"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:379
+#: classes/vcl/mail_notify.aw:387
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:385
+#: classes/vcl/mail_notify.aw:393
 msgid "Kustuta valitute hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:398
+#: classes/vcl/mail_notify.aw:406
 msgid "Otsi isikuid hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:409
+#: classes/vcl/mail_notify.aw:417
 msgid "Saada teavitusmeil"
 msgstr ""

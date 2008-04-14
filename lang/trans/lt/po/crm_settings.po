@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -109,18 +109,6 @@ msgstr ""
 msgid "Omaduse Toimetuse kontroller (controller_task) help"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:prop_controller_meeting
-msgid "Omaduse Kohtumise kontroller (controller_meeting) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_controller_meeting_comment
-msgid "Omaduse Kohtumise kontroller (controller_meeting) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_controller_meeting_help
-msgid "Omaduse Kohtumise kontroller (controller_meeting) help"
-msgstr ""
-
 #: classes/applications/crm/crm_settings.aw:prop_default_tasks_view
 msgid "Omaduse Tegevused vaikimisi vaade (default_tasks_view) caption"
 msgstr ""
@@ -155,30 +143,6 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_view_task_rows_open_help
 msgid "Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) help"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_send_mail_feature
-msgid "Omaduse V&otilde;imalus saata CRMis maile (send_mail_feature) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_send_mail_feature_comment
-msgid "Omaduse V&otilde;imalus saata CRMis maile (send_mail_feature) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_send_mail_feature_help
-msgid "Omaduse V&otilde;imalus saata CRMis maile (send_mail_feature) help"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_show_files_and_docs_in_tree
-msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_show_files_and_docs_in_tree_comment
-msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_settings.aw:prop_show_files_and_docs_in_tree_help
-msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_default_task_rows_bills_filter
@@ -217,6 +181,42 @@ msgstr ""
 msgid "Omaduse Toimetuse salvestamise kontroller (task_save_controller) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_controller_meeting
+msgid "Omaduse Kohtumise kontroller (controller_meeting) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_controller_meeting_comment
+msgid "Omaduse Kohtumise kontroller (controller_meeting) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_controller_meeting_help
+msgid "Omaduse Kohtumise kontroller (controller_meeting) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_send_mail_feature
+msgid "Omaduse V&otilde;imalus saata CRMis maile (send_mail_feature) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_send_mail_feature_comment
+msgid "Omaduse V&otilde;imalus saata CRMis maile (send_mail_feature) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_send_mail_feature_help
+msgid "Omaduse V&otilde;imalus saata CRMis maile (send_mail_feature) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_show_files_and_docs_in_tree
+msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_show_files_and_docs_in_tree_comment
+msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_show_files_and_docs_in_tree_help
+msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_org_link_menu
 msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) caption"
 msgstr ""
@@ -239,6 +239,30 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_insurance_link_menu_help
 msgid "Omaduse Kindlustuse tüüpide kataloog (insurance_link_menu) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_my_company_tab
+msgid "Omaduse Minu organisatsiooni avanev tab (default_my_company_tab) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_my_company_tab_comment
+msgid "Omaduse Minu organisatsiooni avanev tab (default_my_company_tab) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_my_company_tab_help
+msgid "Omaduse Minu organisatsiooni avanev tab (default_my_company_tab) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_client_company_tab
+msgid "Omaduse Kliendi organisatsiooni avanev tab (default_client_company_tab) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_client_company_tab_comment
+msgid "Omaduse Kliendi organisatsiooni avanev tab (default_client_company_tab) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_client_company_tab_help
+msgid "Omaduse Kliendi organisatsiooni avanev tab (default_client_company_tab) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_tables_toolbar
@@ -445,82 +469,82 @@ msgstr ""
 msgid "Seose Kataloog (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:224
+#: classes/applications/crm/crm_settings.aw:252
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:225
+#: classes/applications/crm/crm_settings.aw:253
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:226
+#: classes/applications/crm/crm_settings.aw:254
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:227
+#: classes/applications/crm/crm_settings.aw:255
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:240
+#: classes/applications/crm/crm_settings.aw:268
 msgid "Tabelvaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:241
+#: classes/applications/crm/crm_settings.aw:269
 msgid "Kalendervaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:260
+#: classes/applications/crm/crm_settings.aw:305
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:281
+#: classes/applications/crm/crm_settings.aw:326
 msgid "Grupid kellele piirang ei m&otilde;ju"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:368
+#: classes/applications/crm/crm_settings.aw:413
 msgid "Salvesta tabeli seaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:389
+#: classes/applications/crm/crm_settings.aw:434
 msgid "Taasta algseaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:390
+#: classes/applications/crm/crm_settings.aw:435
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:403
+#: classes/applications/crm/crm_settings.aw:448
 msgid "Minu t&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:410
+#: classes/applications/crm/crm_settings.aw:455
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:417
+#: classes/applications/crm/crm_settings.aw:462
 msgid "Eraisikust klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:424
+#: classes/applications/crm/crm_settings.aw:469
 msgid "T&ouml;&ouml;kaaslane"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:431
+#: classes/applications/crm/crm_settings.aw:476
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:481
+#: classes/applications/crm/crm_settings.aw:526
 msgid "Veeru nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:485
+#: classes/applications/crm/crm_settings.aw:530
 msgid "Järjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:489
+#: classes/applications/crm/crm_settings.aw:534
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:493
+#: classes/applications/crm/crm_settings.aw:538
 msgid "Pealkiri"
 msgstr ""

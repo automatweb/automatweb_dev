@@ -61,6 +61,6 @@ msgstr ""
 msgid "Seose Link (RELTYPE_LINK) tekst"
 msgstr ""
 
-#: classes/contentmgmt/keywords.aw:1176
+#: classes/contentmgmt/keywords.aw:984
 msgid "Selline v&otilde;tmes&otilde;na on juba olemas (%s)!"
 msgstr ""

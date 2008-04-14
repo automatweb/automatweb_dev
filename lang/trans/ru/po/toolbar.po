@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,72 +9,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/toolbar.aw:51 classes/vcl/toolbar.aw:96
-#: classes/vcl/toolbar.aw:153 classes/vcl/toolbar.aw:178
-#: classes/vcl/toolbar.aw:345
+#: classes/vcl/toolbar.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:54 classes/vcl/toolbar.aw:99
+#: classes/vcl/toolbar.aw:156 classes/vcl/toolbar.aw:181
+#: classes/vcl/toolbar.aw:348
 msgid "Kustuta"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:101
+#: classes/vcl/toolbar.aw:104
 msgid "fail"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:102
+#: classes/vcl/toolbar.aw:105
 msgid "kustuta fail"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:183
+#: classes/vcl/toolbar.aw:186
 msgid "text"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:184
+#: classes/vcl/toolbar.aw:187
 msgid "tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:189
+#: classes/vcl/toolbar.aw:192
 msgid "suubmenuuu"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:193
+#: classes/vcl/toolbar.aw:196
 msgid "teine tekst"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:194
+#: classes/vcl/toolbar.aw:197
 msgid "teine tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:252
+#: classes/vcl/toolbar.aw:255
 msgid "neti.ee"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:253
+#: classes/vcl/toolbar.aw:256
 msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:494
+#: classes/vcl/toolbar.aw:497
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:540 classes/vcl/toolbar.aw:548
+#: classes/vcl/toolbar.aw:543 classes/vcl/toolbar.aw:551
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:571
+#: classes/vcl/toolbar.aw:574
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:585
+#: classes/vcl/toolbar.aw:575
+msgid "Oled kindel et soovit valitud objektid kustutada?"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:589
 msgid "Kustuta valitud seosed"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:598
+#: classes/vcl/toolbar.aw:590
+msgid "Oled kindel et soovid valitud seosed kustutada?"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:603
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:628
+#: classes/vcl/toolbar.aw:633
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:641
+#: classes/vcl/toolbar.aw:646
 msgid "Kleebi"
 msgstr ""

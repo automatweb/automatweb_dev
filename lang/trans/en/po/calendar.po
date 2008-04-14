@@ -37,15 +37,15 @@ msgstr "Overview"
 msgid "Toimetused"
 msgstr "Events"
 
-#: classes/vcl/calendar.aw:1399
+#: classes/vcl/calendar.aw:1405
 msgid "Viimased"
 msgstr "Last"
 
-#: classes/vcl/calendar.aw:1400
+#: classes/vcl/calendar.aw:1406
 msgid "J&auml;rgmised"
 msgstr "Next"
 
-#: classes/vcl/calendar.aw:1853
+#: classes/vcl/calendar.aw:1863
 msgid "Lisas [%s] %s /  Muutis [%s] %s"
 msgstr "Added by [%s] %s / Modified by [%s] %s"
 

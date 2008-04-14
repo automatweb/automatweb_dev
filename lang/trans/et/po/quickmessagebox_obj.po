@@ -9,16 +9,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:20
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:143
 msgid "anyone"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:21
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:144
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:161
 msgid "users in my contact list"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessagebox_obj.aw:22
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:145
 msgid "no-one"
 msgstr ""
 
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:147
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:163
+msgid "system default (currently '%s')"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:160
+msgid "all users"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox_obj.aw:197
+msgid "Quickmessagebox of %s"
+msgstr ""

@@ -9,34 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/users_user.aw:class__help
+#: classes/core/users/users_user.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/users_user.aw:89
-msgid "0"
-msgstr ""
-
-#: classes/users_user.aw:131
-msgid "uid is empty!"
-msgstr ""
-
-#: classes/users_user.aw:139
+#: classes/core/users/users_user.aw:83
 msgid "oid for uid is empty uid = '%s'!"
 msgstr ""
 
-#: classes/users_user.aw:147
-msgid "user object is not user object!!!! %s clid = %s"
-msgstr ""
-
-#: classes/users_user.aw:155
-msgid "user object is of wrong type! %s props = %s"
-msgstr ""
-
-#: classes/users_user.aw:190
+#: classes/core/users/users_user.aw:120
 msgid "1"
 msgstr ""
 
-#: classes/users_user.aw:1013
-msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"
+#: classes/core/users/users_user.aw:211
+msgid "0"
+msgstr ""
+
+#: classes/core/users/users_user.aw:214
+msgid "Vigane kasutajanimi v&otilde;i parool"
 msgstr ""

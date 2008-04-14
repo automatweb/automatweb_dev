@@ -1827,10 +1827,6 @@ msgstr ""
 msgid "Arhiveeritud kirjad"
 msgstr ""
 
-#: classes/applications/commune/commune.aw:4568
-msgid "aga sellist kasutajat pole üldse olemas"
-msgstr ""
-
-#: classes/applications/commune/commune.aw:4705
+#: classes/applications/commune/commune.aw:4685
 msgid "Kasutajanimi"
 msgstr ""

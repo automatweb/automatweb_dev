@@ -66,6 +66,10 @@ msgstr ""
 msgid "Kujundusosa Tolgitavad_asjad (translation_vsplit_right) pealkiri"
 msgstr ""
 
+#: classes/applications/cb_trans/cb_translate.aw:77 classes/applications/cb_trans/cb_translate.aw:224
+msgid "AW KLASSIDE T&Otilde;LKIMINE"
+msgstr ""
+
 #: classes/applications/cb_trans/cb_translate.aw:108
 msgid "Salvesta"
 msgstr ""
@@ -164,6 +168,10 @@ msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:1284 classes/applications/cb_trans/cb_translate.aw:1473 classes/applications/cb_trans/cb_translate.aw:1656
 msgid "Klass"
+msgstr ""
+
+#: classes/applications/cb_trans/cb_translate.aw:1333
+msgid "Klass '%s', Grupp '%s'"
 msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:1394

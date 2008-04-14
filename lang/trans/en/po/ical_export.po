@@ -62,15 +62,15 @@ msgid "Omaduse Ajavahemiku l&otilde;pp (enddate) help"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_personal_not
-msgid "Omaduse &Auml;ra ekspordi isiklikke sündmusi (personal_not) caption"
+msgid "Omaduse &Auml;ra ekspordi isiklikke s&uuml;ndmusi (personal_not) caption"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_personal_not_comment
-msgid "Omaduse &Auml;ra ekspordi isiklikke sündmusi (personal_not) kommentaar"
+msgid "Omaduse &Auml;ra ekspordi isiklikke s&uuml;ndmusi (personal_not) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_personal_not_help
-msgid "Omaduse &Auml;ra ekspordi isiklikke sündmusi (personal_not) help"
+msgid "Omaduse &Auml;ra ekspordi isiklikke s&uuml;ndmusi (personal_not) help"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_url
@@ -110,15 +110,15 @@ msgid "Omaduse Uue kalendri nimi (google_calendar_settings_newcalname) help"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_google_calendar_settings_color
-msgid "Omaduse Värv (google_calendar_settings_color) caption"
+msgid "Omaduse V&auml;rv (google_calendar_settings_color) caption"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_google_calendar_settings_color_comment
-msgid "Omaduse Värv (google_calendar_settings_color) kommentaar"
+msgid "Omaduse V&auml;rv (google_calendar_settings_color) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_google_calendar_settings_color_help
-msgid "Omaduse Värv (google_calendar_settings_color) help"
+msgid "Omaduse V&auml;rv (google_calendar_settings_color) help"
 msgstr ""
 
 #: classes/applications/calendar/ical_export.aw:prop_google_calendar_settings_calendar_url
@@ -197,26 +197,26 @@ msgstr ""
 msgid "Seose Kalender (RELTYPE_CALENDAR) tekst"
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:132
+#: classes/applications/calendar/ical_export.aw:136
 msgid "Loo uus kalender..."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:212
+#: classes/applications/calendar/ical_export.aw:216
 msgid "Vali..."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:579
-msgid "&uuml;le 15 sümboli (ka t&uuml;hikud) ei soovita nimeks, kuna pikem tekst j&auml;&auml;b Google kalendris paani taha peitu."
+#: classes/applications/calendar/ical_export.aw:616
+msgid "&uuml;le 15 s&uuml;mboli (ka t&uuml;hikud) ei soovita nimeks, kuna pikem tekst j&auml;&auml;b Google kalendris paani taha peitu."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:591
+#: classes/applications/calendar/ical_export.aw:628
 msgid "aw kalender"
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:660
-msgid "näiteks Tallinn v&otilde;i Haapsalu. Kui Google kalender on avalik, siis see aitab inimestel Sinu s&uuml;ndmusi paremini leida."
+#: classes/applications/calendar/ical_export.aw:697
+msgid "n&auml;iteks Tallinn v&otilde;i Haapsalu. Kui Google kalender on avalik, siis see aitab inimestel Sinu s&uuml;ndmusi paremini leida."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:697
-msgid "Paroolid ei ühti"
+#: classes/applications/calendar/ical_export.aw:734
+msgid "Paroolid ei &uuml;hti"
 msgstr ""

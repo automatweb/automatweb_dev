@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -116,42 +116,30 @@ msgstr ""
 msgid "Omaduse Info table (from_folder_contents) help"
 msgstr ""
 
-# classes/applications/image_resizer.aw:prop_do_resize
 #: classes/applications/image_resizer.aw:prop_do_resize
-msgid "Omaduse Töötle (do_resize) caption"
+msgid "Omaduse  (do_resize) caption"
 msgstr ""
 
-# classes/applications/image_resizer.aw:prop_do_resize_comment
 #: classes/applications/image_resizer.aw:prop_do_resize_comment
-msgid "Omaduse Töötle (do_resize) kommentaar"
+msgid "Omaduse  (do_resize) kommentaar"
 msgstr ""
 
-# classes/applications/image_resizer.aw:prop_do_resize_help
 #: classes/applications/image_resizer.aw:prop_do_resize_help
-msgid "Omaduse Töötle (do_resize) help"
+msgid "Omaduse  (do_resize) help"
 msgstr ""
 
-# classes/applications/image_resizer.aw:group_config
 #: classes/applications/image_resizer.aw:group_config
-msgid "Grupi Võimalused (config) pealkiri"
+msgid "Grupi config (config) pealkiri"
 msgstr ""
 
-# classes/applications/image_resizer.aw:group_config_help
 #: classes/applications/image_resizer.aw:group_config_help
-msgid "Grupi Võimalused (config) help"
+msgid "Grupi config (config) help"
 msgstr ""
 
-# classes/applications/image_resizer.aw:group_status
 #: classes/applications/image_resizer.aw:group_status
-msgid "Grupi Staatus (status) pealkiri"
+msgid "Grupi status (status) pealkiri"
 msgstr ""
 
-# classes/applications/image_resizer.aw:group_status_help
 #: classes/applications/image_resizer.aw:group_status_help
-msgid "Grupi Staatus (status) help"
-msgstr ""
-
-# classes/applications/image_resizer.aw:rel_RELTYPE_IMAGE_FOLDER
-#: classes/applications/image_resizer.aw:rel_RELTYPE_IMAGE_FOLDER
-msgid "Seose Piltide kaust (RELTYPE_IMAGE_FOLDER) tekst"
+msgid "Grupi status (status) help"
 msgstr ""

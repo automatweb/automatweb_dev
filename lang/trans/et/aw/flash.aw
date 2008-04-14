@@ -3,6 +3,4 @@ $GLOBALS["TRANS"]["Omaduse Vali fail (file) kommentaar"] = "võimaldab arvutist F
 $GLOBALS["TRANS"]["Omaduse Vali fail (file) help"] = "võimaldab arvutist Falshi faili valida.";
 $GLOBALS["TRANS"]["Omaduse Laius (width) kommentaar"] = "Falshi rakenduse laius pikselites. ";
 $GLOBALS["TRANS"]["Omaduse Laius (width) help"] = "Falshi rakenduse laius pikselites. ";
-$GLOBALS["TRANS"]["Omaduse Kõrgus (height) kommentaar"] = "Falshi rakenduse kõrgus pikselites.";
-$GLOBALS["TRANS"]["Omaduse Kõrgus (height) help"] = "Falshi rakenduse kõrgus pikselites.";
 ?>

@@ -85,6 +85,18 @@ msgstr ""
 msgid "Omaduse Objekte sorteeritakse (sort_by) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_fld_sort_by
+msgid "Omaduse Katalooge sorteeritakse (fld_sort_by) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_fld_sort_by_comment
+msgid "Omaduse Katalooge sorteeritakse (fld_sort_by) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_fld_sort_by_help
+msgid "Omaduse Katalooge sorteeritakse (fld_sort_by) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders
 msgid "Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) caption"
 msgstr ""
@@ -185,38 +197,41 @@ msgstr ""
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:90
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:92
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:101
 msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:91
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:93
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:100
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:92
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:94
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:102
 msgid "Objektide nime j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:160
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:170
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:168
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:178
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:173
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:183
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:180
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:190
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:435
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:457
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:436
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:458
 msgid "OID"
 msgstr ""

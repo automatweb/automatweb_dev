@@ -14,16 +14,28 @@ msgstr ""
 msgid "Klassi Haridus help"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school
-msgid "Omaduse Kool (school) caption"
+#: classes/applications/crm/crm_person_education.aw:prop_school_1
+msgid "Omaduse Kool (school_1) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_comment
-msgid "Omaduse Kool (school) kommentaar"
+#: classes/applications/crm/crm_person_education.aw:prop_school_1_comment
+msgid "Omaduse Kool (school_1) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_help
-msgid "Omaduse Kool (school) help"
+#: classes/applications/crm/crm_person_education.aw:prop_school_1_help
+msgid "Omaduse Kool (school_1) help"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_school_2
+msgid "Omaduse Muu kool (school_2) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_school_2_comment
+msgid "Omaduse Muu kool (school_2) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_school_2_help
+msgid "Omaduse Muu kool (school_2) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_degree
@@ -86,6 +98,18 @@ msgstr ""
 msgid "Omaduse Omandamisel (in_progress) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_education.aw:prop_dnf
+msgid "Omaduse Alustatud, kuid j&auml;&auml;nud l&otilde;petamata (dnf) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_dnf_comment
+msgid "Omaduse Alustatud, kuid j&auml;&auml;nud l&otilde;petamata (dnf) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:prop_dnf_help
+msgid "Omaduse Alustatud, kuid j&auml;&auml;nud l&otilde;petamata (dnf) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_education.aw:prop_obtain_language
 msgid "Omaduse Omandamise keel (obtain_language) caption"
 msgstr ""
@@ -123,15 +147,15 @@ msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_date
-msgid "Omaduse L&otilde;petamise kuupäev (end_date) caption"
+msgid "Omaduse L&otilde;petamise kuup&auml;ev (end_date) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_date_comment
-msgid "Omaduse L&otilde;petamise kuupäev (end_date) kommentaar"
+msgid "Omaduse L&otilde;petamise kuup&auml;ev (end_date) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_end_date_help
-msgid "Omaduse L&otilde;petamise kuupäev (end_date) help"
+msgid "Omaduse L&otilde;petamise kuup&auml;ev (end_date) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_diploma_nr
@@ -150,44 +174,52 @@ msgstr ""
 msgid "Seose Valdkond (RELTYPE_FIELD) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:71
+#: classes/applications/crm/crm_person_education.aw:rel_RELTYPE_SCHOOL
+msgid "Seose Kool (RELTYPE_SCHOOL) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:rel_RELTYPE_LANGUAGE
+msgid "Seose Omandamise keel (RELTYPE_LANGUAGE) tekst"
+msgstr ""
+
 #: classes/applications/crm/crm_person_education.aw:78
-msgid "Jah"
+msgid "P&otilde;hiharidus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:72
 #: classes/applications/crm/crm_person_education.aw:79
-msgid "Ei"
-msgstr ""
-
-#: classes/applications/crm/crm_person_education.aw:85
-msgid "Põhiharidus"
-msgstr ""
-
-#: classes/applications/crm/crm_person_education.aw:86
 msgid "Keskharidus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:87
+#: classes/applications/crm/crm_person_education.aw:80
 msgid "Kesk-eriharidus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:88
+#: classes/applications/crm/crm_person_education.aw:81
 msgid "Diplom"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:89
+#: classes/applications/crm/crm_person_education.aw:82
 msgid "Bakalaureus"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:90
+#: classes/applications/crm/crm_person_education.aw:83
 msgid "Magister"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:91
+#: classes/applications/crm/crm_person_education.aw:84
 msgid "Doktor"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:92
+#: classes/applications/crm/crm_person_education.aw:85
 msgid "Teaduste kandidaat"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:126
+#: classes/applications/crm/crm_person_education.aw:133
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:127
+#: classes/applications/crm/crm_person_education.aw:134
+msgid "Ei"
 msgstr ""

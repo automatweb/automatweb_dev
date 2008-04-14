@@ -1,0 +1,120 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/admin/contentmgmt_statistics.aw:class_1332_help
+msgid "Klassi Sisuhalduse statistika help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_sel_folders
+msgid "Omaduse Vali kaustad (sel_folders) caption"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_sel_folders_comment
+msgid "Omaduse Vali kaustad (sel_folders) kommentaar"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_sel_folders_help
+msgid "Omaduse Vali kaustad (sel_folders) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_num_docs
+msgid "Omaduse Mitu dokumenti nimekirjas (num_docs) caption"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_num_docs_comment
+msgid "Omaduse Mitu dokumenti nimekirjas (num_docs) kommentaar"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_num_docs_help
+msgid "Omaduse Mitu dokumenti nimekirjas (num_docs) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_mod_table
+msgid "Omaduse  (mod_table) caption"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_mod_table_comment
+msgid "Omaduse  (mod_table) kommentaar"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_mod_table_help
+msgid "Omaduse  (mod_table) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_link_checker
+msgid "Omaduse  (link_checker) caption"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_link_checker_comment
+msgid "Omaduse  (link_checker) kommentaar"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:prop_link_checker_help
+msgid "Omaduse  (link_checker) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_stats
+msgid "Grupi Statistika (stats) pealkiri"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_stats_help
+msgid "Grupi Statistika (stats) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_stats_lastmod
+msgid "Grupi Viimati muudetud (stats_lastmod) pealkiri"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_stats_lastmod_help
+msgid "Grupi Viimati muudetud (stats_lastmod) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_stats_unmod
+msgid "Grupi Ammu muudetud (stats_unmod) pealkiri"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_stats_unmod_help
+msgid "Grupi Ammu muudetud (stats_unmod) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_link_checker
+msgid "Grupi Linkide kontroll (link_checker) pealkiri"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:group_link_checker_help
+msgid "Grupi Linkide kontroll (link_checker) help"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:119
+msgid "Kontrollin linke:<br>\n"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:126
+msgid "Leidsin %s linki<br>\n"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:129
+msgid "Kontrollin linki %s ..."
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:133
+msgid "OK<br>\n"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:137
+msgid "<font color=red>VIGA!!</font><br>\n"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:141
+msgid "Valmis. <a href='%s'>Tagasi</a>"
+msgstr ""
+

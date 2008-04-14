@@ -17,7 +17,7 @@ msgstr ""
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:144 classes/vcl/relationmgr.aw:956
+#: classes/vcl/relationmgr.aw:144 classes/vcl/relationmgr.aw:961
 msgid "Alias"
 msgstr "Alias"
 
@@ -38,7 +38,7 @@ msgid "Tagasi"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:329 classes/vcl/relationmgr.aw:450
-#: classes/vcl/relationmgr.aw:937
+#: classes/vcl/relationmgr.aw:942
 msgid "Nimi"
 msgstr "Name"
 
@@ -55,7 +55,7 @@ msgid "Looja"
 msgstr "Created by"
 
 #: classes/vcl/relationmgr.aw:356 classes/vcl/relationmgr.aw:490
-#: classes/vcl/relationmgr.aw:982
+#: classes/vcl/relationmgr.aw:987
 msgid "Muutja"
 msgstr "Modifiedby"
 
@@ -80,7 +80,7 @@ msgid "Deaktiivsed"
 msgstr "Deactive"
 
 #: classes/vcl/relationmgr.aw:382 classes/vcl/relationmgr.aw:455
-#: classes/vcl/relationmgr.aw:943
+#: classes/vcl/relationmgr.aw:948
 msgid "Keel"
 msgstr "Language"
 
@@ -97,11 +97,11 @@ msgstr "Search"
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/relationmgr.aw:445 classes/vcl/relationmgr.aw:929
+#: classes/vcl/relationmgr.aw:445 classes/vcl/relationmgr.aw:934
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:461 classes/vcl/relationmgr.aw:1001
+#: classes/vcl/relationmgr.aw:461 classes/vcl/relationmgr.aw:1006
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
@@ -109,7 +109,7 @@ msgstr "Type"
 msgid "Loodud"
 msgstr "Created"
 
-#: classes/vcl/relationmgr.aw:483 classes/vcl/relationmgr.aw:990
+#: classes/vcl/relationmgr.aw:483 classes/vcl/relationmgr.aw:995
 msgid "Muudetud"
 msgstr "Modified"
 
@@ -121,7 +121,7 @@ msgstr "<a href='javascript:selall(\"sel\")'>Select</a>"
 msgid "Vali"
 msgstr "Choose"
 
-#: classes/vcl/relationmgr.aw:724 classes/vcl/relationmgr.aw:1009
+#: classes/vcl/relationmgr.aw:724 classes/vcl/relationmgr.aw:1014
 msgid "Seose t&uuml;&uuml;p"
 msgstr "Relation type"
 
@@ -161,15 +161,15 @@ msgstr "Paste relations"
 msgid "N&auml;ita teistpidi seoseid"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:950
+#: classes/vcl/relationmgr.aw:955
 msgid "Muu info"
 msgstr "Other info"
 
-#: classes/vcl/relationmgr.aw:964
+#: classes/vcl/relationmgr.aw:969
 msgid "Link"
 msgstr "Link"
 
-#: classes/vcl/relationmgr.aw:973
+#: classes/vcl/relationmgr.aw:978
 msgid "Cache"
 msgstr "Cache"
 

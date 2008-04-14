@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_skill_level.aw:class_1401_help
 msgid "Klassi Oskuse tase help"
 msgstr ""
@@ -26,19 +25,26 @@ msgstr ""
 msgid "Omaduse Oskus (skill) help"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:prop_name
-msgid "Omaduse Oskuse tase (name) caption"
+#: classes/applications/crm/crm_skill_level.aw:prop_level
+msgid "Omaduse Tase (level) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:prop_name_comment
-msgid "Omaduse Oskuse tase (name) kommentaar"
+#: classes/applications/crm/crm_skill_level.aw:prop_level_comment
+msgid "Omaduse Tase (level) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:prop_name_help
-msgid "Omaduse Oskuse tase (name) help"
+#: classes/applications/crm/crm_skill_level.aw:prop_level_help
+msgid "Omaduse Tase (level) help"
 msgstr ""
 
 #: classes/applications/crm/crm_skill_level.aw:rel_RELTYPE_SKILL
 msgid "Seose Oskus (RELTYPE_SKILL) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_skill_level.aw:rel_RELTYPE_LEVEL
+msgid "Seose Oskuse tase (RELTYPE_LEVEL) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_skill_level.aw:42
+msgid "--vali--"
+msgstr ""

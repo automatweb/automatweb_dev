@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/vcl/keyword_selector.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:81 classes/vcl/keyword_selector.aw:93 classes/vcl/keyword_selector.aw:105
+msgid "Nimi"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:87 classes/vcl/keyword_selector.aw:99 classes/vcl/keyword_selector.aw:111
+msgid "Vali"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:218 classes/vcl/keyword_selector.aw:223
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:229
+msgid "Lisa uus"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:240
+msgid "Valitud:"
+msgstr ""
+

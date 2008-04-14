@@ -364,47 +364,47 @@ msgstr ""
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:136 classes/contentmgmt/links.aw:184
+#: classes/contentmgmt/links.aw:135 classes/contentmgmt/links.aw:183
 msgid "Vali see"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:140
+#: classes/contentmgmt/links.aw:139
 msgid "Nimetus"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:145
+#: classes/contentmgmt/links.aw:144
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:150
+#: classes/contentmgmt/links.aw:149
 msgid "Looja"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:155
+#: classes/contentmgmt/links.aw:154
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:283
+#: classes/contentmgmt/links.aw:282
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:284
+#: classes/contentmgmt/links.aw:283
 msgid "Aadressi riba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:285
+#: classes/contentmgmt/links.aw:284
 msgid "Men&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:286
+#: classes/contentmgmt/links.aw:285
 msgid "Kerimisriba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:318
+#: classes/contentmgmt/links.aw:317
 msgid "Saidi sisene link"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:484
+#: classes/contentmgmt/links.aw:483
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

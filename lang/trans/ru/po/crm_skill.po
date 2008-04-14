@@ -9,8 +9,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_skill.aw:class_1400_help
 msgid "Klassi Oskus help"
 msgstr ""
 
+#: classes/applications/crm/crm_skill.aw:prop_subheading
+msgid "Omaduse Vahepealkiri (subheading) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_subheading_comment
+msgid "Omaduse Vahepealkiri (subheading) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_subheading_help
+msgid "Omaduse Vahepealkiri (subheading) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_lvl
+msgid "Omaduse  (lvl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_lvl_comment
+msgid "Omaduse  (lvl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_lvl_help
+msgid "Omaduse  (lvl) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_Saab
+msgid "Omaduse  (Saab) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_Saab_comment
+msgid "Omaduse  (Saab) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_Saab_help
+msgid "Omaduse  (Saab) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_lvl_meta
+msgid "Omaduse  (lvl_meta) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_lvl_meta_comment
+msgid "Omaduse  (lvl_meta) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_lvl_meta_help
+msgid "Omaduse  (lvl_meta) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:rel_RELTYPE_LEVELS
+msgid "Seose Tasemed (RELTYPE_LEVELS) tekst"
+msgstr ""

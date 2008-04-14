@@ -9,7 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/trans/pot_scanner.aw:808
+#: classes/core/trans/pot_scanner.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/trans/pot_scanner.aw:820
 msgid ""
 "\n"
 "\n"

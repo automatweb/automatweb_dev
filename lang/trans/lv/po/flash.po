@@ -62,15 +62,15 @@ msgid "Omaduse Laius (width) help"
 msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_height
-msgid "Omaduse Kõrgus (height) caption"
+msgid "Omaduse K&otilde;rgus (height) caption"
 msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_height_comment
-msgid "Omaduse Kõrgus (height) kommentaar"
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_height_help
-msgid "Omaduse Kõrgus (height) help"
+msgid "Omaduse K&otilde;rgus (height) help"
 msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_preview

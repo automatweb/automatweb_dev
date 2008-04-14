@@ -9,13 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 #: classes/common/openhours.aw:class_1014_help
 msgid "Klassi Avamisajad help"
 msgstr ""
 
 #: classes/common/openhours.aw:prop_openhours
 msgid "Omaduse Avamisajad (openhours) caption"
-msgstr ""
+msgstr "Open hours"
 
 #: classes/common/openhours.aw:prop_openhours_comment
 msgid "Omaduse Avamisajad (openhours) kommentaar"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: classes/common/openhours.aw:prop_apply_group
 msgid "Omaduse Kehtib gruppidele (apply_group) caption"
-msgstr ""
+msgstr "Applies to groups"
 
 #: classes/common/openhours.aw:prop_apply_group_comment
 msgid "Omaduse Kehtib gruppidele (apply_group) kommentaar"
@@ -39,7 +40,7 @@ msgstr ""
 
 #: classes/common/openhours.aw:prop_date_from
 msgid "Omaduse Kehtib alates (date_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/common/openhours.aw:prop_date_from_comment
 msgid "Omaduse Kehtib alates (date_from) kommentaar"
@@ -51,7 +52,7 @@ msgstr ""
 
 #: classes/common/openhours.aw:prop_date_to
 msgid "Omaduse Kehtib kuni (date_to) caption"
-msgstr ""
+msgstr "To"
 
 #: classes/common/openhours.aw:prop_date_to_comment
 msgid "Omaduse Kehtib kuni (date_to) kommentaar"
@@ -67,60 +68,89 @@ msgstr ""
 
 #: classes/common/openhours.aw:54
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/common/openhours.aw:75
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/common/openhours.aw:106
 msgid "Rida"
-msgstr ""
+msgstr "Row"
 
 #: classes/common/openhours.aw:156
 msgid "E"
-msgstr ""
+msgstr "Mo"
 
 #: classes/common/openhours.aw:157
 msgid "T"
-msgstr ""
+msgstr "Tu"
 
 #: classes/common/openhours.aw:158
 msgid "K"
-msgstr ""
+msgstr "We"
 
 #: classes/common/openhours.aw:159
 msgid "N"
-msgstr ""
+msgstr "Th"
 
 #: classes/common/openhours.aw:160
 msgid "R"
-msgstr ""
+msgstr "Fr"
 
 #: classes/common/openhours.aw:161
 msgid "L"
-msgstr ""
+msgstr "Sa"
 
 #: classes/common/openhours.aw:162
 msgid "P"
-msgstr ""
+msgstr "Su"
 
 #: classes/common/openhours.aw:241
 msgid "-- Valimata --"
-msgstr ""
+msgstr "-- Not selected --"
+
+#: classes/common/openhours.aw:242
+msgid "Esmasp&auml;ev"
+msgstr "Monday"
+
+#: classes/common/openhours.aw:243
+msgid "Teisip&auml;ev"
+msgstr "Tuesday"
+
+#: classes/common/openhours.aw:244
+msgid "Kolmap&auml;ev"
+msgstr "Wednesday"
+
+#: classes/common/openhours.aw:245
+msgid "Neljap&auml;ev"
+msgstr "Thursday"
+
+#: classes/common/openhours.aw:246
+msgid "Reede"
+msgstr "Friday"
+
+#: classes/common/openhours.aw:247
+msgid "Laup&auml;ev"
+msgstr "Saturday"
+
+#: classes/common/openhours.aw:248
+msgid "P&uuml;hap&auml;ev"
+msgstr "Sunday"
 
 #: classes/common/openhours.aw:304
 msgid "Vigane perioodi alguse p&auml;ev"
-msgstr ""
+msgstr "Incorrect start day"
 
 #: classes/common/openhours.aw:308
 msgid "Vigane perioodi l&otilde;pu p&auml;ev"
-msgstr ""
+msgstr "Incorrect ending day"
 
 #: classes/common/openhours.aw:312
 msgid "Vigane perioodi alguse aeg"
-msgstr ""
+msgstr "Incorrect start"
 
 #: classes/common/openhours.aw:316
 msgid "Vigane perioodi l&otilde;pu aeg"
-msgstr ""
+msgstr "Incorrect end"
+

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -501,173 +501,173 @@ msgstr ""
 msgid "Seose Failide kataloog (RELTYPE_FILES_MENU) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:174
-#: classes/applications/procurement_center/procurement.aw:816
+#: classes/applications/procurement_center/procurement.aw:173
+#: classes/applications/procurement_center/procurement.aw:820
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:175
+#: classes/applications/procurement_center/procurement.aw:174
 msgid "Avaldatud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:176
+#: classes/applications/procurement_center/procurement.aw:175
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:177
+#: classes/applications/procurement_center/procurement.aw:176
 msgid "Valmis"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:178
+#: classes/applications/procurement_center/procurement.aw:177
 msgid "Suletud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:265
+#: classes/applications/procurement_center/procurement.aw:264
 msgid "Tagasi pakkujate valikusse"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:370
+#: classes/applications/procurement_center/procurement.aw:374
 msgid "Valimata"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:427
+#: classes/applications/procurement_center/procurement.aw:431
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:434
+#: classes/applications/procurement_center/procurement.aw:438
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:438
+#: classes/applications/procurement_center/procurement.aw:442
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:442
+#: classes/applications/procurement_center/procurement.aw:446
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:627
+#: classes/applications/procurement_center/procurement.aw:631
 msgid "Hangete failide men&uuml;&uuml; m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:673
-#: classes/applications/procurement_center/procurement.aw:1143
+#: classes/applications/procurement_center/procurement.aw:677
+#: classes/applications/procurement_center/procurement.aw:1147
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:678
+#: classes/applications/procurement_center/procurement.aw:682
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:684
-#: classes/applications/procurement_center/procurement.aw:823
+#: classes/applications/procurement_center/procurement.aw:688
+#: classes/applications/procurement_center/procurement.aw:827
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:829
+#: classes/applications/procurement_center/procurement.aw:833
 msgid "N&otilde;ue"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:836
+#: classes/applications/procurement_center/procurement.aw:840
 msgid "Kustuta valitud n&otilde;uded"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:838
+#: classes/applications/procurement_center/procurement.aw:842
 msgid "Kas oled kindel et soovid valitud n&otilde;uded kustudada?"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:866
+#: classes/applications/procurement_center/procurement.aw:870
 msgid "N&otilde;ude nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:872
-#: classes/applications/procurement_center/procurement.aw:1149
+#: classes/applications/procurement_center/procurement.aw:876
+#: classes/applications/procurement_center/procurement.aw:1153
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:878
-#: classes/applications/procurement_center/procurement.aw:1155
+#: classes/applications/procurement_center/procurement.aw:882
+#: classes/applications/procurement_center/procurement.aw:1159
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:887
-#: classes/applications/procurement_center/procurement.aw:1164
+#: classes/applications/procurement_center/procurement.aw:891
+#: classes/applications/procurement_center/procurement.aw:1168
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:893
-#: classes/applications/procurement_center/procurement.aw:1170
+#: classes/applications/procurement_center/procurement.aw:897
+#: classes/applications/procurement_center/procurement.aw:1174
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:972
+#: classes/applications/procurement_center/procurement.aw:976
 msgid "Vali v&otilde;itjapakkumine"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:974
+#: classes/applications/procurement_center/procurement.aw:978
 msgid "Kas oled kindel et soovid valitud pakkumise v&auml;lja valida?"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:994
+#: classes/applications/procurement_center/procurement.aw:998
 msgid "Edetabel"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1003
+#: classes/applications/procurement_center/procurement.aw:1007
 msgid "Pakkumise nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1009
+#: classes/applications/procurement_center/procurement.aw:1013
 msgid "Pakkuja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1015
+#: classes/applications/procurement_center/procurement.aw:1019
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1024
+#: classes/applications/procurement_center/procurement.aw:1028
 msgid "Punktid"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1179
+#: classes/applications/procurement_center/procurement.aw:1183
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1283
+#: classes/applications/procurement_center/procurement.aw:1287
 msgid "Kriteeriumi nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1290
+#: classes/applications/procurement_center/procurement.aw:1294
 msgid "T&uuml;p"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1296
+#: classes/applications/procurement_center/procurement.aw:1300
 msgid "Protsent"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1333
+#: classes/applications/procurement_center/procurement.aw:1337
 msgid "Lisa kriteerium"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1339
+#: classes/applications/procurement_center/procurement.aw:1343
 msgid "Kustuta kriteeriumid"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1340
+#: classes/applications/procurement_center/procurement.aw:1344
 msgid "Oled kindel et soovid valitud kriteeriumid kustutada?"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1404
+#: classes/applications/procurement_center/procurement.aw:1409
 msgid "Toodet nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1416
+#: classes/applications/procurement_center/procurement.aw:1422
 msgid "Templeiti on ka tarvis"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1420
+#: classes/applications/procurement_center/procurement.aw:1426
 msgid "Valida tuleb v&auml;hemalt 1 pakkuja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement.aw:1424
+#: classes/applications/procurement_center/procurement.aw:1430
 msgid "Hanke id'd ka vaja"
 msgstr ""

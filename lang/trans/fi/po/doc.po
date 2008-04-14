@@ -1377,65 +1377,65 @@ msgstr ""
 msgid "puudub"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:935
+#: classes/contentmgmt/doc.aw:937
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:956 classes/contentmgmt/doc.aw:1780
+#: classes/contentmgmt/doc.aw:958 classes/contentmgmt/doc.aw:1782
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1118
+#: classes/contentmgmt/doc.aw:1120
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1131
+#: classes/contentmgmt/doc.aw:1133
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1415 classes/contentmgmt/doc.aw:1510
-#: classes/contentmgmt/doc.aw:1514
+#: classes/contentmgmt/doc.aw:1417 classes/contentmgmt/doc.aw:1512
+#: classes/contentmgmt/doc.aw:1516
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1462
+#: classes/contentmgmt/doc.aw:1464
 msgid "Versioon"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1468 classes/contentmgmt/doc.aw:1528
-#: classes/contentmgmt/doc.aw:1556
+#: classes/contentmgmt/doc.aw:1470 classes/contentmgmt/doc.aw:1530
+#: classes/contentmgmt/doc.aw:1558
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1474
+#: classes/contentmgmt/doc.aw:1476
 msgid "Hinne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1480
+#: classes/contentmgmt/doc.aw:1482
 msgid "Hinda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1486
+#: classes/contentmgmt/doc.aw:1488
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1492
+#: classes/contentmgmt/doc.aw:1494
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1523 classes/contentmgmt/doc.aw:1551
+#: classes/contentmgmt/doc.aw:1525 classes/contentmgmt/doc.aw:1553
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1648
+#: classes/contentmgmt/doc.aw:1650
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1716
+#: classes/contentmgmt/doc.aw:1718
 msgid "V&otilde;tmes&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1754 classes/contentmgmt/doc.aw:1755
-#: classes/contentmgmt/doc.aw:1756
+#: classes/contentmgmt/doc.aw:1756 classes/contentmgmt/doc.aw:1757
+#: classes/contentmgmt/doc.aw:1758
 msgid "<b>"
 msgstr ""

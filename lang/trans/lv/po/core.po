@@ -13,14 +13,14 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core.aw:808
+#: classes/core.aw:829
 msgid "Tagasi"
 msgstr ""
 
-#: classes/core.aw:840
+#: classes/core.aw:861
 msgid "(nimetu)"
 msgstr ""
 
-#: classes/core.aw:996
+#: classes/core.aw:1017
 msgid "Couldn't open file '%s' for writing"
 msgstr ""

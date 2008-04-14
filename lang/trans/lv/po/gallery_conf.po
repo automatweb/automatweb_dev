@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:class_187_help
 msgid "Klassi Galerii seaded help"
@@ -96,6 +95,18 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_controller_help
 msgid "Omaduse Pildi muundamise kontroller (controller) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_comm_edit_grp
+msgid "Omaduse Kommentaaride muutmise grupid (comm_edit_grp) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_comm_edit_grp_comment
+msgid "Omaduse Kommentaaride muutmise grupid (comm_edit_grp) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:prop_comm_edit_grp_help
+msgid "Omaduse Kommentaaride muutmise grupid (comm_edit_grp) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop
@@ -558,3 +569,6 @@ msgstr ""
 msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_conf.aw:rel_RELTYPE_EDIT_GRP
+msgid "Seose Muutmise grupp (RELTYPE_EDIT_GRP) tekst"
+msgstr ""

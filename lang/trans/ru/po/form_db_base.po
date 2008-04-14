@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/formgen/form_db_base.aw:2053
+#: classes/formgen/form_db_base.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/formgen/form_db_base.aw:2056
 msgid "Please %sgo here</a> and click the save button"
 msgstr ""

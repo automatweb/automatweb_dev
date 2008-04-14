@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -126,11 +126,11 @@ msgid "Hindamisskaala j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:83
-msgid "Klassi järgi"
+msgid "Klassi j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:84
-msgid "Kataloogi järgi"
+msgid "Kataloogi j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:85
@@ -157,10 +157,10 @@ msgstr ""
 msgid "V&auml;him vaadatud"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:538
+#: classes/contentmgmt/rate/rate.aw:546
 msgid "H&auml;&auml;leta"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:556
+#: classes/contentmgmt/rate/rate.aw:564
 msgid "Hinda"
 msgstr ""

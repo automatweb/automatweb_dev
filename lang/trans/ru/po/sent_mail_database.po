@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/sent_mail_database.aw:class_1388_help
 msgid "Klassi V&auml;ljasaadetud meilid help"
 msgstr ""
@@ -86,23 +85,22 @@ msgstr ""
 msgid "Kujundusosa Otsing (mail_left_pane) pealkiri"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:129
+#: classes/admin/sent_mail_database.aw:131
 msgid "Programm"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:135
+#: classes/admin/sent_mail_database.aw:137
 msgid "Millal"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:144
+#: classes/admin/sent_mail_database.aw:146
 msgid "Kes"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:150
+#: classes/admin/sent_mail_database.aw:152
 msgid "Kellele"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:156
+#: classes/admin/sent_mail_database.aw:158
 msgid "Teema"
 msgstr ""
-

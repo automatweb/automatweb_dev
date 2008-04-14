@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -583,51 +583,51 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:324
-#: classes/applications/orders/orders_order.aw:362
+#: classes/applications/orders/orders_order.aw:331
+#: classes/applications/orders/orders_order.aw:369
 msgid "Tarnimata kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:332
+#: classes/applications/orders/orders_order.aw:339
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:337
+#: classes/applications/orders/orders_order.aw:344
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:342
+#: classes/applications/orders/orders_order.aw:349
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:347
+#: classes/applications/orders/orders_order.aw:354
 msgid "Tellitav_kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:352
+#: classes/applications/orders/orders_order.aw:359
 msgid "Soovitav tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:357
+#: classes/applications/orders/orders_order.aw:364
 msgid "Tarne t&auml;itmine/arve nr"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:367
+#: classes/applications/orders/orders_order.aw:374
 msgid "V&auml;rvikaart"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:372
+#: classes/applications/orders/orders_order.aw:379
 msgid "Erihind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:655
+#: classes/applications/orders/orders_order.aw:662
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:657
+#: classes/applications/orders/orders_order.aw:664
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:763
+#: classes/applications/orders/orders_order.aw:770
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""

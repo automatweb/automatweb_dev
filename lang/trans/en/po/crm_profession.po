@@ -2,30 +2,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: 2005-12-04 22:15+0200\n"
-"Last-Translator: Erki <erki@struktuur.ee>\n"
-"Language-Team: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
 
 # classes/crm/crm_profession.aw:class_220_help
 #: classes/crm/crm_profession.aw:class_220_help
 msgid "Klassi Ametinimetus help"
 msgstr ""
 
-# classes/crm/crm_profession.aw:prop_ext_id
 #: classes/crm/crm_profession.aw:prop_ext_id
-msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
-msgstr "External ID"
+msgid "Omaduse Siduss&uuml;steemi ID (ext_id) caption"
+msgstr "External system ID"
 
 #: classes/crm/crm_profession.aw:prop_ext_id_comment
-msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
+msgid "Omaduse Siduss&uuml;steemi ID (ext_id) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id_help
-msgid "Omaduse Sidussüsteemi ID (ext_id) help"
+msgid "Omaduse Siduss&uuml;steemi ID (ext_id) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_hr_price
@@ -41,20 +40,20 @@ msgid "Omaduse Tunnihind (hr_price) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk
-msgid "Omaduse Järk (jrk) caption"
-msgstr ""
+msgid "Omaduse J&auml;rk (jrk) caption"
+msgstr "Order"
 
 #: classes/crm/crm_profession.aw:prop_jrk_comment
-msgid "Omaduse Järk (jrk) kommentaar"
+msgid "Omaduse J&auml;rk (jrk) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk_help
-msgid "Omaduse Järk (jrk) help"
+msgid "Omaduse J&auml;rk (jrk) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_directive_link
 msgid "Omaduse Viit ametijuhendile (directive_link) caption"
-msgstr ""
+msgstr "Profession manual"
 
 #: classes/crm/crm_profession.aw:prop_directive_link_comment
 msgid "Omaduse Viit ametijuhendile (directive_link) kommentaar"
@@ -66,7 +65,7 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_directive
 msgid "Omaduse Ametijuhend (directive) caption"
-msgstr ""
+msgstr "Profession manual"
 
 #: classes/crm/crm_profession.aw:prop_directive_comment
 msgid "Omaduse Ametijuhend (directive) kommentaar"
@@ -93,7 +92,7 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_skills
 msgid "Omaduse P&auml;devused (skills) caption"
-msgstr ""
+msgstr "Skills"
 
 #: classes/crm/crm_profession.aw:prop_skills_comment
 msgid "Omaduse P&auml;devused (skills) kommentaar"
@@ -103,26 +102,32 @@ msgstr ""
 msgid "Omaduse P&auml;devused (skills) help"
 msgstr ""
 
-# classes/crm/crm_profession.aw:prop_trans
-#: classes/crm/crm_profession.aw:prop_trans
-msgid "Omaduse Tõlkimine (trans) caption"
-msgstr "Translation"
-
-#: classes/crm/crm_profession.aw:prop_trans_comment
-msgid "Omaduse Tõlkimine (trans) kommentaar"
+#: classes/crm/crm_profession.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_trans_help
-msgid "Omaduse Tõlkimine (trans) help"
+#: classes/crm/crm_profession.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
 msgstr ""
 
-# classes/crm/crm_profession.aw:group_trans
+#: classes/crm/crm_profession.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/crm/crm_profession.aw:group_trans
-msgid "Grupi Tõlkimine (trans) pealkiri"
+msgid "Grupi T&otilde;lkimine (trans) pealkiri"
 msgstr "Translation"
 
 #: classes/crm/crm_profession.aw:group_trans_help
-msgid "Grupi Tõlkimine (trans) help"
+msgid "Grupi T&otilde;lkimine (trans) help"
 msgstr ""
 
 # classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION
@@ -144,5 +149,3 @@ msgstr "Job description"
 msgid "Seose Oskus (RELTYPE_SKILL) tekst"
 msgstr ""
 
-#~ msgid "Grupi Üldine (general) pealkiri"
-#~ msgstr "General"

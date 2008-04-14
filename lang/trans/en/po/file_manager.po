@@ -37,18 +37,30 @@ msgstr "Choose"
 msgid "Vali see"
 msgstr "Choose this"
 
-#: classes/admin/file_manager.aw:240
+#: classes/admin/file_manager.aw:319
+msgid "zip"
+msgstr ""
+
+#: classes/admin/file_manager.aw:320
+msgid "Oled sa kindel et tahad seda jama pakkida?"
+msgstr ""
+
+#: classes/admin/file_manager.aw:336
+msgid "Lae alla ZIP failina"
+msgstr ""
+
+#: classes/admin/file_manager.aw:374
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/admin/file_manager.aw:247
+#: classes/admin/file_manager.aw:381
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/admin/file_manager.aw:253
+#: classes/admin/file_manager.aw:387
 msgid "Minu lisatud"
 msgstr "Added by me"
 
-#: classes/admin/file_manager.aw:260
+#: classes/admin/file_manager.aw:394
 msgid "Viimased 30"
 msgstr "Last 30"

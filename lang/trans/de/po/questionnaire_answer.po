@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/questionary/questionnaire_answer.aw:class_1395_help
-msgid "Klassi Dünaamilise küsimustiku vastus help"
+msgid "Klassi D&uuml;naamilise k&uuml;simustiku vastus help"
 msgstr ""
 
 #: classes/applications/questionary/questionnaire_answer.aw:prop_name
@@ -61,4 +60,3 @@ msgstr ""
 #: classes/applications/questionary/questionnaire_answer.aw:prop_comm_help
 msgid "Omaduse Kommentaar (comm) help"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -250,130 +250,130 @@ msgstr ""
 msgid "Viga: halduskeskond defineerimata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:348
-msgid "Viga: administratiivjaotuse vasted määramata."
+#: classes/applications/realestate_management/realestate_import.aw:349
+msgid "Viga: administratiivjaotuse vasted m&auml;&auml;ramata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:467
-msgid "Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:"
+#: classes/applications/realestate_management/realestate_import.aw:468
+msgid "Loetletud City24 id-ga objekte on AW objektis&uuml;steemis rohkem kui &uuml;ks:"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:488
+#: classes/applications/realestate_management/realestate_import.aw:489
 msgid "Locales (%s, %s, %s, %s) not supported in this system."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:507
+#: classes/applications/realestate_management/realestate_import.aw:508
 msgid "Objekt city24 id-ga %s imporditud. AW id: %s."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:515
+#: classes/applications/realestate_management/realestate_import.aw:516
 msgid "puudub"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:517
+#: classes/applications/realestate_management/realestate_import.aw:518
 msgid "Viga objekti city24 id-ga %s impordil. AW objekti ei loodud."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:524
+#: classes/applications/realestate_management/realestate_import.aw:525
 msgid "Objekti city24 id-ga %s import osaliselt v6i t2ielikult eba6nnestunud. AW id %. Veastaatus: %s."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:728
-msgid "Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."
+#: classes/applications/realestate_management/realestate_import.aw:729
+msgid "Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud s&uuml;steemis &uuml;hkti kasutajat."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:741
+#: classes/applications/realestate_management/realestate_import.aw:742
 msgid "Viga importides objekti city24 id-ga %s. Maakler puudub."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:768
-msgid "Importides objekti city24 id-ga %s ilmnes: maakleril puudub üksus."
+#: classes/applications/realestate_management/realestate_import.aw:769
+msgid "Importides objekti city24 id-ga %s ilmnes: maakleril puudub &uuml;ksus."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:800
-msgid "Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."
+#: classes/applications/realestate_management/realestate_import.aw:801
+msgid "Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot j&auml;&auml;b salvestamata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:813
-msgid "Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."
+#: classes/applications/realestate_management/realestate_import.aw:814
+msgid "Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot j&auml;&auml;b salvestamata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:835
+#: classes/applications/realestate_management/realestate_import.aw:836
 msgid "Viga importides objekti city24 id-ga %s: maakler puudub."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:857
+#: classes/applications/realestate_management/realestate_import.aw:858
 msgid "Loodud objekt aw oid: %s. (City24 id: %s)"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:862
+#: classes/applications/realestate_management/realestate_import.aw:863
 msgid "Viga importides objekti city24 id-ga %s. Objekti loomine ei tagastanud aw objekti id-d."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:893
+#: classes/applications/realestate_management/realestate_import.aw:919
 msgid "Viga importides objekti city24 id-ga %s. Objekt (oid: %s) loodi ilma aadressita."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1101
+#: classes/applications/realestate_management/realestate_import.aw:1141
 msgid "Vali see klient"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1107
-msgid "Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid:"
+#: classes/applications/realestate_management/realestate_import.aw:1147
+msgid "Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui &uuml;ks. Ei tea millist valida. AW oid: %s. Leitud kliendid:"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1244
-msgid "väike pilt"
+#: classes/applications/realestate_management/realestate_import.aw:1284
+msgid "v&auml;ike pilt"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1302
+#: classes/applications/realestate_management/realestate_import.aw:1342
 msgid "pilt"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1313
+#: classes/applications/realestate_management/realestate_import.aw:1353
 msgid "Viga importides objekti city24 id-ga %s. Pilt (nr. %s, id %s) pole JPEG fail."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1319
+#: classes/applications/realestate_management/realestate_import.aw:1359
 msgid "Viga importides objekti city24 id-ga %s. Pildi (nr. %s, id %s) lugemine eba6nnestus."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1813
+#: classes/applications/realestate_management/realestate_import.aw:1860
 msgid "Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1819
+#: classes/applications/realestate_management/realestate_import.aw:1866
 msgid "Viga objekti city24 id-ga %s lisainfo (%s) impordil. Veastaatus: %s"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1861
+#: classes/applications/realestate_management/realestate_import.aw:1908
 msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: vastavat aw objekti ei leitud."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1878
+#: classes/applications/realestate_management/realestate_import.aw:1925
 msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s. Objektil puudub maakler."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1913
-msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."
+#: classes/applications/realestate_management/realestate_import.aw:1960
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot j&auml;&auml;b salvestamata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1926
-msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."
+#: classes/applications/realestate_management/realestate_import.aw:1973
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot j&auml;&auml;b salvestamata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1948
+#: classes/applications/realestate_management/realestate_import.aw:1995
 msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakler puudub."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:1978
+#: classes/applications/realestate_management/realestate_import.aw:2025
 msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s ilmnes: keeleobjekti ei leitud."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:2058
+#: classes/applications/realestate_management/realestate_import.aw:2105
 msgid "Import tehtud. Staatus: %s"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_import.aw:2095
+#: classes/applications/realestate_management/realestate_import.aw:2142
 msgid "Viga: muutuja %s klassil id-ga %s defineerimata."
 msgstr ""

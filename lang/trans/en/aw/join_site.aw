@@ -64,7 +64,6 @@ $GLOBALS["TRANS"]["<b>Vahepealkirjad</b>"] = "<b>Subtitles</b>";
 $GLOBALS["TRANS"]["Maa"] = "Country";
 $GLOBALS["TRANS"]["Postiindeks"] = "Postal index";
 $GLOBALS["TRANS"]["Linn"] = "City";
-$GLOBALS["TRANS"]["Maakond"] = "State/Territory";
 $GLOBALS["TRANS"]["T&auml;nava nimi"] = "Street address";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Liitun"] = "Join";

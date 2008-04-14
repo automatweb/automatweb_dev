@@ -42,119 +42,119 @@ msgstr "File"
 msgid "Pakkumine"
 msgstr "Offer"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:30
+#: classes/applications/crm/crm_company_docs_impl.aw:37
 msgid "dokumendid"
 msgstr "documents"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:49
+#: classes/applications/crm/crm_company_docs_impl.aw:56
 msgid "uudised"
 msgstr "news"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:66
+#: classes/applications/crm/crm_company_docs_impl.aw:73
 msgid "Uus"
 msgstr "New"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:110
+#: classes/applications/crm/crm_company_docs_impl.aw:117
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:117
+#: classes/applications/crm/crm_company_docs_impl.aw:124
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:126
+#: classes/applications/crm/crm_company_docs_impl.aw:133
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:139
+#: classes/applications/crm/crm_company_docs_impl.aw:146
 msgid "Impordi faile"
 msgstr "Import files"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:487
-#: classes/applications/crm/crm_company_docs_impl.aw:1019
-#: classes/applications/crm/crm_company_docs_impl.aw:1143
+#: classes/applications/crm/crm_company_docs_impl.aw:496
+#: classes/applications/crm/crm_company_docs_impl.aw:1028
+#: classes/applications/crm/crm_company_docs_impl.aw:1152
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:494
+#: classes/applications/crm/crm_company_docs_impl.aw:503
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:503
+#: classes/applications/crm/crm_company_docs_impl.aw:512
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:511
-#: classes/applications/crm/crm_company_docs_impl.aw:1033
+#: classes/applications/crm/crm_company_docs_impl.aw:520
+#: classes/applications/crm/crm_company_docs_impl.aw:1042
 msgid "Looja"
 msgstr "Creator"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:518
-#: classes/applications/crm/crm_company_docs_impl.aw:1040
+#: classes/applications/crm/crm_company_docs_impl.aw:527
+#: classes/applications/crm/crm_company_docs_impl.aw:1049
 msgid "Loodud"
 msgstr "Created"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:530
-#: classes/applications/crm/crm_company_docs_impl.aw:1050
-#: classes/applications/crm/crm_company_docs_impl.aw:1164
+#: classes/applications/crm/crm_company_docs_impl.aw:539
+#: classes/applications/crm/crm_company_docs_impl.aw:1059
+#: classes/applications/crm/crm_company_docs_impl.aw:1173
 msgid "Muutja"
 msgstr "Modifier"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:538
-#: classes/applications/crm/crm_company_docs_impl.aw:1057
+#: classes/applications/crm/crm_company_docs_impl.aw:547
+#: classes/applications/crm/crm_company_docs_impl.aw:1066
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:598
+#: classes/applications/crm/crm_company_docs_impl.aw:607
 msgid "folder"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:659
-msgid "Dokumentide kataloogile puudub juurdep‰‰suıigus"
+#: classes/applications/crm/crm_company_docs_impl.aw:668
+msgid "Dokumentide kataloogile puudub juurdep&auml;&auml;su&otilde;igus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:667
+#: classes/applications/crm/crm_company_docs_impl.aw:676
 msgid "%s dokumendid"
 msgstr "%s documents"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:760
+#: classes/applications/crm/crm_company_docs_impl.aw:769
 msgid "Ava internetist"
 msgstr "Open from Internet"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:764
+#: classes/applications/crm/crm_company_docs_impl.aw:773
 msgid "Ava serverist"
 msgstr "Open from server"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:768
+#: classes/applications/crm/crm_company_docs_impl.aw:777
 msgid "Laadi uus versioon"
 msgstr "Upload new version"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1009
+#: classes/applications/crm/crm_company_docs_impl.aw:1018
 msgid "Lisa dokument"
 msgstr "Add document"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1026
+#: classes/applications/crm/crm_company_docs_impl.aw:1035
 msgid "Lead"
 msgstr "Lead"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1067
-#: classes/applications/crm/crm_company_docs_impl.aw:1096
+#: classes/applications/crm/crm_company_docs_impl.aw:1076
+#: classes/applications/crm/crm_company_docs_impl.aw:1105
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1078
+#: classes/applications/crm/crm_company_docs_impl.aw:1087
 msgid "%s siseuudised"
 msgstr "%s news"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1150
+#: classes/applications/crm/crm_company_docs_impl.aw:1159
 msgid "Failid"
 msgstr "Files"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1157
+#: classes/applications/crm/crm_company_docs_impl.aw:1166
 msgid "Asukoht"
 msgstr "Location"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:1171
+#: classes/applications/crm/crm_company_docs_impl.aw:1180
 msgid "Muutmisaeg"
 msgstr "Modified"
 

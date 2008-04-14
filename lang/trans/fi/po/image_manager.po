@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,42 +13,42 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/image_manager.aw:100
+#: classes/admin/image_manager.aw:113
 msgid "Uus pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:101
+#: classes/admin/image_manager.aw:114
 msgid "Vali olemasolev pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:110
+#: classes/admin/image_manager.aw:123
 msgid "Pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:115
+#: classes/admin/image_manager.aw:128
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/image_manager.aw:120
+#: classes/admin/image_manager.aw:133
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/image_manager.aw:174
+#: classes/admin/image_manager.aw:187
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/image_manager.aw:213
+#: classes/admin/image_manager.aw:226
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:220
+#: classes/admin/image_manager.aw:233
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:226
+#: classes/admin/image_manager.aw:239
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/image_manager.aw:233
+#: classes/admin/image_manager.aw:246
 msgid "Viimased 30"
 msgstr ""

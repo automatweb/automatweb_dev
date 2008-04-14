@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1187,6 +1187,42 @@ msgstr ""
 msgid "Omaduse Kokkusobivad tooted (match_prod) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_amount_limits
+msgid "Omaduse  (amount_limits) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_comment
+msgid "Omaduse  (amount_limits) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_help
+msgid "Omaduse  (amount_limits) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_tb
+msgid "Omaduse  (amount_limits_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_tb_comment
+msgid "Omaduse  (amount_limits_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_tb_help
+msgid "Omaduse  (amount_limits_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_tbl
+msgid "Omaduse  (amount_limits_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_tbl_comment
+msgid "Omaduse  (amount_limits_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_amount_limits_tbl_help
+msgid "Omaduse  (amount_limits_tbl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -1265,6 +1301,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_match_prod_help
 msgid "Grupi Kokkusobivad tooted (match_prod) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_amount_limits
+msgid "Grupi Kogusepiirangud (amount_limits) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_amount_limits_help
+msgid "Grupi Kogusepiirangud (amount_limits) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_transl
@@ -1365,22 +1409,42 @@ msgstr ""
 msgid "Seose Kokkusobiv toode (RELTYPE_MATCH_PROD) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:429
+#: classes/applications/shop/shop_product.aw:438
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:430
+#: classes/applications/shop/shop_product.aw:439
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:470
+#: classes/applications/shop/shop_product.aw:484
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:487
+msgid "Kas olete kindel, et soovite kustutada kogusepiirangud valitud gruppidele?"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:501
+msgid "Kasutajagrupp"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:506
+msgid "Minimaalne kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:511
+msgid "Maksimaalne kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:557
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:475
+#: classes/applications/shop/shop_product.aw:562
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:632
+#: classes/applications/shop/shop_product.aw:743
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

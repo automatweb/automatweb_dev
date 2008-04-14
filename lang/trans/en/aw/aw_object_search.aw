@@ -30,6 +30,7 @@ $GLOBALS["TRANS"]["Kujundusosa &Uuml;ldandmed (left_side) pealkiri"] = "General 
 $GLOBALS["TRANS"]["Kujundusosa Muutmine&nbsp;ja&nbsp;lisamine (creamod) pealkiri"] = "Modified and created";
 $GLOBALS["TRANS"]["Kujundusosa M&auml;rks&otilde;nad (keywords) pealkiri"] = "Keywords";
 $GLOBALS["TRANS"]["Kujundusosa Ajaline&nbsp;aktiivsus (l_timing) pealkiri"] = "Timing";
+$GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Kasutajatest"] = "From users";
 $GLOBALS["TRANS"]["Gruppidest"] = "From groups";
 $GLOBALS["TRANS"]["K&otilde;ik"] = "All";
@@ -50,5 +51,7 @@ $GLOBALS["TRANS"]["Looja"] = "Created by";
 $GLOBALS["TRANS"]["Muudetud"] = "Modified";
 $GLOBALS["TRANS"]["Muutja"] = "Modified by";
 $GLOBALS["TRANS"]["Ava"] = "Open";
+$GLOBALS["TRANS"]["Leiti"] = "Found";
+$GLOBALS["TRANS"]["objekti"] = "objects";
 $GLOBALS["TRANS"]["AW Objektide otsing"] = "Search for objects";
 ?>

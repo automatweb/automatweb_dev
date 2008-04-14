@@ -10,5 +10,5 @@ $GLOBALS["TRANS"]["August"] = "Август";
 $GLOBALS["TRANS"]["September"] = "Сентябрь";
 $GLOBALS["TRANS"]["Oktoober"] = "Октябрь";
 $GLOBALS["TRANS"]["November"] = "Ноябрь";
-$GLOBALS["TRANS"]["Detsember"] = "Декабр";
+$GLOBALS["TRANS"]["Detsember"] = "Декабрь";
 ?>

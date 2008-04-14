@@ -122,19 +122,16 @@ msgstr ""
 msgid "Omaduse Maksimaalne otsingus&otilde;na pikkus (max_s_len) help"
 msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
-msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
-msgstr "Search keywords"
-
-# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
-msgid "Omaduse Otsing märksõnadest (do_keyword_search) kommentaar"
+msgid "Omaduse Otsing m&auml;rks&otilde;nadest (do_keyword_search) caption"
 msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
+msgid "Omaduse Otsing m&auml;rks&otilde;nadest (do_keyword_search) kommentaar"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
-msgid "Omaduse Otsing märksõnadest (do_keyword_search) help"
+msgid "Omaduse Otsing m&auml;rks&otilde;nadest (do_keyword_search) help"
 msgstr ""
 
 # classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes
@@ -354,14 +351,12 @@ msgstr "Static search"
 msgid "Grupi Staatiline otsing (static) help"
 msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content.aw:group_keywords
 #: classes/contentmgmt/site_search/site_search_content.aw:group_keywords
-msgid "Grupi Märksõnade järgi otsing (keywords) pealkiri"
-msgstr "Keyword search"
+msgid "Grupi M&auml;rks&otilde;nade j&auml;rgi otsing (keywords) pealkiri"
+msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content.aw:group_keywords_help
 #: classes/contentmgmt/site_search/site_search_content.aw:group_keywords_help
-msgid "Grupi Märksõnade järgi otsing (keywords) help"
+msgid "Grupi M&auml;rks&otilde;nade j&auml;rgi otsing (keywords) help"
 msgstr ""
 
 # classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
@@ -493,7 +488,7 @@ msgid "Vaikimisi sorteeritakse"
 msgstr "Default sort-by"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:339
-#: classes/contentmgmt/site_search/site_search_content.aw:2207
+#: classes/contentmgmt/site_search/site_search_content.aw:2223
 msgid "Pealkiri"
 msgstr "Title"
 
@@ -502,49 +497,63 @@ msgid "--vali--"
 msgstr "--select--"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:355
-msgid "Kuupäeva järgi (uuem enne)"
-msgstr "By date (newest first)"
+msgid "Kuup&auml;eva j&auml;rgi (uuem enne)"
+msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:356
-msgid "Kuupäeva järgi (vanem enne)"
-msgstr "By date (oldest first)"
+msgid "Kuup&auml;eva j&auml;rgi (vanem enne)"
+msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2187
-#: classes/contentmgmt/site_search/site_search_content.aw:2193
+#: classes/contentmgmt/site_search/site_search_content.aw:2203
+#: classes/contentmgmt/site_search/site_search_content.aw:2209
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2199
+#: classes/contentmgmt/site_search/site_search_content.aw:2215
 msgid "Mitu korda sisaldab"
 msgstr "How many in results"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2214
+#: classes/contentmgmt/site_search/site_search_content.aw:2230
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2224
+#: classes/contentmgmt/site_search/site_search_content.aw:2240
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2380
+#: classes/contentmgmt/site_search/site_search_content.aw:2396
 msgid "t&auml;psuse"
 msgstr "by accuracy"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2381
+#: classes/contentmgmt/site_search/site_search_content.aw:2397
 msgid "kuup&auml;eva alusel"
 msgstr "by date"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2382
+#: classes/contentmgmt/site_search/site_search_content.aw:2398
 msgid "pealkirja alusel"
 msgstr "by title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2678
+#: classes/contentmgmt/site_search/site_search_content.aw:2694
 msgid "Lihtne otsing"
 msgstr "Simple search"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2686
+#: classes/contentmgmt/site_search/site_search_content.aw:2702
 msgid "Detailotsing"
 msgstr "Advanced search"
+
+# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
+#~ msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
+#~ msgstr "Search keywords"
+
+# classes/contentmgmt/site_search/site_search_content.aw:group_keywords
+#~ msgid "Grupi Märksõnade järgi otsing (keywords) pealkiri"
+#~ msgstr "Keyword search"
+
+#~ msgid "Kuupäeva järgi (uuem enne)"
+#~ msgstr "By date (newest first)"
+
+#~ msgid "Kuupäeva järgi (vanem enne)"
+#~ msgstr "By date (oldest first)"
 
 # classes/contentmgmt/site_search/site_search_content.aw:prop_default_order
 #~ msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) caption"

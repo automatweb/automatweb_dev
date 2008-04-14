@@ -101,16 +101,40 @@ msgstr ""
 msgid "Omaduse Valdkond (field) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_location
-msgid "Omaduse Asukoht (location) caption"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_area
+msgid "Omaduse Piirkond (loc_area) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_location_comment
-msgid "Omaduse Asukoht (location) kommentaar"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_area_comment
+msgid "Omaduse Piirkond (loc_area) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_location_help
-msgid "Omaduse Asukoht (location) help"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_area_help
+msgid "Omaduse Piirkond (loc_area) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_county
+msgid "Omaduse Maakond (loc_county) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_county_comment
+msgid "Omaduse Maakond (loc_county) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_county_help
+msgid "Omaduse Maakond (loc_county) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_city
+msgid "Omaduse Linn (loc_city) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_city_comment
+msgid "Omaduse Linn (loc_city) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_loc_city_help
+msgid "Omaduse Linn (loc_city) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_workinfo
@@ -197,6 +221,18 @@ msgstr ""
 msgid "Omaduse T&ouml;&ouml;leasumise aeg (start_working) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_file_url
+msgid "Omaduse T&ouml;&ouml;pakkumise fail (job_offer_file_url) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_file_url_comment
+msgid "Omaduse T&ouml;&ouml;pakkumise fail (job_offer_file_url) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_file_url_help
+msgid "Omaduse T&ouml;&ouml;pakkumise fail (job_offer_file_url) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_file
 msgid "Omaduse T&ouml;&ouml;pakkumine failina (job_offer_file) caption"
 msgstr ""
@@ -207,6 +243,18 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_file_help
 msgid "Omaduse T&ouml;&ouml;pakkumine failina (job_offer_file) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_pdf
+msgid "Omaduse T&ouml;&ouml;pakkumine PDF-failina (job_offer_pdf) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_pdf_comment
+msgid "Omaduse T&ouml;&ouml;pakkumine PDF-failina (job_offer_pdf) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_job_offer_pdf_help
+msgid "Omaduse T&ouml;&ouml;pakkumine PDF-failina (job_offer_pdf) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_apply
@@ -221,28 +269,16 @@ msgstr ""
 msgid "Omaduse Kandideerin (apply) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_offer_cfgform
-msgid "Omaduse CV seadete vorm (offer_cfgform) caption"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_rate_scale
+msgid "Omaduse Hindamise skaala (rate_scale) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_offer_cfgform_comment
-msgid "Omaduse CV seadete vorm (offer_cfgform) kommentaar"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_rate_scale_comment
+msgid "Omaduse Hindamise skaala (rate_scale) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_offer_cfgform_help
-msgid "Omaduse CV seadete vorm (offer_cfgform) help"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_default_cfgform
-msgid "Omaduse  (default_cfgform) caption"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_default_cfgform_comment
-msgid "Omaduse  (default_cfgform) kommentaar"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_default_cfgform_help
-msgid "Omaduse  (default_cfgform) help"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_rate_scale_help
+msgid "Omaduse Hindamise skaala (rate_scale) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_toolbar
@@ -269,16 +305,40 @@ msgstr ""
 msgid "Omaduse  (candidate_table) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_offer_cfgform
+msgid "Omaduse CV seadete vorm (offer_cfgform) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_offer_cfgform_comment
+msgid "Omaduse CV seadete vorm (offer_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_offer_cfgform_help
+msgid "Omaduse CV seadete vorm (offer_cfgform) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_default_cfgform
+msgid "Omaduse  (default_cfgform) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_default_cfgform_comment
+msgid "Omaduse  (default_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_default_cfgform_help
+msgid "Omaduse  (default_cfgform) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_new_cfgform_name
-msgid "Omaduse Nimi (new_cfgform_name) caption"
+msgid "Omaduse  (new_cfgform_name) caption"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_new_cfgform_name_comment
-msgid "Omaduse Nimi (new_cfgform_name) kommentaar"
+msgid "Omaduse  (new_cfgform_name) kommentaar"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_new_cfgform_name_help
-msgid "Omaduse Nimi (new_cfgform_name) help"
+msgid "Omaduse  (new_cfgform_name) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_new_cfgform_tbl
@@ -293,6 +353,18 @@ msgstr ""
 msgid "Omaduse  (new_cfgform_tbl) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_save_cfgform
+msgid "Omaduse Salvesta seadetevorm (save_cfgform) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_save_cfgform_comment
+msgid "Omaduse Salvesta seadetevorm (save_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_save_cfgform_help
+msgid "Omaduse Salvesta seadetevorm (save_cfgform) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:group_candidate
 msgid "Grupi Kandideerimised (candidate) pealkiri"
 msgstr ""
@@ -302,11 +374,11 @@ msgid "Grupi Kandideerimised (candidate) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:group_custom_cfgform
-msgid "Grupi Uus CV seadete vorm (custom_cfgform) pealkiri"
+msgid "Grupi CV v&auml;ljad (custom_cfgform) pealkiri"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:group_custom_cfgform_help
-msgid "Grupi Uus CV seadete vorm (custom_cfgform) help"
+msgid "Grupi CV v&auml;ljad (custom_cfgform) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_CANDIDATE
@@ -325,10 +397,6 @@ msgstr ""
 msgid "Seose Ametikoht (RELTYPE_PROFESSION) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_LOCATION
-msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
-msgstr ""
-
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_FIELD
 msgid "Seose Valdkond (RELTYPE_FIELD) tekst"
 msgstr ""
@@ -337,72 +405,149 @@ msgstr ""
 msgid "Seose CV seadete vorm (RELTYPE_CFGFORM) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:138
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_AREA
+msgid "Seose Piirkond (RELTYPE_AREA) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_COUNTY
+msgid "Seose Maakond (RELTYPE_COUNTY) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_CITY
+msgid "Seose Linn (RELTYPE_CITY) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_RATE_SCALE
+msgid "Seose Hindamise skaala (RELTYPE_RATE_SCALE) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_JOB_OFFER_FILE
+msgid "Seose T&ouml;&ouml;pakkumine failina (RELTYPE_JOB_OFFER_FILE) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:236
 msgid "T&ouml;&ouml;pakkumine PDF-formaadis"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:159
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:244
+msgid "Kandideerin"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:257
 msgid "ASAP"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:228
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:310
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:265
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:372
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:269
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:376
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:273
-msgid "Valitud"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:380
+msgid "N&auml;ita vormis"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:301
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:384
+msgid "Kohustuslik"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:388
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:435
 msgid "Lisa uus kandideerija"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:312
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:444
+msgid "Saada e-kiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:451
+msgid "Saada SMS"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:462
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:320
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:470
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:328
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:478
 msgid "Genereeri PDF"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:341
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:464
-msgid "Nimi"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:491
+msgid "Kandideerija nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:346
-msgid "Isik"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:496
+msgid "Kandidatuuri lisamise aeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:351
-msgid "Kuupäev"
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:501
+msgid "Vanus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:357
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:506
+msgid "Telefonid"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:511
+msgid "E-postiaadressid"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:516
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:520
+msgid "Keskmine hinne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:525
 msgid "Kaaskiri"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:378
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:385
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:529
+msgid "Kaaskiri (failina)"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:533
+msgid "Lisainfo"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:537
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:626
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:559
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:569
 msgid "kaaskiri"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:392
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:565
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:572
 msgid "Puudub"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:470
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:768
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:774
 msgid "Vaatamisi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:1043
+msgid "Sisestage salvestatava seadetevormi nimi:"
 msgstr ""

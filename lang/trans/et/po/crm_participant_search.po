@@ -30,11 +30,27 @@ msgid "Olulised"
 msgstr ""
 
 #: classes/applications/crm/crm_participant_search.aw:48
-msgid "Esimesed kolmkümmend"
+msgid "Esimesed kolmk&uuml;mmend"
 msgstr ""
 
 #: classes/applications/crm/crm_participant_search.aw:55
 msgid "N&auml;ita"
+msgstr ""
+
+#: classes/applications/crm/crm_participant_search.aw:88
+msgid "minu klientide"
+msgstr ""
+
+#: classes/applications/crm/crm_participant_search.aw:90
+msgid "v&otilde;i"
+msgstr ""
+
+#: classes/applications/crm/crm_participant_search.aw:93
+msgid "t&ouml;&ouml;tajaid"
+msgstr ""
+
+#: classes/applications/crm/crm_participant_search.aw:97
+msgid "olulisi"
 msgstr ""
 
 #: classes/applications/crm/crm_participant_search.aw:102

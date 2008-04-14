@@ -7,10 +7,10 @@ $GLOBALS["TRANS"]["Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_empl
 $GLOBALS["TRANS"]["Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"] = "Default article in task rows";
 $GLOBALS["TRANS"]["Omaduse Projekti kontroller (controller_proj) caption"] = "Project controller";
 $GLOBALS["TRANS"]["Omaduse Toimetuse kontroller (controller_task) caption"] = "Task controller";
-$GLOBALS["TRANS"]["Omaduse Kohtumise kontroller (controller_meeting) caption"] = "Meeting controller";
 $GLOBALS["TRANS"]["Omaduse Tegevused vaikimisi vaade (default_tasks_view) caption"] = "Default view for actions";
 $GLOBALS["TRANS"]["Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) caption"] = "By default rows will be open by clicking task name";
 $GLOBALS["TRANS"]["Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) caption"] = "Task rows default invoice status filter";
+$GLOBALS["TRANS"]["Omaduse Kohtumise kontroller (controller_meeting) caption"] = "Meeting controller";
 $GLOBALS["TRANS"]["Omaduse Tabelite valik (tables_treemenu) caption"] = "Tables";
 $GLOBALS["TRANS"]["Omaduse Tabeli konfiguratsioon (table_cfg) caption"] = "Table configuration";
 $GLOBALS["TRANS"]["Omaduse Kasutajad (users) caption"] = "Users";
