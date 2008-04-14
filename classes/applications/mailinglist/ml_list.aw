@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.120 2008/04/10 14:54:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.121 2008/04/14 11:55:16 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -510,6 +510,7 @@ class ml_list extends class_base
 		
 		$count = $this->member_count;
 		// mark the queue as "processing" - 5
+		
 		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
 			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
 		$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid");
@@ -521,7 +522,7 @@ class ml_list extends class_base
 			"mfrom" => $mfrom,
 		));
 		$mlq = get_instance("applications/mailinglist/ml_mail_gen");
-		$mlq->bg_control(array("id" => $id, "do" => "start",));
+		$mlq->bg_control(array("id" => $id, "do" => "start"));
 
 		$this->_log(ST_MAILINGLIST, SA_SEND, sprintf(t("saatis meili %s listi %s:%s"),$id, $v["name"], $gname) ,$lid);
 		return aw_global_get("route_back");
@@ -935,7 +936,7 @@ class ml_list extends class_base
 			case "message":
 				$msg_obj = $this->_get_mail_message_object($arr);
 				$prop["value"] = $msg_obj->prop("message");
-				$prop["richtext"] = 1;
+				$prop["richtext"] = $arr["obj_inst"]->prop("no_fck")? 0 : $arr["obj_inst"]->prop("classinfo_allow_rte");
 				//allow_rte
 				break;
 			case "html_mail":
@@ -1410,9 +1411,9 @@ class ml_list extends class_base
 				break;
 
 			case "bounce":
-				if(is_oid($arr["request"]["id"]) && $this->can("view" , $arr["request"]["id"]))
+				if($this->can("view" , $arr["request"]["message_id"]))
 				{
-					$mail_object = obj($arr["request"]["id"]);
+					$mail_object = obj($arr["request"]["message_id"]);
 					$mail_object -> set_meta("bounce" , $prop["value"]);
 				}
 				return PROP_IGNORE;
@@ -3211,7 +3212,7 @@ class ml_list extends class_base
 		if(!$msg_data["html_mail"])
 		{
 			$msg_data["html_mail"] = "0";
-		}
+		}else $msg_data["html_mail"] = 1024;
 		unset($msg_data["rawdata"]);
 
 		$msg_data["mto"] = $arr["obj_inst"]->id();
@@ -3274,12 +3275,10 @@ class ml_list extends class_base
 				foreach($c->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $c->prop($key)));
-					//arr($c->meta($key));arr($key);
 				}
 				foreach($ro->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $ro->prop($key)));
-//					arr($ro->meta($key));arr($key);
 				}
 				foreach($c->get_property_list() as $key => $val)
 				{
@@ -3321,8 +3320,25 @@ class ml_list extends class_base
 			$msg_data["message"] = html_entity_decode($msg_data["message"]);
 		}
 */		$writer = get_instance(CL_MESSAGE);
-		$writer->init_class_base();
-		$message_id = $writer->submit($msg_data);
+		//$writer->init_class_base();
+		//$message_id = $writer->submit($msg_data);die();
+
+		foreach($msg_data as $prop => $val)
+		{
+			if($msg_obj->is_property($prop))
+			{
+				$msg_obj->set_prop($prop , $val);
+			}
+		}
+		$msg_obj->save();
+		$message_id = $msg_obj->id();
+		$writer->id = $msg_obj->id();
+/*
+		arr($msg_obj->prop("message"));
+		$msg_obj->set_prop("message" , $msg_data["message"]);
+		$msg_obj->save();
+arr($msg_obj->prop("message"));
+*/
 
 		$sender = $msg_obj->prop("mfrom");
 		if($this->can("view", $sender))
@@ -3333,8 +3349,8 @@ class ml_list extends class_base
 			));
 		}
 		//arr($msg_data["message"]);
-		$msg_obj->set_prop("message" , $msg_data["message"]);
-		$msg_obj->save();
+		//$msg_obj->set_prop("message" , $msg_data["message"]);
+		//$msg_obj->save();
 
 		if ($this->can("view", $tpl))
 		{

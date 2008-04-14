@@ -90,7 +90,7 @@ class ml_mail_gen extends run_in_background
 
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
 		$members = $ml_list_inst->get_members($msg);
-		arr($members);
+
 		$member_list = $members["objects"];
 		$from_file = $members["from_file"];
 		set_time_limit(0);
@@ -226,7 +226,7 @@ class ml_mail_gen extends run_in_background
 		return $target;
 	}
 
-	//mail_id, vars, name , mail, member_id, - esimene on nagu olulisim, teised tulevad kas baasist valmis maili juurest või kui asi alles tegemisel, siis lambist
+	//mail_id, vars, name , mail, member_id, - esimene on nagu olulisim, teised tulevad kas baasist valmis maili juurest voi kui asi alles tegemisel, siis lambist
 	function get_changed_message($arr)
 	{
 		if(!$arr["msg"])
@@ -238,7 +238,12 @@ class ml_mail_gen extends run_in_background
 			$ml_list_inst = get_instance(CL_ML_LIST);
 			$arr["msg"] = $this->d->msg_get(array("id" => $arr["mail_id"]));
 		}
-
+		if(!$arr["msg"]["message"])
+		{
+			$mail_object = obj($arr["mail_id"]);
+			$arr["msg"]["message"] = $mail_object->meta("message");
+			
+		}
 		$mail_obj = obj($arr["mail_id"]);
 		$mail_meta = $mail_obj->meta();
 		$vars = $arr["vars"];
@@ -271,7 +276,7 @@ class ml_mail_gen extends run_in_background
 			"list" => $mail_meta["list_id"]
 		);
 		
-		//teeb lahkumise lingi ümber selliseks, et ei oleks massiivi
+		//teeb lahkumise lingi ymber selliseks, et ei oleks massiivi
 		if(is_array($arr["msg"]["meta"]["list_source"]))
 		{
 			$n = 0;
@@ -290,7 +295,6 @@ class ml_mail_gen extends run_in_background
 			true
 		);
 		$html_mail_unsubscribe = array();
-
 		if ($mail_obj->prop("html_mail") > 0)
 		{
 			$html_mail_unsubscribe = array("<a href=\"".$unsubscribe_link."\">" , "</a>");
@@ -307,7 +311,6 @@ class ml_mail_gen extends run_in_background
 		$message = $this->replace_tags($message, $data);
 		$message = str_replace("a href='/", "a href='".aw_ini_get("baseurl")."/" , $message);
 		$message = str_replace('a href="/', 'a href="'.aw_ini_get("baseurl").'/' , $message);
-
 		return $message;
 	}
 
@@ -319,9 +322,12 @@ class ml_mail_gen extends run_in_background
 		{
 			foreach($matches[1] as $v)
 			{
-				$this->used_variables[$v] = 1;
-				if($data[$v]) $text = preg_replace("/#$v#/", $data[$v] ? $data[$v] : "", $text);
-				//decho("matced $v<br />");
+				if($data[$v])
+				{
+					$this->used_variables[$v] = 1;
+					if($data[$v]) $text = preg_replace("/#$v#/", $data[$v] ? $data[$v] : "", $text);
+					//decho("matced $v<br />");
+				}
 			};
 		};
 		return $text;
