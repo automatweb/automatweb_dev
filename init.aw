@@ -89,8 +89,7 @@ function aw_ini_get($var)
 			}
 			else
 			{
-				return;
-				// throw new aw_exception("Invalid key '" . $var . "'");
+				throw new aw_exception("Invalid key '" . $var . "'");
 			}
 		}
 	}
