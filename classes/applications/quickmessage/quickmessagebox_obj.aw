@@ -129,6 +129,17 @@ class quickmessagebox_obj extends _int_object
 			"type" => "RELTYPE_UNREAD_MESSAGE"
 		));
 		$this->update_counter(1);
+
+		// make msg visible to recipient
+		$owner = $this->get_first_obj_by_reltype("RELTYPE_OWNER");
+		$group = new object($owner->get_default_group());
+		$msg->acl_set($group, array(
+			"can_add" => 0,
+			"can_edit" => 0,
+			"can_admin" => 0,
+			"can_delete" => 0,
+			"can_view" => 1
+		));
 	}
 
 	/**
@@ -264,7 +275,7 @@ class quickmessagebox_obj extends _int_object
 
 		// get count of unread messages among those to be deleted
 		$unread = array();
-		$connectes_msgs = array();
+		$connected_msgs = array();
 		foreach ($c as $connection)
 		{
 			if ("6" === $connection["reltype"]) // RELTYPE_UNREAD_MESSAGE
@@ -272,22 +283,36 @@ class quickmessagebox_obj extends _int_object
 				$unread[] = $connection["to"];
 			}
 
-			$connectes_msgs[] = $connection["to"];
+			$connected_msgs[] = $connection["to"];
 		}
 
 		// check if connected to this box. delete.
 		$failed = array();
+		$current_user = new object(aw_global_get("uid_oid"));
+		$group = new object($current_user->get_default_group());
 		foreach ($delete_q as $msg)
 		{
 			try
 			{
-				if (!in_array($msg->id(), $connectes_msgs))
+				if (in_array($msg->id(), $connected_msgs))
+				{
+					$msg->acl_set ($group, array(
+						"can_add" => 0,
+						"can_edit" => 0,
+						"can_admin" => 0,
+						"can_delete" => 0,
+						"can_view" => 0
+					));
+				}
+				elseif ($msg->prop("box") === $this->id())
+				{
+					$msg->delete();
+				}
+				else
 				{
 					$e = new awex_qmsg_box("Can't delete messages not belonging to this messagebox.");
 					$e->qmsg_affected_msgs = array($msg->id() => "wrong box");
 				}
-
-				$msg->delete();
 			}
 			catch (Exception $e)
 			{
