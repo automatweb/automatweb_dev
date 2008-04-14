@@ -40,8 +40,8 @@ class quickmessage_obj extends _int_object
 		try
 		{
 			$u_oid = aw_global_get("uid_oid");
-			$u_o = new object($u_oid);
-			$msgbox = quickmessagebox_obj::get_msgbox_for_user($u_o);
+			$current_user = new object($u_oid);
+			$msgbox = quickmessagebox_obj::get_msgbox_for_user($current_user);
 		}
 		catch (Exception $e)
 		{
@@ -102,6 +102,7 @@ class quickmessage_obj extends _int_object
 			throw new awex_qmsg_cfg("Addressees setting invalid: " . var_export($addressees_setting, true));
 		}
 
+		unset($options[$current_user->id()]);
 		return $options;
 	}
 
