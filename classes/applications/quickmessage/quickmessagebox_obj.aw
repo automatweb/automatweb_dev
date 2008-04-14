@@ -312,6 +312,7 @@ class quickmessagebox_obj extends _int_object
 				{
 					$e = new awex_qmsg_box("Can't delete messages not belonging to this messagebox.");
 					$e->qmsg_affected_msgs = array($msg->id() => "wrong box");
+					$failed[$msg->id()] = $e;
 				}
 			}
 			catch (Exception $e)
