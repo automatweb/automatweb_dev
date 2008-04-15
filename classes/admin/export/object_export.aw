@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.24 2008/04/15 07:08:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/export/object_export.aw,v 1.1 2008/04/15 18:52:05 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 

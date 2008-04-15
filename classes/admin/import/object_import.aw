@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.51 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/import/object_import.aw,v 1.1 2008/04/15 18:52:06 kristo Exp $
 // object_import.aw - Objektide Import
 /*
 
