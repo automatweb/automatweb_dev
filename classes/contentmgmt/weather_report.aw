@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.5 2008/02/28 12:25:38 robert Exp $
-// weather_report.aw - Ilmateade 
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/weather_report.aw,v 1.6 2008/04/15 19:13:32 voldemar Exp $
+// weather_report.aw - Ilmateade
 /*
 
 @classinfo syslog_type=ST_WEATHER_REPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
@@ -42,10 +42,10 @@ class weather_report extends class_base
 		{
 			case "report_type":
 				$prop["options"] = array(
-					1 => "Weather underground"			
+					1 => "Weather underground"
 				);
 				break;
-				
+
 			case "feed_url":
 			case "cache_time":
 			case "pic_list":
@@ -68,7 +68,7 @@ class weather_report extends class_base
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -148,9 +148,9 @@ class weather_report extends class_base
 								$pic = explode("=", $pici);
 								$pics[str_replace(" ", "", trim(strtolower($pic[0])))] = $pic[1];
 							}
-							$imgsrc = "http://icons-pe.wxug.com/graphics/conds/".$pics[str_replace(" ", "", trim(strtolower($val)))];
+							$imgsrc = $pic_url . $pics[str_replace(" ", "", trim(strtolower($val)))];
 							if(!@fopen($imgsrc,"r"))
-							$imgsrc = "http://icons-pe.wxug.com/graphics/conds/unknown.gif";
+							$imgsrc = $pic_url . "unknown.gif";
 						}
 						$this->vars(array(
 							"imgsrc" => $imgsrc
@@ -160,20 +160,20 @@ class weather_report extends class_base
 					{
 						preg_match_all("/^(\d+).+?(\d+).*?/", $val, $vals, PREG_PATTERN_ORDER);
 						$fields['fahr'] = $vals['1']['0'];
-						$fields['cels'] = $vals['2']['0'];	
+						$fields['cels'] = $vals['2']['0'];
 					}
-					
+
 					$fields[$prop] = $val;
 				}
 				foreach($fields as $prop=>$val)
 				{
 					$this->vars(array(
-						$prop => $val	 
+						$prop => $val
 					));
 				}
 			}
 		}
-		
+
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
