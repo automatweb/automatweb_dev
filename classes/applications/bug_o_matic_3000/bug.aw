@@ -960,7 +960,7 @@ class bug extends class_base
 				if ($ev > 100 && $estend > ($ev+24*3600))
 				{
 					$prop["error"] = sprintf(t("Bugi ei ole v&otilde;imalik valmis saada enne %s!"), date("d.m.Y H:i", $estend));
-					return PROP_FATAL_ERROR;
+					return PROP_ERROR;
 				}
 				break;
 
@@ -2176,6 +2176,7 @@ die($email);
 			case "orderer_person":
 			case "fileupload":
 			case "is_order":
+			case "bug_type":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
