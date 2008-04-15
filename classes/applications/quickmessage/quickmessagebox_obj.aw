@@ -212,6 +212,14 @@ class quickmessagebox_obj extends _int_object
 					"to" => $user->id(),
 					"type" => "RELTYPE_OWNER"
 				));
+				$group = new object($user->get_default_group());
+				$box->acl_set($group, array(
+					"can_add" => 1,
+					"can_edit" => 1,
+					"can_admin" => 0,
+					"can_delete" => 1,
+					"can_view" => 1
+				));
 			}
 			else
 			{
