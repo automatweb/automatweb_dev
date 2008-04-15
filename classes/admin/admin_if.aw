@@ -36,6 +36,9 @@
 class admin_if extends class_base
 {
 	var $use_parent;
+	var $period;
+	var $curl;
+	var $selp;
 	var $force_0_parent;
 
 	/** this stores a list of {clid => class name } for each class that implements the admin if modifier interface **/

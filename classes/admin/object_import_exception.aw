@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.7 2007/12/06 14:32:43 kristo Exp $
-// object_import_exception.aw - Objektide impordi erand 
 /*
 
 @classinfo syslog_type=ST_OBJECT_IMPORT_EXCEPTION relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
@@ -15,6 +13,7 @@
 
 
 */
+
 
 class object_import_exception extends class_base
 {
@@ -120,6 +119,18 @@ class object_import_exception extends class_base
 		}
 	}
 
+	/** Applies the changes defined in the exception
+		@attrib api=1 params=pos
+
+		@param ex_id required type=oid
+			The exception object id
+
+		@param text required type=string
+			The text to replace texts in
+
+		@returns
+			The text with the exceptions replaced
+	**/
 	function do_replace($ex_id, $text)
 	{
 		$o = obj($ex_id);
