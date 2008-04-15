@@ -7047,11 +7047,25 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-
+			
 			//kui on kokkuleppehind kas arvel, v6i kui arvet ei ole, siis toimetusel... tuleb v2he arvutada
-			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
+			if(is_object($b))
 			{
-				$sum = $row_inst->get_row_ageement_price($o);
+				$br_ol = new object_list(array(
+					"class_id" => CL_CRM_BILL_ROW,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_CRM_BILL_ROW.RELTYPE_TASK_ROW" => $o->id(),
+				));
+				$br = reset($br_ol->arr());
+				if(is_object($br))
+				{
+					$sum = $br->get_sum();
+				}
+				elseif((sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
+				{
+					$sum = $row_inst->get_row_ageement_price($o);
+				}
 			}
 
 			//6igesse valuutasse

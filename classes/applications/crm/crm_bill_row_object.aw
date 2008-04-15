@@ -20,6 +20,18 @@ class crm_bill_row_object extends _int_object
 		}
 		return $rv;
 	}
-}
 
+	function get_sum()
+	{
+		if($this->prop("sum"))
+		{
+			$sum = $this->prop("sum");
+		}
+		else
+		{
+			$sum = str_replace(",", ".", $this->prop("amt")) * str_replace(",", ".", $this->prop("price"));
+		}
+		return $sum;
+	}
+}
 ?>
