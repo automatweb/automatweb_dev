@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.28 2008/01/31 10:48:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.29 2008/04/15 07:08:23 kristo Exp $
 // procurement.aw - Hange
 /*
 
@@ -1638,12 +1638,7 @@ if($arr["request"]["group"] == "products")
 		$adminif = obj($_SESSION["cur_admin_if"]);
 		$loch=html::get_change_url($_SESSION["cur_admin_if"], array("parent" => $menu->id(), "group" => "o",));
 		print "<script type='text/javascript'>window.location.href='".$loch."'</script>";
-//arr($this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id())));
-
-//		header("Location: ".$loch);
 		die();
-		return $this->mk_my_orb("admin_menus", array("action" => "right_frame" , "parent" => $menu->id()));
-		die($this->parse());
 	}
 
 }

@@ -49,36 +49,18 @@ class admin_if extends class_base
 		));
 	}
 
-	function get_property($arr)
+	function _get_info_text($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
+		if (!empty($_SESSION["fu_tm_text"]))
 		{
-			case "info_text":
-				if (!empty($_SESSION["fu_tm_text"]))
-				{
-					$prop["value"] = $_SESSION["fu_tm_text"];
-					unset($_SESSION["fu_tm_text"]);
-				}
-				else
-				{
-					return PROP_IGNORE;
-				}
-				break;
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
+			$arr["prop"]["value"] = $_SESSION["fu_tm_text"];
+			unset($_SESSION["fu_tm_text"]);
 		}
-		return $retval;
-	}	
+		else
+		{
+			return PROP_IGNORE;
+		}
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -171,7 +153,7 @@ class admin_if extends class_base
 				"title" => t("Impordi kaustu"),
 				"name" => "import_menus",
 				"tooltip" => t("Impordi kaustu"),
-				"link" => $this->mk_my_orb("import",array("parent" => $parent), "admin_menus"),
+				"link" => $this->mk_my_orb("import",array("parent" => $parent)),
 			));
 
 			$tb->add_menu_item(array(
@@ -1022,7 +1004,121 @@ class admin_if extends class_base
 	function if_copy($arr)
 	{
 		extract($arr);
-		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel), "admin_menus");
+		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
+	}
+
+	/**  
+		
+		@attrib name=copy_feedback params=name default="0"
+		
+		@param parent optional
+		@param period optional
+		@param sel optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function copy_feedback($arr)
+	{
+		extract($arr);
+		$this->mk_path($parent, t("Vali kuidas objekte kopeerida"));
+
+		$hc = get_instance("cfg/htmlclient", array(
+			"tabs" => true,
+		));
+		$hc->add_tab(array(
+			"active" => true,
+			"caption" => t("Objekti kopeerimine"),
+		));
+		$hc->start_output();
+		$hc->add_property(array(
+			"name" => "objects",
+			"type" => "text",
+			"caption" => "&nbsp;",
+			"value" => "<b>".t("Objektid")."</b>",
+		));
+		$hc->add_property(array(
+			"name" => "ser_type",
+			"type" => "chooser",
+			"orient" => "vertical",
+			"options" => array(
+				"2" => t("Kopeeri alamobjektid"),
+				"1" => t("Kopeeri alammen&uuml;&uuml;d"),
+				"3" => t("Kopeeri dokumendid"),
+			),
+		));
+		$hc->add_property(array(
+			"name" => "rels",
+			"type" => "text",
+			"caption" => "&nbsp;",
+			"value" => "<b>".t("Seosed")."</b>",
+		));
+		$hc->add_property(array(
+			"name" => "ser_rels",
+			"type" => "chooser",
+			"orient" => "vertical",
+			"options" => array(
+				"1" => t("Seosta samade objektidega"),
+				"2" => t("Loo uued seotud objektid"),
+			),
+		));
+		$hc->add_property(array(
+			"name" => "submit_override",
+			"type" => "submit",
+			"caption" => t("Kopeeri"),
+		));
+		$hc->finish_output(array(
+			"data" => array(
+				"action" => "submit_copy_feedback",
+				"parent" => $parent,
+				"period" => $period,
+				"sel" => $sel,
+				"orb_class" => "admin_if",
+			),
+		));
+
+		$props = $hc->get_result(array(
+			//"form_only" => 1,
+		));
+
+		return $props;
+	}
+
+	/**  
+		
+		@attrib name=submit_copy_feedback params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function submit_copy_feedback($arr)
+	{
+		extract($arr);
+		$params = array(
+			"copy_subobjects" => $ser_type == 2 ? 1 : 0,
+			"copy_subfolders" => $ser_type == 1 ? 1 : 0,
+			"copy_subdocs" => $ser_type == 3 ? 1 : 0,
+			"copy_rels" => $ser_rels == 1 ? 1 : 0,
+			"new_rels" => $ser_rels == 2 ? 1 : 0
+		);
+		$copied_objects = array();
+		if (is_array($sel))
+		{
+			foreach($sel as $oid => $one)
+			{
+				$o = obj($oid);
+				$copied_objects[$oid] = $o->get_xml($params);
+			}
+		}
+		aw_session_set("copied_objects", $copied_objects);
+		return self::get_link_for_obj($parent,$period);
 	}
 
 	/** pastes the cut objects 
@@ -1092,13 +1188,13 @@ class admin_if extends class_base
 	**/
 	function redir($arr)
 	{
-		return html::get_change_url($this->find_admin_if_id(), array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : ""));
+		return html::get_change_url(self::find_admin_if_id(), array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : ""));
 	}
 
 	/** returns the admin if id
 		@attrib api=1
 	**/
-	function find_admin_if_id()
+	public static function find_admin_if_id()
 	{
 		if (!empty($_SESSION["cur_admin_if"]))
 		{
@@ -1145,6 +1241,7 @@ class admin_if extends class_base
 		return true;
 	}
 
+	/** Used from admin_footer so that all texts are translatable. this can't be in admin_footer, cause only files under classes folder are translatable. **/
 	function insert_texts(&$t)
 	{
 		$t->vars(array(
@@ -1434,6 +1531,306 @@ class admin_if extends class_base
 			}
 		}
 		return $filter;
+	}
+
+	/** Returns a link that displays objects under the given oid
+		@attrib api=1 params=pos
+
+		@param parent required type=oid
+			The object id to display objects under
+
+		@param period optional type=int
+			The period to display
+	**/
+	static public function get_link_for_obj($parent, $period = null)
+	{
+		return html::get_change_url(self::find_admin_if_id(), array("group" => "o", "parent" => $parent));
+	}
+
+	/** shows menus importing form 
+		@attrib name=import params=name default="0"
+		
+		@param parent required
+	**/
+	function import($arr)
+	{
+		extract($arr);
+		$this->mk_path($parent,t("Impordi men&uuml;&uuml;sid"));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		$htmlc->add_property(array(
+			"name" => "fail",
+			"type" => "fileupload",
+			"caption" => t("Vali fail"),
+		));
+		$htmlc->add_property(array(
+			"name" => "file_type",
+			"type" => "chooser",
+			"caption" => t("Vali faili t&uuml;&uuml;p"),
+			"options" => array(
+				"aw" => t("Eksporditud AW'st"),
+				"text" => t("Tekstifail")
+			)
+		));
+		$htmlc->add_property(array(
+			"name" => "sbt",
+			"type" => "submit",
+			"caption" => t("Impordi"),
+		));
+		$htmlc->finish_output(array("data" => array(
+				"class" => get_class($this),
+				"action" => "submit_import",
+				"id" => $id,
+				"parent" => $arr["parent"]
+			),
+		));
+
+		$html = $htmlc->get_result(array(
+			"form_only" => 1
+		));
+
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"active" => true,
+			"caption" => t("Impordi"),
+			"link" => get_ru(),
+		));		
+
+		return $tp->get_tabpanel(array(
+			"content" => $html
+		));
+	}
+
+	/** does the actual menu importing bit 
+		
+		@attrib name=submit_import params=name default="0"
+		
+		@param parent required
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function submit_import($arr)
+	{
+		extract($arr);
+
+		if ($file_type == "text")
+		{
+			$this->do_text_import($arr);
+		}
+		else
+		{
+			$fail = $_FILES["fail"]["tmp_name"];
+			$f = @fopen($fail, "r");
+			if ($f)
+			{
+				$d = fread($f,filesize($fail));
+				fclose($f);
+			}
+			else
+			{
+				return $this->mk_my_orb("import",array("parent" => $parent));
+			};
+
+			$menus = unserialize($d);
+			$i_p = $menus[0];
+			$this->req_import_menus($i_p, &$menus, $parent);
+		}
+
+		return $this->mk_my_orb("right_frame", array("parent" => $parent));
+	}
+
+	private function req_import_menus($i_p, &$menus, $parent)
+	{
+		if (!is_array($menus[$i_p]))
+		{
+			return;
+		}
+
+		$p_o = obj($parent);
+		$mt = $p_o->prop("type");
+
+		$i = get_instance("core/icons");
+		reset($menus[$i_p]);
+		while (list(,$v) = each($menus[$i_p]))
+		{
+			$db = $v["db"];
+	
+			$icon_id = 0;
+			if (is_array($v["icon"]))
+			{
+				$icon_id = $i->get_icon_by_file($v["icon"]["file"]);
+				if (!$icon_id)
+				{
+					// not in db, must add
+					$icon_id = $i->add_array($v["icon"]);
+				}
+			}
+
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($db["name"]);
+			$o->set_class_id($db["class_id"]);
+			$o->set_status($db["status"]);
+			$o->set_comment($db["comment"]);
+			$o->set_ord($db["jrk"]);
+			$o->set_alias($db["alias"]);
+			$o->set_periodic($db["periodic"]);
+
+			$ps = $o->properties();
+			foreach($ps as $pn => $pv)
+			{
+				if ($o->is_property($pn))
+				{
+					$o->set_prop($pn, $db[$pn]);
+				}
+			}
+			$id = $o->save();
+
+			// tegime vanema menyy 2ra, teeme lapsed ka.
+			$this->req_import_menus($db["oid"],$menus,$id);
+		}
+	}
+
+	/** imports menus from text file. file format description is in the docs folder **/
+	private function do_text_import($arr)
+	{
+		$fail = $_FILES["fail"]["tmp_name"];
+		if (is_uploaded_file($fail))
+		{
+			$c = file($fail);
+			$cnt = 0;
+			$levels = array("" => $parent); // here we keep the info about the numbering of the levels => menu id's
+			foreach($c as $row)
+			{
+				if (substr($row, 0, 1) == "#")
+				{
+					continue;
+				}
+				$cnt++;
+				// parse row and create menu.
+				if (!preg_match("/([0-9\.]+)(.*)\[(.*)\]/",$row,$mt))
+				{
+					if (!preg_match("/([0-9\.]+)(.*)/",$row,$mt))
+					{
+						die(sprintf(t("Menyyde importimisel tekkis viga real %s "),$cnt));
+					}
+				}
+				// now parse the position in the structure from the numbers.
+				$pos = strrpos($mt[1],".");
+				$_pt = substr($mt[1],0,$pos);
+				if ($_pt == "")
+				{
+					$_parent = $arr["parent"];
+				}
+				else
+				{
+					$_parent = $levels[$_pt];
+				}
+
+				if ($_pt != "" && !$_parent)
+				{
+					die(sprintf(t("Menyyde importimisel ei leidnud parent menyyd real %s "),$cnt));
+				}
+				else
+				{
+					// parse the menu options
+					$opts = trim($mt[3]);
+					$mopts = array("click" => 1);
+					if ($opts != "")
+					{
+						// whee. do a preg_match for every option. 
+						$mopts["act"] = preg_match("/\+act/",$opts);
+						if (preg_match("/\+comment=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["comment"] = $mmt[1];
+						}
+						if (preg_match("/\+alias=(.*)/",$opts,$mmt))
+						{
+							$mopts["alias"] = $mmt[1];
+						}
+						$mopts["per"] = preg_match("/\+per/",$opts);
+						if (preg_match("/\+link=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["link"] = $mmt[1];
+						}
+						$mopts["click"] = preg_match("/\+click/",$opts);
+						$mopts["target"] = preg_match("/\+target/",$opts);
+						$mopts["mid"] = preg_match("/\+mid/",$opts);
+						$mopts["makdp"] = preg_match("/\+makdp/",$opts);
+						if (preg_match("/\+width=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["width"] = $mmt[1];
+						}
+						$mopts["rp"] = preg_match("/\+rp/",$opts);
+						$mopts["lp"] = preg_match("/\+lp/",$opts);
+						if (preg_match("/\+fn=\"(.*)\"/",$opts,$mmt))
+						{
+							$mopts["fn"] = $mmt[1];
+						}
+						if (preg_match_all("/\+prop=\"(.*)\"/U",$opts, $mmt))
+						{
+							$mopts["props"] = $mmt[1];
+						}
+
+						if (preg_match_all("/\+meta=\"(.*)\"/U",$opts, $mmt))
+						{
+							$mopts["metas"] = $mmt[1];
+						}
+						
+					}
+
+					// now create the damn thing.
+					$this->quote(&$mt);
+					$this->quote(&$mopts);
+
+					$o = obj();
+					$o->set_parent($_parent);
+					$o->set_name(trim($mt[2]));
+					$o->set_class_id(CL_MENU);
+					$o->set_status(STAT_ACTIVE /*($mopts["act"] ? 2 : 1)*/);
+					$o->set_alias($mopts["alias"]);
+					$o->set_ord(substr($mt[1],($pos > 0 ? $pos+1 : 0)));
+
+					$o->set_prop("type", MN_CONTENT);
+					$o->set_prop("link", $mopts["link"]);
+					$o->set_prop("clickable", $mopts["click"]);
+					$o->set_prop("target", $mopts["target"]);
+					$o->set_prop("mid", $mopts["mid"]);
+					$o->set_prop("hide_noact", $mopts["makdp"]);
+					$o->set_prop("width", $mopts["width"]);
+					$o->set_prop("right_pane", !$mopts["rp"]);
+					$o->set_prop("left_pane", !$mopts["lp"]);
+
+					foreach($mopts["props"] as $s_prop)
+					{
+						preg_match("/(.*)\|/",$s_prop,$a_match);
+						$s_prop_name = $a_match[1];
+						preg_match("/\|(.*)/",$s_prop,$a_match);
+						$s_prop_value = $a_match[1];
+
+						$o->set_prop($s_prop_name, $s_prop_value);
+					}
+
+					foreach($mopts["metas"] as $s_meta)
+					{
+						preg_match("/(.*)\|/",$s_meta,$a_match);
+						$s_meta_name = $a_match[1];
+						preg_match("/\|(.*)/",$s_meta,$a_match);
+						$s_meta_value = $a_match[1];
+
+						$o->set_meta($s_meta_name, $s_meta_value);
+					}
+
+					$id = $o->save();
+					$levels[$mt[1]] = $id;
+				}
+			}
+		}
 	}
 }
 

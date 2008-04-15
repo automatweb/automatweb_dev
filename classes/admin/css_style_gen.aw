@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/css_style_gen.aw,v 1.4 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/css_style_gen.aw,v 1.5 2008/04/15 07:08:07 kristo Exp $
 // css_style_gen.aw - CSS Stiilide generaator 
 /*
 
@@ -32,28 +32,6 @@ class css_style_gen extends class_base
 			"clid" => CL_CSS_STYLE_GEN
 		));
 	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-
-		}
-		return $retval;
-	}	
 
 	function callback_post_save($arr)
 	{
@@ -94,7 +72,7 @@ class css_style_gen extends class_base
 		}
 	}
 
-	function _get_style_names($url)
+	private function _get_style_names($url)
 	{
 		$ret = array();
 

@@ -23,7 +23,7 @@
             <table>planner</table>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;amp;otilde;peb</caption>
+            <caption>L&amp;amp;otulde;peb</caption>
       </property>
       <property>
             <name>project_selector</name>
@@ -114,13 +114,6 @@
             <table>planner</table>
             <type>textbox</type>
             <field>utextbox10</field>
-      </property>
-      <property>
-            <name>utextarea1</name>
-            <group>general</group>
-            <table>planner</table>
-            <type>textarea</type>
-            <field>utextarea1</field>
       </property>
       <property>
             <name>utextarea2</name>

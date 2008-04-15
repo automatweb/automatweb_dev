@@ -55,6 +55,18 @@
             <method>serialize</method>
             <caption>Lisainfo</caption>
       </property>
+      <property>
+            <name>recommendations</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RECOMMENDATION</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <no_edit>1</no_edit>
+            <caption>Soovitajad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_CANDIDATE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -80,6 +92,11 @@
                   <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine</caption>
             </JOB_OFFER>
+            <RECOMMENDATION>
+                  <value>4</value>
+                  <clid>CL_CRM_RECOMMENDATION</clid>
+                  <caption>Soovitus</caption>
+            </RECOMMENDATION>
       </reltypes>
 </properties>
 

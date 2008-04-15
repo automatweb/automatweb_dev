@@ -15,6 +15,7 @@
 				<arguments>
 					<optional name="parent" type="oid,array(oid)" />
 					<optional name="status" type="int" />
+					<optional name="by_jobwish" type="bool" />
 				</arguments>
 			</function>
 		</action>

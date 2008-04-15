@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.16 2008/03/12 21:22:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.17 2008/04/15 07:08:12 kristo Exp $
 // commune.aw - Kommuun
 /*
 
@@ -2512,26 +2512,6 @@ class commune extends class_base implements main_subtemplate_handler
 			"url" => $url,
 			"caption" => $caption,
 		));
-	}
-	
-	function get_link_for_obj($obj)
-	{
-		$str = "";
-		$params = array("id" => $obj->id());
-		
-		$str .= html::href(array(
-			"url" => $this->mk_my_orb($params),
-			"caption" => $obj->name() ? $obj->name(): $obj->id(),
-		)).
-		$str .= " ";
-		
-		$params = array("parent" => $obj->parent());
-		
-		$str .= html::href(array(
-			"url" => $this->mk_my_orb("right_frame", $params, "admin_menus"),
-			"caption" => t("[at]"),
-		));
-		return $str;
 	}
 	
 	function update_message_conditions($arr)

@@ -118,6 +118,16 @@ class languages extends aw_template implements request_startup
 		};
 	}
 
+	function set_status($id,$status)
+	{
+		$ld = $this->fetch($id, true);
+		if ($status != $ld["status"])
+		{
+			$this->db_query("UPDATE languages SET status = $status, modified = '".time()."', modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
+		}
+		$this->init_cache(true);
+	}
+
 	function _get_sl()
 	{
 		$ret = array();

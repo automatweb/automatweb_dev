@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.10 2008/01/31 13:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.11 2008/04/15 07:08:36 kristo Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes maintainer=kristo
@@ -714,7 +714,6 @@ class pank extends class_base
 			$change_project_url = $this->mk_my_orb('change',array(
 												'id' => $project->id()
 											),CL_PROJECT);
-			$admin_menus_project_url = 'http://toomas.dev.struktuur.ee/automatweb/orb.aw?class=admin_menus&action=right_frame&parent='.$project->id().'&period=';
 
 			$table->define_data(array(
 				'project_name' => html::href(array(

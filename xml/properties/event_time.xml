@@ -14,7 +14,7 @@
             <table>aw_event_time</table>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;otilde;peb</caption>
+            <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
             <name>location</name>
@@ -24,6 +24,15 @@
             <reltype>RELTYPE_LOCATION</reltype>
             <field>location</field>
             <caption>Toimumiskoht</caption>
+      </property>
+      <property>
+            <name>event</name>
+            <group>general</group>
+            <table>aw_event_time</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT</reltype>
+            <field>event</field>
+            <caption>S&amp;amp;uuml;ndmus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_EVENT_TIME</syslog_type>
@@ -46,6 +55,11 @@
                   <clid>CL_SCM_LOCATION</clid>
                   <caption>Toimumiskoht</caption>
             </LOCATION>
+            <EVENT>
+                  <value>1</value>
+                  <clid>CL_CALENDAR_EVENT</clid>
+                  <caption>Toimumiskoht</caption>
+            </EVENT>
       </reltypes>
 </properties>
 

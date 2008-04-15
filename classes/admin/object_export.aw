@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.23 2008/03/03 13:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.24 2008/04/15 07:08:07 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -123,7 +123,7 @@ class object_export extends class_base
 		return $retval;
 	}	
 
-	function save_mktbl_tbl($arr)
+	private function save_mktbl_tbl($arr)
 	{
 		$dat = $arr["request"]["dat"];
 		foreach(safe_array($arr["request"]["dat"]) as $key => $value)
@@ -133,7 +133,7 @@ class object_export extends class_base
 		$arr["obj_inst"]->set_meta("dat", $dat);
 	}
 
-	function _init_mktbl_tbl(&$t)
+	private function _init_mktbl_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -169,7 +169,7 @@ class object_export extends class_base
 		$t->set_sortable(false);
 	}
 
-	function do_mktbl_tbl($arr)
+	private function do_mktbl_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_mktbl_tbl($t);
@@ -215,7 +215,7 @@ class object_export extends class_base
 		}
 	}
 
-	function get_properties_from_obj($o)
+	private function get_properties_from_obj($o)
 	{
 		$ret = array();
 		if ($o->prop("object_type"))
@@ -280,7 +280,7 @@ class object_export extends class_base
 		return $ret;
 	}
 
-	function _init_exp_table(&$t, $o, $awa, $props)
+	private function _init_exp_table(&$t, $o, $awa, $props)
 	{
 		foreach($awa->get() as $pn => $pd)
 		{
@@ -307,7 +307,7 @@ class object_export extends class_base
 		}
 	}
 
-	function do_export_table($arr)
+	private function do_export_table($arr)
 	{
 		$sep = $arr["obj_inst"]->prop("csv_separator");
 		$t =& $arr["prop"]["vcl_inst"];
@@ -339,40 +339,9 @@ class object_export extends class_base
 		ini_set("memory_limit","1800M");
 		aw_set_exec_time(AW_LONG_PROCESS);
 		$ol = new object_list($filt);
-//		echo "filtrd <br>\n";
-//		flush();
 		$d = $ol->arr() ;
-//		echo "arrd() <br>\n";
-//		flush();
-
-		// go over all props and for all classificators
-		// read all the conns at once so we don't have to 
-		// do a query for each object.
-		/*$conn_vals = array();
-		foreach($props as $pn => $pd)
-		{
-			if ($pd["type"] == "classificator")
-			{
-				$c = new connection();
-				$conns = $c->find(array(
-					"from" => $ol->ids(),
-					"from.class_id" => $clid,
-					"type" => $pd["reltype"]
-				));
-				foreach($conns as $con)
-				{
-					$conn_vals[$pn][$con["from"]][] = $con;
-				}
-			}
-		}*/
 		foreach($d as $o)
 		{
-		//	if (++$cnt > 100)
-		//	{
-		//echo $o->id()." mem: ".memory_get_usage()."<br>\n";
-		//flush();
-		//		$cnt = 0;
-		//	}
 			$dat = array();
 			foreach($props as $pn => $pd)
 			{
@@ -418,8 +387,6 @@ class object_export extends class_base
 			}
 			$t->define_data($dat);
 		}
-//echo "defind <br>\n";
-//flush();
 		if ($arr["request"]["do_exp"] == 1)
 		{
 			header("Content-type: application/csv; charset=UTF-8");

@@ -84,48 +84,6 @@ class aw_sent_mail extends class_base
 			case "content":
 				if ($arr["request"]["action"] == "view")
 				{
-					/*if (preg_match(
-						"/Content\-Type\: multipart\/mixed\;(\s+)boundary\=\"(.*?)\"/imsU", 
-						$arr["obj_inst"]->prop("headers"),
-						$mt))
-					{
-							$pv = $prop["value"];
-							$arr["prop"]["value"] = "";
-							// split body by boundary
-
-							foreach(explode($mt[2], $pv) as $part)
-							{
-								// this 
-								list($headers, $content) = explode("\n\n", $part, 2);
-								if ($content == "")
-								{
-									$content = $headers;
-									$headers = "";
-									$ct = "text/plain";
-echo "content = $scontent  / headers = $headers <br>";
-								}
-								else
-								{
-echo "content = $scontent  / headers = $headers <br>";
-									preg_match(
-										"/Content\-Type\: multipart\/mixed\;(\s+)boundary\=\"(.*?)\"/imsU", 
-										$headers,
-										$mt2);
-									echo (dbg::dump($mt2));
-								}
-	
-								if (strpos($part, "text/html") !== false)
-								{
-									$arr["prop"]["value"] .= $part;
-								}
-								else
-								{
-									$arr["prop"]["value"] .= "<pre>".htmlentities($part)."</pre>";
-								}
-							}
-die();
-					}
-					else*/
 					if (strpos($arr["prop"]["value"], "<body") === false)
 					{
 						$arr["prop"]["value"] = "<pre>".htmlspecialchars($arr["prop"]["value"])."</pre>";
@@ -154,16 +112,6 @@ die();
 		$arr["post_ru"] = post_ru();
 	}
 
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
 	function do_db_upgrade($t, $f)
 	{
 		if ($f == "")
@@ -171,10 +119,6 @@ die();
 			$this->db_query("CREATE TABLE aw_sent_mails(aw_oid int primary key, aw_app varchar(255), aw_from varchar(255), aw_to varchar(255), aw_subject varchar(255), aw_headers text, aw_arguments text, aw_content mediumtext)");
 			return true;
 		}
-	}
-
-	function get_from($arr)
-	{
 	}
 }
 

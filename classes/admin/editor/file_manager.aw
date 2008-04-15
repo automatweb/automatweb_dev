@@ -83,24 +83,6 @@ class file_manager extends aw_template
 		die($this->parse());
 	}
 
-	function _init_t(&$t)
-	{
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Fail"),
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "location",
-			"caption" => t("Asukoht"),
-			"sortable" => true,
-		));
-		$t->define_field(array(
-			"name" => "sel",
-			"caption" => t("Vali"),
-		));
-	}
-
 	/**
 		@attrib name=manager
 		@param docid optional
@@ -109,7 +91,7 @@ class file_manager extends aw_template
 	{
 		classload("vcl/table");
 		$t = new vcl_table;
-		$this->_init_t($t);
+		$this->_init_t($t, t("Fail"));
 
 		$ol = new object_list(array(
 			"class_id" => CL_FILE,
@@ -297,8 +279,8 @@ class file_manager extends aw_template
 		die();
 	}
 
-	/**
-		@attribs params=name api=1
+	/** Adds zip compress button to toolbar.
+		@attrib params=name api=1
 		@param tb required type=object
 			Toolbar object
 		@param tooltip optional type=string
@@ -310,8 +292,7 @@ class file_manager extends aw_template
 		@param zip_name optional type=string
 			Zip file name
 		@param field_name optional type=string default=sel
-		@comment
-			Adds zip compress button to toolbar.
+
 		@examples
 			$tmp = get_instance("vcl/toolbar");
 			$tmp->add_zip_button(array(
@@ -357,68 +338,6 @@ class file_manager extends aw_template
 		";
 
 		$tb->add_button($args);
-	}
-
-	function draw_form($arr)
-	{
-		classload("cfg/htmlclient");
-		$htmlc = new htmlclient(array(
-			'template' => "default",
-		));
-		$htmlc->start_output();
-
-		// search by name, url
-		$htmlc->add_property(array(
-			"name" => "s[name]",
-			"type" => "textbox",
-			"caption" => t("Nimi"),
-			"value" => $_GET["s"]["name"]
-		));
-
-		$htmlc->add_property(array(
-			"name" => "s[submit]",
-			"type" => "submit",
-			"value" => t("Otsi"),
-		));
-
-		$htmlc->add_property(array(
-			"name" => "s[my]",
-			"type" => "checkbox",
-			"caption" => t("Minu lisatud"),
-			"value" => $_GET["s"]["my"],
-		));
-
-		$htmlc->add_property(array(
-			"name" => "s[last]",
-			"type" => "checkbox",
-			"caption" => t("Viimased 30"),
-			"value" => $_GET["s"]["last"],
-		));
-
-		$htmlc->finish_output(array(
-			"action" => "manager",
-			"method" => "GET",
-			"data" => array(
-				"docid" => $arr["docid"],
-				"orb_class" => "file_manager",
-				"reforb" => 0
-			)
-		));
-
-		$html = $htmlc->get_result();
-		return $html;
-	}
-
-
-	function gen_location_for_obj($o)
-	{
-		$o = obj($o->parent());
-		for($i=0;$i<3;$i++)
-		{
-			$ret[] = $o?$o->name():NULL;
-			$o = (($o) && $s = $o->parent())?obj($s):false;
-		}
-		return join(" / ", array_reverse($ret));
 	}
 }
 ?>

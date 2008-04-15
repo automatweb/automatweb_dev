@@ -9,8 +9,10 @@
 		</action>
 
 		<action name="submit_exec">
-			<function name="submit_exec">
+			<function name="do_call">
 				<arguments>
+					<required name="eurl" type="string" />
+					<optional name="same_code" type="bool" />
 				</arguments>
 			</function>
 		</action>

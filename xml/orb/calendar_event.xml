@@ -5,6 +5,16 @@
 			<function name="locations_autocomplete_source">
 				<arguments>
 					<optional name="location" />
+					<optional name="parent" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="organizer_autocomplete_source">
+			<function name="organizer_autocomplete_source">
+				<arguments>
+					<optional name="organizer" />
+					<optional name="parent" />
 				</arguments>
 			</function>
 		</action>

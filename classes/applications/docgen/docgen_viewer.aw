@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.21 2008/04/07 08:00:33 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.22 2008/04/15 07:08:17 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -434,6 +434,17 @@ class docgen_viewer extends class_base
 			}
 		}
 
+		$cln = $data["name"];
+		if ($cln == "document" || $cln == "document_brother")
+		{
+			$cln = "doc";
+		}
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+			"file" => $cln,
+			"clid" => $clid
+		));
+
 		$f = array();
 		$api_count = 0;
 		$orb_count = 0;
@@ -538,7 +549,7 @@ class docgen_viewer extends class_base
 				$f["ORB"] .= $this->parse("ORB_FUNCTION");
 			}
 			else
-			if (isset($this->cb_callbacks[$func]))
+			if (isset($this->cb_callbacks[$func]) || ((substr($func, 0, 5) == "_get_" || substr($func, 0, 5) == "_set_") && isset($props[substr($func, 5)])))
 			{
 				$f["CB"] .= $this->parse("CB_FUNCTION");
 			}
@@ -551,6 +562,7 @@ class docgen_viewer extends class_base
 			if (isset($if_meth_list[$func]))
 			{
 				$d = $if_meth_list[$func];
+die($d["class"]);
 				$clf = class_index::get_file_by_name(basename($d["class"]));
 				$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 				$if_name = html::href(array(

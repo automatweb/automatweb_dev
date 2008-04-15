@@ -31,5 +31,21 @@
 			</function>
 		</action>
 
+		<action name="send_email">
+			<function name="send_email">
+				<arguments>
+					<optional name="sel" type="array(oid)" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_sms">
+			<function name="send_sms">
+				<arguments>
+					<optional name="sel" type="array(oid)" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

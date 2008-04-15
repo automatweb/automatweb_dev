@@ -11,12 +11,5 @@
 			</function>
 		</action>
 
-		<action name="send_it">
-			<function name="send_it">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

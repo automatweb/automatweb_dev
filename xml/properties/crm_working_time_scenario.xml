@@ -8,7 +8,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>weekdays</field>
-            <caption>N&amp;auml;dalap&amp;auml;evad</caption>
+            <caption>N&amp;amp;auml;dalap&amp;amp;auml;evad</caption>
       </property>
       <property>
             <name>days</name>

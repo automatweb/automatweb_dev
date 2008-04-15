@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.11 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.12 2008/04/15 07:08:07 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 
@@ -85,8 +85,7 @@ class workbench extends class_base
 		$this->vars(array(
 			"uid" => aw_global_get("uid"),
 			"navigator_url" => $this->mk_my_orb("gen_folders",array()),
-			//"content_url" => $this->mk_my_orb("right_frame",array(),"admin_menus"),
-			"content_url" => $this->mk_my_orb("right_frame",array(),"admin_menus"),
+			"content_url" => admin_if::get_url_for_obj(null),
 		));
 		print $this->parse();
 		$awt->stop("meat");

@@ -446,6 +446,13 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		$tmp = $_REQUEST;
+		unset($tmp["MAX_FILE_SIZE"]);
+		if ($err_type == 30 && count($tmp) == 0)
+		{
+			$send_mail = false;
+		}
+
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"process_error"))
 		{
@@ -485,6 +492,12 @@ class core extends acl_base
 		{
 			$send_mail = false;
 		}
+
+                if ($err_type == 31 && (strpos($GLOBALS["class"], "/") !== false || strpos($GLOBALS["class"], "alert") !== false || strpos($GLOBALS["class"], "&") !== false || strpos($GLOBALS["class"], "\\") !== false || strpos($GLOBALS["class"], "%") !== false || strpos($GLOBALS["class"], "§") !== false || strpos($GLOBALS["class"], "=") !== false))
+                {
+                        die("silly robot");
+                }
+
 
 		// kui saidi kaustas on fail spam.txt, siis kontrollitakse enne saatmist kirja sisu failis olevate s6nade vastu; spam.txt sisu on yhes reas kujul: /viagra|v1agra|porn|foo/i
 		if ( file_exists(aw_ini_get("site_basedir") . "/spam.txt") && $send_mail)
@@ -867,23 +880,10 @@ class core extends acl_base
 				}
 
 				$path = html::href(array(
-					"url" => $this->mk_my_orb("right_frame",array(
-						"parent" => $obj->id(),
-						"period" => $period,
-					),"admin_menus"),
+					"url" => admin_if::get_link_for_obj($obj->id(),$period),
 					"caption" => parse_obj_name(strip_tags($name)),
 				)) . " / " . $path;
 			}
-			/*if ($current->class_id() == CL_MENU)
-			{
-				$path .= html::href(array(
-					"url" => $this->mk_my_orb("right_frame",array(
-						"parent" => $current->id(),
-						"period" => $period,
-					),"admin_menus"),
-					"caption" => strip_tags(parse_obj_name($current->name())),
-				));
-			}*/
 		}
 
 		if((aw_global_get("output_charset") != null) && (aw_global_get("charset") != aw_global_get("output_charset")))

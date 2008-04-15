@@ -70,6 +70,8 @@
 			<function name="show_cv">
 				<arguments>
 					<optional name="cv" type="string" />
+					<optional name="die" type="boolean" />
+					<optional name="job_offer" type="oid" />
 				</arguments>
 			</function>
 		</action>

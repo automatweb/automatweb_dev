@@ -1,10 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.12 2007/12/06 14:32:43 kristo Exp $
-// foreach_site.aw - foreach site 
-/*
+/** This can be used to call an orb action on each site in the aw site list. 
 @classinfo maintainer=kristo
 */
-
 class foreach_site extends class_base
 {
 	function foreach_site()
@@ -15,41 +12,81 @@ class foreach_site extends class_base
 	}
 
 	/**  
-		
 		@attrib name=exec params=name default="1"
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function exec($arr)
 	{
-		$this->read_template("exec.tpl");
-		
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_exec")
+		$this->mk_path(aw_ini_get("rootmenu"),t("Tee igal saidil"));
+
+		$htmlc = new htmlclient(array(
+			'template' => "default",
 		));
-		return $this->parse();
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
+			"name" => "eurl",
+			"type" => "textbox",
+			"size" => 60,
+			"caption" => t("Url"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "same_code",
+			"type" => "checkbox",
+			"ch_value" => 1,
+			"caption" => t("Ainult samal koodil saidid"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "suubitt",
+			"type" => "submit",
+			"value" => t("Tee!"),
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "submit_exec",
+			"method" => "GET",
+			"data" => array(
+				"orb_class" => "foreach_site",
+				"reforb" => 0
+			)
+		));
+
+
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"active" => true,
+			"caption" => t("Tee igal saidil"),
+			"link" => get_ru(),
+		));		
+
+		return $tp->get_tabpanel(array(
+			"content" => $htmlc->get_result(array(
+				"form_only" => 1
+			))
+		));
 	}
 
-	/**  
-		
-		@attrib name=submit_exec params=name default="0"
-		
-		
-		@returns
-		
-		
+	/** Call an url for each site in the site list
+		@attrib name=submit_exec params=name api=1
+
+		@param eurl required type=string
+			The url to exec for each site. 
+
+		@param same_code optional type=bool
+			If set to true, only sites on the same code branch are affected
+
 		@comment
+			The output from all the sites will be echoed to the user.
 
+		@examples
+			get_instance("admin/foreach_site")->do_call(array(
+				"url" => "/orb.aw?class=maitenance&action=cache_clear&clear=1",
+				"same_code" => 1
+			));
 	**/
-	function submit_exec($arr)
+	function do_call($arr)
 	{
-		extract($arr);
-
 		aw_set_exec_time(AW_LONG_PROCESS);
 		
 		// try remoting
@@ -127,7 +164,7 @@ class foreach_site extends class_base
 			echo "------------------------------------------------------------------------------------------------------------------------------------<br /><br />\n\n";
 
 		}
-		die();
+		die(t("all done"));
 	}
 }
 ?>

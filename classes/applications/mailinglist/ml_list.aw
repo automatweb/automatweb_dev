@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.121 2008/04/14 11:55:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.122 2008/04/15 07:08:20 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1956,7 +1956,7 @@ class ml_list extends class_base
 					));
 					$joined = $memberdata["joined"];
 					$source = html::href(array(
-						"url" => $this->mk_my_orb("right_frame", array("parent" => $val["parent"], "return_url" => get_ru()), "admin_menus"),
+						"url" => admin_if::get_link_for_obj($val["parent"]),
 						"caption" => $parent_name,
 					));
 					$others = html::href(array(
@@ -3762,7 +3762,7 @@ arr($msg_obj->prop("message"));
 						));
 						$joined = $memberdata["joined"];
 						$source = html::href(array(
-							"url" => $this->mk_my_orb("right_frame", array("parent" => $val["parent"], "return_url" => get_ru()), "admin_menus"),
+							"url" => admin_if::get_link_for_obj($val["parent"]),
 							"caption" => $parent_name,
 						));
 						$others = html::href(array(

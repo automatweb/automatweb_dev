@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.9 2008/03/12 21:23:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.10 2008/04/15 07:08:33 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -402,8 +402,8 @@ class user_manager extends class_base
 		$selected = safe_array(ifset($arr,'sel_g')) + safe_array(ifset($arr,'sel_u'));
 		if (count($selected))
 		{
-			$o = get_instance("admin/admin_menus");
-			$o->new_delete(array('sel' => $selected));
+			$o = get_instance("admin/if");
+			$o->if_delete(array('sel' => $selected));
 		}
 		return $arr['post_ru'];
 	}		
@@ -424,8 +424,8 @@ class user_manager extends class_base
 			aw_session_del('copied_objects');
 			aw_session_del('cut_objects');
 		
-			$o = get_instance("admin/admin_menus");
-			return $o->cut(array('sel' => $selected, 'return_url' => $arr['post_ru']));
+			$o = get_instance("admin/admin_if");
+			return $o->if_cut(array('sel' => $selected, 'return_url' => $arr['post_ru']));
 		}
 	}		
 
@@ -445,8 +445,8 @@ class user_manager extends class_base
 		{
 			aw_session_del('cut_objects');
 		
-			$o = get_instance("admin/admin_menus");
-			return $o->copy(array('sel' => $selected, 'return_url' => $arr['post_ru']));
+			$o = get_instance("admin/admin_if");
+			return $o->if_copy(array('sel' => $selected, 'return_url' => $arr['post_ru']));
 		}
 	}
 	
@@ -461,8 +461,8 @@ class user_manager extends class_base
 		{
 			return;
 		}
-		$o = get_instance("admin/admin_menus");
-		return $o->paste(array('parent' => $arr['last_parent'], 'return_url' => $arr['post_ru']));
+		$o = get_instance("admin/admin_if");
+		return $o->if_paste(array('parent' => $arr['last_parent'], 'return_url' => $arr['post_ru']));
 	}
 	
 	/** blocks/unblocks a user 

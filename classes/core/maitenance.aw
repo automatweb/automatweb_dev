@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.4 2008/01/31 13:52:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.5 2008/04/15 07:08:28 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -93,7 +93,7 @@ class maitenance extends class_base
 	function clear_all_sites($arr)
 	{
 		$i = get_instance("admin/foreach_site");
-		$i->submit_exec(array(
+		$i->do_call(array(
 			"eurl" => "orb.aw?class=maitenance&action=cache_clear&clear=1"
 		));
 	}

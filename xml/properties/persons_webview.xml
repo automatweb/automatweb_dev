@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_COMPANY</reltype>
-            <caption>Ettev&amp;otilde;te</caption>
+            <caption>Ettev&amp;amp;otilde;te</caption>
       </property>
       <property>
             <name>departments</name>
@@ -29,7 +29,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita ainult avalikke numbreid</caption>
+            <caption>N&amp;amp;auml;ita ainult avalikke numbreid</caption>
       </property>
       <property>
             <name>persons_principe</name>
@@ -39,7 +39,7 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>callback_get_persons_principe</callback>
-            <caption>Isikute j&amp;auml;rjestamisprintsiip</caption>
+            <caption>Isikute j&amp;amp;auml;rjestamisprintsiip</caption>
       </property>
       <property>
             <name>department_grouping</name>
@@ -49,7 +49,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Grupeerimine osakonna j&amp;auml;rgi</caption>
+            <caption>Grupeerimine osakonna j&amp;amp;auml;rgi</caption>
       </property>
       <property>
             <name>grouping_principe</name>
@@ -59,7 +59,7 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>callback_get_grouping_principe</callback>
-            <caption>Grupeerimise j&amp;auml;rjestamisprintsiip</caption>
+            <caption>Grupeerimise j&amp;amp;auml;rjestamisprintsiip</caption>
       </property>
       <property>
             <name>view</name>
@@ -80,7 +80,7 @@
       </classinfo>
       <groupinfo>
             <view>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
             </view>
       </groupinfo>
       <reltypes>

@@ -2,308 +2,352 @@
 <properties>
       <property>
             <name>toolbar</name>
-            <table>objects</table>
-            <group>general</group>
+            <table>objects</table>
+            <group>general</group>
             <type>toolbar</type>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <store>no</store>
             <field>toolbar</field>
       </property>
       <property>
             <name>name</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
             <field>name</field>
-            <caption>Nimi</caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>status</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>status</type>
+            <table>objects</table>
+            <group>general</group>
+            <type>status</type>
             <field>status</field>
-            <caption>Aktiivne</caption>
+            <caption>Aktiivne</caption>
       </property>
       <property>
             <name>company</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_ORG</reltype>
-            <caption>Organisatsioon</caption>
+            <reltype>RELTYPE_ORG</reltype>
+            <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>contact</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT</reltype>
-            <caption>Kontaktisik</caption>
+            <reltype>RELTYPE_CONTACT</reltype>
+            <caption>Kontaktisik</caption>
       </property>
       <property>
             <name>start</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>Konkursi algusaeg</caption>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>Konkursi algusaeg</caption>
       </property>
       <property>
             <name>end</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>Konkursi t&amp;amp;auml;htaeg</caption>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>Konkursi t&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>profession</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_PROFESSION</reltype>
-            <caption>Ametikoht</caption>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <caption>Ametikoht</caption>
       </property>
       <property>
             <name>field</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FIELD</reltype>
-            <store>connect</store>
-            <caption>Valdkond</caption>
+            <store>connect</store>
+            <caption>Valdkond</caption>
       </property>
       <property>
             <name>loc_area</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_AREA</reltype>
-            <caption>Piirkond</caption>
+            <reltype>RELTYPE_AREA</reltype>
+            <caption>Piirkond</caption>
       </property>
       <property>
             <name>loc_county</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_COUNTY</reltype>
-            <caption>Maakond</caption>
+            <reltype>RELTYPE_COUNTY</reltype>
+            <caption>Maakond</caption>
       </property>
       <property>
             <name>loc_city</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CITY</reltype>
-            <caption>Linn</caption>
+            <reltype>RELTYPE_CITY</reltype>
+            <caption>Linn</caption>
       </property>
       <property>
             <name>workinfo</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textarea</type>
             <rows>15</rows>
-            <cols>60</cols>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; sisu</caption>
+            <cols>60</cols>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; sisu</caption>
       </property>
       <property>
             <name>requirements</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textarea</type>
             <rows>15</rows>
-            <cols>60</cols>
-            <caption>N&amp;amp;otilde;udmised kandidaadile</caption>
+            <cols>60</cols>
+            <caption>N&amp;amp;otilde;udmised kandidaadile</caption>
       </property>
       <property>
             <name>suplementary</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textarea</type>
             <rows>15</rows>
-            <cols>60</cols>
-            <caption>Kasuks tuleb</caption>
+            <cols>60</cols>
+            <caption>Kasuks tuleb</caption>
       </property>
       <property>
             <name>weoffer</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textarea</type>
             <rows>15</rows>
-            <cols>60</cols>
-            <caption>Omalt poolt pakume</caption>
+            <cols>60</cols>
+            <caption>Omalt poolt pakume</caption>
       </property>
       <property>
             <name>info</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textarea</type>
             <rows>15</rows>
-            <cols>60</cols>
-            <caption>Lisainfo</caption>
+            <cols>60</cols>
+            <caption>Lisainfo</caption>
       </property>
       <property>
             <name>motivation_letter</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Vajalik motivatsioonikiri</caption>
+            <ch_value>1</ch_value>
+            <caption>Vajalik motivatsioonikiri</caption>
       </property>
       <property>
             <name>start_working</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>chooser</type>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;leasumise aeg</caption>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;leasumise aeg</caption>
       </property>
       <property>
             <name>job_offer_file_url</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
-            <store>no</store>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise fail</caption>
+            <store>no</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise fail</caption>
       </property>
       <property>
             <name>job_offer_file</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general</group>
             <field>meta</field>
-            <method>serialize</method>
+            <method>serialize</method>
             <type>releditor</type>
             <reltype>RELTYPE_JOB_OFFER_FILE</reltype>
             <rel_id>first</rel_id>
             <props>file</props>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
       </property>
       <property>
             <name>job_offer_pdf</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine PDF-failina</caption>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine PDF-failina</caption>
       </property>
       <property>
             <name>apply</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Kandideerin</caption>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Kandideerin</caption>
       </property>
       <property>
             <name>rate_scale</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_RATE_SCALE</reltype>
-            <caption>Hindamise skaala</caption>
+            <reltype>RELTYPE_RATE_SCALE</reltype>
+            <caption>Hindamise skaala</caption>
       </property>
       <property>
             <name>candidate_toolbar</name>
-            <table>objects</table>
-            <group>candidate</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>toolbar</type>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <store>no</store>
       </property>
       <property>
             <name>candidate_table</name>
-            <table>objects</table>
-            <group>candidate</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
-            <no_caption>1</no_caption>
+            <no_caption>1</no_caption>
             <store>no</store>
       </property>
       <property>
             <name>offer_cfgform</name>
-            <table>objects</table>
+            <table>objects</table>
             <group>custom_cfgform</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>CV seadete vorm</caption>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>CV seadete vorm</caption>
       </property>
       <property>
             <name>default_cfgform</name>
-            <table>objects</table>
+            <table>objects</table>
             <group>custom_cfgform</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
       </property>
       <property>
             <name>new_cfgform_name</name>
-            <table>objects</table>
+            <table>objects</table>
             <group>custom_cfgform</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>meta</field>
+            <method>serialize</method>
             <type>hidden</type>
-            <store>no</store>
+            <store>no</store>
       </property>
       <property>
             <name>new_cfgform_tbl</name>
-            <table>objects</table>
+            <table>objects</table>
             <group>custom_cfgform</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
-            <store>no</store>
+            <store>no</store>
       </property>
       <property>
             <name>save_cfgform</name>
-            <table>objects</table>
+            <table>objects</table>
             <group>custom_cfgform</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>meta</field>
+            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <store>no</store>
-            <caption>Salvesta seadetevorm</caption>
+            <store>no</store>
+            <caption>Salvesta seadetevorm</caption>
+      </property>
+      <property>
+            <name>receivers</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <parent>send_email_sms_left</parent>
+      </property>
+      <property>
+            <name>add_receivers</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <caption>Lisa saajaid</caption>
+      </property>
+      <property>
+            <name>subject</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
+            <name>message</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <caption>S&amp;amp;otilde;num</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
@@ -311,74 +355,97 @@
             <r2>yes</r2>
             <no_comment>1</no_comment>
             <prop_cb>1</prop_cb>
-            <maintainer>kristo</maintainer>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <candidate>
                   <caption>Kandideerimised</caption>
-                  <submit>no</submit>
+                  <submit>no</submit>
             </candidate>
             <custom_cfgform>
-                  <caption>CV v&amp;amp;auml;ljad</caption>
-                  <no_submit>1</no_submit>
+                  <caption>CV&amp;amp;nbsp;v&amp;amp;auml;ljad</caption>
+                  <no_submit>1</no_submit>
             </custom_cfgform>
+            <send_email_sms>
+                  <caption>Tagasiside&amp;amp;nbsp;kandideerijatele</caption>
+            </send_email_sms>
       </groupinfo>
       <reltypes>
             <CANDIDATE>
                   <value>1</value>
-                  <clid>CL_PERSONNEL_MANAGEMENT_CANDIDATE</clid>
-                  <caption>Kandidatuur</caption>
+                  <clid>CL_PERSONNEL_MANAGEMENT_CANDIDATE</clid>
+                  <caption>Kandidatuur</caption>
             </CANDIDATE>
             <ORG>
                   <value>2</value>
-                  <clid>CL_CRM_COMPANY</clid>
-                  <caption>Organisatsioon</caption>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
             </ORG>
             <CONTACT>
                   <value>3</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>Kontaktisik</caption>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kontaktisik</caption>
             </CONTACT>
             <PROFESSION>
                   <value>4</value>
-                  <clid>CL_CRM_PROFESSION</clid>
-                  <caption>Ametikoht</caption>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Ametikoht</caption>
             </PROFESSION>
             <FIELD>
                   <value>6</value>
-                  <clid>CL_META</clid>
-                  <caption>Valdkond</caption>
+                  <clid>CL_META</clid>
+                  <caption>Valdkond</caption>
             </FIELD>
             <CFGFORM>
                   <value>7</value>
-                  <clid>CL_CFGFORM</clid>
-                  <caption>CV seadete vorm</caption>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>CV seadete vorm</caption>
             </CFGFORM>
             <AREA>
                   <value>8</value>
-                  <clid>CL_CRM_AREA</clid>
-                  <caption>Piirkond</caption>
+                  <clid>CL_CRM_AREA</clid>
+                  <caption>Piirkond</caption>
             </AREA>
             <COUNTY>
                   <value>9</value>
-                  <clid>CL_CRM_COUNTY</clid>
-                  <caption>Maakond</caption>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Maakond</caption>
             </COUNTY>
             <CITY>
                   <value>10</value>
-                  <clid>CL_CRM_CITY</clid>
-                  <caption>Linn</caption>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Linn</caption>
             </CITY>
             <RATE_SCALE>
                   <value>11</value>
-                  <clid>CL_RATE_SCALE</clid>
-                  <caption>Hindamise skaala</caption>
+                  <clid>CL_RATE_SCALE</clid>
+                  <caption>Hindamise skaala</caption>
             </RATE_SCALE>
             <JOB_OFFER_FILE>
                   <value>12</value>
-                  <clid>CL_FILE</clid>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
+                  <clid>CL_FILE</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
             </JOB_OFFER_FILE>
       </reltypes>
+      <layout>
+            <send_email_sms>
+                  <type>hbox</type>
+                  <width>20%80%</width>
+                  <group>send_email_sms</group>
+                  <area_caption></area_caption>
+            </send_email_sms>
+            <send_email_sms_left>
+                  <type>vbox</type>
+                  <area_caption>Saajad</area_caption>
+                  <parent>send_email_sms</parent>
+                  <group>send_email_sms</group>
+            </send_email_sms_left>
+            <send_email_sms_right>
+                  <type>vbox</type>
+                  <parent>send_email_sms</parent>
+                  <area_caption>S&amp;amp;otilde;num</area_caption>
+                  <group>send_email_sms</group>
+            </send_email_sms_right>
+      </layout>
 </properties>
 

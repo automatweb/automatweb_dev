@@ -66,5 +66,12 @@
                   <caption>Linkide kontroll</caption>
             </link_checker>
       </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kaust</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 

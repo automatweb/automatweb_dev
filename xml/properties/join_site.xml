@@ -150,25 +150,6 @@
             <caption>Kasutajanime element</caption>
       </property>
       <property>
-            <name>auto_pwd</name>
-            <table>objects</table>
-            <group>prop_settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Automaatne parool</caption>
-      </property>
-      <property>
-            <name>default_ctry</name>
-            <table>objects</table>
-            <group>prop_settings</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Vaikimisi maa</caption>
-      </property>
-      <property>
             <name>prop_settings</name>
             <table>objects</table>
             <group>prop_settings</group>

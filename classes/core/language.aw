@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.26 2008/01/31 13:52:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.27 2008/04/15 07:08:28 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -107,7 +107,7 @@ class language extends class_base
 				break;
 
 			case "lang_site_id":
-				$adm = get_instance("admin/admin_languages");
+				$adm = get_instance("core/languages");
 				$sli = get_instance("install/site_list");
 				$sl = $adm->_get_sl();
 				foreach($sl as $idx => $a)
@@ -189,7 +189,7 @@ class language extends class_base
 						$o->set_status($arr["request"]["act"][$o->id()] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE);
 						$o->set_prop("lang_status", $arr["request"]["act"][$o->id()] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE);
 						$o->save();
-						$al = get_instance("admin/admin_languages");
+						$al = get_instance("core/languages");
 						$al->set_status($o->prop("lang_id"), $arr["request"]["act"][$o->id()] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE);
 					}
 				}
@@ -205,7 +205,7 @@ class language extends class_base
 				$tmp = aw_ini_get("languages.list");
 				$arr["obj_inst"]->set_prop("lang_acceptlang", $tmp[$prop["value"]]["acceptlang"]);
 				$arr["obj_inst"]->set_prop("lang_charset", $tmp[$prop["value"]]["charset"]);
-				$l = get_instance("admin/admin_languages");	
+				$l = get_instance("core/languages");	
 				$l->init_cache(true);
 				break;
 
@@ -249,7 +249,7 @@ class language extends class_base
 
 	function callback_post_save()
 	{
-		$l = get_instance("admin/admin_languages");	
+		$l = get_instance("core/languages");	
 		$l->init_cache(true);
 	}
 

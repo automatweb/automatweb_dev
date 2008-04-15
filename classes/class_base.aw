@@ -1517,7 +1517,7 @@ class class_base extends aw_template
 			if ($is_container)
 			{
 				$title = html::href(array(
-					"url" => $this->mk_my_orb("right_frame",array("parent" => $this->id),"admin_menus"),
+					"url" => admin_if::get_link_for_obj($this->id),
 					"caption" => $name,
 				));
 				$title .= " / " . t("Muuda");
@@ -1558,7 +1558,7 @@ class class_base extends aw_template
 			{
 				$tmp = obj($this->id);
 				$title = html::href(array(
-					"url" => $this->mk_my_orb("right_frame", array("parent" => $this->id), "admin_menus"),
+					"url" => admin_if::get_link_for_obj($this->id),
 					"caption" => $tmp->name(),
 					"target" => $target,
 				))." / ";
@@ -1566,7 +1566,7 @@ class class_base extends aw_template
 				{
 					$po= obj($tmp->parent());
 					$title = html::href(array(
-						"url" => $this->mk_my_orb("right_frame", array("parent" => $tmp->parent()), "admin_menus"),
+						"url" => admin_if::get_link_for_obj($tmp->parent()),
 						"caption" => $po->name(),
 						"target" => $target,
 					))." / " . $title;

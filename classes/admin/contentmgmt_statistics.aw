@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/contentmgmt_statistics.aw,v 1.3 2007/12/06 14:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/contentmgmt_statistics.aw,v 1.4 2008/04/15 07:08:07 kristo Exp $
 // contentmgmt_statistics.aw - Sisuhalduse statistika 
 /*
 
@@ -25,6 +25,9 @@
 	@groupinfo stats_unmod caption="Ammu muudetud" parent=stats
 
 @groupinfo link_checker caption="Linkide kontroll"
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption Kaust
 */
 
 class contentmgmt_statistics extends class_base
@@ -36,26 +39,6 @@ class contentmgmt_statistics extends class_base
 			"clid" => CL_CONTENTMGMT_STATISTICS
 		));
 	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		}
-		return $retval;
-	}	
 
 	function callback_mod_reforb($arr)
 	{
@@ -95,7 +78,7 @@ class contentmgmt_statistics extends class_base
 		$t->table_from_ol($ol, array("name", "parent", "created", "createdby", "modified", "modifiedby"), CL_DOCUMENT);
 	}
 
-	function _get_parent($o)
+	private function _get_parent($o)
 	{
 		$rv = array();
 		foreach(safe_array($o->prop("sel_folders")) as $fld)
@@ -141,7 +124,7 @@ class contentmgmt_statistics extends class_base
 		die(sprintf(t("Valmis. <a href='%s'>Tagasi</a>"), aw_url_change_var("group", "general")));
 	}
 
-	function _check_link($url)
+	private function _check_link($url)
 	{
 		if (substr($url, 0, 3) != "htt")
 		{

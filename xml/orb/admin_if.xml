@@ -33,6 +33,23 @@
 			</function>
 		</action>
 
+		<action name="copy_feedback">
+			<function name="copy_feedback">
+				<arguments>
+					<optional name="parent" />
+					<optional name="period" />
+					<optional name="sel" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_copy_feedback">
+			<function name="submit_copy_feedback">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="if_paste" all_args="1">
 			<function name="if_paste">
 				<arguments>
@@ -57,6 +74,22 @@
 
 		<action name="handle_upload">
 			<function name="handle_upload">
+				<arguments>
+					<required name="parent" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="import">
+			<function name="import">
+				<arguments>
+					<required name="parent" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_import">
+			<function name="submit_import">
 				<arguments>
 					<required name="parent" />
 				</arguments>

@@ -268,6 +268,19 @@ class doc_display extends aw_template
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
 		));
 
+		if (aw_global_get("print") == 1)
+		{
+			aw_session_set("no_cache", 1);
+			$cs = aw_global_get("charset");
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$l = get_instance("languages");
+				$ld = $l->fetch(aw_global_get("ct_lang_id"));
+				$cs = $ld["charset"];
+			}
+			header("Content-type: text/html; charset=".$cs);
+		}
+
 		$this->vars(array(
                         "SHOW_MODIFIED" => ($doc->prop("show_modified") ? $this->parse("SHOW_MODIFIED") : ""),
                 ));
