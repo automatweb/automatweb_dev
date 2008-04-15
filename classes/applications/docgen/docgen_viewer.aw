@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.22 2008/04/15 07:08:17 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.23 2008/04/15 07:26:50 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -562,7 +562,6 @@ class docgen_viewer extends class_base
 			if (isset($if_meth_list[$func]))
 			{
 				$d = $if_meth_list[$func];
-die($d["class"]);
 				$clf = class_index::get_file_by_name(basename($d["class"]));
 				$clf = str_replace(aw_ini_get("classdir"), "", $clf);
 				$if_name = html::href(array(
