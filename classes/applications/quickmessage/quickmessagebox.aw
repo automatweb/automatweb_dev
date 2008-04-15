@@ -86,7 +86,7 @@ class quickmessagebox extends class_base
 				"oid" => $msg->id(),
 				"from" => $from->name(),
 				"msg" => $msg->prop("msg"),
-				"sent" => date("d.m Y H:i:s", $msg->created()),
+				"sent" => $msg->created(),
 				// "colour" => self::COLOUR_READ,
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
 			));
@@ -282,11 +282,17 @@ class quickmessagebox extends class_base
 			flush();
 		}
 
-		$return_url = $this->mk_my_orb("change", array(
-			"id" => $arr["id"],
-			"return_url" => $arr["return_url"],
-			"group" => $arr["group"],
-		), $arr["class"]);
+		$keys = array("cfgform", "section", "id", "group", "return_url");
+		$args = array();
+		foreach ($arr as $key => $value)
+		{
+			if (in_array($key, $keys) and !empty($value))
+			{
+				$args[$key] = $value;
+			}
+		}
+
+		$return_url = $this->mk_my_orb("change", $args, $arr["class"], false, false, "&", $arr["ret_to_orb"]);
 		return $return_url;
 	}
 

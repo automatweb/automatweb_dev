@@ -288,20 +288,15 @@ class quickmessagebox_obj extends _int_object
 
 		// check if connected to this box. delete.
 		$failed = array();
-		$current_user = new object(aw_global_get("uid_oid"));
-		$group = new object($current_user->get_default_group());
 		foreach ($delete_q as $msg)
 		{
 			try
 			{
 				if (in_array($msg->id(), $connected_msgs))
 				{
-					$msg->acl_set ($group, array(
-						"can_add" => 0,
-						"can_edit" => 0,
-						"can_admin" => 0,
-						"can_delete" => 0,
-						"can_view" => 0
+					$this->disconnect(array(
+						"from" => $msg->id(),
+						"type" => array("RELTYPE_UNREAD_MESSAGE", "RELTYPE_READ_MESSAGE")
 					));
 				}
 				elseif ($msg->prop("box") === $this->id())
