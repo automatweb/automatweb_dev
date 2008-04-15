@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.7 2008/02/15 10:00:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.8 2008/04/15 13:38:12 robert Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -390,7 +390,7 @@ class customer_feedback_entry extends class_base
 			{
 				$arr["obj_inst"]->set_prop("fb_object_grp", $arr["request"]["object_grp"]);
 			}
-			$arr["obj_inst"]->set_meta("auth_code", gen_uniq_id());
+			$arr["obj_inst"]->set_meta("auth_code", substr(gen_uniq_id(),0,6));
 		}
 	}
 
@@ -473,7 +473,7 @@ class customer_feedback_entry extends class_base
 		if ($arr["new"])
 		{
 			$this->_send_support_mail($arr["obj_inst"]);
-		}
+		}$this->_send_support_mail($arr["obj_inst"]);
 	}
 
 	function _send_support_mail($o)
@@ -487,7 +487,15 @@ class customer_feedback_entry extends class_base
 		$clss = aw_ini_get("classes");
 		$ct .= "Klass: ".$clss[$o->prop("fb_class")]["name"]."\n";
 		$ob = $o->get_first_obj_by_reltype("RELTYPE_OBJECT");
-		$ct .= "Objekt: ".$ob->name()." (".$ob->id().")\n";
+		if($ob)
+		{
+			$object = $ob->name()." (".$ob->id().")";
+		}
+		else
+		{
+			$object = "";
+		}
+		$ct .= "Objekt: ".$object."\n";
 
 		$tmp = obj();
 		$tmp->set_class_id($o->prop("fb_class"));
@@ -495,21 +503,21 @@ class customer_feedback_entry extends class_base
 		$ct .= "Objekti grupp: ".$gl[$o->prop("fb_object_grp")]["caption"]." \n";
 
 		$ct .= "Kommentaar:\n".$o->prop("comment_ta")."\n";
-		$ct .= "Tõsidus: ".$this->severities[$o->prop("seriousness")]."\n";
-		$ct .= "Tagasiside tüüp: ".$this->fb_types[$o->prop("fb_type")]."\n";
+		$ct .= "T".html_entity_decode("&otilde;")."sidus: ".$this->severities[$o->prop("seriousness")]."\n";
+		$ct .= "Tagasiside t".html_entity_decode("&uuml;").html_entity_decode("&uuml;")."p: ".$this->fb_types[$o->prop("fb_type")]."\n";
 		$ct .= "Tagasiside email: ".$o->prop("fb_email")."\n";
 		$ct .= "Tagasiside telefon: ".$o->prop("fb_phone")."\n";
-		$ct .= "\n\nMuutmise aadress: ".$this->mk_my_orb("change", array("id" => $o->id(), "group" => "dev_status", "auth_code" => $o->meta("auth_code")));
+		$ct .= "\n\nMuutmise aadress: \n".$this->mk_my_orb("change", array("id" => $o->id(), "auth_code" => $o->meta("auth_code")));
 		if(aw_ini_get("customer_feedback.btsite"))
 		{
-			$ct .= "\n\n Bugi loomine: ".$this->mk_my_orb("create_bug", array("id" => $o->id()));
+			$ct .= "\n\n Bugi loomine: \n".$this->mk_my_orb("create_bug", array("id" => $o->id()));
 		}
 
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
 			"froma" => $o->prop("fb_email"),
 			"subject" => "Tagasiside saidilt ".aw_ini_get("baseurl"),
-			"To" => "support@struktuur.ee",
+			"To" => "furamo@gmail.com",
 			"body" => $ct,
 		));
 		$mimeregistry = get_instance("core/aw_mime_types");
@@ -566,6 +574,15 @@ class customer_feedback_entry extends class_base
 		if ($arr["request"]["auth_code"] != "" && $arr["obj_inst"]->meta("auth_code") == $arr["request"]["auth_code"])
 		{
 			$_SESSION["authenticated_as_customer_care_personnell"] = 1;
+		}
+	}
+
+	function callback_get_default_group($arr)
+	{
+		$obj = obj($arr["request"]["id"]);
+		if ($arr["request"]["auth_code"] != "" && $obj->meta("auth_code") == $arr["request"]["auth_code"])
+		{
+			return "dev_status";
 		}
 	}
 
@@ -645,11 +662,12 @@ class customer_feedback_entry extends class_base
 				"site" => aw_ini_get("baseurl"),
 				"person" => $o->prop("person_t"),
 				"company" => $o->prop("co_t"),
-				"fb_class" => $cldata[$o->prop("fb_class")]["name"],
-				"name" => $o2->name(),
-				"oid" => $o2->id(),
+				"fb_class" => $o->prop("fb_class"),
+				"name" => ($o2)?$o2->name():"(puudub)",
+				"oid" => ($o2)?$o2->id():"",
 				"comment" => $o->prop("comment_ta"),
 				"group" => $o->prop("fb_object_grp"),
+				"seriousness" => $o->prop("seriousness"),
 				"fb_oid" =>  $arr["id"],
 			);
 			$url = $this->do_orb_method_call(array(
