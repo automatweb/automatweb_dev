@@ -15,6 +15,7 @@
         if(options) {
 			jQuery.extend(settings, options);
 		};
+		settings.parent = Number(settings.parent);
 		
 		var d_quickadd_box = this;
         var d_input = $("#"+d_quickadd_box.attr("id")+" input.text");
