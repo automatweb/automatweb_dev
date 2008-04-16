@@ -70,6 +70,13 @@ class crm_recommendation extends class_base
 					}
 					$prop["value"] = $val;
 				}
+				if(!$prop["value"])
+				{
+					$prop["post_append_text"] = "";
+					$prop["type"] = "textbox";
+				}
+				break;
+
 			case "person":
 				if(!$prop["value"])
 				{
@@ -143,7 +150,7 @@ class crm_recommendation extends class_base
 				if(strlen($number) > 0 && substr($arr["request"]["phones"], 0, 9) != "< a href=" && $this->can("view", $arr["obj_inst"]->prop("person")))
 				{
 					$p_obj = obj($arr["obj_inst"]->prop("person"));
-					$odl = new object_data_list(
+/*					$odl = new object_data_list(
 						array(
 							"class_id" => CL_CRM_PHONE,
 							"lang_id" => array(),
@@ -166,7 +173,7 @@ class crm_recommendation extends class_base
 						));
 					}
 					else
-					{
+					{*/
 						$ph = new object;
 						$ph->set_class_id(CL_CRM_PHONE);
 						$ph->set_parent($p_obj->id());
@@ -176,7 +183,7 @@ class crm_recommendation extends class_base
 							"to" => $ph->id(),
 							"reltype" => "RELTYPE_PHONE",
 						));
-					}
+//					}
 				}
 				return PROP_IGNORE;
 
