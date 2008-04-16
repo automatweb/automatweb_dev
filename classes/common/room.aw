@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.242 2008/04/08 12:40:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.243 2008/04/16 16:19:54 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3845,7 +3845,7 @@ class room extends class_base
 		else
 		{
 			$prods = $this->get_prod_list($o);
-			$c = new connection();
+/*			$c = new connection();
 			$conns = $c->find(array(
 				"from" => $prods->ids(),
 				"from.class_id" => CL_SHOP_PRODUCT,
@@ -3857,6 +3857,17 @@ class room extends class_base
 				if($this->prod_data[$c["to"]]["active"]) 
 				{
 					$pk_ids[] = $c["to"];
+				}
+			}
+*/
+
+			foreach($prods->arr() as $product){
+				foreach ($product->connections_from(array("type" => "RELTYPE_PACKAGING")) as $pc)
+				{
+					if($this->prod_data[$pc->prop("to")]["active"]) 
+					{
+						$pk_ids[] = $pc->prop("to");
+					}
 				}
 			}
 			if (count($pk_ids))
