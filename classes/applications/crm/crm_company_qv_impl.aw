@@ -255,7 +255,7 @@ class crm_company_qv_impl extends class_base
 			$t->define_data(array(
 				"icon" => icons::get_icon($o),
 				"date" => date("d.m.Y", $o->prop("start1")).$end,
-				"name" => html::obj_change_url($o),
+				"name" => html::obj_change_url($o,($o->name()?$o->name():t("Nimetu"))),
 				"parts" => join(", ", $parts),
 				"hrs" => number_format($hrs, 3, ',', ''),
 				"sum" => number_format($sum, 2, ',', ''),
@@ -321,7 +321,7 @@ class crm_company_qv_impl extends class_base
 			}
 			$t->define_data(array(
 				"date" => $o->prop("bill_date") > 100 ? date("d.m.Y", $o->prop("bill_date")) : "",
-				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), $o->name()),
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), ($o->name()?$o->name():t("Nimetu"))),
 				"parts" => "",
 				"hrs" => number_format($hrs, 3, ',', ''),
 				"sum" => number_format($sum, 2, ',', ''),

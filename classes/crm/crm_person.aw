@@ -7045,7 +7045,10 @@ class crm_person extends class_base
 				continue;
 			}
 
-			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
+
+			$ttc = $o->prop("time_to_cust");
+			$time_real = $o->prop("time_real");
+			$sum = str_replace(",", ".", $ttc);
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
 			
 			//kui on kokkuleppehind kas arvel, v6i kui arvet ei ole, siis toimetusel... tuleb v2he arvutada
@@ -7058,13 +7061,26 @@ class crm_person extends class_base
 					"CL_CRM_BILL_ROW.RELTYPE_TASK_ROW" => $o->id(),
 				));
 				$br = reset($br_ol->arr());
-				if(is_object($br))
-				{
-					$sum = $br->get_sum();
-				}
-				elseif((sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
+				if((sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 				{
 					$sum = $row_inst->get_row_ageement_price($o);
+				}
+				elseif(is_object($br) && !$o->meta("parent_row"))
+				{
+					$ttc = $br->prop("amt");
+					foreach($br->connections_from(array("type" => "RELTYPE_TASK_ROW")) as $c)
+					{
+						$other_tr = $c->to();
+						if($other_tr->meta("parent_row") == $o->id())
+						{
+							$time_real += $other_tr->prop("time_real");
+						}
+					}
+					$sum = $br->get_sum();//if(aw_global_get("uid") == "Teddi.Rull") arr($sum);
+				}
+				else
+				{
+					continue;
 				}
 			}
 
@@ -7081,16 +7097,16 @@ class crm_person extends class_base
 				"proj" => html::obj_change_url($task->prop("project")),
 				"task" => html::obj_change_url($task),
 				"content" => $bi->_split_long_words($o->prop("content")),
-				"length" => number_format($o->prop("time_real"), 3, ',', ''),
+				"length" => number_format($time_real, 3, ',', ''),
 				//"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 				"length_cust" => (!is_oid($bn))?html::textbox(array(
 					"name" => "rows[".$o->id()."][time_to_cust]",
-					"value" => number_format($o->prop("time_to_cust"), 3, ',', ''),
+					"value" => number_format($ttc, 3, ',', ''),
 					"size" => 4,
 				)).html::hidden(array(
 					"name" => "rows[".$o->id()."][time_to_cust_real]",
-					"value" => number_format($o->prop("time_to_cust"), 3, ',', ''),
-				)):number_format($o->prop("time_to_cust"), 3, ',', ''),
+					"value" => number_format($ttc, 3, ',', ''),
+				)):number_format($ttc, 3, ',', ''),
 
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
@@ -7098,9 +7114,9 @@ class crm_person extends class_base
 				"sum" => number_format($sum, 2, ',', ''),
 				"bill_nr" => $bn,
 			));
-			$l_sum += $o->prop("time_real");
+			$l_sum += $time_real;
 			$s_sum += $sum;
-			$l_cus_s += $o->prop("time_to_cust");
+			$l_cus_s += $ttc;
 		}
 
 		$t->set_default_sortby("date");

@@ -2799,6 +2799,11 @@ class crm_bill extends class_base
 		if (is_array($arr["sel_rows"]) && count($arr["sel_rows"]) > 1)
 		{
 			$frow = obj($arr["sel_rows"][0]);
+			$mtask_row = $frow->get_first_obj_by_reltype("RELTYPE_TASK_ROW");
+			if(is_object($mtask_row))
+			{
+				$mtrid = $mtask_row->id();
+			}
 			for($i = 1; $i < count($arr["sel_rows"]); $i++)
 			{
 				$row_o = obj($arr["sel_rows"][$i]);
@@ -2808,6 +2813,16 @@ class crm_bill extends class_base
 				}
 				$frow->set_prop("amt", $frow->prop("amt") + $row_o->prop("amt"));
 				$frow->set_prop("sum", $frow->prop("amt") * $frow->prop("price"));
+				$task_row = $row_o->get_first_obj_by_reltype("RELTYPE_TASK_ROW");
+				if(is_object($task_row))
+				{
+					$task_row->set_meta("parent_row" , $mtrid);
+					$frow->connect(array(
+						"to" => $task_row->id(),
+						"type" => "RELTYPE_TASK_ROW"
+					));
+					$task_row->save();
+				}
 				$row_o->delete();
 			}
 			$frow->save();
