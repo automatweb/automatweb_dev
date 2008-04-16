@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.4 2008/04/08 09:21:40 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.5 2008/04/16 08:53:00 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -400,7 +400,7 @@ die();
 			foreach($gl as $g_oid => $g_obj)
 			{
 				$gid = $g_obj->prop("gid");
-				$gidlist[(int)$gid] = (int)$gd["gid"];
+				$gidlist[(int)$gid] = (int)$gid;
 				$gidlist_pri[(int)$gid] = (int)$g_obj->prop("priority");
 				$gidlist_pri_oid[(int)$g_oid] = (int)$g_obj->prop("priority");
 				$gidlist_oid[(int)$g_oid] = (int)$g_oid;
