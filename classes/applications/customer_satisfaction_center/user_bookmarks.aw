@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.20 2008/03/25 10:20:24 robert Exp $
-// user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.21 2008/04/16 13:40:15 voldemar Exp $
+// user_bookmarks.aw - Kasutaja j&auml;rjehoidjad
 /*
 
 @classinfo syslog_type=ST_USER_BOOKMARKS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -18,9 +18,9 @@
 
 @default group=bms
 
-	@property bm_tb type=toolbar store=no no_caption=1 
+	@property bm_tb type=toolbar store=no no_caption=1
 
-	@layout bm_tt type=hbox width=30%:70% 
+	@layout bm_tt type=hbox width=30%:70%
 
 		@layout bm_tree type=vbox parent=bm_tt closeable=1 area_caption=Puu
 
@@ -29,13 +29,13 @@
 		@property bm_table type=table store=no no_caption=1 parent=bm_tt
 
 @default group=shared
-	
+
 	@property shared_tb type=toolbar store=no no_caption=1
 
 	@layout shared_tt type=hbox width=30%:70%
 
 		@layout shared_tree type=vbox parent=shared_tt closeable=1 area_caption=Puu
-			
+
 			@property shared_tree type=treeview store=no no_caption=1 parent=shared_tree
 
 		@property shared_table type=table store=no no_caption=1 parent=shared_tt
@@ -84,7 +84,7 @@ class user_bookmarks extends class_base
 				$this->_shared_table($arr);
 				$this->clear_cache($arr["obj_inst"]);
 				break;
-			
+
 			case "shared_tree":
 				$this->_shared_tree($arr);
 				break;
@@ -107,7 +107,7 @@ class user_bookmarks extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -174,12 +174,12 @@ class user_bookmarks extends class_base
 			"parent" => "new",
 			"text" => t("Kataloog"),
 			"link" => html::get_new_url(CL_MENU, $pt, array("return_url" => get_ru()))
-		));		
+		));
 		$tb->add_menu_item(array(
 			"parent" => "new",
 			"text" => t("Link"),
 			"link" => html::get_new_url(CL_EXTLINK, $pt, array("return_url" => get_ru()))
-		));		
+		));
 
 		$ps = get_instance("vcl/popup_search");
 		$tb->add_cdata($ps->get_popup_search_link(array(
@@ -212,7 +212,7 @@ class user_bookmarks extends class_base
 			"img" => "cut.gif",
 			"tooltip" => t("L&otilde;ika")
 		));
-		
+
 		if ( is_array(aw_global_get('copy_bookmarks')) || is_array(aw_global_get('cut_bookmarks')) )
 		{
 			$tb->add_button(array(
@@ -246,7 +246,7 @@ class user_bookmarks extends class_base
 			$parent = $o->id();
 		}
 		$ol = new object_list(array(
-			"class_id" => array(CL_MENU, CL_EXTLINK),	
+			"class_id" => array(CL_MENU, CL_EXTLINK),
 			"parent" => $parent,
 		));
 		foreach($ol->arr() as $ob)
@@ -331,11 +331,11 @@ class user_bookmarks extends class_base
 	}
 
 	function _bm_tree($arr)
-	{	
+	{
 		classload("core/icons");
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
-				"type" => TREE_DHTML, 
+				"type" => TREE_DHTML,
 				"persist_state" => true,
 				"tree_id" => "user_bm",
 			),
@@ -359,7 +359,7 @@ class user_bookmarks extends class_base
 		$_SESSION['copy_bookmarks'] = $arr['sel'];
 		return $arr['post_ru'];
 	}
-	
+
 	/**
 		@attrib name=cut_bms
 	**/
@@ -487,7 +487,7 @@ class user_bookmarks extends class_base
 				$tmp = obj();
 				$tmp->set_class_id($o->class_id());
 				$gl = $tmp->get_group_list();
-				$inf = array();	
+				$inf = array();
 				foreach($gl as $nm => $dat)
 				{
 					$inf[$nm] = ($dat["parent"] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "").$dat["caption"];
@@ -816,7 +816,7 @@ class user_bookmarks extends class_base
 				}
 			}
 		}
-		
+
 	}
 
 	/**
@@ -880,7 +880,7 @@ class user_bookmarks extends class_base
 
 	/**
 		@attrib name=pm_lod
-		@param url optional 
+		@param url optional
 	**/
 	function pm_lod($arr)
 	{
@@ -922,6 +922,7 @@ class user_bookmarks extends class_base
 		{
 			$params["oid"] = $oids;
 		}
+		$params["sort_by"] = "objects.jrk ASC";
 		$list = new object_list($params);
 		$mt = $bm->meta("grp_sets");
 		foreach($list->arr() as $li)
@@ -1102,7 +1103,7 @@ class user_bookmarks extends class_base
 		}
 
 		$this->read_template("show.tpl");
-		
+
 		$bm = $this->init_bm();
 
 		// now, add items from the bum
@@ -1179,7 +1180,7 @@ class user_bookmarks extends class_base
 						$gl = $li->get_group_list();
 						$ga = " - ".$gl[$grp]["caption"];
 					}
-	
+
 					$this->vars(array(
 						"item_text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name().$ga,
 						"item_link" => html::get_change_url($li->id(), array("return_url" => $arr["url"], "group" => $grp))
@@ -1193,7 +1194,7 @@ class user_bookmarks extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
-		
+
 		if($tbl == "user_bookmarks")
 		{
 			if($field=="")
@@ -1207,7 +1208,7 @@ class user_bookmarks extends class_base
 					$this->db_query("INSERT INTO user_bookmarks(`aw_oid`,`sharing`) VALUES('".$o->id()."',0)");
 				}
 				return true;
-						
+
 			}
 			switch($field)
 			{
