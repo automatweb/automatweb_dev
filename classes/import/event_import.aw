@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.31 2008/02/25 14:07:15 instrumental Exp $
-// event_import.aw - SĆ¼ndmuste import 
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.32 2008/04/17 22:10:59 instrumental Exp $
+// event_import.aw - S&uuml;ndmuste import 
 /*
 
 @classinfo syslog_type=ST_EVENT_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
@@ -30,6 +30,9 @@
 	@caption Keel
 	@comment Imporditavate objektide keel
 
+	@property no_event_time_objs type=checkbox ch_value=1 default=0 field=meta method=serialize
+	@caption Iga toimumisaeg eraldi s&uuml;ndmuseks
+
 	@property translatable_fields type=select multiple=1 field=meta method=serialize
 	@caption V&auml;ljad, mida v&otilde;imalusel t&otilde;lgitakse
 
@@ -46,7 +49,7 @@
 
 	@property future_length type=textbox field=meta mehtod=serialize size=5
 	@caption Imporditavate p&auml;evade arv
-	@comment Mitu p&auml;eva alates tänasest edasi imporditakse
+	@comment Mitu p&auml;eva alates t&auml;nasest edasi imporditakse
 
 	@property import_events type=text store=no
 	@caption Impordi s&uuml;ndmused
@@ -340,7 +343,7 @@ class event_import extends class_base
 					"name" => "xml_conf_category[".$arr["parent_tag_source_id"]."_".$arr["parent_tag_name"]."]",
 					"options" => array(
 						"do_not_save_into_db" => t("-- Ei salvestata --"),
-						"id_multiple" => t("ID allikas"),	// Võib olla ka mitu, komaga eraldatud ID-d
+						"id_multiple" => t("ID allikas"),	// V6ib olla ka mitu, komaga eraldatud ID-d
 						"tegevusala" => t("Tegevusala nimetus"),
 						"comment" => t("Kirjeldus"),
 					),
@@ -412,7 +415,7 @@ class event_import extends class_base
 							"name" => "xml_conf_category[".$arr["parent_tag_source_id"]."_".$arr["parent_tag_name"]."_args".$subt_arg."]",
 							"options" => array(
 								"do_not_save_into_db" => t("-- Ei salvestata --"),
-								"id_multiple" => t("ID allikas"),	// Võib olla ka mitu, komaga eraldatud ID-d
+								"id_multiple" => t("ID allikas"),	// V6ib olla ka mitu, komaga eraldatud ID-d
 								"tegevusala" => t("Tegevusala nimetus"),
 								"comment" => t("Kirjeldus"),
 							),
@@ -1195,38 +1198,6 @@ class event_import extends class_base
 		$event_time_data[$time_i][$saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix]] = trim($attr_value, " \t\n\r\0");
 	}
 
-	function remove_crap($v, $i)
-	{		
-		$v = str_replace("ā", "&#257;", $v);
-		$v = str_replace("ē", "&#275;", $v);
-		$v = str_replace("ū", "&#363;", $v);
-		$v = str_replace("ņ", "&#326;", $v);
-		$v = str_replace("š", "&#353;", $v);
-		$v = str_replace("ī", "&#299;", $v);
-		$v = str_replace("ģ", "&#291;", $v);
-		$v = str_replace("ļ", "&#316;", $v);
-		$v = str_replace("Ģ", "&#290;", $v);
-		$v = str_replace("ķ", "&#311;", $v);
-		$v = str_replace("Я", "&#1071;", $v);
-		$v = str_replace("ž", "&#382;", $v);
-		$v = str_replace("„", "\"", $v);
-		$v = str_replace("“", "\"", $v);
-		$v = str_replace("”", "\"", $v);
-		$v = str_replace("’", "&rsquo;", $v);
-		$v = str_replace("–", "&ndash;", $v);
-		$v = str_replace("—", "&mdash;", $v);
-		$v = str_replace("õ", "&otilde;", $v);
-		$v = str_replace("ä", "&auml;", $v);
-		$v = str_replace("ö", "&ouml;", $v);
-		$v = str_replace("ü", "&uuml;", $v);
-		$v = str_replace("Õ", "&Otilde;", $v);
-		$v = str_replace("Ä", "&Auml;", $v);
-		$v = str_replace("Ö", "&Ouml;", $v);
-		$v = str_replace("Ü", "&Uuml;", $v);
-
-		return $v;
-	}
-
 	function make_piletimaailm_links($v, $o, $pmlinks)
 	{
 		// I find it the easiest way to treat spaces and line breaks equally.
@@ -1290,6 +1261,7 @@ class event_import extends class_base
 		$saved_conf_aw_location = $o->meta("log_conf_aw");
 		$saved_conf_source_sector = $o->meta("log_conf_source");
 		$saved_conf_aw_sector = $o->meta("log_conf_aw");
+		$no_event_time_objs = $o->no_event_time_objs;
 
 		$xml_source = obj($xml_source_id);
 		if("tijolatie" == $xml_source->prop("tag_lang") && !$import_orig)
@@ -1373,7 +1345,7 @@ class event_import extends class_base
 			$saved_xml_conf[$xml_source->id()."_".$tag_public_event_e] = "iteinpwsi_".$i_conf;
 			$i_conf++;
 		}	
-		// We need to save the data about the language somewhere. (So far only used for Välisministeeriumi kultuurikalender)
+		// We need to save the data about the language somewhere. (So far only used for V2lisministeeriumi kultuurikalender)
 		if($tag_lang != "tlidbup" && $tag_lang != "tijolatie")
 		{
 			// There are more than one languages and we save 'em here.
@@ -1644,7 +1616,7 @@ class event_import extends class_base
 					}
 					$event_obj->set_lang_id($li);
 					$event_obj->set_class_id($class_id);
-					$event_obj->set_parent($dirs["event"]);		// Kaust, kuhu sündmusi kirjutatakse (event_manager)
+					$event_obj->set_parent($dirs["event"]);		// Kaust, kuhu syndmusi kirjutatakse (event_manager)
 					// By default new events are not public.
 					$event_obj->set_prop("published", 0);
 					// I might need to connect the event object. So I have to save it here. Hopefully it won't cause major impact on cache size.
@@ -1667,7 +1639,8 @@ class event_import extends class_base
 								$this->make_piletimaailm_links($value, &$event_obj, &$pmlinks);
 							}
 
-							$value = $this->remove_crap($value, $imp_lang_id);
+							//$value = $this->remove_crap($value, $imp_lang_id);
+							$value = htmlspecialchars($value);
 							$value = iconv("UTF-8", $lg_list[$imp_lang_id]["charset"]."//IGNORE", $value);
 							if($import_orig)
 							{
@@ -1744,7 +1717,8 @@ class event_import extends class_base
 							$this->make_piletimaailm_links($value, &$event_obj, &$pmlinks);
 						}
 
-						$value = $this->remove_crap($value, $imp_lang_id);
+						//$value = $this->remove_crap($value, $imp_lang_id);
+						$value = htmlspecialchars($value);
 						$value = iconv("UTF-8", $lg_list[$imp_lang_id]["charset"]."//IGNORE", $value);
 						if(!empty($key))
 						{
@@ -2050,8 +2024,10 @@ class event_import extends class_base
 				}
 				
 				$times_done = array();
+				$event_time_count = 0;
 				foreach($event_time_data as $event_time)
 				{
+					$event_time_count++;
 					$deleted = false;
 					for($i_conf = 0; isset($event_time["delete_".$i_conf]); $i_conf++)
 					{
@@ -2087,6 +2063,21 @@ class event_import extends class_base
 
 					if($event_time["start_day"] != 0 && $event_time["start_mon"] != 0)
 					{
+						if($no_event_time_objs)
+						{
+							$this->event_times_into_events(array(
+								"event_time" => &$event_time,
+								"event_obj" => &$event_obj,
+								"event_time_count" => &$event_time_count,
+								"imps" => &$imps,
+								"ext_sys_event" => &$ext_sys_event,
+								"ext_sys_event_name" => &$ext_sys_event_name,
+								"li" => &$li,
+								"event_id" => &$event_id,
+								"times_done" => &$times_done,
+							));
+							continue;
+						}
 						if(array_key_exists($event_time["id"], $imps["time"][$ext_sys_event_time]))
 						{
 							$time_obj = obj($imps["time"][$ext_sys_event_time][$event_time["id"]]);
@@ -2235,6 +2226,108 @@ class event_import extends class_base
 		
 		print " &nbsp; - <strong>[ENDED]</strong> " . $xml_source->name() . "<br><br>";
 		flush();
+	}
+
+	function event_times_into_events($arr)
+	{
+		extract($arr);
+
+		if($event_time["end_year"] < 1970)
+		{
+			$event_time["end_year"] = date("Y");
+		}
+		$tmp["end"] = mktime(
+			$event_time["end_hour"],
+			$event_time["end_min"],
+			$event_time["end_sec"],
+			$event_time["end_mon"],
+			$event_time["end_day"],
+			$event_time["end_year"]
+		);
+		if($event_time["start_year"] < 1970)
+		{
+			$event_time["start_year"] = date("Y");
+		}
+		$tmp["start"] = mktime(
+			$event_time["start_hour"],
+			$event_time["start_min"],
+			$event_time["start_sec"],
+			$event_time["start_mon"],
+			$event_time["start_day"],
+			$event_time["start_year"]
+		);
+		$tmp["end"] = ($tmp["end"] > $tmp["start"]) ? $tmp["end"] : $tmp["start"];
+
+		
+		if(in_array($tmp["start"], $times_done))
+		{
+			print " &nbsp; &nbsp; &nbsp; -";
+			print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." already imported <b>[SKIPPED]<br></b>";
+			return;
+		}
+		else
+		{
+			$times_done[] = $tmp["start"];
+		}
+
+		if(empty($event_time["id"]))
+		{
+			$event_time["id"] = $event_id."_".$tmp["start"];
+		}
+
+		if(array_key_exists($event_time["id"], $imps["event"][$ext_sys_event]))
+		{
+			print " &nbsp; &nbsp; &nbsp; -";
+			print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." imported as event. Existing event. Ext ID - ".$event_time["id"]." and AW ID - ".$imps["event"][$ext_sys_event][$event_time["id"]]."<br>";
+			$o = obj($imps["event"][$ext_sys_event][$event_time["id"]]);
+		}
+		else
+		if($event_time_count > 1)
+		{
+			print " &nbsp; &nbsp; &nbsp; -";
+			print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." imported as <b>NEW EVENT</b><br>";
+			$o = obj($event_obj->save_new());
+			// We make a record of the event we just imported so we won't make a duplicate.
+			$extent_obj = new object;
+			$extent_obj->set_lang_id($li);
+			$extent_obj->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
+			$extent_obj->set_parent($ext_sys_event);
+			$extent_obj->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $ext_sys_event_name, $o->name()));
+			$extent_obj->set_prop("ext_sys_id", $ext_sys_event);
+			$extent_obj->set_prop("obj", $o->id());
+			$extent_obj->set_prop("value", $event_time["id"]);
+			$extent_obj->save();
+			$extent_obj->connect(array(
+				"type" => "OBJ",
+				"to" => $event_obj->id(),
+			));
+			$extent_obj->connect(array(
+				"type" => "EXTSYS",
+				"to" => $ext_sys_event,
+			));
+			$imps["event"][$ext_sys_event][$event_time["id"]] = $o->id();
+		}
+		else
+		{
+			print " &nbsp; &nbsp; &nbsp; -";
+			print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." added to the currect event object<br>";
+			$o = $event_obj;
+		}
+		$o->start1 = $tmp["start"];
+		$o->end = $tmp["end"];
+		$o->save();
+
+		if(array_key_exists($event_time["place_id"], $imps["location"][$ext_sys_location]))
+		{
+			$o->connect(array(
+				"to" => $imps["location"][$ext_sys_location][$event_time["place_id"]],
+				"type" => "RELTYPE_LOCATION",
+			));
+			$o->location = $imps["location"][$ext_sys_location][$event_time["place_id"]];
+			$o->save();
+			print " &nbsp; &nbsp; &nbsp; -";
+			print "- connected to location. ID - ".$imps["location"][$ext_sys_location][$event_time["place_id"]]."<br>";
+		}
 	}
 
 	/**

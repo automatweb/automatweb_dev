@@ -56,6 +56,17 @@
             <comment>Imporditavate objektide keel</comment>
       </property>
       <property>
+            <name>no_event_time_objs</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>0</default>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Iga toimumisaeg eraldi s&amp;amp;uuml;ndmuseks</caption>
+      </property>
+      <property>
             <name>translatable_fields</name>
             <table>objects</table>
             <group>general</group>
@@ -104,7 +115,7 @@
             <mehtod>serialize</mehtod>
             <size>5</size>
             <caption>Imporditavate p&amp;amp;auml;evade arv</caption>
-            <comment>Mitu p&amp;amp;auml;eva alates t&amp;Atilde;&amp;curren;nasest edasi imporditakse</comment>
+            <comment>Mitu p&amp;amp;auml;eva alates t&amp;amp;auml;nasest edasi imporditakse</comment>
       </property>
       <property>
             <name>import_events</name>
