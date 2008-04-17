@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.7 2007/12/06 14:32:43 kristo Exp $
-// site_template_trans.aw - Saidi templatede t&otilde;lkimine 
 /*
-
 @classinfo syslog_type=ST_SITE_TEMPLATE_TRANS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
@@ -22,8 +19,6 @@
 
 @groupinfo t caption=T&otilde;lkimine submit=no
 
-
-
 */
 
 class site_template_trans extends class_base
@@ -35,26 +30,6 @@ class site_template_trans extends class_base
 			"clid" => CL_SITE_TEMPLATE_TRANS
 		));
 	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		}
-		return $retval;
-	}	
 
 	function callback_mod_reforb($arr)
 	{
@@ -135,7 +110,7 @@ class site_template_trans extends class_base
 		}		
 	}
 
-	function _init_bm_table(&$t)
+	private function _init_bm_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "expl",
@@ -202,7 +177,13 @@ class site_template_trans extends class_base
 	}
 
 	/** returns the parsed content of a translation file, that is in format $lc_foo["BLA"] = "translation"; // comment
-		@attrib api=1
+		@attrib api=1 params=pos
+
+		@param fn required type=string
+			The file to read, full path
+
+		@returns
+			array { index number => array { "const" => the translation constant name, "tr" => translated text, "expl" => explanation text, after // in the file } }
 	**/
 	function read_trans_file($fn)
 	{
@@ -276,7 +257,13 @@ class site_template_trans extends class_base
 	}
 
 	/** writes translation file from the given data to the given folder
-		@attrib api=1
+		@attrib api=1 params=pos
+
+		@param fn required type=string
+			The full path of the file to write
+
+		@param dat required type=array
+			The data to write to the file, same format as read_trans_file return value
 	**/
 	function write_trans_file($fn, $dat)
 	{
@@ -306,7 +293,7 @@ class site_template_trans extends class_base
 		));
 	}
 
-	function code_quote($value)
+	private function code_quote($value)
 	{
 		return str_replace("\"", "\\\"", str_replace("\n", "\\n", str_replace("\\", "\\\\", $value)));
 	}

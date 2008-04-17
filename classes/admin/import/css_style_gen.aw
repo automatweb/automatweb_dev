@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/import/css_style_gen.aw,v 1.1 2008/04/15 18:52:06 kristo Exp $
-// css_style_gen.aw - CSS Stiilide generaator 
 /*
-
 @classinfo syslog_type=ST_CSS_STYLE_GEN relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects

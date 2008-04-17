@@ -284,6 +284,10 @@ class core extends acl_base
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
+		if (!function_exists("aw_global_get"))
+		{
+			classload("defs");
+		}
 		/*if (!$_SESSION["err_retry"])
 		{
 			$_SESSION["err_retry"] = 1;

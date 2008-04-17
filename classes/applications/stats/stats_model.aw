@@ -453,6 +453,32 @@ echo "cmd2 = $cmd <br>";
 		$to = get_day_start();
 		$from = $to-24*3600;
 
+                // select all entries from syslog that are already in archive and delete those
+                $this->db_query("SELECT id FROM syslog");
+                $sys_ids = array();
+                while ($row = $this->db_next())
+                {
+                        $sys_ids[$row["id"]] = $row["id"];
+                }
+echo "got ".count($sys_ids)." ids from syslog <br>\n";
+flush();
+
+                $ex_ids = array();
+                $awa = new aw_array($sys_ids);
+                $this->db_query("SELECT id FROM syslog_archive WHERE id IN (".$awa->to_sql().")");
+                while ($row = $this->db_next())
+                {
+                        $ex_ids[$row["id"]] = $row["id"];
+                }
+echo "from those, ".count($ex_ids)." are already in the archive <br>\n";
+flush();
+                if (count($ex_ids))
+                {
+                        $awa = new aw_array($ex_ids);
+echo "so we will delete those now. <br>";
+                        $this->db_query("DELETE FROM syslog WHERE id IN (".$awa->to_sql().")");
+                }
+
 		$q = "INSERT INTO syslog_archive(id,tm,uid,type,action,ip,oid,site_id,act_id,referer,lang_id,object_name,mail_id,session_id) SELECT id,tm,uid,type,action,ip,oid,site_id,act_id,referer,lang_id,object_name,mail_id,session_id FROM syslog ";
 		echo $q." <br>";
 		$this->db_query($q);

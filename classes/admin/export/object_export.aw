@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/export/object_export.aw,v 1.1 2008/04/15 18:52:05 kristo Exp $
-// object_export.aw - Objektide eksport 
 /*
-
 @classinfo syslog_type=ST_OBJECT_EXPORT relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
 @default table=objects

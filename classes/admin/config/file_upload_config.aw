@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/file_upload_config.aw,v 1.3 2007/12/06 14:32:45 kristo Exp $
-// file_upload_config.aw - Failide &uuml;leslaadimise seaded 
 /*
 
 @classinfo syslog_type=ST_FILE_UPLOAD_CONFIG relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -41,26 +39,6 @@ class file_upload_config extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		}
-		return $retval;
-	}	
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -79,7 +57,7 @@ class file_upload_config extends class_base
 		$tb->add_delete_rels_button();
 	}
 
-	function _init_menus_table(&$t)
+	private function _init_menus_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -144,7 +122,7 @@ class file_upload_config extends class_base
 		@param is_file_object required type=bool
 			If the file is being uploaded from a separate file object. In this case only configs that apply to file objects as well, are used.
 
-		@returns true/false, based on the fule upload conf settings
+		@returns true/false, based on the file upload conf settings
 	**/
 	function can_upload_file($arr)
 	{

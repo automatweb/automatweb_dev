@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.7 2008/03/13 11:22:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.8 2008/04/17 12:20:16 kristo Exp $
 // auth_server_openldap.aw - Autentimisserver OpenLDAP 
 /*
 
@@ -51,6 +51,9 @@
 
 @property aw_user_prefix type=textbox 
 @caption Kasutajanime prefiks
+
+@property user_bind_prefix type=textbox
+@caption Bind prefix kasutajatele
 
 @reltype GROUP value=2 clid=CL_GROUP
 @caption grupp

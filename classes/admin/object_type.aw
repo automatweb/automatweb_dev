@@ -1,18 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.27 2008/03/17 19:35:21 instrumental Exp $
-// object_type.aw - objekti klass (lisamise puu jaoks)
 /*
+$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.28 2008/04/17 12:20:11 kristo Exp $
 
-	@classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
+@classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
 
-	@default table=objects
-	@default group=general
+@default table=objects
+@default group=general
 
 	@property type type=select field=subclass
 	@caption Objektit&uuml;&uuml;p
 
-	@default field=meta
-	@default method=serialize
+@default field=meta
+@default method=serialize
 
 	@property use_cfgform type=relpicker reltype=RELTYPE_OBJECT_CFGFORM
 	@caption Kasuta seadete vormi
@@ -23,14 +22,14 @@
 	@property default_object type=chooser store=no group=defobj orient=vertical
 	@caption Vaikimisi objekt
 
-	@groupinfo settings caption="Klassi konfiguratsioon"
-	@groupinfo defobj caption="Aktiivne objekt"
+@groupinfo settings caption="Klassi konfiguratsioon"
+@groupinfo defobj caption="Aktiivne objekt"
 
-	@reltype OBJECT_CFGFORM value=1 clid=CL_CFGFORM
-	@caption Seadete vorm
+@reltype OBJECT_CFGFORM value=1 clid=CL_CFGFORM
+@caption Seadete vorm
 
-	@reltype META_ELEMENTS value=2 clid=CL_META
-	@caption Muutuja
+@reltype META_ELEMENTS value=2 clid=CL_META
+@caption Muutuja
 
 */
 
@@ -134,6 +133,18 @@ class object_type extends class_base
 		return $retval;
 	}
 
+	/** Returns the object type object id for the given class_id
+		@attrib api=1 params=name
+
+		@param clid required type=class_id
+			The class id to find the object type for
+
+		@param general optional type=bool
+			If set to true, the object type returned does not have to be set as default, it is randomly selected from the available ones for the given class. 
+
+		@returns
+			Matching object type object id
+	**/
 	function get_obj_for_class($arr)
 	{
 		$ol = new object_list(array(
@@ -272,7 +283,7 @@ class object_type extends class_base
 		return $rv;
 	}
 
-	function get_type_picker()
+	private function get_type_picker()
 	{
 		$ret = array();
 		$tmp = aw_ini_get("classes");
@@ -288,8 +299,21 @@ class object_type extends class_base
 		return $ret;
 	}
 
-	////
-	// !builds the url for adding a new object
+	/** builds the url for adding a new object, given an object type object id for the class
+		@attrib api=1 params=name
+
+		@param id required type=oid 
+			The object type object id to read the addable class id from 
+
+		@param parent required type=oid
+			The object to add the new object under
+
+		@param section optional type=oid
+			The section to display the new object adding form under
+
+		@returns 
+			url that displays the new object form for the class specified in the given object type object
+	**/
 	function get_add_url($arr)
 	{
 		$o = new object($arr["id"]);
@@ -310,6 +334,14 @@ class object_type extends class_base
 	}
 
 	/** reads the properties from the object type $o and returns them. honors cfgforms
+		@attrib api=1 params=pos
+
+		@param o required type=cl_object_type
+			The object type object to read the class and cfgform from 
+
+		@returns
+			array { property name => property data, ... }  containing all properties in the class given in the object type 
+			or if the object type also has a config form set, then properties are read from that
 	**/
 	function get_properties($o)
 	{
@@ -345,7 +377,7 @@ class object_type extends class_base
 			The class_id the system default object_type is asked for.
 
 	**/
-	function get_default_settings($clid)
+	private function get_default_settings($clid)
 	{
 		$o = obj(object_type::get_obj_for_class(array(
 			"clid" => $clid,
@@ -353,19 +385,26 @@ class object_type extends class_base
 		return $o->meta();
 	}
 
-	/**
-		@attrib name=get_classificator_options api=1 params=name
+	/** Returns array of classificator options
+		@attrib api=1 params=name
 
 		@param clid required type=class_id
-		
-		@param classificator required type=string
+			The class id to get the options for
 
+		@param classificator required type=string
+			The property to get options for
+
+		@returns
+			false, if no settings are found
+			array { cl_meta_oid => name, ... } for all defined options
 	**/
 	function get_classificator_options($arr)
 	{
 		$conf = object_type::get_default_settings($arr["clid"]);
 		if(!is_oid($conf["classificator"][$arr["classificator"]]))
+		{
 			return false;
+		}
 
 		$ol = new object_list(array(
 			"class_id" => CL_META,

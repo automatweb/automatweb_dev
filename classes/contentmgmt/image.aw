@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.12 2008/03/31 11:24:49 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.13 2008/04/17 12:20:15 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -194,7 +194,11 @@ class image extends class_base
 			if ($row)
 			{
 				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
-				$row["url"] = $this->get_url($row["file"])."/".$row["name"];
+				$row["url"] = $this->get_url($row["file"]);
+				if (aw_ini_get("image.imgbaseurl") == "")
+				{
+				 	$row["url"] .= "/".$row["name"];
+				}
 				// if the image is from another site, then make the url point to that
 				if ($row["site_id"] != aw_ini_get("site_id"))
 				{

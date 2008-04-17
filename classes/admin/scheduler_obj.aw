@@ -1,15 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.8 2007/12/06 14:32:43 kristo Exp $
-// scheduler.aw - Scheduler
-
-// okey, objektid mida käima tõmmatakse, defineeritakse seostega. Metainfos salvestatud
-// asjad lennaku kus kurat. St88rl arvas, et nende konvertimisega mingit jama ei teki
-
-// korduse kellajad, well, nende jaoks tuleb analoogselt kalendri sündmusega teine
-// seose tüüp. CL_RECURRENCE peale
-
-// login_uid ja login_pass kahh
-
 /*
 @classinfo relationmgr=yes syslog_type=ST_SCHEDULER_OBJ maintainer=kristo
 @default table=objects
@@ -17,17 +6,16 @@
 @default method=serialize
 @default group=general
 
-@property login_uid type=textbox 
-@caption Kasutaja
+	@property login_uid type=textbox 
+	@caption Kasutaja
 
-@property login_password type=password
-@caption Parool
-
+	@property login_password type=password
+	@caption Parool
 
 @default group=recurrence
 
-@property recurrence type=releditor reltype=RELTYPE_RECURRENCE use_form=emb mode=manager
-@caption Kordused
+	@property recurrence type=releditor reltype=RELTYPE_RECURRENCE use_form=emb mode=manager
+	@caption Kordused
 
 @groupinfo recurrence caption=Kordused submit=no
 
@@ -48,19 +36,6 @@ class scheduler_obj extends class_base
 		$this->init(array(
 			"clid" => CL_SCHEDULER
 		));
-	}
-
-	function set_property($arr)
-	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case "recurrence":
-				$this->re_schedule = true;
-				break;
-		};
-		return $retval;
 	}
 
 	function callback_post_save($arr)
@@ -98,12 +73,5 @@ class scheduler_obj extends class_base
 			};
 		}
 	}
-
-	
-
-	// ah yes. Each time I'm saving the schedulering object, I need to create a new
-	// record in the scheduler table. And that pretty much is it too
-	
-	//$this->add(array("event" => $link,"rep_id" => $id, "uid" => $obj["meta"]["login_uid"],"password" => $obj["meta"]["login_password"]));
 }
 ?>

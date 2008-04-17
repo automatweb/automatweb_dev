@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/import/object_import.aw,v 1.1 2008/04/15 18:52:06 kristo Exp $
-// object_import.aw - Objektide Import
 /*
 
 @classinfo syslog_type=ST_OBJECT_IMPORT relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
@@ -286,7 +284,7 @@ class object_import extends class_base
 		return $retval;
 	}
 
-	function _init_folders_table(&$t)
+	private function _init_folders_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "folder",
@@ -303,7 +301,7 @@ class object_import extends class_base
 		$t->set_default_sortby("folder");
 	}
 
-	function do_folders_table($arr)
+	private function do_folders_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_folders_table($t);
@@ -344,7 +342,7 @@ class object_import extends class_base
 		$t->sort_by();
 	}
 
-	function _init_props_tbl(&$t)
+	private function _init_props_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "prop",
@@ -384,7 +382,7 @@ class object_import extends class_base
 		$t->set_default_sortby("prop");
 	}
 
-	function do_props_table($arr)
+	private function do_props_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_props_tbl($t);
@@ -478,7 +476,7 @@ class object_import extends class_base
 		return $properties;
 	}
 
-	function _init_connect_props_table(&$t, $cols)
+	private function _init_connect_props_table(&$t, $cols)
 	{
 		$t->set_sortable(false);
 		$t->define_field(array(
@@ -505,7 +503,7 @@ class object_import extends class_base
 		));
 	}
 
-	function do_connect_props_table($arr)
+	private function do_connect_props_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 

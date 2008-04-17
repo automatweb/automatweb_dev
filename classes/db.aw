@@ -55,7 +55,7 @@ class db_connector
 	function init($args = array())
 	{
 		// dammit, I hate it when I don't know whether the args are string or array
-		if ((is_array($args) && isset($args["no_db"])) || (aw_global_get("no_db_connection")))
+		if ((is_array($args) && isset($args["no_db"])) || aw_global_get("no_db_connection"))
 		{
 			return;
 		};

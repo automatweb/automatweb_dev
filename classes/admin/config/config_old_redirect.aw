@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_old_redirect.aw,v 1.4 2007/12/06 14:32:45 kristo Exp $
-// config_old_redirect.aw - Vanade aadresside suunamine 
 /*
 
 @classinfo syslog_type=ST_CONFIG_OLD_REDIRECT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -20,7 +18,6 @@
 @property activity type=table group=activity no_caption=1
 @caption Aktiivsus
 
-
 */
 
 class config_old_redirect extends class_base
@@ -33,32 +30,12 @@ class config_old_redirect extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-		}
-		return $retval;
-	}	
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
 
-	function _init_url_table(&$t)
+	private function _init_url_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "old",
@@ -153,7 +130,7 @@ class config_old_redirect extends class_base
 		}
 	}
 
-	function _init_repl_table(&$t)
+	private function _init_repl_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "with",

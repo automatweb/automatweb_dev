@@ -1,20 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.21 2008/03/12 21:22:11 kristo Exp $
-// config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
-
 @classinfo syslog_type=ST_CONFIG_LOGIN_MENUS relationmgr=yes maintainer=kristo
 @classinfo no_status=1
 
 @default table=objects
 @default group=general
 
-@property login_menus type=callback callback=callback_get_login_menus store=no
+	@property login_menus type=callback callback=callback_get_login_menus store=no
 
 @groupinfo activity caption=Aktiivsus
 
-@property activity type=table group=activity no_caption=1
-@caption Aktiivsus
+	@property activity type=table group=activity no_caption=1
+	@caption Aktiivsus
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -25,8 +22,6 @@ class config_login_menus extends class_base
 {
 	function config_login_menus()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "admin/config/config_login_menus",
 			"clid" => CL_CONFIG_LOGIN_MENUS
@@ -94,7 +89,7 @@ class config_login_menus extends class_base
 		return $retval;
 	}	
 
-	function _set_active_menus($o)
+	private function _set_active_menus($o)
 	{
 		$o_lm = $o->meta("lm");
 		
@@ -156,7 +151,7 @@ class config_login_menus extends class_base
 		return $ret;
 	}
 
-	function mk_activity_table($arr)
+	private function mk_activity_table($arr)
 	{
 		// this is supposed to return a list of all active polls
 		// to let the user choose the active one
@@ -177,15 +172,7 @@ class config_login_menus extends class_base
 	}
 
 	/**  
-		
 		@attrib name=find_active_edit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function find_active_edit($arr)
 	{
@@ -255,9 +242,13 @@ class config_login_menus extends class_base
 		$dbi->db_query("INSERT INTO config(ckey,content) values('login_menus_".$ini_opts["site_id"]."','$str')");
 	}
 
-	////
-	// Votab argumentidena gidlisti, ning üritab tagastada oige login menüü
-	// aadressi.
+	/** Finds the active set of login menus and returns the menu for the current user
+		@attrib api=1 params=name
+
+		@retuns
+			-1 if no menus are set for the current user
+			object id of the active menu object for the current user
+	**/
 	function get_login_menus($args = array())
 	{
 		$_data = $this->_get_login_menus();
@@ -301,7 +292,7 @@ class config_login_menus extends class_base
 		return $cur_menu;
 	}
 
-	function _get_login_menus($args = array())
+	private function _get_login_menus($args = array())
 	{
 		$sid = aw_ini_get("site_id");
 		$res = $this->get_cval("login_menus_".$sid);
