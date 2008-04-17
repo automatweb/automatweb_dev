@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.48 2008/02/19 10:13:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.49 2008/04/17 12:09:18 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -835,6 +835,10 @@ class register_search extends class_base
 		}
 		exit_function("register_search::show::dsrt::gsr::init");
 
+		$tmp = obj();
+		$tmp->set_class_id(CL_REGISTER_DATA);
+		$real_props = $tmp->get_property_list();
+
 		enter_function("register_search::show::dsrt::gsr::loop");
 		foreach($props as $pn => $pd)
 		{
@@ -860,14 +864,9 @@ class register_search extends class_base
 			else
 			if ($request["rsf"][$pn] != "")
 			{
-				if (is_array($request["rsf"][$pn]))
+				if ($fdata[$pn]["is_chooser"])
 				{
-					$filter[$pn] = $request["rsf"][$pn];
-				}
-				else
-				if ($pd["type"] == "classificator")
-				{
-					$filter[$pn] = $request["rsf"][$pn];
+					$filter["CL_REGISTER_DATA.".$real_props[$pn]["reltype"].".name"] = $request["rsf"][$pn];
 				}
 				else
 				if ($fdata[$pn]["is_num"] == 1)
@@ -888,7 +887,12 @@ class register_search extends class_base
 					}
 				}
 				else
-				if ($fdata[$pn]["is_chooser"])
+				if ($pd["type"] == "classificator")
+				{
+					$filter[$pn] = $request["rsf"][$pn];
+				}
+				else
+				if (is_array($request["rsf"][$pn]))
 				{
 					$filter[$pn] = $request["rsf"][$pn];
 				}
@@ -1141,12 +1145,22 @@ class register_search extends class_base
 
 			if (!($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
 			{
-				$q = "SELECT distinct($p[field]) as val FROM $p[table] 
-					LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).") AND objects.status > 0";
-
-				if (aw_global_get("uid") == "meff")
+				if ($p["store"] == "connect")
 				{
-		//			echo "q = $q <br>";
+					$relist = obj();
+					$relist->set_class_id(CL_REGISTER_DATA);
+					$relist = $relist->get_relinfo();
+					$q = "SELECT distinct(t.name) as val FROM aliases a LEFT JOIN objects o ON o.oid = a.source left join objects t on t.oid = a.target WHERE o.class_id = ".CL_REGISTER_DATA." AND o.status > 0 AND a.reltype = ".$relist[$p["reltype"]]["value"];
+				}
+				else
+				{
+					$q = "SELECT distinct($p[field]) as val FROM $p[table] 
+						LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).") AND objects.status > 0";
+				}
+
+				if (aw_global_get("uid") == "kix")
+				{
+				//	echo "q = $q <br>";
 				}
 				$this->db_query($q);
 				while ($row = $this->db_next())
