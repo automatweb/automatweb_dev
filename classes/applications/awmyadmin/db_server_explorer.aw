@@ -1,28 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.8 2007/12/06 14:32:46 kristo Exp $
-
 /*
-	@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
+@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
 
 	@property conf type=relpicker reltype=RELTYPE_CONF automatic=1
 	@caption Vali konfiguratsioon
 
-	@groupinfo explorer caption="Explorer"
-	@default group=explorer
+@groupinfo explorer caption="Explorer"
+@default group=explorer
 
-	@layout fs type=hbox group=explorer
+	@property ex_toolbar type=toolbar no_caption=1 store=no
 
-	@property tree type=text parent=fs group=explorer store=no no_caption=1
-	@property content type=text parent=fs group=explorer store=no no_caption=1
+	@layout fs type=hbox group=explorer width=20%:80%
+		@layout tree_box type=vbox closeable=1 area_caption=Serverid parent=fs
+			@property tree type=treeview parent=tree_box group=explorer store=no no_caption=1
+
+		@property content type=table parent=fs group=explorer store=no no_caption=1
 	
 
-	@reltype CONF value=1 clid=CL_DB_VIEW_CONF
-	@caption konfiguratsioon
+@reltype CONF value=1 clid=CL_DB_VIEW_CONF
+@caption konfiguratsioon
 */
 
 class db_server_explorer extends class_base
@@ -48,19 +49,40 @@ class db_server_explorer extends class_base
 			case "content":
 				$prop["value"] = $this->do_content($arr);
 				break;
+
+			case "ex_toolbar":
+				$this->_get_ex_toolbar($arr);
+				break;
 		}
 
 		return PROP_OK;
 	}
 
-	function do_tree($arr)
+	private function _get_ex_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'new',
+			'tooltip' => 'Lisa',
+			'url' => $this->mk_my_orb('change', $arr),
+			'img' => 'new.gif'
+		));
+		$tb->add_button(array(
+			'name' => 'delete',
+			'tooltip' => 'Kustuta',
+			'url' => 'javascript:del()',
+			'img' => 'delete.gif'
+		));
+	}
+
+	private function do_tree($arr)
 	{
 		$ob = $arr["obj_inst"];
 
 		// build the tree of servers.
-		$tree = get_instance('vcl/treeview');
+		$tree = $arr["prop"]["vcl_inst"];
 		$tree->start_tree(array(
-			'root_name' => 'Konfiguratsioon',
+			'root_name' => t('Konfiguratsioon'),
 			'root_url' => $this->mk_my_orb('change', array('id' => $arr['id'])),
 			'root_icon' => $this->cfg['baseurl'].'/automatweb/images/icon_aw.gif',
 			"type" => TREE_DHTML,
@@ -79,9 +101,13 @@ class db_server_explorer extends class_base
 
 		foreach($servers as $serv_id => $server)
 		{
+			if (!$arr["request"]["server_id"])
+			{
+				$arr["request"]["server_id"] = $serv_id;
+			}
 			$tree->add_item(0,array(
 				'id' => $serv_id,
-				'name' => $server,
+				'name' => $arr["request"]["server_id"] == $serv_id ? "<b>".$server."</b>" : $server,
 				'url' => aw_url_change_var('server_id',$serv_id),
 				'icon' => $this->cfg['baseurl'].'/automatweb/images/icon_aw.gif',
 			));
@@ -92,7 +118,7 @@ class db_server_explorer extends class_base
 			{
 				$tree->add_item($serv_id,array(
 					'id' => $dbid,
-					'name' => $dbname,
+					'name' => $arr["request"]["db_id"] == $dbid ? "<b>".$dbname."</b>" : $dbname,
 					'url' => aw_url_change_var("server_id", $serv_id, aw_url_change_var('db_id',$dbid)),
 					'icon' => $this->cfg['baseurl'].'/automatweb/images/icon_aw.gif',
 				));
@@ -105,7 +131,7 @@ class db_server_explorer extends class_base
 					{
 						$tree->add_item($dbid,array(
 							'id' => $dbid.$tbl,
-							'name' => $tbl,
+							'name' => $arr["request"]["table"] == $tbl ? "<b>".$tbl."</b>" : $tbl,
 							'url' => aw_url_change_var('table', $tbl, aw_url_change_var('db_id',$dbid,aw_url_change_var('server_id',$serv_id))),
 							'icon_url' => $this->cfg['baseurl'].'/automatweb/images/icon_aw.gif',
 						));
@@ -113,12 +139,9 @@ class db_server_explorer extends class_base
 				}
 			}
 		}
-
-		return $tree->finalize_tree();
 	}
 
-
-	function do_content($arr)
+	private function do_content($arr)
 	{
 		if ($arr["request"]["table"])
 		{
@@ -129,13 +152,19 @@ class db_server_explorer extends class_base
 		{
 			return $this->show_database($arr);
 		}
-		if ($arr["request"]["server_id"])
+		else
 		{
+			if (!$arr["request"]["server_id"])
+			{
+				$cfg_inst = get_instance(CL_DB_VIEW_CONF);
+				$arr["request"]["server_id"] = reset(array_keys($cfg_inst->get_servers($arr["obj_inst"]->prop('conf'))));
+			}
+
 			return $this->show_server($arr);
 		}
 	}
 
-	function show_server($arr)
+	private function show_server($arr)
 	{
 		$server_id = $arr["request"]["server_id"];
 		$s_o = obj($server_id);
@@ -143,16 +172,15 @@ class db_server_explorer extends class_base
 		$server = get_instance(CL_DB_SERVER_LOGIN);
 		$server->login_as($server_id);
 
-		load_vcl('table');
-		$t = new aw_table(array('layout' => 'generic'));
+		$t = $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			'name' => 'var',
-			'caption' => 'Muutuja',
+			'caption' => t('Muutuja'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'val',
-			'caption' => 'V&auml;&auml;rtus',
+			'caption' => t('V&auml;&auml;rtus'),
 		));
 
 		$stat = $server->db_server_status();
@@ -163,11 +191,11 @@ class db_server_explorer extends class_base
 				'val' => $v
 			));
 		}
-		$t->sort_by(array('field' => 'var'));
-		return $t->draw();
+		$t->set_default_sortby('var');
+		$t->set_caption(sprintf(t("Serveri %s info"), parse_obj_name($s_o->name())));
 	}
 
-	function show_database($arr)
+	private function show_database($arr)
 	{
 		$server_id = $arr["request"]["server_id"];
 		$db_id = $arr["request"]["db_id"];
@@ -178,11 +206,7 @@ class db_server_explorer extends class_base
 		$server = get_instance(CL_DB_LOGIN);
 		$server->login_as($db_id);
 
-		load_vcl('table');
-		$t = new aw_table(array(
-			'layout' => 'generic',
-		));
-		
+		$t = $arr["prop"]["vcl_inst"];
 		$fields = false;
 		$fields_tbl = '';
 		$tbldat = array();
@@ -217,474 +241,119 @@ class db_server_explorer extends class_base
 		}
 
 		$t->set_default_sortby('Name');
-		$t->sort_by();
-		return $t->draw();
+		$t->set_caption(sprintf(t("Andmebaasi %s\\%s tabelite info"), $s_o->name(), $db_o->name()));
 	}
 
-	function show_table($arr)
+	private function show_table($arr)
 	{
-		$server_id = $arr["request"]["server_id"];
-		$db_id = $arr["request"]["db_id"];
-		$table = $arr["request"]["table"];
-
-		$s_o = obj($server_id);
-		$db_o = obj($db_id);
-
-
-		$tbp = get_instance('vcl/tabpanel');
-
-		$tmp = $arr["request"];
-		$type = $tmp["type"];
-		$tmp['type'] = 'admin';
-		$tbp->add_tab(array(
-			'active' => (in_array($type,array('admin_col','admin')) ? true : false),
-			'caption' => 'Administreeri',
-			'link' => $this->mk_my_orb('show_table', $tmp)
-		));
-
-		$tmp['type'] = 'admin_indexes';
-		$tbp->add_tab(array(
-			'active' => (in_array($type,array('admin_indexes','admin_index')) ? true : false),
-			'caption' => 'Administreeri indekseid',
-			'link' => $this->mk_my_orb('show_table', $tmp)
-		));
-
-		$tmp['type'] = 'content';
-		$tbp->add_tab(array(
-			'active' => ($type == 'content' ? true : false),
-			'caption' => 'Sisu',
-			'link' => $this->mk_my_orb('show_table', $tmp)
-		));
-
-		$tmp['type'] = 'query';
-		$tbp->add_tab(array(
-			'active' => ($type == 'query' ? true : false),
-			'caption' => 'P&auml;ring',
-			'link' => $this->mk_my_orb('show_table', $tmp)
-		));
-		unset($arr['type']);
-
-		$content = '';
-		switch($type)
+		switch($arr["request"]["type"])
 		{
-			case 'admin_col':
-				$content = $this->_sht_do_admin_col($arr["request"]);
-				break;
-
 			case 'admin_indexes':
-				$content = $this->_sht_do_admin_indexes($arr["request"]);
-				break;
-
-			case 'admin_index':
-				$content = $this->_sht_do_admin_index($arr["request"]);
+				$this->_sht_do_admin_indexes($arr);
 				break;
 
 			case 'content':
-				$content = $this->_sht_do_content($arr["request"]);
+				$this->_sht_do_content($arr);
 				break;
 
 			case 'query':
-				$content = $this->_sht_do_query($arr["request"]);
+				$this->_sht_do_query($arr);
 				break;
 
 			case 'admin':
 			default:
-				$content = $this->_sht_do_admin($arr["request"]);
+				$this->_sht_do_admin($arr);
 				break;
 		}
 
-		return $tbp->get_tabpanel(array('content' => $content));
+		$arr["prop"]["vcl_inst"]->set_caption(
+			$arr["prop"]["vcl_inst"]->get_caption()." ".
+			sprintf(t("| vaata: %s / %s / %s "), 
+				html::href(array(
+					"url" => aw_url_change_var("type", "admin"),
+					"caption" => t("Struktuur")
+				)),
+				html::href(array(
+					"url" => aw_url_change_var("type", "admin_indexes"),
+					"caption" => t("Indeksid")
+				)),
+				html::href(array(
+					"url" => aw_url_change_var("type", "content"),
+					"caption" => t("Sisu")
+				))
+			)
+		);
 	}
 
-	function _sht_do_admin($arr)
+	private function _sht_do_admin($arr)
 	{
-		extract($arr);
-		$this->read_template('admin.tpl');
-
-		load_vcl('table');
-		$t = new aw_table(array(
-			'prefix' => 'db_table_admin', 
-			"layout" => "generic"
-		));
-		$t->define_field(array('name' => 'name','caption' => 'Nimi','sortable' => 1));
-		$t->define_field(array('name' => 'type','caption' => 'T&uuml;&uuml;p','sortable' => 1));
-		$t->define_field(array('name' => 'flags','caption' => 'Attribuudid','sortable' => 1));
-		$t->define_field(array('name' => 'null','caption' => 'NULL','sortable' => 1));
-		$t->define_field(array('name' => 'default','caption' => 'Default','sortable' => 1));
-		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
-		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
+		$t = $arr["prop"]["vcl_inst"];
+		$t->define_field(array('name' => 'name','caption' => t('Nimi'),'sortable' => 1));
+		$t->define_field(array('name' => 'type','caption' => t('T&uuml;&uuml;p'),'sortable' => 1));
+		$t->define_field(array('name' => 'flags','caption' => t('Attribuudid'),'sortable' => 1));
+		$t->define_field(array('name' => 'null','caption' => t('NULL'),'sortable' => 1));
+		$t->define_field(array('name' => 'default','caption' => t('Default'),'sortable' => 1));
+		$t->define_field(array('name' => 'change','caption' => t('Muuda')));
+		$t->define_field(array('name' => 'sel','caption' => t('Vali')));
 
 		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-		$tbl = $db->db_get_table($table);
+		$db->login_as($arr["request"]["db_id"]);
+		$tbl = $db->db_get_table($arr["request"]["table"]);
+
 		foreach($tbl['fields'] as $fid => $fdat)
 		{
 			$fdat['type'] .= '('.$fdat['length'].')';
-			$tarr = $arr;
+			$tarr = $arr["request"];
 			$tarr["type"] = "admin_col";
 			$tarr['field'] = $fdat['name'];
-			$fdat['change'] = html::href(array(
-				'url' => $this->mk_my_orb('change', $tarr),
-				'caption' => 'Muuda'
-			));
-			$fdat['sel'] = html::checkbox(array(
-					'name' => 'sel[]',
-				'value' => $fdat['name']
-			));
 
 			$t->define_data($fdat);
 		}
 		$t->set_default_sortby('name');
-		$t->sort_by();
-
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'new',
-			'tooltip' => 'Lisa',
-			'url' => $this->mk_my_orb('change', $arr),
-			'img' => 'new.gif'
+		$t->set_caption(sprintf(
+			t("Tabeli %s\\%s\\%s struktuur"), 
+			obj($arr["request"]["server_id"])->name(),
+			obj($arr["request"]["db_id"])->name(),
+			$arr["request"]["table"]
 		));
-		$tb->add_button(array(
-			'name' => 'delete',
-			'tooltip' => 'Kustuta',
-			'url' => 'javascript:del()',
-			'img' => 'delete.gif'
-		));
-
-		$arr['is_del'] = '0';
-		$this->vars(array(
-			'table' => $t->draw(),
-			'reforb' => $this->mk_reforb('submit_admin', $arr),
-			'toolbar' => $tb->get_toolbar(),
-		));
-		return $this->parse();
 	}
 
-	function _sht_do_content($arr)
+	private function _sht_do_content($arr)
 	{
 		$dtc = get_instance(CL_DB_SQL_QUERY);
 		$nr = 0;
-		return $dtc->show_query_results($arr['db_id'],'SELECT * FROM '.$arr['table'],$nr);
+		$dtc->show_query_results($arr["request"]['db_id'],'SELECT * FROM '.$arr["request"]['table'],$nr, $arr["prop"]["vcl_inst"]);
+
+		$arr["prop"]["vcl_inst"]->set_caption(sprintf(
+			t("Tabeli %s\\%s\\%s sisu"), 
+			obj($arr["request"]["server_id"])->name(),
+			obj($arr["request"]["db_id"])->name(),
+			$arr["request"]["table"]
+		));
 	}
 
-	function _sht_do_query($arr)
+	private function _sht_do_admin_indexes($arr)
 	{
-		$this->read_template('query.tpl');
-		$tarr = $arr;
-		$tarr['no_reforb'] = 1;
-		unset($tarr['sql']);
-
-		$dtc = get_instance(CL_DB_SQL_QUERY);
-		$nr = 0;
-		if ($arr['sql'] != '')
-		{
-			$res = $dtc->show_query_results($arr['db_id'],$arr['sql'],$nr);
-		}
-
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'save',
-			'tooltip' => t('Salvesta'),
-			'url' => 'javascript:document.add.submit()',
-			'img' => 'save.gif'
-		));
-
-		$this->vars(array(
-			'sql' => $arr['sql'],
-			'reforb' => $this->mk_reforb('show_table', $tarr),
-			'results' => $res,
-			'toolbar' => $tb->get_toolbar()
-		));
-
-		return $this->parse();
-	}
-
-	function _sht_do_admin_col($arr)
-	{
-		extract($arr);
-		$this->read_template('admin_col.tpl');
+		$t = $arr["prop"]["vcl_inst"];
+		$t->define_field(array('name' => 'index_name','caption' => t('Nimi'),'sortable' => 1));
+		$t->define_field(array('name' => 'col_name','caption' => t('Tulba nimi'),'sortable' => 1));
+		$t->define_field(array('name' => 'unique','caption' => t('Unikaalne'),'sortable' => 1));
 
 		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-
-		$tbl = $db->db_get_table($table);
-
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'save',
-			'tooltip' => t('Salvesta'),
-			'url' => 'javascript:document.changeform.submit()',
-			'img' => 'save.gif'
-		));
-		unset($arr['type']);
-		$arr['field'] = $field;
-		$this->vars(array(
-			'name' => $field,
-			'type' => $this->picker(strtoupper($tbl['fields'][$field]['type']),$db->db_list_field_types()),
-			'length' => $tbl['fields'][$field]['length'],
-			'null' => checked($tbl['fields'][$field]['null']),
-			'default' => $tbl['fields'][$field]['default'],
-			'extra' => $this->picker(strtoupper($tbl['fields'][$field]['flags']), $db->db_list_flags()),
-			'toolbar' => $tb->get_toolbar(),
-			'reforb' => $this->mk_reforb('submit_admin_col', $arr)
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_admin_col params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin_col($arr)
-	{
-		extract($arr);
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-		if ($field == '')
-		{
-			// add
-			$db->db_add_col($table, array(
-				'name' => $name,
-				'type' => $type,
-				'length' => $length,
-				'null' => ($null ? 'NULL' : 'NOT NULL'),
-				'default' => $default,
-				'extra' => $extra
-			));
-			$field = $name;
-		}
-		else
-		{
-			// change
-			$db->db_change_col($table, $field, array(
-				'name' => $name,
-				'type' => $type,
-				'length' => $length,
-				'null' => ($null ? 'NULL' : 'NOT NULL'),
-				'default' => $default,
-				'extra' => $extra
-			));
-		}
-		return $this->mk_my_orb('change', array(
-			"group" => "explorer",
-			'field' => $field,
-			'id' => $id,
-			'table' => $table,
-			'db_id' => $db_id,
-			'server_id' => $server_id,
-			'sql' => $sql
-		));
-	}
-
-	/**  
-		
-		@attrib name=submit_admin params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin($arr)
-	{
-		extract($arr);
-
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-
-		if ($is_del)
-		{
-			$sel = new aw_array($sel);
-			foreach($sel->get() as $secol)
-			{
-				$db->db_drop_col($table,$secol);
-			}
-		}
-		return $this->mk_my_orb('show_table', array(
-			'id' => $id,
-			'table' => $table,
-			'db_id' => $db_id,
-			'server_id' => $server_id,
-			'sql' => $sql
-		));
-	}
-
-	function _sht_do_admin_indexes($arr)
-	{
-		extract($arr);
-		$this->read_template('admin_indexes.tpl');
-
-		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'db_table_admin', "layout" => "generic"));
-		$t->define_field(array('name' => 'index_name','caption' => 'Nimi','sortable' => 1));
-		$t->define_field(array('name' => 'col_name','caption' => 'Tulba nimi','sortable' => 1));
-		$t->define_field(array('name' => 'unique','caption' => 'Unikaalne','sortable' => 1));
-		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
-		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
-
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-		$db->db_list_indexes($table);
+		$db->login_as($arr["request"]["db_id"]);
+		$db->db_list_indexes($arr["request"]["table"]);
 		while ($idx = $db->db_next_index())
 		{
 			$tar = $arr;
 			$tar['index'] = $idx['index_name'];
-			$idx['change'] = html::href(array(
-				'url' => $this->mk_my_orb('admin_index', $tar),
-				'caption' => 'Muuda'
-			));
-			$idx['sel'] = html::checkbox(array(
-				'name' => 'sel[]',
-				'value' => $idx['index_name']
-			));
-
 			$t->define_data($idx);
 		}
 		$t->set_default_sortby('index_name');
-		$t->sort_by();
-
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'new',
-			'tooltip' => 'Lisa',
-			'url' => $this->mk_my_orb('admin_index', $arr),
-			'img' => 'new.gif'
-		));
-		$tb->add_button(array(
-			'name' => 'delete',
-			'tooltip' => 'Kustuta',
-			'url' => 'javascript:del()',
-			'img' => 'delete.gif'
-		));
-
-		$arr['is_del'] = '0';
-		$this->vars(array(
-			'table' => $t->draw(),
-			'toolbar' => $tb->get_toolbar(),
-			'reforb' => $this->mk_reforb('submit_admin_indexes', $arr)
-		));
-		return $this->parse();
-	}
-
-	function _sht_do_admin_index($arr)
-	{
-		extract($arr);
-		$this->read_template('admin_index.tpl');
-
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-
-		$db->db_list_indexes($table);
-		while($idx = $db->db_next_index())
-		{
-			if ($idx['index_name'] == $index)
-			{
-				break;
-			}
-		}
-
-		$tbl = $db->db_get_table($table);
-		$fields = $this->make_keys(array_keys($tbl['fields']));
-
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'save',
-			'tooltip' => t('Salvesta'),
-			'url' => 'javascript:document.add.submit()',
-			'img' => 'save.gif'
-		));
-		$arr['index'] = $index;
-		$this->vars(array(
-			'name' => $idx['index_name'],
-			'fields' => $this->picker($idx['col_name'], $fields),
-			'toolbar' => $tb->get_toolbar(),
-			'reforb' => $this->mk_reforb('submit_admin_index', $arr)
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_admin_indexes params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin_indexes($arr)
-	{
-		extract($arr);
-	
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-
-		if ($is_del)
-		{
-			$ar = new aw_array($sel);
-			foreach($ar->get() as $idxname)
-			{
-				$db->db_drop_index($table, $idxname);
-			}
-		}
-		return $this->mk_my_orb('admin_indexes', array(
-			'id' => $id,
-			'table' => $table,
-			'db_id' => $db_id,
-			'server_id' => $server_id,
-			'sql' => $sql
-		));
-	}
-
-	/**  
-		
-		@attrib name=submit_admin_index params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin_index($arr)
-	{
-		extract($arr);
-
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_id);
-
-		if ($index != "")
-		{
-			// change = drop && add
-			$db->db_drop_index($table, $index);
-		}
-
-		// add
-		$db->db_add_index($table, array(
-			'name' => $name,
-			'col' => $field
-		));
-		$index = $name;
-
-		return $this->mk_my_orb("admin_index", array(
-			'id' => $id,
-			'table' => $table,
-			'db_id' => $db_id,
-			'server_id' => $server_id,
-			'sql' => $sql,
-			'index' => $index
+		$arr["prop"]["vcl_inst"]->set_caption(sprintf(
+			t("Tabeli %s\\%s\\%s indeksid"), 
+			obj($arr["request"]["server_id"])->name(),
+			obj($arr["request"]["db_id"])->name(),
+			$arr["request"]["table"]
 		));
 	}
 }

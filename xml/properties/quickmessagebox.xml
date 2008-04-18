@@ -54,6 +54,7 @@
             <automatic>1</automatic>
             <no_edit>1</no_edit>
             <caption>Contact list</caption>
+            <comment>Select people you want in your contact list</comment>
       </property>
       <property>
             <name>msg_toolbar</name>

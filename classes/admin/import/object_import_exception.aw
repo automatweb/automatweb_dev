@@ -1,6 +1,5 @@
 <?php
 /*
-
 @classinfo syslog_type=ST_OBJECT_IMPORT_EXCEPTION relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
@@ -10,7 +9,6 @@
 @default group=exc
 
 @property exc type=table store=no no_caption=1
-
 
 */
 
@@ -51,7 +49,7 @@ class object_import_exception extends class_base
 		return $retval;
 	}	
 
-	function save_exc_table($arr)
+	private function save_exc_table($arr)
 	{
 		$awa = new aw_array($arr["request"]["exc"]);
 		$dat = array();
@@ -66,7 +64,7 @@ class object_import_exception extends class_base
 		$arr["obj_inst"]->set_meta("exc", $dat);
 	}
 
-	function _init_exc_table(&$t)
+	private function _init_exc_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "from",
@@ -81,7 +79,7 @@ class object_import_exception extends class_base
 		$t->set_sortable(false);
 	}
 
-	function do_exc_table($arr)
+	private function do_exc_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_exc_table($t);

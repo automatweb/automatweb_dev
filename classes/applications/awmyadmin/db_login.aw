@@ -1,12 +1,11 @@
 <?php
-
 /*
-	@classinfo syslog_type=ST_DB_LOGIN relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
+@classinfo syslog_type=ST_DB_LOGIN relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
 
 	@property db_server type=relpicker reltype=RELTYPE_SERVER_LOGIN automatic=1
 	@caption Server
@@ -23,8 +22,8 @@
 	@property db_create_ifnexist type=checkbox ch_value=1
 	@caption Loo kui olemas pole
 
-	@reltype SERVER_LOGIN value=1 clid=CL_DB_SERVER_LOGIN
-	@caption db serveri login
+@reltype SERVER_LOGIN value=1 clid=CL_DB_SERVER_LOGIN
+@caption db serveri login
 */
 
 class db_login extends class_base
@@ -73,6 +72,16 @@ class db_login extends class_base
 		}
 	}
 
+	/** Switches the default database connection to the one defined in the given database login object
+		@attrib api=1 params=pos
+
+		@param oid required type=oid
+			The database login object to use
+
+		@returns
+			true if the connection was successfully changed
+			false if not
+	**/
 	function login_as($oid)
 	{
 		if (!$this->can("view", $oid) || !is_oid($oid))

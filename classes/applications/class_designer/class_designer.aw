@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.34 2007/12/06 14:33:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.35 2008/04/18 07:36:42 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -2424,7 +2424,7 @@ class class_designer extends class_base
 
 	function get_groups_from_existing_class($cd)
 	{
-		$anal = get_instance("analyzer/propcollector");
+		$anal = get_instance("cfg/propcollector");
 
 		$cb_inf = $anal->parse_file(array(
 			"file" => aw_ini_get("classdir")."/class_base.aw"

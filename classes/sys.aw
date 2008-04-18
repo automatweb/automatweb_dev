@@ -864,7 +864,7 @@ class sys extends aw_template
 
 	private function _make_property_definitions($classes = array())
 	{
-		$collector = get_instance("analyzer/propcollector");
+		$collector = get_instance("cfg/propcollector");
 
 		if (count($classes))
 		{

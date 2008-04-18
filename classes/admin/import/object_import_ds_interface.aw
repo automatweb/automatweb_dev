@@ -12,6 +12,17 @@ interface object_import_ds_interface
 		@attrib api=1 params=pos
 	**/
 	function get_folders();
+
+	/** This should return an array of fields that are available in the datasource
+		@attrib api=1 params=pos
+
+		@param ds_o required type=object
+			The datasource object
+
+		@param full_props optional type=bool
+			If set to true, the datasource returns full property data, else just name => caption
+	**/
+	function get_fields($ds_o, $is_file = false);
 }
 
 ?>

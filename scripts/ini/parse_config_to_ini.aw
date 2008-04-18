@@ -6,7 +6,6 @@ function parse_config_to_ini($file, $include = false)
 	$res = array();
 	$linenum = 0;
 	$fd = file($file);
-
 	foreach($fd as $line)
 	{
 		$linenum++;
@@ -23,6 +22,7 @@ function parse_config_to_ini($file, $include = false)
 
 		if ($line != "")
 		{
+//echo "line = $line \n";
 			if (substr($line, 0, strlen("include")) == "include")
 			{
 				// process include
@@ -59,13 +59,19 @@ function parse_config_to_ini($file, $include = false)
 					$varvalue = trim(substr($line,$eqpos+3));
 
 					// now, replace all variables in varvalue
-					$varvalue = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $varvalue);
-					$var = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $var);
-
-					if (($dotpos = strpos($var,".")) === false)
+					try {
+						$varvalue = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $varvalue);
+						$var = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $var);
+					}
+					catch(Exception $e)
+					{
+					//	echo "ex for $varvalue / $var \n";
+					}
+					if (true || ($dotpos = strpos($var,".")) === false)
 					{
 						$varname = $var;
 						aw_ini_set($varname, $varvalue);
+//						echo "set $varname => $varvalue \n";
 					}
 				}
 			}

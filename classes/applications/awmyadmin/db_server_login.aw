@@ -1,14 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.5 2007/12/06 14:32:46 kristo Exp $
-// db_server_login.aw - Andmebaasi serveri login
-
 /*
-	@classinfo syslog_type=ST_DB_SERVER_LOGIN relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
+@classinfo syslog_type=ST_DB_SERVER_LOGIN relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
 
 	@property server_host type=textbox 
 	@caption Server
@@ -43,6 +40,16 @@ class db_server_login extends class_base
 		return PROP_OK;
 	}
 
+	/** Switches the current database connection to the given database server login
+		@attrib api=1 params=pos
+
+		@param oid required type=oid
+			The database server login object to use
+
+		@returns
+			true if the connection was successfully switched
+			false if not
+	**/
 	function login_as($oid)
 	{
 		$ob = obj($oid);

@@ -131,6 +131,15 @@
             <type>textbox</type>
             <caption>Kasutajanime prefiks</caption>
       </property>
+      <property>
+            <name>user_bind_prefix</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Bind prefix kasutajatele</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_AUTH_SERVER_OPENLDAP</syslog_type>
             <relationmgr>yes</relationmgr>

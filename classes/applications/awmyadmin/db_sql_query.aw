@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.6 2007/12/06 14:32:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.7 2008/04/18 07:36:39 kristo Exp $
 /*
 
 	@classinfo no_status=1 no_comment=1 maintainer=kristo
@@ -49,7 +49,9 @@ class db_sql_query extends class_base
 
 		// do the query and display results
 		$num_rows = 0;
-		$qres = $this->show_query_results($ob->meta('db_base'), $ob->meta('sql'), &$num_rows);
+		load_vcl("table");
+		$t = new aw_table(array("prefix" => "db_table_content"));
+		$qres = $this->show_query_results($ob->meta('db_base'), $ob->meta('sql'), &$num_rows, $t);
 
 		$tbp = get_instance('vcl/tabpanel');
 		$tbp->hide_one_tab = false;
@@ -62,15 +64,13 @@ class db_sql_query extends class_base
 		return $chgf.$tbp->get_tabpanel(array('content' => $qres));
 	}
 
-	function show_query_results($db_base, $sql, &$num_rows)
+	function show_query_results($db_base, $sql, &$num_rows, &$t)
 	{
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($db_base);
 
 		$num_rows = 0;
 
-		load_vcl("table");
-		$t = new aw_table(array("prefix" => "db_table_content"));
 		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
 
 		$rows_defined = false;

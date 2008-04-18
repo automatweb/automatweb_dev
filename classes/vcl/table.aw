@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.113 2008/04/08 12:04:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.114 2008/04/18 07:36:46 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -161,6 +161,11 @@ class aw_table extends aw_template
 	function set_caption($arr)
 	{
 		$this->table_caption = $arr;
+	}
+
+	function get_caption()
+	{
+		return $this->table_caption;
 	}
 
 	////

@@ -249,7 +249,7 @@ class class_visualizer extends class_base
 			));
 		}
 
-		$anal = get_instance("analyzer/propcollector");
+		$anal = get_instance("cfg/propcollector");
 
 		$inf = $anal->parse_file(array(
 			"file" => $fn
@@ -259,7 +259,7 @@ class class_visualizer extends class_base
 
 	function get_class_groups($arr)
 	{
-		$anal = get_instance("analyzer/propcollector");
+		$anal = get_instance("cfg/propcollector");
 
 		$cb_inf = $anal->parse_file(array(
 			"file" => aw_ini_get("classdir")."/class_base.aw"
@@ -293,7 +293,7 @@ class class_visualizer extends class_base
 
 	function get_group_properties($arr)
 	{
-		$anal = get_instance("analyzer/propcollector");
+		$anal = get_instance("cfg/propcollector");
 		$cb_inf = $anal->parse_file(array(
 			"file" => aw_ini_get("classdir")."/class_base.aw"
 		));
@@ -322,7 +322,7 @@ class class_visualizer extends class_base
 
 	function get_layouts($arr)
 	{
-		$anal = get_instance("analyzer/propcollector");
+		$anal = get_instance("cfg/propcollector");
 		$inf = $anal->parse_file(array(
 			"file" => aw_ini_get("site_basedir")."/files/classes/".$arr["class_id"].".aw"
 		));
@@ -346,7 +346,7 @@ class class_visualizer extends class_base
 	{
 		$text = $_POST["text"];
 		// ja nüüd ei olegi muud vaja, kui sellest asjast propertyte definitsioon genereerida
-		$anakin = get_instance("analyzer/propcollector");
+		$anakin = get_instance("cfg/propcollector");
 		$result = $anakin->parse_file(array(
 			"data" => $text,
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.92 2008/03/31 09:57:10 kristo Exp $
+// $Id: cfgutils.aw,v 1.93 2008/04/18 07:36:44 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 /*
 @classinfo  maintainer=kristo
@@ -743,7 +743,7 @@ class cfgutils extends aw_template
 			$fld = $this->cfg["site_basedir"]."/files/classes";
 			$loc = $fld . "/" . $cldat["file"] . "." . aw_ini_get("ext");
 
-			$anakin = get_instance("analyzer/propcollector");
+			$anakin = get_instance("cfg/propcollector");
 			$result = $anakin->parse_file(array(
 				"file" => $loc,
 			));

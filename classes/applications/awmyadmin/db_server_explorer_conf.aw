@@ -1,12 +1,11 @@
 <?php
-
 /*
-	@classinfo syslog_type=ST_DB_SERVER_EXPLORER_CONF relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
+@classinfo syslog_type=ST_DB_SERVER_EXPLORER_CONF relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
 
 	@property all_servers type=checkbox ch_value=1
 	@caption K&otilde;ik serverid
@@ -38,17 +37,15 @@ class db_server_explorer_conf extends class_base
 		));
 	}
 
-	function get_property($args)
-	{
-		$data = &$args['prop'];
-		switch($data['name'])
-		{
-		}
-		return PROP_OK;
-	}
+	/** returns a list of all servers for the given cfg object
+		@attrib api=1 param=pos
 
-	////
-	// !returns a list of all servers for this cfg object
+		@param oid required type=oid
+			The server explorer conf to use
+
+		@returns
+			array { server_oid => server_name, ... } 
+	**/
 	function get_servers($oid)
 	{
 		$ret = array();
@@ -60,20 +57,26 @@ class db_server_explorer_conf extends class_base
 
 		if (!$ob->prop('all_servers'))
 		{
-			$svs = $ob->prop('servers');
-			foreach($ret as $seid => $name)
+			$svs = safe_array($ob->prop('servers'));
+			$tmp = $ret;
+			$ret = array();
+			foreach($svs as $seid)
 			{
-				if (!$svs[$seid])
-				{
-					unset($ret[$seid]);
-				}
+				$ret[$seid] = $tmp[$seid];
 			}
 		}
 		return $ret;
 	}
 
-	////
-	// !returns an array of databases, grouped by server
+	/** returns an array of databases, grouped by server
+		@attrib api=1 params=pos
+
+		@param oid required type=oid
+			The db_server_explorer_conf object to use
+
+		@returns
+			array { server_id => array { database_oid => database_name }, ... }
+	**/
 	function get_databases_by_server($oid)
 	{
 		$ret = array();

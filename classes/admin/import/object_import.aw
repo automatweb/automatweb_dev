@@ -450,7 +450,7 @@ class object_import extends class_base
 		$t->sort_by();
 	}
 
-	function get_props_from_obj($o)
+	private function get_props_from_obj($o)
 	{
 		$cf = get_instance(CL_CFGFORM);
 		return $cf->get_props_from_ot(array(
@@ -544,7 +544,7 @@ class object_import extends class_base
 		}
 	}
 
-	function get_cols_from_ds($o)
+	private function get_cols_from_ds($o)
 	{
 		if (!$o->prop("ds"))
 		{
@@ -558,11 +558,9 @@ class object_import extends class_base
 	}
 
 	/**
-
 		@attrib name=automatic_import
 
 		@param id required
-
 	**/
 	function automatic_import($arr)
 	{
@@ -573,7 +571,6 @@ class object_import extends class_base
 
 
 	/**
-
 		@attrib name=do_check_import nologin="1"
 
 		@param oid optional
@@ -634,7 +631,7 @@ class object_import extends class_base
 
 	}
 
-	function do_exec_import($o, $start_from_row = 0)
+	private function do_exec_import($o, $start_from_row = 0)
 	{
 		// for each line in the ds
 		// read it
@@ -876,14 +873,14 @@ class object_import extends class_base
 		}
 	}
 
-	function do_init_import($o)
+	private function do_init_import($o)
 	{
 		$o->set_meta("import_status", 1);
 		$o->set_meta("import_started_at", time());
 		$this->_start_log($o);
 	}
 
-	function do_mark_finish_import($o)
+	private function do_mark_finish_import($o)
 	{
 		$o->set_meta("import_status", 0);
 		$this->_add_log($o, t("Import edukalt l&otilde;ppenud"));
@@ -926,7 +923,7 @@ class object_import extends class_base
 		}
 	}
 
-	function _resolve_classificator($arr, $str)
+	private function _resolve_classificator($arr, $str)
 	{
 		if (!is_array($this->classif_cache[$arr["name"]]))
 		{
@@ -950,7 +947,7 @@ class object_import extends class_base
 		return NULL;
 	}
 
-	function _get_uniq_existing($o, $properties, $tableinfo)
+	private function _get_uniq_existing($o, $properties, $tableinfo)
 	{
 		$existing_objects = array();
 
@@ -996,7 +993,7 @@ class object_import extends class_base
 		return $existing_objects;
 	}
 
-	function _delete_objects($o, $properties, $tableinfo, $lines, $p2c, $userval, $class_id)
+	private function _delete_objects($o, $properties, $tableinfo, $lines, $p2c, $userval, $class_id)
 	{
 		// check if the object says we should delete
 		if (!$o->prop("auto_del"))
@@ -1072,7 +1069,7 @@ class object_import extends class_base
 		return sprintf(t("Edukalt kustutatud %s objekti!"), count($uniq));
 	}
 
-	function _get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id)
+	private function _get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id)
 	{
 		foreach($o->prop("unique_id") as $unique_id)
 		{
@@ -1105,13 +1102,13 @@ class object_import extends class_base
 		return $key;
 	}
 
-	function _start_log($o)
+	private function _start_log($o)
 	{
 		$o->set_meta("last_import_log", array(date("d.m.Y / H:i").": ".t("Importi alustati ")));
 		$o->save();
 	}
 
-	function _add_log($o, $msg)
+	private function _add_log($o, $msg)
 	{
 		$cur = safe_array($o->meta("last_import_log"));
 		$cur[] = date("d.m.Y / H:i").": ".$msg;
@@ -1121,7 +1118,7 @@ class object_import extends class_base
 		aw_restore_acl();
 	}
 
-	function _get_date_value($date, $format)
+	private function _get_date_value($date, $format)
 	{
 		return strptime($date, $format);
 	}
