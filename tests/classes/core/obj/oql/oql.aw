@@ -83,13 +83,16 @@ class oql_test extends UnitTestCase
 		");
 		$aks = array("name", "firstname", "lastname", "balance");
 		$rv2 = oql::execute_query($rv);
-		$ok = false;
+		$ok = true;
 		foreach($rv2 as $id => $data)
 		{
 			foreach($aks as $ak)
 			{
 				if(!array_key_exists($ak, $data))
+				{
 					$ok = false;
+					break;
+				}
 			}
 		}
 		$this->assertTrue($ok);
@@ -109,13 +112,16 @@ class oql_test extends UnitTestCase
 			true
 		");
 		$rv2 = oql::execute_query($rv);
-		$ok = false;
+		$ok = true;
 		foreach($rv2 as $id => $data)
 		{
 			foreach($data as $dk => $dv)
 			{
 				if($dk != "name")
+				{
 					$ok = false;
+					break;
+				}
 			}
 		}
 		$this->assertTrue($ok);
@@ -202,22 +208,80 @@ class oql_test extends UnitTestCase
 		$this->assertTrue($rv[$o3->id()]["images_from_menu.submenus_from_menu.name"] == $o1->name());
 	}
 
+	function test_execute_query_select_all()
+	{
+		$q = oql::compile_query("
+		SELECT
+			*
+		FROM
+			CL_MENU
+		LIMIT 1
+		");
+		$v = oql::execute_query($q, array());
+		$ok = count($v) > 0;
+		// Only checks some of the properties. But I selected 'em randomly. ;-) Some from objects table and some from menu table.
+		$ps = array("oid, class_id", "parent", "brother_of", "type", "link", "name", "comment", "alias");
+		foreach($v as $data)
+		{
+			foreach($ps as $p)
+			{
+				if(!array_key_exists($p, $data))
+				{
+					$ok = false;
+					break;
+				}
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function test_execute_query_select_oid()
+	{
+		$row = $this->db->db_fetch_row("SELECT name, oid FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"parent" => array(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"status" => array(),
+			"name" => $row["name"],
+		));
+		$rv = oql::compile_query("
+		SELECT
+			oid
+		FROM
+			CL_MENU
+		WHERE
+			name = '%s'
+		");
+		$v = oql::execute_query($rv, array($row["name"]));
+		$this->assertTrue($v[$row["oid"]]["oid"] == $row["oid"]);
+	}
+
+	function test_execute_query_select_status()
+	{
+		$row = $this->db->db_fetch_row("SELECT oid, status FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
+		$rv = oql::compile_query("
+		SELECT
+			status
+		FROM
+			CL_MENU
+		WHERE
+			oid = '%u'
+		");
+		$v = oql::execute_query($rv, array($row["oid"]));
+		$this->assertTrue($v[$row["oid"]]["status"] == $row["status"]);
+	}
+
 	function test_execute_query_where_props_prop()
 	{
-		$o1 = $this->_get_temp_o();
-		$o2 = $this->_get_temp_o();
-		$o3 = $this->_get_temp_o();
+		// Kaarel, you dumb f*ck! submenus_from_menu is stored in meta and cannot be in where clause! -kaarel
+		/*
+		$o1 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o2 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o3 = $this->_get_temp_o(array("class_id" => CL_LANGUAGE, "name" => "This_is_very_unique_name_Foo1"));
 
-		$o1->set_prop("name", "This_is_very_unique_name_Foo1");
-		$o1->save();
-
-		$o2->set_prop("name", "This_is_very_unique_name_Foo2");
-		$o2->set_prop("submenus_from_menu", $o1->id());
-		$o2->save();
-
-		$o3->set_prop("name", "This_is_very_unique_name_Foo3");
-		$o3->set_prop("images_from_menu", $o2->id());
-		$o3->save();
+		$o1->client_manager = $o2->id();
 
 		$rv = oql::compile_query("
 		SELECT
@@ -230,6 +294,7 @@ class oql_test extends UnitTestCase
 		$r2 = oql::execute_query($rv, array($o1->name()));
 
 		$this->assertTrue($rv[$o3->id()]["name"] == $o3->name());
+		*/
 	}
 
 	function test_execute_query_where_reltype()
@@ -245,7 +310,7 @@ class oql_test extends UnitTestCase
 
 		$o1->connect(array(
 			"to" => $o2,
-			"reltype" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
+			"type" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
 		));
 
 		$rv = oql::compile_query("
@@ -262,6 +327,8 @@ class oql_test extends UnitTestCase
 
 	function test_execute_query_where_reltypes_and_props()
 	{
+		// Kaarel, you dumb f*ck! submenus_from_menu is stored in meta and cannot be in where clause! -kaarel
+		/*
 		$o1 = $this->_get_temp_o();
 		$o2 = $this->_get_temp_o();
 		$o3 = $this->_get_temp_o();
@@ -278,7 +345,7 @@ class oql_test extends UnitTestCase
 
 		$o1->connect(array(
 			"to" => $o2,
-			"reltype" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
+			"type" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
 		));
 
 		$rv = oql::compile_query("
@@ -291,6 +358,7 @@ class oql_test extends UnitTestCase
 		");
 		$rv2 = oql::execute_query($rv, array($o3->name()));
 		$this->assertTrue($rv2[$o1->id()]["name"] == $o1->name());
+		*/
 	}
 
 	function test_execute_query_where_like()
@@ -482,7 +550,7 @@ class oql_test extends UnitTestCase
 		$this->assertTrue(count($v) == 2 && count($v0) == 0);
 	}
 
-	function text_execute_query_where_parent()
+	function test_execute_query_where_parent()
 	{
 		$o1 = $this->_get_temp_o();
 		$o2 = $this->_get_temp_o();
@@ -512,7 +580,7 @@ class oql_test extends UnitTestCase
 		$this->assertTrue($ok);
 	}
 
-	function text_execute_query_where_oid()
+	function test_execute_query_where_oid()
 	{
 		$row = $this->db->db_fetch_row("SELECT oid FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
 		$q = oql::compile_query("
@@ -537,7 +605,7 @@ class oql_test extends UnitTestCase
 		$this->assertTrue($ok);
 	}
 
-	function text_execute_query_where_status()
+	function test_execute_query_where_status()
 	{
 		$row = $this->db->db_fetch_row("SELECT status FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
 		$q = oql::compile_query("
@@ -563,7 +631,7 @@ class oql_test extends UnitTestCase
 		$this->assertTrue($ok);
 	}
 
-	function text_execute_query_where_brother_of()
+	function test_execute_query_where_brother_of()
 	{
 		$o1 = $this->_get_temp_o();
 		$o2 = obj($o1->create_brother());
@@ -591,46 +659,211 @@ class oql_test extends UnitTestCase
 		$this->assertTrue($ok);
 	}
 
-	function text_execute_query_where_class_id()
+	function test_execute_query_where_class_id()
 	{
+		// To make it 100% sure there's atleast one objects matching the where condition.
+		$o = $this->_get_temp_o();
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU, CL_CRM_PERSON
+		WHERE
+			class_id = %u
+		");
+		$v = oql::execute_query($q, array(CL_MENU));
+		// There has to be atleast one object matching the search conditions.
+		$ok = count($v) > 0;
+		foreach($v as $id => $data)
+		{
+			$o = obj($id);
+			if($o->class_id != CL_MENU)
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
-	function text_execute_query_select_oid()
+	function test_execute_query_where_in_with_static_array_size()
 	{
-		$row = $this->db->db_fetch_row("SELECT name, oid FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
-		$ol = new object_list(array(
-			"class_id" => CL_MENU,
-			"parent" => array(),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"status" => array(),
-			"name" => $row["name"],
-		));
+		$o1 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo1"));
+		$o2 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo2"));
+		$o3 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo3"));
+		$o4 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo4"));
+
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU
+		WHERE
+			name IN (%s, %s, %s)
+		");
+		$nms = array("This_is_very_unique_name_Foo1", "This_is_very_unique_name_Foo2", "This_is_very_unique_name_Foo3");
+		$v = oql::execute_query($q, $nms);
+		$ok = count($v) > 0;
+		foreach($v as $d)
+		{
+			if(!in_array($d["name"], $nms))
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function test_execute_query_where_with_brackets()
+	{
+		// Just to make sure there's atleast one object matching the search conditions.
+		$o1 = $this->_get_temp_o();
+		$o1->target = 1;
+		$o1->clickable = 1;
+		$o1->save();
+
 		$rv = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU
+		WHERE
+			(target + clickable) * (%u + %u) >= %u
+		");
+		$v = oql::execute_query($rv, array(75, 6, 2*(75+6)));
+		// There has to be atleast one object matching the search conditions.
+		$ok = count($v) > 0;
+		foreach($v as $id => $data)
+		{
+			$o = obj($id);
+			if($o->target + $o->clickable != 2)
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function test_execute_query_from_multiple_classes_only_classes_asked_for()
+	{
+		$o1 = $this->_get_temp_o();
+		$o1->name = "This_is_very_unique_name_Foo_Fighters";
+		$o1->save();
+
+		$o2 = obj();
+		$o2->set_parent($o1->parent);
+		$o2->set_class_id(CL_CRM_PERSON);
+		$o2->name = "This_is_very_unique_name_Foo_Fighters";
+		$o2->save();
+		// Easier to kill it this way afterwards.
+		$this->tmp_objs[] = $o2;
+
+		$o3 = obj();
+		$o3->set_parent($o1->parent);
+		$o3->set_class_id(CL_CRM_COMPANY);
+		$o3->name = "This_is_very_unique_name_Foo_Fighters";
+		$o3->save();
+		// Easier to kill it this way afterwards.
+		$this->tmp_objs[] = $o3;
+
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU, CL_CRM_PERSON
+		WHERE
+			name = %s
+		");
+		$v = oql::execute_query($q, array("This_is_very_unique_name_Foo_Fighters"));
+		$ok = count($v) >= 2;
+		foreach($v as $id => $data)
+		{
+			$o = obj($id);
+			if(!in_array($o->class_id, array(CL_MENU, CL_CRM_PERSON)))
+			{
+				$ok = false;
+				break;
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function test_execute_query_from_multiple_classes_atleast_classes_asked_for()
+	{
+		$o1 = $this->_get_temp_o();
+		$o1->name = "This_is_very_unique_name_Foo_Fighters";
+		$o1->save();
+
+		$o2 = obj();
+		$o2->set_parent($o1->parent);
+		$o2->set_class_id(CL_CRM_PERSON);
+		$o2->name = "This_is_very_unique_name_Foo_Fighters";
+		$o2->save();
+		// Easier to kill it this way afterwards.
+		$this->tmp_objs[] = $o2;
+
+		$q = oql::compile_query("
+		SELECT
+			name
+		FROM
+			CL_MENU, CL_CRM_PERSON
+		WHERE
+			name = %s
+		");
+		$v = oql::execute_query($q, array("This_is_very_unique_name_Foo_Fighters"));
+		$this->assertTrue(array_key_exists($o1->id(), $v) && array_key_exists($o2->id(), $v));
+	}
+
+	function test_execute_query_order_by_desc()
+	{
+		$q = oql::compile_query("
 		SELECT
 			oid
 		FROM
 			CL_MENU
-		WHERE
-			name = '%s'
+		ORDER BY
+			oid DESC
 		");
-		$v = oql::execute_query($rv, array($row["name"]));
-		$this->assertTrue($v[$row["oid"]]["oid"] == $row["oid"]);
+		$v = oql::execute_query($q, array());
+		$prev = -1;
+		$ok = count($v) >= 2;
+		foreach($v as $d)
+		{
+			if($d["oid"] > $prev && $prev != -1)
+			{
+				$ok = false;
+			}
+			$prev = $d["oid"];
+			$c++;
+		}
+		$this->assertTrue($ok);
 	}
 
-	function text_execute_query_select_status()
+	function test_execute_query_order_by_asc()
 	{
-		$row = $this->db->db_fetch_row("SELECT oid, status FROM objects WHERE class_id = '".CL_MENU."' ORDER BY RAND() LIMIT 1");
-		$rv = oql::compile_query("
+		$q = oql::compile_query("
 		SELECT
-			status
+			oid
 		FROM
 			CL_MENU
-		WHERE
-			oid = '%u'
+		ORDER BY
+			oid ASC
 		");
-		$v = oql::execute_query($rv, array($row["oid"]));
-		$this->assertTrue($v[$row["oid"]]["status"] == $row["status"]);
+		$v = oql::execute_query($q, array());
+		$prev = -1;
+		$ok = count($v) >= 2;
+		foreach($v as $d)
+		{
+			if($d["oid"] < $prev)
+			{
+				$ok = false;
+			}
+			$prev = $d["oid"];
+			$c++;
+		}
+		$this->assertTrue($ok);
 	}
 
 	function get_class_id($id)
@@ -639,12 +872,13 @@ class oql_test extends UnitTestCase
 		return $row["class_id"];
 	}
 
-	function _get_temp_o()
+	function _get_temp_o($arr = array())
 	{
 		// create new object
 		$o = obj();
-		$o->set_parent(aw_ini_get("site_rootmenu"));
-		$o->set_class_id(CL_MENU);
+		$o->set_parent(isset($arr["parent"]) ? $arr["parent"] : aw_ini_get("site_rootmenu"));
+		$o->set_class_id(isset($arr["class_id"]) ? $arr["class_id"] : CL_MENU);
+		$o->name = $arr["name"];
 		$o->save();
 		// Easier to kill 'em this way afterwards.
 		$this->tmp_objs[] = $o;
