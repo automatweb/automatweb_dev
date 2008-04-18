@@ -65,8 +65,8 @@ class link_manager extends aw_template
 		}
 		if (!$parent)
 		{
-				// parse the documents parent from the url
-				$parent = $params["parent"];
+			// parse the documents parent from the url
+			$parent = $params["parent"];
 		}
 
 		if ($image_list->count())
