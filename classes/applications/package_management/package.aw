@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.2 2008/04/04 11:50:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.3 2008/04/18 12:11:50 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -9,11 +9,19 @@
 @default table=objects
 @default group=general
 
+	@property package_tb type=toolbar store=no no_caption=1
+
+	@property name type=textbox table=objects field=name
+	@caption Nimi
+
 	@property version type=textbox table=aw_packages field=version
 	@caption Versioon
 
 	@property description type=textarea rows=10 cols=40 table=aw_packages field=description
 	@caption Kirjeldus
+
+	@property file_names type=text rows=10 cols=40 table=aw_packages field=file_names
+	@caption Failid
 
 @groupinfo dependencies caption="S&otilde;ltuvused" no_submit=1
 @default group=dependencies
@@ -48,9 +56,37 @@ class package extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "package_tb":
+				$arr["prop"]["vcl_inst"]->add_button(array(
+					"name" => "add_image",
+					"tooltip" => t("Uuenda failide nimekiri"),
+					//"img" => "new.gif",
+					"url" => $this->mk_my_orb("get_file_names", array(
+						"id" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					), CL_PACKAGE),
+				));
 			//-- get_property --//
 		};
 		return $retval;
+	}
+
+	/**
+		@attrib name=get_file_names params=name all_args=1
+		@param id required type=int
+			package object id
+		@param return_url required type=string
+	**/
+	function get_file_names($arr)
+	{
+		extract($arr);
+		if(!$this->can("view" , $id))
+		{
+			return $return_url;
+		}
+		$o = obj($id);
+		$o->set_package_file_names();
+		return $return_url;
 	}
 
 	function _get_dep_toolbar($arr)
@@ -192,6 +228,7 @@ class package extends class_base
 				));
                                 return true;
 			case 'description':
+			case 'file_names':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'text'

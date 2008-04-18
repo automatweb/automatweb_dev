@@ -34,6 +34,33 @@ class package_obj extends _int_object
 		return $ol;
 	}
 
+	function download_package()
+	{
+		foreach($file_objects->arr() as $file_object)
+		{
+			$data = $file_object->get_file();
+		}
+		header("Content-type: application/zip");
+		header("Content-length: ".filesize($data["properties"]["file"]));
+		header("Content-disposition: inline; filename=".$data["name"].";");
+		readfile($data["properties"]["file"]);
+		die();
+	}
 
+	function set_package_file_names()
+	{
+		$filenamestring = "";
+		$file_objects = $this->get_files();
+		foreach($file_objects->arr() as $file_object)
+		{
+
+			$data = $file_object->get_file();
+			//siia vaja et zipi seest nimed v6taks
+			$filenamestring.= $data["name"];
+		}
+
+		$this->set_prop("file_names" , $filenamestring);
+		$this->save();
+	}
 }
 ?>

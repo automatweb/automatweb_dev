@@ -1,6 +1,23 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>package_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>package_tb</field>
+      </property>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>version</name>
             <table>aw_packages</table>
             <group>general</group>
@@ -17,6 +34,16 @@
             <cols>40</cols>
             <field>description</field>
             <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>file_names</name>
+            <table>aw_packages</table>
+            <group>general</group>
+            <type>text</type>
+            <rows>10</rows>
+            <cols>40</cols>
+            <field>file_names</field>
+            <caption>Failid</caption>
       </property>
       <property>
             <name>dep_toolbar</name>
