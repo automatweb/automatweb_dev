@@ -107,7 +107,6 @@ class personnel_management_mobi_handler extends class_base
 		$url = $o->prop("url");
 
 		$params = array(
-			"serviceid" => 81,
 			"password" => "e1DsA8fJr4w",
 			"phone" => "37255547369",
 			"text" => "Text. Yeah!",
