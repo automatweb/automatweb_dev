@@ -2155,10 +2155,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				$prev_clid = $join["from_class"];
 
-				$str  = " LEFT JOIN aliases aliases_".$join["from_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".source = ";
+				$tmp_prev = $this->join_data[$pos-1];
+				$cur_al_name = "aliases_".$tmp_prev["from_class"]."_".$tmp_prev["reltype"]."_".$join["to_class"]."_".$join["reltype"];
+
+				$str  = " LEFT JOIN aliases $cur_al_name ON ".$cur_al_name.".source = ";
 				if ($join["from_class"] == $clid)
 				{
 					$str .= " objects.oid ";
+				}
+				else
+				if ($tmp_prev["via"] == "rel")
+				{
+					$str .= " objects__".$tmp_prev["from_class"]."_".$join["from_class"]."_".$tmp_prev["reltype"].".oid ";
 				}
 				else
 				{
@@ -2167,12 +2175,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if ($join["reltype"])
 				{
-					$str .= " AND aliases_".$join["from_class"]."_".$join["reltype"].".reltype = ".$join["reltype"];
+					$str .= " AND ".$cur_al_name.".reltype = ".$join["reltype"];
 				}
 				$this->joins[] = $str;
 
-				$str  = " LEFT JOIN objects objects_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".target = ";
-				$str .= " objects_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"].".oid ";
+				$tmp_cur_obj_name = "objects_".$tmp_prev["reltype"]."_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"];
+
+				$str  = " LEFT JOIN objects $tmp_cur_obj_name  ON ".$cur_al_name.".target = ";
+				$str .= " ".$tmp_cur_obj_name.".oid ";
 				$prev_clid = $join["to_class"];
 
 				$this->joins[] = $str;
@@ -2181,7 +2191,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if (is_array($new_t))
 				{
-					$objt_name = "objects_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"];
+					$objt_name = $tmp_cur_obj_name;
 					$tbl = $tbl_r = reset(array_keys($new_t));
 					if ($tbl != "")
 					{
@@ -2197,7 +2207,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 
 					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that
-					if ($this->join_data[$pos+1]["via"] == "rel")
+					if ($this->join_data[$pos+1]["via"] == "rel" && $tbl != "")
 					{
 						$o_field = "oid";
 						$o_tbl = "objects_".$join["to_class"];
@@ -2209,9 +2219,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 
-
+				$prev_al_name = $cur_al_name;
 				$ret = array(
-					"aliases_".$join["from_class"]."_".$join["reltype"],
+					$cur_al_name, //"aliases_".$join["from_class"]."_".$join["reltype"],
 					"target",
 				);
 			}
@@ -2220,16 +2230,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (!$join["to_class"] && $this->join_data[$pos-1]["via"] == "rel")
 				{
 					$prev = $this->join_data[$pos-1];
+					$prev_prev = $this->join_data[$pos-2];
 
 					$this->_do_add_class_id($join["from_class"]);
 					// join from rel to prop
-					$prev_t = "aliases_".$prev["from_class"]."_".$prev["reltype"];
+					$prev_t = $prev_al_name; //"aliases_".$prev["from_class"]."_".$prev["reltype"];
+
 					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
 					$do_other_join = false;
 					if (!is_array($new_t) || !isset($GLOBALS["properties"][$join["from_class"]][$join["prop"]]) || $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["table"] == "objects")
 					{
 						// class only has objects table, so join that
-						$tbl = "objects_rel_".$prev["reltype"];
+						$tbl = "objects_rel_".$prev["from_class"]."_".$prev["reltype"]."_".$join["from_class"]."_".$prev["reltype"]."_".$prev_prev["reltype"];
 						$tbl_r = "objects";
 						$field = "oid";
 
