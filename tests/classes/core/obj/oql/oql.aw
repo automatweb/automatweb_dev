@@ -275,26 +275,33 @@ class oql_test extends UnitTestCase
 
 	function test_execute_query_where_props_prop()
 	{
-		// Kaarel, you dumb f*ck! submenus_from_menu is stored in meta and cannot be in where clause! -kaarel
-		/*
 		$o1 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
 		$o2 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
 		$o3 = $this->_get_temp_o(array("class_id" => CL_LANGUAGE, "name" => "This_is_very_unique_name_Foo1"));
 
 		$o1->client_manager = $o2->id();
+		$o2->mlang = $o3->id();
 
 		$rv = oql::compile_query("
 		SELECT
 			name
 		FROM
-			CL_MENU
+			CL_CRM_PERSON
 		WHERE
-			images_from_menu.submenus_from_menu.name = '%s'
+			client_manager.mlang.name = '%s'
 		");
-		$r2 = oql::execute_query($rv, array($o1->name()));
-
-		$this->assertTrue($rv[$o3->id()]["name"] == $o3->name());
-		*/
+		$r2 = oql::execute_query($rv, array($o3->name()));
+		$ok = count($rv2) > 0;
+		foreach($rv2 as $id => $data)
+		{
+			$o = obj($id);
+			$cm = obj($o->client_manager);
+			if($cm->prop("mlang.name") != $o3->name())
+			{
+				$ok = false;
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function test_execute_query_where_reltype()
@@ -309,7 +316,7 @@ class oql_test extends UnitTestCase
 		$o2->save();
 
 		$o1->connect(array(
-			"to" => $o2,
+			"to" => $o2->id(),
 			"type" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
 		));
 
@@ -325,40 +332,41 @@ class oql_test extends UnitTestCase
 		$this->assertTrue($rv2[$o1->id()]["name"] == $o1->name());
 	}
 
-	function test_execute_query_where_reltypes_and_props()
+	function test_execute_query_where_reltypes_props()
 	{
-		// Kaarel, you dumb f*ck! submenus_from_menu is stored in meta and cannot be in where clause! -kaarel
-		/*
-		$o1 = $this->_get_temp_o();
-		$o2 = $this->_get_temp_o();
-		$o3 = $this->_get_temp_o();
-
-		$o1->set_prop("name", "This_is_very_unique_name_Foo1");
-		$o1->save();
-
-		$o2->set_prop("name", "This_is_very_unique_name_Foo2");
-		$o2->set_prop("submenus_from_menu", $o3->id());
-		$o2->save();
-
-		$o3->set_prop("name", "This_is_very_unique_name_Foo3");
-		$o3->save();
+		$o1 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o2 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o3 = $this->_get_temp_o(array("class_id" => CL_LANGUAGE, "name" => "This_is_very_unique_name_Foo1"));
 
 		$o1->connect(array(
-			"to" => $o2,
-			"type" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
+			"to" => $o2->id(),
+			"type" => "RELTYPE_CLIENT_MANAGER",
 		));
+		$o2->mlang = $o3->id();
 
 		$rv = oql::compile_query("
 		SELECT
 			name
 		FROM
-			CL_MENU
+			CL_CRM_PERSON
 		WHERE
-			RELTYPE_SHOW_SUBFOLDERS_MENU.submenus_from_menu.name = '%s'
+			RELTYPE_CLIENT_MANAGER.mlang.name = '%s'
 		");
-		$rv2 = oql::execute_query($rv, array($o3->name()));
-		$this->assertTrue($rv2[$o1->id()]["name"] == $o1->name());
-		*/
+		$r2 = oql::execute_query($rv, array($o3->name()));
+		$ok = count($rv2) > 0;
+		foreach($rv2 as $id => $data)
+		{
+			$o = obj($id);
+			foreach($o->connections_from(array("type" => "RELTYPE_CLIENT_MANAGER")) as $conn)
+			{
+				$cm = $conn->to();
+				if($cm->prop("mlang.name") != $o3->name())
+				{
+					$ok = false;
+				}
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function test_execute_query_where_like()

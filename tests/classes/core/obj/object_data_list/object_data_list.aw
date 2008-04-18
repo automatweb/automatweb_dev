@@ -141,7 +141,7 @@ class object_data_list_test extends UnitTestCase
 		$o2 = $this->_get_temp_o();
 
 		$o1->connect(array(
-			"to" => $o2,
+			"to" => $o2->id(),
 			"type" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
 		));
 
@@ -183,7 +183,7 @@ class object_data_list_test extends UnitTestCase
 		$o1 = $this->_get_temp_o();
 		$o2 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo_Fighters"));
 		$o1->connect(array(
-			"to" => $o2,
+			"to" => $o2->id(),
 			"type" => "RELTYPE_SHOW_SUBFOLDERS_MENU",
 		));
 		$odl = new object_data_list(
