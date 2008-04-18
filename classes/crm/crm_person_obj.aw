@@ -14,11 +14,65 @@ class crm_person_obj extends _int_object
 		}
 	}
 
+	function set_rank($v)
+	{
+		// It won't work with new object, so we need to check the oid.
+		if(!is_oid($this->id()))
+		{
+			$this->save();
+		}
+
+		$o = obj($this->id());
+		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if (!$org_rel)
+		{
+			$org_rel = obj();
+			$org_rel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+			$org_rel->set_parent($o->id());
+			$org_rel->save();
+			$o->connect(array(
+				"to" => $org_rel->id(),
+				"type" => "RELTYPE_CURRENT_JOB",
+			));
+		}
+		$sp = $org_rel->set_prop("profession", $v);
+		$org_rel->save();
+		return $sp;
+	}
+
+	function get_rank()
+	{
+		// It won't work with new object, so we need to check the oid.
+		if(!is_oid($this->id()))
+			return false;
+
+		$o = obj($this->id());
+		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if (!$org_rel)
+		{
+			return false;
+		}
+		return $org_rel->prop("profession");
+	}
+
+	function set_prop($k, $v)
+	{
+		if($k == "rank")
+		{
+			return $this->set_rank($v);
+		}
+		return parent::set_prop($k, $v);
+	}
+
 	function prop($k)
 	{
 		if ($k == "work_contact")
 		{
 			return $this->find_work_contact();
+		}
+		if($k == "rank")
+		{
+			return $this->get_rank();
 		}
 		return parent::prop($k);
 	}
