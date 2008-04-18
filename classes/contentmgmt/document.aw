@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.8 2008/04/08 14:40:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.9 2008/04/18 09:04:09 kristo Exp $
 // document.aw - Dokumentide haldus.
 /*
 @classinfo  maintainer=kristo
@@ -3466,7 +3466,6 @@ if (is_object($docobj))
 			case "user14":
 			case "user15":
 			case "user16":
-
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "text"
