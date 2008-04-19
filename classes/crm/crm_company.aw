@@ -6388,7 +6388,7 @@ class crm_company extends class_base
 
 	function get_cust_rel($view_co, $crea_if_not_exists = false, $my_co = null)
 	{
-		if (!is_oid($view_co->id()))
+		if (!is_object($view_co) || !is_oid($view_co->id()))
 		{
 			return false;
 		}
