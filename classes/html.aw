@@ -352,7 +352,7 @@ class html extends aw_template
 		$value = isset($value) ? $value : "";
 		$onFocus = isset($onFocus) ? ' onfocus="'.$onFocus.'"' : '';
 		$onBlur = isset($onBlur) ? ' onblur="'.$onBlur.'"' : '';
-		$onkeyup = isset($onchange) ? ' onkeyup="'.$onkeyup.'"' : '';
+		$onkeyup = isset($onkeyup) ? ' onkeyup="'.$onkeyup.'"' : '';
 
 
 		if (strpos($value, "<") !== false)
