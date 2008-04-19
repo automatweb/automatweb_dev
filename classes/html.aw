@@ -337,7 +337,8 @@ class html extends aw_template
 		if set, onFocus=$onFocus.
 	@param onBlur optional type=string
 		if set, onBlur=$onBlur.
-
+	@param onkeyup optional type=string
+		if set, onkeyup=$onkeyup.
 
 	@returns string / html textarea
 
@@ -351,6 +352,7 @@ class html extends aw_template
 		$value = isset($value) ? $value : "";
 		$onFocus = isset($onFocus) ? ' onfocus="'.$onFocus.'"' : '';
 		$onBlur = isset($onBlur) ? ' onblur="'.$onBlur.'"' : '';
+		$onkeyup = isset($onchange) ? ' onkeyup="'.$onkeyup.'"' : '';
 
 
 		if (strpos($value, "<") !== false)
@@ -363,7 +365,7 @@ class html extends aw_template
 		{
 			if($rte_type == 2)
 			{
-				$retval .= "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' $disabled $textsize>$value</textarea>\n";
+				$retval .= "<textarea $onchange $onkeyup id='$name' name='$name' cols='$cols' rows='$rows' $disabled $textsize>$value</textarea>\n";
 			}
 			else
 			{
@@ -384,7 +386,7 @@ class html extends aw_template
 				$style .= ";width: $width;";
 			}
 			//$style = isset($style) ? " style='$style' " : ""; if anyone knows why was this needed you may revert the changes but at the moment it only gave style='Array' in html
-			$retval = "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' $disabled $textsize $onFocus $onBlur>$value</textarea>\n";
+			$retval = "<textarea $onchange $onkeyup id='$name' name='$name' cols='$cols' rows='$rows' $disabled $textsize $onFocus $onBlur>$value</textarea>\n";
 		};
 		return $retval;
 	}
