@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/xml_editor.aw,v 1.4 2008/04/08 08:13:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/xml_editor.aw,v 1.5 2008/04/20 23:05:42 dragut Exp $
 // xml_editor.aw - xml editor 
 /*
 
@@ -81,6 +81,14 @@ class xml_editor extends class_base
 		return $this->parse();
 	}
 
+	function _get_xml_file($arr)
+	{
+		if (!is_writable($arr['prop']['value']))
+		{
+			$arr['prop']['error'] = t('XML fail ei ole kirjutatav');
+		}
+	}
+
 	function _get_xml_content($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -121,6 +129,7 @@ class xml_editor extends class_base
 						 'value' => utf8_decode($attr_value),
 						 'size' => 30,
 					 ));
+					 $str .= '"';
 				}
 				$str .= ' /&gt;';
 			}
