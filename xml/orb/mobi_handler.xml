@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mobi_handler" folder="common" extends="class_base">
+		<action name="presend_sms">
+			<function name="presend_sms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_sms">
+			<function name="send_sms">
+				<arguments>
+					<required name="id" type="oid" />
+					<required name="number" type="string" />
+					<required name="message" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
