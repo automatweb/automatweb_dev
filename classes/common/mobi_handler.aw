@@ -151,12 +151,16 @@ class mobi_handler extends class_base
 		{
 			$nr = preg_replace("/[^0-9]/", "", $nr);
 			$i = 0;
-			$sms = $this->send_sms(array(
-				"id" => $arr["id"],
-				"number" => $nr,
-				"message" => $msg,
-				"sms" => &$i,
-			));
+			// Don't think there's any point in sending an empty message.
+			if(!empty($nr) && !empty($msg))
+			{
+				$sms = $this->send_sms(array(
+					"id" => $arr["id"],
+					"number" => $nr,
+					"message" => $msg,
+					"sms" => &$i,
+				));
+			}
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "log"), CL_MOBI_HANDLER);
 		//return $arr["post_ru"];
@@ -232,7 +236,8 @@ class mobi_handler extends class_base
 			)
 		);
 		$context = stream_context_create($args);
-		$mobi_answer = file_get_contents($url, false, $context);
+		// I know, it works. No need to send 'em anymore for testing purposes.
+		//$mobi_answer = file_get_contents($url, false, $context);
 
 		$log = array();
 		$log[] = array("t" => time(), "m" => $mobi_answer);
