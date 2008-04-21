@@ -7023,13 +7023,29 @@ class crm_person extends class_base
 		}
 
 		$p = get_current_person();
-		$ol = new object_list(array(
+		$row_filter = array(
 			"class_id" => CL_TASK_ROW,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"impl" => $p->id(),
-			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["stats_s_from"], $r["stats_s_to"]),
+	//		"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["stats_s_from"], $r["stats_s_to"]),
+		);
+
+		$row_filter[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => array(
+				"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"]-1, ($r["stats_s_to"] + 86399)),
+				new object_list_filter(array(
+					"logic" => "AND",
+					"conditions" => array(
+						"date" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+						"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"]-1, ($r["stats_s_to"] + 86399)),
+					)
+				))
+			)
 		));
+
+		$ol = new object_list($row_filter);
 
 		classload("vcl/table");
 		$t = new vcl_table;
@@ -7062,6 +7078,7 @@ class crm_person extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$impl = $check = $bs = $bn = "";
+			$b = null;
 			$agreement = array();
 			if ($this->can("view", $o->prop("bill_id")))
 			{
