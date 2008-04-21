@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="calendar_event" folder="applications/calendar" extends="class_base">
+		<action name="new" all_args="1" nologin="1">
+			<function name="new_change">
+				<arguments>
+					<required name="class" />
+					<optional name="parent" type="int" acl="add" />
+					<optional name="period" />
+					<optional name="alias_to" />
+					<optional name="alias_to_prop" />
+					<optional name="return_url" />
+					<optional name="reltype" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="locations_autocomplete_source">
 			<function name="locations_autocomplete_source">
 				<arguments>

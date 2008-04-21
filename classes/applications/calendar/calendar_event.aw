@@ -256,6 +256,24 @@ class calendar_event extends class_base
 		);
 	}
 
+	/**
+
+		@attrib name=new params=name all_args="1" nologin="1"
+
+		@param class required
+		@param parent optional type=int acl="add"
+		@param period optional
+		@param alias_to optional
+		@param alias_to_prop optional
+		@param return_url optional
+		@param reltype optional type=int
+
+	**/
+	public function new_change()
+	{
+		return parent::new_change();
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -319,7 +337,7 @@ class calendar_event extends class_base
 				$this->id = $arr["obj_inst"]->id();
 				$this->save_event_times($arr["request"]["event_time"]);
 				break;
-			
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -1075,7 +1093,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 
 		return false;
 	}
-	
+
 
 }
 ?>
