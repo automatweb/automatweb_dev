@@ -161,7 +161,14 @@ class class_base extends aw_template
 
 		$this->obj_inst = new object($this->id);
 
-		$clid = aw_ini_get("class_lut." . $arr["class"]);
+		try
+		{
+			$clid = aw_ini_get("class_lut." . $arr["class"]);
+		}
+		catch (Exception $e)
+		{
+		}
+
 		if($this->obj_inst->class_id() != $clid && is_admin() && $this->obj_inst->class_id() != CL_RELATION)
 		{
 			throw new aw_exception("Given class doesn't match the object's class_id");
@@ -2437,7 +2444,7 @@ class class_base extends aw_template
 			};
 		};
 		$nm = $property["name"];
-		
+
 		// if this is a new object and the property has a default value, use it
 		if (empty($this->id) && isset($property["default"]))
 		{
@@ -2621,7 +2628,7 @@ class class_base extends aw_template
 				$resprops[$key] = $val;
 			}
 		}
-		
+
 		$properties = $resprops;
 		$resprops = array();
 
@@ -5512,7 +5519,7 @@ class class_base extends aw_template
 				$nm = "sep_$lid";
 				$ret[$nm] = array(
 					"name" => $nm,
-					"type" => "text", 
+					"type" => "text",
 					"cols" => $pl[$p]["cols"],
 					"rows" => $pl[$p]["rows"],
 					"value" => iconv($lang["charset"], "UTF-8", $vals[$p]),
@@ -5569,7 +5576,7 @@ class class_base extends aw_template
 				"caption" => t("T&otilde;lge aktiivne"),
 				"type" => "checkbox",
 				"ch_value" => 1,
-				"value" => $o->meta("trans_".$lid."_status") 
+				"value" => $o->meta("trans_".$lid."_status")
 			);
 			$nm = "sbt_".$lid;
 			$ret[$nm] = array(
