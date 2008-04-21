@@ -269,9 +269,9 @@ class calendar_event extends class_base
 		@param reltype optional type=int
 
 	**/
-	public function new_change()
+	public function new_change($arr)
 	{
-		return parent::new_change();
+		return parent::new_change($arr);
 	}
 
 	function set_property($arr = array())
