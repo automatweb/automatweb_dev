@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.13 2008/04/07 19:11:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.14 2008/04/21 22:41:27 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -115,7 +115,7 @@ class crm_person_education extends class_base
 				$ops["---"] = "---";
 				for($i = 1950; $i <= date("Y") + 5; $i++)
 				{
-					$ops[$i] = $i;
+					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$prop["options"] = $ops;
 				//$prop["value"] = date("Y", $prop["value"]);
