@@ -119,6 +119,60 @@
             <field>from_place_table</field>
             <caption>Kust</caption>
       </property>
+      <property>
+            <name>flow_tb</name>
+            <table>aw_budgeting_tax</table>
+            <group>flow</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>flow_tb</field>
+      </property>
+      <property>
+            <name>start</name>
+            <table>aw_budgeting_tax</table>
+            <group>flow</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>flow_group</parent>
+            <captionside>top</captionside>
+            <field>start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>to</name>
+            <table>aw_budgeting_tax</table>
+            <group>flow</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>flow_group</parent>
+            <captionside>top</captionside>
+            <field>to</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>flow_s_sbt</name>
+            <table>aw_budgeting_tax</table>
+            <group>flow</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>flow_group</parent>
+            <size>15</size>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>flow_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>flow_table</name>
+            <table>aw_budgeting_tax</table>
+            <group>flow</group>
+            <type>table</type>
+            <parent>flow_table</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>flow_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUDGETING_TAX</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -132,6 +186,10 @@
                   <caption>Kust</caption>
                   <submit>no</submit>
             </locs>
+            <flow>
+                  <caption>Rahavood</caption>
+                  <submit>no</submit>
+            </flow>
       </groupinfo>
       <tableinfo>
             <aw_budgeting_tax>
@@ -169,5 +227,32 @@
                   <caption>Stsenaarium</caption>
             </SCENARIO>
       </reltypes>
+      <layout>
+            <flow_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>flow</group>
+                  <area_caption></area_caption>
+            </flow_split>
+            <flow_left>
+                  <type>vbox</type>
+                  <parent>flow_split</parent>
+                  <group>flow</group>
+                  <area_caption></area_caption>
+            </flow_left>
+            <flow_group>
+                  <type>vbox</type>
+                  <parent>flow_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>flow</group>
+            </flow_group>
+            <flow_table>
+                  <parent>flow_split</parent>
+                  <type>vbox</type>
+                  <group>flow</group>
+                  <area_caption></area_caption>
+            </flow_table>
+      </layout>
 </properties>
 

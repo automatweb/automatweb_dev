@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.8 2007/12/06 14:32:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.9 2008/04/21 13:28:55 markop Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -52,6 +52,29 @@
 	@property from_place_table type=table store=no no_caption=1
 	@caption Kust
 	
+@groupinfo flow caption="Rahavood" submit=no
+@default group=flow
+	@property flow_tb type=toolbar no_caption=1 store=no
+
+	@layout flow_split type=hbox width="20%:80%" 
+
+		@layout flow_left type=vbox parent=flow_split 
+			@layout flow_group type=vbox parent=flow_left closeable=1 area_caption=Otsing
+
+				@property start type=date_select store=no parent=flow_group captionside=top
+				@caption Alates
+
+				@property to type=date_select store=no parent=flow_group captionside=top
+				@caption Kuni
+
+				@property flow_s_sbt type=submit store=no parent=flow_group size=15 captionside=top no_caption=1
+				@caption Otsi
+
+
+		@layout flow_table parent=flow_split type=vbox
+
+			@property flow_table type=table parent=flow_table store=no no_caption=1
+
 
 @reltype FROM_ACCT value=1 clid=CL_BUDGETING_ACCOUNT
 @caption Kontolt
@@ -102,6 +125,17 @@ class budgeting_tax extends class_base
 					));
 				}
 				break;
+			case "start":
+				if(!$arr["request"][$prop["name"]])
+				{
+					$prop["value"] = time() - 365*24*3600;
+				}
+			case "to":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -113,11 +147,14 @@ class budgeting_tax extends class_base
 		switch($prop["name"])
 		{
 			case "from_place":
-				if (strlen($arr["request"]["set_tax_fld"]) < 2)
+				if(strlen($prop["value"]) < 2)
 				{
-					return PROP_IGNORE;
+					if (strlen($arr["request"]["set_tax_fld"]) < 2)
+					{
+						return PROP_IGNORE;
+					}
+					$prop["value"] = $arr["request"]["set_tax_fld"];
 				}
-				$prop["value"] = $arr["request"]["set_tax_fld"];
 				break;
 		}
 		return $retval;
@@ -218,6 +255,12 @@ class budgeting_tax extends class_base
 		}
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["to"] = $arr["request"]["to"];
+		$arr["args"]["start"] = $arr["request"]["start"];
+	}
+
 	function _init_from_place_table(&$t)
 	{
 		$t->define_field(array(
@@ -278,6 +321,71 @@ class budgeting_tax extends class_base
 			"action" => "create_new_rel"
 		));
 		$tb->add_delete_button();
+	}
+
+	function _init_flow_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_flow_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_flow_t($t);
+		if(!$arr["request"]["start"])
+		{
+			$arr["request"]["start"] = time() - 365*3600*24;
+		}
+		if(!$arr["request"]["to"])
+		{
+			$arr["request"]["to"] = time();
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_BUDGETING_TRANSFER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "created desc",
+			"limit" => 1,
+			"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, (date_edit::get_timestamp($arr["request"]["start"])) , date_edit::get_timestamp($arr["request"]["to"])),
+			"to_acct" =>  $arr["obj_inst"]->prop("to_acct"),
+		));
+		$sum = 0;
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"sum" => $o->prop("amount"),
+				"date" => date("d.m.Y" , $o->created()),
+				"oid" => $o->id(),
+			));
+			$sum += $o->prop("amount");
+		}
+		$t->set_sortable(false);
+		$t->define_data(array(
+			"sum" => $sum,
+			"date" => t("Kokku"),
+		));
 	}
 
 	/**

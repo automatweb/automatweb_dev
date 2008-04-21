@@ -17,8 +17,14 @@ class budgeting_model extends core
 		$n_tax_from_acct = $transfer->prop("to_acct");
 		$n_tax_to_acct = $this->get_next_propagation_level_from_acct($transfer->prop("to_acct"), $transfer);
 
+		$used_money = 0;
 		foreach($n_tax_to_acct as $tf_data)
 		{
+			if($tf_data["amount"] == $transfer->prop("amount"))//sellisel juhul peaks vist lahutama juba kuskile kantud raha
+			{
+				$tf_data["amount"] = $tf_data["amount"] - $used_money;
+			}
+			$used_money+= $tf_data["amount"];
 			echo "from account ".$transfer->prop("to_acct.name")." to ".$tf_data["to_acct"]." amt = ".$tf_data["amount"]." <br>\n";
 			flush();
 			$to = $this->create_money_transfer(obj($transfer->prop("to_acct")), obj($tf_data["to_acct"]), $tf_data["amount"], array(
@@ -35,7 +41,7 @@ class budgeting_model extends core
 
 		error::raise_if($from_balance < $amt, array(
 			"id" => "ERR_NO_MONEY",
-			"msg" => sprintf(t("Kontol %s ei ole piisavalt raha! Vaja on %s, kontol on %s"), $from_acct, $from_balance, $amt)
+			"msg" => sprintf(t("Kontol %s ei ole piisavalt raha! Vaja on %s, kontol on %s"), $from_acct, $amt, $from_balance)
 		));
 
 		$this->start_transaction();
@@ -117,6 +123,7 @@ echo "created transaction ".$to->id()." <br>";
 		// switch for account type and hardwire the next levels
 		$acct_o = obj($acct_id);
 		$rv = array();
+		
 		switch($acct_o->class_id())
 		{
 			case CL_CRM_CATEGORY:
@@ -224,25 +231,27 @@ echo "created transaction ".$to->id()." <br>";
 				"class_id" => CL_BUDGETING_TAX,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"from_place" => $from_place
+				"from_place" => $from_place,
+				"sort_by" => "aw_budgeting_tax.aw_pri DESC"
 			));
 			foreach($ol->arr() as $tax)
-			{	
-				$rv[] = array(
+			{
+				$rv[$tax->prop("pri")] = array(
 					"to_acct" => $tax->prop("to_acct"),
 					"amount" => $this->calculate_amount_to_transfer_from_tax($tax, $acct_o)
 				);
 			}
 		}
+		krsort($rv);
 		return $rv;
 	}
 
 	function calculate_amount_to_transfer_from_tax($tax, $from_acct_o)
 	{
-		if (substr($tax->prop("amount"), -1) == "%")
-		{
+//		if (substr($tax->prop("amount"), -1) == "%")
+//		{
 			return $this->get_account_balance($from_acct_o->id()) * ((double)$tax->prop("amount") / 100.0); 
-		}
+//		}
 		return $tax->prop("amount");
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.11 2007/12/06 14:32:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.12 2008/04/21 13:28:55 markop Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -194,10 +194,10 @@ class budgeting_workspace extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		if ($arr["group"] != "transfers")
-		{
+//		if ($arr["group"] != "transfers")//milleks nii? kustutamisel seal vaates ka post_ru'd vaja
+//		{
 			$arr["post_ru"] = post_ru();
-		}
+//		}
 		$arr["tax_fld"] = $_GET["tax_fld"];
 	}
 
@@ -439,7 +439,7 @@ class budgeting_workspace extends class_base
 				"class_id" => CL_BUDGETING_TAX,
 				"from_place" => $pt,
 				"lang_id" => array(),
-				"site_id" => array()
+				"site_id" => array(),
 			));
 		}
 		$arr["prop"]["vcl_inst"]->table_from_ol(
@@ -1344,9 +1344,9 @@ class budgeting_workspace extends class_base
 	**/
 	function select_tax_cat($arr)
 	{
-		if (!$arr["var"])
+		if (!$_GET["var"])
 		{
-			$arr["var"] = "set_tax_fld";
+			$_GET["var"] = "set_tax_fld";
 		}
 		$t = get_instance("vcl/treeview");
 		$p = array(

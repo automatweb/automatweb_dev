@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.8 2007/12/06 14:32:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.9 2008/04/21 13:28:55 markop Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -245,7 +245,8 @@ class budget extends class_base
 			{
 				continue;
 			}
-			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
+			$hr_price = $task->prop("hr_price");
+			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 			$t->define_data(array(
 				"tax_grp" => t("Muud maksud"),
@@ -258,6 +259,89 @@ class budget extends class_base
 			));
 		}
 
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_MEETING),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_MEETING.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		// divide the rest of the money between tasks until it runs uut
+		foreach($ol->arr() as $task)
+		{
+			if ($ex[$task->id()] == 1)
+			{
+				continue;
+			}
+			$hr_price = $task->prop("hr_price");
+			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
+			$amt -= $tax_amt;
+			$t->define_data(array(
+				"tax_grp" => t("Muud maksud"),
+				"tax" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($task),
+				"tax_pct" => "",
+				"tot_amt" => number_format($tax_amt, 2),
+				"forward" => number_format($amt, 2),
+				"acct_type" => parse_obj_name($clss[$task->class_id()]["name"]),
+				"rown" => ++$rown
+			));
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_CALL),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_CALL.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		// divide the rest of the money between tasks until it runs uut
+		foreach($ol->arr() as $task)
+		{
+			if ($ex[$task->id()] == 1)
+			{
+				continue;
+			}
+			$hr_price = $task->prop("hr_price");
+			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
+			$amt -= $tax_amt;
+			$t->define_data(array(
+				"tax_grp" => t("Muud maksud"),
+				"tax" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($task),
+				"tax_pct" => "",
+				"tot_amt" => number_format($tax_amt, 2),
+				"forward" => number_format($amt, 2),
+				"acct_type" => parse_obj_name($clss[$task->class_id()]["name"]),
+				"rown" => ++$rown
+			));
+		}
+		
+		if(!$hr_price) $hr_price = 1000; //SEE ON VAID TESTIMISEKS NIIKAUA KUNI BUGILE KA MINGI TUNNIHINNA V6TTA SAAB KUSKILT
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_BUG),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_BUG.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		// divide the rest of the money between bugs until it runs uut
+		foreach($ol->arr() as $bug)
+		{
+			if ($ex[$bug->id()] == 1)
+			{
+				continue;
+			}
+			$tax_amt = $bug->prop("num_hrs_guess") * $hr_price;
+			$amt -= $tax_amt;
+			$t->define_data(array(
+				"tax_grp" => t("Muud maksud"),
+				"tax" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($bug),
+				"tax_pct" => "",
+				"tot_amt" => number_format($tax_amt, 2),
+				"forward" => number_format($amt, 2),
+				"acct_type" => parse_obj_name($clss[$bug->class_id()]["name"]),
+				"rown" => ++$rown
+			));
+		}
+
+
 		if ($arr["request"]["group"] == "m2")
 		{
 			$t->set_rgroupby(array("tax_grp" => "tax_grp"));
@@ -268,7 +352,7 @@ class budget extends class_base
 			$t->set_rgroupby(array("acct_type" => "acct_type"));
 		}
 		$t->set_default_sortby("rown");
-		$t->sort_by();
+//		$t->sort_by();
 		$t->set_sortable(false);
 	}
 
@@ -307,7 +391,60 @@ class budget extends class_base
 			{
 				continue;
 			}
-			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
+			$hr_price = $task->prop("hr_price");
+			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
+			$amt -= $tax_amt;
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_MEETING),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_MEETING.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		foreach($ol->arr() as $task)
+		{
+			if ($ex[$task->id()] == 1)
+			{
+				continue;
+			}
+			$hr_price = $task->prop("hr_price");
+			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
+			$amt -= $tax_amt;
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_CALL),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_CALL.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		foreach($ol->arr() as $task)
+		{
+			if ($ex[$task->id()] == 1)
+			{
+				continue;
+			}
+			$hr_price = $task->prop("hr_price");
+			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
+			$amt -= $tax_amt;
+		}
+		
+		if(!$hr_price) $hr_price = 1000; //SEE ON VAID TESTIMISEKS NIIKAUA KUNI BUGILE KA MINGI TUNNIHINNA V6TTA SAAB KUSKILT
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_BUG),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_BUG.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		foreach($ol->arr() as $bug)
+		{
+			if ($ex[$bug->id()] == 1)
+			{
+				continue;
+			}
+			$tax_amt = $bug->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 		}
 		$arr["prop"]["value"] = number_format($amt, 2);
