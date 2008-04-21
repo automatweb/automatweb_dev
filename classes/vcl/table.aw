@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.114 2008/04/18 07:36:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.115 2008/04/21 13:34:49 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -17,7 +17,7 @@ class aw_table extends aw_template
 	var $filter_name = "awTblFlt";
 	var $name = "awTable0";
 
-	var $table_caption = ''; 
+	var $table_caption = '';
 	var $parsed_pageselector = '';
 	var $no_recount;
 	var $rgroupby;
@@ -68,7 +68,7 @@ class aw_table extends aw_template
 		$this->selected_filters = array();
 		$this->filter_index = array();
 		$this->rowspans = array();
-		
+
 		if ($data["prop_name"] != "")
 		{
 			$this->filter_name = $data["prop_name"].$_GET["id"];
@@ -422,7 +422,7 @@ class aw_table extends aw_template
 	/** defines that the table has a pager
 		@attrib api=1 params=name
 		@param type required type=string
-			"text" || "buttons" || "lb"
+			"text" || "buttons" || "lb" || "lbtxt"
 		@param records_per_page required type=int
 			Number of records per page.
 		@param d_row_cnt optional type=int
@@ -533,7 +533,7 @@ class aw_table extends aw_template
 		// ok, all those if sentences are getting on my nerves - we will make sure that all sorting options
 		// after this point are always arrays
 		$this->make_sort_prop_arrays();
-		
+
 		// switch to estonian locale
 		$old_loc = setlocale(LC_COLLATE,0);
 		setlocale(LC_COLLATE, 'et_EE');
@@ -721,7 +721,7 @@ class aw_table extends aw_template
 		   return ($a["order"] < $b["order"]) ? -1 : 1;
 		}
 	}
-	
+
 	/**
 		@attrib api=1 params=name
 		@param header required type=array
@@ -732,7 +732,7 @@ class aw_table extends aw_template
 			Second row's data. Array has the same structure as define_data() parameter.
 		@param finalize optional type=array
 			if this is set to true, html source for the table is returned.
-		
+
 		@errors
 			if $arg["header"] is not array or hasn't any fields in it... funcion returns false.
 		@comment
@@ -920,6 +920,7 @@ class aw_table extends aw_template
 					));
 					break;
 				case "lb":
+				case "lbtxt":
 				default:
 					$this->parsed_pageselector = $this->draw_lb_pageselector(array(
 						"records_per_page" => $this->records_per_page
@@ -1713,12 +1714,12 @@ class aw_table extends aw_template
 		@param numeric optional type=bool
 		@param filter_compare optional array
 		@param order optional
-		
+
 		@param onclick optional type=string
 			variable name for onClick actions in define_field function
 		@param rowspan optional type=string
 			variable name for roswpan in define_field function
-			
+
 		@param filter optional
 
 		@param filter_options optional
@@ -1844,7 +1845,7 @@ class aw_table extends aw_template
 		}
 		$this->rowdefs_key_index = array_flip($tmp);
 	}
-	
+
 	function field_exists($field)
 	{
 		return isset($this->rowdefs_key_index[$field]);
@@ -2168,6 +2169,40 @@ class aw_table extends aw_template
 	function draw_lb_pageselector($arr)
 	{
 		$this->read_template("lb_pageselector.tpl");
+
+		if ("lbtxt" === $this->pageselector)
+		{
+			$url = new aw_uri(aw_global_get("REQUEST_URI"));
+
+			$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
+			$records_per_page = $arr["records_per_page"];
+			$page = (int) $GLOBALS["ft_page"];
+			if ($page*$records_per_page > $_drc)
+			{
+				$page = 0;
+			}
+
+			if ($page)
+			{
+				$url->set_arg("ft_page", $page - 1);
+				$this->vars(array(
+					"link" => $url->get(),
+					"caption" => t("eelmine leht")
+				));
+				$this->vars(array("prev" => $this->parse("prev")));
+			}
+
+			if ($_drc > $records_per_page and ($_drc - $page*$records_per_page) > $records_per_page)
+			{
+				$url->set_arg("ft_page", $page + 1);
+				$this->vars(array(
+					"link" => $url->get(),
+					"caption" => t("j&auml;rgmine leht")
+				));
+				$this->vars(array("next" => $this->parse("next")));
+			}
+		}
+
 		return $this->finish_pageselector($arr);
 	}
 
@@ -2199,7 +2234,7 @@ class aw_table extends aw_template
 		{
 			$style = "class=\"style_".$style."\"";
 		}
-		
+
 		$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
 
 		$act_page = $GLOBALS["ft_page"];
@@ -2675,7 +2710,7 @@ class vcl_table extends aw_table
 			<div class="navigaator">
 				<!-- siia tuleb yhel ilusal p2eval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div j22b tyhjaks -->
 				'.$pageselector_top.'
-				
+
 			</div>
 		    </div>
 		    <div class="sisu">
@@ -2685,7 +2720,7 @@ class vcl_table extends aw_table
 		    </div>
 		    <div>
 				'.$pageselector_bottom.'
-		    </div>	
+		    </div>
 		</div>';
 		return $rv;
 	}
