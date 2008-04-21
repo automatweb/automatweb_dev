@@ -1460,7 +1460,6 @@ function __autoload($class_name)
 
 function aw_exception_handler($e)
 {
-die(dbg::dump($e));
 	try
 	{
 		error::raise(array(
