@@ -1,5 +1,5 @@
-<?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.35 2008/02/29 14:02:32 instrumental Exp $
+	<?php
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.36 2008/04/21 12:04:32 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -255,7 +255,8 @@ die($fdat);
 
 		if (!is_oid($crm_db_id))
 		{
-			die(t("Nii ei saa ju rallit s&otilde;ita!"));
+			//die(t("Nii ei saa ju rallit s&otilde;ita!"));
+			die(t("Kasutatav kliendibaas valimata"));
 		};
 
 		$crm_db = new object($crm_db_id);
