@@ -4197,7 +4197,7 @@ class cfgform extends class_base
 				$d[$group_obj->id()] = html::checkbox(array(
 					"name" => "d[$method][".$group_obj->id()."]",
 					"value" => 1,
-					"checked" => $dd[$method][$group_obj->id()] == 1
+					"checked" => is_array($dd) ? $dd[$method][$group_obj->id()] == 1 : false,
 				));
 			}
 
