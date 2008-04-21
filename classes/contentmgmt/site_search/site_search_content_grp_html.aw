@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.14 2008/02/14 12:51:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.15 2008/04/21 10:25:55 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -172,6 +172,8 @@ echo "baseurl = ".$this->baseurl." <br>";
 
 	function add_single_url_to_index($url)
 	{
+		// we need to do this, because when the new page is fetched, it uses the same session. and that's locked.
+		session_write_close();
 		classload("contentmgmt/site_search/parsers/parser_finder");
 		$i = parser_finder::instance($url);
 		if ($i === NULL)
@@ -193,6 +195,7 @@ echo "baseurl = ".$this->baseurl." <br>";
 		ob_start();
 		$this->_store_content($i, $o->id());
 		ob_end_clean();
+		session_start();
 	}
 
 	function is_ignored($url)
