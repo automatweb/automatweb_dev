@@ -235,7 +235,7 @@ class events_manager extends class_base
 
 		switch($prop["name"])
 		{
-			case "per_page_str":return PROP_IGNORE; 
+			case "per_page_str":return PROP_IGNORE;
 				if(!($GLOBALS["event_result_count"] > $this_o->prop("events_per_page")))
 				{
 					return PROP_IGNORE;
@@ -950,7 +950,7 @@ aw_restore_acl();
 			$this->total_events = count($t->arr());
 
 
-			$ol -> add($filter["oid"]); 
+			$ol -> add($filter["oid"]);
 			return $ol;
 		}
 */
@@ -996,7 +996,7 @@ aw_restore_acl();
 		$max_events = $arr["obj_inst"]->prop("events_per_page");
 
 		$t->define_pageselector(array(
-			"type" => "lb",
+			"type" => "lbtxt",
 			"records_per_page" => $max_events,
 			"d_row_cnt" => $this->total_events,
 		));
