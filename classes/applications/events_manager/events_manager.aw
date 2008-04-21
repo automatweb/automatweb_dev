@@ -1320,13 +1320,13 @@ aw_restore_acl();
 			"name" => "arc_button",
 			"id" => "arc_button",
 			"caption" => t("Arhiiv"),
-			"checked" => 0,//$_GET["archived"],
+			"checked" => !$_GET["e_find_news"] &&  $_GET["archived"],
 			"onclick" => 'javascript:window.location.href="'.$arcu.'";'
 		)).html::radiobutton(array(
 			"name" => "new_button",
 			"id" => "new_button",
 			"caption" => t("Aktiivsed"),
-			"checked" => 0,//!$_GET["archived"],
+			"checked" => !$_GET["e_find_news"] &&  !$_GET["archived"],
 			"onclick" => 'javascript:window.location.href="'.$newu.'";'
 		));
 

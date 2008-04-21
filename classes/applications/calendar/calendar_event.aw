@@ -423,6 +423,10 @@ class calendar_event extends class_base
 
 		switch($prop["name"])
 		{
+			case "title":
+			case "description":
+				$prop["value"] = nl2br($prop["value"]);
+				break;
 			//case "multifile_upload": return PROP_IGNORE;
 			case "level":
 				$prop["options"] = $this->level_options;
