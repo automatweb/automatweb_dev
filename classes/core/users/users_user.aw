@@ -11,7 +11,7 @@ define("GROUP_LEVEL_PRIORITY", 100000);
 define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.1 2008/03/13 20:35:49 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.2 2008/04/22 12:17:38 kristo Exp $
 @classinfo maintainer=kristo
 EMIT_MESSAGE(MSG_USER_LOGIN);
 EMIT_MESSAGE(MSG_USER_LOGOUT);
@@ -245,12 +245,11 @@ class users_user extends aw_template
 	{
 		$uid = aw_global_get("uid");
 		$ma = -1;
-        session_cache_limiter("must-revalidate, max-age=".$ma);
+	        session_cache_limiter("must-revalidate, max-age=".$ma);
 		header("Cache-Control: must-revalidate, max-age=".$ma);
 		header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
 		aw_global_set("uid","");
 		$_SESSION["uid"] = null;
-		session_destroy();
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
 
 		post_message("MSG_USER_LOGOUT", array("uid" => $uid));
