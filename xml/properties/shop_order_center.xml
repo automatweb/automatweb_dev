@@ -48,16 +48,6 @@
             <caption>N&amp;amp;auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
       </property>
       <property>
-            <name>no_change_button</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>&amp;amp;Auml;ra kuva tellimiskeskkonnas toote k&amp;amp;otilde;rvale &amp;quot;Muuda&amp;quot; nuppu</caption>
-      </property>
-      <property>
             <name>only_prods</name>
             <group>general</group>
             <table>objects</table>
@@ -77,81 +67,14 @@
             <caption>PDF Template faili nimi</caption>
       </property>
       <property>
-            <name>data_form</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ORDER_FORM</reltype>
-            <caption>Tellija andmete vorm</caption>
-      </property>
-      <property>
-            <name>data_form_person</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Isiku nime element andmete vormis</caption>
-      </property>
-      <property>
-            <name>data_form_company</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Organisatsiooni nime element andmete vormis</caption>
-      </property>
-      <property>
-            <name>data_form_discount</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Allahindluse element andmete vormis</caption>
-      </property>
-      <property>
-            <name>only_active_items</name>
+            <name>show_prod_and_package</name>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ainult aktiivsed tooted</caption>
-      </property>
-      <property>
-            <name>use_controller</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;itamiseks kasuta kontrollerit</caption>
-      </property>
-      <property>
-            <name>prods_are_folders</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Veebis tooted on kataloogid</caption>
-      </property>
-      <property>
-            <name>web_discount</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>5</size>
-            <caption>Veebis allahindlus (%)</caption>
+            <caption>N&amp;amp;auml;ita selgituses toodet/paketti</caption>
       </property>
       <property>
             <name>chart_show_template</name>
@@ -172,14 +95,13 @@
             <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
       </property>
       <property>
-            <name>show_prod_and_package</name>
+            <name>integration_class</name>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;ita selgituses toodet/paketti</caption>
+            <type>select</type>
+            <caption>Integratsiooni klass</caption>
       </property>
       <property>
             <name>mail_to_client</name>
@@ -268,8 +190,27 @@
             <caption>Lisa meili manusega tellimus</caption>
       </property>
       <property>
+            <name>web_discount</name>
+            <group>payment1</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Veebis allahindlus (%)</caption>
+      </property>
+      <property>
+            <name>data_form_discount</name>
+            <group>payment1</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Allahindluse element andmete vormis</caption>
+      </property>
+      <property>
             <name>rent_min_amt</name>
-            <group>payment</group>
+            <group>payment1</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -278,7 +219,7 @@
       </property>
       <property>
             <name>rent_prop</name>
-            <group>payment</group>
+            <group>payment1</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -287,7 +228,7 @@
       </property>
       <property>
             <name>rent_prop_val</name>
-            <group>payment</group>
+            <group>payment1</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -295,8 +236,28 @@
             <caption>v&amp;amp;auml;&amp;amp;auml;rtus j&amp;amp;auml;relmaksuks</caption>
       </property>
       <property>
+            <name>only_active_items</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ainult aktiivsed tooted</caption>
+      </property>
+      <property>
+            <name>use_controller</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;amp;auml;itamiseks kasuta kontrollerit</caption>
+      </property>
+      <property>
             <name>no_show_cart_contents</name>
-            <group>appear</group>
+            <group>appear_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -306,7 +267,7 @@
       </property>
       <property>
             <name>controller</name>
-            <group>appear</group>
+            <group>appear_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -315,8 +276,57 @@
             <caption>Vaikimisi n&amp;amp;auml;itamise kontroller</caption>
       </property>
       <property>
+            <name>sortbl</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Toodete sorteerimine</caption>
+      </property>
+      <property>
+            <name>grouping</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Toodete grupeerimine</caption>
+      </property>
+      <property>
+            <name>disp_cart_in_web</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva korvi toodete all</caption>
+      </property>
+      <property>
+            <name>no_change_button</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;amp;Auml;ra kuva tellimiskeskkonnas toote k&amp;amp;otilde;rvale &amp;quot;Muuda&amp;quot; nuppu</caption>
+      </property>
+      <property>
+            <name>prods_are_folders</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Veebis tooted on kataloogid</caption>
+      </property>
+      <property>
             <name>controller_tbl</name>
-            <group>appear</group>
+            <group>appear_ctr</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -327,42 +337,42 @@
       </property>
       <property>
             <name>layoutbl</name>
-            <group>appear</group>
+            <group>appear_layout</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Toodete layout</caption>
       </property>
       <property>
-            <name>sortbl</name>
-            <group>appear</group>
+            <name>data_form</name>
+            <group>data_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <caption>Toodete sorteerimine</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDER_FORM</reltype>
+            <caption>Tellija andmete vorm</caption>
       </property>
       <property>
-            <name>grouping</name>
-            <group>appear</group>
+            <name>data_form_person</name>
+            <group>data_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Toodete grupeerimine</caption>
+            <caption>Isiku nime element andmete vormis</caption>
       </property>
       <property>
-            <name>disp_cart_in_web</name>
-            <group>appear</group>
+            <name>data_form_company</name>
+            <group>data_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kuva korvi toodete all</caption>
+            <type>select</type>
+            <caption>Organisatsiooni nime element andmete vormis</caption>
       </property>
       <property>
             <name>psfieldmap</name>
@@ -421,10 +431,75 @@
             <type>select</type>
             <caption>Panga keele muutuja</caption>
       </property>
+      <property>
+            <name>use_filtering</name>
+            <group>filter_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Filtreeri tooteid</caption>
+      </property>
+      <property>
+            <name>filter_fields_class</name>
+            <group>filter_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Filtrid integratsiooniklassist</caption>
+      </property>
+      <property>
+            <name>filter_fields_props</name>
+            <group>filter_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Filtrid toote omadustest	</caption>
+      </property>
+      <property>
+            <name>filter_settings_tb</name>
+            <group>filter_select</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>filter_settings</name>
+            <group>filter_select</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>filter_sel_for_folders</name>
+            <group>filter_set_folders</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
             <maintainer>kristo</maintainer>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <mail_settings>
@@ -439,20 +514,62 @@
                   <parent>mail_settings</parent>
             </mail_settings_seller>
             <payment>
-                  <caption>Makseviisid</caption>
+                  <caption>Maksmine</caption>
             </payment>
+            <payment1>
+                  <caption>Seaded</caption>
+                  <parent>payment</parent>
+            </payment1>
+            <payment_settings>
+                  <caption>Pangamakse seaded</caption>
+                  <parent>payment</parent>
+            </payment_settings>
             <appear>
                   <caption>N&amp;amp;auml;itamine</caption>
             </appear>
+            <appear_settings>
+                  <parent>appear</parent>
+                  <caption>Seaded</caption>
+            </appear_settings>
+            <appear_ctr>
+                  <parent>appear</parent>
+                  <caption>Kontrollerid</caption>
+            </appear_ctr>
+            <appear_layout>
+                  <parent>appear</parent>
+                  <caption>Layoudid</caption>
+            </appear_layout>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
+            <data_settings>
+                  <caption>Seaded</caption>
+                  <parent>data</parent>
+            </data_settings>
             <psfieldmap>
                   <caption>Isukuandmete kaart</caption>
+                  <parent>data</parent>
             </psfieldmap>
             <orgfieldmap>
                   <caption>Firma andmete kaart</caption>
+                  <parent>data</parent>
             </orgfieldmap>
-            <payment_settings>
-                  <caption>Pangamakse seaded</caption>
-            </payment_settings>
+            <filter>
+                  <caption>Filtreerimine</caption>
+            </filter>
+            <filter_settings>
+                  <caption>Seaded</caption>
+                  <parent>filter</parent>
+            </filter_settings>
+            <filter_select>
+                  <caption>Koosta filter</caption>
+                  <parent>filter</parent>
+                  <submit>no</submit>
+            </filter_select>
+            <filter_set_folders>
+                  <caption>Vali kehtivad filtrid</caption>
+                  <parent>filter</parent>
+            </filter_set_folders>
       </groupinfo>
       <tableinfo>
             <aw_shop_order_center>
@@ -502,6 +619,11 @@
                   <clid>CL_BANK_PAYMENT</clid>
                   <caption>Pangalingi objekt</caption>
             </BANK_PAYMENT>
+            <FILTER>
+                  <value>12</value>
+                  <clid>CL_SHOP_ORDER_CENTER_FILTER_ENTRY</clid>
+                  <caption>Toodete filtri sisestus</caption>
+            </FILTER>
       </reltypes>
 </properties>
 

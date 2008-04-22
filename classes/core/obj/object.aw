@@ -769,12 +769,10 @@ class object
 
 
 		@returns
-			the old class id of the object
+			the object instance
 
 		@examples
-			$o = obj(666);
-			$o->set_implicit_save(true);
-			$o->set_class_id(CL_FOO);
+			$o = obj(666)->set_class_id(CL_FOO)->get_property_list();
 	**/
 	function set_class_id($param)
 	{
@@ -796,7 +794,7 @@ class object
 			}
 		}
 
-		return $rv;
+		return $this;
 	}
 
 	/** returns the status of the object

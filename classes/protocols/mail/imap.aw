@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.45 2008/03/31 09:57:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.46 2008/04/22 08:24:12 kristo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
@@ -563,7 +563,6 @@ class imap extends class_base
 		// shouldn't i set new mbox_cache_id here also??
 		if(imap_reopen($this->mbox, $this->servspec . $arr["use_mailbox"]))
 		{
-			e("folder changed to:".$arr["use_mailbox"]);
 			$this->use_mailbox = $arr["use_mailbox"];
 			$this->reset_mbox_cache_id();
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.50 2008/01/31 13:53:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.51 2008/04/22 08:24:10 kristo Exp $
 /*
 @classinfo  maintainer=tarvo
 */
@@ -670,6 +670,15 @@ class pot_scanner extends core
 				$strings[] = array(
 					"line" => "syslogactions_".$said,
 					"str" => "syslog.action.".$sd["def"],
+				);
+			}
+			
+			$lgs = aw_ini_get("languages.list");
+			foreach($lgs as $laid => $sd)
+			{
+				$strings[] = array(
+					"line" => "languages_list_".$laid,
+					"str" => "languages.list.".$sd["acceptlang"],
 				);
 			}
 			

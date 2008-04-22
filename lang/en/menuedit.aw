@@ -101,6 +101,7 @@ $lc_menuedit["LC_MENUEDIT_CHOOSE_KEYWORDS"] = "Keywords";
 $lc_menuedit["LC_MENUEDIT_DISPLAY"] = "Display";
 $lc_menuedit["LC_MENUEDIT_OTHER_SETTINGS"] = "Other Settings";
 $lc_menuedit["LC_LOGIN_CAPTION"] = "Log in";
+$lc_menuedit["LC_SEARCH_CONF"] = "17415";
 
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.15 2008/01/31 13:52:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.16 2008/04/22 08:24:06 kristo Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -239,15 +239,15 @@ class openhours extends class_base
 		$minute_step = 15;
 		$wdays = array(
 			0	=> t("-- Valimata --"),
-			1	=> LC_MONDAY,
-			2	=> LC_TUESDAY,
-			3	=> LC_WEDNESDAY,
-			4	=> LC_THURSDAY,
-			5	=> LC_FRIDAY,
-			6	=> LC_SATURDAY,
-			7	=> LC_SUNDAY,
+			1	=> t("Esmasp&auml;ev"),
+			2	=> t("Teisip&auml;ev"),
+			3	=> t("Kolmap&auml;ev"),
+			4	=> t("Neljap&auml;ev"),
+			5	=> t("Reede"),
+			6	=> t("Laup&auml;ev"),
+			7	=> t("P&uuml;hap&auml;ev"),
 		);
-		
+		 
 		$day1 = isset($arr['day1']) && is_numeric($arr['day1']) && between($arr['day1'], 0, 7) ? $arr['day1'] : 0;
 		$day2 = isset($arr['day2']) && is_numeric($arr['day2']) && between($arr['day2'], 0, 7) ? $arr['day2'] : 0;
 		$h1 = isset($arr['h1']) && is_numeric($arr['h1']) && between($arr['h1'], 0, 23) ? $arr['h1'] : 0;

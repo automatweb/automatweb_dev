@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.19 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.20 2008/04/22 08:24:04 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -212,6 +212,12 @@ class shop_product_table_layout extends class_base
 		{
 			$wd = 0;
 		}
+
+		if ($this->is_template("PROD_FILTER"))
+		{
+			$this->_insert_prod_filter($this->oc, $so);
+		}
+
 		$this->vars_safe(array(
 			"ROW" => $this->ft_str,
 			"ROW1" => $this->ft_str,
@@ -287,6 +293,52 @@ class shop_product_table_layout extends class_base
 				"HAS_PAGES2" => $this->parse("HAS_PAGES2")
 			));
 		}
+	}
+
+	private function _insert_prod_filter($oc, $so)
+	{
+		$pf = "";
+		$active_filter_set = $oc->filter_get_active_by_folder($so->id());
+		if (!$this->can("view", $active_filter_set))
+		{
+			return;
+		}
+		$active_filter_obj = obj($active_filter_set);
+		$fh2 = "";
+		foreach($oc->filter_get_fields() as $field_name => $field_caption)
+		{
+			$vals = $active_filter_obj->filter_get_selected_values($field_name);
+			if (count($vals) < 1)
+			{
+				continue;
+			}
+
+			$this->vars(array(
+				"filter_caption" => $field_caption,
+				"filter_name" => $field_name
+			));
+			$fh .= $this->parse("PROD_FILTER_HEADER");
+			$fh2 .= $this->parse("PROD_FILTER_HEADER2");
+
+			$v = "";
+			foreach($vals as $val => $val_caption)
+			{
+				$this->vars(array(
+					"filter_value" => $val,
+					"filter_label" => $val_caption
+				));
+				$v .= $this->parse("PROD_FILTER_VALUE");
+			}
+			$this->vars(array(
+				"PROD_FILTER_VALUE" => $v,
+			));
+			$pf .= $this->parse("PROD_FILTER");
+		}
+		$this->vars(array(
+			"PROD_FILTER" => $pf,
+			"PROD_FILTER_HEADER" => $fh,
+			"PROD_FILTER_HEADER2" => $fh2,
+		));
 	}
 }
 ?>

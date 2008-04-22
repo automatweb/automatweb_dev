@@ -105,8 +105,10 @@ class personnel_management_mobi_handler extends class_base
 		$service_id = $o->prop("service_id");
 		$password = $o->prop("mpassword");
 		$url = $o->prop("url");
+		$url = "http://smsgw.mobi.ee:8080/turbosms/injection";
 
 		$params = array(
+			"serviceid" => 81,
 			"password" => "e1DsA8fJr4w",
 			"phone" => "37255547369",
 			"text" => "Text. Yeah!",
@@ -121,6 +123,8 @@ class personnel_management_mobi_handler extends class_base
 			)
 		);
 		$context = stream_context_create($args);
+
+		arr($url);
 
 		arr(file_get_contents($url, false, $context));
 		exit;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.243 2008/04/16 16:19:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.244 2008/04/22 08:24:06 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -6171,8 +6171,8 @@ class room extends class_base
 			$warehouse = obj($warehouse_id);
 			if(is_oid($warehouse->prop("conf")) && $this->can("view" ,$warehouse->prop("conf")))
 			{
-				$warehouse->config = obj($warehouse->prop("conf"));
-				$prod_fld = $warehouse->config->prop("prod_fld");
+				$config = obj($warehouse->prop("conf"));
+				$prod_fld = $config->prop("prod_fld");
 			}
 		}
 		if(is_oid($prod_fld))

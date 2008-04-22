@@ -94,8 +94,9 @@ $class_names = array(
 	"config" => t("Seaded"),
 );
 $cur_class = empty($clss[clid_for_name($_GET["class"])]["name"]) ? $class_names[$_GET["class"]] : $clss[clid_for_name($_GET["class"])]["name"];
-$parent = $_GET["parent"] ? $_GET["parent"] : $cur_obj->parent();
+$parent = max(1, $_GET["parent"] ? $_GET["parent"] : $cur_obj->parent());
 $sf->vars(array(
+	"parent" => $_GET["parent"],
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
 	"cur_p_name" => $p->name(),

@@ -3,4 +3,3 @@
 	<class name="generic_xml_ds" folder="common/external" extends="class_base">
 	</class>
 </orb>
-

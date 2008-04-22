@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.32 2008/04/08 12:04:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.33 2008/04/22 08:24:00 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -111,14 +111,14 @@ class task_quick_entry extends class_base
 						document.getElementById('custp_fn').parentNode.parentNode.style.display = d;
 						document.getElementById('custp_ln').parentNode.parentNode.style.display = d;
 						document.getElementById('customer').parentNode.parentNode.style.display = 'none';
-						document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = 'none';
+//						document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = 'none';
 					}
 					else 
 					{
 						document.getElementById('customer').parentNode.parentNode.style.display = d;
 						document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none';
 						document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';
-						document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
+//						document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
 					}";
 				break;
 			
@@ -610,7 +610,7 @@ $start = ((float)$usec + (float)$sec);
 		document.getElementById('customer').parentNode.parentNode.style.display = d;
 		document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none';
 		document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';
-		document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
+//		document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
 		";
 	}
 

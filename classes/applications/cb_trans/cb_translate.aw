@@ -74,7 +74,7 @@ class cb_translate extends class_base
 			//"open_path" => array("fld_10","fld_37","fld_59"),
 			//"open_path" => array("fld_1"),
 			//"open_path" => array("fld_10","fld_37","fld_59","867"),
-			"root_name" => iconv("iso-8859-1", "utf-8", "AW KLASSIDE T&Otilde;LKIMINE"),
+			"root_name" => iconv("iso-8859-1", "utf-8", t("AW KLASSIDE T&Otilde;LKIMINE")),
 			"url_target" => "editorcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $clid, "parent" => " ")),
 			"has_root" => 1,
@@ -221,7 +221,7 @@ class cb_translate extends class_base
 			//"open_path" => array("fld_10","fld_37","fld_59"),
 			//"open_path" => array("fld_1"),
 			//"open_path" => array("fld_10","fld_37","fld_59","867"),
-			"root_name" => iconv("iso-8859-1", "utf-8", "AW KLASSIDE T&Otilde;LKIMINE"),
+			"root_name" => iconv("iso-8859-1", "utf-8", t("AW KLASSIDE T&Otilde;LKIMINE")),
 			"url_target" => "editorcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			"has_root" => 1,
@@ -1330,7 +1330,7 @@ class cb_translate extends class_base
 			"template" => "default",
 		));
 
-		$title = sprintf("Klass '%s', Grupp '%s'", $cls[$arr["clid"]]["name"], "<b>".$groups[$arr["grpid"]]["caption"]."</b>");
+		$title = sprintf(t("Klass '%s', Grupp '%s'"), $cls[$arr["clid"]]["name"], "<b>".$groups[$arr["grpid"]]["caption"]."</b>");
 
 		$this->cb_htmlc->add_property(array(
 			"name" => "general_title",

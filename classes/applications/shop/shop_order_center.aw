@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.60 2008/04/08 10:39:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.61 2008/04/22 08:24:04 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
 @tableinfo aw_shop_order_center index=aw_id master_table=objects master_index=brother_of
 
-@classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes maintainer=kristo
+@classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes maintainer=kristo no_comment=1 no_status=1 prop_cb=1
 
 @default group=general
 
@@ -28,40 +28,14 @@
 @property show_unconfirmed type=checkbox ch_value=1
 @caption N&auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
 
-@property no_change_button type=checkbox ch_value=1
-@caption &Auml;ra kuva tellimiskeskkonnas toote k&otilde;rvale "Muuda" nuppu
-
 @property only_prods type=checkbox ch_value=1
 @caption Ostukorvis on tooted ilma pakendite, piltide jms
 
 @property pdf_template type=textbox
 @caption PDF Template faili nimi
 
-@property data_form type=relpicker reltype=RELTYPE_ORDER_FORM
-@caption Tellija andmete vorm
-
-
-
-@property data_form_person type=select
-@caption Isiku nime element andmete vormis
-
-@property data_form_company type=select
-@caption Organisatsiooni nime element andmete vormis
-
-@property data_form_discount type=select
-@caption Allahindluse element andmete vormis
-
-@property only_active_items type=checkbox ch_value=1
-@caption Ainult aktiivsed tooted
-
-@property use_controller type=checkbox ch_value=1
-@caption N&auml;itamiseks kasuta kontrollerit
-
-@property prods_are_folders type=checkbox ch_value=1
-@caption Veebis tooted on kataloogid
-
-@property web_discount type=textbox size=5
-@caption Veebis allahindlus (%)
+@property show_prod_and_package type=checkbox ch_value=1
+@caption N&auml;ita selgituses toodet/paketti
 
 @property chart_show_template type=select
 @caption Ostukorvi vaade template
@@ -69,12 +43,9 @@
 @property chart_final_template type=select
 @caption Ostukorvi l&ouml;ppvaate template
 
-@property show_prod_and_package type=checkbox ch_value=1
-@caption N&auml;ita selgituses toodet/paketti
+@property integration_class type=select
+@caption Integratsiooni klass
 
-@groupinfo mail_settings caption="Meiliseaded"
-	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
-	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
 
 @default group=mail_settings_orderer
 
@@ -108,57 +79,86 @@
 	@caption Lisa meili manusega tellimus
 
 
-@groupinfo payment caption="Makseviisid"
-@default group=payment
+@default group=payment1
 
-@property rent_min_amt type=textbox
-@caption J&auml;relmaksu min. summa
+	@property web_discount type=textbox size=5
+	@caption Veebis allahindlus (%)
 
-@property rent_prop type=select
-@caption Elemendi
+	@property data_form_discount type=select
+	@caption Allahindluse element andmete vormis
 
-@property rent_prop_val type=textbox
-@caption v&auml;&auml;rtus j&auml;relmaksuks
+	@property rent_min_amt type=textbox
+	@caption J&auml;relmaksu min. summa
+
+	@property rent_prop type=select
+	@caption Elemendi
+
+	@property rent_prop_val type=textbox
+	@caption v&auml;&auml;rtus j&auml;relmaksuks
 
 
-@groupinfo appear caption="N&auml;itamine"
-@default group=appear
+@default group=appear_settings
 
-@property no_show_cart_contents type=checkbox ch_value=1
-@caption &Auml;ra n&auml;ita korvi kinnitusvaadet
+	@property only_active_items type=checkbox ch_value=1
+	@caption Ainult aktiivsed tooted
 
-@property controller type=relpicker reltype=RELTYPE_CONTROLLER
-@caption Vaikimisi n&auml;itamise kontroller
+	@property use_controller type=checkbox ch_value=1
+	@caption N&auml;itamiseks kasuta kontrollerit
 
-@property controller_tbl type=callback callback=callback_get_controller_tbl store=no
-@caption Kontrollerid kataloogidele
+	@property no_show_cart_contents type=checkbox ch_value=1
+	@caption &Auml;ra n&auml;ita korvi kinnitusvaadet
 
-@property layoutbl type=table store=no
-@caption Toodete layout
+	@property controller type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Vaikimisi n&auml;itamise kontroller
 
-@property sortbl type=table store=no
-@caption Toodete sorteerimine
+	@property sortbl type=table store=no
+	@caption Toodete sorteerimine
 
-@property grouping type=select
-@caption Toodete grupeerimine
+	@property grouping type=select
+	@caption Toodete grupeerimine
 
-@property disp_cart_in_web type=checkbox ch_value=1
-@caption Kuva korvi toodete all
+	@property disp_cart_in_web type=checkbox ch_value=1
+	@caption Kuva korvi toodete all
 
-@groupinfo psfieldmap caption="Isukuandmete kaart"
+	@property no_change_button type=checkbox ch_value=1
+	@caption &Auml;ra kuva tellimiskeskkonnas toote k&otilde;rvale "Muuda" nuppu
+
+	@property prods_are_folders type=checkbox ch_value=1
+	@caption Veebis tooted on kataloogid
+
+
+@default group=appear_ctr
+
+	@property controller_tbl type=callback callback=callback_get_controller_tbl store=no
+	@caption Kontrollerid kataloogidele
+
+@default group=appear_layout
+
+	@property layoutbl type=table store=no no_caption=1
+	@caption Toodete layout
+
+
+@default group=data_settings
+
+	@property data_form type=relpicker reltype=RELTYPE_ORDER_FORM
+	@caption Tellija andmete vorm
+
+	@property data_form_person type=select
+	@caption Isiku nime element andmete vormis
+
+	@property data_form_company type=select
+	@caption Organisatsiooni nime element andmete vormis
+
 @default group=psfieldmap
 
-@property psfieldmap type=table store=no 
-@caption Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele
-
-@groupinfo orgfieldmap caption="Firma andmete kaart"
+	@property psfieldmap type=table store=no 
+	@caption Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele
+ 
 @default group=orgfieldmap
 
-@property orgfieldmap type=table store=no 
-@caption Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele
+	@property orgfieldmap type=table store=no 
+	@caption Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele
 
-
-@groupinfo payment_settings caption="Pangamakse seaded"
 @default group=payment_settings
 
 	@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
@@ -173,6 +173,50 @@
 	@property bank_lang type=select
 	@caption Panga keele muutuja
 
+@default group=filter_settings
+
+	@property use_filtering type=checkbox ch_value=1
+	@caption Filtreeri tooteid
+
+	@property filter_fields_class type=table store=no no_caption=1
+	@caption Filtrid integratsiooniklassist
+
+	@property filter_fields_props type=table store=no no_caption=1
+	@caption Filtrid toote omadustest	
+
+@default group=filter_select
+
+	@property filter_settings_tb type=toolbar store=no no_caption=1
+	@property filter_settings type=table store=no no_caption=1
+
+@default group=filter_set_folders
+
+	@property filter_sel_for_folders type=table store=no no_caption=1
+
+
+
+@groupinfo mail_settings caption="Meiliseaded"
+	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
+	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
+ 
+@groupinfo payment caption="Maksmine"
+	@groupinfo payment1 caption="Seaded" parent=payment
+	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
+
+@groupinfo appear caption="N&auml;itamine"
+	@groupinfo appear_settings parent=appear caption="Seaded"
+	@groupinfo appear_ctr parent=appear caption="Kontrollerid"
+	@groupinfo appear_layout parent=appear caption="Layoudid"
+
+@groupinfo data caption="Andmed"
+	@groupinfo data_settings caption="Seaded" parent=data
+	@groupinfo psfieldmap caption="Isukuandmete kaart" parent=data
+	@groupinfo orgfieldmap caption="Firma andmete kaart" parent=data
+
+@groupinfo filter caption="Filtreerimine"
+	@groupinfo filter_settings caption="Seaded" parent=filter
+	@groupinfo filter_select caption="Koosta filter" parent=filter submit=no
+	@groupinfo filter_set_folders caption="Vali kehtivad filtrid" parent=filter 
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -197,6 +241,9 @@
 
 @reltype BANK_PAYMENT value=11 clid=CL_BANK_PAYMENT
 @caption Pangalingi objekt
+
+@reltype FILTER value=12 clid=CL_SHOP_ORDER_CENTER_FILTER_ENTRY
+@caption Toodete filtri sisestus
 */
 
 class shop_order_center extends class_base
@@ -657,6 +704,8 @@ class shop_order_center extends class_base
 		@attrib name=show_items nologin="1"
 
 		@param id required type=int acl=view
+		@param f optional 
+		@param show_prod optional
 		@param section required 
 
 	**/
@@ -726,10 +775,16 @@ class shop_order_center extends class_base
 				"only_active" => $soc->prop("only_active_items")
 			));
 		}
-		if ($this->can("view", $_GET["show_prod"]))
+		if ($this->can("view", $arr["show_prod"]))
 		{
-			$pl = array(obj($_GET["show_prod"]));
+			$pl = array(obj($arr["show_prod"]));
 		}
+
+		if (is_array($arr["f"]))
+		{
+			$this->do_filter_packet_list($pl, $arr["f"], $soc);
+		}
+
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 	
 		$section = aw_global_get("section");
@@ -1414,5 +1469,285 @@ class shop_order_center extends class_base
 		}
 		$arr["obj_inst"]->set_meta("fld_controllers", $vals);
 	}
+
+	function _get_integration_class($arr)
+	{
+		$arr["prop"]["options"] = array("" => t("--vali--"));
+		$clss = aw_ini_get("classes");
+		foreach(class_index::get_classes_by_interface("shop_order_center_integrator") as $class_name)
+		{
+			$clid = clid_for_name($class_name);
+			$arr["prop"]["options"][$clid] = $clss[$clid]["name"];
+		}
+
+		foreach($clss as $clid => $clinf)
+		{
+			if ($clinf["site_class"] == 1)
+			{
+				// check if site class implements interface
+				$anal = get_instance("aw_code_analyzer");
+				$data = $anal->analyze_file(aw_ini_get("site_basedir")."/classes/".$clinf["file"].".".aw_ini_get("ext"), true);
+				foreach($data["classes"] as $class_name => $class_data)
+				{
+					if (in_array("shop_order_center_integrator", $class_data["implements"]))
+					{
+						$arr["prop"]["options"][$clid] = $clinf["name"];
+					}
+				}
+			}
+		}
+	}
+
+	function _get_filter_fields_class($arr)
+	{
+		if (!is_class_id($ic = $arr["obj_inst"]->prop("integration_class")))
+		{
+			return PROP_IGNORE;
+		}
+		$t = $arr["prop"]["vcl_inst"];
+
+		$class_filter_fields = $arr["obj_inst"]->meta("class_filter_fields");
+
+		$this->_init_filter_fields_table($t);
+		$clss = aw_ini_get("classes");
+		foreach(get_instance($clss[$ic]["file"])->get_filterable_fields() as $field_name => $field_caption)
+		{
+			$t->define_data(array(
+				"field" => $field_caption,
+				"select" => html::checkbox(array(
+					"name" => "class_filter_select[$field_name]",
+					"value" => 1,
+					"checked" => $class_filter_fields[$field_name] == 1
+				))
+			));
+		}
+		$t->set_caption(t("Filtrid integratiooniklassist"));
+	}
+
+	function _set_filter_fields_class($arr)
+	{
+		$arr["obj_inst"]->set_meta("class_filter_fields", $arr["request"]["class_filter_select"]);
+	}
+
+	function _get_filter_fields_props($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+
+		$prop_filter_fields = $arr["obj_inst"]->meta("prop_filter_fields");
+
+		$this->_init_filter_fields_table($t);
+		foreach(obj()->set_class_id(CL_SHOP_PRODUCT)->get_property_list() as $field_name => $field_data)
+		{
+			$t->define_data(array(
+				"field" => $field_data["caption"]." [$field_name]",
+				"select" => html::checkbox(array(
+					"name" => "prop_filter_select[$field_name]",
+					"value" => 1,
+					"checked" => $prop_filter_fields[$field_name] == 1
+				))
+			));
+		}
+		$t->set_caption(t("Filtrid toote omadustest"));
+	}
+
+	function _set_filter_fields_props($arr)
+	{
+		$arr["obj_inst"]->set_meta("prop_filter_fields", $arr["request"]["prop_filter_select"]);
+	}
+
+	private function _init_filter_fields_table($t)
+	{
+		$t->define_field(array(
+			"name" => "field",
+			"caption" => t("V&auml;li"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
+	}
+
+	function _get_filter_settings($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILTER"))),
+			array("name"),
+			CL_SHOP_ORDER_CENTER_FILTER_ENTRY
+		);
+	}
+
+	function _get_filter_settings_tb($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->add_new_button(array(CL_SHOP_ORDER_CENTER_FILTER_ENTRY), $arr["obj_inst"]->id(),12, array("set_oc" => $arr["obj_inst"]->id()));
+		$t->add_delete_button();
+	}
+
+	private function _init_filter_sel_table($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Kataloog")
+		));
+
+		$t->define_field(array(
+			"name" => "sel_filter",
+			"caption" => t("Kehtiv filter"),
+			"align" => "center"
+		));
+	}
+
+	function _set_filter_sel_for_folders($arr)
+	{
+		$arr["obj_inst"]->filter_set_active_by_folder($arr["request"]["sel_filter"]);
+	}
+
+	function _get_filter_sel_for_folders($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_filter_sel_table($t);
+
+		$wh = get_instance(CL_SHOP_WAREHOUSE);
+
+		$o = $arr["obj_inst"];
+		$this->_get_folder_ot_from_o($o);
+
+		$ol = new object_list($o->connections_from(array("type" => "RELTYPE_FILTER")));
+		$this->filter_sel = array("" => t("--vali--")) + $ol->names();	
+		$this->selected_filters = $o->meta("filter_by_folder");
+
+		$this->_oinst = &$o;
+
+		if (!$o->prop("warehouse"))
+		{
+			return new object_list();
+		}
+		$wh = obj($o->prop("warehouse"));
+
+		if (!$wh->prop("conf"))
+		{
+			return new object_list();
+		}
+		$conf = obj($wh->prop("conf"));
+		$o = obj($conf->prop("pkt_fld"));
+		$this->filter_table_ot_cb($o, $t);
+
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $o->id(),
+		));
+
+		$ot->foreach_cb(array(
+			"func" => array(&$this, "filter_table_ot_cb"),
+			"param" => &$t,
+			"save" => false
+		));
+
+		$t->sort_by();
+	}
+
+	function filter_table_ot_cb(&$o, &$t)
+	{
+		$t->define_data(array(
+			"name" => $o->path_str(),
+			"sel_filter" => html::select(array(
+				"name" => "sel_filter[".$o->id()."]",
+				"options" => $this->filter_sel,
+				"selected" => $this->selected_filters[$o->id()]
+			)),
+		));
+		$t->set_default_sortby("name");
+	}
+
+	function do_filter_packet_list(&$pl, $f, $soc)
+	{
+		$filter_ic = array();
+		$filter_prod = array();
+		foreach($f as $filter_name => $filter_value)
+		{
+			if (!is_array($filter_value) || !count($filter_value))
+			{
+				continue;
+			}
+
+			list($type, $name) = explode("::", $filter_name);
+			if ($type == "ic")
+			{
+				$filter_ic[$name] = $filter_value;
+			}
+			else
+			{
+				$filter_prod[$name] = $filter_value;
+			}
+		}
+
+		if (count($filter_ic) && count($pl))
+		{
+			$inst = $soc->get_integration_class_instance();
+			$inst->apply_filter_to_product_list($pl, $filter_ic);
+		}
+		if (count($filter_prod) && count($pl))
+		{
+			$this->apply_filter_to_product_list($pl, $filter_prod);
+		}
+	}
+
+	function apply_filter_to_product_list(&$pl, $filter_prod)
+	{
+		$pl_ids = array();
+		foreach($pl as $item)
+		{
+			$pl_ids[] = $item->id();
+		}
+		$filt = array(
+			"oid" => $pl_ids,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_SHOP_PRODUCT
+		);
+		foreach($filter_prod as $prop => $vals)
+		{
+			$filt[$prop] = array_keys($vals);
+		}
+		$ol = new object_list($filt);
+		$pl = $ol->arr();
+	}
+}
+
+/** If you want to create a class that can be used in shop order center to filter products and other things, then implement this interface **/
+interface shop_order_center_integrator
+{
+	/** Returns a list of fields that can be used for filtering
+		@attrib api=1
+		
+		@returns
+			array { filter_field => filter field caption, ... }
+	**/
+	public function get_filterable_fields();
+
+	/** Returns a list of all values for the given filter
+		@attrib api=1 params=pos
+
+		@param filter_name required type=string
+			The name of the filter field to return values for
+		
+		@returns
+			array { filter_value => filter_value_caption, ... }
+	**/
+	public function get_all_filter_values($filter_name);
+
+	/** Applies the given filter to the product list
+		@attrib api=1 params=pos
+
+		@param pl required type=array
+			Array of produxts to filter { index => product_obj, ... }
+
+		@param filter_prod type=array
+			The filter array { filter_name => array { filter_value => 1 }, ... }
+	**/
+	public function apply_filter_to_product_list(&$pl, $filter_prod);
 }
 ?>

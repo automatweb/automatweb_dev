@@ -18,5 +18,15 @@
 			</function>
 		</action>
 
+		<action name="gen_link_alias_for_doc">
+			<function name="gen_link_alias_for_doc">
+				<arguments>
+					<required name="doc_id" type="int" />
+					<required name="link_id" type="int" />
+					<optional name="close" type="bool" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

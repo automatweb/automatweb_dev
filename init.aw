@@ -488,6 +488,14 @@ function lc_init()
 					$GLOBALS["cfg"]["syslog"]["actions"][$actid]["name"] = $_tmp;
 				}
 			}
+
+			foreach($GLOBALS["cfg"]["languages"]["list"] as $laid => $ad)
+			{
+				if (($_tmp = t2("languages.list.".$ad["acceptlang"])) != "")
+				{
+					$GLOBALS["cfg"]["languages"]["list"][$laid]["name"] = $_tmp;
+				}
+			}
 		}
 	}
 
@@ -671,9 +679,10 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		}
 	}
 
+
 	try
 	{
-		$cl_id = aw_ini_get("class_lut.".basename($lib));
+		$cl_id = aw_ini_get("class_lut.".basename($class));
 		if ($GLOBALS["cfg"]["classes"][$cl_id]["site_class"] == 1)
 		{
 			//$class = $GLOBALS["cfg"]["site_classes"][$class];

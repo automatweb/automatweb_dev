@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.49 2008/04/17 12:09:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.50 2008/04/22 08:24:03 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -1143,7 +1143,7 @@ class register_search extends class_base
 			$c = get_instance("cache");
 			$cfn = "register_".$reg->id()."_search_mod_chooser_p_".$pn;
 
-			if (!($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
+			if (true || !($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
 			{
 				if ($p["store"] == "connect")
 				{
@@ -1158,10 +1158,6 @@ class register_search extends class_base
 						LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).") AND objects.status > 0";
 				}
 
-				if (aw_global_get("uid") == "kix")
-				{
-				//	echo "q = $q <br>";
-				}
 				$this->db_query($q);
 				while ($row = $this->db_next())
 				{

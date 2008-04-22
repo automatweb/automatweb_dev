@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.13 2008/04/17 12:20:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.14 2008/04/22 08:24:07 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2187,7 +2187,7 @@ class image extends class_base
 		}
 
 		$that = new image;
-		$size = @getimagesize($o->prop("file2"));
+		$size = getimagesize(self::_get_fs_path($o->prop("file2")));
 		$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
 		return  "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
 	}
