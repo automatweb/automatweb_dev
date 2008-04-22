@@ -3668,7 +3668,7 @@ class crm_company extends class_base
 		{
 			$e_add = 0;
 		}
-		$s_d = mktime(0,0,0,date('m'),date('d'),date('Y'));
+		$s_d = mktime(1,0,0,date('m'),date('d'),date('Y'));
 		$e_d = mktime(23,59,59, date('m'),date('d')+1+$e_add,date('Y'));
 		$bds = $this->get_cust_bds();
 		$dc = 0;
@@ -3681,14 +3681,31 @@ class crm_company extends class_base
 		{
 			$dc++;
 			$tmp2 = '';
+			$bdis = 0;
 			foreach($bds[$i] as $oid)
 			{
+				$bdis = 1;
 				$p = obj($oid);
+				$contacts = array(); 	 
+				foreach($p->connections_from(array("type" => 16)) as $conn) 	 
+				{ 	 
+					$wcon_wrel = $conn->to();
+					if($wcon_wrel->prop("org.name"))
+					{
+						$contacts[] = $p->prop("org.name");
+					}
+				}
+				if($p->prop("phone.name"))
+				{
+					$contacts[] = $p->prop("phone.name");
+				}
+				if($p->prop("email.mail"))
+				{
+					$contacts[] = $p->prop("email.mail"); 	 
+				}
 				$this->vars(array(
 					"name" => html::obj_change_url($p->id(),$p->name()),
-					"company" => ", ".$p->prop("work_contact.name"),
-					"phone" => $p->prop("phone.name")?", ".$p->prop("phone.name"):"",
-					"email" => $p->prop("email.mail")?", ".$p->prop("email.mail"):"",
+					"contacts" => implode(", ", $contacts),
 				));
 				$tmp2 .= $this->parse("bds");
 			}
@@ -3708,11 +3725,14 @@ class crm_company extends class_base
 			{
 				$day = t("Esmasp&auml;ev");
 			}
-			$this->vars(array(
-				"bds" => $tmp2,
-				"day" => $day,
-			));
-			$tmp .= $this->parse("days");
+			if($bdis)
+			{
+				$this->vars(array(
+					"bds" => $tmp2,
+					"day" => $day,
+				));
+				$tmp .= $this->parse("days");
+			}
 		}
 		$this->vars(array(
 			"days" => $tmp
