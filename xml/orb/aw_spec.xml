@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="aw_spec" folder="applications/aw_spec" extends="class_base">
+		<action name="get_pdf">
+			<function name="get_pdf">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
