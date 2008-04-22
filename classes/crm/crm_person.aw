@@ -17,7 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @default table=objects
 ------------------------------------------------------------------
 
-@groupinfo general2 caption="&Uuml;ldine" parent=general
+@groupinfo general2 caption="&Uuml;ldine" parent=general no_submit=1
 @default group=general2
 
 @property name type=text
@@ -102,6 +102,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 # @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
 # @caption Palga dokument
+
+@property submit_cv type=submit store=no
+@caption Salvesta
 
 ------------------------------------------------------------------
 
@@ -1954,6 +1957,7 @@ class crm_person extends class_base
 					"cv" => $tpl,
 					"id" => $arr["obj_inst"]->id(),
 					"die" => "1",
+					"cfgform" => get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_CRM_PERSON)),
 				));
 				$arr["prop"]["toolbar"]->add_button(array(
 					"name" => "delete",
@@ -1995,6 +1999,7 @@ class crm_person extends class_base
 				$arr["prop"]["value"] .= $this->show_cv(array(
 					"id" => $arr["obj_inst"]->id(),
 					"cv" => $tpl,
+					"cfgform" => get_instance(CL_CFGFORM)->get_sysdefault(),
 				));
 				break;
 			case "dl_since":
@@ -5135,6 +5140,7 @@ class crm_person extends class_base
 			"source" => $this->show_cv(array(
 				"id" => $arr["id"],
 				"cv" => $tpl,
+				"cfgform" => get_instance(CL_CFGFORM)->get_sysdefault(),
 			))
 		)));
 	}
@@ -5161,6 +5167,9 @@ class crm_person extends class_base
 		@param cv optional type=string
 			The cv template to use.
 
+		@param cfgform optional type=oid
+			The cfgform to use.
+
 		@param die optional type=boolean
 
 		@param job_offer optional type=oid
@@ -5175,6 +5184,7 @@ class crm_person extends class_base
 		$sm_inst = get_instance(CL_CRM_SKILL_MANAGER);
 		$jw_inst = get_instance(CL_PERSONNEL_MANAGEMENT_JOB_WANTED);
 		$rate_inst = get_instance(CL_RATE);
+		$cff_inst = get_instance(CL_CFGFORM);
 
 		if(!$arr["cv"])
 		{
@@ -5428,9 +5438,17 @@ class crm_person extends class_base
 		{
 			return false;
 		}
+		if($this->can("view", $arr["cfgform"]))
+		{
+			$proplist = $cff_inst->get_cfg_proplist($arr["cfgform"]);
+		}
+		else
+		{
+			$proplist = array();
+		}
 
 		// SUB: CRM_PERSON.PICTURE
-		if($this->can("view", $o->prop("picture")))
+		if($this->can("view", $o->prop("picture")) && (array_key_exists("picture", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.picture" => $img_inst->view(array("id" => $o->prop("picture"))),
@@ -5445,7 +5463,7 @@ class crm_person extends class_base
 		$parse_cppi = 0;
 
 		//		SUB: CRM_PERSON.NAME
-		if(strlen($o->name()) > 0)
+		if(strlen($o->name()) > 0 && (array_key_exists("name", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.name" => $o->name(),
@@ -5459,7 +5477,7 @@ class crm_person extends class_base
 
 		//		SUB: CRM_PERSON.PERSONAL_ID
 		// This needs some heavier check. Maybe I'll come back to it later. Don't think it's that important. Prolly should be checked already when setting the property.
-		if(preg_match("/[34]\d{10}/", $o->prop("personal_id")))
+		if(preg_match("/[34]\d{10}/", $o->prop("personal_id")) && (array_key_exists("personal_id", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.personal_id" => $o->prop("personal_id"),
@@ -5474,7 +5492,7 @@ class crm_person extends class_base
 		//		SUB: CRM_PERSON.BIRTHDAY
 		// Birthday is saved in YYYY-MM-DD format.
 		//if(preg_match("(19|20)[1-9]{2}[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])", $o->prop("birthday")))
-		if(strlen($o->prop("birthday")) == 10)
+		if(strlen($o->prop("birthday")) == 10 && (array_key_exists("birthday", $proplist) || count($proplist) == 0))
 		{
 			$date_bits = explode("-", $o->prop("birthday"));
 			$this->vars(array(
@@ -5489,7 +5507,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.BIRTHDAYGENDER
 
 		//		SUB: CRM_PERSON.GENDER
-		if($o->prop("gender") == 2 || $o->prop("gender") == 1)
+		if($o->prop("gender") == 2 || $o->prop("gender") == 1 && (array_key_exists("gender", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.gender" => ($o->prop("gender") == 1) ? t("Mees") : t("Naine"),
@@ -5502,7 +5520,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.GENDER
 
 		//		SUB: CRM_PERSON.NATIONALITY
-		if($this->can("view", $o->prop("nationality")))
+		if($this->can("view", $o->prop("nationality")) && (array_key_exists("nationality", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.nationality" => $o->prop("nationality.name"),
@@ -5515,7 +5533,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.NATIONALITY
 
 		//		SUB: CRM_PERSON.MLANG
-		if($this->can("view", $o->prop("mlang")))
+		if($this->can("view", $o->prop("mlang")) && (array_key_exists("mlang", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.mlang" => $o->prop("mlang.name"),
@@ -5528,7 +5546,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.MLANG
 
 		//		SUB: CRM_PERSON.EDULEVEL
-		if($o->prop("edulevel") > 0)
+		if($o->prop("edulevel") > 0 && (array_key_exists("edulevel", $proplist) || count($proplist) == 0))
 		{
 			$options = $this->edulevel_options;
 			$this->vars(array(
@@ -5542,7 +5560,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.EDULEVEL
 
 		//		SUB: CRM_PERSON.ACADEMIC_DEGREE
-		if($o->prop("academic_degree") > 0)
+		if($o->prop("academic_degree") > 0 && (array_key_exists("academic_degree", $proplist) || count($proplist) == 0))
 		{
 			$options = $this->academic_degree_options;
 			$this->vars(array(
@@ -5556,7 +5574,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.EDULEVEL
 
 		//		SUB: CRM_PERSON.SOCIAL_STATUS
-		if($o->prop("social_status") > 0 && $o->prop("social_status") < 5)
+		if($o->prop("social_status") > 0 && $o->prop("social_status") < 5 && (array_key_exists("social_status", $proplist) || count($proplist) == 0))
 		{
 			$social_status = array(
 				3 => t("Vallaline"),
@@ -5575,7 +5593,7 @@ class crm_person extends class_base
 		//		END SUB: CRM_PERSON.SOCIAL_STATUS
 
 		//		SUB: CRM_PERSON.CHILDREN1
-		if($o->prop("children1") > 0)
+		if($o->prop("children1") > 0 && (array_key_exists("children1", $proplist) || count($proplist) == 0))
 		{
 			$this->vars(array(
 				"crm_person.children1" => $o->prop("children1"),
@@ -5638,6 +5656,25 @@ class crm_person extends class_base
 
 		// SUB: CRM_PERSON_EDUCATIONS
 		$parse_cpe = 0;
+		$cff_e = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_EDUCATION));
+		if($cff_e)
+		{
+			$proplist_education = $cff_inst->get_cfg_proplist($cff_e);
+		}
+		else
+		{
+			$proplist_education = array();
+		}
+		$props = array("school", "degree", "field", "speciality", "main_speciality", "in_progress", "obtain_language", "start", "end", "end_date", "diploma_nr");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
+			{
+				$this->vars(array(
+					"CRM_PERSON_EDUCATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATIONS.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
 
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_EDUCATION",
@@ -5661,6 +5698,15 @@ class crm_person extends class_base
 				"crm_person_education.end_date" => get_lc_date($to->prop("end_date")),
 				"crm_person_education.diploma_nr" => $to->prop("diploma_nr"),
 			));
+			foreach($props as $prop)
+			{
+				if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
+				{
+					$this->vars(array(
+						"CRM_PERSON_EDUCATION.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATION.".strtoupper($prop)),
+					));
+				}
+			}
 
 			$CRM_PERSON_EDUCATION .= $this->parse("CRM_PERSON_EDUCATION");
 
@@ -5671,6 +5717,7 @@ class crm_person extends class_base
 		if($parse_cpe > 0)
 		{
 			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS.HEADER" => $this->parse("CRM_PERSON_EDUCATIONS.HEADER"),
 				"CRM_PERSON_EDUCATION" => $CRM_PERSON_EDUCATION,
 			));
 			$this->vars(array(
@@ -5681,6 +5728,25 @@ class crm_person extends class_base
 
 		// SUB: CRM_PERSON_ADD_EDUCATIONS
 		$parse_cpae = 0;
+		$cff_ae = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_ADD_EDUCATION));
+		if($cff_ae)
+		{
+			$proplist_add_education = $cff_inst->get_cfg_proplist($cff_ae);
+		}
+		else
+		{
+			$proplist_add_education = array();
+		}
+		$props = array("org", "field", "time", "time_text", "length", "length_hrs");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_add_education) || count($proplist_add_education) == 0)
+			{
+				$this->vars(array(
+					"CRM_PERSON_ADD_EDUCATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_ADD_EDUCATIONS.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
 
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_ADD_EDUCATION",
@@ -5698,6 +5764,15 @@ class crm_person extends class_base
 				"crm_person_add_education.length" => $to->prop("length"),
 				"crm_person_add_education.length_hrs" => $to->prop("length_hrs"),
 			));
+			foreach($props as $prop)
+			{
+				if(array_key_exists($prop, $proplist_add_education) || count($proplist_add_education) == 0)
+				{
+					$this->vars(array(
+						"CRM_PERSON_ADD_EDUCATION.".strtoupper($prop) => $this->parse("CRM_PERSON_ADD_EDUCATION.".strtoupper($prop)),
+					));
+				}
+			}
 
 			$CRM_PERSON_ADD_EDUCATION .= $this->parse("CRM_PERSON_ADD_EDUCATION");
 
@@ -5708,6 +5783,7 @@ class crm_person extends class_base
 		if($parse_cpae > 0)
 		{
 			$this->vars(array(
+				"CRM_PERSON_ADD_EDUCATIONS.HEADER" => $this->parse("CRM_PERSON_ADD_EDUCATIONS.HEADER"),
 				"CRM_PERSON_ADD_EDUCATION" => $CRM_PERSON_ADD_EDUCATION,
 			));
 			$this->vars(array(
@@ -5718,6 +5794,17 @@ class crm_person extends class_base
 
 		// SUB: CRM_PERSON_LANGUAGES
 		$parse_cpl = 0;
+		$cff_l = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_LANGUAGE));
+		if($cff_l)
+		{
+			$proplist_crm_person_language = $cff_inst->get_cfg_proplist($cff_l);
+		}
+		else
+		{
+			$proplist_crm_person_language = array();
+		}
+		$props = array("talk", "understand", "write");
+		
 		$options = $pers_lang_inst->lang_lvl_options;
 		$CRM_PERSON_LANGUAGE = "";
 		foreach($o->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
@@ -5731,6 +5818,15 @@ class crm_person extends class_base
 					"crm_person_language.understand" => $options[$to->prop("understand")],
 					"crm_person_language.write" => $options[$to->prop("write")],
 				));
+				foreach($props as $prop)
+				{
+					if(array_key_exists($prop, $proplist_crm_person_language) || count($proplist_crm_person_language) == 0)
+					{
+						$this->vars(array(
+							"CRM_PERSON_LANGUAGE.".strtoupper($prop) => $this->parse("CRM_PERSON_LANGUAGE.".strtoupper($prop)),
+						));
+					}
+				}
 				$CRM_PERSON_LANGUAGE .= $this->parse("CRM_PERSON_LANGUAGE");
 			}
 			$parse_cpl++;
@@ -5821,7 +5917,7 @@ class crm_person extends class_base
 		}
 
 		// SUB: CRM_PERSON.DRIVERS_LICENSE
-		if(strlen($o->prop("drivers_license")) > 0)
+		if(strlen($o->prop("drivers_license")) > 0 && (array_key_exists("drivers_license", $proplist) || count($proplist) == 0))
 		{
 			$options = $this->drivers_licence_categories;
 			$dl = explode("," ,trim($o->prop("drivers_license"), ","));
@@ -5837,6 +5933,12 @@ class crm_person extends class_base
 				"crm_person.drivers_license" => $v,
 				"crm_person.dl_can_use" => ($o->prop("dl_can_use") == 1) ? t("Jah") : t("Ei"),
 			));
+			if(array_key_exists("dl_can_use", $proplist) || count($proplist) == 0)
+			{
+				$this->vars(array(
+					"CRM_PERSON.DL_CAN_USE" => $this->parse("CRM_PERSON.DL_CAN_USE"),
+				));
+			}
 			$this->vars(array(
 				"CRM_PERSON.DRIVERS_LICENSE" => $this->parse("CRM_PERSON.DRIVERS_LICENSE"),
 			));
@@ -5845,6 +5947,25 @@ class crm_person extends class_base
 
 		// SUB: CRM_COMPANY_RELATIONS
 		$parse_ccr = 0;
+		$cff_cr = $cff_inst->get_sysdefault(array("clid" => CL_CRM_COMPANY_RELATION));
+		if($cff_cr)
+		{
+			$proplist_company_relation = $cff_inst->get_cfg_proplist($cff_cr);
+		}
+		else
+		{
+			$proplist_company_relation = array();
+		}
+		$props = array("org", "start", "end", "add_info");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_company_relation) || count($proplist_company_relation) == 0)
+			{
+				$this->vars(array(
+					"CRM_COMPANY_RELATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_COMPANY_RELATIONS.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
 
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_COMPANY_RELATION",
@@ -5880,6 +6001,15 @@ class crm_person extends class_base
 				"crm_company_relation.end" => $end,
 				"crm_company_relation.add_info" => nl2br($to->prop("add_info")),
 			));
+			foreach($props as $prop)
+			{
+				if(array_key_exists($prop, $proplist_company_relation) || count($proplist_company_relation) == 0)
+				{
+					$this->vars(array(
+						"CRM_COMPANY_RELATION.".strtoupper($prop) => $this->parse("CRM_COMPANY_RELATION.".strtoupper($prop)),
+					));
+				}
+			}
 
 			$CRM_COMPANY_RELATION .= $this->parse("CRM_COMPANY_RELATION");
 
@@ -5891,6 +6021,7 @@ class crm_person extends class_base
 		{
 			$this->vars(array(
 				"CRM_COMPANY_RELATION" => $CRM_COMPANY_RELATION,
+				"CRM_COMPANY_RELATIONS.HEADER" => $this->parse("CRM_COMPANY_RELATIONS.HEADER"),
 			));
 			$this->vars(array(
 				"CRM_COMPANY_RELATIONS" => $this->parse("CRM_COMPANY_RELATIONS"),
@@ -6061,6 +6192,26 @@ class crm_person extends class_base
 		$parse_cpwr = 0;
 		$CRM_PERSON_WORK_RELATION = "";
 
+		$cff_wr = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_WORK_RELATION));
+		if($cff_wr)
+		{
+			$proplist_work_relation = $cff_inst->get_cfg_proplist($cff_wr);
+		}
+		else
+		{
+			$proplist_work_relation = array();
+		}
+		$props = array("org", "section", "profession", "start", "end", "tasks", "load", "salary", "benefits", "field");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_work_relation) || count($proplist_work_relation) == 0)
+			{
+				$this->vars(array(
+					"CRM_PERSON_WORK_RELATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_WORK_RELATIONS.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
+
 		$conns = $o->connections_from(array("type" => array("RELTYPE_CURRENT_JOB", "RELTYPE_PREVIOUS_JOB")));
 		
 		foreach($conns as $conn)
@@ -6082,6 +6233,15 @@ class crm_person extends class_base
 				"crm_person_work_relation.benefits" => $to->prop("benefits"),
 				"crm_person_work_relation.field" => $to->prop("field.name"),
 			));
+			foreach($props as $prop)
+			{
+				if(array_key_exists($prop, $proplist_work_relation) || count($proplist_work_relation) == 0)
+				{
+					$this->vars(array(
+						"CRM_PERSON_WORK_RELATION.".strtoupper($prop) => $this->parse("CRM_PERSON_WORK_RELATION.".strtoupper($prop)),
+					));
+				}
+			}
 			$CRM_PERSON_WORK_RELATION .= $this->parse("CRM_PERSON_WORK_RELATION");
 			$parse_cpwr++;
 		}
@@ -6089,6 +6249,7 @@ class crm_person extends class_base
 		if($parse_cpwr > 0)
 		{
 			$this->vars(array(
+				"CRM_PERSON_WORK_RELATIONS.HEADER" => $this->parse("CRM_PERSON_WORK_RELATIONS.HEADER"),
 				"CRM_PERSON_WORK_RELATION" => $CRM_PERSON_WORK_RELATION,
 			));
 			$this->vars(array(
@@ -6098,7 +6259,120 @@ class crm_person extends class_base
 		// END SUB: CRM_PERSON_WORK_RELATIONS
 
 		// SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED and PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL
-		$parse_pmjw = 0;
+		$parse_pmjw = 0;$cff_jo = $cff_inst->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER));
+		
+		$cff_jw = $cff_inst->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_WANTED));
+		if($cff_jw)
+		{
+			$proplist_job_wanted = $cff_inst->get_cfg_proplist($cff_jw);
+		}
+		else
+		{
+			$proplist_job_wanted = array();
+		}
+		if(array_key_exists("field", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.FIELD" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.FIELD"),
+			));
+		}
+		if(array_key_exists("job_type", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.JOB_TYPE" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.JOB_TYPE"),
+			));
+		}
+		if(array_key_exists("professions", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSION" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSION"),
+			));
+		}
+		if(array_key_exists("professions_rels", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS_RELS" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS_RELS"),
+			));
+		}
+		if(array_key_exists("load", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOAD" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOAD"),
+			));
+		}
+		if(array_key_exists("pay", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PAY" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PAY"),
+			));
+		}
+		if(array_key_exists("location", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION"),
+			));
+		}
+		if(array_key_exists("location_2", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_2" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_2"),
+			));
+		}
+		if(array_key_exists("location_text", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_TEXT" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_TEXT"),
+			));
+		}
+		if(array_key_exists("addinfo", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDINFO" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDINFO"),
+			));
+		}
+		if(array_key_exists("work_at_night", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_AT_NIGHT" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_AT_NIGHT"),
+			));
+		}
+		if(array_key_exists("work_by_schedule", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_BY_SCHEDULE" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_BY_SCHEDULE"),
+			));
+		}
+		if(array_key_exists("start_working", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.START_WORKING" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.START_WORKING"),
+			));
+		}
+		if(array_key_exists("ready_for_errand", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.READY_FOR_ERRAND" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.READY_FOR_ERRAND"),
+			));
+		}
+		if(array_key_exists("additional_skills", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDITIONAL_SKILLS" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDITIONAL_SKILLS"),
+			));
+		}
+		if(array_key_exists("handicaps", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HANDICAPS" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HANDICAPS"),
+			));
+		}
+		if(array_key_exists("hobbies_vs_work", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HOBBIES_VS_WORK" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HOBBIES_VS_WORK"),
+			));
+		}
+
 		$PERSONNEL_MANAGEMENT_JOB_WANTED = "";
 		$PERSONNEL_MANAGEMENT_JOB_WANTED_FIELD = "";
 		$PERSONNEL_MANAGEMENT_JOB_WANTED_JOB_TYPE = "";
@@ -6226,51 +6500,256 @@ class crm_person extends class_base
 				"personnel_management_job_wanted.handicaps" => nl2br($to->prop("handicaps")),
 				"personnel_management_job_wanted.hobbies_vs_work" => nl2br($to->prop("hobbies_vs_work")),
 			));
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_FIELD .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_JOB_TYPE .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_PROFESSIONS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_PROFESSIONS_RELS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_LOAD .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_PAY .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PAY");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_LOCATION .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_LOCATION_2 .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_LOCATION_TEXT .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_ADDINFO .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_WORK_AT_NIGHT .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_WORK_BY_SCHEDULE .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_START_WORKING .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_READY_FOR_ERRAND .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_ADDITIONAL_SKILLS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_HANIDAPS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HANIDAPS");
-			$PERSONNEL_MANAGEMENT_JOB_WANTED_HOBBIES_VS_WORK .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK");
+			if(array_key_exists("field", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD"),
+				));
+			}
+			if(array_key_exists("job_type", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE"),
+				));
+			}
+			if(array_key_exists("professions", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION"),
+				));
+			}
+			if(array_key_exists("professions_rels", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS"),
+				));
+			}
+			if(array_key_exists("load", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD"),
+				));
+			}
+			if(array_key_exists("pay", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.PAY" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PAY"),
+				));
+			}
+			if(array_key_exists("location", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION"),
+				));
+			}
+			if(array_key_exists("location_2", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2"),
+				));
+			}
+			if(array_key_exists("location_text", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT"),
+				));
+			}
+			if(array_key_exists("addinfo", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO"),
+				));
+			}
+			if(array_key_exists("work_at_night", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT"),
+				));
+			}
+			if(array_key_exists("work_by_schedule", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE"),
+				));
+			}
+			if(array_key_exists("start_working", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING"),
+				));
+			}
+			if(array_key_exists("ready_for_errand", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND"),
+				));
+			}
+			if(array_key_exists("additional_skills", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS"),
+				));
+			}
+			if(array_key_exists("handicaps", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS"),
+				));
+			}
+			if(array_key_exists("hobbies_vs_work", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK"),
+				));
+			}
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_FIELD .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.FIELD");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_JOB_TYPE .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.JOB_TYPE");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_PROFESSIONS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_PROFESSIONS_RELS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS_RELS");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOAD .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOAD");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_PAY .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PAY");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOCATION .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOCATION_2 .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_2");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOCATION_TEXT .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_TEXT");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_ADDINFO .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDINFO");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_WORK_AT_NIGHT .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_AT_NIGHT");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_WORK_BY_SCHEDULE .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_BY_SCHEDULE");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_START_WORKING .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.START_WORKING");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_READY_FOR_ERRAND .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.READY_FOR_ERRAND");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_ADDITIONAL_SKILLS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDITIONAL_SKILLS");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HANIDAPS .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HANIDAPS");
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HOBBIES_VS_WORK .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HOBBIES_VS_WORK");
 
 			$PERSONNEL_MANAGEMENT_JOB_WANTED .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED");
 			$parse_pmjw++;
 		}
+		$this->vars(array(
+			"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER"),
+			"PERSONNEL_MANAGEMENT_JOB_WANTED" => $PERSONNEL_MANAGEMENT_JOB_WANTED,
+			// PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.FIELD" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_FIELD,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.JOB_TYPE" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_JOB_TYPE,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_PROFESSIONS,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS_RELS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_PROFESSIONS_RELS,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOAD" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOAD,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PAY" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_PAY,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOCATION,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_2" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOCATION_2,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_TEXT" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_LOCATION_TEXT,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDINFO" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_ADDINFO,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_AT_NIGHT" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_WORK_AT_NIGHT,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_BY_SCHEDULE" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_WORK_BY_SCHEDULE,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.START_WORKING" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_START_WORKING,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.READY_FOR_ERRAND" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_READY_FOR_ERRAND,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDITIONAL_SKILLS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_ADDITIONAL_SKILLS,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HANIDAPS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HANIDAPS,
+			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HOBBIES_VS_WORK" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HOBBIES_VS_WORK,
+		));
+		if(array_key_exists("field", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD.VERTICAL"),
+			));
+		}
+		if(array_key_exists("job_type", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE.VERTICAL"),
+			));
+		}
+		if(array_key_exists("professions", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION.VERTICAL"),
+			));
+		}
+		if(array_key_exists("professions_rels", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS.VERTICAL"),
+			));
+		}
+		if(array_key_exists("load", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD.VERTICAL"),
+			));
+		}
+		if(array_key_exists("pay", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.PAY.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PAY.VERTICAL"),
+			));
+		}
+		if(array_key_exists("location", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION.VERTICAL"),
+			));
+		}
+		if(array_key_exists("location_2", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2.VERTICAL"),
+			));
+		}
+		if(array_key_exists("location_text", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT.VERTICAL"),
+			));
+		}
+		if(array_key_exists("addinfo", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO.VERTICAL"),
+			));
+		}
+		if(array_key_exists("work_at_night", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT.VERTICAL"),
+			));
+		}
+		if(array_key_exists("work_by_schedule", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE.VERTICAL"),
+			));
+		}
+		if(array_key_exists("start_working", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING.VERTICAL"),
+			));
+		}
+		if(array_key_exists("ready_for_errand", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND.VERTICAL"),
+			));
+		}
+		if(array_key_exists("additional_skills", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS.VERTICAL"),
+			));
+		}
+		if(array_key_exists("handicaps", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS.VERTICAL"),
+			));
+		}
+		if(array_key_exists("hobbies_vs_work", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK.VERTICAL"),
+			));
+		}
 
 		if($parse_pmjw > 0)
 		{
-			$this->vars(array(
-				"PERSONNEL_MANAGEMENT_JOB_WANTED" => $PERSONNEL_MANAGEMENT_JOB_WANTED,
-				// PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD" => $PERSONNEL_MANAGEMENT_JOB_WANTED_FIELD,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE" => $PERSONNEL_MANAGEMENT_JOB_WANTED_JOB_TYPE,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_PROFESSIONS,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_PROFESSIONS_RELS,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD" => $PERSONNEL_MANAGEMENT_JOB_WANTED_LOAD,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.PAY" => $PERSONNEL_MANAGEMENT_JOB_WANTED_PAY,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION" => $PERSONNEL_MANAGEMENT_JOB_WANTED_LOCATION,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2" => $PERSONNEL_MANAGEMENT_JOB_WANTED_LOCATION_2,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT" => $PERSONNEL_MANAGEMENT_JOB_WANTED_LOCATION_TEXT,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO" => $PERSONNEL_MANAGEMENT_JOB_WANTED_ADDINFO,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT" => $PERSONNEL_MANAGEMENT_JOB_WANTED_WORK_AT_NIGHT,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE" => $PERSONNEL_MANAGEMENT_JOB_WANTED_WORK_BY_SCHEDULE,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING" => $PERSONNEL_MANAGEMENT_JOB_WANTED_START_WORKING,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND" => $PERSONNEL_MANAGEMENT_JOB_WANTED_READY_FOR_ERRAND,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_ADDITIONAL_SKILLS,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.HANIDAPS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_HANIDAPS,
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK" => $PERSONNEL_MANAGEMENT_JOB_WANTED_HOBBIES_VS_WORK,
-			));
 			$this->vars(array(
 				"PERSONNEL_MANAGEMENT_JOBS_WANTED" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED"),
 				"PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL"),
@@ -6280,6 +6759,29 @@ class crm_person extends class_base
 
 		// SUB: PREVIOUS_CANDIDACIES
 		$parse_pc = 0;
+		$cff_jo = $cff_inst->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER));
+		if($cff_jo)
+		{
+			$proplist_job_offer = $cff_inst->get_cfg_proplist($cff_jo);
+		}
+		else
+		{
+			$proplist_job_offer = array();
+		}
+		$props = array("profession", "field", "end", "addinfo");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PREVIOUS_CANDIDACIES.HEADER.".strtoupper($prop) => $this->parse("PREVIOUS_CANDIDACIES.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
+		$this->vars(array(
+			"PREVIOUS_CANDIDACIES.HEADER.RATING" => $this->parse("PREVIOUS_CANDIDACIES.HEADER.RATING"),
+		));
+
 		$PREVIOUS_CANDIDACY = "";
 
 		$pm_obj = obj($pm_inst->get_sysdefault());
@@ -6305,6 +6807,18 @@ class crm_person extends class_base
 				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
 				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
+			foreach($props as $prop)
+			{
+				if(array_key_exists($prop, $proplist_job_offer) || count($proplist_job_offer) == 0)
+				{
+					$this->vars(array(
+						"PREVIOUS_CANDIDACY.".strtoupper($prop) => $this->parse("PREVIOUS_CANDIDACY.".strtoupper($prop)),
+					));
+				}
+			}
+			$this->vars(array(
+				"PREVIOUS_CANDIDACY.RATING" => $this->parse("PREVIOUS_CANDIDACY.RATING"),
+			));
 			$PREVIOUS_CANDIDACY .= $this->parse("PREVIOUS_CANDIDACY");
 			$parse_pc++;
 		}
@@ -6312,6 +6826,7 @@ class crm_person extends class_base
 		if($parse_pc > 0)
 		{
 			$this->vars(array(
+				"PREVIOUS_CANDIDACIES.HEADER" => $this->parse("PREVIOUS_CANDIDACIES.HEADER"),
 				"PREVIOUS_CANDIDACY" => $PREVIOUS_CANDIDACY,
 			));
 			$this->vars(array(
@@ -6323,7 +6838,58 @@ class crm_person extends class_base
 		// SUB: PERSONNEL_MANAGEMENT_CANDIDATES
 		$parse_pmc = 0;
 		$PERSONNEL_MANAGEMENT_CANDIDATE = "";
-
+		$cff_jo = $cff_inst->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER));
+		if($cff_jo)
+		{
+			$proplist_job_offer = $cff_inst->get_cfg_proplist($cff_jo);
+		}
+		else
+		{
+			$proplist_job_offer = array();
+		}
+		if(array_key_exists("company", $proplist_job_offer) || count($proplist_job_offer) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY"),
+			));
+		}
+		if(array_key_exists("profession", $proplist_job_offer) || count($proplist_job_offer) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.PROFESSION" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.PROFESSION"),
+			));
+		}
+		if(array_key_exists("field", $proplist_job_offer) || count($proplist_job_offer) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.FIELD" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.FIELD"),
+			));
+		}
+		if(array_key_exists("end", $proplist_job_offer) || count($proplist_job_offer) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.END" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.END"),
+			));
+		}
+		if(array_key_exists("company", $proplist_job_offer) || count($proplist_job_offer) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY"),
+			));
+		}
+		// Rating will be there no matter what.
+		$this->vars(array(
+			"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY"),
+		));
+		if(array_key_exists("addinfo", $proplist_job_offer) || count($proplist_job_offer) == 0)
+		{
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.ADDINFO" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.ADDINFO"),
+			));
+		}
+		$this->vars(array(
+			"PERSONNEL_MANAGEMENT_CANDIDATES.HEADER" => $this->parse("PERSONNEL_MANAGEMENT_CANDIDATES.HEADER"),
+		));
 		foreach($o->connections_to(array("from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE, "type" => "RELTYPE_PERSON")) as $conn)
 		{
 			$from = $conn->from();
@@ -6342,6 +6908,46 @@ class crm_person extends class_base
 				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
 				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
+			if(array_key_exists("company", $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_OFFER.COMPANY" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.COMPANY"),
+				));
+			}
+			if(array_key_exists("profession", $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_OFFER.PROFESSION" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.PROFESSION"),
+				));
+			}
+			if(array_key_exists("field", $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_OFFER.FIELD" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.FIELD"),
+				));
+			}
+			if(array_key_exists("end", $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_OFFER.END" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.END"),
+				));
+			}
+			if(array_key_exists("company", $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_OFFER.COMPANY" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.COMPANY"),
+				));
+			}
+			// Rating will be there no matter what.
+			$this->vars(array(
+				"PERSONNEL_MANAGEMENT_JOB_OFFER.COMPANY" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.COMPANY"),
+			));
+			if(array_key_exists("addinfo", $proplist_job_offer) || count($proplist_job_offer) == 0)
+			{
+				$this->vars(array(
+					"PERSONNEL_MANAGEMENT_JOB_OFFER.ADDINFO" => $this->parse("PERSONNEL_MANAGEMENT_JOB_OFFER.ADDINFO"),
+				));
+			}
 			$PERSONNEL_MANAGEMENT_CANDIDATE .= $this->parse("PERSONNEL_MANAGEMENT_CANDIDATE");
 			$parse_pmc++;
 		}
@@ -6363,6 +6969,15 @@ class crm_person extends class_base
 		$CRM_FAMILY_RELATION = array();
 
 		$conns = $o->connections_from(array("type" => "RELTYPE_FAMILY_RELATIONS"));
+		$cff_fr = $cff_inst->get_sysdefault(array("clid" => CL_CRM_FAMILY_RELATION));
+		if($cff_fr)
+		{
+			$proplist_family_relation = $cff_inst->get_cfg_proplist($cff_fr);
+		}
+		else
+		{
+			$proplist_family_relation = array();
+		}
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
@@ -6378,6 +6993,24 @@ class crm_person extends class_base
 					"crm_family_relation.start" => get_lc_date($to->prop("start")),
 					"crm_family_relation.end" => get_lc_date($to->prop("end")),
 				));
+				if(array_key_exists("person", $proplist_family_relation) || count($proplist_family_relation) == 0)
+				{
+					$this->vars(array(
+						"CRM_FAMILY_RELATION.PERSON" => $this->parse("CRM_FAMILY_RELATION.PERSON"),
+					));
+				}
+				if(array_key_exists("start", $proplist_family_relation) || count($proplist_family_relation) == 0)
+				{
+					$this->vars(array(
+						"CRM_FAMILY_RELATION.START" => $this->parse("CRM_FAMILY_RELATION.START"),
+					));
+				}
+				if(array_key_exists("end", $proplist_family_relation) || count($proplist_family_relation) == 0)
+				{
+					$this->vars(array(
+						"CRM_FAMILY_RELATION.END" => $this->parse("CRM_FAMILY_RELATION.END"),
+					));
+				}
 				$CRM_FAMILY_RELATION[$to->prop("relation_type")] .= $this->parse("CRM_FAMILY_RELATION_".$to->prop("relation_type"));
 				$parse_cfr++;
 			}
@@ -6459,6 +7092,39 @@ class crm_person extends class_base
 				"recommendation.person.profession" => $profession,
 				"recommendation.person.company" => $company,
 			));
+			$cff_rec = $cff_inst->get_sysdefault(array("clid" => CL_RECOMMENDATION));
+			if($cff_rec)
+			{
+				$proplist_recommendation = $cff_inst->get_cfg_proplist($cff_rec);
+			}
+			else
+			{
+				$proplist_recommendation = array();
+			}
+			if(array_key_exists("person", $proplist_recommendation) || count($proplist_recommendation) == 0)
+			{
+				$this->vars(array(
+					"RECOMMENDATION.PERSON" => $this->parse("RECOMMENDATION.PERSON"),
+				));
+			}
+			if(array_key_exists("relation", $proplist_recommendation) || count($proplist_recommendation) == 0)
+			{
+				$this->vars(array(
+					"RECOMMENDATION.RELATION" => $this->parse("RECOMMENDATION.RELATION"),
+				));
+			}
+			if(array_key_exists("profession", $proplist_recommendation) || count($proplist_recommendation) == 0)
+			{
+				$this->vars(array(
+					"RECOMMENDATION.PERSON.PROFESSION" => $this->parse("RECOMMENDATION.PERSON.PROFESSION"),
+				));
+			}
+			if(array_key_exists("org", $proplist_recommendation) || count($proplist_recommendation) == 0)
+			{
+				$this->vars(array(
+					"RECOMMENDATION.PERSON.COMPANY" => $this->parse("RECOMMENDATION.PERSON.COMPANY"),
+				));
+			}
 			unset($profession);
 			unset($company);
 			$CRM_RECOMMENDATION .= $this->parse("CRM_RECOMMENDATION");
@@ -7113,10 +7779,11 @@ class crm_person extends class_base
 			$time_real = $o->prop("time_real");
 			$sum = str_replace(",", ".", $ttc);
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-			
+
 			//kui on kokkuleppehind kas arvel, v6i kui arvet ei ole, siis toimetusel... tuleb v2he arvutada
-			if(is_object($b))
+			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
+				$sum = $row_inst->get_row_ageement_price($o);
 				$br_ol = new object_list(array(
 					"class_id" => CL_CRM_BILL_ROW,
 					"lang_id" => array(),
