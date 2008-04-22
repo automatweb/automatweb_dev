@@ -58,8 +58,14 @@ include("$basedir/init.aw");
 $args_from_caller = isset($args["mkcl_file"]);
 $stdin = fopen("php://stdin", "r");
 $class = array();
+try
+{
 $aw_basedir = aw_ini_get("basedir");
+}
+catch(Exception $e)
+{
 
+}
 ///////////////////////////////////////////////////////////////////
 // ask the user the needed info
 //////////////////////////////////////////////////////////////////
