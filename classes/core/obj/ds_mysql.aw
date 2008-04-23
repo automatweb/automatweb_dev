@@ -1480,6 +1480,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$fld = $key;
 
 			// check for dots in key. if there are any, then we gots some join thingie
+			$is_done = false;
 			if (strpos($key, ".") !== false)
 			{
 				list($tbl, $fld) = $this->_do_proc_complex_param(array(
@@ -1487,9 +1488,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"val" => $val,
 					"params" => $p_tmp
 				));
+				if ($tbl == "__rewrite_prop")
+				{
+					$key = $fld;
+				}
+				else
+				{
+					$is_done = true;
+				}
 			}
-			else
-			if (isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
+
+			if (!$is_done && isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
 			{
 				$tbl = $this->properties[$key]["table"];
 				$fld = $this->properties[$key]["field"];
@@ -2114,6 +2123,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						}
 					}
 					
+					if ($prop["store"] == "connect" || $prop["method"] == "serialize")	// need psecial handling, rewrite to undefined class filter
+					{
+						return array("__rewrite_prop", $filt[1]);
+					}
 					$this->used_tables[$prop["table"]] = $prop["table"];
 					return array($prop["table"], $prop["field"]);
 				}
