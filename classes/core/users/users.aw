@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.5 2008/04/16 08:53:00 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.6 2008/04/23 10:32:07 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -469,12 +469,12 @@ die();
 
 			if ($hig_o)
 			{
-				$this->_init_group_settings($hig_o);
+				$this->_init_group_settings($hig_o, true);
 			}
 
 			if ($hig_w_u)
 			{
-				$this->_init_group_settings($hig_w_u);
+				$this->_init_group_settings($hig_w_u, false);
 			}
 
 			if (aw_ini_get("groups.multi_group_admin_rootmenu"))
@@ -485,11 +485,10 @@ die();
 					aw_disable_acl();
 					$o = obj($g_oid);
 					aw_restore_acl();
-					$ar2 = $o->meta("admin_rootmenu2");
-					$lang_id = aw_global_get("lang_id");
-					if (is_array($ar2) && $ar2[$lang_id])
+					$ar2 = $this->_get_admin_rootmenu_from_group($o, true);
+					if ($ar2 !== null)
 					{
-						$awa = new aw_array($ar2[$lang_id]);
+						$awa = new aw_array($ar2);
 						foreach($awa->get() as $k => $v)
 						{
 							$admr[] = $v;
@@ -1050,29 +1049,55 @@ die();
 		return $data;
 	}
 
-	private function _init_group_settings($group_oid)
+	private function _init_group_settings($group_oid, $inherit = true)
 	{
 		aw_disable_acl();
 		$o = obj($group_oid);
 		aw_restore_acl();
-		$ar2 = $o->meta("admin_rootmenu2");
-		$gf = $o->meta("grp_frontpage");
-		$lang_id = aw_global_get("lang_id");
-		if (is_array($ar2) && $ar2[$lang_id])
+		$admin_rootmenu = $this->_get_admin_rootmenu_from_group($o, $inherit);
+
+		if ($admin_rootmenu !== null)
 		{
-			aw_ini_set("admin_rootmenu2",$ar2[$lang_id]);
+			aw_ini_set("admin_rootmenu2",$admin_rootmenu);
 			$inrm = aw_ini_get("ini_rootmenu");
 			if (!$inrm)
 			{
 				$inrm = aw_ini_get("rootmenu");
 			}
 			aw_ini_set("ini_rootmenu", $inrm);
-			aw_ini_set("rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+			aw_ini_set("rootmenu",is_array($admin_rootmenu) ? reset($admin_rootmenu) : $admin_rootmenu);
 		}
+
+		$lang_id = aw_global_get("lang_id");
+		$gf = $o->meta("grp_frontpage");
 		if (is_array($gf) && $gf[$lang_id])
 		{
 			aw_ini_set("frontpage",$gf[$lang_id]);
 		}
+	}
+
+	private function _get_admin_rootmenu_from_group($group, $inherit = true)
+	{
+		$lang_id = aw_global_get("lang_id");
+
+		if ($inherit)
+		{
+			$items = $group->path();
+		}
+		else
+		{
+			$items = array($group);
+		}
+
+		foreach(array_reverse($items) as $o)
+		{
+			$ar2 = $o->meta("admin_rootmenu2");
+			if (is_array($ar2) && !empty($ar2[$lang_id]) && ($o->prop("inherit_rm") || $o->id() == $group->id()))
+			{
+				return $ar2[$lang_id];
+			}
+		}
+		return null;
 	}
 }
 ?>

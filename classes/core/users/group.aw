@@ -94,6 +94,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 @default group=admin_rm
 
+	@property inherit_rm type=checkbox ch_value=1 field=meta method=serialize table=objects
+	@caption P&auml;ri suurmen&uuml;&uuml; alumistele gruppidele
+
 	@property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
 	@caption Administreerimisliidese juurkaust
 
