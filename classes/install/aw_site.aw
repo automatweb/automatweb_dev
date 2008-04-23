@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.54 2008/02/11 09:43:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.55 2008/04/23 12:04:33 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1 maintainer=kristo
@@ -766,6 +766,7 @@ class aw_site extends class_base
 		$ini_opts["acl.use_new_acl"] = 1;
 		$ini_opts["document.use_new_parser"] = 1;
 		$ini_opts["promo.version"] = 2;
+		$ini_opts["menuedit.404redir"] = "${baseurl}/error";
 
 		aw_ini_set("site_id", $osid);
 
