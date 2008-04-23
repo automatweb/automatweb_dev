@@ -387,6 +387,18 @@
             <caption>Tulemused</caption>
       </property>
       <property>
+            <name>r_ra_res_style</name>
+            <table>objects</table>
+            <group>reports_all</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>ra_srch</parent>
+            <prop_cb>1</prop_cb>
+            <captionside>top</captionside>
+            <field>r_ra_res_style</field>
+            <caption></caption>
+      </property>
+      <property>
             <name>r_ra_btn</name>
             <table>objects</table>
             <group>reports_all</group>
