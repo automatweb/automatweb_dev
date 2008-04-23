@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.14 2008/04/22 08:24:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.15 2008/04/23 12:21:18 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -25,6 +25,9 @@
 
 	@property alt type=textbox table=objects field=meta method=serialize
 	@caption Alt
+
+	@property longdesc type=textarea rows=3 cols=30 table=objects field=meta method=serialize
+	@caption Pikk kirjeldus
 
 	@property link type=textbox table=images field=link
 	@caption Link
@@ -463,7 +466,8 @@ class image extends class_base
 				"doc_link" => $d->get_doc_link(obj($args["oid"])),
 				"image_id" => $idata["oid"],
 				"document_link" => $d->get_doc_link(obj($f["source"])),
-				"comments" => $num_comments
+				"comments" => $num_comments,
+				"longdesc" => $idata["meta"]["longdesc"]
 			);
 			$tmp = new aw_template;
 			lc_site_load("document", &$tmp);

@@ -58,6 +58,17 @@
             <caption>Alt</caption>
       </property>
       <property>
+            <name>longdesc</name>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>3</rows>
+            <cols>30</cols>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pikk kirjeldus</caption>
+      </property>
+      <property>
             <name>link</name>
             <group>general</group>
             <type>textbox</type>
