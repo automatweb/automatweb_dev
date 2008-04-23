@@ -241,11 +241,10 @@
             <name>r_ra_name</name>
             <table>objects</table>
             <group>reports_all</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
             <parent>ra_srch</parent>
-            <size>22</size>
             <field>r_ra_name</field>
             <caption>Ruumi nimi</caption>
       </property>
@@ -265,11 +264,10 @@
             <name>r_ra_project</name>
             <table>objects</table>
             <group>reports_all</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
             <parent>ra_srch</parent>
-            <size>22</size>
             <field>r_ra_project</field>
             <caption>Projekt</caption>
       </property>
@@ -350,6 +348,19 @@
             <captionside>top</captionside>
             <field>r_ra_only_done</field>
             <caption>Kohale ilmunud</caption>
+      </property>
+      <property>
+            <name>r_ra_only_paid</name>
+            <table>objects</table>
+            <group>reports_all</group>
+            <type>chooser</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>ra_srch</parent>
+            <prop_cb>1</prop_cb>
+            <captionside>top</captionside>
+            <field>r_ra_only_paid</field>
+            <caption>Maksnud</caption>
       </property>
       <property>
             <name>r_ra_unconfirmed</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.51 2008/04/03 12:43:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.52 2008/04/23 10:51:02 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -93,13 +93,13 @@
 
 			@layout ra_srch type=vbox closeable=1 area_caption=Otsing parent=ra_left
 			
-				@property r_ra_name type=textbox store=no captionside=top parent=ra_srch size=22
+				@property r_ra_name type=select store=no captionside=top parent=ra_srch
 				@caption Ruumi nimi
 
 				@property r_ra_booker_name type=textbox store=no captionside=top parent=ra_srch size=22
 				@caption Broneerija nimi
 
-				@property r_ra_project type=textbox store=no captionside=top parent=ra_srch size=22
+				@property r_ra_project type=select store=no captionside=top parent=ra_srch
 				@caption Projekt
 
 				@property r_ra_location type=select store=no captionside=top parent=ra_srch
@@ -119,6 +119,9 @@
 
 				@property r_ra_only_done type=chooser ch_value=1 store=no parent=ra_srch prop_cb=1 captionside=top
 				@caption Kohale ilmunud
+
+				@property r_ra_only_paid type=chooser ch_value=1 store=no parent=ra_srch prop_cb=1 captionside=top
+				@caption Maksnud
 
 				@property r_ra_unconfirmed type=checkbox ch_value=1 store=no parent=ra_srch no_caption=1 prop_cb=1
 				@caption K.A Kinnitamata
@@ -202,25 +205,7 @@ class spa_bookings_overview extends class_base
 		switch($prop["name"])
 		{
 			case "r_ra_seller":
-				$ol = new object_list(array(
-					"class_id" => CL_ROOM,
-					"lang_id" => array(),
-					"site_id" => array(),
-				));
-				$pro = array();
-				foreach($ol->arr() as $room)
-				{
-					if(is_array($room->prop("seller_professions")))
-					{
-						$pro = $pro  + $room->prop("seller_professions");
-					}
-				}
-				$ol2 = new object_list(array(
-					"class_id" => CL_CRM_PERSON,
-					"lang_id" => array(),
-					"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
-				));
-				$prop["options"] = array("" => "") + $ol2->names();
+				$prop["options"] = array("" => "") + $this->get_all_sellers();
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "r_ra_worker":
@@ -228,6 +213,10 @@ class spa_bookings_overview extends class_base
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "r_ra_only_done":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["options"] = array(0 => t("K&otilde;ik"), 2 => t("Ei") , 1 => t("Jah"));
+				break;
+			case "r_ra_only_paid":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				$prop["options"] = array(0 => t("K&otilde;ik"), 2 => t("Ei") , 1 => t("Jah"));
 				break;
@@ -258,12 +247,34 @@ class spa_bookings_overview extends class_base
 					"sellers" => t("Vahendajate aruanne"),
 					"workers" => t("T&ouml;&ouml;tajate aruanne"),
 					"projects" => $this->new_captions["r_ra_project"] ? $this->new_captions["r_ra_project"]. " ".t("aruanne") : t("Projektide aruanne"),
+					"dp" => ($this->new_captions["r_ra_project"] ? $this->new_captions["r_ra_project"]. " ": t("Projektide aruanne"))." ".t("P&auml;evade kaupa"),
 				);
+				if($prop["caption"] != $prop["orig_caption"])
+				{
+					$this->new_captions[$prop["name"]] = $prop["caption"];
+				}
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
 			case "r_ra_name":
+				if($prop["caption"] != $prop["orig_caption"])
+				{
+					$this->new_captions[$prop["name"]] = $prop["caption"];
+				}
+				$prop["options"] = array("" => "") + $this->get_all_room_names();
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+			case "r_ra_project":
+				$prop["options"] = array("" => "") + $this->get_all_project_names();
+				if($prop["caption"] != $prop["orig_caption"])
+				{
+					$this->new_captions[$prop["name"]] = $prop["caption"];
+				}
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
 			case "r_ra_booker_name":
 			case "r_ra_seller":
 			case "r_ra_worker":
-			case "r_ra_project":
 			case "r_ra_booking_to":
 			case "r_ra_unconfirmed":
 			case "r_ra_res_type":
@@ -277,6 +288,7 @@ class spa_bookings_overview extends class_base
 				$this->_get_report_table($arr);
 				break;
 			case "r_ra_days_projects_tab":
+				return PROP_IGNORE;
 				$this->_get_dp_table($arr);
 				break;
 			case "ra_tb":
@@ -284,6 +296,57 @@ class spa_bookings_overview extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function get_all_room_names()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.name"
+		));
+		return $ol->names();
+	}
+
+	function get_all_project_names()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.name"
+		));
+		return $ol->names();
+	}
+
+	function get_all_sellers()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$pro = array();
+		foreach($ol->arr() as $room)
+		{
+			if(is_array($room->prop("seller_professions")))
+			{
+				$pro = $pro  + $room->prop("seller_professions");
+			}
+		}
+		$ol2 = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
+					"oid" => $pro,
+				)
+			)),
+		));
+		return $ol2->names();
 	}
 
 	function get_all_workers()
@@ -304,7 +367,13 @@ class spa_bookings_overview extends class_base
 		$ol2 = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
 			"lang_id" => array(),
-			"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
+					"oid" => $pro,
+				)
+			)),
 		));
 		return $ol2->names();
 	}
@@ -323,7 +392,7 @@ class spa_bookings_overview extends class_base
 				break;
 		}
 		return $retval;
-	}
+	}	
 
 	function callback_mod_reforb($arr)
 	{
@@ -343,12 +412,14 @@ class spa_bookings_overview extends class_base
 		$arr["args"]["r_ra_booking_from"] = $arr["request"]["r_ra_booking_from"];
 		$arr["args"]["r_ra_booking_to"] = $arr["request"]["r_ra_booking_to"];
 		$arr["args"]["r_ra_only_done"] = $arr["request"]["r_ra_only_done"];
+		$arr["args"]["r_ra_only_paid"] = $arr["request"]["r_ra_only_paid"];
 		$arr["args"]["r_ra_res_type"] = $arr["request"]["r_ra_res_type"];
 		$arr["args"]["r_ra_seller"] = $arr["request"]["r_ra_seller"];
 		$arr["args"]["r_ra_worker"] = $arr["request"]["r_ra_worker"];
 		$arr["args"]["r_ra_project"] = $arr["request"]["r_ra_project"];
 		$arr["args"]["r_ra_unconfirmed"] = $arr["request"]["r_ra_unconfirmed"];
-		$arr["args"]["r_ra_location"] = $arr["request"]["r_ra_location"];
+
+
 
 		$arr["args"]["r_rs_name"] = $arr["request"]["r_rs_name"];
 		$arr["args"]["r_rs_booker_name"] = $arr["request"]["r_rs_booker_name"];
@@ -405,20 +476,20 @@ class spa_bookings_overview extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
-//		if ($selectah)
-//		{
+		if ($selectah)
+		{
 			$t->define_chooser(array(
 				"name" => "sel",
 				"field" => "oid"
 			));
-//		}
+		}
 	}
 
 	function _get_report_table(&$arr)
 	{
 		if($arr["request"]["do_print"])
 		{
-			$this->do_print_results = 1;
+			$this->do_print_results = $arr["request"]["do_print"];
 		}
 		$brons = $this->get_brons($arr);
 		if(!$arr["request"]["r_ra_res_type"])
@@ -437,22 +508,23 @@ class spa_bookings_overview extends class_base
 		return $this->new_captions["r_ra_project"] ? $this->new_captions["r_ra_project"] : t("Projekt");
 	}
 
-	function _get_dp_table($arr)
+	function get_dp_table($arr)
 	{
+		extract($arr);
 		if($arr["request"]["do_print"])
 		{
-			$this->do_print_results = 1;
+			$this->do_print_results = $arr["request"]["do_print"];
 		}
-		$brons = $this->get_brons($arr);
-		if($arr["request"]["r_ra_res_type"] != "projects")
-		{
-			return;
-		}
-		$t =& $arr["prop"]["vcl_inst"];
+//		$brons = $this->get_brons($arr);
+//		if($arr["request"]["r_ra_res_type"] != "projects")
+//		{
+//			return;
+//		}
+//		$t =& $arr["prop"]["vcl_inst"];
 		$step = 3600 * 24;
 
-		$start = date_edit::get_timestamp($arr["request"]["r_ra_booking_from"]);
-		$end = date_edit::get_timestamp($arr["request"]["r_ra_booking_to"]);
+		$start = date_edit::get_timestamp($_GET["r_ra_booking_from"]);
+		$end = date_edit::get_timestamp($_GET["r_ra_booking_to"]);
 
 		$t->define_field(array(
 			"name" => "p",
@@ -460,28 +532,38 @@ class spa_bookings_overview extends class_base
 			"chgbgcolor" => "color",
 		));
 
+		if(!$end > 1)
+		{
+			$end = time();
+		}
 		if(!($start > 1))
 		{
 			$start = ($end - 30*3600*24);
 		}
 
 		$data = array();
+		$proj_sum = array();
+		$day_sum = array();
+		$sum = 0;
 		$projects = array();
 		foreach ($brons->arr() as $b)
 		{
 			$project_id = $b->prop("project");
 			$projects[$project_id] = $project_id;
 			$data[date("Ymd" , $b->prop("start1"))][$project_id]++;
+			$proj_sum[$project_id]++;
+			$day_sum[date("Ymd" , $b->prop("start1"))]++;
+			$sum++;
 			$data[date("Ymd" , $b->prop("start1"))]["time"] = $b->prop("start1");
 		}
 		ksort($data);
 		foreach($projects as $project)
 		{
-			$p = "";
+			$p = t("(M&auml;&auml;ramata)");
 			if($this->can("view" , $project))
 			{
 				$po = obj($project);
-				$p = $po->name();
+				$p = $po->name()?$po->name():t("(Nimetu)");
 			}
 			$t->define_field(array(
 				"name" => $project,
@@ -489,6 +571,12 @@ class spa_bookings_overview extends class_base
 				"chgbgcolor" => "color",
 			));
 		}
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Kokku"),
+			"chgbgcolor" => "color",
+		));
 
 /*		while($start < $end)
 		{
@@ -501,11 +589,44 @@ class spa_bookings_overview extends class_base
 		}
 */
 		$t->set_sortable(false);
+		while($start < $end)
+		{
+			$val = $data[date("Ymd" , $start)];
+			$val["p"] = substr(date("l" , $start) , 0 , 2).date(" d/m/y" , $start);
+			$val["sum"] = $day_sum[date("Ymd" , $start)];
+			$t->define_data($val);
+			$start = $start + 24*3600;
+		}
+		
+		$proj_sum["p"] = t("Kokku:");
+		$proj_sum["sum"] = $sum;
+		$t->define_data($proj_sum);
+
+
+		if ($this->do_print_results == 1)
+		{
+			$i = new aw_template();
+			$i->init("automatweb");
+			$i->read_template("index.tpl");
+			$i->vars(array(
+				"content" => $t->draw()
+			));
+			die($i->parse()."<script language=javascript>window.print();</script>");
+		}
+		if ($this->do_print_results == 2)
+		{
+			header("Content-type: text/csv; charset=aw_global_get('charset')");
+			header("Content-disposition: inline; filename=stats.csv;");
+			die(html_entity_decode($t->get_csv_file()));
+		}
+
+/*
 		foreach($data as $time => $val)
 		{
 			$val["p"] = substr(date("l" , $val["time"]) , 0 , 2).date(" d/m/y" , $val["time"]);
 			$t->define_data($val);
 		}
+*/
 	}
 
 	function get_sellers_table($arr)
@@ -588,7 +709,7 @@ class spa_bookings_overview extends class_base
 			"brons" => $b_cnt,
 			"color" => "grey",
 		));
-		if ($this->do_print_results)
+		if ($this->do_print_results == 1)
 		{
 			$i = new aw_template();
 			$i->init("automatweb");
@@ -597,6 +718,12 @@ class spa_bookings_overview extends class_base
 				"content" => $t->draw()
 			));
 			die($i->parse()."<script language=javascript>window.print();</script>");
+		}
+		if ($this->do_print_results == 2)
+		{
+			header("Content-type: text/csv; charset=aw_global_get('charset')");
+			header("Content-disposition: inline; filename=stats.csv;");
+			die(html_entity_decode($t->get_csv_file()));
 		}
 	}
 
@@ -644,6 +771,20 @@ class spa_bookings_overview extends class_base
 	function get_rooms_table($arr)
 	{
 		extract($arr);
+		$this->_init_brons_table($t, t("Ruumid"));
+		$data_array = $this->get_data_array(array(
+			"brons" => $brons,
+			"prop" => "resource"
+		));
+		
+		$this->do_stuff_with_table(array(
+			"t" => &$t,
+			"data" => &$data_array,
+			"caption" => t("Ruumid"),
+		));
+
+/*
+		extract($arr);
 		$t->define_field(array(
 			"name" => "room",
 			"caption" => t("Ruum"),
@@ -664,12 +805,6 @@ class spa_bookings_overview extends class_base
 			"caption" => t("Aeg"),
 			"chgbgcolor" => "color",
 		));
-		$t->define_field(array(
-			"name" => "redecleared",
-			"caption" => t("&Uuml;mber registreeritud"),
-			"chgbgcolor" => "color",
-		//	"size" => 5,
-		));
 		
 		$bron_array = array();
 		
@@ -677,15 +812,10 @@ class spa_bookings_overview extends class_base
 		{
 			if(($b->prop("end") - $b->prop("start1")) > 0) $bron_array[$b->prop("resource")][$b->prop("people")]["time"] =  $bron_array[$b->prop("resource")][$b->prop("people")]["time"] + ($b->prop("end") - $b->prop("start1"));
 			$bron_array[$b->prop("resource")][$b->prop("people")]["brons"]++;
-			if($b->meta("redecleared"))
-			{
-				$bron_array[$b->prop("resource")][$b->prop("people")]["redecleared"] ++;
-			}
 		}
 
 		$tm_cnt=0;
 		$b_cnt = 0;
-		$redecc = 0;
 		$t->set_sortable(false);
 		foreach($bron_array as $room => $data)
 		{
@@ -695,7 +825,7 @@ class spa_bookings_overview extends class_base
 				$r = obj($room);
 				$room_name = html::obj_change_url($r);
 			}
-			$room_tm_cnt = $room_b_cnt = $redec = 0;
+			$room_tm_cnt = $room_b_cnt = 0;
 			$t->define_data(array(
 				"room" => $room_name,
 			));
@@ -703,7 +833,6 @@ class spa_bookings_overview extends class_base
 			{
 				$room_b_cnt = $room_b_cnt + $data["brons"];
 				$b_cnt = $b_cnt + $data["brons"];
-				$redec = $redec + $data["redecleared"];
 				$worker = "";
 				if(is_oid($person) && $this->can("view" , $person))
 				{
@@ -715,19 +844,16 @@ class spa_bookings_overview extends class_base
 					"tm" => number_format(($data["time"]/3600) , 2),
 					//"tm" => ($data["time"] > 1) ? $data["time"] : 0,
 					"brons" => $data["brons"],
-					"redecleared" => $data["redecleared"],
 				));
 				if($data["time"] > 1) $room_tm_cnt = $room_tm_cnt + $data["time"];
 			}
 			$tm_cnt = $tm_cnt + $room_tm_cnt;
-			$redecc = $redecc + $redec;
 			$t->define_data(array(
 				"worker" => t("kokku"),
 			//	"tm" => $room_tm_cnt,
 				"tm" => number_format(($room_tm_cnt/3600) , 2),
 				"brons" => $room_b_cnt,
 				"color" => "grey",
-				"redecleared" => $redec,
 			));
 		}
 
@@ -735,8 +861,7 @@ class spa_bookings_overview extends class_base
 			"room" => t("Kokku"),
 			"tm" => number_format(($tm_cnt/3600) , 2),
 			"brons" => $b_cnt,
-			"color" => "grey",
-			"redecleared" => $redecc,
+				"color" => "grey",
 		));
 		if ($this->do_print_results)
 		{
@@ -747,7 +872,7 @@ class spa_bookings_overview extends class_base
 				"content" => $t->draw()
 			));
 			die($i->parse()."<script language=javascript>window.print();</script>");
-		}
+		}*/
 	}
 
 	function get_brons($arr)
@@ -769,7 +894,8 @@ class spa_bookings_overview extends class_base
 		//ruumi alusel
 		if($r_ra_name)
 		{
-			$filter["CL_RESERVATION.RELTYPE_RESOURCE.name"] = "%".$r_ra_name."%";
+			//$filter["CL_RESERVATION.RELTYPE_RESOURCE.name"] = "%".$r_ra_name."%";
+			$filter["CL_RESERVATION.RELTYPE_RESOURCE.id"] = $r_ra_name;
 		}
 
 		//broneerija
@@ -784,32 +910,6 @@ class spa_bookings_overview extends class_base
 			$filter["inbetweener"] = "%".$r_ra_seller."%";
 		}
 
-		//asukoht
-		if($r_ra_location)
-		{
-			$locsa = array();
-			$vcl_inst = treeview::tree_from_objects(array(
-				"tree_opts" => array(
-					"type" => TREE_DHTML,
-					"tree_id" => "rooms_temp",
-					"persist_state" => true,
-				),
-				"root_item" => obj($r_ra_location),
-				"ot" => new object_tree(array(
-					"class_id" => array(CL_MENU),
-					"parent" => $r_ra_location
-				)),
-				"var" => "tf"
-			));
-
-			$locs = $vcl_inst->get_item_ids();
-			foreach($locs as $loc_id)
-			{
-				$locsa[$loc_id] = $loc_id;
-			}
-			$filter["CL_RESERVATION.RELTYPE_RESOURCE.parent"] = $locsa;
-		}
-
 		//t88taja
 		if($r_ra_worker)
 		{
@@ -819,21 +919,13 @@ class spa_bookings_overview extends class_base
 		//projekt
 		if($r_ra_project)
 		{
-			$filter["CL_RESERVATION.RELTYPE_PROJECT.name"] = "%".$r_ra_project."%";
+			//$filter["CL_RESERVATION.RELTYPE_PROJECT.name"] = "%".$r_ra_project."%";
+			$filter["CL_RESERVATION.RELTYPE_PROJECT.id"] = $r_ra_project;
 		}
 
 		//broneerimis aja j2rgi
 		$from = date_edit::get_timestamp($r_ra_booking_from);
 		$to = date_edit::get_timestamp($r_ra_booking_to);
-		
-		if(!($from > 0))
-		{
-			$from = time() - 3600*24*30;
-		}
-		if(!($to > 0))
-		{
-			$to = time();
-		}
 		if ($from > 1)
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
@@ -848,11 +940,24 @@ class spa_bookings_overview extends class_base
 		}
 
 		//saabumise j2rgi
-		if($r_ra_only_done)
+		if($r_ra_only_done == 1)
 		{
-			$filter["client_arrived"] = $r_ra_only_done;
+			$filter["client_arrived"] = 1;
+		}
+		if($r_ra_only_done == 2)
+		{
+			$filter["client_arrived"] = 0;
 		}
 
+		//maksmise j"rgi
+		if($r_ra_only_paid == 1)
+		{
+			$filter["paid"] = 1;
+		}
+		if($r_ra_only_paid == 2)
+		{
+			$filter["paid"] = 0;
+		}
 		$ol = new object_list($filter);
 		return $ol;
 	}
@@ -2197,7 +2302,8 @@ class spa_bookings_overview extends class_base
 			"person" => ""
 		));
 
-		if ($arr["request"]["do_print"])
+
+		if ($this->do_print_results == 1)
 		{
 			$i = new aw_template();
 			$i->init("automatweb");
@@ -2206,6 +2312,12 @@ class spa_bookings_overview extends class_base
 				"content" => $t->draw()
 			));
 			die($i->parse()."<script language=javascript>window.print();</script>");
+		}
+		if ($this->do_print_results == 2)
+		{
+			header("Content-type: text/csv; charset=aw_global_get('charset')");
+			header("Content-disposition: inline; filename=stats.csv;");
+			die(html_entity_decode($t->get_csv_file()));
 		}
 	}
 
@@ -2217,6 +2329,14 @@ class spa_bookings_overview extends class_base
 			"img" => "print.gif",
 			"link" => "#",
 			"onClick" => "ad='';f=document.changeform;for(i = 0; i < f.elements.length; i++) {el = f.elements[i];if (el.name.indexOf('persons') == 0 && el.checked) { ad += '&persons[]='+el.value; } }; aw_popup_scroll('".aw_url_change_var("do_print", 1)."'+ad, 'print', 500,500);"
+
+		));
+		$tb->add_button(array(
+			"name" => "csv",
+//			"img" => "print.gif",
+			"tooltip" => "csv",
+			"link" => "#",
+			"onClick" => "ad='';f=document.changeform;for(i = 0; i < f.elements.length; i++) {el = f.elements[i];if (el.name.indexOf('persons') == 0 && el.checked) { ad += '&persons[]='+el.value; } }; aw_popup_scroll('".aw_url_change_var("do_print", 2)."'+ad, 'print', 500,500);"
 
 		));
 	}
