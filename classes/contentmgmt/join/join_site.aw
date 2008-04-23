@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.68 2008/04/08 12:04:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.69 2008/04/23 08:46:59 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1282,7 +1282,7 @@ class join_site extends class_base
 				// if the props say so, log the user in
 				if ($obj->prop("autologin"))
 				{
-					$us->login(array(
+					$rv = $us->login(array(
 						"uid" => $n_uid,
 						"password" => $n_pass
 					));
@@ -1547,17 +1547,17 @@ class join_site extends class_base
 		$fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
 		$fill_msg_email = "Palun sisestage korrektne e-maili aadress!";
 		$lang_id = aw_global_get("lang_id");
-		if (aw_ini_get("user_interface.full_contente_trans"))
+		if (aw_ini_get("user_interface.full_content_trans"))
 		{
-						$lang_id = aw_ini_get("ct_lang_id");
+			$lang_id = aw_global_get("ct_lang_id");
 		}
 		if (!empty($lang_errs["next_filled"][$lang_id]))
 		{
-						$fill_msg = $lang_errs["next_filled"][$lang_id];
+			$fill_msg = $lang_errs["next_filled"][$lang_id];
 		}
 		if (!empty($lang_errs["wrong_email"][$lang_id]))
 		{
-						$fill_msg_email = $lang_errs["wrong_email"][$lang_id];
+			$fill_msg_email = $lang_errs["wrong_email"][$lang_id];
 		}
 
 		if ($user != "")
@@ -2140,6 +2140,19 @@ class join_site extends class_base
 							$p_obj->save();
 						}
 
+						if ($prop["name"] == "picture" && is_uploaded_file($_FILES["typo_145"]["tmp_name"]["picture"]["file"]))
+						{
+							// manual image upload here
+							$image = get_instance(CL_IMAGE);
+							$imdata = $image->add_image(array(
+								"from" => "file",
+								"file" => $_FILES["typo_145"]["tmp_name"]["picture"]["file"],
+								"orig_name" => $_FILES["typo_145"]["name"]["picture"]["file"],
+								"id" => $data_o->prop($prop["name"]),
+								"parent" => $data_o->id()
+							));
+							$p_obj = obj($imdata["id"]);
+						}
 						$data_o->connect(array(
 							"to" => $p_obj->id(),
 							"reltype" => $prop["reltype"]
