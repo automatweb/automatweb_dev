@@ -1108,8 +1108,26 @@ class _int_object
 			$bits = explode(".", $param);
 			foreach($bits as $idx => $part)
 			{
-				$cur_v = $o->prop($part);
-				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+				$is_rel = false;
+				if (substr($part, 0, strlen("RELTYPE")) == "RELTYPE")
+				{
+					$is_rel = true;
+					$prop_dat = array();
+					$tmp = $o->get_first_obj_by_reltype($part);
+					if ($tmp)
+					{
+						$cur_v = $tmp->id();
+					}
+					else
+					{
+						return null;
+					}
+				}
+				else
+				{
+					$cur_v = $o->prop($part);
+					$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+				}
 				// the true here is because if the user says that this thingie is an oid, then we trust him
 				// we check of course, but still. we trust him.
 				if (is_array($cur_v) && count($cur_v) == 1)
@@ -1130,7 +1148,14 @@ class _int_object
 				$GLOBALS["cfg"]["acl"]["no_check"] = $acl_tmp;
 				if ($idx == (count($bits)-1))
 				{
-					return $o->prop_str($part);
+					if ($is_rel)
+					{
+						return $o->prop_str("name");
+					}
+					else
+					{
+						return $o->prop_str($part);
+					}
 				}
 				$o = obj($cur_v);
 			}
@@ -2405,8 +2430,24 @@ class _int_object
 			$bits = explode(".", $prop);
 			foreach($bits as $idx => $part)
 			{
-				$cur_v = $o->prop($part);
-				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+				if (substr($part, 0, strlen("RELTYPE")) == "RELTYPE")
+				{
+					$prop_dat = array();
+					$tmp = $o->get_first_obj_by_reltype($part);
+					if ($tmp)
+					{
+						$cur_v = $tmp->id();
+					}
+					else
+					{
+						return null;
+					}
+				}
+				else
+				{
+					$cur_v = $o->prop($part);
+					$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+				}
 				// the true here is because if the user says that this thingie is an oid, then we trust him
 				// we check of course, but still. we trust him.
 				if (true || in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager", "releditor")))
