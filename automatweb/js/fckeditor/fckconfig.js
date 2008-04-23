@@ -102,8 +102,18 @@ FCKConfig.ToolbarSets["aw_email"] = [
        ['Style','FontFormat']
 ] ;
 
-
-FCKConfig.ToolbarSets["Default"] = [
+FCKConfig.ToolbarSets["aw"] = [
+       ['Source','Cut','Copy','Paste','PasteText','PasteWord'],
+       ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+       ['Bold','Italic','Underline','StrikeThrough','-'],
+       ['OrderedList','UnorderedList','-','Outdent','Indent'],
+       ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+       ['awlup','Unlink','Anchor'],
+       ['awimageupload','awfup','Table','Rule'],
+       ['Style','FontFormat']
+] ;
+FCKConfig.ToolbarSets["Default"] = FCKConfig.ToolbarSets["aw"];
+/*[
        ['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
        ['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
        ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
@@ -118,6 +128,7 @@ FCKConfig.ToolbarSets["Default"] = [
        ['TextColor','BGColor'],
        ['About']
 ] ;
+*/
 
 FCKConfig.ToolbarSets["Basic"] = [
        ['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
