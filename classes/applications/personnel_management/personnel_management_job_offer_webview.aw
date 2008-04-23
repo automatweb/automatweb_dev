@@ -451,6 +451,7 @@ class personnel_management_job_offer_webview extends class_base
 
 			default:
 				$this->vars(array(
+					"JOB_OFFERS.HEADER" => $this->job_offers_header(&$props),
 					"JOB_OFFER" => $this->job_offer(&$jos, &$props),
 				));
 				$this->vars(array(
@@ -461,9 +462,6 @@ class personnel_management_job_offer_webview extends class_base
 				));
 				break;
 		}
-
-		print $this->parse();
-		exit;
 
 		return $this->parse();
 	}
@@ -600,6 +598,16 @@ class personnel_management_job_offer_webview extends class_base
 			$r[$i] = $o;
 		}
 		return $r;
+	}
+
+	function _get_tutorial($arr)
+	{
+		$arr["prop"]["value"] = nl2br("Templeiti v&otilde;ib panna suvalise personnel_management_job_offer property. Selleks peab olema {VAR:job_offer.[property_name]}
+		Selle v&otilde;ib paigutada &lt;!-- SUB:JOB_OFFER.[PROPERTY_NAME] --&gt; sisse.
+		N&auml;iteks:
+		&lt;!-- SUB: JOB_OFFER.WEOFFER --&gt;
+		{VAR:job_offer.weoffer}
+		&lt;!-- END SUB: JOB_OFFER.WEOFFER --&gt;");
 	}
 }
 
