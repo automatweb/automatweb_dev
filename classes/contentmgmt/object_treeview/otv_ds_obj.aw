@@ -679,7 +679,7 @@ class otv_ds_obj extends class_base
 				}
 
 				$_ft[] = new object_list_filter(array(
-					"logic" => $params["predicate"],
+					"logic" => $params["predicate"] ? $params["predicate"] : "OR",
 					"conditions" => $cur_filt
 				));
 			}
