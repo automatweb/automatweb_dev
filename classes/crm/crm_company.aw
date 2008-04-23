@@ -4426,7 +4426,8 @@ class crm_company extends class_base
 	**/
 	function get_all_org_sections($obj)
 	{
-		static $retval;
+		//static $retval;
+		$retval = array();
 		foreach ($obj->connections_from(array("type" => "RELTYPE_SECTION")) as $section)
 		{
 			$retval[$section->prop("to")] = $section->prop("to");
