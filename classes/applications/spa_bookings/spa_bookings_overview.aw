@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.52 2008/04/23 10:51:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.53 2008/04/23 11:04:57 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -936,7 +936,7 @@ class spa_bookings_overview extends class_base
 		}
 		if ($to > 1)
 		{
-			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, get_day_start($to + 3600*24));
 		}
 
 		//saabumise j2rgi
