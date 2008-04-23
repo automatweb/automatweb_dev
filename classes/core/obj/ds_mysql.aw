@@ -1432,6 +1432,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// also, aliases
 		$this->db_query("DELETE FROM aliases WHERE source = '$oid' OR target = '$oid'");
+		// hits, acl
+		$this->db_query("DELETE FROM hits WHERE oid = '$oid'");
+		$this->db_query("DELETE FROM acl WHERE oid = '$oid'");
+
 		$this->cache->file_clear_pt("acl");
 		$this->cache->file_clear_pt("html");
 		$this->cache->file_clear_pt("menu_area_cache");

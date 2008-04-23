@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.28 2008/03/14 10:24:09 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.29 2008/04/23 11:30:33 kristo Exp $
 // recycle_bin.aw - Pr&uuml;gikast 
 /*
 
@@ -594,6 +594,8 @@ class recycle_bin extends class_base
 
 			// also, aliases
 			$this->db_query("DELETE FROM aliases WHERE source = '$id' OR target = '$id'");
+			$this->db_query("DELETE FROM hits WHERE oid = '$id'");
+			$this->db_query("DELETE FROM acl WHERE oid = '$id'");
 		}
 
 		return aw_ini_get("baseurl").$arr["return_url"];
