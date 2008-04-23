@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.50 2008/04/22 08:24:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.51 2008/04/23 11:37:06 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -290,6 +290,12 @@ class register_search extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "change_col",
+			"caption" => t("Muuda tulp"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "u_name",
 			"caption" => t("Tulba pealkiri"),
 			"sortable" => 1,
@@ -323,12 +329,18 @@ class register_search extends class_base
 				));
 			}
 			$vc = "";
+			$cc = "";
 			if ($tdata[$pn]["visible"])
 			{
 				$vc = html::radiobutton(array(
 					"name" => "tdata[__view_col]",
 					"value" => $pn,
 					"checked" => ($tdata["__view_col"] == $pn)
+				));
+				$cc = html::radiobutton(array(
+					"name" => "tdata[__change_col]",
+					"value" => $pn,
+					"checked" => ($tdata["__change_col"] == $pn)
 				));
 			}
 			$t->define_data(array(
@@ -350,6 +362,7 @@ class register_search extends class_base
 				)),
 				"defaultsort" => $defs,
 				"view_col" => $vc,
+				"change_col" => $cc,
 				"u_name" => html::textbox(array(
 					"name" => "tdata[$pn][caption]",
 					"value" => ($tdata[$pn]["caption"] == "" ? $pd["caption"] : $tdata[$pn]["caption"])
@@ -1090,6 +1103,14 @@ class register_search extends class_base
 							"url" => $this->mk_my_orb("view", array("section" => aw_global_get("section"), "id" => $o->id()), $o->class_id()),
 							"caption" => $data[$v["name"]]
 						));
+					}
+					if ($tdata["__change_col"] == $v["name"] && $this->can("edit", $o->id()))
+					{
+						$data[$v["name"]] = html::href(array(
+							"url" => $this->mk_my_orb("change", array("section" => aw_global_get("section"), "id" => $o->id()), $o->class_id()),
+							"caption" => $data[$v["name"]]
+						));
+						$can_change = true;
 					}
 				}
 			}			
