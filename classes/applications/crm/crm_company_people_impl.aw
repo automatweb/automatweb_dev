@@ -185,7 +185,7 @@ class crm_company_people_impl extends class_base
 
 		return html::get_change_url(
 			$arr["id"],
-			array("return_url" => (empty($this->hr_tbl_return_url) ? urlencode(get_ru()) : $this->hr_tbl_return_url)),
+			array("return_url" => (empty($this->hr_tbl_return_url) ? get_ru() : $this->hr_tbl_return_url)),
 			parse_obj_name($name)
 		);
 	}
