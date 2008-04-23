@@ -1968,7 +1968,8 @@ class site_show extends class_base
 				"link" => $url,
 				"target" => "",
 				"img_url" => $img_url,
-				"sel_img_url" => $sel_img_url
+				"sel_img_url" => $sel_img_url,
+				"fp_text" => $row["meta"]["fp_text"]
 			));
 			if (!isset($l[$grp]))
 			{
