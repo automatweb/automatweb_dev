@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.23 2008/03/27 09:30:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.24 2008/04/24 14:42:22 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -141,11 +141,13 @@ class ml_member extends class_base
 	function check_member($args = array())
 	{
 		$this->quote($args);
-		extract($args);
+		extract($args); 
 		$ol = new object_list(array(
 			"class_id" => CL_ML_MEMBER,
 			"mail" => $email,
 			"parent" => $folder,
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		$rv = $ol->count() > 0 ? $ol->begin() : false;
 		return $rv;
