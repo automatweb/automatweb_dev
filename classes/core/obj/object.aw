@@ -2038,6 +2038,10 @@ function obj_set_opt($opt, $val)
 	return $tmp;
 }
 
+function obj_get_opt($opt)
+{
+	return $GLOBALS["__obj_sys_opts"][$opt];
+}
 function dump_obj_table($pre = "")
 {
 	echo "---------------------------------------- object table dump: <br />$pre <br />\n";

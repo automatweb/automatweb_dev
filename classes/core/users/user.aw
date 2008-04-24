@@ -1928,10 +1928,10 @@ class user extends class_base
 
 	function on_save_addr($arr)
 	{
-		obj_set_opt("no_cache", 1);
+		$prev = obj_set_opt("no_cache", 1);
 		$ml_m = obj($arr["oid"]);
 		$c = reset($ml_m->connections_to(array("from.class_id" => CL_USER, "type" => 6)));
-		obj_set_opt("no_cache", 0);
+		obj_set_opt("no_cache", $prev);
 
 		if (!$c)
 		{

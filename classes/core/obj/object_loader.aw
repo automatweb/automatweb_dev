@@ -437,12 +437,11 @@ class _int_object_loader extends core
 
 	function can($acl_name, $oid, $dbg = false)
 	{
-		//echo dbg::dump($GLOBALS["__obj_sys_acl_memc"]);
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
 			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
-			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
+			if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
 			{
 				$max_acl = aw_unserialize($str_max_acl);
 			}
@@ -459,7 +458,10 @@ class _int_object_loader extends core
 						"can_admin" => false
 					);
 				}
-				$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
+				if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
+				{
+					$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
+				}
 			}
 
 			$this->__aw_acl_cache[$oid] = $max_acl;
@@ -593,7 +595,7 @@ class _int_object_loader extends core
 			$type = 10000;
 		}
 
-		$this->cache->_log($type, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false);
+		$this->cache->_log($type, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false, $name);
 	}
 
 	function resolve_reltype($type, $class_id)
@@ -715,6 +717,15 @@ class _int_object_loader extends core
 				"no_errors" => 1	// sites may not respond or be password protected or whatever and the user does not need to see that
 			));
 		}
+	}
+
+	function handle_no_cache_clear()
+	{
+		$this->cache->file_clear_pt("html");
+		$this->cache->file_clear_pt("acl");
+		$this->cache->file_clear_pt("menu_area_cache");
+		$this->cache->file_clear_pt("storage_search");
+		$this->cache->file_clear_pt("storage_object_data");
 	}
 }
 

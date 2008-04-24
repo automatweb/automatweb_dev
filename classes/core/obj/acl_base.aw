@@ -636,7 +636,14 @@ class acl_base extends db_connector
 	// !returns the default group for the user
 	function get_user_group($uid)
 	{
-		return $this->db_fetch_field("SELECT oid FROM groups WHERE type=1 AND name='$uid'", "oid");
+		static $cache;
+		if (!empty($cache[$uid]))
+		{
+			return $cache[$uid];
+		}
+		$rv =  $this->db_fetch_field("SELECT oid FROM groups WHERE type=1 AND name='$uid'", "oid");
+		$cache[$uid] = $rv;
+		return $rv;
 	}
 
 	function get_acl_value($aclarr)
@@ -682,7 +689,10 @@ class acl_base extends db_connector
 		$aclarr = array();
 		while (list(,$k) = each($acl_ids))
 		{
-			$aclarr[$k] = $GLOBALS["cfg"]["acl"]["allowed"];
+			if ($k != "can_subs")
+			{
+				$aclarr[$k] = $GLOBALS["cfg"]["acl"]["allowed"];
+			}
 		}
 		return $aclarr;
 	}

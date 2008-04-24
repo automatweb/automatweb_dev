@@ -21,6 +21,8 @@ class _int_object
 	var $implicit_save;
 	var $obj_sys_flags;
 
+	static $global_save_count = 0;
+	static $cache_off = false;
 
 	///////////////////////////////////////////
 	// public functions
@@ -2054,9 +2056,23 @@ class _int_object
 		}
 
 		// log save
-		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"], $this->obj["class_id"]);
+		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"], $this->obj["class_id"], true, $this->obj["name"]);
+
+		// check cache
+		$this->_check_save_cache();
 
 		return $this->obj["oid"];
+	}
+
+	protected function _check_save_cache()
+	{
+		if (self::$global_save_count > 3 && !self::$cache_off)
+		{
+			obj_set_opt("no_cache", 1);
+			self::$cache_off = true;
+			register_shutdown_function(array(&$GLOBALS["object_loader"], "handle_no_cache_clear"));
+		}
+		self::$global_save_count++;
 	}
 
 	function _int_do_inherit_new_props()

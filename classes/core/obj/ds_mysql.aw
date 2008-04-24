@@ -649,14 +649,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->quote(&$objdata);
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
+		$n_acl_data = null;
 		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
 		{
 			$uo = obj(aw_global_get("uid_oid"));
 			$g_d = $uo->get_default_group();
-			$acld_fld = ",acldata";
-			$acld_val = ",'".str_replace("'", "\\'", aw_serialize(array(
+
+			$n_acl_data = array(
 				$g_d => $this->get_acl_value_n($this->acl_get_default_acl_arr())
-			)))."'";
+			);
+
+			$acld_fld = ",acldata";
+			$acld_val = ",'".str_replace("'", "\\'", aw_serialize($n_acl_data))."'";
 		}
 
 		// create oid
@@ -681,14 +685,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query($q);
 		$oid = $this->db_last_insert_id();
 
-
-		// create all access for the creator
-		$this->create_obj_access($oid);
+		if (!aw_ini_get("acl.use_new_acl_final"))
+		{
+			// create all access for the creator
+			$this->create_obj_access($oid);
+		}
 		// set brother to self if not specified.
 		if (!$objdata["brother_of"])
 		{
 			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
 		}
+
+		// put into cache to avoid query for the same object's data in the can() a few lines down
+		$tmp = $objdata;
+		$tmp["acldata"] = $n_acl_data;
+		$GLOBALS["__obj_sys_objd_memc"][$oid] = $tmp;
 		$this->can("admin", $oid);
 
 		// hits
@@ -776,7 +787,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		// we need to clear the html cache here, not in ds_cache, because ds_cache can be not loaded
 		// even when html caching is turned on
-		$this->cache->file_clear_pt("html");
+		
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("html");
+		}
 	}
 
 	// saves object properties, including all object table fields,
@@ -976,7 +991,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function save_properties_cache_update($oid)
 	{
-		$this->cache->file_clear_pt("html");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("html");
+		}
 	}
 
 	function read_connection($id)
@@ -1041,7 +1059,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function save_connection_cache_update($oid)
 	{
-		$this->cache->file_clear_pt("html");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("html");
+		}
 	}
 
 	function delete_connection($id)
@@ -1052,7 +1073,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function delete_connection_cache_update($oid)
 	{
-		$this->cache->file_clear_pt("html");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("html");
+		}
 	}
 
 	function connection_query_fetch()
@@ -1382,18 +1406,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function delete_object_cache_update($oid)
 	{
-		$this->cache->file_clear_pt_oid("acl", $oid);
-		$this->cache->file_clear_pt("html");
-		$this->cache->file_clear_pt("menu_area_cache");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt_oid("acl", $oid);
+			$this->cache->file_clear_pt("html");
+			$this->cache->file_clear_pt("menu_area_cache");
+		}
 	}
 
 	function delete_multiple_objects($oid_list)
 	{
 		$awa = new aw_array($oid_list);
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid IN(".$awa->to_sql().")");
-		$this->cache->file_clear_pt("acl");
-		$this->cache->file_clear_pt("html");
-		$this->cache->file_clear_pt("menu_area_cache");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("acl");
+			$this->cache->file_clear_pt("html");
+			$this->cache->file_clear_pt("menu_area_cache");
+		}
 	}
 
 	function final_delete_object($oid)
@@ -1434,11 +1464,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("DELETE FROM aliases WHERE source = '$oid' OR target = '$oid'");
 		// hits, acl
 		$this->db_query("DELETE FROM hits WHERE oid = '$oid'");
-		$this->db_query("DELETE FROM acl WHERE oid = '$oid'");
+		if (!aw_ini_get("acl.use_new_acl_final"))
+		{
+			$this->db_query("DELETE FROM acl WHERE oid = '$oid'");
+		}
 
-		$this->cache->file_clear_pt("acl");
-		$this->cache->file_clear_pt("html");
-		$this->cache->file_clear_pt("menu_area_cache");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("acl");
+			$this->cache->file_clear_pt("html");
+			$this->cache->file_clear_pt("menu_area_cache");
+		}
 	}
 
 	function req_make_sql($params, $logic = "AND", $dbg = false)
@@ -2030,6 +2066,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$od = $this->get_objdata($parent);
 		$objdata["site_id"] = $od["site_id"];//aw_ini_get("site_id");		
 
+		$acld_fld = $acld_val = "";
+		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
+		{
+			$uo = obj(aw_global_get("uid_oid"));
+			$g_d = $uo->get_default_group();
+			$acld_fld = ",acldata";
+			$acld_val = ",'".str_replace("'", "\\'", aw_serialize(array(
+				$g_d => $this->get_acl_value_n($this->acl_get_default_acl_arr())
+			)))."'";
+		}
+
 		// create oid
 		$q = "
 			INSERT INTO objects (
@@ -2037,22 +2084,25 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				created,					modified,						status,						site_id,
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
-				metadata,						subclass,					flags,
-				brother_of
+				metadata,					subclass,					flags,
+				brother_of					$acl_fld
 		) VALUES (
 				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
 				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
 										'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
-				'".$objdata["oid"]."'
+				'".$objdata["oid"]."'		$acld_val
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 		$this->db_query($q);
 		$oid = $this->db_last_insert_id();
 
-		// create all access for the creator
-		$this->create_obj_access($oid);
+		if (!aw_ini_get("acl.use_new_acl_final"))
+		{
+			// create all access for the creator
+			$this->create_obj_access($oid);
+		}
 
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
@@ -2064,7 +2114,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function create_brother_cache_update($oid)
 	{
-		$this->cache->file_clear_pt("html");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("html");
+		}
 	}
 
 	// $key, $val
@@ -2966,7 +3019,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		unset($this->read_properties_data_cache[$objdata["oid"]]);
 		unset($this->read_properties_data_cache[$objdata["brother_of"]]);
 
-		$this->cache->file_clear_pt("html");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("html");
+		}
 	}
 
 	function load_version_properties($arr)

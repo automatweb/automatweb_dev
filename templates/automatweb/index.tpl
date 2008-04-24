@@ -33,6 +33,7 @@
 
 
 <script type="text/javascript">
+xchanged = 0;
 shortcut("Ctrl+Shift+A",function() {
 	desc = prompt("Kirjeldus", "nimetu");
 	if(desc){

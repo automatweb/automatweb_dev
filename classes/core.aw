@@ -102,7 +102,7 @@ class core extends acl_base
 		@examples
 			$this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
 	**/
-	function _log($type,$action,$text,$oid = 0,$honor_ini = true)
+	function _log($type,$action,$text,$oid = 0,$honor_ini = true, $object_name = null)
 	{
 		if(aw_ini_get('logging_disabled') && $honor_ini)
 		{
@@ -128,7 +128,10 @@ class core extends acl_base
 			$ref = aw_global_get("HTTP_REFERER");
 			$this->quote(&$ref);
 			$session_id = session_id();
-			$object_name = $this->db_fetch_field("SELECT name FROM objects where oid = '$oid'", "name");
+			if ($object_name === null)
+			{
+				$object_name = $this->db_fetch_field("SELECT name FROM objects where oid = '$oid'", "name");
+			}
 			$this->quote(&$object_name);
 			$mail_id = (int)$_GET["mlx"];
 			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer", "object_name", "session_id", "mail_id");

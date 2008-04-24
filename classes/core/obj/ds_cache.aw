@@ -41,12 +41,15 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->get_objdata($oid, $param);
-			$this->cache->file_set_pt_oid(
-				"storage_object_data",
-				$oid,
-				$c_fn,
-				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);
+			if (!obj_get_opt("no_cache"))
+			{
+				$this->cache->file_set_pt_oid(
+					"storage_object_data",
+					$oid,
+					$c_fn,
+					aw_serialize($ret, SERIALIZE_PHP_FILE)
+				);
+			}
 		}
 		return $ret;
 	}
@@ -81,12 +84,15 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->read_properties($arr);
-			$this->cache->file_set_pt_oid(
-				"storage_object_data",
-				$oid,
-				$c_fn,
-				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);
+			if (!obj_get_opt("no_cache"))
+			{
+				$this->cache->file_set_pt_oid(
+					"storage_object_data",
+					$oid,
+					$c_fn,
+					aw_serialize($ret, SERIALIZE_PHP_FILE)
+				);
+			}
 		}
 		return $ret;
 	}
@@ -104,7 +110,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function create_new_object_cache_update($oid, $propagate = false)
 	{
-		$this->cache->file_clear_pt("storage_search");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("storage_search");
+		}
 		if ($propagate)
 		{
 			$this->contained->create_new_object_cache_update($oid);
@@ -122,7 +131,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		// after creating a new object, we need to clear storage search cache and html cache
 		// but html cache clear is done in ds_mysql, not here
-		$this->cache->file_clear_pt("storage_search");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("storage_search");
+		}
 		if ($propagate)
 		{
 			$this->contained->create_brother_cache_update($oid);
@@ -140,21 +152,24 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function save_properties_cache_update($oid, $propagate = false)
 	{
-		list($tarr) = $this->contained->search(array(
-			"brother_of" => $oid,
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-
-		$tarr[$oid] = 1;
-		$char = array_keys($tarr);
-		foreach($char as $obj_id)
+		if (!obj_get_opt("no_cache"))
 		{
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "objdata-$obj_id");
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "properties-$obj_id");
-		}
+			list($tarr) = $this->contained->search(array(
+				"brother_of" => $oid,
+				"site_id" => array(),
+				"lang_id" => array()
+			));
 
-		$this->cache->file_clear_pt("storage_search");
+			$tarr[$oid] = 1;
+			$char = array_keys($tarr);
+			foreach($char as $obj_id)
+			{
+				$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "objdata-$obj_id");
+				$this->cache->file_clear_pt_oid_fn("storage_object_data", $obj_id, "properties-$obj_id");
+			}
+
+			$this->cache->file_clear_pt("storage_search");
+		}
 		if ($propagate)
 		{
 			$this->contained->save_properties_cache_update($oid);
@@ -179,12 +194,15 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->read_connection($id);
-			$this->cache->file_set_pt_oid(
-				"storage_object_data",
-				$id,
-				$c_fn,
-				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);
+			if (!obj_get_opt("no_cache"))
+			{
+				$this->cache->file_set_pt_oid(
+					"storage_object_data",
+					$id,
+					$c_fn,
+					aw_serialize($ret, SERIALIZE_PHP_FILE)
+				);
+			}
 		}
 		return $ret;
 	}
@@ -204,10 +222,16 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// also html cache, but that gets done one level deeper
 		if ($oid)
 		{
-			$this->cache->file_clear_pt_oid_fn("storage_object_data", $data["id"], "connection-".$oid);
+			if (!obj_get_opt("no_cache"))
+			{
+				$this->cache->file_clear_pt_oid_fn("storage_object_data", $data["id"], "connection-".$oid);
+			}
 		}
 		
-		$this->cache->file_clear_pt("storage_search");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("storage_search");
+		}
 		if ($propagate)
 		{
 			$this->contained->save_connection_cache_update($oid);
@@ -227,8 +251,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		// here we must clear storage search, because it can contain searches by conn and that connection's cache
 		// also html cache, but that gets done one level deeper
-		$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
-		$this->cache->file_clear_pt("storage_search");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
+			$this->cache->file_clear_pt("storage_search");
+		}
 		if ($propagate)
 		{
 			$this->contained->delete_connection_cache_update($oid);
@@ -257,12 +284,15 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->find_connections($arr);
-			$this->cache->file_set_pt(
-				"storage_search",
-				$query_hash[0],
-				$c_fn,
-				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);
+			if (!obj_get_opt("no_cache"))
+			{
+				$this->cache->file_set_pt(
+					"storage_search",
+					$query_hash[0],
+					$c_fn,
+					aw_serialize($ret, SERIALIZE_PHP_FILE)
+				);
+			}
 		}
 		return $ret;
 	}
@@ -279,10 +309,13 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function delete_object_cache_update($oid, $propagate = false)
 	{
 		// clear lots of caches here: html, acl for oid, storage_search, storage_objdata for $oid
-		$this->cache->file_clear_pt_oid("acl", $oid);
-		$this->cache->file_clear_pt("storage_search");
-		$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-$oid");
-		$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "properties-$oid");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt_oid("acl", $oid);
+			$this->cache->file_clear_pt("storage_search");
+			$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-$oid");
+			$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "properties-$oid");
+		}
 		if ($propagate)
 		{
 			$this->contained->delete_object_cache_update($oid);
@@ -318,12 +351,15 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->search($params, $to_fetch);
-			$this->cache->file_set_pt(
-				"storage_search",
-				$query_hash[0],
-				$c_fn,
-				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);
+			if (!obj_get_opt("no_cache"))
+			{
+				$this->cache->file_set_pt(
+					"storage_search",
+					$query_hash[0],
+					$c_fn,
+					aw_serialize($ret, SERIALIZE_PHP_FILE)
+				);
+			}
 		}
 		return $ret;
 	}
@@ -378,8 +414,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function originalize_cache_update($oid, $propagate = false)
 	{
-		$this->cache->file_clear_pt("storage_search");
-		$this->cache->file_clear_pt("storage_object_data");
+		if (!obj_get_opt("no_cache"))
+		{
+			$this->cache->file_clear_pt("storage_search");
+			$this->cache->file_clear_pt("storage_object_data");
+		}
 		if ($propagate)
 		{
 			$this->contained->originalize_cache_update($oid);
