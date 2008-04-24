@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.24 2008/04/07 19:41:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.25 2008/04/24 08:13:33 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -24,10 +24,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @default field=meta
 @default method=serialize
 
-@property company type=relpicker reltype=RELTYPE_ORG
+@property company type=relpicker reltype=RELTYPE_ORG store=connect
 @caption Organisatsioon
 
-@property contact type=relpicker reltype=RELTYPE_CONTACT
+@property sect type=relpicker reltype=RELTYPE_SECTION store=connect
+@caption Osakond
+
+@property contact type=relpicker reltype=RELTYPE_CONTACT store=connect
 @caption Kontaktisik
 
 @property start type=date_select
@@ -36,22 +39,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property end type=date_select
 @caption Konkursi t&auml;htaeg
 
-@property profession type=relpicker reltype=RELTYPE_PROFESSION
+@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect
 @caption Ametikoht
 
 @property field type=relpicker reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
-#@property location type=relpicker reltype=RELTYPE_LOCATION
+#@property location type=relpicker reltype=RELTYPE_LOCATION store=connect
 #@caption Asukoht
 
-@property loc_area type=relpicker reltype=RELTYPE_AREA
+@property loc_area type=relpicker reltype=RELTYPE_AREA store=connect
 @caption Piirkond
 
-@property loc_county type=relpicker reltype=RELTYPE_COUNTY
+@property loc_county type=relpicker reltype=RELTYPE_COUNTY store=connect
 @caption Maakond
 
-@property loc_city type=relpicker reltype=RELTYPE_CITY
+@property loc_city type=relpicker reltype=RELTYPE_CITY store=connect
 @caption Linn
 
 @property workinfo type=textarea rows=15 cols=60
@@ -112,7 +115,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property save_cfgform type=checkbox ch_value=1 store=no
 	@caption Salvesta seadetevorm
 
-@groupinfo send_email_sms caption=Tagasiside&nbsp;kandideerijatele
+@groupinfo send_email_sms caption=Tagasiside&nbsp;kandideerijatele no_submit=1
 @default group=send_email_sms
 
 	@layout send_email_sms type=hbox width=20%80%
@@ -122,15 +125,23 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 			@property receivers type=select multiple=1 store=no parent=send_email_sms_left
 
 		@layout send_email_sms_right type=vbox parent=send_email_sms area_caption=S&otilde;num
+
+			@property send_email_sms_type type=hidden field=meta method=serialize parent=send_email_sms_right
+
+			@property from type=textbox store=no parent=send_email_sms_right size=20
+			@caption Saatja
 			
-			@property add_receivers type=textbox store=no parent=send_email_sms_right
+			@property add_receivers type=textbox store=no parent=send_email_sms_right size=20
 			@caption Lisa saajaid
 
-			@property subject type=textbox store=no parent=send_email_sms_right
+			@property subject type=textbox store=no parent=send_email_sms_right size=20
 			@caption Pealkiri
 
 			@property message type=textarea store=no parent=send_email_sms_right
 			@caption S&otilde;num
+
+			@property send_it type=submit store=no
+			@caption Saada
 
 @reltype CANDIDATE value=1 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
 @caption Kandidatuur
@@ -168,6 +179,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @reltype JOB_OFFER_FILE value=12 clid=CL_FILE
 @caption T&ouml;&ouml;pakkumine failina
 
+@reltype MOBI_SMS value=13 clid=CL_MOBI_SMS
+@caption Kandideerijale saadetud SMS
+
+@reltype SECTION value=14 clid=CL_CRM_SECTION
+@caption Osakond
+
 */
 
 class personnel_management_job_offer extends class_base
@@ -186,9 +203,37 @@ class personnel_management_job_offer extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		
 		switch($prop["name"])
 		{
+			case "send_email_sms_type":
+				$prop["value"] = $arr["request"]["sms"] ? "sms" : ($arr["request"]["email"] ? "email" : "");
+				break;
+
+			case "subject":
+				if($arr["request"]["sms"])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "from":
+				if($arr["request"]["sms"])
+				{
+					return PROP_IGNORE;
+				}
+				if($this->can("view", $arr["obj_inst"]->contact))
+				{
+					$person = obj($arr["obj_inst"]->contact);
+					$mls = $person->emails();
+					foreach($mls->arr() as $ml)
+					{
+						$m = $ml->mail;
+						break;
+					}
+					$prop["value"] = $person->name." &lt;".$m."&gt;";
+				}
+				break;
+
 			case "receivers":
 				if(is_array($arr["request"]["sel"]) && count($arr["request"]["sel"]) > 0)
 				{
@@ -254,7 +299,7 @@ class personnel_management_job_offer extends class_base
 					"year" => 1,
 				);
 				$prop["options"] = array(
-					"asap" => t("ASAP"),
+					"asap" => t("Niipea kui v&otilde;imalik"),
 					"date_select" => $date_edit->gen_edit_form("start_working_date", time()),
 				);
 				break;
@@ -367,35 +412,35 @@ class personnel_management_job_offer extends class_base
 		}
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
-		$t->define_field(array(
-			"name" => "group",
-			"caption" => t("Grupp"),
-		));
-		$t->define_field(array(
-			"name" => "property",
-			"caption" => t("Omadus"),
-		));
-		$t->define_field(array(
-			"name" => "selected",
-			"caption" => t("N&auml;ita vormis"),
-		));
-		$t->define_field(array(
-			"name" => "mandatory",
-			"caption" => t("Kohustuslik"),
-		));
-		$t->define_field(array(
-			"name" => "jrk",
-			"caption" => t("J&auml;rjekord"),
-		));
+		$fields = array(
+			"group" => t("Grupp"),
+			"property" => t("Omadus"),
+			"selected" => t("N&auml;ita vormis"),
+			"mandatory" => t("Kohustuslik"),
+			"jrk" => t("J&auml;rjekord"),
+		);
+		$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
+		$pm = obj($pm_id);
+		$fields_conf = $pm->job_offer_cv_tbl;
+		foreach($fields_conf as $v)
+		{
+			$t->define_field(array(
+				"name" => $v,
+				"caption" => $fields[$v],
+			));
+		}
 
+		$cff = get_instance(CL_CFGFORM);
 		$cfgform = obj($cfgform_id);
-		$cfg_proplist = $cfgform->meta("cfg_proplist");
+		$cfg_proplist = $cff->get_cfg_proplist($cfgform_id);
 		$controllers = $cfgform->meta("controllers");
 		$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
 		$pm = obj($pm_id);
 		$mand_cont = $pm->prop("mandatory_controller");
-		//foreach($cfgform->meta("cfg_proplist") as $pid => $pdata)
-		foreach(get_instance(CL_CRM_PERSON)->get_all_properties() as $pid => $pdata)
+		$pm_default_cfgform = obj($pm->default_offers_cfgform);
+		foreach($cff->get_cfg_proplist($pm->default_offers_cfgform) as $pid => $pdata)
+		//foreach($pm_default_cfgform->meta("cfg_proplist") as $pid => $pdata)
+		//foreach(get_instance(CL_CRM_PERSON)->get_all_properties() as $pid => $pdata)
 		{
 			if(is_array($pdata["group"]))
 			{
@@ -634,6 +679,17 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "status":
+				if(!$prop["value"])
+				{
+					$prop["value"] = object::STAT_NOTACTIVE;
+				}
+				break;
+
+			case "message":
+				$this->send_feedback($arr);
+				break;
+
 			case "new_cfgform_name":
 				if(strlen($prop["value"]) > 0)
 				{
@@ -646,6 +702,79 @@ class personnel_management_job_offer extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function send_feedback($arr)
+	{
+		if($arr["request"]["send_email_sms_type"] == "email")
+		{
+			$subject = $arr["request"]["subject"];
+			$message = $arr["request"]["message"];
+			$tos = $arr["request"]["receivers"];
+			if(strlen($arr["request"]["add_receivers"]) > 0)
+			{
+				$tos += explode(",", $arr["request"]["add_receivers"]);
+			}
+			$additional_headers = "From: ".$arr["request"]["from"];
+			foreach($tos as $to)
+			{
+				mail($to, $subject, $message, $additional_headers);
+			}
+		}
+		if($arr["request"]["send_email_sms_type"] == "sms")
+		{
+			$message = $arr["request"]["message"];
+			//$tos = $arr["request"]["receivers"];
+			$tos = array();
+			$odl = new object_data_list(
+				array(
+					"class_id" => CL_CRM_PHONE,
+					"oid" => $arr["request"]["receivers"],
+					"parent" => array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"status" => array(),
+				),
+				array(
+					CL_CRM_PHONE => array("clean_number" => "nr"),
+				)
+			);
+			foreach($odl->arr() as $oid => $odata)
+			{
+				$tos[] = $odata["nr"];
+				// Easier to connect the SMS to the phone this way.
+				$phs[$odata["nr"]] = $oid;
+			}
+			if(strlen($arr["request"]["add_receivers"]) > 0)
+			{
+				$tos += explode(",", $arr["request"]["add_receivers"]);
+			}
+			$mobi = get_instance(CL_MOBI_HANDLER);
+			$mobi_handler = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->prop("mobi_handler");
+			foreach($tos as $to)
+			{
+				$sms = 0;
+				$to = preg_replace("/[^0-9]/", "", $to);
+				$mobi->send_sms(array(
+					"id" => $mobi_handler,
+					"number" => $to,
+					"message" => $message,
+					"sms" => &$sms,
+				));
+				$arr["obj_inst"]->connect(array(
+					"to" => $sms,
+					"type" => "RELTYPE_MOBI_SMS",
+				));
+				if(array_key_exists($to, $phs))
+				{
+					$ph = obj($phs[$to]);
+					$ph->connect(array(
+						"to" => $sms,
+						"type" => "RELTYPE_MOBI_SMS",
+					));
+				}
+			}
+		}
 	}
 
 	function callback_mod_reforb($arr)
@@ -908,23 +1037,60 @@ class personnel_management_job_offer extends class_base
 		$this->vars(array(
 			"name" => @$ob->prop("name"),
 			"company" => $ob->prop("company.name"),
+			"sect" => $ob->prop("sect.name"),
 			"location" => $location,
+			"loc_area" => $ob->prop("loc_area.name"),
+			"loc_county" => $ob->prop("loc_county.name"),
+			"loc_city" => $ob->prop("loc_city.name"),
 			"sectors" => $tmp_sectors,
-			"deadline" => get_lc_date($ob->prop("deadline")),
+			"end" => get_lc_date($ob->prop("end")),
 			"description" => $ob->prop("toosisu"),
 			"requirements" => $ob->prop("noudmised"),
 			"start_date" => $ob->prop("job_from") > 100 ? get_lc_date($ob->prop("job_from")) : " - ",
+			"start_working" => $ob->start_working == "asap" ? t("Niipea kui v&otilde;imalik") : get_lc_date($ob->start_working_date),
 			"tookoormused" => join(",", $ks),
 			"contact_person" => $ob->prop("contact_person"),
 			"job_nr" => $ob->prop("job_nr"),
 			"profession" => $ob->prop("profession.name"),
 			"org_description_text" => $ob->prop("company.tegevuse_kirjeldus"),
-			"about_job" => $ob->prop("workinfo"),
+			"workinfo" => $ob->prop("workinfo"),
 			"requirements" => $ob->prop("requirements"),
-			"we_offer" => $ob->prop("weoffer"),
+			"weoffer" => $ob->prop("weoffer"),
+			"info" => $ob->info,
 			"apply_link" => $this->mk_my_orb("new", array("alias_to" => $ob->id(), "reltype" => 1, "parent" => $ob->id(), "return_url" => get_ru()), "personnel_management_candidate", true)
-
 		));
+
+		$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
+		// Add SUBs
+		$props += array("apply");
+
+		// 
+		foreach($props as $prop)
+		{
+			switch ($prop)
+			{
+				case "apply":
+					$ok[$prop] = 1;
+					break;
+
+				default:
+					if($ob->prop($prop))
+					{
+						$ok[$prop] = 1;
+					}
+					break;
+			}
+		}
+
+		foreach($props as $prop)
+		{
+			if($ok[$prop])
+			{
+				$this->vars(array(
+					strtoupper($prop) => $this->parse(strtoupper($prop)),
+				));
+			}
+		}
 		
 		return $this->parse();
 	}
@@ -1033,7 +1199,7 @@ class personnel_management_job_offer extends class_base
 	
 	function callback_generate_scripts($arr)
 	{
-		if($arr["group"] == "custom_cfgform")
+		if($arr["request"]["group"] == "custom_cfgform")
 		{
 			$f = "
 			function save_cfgform()
@@ -1081,6 +1247,15 @@ class personnel_management_job_offer extends class_base
 			$sel[] = $conn["to"];
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "send_email_sms", "sms" => 1, "sel" => $sel));
+	}
+
+	function callback_pre_save($arr)
+	{
+		if (!is_oid($arr["request"]["company"]))
+		{
+			$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
+			$arr["obj_inst"]->company = $cp->work_contact;
+		}
 	}
 }
 ?>
