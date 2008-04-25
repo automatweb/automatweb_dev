@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.6 2008/04/25 11:30:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.7 2008/04/25 12:21:04 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -258,13 +258,64 @@ class package_server extends class_base
 				"id" => $package->id(),
 				"name" => $package->name(),
 				"version" => $package->prop("version"),
-				"description" => $package->prop("descriotion"),
-				"dependences" => $deps->ids(),
-				"files"	=> $files,
 			);
 
 		}
 		arr($pa);
+		die();
+	}
+
+	/** 
+		@attrib name=download_package_files_list nologin=1 is_public=1 all_args=1
+
+ 	**/
+	function download_package_files($arr)
+	{
+		extract($arr);
+		if(!$this->can("view" , $id))
+		{
+			return "";
+		}
+		$o = obj($id);
+
+		$files = $package->get_package_file_names();
+		print(join("," , $files));
+		die();
+	}
+
+	/** 
+		@attrib name=download_package_dependences_list nologin=1 is_public=1 all_args=1
+
+ 	**/
+	function download_package_dependences($arr)
+	{
+		extract($arr);
+		if(!$this->can("view" , $id))
+		{
+			return "";
+		}
+		$o = obj($id);
+
+		$deps = $o->get_dependencies();
+		print(join("," , $deps->ids()));
+
+		die();
+	}
+
+	/** 
+		@attrib name=download_package_description_list nologin=1 is_public=1 all_args=1
+
+ 	**/
+	function download_package_description($arr)
+	{
+		extract($arr);
+		if(!$this->can("view" , $id))
+		{
+			return "";
+		}
+		$o = obj($id);
+
+		print($package->prop("descriotion"));
 		die();
 	}
 

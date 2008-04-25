@@ -15,6 +15,27 @@
 			</function>
 		</action>
 
+		<action name="download_package_files_list" nologin="1" is_public="1" all_args="1">
+			<function name="download_package_files">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="download_package_dependences_list" nologin="1" is_public="1" all_args="1">
+			<function name="download_package_dependences">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="download_package_description_list" nologin="1" is_public="1" all_args="1">
+			<function name="download_package_description">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="download_package" nologin="1" is_public="1" all_args="1">
 			<function name="download_package">
 				<arguments>
