@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.115 2008/04/25 08:50:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.116 2008/04/25 09:29:07 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -215,9 +215,16 @@ class releditor extends core
 
 		}
 
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => $arr["prop"]["reltype"],
-		));
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			$conns = array();
+		}
+		else
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => $arr["prop"]["reltype"],
+			));
+		}
 		$conns_count = sizeof($conns);
 
 		$props = $arr["prop"]["props"];
@@ -1772,7 +1779,7 @@ class releditor extends core
 	}
 
 	/**
-		@attrib name=handle_js_submit all_args=1
+		@attrib name=handle_js_submit all_args=1 nologin=1
 	**/
 	function handle_js_submit($arr)
 	{
@@ -1996,7 +2003,7 @@ class releditor extends core
 	}
 
 	/**
-		@attrib name=js_change_data all_args=1
+		@attrib name=js_change_data all_args=1 nologin=1
 	**/
 	function js_change_data($arr)
 	{
@@ -2035,7 +2042,7 @@ class releditor extends core
 	}
 
 	/**
-		@attrib name=js_get_button_name
+		@attrib name=js_get_button_name nologin=1
 		@param is_edit optional
 	**/
 	function js_get_button_name($arr)
@@ -2051,7 +2058,7 @@ class releditor extends core
 	}
 
 	/**
-		@attrib name=js_delete_rows all_args=1
+		@attrib name=js_delete_rows all_args=1 nologin="1"
 	**/
 	function js_delete_rows($arr)
 	{
@@ -2120,4 +2127,3 @@ class releditor extends core
 
 };
 ?>
-	

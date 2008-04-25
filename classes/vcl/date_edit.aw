@@ -305,7 +305,7 @@ class date_edit
 	/**
 		@attrib params=name api=1
 		@param year required type=int
-		sets the year
+			sets the year
 		@param month required type=int
 		sets the month
 		@param day required type=int
@@ -316,13 +316,34 @@ class date_edit
 		sets the minute
 		@param second required type=int
 		sets the second
+
+		@param prop_def optional type=array
+			The property definition for the property to convert - useful if some fields should be missing
+
 		@comment
 		Generates unix timestamp according to given values
 		@returns
 		Returns Unix timestamp
 	**/
-	function get_timestamp($var)
+	function get_timestamp($var, $prop_def = null)
 	{
+		// if the prop def gives format, then eoms fields might be omitted, fill them in with defaults
+		if ($prop_def !== null && is_array($prop_def["format"]))
+		{
+			if (!$var["day"] && !in_array("day", $prop_def["format"]))
+			{
+				$var["day"] = 1;
+			}
+			if (!$var["month"] && !in_array("month", $prop_def["format"]))
+			{
+				$var["month"] = 1;
+			}
+			if (!$var["year"] && !in_array("year", $prop_def["format"]))
+			{
+				$var["year"] = date("Y");
+			}
+		}
+
 		if ($var['month'] == '---' || $var['day'] == '---' || $var['year'] == '---')
 		{
 			return -1;

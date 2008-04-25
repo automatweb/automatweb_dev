@@ -5,7 +5,7 @@
 		<!-- SUB: button -->
 		{VAR:surround_start}
 		<div nowrap class="tb_but" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
-		<a href="{VAR:url}" onClick="{VAR:onClick}" target="{VAR:target}" {VAR:href_id}><img style="button" src="{VAR:img_url}" border="0"></a>
+		<a href="{VAR:url}" onClick="{VAR:onClick}" name="{VAR:name}" target="{VAR:target}" {VAR:href_id}><img style="button" src="{VAR:img_url}" border="0"></a>
 		</div>
 		{VAR:surround_end}
 		<!-- END SUB: button -->
