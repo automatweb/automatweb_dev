@@ -44,6 +44,7 @@
   */
 
 	var interval = interval || 100;
+	var selfid = 0;
 
 	if (!callback)
 		return false;
@@ -51,6 +52,14 @@
 	_timer = function (interval, callback) {
 		this.stop = function () {
 			clearInterval(self.id);
+		};
+		
+		this.pause = function () {
+			clearInterval(self.id);
+		};
+		
+		this.unpause = function () {
+			this.id = setInterval(this.internalCallback, this.interval);
 		};
 		
 		this.internalCallback = function () {

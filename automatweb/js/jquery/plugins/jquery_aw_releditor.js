@@ -1,5 +1,5 @@
 jQuery.aw_releditor = function(arr) {
-	var i_releditor_form_index = 0;
+	var i_releditor_form_index = arr["start_from_index"];
 	var i_releditor_edit_index = false; // if being edited
 	var i_releditor_edit_index_last_edit = false; // for multiple change button clicks if not saved between
 	var is_edit_mode = false; // edit or new data
@@ -24,26 +24,12 @@ jQuery.aw_releditor = function(arr) {
 			return false;
 		});
 		
-		$("a[name^="+arr["releditor_name"]+"_del]").click(function() {
-			if(confirm('Kustutada valitud objektid?'))
-			{
-				delete_data = $("input[name^="+arr["releditor_name"]+"_del][type=checkbox][checked]").serialize();
-				s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();
-				s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
-				data = delete_data+"&"+s_form_extension+"&"+s_form_extension_class_info;
-				$.ajax({
-					type: "POST",
-					url: "/orb.aw?class=releditor&action=js_delete_rows",
-					data: data,
-					success: function(msg){
-						$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
-					}
-				});
-			}
-			return false;
-		});
+		handle_change_links();
+		handle_delete_links();
 	}
 
+	
+	
 	/*
 		gets data to be edited to form
 	*/
@@ -52,7 +38,8 @@ jQuery.aw_releditor = function(arr) {
 		data = $("#"+arr["releditor_name"]+"_data").serialize();
 		
 		// change button name when editing not adding
-		change_btn_name = $.get("/orb.aw?class=releditor&action=js_get_button_name&is_edit=1", function(change_btn_name){
+		$.get("/orb.aw?class=releditor&action=js_get_button_name&is_edit=1", function(change_btn_name){
+			alert ("'"+change_btn_name+"'");
 			btn = $("input[name="+arr["releditor_name"]+"]");
 			btn.attr("value", change_btn_name);
 		});
@@ -83,7 +70,6 @@ jQuery.aw_releditor = function(arr) {
 		{
 			current_index = i_releditor_form_index;
 		}
-		
 		form = $("[name^="+arr["releditor_name"]+"\["+current_index+"][type!=submit]").not("a");
 		form.each(function(){
 			s_prop_name = _get_prop_name($(this).attr("name"));
@@ -92,6 +78,43 @@ jQuery.aw_releditor = function(arr) {
 		});
 		i_releditor_edit_index_last_edit = i_releditor_edit_index;
 		is_edit_mode = true;
+	}
+	
+	/*
+		adds delete events to delete links
+	*/
+	function handle_delete_links()
+	{
+		$("a[name^="+arr["releditor_name"]+"_delete_]").click(function() {
+			if(confirm('Kustutada valitud objektid?'))
+			{
+				//delete_data = $("input[name^="+arr["releditor_name"]+"_delete_][type=checkbox][checked]").serialize();
+				s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();
+				s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
+				data = s_form_extension+"&"+s_form_extension_class_info+"&"+arr["releditor_name"]+"_delete_index="+_get_delete_index($(this).attr("name"));
+				data += "&id="+arr["id"];
+				$.ajax({
+					type: "POST",
+					url: "/orb.aw?class=releditor&action=js_delete_rows",
+					data: data,
+					success: function(msg){
+						$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
+						handle_delete_links();
+					}
+				});
+			}
+			return false;
+		});
+	}
+	
+	function handle_change_links()
+	{
+		// and add edit btn events
+		$("a[name^="+arr["releditor_name"]+"_edit]").click(function() {
+			i_releditor_edit_index = _get_form_index_from_edit_button($(this).attr("name"));
+			do_edit();
+			return false;
+		});
 	}
 	
 	/*
@@ -112,19 +135,15 @@ jQuery.aw_releditor = function(arr) {
 		data = s_form_extension.length>0 ? s_form+"&"+s_form_extension : s_form;
 		s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
 		data = s_form_extension_class_info.length>0 ? data+"&"+s_form_extension_class_info : data;
+		data += "&id="+arr["id"];
 		$.ajax({
 			type: "POST",
 			url: "/orb.aw?class=releditor&action=handle_js_submit",
 			data: data,
 			success: function(msg){
 				$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
-				
-				// and add edit btn events
-				$("a[name^="+arr["releditor_name"]+"_edit]").click(function() {
-					i_releditor_edit_index = _get_form_index_from_edit_button($(this).attr("name"));
-					do_edit();
-					return false;
-				});
+				handle_change_links();
+				handle_delete_links();
 			}
 		});
 		
@@ -157,6 +176,17 @@ jQuery.aw_releditor = function(arr) {
 			i_releditor_form_index++
 		}
 	}
+	
+	/*
+		gets last part of name element
+	*/
+	function _get_delete_index(s_input_name)
+	{
+		// i don't undrestand why I had to doublescape: \\[
+		var re  =  new RegExp(".*_(.*)$", "g").exec(s_input_name);
+		return re[1];
+	}
+
 
 	/*
 		gets last part of name element
