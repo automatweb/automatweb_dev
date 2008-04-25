@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.118 2008/04/25 13:54:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.119 2008/04/25 14:04:24 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -22,11 +22,7 @@ class releditor extends core
 			"layout" => "generic",
 		));
 
-/*		$awt->define_chooser(array(
-			"field" => "idx",
-			"name" => $arr["prop"]["name"]."_del",
-		));*/
-		
+	
 		if(!is_object($arr["obj_inst"]))
 		{
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
@@ -38,10 +34,6 @@ class releditor extends core
 			return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>";
 		}
 
-		$awt->define_chooser(array(
-			"field" => "idx",
-			"name" => $arr["prop"]["name"]."_del",
-		));
 		$htmlclient = get_instance("cfg/htmlclient");
 
 		$parent_inst = get_instance($arr["obj_inst"]->class_id());
@@ -100,7 +92,6 @@ class releditor extends core
 				foreach($property_list as $_pn => $_pd)
 				{
 					$data[$idx-1][$_pn] = $target->prop($_pn);
-
 					if (!in_array($_pn,$tb_fields))
 					{
 						continue;
@@ -198,6 +189,7 @@ class releditor extends core
 				$idx++;
 			}
 		}
+
 		$awt->define_field(array(
 			"name" => "delete",
 			"caption" => t("Muuda"),
@@ -473,24 +465,6 @@ class releditor extends core
 			"store" => "no",
 			"name" => $this->elname."_add_button",
 			"caption" => " ",//$this->elname."_add_button",
-//			"no_caption" => 1,
- 		);
-
-/*		$xprops[$prop["name"]."[0]toolbar"] = array(
-			"type" => "text",
-			"value" => $tb->get_toolbar(),
-			"store" => "no",
-			"name" => $this->elname."_toolbar",
-			"caption" => " ",//$this->elname."_toolbar",
-//			"no_caption" => 1,
- 		);*/
-
-		$xprops[$prop["name"]."[0]table"] = array(
-			"type" => "text",
-			"value" => $this->init_new_rel_table($arr),
-			"store" => "no",
-			"name" => $this->elname."_table",
-			"caption" => " ",//$this->elname."_table",
 //			"no_caption" => 1,
  		);
 
@@ -1395,6 +1369,16 @@ class releditor extends core
 
 		$rels = $arr["obj_inst"]->get_property_list();
 
+		$idx2rel = array();
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$idx = 0;
+			foreach($arr["obj_inst"]->connections_from(array("type" => $arr["prop"]["reltype"])) as $c)
+			{
+				$idx2rel[$idx++] = $c->prop("to");
+			}
+		}
+
 		foreach($dat as $idx => $row)
 		{
 			$row["class"] = $class_name;
@@ -1403,6 +1387,7 @@ class releditor extends core
 			$row["alias_to"] = $arr["obj_inst"]->id();
 			$row["alias_to_prop"] = $arr["prop"]["name"];
 			$row["reltype"] = $arr["prop"]["reltype"];
+			$row["id"] = $idx2rel[$idx];
 			$i = get_instance($to_clid);
 			$i->submit($row);
 		}
