@@ -91,6 +91,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property ctp_text type=textbox table=objects field=meta method=serialize
 	@caption Kontaktisik vabatekstina
 
+	@property show_oe_add type=checkbox ch_value=1 field=meta method=serialize
+	@caption N&auml;ita arve lisas muid kulusid
+
 	@property udef1 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 1
 
@@ -1428,8 +1431,7 @@ class crm_bill extends class_base
 			{
 				$ord_cur = obj($ord->prop("currency"));
 			}
-			//$cust_no = //$ord->prop("code");
-		}
+	}
 		$logo = "";
 		$impl = obj();
 		if ($this->can("view", $b->prop("impl")))
@@ -2161,7 +2163,7 @@ class crm_bill extends class_base
 		
 		foreach($bill_rows as $key => $row)
 		{
-			if (!$row["is_oe"])
+			if (!$b->meta("show_oe_add") || !$row["is_oe"])
 			{
 				continue;
 			}
