@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.33 2008/04/22 08:24:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.34 2008/04/25 09:59:06 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -387,6 +387,19 @@ $start = ((float)$usec + (float)$sec);
 		}
 		//$arr["request"]["content"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["content"]);
 		$arr["request"]["duration"] = str_replace(",", ".", $arr["request"]["duration"]);
+		
+		//et ta kuramus IEga topelt ei teeks mingi valemiga
+		$rows = new object_list(array(
+			"class_id" => array(CL_TASK_ROW),
+			"createdby" => aw_global_get("uid"),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"content" => $arr["request"]["content"],
+			"created" =>  new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, (time() - 10)),
+		));
+
+	if(!(sizeof($rows->ids()) > 0)) {
+
 		if($arr["request"]["customer"])
 		{
 			$ol = new object_list(array(
@@ -566,6 +579,7 @@ $start = ((float)$usec + (float)$sec);
 			));
 		}
 
+	}
 
 		if ($arr["request"]["submit_and_add"] != "")
 		{
