@@ -15,5 +15,34 @@
 			</function>
 		</action>
 
+		<action name="handle_js_submit" nologin="1" all_args="1">
+			<function name="handle_js_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="js_change_data" nologin="1" all_args="1">
+			<function name="js_change_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="js_get_button_name" nologin="1">
+			<function name="js_get_button_name">
+				<arguments>
+					<optional name="is_edit" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="js_delete_rows" nologin="1" all_args="1">
+			<function name="js_delete_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
