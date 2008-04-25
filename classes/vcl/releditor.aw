@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.116 2008/04/25 09:29:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.117 2008/04/25 12:15:45 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -21,10 +21,10 @@ class releditor extends core
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
-		$awt->define_chooser(array(
+/*		$awt->define_chooser(array(
 			"field" => "idx",
 			"name" => $arr["prop"]["name"]."_del",
-		));
+		));*/
 		
 		if(!is_object($arr["obj_inst"]))
 		{
@@ -80,6 +80,7 @@ class releditor extends core
 					"_sort_name" => $conn->prop("to.name"),
 					"_active" => ($arr["request"][$this->elname] == $c_to),
 					"delete" => "<a href='javascript:void(0)' name='".$this->elname."_edit_".($idx-1)."'>".t("Muuda")."</a>",
+					"_delete" => "<a href='javascript:void(0)' name='".$this->elname."_delete_".($idx-1)."'>".t("Kustuta")."</a>",
 				);
 
 				$property_list = $target->get_property_list();
@@ -188,7 +189,13 @@ class releditor extends core
 		}
 		$awt->define_field(array(
 			"name" => "delete",
-			"caption" => "",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+		$awt->define_field(array(
+			"name" => "_delete",
+			"caption" => t("Kustuta"),
+			"align" => "center"
 		));
 		$awt->set_sortable(true);
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
@@ -434,14 +441,14 @@ class releditor extends core
 //			"no_caption" => 1,
  		);
 
-		$xprops[$prop["name"]."[0]toolbar"] = array(
+/*		$xprops[$prop["name"]."[0]toolbar"] = array(
 			"type" => "text",
 			"value" => $tb->get_toolbar(),
 			"store" => "no",
 			"name" => $this->elname."_toolbar",
 			"caption" => " ",//$this->elname."_toolbar",
 //			"no_caption" => 1,
- 		);
+ 		);*/
 
 		$xprops[$prop["name"]."[0]table"] = array(
 			"type" => "text",
@@ -1871,13 +1878,18 @@ class releditor extends core
 		{
 			$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
 		}
-		$t->define_chooser(array(
+/*		$t->define_chooser(array(
 			"name" => $propn."_del",
 			"field" => "oid"
-		));
+		));*/
 		$t->define_field(array(
 			"name" => $propn."_change",
 			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => $propn."_delete",
+			"caption" => t("Kustuta"),
 			"align" => "center"
 		));
 	}
@@ -1889,7 +1901,8 @@ class releditor extends core
 
 		$d = array(
 			"oid" => $idx+1,
-			$cur_prop["name"]."_change" => "<a href='javascript:void(0)' name='".$cur_prop["name"]."_edit_".$idx."'>".t("Muuda")."</a>"
+			$cur_prop["name"]."_change" => "<a href='javascript:void(0)' name='".$cur_prop["name"]."_edit_".$idx."'>".t("Muuda")."</a>",
+			$cur_prop["name"]."_delete" => "<a href='javascript:void(0)' name='".$cur_prop["name"]."_delete_".($idx)."'>".t("Kustuta")."</a>"
 		);
 
 		// call get_property for each field in the table as well
@@ -2086,24 +2099,21 @@ class releditor extends core
 		{
 			$o = obj($arr["id"]);
 			$idx2oid = array();
-			$idx = 1;
+			$idx = 0;
 			foreach($o->connections_from(array("type" => $cur_prop["reltype"])) as $c)
 			{
 				$idx2oid[$idx++] = $c->prop("to");
 			}
 		}
 
-		foreach(safe_array($arr[$propn."_del"]) as $idx)
+		if (is_oid($arr["id"]) && is_oid($idx2oid[$arr[$propn."_delete_index"]]))
 		{
-			if (is_oid($arr["id"]))
-			{
-				$o->disconnect(array(
-					"from" => $idx2oid[$idx],
-					"type" => $cur_prop["reltype"]
-				));
-			}
-			unset($prev_dat[$idx-1]);
+			$o->disconnect(array(
+				"from" => $idx2oid[$arr[$propn."_delete_index"]],
+				"type" => $cur_prop["reltype"]
+			));
 		}
+		unset($prev_dat[$arr[$propn."_delete_index"]]);
 
 		$tmp = array();
 		foreach($prev_dat as $row)
