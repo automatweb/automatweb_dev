@@ -596,12 +596,16 @@ class crm_bill extends class_base
 						}
 					}
 				}
-				if ($prop["name"] == "customer" && ($this->can("view", $prop["value"]) || is_oid($arr["obj_inst"]->prop("customer"))))
+				if ($prop["name"] == "customer" && ($this->can("view", $prop["value"]) || $this->can("view", $arr["obj_inst"]->prop("customer"))))
 				{
 					if($this->can("view", $prop["value"]))
 					{
 						$cust_obj = obj($prop["value"]);
 						
+					}
+					else
+					{
+						$cust_obj = obj($arr["obj_inst"]->prop("customer"));
 					}
 					$arr["obj_inst"]->set_prop("customer_name" , $cust_obj->name());
 					$arr["obj_inst"]->set_prop("customer_code" ,$cust_obj->prop("code"));
