@@ -167,6 +167,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property gantt_summary type=text store=no
 	@caption Kokkuv&otilde;te
 
+	@property gantt_legend type=text store=no
+	@caption Legend
+
 @default group=complete
 
 	@property complete_table type=table store=no no_caption=1
@@ -628,6 +631,13 @@ class bug_tracker extends class_base
 					$this->job_hrs / 3600,
 					date("d.m.Y H:i", $this->job_end)
 				);
+				break;
+
+			case "gantt_legend":
+				$prop["value"] = '<div style="color:black">'.t("Fatal error").'</div>';
+				$prop["value"] .= '<div style="color:green">'.t("Vajab tagasisidet").'</div>';
+				$prop["value"] .= '<div style="color:red">'.t("T&auml;htaeg &uuml;le").'</div>';
+				$prop["value"] .= '<div style="color:yellow">'.t("T&auml;htaeg l&auml;hedal").'</div>';
 				break;
 
 			case "sp_tb":
@@ -3058,6 +3068,29 @@ class bug_tracker extends class_base
 			$day_start = $day_info[0];
 			$day_end = $day_info[1];
 
+			$color = "silver";
+			$deadline = $gt->prop("deadline");
+			if($deadline > 1)
+			{
+				if($deadline < time())
+				{
+					$color = "red";
+				}
+				elseif(($deadline - 5*24*60*60) < time())
+				{
+					$color = "yellow";
+				}
+			}
+
+			$status = $gt->prop("bug_status");
+			if($status == 10)
+			{
+				$color = "green";
+			}
+			elseif($status == 11)
+			{
+				$color = "black";
+			}
 			if (date("H", $start+$length) > $day_end || ($length > (3600 * 7)))
 			{
 				// split into parts
@@ -3073,6 +3106,7 @@ class bug_tracker extends class_base
 					"start" => $start,
 					"length" => $length,
 					"title" => $title,
+					"colour" => $color,
 				);
 
 				$chart->add_bar ($bar);
@@ -3092,6 +3126,7 @@ class bug_tracker extends class_base
 						"start" => $start,
 						"length" => $length,
 						"title" => $title,
+						"colour" => $color,
 					);
 
 					$chart->add_bar ($bar);
@@ -3108,6 +3143,7 @@ class bug_tracker extends class_base
 					"start" => $start,
 					"length" => $length,
 					"title" => $title,
+					"colour" => $color,
 				);
 
 				$chart->add_bar ($bar);
