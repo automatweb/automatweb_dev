@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.232 2008/03/22 19:26:11 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.233 2008/04/25 09:30:29 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2511,7 +2511,10 @@ class menu extends class_base implements main_subtemplate_handler
 		}
 	}
 
-	private function write_trans_aliases($arr)
+	/**
+		@attrib api=1
+	**/
+	public function write_trans_aliases($arr)
 	{
 		$o = $arr["obj_inst"];
 		$l = get_instance("languages");
