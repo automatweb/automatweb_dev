@@ -446,7 +446,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property jobs_wanted_table type=table no_caption=1
 
-@property jobs_wanted type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
+@property jobs_wanted type=releditor mode=manager2 reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no table_fields=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton
 
 ------------------------------------------------------------------
 

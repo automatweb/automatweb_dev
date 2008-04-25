@@ -246,6 +246,15 @@
             <caption>CV aktiivne</caption>
       </property>
       <property>
+            <name>submit_cv</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>submit_cv</field>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
             <name>co_is_cust</name>
             <table>kliendibaas_isik</table>
             <group>cust_rel</group>
@@ -1035,6 +1044,7 @@
             <table>objects</table>
             <group>work_wanted</group>
             <type>releditor</type>
+            <mode>manager2</mode>
             <reltype>RELTYPE_EDUCATION</reltype>
             <props>
                   <num_0>name</num_0>
@@ -1047,6 +1057,16 @@
                   <num_7>sbutton</num_7>
             </props>
             <store>no</store>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>palgasoov</num_1>
+                  <num_2>valdkond</num_2>
+                  <num_3>liik</num_3>
+                  <num_4>asukoht</num_4>
+                  <num_5>koormus</num_5>
+                  <num_6>lisainfo</num_6>
+                  <num_7>sbutton</num_7>
+            </table_fields>
             <field>jobs_wanted</field>
       </property>
       <property>
@@ -1536,6 +1556,7 @@
             <general2>
                   <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
+                  <no_submit>1</no_submit>
             </general2>
             <cust_rel>
                   <caption>Kliendisuhe</caption>
