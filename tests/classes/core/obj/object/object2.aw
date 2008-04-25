@@ -471,7 +471,7 @@ class object_test2 extends UnitTestCase
 		$time = time();
 		$o = $this->_get_temp_o();
 		$id = $o->id();
-		$this->assertEqual($time, $this->db->db_fetch_field("SELECT created FROM objects WHERE oid= $id", "created"));
+		$this->assertTrue((abs($time - $this->db->db_fetch_field("SELECT created FROM objects WHERE oid= $id", "created"))<2));
 		$o->delete(true);
 	}
 
