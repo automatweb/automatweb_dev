@@ -39,7 +39,6 @@ jQuery.aw_releditor = function(arr) {
 		
 		// change button name when editing not adding
 		$.get("/orb.aw?class=releditor&action=js_get_button_name&is_edit=1", function(change_btn_name){
-			alert ("'"+change_btn_name+"'");
 			btn = $("input[name="+arr["releditor_name"]+"]");
 			btn.attr("value", change_btn_name);
 		});
@@ -99,6 +98,7 @@ jQuery.aw_releditor = function(arr) {
 					data: data,
 					success: function(msg){
 						$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
+						handle_change_links();
 						handle_delete_links();
 					}
 				});
