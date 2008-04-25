@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.117 2008/04/25 12:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.118 2008/04/25 13:54:20 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -21,6 +21,7 @@ class releditor extends core
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
+
 /*		$awt->define_chooser(array(
 			"field" => "idx",
 			"name" => $arr["prop"]["name"]."_del",
@@ -31,6 +32,16 @@ class releditor extends core
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
 		}  
 
+		if ($arr["new"])	
+		{
+			$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $arr["prop"]["name"]);
+			return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>";
+		}
+
+		$awt->define_chooser(array(
+			"field" => "idx",
+			"name" => $arr["prop"]["name"]."_del",
+		));
 		$htmlclient = get_instance("cfg/htmlclient");
 
 		$parent_inst = get_instance($arr["obj_inst"]->class_id());
@@ -380,15 +391,6 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
-		$this->elname = $this->elname;
-		$xprops = $t->parse_properties(array(
-			"properties" => $act_props,
-			"name_prefix" => $this->elname."[".$conns_count."]",
-			"obj_inst" => $obj_inst,
-		));
-
-		exit_function("init-rel-editor-new");
-
 		$tb = get_instance("vcl/toolbar");
 //		$tb->add_button(array(
 //			"name" => "new",
@@ -402,6 +404,39 @@ class releditor extends core
 			"tooltip" => t("Kustuta"),
 			"url" => "javascript:void(0);",
 		));
+
+		$xprops[$prop["name"]."[0]_caption"] = array(
+			"type" => "text",
+			"value" => $prop["caption"],
+			"subtitle" => 1,
+			"store" => "no",
+			"name" => $this->elname."_caption",
+			"caption" => " ",
+//			"no_caption" => 1,
+ 		);
+
+		$xprops[$prop["name"]."[0]table"] = array(
+			"type" => "text",
+			"value" => $this->init_new_rel_table($arr),
+			"store" => "no",
+			"name" => $this->elname."_table",
+			"caption" => " ",//$this->elname."_table",
+//			"no_caption" => 1,
+ 		);
+
+		$tmp = $t->parse_properties(array(
+			"properties" => $act_props,
+			"name_prefix" => $this->elname."[".$conns_count."]",
+			"obj_inst" => $obj_inst,
+		));
+		foreach($tmp as $k => $v)
+		{
+			$xprops[$k] = $v;
+		}
+
+
+		exit_function("init-rel-editor-new");
+
 
 
 		$xprops[$prop["name"]."_reled_data"] = array(
@@ -432,7 +467,7 @@ class releditor extends core
 					"id" : "'.$arr["obj_inst"]->id().'",
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
-					"start_from_index" : "'.count($arr["obj_inst"]->connections_from(array("type" => $arr["prop"]["reltype"]))).'"
+					"start_from_index" : "'.$conns_count.'"
 					});
 			</script>',
 			"store" => "no",
@@ -465,6 +500,7 @@ class releditor extends core
 			$get_prop_arr = $arr;
 			$get_prop_arr["prop"] = $prop;
 			$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $get_prop_arr["prop"]["name"]);
+
 			$parent_inst->get_property($get_prop_arr);
 			$get_prop_arr["prop"]["name"] = $prop["name"];
 			$xprops[$key] = $get_prop_arr["prop"];
@@ -1341,17 +1377,19 @@ class releditor extends core
 		$o->delete();
 	}
 
-	/**
-		@attrib name=process_new_releditor all_args=1
-	**/
-	function process_new_releditor($arr)
+	function callback_post_save($arr)
 	{
 		// read the data from the serialized array
-		$dat = safe_array(unserialize($arr["request"][$arr["prop"]["name"]."_data"]));
-
+		$dat = unserialize($arr["request"][$arr["prop"]["name"]."_data"]);
+		if (!is_array($dat))
+		{
+			return;
+		}
 		// for each row in the data, fake a submit to the correct class
 
-		$to_clid = $arr["prop"]["clid"][0];
+		$relinfo = $arr["obj_inst"]->get_relinfo();
+
+		$to_clid = $relinfo[$arr["prop"]["reltype"]]["clid"][0];
 		$clss = aw_ini_get("classes");
 		$class_name = basename($clss[$to_clid]["file"]);
 
@@ -1369,108 +1407,12 @@ class releditor extends core
 			$i->submit($row);
 		}
 
-		return;
-
-		extract($arr);
-		if($id) 
-		{
-			$arr["request"]["id"] = $id;
-		}
-		if($reltype) 
-		{
-			$arr["prop"]["reltype"] = $reltype;
-		}
-		if($clid) 
-		{
-			$arr["prop"]["clid"] = $clid;
-		}
-		if($releditor_name) 
-		{
-			$arr["prop"]["name"] = $this->elname = $releditor_name;
-		}
-
-		$clid = $arr["prop"]["clid"];
-		if(is_array($clid))
-		{
-			$clid = reset($clid);
-		}
-		$parent_object = obj($arr["request"]["id"]);
-		$parent = $arr["request"]["id"];
-		if(!$arr["prop"]["value"])
-		{
-			$arr["prop"]["value"] = $_POST[$arr["prop"]["name"]];
-			foreach($arr["prop"]["value"] as $key => $data)
-			{
-				foreach($data as $prop => $val)
-				{
-					if(!is_array($val))
-					{
-						$arr["prop"]["value"][$key][$prop] = utf8_decode($val);
-					}
-				}
-			}
-		}
-		$save_stuff = 0;
-		foreach($arr["prop"]["value"] as $key => $data)
-		{
-			if(!$save_stuff)
-			{
-				$save_stuff = 1;
-				continue;
-			}
-			if($this->can("view" , $data["id"]))
-			{
-				$o = obj($data["id"]);
-			}
-			else
-			{
-				$o = new object();
-				$o->set_class_id($clid);
-				$o->set_parent($parent);
-				$o->set_name();
-			}
-			foreach($data as $prop => $val)
-			{
-				if(is_array($val))
-				{
-					if(!$val["day"])
-					{
-						$val["day"] = 1;
-					}
-					$val = date_edit::get_timestamp($val);
-				}
-				if($o->is_property($prop))
-				{
-					$o->set_prop($prop , $val);
-				}
-			}
-			$o->save();
-			$parent_object->connect(array(
-				"to" => $o->id(),
-				"reltype" =>  $arr["prop"]["reltype"],
-			));
-		}
-		foreach($_POST["releditor"]["delete_oid"] as $key => $id)
-		{
-			if($this->can("delete" , $id))
-			{
-				$o = obj($id); 
-				$o->delete();
-			}
-		}
-
-		if(!is_object($arr["obj_inst"]))
-		{
-			header ("Content-Type: text/html; charset=".aw_global_get("charset"));
-			die($this->init_new_rel_table($arr));
-		}
 	}
 
 	function process_releditor($arr)
 	{
 		if($arr["prop"]["mode"] == "manager2")
 		{
-			$this->process_new_releditor($arr);
 			return;
 		}
 		$prop = &$arr["prop"];
@@ -1871,7 +1813,6 @@ class releditor extends core
 	private function _init_js_rv_table($t, $clid, $propn)
 	{
 		$rel_props = $this->_get_props_from_clid($this->_get_related_clid($clid, $propn));
-
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
 
 		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
@@ -1941,6 +1882,18 @@ class releditor extends core
 
 			switch($pv["type"])
 			{
+				case "relpicker":
+					if ($this->can("view", $pv["value"]))
+					{
+						$tmp = obj($pv["value"]);
+						$d[$prop_name] = $tmp->name();
+					}
+					else
+					{
+						$d[$prop_name] = "";
+					}
+					break;
+
 				case "chooser":
 				case "select":
 					$d[$prop_name] = $pv["options"][$pv["value"]];
@@ -1955,6 +1908,10 @@ class releditor extends core
 
 	private function _define_table_col_from_prop($t, $pd)
 	{
+		if (!is_array($pd))
+		{
+			return;
+		}
 		$d = array(
 			"name" => $pd["name"],
 			"caption" => $pd["caption"],
@@ -1976,6 +1933,10 @@ class releditor extends core
 				if (in_array("year", $pd["format"]))
 				{
 					$dmy[] = "Y";
+				}
+				if (count($dmy) == 0)
+				{
+					$dmy = "d.m.Y";
 				}
 				$d["format"] = join(".", $dmy);
 			}
