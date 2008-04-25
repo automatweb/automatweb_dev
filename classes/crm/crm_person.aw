@@ -381,7 +381,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @groupinfo orgs caption="Organisatoorne kuuluvus" parent=cv submit=no
 
-@property org_edit type=releditor store=no mode=manager reltype=RELTYPE_COMPANY_RELATION props=org,start,end,add_info table_fields=org,start,end,add_info group=orgs
+@property org_edit type=releditor store=no mode=manager2 reltype=RELTYPE_COMPANY_RELATION props=org,start,end,add_info table_fields=org,start,end,add_info group=orgs
 
 ------------------------------------------------------------------
 

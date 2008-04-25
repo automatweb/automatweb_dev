@@ -887,7 +887,7 @@
             <group>orgs</group>
             <type>releditor</type>
             <store>no</store>
-            <mode>manager</mode>
+            <mode>manager2</mode>
             <reltype>RELTYPE_COMPANY_RELATION</reltype>
             <props>
                   <num_0>org</num_0>
