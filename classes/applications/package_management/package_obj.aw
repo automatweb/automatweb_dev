@@ -47,18 +47,30 @@ class package_obj extends _int_object
 		die();
 	}
 
-	function set_package_file_names()
+	function get_package_file_names()
 	{
-		$filenamestring = "";
+		$files = array();
 		$file_objects = $this->get_files();
 		foreach($file_objects->arr() as $file_object)
 		{
-
 			$data = $file_object->get_file();
-			//siia vaja et zipi seest nimed v6taks
-			$filenamestring.= $data["name"];
+			$zip = new ZipArchive;
+			$zip->open($data["properties"]["file"]);
+			for ($i=0; $i<$zip->numFiles;$i++) {
+				$dat =  $zip->statIndex($i);
+    				if($dat["comp_method"])
+				{
+					$files[] = $dat["name"];
+				}
+			}
 		}
+		return $files;
+	}
 
+	function set_package_file_names()
+	{
+		$files = get_package_file_names();
+		$filenamestring = join("<br>\n" , $files);
 		$this->set_prop("file_names" , $filenamestring);
 		$this->save();
 	}

@@ -42,6 +42,11 @@ class package_server_obj extends _int_object
 			// right now it is possible to search by the beginning of version number
 			$filter['version'] = $params['filter']['search_version'].'%'; 
 		}
+		if (!empty($params['filter']['search_file']))
+		{
+			// right now it is possible to search by the beginning of version number
+			$filter['file_names'] = '%'.$params['filter']['search_file'].'%'; 
+		}
 
 		$ol = new object_list($filter);
 

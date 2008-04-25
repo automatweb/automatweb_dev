@@ -52,6 +52,18 @@
             <caption>Versioon</caption>
       </property>
       <property>
+            <name>search_file</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packages_search</parent>
+            <field>search_file</field>
+            <caption>Fail</caption>
+      </property>
+      <property>
             <name>search_button</name>
             <table>objects</table>
             <group>packages</group>

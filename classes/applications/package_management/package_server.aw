@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.5 2008/04/18 12:11:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.6 2008/04/25 11:30:54 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -30,6 +30,9 @@
 
 			@property search_version type=textbox size=20 store=no captionside=top parent=packages_search
 			@caption Versioon
+
+			@property search_file type=textbox size=20 store=no captionside=top parent=packages_search
+			@caption Fail
 
 			@property search_button type=submit no_caption=1 parent=packages_search
 			@caption Otsi
@@ -68,6 +71,7 @@ class package_server extends class_base
 		{
 			case 'search_name':
 			case 'search_version':
+			case 'search_file':
 				$prop['value'] = $arr['request'][$prop['name']];
 				break;
 		};
@@ -134,7 +138,8 @@ class package_server extends class_base
 
 		$filter = array(
 			'search_name' => $arr['request']['search_name'],
-			'search_version' => $arr['request']['search_version']
+			'search_version' => $arr['request']['search_version'],
+			'search_file' => $arr['request']['search_file'],
 		);
 
 		$packages = $this->model->packages_list(array(
@@ -191,6 +196,7 @@ class package_server extends class_base
 		{
 			$arr['args']['search_name'] = $arr['request']['search_name'];
 			$arr['args']['search_version'] = $arr['request']['search_version'];
+			$arr['args']['search_file'] = $arr['request']['search_file'];
 		}
 	}
 
@@ -224,7 +230,7 @@ class package_server extends class_base
 	}
 
 	/** 
-		@attrib name=download_package_list nologin=1 is_public=1
+		@attrib name=download_package_list nologin=1 is_public=1 all_args=1
 
  	**/
 	function download_package_list()
@@ -247,14 +253,14 @@ class package_server extends class_base
 		foreach($packages as $package)
 		{
 			$deps = $package->get_dependencies();
-			$files = $package->get_files();
+			$files = $package->get_package_file_names();
 			$pa[] = array(
 				"id" => $package->id(),
 				"name" => $package->name(),
 				"version" => $package->prop("version"),
 				"description" => $package->prop("descriotion"),
 				"dependences" => $deps->ids(),
-				"files"	=> $files->names(),
+				"files"	=> $files,
 			);
 
 		}

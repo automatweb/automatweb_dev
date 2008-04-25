@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="download_package_list" nologin="1" is_public="1">
+		<action name="download_package_list" nologin="1" is_public="1" all_args="1">
 			<function name="download_package_list">
 				<arguments>
 				</arguments>
@@ -17,6 +17,13 @@
 
 		<action name="download_package" nologin="1" is_public="1" all_args="1">
 			<function name="download_package">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="download_package_file" nologin="1" is_public="1" all_args="1">
+			<function name="download_package_file">
 				<arguments>
 				</arguments>
 			</function>
