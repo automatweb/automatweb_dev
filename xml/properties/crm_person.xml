@@ -2104,11 +2104,7 @@
             <ceditprof>
                   <type>vbox</type>
                   <closeable>1</closeable>
-<<<<<<< crm_person.xml
-                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;suhted</area_caption>
-=======
                   <area_caption>Eelnev&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;kogemus</area_caption>
->>>>>>> 1.103
                   <group>contact</group>
             </ceditprof>
             <ceditadr>
