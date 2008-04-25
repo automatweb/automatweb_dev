@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.114 2008/03/31 11:34:39 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.115 2008/04/25 08:50:38 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -22,8 +22,8 @@ class releditor extends core
 			"layout" => "generic",
 		));
 		$awt->define_chooser(array(
-			"field" => "conn_id",
-			"name" => "check",
+			"field" => "idx",
+			"name" => $arr["prop"]["name"]."_del",
 		));
 		
 		if(!is_object($arr["obj_inst"]))
@@ -38,6 +38,8 @@ class releditor extends core
 		$arr["prop"] = $parent_property_list[$arr["prop"]["name"]];
 		$tb_fields = $arr["prop"]["table_fields"];
 
+		$data = array();
+
 		if(!$arr["new"] && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
@@ -45,9 +47,10 @@ class releditor extends core
 			));
 			$name = $arr["prop"]["name"];
 			$return_url = get_ru();
-			$rows_count = 1;
+			$rows_count = 0;
 			$del_hiddens = "";
 			$conns_count = sizeof($conns);
+			$idx = 1;
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
@@ -65,6 +68,7 @@ class releditor extends core
 				$clinst = $target->instance();
 				$rowdata = array(
 					"id" => $c_to,
+					"idx" => $idx,
 					"parent" => $target->parent(),
 					"conn_id" => $conn->id(),
 					"name" => $conn->prop("to.name"),
@@ -75,13 +79,7 @@ class releditor extends core
 					"_sort_jrk" => $conn->prop("to.jrk"),
 					"_sort_name" => $conn->prop("to.name"),
 					"_active" => ($arr["request"][$this->elname] == $c_to),
-					"delete" => html::submit(array(
-						"name" => "releditor_del_button_".$c_to,
-						"value" => t("Kustuta"),
-						)).html::submit(array(
-						"name" => "releditor_edit_button_".$rows_count,
-						"value" => t("Muuda"),
-						)),
+					"delete" => "<a href='javascript:void(0)' name='".$this->elname."_edit_".($idx-1)."'>".t("Muuda")."</a>",
 				);
 
 				$property_list = $target->get_property_list();
@@ -89,6 +87,8 @@ class releditor extends core
 
 				foreach($property_list as $_pn => $_pd)
 				{
+					$data[$idx-1][$_pn] = $target->prop($_pn);
+
 					if (!in_array($_pn,$tb_fields))
 					{
 						continue;
@@ -180,9 +180,10 @@ class releditor extends core
 
 
 				//viimasesse tulpa muutmise jaoks peidetud asjad
-				$rowdata["delete"].='<div style="display: none;">'.$hidden_div.'</div>';
+				//$rowdata["delete"].='<div style="display: none;">'.$hidden_div.'</div>';
 				$awt->define_data($rowdata);
 				$rows_count++;
+				$idx++;
 			}
 		}
 		$awt->define_field(array(
@@ -194,7 +195,7 @@ class releditor extends core
 		$awt->sort_by();
 		$awt->set_sortable(false);
 
-		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>".$del_hiddens;
+		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => serialize($data)))."</div>".$del_hiddens;
 	}
 
 
@@ -382,12 +383,20 @@ class releditor extends core
 //			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
 //		));
 		$tb->add_button(array(
-			"name" => "delete",
+			"name" => $this->elname."_del",
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta"),
-			"url" => "javascript:crap();",
+			"url" => "javascript:void(0);",
 		));
 
+
+		$xprops[$prop["name"]."_reled_data"] = array(
+			"type" => "hidden",
+			"value" => $arr["obj_inst"]->class_id()."::".$prop["name"],
+			"store" => "no",
+			"name" => $prop["name"]."_reled_data",
+			"no_caption" => 1,
+		);
 
 		$xprops[$prop["name"]."[0]break"] = array(
 			"type" => "text",
@@ -409,7 +418,7 @@ class releditor extends core
 					"id" : "'.$arr["obj_inst"]->id().'",
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
-					"del_url" : "'.aw_ini_get("baseurl").'/?class=releditor&action=delo&id=",
+					"start_from_index" : "'.count($arr["obj_inst"]->connections_from(array("type" => $arr["prop"]["reltype"]))).'"
 					});
 			</script>',
 			"store" => "no",
@@ -1322,12 +1331,50 @@ class releditor extends core
 		@attrib name=process_new_releditor all_args=1
 	**/
 	function process_new_releditor($arr)
-	{//arr($arr); arr($_POST);die();
+	{
+		// read the data from the serialized array
+		$dat = safe_array(unserialize($arr["request"][$arr["prop"]["name"]."_data"]));
+
+		// for each row in the data, fake a submit to the correct class
+
+		$to_clid = $arr["prop"]["clid"][0];
+		$clss = aw_ini_get("classes");
+		$class_name = basename($clss[$to_clid]["file"]);
+
+		$rels = $arr["obj_inst"]->get_property_list();
+
+		foreach($dat as $idx => $row)
+		{
+			$row["class"] = $class_name;
+			$row["action"] = "submit";
+			$row["parent"] = $arr["obj_inst"]->id();
+			$row["alias_to"] = $arr["obj_inst"]->id();
+			$row["alias_to_prop"] = $arr["prop"]["name"];
+			$row["reltype"] = $arr["prop"]["reltype"];
+			$i = get_instance($to_clid);
+			$i->submit($row);
+		}
+
+		return;
+
 		extract($arr);
-		if($id) $arr["request"]["id"] = $id;
-		if($reltype) $arr["prop"]["reltype"] = $reltype;
-		if($clid) $arr["prop"]["clid"] = $clid;
-		if($releditor_name) $arr["prop"]["name"] = $this->elname = $releditor_name;
+		if($id) 
+		{
+			$arr["request"]["id"] = $id;
+		}
+		if($reltype) 
+		{
+			$arr["prop"]["reltype"] = $reltype;
+		}
+		if($clid) 
+		{
+			$arr["prop"]["clid"] = $clid;
+		}
+		if($releditor_name) 
+		{
+			$arr["prop"]["name"] = $this->elname = $releditor_name;
+		}
+
 		$clid = $arr["prop"]["clid"];
 		if(is_array($clid))
 		{
@@ -1342,7 +1389,10 @@ class releditor extends core
 			{
 				foreach($data as $prop => $val)
 				{
-					if(!is_array($val))$arr["prop"]["value"][$key][$prop] = utf8_decode($val);
+					if(!is_array($val))
+					{
+						$arr["prop"]["value"][$key][$prop] = utf8_decode($val);
+					}
 				}
 			}
 		}
@@ -1721,5 +1771,353 @@ class releditor extends core
 		$arr["s_reled"] = "0";
 	}
 
+	/**
+		@attrib name=handle_js_submit all_args=1
+	**/
+	function handle_js_submit($arr)
+	{
+//	die(dbg::dump($_GET).dbg::dump($_POST));
+		$propn = null;
+		foreach($arr as $k => $d)
+		{
+			if (substr($k, -strlen("_reled_data")) == "_reled_data")
+			{
+				list($clid, $propn) = explode("::", $d);
+				break;
+			}
+		}
+		if ($propn === null)
+		{
+			die("error, no property data! given: ".dbg::dump($arr));
+		}
+
+		$num = reset(array_keys($arr[$propn]));
+
+		$t = new aw_table;
+		$this->_init_js_rv_table($t, $clid, $propn, $arr[$propn][$num], $num);
+
+		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
+		foreach($arr[$propn][$num] as $k => $v)
+		{
+			if (!is_array($v))
+			{
+				$arr[$propn][$num][$k] = iconv("utf-8", aw_global_get("charset")."//IGNORE", $v);
+			}
+		}
+		$prev_dat[$num] = $arr[$propn][$num];
+		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
+
+		// if the current object exists then we need to save the change to the connected class immediately
+		if (is_oid($arr["id"]))
+		{
+			$o = obj($arr["id"]);
+			$idx2oid = array();
+			$idx = 0;
+			foreach($o->connections_from(array("type" => $cur_prop["reltype"])) as $c)
+			{
+				$idx2oid[$idx++] = $c->prop("to");
+			}
+
+			$clss = aw_ini_get("classes");
+
+			$row = $prev_dat[$num];
+			$row["class"] = basename($clss[$this->_get_related_clid($clid, $propn)]["file"]);
+			$row["action"] = "submit";
+			$row["parent"] = $arr["id"];
+			$row["id"] = $idx2oid[$num];
+			$row["alias_to"] = $arr["id"];
+			$row["alias_to_prop"] = $propn;
+			$row["reltype"] = $cur_prop["reltype"];
+			$i = get_instance($this->_get_related_clid($clid, $propn));
+			$rv = $i->submit($row);
+		}
+	
+
+		foreach($prev_dat  as $idx => $dat_row)
+		{
+			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx);
+		}
+
+
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		die($t->draw().html::hidden(array(
+			"name" => $propn."_data",
+			"value" => serialize($prev_dat)
+		)));
+	}
+
+	/** returns property data, given class id and property name 
+	**/
+	private function _get_js_cur_prop($clid, $propn)
+	{
+		$cur_props = $this->_get_props_from_clid($clid);
+		return $cur_props[$propn];
+	}
+
+	private function _init_js_rv_table($t, $clid, $propn)
+	{
+		$rel_props = $this->_get_props_from_clid($this->_get_related_clid($clid, $propn));
+
+		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
+
+		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
+		{
+			$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
+		}
+		$t->define_chooser(array(
+			"name" => $propn."_del",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => $propn."_change",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+	}
+
+	private function _insert_js_data_to_table($t, $cur_prop, $prop_data, $clid, $idx)
+	{
+		$rel_clid = $this->_get_related_clid($clid, $cur_prop["name"]);
+		$rel_props = $this->_get_props_from_clid($rel_clid);
+
+		$d = array(
+			"oid" => $idx+1,
+			$cur_prop["name"]."_change" => "<a href='javascript:void(0)' name='".$cur_prop["name"]."_edit_".$idx."'>".t("Muuda")."</a>"
+		);
+
+		// call get_property for each field in the table as well
+		$o = obj();
+		$o->set_class_id($rel_clid);
+		$i = $o->instance();
+//echo dbg::dump($_POST);
+		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
+		{
+			if ($rel_props[$prop_name]["type"] == "date_select" || $rel_props[$prop_name]["type"] == "datetime_select")
+			{
+				$d[$prop_name] = date_edit::get_timestamp($prop_data[$prop_name], $rel_props[$prop_name]);
+			}
+			else
+			{
+				$d[$prop_name] = $prop_data[$prop_name];
+			}
+
+			$pv = $rel_props[$prop_name];
+			$pv["value"] = $d[$prop_name];
+			$args = array(
+				"obj_inst" => $o,
+				"request" => $_POST,
+				"prop" => &$pv
+			);
+			if (method_exists($i, "_get_".$prop_name))
+			{
+				$mn = "_get_".$prop_name;
+				$i->$mn($args);
+			}
+			else
+			if (method_exists($i, "get_property"))
+			{
+				$i->get_property($args);
+			}
+
+			switch($pv["type"])
+			{
+				case "chooser":
+				case "select":
+					$d[$prop_name] = $pv["options"][$pv["value"]];
+					break;
+
+				default:
+					$d[$prop_name] = $pv["value"];
+			}
+		}
+		$t->define_data($d);
+	}
+
+	private function _define_table_col_from_prop($t, $pd)
+	{
+		$d = array(
+			"name" => $pd["name"],
+			"caption" => $pd["caption"],
+		);
+		if ($pd["type"] == "date_select")
+		{
+			$d["type"] = "time";
+			if (is_array($pd["format"]))
+			{
+				$dmy = array();
+				if (in_array("day", $pd["format"]))
+				{
+					$dmy[] = "d";
+				}
+				if (in_array("month", $pd["format"]))
+				{
+					$dmy[] = "m";
+				}
+				if (in_array("year", $pd["format"]))
+				{
+					$dmy[] = "Y";
+				}
+				$d["format"] = join(".", $dmy);
+			}
+			else
+			{
+				$d["format"] = "d.m.Y";
+			}
+		}
+		else
+		if ($pd["type"] == "datetime_select")
+		{
+			$d["type"] = "time";
+			$d["format"] = "d.m.Y H:i:s";
+		}
+		$t->define_field($d);
+	}
+
+	/** returns the first class_id from the relation type for the $from_prop property in class $from_clid 
+	**/
+	private function _get_related_clid($from_clid, $from_prop)
+	{
+ 		$o = obj();
+		$o->set_class_id($from_clid);
+		$pl = $o->get_property_list();
+		$pd = $pl[$from_prop];
+
+		$relinfo = $o->get_relinfo();
+		return $relinfo[$pd["reltype"]]["clid"][0];
+	}
+
+	/** returns list of properties for class $from_clid 
+	**/
+	private function _get_props_from_clid($from_clid)
+	{
+ 		$o = obj();
+		$o->set_class_id($from_clid);
+		return $o->get_property_list();
+	}
+
+	/**
+		@attrib name=js_change_data all_args=1
+	**/
+	function js_change_data($arr)
+	{
+		$releditor_name = $arr["releditor_name"];
+		$d = unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$releditor_name."_data"]));
+		$idx = $arr["edit_index"];
+		$main_clid = CL_CRM_PERSON;
+
+		$pd = $this->_get_js_cur_prop($main_clid, $releditor_name);
+		$rel_clid = $this->_get_related_clid($main_clid, $releditor_name);
+		$rel_props = $this->_get_props_from_clid($rel_clid);
+
+		$r = array();
+		foreach($pd["props"] as $rel_prop_name)
+		{
+			if (is_array($d[$idx][$rel_prop_name]))
+			{
+				foreach($d[$idx][$rel_prop_name] as $k => $v)
+				{
+					$r[] = "'[$rel_prop_name][$k]': '".$v."'";
+				}
+			}
+			else
+			{
+				$r[] = "'[$rel_prop_name]': '".$d[$idx][$rel_prop_name]."'";
+			}
+		}
+
+		$s_out = "edit_data = {";
+		$s_out .= join(",\n", $r);
+		$s_out .= " }; ";
+
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		echo $s_out; 
+		die();
+	}
+
+	/**
+		@attrib name=js_get_button_name
+		@param is_edit optional
+	**/
+	function js_get_button_name($arr)
+	{
+		if ($arr["is_edit"] == 1)
+		{
+			die(trim(t("Muuda")));
+		}
+		else
+		{
+			die(trim(t("Lisa")));
+		}
+	}
+
+	/**
+		@attrib name=js_delete_rows all_args=1
+	**/
+	function js_delete_rows($arr)
+	{
+		$propn = null;
+		foreach($arr as $k => $d)
+		{
+			if (substr($k, -strlen("_reled_data")) == "_reled_data")
+			{
+				list($clid, $propn) = explode("::", $d);
+				break;
+			}
+		}
+		if ($propn === null)
+		{
+			die("error, no property data! given: ".dbg::dump($arr));
+		}
+
+		$t = new aw_table;
+		$this->_init_js_rv_table($t, $clid, $propn);
+
+		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
+		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
+
+		if (is_oid($arr["id"]))
+		{
+			$o = obj($arr["id"]);
+			$idx2oid = array();
+			$idx = 1;
+			foreach($o->connections_from(array("type" => $cur_prop["reltype"])) as $c)
+			{
+				$idx2oid[$idx++] = $c->prop("to");
+			}
+		}
+
+		foreach(safe_array($arr[$propn."_del"]) as $idx)
+		{
+			if (is_oid($arr["id"]))
+			{
+				$o->disconnect(array(
+					"from" => $idx2oid[$idx],
+					"type" => $cur_prop["reltype"]
+				));
+			}
+			unset($prev_dat[$idx-1]);
+		}
+
+		$tmp = array();
+		foreach($prev_dat as $row)
+		{
+			$tmp[] = $row;
+		}
+		$prev_dat = $tmp;
+
+		foreach($prev_dat  as $idx => $dat_row)
+		{
+			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx);
+		}
+
+
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		die($t->draw().html::hidden(array(
+			"name" => $propn."_data",
+			"value" => serialize($prev_dat)
+		)));
+	}
+
 };
 ?>
+	
