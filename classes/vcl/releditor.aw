@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.121 2008/04/26 16:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.122 2008/04/26 18:06:36 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -87,7 +87,7 @@ class releditor extends core
 					"_delete" => "<a href='javascript:void(0)' name='".$this->elname."_delete_".($idx-1)."'>".t("Kustuta")."</a>",
 				);
 
-				$property_list = $target->get_property_list();
+				$property_list = $this->all_props;
 				$export_props = array();
 
 				foreach($property_list as $_pn => $_pd)
@@ -1071,7 +1071,7 @@ class releditor extends core
 					}
 				}
 
-				$property_list = $target->get_property_list();
+				$property_list = $this->all_props;
 
 				foreach($property_list as $_pn => $_pd)
 				{
@@ -1796,7 +1796,7 @@ class releditor extends core
 
 	private function _init_js_rv_table($t, $clid, $propn)
 	{
-		$rel_props = $this->_get_props_from_clid($this->_get_related_clid($clid, $propn));
+		$rel_props = $this->all_props;
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
 
 		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
