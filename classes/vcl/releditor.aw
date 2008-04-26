@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.119 2008/04/25 14:04:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.120 2008/04/26 12:43:55 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -10,25 +10,26 @@
 class releditor extends core
 {
 	var $auto_fields;
+
 	function releditor()
 	{
 		$this->init();
 	}
 
-	function init_new_rel_table($arr)
+	private function init_new_rel_table($arr)
 	{
 		classload("vcl/table");
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
 
-	
+
 		if(!is_object($arr["obj_inst"]))
 		{
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
-		}  
+		}
 
-		if ($arr["new"])	
+		if ($arr["new"])
 		{
 			$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $arr["prop"]["name"]);
 			return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>";
@@ -67,7 +68,7 @@ class releditor extends core
 //					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[releditor_remove]",
 //					"value" => ""
 //				));
-				
+
 				$clinst = $target->instance();
 				$rowdata = array(
 					"id" => $c_to,
@@ -172,7 +173,7 @@ class releditor extends core
 					$parent_inst->get_property($get_prop_arr);
 					$get_prop_arr["prop"]["name"] = $prop["name"];
 					$hidden_input = $get_prop_arr["prop"];
-					$hidden_input["name"] = str_replace("[" , "[".$rows_count."][" , $hidden_input["name"]); 
+					$hidden_input["name"] = str_replace("[" , "[".$rows_count."][" , $hidden_input["name"]);
 
 					$hidden_div.= $htmlclient->draw_element($hidden_input);
 					$export_props[$_pn] = $prop["value"];//.$htmlclient->draw_element($hidden_input);
@@ -209,7 +210,7 @@ class releditor extends core
 	}
 
 
-	function init_new_manager($arr)
+	private function init_new_manager($arr)
 	{
 		//arr($arr);
 		enter_function("init-rel-editor-new");
@@ -222,7 +223,6 @@ class releditor extends core
 		{
 			$relinfo = $arr["obj_inst"]->get_relinfo();
 			$clid = $relinfo[$prop["reltype"]]["clid"][0];
-
 		}
 
 		if (!is_oid($arr["obj_inst"]->id()))
@@ -311,11 +311,11 @@ class releditor extends core
 		};
 
 		$cfgform_id = $arr["prop"]["cfgform_id"];
-		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
+		if($this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
-			//$act_props = $act_props + $this->cfg_act_props;
+			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
 		}
 
 		if (!empty($prop["choose_default"]))
@@ -363,8 +363,7 @@ class releditor extends core
 				"name" => "id",
 				"value" => $obj_inst->id(),
 			);
-
-		};
+		}
 
 		if (!$obj_inst)
 		{
@@ -644,15 +643,6 @@ class releditor extends core
 		#$this->all_props = $act_props;
 		$pcount = sizeof($props);
 
-		// the toolbar should be before the props, because otherwise it
-		// would look freakish when adding new or changing -- ahz
-		if($visual == "manager" && $arr["prop"]["no_toolbar"] != 1)
-		{
-			// insert the toolbar into property array
-			$tbdef = $this->init_rel_toolbar($arr);
-			$act_props[$tbdef["name"]] = $tbdef;
-		}
-
 		// act_props needs to contain properties, if
 		// 1) visual is form and form_type is empty, if a single relation (rel_id=first) is being edited
 		// 2) ....
@@ -685,11 +675,20 @@ class releditor extends core
 		// so i'll just implement something neater
 
 		$cfgform_id = $arr["prop"]["cfgform_id"];
-		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
+		if($this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
-			//$act_props = $act_props + $this->cfg_act_props;
+			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
+		}
+
+		// the toolbar should be before the props, because otherwise it
+		// would look freakish when adding new or changing -- ahz
+		if($visual == "manager" && $arr["prop"]["no_toolbar"] != 1)
+		{
+			// insert the toolbar into property array
+			$tbdef = $this->init_rel_toolbar($arr);
+			$act_props = array_merge(array($tbdef["name"] => $tbdef), $act_props);
 		}
 
 		if (!empty($prop["choose_default"]))
@@ -1135,7 +1134,7 @@ class releditor extends core
 					}
 					$export_props[$_pn] = $prop["value"];
 				}
-				
+
 
 
 				$ed_fields["name"] = "name";
@@ -1772,7 +1771,7 @@ class releditor extends core
 			$i = get_instance($this->_get_related_clid($clid, $propn));
 			$rv = $i->submit($row);
 		}
-	
+
 
 		foreach($prev_dat  as $idx => $dat_row)
 		{
@@ -1787,7 +1786,7 @@ class releditor extends core
 		)));
 	}
 
-	/** returns property data, given class id and property name 
+	/** returns property data, given class id and property name
 	**/
 	private function _get_js_cur_prop($clid, $propn)
 	{
@@ -1939,7 +1938,7 @@ class releditor extends core
 		$t->define_field($d);
 	}
 
-	/** returns the first class_id from the relation type for the $from_prop property in class $from_clid 
+	/** returns the first class_id from the relation type for the $from_prop property in class $from_clid
 	**/
 	private function _get_related_clid($from_clid, $from_prop)
 	{
@@ -1952,7 +1951,7 @@ class releditor extends core
 		return $relinfo[$pd["reltype"]]["clid"][0];
 	}
 
-	/** returns list of properties for class $from_clid 
+	/** returns list of properties for class $from_clid
 	**/
 	private function _get_props_from_clid($from_clid)
 	{
@@ -1996,7 +1995,7 @@ class releditor extends core
 		$s_out .= " }; ";
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		echo $s_out; 
+		echo $s_out;
 		die();
 	}
 

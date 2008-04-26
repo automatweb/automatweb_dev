@@ -108,6 +108,11 @@ function cfgformToggleSelectProps(grpId)
 				{VAR:captionside_t_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][captionside]" value="top"{VAR:captionside_t_ch}/><br/>
 				{VAR:textsize_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][textsize]" value="{VAR:textsize}"/><br/>
 {VAR:prp_options}
+				<!-- SUB: emb_tbl -->
+				{VAR:show_in_emb_tbl_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][show_in_emb_tbl]" value="1"{VAR:show_in_emb_tbl_checked}/>
+				<input type="hidden" name="xconfig[{VAR:prp_key}][show_in_emb_tbl]" value="{VAR:show_in_emb_tbl}"/><br/>
+				{VAR:emb_tbl_controller_caption} <input type="text" size="7" name="prpconfig[{VAR:prp_key}][emb_tbl_controller]" value="{VAR:emb_tbl_controller}"/><br/>
+				<!-- END SUB: emb_tbl -->
 			</div>
 		<!-- END SUB: options -->
 		</td>
@@ -148,6 +153,10 @@ function cfgformToggleSelectProps(grpId)
 			{VAR:styleac_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][style]" value="autocomplete"{VAR:styleac_ch}/><br/>
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"/><br/>
 <!-- END SUB: relpicker_options -->
+
+<!-- SUB: releditor_options -->
+			{VAR:cfgform_id_caption} <input type="text" size="7" name="prpconfig[{VAR:prp_key}][cfgform_id]" value="{VAR:cfgform_id}"/><br/>
+<!-- END SUB: releditor_options -->
 
 <!-- SUB: select_options -->
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"/><br/>

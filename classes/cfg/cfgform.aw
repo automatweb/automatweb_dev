@@ -74,6 +74,9 @@
 		@property preview type=text store=no editonly=1
 		@caption Definitsioon
 
+		@property use_in_releditor type=checkbox ch_value=1
+		@caption V&otilde;imalda kasutamist releditoris
+
 
 	@default group=groupdata_a
 		@property edit_groups_tb type=toolbar no_caption=1 store=no
@@ -1848,6 +1851,7 @@ class cfgform extends class_base
 			));
 
 			$sc = "";
+			$clid = $arr["obj_inst"]->subclass();
 
 			foreach($proplist as $tmp)
 			{
@@ -1918,17 +1922,27 @@ class cfgform extends class_base
 									"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
 									"size_caption" => t("K&otilde;rgus"),
 									"size" => $property["size"],
-									"prp_key" => $property["name"],
+									"prp_key" => $property["name"]
 								));
 								$property["cfgform_additional_options"] = $this->parse("relpicker_options");
 								$this->vars(array("relpicker_options" => ""));
+								break;
+
+							case "releditor":
+								$this->vars(array(
+									"cfgform_id_caption" => t("Seadetevormi id"),
+									"cfgform_id" => $property["cfgform_id"],
+									"prp_key" => $property["name"]
+								));
+								$property["cfgform_additional_options"] = $this->parse("releditor_options");
+								$this->vars(array("releditor_options" => ""));
 								break;
 
 							case "select":
 								$this->vars(array(
 									"size_caption" => t("K&otilde;rgus"),
 									"size" => $property["size"],
-									"prp_key" => $property["name"],
+									"prp_key" => $property["name"]
 								));
 								$property["cfgform_additional_options"] = $this->parse("select_options");
 								$this->vars(array("select_options" => ""));
@@ -2031,6 +2045,23 @@ class cfgform extends class_base
 								$property["cfgform_additional_options"] = "";
 						}
 
+						if ($arr["obj_inst"]->prop("use_in_releditor"))
+						{
+							$this->vars(array(
+								"prp_key" => $property["name"],
+								"emb_tbl_controller_caption" => t("Tabeli kontrolleri id"),
+								"emb_tbl_controller" => $property["emb_tbl_controller"],
+								"show_in_emb_tbl_caption" => t("N&auml;ita releditori tabelis"),
+								"show_in_emb_tbl_checked" => checked(!empty($property["show_in_emb_tbl"])),
+								"show_in_emb_tbl" => $property["show_in_emb_tbl"]
+							));
+							$emb_tbl = $this->parse("emb_tbl");
+						}
+						else
+						{
+							$emb_tbl = "";
+						}
+
 						$this->vars(array(
 							"prp_key" => $property["name"],
 							"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
@@ -2048,6 +2079,7 @@ class cfgform extends class_base
 							"prp_options" => $property["cfgform_additional_options"],
 							"prp_opts_caption" => t("Lisavalikud"),
 							"tmp_id" => $cnt,
+							"emb_tbl" => $emb_tbl
 						));
 						$options = $this->parse("options");
 						$this->vars(array("options" => ""));
@@ -2653,6 +2685,25 @@ class cfgform extends class_base
 					if (isset($arr["request"]["prpconfig"][$name]))
 					{
 						$cfg_data = $arr["request"]["prpconfig"][$name];
+
+						if ("releditor" === $data["type"] and is_oid($cfg_data["cfgform_id"]))
+						{ // collect props from spec cfgf to show in releditor table
+							if (!is_object($cfg))
+							{
+								$cfg = get_instance(CL_CFGFORM);
+							}
+
+							$reled_tbl_props = $cfg->get_props_from_cfgform(array("id" => $cfg_data["cfgform_id"]));
+							$cfg_data["table_fields"] = array();
+
+							foreach ($reled_tbl_props as $tbl_prop_name => $tbl_prop_data)
+							{
+								if ($tbl_prop_data["show_in_emb_tbl"])
+								{
+									$cfg_data["table_fields"][] = $name;
+								}
+							}
+						}
 
 						if (isset($arr["request"]["xconfig"][$name]))
 						{ // remove option configuration if checkbox not checked. required by some older html and vcl(?) classes' methods' boolean argument implementations.

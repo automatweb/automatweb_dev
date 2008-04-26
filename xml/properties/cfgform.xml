@@ -66,6 +66,16 @@
             <caption>Definitsioon</caption>
       </property>
       <property>
+            <name>use_in_releditor</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>V&amp;amp;otilde;imalda kasutamist releditoris</caption>
+      </property>
+      <property>
             <name>edit_groups_tb</name>
             <table>objects</table>
             <group>groupdata_a</group>
