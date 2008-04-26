@@ -959,6 +959,48 @@
             <caption>Oskused</caption>
       </property>
       <property>
+            <name>skills_releditor</name>
+            <table>objects</table>
+            <group>addinfo_new</group>
+            <type>releditor</type>
+            <mode>manager2</mode>
+            <reltype>RELTYPE_SKILL_LEVEL</reltype>
+            <props>
+                  <num_0>skill</num_0>
+                  <num_1>level</num_1>
+            </props>
+            <table_fields>
+                  <num_0>skill</num_0>
+                  <num_1>level</num_1>
+            </table_fields>
+            <store>no</store>
+            <field>skills_releditor</field>
+            <caption>Oskused releditor</caption>
+      </property>
+      <property>
+            <name>languages_releditor</name>
+            <table>objects</table>
+            <group>addinfo_new</group>
+            <type>releditor</type>
+            <mode>manager2</mode>
+            <reltype>RELTYPE_LANGUAGE_SKILL</reltype>
+            <props>
+                  <num_0>language</num_0>
+                  <num_1>talk</num_1>
+                  <num_2>understand</num_2>
+                  <num_3>write</num_3>
+            </props>
+            <table_fields>
+                  <num_0>language</num_0>
+                  <num_1>talk</num_1>
+                  <num_2>understand</num_2>
+                  <num_3>write</num_3>
+            </table_fields>
+            <store>no</store>
+            <field>languages_releditor</field>
+            <caption>Keeled releditor</caption>
+      </property>
+      <property>
             <name>drivers_license</name>
             <table>kliendibaas_isik</table>
             <group>addinfo_new</group>

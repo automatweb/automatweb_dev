@@ -9,14 +9,5 @@
 			</function>
 		</action>
 
-		<action name="get_classificator_options">
-			<function name="get_classificator_options">
-				<arguments>
-					<required name="clid" type="class_id" />
-					<required name="classificator" type="string" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

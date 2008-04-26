@@ -97,6 +97,11 @@
                   <clid>CL_CRM_COUNTRY</clid>
                   <caption>Riik</caption>
             </COUNTRY>
+            <MOBI_SMS>
+                  <value>3</value>
+                  <clid>CL_MOBI_SMS</clid>
+                  <caption>Numbrile saadetud SMS</caption>
+            </MOBI_SMS>
       </reltypes>
 </properties>
 

@@ -8,6 +8,7 @@
             <reltype>RELTYPE_SKILL</reltype>
             <store>connect</store>
             <no_edit>1</no_edit>
+            <automatic>1</automatic>
             <field>skill</field>
             <caption>Oskus</caption>
       </property>

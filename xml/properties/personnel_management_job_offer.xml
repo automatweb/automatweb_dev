@@ -29,106 +29,96 @@
             <name>company</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ORG</reltype>
             <store>connect</store>
+            <field>company</field>
             <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>sect</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
+            <field>sect</field>
             <caption>Osakond</caption>
       </property>
       <property>
             <name>contact</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTACT</reltype>
             <store>connect</store>
+            <field>contact</field>
             <caption>Kontaktisik</caption>
       </property>
       <property>
             <name>start</name>
-            <table>objects</table>
+            <table>personnel_management_job_offer</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>date_select</type>
+            <field>jo_start</field>
             <caption>Konkursi algusaeg</caption>
       </property>
       <property>
             <name>end</name>
-            <table>objects</table>
+            <table>personnel_management_job_offer</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>date_select</type>
+            <field>jo_end</field>
             <caption>Konkursi t&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>profession</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
             <store>connect</store>
+            <field>profession</field>
             <caption>Ametikoht</caption>
       </property>
       <property>
             <name>field</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FIELD</reltype>
             <store>connect</store>
+            <field>field</field>
             <caption>Valdkond</caption>
       </property>
       <property>
             <name>loc_area</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_AREA</reltype>
             <store>connect</store>
+            <field>loc_area</field>
             <caption>Piirkond</caption>
       </property>
       <property>
             <name>loc_county</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_COUNTY</reltype>
             <store>connect</store>
+            <field>loc_county</field>
             <caption>Maakond</caption>
       </property>
       <property>
             <name>loc_city</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CITY</reltype>
             <store>connect</store>
+            <field>loc_city</field>
             <caption>Linn</caption>
       </property>
       <property>
@@ -243,6 +233,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
+            <store>no</store>
             <caption>Kandideerin</caption>
       </property>
       <property>
@@ -452,6 +443,13 @@
                   <submit>no</submit>
             </sent_fb_email>
       </groupinfo>
+      <tableinfo>
+            <personnel_management_job_offer>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </personnel_management_job_offer>
+      </tableinfo>
       <reltypes>
             <CANDIDATE>
                   <value>1</value>

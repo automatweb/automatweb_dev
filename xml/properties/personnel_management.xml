@@ -110,13 +110,14 @@
             <caption>Kohustuslikkuse kontroller</caption>
       </property>
       <property>
-            <name>cv_tpl</name>
-            <group>search_conf</group>
+            <name>mobi_handler</name>
+            <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>CV templeit</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MOBI_HANDLER</reltype>
+            <caption>Mobi SMSi haldur</caption>
       </property>
       <property>
             <name>search_conf_tbl</name>
@@ -177,6 +178,25 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+      </property>
+      <property>
+            <name>cv_tpl</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>CV templeit</caption>
+      </property>
+      <property>
+            <name>job_offer_cv_tbl</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Uus seadetevorm</caption>
       </property>
       <property>
             <name>employee_tb</name>
@@ -935,6 +955,10 @@
                   <caption>Keelte seaded</caption>
                   <parent>general</parent>
             </lang_conf>
+            <job_offer_conf>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise seaded</caption>
+                  <parent>general</parent>
+            </job_offer_conf>
             <employee>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
                   <submit>no</submit>
@@ -1016,6 +1040,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Kontroller</caption>
             </CFGCONTROLLER>
+            <MOBI_HANDLER>
+                  <value>11</value>
+                  <clid>CL_MOBI_HANDLER</clid>
+                  <caption>Mobi SMSi haldur</caption>
+            </MOBI_HANDLER>
       </reltypes>
       <layout>
             <employee>

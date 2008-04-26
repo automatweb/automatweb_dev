@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.120 2008/04/26 12:43:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.121 2008/04/26 16:21:13 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1873,8 +1873,13 @@ class releditor extends core
 						$d[$prop_name] = $tmp->name();
 					}
 					else
+					if (is_oid($pv["value"]))
 					{
 						$d[$prop_name] = "";
+					}
+					else
+					{
+						$d[$prop_name] = $pv["value"];
 					}
 					break;
 

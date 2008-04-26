@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="object_import" folder="admin" extends="class_base">
+	<class name="object_import" folder="admin/import" extends="class_base">
 		<action name="automatic_import">
 			<function name="automatic_import">
 				<arguments>

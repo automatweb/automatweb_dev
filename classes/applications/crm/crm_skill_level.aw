@@ -7,10 +7,10 @@
 @default table=objects
 @default group=general
 
-@property skill type=relpicker reltype=RELTYPE_SKILL store=connect no_edit=1
+@property skill type=relpicker reltype=RELTYPE_SKILL store=connect no_edit=1 automatic=1
 @caption Oskus
 
-@property level type=relpicker reltype=RELTYPE_LEVEL store=connect no_edit=1
+@property level type=relpicker reltype=RELTYPE_LEVEL store=connect no_edit=1 
 @caption Tase
 
 @reltype SKILL value=1 clid=CL_CRM_SKILL
@@ -38,11 +38,56 @@ class crm_skill_level extends class_base
 
 		switch($prop["name"])
 		{
+			case "skill":
+				$by_parent = array();
+				foreach($prop["options"] as $opt_id => $opt_capt)
+				{
+					if (!is_oid($opt_id))
+					{
+						continue;
+					}
+					$val = $this->_get_level_in_opts($opt_id, $prop["options"]);
+					if ($val == 0)
+					{
+						$by_parent[0][] = $opt_id;
+					}
+					else
+					{
+						$tmp = obj($opt_id);
+						$by_parent[$tmp->parent()][] = $opt_id;
+					}
+				}
+
+				$prop["options"] = array();
+				$prop["options"][""] = t("--vali--");
+				$prop["disabled_options"] = array();
+				$this->_format_opts($prop["options"], 0, $by_parent, $prop["disabled_options"]);
+				break;
+
 			case "level":
 				$prop["options"][0] = t("--vali--");
 				if(is_oid($arr["obj_inst"]->prop("skill")))
 				{
-					$skill_obj = obj($arr["obj_inst"]->prop("skill"));
+					$skill_id = $arr["obj_inst"]->prop("skill");
+				}
+				else
+				{
+					$ol = new object_list(array("class_id" => CL_CRM_SKILL, "lang_id" => array(),"site_id" => array()));
+					if ($ol->count())
+					{
+						foreach($ol->arr() as $tmp)
+						{
+							if ($tmp->prop("lvl_meta") > 0)
+							{
+								$skill_id = $tmp->id();
+							}
+						}
+					}
+				}
+				
+				if ($this->can("view", $skill_id))
+				{
+					$skill_obj = obj($skill_id);
 					if(is_oid($skill_obj->prop("lvl_meta")))
 					{
 						$ol = new object_list(array(
@@ -59,6 +104,37 @@ class crm_skill_level extends class_base
 		}
 
 		return $retval;
+	}
+
+	function _format_opts(&$opts, $parent, $by_parent, &$disabled_opts)
+	{
+		$this->level++;
+		$cnt = 0;
+		foreach($by_parent[$parent] as $opt_id)
+		{
+			$tmp = obj($opt_id);
+			$opts[$opt_id] = str_repeat("&nbsp;&nbsp;", $this->level-1).$tmp->trans_get_val("name");
+			if ($this->_format_opts($opts, $opt_id, $by_parent, $disabled_opts) != 0)
+			{
+				$disabled_opts[$opt_id] = $opt_id;
+			}
+			$cnt++;
+		}
+		$this->level--;
+		return $cnt;
+	}
+
+	private function _get_level_in_opts($opt_id, $opts)
+	{
+		if ($this->can("view", $opt_id))
+		{
+			$o = obj($opt_id);
+			if (isset($opts[$o->parent()]))
+			{
+				return $this->_get_level_in_opts($o->parent(), $opts)+1;
+			}
+		}
+		return 0;
 	}
 
 	function set_property($arr = array())

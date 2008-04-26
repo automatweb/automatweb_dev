@@ -9,10 +9,10 @@
             <caption>Number</caption>
       </property>
       <property>
-            <name>message</name>
+            <name>comment</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>textarea</type>
             <field>comment</field>
             <caption>S&amp;amp;otilde;num</caption>
       </property>
@@ -28,7 +28,6 @@
       <classinfo>
             <syslog_type>ST_MOBI_SMS</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>

@@ -85,7 +85,7 @@ jQuery.aw_releditor = function(arr) {
 	function handle_delete_links()
 	{
 		$("a[name^="+arr["releditor_name"]+"_delete_]").click(function() {
-			if(confirm('Kustutada valitud objektid?'))
+			if(true)
 			{
 				//delete_data = $("input[name^="+arr["releditor_name"]+"_delete_][type=checkbox][checked]").serialize();
 				s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();

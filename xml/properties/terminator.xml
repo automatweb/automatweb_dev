@@ -6,10 +6,11 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PERSON</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <automatic>1</automatic>
-            <caption>Tere</caption>
+            <store>connect</store>
+            <delete_button>1</delete_button>
+            <delete_rels_button>1</delete_rels_button>
+            <field>pers</field>
+            <caption>Isik</caption>
       </property>
       <classinfo>
             <syslog_type>ST_TERMINATOR</syslog_type>
@@ -22,6 +23,7 @@
             <PERSON>
                   <value>1</value>
                   <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik</caption>
             </PERSON>
       </reltypes>
 </properties>
