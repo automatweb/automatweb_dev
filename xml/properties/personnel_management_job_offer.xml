@@ -399,6 +399,26 @@
             <store>no</store>
             <caption>Saada</caption>
       </property>
+      <property>
+            <name>sent_fb_sms_tbl</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>sent_fb_email_tbl</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -420,6 +440,17 @@
                   <caption>Tagasiside&amp;amp;nbsp;kandideerijatele</caption>
                   <no_submit>1</no_submit>
             </send_email_sms>
+            <sent_feedback>
+                  <caption>Saadetud tagasiside</caption>
+            </sent_feedback>
+            <sent_fb_sms>
+                  <caption>SMS</caption>
+                  <submit>no</submit>
+            </sent_fb_sms>
+            <sent_fb_email>
+                  <caption>E-post</caption>
+                  <submit>no</submit>
+            </sent_fb_email>
       </groupinfo>
       <reltypes>
             <CANDIDATE>
