@@ -359,7 +359,7 @@ class aw_template extends core
 	}
 
 	/** reads a template from a file from the admin template folder
-		@attrib api=1
+		@attrib api=1 params=pos
 
 		@param name required type=string
 			name of the file to load
@@ -405,7 +405,7 @@ class aw_template extends core
 	}
 
 	/**  reads the given template from the site's template folder even if the user is in the admin interface
-		@attrib api=1
+		@attrib api=1 params=pos
 
 		@param name required type=string
 			name of the file to load
@@ -419,7 +419,7 @@ class aw_template extends core
 		@returns
 			false if silent == 1 and file is not found, else true
 
-		@example
+		@examples
 			$tpl = new aw_template;
 			$tpl->read_site_template("foo.tpl");
 			$tpl->vars(array(
@@ -451,7 +451,7 @@ class aw_template extends core
 	}
 
 	/** tries to read the given template from the site's template folder even if the user is in the admin interface and if not found in the site folder, tries to read it from the admin templates folder
-		@attrib api=1
+		@attrib api=1 params=pos
 
 		@param name required type=string
 			name of the file to load
@@ -464,7 +464,7 @@ class aw_template extends core
 		@returns
 			false if silent == 1 and file is not found, else true
 
-		@xamples
+		@examples
 			$tpl = new aw_template;
 			$tpl->read_any_template("foo.tpl");
 			$tpl->vars(array(
