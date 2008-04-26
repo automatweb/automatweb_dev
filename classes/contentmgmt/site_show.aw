@@ -2369,7 +2369,7 @@ class site_show extends class_base
 		if (is_oid($this->active_doc) && $this->can("view", $this->active_doc))
 		{
 			$adt_o = obj($this->active_doc);
-			$adt = $adt_o->name();
+			$adt = $adt_o->trans_get_val("title");
 		}
 
 		$u = get_instance(CL_USER);
