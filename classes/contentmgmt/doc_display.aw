@@ -797,6 +797,8 @@ class doc_display extends aw_template
 		if (strpos($str, "=") !== false)
 		{
 			$str = "";
+			$last_count = 0;
+			$last_line = "";
 			for ($i=0;$i<$i_a_str_count;$i++)
 			{
 				$a_pattern[1] = "/^======(.+)======$/";
@@ -813,17 +815,26 @@ class doc_display extends aw_template
 				$a_replacement[6] = "<h1>\\1</h1>";
 				
 				$a_str[$i] = preg_replace  ( $a_pattern  , $a_replacement  , $a_str[$i], 1, $count );
+				// remove br before h tags
+				if ($count==1 && $last_count == 0)
+				{
+					$a_str[$i-1] = $last_line;
+				}
+				$last_line = $a_str[$i];
+				$last_count = $count;
+				
 				if ($count==1)
 				{
-					$str .= $a_str[$i];
+					// remove br tag after h tags
+					$a_str[$i] = $a_str[$i];
 				}
 				else
 				{
-					$str .= $a_str[$i]. "\r\n";
+					$a_str[$i] = $a_str[$i]. "\r\n";
 				}
 			}
 		}
-		$str = $str;
+		$str = join($a_str);
 	}
 	
 	function _parse_wiki_lists($str)
