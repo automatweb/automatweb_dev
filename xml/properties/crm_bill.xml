@@ -167,15 +167,6 @@
             <caption>Sissen&amp;amp;otilde;udmisel</caption>
       </property>
       <property>
-            <name>show_oe_rowadd</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <field>meta</field>
-            <methid>serialize</methid>
-            <caption>Kuva muid kulusid arve lisas</caption>
-      </property>
-      <property>
             <name>partial_recieved</name>
             <table>objects</table>
             <group>general</group>
@@ -261,6 +252,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kontaktisik vabatekstina</caption>
+      </property>
+      <property>
+            <name>show_oe_add</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;amp;auml;ita arve lisas muid kulusid</caption>
       </property>
       <property>
             <name>udef1</name>

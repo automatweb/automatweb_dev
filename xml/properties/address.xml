@@ -35,8 +35,8 @@
             <method>serialize</method>
             <group>grp_address</group>
             <type>hidden</type>
-            <editonly>1</editonly>
             <store>no</store>
+            <editonly>1</editonly>
       </property>
       <property>
             <name>location</name>

@@ -449,6 +449,15 @@
             <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
+            <name>gantt_legend</name>
+            <table>objects</table>
+            <group>gantt_chart</group>
+            <type>text</type>
+            <store>no</store>
+            <field>gantt_legend</field>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>complete_table</name>
             <table>objects</table>
             <group>complete</group>

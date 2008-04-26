@@ -929,7 +929,7 @@
             </grp_map>
             <grp_sub_main>
                   <parent>grp_main</parent>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
             </grp_sub_main>
             <transaction_data>
                   <parent>grp_main</parent>

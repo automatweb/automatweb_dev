@@ -33,7 +33,19 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ORG</reltype>
+            <store>connect</store>
             <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>sect</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTION</reltype>
+            <store>connect</store>
+            <caption>Osakond</caption>
       </property>
       <property>
             <name>contact</name>
@@ -43,6 +55,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTACT</reltype>
+            <store>connect</store>
             <caption>Kontaktisik</caption>
       </property>
       <property>
@@ -71,6 +84,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
+            <store>connect</store>
             <caption>Ametikoht</caption>
       </property>
       <property>
@@ -92,6 +106,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_AREA</reltype>
+            <store>connect</store>
             <caption>Piirkond</caption>
       </property>
       <property>
@@ -102,6 +117,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_COUNTY</reltype>
+            <store>connect</store>
             <caption>Maakond</caption>
       </property>
       <property>
@@ -112,6 +128,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CITY</reltype>
+            <store>connect</store>
             <caption>Linn</caption>
       </property>
       <property>
@@ -317,6 +334,27 @@
             <parent>send_email_sms_left</parent>
       </property>
       <property>
+            <name>send_email_sms_type</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <parent>send_email_sms_right</parent>
+      </property>
+      <property>
+            <name>from</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <size>20</size>
+            <caption>Saatja</caption>
+      </property>
+      <property>
             <name>add_receivers</name>
             <table>objects</table>
             <group>send_email_sms</group>
@@ -325,6 +363,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>send_email_sms_right</parent>
+            <size>20</size>
             <caption>Lisa saajaid</caption>
       </property>
       <property>
@@ -336,6 +375,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>send_email_sms_right</parent>
+            <size>20</size>
             <caption>Pealkiri</caption>
       </property>
       <property>
@@ -348,6 +388,16 @@
             <store>no</store>
             <parent>send_email_sms_right</parent>
             <caption>S&amp;amp;otilde;num</caption>
+      </property>
+      <property>
+            <name>send_it</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Saada</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
@@ -368,6 +418,7 @@
             </custom_cfgform>
             <send_email_sms>
                   <caption>Tagasiside&amp;amp;nbsp;kandideerijatele</caption>
+                  <no_submit>1</no_submit>
             </send_email_sms>
       </groupinfo>
       <reltypes>
@@ -426,6 +477,16 @@
                   <clid>CL_FILE</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
             </JOB_OFFER_FILE>
+            <MOBI_SMS>
+                  <value>13</value>
+                  <clid>CL_MOBI_SMS</clid>
+                  <caption>Kandideerijale saadetud SMS</caption>
+            </MOBI_SMS>
+            <SECTION>
+                  <value>14</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Osakond</caption>
+            </SECTION>
       </reltypes>
       <layout>
             <send_email_sms>

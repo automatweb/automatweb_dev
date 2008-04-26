@@ -138,7 +138,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>FTP kataloog</caption>
-            <comment>Kataloog, kuhu &amp;uuml;le FTP fail salvestatakse (koos failinimega)</comment>
+            <comment>Kataloog, kuhu &amp;amp;uuml;le FTP fail salvestatakse (koos failinimega)</comment>
       </property>
       <property>
             <name>parents_table</name>
