@@ -232,9 +232,10 @@ class personnel_management_job_offer_webview extends class_base
 		$ol_prms = array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"parent" => array(),
-			"status" => array(),
+			"status" => object::STAT_ACTIVE,
 			"site_id" => array(),
 			"lang_id" => array(),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time() - (24*3600 - 1)),
 		);
 		if(is_array($o->org) && count($o->org) > 0)
 		{
