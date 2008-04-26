@@ -325,6 +325,43 @@ class doc_display extends aw_template
 		}
 
 		$str = $this->parse();
+		if ($_GET["print"] == 1)
+		{
+				preg_match_all("/\<a.*href\s*=\s*[\"']{1}(.*)[\"']{1}.*\<\/a>/imsU", $str, $a_link_matches);
+				
+				foreach ($a_link_matches[0] as $key => $var)
+				{
+					if (	strpos($a_link_matches[1][$key], "mailto") === false && 
+							strpos($a_link_matches[1][$key], "http") === false &&
+							 strpos($a_link_matches[1][$key], "https") === false
+							 )
+					{
+						$a_print_link_find = array(
+							"/href\s*=\s*\"\//U",
+							"/href\s*=\s*\"[^https]|href\s*=\s*\"[^http]/U",
+						);
+			arr(aw_ini_get("baseurl"));
+						$a_print_link_replace = array(
+							"href=\"".aw_ini_get("baseurl")."/",
+							"href=\"".aw_ini_get("baseurl")."/",
+						);
+						$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+						$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+					}
+					else if (strpos($a_link_matches[1][$key], "mailto") !== false)
+					{
+						$a_print_link_find = array(
+							"/<a.*href\s*=\s*\"\mailto:(.*)\".*a>/U",
+						);
+			
+						$a_print_link_replace = array(
+							"\\1",
+						);
+						$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+						$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+					}
+				}
+		}
 		$this->vars(array("image_inplace" => ""));
 		exit_function("doc_display::gen_preview::".$arr["docid"]);
 		return $str;
@@ -759,6 +796,7 @@ class doc_display extends aw_template
 		$i_a_str_count = count($a_str);
 		if (strpos($str, "=") !== false)
 		{
+			$str = "";
 			for ($i=0;$i<$i_a_str_count;$i++)
 			{
 				$a_pattern[1] = "/^======(.+)======$/";
@@ -774,10 +812,18 @@ class doc_display extends aw_template
 				$a_pattern[6] = "/^=(.+)=$/";
 				$a_replacement[6] = "<h1>\\1</h1>";
 				
-				$a_str[$i] = preg_replace  ( $a_pattern  , $a_replacement  , $a_str[$i] );
+				$a_str[$i] = preg_replace  ( $a_pattern  , $a_replacement  , $a_str[$i], 1, $count );
+				if ($count==1)
+				{
+					$str .= $a_str[$i];
+				}
+				else
+				{
+					$str .= $a_str[$i]. "\r\n";
+				}
 			}
 		}
-		$str = implode  ( "\r\n", $a_str );
+		$str = $str;
 	}
 	
 	function _parse_wiki_lists($str)
