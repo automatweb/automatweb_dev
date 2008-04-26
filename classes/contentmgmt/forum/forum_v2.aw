@@ -2799,7 +2799,14 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		//	)),
 		//));
 		//return $this->parse();
-		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+		if ($this->read_site_template('add_topic.tpl', 1))
+		{
+			$htmlc = get_instance("cfg/htmlclient",array("tpldir" => "forum", "template" => "add_topic.tpl"));
+		}
+		else
+		{
+			$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+		}
 		$htmlc->start_output();
 
 		$htmlc->add_property(array(
