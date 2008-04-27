@@ -5239,6 +5239,7 @@ class crm_person extends class_base
 		$jw_inst = get_instance(CL_PERSONNEL_MANAGEMENT_JOB_WANTED);
 		$rate_inst = get_instance(CL_RATE);
 		$cff_inst = get_instance(CL_CFGFORM);
+		$file_inst = get_instance(CL_FILE);
 
 		if(!$arr["cv"])
 		{
@@ -5659,6 +5660,22 @@ class crm_person extends class_base
 			$parse_cppi++;
 		}
 		//		END SUB: CRM_PERSON.CHILDREN1
+
+		//		SUB: CRM_PERSON.CV_FILE
+		if($this->can("view", $o->prop("cv_file")) && (array_key_exists("cv_file", $proplist) || count($proplist) == 0))
+		{
+			$cv_file = obj($o->prop("cv_file"));
+			$this->vars(array(
+				"crm_person.cv_file_url" => obj_link($cv_file->id()),
+				//"crm_person.cv_file_url" => $file_inst->get_url($cv_file->id(), $cv_file->name()),
+				"crm_person.cv_file" => $cv_file->name(),
+			));
+			$this->vars(array(
+				"CRM_PERSON.CV_FILE" => $this->parse("CRM_PERSON.CV_FILE"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.CV_FILE
 
 		//		SUB: CRM_PERSON.MODIFIED
 		$this->vars(array(
@@ -6340,7 +6357,7 @@ class crm_person extends class_base
 		if(array_key_exists("professions", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
 		{
 			$this->vars(array(
-				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSION" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSION"),
+				"PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS" => $this->parse("PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS"),
 			));
 		}
 		if(array_key_exists("professions_rels", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
@@ -6570,7 +6587,7 @@ class crm_person extends class_base
 			if(array_key_exists("professions", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
 			{
 				$this->vars(array(
-					"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION"),
+					"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS"),
 				));
 			}
 			if(array_key_exists("professions_rels", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
@@ -6700,6 +6717,7 @@ class crm_person extends class_base
 			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HANIDAPS" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HANIDAPS,
 			"PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HOBBIES_VS_WORK" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HOBBIES_VS_WORK,
 		));
+
 		if(array_key_exists("field", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
 		{
 			$this->vars(array(
@@ -6715,7 +6733,7 @@ class crm_person extends class_base
 		if(array_key_exists("professions", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
 		{
 			$this->vars(array(
-				"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSION.VERTICAL"),
+				"PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS.VERTICAL"),
 			));
 		}
 		if(array_key_exists("professions_rels", $proplist_job_wanted) || count($proplist_job_wanted) == 0)

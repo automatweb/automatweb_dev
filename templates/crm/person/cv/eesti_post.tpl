@@ -233,10 +233,16 @@ text-decoration:underline;
 				<!-- END SUB: CRM_PERSON.CHILDREN1 -->
 				<!-- SUB: CRM_PERSON.MODIFIED -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>CV uuendamise kuupäev:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>CV uuendamise kuup&auml;ev:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" valign="top" style="padding-left:10px;">{VAR:crm_person.modified}</td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.MODIFIED -->
+				<!-- SUB: CRM_PERSON.CV_FILE -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>CV failina:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" valign="top" style="padding-left:10px;"><a href="{VAR:crm_person.cv_file_url}">{VAR:crm_person.cv_file}</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.CV_FILE -->
 				<tr>
 					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
 				</tr>
