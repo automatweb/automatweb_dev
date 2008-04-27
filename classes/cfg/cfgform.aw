@@ -1932,6 +1932,9 @@ class cfgform extends class_base
 								$this->vars(array(
 									"cfgform_id_caption" => t("Seadetevormi id"),
 									"cfgform_id" => $property["cfgform_id"],
+									"use_form" => $property["use_form"],
+									"rel_id" => $property["rel_id"],
+									"mode" => $property["mode"],
 									"prp_key" => $property["name"]
 								));
 								$property["cfgform_additional_options"] = $this->parse("releditor_options");
@@ -2114,6 +2117,20 @@ class cfgform extends class_base
 								$type_options = array(
 									"datetime_select" => "datetime_select",
 									"date_select" => "date_select"
+								);
+								break;
+
+							case "relpicker":
+								$type_options = array(
+									"relpicker" => "relpicker",
+									"releditor" => "releditor"
+								);
+								break;
+
+							case "releditor":
+								$type_options = array(
+									"releditor" => "releditor",
+									"relpicker" => "relpicker"
 								);
 								break;
 						}

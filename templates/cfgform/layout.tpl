@@ -155,7 +155,10 @@ function cfgformToggleSelectProps(grpId)
 <!-- END SUB: relpicker_options -->
 
 <!-- SUB: releditor_options -->
-			{VAR:cfgform_id_caption} <input type="text" size="7" name="prpconfig[{VAR:prp_key}][cfgform_id]" value="{VAR:cfgform_id}"/><br/>
+			{VAR:cfgform_id_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][cfgform_id]" value="{VAR:cfgform_id}"/><br/>
+			use_form <input type="text" size="10" name="prpconfig[{VAR:prp_key}][use_form]" value="{VAR:use_form}"/><br/>
+			rel_id <input type="text" size="10" name="prpconfig[{VAR:prp_key}][rel_id]" value="{VAR:rel_id}"/><br/>
+			mode <input type="text" size="10" name="prpconfig[{VAR:prp_key}][mode]" value="{VAR:mode}"/><br/>
 <!-- END SUB: releditor_options -->
 
 <!-- SUB: select_options -->
