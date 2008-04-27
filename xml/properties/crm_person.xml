@@ -983,7 +983,7 @@
             <group>addinfo_new</group>
             <type>releditor</type>
             <mode>manager2</mode>
-            <reltype>RELTYPE_SKILL_LEVEL</reltype>
+            <reltype>RELTYPE_SKILL_LEVEL2</reltype>
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
@@ -1002,7 +1002,7 @@
             <group>addinfo_new</group>
             <type>releditor</type>
             <mode>manager2</mode>
-            <reltype>RELTYPE_SKILL_LEVEL</reltype>
+            <reltype>RELTYPE_SKILL_LEVEL3</reltype>
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
@@ -1021,7 +1021,7 @@
             <group>addinfo_new</group>
             <type>releditor</type>
             <mode>manager2</mode>
-            <reltype>RELTYPE_SKILL_LEVEL</reltype>
+            <reltype>RELTYPE_SKILL_LEVEL4</reltype>
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
@@ -1040,7 +1040,7 @@
             <group>addinfo_new</group>
             <type>releditor</type>
             <mode>manager2</mode>
-            <reltype>RELTYPE_SKILL_LEVEL</reltype>
+            <reltype>RELTYPE_SKILL_LEVEL5</reltype>
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
@@ -2105,6 +2105,26 @@
                   <clid>CL_CRM_SKILL_LEVEL</clid>
                   <caption>Oskuse tase</caption>
             </SKILL_LEVEL>
+            <SKILL_LEVEL2>
+                  <value>88</value>
+                  <clid>CL_CRM_SKILL_LEVEL</clid>
+                  <caption>Oskuse tase</caption>
+            </SKILL_LEVEL2>
+            <SKILL_LEVEL3>
+                  <value>89</value>
+                  <clid>CL_CRM_SKILL_LEVEL</clid>
+                  <caption>Oskuse tase</caption>
+            </SKILL_LEVEL3>
+            <SKILL_LEVEL4>
+                  <value>90</value>
+                  <clid>CL_CRM_SKILL_LEVEL</clid>
+                  <caption>Oskuse tase</caption>
+            </SKILL_LEVEL4>
+            <SKILL_LEVEL5>
+                  <value>91</value>
+                  <clid>CL_CRM_SKILL_LEVEL</clid>
+                  <caption>Oskuse tase</caption>
+            </SKILL_LEVEL5>
             <COMPANY_RELATION>
                   <value>82</value>
                   <clid>CL_CRM_COMPANY_RELATION</clid>

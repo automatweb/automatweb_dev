@@ -412,16 +412,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property skills_releditor1 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
 	@caption Oskused releditor1
 
-	@property skills_releditor2 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@property skills_releditor2 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL2 props=skill,level table_fields=skill,level store=no
 	@caption Oskused releditor2
 
-	@property skills_releditor3 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@property skills_releditor3 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL3 props=skill,level table_fields=skill,level store=no
 	@caption Oskused releditor3
 
-	@property skills_releditor4 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@property skills_releditor4 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL4 props=skill,level table_fields=skill,level store=no
 	@caption Oskused releditor4
 
-	@property skills_releditor5 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@property skills_releditor5 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL5 props=skill,level table_fields=skill,level store=no
 	@caption Oskused releditor5
 
 	@property languages_releditor type=releditor mode=manager2 reltype=RELTYPE_LANGUAGE_SKILL props=language,talk,understand,write table_fields=language,talk,understand,write store=no
@@ -887,6 +887,18 @@ caption S&otilde;bragrupid
 @reltype SKILL_LEVEL value=81 clid=CL_CRM_SKILL_LEVEL
 @caption Oskuse tase
 
+@reltype SKILL_LEVEL2 value=88 clid=CL_CRM_SKILL_LEVEL
+@caption Oskuse tase
+
+@reltype SKILL_LEVEL3 value=89 clid=CL_CRM_SKILL_LEVEL
+@caption Oskuse tase
+
+@reltype SKILL_LEVEL4 value=90 clid=CL_CRM_SKILL_LEVEL
+@caption Oskuse tase
+
+@reltype SKILL_LEVEL5 value=91 clid=CL_CRM_SKILL_LEVEL
+@caption Oskuse tase
+
 @reltype COMPANY_RELATION value=82 clid=CL_CRM_COMPANY_RELATION
 @caption Organisatoorne kuuluvus
 
@@ -905,6 +917,7 @@ caption S&otilde;bragrupid
 @reltype RECOMMENDATION value=87 clid=CL_CRM_RECOMMENDATION
 @caption Soovitus
 
+// last id 91
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
@@ -1512,7 +1525,7 @@ class crm_person extends class_base
 			"caption" => t("Tase"),
 			"align" => "center",
 		));
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SKILL_LEVEL")) as $conn)
+		foreach($arr["obj_inst"]->connections_from(array("type" => array("RELTYPE_SKILL_LEVEL", "RELTYPE_SKILL_LEVEL2", "RELTYPE_SKILL_LEVEL3", "RELTYPE_SKILL_LEVEL4", "RELTYPE_SKILL_LEVEL5"))) as $conn)
 		{
 			$to = $conn->to();
 			
@@ -5881,7 +5894,7 @@ class crm_person extends class_base
 
 			$skills = $sm_inst->get_skills(array("id" => $sm_id));
 			$conns = $o->connections_from(array(
-				"type" => "RELTYPE_SKILL_LEVEL",
+				"type" => array("RELTYPE_SKILL_LEVEL", "RELTYPE_SKILL_LEVEL2", "RELTYPE_SKILL_LEVEL3", "RELTYPE_SKILL_LEVEL4", "RELTYPE_SKILL_LEVEL5")
 			));
 
 			foreach($skills[$sm_id] as $id => $data)
@@ -8418,7 +8431,7 @@ class crm_person extends class_base
 			$s->save();
 			$p->connect(array(
 				"to" => $s->id(),
-				"reltype" => "RELTYPE_SKILL_LEVEL",
+				"reltype" => array("RELTYPE_SKILL_LEVEL", "RELTYPE_SKILL_LEVEL2", "RELTYPE_SKILL_LEVEL3", "RELTYPE_SKILL_LEVEL4", "RELTYPE_SKILL_LEVEL5"),
 			));
 		}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.31 2008/04/27 11:02:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.32 2008/04/27 15:29:03 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1267,7 +1267,17 @@ class personnel_management extends class_base
 				if(count($skill_ol->ids()) == 0)
 					return array();
 
-				$odl_prms["CL_CRM_PERSON.RELTYPE_SKILL_LEVEL"] = $skill_ol->ids();
+				$_ids = array();
+				$odl_prms[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL2" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL3" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL4" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL5" => $_ids
+					)
+				));
 			}
 		}
 		if($r["cv_driving_licence"])
