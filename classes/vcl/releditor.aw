@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.123 2008/04/27 13:43:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.124 2008/04/27 14:31:41 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -315,7 +315,7 @@ class releditor extends core
 		if($this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
-			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
 			$this->loaded_from_cfgform = true;
 		}
@@ -680,7 +680,7 @@ class releditor extends core
 		if($this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
-			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
 			$this->loaded_from_cfgform = true;
 		}
