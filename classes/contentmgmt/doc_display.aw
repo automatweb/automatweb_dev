@@ -325,43 +325,6 @@ class doc_display extends aw_template
 		}
 
 		$str = $this->parse();
-		if ($_GET["print"] == 1)
-		{
-				preg_match_all("/\<a.*href\s*=\s*[\"']{1}(.*)[\"']{1}.*\<\/a>/imsU", $str, $a_link_matches);
-				
-				foreach ($a_link_matches[0] as $key => $var)
-				{
-					if (	strpos($a_link_matches[1][$key], "mailto") === false && 
-							strpos($a_link_matches[1][$key], "http") === false &&
-							 strpos($a_link_matches[1][$key], "https") === false
-							 )
-					{
-						$a_print_link_find = array(
-							"/href\s*=\s*\"\//U",
-							"/href\s*=\s*\"[^https]|href\s*=\s*\"[^http]/U",
-						);
-			arr(aw_ini_get("baseurl"));
-						$a_print_link_replace = array(
-							"href=\"".aw_ini_get("baseurl")."/",
-							"href=\"".aw_ini_get("baseurl")."/",
-						);
-						$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
-						$str = str_replace($a_link_matches[0][$key], $tmp, $str);
-					}
-					else if (strpos($a_link_matches[1][$key], "mailto") !== false)
-					{
-						$a_print_link_find = array(
-							"/<a.*href\s*=\s*\"\mailto:(.*)\".*a>/U",
-						);
-			
-						$a_print_link_replace = array(
-							"\\1",
-						);
-						$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
-						$str = str_replace($a_link_matches[0][$key], $tmp, $str);
-					}
-				}
-		}
 		$this->vars(array("image_inplace" => ""));
 		exit_function("doc_display::gen_preview::".$arr["docid"]);
 		return $str;
@@ -785,8 +748,11 @@ class doc_display extends aw_template
 	{
 		if (strlen(trim($str))>0)
 		{
-			$str = "<p>$str</p>";
-			$str = str_replace  ( "\r\n\r\n", "</p><p>", $str );
+			if (strpos  ($str, "\r\n\r\n" )!== false)
+			{
+				$str = "<p>$str</p>";
+				$str = str_replace  ( "\r\n\r\n", "</p><p>", $str );
+			}
 		}
 	}
 	
@@ -796,9 +762,6 @@ class doc_display extends aw_template
 		$i_a_str_count = count($a_str);
 		if (strpos($str, "=") !== false)
 		{
-			$str = "";
-			$last_count = 0;
-			$last_line = "";
 			for ($i=0;$i<$i_a_str_count;$i++)
 			{
 				$a_pattern[1] = "/^======(.+)======$/";
@@ -814,27 +777,10 @@ class doc_display extends aw_template
 				$a_pattern[6] = "/^=(.+)=$/";
 				$a_replacement[6] = "<h1>\\1</h1>";
 				
-				$a_str[$i] = preg_replace  ( $a_pattern  , $a_replacement  , $a_str[$i], 1, $count );
-				// remove br before h tags
-				if ($count==1 && $last_count == 0)
-				{
-					$a_str[$i-1] = $last_line;
-				}
-				$last_line = $a_str[$i];
-				$last_count = $count;
-				
-				if ($count==1)
-				{
-					// remove br tag after h tags
-					$a_str[$i] = $a_str[$i];
-				}
-				else
-				{
-					$a_str[$i] = $a_str[$i]. "\r\n";
-				}
+				$a_str[$i] = preg_replace  ( $a_pattern  , $a_replacement  , $a_str[$i] );
 			}
 		}
-		$str = join($a_str);
+		$str = implode  ( "\r\n", $a_str );
 	}
 	
 	function _parse_wiki_lists($str)
@@ -1027,7 +973,16 @@ class doc_display extends aw_template
 			$_sect = aw_global_get("section");
 			// calculate the amount of comments this document has
 			// XXX: I could use a way to figure out which variables are present in the template
-			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '".$doc->id()."'","cnt");
+			$num_comments = $this->db_fetch_field("
+				SELECT
+					count(*) AS cnt
+				FROM
+					comments
+				WHERE
+					board_id = '".$doc->id()."'
+				AND
+					lang_id = ".aw_global_get("ct_lang_id"),
+				"cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
 				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $doc->id(),"section" => $_sect),"forum"),
@@ -1054,7 +1009,20 @@ class doc_display extends aw_template
 		{
 			if ($num_comments>0)
 			{
-				$this->db_query("SELECT id, name, url,  time, comment FROM comments WHERE board_id = ".$doc->id() ." ORDER BY time ASC");
+				$this->db_query("
+					SELECT
+						id,
+						name,
+						url,
+						time,
+						comment
+					FROM
+						comments
+					WHERE
+						board_id = ".$doc->id() ."
+					AND
+						lang_id = ".aw_global_get("ct_lang_id")."
+					ORDER BY time ASC");
 				
 				$i=1;
 				while($row = $this->db_next())
