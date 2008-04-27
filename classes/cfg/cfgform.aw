@@ -2686,25 +2686,6 @@ class cfgform extends class_base
 					{
 						$cfg_data = $arr["request"]["prpconfig"][$name];
 
-						if ("releditor" === $data["type"] and is_oid($cfg_data["cfgform_id"]))
-						{ // collect props from spec cfgf to show in releditor table
-							if (!is_object($cfg))
-							{
-								$cfg = get_instance(CL_CFGFORM);
-							}
-
-							$reled_tbl_props = $cfg->get_props_from_cfgform(array("id" => $cfg_data["cfgform_id"]));
-							$cfg_data["table_fields"] = array();
-
-							foreach ($reled_tbl_props as $tbl_prop_name => $tbl_prop_data)
-							{
-								if ($tbl_prop_data["show_in_emb_tbl"])
-								{
-									$cfg_data["table_fields"][] = $name;
-								}
-							}
-						}
-
 						if (isset($arr["request"]["xconfig"][$name]))
 						{ // remove option configuration if checkbox not checked. required by some older html and vcl(?) classes' methods' boolean argument implementations.
 							foreach ($arr["request"]["xconfig"][$name] as $ch_name => $value)
@@ -2827,8 +2808,12 @@ class cfgform extends class_base
 	**/
 	function get_props_from_cfgform($arr)
 	{
-	if(!$arr["id"])return array();	$cf = obj($arr["id"]);
+		if(!$arr["id"])
+		{
+			return array();
+		}
 
+		$cf = obj($arr["id"]);
 		$cfgx = get_instance("cfg/cfgutils");
 		$ret = $cfgx->load_properties(array(
 			"clid" => $cf->prop("subclass"),
@@ -2836,7 +2821,8 @@ class cfgform extends class_base
 
 		$subclass = $cf->prop("subclass");
 		// XXX: can be removed once doc and document are merged
-		$inst_name = ($subclass == CL_DOCUMENT) ? "doc" : $subclass;		$class_i = get_instance($inst_name);
+		$inst_name = ($subclass == CL_DOCUMENT) ? "doc" : $subclass;
+		$class_i = get_instance($inst_name);
 		$tmp = $class_i->load_from_storage(array(
 			"id" => $cf->id()
 		));
@@ -3275,6 +3261,11 @@ class cfgform extends class_base
 			$tc = $trans[$lc];
 			foreach($ret as $pn => $pd)
 			{
+				if ($pn == "needs_translation" || $pn == "is_translated" || $pn == "")
+				{
+					unset($ret[$pn]);
+				}
+
 				if ($tc[$pn] != "")
 				{
 					if ($pd["type"] == "text")
