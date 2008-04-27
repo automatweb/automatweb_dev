@@ -3261,11 +3261,6 @@ class cfgform extends class_base
 			$tc = $trans[$lc];
 			foreach($ret as $pn => $pd)
 			{
-				if ($pn == "needs_translation" || $pn == "is_translated" || $pn == "")
-				{
-					unset($ret[$pn]);
-				}
-
 				if ($tc[$pn] != "")
 				{
 					if ($pd["type"] == "text")
@@ -3319,6 +3314,11 @@ class cfgform extends class_base
 
 		foreach($ret as $key => $val)
 		{
+			if ($key === "needs_translation" || $key === "is_translated")
+			{
+				unset($ret[$key]);
+			}
+
 			if(isset($show_to_groups[$key]))
 			{
 				$allowed_to_see = 0;
