@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.125 2008/04/27 15:13:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.126 2008/04/27 15:59:17 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -31,6 +31,7 @@ class releditor extends core
 
 		if ($arr["new"])
 		{
+			return '<div id="releditor_'.$this->elname.'_table_wrapper"></div>';
 			$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $arr["prop"]["name"]);
 			return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>";
 		}
@@ -49,6 +50,11 @@ class releditor extends core
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
 			));
+			if (count($conns) == 0)
+			{
+				return '<div id="releditor_'.$this->elname.'_table_wrapper"></div>';
+				return;
+			}
 			$idx = 1;
 			foreach($conns as $conn)
 			{
@@ -74,6 +80,7 @@ class releditor extends core
 				foreach($property_list as $_pn => $_pd)
 				{
 					$data[$idx-1][$_pn] = $target->prop($_pn);
+
 					if (!in_array($_pn,$tb_fields))
 					{
 						continue;
@@ -118,7 +125,7 @@ class releditor extends core
 					if (($_pd["type"] == "relpicker" || $_pd["type"] == "classificator") && $this->can("view", $prop["value"]))
 					{
 						$_tmp = obj($prop["value"]);
-						$prop["value"] = $_tmp->name();
+						$prop["value"] = parse_obj_name($_tmp->name());
 					}
 					else
 					if ($_pd["type"] == "select" && is_array($prop["options"]))
@@ -1054,7 +1061,7 @@ class releditor extends core
 					if (($_pd["type"] == "relpicker" || $_pd["type"] == "classificator") && $this->can("view", $prop["value"]))
 					{
 						$_tmp = obj($prop["value"]);
-						$prop["value"] = $_tmp->name();
+						$prop["value"] = parse_obj_name($_tmp->name());
 					}
 					else
 					if ($_pd["type"] == "select" && is_array($prop["options"]))
@@ -1732,7 +1739,15 @@ class releditor extends core
 
 	private function _init_js_rv_table($t, $clid, $propn)
 	{
-		$rel_props = $this->all_props;
+		if ($this->all_props)
+		{
+			$rel_props = $this->all_props;
+		}
+		else
+		{
+			$rel_clid = $this->_get_related_clid($clid, $propn);
+			$rel_props = $this->_get_props_from_clid($rel_clid);
+		}
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
 
 		if ($this->loaded_from_cfgform)
@@ -1752,10 +1767,6 @@ class releditor extends core
 				$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
 			}
 		}
-/*		$t->define_chooser(array(
-			"name" => $propn."_del",
-			"field" => "oid"
-		));*/
 		$t->define_field(array(
 			"name" => $propn."_change",
 			"caption" => t("Muuda"),
@@ -1819,7 +1830,7 @@ class releditor extends core
 					if ($this->can("view", $pv["value"]))
 					{
 						$tmp = obj($pv["value"]);
-						$d[$prop_name] = $tmp->name();
+						$d[$prop_name] = parse_obj_name($tmp->name());
 					}
 					else
 					if (is_oid($pv["value"]))
