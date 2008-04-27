@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.122 2008/04/26 18:06:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.123 2008/04/27 13:43:34 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -10,6 +10,7 @@
 class releditor extends core
 {
 	var $auto_fields;
+	private $loaded_from_cfgform = false;
 
 	function releditor()
 	{
@@ -316,6 +317,7 @@ class releditor extends core
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
+			$this->loaded_from_cfgform = true;
 		}
 
 		if (!empty($prop["choose_default"]))
@@ -680,6 +682,7 @@ class releditor extends core
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
+			$this->loaded_from_cfgform = true;
 		}
 
 		// the toolbar should be before the props, because otherwise it
@@ -1799,9 +1802,22 @@ class releditor extends core
 		$rel_props = $this->all_props;
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
 
-		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
+		if ($this->loaded_from_cfgform)
 		{
-			$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
+			foreach ($rel_props as $name => $data)
+			{
+				if ($data["show_in_emb_tbl"])
+				{
+					$this->_define_table_col_from_prop($t, $data);
+				}
+			}
+		}
+		else
+		{
+			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
+			{
+				$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
+			}
 		}
 /*		$t->define_chooser(array(
 			"name" => $propn."_del",
