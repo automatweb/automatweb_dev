@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.130 2008/04/27 18:11:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.131 2008/04/27 18:45:19 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -622,6 +622,11 @@ class releditor extends core
 		// 2) ....
 		foreach($all_props as $key => $_prop)
 		{
+                        if (!empty($arr["cb_values"]["value"][$key]))
+                        {
+                                $_prop["value"] = $arr["cb_values"]["value"][$key];
+                        }
+ 
 			//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
 			//if ($all_props[$key])
 			//if (is_array($props) && in_array($key,$props))
@@ -640,6 +645,10 @@ class releditor extends core
 					$act_props[$key] = $_prop;
 				};
 			};
+			if (!empty($arr["cb_values"]["value"][$key]))
+			{
+				$_prop["value"] = $arr["cb_values"]["value"][$key];
+			}
 			$this->all_props[$key] = $_prop;
 		};
 
@@ -821,6 +830,15 @@ class releditor extends core
 				"value" => "",
 			);
 		};
+		foreach($xprops as $pn => $pd)
+		{
+			preg_match("/.*\[(.*)\]/imsU", $pd["name"], $mt);
+			$rn = $mt[1];
+			if (!empty($arr["cb_values"]["value"][$rn]))
+			{
+				$xprops[$pn]["value"] = $arr["cb_values"]["value"][$rn];
+			}
+		}
 
 		if ($prop["parent"] != "")
 		{

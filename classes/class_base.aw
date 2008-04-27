@@ -2436,12 +2436,20 @@ class class_base extends aw_template
 		{
 			if (!empty($this->cb_values[$property["name"]]["value"]))
 			{
-				$property["value"] = $this->cb_values[$property["name"]]["value"];
+				if ($property["type"] == "date_select" || $property["type"] == "datetime_select")
+				{
+					 $property["value"] = date_edit::get_timestamp($this->cb_values[$property["name"]]["value"]);
+				}
+				else
+				{
+					$property["value"] = $this->cb_values[$property["name"]]["value"];
+				}
 			};
 			if (!empty($this->cb_values[$property["name"]]["error"]))
 			{
 				$property["error"] = $this->cb_values[$property["name"]]["error"];
 			};
+			return;
 		};
 		$nm = $property["name"];
 
@@ -3849,7 +3857,6 @@ class class_base extends aw_template
                                 {
                                         $propvalues[$k]["edit_data"] = $args[$k."_data"];
                                 }
-
 				$this->cb_values = $propvalues;
 				aw_session_set("cb_values",$propvalues);
 				$this->stop_processing = true;
