@@ -409,8 +409,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property skills_tbl type=table store=no
 	@caption Oskused
 
-	@property skills_releditor type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
-	@caption Oskused releditor
+	@property skills_releditor1 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor1
+
+	@property skills_releditor2 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor2
+
+	@property skills_releditor3 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor3
+
+	@property skills_releditor4 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor4
+
+	@property skills_releditor5 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor5
 
 	@property languages_releditor type=releditor mode=manager2 reltype=RELTYPE_LANGUAGE_SKILL props=language,talk,understand,write table_fields=language,talk,understand,write store=no
 	@caption Keeled releditor

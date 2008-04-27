@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.124 2008/04/27 14:31:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.125 2008/04/27 15:13:32 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -23,7 +23,6 @@ class releditor extends core
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
-
 
 		if(!is_object($arr["obj_inst"]))
 		{
@@ -50,25 +49,11 @@ class releditor extends core
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
 			));
-			$name = $arr["prop"]["name"];
-			$return_url = get_ru();
-			$rows_count = 0;
-			$del_hiddens = "";
-			$conns_count = sizeof($conns);
 			$idx = 1;
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
 				$target = $conn->to();
-
-				$hidden_div = html::hidden(Array(
-					"name" => $this->elname."[".$rows_count."][id]",
-					"value" => $c_to
-				));
-//				$del_hiddens .=html::hidden(Array(
-//					"name" => str_replace("[0]" , "[".$rows_count."]" , $this->elname)."[releditor_remove]",
-//					"value" => ""
-//				));
 
 				$clinst = $target->instance();
 				$rowdata = array(
@@ -77,13 +62,8 @@ class releditor extends core
 					"parent" => $target->parent(),
 					"conn_id" => $conn->id(),
 					"name" => $conn->prop("to.name"),
-					"edit" => html::href(array(
-						"caption" => t("Muuda"),
-						"url" => $url,
-					)),
 					"_sort_jrk" => $conn->prop("to.jrk"),
 					"_sort_name" => $conn->prop("to.name"),
-					"_active" => ($arr["request"][$this->elname] == $c_to),
 					"delete" => "<a href='javascript:void(0)' name='".$this->elname."_edit_".($idx-1)."'>".t("Muuda")."</a>",
 					"_delete" => "<a href='javascript:void(0)' name='".$this->elname."_delete_".($idx-1)."'>".t("Kustuta")."</a>",
 				);
@@ -107,12 +87,6 @@ class releditor extends core
 						));
 					}
 
-					/*
-					if (empty($fdata[$_pn]))
-					{
-						continue;
-					};
-					*/
 					$prop = $_pd;
 					$prop["value"] = $target->prop($_pn);
 					// now lets call get_property on that beast
@@ -165,29 +139,13 @@ class releditor extends core
 					$get_prop_arr["prop"]["name"] = $this->elname."[".$get_prop_arr["prop"]["name"]."]";
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
-
-					$hidden_input = $this->all_props[$_pn];//arr($hidden_input);//arr($prop["name"]); //arr($this->all_props);
-					$hidden_input["value"] = $target->prop($_pn);
-					$get_prop_arr = $arr;
-					$get_prop_arr["prop"] = $hidden_input;
-					$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $get_prop_arr["prop"]["name"]);
-					$parent_inst->get_property($get_prop_arr);
-					$get_prop_arr["prop"]["name"] = $prop["name"];
-					$hidden_input = $get_prop_arr["prop"];
-					$hidden_input["name"] = str_replace("[" , "[".$rows_count."][" , $hidden_input["name"]);
-
-					$hidden_div.= $htmlclient->draw_element($hidden_input);
-					$export_props[$_pn] = $prop["value"];//.$htmlclient->draw_element($hidden_input);
+					$export_props[$_pn] = $prop["value"];
 				}
 				$fields_defined = 1;
 				$rowdata = $export_props + $rowdata;
 				// This one defines the display table data. Just a reminder for myself. - Kaarel
 
-
-				//viimasesse tulpa muutmise jaoks peidetud asjad
-				//$rowdata["delete"].='<div style="display: none;">'.$hidden_div.'</div>';
 				$awt->define_data($rowdata);
-				$rows_count++;
 				$idx++;
 			}
 		}
@@ -207,7 +165,7 @@ class releditor extends core
 		$awt->sort_by();
 		$awt->set_sortable(false);
 
-		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => serialize($data)))."</div>".$del_hiddens;
+		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => serialize($data)))."</div>";
 	}
 
 
@@ -246,7 +204,6 @@ class releditor extends core
 
 		$xprops = array();
 
-
 		if ($clid == 7)
 		{
 			$use_clid = "doc";
@@ -266,12 +223,9 @@ class releditor extends core
 
 		// generate a list of all properties. Needed to display edit form
 		// and to customize table display in manager mode
-		//$all_props = $t->get_property_group($filter);
 		$all_props = $t->load_defaults();
-//		$this->clid = $use_clid;
 		$act_props = array();
 		$use_form = $prop["use_form"];
-
 
 		if (!empty($use_form))
 		{
@@ -291,9 +245,7 @@ class releditor extends core
 		}
 		$this->form_type = $form_type;
 
-		#$this->all_props = $act_props;
 		$pcount = sizeof($props);
-
 		foreach($all_props as $key => $_prop)
 		{
 			if ($all_props[$key] && is_array($props) && in_array($key,$props))
@@ -384,20 +336,6 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
-		$tb = get_instance("vcl/toolbar");
-//		$tb->add_button(array(
-//			"name" => "new",
-//			"tooltip" => t("Lisa uus")." " . $prop["caption"],
-//			"caption" => t("Lisa uus")." " . $prop["caption"],
-//			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
-//		));
-		$tb->add_button(array(
-			"name" => $this->elname."_del",
-			"img" => "delete.gif",
-			"tooltip" => t("Kustuta"),
-			"url" => "javascript:void(0);",
-		));
-
 		$xprops[$prop["name"]."[0]_caption"] = array(
 			"type" => "text",
 			"value" => $prop["caption"],
@@ -405,7 +343,6 @@ class releditor extends core
 			"store" => "no",
 			"name" => $this->elname."_caption",
 			"caption" => " ",
-//			"no_caption" => 1,
  		);
 
 		$xprops[$prop["name"]."[0]table"] = array(
@@ -413,8 +350,7 @@ class releditor extends core
 			"value" => $this->init_new_rel_table($arr),
 			"store" => "no",
 			"name" => $this->elname."_table",
-			"caption" => " ",//$this->elname."_table",
-//			"no_caption" => 1,
+			"caption" => " ",
  		);
 
 		$tmp = $t->parse_properties(array(
@@ -427,10 +363,7 @@ class releditor extends core
 			$xprops[$k] = $v;
 		}
 
-
 		exit_function("init-rel-editor-new");
-
-
 
 		$xprops[$prop["name"]."_reled_data"] = array(
 			"type" => "hidden",
@@ -445,11 +378,13 @@ class releditor extends core
 			"value" => '<br>',
 			"store" => "no",
 			"name" => $this->elname."_break",
-			"caption" => " ",//$this->elname."_break",
-//			"no_caption" => 1,
+			"caption" => " ",
 		);
 
-		if(is_array($arr["prop"]["clid"]))$arr["prop"]["clid"] = reset($arr["prop"]["clid"]);
+		if(is_array($arr["prop"]["clid"]))
+		{
+			$arr["prop"]["clid"] = reset($arr["prop"]["clid"]);
+		}
 		$xprops[$prop["name"]."[0]add_button"] = array(
 			"type" => "text",
 			"value" => '
@@ -466,21 +401,19 @@ class releditor extends core
 			"store" => "no",
 			"name" => $this->elname."_add_button",
 			"caption" => " ",//$this->elname."_add_button",
-//			"no_caption" => 1,
  		);
 
-//		arr($xprops);
 		foreach($xprops as $key => $prop)
 		{
 			$get_prop_arr = $arr;
 			$get_prop_arr["prop"] = $prop;
 			$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $get_prop_arr["prop"]["name"]);
+			$get_prop_arr["caller_releditor_name"] = $arr["prop"]["name"];
 
 			$parent_inst->get_property($get_prop_arr);
 			$get_prop_arr["prop"]["name"] = $prop["name"];
 			$xprops[$key] = $get_prop_arr["prop"];
 		}
-//		arr($xprops);
 
 		return $xprops;
 

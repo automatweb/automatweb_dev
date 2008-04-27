@@ -62,6 +62,13 @@ class crm_skill_level extends class_base
 				$prop["options"][""] = t("--vali--");
 				$prop["disabled_options"] = array();
 				$this->_format_opts($prop["options"], 0, $by_parent, $prop["disabled_options"]);
+
+				if (preg_match("/skills_releditor(\d)/imsU", $arr["name_prefix"], $mt))
+				{
+					// list only items under top-level items with jrk no 1
+					echo "filter by no ".$mt[1]." <br>";
+					$this->_filter_opts_by_level_jrk($prop["options"], $mt[1]);
+				}
 				break;
 
 			case "level":
@@ -104,6 +111,54 @@ class crm_skill_level extends class_base
 		}
 
 		return $retval;
+	}
+
+	function _filter_opts_by_level_jrk(&$opts, $jrk)
+	{
+		foreach($opts as $k => $v)
+		{
+			if (!is_oid($k))
+			{
+				continue;
+			}
+			$tmp = obj($k);
+			if ($this->_get_level_in_opts($k, $opts) == 1 && $tmp->ord() == $jrk)
+			{
+				$filter_opt = $k;
+			}
+		}
+
+		if ($filter_opt)
+		{
+			foreach($opts as $k => $v)
+			{
+				if (!is_oid($k))
+				{
+					continue;
+				}
+				if (!$this->_opt_is_below($k, $filter_opt, $opts))
+				{
+					unset($opts[$k]);
+				}
+			}
+		}
+		else
+		{
+			$opts = array("" => t("--vali--"));
+		}
+	}
+
+	private function _opt_is_below($opt, $filter_opt, $opts)
+	{
+		$o = obj($opt);
+		foreach($o->path() as $path_item)
+		{
+			if ($path_item->id() == $filter_opt)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	function _format_opts(&$opts, $parent, $by_parent, &$disabled_opts)
