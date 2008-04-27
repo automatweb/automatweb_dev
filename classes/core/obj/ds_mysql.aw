@@ -2085,7 +2085,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
 				metadata,					subclass,					flags,
-				brother_of					$acl_fld
+				brother_of					$acld_fld
 		) VALUES (
 				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
