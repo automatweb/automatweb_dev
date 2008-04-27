@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.128 2008/04/27 17:10:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.129 2008/04/27 18:03:10 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -285,6 +285,13 @@ class releditor extends core
 			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
 			$this->loaded_from_cfgform = true;
+			$cfgform_o = new object($cfgform_id);
+			$layoutinfo = $cfg->get_cfg_layout($cfgform_o);
+
+			if (is_array($layoutinfo))
+			{
+				$t->layoutinfo = $layoutinfo;
+			}
 		}
 
 		if (!empty($prop["choose_default"]))
@@ -631,6 +638,13 @@ class releditor extends core
 			$this->cfg_act_props = $cfg->get_cfg_proplist($cfgform_id);
 			$act_props = $this->all_props = $all_props = $this->cfg_act_props;
 			$this->loaded_from_cfgform = true;
+			$cfgform_o = new object($cfgform_id);
+			$layoutinfo = $cfg->get_cfg_layout($cfgform_o);
+
+			if (is_array($layoutinfo))
+			{
+				$t->layoutinfo = $layoutinfo;
+			}
 		}
 
 		// the toolbar should be before the props, because otherwise it
