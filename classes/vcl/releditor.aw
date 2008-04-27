@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.131 2008/04/27 18:45:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.132 2008/04/27 19:07:32 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -390,6 +390,7 @@ class releditor extends core
 			"store" => "no",
 			"name" => $this->elname."_table",
 			"caption" => " ",
+			"no_caption" => 1
  		);
 
 		$tmp = $t->parse_properties(array(

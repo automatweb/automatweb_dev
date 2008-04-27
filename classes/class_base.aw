@@ -3057,11 +3057,11 @@ class class_base extends aw_template
 					{
 						if ($val["error"])
 						{
-							$resprops[$val["name"]."_error"] = array(
+							/*$resprops[$val["name"]."_error"] = array(
 								"type" => "text",
 								"value" => "",
 								"error" => $val["error"],
-							);
+							);*/
 						};
 
 						foreach($relres as $rkey => $rval)
