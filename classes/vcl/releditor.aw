@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.127 2008/04/27 16:37:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.128 2008/04/27 17:10:28 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -102,7 +102,7 @@ class releditor extends core
 							"obj_inst" => $target,
 							"called_from" => "releditor"
 						));
-						if (PROP_OK != $test)
+						if (null !== $test && PROP_OK != $test)
 						{
 							continue;
 						};
@@ -144,6 +144,16 @@ class releditor extends core
 					$get_prop_arr["prop"]["name"] = $this->elname."[".$get_prop_arr["prop"]["name"]."]";
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
+
+					if (is_array($prop["value"]))
+					{
+						$strs = array();
+						foreach($prop["value"] as $k => $v)
+						{
+							$strs[] = $prop["options"][$v];
+						}
+						$prop["value"] = join(", ", $strs);
+					}
 					$export_props[$_pn] = $prop["value"];
 				}
 				$fields_defined = 1;
