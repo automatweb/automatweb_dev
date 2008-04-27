@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.30 2008/04/07 14:15:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.31 2008/04/27 11:02:49 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -47,11 +47,11 @@
 		@property mandatory_controller type=relpicker reltype=RELTYPE_CFGCONTROLLER
 		@caption Kohustuslikkuse kontroller
 
+		@property mobi_handler type=relpicker reltype=RELTYPE_MOBI_HANDLER
+		@caption Mobi SMSi haldur
+
 	@groupinfo search_conf caption="Otsingu seaded" parent=general
 	@default group=search_conf
-
-		@property cv_tpl type=select
-		@caption CV templeit
 
 		@property search_conf_tbl type=table
 		@caption Tulemuste tabeli v&auml;ljad
@@ -74,6 +74,18 @@
 		@property lang_tb type=toolbar no_caption=1 store=no
 
 		@property lang_tbl type=table no_caption=1 store=no
+
+	@groupinfo job_offer_conf caption="T&ouml;&ouml;pakkumise seaded" parent=general
+	@default group=job_offer_conf
+
+		@property cv_tpl type=select
+		@caption CV templeit
+
+		@property job_offer_cv_tbl type=select multiple=1 field=meta method=serialize
+		@caption Uus seadetevorm
+
+		@property default_offers_cfgform type=relpicker reltype=RELTYPE_DEFAULT_OFFERS_CFGFORM
+		@caption Default seadete vorm
 
 -------------------T88OTSIJAD-----------------------
 @groupinfo employee caption="T&ouml;&ouml;otsijad" submit=no
@@ -278,12 +290,6 @@
 
 	@property offers_table type=table no_caption=1 parent=offers
 
-@groupinfo offers_conf parent=offers caption="Seaded"
-@default group=offers_conf
-
-	@property default_offers_cfgform type=relpicker reltype=RELTYPE_DEFAULT_OFFERS_CFGFORM
-	@caption Default seadete vorm
-
 ----------------------------------------
 
 @groupinfo actions caption="Tegevused" submit=no
@@ -329,6 +335,9 @@
 
 @reltype CFGCONTROLLER value=10 clid=CL_CFGCONTROLLER
 @caption Kontroller
+
+@reltype MOBI_HANDLER value=11 clid=CL_MOBI_HANDLER
+@caption Mobi SMSi haldur
 
 */
 
@@ -404,6 +413,16 @@ class personnel_management extends class_base
 
 		switch($prop["name"])
 		{
+			case "job_offer_cv_tbl":
+				$prop["options"] = array(
+					"group" => t("Grupp"),
+					"property" => t("Omadus"),
+					"selected" => t("N&auml;ita vormis"),
+					"mandatory" => t("Kohustuslik"),
+					"jrk" => t("J&auml;rjekord"),
+				);
+				break;
+
 			case "drivers_license":
 				$prop["options"] = get_instance(CL_CRM_PERSON)->drivers_licence_original_categories;
 				break;
@@ -1087,7 +1106,7 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_PERSON.RELTYPE_PHONE.name" => "%".$r["cv_tel"]."%",
-					"CL_CRM_PERSON.RELTYPE_PHONE.clean_number" => "%".$r["cv_tel"]."%",
+					"CL_CRM_PERSON.RELTYPE_PHONE.clean_number" => "%".preg_replace("/[^0-9]/", "", $r["cv_tel"])."%",
 				)
 			));
 		}

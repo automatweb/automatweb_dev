@@ -199,6 +199,16 @@
             <caption>Uus seadetevorm</caption>
       </property>
       <property>
+            <name>default_offers_cfgform</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_OFFERS_CFGFORM</reltype>
+            <caption>Default seadete vorm</caption>
+      </property>
+      <property>
             <name>employee_tb</name>
             <group>
                   <num_0>employee</num_0>
@@ -900,16 +910,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>default_offers_cfgform</name>
-            <group>offers_conf</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_DEFAULT_OFFERS_CFGFORM</reltype>
-            <caption>Default seadete vorm</caption>
-      </property>
-      <property>
             <name>treeview3</name>
             <group>actions</group>
             <table>objects</table>
@@ -976,10 +976,6 @@
                   <caption>&amp;amp;Uuml;ldine</caption>
                   <submit>no</submit>
             </offers_>
-            <offers_conf>
-                  <parent>offers</parent>
-                  <caption>Seaded</caption>
-            </offers_conf>
             <actions>
                   <caption>Tegevused</caption>
                   <submit>no</submit>
