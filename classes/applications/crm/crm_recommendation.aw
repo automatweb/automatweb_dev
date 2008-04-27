@@ -390,6 +390,7 @@ class crm_recommendation extends class_base
 			$error = true;
 		}
 
+		$clid = $clids[$clid];
 		$option_data = array(
 			"error" => &$error,// recommended
 			"errorstring" => &$errorstring,// optional
