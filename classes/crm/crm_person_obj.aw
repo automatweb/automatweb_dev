@@ -16,7 +16,7 @@ class crm_person_obj extends _int_object
 
 	function set_rank($v)
 	{
-		// It won't work with new object, so we need to check the oid.
+		// It won't work with new object, so we need to save it first.
 		if(!is_oid($this->id()))
 		{
 			$this->save();
@@ -61,6 +61,14 @@ class crm_person_obj extends _int_object
 		{
 			return $this->set_rank($v);
 		}
+		if($k == "work_contact")
+		{
+			return $this->set_work_contact($v);
+		}
+		if($k == "org_section")
+		{
+			return $this->set_org_section($v);
+		}
 		return parent::set_prop($k, $v);
 	}
 
@@ -73,6 +81,10 @@ class crm_person_obj extends _int_object
 		if($k == "rank")
 		{
 			return $this->get_rank();
+		}
+		if($k == "org_section")
+		{
+			return $this->get_org_section();
 		}
 		return parent::prop($k);
 	}
@@ -90,6 +102,73 @@ class crm_person_obj extends _int_object
 			return false;
 		}
 		return $org_rel->prop("org");
+	}
+
+	function set_work_contact($v)
+	{
+		// It won't work with new object, so we need to save it first.
+		if(!is_oid($this->id()))
+		{
+			$this->save();
+		}
+
+		$o = obj($this->id());
+		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if (!$org_rel)
+		{
+			$org_rel = obj();
+			$org_rel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+			$org_rel->set_parent($o->id());
+			$org_rel->save();
+			$o->connect(array(
+				"to" => $org_rel->id(),
+				"type" => "RELTYPE_CURRENT_JOB",
+			));
+		}
+		$sp = $org_rel->set_prop("org", $v);
+		$org_rel->save();
+		return $sp;
+	}
+
+	function set_org_section($v)
+	{
+		// It won't work with new object, so we need to save it first.
+		if(!is_oid($this->id()))
+		{
+			$this->save();
+		}
+
+		$o = obj($this->id());
+		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if (!$org_rel)
+		{
+			$org_rel = obj();
+			$org_rel->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+			$org_rel->set_parent($o->id());
+			$org_rel->save();
+			$o->connect(array(
+				"to" => $org_rel->id(),
+				"type" => "RELTYPE_CURRENT_JOB",
+			));
+		}
+		$sp = $org_rel->set_prop("section", $v);
+		$org_rel->save();
+		return $sp;
+	}
+
+	function get_org_section()
+	{
+		// It won't work with new object, so we need to check the oid.
+		if(!is_oid($this->id()))
+			return false;
+
+		$o = obj($this->id());
+		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
+		if (!$org_rel)
+		{
+			return false;
+		}
+		return $org_rel->prop("section");
 	}
 
 	function add_person_to_list($arr)
