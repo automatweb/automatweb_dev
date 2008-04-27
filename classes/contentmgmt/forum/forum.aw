@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.21 2008/04/27 11:46:21 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.22 2008/04/27 11:50:58 hannes Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -670,7 +670,7 @@ topic");
 	
 		if ($forum_obj->meta("rated") != "")
 		{	
-			// arvutame häälte arvu sellele foorumile
+			// lets calculate vote count for this forum
 			if ($board_obj->meta("voters") == 0)
 			{
 				$rate = 0;
@@ -1637,7 +1637,7 @@ topic");
 			"id" => $id,
 		));
 
-		// õkk, this is overkill
+		// 8kk, this is overkill
 		// $this->db_query("SELECT COUNT(id) as cnt ,board_id, MAX(time) as mtime FROM comments GROUP BY board_id");
 		// pealkirjad, vastuseid, postitas, alustatud, hiliseim vastus
 
@@ -1961,7 +1961,7 @@ topic");
 			else
 			{
 				$this->section = $oid;
-				// kui ühtegi argumenti pole antud, siis näitame foorumit topicuvaates
+				// if there are no arguments, then show forum in topicview
 				$content = $this->topics(array("id" => $id,"section" => $oid));
 			};
 		};
@@ -1999,7 +1999,7 @@ topic");
 	function _draw_all_topics($args = array())
 	{
 		extract($args);
-		// alright, seda pole vaja siis ümber teha
+		// alright, this doesn't need to be changed
 		$ol = new object_list(array(
 			"parent" => $id,
 			"class_id" => CL_MSGBOARD_TOPIC,
@@ -2066,7 +2066,7 @@ topic");
 		#	$topic_link = $this->mk_url(array("board" => $args["oid"],"section" => $args["section"]));
 		#};
 
-		// mille vastu võrrelda=
+		// to check against=
 		$check_against = ($args["modified"] > $args["created"]) ? $args["modified"] : $args["created"];
 		$mark = ($check_against > $this->last_read[$args["oid"]]) ? $this->parse("NEW_MSGS") : "";
 
@@ -2428,7 +2428,7 @@ topic");
 			case "preview":
 				$data["value"] = html::href(array(
 					"url" => $this->mk_my_orb("topics",array("id" => $arr["obj_inst"]->id())),
-					"caption" => t("Näita"),
+					"caption" => t("N&auml;ita"),
 				));
 
 				break;
