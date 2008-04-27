@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.20 2008/02/11 09:42:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.21 2008/04/27 11:46:21 hannes Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -1457,17 +1457,16 @@ topic");
 			if ($response)
 			{
 				$q = "INSERT INTO comments (parent, board_id, name, email, comment, subj,
-						time, site_id, ip, response)
+						time, site_id, ip, response, lang_id)
 					VALUES ('$parent','$board','$name','$email','$comment','$subj',
-
-						$t,'$site_id', '$ip', '$response')";
+						$t,'$site_id', '$ip', '$response', '".aw_global_get("ct_lang_id")."')";
 			}
 			else
 			{
 				$q = "INSERT INTO comments (parent, board_id, name, email, url, comment, subj,
-						time, site_id, ip)
+						time, site_id, ip, lang_id)
 				VALUES ('$parent','$board','$name','$email','$url','$comment','$subj',
-						$t,'$site_id', '$ip')";
+						$t,'$site_id', '$ip', '".aw_global_get("ct_lang_id")."')";
 			};
 
 			$this->db_query($q);
@@ -1503,7 +1502,13 @@ topic");
 			}
 		} 
 
-		if ($alias)
+		if ($alias && aw_ini_get("user_interface.full_content_trans") && aw_ini_get("user_interface.content_trans"))
+		{
+			$di = get_instance("doc_display");
+			$doc = obj($section);
+			$retval = $di->get_doc_link($doc, $_COOKIE["ct_lang_lc"]);
+		}
+		else if ($alias)
 		{
 			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"_alias" => "forum","no_comments" => $args["no_comments"]));
 		}
