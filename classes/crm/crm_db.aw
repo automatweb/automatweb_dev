@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.44 2008/01/31 13:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.45 2008/04/27 14:53:08 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -24,11 +24,17 @@
 @property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT
 @caption Õiguslike vormide kaust
 
-@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT
-@caption Linnade kaust
+@property dir_country type=relpicker reltype=RELTYPE_RIIK_CAT
+@caption Riikide kaust
+
+@property dir_county type=relpicker reltype=RELTYPE_PIIRKOND_CAT
+@caption Piirkondade kaust
 
 @property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT
 @caption Maakondade kaust
+
+@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT
+@caption Linnade kaust
 
 @property dir_tegevusala type=relpicker multiple=1 reltype=RELTYPE_TEGEVUSALA_CAT
 @caption Tegevusalade kaust
@@ -122,6 +128,9 @@ property search_table type=table parent=org no_caption=1
 
 @reltype METAMGR value=14 clid=CL_METAMGR
 @caption Muutujad
+
+@reltype PIIRKOND_CAT value=15 clid=CL_MENU
+@caption Piirkondade kaust
 
 */
 
