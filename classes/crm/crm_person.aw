@@ -237,9 +237,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof store=no
 
-		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
+		#@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
-			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
+			#@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
+
+			@property address_edit type=releditor mode=manager2 store=no props=name,aadress,postiindex,linn,maakond,piirkond,riik,comment table_fields=name,aadress,postiindex,linn,maakond,piirkond,riik,comment reltype=RELTYPE_ADDRESS
 
 		@layout ceditmsn type=vbox closeable=1 area_caption=Msn/yahoo/aol/icq
 
@@ -359,18 +361,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 ------------------------------------------------------------------
 @groupinfo cv caption="Elulugu"
 
-@groupinfo education caption="Haridusk&auml;ik" parent=cv submit=no
+@groupinfo education caption="Haridusk&auml;ik" parent=cv
 @default group=education
 
-@property education_tlb type=toolbar no_caption=1 store=no
+	#@property education_tlb type=toolbar no_caption=1 store=no
 
-@property edulevel type=select field=edulevel table=kliendibaas_isik
-@caption Haridustase
+	@property edulevel type=select field=edulevel table=kliendibaas_isik
+	@caption Haridustase
 
-@property academic_degree type=select field=academic_degree table=kliendibaas_isik
-@caption Akadeemiline kraad
+	@property academic_degree type=select field=academic_degree table=kliendibaas_isik
+	@caption Akadeemiline kraad
 
-@property education_tbl type=table no_caption=1 store=no
+	#@property education_tbl type=table no_caption=1 store=no
+
+	@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=school_1,school_2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school_1,school_2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
 
 ------------------------------------------------------------------
 
@@ -388,9 +392,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo recommends caption="Soovitajad" parent=cv submit=no
 @default group=recommends
 
-@property recommends_tlb type=toolbar store=no no_caption=1
+	#@property recommends_tlb type=toolbar store=no no_caption=1
 
-@property recommends_tbl type=table store=no no_caption=1
+	#@property recommends_tbl type=table store=no no_caption=1
+
+	@property recommends_edit type=releditor store=no mode=manager2 reltype=RELTYPE_RECOMMENDATION props=person,relation,phones,emails,org,profession table_fields=person,relation,phones,emails,org,profession
 
 ------------------------------------------------------------------
 
@@ -443,8 +449,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo experiences caption="T&ouml;&ouml;kogemus" parent=work submit=no
 @default group=experiences
 
-@property previous_jobs_tb type=toolbar no_caption=1 store=no
-@property previous_jobs_table type=table store=no no_caption=1
+	#@property previous_jobs_tb type=toolbar no_caption=1 store=no
+	#@property previous_jobs_table type=table store=no no_caption=1
+
+	@property previous_job_edit type=releditor store=no mode=manager2 reltype=RELTYPE_PREVIOUS_JOB props=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop table_fields=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop
 
 ------------------------------------------------------------------
 
@@ -460,11 +468,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo work_wanted caption="Soovitud t&ouml;&ouml;" parent=work submit=no
 @default group=work_wanted
 
-@property jobs_wanted_tb type=toolbar no_caption=1 store=no
+	#@property jobs_wanted_tb type=toolbar no_caption=1 store=no
 
-@property jobs_wanted_table type=table no_caption=1
+	#@property jobs_wanted_table type=table no_caption=1
 
-@property jobs_wanted type=releditor mode=manager2 reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no table_fields=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton
+	#@property jobs_wanted type=releditor mode=manager2 reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no table_fields=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton
+
+	@property jobs_wanted_edit type=releditor mode=manager2 reltype=RELTYPE_WORK_WANTED store=no props=field,job_type,professions_rels,professions,load,pay,work_by_schedule,work_at_night,ready_for_errand,location,location_2,location_text,start_working,additional_skills,handicaps,hobbies_vs_work,addinfo table_fields=field,job_type,professions_rels,professions,load,pay,work_by_schedule,work_at_night,ready_for_errand,location,location_2,location_text,start_working,additional_skills,handicaps,hobbies_vs_work,addinfo
 
 ------------------------------------------------------------------
 
