@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.129 2008/04/27 18:03:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.130 2008/04/27 18:11:04 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -28,6 +28,23 @@ class releditor extends core
 		{
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
 		}
+
+		if (!empty($arr["cb_values"]["edit_data"]))
+                {
+                        $tmp = aw_unserialize($arr["cb_values"]["edit_data"]);
+                        if (is_array($tmp))
+                        {
+				$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $arr["prop"]["name"]);
+				foreach($tmp  as $idx => $dat_row)
+				{
+					$this->_insert_js_data_to_table($awt, $arr["prop"], $dat_row, $arr["obj_inst"]->class_id(), $idx);
+				}
+				return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>".html::hidden(array(
+					"name" => $arr["prop"]["name"]."_data",
+					"value" => $arr["cb_values"]["edit_data"] 
+				));
+                        }
+                }
 
 		if ($arr["new"])
 		{

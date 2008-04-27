@@ -3036,7 +3036,7 @@ class class_base extends aw_template
 					$target_reltype = $val["reltype"];
 					$argblock["prop"]["reltype"] = $this->relinfo[$target_reltype]["value"];
 					$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
-
+//die(dbg::dump($this->cb_values));
 					if (is_array($this->cb_values[$val["name"]]))
 					{
 						$argblock["cb_values"] = $this->cb_values[$val["name"]];
@@ -3845,10 +3845,14 @@ class class_base extends aw_template
 				{
 					$propvalues[$name]["error"] = $argblock["prop"]["error"];
 				};
+                                foreach($realprops as $k => $v)
+                                {
+                                        $propvalues[$k]["edit_data"] = $args[$k."_data"];
+                                }
+
 				$this->cb_values = $propvalues;
 				aw_session_set("cb_values",$propvalues);
 				$this->stop_processing = true;
-
 				//return false;
 			};
 
@@ -3886,7 +3890,7 @@ class class_base extends aw_template
 					$this->cb_values = $propvalues;
 					return false;
 				}
-
+				$propvalues[$name]["reledit_data"] = $args[$name."_edit_data"];
 			};
 
 			// the current behaviour is to call set_property and not ever
