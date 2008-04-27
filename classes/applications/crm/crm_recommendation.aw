@@ -256,7 +256,7 @@ class crm_recommendation extends class_base
 						{
 							continue;
 						}
-						else	
+						else
 						if($to->prop("org.name") ==	$arr["request"]["org"] && ($to->prop("profession.name") == $arr["request"]["profession"] || strlen($arr["request"]["profession"]) == 0 || substr($arr["request"]["profession"], 0, 9) == "< a href="))
 						{
 							$ok = true;
@@ -313,7 +313,7 @@ class crm_recommendation extends class_base
 						{
 							continue;
 						}
-						else	
+						else
 						if($to->prop("profession.name") ==	$arr["request"]["profession"] && ($to->prop("org.name") == $arr["request"]["org"] || strlen($arr["request"]["org"]) == 0 || substr($arr["request"]["org"], 0, 9) == "< a href="))
 						{
 							$ok = true;
@@ -360,7 +360,7 @@ class crm_recommendation extends class_base
 		));
 		return $this->parse();
 	}
-	
+
 	/**
 		@attrib name=autocomp all_args=1
 	**/
@@ -374,6 +374,8 @@ class crm_recommendation extends class_base
 			"org" => CL_CRM_COMPANY,
 			"profession" => CL_CRM_PROFESSION,
 		);
+		preg_match("/.*(person|phones|emails|org|profession).*/U", $arr["requester"], $clid);
+		$clid = $clid[1];
 
 		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
@@ -382,15 +384,21 @@ class crm_recommendation extends class_base
 		$error = false;
 		$autocomplete_options = array();
 
+		if (!array_key_exists($clid, $clids))
+		{
+			$errorstring = t("Vigane argument '" . $arr["requester"] . "'");
+			$error = true;
+		}
+
 		$option_data = array(
 			"error" => &$error,// recommended
 			"errorstring" => &$errorstring,// optional
 			"options" => &$autocomplete_options,// required
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
-		
+
 		$ol = new object_list(array(
-			"class_id" => $clids[$arr["requester"]],
+			"class_id" => $clid,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 500,
