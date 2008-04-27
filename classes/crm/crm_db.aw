@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.46 2008/04/27 14:55:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.47 2008/04/27 15:04:23 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -24,10 +24,10 @@
 @property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT
 @caption &Otilde;iguslike vormide kaust
 
-@property dir_country type=relpicker reltype=RELTYPE_RIIK_CAT
+@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT
 @caption Riikide kaust
 
-@property dir_county type=relpicker reltype=RELTYPE_PIIRKOND_CAT
+@property dir_piirkond type=relpicker reltype=RELTYPE_PIIRKOND_CAT
 @caption Piirkondade kaust
 
 @property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT
