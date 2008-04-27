@@ -66,7 +66,6 @@ class crm_skill_level extends class_base
 				if (preg_match("/skills_releditor(\d)/imsU", $arr["name_prefix"], $mt))
 				{
 					// list only items under top-level items with jrk no 1
-					echo "filter by no ".$mt[1]." <br>";
 					$this->_filter_opts_by_level_jrk($prop["options"], $mt[1]);
 				}
 				break;
@@ -122,12 +121,11 @@ class crm_skill_level extends class_base
 				continue;
 			}
 			$tmp = obj($k);
-			if ($this->_get_level_in_opts($k, $opts) == 1 && $tmp->ord() == $jrk)
+			if ($this->_get_level_in_opts($k, $opts) == 0 && $tmp->ord() == $jrk)
 			{
 				$filter_opt = $k;
 			}
 		}
-
 		if ($filter_opt)
 		{
 			foreach($opts as $k => $v)
@@ -136,7 +134,7 @@ class crm_skill_level extends class_base
 				{
 					continue;
 				}
-				if (!$this->_opt_is_below($k, $filter_opt, $opts))
+				if ($k == $filter_opt || !$this->_opt_is_below($k, $filter_opt, $opts))
 				{
 					unset($opts[$k]);
 				}
