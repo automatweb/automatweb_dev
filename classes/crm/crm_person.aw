@@ -5248,7 +5248,8 @@ class crm_person extends class_base
 		$person_obj = current($ob->connections_to(/*array("from.class_id" => CL_CRM_PERSON)*/));
 		if(!is_object($person_obj))
 		{
-			return false;
+			$person_obj = $ob;
+			//return false;
 		}
 		$person_obj = &obj($person_obj->prop("from"));
 
