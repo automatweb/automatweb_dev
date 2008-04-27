@@ -52,14 +52,24 @@
             <caption>&amp;Otilde;iguslike vormide kaust</caption>
       </property>
       <property>
-            <name>dir_linn</name>
+            <name>dir_country</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_LINN_CAT</reltype>
-            <caption>Linnade kaust</caption>
+            <reltype>RELTYPE_RIIK_CAT</reltype>
+            <caption>Riikide kaust</caption>
+      </property>
+      <property>
+            <name>dir_county</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PIIRKOND_CAT</reltype>
+            <caption>Piirkondade kaust</caption>
       </property>
       <property>
             <name>dir_maakond</name>
@@ -70,6 +80,16 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MAAKOND_CAT</reltype>
             <caption>Maakondade kaust</caption>
+      </property>
+      <property>
+            <name>dir_linn</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LINN_CAT</reltype>
+            <caption>Linnade kaust</caption>
       </property>
       <property>
             <name>dir_tegevusala</name>
@@ -276,6 +296,11 @@
                   <clid>CL_METAMGR</clid>
                   <caption>Muutujad</caption>
             </METAMGR>
+            <PIIRKOND_CAT>
+                  <value>15</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Piirkondade kaust</caption>
+            </PIIRKOND_CAT>
       </reltypes>
       <layout>
             <org>

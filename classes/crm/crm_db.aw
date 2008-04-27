@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.45 2008/04/27 14:53:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.46 2008/04/27 14:55:08 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -13,16 +13,16 @@
 @caption Vaikimisi valim
 
 @property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1
-@caption Ettevõtete kaust
+@caption Ettev&otilde;tete kaust
 
 @property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT
-@caption Töötajate kaust
+@caption T&ouml;&ouml;tajate kaust
 
 @property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT
 @caption Aadresside kaust
 
 @property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT
-@caption Õiguslike vormide kaust
+@caption &Otilde;iguslike vormide kaust
 
 @property dir_country type=relpicker reltype=RELTYPE_RIIK_CAT
 @caption Riikide kaust
@@ -43,10 +43,10 @@
 @caption Toodete kaust
 
 @property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
-@caption Kaust, kui mõni eelnevatest pole määratud, siis kasutatakse seda
+@caption Kaust, kui m&otilde;ni eelnevatest pole m&auml;&auml;ratud, siis kasutatakse seda
 
 @property flimit type=select
-@caption Kirjeid ühel lehel
+@caption Kirjeid &uuml;hel lehel
 
 @property all_ct_data type=checkbox ch_value=1 
 @caption Kuva k&otilde;iki kontaktandmeid
@@ -94,7 +94,7 @@ property search_table type=table parent=org no_caption=1
 @caption Organisatsioonide kaust
 
 @reltype ISIK_CAT value=3 clid=CL_MENU
-@caption Töötajate kaust
+@caption T&ouml;&ouml;tajate kaust
 
 @reltype ADDRESS_CAT value=4 clid=CL_MENU
 @caption Aadresside kaust
@@ -115,13 +115,13 @@ property search_table type=table parent=org no_caption=1
 @caption Toodete kataloogide kaust
 
 @reltype GENERAL_CAT value=10 clid=CL_MENU
-@caption Üldkaust
+@caption &Uuml;ldkaust
 
 @reltype CALENDAR value=11 clid=CL_PLANNER
 @caption Kalender
 
 @reltype ETTEVOTLUSVORM_CAT value=12 clid=CL_MENU
-@caption Õiguslike vormide kaust
+@caption &Otilde;iguslike vormide kaust
 
 @reltype FORMS  value=13 clid=CL_CFGFORM
 @caption Sisestusvormid
@@ -243,12 +243,12 @@ class crm_db extends class_base
 		));
 		$t->define_field(array(
 			"name" => "field",
-			"caption" => t("Põhitegevus"),
+			"caption" => t("P&otilde;hitegevus"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "ettevotlusvorm",
-			"caption" => t("Õiguslik vorm"),
+			"caption" => t("&Otilde;iguslik vorm"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
@@ -293,7 +293,7 @@ class crm_db extends class_base
 	}
 
 	function company_table($arr)
-	{//arr("kräpp");
+	{//arr("kr2pp");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_company_table(&$t);
 
