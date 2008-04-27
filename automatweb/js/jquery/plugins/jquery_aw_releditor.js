@@ -91,6 +91,8 @@ jQuery.aw_releditor = function(arr) {
 				s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();
 				s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
 				data = s_form_extension+"&"+s_form_extension_class_info+"&"+arr["releditor_name"]+"_delete_index="+_get_delete_index($(this).attr("name"));
+				s_form_cfgform = $("[name^=cfgform][type=hidden]").serialize();
+	                        data = s_form_cfgform.length>0 ? data+"&"+s_form_cfgform : data;
 				data += "&id="+arr["id"];
 				$.ajax({
 					type: "POST",
@@ -134,7 +136,9 @@ jQuery.aw_releditor = function(arr) {
 		s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();
 		data = s_form_extension.length>0 ? s_form+"&"+s_form_extension : s_form;
 		s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
+		s_form_cfgform = $("[name^=cfgform][type=hidden]").serialize();
 		data = s_form_extension_class_info.length>0 ? data+"&"+s_form_extension_class_info : data;
+		data = s_form_cfgform.length>0 ? data+"&"+s_form_cfgform : data;
 		data += "&id="+arr["id"];
 		$.ajax({
 			type: "POST",

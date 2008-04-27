@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.126 2008/04/27 15:59:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.127 2008/04/27 16:37:49 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -32,8 +32,6 @@ class releditor extends core
 		if ($arr["new"])
 		{
 			return '<div id="releditor_'.$this->elname.'_table_wrapper"></div>';
-			$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $arr["prop"]["name"]);
-			return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>";
 		}
 
 		$htmlclient = get_instance("cfg/htmlclient");
@@ -1659,7 +1657,6 @@ class releditor extends core
 	**/
 	function handle_js_submit($arr)
 	{
-//	die(dbg::dump($_GET).dbg::dump($_POST));
 		$propn = null;
 		foreach($arr as $k => $d)
 		{
@@ -1677,7 +1674,7 @@ class releditor extends core
 		$num = reset(array_keys($arr[$propn]));
 
 		$t = new aw_table;
-		$this->_init_js_rv_table($t, $clid, $propn, $arr[$propn][$num], $num);
+		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 
 		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
 		foreach($arr[$propn][$num] as $k => $v)
@@ -1703,7 +1700,7 @@ class releditor extends core
 
 			$clss = aw_ini_get("classes");
 
-			$row = $prev_dat[$num];
+			$row = safe_array($prev_dat[$num]);
 			$row["class"] = basename($clss[$this->_get_related_clid($clid, $propn)]["file"]);
 			$row["action"] = "submit";
 			$row["parent"] = $arr["id"];
@@ -1737,7 +1734,7 @@ class releditor extends core
 		return $cur_props[$propn];
 	}
 
-	private function _init_js_rv_table($t, $clid, $propn)
+	private function _init_js_rv_table($t, $clid, $propn, $cfgform_id = null)
 	{
 		if ($this->all_props)
 		{
@@ -1749,6 +1746,18 @@ class releditor extends core
 			$rel_props = $this->_get_props_from_clid($rel_clid);
 		}
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
+		if ($this->can("view", $cfgform_id))
+		{
+			$cfo = obj($cfgform_id);
+			$cf = get_instance(CL_CFGFORM);
+			$props = $cf->get_cfg_proplist($cfgform_id);
+			$cur_prop = $props[$propn];
+
+			if ($this->can("view", $cur_prop["cfgform_id"]))
+			{
+				$rel_props = $cf->get_cfg_proplist($cur_prop["cfgform_id"]);
+			}
+		}
 
 		if ($this->loaded_from_cfgform)
 		{
@@ -1764,7 +1773,10 @@ class releditor extends core
 		{
 			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 			{
-				$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
+				if (isset($rel_props[$prop_name]))
+				{
+					$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
+				}
 			}
 		}
 		$t->define_field(array(
@@ -1836,6 +1848,20 @@ class releditor extends core
 					if (is_oid($pv["value"]))
 					{
 						$d[$prop_name] = "";
+					}
+					else
+					if (is_array($pv["value"]))
+					{
+						$strs = array();
+						foreach($pv["value"] as $item)
+						{
+							if ($this->can("view", $item))
+							{
+								$tmp = obj($item);
+								$strs[] = parse_obj_name($tmp->name());
+							}
+						}
+						$d[$prop_name] = join(", ", $strs);
 					}
 					else
 					{
@@ -2000,7 +2026,7 @@ class releditor extends core
 		}
 
 		$t = new aw_table;
-		$this->_init_js_rv_table($t, $clid, $propn);
+		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 
 		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
