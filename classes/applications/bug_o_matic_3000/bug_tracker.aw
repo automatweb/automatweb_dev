@@ -856,7 +856,7 @@ class bug_tracker extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_complete_table($t);
-		$cur_u = get_current_user();
+		$cur_u = aw_global_get("uid");
 		$ol = new object_list(array(
 			"class_id" => CL_BUG,
 			"bug_status" => 3,
