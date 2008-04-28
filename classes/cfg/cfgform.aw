@@ -957,7 +957,7 @@ class cfgform extends class_base
 		// fix old cfgform objects where cfg_proplist contained only configured attributes
 		$tmp = reset($this->cfg_proplist);
 
-		if (empty($tmp["type"]))
+		if (!$obj->meta("cfg_proplist_format_updated"))
 		{
 			foreach ($this->cfg_proplist as $name => $cfg)
 			{
@@ -965,6 +965,7 @@ class cfgform extends class_base
 			}
 
 			$obj->set_meta("cfg_proplist", $this->cfg_proplist);
+			$obj->set_meta("cfg_proplist_format_updated", "1");
 			$obj->save();
 		}
 	}
