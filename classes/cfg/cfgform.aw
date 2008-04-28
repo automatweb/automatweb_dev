@@ -955,13 +955,14 @@ class cfgform extends class_base
 		$this->layout = $this->cfg_layout = safe_array($obj->meta("cfg_layout"));
 
 		// fix old cfgform objects where cfg_proplist contained only configured attributes
-		$tmp = reset($this->cfg_proplist);
-
 		if (!$obj->meta("cfg_proplist_format_updated"))
 		{
 			foreach ($this->cfg_proplist as $name => $cfg)
 			{
-				$this->cfg_proplist[$name] = $this->cfg_proplist[$name] + $this->all_props[$name];
+				if(is_array($this->cfg_proplist[$name]) and is_array($this->all_props[$name]))
+				{
+					$this->cfg_proplist[$name] = $this->cfg_proplist[$name] + $this->all_props[$name];
+				}
 			}
 
 			$obj->set_meta("cfg_proplist", $this->cfg_proplist);
