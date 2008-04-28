@@ -51,6 +51,14 @@
             <caption>Autori e-post</caption>
       </property>
       <property>
+            <name>ip</name>
+            <table>forum_topics</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>ip</field>
+            <caption>IP</caption>
+      </property>
+      <property>
             <name>locked</name>
             <table>forum_topics</table>
             <group>general</group>

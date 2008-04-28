@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.26 2008/01/31 13:52:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.27 2008/04/28 12:15:48 robert Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1 maintainer=dragut
@@ -26,6 +26,9 @@
 
 	@property author_email type=textbox table=forum_topics field=author_email
 	@caption Autori e-post
+
+	@property ip type=textbox table=forum_topics field=ip
+	@caption IP
 
 	@property locked type=checkbox ch_value=1 table=forum_topics field=locked
 	@caption Teema lukus
@@ -104,12 +107,18 @@ class forum_topic extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "ip":
+				if (empty($prop["value"]))
+				{
+					$prop["value"] = aw_global_get("REMOTE_ADDR");
+				};
+				break;
 			case "name":
 			case "author_name":
 			case "author_email":
 				if (empty($prop["value"]))
 				{
-					$prop["error"] = $prop["caption"] . " ei tohi olla tühi!";
+					$prop["error"] = $prop["caption"] . " ei tohi olla t&uuml;hi!";
 					$retval = PROP_FATAL_ERROR;
 				};
 
@@ -117,7 +126,7 @@ class forum_topic extends class_base
 			case "comment":
 				if (empty($prop["value"]))
 				{
-					$prop["error"] = $prop["caption"] . " ei tohi olla tühi!";
+					$prop["error"] = $prop["caption"] . " ei tohi olla t&uuml;hi!";
 					$retval = PROP_FATAL_ERROR;
 				};
 
@@ -242,6 +251,7 @@ class forum_topic extends class_base
 					break;
 				case "author_name":
 				case "author_email":
+				case "ip":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
 						"type" => "varchar(200)"

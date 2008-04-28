@@ -1762,6 +1762,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			"date" => $this->time2date($topic_obj->created(),2),
 			"comment" => $this->_filter_output($topic_obj->comment()),
 			"topic_image1" => $this->get_image_tag(array("id" => $topic_obj->id())),
+			"topic_ip" => $topic_obj->prop("ip"),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",$path),
 			"CHANGED" => $changed,
