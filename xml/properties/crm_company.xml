@@ -515,6 +515,16 @@
             <caption>Kirjavahetuse aadress</caption>
       </property>
       <property>
+            <name>classif1</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>classificator</type>
+            <store>connect</store>
+            <reltype>RELTYPE_METAMGR</reltype>
+            <field>classif1</field>
+            <caption>Asutuse omadused</caption>
+      </property>
+      <property>
             <name>userta1</name>
             <table>objects</table>
             <group>add_info</group>
@@ -4074,7 +4084,7 @@
             </CONTENT_DOCS_FOLDER>
             <METAMGR>
                   <value>49</value>
-                  <clid>CL_METAMGR</clid>
+                  <clid>CL_META</clid>
                   <caption>Muutujate haldur</caption>
             </METAMGR>
             <FIELD>

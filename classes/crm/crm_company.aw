@@ -196,8 +196,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property correspond_address type=relpicker reltype=RELTYPE_CORRESPOND_ADDRESS table=objects field=meta method=serialize
 	@caption Kirjavahetuse aadress
 
-	property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
-	caption Asutuse omadused
+	@property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
+	@caption Asutuse omadused
 
 	@property userta1 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 1
@@ -1353,7 +1353,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype CONTENT_DOCS_FOLDER value=48 clid=CL_DOCUMENT
 @caption uudiste kataloog
 
-@reltype METAMGR value=49 clid=CL_METAMGR
+@reltype METAMGR value=49 clid=CL_META
 @caption Muutujate haldur
 
 @reltype FIELD value=50 clid=CL_CRM_FIELD_ACCOMMODATION,CL_CRM_FIELD_FOOD,CL_CRM_FIELD_ENTERTAINMENT,CL_CRM_FIELD_CONFERENCE_ROOM
@@ -3686,9 +3686,9 @@ class crm_company extends class_base
 			{
 				$bdis = 1;
 				$p = obj($oid);
-				$contacts = array(); 	 
-				foreach($p->connections_from(array("type" => 16)) as $conn) 	 
-				{ 	 
+				$contacts = array();
+				foreach($p->connections_from(array("type" => 16)) as $conn)
+				{
 					$wcon_wrel = $conn->to();
 					if($wcon_wrel->prop("org.name"))
 					{
@@ -3701,7 +3701,7 @@ class crm_company extends class_base
 				}
 				if($p->prop("email.mail"))
 				{
-					$contacts[] = $p->prop("email.mail"); 	 
+					$contacts[] = $p->prop("email.mail");
 				}
 				$this->vars(array(
 					"name" => html::obj_change_url($p->id(),$p->name()),
