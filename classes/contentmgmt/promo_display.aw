@@ -231,10 +231,6 @@ if ($_GET["PROMO_DBG"] == 1)
 				$pr_c = "";
 				global $awt;
 				$awt->start("def-doc");
-				if ($o->prop("trans_all_langs"))
-				{
-					obj_set_opt("no_cache", 1);
-				}
 
 				if ($o->prop("is_dyn"))
 				{
@@ -291,10 +287,6 @@ if ($_GET["PROMO_DBG"] == 1)
 {
 	echo "3promo = ".$o->id()." show = ".dbg::dump($docid)." <br>";
 }
-				if ($o->prop("trans_all_langs"))
-				{
-					obj_set_opt("no_cache", 0);
-				}
 				$awt->stop("def-doc");
 
 if ($_GET["PROMO_DBG"] == 1)

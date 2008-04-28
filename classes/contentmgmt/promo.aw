@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.110 2008/03/13 13:26:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.111 2008/04/28 13:59:33 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -608,17 +608,9 @@ class promo extends class_base implements main_subtemplate_handler
 		}
 
 		$ss = get_instance("contentmgmt/site_show");
-		if ($ob->prop("trans_all_langs"))
-		{
-			obj_set_opt("no_cache", 1);
-		}
 		$def = new aw_array($ss->get_default_document(array(
 			"obj" => obj($alias["target"])
 		)));
-		if ($ob->prop("trans_all_langs"))
-		{
-			obj_set_opt("no_cache", 0);
-		}
 
 		if ($ob->prop("sort_by"))
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.145 2008/03/04 11:19:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.146 2008/04/28 13:59:24 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -2162,9 +2162,6 @@ class planner extends class_base
 			$params["class_id"] = $this->event_entry_classes;
 		}
 		
-		/*obj_set_opt("no_cache", 1);
-		$GLOBALS["DUKE"] = 1;
-		*/
 		$event_ol = new object_list($params);
 
 		if($event_ol->count() == 0)
@@ -2172,9 +2169,6 @@ class planner extends class_base
 			return $event_ol;
 		}
 
-		/*obj_set_opt("no_cache", 0);
-		$GLOBALS["DUKE"] = 0;
-		*/
 		//Now lets get orginal objects ,not brothers
 		foreach ($event_ol->arr() as $item)
 		{

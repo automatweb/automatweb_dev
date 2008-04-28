@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.69 2008/04/23 08:46:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.70 2008/04/28 13:59:35 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1176,9 +1176,6 @@ class join_site extends class_base
 	**/
 	function submit_join_form($arr)
 	{
-//		$GLOBALS["INTENSE_DUKE"] = 1;
-		obj_set_opt("no_cache", 1);
-
 		$obj = obj($arr["id"]);
 
 		if (strpos($obj->prop("username_element"), "_") !== false)

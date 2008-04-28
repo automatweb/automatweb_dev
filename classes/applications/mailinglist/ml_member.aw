@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.24 2008/04/24 14:42:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.25 2008/04/28 13:59:28 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -423,7 +423,6 @@ class ml_member extends class_base
 
 	function on_disconnect_work_relation_from_email($arr)
 	{
-		obj_set_opt("no_cache", 1);
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_ML_MEMBER)

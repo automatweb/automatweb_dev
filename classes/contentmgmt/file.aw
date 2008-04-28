@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.2 2008/02/21 11:56:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.3 2008/04/28 13:59:33 kristo Exp $
 /*
 
 
@@ -148,7 +148,6 @@ class file extends class_base
 	// !Konstruktor
 	function file()
 	{
-		//obj_set_opt("no_cache", 1);
 		$this->init(array(
 			"clid" => CL_FILE,
 			"tpldir" => "file",

@@ -1309,7 +1309,6 @@ class user extends class_base
 		$umail = $o->prop("email");
 		$uname = $o->prop("real_name");
 
-		$prev = obj_set_opt("no_cache", 1);
 		if($mail = $o->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 		{
 			if ($mail->class_id() != CL_ML_MEMBER)
@@ -1318,7 +1317,6 @@ class user extends class_base
 				$this->on_save_user($arr);
 				return;
 			}
-			obj_set_opt("no_cache", $prev);
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);
 			$mail->set_name($uname." &lt;".$umail."&gt;");
@@ -1326,7 +1324,6 @@ class user extends class_base
 		}
 		else
 		{
-			obj_set_opt("no_cache", $prev);
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
 			$p = obj($this->get_person_for_user($o));
@@ -1425,13 +1422,11 @@ class user extends class_base
 	**/
 	function get_person_for_user(object $u)
 	{
-		obj_set_opt("no_cache", 1);
 		aw_disable_acl();
 		$person_c = $u->connections_from(array(
 			"type" => "RELTYPE_PERSON",
 		));
 		$person_c = reset($person_c);
-		obj_set_opt("no_cache", 0);
 
 		if (!$person_c)
 		{
@@ -1509,19 +1504,16 @@ class user extends class_base
 	function get_company_for_person($person)
 	{
 		aw_disable_acl();
-		obj_set_opt("no_cache", 1);
 		$p_o = obj($person);
 		if ($this->can("view", $p_o->prop("work_contact")))
 		{
 			aw_restore_acl();
-			obj_set_opt("no_cache", 0);
 			return $p_o->prop("work_contact");
 		}
 		$cons = $p_o->connections_from(array(
 			"type" => "RELTYPE_WORK",
 		));
 		$org_c = reset($cons);
-		obj_set_opt("no_cache", 0);
 		if (!$org_c)
 		{
 			$uo = obj(aw_global_get("uid_oid"));
@@ -1928,10 +1920,8 @@ class user extends class_base
 
 	function on_save_addr($arr)
 	{
-		$prev = obj_set_opt("no_cache", 1);
 		$ml_m = obj($arr["oid"]);
 		$c = reset($ml_m->connections_to(array("from.class_id" => CL_USER, "type" => 6)));
-		obj_set_opt("no_cache", $prev);
 
 		if (!$c)
 		{
@@ -1958,8 +1948,6 @@ class user extends class_base
 	**/
 	function on_delete_user($arr)
 	{
-		obj_set_opt("no_cache", 1);
-
 		$u = get_instance("users");
 
 		aw_disable_acl();
@@ -2019,8 +2007,6 @@ class user extends class_base
 		aw_disable_acl();
 		$user->delete(true);
 		aw_restore_acl();
-
-		obj_set_opt("no_cache", 0);
 
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");

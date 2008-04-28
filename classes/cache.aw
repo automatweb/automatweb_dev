@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.57 2008/03/31 09:57:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.58 2008/04/28 13:59:14 kristo Exp $
 
 /*
 @classinfo  maintainer=kristo
@@ -304,7 +304,7 @@ class cache extends core
 	**/
 	function file_set_pt_oid($pt, $oid, $fn, $cont)
 	{
-		//echo "file_set_pt_oid pt = $pt ,oid =  $oid, fn = $fn <br>";
+//		echo "file_set_pt_oid pt = $pt ,oid =  $oid, fn = $fn from ".dbg::short_backtrace()."<br>";
 		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $cont);
 	}
 
@@ -579,7 +579,7 @@ class cache extends core
 		$of = substr($oid, -1, 1);
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$of;
 		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".$of."_".gen_uniq_id();
-
+//echo "rename $fq => $nn <br>";
 		rename($fq, $nn);
 
 		// recreate

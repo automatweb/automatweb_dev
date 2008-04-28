@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.21 2008/04/10 13:37:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.22 2008/04/28 13:59:40 kristo Exp $
 // phone.aw - Telefon
 /*
 
@@ -117,7 +117,6 @@ class crm_phone extends class_base
 
 	function on_disconnect_work_relation_from_phone($arr)
 	{
-		obj_set_opt("no_cache", 1);
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PHONE)

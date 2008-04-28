@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.44 2008/01/31 10:48:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.45 2008/04/28 13:59:31 kristo Exp $
 // procurement_center.aw - Hankekeskkond
 /*
 
@@ -4201,10 +4201,6 @@ class procurement_center extends class_base
 		$ol2 = new object_list($filter2);
 		$ol->add($ol2);
 
-		//arr($filter);
-// 		obj_set_opt("no_cache", 1);
-// 				$GLOBALS["DUKE"] =1;
-// 		arr($ol);
 		foreach($ol->arr() as $o)
 		{
 			$deal_no = $o->prop("deal_no");

@@ -99,9 +99,7 @@ class crm_user_creator extends core
 	function _check_company_group($co)
 	{
 		// info on group creation is stored in company as relation
-		obj_set_opt("no_cache", 1);
 		$grp = $co->get_first_obj_by_reltype("RELTYPE_GROUP"); // CRM_COMPANY__RELTYPE_GROUP
-		obj_set_opt("no_cache", 0);
 		if (!$grp)
 		{
 			// create group under group folder
@@ -166,9 +164,7 @@ class crm_user_creator extends core
 			}
 
 			// check of the object has a group relation
-			obj_set_opt("no_cache", 1);
 			$grp = $o->get_first_obj_by_reltype("RELTYPE_GROUP");
-			obj_set_opt("no_cache", 0);
 			if (!$grp)
 			{
 				// if not, create the group

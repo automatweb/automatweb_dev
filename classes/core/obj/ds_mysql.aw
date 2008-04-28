@@ -805,7 +805,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function save_properties($arr)
 	{
 		extract($arr);
-
 		if ($arr["create_new_version"] == 1)
 		{
 			return $this->save_properties_new_version($arr);

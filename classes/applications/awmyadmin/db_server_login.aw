@@ -70,12 +70,30 @@ class db_server_login extends class_base
 		return true;
 	}
 
+	/** Returns the hostname from the server conf
+		@attrib api=1 params=pos
+
+		@param oid required type=string
+			The objct to read the host from
+
+		@returns
+			hostname of the server
+	**/
 	function get_host($oid)
 	{
 		$ob = obj($oid);
 		return $ob->prop('server_host');
 	}
 
+	/** Returns the database type from the server conf
+		@attrib api=1 params=pos
+
+		@param oid required type=string
+			The objct to read the db driver from
+
+		@returns
+			database driver to the server
+	**/
 	function get_host_driver($oid)
 	{
 		$ob = obj($oid);

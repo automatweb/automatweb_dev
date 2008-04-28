@@ -2025,6 +2025,7 @@ no_cache - 1/0 - if 1, ds_cache is not used even if it is loaded
 **/
 function obj_set_opt($opt, $val)
 {
+//echo "set opt $opt => $val from ".dbg::short_backtrace()." <br>";
 	$tmp = null;
 	if (!isset($GLOBALS['__obj_sys_opts']))
 	{

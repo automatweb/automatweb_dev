@@ -1,14 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.8 2007/12/06 14:32:46 kristo Exp $
-
 /*
+@classinfo no_status=1 no_comment=1 maintainer=kristo
 
-	@classinfo no_status=1 no_comment=1 maintainer=kristo
-
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
 
 	@property db_base type=relpicker reltype=RELTYPE_DB_LOGIN
 	@caption Vali andmebaas

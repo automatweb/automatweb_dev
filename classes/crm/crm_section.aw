@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.31 2008/01/31 13:54:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.32 2008/04/28 13:59:40 kristo Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -362,7 +362,6 @@ class crm_section extends class_base
 	// .. this will then remove the opposite connection as well if one exists
 	function on_disconnect_org_from_section($arr)
 	{
-		obj_set_opt("no_cache", 1);
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_SECTION)

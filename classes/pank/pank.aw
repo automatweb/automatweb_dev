@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.11 2008/04/15 07:08:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.12 2008/04/28 13:59:43 kristo Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes maintainer=kristo
@@ -602,14 +602,12 @@ class pank extends class_base
 		$parent = $this->get_account_for_obj($arr['parent']);
 
 		//let's list the accounts
-		obj_set_opt('no_cache',1);
 		$ol = new object_list(array(
 					'parent' => $parent->id(),
 					'class_id' => CL_TRANSACTION,
 					'is_completed' => 1,
 					'sort_by' => 'pank_transaction.time asc',
 		));
-		obj_set_opt('no_cache',0);
 	
 		$trans = get_instance(CL_TRANSACTION);
 

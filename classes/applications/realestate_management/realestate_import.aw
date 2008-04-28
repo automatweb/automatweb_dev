@@ -250,8 +250,6 @@ class realestate_import extends class_base
 		ini_set("memory_limit", $memory_limit);
 		ini_set ("max_execution_time", "3600");
 		ini_set ("ignore_user_abort", "1");
-		aw_global_set ("no_cache_flush", 1);
-		obj_set_opt ("no_cache", 1);
 		$status = REALESTATE_IMPORT_OK;
 		$quiet = isset($arr["quiet"]) ? (int) $arr["quiet"] : 0;
 

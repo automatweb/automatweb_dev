@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.14 2008/03/13 20:30:42 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.15 2008/04/28 13:59:36 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -113,10 +113,6 @@ class aw_code_analyzer extends class_base
 						$this->handle_variable_ref($token);
 						break;
 
-					/*case T_NEW:
-						$this->assert_fail($token);
-						break;*/
-
 					case T_RETURN:
 						$this->handle_return();
 						break;
@@ -152,7 +148,6 @@ class aw_code_analyzer extends class_base
 		if (is_array($ret))
 		{
 			list($id, $str) = $ret;
-			//echo "token: ".token_name($id)." str = ".htmlentities($str)." , line = ".$this->cur_line."<br>";
 			$this->cur_line += substr_count($str, "\n");
 			if ($id == T_WHITESPACE && $ws == false)
 			{
@@ -161,11 +156,8 @@ class aw_code_analyzer extends class_base
 		}
 		else
 		{
-			//echo "str: ".htmlentities($ret)." , line = ".$this->cur_line."<Br>";
 			$this->cur_line += substr_count($ret, "\n");
 		}
-		// short dbg bt
-		//echo $this->_dbg_backtrace()." <br>";;
 		return $ret;
 	}
 
@@ -296,7 +288,6 @@ class aw_code_analyzer extends class_base
 		$this->assert($name_t, T_STRING);
 		list($name_id, $name) = $name_t;
 		$this->current_class = $name;
-//echo "in handle class begin $name <br>";
 		$this->data["classes"][$name] = array();
 		$this->data["classes"][$name]["name"] = $name;
 		$this->data["classes"][$this->current_class]["start_line"] = $this->get_line();
@@ -372,16 +363,13 @@ class aw_code_analyzer extends class_base
 	function handle_brace_begin()
 	{
 		$this->brace_level++;
-		//echo "brace begin, level = ".$this->brace_level." <br>";
 	}
 
 	function handle_brace_end()
 	{
-		//echo "brace end, level = ".$this->brace_level." <br>";
 		$this->brace_level--;
 		if ($this->in_class && $this->brace_level == $this->class_start_level)
 		{
-			//echo "cur level == class start level (".$this->class_start_level.") so end class <br>";
 			if ($this->in_function)
 			{
 				// this is for interfaces with no function bodies
@@ -392,7 +380,6 @@ class aw_code_analyzer extends class_base
 
 		if ($this->in_function && $this->brace_level == $this->function_start_level)
 		{
-			//echo "cur level == func start level (".$this->function_start_level.") so end func<br>";
 			$this->handle_function_end();
 		}
 	}
@@ -493,8 +480,6 @@ class aw_code_analyzer extends class_base
 
 			// possible sequence var [= type]|[,]|[)]
 			$next = $this->get();
-//			echo "next = ";
-//			$this->dump_tok($next);
 			if (!is_array($next) && $next == "=")
 			{
 				// default value
@@ -843,18 +828,15 @@ class aw_code_analyzer extends class_base
 		$len = strlen($str);
 		for ($i = 0; $i < $len; $i++)
 		{
-//			echo "i = $i, char = ".$str{$i}." <br>";
 			if ($in_att_name)
 			{
 				if ($str{$i} == "=")
 				{
-//					echo "in_att_name found eq <br>";
 					$in_att_name = false;
 					$in_att_value = true;
 				}
 				else
 				{
-//					echo "in att name add <br>";
 					$cur_att_name .= $str{$i};
 				}
 			}
@@ -863,20 +845,17 @@ class aw_code_analyzer extends class_base
 			{
 				if ($str{$i} == "\"" && trim($cur_att_value) == "")
 				{
-//					echo "in att value begin quoted <br>";
 					$att_val_quoted = true;
 				}
 
 				$end_value = false;
 				if ($att_val_quoted && $str{$i} == "\"" && trim($cur_att_value) != "")
 				{
-//					echo "att val found end quoted cur att = $cur_att_value <br>";
 					$end_value = true;
 				}
 				else
 				if ($att_val_quoted == false && $str{$i} == " ")
 				{
-//					echo "att val found end not quoted cur att = $cur_att_value <br>";
 					$end_value = true;
 				}
 
@@ -890,7 +869,6 @@ class aw_code_analyzer extends class_base
 					{
 						$ret[trim($cur_att_name)] = $cur_att_value;
 					}
-//					echo "att val ended att $cur_att_name => $cur_att_value <br>";
 					$in_att_value = false;
 					$att_val_quoted = false;
 					$cur_att_name = "";
@@ -898,7 +876,6 @@ class aw_code_analyzer extends class_base
 				}
 				else
 				{
-//					echo "add to cur att value ".$str{$i}." cur val = $cur_att_value<br>";
 					$cur_att_value .= $str{$i};
 				}
 			}
@@ -906,7 +883,6 @@ class aw_code_analyzer extends class_base
 			{
 				if ($str{$i} != " ")
 				{
-//					echo "not space, start new att <Br>";
 					$in_att_name = true;
 					$cur_att_name = $str{$i};
 				}
@@ -949,8 +925,6 @@ class aw_code_analyzer extends class_base
 				$is_var = false;
 
 				$cln = $this->get();
-				//echo "cln: <br>";
-				//$this->dump_tok($cln, false);
 				switch($cln[0])
 				{
 					case T_CONSTANT_ENCAPSED_STRING:
@@ -1147,9 +1121,12 @@ class aw_code_analyzer extends class_base
 	function handle_variable_ref($v_tok)
 	{
 		$nxt = $this->get();
-		/*echo "handle var ref on line ".$this->get_line()." =<br>";
+	/*	echo "handle var ref on line ".$this->get_line()." v_tok =<br>";
 		$this->dump_tok($v_tok, false);
-		$this->dump_tok($nxt, false);*/
+		echo "nxt = ";
+		$this->dump_tok($nxt, false);
+		echo "dong<br>";*/
+
 		if (!is_array($nxt) && $nxt == "{")	// this is $a{4} string position handler
 		{
 			$this->handle_brace_begin();
@@ -1166,6 +1143,9 @@ class aw_code_analyzer extends class_base
 			// check if it is a funcall or object variable ref
 			$osnm = $this->get();
 			$ttt = $this->get();
+//echo "osnm = ";$this->dump_tok($osnm, false);
+//echo "ttt = ";$this->dump_tok($ttt, false);
+
 			/*if (!is_array($ttt) && $ttt == "=")
 			{
 				$this->back();
@@ -1173,6 +1153,14 @@ class aw_code_analyzer extends class_base
 				return;
 			}*/
 
+			// track $this->var settings
+			if (is_array($osnm) && $osnm[0] == T_STRING && $v_tok[1] == "\$this" && !(!is_array($ttt) && ($ttt == "(" || $ttt == ")" || $ttt == ",")))
+			{
+				$tmp = $v_tok;
+				$tmp[1] = $v_tok[1]."->".$osnm[1];
+				$this->handle_variable_assign($tmp, array());
+			}
+			else
 			if (!is_array($ttt) && $ttt == "(")
 			{
 				if ($v_tok[1] == "\$this")
@@ -1243,6 +1231,16 @@ class aw_code_analyzer extends class_base
 						}
 					}
 				}
+			}
+			else
+			if (false && $v_tok[1] == "\$this" && $nxt[0] == T_OBJECT_OPERATOR)
+			{
+				$var_name = $v_tok[1]."->".$osnm[1];
+				$this->add_track_var($var_name,array(
+					"type" => "unknown",
+					"class" => "unknown",
+					"assigned_at" => $this->get_line(),
+				));
 			}
 		}
 	}
@@ -1371,9 +1369,17 @@ class aw_code_analyzer extends class_base
 	{
 		// get the expression until end of statement (;)
 		// and give it to a generic expression parser that tries to deduct the return type
-
 		// right now just check for get_instance as the next token
 		$tok = $this->get();
+
+/*echo "enter handle_variable_assign var_tok =";
+$this->dump_tok($var_tok, false);
+echo "eq_tok = ";
+$this->dump_tok($eq_tok, false);
+echo "tok = ";
+$this->dump_tok($tok, false);
+echo "ding<br>";*/
+
 		if ($tok[0] == T_STRING && $tok[1] == "get_instance")
 		{
 			$opb = $this->get();
@@ -1428,17 +1434,17 @@ class aw_code_analyzer extends class_base
 		if ($tok[0] == T_VARIABLE)
 		{
 			$this->save_bm2();
-			//echo "dmn, in var assign got asigned val from as variable, $tok[1] <br>";
+//			echo "dmn, in var assign got asigned val from as variable, $tok[1] <br>";
 			//$this->dump_tok($tok, false);
 			$this->handle_variable_ref($tok);
 			$this->restore_bm2();
 
 			$this->back();
 			$this->save_bm();
-
+//echo "handling t variable <br>";
 			$this->get();
 			$nxt = $this->get();
-			//$this->dump_tok($nxt, false);
+	//		$this->dump_tok($nxt, false)."<br><br>";
 			if ($nxt[0] == T_OBJECT_OPERATOR)
 			{
 				$vn = $this->get();
@@ -1478,8 +1484,52 @@ class aw_code_analyzer extends class_base
 					}
 				}
 			}
-
+			else
+			if (!is_array($nxt) && $nxt == ";")
+			{
+				// track the assigned var
+				$assigned = $this->get_track_var($tok[1]);
+				if ($assigned)
+				{
+					$this->add_track_var($var_tok[1],array(
+						"type" => $assigned["type"],
+						"class" => $assigned["class"],
+						"assigned_at" => $this->get_line(),
+						"parameters" => $assigned["parameters"]
+					));
+				}
+			}
 			$this->restore_bm();
+		}
+		else
+		if ($tok[0] == T_CONSTANT_ENCAPSED_STRING || $tok[0] == T_LNUMBER)
+		{
+			$this->add_track_var($var_tok[1],array(
+				"type" => "const",
+				"class" => "string",
+				"assigned_at" => $this->get_line(),
+				"parameters" => array("value" => $tok[1])
+			));
+		}
+		else
+		if ($tok[0] == T_ARRAY)
+		{
+			$defval = $this->read_const_array_def();
+			$this->add_track_var($var_tok[1],array(
+				"type" => "const",
+				"class" => "array",
+				"assigned_at" => $this->get_line(),
+				"parameters" => array("value" => $defval)
+			));
+		}
+		else
+		{
+			// unknown value for var
+			$this->add_track_var($var_tok[1],array(
+				"type" => "undefined",
+				"class" => "undefined",
+				"assigned_at" => $this->get_line(),
+			));
 		}
 	}
 

@@ -1,5 +1,5 @@
 	<?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.36 2008/04/21 12:04:32 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.37 2008/04/28 13:59:29 kristo Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -821,7 +821,6 @@ die($fdat);
 		$persons = array();
 
 		print t("creating person objects<br>");
-		obj_set_opt("no_cache",1);
 		$persons_per_batch = 10;
 		$batchcounter = 0;
 

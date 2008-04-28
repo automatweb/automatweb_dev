@@ -24,6 +24,12 @@
 
 @reltype CONF value=1 clid=CL_DB_VIEW_CONF
 @caption konfiguratsioon
+
+@reltype SQL value=2 clid=CL_DB_SQL_QUERY
+@caption p&auml;ringute objekt
+
+@reltype ADMIN value=3 clid=CL_DB_TABLE_admin
+@caption administreerimise objekt
 */
 
 class db_server_explorer extends class_base
@@ -268,7 +274,7 @@ class db_server_explorer extends class_base
 
 		$arr["prop"]["vcl_inst"]->set_caption(
 			$arr["prop"]["vcl_inst"]->get_caption()." ".
-			sprintf(t("| vaata: %s / %s / %s "), 
+			sprintf(t("| vaata: %s / %s / %s / %s"), 
 				html::href(array(
 					"url" => aw_url_change_var("type", "admin"),
 					"caption" => t("Struktuur")
@@ -280,9 +286,32 @@ class db_server_explorer extends class_base
 				html::href(array(
 					"url" => aw_url_change_var("type", "content"),
 					"caption" => t("Sisu")
+				)),
+				html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $this->_find_sql_id($arr["obj_inst"]), 
+						"return_url" => get_ru(),
+						"db_base" => $arr["request"]["db_id"],
+						"table" => $arr["request"]["table"]
+					), CL_DB_SQL_QUERY),
+					"caption" => t("SQL")
 				))
 			)
 		);
+	}
+
+	private function _find_sql_id(object $o)
+	{
+		$res = $o->get_first_obj_by_reltype("RELTYPE_SQL");
+		if (!$res)
+		{
+			$res = obj();
+			$res->set_parent($o->id());
+			$res->set_class_id(CL_DB_SQL_QUERY);
+			$res->save();
+			$o->connect(array("to" => $res->id(), "type" => "RELTYPE_SQL"));
+		}
+		return $res->id();
 	}
 
 	private function _sht_do_admin($arr)

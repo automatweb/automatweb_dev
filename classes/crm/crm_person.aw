@@ -4822,14 +4822,12 @@ class crm_person extends class_base
 	**/
 	function has_user($o)
 	{
-		$prev = obj_set_opt("no_cache", 1);
 		$c = new connection();
 		$res = $c->find(array(
 			"to" => $o->id(),
 			"from.class_id" => CL_USER,
 			"type" => 2 // CL_USER.RELTYPE_PERSON
 		));
-		obj_set_opt("no_cache", $prev);
 
 		if (count($res))
 		{

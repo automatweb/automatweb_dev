@@ -648,8 +648,6 @@ class object_import extends class_base
 		{
 			aw_set_exec_time(AW_LONG_PROCESS);
 			ignore_user_abort(true);
-			aw_global_set("no_cache_flush", 1);
-			obj_set_opt("no_cache", 1);
 			ini_set("memory_limit", "500M");
 			if (aw_ini_get("object_import.uid") && aw_global_get("uid") == "")
 			{
@@ -842,12 +840,7 @@ class object_import extends class_base
 						}
 					}
 				}
-				//obj_set_opt("no_cache", 1);
-				//$GLOBALS["INTENSE_DUKE"] = 1;
-				//$GLOBALS["O_T"] = 1;
 				$dat->save();
-				//obj_set_opt("no_cache", 1);
-				//$GLOBALS["INTENSE_DUKE"] = 1;
 				echo sprintf(t("importisin objekti %s (%s) kataloogi %s <br>\n"), $dat->name(),$dat->id(),$dat->parent());
 				flush();
 				if (($line_n % 10) == 1)

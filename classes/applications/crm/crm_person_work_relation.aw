@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.18 2008/04/28 07:19:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.19 2008/04/28 13:59:25 kristo Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -169,7 +169,6 @@ class crm_person_work_relation extends class_base
 
 	function on_disconnect_phone_from_work_relation($arr)
 	{
-		obj_set_opt("no_cache", 1);
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON_WORK_RELATION)
@@ -186,7 +185,6 @@ class crm_person_work_relation extends class_base
 
 	function on_disconnect_email_from_work_relation($arr)
 	{
-		obj_set_opt("no_cache", 1);
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON_WORK_RELATION)

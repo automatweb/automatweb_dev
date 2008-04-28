@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.6 2008/04/23 10:32:07 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.7 2008/04/28 13:59:37 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -595,7 +595,6 @@ die();
 			// create default group
 			$this->dc = $dbi->dc;
 
-			obj_set_opt("no_cache", 1);
 			echo "adding groups... <br>\n";
 			flush();
 
@@ -868,8 +867,6 @@ die();
 		}
 		else
 		{
-			//obj_set_opt("no_cache", 1);
-			//$GLOBALS["DUKE"] = 1;
 			$c = new connection();
 			$conns = $c->find(array(
 				"from.class_id" => CL_USER,

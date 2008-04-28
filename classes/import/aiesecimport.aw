@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.4 2008/01/31 13:54:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/aiesecimport.aw,v 1.5 2008/04/28 13:59:40 kristo Exp $
 // aiesecimport.aw - Aiesec import 
 /*
 
@@ -488,8 +488,6 @@ class aiesecimport extends class_base
 	function do_import($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1412,8 +1410,6 @@ class aiesecimport extends class_base
 	function ajax_import_aiesec_members_and_alumni($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1526,8 +1522,6 @@ class aiesecimport extends class_base
 	function ajax_import_other_contact($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1583,8 +1577,6 @@ class aiesecimport extends class_base
 	function ajax_import_positions($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1658,8 +1650,6 @@ class aiesecimport extends class_base
 	function ajax_import_companies($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1737,8 +1727,6 @@ class aiesecimport extends class_base
 	function ajax_import_meetings($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1796,8 +1784,6 @@ class aiesecimport extends class_base
 	function ajax_import_phonecalls($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -1851,8 +1837,6 @@ class aiesecimport extends class_base
 	function ajax_import_persons($arr)
 	{
 		aw_disable_acl();
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
 		
 		$this -> set_parents($arr["import_parent"]);
 		
@@ -2634,7 +2618,6 @@ class aiesecimport extends class_base
 		
 		while($w = $this->db_next())
         {
-			obj_set_opt("no_cache",1);
 			$ol = new object_list(array(
 					"userta1" =>  $w["companyid"],
 					"class_id" => CL_CRM_COMPANY,

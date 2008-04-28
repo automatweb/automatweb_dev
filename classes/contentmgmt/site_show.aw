@@ -1020,7 +1020,7 @@ class site_show extends class_base
 			}
 			if ($has_rand)
 			{
-				obj_set_opt("no_cache", 1);
+				$noc_val = obj_set_opt("no_cache", 1);
 			}
 
 			if (is_array($arr["date_filter"]))
@@ -1096,7 +1096,7 @@ class site_show extends class_base
 
 			if ($has_rand)
 			{
-				obj_set_opt("no_cache", 0);
+				obj_set_opt("no_cache", $noc_val);
 			}
 
 			$rsid = aw_ini_get("site_id");

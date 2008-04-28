@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="calendar_event" folder="applications/calendar" extends="class_base">
-		<action name="new" all_args="1" nologin="1">
+		<action name="new" nologin="1" all_args="1">
 			<function name="new_change">
 				<arguments>
 					<required name="class" />

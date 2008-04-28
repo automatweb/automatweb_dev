@@ -1470,7 +1470,6 @@ class _int_object
 
 		// check if a brother already exists for this object under
 		// the $parent menu.
-		$noc = obj_set_opt("no_cache", 1);
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"brother_of" => $this->obj["oid"],
@@ -1479,11 +1478,9 @@ class _int_object
 		if ($ol->count() > 0)
 		{
 			$tmp = $ol->begin();
-			obj_set_opt("no_cache", $noc);
 			return $tmp->id();
 		}
 
-		obj_set_opt("no_cache", $noc);
 		return $this->_int_create_brother($parent);
 	}
 
@@ -2066,7 +2063,7 @@ class _int_object
 
 	protected function _check_save_cache()
 	{
-		if (self::$global_save_count > 13 && !self::$cache_off)
+		if (self::$global_save_count > 3 && !self::$cache_off)
 		{
 			obj_set_opt("no_cache", 1);
 			self::$cache_off = true;

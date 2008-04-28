@@ -2602,13 +2602,6 @@ class realestate_manager extends class_base
 	function save_realestate_properties ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
-		$vla = (count ($arr["request"]["realestatemgr_property_id"]) > 9) ? true : false;
-
-		if ($vla)
-		{
-			aw_global_set ("no_cache_flush", 1);
-			obj_set_opt ("no_cache", 1);
-		}
 
 		foreach (safe_array ($arr["request"]["realestatemgr_property_id"]) as $oid)
 		{
@@ -2632,16 +2625,6 @@ class realestate_manager extends class_base
 					$property->save ();
 				}
 			}
-		}
-
-		if ($vla)
-		{
-			if (!is_object ($this->cl_cache))
-			{
-				$this->cl_cache = get_instance ("cache");
-			}
-
-			$this->cl_cache->full_flush ();
 		}
 	}
 

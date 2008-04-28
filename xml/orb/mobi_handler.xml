@@ -14,6 +14,7 @@
 					<required name="id" type="oid" />
 					<required name="number" type="string" />
 					<required name="message" type="string" />
+					<optional name="sms" type="*oid" />
 				</arguments>
 			</function>
 		</action>

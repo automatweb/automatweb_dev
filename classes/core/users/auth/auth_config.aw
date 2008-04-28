@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.29 2008/04/03 11:20:46 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.30 2008/04/28 13:59:38 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -311,7 +311,6 @@ class auth_config extends class_base
 		{
 			$cred["uid"] .= ".".$cred["server"];
 		}
-		obj_set_opt("no_cache", 1);
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
 			"name" => $cred["uid"],
@@ -319,7 +318,6 @@ class auth_config extends class_base
 			"lang_id" => array(),
 			"brother_of" => new obj_predicate_prop("id")
 		));
-		obj_set_opt("no_cache", 0);
 
 		$confo = obj($auth_id);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.79 2008/03/13 20:30:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.80 2008/04/28 13:59:33 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -299,9 +299,6 @@ class spa_bookigs_entry extends class_base
 
 	function _set_cust_entry($arr)
 	{
-		aw_global_set("no_cache_flush", 1);
-		obj_set_opt("no_cache", 1);
-
 		//xml_rpc teenuse jaoks
 		$_SESSION["add_package_service"] = array();
 //die(dbg::dump($arr["request"]));
@@ -734,13 +731,11 @@ class spa_bookigs_entry extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_my_bookings($t);
-$t->set_sortable(false);
+		$t->set_sortable(false);
 		// get bookings for my person
 		$p = get_current_person();
 		if ($arr["request"]["group"] == "my_bookings")
 		{
-/*			obj_set_opt("no_cache", 1);
-			$GLOBALS["DUKE"] = 1;*/
 			$ol = new object_list(array(
 				"class_id" => CL_SPA_BOOKING,
 				"lang_id" => array(),
@@ -754,9 +749,6 @@ $t->set_sortable(false);
 				)),
 				"sort_by" => "objects.oid DESC",
 			));
-/*echo dbg::dump($ol->names());
-                        obj_set_opt("no_cache", 0);
-                        $GLOBALS["DUKE"] = 0;*/
 
 		}
 		else

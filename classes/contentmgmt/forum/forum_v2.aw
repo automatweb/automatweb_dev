@@ -2587,8 +2587,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				),
 			));
 		}
-//obj_set_opt("no_cache", 1);
-//$GLOBALS["DUKE"] = 1;
 		$ol = new object_list($params);
 		foreach($ol->arr() as $o)
 		{

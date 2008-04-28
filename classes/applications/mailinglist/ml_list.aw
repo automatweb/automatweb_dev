@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.122 2008/04/15 07:08:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.123 2008/04/28 13:59:28 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1487,7 +1487,6 @@ class ml_list extends class_base
 			$cnt = 0;
 			if (sizeof($lines) > 0)
 			{
-				obj_set_opt("no_cache", 1);
 				foreach($lines as $line)
 				{
 					$line = trim($line);

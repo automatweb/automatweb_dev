@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.12 2008/03/27 13:14:01 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/ical_export.aw,v 1.13 2008/04/28 13:59:24 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_ICAL_EXPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
@@ -317,7 +317,6 @@ class ical_export extends class_base
 	
 	function sync_events($arr)
 	{
-		//obj_set_opt("no_cache", 1);
 		$a_aw_events = $this->get_aw_calendar_events_array($arr);
 		$a_google_events = $this->get_google_calendar_events_array($arr);
 		
