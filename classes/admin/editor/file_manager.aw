@@ -216,9 +216,9 @@ class file_manager extends aw_template
 	function compress($arr)
 	{
 		extract($arr);
-		
+
 		$file_inst = get_instance(CL_FILE);
-		$zip = new ZipArchive();
+		$zip = new ZipArchive;
 
 		if($GLOBALS["sited"])
 		{
@@ -237,17 +237,56 @@ class file_manager extends aw_template
 			if(!$this->can("view" , $id)) continue;
 
 			$fileo = obj($id);
-			if(!$fileo->class_id() == CL_FILE) continue;
-
-			$file_data = $file_inst->get_file_by_id($id);
-			$filepath = $file_data["properties"]["file"];
-			$filename = $file_data["properties"]["name"];
-			$filepath = str_replace("/new/" , "/" , $filepath);
-			$zip->addFile($filepath,"/".$filename);
+			if($fileo->class_id() == CL_FILE)
+			{
+				$this->zip_add_file(&$zip , $id);
+			}
+			elseif($fileo->class_id() == CL_MENU)
+			{
+				$this->zip_add_menu(&$zip , $id);
+			}
+			else
+			{
+				continue;
+			}
 		}
 
 		$zip->close();
 		return $zipfilename;
+	}
+
+	function zip_add_menu($zip,$id,$path = "")
+	{
+		$fileo = obj($id);
+		$zip->addEmptyDir($path."/".$fileo->name());
+		$files = new object_list(array(
+			"class_id" => array(CL_MENU,CL_FILE),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $id
+		));
+		foreach($files->arr() as $file)
+		{
+			if($file->class_id() == CL_MENU)
+			{
+				$this->zip_add_menu(&$zip,$file->id(),$path."/".$fileo->name());
+			}
+			if($file->class_id() == CL_FILE)
+			{
+				$this->zip_add_file(&$zip,$file->id(),$path."/".$fileo->name());
+			}
+		}
+	}
+
+	function zip_add_file($zip,$id,$path = "")
+	{
+		$file_inst = get_instance(CL_FILE);
+		$fileo = obj($id);
+		$file_data = $file_inst->get_file_by_id($id);
+		$filepath = $file_data["properties"]["file"];
+		$filename = $file_data["properties"]["name"];
+		$filepath = str_replace("/new/" , "/" , $filepath);
+		$zip->addFile($filepath,$path."/".$filename);
 	}
 
 	/**
