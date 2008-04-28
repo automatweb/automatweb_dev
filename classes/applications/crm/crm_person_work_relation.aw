@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.17 2008/04/07 17:22:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.18 2008/04/28 07:19:26 kristo Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -14,10 +14,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @default table=objects
 @default group=general
 
-@property org type=relpicker reltype=RELTYPE_ORG store=connect
+@property org type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete
 @caption Organisatsioon
 
-@property section type=hidden reltype=RELTYPE_SECTION store=connect
+@property section type=hidden reltype=RELTYPE_SECTION store=connect 
 #@property section type=relpicker reltype=RELTYPE_SECTION
 #@caption &Uuml;ksus (non-functioning)
 

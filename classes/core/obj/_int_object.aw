@@ -2066,7 +2066,7 @@ class _int_object
 
 	protected function _check_save_cache()
 	{
-		if (self::$global_save_count > 3 && !self::$cache_off)
+		if (self::$global_save_count > 13 && !self::$cache_off)
 		{
 			obj_set_opt("no_cache", 1);
 			self::$cache_off = true;

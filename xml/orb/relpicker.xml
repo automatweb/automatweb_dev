@@ -18,5 +18,12 @@
 			</function>
 		</action>
 
+		<action name="get_relp_opts" all_args="1">
+			<function name="get_relp_opts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

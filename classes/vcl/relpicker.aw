@@ -218,6 +218,11 @@ class relpicker extends  core
 	{
 		$prop = &$arr["property"];
 		$this->obj = $arr["obj_inst"];
+		if ($prop["mode"] == "autocomplete")
+		{
+			return $this->init_autocomplete_relpicker($arr);
+		}
+
 		$val = &$arr["property"];
 		if($prop["no_sel"] == 1)
 		{
@@ -470,6 +475,10 @@ class relpicker extends  core
 
 	function process_vcl_property($arr)
 	{
+		if ($arr["prop"]["mode"] == "autocomplete")
+		{
+			return $this->process_autocomplete_relpicker($arr);
+		}
 		$property = $arr["prop"];
 		if ($property["type"] == "relpicker" && $property["automatic"] == 1)
 		{
@@ -535,5 +544,111 @@ class relpicker extends  core
 			};
 		};
 	}
+
+	function init_autocomplete_relpicker($arr)
+	{
+		$prop = array(
+			"name" => $arr["prop"]["name"],
+			"type" => "textbox",
+			"store" => "no",
+			"caption" => $arr["prop"]["caption"],
+		);
+		$ri = $arr["obj_inst"]->get_relinfo();
+		$clids = $ri[$arr["prop"]["reltype"]]["clid"];
+
+		if ($this->can("view", $arr["obj_inst"]->prop($arr["prop"]["name"])))
+		{
+			$prop["value"] = $arr["obj_inst"]->prop($arr["prop"]["name"].".name");
+		}
+		$prop["autocomplete_source"] = $this->mk_my_orb("get_relp_opts", array("clids" => $clids));
+		$prop["autocomplete_params"] = array($arr["prop"]["name"]);
+		return array($arr["prop"]["name"] => $prop);
+	}
+
+	/**
+		@attrib name=get_relp_opts all_args="1"
+	**/
+	function get_relp_opts($arr)
+	{
+		if (is_admin())
+		{
+			$ol = new object_list(array(
+				"class_id" => $arr["clids"],
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => $arr[$arr["requester"]]."%"
+			));
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $key=>$val)
+		{
+			$autocomplete_options[$key] = iconv(aw_global_get("charset"),"UTF-8",  $autocomplete_options[$key]);
+		}
+		exit ($cl_json->encode($option_data));
+	}
+
+	function process_autocomplete_relpicker($arr)
+	{
+		// if the name is not empty, find item with that name. if not found, create new
+		if (trim($arr["prop"]["value"]) != "")
+		{
+			$ri = $arr["obj_inst"]->get_relinfo();
+			$clids = $ri[$arr["prop"]["reltype"]]["clid"];
+
+			$ol = new object_list(array(
+				"class_id" => $clids,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => $arr["prop"]["value"]
+			));
+			if ($ol->count())
+			{
+				$item = $ol->begin();
+			}
+			else
+			{
+				$item = obj();
+				$item->set_class_id(reset($clids));
+				$item->set_parent(is_oid($arr["obj_inst"]->id()) ? $arr["obj_inst"]->id() : $arr["obj_inst"]->parent());
+				$item->set_name($arr["prop"]["value"]);
+				$item->save();
+			}
+
+			if ($arr["prop"]["store"] == "connect")
+			{
+				foreach($arr["obj_inst"]->connections_from(array("type" => $arr["prop"]["reltype"])) as $c)
+				{
+					$c->delete();
+				}
+			}
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $item->id(),
+				"type" => $arr["prop"]["reltype"]
+			));
+			$arr["prop"]["value"] = $item->id();
+			$arr["obj_inst"]->set_prop($arr["prop"]["name"], $item->id());
+		}
+	}
 };
+
 ?>

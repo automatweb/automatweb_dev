@@ -7,6 +7,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ORG</reltype>
             <store>connect</store>
+            <mode>autocomplete</mode>
             <field>org</field>
             <caption>Organisatsioon</caption>
       </property>
