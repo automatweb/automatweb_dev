@@ -258,7 +258,7 @@ class file_manager extends aw_template
 	function zip_add_menu($zip,$id,$path = "")
 	{
 		$fileo = obj($id);
-		$zip->addEmptyDir($path."/".$fileo->name());
+		//$zip->addEmptyDir($path."/".$fileo->name());
 		$files = new object_list(array(
 			"class_id" => array(CL_MENU,CL_FILE),
 			"site_id" => array(),
