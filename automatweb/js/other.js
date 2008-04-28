@@ -97,3 +97,12 @@ window.onscroll = function ()
 $(window).unload( function () { 
 	check_generic_unloader();
 });
+
+
+$(document).ready(function(){
+	// in controller change tab behaviour in textarea so tabs insert tab characters
+	if ($.gup("class")=="form_controller")
+	{
+		$("textarea[name=eq]").EnableTabs();
+	}
+});

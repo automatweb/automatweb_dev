@@ -17,6 +17,8 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dump.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_formreset.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_object_quickadd.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_tabs.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_gup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
