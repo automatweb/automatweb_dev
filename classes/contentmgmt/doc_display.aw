@@ -1342,11 +1342,11 @@ class doc_display extends aw_template
 			$i_minutes = floor($i_time_from_created_to_current_time / 60);
 			if ($i_minutes == 1)
 			{
-				return t(sprintf("%s minut tagasi",$i_minutes));
+				return sprintf(t("%s minut tagasi"), $i_minutes);
 			}
 			else
 			{
-				return t(sprintf("%s minutit tagasi",$i_minutes));
+				return sprintf(t("%s minutit tagasi"), $i_minutes);
 			}
 		}
 		else if ($i_time_from_created_to_current_time < 60*60*24)
@@ -1354,11 +1354,11 @@ class doc_display extends aw_template
 			$i_hours = floor($i_time_from_created_to_current_time / 60 / 60);
 			if ($i_hours == 1)
 			{
-				return t(sprintf("%s tund tagasi",$i_hours));
+				return sprintf(t("%s tund tagasi"), $i_hours);
 			}
 			else
 			{
-				return t(sprintf("%s tundi tagasi",$i_hours));
+				return sprintf(t("%s tundi tagasi"), $i_hours);
 			}
 		}
 		else if ($i_time_from_created_to_current_time < 60*60*24*31)
@@ -1366,11 +1366,11 @@ class doc_display extends aw_template
 			$i_days = floor($i_time_from_created_to_current_time / 60 / 60 / 24);
 			if ($i_days == 1)
 			{
-				return t(sprintf("%s p&auml;ev tagasi",$i_days));
+				return sprintf(t("%s p&auml;ev tagasi"), $i_days);
 			}
 			else
 			{
-				return t(sprintf("%s p&auml;eva tagasi",$i_days));
+				return sprintf(t("%s p&auml;eva tagasi"), $i_days);
 			}
 		}
 		else if (date("Y", $i_timestamp_created) == date("Y", time() ))
