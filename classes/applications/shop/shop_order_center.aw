@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.61 2008/04/22 08:24:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.62 2008/04/29 12:10:57 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -1179,8 +1179,12 @@ class shop_order_center extends class_base
 		$all_ps = $cfgx->load_properties(array(
 			"clid" => $class_id,
 		));
+		$tmp_obj = obj();
+		$tmp_obj->set_class_id($class_id);
+
 		$all_ps = $class_i->parse_properties(array(
-			"properties" => &$all_ps
+			"properties" => &$all_ps,
+			"obj_inst" => $tmp_obj
 		));
 
 		$ps_pmap = safe_array($oc->meta("ps_pmap"));
