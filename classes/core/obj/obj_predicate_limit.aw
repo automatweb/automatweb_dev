@@ -5,10 +5,10 @@ class obj_predicate_limit
 	private $from;
 	private $per_page;
 
-	function obj_predicate_limit($from, $per_page = 0)
+	function obj_predicate_limit($limit, $offset = 0)
 	{
-		$this->from = $from;
-		$this->per_page = $per_page;
+		$this->from = $offset;
+		$this->per_page = $limit;
 	}
 
 	function get_from()
