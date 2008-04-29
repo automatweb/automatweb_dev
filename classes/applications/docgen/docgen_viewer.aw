@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.24 2008/04/28 13:59:26 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.25 2008/04/29 09:38:31 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -404,7 +404,6 @@ class docgen_viewer extends class_base
 
 	function display_class($data, $cur_file, $opts = array())
 	{
-die(dbg::dump($data));
 		if ($opts["disp"] == "__outer")
 		{
 			$this->read_template("function_info.tpl");
