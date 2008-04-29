@@ -368,12 +368,17 @@ class file_manager extends aw_template
 
 		unset($args["field_name"]);
 		$args['onClick'] = "
-			tmp = $('form').attr('action');
-			win = window.open('','Window1','menubar=no,width=300,height=500,toolbar=no');
-			document.changeform.action='".$url."';
-			document.changeform.target='Window1';
-			document.changeform.submit();
-			$('form').attr('action', tmp);
+                        win = window.open('','Window1','menubar=no,width=300,height=500,toolbar=no');
+                        url = '$url';
+                        for(i = 0; i < document.changeform.elements.length; i++)
+                        {
+                                if (document.changeform.elements[i].name.indexOf('sel') == 0 && document.changeform.elements[i].checked)
+                                {
+                                        url += '&sel[]='+document.changeform.elements[i].value;
+                                }
+                        }
+                        win.location.href=url;
+                        return false;
 		";
 
 		$tb->add_button($args);
