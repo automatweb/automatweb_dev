@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.124 2008/04/29 12:56:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.125 2008/04/29 13:12:55 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1997,22 +1997,13 @@ class ml_list extends class_base
 					}
 				}
 
-				if (empty($tabledata["email"]))
+				if (isset($tabledata_arr[$tabledata["id"]]))
 				{
-					$t->define_data($tabledata);
-				}
-				else
-				if (isset($tabledata_arr[$tabledata["email"]]))
-				{
-					if (strpos($tabledata_arr[$tabledata["email"]]["name"], $tabledata["name"]) === false)
-					{
-						$tabledata_arr[$tabledata["email"]]["source"] .= ", ".$tabledata["source"];
-						$tabledata_arr[$tabledata["email"]]["name"] .= ", ".$tabledata["name"];
-					}
+					$tabledata_arr[$tabledata["id"]]["source"] .= ", ".$tabledata["source"];
 				}
 				else
 				{
-					$tabledata_arr[$tabledata["email"]] = $tabledata;
+					$tabledata_arr[$tabledata["id"]] = $tabledata;
 				}
 			}
 
