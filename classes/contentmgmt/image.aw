@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.15 2008/04/23 12:21:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.16 2008/04/29 08:31:25 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1347,7 +1347,7 @@ class image extends class_base
 
 	/** Adds an image to the system
 
-		@attrib name=orb_name params=[name|pos] default="0" nologin="1" api=1 all_args=1 caption="foo" is_public=1
+		@attrib name=add_image params=name default="0" nologin="1" api=1 all_args=1 caption="foo" is_public=1
 
 		@param from required type=string 
 			Method how image is passed to the function. Options: [file|string|url]

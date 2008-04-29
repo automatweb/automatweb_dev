@@ -1,13 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:class_1187_help
 msgid "Klassi Reserveeringute &uuml;levaade help"
@@ -39,7 +40,7 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_groups
 msgid "Omaduse Kasutajagrupid (groups) caption"
-msgstr ""
+msgstr "User groups"
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:prop_groups_comment
 msgid "Omaduse Kasutajagrupid (groups) kommentaar"
@@ -765,3 +766,4 @@ msgstr ""
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:2191
 msgid "<b>Summa:</b>"
 msgstr ""
+

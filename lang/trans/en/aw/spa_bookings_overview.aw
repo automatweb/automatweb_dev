@@ -1,6 +1,7 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Ruumide kaust (rooms_folder) caption"] = "Rooms folder";
 $GLOBALS["TRANS"]["Omaduse Omanik (owner) caption"] = "Owner";
+$GLOBALS["TRANS"]["Omaduse Kasutajagrupid (groups) caption"] = "User groups";
 $GLOBALS["TRANS"]["Omaduse Ruumi nimi (rs_name) caption"] = "Room name";
 $GLOBALS["TRANS"]["Omaduse Broneerija nimi (rs_booker_name) caption"] = "Booker name";
 $GLOBALS["TRANS"]["Omaduse Broneering alates (rs_booking_from) caption"] = "Booking from";

@@ -683,7 +683,7 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 	try
 	{
 		$cl_id = aw_ini_get("class_lut.".basename($class));
-		if ($GLOBALS["cfg"]["classes"][$cl_id]["site_class"] == 1)
+		if (!empty($GLOBALS["cfg"]["classes"][$cl_id]["site_class"]))
 		{
 			//$class = $GLOBALS["cfg"]["site_classes"][$class];
 			$site = true;

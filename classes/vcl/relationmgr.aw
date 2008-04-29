@@ -269,7 +269,7 @@ class relationmgr extends aw_template
 				$this->vars(array(
 					"parent" => $def_val,
 					"period" => $period,
-					"id" => $id,
+					"id" => $arr["obj_inst"]->id(),
 					"return_url" => urlencode($return_url),
 					"def_fld_clid" => $def_clid
 				));
