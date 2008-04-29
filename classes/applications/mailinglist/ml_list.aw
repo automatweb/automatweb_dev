@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.123 2008/04/28 13:59:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.124 2008/04/29 12:56:57 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1996,9 +1996,30 @@ class ml_list extends class_base
 						}
 					}
 				}
-				$t->define_data($tabledata);
-		
+
+				if (empty($tabledata["email"]))
+				{
+					$t->define_data($tabledata);
+				}
+				else
+				if (isset($tabledata_arr[$tabledata["email"]]))
+				{
+					if (strpos($tabledata_arr[$tabledata["email"]]["name"], $tabledata["name"]) === false)
+					{
+						$tabledata_arr[$tabledata["email"]]["source"] .= ", ".$tabledata["source"];
+						$tabledata_arr[$tabledata["email"]]["name"] .= ", ".$tabledata["name"];
+					}
+				}
+				else
+				{
+					$tabledata_arr[$tabledata["email"]] = $tabledata;
+				}
 			}
+
+			foreach($tabledata_arr as $row)
+			{
+				$t->define_data($row);	
+ 			}
 		}
 		$t->d_row_cnt = $this->member_count;
 		$pageselector = "";
@@ -2293,7 +2314,16 @@ class ml_list extends class_base
 		));
 		foreach($ol->arr() as $o)
 		{
-			$mail = $o->prop("email_id.mail");;
+			$mail = $o->prop("email_id.mail");
+			if (!$mail)
+			{
+				// try to get first conn
+				$mail_o = $o->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				if ($mail_o)
+				{
+					$mail = $mail_o->prop("mail");
+				}
+			}
 			if(!$no_return)
 			{
 				if(!(array_key_exists($mail , $already_found)))
@@ -2316,7 +2346,10 @@ class ml_list extends class_base
 					$cnt++;
 				}
 			}
-			if(!$all) $already_found[$mail] = $mail;
+			if(!$all) 
+			{
+				$already_found[$mail] = $mail;
+			}
 		}
 		$this->already_found = $already_found;
 		if(!$all)$this->member_count = sizeof($already_found);
