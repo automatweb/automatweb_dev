@@ -2018,6 +2018,12 @@ class _int_object
 			$this->props_modified = array();
 		}
 
+		// this here is bad, I know, but it is necessary. Why? because if for some of the connections that are created
+		// there is a message handler, that reies to load the object just created, it errors out, because it is in a state of flux - 
+		// it should be in the objects array, but that gets done in the object_loader that called here. 
+		// so we have to do it here as well to fix the in-between state to the correct one right now
+		$GLOBALS["objects"][$this->obj["oid"]] =& $this;
+
 		if (is_array($this->obj["_create_connections"]))
 		{
 			foreach($this->obj["_create_connections"] as $new_conn)
