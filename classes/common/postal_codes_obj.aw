@@ -3,7 +3,7 @@
 class postal_codes_obj extends _int_object
 {
 
-	const DEFAULT_REGISTER_URL = "http://robert.dev.struktuur.ee";
+	const DEFAULT_REGISTER_URL = "http://register.automatweb.com";
 
 	const REQUEST_PAGE_SIZE = 1000;
 
