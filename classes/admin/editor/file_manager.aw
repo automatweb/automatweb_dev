@@ -416,17 +416,18 @@ class file_manager extends aw_template
 
 		unset($args["field_name"]);
 		$args['onClick'] = "
-			tmp = $('form').attr('action');
-			win = window.open('','Window1','menubar=no,width=300,height=500,toolbar=no');
 			url = '$url';
-			for(i = 0; i < document.changeform.elements.length; i++)
+			checkboxes = $('form[name=changeform] input[name^=sel][type=checkbox][checked]').each(function(){
+				url += '&sel[]='+$(this).attr('value');
+			});
+			if (checkboxes.length>0)
 			{
-				if (document.changeform.elements[i].name.indexOf('sel') == 0 && document.changeform.elements[i].checked)
-				{
-					url += '&sel[]='+document.changeform.elements[i].value;
-				}
+				location.href = url;
 			}
-			win.location.href=url;
+			else
+			{
+				alert ('".t("Vali failid ja/v&otilde;i kataloogid!")."');
+			}
 			return false;
 		";
 
