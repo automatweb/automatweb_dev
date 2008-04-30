@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.9 2008/01/31 13:54:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.10 2008/04/30 11:55:55 hannes Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -271,8 +271,8 @@ class minify_js_and_css extends class_base
 			$cache->file_set($s_salt.$f_cache_filename_css, $s_css_contents);
 			
 		}
-		$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_css&name=aw_admin.css">'."\n";
-		$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_js&name=aw_admin.js" type="text/javascript"></script>';
+		$s_out = '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">'."\n";
+		$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_js&amp;name=aw_admin.js" type="text/javascript"></script>';
 		
 		return $s_out;
 	}
@@ -321,11 +321,11 @@ class minify_js_and_css extends class_base
 			
 			if (strlen($cache->file_get($s_prefix.$f_cache_filename_css))>0)
 			{
-				$s_out .= '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_css&name='.$f_cache_filename_css.'">'."\n";
+				$s_out .= '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name='.$f_cache_filename_css.'">'."\n";
 			}
 			if (strlen($cache->file_get($s_prefix.$f_cache_filename_js))>0)
 			{
-				$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&action=get_js&name='.$f_cache_filename_js.'" type="text/javascript"></script>';
+				$s_out .= '<script src="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_js&amp;name='.$f_cache_filename_js.'" type="text/javascript"></script>';
 			}
 			
 			$that->vars(array("MINIFY_JS_AND_CSS" => $s_out ));
