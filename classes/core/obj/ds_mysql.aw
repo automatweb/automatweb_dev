@@ -3515,7 +3515,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$fetch = array();
 		foreach(explode(",", trim($str)) as $prop_fetch)
 		{
-			if (preg_match("/(.*)AS(.*)/imsU", $prop_fetch, $pf))
+			if (preg_match("/(.*)\sAS\s(.*)/imsU", $prop_fetch, $pf))
 			{
 				$fetch[trim($pf[1])] = trim($pf[2]);
 			}
@@ -3524,7 +3524,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$fetch[trim($prop_fetch)] = trim($prop_fetch);
 			}
 		}
-
 		$nf = array();
 		foreach($fetch as $prop => $as)
 		{
