@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.16 2008/04/29 08:31:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.17 2008/04/30 12:02:35 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -26,7 +26,7 @@
 	@property alt type=textbox table=objects field=meta method=serialize
 	@caption Alt
 
-	@property longdesc type=textarea rows=3 cols=30 table=objects field=meta method=serialize
+	@property longdesc type=textarea rows=3 cols=30 table=objects field=meta method=serialize user=1
 	@caption Pikk kirjeldus
 
 	@property link type=textbox table=images field=link
@@ -467,7 +467,7 @@ class image extends class_base
 				"image_id" => $idata["oid"],
 				"document_link" => $d->get_doc_link(obj($f["source"])),
 				"comments" => $num_comments,
-				"longdesc" => $idata["meta"]["longdesc"]
+				"longdesc" => $this->mk_my_orb("disp_longdesc", array("id" => $idata["oid"]))
 			);
 			$tmp = new aw_template;
 			lc_site_load("document", &$tmp);
@@ -2409,6 +2409,16 @@ class image extends class_base
 				));
 				return true;
 		}
+	}
+
+	/**
+		@attrib name=disp_longdesc nologin="1"
+		@param id required type=int acl=view
+	**/
+	function disp_longdesc($arr)
+	{
+		$o = obj($arr["id"]);
+		die($o->prop("longdesc"));
 	}
 }
 ?>

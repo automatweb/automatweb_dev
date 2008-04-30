@@ -53,7 +53,7 @@
 			</function>
 		</action>
 
-		<action name="orb_name" nologin="1" is_public="1" all_args="1" caption="foo">
+		<action name="add_image" nologin="1" is_public="1" all_args="1" caption="foo">
 			<function name="add_image">
 				<arguments>
 					<required name="from" type="string" />
@@ -180,6 +180,14 @@
 		<action name="del_comment" all_args="1">
 			<function name="del_comment">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="disp_longdesc" nologin="1">
+			<function name="disp_longdesc">
+				<arguments>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
