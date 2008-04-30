@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.4 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.5 2008/04/30 12:27:10 kristo Exp $
 // link_collection.aw - Lingikogu 
 /*
 
@@ -13,7 +13,10 @@
 	@caption T&uuml;&uuml;p
 
 	@property ordering type=select field=aw_ordering
-	@caption J&auml;rjestamine
+	@caption Linkide j&auml;rjestamine
+
+	@property kw_ordering type=select field=aw_kw_ordering
+	@caption V&otilde;tmes&otilde;nade j&auml;rjestamine
 
 	
 @default group=folders
@@ -69,6 +72,14 @@ class link_collection extends class_base
 			case "folders":
 				$this->_folders($arr);
 				break;
+
+			case "kw_ordering":
+				if ($arr["obj_inst"]->prop("type") != LINKCOLL_TYPE_KW)
+				{
+					return PROP_IGNORE;
+				}
+				$prop["options"] = $this->orderings;
+				break;
 		};
 		return $retval;
 	}
@@ -119,7 +130,8 @@ class link_collection extends class_base
 
 		$links = new object_list(array(
 			"class_id" => CL_EXTLINK,
-			"parent" => $flds
+			"parent" => $flds,
+			"sort_by" => $o->prop("ordering") == LINKCOLL_SORT_ALPHA ? "name" : "jrk"
 		));
 		$l2parent = array();
 		foreach($links->arr() as $link)
@@ -173,7 +185,8 @@ class link_collection extends class_base
 		// get keywords from folders
 		$kw_list = new object_list(array(
 			"class_id" => CL_KEYWORD,
-			"parent" => $flds
+			"parent" => $flds,
+			"sort_by" => $o->prop("kw_ordering") == LINKCOLL_SORT_ALPHA ? "name" : "jrk"
 		));
 
 		// to get links find connections from links to kws
@@ -294,6 +307,16 @@ class link_collection extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_link_collection (aw_oid int primary key, aw_type int, aw_ordering int)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_kw_ordering":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 	}
 }

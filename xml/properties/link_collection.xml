@@ -14,7 +14,15 @@
             <group>general</group>
             <type>select</type>
             <field>aw_ordering</field>
-            <caption>J&amp;amp;auml;rjestamine</caption>
+            <caption>Linkide j&amp;amp;auml;rjestamine</caption>
+      </property>
+      <property>
+            <name>kw_ordering</name>
+            <table>aw_link_collection</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_kw_ordering</field>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nade j&amp;amp;auml;rjestamine</caption>
       </property>
       <property>
             <name>folders</name>
