@@ -3,7 +3,7 @@
 class postal_codes_obj extends _int_object
 {
 
-	const DEFAULT_REGISTER_URL = "http://register.automatweb.com";
+	const DEFAULT_REGISTER_URL = "http://robert.dev.struktuur.ee";
 
 	const REQUEST_PAGE_SIZE = 1000;
 
@@ -25,6 +25,7 @@ class postal_codes_obj extends _int_object
 
 	public function get_code($arr)
 	{
+		self::check_db_data();
 		$i = get_instance(CL_POSTAL_CODES);
 		$where = array();
 		$db_fields = self::get_db_fields();
@@ -196,9 +197,16 @@ class postal_codes_obj extends _int_object
 
 	public function import_from_register($arr)
 	{
-		$obj = obj($arr["id"]);
-		$i = $obj->instance();
-		$site = ($url = $obj->prop("register_url"))?$url:self::DEFAULT_REGISTER_URL;
+		if(is_oid($arr["id"]))
+		{
+			$obj = obj($arr["id"]);
+			$site = ($url = $obj->prop("register_url"))?$url:self::DEFAULT_REGISTER_URL;
+		}
+		$i = get_instance(CL_POSTAL_CODES);
+		if(!$site)
+		{
+			$site = self::DEFAULT_REGISTER_URL;
+		}
 		$count = self::REQUEST_PAGE_SIZE;
 		$end = false;
 		$start = true;
@@ -217,10 +225,6 @@ class postal_codes_obj extends _int_object
 				),
 				"method" => "xmlrpc",
 			));
-			if(!is_array($result) && $start)
-			{
-				throw new awex_pcodes_xmlrpc("Unable to fetch data");
-			}
 			if(is_array($result))
 			{
 				$data = array_merge($data, $result);
@@ -232,8 +236,21 @@ class postal_codes_obj extends _int_object
 				$end = true;
 			}
 		}
-		$sql = $this->get_register_import_sql($data);
-		$this->import_from_sql($sql);
+		if(count($data))
+		{
+			$sql = $this->get_register_import_sql($data);
+			$this->import_from_sql($sql);
+		}
+	}
+
+	private function check_db_data()
+	{
+		$i = get_instance(CL_POSTAL_CODES);
+		$count = $i->db_fetch_field("SELECT count(*) as chk FROM aw_postal_codes", "chk");
+		if(!$count)
+		{
+			self::import_from_register();
+		}
 	}
 
 	private function get_export_row($raw, $fields)
@@ -381,5 +398,4 @@ class postal_codes_obj extends _int_object
 
 class awex_pcodes extends awex_obj {}
 class awex_pcodes_badfile extends awex_pcodes {}
-class awex_pcodes_xmlrpc extends awex_pcodes {}
 ?>
