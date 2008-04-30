@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.244 2008/04/22 08:24:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.245 2008/04/30 09:08:02 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -2194,6 +2194,7 @@ class room extends class_base
 								));
 							}
 							else
+							if ($last_bron->prop("client_arrived") == 2)
 							{
 								$d[$x] .= html::href(array(
 									"caption" => "-",
