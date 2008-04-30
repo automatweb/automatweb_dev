@@ -692,7 +692,7 @@ class core extends acl_base
 		}
 
 		$this->process_orb_args("",$arr);
-		$res = $this->cfg["baseurl"] . "/";
+		$res = aw_ini_get("baseurl") . "/";
 		if ($force_admin || $in_admin)
 		{
 			$res .= "automatweb/";
