@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.17 2008/04/30 12:02:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.18 2008/04/30 13:18:35 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -896,8 +896,37 @@ class image extends class_base
 							break;
 
 					};
+
+					// let the browser cache images
+					$cur_etag = md5($arr["file"]);
+
+
+					$offset = 3600;
+					header("Expires: ".gmdate("D, d M Y H:i:s", time() + $offset) . " GMT");
+					header("Pragma:");
+					header("Cache-control: max-age=".$offset);
 					header("Content-type: $type");
 					header("Content-length: ".filesize($fname));
+					header("ETag: ".$cur_etag);
+
+					if(strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]) > filemtime($fname))
+					{
+						header("HTTP/1.x 304 Not Modified1");
+						die();
+					}
+
+					// check if we got an if-none-match and if we did, then check the etag and
+					// finally, return is cached if all checks out
+					foreach(explode(",", $_SERVER["HTTP_IF_NONE_MATCH"]) as $check_etag)
+					{
+						$check_etag = trim($check_etag);
+						if ($check_etag == $cur_etag)
+						{
+							header("HTTP/1.x 304 Not Modified");
+							die();
+						}
+					}
+
 					readfile($fname);
 				};
 			} 
