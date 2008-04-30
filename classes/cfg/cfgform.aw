@@ -961,7 +961,7 @@ class cfgform extends class_base
 			{
 				if(is_array($this->cfg_proplist[$name]) and is_array($this->all_props[$name]))
 				{
-					$this->cfg_proplist[$name] = $this->cfg_proplist[$name] + $this->all_props[$name];
+					$this->cfg_proplist[$name]["type"] = $this->all_props[$name]["type"];
 				}
 			}
 
