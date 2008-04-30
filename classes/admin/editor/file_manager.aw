@@ -217,7 +217,7 @@ class file_manager extends aw_template
 	{
 		extract($arr);
 
-		$file_inst = get_instance(CL_FILE);
+		/*$file_inst = get_instance(CL_FILE);
 		$zip = new ZipArchive;
 
 		if($GLOBALS["sited"])
@@ -230,20 +230,28 @@ class file_manager extends aw_template
 		}
 		if ($zip->open($zipfilename, ZIPARCHIVE::CREATE)!==TRUE) {
 			exit("cannot open <$zipfilename>\n");
-		}
+		}*/
+
+		// create temp folder for zipping
+		$folder = aw_ini_get("server.tmpdir")."/aw_fld_zip_".gen_uniq_id();
+		mkdir ($folder, 0777);
+		chmod($folder, 0777);
 
 		foreach($files as $id)
 		{
-			if(!$this->can("view" , $id)) continue;
+			if(!$this->can("view" , $id))
+			{
+				continue;
+			}
 
 			$fileo = obj($id);
 			if($fileo->class_id() == CL_FILE)
 			{
-				$this->zip_add_file(&$zip , $id);
+				$this->zip_add_file($folder , $id);
 			}
 			elseif($fileo->class_id() == CL_MENU)
 			{
-				$this->zip_add_menu(&$zip , $id);
+				$this->zip_add_menu($folder , $id);
 			}
 			else
 			{
@@ -251,34 +259,72 @@ class file_manager extends aw_template
 			}
 		}
 
-		$zip->close();
+		chdir($folder);
+		$zipfilename = aw_ini_get("cache.page_cache")."/".time()."files.zip";
+		$cmd = aw_ini_get("server.zip_path")." -r $zipfilename *";
+		$res = `$cmd`;
+
+		$this->_req_del_fld($folder);
 		return $zipfilename;
 	}
 
-	function zip_add_menu($zip,$id,$path = "")
+	private function _req_del_fld($dir)
 	{
-		$fileo = obj($id);
-		//$zip->addEmptyDir($path."/".$fileo->name());
+		if ($dh = opendir($dir)) 
+		{
+				while (($file = readdir($dh)) !== false) 
+				{
+					if ($file == "." || $file == "..")
+					{
+						continue;
+					}
+					if (is_dir($dir."/".$file))
+					{
+						$this->_req_del_fld($dir."/".$file);
+						rmdir($dir."/".$file);
+					}
+					else
+					{
+						unlink($dir."/".$file);
+					}
+				}
+				closedir($dh);
+				rmdir($dir);
+		}
+	}
+
+	function zip_add_menu($folder,$id,$path = "")
+	{
+		$parent = obj($id);
+		$folder .= "/".$parent->name();
+
 		$files = new object_list(array(
 			"class_id" => array(CL_MENU,CL_FILE),
 			"site_id" => array(),
 			"lang_id" => array(),
 			"parent" => $id
 		));
+
+		if ($files->count())
+		{
+			mkdir ($folder, 0777);
+			chmod($folder, 0777);
+		}
+
 		foreach($files->arr() as $file)
 		{
 			if($file->class_id() == CL_MENU)
 			{
-				$this->zip_add_menu(&$zip,$file->id(),$path."/".$fileo->name());
+				$this->zip_add_menu($folder,$file->id());
 			}
 			if($file->class_id() == CL_FILE)
 			{
-				$this->zip_add_file(&$zip,$file->id(),$path."/".$fileo->name());
+				$this->zip_add_file($folder,$file->id());
 			}
 		}
 	}
 
-	function zip_add_file($zip,$id,$path = "")
+	function zip_add_file($folder,$id)
 	{
 		$file_inst = get_instance(CL_FILE);
 		$fileo = obj($id);
@@ -286,11 +332,12 @@ class file_manager extends aw_template
 		$filepath = $file_data["properties"]["file"];
 		$filename = $file_data["properties"]["name"];
 		$filepath = str_replace("/new/" , "/" , $filepath);
-		$zip->addFile($filepath,$path."/".$filename);
+
+		copy($filepath, $folder."/".$filename);
 	}
 
 	/**
-		@attrib name=compress_submit
+		@attrib name=compress_submit all_args=1
 	**/
 	function compress_submit($arr)
 	{
@@ -318,8 +365,8 @@ class file_manager extends aw_template
 		die();
 	}
 
-	/** Adds zip compress button to toolbar.
-		@attrib params=name api=1
+	/**
+		@attribs params=name api=1
 		@param tb required type=object
 			Toolbar object
 		@param tooltip optional type=string
@@ -331,7 +378,8 @@ class file_manager extends aw_template
 		@param zip_name optional type=string
 			Zip file name
 		@param field_name optional type=string default=sel
-
+		@comment
+			Adds zip compress button to toolbar.
 		@examples
 			$tmp = get_instance("vcl/toolbar");
 			$tmp->add_zip_button(array(
@@ -353,7 +401,7 @@ class file_manager extends aw_template
 		}
 		if(!$args["tooltip"])
 		{
-			$args["tooltip"] = t("Lae alla ZIP failina");
+			$args["tooltip"] = t("Download selected compressed in ZIP file");
 		}
 
 		$url = aw_global_get("baseurl")."/orb.aw?class=file_manager&action=compress_submit";
@@ -368,17 +416,18 @@ class file_manager extends aw_template
 
 		unset($args["field_name"]);
 		$args['onClick'] = "
-                        win = window.open('','Window1','menubar=no,width=300,height=500,toolbar=no');
-                        url = '$url';
-                        for(i = 0; i < document.changeform.elements.length; i++)
-                        {
-                                if (document.changeform.elements[i].name.indexOf('sel') == 0 && document.changeform.elements[i].checked)
-                                {
-                                        url += '&sel[]='+document.changeform.elements[i].value;
-                                }
-                        }
-                        win.location.href=url;
-                        return false;
+			tmp = $('form').attr('action');
+			win = window.open('','Window1','menubar=no,width=300,height=500,toolbar=no');
+			url = '$url';
+			for(i = 0; i < document.changeform.elements.length; i++)
+			{
+				if (document.changeform.elements[i].name.indexOf('sel') == 0 && document.changeform.elements[i].checked)
+				{
+					url += '&sel[]='+document.changeform.elements[i].value;
+				}
+			}
+			win.location.href=url;
+			return false;
 		";
 
 		$tb->add_button($args);
