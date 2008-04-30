@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.68 2008/03/06 11:14:26 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.69 2008/04/30 13:30:19 kristo Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -136,7 +136,10 @@ class object_list extends _int_obj_container_base
 	}
 
 	/** Deletes all objects that are in the current list and removes them from the list
-		@attrib api=1
+		@attrib api=1 params=pos
+
+		@param final_delete optional type=bool
+			If set to true, the objects are completely deleted. see object::delete for more.
 
 		@errors
 			- acl error is thrown if the user has no delete access for any of the objects in the list
@@ -150,9 +153,9 @@ class object_list extends _int_obj_container_base
 			));
 			$ol->delete();
 	**/
-	function delete()
+	function delete($param = null)
 	{
-		return parent::delete();
+		return parent::delete($param);
 	}
 
 	/** adds the specified object to the current list

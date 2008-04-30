@@ -13,12 +13,23 @@ class _int_obj_container_base
 		));
 	}
 
-	function delete()
+	function delete($full = null)
 	{
-		$cnt = $this->foreach_o(array(
-			"func" => "delete", 
-			"save" => false
-		));
+		if ($full !== null)
+		{
+			return $this->foreach_o(array(
+				"func" => "delete",
+				"params" => array($full),
+				"save" => false
+			));
+		}
+		else
+		{
+			$cnt = $this->foreach_o(array(
+				"func" => "delete", 
+				"save" => false
+			));
+		}
 		$this->_int_init_empty();
 		return $cnt;
 	}
