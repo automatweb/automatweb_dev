@@ -19,8 +19,8 @@
 		<action name="search_for_contacts">
 			<function name="search_for_contacts">
 				<arguments>
-					<optional name="cat" type="int" />
-					<optional name="unit" type="int" />
+					<optional name="cat" />
+					<optional name="unit" />
 				</arguments>
 			</function>
 		</action>

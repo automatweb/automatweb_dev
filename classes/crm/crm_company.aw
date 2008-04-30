@@ -3213,8 +3213,8 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=search_for_contacts
-		@param cat optional type=int
-		@param unit optional type=int
+		@param cat optional 
+		@param unit optional 
 	**/
 	function search_for_contacts($arr)
 	{
