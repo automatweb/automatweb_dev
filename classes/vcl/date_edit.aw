@@ -1,6 +1,6 @@
 <?php
 // klassile antakse ette "unix timestamp", ta konverdib
-// selle ajaühikuteks, ning tagastab nende muutmiseks
+// selle ajayhikuteks, ning tagastab nende muutmiseks
 // sobivad vormielemendid
 /*
 @classinfo  maintainer=kristo
@@ -10,8 +10,8 @@ class date_edit
 	// vormielementide nimed saavad olema kujul
 	// $varname[month] $varname[day] jne.
 
-	// kui aega ette ei anta, siis kuvame selleks kuupäeva
-	// ööpäev hiljem dokumendi avamisest. See on üsna suvaline muidugi
+	// kui aega ette ei anta, siis kuvame selleks kuup2eva
+	// 88p2ev hiljem dokumendi avamisest. See on ysna suvaline muidugi
 
 	function date_edit($varname = "", $timestamp = "+24h")
 	{
@@ -62,8 +62,8 @@ class date_edit
 	**/
 	function configure($fields)
 	{
-		// millised väljad ja millises järjekorras kuvame
-		// ja mida me nende captioniteks näitame
+		// millised v2ljad ja millises j2rjekorras kuvame
+		// ja mida me nende captioniteks n2itame
 		//    month = Kuu
 		//
 		if (!is_array($fields))
@@ -244,6 +244,15 @@ class date_edit
 					break;
 
 				case "hour":
+					// if hour is followed by minute, then start a nowrap span, so that minute and hour entry boxes wrap together
+					$tmp = array_keys($this->fields);
+					$hour_idx = array_search("hour", $tmp);
+					$prev_hr_span = false;
+					if ($tmp[$hour_idx+1] == "minute")
+					{
+						$retval .= "<span style='white-space: nowrap'>";
+						$prev_hr_span = true;
+					}
 					$retval .= sprintf("<select $clid name='%s[hour]' $disabled $textsize>\n",$this->varname);
 					if ($add_empty)
 					{
@@ -271,7 +280,12 @@ class date_edit
 					{
 						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i <= $minute && $i +  $step > $minute && $this->timestamp != -1),$i);
 					};
-					$retval .= "</select>\n";
+					$retval .= "</select>";
+					if ($prev_hr_span)
+					{
+						$retval .= "</span>";
+					}
+					$retval .= "\n";
 					break;
 
 				case "minute_textbox":
@@ -294,9 +308,9 @@ class date_edit
 				$date_clear_img_url = '/automatweb/images/icons/delete.gif';
 			}
 
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."' >"; 
+			$retval .= "<span style='white-space: nowrap;'><a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."' >"; 
 			$retval .= "<img id='".$this->varname."_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0'></a> ";	
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a>";
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a></span>";
 		}
 
 		return $retval;
