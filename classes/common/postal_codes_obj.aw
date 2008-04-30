@@ -79,6 +79,66 @@ class postal_codes_obj extends _int_object
 		return false;
 	}
 
+	public function get_locations_from_param($arr)
+	{
+		$db_fields = self::get_db_fields();
+		$where = array();
+		foreach($arr as $var=>$val)
+		{
+			if($db_fields[$var])
+			{
+				$add = "";
+				if(substr($val, 0, 1)=="!")
+				{
+					$add = "!";
+				}
+				$where[] = "`".$var."`".$add."='".iconv("UTF-8", aw_global_get("charset"), $val)."'";
+			}
+			elseif($var == "house")
+			{
+				$tmp = explode(" - ", $val);
+				if(count($tmp) == 2)
+				{
+					$where[] = "`house_start`='".$tmp[0]."'";
+					$where[] = "`house_end`='".$tmp[1]."'";
+				}
+				else
+				{
+					$where[] = "`house_start`='".$val."'";
+				}
+			}
+		}
+		if($db_fields[$arr["find"]] || $arr["find"] == "house")
+		{
+			$sql = "";
+			if(count($where))
+			{
+ 				$sql = " WHERE ".implode(" AND ", $where);
+			}
+			$i = get_instance(CL_POSTAL_CODES);
+			if($arr["find"] == "house")
+			{
+				$res = array();
+				$rows = $i->db_fetch_array("SELECT house_start, house_end FROM aw_postal_codes ".$sql." ORDER BY `house_start` ASC");
+				foreach($rows as $row)
+				{
+					$tmp = $row["house_start"];
+					if($row["house_start"] != $row["house_end"])
+					{
+						$tmp .= " - ".$row["house_end"];	
+					}
+					$res[] = array("house" => $tmp);
+				}
+			}
+			else
+			{
+				$res = $i->db_fetch_array("SELECT DISTINCT `".$arr["find"]."` FROM aw_postal_codes ".$sql." ORDER BY `".$arr["find"]."` ASC");
+			}
+			return $res;
+		}
+		return array();
+	}
+
 	public function get_file_fields($obj)
 	{
 		$fields = array("none" => "");
@@ -98,6 +158,7 @@ class postal_codes_obj extends _int_object
 			"street" => t("T&auml;nav / Talu"),
 			"house_start" => t("Maja nr algus"),
 			"house_end" => t("Maja nr l&otilde;pp"),
+			"type" => t("T&uuml;&uuml;p (linn / alev / k&uuml;la)"),
 			"zip" => t("Postiindeks"),
 		);
 		return $fields;
@@ -282,8 +343,8 @@ class postal_codes_obj extends _int_object
 				}
 			}
 			$insert = "
-				INSERT INTO aw_postal_codes(`".implode('`, `', $db_cols)."`)
-				VALUES('".implode("', '", $row)."')";
+				INSERT INTO aw_postal_codes (`".implode('`, `', $db_cols)."`)
+				VALUES('".htmlspecialchars(implode("', '", $row))."')";
 			$sql[] = $insert;
 		}
 		return $sql;
@@ -297,7 +358,7 @@ class postal_codes_obj extends _int_object
 			unset($row["id"]);
 			$fields = array_keys($row);
 			$insert = "
-				INSERT INTO aw_postal_codes(`".implode('`, `', $fields)."`)
+				INSERT INTO aw_postal_codes (`".implode('`, `', $fields)."`)
 				VALUES('".implode("', '", $row)."')";
 			$sql[] = $insert;
 		}

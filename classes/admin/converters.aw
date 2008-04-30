@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.83 2008/04/29 09:16:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.84 2008/04/30 13:00:21 robert Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1819,6 +1819,11 @@ echo "mod ".$con["to.name"]."<br>";
 					case "":
 						$this->db_query("create table aw_postal_codes(id int not null primary key auto_increment, country varchar(255), state varchar(255), city varchar(255), street varchar(255), house_start varchar(10), house_end varchar(10), zip int)");
 						return true;
+						break;
+					case "type":
+						$this->db_query("ALTER TABLE aw_postal_codes ADD `type` varchar(40)");
+						return true;
+						break;
 				}
 		}
 	}

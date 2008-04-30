@@ -83,7 +83,7 @@ class postal_codes extends class_base
 			"name" => "import_csv",
 			"tooltip" => t("Impordi failist"),
 			"img" => "import.gif",
-			"action" => "import",
+			"action" => "import_csv",
 			"confirm" => t("Oled kindel? Vanad andmed kustutatakse"),
 		));
 		$tb->add_button(array(
@@ -202,7 +202,6 @@ class postal_codes extends class_base
 	**/
 	function get_postal_codes($arr)
 	{
-		$o = obj($arr["id"]);
 		$pc = postal_codes_obj::get_postal_codes($arr);
 		return $pc;
 	}
@@ -235,6 +234,21 @@ class postal_codes extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	/**
+	@attrib name=get_locations nologin=1 all_args=1
+	**/
+	function get_locations_ajax($arr)
+	{
+		$loc = postal_codes_obj::get_locations_from_param($arr);
+		$res = array();
+		foreach($loc as $l)
+		{
+			$res[] = $l[$arr["find"]];
+		}
+		$res = iconv(aw_global_get("charset"), "UTF-8", implode("|", $res));
+		die($res);
 	}
 }
 
