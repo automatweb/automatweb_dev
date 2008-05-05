@@ -5640,14 +5640,26 @@ class crm_company extends class_base
 	**/
 	function submit_delete_docs($arr)
 	{
+		$ru = $arr["post_ru"];
+		$_SESSION["docs_del_err"] = array();
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
 			$ol = new object_list(array(
 				"oid" => $arr["sel"]
 			));
-			$ol->foreach_o(array("func" => "delete"));
+			foreach($ol->arr() as $o)
+			{
+				if($this->can("delete", $o->id()))
+				{
+					$o->delete();
+				}
+				else
+				{
+					$_SESSION["docs_del_err"][] = $o->id();
+				}
+			}
 		}
-		return $arr["post_ru"];
+		return $ru;
 	}
 
 	/**

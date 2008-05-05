@@ -425,6 +425,17 @@ class crm_company_docs_impl extends class_base
 
 	function _get_docs_tree($arr)
 	{
+		if(count($err = $_SESSION["docs_del_err"]))
+		{
+			$names = array();
+			foreach($err as $oid)
+			{
+				$o = obj($oid);
+				$names[] = $o->name();
+			}
+			$arr["prop"]["error"] = t("Osasid dokumente ei saanud kustutada, &otilde;igused puuduvad: ").implode(", ", $names);
+			unset($_SESSION["docs_del_err"]);
+		}
 		if ($arr["request"]["do_doc_search"])
 		{
 			return PROP_IGNORE;
