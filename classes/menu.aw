@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.233 2008/04/25 09:30:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.234 2008/05/05 09:34:11 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2645,6 +2645,10 @@ class menu extends class_base implements main_subtemplate_handler
 
 	private function _object_has_parent_aliases($o)
 	{
+		if (!is_oid($o->id()))
+		{
+			$o = obj($o->parent());
+		}
 		foreach($o->path() as $path_item)
 		{
 			if ($path_item->alias() != "")
