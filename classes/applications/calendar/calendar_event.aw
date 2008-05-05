@@ -13,7 +13,7 @@
 @caption Algab
 
 @property end type=datetime_select field=end
-@caption L&otulde;peb
+@caption L&otilde;peb
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -170,7 +170,9 @@ caption Korraldaja tabel
 property event_time_table type=table no_caption=1 store=no
 caption Toimumisaegade tabel
 
-@property event_time_edit type=releditor reltype=RELTYPE_EVENT_TIME store=no mode=manager2 props=start,end,location table_fields=start,end,location
+@property recommends_edit type=releditor store=no mode=manager2 reltype=RELTYPE_RECOMMENDATION props=person,relation,phones,emails,org,profession table_fields=person,relation,phones,emails,org,profession
+
+@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIME props=start,end,location table_fields=start,end,location
 @caption Toimumisajad
 
 
@@ -298,13 +300,13 @@ class calendar_event extends class_base
 				break;
 
 			case "end":
-				if ("---" === $prop["value"]["year"])
+				if(!is_numeric($prop["value"]["year"]) || !is_numeric($prop["value"]["month"]) || !is_numeric($prop["value"]["day"]) || !is_numeric($prop["value"]["hour"]) || !is_numeric($prop["value"]["minute"]))
 				{
-					$prop["value"]["day"] = $arr["request"]["start1"]["day"];
-					$prop["value"]["month"] = $arr["request"]["start1"]["month"];
-					$prop["value"]["year"] = $arr["request"]["start1"]["year"];
-					$prop["value"]["hour"] = $arr["request"]["start1"]["hour"];
-					$prop["value"]["minute"] = $arr["request"]["start1"]["minute"];
+					// There better be some good explanation why I can't use $arr["prop"]["value"] for date_select.
+					$request = &$arr["request"];
+					$request["end"] = $arr["request"]["start1"];
+					// Just in case it should turn to normal one day...
+					$prop["value"] = $arr["request"]["start1"];
 				}
 				else
 				{
@@ -321,6 +323,7 @@ class calendar_event extends class_base
 					}
 				}
 				break;
+
 			case "organizer":
 /*				$os = explode(",",$prop["value"]);
 				foreach($os  as $id)
