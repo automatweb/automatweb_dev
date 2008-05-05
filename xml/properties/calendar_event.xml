@@ -379,6 +379,16 @@
             <caption>Toimumisaeg</caption>
       </property>
       <property>
+            <name>event_time_table</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>event_time_table</field>
+            <caption>Toimumisaegade tabel</caption>
+      </property>
+      <property>
             <name>event_time_edit</name>
             <group>general</group>
             <table>planner</table>
