@@ -595,7 +595,7 @@ class admin_if extends class_base
 		if ($t->d_row_cnt > $per_page)
 		{
 			$t->define_pageselector(array(
-				"type" => "lb",
+				"type" => "lbtxt",
 				"records_per_page" => $per_page,
 				"d_row_cnt" => $t->d_row_cnt
 			));
@@ -616,10 +616,15 @@ class admin_if extends class_base
 		$sel_objs = $this->get_cutcopied_objects();
 		$trans = aw_ini_get("user_interface.full_content_trans") ? true : false;
 
-		$ob = new object_list($this->_get_object_list_filter($parent, $per_page, $period));
+		$filt = $this->_get_object_list_filter($parent, $period);
+		$ob_cnt = new object_list($filt);
+
+		$ft_page = isset($arr["request"]["ft_page"]) ? $arr["request"]["ft_page"] : null;
+		$filt[] = new obj_predicate_limit($per_page, $ft_page * $per_page);
+		$ob = new object_list($filt);
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->setup_rf_table($t, $ob->count(), $per_page);
+		$this->setup_rf_table($t, $ob_cnt->count(), $per_page);
 
 		$this->_init_admin_modifier_list();
 		foreach($ob->arr() as $row_o)
@@ -1464,9 +1469,8 @@ class admin_if extends class_base
 		return $parent;
 	}
 
-	private function _get_object_list_filter($parent, $per_page, $period)
+	private function _get_object_list_filter($parent, $period)
 	{
-		$ft_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
 		$filter = array(
 			"parent" => $parent,
 			new object_list_filter(array(
@@ -1479,7 +1483,6 @@ class admin_if extends class_base
 				)
 			)),
 			"class_id" => new obj_predicate_not(CL_RELATION),
-			new obj_predicate_limit($ft_page * $per_page, $per_page),
 			"site_id" => array(),
 		);
 		$menu_obj = obj($parent);
