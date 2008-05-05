@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.32 2008/04/17 22:10:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.33 2008/05/05 17:12:50 instrumental Exp $
 // event_import.aw - S&uuml;ndmuste import 
 /*
 
@@ -2278,8 +2278,9 @@ class event_import extends class_base
 		if(array_key_exists($event_time["id"], $imps["event"][$ext_sys_event]))
 		{
 			print " &nbsp; &nbsp; &nbsp; -";
-			print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." imported as event. Existing event. Ext ID - ".$event_time["id"]." and AW ID - ".$imps["event"][$ext_sys_event][$event_time["id"]]."<br>";
+			print "- event time: ".date("d-m-Y / H:i", $tmp["start"])." imported as event and copied translations from the original event. Existing event. Ext ID - ".$event_time["id"]." and AW ID - ".$imps["event"][$ext_sys_event][$event_time["id"]]."<br>";
 			$o = obj($imps["event"][$ext_sys_event][$event_time["id"]]);
+			$o->set_meta("translations", $event_obj->meta("translations"));
 		}
 		else
 		if($event_time_count > 1)
