@@ -379,14 +379,25 @@
             <caption>Toimumisaeg</caption>
       </property>
       <property>
-            <name>event_time_table</name>
+            <name>event_time_edit</name>
             <group>general</group>
             <table>planner</table>
-            <type>table</type>
-            <no_caption>1</no_caption>
+            <type>releditor</type>
+            <reltype>RELTYPE_EVENT_TIME</reltype>
             <store>no</store>
-            <field>event_time_table</field>
-            <caption>Toimumisaegade tabel</caption>
+            <mode>manager2</mode>
+            <props>
+                  <num_0>start</num_0>
+                  <num_1>end</num_1>
+                  <num_2>location</num_2>
+            </props>
+            <table_fields>
+                  <num_0>start</num_0>
+                  <num_1>end</num_1>
+                  <num_2>location</num_2>
+            </table_fields>
+            <field>event_time_edit</field>
+            <caption>Toimumisajad</caption>
       </property>
       <property>
             <name>aliasmgr</name>

@@ -167,8 +167,11 @@ caption Korraldaja tabel
 @property event_time type=relpicker reltype=RELTYPE_EVENT_TIME store=connect
 @caption Toimumisaeg
 
-@property event_time_table type=table no_caption=1 store=no
-@caption Toimumisaegade tabel
+property event_time_table type=table no_caption=1 store=no
+caption Toimumisaegade tabel
+
+@property event_time_edit type=releditor reltype=RELTYPE_EVENT_TIME store=no mode=manager2 props=start,end,location table_fields=start,end,location
+@caption Toimumisajad
 
 
 @property ufupload1 type=fileupload table=objects field=meta method=serialize
