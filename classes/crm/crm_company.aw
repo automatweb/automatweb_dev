@@ -7134,6 +7134,7 @@ class crm_company extends class_base
 		return false;
 	}
 
+	/*
 	function callback_get_add_txt($arr)
 	{
 		$cust_url = $this->mk_my_orb('new',array(
@@ -7329,6 +7330,7 @@ class crm_company extends class_base
 			</script>
 		  <select name=\"foo\" onChange='select_this(this)'>$adds</select></span>$s";
 	}
+	*/
 
 	function _init_ext_sys_t(&$t)
 	{
