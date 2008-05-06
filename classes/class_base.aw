@@ -4208,7 +4208,7 @@ class class_base extends aw_template
 							break;
 
 						case "multifile_upload":
-							$inst = $this->vcl_register["multifile_upload"];
+							$inst = get_instance("vcl/multifile_upload");
 							break;
 
 					}
