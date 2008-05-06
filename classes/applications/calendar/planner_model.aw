@@ -373,7 +373,7 @@ class planner_model extends core
 		while($row = $this->db_next())
 		{
 			$rv[$row["brother_of"]] = array(
-				"id" => $row["id"],
+				"id" => $row["brother_of"],
 				"start" => $row["start"],
 				"end" => $row["end"],
 			);

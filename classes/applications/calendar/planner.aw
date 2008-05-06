@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.146 2008/04/28 13:59:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.147 2008/05/06 11:23:06 robert Exp $
 // planner.aw - kalender
 /*
 
@@ -674,7 +674,9 @@ class planner extends class_base
 			$m = get_instance("applications/calendar/planner_model");
 		}
 		$this->id = $args["id"];
-		return $m->_init_event_source($args);
+		$ret = $m->_init_event_source($args);
+		$this->recur_info = $m->recur_info;
+		return $ret;
 	}
 
 	function do_group_headers($arr)
