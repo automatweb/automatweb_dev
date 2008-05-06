@@ -1,16 +1,16 @@
 <?php
 
-class aw_spec_obj extends _int_object
+class aw_spec_class_obj extends _int_object
 {
 	/**
 		@attrib api=1
 		@returns
-			array { oid => class_object }
+			array { oid => group_object }
 	**/
-	public function spec_class_list()
+	public function spec_group_list()
 	{
 		$ol = new object_list(array(
-			"class_id" => CL_AW_SPEC_CLASS,
+			"class_id" => CL_AW_SPEC_GROUP,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"parent" => $this->id()
@@ -20,23 +20,23 @@ class aw_spec_obj extends _int_object
 
 	/**
 		@attrib api=1 params=pos
-		@param class_data required type=array
-			array { oid => array { class_name => text, class_desc => text } }
+		@param group_data required type=array
+			array { oid => array { group_name => text, parent_group_name => text } }
 	**/
-	public function set_spec_class_list($class_data)
+	public function set_spec_group_list($group_data)
 	{
-		$cur_list = $this->spec_class_list();
+		$cur_list = $this->spec_group_list();
 		
-		$class_data = $this->_get_class_data($class_data);
+		$group_data = $this->_get_group_data($group_data);
 
-		foreach($class_data as $idx => $cle)
+		foreach($group_data as $idx => $cle)
 		{
 			// add new
 			if (!is_oid($idx))
 			{
 				$tmp = $this->_add_class_entry($cle);
 				$cur_list[$tmp->id()] = $tmp;
-				$class_data[$tmp->id()] = $cle;
+				$group_data[$tmp->id()] = $cle;
 			}
 			else
 			// change old
@@ -48,7 +48,7 @@ class aw_spec_obj extends _int_object
 		// remove deleted
 		foreach($cur_list as $oid => $obj)
 		{
-			if (!isset($class_data[$oid]))
+			if (!isset($group_data[$oid]))
 			{
 				$obj->delete();
 			}
@@ -56,12 +56,12 @@ class aw_spec_obj extends _int_object
 	}
 
 	/** filter data for empty entries **/
-	private function _get_class_data($class_data)
+	private function _get_group_data($class_data)
 	{
 		$rv = array();
 		foreach(safe_array($class_data) as $idx => $cle)
 		{
-			if (trim($cle["class_name"]) != "")
+			if (trim($cle["group_name"]) != "")
 			{
 				$rv[$idx]  = $cle;
 			}
@@ -73,7 +73,7 @@ class aw_spec_obj extends _int_object
 	private function _add_class_entry($cle)
 	{
 		$o = obj();
-		$o->set_class_id(CL_AW_SPEC_CLASS);
+		$o->set_class_id(CL_AW_SPEC_GROUP);
 		$o->set_parent($this->id());
 		$this->_upd_class_obj($o, $cle);
 		return $o;
@@ -81,8 +81,8 @@ class aw_spec_obj extends _int_object
 
 	private function _upd_class_obj($o, $cle)
 	{
-		$o->set_name($cle["class_name"]);
-		$o->set_comment($cle["class_desc"]);
+		$o->set_name($cle["group_name"]);
+		$o->set_comment($cle["parent_group_name"]);
 		$o->save();
 	}
 }

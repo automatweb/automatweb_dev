@@ -17,8 +17,6 @@
 
 		@property class_list type=table store=no no_caption=1 parent=v_split
 		@property relation_list type=table store=no no_caption=1 parent=v_split
-		@property group_list type=table store=no no_caption=1 parent=v_split
-		@property prop_list type=table store=no no_caption=1 parent=v_split
 		
 		@layout spec_border type=vbox parent=v_split area_caption=Sisu closeable=1
 
@@ -58,8 +56,6 @@ class aw_spec extends class_base
 				array("classes", "classes_classes", t("Klassid"), "class_list"),
 				array("classes", "classes_rels", t("Seosed"), "relation_list"),
 				array("classes", "classes_ui", t("Kasutajaliides"), "spec_editor"),
-			array(0, "groups", t("Omaduste grupid"), "group_list"),
-			array(0, "props", t("Omaduste loetelu"), "prop_list"),
 			array(0, "prev", t("Eeskujud"), "spec_editor"),
 			array(0, "bl", t("&Auml;riloogika"), "spec_overview"),
 				array("bl", "classes_ucase", t("Kasutajalood"), "spec_editor"),
@@ -72,11 +68,13 @@ class aw_spec extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["disp"] = $_GET["disp"];
+		$arr["disp2"] = $_GET["disp2"];
 	}
 
 	function callback_mod_retval($arr)
 	{
 		$arr["args"]["disp"] = $arr["request"]["disp"];
+		$arr["args"]["disp2"] = $arr["request"]["disp2"];
 	}
 
 	function _get_spec_tb($arr)
@@ -97,6 +95,12 @@ class aw_spec extends class_base
 				"url" => aw_url_change_var("disp", $item[1]),
 				"name" => $disp == $item[1] ? "<b>".$item[2]."</b>" : $item[2]
 			));
+
+			$mn = "_get_".$item[3]."_tree_items";
+			if (method_exists($this, $mn))
+			{
+				$this->$mn($t, $arr["obj_inst"], $item[1]);
+			}
 		}
 	}
 
@@ -119,32 +123,40 @@ class aw_spec extends class_base
 			return PROP_IGNORE;
 		}
 
+		if ($this->can("view", $arr["request"]["disp2"]))
+		{
+			$o = obj($arr["request"]["disp2"]);
+			return $o->instance()->get_embed_prop($o, $arr);
+		}
+
 		$disp = $this->_get_disp($arr);
 
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_class_list_table($t);
-		$data = $arr["obj_inst"]->meta($disp);
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
+		
+		$data = $arr["obj_inst"]->spec_class_list();
+		$data[-1] = obj();
+		$data[-2] = obj();
+		$data[-3] = obj();
+		$data[-4] = obj();
+		$data[-5] = obj();
 		foreach($data as $idx => $dr)
 		{
 			$t->define_data(array(
 				"class_desc" => html::textarea(array(
 					"name" => "class_list[".$idx."][class_desc]",
-					"value" => $dr["class_desc"],
+					"value" => $dr->comment(),
 					"rows" => 5,
 					"cols" => 60
 				)),
 				"class_name" => html::textbox(array(
 					"name" => "class_list[".$idx."][class_name]",
-					"value" => $dr["class_name"],
+					"value" => $dr->name(),
 				)),
 			));
 		}
 		$t->set_sortable(false);
+		$t->set_caption(t("Sisesta klassid"));
 	}
 
 	function _set_class_list($arr)
@@ -153,16 +165,15 @@ class aw_spec extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		$disp = $this->_get_disp($arr);
-		$v = array();
-		foreach(safe_array($arr["request"]["class_list"]) as $idx => $row)
+
+		if ($this->can("view", $arr["request"]["disp2"]))
 		{
-			if ($row["class_name"] != "")
-			{
-				$v[$idx] = $row;
-			}
+			$o = obj($arr["request"]["disp2"]);
+			return $o->instance()->set_embed_prop($o, $arr);
 		}
-		$arr["obj_inst"]->set_meta($disp, $v);
+
+		$disp = $this->_get_disp($arr);
+		$arr["obj_inst"]->set_spec_class_list($arr["request"]["class_list"]);
 	}
 
 	function _get_spec_editor($arr)
@@ -237,7 +248,7 @@ class aw_spec extends class_base
 				return $item;
 			}
 		}
-		throw aw_exception("no row found for disp $disp!");
+		throw new aw_exception("no row found for disp $disp!");
 	}
 
 	private function _is_visible($arr)
@@ -341,87 +352,6 @@ class aw_spec extends class_base
 		return $rv;
 	}
 
-	private function _init_group_list_table($t)
-	{	
-		$t->define_field(array(
-			"name" => "class",
-			"caption" => t("Klass"),
-		));
-		$t->define_field(array(
-			"name" => "group_name",
-			"caption" => t("Grupi nimi"),
-		));
-		$t->define_field(array(
-			"name" => "parent_group_name",
-			"caption" => t("Parent grupp"),
-		));
-	}
-
-	function _get_group_list($arr)
-	{
-		if (!$this->_is_visible($arr))
-		{
-			return PROP_IGNORE;
-		}
-		
-		$disp = $this->_get_disp($arr);
-
-		$t = $arr["prop"]["vcl_inst"];
-		$this->_init_group_list_table($t);
-
-		$group_picker = $this->_get_group_picker($arr["obj_inst"]);		
-		$class_picker = array("" => t("--vali--"));
-		foreach(safe_array($arr["obj_inst"]->meta("classes_classes")) as $idx => $row)
-		{
-			$class_picker["new_".$idx] = $row["class_name"];
-		}
-
-		$data = $arr["obj_inst"]->meta($disp);
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		foreach($data as $idx => $dr)
-		{
-			$t->define_data(array(
-				"class" => html::select(array(
-					"name" => "gp_data[".$idx."][class]",
-					"value" => $dr["class"],
-					"options" => $class_picker
-				)),
-				"group_name" => html::textbox(array(
-					"name" => "gp_data[".$idx."][group_name]",
-					"value" => $dr["group_name"],
-				)),
-				"parent_group_name" => html::select(array(
-					"name" => "gp_data[".$idx."][parent_group_name]",
-					"value" => $dr["parent_group_name"],
-					"options" => $group_picker
-				)),
-			));
-		}
-		$t->set_sortable(false);
-	}
-
-	function _set_group_list($arr)
-	{
-		if (!$this->_is_visible($arr))
-		{
-			return PROP_IGNORE;
-		}
-		$disp = $this->_get_disp($arr);
-		$v = array();
-		foreach(safe_array($arr["request"]["gp_data"]) as $idx => $row)
-		{
-			if ($row["group_name"] != "")
-			{
-				$v[$idx] = $row;
-			}
-		}
-		$arr["obj_inst"]->set_meta($disp, $v);
-	}
-
 	private function _get_group_picker($o)
 	{
 		$rv = array("" => t("--vali--"));
@@ -430,30 +360,6 @@ class aw_spec extends class_base
 			$rv[$idx] = $row["group_name"];
 		}
 		return $rv;
-	}
-
-	private function _init_prop_list_table($t)
-	{
-		$t->define_field(array(
-			"name" => "class",
-			"caption" => t("Klass"),
-		));
-		$t->define_field(array(
-			"name" => "group_name",
-			"caption" => t("Grupp"),
-		));
-		$t->define_field(array(
-			"name" => "prop_name",
-			"caption" => t("Omadus"),
-		));
-		$t->define_field(array(
-			"name" => "prop_type",
-			"caption" => t("T&uuml;&uuml;p"),
-		));
-		$t->define_field(array(
-			"name" => "prop_desc",
-			"caption" => t("Kirjeldus"),
-		));
 	}
 
 	private function _get_type_picker()
@@ -467,84 +373,6 @@ class aw_spec extends class_base
 			"relpicker" => t("Relpicker"),
 			"toolbar" => t("Toolbar")
 		);
-	}
-
-	function _get_prop_list($arr)
-	{
-		if (!$this->_is_visible($arr))
-		{
-			return PROP_IGNORE;
-		}
-		
-		$disp = $this->_get_disp($arr);
-
-		$t = $arr["prop"]["vcl_inst"];
-		$this->_init_prop_list_table($t);
-
-		$group_picker = $this->_get_group_picker($arr["obj_inst"]);		
-		$class_picker = array("" => t("--vali--"));
-		foreach(safe_array($arr["obj_inst"]->meta("classes_classes")) as $idx => $row)
-		{
-			$class_picker["new_".$idx] = $row["class_name"];
-		}
-
-		$type_picker = $this->_get_type_picker();
-
-		$data = $arr["obj_inst"]->meta($disp);
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		foreach($data as $idx => $dr)
-		{
-			$t->define_data(array(
-				"class" => html::select(array(
-					"name" => "gp_data[".$idx."][class]",
-					"value" => $dr["class"],
-					"options" => $class_picker
-				)),
-				"group_name" => html::select(array(
-					"name" => "gp_data[".$idx."][group]",
-					"value" => $dr["group"],
-					"options" => $group_picker
-				)),
-				"prop_name" => html::textbox(array(
-					"name" => "gp_data[".$idx."][prop_name]",
-					"value" => $dr["prop_name"],
-				)),
-				"prop_type" => html::select(array(
-					"name" => "gp_data[".$idx."][type]",
-					"value" => $dr["type"],
-					"options" => $type_picker
-				)),
-				"prop_desc" => html::textarea(array(
-					"name" => "gp_data[".$idx."][prop_desc]",
-					"value" => $dr["prop_desc"],
-					"rows" => 4,
-					"cols" => 20
-				)),
-			));
-		}
-		$t->set_sortable(false);
-	}
-
-	function _set_prop_list($arr)
-	{
-		if (!$this->_is_visible($arr))
-		{
-			return PROP_IGNORE;
-		}
-		$disp = $this->_get_disp($arr);
-		$v = array();
-		foreach(safe_array($arr["request"]["gp_data"]) as $idx => $row)
-		{
-			if ($row["prop_name"] != "")
-			{
-				$v[$idx] = $row;
-			}
-		}
-		$arr["obj_inst"]->set_meta($disp, $v);
 	}
 
 	function _get_view_tb($arr)
@@ -611,9 +439,20 @@ class aw_spec extends class_base
 	{
 		$t = new aw_table();
 		$this->_init_class_list_table($t);
-		foreach(safe_array($o->meta($val[1])) as $row)
+		foreach($o->spec_class_list() as $row)
 		{
-			$t->define_data($row);
+			$t->define_data(array(
+				"class_name" => $row->name(),
+				"class_desc" => $row->comment()
+			));
+
+			if (($val = $row->instance()->get_overview($row, $t)) !== null)
+			{
+				$t->define_data(array(
+					"class_name" => "&nbsp;",
+					"class_desc" => $val
+				));
+			}
 		}
 		return $t->draw();
 	}
@@ -679,6 +518,25 @@ class aw_spec extends class_base
 			));
 		}
 		return $t->draw();
+	}
+
+	private function _get_class_list_tree_items($tree, $o, $pt)
+	{
+		foreach($o->spec_class_list() as $cl_oid => $cl)
+		{
+			$id = $pt."_".$cl_oid;
+			$tree->add_item($pt, array(
+				"id" => $id,
+				"url" => aw_url_change_var("disp2", $cl_oid),
+				"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
+			));
+
+			$t = obj($cl_oid);
+			if (method_exists($t->instance(), "get_tree_items"))
+			{
+				$t->instance()->get_tree_items($tree, $t, $id);
+			}
+		}
 	}
 }
 
