@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.3 2008/04/28 13:59:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.4 2008/05/06 11:17:32 instrumental Exp $
 /*
 
 
@@ -1290,6 +1290,19 @@ class file extends class_base
 
 	}
 
+	/** Returns the download url for the file.
+		@attrib name=get_url params=pos api=1
+
+		@param id required type=oid
+
+		@param name optional type=string
+
+		@returns
+			Returns the download url for the file.
+
+		@comment
+
+	**/
 	function get_url($id,$name)
 	{
 		$retval = str_replace("automatweb/","",$this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/"))."/".urlencode(str_replace("/","_",$name));

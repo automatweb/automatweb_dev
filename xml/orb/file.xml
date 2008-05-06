@@ -17,6 +17,15 @@
 			</function>
 		</action>
 
+		<action name="get_url">
+			<function name="get_url">
+				<arguments>
+					<required name="id" type="oid" />
+					<optional name="name" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="new" is_public="1" all_args="1" caption="Lisa">
 			<function name="new_change">
 				<arguments>
