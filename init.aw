@@ -1469,7 +1469,6 @@ function __autoload($class_name)
 
 function aw_exception_handler($e)
 {
-die(var_dump($e));
 	try
 	{
 		error::raise(array(
