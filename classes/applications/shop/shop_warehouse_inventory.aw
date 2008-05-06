@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_inventory.aw,v 1.2 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_inventory.aw,v 1.3 2008/05/06 11:48:13 kristo Exp $
 // shop_warehouse_inventory.aw - Inventuur 
 /*
 
@@ -15,6 +15,9 @@
 
 	@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=shop_warehouse_inventory
 	@caption Ladu
+
+	@property confirmed type=checkbox ch_value=1 table=shop_warehouse_inventory field=aw_confirmed
+	@caption Kinnitatud
 
 @groupinfo products caption="Tooted"
 @default group=products
@@ -52,67 +55,15 @@ class shop_warehouse_inventory extends class_base
 {
 	function shop_warehouse_inventory()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/shop/shop_warehouse_inventory",
 			"clid" => CL_SHOP_WAREHOUSE_INVENTORY
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- set_property --//
-
-		}
-		return $retval;
-	}	
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 
 	function _get_toolbar($arr)
@@ -134,7 +85,7 @@ class shop_warehouse_inventory extends class_base
 		$t->set_sortable(false);
 /*
 
-Tekstivälja saab sisestada koguse, mis jäetakse meelde suhtena selle inventuuri ja selle toote vahel
+Tekstiv2lja saab sisestada koguse, mis j2etakse meelde suhtena selle inventuuri ja selle toote vahel
 
 */
 		$t->define_field(array(
@@ -219,6 +170,7 @@ Tekstivälja saab sisestada koguse, mis jäetakse meelde suhtena selle inventuuri 
 		{
 			case 'date':
 			case 'warehouse':
+			case 'aw_confirmed':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
@@ -227,6 +179,15 @@ Tekstivälja saab sisestada koguse, mis jäetakse meelde suhtena selle inventuuri 
 		}
 
 		return false;
+	}
+
+	function _get_warehouse($arr)
+	{
+		if ($arr["request"]["warehouse"])
+		{
+			$arr["prop"]["value"] = $arr["request"]["warehouse"];
+			$arr["prop"]["options"][$arr["request"]["warehouse"]] = obj($arr["request"]["warehouse"])->name();
+		}
 	}
 
 }

@@ -1,69 +1,534 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.62 2008/03/13 13:27:17 kristo Exp $
-// shop_warehouse.aw - Ladu 
 /*
-
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_search_change)
 
-
 @tableinfo aw_shop_warehouses index=aw_oid master_table=objects master_index=brother_of
-
-@classinfo syslog_type=ST_SHOP_WAREHOUSE relationmgr=yes maintainer=kristo
+@classinfo syslog_type=ST_SHOP_WAREHOUSE relationmgr=yes maintainer=kristo prop_cb=1
 
 @default table=objects
-@default group=general
 
-@property conf type=relpicker reltype=RELTYPE_CONFIG table=aw_shop_warehouses field=aw_config 
-@caption Konfiguratsioon
+@default group=general_sub
 
-@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER table=objects field=meta method=serialize
-@caption Tellimiskeskkond tellimuste jaoks
+	@property name type=textbox rel=1 trans=1
+	@caption Nimi
+	@comment Objekti nimi
 
-/////////// products tab
-@groupinfo products caption="Tooted" submit=no
+	@property comment type=textbox
+	@caption Kommentaar
+	@comment Vabas vormis tekst objekti kohta
 
-@property products_toolbar type=toolbar no_caption=1 group=products store=no
-
-@property products_list type=text store=no group=products no_caption=1 
-@caption Toodete nimekiri 
-
-/////////// productgroups tab
-@groupinfo productgroups caption="Tootegrupid" submit=no
-
-@property productgroups_toolbar type=toolbar no_caption=1 group=productgroups store=no
-
-@property productgroups_list type=table store=no group=productgroups no_caption=1 
-@caption Tootegruppide nimekiri 
-
-/////////// packets tab
-@groupinfo packets caption="Paketid" submit=no
-
-@property packets_toolbar type=toolbar no_caption=1 group=packets store=no
-
-@property packets_list type=text store=no group=packets no_caption=1
-@caption Pakettide nimekiri
-
-/////////// storage tab
-@groupinfo storage caption="Laoseis"
-@groupinfo storage_storage parent=storage caption="Laoseis" submit=no
-@groupinfo storage_income parent=storage caption="Sissetulekud" 
-@groupinfo storage_export parent=storage caption="V&auml;ljaminekud"
-
-@property storage_list type=table store=no group=storage_storage no_caption=1
-@caption Laoseis
-
-@property storage_income_toolbar type=toolbar no_caption=1 group=storage_income store=no
-
-@property storage_income type=table store=no group=storage_income no_caption=1
-@caption Sissetulekud
-
-@property storage_export_toolbar type=toolbar no_caption=1 group=storage_export store=no
-
-@property storage_export type=table store=no group=storage_export no_caption=1
-@caption V&auml;ljaminekud
-////////// ordering tab
+	@property status type=status trans=1 default=1
+	@caption Aktiivne
+	@comment Kas objekt on aktiivne
 
 
+@default group=general_settings
+
+	@property conf type=relpicker reltype=RELTYPE_CONFIG table=aw_shop_warehouses field=aw_config 
+	@caption Seaded
+
+	@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER table=objects field=meta method=serialize
+	@caption Tellimiskeskkond tellimuste jaoks
+
+	@property category_entry_form type=relpicker reltype=RELTYPE_CAT_ENTRY_FORM table=objects field=meta method=serialize
+	@caption Kategooria lisamise vorm
+
+	@property status_calc_type type=chooser table=aw_shop_warehouses field=aw_status_calc_type
+	@caption Laoseisu arvestus
+
+
+@default group=productgroups
+
+	@property productgroups_toolbar type=toolbar no_caption=1 store=no
+
+	@property productgroups_list type=table store=no no_caption=1 
+	@caption Tootegruppide nimekiri 
+
+
+@default group=products
+
+	@property products_toolbar type=toolbar no_caption=1 store=no
+
+	@layout prod_split type=hbox width=20%:80%
+
+		@layout prod_left type=vbox parent=prod_split
+
+			@layout prod_tree_lay type=vbox closeable=1 area_caption=Toodete&nbsp;puu parent=prod_left
+	
+				@property prod_tree type=treeview parent=prod_tree_lay store=no no_caption=1
+
+			@layout prod_left_search type=vbox parent=prod_left area_caption=Otsing closeable=1
+
+				@property prod_s_name type=textbox store=no captionside=top size=30 parent=prod_left_search
+				@caption Nimi 
+				
+				@property prod_s_code type=textbox store=no captionside=top size=30 parent=prod_left_search
+				@caption Kood
+				
+				@property prod_s_barcode type=textbox store=no captionside=top size=30 parent=prod_left_search
+				@caption Ribakood
+				
+				@property prod_s_cat type=textbox store=no captionside=top size=30 parent=prod_left_search
+				@caption Kategooria
+				
+				@property prod_s_count type=select store=no captionside=top parent=prod_left_search
+				@caption Laoseis
+
+				@property prod_s_price_from type=textbox store=no captionside=top size=30 parent=prod_left_search
+				@caption Hind alates
+				
+				@property prod_s_pricelist type=textbox store=no captionside=top size=30  parent=prod_left_search
+				@caption Hinnakiri
+				
+				@property prod_s_sbt type=submit store=no captionside=top  parent=prod_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property products_list type=table store=no no_caption=1  parent=prod_split
+		@caption Toodete nimekiri 
+
+@default group=packets
+
+	@property packets_toolbar type=toolbar no_caption=1 group=packets store=no
+
+	@layout packets_split type=hbox width=20%:80%
+
+		@layout packets_left type=vbox parent=packets_split
+
+			@layout packets_tree_lay type=vbox closeable=1 area_caption=Pakettide&nbsp;puu parent=packets_left
+	
+				@property packets_tree type=treeview parent=packets_tree_lay store=no no_caption=1
+
+			@layout packets_left_search type=vbox parent=packets_left area_caption=Otsing closeable=1
+
+				@property packets_s_name type=textbox store=no captionside=top size=30 parent=packets_left_search
+				@caption Nimi 
+				
+				@property packets_s_code type=textbox store=no captionside=top size=30 parent=packets_left_search
+				@caption Kood
+				
+				@property packets_s_barcode type=textbox store=no captionside=top size=30 parent=packets_left_search
+				@caption Ribakood
+				
+				@property packets_s_cat type=textbox store=no captionside=top size=30 parent=packets_left_search
+				@caption Kategooria
+				
+				@property packets_s_count type=select store=no captionside=top parent=packets_left_search
+				@caption Laoseis
+
+				@property packets_s_price_from type=textbox store=no captionside=top size=30 parent=packets_left_search
+				@caption Hind alates
+				
+				@property packets_s_pricelist type=textbox store=no captionside=top size=30  parent=packets_left_search
+				@caption Hinnakiri
+				
+				@property packets_s_sbt type=submit store=no captionside=top  parent=packets_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property packets_list type=table store=no no_caption=1  parent=packets_split
+		@caption Pakettide nimekiri 
+
+
+@default group=storage_income
+
+	@property storage_income_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_income_split type=hbox width=20%:80%
+
+		@layout storage_income_left type=vbox parent=storage_income_split
+
+			@layout storage_income_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_income_left
+	
+				@property storage_income_tree type=treeview parent=storage_income_tree_lay store=no no_caption=1
+
+			@layout storage_income_left_search type=vbox parent=storage_income_left area_caption=Otsing closeable=1
+
+				@property storage_income_s_acquiredby type=textbox store=no captionside=top size=30 parent=storage_income_left_search
+				@caption Hankija
+				
+				@property storage_income_s_type type=chooser store=no captionside=top size=30 parent=storage_income_left_search
+				@caption T&uuml;&uuml;p
+				
+				@property storage_income_s_number type=textbox store=no captionside=top size=30 parent=storage_income_left_search
+				@caption Number
+				
+				@property storage_income_s_status type=textbox store=no captionside=top size=30 parent=storage_income_left_search
+				@caption Staatus
+				
+				@property storage_income_s_from type=date_select store=no captionside=top parent=storage_income_left_search
+				@caption Alates
+
+				@property storage_income_s_to type=date_select store=no captionside=top size=30 parent=storage_income_left_search
+				@caption Kuni
+				
+				@property storage_income_s_article type=textbox store=no captionside=top size=30  parent=storage_income_left_search
+				@caption Artikkel
+				
+				@property storage_income_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_income_left_search
+				@caption Artikli kategooria
+				
+				@property storage_income_s_sbt type=submit store=no captionside=top  parent=storage_income_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_income type=table store=no no_caption=1  parent=storage_income_split
+		@caption Sissetulekud
+
+
+@default group=storage_export
+
+	@property storage_export_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_export_split type=hbox width=20%:80%
+
+		@layout storage_export_left type=vbox parent=storage_export_split
+
+			@layout storage_export_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_export_left
+	
+				@property storage_export_tree type=treeview parent=storage_export_tree_lay store=no no_caption=1
+
+			@layout storage_export_left_search type=vbox parent=storage_export_left area_caption=Otsing closeable=1
+
+				@property storage_export_s_acquiredby type=textbox store=no captionside=top size=30 parent=storage_export_left_search
+				@caption Hankija
+				
+				@property storage_export_s_type type=chooser store=no captionside=top size=30 parent=storage_export_left_search
+				@caption T&uuml;&uuml;p
+				
+				@property storage_export_s_number type=textbox store=no captionside=top size=30 parent=storage_export_left_search
+				@caption Number
+				
+				@property storage_export_s_status type=textbox store=no captionside=top size=30 parent=storage_export_left_search
+				@caption Staatus
+				
+				@property storage_export_s_from type=date_select store=no captionside=top parent=storage_export_left_search
+				@caption Alates
+
+				@property storage_export_s_to type=date_select store=no captionside=top size=30 parent=storage_export_left_search
+				@caption Kuni
+				
+				@property storage_export_s_article type=textbox store=no captionside=top size=30  parent=storage_export_left_search
+				@caption Artikkel
+				
+				@property storage_export_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_export_left_search
+				@caption Artikli kategooria
+				
+				@property storage_export_s_sbt type=submit store=no captionside=top  parent=storage_export_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_export type=table store=no no_caption=1  parent=storage_export_split
+		@caption V&auml;ljaminekud
+
+
+@default group=storage_movements
+
+	@property storage_movements_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_movements_split type=hbox width=20%:80%
+
+		@layout storage_movements_left type=vbox parent=storage_movements_split
+
+			@layout storage_movements_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_movements_left
+	
+				@property storage_movements_tree type=treeview parent=storage_movements_tree_lay store=no no_caption=1
+
+			@layout storage_movements_left_search type=vbox parent=storage_movements_left area_caption=Otsing closeable=1
+
+				@property storage_movements_s_warehouse type=textbox store=no captionside=top size=30 parent=storage_movements_left_search
+				@caption Ladu
+				
+				@property storage_movements_s_number type=textbox store=no captionside=top size=30 parent=storage_movements_left_search
+				@caption Number
+				
+				@property storage_movements_s_status type=textbox store=no captionside=top size=30 parent=storage_movements_left_search
+				@caption Staatus
+				
+				@property storage_movements_s_from type=date_select store=no captionside=top parent=storage_movements_left_search
+				@caption Alates
+
+				@property storage_movements_s_to type=date_select store=no captionside=top size=30 parent=storage_movements_left_search
+				@caption Kuni
+				
+				@property storage_movements_s_article type=textbox store=no captionside=top size=30  parent=storage_movements_left_search
+				@caption Artikkel
+				
+				@property storage_movements_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_movements_left_search
+				@caption Artikli kategooria
+				
+				@property storage_movements_s_sbt type=submit store=no captionside=top  parent=storage_movements_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_movements type=table store=no no_caption=1  parent=storage_movements_split
+		@caption V&auml;ljaminekud
+
+
+@default group=storage_writeoffs
+
+	@property storage_writeoffs_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_writeoffs_split type=hbox width=20%:80%
+
+		@layout storage_writeoffs_left type=vbox parent=storage_writeoffs_split
+
+			@layout storage_writeoffs_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_writeoffs_left
+	
+				@property storage_writeoffs_tree type=treeview parent=storage_writeoffs_tree_lay store=no no_caption=1
+
+			@layout storage_writeoffs_left_search type=vbox parent=storage_writeoffs_left area_caption=Otsing closeable=1
+
+				@property storage_writeoffs_s_warehouse type=textbox store=no captionside=top size=30 parent=storage_writeoffs_left_search
+				@caption Ladu
+				
+				@property storage_writeoffs_s_number type=textbox store=no captionside=top size=30 parent=storage_writeoffs_left_search
+				@caption Number
+				
+				@property storage_writeoffs_s_status type=textbox store=no captionside=top size=30 parent=storage_writeoffs_left_search
+				@caption Staatus
+				
+				@property storage_writeoffs_s_from type=date_select store=no captionside=top parent=storage_writeoffs_left_search
+				@caption Alates
+
+				@property storage_writeoffs_s_to type=date_select store=no captionside=top size=30 parent=storage_writeoffs_left_search
+				@caption Kuni
+				
+				@property storage_writeoffs_s_article type=textbox store=no captionside=top size=30  parent=storage_writeoffs_left_search
+				@caption Artikkel
+				
+				@property storage_writeoffs_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_writeoffs_left_search
+				@caption Artikli kategooria
+				
+				@property storage_writeoffs_s_sbt type=submit store=no captionside=top  parent=storage_writeoffs_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_writeoffs type=table store=no no_caption=1  parent=storage_writeoffs_split
+		@caption Mahakandmised
+
+
+@default group=status_status
+
+	@property storage_status_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_status_split type=hbox width=20%:80%
+
+		@layout storage_status_left type=vbox parent=storage_status_split
+
+			@layout storage_status_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_status_left
+	
+				@property storage_status_tree type=treeview parent=storage_status_tree_lay store=no no_caption=1
+
+			@layout storage_status_left_search type=vbox parent=storage_status_left area_caption=Otsing closeable=1
+
+				@property storage_status_s_name type=textbox store=no captionside=top size=30 parent=storage_status_left_search
+				@caption Nimi
+				
+				@property storage_status_s_code type=textbox store=no captionside=top size=30 parent=storage_status_left_search
+				@caption Kood
+				
+				@property storage_status_s_barcode type=textbox store=no captionside=top size=30 parent=storage_status_left_search
+				@caption Ribakood
+				
+				@property storage_status_s_category type=date_select store=no captionside=top parent=storage_status_left_search
+				@caption Kategooria
+
+				@property storage_status_s_status type=date_select store=no captionside=top size=30 parent=storage_status_left_search
+				@caption Laoseis
+				
+				@property storage_status_s_price type=textbox store=no captionside=top size=30  parent=storage_status_left_search
+				@caption Hind
+				
+				@property storage_status_s_pricelist type=textbox store=no captionside=top size=30  parent=storage_status_left_search
+				@caption Hinnakiri
+				
+				@property storage_status_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_status_left_search
+				@caption Alla miinimumi
+				
+				@property storage_status_s_sbt type=submit store=no captionside=top  parent=storage_status_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_status type=table store=no no_caption=1  parent=storage_status_split
+		@caption Laoseis
+
+
+@default group=status_prognosis
+
+	@property storage_prognosis_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_prognosis_split type=hbox width=20%:80%
+
+		@layout storage_prognosis_left type=vbox parent=storage_prognosis_split
+
+			@layout storage_prognosis_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_prognosis_left
+	
+				@property storage_prognosis_tree type=treeview parent=storage_prognosis_tree_lay store=no no_caption=1
+
+			@layout storage_prognosis_left_search type=vbox parent=storage_prognosis_left area_caption=Otsing closeable=1
+
+				@property storage_prognosis_s_name type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
+				@caption Nimi
+				
+				@property storage_prognosis_s_code type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
+				@caption Kood
+				
+				@property storage_prognosis_s_barcode type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
+				@caption Ribakood
+				
+				@property storage_prognosis_s_category type=date_select store=no captionside=top parent=storage_prognosis_left_search
+				@caption Kategooria
+
+				@property storage_prognosis_s_status type=date_select store=no captionside=top size=30 parent=storage_prognosis_left_search
+				@caption Laoseis
+				
+				@property storage_prognosis_s_price type=textbox store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@caption Hind
+				
+				@property storage_prognosis_s_pricelist type=textbox store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@caption Hinnakiri
+				
+				@property storage_prognosis_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@caption Alla miinimumi
+				
+				@property storage_prognosis_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@caption Kuup&auml;ev
+				
+				@property storage_prognosis_s_sales_order_status type=chooser ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@caption M&uuml;&uuml;gitellimuste staatus
+
+				@property storage_prognosis_s_purchase_order_status type=chooser ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@caption Ostutellimuste staatus
+				
+				@property storage_prognosis_s_sbt type=submit store=no captionside=top  parent=storage_prognosis_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_prognosis type=table store=no no_caption=1  parent=storage_prognosis_split
+		@caption Laoseis
+
+
+@default group=status_inventories
+
+	@property storage_inventories_toolbar type=toolbar no_caption=1 store=no
+
+	@layout storage_inventories_split type=hbox width=20%:80%
+
+		@layout storage_inventories_left type=vbox parent=storage_inventories_split
+
+			@layout storage_inventories_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_inventories_left
+	
+				@property storage_inventories_tree type=treeview parent=storage_inventories_tree_lay store=no no_caption=1
+
+			@layout storage_inventories_left_search type=vbox parent=storage_inventories_left area_caption=Otsing closeable=1
+
+				@property storage_inventories_s_name type=textbox store=no captionside=top size=30 parent=storage_inventories_left_search
+				@caption Nimi
+				
+				@property storage_inventories_s_from type=date_select store=no captionside=top parent=storage_inventories_left_search
+				@caption Alates
+
+				@property storage_inventories_s_to type=date_select store=no captionside=top size=30 parent=storage_inventories_left_search
+				@caption Kuni
+				
+				@property storage_inventories_s_sbt type=submit store=no captionside=top  parent=storage_inventories_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property storage_inventories type=table store=no no_caption=1  parent=storage_inventories_split
+		@caption Inventuurid
+
+
+@default group=purchase_orders
+
+	@property purchase_orders_toolbar type=toolbar no_caption=1 store=no
+
+	@layout purchase_orders_split type=hbox width=20%:80%
+
+		@layout purchase_orders_left type=vbox parent=purchase_orders_split
+
+			@layout purchase_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=purchase_orders_left
+	
+				@property purchase_orders_tree type=treeview parent=purchase_orders_tree_lay store=no no_caption=1
+
+			@layout purchase_orders_left_search type=vbox parent=purchase_orders_left area_caption=Otsing closeable=1
+
+				@property purchase_orders_s_purchaser type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
+				@caption Hankija
+				
+				@property purchase_orders_s_number type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
+				@caption Number
+
+				@property purchase_orders_s_status type=chooser store=no captionside=top size=30 parent=purchase_orders_left_search
+				@caption Staatus
+				
+				@property purchase_orders_s_from type=date_select store=no captionside=top parent=purchase_orders_left_search
+				@caption Alates
+
+				@property purchase_orders_s_to type=date_select store=no captionside=top size=30 parent=purchase_orders_left_search
+				@caption Kuni
+				
+				@property purchase_orders_s_art type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
+				@caption Artikkel
+
+				@property purchase_orders_s_art_cat type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
+				@caption Artikli kategooria
+
+				@property purchase_orders_s_sbt type=submit store=no captionside=top  parent=purchase_orders_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property purchase_orders type=table store=no no_caption=1  parent=purchase_orders_split
+		@caption Ostutellimused
+
+
+@default group=sell_orders
+
+	@property sell_orders_toolbar type=toolbar no_caption=1 store=no
+
+	@layout sell_orders_split type=hbox width=20%:80%
+
+		@layout sell_orders_left type=vbox parent=sell_orders_split
+
+			@layout sell_orders_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=sell_orders_left
+	
+				@property sell_orders_tree type=treeview parent=sell_orders_tree_lay store=no no_caption=1
+
+			@layout sell_orders_left_search type=vbox parent=sell_orders_left area_caption=Otsing closeable=1
+
+				@property sell_orders_s_buyer type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Ostja
+				
+				@property sell_orders_s_number type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Number
+
+				@property sell_orders_s_status type=chooser store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Staatus
+				
+				@property sell_orders_s_from type=date_select store=no captionside=top parent=sell_orders_left_search
+				@caption Alates
+
+				@property sell_orders_s_to type=date_select store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Kuni
+				
+				@property sell_orders_s_art type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Artikkel
+
+				@property sell_orders_s_art_cat type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Artikli kategooria
+
+				@property sell_orders_s_sbt type=submit store=no captionside=top  parent=sell_orders_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property sell_orders type=table store=no no_caption=1  parent=sell_orders_split
+		@caption M&uuml;&uuml;gitellimused
+
+
+
+
+/////////////////////////////////////////////////////////////////////////// OLDER, PLEASE REVIEW
 #otsing
 @property find_name type=textbox store=no group=order_confirmed,order_unconfirmed
 @caption Nimi
@@ -116,7 +581,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @caption Toote nimi
 
 @property osearch_from type=chooser group=order_search store=no
-@caption Otsi staatuse järgi
+@caption Otsi staatuse j&auml;rgi
 
 @property osearch_odates type=date_select group=order_search store=no
 @caption Tellimuse ajavahemik (alates)
@@ -171,6 +636,35 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @caption Tellimuse info vorm
 
 
+
+// general subs
+	@groupinfo general_sub parent=general caption="&Uuml;ldine"
+	@groupinfo general_settings parent=general caption="Seaded"
+	@groupinfo productgroups caption="Tootegrupid" submit=no parent=general
+
+@groupinfo articles caption="Artiklid"
+
+	@groupinfo products caption="Artiklid" submit=no parent=articles
+	@groupinfo packets caption="Paketid" submit=no parent=articles
+
+@groupinfo storage caption="Muutused"
+
+	@groupinfo storage_income parent=storage caption="Sissetulekud" 
+	@groupinfo storage_export parent=storage caption="V&auml;ljaminekud"
+	@groupinfo storage_movements parent=storage caption="Liikumised" submit=no
+	@groupinfo storage_writeoffs parent=storage caption="Mahakandmised" submit=no
+
+@groupinfo status caption="Laoseis"
+
+	@groupinfo status_status caption="Laoseis" parent=status
+	@groupinfo status_prognosis caption="Prognoos" parent=status
+	@groupinfo status_inventories caption="Inventuurid" parent=status
+
+@groupinfo purchases caption="Tellimused"
+
+	@groupinfo purchase_orders caption="Ostutellimused" parent=purchases
+	@groupinfo sell_orders caption="M&uuml;&uuml;gitellimused" parent=purchases
+
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
 @caption konfiguratsioon
@@ -198,6 +692,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @reltype CFGMANAGER value=8 clid=CL_CFGMANAGER
 @caption Seadete haldur
+
+@reltype CAT_ENTRY_FORM value=9 clid=CL_CFGFORM
+@caption Kategooria lisamise vorm
+
+@reltype PURCHASE_ORDER value=10 clid=CL_SHOP_PURCHASE_ORDER
+@caption Ostutellimus
+
+@reltype SELL_ORDER value=11 clid=CL_SHOP_SELL_ORDER
+@caption M&uuml;&uuml;gitellimus
+
+@reltype INVENTORY value=12 clid=CL_SHOP_WAREHOUSE_INVENTORY
+@caption Inventuur
+
 */
 
 class shop_warehouse extends class_base
@@ -263,10 +770,6 @@ class shop_warehouse extends class_base
 				$this->mk_prod_toolbar($arr);
 				break;
 
-			case "products_list":
-				$this->do_prod_list($arr);
-				break;
-
 			case "productgroups_toolbar":
 				$this->mk_prodg_toolbar($arr);
 				break;
@@ -279,10 +782,6 @@ class shop_warehouse extends class_base
 				$this->mk_pkt_toolbar($arr);
 				break;
 
-			case "packets_list":
-				$this->do_pkt_list($arr);
-				break;
-
 			case "storage_list":
 				$this->do_storage_list_tbl($arr);
 				break;
@@ -291,16 +790,8 @@ class shop_warehouse extends class_base
 				$this->mk_storage_income_toolbar($arr);
 				break;
 
-			case "storage_income":
-				$this->do_storage_income_tbl($arr);
-				break;
-
 			case "storage_export_toolbar":
 				$this->mk_storage_export_toolbar($arr);
-				break;
-
-			case "storage_export":
-				$this->do_storage_export_tbl($arr);
 				break;
 
 			case "order_unconfirmed_toolbar":
@@ -1093,20 +1584,7 @@ class shop_warehouse extends class_base
 		}
 	}
 
-	function do_prod_list(&$arr)
-	{
-		// this has tree on left, table on right
-		$this->read_template("prod_list.tpl");
-
-		$this->vars(array(
-			"tree" => $this->_prod_list_tree($arr),
-			"list" => $this->_prod_list_list($arr)
-		));
-
-		$arr["prop"]["value"] = $this->parse();
-	}
-
-	function _prod_list_tree(&$arr)
+	function _get_prod_tree(&$arr)
 	{
 		$ot = new object_tree(array(
 			"parent" => $this->config->prop("prod_fld"),
@@ -1115,8 +1593,7 @@ class shop_warehouse extends class_base
 			"sort_by" => "objects.jrk"
 		));
 		
-		classload("vcl/treeview");
-		$tv = treeview::tree_from_objects(array(
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML,
 				"tree_id" => "prods",
@@ -1126,14 +1603,11 @@ class shop_warehouse extends class_base
 			"ot" => $ot,
 			"var" => "tree_filter"
 		));
-
-		return $tv->finalize_tree();
 	}
 
-	function _prod_list_list(&$arr)
+	function _get_products_list(&$arr)
 	{
-		classload("vcl/table");
-		$tb = new aw_table(array("layout" => "generic"));
+		$tb = $arr["prop"]["vcl_inst"];
 		$this->_init_prod_list_list_tbl($tb, $arr["obj_inst"]);
 
 		// get items 
@@ -1148,6 +1622,7 @@ class shop_warehouse extends class_base
 				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 			));
+			$tb->set_caption(sprintf(t("Artiklid kategoorias %s"), obj($_GET["tree_filter"])->path_str(array("start_at" => $this->config->prop("prod_fld")))));
 		}
 
 		classload("core/icons");
@@ -1207,7 +1682,7 @@ class shop_warehouse extends class_base
 
 			$tb->define_data(array(
 				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
-				"name" => $name,
+				"name" => html::obj_change_url($o), //$name,
 				"cnt" => $o->prop("item_count"),
 				"item_type" => $tp,
 				"change" => html::href(array(
@@ -1238,13 +1713,6 @@ class shop_warehouse extends class_base
 
 		$tb->set_numeric_field("hidden_ord");				
 		$tb->set_default_sortby(array("is_menu", "hidden_ord"));
-		$tb->sort_by();
-		
-		return $tb->draw(array(
-			//"pageselector" => "text",
-			//"records_per_page" => 50,
-			//"has_pages" => 1
-		));
 	}
 
 	function _init_prod_list_list_tbl(&$t, $o)
@@ -1262,6 +1730,63 @@ class shop_warehouse extends class_base
 		));
 
 		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "code",
+			"caption" => t("Kood"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "last_purchase_price",
+			"caption" => t("Ostuhind"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "price_fifo",
+			"caption" => t("FIFO"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "sales_price",
+			"caption" => t("M&uuml;&uuml;gihind"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "amount1",
+			"caption" => t("Kogus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "unit1",
+			"caption" => t("&Uuml;hik"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "amount2",
+			"caption" => t("Kogus 2"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "unit2",
+			"caption" => t("&Uuml;hik 2"),
+			"align" => "center"
+		));
+
+
+		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
@@ -1274,7 +1799,7 @@ class shop_warehouse extends class_base
 			"align" => "center"
 		));
 
-		$conf = obj($o->prop("conf"));
+/*		$conf = obj($o->prop("conf"));
 		if (!$conf->prop("no_count"))
 		{
 			$t->define_field(array(
@@ -1302,12 +1827,11 @@ class shop_warehouse extends class_base
 			"name" => "change",
 			"caption" => t("Muuda"),
 			"align" => "center"
-		));
+		));*/
 
-		$t->define_field(array(
-			"name" => "del",
-			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>".t("Vali")."</a>",
-			"align" => "center",
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 
@@ -1372,22 +1896,48 @@ class shop_warehouse extends class_base
 				"return_url" => get_ru()
 			), CL_SHOP_PACKET)
 		));
-	}
 
-	function do_pkt_list(&$arr)
-	{
-		// this has tree on left, table on right
-		$this->read_template("prod_list.tpl");
-
-		$this->vars(array(
-			"tree" => $this->_pkt_list_tree($arr),
-			"list" => $this->_pkt_list_list($arr)
+		$tb->add_button(array(
+			"name" => "del",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta valitud"),
+			"url" => "javascript:document.changeform.submit()"
 		));
 
-		$arr["prop"]["value"] = $this->parse();
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => t("Lisa korvi"),
+			"action" => "add_to_cart"
+		));
+		
+		$tb->add_button(array(
+			"name" => "copy",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri"),
+			"action" => "copy_products"
+		));
+		
+		$tb->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otilde;ika"),
+			"action" => "cut_products"
+		));
+	
+		$tb->add_button(array(
+			"name" => "paste",
+			"img" => "paste.gif",
+			"tooltip" => t("Kleebi"),
+			"url" => $this->mk_my_orb("paste_products", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => get_ru(),
+			))
+			//"action" => "paste_products"
+		));
 	}
 
-	function _pkt_list_tree(&$arr)
+	function _get_packets_tree($arr)
 	{
 		$ot = new object_tree(array(
 			"parent" => $this->config->prop("pkt_fld"),
@@ -1396,8 +1946,7 @@ class shop_warehouse extends class_base
 			"sort_by" => "objects.jrk"
 		));
 		
-		classload("vcl/treeview");
-		$tv = treeview::tree_from_objects(array(
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML,
 				"tree_id" => "pkts",
@@ -1407,14 +1956,11 @@ class shop_warehouse extends class_base
 			"ot" => $ot,
 			"var" => "tree_filter"
 		));
-
-		return $tv->finalize_tree();
 	}
 
-	function _pkt_list_list(&$arr)
+	function _get_packets_list(&$arr)
 	{
-		classload("vcl/table");
-		$tb = new aw_table(array("layout" => "generic"));
+		$tb = $arr["prop"]["vcl_inst"];
 		$this->_init_pkt_list_list_tbl($tb, $arr["obj_inst"]);
 
 		// get items 
@@ -1463,19 +2009,93 @@ class shop_warehouse extends class_base
 				))
 			));
 		}
-		
-		return $tb->draw();
 	}
 
 	function _init_pkt_list_list_tbl(&$t, $o)
 	{
 		$t->define_field(array(
-			"sortable" => 1,
-			"name" => "name",
-			"caption" => t("Nimi")
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
 		));
 
-		$conf = obj($o->prop("conf"));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "code",
+			"caption" => t("Kood"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "last_purchase_price",
+			"caption" => t("Ostuhind"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "price_fifo",
+			"caption" => t("FIFO"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "sales_price",
+			"caption" => t("M&uuml;&uuml;gihind"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "amount1",
+			"caption" => t("Kogus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "unit1",
+			"caption" => t("&Uuml;hik"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "amount2",
+			"caption" => t("Kogus 2"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "unit2",
+			"caption" => t("&Uuml;hik 2"),
+			"align" => "center"
+		));
+
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "item_type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+/*		$conf = obj($o->prop("conf"));
 		if (!$conf->prop("no_count"))
 		{
 			$t->define_field(array(
@@ -1503,6 +2123,11 @@ class shop_warehouse extends class_base
 			"name" => "change",
 			"caption" => t("Muuda"),
 			"align" => "center"
+		));*/
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 
@@ -1600,7 +2225,7 @@ class shop_warehouse extends class_base
 
 	}
 
-	function do_storage_income_tbl(&$arr)
+	function _get_storage_income(&$arr)
 	{
 		$this->_init_storage_income_tbl($arr["prop"]["vcl_inst"]);
 
@@ -1641,36 +2266,55 @@ class shop_warehouse extends class_base
 	{
 		$t->define_field(array(
 			"sortable" => 1,
-			"name" => "name",
-			"caption" => t("Nimi")
+			"name" => "number",
+			"caption" => t("number")
 		));
 
 		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Staatus"),
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
-			"name" => "modifiedby",
-			"caption" => t("Kes"),
+			"name" => "acquirer",
+			"caption" => t("Hankija"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
-			"name" => "modified",
-			"caption" => t("Millal"),
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
 			"align" => "center",
 			"type" => "time",
 			"format" => "m.d.Y H:i"
 		));
 
 		$t->define_field(array(
-			"name" => "view",
-			"caption" => t("Vaata"),
+			"name" => "relations",
+			"caption" => t("Seosed"),
 			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 
@@ -1711,7 +2355,7 @@ class shop_warehouse extends class_base
 	}
 
 
-	function do_storage_export_tbl(&$arr)
+	function _get_storage_export(&$arr)
 	{
 		$this->_init_storage_export_tbl($arr["prop"]["vcl_inst"]);
 
@@ -1752,36 +2396,55 @@ class shop_warehouse extends class_base
 	{
 		$t->define_field(array(
 			"sortable" => 1,
-			"name" => "name",
-			"caption" => t("Nimi")
+			"name" => "number",
+			"caption" => t("number")
 		));
 
 		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Staatus"),
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
-			"name" => "modifiedby",
-			"caption" => t("Kes"),
+			"name" => "acquirer",
+			"caption" => t("Hankija"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"sortable" => 1,
-			"name" => "modified",
-			"caption" => t("Millal"),
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
 			"align" => "center",
 			"type" => "time",
 			"format" => "m.d.Y H:i"
 		));
 
 		$t->define_field(array(
-			"name" => "view",
-			"caption" => t("Vaata"),
+			"name" => "relations",
+			"caption" => t("Seosed"),
 			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 
@@ -3280,6 +3943,11 @@ class shop_warehouse extends class_base
 
 	function callback_mod_tab($arr)
 	{
+		if ($arr["id"] == "order")
+		{
+			return false;
+		}
+
 		if ($arr["id"] == "storage" && $arr["obj_inst"]->prop("conf.no_count") == 1)
 		{
 			return false;
@@ -3422,5 +4090,627 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 		die($res);
 	}
+
+	function _get_category_entry_form($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CFGFORM,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"subclass" => CL_MENU
+		));
+		$arr["prop"]["options"] = array("" => t("--vali--")) + $ol->names();
+	}
+
+	function _get_status_calc_type($arr)
+	{
+		$arr["prop"]["options"] = $arr["obj_inst"]->get_status_calc_options();
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "aw_status_calc_type":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+		}
+	}
+
+	function _get_storage_export_tree($arr)
+	{
+		return $this->_get_storage_income_tree($arr);
+	}
+
+	function _get_storage_income_tree($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$disp = $arr["request"]["disp"];
+		$t->add_item(0, array(
+			"id" => "sl",
+			"url" => aw_url_change_var("disp", "sl"),
+			"name" => $disp == "sl" ? "<b>".t("Saatelehed")."</b>" : t("Saatelehed")
+		));
+
+			$t->add_item("sl", array(
+				"id" => "sl_unc",
+				"url" => aw_url_change_var("disp", "sl_unc"),
+				"name" => $disp == "sl_unc" ? "<b>".t("Kinnitamata")."</b>" : t("Kinnitamata")
+			));
+
+			$t->add_item("sl", array(
+				"id" => "sl_conf",
+				"url" => aw_url_change_var("disp", "sl_conf"),
+				"name" => $disp == "sl_conf" ? "<b>".t("Kinnitatud")."</b>" : t("Kinnitatud")
+			));
+
+		$t->add_item(0, array(
+			"id" => "bl",
+			"url" => aw_url_change_var("disp", "bl"),
+			"name" => $disp == "bl" ? "<b>".t("Arved")."</b>" : t("Arved")
+		));
+		
+			$t->add_item("bl", array(
+				"id" => "bl_unc",
+				"url" => aw_url_change_var("disp", "bl_unc"),
+				"name" => $disp == "bl_unc" ? "<b>".t("Kinnitamata")."</b>" : t("Kinnitamata")
+			));
+
+			$t->add_item("bl", array(
+				"id" => "bl_conf",
+				"url" => aw_url_change_var("disp", "bl_conf"),
+				"name" => $disp == "bl_conf" ? "<b>".t("Kinnitatud")."</b>" : t("Kinnitatud")
+			));
+	}
+
+	function _get_storage_movements_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "create_reception",
+			"tooltip" => t("Uus")
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "create_reception",
+			"text" => t("Lisa sissetulek"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->reception_fld,
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 3, //RELTYPE_STORAGE_INCOME,
+				"return_url" => get_ru()
+			), CL_SHOP_WAREHOUSE_RECEPTION)
+		));
+
+		$tb->add_save_button();
+		$tb->add_delete_button();
+	}
+
+	function _get_storage_movements_tree($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$disp = $arr["request"]["disp"];
+		$t->add_item(0, array(
+			"id" => "sl",
+			"url" => aw_url_change_var("disp", "sl"),
+			"name" => $disp == "sl" ? "<b>".t("Saatelehed")."</b>" : t("Saatelehed")
+		));
+
+			$t->add_item("sl", array(
+				"id" => "sl_unc",
+				"url" => aw_url_change_var("disp", "sl_unc"),
+				"name" => $disp == "sl_unc" ? "<b>".t("Kinnitamata")."</b>" : t("Kinnitamata")
+			));
+
+			$t->add_item("sl", array(
+				"id" => "sl_conf",
+				"url" => aw_url_change_var("disp", "sl_conf"),
+				"name" => $disp == "sl_conf" ? "<b>".t("Kinnitatud")."</b>" : t("Kinnitatud")
+			));
+	}
+
+	function _init_storage_movements_tbl(&$t)
+	{
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "number",
+			"caption" => t("number")
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "warehouse",
+			"caption" => t("Ladu"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "m.d.Y H:i"
+		));
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_storage_movements(&$arr)
+	{
+		$this->_init_storage_movements_tbl($arr["prop"]["vcl_inst"]);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STORAGE_INCOME")) as $c)
+		{
+			$to = $c->to();
+
+			if ($to->prop("confirm"))
+			{
+				$stat = t("Sissetulek kinnitatud");
+			}
+			else
+			{
+				$stat = html::checkbox(array(
+					"name" => "confirm[".$to->id()."]",
+					"value" => 1
+				));
+			}
+
+			$arr["prop"]["vcl_inst"]->define_data(array(
+				"name" => $c->prop("to.name"),
+				"view" => html::href(array(
+					"caption" => t("Vaata"),
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $c->prop("to")
+					), CL_SHOP_WAREHOUSE_RECEPTION)
+				)),
+				"modifiedby" => $c->prop("to.modifiedby"),
+				"modified" => $c->prop("to.modified"),
+				"status" => $stat
+			));
+		}
+
+		$arr["prop"]["vcl_inst"]->sort_by();
+	}
+
+	function _get_storage_writeoffs_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "create_reception",
+			"tooltip" => t("Uus")
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "create_reception",
+			"text" => t("Lisa sissetulek"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->reception_fld,
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 3, //RELTYPE_STORAGE_INCOME,
+				"return_url" => get_ru()
+			), CL_SHOP_WAREHOUSE_RECEPTION)
+		));
+
+		$tb->add_save_button();
+		$tb->add_delete_button();
+	}
+
+	function _get_storage_writeoffs_tree($arr)
+	{
+		return $this->_get_storage_movements_tree($arr);
+	}
+
+	function _get_storage_writeoffs(&$arr)
+	{
+		$this->_init_storage_movements_tbl($arr["prop"]["vcl_inst"]);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STORAGE_INCOME")) as $c)
+		{
+			$to = $c->to();
+
+			if ($to->prop("confirm"))
+			{
+				$stat = t("Sissetulek kinnitatud");
+			}
+			else
+			{
+				$stat = html::checkbox(array(
+					"name" => "confirm[".$to->id()."]",
+					"value" => 1
+				));
+			}
+
+			$arr["prop"]["vcl_inst"]->define_data(array(
+				"name" => $c->prop("to.name"),
+				"view" => html::href(array(
+					"caption" => t("Vaata"),
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $c->prop("to")
+					), CL_SHOP_WAREHOUSE_RECEPTION)
+				)),
+				"modifiedby" => $c->prop("to.modifiedby"),
+				"modified" => $c->prop("to.modified"),
+				"status" => $stat
+			));
+		}
+
+		$arr["prop"]["vcl_inst"]->sort_by();
+	}
+
+	function _get_storage_status_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "refresh",
+			"tooltip" => t("Uuenda"),
+			"url" => "javascript:window.location.reload()",
+			"img" => "refresh.gif",
+		));
+	}
+
+	function _get_storage_status_tree($arr)
+	{
+		return $this->_get_prod_tree($arr);
+	}
+
+	function _init_storage_status_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "code",
+			"caption" => t("Kood"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "last_purchase_price",
+			"caption" => t("Ostuhind"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "price_fifo",
+			"caption" => t("FIFO"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "sales_price",
+			"caption" => t("M&uuml;&uuml;gihind"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "amount1",
+			"caption" => t("Kogus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "unit1",
+			"caption" => t("&Uuml;hik"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "amount2",
+			"caption" => t("Kogus 2"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "unit2",
+			"caption" => t("&Uuml;hik 2"),
+			"align" => "center"
+		));
+
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "item_type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_storage_status(&$arr)
+	{
+		$this->_init_storage_status_tbl($arr["prop"]["vcl_inst"]);
+	}
+
+	function _get_storage_prognosis_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "refresh",
+			"tooltip" => t("Uuenda"),
+			"url" => "javascript:window.location.reload()",
+			"img" => "refresh.gif",
+		));
+	}
+
+	function _get_storage_prognosis_tree($arr)
+	{
+		return $this->_get_prod_tree($arr);
+	}
+
+
+	function _get_storage_prognosis(&$arr)
+	{
+		$this->_init_storage_status_tbl($arr["prop"]["vcl_inst"]);
+	}
+
+	function _get_storage_inventories_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_SHOP_WAREHOUSE_INVENTORY), $arr["obj_inst"]->id(), 12, array("warehouse" => $arr["obj_inst"]->id()));
+		$tb->add_save_button();
+		$tb->add_delete_button();	
+	}
+
+	function _get_storage_inventories_tree($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$disp = $arr["request"]["disp"];
+
+		$t->add_item(0, array(
+			"id" => "unc",
+			"url" => aw_url_change_var("disp", "unc"),
+			"name" => $disp == "unc" ? "<b>".t("Kinnitamata")."</b>" : t("Kinnitamata")
+		));
+
+		$t->add_item(0, array(
+			"id" => "conf",
+			"url" => aw_url_change_var("disp", "conf"),
+			"name" => $disp == "conf" ? "<b>".t("Kinnitatud")."</b>" : t("Kinnitatud")
+		));
+	}
+
+	function _get_storage_inventories(&$arr)
+	{
+		$this->_init_storage_inventories_tbl($arr["prop"]["vcl_inst"]);
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_WAREHOUSE_INVENTORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"warehouse" => $arr["obj_inst"]->id()
+		));
+		$arr["prop"]["vcl_inst"]->data_from_ol($ol, array("change_col" => "name"));
+	}
+
+	private function _init_storage_inventories_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_purchase_orders_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_SHOP_PURCHASE_ORDER), $arr["obj_inst"]->id(), 10, array("warehouse" => $arr["obj_inst"]->id()));
+		$tb->add_save_button();
+		$tb->add_delete_button();
+	}
+
+	function _get_purchase_orders_tree($arr)
+	{
+		$this->_get_storage_inventories_tree($arr);
+	}
+
+
+	function _get_purchase_orders(&$arr)
+	{
+		$this->_init_purchase_orders_tbl($arr["prop"]["vcl_inst"]);
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PURCHASE_ORDER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"warehouse" => $arr["obj_inst"]->id()
+		));
+		$arr["prop"]["vcl_inst"]->data_from_ol($ol, array("change_col" => "number"));
+	}
+
+	private function _init_purchase_orders_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "number",
+			"caption" => t("Number"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "purchaser",
+			"caption" => t("Hankija"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "rels",
+			"caption" => t("Seosed"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_sell_orders_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_SHOP_SELL_ORDER), $arr["obj_inst"]->id(), 11, array("warehouse" => $arr["obj_inst"]->id()));
+		$tb->add_save_button();
+		$tb->add_delete_button();
+	}
+
+	function _get_sell_orders_tree($arr)
+	{
+		$this->_get_storage_inventories_tree($arr);
+	}
+
+
+	function _get_sell_orders(&$arr)
+	{
+		$this->_init_sell_orders_tbl($arr["prop"]["vcl_inst"]);
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_SELL_ORDER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"warehouse" => $arr["obj_inst"]->id()
+		));
+		$arr["prop"]["vcl_inst"]->data_from_ol($ol, array("change_col" => "number"));
+	}
+
+	private function _init_sell_orders_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "number",
+			"caption" => t("Number"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "seller",
+			"caption" => t("Ostja"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "rels",
+			"caption" => t("Seosed"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
 }
+
 ?>

@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>layout_type</name>
+            <table>aw_spec_layouts</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_layout_type</field>
+            <caption>Layoudi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>parent_layout_name</name>
+            <table>aw_spec_layouts</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_parent_layout_name</field>
+            <reltype>RELTYPE_PARENT_LAYOUT</reltype>
+            <caption>Parent layout</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AW_SPEC_LAYOUT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <tableinfo>
+            <aw_spec_layouts>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_spec_layouts>
+      </tableinfo>
+      <reltypes>
+            <PARENT_LAYOUT>
+                  <value>1</value>
+                  <clid>CL_AW_SPEC_LAYOUT</clid>
+                  <caption>Parent layout</caption>
+            </PARENT_LAYOUT>
+      </reltypes>
+</properties>
+

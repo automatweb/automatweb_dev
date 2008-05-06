@@ -18,6 +18,15 @@
             <caption>Ladu</caption>
       </property>
       <property>
+            <name>confirmed</name>
+            <table>shop_warehouse_inventory</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_confirmed</field>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
             <name>product_code</name>
             <table>objects</table>
             <group>products</group>

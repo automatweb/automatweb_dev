@@ -3,7 +3,7 @@
       <property>
             <name>name</name>
             <table>objects</table>
-            <group>general_sub</group>
+            <group>general_general</group>
             <type>textbox</type>
             <rel>1</rel>
             <trans>1</trans>
@@ -14,7 +14,7 @@
       <property>
             <name>comment</name>
             <table>objects</table>
-            <group>general_sub</group>
+            <group>general_general</group>
             <type>textbox</type>
             <field>comment</field>
             <caption>Kommentaar</caption>
@@ -23,7 +23,7 @@
       <property>
             <name>status</name>
             <table>objects</table>
-            <group>general_sub</group>
+            <group>general_general</group>
             <type>status</type>
             <trans>1</trans>
             <default>1</default>
@@ -32,314 +32,15 @@
             <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
-            <name>conf</name>
-            <table>aw_shop_warehouses</table>
-            <group>general_settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONFIG</reltype>
-            <field>aw_config</field>
-            <caption>Seaded</caption>
-      </property>
-      <property>
-            <name>order_center</name>
+            <name>warehouses</name>
             <table>objects</table>
             <group>general_settings</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_ORDER_CENTER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tellimiskeskkond tellimuste jaoks</caption>
-      </property>
-      <property>
-            <name>category_entry_form</name>
-            <table>objects</table>
-            <group>general_settings</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CAT_ENTRY_FORM</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kategooria lisamise vorm</caption>
-      </property>
-      <property>
-            <name>status_calc_type</name>
-            <table>aw_shop_warehouses</table>
-            <group>general_settings</group>
-            <type>chooser</type>
-            <field>aw_status_calc_type</field>
-            <caption>Laoseisu arvestus</caption>
-      </property>
-      <property>
-            <name>productgroups_toolbar</name>
-            <table>objects</table>
-            <group>productgroups</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>productgroups_toolbar</field>
-      </property>
-      <property>
-            <name>productgroups_list</name>
-            <table>objects</table>
-            <group>productgroups</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>productgroups_list</field>
-            <caption>Tootegruppide nimekiri </caption>
-      </property>
-      <property>
-            <name>products_toolbar</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>products_toolbar</field>
-      </property>
-      <property>
-            <name>prod_tree</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>treeview</type>
-            <parent>prod_tree_lay</parent>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>prod_tree</field>
-      </property>
-      <property>
-            <name>prod_s_name</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
-            <field>prod_s_name</field>
-            <caption>Nimi </caption>
-      </property>
-      <property>
-            <name>prod_s_code</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
-            <field>prod_s_code</field>
-            <caption>Kood</caption>
-      </property>
-      <property>
-            <name>prod_s_barcode</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
-            <field>prod_s_barcode</field>
-            <caption>Ribakood</caption>
-      </property>
-      <property>
-            <name>prod_s_cat</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
-            <field>prod_s_cat</field>
-            <caption>Kategooria</caption>
-      </property>
-      <property>
-            <name>prod_s_count</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>select</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>prod_left_search</parent>
-            <field>prod_s_count</field>
-            <caption>Laoseis</caption>
-      </property>
-      <property>
-            <name>prod_s_price_from</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
-            <field>prod_s_price_from</field>
-            <caption>Hind alates</caption>
-      </property>
-      <property>
-            <name>prod_s_pricelist</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
-            <field>prod_s_pricelist</field>
-            <caption>Hinnakiri</caption>
-      </property>
-      <property>
-            <name>prod_s_sbt</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>submit</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>prod_left_search</parent>
-            <value>
-            <![CDATA["Otsi"]]>
-            </value>
-            <field>prod_s_sbt</field>
-            <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>products_list</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>prod_split</parent>
-            <field>products_list</field>
-            <caption>Toodete nimekiri </caption>
-      </property>
-      <property>
-            <name>packets_toolbar</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>packets_toolbar</field>
-      </property>
-      <property>
-            <name>packets_tree</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>treeview</type>
-            <parent>packets_tree_lay</parent>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>packets_tree</field>
-      </property>
-      <property>
-            <name>packets_s_name</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>packets_left_search</parent>
-            <field>packets_s_name</field>
-            <caption>Nimi </caption>
-      </property>
-      <property>
-            <name>packets_s_code</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>packets_left_search</parent>
-            <field>packets_s_code</field>
-            <caption>Kood</caption>
-      </property>
-      <property>
-            <name>packets_s_barcode</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>packets_left_search</parent>
-            <field>packets_s_barcode</field>
-            <caption>Ribakood</caption>
-      </property>
-      <property>
-            <name>packets_s_cat</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>packets_left_search</parent>
-            <field>packets_s_cat</field>
-            <caption>Kategooria</caption>
-      </property>
-      <property>
-            <name>packets_s_count</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>select</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>packets_left_search</parent>
-            <field>packets_s_count</field>
-            <caption>Laoseis</caption>
-      </property>
-      <property>
-            <name>packets_s_price_from</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>packets_left_search</parent>
-            <field>packets_s_price_from</field>
-            <caption>Hind alates</caption>
-      </property>
-      <property>
-            <name>packets_s_pricelist</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>packets_left_search</parent>
-            <field>packets_s_pricelist</field>
-            <caption>Hinnakiri</caption>
-      </property>
-      <property>
-            <name>packets_s_sbt</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>submit</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>packets_left_search</parent>
-            <value>
-            <![CDATA["Otsi"]]>
-            </value>
-            <field>packets_s_sbt</field>
-            <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>packets_list</name>
-            <table>objects</table>
-            <group>packets</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>packets_split</parent>
-            <field>packets_list</field>
-            <caption>Pakettide nimekiri </caption>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <store>connect</store>
+            <field>warehouses</field>
+            <caption>Laod</caption>
       </property>
       <property>
             <name>storage_income_toolbar</name>
@@ -509,7 +210,7 @@
             <size>30</size>
             <parent>storage_export_left_search</parent>
             <field>storage_export_s_acquiredby</field>
-            <caption>Hankija</caption>
+            <caption>Ostja</caption>
       </property>
       <property>
             <name>storage_export_s_type</name>
@@ -989,6 +690,32 @@
             <caption>Alla miinimumi</caption>
       </property>
       <property>
+            <name>storage_status_s_show_pieces</name>
+            <table>objects</table>
+            <group>status_status</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>storage_status_left_search</parent>
+            <field>storage_status_s_show_pieces</field>
+            <caption>Kuva t&amp;amp;uuml;&amp;amp;uuml;kkidena</caption>
+      </property>
+      <property>
+            <name>storage_status_s_show_batches</name>
+            <table>objects</table>
+            <group>status_status</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>storage_status_left_search</parent>
+            <field>storage_status_s_show_batches</field>
+            <caption>Kuva partiidena</caption>
+      </property>
+      <property>
             <name>storage_status_s_sbt</name>
             <table>objects</table>
             <group>status_status</group>
@@ -1168,6 +895,32 @@
             <caption>Ostutellimuste staatus</caption>
       </property>
       <property>
+            <name>storage_prognosis_s_show_pieces</name>
+            <table>objects</table>
+            <group>status_prognosis</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>storage_prognosis_left_search</parent>
+            <field>storage_prognosis_s_show_pieces</field>
+            <caption>Kuva t&amp;amp;uuml;kkidena</caption>
+      </property>
+      <property>
+            <name>storage_prognosis_s_show_batches</name>
+            <table>objects</table>
+            <group>status_prognosis</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>storage_prognosis_left_search</parent>
+            <field>storage_prognosis_s_show_batches</field>
+            <caption>Kuva partiidena</caption>
+      </property>
+      <property>
             <name>storage_prognosis_s_sbt</name>
             <table>objects</table>
             <group>status_prognosis</group>
@@ -1291,7 +1044,7 @@
             <field>purchase_orders_tree</field>
       </property>
       <property>
-            <name>purchase_orders_s_purchaser</name>
+            <name>purchase_orders_s_customer</name>
             <table>objects</table>
             <group>purchase_orders</group>
             <type>textbox</type>
@@ -1299,8 +1052,8 @@
             <captionside>top</captionside>
             <size>30</size>
             <parent>purchase_orders_left_search</parent>
-            <field>purchase_orders_s_purchaser</field>
-            <caption>Hankija</caption>
+            <field>purchase_orders_s_customer</field>
+            <caption>Klient</caption>
       </property>
       <property>
             <name>purchase_orders_s_number</name>
@@ -1372,6 +1125,66 @@
             <parent>purchase_orders_left_search</parent>
             <field>purchase_orders_s_art_cat</field>
             <caption>Artikli kategooria</caption>
+      </property>
+      <property>
+            <name>purchase_orders_s_purchaser</name>
+            <table>objects</table>
+            <group>purchase_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>purchase_orders_left_search</parent>
+            <field>purchase_orders_s_purchaser</field>
+            <caption>Hankija</caption>
+      </property>
+      <property>
+            <name>purchase_orders_s_job_name</name>
+            <table>objects</table>
+            <group>purchase_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>purchase_orders_left_search</parent>
+            <field>purchase_orders_s_job_name</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; nimi</caption>
+      </property>
+      <property>
+            <name>purchase_orders_s_job_number</name>
+            <table>objects</table>
+            <group>purchase_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>purchase_orders_left_search</parent>
+            <field>purchase_orders_s_job_number</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; number</caption>
+      </property>
+      <property>
+            <name>purchase_orders_s_sales_manager</name>
+            <table>objects</table>
+            <group>purchase_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>purchase_orders_left_search</parent>
+            <field>purchase_orders_s_sales_manager</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gijuht</caption>
+      </property>
+      <property>
+            <name>purchase_orders_s_group_by_order</name>
+            <table>objects</table>
+            <group>purchase_orders</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>purchase_orders_left_search</parent>
+            <field>purchase_orders_s_group_by_order</field>
+            <caption>Grupeeri ostutellimuste alusel</caption>
       </property>
       <property>
             <name>purchase_orders_s_sbt</name>
@@ -1525,398 +1338,23 @@
             <field>sell_orders</field>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gitellimused</caption>
       </property>
-      <property>
-            <name>find_name</name>
-            <table>objects</table>
-            <group>
-                  <num_0>order_confirmed</num_0>
-                  <num_1>order_unconfirmed</num_1>
-            </group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>find_name</field>
-            <caption>Nimi</caption>
-      </property>
-      <property>
-            <name>find_start</name>
-            <table>objects</table>
-            <group>
-                  <num_0>order_confirmed</num_0>
-                  <num_1>order_unconfirmed</num_1>
-            </group>
-            <type>date_select</type>
-            <field>find_start</field>
-            <caption>Alates</caption>
-      </property>
-      <property>
-            <name>find_end</name>
-            <table>objects</table>
-            <group>
-                  <num_0>order_confirmed</num_0>
-                  <num_1>order_unconfirmed</num_1>
-            </group>
-            <type>date_select</type>
-            <store>no</store>
-            <field>find_end</field>
-            <caption>Kuni</caption>
-      </property>
-      <property>
-            <name>do_find</name>
-            <table>objects</table>
-            <group>
-                  <num_0>order_confirmed</num_0>
-                  <num_1>order_unconfirmed</num_1>
-            </group>
-            <type>submit</type>
-            <store>no</store>
-            <field>do_find</field>
-            <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>order_undone_tb</name>
-            <table>objects</table>
-            <group>order_undone</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>order_undone_tb</field>
-      </property>
-      <property>
-            <name>order_undone</name>
-            <table>objects</table>
-            <group>order_undone</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>order_undone</field>
-      </property>
-      <property>
-            <name>order_unconfirmed_toolbar</name>
-            <table>objects</table>
-            <group>order_unconfirmed</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>order_unconfirmed_toolbar</field>
-      </property>
-      <property>
-            <name>order_unconfirmed</name>
-            <table>objects</table>
-            <group>order_unconfirmed</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>order_unconfirmed</field>
-      </property>
-      <property>
-            <name>order_confirmed_toolbar</name>
-            <table>objects</table>
-            <group>order_confirmed</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>order_confirmed_toolbar</field>
-      </property>
-      <property>
-            <name>order_confirmed</name>
-            <table>objects</table>
-            <group>order_confirmed</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>order_confirmed</field>
-      </property>
-      <property>
-            <name>order_orderer_cos_tree</name>
-            <table>objects</table>
-            <group>order_orderer_cos</group>
-            <type>text</type>
-            <store>no</store>
-            <parent>hbox_oc</parent>
-            <no_caption>1</no_caption>
-            <field>order_orderer_cos_tree</field>
-      </property>
-      <property>
-            <name>order_orderer_cos</name>
-            <table>objects</table>
-            <group>order_orderer_cos</group>
-            <type>table</type>
-            <store>no</store>
-            <parent>hbox_oc</parent>
-            <no_caption>1</no_caption>
-            <field>order_orderer_cos</field>
-      </property>
-      <property>
-            <name>osearch_uname</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>osearch_uname</field>
-            <caption>Tellija kasutajanimi</caption>
-      </property>
-      <property>
-            <name>osearch_pname</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>osearch_pname</field>
-            <caption>Tellija isikunimi</caption>
-      </property>
-      <property>
-            <name>osearch_oname</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>osearch_oname</field>
-            <caption>Organisatsiooni nimi</caption>
-      </property>
-      <property>
-            <name>osearch_oid</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>textbox</type>
-            <size>8</size>
-            <store>no</store>
-            <field>osearch_oid</field>
-            <caption>Tellimuse ID</caption>
-      </property>
-      <property>
-            <name>osearch_prodname</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>osearch_prodname</field>
-            <caption>Toote nimi</caption>
-      </property>
-      <property>
-            <name>osearch_from</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>chooser</type>
-            <store>no</store>
-            <field>osearch_from</field>
-            <caption>Otsi staatuse j&amp;amp;auml;rgi</caption>
-      </property>
-      <property>
-            <name>osearch_odates</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>date_select</type>
-            <store>no</store>
-            <field>osearch_odates</field>
-            <caption>Tellimuse ajavahemik (alates)</caption>
-      </property>
-      <property>
-            <name>osearch_odatee</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>date_select</type>
-            <store>no</store>
-            <field>osearch_odatee</field>
-            <caption>Tellimuse ajavahemik (kuni)</caption>
-      </property>
-      <property>
-            <name>osearch_hidden</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>hidden</type>
-            <value>1</value>
-            <store>no</store>
-            <field>osearch_hidden</field>
-            <caption>Otsing</caption>
-      </property>
-      <property>
-            <name>osearch_submit</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>submit</type>
-            <store>no</store>
-            <field>osearch_submit</field>
-            <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>osearch_table</name>
-            <table>objects</table>
-            <group>order_search</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>osearch_table</field>
-            <caption>Tulemuste tabel</caption>
-      </property>
-      <property>
-            <name>search_tb</name>
-            <table>objects</table>
-            <group>search_search</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_tb</field>
-            <caption>Otsingu toolbar</caption>
-      </property>
-      <property>
-            <name>search_form</name>
-            <table>objects</table>
-            <group>search_search</group>
-            <type>callback</type>
-            <callback>callback_get_search_form</callback>
-            <submit_method>get</submit_method>
-            <store>no</store>
-            <field>search_form</field>
-            <caption>Otsinguvorm</caption>
-      </property>
-      <property>
-            <name>search_res</name>
-            <table>objects</table>
-            <group>search_search</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_res</field>
-            <caption>Otsingu tulemused</caption>
-      </property>
-      <property>
-            <name>search_cur_ord_text</name>
-            <table>objects</table>
-            <group>search_search</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_cur_ord_text</field>
-            <caption>Hetke tellimus text</caption>
-      </property>
-      <property>
-            <name>search_cur_ord</name>
-            <table>objects</table>
-            <group>search_search</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search_cur_ord</field>
-            <caption>Hetke tellimus tabel</caption>
-      </property>
-      <property>
-            <name>order_current_toolbar</name>
-            <table>objects</table>
-            <group>order_current</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>order_current_toolbar</field>
-      </property>
-      <property>
-            <name>order_current_table</name>
-            <table>objects</table>
-            <group>order_current</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>order_current_table</field>
-      </property>
-      <property>
-            <name>order_current_org</name>
-            <table>objects</table>
-            <group>order_current</group>
-            <type>popup_search</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <clid>CL_CRM_COMPANY</clid>
-            <caption>Tellija organisatsioon</caption>
-      </property>
-      <property>
-            <name>order_current_person</name>
-            <table>objects</table>
-            <group>order_current</group>
-            <type>popup_search</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <clid>CL_CRM_PERSON</clid>
-            <caption>Tellija isik</caption>
-      </property>
-      <property>
-            <name>order_current_form</name>
-            <table>objects</table>
-            <group>order_current</group>
-            <type>callback</type>
-            <callback>callback_get_order_current_form</callback>
-            <store>no</store>
-            <field>order_current_form</field>
-            <caption>Tellimuse info vorm</caption>
-      </property>
       <classinfo>
-            <syslog_type>ST_SHOP_WAREHOUSE</syslog_type>
+            <syslog_type>ST_SHOP_PURCHASE_MANAGER_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
-            <maintainer>kristo</maintainer>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
             <prop_cb>1</prop_cb>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
-            <order>
-                  <caption>Tellimused</caption>
-            </order>
-            <order_unconfirmed>
-                  <parent>order</parent>
-                  <caption>Kinnitamata</caption>
-            </order_unconfirmed>
-            <order_confirmed>
-                  <parent>order</parent>
-                  <caption>Kinnitatud</caption>
-            </order_confirmed>
-            <order_undone>
-                  <parent>order</parent>
-                  <caption>T&amp;amp;auml;itmata tellimused</caption>
-            </order_undone>
-            <order_orderer_cos>
-                  <parent>order</parent>
-                  <caption>Tellijad</caption>
-            </order_orderer_cos>
-            <order_search>
-                  <parent>order</parent>
-                  <caption>Otsing</caption>
-                  <submit_method>get</submit_method>
-            </order_search>
-            <search>
-                  <caption>Otsing</caption>
-                  <submit_method>get</submit_method>
-            </search>
-            <search_search>
-                  <caption>Otsing</caption>
-                  <parent>search</parent>
-                  <submit_method>get</submit_method>
-            </search_search>
-            <order_current>
-                  <parent>search</parent>
-                  <caption>Pakkumine</caption>
-            </order_current>
-            <general_sub>
+            <general_general>
                   <parent>general</parent>
                   <caption>&amp;amp;Uuml;ldine</caption>
-            </general_sub>
+            </general_general>
             <general_settings>
                   <parent>general</parent>
                   <caption>Seaded</caption>
             </general_settings>
-            <productgroups>
-                  <caption>Tootegrupid</caption>
-                  <submit>no</submit>
-                  <parent>general</parent>
-            </productgroups>
-            <articles>
-                  <caption>Artiklid</caption>
-            </articles>
-            <products>
-                  <caption>Artiklid</caption>
-                  <submit>no</submit>
-                  <parent>articles</parent>
-            </products>
-            <packets>
-                  <caption>Paketid</caption>
-                  <submit>no</submit>
-                  <parent>articles</parent>
-            </packets>
             <storage>
                   <caption>Muutused</caption>
             </storage>
@@ -1965,133 +1403,14 @@
                   <parent>purchases</parent>
             </sell_orders>
       </groupinfo>
-      <tableinfo>
-            <aw_shop_warehouses>
-                  <index>aw_oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>brother_of</master_index>
-            </aw_shop_warehouses>
-      </tableinfo>
       <reltypes>
-            <CONFIG>
+            <WAREHOUSE>
                   <value>1</value>
-                  <clid>CL_SHOP_WAREHOUSE_CONFIG</clid>
-                  <caption>konfiguratsioon</caption>
-            </CONFIG>
-            <PRODUCT>
-                  <value>2</value>
-                  <clid>CL_SHOP_PRODUCT</clid>
-                  <caption>toode</caption>
-            </PRODUCT>
-            <PACKET>
-                  <value>2</value>
-                  <clid>CL_SHOP_PACKET</clid>
-                  <caption>pakett</caption>
-            </PACKET>
-            <STORAGE_INCOME>
-                  <value>3</value>
-                  <clid>CL_SHOP_WAREHOUSE_RECEPTION</clid>
-                  <caption>lao sissetulek</caption>
-            </STORAGE_INCOME>
-            <STORAGE_EXPORT>
-                  <value>4</value>
-                  <clid>CL_SHOP_WAREHOUSE_EXPORT</clid>
-                  <caption>lao v&amp;amp;auml;jaminek</caption>
-            </STORAGE_EXPORT>
-            <ORDER>
-                  <value>5</value>
-                  <clid>CL_SHOP_ORDER</clid>
-                  <caption>tellimus</caption>
-            </ORDER>
-            <ORDER_CENTER>
-                  <value>6</value>
-                  <clid>CL_SHOP_ORDER_CENTER</clid>
-                  <caption>tellimiskeskkond</caption>
-            </ORDER_CENTER>
-            <EMAIL>
-                  <value>7</value>
-                  <clid>CL_ML_MEMBER</clid>
-                  <caption>saada tellimused</caption>
-            </EMAIL>
-            <CFGMANAGER>
-                  <value>8</value>
-                  <clid>CL_CFGMANAGER</clid>
-                  <caption>Seadete haldur</caption>
-            </CFGMANAGER>
-            <CAT_ENTRY_FORM>
-                  <value>9</value>
-                  <clid>CL_CFGFORM</clid>
-                  <caption>Kategooria lisamise vorm</caption>
-            </CAT_ENTRY_FORM>
-            <PURCHASE_ORDER>
-                  <value>10</value>
-                  <clid>CL_SHOP_PURCHASE_ORDER</clid>
-                  <caption>Ostutellimus</caption>
-            </PURCHASE_ORDER>
-            <SELL_ORDER>
-                  <value>11</value>
-                  <clid>CL_SHOP_SELL_ORDER</clid>
-                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gitellimus</caption>
-            </SELL_ORDER>
-            <INVENTORY>
-                  <value>12</value>
-                  <clid>CL_SHOP_WAREHOUSE_INVENTORY</clid>
-                  <caption>Inventuur</caption>
-            </INVENTORY>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
       </reltypes>
       <layout>
-            <prod_split>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>products</group>
-                  <area_caption></area_caption>
-            </prod_split>
-            <prod_left>
-                  <type>vbox</type>
-                  <parent>prod_split</parent>
-                  <group>products</group>
-                  <area_caption></area_caption>
-            </prod_left>
-            <prod_tree_lay>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Toodete&amp;amp;nbsp;puu</area_caption>
-                  <parent>prod_left</parent>
-                  <group>products</group>
-            </prod_tree_lay>
-            <prod_left_search>
-                  <type>vbox</type>
-                  <parent>prod_left</parent>
-                  <area_caption>Otsing</area_caption>
-                  <closeable>1</closeable>
-                  <group>products</group>
-            </prod_left_search>
-            <packets_split>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>packets</group>
-                  <area_caption></area_caption>
-            </packets_split>
-            <packets_left>
-                  <type>vbox</type>
-                  <parent>packets_split</parent>
-                  <group>packets</group>
-                  <area_caption></area_caption>
-            </packets_left>
-            <packets_tree_lay>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Pakettide&amp;amp;nbsp;puu</area_caption>
-                  <parent>packets_left</parent>
-                  <group>packets</group>
-            </packets_tree_lay>
-            <packets_left_search>
-                  <type>vbox</type>
-                  <parent>packets_left</parent>
-                  <area_caption>Otsing</area_caption>
-                  <closeable>1</closeable>
-                  <group>packets</group>
-            </packets_left_search>
             <storage_income_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -2326,11 +1645,6 @@
                   <closeable>1</closeable>
                   <group>sell_orders</group>
             </sell_orders_left_search>
-            <hbox_oc>
-                  <type>hbox</type>
-                  <group>order_orderer_cos</group>
-                  <area_caption></area_caption>
-            </hbox_oc>
       </layout>
 </properties>
 

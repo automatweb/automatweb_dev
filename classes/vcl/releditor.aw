@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.134 2008/05/05 09:19:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.135 2008/05/06 11:48:13 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -450,7 +450,10 @@ class releditor extends core
 			$get_prop_arr["prop"]["name"] = str_replace("[0]" , "" , $get_prop_arr["prop"]["name"]);
 			$get_prop_arr["caller_releditor_name"] = $arr["prop"]["name"];
 
-			$parent_inst->get_property($get_prop_arr);
+			if (method_exists($parent_inst, "get_property"))
+			{
+				$parent_inst->get_property($get_prop_arr);
+			}
 			$get_prop_arr["prop"]["name"] = $prop["name"];
 			$xprops[$key] = $get_prop_arr["prop"];
 		}

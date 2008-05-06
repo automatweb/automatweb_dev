@@ -92,6 +92,16 @@
             <caption>Valdkond</caption>
       </property>
       <property>
+            <name>loc_country</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <store>connect</store>
+            <field>loc_country</field>
+            <caption>Riik</caption>
+      </property>
+      <property>
             <name>loc_area</name>
             <table>objects</table>
             <group>general</group>
@@ -257,6 +267,15 @@
             <store>no</store>
       </property>
       <property>
+            <name>candidate_add</name>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <store>no</store>
+      </property>
+      <property>
             <name>candidate_table</name>
             <table>objects</table>
             <group>candidate</group>
@@ -334,6 +353,27 @@
             <parent>send_email_sms_right</parent>
       </property>
       <property>
+            <name>send_email_sms_select</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <parent>send_email_sms_right</parent>
+      </property>
+      <property>
+            <name>typical_select</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <no_edit>1</no_edit>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;ps&amp;amp;otilde;num</caption>
+      </property>
+      <property>
             <name>from</name>
             <table>objects</table>
             <group>send_email_sms</group>
@@ -370,6 +410,20 @@
             <caption>Pealkiri</caption>
       </property>
       <property>
+            <name>attachment</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <rel_id>first</rel_id>
+            <props>file</props>
+            <reltype>RELTYPE_ATTACHMENT</reltype>
+            <caption>Manus</caption>
+      </property>
+      <property>
             <name>message</name>
             <table>objects</table>
             <group>send_email_sms</group>
@@ -379,6 +433,30 @@
             <store>no</store>
             <parent>send_email_sms_right</parent>
             <caption>S&amp;amp;otilde;num</caption>
+      </property>
+      <property>
+            <name>message_length</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <store>no</store>
+            <parent>send_email_sms_right</parent>
+            <caption>T&amp;amp;auml;hem&amp;amp;auml;rke j&amp;amp;auml;&amp;amp;auml;nud</caption>
+      </property>
+      <property>
+            <name>save_typical</name>
+            <table>objects</table>
+            <group>send_email_sms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>send_email_sms_right</parent>
+            <store>no</store>
+            <caption>Salvesta t&amp;amp;uuml;&amp;amp;uuml;ps&amp;amp;otilde;numina</caption>
       </property>
       <property>
             <name>send_it</name>
@@ -393,7 +471,7 @@
       <property>
             <name>sent_fb_sms_tbl</name>
             <table>objects</table>
-            <group>send_email_sms</group>
+            <group>sent_fb_sms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -403,7 +481,7 @@
       <property>
             <name>sent_fb_email_tbl</name>
             <table>objects</table>
-            <group>send_email_sms</group>
+            <group>sent_fb_email</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -437,10 +515,12 @@
             <sent_fb_sms>
                   <caption>SMS</caption>
                   <submit>no</submit>
+                  <parent>sent_feedback</parent>
             </sent_fb_sms>
             <sent_fb_email>
                   <caption>E-post</caption>
                   <submit>no</submit>
+                  <parent>sent_feedback</parent>
             </sent_fb_email>
       </groupinfo>
       <tableinfo>
@@ -506,16 +586,41 @@
                   <clid>CL_FILE</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine failina</caption>
             </JOB_OFFER_FILE>
-            <MOBI_SMS>
+            <MOBI_SMS_SENT>
                   <value>13</value>
-                  <clid>CL_MOBI_SMS</clid>
-                  <caption>Kandideerijale saadetud SMS</caption>
-            </MOBI_SMS>
+                  <clid>CL_MOBI_SMS_SENT</clid>
+                  <caption>Kandideerijale saadetud SMSi saatmine</caption>
+            </MOBI_SMS_SENT>
             <SECTION>
                   <value>14</value>
                   <clid>CL_CRM_SECTION</clid>
                   <caption>Osakond</caption>
             </SECTION>
+            <COUNTRY>
+                  <value>15</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Riik</caption>
+            </COUNTRY>
+            <TYPICAL_MOBI_SMS>
+                  <value>16</value>
+                  <clid>CL_MOBI_SMS</clid>
+                  <caption>T&amp;amp;uuml;&amp;amp;uuml;s&amp;amp;otilde;num</caption>
+            </TYPICAL_MOBI_SMS>
+            <TYPICAL_MAIL_MESSAGE>
+                  <value>17</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>T&amp;amp;uuml;&amp;amp;uuml;s&amp;amp;otilde;num</caption>
+            </TYPICAL_MAIL_MESSAGE>
+            <MAIL_SENT>
+                  <value>18</value>
+                  <clid>CL_MESSAGE</clid>
+                  <caption>Kandideerijale saadetud e-kiri</caption>
+            </MAIL_SENT>
+            <ATTACHMENT>
+                  <value>19</value>
+                  <clid>CL_FILE</clid>
+                  <caption>E-kirja manus</caption>
+            </ATTACHMENT>
       </reltypes>
       <layout>
             <send_email_sms>

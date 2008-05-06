@@ -1,94 +1,39 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>prod_fld</name>
+            <name>name</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Toodete kataloog</caption>
+            <type>textbox</type>
+            <parent>left</parent>
+            <caption>Nimi</caption>
+            <comment>Objekti nimi</comment>
       </property>
       <property>
-            <name>pkt_fld</name>
+            <name>comment</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Pakettide kataloog</caption>
+            <type>textbox</type>
+            <parent>left</parent>
+            <caption>Kommentaar</caption>
+            <comment>Vabas vormis tekst objekti kohta</comment>
       </property>
       <property>
-            <name>reception_fld</name>
+            <name>status</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Lao sissetulekute kataloog</caption>
-      </property>
-      <property>
-            <name>export_fld</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Lao v&amp;amp;auml;jaminekute kataloog</caption>
-      </property>
-      <property>
-            <name>prod_type_fld</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Lao toodete t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
-      </property>
-      <property>
-            <name>prod_type_cfgform</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFGFORM</reltype>
-            <caption>Lao tootet&amp;amp;uuml;&amp;amp;uuml;pide lisamise vormi seadete vorm</caption>
-      </property>
-      <property>
-            <name>prod_conf_folder</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Toodete lisaobjektide seadetevormide kataloog</caption>
-      </property>
-      <property>
-            <name>order_fld</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Lao tellimuste kataloog</caption>
-      </property>
-      <property>
-            <name>buyers_fld</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Lao tellijate kataloog</caption>
+            <type>status</type>
+            <trans>1</trans>
+            <default>1</default>
+            <parent>left</parent>
+            <caption>Aktiivne</caption>
+            <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
             <name>search_form</name>
@@ -98,7 +43,53 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SEARCH_FORM</reltype>
+            <parent>left</parent>
             <caption>Lao otsinguvorm</caption>
+      </property>
+      <property>
+            <name>has_alternative_units</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>left</parent>
+            <caption>Alternatiiv&amp;amp;uuml;hikud</caption>
+      </property>
+      <property>
+            <name>alternative_unit_levels</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>left</parent>
+            <caption>Alternatiiv&amp;amp;uuml;hikute tasemeid</caption>
+      </property>
+      <property>
+            <name>def_price_list</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEF_PRICELIST</reltype>
+            <parent>left</parent>
+            <automatic>1</automatic>
+            <caption>Vaikimisi hinnakiri</caption>
+      </property>
+      <property>
+            <name>def_currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEF_CURRENCY</reltype>
+            <parent>left</parent>
+            <automatic>1</automatic>
+            <caption>Vaikimisi valuuta</caption>
       </property>
       <property>
             <name>manager_cos</name>
@@ -109,6 +100,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MANAGER_CO</reltype>
             <multiple>1</multiple>
+            <parent>left</parent>
             <caption>Haldurfirmad</caption>
       </property>
       <property>
@@ -119,6 +111,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <parent>left</parent>
             <caption>Ladu m&amp;amp;uuml;&amp;amp;uuml;b tooteid, mitte pakendeid</caption>
       </property>
       <property>
@@ -129,7 +122,8 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ladu ei m&amp;uuml;&amp;uuml; pakette</caption>
+            <parent>left</parent>
+            <caption>Ladu ei m&amp;amp;uuml;&amp;amp;uuml; pakette</caption>
       </property>
       <property>
             <name>no_count</name>
@@ -139,13 +133,128 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <parent>left</parent>
             <caption>Toodetel puudub laoseis</caption>
+      </property>
+      <property>
+            <name>prod_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Toodete kataloog</caption>
+      </property>
+      <property>
+            <name>pkt_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Pakettide kataloog</caption>
+      </property>
+      <property>
+            <name>reception_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Lao sissetulekute kataloog</caption>
+      </property>
+      <property>
+            <name>export_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Lao v&amp;amp;auml;jaminekute kataloog</caption>
+      </property>
+      <property>
+            <name>prod_type_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Lao toodete t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
+      </property>
+      <property>
+            <name>prod_type_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <parent>right</parent>
+            <caption>Lao tootet&amp;amp;uuml;&amp;amp;uuml;pide lisamise vormi seadete vorm</caption>
+      </property>
+      <property>
+            <name>prod_conf_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Toodete lisaobjektide seadetevormide kataloog</caption>
+      </property>
+      <property>
+            <name>order_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Lao tellimuste kataloog</caption>
+      </property>
+      <property>
+            <name>buyers_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <parent>right</parent>
+            <caption>Lao tellijate kataloog</caption>
+      </property>
+      <property>
+            <name>units_table</name>
+            <table>objects</table>
+            <group>units</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <units>
+                  <caption>&amp;amp;Uuml;hikud</caption>
+            </units>
+      </groupinfo>
       <reltypes>
             <FOLDER>
                   <value>1</value>
@@ -167,6 +276,37 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </CFGFORM>
+            <DEF_PRICELIST>
+                  <value>5</value>
+                  <clid>CL_SHOP_PRICELIST</clid>
+                  <caption>Hinnakiri</caption>
+            </DEF_PRICELIST>
+            <DEF_CURRENCY>
+                  <value>6</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </DEF_CURRENCY>
       </reltypes>
+      <layout>
+            <split>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </split>
+            <left>
+                  <type>vbox</type>
+                  <area_caption>Seaded</area_caption>
+                  <closeable>1</closeable>
+                  <parent>split</parent>
+                  <group>general</group>
+            </left>
+            <right>
+                  <type>vbox</type>
+                  <area_caption>Kaustad</area_caption>
+                  <closeable>1</closeable>
+                  <parent>split</parent>
+                  <group>general</group>
+            </right>
+      </layout>
 </properties>
 

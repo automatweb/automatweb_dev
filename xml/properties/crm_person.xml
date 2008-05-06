@@ -1361,7 +1361,7 @@
       </property>
       <property>
             <name>udef_ch1</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>chooser</type>
             <multiple>1</multiple>
@@ -1370,7 +1370,7 @@
       </property>
       <property>
             <name>udef_ch2</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>chooser</type>
             <multiple>1</multiple>
@@ -1379,7 +1379,7 @@
       </property>
       <property>
             <name>udef_ch3</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>chooser</type>
             <multiple>1</multiple>
@@ -1388,7 +1388,7 @@
       </property>
       <property>
             <name>user1</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textbox</type>
             <field>user1</field>
@@ -1396,7 +1396,7 @@
       </property>
       <property>
             <name>user2</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textbox</type>
             <field>user2</field>
@@ -1404,7 +1404,7 @@
       </property>
       <property>
             <name>user3</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textbox</type>
             <field>user3</field>
@@ -1412,7 +1412,7 @@
       </property>
       <property>
             <name>user4</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textbox</type>
             <field>user4</field>
@@ -1420,7 +1420,7 @@
       </property>
       <property>
             <name>user5</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textbox</type>
             <field>user5</field>
@@ -1428,7 +1428,7 @@
       </property>
       <property>
             <name>udef_ta1</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textarea</type>
             <rows>5</rows>
@@ -1438,7 +1438,7 @@
       </property>
       <property>
             <name>udef_ta2</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textarea</type>
             <rows>5</rows>
@@ -1448,7 +1448,7 @@
       </property>
       <property>
             <name>udef_ta3</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textarea</type>
             <rows>5</rows>
@@ -1458,7 +1458,7 @@
       </property>
       <property>
             <name>udef_ta4</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textarea</type>
             <rows>5</rows>
@@ -1468,7 +1468,7 @@
       </property>
       <property>
             <name>udef_ta5</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>data</group>
             <type>textarea</type>
             <rows>5</rows>
@@ -1737,6 +1737,15 @@
             <field>comment_text</field>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>sms_tbl</name>
+            <table>objects</table>
+            <group>sms</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sms_tbl</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_PERSON</syslog_type>
@@ -1882,6 +1891,11 @@
                   <caption>Kommentaarid</caption>
                   <parent>general</parent>
             </comments>
+            <sms>
+                  <caption>SMSid</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </sms>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>

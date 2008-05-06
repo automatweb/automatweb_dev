@@ -43,7 +43,7 @@
 			</function>
 		</action>
 
-		<action name="compress_submit">
+		<action name="compress_submit" all_args="1">
 			<function name="compress_submit">
 				<arguments>
 				</arguments>

@@ -3,4 +3,3 @@
 	<class name="reval_customer_mailer" folder="applications/clients/reval" extends="class_base">
 	</class>
 </orb>
-		

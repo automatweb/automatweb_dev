@@ -40,26 +40,6 @@
             <field>relation_list</field>
       </property>
       <property>
-            <name>group_list</name>
-            <table>objects</table>
-            <group>spec</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>v_split</parent>
-            <field>group_list</field>
-      </property>
-      <property>
-            <name>prop_list</name>
-            <table>objects</table>
-            <group>spec</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>v_split</parent>
-            <field>prop_list</field>
-      </property>
-      <property>
             <name>spec_editor</name>
             <table>objects</table>
             <group>spec</group>

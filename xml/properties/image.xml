@@ -66,6 +66,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <user>1</user>
             <caption>Pikk kirjeldus</caption>
       </property>
       <property>
