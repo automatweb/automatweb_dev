@@ -245,6 +245,7 @@ class doc_display extends aw_template
 			"trans_lc" => aw_global_get("ct_lang_lc"),
 			"lead" => $lead,
 			"content" => $content,
+			"alias" => $doc->trans_get_val("alias"),
 		));
 
 		$ablock = "";
