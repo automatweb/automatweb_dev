@@ -5740,8 +5740,8 @@ class crm_person extends class_base
 		{
 			$cv_file = obj($o->prop("cv_file"));
 			$this->vars(array(
-				"crm_person.cv_file_url" => obj_link($cv_file->id()),
-				//"crm_person.cv_file_url" => $file_inst->get_url($cv_file->id(), $cv_file->name()),
+				//"crm_person.cv_file_url" => obj_link($cv_file->id()),
+				"crm_person.cv_file_url" => $file_inst->get_url($cv_file->id(), $cv_file->name()),
 				"crm_person.cv_file" => $cv_file->name(),
 			));
 			$this->vars(array(
