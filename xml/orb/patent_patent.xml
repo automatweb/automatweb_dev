@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="patent_patent" folder="applications/clients/patent_office" extends="class_base">
+	</class>
+</orb>
+		
