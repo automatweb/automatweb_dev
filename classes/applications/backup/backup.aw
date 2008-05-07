@@ -1,7 +1,5 @@
 <?php
-
 /*
-
 @classinfo no_comment=1 no_status=1 syslog_type=ST_BACKUP maintainer=kristo
 
 @default table=objects
@@ -9,11 +7,11 @@
 @default field=meta
 @default method=serialize
 
-@property folder type=textbox
-@caption Serveri kataloog, kuhu backupi fail kirjutatakse
+	@property folder type=server_folder_selector
+	@caption Serveri kataloog, kuhu backupi fail kirjutatakse
 
-@property do_bup type=checkbox ch_value=1
-@caption Loo backup
+	@property do_bup type=checkbox ch_value=1
+	@caption Loo backup
 
 */
 class backup extends class_base
@@ -54,6 +52,7 @@ class backup extends class_base
 	function do_backup($o)
 	{
 		extract($arr);
+		ob_end_clean();
 		$folder = $o->prop("folder");
 		error::raise_if(!$folder, array(
 			"id" => "ERR_NO_FOLDER",

@@ -6,7 +6,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>server_folder_selector</type>
             <caption>Serveri kataloog, kuhu backupi fail kirjutatakse</caption>
       </property>
       <property>
