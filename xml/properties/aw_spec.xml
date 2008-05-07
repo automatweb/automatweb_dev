@@ -53,16 +53,6 @@
             <field>spec_editor</field>
       </property>
       <property>
-            <name>spec_overview</name>
-            <table>objects</table>
-            <group>spec</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>spec_border</parent>
-            <field>spec_overview</field>
-      </property>
-      <property>
             <name>view_tb</name>
             <table>objects</table>
             <group>spec_view</group>
@@ -86,6 +76,7 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
+            <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
             <spec>
@@ -93,6 +84,7 @@
             </spec>
             <spec_view>
                   <caption>&amp;amp;Uuml;levaade</caption>
+                  <save>no</save>
             </spec_view>
       </groupinfo>
       <layout>

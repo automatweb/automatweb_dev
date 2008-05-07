@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SPEC relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AW_SPEC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 
 @default table=objects
 @default group=general
@@ -21,7 +21,6 @@
 		@layout spec_border type=vbox parent=v_split area_caption=Sisu closeable=1
 
 			@property spec_editor type=textarea rows=30 cols=80 richtext=1 store=no no_caption=1 parent=spec_border
-			@property spec_overview type=text store=no no_caption=1 parent=spec_border
 
 		
 @default group=spec_view
@@ -30,7 +29,7 @@
 	@property view_ct type=text no_caption=1 store=no
 
 @groupinfo spec caption="Koosta" 
-@groupinfo spec_view caption="&Uuml;levaade" 
+@groupinfo spec_view caption="&Uuml;levaade" save=no
 */
 
 class aw_spec extends class_base
@@ -46,18 +45,18 @@ class aw_spec extends class_base
 			array(0, "intro", t("Sissejuhatus"), "spec_editor"),
 				array("intro", "intro_whom", t("Kellele"), "spec_editor"),
 				array("intro", "intro_why", t("Miks"), "spec_editor"),
-			array(0, "conf", t("Seadistatavus")),
+			array(0, "conf", t("Seadistatavus"), "spec_editor"),
 				array("conf", "conf_what", t("Mida seadistada"), "spec_editor"),
 				array("conf", "intro_how", t("Kuidas"), "spec_editor"),
 				array("conf", "intro_who", t("Kes"), "spec_editor"),
-			array(0, "classes", t("Klassid")),
+			array(0, "classes", t("Klassid"), "spec_editor"),
 				array("classes", "classes_who", t("Kellele"), "spec_editor"),
 				array("classes", "classe_why", t("Miks"), "spec_editor"),
-				array("classes", "classes_classes", t("Klassid"), "class_list"),
+				array("classes", "classes_classes", t("Klasside nimekiri"), "class_list"),
 				array("classes", "classes_rels", t("Seosed"), "relation_list"),
 				array("classes", "classes_ui", t("Kasutajaliides"), "spec_editor"),
 			array(0, "prev", t("Eeskujud"), "spec_editor"),
-			array(0, "bl", t("&Auml;riloogika"), "spec_overview"),
+			array(0, "bl", t("&Auml;riloogika"), "spec_editor"),
 				array("bl", "classes_ucase", t("Kasutajalood"), "spec_editor"),
 				array("bl", "classes_principles", t("S&uuml;steemi toimimisp&otilde;him&otilde;tted"), "spec_editor"),
 				array("bl", "classes_examples", t("N&auml;ited"), "spec_editor"),
@@ -92,7 +91,7 @@ class aw_spec extends class_base
 		{
 			$t->add_item($item[0], array(
 				"id" => $item[1],
-				"url" => aw_url_change_var("disp", $item[1]),
+				"url" => aw_url_change_var("disp2", null, aw_url_change_var("disp", $item[1])),
 				"name" => $disp == $item[1] ? "<b>".$item[2]."</b>" : $item[2]
 			));
 
@@ -129,8 +128,6 @@ class aw_spec extends class_base
 			return $o->instance()->get_embed_prop($o, $arr);
 		}
 
-		$disp = $this->_get_disp($arr);
-
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_class_list_table($t);
 		
@@ -145,7 +142,7 @@ class aw_spec extends class_base
 			$t->define_data(array(
 				"class_desc" => html::textarea(array(
 					"name" => "class_list[".$idx."][class_desc]",
-					"value" => $dr->comment(),
+					"value" => $dr->prop("desc"),
 					"rows" => 5,
 					"cols" => 60
 				)),
@@ -172,7 +169,6 @@ class aw_spec extends class_base
 			return $o->instance()->set_embed_prop($o, $arr);
 		}
 
-		$disp = $this->_get_disp($arr);
 		$arr["obj_inst"]->set_spec_class_list($arr["request"]["class_list"]);
 	}
 
@@ -193,33 +189,6 @@ class aw_spec extends class_base
 			return PROP_IGNORE;
 		}
 		$arr["obj_inst"]->set_meta($this->_get_disp($arr), $arr["request"]["spec_editor"]);
-	}
-
-	function _get_spec_overview($arr)
-	{
-		if (!$this->_is_visible($arr))
-		{
-			return PROP_IGNORE;
-		}
-
-		$disp = $this->_get_disp($arr);
-		$vals = array();
-		foreach($this->tree_struct as $item)
-		{
-			if ((string)$item[0] == (string)$disp)
-			{
-				$vals[] = $item;
-			}
-		}
-
-		$str = "";
-		foreach($vals as $val)
-		{
-			$str .= "<b>".$val[2]."</b><br>";
-			$str .= $arr["obj_inst"]->meta($val[1]);
-			$str .= "<br><hr><br>";
-		}
-		$arr["prop"]["value"] = $str;
 	}
 
 	private function _get_disp($arr)
@@ -283,35 +252,32 @@ class aw_spec extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		
-		$disp = $this->_get_disp($arr);
-
 		$t = $arr["prop"]["vcl_inst"];
 		$this->_init_relation_list_table($t);
 
-		$class_picker = $this->_get_class_picker($arr["obj_inst"]);		
+		$class_picker = $this->get_class_picker($arr["obj_inst"]);		
 
-		$data = $arr["obj_inst"]->meta($disp);
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
-		$data[] = array();
+		$data = $arr["obj_inst"]->spec_relation_list();
+		$data[-1] = obj();
+		$data[-2] = obj();
+		$data[-3] = obj();
+		$data[-4] = obj();
+		$data[-5] = obj();
 		foreach($data as $idx => $dr)
 		{
 			$t->define_data(array(
 				"rel_from" => html::select(array(
 					"name" => "rel_data[".$idx."][rel_from]",
-					"value" => $dr["rel_from"],
+					"value" => $dr->prop("rel_from"),
 					"options" => $class_picker
 				)),
 				"rel_name" => html::textbox(array(
 					"name" => "rel_data[".$idx."][rel_name]",
-					"value" => $dr["rel_name"],
+					"value" => $dr->name(),
 				)),
 				"rel_to" => html::select(array(
 					"name" => "rel_data[".$idx."][rel_to]",
-					"value" => $dr["rel_to"],
+					"value" => $dr->prop("rel_to"),
 					"options" => $class_picker
 				)),
 			));
@@ -325,54 +291,32 @@ class aw_spec extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		$disp = $this->_get_disp($arr);
-		$v = array();
-		foreach(safe_array($arr["request"]["rel_data"]) as $idx => $row)
-		{
-			if ($row["rel_name"] != "")
-			{
-				$v[$idx] = $row;
-			}
-		}
-		$arr["obj_inst"]->set_meta($disp, $v);
+		$arr["obj_inst"]->set_spec_relation_list($arr["request"]["rel_data"]);
 	}
 
-	private function _get_class_picker($o)
+	/** Returns a list of classes
+		@attrib api=1 params=pos
+		
+		@param o required type=cl_aw_spec
+			The spec to read clases from 
+
+		@returns
+			array { class_id => class_name } for all classes in the spec and the system
+	**/
+	public static function get_class_picker($o)
 	{
 		$clss = aw_ini_get("classes");
 		$rv = array("" => t("--vali--"));
+		foreach($o->spec_class_list() as $idx => $row)
+		{
+			$rv["new_".$idx] = $row->name();
+		}
+		$rv["sep"] = "-----------";
 		foreach($clss as $clid => $cle)
 		{
 			$rv[$clid] = $cle["name"];
 		}
-		foreach(safe_array($o->meta("classes_classes")) as $idx => $row)
-		{
-			$rv["new_".$idx] = $row["class_name"];
-		}
 		return $rv;
-	}
-
-	private function _get_group_picker($o)
-	{
-		$rv = array("" => t("--vali--"));
-		foreach(safe_array($o->meta("groups")) as $idx => $row)
-		{
-			$rv[$idx] = $row["group_name"];
-		}
-		return $rv;
-	}
-
-	private function _get_type_picker()
-	{
-		return array(
-			"" => t("--vali--"),
-			"textbox" => t("Textbox"),
-			"textarea" => t("Textarea"),
-			"treeview" => t("Puu"),
-			"table" => t("Tabel"),
-			"relpicker" => t("Relpicker"),
-			"toolbar" => t("Toolbar")
-		);
 	}
 
 	function _get_view_tb($arr)
@@ -397,24 +341,31 @@ class aw_spec extends class_base
 		die(get_instance("html2pdf")->convert(array("source" => $str)));
 	}
 
-	function _get_overview($o)
+	function _get_overview($o, $parent = 0, $prnt_num = "")
 	{
 		$str = "";
+		$num = 1;
 		foreach($this->tree_struct as $val)
 		{
-			if (!isset($val[3]))
+			if (!isset($val[3]) || $val[0] !== $parent)
 			{
 				continue;
 			}
+			$np = ($prnt_num != "" ? $prnt_num."." : "").$num;
+
 			$fn = "_get_ovr_".$val[3];
-			$tmp = $this->$fn($o, $val);		
+			$tmp = $this->$fn($o, $val, $np);
 			if ($tmp === false)
 			{
 				continue;
 			}
-			$str .= "<b>".$val[2]."</b><br>";
+
+			$str .= "<b>$np ".$val[2]."</b><br>";
 			$str .= $tmp;
-			$str .= "<br><hr><br>";
+			$str .= "<br><br>";
+
+			$str .= $this->_get_overview($o, $val[1], $np);
+			$num++;
 		}
 
 		return $str;
@@ -425,99 +376,53 @@ class aw_spec extends class_base
 		$arr["prop"]["value"] = $this->_get_overview($arr["obj_inst"]);
 	}
 
-	function _get_ovr_spec_overview($o, $val)
+	private function _get_ovr_spec_overview($o, $val)
 	{
 		return null;
 	}
 
-	function _get_ovr_spec_editor($o, $val)
+	private function _get_ovr_spec_editor($o, $val)
 	{
-		return $o->meta($val[1]);
+		return nl2br($o->meta($val[1]));
 	}
 
-	function _get_ovr_class_list($o, $val)
+	private function _get_ovr_class_list($o, $val, $prnt_num)
 	{
-		$t = new aw_table();
-		$this->_init_class_list_table($t);
+		$str = "<br><br>";
+		$num = 0;
 		foreach($o->spec_class_list() as $row)
 		{
-			$t->define_data(array(
-				"class_name" => $row->name(),
-				"class_desc" => $row->comment()
-			));
+			$np = self::format_chapter_num($prnt_num, ++$num);
 
-			if (($val = $row->instance()->get_overview($row, $t)) !== null)
+			$str .= self::format_doc_entry(
+				$np, 
+				sprintf(t("Klass: %s"), $row->name()),
+				nl2br($row->prop("desc"))
+			);
+
+			if (($val = $row->instance()->get_overview($row, $t, $np)) !== null)
 			{
-				$t->define_data(array(
-					"class_name" => "&nbsp;",
-					"class_desc" => $val
-				));
+				$str .= $val;
 			}
 		}
-		return $t->draw();
+		return $str;
 	}
 
-	function _get_ovr_relation_list($o, $val)
+	private function _get_ovr_relation_list($o, $val, $prnt_num)
 	{
-		$t = new aw_table();
-		$this->_init_relation_list_table($t);
-		$class_picker = $this->_get_class_picker($o);		
-		foreach(safe_array($o->meta($val[1])) as $row)
-		{
-			$t->define_data(array(
-				"rel_from" => $class_picker[$row["rel_from"]],
-				"rel_name" => $row["rel_name"],
-				"rel_to" => $class_picker[$row["rel_to"]],
-			));
-		}
-		return $t->draw();
-	}
+		$str = "<br><br>";
+		$class_picker = $this->get_class_picker($o);		
 
-	function _get_ovr_group_list($o, $val)
-	{
-		$t = new aw_table();
-		$this->_init_group_list_table($t);
-		$group_picker = $this->_get_group_picker($o);		
-		$class_picker = array("" => t("--vali--"));
-		foreach(safe_array($o->meta("classes_classes")) as $idx => $row)
+		$num = 0;
+		foreach($o->spec_relation_list() as $row)
 		{
-			$class_picker["new_".$idx] = $row["class_name"];
+			$str .= self::format_doc_entry(
+				self::format_chapter_num($prnt_num, ++$num),
+				sprintf(t("Seos: %s"), $row->name),
+				sprintf(t("Klassist %s klassi %s"), $class_picker[$row->rel_from], $class_picker[$row->rel_to])
+			);
 		}
-		foreach(safe_array($o->meta($val[1])) as $row)
-		{
-			$t->define_data(array(
-				"class" => $class_picker[$row["class"]],
-				"group_name" => $row["group_name"],
-				"parent_group_name" => $group_picker[$row["parent_group_name"]],
-			));
-		}
-		return $t->draw();
-	}
-
-	function _get_ovr_prop_list($o, $val)
-	{
-		$t = new aw_table();
-		$this->_init_prop_list_table($t);
-		$group_picker = $this->_get_group_picker($o);		
-		$class_picker = array("" => t("--vali--"));
-		foreach(safe_array($o->meta("classes_classes")) as $idx => $row)
-		{
-			$class_picker["new_".$idx] = $row["class_name"];
-		}
-
-		$type_picker = $this->_get_type_picker();
-
-		foreach(safe_array($o->meta($val[1])) as $row)
-		{
-			$t->define_data(array(
-				"class" => $class_picker[$row["class"]],
-				"group" => $group_picker[$row["group"]],
-				"prop_name" => $row["prop_name"],
-				"prop_desc" => nl2br($row["prop_desc"]),
-				"type" => $type_picker[$row["type"]],
-			));
-		}
-		return $t->draw();
+		return $str;
 	}
 
 	private function _get_class_list_tree_items($tree, $o, $pt)
@@ -527,7 +432,7 @@ class aw_spec extends class_base
 			$id = $pt."_".$cl_oid;
 			$tree->add_item($pt, array(
 				"id" => $id,
-				"url" => aw_url_change_var("disp2", $cl_oid),
+				"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid)),
 				"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
 			));
 
@@ -537,6 +442,47 @@ class aw_spec extends class_base
 				$t->instance()->get_tree_items($tree, $t, $id);
 			}
 		}
+	}
+
+	/** Formats the chapter number from parent and current entry
+		@attrib api=1 params=pos
+
+		@param parent_num required type=string
+			The parent chapter number
+
+		@param num required type=string
+			The current level item number
+	
+		@returns
+			Combined chapter number 
+	**/
+	public static function format_chapter_num($parent_num, $num)
+	{
+		return ($parent_num != "" ? $parent_num."." : "").$num;
+	}
+
+	/** Formats document chapter
+		@attrib api=1 params=pos
+
+		@param num required type=string
+			The chapter number
+
+		@param title required type=string
+			The chapter title
+
+		@param content required type=string
+			The chapter content
+
+		@returns
+			Properly formatted chapter to concanenate to the current document
+	**/
+	public static function format_doc_entry($num, $title, $content)
+	{
+		$str = "";
+		$str .= "<b>$num ".$title."</b><br>";
+		$str .= $content;
+		$str .= "<br><br>";
+		return $str;
 	}
 }
 
