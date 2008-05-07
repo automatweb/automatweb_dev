@@ -195,6 +195,9 @@ caption Toimumisaegade tabel
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
 @caption Kordused
 
+@property iver type=image_verification width=200 height=40 text_color=000000 background_color=FFFFFF font_size=10
+@caption Kontrolltekst
+
 @groupinfo projects caption="Projektid"
 @groupinfo recurrence caption=Kordumine
 

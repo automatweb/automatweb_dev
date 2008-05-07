@@ -479,6 +479,20 @@
             <caption>Kordused</caption>
       </property>
       <property>
+            <name>iver</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>image_verification</type>
+            <width>200</width>
+            <height>40</height>
+            <text_color>000000</text_color>
+            <background_color>FFFFFF</background_color>
+            <font_size>10</font_size>
+            <caption>Kontrolltekst</caption>
+      </property>
+      <property>
             <name>transl</name>
             <group>transl</group>
             <table>objects</table>
