@@ -2683,6 +2683,10 @@ class site_show extends class_base
 				}
 				$values = array();
 				$err = false;
+				if ($_act == "change")
+				{
+					$meth["required"]["id"] = "required";
+				}
 				$mv = new aw_array($meth["values"]);
 				$mr = new aw_array($meth["required"]);
 				foreach($mr->get() as $key => $val)
