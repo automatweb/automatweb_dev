@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.4 2008/05/06 11:17:32 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.5 2008/05/07 10:44:40 kristo Exp $
 /*
 
 
@@ -194,6 +194,11 @@ class file extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				if (basename($arr["obj_inst"]->prop("file")) == "" && $arr["obj_inst"]->prop("file_url") == "")
+				{
+					return PROP_IGNORE;
+				}
+
 				$ddoc_inst = get_instance(CL_DDOC);
 				$signs = $ddoc_inst->get_signatures($re["ddoc"]);
 				foreach($signs as $sig)
@@ -219,7 +224,7 @@ class file extends class_base
 						$add_sig = html::href(array(
 							"url" => "#",
 							"caption" => t("Lisa allkiri"),
-							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Faili: %s, allkirjastamine")."\", 410, 250);",
 						));
 						$ddoc_link = html::href(array(
 							"url" => $this->mk_my_orb("change", array(
@@ -1246,9 +1251,10 @@ class file extends class_base
 		header("Content-Length: ".strlen($fc["content"]));
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
-		//header("Content-Disposition: inline; filename=\"$fc[name]\"");
-		//header("Content-Length: ".strlen($fc["content"]));
-		//header("Pragma: no-cache");
+		if($pi["extension"] == "ddoc")
+		{
+			header("Content-Disposition: inline; filename=\"$fc[name]\"");
+		}
 		die($fc["content"]);
 	}
 
