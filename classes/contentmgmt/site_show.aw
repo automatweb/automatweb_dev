@@ -835,6 +835,7 @@ class site_show extends class_base
 						$ot = new object_tree(array(
 							"class_id" => CL_MENU,
 							"parent" => $gm_id,
+							"site_id" => array(),
 							"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 							"sort_by" => "objects.parent"
 						));
