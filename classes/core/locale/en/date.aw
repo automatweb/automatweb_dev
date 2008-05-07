@@ -28,11 +28,11 @@ class date
 				return $newdate;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$newdate=date("d ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				return $newdate;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$newdate=date("d ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
 			
 			case 5:
