@@ -115,30 +115,6 @@
             <caption>Mitu klikki maksimaalselt</caption>
       </property>
       <property>
-            <name>clicks</name>
-            <table>objects</table>
-            <group>stats</group>
-            <type>text</type>
-            <field>clicks</field>
-            <caption>Klikke</caption>
-      </property>
-      <property>
-            <name>views</name>
-            <table>objects</table>
-            <group>stats</group>
-            <type>text</type>
-            <field>views</field>
-            <caption>Vaatamisi</caption>
-      </property>
-      <property>
-            <name>click_through</name>
-            <table>objects</table>
-            <group>stats</group>
-            <type>text</type>
-            <field>click_through</field>
-            <caption>Click-through ratio</caption>
-      </property>
-      <property>
             <name>stats_table</name>
             <table>objects</table>
             <group>stats</group>
@@ -176,6 +152,7 @@
             </display>
             <stats>
                   <caption>Statistika</caption>
+                  <submit>no</submit>
             </stats>
             <timing>
                   <caption>Ajaline aktiivsus</caption>

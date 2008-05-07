@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_manager.aw,v 1.4 2007/12/13 12:27:21 robert Exp $
-// banner_manager.aw - Bannerite haldus 
 /*
-
 @classinfo syslog_type=ST_BANNER_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @default table=objects
 
@@ -245,7 +242,7 @@ EOT;
 		));
 	}
 
-	function get_cont_locs($cont, &$t, $parent, $arr)
+	private function get_cont_locs($cont, &$t, $parent, $arr)
 	{
 		classload("core/icons");
 		// get document under promo and list all connections from that to bannerplaces
@@ -277,7 +274,7 @@ EOT;
 	}
 
 	/**
-	@attrib name=mgr_tree_func all_args=1
+		@attrib name=mgr_tree_func all_args=1
 	**/
 	function mgr_tree_func($arr)
 	{
@@ -379,7 +376,7 @@ EOT;
 		}
 	}
 
-	function _init_locs_tbl(&$t)
+	private function _init_locs_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -518,7 +515,7 @@ EOT;
 		}
 	}
 
-	function _init_bans_t(&$t)
+	private function _init_bans_t(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -635,7 +632,7 @@ EOT;
 			));
 			$t->define_data(array(
 				"name" => html::obj_change_url($b),
-				"img" => $bi->get_banner_html(null, null, $b),
+				"img" => $bi->get_banner_html(null, $b),
 				"location" => html::href(array(
 					"url" => $b->prop("url"),
 					"caption" => substr($b->prop("url"), 0, 50)
@@ -663,11 +660,11 @@ EOT;
 		}
 	}
 
-	function _get_places_for_container($ct_id)
+	private function _get_places_for_container($ct_id)
 	{
 		$o = obj($ct_id);
 		$rv = array();
-		if($o->class_id()==CL_PROMO)
+		if($o->class_id() == CL_PROMO)
 		{
 			$ol = new object_list(array("class_id" => CL_DOCUMENT, "parent" => $ct_id));
 			$doc = $ol->begin();

@@ -1,11 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.33 2008/03/13 13:26:23 kristo Exp $
-
 /*
-
 @tableinfo banners index=id master_table=objects master_index=brother_of
-
 @classinfo syslog_type=ST_BANNER relationmgr=yes maintainer=kristo
+
 @default table=objects
 @default group=general
 
@@ -48,16 +45,7 @@
 	@property max_clicks type=textbox size=3 table=banners  group=display
 	@caption Mitu klikki maksimaalselt
 
-@groupinfo stats caption="Statistika"
-
-	@property clicks type=text group=stats
-	@caption Klikke
-
-	@property views type=text group=stats
-	@caption Vaatamisi
-
-	@property click_through type=text group=stats
-	@caption Click-through ratio
+@groupinfo stats caption="Statistika" submit=no
 
 	@property stats_table type=table no_caption=1 store=no group=stats
 
@@ -103,21 +91,6 @@ class banner extends class_base
 		$prop =& $arr["prop"];
 		switch($prop["name"])
 		{
-			case "clicks":
-				$this->_init_stats($arr["obj_inst"]);
-				$prop["value"] = (int)$this->clicks;
-				break;
-
-			case "views":
-				$this->_init_stats($arr["obj_inst"]);
-				$prop["value"] = (int)$this->views;
-				break;
-
-			case "click_through":
-				$this->_init_stats($arr["obj_inst"]);
-				$prop["value"] = round($this->click_through,4)." %";
-				break;
-
 			case "probability_tbl":
 				$this->do_prob_tbl($arr);
 				break;
@@ -149,7 +122,7 @@ class banner extends class_base
 		return PROP_OK;
 	}
 
-	function stats_table($arr)
+	private function stats_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$langs = $this->db_fetch_array("SELECT DISTINCT langid FROM banner_views");
@@ -163,6 +136,7 @@ class banner extends class_base
 			"name" => "total",
 			"caption" => t("Kokku")
 		));
+		$t->set_caption(sprintf(t("Banneri %s klikkimise ja vaatamise statistika"), $arr["obj_inst"]->name));
 		$clickdata = $this->db_fetch_array("SELECT COUNT(*) as cnt, langid FROM banner_clicks WHERE bid = '".$arr["obj_inst"]->id()."' GROUP BY langid");
 		$viewdata = $this->db_fetch_array("SELECT COUNT(*) as cnt, langid FROM banner_views WHERE bid = '".$arr["obj_inst"]->id()."' GROUP BY langid");
 		foreach($clickdata as $click)
@@ -208,11 +182,9 @@ class banner extends class_base
 		$clicks["name"] = t("Klikke");
 		$clicks["total"] = $this->clicks;
 		$t->define_data($clicks);
-
-		
 	}
 
-	function do_save_prob_tbl(&$arr)
+	private function do_save_prob_tbl(&$arr)
 	{
 		if (!is_oid($arr["obj_inst"]->id()))
 		{
@@ -232,7 +204,7 @@ class banner extends class_base
 	}
 
 	// Generates toolbar
-	function do_general_toolbar (&$tb, $arr)
+	private function do_general_toolbar (&$tb, $arr)
 	{
 		$tb->add_menu_button(array(
 			'name'=>'add_item',
@@ -276,10 +248,7 @@ class banner extends class_base
 		));
 	}
 
-	
-
-
-	function init_prob_tbl(&$t)
+	private function init_prob_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -294,7 +263,7 @@ class banner extends class_base
 		));
 	}
 
-	function do_prob_tbl(&$arr)
+	private function do_prob_tbl(&$arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->init_prob_tbl($t);
@@ -325,30 +294,12 @@ class banner extends class_base
 		$t->set_sortable(false);
 	}
 
-	function _init_stats($o)
-	{
-		if (!$this->__inited)
-		{
-			$this->clicks = $this->db_fetch_field("SELECT count(*) as cnt FROM banner_clicks WHERE bid = '".$o->id()."'", "cnt");
-			$this->views = $this->db_fetch_field("SELECT count(*) as cnt FROM banner_views WHERE bid = '".$o->id()."'", "cnt");
-			if ($this->views > 0)
-			{
-				$this->click_through = ($this->clicks / $this->views) * 100.0;
-			}
-			else
-			{
-				$this->click_through = 0;
-			}
-			$this->__inited = true;
-		}
-	}
-
 	/** randomly selects a banner from the specified group
 
 		@comment
 			$gid - banner area id
 	**/
-	function get_grp($gid, $die = true)
+	private function get_grp($gid, $die = true)
 	{
 		$baids = array();
 		$cnt = 0;
@@ -450,7 +401,7 @@ class banner extends class_base
 		}
 	}
 
-	function add_click($bid)
+	private function add_click($bid)
 	{
 		$langid = $this->get_lang_id();
 		$this->quote(&$ss);
@@ -464,9 +415,8 @@ class banner extends class_base
 		$this->db_query("INSERT INTO banner_clicks (tm,bid,ip,langid) values('".time()."','$bid','$ip','$langid')");
 	}
 
-	////
-	// !adds a record to the banner_ids table to identify shown banners l8r
-	function add_view($bid,$ss,$noview,$clid)
+	/** adds a record to the banner_ids table to identify shown banners l8r **/
+	private function add_view($bid,$ss,$noview,$clid)
 	{
 		$langid = $this->get_lang_id();
 		$this->quote(&$ss);
@@ -485,7 +435,7 @@ class banner extends class_base
 		}
 	}
 
-	function add_simple_view($bid, $clid)
+	private function add_simple_view($bid, $clid)
 	{
 		$langid = $this->get_lang_id();
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
@@ -499,7 +449,7 @@ class banner extends class_base
 		$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
 	}
 
-	function get_lang_id()
+	private function get_lang_id()
 	{
 		$type = aw_ini_get("user_interface.content_trans");
 		if($type == 1)
@@ -518,7 +468,7 @@ class banner extends class_base
 		@comment 
 			also cleans the banner_ids table of all views older than 48 hours	
 	**/
-	function find_url($ss,$clid)
+	private function find_url($ss,$clid)
 	{
 		$langid = $this->get_lang_id();
 		$bid = $this->db_fetch_field("SELECT bid FROM banner_ids WHERE ss = '$ss' AND clid = '$clid'","bid");
@@ -621,27 +571,25 @@ class banner extends class_base
 		}
 	}
 
-	////
-	// !shows a transparent gif, used if any errors occur while showing banner
-	function error_banner($die = true)
+	/** shows a transparent gif, used if any errors occur while showing banner **/
+	private function error_banner($die = true)
 	{
 		if ($die)
 		{
 			header("Content-type: image/gif");
-			readfile($this->cfg["baseurl"]."/automatweb/images/trans.gif");
+			readfile(aw_ini_get("baseurl")."/automatweb/images/trans.gif");
 			die();
 		}
 	}
 
-	////
-	// !redirects to the site, used when any errors occur when the user clicks on a banner
-	function error_click()
+	/** redirects to the site, used when any errors occur when the user clicks on a banner **/
+	private function error_click()
 	{
-		header("Location: ".$this->cfg["baseurl"]);
+		header("Location: ".aw_ini_get("baseurl"));
 		die();
 	}
 
-	function display_banner($o)
+	private function display_banner($o)
 	{
 		if (!$o->trans_get_val("banner_file"))
 		{
@@ -672,7 +620,19 @@ class banner extends class_base
 		}
 	}
 
-	function get_banner_html($loc, $count, $banner = null)
+	/** Returns the html for the given banner or banner location
+		@attrib api=1 params=pos
+
+		@param loc optional type=oid
+			The banner location object oid. If this is given and not the banner, then it fids a banner from the location settings to display
+
+		@param banner optionsl type=oid
+			The oid of the banner to display. If not set, the location must be. If set, the location is ignored and the given banner is used. 
+
+		@returns 
+			The html for the banner
+	**/
+	function get_banner_html($loc, $banner = null)
 	{
 		if ($banner === null)
 		{
@@ -761,6 +721,15 @@ class banner extends class_base
 		}
 	}
 
+	/** Inserts banner content into html
+		@attrib api=1 params=pos
+
+		@param html required type=string
+			the html to put banners in, with the banner places marked
+
+		@param list required type=array
+			an array containing intems to replace with banners array { 0 => array { index => string to replace }, 1 => array { index => banner place oid } }
+	**/
 	function put_banners_in_html($html, $list)
 	{
 		foreach($list[0] as $idx => $repl)

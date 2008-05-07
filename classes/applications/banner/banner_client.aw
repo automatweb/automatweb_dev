@@ -1,22 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.8 2007/12/06 14:32:49 kristo Exp $
-
 /*
-
 @tableinfo banner_clients index=id master_table=objects master_index=brother_of
-
 @classinfo syslog_type=ST_BANNER_LOCATION relationmgr=yes maintainer=kristo
+
 @default table=objects
 @default group=general
 
-@property cont_place type=select store=no
-@caption Koht veebis
+	@property cont_place type=select store=no
+	@caption Koht veebis
 
-@property cont_doc_tpl type=select store=no
-@caption Dokumendi template
+	@property cont_doc_tpl type=select store=no
+	@caption Dokumendi template
 
-@property html type=textarea cols=80 rows=10 table=banner_clients 
-@caption Asukoha HTML
+	@property html type=textarea cols=80 rows=10 table=banner_clients 
+	@caption Asukoha HTML
 
 */
 
@@ -89,17 +86,9 @@ class banner_client extends class_base
 		}
 	}
 
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
 	function show($arr)
 	{
 		return "[bloc".$arr["id"]."]";
-		$ob = new object($arr["id"]);
-		// return is html for banner area
-		return str_replace("[ss]", "[ss".$arr["id"]."]",$ob->prop("html"));
 	}	
 }
 ?>

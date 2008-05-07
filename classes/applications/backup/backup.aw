@@ -49,7 +49,7 @@ class backup extends class_base
 		}
 	}
 
-	function do_backup($o)
+	private function do_backup($o)
 	{
 		extract($arr);
 		ob_end_clean();
