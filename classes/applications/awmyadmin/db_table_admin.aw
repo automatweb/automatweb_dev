@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo no_status=1 no_comment=1 maintainer=kristo
+@classinfo no_status=1 no_comment=1 maintainer=kristo prop_cb=1
 
 @default table=objects
 @default group=general
@@ -13,8 +13,19 @@
 	@property db_table type=select 
 	@caption Vali tabel
 
-	@property adminlink type=text editonly=1
-	@caption 
+@default group=columns
+
+	@property column_toolbar type=toolbar store=no no_caption=1
+	@property column_table type=table store=no no_caption=1
+
+@default group=indexes
+
+	@property index_toolbar type=toolbar store=no no_caption=1
+	@property index_table type=table store=no no_caption=1
+
+@groupinfo columns caption="Tulbad" submit=no
+@groupinfo indexes caption="Indeksid" submit=no
+
 
 @reltype DB_LOGIN value=1 clid=CL_DB_LOGIN
 @caption DB Login
@@ -47,145 +58,100 @@ class db_table_admin extends class_base
 				}
 				$args['prop']['options'] = $tbls;
 				break;
-			
-			case 'adminlink':
-				$args['prop']['value'] = html::href(array(
-					'url' => $this->mk_my_orb('admin', array('id' => $args['obj_inst']->id())),
-					'caption' => 'Administreeri'
-				));
-				break;
 		}
 		return PROP_OK;
 	}
 
-	/**  
-		
-		@attrib name=admin params=name 
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function admin($arr)
-	{
-		extract($arr);
-		$ob = $this->_change_init($arr, 'Tabeli admin', 'admin.tpl');
-		$this->mk_path($ob->parent(), html::href(array(
-				'url' => $this->mk_my_orb('change', array('id' => $id)),
-				'caption' => 'Muuda'
-			)).' / '.html::href(array(
-				'url' => $this->mk_my_orb('admin', array('id' => $id)),
-				'caption' => 'Administreeri'
-			))
-		);
-
-		return $this->do_table_admin(array(
-			'db_base' => $ob->meta('db_base'),
-			'db_table' => $ob->meta('db_table'),
-			'that' => &$this,
-			'id' => $id
-		));
-	}
-
-	/**  
-		
+	/** 
 		@attrib name=admin_col params=name 
 		
 		@param id required
 		@param field optional
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function admin_col($arr)
 	{
-		extract($arr);
-		$this->read_template('admin_col.tpl');
-		$ob = obj($id);
+		$ob = obj($arr["id"]);
 		$this->mk_path($ob->parent(), html::href(array(
-				'url' => $this->mk_my_orb('change', array('id' => $id)),
-				'caption' => 'Muuda'
+				'url' => $this->mk_my_orb('change', array('id' => $arr["id"], "group" => 'columns')),
+				'caption' => t('Tulbad')
 			)).' / '.html::href(array(
-				'url' => $this->mk_my_orb('admin', array('id' => $id)),
-				'caption' => 'Administreeri'
-			)).' / '.html::href(array(
-				'url' => $this->mk_my_orb('admin_col', array('id' => $id,'field' => $field)),
-				'caption' => ($field == '' ? 'Lisa tulp' : "Muuda tulpa $field")
+				'url' => $this->mk_my_orb('admin_col', array('id' => $arr["id"],'field' => $arr["field"])),
+				'caption' => ($arr["field"] == '' ? 'Lisa tulp' : "Muuda tulpa $field")
 			))
 		);
 
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($ob->meta('db_base'));
-
 		$tbl = $db->db_get_table($ob->meta('db_table'));
 
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'save',
-			'tooltip' => t('Salvesta'),
-			'url' => 'javascript:document.add.submit()',
-			'img' => 'save.gif'
+		$hc = get_instance("cfg/htmlclient", array(
+			"tabs" => true,
 		));
-		$this->vars(array(
-			'name' => $field,
-			'type' => $this->picker(strtoupper($tbl['fields'][$field]['type']),$db->db_list_field_types()),
-			'length' => $tbl['fields'][$field]['length'],
-			'null' => checked($tbl['fields'][$field]['null']),
-			'default' => $tbl['fields'][$field]['default'],
-			'extra' => $this->picker(strtoupper($tbl['fields'][$field]['flags']), $db->db_list_flags()),
-			'toolbar' => $tb->get_toolbar(),
-			'reforb' => $this->mk_reforb('submit_admin_col', array('id' => $id, 'field' => $field))
+		$field = $arr["field"];
+		$hc->add_tab(array(
+			"active" => true,
+			"caption" => !empty($arr["field"]) ? t("Muuda tulpa") : t("Lisa tulp"),
 		));
-		return $this->parse();
+		$hc->start_output();
+		$hc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => t("Nimi"),
+			"value" => $arr["field"]
+		));
+		$hc->add_property(array(
+			"name" => "type",
+			"type" => "select",
+			"options" => $db->db_list_field_types(),
+			"value" => strtoupper($tbl['fields'][$field]['type'])
+		));
+
+		$hc->add_property(array(
+			"name" => "length",
+			"type" => "textbox",
+			"size" => 5,
+			"caption" => t("Pikkus"),
+			"value" => $tbl['fields'][$field]['length']
+		));
+		$hc->add_property(array(
+			"name" => "null",
+			"type" => "checkbox",
+			"ch_value" => "YES",
+			"caption" => t("NULL"),
+			"value" => $tbl['fields'][$field]['null']
+		));
+		$hc->add_property(array(
+			"name" => "default",
+			"type" => "textbox",
+			"caption" => t("Vaikimisi"),
+			"value" => $tbl['fields'][$field]['default']
+		));
+		$hc->add_property(array(
+			"name" => "extra",
+			"type" => "select",
+			"caption" => t("Extra"),
+			"options" => $db->db_list_flags(),
+			"value" => strtoupper($tbl['fields'][$field]['flags'])
+		));
+		$hc->add_property(array(
+			"name" => "submit_override",
+			"type" => "submit",
+			"caption" => !empty($arr["field"]) ? t("Muuda tulpa") : t("Lisa tulp"),
+		));
+		$hc->finish_output(array(
+			"data" => array(
+				"action" => "submit_admin_col",
+				"id" => $arr["id"],
+				"field" => $arr["field"],
+				"orb_class" => "db_table_admin",
+			),
+		));
+
+		return $hc->get_result(array());
 	}
 
 	/**  
-		
-		@attrib name=submit_admin params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin($arr)
-	{
-		extract($arr);
-
-		$ob = obj($id);
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($ob->meta('db_base'));
-
-		if ($is_del)
-		{
-			$sel = new aw_array($sel);
-			foreach($sel->get() as $secol)
-			{
-				$db->db_drop_col($ob->meta('db_table'),$secol);
-			}
-		}
-		return $this->mk_my_orb('admin', array('id' => $id));
-	}
-
-	/**  
-		
 		@attrib name=submit_admin_col params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function submit_admin_col($arr)
 	{
@@ -223,130 +189,6 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=admin_indexes params=name 
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function admin_indexes($arr)
-	{
-		extract($arr);
-		$this->read_template('admin_indexes.tpl');
-		$ob = obj($id);
-		$this->mk_path($ob->parent(), html::href(array(
-				'url' => $this->mk_my_orb('change', array('id' => $id)),
-				'caption' => 'Muuda'
-			)).' / '.html::href(array(
-				'url' => $this->mk_my_orb('admin', array('id' => $id)),
-				'caption' => 'Administreeri indekseid'
-			))
-		);
-
-
-		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'db_table_admin'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
-		$t->define_field(array('name' => 'index_name','caption' => 'Nimi','sortable' => 1));
-		$t->define_field(array('name' => 'col_name','caption' => 'Tulba nimi','sortable' => 1));
-		$t->define_field(array('name' => 'unique','caption' => 'Unikaalne','sortable' => 1));
-		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
-		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
-
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($ob->meta('db_base'));
-		$db->db_list_indexes($ob->meta('db_table'));
-		while ($idx = $db->db_next_index())
-		{
-			$idx['change'] = html::href(array(
-				'url' => $this->mk_my_orb('admin_index', array('id' => $id, 'index' => $idx['index_name'])),
-				'caption' => 'Muuda'
-			));
-			$idx['sel'] = html::checkbox(array(
-				'name' => 'sel[]',
-				'value' => $idx['index_name']
-			));
-
-			$t->define_data($idx);
-		}
-		$t->set_default_sortby('index_name');
-		$t->sort_by();
-
-
-
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'new',
-			'tooltip' => 'Lisa',
-			'url' => $this->mk_my_orb('admin_index', array('id' => $id)),
-			'img' => 'new.gif'
-		));
-		$tb->add_button(array(
-			'name' => 'delete',
-			'tooltip' => 'Kustuta',
-			'url' => 'javascript:del()',
-			'img' => 'delete.gif'
-		));
-
-		$tbp = get_instance('vcl/tabpanel');
-		$tbp->add_tab(array(
-			'active' => false,
-			'caption' => 'Tulbad',
-			'link' => $this->mk_my_orb('admin', array('id' => $id)),
-		));
-		$tbp->add_tab(array(
-			'active' => true,
-			'caption' => 'Indeksid',
-			'link' => $this->mk_my_orb('admin_indexes', array('id' => $id))
-		));
-		$this->vars(array(
-			'table' => $t->draw(),
-			'toolbar' => $tb->get_toolbar(),
-			'reforb' => $this->mk_reforb('submit_admin_indexes', array('id' => $id, 'is_del' => '0'))
-		));
-		$this->vars(array(
-			'tabs' => $tbp->get_tabpanel(array('content' => $this->parse('TBC'))),
-			'TBC' => ''
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_admin_indexes params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_admin_indexes($arr)
-	{
-		extract($arr);
-	
-		$ob = obj($id);
-		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($ob->meta('db_base'));
-
-		if ($is_del)
-		{
-			$ar = new aw_array($sel);
-			foreach($ar->get() as $idxname)
-			{
-				$db->db_drop_index($ob->meta('db_table'), $idxname);
-			}
-		}
-		return $this->mk_my_orb('admin_indexes', array('id' => $id));
-	}
-
-	/**  
-		
 		@attrib name=admin_index params=name 
 		
 		@param id required
@@ -360,62 +202,73 @@ class db_table_admin extends class_base
 	**/
 	function admin_index($arr)
 	{
-		extract($arr);
-		$this->read_template('admin_index.tpl');
-		$ob = obj($id);
+		$ob = obj($arr["id"]);
 		$this->mk_path($ob->parent(), html::href(array(
-				'url' => $this->mk_my_orb('change', array('id' => $id)),
-				'caption' => 'Muuda'
+				'url' => $this->mk_my_orb('change', array('id' => $arr["id"], "group" => "indexes")),
+				'caption' => t('Muuda')
 			)).' / '.html::href(array(
-				'url' => $this->mk_my_orb('admin_indexes', array('id' => $id)),
-				'caption' => 'Administreeri indekseid'
-			)).' / '.html::href(array(
-				'url' => $this->mk_my_orb('admin_index', array('id' => $id,'index' => $index)),
-				'caption' => ($index == '' ? 'Lisa indeks' : "Muuda indeksit $index")
+				'url' => $this->mk_my_orb('admin_index', array('id' => $arr["id"],'index' => $arr["index"])),
+				'caption' => ($arr["index"] == '' ? t('Lisa indeks') : t("Muuda indeksit"))
 			))
 		);
 
 		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($ob->meta('db_base'));
+		$db->login_as($ob->db_base);
 
-		$db->db_list_indexes($ob->meta('db_table'));
+		$db->db_list_indexes($ob->db_table);
 		while($idx = $db->db_next_index())
 		{
-			if ($idx['index_name'] == $index)
+			if ($idx['index_name'] == $arr["index"])
 			{
 				break;
 			}
 		}
 
-		$tbl = $db->db_get_table($ob->meta('db_table'));
+		$tbl = $db->db_get_table($ob->db_table);
 		$fields = $this->make_keys(array_keys($tbl['fields']));
 
-		$tb = get_instance('vcl/toolbar');
-		$tb->add_button(array(
-			'name' => 'save',
-			'tooltip' => t('Salvesta'),
-			'url' => 'javascript:document.add.submit()',
-			'img' => 'save.gif'
+		$hc = get_instance("cfg/htmlclient", array(
+			"tabs" => true,
 		));
-		$this->vars(array(
-			'name' => $idx['index_name'],
-			'fields' => $this->picker($idx['col_name'], $fields),
-			'toolbar' => $tb->get_toolbar(),
-			'reforb' => $this->mk_reforb('submit_admin_index', array('id' => $id, 'index' => $index))
+		$field = $arr["field"];
+		$hc->add_tab(array(
+			"active" => true,
+			"caption" => !empty($arr["index"]) ? t("Muuda indeksit") : t("Lisa indeks"),
 		));
-		return $this->parse();
+		$hc->start_output();
+		$hc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => t("Nimi"),
+			"value" => $idx['index_name']
+		));
+		$hc->add_property(array(
+			"name" => "field",
+			"type" => "select",
+			"options" => $fields,
+			"value" => $idx['col_name'],
+			"caption" => t("Tulbale")
+		));
+
+		$hc->add_property(array(
+			"name" => "submit_override",
+			"type" => "submit",
+			"caption" => !empty($arr["index"]) ? t("Muuda indeksit") : t("Lisa indeks"),
+		));
+		$hc->finish_output(array(
+			"data" => array(
+				"action" => "submit_admin_index",
+				"id" => $arr["id"],
+				"index" => $arr["index"],
+				"orb_class" => "db_table_admin",
+			),
+		));
+
+		return $hc->get_result(array());
 	}
 
 	/**  
-		
 		@attrib name=submit_admin_index params=name 
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function submit_admin_index($arr)
 	{
@@ -423,16 +276,16 @@ class db_table_admin extends class_base
 
 		$ob = obj($id);
 		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($ob->meta('db_base'));
+		$db->login_as($ob->db_base);
 
 		if ($index != "")
 		{
 			// change = drop && add
-			$db->db_drop_index($ob->meta('db_table'), $index);
+			$db->db_drop_index($ob->db_table, $index);
 		}
 
 		// add
-		$db->db_add_index($ob->meta('db_table'), array(
+		$db->db_add_index($ob->db_table, array(
 			'name' => $name,
 			'col' => $field
 		));
@@ -441,33 +294,80 @@ class db_table_admin extends class_base
 		return $this->mk_my_orb("admin_index", array("id" => $id, "index" => $index));
 	}
 
-	function do_table_admin($arr)
+	function _get_column_toolbar($arr)
 	{
-		extract($arr);
-		if ($tpl)
+		if ($arr["request"]["db_id"] && $arr["obj_inst"]->db_base != $arr["request"]["db_id"])
 		{
-			$this->read_template($tpl);
+			$arr["obj_inst"]->set_prop("db_base", $arr["request"]["db_id"]);
+			$arr["obj_inst"]->save();
+		}
+		if ($arr["request"]["table"] && $arr["obj_inst"]->db_table != $arr["request"]["table"])
+		{
+			$arr["obj_inst"]->set_prop("db_table", $arr["request"]["table"]);
+			$arr["obj_inst"]->save();
 		}
 
-		load_vcl('table');
-		$t = new aw_table(array('prefix' => 'db_table_admin'));
-		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
-		$t->define_field(array('name' => 'name','caption' => 'Nimi','sortable' => 1));
-		$t->define_field(array('name' => 'type','caption' => 'T&uuml;&uuml;p','sortable' => 1));
-		$t->define_field(array('name' => 'flags','caption' => 'Attribuudid','sortable' => 1));
-		$t->define_field(array('name' => 'null','caption' => 'NULL','sortable' => 1));
-		$t->define_field(array('name' => 'default','caption' => 'Default','sortable' => 1));
-		$t->define_field(array('name' => 'change','caption' => 'Muuda'));
-		$t->define_field(array('name' => 'sel','caption' => 'Vali'));
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => $this->mk_my_orb("admin_col", array("id" => $arr["obj_inst"]->id())),
+			"tooltip" => t("Lisa uus tulp")
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "",
+			"confirm" => t("Oled kindel et soovid valitud tulpi kustutada?"),
+			"tooltip" => t("Kustuta valitud tulbad")
+		));
+	}
+
+	function _get_column_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'type',
+			'caption' => t('T&uuml;&uuml;p'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'flags',
+			'caption' => t('Attribuudid'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'null',
+			'caption' => t('NULL'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'default',
+			'caption' => t('Default'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'change',
+			'caption' => t('Muuda')
+		));
+		$t->define_field(array(
+			'name' => 'sel',
+			'caption' => t('Vali')
+		));
 
 		$db = get_instance(CL_DB_LOGIN);
-		$db->login_as($db_base);
-		$tbl = $db->db_get_table($db_table);
+		$db->login_as($arr["obj_inst"]->db_base);
+		$tbl = $db->db_get_table($arr["obj_inst"]->db_table);
 		foreach($tbl['fields'] as $fid => $fdat)
 		{
 			$fdat['type'] .= '('.$fdat['length'].')';
 			$fdat['change'] = html::href(array(
-				'url' => $that->mk_my_orb('admin_col', array('id' => $id, 'field' => $fdat['name'])),
+				'url' => $this->mk_my_orb('admin_col', array('id' => $arr["obj_inst"]->id(), 'field' => $fdat['name'])),
 				'caption' => 'Muuda'
 			));
 			$fdat['sel'] = html::checkbox(array(
@@ -478,43 +378,94 @@ class db_table_admin extends class_base
 			$t->define_data($fdat);
 		}
 		$t->set_default_sortby('name');
-		$t->sort_by();
+	}
 
-		$tb = get_instance('vcl/toolbar');
+	function _set_column_table($arr)
+	{
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($arr["obj_inst"]->db_base);
+
+		$sel = new aw_array($arr["request"]["sel"]);
+		foreach($sel->get() as $secol)
+		{
+			$db->db_drop_col($arr["obj_inst"]->db_table,$secol);
+		}
+	}
+
+	function _get_index_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
 		$tb->add_button(array(
-			'name' => 'new',
-			'tooltip' => 'Lisa',
-			'url' => $that->mk_my_orb('admin_col', array('id' => $id)),
-			'img' => 'new.gif'
+			"name" => "new",
+			"img" => "new.gif",
+			'url' => $this->mk_my_orb('admin_index', array('id' => $arr["obj_inst"]->id())),
+			"tooltip" => t("Lisa uus indeks")
 		));
 		$tb->add_button(array(
-			'name' => 'delete',
-			'tooltip' => 'Kustuta',
-			'url' => 'javascript:del()',
-			'img' => 'delete.gif'
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "",
+			"confirm" => t("Oled kindel et soovid valitud indekseid kustutada?"),
+			"tooltip" => t("Kustuta valitud indeksid")
+		));
+	}
+
+	function _get_index_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			'name' => 'index_name',
+			'caption' => t('Nimi'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'col_name',
+			'caption' => t('Tulba nimi'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'unique',
+			'caption' => t('Unikaalne'),
+			'sortable' => 1
+		));
+		$t->define_field(array(
+			'name' => 'change',
+			'caption' => t('Muuda')
+		));
+		$t->define_field(array(
+			'name' => 'sel',
+			'caption' => t('Vali')
 		));
 
-		$tbp = get_instance('vcl/tabpanel');
-		$tbp->add_tab(array(
-			'active' => true,
-			'caption' => 'Tulbad',
-			'link' => $this->REQUEST_URI
-		));
-		$tbp->add_tab(array(
-			'active' => false,
-			'caption' => 'Indeksid',
-			'link' => $that->mk_my_orb('admin_indexes', array('id' => $id))
-		));
-		$this->vars(array(
-			'table' => $t->draw(),
-			'reforb' => $that->mk_reforb('submit_admin', array('id' => $id, 'is_del' => '0')),
-			'toolbar' => $tb->get_toolbar(),
-		));
-		$this->vars(array(
-			'tabs' => $tbp->get_tabpanel(array('content' => $this->parse('TBC'))),
-			'TBC' => ''
-		));
-		return $this->parse();
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($arr["obj_inst"]->db_base);
+		$db->db_list_indexes($arr["obj_inst"]->db_table);
+		while ($idx = $db->db_next_index())
+		{
+			$idx['change'] = html::href(array(
+				'url' => $this->mk_my_orb('admin_index', array('id' => $arr["obj_inst"]->id, 'index' => $idx['index_name'])),
+				'caption' => t('Muuda')
+			));
+			$idx['sel'] = html::checkbox(array(
+				'name' => 'sel[]',
+				'value' => $idx['index_name']
+			));
+
+			$t->define_data($idx);
+		}
+		$t->set_default_sortby('index_name');
+	}
+
+	function _set_index_table($arr)
+	{
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($arr["obj_inst"]->db_base);
+
+		$ar = new aw_array($arr["request"]["sel"]);
+		foreach($ar->get() as $idxname)
+		{
+			$db->db_drop_index($arr["obj_inst"]->db_table, $idxname);
+		}
 	}
 }
 ?>

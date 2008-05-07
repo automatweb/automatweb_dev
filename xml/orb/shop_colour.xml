@@ -3,4 +3,3 @@
 	<class name="shop_colour" folder="applications/shop" extends="class_base">
 	</class>
 </orb>
-		

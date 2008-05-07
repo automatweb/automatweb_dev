@@ -68,7 +68,7 @@
             </SQL>
             <ADMIN>
                   <value>3</value>
-                  <clid>CL_DB_TABLE_admin</clid>
+                  <clid>CL_DB_TABLE_ADMIN</clid>
                   <caption>administreerimise objekt</caption>
             </ADMIN>
       </reltypes>

@@ -28,7 +28,7 @@
 @reltype SQL value=2 clid=CL_DB_SQL_QUERY
 @caption p&auml;ringute objekt
 
-@reltype ADMIN value=3 clid=CL_DB_TABLE_admin
+@reltype ADMIN value=3 clid=CL_DB_TABLE_ADMIN
 @caption administreerimise objekt
 */
 
@@ -274,7 +274,7 @@ class db_server_explorer extends class_base
 
 		$arr["prop"]["vcl_inst"]->set_caption(
 			$arr["prop"]["vcl_inst"]->get_caption()." ".
-			sprintf(t("| vaata: %s / %s / %s / %s"), 
+			sprintf(t("| vaata: %s / %s / %s / %s / %s"), 
 				html::href(array(
 					"url" => aw_url_change_var("type", "admin"),
 					"caption" => t("Struktuur")
@@ -295,6 +295,16 @@ class db_server_explorer extends class_base
 						"table" => $arr["request"]["table"]
 					), CL_DB_SQL_QUERY),
 					"caption" => t("SQL")
+				)),
+				html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $this->_find_tbl_admin_id($arr["obj_inst"]), 
+						"return_url" => get_ru(),
+						"db_base" => $arr["request"]["db_id"],
+						"table" => $arr["request"]["table"],
+						"group" => "columns"
+					), CL_DB_TABLE_ADMIN),
+					"caption" => t("Administreeri")
 				))
 			)
 		);
@@ -310,6 +320,20 @@ class db_server_explorer extends class_base
 			$res->set_class_id(CL_DB_SQL_QUERY);
 			$res->save();
 			$o->connect(array("to" => $res->id(), "type" => "RELTYPE_SQL"));
+		}
+		return $res->id();
+	}
+
+	private function _find_tbl_admin_id(object $o)
+	{
+		$res = $o->get_first_obj_by_reltype("RELTYPE_DMIN");
+		if (!$res)
+		{
+			$res = obj();
+			$res->set_parent($o->id());
+			$res->set_class_id(CL_DB_TABLE_ADMIN);
+			$res->save();
+			$o->connect(array("to" => $res->id(), "type" => "RELTYPE_ADMIN"));
 		}
 		return $res->id();
 	}

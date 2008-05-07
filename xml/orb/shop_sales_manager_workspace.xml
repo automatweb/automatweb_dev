@@ -3,4 +3,3 @@
 	<class name="shop_sales_manager_workspace" folder="applications/shop" extends="class_base">
 	</class>
 </orb>
-		

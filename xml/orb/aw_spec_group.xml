@@ -3,4 +3,3 @@
 	<class name="aw_spec_group" folder="applications/aw_spec" extends="class_base">
 	</class>
 </orb>
-		

@@ -47,5 +47,61 @@
 			</function>
 		</action>
 
+		<action name="autocomp_contact" all_args="1">
+			<function name="autocomp_contact">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp_profession" all_args="1">
+			<function name="autocomp_profession">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp_loc_country" all_args="1">
+			<function name="autocomp_loc_country">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp_loc_area" all_args="1">
+			<function name="autocomp_loc_area">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp_loc_county" all_args="1">
+			<function name="autocomp_loc_county">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp_loc_city" all_args="1">
+			<function name="autocomp_loc_city">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp_from" all_args="1">
+			<function name="autocomp_from">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="autocomp" all_args="1">
+			<function name="autocomp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

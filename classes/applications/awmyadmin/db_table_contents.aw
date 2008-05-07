@@ -1,14 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.14 2008/04/08 08:13:07 kristo Exp $
-// db_table_contents.aw - Andmebaasi tabeli sisu
-
 /*
-	@classinfo syslog_type=ST_DB_TABLE_CONTENTS relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
+@classinfo syslog_type=ST_DB_TABLE_CONTENTS relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
+@default group=general
+@default field=meta
+@default method=serialize
 
 	@property db_base type=relpicker reltype=RELTYPE_DB_LOGIN automatic=1
 	@caption Andmebaas
@@ -34,11 +31,11 @@
 	@property admcontent type=table store=no group=admcontent no_caption=1
 	@property admcontent_addr type=table store=no group=admcontent no_caption=1
 
-	@reltype DB_LOGIN value=1 clid=CL_DB_LOGIN 
-	@caption andmebaasi login
+@reltype DB_LOGIN value=1 clid=CL_DB_LOGIN 
+@caption andmebaasi login
 
-	@reltype TRANSFORM value=2 clid=CL_OTV_DATA_FILTER
-	@caption andmete muundaja
+@reltype TRANSFORM value=2 clid=CL_OTV_DATA_FILTER
+@caption andmete muundaja
 
 */
 
@@ -59,7 +56,6 @@ class db_table_contents extends class_base
 		switch($args['prop']['name'])
 		{
 			case 'db_table':
-return;
 				if (!$args['obj_inst']->prop('db_base'))
 				{
 					return PROP_IGNORE;
@@ -131,13 +127,14 @@ return;
 		return PROP_OK;
 	}
 
-	function do_content_tbl($arr)
+	private function do_content_tbl($arr)
 	{
 		$ob = $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($ob->prop('db_base'));
 
+		$t->set_caption(sprintf(t("Tabeli %s sisu serverist %s"), $ob->prop('db_table'), $ob->prop('db_base.name')));
 		if ($db->db_get_table_type($ob->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
 		{
 			$q = $ob->prop('db_table')." ".$ob->prop("sproc_params");
@@ -188,20 +185,23 @@ return;
 		}
 	}
 
-	function do_content_pager($arr)
+	private function do_content_pager($arr)
 	{
-		return;
 		$ob = $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($ob->prop('db_base'));
+		if ($db->db_get_table_type($ob->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
+		{
+			return;
+		}
 		$num_rows = $db->db_fetch_field('SELECT count(*) AS cnt FROM '.$ob->prop('db_table'),'cnt');
 		$per_page = $ob->prop('per_page');
 		return $this->get_pager($ob, $num_rows, $arr["request"]["page"], $per_page);
 	}
 
-	function do_adm_content_toolbar($arr)
+	private function do_adm_content_toolbar($arr)
 	{
 		$tb =& $arr["prop"]["toolbar"];
 		$tb->add_button(array(
@@ -213,15 +213,14 @@ return;
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
-			'url' => 'javascript:ddel()',
+			'url' => 'javascript:document.changeform.submit()',
 			'img' => 'delete.gif'
 		));
 	}
 
-	function do_adm_content_tbl($arr)
+	private function do_adm_content_tbl($arr)
 	{
 		$ob = $arr["obj_inst"];
-
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$db = get_instance(CL_DB_LOGIN);
@@ -247,7 +246,7 @@ return;
 			))
 		));
 
-		$t->define_header('Muuda olemasolevaid ridu');
+		$t->set_caption('Muuda olemasolevaid ridu');
 
 		$num_rows = $db->db_fetch_field('SELECT count(*) AS cnt FROM '.$ob->prop("db_table"),'cnt');
 		$per_page = $ob->prop('per_page');
@@ -266,7 +265,7 @@ return;
 			{
 				$wherepts[] = "$fn = '".$row[$fn]."'";
 				$row[$fn] = html::textbox(array(
-					'name' => "values['$rc']['$fn']",
+					'name' => "values[$rc][$fn]",
 					'value' => $row[$fn],
 					'size' => min($fd['length'],50)
 				));
@@ -282,7 +281,7 @@ return;
 		return;
 	}
 
-	function do_adm_content_tbl_addr($arr)
+	private function do_adm_content_tbl_addr($arr)
 	{
 		$ob = $arr["obj_inst"];
 		$db = get_instance(CL_DB_LOGIN);
@@ -290,7 +289,7 @@ return;
 		$tbl = $db->db_get_table($ob->prop('db_table'));
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$t->define_header('Lisa uus rida');
+		$t->set_caption('Lisa uus rida');
 
 		$row = array();
 		foreach($tbl['fields'] as $fn => $fd)
@@ -312,7 +311,7 @@ return;
 		$t->define_data($row);
 	}
 
-	function get_pager($ob, $num_rows, $page, $per_page)
+	private function get_pager($ob, $num_rows, $page, $per_page)
 	{
 		$ret = array();
 		$num_pages = ($per_page > 0 ? $num_rows / $per_page : 1);
@@ -335,11 +334,8 @@ return;
 		return join(" | ", $ret);
 	}
 
-	function submit_admin_content($arr)
+	private function submit_admin_content($arr)
 	{
-		// this is here,because these things are a part of the sql statement 
-		// and should contain ' that should be passed without quoting to the sql where part
-		$this->dequote(&$keys);
 		$ob = $arr["obj_inst"];
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($ob->prop('db_base'));
@@ -351,6 +347,20 @@ return;
 
 		$sela = new aw_array($arr["request"]["sel"]);
 		$values = $arr["request"]["values"];
+
+		$keys = array();
+		$db->db_query_lim('SELECT * FROM '.$ob->prop('db_table'), ($page*$per_page),((int)$per_page));
+		$rc = 0;
+		while ($row = $db->db_next())
+		{
+			$rc++;
+			$wherepts = array();
+			foreach($tbl['fields'] as $fn => $fd)
+			{
+				$wherepts[] = "$fn = '".$row[$fn]."'";
+			}
+			$keys[$rc] = join(" AND ", $wherepts);
+		}
 
 		// now go over all rows that were shown and for each check if the data has changed
 		// and if it has, write the data
@@ -373,25 +383,26 @@ return;
 			{
 				// check that we didn't mark this row to be deleted, because then we must not change it's content, because
 				// then the where part will break
-				if (!($is_del == 1 && in_array($rc, $sela->get())))
+				if (!in_array($rc, $sela->get()))
 				{
 					$q = "UPDATE ".$ob->prop('db_table')." SET $tochangestr WHERE ".$keys[$rc];
-					echo "q = $q <br />";
+					//echo "q = $q <br />";
 					$db->save_handle();
-					//$db->db_query($q);
+					$db->db_query($q);
 					$db->restore_handle();
 				}
 			}
 		}
 
-		if ($is_del)
+		if (count($sela->get()))
 		{
 			foreach($sela->get() as $k)
 			{
 				$q = "DELETE FROM ".$ob->prop('db_table')." WHERE ".$keys[$k];
 				echo "q = $q <br />";
+				die();
 				$db->save_handle();
-				//$db->db_query($q);
+				$db->db_query($q);
 				$db->restore_handle();
 			}
 		}
@@ -416,14 +427,13 @@ return;
 				$vals->set( "'".$val."'");
 			}
 
-			$q = "INSERT INTO ".$ob->prop('db_table')."(".$cols->to_sql().") VALUES(".$vals->to_sql().")";
+			$q = "INSERT INTO ".$ob->prop('db_table')."(".join(", ", $cols->get()).") VALUES(".join(", ", $vals->get()).")";
 			$db->db_query($q);
 		}
 	}
 
 	function callback_mod_tab($arr)
 	{
-//		echo dbg::dump($arr);
 		if ($arr["id"] == "admcontent")
 		{
 			$db = get_instance(CL_DB_LOGIN);
