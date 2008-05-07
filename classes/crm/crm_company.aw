@@ -6064,8 +6064,11 @@ class crm_company extends class_base
 		{
 			foreach($arr["sel"] as $id)
 			{
-				$o = obj($id);
-				$o->delete();
+				if ($this->can("delete", $id))
+				{
+					$o = obj($id);
+					$o->delete();
+				}
 			}
 		}
 		return $arr["post_ru"];
