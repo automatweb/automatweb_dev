@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.38 2008/05/07 10:29:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.39 2008/05/07 11:19:09 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -201,22 +201,50 @@ class persona_import extends class_base
 		aw_disable_acl();
 		$obj = new object($arr["id"]);
 		$import_id = $obj->prop("xml_link");
-		if(!!$this->can("view" , $import_id))
+		if(!$this->can("view" , $import_id))
 		{
-die("a");
 			$config = $this->get_config($arr);
 		}
 
-		$c = get_instance(CL_FTP_LOGIN);
-die(dbg::dump($config["ftp"]));
-		$c->connect($config["ftp"]);
-		$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
-		$fdat = $c->get_file($fqfn);
-die($fdat);
-		$c->disconnect();
-		header("Content-type: text/xml");
-		print $fdat;
-		exit;
+		if($this->can("view" , $import_id))
+		{
+			$import_obj = get_instance(CL_TAAVI_IMPORT);
+			$fdat = $import_obj->export_xml($import_id);
+		}
+		
+		else
+		{	
+			$c = get_instance(CL_FTP_LOGIN);
+			$c->connect($config["ftp"]);
+
+			$fdat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			$fdat .= "<XML_DATA>\n";
+
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+	
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_personnel_file");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+	
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_education_file");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
+			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+
+			$fdat .= "</XML_DATA>\n";
+
+			$c->disconnect();
+		}
+		if (strlen($fdat) <= 62)
+		{
+			die(t("Not enough data to process<br>"));
+		}
+		else
+		{
+			header("Content-type: text/xml");
+			die($fdat);
+		}
 	}
 
 	/**
