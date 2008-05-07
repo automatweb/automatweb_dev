@@ -313,6 +313,9 @@ $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
 $fc = str_replace("__name", $class['name'], $fc);
 $fc = str_replace("__classname", $class['file'], $fc);
+$fc = str_replace("__table_name", "aw_".$class['file'], $fc);
+$fc = str_replace("__maintainer", get_current_user(), $fc);
+
 _file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf",$fc);
 echo "created classes/$clnf...\n";
 
