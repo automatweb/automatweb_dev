@@ -178,6 +178,17 @@ class admin_if extends class_base
 		));
 		$file_manager = get_instance("admin/file_manager");
 		$file_manager->add_zip_button(array("tb" => $tb));
+
+		if (aw_ini_get("per_oid"))
+		{
+			$tb->add_separator();
+			$tb->add_menu_button(array(
+				"name" => "set_period",
+				"img" => "periods.gif",
+				"tooltip" => t("Vali periood")
+			));
+			$this->_init_period_dropdown($tb);
+		}
 	}
 
 	private function get_cutcopied_objects()
@@ -1836,6 +1847,63 @@ class admin_if extends class_base
 					$levels[$mt[1]] = $id;
 				}
 			}
+		}
+	}
+
+	private function _init_period_dropdown($tb)
+	{
+		$per_oid = aw_ini_get("per_oid");
+		$dbp = get_instance(CL_PERIOD, $per_oid);
+
+		$act_per_id = $dbp->get_active_period();
+		$pl = array();
+		$actrec = 0;
+		$rc = 0;
+		$period_list = new object_list(array(
+			"class_id" => CL_PERIOD,
+			"sort_by" => "objects.jrk DESC",
+		));
+
+		for ($period_obj = $period_list->begin(); !$period_list->end(); $period_obj = $period_list->next())
+		{
+			$rc++;
+			if ($period_obj->prop("per_id") == $act_per_id)
+			{
+				$actrec = $rc;
+			};
+			$pl[$rc] = array(
+				"id" => $period_obj->prop("per_id"),
+				"name" => $period_obj->name(),
+			);
+		}
+
+		// leiame praegune +-3
+		$ar = array();
+		for ($i=$actrec-6; $i <= ($actrec+6); $i++)
+		{
+			if (isset($pl[$i]))
+			{
+				if ($pl[$i]["id"] == $act_per_id)
+				{
+					$ar[$pl[$i]["id"]] = $pl[$i]["name"].MN_ACTIVE;
+				}
+				else
+				{
+					$ar[$pl[$i]["id"]] = $pl[$i]["name"];
+				}
+			}
+		}
+		$ar[0] = t("Mitteperioodilised");
+		foreach($ar as $id => $name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "set_period",
+				"text" => $name,
+				"title" => $name,
+				"name" => "per".$id,
+				"tooltip" => $name,
+				"link" => aw_url_change_var("period", $id)
+			));
 		}
 	}
 }
