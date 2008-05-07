@@ -31,6 +31,26 @@
             <caption>Numbriseeria</caption>
       </property>
       <property>
+            <name>patent_add</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADD</reltype>
+            <caption>Patenditaotluste lisamine</caption>
+      </property>
+      <property>
+            <name>utility_model_add</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADD</reltype>
+            <caption>Kasuliku mudeli taotluste lisamine</caption>
+      </property>
+      <property>
             <name>trademark_add</name>
             <table>objects</table>
             <group>general</group>
@@ -199,7 +219,7 @@
             <ADD>
                   <clid>CL_DOCUMENT</clid>
                   <value>4</value>
-                  <caption>Kaubam&amp;amp;auml;rgitaotluste lisamine</caption>
+                  <caption>Taotluste lisamine</caption>
             </ADD>
             <ADMIN>
                   <clid>CL_GROUP</clid>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="utility_model" folder="applications/clients/patent_office" extends="class_base">
+	<class name="utility_model" folder="applications/clients/patent_office" extends="intellectual_property">
 	</class>
 </orb>
-		
+

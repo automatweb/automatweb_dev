@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.11 2007/11/23 10:41:56 markop Exp $
-// trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
+// trademark_add.aw - Kaubam&auml;rgi veebist lisamine
 /*
 
 @classinfo syslog_type=ST_TRADEMARK_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
@@ -12,16 +11,16 @@
 
 	@property procurator_menu type=relpicker reltype=RELTYPE_PROCURATOR_MENU
 	@caption Volinike kaust
-	
+
 	@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
 	@caption Pangamakse objekt
-	
+
 	@property trademarks_menu type=relpicker reltype=RELTYPE_TRADEMARK_MENU
 	@caption Kaubam&auml;rgitaotluste kaust
-	
+
 	@property series type=relpicker reltype=RELTYPE_SERIES
 	@caption Numbriseeria
-	
+
 @reltype BANK_PAYMENT value=11 clid=CL_BANK_PAYMENT
 @caption Pangalingi objekt
 
@@ -47,36 +46,10 @@ class trademark_add extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- set_property --//
-		}
-		return $retval;
-	}	
-
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
@@ -89,24 +62,24 @@ class trademark_add extends class_base
 		return $this->parse();
 	}
 
-	/** 
+	/**
 		@attrib name=parse_alias is_public="1" caption="Change"
 	**/
 	function parse_alias($arr)
 	{
-		enter_function("patent::parse_alias");
-		
-		$patent_inst = get_instance(CL_PATENT);
-		
-		return $patent_inst->parse_alias($arr);
-		
+		enter_function("trademark::parse_alias");
+
+		$tm_inst = get_instance(CL_TRADEMARK);
+
+		return $tm_inst->parse_alias($arr);
+
 		if($_GET["patent_id"])
 		{
 			$_SESSION["patent"] = null;
 			$_SESSION["patent"]["id"] = $_GET["patent_id"];
 			$this->fill_session($_GET["patent_id"]);
 		}
-		
+
 		if(!$_SESSION["patent"]["data_type"])
 		{
 			$_SESSION["patent"]["data_type"] = 0;
@@ -119,34 +92,34 @@ class trademark_add extends class_base
 		{
 			$arr["data_type"] = $_SESSION["patent"]["data_type"];
 		}
-		
+
 		if($arr["data_type"] == 6)
 		{
-			return $patent_inst->my_patent_list();//$this->mk_my_orb("my_patent_list", array());
+			return $tm_inst->my_patent_list();//$this->mk_my_orb("my_patent_list", array());
 		}
-		
-		$tpl = $patent_inst->info_levels[$arr["data_type"]].".tpl";
-		$patent_inst->read_template($tpl);
-		lc_site_load("patent", &$this);
-		$patent_inst->vars($patent_inst->web_data($arr));
-		
+
+		$tpl = $tm_inst->info_levels[$arr["data_type"]].".tpl";
+		$tm_inst->read_template($tpl);
+		lc_site_load("trademark", &$this);
+		$tm_inst->vars($tm_inst->web_data($arr));
+
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
 				"data_type"	=> $arr["data_type"],
 				"return_url" 	=> get_ru(),
 			)),
 		));
-	
-		//lõpetab ja salvestab
+
+		//l6petab ja salvestab
 		if($arr["data_type"] == 5)
 		{
-			$this->vars(array("reforb" => $patent_inst->mk_reforb("submit_data",array(
+			$this->vars(array("reforb" => $tm_inst->mk_reforb("submit_data",array(
 					"save" => 1,
 					"return_url" 	=> get_ru(),
 				)),
 			));
 		}
-		
-		exit_function("realestate_add::parse_alias");
+
+		exit_function("trademark::parse_alias");
 		return $this->parse();
 	}
 
@@ -178,42 +151,42 @@ class trademark_add extends class_base
 				$o1->set_parent($o->id());
 				$o1->save();
 				$ol->add($o1);
-				
+
 				$o2 = new object();
-				$o2->set_name("Kaubamärk");
+				$o2->set_name("Kaubam".chr(228)."rk");
 				$o2->set_class_id(CL_TRADEMARK_ADD);
 				$o2->set_parent($o->id());
 				$o2->save();
 				$ol->add($o2);
-							
+
 				$o3 = new object();
 				$o3->set_name("Kaupade ja teenuste loetelu");
 				$o3->set_class_id(CL_TRADEMARK_ADD);
 				$o3->set_parent($o->id());
 				$o3->save();
 				$ol->add($o3);
-				
+
 				$o4 = new object();
 				$o4->set_name("Prioriteet");
 				$o4->set_class_id(CL_TRADEMARK_ADD);
 				$o4->set_parent($o->id());
 				$o4->save();
 				$ol->add($o4);
-				
+
 				$o5 = new object();
-				$o5->set_name("Riigilõiv");
+				$o5->set_name("Riigil".chr(245)."iv");
 				$o5->set_class_id(CL_TRADEMARK_ADD);
 				$o5->set_parent($o->id());
 				$o5->save();
 				$ol->add($o5);
-				
+
 				$o6 = new object();
 				$o6->set_name("Andmete kontroll/edastamine");
 				$o6->set_class_id(CL_TRADEMARK_ADD);
 				$o6->set_parent($o->id());
 				$o6->save();
 				$ol->add($o6);
-				
+
 				$o->set_meta("meaningless_sh__" , $ol->ids());
 				$o->save();
 			}
@@ -228,14 +201,14 @@ class trademark_add extends class_base
 //arr($_SESSION["patent"]["id"]);
 		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
 		{
-			$tr_inst = get_instance(CL_PATENT);
+			$tr_inst = get_instance(CL_TRADEMARK);
 			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
 			if($res["status"] == 1)
 			{
 				return aw_url_change_var()."#";
 			}
 
-/*		
+/*
 			switch($res["status"])
 			$tm = obj($_SESSION["patent"]["id"]);
 */
@@ -254,9 +227,9 @@ class trademark_add extends class_base
 			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		}
 		else
-		$url = aw_url_change_var()."#";//aw_url_change_var("", "#");	
+		$url = aw_url_change_var()."#";//aw_url_change_var("", "#");
 		// $url =$_SERVER["SCRIPT_URI"]."?section=".aw_ini_get("section")."&data_type=".$_SESSION["patent"]["jrk"];
-		
+
 	//		$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		$_SESSION["patent"]["jrk"]++;
 	//	arr($_SESSION["patent"]["data_type"]);
@@ -273,7 +246,5 @@ class trademark_add extends class_base
 		),
 		CL_PERSONS_WEBVIEW);
 	}
-
-//-- methods --//
 }
 ?>

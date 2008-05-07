@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.6 2007/11/23 10:41:56 markop Exp $
-// trademark_status.aw - Trademark status 
+// trademark_status.aw - Trademark status
 /*
 
 @classinfo syslog_type=ST_TRADEMARK_STATUS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
@@ -8,10 +7,10 @@
 
 @default group=general
 
-	@property verified type=checkbox table=aw_trademark_status field=aw_verified ch_value=1 
+	@property verified type=checkbox table=aw_trademark_status field=aw_verified ch_value=1
 	@caption Kinnitatud
 
-	@property exported type=checkbox caption=no table=aw_trademark_status field=aw_exported ch_value=1 
+	@property exported type=checkbox caption=no table=aw_trademark_status field=aw_exported ch_value=1
 	@caption Eksporditud
 
 	@property export_date type=date_select table=aw_trademark_status field=aw_exported_date
@@ -58,7 +57,7 @@ class trademark_status extends class_base
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -79,7 +78,7 @@ class trademark_status extends class_base
 		));
 		return $this->parse();
 	}
-	
+
 	function do_db_upgrade($t, $f, $q, $err)
 	{
 		if ($f == "" && $t == "aw_trademark_status")
@@ -103,7 +102,7 @@ class trademark_status extends class_base
 				return true;
 		}
 	}
-	
+
 
 //-- methods --//
 }

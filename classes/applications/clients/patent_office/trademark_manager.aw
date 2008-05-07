@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.34 2008/05/07 10:50:10 kristo Exp $
-// patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
+// trademark_manager.aw - Kaubam&auml;rgitaotluse keskkond
 /*
 
 @classinfo syslog_type=ST_TRADEMARK_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
@@ -12,12 +11,18 @@
 #GENERAL
 	@property not_verified_menu type=relpicker reltype=RELTYPE_NOT_VERIFIED_MENU
 	@caption Kinnitamata taotluste kaust
-	
+
 	@property verified_menu type=relpicker reltype=RELTYPE_VERIFIED_MENU
 	@caption Kinnitatud taotluste kaust
 
 	@property series type=relpicker reltype=RELTYPE_SERIES
 	@caption Numbriseeria
+
+	@property patent_add type=relpicker reltype=RELTYPE_ADD
+	@caption Patenditaotluste lisamine
+
+	@property utility_model_add type=relpicker reltype=RELTYPE_ADD
+	@caption Kasuliku mudeli taotluste lisamine
 
 	@property trademark_add type=relpicker reltype=RELTYPE_ADD
 	@caption Kaubam&auml;rgitaotluste lisamine
@@ -29,28 +34,28 @@
 #TAOTLUSED
 @groupinfo name=applications caption=Taotlused
 @default group=applications
-	
+
 	@property objects_tb type=toolbar no_caption=1 store=no
-	
+
 	@layout objects_lay type=hbox width=20%:80%
 
 		@layout objects_l type=vbox parent=objects_lay
-			
+
 			@layout trademark_tr_l type=vbox parent=objects_l closeable=1 area_caption=Taotluste&nbsp;puu
 				@property trademark_tr type=treeview no_caption=1 store=no parent=trademark_tr_l
 			@layout objects_find_params type=vbox parent=objects_l closeable=1 area_caption=Objektide&nbsp;otsing
 				@property trademark_find_applicant_name type=textbox store=no parent=objects_find_params captionside=top size=30
 				@caption Esitaja nimi
-				
+
 				@property trademark_find_procurator_name type=textbox store=no size=30 parent=objects_find_params captionside=top
 				@caption Voliniku nimi
-				
+
 				@property trademark_find_start type=date_select store=no parent=objects_find_params captionside=top
 				@caption Alates
-				
+
 				@property trademark_find_end type=date_select store=no parent=objects_find_params captionside=top
 				@caption Kuni
-				
+
 				@property do_find_applications type=submit store=no parent=objects_find_params captionside=top no_caption=1
 				@caption Otsi
 		@property objects_tbl type=table no_caption=1 store=no parent=objects_lay
@@ -59,7 +64,7 @@
 #EKSPORT
 @groupinfo name=export caption=Eksport
 @default group=export
-	
+
 	@property exp_dest type=textbox
 	@caption Ekspordifaili asukoht serveris
 
@@ -70,7 +75,7 @@
 
 	@reltype NOT_VERIFIED_MENU clid=CL_MENU value=1
 	@caption Kinnitamata taotluste kaust
-	
+
 	@reltype VERIFIED_MENU clid=CL_MENU value=2
 	@caption Kinnitatud taotluste kaust
 
@@ -78,7 +83,7 @@
 	@caption Numbriseeria
 
 	@reltype ADD clid=CL_DOCUMENT value=4
-	@caption Kaubam&auml;rgitaotluste lisamine
+	@caption Taotluste lisamine
 
 	@reltype ADMIN clid=CL_GROUP value=5
 	@caption Adminn
@@ -107,20 +112,20 @@ class trademark_manager extends class_base
 			case "objects_tbl":
 				$this->_objects_tbl($arr);
 				break;
-				
+
 			case "trademark_find_applicant_name":
 			case "trademark_find_procurator_name":
 			case "trademark_find_start":
 			case "trademark_find_end":
 				$search_data = $arr["obj_inst"]->meta("search_data");
 				$prop["value"] = $search_data[$prop["name"]];
-				break;	
+				break;
 			case "exp_link":
 				$prop["value"] = html::href(array(
-					"url" =>  $this->mk_my_orb("nightly_export"), 
+					"url" =>  $this->mk_my_orb("nightly_export"),
 					"caption" => t("EKSPORDI!")
 				));
-				
+
 			//-- get_property --//
 		};
 		return $retval;
@@ -132,13 +137,13 @@ class trademark_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "trademark_find_applicant_name":	
+			case "trademark_find_applicant_name":
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 			break;
 			//-- set_property --//
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -152,13 +157,13 @@ class trademark_manager extends class_base
 - vasakus puus: Kinnitamata taotlused, Kinnitatud taotlused
 
 */
-		
+
 
 	function _get_trademark_tr($arr)
 	{
 		classload("core/icons");
 		//$arr["prop"]["vcl_inst"] = get_instance("vcl/treeview");
-		
+
 		$arr["prop"]["vcl_inst"]->start_tree (array (
 			"type" => TREE_DHTML,
 			"has_root" => 1,
@@ -167,7 +172,7 @@ class trademark_manager extends class_base
 			"root_name" => t("Taotlused"),
 			"root_url" => "#",
 //			"get_branch_func" => $this->mk_my_orb("get_tree_stuff",array(
-//				"clid" => $arr["clid"], 
+//				"clid" => $arr["clid"],
 //				"group" => $arr["request"]["group"],
 //				"oid" => $arr["obj_inst"]->id(),
 //				"set_retu" => get_ru(),
@@ -198,22 +203,43 @@ class trademark_manager extends class_base
 	function search_applications($this_obj)
 	{
 		$ol = new object_list();
+		$applicant_name = empty($data["trademark_find_applicant_name"]) ? null : "%".$data["trademark_find_applicant_name"]."%";
+		$procurator_name = empty($data["trademark_find_procurator_name"]) ? null : "%".$data["trademark_find_procurator_name"]."%";
 		$filter = array(
-			"class_id" => array(CL_PATENT),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array (
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_PATENT),
+							"CL_PATENT.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_PATENT.RELTYPE_PROCURATOR.name" => $procurator_name,
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_UTILITY_MODEL),
+							"CL_UTILITY_MODEL.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_UTILITY_MODEL.RELTYPE_PROCURATOR.name" => $procurator_name,
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_TRADEMARK),
+							"CL_TRADEMARK.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_TRADEMARK.RELTYPE_PROCURATOR.name" => $procurator_name,
+						)
+					)),
+				)
+			)),
 			"lang_id" => array(),
-			"site_id" => array(),
+			"site_id" => array()
 		);
 		$data = $this_obj->meta("search_data");
 
-		if($data["trademark_find_applicant_name"])
-		{
-			$filter["CL_PATENT.RELTYPE_APPLICANT.name"] = "%".$data["trademark_find_applicant_name"]."%";
-		}
-		if($data["trademark_find_procurator_name"])
-		{
-			$filter["CL_PATENT.RELTYPE_PROCURATOR.name"] = "%".$data["trademark_find_procurator_name"]."%";
-		}
-	
  		if((date_edit::get_timestamp($data["trademark_find_start"]) > 1)|| (date_edit::get_timestamp($data["trademark_find_end"]) > 1))
  		{
  			if(date_edit::get_timestamp($data["trademark_find_start"]) > 1)
@@ -240,31 +266,46 @@ class trademark_manager extends class_base
 
 	function _objects_tbl($arr)
 	{
+		$verified = ($arr["request"]["p_id"] === "verified") ? 1 : null;
 		$filter = array(
-			"class_id" => array(CL_PATENT),
-//			"parent" => $parent,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array (
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_PATENT),
+							"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_UTILITY_MODEL),
+							"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified" => $verified
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_TRADEMARK),
+							"CL_TRADEMARK.RELTYPE_TRADEMARK_STATUS.verified" => $verified
+						)
+					)),
+				)
+			)),
 			"lang_id" => array(),
 			"site_id" => array()
 		);
-		
-		if($arr["request"]["p_id"] == "verified")
-		{
-			$filter["CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified"] = 1;
-		}
-		
-//		if($arr["request"]["p_id"] == "not_verified")
-//		{
-//			$filter["verified"] = new obj_predicate_not(1);
-//		}
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_objects_tbl($t);
-		
+
 		if(!$arr["request"]["p_id"])
 		{
 			$filter = null;
 		}
-		
+
 		//otsingust
 		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
@@ -282,13 +323,15 @@ class trademark_manager extends class_base
 		));
 
 
-		$trademark_inst = get_instance(CL_PATENT);
+		$trademark_inst = get_instance(CL_TRADEMARK);
+		$ip_inst = get_instance(CL_INTELLECTUAL_PROPERTY);
 		$person_inst = get_instance(CL_CRM_PERSON);
 		$types = $trademark_inst->types;
+
 		foreach($ol->arr() as $o)
 		{
-			$re = $trademark_inst->is_signed($o->id());
-			$status = $trademark_inst->get_status($o);
+			$re = $ip_inst->is_signed($o->id());
+			$status = $ip_inst->get_status($o);
 			if($arr["request"]["p_id"] == "not_verified" && ($status->prop("verified") || (!($re["status"] == 1))))
 			{
 				continue;
@@ -304,11 +347,16 @@ class trademark_manager extends class_base
 					"onclick" => 'javascript:window.open("'.$file_inst->get_url($o->prop("warrant")).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 				));
 			}
-			$type = $types[$o->prop("type")];
-			if($o->prop("type") == 0 && $o->prop("word_mark"))
+
+			if (CL_TRADEMARK === $o->class_id())
 			{
-				$type.= " (".$o->prop("word_mark").")";
+				$type = $types[$o->prop("type")];
+				if($o->prop("type") == 0 && $o->prop("word_mark"))
+				{
+					$type.= " (".$o->prop("word_mark").")";
+				}
 			}
+
 			$nr_str = t("Number puudub");
 			if($status->prop("nr"))
 			{
@@ -319,7 +367,7 @@ class trademark_manager extends class_base
 				"url" => "#",//html::get_change_url($o->id(), array("return_url" => $arr["post_ru"])),
 				"onclick" => 'javascript:window.open("'.aw_ini_get("baseurl").'/'.$o->id().'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			));
-			
+
 //			if(!(is_oid($o->prop("applicant")) && ($this->can("view" ,$o->prop("applicant")))))
 //			{
 				$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
@@ -330,7 +378,7 @@ class trademark_manager extends class_base
 //			}
 			if(is_object($applicant))
 			{
-				$applicant_name = $trademark_inst->get_applicants_str($o);//$applicant->name();
+				$applicant_name = $ip_inst->get_applicants_str($o);//$applicant->name();
 				$applicant_data = "";
 				if($applicant->class_id() == CL_CRM_PERSON)
 				{
@@ -344,7 +392,7 @@ class trademark_manager extends class_base
 					{
 						$stuff[] = $a_phone->name();
 					}
-					
+
 					if(is_object($a_mail = $applicant->get_first_obj_by_reltype("RELTYPE_EMAIL")))
 					{
 						$stuff[] = $a_mail->name();
@@ -361,7 +409,7 @@ class trademark_manager extends class_base
 			{
 				$date = $o->created();
 			}
-			
+
 			$retval = "";
 			if($re["status"] == 1)
 			{
@@ -401,7 +449,7 @@ class trademark_manager extends class_base
 	}
 
 /*
-- paremal tabelis: Märgi tüüp (sõnamärk, kujutismärk jne, kui sõnamärk, siis vastava tekstivälja sisu ka sulgudes), Taotluse number (sellel klikkides avaneb ka taotluse sisestusvorm, kui number puudub, siis on klikitav tekst Number puudub), Esitaja nimi, Esitaja kontaktandmed (kõik ühes väljas komaga eraldatult, aadressi pole vaja), voliniku nimi, Esitamise kuupäev, Vali tulp.		
+- paremal tabelis: M2rgi tyyp (s5nam2rk, kujutism2rk jne, kui s6nam2rk, siis vastava tekstiv2lja sisu ka sulgudes), Taotluse number (sellel klikkides avaneb ka taotluse sisestusvorm, kui number puudub, siis on klikitav tekst Number puudub), Esitaja nimi, Esitaja kontaktandmed (k6ik yhes v2ljas komaga eraldatult, aadressi pole vaja), voliniku nimi, Esitamise kuup2ev, Vali tulp.
 */
 	function _init_objects_tbl(&$t)
 	{
@@ -411,21 +459,21 @@ class trademark_manager extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
-		
+
 		$t->define_field(array(
 			"name" => "nr",
 			"caption" => t("Taotluse number"),
 			"align" => "center",
 			"sortable" => 1
 		));
-		
+
 		$t->define_field(array(
 			"name" => "applicant_name",
 			"caption" => t("Esitaja nimi"),
 			"align" => "center",
 			"sortable" => 1
 		));
-		
+
 		$t->define_field(array(
 			"name" => "applicant_data",
 			"caption" => t("Esitaja kontaktandmed"),
@@ -438,7 +486,7 @@ class trademark_manager extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
-		
+
 		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Esitamise kuup&auml;ev"),
@@ -455,13 +503,13 @@ class trademark_manager extends class_base
 			"align" => "center",
 //			"sortable" => 1
 		));
-		
+
 		$t->define_chooser(array(
 			"caption" => t("Vali"),
 			"field" => "oid",
 			"name" => "sel"
 		));
-		
+
 		if(!($_GET["p_id"] == "verified"))
 		{
 			$t->define_field(array(
@@ -474,25 +522,37 @@ class trademark_manager extends class_base
 	function _objects_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$add_inst = get_instance(CL_TRADEMARK_ADD);
-		$new_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("trademark_add");
-		
-		//$add_inst->mk_my_orb("parse_alias", array("alias" => array("target" => $arr["obj_inst"] ->prop("trademark_add")), CL_TRADEMARK_ADD));
-		
-		//$prop_obj->request_execute($realest_obj);
-		
-		//$add_inst->mk_my_orb("parse_alias" , array("alias" => array("target" => $arr["obj_inst"] -> prop("trademark_add"))));
-		
-		$tb->add_button(array(
-			'name'=>'add_item',
-			"img" => 'new.gif',
-			'tooltip'=> t('Lisa taotlus'),
-	//		'action' => 'new',
-			'url' => $new_url,
-	//		'confirm' => t(""),
-			"target" => '_blank',
+		$add_trademark_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("trademark_add");
+		$add_patent_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("patent_add");
+		$add_utility_model_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("utility_model_add");
+
+		$tb->add_menu_button(array(
+			"name" => "add_item",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus")
 		));
-		
+
+		$tb->add_menu_item(array(
+			"parent" => "add_item",
+			"text" => t("Kaubam&auml;rgitaotlus"),
+			"link" => $add_trademark_url,
+			"target" => "_blank"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "add_item",
+			"text" => t("Patenditaotlus"),
+			"link" => $add_patent_url,
+			"target" => "_blank"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "add_item",
+			"text" => t("Kasuliku mudeli taotlus"),
+			"link" => $add_utility_model_url,
+			"target" => "_blank"
+		));
+
 		$tb->add_button(array(
 			'name' => 'save',
 			'img' => 'save.gif',
@@ -523,9 +583,9 @@ class trademark_manager extends class_base
 			'url' => "",
 			'action' => 'verify',
 		//	'confirm' => t(""),
-		));	
+		));
 	}
-	
+
 	/**
 		@attrib name=delete_applications
 	**/
@@ -534,34 +594,24 @@ class trademark_manager extends class_base
 		object_list::iterate_list($arr["sel"], "delete");
 		return $arr["post_ru"];
 	}
-	
+
 	/**
 		@attrib name=verify all_args=1
 	**/
 	function verify($arr)
 	{
-		$patent_inst = get_instance(CL_PATENT);
+		$ip_inst = get_instance(CL_INTELLECTUAL_PROPERTY);
 		$object = obj($arr["id"]);
 		if(is_oid($object->prop("verified_menu")))
 		{
 			$parent = $object->prop("verified_menu");
-//			$num_ser = $object->prop("series");
 		}
-//		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
-			$status = $patent_inst->get_status($o);
+			$status = $ip_inst->get_status($o);
 			$status->set_prop("verified",1);
 			$status->set_name(t("Taotlus nr: ".$status->prop("nr")));
-			
-//			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
-//			$o->set_prop("nr" , $tno);
-//			if($parent)
-//			{
-//				$status->set_parent($parent);
-//			}
-//			$o->save();
 			$status->save();
 		}
 		if($arr["popup"])
@@ -593,7 +643,6 @@ class trademark_manager extends class_base
 
 	function __application_sorter($a, $b)
 	{
-		$tm = get_instance(CL_PATENT);
 		$as = $a->get_first_obj_by_reltype("RELTYPE_TRADEMARK_STATUS");
 		$bs = $b->get_first_obj_by_reltype("RELTYPE_TRADEMARK_STATUS");
 		if(is_object($as) && is_object($bs))
@@ -606,26 +655,26 @@ class trademark_manager extends class_base
 		}
 	}
 
-	/** 
+	/**
 		@attrib name=nightly_export nologin="1"
 	**/
 	function nightly_export($arr)
 	{
 		classload("core/date/date_calc");
-		// list all patents created yesterday
+		// list all trademarks created yesterday
 		$ol = new object_list(array(
-			"class_id" => CL_PATENT,
+			"class_id" => CL_TRADEMARK,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => 1,
-			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start()),
+			"CL_TRADEMARK.RELTYPE_TRADEMARK_STATUS.verified" => 1,
+			"CL_TRADEMARK.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start()),
 		));
 		$ol->sort_by_cb(array(&$this, "__application_sorter"));
-		
+
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
 ';
-		$tm = get_instance(CL_PATENT);
+		$tm = get_instance(CL_TRADEMARK);
 
 		foreach($ol->arr() as $o)
 		{
@@ -699,7 +748,7 @@ class trademark_manager extends class_base
 /*				$xml .= "\t\t</HOLGR>\n";*/
 
 
-//taotlejad veidi ümber et mitu tükki ka neid saaks
+//taotlejad veidi ymber et mitu tykki ka neid saaks
 
 
 
@@ -758,8 +807,8 @@ class trademark_manager extends class_base
 					}*/
 
 				$xml .= "\t\t</HOLGR>\n";
-			}	
-				
+			}
+
 
 
 				if ($this->can("view", $o->prop("procurator")))
@@ -781,7 +830,7 @@ class trademark_manager extends class_base
 
 				$xml .= "\t\t</REPGR>\n";
 				}
-				$type = ""; 
+				$type = "";
 				// save image to folder
 				if ($this->can("view", $o->prop("reproduction")))
 				{
@@ -796,9 +845,9 @@ class trademark_manager extends class_base
 				$f = fopen($fn ,"w");
 				fwrite($f, $imd["content"]);
 				fclose($f);
-				}//tõstsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult sõnalist osa näha
+				}//t6stsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult s6nalist osa n2ha
 				$xml .= "\t\t<IMAGE NAME=\"".sprintf("%08d", $status->prop("nr"))."\" TEXT=\"".$this->rere($o->prop("word_mark"))."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$this->rere($type)."\"/>\n";
-				
+
 
 				$xml .= "\t\t<MARTRGR>\n";
 					$xml .= "\t\t\t<MARTREN>".$this->rere($o->prop("element_translation"))."</MARTREN>\n";
@@ -866,7 +915,7 @@ class trademark_manager extends class_base
 								$parent = obj($prod->parent());
 								$xml .= "\t\t\t<GSGR NICCLAI=\"".$parent->comment()."\">\n";
 									if ($val == "")
-									{	
+									{
 										$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$val."]]></GSTERMEN>\n";
 									}
 								$xml .= "\t\t\t</GSGR>\n";
@@ -890,7 +939,7 @@ class trademark_manager extends class_base
 						$xml .= "\t\t\t<PRIAPPD>".$pri_date."</PRIAPPD>\n";
 					}
 					$xml .= "\t\t\t<PRIAPPN>".$this->rere($pri_name)."</PRIAPPN>\n";
-				
+
 				$xml .= "\t\t</PRIGR>\n";
 
 				$xml .= "\t\t<DESPG>\n";
