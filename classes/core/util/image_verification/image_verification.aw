@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.8 2008/03/13 09:43:33 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.9 2008/05/07 12:50:53 instrumental Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -128,25 +128,42 @@ class image_verification extends class_base
 		));
 		return $this->parse();
 	}
+	
+	/**
+		@attrib name=draw_image api=1 nologin=1 params=name
+		
+		@param obj_inst optional type=CL_IMAGE_VERIFICATION object
+			If not set, the other params will be used
+		@param width optional type=int
+			If 'obj_inst' param is not set, this is required		
+		@param height optional type=int
+			If 'obj_inst' param is not set, this is required		
+		@param text_color optional type=string
+			If 'obj_inst' param is not set, this is required		
+		@param background_color optional type=string
+			If 'obj_inst' param is not set, this is required
+		@param font_size optional type=int
+			If 'obj_inst' param is not set, this is required
 
+	**/
 	function draw_image($arr)
 	{
-		$im_width = $arr['obj_inst']->prop('width');
-		$im_height = $arr['obj_inst']->prop('height');
+		$im_width = is_object($arr['obj_inst']) ? $arr['obj_inst']->prop('width') : $arr["width"];
+		$im_height = is_object($arr['obj_inst']) ? $arr['obj_inst']->prop('height') : $arr["height"];
 
 		$im = imagecreatetruecolor($im_width, $im_height);
 
-		$bg_color = $this->convert_color( $arr['obj_inst']->prop('background_color') );
+		$bg_color = $this->convert_color( is_object($arr['obj_inst']) ? $arr['obj_inst']->prop('background_color') : $arr["background_color"] );
 		$bg_color = imagecolorallocate($im, $bg_color['red'], $bg_color['green'], $bg_color['blue']);
 		imagefill($im, 0, 0, $bg_color);
 
-		$text_color = $this->convert_color( $arr['obj_inst']->prop('text_color') );
+		$text_color = $this->convert_color( is_object($arr['obj_inst']) ? $arr['obj_inst']->prop('text_color') : $arr["text_color"] );
 		$text_color = imagecolorallocate($im, $text_color['red'], $text_color['green'], $text_color['blue']);
 
 		putenv('GDFONTPATH=' . aw_ini_get('basedir').'/classes/core/util/image_verification');
 		$font_file = 'Vera.ttf';
 
-		$font_size = $arr['obj_inst']->prop('font_size');
+		$font_size = is_object($arr['obj_inst']) ? $arr['obj_inst']->prop('font_size') : $arr["font_size"];
 		$angle = 0;
 
 		$sel_code = rand(1,3);
@@ -245,6 +262,48 @@ class image_verification extends class_base
                 }
 
 		return false;
+	}
+
+	function init_vcl_property($arr)
+	{
+		if(is_admin())
+		{
+			return PROP_IGNORE;
+		}
+		$arr["property"]["value"] = html::img(array(
+			'url' => $this->mk_my_orb(
+				"draw_image",
+				array(
+					"width" => $arr["property"]["width"],
+					"height" => $arr["property"]["height"],
+					"text_color" => $arr["property"]["text_color"],
+					"background_color" => $arr["property"]["background_color"],
+					"font_size" => $arr["property"]["font_size"],
+				),
+				CL_IMAGE_VERIFICATION
+			),
+			'width' => $arr["property"]["width"],
+			'height' => $arr["property"]["height"],
+		));
+		$arr["property"]["value"] .= "<br /><br />";
+		$arr["property"]["value"] .= html::textbox(array(
+			"name" => $arr["property"]["name"],
+			"size" => 4,
+		));
+		return array($arr["property"]["name"] => $arr["property"]);
+	}
+
+	function process_vcl_property($arr)
+	{
+		if(is_admin())
+		{
+			return PROP_IGNORE;
+		}
+		if(!$this->validate($arr["prop"]["value"]))
+		{
+			return PROP_FATAL_ERROR;
+		}
+		return PROP_OK;
 	}
 
 }

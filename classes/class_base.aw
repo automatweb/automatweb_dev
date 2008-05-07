@@ -3913,12 +3913,16 @@ class class_base extends aw_template
 					$argblock["clid"] = $this->clid;
 					$res = $ot->process_vcl_property($argblock);
 
-					if (PROP_ERROR == $res)
+					if (PROP_ERROR == $res || PROP_FATAL_ERROR == $res)
 					{
 						$propvalues[$name]["error"] = $argblock["prop"]["error"];
 						aw_session_set("cb_values",$propvalues);
 						$this->cb_values = $propvalues;
 						return false;
+					};
+					if(PROP_FATAL_ERROR == $res)
+					{
+						$this->stop_processing = true;
 					};
 				};
 				if (is_callable(array($ot, "callback_mod_retval")))
