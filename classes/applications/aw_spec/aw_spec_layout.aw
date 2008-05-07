@@ -1,8 +1,6 @@
 <?php
-// aw_spec_layout.aw - AW Spetsifikatsiooni layout
 /*
-
-@classinfo syslog_type=ST_AW_SPEC_LAYOUT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AW_SPEC_LAYOUT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_spec_layouts master_index=brother_of  master_table=objects index=aw_oid
 
 @default table=aw_spec_layouts
@@ -107,29 +105,22 @@ class aw_spec_layout extends class_base
 		$o->set_spec_property_list($arr["request"]["gp_data"]);
 	}
 
-	function get_overview($o, $t)
+	function get_overview($o, $t, $prnt_num)
 	{
-		$t = new vcl_table();
-		$this->_init_table($t);
-
 		$prop_type_picker = $o->spec_prop_type_picker();	
 
-		$r = false;
+		$num = 0;
 		foreach($o->spec_property_list() as $idx => $g_obj)
 		{
-			$r = true;
-			$t->define_data(array(
-				"layout_name" => $g_obj->name(),
-				"layout_type" => $prop_type_picker[$g_obj->prop("prop_type")],
-				"layout_desc" => nl2br($g_obj->prop("prop_desc")),
-			));
+			$np = aw_spec::format_chapter_num($prnt_num, ++$num);
+
+			$str .= aw_spec::format_doc_entry(
+				$np,
+				sprintf(t("Omadus: %s"), $g_obj->name()),
+				sprintf(t("T&uuml;&uuml;p: %s<br>"), $prop_type_picker[$g_obj->prop("prop_type")]).nl2br($g_obj->prop("prop_desc"))
+			);
 		}
-		if (!$r)
-		{
-			return null;
-		}
-		$t->set_sortable(false);
-		return $t->draw();
+		return $str;
 	}
 }
 

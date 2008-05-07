@@ -1,12 +1,13 @@
 <?php
-// aw_spec_class.aw - AW Spetsifikatsiooni klass
 /*
+@classinfo syslog_type=ST_AW_SPEC_CLASS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@tableinfo aw_spec_class master_index=brother_of master_table=objects index=aw_oid
 
-@classinfo syslog_type=ST_AW_SPEC_CLASS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
-
-@default table=objects
+@default table=aw_spec_class
 @default group=general
 
+	@property desc type=textarea rows=10 cols=50 field=aw_desc
+	@caption Kirjeldus
 */
 
 class aw_spec_class extends class_base
@@ -101,7 +102,7 @@ class aw_spec_class extends class_base
 				$id = $pt."_".$cl_oid;
 				$tree->add_item($pt, array(
 					"id" => $id,
-					"url" => aw_url_change_var("disp2", $cl_oid),
+					"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid)),
 					"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
 				));
 
@@ -118,35 +119,36 @@ class aw_spec_class extends class_base
 		}
 	}
 
-	function get_overview($o, $t)
+	function get_overview($o, $t, $prnt_num)
 	{
-		$t = new vcl_table();
-		$this->_init_table($t);
 		$group_picker = $this->_get_group_picker($o);		
 
-		$r = false;
+		$num = 0;
 		foreach($o->spec_group_list() as $idx => $g_obj)
 		{
-			$r = true;
-			$t->define_data(array(
-				"group_name" => $g_obj->name(),
-				"parent_group_name" => $g_obj->comment() ? $group_picker[$g_obj->comment()] : "",
-			));
+			$np = aw_spec::format_chapter_num($prnt_num, ++$num);
 
-			if (($val = $g_obj->instance()->get_overview($g_obj, $t)) !== null)
+			$str .= aw_spec::format_doc_entry(
+				$np, 
+				sprintf(t("Grupp: %s"), $g_obj->name()),
+				$g_obj->comment() ? sprintf(t("Parent grupp: %s"), $group_picker[$g_obj->comment()]) : ""
+			);
+
+			if (($val = $g_obj->instance()->get_overview($g_obj, $t, $np)) !== null)
 			{
-				$t->define_data(array(
-					"group_name" => "&nbsp;",
-					"parent_group_name" => $val
-				));
+				$str .= $val;
 			}
 		}
-		if (!$r)
+		return $str;
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "")
 		{
-			return null;
+			$this->db_query("CREATE TABLE aw_spec_class(aw_oid int primary key, aw_desc text)");
+			return true;
 		}
-		$t->set_sortable(false);
-		return $t->draw();
 	}
 }
 

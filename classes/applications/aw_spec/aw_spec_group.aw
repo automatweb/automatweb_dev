@@ -109,7 +109,7 @@ class aw_spec_group extends class_base
 				$id = $pt."_".$cl_oid;
 				$tree->add_item($pt, array(
 					"id" => $id,
-					"url" => aw_url_change_var("disp2", $cl_oid),
+					"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid)),
 					"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
 				));
 
@@ -125,33 +125,25 @@ class aw_spec_group extends class_base
 		return $has_items;
 	}
 
-	function get_overview($o, $t)
+	function get_overview($o, $t, $prnt_num)
 	{
-		$t = new vcl_table();
-		$this->_init_table($t);
 		$type_picker = $o->spec_layout_type_picker();
 		$layout_picker = $this->_get_layout_picker($o);	
 
-		$rows = false;
+		$num = 0;
 		foreach($o->spec_layout_list() as $idx => $g_obj)
 		{
-			$t->define_data(array(
-				"layout_name" => $g_obj->name(),
-				"parent_layout_name" => $layout_picker[$g_obj->prop("parent_layout_name")],
-				"layout_type" => $layout_type_picker[$g_obj->prop("layout_type")],
-			));
+			$np = aw_spec::format_chapter_num($prnt_num,++$num);
 
-			$t->define_data(array(
-				"parent_layout_name" => $g_obj->instance()->get_overview($g_obj, $t)
-			));
-			$rows = true;
+			$str .= aw_spec::format_doc_entry(
+				$np,
+				sprintf(t("Layout: %s"), $g_obj->name()),
+				sprintf(t("Parent: %s , t&uuml;&uuml;p: %s"), $layout_picker[$g_obj->prop("parent_layout_name")], $type_picker[$g_obj->prop("layout_type")])
+			);
+			
+			$str .= $g_obj->instance()->get_overview($g_obj, $t, $np);
 		}
-		if (!$rows)
-		{
-			return null;
-		}
-		$t->set_sortable(false);
-		return $t->draw();
+		return $str;
 	}
 }
 

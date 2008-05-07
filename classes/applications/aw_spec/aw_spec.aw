@@ -29,7 +29,7 @@
 	@property view_ct type=text no_caption=1 store=no
 
 @groupinfo spec caption="Koosta" 
-@groupinfo spec_view caption="&Uuml;levaade" save=no
+@groupinfo spec_view caption="&Uuml;levaade" submit=no
 */
 
 class aw_spec extends class_base

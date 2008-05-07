@@ -1,8 +1,6 @@
 <?php
-// aw_spec_property.aw - AW Spetsifikatsiooni omadus
 /*
-
-@classinfo syslog_type=ST_AW_SPEC_PROPERTY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_AW_SPEC_PROPERTY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
 @tableinfo aw_spec_properties master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_spec_properties

@@ -95,12 +95,36 @@ class aw_spec_layout_obj extends _int_object
 	static public function spec_prop_type_picker()
 	{
 		return array(
-			"textbox" => t("Textbox"),
-			"textarea" => t("Textarea"),
-			"treeview" => t("Puu"),
+			"checkbox" => t("Checkbox"),
+			"toolbar" => t("Toolbar"),
+			"fileupload" => t("Faili upload"),
+			"textbox" => t("Tekstikast"),
 			"table" => t("Tabel"),
 			"relpicker" => t("Relpicker"),
-			"toolbar" => t("Toolbar")
+			"select" => t("Listpoks"),
+			"releditor" => t("Releditor"),
+			"chooser" => t("Valik"),
+			"comments" => t("Kommentaaride sisetamine"),
+			"classificator" => t("Klassifikaator"),
+			"treeview" => t("Puu"),
+			"date_select" => t("Kuup&auml;eva valik"),
+			"reset" => t("Reset nupp"),
+			"button" => t("Nupp"),
+			"aliasmgr" => t("Aliastehaldur"),
+			"datetime_select" => t("Kuup&auml;eva ja aja valik"),
+			"calendar_selector" => t("Kalendri valik"),
+			"project_selector" => t("Projekti valik"),
+			"reminder" => t("Meeldetuletaja"),
+			"participant_selector" => t("Osaleja valik"),
+			"status" => t("Staatus"),
+			"multifile_upload" => t("Mitme faili upload"),
+			"texarea" => t("Textarea"),
+			"password" => t("Parooli sisestamine"),
+			"server_folder_selector" => t("Server kataloogi valik"),
+			"calendar" => t("Kalender"),
+			"text" => t("Mittemuudetav tekst"),
+			"time_select" => t("Aja sisestamine"),
+			"colorpicker" => t("V&auml;rvivalik")
 		);
 	}
 }
