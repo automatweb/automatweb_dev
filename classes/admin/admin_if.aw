@@ -188,6 +188,12 @@ class admin_if extends class_base
 				"tooltip" => t("Vali periood")
 			));
 			$this->_init_period_dropdown($tb);
+			if ($tmp = aw_global_get("period"))
+			{
+				$dbp = get_instance(CL_PERIOD);
+				$pd = $dbp->get($tmp);
+				$tb->add_cdata(sprintf(t("Aktiivne periood: %s"), $pd["name"]));
+			}
 		}
 	}
 
@@ -1885,7 +1891,7 @@ class admin_if extends class_base
 			{
 				if ($pl[$i]["id"] == $act_per_id)
 				{
-					$ar[$pl[$i]["id"]] = $pl[$i]["name"].MN_ACTIVE;
+					$ar[$pl[$i]["id"]] = $pl[$i]["name"]." ".t("(A)");
 				}
 				else
 				{
