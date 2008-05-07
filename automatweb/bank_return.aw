@@ -144,7 +144,6 @@ else
 {
 	$url = $_SESSION["bank_payment"]["cancel"];
 }
-
 /*
 if(!$url)
 {

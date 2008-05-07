@@ -78,7 +78,7 @@ class ddoc2_parser{
 		$this->xml = $xml;
 		$this->xmlarray = $xml?$this->Parse($this->xml):false;
 		$this->setDigiDocFormatAndVersion();
-		$this->workPath = DD_FILES;//.session_id().'/';
+		$this->workPath = aw_ini_get("basedir").'/classes/common/digidoc/data/';//DD_FILES;//.session_id().'/';
 		if (!is_dir($this->workPath))
 			if(ddFile::DirMake($this->workPath) != DIR_ERR_OK)
 				die('Error accessing workpath:'.$this->workPath);
@@ -465,7 +465,8 @@ class ddFile{
 			$susisevad = array("š","ž","Š","Ž");
 			$eisusise = array("sh","zh","Sh","Zh");
 			$name = str_replace($susisevad, $eisusise,$name);
-			$name = mb_convert_encoding($name, 'ISO-8859-1','UTF-8');
+			//$name = mb_convert_encoding($name, 'ISO-8859-1','UTF-8');
+			$name = iconv("ISO-8859-1", "UTF-8", $name);
 		}
 
 		if($charset){

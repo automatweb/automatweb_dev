@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.33 2007/11/23 10:41:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.34 2008/05/07 10:50:10 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -448,7 +448,7 @@ class trademark_manager extends class_base
 			"type" => "time",
 			"format" => "d.m.Y",
 		));
-		
+
 		$t->define_field(array(
 			"name" => "signatures",
 			"caption" => t("Allkirjad"),

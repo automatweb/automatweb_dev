@@ -18,17 +18,22 @@ require_once PEAR_PATH.'XML/Unserializer.php';
  */
 
 //define('DD_WSDL', 'https://www.sk.ee:8090/?wsdl');
+//define('DD_WSDL', 'https://www.sk.ee:8097/?wsdl');
+
+define('DD_WSDL', 'https://digidocservice.sk.ee/?wsdl'); // some sort of a new service?????
+
 //define('DD_WSDL', 'https://linux.test.sk.sise:8092/?wsdl');
-define('DD_WSDL', 'https://www.openxades.org:8090/?wsdl');
+//define('DD_WSDL', 'https://www.openxades.org:8090/?wsdl');
+//define('DD_WSDL', 'https://www.openxades.org/cgi-bin/ocsp.cgi');
 //define('DD_WSDL', 'http://linux.test.sk.sise:8098/?wsdl');
 
-define('DD_SERVER_CA_FILE', aw_ini_get("basedir").'/classes/common/digidoc/service_certs.pem');
+//define('DD_SERVER_CA_FILE', aw_ini_get("basedir").'/classes/common/digidoc/service_certs.pem');
 
 /**
  * Kohapeal hoitavate failide kaust (lõppeb /-ga):
  */
-define('DD_FILES', dirname(__FILE__).'/data/');
-define('DATA_ROOT', dirname(__FILE__).'/data/');
+define('DD_FILES', aw_ini_get("basedir").'/classes/common/digidoc/data/');
+define('DATA_ROOT', aw_ini_get("basedir").'/classes/common/digidoc/data/');
 
 /**#@+
  * Serveriga ühenduse loomiseks vajalik parameeter
@@ -49,7 +54,8 @@ define('DD_TIMEOUT', '900000');
  * selles hoitakse ka serveri aadressi, mis pärast muutmist enam ei ühti
  * õige aadressiga!
  */
-define('DD_WSDL_FILE', aw_ini_get("basedir").'/classes/common/digidoc/wsdl.class.php');
+//define('DD_WSDL_FILE', aw_ini_get("basedir").'/classes/common/digidoc/wsdl.class.php');
+define('DD_WSDL_FILE', aw_ini_get("basedir").'/classes/common/digidoc/data/wsdl.class.php');
 
 /**
  * Failide yleslaadimise kaust

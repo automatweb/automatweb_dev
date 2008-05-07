@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.4 2008/03/13 11:22:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/xmlrpc.aw,v 1.5 2008/05/07 10:50:17 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -193,7 +193,7 @@ class xmlrpc extends aw_template
 	function send_request($args = array())
 	{
 		extract($args);
-		if (substr($server,0,7) == "http://")
+		if (substr($server,0,7) == "http://" || substr($server,0,8) == "https://")
 		{
 			$server = substr($server,7);
 		};

@@ -9,7 +9,7 @@ class aw_mime_types
 		"application/mac-binhex40" => "hqx",
 		"application/mac-compactpro" => "cpt",
 		"application/msword" => "doc",
-		"application/octet-stream" => "bin,dms,lha,lzh,exe,class,so,dll",
+		"application/octet-stream" => "bin,dms,lha,lzh,exe,class,so,dll,ddoc",
 		"application/oda" => "oda",
 		"application/pdf" => "pdf",
 		"application/postscript" => "ai,eps,ps",
@@ -102,7 +102,7 @@ class aw_mime_types
 		"video/flv" => "flv",
 		"x-conference/x-cooltalk" => "ice",
 		"application/vnd.sun.xml.writer" => "sxw",
-		"application/vnd.sun.xml.calc" => "sxc"
+		"application/vnd.sun.xml.calc" => "sxc",
 	);
 
 	/** Returns the MIME type of an extension

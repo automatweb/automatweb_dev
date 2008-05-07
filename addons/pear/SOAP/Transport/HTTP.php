@@ -583,7 +583,7 @@ class SOAP_Transport_HTTP extends SOAP_Base
         curl_setopt($ch, CURLOPT_USERAGENT ,     $this->_userAgent);
 
         if ($this->timeout) {
-            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout); //times out after 4s
+            //curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout); //times out after 4s
         }
 
 // Added by SK for DigiDocService Server certificate verification purposes

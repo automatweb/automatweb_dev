@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.83 2008/03/12 21:22:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.84 2008/05/07 10:50:10 kristo Exp $
 // patent.aw - Patent 
 /*
 
@@ -1467,17 +1467,12 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			$fl = basename($fl);
 			$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
 			$sz = @getimagesize($fl);
-		}
+		}//if(aw_global_get("uid") == "struktuur"){ arr($sz);arr($sz[0]/200); arr($sz[1]/($sz[0]/200));arr(($sz[1]/($sz[0]/200)) % 200001);}
 		if($sz[0] > 200)
 		{
 			$sz[1] = ($sz[1]/($sz[0]/200)) % 200001;
 			$sz[0] = 200;
 		}
-//		if($sz[1] > 200)
-//		{
-//			$sz[0] = ($sz[0]/($sz[1]/200)) % 200001;
-//			$sz[1] = 200;
-//		}
 		$ret =  $image_inst->make_img_tag_wl($oid, "", "" , array(
 				"height" => $sz[1],
 				"width" => $sz[0],

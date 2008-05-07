@@ -21,17 +21,17 @@
             <caption>Pangamakse objekt</caption>
       </property>
       <property>
-            <name>patents_menu</name>
+            <name>trademarks_menu</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_PATENT_MENU</reltype>
-            <caption>Patentide kaust</caption>
+            <reltype>RELTYPE_TRADEMARK_MENU</reltype>
+            <caption>Kaubam&amp;amp;auml;rgitaotluste kaust</caption>
       </property>
       <classinfo>
-            <syslog_type>ST_PATENT_ADD</syslog_type>
+            <syslog_type>ST_TRADEMARK_ADD</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
@@ -49,11 +49,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Volinike kaust</caption>
             </PROCURATOR_MENU>
-            <PATENT_MENU>
+            <TRADEMARK_MENU>
                   <value>9</value>
                   <clid>CL_MENU</clid>
-                  <caption>Patentide kaust</caption>
-            </PATENT_MENU>
+                  <caption>Kaubam&amp;amp;auml;rgitaotluste kaust</caption>
+            </TRADEMARK_MENU>
       </reltypes>
 </properties>
 

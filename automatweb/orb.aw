@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.28 2008/02/22 12:01:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.29 2008/05/07 10:50:09 kristo Exp $
 	function get_time() 
 	{
 		list($micro,$sec) = explode(" ",microtime());
@@ -100,7 +100,7 @@ $content = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
+if ((substr($content,0,5) == "http:" || (substr($content,0,6) == "https:") || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
 {
 	if (headers_sent())
 	{

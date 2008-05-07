@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.115 2008/04/21 13:34:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.116 2008/05/07 10:50:18 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -957,7 +957,11 @@ class aw_table extends aw_template
 		{
 			$tmp = $this->tableattribs;
 			$tmp["name"] = "table";
-			$tmp["classid"] = "awmenuedittabletag";
+			$tmp["classid"] = $this->table_class_id ? $this->table_class_id : "awmenuedittabletag";
+			if ($this->table_tag_id)
+			{
+				$tmp["domid"] = $this->table_tag_id;
+			}
 			$tbl .= $this->opentag($tmp);
 		}
 
