@@ -1,5 +1,5 @@
-	<?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.37 2008/04/28 13:59:29 kristo Exp $
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.38 2008/05/07 10:29:22 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -225,6 +225,13 @@ die($fdat);
 	**/
 	function invoke($arr)
 	{
+		$config_inst = get_instance("config");
+		$inp = $config_inst->get_simple_config("persona_import_in_progress");
+		if((time() - $inp) < 3600 * 10)
+		{
+			die("already in progress");
+		}
+		$config_inst->set_simple_config("persona_import_in_progress", time());
 		/*
 		$ol = new object_list(array(
 			"parent" => 26366,
@@ -2197,13 +2204,13 @@ die($fdat);
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_RECURRENCE",
 		));
-		// iga asja kohta on vaja teada seda, et millal ta v&auml;lja kutsutakse
+		// iga asja kohta on vaja teada seda, et millal ta v2lja kutsutakse
 		$sch = get_instance("scheduler");
 		foreach($conns as $conn)
 		{
 			$rep_id = $conn->prop("to");
 			$event_url = $this->mk_my_orb("invoke",array("id" => $o->id()));
-			// lisab iga &uuml;hendatud recurrence objekti kohta kirje scheduleri
+			// lisab iga yhendatud recurrence objekti kohta kirje scheduleri
 			$sch->add(array(
 			 	"event" => $event_url,
 				"rep_id" => $rep_id,
