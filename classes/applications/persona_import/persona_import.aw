@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.39 2008/05/07 11:19:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.40 2008/05/07 11:39:22 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -339,6 +339,8 @@ class persona_import extends class_base
 			"parent" => $metamgr->id(),
 			"class_id" => CL_META,
 			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
 		));
 
 		$meta1 = array_flip($meta1list->names());
@@ -563,7 +565,8 @@ class persona_import extends class_base
 			"parent" => $folder_person,
 			"class_id" => CL_CRM_PERSON,
 			"site_id" => array(),
-//			"lang_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
 		));
 		
 		foreach($person_list->arr() as $person_obj)
@@ -633,7 +636,9 @@ class persona_import extends class_base
 		$addr_list = new object_list(array(
 			"class_id" => CL_CRM_ADDRESS,
 			"site_id" => array(),
-//			"lang_id" => array()
+			"lang_id" => array(),
+			"status" => array(),
+			"parent" => array(),
 		));
 
 		$addr = $addr_list->names();
@@ -659,7 +664,8 @@ class persona_import extends class_base
 			"class_id" => CL_CRM_PHONE,
 			"parent" => $dir_default,
 			"site_id" => array(),
-//			"lang_id" => array()
+			"lang_id" => array(),
+			"status" => array(),
 		));
 
 		$phones = array_flip($phone_list->names());
@@ -703,11 +709,32 @@ class persona_import extends class_base
 				"class_id" => $sdata["clid"],
 				"parent" => $dir_default,
 				"site_id" => array(),
-//				"lang_id" => array()
+				"lang_id" => array(),
+				"status" => array(),
 			));
 			$simple_data[$key] = array_flip($olist->names());
 
 		};
+
+		// Collecting all imported company objs.		
+		$olist = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"parent" => array($dir_default, $dir_company),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
+		));
+		$impd_company_objs = array_flip($olist->names());
+
+		// Collecting all imported substitutes		
+		$subst_ol = new object_list(array(
+			"parent" => $dir_default,
+			"class_id" => CL_CRM_PROFESSION,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
+		));
+		$subst_ol_arr = $subst_ol->arr();
 		
 		/*
 		arr($simple_data);
@@ -731,6 +758,9 @@ class persona_import extends class_base
 		$seco = new object_list(array(
 			"class_id" => CL_CRM_SECTION,
 			"site_id" => array(),
+			"parent" => array(),
+			"lang_id" => array(),
+			"status" => array(),
 		));
 
 		$sections = array();
@@ -1112,10 +1142,14 @@ class persona_import extends class_base
 
 				if(!empty($asutus))
 				{
+					/*
 					$ol = new object_list(array(
 						"class_id" => CL_CRM_COMPANY,
 						"parent" => array($dir_default, $dir_company),
 						"name" => $asutus,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"status" => array(),
 					));
 					if($ol->count() > 0)
 					{
@@ -1123,6 +1157,11 @@ class persona_import extends class_base
 						{
 							break;
 						}
+					}
+					*/
+					if(array_key_exists($asutus, $impd_company_objs))
+					{
+						$company_obj = obj($impd_company_objs[$asutus]);
 					}
 					else
 					{
@@ -1133,6 +1172,7 @@ class persona_import extends class_base
 						$company_obj->set_parent($dir_company);
 						$company_obj->set_prop("name", $asutus);
 						$company_obj->save();
+						$impd_company_objs[$asutus] = $company_obj->id();
 					}
 					/*
 					print "connecting section ".iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"])." to company object ".$asutus."<br>";
@@ -1272,11 +1312,17 @@ class persona_import extends class_base
 				{
 					unset($substitute_id);
 
+					/*
 					$subst_ol = new object_list(array(
 						"parent" => $dir_default,
 						"class_id" => CL_CRM_PROFESSION,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"status" => array(),
 					));
 					foreach($subst_ol->arr() as $subst_obj)
+					*/
+					foreach($subst_ol_arr as $subst_obj)
 					{
 //						print $subst_obj->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
 //						print $subst_obj->name()." == ".$asendamine_tookoht."<br>";
@@ -1297,6 +1343,7 @@ class persona_import extends class_base
 						$subst->set_meta("external_id", $worker["TOOTAJA_ID"]);
 						$subst->save();
 						$substitute_id = $subst->id();
+						$subst_ol_arr[$substitute_id] = $subst;
 					}
 
 					print "connecting to profession object ".$asendamine_tookoht."<br>";
@@ -1548,6 +1595,9 @@ class persona_import extends class_base
 		$mx = new object_list(array(
 			"class_id" => CL_META,
 			"parent" => $meta_cat["peatumised"],
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
 		));
 
 		$mxlist = array_flip($mx->names());
@@ -1855,6 +1905,9 @@ class persona_import extends class_base
 		$mx = new object_list(array(
 			"parent" => $meta_cat["puhkused"],
 			"class_id" => CL_META,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
 		));
 
 		$mxlist = array_flip($mx->names());
@@ -2013,6 +2066,9 @@ class persona_import extends class_base
 		$persons = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
 			"status" => STAT_ACTIVE,
+			"site_id" => array(),
+			"parent" => array(),
+			"lang_id" => array(),
 		));	
 		$px = array();
 		foreach($persons->arr() as $person_obj)
