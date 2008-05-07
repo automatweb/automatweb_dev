@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.38 2008/04/10 13:37:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.39 2008/05/07 10:51:15 instrumental Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -77,7 +77,7 @@ caption Minimaalne tulpade arv
 @caption Registri andmed
 
 @reltype DEPARTMENT value=2 clid=CL_CRM_SECTION,CL_CRM_COMPANY
-@caption Seadete vorm
+@caption Osakond
 */
 class persons_webview extends class_base
 {
