@@ -5626,7 +5626,7 @@ class crm_person extends class_base
 		{
 			$date_bits = explode("-", $o->prop("birthday"));
 			$this->vars(array(
-				"crm_person.birthday" => get_lc_date(mktime(0, 0, 0, $date_bits[1], $date_bits[2], $date_bits[0])),
+				"crm_person.birthday" => get_lc_date(mktime(0, 0, 0, $date_bits[1], $date_bits[2], $date_bits[0]), LC_DATE_FORMAT_SHORT_FULLYEAR),
 				"crm_person.age" => $o->get_age(),
 			));
 			$this->vars(array(
@@ -5753,7 +5753,7 @@ class crm_person extends class_base
 
 		//		SUB: CRM_PERSON.MODIFIED
 		$this->vars(array(
-			"crm_person.modified" => get_lc_date($o->prop("modified")),
+			"crm_person.modified" => get_lc_date($o->prop("modified"), LC_DATE_FORMAT_SHORT_FULLYEAR),
 		));
 		$this->vars(array(
 			"CRM_PERSON.MODIFIED" => $this->parse("CRM_PERSON.MODIFIED"),
@@ -5785,8 +5785,8 @@ class crm_person extends class_base
 				$end = mktime(0, 0, 0, $end["month"], $end["day"], $end["year"]);
 				$this->vars(array(
 					"citizenship.country" => $cs->prop("country.name"),
-					"citizenship.start" => get_lc_date($start),
-					"citizenship.end" => $end >= $start ? get_lc_date($end) : t("t&auml;nap&auml;evani"),
+					"citizenship.start" => get_lc_date($start, LC_DATE_FORMAT_SHORT_FULLYEAR),
+					"citizenship.end" => $end >= $start ? get_lc_date($end, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("t&auml;nap&auml;evani"),
 				));
 				$CITIZENSHIP .= $this->parse("CITIZENSHIP");
 				// END SUB: CITIZENSHIP
@@ -5847,7 +5847,7 @@ class crm_person extends class_base
 				"crm_person_education.obtain_language" => $to->prop("obtain_language.name"),
 				"crm_person_education.start" => $to->prop("start") ? date("Y", $to->prop("start")) : t("M&auml;&auml;ramata"),
 				"crm_person_education.end" => $to->prop("end") ? date("Y", $to->prop("end")) : t("M&auml;&auml;ramata"),
-				"crm_person_education.end_date" => get_lc_date($to->prop("end_date")),
+				"crm_person_education.end_date" => get_lc_date($to->prop("end_date"), LC_DATE_FORMAT_SHORT_FULLYEAR),
 				"crm_person_education.diploma_nr" => $to->prop("diploma_nr"),
 			));
 			foreach($props as $prop)
@@ -5917,7 +5917,7 @@ class crm_person extends class_base
 			$this->vars(array(
 				"crm_person_add_education.org" => $to->prop("org"),
 				"crm_person_add_education.field" => $to->prop("field"),
-				"crm_person_add_education.time" => get_lc_date($to->prop("time")),
+				"crm_person_add_education.time" => get_lc_date($to->prop("time"), LC_DATE_FORMAT_SHORT_FULLYEAR),
 				"crm_person_add_education.time_text" => $to->prop("time_text"),
 				"crm_person_add_education.length" => $to->prop("length"),
 				"crm_person_add_education.length_hrs" => $to->prop("length_hrs"),
@@ -6144,7 +6144,7 @@ class crm_person extends class_base
 			if(strlen($to->prop("start")) == 10 && $to->prop("start") != "0000-00-00")
 			{
 				$s = explode("-", $to->prop("start"));
-				$start = get_lc_date(mktime(0, 0, 0, $s[1], $s[2], $s[0]));
+				$start = get_lc_date(mktime(0, 0, 0, $s[1], $s[2], $s[0]), LC_DATE_FORMAT_SHORT_FULLYEAR);
 			}
 			else
 			{
@@ -6154,7 +6154,7 @@ class crm_person extends class_base
 			if(strlen($to->prop("end")) == 10 && $to->prop("end") != "0000-00-00")
 			{
 				$e = explode("-", $to->prop("end"));
-				$end = get_lc_date(mktime(0, 0, 0, $e[1], $e[2], $e[0]));
+				$end = get_lc_date(mktime(0, 0, 0, $e[1], $e[2], $e[0]), LC_DATE_FORMAT_SHORT_FULLYEAR);
 			}
 			else
 			{
@@ -6385,8 +6385,8 @@ class crm_person extends class_base
 			$to = $conn->to();
 			$s = $to->prop("start");
 			$e = $to->prop("end");
-			$start = !empty($s) ? get_lc_date($s) : t("M&auml;&auml;ramata");
-			$end = !empty($e) ? get_lc_date($e) : t("M&auml;&auml;ramata");
+			$start = !empty($s) ? get_lc_date($s, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
+			$end = !empty($e) ? get_lc_date($e, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
 			$this->vars(array(
 				"crm_person_work_relation.org" => $to->prop("org.name"),
 				"crm_person_work_relation.section" => $to->prop("section.name"),
@@ -6970,7 +6970,7 @@ class crm_person extends class_base
 			$this->vars(array(
 				"personnel_management_job_offer.profession" => $jo->prop("profession.name"),
 				"personnel_management_job_offer.field" => $jo->prop("field.name"),
-				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end")),
+				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end"), LC_DATE_FORMAT_SHORT_FULLYEAR),
 				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
 				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
@@ -7071,7 +7071,7 @@ class crm_person extends class_base
 				"personnel_management_job_offer.company" => $jo->prop("company.name"),
 				"personnel_management_job_offer.profession" => $jo->prop("profession.name"),
 				"personnel_management_job_offer.field" => $jo->prop("field.name"),
-				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end")),
+				"personnel_management_job_offer.end" => get_lc_date($jo->prop("end"), LC_DATE_FORMAT_SHORT_FULLYEAR),
 				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
 				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
@@ -7157,8 +7157,8 @@ class crm_person extends class_base
 
 				$this->vars(array(
 					"crm_family_relation.person" => $to->prop("person.name"),
-					"crm_family_relation.start" => get_lc_date($to->prop("start")),
-					"crm_family_relation.end" => get_lc_date($to->prop("end")),
+					"crm_family_relation.start" => get_lc_date($to->prop("start"), LC_DATE_FORMAT_SHORT_FULLYEAR),
+					"crm_family_relation.end" => get_lc_date($to->prop("end"), LC_DATE_FORMAT_SHORT_FULLYEAR),
 				));
 				if(array_key_exists("person", $proplist_family_relation) || count($proplist_family_relation) == 0)
 				{
