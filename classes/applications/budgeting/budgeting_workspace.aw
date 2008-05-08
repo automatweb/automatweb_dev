@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.12 2008/04/21 13:28:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.13 2008/05/08 11:37:32 markop Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -371,10 +371,12 @@ class budgeting_workspace extends class_base
 	{
 		$co = get_current_company();
 		$tv = &$arr["prop"]["vcl_inst"];
+
 		$tv->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => 1,
-			"tree_id" => "budgeting_taxes",
+			"branch" => 1,
+			"tree_id" => "budgeting_taxes_tre",
 			"persist_state" => 1,
 			"root_name" => $co->name(),
 			"root_url" => aw_url_change_var("tax_fld", null),
@@ -618,7 +620,7 @@ class budgeting_workspace extends class_base
 		$tv = get_instance("vcl/treeview");
 		$tv->start_tree (array (
 			"type" => TREE_DHTML,
-			"tree_id" => "budgeting_taxes",
+			"tree_id" => "budgeting_taxes_".$pt,
 			"branch" => 1,
 		));
 		if ($pt == "main")
@@ -834,6 +836,49 @@ class budgeting_workspace extends class_base
 					"url" => $this->mk_my_orb("change", $arr["r"]),
 				));
 				$tv->add_item($ti, array("id" => "tmp"));
+			}
+		}
+		else
+		if (substr($pt, 0, 6) == "worker")
+		{
+			list(, $area_id) = explode("_", $pt);
+			if (!$area_id)
+			{
+				$sect = get_current_company();
+			}
+			else
+			{
+				$sect = obj($area_id);
+			}
+			$curf = $arr["r"]["tax_fld"];
+
+			$comp = get_instance(CL_CRM_COMPANY);
+			
+			$workers = array();
+
+			$comp->get_all_workers_for_company(obj(get_current_company()), $workers);
+
+			$wol = new object_list(array(
+				"oid" => $workers,
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "objects.name"
+			));
+
+			foreach($wol->arr() as $sc)
+			{
+				//$sc = obj($worker);
+				$s = $sc->name();
+				if(!$s) $s = t("(Nimetu)");
+				$ti = "worker_".$sc->id();
+				$arr["r"]["tax_fld"] = $ti;
+				$tv->add_item(0, array(
+					"id" => $ti,
+					"name" => $curf == $ti ? "<b>".$s."</b>" : $s,
+					"url" => $this->mk_my_orb("change", $arr["r"]),
+				));
+				//$tv->add_item($ti, array("id" => "tmp"));
 			}
 		}
 		else
