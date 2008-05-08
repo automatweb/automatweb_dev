@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.31 2008/04/08 12:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.32 2008/05/08 20:15:14 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -1153,17 +1153,6 @@ class orb extends aw_template
 			if($obj)
 			{
 				$meth["values"]["mid"] = $obj;
-			}
-		}
-		if($id == "commune" || $id == "community")
-		{
-			if($obj)
-			{
-				$meth["values"]["id"] = $obj;
-			}
-			if($pgroup)
-			{
-				$meth["values"]["group"] = $pgroup;
 			}
 		}
 		return $meth;

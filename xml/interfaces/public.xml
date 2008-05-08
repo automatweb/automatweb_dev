@@ -9,9 +9,7 @@
 	<class id="messenger_v2" name="E-post"/>
 	<class id="planner" name="Kalender"/>
 	<class id="menu" name="Kaust"/>
-	<class id="commune" name="Kommuun"/>
 	<class id="shop_order_center" name="Lao tellimused"/>
-	<class id="community" name="Kogukond"/>
 	<class id="simple_shop" name="Lihtne pood"/>
 	<class id="file" name="Fail"/>
 </interface>

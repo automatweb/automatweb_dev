@@ -749,9 +749,6 @@ caption Lapsed
 @reltype PHONE value=13 clid=CL_CRM_PHONE
 @caption Telefon
 
-#reltype PROFILE value=14 clid=CL_PROFILE
-#caption Profiil
-
 #reltype USER_DATA value=15
 #caption Andmed
 
@@ -4816,43 +4813,6 @@ class crm_person extends class_base
 			$obj = $conn->from();
 			$this->_get_work_contacts(&$obj,&$data);
 		}
-	}
-
-	// returns the profiles for person
-	// if $all is true, then returns array, else the object
-	function get_profile_for_person($person, $all = false)
-	{
-		$profile = array();
-		// first, we'll check, if the person has an active profile
-		$active_profile = $person->meta("active_profile");
-		if($all)
-		{
-			$profs = $person->connections_from(array(
-				"type" => "RELTYPE_PROFILE",
-			));
-			//if(count($profs) > 0)
-			//{
-				$prof_list = new object_list();
-				foreach($profs as $prof)
-				{
-					$prof_list->add($prof->prop("to"));
-				}
-				$profile = $prof_list->arr();
-				//arr($profile);
-			//}
-		}
-		else
-		{
-			if(!empty($active_profile))
-			{
-				$profile = obj($active_profile);
-			}
-			else
-			{
-				$profile = get_first_obj_by_reltype("RELTYPE_PROFILE");
-			}
-		}
-		return $profile;
 	}
 
 	/** returns a list of company id's that the given person works for

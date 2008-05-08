@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.234 2008/05/05 09:34:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.235 2008/05/08 20:15:01 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1313,7 +1313,7 @@ class menu extends class_base implements main_subtemplate_handler
 		);
 		$pclass = $arr["obj_inst"]->meta("pclass");
 		list($class_name, $tmp) = explode("/", $pclass);
-		if($class_name == "method" || $class_name == "commune" || $class_name == "community")
+		if($class_name == "method")
 		{
 			$class_id = clid_for_name($class_name);
 			$nodes[] = array(
@@ -1322,16 +1322,6 @@ class menu extends class_base implements main_subtemplate_handler
 				"caption" => t("Vali meetodiga seotud objekt"),
 				"selected" => $arr["obj_inst"]->meta("pobject"),
 				"options" => $this->get_pobjects($class_id),
-			);
-		}
-		if($class_name == "commune" || $class_name == "community")
-		{
-			$nodes[] = array(
-				"type" => "select",
-				"name" => "pgroup",
-				"caption" => t("Vali meetodiga seotud grupp"),
-				"options" => $this->get_object_groups($class_id),
-				"selected" => $arr["obj_inst"]->meta("pgroup"),
 			);
 		}
 		$nodes[] = array(

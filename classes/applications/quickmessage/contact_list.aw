@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.9 2007/12/06 14:33:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.10 2008/05/08 20:15:11 kristo Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -112,7 +112,6 @@ class contact_list extends class_base
 						"email" => $add["mail"],
 					));
 				}
-				$this->show_contact_list($arr);
 				break;
 		};
 		return $retval;
@@ -165,132 +164,6 @@ class contact_list extends class_base
 		return $ret;
 	}
 
-	function show_contact_list($arr)
-	{
-		/*
-		$c = new connection();
-		$asd = $c->find(array("to" => $arr["id"], "type" => 1));
-		arr($asd);
-		*/
-		//arr($arr["obj_inst"]);
-/*
-		$contacts = array();
-		$owner = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_LIST_OWNER");
-
-		$u = get_instance("users");
-		if(is_object($owner))
-		{
-			// now, first we sort out the things we need -- ahz
-			$person = $owner->get_first_obj_by_reltype("RELTYPE_PERSON");
-			$conts = $person->connections_from(array(
-				"type" => "RELTYPE_FRIEND",
-				//"sort_by" => "",
-				//"sort_dir" => "desc",
-			));
-			foreach($conts as $cont)
-			{
-				$a_person = $cont->to();
-				$a_profile = $a_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
-				$a_user = obj($u->get_oid_for_uid($a_person->createdby()));
-				$contacts[$a_user->id()] = array(
-					"id" => $a_person->id(),
-					"name" => $a_user->name(),
-					"email" => $a_person->prop("email"),
-					"profile" => $a_profile->id(),
-				);
-			}
-			
-		}
-		$persons = &$arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_ADDED_PERSON",
-		));
-		//arr($users);
-		foreach($persons as $pers)
-		{
-			$b_person = $pers->to();
-			$b_user = obj($u->get_oid_for_uid($b_person->createdby()));
-			$b_profile = $b_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
-			$contacts[] = array(
-				"id" => $b_user->id(),
-				"name" => $b_user->name(),
-				"email" => $b_user->prop("email"),
-				"profile" => is_object($b_profile) ? $b_profile->id() : "",
-			);
-		}
-		$t = &$arr["vcl_inst"];
-		$r_on_page = 40;
-		$t->table_header = $t->draw_text_pageselector(array(
-			"records_per_page" => $r_on_page, // rows per page
-			"d_row_cnt" => count($contacts), // total rows 
-		));
-		$ft_page = $arr["request"]["ft_page"] ? $arr["request"]["ft_page"] : 0;
-		$contacts = array_slice($contacts, ($ft_page * $r_on_page), $r_on_page);
-		$t->define_field(array(
-			"name" => "id",
-			"caption" => t("ID"),
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-		));
-		$t->define_field(array(
-			"name" => "email",
-			"caption" => t("E-post"),
-		));
-		$t->define_field(array(
-			"name" => "sendmessage",
-			"caption" => t(""),
-		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "id",
-		));
-		//arr($contacts);
-		foreach($contacts as $contact)
-		{
-			// h4x0rD stuff -- ahz
-			if($arr["include"])
-			{
-				$profile = $this->mk_my_orb("change",array(
-					"id" => $arr["commune"],
-					"group" => "friend_details",
-					"profile" => $contact["profile"],
-				), "commune");
-				$message = $this->mk_my_orb("change",array(
-					"id" => $arr["commune"],
-					"cuser" => $contact["name"],
-					"group" => "newmessage",
-				),"commune");
-			}
-			else
-			{
-				$profile = $this->mk_my_orb("change",array(
-					"id" => $contact["profile"],
-				), CL_PROFILE);
-				$message = $this->mk_my_orb("change",array(
-					"cuser" => $contact["name"],
-					"group" => "newmessage",
-				), CL_QUICKMESSAGE);
-			}
-			$t->define_data(array(
-				"id" => $contact["id"],
-				"name" => html::href(array(
-					"url" => $profile,
-					"caption" => $contact["name"],
-				)),
-				"email" => html::href(array(
-					"url" => "mailto:".$contact["email"],
-					"caption" => $contact["email"],
-				)),
-				"sendmessage" => html::href(array(
-					"url" => $message,
-					"caption" => t("Saada sõnum"),
-				)),
-			));
-		}
-		*/
-	}
-	
 	/**	
 		@attrib name=delete
 		
@@ -346,7 +219,7 @@ class contact_list extends class_base
 		if(strlen($request["new_mail"]))
 		{
 			/*
-				siia peaks nüüd see tsekk tulema kas messengeriga on contact_list ühendatud, kui pole siis tuleb tekitada... vist?:S
+				siia peaks nyyd see tsekk tulema kas messengeriga on contact_list yhendatud, kui pole siis tuleb tekitada... vist?:S
 			*/
 			$mail = new object();
 			$mail->set_parent($arr["id"]);
