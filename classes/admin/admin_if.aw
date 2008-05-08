@@ -192,7 +192,7 @@ class admin_if extends class_base
 			{
 				$dbp = get_instance(CL_PERIOD);
 				$pd = $dbp->get($tmp);
-				$tb->add_cdata(sprintf(t("Aktiivne periood: %s"), $pd["name"]));
+				$tb->add_cdata(sprintf(t("Valitud periood: %s"), $pd["name"]." ".(aw_global_get("act_per_id") == $tmp ? t("(A)") : "")));
 			}
 		}
 	}
