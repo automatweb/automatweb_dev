@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.28 2008/04/17 12:20:11 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.29 2008/05/08 13:31:39 instrumental Exp $
 
 @classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
 
@@ -410,6 +410,7 @@ class object_type extends class_base
 			"class_id" => CL_META,
 			"parent" => $conf["classificator"][$arr["classificator"]],
 			"status" => object::STAT_ACTIVE,
+			"sort_by" => "jrk",
 		));
 		return $ol->names();
 	}
