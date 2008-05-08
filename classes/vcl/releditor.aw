@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.135 2008/05/06 11:48:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.136 2008/05/08 11:10:58 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1819,6 +1819,13 @@ class releditor extends core
 			if ($this->can("view", $cur_prop["cfgform_id"]))
 			{
 				$rel_props = $cf->get_cfg_proplist($cur_prop["cfgform_id"]);
+				foreach($rel_props as $pn => $pd)
+				{
+					if (!$pd["show_in_emb_tbl"])
+					{
+						unset($rel_props[$pn]);
+					}
+				}
 			}
 		}
 
@@ -1902,6 +1909,7 @@ class releditor extends core
 			switch($pv["type"])
 			{
 				case "relpicker":
+				case "classificator":
 					if ($this->can("view", $pv["value"]))
 					{
 						$tmp = obj($pv["value"]);
@@ -2124,6 +2132,14 @@ class releditor extends core
 			$tmp[] = $row;
 		}
 		$prev_dat = $tmp;
+
+		if (count($prev_dat) == 0)
+		{
+			die(html::hidden(array(
+				"name" => $propn."_data",
+				"value" => serialize($prev_dat)
+			)));
+		}
 
 		foreach($prev_dat  as $idx => $dat_row)
 		{

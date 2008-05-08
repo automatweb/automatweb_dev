@@ -4193,49 +4193,37 @@ class class_base extends aw_template
 				}
 			};
 		};
-		// callback_post_save for multifile_upload vcl component
-		// @ todo: should work on all vcl components
+
+		foreach($properties as $key => $prop)
 		{
-			foreach($realprops as $key => $prop)
+			// load callback_post_save in multifile upload if not done allready
+			$inst = $prop["vcl_inst"];
+			if (!is_object($inst))
 			{
-		//	foreach ($properties as $prop)
-		//	{
-				// load callback_post_save in multifile upload if not done allready
-				//if ($prop["type"] == "multifile_upload" && $callback_post_save_done == false)
-				$inst = $prop["vcl_inst"];
-				if (!is_object($inst))
+				switch($prop["type"])
 				{
-					switch($prop["type"])
-					{
-						case "releditor":
-							$inst = get_instance("vcl/releditor");
-							break;
+					case "releditor":
+						$inst = get_instance("vcl/releditor");
+						break;
 
-						case "multifile_upload":
-							$inst = get_instance("vcl/multifile_upload");
-							break;
-
-					}
-				}
-				if (is_object($inst) && method_exists($inst, "callback_post_save"))
-				{
-					//$reginst = $this->vcl_register["multifile_upload"];
-					//$ot = get_instance($reginst);
-					//if (method_exists($ot,"callback_post_save"))
-					//{
-				        $inst->callback_post_save(array(
-				                "id" => $this->obj_inst->id(),
-						"request" => &$args,
-						"obj_inst" => &$this->obj_inst,
-						"new" => $new,
-						"prop" => $prop,
-				        ));
-					//}
-
-					$callback_post_save_done = true;
+					case "multifile_upload":
+						$inst = get_instance("vcl/multifile_upload");
+						break;
 				}
 			}
+
+			if (is_object($inst) && method_exists($inst, "callback_post_save"))
+			{
+			        $inst->callback_post_save(array(
+			                "id" => $this->obj_inst->id(),
+					"request" => &$args,
+					"obj_inst" => &$this->obj_inst,
+					"new" => $new,
+					"prop" => $prop,
+			        ));
+			}
 		}
+
 		if (method_exists($this->inst,"callback_post_save"))
 		{
 			// you really shouldn't attempt something fancy like trying
