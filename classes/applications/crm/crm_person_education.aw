@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.14 2008/04/21 22:41:27 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.15 2008/05/08 09:51:22 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -29,7 +29,7 @@
 @property main_speciality type=chooser field=main_speciality
 @caption P&otilde;hieriala
 
-@property in_progress type=chooser field=in_progress
+@property in_progress type=checkbox ch_value=1 field=in_progress
 @caption Omandamisel
 
 @property dnf type=checkbox ch_value=1 field=dnf
@@ -118,7 +118,6 @@ class crm_person_education extends class_base
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$prop["options"] = $ops;
-				//$prop["value"] = date("Y", $prop["value"]);
 				break;
 
 			case "main_speciality":
@@ -129,14 +128,24 @@ class crm_person_education extends class_base
 				break;
 
 			case "in_progress":
+				/*
 				$arr["prop"]["options"] = array(
 					1 => t("Jah"),
 					0 => t("Ei"),
 				);
+				*/
 				break;
 
 			case "degree":
 				$arr["prop"]["options"] = $this->degree_options;
+				break;
+
+			case "school_1":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"parent" => obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->shools_fld,
+				));
+				$prop["options"] = array("" => t("--vali--")) + $ol->names();
 				break;
 		};
 		return $retval;

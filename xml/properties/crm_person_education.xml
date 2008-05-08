@@ -55,7 +55,8 @@
             <name>in_progress</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
-            <type>chooser</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>in_progress</field>
             <caption>Omandamisel</caption>
       </property>
