@@ -209,9 +209,6 @@ class patent_add extends class_base
 
 	function make_menu_link($o, $ref = NULL)
 	{
-		//arr($_SESSION["patent"]["checked"]);
-		//r($_SESSION);
-//arr($_SESSION["patent"]["id"]);
 		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
 		{
 			$tr_inst = get_instance(CL_PATENT_PATENT);
@@ -220,18 +217,10 @@ class patent_add extends class_base
 			{
 				return aw_url_change_var()."#";
 			}
-
-/*
-			switch($res["status"])
-			$tm = obj($_SESSION["patent"]["id"]);
-*/
 		}
 		if($_SESSION["patent"]["jrk"] == 0)
 		{
 			$url = $_SERVER["SCRIPT_URI"]."?section=".$_GET["section"]."&data_type=0";
-			//aw_url_change_var("data_type", "0");
-		//arr($_GET["section"]);
-		//arr();
 		}
 		elseif(
 			($_SESSION["patent"]["checked"] > -1) && (
@@ -240,24 +229,9 @@ class patent_add extends class_base
 			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		}
 		else
-		$url = aw_url_change_var()."#";//aw_url_change_var("", "#");
-		// $url =$_SERVER["SCRIPT_URI"]."?section=".aw_ini_get("section")."&data_type=".$_SESSION["patent"]["jrk"];
-
-	//		$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
+		$url = aw_url_change_var()."#";
 		$_SESSION["patent"]["jrk"]++;
-	//	arr($_SESSION["patent"]["data_type"]);
-	//arr($_SESSION["patent"]["data_type"]); arr(($_SESSION["patent"]["jrk"]-2));
 		return $url;
-	//	else return "";
-		$this->mk_my_orb("parse_alias",
-			array(
-				"id" => $_SESSION["persons_webview"],
-				"section" => $o->id(),
-				"view" => 1,
-				"level" => $this->jrks[$o->id()],
-				"company_id" => $_SESSION["company"],
-		),
-		CL_PERSONS_WEBVIEW);
 	}
 }
 ?>
