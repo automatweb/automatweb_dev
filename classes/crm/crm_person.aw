@@ -535,6 +535,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property udef_ch3 type=chooser multiple=1 table=kliendibaas_isik
 @caption Kasutajadefineeritud CH3
 
+@property udef_chbox1 type=checkbox ch_value=1 table=kliendibaas_isik
+@caption Kasutajadefineeritud CHBOX1
+
+@property udef_chbox2 type=checkbox ch_value=1 table=kliendibaas_isik
+@caption Kasutajadefineeritud CHBOX2
+
+@property udef_chbox3 type=checkbox ch_value=1 table=kliendibaas_isik
+@caption Kasutajadefineeritud CHBOX3
+
 @property user1 type=textbox table=kliendibaas_isik
 @caption Kasutajadefineeritud tekstikast 1
 
@@ -4973,6 +4982,9 @@ class crm_person extends class_base
 			case "udef_ch1":
 			case "udef_ch2":
 			case "udef_ch3":
+			case "udef_chbox1":
+			case "udef_chbox2":
+			case "udef_chbox3":
 			case "picture2":
 			case "client_manager":
 			case "aw_is_customer":
@@ -7362,7 +7374,7 @@ class crm_person extends class_base
 			if(strlen($o->prop("udef_ch".$i)) > 0)
 			{
 				$this->vars(array(
-					"crm_person.udef_ch".$i => $o->prop("udef_ch".$i) ? t("Jah") : t("Ei"),
+					"crm_person.udef_ch".$i => $o->prop("udef_ch".$i),
 				));
 				$this->vars(array(
 					"CRM_PERSON.UDEF_CH".$i => $this->parse("CRM_PERSON.UDEF_CH".$i),
@@ -7370,6 +7382,21 @@ class crm_person extends class_base
 			}
 		}
 		// END SUB: CRM_PERSON.UDEF_CH{n}
+
+		// SUB: CRM_PERSON.UDEF_CHBOX{n}
+		for($i = 1; $i <= 3; $i++)
+		{
+			if(strlen($o->prop("udef_chbox".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.udef_chbox".$i => $o->prop("udef_chbox".$i) ? t("Jah") : t("Ei"),
+				));
+				$this->vars(array(
+					"CRM_PERSON.UDEF_CHBOX".$i => $this->parse("CRM_PERSON.UDEF_CHBOX".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.UDEF_CHBOX{n}
 
 		// SUB: CRM_PERSON.USER{n}
 		for($i = 1; $i <= 5; $i++)

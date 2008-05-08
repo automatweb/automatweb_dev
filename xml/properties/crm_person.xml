@@ -1387,6 +1387,33 @@
             <caption>Kasutajadefineeritud CH3</caption>
       </property>
       <property>
+            <name>udef_chbox1</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>udef_chbox1</field>
+            <caption>Kasutajadefineeritud CHBOX1</caption>
+      </property>
+      <property>
+            <name>udef_chbox2</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>udef_chbox2</field>
+            <caption>Kasutajadefineeritud CHBOX2</caption>
+      </property>
+      <property>
+            <name>udef_chbox3</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>udef_chbox3</field>
+            <caption>Kasutajadefineeritud CHBOX3</caption>
+      </property>
+      <property>
             <name>user1</name>
             <table>kliendibaas_isik</table>
             <group>data</group>
@@ -1803,7 +1830,6 @@
             <recommends>
                   <caption>Soovitajad</caption>
                   <parent>cv</parent>
-                  <submit>no</submit>
             </recommends>
             <addinfo_new>
                   <caption>Muud oskused</caption>
