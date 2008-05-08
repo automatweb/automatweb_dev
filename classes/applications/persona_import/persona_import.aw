@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.40 2008/05/07 11:39:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.41 2008/05/08 09:35:45 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -257,7 +257,7 @@ class persona_import extends class_base
 		$inp = $config_inst->get_simple_config("persona_import_in_progress");
 		if((time() - $inp) < 3600 * 10)
 		{
-			die("already in progress");
+//			die("already in progress");
 		}
 		$config_inst->set_simple_config("persona_import_in_progress", time());
 		/*
@@ -270,7 +270,7 @@ class persona_import extends class_base
 		$cache->full_flush();
 		exit;
 		*/
-		aw_disable_acl();
+//		aw_disable_acl();
 		$obj = new object($arr["id"]);
 		
 		$import_id = $obj->prop("xml_link");
@@ -1074,9 +1074,8 @@ class persona_import extends class_base
 						"phone" => $worker[$pkey],
 					));
 				};
-				if ($phones[$worker[$pkey]])
+				if ($this->can("view", $phones[$worker[$pkey]]))
 				{
-					
 					$po = new object($phones[$worker[$pkey]]);
 					$po->set_prop("type",$pval);
 					$po->save();
@@ -2193,6 +2192,13 @@ class persona_import extends class_base
 						// re-save image from $pilt_data 
 						$img_o = obj($t->prop("picture"));
 						$fn = $img_o->prop("file");
+						if (!is_writable($fn))
+						{
+							classload("image");
+							$fn = image::_mk_fn(gen_uniq_id()).".jpg";
+							$img_o->set_prop("file", $fn);
+							$img_o->save();
+						}
 						if(!empty($fn) && !empty($pilt_data))
 						{
 							$this->put_file(array(
