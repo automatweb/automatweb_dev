@@ -212,9 +212,9 @@ class trademark_manager extends class_base
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array (
-							"class_id" => array(CL_PATENT),
-							"CL_PATENT.RELTYPE_APPLICANT.name" => $applicant_name,
-							"CL_PATENT.RELTYPE_PROCURATOR.name" => $procurator_name,
+							"class_id" => array(CL_PATENT_PATENT),
+							"CL_PATENT_PATENT.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_PATENT_PATENT.RELTYPE_PROCURATOR.name" => $procurator_name,
 						)
 					)),
 					new object_list_filter(array(
@@ -228,9 +228,9 @@ class trademark_manager extends class_base
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array (
-							"class_id" => array(CL_TRADEMARK),
-							"CL_TRADEMARK.RELTYPE_APPLICANT.name" => $applicant_name,
-							"CL_TRADEMARK.RELTYPE_PROCURATOR.name" => $procurator_name,
+							"class_id" => array(CL_PATENT),
+							"CL_PATENT.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_PATENT.RELTYPE_PROCURATOR.name" => $procurator_name,
 						)
 					)),
 				)
@@ -274,8 +274,8 @@ class trademark_manager extends class_base
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array (
-							"class_id" => array(CL_PATENT),
-							"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+							"class_id" => array(CL_PATENT_PATENT),
+							"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
 						)
 					)),
 					new object_list_filter(array(
@@ -288,8 +288,8 @@ class trademark_manager extends class_base
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array (
-							"class_id" => array(CL_TRADEMARK),
-							"CL_TRADEMARK.RELTYPE_TRADEMARK_STATUS.verified" => $verified
+							"class_id" => array(CL_PATENT),
+							"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified
 						)
 					)),
 				)
@@ -323,15 +323,14 @@ class trademark_manager extends class_base
 		));
 
 
-		$trademark_inst = get_instance(CL_TRADEMARK);
-		$ip_inst = get_instance(CL_INTELLECTUAL_PROPERTY);
+		$trademark_inst = get_instance(CL_PATENT);
 		$person_inst = get_instance(CL_CRM_PERSON);
 		$types = $trademark_inst->types;
 
 		foreach($ol->arr() as $o)
 		{
-			$re = $ip_inst->is_signed($o->id());
-			$status = $ip_inst->get_status($o);
+			$re = $trademark_inst->is_signed($o->id());
+			$status = $trademark_inst->get_status($o);
 			if($arr["request"]["p_id"] == "not_verified" && ($status->prop("verified") || (!($re["status"] == 1))))
 			{
 				continue;
@@ -348,7 +347,7 @@ class trademark_manager extends class_base
 				));
 			}
 
-			if (CL_TRADEMARK === $o->class_id())
+			if (CL_PATENT === $o->class_id())
 			{
 				$type = $types[$o->prop("type")];
 				if($o->prop("type") == 0 && $o->prop("word_mark"))
@@ -378,7 +377,7 @@ class trademark_manager extends class_base
 //			}
 			if(is_object($applicant))
 			{
-				$applicant_name = $ip_inst->get_applicants_str($o);//$applicant->name();
+				$applicant_name = $trademark_inst->get_applicants_str($o);//$applicant->name();
 				$applicant_data = "";
 				if($applicant->class_id() == CL_CRM_PERSON)
 				{
@@ -424,7 +423,17 @@ class trademark_manager extends class_base
 				));
 			}
 
+			try
+			{
+				$class = aw_ini_get("classes." . $o->class_id() . ".name");
+			}
+			catch (Exception $e)
+			{
+				$class = "N/A";
+			}
+
 			$t->define_data(array(
+				"class" => $class,
 				"procurator" => $procurator,
 				"nr" => $nr,
 				"type" => $type,
@@ -453,6 +462,14 @@ class trademark_manager extends class_base
 */
 	function _init_objects_tbl(&$t)
 	{
+		$t->define_field(array(
+			"name" => "class",
+			"caption" => t("Taotluse t&uuml;&uuml;p"),
+			"align" => "center",
+			"sortable" => 1,
+			"filter" => "automatic"
+		));
+
 		$t->define_field(array(
 			"name" => "type",
 			"caption" => t("M&auml;rgi t&uuml;&uuml;p"),
@@ -522,9 +539,6 @@ class trademark_manager extends class_base
 	function _objects_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$add_trademark_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("trademark_add");
-		$add_patent_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("patent_add");
-		$add_utility_model_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("utility_model_add");
 
 		$tb->add_menu_button(array(
 			"name" => "add_item",
@@ -532,26 +546,38 @@ class trademark_manager extends class_base
 			"tooltip" => t("Lisa uus")
 		));
 
-		$tb->add_menu_item(array(
-			"parent" => "add_item",
-			"text" => t("Kaubam&auml;rgitaotlus"),
-			"link" => $add_trademark_url,
-			"target" => "_blank"
-		));
+		if (is_oid($arr["obj_inst"] ->prop("trademark_add")))
+		{
+			$add_trademark_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("trademark_add");
+			$tb->add_menu_item(array(
+				"parent" => "add_item",
+				"text" => t("Kaubam&auml;rgitaotlus"),
+				"link" => $add_trademark_url,
+				"target" => "_blank"
+			));
+		}
 
-		$tb->add_menu_item(array(
-			"parent" => "add_item",
-			"text" => t("Patenditaotlus"),
-			"link" => $add_patent_url,
-			"target" => "_blank"
-		));
+		if (is_oid($arr["obj_inst"] ->prop("patent_add")))
+		{
+			$add_patent_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("patent_add");
+			$tb->add_menu_item(array(
+				"parent" => "add_item",
+				"text" => t("Patenditaotlus"),
+				"link" => $add_patent_url,
+				"target" => "_blank"
+			));
+		}
 
-		$tb->add_menu_item(array(
-			"parent" => "add_item",
-			"text" => t("Kasuliku mudeli taotlus"),
-			"link" => $add_utility_model_url,
-			"target" => "_blank"
-		));
+		if (is_oid($arr["obj_inst"] ->prop("utility_model_add")))
+		{
+			$add_utility_model_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("utility_model_add");
+			$tb->add_menu_item(array(
+				"parent" => "add_item",
+				"text" => t("Kasuliku mudeli taotlus"),
+				"link" => $add_utility_model_url,
+				"target" => "_blank"
+			));
+		}
 
 		$tb->add_button(array(
 			'name' => 'save',
@@ -600,7 +626,7 @@ class trademark_manager extends class_base
 	**/
 	function verify($arr)
 	{
-		$ip_inst = get_instance(CL_INTELLECTUAL_PROPERTY);
+		$trademark_inst = get_instance(CL_PATENT);
 		$object = obj($arr["id"]);
 		if(is_oid($object->prop("verified_menu")))
 		{
@@ -609,7 +635,7 @@ class trademark_manager extends class_base
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
-			$status = $ip_inst->get_status($o);
+			$status = $trademark_inst->get_status($o);
 			$status->set_prop("verified",1);
 			$status->set_name(t("Taotlus nr: ".$status->prop("nr")));
 			$status->save();
@@ -663,18 +689,18 @@ class trademark_manager extends class_base
 		classload("core/date/date_calc");
 		// list all trademarks created yesterday
 		$ol = new object_list(array(
-			"class_id" => CL_TRADEMARK,
+			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"CL_TRADEMARK.RELTYPE_TRADEMARK_STATUS.verified" => 1,
-			"CL_TRADEMARK.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start()),
+			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => 1,
+			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start()),
 		));
 		$ol->sort_by_cb(array(&$this, "__application_sorter"));
 
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
 ';
-		$tm = get_instance(CL_TRADEMARK);
+		$tm = get_instance(CL_PATENT);
 
 		foreach($ol->arr() as $o)
 		{

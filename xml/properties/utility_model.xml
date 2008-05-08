@@ -323,7 +323,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Varasema taotluse alusel (seaduse &amp;sect; 10 l&amp;otilde;ige 3)</caption>
+            <caption>Varasema taotluse alusel (seaduse &amp;amp;#0167;10 l&amp;amp;otilde;ige 3)</caption>
       </property>
       <property>
             <name>prio_prevapplication_date</name>

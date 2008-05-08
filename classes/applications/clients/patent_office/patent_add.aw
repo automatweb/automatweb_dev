@@ -68,7 +68,7 @@ class patent_add extends class_base
 	{
 		enter_function("patent::parse_alias");
 
-		$tm_inst = get_instance(CL_PATENT);
+		$tm_inst = get_instance(CL_PATENT_PATENT);
 
 		return $tm_inst->parse_alias($arr);
 
@@ -214,7 +214,7 @@ class patent_add extends class_base
 //arr($_SESSION["patent"]["id"]);
 		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
 		{
-			$tr_inst = get_instance(CL_PATENT);
+			$tr_inst = get_instance(CL_PATENT_PATENT);
 			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
 			if($res["status"] == 1)
 			{

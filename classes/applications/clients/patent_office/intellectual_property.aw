@@ -975,7 +975,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			));
 		}
 
-		exit_function("realestate_add::parse_alias");
+		exit_function("patent::parse_alias");
 		return $this->parse();
 	}
 
@@ -2567,7 +2567,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 
 		/* PATENTS LIST */
 		$obj_list = new object_list(array(
-			"class_id" => CL_PATENT,
+			"class_id" => CL_PATENT_PATENT,
 			"createdby" => $uid,
 			"lang_id" => array(),
 		));
@@ -2586,7 +2586,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"personal_id" => $code
 			));
 			$other_list = new object_list(array(
- 				"class_id" => CL_PATENT,
+ 				"class_id" => CL_PATENT_PATENT,
  				"lang_id" => array(),
  				"authorized_codes" => "%".$code."%",
  			));
@@ -2595,14 +2595,14 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			foreach($persons_list->ids() as $id)
 			{
 				$other_list = new object_list(array(
-					"class_id" => CL_PATENT,
+					"class_id" => CL_PATENT_PATENT,
 					"applicant" => $id,
 					"lang_id" => array(),
 				));
 				$obj_list->add($other_list);
 
 				$other_list = new object_list(array(
-					"class_id" => CL_PATENT,
+					"class_id" => CL_PATENT_PATENT,
 					"lang_id" => array(),
 					"authorized_person" => $id,
 				));
@@ -2688,7 +2688,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign,
-				), CL_PATENT);
+				), CL_PATENT_PATENT);
 
 				$change = $del_url = $send_url= '';
 				if(!($status->prop("nr") || $status->prop("verified")))
@@ -2725,12 +2725,24 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				));
 				$pat_l .= $this->parse("PAT_LIST");
 			}
+
+			if (count($objects_array))
+			{
+				$this->vars(array(
+					"PAT_LIST" => $pat_l
+				));
+				$pat = $this->parse("PAT");
+			}
+			else
+			{
+				$pat = "";
+			}
 		}
 		/* END PATENTS LIST */
 
 		/* TM LIST */
 		$obj_list = new object_list(array(
-			"class_id" => CL_TRADEMARK,
+			"class_id" => CL_PATENT,
 			"createdby" => $uid,
 			"lang_id" => array(),
 		));
@@ -2740,7 +2752,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			"order" => "desc"
 		));
 
-		lc_site_load("trademark", $this);
+		lc_site_load("patent", $this);
 		if($code)
 		{
 			$persons_list = new object_list(array(
@@ -2749,7 +2761,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"personal_id" => $code
 			));
 			$other_list = new object_list(array(
- 				"class_id" => CL_TRADEMARK,
+ 				"class_id" => CL_PATENT,
  				"lang_id" => array(),
  				"authorized_codes" => "%".$code."%",
  			));
@@ -2758,14 +2770,14 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			foreach($persons_list->ids() as $id)
 			{
 				$other_list = new object_list(array(
-					"class_id" => CL_TRADEMARK,
+					"class_id" => CL_PATENT,
 					"applicant" => $id,
 					"lang_id" => array(),
 				));
 				$obj_list->add($other_list);
 
 				$other_list = new object_list(array(
-					"class_id" => CL_TRADEMARK,
+					"class_id" => CL_PATENT,
 					"lang_id" => array(),
 					"authorized_person" => $id,
 				));
@@ -2793,7 +2805,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 
 		if ($this->is_template("TM_LIST"))
 		{
-			$pat_l = "";
+			$tm_l = "";
 			foreach($objects_array as $key => $patent)
 			{
 				$status = $this->get_status($patent);
@@ -2851,7 +2863,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign,
-				), CL_TRADEMARK);
+				), CL_PATENT);
 
 				$change = $del_url = $send_url= '';
 				if(!($status->prop("nr") || $status->prop("verified")))
@@ -2887,7 +2899,19 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 					"delete"	=> $del_url,
 					"send"		=> $send_url,
 				));
-				$pat_l .= $this->parse("TM_LIST");
+				$tm_l .= $this->parse("TM_LIST");
+			}
+
+			if (count($objects_array))
+			{
+				$this->vars(array(
+					"TM_LIST" => $tm_l
+				));
+				$tm = $this->parse("TM");
+			}
+			else
+			{
+				$tm = "";
 			}
 		}
 		/* END TM LIST */
@@ -3052,14 +3076,26 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				));
 				$um_l .= $this->parse("UM_LIST");
 			}
+
+			if (count($objects_array))
+			{
+				$this->vars(array(
+					"UM_LIST" => $um_l
+				));
+				$um = $this->parse("UM");
+			}
+			else
+			{
+				$um = "";
+			}
 		}
 		/* END UM LIST */
 
 
 		$this->vars(array(
-			"PAT_LIST" => $pat_l,
-			"TM_LIST" => $tm_l,
-			"UM_LIST" => $um_l
+			"PAT" => $pat,
+			"TM" => $tm,
+			"UM" => $um
 		));
 
 		return $this->parse();

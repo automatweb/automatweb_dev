@@ -69,7 +69,7 @@ class trademark_add extends class_base
 	{
 		enter_function("trademark::parse_alias");
 
-		$tm_inst = get_instance(CL_TRADEMARK);
+		$tm_inst = get_instance(CL_PATENT);
 
 		return $tm_inst->parse_alias($arr);
 
@@ -100,7 +100,7 @@ class trademark_add extends class_base
 
 		$tpl = $tm_inst->info_levels[$arr["data_type"]].".tpl";
 		$tm_inst->read_template($tpl);
-		lc_site_load("trademark", &$this);
+		lc_site_load("patent", &$this);
 		$tm_inst->vars($tm_inst->web_data($arr));
 
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
@@ -119,7 +119,7 @@ class trademark_add extends class_base
 			));
 		}
 
-		exit_function("trademark::parse_alias");
+		exit_function("patent::parse_alias");
 		return $this->parse();
 	}
 
@@ -201,7 +201,7 @@ class trademark_add extends class_base
 //arr($_SESSION["patent"]["id"]);
 		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
 		{
-			$tr_inst = get_instance(CL_TRADEMARK);
+			$tr_inst = get_instance(CL_PATENT);
 			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
 			if($res["status"] == 1)
 			{

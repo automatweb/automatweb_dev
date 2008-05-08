@@ -193,68 +193,123 @@
             <caption>Maksekorraldus</caption>
       </property>
       <property>
-            <name>author_first_name</name>
+            <name>type</name>
             <table>objects</table>
-            <group>author</group>
+            <group>trademark</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>undefended_parts</name>
+            <table>objects</table>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Eesnimi</caption>
+            <caption>Mittekaitstavad osad</caption>
       </property>
       <property>
-            <name>author_last_name</name>
+            <name>word_mark</name>
             <table>objects</table>
-            <group>author</group>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Perekonnanimi</caption>
+            <caption>S&amp;amp;otilde;nam&amp;amp;auml;rk</caption>
       </property>
       <property>
-            <name>author_address</name>
+            <name>colors</name>
             <table>objects</table>
-            <group>author</group>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Aadress</caption>
+            <type>textarea</type>
+            <caption>V&amp;amp;auml;rvide loetelu (juhul, kui on v&amp;amp;auml;rviline)</caption>
       </property>
       <property>
-            <name>author_country_code</name>
+            <name>trademark_character</name>
             <table>objects</table>
-            <group>author</group>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Riigi kood</caption>
+            <type>textarea</type>
+            <caption>Kaubam&amp;amp;auml;rgi iseloomustus</caption>
       </property>
       <property>
-            <name>author_disallow_disclose</name>
+            <name>element_translation</name>
             <table>objects</table>
-            <group>author</group>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Mitte avalikustada minu nime autorina</caption>
+            <type>textarea</type>
+            <caption>V&amp;amp;otilde;&amp;amp;otilde;rkeelsete elementide t&amp;amp;otilde;lge</caption>
       </property>
       <property>
-            <name>invention_name_et</name>
+            <name>reproduction</name>
             <table>objects</table>
-            <group>invention</group>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Leiutise nimetus (eesti keeles)</caption>
+            <type>fileupload</type>
+            <reltype>RELTYPE_REPRODUCTION</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Lisa reproduktsioon</caption>
       </property>
       <property>
-            <name>invention_name_en</name>
+            <name>g_statues</name>
             <table>objects</table>
-            <group>invention</group>
+            <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Leiutise nimetus (eesti inglise)</caption>
+            <type>fileupload</type>
+            <reltype>RELTYPE_G_STATUES</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Garantiim&amp;amp;auml;rgi p&amp;amp;otilde;hikiri</caption>
+      </property>
+      <property>
+            <name>c_statues</name>
+            <table>objects</table>
+            <group>trademark</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_C_STATUES</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Kollektiivm&amp;amp;auml;rgi p&amp;amp;otilde;hikiri</caption>
+      </property>
+      <property>
+            <name>trademark_type</name>
+            <table>objects</table>
+            <group>trademark</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>products_and_services_tbl</name>
+            <table>objects</table>
+            <group>products_and_services</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Kaupade ja teenuste loetelu</caption>
       </property>
       <property>
             <name>childtitle110</name>
@@ -265,10 +320,19 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Pariisi konventsiooni vm. kokkuleppe taotluse alusel</caption>
+            <caption>Konventsiooniprioriteet</caption>
       </property>
       <property>
-            <name>prio_convention_date</name>
+            <name>convention_nr</name>
+            <table>objects</table>
+            <group>priority</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Taotluse number</caption>
+      </property>
+      <property>
+            <name>convention_date</name>
             <table>objects</table>
             <group>priority</group>
             <field>meta</field>
@@ -277,22 +341,13 @@
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
-            <name>prio_convention_country</name>
+            <name>convention_country</name>
             <table>objects</table>
             <group>priority</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <caption>Riigi kood</caption>
-      </property>
-      <property>
-            <name>prio_convention_nr</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Taotluse number</caption>
       </property>
       <property>
             <name>childtitle111</name>
@@ -303,10 +358,19 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Varasema patenditaotluse alusel sellest eraldatud patenditaotluse puhul</caption>
+            <caption>N&amp;amp;auml;ituseprioriteet</caption>
       </property>
       <property>
-            <name>prio_prevapplicationsep_date</name>
+            <name>exhibition_name</name>
+            <table>objects</table>
+            <group>priority</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>N&amp;amp;auml;ituse nimi</caption>
+      </property>
+      <property>
+            <name>exhibition_date</name>
             <table>objects</table>
             <group>priority</group>
             <field>meta</field>
@@ -315,211 +379,13 @@
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
-            <name>prio_prevapplicationsep_nr</name>
+            <name>exhibition_country</name>
             <table>objects</table>
             <group>priority</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Taotluse number</caption>
-      </property>
-      <property>
-            <name>childtitle112</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <caption>Varasema patenditaotluse paranduste ja t&amp;amp;auml;ienduste alusel</caption>
-      </property>
-      <property>
-            <name>prio_prevapplicationadd_date</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>Kuup&amp;amp;auml;ev</caption>
-      </property>
-      <property>
-            <name>prio_prevapplicationadd_nr</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Taotluse number</caption>
-      </property>
-      <property>
-            <name>childtitle113</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <caption>Varasema taotluse alusel</caption>
-      </property>
-      <property>
-            <name>prio_prevapplication_date</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>Kuup&amp;amp;auml;ev</caption>
-      </property>
-      <property>
-            <name>prio_prevapplication_nr</name>
-            <table>objects</table>
-            <group>priority</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Taotluse number</caption>
-      </property>
-      <property>
-            <name>other_first_application_data</name>
-            <table>objects</table>
-            <group>other_data</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Esmase taotluse andmed (seaduse &amp;sect; 21 l&amp;otilde;ige 2)</caption>
-      </property>
-      <property>
-            <name>other_bio</name>
-            <table>objects</table>
-            <group>other_data</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed:</caption>
-      </property>
-      <property>
-            <name>other_datapub</name>
-            <table>objects</table>
-            <group>other_data</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Patendiseaduse &amp;sect; 8 l&amp;otilde;ikes 3 nimetatud teabe avalikustamise kuup&amp;auml;ev (23) ja andmed:</caption>
-      </property>
-      <property>
-            <name>attachment_invention_description</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Leiutiskirjeldus</caption>
-      </property>
-      <property>
-            <name>attachment_seq</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>J&amp;amp;auml;rjestuse loetelu</caption>
-      </property>
-      <property>
-            <name>attachment_demand</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Patendin&amp;amp;otilde;udlus</caption>
-      </property>
-      <property>
-            <name>attachment_demand_points</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>3</size>
-            <caption>Patendin&amp;amp;otilde;udlus, n&amp;amp;otilde;udluspunkti</caption>
-      </property>
-      <property>
-            <name>attachment_summary_et</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Leiutise olemuse l&amp;amp;uuml;hikokkuv&amp;amp;otilde;te eesti keeles</caption>
-      </property>
-      <property>
-            <name>attachment_summary_en</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Leiutise olemuse l&amp;amp;uuml;hikokkuv&amp;amp;otilde;te inglise keeles</caption>
-      </property>
-      <property>
-            <name>attachment_dwgs</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Joonised ja muu illustreeriv materjal</caption>
-      </property>
-      <property>
-            <name>attachment_fee</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Riigil&amp;amp;otilde;ivu tasumist t&amp;amp;otilde;endav dokument</caption>
-      </property>
-      <property>
-            <name>attachment_warrant</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Volikiri</caption>
-      </property>
-      <property>
-            <name>attachment_prio</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Prioriteedin&amp;amp;otilde;uet t&amp;amp;otilde;endavad dokumendid</caption>
-      </property>
-      <property>
-            <name>attachment_bio</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&amp;amp;otilde;endav dokument</caption>
+            <caption>Riigi kood</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PATENT</syslog_type>
@@ -536,18 +402,12 @@
             <fee>
                   <caption>Riigil&amp;amp;otilde;iv</caption>
             </fee>
-            <author>
-                  <caption>Autor</caption>
-            </author>
-            <invention>
-                  <caption>Leiutise nimetus</caption>
-            </invention>
-            <other_data>
-                  <caption>Muud andmed</caption>
-            </other_data>
-            <attachments>
-                  <caption>Lisad</caption>
-            </attachments>
+            <trademark>
+                  <caption>Kaubam&amp;amp;auml;rk</caption>
+            </trademark>
+            <products_and_services>
+                  <caption>Kaupade ja teenuste loetelu</caption>
+            </products_and_services>
       </groupinfo>
       <tableinfo>
             <aw_trademark>
