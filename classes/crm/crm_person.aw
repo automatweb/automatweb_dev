@@ -389,7 +389,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 ------------------------------------------------------------------
 
-@groupinfo recommends caption="Soovitajad" parent=cv submit=no
+@groupinfo recommends caption="Soovitajad" parent=cv
 @default group=recommends
 
 	#@property recommends_tlb type=toolbar store=no no_caption=1
@@ -958,8 +958,8 @@ class crm_person extends class_base
 			4 => t("Kutsekeskharidus"),
 			5 => t("Kutsek&otilde;rgharidus"),
 			6 => t("Rakendusk&otilde;rgharidus"),
-			7 => t("K&otilde;rgharidus"),
-			8 => t("Diplom"),
+//			7 => t("K&otilde;rgharidus"),
+			8 => t("K&otilde;rghariduse diplom"),
 			9 => t("Bakalaureus"),
 			10 => t("Magister"),
 			11 => t("Doktor"),
