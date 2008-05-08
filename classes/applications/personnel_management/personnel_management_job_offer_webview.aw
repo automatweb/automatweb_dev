@@ -139,7 +139,7 @@ class personnel_management_job_offer_webview extends class_base
 		$ops = array(
 			"" => t("--vali--"),
 			"name" => t("Grupi nimi"),
-			"jrk" => t("Grupi jrk"),
+			"ord" => t("Grupi jrk"),
 		);
 		$mi = 0;
 		foreach($arr["obj_inst"]->meta("grp_ord_tbl") as $i => $d)
@@ -196,7 +196,7 @@ class personnel_management_job_offer_webview extends class_base
 		$ops = array(
 			"" => t("--vali--"),
 			"name" => t("T&ouml;&ouml;pakkumise nimi"),
-			"profession.jrk" => t("Ameti jrk"),
+			"profession.ord" => t("Ameti jrk"),
 			"profession.name" => t("Ameti nimi"),
 			"end" => t("T&auml;htaeg"),
 		);
@@ -681,11 +681,33 @@ class personnel_management_job_offer_webview extends class_base
 				}
 				for($j = 0; $j < count($ord_info); $j++)
 				{
+					$ord_decided = false;
+					if($ord_info[$j]["property"] == "ord")
+					{
+						$ord_decided = $o->ord() != $o2->ord();
+						if(($o->ord() > $o2->ord() && $ord_info[$j]["order"] == "ASC") || ($o->ord() < $o2->ord() && $ord_info[$j]["order"] == "DESC"))
+						{
+							$i++;
+						}
+					}
+					else
+					if(strlen($ord_info[$j]["property"]) > 4 && substr($ord_info[$j]["property"], strlen($ord_info[$j]["property"]) - 4, 4) == ".ord")
+					{
+						$o_ = obj($o->prop(substr($ord_info[$j]["property"], 0, strlen($ord_info[$j]["property"]) - 4)));
+						$o2_ = obj($o2->prop(substr($ord_info[$j]["property"], 0, strlen($ord_info[$j]["property"]) - 4)));
+
+						$ord_decided = $o_->ord() != $o2_->ord();
+						if(($o_->ord() > $o2_->ord() && $ord_info[$j]["order"] == "ASC") || ($o_->ord() < $o2_->ord() && $ord_info[$j]["order"] == "DESC"))
+						{
+							$i++;
+						}
+					}
+					else
 					if((strcasecmp($o->prop($ord_info[$j]["property"]), $o2->prop($ord_info[$j]["property"])) > 0 && $ord_info[$j]["order"] == "ASC") || (strcasecmp($o->prop($ord_info[$j]["property"]), $o2->prop($ord_info[$j]["property"])) < 0 && $ord_info[$j]["order"] == "DESC"))
 					{
 						$i++;
 					}
-					if(strcasecmp($o->prop($ord_info[$j]["property"]), $o2->prop($ord_info[$j]["property"])) != 0)
+					if(strcasecmp($o->prop($ord_info[$j]["property"]), $o2->prop($ord_info[$j]["property"])) != 0 || $ord_decided)
 					{
 						break;
 					}
