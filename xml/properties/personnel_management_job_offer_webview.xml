@@ -93,6 +93,16 @@
             <caption>Grupeerimine</caption>
       </property>
       <property>
+            <name>grp_ord_tbl</name>
+            <table>objects</table>
+            <group>display</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Gruppide j&amp;amp;auml;rjestamisprintsiibid</caption>
+      </property>
+      <property>
             <name>grp_rule_loc_area</name>
             <table>objects</table>
             <group>display</group>

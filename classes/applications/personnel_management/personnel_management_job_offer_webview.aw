@@ -37,6 +37,9 @@
 	@property grp_rule type=select
 	@caption Grupeerimine
 
+	@property grp_ord_tbl type=table
+	@caption Gruppide j&auml;rjestamisprintsiibid
+
 	@property grp_rule_loc_area type=checkbox
 	@caption Grupeeri piirkonna j&auml;rgi
 
@@ -107,6 +110,68 @@ class personnel_management_job_offer_webview extends class_base
 		}
 
 		return $retval;
+	}
+
+	function _get_grp_ord_tbl($arr)
+	{
+		if(!$arr["obj_inst"]->grp_rule)
+		{
+			return PROP_INGORE;
+		}
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			"name" => "priority",
+			"caption" => t("Prioriteet"),
+			"align" => "right"
+		));
+		$t->define_field(array(
+			"name" => "property",
+			"caption" => t("Omadus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("J&auml;rjestus"),
+			"align" => "center"
+		));
+		$ops = array(
+			"" => t("--vali--"),
+			"name" => t("Grupi nimi"),
+			"jrk" => t("Grupi jrk"),
+		);
+		$mi = 0;
+		foreach($arr["obj_inst"]->meta("grp_ord_tbl") as $i => $d)
+		{
+			$t->define_data(array(
+				"priority" => $i,
+				"property" => html::select(array(
+					"name" => "grp_ord_tbl[".$i."][property]",
+					"options" => $ops,
+					"selected" => $d["property"],
+				)),
+				"order" => html::select(array(
+					"name" => "grp_ord_tbl[".$i."][order]",
+					"options" => array("ASC" => t("Kasvav"), "DESC" => t("Kahanev")),
+					"selected" => $d["order"],
+				)),
+			));
+			$mi = $i > $mi ? $i : $mi;
+		}
+		$mi++;
+		$t->define_data(array(
+			"priority" => $mi,
+			"property" => html::select(array(
+				"name" => "grp_ord_tbl[".$mi."][property]",
+				"options" => $ops,
+			)),
+			"order" => html::select(array(
+				"name" => "grp_ord_tbl[".$mi."][order]",
+				"options" => array("" => t("--vali--"), "ASC" => t("Kasvav"), "DESC" => t("Kahanev")),
+			)),
+		));
+		$t->sort_by(array("field" => "priority"));
 	}
 
 	function _get_ord_tbl($arr)
@@ -209,6 +274,17 @@ class personnel_management_job_offer_webview extends class_base
 				}
 				$arr["obj_inst"]->set_meta("ord_tbl", $arr["request"]["ord_tbl"]);
 				break;
+
+			case "grp_ord_tbl":
+				foreach($arr["request"]["grp_ord_tbl"] as $k => $v)
+				{
+					if(!$v["property"] || !$v["order"])
+					{
+						unset($arr["request"]["grp_ord_tbl"][$k]);
+					}
+				}
+				$arr["obj_inst"]->set_meta("grp_ord_tbl", $arr["request"]["grp_ord_tbl"]);
+				break;
 		}
 
 		return $retval;
@@ -236,6 +312,7 @@ class personnel_management_job_offer_webview extends class_base
 			"site_id" => array(),
 			"lang_id" => array(),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time() - (24*3600 - 1)),
+			"start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
 		);
 		if(is_array($o->org) && count($o->org) > 0)
 		{
@@ -297,8 +374,12 @@ class personnel_management_job_offer_webview extends class_base
 					$ol = new object_list($ol_prms);
 					$denied = $this->denied_jos(&$o, $opr, &$jos);
 					$GROUP_LVL1 = "";
-					foreach($ol->arr() as $loc)
+					$ol_arr = $ol->arr();
+					$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
+					$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
+					for($i = 0; $i < count($ol_arr_ordered); $i++)
 					{
+						$loc = $ol_arr_ordered[$i];
 						$loc_jos = $loc->get_job_offers()->ids();
 						$JOB_OFFER = $this->job_offer(&$jos, &$props, &$loc_jos, &$denied);
 						if(empty($JOB_OFFER))
@@ -341,8 +422,12 @@ class personnel_management_job_offer_webview extends class_base
 				}
 				$ol = new object_list($ol_prms);
 				$GROUP_LVL1 = "";
-				foreach($ol->arr() as $comp)
+				$ol_arr = $ol->arr();
+				$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
+				$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
+				for($i = 0; $i < count($ol_arr_ordered); $i++)
 				{
+					$comp = $ol_arr_ordered[$i];
 					$org_jos = $comp->get_job_offers()->ids();
 					$JOB_OFFER = $this->job_offer(&$jos, &$props, &$org_jos);
 					if(empty($JOB_OFFER))
@@ -378,8 +463,12 @@ class personnel_management_job_offer_webview extends class_base
 				}
 				$ol = new object_list($ol_prms);
 				$GROUP_LVL1 = "";
-				foreach($ol->arr() as $sec)
+				$ol_arr = $ol->arr();
+				$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
+				$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
+				for($i = 0; $i < count($ol_arr_ordered); $i++)
 				{
+					$sec = $ol_arr_ordered[$i];
 					$sec_jos = $sec->get_job_offers()->ids();
 					$JOB_OFFER = $this->job_offer(&$jos, &$props, &$sec_jos);
 					if(empty($JOB_OFFER))
@@ -415,8 +504,12 @@ class personnel_management_job_offer_webview extends class_base
 				}
 				$ol = new object_list($ol_prms);
 				$GROUP_LVL1 = "";
-				foreach($ol->arr() as $comp)
+				$ol_arr = $ol->arr();
+				$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
+				$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
+				for($i = 0; $i < count($ol_arr_ordered); $i++)
 				{
+					$comp = $ol_arr_ordered[$i];
 					$secs = get_instance(CL_CRM_COMPANY)->get_all_org_sections($org);
 					$GROUP_LVL2 = "";
 					foreach($secs as $sec_id)
@@ -566,6 +659,12 @@ class personnel_management_job_offer_webview extends class_base
 			$r[$i] = $a;
 		}
 		return $r;
+	}
+
+	private function order_groups($objs, $ord_info)
+	{
+		// We can use the same function as we do for job offers.
+		return $this->order_job_offers(&$objs, &$ord_info);
 	}
 
 	private function order_job_offers($objs, $ord_info)
