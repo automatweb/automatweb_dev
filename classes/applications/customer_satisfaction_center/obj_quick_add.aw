@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.13 2008/03/13 13:26:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.14 2008/05/09 09:54:59 robert Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -383,10 +383,12 @@ class obj_quick_add extends class_base
 		if($urlvars["class"] = "admin_if" && $urlvars["parent"])
 		{
 			$ol = new object_list(array(
-				"parent" => $urlvars["parent"]
+				"parent" => $urlvars["parent"],
+				"site_id" => array(),
+				"lang_id" => array(),
 			));
 			$ol->sort_by_cb(array($this, "_qa_ol_sort"));
-			if(count($ol->list))
+			if($ol->count())
 			{
 				$pm->add_sub_menu(array(
 					"name" => "cur",
@@ -394,15 +396,19 @@ class obj_quick_add extends class_base
 				));
 			}
 			$set_cls = array();
-			foreach($ol->list as $oid)
+			$cls = aw_ini_get("classes");
+			foreach($ol->arr() as $o)
 			{
-				$o = obj($oid);
 				$class_id = $o->class_id();
+				if($class_id == 179)
+				{
+					continue;
+				}
 				if(!$set_cls[$class_id])
 				{
 					$set_cls[$class_id] = 1;
-					$cl_name = aw_ini_get('classes.'.$class_id.'.file');;
-					$cl_title = aw_ini_get('classes.'.$class_id.'.name');
+					$cl_name = $cls[$class_id]['file'];
+					$cl_title = $cls[$class_id]['name'];
 					$pm->add_item(array(
 						"text" => $cl_title,
 						"link" => html::get_new_url(
@@ -424,8 +430,9 @@ class obj_quick_add extends class_base
 
 	function _qa_ol_sort($a, $b)
 	{
-		$a = aw_ini_get('classes.'.$a->class_id().'.name');
-		$b = aw_ini_get('classes.'.$b->class_id().'.name');
+		$cls = aw_ini_get("classes");
+		$a = $cls[$a->class_id()]['name'];
+		$b = $cls[$b->class_id()]['name'];
 		if ($a == $b) {
 			return 0;
 		}
