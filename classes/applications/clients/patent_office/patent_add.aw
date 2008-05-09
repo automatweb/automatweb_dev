@@ -94,12 +94,12 @@ class patent_add extends class_base
 
 		if($arr["data_type"] == 6)
 		{
-			return $tm_inst->my_patent_list();//$this->mk_my_orb("my_patent_list", array());
+			return $tm_inst->my_patent_list();
 		}
 
 		$tpl = $tm_inst->info_levels[$arr["data_type"]].".tpl";
 		$tm_inst->read_template($tpl);
-		lc_site_load("trademark", &$this);
+		lc_site_load("patent_patent", &$this);
 		$tm_inst->vars($tm_inst->web_data($arr));
 
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(

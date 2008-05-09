@@ -10,6 +10,14 @@
             <caption>Kinnitatud</caption>
       </property>
       <property>
+            <name>verified_date</name>
+            <group>general</group>
+            <type>text</type>
+            <table>aw_trademark_status</table>
+            <field>aw_verified_date</field>
+            <caption>Kinnitamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>exported</name>
             <group>general</group>
             <type>checkbox</type>

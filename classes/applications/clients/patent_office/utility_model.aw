@@ -99,6 +99,9 @@ class utility_model extends intellectual_property
 			"tpldir" => "applications/patent",
 			"clid" => CL_UTILITY_MODEL
 		));
+		$this->info_levels[11] = "author";
+		$this->info_levels[12] = "invention_um";
+		$this->info_levels[14] = "attachments_um";
 	}
 
 	protected function save_priority($patent)
@@ -158,6 +161,26 @@ class utility_model extends intellectual_property
 
 		$sum = $is_corporate ? 1600 : 400;
 		return $sum;
+	}
+
+	/**
+		@attrib name=remove_author is_public="1"  all_args=1
+		@param key optional type=int
+	**/
+	function remove_author($arr)
+	{
+		unset($_SESSION["patent"]["authors"][$arr["key"]]);
+		die('<script type="text/javascript">
+			window.opener.location.reload();
+			window.close();
+			</script>'
+		);
+	}
+
+	function get_vars($arr)
+	{
+		$data = parent::get_vars($arr);
+		return $data;
 	}
 }
 

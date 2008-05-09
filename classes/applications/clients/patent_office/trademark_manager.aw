@@ -125,9 +125,8 @@ class trademark_manager extends class_base
 					"url" =>  $this->mk_my_orb("nightly_export"),
 					"caption" => t("EKSPORDI!")
 				));
+		}
 
-			//-- get_property --//
-		};
 		return $retval;
 	}
 
@@ -140,7 +139,6 @@ class trademark_manager extends class_base
 			case "trademark_find_applicant_name":
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 			break;
-			//-- set_property --//
 		}
 		return $retval;
 	}
@@ -150,9 +148,6 @@ class trademark_manager extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 /*
 - vasakus puus: Kinnitamata taotlused, Kinnitatud taotlused
 
@@ -162,7 +157,6 @@ class trademark_manager extends class_base
 	function _get_trademark_tr($arr)
 	{
 		classload("core/icons");
-		//$arr["prop"]["vcl_inst"] = get_instance("vcl/treeview");
 
 		$arr["prop"]["vcl_inst"]->start_tree (array (
 			"type" => TREE_DHTML,
@@ -189,8 +183,79 @@ class trademark_manager extends class_base
 				"p_id" => "verified",
 			)),
 		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 11,
+			"name" => t('Kaubam&auml;rk'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "verified",
+				"p_cl" => "tm"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 12,
+			"name" => t('Patent'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "verified",
+				"p_cl" => "pat"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 13,
+			"name" => t('Kasulik mudel'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "verified",
+				"p_cl" => "um"
+			)),
+		));
+
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"id" => 2,
+			"name" => t('Arhiiv'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "archive",
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(2, array(
+			"id" => 21,
+			"name" => t('Kaubam&auml;rk'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "archive",
+				"p_cl" => "tm"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(2, array(
+			"id" => 22,
+			"name" => t('Patent'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "archive",
+				"p_cl" => "pat"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(2, array(
+			"id" => 23,
+			"name" => t('Kasulik mudel'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "archive",
+				"p_cl" => "um"
+			)),
+		));
+
+		$arr["prop"]["vcl_inst"]->add_item(0, array(
+			"id" => 3,
 			"name" => t('Kinnitamata'),
 			"url" => $this->mk_my_orb("change",array(
 				"id" => $arr["obj_inst"]->id(),
@@ -267,36 +332,85 @@ class trademark_manager extends class_base
 	function _objects_tbl($arr)
 	{
 		$verified = ($arr["request"]["p_id"] === "verified") ? 1 : null;
-		$filter = array(
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array (
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_PATENT_PATENT),
-							"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
-						)
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_UTILITY_MODEL),
-							"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified" => $verified
-						)
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_PATENT),
-							"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified
-						)
-					)),
-				)
-			)),
-			"lang_id" => array(),
-			"site_id" => array()
-		);
+		$cl = $arr["request"]["p_cl"];
+		$three_months_ago = time() - 3*30*86400;
+
+		if ($arr["request"]["p_id"] === "archive")
+		{
+			$age = new obj_predicate_compare(OBJ_COMP_LESS, $three_months_ago);
+			$verified = 1;
+		}
+		elseif ($verified)
+		{
+			$age = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $three_months_ago);
+		}
+
+		if ("tm" === $cl)
+		{
+			$filter = array(
+				"class_id" => array(CL_PATENT),
+				"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+				"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified_date" => $age,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+		}
+		elseif ("pat" === $cl)
+		{
+			$filter = array(
+				"class_id" => array(CL_PATENT_PATENT),
+				"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+				"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified_date" => $age,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+		}
+		elseif ("um" === $cl)
+		{
+			$filter = array(
+				"class_id" => array(CL_UTILITY_MODEL),
+				"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+				"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified_date" => $age,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+		}
+		else
+		{
+			$filter = array(
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array (
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array (
+								"class_id" => array(CL_PATENT_PATENT),
+								"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+								"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified_date" => $age
+							)
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array (
+								"class_id" => array(CL_UTILITY_MODEL),
+								"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+								"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified_date" => $age
+							)
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array (
+								"class_id" => array(CL_PATENT),
+								"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+								"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified_date" => $age
+							)
+						)),
+					)
+				)),
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+		}
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_objects_tbl($t);

@@ -100,7 +100,7 @@ class utility_model_add extends class_base
 
 		$tpl = $tm_inst->info_levels[$arr["data_type"]].".tpl";
 		$tm_inst->read_template($tpl);
-		lc_site_load("trademark", &$this);
+		lc_site_load("utility_model", &$this);
 		$tm_inst->vars($tm_inst->web_data($arr));
 
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(

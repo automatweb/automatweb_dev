@@ -68,6 +68,13 @@
 		@property exhibition_country type=textbox
 		@caption Riigi kood
 
+// RELTYPES
+@reltype C_STATUES value=12 clid=CL_FILE
+@caption Kollektiivp&otilde;hikiri
+
+@reltype G_STATUES value=13 clid=CL_FILE
+@caption Garantiip&otilde;hikiri
+
 
 
 */
@@ -81,6 +88,8 @@ class patent extends intellectual_property
 			"tpldir" => "applications/patent",
 			"clid" => CL_PATENT
 		));
+		$this->info_levels[1] = "trademark";
+		$this->info_levels[2] = "products_and_services";
 		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
 	}
@@ -138,6 +147,201 @@ class patent extends intellectual_property
 			}
 		}
 		return $t->draw();
+	}
+
+	function get_results_table()
+	{//arr($_SESSION["patent"]["delete"]);arr($_SESSION['patent']['products']);
+		if($_SESSION["patent"]["delete"])
+		{
+			//$js.= 'alert("'.$_SESSION['patent']['errors'].'");';
+			unset($_SESSION['patent']['products'][$_SESSION["patent"]["delete"]]);
+			$_SESSION["patent"]["delete"] = null;
+		}
+
+		if(!is_array($_SESSION["patent"]["prod_selection"]) && !is_array($_SESSION["patent"]["products"]))
+		{
+			return;
+		}
+
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+
+		$t->define_field(array(
+			"name" => "class",
+			"caption" => t("Klass"),
+		));
+//		$t->define_field(array(
+//			"name" => "class_name",
+//			"caption" => t("Klassi nimi"),
+//		));
+		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Kaup/teenus"),
+		));
+		$t->define_field(array(
+			"name" => "delete",
+			"caption" => "",
+		));
+
+
+		$classes = array();
+		if(is_array($_SESSION["patent"]["prod_selection"]))
+		{
+			foreach($_SESSION["patent"]["prod_selection"] as $prod)
+			{
+				if(!$this->can("view" , $prod))
+				{
+					continue;
+				}
+
+				$product = obj($prod);
+				$parent = obj($product->parent());
+				$classes[$parent->comment()][$product->id()] = $product->prop("userta1");
+
+//				$t->define_data(array(
+//					"prod" => html::textarea(array("name" => "products[".$prod."]" , "value" => $product->name() . "(" .$product->prop("code").  ")", )),
+//					"class" => $parent->comment(),
+//					"class_name" => $parent->name(),
+	//				"oid"	=> $prod->id(),
+//				));
+			}
+			$_SESSION["patent"]["prod_selection"] = null;
+		}
+
+
+		if(is_array($_SESSION["patent"]["products"]))
+		{
+			foreach($_SESSION["patent"]["products"] as $key=> $val)
+			{
+				$classes[$key][] = $val;
+//				$t->define_data(array(
+//					"prod" => html::textarea(array("name" => "products[".$key."]" , "value" => $val, )),
+//					"class" => $parent->comment(),
+//					"class_name" => $parent->name(),
+	//				"oid"	=> $prod->id(),
+//				));
+			}
+//			$_SESSION["patent"]["prod_selection"] = null;
+		}
+		ksort($classes);
+		foreach($classes as $class => $prods)
+		{
+			$t->define_data(array(
+				"prod" => html::textarea(array("name" => "products[".$class."]" , "value" => join("\n" , $prods))),
+				"class" => $class,
+				"delete" => html::href(array(
+					"url" => "#",
+					"onclick" => 'fRet = confirm("'.t("Oled kindel, et soovid valitud klassi kustutada?").'"); if(fRet) {document.getElementById("delete").value="'.$class.'";document.getElementById("stay").value=1;
+					document.changeform.submit();} else;',
+					"caption" => t("Kustuta"),
+				)),
+
+			));
+		}
+		return $t->draw();
+	}
+
+	function get_vars($arr)
+	{
+		$data = parent::get_vars($arr);
+
+		if(sizeof($_SESSION["patent"]["products"]))
+		{
+			$_SESSION["patent"]["request_fee"]=2200;
+			if($_SESSION["patent"]["co_trademark"] || $_SESSION["patent"]["guaranty_trademark"])
+			{
+				$_SESSION["patent"]["request_fee"]=3000;
+			}
+			$_SESSION["patent"]["classes_fee"]= (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
+		}
+		else
+		{
+			$_SESSION["patent"]["request_fee"] = 0;
+			$_SESSION["patent"]["classes_fee"] = 0;
+		}
+
+		$data["type_text"] = $this->types[$_SESSION["patent"]["type"]];
+		//$data["products_value"] = $this->_get_products_and_services_tbl();
+		$data["type"] = t("S&otilde;nam&auml;rk ").html::radiobutton(array(
+				"value" => 0,
+				"checked" => !$_SESSION["patent"]["type"],
+				"name" => "type",
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
+				document.getElementById("reproduction_row").style.display = "none";
+				document.getElementById("color_row").style.display = "none";
+			document.getElementById("colors").value = "";
+
+				document.getElementById("wordmark_caption").innerHTML = "* Kaubam&auml;rk";
+				document.getElementById("foreignlangelements_row").style.display = "";
+				 ',
+			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kujutism&auml;rk ").html::radiobutton(array(
+				"value" => 1,
+		 		"checked" => ($_SESSION["patent"]["type"] == 1) ? 1 : 0,
+				"name" => "type",
+				"onclick" => '
+				document.getElementById("wordmark_row").style.display = "none";
+			document.getElementById("word_mark").value = "";
+				document.getElementById("foreignlangelements_row").style.display = "none";
+			document.getElementById("element_translation").value = "";
+
+
+				document.getElementById("reproduction_row").style.display = "";
+				document.getElementById("color_row").style.display = "";'
+			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk ").html::radiobutton(array(
+				"value" => 2,
+				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
+				"name" => "type",
+				"onclick" => '
+				document.getElementById("color_row").style.display = "";
+				document.getElementById("reproduction_row").style.display = "";
+      				document.getElementById("wordmark_row").style.display = "none";
+			document.getElementById("word_mark").value = "";
+				document.getElementById("foreignlangelements_row").style.display = "";',
+			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk ").html::radiobutton(array(
+				"value" => 3,
+				"checked" => ($_SESSION["patent"]["type"] == 3) ? 1 : 0,
+				"name" => "type",
+				"onclick" => '
+				document.getElementById("color_row").style.display = "";
+				document.getElementById("reproduction_row").style.display = "";
+				document.getElementById("wordmark_row").style.display = "none";
+			document.getElementById("word_mark").value = "";
+				document.getElementById("foreignlangelements_row").style.display = "";',
+			));
+
+		$data["wm_caption"] = ($_SESSION["patent"]["type"]  ? t("S&otilde;naline osa:") : t("Kaubam&auml;rk:"));
+
+		$data["trademark_type"] = t("(kui taotlete kollektiivkaubam&auml;rki)").html::checkbox(array(
+			"value" => 1,
+			"checked" => $_SESSION["patent"]["co_trademark"],
+			"name" => "co_trademark",
+			"onclick" => 'document.getElementById("c_statues_row").style.display = "";'
+			)).'<a href="javascript:;" onClick="MM_openBrWindow(\'16340\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a><br>'.
+
+			t("(kui taotlete garantiikaubam&auml;rki)").html::checkbox(array(
+				"value" => 1,
+				"checked" => $_SESSION["patent"]["guaranty_trademark"],
+				"name" => "guaranty_trademark",
+				"onclick" => 'document.getElementById("g_statues_row").style.display = "";'
+			)).'<a href="javascript:;" onClick="MM_openBrWindow(\'16341\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" />';
+		$data["trademark_type_text"] = ($_SESSION["patent"]["co_trademark"]) ? t("Kollektiivkaubam&auml;rk") : "";
+		$data["trademark_type_text"].= " ";
+		$data["trademark_type_text"].= ($_SESSION["patent"]["guaranty_trademark"]) ? t("Garantiim&auml;rk") : "";
+
+		$data["find_products"] = html::href(array(
+			"caption" => t("Sisene klassifikaatorisse") ,
+			"url"=> "javascript:void(0);",
+			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("find_products", array("ru" => get_ru(), "print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+		));
+
+		$_SESSION["patent"]["prod_ru"] = get_ru();
+		$data["results_table"] = $this->get_results_table();
+
+		$data["show_link"] = "javascript:window.open('".$this->mk_my_orb("show", array("print" => 1 , "id" => $_SESSION["patent"]["trademark_id"], "add_obj" => $arr["alias"]["to"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=800')";
+		$data["convert_link"] = $this->mk_my_orb("pdf", array("print" => 1 , 	"id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT);
+		return $data;
 	}
 
 	/**
@@ -290,23 +494,17 @@ class patent extends intellectual_property
 
 		$tpl = "products.tpl";
 		$is_tpl = $this->read_template($tpl);
+
 		if($is_tpl)
 		{
 			$this->vars(array("result" => $result_list));
 			return $this->parse();
 		}
-		//$products = nee object_list(array("class_id" => CL_SHOP_PRODUCT,"lang_id" => array()));
-//		$address_inst = get_instance(CL_CRM_ADDRESS);
+
 		$ret = "<form action='' method=POST>Klassi nr:".
 		html::textbox(array("name" => "class"))."<br> Kauba/teenuse nimetus".html::textbox(array("name" => "product"))
-
 		."<input type=hidden value=".$arr["ru"]." name=ru><input type=submit value='otsi'></form>";
-//		foreach($address_inst->get_country_list() as $key=> $val)
-//		{
-//
-//			$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.document.exhibition_country.value=".$key."'>".$val."</a><br>";
-		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
-//		}
+
 		return $ret . $result_list;
 	}
 

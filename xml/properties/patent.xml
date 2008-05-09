@@ -475,16 +475,6 @@
                   <clid>CL_BANK_PAYMENT</clid>
                   <caption>Pangalingi objekt</caption>
             </BANK_PAYMENT>
-            <C_STATUES>
-                  <value>12</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Kollektiivp&amp;amp;otilde;hikiri</caption>
-            </C_STATUES>
-            <G_STATUES>
-                  <value>13</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Garantiip&amp;amp;otilde;hikiri</caption>
-            </G_STATUES>
             <PAYMENT_ORDER>
                   <value>14</value>
                   <clid>CL_FILE</clid>
@@ -495,6 +485,16 @@
                   <clid>CL_TRADEMARK_STATUS</clid>
                   <caption>Staatus</caption>
             </TRADEMARK_STATUS>
+            <C_STATUES>
+                  <value>12</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Kollektiivp&amp;amp;otilde;hikiri</caption>
+            </C_STATUES>
+            <G_STATUES>
+                  <value>13</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Garantiip&amp;amp;otilde;hikiri</caption>
+            </G_STATUES>
       </reltypes>
 </properties>
 

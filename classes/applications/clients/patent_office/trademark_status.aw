@@ -10,6 +10,9 @@
 	@property verified type=checkbox table=aw_trademark_status field=aw_verified ch_value=1
 	@caption Kinnitatud
 
+	@property verified_date type=text table=aw_trademark_status field=aw_verified_date
+	@caption Kinnitamise kuup&auml;ev
+
 	@property exported type=checkbox caption=no table=aw_trademark_status field=aw_exported ch_value=1
 	@caption Eksporditud
 
@@ -36,37 +39,15 @@ class trademark_status extends class_base
 		));
 	}
 
-	function get_property($arr)
+	public function _get_verified_date($arr)
 	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- set_property --//
-		}
-		return $retval;
+		$arr["prop"]["value"] = date("d.M. Y", $arr["prop"]["value"]);
 	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
@@ -86,6 +67,7 @@ class trademark_status extends class_base
 			$this->db_query("CREATE TABLE aw_trademark_status(
 				aw_oid int primary key,
 				aw_verified int,
+				aw_verified_date int,
 				aw_exported int,
 				aw_exported_date int,
 				aw_nr int,
@@ -95,6 +77,7 @@ class trademark_status extends class_base
 		switch($f)
 		{
 			case "aw_sent_date":
+			case "aw_verified_date":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -102,8 +85,6 @@ class trademark_status extends class_base
 				return true;
 		}
 	}
-
-
-//-- methods --//
 }
+
 ?>

@@ -151,6 +151,10 @@ class patent_patent extends intellectual_property
 			"tpldir" => "applications/patent",
 			"clid" => CL_PATENT_PATENT
 		));
+		$this->info_levels[11] = "author";
+		$this->info_levels[12] = "invention_pat";
+		$this->info_levels[13] = "other_data";
+		$this->info_levels[14] = "attachments_pat";
 	}
 
 	protected function save_priority($patent)
@@ -224,6 +228,26 @@ class patent_patent extends intellectual_property
 		}
 
 		return $sum;
+	}
+
+	function get_vars($arr)
+	{
+		$data = parent::get_vars($arr);
+		return $data;
+	}
+
+	/**
+		@attrib name=remove_author is_public="1"  all_args=1
+		@param key optional type=int
+	**/
+	function remove_author($arr)
+	{
+		unset($_SESSION["patent"]["authors"][$arr["key"]]);
+		die('<script type="text/javascript">
+			window.opener.location.reload();
+			window.close();
+			</script>'
+		);
 	}
 }
 
