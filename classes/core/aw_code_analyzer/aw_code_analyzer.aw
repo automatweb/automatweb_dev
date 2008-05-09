@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.15 2008/04/28 13:59:36 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.16 2008/05/09 10:45:58 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -13,6 +13,12 @@
 
 class aw_code_analyzer extends class_base
 {
+	private $faccess_lut = array(
+		T_PRIVATE => "private",
+		T_PUBLIC => "public",
+		T_PROTECTED => "protected"
+	);
+
 	function aw_code_analyzer()
 	{
 		$this->init("core/aw_code_analyzer");
@@ -59,7 +65,8 @@ class aw_code_analyzer extends class_base
 /*		foreach($this->tokens as $tok)
 		{
 			$this->dump_tok($tok, false);
-		}*/
+		}
+die();*/
 
 		$this->data = array();
 		$this->brace_level = 0;
@@ -356,6 +363,8 @@ class aw_code_analyzer extends class_base
 	function handle_class_end()
 	{
 		$this->data["classes"][$this->current_class]["end_line"] = $this->get_line();
+		$this->data["classes"][$this->current_class]["tracked_vars"] = $this->var_track_class_scope;
+		unset($this->var_track_class_scope);
 		$this->in_class = false;
 		$this->current_class = "";
 	}
@@ -412,11 +421,6 @@ class aw_code_analyzer extends class_base
 		{
 			$this->function_access = T_PUBLIC;
 		}
-		$this->faccess_lut = array(
-			T_PRIVATE => "private",
-			T_PUBLIC => "public",
-			T_PROTECTED => "protected"
-		);
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["access"] = $this->faccess_lut[$this->function_access];
 
 		$this->current_function = $f_name;
@@ -564,7 +568,9 @@ class aw_code_analyzer extends class_base
 
 	function handle_function_end()
 	{
-		$this->data["classes"][$this->current_class]["functions"][$this->current_function]["tracked_vars"] = $this->var_track_glob_scope;
+//echo "func end track vars = local =".dbg::dump($this->var_track_func_scope)." class = ".dbg::dump($this->var_track_class_scope)." glob = ".dbg::dump($this->var_track_glob_scope)." <br>";
+		$this->data["classes"][$this->current_class]["functions"][$this->current_function]["tracked_vars"] = $this->var_track_func_scope;
+		unset($this->var_track_func_scope);
 		$this->data["classes"][$this->current_class]["functions"][$this->current_function]["end_line"] = $this->get_line();
 		$this->in_function = false;
 		$this->var_track_func_scope = array();
@@ -1121,11 +1127,29 @@ class aw_code_analyzer extends class_base
 	function handle_variable_ref($v_tok)
 	{
 		$nxt = $this->get();
-	/*	echo "handle var ref on line ".$this->get_line()." v_tok =<br>";
+/*		echo "handle var ref on line ".$this->get_line()." v_tok =<br>";
 		$this->dump_tok($v_tok, false);
 		echo "nxt = ";
 		$this->dump_tok($nxt, false);
 		echo "dong<br>";*/
+
+		if (!$this->in_function)
+		{
+			if (!is_array($nxt) && $nxt == "=")
+			{
+				$this->handle_variable_assign($v_tok, $nxt);
+			}
+
+			// class variable definition
+			$_nm = "\$this->".substr($v_tok[1],1);
+			$this->data["classes"][$this->current_class]["member_var_defs"][$_nm] = array(
+				"name" => $_nm,
+				"line" => $this->get_line(),
+				"access" => $this->faccess_lut[$this->function_access]
+			);
+			unset($this->function_access);
+			return;
+		}
 
 		if (!is_array($nxt) && $nxt == "{")	// this is $a{4} string position handler
 		{
@@ -1248,7 +1272,7 @@ class aw_code_analyzer extends class_base
 	function get_track_var($varname)
 	{
 		// if in func, check local scope
-		if ($this->in_function)
+		if ($this->in_function && strpos($varname, "\$this") === false)
 		{
 			/*if ($this->current_function == "_req_add_itypes")
 			{
@@ -1256,12 +1280,18 @@ class aw_code_analyzer extends class_base
 			}*/
 			return $this->var_track_func_scope[$varname];
 		}
+		else
+		if ($this->in_class || strpos($varname, "\$this") !== false)
+		{
+			return $this->var_track_class_scope[$varname];
+		}
 		return $this->var_track_glob_scope[$varname];
 	}
 
 	function add_track_var($varn, $vard)
 	{
-		if ($this->in_function)
+//echo "add track var $varn ".dbg::dump($vard)." <br>";
+		if ($this->in_function && strpos($varn, "\$this") === false)
 		{
 			/*if ($this->current_function == "_req_add_itypes")
 			{
@@ -1269,7 +1299,31 @@ class aw_code_analyzer extends class_base
 			}*/
 			$this->var_track_func_scope[$varn] = $vard;
 		}
-		$this->var_track_glob_scope[$varn] = $vard;
+		else
+		if ($this->in_class || strpos($varn, "\$this") !== false)
+		{
+			if (strpos($varn, "\$this") === false)
+			{
+				$varn = "\$this->".substr($varn, 1);
+			}
+			if (!isset($this->var_track_class_scope[$varn]))
+			{
+				$this->var_track_class_scope[$varn] = $vard;
+			}
+
+			if ($this->in_function)
+			{
+				$this->var_track_class_scope[$varn]["referenced"][] = array(
+					"function" => $this->current_function,
+					"line" => $vard["assigned_at"],
+					"type" => $vard["type"]
+				);
+			}
+		}
+		else
+		{
+			$this->var_track_glob_scope[$varn] = $vard;
+		}
 	}
 
 	function _try_parse_complex_expr()
@@ -1436,7 +1490,7 @@ echo "ding<br>";*/
 			$this->save_bm2();
 //			echo "dmn, in var assign got asigned val from as variable, $tok[1] <br>";
 			//$this->dump_tok($tok, false);
-			$this->handle_variable_ref($tok);
+			//$this->handle_variable_ref($tok);
 			$this->restore_bm2();
 
 			$this->back();
@@ -1444,7 +1498,7 @@ echo "ding<br>";*/
 //echo "handling t variable <br>";
 			$this->get();
 			$nxt = $this->get();
-	//		$this->dump_tok($nxt, false)."<br><br>";
+//			echo "aa ".$this->dump_tok($nxt, false)."<br><br>";
 			if ($nxt[0] == T_OBJECT_OPERATOR)
 			{
 				$vn = $this->get();
@@ -1499,6 +1553,7 @@ echo "ding<br>";*/
 					));
 				}
 			}
+//echo "<hr>";
 			$this->restore_bm();
 		}
 		else
@@ -1520,6 +1575,16 @@ echo "ding<br>";*/
 				"class" => "array",
 				"assigned_at" => $this->get_line(),
 				"parameters" => array("value" => $defval)
+			));
+		}
+		else
+		if ($tok[0] == T_STRING)
+		{
+			$this->add_track_var($var_tok[1],array(
+				"type" => "const",
+				"class" => "string",
+				"assigned_at" => $this->get_line(),
+				"parameters" => array("value" => $tok[1])
 			));
 		}
 		else
@@ -1673,7 +1738,7 @@ echo "ding<br>";*/
 		// cause this can also be for var or whatever
 		$next = $this->get();
 		$this->back();
-		if (is_array($next) && $next[0] == T_FUNCTION)
+		if (is_array($next) && $next[0] == T_FUNCTION || $next[0] == T_VARIABLE)
 		{
 			$this->function_access = $id;
 		}

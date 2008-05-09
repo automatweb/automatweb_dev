@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.25 2008/04/29 09:38:31 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.26 2008/05/09 10:45:43 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -619,6 +619,7 @@ class docgen_viewer extends class_base
 
 		$this->_display_throws($data);
 		$this->_display_defines($opts["defines"]);
+		$this->_display_member_vars($data);
 
 		// do properties
 		$clid = $this->_find_clid_for_name($data["name"]);
@@ -647,6 +648,53 @@ class docgen_viewer extends class_base
 		));
 
 		return $this->finish_with_style($this->parse());
+	}
+
+	private function _display_member_vars($data)
+	{
+		$tmp = $data["tracked_vars"];
+		foreach(safe_array($data["member_var_defs"]) as $varn => $d)
+		{
+			if (!isset($tmp[$varn]))
+			{
+				$tmp[$varn] = array();
+			}
+		}
+		$str = "";
+		$str2 = "";
+		foreach($tmp as $var_name => $var_data)
+		{
+			$used = array();
+			foreach(safe_array($var_data["referenced"]) as $ref_data)
+			{
+				$used[] = html::href(array(
+					"url" => get_ru()."#fn.$ref_data[function]",
+					"caption" => $ref_data["function"]
+				));
+			}
+			$def = $data["member_var_defs"][$var_name];
+			$this->vars(array(
+				"memv_name" => $var_name,
+				"memv_used" => join(", ",array_unique($used)),
+				"memv_type" => $var_data["class"]
+			));
+			if ($def)
+			{
+				$this->vars(array(
+					"memv_access" => $def["access"],
+					"memv_defined" => $def["line"],
+				));
+				$str .= $this->parse("DEFINED_MEMBER_VAR");
+			}
+			else
+			{
+				$str2 .= $this->parse("UNDEFINED_MEMBER_VAR");
+			}
+		}
+		$this->vars(array(
+			"UNDEFINED_MEMBER_VAR" => $str,
+			"DEFINED_MEMBER_VAR" => $str2
+		));
 	}
 
 	private function _get_if_methods_for_class($data)
@@ -841,6 +889,7 @@ class docgen_viewer extends class_base
 		$analyzer = get_instance("core/aw_code_analyzer/aw_code_analyzer");
 
 		$data = $analyzer->analyze_file($file);
+//die(dbg::dump($data));
 		foreach($data["classes"] as $class => $class_data)
 		{
 			if (!empty($arr["disp"]) && $class != $arr["disp"] && !($arr["disp"] == "__outer" && $class == ""))

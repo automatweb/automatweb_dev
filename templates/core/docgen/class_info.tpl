@@ -165,6 +165,39 @@ table.class_info th {
 		<!-- END SUB: PRIVATE_FUNCTION -->
 		<br>
 		<!-- END SUB: HAS_PRIVATE -->
+		<br><br>
+		<b>Member variables:</b><br>
+
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
+		<tr>
+			<th>Access</th>
+			<th>Name</th>
+			<th>Defined</th>
+			<th>Used</th>
+			<th>Type</th>
+		</tr>
+		<!-- SUB: DEFINED_MEMBER_VAR -->
+		<tr>
+			<td>{VAR:memv_access}</td>
+			<td>{VAR:memv_name}</td>
+			<td>{VAR:memv_defined}</td>
+			<td>{VAR:memv_used}</td>
+			<td>{VAR:memv_type}</td>
+		</tr>
+		<!-- END SUB: DEFINED_MEMBER_VAR -->
+
+		<!-- SUB: UNDEFINED_MEMBER_VAR -->
+		<tr>
+			<td>&nbsp;</td>
+			<td>{VAR:memv_name}</td>
+			<td>UNDEFINED!</td>
+			<td>{VAR:memv_used}</td>
+			<td>{VAR:memv_type}</td>
+		</tr>
+		<!-- END SUB: UNDEFINED_MEMBER_VAR -->
+		</table>
+
+
 	</td>
 	<td class="text" valign="top" colspan="4">
 		<b>properties:</b><br>
