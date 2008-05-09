@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.12 2008/01/31 22:28:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.13 2008/05/09 11:22:25 robert Exp $
 // party.aw - Pidu 
 /*
 
@@ -15,7 +15,7 @@
 @caption Algus
 
 @property end type=datetime_select
-@caption Lõpp
+@caption L&otilde;pp
 
 @property image type=releditor reltype=RELTYPE_FLYER rel_id=first use_form=emb
 @caption Flyer
@@ -24,7 +24,7 @@
 @caption Sisu
 
 @property from_artist type=select multiple=1 table=objects field=meta method=serialize
-@caption Võta esineja objektist ürituse
+@caption V&otilde;ta esineja objektist &uuml;rituse
 
 @property relman type=aliasmgr no_caption=1 store=no
 @caption Seostehaldur
@@ -307,6 +307,8 @@ class party extends class_base
 			$evt["image"] = $flyer_i->show($image);
 			$evt["image_url"] = $flyer_i->image->get_url($image->prop('file1'));
 		}
+		$al = get_instance("alias_parser");
+		$al->parse_oo_aliases($obj->id(), $evt["content"]);
 		$this->vars($evt);
 		return $this->parse();
 	}
