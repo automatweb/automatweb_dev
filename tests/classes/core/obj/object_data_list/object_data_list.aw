@@ -10,7 +10,7 @@ class object_data_list_test extends UnitTestCase
 	function setUp()
 	{
 		$this->db = get_instance("class_base");
-		aw_disable_acl();
+		//aw_disable_acl();
 		$this->tmp_objs = array();
 	}
 
@@ -20,7 +20,7 @@ class object_data_list_test extends UnitTestCase
 		{
 			$doomed_obj->delete(true);
 		}
-		aw_restore_acl();
+		//aw_restore_acl();
 	}
 
 	function test_construct_aliases()
@@ -44,7 +44,7 @@ class object_data_list_test extends UnitTestCase
 	
 	function test_arr_aliases()
 	{
-		$row = $this->db->db_fetch_row("SELECT oid, class_id FROM objects LIMIT 1");
+		$row = $this->db->db_fetch_row("SELECT oid, class_id, name FROM objects LIMIT 1");
 		$odl = new object_data_list(
 			array(
 				"class_id" => $row["class_id"],
@@ -55,12 +55,12 @@ class object_data_list_test extends UnitTestCase
 			)
 		);
 		$odl_arr = $odl->arr();
-		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $odl_arr[$row["id"]]["oid"]);
+		$this->assertTrue($row["name"] == $odl_arr[$row["id"]]["oid"]);
 	}
 
 	function test_arr_no_aliases()
 	{
-		$row = $this->db->db_fetch_row("SELECT oid, class_id FROM objects LIMIT 1");
+		$row = $this->db->db_fetch_row("SELECT oid, class_id, name FROM objects LIMIT 1");
 		$odl = new object_data_list(
 			array(
 				"class_id" => $row["class_id"],
@@ -71,7 +71,7 @@ class object_data_list_test extends UnitTestCase
 			)
 		);
 		$odl_arr = $odl->arr();
-		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $odl_arr[$row["id"]]["name"]);
+		$this->assertTrue($row["name"] == $odl_arr[$row["id"]]["name"]);
 	}
 
 	function test_construct_no_aliases()
@@ -214,22 +214,161 @@ class object_data_list_test extends UnitTestCase
 
 	function test_props_props_parent_name()
 	{
-		/*
-		Not complete.
+		$o1 = $this->get_temp_o(array("name" => "This_is_very_unique_name_Foo_Fighters"));
+		$o2 = $this->get_temp_o(array("parent" => $o1->id()));
+
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_MENU,
+				"oid" => $o1->id(),
+				"limit" => 1,
 			),
 			array(
-				CL_MENU => array("parent.name" => "parent")
+				CL_MENU => array("parent.name" => "parent"),
 			)
 		);
-		*/
+		$odl_el = reset($odl->arr());
+		$this->assertTrue($odl_el["parent"] == $o1->name());
+	}
+
+	function test_props_props_foo_ord()
+	{
+		$o1 = $this->get_temp_o(array("ord" => 865));
+		$o2 = $this->get_temp_o(array("parent" => $o1->id()));
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MENU,
+				"oid" => $o1->id(),
+				"limit" => 1,
+			),
+			array(
+				CL_MENU => array("parent.ord"),
+			)
+		);
+		$odl_el = reset($odl->arr());
+		$this->assertTrue($odl_el["parent.ord"] == $o1->ord());
 	}
 
 	function test_props_props_foo_foo()
 	{
-		// Ask for property.property. Something like test_props_props_parent_name
+		$o1 = $this->get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o1->personal_id = 37806292799;
+		$o1->save();
+
+		$o2 = $this->get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o2->client_manager = $o1->id();
+		$o2->save();
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_MENU,
+				"oid" => $o1->id(),
+				"limit" => 1,
+			),
+			array(
+				CL_MENU => array("client_manager.personal_id" => "foo"),
+			)
+		);
+		$odl_el = reset($odl->arr());
+		$this->assertTrue($odl_el["foo"] == $o1->personal_id);
+	}
+
+	function test_filter_multiple_clids()
+	{
+		$odl = new object_data_list(
+			array(
+				"class_id" => array(CL_MENU, CL_CRM_PERSON),
+				"parent" => array(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"status" => array(),
+			),
+			array()
+		);
+		$ids = "";
+		foreach(array_keys($odl->arr()) as $id)
+		{
+			$ids .= (strlen($ids) > 0) ? ", ".$id : $id;
+		}
+		$row = $this->db->db_fetch_row("SELECT COUNT(oid) as oid_cnt FROM objects WHERE oid IN (".$ids.") AND class_id NOT IN ('".CL_MENU."', '".CL_CRM_PERSON."')");
+		$this->assertFalse($row["oid_cnt"] > 0);
+	}
+
+	function test_props_multiple_clids_props_asked_for()
+	{
+		$o1 = $this->get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o1->personal_id = 37806292799;
+		$o1->save();
+
+		$o2 = $this->get_temp_o(array("class_id" => CL_MENU, "name" => "This_is_very_unique_name_Foo2"));
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => array(CL_MENU, CL_CRM_PERSON),
+				"oid" => array($o1->id(), $o2->id()),
+			),
+			array(
+				CL_MENU => array("name" => "mname"),
+				CL_CRM_PERSON => array("personal_id" => "pid"),
+			)
+		);
+		$props = array(
+			CL_MENU => array("mname"),
+			CL_CRM_PERSON => array("pid"),
+		);
+		$ok = count($odl->arr()) == 2;
+		foreach($odl->arr() as $oid => $odata)
+		{
+			$o = obj($oid);
+			foreach($odata as $k => $v)
+			{
+				if(!in_array($k, $props[$o->class_id]))
+				{
+					$ok = false;
+					break;
+				}
+			}
+		}
+		$this->assertTrue($ok);
+	}
+
+	function test_props_multiple_clids_values()
+	{
+		$o1 = $this->get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o1->personal_id = 37806292799;
+		$o1->save();
+
+		$o2 = $this->get_temp_o(array("class_id" => CL_MENU, "name" => "This_is_very_unique_name_Foo2"));
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => array(CL_MENU, CL_CRM_PERSON),
+				"oid" => array($o1->id(), $o2->id()),
+			),
+			array(
+				CL_MENU => array("name" => "mname"),
+				CL_CRM_PERSON => array("personal_id" => "pid"),
+			)
+		);
+		$props = array(
+			"mname" => "name",
+			"pid" => "personal_id"
+		);
+		$ok = count($odl->arr()) == 2;
+		foreach($odl->arr() as $oid => $odata)
+		{
+			$o = obj($oid);
+			foreach($odata as $k => $v)
+			{
+				if($o->prop($props[$k]) != $v)
+				{
+					$ok = false;
+					break;
+				}
+			}
+		}
+		$this->assertTrue($ok);
 	}
 
 	function _get_temp_o($arr = array())
@@ -239,6 +378,7 @@ class object_data_list_test extends UnitTestCase
 		$o->set_parent(isset($arr["parent"]) ? $arr["parent"] : aw_ini_get("site_rootmenu"));
 		$o->set_class_id(isset($arr["class_id"]) ? $arr["class_id"] : CL_MENU);
 		$o->name = $arr["name"];
+		$o->set_ord($arr["ord"]);
 		$o->save();
 		// Easier to kill 'em this way afterwards.
 		$this->tmp_objs[] = $o;
