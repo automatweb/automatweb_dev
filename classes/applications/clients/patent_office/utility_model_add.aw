@@ -67,60 +67,8 @@ class utility_model_add extends class_base
 	**/
 	function parse_alias($arr)
 	{
-		enter_function("utility_model::parse_alias");
-
 		$tm_inst = get_instance(CL_UTILITY_MODEL);
-
 		return $tm_inst->parse_alias($arr);
-
-		if($_GET["patent_id"])
-		{
-			$_SESSION["patent"] = null;
-			$_SESSION["patent"]["id"] = $_GET["patent_id"];
-			$this->fill_session($_GET["patent_id"]);
-		}
-
-		if(!$_SESSION["patent"]["data_type"])
-		{
-			$_SESSION["patent"]["data_type"] = 0;
-		}
-		if(isset($_GET["data_type"]))
-		{
-			$arr["data_type"] = $_GET["data_type"];
-		}
-		else
-		{
-			$arr["data_type"] = $_SESSION["patent"]["data_type"];
-		}
-
-		if($arr["data_type"] == 6)
-		{
-			return $tm_inst->my_patent_list();//$this->mk_my_orb("my_patent_list", array());
-		}
-
-		$tpl = $tm_inst->info_levels[$arr["data_type"]].".tpl";
-		$tm_inst->read_template($tpl);
-		lc_site_load("utility_model", &$this);
-		$tm_inst->vars($tm_inst->web_data($arr));
-
-		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
-				"data_type"	=> $arr["data_type"],
-				"return_url" 	=> get_ru(),
-			)),
-		));
-
-		//l6petab ja salvestab
-		if($arr["data_type"] == 5)
-		{
-			$this->vars(array("reforb" => $tm_inst->mk_reforb("submit_data",array(
-					"save" => 1,
-					"return_url" 	=> get_ru(),
-				)),
-			));
-		}
-
-		exit_function("utility_model::parse_alias");
-		return $this->parse();
 	}
 
 	function get_folders_as_object_list($o, $level, $parent)

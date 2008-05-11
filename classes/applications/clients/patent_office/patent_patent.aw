@@ -8,17 +8,8 @@
 
 @groupinfo author caption="Autor"
 @default group=author
-	@property author_first_name type=textbox
-	@caption Eesnimi
-
-	@property author_last_name type=textbox
-	@caption Perekonnanimi
-
-	@property author_address type=textbox
-	@caption Aadress
-
-	@property author_country_code type=textbox
-	@caption Riigi kood
+	@property author type=relpicker reltype=RELTYPE_AUTHOR
+	@caption Autor
 
 	@property author_disallow_disclose type=checkbox ch_value=1
 	@caption Mitte avalikustada minu nime autorina
@@ -102,43 +93,76 @@
 
 @groupinfo attachments caption="Lisad"
 @default group=attachments
- 	@property attachment_invention_description type=checkbox ch_value=1
+ 	@property attachment_invention_description type=fileupload reltype=RELTYPE_ATTACHMENT_INVENTION_DESCRIPTION form=+emb
 	@caption Leiutiskirjeldus
 
- 	@property attachment_seq type=checkbox ch_value=1
+ 	@property attachment_seq type=fileupload reltype=RELTYPE_ATTACHMENT_SEQ form=+emb
 	@caption J&auml;rjestuse loetelu
 
- 	@property attachment_demand type=checkbox ch_value=1
+ 	@property attachment_demand type=fileupload reltype=RELTYPE_ATTACHMENT_DEMAND form=+emb
 	@caption Patendin&otilde;udlus
 
  	@property attachment_demand_points type=textbox size=3
 	@caption Patendin&otilde;udlus, n&otilde;udluspunkti
 
- 	@property attachment_summary_et type=checkbox ch_value=1
+ 	@property attachment_summary_et type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_ET form=+emb
 	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te eesti keeles
 
- 	@property attachment_summary_en type=checkbox ch_value=1
+ 	@property attachment_summary_en type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_EN form=+emb
 	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles
 
- 	@property attachment_dwgs type=checkbox ch_value=1
+ 	@property attachment_dwgs type=fileupload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
 	@caption Joonised ja muu illustreeriv materjal
 
- 	@property attachment_fee type=checkbox ch_value=1
+ 	@property attachment_fee type=fileupload reltype=RELTYPE_ATTACHMENT_FEE form=+emb
 	@caption Riigil&otilde;ivu tasumist t&otilde;endav dokument
 
- 	@property attachment_warrant type=checkbox ch_value=1
+ 	@property attachment_warrant type=fileupload reltype=RELTYPE_ATTACHMENT_WARRANT form=+emb
 	@caption Volikiri
 
- 	@property attachment_prio type=checkbox ch_value=1
+ 	@property attachment_prio type=fileupload reltype=RELTYPE_ATTACHMENT_PRIO form=+emb
 	@caption Prioriteedin&otilde;uet t&otilde;endavad dokumendid
 
- 	@property attachment_bio type=checkbox ch_value=1
+ 	@property attachment_bio type=fileupload reltype=RELTYPE_ATTACHMENT_BIO form=+emb
 	@caption Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&otilde;endav dokument
 
 @default group=fee
  	@property fee_copies type=checkbox ch_value=1
 	@caption Patendidokumentide v&otilde;i muude tr&uuml;kiste koopiate v&auml;ljastamise l&otilde;iv
 
+// RELTYPES
+@reltype AUTHOR value=17 clid=CL_CRM_PERSON
+@caption Autor
+
+@reltype ATTACHMENT_INVENTION_DESCRIPTION value=100 clid=CL_FILE
+@caption Lisa kirjeldus
+
+@reltype ATTACHMENT_SEQ value=101 clid=CL_FILE
+@caption Lisa jarjestuse loetelu
+
+@reltype ATTACHMENT_DEMAND value=102 clid=CL_FILE
+@caption Lisa pat. noudlus
+
+@reltype ATTACHMENT_SUMMARY_ET value=103 clid=CL_FILE
+@caption Lisa kokkuvote est
+
+@reltype ATTACHMENT_SUMMARY_EN value=104 clid=CL_FILE
+@caption Lisa kokkuvote eng
+
+@reltype ATTACHMENT_DWGS value=105 clid=CL_FILE
+@caption Lisa joonised
+
+@reltype ATTACHMENT_FEE value=106 clid=CL_FILE
+@caption Lisa tasumisdok
+
+@reltype ATTACHMENT_WARRANT value=107 clid=CL_FILE
+@caption Lisa volikiri
+
+@reltype ATTACHMENT_PRIO value=108 clid=CL_FILE
+@caption Lisa prioriteeditoend
+
+@reltype ATTACHMENT_BIO value=109 clid=CL_FILE
+@caption Lisa biol. depon. toend
 
 */
 
@@ -155,6 +179,9 @@ class patent_patent extends intellectual_property
 		$this->info_levels[12] = "invention_pat";
 		$this->info_levels[13] = "other_data";
 		$this->info_levels[14] = "attachments_pat";
+		$this->pdf_file_name = "Patenditaotlus";
+		$this->show_template = "show_pat.tpl";
+		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio"));
 	}
 
 	protected function save_priority($patent)
@@ -248,6 +275,12 @@ class patent_patent extends intellectual_property
 			window.close();
 			</script>'
 		);
+	}
+
+	function fill_session($id)
+	{
+		$this->fill_session_property_vars = array("authorized_codes" , "job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type", "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee", "payer" , "doc_nr" , "warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
+		parent::fill_session($id);
 	}
 }
 

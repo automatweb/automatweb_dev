@@ -267,6 +267,7 @@ class trademark_manager extends class_base
 
 	function search_applications($this_obj)
 	{
+		$data = $this_obj->meta("search_data");
 		$ol = new object_list();
 		$applicant_name = empty($data["trademark_find_applicant_name"]) ? null : "%".$data["trademark_find_applicant_name"]."%";
 		$procurator_name = empty($data["trademark_find_procurator_name"]) ? null : "%".$data["trademark_find_procurator_name"]."%";
@@ -303,7 +304,6 @@ class trademark_manager extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		);
-		$data = $this_obj->meta("search_data");
 
  		if((date_edit::get_timestamp($data["trademark_find_start"]) > 1)|| (date_edit::get_timestamp($data["trademark_find_end"]) > 1))
  		{
@@ -532,7 +532,7 @@ class trademark_manager extends class_base
 					"target" => "new window",
 					//"url" => "#",
 					"caption" => t("Allkirjad"),
-					"title" => $title,
+					// "title" => $title,
 					//"onclick" => 'javascript:window.open("'.$signatures_url.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 				));
 			}
@@ -741,19 +741,16 @@ class trademark_manager extends class_base
 	function verify($arr)
 	{
 		$trademark_inst = get_instance(CL_PATENT);
-		$object = obj($arr["id"]);
-		if(is_oid($object->prop("verified_menu")))
-		{
-			$parent = $object->prop("verified_menu");
-		}
+
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
 			$status = $trademark_inst->get_status($o);
-			$status->set_prop("verified",1);
+			$status->set_prop("verified", 1);
 			$status->set_name(t("Taotlus nr: ".$status->prop("nr")));
 			$status->save();
 		}
+
 		if($arr["popup"])
 		{
 			die('<script type="text/javascript">
@@ -892,7 +889,7 @@ class trademark_manager extends class_base
 
 
 
-			foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
+			foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $c)
 			{
 				$applicant = $c->to();
 				$xml .= '		<HOLGR>

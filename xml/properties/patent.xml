@@ -435,11 +435,6 @@
                   <clid>CL_FILE</clid>
                   <caption>Volikiri</caption>
             </WARRANT>
-            <REPRODUCTION>
-                  <value>9</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Volikiri</caption>
-            </REPRODUCTION>
             <PHONE>
                   <value>4</value>
                   <clid>CL_CRM_PHONE</clid>
@@ -495,6 +490,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Garantiip&amp;amp;otilde;hikiri</caption>
             </G_STATUES>
+            <REPRODUCTION>
+                  <value>9</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Reproduktsioon</caption>
+            </REPRODUCTION>
       </reltypes>
 </properties>
 

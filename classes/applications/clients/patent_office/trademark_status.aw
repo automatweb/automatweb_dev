@@ -74,6 +74,7 @@ class trademark_status extends class_base
 				aw_sent_date int,
 			)");
 		}
+
 		switch($f)
 		{
 			case "aw_sent_date":
@@ -82,8 +83,8 @@ class trademark_status extends class_base
 					"name" => $f,
 					"type" => "int"
 				));
-				return true;
 		}
+		return true;
 	}
 }
 

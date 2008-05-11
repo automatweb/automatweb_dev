@@ -349,8 +349,13 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_INVENTION_DESCRIPTION</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Leiutiskirjeldus</caption>
       </property>
       <property>
@@ -359,8 +364,13 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_SEQ</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>J&amp;amp;auml;rjestuse loetelu</caption>
       </property>
       <property>
@@ -369,19 +379,54 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kasuliku mudeli n&amp;amp;otilde;udlus, ............ n&amp;amp;otilde;udluspunkti</caption>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_DEMAND</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Kasuliku mudeli n&amp;amp;otilde;udlus</caption>
       </property>
       <property>
-            <name>attachment_summary</name>
+            <name>attachment_demand_points</name>
             <table>objects</table>
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>textbox</type>
+            <size>3</size>
+            <caption>Kasuliku mudeli n&amp;amp;otilde;udlus, n&amp;amp;otilde;udluspunkti</caption>
+      </property>
+      <property>
+            <name>attachment_summary_et</name>
+            <table>objects</table>
+            <group>attachments</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_SUMMARY_ET</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Leiutise olemuse l&amp;amp;uuml;hikokkuv&amp;amp;otilde;te</caption>
+      </property>
+      <property>
+            <name>attachment_summary_en</name>
+            <table>objects</table>
+            <group>attachments</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_SUMMARY_EN</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Leiutise olemuse l&amp;amp;uuml;hikokkuv&amp;amp;otilde;te inglise keeles</caption>
       </property>
       <property>
             <name>attachment_dwgs</name>
@@ -389,9 +434,14 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Illustratsioonid</caption>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_DWGS</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Joonised ja muu illustreeriv materjal</caption>
       </property>
       <property>
             <name>attachment_fee</name>
@@ -399,8 +449,13 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_FEE</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Riigil&amp;amp;otilde;ivu tasumist t&amp;amp;otilde;endav dokument</caption>
       </property>
       <property>
@@ -409,8 +464,13 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_WARRANT</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Volikiri</caption>
       </property>
       <property>
@@ -419,8 +479,13 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_PRIO</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Prioriteedin&amp;amp;otilde;uet t&amp;amp;otilde;endavad dokumendid</caption>
       </property>
       <property>
@@ -429,8 +494,13 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_PRIO_TRANS</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Prioriteedin&amp;amp;otilde;uet t&amp;amp;otilde;endavate dokumentide t&amp;amp;otilde;lked</caption>
       </property>
       <classinfo>
@@ -483,11 +553,6 @@
                   <clid>CL_FILE</clid>
                   <caption>Volikiri</caption>
             </WARRANT>
-            <REPRODUCTION>
-                  <value>9</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Volikiri</caption>
-            </REPRODUCTION>
             <PHONE>
                   <value>4</value>
                   <clid>CL_CRM_PHONE</clid>
@@ -533,6 +598,61 @@
                   <clid>CL_TRADEMARK_STATUS</clid>
                   <caption>Staatus</caption>
             </TRADEMARK_STATUS>
+            <AUTHOR>
+                  <value>17</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Autor</caption>
+            </AUTHOR>
+            <ATTACHMENT_INVENTION_DESCRIPTION>
+                  <value>100</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa kirjeldus</caption>
+            </ATTACHMENT_INVENTION_DESCRIPTION>
+            <ATTACHMENT_SEQ>
+                  <value>101</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa jarjestuse loetelu</caption>
+            </ATTACHMENT_SEQ>
+            <ATTACHMENT_DEMAND>
+                  <value>102</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa pat. noudlus</caption>
+            </ATTACHMENT_DEMAND>
+            <ATTACHMENT_SUMMARY_ET>
+                  <value>103</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa kokkuvote est</caption>
+            </ATTACHMENT_SUMMARY_ET>
+            <ATTACHMENT_SUMMARY_EN>
+                  <value>104</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa kokkuvote eng</caption>
+            </ATTACHMENT_SUMMARY_EN>
+            <ATTACHMENT_DWGS>
+                  <value>105</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa joonised</caption>
+            </ATTACHMENT_DWGS>
+            <ATTACHMENT_FEE>
+                  <value>106</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa tasumisdok</caption>
+            </ATTACHMENT_FEE>
+            <ATTACHMENT_WARRANT>
+                  <value>107</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa volikiri</caption>
+            </ATTACHMENT_WARRANT>
+            <ATTACHMENT_PRIO>
+                  <value>108</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa prioriteeditoend</caption>
+            </ATTACHMENT_PRIO>
+            <ATTACHMENT_PRIO_TRANS>
+                  <value>110</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa prioriteeditoendi tolked</caption>
+            </ATTACHMENT_PRIO_TRANS>
       </reltypes>
 </properties>
 

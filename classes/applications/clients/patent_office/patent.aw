@@ -75,6 +75,8 @@
 @reltype G_STATUES value=13 clid=CL_FILE
 @caption Garantiip&otilde;hikiri
 
+@reltype REPRODUCTION value=9 clid=CL_FILE
+@caption Reproduktsioon
 
 
 */
@@ -92,6 +94,15 @@ class patent extends intellectual_property
 		$this->info_levels[2] = "products_and_services";
 		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
+		$this->pdf_file_name = "Kaubam".chr(228)."rgitaotlus";
+		$this->show_template = "show_tm.tpl";
+		$this->file_upload_vars = array_merge($this->file_upload_vars, array("reproduction" , "g_statues","c_statues"));
+		$this->save_fee_vars = array_merge($this->save_fee_vars, array("request_fee" , "classes_fee"));
+
+		$this->datafromobj_vars = array("authorized_codes" ,"job" , "undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "doc_nr", "payer");
+
+		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
+		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","correspond_street_value", "correspond_index_value" ,	"correspond_country_code_value" , "correspond_city_value", "name");
 	}
 
 	function get_property($arr)
@@ -104,13 +115,35 @@ class patent extends intellectual_property
 			case "type":
 				$prop["options"] = $this->types;
 				break;
+
 			case "trademark_type":
 				$prop["options"] = $this->trademark_types;
 				break;
+
+			case "products_and_services_tbl":
+				$this->_get_products_and_services_tbl($arr);
+				break;
+
 			default:
 				$retval = parent::get_property($arr);
 		}
 
+		return $retval;
+	}
+
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "products_and_services_tbl":
+				if(is_array($arr["request"]["products"]))
+				{
+					$arr["obj_inst"] -> set_meta("products" , $arr["request"]["products"]);
+				}
+				break;
+		}
 		return $retval;
 	}
 
@@ -123,10 +156,6 @@ class patent extends intellectual_property
 			"name" => "class",
 			"caption" => t("Klass"),
 		));
-//		$t->define_field(array(
-//			"name" => "class_name",
-//			"caption" => t("Klassi nimi"),
-//		));
 		$t->define_field(array(
 			"name" => "prod",
 			"caption" => t("Kaup/teenus"),
@@ -136,13 +165,9 @@ class patent extends intellectual_property
 		{
 			foreach($arr["obj_inst"]->meta("products") as $key=> $val)
 			{
-				$product = obj($key);
-			//	$parent = obj($product->parent());
 				$t->define_data(array(
 					"prod" => html::textarea(array("name" => "products[".$key."]" , "value" => $val, )),
 					"class" => $key,
-//					"class_name" => $parent->name(),
-	//				"oid"	=> $prod->id(),
 				));
 			}
 		}
@@ -150,10 +175,9 @@ class patent extends intellectual_property
 	}
 
 	function get_results_table()
-	{//arr($_SESSION["patent"]["delete"]);arr($_SESSION['patent']['products']);
+	{
 		if($_SESSION["patent"]["delete"])
 		{
-			//$js.= 'alert("'.$_SESSION['patent']['errors'].'");';
 			unset($_SESSION['patent']['products'][$_SESSION["patent"]["delete"]]);
 			$_SESSION["patent"]["delete"] = null;
 		}
@@ -172,10 +196,6 @@ class patent extends intellectual_property
 			"name" => "class",
 			"caption" => t("Klass"),
 		));
-//		$t->define_field(array(
-//			"name" => "class_name",
-//			"caption" => t("Klassi nimi"),
-//		));
 		$t->define_field(array(
 			"name" => "prod",
 			"caption" => t("Kaup/teenus"),
@@ -199,13 +219,6 @@ class patent extends intellectual_property
 				$product = obj($prod);
 				$parent = obj($product->parent());
 				$classes[$parent->comment()][$product->id()] = $product->prop("userta1");
-
-//				$t->define_data(array(
-//					"prod" => html::textarea(array("name" => "products[".$prod."]" , "value" => $product->name() . "(" .$product->prop("code").  ")", )),
-//					"class" => $parent->comment(),
-//					"class_name" => $parent->name(),
-	//				"oid"	=> $prod->id(),
-//				));
 			}
 			$_SESSION["patent"]["prod_selection"] = null;
 		}
@@ -216,14 +229,7 @@ class patent extends intellectual_property
 			foreach($_SESSION["patent"]["products"] as $key=> $val)
 			{
 				$classes[$key][] = $val;
-//				$t->define_data(array(
-//					"prod" => html::textarea(array("name" => "products[".$key."]" , "value" => $val, )),
-//					"class" => $parent->comment(),
-//					"class_name" => $parent->name(),
-	//				"oid"	=> $prod->id(),
-//				));
 			}
-//			$_SESSION["patent"]["prod_selection"] = null;
 		}
 		ksort($classes);
 		foreach($classes as $class => $prods)
@@ -569,7 +575,6 @@ class patent extends intellectual_property
 
 	protected function get_payment_sum($arr)
 	{
-		$classes = array();
 		$sum = 0;
 		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
 		{
@@ -586,6 +591,143 @@ class patent extends intellectual_property
 			$_SESSION["patent"]["classes_fee"] = $classes_fee;
 		}
 		return $sum;
+	}
+
+	function fill_session($id)
+	{
+		$patent = obj($id);
+		$this->fill_session_property_vars = array("authorized_codes" , "job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type", "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee", "payer" , "doc_nr" , "warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
+		parent::fill_session($id);
+
+		if(isset($_SESSION["patent"]["trademark_type"][0]))
+		{
+			$_SESSION["patent"]["co_trademark"] = 1;
+		}
+		if(isset($_SESSION["patent"]["trademark_type"][1]))
+		{
+			$_SESSION["patent"]["guaranty_trademark"] = 1;
+		}
+
+		$_SESSION["patent"]["products"] = $patent->meta("products");
+	}
+
+	function get_data_from_object($id)
+	{
+		$data = parent::get_data_from_object($id);
+		$o = obj($id);
+		$tr = $o->prop("trademark_type");
+		$data["trademark_type_text"] = $tr[0]? $this->trademark_types[0]:"";
+		$data["trademark_type_text"].= " ";
+		$data["trademark_type_text"].= $tr[1]? $this->trademark_types[1]:"";
+		$data["type_text"] = $this->types[$o->prop("type")];
+		return $data;
+	}
+
+	function get_js($arr)
+	{
+		$js2 = parent::get_js($arr);
+		$js = "";
+
+		if($_GET["data_type"] == 1)
+		{
+			if(!$_SESSION["patent"]["type"])
+			{
+				$js.='document.getElementById("reproduction_row").style.display = "none";';
+				$js.='document.getElementById("color_row").style.display = "none";';
+      			$js.='document.getElementById("wordmark_row").style.display = "";';
+				$js.='document.getElementById("wordmark_caption").innerHTML = "* Kaubam&auml;rk";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
+			}
+			if($_SESSION["patent"]["type"] == 1)
+			{
+				$js.='document.getElementById("wordmark_row").style.display = "none";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "none";';
+				$js.='document.getElementById("reproduction_row").style.display = "";';
+				$js.='document.getElementById("color_row").style.display = "";';
+			}
+      			if($_SESSION["patent"]["type"] == 2)
+			{
+				$js.='document.getElementById("wordmark_row").style.display = "none";';
+				$js.='document.getElementById("color_row").style.display = "";';
+				$js.='document.getElementById("reproduction_row").style.display = "";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
+     			}
+			if($_SESSION["patent"]["type"] == 3)
+			{
+				$js.='document.getElementById("wordmark_row").style.display = "none";';
+				$js.='document.getElementById("color_row").style.display = "";';
+				$js.='document.getElementById("reproduction_row").style.display = "";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
+			}
+			if(!$_SESSION["patent"]["guaranty_trademark"])
+			{
+				$js.='document.getElementById("g_statues_row").style.display = "none";';
+			}
+			if(!$_SESSION["patent"]["co_trademark"])
+			{
+				$js.='document.getElementById("c_statues_row").style.display = "none";';
+			}
+		}
+		return $js . $js2;
+	}
+
+	function check_fields()
+	{
+		$err = parent::check_fields();
+
+		if($_GET["data_type"] == 2)
+		{
+			if(!is_array($_POST["products"]) && !is_array($_SESSION["patent"]["prod_selection"]) && !(is_array($_SESSION["patent"]["products"] && sizeof($_SESSION["patent"]["products"]))))
+			{
+				$err.= t("Kohustuslik v&auml;hemalt &uuml;he klassi lisamine")."\n<br>";
+			}
+		}
+
+		if($_GET["data_type"] == 1)
+		{
+			if($_POST["type"] == 0 && !isset($_POST["word_mark"]))
+			{
+				$err.= t("S&otilde;nam&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud")."\n<br>";
+			}
+			if($_POST["type"] == 1 && !$_FILES["reproduction_upload"]["name"] && !is_oid($_SESSION["patent"]["reproduction"]))
+			{
+				$err.= t("Peab olema lisatud ka reproduktsioon")."\n<br>";
+			}
+			if($_POST["type"] == 2 && !isset($_POST["word_mark"]))
+			{
+				$err.= t("Kombineeritud m&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud")."\n<br>";
+			}
+			if($_POST["type"] == 2 && !$_FILES["reproduction_upload"]["name"] && !is_oid($_SESSION["patent"]["reproduction"]))
+			{
+				$err.= t("Peab olema lisatud ka reproduktsioon")."\n<br>";
+			}
+			if($_POST["type"] == 3 && !$_FILES["reproduction_upload"]["name"] && !is_oid($_SESSION["patent"]["reproduction"]))
+			{
+				$err.= t("Peab olema lisatud ka reproduktsioon")."\n<br>";
+			}
+		}
+
+		if($_POST["convention_date"]["day"] || $_POST["exhibition_date"]["day"])
+		{
+			if(
+				(
+						$_POST["convention_nr"] && mktime(0,0,0,$_POST["convention_date"]["month"],$_POST["convention_date"]["day"],$_POST["convention_date"]["year"]) <
+						mktime(0,0,0,date("m" , time())-6, date("j" , time())-5,date("Y" , time()))
+				)
+				//time() - (30*6+5)*24*3600)
+				||
+
+					(
+						$_POST["exhibition_name"] && mktime(0,0,0,$_POST["exhibition_date"]["month"], $_POST["exhibition_date"]["day"],$_POST["exhibition_date"]["year"]) <   mktime(0,0,0,date("m" , time())-6, date("j" , time())-5,date("Y" , time()))
+					)
+				//time() - (30*6 + 5)*24*3600 )
+			 )
+			{
+				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud")."\n<br>";
+			}
+		}
+
+		return $err;
 	}
 }
 

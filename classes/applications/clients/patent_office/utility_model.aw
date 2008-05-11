@@ -60,33 +60,73 @@
 
 @groupinfo attachments caption="Lisad"
 @default group=attachments
- 	@property attachment_invention_description type=checkbox ch_value=1
+ 	@property attachment_invention_description type=fileupload reltype=RELTYPE_ATTACHMENT_INVENTION_DESCRIPTION form=+emb
 	@caption Leiutiskirjeldus
 
- 	@property attachment_seq type=checkbox ch_value=1
+ 	@property attachment_seq type=fileupload reltype=RELTYPE_ATTACHMENT_SEQ form=+emb
 	@caption J&auml;rjestuse loetelu
 
- 	@property attachment_demand type=checkbox ch_value=1
-	@caption Kasuliku mudeli n&otilde;udlus, ............ n&otilde;udluspunkti
+ 	@property attachment_demand type=fileupload reltype=RELTYPE_ATTACHMENT_DEMAND form=+emb
+	@caption Kasuliku mudeli n&otilde;udlus
 
- 	@property attachment_summary type=checkbox ch_value=1
+ 	@property attachment_demand_points type=textbox size=3
+	@caption Kasuliku mudeli n&otilde;udlus, n&otilde;udluspunkti
+
+ 	@property attachment_summary_et type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_ET form=+emb
 	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te
 
- 	@property attachment_dwgs type=checkbox ch_value=1
-	@caption Illustratsioonid
+ 	@property attachment_summary_en type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_EN form=+emb
+	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles
 
- 	@property attachment_fee type=checkbox ch_value=1
+ 	@property attachment_dwgs type=fileupload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
+	@caption Joonised ja muu illustreeriv materjal
+
+ 	@property attachment_fee type=fileupload reltype=RELTYPE_ATTACHMENT_FEE form=+emb
 	@caption Riigil&otilde;ivu tasumist t&otilde;endav dokument
 
- 	@property attachment_warrant type=checkbox ch_value=1
+ 	@property attachment_warrant type=fileupload reltype=RELTYPE_ATTACHMENT_WARRANT form=+emb
 	@caption Volikiri
 
- 	@property attachment_prio type=checkbox ch_value=1
+ 	@property attachment_prio type=fileupload reltype=RELTYPE_ATTACHMENT_PRIO form=+emb
 	@caption Prioriteedin&otilde;uet t&otilde;endavad dokumendid
 
- 	@property attachment_prio_trans type=checkbox ch_value=1
+ 	@property attachment_prio_trans type=fileupload reltype=RELTYPE_ATTACHMENT_PRIO_TRANS form=+emb
 	@caption Prioriteedin&otilde;uet t&otilde;endavate dokumentide t&otilde;lked
 
+
+// RELTYPES
+@reltype AUTHOR value=17 clid=CL_CRM_PERSON
+@caption Autor
+
+@reltype ATTACHMENT_INVENTION_DESCRIPTION value=100 clid=CL_FILE
+@caption Lisa kirjeldus
+
+@reltype ATTACHMENT_SEQ value=101 clid=CL_FILE
+@caption Lisa jarjestuse loetelu
+
+@reltype ATTACHMENT_DEMAND value=102 clid=CL_FILE
+@caption Lisa pat. noudlus
+
+@reltype ATTACHMENT_SUMMARY_ET value=103 clid=CL_FILE
+@caption Lisa kokkuvote est
+
+@reltype ATTACHMENT_SUMMARY_EN value=104 clid=CL_FILE
+@caption Lisa kokkuvote eng
+
+@reltype ATTACHMENT_DWGS value=105 clid=CL_FILE
+@caption Lisa joonised
+
+@reltype ATTACHMENT_FEE value=106 clid=CL_FILE
+@caption Lisa tasumisdok
+
+@reltype ATTACHMENT_WARRANT value=107 clid=CL_FILE
+@caption Lisa volikiri
+
+@reltype ATTACHMENT_PRIO value=108 clid=CL_FILE
+@caption Lisa prioriteeditoend
+
+@reltype ATTACHMENT_PRIO_TRANS value=110 clid=CL_FILE
+@caption Lisa prioriteeditoendi tolked
 
 */
 
@@ -102,6 +142,9 @@ class utility_model extends intellectual_property
 		$this->info_levels[11] = "author";
 		$this->info_levels[12] = "invention_um";
 		$this->info_levels[14] = "attachments_um";
+		$this->pdf_file_name = "KasulikuMudeliTaotlus";
+		$this->show_template = "show_um.tpl";
+		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
 	}
 
 	protected function save_priority($patent)
@@ -150,7 +193,7 @@ class utility_model extends intellectual_property
 		$sum = 0;
 		$is_corporate = false;
 
-		foreach($_SESSION["patent"]["applicants"] as $key => $val)
+		foreach($_SESSION["patent"]["applicants"] as $val)
 		{
 			if($val["applicant_type"])
 			{
@@ -181,6 +224,13 @@ class utility_model extends intellectual_property
 	{
 		$data = parent::get_vars($arr);
 		return $data;
+	}
+
+
+	function fill_session($id)
+	{
+		$this->fill_session_property_vars = array("authorized_codes" , "job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type", "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee", "payer" , "doc_nr" , "warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
+		parent::fill_session($id);
 	}
 }
 
