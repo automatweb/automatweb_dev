@@ -682,13 +682,11 @@ class core extends acl_base
 			$this->use_empty = false;
 		};
 
+		$ru = null;
 		if (isset($arr["return_url"]))
 		{
-			$arr["return_url"] = substr($arr["return_url"], 0, 3500);
-			if ($arr["return_url"] == "")
-			{
-				unset($arr["return_url"]);
-			}
+			$ru = $arr["return_url"];
+			unset($arr["return_url"]);
 		}
 
 		$this->process_orb_args("",$arr);
@@ -709,14 +707,30 @@ class core extends acl_base
 			if ($value !== '')
 			{
 				$add = $name."=".$value.$sep;
-				if(strlen($res.$add) > 3000)
+				if(strlen($res.$add) > 2047)
 				{
 					$add = substr($add, 0, 2000);
 				}
 				$res .= $add;
 			}
 		};
-		return substr($res,0,-strlen($sep));
+
+		if ($ru !== null)
+		{
+			$rv = $res."return_url=".urlencode($ru).$sep;
+		}
+		else
+		{
+			$rv = substr($res,0,-strlen($sep));
+		}
+
+		$len = strlen($rv);
+		if ($len > 2047)
+		{
+			$rv = substr($rv, 0, 2047);
+		}
+		return $rv;
+
 	}
 
 	/** creates the necessary hidden elements to put in a form that tell the orb which function to call
