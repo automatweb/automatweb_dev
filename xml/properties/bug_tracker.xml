@@ -976,6 +976,24 @@
             <caption>Otsi</caption>
       </property>
       <property>
+            <name>stat_proj_hrs_start</name>
+            <table>objects</table>
+            <group>stat_proj_overview</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>stat_proj_hrs_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>stat_proj_hrs_end</name>
+            <table>objects</table>
+            <group>stat_proj_overview</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>stat_proj_hrs_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
             <name>stat_proj_detail</name>
             <table>objects</table>
             <group>stat_proj_overview</group>

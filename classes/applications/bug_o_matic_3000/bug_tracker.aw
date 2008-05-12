@@ -369,6 +369,12 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=stat_proj_overview
 
+		@property stat_proj_hrs_start type=date_select store=no
+		@caption Alates
+
+		@property stat_proj_hrs_end type=date_select store=no
+		@caption Kuni
+
 	@property stat_proj_detail type=table store=no no_caption=1
 	@property stat_proj_detail_b type=table store=no no_caption=1
 
@@ -672,24 +678,36 @@ class bug_tracker extends class_base
 				return $st_i->$fn($arr);
 
 			case "stat_hrs_start":
-				if (empty($arr["request"]["stat_hrs_start"]))
+				if (empty($arr["request"][$prop["name"]]))
 				{
 					$prop["value"] = mktime(0, 0, 0, date("n"), 1, date("Y"), 1);
 				}
 				else
 				{
-					$prop["value"] = $arr["request"]["stat_hrs_start"];
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
+
+			case "stat_proj_hrs_start":
+				if (empty($arr["request"][$prop["name"]]))
+				{
+					$prop["value"] = mktime(0, 0, 1, 1, 1, date("Y"));
+				}
+				else
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
 				}
 				break;
 
 			case "stat_hrs_end":
-				if (empty($arr["request"]["stat_hrs_end"]))
+			case "stat_proj_hrs_end":
+				if (empty($arr["request"][$prop["name"]]))
 				{
 					$prop["value"] = time() + 86400;
 				}
 				else
 				{
-					$prop["value"] = $arr["request"]["stat_hrs_end"];
+					$prop["value"] = $arr["request"][$prop["name"]];
 				}
 				break;
 			case "stat_hr_tasks":
@@ -2408,6 +2426,8 @@ class bug_tracker extends class_base
 		$arr["args"]["sp_p_co"] = $arr["request"]["sp_p_co"];
 		$arr["args"]["stat_hrs_start"] = $arr["request"]["stat_hrs_start"];
 		$arr["args"]["stat_hrs_end"] = $arr["request"]["stat_hrs_end"];
+		$arr["args"]["stat_proj_hrs_start"] = $arr["request"]["stat_proj_hrs_start"];
+		$arr["args"]["stat_proj_hrs_end"] = $arr["request"]["stat_proj_hrs_end"];
 		$arr["args"]["stat_hr_bugs"] = $arr["request"]["stat_hr_bugs"];
 		$arr["args"]["stat_hr_tasks"] = $arr["request"]["stat_hr_tasks"];
 		$arr["args"]["stat_hr_calls"] = $arr["request"]["stat_hr_calls"];
