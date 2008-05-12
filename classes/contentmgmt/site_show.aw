@@ -1966,6 +1966,7 @@ class site_show extends class_base
 				"name" => $row["name"],
 				"lang_id" => $row["id"],
 				"lang_url" => $url,
+				"lang_change_url" => aw_url_change_var("set_lang_id", $row["id"]),
 				"link" => $url,
 				"target" => "",
 				"img_url" => $img_url,
@@ -2377,6 +2378,7 @@ class site_show extends class_base
 		aw_disable_acl();
 		$p = obj($u->get_current_person());
 		aw_restore_acl();
+
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
