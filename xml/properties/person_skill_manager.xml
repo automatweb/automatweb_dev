@@ -20,11 +20,22 @@
             <field>skills_tb</field>
       </property>
       <property>
+            <name>skills_tree</name>
+            <table>aw_person_skill_manager</table>
+            <group>skills</group>
+            <type>treeview</type>
+            <store>no</store>
+            <parent>skills_layout</parent>
+            <no_caption>1</no_caption>
+            <field>skills_tree</field>
+      </property>
+      <property>
             <name>skills_tbl</name>
             <table>aw_person_skill_manager</table>
             <group>skills</group>
             <type>table</type>
             <store>no</store>
+            <parent>skills_layout</parent>
             <no_caption>1</no_caption>
             <field>skills_tbl</field>
       </property>
@@ -88,6 +99,12 @@
             </COMPANY>
       </reltypes>
       <layout>
+            <skills_layout>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>skills</group>
+                  <area_caption></area_caption>
+            </skills_layout>
             <workers_layout>
                   <type>hbox</type>
                   <width>20%:80%</width>
