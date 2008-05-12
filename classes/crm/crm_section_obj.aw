@@ -11,6 +11,16 @@ class crm_section_obj extends _int_object
 		}
 		return $r;
 	}
+
+	function get_workers()
+	{
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_WORKERS",
+		));
+		$ol = new object_list();
+		$ol -> add($conns);
+		return $ol;
+	}
 }
 
 ?>
