@@ -19,6 +19,11 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_object_quickadd.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_tabs.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_gup.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_bgiframe.min.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dimensions.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_ajaxQueue.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_thickbox-compressed.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_autocomplete.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -61,13 +66,16 @@ shortcut("Ctrl+Shift+E", function() {
 <div style="padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;" id="ajax_loader_div"><img src="{VAR:baseurl}/automatweb/images/ajax-loader.gif"><br/><br/>Laadin...</div>
 <body onLoad="check_generic_loader();">
 
+<div id="test"></div>
+
 <div id="aw_object_quickadd" style="display: none;">
 <!--	<div class="icon"><img src="http://register.automatweb.com/automatweb/images/icons/class_1.gif" width="40" alt="" /></div>-->
 	<!--<div class="icon"><img src="http://register.automatweb.com/automatweb/images/icons/class_129.gif" width="40" alt="" /></div>-->
 	<div class="icon"><img src="http://register.automatweb.com/automatweb/images/aw06/blank.gif" width="40" alt="" /></div>
 	<div class="selected_object_name"></div>
-	<input type="text" class="text" /></div>
+	<input type="text" id="aw_object_quickadd_input" class="text" /></div>
 <div id="aw_object_quickadd_results" style="display: none;" ></div>
+
 
 <script type="text/javascript">
 var options = {
@@ -77,7 +85,6 @@ var options = {
 };
 $("#aw_object_quickadd").AWObjectQuickAdd(items, options);
 </script>
-
 
 <!-- päis -->
 		<!-- SUB: YAH -->

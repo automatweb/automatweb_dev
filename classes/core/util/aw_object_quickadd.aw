@@ -22,7 +22,7 @@ class aw_object_quickadd extends class_base
 		header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
 		header("Cache-Control: max-age=315360000");
 		echo $this->get_objects_to_js_array(array(
-			"pack" => true,
+			"pack" => false,
 		));
 		die();
 	}
@@ -42,7 +42,6 @@ class aw_object_quickadd extends class_base
 		if(!is_array($tree))
 		{
 			$tree = $atc->get_class_tree(array(
-				"az" => 1,
 				"docforms" => 1,
 				// those are for docs menu only
 				"parent" => "--p--",
@@ -72,7 +71,6 @@ class aw_object_quickadd extends class_base
 				if ($el_data["link"])
 				{
 					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $el_data["link"]);
-					//$url =  str_replace("--pt--", $i_parent, str_replace("--pr--", $arr["period"], $url));
 					$name = $el_data["name"];
 					$a_items[strtolower(substr($name,0,1))][] = array(
 						"name" => $name,
@@ -94,27 +92,23 @@ class aw_object_quickadd extends class_base
 		}
 		
 		$a_items = $this->get_objects();
-		$s_out = 'var items = new Array();';;
+		$a_out = array();
+		$a_out[] = 'var items = [';
 		foreach ($a_items as $key => $value)
 		{
 			$index = 0;
 			foreach ($a_items[$key] as $key2 => $value2)
 			{
-				if ($index == 0)
-				{
-					$s_out .= 'items["'.$key.'"] = new Array();'.$line_prefix;
-				}
-				$s_out .= 'items["'.$key.'"]['.$index.'] = {'.$line_prefix;
-				$s_out .= 'name: "'.$a_items[$key][$key2]["name"].'",'.$line_prefix;
-				$s_out .= 'url_obj : "'.$a_items[$key][$key2]["url"].'",'.$line_prefix;
-				$s_out .= 'url_icon: "'.$a_items[$key][$key2]["icon"].'",'.$line_prefix;
-				$s_out .= 'priority: 5'.$line_prefix;
-				$s_out .= '};'.$line_prefix;
-				$index++;
+				$a_out[] = '{name: "'.html_entity_decode ($a_items[$key][$key2]["name"]).'",';
+				$a_out[] = 'url_obj: "'.$a_items[$key][$key2]["url"].'",'.$line_prefix;
+				$a_out[] = 'icon: "'.$a_items[$key][$key2]["icon"].'"'.$line_prefix;
+				//$s_out .= 'priority: 5,'.$line_prefix;
+				$a_out[] = '},'.$line_prefix;
 			}
 		}
-		$s_out .= "\n";
-		return $s_out;
+		$a_out[count($a_out)-1] = "}";
+		$a_out[] = "]";
+		return implode  ( "",  $a_out);
 	}
 }
 ?>
