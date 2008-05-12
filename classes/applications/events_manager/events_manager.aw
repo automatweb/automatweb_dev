@@ -1212,9 +1212,9 @@ aw_restore_acl();
 			$change_url = html::obj_change_url($o , t("Muuda"));
 
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():html::obj_change_url($o->id()),
+				"name" => (!$this->can("edit" , $o->id()))?parse_obj_name($o->trans_get_val("name")):html::obj_change_url($o->id(), parse_obj_name($o->trans_get_val("name"))),
 				"time_val" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
-				"sector" => (is_object($sec))?$sec->name():"",
+				"sector" => (is_object($sec))?$sec->trans_get_val("name"):"",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"oid" => $o->id(),
 				"time" => $eventstart.$eventend,
