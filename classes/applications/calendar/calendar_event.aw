@@ -170,8 +170,6 @@ caption Korraldaja tabel
 property event_time_table type=table no_caption=1 store=no
 caption Toimumisaegade tabel
 
-@property recommends_edit type=releditor store=no mode=manager2 reltype=RELTYPE_RECOMMENDATION props=person,relation,phones,emails,org,profession table_fields=person,relation,phones,emails,org,profession
-
 @property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIME props=start,end,location table_fields=start,end,location
 @caption Toimumisajad
 

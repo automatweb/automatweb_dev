@@ -379,32 +379,6 @@
             <caption>Toimumisaeg</caption>
       </property>
       <property>
-            <name>recommends_edit</name>
-            <group>general</group>
-            <table>planner</table>
-            <type>releditor</type>
-            <store>no</store>
-            <mode>manager2</mode>
-            <reltype>RELTYPE_RECOMMENDATION</reltype>
-            <props>
-                  <num_0>person</num_0>
-                  <num_1>relation</num_1>
-                  <num_2>phones</num_2>
-                  <num_3>emails</num_3>
-                  <num_4>org</num_4>
-                  <num_5>profession</num_5>
-            </props>
-            <table_fields>
-                  <num_0>person</num_0>
-                  <num_1>relation</num_1>
-                  <num_2>phones</num_2>
-                  <num_3>emails</num_3>
-                  <num_4>org</num_4>
-                  <num_5>profession</num_5>
-            </table_fields>
-            <field>recommends_edit</field>
-      </property>
-      <property>
             <name>event_time_edit</name>
             <group>general</group>
             <table>planner</table>
