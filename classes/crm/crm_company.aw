@@ -1504,6 +1504,7 @@ class crm_company extends class_base
 			attrib -> the node link can have some extra attributes
 			leafs -> if leafs should be shown (not exactly what the description implies)
 			style -> css style added to the node - sound funny - yeah, it is
+			show_people
 	*/
 	//function generate_tree($tree, $obj,$node_id,$type1,$skip, $attrib, $leafs, $style=false)
 	function generate_tree($arr)
@@ -1647,7 +1648,8 @@ class crm_company extends class_base
 						'skip' => &$skip,
 						'attrib' => &$attrib,
 						'leafs' => $leafs,
-						"edit_mode" => $edit_mode
+						"edit_mode" => $edit_mode,
+						"show_people" => $show_people,
 			));
 		}
 		if($_GET['group'] == 'relorg_s')
@@ -1705,17 +1707,17 @@ class crm_company extends class_base
 		{
 			if(is_callable(array($this, $leafs)))
 			{
-				$this->$leafs(&$tree,&$obj,$this_level_id,&$node_id);
+				$this->$leafs(&$tree,&$obj,$this_level_id,&$node_id, $show_people);
 			}
 			else
 			{
-				$this->tree_node_items(&$tree,&$obj,$this_level_id,&$node_id);
+				$this->tree_node_items(&$tree,&$obj,$this_level_id,&$node_id, $show_people);
 			}
 		}
 	}
 
 	//hardcoded
-	function tree_node_items($tree,$obj,$this_level_id,$node_id)
+	function tree_node_items($tree,$obj,$this_level_id,$node_id, $show_people)
 	{
 		//getting the list of professions for the current
 		//unit/organization
@@ -1728,6 +1730,23 @@ class crm_company extends class_base
 		if($obj->prop("class_id") == CL_CRM_SECTION)
 		{
 			$value = $obj->id();
+		}
+		
+		if($show_people)
+		{
+			// preload sections from persons
+			$p2s = array(1);
+			$c = new connection();
+			$r_conns = $c->find(array(
+				"from.class_id" => CL_CRM_PERSON,
+				"type" => "RELTYPE_SECTION",
+				"to.oid" => $obj->id(),
+			));
+			foreach($r_conns as $r_con)
+			{
+				$p2s[$r_con["from"]] = $r_con["from"];
+			}
+
 		}
 
 		foreach($prof_connections as $prof_conn)
@@ -1751,6 +1770,47 @@ class crm_company extends class_base
 					"class_id" => $tmp_obj->class_id()
 				)
 			);
+			if($show_people)
+			{
+
+				$pol = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"CL_CRM_PERSON.RELTYPE_RANK" => $tmp_obj->id(), 
+					"oid" => $p2s,
+				));
+				foreach($pol->arr() as $po)
+				{
+					$url = aw_url_change_var(array('cat'=>$po->id(),$key=>$value));
+					$tree->add_item($node_id,
+						array(
+							'id' => $po->id(),
+							'name' => $po->name(),
+							'iconurl' =>' images/icons/class_145.gif',
+							'url'=>$url,
+							"class_id" => $po->class_id()
+						)
+					);
+				}
+			}
+		}
+		if($show_people)
+		{
+			foreach($p2s as $id)
+			{
+				$po = obj($id);
+				$url = aw_url_change_var(array('cat'=>$po->id(),$key=>$value));
+				$tree->add_item($this_level_id,
+					array(
+						'id' => $po->id()."_".$po->id(),
+						'name' => $po->name(),
+						'iconurl' =>' images/icons/class_145.gif',
+						'url'=>$url,
+						"class_id" => $po->class_id()
+					)
+				);
+			}
 		}
 	}
 
