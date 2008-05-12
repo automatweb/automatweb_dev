@@ -2,7 +2,7 @@
 <properties>
       <property>
             <name>company</name>
-            <table>aw_person_skill_manager</table>
+            <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_COMPANY</reltype>

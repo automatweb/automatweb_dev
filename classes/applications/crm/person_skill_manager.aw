@@ -6,7 +6,7 @@
 @default table=aw_person_skill_manager
 @default group=general
 
-@property company type=relpicker reltype=RELTYPE_COMPANY field=meta method=serialize
+@property company type=relpicker reltype=RELTYPE_COMPANY table=objects field=meta method=serialize
 @caption Default tasemed
 
 
@@ -85,7 +85,7 @@ class person_skill_manager extends class_base
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_person_skill_manager(aw_oid int primary_key)");
+			$this->db_query("CREATE TABLE aw_person_skill_manager(aw_oid int primary key)");
 			return true;
 		}
 
@@ -99,6 +99,158 @@ class person_skill_manager extends class_base
 				return true;
 		}
 	}
+
+	function _get_skills_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => html::get_new_url(CL_PERSON_SKILL, $arr["obj_inst"]->id(), array("return_url" => get_ru())),
+		));
+		$tb->add_delete_button();
+		$tb->add_save_button();
+	}
+
+	function _get_workers_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => html::get_new_url(
+				CL_PERSON_HAS_SKILL,
+				$arr["request"]["cat"]?$arr["request"]["cat"]:$arr["obj_inst"]->id(),
+				 array("alias_to" => $arr["request"]["cat"], "reltype" => 53, "return_url" => get_ru())
+			),
+		));
+		$tb->add_delete_button();
+		$tb->add_save_button();
+	}
+
+	function _get_workers_tree($arr)
+	{
+		if (!$this->can("view", $arr["obj_inst"]->prop("company")))
+		{
+			die("Tubade kaust on valimata, palun valige see <a href='/automatweb/orb.aw?class=person_skill_manager&action=change&id=".$arr["obj_inst"]->id()."'>siit</a>");
+		}
+
+		$org = obj($arr["obj_inst"]->prop("company"));
+
+		$tree_inst = &$arr['prop']['vcl_inst'];
+		$node_id = 0;
+		$i = get_instance(CL_CRM_COMPANY);
+		$i->active_node = (int)$arr['request']['unit'];
+		if(is_oid($arr['request']['cat']))
+		{
+			$i->active_node = $arr['request']['cat'];
+		}
+		$i->generate_tree(array(
+			'tree_inst' => &$tree_inst,
+			'obj_inst' => $org,
+			'node_id' => &$node_id,
+			'conn_type' => 'RELTYPE_SECTION',
+			'attrib' => 'unit',
+			'leafs' => true,
+			'show_people' =>1 ,
+		));
+
+		$nm = t("K&otilde;ik t&ouml;&ouml;tajad");
+		$tree_inst->add_item(0, array(
+			"id" => CRM_ALL_PERSONS_CAT,
+			"name" => $arr["request"]["cat"] == CRM_ALL_PERSONS_CAT ? "<b>".$nm."</b>" : $nm,
+			"url" => aw_url_change_var(array(
+				"cat" =>  CRM_ALL_PERSONS_CAT,
+				"unit" =>  NULL,
+			))
+		));
+
+/*		if ($_SESSION["crm"]["people_view"] == "edit")
+		{
+			classload("core/icons");
+			$tree_inst->set_root_name($arr["obj_inst"]->name());
+			$tree_inst->set_root_icon(icons::get_icon_url(CL_CRM_COMPANY));
+			$tree_inst->set_root_url(aw_url_change_var("cat", NULL, aw_url_change_var("unit", NULL)));
+		}*/
+	}
+
+	function _get_workers_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "skill",
+			"caption" => t("P&auml;devus"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "acquired",
+			"caption" => t("Omandatud"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "lost",
+			"caption" => t("kaotatud"),
+			"sortable" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		if($this->can("view", $arr["request"]["unit"]))
+		{
+			$cat = obj($arr["request"]["cat"]);
+			if($cat->class_id() == CL_CRM_PERSON)
+			{
+				$skills = $cat->get_skills();
+				foreach($skills->arr() as $skill)
+				{
+					$t->define_data(array(
+						"name" => html::get_change_url($skill->id(),array("return_url" => get_ru()),$skill->name()),
+						"oid" => $skill->id(),
+						"skill" =>  html::get_change_url($skill->prop("skill"),array("return_url" => get_ru()),$skill->prop("skill.name")),
+						"acquired" => $skill->prop("skill_acquired")?date("d.m.Y", $skill->prop("skill_acquired")):"",
+						"lost" => $skill->prop("skill_lost")?date("d.m.Y", $skill->prop("skill_lost")):"",
+					));
+				}
+			}
+			
+		}
+	}
+
+
+	function _get_skills_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+/*		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+			"sortable" => 1,
+		));
+*/
+		$ol = $arr["obj_inst"]->get_all_skills();
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::get_change_url($o->id(),array("returl_url" => get_ru()),$o->name()),
+				"oid" => $o->id()
+			));
+		}
+	}
+
 }
 
 ?>
