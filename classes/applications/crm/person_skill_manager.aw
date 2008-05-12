@@ -6,6 +6,30 @@
 @default table=aw_person_skill_manager
 @default group=general
 
+@property company type=relpicker reltype=RELTYPE_COMPANY field=meta method=serialize
+@caption Default tasemed
+
+
+@groupinfo skills caption="Oskused"
+@default group=skills
+	@property skills_tb type=toolbar no_caption=1 store=no 
+
+	@property skills_tbl type=table store=no no_caption=1
+
+
+@groupinfo workers caption="T&ouml;&ouml;tajad"
+@default group=workers
+	@property workers_tb type=toolbar no_caption=1 store=no 
+
+	@layout workers_layout type=hbox width=20%:80%
+
+		@property workers_tree type=treeview store=no parent=workers_layout no_caption=1
+		
+		@property workers_tbl type=table store=no parent=workers_layout no_caption=1
+
+@reltype COMPANY value=2 clid=CL_CRM_COMPANY
+@caption Tasemed
+
 */
 
 class person_skill_manager extends class_base
