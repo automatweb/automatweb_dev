@@ -408,7 +408,9 @@ class events_manager extends class_base
 
 		$filter = array(
 			"class_id" => array(CL_SCM_LOCATION),
-			"parent" => $arr["obj_inst"]->prop("places_menu")
+			"parent" => $arr["obj_inst"]->prop("places_menu"),
+			"lang_id" => array(),
+			"oid" => $this->translated_objs(CL_SCM_LOCATION),
 		);
 
 		// to editors show only their own objects
@@ -429,10 +431,10 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id())) ? $o->name() :
-					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name() ? $o->name() : "(".t("Nimetu").")")),
-				"name_str" => $o->name(),
-				"comment" => $o->prop("comment"),
+				"name" => (!$this->can("edit" , $o->id())) ? parse_obj_name($o->trans_get_val("name")) :
+					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), (parse_obj_name($o->trans_get_val("name")) ? parse_obj_name($o->trans_get_val("name")) : "(".t("Nimetu").")")),
+				"name_str" => parse_obj_name($o->trans_get_val("name")),
+				"comment" => $o->trans_get_val("comment"),
 				"oid" => $o->id(),
 			));
 		}
@@ -481,9 +483,17 @@ class events_manager extends class_base
 			return PROP_ERROR;
 		}
 
+		$ids = $this->translated_objs(CL_CRM_COMPANY);
+		foreach($this->translated_objs(CL_CRM_PERSON) as $id)
+		{
+			$ids[] = $id;
+		}
+
 		$filter = array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-			"parent" => $arr["obj_inst"]->prop("organiser_menu")
+			"parent" => $arr["obj_inst"]->prop("organiser_menu"),
+			"lang_id" => array(),
+			"oid" => $ids,
 		);
 
 		// to editors show only their own objects
@@ -505,9 +515,10 @@ class events_manager extends class_base
 		{
 			$cfg = (CL_CRM_COMPANY === (int) $o->class_id()) ? $cfg_o : $cfg_p;
 			$t->define_data(array(
-				"name" => (!$this->can("edit" , $o->id()))?$o->name():
-					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), ($o->name()?$o->name():"(".t("Nimetu").")")),
-				"address" => $o->prop("contact.name"),
+				"name" => (!$this->can("edit" , $o->id()))?parse_obj_name($o->trans_get_val("name")):
+					 html::get_change_url($o->id(), array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), (parse_obj_name($o->trans_get_val("name")))),
+//				"address" => $o->prop("contact.name"),
+				"address" => $this->can("view", $o->prop("contact")) ? parse_obj_name(obj($o->prop("contact"))->trans_get_val("name")) : "",
 				"oid" => $o->id(),
 				"name_str" => $o->name(),
 			));
@@ -528,6 +539,8 @@ class events_manager extends class_base
 		$ot = new object_tree(array(
 			"class_id" => CL_CRM_SECTOR,
 			"parent" => $parent,
+			"lang_id" => array(),
+			"oid" => $this->translated_objs(CL_CRM_SECTOR),
 		));
 		$cfg = $this->get_cgf_from_manager($arr["obj_inst"], "sector");
 		$target_url = $this->mk_my_orb("change", array("cfgform" => $cfg, "return_url" => get_ru()) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), "crm_sector");
@@ -753,24 +766,13 @@ class events_manager extends class_base
 		}
 aw_restore_acl();
 */
-		$ids_sql_results = $this->db_fetch_array("SELECT oid FROM objects WHERE class_id = '".CL_CALENDAR_EVENT."' AND (metadata LIKE '%\'trans_".aw_global_get("lang_id")."_status\'=>\'1\'%' OR lang_id = '".aw_global_get("lang_id")."')");
-		$ids = array();
-		foreach($ids_sql_results as $ids_sql_result)
-		{
-			$ids[] = $ids_sql_result["oid"];
-		}
-		// If no OIDs is returned in the SQL, no objects should be returned in the ol.
-		if(count($ids) == 0)
-		{
-			$ids[] = -1;
-		}
 		$time = time();
 		$filter = array(
 			"class_id" => array(CL_CALENDAR_EVENT),
 			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
 //			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
 			"lang_id" => array(),
-			"oid" => $ids,
+			"oid" => $this->translated_objs(CL_CALENDAR_EVENT),
 		);
 
 		$filter2 = array(
@@ -1094,7 +1096,8 @@ aw_restore_acl();
 				$translated = join (", " ,$langs);
 			}
 
-			$name = parse_obj_name($o->name());
+			// $name = parse_obj_name($o->name());
+			$name = parse_obj_name($o->trans_get_val("name"));
 
 			if($arr["obj_inst"]-> prop("preview_object"))
 			{
@@ -1135,7 +1138,7 @@ aw_restore_acl();
 				"name" => ($parse_url)? html::href(array("caption" => $name, "url" => $parse_url)):($can_edit ? html::get_change_url($oid, array("cfgform" => $cfg, "return_url" => $get_ru) + (aw_global_get("section") ? array("section" => aw_global_get("section")) : array()), $name) : $name),
 				"time" => $eventstart.$eventend,
 				"time_val" => $eventtime,
-				"sector" => (is_object($sec)) ? $sec->name() : "",
+				"sector" => (is_object($sec)) ? $sec->trans_get_val("name") : "",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"tasks" => $make_copy . " " . $publish . " " . $change,
 				"oid" => $oid,
@@ -1239,7 +1242,8 @@ aw_restore_acl();
 			FROM
 			objects  LEFT JOIN planner ON planner.id = objects.brother_of
 			WHERE
-			objects.class_id = 819
+			objects.class_id = '".CL_CALENDAR_EVENT."'
+			AND (objects.metadata LIKE '%\'trans_".aw_global_get("lang_id")."_status\'=>\'1\'%' OR objects.lang_id = '".aw_global_get("lang_id")."')
 			AND planner.start  <  ".(time() + 86400 * $days)."
 			AND planner.end  > ".time()."
 			AND  objects.status > 0
@@ -1922,6 +1926,22 @@ aw_restore_acl();
 			}
 		}
 		return $ol;
+	}
+
+	private function translated_objs($clid)
+	{
+		$ids_sql_results = $this->db_fetch_array("SELECT oid FROM objects WHERE class_id = '".$clid."' AND (metadata LIKE '%\'trans_".aw_global_get("lang_id")."_status\'=>\'1\'%' OR lang_id = '".aw_global_get("lang_id")."')");
+		$ids = array();
+		foreach($ids_sql_results as $ids_sql_result)
+		{
+			$ids[] = $ids_sql_result["oid"];
+		}
+		// If no OIDs is returned in the SQL, no objects should be returned in the object list.
+		if(count($ids) == 0)
+		{
+			$ids[] = -1;
+		}
+		return $ids;
 	}
 }
 ?>
