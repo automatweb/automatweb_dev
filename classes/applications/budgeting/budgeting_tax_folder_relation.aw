@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_folder_relation.aw,v 1.3 2007/12/06 14:32:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_folder_relation.aw,v 1.4 2008/05/12 09:08:15 markop Exp $
 // budgeting_tax_folder_relation.aw - Eelarvestamise maksu kausta seos 
 /*
 
@@ -15,6 +15,28 @@
 
 @property folder type=textbox field=aw_folder
 @caption Asukoht
+
+	@property use_different_settings type=checkbox size=5 field=aw_use_different_settings
+	@caption Kasuta eraldi seadeid
+
+	@property amount_final type=textbox size=5 field=aw_amt_final
+	@caption Summa t&auml;isarv
+
+	@property amount type=textbox size=5 field=aw_amt
+	@caption Summa %
+
+	@property max_deviation_minus type=textbox size=5 field=aw_max_deviation_minus
+	@caption Maksimaalne projektip&otilde;hine muudatus -
+
+	@property max_deviation_plus type=textbox size=5 field=aw_max_deviation_plus
+	@caption Maksimaalne projektip&otilde;hine muudatus +
+
+	@property pri type=textbox size=5 field=aw_pri
+	@caption Prioriteet
+
+	@property term type=textbox size=10 field=aw_term
+	@caption Tingimus
+
 
 @reltype TAX value=1 clid=CL_BUDGETING_TAX
 @caption Maks
@@ -63,6 +85,32 @@ class budgeting_tax_folder_relation extends class_base
 			$this->db_query("CREATE TABLE aw_budgeting_tax_relation (aw_oid int primary key,aw_tax int, aw_folder varchar(50))");
 			return true;
 		}
+		switch($f)
+		{
+			case "term":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)"
+				));
+				return true;
+			case "aw_pri":
+			case "aw_use_different_settings":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+			case "aw_amt_final":
+			case "aw_amt":
+			case "aw_max_deviation_minus":
+			case "aw_max_deviation_plus":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+				return true;
+		}
+
 	}
 }
 ?>
