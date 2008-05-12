@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.9 2008/03/13 13:27:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.10 2008/05/12 07:35:15 kristo Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -157,16 +157,16 @@ class crm_conference_value_days extends class_base
 			// well, i changed these get_lc's from locale:: class to static, because these different languages fucked the locale classload totally up. if anybody wants to fix it, be my guest.. 
 			$html.='<table class="type4">
 				<tr class="subheading">	
-					<th colspan="7">'.get_lc_month(date("m",(time() + $n*30*24*3600)))." ".date("Y",(time() + $n*30*24*3600)).'</th>
+					<th colspan="7">'.locale::get_lc_month(date("m",(time() + $n*30*24*3600)))." ".date("Y",(time() + $n*30*24*3600)).'</th>
 				</tr>
 				<tr>
-					<th>'.strtoupper(substr(get_lc_weekday(1,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(get_lc_weekday(2,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(get_lc_weekday(3,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(get_lc_weekday(4,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(get_lc_weekday(5,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(get_lc_weekday(6,true), 0, 1)).'</th>
-					<th>'.strtoupper(substr(get_lc_weekday(7,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(1,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(2,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(3,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(4,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(5,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(6,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(7,true), 0, 1)).'</th>
 				</tr>';
 			$day_start = $month_start - 3600*24*($day_of_the_week - 1);
 			$w = 0;
