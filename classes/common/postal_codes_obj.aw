@@ -114,7 +114,7 @@ class postal_codes_obj extends _int_object
 			}
 			elseif($var == "userhouse")
 			{
-				$hn = $arr["userhouse"];
+				$hn = $val;
 				if(is_numeric($val))
 				{
 					$where[] = "`house_start` <= ".$val."";
@@ -122,8 +122,8 @@ class postal_codes_obj extends _int_object
 				}
 				else
 				{
-					$where[] = "`house_start` = '".$val."'";
-					$where[] = "`house_end` = '".$val."'";
+					$where["house_start"] = "`house_start` = '".$val."'";
+					$where["house_end"] = "`house_end` = '".$val."'";
 				}
 			}
 		}
@@ -140,6 +140,16 @@ class postal_codes_obj extends _int_object
 				$res = array();
 				$rows = $i->db_fetch_array("SELECT house_start, house_end, zip FROM aw_postal_codes ".$sql." ORDER BY `house_start` ASC");
 				$high = 0;
+				if(count($rows)<1 && !is_numeric($hn))
+				{
+					if(ereg("([0-9]{1,})*", $hn, $num))
+					{
+						$where["house_start"] = "`house_start` <= ".$num[1]."";
+						$where["house_end"] = "`house_end` >= ".$num[1]."";
+						$sql = " WHERE ".implode(" AND ", $where);
+						$rows = $i->db_fetch_array("SELECT house_start, house_end, zip FROM aw_postal_codes ".$sql." ORDER BY `house_start` ASC");
+					}
+				}
 				if(count($rows)>1)
 				{
 					foreach($rows as $id => $row)
