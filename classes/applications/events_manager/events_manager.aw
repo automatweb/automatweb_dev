@@ -753,11 +753,24 @@ class events_manager extends class_base
 		}
 aw_restore_acl();
 */
+		$ids_sql_results = $this->db_fetch_array("SELECT oid FROM objects WHERE class_id = '".CL_CALENDAR_EVENT."' AND (metadata LIKE '%\'trans_".aw_global_get("lang_id")."_status\'=>\'1\'%' OR lang_id = '".aw_global_get("lang_id")."')");
+		$ids = array();
+		foreach($ids_sql_results as $ids_sql_result)
+		{
+			$ids[] = $ids_sql_result["oid"];
+		}
+		// If no OIDs is returned in the SQL, no objects should be returned in the ol.
+		if(count($ids) == 0)
+		{
+			$ids[] = -1;
+		}
 		$time = time();
 		$filter = array(
 			"class_id" => array(CL_CALENDAR_EVENT),
 			"parent" => array($this_o->prop("event_menu")) + (array) $this_o->prop("event_menu_source"),
 //			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $time)
+			"lang_id" => array(),
+			"oid" => $ids,
 		);
 
 		$filter2 = array(
