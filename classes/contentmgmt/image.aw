@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.18 2008/04/30 13:18:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.19 2008/05/13 13:32:10 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1983,6 +1983,18 @@ class image extends class_base
 		if (($conf->prop("v_width") || $conf->prop("v_height") || $conf->prop("h_width") || $conf->prop("h_height")))
 		{
 			$bigf = $o->prop("file2");
+
+			if (file_exists($bigf))
+			{
+				$img = get_instance("core/converters/image_convert");
+				$img->set_error_reporting(false);
+				$img->load_from_file($bigf);
+				if ($img->is_error())
+				{
+					$bigf = false;
+				}
+			}
+
 			if (!$bigf)
 			{
 				// no big file, copy from small file
