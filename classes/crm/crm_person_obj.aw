@@ -349,6 +349,21 @@ class crm_person_obj extends _int_object
 		}
 		return $ol;
 	}
+
+	function get_skill_names()
+	{
+		$ol = new object_list();
+		foreach($this->connections_from(array("type" => "RELTYPE_HAS_SKILL")) as $conn)
+		{
+			$ol ->add($conn->prop("to"));
+		}
+		$ret = array();
+		foreach($ol->arr() as $o)
+		{
+			$ret[$o->id()] = $o->prop("skill.name");
+		}
+		return $ret;
+	}
 }
 
 ?>

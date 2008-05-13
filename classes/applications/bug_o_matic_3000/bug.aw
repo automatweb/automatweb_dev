@@ -41,6 +41,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
 		@caption Kellele
 
+		@property skill_used style=select table=aw_bugs field=skill_used parent=settings_col1 captionside=top
+		@caption Kasutatav P&auml;devus
+
 		@property is_order type=checkbox ch_value=1 parent=settings_col1 no_caption=1
 		@caption Arendustellimus
 
@@ -375,7 +378,14 @@ class bug extends class_base
 					$retval = PROP_IGNORE;
 				}
 				break;
-
+			case "skill_used":
+				if (!$this->can("view", $arr["obj_inst"]->prop("who")))
+				{
+					return PROP_IGNORE;
+				}
+				$who = obj($arr["obj_inst"]->prop("who"));
+				$prop["options"] = $who->get_skill_names();
+				break;
 			case "customer_unit":
 				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
@@ -2177,6 +2187,7 @@ die($email);
 			case "fileupload":
 			case "is_order":
 			case "bug_type":
+			case "skill_used":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",

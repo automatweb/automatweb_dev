@@ -79,6 +79,16 @@
             <caption>Kellele</caption>
       </property>
       <property>
+	      <name>skill_used</name>
+	      <group>general</group>
+	      <table>aw_bugs</table>
+	      <type>select</type>
+	      <field>skill_used</field>
+	      <parent>settings_col1</parent>
+	      <captionside>top</captionside>
+	      <caption>Kasutatav  P&amp;amp;auml;devus</caption>
+      </property>
+      <property>
             <name>is_order</name>
             <group>general</group>
             <table>aw_bugs</table>
