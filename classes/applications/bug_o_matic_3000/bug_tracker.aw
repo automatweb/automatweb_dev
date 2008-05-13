@@ -3044,13 +3044,15 @@ class bug_tracker extends class_base
 		$bi = get_instance(CL_BUG);
 		foreach($gt_list as $gt)
 		{
+			$cdata = $this->get_gantt_bug_colors($gt);
 			$chart->add_row (array (
 				"name" => $gt->id(),
 				"title" => parse_obj_name($gt->name()), //." (".$bi->get_sort_priority($gt).") ",
 				"uri" => html::get_change_url(
 					$gt->id(),
 					array("return_url" => get_ru())
-				)
+				),
+				"row_name_class" => $cdata["class"],
 			));
 			if ($arr["ret_b"] && $gt->id() == $arr["ret_b"]->id())
 			{
@@ -3088,29 +3090,8 @@ class bug_tracker extends class_base
 			$day_start = $day_info[0];
 			$day_end = $day_info[1];
 
-			$color = "silver";
-			$deadline = $gt->prop("deadline");
-			if($deadline > 1)
-			{
-				if($deadline < time())
-				{
-					$color = "red";
-				}
-				elseif(($deadline - 5*24*60*60) < time())
-				{
-					$color = "yellow";
-				}
-			}
-
-			$status = $gt->prop("bug_status");
-			if($status == 10)
-			{
-				$color = "green";
-			}
-			elseif($status == 11)
-			{
-				$color = "black";
-			}
+			$cdata = $this->get_gantt_bug_colors($gt);
+			$color = $cdata["color"];
 			if (date("H", $start+$length) > $day_end || ($length > (3600 * 7)))
 			{
 				// split into parts
@@ -3213,6 +3194,62 @@ class bug_tracker extends class_base
 		}
 
 		$arr["prop"]["value"] = $chart->draw_chart ();
+	}
+
+	function get_gantt_bug_colors($gt)
+	{
+		$color = "silver";
+		$class = "";
+		$deadline = $gt->prop("deadline");
+		if($deadline > 1)
+		{
+			if($deadline < time())
+			{
+				$color = "red";
+				$class = "deadline0";
+			}
+			elseif(($deadline - 5*24*60*60) < time() && $deadline - 4*24*60*60 > time())
+			{
+				$color = "yellow";
+				$class = "deadline5";
+			}
+			elseif(($deadline - 4*24*60*60) < time() && $deadline - 3*24*60*60 > time())
+			{
+				$color = "#FF5300";
+				$class = "deadline4";
+			}
+			elseif(($deadline - 3*24*60*60) < time() && $deadline - 2*24*60*60 > time())
+			{
+				$color = "#FF7E00";
+				$class = "deadline3";
+			}
+			elseif(($deadline - 2*24*60*60) < time() && $deadline - 1*24*60*60 > time())
+			{
+				$color = "#FFA900";
+				$class = "deadline2";
+			}
+			elseif(($deadline - 1*24*60*60) < time() && $deadline > time())
+			{
+				$color = "#FFD400";
+				$class = "deadline1";
+			}
+		}
+
+		$status = $gt->prop("bug_status");
+		if($status == 10)
+		{
+			$color = "green";
+			$class = "feedback";
+		}
+		elseif($status == 11)
+		{
+			$color = "black";
+			$class = "fatalerror";
+		}
+		return array(
+			"color" => $color,
+			"class" => $class,
+		);
 	}
 
 	function validate_cp_formula($formula)

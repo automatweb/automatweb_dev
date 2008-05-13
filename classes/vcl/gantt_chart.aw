@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.22 2008/01/31 13:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.23 2008/05/13 10:39:16 robert Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -162,6 +162,7 @@ class gantt_chart extends class_base
 	**/
 	function add_row ($arr)
 	{
+		$row_name_class = empty ($arr["row_name_class"]) ? "VclGanttRowName" : $arr["row_name_class"];
 		$row_name = $arr["name"];
 		$row_title = $arr["title"];
 		$row_type = empty ($arr["type"]) ? "data" : $arr["type"];
@@ -177,6 +178,7 @@ class gantt_chart extends class_base
 			"uri" => $row_title_uri,
 			"target" => $row_title_uri_target,
 			"id" => ++$this->row_id_counter,
+			"name_class" => $row_name_class,
 		);
 	}
 
@@ -367,7 +369,7 @@ class gantt_chart extends class_base
 
 					$collapse_toggle_value = $collapsed ? "n" : "y";
 					$row_state = $collapsed ? "plus" : "minus";
-					$expand_collapse_title = $collapsed ? t("Näita") : t("Peida");
+					$expand_collapse_title = $collapsed ? t("N&auml;ita") : t("Peida");
 					$this->vars (array (
 						"expand_collapse_link" => aw_url_change_var ("aw_gantt_chart_collapsed_" . $row["id"], $collapse_toggle_value),
 						"expand_collapse_title" => $expand_collapse_title,
@@ -529,6 +531,7 @@ class gantt_chart extends class_base
 			### parse row
 			$this->vars (array (
 				"row_name" => $row["title"],
+				"row_name_class" => $row["name_class"],
 				"row_uri" => $row["uri"],
 				"row_uri_target" => $row["target"],
 				"data_cell_" . $cell_type => $row_contents,
