@@ -1538,7 +1538,7 @@ class crm_company_overview_impl extends class_base
 				$clid = array(CL_TASK);
 				if ($co == $arr["obj_inst"]->id())
 				{
-					$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
+					$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1), $arr);
 
 				}
 				else
@@ -1564,7 +1564,7 @@ class crm_company_overview_impl extends class_base
 				$clid = CL_BUG;
 				if ($co == $arr["obj_inst"]->id())
 				{
-					$tasks = $i->get_my_bugs(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
+					$tasks = $i->get_my_bugs($arr);
 
 				}
 				else
@@ -1585,7 +1585,7 @@ class crm_company_overview_impl extends class_base
 				$clid = CL_CRM_MEETING;
 				if ($co == $arr["obj_inst"]->id())
 				{
-					$tasksi = $i->get_my_meetings();
+					$tasksi = $i->get_my_meetings($arr);
 					$tasks = array();
 					foreach($tasksi as $t_id)
 					{
@@ -1620,7 +1620,7 @@ class crm_company_overview_impl extends class_base
 				$clid = CL_CRM_CALL;
 				if ($co == $arr["obj_inst"]->id())
 				{
-					$tasksi = $i->get_my_calls();
+					$tasksi = $i->get_my_calls($arr);
 					$tasks = array();
 					foreach($tasksi as $t_id)
 					{
@@ -1726,7 +1726,7 @@ class crm_company_overview_impl extends class_base
 					enter_function("_get_task_list:2:2");
 					$tasks = array();
 					enter_function("_get_task_list:2:2:get_my_act");
-					$tg = $i->get_my_actions(isset($arr["range"]) ? $arr["range"] : null);
+					$tg = $i->get_my_actions($arr);
 					exit_function("_get_task_list:2:2:get_my_act");
 					if (!count($tg))
 					{

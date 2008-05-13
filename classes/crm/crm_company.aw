@@ -5041,7 +5041,7 @@ class crm_company extends class_base
 		return $ret;
 	}
 
-	function get_my_tasks($only_not_done = false)
+	function get_my_tasks($only_not_done = false, $arr = array())
 	{
 		$u = get_instance(CL_USER);
 		$c = new connection();
@@ -5057,13 +5057,29 @@ class crm_company extends class_base
 		}
 		if(!empty($ids))
 		{
-			$ol = new object_list(array(
+			$params = array(
 				"oid" => $ids,
 				"site_id" => array(),
 				"lang_id" => array(),
 				"class_id" => CL_TASK,
 				"flags" => array("mask" => OBJ_IS_DONE, "flags" => 0)
-			));
+			);
+			if($arr["prop"]["type"] == "calendar")
+			{
+				if($d = $arr["request"]["date"])
+				{
+					$tmp = explode("-", $d);
+					$time = mktime(0, 0, 1, $tmp[1], $tmp[0], $tmp[2]);
+				}
+				else
+				{
+					$time = time();
+				}
+				$from = mktime(0, 0, 1, date('m', $time) - 1, 1, date('Y', $time));
+				$to = mktime(0, 0, 1, date('m', $time) + 1, date('t', mktime(0, 0, 1, date('m', $time)+1, 1, date('Y', $time))), date('Y', $time));
+				$params[] = new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to));
+			}
+			$ol = new object_list($params);
 			return $ol->ids();
 		}
 		return array();
@@ -5079,7 +5095,7 @@ class crm_company extends class_base
 		return $ret;*/
 	}
 
-	function get_my_meetings()
+	function get_my_meetings($arr = array())
 	{
 		$u = get_instance(CL_USER);
 		$c = new connection();
@@ -5088,15 +5104,16 @@ class crm_company extends class_base
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => "RELTYPE_PERSON_MEETING",
 		));
-		$ret = array();
+		$oids = array();
 		foreach($cs as $c)
 		{
-			$ret[] = $c["to"];
+			$oids[] = $c["to"];
 		}
+		$ret = $this->get_events_from_oids($oids, array(CL_CRM_MEETING), $arr);
 		return $ret;
 	}
 
-	function get_my_calls()
+	function get_my_calls($arr = array())
 	{
 		$u = get_instance(CL_USER);
 		$c = new connection();
@@ -5105,15 +5122,16 @@ class crm_company extends class_base
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => "RELTYPE_PERSON_CALL",
 		));
-		$ret = array();
+		$oids = array();
 		foreach($cs as $c)
 		{
-			$ret[] = $c["to"];
+			$oids[] = $c["to"];
 		}
+		$ret = $this->get_events_from_oids($oids, array(CL_CRM_CALL), $arr);
 		return $ret;
 	}
 
-	function get_my_bugs()
+	function get_my_bugs($arr = array())
 	{
 		$u = get_instance(CL_USER);
 		$c = new connection();
@@ -5148,23 +5166,26 @@ class crm_company extends class_base
 		return $ret;
 	}
 
-	function get_my_actions()
+	function get_my_actions($arr = array())
 	{
 		$u = get_instance(CL_USER);
+		$cp = $u->get_current_person();
 		$c = new connection();
 		$cs = $c->find(array(
-			"from" => $u->get_current_person(),
+			"from" => $cp,
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => array("RELTYPE_PERSON_TASK", "RELTYPE_PERSON_MEETING", "RELTYPE_PERSON_CALL"),
 		));
-		$ret = array();
+		
+		$oids = array();
 		foreach($cs as $c)
 		{
 			if ($this->can("view", $c["to"]))
 			{
-				$ret[] = $c["to"];
+				$oids[] = $c["to"];
 			}
 		}
+		$ret = $this->get_events_from_oids($oids, array(CL_TASK, CL_CRM_MEETING, CL_CRM_CALL), $arr);
 		$cali = get_instance(CL_PLANNER);
 		$calid = $cali->get_calendar_for_user();
 		if($calid)
@@ -5195,6 +5216,36 @@ class crm_company extends class_base
 			{
 				$ret[] = $ofid;
 			}
+		}
+		return $ret;
+	}
+
+	function get_events_from_oids($oids, $clids, $arr)
+	{
+		$ret = array();
+		if(count($oids))
+		{
+			if($arr["prop"]["type"] == "calendar")
+			{
+				if($d = $arr["request"]["date"])
+				{
+					$tmp = explode("-", $d);
+					$time = mktime(0, 0, 1, $tmp[1], $tmp[0], $tmp[2]);
+				}
+				else
+				{
+					$time = time();
+				}
+				$from = mktime(0, 0, 1, date('m', $time) - 1, 1, date('Y', $time));
+				$to = mktime(0, 0, 1, date('m', $time) + 1, date('t', mktime(0, 0, 1, date('m', $time)+1, 1, date('Y', $time))), date('Y', $time));
+				$params[] = new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to));
+			}
+			$params["site_id"] = array();
+			$params["lang_id"] = array();
+			$params["oid"] = $oids;
+			$params["class_id"] = $clids;
+			$ol = new object_list($params);
+			$ret = $ol->ids();
 		}
 		return $ret;
 	}
@@ -6124,11 +6175,8 @@ class crm_company extends class_base
 		{
 			foreach($arr["sel"] as $id)
 			{
-				if ($this->can("delete", $id))
-				{
-					$o = obj($id);
-					$o->delete();
-				}
+				$o = obj($id);
+				$o->delete();
 			}
 		}
 		return $arr["post_ru"];
@@ -7197,7 +7245,6 @@ class crm_company extends class_base
 		return false;
 	}
 
-	/*
 	function callback_get_add_txt($arr)
 	{
 		$cust_url = $this->mk_my_orb('new',array(
@@ -7393,7 +7440,6 @@ class crm_company extends class_base
 			</script>
 		  <select name=\"foo\" onChange='select_this(this)'>$adds</select></span>$s";
 	}
-	*/
 
 	function _init_ext_sys_t(&$t)
 	{
