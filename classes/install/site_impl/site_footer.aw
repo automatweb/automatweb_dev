@@ -52,6 +52,7 @@ if (aw_ini_get("ga_id"))
 	$sf->read_template("applications/google_analytics/tracking_code.tpl");
 	$sf->vars(array(
 		"ga_id" => aw_ini_get("ga_id"),
+		"ga_page_name" => aw_global_get("ga_page_name")
 	));
 	$s_code = $sf->parse();
 	$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_code."</body>\n</html>" , $str);
