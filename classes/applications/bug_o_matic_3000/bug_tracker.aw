@@ -3199,39 +3199,39 @@ class bug_tracker extends class_base
 	function get_gantt_bug_colors($gt)
 	{
 		$color = "silver";
-		$class = "";
+		$class = "VclGanttRowName";
 		$deadline = $gt->prop("deadline");
 		if($deadline > 1)
 		{
 			if($deadline < time())
 			{
 				$color = "red";
-				$class = "deadline0";
+				$class = "VclGanttRowName deadline0";
 			}
 			elseif(($deadline - 5*24*60*60) < time() && $deadline - 4*24*60*60 > time())
 			{
 				$color = "yellow";
-				$class = "deadline5";
+				$class = "VclGanttRowName deadline5";
 			}
 			elseif(($deadline - 4*24*60*60) < time() && $deadline - 3*24*60*60 > time())
 			{
 				$color = "#FF5300";
-				$class = "deadline4";
+				$class = "VclGanttRowName deadline4";
 			}
 			elseif(($deadline - 3*24*60*60) < time() && $deadline - 2*24*60*60 > time())
 			{
 				$color = "#FF7E00";
-				$class = "deadline3";
+				$class = "VclGanttRowName deadline3";
 			}
 			elseif(($deadline - 2*24*60*60) < time() && $deadline - 1*24*60*60 > time())
 			{
 				$color = "#FFA900";
-				$class = "deadline2";
+				$class = "VclGanttRowName deadline2";
 			}
 			elseif(($deadline - 1*24*60*60) < time() && $deadline > time())
 			{
 				$color = "#FFD400";
-				$class = "deadline1";
+				$class = "VclGanttRowName deadline1";
 			}
 		}
 
@@ -3239,12 +3239,12 @@ class bug_tracker extends class_base
 		if($status == 10)
 		{
 			$color = "green";
-			$class = "feedback";
+			$class = "VclGanttRowName feedback";
 		}
 		elseif($status == 11)
 		{
 			$color = "black";
-			$class = "fatalerror";
+			$class = "VclGanttRowName fatalerror";
 		}
 		return array(
 			"color" => $color,
