@@ -14,5 +14,5 @@ pageTracker._addOrganic("1182.ee","nimi");
 pageTracker._addOrganic("1182.ee","msona");
 pageTracker._addOrganic("blog.tr.ee","q");
 pageTracker._initData();
-pageTracker._trackPageview();
+pageTracker._trackPageview("{VAR:ga_page_name}");
 </script>
