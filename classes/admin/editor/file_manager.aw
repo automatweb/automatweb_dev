@@ -237,6 +237,7 @@ class file_manager extends aw_template
 		mkdir ($folder, 0777);
 		chmod($folder, 0777);
 
+		$this->file_info = array();
 		foreach($files as $id)
 		{
 			if(!$this->can("view" , $id))
@@ -258,6 +259,15 @@ class file_manager extends aw_template
 				continue;
 			}
 		}
+
+		$str = "";
+		foreach($this->file_info as $item)
+		{
+			$str .= '"'.$item[0].'"'."\t".'"'.$item[1]."\"\r\n";
+		}
+		$f = fopen($folder."/content.csv", "w");
+		fwrite($f, $str);
+		fclose($f);
 
 		chdir($folder);
 		$zipfilename = aw_ini_get("cache.page_cache")."/".time()."files.zip";
@@ -332,6 +342,7 @@ class file_manager extends aw_template
 		$filepath = $file_data["properties"]["file"];
 		$filename = $file_data["properties"]["name"];
 		$filepath = str_replace("/new/" , "/" , $filepath);
+		$this->file_info[] = array($fileo->path_str(),$fileo->comment());
 
 		copy($filepath, $folder."/".$filename);
 	}
