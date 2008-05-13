@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.10 2007/11/23 10:54:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.11 2008/05/13 13:37:08 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property impl type=relpicker reltype=RELTYPE_IMPL table=aw_task_rows field=aw_impl store=connect multiple=1
 	@caption Teostaja
+
+	@property skill_used style=select table=aw_task_rows field=skill_used parent=settings_col1 captionside=top
+	@caption Kasutatav P&auml;devus
 
 	@property time_guess type=textbox size=5 table=aw_task_rows field=aw_time_guess
 	@caption Prognoositud tunde
@@ -77,6 +80,14 @@ class task_row extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "skill_used":
+				$prop["options"] = array();
+				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")) as $c)
+				{
+					$who = $c->to();
+					$prop["options"] = $prop["options"] + $who->get_skill_names();
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -121,6 +132,7 @@ class task_row extends class_base
 				));
 				return true;
 			case "aw_task_ord":
+			case "skill_used":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -129,9 +141,9 @@ class task_row extends class_base
 		}
 	}
 		//Toimima peaks see siis nii, et kui Toimetuses on ainult 1 rida, siis pannakse kokkuleppehind
-	// sinna rea taha kirja. Kui on kaks või rohkem 0 tundidega rida, siis jagatakse kokkuleppehind 
-	//võrdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind 
-	//ainult tundidega ridade vahel ära.
+	// sinna rea taha kirja. Kui on kaks v6i rohkem 0 tundidega rida, siis jagatakse kokkuleppehind 
+	//v6rdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind 
+	//ainult tundidega ridade vahel 2ra.
 	
 	//tagastab statistikale sobiliku summa rea kohta, juhul kui on tegu kokkuleppehinnaga
 	function get_row_ageement_price($row, $task = null)
@@ -162,7 +174,7 @@ class task_row extends class_base
 				}
 				else
 				{
-					//mõnikord äkki ei viitsita koguseks 1 märkida
+					//m6nikord 2kki ei viitsita koguseks 1 m2rkida
 					if(!$agreement[0]["amt"])
 					{
 						$agreement[0]["amt"] = 1;
@@ -210,12 +222,12 @@ class task_row extends class_base
 			{
 				return $sum;
 			}
-			//kui on mitu rida , mille aeg näitab 0
+			//kui on mitu rida , mille aeg n2itab 0
 			if($row_cnt > 1 && $time_cnt == 0)
 			{
 				return $sum / $row_cnt;
 			}
-			//kui on mitu rida ja mõnel on aeg, teistel mitte
+			//kui on mitu rida ja m6nel on aeg, teistel mitte
 			if($row_cnt > 1 && $time_cnt > 0)
 			{
 				return ($row->prop("time_to_cust")/$time_cnt) * $sum;
