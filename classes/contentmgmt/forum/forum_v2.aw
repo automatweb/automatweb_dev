@@ -2590,6 +2590,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		$ol = new object_list($params);
 		foreach($ol->arr() as $o)
 		{
+			$tp = null;
 			if($folder)
 			{
 				$ok = 0;
