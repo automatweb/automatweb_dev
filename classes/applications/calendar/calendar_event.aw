@@ -761,7 +761,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 						$vco = obj($v_ctr_oid);
 						$vci = $vco->instance();
 						$prop_list[$propname]["value"] = $ob->prop($propname);
-						$ok &= ($vci->check_property($prop_list[$propname], $v_ctr_oid, array("obj" => $ob)) == PROP_OK);
+						$ok &= ($vci->check_property(&$prop_list[$propname], $v_ctr_oid, array("obj" => $ob)) == PROP_OK);
 					}
 				}
 			}
@@ -770,8 +770,14 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 			{
 				continue;
 			}
-
-		  	$value = $ob->prop_str($propname);
+			if($val = $prop_list[$propname]["value"])
+			{
+				$value = $val;
+			}
+			else
+			{
+		  		$value = $ob->prop_str($propname);
+			}
 			if ($propdata["type"] == "datetime_select")
 			{
 				if($value == -1)
