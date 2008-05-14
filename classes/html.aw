@@ -28,6 +28,10 @@ class html extends aw_template
 		selectbox size in pixels
 	@param tabindex optional type=string
 		tab inde
+	@param multiple optional type=bool
+		if true, multiple selection abled
+	@param size optional type=int
+		the size of the selection visible
 
 	@returns string / html select
 
