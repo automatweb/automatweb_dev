@@ -1004,7 +1004,7 @@ class crm_company_bills_impl extends class_base
 				"oid" => $bill->id(),
 				"print" => $pop->get_menu()
 			));
-			$sum+= $cursum;
+			$sum+= number_format($cursum,2,".", "");
 		}
 
 		$t->set_default_sorder("desc");
