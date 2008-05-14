@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.118 2008/01/31 13:52:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.119 2008/05/14 06:48:17 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -612,7 +612,7 @@ class object_treeview_v2 extends class_base
 			aw_global_set("no_cache", 1);
 		}
 
-		$tpl = $ob->prop("show_tpl") . ".tpl";
+		$tpl = ($ob->prop("show_tpl") != "" ? $ob->prop("show_tpl") : "show") . ".tpl";
 		$this->read_template($tpl);
 
 		if ("show_search.tpl" === $tpl and $this->can("view", $ob->prop("search")))
