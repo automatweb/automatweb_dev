@@ -216,6 +216,7 @@ class postal_codes_obj extends _int_object
 		$fields = array(
 			"country" => t("Riik"),
 			"state" => t("Maakond"),
+			"area" => t("Vald"),
 			"city" => t("Linn / Alev / K&uuml;la"),
 			"street" => t("T&auml;nav / Talu"),
 			"house_start" => t("Maja nr algus"),

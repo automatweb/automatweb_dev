@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.84 2008/04/30 13:00:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.85 2008/05/14 11:56:27 robert Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1821,7 +1821,8 @@ echo "mod ".$con["to.name"]."<br>";
 						return true;
 						break;
 					case "type":
-						$this->db_query("ALTER TABLE aw_postal_codes ADD `type` varchar(40)");
+					case "area":
+						$this->db_query("ALTER TABLE aw_postal_codes ADD `".$f."` varchar(40)");
 						return true;
 						break;
 				}
