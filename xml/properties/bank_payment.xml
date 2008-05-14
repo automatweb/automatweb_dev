@@ -283,6 +283,17 @@
             <reltype>RELTYPE_DESC_CTR</reltype>
             <caption>Kirjeldus kontrollerist</caption>
       </property>
+      <property>
+            <name>alias_return_ctr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>as_alias</group>
+            <submit>no</submit>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RETURN_CTR</reltype>
+            <caption>Makse kinnituse kontroller</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BANK_PAYMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -335,6 +346,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>Kontroller</caption>
             </CTR>
+            <RETURN_CTR>
+                  <value>7</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Makse kinnituse kontroller</caption>
+            </RETURN_CTR>
       </reltypes>
       <layout>
             <general_l>

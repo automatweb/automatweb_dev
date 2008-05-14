@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.81 2008/03/26 11:03:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.82 2008/05/14 12:12:37 kristo Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -107,6 +107,9 @@
 	@property alias_desc_ctr type=relpicker field=meta method=serialize reltype=RELTYPE_DESC_CTR
 	@caption Kirjeldus kontrollerist
 
+	@property alias_return_ctr type=relpicker field=meta method=serialize reltype=RELTYPE_RETURN_CTR
+	@caption Makse kinnituse kontroller
+
 #RELTYPES
 
 @reltype KEY value=2 clid=CL_FILE
@@ -123,6 +126,9 @@
 
 @reltype CTR value=6 clid=CL_FORM_CONTROLLER
 @caption Kontroller
+
+@reltype RETURN_CTR value=7 clid=CL_CFGCONTROLLER
+@caption Makse kinnituse kontroller
 
 */
 
@@ -2205,6 +2211,16 @@ class bank_payment extends class_base
 			"expl" => $desc,
 			"lang" => "en"
 		));
+	}
+
+	function bank_return($arr)
+	{
+		$o = obj($arr["id"]);
+		if ($this->can("view", $o->prop("alias_return_ctr")))
+		{
+			$i = get_instance(CL_CFGCONTROLLER);
+			$desc = $i->check_property($o->prop("alias_return_ctr"), $o->id(), $arr);
+		}
 	}
 }
 
