@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.44 2008/05/08 12:59:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.45 2008/05/14 12:27:55 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -602,11 +602,18 @@ class mini_gallery extends class_base
 	function _mg_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+		
+		$pt = $arr["obj_inst"]->prop("folder");
+		if (is_array($pt))
+		{
+			$pt = reset($pt);
+		}
+
 		$tb->add_button(array(
 			'name' => 'new',
 			'img' => 'new.gif',
 			'tooltip' => t('Lisa uus pilt'),
-			'url' => html::get_new_url(CL_IMAGE, $arr["obj_inst"]->prop("folder"), array("return_url" => get_ru()))
+			'url' => html::get_new_url(CL_IMAGE, $pt, array("return_url" => get_ru()))
 		));
 		$tb->add_button(array(
 			'name' => 'save',
