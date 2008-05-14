@@ -17,7 +17,7 @@ class crm_company_obj extends _int_object
 			"lang_id" => array(),
 		);
 		$ol = new object_list($filter);
-//see ei ole hea, et peab kindlasti ümber tegema, kuid va toodet on igalpool kasutuses, et ei taha hetkel selle muutmisele mõelda
+//see ei ole hea, et peab kindlasti ymber tegema, kuid va toodet on igalpool kasutuses, et ei taha hetkel selle muutmisele m6elda
 		foreach($ol->arr() as $o)
 		{
 			if($o->meta("order_completed"))
@@ -76,7 +76,7 @@ class crm_company_obj extends _int_object
 		{
 			$cursum = $bill_i->get_bill_sum($bill,$tax_add);
 
-			//paneme ikka oma valuutasse ümber asja
+			//paneme ikka oma valuutasse ymber asja
 			$curid = $bill->prop("customer.currency");
 			if($company_curr && $curid && ($company_curr != $curid))
 			{
@@ -133,6 +133,40 @@ class crm_company_obj extends _int_object
 		}
 		return $r;
 	}
+
+	function get_root_sections()
+	{
+		$r = new object_list();
+
+		foreach($this->connections_from(array(
+			"type" => "RELTYPE_SECTION",
+			"sort_by_num" => "to.jrk"
+		)) as $conn)
+		{
+			$r->add($conn->prop("to"));
+		}
+		return $r;
+	}
+
+	function get_sub_sections($parents)
+	{
+		$r = array();
+		foreach($parents as $parent_id)
+		{
+			if(!is_oid($parent_id))
+			{
+				$parent = obj($parent_id);
+				foreach($this->connections_from(array("type" => "RELTYPE_SECTION")) as $conn)
+				{
+					$r->add($conn->prop("to"));
+				}
+			}
+			$r->add($conn->prop("to"));
+		}
+		return $r;
+	}
+
+
 }
 
 ?>
