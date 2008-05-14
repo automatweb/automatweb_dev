@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/person_has_skill.aw,v 1.2 2007/12/06 14:34:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/person_has_skill.aw,v 1.3 2008/05/14 15:42:23 markop Exp $
 // person_has_skill.aw - Oskuse kehtivus 
 /*
 
@@ -12,6 +12,12 @@
 
 	@property skill type=relpicker reltype=RELTYPE_SKILL automatic=1 table=aw_person_has_skill field=aw_skill
 	@caption P&auml;devus
+
+	@property level type=select table=aw_person_has_skill field=aw_skill_level
+	@caption Tase
+
+	@property hour_price type=textbox table=aw_person_has_skill field=aw_hour_price
+	@caption P&auml;devuse kasutamise tunnihind
 
 	@property skill_acquired type=date_select table=aw_person_has_skill field=aw_skill_acquired
 	@caption Omandatud
@@ -39,6 +45,8 @@ class person_has_skill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "level":
+				$prop["options"] = array(0,1,2,3,4,5,6,7,8,9);
 		};
 		return $retval;
 	}
@@ -64,6 +72,21 @@ class person_has_skill extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_person_has_skill (aw_oid int primary key, aw_skill int, aw_skill_acquired int)");
 			return true;
+		}
+		switch($f)
+		{
+			case "aw_skill_level":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+			case "aw_hour_price":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+				return true;
 		}
 	}
 }
