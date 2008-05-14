@@ -50,9 +50,14 @@ else if (aw_ini_get("content.doctype") == "xhtml" )
 if (aw_ini_get("ga_id"))
 {
 	$sf->read_template("applications/google_analytics/tracking_code.tpl");
+	$gpn = "";
+	if (strlen(aw_global_get("ga_page_name")) > 1 )
+	{
+		$gpn = "\"".aw_global_get("ga_page_name")."\"";
+	}
 	$sf->vars(array(
 		"ga_id" => aw_ini_get("ga_id"),
-		"ga_page_name" => aw_global_get("ga_page_name")
+		"ga_page_name" => $gpn,
 	));
 	$s_code = $sf->parse();
 	$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_code."</body>\n</html>" , $str);
