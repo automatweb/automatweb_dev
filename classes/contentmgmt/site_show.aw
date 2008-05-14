@@ -2361,6 +2361,9 @@ class site_show extends class_base
 	{
 		$section = $this->section_obj->id();
 		$frontpage = $this->cfg["frontpage"];
+		
+		$islm = get_instance("site_loginmenu");
+		$site_loginmenu = $islm->get_site_loginmenu($this);
 
 		// site_title_rev - shows two levels in reverse order
 		$pcnt = count($this->title_yah_arr);
@@ -2402,7 +2405,8 @@ class site_show extends class_base
 			"section_name" => $this->section_obj->name(),
 			"meta_description" => $this->section_obj->trans_get_val("description"),
 			"meta_keywords" => $this->section_obj->trans_get_val("keywords"),
-			"trans_lc" => aw_global_get("ct_lang_lc")
+			"trans_lc" => aw_global_get("ct_lang_lc"),
+			"site_loginmenu" => $site_loginmenu
 		));
 
 		if ($this->_is_in_document_list)
