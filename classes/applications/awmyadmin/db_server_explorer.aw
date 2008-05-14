@@ -57,8 +57,7 @@ class db_server_explorer extends class_base
 				break;
 
 			case "ex_toolbar":
-				$this->_get_ex_toolbar($arr);
-				break;
+				return $this->_get_ex_toolbar($arr);
 		}
 
 		return PROP_OK;
@@ -67,16 +66,20 @@ class db_server_explorer extends class_base
 	private function _get_ex_toolbar($arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
+		if (!$arr["request"]["db_id"])
+		{
+			return PROP_IGNORE;
+		}
 		$tb->add_button(array(
 			'name' => 'new',
 			'tooltip' => 'Lisa',
-			'url' => $this->mk_my_orb('change', $arr),
+			'url' => $this->mk_my_orb("add_table", array("id" => $arr["obj_inst"]->id(), "return_url" => get_ru())),
 			'img' => 'new.gif'
 		));
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
-			'url' => 'javascript:del()',
+			'action' => 'delete_tables',
 			'img' => 'delete.gif'
 		));
 	}
@@ -114,7 +117,7 @@ class db_server_explorer extends class_base
 			$tree->add_item(0,array(
 				'id' => $serv_id,
 				'name' => $arr["request"]["server_id"] == $serv_id ? "<b>".$server."</b>" : $server,
-				'url' => aw_url_change_var('server_id',$serv_id),
+				'url' => aw_url_change_var("db_id", null, aw_url_change_var("table", null, aw_url_change_var('server_id',$serv_id))),
 				'icon' => $this->cfg['baseurl'].'/automatweb/images/icon_aw.gif',
 			));
 
@@ -240,6 +243,10 @@ class db_server_explorer extends class_base
 				'numeric' => (is_numeric($tbldat[$fields_tbl][$fname]))
 			));
 		}
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "Name"
+		));
 
 		foreach($tbldat as $tbl => $td)
 		{
@@ -408,6 +415,149 @@ class db_server_explorer extends class_base
 			obj($arr["request"]["db_id"])->name(),
 			$arr["request"]["table"]
 		));
+	}
+
+	/**
+		@attrib name=add_table
+		@param id required type=int
+		@param return_url optional
+	**/
+	function add_table($arr)
+	{
+		$ob = obj($arr["id"]);
+		$this->mk_path(
+			null,
+			html::href(array(
+				"url" => $arr["return_url"], 
+				"caption" => t("Tagasi")
+			))
+		);
+
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
+
+		$hc = get_instance("cfg/htmlclient", array(
+			"tabs" => true,
+		));
+		$hc->add_tab(array(
+			"active" => true,
+			"caption" => t("Lisa tabel"),
+		));
+		$hc->start_output();
+
+		$hc->add_property(array(
+			"name" => "tbl_capt",
+			"subtitle" => 1,
+			"type" => "text",
+			"caption" => t("Tabeli andmed"),
+		));
+		$hc->add_property(array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => t("Tabeli nimi"),
+			"value" => $arr["field"]
+		));
+
+		$hc->add_property(array(
+			"name" => "pk_capt",
+			"subtitle" => 1,
+			"type" => "text",
+			"caption" => t("Primaarv&otilde;tme andmed"),
+		));
+
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
+		$tbl = $db->db_get_table($ob->meta('db_table'));
+
+		$hc->add_property(array(
+			"name" => "pk_name",
+			"type" => "textbox",
+			"caption" => t("Nimi"),
+		));
+		$hc->add_property(array(
+			"name" => "type",
+			"type" => "select",
+			"caption" => t("T&uuml;&uuml;p"),
+			"options" => $db->db_list_field_types(),
+		));
+
+		$hc->add_property(array(
+			"name" => "length",
+			"type" => "textbox",
+			"size" => 5,
+			"caption" => t("Pikkus"),
+		));
+		$hc->add_property(array(
+			"name" => "null",
+			"type" => "checkbox",
+			"ch_value" => "YES",
+			"caption" => t("NULL"),
+		));
+		$hc->add_property(array(
+			"name" => "default",
+			"type" => "textbox",
+			"caption" => t("Vaikimisi"),
+		));
+		$hc->add_property(array(
+			"name" => "extra",
+			"type" => "select",
+			"caption" => t("Extra"),
+			"options" => $db->db_list_flags(),
+		));
+
+		$hc->add_property(array(
+			"name" => "submit_override",
+			"type" => "submit",
+			"caption" => t("Lisa tabel"),
+		));
+		$hc->finish_output(array(
+			"data" => array(
+				"action" => "submit_add_table",
+				"id" => $arr["id"],
+				"orb_class" => "db_server_explorer",
+				"return_url" => $arr["return_url"]
+			),
+		));
+
+		return $hc->get_result(array());
+	}
+
+	/**
+		@attrib name=submit_add_table
+	**/
+	function submit_add_table($arr)
+	{
+		if ($arr["name"] != "")
+		{
+			$ob = obj($arr["id"]);
+			$db = get_instance(CL_DB_LOGIN);
+			$db->login_as($ob->meta('db_base'));
+			$db->db_create_table($arr["name"], array(
+					$arr["pk_name"] => $arr
+				), $arr["pk_name"]);
+		}
+		return $arr["return_url"];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
+	/**
+		@attrib name=delete_tables
+	**/
+	function delete_tables($arr)
+	{
+		$ob = obj($arr["id"]);
+		$db = get_instance(CL_DB_LOGIN);
+		$db->login_as($ob->meta('db_base'));
+		foreach(safe_array($arr["sel"]) as $table)
+		{
+			$this->quote(&$table);
+			$db->db_drop_table($table);
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

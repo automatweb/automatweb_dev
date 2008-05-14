@@ -541,8 +541,7 @@
             <group>others</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_calendar_others</callback>
+            <type>other_calendar_selector</type>
             <store>no</store>
             <caption>Teised</caption>
       </property>
@@ -573,8 +572,7 @@
             <group>participants</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_participant_selector</callback>
+            <type>participant_selector</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Osalejad</caption>

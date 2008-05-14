@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="id" />
 					<optional name="field" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>

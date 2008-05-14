@@ -318,8 +318,7 @@
             <group>participants</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_participant_selector</callback>
+            <type>participant_selector</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Osalejad</caption>

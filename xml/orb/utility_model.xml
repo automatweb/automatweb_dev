@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="utility_model" folder="applications/clients/patent_office" extends="intellectual_property">
+		<action name="remove_author" is_public="1" all_args="1">
+			<function name="remove_author">
+				<arguments>
+					<optional name="key" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
-

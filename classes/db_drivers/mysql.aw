@@ -483,7 +483,14 @@ class mysql
 
 		$field_dfns = implode(",", $field_dfns);
 		$index = count($indexed_fields) ? ", (`" . implode("`,`", $indexed_fields) . "`)" : "";
-		$q = "CREATE TABLE `$name` ($field_dfns, PRIMARY KEY(`$primary`)" . $index . ")";
+		if ($field_dfns != "")
+		{
+			$q = "CREATE TABLE `$name` ($field_dfns, PRIMARY KEY(`$primary`)" . $index . ")";
+		}
+		else
+		{
+			$q = "CREATE TABLE `$name`";
+		}
 		return $this->db_query($q);
 	}
 
@@ -812,6 +819,11 @@ class mysql
 			return $cv->do_db_upgrade($mt[2], "", $q, $errstr);
 		}
 		return false;
+	}
+
+	function db_drop_table($table)
+	{
+		$this->db_query("DROP TABLE `$table`");
 	}
 };
 ?>

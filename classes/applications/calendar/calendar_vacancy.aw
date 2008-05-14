@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.8 2007/12/06 14:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.9 2008/05/14 19:49:04 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
@@ -12,7 +12,7 @@
 @caption Algab
 
 @property end type=datetime_select table=planner
-@caption Lõpeb
+@caption L&otilde;peb
 
 @property info_on_object type=text store=no
 @caption Osalejad
@@ -25,7 +25,7 @@
 @property task_toolbar type=toolbar no_caption=1 store=no group=participants
 @caption "Toolbar"
 
-@property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+@property participant type=participant_selector store=no group=participants no_caption=1
 @caption Osalejad
 
 @property search_contact_company type=textbox store=no group=participants
@@ -296,12 +296,6 @@ class calendar_vacancy extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
-	}
-
-	function cb_participant_selector($arr)
-	{
-		$elib = get_instance('calendar/event_property_lib');
-		return $elib->participant_selector($arr);
 	}
 }
 ?>

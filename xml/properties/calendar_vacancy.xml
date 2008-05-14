@@ -48,8 +48,7 @@
             <name>participant</name>
             <table>objects</table>
             <group>participants</group>
-            <type>callback</type>
-            <callback>cb_participant_selector</callback>
+            <type>participant_selector</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>participant</field>

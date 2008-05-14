@@ -411,6 +411,20 @@ class db_connector
 		return $this->dc[$this->default_cid]->db_create_table($name, $field_data, $primary);
 	}
 
+	/** Deletes a database table
+		@attrib params=pos api=1
+
+		@param $table required type=string
+			table name to drop
+
+		@examples
+			 $this->db_drop_table("crm_insurance");
+	**/
+	function db_drop_table($table)
+	{
+		return $this->dc[$this->default_cid]->db_drop_table($table);
+	}
+
 	/** Returns sql for field type with length
 		@attrib params=pos api=1
 

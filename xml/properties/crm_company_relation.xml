@@ -14,9 +14,7 @@
             <name>start</name>
             <table>kliendibaas_organisatoorne_kuuluvus</table>
             <group>general</group>
-            <type>date_select</type>
-            <year_from>1950</year_from>
-            <save_format>iso8601</save_format>
+            <type>select</type>
             <field>rel_start</field>
             <caption>Algus</caption>
       </property>
@@ -24,9 +22,7 @@
             <name>end</name>
             <table>kliendibaas_organisatoorne_kuuluvus</table>
             <group>general</group>
-            <type>date_select</type>
-            <year_from>1950</year_from>
-            <save_format>iso8601</save_format>
+            <type>select</type>
             <field>rel_end</field>
             <caption>L&amp;amp;otilde;pp</caption>
       </property>

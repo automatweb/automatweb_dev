@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.215 2008/04/04 11:42:01 robert Exp $
-// task.aw - TODO item
 /*
 
 @classinfo syslog_type=ST_TASK confirm_save_data=1 maintainer=markop
@@ -160,7 +158,7 @@ caption Seostehaldur
 @property calendar_selector type=calendar_selector store=no group=calendars method=serialize
 @caption Kalendrid
 
-@property other_selector type=multi_calendar store=no group=others no_caption=1 method=serialize
+@property other_selector type=other_calendar_selector store=no group=others no_caption=1 method=serialize
 @caption Teised
 
 @property project_selector type=project_selector store=no group=projects method=serialize
@@ -171,9 +169,6 @@ caption Seostehaldur
 
 @property rmd type=reminder group=reminders store=no method=serialize
 @caption Meeldetuletus
-
-property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1 method=serialize
-caption Osalejad
 
 @property participant type=participant_selector store=no group=participants no_caption=1 method=serialize
 @caption Osalejad
@@ -1494,13 +1489,6 @@ class task extends class_base
 		return $retval;
 	}
 
-	function cb_calendar_others($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->calendar_others($arr);
-	}
-
-
 	function set_property($arr)
 	{
 		$seti = get_instance(CL_CRM_SETTINGS);
@@ -1615,11 +1603,6 @@ class task extends class_base
 					$prop["value"] = $proj->prop("code");
 					$arr["obj_inst"]->set_prop("code", $proj->prop("code"));
 				}
-				break;
-
-			case "other_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_other_selector($arr);
 				break;
 
 			case "whole_day":
@@ -1900,12 +1883,6 @@ class task extends class_base
 			"content" => nl2br($obj->prop("content")),
 		));
 		return $this->parse();
-	}
-
-	function cb_participant_selector($arr)
-	{
-		$elib = get_instance('calendar/event_property_lib');
-		return $elib->participant_selector($arr);
 	}
 
 	function _init_other_exp_t(&$t)

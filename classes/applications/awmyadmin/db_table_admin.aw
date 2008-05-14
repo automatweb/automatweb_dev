@@ -67,11 +67,12 @@ class db_table_admin extends class_base
 		
 		@param id required
 		@param field optional
+		@param return_url optional 
 	**/
 	function admin_col($arr)
 	{
 		$ob = obj($arr["id"]);
-		$this->mk_path($ob->parent(), html::href(array(
+		$this->mk_path($arr["return_url"] ? null : $ob->parent(), $arr["return_url"] ? html::href(array("url" => $arr["return_url"], "caption" => t("Tagasi"))) : html::href(array(
 				'url' => $this->mk_my_orb('change', array('id' => $arr["id"], "group" => 'columns')),
 				'caption' => t('Tulbad')
 			)).' / '.html::href(array(
@@ -102,6 +103,7 @@ class db_table_admin extends class_base
 		$hc->add_property(array(
 			"name" => "type",
 			"type" => "select",
+			"caption" => t("T&uuml;&uuml;p"),
 			"options" => $db->db_list_field_types(),
 			"value" => strtoupper($tbl['fields'][$field]['type'])
 		));

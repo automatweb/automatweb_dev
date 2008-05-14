@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.95 2008/03/13 11:22:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.96 2008/05/14 19:49:19 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -196,7 +196,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property calendar_selector type=calendar_selector store=no group=calendars
 @caption Kalendrid
 
-@property other_selector type=callback callback=cb_calendar_others store=no group=others
+@property other_selector type=other_calendar_selector store=no group=others
 @caption Teised
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
@@ -205,7 +205,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property comment_list type=comments group=comments no_caption=1
 @caption Kommentaarid
 
-@property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+@property participant type=participant_selector store=no group=participants no_caption=1
 @caption Osalejad
 
 @property search_contact_company type=textbox store=no group=participants
@@ -713,19 +713,6 @@ class crm_meeting extends class_base
 		));
 	}
 
-	function cb_participant_selector($arr)
-	{
-		$elib = get_instance('calendar/event_property_lib');
-		return $elib->participant_selector($arr);
-	}
-
-	
-	function cb_calendar_others($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->calendar_others($arr);
-	}
-
 	function set_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -814,11 +801,6 @@ class crm_meeting extends class_base
 				}
 				break;
 
-			case "other_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_other_selector($arr);
-				break;
-			
 			case "whole_day":
 				if ($data["value"])
 				{

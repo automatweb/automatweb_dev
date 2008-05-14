@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.66 2008/03/04 11:19:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.67 2008/05/14 19:49:19 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -129,7 +129,7 @@
 @property comment_list type=comments group=comments no_caption=1
 @caption Kommentaarid
 
-@property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+@property participant type=participant_selector store=no group=participants no_caption=1
 @caption Osalejad
 
 @property search_contact_company type=textbox store=no group=participants
@@ -821,12 +821,6 @@ class crm_call extends class_base
 		{
 			$pl->add_event_to_calendar(obj($cal), $task);
 		}
-	}
-
-	function cb_participant_selector($arr)
-	{
-		$elib = get_instance('calendar/event_property_lib');
-		return $elib->participant_selector($arr);
 	}
 
 	function new_change($arr)
