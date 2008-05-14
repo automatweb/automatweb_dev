@@ -11,10 +11,12 @@
 @property org type=relpicker reltype=RELTYPE_COMPANY store=connect
 @caption Organisatsioon
 
-@property start type=date_select year_from=1950 save_format=iso8601 field=rel_start table=kliendibaas_organisatoorne_kuuluvus
+#@property start type=date_select year_from=1950 save_format=iso8601 field=rel_start table=kliendibaas_organisatoorne_kuuluvus
+@property start type=select field=rel_start table=kliendibaas_organisatoorne_kuuluvus
 @caption Algus
 
-@property end type=date_select year_from=1950 save_format=iso8601 field=rel_end table=kliendibaas_organisatoorne_kuuluvus
+#@property end type=date_select year_from=1950 save_format=iso8601 field=rel_end table=kliendibaas_organisatoorne_kuuluvus
+@property end type=select field=rel_end table=kliendibaas_organisatoorne_kuuluvus
 @caption L&otilde;pp
 
 @property add_info type=textarea field=comment
@@ -42,13 +44,24 @@ class crm_company_relation extends class_base
 
 		switch($prop["name"])
 		{
+			case "start":
+			case "end":
+				$prop["options"][""] = t("--vali--");
+				for($i = 1950; $i <= date("Y"); $i++)
+				{
+					$prop["options"][$i."-01-01"] = $i;
+				}
+				break;
+
 			case "org":
 				if(!$prop["value"])
 				{
 					$prop["post_append_text"] = "";
 					$prop["type"] = "textbox";
+					/*
 					$prop["autocomplete_source"] = $this->mk_my_orb("org_ac");
 					$prop["autocomplete_params"] = array();
+					*/
 				}
 				break;
 		}
