@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_matrix.aw,v 1.4 2008/05/14 14:05:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_matrix.aw,v 1.5 2008/05/14 15:45:20 markop Exp $
 // budgeting_tax_matrix.aw - Eelarvestamise maksumaatriks 
 /*
 
@@ -205,6 +205,7 @@ class budgeting_tax_matrix extends class_base
 
 		$this->props_selection = array("" => "");
 
+		$tax2acct = array();
 
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TAX")) as $c)
 		{
@@ -217,7 +218,7 @@ class budgeting_tax_matrix extends class_base
 				"lang_id" => array(),
 				"site_id" => array()
 			));
-			$tax2acct = array();
+
 
 			foreach($ol-> arr() as $o)
 			{

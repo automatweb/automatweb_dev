@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_folder_relation.aw,v 1.5 2008/05/14 14:05:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_folder_relation.aw,v 1.6 2008/05/14 15:45:20 markop Exp $
 // budgeting_tax_folder_relation.aw - Eelarvestamise maksu kausta seos 
 /*
 
@@ -62,6 +62,13 @@ class budgeting_tax_folder_relation extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "folder":
+				if($this->can("view" , $_GET["folder"]) && !$prop["value"])
+				{
+					$m = get_instance("applications/budgeting/budgeting_model");
+					$prop["value"] = $m->_get_cat_id_from_obj(obj($_GET["folder"]));
+				}
+				break;
 		};
 		return $retval;
 	}

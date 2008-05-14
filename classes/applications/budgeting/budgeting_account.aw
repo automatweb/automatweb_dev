@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_account.aw,v 1.4 2007/12/06 14:32:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_account.aw,v 1.5 2008/05/14 15:45:20 markop Exp $
 // rostering_account.aw - Eelarvestamise konto 
 /*
 
@@ -88,6 +88,7 @@ class budgeting_account extends class_base
 			"class_id" => CL_BUDGETING_TRANSFER,
 			"lang_id" => array(),
 			"site_id" => array(),
+			"from_acct" => $arr["obj_inst"]->id(),
 		));
 		$arr["prop"]["vcl_inst"]->table_from_ol(
 			$data,
@@ -98,17 +99,13 @@ class budgeting_account extends class_base
 
 	function _get_taxes_tb($arr)
 	{
-		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_BUDGETING_TAX), $arr["obj_inst"]->id());
+		$arr["prop"]["vcl_inst"]->add_new_button(array(CL_BUDGETING_TAX_FOLDER_RELATION), $arr["obj_inst"]->id() , array(),array("folder" => $arr["obj_inst"]->id()));
 		$arr["prop"]["vcl_inst"]->add_delete_button();
 	}
 
 	function _get_taxes_tbl($arr)
 	{
-		$data = new object_list(array(
-			"class_id" => CL_BUDGETING_TAX,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
+		$data = $arr["obj_inst"]->get_account_taxes();
 		$arr["prop"]["vcl_inst"]->table_from_ol(
 			$data,
 			array("name", "to_acct", "amount", "pri", "tax_grp"),
