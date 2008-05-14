@@ -120,6 +120,16 @@
             <caption>Mobi SMSi haldur</caption>
       </property>
       <property>
+            <name>messenger</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MESSENGER</reltype>
+            <caption>Meilikast</caption>
+      </property>
+      <property>
             <name>search_conf_tbl</name>
             <group>search_conf</group>
             <table>objects</table>
@@ -207,6 +217,46 @@
             <type>relpicker</type>
             <reltype>RELTYPE_DEFAULT_OFFERS_CFGFORM</reltype>
             <caption>Default seadete vorm</caption>
+      </property>
+      <property>
+            <name>apply_doc</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DOC</reltype>
+            <caption>Dokument veebist kandideerimiseks</caption>
+      </property>
+      <property>
+            <name>fb_from_fld</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise tagasiside saatjate kaust</caption>
+      </property>
+      <property>
+            <name>location_conf</name>
+            <group>job_wanted_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Asukoht (esimene valik)</caption>
+      </property>
+      <property>
+            <name>location_2_conf</name>
+            <group>job_wanted_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Asukoht (teine valik)</caption>
       </property>
       <property>
             <name>employee_tb</name>
@@ -959,6 +1009,10 @@
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise seaded</caption>
                   <parent>general</parent>
             </job_offer_conf>
+            <job_wanted_conf>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;soovi seaded</caption>
+                  <parent>general</parent>
+            </job_wanted_conf>
             <employee>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
                   <submit>no</submit>
@@ -1041,6 +1095,16 @@
                   <clid>CL_MOBI_HANDLER</clid>
                   <caption>Mobi SMSi haldur</caption>
             </MOBI_HANDLER>
+            <MESSENGER>
+                  <value>12</value>
+                  <clid>CL_MESSENGER_V2</clid>
+                  <caption>Meilikast</caption>
+            </MESSENGER>
+            <DOC>
+                  <value>13</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument veebist kandideerimiseks</caption>
+            </DOC>
       </reltypes>
       <layout>
             <employee>

@@ -399,7 +399,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 	#@property recommends_tbl type=table store=no no_caption=1
 
-	@property recommends_edit type=releditor store=no mode=manager2 reltype=RELTYPE_RECOMMENDATION props=person,relation,phones,emails,org,profession table_fields=person,relation,phones,emails,org,profession
+	@property recommends_edit type=releditor store=no mode=manager2 reltype=RELTYPE_RECOMMENDATION props=person,relation,phones,emails,org,profession,contact_lang table_fields=person,relation,phones,emails,org,profession,contact_lang
 
 ------------------------------------------------------------------
 
@@ -7278,7 +7278,7 @@ class crm_person extends class_base
 				"recommendation.person.phone" => $phone,
 				"recommendation.person.email" => $email,
 			));
-			$cff_rec = $cff_inst->get_sysdefault(array("clid" => CL_RECOMMENDATION));
+			$cff_rec = $cff_inst->get_sysdefault(array("clid" => CL_CRM_RECOMMENDATION));
 			if($cff_rec)
 			{
 				$proplist_recommendation = $cff_inst->get_cfg_proplist($cff_rec);

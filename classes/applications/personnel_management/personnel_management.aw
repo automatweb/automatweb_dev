@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.32 2008/04/27 15:29:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.33 2008/05/14 11:53:11 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -50,6 +50,9 @@
 		@property mobi_handler type=relpicker reltype=RELTYPE_MOBI_HANDLER
 		@caption Mobi SMSi haldur
 
+		@property messenger type=relpicker reltype=RELTYPE_MESSENGER
+		@caption Meilikast
+
 	@groupinfo search_conf caption="Otsingu seaded" parent=general
 	@default group=search_conf
 
@@ -86,6 +89,21 @@
 
 		@property default_offers_cfgform type=relpicker reltype=RELTYPE_DEFAULT_OFFERS_CFGFORM
 		@caption Default seadete vorm
+
+		@property apply_doc type=relpicker reltype=RELTYPE_DOC
+		@caption Dokument veebist kandideerimiseks
+
+		@property fb_from_fld type=relpicker reltype=RELTYPE_MENU
+		@caption T&ouml;&ouml;pakkumise tagasiside saatjate kaust
+
+	@groupinfo job_wanted_conf caption="T&ouml;&ouml;soovi seaded" parent=general
+	@default group=job_wanted_conf
+
+		@property location_conf type=select multiple=1
+		@caption Asukoht (esimene valik)
+
+		@property location_2_conf type=select multiple=1
+		@caption Asukoht (teine valik)
 
 -------------------T88OTSIJAD-----------------------
 @groupinfo employee caption="T&ouml;&ouml;otsijad" submit=no
@@ -339,6 +357,12 @@
 @reltype MOBI_HANDLER value=11 clid=CL_MOBI_HANDLER
 @caption Mobi SMSi haldur
 
+@reltype MESSENGER value=12 clid=CL_MESSENGER_V2
+@caption Meilikast
+
+@reltype DOC value=13 clid=CL_DOCUMENT
+@caption Dokument veebist kandideerimiseks
+
 */
 
 class personnel_management extends class_base
@@ -413,6 +437,15 @@ class personnel_management extends class_base
 
 		switch($prop["name"])
 		{
+			case "location_conf":
+			case "location_2_conf":
+				$prop["options"] = array(
+					CL_CRM_AREA => t("Piirkond"),
+					CL_CRM_COUNTY => t("Maakond"),
+					CL_CRM_CITY => t("Linn"),
+				);
+				break;
+
 			case "job_offer_cv_tbl":
 				$prop["options"] = array(
 					"group" => t("Grupp"),
@@ -594,6 +627,10 @@ class personnel_management extends class_base
 				$this->employee_list_tree($arr);
 				break;
 
+			case "cv_exps_n_lvls":
+				$this->get_cv_exps_n_lvls($arr);
+				break;
+
 			case "os_status":
 				$prop["options"] = array(
 					"0" => t("K&otilde;ik"),
@@ -611,7 +648,7 @@ class personnel_management extends class_base
 		$arr["prop"]["options"] = crm_person::get_cv_tpl();
 	}
 
-	function _get_cv_exps_n_lvls($arr)
+	function get_cv_exps_n_lvls($arr)
 	{
 		$skill_manager_inst = get_instance(CL_CRM_SKILL_MANAGER);
 		$skill_manager_id = $arr["obj_inst"]->prop("skill_manager");
@@ -636,6 +673,8 @@ class personnel_management extends class_base
 			$ret .= html::select(array(
 				"name" => "cv_exp[".$id."]",
 				"options" => $options,
+				"multiple" => 1,
+				"size" => 3,
 				"disabled_options" => $disabled_options,
 				"selected" => $arr["request"]["cv_exp"][$id],
 			))."<br />";
@@ -645,8 +684,8 @@ class personnel_management extends class_base
 				"name" => "cv_exp_lvl[".$id."]",
 				"options" => array(0 => t("--vali--")) + $ol->names(),
 				"caption" => t("Tase"),
-				"multiple" => 1,
-				"size" => 3,
+				//"multiple" => 1,
+				//"size" => 3,
 				"selected" => $arr["request"]["cv_exp_lvl"][$id],
 			))."<br />";
 		}
@@ -676,6 +715,11 @@ class personnel_management extends class_base
 			"caption" => t("Kasuta keelt personalikeskkonnas"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "sel_rec",
+			"caption" => t("Kasuta keelt soovitajaga kontakteerumiseks"),
+			"align" => "center",
+		));
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_LANGUAGE,
@@ -689,6 +733,7 @@ class personnel_management extends class_base
 			)
 		);
 		$lang_tbl = $this->get_lang_conf(array("id" => $arr["obj_inst"]->id()));
+		$rec_lang_tbl = $this->get_rec_lang_conf(array("id" => $arr["obj_inst"]->id()));
 		foreach($odl->arr() as $oid => $odata)
 		{
 			$t->define_data(array(
@@ -697,6 +742,11 @@ class personnel_management extends class_base
 					"name" => "lang_tbl[".$oid."]",
 					"value" => 1,
 					"checked" => $lang_tbl[$oid],
+				)),
+				"sel_rec" => html::checkbox(array(
+					"name" => "rec_lang_tbl[".$oid."]",
+					"value" => 1,
+					"checked" => $rec_lang_tbl[$oid],
 				)),
 			));
 		}
@@ -879,7 +929,7 @@ class personnel_management extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->add_new_button(array(CL_CRM_PERSON), $this->persons_fld);
 		$t->add_search_button(array(
-			"pn" => add_employee,
+			"pn" => "add_employee",
 			"multiple" => 1,
 			"clid" => CL_CRM_PERSON,
 		));
@@ -1049,11 +1099,24 @@ class personnel_management extends class_base
 		if($r["cv_age_from"] && $r["cv_age_to"])
 		{
 			// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
-			$odl_prms["birthday"] = new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING,
-				((date("Y") - $r["cv_age_to"]).date("-m-d")),
-				((date("Y") - $r["cv_age_from"]).date("-m-d"))
-			);
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						((date("Y") - $r["cv_age_from"]).date("-m-d"))
+					),
+				),
+			));
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_compare(
+						OBJ_COMP_GREATER,
+						((date("Y") - $r["cv_age_to"] - 1).date("-m-d"))
+					),
+				),
+			));
 		}
 		else
 		{
@@ -1069,8 +1132,8 @@ class personnel_management extends class_base
 			{
 				// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
 				$odl_prms["birthday"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER_OR_EQ,
-					((date("Y") - $r["cv_age_to"]).date("-m-d"))
+					OBJ_COMP_GREATER,
+					((date("Y") - $r["cv_age_to"] - 1).date("-m-d"))
 				);
 			}
 		}
@@ -1247,27 +1310,46 @@ class personnel_management extends class_base
 				//	This is the
 				//		0 => t("--vali--") 
 				//			thing.
-				if($data == 0)
+				if($data[0] == 0 && count($data) == 1 || count($data) == 0)
+				{
 					continue;
+				}
+
+				if($this->can("view", $r["cv_exp_lvl"][$id]))
+				{
+					$jrk = obj($r["cv_exp_lvl"][$id])->ord();
+				}
 
 				$skill_ol_prms = array(
 					"class_id" => CL_CRM_SKILL_LEVEL,
-					"CL_CRM_SKILL_LEVEL.RELTYPE_SKILL" => $data,
 					"parent" => array(),
 					"site_id" => array(),
 					"lang_id" => array(),
+					"CL_CRM_SKILL_LEVEL.skill" => $data,
 				);
-				if($r["cv_exp_lvl"][$id][0] == 0)
+
+				if(!$r["cv_exp_lvl"][$id])
 				{
-					unset($r["cv_exp_lvl"][$id][0]);
+					$r["cv_exp_lvl"][$id] = array();
 				}
-				$skill_ol_prms["CL_CRM_SKILL_LEVEL.RELTYPE_LEVEL"] = $r["cv_exp_lvl"][$id];
+				$skill_ol_prms[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_SKILL_LEVEL.level" => $r["cv_exp_lvl"][$id],
+						"CL_CRM_SKILL_LEVEL.level.ord" => new obj_predicate_compare(
+							OBJ_COMP_GREATER,
+							$jrk
+						),
+					),
+				));
+
+				arr($skill_ol_prms);
 
 				$skill_ol = new object_list($skill_ol_prms);
 				if(count($skill_ol->ids()) == 0)
 					return array();
 
-				$_ids = array();
+				$_ids = $skill_ol->ids();
 				$odl_prms[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
@@ -1343,6 +1425,7 @@ class personnel_management extends class_base
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
+		arr($odl_prms);
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
@@ -2215,6 +2298,7 @@ class personnel_management extends class_base
 
 			case "lang_tbl":
 				$arr["obj_inst"]->set_meta("lang_tbl", $arr["request"]["lang_tbl"]);
+				$arr["obj_inst"]->set_meta("rec_lang_tbl", $arr["request"]["rec_lang_tbl"]);
 				break;
 
 			case "sysdefault_pm":
@@ -2534,6 +2618,16 @@ class personnel_management extends class_base
 		}
 		$o = obj($arr["id"]);
 		return $o->meta("lang_tbl");
+	}
+
+	function get_rec_lang_conf($arr = array())
+	{
+		if(!is_oid($arr["id"]))
+		{
+			$arr["id"] = personnel_management::get_sysdefault();
+		}
+		$o = obj($arr["id"]);
+		return $o->meta("rec_lang_tbl");
 	}
 
 

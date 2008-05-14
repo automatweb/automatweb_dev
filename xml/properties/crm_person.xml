@@ -969,6 +969,7 @@
                   <num_3>emails</num_3>
                   <num_4>org</num_4>
                   <num_5>profession</num_5>
+                  <num_6>contact_lang</num_6>
             </props>
             <table_fields>
                   <num_0>person</num_0>
@@ -977,6 +978,7 @@
                   <num_3>emails</num_3>
                   <num_4>org</num_4>
                   <num_5>profession</num_5>
+                  <num_6>contact_lang</num_6>
             </table_fields>
             <field>recommends_edit</field>
       </property>

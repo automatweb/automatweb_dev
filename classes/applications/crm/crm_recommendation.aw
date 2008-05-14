@@ -27,11 +27,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_
 @property profession type=text store=no
 @caption Amet
 
+@property contact_lang type=relpicker reltype=RELTYPE_CONTACT_LANGUAGE no_edit=1 store=connect
+@caption Soovitaja poole p&ouml;&ouml;rduda
+
 @reltype PERSON value=2 clid=CL_CRM_PERSON
 @caption Soovitav isik
 
 @reltype RELATION value=3 clid=CL_META
 @caption Suhe soovitajaga
+
+@reltype CONTACT_LANGUAGE value=4 clid=CL_LANGUAGE
+@caption Soovitaja poole p&ouml;&ouml;rduda
 
 */
 
@@ -52,6 +58,21 @@ class crm_recommendation extends class_base
 
 		switch($prop["name"])
 		{
+			case "contact_lang":
+				$ol_prms = array(
+					"class_id" => CL_LANGUAGE,
+					"parent" => array(),
+					"site_id" => array(),
+				);
+				$oid = get_instance(CL_PERSONNEL_MANAGEMENT)->get_rec_lang_conf();
+				if(is_array($oid) && count($oid) > 0)
+				{
+					$ol_prms["oid"] = array_keys($oid);
+				}
+				$ol = new object_list($ol_prms);
+				$prop["options"] = $ol->names();
+				break;
+
 			case "phones":
 			case "emails":
 				if($this->can("view", $arr["obj_inst"]->prop("person")))
@@ -82,8 +103,10 @@ class crm_recommendation extends class_base
 				{
 					$prop["post_append_text"] = "";
 					$prop["type"] = "textbox";
+					/*
 					$prop["autocomplete_source"] = $this->mk_my_orb("autocomp");
 					$prop["autocomplete_params"] = array();
+					*/
 				}
 				break;
 
@@ -103,8 +126,10 @@ class crm_recommendation extends class_base
 				{
 					$prop["post_append_text"] = "";
 					$prop["type"] = "textbox";
+					/*
 					$prop["autocomplete_source"] = $this->mk_my_orb("autocomp");
 					$prop["autocomplete_params"] = array();
+					*/
 				}
 				break;
 		}
