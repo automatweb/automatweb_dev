@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.10 2008/04/30 11:55:55 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.11 2008/05/14 22:19:39 sander Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -318,10 +318,14 @@ class minify_js_and_css extends class_base
 				$cache->file_set($s_prefix.$f_cache_filename_js, $s_js_contents);
 				$cache->file_set($s_prefix.$f_cache_filename_css, $s_css_contents);
 			}
-			
+			$xhtml_slash = "";
+			if (aw_ini_get("content.doctype") == "xhtml")
+			{
+				$xhtml_slash = " /";
+			}
 			if (strlen($cache->file_get($s_prefix.$f_cache_filename_css))>0)
 			{
-				$s_out .= '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name='.$f_cache_filename_css.'">'."\n";
+				$s_out .= '<link rel="stylesheet" type="text/css" href="'.aw_ini_get("baseurl").'/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name='.$f_cache_filename_css.'"'.$xhtml_slash.'>'."\n";
 			}
 			if (strlen($cache->file_get($s_prefix.$f_cache_filename_js))>0)
 			{
