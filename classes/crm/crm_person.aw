@@ -100,6 +100,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption CV aktiivne
 
+@property not_working type=checkbox ch_value=1 table=kliendibaas_isik field=not_working
+@caption Hetkel ei t&ouml;&ouml;ta
+
 # @property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
 # @caption Palga dokument
 
@@ -453,6 +456,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	#@property previous_jobs_table type=table store=no no_caption=1
 
 	@property previous_job_edit type=releditor store=no mode=manager2 reltype=RELTYPE_PREVIOUS_JOB props=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop table_fields=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop
+	@caption Endised t&ouml;&ouml;kohad
+
+	@property current_job_edit type=releditor store=no mode=manager2 reltype=RELTYPE_CURRENT_JOB props=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop table_fields=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop
+	@caption Praegused t&ouml;&ouml;kohad
 
 ------------------------------------------------------------------
 
@@ -1832,16 +1839,26 @@ class crm_person extends class_base
 		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		switch($data["name"])
 		{
+			case "current_job_edit":
+				if($arr["obj_inst"]->not_working)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "academic_degree":
 				// If edulevel is lower than 'k8rgharidus'
 				if($arr["obj_inst"]->prop("edulevel") < 7)
+				{
 					return PROP_IGNORE;
-
+				}
 				$data["options"] = $this->academic_degree_options;
 				break;
+
 			case "edulevel":
 				$data["options"] = $this->edulevel_options;
 				break;
+
 			case "udef_skills_1_re":
 			case "udef_skills_2_re":
 			case "udef_skills_3_re":
@@ -4939,6 +4956,7 @@ class crm_person extends class_base
 				));
 				return true;
 
+			case "not_working":
 			case "udef_ch1":
 			case "udef_ch2":
 			case "udef_ch3":
@@ -5773,6 +5791,13 @@ class crm_person extends class_base
 		// END SUB: CITIZENSHIPS
 
 		// SUB: CRM_PERSON_EDUCATIONS
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_EDUCATION",
+		));
+		$options = $edu_inst->degree_options;
+		$CRM_PERSON_EDUCATION = "";
+		$anything_in_progress = $this->anything_in_progress($conns);
+
 		$parse_cpe = 0;
 		$cff_e = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_EDUCATION));
 		if($cff_e)
@@ -5783,7 +5808,7 @@ class crm_person extends class_base
 		{
 			$proplist_education = array();
 		}
-		$props = array("degree", "field", "speciality", "main_speciality", "in_progress", "obtain_language", "start", "end", "end_date", "diploma_nr");
+		$props = array("degree", "field", "speciality", "main_speciality", "obtain_language", "start", "end", "end_date", "diploma_nr");
 		foreach($props as $prop)
 		{
 			if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
@@ -5793,6 +5818,12 @@ class crm_person extends class_base
 				));
 			}
 		}
+		if((array_key_exists("in_progress", $proplist_education) || count($proplist_education) == 0) && $anything_in_progress)
+		{
+			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS"),
+			));
+		}
 		if(array_key_exists("school_1", $proplist_education) || array_key_exists("school_2", $proplist_education) || count($proplist_education) == 0)
 		{
 			$this->vars(array(
@@ -5800,11 +5831,6 @@ class crm_person extends class_base
 			));
 		}
 
-		$conns = $o->connections_from(array(
-			"type" => "RELTYPE_EDUCATION",
-		));
-		$options = $edu_inst->degree_options;
-		$CRM_PERSON_EDUCATION = "";
 		foreach($conns as $conn)
 		{
 			//	SUB: CRM_PERSON_EDUCATION
@@ -5815,7 +5841,7 @@ class crm_person extends class_base
 				"crm_person_education.field" => $to->prop("field.name"),
 				"crm_person_education.speciality" => $to->prop("speciality"),
 				"crm_person_education.main_speciality" => ($to->prop("main_speciality") == 1) ? t("Jah") : t("Ei"),
-				"crm_person_education.in_progress" => ($to->prop("in_progress") == 1) ? t("Jah") : t("Ei"),
+				"crm_person_education.in_progress" => ($to->prop("in_progress") == 1) ? t("Jah") : "",
 				"crm_person_education.obtain_language" => $to->prop("obtain_language.name"),
 				"crm_person_education.start" => $to->prop("start") ? date("Y", $to->prop("start")) : t("M&auml;&auml;ramata"),
 				"crm_person_education.end" => $to->prop("end") ? date("Y", $to->prop("end")) : t("M&auml;&auml;ramata"),
@@ -5830,6 +5856,12 @@ class crm_person extends class_base
 						"CRM_PERSON_EDUCATION.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATION.".strtoupper($prop)),
 					));
 				}
+			}
+			if((array_key_exists("in_progress", $proplist_education) || count($proplist_education) == 0) && $anything_in_progress)
+			{
+				$this->vars(array(
+					"CRM_PERSON_EDUCATION.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATION.IN_PROGRESS"),
+				));
 			}
 			if(array_key_exists("school_1", $proplist_education) || array_key_exists("school_2", $proplist_education) || count($proplist_education) == 0)
 			{
@@ -8614,6 +8646,19 @@ class crm_person extends class_base
 		}
 
 		return $arr["return_url"];
+	}
+
+	private function anything_in_progress($conns)
+	{
+		foreach($conns as $conn)
+		{
+			$to = $conn->to();
+			if($to->in_progress)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
 ?>

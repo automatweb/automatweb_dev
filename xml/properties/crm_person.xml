@@ -246,6 +246,15 @@
             <caption>CV aktiivne</caption>
       </property>
       <property>
+            <name>not_working</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>not_working</field>
+            <caption>Hetkel ei t&amp;amp;ouml;&amp;amp;ouml;ta</caption>
+      </property>
+      <property>
             <name>submit_cv</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -1193,6 +1202,50 @@
                   <num_13>contract_stop</num_13>
             </table_fields>
             <field>previous_job_edit</field>
+            <caption>Endised t&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
+      </property>
+      <property>
+            <name>current_job_edit</name>
+            <table>objects</table>
+            <group>experiences</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager2</mode>
+            <reltype>RELTYPE_CURRENT_JOB</reltype>
+            <props>
+                  <num_0>org</num_0>
+                  <num_1>section2</num_1>
+                  <num_2>profession</num_2>
+                  <num_3>field</num_3>
+                  <num_4>start</num_4>
+                  <num_5>end</num_5>
+                  <num_6>tasks</num_6>
+                  <num_7>load</num_7>
+                  <num_8>salary</num_8>
+                  <num_9>salary_currency</num_9>
+                  <num_10>benefits</num_10>
+                  <num_11>directive_link</num_11>
+                  <num_12>directive</num_12>
+                  <num_13>contract_stop</num_13>
+            </props>
+            <table_fields>
+                  <num_0>org</num_0>
+                  <num_1>section2</num_1>
+                  <num_2>profession</num_2>
+                  <num_3>field</num_3>
+                  <num_4>start</num_4>
+                  <num_5>end</num_5>
+                  <num_6>tasks</num_6>
+                  <num_7>load</num_7>
+                  <num_8>salary</num_8>
+                  <num_9>salary_currency</num_9>
+                  <num_10>benefits</num_10>
+                  <num_11>directive_link</num_11>
+                  <num_12>directive</num_12>
+                  <num_13>contract_stop</num_13>
+            </table_fields>
+            <field>current_job_edit</field>
+            <caption>Praegused t&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
       </property>
       <property>
             <name>work_projects</name>
