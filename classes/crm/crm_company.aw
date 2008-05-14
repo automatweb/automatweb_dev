@@ -6797,7 +6797,25 @@ class crm_company extends class_base
 	{
 		if (!$arr["new"])
 		{
-			$sc = "
+			$sc = "";
+			if ($arr["request"]["group"] == "bills")
+			{
+				$sc .= '
+				$("#bill_s_bill_no").blur( group_bills_clean_date);
+				$("#bill_s_bill_to").blur( group_bills_clean_date);
+				
+				function group_bills_clean_date()
+				{
+					if ($(this).attr("value").length>0)
+					{
+						$("input[name^=bill_s_from]").attr("value", "");
+						$("input[name^=bill_s_to]").attr("value", "");
+					}
+				}
+				';
+			}
+			
+			$sc .= "
 				function bg_mark_task_done(link, eln, ns)
 				{
 					resetButton(activeButton);
