@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.13 2008/05/08 11:37:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.14 2008/05/14 14:05:05 markop Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -170,6 +170,16 @@ class budgeting_workspace extends class_base
 			"tpldir" => "applications/budgeting/budgeting_workspace",
 			"clid" => CL_BUDGETING_WORKSPACE
 		));
+		
+		$this->account_classes = array(CL_BUDGETING_ACCOUNT,
+			CL_BUDGETING_FUND,
+			CL_CRM_CATEGORY,
+			CL_CRM_COMPANY,
+			CL_CRM_PERSON,
+			CL_PROJECT,
+			CL_SHOP_PRODUCT,
+			CL_TASK,
+		);
 	}
 
 	function get_property($arr)

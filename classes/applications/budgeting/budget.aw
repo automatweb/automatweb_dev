@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.9 2008/04/21 13:28:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.10 2008/05/14 14:05:05 markop Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -328,6 +328,7 @@ class budget extends class_base
 			{
 				continue;
 			}
+			$hr_price = $bug->prop("skill_used.hour_price");
 			$tax_amt = $bug->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 			$t->define_data(array(
@@ -447,7 +448,9 @@ class budget extends class_base
 			$tax_amt = $bug->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 		}
-		$arr["prop"]["value"] = number_format($amt, 2);
+		$arr["prop"]["value"] = number_format($amt, 2).
+		" ".t("Projekti maksumus: ").$arr["obj_inst"]->get_budget_sum();
+		;
 	}
 
 	function _get_ex_table($arr)

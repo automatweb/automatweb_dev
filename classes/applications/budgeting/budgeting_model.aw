@@ -123,7 +123,7 @@ echo "created transaction ".$to->id()." <br>";
 		// switch for account type and hardwire the next levels
 		$acct_o = obj($acct_id);
 		$rv = array();
-		
+
 		switch($acct_o->class_id())
 		{
 			case CL_CRM_CATEGORY:
@@ -224,6 +224,7 @@ echo "created transaction ".$to->id()." <br>";
 
 		}
 
+		$sum = $this->get_account_balance($acct_o->id());
 		if ($from_place != "")
 		{
 			// get all taxes that go from the category
@@ -238,14 +239,17 @@ echo "created transaction ".$to->id()." <br>";
 			{
 				$rv[$tax->prop("pri")] = array(
 					"to_acct" => $tax->prop("to_acct"),
-					"amount" => $this->calculate_amount_to_transfer_from_tax($tax, $acct_o)
+//					"amount" => $this->calculate_amount_to_transfer_from_tax($tax, $acct_o)
+					"amount" => $tax->calculate_amount_to_transfer($acct_o , $sum)
 				);
+				$sum = $sum - $rv[$tax->prop("pri")]["amount"];
 			}
 		}
 		krsort($rv);
 		return $rv;
 	}
 
+	//lykkas selle funktsionaalsuse budgeting_tax sisse, v6idab v2hemalt 5 symboli kirjutamise vaeva
 	function calculate_amount_to_transfer_from_tax($tax, $from_acct_o)
 	{
 //		if (substr($tax->prop("amount"), -1) == "%")

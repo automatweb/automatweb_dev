@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_matrix.aw,v 1.3 2007/12/06 14:32:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_matrix.aw,v 1.4 2008/05/14 14:05:05 markop Exp $
 // budgeting_tax_matrix.aw - Eelarvestamise maksumaatriks 
 /*
 
@@ -203,6 +203,9 @@ class budgeting_tax_matrix extends class_base
 			));
 		}
 
+		$this->props_selection = array("" => "");
+
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TAX")) as $c)
 		{
 			$d = array(
@@ -215,27 +218,231 @@ class budgeting_tax_matrix extends class_base
 				"site_id" => array()
 			));
 			$tax2acct = array();
-			foreach($ol->arr() as $o)
+
+			foreach($ol-> arr() as $o)
 			{
-				$tax2acct[$o->prop("tax")][$o->prop("folder")] = obj($o->prop("tax"));
+				$this->props_selection[$o->id()] = $m->get_cat_id_description($o->prop("folder"));
 			}
 
-			foreach(safe_array($arr["obj_inst"]->meta("accts")) as $acct_num => $acct_id)
+			foreach($ol->arr() as $o)
 			{
-				$d[$acct_id] = html::textbox(array(
+//				$tax = obj($o->prop("tax"));
+//				$tax_terms = $tax->get_terms($o->prop("folder"));
+//				if(sizeof($tax_terms->ids()))
+//				{
+//					foreach($tax_terms->arr() as $tt)
+//					{
+
+						$tax2acct[$o->prop("tax")][$o->prop("folder")][] = array(
+							"final_amount" => $o->prop("amount_final"),
+							"amount" => $o->prop("amount"),
+							"plus" => $o->prop("max_deviation_plus"),
+							"minus" => $o->prop("max_deviation_minus"),
+							"term" => $o->prop("term"),
+							"priority" => $o->prop("pri"),
+							"id" => $o->id(),
+							"use_different_settings" => $o->prop("use_different_settings"),
+							"acct_id" => $o->prop("folder"),
+							"use_used_settings" => $o->prop("use_used_settings"),
+						);
+						if($o->prop("use_different_settings")) $this->use_different_settings = 1;
+//					}
+//				}
+//				else
+//				{
+/*					$tax2acct[$o->prop("tax")][$o->prop("folder")][] = array(
+						"final_amount" => "",
+						"amount" => $tax->prop("amount"),
+						"plus" => $tax->prop("max_deviation_plus"),
+						"minus" => $tax->prop("max_deviation_minus"),
+						"term" => "",
+						"term_sum" => "",
+						"priority" => "",
+						"id" => $c->prop("to"),
+						"use_tax_data" => 1,
+					);*/
+//				}
+			}
+
+		}
+		//	arr($arr["obj_inst"]->meta("accts"));
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TAX")) as $c)
+		{
+			$d = array(
+				"desc" => $c->prop("to.name")
+			);
+
+			foreach(safe_array($arr["obj_inst"]->meta("accts")) as $acct_num => $acct_id)
+			{//arr($acct_id);
+				$d[$acct_id] = $this->_get_account_tax_table($tax2acct[$c->prop("to")][$acct_id]);
+/*				$d[$acct_id] = html::textbox(array(
 					"name" => "d[".$c->prop("to")."][$acct_id]",
 					"size" => 5,
 					"value" => ($tax2acct[$c->prop("to")][$acct_id] ? $tax2acct[$c->prop("to")][$acct_id]->prop("amount") : "")
-				));
+				));*/
 			}
 			$t->define_data($d);
 		}
 	}
 
-	function _set_disp_table($arr)
+	function _init_accout_tax_table()
 	{
+		$t = new vcl_table;
+		$t->define_field(array(
+			"name" => "final_amount",
+			"caption" => t("T&auml;isarvuline summa"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Summa protsentides"),
+		));
+		$t->define_field(array(
+			"name" => "minus",
+			"caption" => t("Miinus tolerants"),
+		));
+		$t->define_field(array(
+			"name" => "plus",
+			"caption" => t("Pluss tolerants"),
+		));
+		$t->define_field(array(
+			"name" => "term",
+			"caption" => t("Tingimus"),
+		));
+		$t->define_field(array(
+			"name" => "use_different_settings",
+			"caption" => t("Kasuta eraldi seadeid"),
+		));
+		$t->define_field(array(
+			"name" => "use_used_settings",
+			"caption" => t("Kasuta olemasolevaid seadeid"),
+		));
+//		$t->define_field(array(
+//			"name" => "priority",
+//			"caption" => t("Prioriteet"),
+//		));
+		return $t;
+	}
+
+	function _get_account_tax_table($arr)
+	{
+		if(!sizeof($arr))
+		{
+			return "";
+		}
+		$t = $this->_init_accout_tax_table();
+		$ret = "";
+
+
+
+		foreach($arr as $accout_tax_data)
+		{
+			$acct_id = $accout_tax_data["acct_id"];
+			if(!$accout_tax_data["use_different_settings"])
+			{
+				$d["final_amount"] = $accout_tax_data["final_amount"];
+				$d["amount"]= $accout_tax_data["amount"];
+				$d["minus"] = $accout_tax_data["minus"];
+				$d["plus"] = $accout_tax_data["plus"];
+				$d["term"] = $accout_tax_data["term"];
+				$d["priority"]= $accout_tax_data["priority"];
+				$d["use_different_settings"]= html::checkbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][use_different_settings]",
+					"checked" => $accout_tax_data["use_different_settings"],
+				)).
+				html::hidden(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][id]",
+					"value" => $accout_tax_data["id"],
+				));
+				$d["use_used_settings"] = html::select(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][use_used_settings]",
+					"options" => $this->props_selection,
+					"value" => $accout_tax_data["use_used_settings"],
+				));
+			}
+			else
+			{
+				$d["final_amount"] = html::textbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][amount_final]",
+					"size" => 5,
+					"value" => $accout_tax_data["final_amount"],
+				));
+				$d["amount"]= html::textbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][amount]",
+					"size" => 3,
+					"value" => $accout_tax_data["amount"],
+				));
+				$d["minus"] = html::textbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][max_deviation_minus]",
+					"size" => 3,
+					"value" => $accout_tax_data["minus"],
+				));
+				$d["plus"] = html::textbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][max_deviation_plus]",
+					"size" => 3,
+					"value" => $accout_tax_data["plus"],
+				));
+				$d["term"] = html::textbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][term]",
+					"size" => 5,
+					"value" => $accout_tax_data["term"],
+				));
+				$d["priority"]= html::textbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][priority]",
+					"size" => 1,
+					"value" => $accout_tax_data["priority"],
+				));
+				$d["use_different_settings"]= html::checkbox(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][use_different_settings]",
+					"checked" => $accout_tax_data["use_different_settings"],
+				)).
+				html::hidden(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][id]",
+					"value" => $accout_tax_data["id"],
+				));
+				$d["use_used_settings"] = html::select(array(
+					"name" => "d[".$accout_tax_data["id"]."][$acct_id][use_used_settings]",
+					"options" => $this->props_selection,
+					"value" => $accout_tax_data["use_used_settings"],
+				));
+			}
+			$t->define_data($d);
+		}
+		return $t->draw();
+	}
+
+	function _set_disp_table($arr)
+	{//arr($arr); die();
 		foreach(safe_array($arr["request"]["d"]) as $tax_id => $d1)
 		{
+			foreach($d1 as $acct_id => $data)
+			{
+				$btfr = obj($data["id"]);
+				if($data["use_different_settings"])
+				{
+					foreach($data as $prop => $val)
+					{
+						if($btfr->is_property($prop))
+						{
+							$btfr -> set_prop($prop , $val);
+						}
+
+					}
+					$btfr->set_prop("use_used_settings" , 0);
+				}
+				else
+				{
+					$btfr -> set_prop("use_different_settings" , 0);
+					if($data["use_used_settings"])
+					{
+						$btfr->set_prop("use_used_settings" , $data["use_used_settings"]);
+					}
+				}
+
+				$btfr->save();
+			}
+
+/*
 			$ol = new object_list(array(
 				"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
 				"tax" => $tax_id,
@@ -247,10 +454,10 @@ class budgeting_tax_matrix extends class_base
 			{
 				$tax2acct[$o->prop("tax")][$o->prop("folder")] = $o;
 			}
-
-			foreach($d1 as $acct_id => $tax_amt)
+*/
+/*			foreach($d1 as $acct_id => $data)
 			{
-				if ($tax_amt == 0 && isset($tax2acct[$tax_id][$acct_id]))
+				if (!(is_array($data) && sizeof($data)) && isset($tax2acct[$tax_id][$acct_id]))
 				{
 					$tax2acct[$tax_id][$acct_id]->delete();
 				}
@@ -276,7 +483,7 @@ class budgeting_tax_matrix extends class_base
 					$to->set_prop("amount", $tax_amt);
 					$to->save();
 				}
-			}
+			}*/
 		}
 	}
 }

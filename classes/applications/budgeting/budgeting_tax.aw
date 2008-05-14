@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.9 2008/04/21 13:28:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.10 2008/05/14 14:05:05 markop Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -221,10 +221,12 @@ class budgeting_tax extends class_base
 	}
 
 	function callback_post_save($arr)
-	{	
+	{
 		$ol = new object_list(array(
 			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
-			"tax" => $arr["obj_inst"]->id()
+			"tax" => $arr["obj_inst"]->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		if (!$ol->count())
 		{
@@ -269,6 +271,37 @@ class budgeting_tax extends class_base
 			"align" => "left",
 			"sortable" => 1
 		));
+
+		$t->define_field(array(
+			"name" => "amount_final",
+			"caption" => t("T&auml;isarvuline summa"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Summa protsentides"),
+		));
+		$t->define_field(array(
+			"name" => "minus",
+			"caption" => t("Miinus tolerants"),
+		));
+		$t->define_field(array(
+			"name" => "plus",
+			"caption" => t("Pluss tolerants"),
+		));
+		$t->define_field(array(
+			"name" => "term",
+			"caption" => t("Tingimus"),
+		));
+		$t->define_field(array(
+			"name" => "use_different_settings",
+			"caption" => t("Kasuta eraldi seadeid"),
+		));
+
+		$t->define_field(array(
+			"name" => "use_used_settings",
+			"caption" => t("Kasuta olemasolevaid seadeid"),
+		));
+
 		$t->define_field(array(
 			"name" => "hedit",
 			"caption" => t("Muuda"),
@@ -279,6 +312,34 @@ class budgeting_tax extends class_base
 			"name" => "sel",
 			"field" => "oid"
 		));
+	}
+
+	function _set_from_place_table($arr)
+	{
+		foreach($arr["request"]["d"] as $id => $data)
+		{
+			$o = obj($id);
+			if($data["use_different_settings"])
+			{
+				foreach($data as $prop => $val)
+				{
+					if($o->is_property($prop))
+					{
+						$o->set_prop($prop , $val);
+					}
+				}
+				$o->set_prop("use_used_settings" , 0);
+			}
+			else
+			{
+				$o -> set_prop("use_different_settings"  , 0);
+				if($data["use_used_settings"])
+				{
+					$o->set_prop("use_used_settings" , $data["use_used_settings"]);
+				}
+			}
+			$o -> save();
+		}
 	}
 
 	function _get_from_place_table($arr)
@@ -293,11 +354,18 @@ class budgeting_tax extends class_base
 		$this->_init_from_place_table($t);
 
 		$m = get_instance("applications/budgeting/budgeting_model");
+
+		$props_selection = array("" => "");
+		foreach($ol-> arr() as $o)
+		{
+			$props_selection[$o->id()] = $m->get_cat_id_description($o->prop("folder"));
+		}
+
 		foreach($ol->arr() as $o)
 		{
 			$this->_add_vars[] = "taxfld_".$o->id();
-			$t->define_data(array(
-				"hfrom" => $m->get_cat_id_description($o->prop("folder")),
+			$table_row = array(
+				"hfrom" => html::get_change_url($o->id(),array("return_url" => get_ru()),$m->get_cat_id_description($o->prop("folder"))?$m->get_cat_id_description($o->prop("folder")):"-"),
 				"hedit" => html::popup(array(
 					"url" => $this->mk_my_orb("select_tax_cat", array("id" => $arr["obj_inst"]->id(), "var" => "taxfld_".$o->id()), "budgeting_workspace"),
 					"caption" => html::img(array(
@@ -306,8 +374,66 @@ class budgeting_tax extends class_base
 					)),
 					"scrollbars" => "auto"
 				)),
-				"oid" => $o->id()
-			));
+				"oid" => $o->id(),
+				"use_used_settings" => html::select(array(
+					"name" => "d[".$o->id()."][use_used_settings]",
+					"options" => $props_selection,
+					"value" => $o->prop("use_used_settings"),
+				)),
+			);
+
+			if(!$o->prop("use_different_settings"))
+			{
+				$table_row["amount_final"] = $o->prop("amount_final");
+				$table_row["amount"]= $o->prop("amount");
+				$table_row["minus"] = $o->prop("max_deviation_minus");
+				$table_row["plus"] = $o->prop("max_deviation_plus");
+				$table_row["term"] = $o->prop("term");
+				$table_row["priority"]= $o->prop("priority");
+				$table_row["use_different_settings"]= html::checkbox(array(
+					"name" => "d[".$o->id()."][use_different_settings]",
+					"checked" => $o->prop("use_different_settings"),
+				));
+			}
+			else
+			{
+				$table_row["amount_final"] = html::textbox(array(
+					"name" => "d[".$o->id()."][amount_final]",
+					"size" => 5,
+					"value" => $o->prop("amount_final"),
+				));
+				$table_row["amount"]= html::textbox(array(
+					"name" => "d[".$o->id()."][amount]",
+					"size" => 3,
+					"value" => $o->prop("amount"),
+				));
+				$table_row["minus"] = html::textbox(array(
+					"name" => "d[".$o->id()."][max_deviation_minus]",
+					"size" => 3,
+					"value" => $o->prop("max_deviation_minus"),
+				));
+				$table_row["plus"] = html::textbox(array(
+					"name" => "d[".$o->id()."][max_deviation_plus]",
+					"size" => 3,
+					"value" => $o->prop("max_deviation_plus"),
+				));
+				$table_row["term"] = html::textbox(array(
+					"name" => "d[".$o->id()."][term]",
+					"size" => 5,
+					"value" => $o->prop("term"),
+				));
+				$table_row["priority"]= html::textbox(array(
+					"name" => "d[".$o->id()."][priority]",
+					"size" => 1,
+					"value" => $accout_tax_data["priority"],
+				));
+				$table_row["use_different_settings"]= html::checkbox(array(
+					"name" => "d[".$o->id()."][use_different_settings]",
+					"checked" => $o->prop("use_different_settings"),
+				));
+			}
+
+			$t->define_data($table_row);
 		}
 		$arr["prop"]["vcl_inst"] = $t;
 	}
@@ -321,6 +447,7 @@ class budgeting_tax extends class_base
 			"action" => "create_new_rel"
 		));
 		$tb->add_delete_button();
+		$tb->add_save_button();
 	}
 
 	function _init_flow_t(&$t)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_folder_relation.aw,v 1.4 2008/05/12 09:08:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax_folder_relation.aw,v 1.5 2008/05/14 14:05:05 markop Exp $
 // budgeting_tax_folder_relation.aw - Eelarvestamise maksu kausta seos 
 /*
 
@@ -18,6 +18,9 @@
 
 	@property use_different_settings type=checkbox size=5 field=aw_use_different_settings
 	@caption Kasuta eraldi seadeid
+
+	@property use_used_settings type=select size=5 field=aw_use_used_settings
+	@caption Kasuta olemasolevaid seadeid
 
 	@property amount_final type=textbox size=5 field=aw_amt_final
 	@caption Summa t&auml;isarv
@@ -87,7 +90,7 @@ class budgeting_tax_folder_relation extends class_base
 		}
 		switch($f)
 		{
-			case "term":
+			case "aw_term":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
@@ -95,6 +98,7 @@ class budgeting_tax_folder_relation extends class_base
 				return true;
 			case "aw_pri":
 			case "aw_use_different_settings":
+			case "aw_use_used_settings":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

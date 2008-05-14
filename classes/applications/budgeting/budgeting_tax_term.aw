@@ -83,13 +83,13 @@ class budgeting_tax_term extends class_base
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_budgeting_tax_term(aw_oid int primary_key)");
+			$this->db_query("CREATE TABLE aw_budgeting_tax_term (aw_oid int primary key, aw_from_place int)");
 			return true;
 		}
 
 		switch($f)
 		{
-/*			case "aw_from_place":
+			case "aw_from_place":
 			case "aw_pri":
 				$this->db_add_col($t, array(
 					"name" => $f,
@@ -105,7 +105,7 @@ class budgeting_tax_term extends class_base
 					"type" => "double"
 				));
 				return true;
-	*/	}
+		}
 	}
 }
 ?>
