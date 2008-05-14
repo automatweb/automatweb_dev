@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.19 2008/05/13 13:32:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.20 2008/05/14 13:42:46 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -540,6 +540,13 @@ class image extends class_base
 			}
 			else
 			{
+				if (!empty($tpls["image_inplace_".$args["data"]["prop"]."_loop"]) /*&& $this->image_inplace_used*/)
+				{
+					$tpl = "image_inplace_".$args["data"]["prop"]."_loop";
+					$inplace = $tpl;
+					//$this->image_inplace_used = true;
+				}
+				else
 				if (!empty($tpls["image_inplace_".$args["data"]["prop"]]) /*&& $this->image_inplace_used*/)
 				{
 					$tpl = "image_inplace_".$args["data"]["prop"];
