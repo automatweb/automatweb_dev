@@ -47,4 +47,14 @@ class bug_object extends _int_object
 			}
 		}
 	}
+
+	function sum_guess()
+	{
+		$sum = 0;
+		if($this->prop("num_hrs_guess"))
+		{
+			$sum = $this->prop("num_hrs_guess") * $this->prop("skill_used.hour_price");
+		}
+		return $sum;
+	}
 }

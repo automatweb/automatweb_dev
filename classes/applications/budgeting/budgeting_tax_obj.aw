@@ -24,6 +24,8 @@ class budgeting_tax_obj extends _int_object
 	
 	function calculate_amount_to_transfer($account, $sum = 0)
 	{
+		$m = get_instance("applications/budgeting/budgeting_model");
+		$account = $m->get_account_object($account);
 		if(!is_object($account))
 		{
 			return 0;
@@ -33,7 +35,6 @@ class budgeting_tax_obj extends _int_object
 
 		if(!$sum)
 		{
-			$m = get_instance("applications/budgeting/budgeting_model");
 			$sum = $m->get_account_balance($account->id());
 		}
 
@@ -52,15 +53,50 @@ class budgeting_tax_obj extends _int_object
 		return $tax->prop("amount");
 	}
 
-	private function get_folder_rel_object($sum)
+	function calculate_amount_needed($account, $sum = 0)
+	{
+		$m = get_instance("applications/budgeting/budgeting_model");
+		$account = $m->get_account_object($account);
+		if(!is_object($account))
+		{
+			return $sum;
+		}
+		$rel_obj = $this->get_folder_rel_object($account , $sum);
+
+		if(is_object($rel_obj))
+		{
+			return $rel_obj->get_needed_amount($sum);
+		}
+		else
+		{
+			if($this->prop("amount") < 100 && $this->prop("amount") > 0)
+			{
+				return 100 * $sum / (100 - $this->prop("amount"));
+			}
+		}
+
+		return $sum;
+	}
+
+	private function get_folder_rel_object($account, $sum)
 	{
 		$rel = "";
 		$pri = 0;
+		if(is_object($account))
+		{
+			$account = $account->id();
+		}
+		if(is_oid($account))
+		{
+			$m = get_instance("applications/budgeting/budgeting_model");
+			$account = $m->get_cat_id_description($account);
+		}
 		$ol = new object_list(array(
 			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"tax" => $this->id()
+			"tax" => $this->id(),
+			"folder" => $açcount,
 		));
 		foreach($ol->arr() as $o)
 		{

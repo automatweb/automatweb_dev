@@ -302,17 +302,114 @@ echo "created transaction ".$to->id()." <br>";
 		$path = $this->get_transfer_path_from_proj($p);
 		$rv = array();
 		$ids = array();
+		$btfrs = array();
 		foreach($path as $p_item)
 		{
 			$ids[] = $this->_get_cat_id_from_obj($p_item);
 		}
-
-		$ol = new object_list(array(
-			"class_id" => CL_BUDGETING_TAX,
+		
+		$btfrs = new object_list(array(
+			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"folder" => $ids,
 		));
-		return $ol->arr();
+		$taxes = array();
+		$added = array();
+
+		foreach($btfrs->arr() as $btfr)
+		{
+			if($btfr->prop("tax") && $btfr->prop("folder"))
+			{	
+				if($this->can("view" , $btfr->prop("tax")))
+				{
+					if(!$added[$btfr->prop("account")][$btfr->prop("tax")])
+					{
+						$taxes[] = obj($btfr->prop("tax"));
+					}
+					$added[$btfr->prop("account")][$btfr->prop("tax")] = 1;
+				}
+			}
+		}
+//		$taxes->sort_by(array(
+//			"prop" => "pri",
+//			"order" => "desc"
+//		));
+		uasort($taxes, array(&$this, "sort_taxes"));//foreach($taxes as $tax){arr(array("name" => $tax->name(), "pri" => $tax->prop("pri") , "id" => $tax->id()));}
+		return $taxes;
+	}
+
+	private function sort_taxes($a, $b)
+	{
+		$ret =  $b->prop("pri") - $a->prop("pri");
+		if($ret == 0)
+		{
+			$ret = $a->id() - $b->id();
+		}
+		return $ret;
+	}
+
+	function get_project_taxes_data($p)
+	{
+		$path = $this->get_transfer_path_from_proj($p);
+		$rv = array();
+		$ids = array();
+		$btfrs = array();
+		foreach($path as $p_item)
+		{
+			$ids[] = $this->_get_cat_id_from_obj($p_item);
+		}
+		$btfrs = new object_list(array(
+			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"folder" => $ids,
+		));
+		$ret = array();
+		foreach($btfrs->arr() as $btfr)
+		{
+			if($btfr->prop("tax") && $btfr->prop("folder"))
+			{
+				if(!$added[$btfr->prop("account")][$btfr->prop("tax")])
+				{
+					$ret[] = array(
+						"tax" => obj($btfr->prop("tax")),
+						"account" => $btfr->prop("folder"),
+					);
+					$added[$btfr->prop("account")][$btfr->prop("tax")] = 1;
+				}
+			}
+		}
+		uasort($ret, array(&$this, "sort_taxes_data"));
+		return $ret;
+	}
+
+	private function sort_taxes_data($a, $b)
+	{
+		$ret =  $b["tax"]->prop("pri") - $a["tax"]->prop("pri");
+		if($ret == 0)
+		{
+			return $a["tax"]->id() - $b["tax"]->id();
+		}
+		return $ret;
+	}
+
+	function get_account_object($a)
+	{
+		if(is_object($a))
+		{
+			return $a;
+		}
+		if(!is_oid($a))
+		{
+			$ad = explode("_" , $a);
+			$a = $ad[1];
+		}
+		if(is_oid($a))
+		{
+			$a = obj($a);
+		}
+		return $a;
 	}
 
 	function _get_cat_id_from_obj($o)

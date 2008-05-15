@@ -17,7 +17,7 @@ class budgeting_account_obj extends _int_object
 			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"folder" => "%".$this->id()."%"
+			"folder" => "%_".$this->id()."%"
 		));
 		$taxes = new object_list();
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.10 2008/05/14 14:05:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.11 2008/05/15 15:29:53 markop Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -187,23 +187,26 @@ class budget extends class_base
 		// then all tasks in the project
 		// then let the user play with numbers
 		$m = get_instance("applications/budgeting/budgeting_model");
-		$above = $m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project")));
+		$above = $arr["obj_inst"]->get_taxes_data();
 		$amt = $arr["obj_inst"]->prop("total");
 		$p = $arr["obj_inst"]->meta("mod_tax_pct");
 		$clss = aw_ini_get("classes");
 		$ex = $arr["obj_inst"]->meta("ex");
-		foreach($above as $tax)
+		foreach($above as $tax_data)
 		{
-			if ($ex[$tax->id()] == 1)
-			{
-				continue;
-			}
+			$tax = $tax_data["tax"];
 			$t_pct = $tax->prop("amount");
 			if (!empty($p[$tax->id()]))
 			{
 				$t_pct = $p[$tax->id()];
+				$tax_amt = ($t_pct / 100.0) * $amt;
 			}
-			$tax_amt = ($t_pct / 100.0) * $amt;
+			else
+			{
+				$tax_amt = $tax->calculate_amount_to_transfer($tax_data["account"] , $amt);
+			}
+
+//			$tax_amt = ($t_pct / 100.0) * $amt;
 			$amt -= $tax_amt;
 			$add = "";
 			if ($tax->prop("max_deviation") > 0)
@@ -232,19 +235,10 @@ class budget extends class_base
 			));
 		}
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_TASK),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_TASK.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		$ol = $arr["obj_inst"]->get_tasks();
 		// divide the rest of the money between tasks until it runs uut
 		foreach($ol->arr() as $task)
 		{
-			if ($ex[$task->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $task->prop("hr_price");
 			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
@@ -259,19 +253,10 @@ class budget extends class_base
 			));
 		}
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_MEETING),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_CRM_MEETING.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		$ol = $arr["obj_inst"]->get_meetings();
 		// divide the rest of the money between tasks until it runs uut
 		foreach($ol->arr() as $task)
 		{
-			if ($ex[$task->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $task->prop("hr_price");
 			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
@@ -286,19 +271,10 @@ class budget extends class_base
 			));
 		}
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_CALL),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_CRM_CALL.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		$ol = $arr["obj_inst"]->get_calls();
 		// divide the rest of the money between tasks until it runs uut
 		foreach($ol->arr() as $task)
 		{
-			if ($ex[$task->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $task->prop("hr_price");
 			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
@@ -313,21 +289,9 @@ class budget extends class_base
 			));
 		}
 		
-		if(!$hr_price) $hr_price = 1000; //SEE ON VAID TESTIMISEKS NIIKAUA KUNI BUGILE KA MINGI TUNNIHINNA V6TTA SAAB KUSKILT
-
-		$ol = new object_list(array(
-			"class_id" => array(CL_BUG),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_BUG.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
-		// divide the rest of the money between bugs until it runs uut
+		$ol = $arr["obj_inst"]->get_bugs();
 		foreach($ol->arr() as $bug)
 		{
-			if ($ex[$bug->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $bug->prop("skill_used.hour_price");
 			$tax_amt = $bug->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
@@ -341,7 +305,21 @@ class budget extends class_base
 				"rown" => ++$rown
 			));
 		}
-
+		$ol = $arr["obj_inst"]->get_products();
+		foreach($ol->arr() as $product)
+		{
+			$tax_amt = $product->prop("price");
+			$amt -= $tax_amt;
+			$t->define_data(array(
+				"tax_grp" => t("Muud maksud"),
+				"tax" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($product),
+				"tax_pct" => "",
+				"tot_amt" => number_format($tax_amt, 2),
+				"forward" => number_format($amt, 2),
+				"acct_type" => parse_obj_name($clss[$product->class_id()]["name"]),
+				"rown" => ++$rown
+			));
+		}
 
 		if ($arr["request"]["group"] == "m2")
 		{
@@ -360,96 +338,76 @@ class budget extends class_base
 	function _get_desc($arr)
 	{
 		$m = get_instance("applications/budgeting/budgeting_model");
-		$above = $m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project")));
+		$path = $m->get_transfer_path_from_proj($arr["obj_inst"]->get_project_object());
+		$above = $arr["obj_inst"]->get_taxes_data();
 		$amt = $arr["obj_inst"]->prop("total");
 		$p = $arr["obj_inst"]->meta("mod_tax_pct");
 		$ex = $arr["obj_inst"]->meta("ex");
-		foreach($above as $tax)
+
+		$p_string = "pappi saab selliseid kohti maksustades: ";
+		foreach($path as $pa)
 		{
-			if ($ex[$tax->id()] == 1)
-			{
-				continue;
-			}
-			$t_pct = $tax->prop("amount");
+			$p_string .= " , ".html::get_change_url($pa->id() , array() , $pa->name());
+		}
+
+		foreach($above as $tax_data)
+		{
+			$tax = $tax_data["tax"];
 			if (!empty($p[$tax->id()]))
 			{
 				$t_pct = $p[$tax->id()];
+				$tax_amt = ($t_pct / 100.0) * $amt;
 			}
-			$tax_amt = ($t_pct / 100.0) * $amt;
+			else
+			{
+				$tax_amt = $tax->calculate_amount_to_transfer($tax_data["account"] , $amt);
+			}
+
 			$amt -= $tax_amt;
 		}
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_TASK),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_TASK.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
 		// divide the rest of the money between tasks until it runs uut
+		$ol = $arr["obj_inst"]->get_tasks();
 		foreach($ol->arr() as $task)
 		{
-			if ($ex[$task->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $task->prop("hr_price");
 			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 		}
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_MEETING),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_CRM_MEETING.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		$ol = $arr["obj_inst"]->get_meetings();
 		foreach($ol->arr() as $task)
 		{
-			if ($ex[$task->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $task->prop("hr_price");
 			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 		}
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_CALL),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_CRM_CALL.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		$ol = $arr["obj_inst"]->get_calls();
 		foreach($ol->arr() as $task)
 		{
-			if ($ex[$task->id()] == 1)
-			{
-				continue;
-			}
 			$hr_price = $task->prop("hr_price");
 			$tax_amt = $task->prop("num_hrs_guess") * $hr_price;
 			$amt -= $tax_amt;
 		}
 		
-		if(!$hr_price) $hr_price = 1000; //SEE ON VAID TESTIMISEKS NIIKAUA KUNI BUGILE KA MINGI TUNNIHINNA V6TTA SAAB KUSKILT
-
-		$ol = new object_list(array(
-			"class_id" => array(CL_BUG),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_BUG.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		$ol = $arr["obj_inst"]->get_bugs();
 		foreach($ol->arr() as $bug)
 		{
-			if ($ex[$bug->id()] == 1)
-			{
-				continue;
-			}
-			$tax_amt = $bug->prop("num_hrs_guess") * $hr_price;
+			$tax_amt = $bug->prop("num_hrs_guess") * $bug->prop("skill_used.hour_price");
+			$amt -= $tax_amt;
+		}
+		$ol = $arr["obj_inst"]->get_products();
+		foreach($ol->arr() as $product)
+		{
+			$tax_amt = $product->prop("price");
 			$amt -= $tax_amt;
 		}
 		$arr["prop"]["value"] = number_format($amt, 2).
-		" ".t("Projekti maksumus: ").$arr["obj_inst"]->get_budget_sum();
+		" <br>".t("Projekti maksumus: ").number_format($arr["obj_inst"]->get_budget_sum(), 2).
+		" <br>".$p_string;
+
+
 		;
 	}
 
@@ -457,12 +415,17 @@ class budget extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$m = get_instance("applications/budgeting/budgeting_model");
-		$ol = new object_list(array(
-			"class_id" => array(CL_TASK),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"CL_TASK.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
-		));
+		if(!$project = $arr["obj_inst"]->get_project_object())
+		{
+			arr(t("Projekt valimata"));
+		}
+		$ol = new object_list();
+		$ol -> add($project->get_tasks());
+		$ol -> add($project->get_bugs());
+		$ol -> add($project->get_meetings());
+		$ol -> add($project->get_calls());
+		$ol -> add($project->get_products());
+
 		foreach($m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project"))) as $tax)
 		{
 			$ol->add($tax);

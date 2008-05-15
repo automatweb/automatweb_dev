@@ -43,5 +43,62 @@ class project_obj extends _int_object
 		}
 		return $rv;
 	}
+		
+	function get_tasks()
+	{
+		$filter = array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_TASK,
+			"project" => $this->id(),
+		);
+		$ol = new object_list($filter);
+		return $ol;
+	}
+
+	function get_bugs()
+	{
+		$filter = array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_BUG,
+			"project" => $this->id(),
+		);
+		$ol = new object_list($filter);
+		return $ol;
+	}
+
+	function get_calls()
+	{
+		$filter = array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_CRM_CALL,
+			"project" => $this->id(),
+		);
+		$ol = new object_list($filter);
+		return $ol;
+	}
+
+	function get_meetings()
+	{
+		$filter = array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_CRM_MEETING,
+			"project" => $this->id(),
+		);
+		$ol = new object_list($filter);
+		return $ol;
+	}
+	
+	function get_products()
+	{
+		$ol = new object_list($this->connections_from(array(
+				"type" => "RELTYPE_PRODUCT"
+		)));
+		// = new object_list($filter);
+		return $ol;
+	}
 }
 ?>
