@@ -5483,6 +5483,14 @@ class class_base extends aw_template
 
 				$src_lang_vals = $all_vals[$src_lang_id];
 
+				foreach(safe_array($props_if_filled) as $p)
+				{
+					if ($arr["obj_inst"]->prop($p) != "")
+					{
+						$props[] = $p;
+					}
+				}
+
 				//
 				foreach($props as $p)
 				{
