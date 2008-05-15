@@ -1800,11 +1800,18 @@ class class_base extends aw_template
 			$this->classinfo["relationmgr"] = false;
 		}
 
+		$just_saved_msg = "";
+		if(method_exists($this->inst, "callback_just_saved_msg"))
+		{
+			$just_saved_msg = $this->inst->callback_just_saved_msg($this->request);
+		}
+		$just_saved_msg = (strlen($just_saved_msg) > 0) ? $just_saved_msg : t("Andmed salvestatud!");
+
 		$cli_args = array(
 			"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 			"content" => $args["content"],
 			"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
-			"save_message" => $this->just_saved ? t("Andmed salvestatud!") : null
+			"save_message" => $this->just_saved ? $just_saved_msg : null
 		);
 
 		if ($this->can("view", $this->cfgform_id))
