@@ -2174,6 +2174,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							case "lang_id":
 							case "comment":
 							case "period":
+							case "ord":
 							case "site_id":
 								return array("objects", $filt[1]);
 						}
@@ -2369,7 +2370,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
 
-				if (is_array($new_t))
+				if (is_array($new_t) && count($new_t))
 				{
 					$tbl = $tbl_r = reset(array_keys($new_t));
 					$field = $new_t[$tbl]["index"];
@@ -2484,6 +2485,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$cur_prop = array("name" => "modifiedby", "table" => "objects", "field" => "modifiedby");
 			}
 			else
+			if ($pp == "ord")
+			{
+				$cur_prop = array("name" => "ord", "table" => "objects", "field" => "jrk");
+			}
+			else
 			{
 				$cur_prop = $GLOBALS["properties"][$cur_clid][$pp];
 			}
@@ -2500,11 +2506,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				/*error::raise_if(!$set_clid && $cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager" && $cur_prop["type"] != "classificator", array(
-					"id" => ERR_OBJ_NO_RP,
-					"msg" => t("ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise")
-				));*/
-
 				error::raise_if($cur_prop["method"] == "serialize", array(
 					"id" => ERR_OBJ_NO_META,
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
@@ -2558,15 +2559,39 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
-			$jd = array(
-				"via" => "prop",
-				"prop" => $pp,
-				"from_class" => $cur_clid,
-				"to_class" => $new_clid,
-				"table" => $table,
-				"field" => $field
-			);
-			$this->join_data[] = $jd;
+			if ($cur_prop["store"] == "connect")
+			{
+				$this->_do_add_class_id($cur_clid);
+				// rewrite to a reltype join
+				$pp = $cur_prop["reltype"];
+				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
+				error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
+					"id" => ERR_OBJ_NO_RELATION,
+					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
+				));
+
+				// calc new class id
+				$new_clid = $GLOBALS["relinfo"][$cur_clid][$pp]["clid"][0];
+
+				$this->join_data[] = array(
+					"via" => "rel",
+					"reltype" => $reltype_id,
+					"from_class" => $cur_clid,
+					"to_class" => $new_clid
+				);
+			}
+			else
+			{
+				$jd = array(
+					"via" => "prop",
+					"prop" => $pp,
+					"from_class" => $cur_clid,
+					"to_class" => $new_clid,
+					"table" => $table,
+					"field" => $field
+				);
+				$this->join_data[] = $jd;
+			}
 		}
 
 		if ($pos < (count($filt)-1))
