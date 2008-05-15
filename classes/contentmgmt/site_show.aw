@@ -1031,14 +1031,14 @@ class site_show extends class_base
 				{
 					$s_tm = mktime(0, 0, 0, $df["month"], $df["day"], $df["year"]);
 					$s_tm = ($s_tm === false ? -1 : $s_tm);
-					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm, $s_tm+24*3600);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm-1, $s_tm+24*3600);
 				}
 				else
 				if ($df["week"])
 				{
 					$s_tm = mktime(0, 0, 0, 1, 1, $df["year"]) + $df["week"] * 24*3600*7;
 					$s_tm = $s_tm === false ? -1 : $s_tm;
-					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm, $s_tm+24*3600*7);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm-1, $s_tm+24*3600*7);
 				}
 				else
 				if ($df["month"])
@@ -1047,7 +1047,7 @@ class site_show extends class_base
 					$e_tm = mktime(0, 0, 0, $df["month"]+1, 1, $df["year"]);
 					$s_tm = $s_tm === false ? -1 : $s_tm;
 					$e_tm = $e_tm === galse ? -1 : $e_tm;
-					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm, $e_tm);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm-1, $e_tm);
 				}
 				else
 				if ($df["year"])
@@ -1056,7 +1056,7 @@ class site_show extends class_base
 					$e_tm = mktime(0, 0, 0, 1, 1, $df["year"]+1);
 					$s_tm = $s_tm === false ? -1 : $s_tm;
 					$e_tm = $e_tm === galse ? -1 : $e_tm;
-					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm, $e_tm);
+					$filter["doc_modified"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $s_tm-1, $e_tm);
 				}
 			}
 
