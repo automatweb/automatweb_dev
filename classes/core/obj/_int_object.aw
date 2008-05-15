@@ -2469,6 +2469,15 @@ class _int_object
 				}
 				// the true here is because if the user says that this thingie is an oid, then we trust him
 				// we check of course, but still. we trust him.
+				if (!$prop_dat && $GLOBALS["object_loader"]->is_object_member_fun($part))
+				{
+					$cur_v = $o->$part();
+					if ($part == "parent")
+					{
+						$o = obj($cur_v);
+					}
+				}
+				else
 				if (true || in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager", "releditor")))
 				{
 					if (is_array($cur_v) && count($cur_v) == 1)
