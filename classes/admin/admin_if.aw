@@ -1529,7 +1529,18 @@ class admin_if extends class_base
 				$filter[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"period" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"period" => new obj_predicate_compare(OBJ_COMP_NULL),
+							)
+						)),
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"period" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+							)
+						)),
 						"class_id" => CL_USER
 					)
 				));
