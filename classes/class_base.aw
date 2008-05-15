@@ -5302,6 +5302,10 @@ class class_base extends aw_template
 				$this->translation_lang_id = $lid;
 				$mod = false;
 
+				foreach(safe_array($props_if) as $pi)
+				{
+					$props[] = $pi;
+				}
 				foreach($props as $p)
 				{
 					$nm = "trans_".$lid."_".$p;
