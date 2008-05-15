@@ -3615,7 +3615,6 @@ class bug_tracker extends class_base
 		);
 		$ot = new object_tree($ft);
 		$gt_list = $ot->to_list();
-
 		// add bugs that are marked as need feedback from the person
 		$gt_list->add(new object_list(array(
 			"class_id" => CL_BUG,

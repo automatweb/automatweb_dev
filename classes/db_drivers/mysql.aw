@@ -124,18 +124,28 @@ class mysql
 		$this->log_query($qtext);
 		if (!$this->qID )
 		{
-			if (!$errors)
+			if (mysql_errno($this->dbh) == 2013)
 			{
-				$this->db_last_error = array(
-					'error_cmd' => $qtext,
-					'error_code' => mysql_errno($this->dbh),
-					'error_string' => mysql_error($this->dbh)
-				);
-				return false;
+				// retry with connection
+				$this->db_connect(aw_ini_get("db.host"), aw_ini_get("db.base"), aw_ini_get("db.user"), aw_ini_get("db.pass"));
+				$this->qID = mysql_query($qtext, $this->dbh);
 			}
-			$eri = new class_base;
-			$eri->init();
-			$eri->raise_error(ERR_DB_QUERY,LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
+
+			if (!$this->qID)
+			{
+				if (!$errors)
+				{
+					$this->db_last_error = array(
+						'error_cmd' => $qtext,
+						'error_code' => mysql_errno($this->dbh),
+						'error_string' => mysql_error($this->dbh)
+					);
+					return false;
+				}
+				$eri = new class_base;
+				$eri->init();
+				$eri->raise_error(ERR_DB_QUERY,LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
+			}
 		}
 		else
 		{

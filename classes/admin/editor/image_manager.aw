@@ -2,7 +2,7 @@
 /*
 @classinfo maintainer=kristo
 */
-class image_manager extends aw_template
+class image_manager extends aw_editor_manager_base
 {
 	function image_manager()
 	{

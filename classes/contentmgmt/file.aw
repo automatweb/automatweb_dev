@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.5 2008/05/07 10:44:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.6 2008/05/15 07:43:28 kristo Exp $
 /*
 
 
@@ -1239,14 +1239,18 @@ class file extends class_base
 				die();
 			}
 		}
+
 		$fc = $this->get_file_by_id($id);
+
 		$pi = pathinfo($fc["name"]);
 		$mimeregistry = get_instance("core/aw_mime_types");
 		$tmp = $mimeregistry->type_for_ext($pi["extension"]);
+
 		if ($tmp != "")
 		{
 			$fc["type"] = $tmp;
 		}
+
 		header("Accept-Ranges: bytes");
 		header("Content-Length: ".strlen($fc["content"]));
 		header("Content-type: ".$fc["type"]);

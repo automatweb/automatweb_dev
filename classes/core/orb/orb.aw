@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.32 2008/05/08 20:15:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.33 2008/05/15 07:43:31 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -111,7 +111,7 @@ class orb extends aw_template
 				$this->check_class_access($class);
 			}
 		}
-
+		
 		// if the action is found in one of the classes defined by
 		// the extends attribute, it should know which class was really
 		// requested.
