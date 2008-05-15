@@ -1,5 +1,81 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>packages_server</name>
+            <table>aw_package_client</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>packages_server</field>
+            <caption>Pakiserveri url</caption>
+      </property>
+      <property>
+            <name>toolbar</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>toolbar</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>search_name</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packages_search</parent>
+            <field>search_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>search_version</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packages_search</parent>
+            <field>search_version</field>
+            <caption>Versioon</caption>
+      </property>
+      <property>
+            <name>search_file</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>packages_search</parent>
+            <field>search_file</field>
+            <caption>Fail</caption>
+      </property>
+      <property>
+            <name>search_button</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <parent>packages_search</parent>
+            <store>no</store>
+            <field>search_button</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>list</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>packages_list</parent>
+            <store>no</store>
+            <field>list</field>
+            <caption>Pakkide nimekiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE_CLIENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -8,6 +84,12 @@
             <prop_cb>1</prop_cb>
             <maintainer>markop</maintainer>
       </classinfo>
+      <groupinfo>
+            <packages>
+                  <caption>Pakid</caption>
+                  <no_submit>1</no_submit>
+            </packages>
+      </groupinfo>
       <tableinfo>
             <aw_package_client>
                   <master_index>brother_of</master_index>
@@ -15,5 +97,25 @@
                   <index>aw_oid</index>
             </aw_package_client>
       </tableinfo>
+      <layout>
+            <packages_frame>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>packages</group>
+                  <area_caption></area_caption>
+            </packages_frame>
+            <packages_search>
+                  <type>vbox</type>
+                  <parent>packages_frame</parent>
+                  <group>packages</group>
+                  <area_caption></area_caption>
+            </packages_search>
+            <packages_list>
+                  <type>vbox</type>
+                  <parent>packages_frame</parent>
+                  <group>packages</group>
+                  <area_caption></area_caption>
+            </packages_list>
+      </layout>
 </properties>
 
