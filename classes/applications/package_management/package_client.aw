@@ -33,9 +33,11 @@
 
 		@layout packages_list type=vbox parent=packages_frame
 
-			@property list type=table no_caption=1 parent=packages_list
+			@property list type=table no_caption=1 parent=packages_list store=no
 			@caption Pakkide nimekiri
 
+			@property files_list type=text no_caption=1 parent=packages_list store=no
+			@caption Failide nimekiri
 
 */
 
@@ -122,6 +124,18 @@ class package_client extends class_base
 		}
 	}
 
+	function _get_files_list($arr)
+	{
+		$ret = t("Failid:")."<br>";
+		if($arr["request"]["show_files"])
+		{
+			$files = $arr["obj_inst"]-> get_files_list($arr["request"]["show_files"]);
+			$arr['prop']["value"] = $ret.join("<br>", $files);
+			return PROP_OK;
+		}
+		return PROP_IGNORE;
+	}
+
 	function _get_list($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -159,45 +173,17 @@ class package_client extends class_base
 			'search_version' => $arr['request']['search_version'],
 			'search_file' => $arr['request']['search_file'],
 		);
-
-		$packages = $this->model->packages_list(array(
-			'obj_inst' => $arr['obj_inst'],
-			'filter' => $filter
-		));
-
-		foreach ($packages as $oid => $obj)
+		$packages = $arr["obj_inst"]->get_packages($filter);
+		foreach ($packages as $data)
 		{
-			$deps = $obj->get_dependencies();
-			$deps_arr = array();
-			foreach($deps->arr() as $d)
-			{
-				$deps_arr[] = html::href(array(
-					'caption' => $d->name()." ".$d->prop("version"),
-					'url' => $this->mk_my_orb('change', array(
-						'id' => $d->id()
-					), CL_PACKAGE),
-				));
-			}
-
-
 			$t->define_data(array(
-				'select' => $oid,
-				'name' => html::href(array(
-					'caption' => $obj->name(),
-					'url' => $this->mk_my_orb('change', array(
-						'id' => $oid
-					), CL_PACKAGE),
-				)),
-				'version' => $obj->prop('version'),
-				'description' => substr($obj->prop('description'), 0, 500),
-				"dep" => join(", " , $deps_arr),
+				'select' => $data["id"],
+				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
+				'version' => $data["version"],
 			));
 		}
-
 		return PROP_OK;
 	}
-
-
 
 }
 

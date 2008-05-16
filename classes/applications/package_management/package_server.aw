@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.7 2008/04/25 12:21:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.8 2008/05/16 11:55:57 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -233,7 +233,7 @@ class package_server extends class_base
 		@attrib name=download_package_list nologin=1 is_public=1 all_args=1
 
  	**/
-	function download_package_list()
+	function download_package_list($arr)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_PACKAGE_SERVER,
@@ -241,12 +241,7 @@ class package_server extends class_base
 			"site_id" => array(),
 		));
 		$o = reset($ol->arr());
-		if(!is_object($o))
-		{
-			die(t("Pole sellist ajsa nagu pakihalduse serveri objekt!"));
-		}
-
-		$packages = $o->packages_list();
+		$packages = $o->packages_list(array("filter" => $arr));
 		
 		$pa = array();
 
@@ -261,12 +256,12 @@ class package_server extends class_base
 			);
 
 		}
-		arr($pa);
+		return $pa;
 		die();
 	}
 
 	/** 
-		@attrib name=download_package_files_list nologin=1 is_public=1 all_args=1
+		@attrib name=download_package_files nologin=1 is_public=1 all_args=1
 
  	**/
 	function download_package_files($arr)
@@ -278,9 +273,8 @@ class package_server extends class_base
 		}
 		$o = obj($id);
 
-		$files = $package->get_package_file_names();
-		print(join("," , $files));
-		die();
+		$files = $o->get_package_file_names();
+		return $files;
 	}
 
 	/** 

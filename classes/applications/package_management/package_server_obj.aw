@@ -30,7 +30,9 @@ class package_server_obj extends _int_object
 	{
 		$filter = array(
 			'class_id' => CL_PACKAGE,
-			'parent' => $this->prop('packages_folder_aw')
+			'parent' => $this->prop('packages_folder_aw'),
+			'site_id' => array(),
+			'lang_id' => array(),
 		);
 
 		if (!empty($params['filter']['search_name']))

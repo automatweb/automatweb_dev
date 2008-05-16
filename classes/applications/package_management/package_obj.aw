@@ -69,7 +69,7 @@ class package_obj extends _int_object
 
 	function set_package_file_names()
 	{
-		$files = get_package_file_names();
+		$files = $this->get_package_file_names();
 		$filenamestring = join("<br>\n" , $files);
 		$this->set_prop("file_names" , $filenamestring);
 		$this->save();

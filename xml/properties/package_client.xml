@@ -76,6 +76,17 @@
             <field>list</field>
             <caption>Pakkide nimekiri</caption>
       </property>
+      <property>
+            <name>files_list</name>
+            <table>aw_package_client</table>
+            <group>packages</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>packages_list</parent>
+            <store>no</store>
+            <field>files_list</field>
+            <caption>Failide nimekiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE_CLIENT</syslog_type>
             <relationmgr>yes</relationmgr>

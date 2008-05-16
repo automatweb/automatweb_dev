@@ -3,4 +3,3 @@
 	<class name="package_client" folder="applications/package_management" extends="class_base">
 	</class>
 </orb>
-		
