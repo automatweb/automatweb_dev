@@ -15,6 +15,6 @@ $.fn.reset = function()
 			this.checked = false;
 		}
 		else if (tag == 'select')
-            this.selectedIndex = 0;
+            this.selectedIndex = -1;
         });
 };
