@@ -137,7 +137,7 @@ class languages extends aw_template implements request_startup
 			if ($row["site_id"] != 0)
 			{
 				// get site name from site server
-				
+				$this->save_handle();	
 				$sd = $this->do_orb_method_call(array(
 					"class" => "site_list", 
 					"action" => "get_site_data", 
@@ -147,7 +147,7 @@ class languages extends aw_template implements request_startup
 					//"method" => "xmlrpc",
 					//"server" => "register.automatweb.com"
 				));
-				
+				$this->restore_handle();
 				$ret[$row["site_id"]] = $sd["url"]."( ".$row["site_id"]." )";
 			}
 		}
@@ -326,7 +326,7 @@ class languages extends aw_template implements request_startup
 			{
 				// we must re-read from the db and write the cache
 				aw_cache_flush("languages");
-				$this->db_query("SELECT languages.* FROM languages LEFT JOIN objects o ON languages.oid = o.oid WHERE languages.status != 0 ORDER BY o.jrk");
+				$this->db_query("SELECT languages.*,o.comment as comment FROM languages LEFT JOIN objects o ON languages.oid = o.oid WHERE languages.status != 0 ORDER BY o.jrk");
 				while ($row = $this->db_next())
 				{
 					$row["meta"] = aw_unserialize($row["meta"]);
