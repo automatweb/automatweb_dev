@@ -166,6 +166,9 @@
             <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
+            <Kontaktid>
+                  <caption>Kontaktid</caption>
+            </Kontaktid>
             <wpls>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
             </wpls>
