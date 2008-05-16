@@ -6,7 +6,7 @@
 	<title>MP3 Pleier</title>
 	<link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/js/jw_mp3_player/style.css"> 
 	
-	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery-1.2.1.pack.js"></script>
+	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jw_mp3_player/swfobject.js"></script>
 	<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jw_mp3_player/interaction.js"></script>
 	<script type="text/javascript">
@@ -28,7 +28,7 @@
 						loadFile({file:'{VAR:baseurl}/orb.aw/class=mp3player/action=playlist/id={VAR:mp3player_oid}/playlist.xml'})
 					},
 					error: function(msg){
-					 alert( "Andmete salvestamine kahjuks ei õnn");
+					 alert( "Andmete salvestamine kahjuks ei õnnestunud");
 					}
 
 				});

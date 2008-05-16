@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3.aw,v 1.4 2008/03/31 06:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3.aw,v 1.5 2008/05/16 09:28:15 hannes Exp $
 // mp3.aw - MP3 
 /*
 
@@ -439,22 +439,15 @@ class mp3 extends class_base implements admin_if_plugin
 	
 	function get_name($a_id3, $s_orig_filename)
 	{
-		if (isset($a_id3["tags"]["id3v2"]["title"][0]) && isset($a_id3["tags"]["id3v2"]["artist"][0]))
+		if (isset($a_id3["title"]) && isset($a_id3["artist"]))
 		{
-			return trim( $a_id3["tags"]["id3v2"]["artist"][0] ) . " - " . trim($a_id3["tags"]["id3v2"]["title"][0]);
-		}
-		else if (isset($a_id3["tags"]["id3v1"]["title"][0]) && isset($a_id3["tags"]["id3v1"]["artist"][0]))
-		{
-			return trim( $a_id3["tags"]["id3v1"]["artist"][0] ) . " - " . trim($a_id3["tags"]["id3v1"]["title"][0]);
+			return trim( $a_id3["artist"] ) . " - " . trim($a_id3["title"]);
 		}
 		else
 		{
 			return $s_orig_filename;
 		}
 	}
-	
-	
-
 
 	function get_property($arr)
 	{
@@ -472,14 +465,11 @@ class mp3 extends class_base implements admin_if_plugin
 			// if a file was found, then move it to wherever it should be located
 			if (is_file($src_file))
 			{
-				require_once("../addons/getid3/getid3/getid3.php");
-				$this->getid3 = new getID3;
-			
 				$o = new object(array(
 					"parent" => $i_parent,
 					"class_id" => CL_MP3
 				));
-				$o -> set_class_id(CL_MP3);
+				$o->set_class_id(CL_MP3);
 				
 				$_fi = get_instance(CL_FILE);
 				$final_name = $_fi->generate_file_path(array(
@@ -490,121 +480,57 @@ class mp3 extends class_base implements admin_if_plugin
 				
 				// get idv3v1 tags to object
 				{
-					$a_file_id3 = $this->getid3->analyze($final_name);
+					$a_file_id3 = array();
+					$a_file_id3 = id3_get_tag($final_name);
 					$o->set_prop("md5", md5_file($final_name) );
-
-					if (isset($a_file_id3["tags"]["id3v2"]["track_number"][0]))
+					$a_file_id3["filesize"] = filesize($final_name);
+					$a_file_id3 = array_merge($a_file_id3, mp3::mp3info($final_name));
+					
+					if (isset($a_file_id3["track"]))
 					{
-						$o->set_prop("track", $a_file_id3["tags"]["id3v2"]["track_number"][0]);
-					}
-					else if (isset($a_file_id3["tags"]["id3v1"]["track"][0]))
-					{
-						$o->set_prop("track", $a_file_id3["tags"]["id3v1"]["track"][0]);
+						$o->set_prop("track", $a_file_id3["track"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["title"][0]))
+					if (isset($a_file_id3["title"]))
 					{
-						$o->set_prop("title", $a_file_id3["tags"]["id3v2"]["title"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["title"][0]))
-					{
-						$o->set_prop("title", $a_file_id3["tags"]["id3v1"]["title"][0]);
+						$o->set_prop("title", $a_file_id3["title"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["artist"][0]))
+					if (isset($a_file_id3["artist"]))
 					{
-						$o->set_prop("artist", $a_file_id3["tags"]["id3v2"]["artist"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["artist"][0]))
-					{
-						$o->set_prop("artist", $a_file_id3["tags"]["id3v1"]["artist"][0]);
+						$o->set_prop("artist", $a_file_id3["artist"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["album"][0]))
+					if (isset($a_file_id3["album"]))
 					{
-						$o->set_prop("album", $a_file_id3["tags"]["id3v2"]["album"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["album"][0]))
-					{
-						$o->set_prop("album", $a_file_id3["tags"]["id3v1"]["album"][0]);
+						$o->set_prop("album", $a_file_id3["album"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["year"][0]))
+					if (isset($a_file_id3["year"]))
 					{
-						$o->set_prop("year", $a_file_id3["tags"]["id3v2"]["year"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["year"][0]))
-					{
-						$o->set_prop("year", $a_file_id3["tags"]["id3v1"]["year"][0]);
+						$o->set_prop("year", $a_file_id3["year"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["content_type"][0]))
+					if  (isset($a_file_id3["genre"]))
 					{
-						$s_genre = $a_file_id3["tags"]["id3v2"]["content_type"][0];
-						$s_genre = preg_replace ("/\(.*\)/imsU", "", $s_genre);
-						$o->set_prop("genre", $s_genre);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["genre"][0]))
-					{
-						$o->set_prop("genre", $a_file_id3["tags"]["id3v1"]["genre"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["comments"][0]))
-					{
-						$o->set_prop("comment", $a_file_id3["tags"]["id3v2"]["comments"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["comment"][0]))
-					{
-						$o->set_prop("comment", $a_file_id3["tags"]["id3v1"]["comment"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["composer"][0]))
-					{
-						$o->set_prop("composer", $a_file_id3["tags"]["id3v2"]["composer"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["original_artist"][0]))
-					{
-						$o->set_prop("orig_artist", $a_file_id3["tags"]["id3v2"]["original_artist"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["copyright_message"][0]))
-					{
-						$o->set_prop("copyright", $a_file_id3["tags"]["id3v2"]["copyright_message"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["url_user"][0]))
-					{
-						$o->set_prop("url", $a_file_id3["tags"]["id3v2"]["url_user"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["encoded_by"][0]))
-					{
-						$o->set_prop("encoded_by", $a_file_id3["tags"]["id3v2"]["encoded_by"][0]);
+						$o->set_prop("genre", $a_file_id3["genre"]);
 					}
 				}
+				
+				// make playtime string
+				$playtime_mins = floor ($a_file_id3["seconds"] / 60);
+        		$playtime_secs = $a_file_id3["seconds"] % 60;
+				$a_file_id3["playtime_string"] = $playtime_mins.":".$playtime_secs;
 				
 				// mpeg info
 				{
 					$o->set_prop("mpeg_info_filesize", $a_file_id3["filesize"]);
-					$o->set_prop("mpeg_info_channels", $a_file_id3["audio"]["channels"]);
-					$o->set_prop("mpeg_info_sample_rate", $a_file_id3["audio"]["sample_rate"]);
-					$o->set_prop("mpeg_info_bitrate", $a_file_id3["audio"]["bitrate"]);
-					$o->set_prop("mpeg_info_channelmode", $a_file_id3["audio"]["channelmode"]);
-					$o->set_prop("mpeg_info_bitrate_mode", $a_file_id3["audio"]["[bitrate_mode"]);
-					$o->set_prop("mpeg_info_codec", $a_file_id3["audio"]["codec"]);
-					$o->set_prop("mpeg_info_encoder", $a_file_id3["audio"]["encoder"]);
-					$o->set_prop("mpeg_info_lossless", $a_file_id3["audio"]["lossless"]);
-					$o->set_prop("mpeg_info_encoder_options", $a_file_id3["audio"]["encoder_options"]);
-					$o->set_prop("mpeg_info_compression_ratio", $a_file_id3["audio"]["compression_ratio"]);
-					$o->set_prop("mpeg_info_playtime_seconds", $a_file_id3["playtime_seconds"]);
+					$o->set_prop("mpeg_info_bitrate", $a_file_id3["bitrate"]);
+					$o->set_prop("mpeg_info_playtime_seconds", $a_file_id3["seconds"]);
 					$o->set_prop("mpeg_info_playtime_string", $a_file_id3["playtime_string"]);
-					$o->set_prop("mpeg_info_original", $a_file_id3["mpeg"]["audio"]["raw"]["original"]);
-					$o->set_prop("mpeg_info_emphasis", $a_file_id3["mpeg"]["audio"]["raw"]["emphasis"]);
-					$o->set_prop("mpeg_info_copyright", $a_file_id3["mpeg"]["audio"]["raw"]["copyright"]);
 				}
 				
-				$o->set_name(mp3::get_name($a_file_id3, "nimetu.mp3"));
+				$o->set_name(mp3::get_name($a_file_id3, t("nimetu.mp3")));
 				$o->set_prop("file", $final_name);
 				$o->save();
 			}
@@ -612,8 +538,6 @@ class mp3 extends class_base implements admin_if_plugin
 
 	function set_property($arr = array())
 	{
-		require_once("../addons/getid3/getid3/getid3.php");
-		$this->getid3 = new getID3;
 		$obj_inst = $arr["obj_inst"];
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
@@ -632,7 +556,7 @@ class mp3 extends class_base implements admin_if_plugin
 				// so it must be needed
 				if (empty($ftype))
 				{
-					$ftype = "image/jpg";
+					$ftype = "audio/mp3";
 				};
 			};
 			
@@ -655,118 +579,57 @@ class mp3 extends class_base implements admin_if_plugin
 				
 				// get idv3v1 tags to object
 				{
-					$a_file_id3 = $this->getid3->analyze($final_name);
+					//$a_file_id3 = id3_get_tag($final_name);
+					$a_file_id3 = array();
+					$a_file_id3 = id3_get_tag($final_name);
 					$obj_inst->set_prop("md5", md5_file($final_name) );
-
-					if (isset($a_file_id3["tags"]["id3v2"]["track_number"][0]))
+					
+					$a_file_id3["filesize"] = filesize($final_name);
+					
+					$a_file_id3 = array_merge($a_file_id3, $this->mp3info($final_name));
+					
+					if (isset($a_file_id3["track"]))
 					{
-						$obj_inst->set_prop("track", $a_file_id3["tags"]["id3v2"]["track_number"][0]);
-					}
-					else if (isset($a_file_id3["tags"]["id3v1"]["track"][0]))
-					{
-						$obj_inst->set_prop("track", $a_file_id3["tags"]["id3v1"]["track"][0]);
+						$obj_inst->set_prop("track", $a_file_id3["track"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["title"][0]))
+					if (isset($a_file_id3["title"]))
 					{
-						$obj_inst->set_prop("title", $a_file_id3["tags"]["id3v2"]["title"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["title"][0]))
-					{
-						$obj_inst->set_prop("title", $a_file_id3["tags"]["id3v1"]["title"][0]);
+						$obj_inst->set_prop("title", $a_file_id3["title"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["artist"][0]))
+					if (isset($a_file_id3["artist"]))
 					{
-						$obj_inst->set_prop("artist", $a_file_id3["tags"]["id3v2"]["artist"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["artist"][0]))
-					{
-						$obj_inst->set_prop("artist", $a_file_id3["tags"]["id3v1"]["artist"][0]);
+						$obj_inst->set_prop("artist", $a_file_id3["artist"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["album"][0]))
+					if (isset($a_file_id3["album"]))
 					{
-						$obj_inst->set_prop("album", $a_file_id3["tags"]["id3v2"]["album"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["album"][0]))
-					{
-						$obj_inst->set_prop("album", $a_file_id3["tags"]["id3v1"]["album"][0]);
+						$obj_inst->set_prop("album", $a_file_id3["album"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["year"][0]))
+					if (isset($a_file_id3["year"]))
 					{
-						$obj_inst->set_prop("year", $a_file_id3["tags"]["id3v2"]["year"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["year"][0]))
-					{
-						$obj_inst->set_prop("year", $a_file_id3["tags"]["id3v1"]["year"][0]);
+						$obj_inst->set_prop("year", $a_file_id3["year"]);
 					}
 					
-					if (isset($a_file_id3["tags"]["id3v2"]["content_type"][0]))
+					if  (isset($a_file_id3["genre"]))
 					{
-						$s_genre = $a_file_id3["tags"]["id3v2"]["content_type"][0];
-						$s_genre = preg_replace ("/\(.*\)/imsU", "", $s_genre);
-						$obj_inst->set_prop("genre", $s_genre);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["genre"][0]))
-					{
-						$obj_inst->set_prop("genre", $a_file_id3["tags"]["id3v1"]["genre"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["comments"][0]))
-					{
-						$obj_inst->set_prop("comment", $a_file_id3["tags"]["id3v2"]["comments"][0]);
-					}
-					else if  (isset($a_file_id3["tags"]["id3v1"]["comment"][0]))
-					{
-						$obj_inst->set_prop("comment", $a_file_id3["tags"]["id3v1"]["comment"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["composer"][0]))
-					{
-						$obj_inst->set_prop("composer", $a_file_id3["tags"]["id3v2"]["composer"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["original_artist"][0]))
-					{
-						$obj_inst->set_prop("orig_artist", $a_file_id3["tags"]["id3v2"]["original_artist"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["copyright_message"][0]))
-					{
-						$obj_inst->set_prop("copyright", $a_file_id3["tags"]["id3v2"]["copyright_message"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["url_user"][0]))
-					{
-						$obj_inst->set_prop("url", $a_file_id3["tags"]["id3v2"]["url_user"][0]);
-					}
-					
-					if (isset($a_file_id3["tags"]["id3v2"]["encoded_by"][0]))
-					{
-						$obj_inst->set_prop("encoded_by", $a_file_id3["tags"]["id3v2"]["encoded_by"][0]);
+						$obj_inst->set_prop("genre", $a_file_id3["genre"]);
 					}
 				}
+				
+				// make playtime string
+				$playtime_mins = floor ($a_file_id3["seconds"] / 60);
+        		$playtime_secs = $a_file_id3["seconds"] % 60;
+				$a_file_id3["playtime_string"] = $playtime_mins.":".$playtime_secs;
 				
 				// mpeg info
 				{
 					$obj_inst->set_prop("mpeg_info_filesize", $a_file_id3["filesize"]);
-					$obj_inst->set_prop("mpeg_info_channels", $a_file_id3["audio"]["channels"]);
-					$obj_inst->set_prop("mpeg_info_sample_rate", $a_file_id3["audio"]["sample_rate"]);
-					$obj_inst->set_prop("mpeg_info_bitrate", $a_file_id3["audio"]["bitrate"]);
-					$obj_inst->set_prop("mpeg_info_channelmode", $a_file_id3["audio"]["channelmode"]);
-					$obj_inst->set_prop("mpeg_info_bitrate_mode", $a_file_id3["audio"]["[bitrate_mode"]);
-					$obj_inst->set_prop("mpeg_info_codec", $a_file_id3["audio"]["codec"]);
-					$obj_inst->set_prop("mpeg_info_encoder", $a_file_id3["audio"]["encoder"]);
-					$obj_inst->set_prop("mpeg_info_lossless", $a_file_id3["audio"]["lossless"]);
-					$obj_inst->set_prop("mpeg_info_encoder_options", $a_file_id3["audio"]["encoder_options"]);
-					$obj_inst->set_prop("mpeg_info_compression_ratio", $a_file_id3["audio"]["compression_ratio"]);
-					$obj_inst->set_prop("mpeg_info_playtime_seconds", $a_file_id3["playtime_seconds"]);
+					$obj_inst->set_prop("mpeg_info_bitrate", $a_file_id3["bitrate"]);
+					$obj_inst->set_prop("mpeg_info_playtime_seconds", $a_file_id3["seconds"]);
 					$obj_inst->set_prop("mpeg_info_playtime_string", $a_file_id3["playtime_string"]);
-					$obj_inst->set_prop("mpeg_info_original", $a_file_id3["mpeg"]["audio"]["raw"]["original"]);
-					$obj_inst->set_prop("mpeg_info_emphasis", $a_file_id3["mpeg"]["audio"]["raw"]["emphasis"]);
-					$obj_inst->set_prop("mpeg_info_copyright", $a_file_id3["mpeg"]["audio"]["raw"]["copyright"]);
 				}
 				
 				// get rid of the old file
@@ -774,7 +637,7 @@ class mp3 extends class_base implements admin_if_plugin
 				{
 					// also, we should check if any OTHER file objects point to this file.
 					// if they do, then don't delete the old one. this is sort-of like reference counting:P
-					// because copy/paste on images creates a new object that points to the same file. 
+					// because copy/paste on files creates a new object that points to the same file. 
 					$ol = new object_list(array(
 						"class_id" => CL_MP3,
 						"lang_id" => array(),
@@ -809,10 +672,549 @@ class mp3 extends class_base implements admin_if_plugin
 		return $retval;
 	}
 	
-
+	//to pad binary strings so they represent the correct 8 bits.
+	function mp3info_padd (&$inf)
+	{
+		while (strlen($inf)<8)
+		{
+			$inf = "0".$inf;
+		}
+	}
+	
+	function mp3info($filename)
+	{
+		$file = fopen($filename, 'r') or die("Can't open file");
+		
+		// Checking to make sure I can find Frame Sync
+		while (!feof($file))
+		{
+			$tmp=fgetc($file);
+			if (ord($tmp)==255)
+			{
+				$tmp=fgetc($file);
+				if (substr((decbin(ord($tmp))),0,3)=="111")
+				{
+					break;
+				}
+			}
+		}
+		// If end of file is reached before Frame Sync is found then bail...
+		if (feof($file))
+		{
+			fclose($file);
+			die('Are you sure this is a MP3?');
+		}
+		// We have declared all engines go.
+		// Assign filesize
+		$filesize=filesize($filename);
+		// Assign all important information to $bitstream variable.
+		$inf=decbin(ord($tmp));
+		mp3::mp3info_padd($inf);
+		$bitstream = $inf;
+		$tmp=fgetc($file);
+		$inf=decbin(ord($tmp));
+		mp3::mp3info_padd($inf);
+		$bitstream = $bitstream.$inf;
+		$tmp=fgetc($file);
+		$inf=decbin(ord($tmp));
+		mp3::mp3info_padd($inf);
+		$bitstream = $bitstream.$inf;
+		// $bitstream now totals the 3 important bytes of the header of this frame.
+		// Determine Version of Mpeg.
+		switch (substr($bitstream,3,2))
+		{
+			case "00":
+				$version="2.5";
+				break;
+			case "01":
+				$version="0";
+				break;
+			case "10":
+				$version="2";
+				break;
+			case "11":
+				$version="1";
+				break;
+		}
+		// Determine Layer.
+		switch (substr($bitstream,5,2))
+		{
+			case "00":
+				$layer="0";
+				break;
+			case "01":
+				$layer="3";
+				break;
+			case "10":
+				$layer="2";
+				break;
+			case "11":
+				$layer="1";
+				break;
+		}
+		// Determine CRC checking enabled / disabled 1==disabled
+		$crc = substr($bitstream,7,1);
+		// Determine Bitrate
+		// Setting an index variable ... trust me in this state tis the only way I can think of doing it...
+		if (($version=="1")&($layer=="1"))
+		{
+			$index="1";
+		}
+		elseif (($version=="1")&($layer=="2"))
+		{
+			$index="2";
+		}
+		elseif ($version=="1")
+		{
+			$index="3";
+		}
+		elseif ($layer=="1")
+		{
+			$index="4";
+		}
+		else	
+		{
+			$index="5";
+		}
+		switch (substr($bitstream,8,4))
+		{
+			case "0000":
+				$bitrate="free";
+				break;
+			case "0001":
+				if (($layer>1)and($version>1))
+					{
+						$bitrate="8000";
+					}
+				else
+					{
+						$bitrate="32000";
+					}
+				break;
+			case "0010":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="64000";
+							break;
+						case "2":
+							$bitrate="48000";
+							break;
+						case "3":
+							$bitrate="40000";
+							break;
+						case "4":
+							$bitrate="48000";
+							break;
+						case "5":
+							$bitrate="16000";
+							break;
+					}
+				break;
+			case "0011":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="96000";
+							break;
+						case "2":
+							$bitrate="56000";
+							break;
+						case "3":
+							$bitrate="48000";
+							break;
+						case "4":
+							$bitrate="56000";
+							break;
+						case "5":
+							$bitrate="24000";
+							break;
+					}
+				break;
+			case "0100":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="128000";
+							break;
+						case "2":
+							$bitrate="64000";
+							break;
+						case "3":
+							$bitrate="56000";
+							break;
+						case "4":
+							$bitrate="64000";
+							break;
+						case "5":
+							$bitrate="32000";
+							break;
+					}
+				break;
+			case "0101":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="160000";
+							break;
+						case "2":
+							$bitrate="80000";
+							break;
+						case "3":
+							$bitrate="64000";
+							break;
+						case "4":
+							$bitrate="80000";
+							break;
+						case "5":
+							$bitrate="40000";
+							break;
+					}
+				break;
+			case "0110":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="192000";
+							break;
+						case "2":
+							$bitrate="96000";
+							break;
+						case "3":
+							$bitrate="80000";
+							break;
+						case "4":
+							$bitrate="96000";
+							break;
+						case "5":
+							$bitrate="48000";
+							break;
+					}
+				break;
+			case "0111":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="224000";
+							break;
+						case "2":
+							$bitrate="112000";
+							break;
+						case "3":
+							$bitrate="96000";
+							break;
+						case "4":
+							$bitrate="112000";
+							break;
+						case "5":
+							$bitrate="56000";
+							break;
+					}
+				break;
+			case "1000":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="256000";
+							break;
+						case "2":
+							$bitrate="128000";
+							break;
+						case "3":
+							$bitrate="112000";
+							break;
+						case "4":
+							$bitrate="128000";
+							break;
+						case "5":
+							$bitrate="64000";
+							break;
+					}
+				break;
+			case "1001":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="288000";
+							break;
+						case "2":
+							$bitrate="160000";
+							break;
+						case "3":
+							$bitrate="128000";
+							break;
+						case "4":
+							$bitrate="144000";
+							break;
+						case "5":
+							$bitrate="80000";
+							break;
+					}
+				break;
+			case "1010":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="320000";
+							break;
+						case "2":
+							$bitrate="192000";
+							break;
+						case "3":
+							$bitrate="160000";
+							break;
+						case "4":
+							$bitrate="160000";
+							break;
+						case "5":
+							$bitrate="96000";
+							break;
+					}
+				break;
+			case "1011":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="352000";
+							break;
+						case "2":
+							$bitrate="224000";
+							break;
+						case "3":
+							$bitrate="192000";
+							break;
+						case "4":
+							$bitrate="176000";
+							break;
+						case "5":
+							$bitrate="112000";
+							break;
+					}
+				break;
+			case "1100":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="384000";
+							break;
+						case "2":
+							$bitrate="256000";
+							break;
+						case "3":
+							$bitrate="224000";
+							break;
+						case "4":
+							$bitrate="192000";
+							break;
+						case "5":
+							$bitrate="128000";
+							break;
+					}
+				break;
+			case "1101":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="416000";
+							break;
+						case "2":
+							$bitrate="320000";
+							break;
+						case "3":
+							$bitrate="256000";
+							break;
+						case "4":
+							$bitrate="224000";
+							break;
+						case "5":
+							$bitrate="144000";
+							break;
+					}
+				break;
+			case "1110":
+				switch ($index)
+					{
+						case "1":
+							$bitrate="448000";
+							break;
+						case "2":
+							$bitrate="384000";
+							break;
+						case "3":
+							$bitrate="320000";
+							break;
+						case "4":
+							$bitrate="256000";
+							break;
+						case "5":
+							$bitrate="160000";
+							break;
+					}
+				break;
+			case "1111":
+				$bitrate="bad";
+				break;
+		}
+		// Determine Sample Rate
+		switch ($version)
+		{
+			case "1":
+				switch (substr($bitstream,12,2))
+					{
+						case "00":
+							$sample="44100";
+							break;
+						case "01":
+							$sample="48000";
+							break;
+						case "10":
+							$sample="32000";
+							break;
+						case "11":
+							$sample="reserved";
+							break;
+					}
+				break;
+			case "2":
+				switch (substr($bitstream,12,2))
+					{
+						case "00":
+							$sample="22050";
+							break;
+						case "01":
+							$sample="24000";
+							break;
+						case "10":
+							$sample="16000";
+							break;
+						case "11":
+							$sample="reserved";
+							break;
+					}
+				break;
+			case "2.5":
+				switch (substr($bitstream,12,2))
+					{
+						case "00":
+							$sample="11025";
+							break;
+						case "01":
+							$sample="12000";
+							break;
+						case "10":
+							$sample="8000";
+							break;
+						case "11":
+							$sample="reserved";
+							break;
+					}
+				break;
+		}
+		// Determine whether padding is set on. 0 == no & 1 == yes
+		$padding = substr($bitstream,14,1);
+		// Determine the private bit's value. Dont know what for though?
+		$private = substr($bitstream,15,1);
+		// Determine Channel mode
+		switch (substr($bitstream,16,2))
+		{
+			case "00":
+				$cmode="Stereo";
+				break;
+			case "01":
+				$cmode="Joint Stereo";
+				break;
+			case "10":
+				$cmode="Dual Channel";
+				break;
+			case "11":
+				$cmode="Mono";
+				break;
+		}
+		
+		// Determine number of frames.
+		if ((isset($sample)) and (isset($bitrate)))
+		{
+			if ($layer=="1")
+			{
+				$frames=floor($filesize/(floor(((12*$bitrate)/($sample+$padding))*4)));	
+			}
+			else
+			{
+				$frames=floor($filesize/(floor((144*$bitrate)/($sample))));
+			}
+			
+			// todo: this can actually lie
+			// Determine number of seconds in song.
+			if ($layer=="1")
+			{
+				$seconds=floor((384/$sample)*$frames);
+			}
+			else
+			{
+				$seconds=floor((1152/$sample)*$frames);
+			}
+		}
+		
+		fclose($file);
+		$fred = array(
+			"seconds" => $seconds,
+			"bitrate" => $bitrate,
+			"sample" => $sample,
+			"cmode" => $cmode,
+			"version" => $version,
+			"crc" => $crc,
+			"layer" => $layer,
+		);
+		return($fred);
+	}
+	
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+	
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl)
+		{
+			$this->db_query(
+				"CREATE TABLE mp3
+				(
+					aw_oid INT NOT NULL AUTO_INCREMENT primary key,
+					file varchar(255),
+					md5 varchar(32),
+					play_count int,
+					track varchar(255),
+					title varchar(255),
+					artist varchar(255),
+					album varchar(255),
+					year varchar(255),
+					genre varchar(255),
+					comment varchar(255),
+					composer varchar(255),
+					orig_artist varchar(255),
+					copyright varchar(255),
+					url varchar(255),
+					encoded_by varchar(255),
+					mpeg_info_filesize varchar(255),
+					mpeg_info_channels varchar(255),
+					mpeg_info_sample_rate varchar(255),
+					mpeg_info_bitrate varchar(255),
+					mpeg_info_channelmode varchar(255),
+					mpeg_info_bitrate_mode varchar(255),
+					mpeg_info_codec varchar(255),
+					mpeg_info_encoder varchar(255),
+					mpeg_info_lossless varchar(255),
+					mpeg_info_encoder_options varchar(255),
+					mpeg_info_compression_ratio varchar(255),
+					mpeg_info_playtime_seconds varchar(255),
+					mpeg_info_playtime_string varchar(255),
+					mpeg_info_original varchar(255),
+					mpeg_info_emphasis varchar(255),
+					mpeg_info_copyright varchar(255)
+				)"
+			);
+		}
 	}
 
 	////////////////////////////////////
