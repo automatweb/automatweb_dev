@@ -154,7 +154,7 @@ class postal_codes_obj extends _int_object
 				{
 					foreach($rows as $id => $row)
 					{
-						if($row["house_start"] >= $rows[$high]["house_start"])
+						if($row["house_start"] >= $rows[$high]["house_start"] && ($hn%2==0 && $row["house_start"]%2==0 || $hn%2==1 && $row["house_start"]%2==1 || $row["house_start"] == 0))
 						{
 							$high = $id;
 						}
@@ -165,18 +165,7 @@ class postal_codes_obj extends _int_object
 				{
 					$row = $rows[0];
 				}
-				if($row["house_start"] == 0)
-				{
-					$res[] = array("zip" => $row["zip"]);
-				}
-				elseif($hn%2==0 && $row["house_start"]%2==0)
-				{
-					$res[] = array("zip" => $row["zip"]);
-				}
-				elseif($hn%2==1 && $row["house_start"]%2==1)
-				{
-					$res[] = array("zip" => $row["zip"]);
-				}
+				$res[] = array("zip" => $row["zip"]);
 			}
 			elseif($arr["find"] == "house")
 			{
