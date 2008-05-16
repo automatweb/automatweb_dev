@@ -56,7 +56,7 @@ a.VclGanttHeader
 	font-size: {VAR:row_text_height}px;
 	white-space: nowrap;
 	padding-right: 3px;
-	padding-left: 3px;
+	padding-left: 16px;
 	border-bottom: 1px solid;
 	border-right: none;
 	border-top: none;
