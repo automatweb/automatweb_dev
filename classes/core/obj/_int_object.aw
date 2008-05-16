@@ -21,8 +21,14 @@ class _int_object
 	var $implicit_save;
 	var $obj_sys_flags;
 
-	static $global_save_count = 0;
-	static $cache_off = false;
+	private static $global_save_count = 0;
+	private static $cache_off = false;
+
+	/** 
+		This defines, after how many object saves cache will automatically be turned off for the rest of the request. 
+		It's here so that the cache will not be cleared a million times pointlessly when you are creating a million objects in one request.
+	**/
+	const CACHE_OFF_ON_SAVE_COUNT = 3;
 
 	///////////////////////////////////////////
 	// public functions
@@ -2061,7 +2067,7 @@ class _int_object
 
 	protected function _check_save_cache()
 	{
-		if (self::$global_save_count > 3 && !self::$cache_off)
+		if (self::$global_save_count > self::CACHE_OFF_ON_SAVE_COUNT && !self::$cache_off)
 		{
 			obj_set_opt("no_cache", 1);
 			self::$cache_off = true;
