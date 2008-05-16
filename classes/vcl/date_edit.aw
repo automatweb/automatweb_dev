@@ -308,9 +308,9 @@ class date_edit
 				$date_clear_img_url = '/automatweb/images/icons/delete.gif';
 			}
 
-			$retval .= "<span style='white-space: nowrap;'><a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."' >"; 
+			$retval .= "<span style='white-space: nowrap;'><a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."' tabindex='10'>"; 
 			$retval .= "<img id='".$this->varname."_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0'></a> ";	
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a></span>";
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");' tabindex='10'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a></span>";
 		}
 
 		return $retval;

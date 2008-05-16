@@ -145,7 +145,8 @@ class relpicker extends  core
 			$r .= " ".html::href(array(
 				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-				"title" => t("Otsi")
+				"title" => t("Otsi"),
+				"tabindex" => "10",
 			));
 		}
 		if(!is_array($selected) && $this->can("edit", $selected) && !$no_edit)
@@ -159,7 +160,8 @@ class relpicker extends  core
 				), $selected_clid),
 //				"url" => html::get_change_url($selected_id, array("return_url" => get_ru())),
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
-				"title" => t("Muuda")
+				"title" => t("Muuda"),
+				"tabindex" => "10",
 			));
 		}
 		if(!$no_edit)
@@ -206,7 +208,8 @@ class relpicker extends  core
 							)
 						),
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
-						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"])
+						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"]),
+						"tabindex" => "10",
 					));
 				}
 			}
@@ -330,7 +333,8 @@ class relpicker extends  core
 				$val["post_append_text"] .= " ".html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-					"title" => t("Otsi")
+					"title" => t("Otsi"),
+					"tabindex" => "10",
 				));
 			}
 		}
@@ -341,7 +345,8 @@ class relpicker extends  core
 			$val["post_append_text"] .= " ".html::href(array(
 				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
-				"title" => t("Muuda")
+				"title" => t("Muuda"),
+				"tabindex" => "10",
 			));
 		}
 		
@@ -399,6 +404,7 @@ class relpicker extends  core
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 					"title" => t("Kustuta valitud objektid"),
 					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud objektid kustutada?")."')) { return false; };",
+					"tabindex" => "10",
 				));
 			}
 			if($val["delete_rels_button"])
@@ -415,6 +421,7 @@ class relpicker extends  core
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 					"title" => t("Kustuta valitud seosed"),
 					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud seosed kustutada?")."')) { return false; };",
+					"tabindex" => "10",
 				));
 			}
 		}
@@ -465,7 +472,8 @@ class relpicker extends  core
 							)
 						),
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
-						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"])
+						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"]),
+						"tabindex" => "10",
 					));
 				}
 			}
