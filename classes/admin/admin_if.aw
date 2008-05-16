@@ -688,10 +688,11 @@ class admin_if extends class_base
 				"obj" => obj($row_o->id()),
 				"period" => $period
 			));
-
+			$title = sprintf(t("Objekti id on %s"), $row_o->id());
 			$row["icon"] = html::img(array(
 				"url" => icons::get_icon_url($row_o->class_id(),$row_o->name()),
-				"alt" => sprintf(t("Objekti id on %s"), $row_o->id())
+				"alt" => $title,
+				"title" => $title,
 			));
 
 			$row["class_id"] = $clss[$row_o->class_id()]["name"];
