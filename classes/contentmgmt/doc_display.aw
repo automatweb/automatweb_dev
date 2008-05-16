@@ -246,6 +246,7 @@ class doc_display extends aw_template
 			"lead" => $lead,
 			"content" => $content,
 			"alias" => $doc->trans_get_val("alias"),
+			"last_error_message" => $_SESSION["aw_session_track"]["aw"]["last_error_message"]
 		));
 
 		$ablock = "";

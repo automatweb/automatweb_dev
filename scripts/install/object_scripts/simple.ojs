@@ -58,7 +58,7 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 				$file_def = obj { class_id=CL_MENU, parent=${ctmt}, name="Failid", type=MN_CLIENT, status=STAT_ACTIVE }
 				$link_def = obj { class_id=CL_MENU, parent=${ctmt}, name="Lingid", type=MN_CLIENT, status=STAT_ACTIVE }
 
-				$errpage = obj { class_id=CL_DOCUMENT, parent=${ctmt}, alias="error", name="Viga", status=STAT_ACTIVE, content="Lehte ei leitud<br>#login# " }
+				$errpage = obj { class_id=CL_DOCUMENT, parent=${ctmt}, alias="error", name="Viga", status=STAT_ACTIVE, content="Lehte ei leitud<br>#login#<br><br>{VAR:last_error_message} " }
 
 			obj { class_id=CL_MENU, parent=${aw_obj}, name="Interaktiivne", type=MN_CLIENT, jrk="20", status=STAT_NOTACTIVE }
 			obj { class_id=CL_MENU, parent=${aw_obj}, name="Tugiteenused", type=MN_CLIENT, jrk="30", status=STAT_NOTACTIVE }
