@@ -27,7 +27,7 @@
 
 <!-- SUB: data_row -->
 <tr class="awmenuedittablerow">
-<td class="awmenuedittabletext VclGanttRowName"><a href="{VAR:row_uri}" class="VclGanttLink" target="{VAR:row_uri_target}">{VAR:row_name}</a></td>
+<td class="awmenuedittabletext {VAR:row_name_class}"><a href="{VAR:row_uri}" class="VclGanttLink" target="{VAR:row_uri_target}">{VAR:row_name}</a></td>
 
 <!-- SUB: data_cell_column -->
 <td class="VclGanttColumn">
