@@ -1498,8 +1498,7 @@ class cb_translate extends class_base
 		$charset_from_local = "iso-8859-1";
 		aw_global_set("output_charset", "UTF-8");
 		$pot_scanner = get_instance("core/trans/pot_scanner");
-		$languages = $pot_scanner->get_langs();
-
+		$languages = $this->get_use_languages();
 		$this->read_template("proptrans.tpl");
 		$this->sub_merge = 1;
 		$cfgu = get_instance("cfg/cfgutils");
@@ -1618,6 +1617,26 @@ class cb_translate extends class_base
 			$this->parse("SUB_TRANSLATE");
 		};
 
+		$this->cb_htmlc->add_property(array(
+			"type" => "hidden",
+			"name" => "forward",
+			"value" => 1,
+		));
+
+		$this->cb_htmlc->add_property(array(
+			"name" => "save",
+			"caption" => t("Salvesta"),
+			"type" => "button",
+			"class" => "sbtbutton",
+			"onclick" => "cf = document.forms.changeform; cf.forward.value=0; submit_changeform('');",
+		));
+
+		$this->cb_htmlc->add_property(array(
+			"no_caption" => 1,
+			"value" => t("Salvesta ja edasi"),
+			"type" => "submit",
+			"name" => "continue",
+		));
 
 		if(count($no_writable_langs))
 		{
@@ -1669,6 +1688,29 @@ class cb_translate extends class_base
 		));
 		return ($this->parse());
 		*/
+	}
+
+	function get_use_languages()
+	{
+		$pot_scanner = get_instance("core/trans/pot_scanner");
+		$languages = $pot_scanner->get_langs();
+		$uo = obj(aw_global_get("uid_oid"));
+		$use_langs = $uo->prop("target_lang");
+		if(count($use_langs))
+		{
+			$li = get_instance("core/languages");
+			$langs = array();
+			foreach($use_langs as $id=>$lang)
+			{
+				$lid = $li->get_langid($id);
+				if($languages[$lid])
+				{
+					$langs[$lid] = $lid;
+				}
+			}
+			$languages = $langs;
+		}
+		return $languages;
 	}
 
 	/**
@@ -2512,8 +2554,58 @@ class cb_translate extends class_base
 				$return_params["lid"] = $tmp[LYT]["id"];
 				break;
 		}
-
-		return $this->mk_my_orb($return_params["acation"], $return_params,"",1);
+		if($save_type == PRP && $arr["forward"])
+		{
+			$languages = $this->get_use_languages();
+			$pot_scanner = get_instance("core/trans/pot_scanner");
+			$cls = aw_ini_get("classes");
+			$aw_location = $cls[trim($arr["clid"])]["file"];
+			$po = split("[/]",$aw_location);
+			$po_file = $po[count($po)-1];
+			$useprop = array();
+			$cfgu = get_instance("cfg/cfgutils");
+			$props = $cfgu->load_properties(array(
+					"clid" => $arr["clid"],
+			));
+			foreach($languages as $language)
+			{
+				$look = 0;
+				$file_location = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$po_file.".po";
+				$lines = $pot_scanner->parse_po_file($file_location);
+				foreach($lines as $id => $data)
+				{
+					$tmp = explode(":", $data["headers"][0]);
+					$prop = substr(trim($tmp[2]),5);
+					if($look && !$data["msgstr"] && strstr($data["msgid"], "Omaduse") && strstr($data["msgid"], "caption") && !$useprop[$language] && $props[$prop]["type"]!="hidden")
+					{
+						$useprop[$language] = array(
+							"id" => $id,
+							"prop" => $prop,
+						);
+					}
+					if(strstr($data["msgid"], "Omaduse") && strstr($data["msgid"], $arr["propid"]) && strstr($data["msgid"], "caption"))
+					{
+						$look = 1;
+					}
+				}
+			}
+			if(count($useprop))
+			{
+				$high = array("id" => 0);
+				foreach($languages as $language)
+				{
+					if($useprop[$language]["id"] > $high["id"])
+					{
+						$high = $useprop[$language];
+					}
+				}
+				$prop = $high["prop"];
+				$return_params["propid"] = $prop;
+				$return_params["grpid"] = $props[$prop]["group"];
+			}
+		}
+		$url = $this->mk_my_orb($return_params["action"], $return_params,"",1);
+		return $url;
 
 	}
 
