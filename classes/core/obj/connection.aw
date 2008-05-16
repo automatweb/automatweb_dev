@@ -683,11 +683,29 @@ class connection
 		$this->_int_load($this->conn["id"]);
 
 		// need to read both from and to site_ids to know if cache needs to be propagated
-		$from_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("from"));
-		$GLOBALS["object_loader"]->handle_cache_update($from_objdata["oid"], $from_objdata["site_id"], "save_connection");
+		if (isset($GLOBALS["objects"][$this->prop("from")]))
+		{
+			$from_site_id = $GLOBALS["objects"][$this->prop("from")]->site_id();
+		}
+		else
+		{
+			$from_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("from"));
+			$from_site_id = $from_objdata["site_id"];
+		}
 
-		$to_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("to"));
-		$GLOBALS["object_loader"]->handle_cache_update($to_objdata["oid"], $to_objdata["site_id"], "save_connection");
+		$GLOBALS["object_loader"]->handle_cache_update($this->prop("from"), $from_site_id, "save_connection");
+
+		if (isset($GLOBALS["objects"][$this->prop("to")]))
+		{
+			$to_site_id = $GLOBALS["objects"][$this->prop("to")]->site_id();
+		}
+		else
+		{
+			$to_objdata = $GLOBALS["object_loader"]->ds->get_objdata($this->prop("to"));
+			$to_site_id = $to_objdata["site_id"];
+		}
+
+		$GLOBALS["object_loader"]->handle_cache_update($this->prop("to"), $to_site_id, "save_connection");
 
 		if ($new)
 		{

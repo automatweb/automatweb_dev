@@ -1012,11 +1012,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function save_connection($data)
 	{
-		if (!$data["type"])
-		{
-			$data["type"] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '".$data["to"]."'", "class_id");
-		}
-
 		if ($data["id"])
 		{
 			$q = "UPDATE aliases SET
@@ -1034,7 +1029,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		else
 		{
-			if (!$data["idx"])
+			// we don't need the index if the connection has a reltype, cause the index is only used for aliases
+			if (!$data["idx"] && !$data["reltype"])
 			{
 				$q = "SELECT MAX(idx) as idx FROM aliases where source = '$data[from]' and type = '$data[type]'";
 				$data["idx"] = $this->db_fetch_field($q, "idx")+1;

@@ -159,14 +159,6 @@ class _int_object
 			}
 			else
 			{
-				$tmp = obj_set_opt("no_cache", 1);
-				if (count($this->connections_from($cprms)) > 0)
-				{
-					obj_set_opt("no_cache", $tmp);
-					return;
-				}
-				obj_set_opt("no_cache", $tmp);
-
 				if ($GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) &&
 					$GLOBALS["object_loader"]->ds->can("view", $oid))
 				{
@@ -2059,7 +2051,7 @@ class _int_object
 		}
 
 		// log save
-		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"], $this->obj["class_id"], true, $this->obj["name"]);
+		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], (string)$this->name(), $this->obj["class_id"]);
 
 		// check cache
 		$this->_check_save_cache();
