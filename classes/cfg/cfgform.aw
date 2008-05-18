@@ -271,7 +271,7 @@ class cfgform extends class_base
 			[table] => objects
 			[field] => name
 			[ch_value] => 2
-			[name] => name
+			[name] => prop_name
 			[rel] => 1
 			[trans] => 1
 			[comment] => Objekti nimi
@@ -959,7 +959,7 @@ class cfgform extends class_base
 		{
 			foreach ($this->cfg_proplist as $name => $cfg)
 			{
-				if(is_array($this->cfg_proplist[$name]) and is_array($this->all_props[$name]))
+				if(is_array($this->cfg_proplist[$name]) and is_array($this->all_props[$name]) and empty($this->cfg_proplist[$name]["type"]))
 				{
 					$this->cfg_proplist[$name]["type"] = $this->all_props[$name]["type"];
 				}
@@ -1773,7 +1773,7 @@ class cfgform extends class_base
 	////
 	// !
 	function callback_gen_layout($arr = array())
-	{
+	{ arr($this->cfg_proplist);exit;
 		$this->read_template("layout.tpl");
 		$used_props = $by_group = $by_layout = $layouts_by_grp = array();
 		$by_group = array();
@@ -2766,6 +2766,7 @@ class cfgform extends class_base
 					$grplist[$key]["grp_d_ctl"] = (int) $arr["request"]["grp_d_ctl"][$key];
 					$grplist[$key]["ord"] = (int) $arr["request"]["grpord"][$key];
 
+					// submit
 					if (empty($arr["request"]["grpsubmit"][$key]))
 					{
 						$grplist[$key]["submit"] = "no";
@@ -2775,6 +2776,76 @@ class cfgform extends class_base
 						unset($grplist[$key]["submit"]);
 					}
 
+					// submit button text
+					if (!empty($arr["request"]["grpsubmit_btn_text"][$key]))
+					{
+						$grplist[$key]["submit_btn_text"] = $arr["request"]["grpsubmit_btn_text"][$key];
+						$found_submit_prop = false;
+
+						// find existing submit prop in this grp
+						foreach ($this->cfg_proplist as $name => $prop)
+						{
+							if ("submit" === $prop["type"] and (is_array($prop["group"]) and in_array($key, $prop["group"]) or $key === $prop["group"]))
+							{
+								$found_submit_prop = true;
+								$this->cfg_proplist[$name]["caption"] = $arr["request"]["grpsubmit_btn_text"][$key];
+								break;
+							}
+						}
+
+						if (!$found_submit_prop)
+						{ // add new
+							$prop_name = $key . "_submit_button";
+							$i = 0;
+
+							while (isset($this->cfg_proplist[$prop_name]))
+							{
+								++$i;
+								$prop_name = $key . "_submit_button_" . $i;
+							}
+
+							$this->cfg_proplist[$prop_name] = array(
+								"name" => $prop_name,
+								"type" => "submit",
+								"store" => "no",
+								"group" => $key,
+								"force_display" => 1,
+								"caption" => $arr["request"]["grpsubmit_btn_text"][$key],
+							);
+						}
+					}
+					else
+					{ // remove submit button
+						foreach ($this->cfg_proplist as $name => $prop)
+						{
+							if ("submit" === $prop["type"])
+							{
+								if ($prop["group"] === $key)
+								{
+									unset($this->cfg_proplist[$name]);
+								}
+								elseif (is_array($prop["group"]) and in_array($key, $prop["group"]))
+								{
+									foreach ($prop["group"] as $ord => $group)
+									{
+										if ($group === $key)
+										{
+											unset($this->cfg_proplist[$name]["group"][$ord]);
+										}
+									}
+
+									if (!count($this->cfg_proplist[$name]["group"]))
+									{
+										unset($this->cfg_proplist[$name]);
+									}
+								}
+							}
+						}
+
+						unset($grplist[$key]["submit_btn_text"]);
+					}
+
+					// style
 					$styl = $arr["request"]["grpstyle"][$key];
 
 					if (!empty($styl))
@@ -2782,6 +2853,7 @@ class cfgform extends class_base
 						$grplist[$key]["grpstyle"] = $styl;
 					}
 
+					// form element to focus on load
 					if (array_key_exists($arr["request"]["grpfocus"][$key], $this->prplist))
 					{
 						$grplist[$key]["focus"] = $arr["request"]["grpfocus"][$key];
@@ -3843,6 +3915,11 @@ class cfgform extends class_base
 			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
+			"name" => "submit_btn_text",
+			"caption" => t("Submit nupu tekst"),
+			"chgbgcolor" => "bg_colour"
+		));
+		$t->define_field(array(
 			"name" => "opt_view",
 			"caption" => '<a href="javascript:selall(\'grpview\')">' . t("V") . '</a>',
 			"tooltip" => t("Vaikimisi view vaade"),
@@ -3887,6 +3964,21 @@ class cfgform extends class_base
 			{
 				$props_by_grp[$data["group"]][$name] = $data["caption"];
 			}
+
+			if ("submit" === $data["type"] and !empty($data["group"]))
+			{
+				if (is_array($data["group"]))
+				{
+					foreach ($data["group"] as $grp)
+					{
+						$grps[$grp]["submit_btn_text"] = $data["caption"];
+					}
+				}
+				else
+				{
+					$grps[$data["group"]]["submit_btn_text"] = $data["caption"];
+				}
+			}
 		}
 
 		foreach($grps as $gn => $gd)
@@ -3903,6 +3995,11 @@ class cfgform extends class_base
 					"name" => "grpord[".$gn."]",
 					"size" => 2,
 					"value" => $gd["ord"],
+				)),
+				"submit_btn_text" => html::textbox(array(
+					"name" => "grpsubmit_btn_text[".$gn."]",
+					"size" => 5,
+					"value" => $gd["submit_btn_text"]
 				)),
 				"style" => html::select(array(
 					"name" => "grpstyle[$gn]",
