@@ -1773,7 +1773,7 @@ class cfgform extends class_base
 	////
 	// !
 	function callback_gen_layout($arr = array())
-	{ arr($this->cfg_proplist);exit;
+	{
 		$this->read_template("layout.tpl");
 		$used_props = $by_group = $by_layout = $layouts_by_grp = array();
 		$by_group = array();
