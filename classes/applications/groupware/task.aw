@@ -771,49 +771,47 @@ class task extends class_base
 	{
 
 		return '<script language="javascript">
-	function update_stoppers()
-	{
+	var thisdate = new Date();
+	var timestamp_start = thisdate.getTime();
+	stops_begin = stops;
+	$.timer(1000, function (timer) {
+		var thisdate = new Date();
+		duration = (((thisdate.getTime() - timestamp_start) /1000).toFixed(0))*1.0;
 		for(stopKey in stops)
 		{
-			el = document.getElementById(\'stopdiv_\'+stopKey+\'_time\');
-			if(!el)
-			{
-				continue;
-			}
-			tm = stops[stopKey];
-			// add a sec
-			tm[2]++;
-			if (tm[2] > 59)
-			{
-				tm[2] = 0;
-				tm[1]++;
-			}
-			if (tm[1] > 59)
-			{
-				tm[1] = 0;
-				tm[0]++;
-			}
-			hr = tm[0];
-			if (hr < 10)
-			{
-				hr = "0" + hr;
-			}
-			mn = tm[1];
-			if (mn < 10)
-			{
-				mn = "0" + mn;
-			}
-			sc = tm[2];
-			if (sc < 10)
-			{
-				sc = "0" + sc;
-			}
-			el.innerHTML = hr+":"+mn+":"+sc;
+			start_duration = (stops[stopKey][0]*60*60+stops[stopKey][1]*60+stops[stopKey][2])*1.0;
+			el = $(\'#stopdiv_\'+stopKey+\'_time\').html(_return_normal_clock(start_duration+duration));
 		}
-		setTimeout("update_stoppers()", 990);
+	});
+	
+	function _return_normal_clock(seconds)
+	{
+		var s = seconds;
+		var m = h = 0;
+		while (s>59)
+		{
+			s -= 60;
+			m++;
+		}
+		while (m>59)
+		{
+			m -= 60;
+			h++;
+		}
+		if (h < 10)
+		{
+			h = "0"+h;
+		}
+		if (m < 10)
+		{
+			m = "0"+m;
+		}
+		if (s < 10)
+		{
+			s = "0"+s;
+		}
+		return h+":"+m+":"+s;
 	}
-
-	setTimeout("update_stoppers()", 990);
 	</script>';
 	}
 
