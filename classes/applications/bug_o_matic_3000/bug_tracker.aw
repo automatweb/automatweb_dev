@@ -3215,22 +3215,22 @@ class bug_tracker extends class_base
 			}
 			elseif(($deadline - 4*24*60*60) < time() && $deadline - 3*24*60*60 > time())
 			{
-				$color = "#FF5300";
+				$color = "#FFD400";
 				$class = "VclGanttRowName deadline4";
 			}
 			elseif(($deadline - 3*24*60*60) < time() && $deadline - 2*24*60*60 > time())
 			{
-				$color = "#FF7E00";
+				$color = "#FFA900";
 				$class = "VclGanttRowName deadline3";
 			}
 			elseif(($deadline - 2*24*60*60) < time() && $deadline - 1*24*60*60 > time())
 			{
-				$color = "#FFA900";
+				$color = "#FF7E00";
 				$class = "VclGanttRowName deadline2";
 			}
 			elseif(($deadline - 1*24*60*60) < time() && $deadline > time())
 			{
-				$color = "#FFD400";
+				$color = "#FF5300";
 				$class = "VclGanttRowName deadline1";
 			}
 		}
