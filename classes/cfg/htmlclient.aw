@@ -422,17 +422,40 @@ class htmlclient extends aw_template
 		{
 			$add = strtoupper("_".$args["capt_ord"]);
 		}
+		$datesub = 0;
+		if($args["type"] == "date_select")
+		{
+			if(isset($this->tmp) && is_object($this->tmp))
+			{
+				if($this->tmp->is_template("DATE_LINE".$add))
+				{
+					$datesub = 1;
+				}
+			}
+			else
+			{
+				if($this->is_template("DATE_LINE".$add))
+				{
+					$datesub = 1;
+				}
+			}
+		}
+		if($datesub)
+		{
+			$tpl_vars["element_name"] = $args["name"];
+			$add2 = "DATE_";
+		}
 		// I wanda mis kammi ma selle tmp-iga tegin
 		// different layout mode eh? well, it sucks!
 		if (isset($this->tmp) && is_object($this->tmp))
 		{
 			$this->tmp->vars($tpl_vars);
-			$rv = $this->tmp->parse("LINE".$add);
+			$rv = $this->tmp->parse($add2."LINE".$add);
 		}
 		else
 		{
 			$this->vars_safe($tpl_vars);
-			$rv = $this->parse("LINE".$add);
+			$rv = $this->parse($add2."LINE".$add);
 		}
 		return $rv;
 	}
