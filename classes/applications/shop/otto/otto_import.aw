@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.91 2008/04/10 08:37:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.92 2008/05/19 12:14:26 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -5544,6 +5544,17 @@ class otto_import extends class_base
 						$new_price = $fields[6];
 					}
 
+					$prod_oid = $this->db_fetch_field("
+						select 
+							aw_oid 
+						from 
+							aw_shop_products 
+							left join objects on (aw_oid = oid) 
+						where 
+							user6 like '%".trim($fields[1])."%' and 
+							lang_id = ".aw_global_get('lang_id').";
+					", "aw_oid");
+
 					$sql = "insert into bp_discount_products set ";
 					$sql .= "prom='".trim($fields[0])."',";
 					$sql .= "product_code='".trim($fields[1])."',";
@@ -5553,6 +5564,7 @@ class otto_import extends class_base
 					$sql .= "old_price=".$old_price.",";
 					$sql .= "new_price=".$new_price.",";
 					$sql .= "category='".trim($fields[7])."',";
+					$sql .= "prod_oid=".$prod_oid.",";
 					$sql .= "lang_id=".aw_global_get('lang_id')." ;";
 
 					$this->db_query($sql);
@@ -5597,7 +5609,6 @@ class otto_import extends class_base
 								$prod_obj->save();
 							}
 						}
-			
 					}
 				}
 			//	echo ".::[ import complete ]::.<br>";
