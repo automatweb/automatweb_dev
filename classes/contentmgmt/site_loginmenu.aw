@@ -20,7 +20,7 @@ class site_loginmenu extends class_base
 		// todo: cache the uid to whole login menu html
 		// no need for object list on every page call
 		// get id form login menu object
-		$login_menu_id = 8;
+		$login_menu_id = site_show::_helper_get_login_menu_id();
 		$ol = new object_list(array(
 			"class_id" => CL_MENU,
 			"parent" => $login_menu_id
