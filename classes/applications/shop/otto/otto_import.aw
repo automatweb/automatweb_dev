@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.92 2008/05/19 12:14:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.93 2008/05/20 11:31:42 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1081,7 +1081,7 @@ class otto_import extends class_base
 				$pics_str .= '<table style="display:inline;">';
 				$pics_str .= '<tr><td style="border: 1px solid blue">';
 				$pics_str .= html::img(array(
-					'url' => aw_ini_get('baseurl').'/vv_product_images/'.$pic{0}.'/'.$pic{1}.'/'.$pic.'_2.jpg',
+					'url' => aw_ini_get('baseurl').'/vv_product_images/'.$pic{0}.'/'.$pic{1}.'/'.$pic.'_2.jpg?a='.rand(),
 				));
 				$pics_str .= '</td></tr>';
 				$pic_del_check_box = html::checkbox(array(
@@ -1103,11 +1103,56 @@ class otto_import extends class_base
 				'caption' => t('Pildid'),
 				'data' => $pics_str
 			));
+
+
+			if ($_SESSION['otto_import_prod_manager_image_exists'])
+			{
+
+				// lets check, what products have this picture:
+				$ol = new object_list(array(
+					'class_id' => CL_SHOP_PRODUCT,
+					'user3' => '%'.$_SESSION['otto_import_prod_manager_image_exists']['filename'].'%'
+				));
+				$prods_for_pic = array();
+				foreach ($ol->arr() as $prod_oid => $prod)
+				{
+					$caption = $prod->name();
+					if ((int)$_GET['products_manager_prod_id'] == $prod_oid)
+					{
+						$caption = "<strong>".$prod->name()."</strong>";
+					}
+					$prods_for_pic[$prod_oid] = html::href(array(
+						'url' => aw_url_change_var('products_manager_prod_id', $prod_oid),
+						'caption' => $caption
+					));
+				}
+				$new_image_str = "Pilt on juba olemas j&auml;rgmiste toodete juures - ".implode(', ', $prods_for_pic)."<br /> ";
+				$new_image_str .= html::hidden(array(
+					'name' => 'tmp_filename',
+					'value' => $_SESSION['otto_import_prod_manager_image_exists']['tmp_filename']
+				));
+				$new_image_str .= "Uus pildi nimi: " . html::textbox(array(
+					'name' => 'new_picture_name',
+					'value' => $_SESSION['otto_import_prod_manager_image_exists']['filename'],
+					'size' => 20
+				));
+				$new_image_str .= html::checkbox(array(
+					'name' => 'overwrite',
+					'value' => 1,
+					'label' => t('Kirjuta &uuml;le')
+				));
+
+				unset($_SESSION['otto_import_prod_manager_image_exists']);
+			} 
+			else 
+			{
+				$new_image_str = html::fileupload(array(
+					'name' => 'new_picture'
+				));
+			}
 			$t->define_data(array(
 				'caption' => t('Uus pilt'),
-				'data' => html::fileupload(array(
-					'name' => 'new_picture',
-				)),
+				'data' => $new_image_str
 			));
 
 
@@ -1238,7 +1283,6 @@ class otto_import extends class_base
 
 		////
 		// pics
-
 		$pics = explode(',', $prod_obj->prop('user3'));
 		$pics_mod = false;
 
@@ -1259,50 +1303,78 @@ class otto_import extends class_base
 		}
 
 		// new picture
+		$filename = "";
+		$image_source = "";
+		$folder = $arr['obj_inst']->prop('images_folder');
 		if ($_FILES['new_picture']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['new_picture']['tmp_name']))
 		{
-			$folder = $arr['obj_inst']->prop('images_folder');
 			$filename = basename($_FILES['new_picture']['name'], '.jpg');
 
-			$big_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg';
 			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
-			if (!file_exists($big_picture))
+
+			// peaks kontrollima seda, et kas fail on juba olemas ...
+			// ma arvan, et piisab v2ikse pildi olemasolu kontrollimisest
+			if (!file_exists($small_picture) || $arr['request']['overwrite'] == 1)
 			{
-				$this->get_image(array(
-					'source' => $_FILES['new_picture']['tmp_name'],
-					'otto_import' => $arr['obj_inst'],
-					'format' => BIG_PICTURE,
+				$image_source = $_FILES['new_picture']['tmp_name'];
+			}
+			else
+			{
+				$_SESSION['otto_import_prod_manager_image_exists'] = array(
+					'tmp_filename' => '/tmp/' . basename($_FILES['new_picture']['tmp_name']),
 					'filename' => $filename
-				));
+				);
+				move_uploaded_file($_FILES['new_picture']['tmp_name'], "/tmp/" . basename($_FILES['new_picture']['tmp_name']));
 			}
-
-			if (!file_exists($small_picture))
-			{
-				$image_converter = get_instance('core/converters/image_convert');
-				$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
-				
-				list($image_width, $image_height) = $image_converter->size();
-				if ($image_width >= $image_height)
-				{
-					$new_image_height = ($image_height * 168) / $image_width;
-					$image_converter->resize_simple(168, $new_image_height);
-				}
-				else
-				{
-					$image_converter->resize_simple(168, 240);
-				}
-				$image_converter->save($small_picture, 2);
-			}
-
-			// add picture to product only when both big and small picture files exist:
-			if (file_exists($big_picture) && file_exists($small_picture))
-			{
-				array_push($pics, $filename);
-				$pics_mod = true;
-			}
-
 		}
 		
+		// so, if there should be any renaming or overwriting done, then lets do it ...
+		if (!empty($arr['request']['new_picture_name'])){
+			$filename = basename($arr['request']['new_picture_name'], '.jpg');
+			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
+			if (!file_exists($small_picture) || $arr['request']['overwrite'] == 1){
+			//	$image_source = $_SESSION['otto_import_prod_manager_image_exists']['tmp_filename'];
+				$image_source = $arr['request']['tmp_filename'];
+			//	unset($_SESSION['otto_import_prod_manager_image_exists']);
+			}
+			else
+			{
+				$_SESSION['otto_import_prod_manager_image_exists']['filename'] = $filename;
+				$_SESSION['otto_import_prod_manager_image_exists']['tmp_filename'] = $arr['request']['tmp_filename'];
+			}
+		}
+
+		// so, do we need to add the picture now ... ?
+		if (!empty($filename) && !empty($image_source))
+		{
+			$this->get_image(array(
+				'source' => $image_source,
+				'otto_import' => $arr['obj_inst'],
+				'format' => BIG_PICTURE,
+				'filename' => $filename,
+				'overwrite' => true
+			));
+
+			$image_converter = get_instance('core/converters/image_convert');
+			$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
+			
+			list($image_width, $image_height) = $image_converter->size();
+			if ($image_width >= $image_height)
+			{
+				$new_image_height = ($image_height * 168) / $image_width;
+				$image_converter->resize_simple(168, $new_image_height);
+			}
+			else
+			{
+				$image_converter->resize_simple(168, 240);
+			}
+			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
+			$image_converter->save($small_picture, 2);
+
+			array_push($pics, $filename);
+			$pics_mod = true;
+		}
+
 		if ($pics_mod)
 		{
 			foreach ($pics as $k => $v)
@@ -1312,11 +1384,10 @@ class otto_import extends class_base
 					unset($pics[$k]);
 				}
 			}
-			$prod_obj->set_prop('user3', implode(',', $pics));
+			$prod_obj->set_prop('user3', implode(',', array_unique($pics)));
 			$prod_obj->set_prop('userch2', 1);
 			$save = true;
 		}
-
 
 		// if i need to save the product object, then lets do it once in the end:
 		if ($save)
@@ -5652,9 +5723,11 @@ class otto_import extends class_base
 	// filename - the new filename, if empty, then original filename is used provided by image parameter
 	// debug - if set to true, then print out what is happening during download process (boolean)
 	// otto_import - otto_import object instance (aw object)
+	// overwrite - boolean, indictes if the image file should be overwritten or not
 	function get_image($arr)
 	{
 		$debug = $arr['debug'];
+		$overwrite = ( $arr['overwrite'] === true ) ? true : false;
 
 		if (empty($arr['filename']))
 		{
@@ -5673,7 +5746,7 @@ class otto_import extends class_base
 		{
 			// new image file
 			$new_file = $folder.'/'.$filename.'_'.$arr['format'].'.jpg';
-			if (!file_exists($new_file) || filesize($new_file) == 0)
+			if ($overwrite || !file_exists($new_file) || filesize($new_file) == 0)
 			{
 				$this->copy_file(array(
 					'source' => $arr['source'],
