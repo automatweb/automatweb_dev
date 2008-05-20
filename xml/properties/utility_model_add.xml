@@ -21,13 +21,13 @@
             <caption>Pangamakse objekt</caption>
       </property>
       <property>
-            <name>utility_models_menu</name>
+            <name>trademarks_menu</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_UTILITY_MODEL_MENU</reltype>
+            <reltype>RELTYPE_TRADEMARK_MENU</reltype>
             <caption>Kasuliku mudeli reg. taotluste kaust</caption>
       </property>
       <property>
@@ -59,11 +59,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Volinike kaust</caption>
             </PROCURATOR_MENU>
-            <UTILITY_MODEL_MENU>
+            <TRADEMARK_MENU>
                   <value>9</value>
                   <clid>CL_MENU</clid>
                   <caption>Kasuliku mudeli reg. taotluste kaust</caption>
-            </UTILITY_MODEL_MENU>
+            </TRADEMARK_MENU>
             <SERIES>
                   <clid>CL_CRM_NUMBER_SERIES</clid>
                   <value>3</value>

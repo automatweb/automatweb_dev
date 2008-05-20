@@ -138,17 +138,8 @@
             <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>text</type>
             <caption>Taotlusl&amp;amp;otilde;iv</caption>
-      </property>
-      <property>
-            <name>classes_fee</name>
-            <table>objects</table>
-            <group>fee</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Lisaklasside l&amp;amp;otilde;iv</caption>
       </property>
       <property>
             <name>payer</name>
@@ -387,6 +378,15 @@
             <type>textbox</type>
             <caption>Riigi kood</caption>
       </property>
+      <property>
+            <name>classes_fee</name>
+            <table>objects</table>
+            <group>fee</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Lisaklasside l&amp;amp;otilde;iv</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PATENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -450,11 +450,6 @@
                   <clid>CL_CRM_EMAIL</clid>
                   <caption>E-mail</caption>
             </EMAIL>
-            <COUNTRY>
-                  <value>7</value>
-                  <clid>CL_CRM_COUNTRY</clid>
-                  <caption>P&amp;amp;auml;riltolumaa</caption>
-            </COUNTRY>
             <PROCURATOR_MENU>
                   <value>8</value>
                   <clid>CL_MENU</clid>

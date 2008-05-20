@@ -138,17 +138,8 @@
             <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>text</type>
             <caption>Taotlusl&amp;amp;otilde;iv</caption>
-      </property>
-      <property>
-            <name>classes_fee</name>
-            <table>objects</table>
-            <group>fee</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Lisaklasside l&amp;amp;otilde;iv</caption>
       </property>
       <property>
             <name>payer</name>
@@ -210,6 +201,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <store>no</store>
             <caption>Mitte avalikustada minu nime autorina</caption>
       </property>
       <property>
@@ -356,13 +348,14 @@
             <caption>Taotluse number</caption>
       </property>
       <property>
-            <name>other_first_application_data</name>
+            <name>childtitle114</name>
             <table>objects</table>
             <group>other_data</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
             <caption>Esmase taotluse andmed (seaduse &amp;amp;#0167;21 l&amp;amp;otilde;ige 2)</caption>
       </property>
       <property>
@@ -393,13 +386,14 @@
             <caption>Taotluse number</caption>
       </property>
       <property>
-            <name>other_bio</name>
+            <name>childtitle115</name>
             <table>objects</table>
             <group>other_data</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
             <caption>Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed:</caption>
       </property>
       <property>
@@ -430,13 +424,14 @@
             <caption>Deponeerimise asutuse nimi</caption>
       </property>
       <property>
-            <name>other_datapub</name>
+            <name>childtitle116</name>
             <table>objects</table>
             <group>other_data</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
             <caption>Patendiseaduse &amp;amp;#0167;8 l&amp;amp;otilde;ikes 3 nimetatud teabe avalikustamise kuup&amp;amp;auml;ev (23) ja andmed:</caption>
       </property>
       <property>
@@ -694,11 +689,6 @@
                   <clid>CL_CRM_EMAIL</clid>
                   <caption>E-mail</caption>
             </EMAIL>
-            <COUNTRY>
-                  <value>7</value>
-                  <clid>CL_CRM_COUNTRY</clid>
-                  <caption>P&amp;amp;auml;riltolumaa</caption>
-            </COUNTRY>
             <PROCURATOR_MENU>
                   <value>8</value>
                   <clid>CL_MENU</clid>

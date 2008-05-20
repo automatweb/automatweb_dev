@@ -8,21 +8,11 @@
 
 @groupinfo author caption="Autor"
 @default group=author
-	@property author_first_name type=textbox
-	@caption Eesnimi
+	@property author type=relpicker reltype=RELTYPE_AUTHOR
+	@caption Autor
 
-	@property author_last_name type=textbox
-	@caption Perekonnanimi
-
-	@property author_address type=textbox
-	@caption Aadress
-
-	@property author_country_code type=textbox
-	@caption Riigi kood
-
-	@property author_disallow_disclose type=checkbox ch_value=1
+	@property author_disallow_disclose type=checkbox ch_value=1 store=no
 	@caption Mitte avalikustada minu nime autorina
-
 
 @groupinfo invention caption="Leiutise nimetus"
 @default group=invention
@@ -63,9 +53,6 @@
  	@property attachment_invention_description type=fileupload reltype=RELTYPE_ATTACHMENT_INVENTION_DESCRIPTION form=+emb
 	@caption Leiutiskirjeldus
 
- 	@property attachment_seq type=fileupload reltype=RELTYPE_ATTACHMENT_SEQ form=+emb
-	@caption J&auml;rjestuse loetelu
-
  	@property attachment_demand type=fileupload reltype=RELTYPE_ATTACHMENT_DEMAND form=+emb
 	@caption Kasuliku mudeli n&otilde;udlus
 
@@ -75,11 +62,8 @@
  	@property attachment_summary_et type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_ET form=+emb
 	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te
 
- 	@property attachment_summary_en type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_EN form=+emb
-	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles
-
  	@property attachment_dwgs type=fileupload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
-	@caption Joonised ja muu illustreeriv materjal
+	@caption Illustratsioonid
 
  	@property attachment_fee type=fileupload reltype=RELTYPE_ATTACHMENT_FEE form=+emb
 	@caption Riigil&otilde;ivu tasumist t&otilde;endav dokument
@@ -139,12 +123,23 @@ class utility_model extends intellectual_property
 			"tpldir" => "applications/patent",
 			"clid" => CL_UTILITY_MODEL
 		));
-		$this->info_levels[11] = "author";
-		$this->info_levels[12] = "invention_um";
-		$this->info_levels[14] = "attachments_um";
+		$this->info_levels = array(
+			0 => "applicant",
+			11 => "author",
+			12 => "invention_um",
+			3 => "priority_um",
+			14 => "attachments_um",
+			4 => "fee_um",
+			5 => "check"
+		);
 		$this->pdf_file_name = "KasulikuMudeliTaotlus";
 		$this->show_template = "show_um.tpl";
+		$this->date_vars = array_merge($this->date_vars, array("prio_convention_date", "prio_prevapplicationsep_date", "prio_prevapplication_date"
+));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
+		$this->text_vars = array_merge($this->text_vars, array("invention_name","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplication_nr","attachment_demand_points"));
+		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "attachment_invention_description", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
 	}
 
 	protected function save_priority($patent)
@@ -172,6 +167,18 @@ class utility_model extends intellectual_property
 		$patent->set_meta("products" , $_SESSION["patent"]["products"]);
 	}
 
+	protected function save_invention($patent)
+	{
+		$patent->set_prop("invention_name" , $_SESSION["patent"]["invention_name"]);
+		$patent->save();
+	}
+
+	protected function save_attachments($patent)
+	{
+		$patent->set_prop("attachment_demand_points" , $_SESSION["patent"]["attachment_demand_points"]);
+		$patent->save();
+	}
+
 	protected function get_object()
 	{
 		if(is_oid($_SESSION["patent"]["id"]))
@@ -186,9 +193,11 @@ class utility_model extends intellectual_property
 			$patent->save();
 			$patent->set_name(" Kinnitamata taotlus nr [".$patent->id()."]");
 		}
+
+		return $patent;
 	}
 
-	protected function get_payment_sum($arr)
+	protected function get_payment_sum()
 	{
 		$sum = 0;
 		$is_corporate = false;
@@ -206,31 +215,103 @@ class utility_model extends intellectual_property
 		return $sum;
 	}
 
-	/**
-		@attrib name=remove_author is_public="1"  all_args=1
-		@param key optional type=int
-	**/
-	function remove_author($arr)
-	{
-		unset($_SESSION["patent"]["authors"][$arr["key"]]);
-		die('<script type="text/javascript">
-			window.opener.location.reload();
-			window.close();
-			</script>'
-		);
-	}
-
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
+
+		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
+
+		if(isset($_SESSION["patent"]["delete_author"]))
+		{
+			unset($_SESSION["patent"]["authors"][$_SESSION["patent"]["delete_author"]]);
+			unset($_SESSION["patent"]["delete_author"]);
+		}
+
+		if($_SESSION["patent"]["add_new_author"])
+		{
+			$_SESSION["patent"]["add_new_author"] = null;
+			$_SESSION["patent"]["change_author"] = null;
+			$_SESSION["patent"]["author_id"] = null;
+		}
+		elseif(strlen(trim(($_SESSION["patent"]["author_id"]))))
+		{
+			$this->_get_author_data();
+			$data["change_author"] = $_SESSION["patent"]["author_id"];
+			$_SESSION["patent"]["change_author"] = null;
+			$_SESSION["patent"]["author_id"] = null;
+		}
+		else
+		{
+			$data["author_no"] = sizeof($_SESSION["patent"]["authors"]) + 1;
+		}
+		//nendesse ka siis see tingumus, et muuta ei saa
+
+		$data["P_ADDRESS"] = $this->parse("P_ADDRESS");
+
+		$data["add_new_author"] = html::radiobutton(array(
+				"value" => 1,
+				"checked" => 0,
+				"name" => "add_new_author",
+		));
+
+		if(is_array($_SESSION["patent"]["authors"]) && sizeof($_SESSION["patent"]["authors"]))
+		{
+			$data["authors_table"] = $this->_get_authors_table();
+		}
+
 		return $data;
 	}
 
+	function check_fields()
+	{
+		$err = parent::check_fields();
+
+		if(((int) $_POST["data_type"]) === 14)
+		{
+			if(empty($_FILES["attachment_invention_description_upload"]["tmp_name"]))
+			{
+				$err.= t("Leiutiskirjeldus peab olema lisatud")."\n<br>";
+			}
+
+			if($err)
+			{
+				$_SESSION["patent"]["checked"] = 3;
+			}
+		}
+
+		return $err;
+	}
 
 	function fill_session($id)
 	{
-		$this->fill_session_property_vars = array("authorized_codes" , "job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type", "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee", "payer" , "doc_nr" , "warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
+		$patent = obj($id);
+		$address_inst = get_instance(CL_CRM_ADDRESS);
 		parent::fill_session($id);
+		$author_disallow_disclose = (array) $patent->meta("author_disallow_disclose");
+
+		foreach($patent->connections_from(array("type" => "RELTYPE_AUTHOR")) as $key => $c)
+		{
+			$o = $c->to();
+			$key = $o->id();
+			$_SESSION["patent"]["authors"][$key]["name"] = $o->name();
+			$_SESSION["patent"]["authors"][$key]["firstname"] = $o->prop("firstname");
+			$_SESSION["patent"]["authors"][$key]["lastname"] = $o->prop("lastname");
+			$_SESSION["patent"]["authors"][$key]["author_disallow_disclose"] = $author_disallow_disclose[$o->id()];
+			$address = $o->prop("address");
+
+			if($this->can("view" , $address))
+			{
+				$address_obj = obj($address);
+				$_SESSION["patent"]["authors"][$key]["street"] = $address_obj->prop("aadress");
+				$_SESSION["patent"]["authors"][$key]["index"] = $address_obj->prop("postiindeks");
+				if(is_oid($address_obj->prop("linn")) && $this->can("view" , $address_obj->prop("linn")))
+				{
+					$city = obj($address_obj->prop("linn"));
+					$_SESSION["patent"]["authors"][$key]["city"] = $city->name();
+				}
+				$_SESSION["patent"]["authors"][$key]["country_code"] = $address_inst->get_country_code($address_obj->prop("riik"));
+			}
+		}
 	}
 }
 

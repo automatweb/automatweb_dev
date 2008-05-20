@@ -138,17 +138,8 @@
             <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>text</type>
             <caption>Taotlusl&amp;amp;otilde;iv</caption>
-      </property>
-      <property>
-            <name>classes_fee</name>
-            <table>objects</table>
-            <group>fee</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Lisaklasside l&amp;amp;otilde;iv</caption>
       </property>
       <property>
             <name>payer</name>
@@ -193,40 +184,14 @@
             <caption>Maksekorraldus</caption>
       </property>
       <property>
-            <name>author_first_name</name>
+            <name>author</name>
             <table>objects</table>
             <group>author</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Eesnimi</caption>
-      </property>
-      <property>
-            <name>author_last_name</name>
-            <table>objects</table>
-            <group>author</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Perekonnanimi</caption>
-      </property>
-      <property>
-            <name>author_address</name>
-            <table>objects</table>
-            <group>author</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Aadress</caption>
-      </property>
-      <property>
-            <name>author_country_code</name>
-            <table>objects</table>
-            <group>author</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Riigi kood</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_AUTHOR</reltype>
+            <caption>Autor</caption>
       </property>
       <property>
             <name>author_disallow_disclose</name>
@@ -236,6 +201,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <store>no</store>
             <caption>Mitte avalikustada minu nime autorina</caption>
       </property>
       <property>
@@ -359,21 +325,6 @@
             <caption>Leiutiskirjeldus</caption>
       </property>
       <property>
-            <name>attachment_seq</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>fileupload</type>
-            <reltype>RELTYPE_ATTACHMENT_SEQ</reltype>
-            <form>
-                  <num_0>add</num_0>
-                  <num_1>edit</num_1>
-                  <num_2>emb</num_2>
-            </form>
-            <caption>J&amp;amp;auml;rjestuse loetelu</caption>
-      </property>
-      <property>
             <name>attachment_demand</name>
             <table>objects</table>
             <group>attachments</group>
@@ -414,21 +365,6 @@
             <caption>Leiutise olemuse l&amp;amp;uuml;hikokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
-            <name>attachment_summary_en</name>
-            <table>objects</table>
-            <group>attachments</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>fileupload</type>
-            <reltype>RELTYPE_ATTACHMENT_SUMMARY_EN</reltype>
-            <form>
-                  <num_0>add</num_0>
-                  <num_1>edit</num_1>
-                  <num_2>emb</num_2>
-            </form>
-            <caption>Leiutise olemuse l&amp;amp;uuml;hikokkuv&amp;amp;otilde;te inglise keeles</caption>
-      </property>
-      <property>
             <name>attachment_dwgs</name>
             <table>objects</table>
             <group>attachments</group>
@@ -441,7 +377,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Joonised ja muu illustreeriv materjal</caption>
+            <caption>Illustratsioonid</caption>
       </property>
       <property>
             <name>attachment_fee</name>
@@ -568,11 +504,6 @@
                   <clid>CL_CRM_EMAIL</clid>
                   <caption>E-mail</caption>
             </EMAIL>
-            <COUNTRY>
-                  <value>7</value>
-                  <clid>CL_CRM_COUNTRY</clid>
-                  <caption>P&amp;amp;auml;riltolumaa</caption>
-            </COUNTRY>
             <PROCURATOR_MENU>
                   <value>8</value>
                   <clid>CL_MENU</clid>

@@ -68,6 +68,12 @@
 		@property exhibition_country type=textbox
 		@caption Riigi kood
 
+#riigil&otilde;iv
+@default group=fee
+	@property classes_fee type=text
+	@caption Lisaklasside l&otilde;iv
+
+
 // RELTYPES
 @reltype C_STATUES value=12 clid=CL_FILE
 @caption Kollektiivp&otilde;hikiri
@@ -90,19 +96,24 @@ class patent extends intellectual_property
 			"tpldir" => "applications/patent",
 			"clid" => CL_PATENT
 		));
-		$this->info_levels[1] = "trademark";
-		$this->info_levels[2] = "products_and_services";
+		$this->info_levels = array(
+			0 => "applicant",
+			1 => "trademark",
+			2 => "products_and_services",
+			3 => "priority_tm",
+			4 => "fee_tm",
+			5 => "check"
+		);
 		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
 		$this->pdf_file_name = "Kaubam".chr(228)."rgitaotlus";
 		$this->show_template = "show_tm.tpl";
+		$this->date_vars = array_merge($this->date_vars, array("exhibition_date", "convention_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("reproduction" , "g_statues","c_statues"));
-		$this->save_fee_vars = array_merge($this->save_fee_vars, array("request_fee" , "classes_fee"));
-
-		$this->datafromobj_vars = array("authorized_codes" ,"job" , "undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "doc_nr", "payer");
-
-		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
-		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","correspond_street_value", "correspond_index_value" ,	"correspond_country_code_value" , "correspond_city_value", "name");
+		$this->save_fee_vars = array_merge($this->save_fee_vars, array("classes_fee"));
+		$this->text_area_vars = array_merge($this->text_area_vars, array("colors" , "trademark_character", "element_translation"));
+		$this->text_vars = array_merge($this->text_vars, array("undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "classes_fee"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country", "classes_fee"));
 	}
 
 	function get_property($arr)
@@ -253,20 +264,8 @@ class patent extends intellectual_property
 	{
 		$data = parent::get_vars($arr);
 
-		if(sizeof($_SESSION["patent"]["products"]))
-		{
-			$_SESSION["patent"]["request_fee"]=2200;
-			if($_SESSION["patent"]["co_trademark"] || $_SESSION["patent"]["guaranty_trademark"])
-			{
-				$_SESSION["patent"]["request_fee"]=3000;
-			}
-			$_SESSION["patent"]["classes_fee"]= (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
-		}
-		else
-		{
-			$_SESSION["patent"]["request_fee"] = 0;
-			$_SESSION["patent"]["classes_fee"] = 0;
-		}
+		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
+		$_SESSION["patent"]["classes_fee"]= $this->get_classes_fee();
 
 		$data["type_text"] = $this->types[$_SESSION["patent"]["type"]];
 		//$data["products_value"] = $this->_get_products_and_services_tbl();
@@ -351,7 +350,7 @@ class patent extends intellectual_property
 	}
 
 	/**
-		@attrib name=find_products nologin=1
+		@attrib name=find_products nologin=1 all_args=1
 		@param ru required type=string
 	**/
 	function find_products($arr)
@@ -367,11 +366,10 @@ class patent extends intellectual_property
 				</script>"
 			);
 		}
-//				window.opener.location.href='".$_SESSION["patent"]["prod_ru"]."';
 
-		if($_POST["product"] || $_POST["class"])
+		if($arr["product"] || $arr["prodclass"])
 		{
-			if($_POST["class"])
+			if($arr["prodclass"])
 			{
 				$limit = 1700;
 			}
@@ -401,12 +399,12 @@ class patent extends intellectual_property
 			));
 
 			$products = new object_list();
-			if(strlen($_POST["class"]) == 1)
+			if(strlen($arr["prodclass"]) == 1)
 			{
-				$_POST["class"] = "0".$_POST["class"];
+				$arr["prodclass"] = "0".$arr["prodclass"];
 			}
 			$parents = new object_list(array(
-				"comment" => "%".$_POST["class"]."%",
+				"comment" => "%".$arr["prodclass"]."%",
 				"class_id" => CL_MENU ,
 				"lang_id" => array(),
 				"limit" => $limit,
@@ -419,7 +417,7 @@ class patent extends intellectual_property
 			foreach ($parents->ids() as $id)
 			{
 				$prod_list = new object_list(array(
-					"userta1" => "%".$_POST["product"]."%",
+					"userta1" => "%".$arr["product"]."%",
 					"parent" => $id,
 					"class_id" => CL_SHOP_PRODUCT ,
 					"lang_id" => array(),
@@ -443,14 +441,6 @@ class patent extends intellectual_property
 				$products->add($prod_list);
 			}
 
-// 			$products = new object_list(array(
-// 				"name" => "%".$_POST["product"]."%",
-// 				"parent" => $parents->ids(),
-// 				"class_id" => CL_SHOP_PRODUCT ,
-// 				"lang_id" => array(),
-// 				"limit" => $limit,
-// 			));
-			//arr(sizeof($products->ids()));
 			if($is_tpl)
 			{
 				$c = "";
@@ -491,25 +481,31 @@ class patent extends intellectual_property
 						"oid"	=> $prod->id(),
 					));
 				}
-				$result_list =  "<form action='' method=POST>".$t->draw()."
-				<input type=hidden value=".$arr["ru"]." name=ru>
-				<input type=hidden value=1 name=do_post>
-				<input type=submit value='Lisa valitud terminid taotlusse'>";
+				$result_list =  '<form action="" method="post">' . $t->draw(). '
+				<input type="hidden" value="'.$arr["ru"].'" name="ru">
+				<input type="hidden" value="1" name="do_post">
+				<input type="submit" value="Lisa valitud terminid taotlusse">';
 			}
 		}
 
 		$tpl = "products.tpl";
 		$is_tpl = $this->read_template($tpl);
-
 		if($is_tpl)
 		{
-			$this->vars(array("result" => $result_list));
+			$this->vars(array(
+				"result" => $result_list,
+				"ru" 	=> $arr["ru"]
+			));
 			return $this->parse();
 		}
 
-		$ret = "<form action='' method=POST>Klassi nr:".
-		html::textbox(array("name" => "class"))."<br> Kauba/teenuse nimetus".html::textbox(array("name" => "product"))
-		."<input type=hidden value=".$arr["ru"]." name=ru><input type=submit value='otsi'></form>";
+		$ret = "<form action='' method='get'>Klassi nr:".
+		html::textbox(array("name" => "class"))."<input type='hidden' name='class' value='patent' />
+<input type='hidden' name='print' value='1' />
+<input type='hidden' name='action' value='find_products' />
+<input type='hidden' name='ru' value='".$arr["ru"]."' />
+<br> Kauba/teenuse nimetus".html::textbox(array("name" => "product"))
+		.$reforb.'<input type="submit" value="otsi"></form>';
 
 		return $ret . $result_list;
 	}
@@ -571,14 +567,27 @@ class patent extends intellectual_property
 			$patent->save();
 			$patent->set_name(" Kinnitamata taotlus nr [".$patent->id()."]");
 		}
+
+		return $patent;
 	}
 
-	protected function get_payment_sum($arr)
+	protected function get_payment_sum()
 	{
 		$sum = 0;
 		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
 		{
-			$classes_fee = (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
+			$classes_fee = $this->get_classes_fee();
+			$sum = $this->get_request_fee() + $classes_fee;
+			$_SESSION["patent"]["classes_fee"] = $classes_fee;
+		}
+		return $sum;
+	}
+
+	private function get_request_fee()
+	{
+		$sum = 0;
+		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
+		{
 			if($_SESSION["patent"]["co_trademark"] || $_SESSION["patent"]["guaranty_trademark"])
 			{
 				$sum = 3000;
@@ -587,16 +596,24 @@ class patent extends intellectual_property
 			{
 				$sum = 2200;
 			}
-			$sum = $sum + $classes_fee;
-			$_SESSION["patent"]["classes_fee"] = $classes_fee;
+		}
+		return $sum;
+	}
+
+	private function get_classes_fee()
+	{
+		$sum = 0;
+		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
+		{
+			$sum = (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
 		}
 		return $sum;
 	}
 
 	function fill_session($id)
 	{
+		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$patent = obj($id);
-		$this->fill_session_property_vars = array("authorized_codes" , "job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type", "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee", "payer" , "doc_nr" , "warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
 		parent::fill_session($id);
 
 		if(isset($_SESSION["patent"]["trademark_type"][0]))
@@ -707,7 +724,7 @@ class patent extends intellectual_property
 			}
 		}
 
-		if($_POST["convention_date"]["day"] || $_POST["exhibition_date"]["day"])
+		if($_GET["data_type"] == 3 and ($_POST["convention_date"]["day"] || $_POST["exhibition_date"]["day"]))
 		{
 			if(
 				(
@@ -725,6 +742,11 @@ class patent extends intellectual_property
 			{
 				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud")."\n<br>";
 			}
+		}
+
+		if($err)
+		{
+			$_SESSION["patent"]["checked"] = $_GET["data_type"] - 1;
 		}
 
 		return $err;

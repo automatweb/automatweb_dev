@@ -15,7 +15,7 @@
 	@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
 	@caption Pangamakse objekt
 
-	@property utility_models_menu type=relpicker reltype=RELTYPE_UTILITY_MODEL_MENU
+	@property trademarks_menu type=relpicker reltype=RELTYPE_TRADEMARK_MENU
 	@caption Kasuliku mudeli reg. taotluste kaust
 
 	@property series type=relpicker reltype=RELTYPE_SERIES
@@ -27,7 +27,7 @@
 @reltype PROCURATOR_MENU value=8 clid=CL_MENU
 @caption Volinike kaust
 
-@reltype UTILITY_MODEL_MENU value=9 clid=CL_MENU
+@reltype TRADEMARK_MENU value=9 clid=CL_MENU
 @caption Kasuliku mudeli reg. taotluste kaust
 
 @reltype SERIES clid=CL_CRM_NUMBER_SERIES value=3
