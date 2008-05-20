@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.35 2008/04/18 07:36:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.36 2008/05/20 11:43:54 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -1069,6 +1069,13 @@ class class_designer extends class_base
 		return $this->create;
 	}
 
+	function gen_valid_id($src)
+	{
+		$rv = strtolower(preg_replace("/\s/","_",$src));
+		$rv = preg_replace("/\W/","",$rv);
+		return $rv;
+	}
+
 	function gen_tabledef($arr)
 	{
 		$els = $this->get_class_elements($arr);
@@ -1084,7 +1091,7 @@ class class_designer extends class_base
 		{
 			$el_clid = $el["class_id"];
 			$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
-			$sys_name = $cfgu->gen_valid_id($el["name"]);
+			$sys_name = $this->gen_valid_id($el["name"]);
 			/* for SQL tables, feel free to override those */
 			// XXX: figure out a way to specify field types, lengths and possibly indexes in property definitions
 			$field_type = "char";
@@ -1373,11 +1380,11 @@ class class_designer extends class_base
 		$clinf = aw_ini_get("classes");
 
 		$cfgu = get_instance("cfg/cfgutils");
-		$clname = $cfgu->gen_valid_id($c->name());
+		$clname = $this->gen_valid_id($c->name());
 
 		$path = aw_ini_get("basedir") . "/install/class_template/classes/base.aw";
 		$clsrc = file_get_contents($path);
-		$clid = "CL_" . strtoupper($cfgu->gen_valid_id($c->name()));
+		$clid = "CL_" . strtoupper($this->gen_valid_id($c->name()));
 
 		$clid = $c->prop("reg_class_id");
 
@@ -1413,13 +1420,13 @@ class class_designer extends class_base
 				$can_save = in_array($el_clid,$this->saveable);
 				$parent = new object($el["parent"]);
 				$grandparent = new object($parent->parent());
-				$sys_name = $cfgu->gen_valid_id($name);
-				$group_name = $cfgu->gen_valid_id($grandparent->name());
+				$sys_name = $this->gen_valid_id($name);
+				$group_name = $this->gen_valid_id($grandparent->name());
 
 				if ($grandparent->class_id() == CL_PROPERTY_GRID)
 				{
 					$grandgrandparent = new object($grandparent->parent());
-					$group_name = $cfgu->gen_valid_id($grandgrandparent->name());
+					$group_name = $this->gen_valid_id($grandgrandparent->name());
 				}
 				// this is not correct
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
@@ -1435,7 +1442,7 @@ class class_designer extends class_base
 				};
 				if ($grandparent->class_id() == CL_PROPERTY_GRID)
 				{
-					$grid_name = $cfgu->gen_valid_id($grandparent->name());
+					$grid_name = $this->gen_valid_id($grandparent->name());
 					$rv .= " parent=" . $grid_name;
 				};
 
@@ -1516,7 +1523,7 @@ class class_designer extends class_base
 			};
 			if ($el_clid == CL_PROPERTY_GROUP)
 			{
-				$grpid = $cfgu->gen_valid_id($name);
+				$grpid = $this->gen_valid_id($name);
 				$grps .= "@groupinfo $grpid caption=\"".($el["caption"] != "" ? $el["caption"] : $name)."\"\n";
 			};
 
@@ -1524,10 +1531,10 @@ class class_designer extends class_base
 			{
 				$parent_o = new object($el["parent"]);
 				$p_clid = $parent_o->class_id();
-				$p_id = $cfgu->gen_valid_id($parent_o->name());
+				$p_id = $this->gen_valid_id($parent_o->name());
 				$group = "";
 				$grid_type = ($el["grid_type"] == 0) ? "hbox" : "vbox";
-				$el_id = $cfgu->gen_valid_id($el["name"]) . $el["id"];
+				$el_id = $this->gen_valid_id($el["name"]) . $el["id"];
 				if ($p_clid == CL_PROPERTY_GROUP)
 				{
 					$group = "group=$p_id";
@@ -2397,7 +2404,7 @@ class class_designer extends class_base
 		$grps = array();
 		foreach($list->arr() as $o)
 		{
-			$grpid = $cfgu->gen_valid_id($o->name());
+			$grpid = $this->gen_valid_id($o->name());
 			$grps[$grpid] = array(
 				"caption" => $o->prop("caption") == "" ? $o->name() : $o->prop("caption")
 			);

@@ -1,10 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.23 2008/04/01 12:45:34 robert Exp $
-
 /*
-
 @classinfo syslog_type=ST_CLASSIFICATOR relationmgr=yes maintainer=kristo
-
 
 @default table=objects
 @default group=general
@@ -44,23 +40,6 @@ class classificator extends class_base
 		}
 
 		return PROP_OK;
-	}
-
-	function callback_post_save($arr)
-	{
-		extract($arr);
-		$ob = new object($id);
-		$this->db_query("DELETE FROM classificator2menu WHERE clf_id = '".$id."'");
-		$arr = new aw_array($ob->prop("folders"));
-		foreach($arr->get() as $_fid => $_tt)
-		{
-			$_arr = new aw_array($ob->prop('clids'));
-			foreach($_arr->get() as $clid)
-			{
-				// so how do I use storage for queries like this? -- duke
-				$this->db_query("INSERT INTO classificator2menu(menu_id, class_id, clf_id) VALUES('".$_tt."','".$clid."','".$id."')");
-			}
-		}
 	}
 
 	function init_vcl_property($arr)
@@ -139,19 +118,9 @@ class classificator extends class_base
 		}
 
 		if (!empty ($default_value) and empty ($prop["value"]))
-		{  ### set default value
+		{ 
 			$prop["default"] = $default_value;
 		}
-
-
-		/* whatta hell is this thing doing here anyway?
-		// it's not very nice to override caption
-		if (!empty($name))
-		{
-			$prop["caption"] = $name;
-			// so I know that these are object in that array
-		};
-		*/
 
 		if (empty($use_type))
 		{
@@ -193,16 +162,7 @@ class classificator extends class_base
 				{
 					$prop["options"] = array("" => "") + $choices["list_names"];
 				}
-//				$prop["options"] = array("" => "") + $choices->names();
-
 		};
-
-		global $XX5;
-		if ($XX5)
-		{
-			arr($prop);
-		};
-
 
 		return array($prop["name"] => $prop);
 		// well, that was pretty easy. Now I need a way to tell the bloody classificator, that
@@ -441,8 +401,27 @@ class classificator extends class_base
 		// and this belongs to some place else, don't you think so?
 	}
 
-	////
-	// !needs name and clid as arguments
+	/** returns a list of classificator names for the given property
+		@attrib api=1 params=name
+		
+		@param object_type optional type=int 
+			The oid of the object type object from what to read the classificatrs from 
+
+		@param object_inst optional type=object
+			If set, the object type is read from the objects metadata
+
+		@param clid optional type=int
+			The class id to return the classificators for. Either this or object_type_id must be specified
+		
+		@param name required type=string
+			Name of the property to return the classificators for
+
+		@errors
+			none
+
+		@returns
+			array { classificator_oid => classificator_name }
+	**/
 	function get_options_for($arr)
 	{
 		if (empty($arr["name"]))
@@ -494,55 +473,6 @@ class classificator extends class_base
 			"sort_by" => "objects.jrk"
 		));
 		return $items->names();
-	}
-
-	////
-	// !returns a list of id => name of classificators for specified folder/clid combo
-	// parameters:
-	//	clid - class id
-	//	parent - folder
-	function get_clfs($arr)
-	{
-		extract($arr);
-		if ($add_empty)
-		{
-			$ret = array("0" => "");
-		}
-		else
-		{
-			$ret = array();
-		}
-
-		$pt = obj($parent);
-		$ch = $pt->path();
-		foreach($ch as $o)
-		{
-			$id = $o->id();
-			$name = $o->name();
-			$found = false;
-			$this->db_query("
-				SELECT
-					o.name as name,o.oid as oid
-				FROM
-					classificator2menu c
-					LEFT JOIN objects o ON o.oid = c.clf_id
-				WHERE
-					c.class_id = '$clid' AND
-					c.menu_id = '$id'
-			");
-			while($row = $this->db_next())
-			{
-				$found = true;
-	 			$ret[$row["oid"]] = $row["name"];
-			}
-
-			if ($found)
-			{
-				return $ret;
-			}
-		}
-
-		return $ret;
 	}
 }
 ?>

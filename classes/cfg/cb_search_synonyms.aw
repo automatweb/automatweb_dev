@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search_synonyms.aw,v 1.3 2008/01/31 13:52:00 kristo Exp $
-// cb_search_synonyms.aw - Classbase otsingu s&uuml;non&uuml;mid 
 /*
-
 @classinfo syslog_type=ST_CB_SEARCH_SYNONYMS relationmgr=yes no_status=1 maintainer=kristo
 
 @default table=objects
@@ -32,7 +29,7 @@ class cb_search_synonyms extends class_base
 		switch($prop["name"])
 		{
 			case "desc":
-				$prop["value"] = "Sisestage ridadele sama t&auml;hendusega s&otilde;nad, eraldatud komadega";
+				$prop["value"] = t("Sisestage ridadele sama t&auml;hendusega s&otilde;nad, eraldatud komadega");
 				break;
 		};
 		return $retval;
@@ -51,7 +48,7 @@ class cb_search_synonyms extends class_base
 		return $retval;
 	}	
 
-	function do_save_syns($arr)
+	private function do_save_syns($arr)
 	{
 		$syns = array();
 		foreach(safe_array($arr["request"]["old"]) as $syn)

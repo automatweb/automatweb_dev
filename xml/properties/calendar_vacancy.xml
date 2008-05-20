@@ -14,7 +14,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;otilde;peb</caption>
+            <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
             <name>info_on_object</name>

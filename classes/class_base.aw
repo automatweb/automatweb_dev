@@ -94,12 +94,7 @@ class class_base extends aw_template
 
 	function init($arg = array())
 	{
-		global $XUL;
 		$this->output_client = "htmlclient";
-		if ($XUL)
-		{
-			$this->output_client = "xulclient";
-		};
 		$this->default_group = "general";
 		$this->features = array();
 		$this->cfg_debug = false;
@@ -520,12 +515,6 @@ class class_base extends aw_template
 				$o_arr["embedded"] = true;
 			}
 
-			if (isset($args["cbcli"]) && $args["cbcli"] == "debugclient")
-			{
-				$this->output_client = "debugclient";
-				$cbcli = "debugclient";
-			}
-
 			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 			if (!empty($lm))
 			{
@@ -895,15 +884,6 @@ class class_base extends aw_template
 		));
 
 		extract($args);
-		if (empty($content))
-		{
-			// XXX: xulclient dies in get_result
-			if ($this->output_client == "xulclient")
-			{
-				$this->cli = &$cli;
-				$_tmp = $this->gen_output(array());
-			};
-		};
 
 		// it would be nice to get the errors and other stuff from the object also,
 		// so we unset cb_values here -- ahz
@@ -2049,9 +2029,10 @@ class class_base extends aw_template
 		// content comes from the config form
 		if (!empty($args["content"]))
 		{
-			$_all_props = $cfgu->parse_definition(array(
+			$tmp = $cfgu->parse_cfgform(array(
 				"content" => $args["content"],
 			));
+			$_all_props = $tmp[0];
 		}
 		else
 		// this handles some embedding cases

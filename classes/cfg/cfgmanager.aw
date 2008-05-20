@@ -1,8 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.17 2008/01/31 13:52:00 kristo Exp $
-// cfgmanager.aw - Object configuration manager
-// deals with drawing add and change forms and submitting data
-
 /*
 @default table=objects
 @default group=general
@@ -28,6 +24,7 @@
 */
 class cfgmanager extends class_base
 {
+	private $formlist = array();
 
 	function cfgmanager($args = array())
 	{
@@ -65,23 +62,13 @@ class cfgmanager extends class_base
 	// there are 2 distinct roles
 	// 1 - apply cfgform by group
 	// 2 - apply cfgform to all classes
-
-	function get_config_table($arr)
+	private function get_config_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "group",
 			"caption" => t("Grupp"),
 		));
-
-		/*
-		$t->define_field(array(
-			"name" => "form",
-			"caption" => t("Seadete vorm"),
-			"callback" => array(&$this, "callb_form_picker"),
-			"callb_pass_row" => true,
-		));
-		*/
 
 		// I need a list of all connected groups
 		$groups = $arr["obj_inst"]->connections_from(array(

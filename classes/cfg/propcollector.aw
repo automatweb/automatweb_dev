@@ -38,7 +38,7 @@ class propcollector extends aw_template
 		);
 	}
 
-	function req_dir($args = array())
+	private function req_dir($args = array())
     {
 		$path = $args["path"];
 		$paths = is_array($path) ? $path : array($path);
@@ -70,6 +70,11 @@ class propcollector extends aw_template
 		}
 	}
 
+	/** Runs the property collector
+		@attrib api=1 params=name
+
+		@comment writes property files from changed classes. echoes text to the console as it goes about. 
+	**/
 	public function run($args = array())
 	{
 		$cdir = $this->cfg["basedir"] . "/classes";
@@ -97,6 +102,18 @@ class propcollector extends aw_template
 		printf("Updated %d files out of %d\nAll done.\n", $this->count_modified, $this->count_total);
 	}
 
+	/** Parses and writes one classes properties
+		@attrib api=1 params=pos
+
+		@param name required type=string
+			The name of the class to parse
+
+		@errors
+			throws awex_propcollector if the given class is not derived from class_base
+
+		@returns
+			true/false based on successfully writing  the file.
+	**/
 	public function parse_class($name)
 	{
 		if (!class_index::is_extension_of($name, "class_base"))
@@ -111,8 +128,18 @@ class propcollector extends aw_template
 		return $success;
 	}
 
-	////
-	// !parse a single file
+	/** Parses the contents of the given file or string and generates properties from that
+		@attrib api=1 params=name
+
+		@param file optional type=string
+			The name and path of the file to parse. either this or data has to be given
+
+		@param data required type=string
+			a string to parse for properties
+
+		@returns
+			The property definition xml file content or false if file was not found
+	**/
 	function parse_file($arr)
 	{
 		$name = $arr["file"];
@@ -215,7 +242,7 @@ class propcollector extends aw_template
 
 	////
 	// !Starts a new class
-	function cl_start($cname)
+	private function cl_start($cname)
 	{
 		$this->cl_name = $cname;
 		$this->properties = array();
@@ -230,7 +257,7 @@ class propcollector extends aw_template
 		$this->classdef = array();
 	}
 
-	function add_property($name,$data)
+	private function add_property($name,$data)
 	{
 		$_x = new aw_array(explode(" ",$data));
 		$fields = array("name" => $name);
@@ -300,7 +327,7 @@ class propcollector extends aw_template
 
 	}
 
-	function add_reltype($name,$data)
+	private function add_reltype($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
 		$this->reltypes[$name] = $fields;
@@ -309,7 +336,7 @@ class propcollector extends aw_template
 
 	}
 
-	function add_layout($name,$data)
+	private function add_layout($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
 		if (empty($fields["group"]) && !empty($this->defaults["group"]))
@@ -322,12 +349,12 @@ class propcollector extends aw_template
 		$this->last_element = "layout";
 	}
 
-	function add_forminfo($name,$data)
+	private function add_forminfo($name,$data)
 	{
 		$this->forminfo[$name] = $this->_parse_attribs($data);
 	}
 
-	function set_groupinfo($id,$data)
+	private function set_groupinfo($id,$data)
 	{
 		$open_token = false;
 		# so that we get the last token as well
@@ -386,7 +413,7 @@ class propcollector extends aw_template
 		};
 	}
 
-	function set_tableinfo($id,$data)
+	private function set_tableinfo($id,$data)
 	{
 		$attr = $this->_parse_attribs($data);
 		if (empty($attr["master_index"]) && $attr["master_table"] == "objects")
@@ -396,7 +423,7 @@ class propcollector extends aw_template
 		$this->tableinfo[$id] = $attr;
 	}
 
-	function add_caption($caption)
+	private function add_caption($caption)
 	{
 		switch($this->last_element)
 		{
@@ -419,7 +446,7 @@ class propcollector extends aw_template
 		};
 	}
 
-	function add_comment($comment)
+	private function add_comment($comment)
 	{
 		if ($this->last_element == "property")
 		{
@@ -429,7 +456,7 @@ class propcollector extends aw_template
 
 	////
 	// !Ends a class
-	function cl_end($write = 1)
+	private function cl_end($write = 1)
 	{
 		$sr = get_instance("core/serializers/xml",array("ctag" => ""));
 		$sr->set_child_id("properties","property");
@@ -505,7 +532,7 @@ class propcollector extends aw_template
 		return $success;
 	}
 
-	function _parse_attribs($data)
+	private function _parse_attribs($data)
 	{
 		$_x = new aw_array(explode(" ",$data));
 		//$fields = array("name" => $name);
@@ -613,7 +640,7 @@ class propcollector extends aw_template
 		return $modified;
 	}
 
-	function _parse_properties ($lines)
+	private function _parse_properties ($lines)
 	{
 		foreach($lines as $line)
 		{
@@ -690,6 +717,7 @@ class propcollector extends aw_template
 	}
 }
 
+/** property parser error message **/
 class awex_propcollector extends aw_exception {}
 
 ?>

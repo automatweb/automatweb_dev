@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.4 2008/01/31 13:52:00 kristo Exp $
 // proptest.aw - Property Test File, for unit tests
 // Feel free to add new things and write new tests, but if you change any existing ones, then make sure
 // that you update any relevant tests as well
@@ -131,3 +130,4 @@ class proptest extends class_base
 
 }
 ?>
+\

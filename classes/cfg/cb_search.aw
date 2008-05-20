@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.50 2008/03/31 11:21:41 kristo Exp $
-// cb_search.aw - Classbase otsing 
 /*
-
 @classinfo syslog_type=ST_CB_SEARCH relationmgr=yes no_status=1 no_comment=1 maintainer=kristo
 
 @default table=objects
@@ -93,6 +90,24 @@
 
 class cb_search extends class_base
 {
+	/** search content **/
+	private $search_data = array();
+
+	/** if search prep already done **/
+	private $search_prepared = false;
+
+	/** if prep already done **/
+	private $prepared = false;
+
+	/** table data **/
+	private $__tdata;
+
+	/** which els are in the result data **/
+	private $in_results;
+
+	/** which els are in the form**/
+	private $in_form;
+
 	function cb_search()
 	{
 		$this->init(array(
@@ -175,7 +190,7 @@ class cb_search extends class_base
 		return $retval;
 	}
 
-	function _init_prop_table(&$t)
+	private function _init_prop_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "classn",
@@ -222,7 +237,7 @@ class cb_search extends class_base
 		));
 	}
 
-	function mk_prop_table($arr)
+	private function mk_prop_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$o = $arr["obj_inst"];
@@ -325,7 +340,7 @@ class cb_search extends class_base
 		}
 	}
 
-	function make_class_list($arr)
+	private function make_class_list($arr)
 	{
 		$cl = aw_ini_get("classes");
 		$names = array();
@@ -449,7 +464,7 @@ class cb_search extends class_base
 		return $res;
 	}
 
-	function mod_chooser_prop(&$props, $pn, $clid, $o)
+	private function mod_chooser_prop(&$props, $pn, $clid, $o)
 	{
 		enter_function("cb_search::mod_chooser_prop");
 		// since storage can't do this yet, we gots to do sql here :(
@@ -479,7 +494,7 @@ class cb_search extends class_base
 		exit_function("cb_search::mod_chooser_prop");
 	}
 
-	function _prepare_search($arr)
+	private function _prepare_search($arr)
 	{
 		enter_function("cb_search::_prepare_search");
 		if ($this->search_prepared)
@@ -514,7 +529,7 @@ class cb_search extends class_base
 		return $a["jrk"] > $b["jrk"];
 	}
 
-	function mk_result_table($arr)
+	private function mk_result_table($arr)
 	{
 		enter_function("cb_search::mk_result_table");
 		$this->_prepare_form_data($arr);
@@ -789,7 +804,7 @@ class cb_search extends class_base
 		exit_function("cb_search::mk_result_table");
 	}
 				
-	function _prepare_form_data($arr)
+	private function _prepare_form_data($arr)
 	{
 		if ($this->prepared)
 		{
@@ -884,7 +899,7 @@ class cb_search extends class_base
 		exit_function("cb_search::_prepare_form_data");
 	}
 
-	function get_props_from_obj($o, $addt = true)
+	private function get_props_from_obj($o, $addt = true)
 	{
 		enter_function("cb_search::get_props_from_obj");
 		// get a list of properties in both classes
@@ -987,7 +1002,7 @@ class cb_search extends class_base
 		return array($ret, $o->prop("root_class"), $cfgx->get_relinfo());
 	}
 
-	function _init_sform_tbl_tbl(&$t)
+	private function _init_sform_tbl_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "jrk",
@@ -1040,7 +1055,7 @@ class cb_search extends class_base
 		));
 	}
 
-	function do_sform_tbl_tbl($arr)
+	private function do_sform_tbl_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sform_tbl_tbl($t);
@@ -1110,11 +1125,6 @@ class cb_search extends class_base
 
 		$t->set_default_sortby("jrk");
 		$t->sort_by();
-	}
-
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	function show($arr)
@@ -1228,6 +1238,16 @@ class cb_search extends class_base
 		return $this->parse();
 	}
 
+	/** Returns properties for the search form
+		@attrib api=1 params=pos
+
+		@param ob required type=cl_cb_search
+			The search form object to draw form from
+
+		@returns
+			array { property_name => property_data, ... } for each property defined in the search form
+
+	**/
 	function get_callback_properties($ob)
 	{
 		enter_function("cb_search::get_callback_properties");
@@ -1252,16 +1272,16 @@ class cb_search extends class_base
 	}
 
 	/** populates the current search result's table
+		@attrib api=1 params=name
 
-		@param ob required
+		@param ob required type=cl_cb_search
+			The search object
+
 		@param t required
+			vcl/table class instance to populate with the search results
+
 		@param request optional
-
-		@comment
-
-			ob - search storage object
-			t - reference to vcl table instance to populate
-			request - current GET/POST request content
+			Array with request variables
 	**/
 	function get_search_result_table($arr)
 	{
@@ -1295,7 +1315,7 @@ class cb_search extends class_base
 		get the synonyms from rels and insert or clauses
 
 	**/
-	function proc_syns_in_sdata($o, &$sdata)
+	private function proc_syns_in_sdata($o, &$sdata)
 	{
 		enter_function("cb_search::proc_syns_in_sdata");
 		$scs = $o->connections_from(array(
@@ -1337,7 +1357,7 @@ class cb_search extends class_base
 		exit_function("cb_search::proc_syns_in_sdata");
 	}
 
-	function proc_perm_str($o, $v, $syns)
+	private function proc_perm_str($o, $v, $syns)
 	{
 		// string
 		$has_pct = (strpos($v,"%") !== NULL ? true : false);
@@ -1395,7 +1415,7 @@ class cb_search extends class_base
 		return $res;
 	}
 
-	function req_do_perms($words, $p_syns)
+	private function req_do_perms($words, $p_syns)
 	{
 		// for all syns, make all possibilities of that syn and add to an array
 		$res = array($words);
@@ -1431,7 +1451,7 @@ class cb_search extends class_base
 		return array_unique($tmp);
 	}
 
-	function _init_parents_tbl(&$t)
+	private function _init_parents_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "id",
@@ -1460,7 +1480,7 @@ class cb_search extends class_base
 		));
 	}
 
-	function do_parents_tbl($arr)
+	private function do_parents_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_parents_tbl($t);
@@ -1490,7 +1510,7 @@ class cb_search extends class_base
 		$t->sort_by();
 	}
 
-	function _add_parent_filter($o, &$sdata)
+	private function _add_parent_filter($o, &$sdata)
 	{
 		enter_function("cb_search::_add_parent_filter");
 		$pd = safe_array($o->meta("parents"));
@@ -1521,7 +1541,7 @@ class cb_search extends class_base
 		exit_function("cb_search::_add_parent_filter");
 	}
 
-	function _do_submit($o)
+	private function _do_submit($o)
 	{
 		$this->vars(array(
 			"submit_text" => $o->prop("submit_button_text")
@@ -1542,9 +1562,7 @@ class cb_search extends class_base
 	}
 
 	/**
-
 		@attrib name=handle_submit nologin="1"
-
 	**/
 	function handle_submit($arr)
 	{
@@ -1561,7 +1579,7 @@ class cb_search extends class_base
 		return $rv;
 	}
 
-	function add_additional_object_types($o, &$sdata)
+	private function add_additional_object_types($o, &$sdata)
 	{
 		$ots = $o->connections_from(array("type" => "RELTYPE_ADDITIONAL_OBJECT_TYPE"));
 		if (count($ots))

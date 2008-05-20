@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.13 2008/03/05 14:27:11 robert Exp $
-// cfgcontroller.aw - Kontroller(Classbase) 
 /*
-
 @classinfo syslog_type=ST_CFGCONTROLLER relationmgr=yes maintainer=kristo
 
 @default table=objects
@@ -127,8 +124,6 @@ class cfgcontroller extends class_base
 	**/
 	function check_property($controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst)
 	{
-		// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
-		//extract($arr);
 		$retval = PROP_OK;
 		if (!is_oid($controller_oid))
 		{

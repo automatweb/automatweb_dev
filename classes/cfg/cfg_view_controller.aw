@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.10 2008/01/31 13:52:00 kristo Exp $
-// cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
-
 @classinfo syslog_type=ST_CFG_VIEW_CONTROLLER relationmgr=yes maintainer=kristo
 
 @default table=objects
@@ -60,8 +57,6 @@ class cfg_view_controller extends class_base
 		{
 			return PROP_OK;
 		}
-		// $prop, $controller_oid, $arr
-		//extract($arr);
 		$retval = PROP_OK;
 		$controller_inst = &obj($controller_oid);
 		eval($controller_inst->prop("formula"));

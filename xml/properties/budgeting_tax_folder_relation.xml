@@ -27,6 +27,15 @@
             <caption>Kasuta eraldi seadeid</caption>
       </property>
       <property>
+            <name>use_used_settings</name>
+            <table>aw_budgeting_tax_relation</table>
+            <group>general</group>
+            <type>select</type>
+            <size>5</size>
+            <field>aw_use_used_settings</field>
+            <caption>Kasuta olemasolevaid seadeid</caption>
+      </property>
+      <property>
             <name>amount_final</name>
             <table>aw_budgeting_tax_relation</table>
             <group>general</group>

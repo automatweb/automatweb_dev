@@ -1,6 +1,4 @@
 <?php
-// $Id: cfgutils.aw,v 1.93 2008/04/18 07:36:44 kristo Exp $
-// cfgutils.aw - helper functions for configuration forms
 /*
 @classinfo  maintainer=kristo
 */
@@ -15,7 +13,7 @@ class cfgutils extends aw_template
 		$this->cache = get_instance("cache");
 	}
 
-	function _init_clist()
+	private function _init_clist()
 	{
 		if ($this->clist_init_done)
 		{
@@ -129,13 +127,24 @@ class cfgutils extends aw_template
 		return $result;
 	}
 
-	//
-	// !Loads, unserializes and returns properties for a single class,
-	// optionally also caches them
-	// file(string) - name of the class
-	// clid(int) - class_id
-	// filter(string) - filter the properties based on a attribute
-	// load_trans - whater to load translated props or not
+	/** Loads, unserializes and returns properties for a single class, also caches them
+		@attrib api=1 params=name
+
+		@param file optional type=string 
+			name of the class to load properties from. either this or class_id must be given
+
+		@param clid optional type=clid
+			class if of the class to load properties from
+
+		@param filter optional type=string
+			filter the properties based on a attribute
+
+		@param load_trans optional type=bool
+			wheter to load translated props or not
+
+		@returns
+			array { prop_name => prop_data } for all props in the given class. subclass props are not loaded. use load_properties for that!
+	**/
 	function load_class_properties($args = array())
 	{
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
@@ -704,7 +713,7 @@ class cfgutils extends aw_template
 		return $ret;
 	}
 
-	function load_properties_unc($args)
+	private function load_properties_unc($args)
 	{
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load-properties");
@@ -810,6 +819,18 @@ class cfgutils extends aw_template
 		return $rv;
 	}
 
+	/** Loads properties from a given xml sring
+		@attrib api=1 params=pos
+			
+		@param args optional type=array
+			array { xml_definition => the string to load props from }
+
+		@param get_layout optional type=bool
+			Whether to inclus list of layouts in the output as well. defaults to false.
+		
+		@returns
+			array{ array{property_name => property_data}, array{group_name => group_data}, array{layout_name => layout_data} }
+	**/
 	function parse_cfgform($args = array(), $get_layout = false)
 	{
 		$proplist = $grplist = $layout = array();
@@ -829,17 +850,6 @@ class cfgutils extends aw_template
 		else
 		{
 			return array($proplist,$grplist);
-		}
-	}
-
-	function parse_definition($args = array())
-	{
-		if ($args["content"])
-		{
-			$proplist = $this->load_class_properties(array(
-				'source' => $args['xml_definition'],
-			));
-			return $proplist;
 		}
 	}
 
@@ -918,13 +928,6 @@ class cfgutils extends aw_template
 	function get_groupinfo()
 	{
 		return $this->groupinfo;
-	}
-
-	function gen_valid_id($src)
-	{
-		$rv = strtolower(preg_replace("/\s/","_",$src));
-		$rv = preg_replace("/\W/","",$rv);
-		return $rv;
 	}
 };
 ?>

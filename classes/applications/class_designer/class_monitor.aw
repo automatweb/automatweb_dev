@@ -42,7 +42,7 @@ class class_monitor
 		$prop_id = $o->id();
 		$alter = false;
 		$cfgu = get_instance("cfg/cfgutils");
-		$el_name = $cfgu->gen_valid_id($o->name());
+		$el_name = $this->gen_valid_id($o->name());
 		// I'll probably have to check for other changes too
 		if (empty($reg_els[$prop_id]) || $reg_els[$prop_id] != $el_name)
 		{
