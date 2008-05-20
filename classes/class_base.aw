@@ -5510,7 +5510,7 @@ class class_base extends aw_template
 					$ret[$nm]["name"] = $nm;
 					$ret[$nm]["caption"] = $ppl[$p]["caption"] . "<small>" . t(" (l&auml;htetekst)") . "</small>";
 					$ret[$nm]["type"] = "text";
-					$ret[$nm]["value"] = (isset($src_lang_vals[$p]) ? $src_lang_vals[$p] : $o->is_property($p) ? $o->trans_get_val_str($p) : "");
+					$ret[$nm]["value"] = iconv(aw_global_get("charset"), "UTF-8", (isset($src_lang_vals[$p]) ? $src_lang_vals[$p] : $o->is_property($p) ? $o->trans_get_val_str($p) : ""));
 
 					// translation field
 					$nm = "trans_".$lang["id"]."_".$p;

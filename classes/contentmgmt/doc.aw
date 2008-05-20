@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.5 2008/04/07 08:00:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.6 2008/05/20 11:18:57 robert Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1753,9 +1753,9 @@ class doc extends class_base
 		}
 
 		$val = '<div id="floatlayerk" style="left: 800px; top: 200px; width: 250px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
-			t("<b>".$pl["title"]["caption"].":</b>")." ".$arr["obj_inst"]->prop("title")."<br><br>".
-			t("<b>".$pl["lead"]["caption"].":</b>")." ".$arr["obj_inst"]->prop("lead")."<br><br>".
-			t("<b>".$pl["content"]["caption"].":</b>")." ".$arr["obj_inst"]->prop("content").
+			t("<b>".$pl["title"]["caption"].":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("title"))."<br><br>".
+			t("<b>".$pl["lead"]["caption"].":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("lead"))."<br><br>".
+			t("<b>".$pl["content"]["caption"].":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("content")).
 			'</div>';
 		$val .= '<script language="javascript">el=document.getElementById(\'floatlayerk\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
 
