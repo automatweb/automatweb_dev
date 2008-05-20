@@ -35,7 +35,7 @@ require_once PEAR_PATH.'SOAP/Parser.php';
 // NOTE: Overload SEGFAULTS ON PHP4 + Zend Optimizer
 // these two are BC/FC handlers for call in PHP4/5
 
-if (!class_exists('SOAP_Client_Overload')) {
+if (!class_exists('SOAP_Client_Overload', false)) {
     if (substr(phpversion(), 0, 1) == 5) {
         class SOAP_Client_Overload extends SOAP_Base {
             function __call($method, $args)

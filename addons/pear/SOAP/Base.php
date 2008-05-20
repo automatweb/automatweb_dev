@@ -53,7 +53,7 @@ $GLOBALS['SOAP_options'] = array();
 
 @include_once PEAR_PATH.'Mail/mimePart.php';
 @include_once PEAR_PATH.'Mail/mimeDecode.php';
-if (class_exists('Mail_mimePart')) {
+if (class_exists('Mail_mimePart', false)) {
     $GLOBALS['SOAP_options']['Mime'] = 1;
     define('MAIL_MIMEPART_CRLF', "\r\n");
 }
