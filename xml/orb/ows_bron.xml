@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="ows_bron" folder="applications/ows_bron" extends="class_base">
-		<action name="show_cancel_page">
+		<action name="show_cancel_page" nologin="1" all_args="1">
 			<function name="show_cancel_page">
 				<arguments>
 				</arguments>
@@ -24,6 +24,13 @@
 
 		<action name="handle_pay_submit" nologin="1">
 			<function name="handle_pay_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ask_confirm" nologin="1">
+			<function name="ask_confirm">
 				<arguments>
 				</arguments>
 			</function>
@@ -64,12 +71,18 @@
 			</function>
 		</action>
 
-		<action name="cancel_booking" all_args="1">
+		<action name="cancel_booking" nologin="1" all_args="1">
 			<function name="cancel_booking">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
+		<action name="fetch_currency_prices" nologin="1" all_args="1">
+			<function name="fetch_currency_prices">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
