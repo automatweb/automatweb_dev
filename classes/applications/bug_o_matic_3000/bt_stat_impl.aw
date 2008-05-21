@@ -131,7 +131,8 @@ class bt_stat_impl extends core
 
 				foreach($mons as $mon => $wh)
 				{
-					$mon_num = substr($mon, 1);
+					$det_day_start = $det_day_end = null;
+					$mon_num = (int)substr($mon, 1);
 					if($mon_num == $arr["request"]["stat_hrs_start"]["month"])
 					{
 						$det_day_start = $arr["request"]["stat_hrs_start"]["day"];
