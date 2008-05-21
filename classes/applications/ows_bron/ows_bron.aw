@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.32 2008/05/20 08:39:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.33 2008/05/21 10:13:16 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -192,7 +192,7 @@ class ows_bron extends class_base
 	}
 
 	/**
-		@attrib name=show_cancel_page
+		@attrib name=show_cancel_page nologin="1"
 	**/
 	function show_cancel_page($arr)
 	{
@@ -326,8 +326,8 @@ class ows_bron extends class_base
 		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_children"];
 		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
 		$parameters["webLanguageId"] = $lang;
-		$parameters["customerId"] = 0;
-$parameters["ow_bron"] = $arr["ow_bron"];
+		$parameters["customerId"] = reval_customer::get_cust_id();
+		$parameters["ow_bron"] = $arr["ow_bron"];
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $currency;
@@ -396,11 +396,66 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 			"ct_phone_ext" => null,
 			"ct_email" => null
 		));
+//$_SESSION["reval_fc"]["data"] = reval_customer::do_call("GetCustomerProfile", array("customerId" => 24419, "webLanguageId" => 1), "Customers");
+		if ($_SESSION["reval_fc"]["data"])
+		{
+			if (empty($arr["is_allergic"]))
+			{
+				$arr["is_allergic"] = $_SESSION["reval_fc"]["data"]["IsAllergic"] == "true";
+			}
+			if (empty($arr["is_handicapped"]))
+			{
+				$arr["is_handicapped"] = $_SESSION["reval_fc"]["data"]["IsHandicapped"] == "true";
+			}
+			if (empty($arr["ct_firstname"]))
+			{
+				$arr["ct_firstname"] = $_SESSION["reval_fc"]["data"]["FirstName"];
+			}
+			if (empty($arr["ct_lastname"]))
+			{
+				$arr["ct_lastname"] = $_SESSION["reval_fc"]["data"]["LastName"];
+			}
+			if (empty($arr["ct_dob"]))
+			{
+				$arr["ct_dob"] = date("d.m.Y", reval_customer::_parse_date($_SESSION["reval_fc"]["data"]["Birthday"]));
+			}
+			if (empty($arr["ct_adr1"]))
+			{
+				$arr["ct_adr1"] = $_SESSION["reval_fc"]["data"]["AddressLine1"];
+			}
+			if (empty($arr["ct_adr2"]))
+			{
+				$arr["ct_adr2"] = $_SESSION["reval_fc"]["data"]["AddressLine2"];
+			}
+			if (empty($arr["ct_postalcode"]))
+			{
+				$arr["ct_postalcode"] = $_SESSION["reval_fc"]["data"]["PostalCode"];
+			}
+			if (empty($arr["ct_city"]))
+			{
+				$arr["ct_city"] = $_SESSION["reval_fc"]["data"]["CityName"];
+			}
+			if (empty($arr["ct_phone"]))
+			{
+				$arr["ct_phone"] = $_SESSION["reval_fc"]["data"]["HomePhone"];
+			}
+			if (empty($arr["ct_email"]))
+			{
+				$arr["ct_email"] = $_SESSION["reval_fc"]["data"]["Email"];
+			}
+			if (empty($arr["ct_country"]))
+			{
+				$arr["ct_country"] = trim($_SESSION["reval_fc"]["data"]["CountryCode"]);
+			}
+
+		}
+		aw_ini_set("menuedit.protect_emails", 0);
 
 		if (!$arr["ct_country"])
 		{
 			$arr["ct_country"] = $this->detect_country();
 		}
+
 		$code =  $hotel["OwsHotelCode"]."-".$rate["OwsRoomTypeCode"];
 		$ol = new object_list(array(
 			"class_id" => CL_DOCUMENT,
@@ -609,7 +664,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
 		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_children"];
 		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
 		$parameters["webLanguageId"] = $lang;
-		$parameters["customerId"] = 0;
+		$parameters["customerId"] = reval_customer::get_cust_id();
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $currency;
@@ -1003,6 +1058,7 @@ $parameters["ow_bron"] = $arr["ow_bron"];
       	"guaranteeCreditCardExpirationDate" => $exp_date,
       	"paymentType" => "NoPayment"
 			);
+			$params["customerId"] = reval_customer::get_cust_id();
 			$return = $this->do_orb_method_call(array(
 				"action" => "MakeBookingExWithBirthday",
 				"class" => "http://markus.ee/RevalServices/Booking/",
@@ -1803,7 +1859,7 @@ if ($_GET["DH"] == 1)
 		$parameters["numberOfChildrenPerRoom"] = $childcount[1];
 		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
 		$parameters["webLanguageId"] = $lang;
-		$parameters["customerId"] = 0;
+		$parameters["customerId"] = reval_customer::get_cust_id();
 		$parameters["ow_bron"] = $arr["ow_bron"];
 		if($currency)
 		{
@@ -2243,6 +2299,15 @@ $rate_ids = array();
 				));
 			}
 		}
+		$o = obj(aw_global_get("section"));
+		$has = false;
+		foreach($o->path() as $item)
+		{
+			if ($item->id() == 173700)
+			{
+				$has = true;
+			}
+		}
 		$this->vars(array(
 			"currentdate" => $_GET["i_checkin"] ? $_GET["i_checkin"] : date('d.m.Y'),
 			"tomorrow" => $_GET["i_checkout"] ? $_GET["i_checkout"] : date("d.m.Y", time() + 24*3600),
@@ -2252,7 +2317,7 @@ $rate_ids = array();
 			"reforb" => $this->mk_reforb(
 				"show_available_rooms",
 				array(
-					"section" => 107220, //aw_global_get("section"),
+					"section" => $has ? 177281 : 107220, //aw_global_get("section"),
 					"no_reforb" => 1,
 					"r_url" => get_ru(),
 					"ow_bron" => $arr["id"],
@@ -2286,7 +2351,7 @@ $rate_ids = array();
 		$parameters["numberOfChildrenPerRoom"] = (int)$i_child;
 		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
 		$parameters["webLanguageId"] = $lang;
-		$parameters["customerId"] = 0;
+		$parameters["customerId"] = reval_customer::get_cust_id();
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $currency;
@@ -2418,7 +2483,7 @@ $rate_ids = array();
 		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_children"];
 		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
 		$parameters["webLanguageId"] = $lang;
-		$parameters["customerId"] = 0;
+		$parameters["customerId"] = reval_customer::get_cust_id();
 		if($currency)
 		{
 			$parameters["customCurrencyCode"] = $currency;
@@ -2471,7 +2536,7 @@ $rate_ids = array();
 	}
 
 	/**
-		@attrib name=cancel_booking all_args="1"
+		@attrib name=cancel_booking all_args="1" nologin="1"
 	**/
 	function cancel_booking($arr)
 	{
@@ -2797,7 +2862,7 @@ echo dbg::dump($return);
 	}
 
 	/**
-		@attib name=fetch_currency_prices all_args="1" nologin="1"
+		@attrib name=fetch_currency_prices all_args="1" nologin="1"
 	**/
 	function fetch_currency_prices($arr)
 	{
@@ -2819,7 +2884,7 @@ echo dbg::dump($return);
 		$parameters["numberOfChildrenPerRoom"] = $arr["i_child1"];
 		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $arr["i_promo"]);
 		$parameters["webLanguageId"] = $lang;
-		$parameters["customerId"] = 0;
+		$parameters["customerId"] = reval_customer::get_cust_id();
 		$parameters["rateIDs"] = explode(",", $arr["rate_ids"]);
 		$parameters["customCurrencyCode"] = $arr["set_currency"];
 		$return = $this->do_orb_method_call(array(

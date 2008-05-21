@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.15 2008/04/09 09:11:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.16 2008/05/21 10:13:16 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -204,6 +204,12 @@ class ows_reservation extends class_base
 	{
 		switch($f)
 		{
+			case "aw_cancel_type":
+			case "aw_cancel_other":
+			case "cancel_other":
+							$this->db_add_col($t, array("name" => $f, "type" => "varchar(255)"));
+							return true;
+
 			case "aw_smoking":
 			case "aw_high_floor":
 			case "aw_low_floor":
@@ -300,9 +306,9 @@ if (!is_oid($arr["id"]))
 
 			$bank_inst = get_instance(CL_BANK_PAYMENT);
 			$data = $bank_inst->get_payment_info();
-			if ($data["bank"] == "credit_card")
+			if ($data["bank_id"] == "credit_card")
 			{
-				$params["guaranteeType"] = "CreditCard";
+				//$params["guaranteeType"] = "CreditCard";
 			}
 
 //die(dbg::dump($params));
@@ -347,6 +353,11 @@ if (!is_oid($arr["id"]))
 			$o->set_prop("total_charge", $return["MakeBookingExWithBirthdayResult"]["TotalCharges"]);
 			$o->set_prop("charge_currency", $return["MakeBookingExWithBirthdayResult"]["ChargeCurrencyCode"]);
 
+			if (!$o->prop("ows_bron"))
+			{
+				$o->set_prop("ows_bron", 107222);
+			}
+
 			$o->set_meta("query", $params);
 			$o->set_meta("result", $return);
 			aw_disable_acl();
@@ -355,8 +366,10 @@ if (!is_oid($arr["id"]))
 			$i = get_instance(CL_OWS_BRON);
 			$i->send_mail_from_bron($o, true);
 
-			header("Location: ".$this->mk_my_orb("display_final_page", array("rvs_id" => $o->id(), "section" => 107221)));
-			die("<script language=javascript>window.location.href='".$this->mk_my_orb("display_final_page", array("rvs_id" => $o->id(), "section" => 107221))."';</script>");
+			$url = $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $o->prop("confirmation_code"), "section" => 107221), "ows_bron");
+			$url = str_replace("automatweb/", "", $url);
+			header("Location: ".$url);
+			die("<script language=javascript>window.location.href='".$url."';</script>");
 	}
 
 	function proc_ws_error($parameters, $return)
