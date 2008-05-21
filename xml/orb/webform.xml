@@ -31,5 +31,30 @@
 			</function>
 		</action>
 
+		<action name="mail_email_autocomplete_source">
+			<function name="mail_email_autocomplete_source">
+				<arguments>
+					<optional name="search_mail_email" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mail_name_autocomplete_source">
+			<function name="mail_name_autocomplete_source">
+				<arguments>
+					<optional name="search_mail_name" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ajax_get_mail_field">
+			<function name="ajax_get_mail_field">
+				<arguments>
+					<required name="val" />
+					<required name="find" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -159,6 +159,52 @@
             <caption>L&amp;amp;otilde;pu printvaate template</caption>
       </property>
       <property>
+            <name>mails_tb</name>
+            <table>objects</table>
+            <group>send_mails</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>mails_tbl</name>
+            <table>objects</table>
+            <group>send_mails</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>search_mail_info</name>
+            <table>objects</table>
+            <group>send_mails</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+      </property>
+      <property>
+            <name>search_mail_name</name>
+            <table>objects</table>
+            <group>send_mails</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>search_mail_email</name>
+            <table>objects</table>
+            <group>send_mails</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>E-mail</caption>
+      </property>
+      <property>
             <name>navtoolbar</name>
             <table>objects</table>
             <group>form</group>
@@ -388,6 +434,10 @@
                   <caption>Suunamine</caption>
                   <parent>general</parent>
             </general_redir>
+            <send_mails>
+                  <caption>Saada meilid</caption>
+                  <parent>general</parent>
+            </send_mails>
             <form>
                   <caption>Vorm</caption>
             </form>

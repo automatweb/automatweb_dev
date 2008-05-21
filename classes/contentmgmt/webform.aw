@@ -69,6 +69,21 @@
 	@property disp_after_entry_print type=select
 	@caption L&otilde;pu printvaate template
 
+@groupinfo send_mails caption="Saada meilid" parent=general
+@default group=send_mails
+
+	@property mails_tb type=toolbar no_caption=1
+
+	@property mails_tbl type=table no_caption=1
+
+	@property search_mail_info type=text
+
+	@property search_mail_name type=textbox
+	@caption Nimi
+
+	@property search_mail_email type=textbox
+	@caption E-mail
+
 ------------- end: general -------------
 
 
@@ -495,6 +510,25 @@ class webform extends class_base
 			case "disp_after_entry_print":
 				$prop["options"] = array("" => t("--vali--")) + $this->get_directory(array("dir" => aw_ini_get("site_tpldir")."/contentmgmt/webform/disp"));
 				break;
+		
+			case "search_mail_info":
+				$prop["value"] = t("Otsi aadressit");
+				break;
+			case "search_mail_name":
+			case "search_mail_email":
+				$prop["option_is_tuple"] = 1;
+				$prop["autocomplete_source"] = $this->mk_my_orb($prop["name"] == "search_mail_name" ? "mail_name_autocomplete_source" : "mail_email_autocomplete_source");
+				$prop["autocomplete_params"] = array($prop["name"]);
+				$prop["onBlur"] = "get_mail_field('".(($prop["name"]=="search_mail_name")?"search_mail_email": "search_mail_name")."', '".(($prop["name"]=="search_mail_email")?"search_mail_email": "search_mail_name")."')";
+				break;
+
+			case "mails_tb":
+				$this->get_mails_tb($arr);
+				break;
+
+			case "mails_tbl":
+				$this->get_mails_tbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -578,6 +612,9 @@ class webform extends class_base
 				$arr["obj_inst"]->set_meta("xstyles", safe_array($arr["request"]["style"]));
 				$arr["obj_inst"]->set_meta("m_styles", safe_array($arr["request"]["m_style"]));
 				$arr["obj_inst"]->save();
+				break;
+			case "mails_tb":
+				$this->set_mails_tb($arr);
 				break;
 		}
 		return $retval;
@@ -2794,6 +2831,190 @@ class webform extends class_base
 		return $cf->get_props_from_ot(array(
 			"ot" => $ot->id()
 		));
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		if($_GET["group"] == "send_mails")
+		{
+			$arr["add_search_mail"] = 0;
+		}
+		$arr["post_ru"] = get_ru();
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		if($_GET["group"] == "send_mails")
+		{
+			$this->vars(array(
+				"agurl" => $this->mk_my_orb("ajax_get_mail_field"),
+			));
+			$this->read_template('mails_script.tpl');
+			return $this->parse();
+		}
+	}
+
+	function get_mails_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_ML_MEMBER), $arr["obj_inst"]->id(), 5);
+		$tb->add_search_button(array(
+			"pn" => "add_search_mail",
+			"clid" => array(CL_ML_MEMBER),
+			"multiple" => 1,
+		));
+		$tb->add_delete_rels_button();
+	}
+
+	function set_mails_tb($arr)
+	{
+		$vars = array("name", "email");
+		foreach($vars as $var)
+		{
+			if($mid = $arr["request"]["search_mail_".$var])
+			{
+				if(is_oid($mid))
+				{
+					$mail = $mid;
+				}
+			}
+		}
+		if($mail)
+		{
+			$arr["request"]["add_search_mail"] = $mail;
+		}
+		if($add = $arr["request"]["add_search_mail"])
+		{
+			$mails = explode(",", $add);
+			foreach($mails as $mail)
+			{
+				if(!$arr["obj_inst"]->is_connected_to(array("to" => $mail)))
+				{
+					$arr["obj_inst"]->connect(array(
+						"to" => $mail,
+						"type" => "RELTYPE_EMAIL",
+					));
+				}
+			}
+		}
+	}
+
+	function _init_mails_tbl($t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "mail",
+			"caption" => t("Aadress"),
+		));
+	}
+
+	function get_mails_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_mails_tbl(&$t);
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_EMAIL",
+		));
+		foreach($conn as $c)
+		{
+			$o = $c->to();
+			$t->define_data(array(
+				"oid" => $o->id(),
+				"name" => html::obj_change_url($o),
+				"mail" => $o->prop("mail"),
+			));
+		}
+		
+	}
+
+	/**
+		@attrib name=mail_email_autocomplete_source
+		@param search_mail_email optional
+	**/
+	function mail_email_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"mail" => $arr["search_mail_email"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		$res = array();
+		foreach($ol->arr() as $o)
+		{
+			$res[$o->id()] = $o->prop("mail");
+		}
+
+		return $ac->finish_ac($res);
+	}
+
+	/**
+		@attrib name=mail_name_autocomplete_source
+		@param search_mail_name optional
+	**/
+	function mail_name_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"CL_ML_MEMBER.name" => $arr["search_mail_name"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		$res = array();
+		foreach($ol->arr() as $o)
+		{
+			$res[$o->id()] = $o->prop("name");
+		}
+
+		return $ac->finish_ac($res);
+	}
+
+	/**
+		@attrib name=ajax_get_mail_field
+		@param val required
+		@param find required
+	**/
+	function ajax_get_mail_field($arr)
+	{
+		if(!empty($arr["val"]))
+		{
+			if($arr["find"] == "search_mail_name")
+			{
+				$params["mail"] = $arr["val"];
+				$var = "name";
+			}
+			elseif($arr["find"] == "search_mail_email")
+			{
+				$params["CL_ML_MEMBER.name"] = $arr["val"];
+				$var = "mail";
+			}
+			$params["class_id"] = CL_ML_MEMBER;
+			$ol = new object_list($params);
+			$o = $ol->begin();
+			if($o)
+			{
+				die("ok||".$o->prop($var));
+			}
+			else
+			{
+				die();
+			}
+		}
 	}
 }
 ?>
