@@ -18,7 +18,9 @@
             <type>hidden</type>
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
+            <mode>autocomplete</mode>
             <field>section</field>
+            <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <property>
             <name>section2</name>
@@ -27,6 +29,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
+            <mode>autocomplete</mode>
             <field>section2</field>
             <caption>&amp;amp;Uuml;ksus</caption>
       </property>
@@ -37,6 +40,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
             <store>connect</store>
+            <mode>autocomplete</mode>
             <field>profession</field>
             <caption>Amet</caption>
       </property>
@@ -65,8 +69,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>date_select</type>
-            <year_from>1990</year_from>
+            <type>select</type>
             <caption>Suhte algus</caption>
       </property>
       <property>
@@ -75,8 +78,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>date_select</type>
-            <year_from>1990</year_from>
+            <type>select</type>
             <caption>Suhte l&amp;amp;otilde;pp</caption>
       </property>
       <property>

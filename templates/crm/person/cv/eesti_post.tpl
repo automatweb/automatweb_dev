@@ -173,61 +173,85 @@ text-decoration:underline;
 				</tr>
 				<!-- SUB: CRM_PERSON.NAME -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Nimi:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.name.caption}:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.name}</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.NAME -->
 				<!-- SUB: CRM_PERSON.PERSONAL_ID -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Isikukood:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.personal_id.caption}:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.personal_id}</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.PERSONAL_ID -->
 				<!-- SUB: CRM_PERSON.BIRTHDAY -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>S&uuml;nniaeg:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.birthday.caption}:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.birthday} ({VAR:crm_person.age})</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.BIRTHDAY -->
 				<!-- SUB: CRM_PERSON.GENDER -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Sugu:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.gender.caption}:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.gender}</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.GENDER -->
-				<!-- SUB: CRM_PERSON.NATIONALITY -->
+				<!-- SUB: CRM_PERSON.UDEF_TA1 -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Rahvus:&nbsp;</strong></td>
-					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.nationality}</b></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.udef_ta1.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.udef_ta1}</b></td>
 				</tr>
-				<!-- END SUB: CRM_PERSON.NATIONALITY -->
-				<!-- SUB: CRM_PERSON.MLANG -->
-				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Emakeel:&nbsp;</strong></td>
-					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.mlang}</b></td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.MLANG -->
-				<!-- SUB: CRM_PERSON.EDULEVEL -->
-				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Haridutase:&nbsp;</strong></td>
-					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.edulevel}</b></td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.EDULEVEL -->
-				<!-- SUB: CRM_PERSON.ACADEMIC_DEGREE -->
-				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Akadeemiline kraad:&nbsp;</strong></td>
-					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.academic_degree}</b></td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.ACADEMIC_DEGREE -->
+				<!-- END SUB: CRM_PERSON.UDEF_TA1 -->
 				<!-- SUB: CRM_PERSON.SOCIAL_STATUS -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Perekonnaseis:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.social_status.caption}:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.social_status}</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.SOCIAL_STATUS -->
+				<!-- SUB: CRM_PERSON.CV_FILE -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.cv_file.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" valign="top" style="padding-left:10px;"><a href="{VAR:crm_person.cv_file_url}">{VAR:crm_person.cv_file}</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.CV_FILE -->
+				<!-- SUB: CRM_PERSON.UDEF_TA2 -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.udef_ta2.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.udef_ta2}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.UDEF_TA2 -->
+				<!-- SUB: CRM_PERSON.NATIONALITY -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.nationality.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.nationality}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.NATIONALITY -->
+				<!-- SUB: CRM_PERSON.EDULEVEL -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.edulevel.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.edulevel}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.EDULEVEL -->
+				<!-- SUB: CRM_PERSON.MLANG -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.mlang.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.mlang}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.MLANG -->
+				<!-- SUB: CRM_PERSON.ACADEMIC_DEGREE -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.academic_degree.caption}:&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.academic_degree}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.ACADEMIC_DEGREE -->
+				<!-- SUB: CRM_PERSON.NOT_WORKING -->
+				<tr>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>&nbsp;</strong></td>
+					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.not_working.caption}</b></td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.NOT_WORKING -->
 				<!-- SUB: CRM_PERSON.CHILDREN1 -->
 				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>Laste arv:&nbsp;</strong></td>
+					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>{VAR:crm_person.children1.caption}:&nbsp;</strong></td>
 					<td class="text11px" width="372" height="20" align="left" style="padding-left:10px;"><b>{VAR:crm_person.children1}</b></td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.CHILDREN1 -->
@@ -237,12 +261,6 @@ text-decoration:underline;
 					<td class="text11px" width="372" height="20" align="left" valign="top" style="padding-left:10px;">{VAR:crm_person.modified}</td>
 				</tr>
 				<!-- END SUB: CRM_PERSON.MODIFIED -->
-				<!-- SUB: CRM_PERSON.CV_FILE -->
-				<tr>
-					<td width="174" height="20" align="left" valign="middle" bgcolor="#EBEBEB" class="text11px" style="padding-left:10px;"><strong>CV failina:&nbsp;</strong></td>
-					<td class="text11px" width="372" height="20" align="left" valign="top" style="padding-left:10px;"><a href="{VAR:crm_person.cv_file_url}">{VAR:crm_person.cv_file}</td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.CV_FILE -->
 				<tr>
 					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
 				</tr>
@@ -300,6 +318,20 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_PERSON.CONTACT -->
 
+			<!-- SUB: CRM_PERSON.NOTES -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_person.notes.caption}</strong></span></td>
+				</tr>
+				<tr>
+					<td width="546" height="20" align="left" class="link11px" style="padding-left:10px;">{VAR:crm_person.notes}</td>
+				</tr>
+				<tr>
+					<td class="cvVormSpacer">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_PERSON.NOTES -->
+
 			<!-- SUB: PREVIOUS_CANDIDACIES -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
@@ -308,19 +340,19 @@ text-decoration:underline;
 				<!-- SUB: PREVIOUS_CANDIDACIES.HEADER -->
 				<tr>
 					<!-- SUB: PREVIOUS_CANDIDACIES.HEADER.PROFESSION -->
-					<td width="165" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametikoht</td>
+					<td width="165" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.profession.caption}</td>
 					<!-- END SUB: PREVIOUS_CANDIDACIES.HEADER.PROFESSION -->
 					<!-- SUB: PREVIOUS_CANDIDACIES.HEADER.FIELD -->
-					<td width="165" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
+					<td width="165" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.field.caption}</td>
 					<!-- END SUB: PREVIOUS_CANDIDACIES.HEADER.FIELD -->
 					<!-- SUB: PREVIOUS_CANDIDACIES.HEADER.END -->
-					<td width="66" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;htaeg</td>
+					<td width="66" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.end.caption}</td>
 					<!-- END SUB: PREVIOUS_CANDIDACIES.HEADER.END -->
 					<!-- SUB: PREVIOUS_CANDIDACIES.HEADER.RATING -->
 					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kandidatuuri keskmine hinne</td>
 					<!-- END SUB: PREVIOUS_CANDIDACIES.HEADER.RATING -->
 					<!-- SUB: PREVIOUS_CANDIDACIES.HEADER.ADDINFO -->
-					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
+					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.addinfo.caption}</td>
 					<!-- END SUB: PREVIOUS_CANDIDACIES.HEADER.ADDINFO -->
 				</tr>
 				<!-- END SUB: PREVIOUS_CANDIDACIES.HEADER -->
@@ -369,42 +401,42 @@ text-decoration:underline;
 			<!-- SUB: CRM_PERSON_EDUCATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="11" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Haridus</strong></span></td>
+					<td height="20" colspan="11" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Hariduskäik</strong></span></td>
 				</tr>
 				<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER -->
 				<tr>
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.SCHOOL -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kool</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.school_1.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.SCHOOL -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.DEGREE -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Akadeemiline kraad</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.degree.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.DEGREE -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.FIELD -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.field.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.FIELD -->
-					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.SPECIALITY  -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Eriala</td>
+					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.SPECIALITY -->
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.speciality.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.SPECIALITY -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.MAIN_SPECIALITY -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">P&otilde;hieriala</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.main_speciality.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.MAIN_SPECIALITY -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Omandamisel</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.in_progress.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.OBTAIN_LANGUAGE -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Omandamise keel</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.obtain_language.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.OBTAIN_LANGUAGE -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.START -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.start.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.START -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.END -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">L&otilde;pp</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.end.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.END -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.END_DATE -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">L&otilde;petamise kuup&auml;ev</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.end_date.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.END_DATE -->
 					<!-- SUB: CRM_PERSON_EDUCATIONS.HEADER.DIPLOMA_NR -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Diplomi nr</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_education.diploma_nr.caption}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER.DIPLOMA_NR -->
 				</tr>
 				<!-- END SUB: CRM_PERSON_EDUCATIONS.HEADER -->
@@ -419,7 +451,7 @@ text-decoration:underline;
 					<!-- SUB: CRM_PERSON_EDUCATION.FIELD -->
 					<td width="50" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_education.field}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATION.FIELD -->
-					<!-- SUB: CRM_PERSON_EDUCATION.SPECIALITY  -->
+					<!-- SUB: CRM_PERSON_EDUCATION.SPECIALITY -->
 					<td width="50" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_education.speciality}</td>
 					<!-- END SUB: CRM_PERSON_EDUCATION.SPECIALITY -->
 					<!-- SUB: CRM_PERSON_EDUCATION.MAIN_SPECIALITY -->
@@ -454,27 +486,27 @@ text-decoration:underline;
 			<!-- SUB: CRM_PERSON_ADD_EDUCATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="6" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>T&auml;iendkoolitus</strong></span></td>
+					<td height="20" colspan="6" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Olulised t&auml;iendkoolitused</strong></span></td>
 				</tr>
 				<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER -->
 				<tr>
 					<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.ORG -->
-					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ettev&otilde;te</td>
+					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_add_education.org.caption}</td>
 					<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.ORG -->
 					<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.FIELD -->
-					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Teema</td>
+					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_add_education.field.caption}</td>
 					<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.FIELD -->
 					<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.TIME -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_add_education.time.caption}</td>
 					<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.TIME -->
 					<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.TIME_TEXT -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Aeg</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_add_education.time_text.caption}</td>
 					<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.TIME_TEXT -->
 					<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.LENGTH -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Maht p&auml;evades</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_add_education.length.caption}</td>
 					<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.LENGTH -->
 					<!-- SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.LENGTH_HRS -->
-					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Maht tundides</td>
+					<td width="50" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_add_education.length_hrs.caption}</td>
 					<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER.LENGTH_HRS -->
 				</tr>
 				<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS.HEADER -->
@@ -506,119 +538,6 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_PERSON_ADD_EDUCATIONS -->
 
-			<!-- SUB: CRM_PERSON_LANGUAGES -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Keeleoskus</strong></span></td>
-				</tr>
-				<!-- SUB: CRM_PERSON_LANGUAGE -->
-				<tr>
-					<td width="96" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_language.language}</td>
-					<!-- SUB: CRM_PERSON_LANGUAGE.TALK -->
-					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">R&auml;&auml;gin: {VAR:crm_person_language.talk}</td>
-					<!-- END SUB: CRM_PERSON_LANGUAGE.TALK -->
-					<!-- SUB: CRM_PERSON_LANGUAGE.UNDERSTAND -->
-					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">Saan aru: {VAR:crm_person_language.understand}</td>
-					<!-- END SUB: CRM_PERSON_LANGUAGE.UNDERSTAND -->
-					<!-- SUB: CRM_PERSON_LANGUAGE.WRITE -->
-					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">Kirjutan: {VAR:crm_person_language.write}</td>
-					<!-- END SUB: CRM_PERSON_LANGUAGE.WRITE -->
-				</tr>
-				<!-- END SUB: CRM_PERSON_LANGUAGE -->
-				<tr>
-					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: CRM_PERSON_LANGUAGES -->
-
-			<!-- SUB: CRM_SKILL -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_skill}</strong></span></td>
-				</tr>
-				<!-- SUB: CRM_SKILL_LEVEL_GROUP -->
-				<!-- SUB: CRM_SKILL_LEVEL_SUBHEADING -->
-				<tr>
-					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_skill.parent}</strong></span></td>
-				</tr>
-				<!-- END SUB: CRM_SKILL_LEVEL_SUBHEADING -->
-				<!-- SUB: CRM_SKILL_LEVEL -->
-				<tr>
-					<td width="372" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_skill_level.skill}</td>
-					<td width="174" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_skill_level.level}</td>
-				</tr>
-				<!-- END SUB: CRM_SKILL_LEVEL -->
-				<!-- END SUB: CRM_SKILL_LEVEL_GROUP -->
-				<tr>
-					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: CRM_SKILL -->
-
-			<!-- SUB: CRM_PERSON.DRIVERS_LICENSE -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Autojuhiload</strong></span></td>
-				</tr>
-				<tr>
-					<td width="174" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">Kategooriad</td>
-					<td width="372" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person.drivers_license}</td>
-				</tr>
-				<!-- SUB: CRM_PERSON.DL_CAN_USE -->
-				<tr>
-					<td width="174" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">Isikliku auto kasutamisv&otilde;imalus</td>
-					<td width="372" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person.dl_can_use}</td>
-				</tr>
-				<!-- END SUB: CRM_PERSON.DL_CAN_USE -->
-				<tr>
-					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: CRM_PERSON.DRIVERS_LICENSE -->
-
-			<!-- SUB: CRM_COMPANY_RELATIONS -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Organisatoorne kuuluvus</strong></span></td>
-				</tr>
-				<!-- SUB: CRM_COMPANY_RELATIONS.HEADER -->
-				<tr>
-					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.ORG -->
-					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
-					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.ORG -->
-					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.START -->
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
-					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.START -->
-					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.END -->
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">L&otilde;pp</td>
-					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.END -->
-					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.ADD_INFO -->
-					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
-					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.ADD_INFO -->
-				</tr>
-				<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER -->
-				<!-- SUB: CRM_COMPANY_RELATION -->
-				<tr>
-					<!-- SUB: CRM_COMPANY_RELATION.ORG -->
-					<td width="173" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.org}</td>
-					<!-- END SUB: CRM_COMPANY_RELATION.ORG -->
-					<!-- SUB: CRM_COMPANY_RELATION.START -->
-					<td width="100" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.start}</td>
-					<!-- END SUB: CRM_COMPANY_RELATION.START -->
-					<!-- SUB: CRM_COMPANY_RELATION.END -->
-					<td width="100" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.end}</td>
-					<!-- END SUB: CRM_COMPANY_RELATION.END -->
-					<!-- SUB: CRM_COMPANY_RELATION.ADD_INFO -->
-					<td width="173" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.add_info}</td>
-					<!-- END SUB: CRM_COMPANY_RELATION.ADD_INFO -->
-				</tr>
-				<!-- END SUB: CRM_COMPANY_RELATION -->
-				<tr>
-					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: CRM_COMPANY_RELATIONS -->
-
 			<!-- SUB: CRM_PERSON_WORK_RELATIONS -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
@@ -627,34 +546,34 @@ text-decoration:underline;
 				<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER -->
 				<tr>
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.ORG -->
-					<td width="66" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
+					<td width="66" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.org.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.ORG -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.SECTION -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">&Uuml;ksus</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.section.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.SECTION -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.PROFESSION -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Amet</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.profession.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.PROFESSION -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.START -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Algus</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.start.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.START -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.END -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">L&otilde;pp</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.end.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.END -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.TASKS -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">&Uuml;lesanded</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.tasks.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.TASKS -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.LOAD -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.load.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.LOAD -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.SALARY -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kuutasu (bruto)</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.salary.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.SALARY -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.BENEFITS -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Soodustused ja eritingimused</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.benefits.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.BENEFITS -->
 					<!-- SUB: CRM_PERSON_WORK_RELATIONS.HEADER.FIELD -->
-					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
+					<td width="60" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_work_relation.field.caption}</td>
 					<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER.FIELD -->
 				</tr>
 				<!-- END SUB: CRM_PERSON_WORK_RELATIONS.HEADER -->
@@ -698,127 +617,6 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_PERSON_WORK_RELATIONS -->
 
-			<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="17" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitud t&ouml;&ouml;</strong></span></td>
-				</tr>
-				<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER -->
-				<tr>
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.FIELD -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.FIELD -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.JOB_TYPE -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml; liik</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.JOB_TYPE -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS_RELS -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS_RELS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid (vabatekst)</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PROFESSIONS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOAD -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOAD -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PAY -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Palk</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.PAY -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (esimene eelistus)</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_2 -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (teine eelistus)</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_2 -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_TEXT -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (t&auml;psemalt)</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.LOCATION_TEXT -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDINFO -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDINFO -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_AT_NIGHT -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_AT_NIGHT -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_BY_SCHEDULE -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama graafiku alusel</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.WORK_BY_SCHEDULE -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.START_WORKING -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml;leasumise aeg</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.START_WORKING -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.READY_FOR_ERRAND -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valmis t&ouml;&ouml;l&auml;hetusteks</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.READY_FOR_ERRAND -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDITIONAL_SKILLS -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;iendavad oskused</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.ADDITIONAL_SKILLS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HANDICAPS -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Takistavad tegurid</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HANDICAPS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HOBBIES_VS_WORK -->
-					<td width="32" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Hobid, mille t&otilde;ttu on vajalik t&ouml;&ouml;lt eemal viibida</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER.HOBBIES_VS_WORK -->
-				</tr>
-				<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED.HEADER -->
-				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED -->
-				<tr>
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions_rels}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PAY -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PAY -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2 -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2 -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.ready_for_errand}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.additional_skills}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.handicaps}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS -->
-					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK -->
-					<td width="32" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.hobbies_vs_work}</td>
-					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK -->
-				</tr>
-				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED -->
-				<tr>
-					<td class="cvVormSpacer" colspan="17">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED -->
-
 			<!-- SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
@@ -826,9 +624,17 @@ text-decoration:underline;
 				</tr>
 			</table>
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER -->
+				<tr>
+					<td width="150" height="20" width="100" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">-</td>
+					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER.N -->
+					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;"><strong>{VAR:personnel_management_job_wanted.vertical.header.n}. eelistus</strong></td>
+					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER -->
+				</tr>
+				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD.VERTICAL -->
 				<tr>
-					<td width="150" height="20" width="100" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Tegevusala</td>
+					<td width="150" height="20" width="100" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.FIELD -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.field}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.FIELD -->
@@ -836,7 +642,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.FIELD.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml; liik</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.JOB_TYPE -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.job_type}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.JOB_TYPE -->
@@ -844,7 +650,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.JOB_TYPE.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions_rels.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS_RELS -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions_rels}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS_RELS -->
@@ -852,7 +658,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS_RELS.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametid (vabatekst)</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.professions}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PROFESSIONS -->
@@ -860,7 +666,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PROFESSIONS.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Koormus</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOAD -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.load}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOAD -->
@@ -868,7 +674,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOAD.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PAY.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Palk</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PAY -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.pay}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.PAY -->
@@ -876,7 +682,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.PAY.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (esimene eelistus)</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION -->
@@ -884,7 +690,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (teine eelistus)</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_2 -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_2}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_2 -->
@@ -892,7 +698,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_2.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Asukoht (t&auml;psemalt)</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_TEXT -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.location_text}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.LOCATION_TEXT -->
@@ -900,7 +706,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.LOCATION_TEXT.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDINFO -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.addinfo}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDINFO -->
@@ -908,7 +714,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDINFO.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_AT_NIGHT -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_at_night}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_AT_NIGHT -->
@@ -916,7 +722,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_AT_NIGHT.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">N&otilde;us t&ouml;&ouml;tama graafiku alusel</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_BY_SCHEDULE -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.work_by_schedule}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.WORK_BY_SCHEDULE -->
@@ -924,7 +730,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.WORK_BY_SCHEDULE.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&ouml;&ouml;leasumise aeg</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.START_WORKING -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.start_working}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.START_WORKING -->
@@ -932,7 +738,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.START_WORKING.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valmis t&ouml;&ouml;l&auml;hetusteks</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.ready_for_errand.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.READY_FOR_ERRAND -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.ready_for_errand}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.READY_FOR_ERRAND -->
@@ -940,7 +746,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.READY_FOR_ERRAND.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;iendavad oskused</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.additional_skills.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDITIONAL_SKILLS -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.additional_skills}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.ADDITIONAL_SKILLS -->
@@ -948,7 +754,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.ADDITIONAL_SKILLS.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Takistavad tegurid</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.handicaps.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HANDICAPS -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.handicaps}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HANDICAPS -->
@@ -956,7 +762,7 @@ text-decoration:underline;
 				<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HANDICAPS.VERTICAL -->
 				<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK.VERTICAL -->
 				<tr>
-					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Hobid, mille t&otilde;ttu on vajalik t&ouml;&ouml;lt eemal viibida</td>
+					<td width="150" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.hobbies_vs_work.caption}</td>
 					<!-- SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HOBBIES_VS_WORK -->
 					<td height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:personnel_management_job_wanted.hobbies_vs_work}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL.HOBBIES_VS_WORK -->
@@ -971,6 +777,176 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: PERSONNEL_MANAGEMENT_JOBS_WANTED_VERTICAL -->
 
+			<!-- SUB: CRM_COMPANY_RELATIONS -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Organisatoorne kuuluvus</strong></span></td>
+				</tr>
+				<!-- SUB: CRM_COMPANY_RELATIONS.HEADER -->
+				<tr>
+					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.ORG -->
+					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_company_relation.org.caption}</td>
+					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.ORG -->
+					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.START -->
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_company_relation.start.caption}</td>
+					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.START -->
+					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.END -->
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_company_relation.end.caption}</td>
+					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.END -->
+					<!-- SUB: CRM_COMPANY_RELATIONS.HEADER.ADD_INFO -->
+					<td width="173" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_company_relation.add_info.caption}</td>
+					<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER.ADD_INFO -->
+				</tr>
+				<!-- END SUB: CRM_COMPANY_RELATIONS.HEADER -->
+				<!-- SUB: CRM_COMPANY_RELATION -->
+				<tr>
+					<!-- SUB: CRM_COMPANY_RELATION.ORG -->
+					<td width="173" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.org}</td>
+					<!-- END SUB: CRM_COMPANY_RELATION.ORG -->
+					<!-- SUB: CRM_COMPANY_RELATION.START -->
+					<td width="100" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.start}</td>
+					<!-- END SUB: CRM_COMPANY_RELATION.START -->
+					<!-- SUB: CRM_COMPANY_RELATION.END -->
+					<td width="100" height="20" valign="top" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.end}</td>
+					<!-- END SUB: CRM_COMPANY_RELATION.END -->
+					<!-- SUB: CRM_COMPANY_RELATION.ADD_INFO -->
+					<td width="173" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_company_relation.add_info}</td>
+					<!-- END SUB: CRM_COMPANY_RELATION.ADD_INFO -->
+				</tr>
+				<!-- END SUB: CRM_COMPANY_RELATION -->
+				<tr>
+					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_COMPANY_RELATIONS -->
+
+			<!-- SUB: CRM_RECOMMENDATIONS -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="6" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitajad</strong></span></td>
+				</tr>
+				<!-- SUB: CRM_RECOMMENDATION.HEADER -->
+				<tr>
+					<!-- SUB: CRM_RECOMMENDATION.HEADER.PERSON -->
+					<td width="196" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.person.caption}</td>
+					<!-- END SUB: CRM_RECOMMENDATION.HEADER.PERSON -->
+					<!-- SUB: CRM_RECOMMENDATION.HEADER.RELATION -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.relation.caption}</td>
+					<!-- END SUB: CRM_RECOMMENDATION.HEADER.RELATION -->
+					<!-- SUB: CRM_RECOMMENDATION.HEADER.PERSON.PROFESSION -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.profession.caption}</td>
+					<!-- END SUB: CRM_RECOMMENDATION.HEADER.PERSON.PROFESSION -->
+					<!-- SUB: CRM_RECOMMENDATION.HEADER.PERSON.COMPANY -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.org.caption}</td>
+					<!-- END SUB: CRM_RECOMMENDATION.HEADER.PERSON.COMPANY -->
+					<!-- SUB: CRM_RECOMMENDATION.HEADER.PERSON.PHONE -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.phones.caption}</td>
+					<!-- END SUB: CRM_RECOMMENDATION.HEADER.PERSON.PHONE -->
+					<!-- SUB: CRM_RECOMMENDATION.HEADER.PERSON.EMAIL -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.emails.caption}</td>
+					<!-- END SUB: CRM_RECOMMENDATION.HEADER.PERSON.EMAIL -->
+				</tr>
+				<!-- END SUB: CRM_RECOMMENDATION.HEADER -->
+				<!-- SUB: CRM_RECOMMENDATION -->
+				<tr>
+					<!-- SUB: RECOMMENDATION.PERSON -->
+					<td width="196" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.person}</td>
+					<!-- END SUB: RECOMMENDATION.PERSON -->
+					<!-- SUB: RECOMMENDATION.RELATION -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.relation}</td>
+					<!-- END SUB: RECOMMENDATION.RELATION -->
+					<!-- SUB: RECOMMENDATION.PERSON.PROFESSION -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.profession}</td>
+					<!-- END SUB: RECOMMENDATION.PERSON.PROFESSION -->
+					<!-- SUB: RECOMMENDATION.PERSON.COMPANY -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.company}</td>
+					<!-- END SUB: RECOMMENDATION.PERSON.COMPANY -->
+					<!-- SUB: RECOMMENDATION.PERSON.PHONE -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.phone}</td>
+					<!-- END SUB: RECOMMENDATION.PERSON.PHONE -->
+					<!-- SUB: RECOMMENDATION.PERSON.EMAIL -->
+					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.email}</td>
+					<!-- END SUB: RECOMMENDATION.PERSON.EMAIL -->
+				</tr>
+				<!-- END SUB: CRM_RECOMMENDATION -->
+				<tr>
+					<td class="cvVormSpacer" colspan="6">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_RECOMMENDATIONS -->
+
+			{VAR:CRM_RECOMMENDATIONS2}
+
+			<!-- SUB: CRM_PERSON_LANGUAGES -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Keeleoskus</strong></span></td>
+				</tr>
+				<!-- SUB: CRM_PERSON_LANGUAGE -->
+				<tr>
+					<td width="174" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:crm_person_language.language}</td>
+					<!-- SUB: CRM_PERSON_LANGUAGE.TALK -->
+					<td width="124" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_language.talk.caption}: {VAR:crm_person_language.talk}</td>
+					<!-- END SUB: CRM_PERSON_LANGUAGE.TALK -->
+					<!-- SUB: CRM_PERSON_LANGUAGE.UNDERSTAND -->
+					<td width="124" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_language.understand.caption}: {VAR:crm_person_language.understand}</td>
+					<!-- END SUB: CRM_PERSON_LANGUAGE.UNDERSTAND -->
+					<!-- SUB: CRM_PERSON_LANGUAGE.WRITE -->
+					<td width="124" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person_language.write.caption}: {VAR:crm_person_language.write}</td>
+					<!-- END SUB: CRM_PERSON_LANGUAGE.WRITE -->
+				</tr>
+				<!-- END SUB: CRM_PERSON_LANGUAGE -->
+				<tr>
+					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_PERSON_LANGUAGES -->
+
+			<!-- SUB: CRM_SKILL -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_skill}</strong></span></td>
+				</tr>
+				<!-- SUB: CRM_SKILL_LEVEL_GROUP -->
+				<!-- SUB: CRM_SKILL_LEVEL_SUBHEADING -->
+				<tr>
+					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_skill.parent}</strong></span></td>
+				</tr>
+				<!-- END SUB: CRM_SKILL_LEVEL_SUBHEADING -->
+				<!-- SUB: CRM_SKILL_LEVEL -->
+				<tr>
+					<td width="174" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_skill_level.skill}</td>
+					<td width="372" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_skill_level.level}</td>
+				</tr>
+				<!-- END SUB: CRM_SKILL_LEVEL -->
+				<!-- END SUB: CRM_SKILL_LEVEL_GROUP -->
+				<tr>
+					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_SKILL -->
+
+			<!-- SUB: CRM_PERSON.DRIVERS_LICENSE -->
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" colspan="2" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Autojuhiload</strong></span></td>
+				</tr>
+				<tr>
+					<td width="174" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">Kategooriad</td>
+					<td width="372" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person.drivers_license}</td>
+				</tr>
+				<!-- SUB: CRM_PERSON.DL_CAN_USE -->
+				<tr>
+					<td width="174" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:crm_person.dl_can_use.caption}</td>
+					<td width="372" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:crm_person.dl_can_use}</td>
+				</tr>
+				<!-- END SUB: CRM_PERSON.DL_CAN_USE -->
+				<tr>
+					<td class="cvVormSpacer" colspan="2">&nbsp;</td>
+				</tr>
+			</table>
+			<!-- END SUB: CRM_PERSON.DRIVERS_LICENSE -->
+
 			<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
@@ -979,22 +955,22 @@ text-decoration:underline;
 				<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER -->
 				<tr>
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY -->
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Organisatsioon</td>
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.company.caption}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.COMPANY -->
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.PROFESSION -->
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Ametikoht</td>
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.profession.caption}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.PROFESSION -->
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.FIELD -->
-					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Valdkond</td>
+					<td width="100" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.field.caption}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.FIELD -->
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.END -->
-					<td width="96" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">T&auml;htaeg</td>
+					<td width="96" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.end.caption}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.END -->
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.RATING -->
 					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Kandidatuuri keskmine hinne</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.RATING -->
 					<!-- SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.ADDINFO -->
-					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">Lisainfo</td>
+					<td width="75" height="20" align="left" bgcolor="#EBEBEB" class="link11px" style="padding-left:10px;">{VAR:personnel_management_job_offer.addinfo.caption}</td>
 					<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER.ADDINFO -->
 				</tr>
 				<!-- END SUB: PERSONNEL_MANAGEMENT_CANDIDATES.HEADER -->
@@ -1079,37 +1055,10 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_FAMILY_RELATIONS -->
 
-			<!-- SUB: CRM_RECOMMENDATIONS -->
-			<table width="546" cellpadding="1" cellspacing="1" border="0">
-				<tr bgcolor="#B1DFF2">
-					<td height="20" colspan="4" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Soovitajad</strong></span></td>
-				</tr>
-				<!-- SUB: CRM_RECOMMENDATION -->
-				<tr>
-					<!-- SUB: RECOMMENDATION.PERSON -->
-					<td width="196" height="20" align="left" class="link11px" style="padding-left:10px;" bgcolor="#EBEBEB">{VAR:recommendation.person}</td>
-					<!-- END SUB: RECOMMENDATION.PERSON -->
-					<!-- SUB: RECOMMENDATION.RELATION -->
-					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.relation}</td>
-					<!-- END SUB: RECOMMENDATION.RELATION -->
-					<!-- SUB: RECOMMENDATION.PERSON.PROFESSION -->
-					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.profession}</td>
-					<!-- END SUB: RECOMMENDATION.PERSON.PROFESSION -->
-					<!-- SUB: RECOMMENDATION.PERSON.COMPANY -->
-					<td width="150" height="20" align="left" class="text11px" style="padding-left:10px;">{VAR:recommendation.person.company}</td>
-					<!-- END SUB: RECOMMENDATION.PERSON.COMPANY -->
-				</tr>
-				<!-- END SUB: CRM_RECOMMENDATION -->
-				<tr>
-					<td class="cvVormSpacer" colspan="4">&nbsp;</td>
-				</tr>
-			</table>
-			<!-- END SUB: CRM_RECOMMENDATIONS -->
-
 			<!-- SUB: CRM_PERSON.ADDINFO -->
 			<table width="546" cellpadding="1" cellspacing="1" border="0">
 				<tr bgcolor="#B1DFF2">
-					<td height="20" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>Muud oskused</strong></span></td>
+					<td height="20" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_person.addinfo.caption}</strong></span></td>
 				</tr>
 				<tr>
 					<td width="546" height="20" align="left" class="link11px" style="padding-left:10px;">{VAR:crm_person.addinfo}</td>
@@ -1120,20 +1069,18 @@ text-decoration:underline;
 			</table>
 			<!-- END SUB: CRM_PERSON.ADDINFO -->
 
-			<!-- SUB: CRM_PERSON.UDEF_CH1 -->
-			{VAR:crm_person.udef_ch1}<br>
-			<!-- END SUB: CRM_PERSON.UDEF_CH1 -->
-
-			<!-- SUB: CRM_PERSON.USER1 -->
-			{VAR:crm_person.user1}<br>
-			<!-- END SUB: CRM_PERSON.USER1 -->
-
-			<!-- SUB: CRM_PERSON.UDEF_TA1 -->
-			{VAR:crm_person.udef_ta1}<br>
-			<!-- END SUB: CRM_PERSON.UDEF_TA1 -->
-
 			<!-- SUB: CRM_PERSON.USERVAR1 -->
-			{VAR:crm_person.uservar1}<br>
+			<table width="546" cellpadding="1" cellspacing="1" border="0">
+				<tr bgcolor="#B1DFF2">
+					<td height="20" align="left" valign="top" class="text11px" style="padding-bottom:5px; padding-top:5px; padding-left:10px;"><strong>{VAR:crm_person.uservar1.caption}</strong></span></td>
+				</tr>
+				<tr>
+					<td width="546" height="20" align="left" class="link11px" style="padding-left:10px;">{VAR:crm_person.uservar1}</td>
+				</tr>
+				<tr>
+					<td class="cvVormSpacer">&nbsp;</td>
+				</tr>
+			</table>
 			<!-- END SUB: CRM_PERSON.USERVAR1 -->
 		</td>
 		<td valign="top">

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.19 2008/04/28 13:59:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.20 2008/05/21 17:48:44 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -17,17 +17,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @property org type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete
 @caption Organisatsioon
 
-@property section type=hidden reltype=RELTYPE_SECTION store=connect 
 #@property section type=relpicker reltype=RELTYPE_SECTION
-#@caption &Uuml;ksus (non-functioning)
-
-@property section2 type=relpicker reltype=RELTYPE_SECTION store=connect
+@property section type=hidden reltype=RELTYPE_SECTION store=connect mode=autocomplete 
 @caption &Uuml;ksus
 
-@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect
+@property section2 type=relpicker reltype=RELTYPE_SECTION store=connect mode=autocomplete
+@caption &Uuml;ksus
+
+@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete
 @caption Amet
 
-@property field type=classificator reltype=RELTYPE_FIELD store=connect
+@property field type=classificator reltype=RELTYPE_FIELD store=connect 
 @caption Valdkond
 
 @default field=meta
@@ -36,10 +36,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @property room type=textbox
 @caption T&ouml;&ouml;ruum
 
-@property start type=date_select year_from=1990
+#@property start type=date_select year_from=1970
+@property start type=select
 @caption Suhte algus
 
-@property end type=date_select year_from=1990
+#@property end type=date_select year_from=1970
+@property end type=select
 @caption Suhte l&otilde;pp
 
 @property tasks type=textarea
@@ -120,6 +122,16 @@ class crm_person_work_relation extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "start":
+			case "end":				
+				$ops["---"] = "---";
+				for($i = 1970; $i <= date("Y"); $i++)
+				{
+					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
+				}
+				$data["options"] = $ops;
+				break;
+
 			case "load":
 				$data["options"] = object_type::get_classificator_options(array(
 					"clid" => CL_PERSONNEL_MANAGEMENT,

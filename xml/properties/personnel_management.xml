@@ -209,16 +209,6 @@
             <caption>Uus seadetevorm</caption>
       </property>
       <property>
-            <name>default_offers_cfgform</name>
-            <group>job_offer_conf</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_DEFAULT_OFFERS_CFGFORM</reltype>
-            <caption>Default seadete vorm</caption>
-      </property>
-      <property>
             <name>apply_doc</name>
             <group>job_offer_conf</group>
             <table>objects</table>
@@ -239,6 +229,16 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise tagasiside saatjate kaust</caption>
       </property>
       <property>
+            <name>rate_candidates</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Hinda kandideerijaid</caption>
+      </property>
+      <property>
             <name>location_conf</name>
             <group>job_wanted_conf</group>
             <table>objects</table>
@@ -257,6 +257,96 @@
             <type>select</type>
             <multiple>1</multiple>
             <caption>Asukoht (teine valik)</caption>
+      </property>
+      <property>
+            <name>default_offers_cfgform</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Isiku seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_job_wanted</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;soovi seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_recommendation</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Soovituse seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_company_relation</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Organisatoorse kuuluvuse seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_education</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Haridusk&amp;amp;auml;igu seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_add_education</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>T&amp;amp;auml;iendkoolituse seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_work_relation</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;suhte seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_person_language</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Keeleoskuse seadetevorm</caption>
+      </property>
+      <property>
+            <name>cff_job_offer</name>
+            <group>cfgforms</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise seadetevorm</caption>
       </property>
       <property>
             <name>employee_tb</name>
@@ -1013,6 +1103,10 @@
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;soovi seaded</caption>
                   <parent>general</parent>
             </job_wanted_conf>
+            <cfgforms>
+                  <caption>Seadete vormid</caption>
+                  <parent>general</parent>
+            </cfgforms>
             <employee>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
                   <submit>no</submit>
@@ -1070,11 +1164,11 @@
                   <clid>CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED</clid>
                   <caption>Otsingu salvestus</caption>
             </SEARCH_SAVE>
-            <DEFAULT_OFFERS_CFGFORM>
+            <CFGFORM>
                   <value>7</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste default-seadetevorm</caption>
-            </DEFAULT_OFFERS_CFGFORM>
+                  <caption>Default seadetevorm</caption>
+            </CFGFORM>
             <JOB_WANTED_LOAD>
                   <value>8</value>
                   <clid>CL_META</clid>

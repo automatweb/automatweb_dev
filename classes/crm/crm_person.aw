@@ -5567,6 +5567,174 @@ class crm_person extends class_base
 			$proplist = array();
 		}
 
+		//////////////////// CAPTIONS
+		$tmpo = obj();
+
+		$prefixx = array(
+			CL_CRM_PERSON => "crm_person.",
+			CL_CRM_RECOMMENDATION => "recommendation.",
+			CL_PERSONNEL_MANAGEMENT_JOB_WANTED => "personnel_management_job_wanted.",
+			CL_CRM_PERSON_EDUCATION => "crm_person_education.",
+			CL_CRM_PERSON_ADD_EDUCATION => "crm_person_add_education.",
+			CL_CRM_PERSON_WORK_RELATION => "crm_person_work_relation.",
+			CL_CRM_COMPANY_RELATION => "crm_company_relation.",
+			CL_CRM_PERSON_LANGUAGE => "crm_person_language.",
+			CL_PERSONNEL_MANAGEMENT_JOB_OFFER => "personnel_management_job_offer.",
+		);
+		$pmprops = array(
+			CL_CRM_PERSON => "default_offers_cfgform",
+			CL_CRM_RECOMMENDATION => "cff_recommendation",
+			CL_PERSONNEL_MANAGEMENT_JOB_WANTED => "cff_job_wanted",
+			CL_CRM_PERSON_EDUCATION => "cff_education",
+			CL_CRM_PERSON_ADD_EDUCATION => "cff_add_education",
+			CL_CRM_PERSON_WORK_RELATION => "cff_work_relation",
+			CL_CRM_COMPANY_RELATION => "cff_company_relation",
+			CL_CRM_PERSON_LANGUAGE => "cff_person_language",
+			CL_PERSONNEL_MANAGEMENT_JOB_OFFER => "cff_job_offer",
+		);
+
+		foreach($prefixx as $clid => $prefix)
+		{
+			// First we set the captions to original
+
+			$tmpo->set_class_id($clid);
+			foreach($tmpo->get_property_list() as $prop_id => $prop_data)
+			{
+				$this->vars(array(
+					$prefix.$prop_id.".caption" => $prop_data["caption"],
+				));
+			}
+
+			// .. then override them with default cfgforms
+
+			$cff_id = $cff_inst->get_sysdefault(array("clid" => $clid));
+			if(is_oid($cff_id))
+			{
+				$cpl = $cff_inst->get_cfg_proplist($cff_id);
+				foreach($cpl as $prop_id => $prop_data)
+				{
+					$this->vars(array(
+						$prefix.$prop_id.".caption" => $prop_data["caption"],
+					));
+				}
+			}
+
+			// .... and finally override them with cfgforms set in personnel management object.
+			
+			$pm = obj($pm_inst->get_sysdefault());
+
+			$cff_id = $pm->prop($pmprops[$clid]);
+			if(is_oid($cff_id))
+			{
+				$cpl = $cff_inst->get_cfg_proplist($cff_id);
+				foreach($cpl as $prop_id => $prop_data)
+				{
+					$this->vars(array(
+						$prefix.$prop_id.".caption" => $prop_data["caption"],
+					));
+				}
+			}
+
+		}
+
+		////////////// CAPTIONS ENDED
+
+		
+
+	///////////////////////// USERDEFINED STUFF
+
+		// SUB: CRM_PERSON.UDEF_CH{n}
+		for($i = 1; $i <= 3; $i++)
+		{
+			if(strlen($o->prop("udef_ch".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.udef_ch".$i => $o->prop("udef_ch".$i),
+				));
+				$this->vars(array(
+					"CRM_PERSON.UDEF_CH".$i => $this->parse("CRM_PERSON.UDEF_CH".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.UDEF_CH{n}
+
+		// SUB: CRM_PERSON.UDEF_CHBOX{n}
+		for($i = 1; $i <= 3; $i++)
+		{
+			if(strlen($o->prop("udef_chbox".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.udef_chbox".$i => $o->prop("udef_chbox".$i) ? t("Jah") : t("Ei"),
+				));
+				$this->vars(array(
+					"CRM_PERSON.UDEF_CHBOX".$i => $this->parse("CRM_PERSON.UDEF_CHBOX".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.UDEF_CHBOX{n}
+
+		// SUB: CRM_PERSON.USER{n}
+		for($i = 1; $i <= 5; $i++)
+		{
+			if(strlen($o->prop("user".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.user".$i => $o->prop("user".$i),
+				));
+				$this->vars(array(
+					"CRM_PERSON.USER".$i => $this->parse("CRM_PERSON.USER".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.USER{n}
+
+		// SUB: CRM_PERSON.UDEF_TA{n}
+		for($i = 1; $i <= 5; $i++)
+		{
+			if(strlen($o->prop("udef_ta".$i)) > 0)
+			{
+				$this->vars(array(
+					"crm_person.udef_ta".$i => nl2br($o->prop("udef_ta".$i)),
+				));
+				$this->vars(array(
+					"CRM_PERSON.UDEF_TA".$i => $this->parse("CRM_PERSON.UDEF_TA".$i),
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.UDEF_TA{n}
+
+		// SUB: CRM_PERSON.USERVAR{n}
+		for($i = 1; $i <= 10; $i++)
+		{
+			$USERVAR = "";
+			if(!is_array($o->prop("uservar".$i)) && $o->prop("uservar".$i))
+			{
+				$uservar[$i] = array($o->prop("uservar".$i));
+			}
+			else
+			{
+				$uservar[$i] = $o->prop("uservar".$i);
+			}
+
+			if(is_array($uservar[$i]))
+			{
+				foreach($uservar[$i] as $uv)
+				{
+					$this->vars(array(
+						"crm_person.uservar".$i => $o->prop("uservar".$i.".name"),
+					));
+					$USERVAR .= $this->parse("CRM_PERSON.USERVAR".$i);
+				}
+				$this->vars(array(
+					"CRM_PERSON.USERVAR".$i => $USERVAR,
+				));
+			}
+		}
+		// END SUB: CRM_PERSON.USERVAR{n}
+
+
+	///////////////////////// END USERDEFINED STUFF
+
 		// SUB: CRM_PERSON.PICTURE
 		if($this->can("view", $o->prop("picture")) && (array_key_exists("picture", $proplist) || count($proplist) == 0))
 		{
@@ -5812,6 +5980,7 @@ class crm_person extends class_base
 		foreach($props as $prop)
 		{
 			if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
+			//if(true)
 			{
 				$this->vars(array(
 					"CRM_PERSON_EDUCATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATIONS.HEADER.".strtoupper($prop)),
@@ -5819,12 +5988,14 @@ class crm_person extends class_base
 			}
 		}
 		if((array_key_exists("in_progress", $proplist_education) || count($proplist_education) == 0) && $anything_in_progress)
+		//if($anything_in_progress)
 		{
 			$this->vars(array(
 				"CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS"),
 			));
 		}
 		if(array_key_exists("school_1", $proplist_education) || array_key_exists("school_2", $proplist_education) || count($proplist_education) == 0)
+		//if(true)
 		{
 			$this->vars(array(
 				"CRM_PERSON_EDUCATIONS.HEADER.SCHOOL" => $this->parse("CRM_PERSON_EDUCATIONS.HEADER.SCHOOL"),
@@ -5851,6 +6022,7 @@ class crm_person extends class_base
 			foreach($props as $prop)
 			{
 				if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
+				//if(true)
 				{
 					$this->vars(array(
 						"CRM_PERSON_EDUCATION.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATION.".strtoupper($prop)),
@@ -5858,12 +6030,14 @@ class crm_person extends class_base
 				}
 			}
 			if((array_key_exists("in_progress", $proplist_education) || count($proplist_education) == 0) && $anything_in_progress)
+			//if($anything_in_progress)
 			{
 				$this->vars(array(
 					"CRM_PERSON_EDUCATION.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATION.IN_PROGRESS"),
 				));
 			}
 			if(array_key_exists("school_1", $proplist_education) || array_key_exists("school_2", $proplist_education) || count($proplist_education) == 0)
+			//if(true)
 			{
 				$this->vars(array(
 					"CRM_PERSON_EDUCATION.SCHOOL" => $this->parse("CRM_PERSON_EDUCATION.SCHOOL"),
@@ -5903,6 +6077,7 @@ class crm_person extends class_base
 		foreach($props as $prop)
 		{
 			if(array_key_exists($prop, $proplist_add_education) || count($proplist_add_education) == 0)
+			//if(true)
 			{
 				$this->vars(array(
 					"CRM_PERSON_ADD_EDUCATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_ADD_EDUCATIONS.HEADER.".strtoupper($prop)),
@@ -5929,6 +6104,7 @@ class crm_person extends class_base
 			foreach($props as $prop)
 			{
 				if(array_key_exists($prop, $proplist_add_education) || count($proplist_add_education) == 0)
+				//if(true)
 				{
 					$this->vars(array(
 						"CRM_PERSON_ADD_EDUCATION.".strtoupper($prop) => $this->parse("CRM_PERSON_ADD_EDUCATION.".strtoupper($prop)),
@@ -5983,6 +6159,7 @@ class crm_person extends class_base
 				foreach($props as $prop)
 				{
 					if(array_key_exists($prop, $proplist_crm_person_language) || count($proplist_crm_person_language) == 0)
+					//if(true)
 					{
 						$this->vars(array(
 							"CRM_PERSON_LANGUAGE.".strtoupper($prop) => $this->parse("CRM_PERSON_LANGUAGE.".strtoupper($prop)),
@@ -6104,6 +6281,7 @@ class crm_person extends class_base
 				"crm_person.dl_can_use" => ($o->prop("dl_can_use") == 1) ? t("Jah") : t("Ei"),
 			));
 			if(array_key_exists("dl_can_use", $proplist) || count($proplist) == 0)
+			//if(true)
 			{
 				$this->vars(array(
 					"CRM_PERSON.DL_CAN_USE" => $this->parse("CRM_PERSON.DL_CAN_USE"),
@@ -6130,6 +6308,7 @@ class crm_person extends class_base
 		foreach($props as $prop)
 		{
 			if(array_key_exists($prop, $proplist_company_relation) || count($proplist_company_relation) == 0)
+			//if(true)
 			{
 				$this->vars(array(
 					"CRM_COMPANY_RELATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_COMPANY_RELATIONS.HEADER.".strtoupper($prop)),
@@ -6148,7 +6327,8 @@ class crm_person extends class_base
 			if(strlen($to->prop("start")) == 10 && $to->prop("start") != "0000-00-00")
 			{
 				$s = explode("-", $to->prop("start"));
-				$start = get_lc_date(mktime(0, 0, 0, $s[1], $s[2], $s[0]), LC_DATE_FORMAT_SHORT_FULLYEAR);
+				// $start = get_lc_date(mktime(0, 0, 0, $s[1], $s[2], $s[0]), LC_DATE_FORMAT_SHORT_FULLYEAR);
+				$start = date("Y", mktime(0, 0, 0, $s[1], $s[2], $s[0]));
 			}
 			else
 			{
@@ -6158,7 +6338,8 @@ class crm_person extends class_base
 			if(strlen($to->prop("end")) == 10 && $to->prop("end") != "0000-00-00")
 			{
 				$e = explode("-", $to->prop("end"));
-				$end = get_lc_date(mktime(0, 0, 0, $e[1], $e[2], $e[0]), LC_DATE_FORMAT_SHORT_FULLYEAR);
+				// $end = get_lc_date(mktime(0, 0, 0, $e[1], $e[2], $e[0]), LC_DATE_FORMAT_SHORT_FULLYEAR);
+				$end = date("Y", mktime(0, 0, 0, $e[1], $e[2], $e[0]));
 			}
 			else
 			{
@@ -6174,6 +6355,7 @@ class crm_person extends class_base
 			foreach($props as $prop)
 			{
 				if(array_key_exists($prop, $proplist_company_relation) || count($proplist_company_relation) == 0)
+				//if(true)
 				{
 					$this->vars(array(
 						"CRM_COMPANY_RELATION.".strtoupper($prop) => $this->parse("CRM_COMPANY_RELATION.".strtoupper($prop)),
@@ -6375,6 +6557,7 @@ class crm_person extends class_base
 		foreach($props as $prop)
 		{
 			if(array_key_exists($prop, $proplist_work_relation) || count($proplist_work_relation) == 0)
+			//if(true)
 			{
 				$this->vars(array(
 					"CRM_PERSON_WORK_RELATIONS.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_WORK_RELATIONS.HEADER.".strtoupper($prop)),
@@ -6389,8 +6572,10 @@ class crm_person extends class_base
 			$to = $conn->to();
 			$s = $to->prop("start");
 			$e = $to->prop("end");
-			$start = !empty($s) ? get_lc_date($s, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
-			$end = !empty($e) ? get_lc_date($e, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
+			// $start = !empty($s) ? get_lc_date($s, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
+			// $end = !empty($e) ? get_lc_date($e, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
+			$start = !empty($s) ? date("Y", $s) : t("M&auml;&auml;ramata");
+			$end = !empty($e) ? date("Y", $e) : t("M&auml;&auml;ramata");
 			$this->vars(array(
 				"crm_person_work_relation.org" => $to->prop("org.name"),
 				"crm_person_work_relation.section" => $to->prop("section.name"),
@@ -6406,6 +6591,7 @@ class crm_person extends class_base
 			foreach($props as $prop)
 			{
 				if(array_key_exists($prop, $proplist_work_relation) || count($proplist_work_relation) == 0)
+				//if(true)
 				{
 					$this->vars(array(
 						"CRM_PERSON_WORK_RELATION.".strtoupper($prop) => $this->parse("CRM_PERSON_WORK_RELATION.".strtoupper($prop)),
@@ -6561,12 +6747,36 @@ class crm_person extends class_base
 		$PERSONNEL_MANAGEMENT_JOB_WANTED_ADDITIONAL_SKILLS = "";
 		$PERSONNEL_MANAGEMENT_JOB_WANTED_HANDICAPS = "";
 		$PERSONNEL_MANAGEMENT_JOB_WANTED_HOBBIES_VS_WORK = "";
+		$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HEADER_N = "";
 
 		$conns = $o->connections_from(array("type" => "RELTYPE_WORK_WANTED"));
-		
+		$oids = array();
 		foreach($conns as $conn)
 		{
-			$to = $conn->to();
+			$oids[] = $conn->prop("to");
+		}
+		if(count($oids) > 0)
+		{
+			$job_wanted_ol = new object_list(array(
+				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_WANTED,
+				"oid" => $oids,
+				"parent" => array(),
+				"status" => array(),
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+		}
+		else
+		{
+			$job_wanted_ol = new object_list();
+		}
+		
+		$n = 0;
+		//foreach($conns as $conn)
+		foreach($job_wanted_ol->arr() as $to)
+		{
+			$n++;
+			//$to = $conn->to();
 
 			$field = "";
 			if(count($to->prop("field")) > 0)
@@ -6652,6 +6862,7 @@ class crm_person extends class_base
 			$sw_options = $jw_inst->start_working_options;
 
 			$this->vars(array(
+				"personnel_management_job_wanted.vertical.header.n" => $n,
 				"personnel_management_job_wanted.field" => $field,
 				"personnel_management_job_wanted.job_type" => $job_type,
 				"personnel_management_job_wanted.professions" => nl2br($to->prop("professions")),
@@ -6670,6 +6881,7 @@ class crm_person extends class_base
 				"personnel_management_job_wanted.handicaps" => nl2br($to->prop("handicaps")),
 				"personnel_management_job_wanted.hobbies_vs_work" => nl2br($to->prop("hobbies_vs_work")),
 			));
+			$PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HEADER_N .= $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER.N");
 			if(array_key_exists("field", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
 			{
 				$this->vars(array(
@@ -6918,6 +7130,13 @@ class crm_person extends class_base
 				"PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK.VERTICAL" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.HOBBIES_VS_WORK.VERTICAL"),
 			));
 		}
+
+		$this->vars(array(
+			"PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER.N" => $PERSONNEL_MANAGEMENT_JOB_WANTED_VERTICAL_HEADER_N,
+		));
+		$this->vars(array(
+			"PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER" => $this->parse("PERSONNEL_MANAGEMENT_JOB_WANTED.VERTICAL.HEADER"),
+		));
 
 		if($parse_pmjw > 0)
 		{
@@ -7243,6 +7462,48 @@ class crm_person extends class_base
 			}
 		}
 
+		$cff_rec = $cff_inst->get_sysdefault(array("clid" => CL_CRM_RECOMMENDATION));
+		if($cff_rec)
+		{
+			$proplist_recommendation = $cff_inst->get_cfg_proplist($cff_rec);
+		}
+		else
+		{
+			$proplist_recommendation = array();
+		}
+
+		$props = array("person", "relation");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_recommendation) || count($proplist_recommendation) == 0)
+			{
+				$this->vars(array(
+					"CRM_RECOMMENDATION.HEADER.".strtoupper($prop) => $this->parse("CRM_RECOMMENDATION.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
+		$props = array(
+			"person",
+			"relation",
+			"profession" => "person.profession",
+			"org" => "person.company",
+		);
+		foreach($props as $real_prop => $prop)
+		{
+			if(array_key_exists($real_prop, $proplist_recommendation) || count($proplist_recommendation) == 0)
+			{
+				$this->vars(array(
+					"CRM_RECOMMENDATION.HEADER.".strtoupper($prop) => $this->parse("CRM_RECOMMENDATION.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
+		$this->vars(array(
+			"CRM_RECOMMENDATION.HEADER.PERSON.PHONE" => $this->parse("CRM_RECOMMENDATION.HEADER.PERSON.PHONE"),
+		));
+		$this->vars(array(
+			"CRM_RECOMMENDATION.HEADER.PERSON.EMAIL" => $this->parse("CRM_RECOMMENDATION.HEADER.PERSON.EMAIL"),
+		));
+
 		foreach($rol->arr() as $ro)
 		{
 			if(!$this->can("view", $ro->prop("person")))
@@ -7278,15 +7539,6 @@ class crm_person extends class_base
 				"recommendation.person.phone" => $phone,
 				"recommendation.person.email" => $email,
 			));
-			$cff_rec = $cff_inst->get_sysdefault(array("clid" => CL_CRM_RECOMMENDATION));
-			if($cff_rec)
-			{
-				$proplist_recommendation = $cff_inst->get_cfg_proplist($cff_rec);
-			}
-			else
-			{
-				$proplist_recommendation = array();
-			}
 			if(array_key_exists("person", $proplist_recommendation) || count($proplist_recommendation) == 0)
 			{
 				$this->vars(array(
@@ -7326,6 +7578,9 @@ class crm_person extends class_base
 		if($parse_r > 0)
 		{
 			$this->vars(array(
+				"CRM_RECOMMENDATION.HEADER" => $this->parse("CRM_RECOMMENDATION.HEADER"),
+			));
+			$this->vars(array(
 				"CRM_RECOMMENDATION" => $CRM_RECOMMENDATION,
 			));
 			$this->vars(array(
@@ -7357,101 +7612,6 @@ class crm_person extends class_base
 			));
 		}
 		// END SUB: CRM_PERSON.NOTES
-
-	///////////////////////// USERDEFINED STUFF
-
-		// SUB: CRM_PERSON.UDEF_CH{n}
-		for($i = 1; $i <= 3; $i++)
-		{
-			if(strlen($o->prop("udef_ch".$i)) > 0)
-			{
-				$this->vars(array(
-					"crm_person.udef_ch".$i => $o->prop("udef_ch".$i),
-				));
-				$this->vars(array(
-					"CRM_PERSON.UDEF_CH".$i => $this->parse("CRM_PERSON.UDEF_CH".$i),
-				));
-			}
-		}
-		// END SUB: CRM_PERSON.UDEF_CH{n}
-
-		// SUB: CRM_PERSON.UDEF_CHBOX{n}
-		for($i = 1; $i <= 3; $i++)
-		{
-			if(strlen($o->prop("udef_chbox".$i)) > 0)
-			{
-				$this->vars(array(
-					"crm_person.udef_chbox".$i => $o->prop("udef_chbox".$i) ? t("Jah") : t("Ei"),
-				));
-				$this->vars(array(
-					"CRM_PERSON.UDEF_CHBOX".$i => $this->parse("CRM_PERSON.UDEF_CHBOX".$i),
-				));
-			}
-		}
-		// END SUB: CRM_PERSON.UDEF_CHBOX{n}
-
-		// SUB: CRM_PERSON.USER{n}
-		for($i = 1; $i <= 5; $i++)
-		{
-			if(strlen($o->prop("user".$i)) > 0)
-			{
-				$this->vars(array(
-					"crm_person.user".$i => $o->prop("user".$i),
-				));
-				$this->vars(array(
-					"CRM_PERSON.USER".$i => $this->parse("CRM_PERSON.USER".$i),
-				));
-			}
-		}
-		// END SUB: CRM_PERSON.USER{n}
-
-		// SUB: CRM_PERSON.UDEF_TA{n}
-		for($i = 1; $i <= 5; $i++)
-		{
-			if(strlen($o->prop("udef_ta".$i)) > 0)
-			{
-				$this->vars(array(
-					"crm_person.udef_ta".$i => nl2br($o->prop("udef_ta".$i)),
-				));
-				$this->vars(array(
-					"CRM_PERSON.UDEF_TA".$i => $this->parse("CRM_PERSON.UDEF_TA".$i),
-				));
-			}
-		}
-		// END SUB: CRM_PERSON.UDEF_TA{n}
-
-		// SUB: CRM_PERSON.USERVAR{n}
-		for($i = 1; $i <= 10; $i++)
-		{
-			$USERVAR = "";
-			if(!is_array($o->prop("uservar".$i)) && $o->prop("uservar".$i))
-			{
-				$uservar[$i] = array($o->prop("uservar".$i));
-			}
-			else
-			{
-				$uservar[$i] = $o->prop("uservar".$i);
-			}
-
-			if(is_array($uservar[$i]))
-			{
-				foreach($uservar[$i] as $uv)
-				{
-					$this->vars(array(
-						"crm_person.uservar".$i => $o->prop("uservar".$i.".name"),
-					));
-					$USERVAR .= $this->parse("CRM_PERSON.USERVAR".$i);
-				}
-				$this->vars(array(
-					"CRM_PERSON.USERVAR".$i => $USERVAR,
-				));
-			}
-		}
-		// END SUB: CRM_PERSON.USERVAR{n}
-
-
-	///////////////////////// END USERDEFINED STUFF
-
 
 		return $arr["die"]?die($this->parse()):$this->parse();
 	}
@@ -8659,6 +8819,11 @@ class crm_person extends class_base
 			}
 		}
 		return false;
+	}
+
+	function _get_not_working($arr)
+	{
+		$arr["prop"]["onclick"] = "el=document.getElementById(\"current_job_edit_caption\");if (this.checked) { el.style.display=\"none\"; } else { el.style.display=\"\"}";
 	}
 }
 ?>

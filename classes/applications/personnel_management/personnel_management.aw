@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.33 2008/05/14 11:53:11 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.34 2008/05/21 17:48:36 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -87,14 +87,14 @@
 		@property job_offer_cv_tbl type=select multiple=1 field=meta method=serialize
 		@caption Uus seadetevorm
 
-		@property default_offers_cfgform type=relpicker reltype=RELTYPE_DEFAULT_OFFERS_CFGFORM
-		@caption Default seadete vorm
-
 		@property apply_doc type=relpicker reltype=RELTYPE_DOC
 		@caption Dokument veebist kandideerimiseks
 
 		@property fb_from_fld type=relpicker reltype=RELTYPE_MENU
 		@caption T&ouml;&ouml;pakkumise tagasiside saatjate kaust
+
+		@property rate_candidates type=checkbox ch_value=1 field=meta method=serialize
+		@caption Hinda kandideerijaid
 
 	@groupinfo job_wanted_conf caption="T&ouml;&ouml;soovi seaded" parent=general
 	@default group=job_wanted_conf
@@ -104,6 +104,36 @@
 
 		@property location_2_conf type=select multiple=1
 		@caption Asukoht (teine valik)
+
+	@groupinfo cfgforms caption="Seadete vormid" parent=general
+	@default group=cfgforms
+
+		@property default_offers_cfgform type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption Isiku seadetevorm
+
+		@property cff_job_wanted type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption T&ouml;&ouml;soovi seadetevorm
+
+		@property cff_recommendation type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption Soovituse seadetevorm
+
+		@property cff_company_relation type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption Organisatoorse kuuluvuse seadetevorm
+
+		@property cff_education type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption Haridusk&auml;igu seadetevorm
+
+		@property cff_add_education type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption T&auml;iendkoolituse seadetevorm
+
+		@property cff_work_relation type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption T&ouml;&ouml;suhte seadetevorm
+
+		@property cff_person_language type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption Keeleoskuse seadetevorm
+
+		@property cff_job_offer type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+		@caption T&ouml;&ouml;pakkumise seadetevorm
 
 -------------------T88OTSIJAD-----------------------
 @groupinfo employee caption="T&ouml;&ouml;otsijad" submit=no
@@ -342,8 +372,8 @@
 @reltype SEARCH_SAVE value=6 clid=CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED
 @caption Otsingu salvestus
 
-@reltype DEFAULT_OFFERS_CFGFORM value=7 clid=CL_CFGFORM
-@caption T&ouml;&ouml;pakkumiste default-seadetevorm
+@reltype CFGFORM value=7 clid=CL_CFGFORM
+@caption Default seadetevorm
 
 @reltype JOB_WANTED_LOAD value=8 clid=CL_META
 @caption Soovitud t&ouml;&ouml;koormus
@@ -934,25 +964,28 @@ class personnel_management extends class_base
 			"clid" => CL_CRM_PERSON,
 		));
 		$t->add_delete_button();
-		$t->add_menu_button(array(
-			"name" => "add2list",
-			"img" => "important.png",
-			"tooltip" => t("Lisa listi"),
-		));
 		$lists = new object_list(array(
 			"class_id" => CL_CRM_CATEGORY,
 			"parent" => array(),
 			"sort_by" => "name",
 		));
-		foreach($lists->arr() as $list)
+		if($lists->count() > 0)
 		{
-			$t->add_menu_item(array(
-				"parent" => "add2list",
-				"name" => "add2list_".$list->id(),
-				"text" => $list->name(),
-				"action" => "add2list",
-				"onClick" => "aw_get_el('list_id').value=".$list->id().";"
+			$t->add_menu_button(array(
+				"name" => "add2list",
+				"img" => "important.png",
+				"tooltip" => t("Lisa listi"),
 			));
+			foreach($lists->arr() as $list)
+			{
+				$t->add_menu_item(array(
+					"parent" => "add2list",
+					"name" => "add2list_".$list->id(),
+					"text" => $list->name(),
+					"action" => "add2list",
+					"onClick" => "aw_get_el('list_id').value=".$list->id().";"
+				));
+			}
 		}
 	}
 
@@ -1069,7 +1102,7 @@ class personnel_management extends class_base
 					"id" => $person["oid"],
 					"name" => html::href(array(
 						"url" => $this->mk_my_orb("show_cv", array("id" => $obj->id(), "cv" => "cv/".basename($arr["obj_inst"]->prop("cv_tpl")), "die" => "1"), CL_CRM_PERSON),
-						"caption" => $person["name"],
+						"caption" => parse_obj_name($person["name"]),
 					)),
 					"age" => $obj->get_age(),
 //					"age" => $person["birthday"],
@@ -1196,8 +1229,19 @@ class personnel_management extends class_base
 		}
 		if($r["cv_schl"] && is_oid($o->prop("shools_fld")))
 		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.name"] = "%".$r["cv_schl"]."%";
-			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent"] = $o->prop("shools_fld");
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(							
+							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.name" => "%".$r["cv_schl"]."%",
+							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("shools_fld"),
+						),
+					)),
+					"CL_CRM_PERSON.RELTYPE_EDUCATION.school_2" => "%".$r["cv_schl"]."%",
+				),
+			));
 		}
 		if($r["cv_schl_area"])
 		{
@@ -1228,10 +1272,15 @@ class personnel_management extends class_base
 			if($r["cv_paywish"])
 			{
 				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER_OR_EQ,
+					OBJ_COMP_BETWEEN_INCLUDING,
+					1,
 					$r["cv_paywish"]
 				);
 				/*
+				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay"] = new obj_predicate_compare(
+					OBJ_COMP_GREATER_OR_EQ,
+					$r["cv_paywish"]
+				);
 				// The lower limit might not be set.
 				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay2"] = new obj_predicate_compare(
 					OBJ_COMP_GREATER_OR_EQ,
@@ -1272,7 +1321,13 @@ class personnel_management extends class_base
 		}
 		if($r["cv_location"])
 		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.name"] = "%".$r["cv_location"]."%";
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.name" => "%".$r["cv_location"]."%",
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2.name" => "%".$r["cv_location"]."%",
+				),
+			));
 		}
 		if($r["cv_load"])
 		{
@@ -1343,9 +1398,15 @@ class personnel_management extends class_base
 					),
 				));
 
-				arr($skill_ol_prms);
-
 				$skill_ol = new object_list($skill_ol_prms);
+				foreach($skill_ol->arr() as $skill_obj)
+				{
+					$level = obj($skill_obj->level);
+					if($level->ord() <= $jrk && $level->id() != $r["cv_exp_lvl"][$id])
+					{
+						$skill_ol->remove($skill_obj->id());
+					}
+				}
 				if(count($skill_ol->ids()) == 0)
 					return array();
 
@@ -1365,11 +1426,26 @@ class personnel_management extends class_base
 		if($r["cv_driving_licence"])
 		{
 			$vals = array();
+			/*
 			foreach($r["cv_driving_licence"] as $c)
 			{
 				$vals[] = "%".strtolower($c)."%";
 			}
 			$odl_prms["drivers_license"] = $vals;
+			*/
+			foreach($r["cv_driving_licence"] as $c)
+			{
+				$vals[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"drivers_license" => "%".strtolower($c)."%",
+					),
+				));
+			}
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => $vals,
+			));
 		}
 		// T88KOGEMUS
 		if($r["cv_previous_rank"])
@@ -1425,7 +1501,7 @@ class personnel_management extends class_base
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
-		arr($odl_prms);
+		// arr($odl_prms);
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
