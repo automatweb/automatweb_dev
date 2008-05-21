@@ -5947,6 +5947,25 @@ class crm_company extends class_base
 	}
 
 	/**
+		@attrib name=unmark_p_as_important
+	**/
+	function unmark_p_as_important($arr)
+	{
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+
+		foreach(safe_array($arr["check"]) as $pers)
+		{
+			$p->disconnect(array(
+				"from" => $pers,
+				"type" => "RELTYPE_IMPORTANT_PERSON"
+			));
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
 		@attrib name=tasks_switch_to_cal_view
 	**/
 	function tasks_switch_to_cal_view($arr)

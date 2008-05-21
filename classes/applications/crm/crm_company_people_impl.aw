@@ -92,11 +92,22 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_separator();
 
-		$tb->add_button(array(
-			"name" => "mark_important",
+		$tb->add_menu_button(array(
+			"name" => "important",
 			"img" => "important.png",
-			"tooltip" => t("Oluliseks"),
+			"tooltip" => t("Olulisus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "important",
+			"text" => t("M&auml;rgi oluliseks"),
 			"action" => "mark_p_as_important",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "important",
+			"text" => t("Eemalda olulisuse märge"),
+			"action" => "unmark_p_as_important",
 		));
 
 		$seti = get_instance(CL_CRM_SETTINGS);
@@ -1227,11 +1238,22 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_separator();
 
-		$tb->add_button(array(
-			"name" => "mark_important",
+		$tb->add_menu_button(array(
+			"name" => "important",
 			"img" => "important.png",
-			"tooltip" => t("Oluliseks"),
+			"tooltip" => t("Olulisus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "important",
+			"text" => t("M&auml;rgi oluliseks"),
 			"action" => "mark_p_as_important",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "important",
+			"text" => t("Eemalda olulisuse märge"),
+			"action" => "unmark_p_as_important",
 		));
 
 	}
