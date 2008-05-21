@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.67 2008/03/13 13:27:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.68 2008/05/21 10:10:27 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -69,6 +69,8 @@
 @reltype ORDER_TABLE_LAYOUT value=7 clid=CL_SHOP_PRODUCT_TABLE_LAYOUT
 @caption Tellimuste tabeli kujundus
 
+@reltype ROW value=8 clid=CL_SHOP_ORDER_ROW
+@caption Tellimuse rida
 */
 
 class shop_order extends class_base
@@ -123,7 +125,7 @@ class shop_order extends class_base
 		
 			case "items_orderer":
 				// use the ordering form for the cart 
-				$this->_disp_order_data($arr);
+				//$this->_disp_order_data($arr);
 				return PROP_OK;
 				$data["value"] = "";
 				if ($arr["obj_inst"]->prop("orderer_person"))
@@ -219,6 +221,77 @@ class shop_order extends class_base
 		}
 	}
 
+	function get_order_rows($obj)
+	{
+		$conn = $obj->connections_from(array(
+			"type" => "RELTYPE_ROW",
+		));
+		if(count($conn))
+		{
+			foreach($conn as $c)
+			{
+				$row = $c->to();
+				$res[$row->prop("prod")][$row->id()] = array(
+					"items" => $row->prop("items"),
+				);
+			}
+			return $res;
+		}
+		else
+		{
+			$old = $obj->meta("ord_item_data");
+			if(count($old))
+			{
+				if($this->create_order_rows($obj, $old))
+				{
+					return $this->get_order_rows($obj, $old);
+				}
+				else
+				{
+					return array();
+				}
+			}
+		}
+		return false;
+	}
+
+	function create_order_rows($obj, $data)
+	{
+		$pi = get_instance(CL_SHOP_PRODUCT);
+		$created = 0;
+		foreach($data as $oid => $prod)
+		{
+			foreach($prod as $item)
+			{
+				if($this->can("view", $oid))
+				{
+					$po = obj($oid);
+					$o = obj();
+					$o->set_class_id(CL_SHOP_ORDER_ROW);
+					$o->set_name($obj->name().t(" rida: ").$po->name());
+					$o->set_prop("prod", $oid);
+					$o->set_prop("items", $item["items"]);
+					$o->set_prop("prod_name", $po->name());
+					$o->set_prop("price", $pi->get_price($po));
+					$o->set_parent($obj->id());
+					$o->save();
+					$obj->connect(array(
+						"type" => "RELTYPE_ROW",
+						"to" => $o->id(),
+					));
+					$created = 1;
+				}
+			}
+		}
+		if(!$created)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 
 	function do_ord_table(&$arr)
 	{
@@ -229,7 +302,7 @@ class shop_order extends class_base
 			$t->table_header = $this->parse();
 		}
 		$pd = $arr["obj_inst"]->meta("ord_content");
-		$pd_data = new aw_array($arr["obj_inst"]->meta("ord_item_data"));
+		$pd_data = new aw_array($this->get_order_rows($arr["obj_inst"]));
 //		$t->define_field(array(
 //			"name" => "user2",
 //			"caption" => t("Artikli kood"),
@@ -274,6 +347,22 @@ class shop_order extends class_base
 		foreach($pd_data->get() as $id => $prod)
 		{
 			if(!is_oid($id) || !$this->can("view", $id))
+			{
+				$cont = 1;
+				foreach($prod as $x => $data)
+				{
+					if($this->can("view", $x))
+					{
+						$row = obj($x);
+						$t->define_data(array(
+							"name" => $row->prop("prod_name"),
+							"count" => $row->prop("items"),
+							"id" => $id."_".$row->id(),
+						));
+					}
+				}
+			}
+			if($cont)
 			{
 				continue;
 			}
@@ -377,7 +466,7 @@ class shop_order extends class_base
 				) + $vals);
 			}
 		}
-	
+
 		//votab tarne taitmise ara ja asemele Taidetud tellimus/arve number
 	//	$add_fields[t("Tarne t&auml;itmine")] = t("T&auml;idetud tellimus/arve number");
 
@@ -423,6 +512,12 @@ class shop_order extends class_base
 		{
 			foreach($stuff as $id => $row)
 			{
+				if($this->can("view", $id))
+				{
+					$rowo = obj($id);
+					$rowo->set_prop("items", $row["items"]);
+					$rowo->save();
+				}
 				foreach($row as $key => $val)
 				{
 					$meta[$prod][$id][$key] = $val;
@@ -506,13 +601,24 @@ class shop_order extends class_base
 
 	function get_price($o)
 	{
-		$d = new aw_array($o->meta("ord_item_data"));
-
+		$d = $this->get_order_rows($o);
 		$sum = 0;
-
-		foreach($d->get() as $id => $prod)
+		foreach($d as $id => $prod)
 		{
+			$cont = 0;
 			if(!is_oid($id) || !$this->can("view", $id))
+			{
+				$cont = 1;
+				foreach($prod as $rowid => $data)
+				{
+					if($this->can("view", $rowid))
+					{
+						$row = obj($rowid);
+						$sum += $row->prop("price")*$row->prop("items");
+					}
+				}
+			}
+			if($cont)
 			{
 				continue;
 			}
@@ -525,7 +631,6 @@ class shop_order extends class_base
 				$sum += $price * $val["items"];
 			}
 		}
-	
 		return number_format($sum, 2);
 	}
 
@@ -679,6 +784,7 @@ class shop_order extends class_base
 		// now, products
 		$mp = array();
 		$sum = 0;
+		$rows = array();
 		foreach($this->order_items as $iid => $quantx)
 		{
 			if(!is_oid($iid) || !$this->can("view", $iid))
@@ -718,6 +824,26 @@ class shop_order extends class_base
 		$oi->set_meta("ord_content", $mp);
 		$oi->set_prop("sum", $sum);
 		$oi->save();
+		foreach($this->order_items as $iid => $quantx)
+		{
+			$i_o = obj($iid);
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
+			{
+				$row = obj();
+				$row->set_class_id(CL_SHOP_ORDER_ROW);
+				$row->set_prop("items", $quant["items"]);
+				$row->set_name($i_o->name());
+				$row->set_prop("price", $price);
+				$row->set_prop("prod", $iid);
+				$row->set_parent($oi->id());
+				$row->save();
+				$oi->connect(array(
+					"to" => $row->id(),
+					"type" => "RELTYPE_ROW",
+				));
+			}
+		}
 
 		$email_subj = sprintf(t("Tellimus laost %s"), $this->order_warehouse->name());
 		$mail_from_addr = "automatweb@automatweb.com";
@@ -794,7 +920,10 @@ class shop_order extends class_base
 						$awm->htmlbodyattach(array(
 							"data" => $this->_eval_buffer($html),
 						));
-						$awm->gen_mail();
+						if (!$params["no_mail"])
+						{
+							$awm->gen_mail();
+						}
 						//echo "sent to $_to , from $mail_from_addr <br>";
 					}
 				}
@@ -873,7 +1002,10 @@ class shop_order extends class_base
 							));
 						}
 						//strip_tags(str_replace("<br>", "\n",$html))
-						$awm->gen_mail();
+						if (!$params["no_mail"])
+						{
+							$awm->gen_mail();
+						}
 						//echo "sent to $eml , from $mail_from_addr <br>";
 					}
 				}
@@ -919,7 +1051,10 @@ class shop_order extends class_base
 							));
 						}
 						//strip_tags(str_replace("<br>", "\n",$html))
-						$awm->gen_mail();
+						if (!$params["no_mail"])
+						{
+							$awm->gen_mail();
+						}
 						//echo "sent to ".$eml->prop("mail")." from $mail_from_addr <br>";
 					}
 				}
@@ -961,7 +1096,10 @@ class shop_order extends class_base
 				$awm->htmlbodyattach(array(
 					"data" => $this->_eval_buffer($html)
 				));
-				$awm->gen_mail();
+				if (!$params["no_mail"])
+				{
+					$awm->gen_mail();
+				}
 			}
 		} // if(this->order_center) end
 		return $oi->id();
@@ -1314,21 +1452,21 @@ class shop_order extends class_base
 
 				for($i = 1; $i < 21; $i++)
 				{
-					$ui = $product_info->prop("user".$i);
+					$ui = $product_info->trans_get_val("user".$i);
 					if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
 					{
-						$ui = $prod->prop("user3");
+						$ui = $prod->trans_get_val("user3");
 					}
 					$this->vars(array(
 						'user'.$i => $ui,
-						"packaging_user".$i => $prod->prop("user".$i),
-						"packaging_uservar".$i => $prod->prop_str("uservar".$i)
+						"packaging_user".$i => $prod->trans_get_val("user".$i),
+						"packaging_uservar".$i => $prod->trans_get_val_str("uservar".$i)
 					));
 				}
 				$cur_tot = $val["items"] * $calc_price;
 				$prod_total += $cur_tot;
 				$this->vars(array(
-					"prod_name" => $product_info->name(),
+					"prod_name" => $product_info->trans_get_val("name"),
 					"prod_price" => $product_info_i->get_price($product_info),
 					"prod_tot_price" => number_format($cur_tot, 2)
 				));
@@ -1344,8 +1482,8 @@ class shop_order extends class_base
 					}
 				}
 				$this->vars(array(
-					"name" => $prod->name(),
-					"p_name" => ($product_info ? $product_info->name() : $prod->name()),
+					"name" => $prod->trans_get_val("name"),
+					"p_name" => ($product_info ? $product_info->trans_get_val("name") : $prod->trans_get_val("name")),
 					"quant" => $val["items"],
 					"price" => number_format($pr,2),
 					"obj_price" => number_format($pr, 2),
@@ -1380,7 +1518,7 @@ class shop_order extends class_base
 		{
 			$po = obj($o->prop("orderer_person"));
 			$this->vars(array(
-				"person_name" => $po->name(),
+				"person_name" => $po->trans_get_val("name"),
 			));
 			$objs["user_data_person_"] = $po;
 		}
@@ -1397,7 +1535,7 @@ class shop_order extends class_base
 		{
 			$co = obj($o->prop("orderer_company"));
 			$this->vars(array(
-				"company_name" => $co->name(),
+				"company_name" => $co->trans_get_val("name"),
 			));
 
 			$objs["user_data_org_"] = $co;
@@ -1421,17 +1559,17 @@ class shop_order extends class_base
 					if($opk == "email_id" && is_oid($opv) && $this->can("view", $opv))
 					{
 						$ob = obj($opv);
-						$vars[$prefix."email_value"] = $ob->prop("mail");
+						$vars[$prefix."email_value"] = $ob->trans_get_val("mail");
 					}
 					elseif($opk == "phone_id" && is_oid($opv) && $this->can("view", $opv))
 					{
 						$ob = obj($opv);
-						$vars[$prefix."phone_value"] = $ob->name();
+						$vars[$prefix."phone_value"] = $ob->trans_get_val("name");
 					}
 					elseif($opk == "contact" && is_oid($opv) && $this->can("view", $opv))
 					{
 						$ob = obj($opv);
-						$vars[$prefix."address_value"] = $ob->name();
+						$vars[$prefix."address_value"] = $ob->trans_get_val("name");
 					}
 					
 					$vars[$prefix.$opk] = $opv;
@@ -1466,7 +1604,7 @@ class shop_order extends class_base
 					if(is_oid($ud_id) && $this->can("view", $ud_id))
 					{
 						$ud_v_obj = obj($ud_id);
-						$ud_string[]= $ud_v_obj->name();
+						$ud_string[]= $ud_v_obj->trans_get_val("name");
 					}
 				}
 				if(sizeof($ud_string)) $ud_v = join("\n<br>" ,$ud_string);
@@ -1845,20 +1983,29 @@ class shop_order extends class_base
 	function remove_items($arr)
 	{
 		$obj = obj($arr["id"]);
-		$prp_data = $obj->meta("ord_item_data");
+		$prp_data = $this->get_order_rows($obj);
 		$prp_count = $obj->meta("ord_content");
 		foreach(safe_array($arr["sel"]) as $sel)
 		{
 			list($sel, $x) = explode("_", $sel);
 			unset($prp_data[$sel][$x]);
-			unset($prp_count[$sel][$x]);
+			unset($prp_count[$sel]);
 			if(count($prp_data[$sel]) <= 0)
 			{
 				$obj->disconnect(array(
 					"from" => $sel,
-					"reltype" => "RELTYPE_PRODUCT",
+					"type" => "RELTYPE_PRODUCT",
 					"errors" => false,
 				));
+				unset($prp_data[$sel]);
+			}
+			if($this->can("view", $x))
+			{
+				$row = obj($x);
+				if($row->class_id() == CL_SHOP_ORDER_ROW)
+				{
+					$row->delete(true);
+				}
 			}
 		}
 		$obj->set_meta("ord_item_data", $prp_data);

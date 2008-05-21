@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.33 2008/03/10 18:43:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.34 2008/05/21 10:10:27 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -586,6 +586,11 @@ class shop_product_packaging extends class_base
 	function _price_cur($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		if (!$t)
+		{
+			return;
+		}
+
 		$t->define_field(array(
 			"name" => "pr",
 			"caption" => t("Hind"),
