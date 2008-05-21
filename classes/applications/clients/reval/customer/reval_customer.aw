@@ -49,13 +49,941 @@ class reval_customer extends class_base
 	}
 
 	function show($arr)
-	{
+	{ 
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
+		$this->read_template("view1.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->_insert_cust_data();
+		$this->_insert_web_bookings(5, array("id" => $arr["id"]));
+		$this->_insert_subscribed_categories();
+		$this->_insert_edit_links($ob->id());
+		return $this->parse();
+	}
+
+	function _disp_login()
+	{
+		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
+
+		$this->read_template("need_login.tpl");
+		lc_site_load("reval_customer", $this);
+
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+				"reforb" => $this->mk_reforb("login", array(), "users")
 		));
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=fc_login nologin="1"
+	**/
+	function fc_login($arr)
+	{
+		$params = array(
+			"login" => $arr["fc_uid"],
+			"password" => $arr["fc_pwd"]
+		);
+	
+		$return = $this->do_orb_method_call(array(
+			"action" => "ValidateCustomerByLoginAndPassword",
+			"class" => "http://markus.ee/RevalServices/Security/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServicesTest/SecurityService.asmx"
+		));
+
+		if ($return["ValidateCustomerByLoginAndPasswordResult"]["ValidationStatus"] != "Success")
+		{
+			return aw_url_change_var("error", 1, $arr["ru"]);
+		}
+		$_SESSION["reval_fc"]["id"] = $return["ValidateCustomerByLoginAndPasswordResult"]["CustomerId"];
+		$_SESSION["reval_fc"]["data"] = $return["ValidateCustomerByLoginAndPasswordResult"];
+
+		return $arr["ru"];
+	}
+
+	private function _insert_edit_links($id)
+	{
+		$this->vars(array(
+			"edit_profile_link" => $this->mk_my_orb("edit_profile", array("id" => $id, "section" => aw_global_get("section"))),
+			"all_bookings_link" => $this->mk_my_orb("all_bookings", array("id" => $id, "section" => aw_global_get("section"))),
+		));
+	}
+
+	private function _insert_subscribed_categories()
+	{
+		$cat_data = $this->do_call("GetCustomerSubscribedCategories", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+		$cats = "";
+		foreach($cat_data["Categories"]["SubscriptionCategory"] as $cat_data)
+		{
+			$this->vars(array(
+				"category_name" => $this->_f($cat_data["Name"])
+			));
+			$cats .= $this->parse("SUBSCRIBED_CATEGORY");
+		}
+		$this->vars(array(
+			"SUBSCRIBED_CATEGORY" => $cats
+		));
+	}
+
+	private function _insert_cust_data()
+	{
+		$cust_data = $this->do_call("GetCustomerProfile", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+
+		$lang_opts = $this->_get_language_options();
+		$country_opts = crm_address::get_country_list();
+		$room_pref_options = $this->_get_room_preference_options();
+		$floor_pref_opts = $this->_get_floor_preference_options();
+		$this->vars(array(
+			"firstname" => $this->_f($cust_data["FirstName"]),
+			"lastname" => $this->_f($cust_data["LastName"]),
+			"level" => $this->_f($cust_data["CurrentLevelId"]),
+			"level_status" => "__undefined__",
+			"num_nights_next" => $this->_f($cust_data["NightsTillNextLevel"]),
+			"next_level_name" => $this->_f($cust_data["NextLevelId"]),
+			"avail_free_nights" => $this->_f($cust_data["AvailableComplimentaryNights"]),
+			"customer_since" => date("d.m.Y", $this->_parse_date($cust_data["RegistrationDate"])),
+			"dob" => date("d.m.Y", $this->_parse_date($cust_data["Birthday"])),
+			"company_name" => "__undefined__",
+			"business_title" => "__undefined__",
+			"position" => "__undefined__",
+			"business_field" => "__undefined__",
+			"business_phone" => $this->_f($cust_data["BusinessPhone"]),
+			"home_phone" => $this->_f($cust_data["HomePhone"]),
+			"mobile_phone" => $this->_f($cust_data["MobilePhone"]),
+			"comm_types" => $this->_get_cust_comm_types($cust_data),
+			"email" => $this->_f($cust_data["Login"]),
+			"pref_language" => $lang_opts[$this->_f($cust_data["PreferredLanguageId"])],
+			"city" => $this->_f($cust_data["CityName"]),
+			"country" => $country_opts[trim($this->_f($cust_data["CountryCode"]))],
+			"smoking_pref" => $room_pref_options[(int)$this->_f($cust_data["RoomSmokingPreferenceId"])],
+			"floor_pref" => $floor_pref_opts[$this->_f($cust_data["FloorPreferenceId"])],
+			"currency_pref" => $this->_f($cust_data["DefaultWebCurrencyLabel"]),
+			"last_visit" => date("d.m.Y H:i:s", $this->_parse_date($cust_data["LastWebLoginDateTime"]))
+		));
+	}
+
+	private function _get_cust_comm_types($cust_data)
+	{
+		$rv = array();
+		if ($cust_data["IsEmailCommunication"])
+		{
+			$rv[] = "Email";
+		}
+		else
+		if ($cust_data["IsMailCommunication"])
+		{
+			$rv[] = "Mail";
+		}
+		else
+		if ($cust_data["IsSmsCommunication"])
+		{
+			$rv[] = "Sms";
+		}
+		return join(", ", $rv);
+	}
+
+	public static function get_cust_id()
+	{
+	//return 24419;
+		return (int)$_SESSION["reval_fc"]["id"];
+	}
+
+	private function _fetch_aw_oids_for_bookings($book_data)
+	{
+		$rv = array();
+		$ids = array();
+		foreach($book_data["BookingDetails"] as $booking)
+		{
+			$ids[] = $booking["ConfirmationCode"];
+		}
+		if (!count($ids))
+		{
+			return $rv;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_OWS_RESERVATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"confirmation_code" => $ids
+		));
+		foreach($ol->arr() as $o)
+		{
+			$rv[$o->prop("confirmation_code")] = $o->id();
+		}
+		return $rv;
+	}
+
+	private function _insert_web_bookings($limit = null, $arr)
+	{
+		$book_data = $this->do_call("GetCustomerBookings", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+//echo dbg::dump($book_data);
+
+		$conf_id2aw_id = $this->_fetch_aw_oids_for_bookings($book_data);
+		$bs = "";
+		foreach($book_data["BookingDetails"] as $booking)
+		{
+			if ($conf_id2aw_id[$booking["ConfirmationCode"]])
+			{
+				$this->vars(array(
+					"view_booking" => $this->mk_my_orb("display_final_page", array("rvs_id" => $conf_id2aw_id[$booking["ConfirmationCode"]], "section" => aw_global_get("section")), CL_OWS_BRON),
+				));
+			}
+			else
+			{
+			continue;
+				$this->vars(array(
+					"view_booking" => $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $booking["ConfirmationCode"], "section" => aw_global_get("section")), CL_OWS_BRON),
+				));
+			}
+			$this->vars(array(
+				"booking_id" => $this->_f($booking["ConfirmationCode"]),
+				"booking_status" => $this->_f($booking["Status"]),
+				"booking_from" => date("d.m.Y", $this->_parse_date($booking["ArrivalDate"])),
+				"booking_to" => date("d.m.Y", $this->_parse_date($booking["DepartureDate"])),
+				"num_nights" => $this->_f($booking["LengthOfStay"]),
+				"hotel_name" => $this->_f($booking["HotelName"]),
+				"checkin_url" => $this->mk_my_orb("do_checkin", array("ows_rvs_id" => $booking["ConfirmationCode"], "section" => /*aw_global_get("section")*/ 176784 , "id" => $arr["id"]))
+			));
+			if (++$i % 2 == 1)
+			{
+				$bs .= $this->parse("WEB_BOOKING");
+			}
+			else
+			{
+				$bs .= $this->parse("WEB_BOOKING_ODD");
+			}
+
+			if ($limit !== null && ++$count > $limit)
+			{
+				break;
+			}
+		}
+		$this->vars(array(
+			"WEB_BOOKING" => $bs,
+			"WEB_BOOKING_ODD" => ""
+		));
+	}
+
+	private function _get_web_language_id()
+	{
+		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
+		return get_instance(CL_OWS_BRON)->get_web_language_id($lc);
+	}
+
+	function do_call($action, $params, $ns = "Booking", $full_res = false)
+	{
+		enter_function("reval_customer::ws_call::$action");
+		if ($ns == "Booking")
+		{
+			$fn = "BookingService";
+		}
+		else
+		if ($ns == "Customers")
+		{
+			$fn = "CustomerService";
+		}
+		$return = $this->do_orb_method_call(array(
+			"action" => $action,
+			"class" => "http://markus.ee/RevalServices/$ns/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServicesTest/".$fn.".asmx"
+		));
+		exit_function("reval_customer::ws_call::$action");
+		return $full_res ? $return : $return[$action.'Result'];
+	}
+
+	private function _f($str)
+	{
+		$str = iconv("utf-8", $this->_charset(), $str);
+		return $str;
+	}
+
+	function _parse_date($str)
+	{
+		list($date_part, $time_part) = explode("T", $str);
+		list($y, $m, $d) = explode("-", $date_part);
+		list($h, $min, $sec) = explode(":", $time_part);
+		return mktime($h, $min, $sec, $m, $d, $y);
+	}
+
+	private function _charset()
+	{
+		return aw_global_get("charset")."//IGNORE";
+	}
+
+	/**
+		@attrib name=edit_profile nologin="1"
+		@param id required type=int acl=view
+	**/
+	function edit_profile($arr)
+	{	
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$o = obj($arr["id"]);
+		$this->read_template("edit_profile.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->_ep_insert_tabs($o->id());
+		$this->_ep_insert_cust_data();
+		$this->_ep_do_sub_cats();
+		$this->_do_errors();
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_edit_profile", array("section" => aw_global_get("section"), "id" => $arr["id"]))
+		));
+		return $this->parse();
+	}
+
+	private function _do_errors()
+	{
+		if ($_GET["error"] > 0)
+		{
+			$this->vars(array(
+				"ERR_".$_GET["error"] => $this->parse("ERR_".$_GET["error"])
+ 			));
+		}
+	}
+
+	private function _ep_insert_cust_data()
+	{
+		$cust_data = $this->do_call("GetCustomerProfile", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+//die(dbg::dump($cust_data));
+//die(dbg::dump($cust_data));
+		$this->vars(array(
+			"firstname" => $this->_f($cust_data["FirstName"]),
+			"lastname" => $this->_f($cust_data["LastName"]),
+			"country_select" => $this->_ep_do_country_select($this->_req("CountryCode", $cust_data["CountryCode"])),
+			"county_name" => $this->_req("StateOrTerritory", $cust_data["StateOrTerritory"]),
+			"personal_code" => $this->_req("PersonalCode", $cust_data["__undefined__"]),
+			"city_select" => $this->_ep_do_city_select($this->_req("City", $cust_data["CityId"])),
+			"city_name" => $this->_req("CityName", $cust_data["CityName"]),
+			"gender_select" => $this->_ep_do_gender_select($this->_req("Gender", $cust_data["GenderId"])),
+			"address" => $this->_req("Address", $cust_data["AddressLine1"]),
+			"dob" => $this->_req("CustomerBirthday", date("d.m.Y", $this->_parse_date($cust_data["Birthday"]))),
+			"postal_code" => $this->_req("PostalCode", $cust_data["PostalCode"]),
+			"marital_status_select" => $this->_ep_do_marital_status_select($this->_req("MaritalStatus", $cust_data["__undefined__"])),
+			"field_of_business_select" => $this->_ep_do_field_of_business_select($this->_req("FieldOfBusiness", $cust_data["__undefined__"])),
+			"business_phone" => $this->_req("BusinessPhone", $cust_data["BusinessPhone"]),
+			"occupation_select" => $this->_ep_do_occupation_select($this->_req("Occupation", $cust_data["__undefined__"])),
+			"mobile_phone" => $this->_req("MobilePhone", $cust_data["MobilePhone"]),
+			"room_preference_select" => $this->_ep_do_room_pref_select($this->_req("RoomPreference", $cust_data["RoomSmokingPreferenceId"])),
+			"home_phone" => $this->_req("HomePhone", $cust_data["HomePhone"]),
+			"floor_preference_select" => $this->_ep_do_floor_preference_select($this->_req("FloorPreference", $cust_data["FloorPreferenceId"])),
+			"preferred_language_select" => $this->_ep_do_pref_language_select($this->_req("PreferredLanguage", $cust_data["PreferredLanguageId"])),
+			"is_allergic_sel" => checked($this->_req("IsAllergic", $cust_data["IsAllergic"]) == "true"),
+			"is_handicapped_sel" => checked($this->_req("IsHandicapped", $cust_data["IsHandicapped"]) == "true"),
+			"is_mail_comm_sel" => checked($this->_req("IsMailCommunication", $cust_data["IsMailCommunication"]) == "true"),
+			"is_email_comm_sel" => checked($this->_req("IsEmailCommunication", $cust_data["IsEmailCommunication"]) == "true"),
+			"is_sms_comm_sel" => checked($this->_req("IsSMSCommunication", $cust_data["IsSmsCommunication"]) == "true"),
+			"pref_currency_select" => $this->_ep_do_pref_currency_select($this->_req("PreferredCurrency", $cust_data["DefaultWebCurrencyLabel"]))
+		));
+	}
+
+	private function _ep_insert_tabs($id)
+	{
+		$this->vars(array(
+			"edit_profile" => $this->mk_my_orb("edit_profile", array("id" => $id, "section" => aw_global_get("section"))),
+			"edit_email" => $this->mk_my_orb("edit_email", array("id" => $id, "section" => aw_global_get("section"))),
+			"edit_password" => $this->mk_my_orb("edit_password", array("id" => $id, "section" => aw_global_get("section"))),
+		));
+	}
+
+	private function _ep_do_country_select($country_code)
+	{
+		return $this->picker(trim($country_code), crm_address::get_country_list());
+	}
+
+	private function _ep_do_sub_cats()
+	{
+		$all_cat_list = $this->do_call("GetSubscriptionCategories", array(
+			"languageId" => $this->_get_web_language_id()
+		), "Customers");
+
+		$sub_cat_list = $this->do_call("GetCustomerSubscribedCategories", array(
+			"languageId" => $this->_get_web_language_id(),
+			"customerId" => $this->get_cust_id()
+		), "Customers");
+		$sel_ids = array();
+		foreach($sub_cat_list["Categories"]["SubscriptionCategory"] as $sub_row)
+		{
+			$sel_ids[$sub_row["ID"]] = 1;
+		}
+
+		foreach($all_cat_list["Categories"]["SubscriptionCategory"] as $cat_row)
+		{
+			$this->vars(array(
+				"checked" => checked(isset($sel_ids[$cat_row["ID"]]) || $_REQUEST["subscriptionCategory".$cat_row["ID"]] == "true"),
+				"sub_cat_num" => $cat_row["ID"],
+				"sub_cat_name" => $cat_row["Name"]
+			));
+			$sc .= $this->parse("SUB_CATEGORY");
+		}
+		$this->vars(array(
+			"SUB_CATEGORY" => $sc
+		));
+	}
+
+	private function _get_currency_options()
+	{
+		return array(
+			"AUD" => "AUD",
+			"CAD"=>"CAD",
+			"CHF"=>"CHF",
+			"CYP"=>"CYP",
+			"CZK"=>"CZK",
+			"DKK"=>"DKK",
+			"EEK"=>"EEK",
+			"EUR"=>"EUR",
+			"GBP"=>"GBP",
+			"HUF"=>"HUF",
+			"JPY"=>"JPY",
+			"LTL"=>"LTL",
+			"LVL"=>"LVL",
+			"NOK"=>"NOK",
+			"PLN"=>"PLN",
+			"RUB"=>"RUB",
+			"SEK"=>"SEK",
+			"USD"=>"USD"
+		);
+	}
+
+	private function _ep_do_pref_currency_select($fb_id)
+	{
+		return $this->picker($fb_id, $this->_get_currency_options());
+	}
+
+	private function _get_language_options()
+	{
+		return array(
+			"" => t("--vali--"), 
+			1 => t("Eesti"), 
+			2 => t("L&auml;ti"), 
+			3 => t("Leedu"), 
+			6 => t("Inglise"), 
+			7 => t("Vene"), 
+			8 => t("Saksa"),
+			9 => t("Soome")
+		);
+	}
+
+	private function _ep_do_pref_language_select($fb_id)
+	{
+		return $this->picker($fb_id, $this->_get_language_options());
+	}
+
+	private function _get_floor_preference_options()
+	{
+		return array("1" => t("Ei ole eelistust"), 2 => t("&Uuml;lemine korrus"), 3 => t("Alumine korrus"));
+	}
+
+	private function _ep_do_floor_preference_select($fb_id)
+	{
+		return $this->picker($fb_id, $this->_get_floor_preference_options());
+	}
+
+	private function _get_room_preference_options()
+	{
+		return array("1" => t("Ei ole eelistust"), 3 => t("Suitsetav"), 2 => t("Suitsuvaba"));
+	}
+
+	private function _ep_do_room_pref_select($fb_id)
+	{
+		return $this->picker($fb_id, $this->_get_room_preference_options());
+	}
+
+	private function _ep_do_occupation_select($fb_id)
+	{
+		return;
+		$fb_list = $this->do_call("GetOccupations", array(
+			"languageId" => $this->_get_web_language_id()
+		), "Customers");
+		$d = array("" => t("--vali--"));
+		foreach($fb_list["Items"]["TranslatedIdentifier"] as $fb_entry)
+		{
+			$d[$fb_entry["ID"]] = $fb_entry["TranslatedName"];
+		}
+		return $this->picker($fb_id, $d);
+	}
+
+	private function _ep_do_field_of_business_select($fb_id)
+	{
+		return;
+		$fb_list = $this->do_call("GetFieldsOfBusiness", array(
+			"languageId" => $this->_get_web_language_id()
+		), "Customers");
+		$d = array("" => t("--vali--"));
+		foreach($fb_list["Items"]["TranslatedIdentifier"] as $fb_entry)
+		{
+			$d[$fb_entry["ID"]] = $fb_entry["TranslatedName"];
+		}
+		return $this->picker($fb_id, $d);
+	}
+
+	private function _ep_do_marital_status_select($ms_id)
+	{
+		return $this->picker($ms_id, array("1" => t("Ei soovi avaldada"), 3 => t("Abielus"), 4 => t("Lahutatud"), 2 => t("Vallaline")));
+	}
+
+	private function _ep_do_gender_select($gender_id)
+	{
+		return $this->picker($gender_id, array("1" => t("Ei soovi avaldada"), 2 => t("Mees"), 3 => t("Naine")));
+	}
+
+	private function _ep_do_city_select($city_id)
+	{
+		$c = get_instance("cache");
+		if (($ct = $c->file_get("ws_city_list")) !== false)
+		{
+			$d = unserialize($ct);
+		}
+		else
+		{
+			// list cities and let user select one	
+			$city_list = $this->do_call("GetCities", array(
+				"languageId" => $this->_get_web_language_id()
+			), "Customers");
+			$d = array("" => t("--vali--"));
+			foreach($city_list["Cities"]["City"] as $city_entry)
+			{
+				$d[$city_entry["ID"]] = $city_entry["Name"];
+			}
+			$c->file_set("ws_city_list", serialize($d));
+		}
+
+		return $this->picker($city_id, $d);
+	}
+
+	private function _ef($str)
+	{
+		$r = iconv("utf-8", aw_global_get("charset")."//IGNORE", $str);
+		return $this->_efc($r);
+	}
+
+	private function _efc($str)
+	{
+		// strip all tags and quote quotes
+		$r = strip_tags($str);
+		$r = htmlspecialchars($r);
+		return $r;
+	}
+
+	/**
+		@attrib name=submit_edit_profile nologin="1"
+	**/
+	function submit_edit_profile($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$cust_data = $this->do_call("GetCustomerProfile", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+
+		list($d, $m, $y) = explode(".", $arr["CustomerBirthday"]);
+		if ($d < 1 || $d > 31 || $m < 1 || $m > 12 || $y < 1900 || $y > date("Y"))
+		{
+				return $this->_err_ret("edit_profile", $arr, 1);
+		}
+
+		if (empty($arr["HomePhone"]) && empty($arr["BusinessPhone"]) && empty($arr["MobilePhone"]))
+		{
+				return $this->_err_ret("edit_profile", $arr, 2);
+		}
+		if (empty($arr["PreferredLanguage"]))
+		{
+				return $this->_err_ret("edit_profile", $arr, 3);
+		}
+		if (empty($arr["IsMailCommunication"]) && empty($arr["IsEmailCommunication"]) && empty($arr["IsSMSCommunication"]))
+		{
+				return $this->_err_ret("edit_profile", $arr, 4);
+		}
+		$dob = mktime(1,1,1, $m, $d, $y);
+
+		$d = array(
+      "customerId" => $this->get_cust_id(),
+      "firstName" => $cust_data["FirstName"],
+      "lastName" => $cust_data["LastName"],
+      "maritalStatusId" => (int)$arr["MaritalStatus"],
+      "genderId" => (int)$arr["Gender"],
+      "birthday" => date("Y-m-d", $dob)."T00:00:00",
+      "personalCode" => $this->_w($arr["PersonalCode"]),
+      //"hasChildren" => false,	__undefined__
+      "occupationId" => (int)$this->_w($arr["Occupation"]),
+      "fieldOfBusinessId" => (int)$this->_w($arr["FieldOfBusiness"]),
+      //"businessTitle" => $arr["__undefined__"],
+      "businessPhone" => $this->_w($arr["BusinessPhone"]),
+      "homePhone" => $this->_w($arr["HomePhone"]),
+      "mobilePhone" => $this->_w($arr["MobilePhone"]),
+      "addressLine1" => $this->_w($arr["Address"]),
+      //"addressLine2" => $arr["__undefined__"],
+      "cityId" => (int)$this->_w($arr["City"]),
+      "cityName" => $this->_w($arr["CityName"]),
+      "stateOrTerritory" => $this->_w($arr["StateOrTerritory"]),
+      "postalCode" => $this->_w($arr["PostalCode"]),
+      "countryCode" => $this->_w($arr["CountryCode"]),
+      //"isBusinessAddress" => $arr["__undefined__"],
+      "isMailCommunication" => $arr["IsMailCommunication"] == "true",
+      "isEmailCommunication" => $arr["IsEmailCommunication"] == "true",
+      "isSmsCommunication" => $arr["IsSMSCommunication"] == "true",
+      "preferredLanguageId" => (int)$this->_w($arr["PreferredLanguage"]),
+      //"homepage" => $arr["__undefined__"],
+      "smokingPreferenceId" => (int)$this->_w($arr["RoomPreference"]),
+      "floorPreferenceId" => (int)$this->_w($arr["FloorPreference"]),
+      "isAllergic" => $arr["IsAllergic"] == "true",
+      "isHandicapped" => $arr["IsHandicapped"] == "true",
+      "defaultWebCurrencyCode" => $this->_w($arr["PreferredCurrency"])
+		);
+//echo dbg::dump($d);
+		$rv = $this->do_call("UpdateCustomerProfile", $d, "Customers", true);
+//echo dbg::dump($rv);
+//echo "<hr>";
+		// set sub cats
+		$all_cat_list = $this->do_call("GetSubscriptionCategories", array(
+			"languageId" => $this->_get_web_language_id()
+		), "Customers");
+
+//echo dbg::dump($arr);
+		$sel_ids = array();
+		foreach($all_cat_list["Categories"]["SubscriptionCategory"] as $sub_row)
+		{
+			if ($arr["subscriptionCategory".$sub_row["ID"]] == "true")
+			{
+				$sel_ids[$sub_row["ID"]] = $sub_row["ID"];
+			}
+		}
+
+		$rv2 = $this->do_call("SetCustomerSubscribedCategories", array(
+			"customerId" => $this->get_cust_id(),
+			"subscribedCategoryIds" => $sel_ids
+		), "Customers");
+//echo dbg::dump($rv2);
+		return $this->_u($this->mk_my_orb("edit_profile", array("section" => $arr["section"], "id" => $arr["id"], "reval_customer", false, false, "&", false)));
+	}
+
+	private function _req($request, $ows)
+	{
+		//echo "enter req $request (".$_REQUEST[$request].") , ows $ows <br>";
+		if (!empty($_REQUEST[$request]))
+		{
+			//echo "ret req ".$this->_efc($_REQUEST[$request])." <br>";
+			return $this->_efc($_REQUEST[$request]);
+		}
+		//echo "ret ows ".$this->_ef($ows)." <br>";
+		return $this->_ef($ows);
+	}
+
+	/**
+		@attrib name=edit_email nologin="1"
+		@param id required type=int
+	**/
+	function edit_email($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$o = obj($arr["id"]);
+		$this->read_template("edit_email.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->_ep_insert_tabs($o->id());
+		$this->_ee_do_data();
+		$this->_do_errors();
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_edit_email", array("section" => aw_global_get("section"), "id" => $arr["id"]))
+		));
+		return $this->parse();
+	}
+
+	private function _ee_do_data()
+	{
+		$cust_data = $this->do_call("GetCustomerProfile", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+		$this->vars(array(
+			"cur_email" => $cust_data["Login"],
+			"new_email" => $this->_req("NewEmail", "")
+		));
+	}
+
+	/**
+		@attrib name=submit_edit_email nologin="1"
+	**/
+	function submit_edit_email($arr)
+	{	
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		if (!is_email($arr["NewEmail"]))
+		{
+				return $this->_err_ret("edit_email", $arr, 1);
+		}
+//aw_global_set("soap_debug",1);
+		$rv = $this->do_call("SetCustomerEmail", array(
+			"customerId" => $this->get_cust_id(),
+			"email" => $this->_w($arr["NewEmail"])
+		), "Customers", true);
+
+		if ($rv["SetCustomerEmailResult"]["ResultCode"] != "Success")
+		{
+				return $this->_err_ret("edit_email", $arr, 2);
+		}
+		return $this->_u($this->mk_my_orb("edit_email", array("id" => $arr["id"], "section" => $arr["section"]), "reval_customer", false, false, "&", false));
+	}
+
+	/**
+		@attrib name=edit_password nologin="1"
+		@param id required type=int
+	**/
+	function edit_password($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$o = obj($arr["id"]);
+		$this->read_template("edit_password.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->_ep_insert_tabs($o->id());
+		$this->_do_errors();
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_edit_password", array("section" => aw_global_get("section"), "id" => $arr["id"]))
+		));
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=submit_edit_password nologin="1"
+	**/
+	function submit_edit_password($arr)
+	{	
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		if (empty($arr["NewPass1"]))
+		{
+				return $this->_err_ret("edit_password", $arr, 1);
+		}
+		if ($arr["NewPass1"] != $arr["NewPass2"])
+		{
+				return $this->_err_ret("edit_password", $arr, 2);
+		}
+		if (!is_valid("password", $arr["NewPass1"]))
+		{
+				return $this->_err_ret("edit_password", $arr, 3);
+		}
+
+		$rv = $this->do_call("SetCustomerPassword", array(
+			"customerId" => $this->get_cust_id(),
+			"password" => $arr["NewPass1"]
+		), "Customers", true);
+		if ($rv["SetCustomerPasswordResult"]["ResultCode"] != "Success")
+		{
+				return $this->_err_ret("edit_password", $arr, 4);
+		}
+		return $this->_u($this->mk_my_orb("edit_password", array("id" => $arr["id"], "section" => $arr["section"]), "reval_customer", false, false, "&", false));
+	}
+
+	private function _err_ret($act, $data, $err_no)
+	{
+		$data["error"] = $err_no;
+		unset($data["class"]);
+		unset($data["action"]);
+		unset($data["reforb"]);
+		return $this->_u($this->mk_my_orb($act, $data, "reval_customer", false, false, "&", false));
+	}
+
+	/**
+		@attrib name=all_bookings nologin="1"
+		@param id required type=int
+	**/
+	function all_bookings($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$this->read_template("all_bookings.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->_insert_web_bookings(null,array("id" => $arr["id"]));
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=do_checkin nologin="1"
+		@param ows_rvs_id required type=int
+		@param id required type=int
+	**/
+	function do_checkin($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$this->read_template("checkin.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$rvs_data = $this->do_call("GetBookingDetails",array(
+			"webLanguageId" => $this->_get_web_language_id(),
+			"confirmationCode" => $arr["ows_rvs_id"]
+		));
+		if (!$rvs_data["Booking"]["ConfirmationCode"])
+		{
+			return t("No such booking found!");
+		}
+
+		$cust_data = $this->do_call("GetCustomerProfile", array(
+			"customerId" => $this->get_cust_id(),
+			"webLanguageId" => $this->_get_web_language_id()
+		), "Customers");
+
+		$this->_ci_data($rvs_data["Booking"], $cust_data);
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_checkin", array("ows_rvs_id" => $arr["ows_rvs_id"], "id" => $arr["id"], "section" => aw_global_get("section")))
+		));
+		$this->_do_errors();
+
+		return $this->parse();
+	}		
+
+	private function _ci_data($booking, $customer)
+	{
+		$this->vars(array(
+			"confirmation_number" => $this->_f($booking["ConfirmationCode"]),
+			"hotel_name" => $this->_f($booking["HotelName"]),
+			"lastname" => $this->_f($booking["GuestLastName"]),
+			"car_no" => $this->_req("car_no", ""),
+			"firstname" => $this->_f($booking["GuestFirstName"]),
+			"room_no" => "__undefined__",
+			"dob" => $this->_req("CustomerBirthday", date("d.m.Y", $this->_parse_date($this->_f($customer["Birthday"])))),
+			"arrival_date" => date("d.m.Y", $this->_parse_date($this->_f($booking["ArrivalDate"]))),
+			"departure" => date("d.m.Y", $this->_parse_date($this->_f($booking["DepartureDate"]))),
+			"home_address" => checked($this->_req("adr_type", "") == 1),
+			"company_address" => checked($this->_req("adr_type", "") == 2),
+			"check_in_time" => $this->_req("CheckInTime", ""),
+			"address" => $this->_req("Address", ""),
+			"flight_no" => $this->_req("FlightNo", ""),
+			"country_select" => $this->_ep_do_country_select($this->_req("CountryCode", $customer["CountryCode"])),
+			"email" => $this->_req("Email", $customer["Login"]),
+			"is_eu" => checked($this->_req("IsEU", "") == 1),
+			"non_eu" => checked($this->_req("IsEU", "") == 2),
+			"phone" => $this->_req("Phone", $customer["HomePhone"]),
+			"document_options" => $this->_ci_do_document_select($this->_req("Document", "")),
+			"non_smoking" => checked($this->_req("RoomType", $customer["RoomSmokingPreferenceId"]) == 2),
+			"smoking" => checked($this->_req("RoomType", $customer["RoomSmokingPreferenceId"]) == 3),
+			"document_no" => $this->_req("DocumentNo", ""),
+			"way_of_payment" => $this->_ci_do_payment_way_select($this->_req("WayPayment", "")),
+			"valid_through" => $this->_req("ValidThru", ""),
+			"date_of_issue" => $this->_req("DateIssue", ""),
+			"address2" => $this->_req("Address2", ""),
+			"exp_date" => $this->_req("ExpDate", ""),
+			"issuing_office" => $this->_req("IssuingOffice", ""),
+			"card_no" => $this->_req("CardNo", ""),
+		));
+	}
+
+	/**
+		@attrib name=submit_checkin nologin="1"
+	**/
+	function submit_checkin($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		list($d, $m, $y) = explode(".", $arr["CustomerBirthday"]);
+		if ($d < 1 || $d > 31 || $m < 1 || $m > 12 || $y < 1900 || $y > date("Y"))
+		{
+				return $this->_err_ret("do_checkin", $arr, 1);
+		}
+		list($d, $m, $y) = explode(".", $arr["DateIssue"]);
+		if ($d < 1 || $d > 31 || $m < 1 || $m > 12 || $y < 1900 || $y > date("Y"))
+		{
+				return $this->_err_ret("do_checkin", $arr, 2);
+		}
+		list($d, $m, $y) = explode(".", $arr["ExpDate"]);
+		if ($d < 1 || $d > 31 || $m < 1 || $m > 12 || $y < 1900 || $y > date("Y"))
+		{
+				return $this->_err_ret("do_checkin", $arr, 3);
+		}
+
+		echo "don't know what to do now! <br><hr>data:<br>";
+		die(dbg::dump($arr));
+	}
+
+	private function _get_document_options()
+	{
+		return array(
+			2 => "Passport",
+			3 => "ID Card",
+			4 => "Driving License"
+		);
+	}
+
+	private function _ci_do_document_select($doc_type)
+	{
+		return $this->picker($doc_type, $this->_get_document_options());
+	}
+
+	private function _get_payment_way_options()
+	{
+		return array(
+			1 => "Cash",
+			2 => "Voucher",
+			11 => "Bank Transfer",
+			16 => "Credit Card"
+		);
+	}
+
+	private function _ci_do_payment_way_select($pw_way)
+	{
+		return $this->picker($pw_way, $this->_get_payment_way_options());
+	}
+
+	private function _w($str)
+	{
+		return iconv(aw_global_get("charset"), "utf-8//IGNORE", strip_tags($str));
+	}
+
+	function _u($url)
+	{
+		return str_replace("/orb.aw", "/?", $url);
 	}
 }
 

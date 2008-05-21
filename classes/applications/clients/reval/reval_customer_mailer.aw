@@ -48,14 +48,41 @@ class reval_customer_mailer extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function show($arr)
+	function _format_date($tm)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
+		return date("Y-m-d", $tm)."T00:00:00";
+	}
+
+	private function do_call($action, $params, $ns = "Booking", $full_res = false)
+	{
+		if ($ns == "Booking")
+		{
+			$fn = "BookingService";
+		}
+		else
+		if ($ns == "Customers")
+		{
+			$fn = "CustomerService";
+		}
+aw_global_set("soap_debug", 1);
+		$return = $this->do_orb_method_call(array(
+			"action" => $action,
+			"class" => "http://revalhotels.com/ORS/webservices/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "https://195.250.171.36/RevalORSService/RRCServices.asmx"
 		));
-		return $this->parse();
+		return $return;
+	}
+
+	/**
+		@attrib name=daily_check nologin="1"
+	**/
+	function daily_check($arr)
+	{
+		die(dbg::dump($this->do_call("GetGuestsWithEmailByCODate", array(
+			"CODate" => date("Y-m-d", time() - 24*3600)
+		))));
 	}
 }
 
