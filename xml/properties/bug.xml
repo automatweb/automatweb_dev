@@ -79,14 +79,14 @@
             <caption>Kellele</caption>
       </property>
       <property>
-	      <name>skill_used</name>
-	      <group>general</group>
-	      <table>aw_bugs</table>
-	      <type>select</type>
-	      <field>skill_used</field>
-	      <parent>settings_col1</parent>
-	      <captionside>top</captionside>
-	      <caption>Kasutatav  P&amp;amp;auml;devus</caption>
+            <name>skill_used</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <style>select</style>
+            <field>skill_used</field>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <caption>Kasutatav P&amp;amp;auml;devus</caption>
       </property>
       <property>
             <name>is_order</name>
@@ -336,12 +336,23 @@
             <caption>Isik</caption>
       </property>
       <property>
+            <name>aw_spec</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_AW_SPEC</reltype>
+            <parent>data_r_bot_left</parent>
+            <captionside>top</captionside>
+            <field>aw_spec</field>
+            <caption>Spetsifikatsioon</caption>
+      </property>
+      <property>
             <name>project</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_PROJECT</reltype>
-            <parent>data_r_bot</parent>
+            <parent>data_r_bot_left</parent>
             <captionside>top</captionside>
             <field>project</field>
             <caption>Projekt</caption>
@@ -351,7 +362,7 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <parent>data_r_bot</parent>
+            <parent>data_r_bot_left</parent>
             <captionside>top</captionside>
             <field>bug_component</field>
             <caption>Komponent</caption>
@@ -362,7 +373,7 @@
             <table>aw_bugs</table>
             <type>multifile_upload</type>
             <reltype>RELTYPE_FILE</reltype>
-            <parent>data_r_bot</parent>
+            <parent>data_r_bot_right</parent>
             <captionside>top</captionside>
             <store>no</store>
             <field>multifile_upload</field>
@@ -373,7 +384,7 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <parent>data_r_bot</parent>
+            <parent>data_r_bot_right</parent>
             <captionside>top</captionside>
             <field>aw_bug_predicates</field>
             <caption>Eeldusbugid</caption>
@@ -383,7 +394,7 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <parent>data_r_bot</parent>
+            <parent>data_r_bot_right</parent>
             <captionside>top</captionside>
             <size>15</size>
             <field>bug_mail</field>
@@ -635,6 +646,11 @@
                   <clid>CL_DEVELOPMENT_ORDER</clid>
                   <caption>Arendustellimus</caption>
             </DEV_ORDER>
+            <AW_SPEC>
+                  <value>18</value>
+                  <clid>CL_AW_SPEC</clid>
+                  <caption>Spetsifikatsioon</caption>
+            </AW_SPEC>
       </reltypes>
       <layout>
             <name>
@@ -753,6 +769,24 @@
                   <area_caption>Andmed</area_caption>
                   <group>general</group>
             </data_r_bot>
+            <data_r_bot_s>
+                  <type>hbox</type>
+                  <parent>data_r_bot</parent>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </data_r_bot_s>
+            <data_r_bot_left>
+                  <type>vbox</type>
+                  <parent>data_r_bot_s</parent>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </data_r_bot_left>
+            <data_r_bot_right>
+                  <type>vbox</type>
+                  <parent>data_r_bot_s</parent>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </data_r_bot_right>
       </layout>
 </properties>
 

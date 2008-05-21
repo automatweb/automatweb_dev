@@ -8,6 +8,9 @@
 
 	@property desc type=textarea rows=10 cols=50 field=aw_desc
 	@caption Kirjeldus
+
+	@property pri type=select field=aw_pri
+	@caption Prioriteet
 */
 
 class aw_spec_class extends class_base
@@ -51,9 +54,17 @@ class aw_spec_class extends class_base
 					"name" => "gp_data[".$idx."][parent_group_name]",
 					"value" => $g_obj->comment(),
 					"options" => $group_picker
-				))
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "gp_data[".$idx."][jrk]",
+					"value" => $g_obj->ord(),
+					"size" => 5
+				)),
+				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000
 			));
 		}
+		$t->set_default_sortby("sort_jrk");
+		$t->set_numeric_field("sort_jrk");
 	}
 
 	private function _get_group_picker($o)
@@ -69,6 +80,10 @@ class aw_spec_class extends class_base
 	private function _init_table($t)
 	{
 		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+		$t->define_field(array(
 			"name" => "group_name",
 			"caption" => t("Grupi nimi"),
 		));
@@ -76,13 +91,17 @@ class aw_spec_class extends class_base
 			"name" => "parent_group_name",
 			"caption" => t("Parent grupp"),
 		));
-		$t->set_sortable(false);
 	}
 
 
 	function set_embed_prop($o, $arr)
 	{
 		$o->set_spec_group_list($arr["request"]["gp_data"]);
+	}
+
+	function set_embed_rels($o, $arr)
+	{
+		$o->set_spec_relation_list($arr["request"]["gp_data"]);
 	}
 
 
@@ -103,7 +122,8 @@ class aw_spec_class extends class_base
 				$tree->add_item($pt, array(
 					"id" => $id,
 					"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid)),
-					"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
+					"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name(),
+					"iconurl" => aw_ini_get("baseurl")."/automatweb/images/icons/archive.gif"
 				));
 
 				if ($cl->comment() == "")
@@ -149,6 +169,76 @@ class aw_spec_class extends class_base
 			$this->db_query("CREATE TABLE aw_spec_class(aw_oid int primary key, aw_desc text)");
 			return true;
 		}
+
+		switch($f)
+		{
+			case "aw_pri":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+		}
+	}
+
+	function get_embed_rels($o, $arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_rels_table($t);
+		$t->set_caption(sprintf(t("Sisesta klassi %s seosed"), $o->name()));
+
+		$data = $o->spec_relation_list();
+		$data[-1] = obj();
+		$data[-2] = obj();
+		$data[-3] = obj();
+		$data[-4] = obj();
+		$data[-5] = obj();
+
+		$class_picker = aw_spec::get_class_picker(obj($o->parent()));
+
+		foreach($data as $idx => $g_obj)
+		{
+			$t->define_data(array(
+				"rel_name" => html::textbox(array(
+					"name" => "gp_data[".$idx."][rel_name]",
+					"value" => $g_obj->name(),
+				)),
+				"rel_to" => html::select(array(
+					"name" => "gp_data[".$idx."][rel_to]",
+					"value" => $g_obj->prop("rel_to"),
+					"options" => $class_picker
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "gp_data[".$idx."][jrk]",
+					"value" => $g_obj->ord(),
+					"size" => 5
+				)),
+				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000
+			));
+		}
+		$t->set_default_sortby("sort_jrk");
+		$t->set_numeric_field("sort_jrk");
+	}
+
+	private function _init_rels_table($t)
+	{
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+		$t->define_field(array(
+			"name" => "rel_name",
+			"caption" => t("Soese nimi"),
+		));
+		$t->define_field(array(
+			"name" => "rel_to",
+			"caption" => t("Seos klassiga"),
+		));
+	}
+
+	function _get_pri($arr)
+	{
+		$arr["prop"]["options"] = aw_spec_obj::get_priority_options();
 	}
 }
 

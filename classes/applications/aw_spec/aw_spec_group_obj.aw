@@ -13,7 +13,8 @@ class aw_spec_group_obj extends _int_object
 			"class_id" => CL_AW_SPEC_LAYOUT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"parent" => $this->id()
+			"parent" => $this->id(),
+			"sort_by" => "objects.jrk"
 		));
 		return $ol->arr();
 	}
@@ -84,6 +85,7 @@ class aw_spec_group_obj extends _int_object
 		$o->set_name($cle["layout_name"]);
 		$o->set_prop("layout_type", $cle["layout_type"]);
 		$o->set_prop("parent_layout_name", $cle["parent_layout_name"]);
+		$o->set_ord($cle["jrk"]);
 		$o->save();
 	}
 

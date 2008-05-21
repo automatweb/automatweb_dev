@@ -168,6 +168,11 @@
                   <clid>CL_SHOP_PRODUCT_TABLE_LAYOUT</clid>
                   <caption>Tellimuste tabeli kujundus</caption>
             </ORDER_TABLE_LAYOUT>
+            <ROW>
+                  <value>8</value>
+                  <clid>CL_SHOP_ORDER_ROW</clid>
+                  <caption>Tellimuse rida</caption>
+            </ROW>
       </reltypes>
 </properties>
 

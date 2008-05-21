@@ -220,7 +220,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Leiutise nimetus (eesti inglise)</caption>
+            <caption>Leiutise nimetus (inglise keeles)</caption>
       </property>
       <property>
             <name>childtitle110</name>

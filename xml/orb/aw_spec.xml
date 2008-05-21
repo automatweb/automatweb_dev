@@ -9,5 +9,12 @@
 			</function>
 		</action>
 
+		<action name="create_new_version">
+			<function name="create_new_version">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

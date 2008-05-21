@@ -39,7 +39,7 @@ class aw_spec_version extends class_base
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_aw_spec_version(aw_oid int primary_key)");
+			$this->db_query("CREATE TABLE aw_aw_spec_version(aw_oid int primary key)");
 			return true;
 		}
 

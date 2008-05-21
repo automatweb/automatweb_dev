@@ -61,7 +61,7 @@ class __classname extends class_base
 	{
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE __table_name(aw_oid int primary_key)");
+			$this->db_query("CREATE TABLE __table_name(aw_oid int primary key)");
 			return true;
 		}
 

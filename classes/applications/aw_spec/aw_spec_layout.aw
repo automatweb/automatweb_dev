@@ -79,12 +79,24 @@ class aw_spec_layout extends class_base
 					"rows" => 3,
 					"cols" => 30
 				)),
+				"jrk" => html::textbox(array(
+					"name" => "gp_data[".$idx."][jrk]",
+					"value" => $g_obj->ord(),
+					"size" => 5
+				)),
+				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000
 			));
 		}
+		$t->set_default_sortby("sort_jrk");
+		$t->set_numeric_field("sort_jrk");
 	}
 
 	private function _init_table($t)
 	{
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
 		$t->define_field(array(
 			"name" => "layout_name",
 			"caption" => t("Omaduse nimi"),

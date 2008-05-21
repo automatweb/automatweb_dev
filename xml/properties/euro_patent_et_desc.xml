@@ -184,11 +184,12 @@
             <caption>Maksekorraldus</caption>
       </property>
       <classinfo>
-            <syslog_type>ST_INTELLECTUAL_PROPERTY</syslog_type>
+            <syslog_type>ST_EURO_PATENT_ET_DESC</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
+            <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
             <priority>
@@ -204,6 +205,11 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </aw_trademark>
+            <aw_euro_patent_et_desc>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_euro_patent_et_desc>
       </tableinfo>
       <reltypes>
             <APPLICANT>

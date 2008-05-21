@@ -3,4 +3,3 @@
 	<class name="budgeting_tax_term" folder="applications/budgeting" extends="class_base">
 	</class>
 </orb>
-		

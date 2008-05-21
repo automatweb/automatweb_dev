@@ -136,20 +136,30 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@layout data_r_bot type=vbox parent=content_right closeable=1 area_caption=Andmed
 
-			@property project type=relpicker reltype=RELTYPE_PROJECT  parent=data_r_bot captionside=top
-			@caption Projekt
+			@layout data_r_bot_s type=hbox parent=data_r_bot 
+	
+				@layout data_r_bot_left type=vbox parent=data_r_bot_s
 
-			@property bug_component type=textbox parent=data_r_bot captionside=top
-			@caption Komponent
+					@property aw_spec type=relpicker reltype=RELTYPE_AW_SPEC  parent=data_r_bot_left captionside=top
+					@caption Spetsifikatsioon
 
-			@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot captionside=top store=no
-			@caption Fail
+					@property project type=relpicker reltype=RELTYPE_PROJECT  parent=data_r_bot_left captionside=top
+					@caption Projekt
 
-			@property bug_predicates type=textbox parent=data_r_bot captionside=top field=aw_bug_predicates
-			@caption Eeldusbugid
+					@property bug_component type=textbox parent=data_r_bot_left captionside=top
+					@caption Komponent
 
-			@property bug_mail type=textbox parent=data_r_bot captionside=top size=15
-			@caption Bugmail CC
+
+				@layout data_r_bot_right type=vbox parent=data_r_bot_s
+	
+					@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot_right captionside=top store=no
+					@caption Fail
+
+					@property bug_predicates type=textbox parent=data_r_bot_right captionside=top field=aw_bug_predicates
+					@caption Eeldusbugid
+	
+					@property bug_mail type=textbox parent=data_r_bot_right captionside=top size=15
+					@caption Bugmail CC
 
 
 
@@ -256,6 +266,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype DEV_ORDER value=17 clid=CL_DEVELOPMENT_ORDER
 @caption Arendustellimus
+
+@reltype AW_SPEC value=18 clid=CL_AW_SPEC
+@caption Spetsifikatsioon
 */
 
 define("BUG_OPEN", 1);
@@ -2188,6 +2201,7 @@ die($email);
 			case "is_order":
 			case "bug_type":
 			case "skill_used":
+			case "aw_spec":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",

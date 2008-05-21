@@ -55,12 +55,24 @@ class aw_spec_group extends class_base
 					"value" => $g_obj->prop("layout_type"),
 					"options" => $layout_type_picker
 				)),
+				"jrk" => html::textbox(array(
+					"name" => "gp_data[".$idx."][jrk]",
+					"value" => $g_obj->ord(),
+					"size" => 5
+				)),
+				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000
 			));
 		}
+		$t->set_default_sortby("sort_jrk");
+		$t->set_numeric_field("sort_jrk");
 	}
 
 	private function _init_table($t)
 	{
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
 		$t->define_field(array(
 			"name" => "layout_name",
 			"caption" => t("Layoudi nimi"),
@@ -73,7 +85,6 @@ class aw_spec_group extends class_base
 			"name" => "parent_layout_name",
 			"caption" => t("Layoudi parent"),
 		));
-		$t->set_sortable(false);
 	}
 
 	private function _get_layout_picker($o)
@@ -110,7 +121,11 @@ class aw_spec_group extends class_base
 				$tree->add_item($pt, array(
 					"id" => $id,
 					"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid)),
-					"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
+					"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name(),
+					"iconurl" => $cl->layout_type == "hbox" ? 
+						aw_ini_get("baseurl")."/automatweb/images/split_cell_down.gif"
+					:
+						aw_ini_get("baseurl")."/automatweb/images/split_cell_left.gif"
 				));
 
 				if (!$this->get_tree_items($tree, $o, $id, $cl_oid))

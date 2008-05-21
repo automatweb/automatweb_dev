@@ -70,6 +70,24 @@
             <store>no</store>
             <field>view_ct</field>
       </property>
+      <property>
+            <name>version_tb</name>
+            <table>objects</table>
+            <group>spec_versions</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>version_tb</field>
+      </property>
+      <property>
+            <name>version_table</name>
+            <table>objects</table>
+            <group>spec_versions</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>version_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_AW_SPEC</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -86,7 +104,18 @@
                   <caption>&amp;amp;Uuml;levaade</caption>
                   <submit>no</submit>
             </spec_view>
+            <spec_versions>
+                  <caption>Versioonid</caption>
+                  <submit>no</submit>
+            </spec_versions>
       </groupinfo>
+      <reltypes>
+            <VERSION>
+                  <value>1</value>
+                  <clid>CL_AW_SPEC_VERSION</clid>
+                  <caption>Versioon</caption>
+            </VERSION>
+      </reltypes>
       <layout>
             <v_split>
                   <type>hbox</type>

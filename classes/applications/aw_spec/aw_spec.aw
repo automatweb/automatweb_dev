@@ -28,8 +28,17 @@
 	@property view_tb type=toolbar no_caption=1 store=no
 	@property view_ct type=text no_caption=1 store=no
 
+@default group=spec_versions
+
+	@property version_tb type=toolbar no_caption=1 store=no
+	@property version_table type=table no_caption=1 store=no
+
 @groupinfo spec caption="Koosta" 
 @groupinfo spec_view caption="&Uuml;levaade" submit=no
+@groupinfo spec_versions caption="Versioonid" submit=no
+
+@reltype VERSION value=1 clid=CL_AW_SPEC_VERSION
+@caption Versioon
 */
 
 class aw_spec extends class_base
@@ -53,13 +62,16 @@ class aw_spec extends class_base
 				array("classes", "classes_who", t("Kellele"), "spec_editor"),
 				array("classes", "classe_why", t("Miks"), "spec_editor"),
 				array("classes", "classes_classes", t("Klasside nimekiri"), "class_list"),
-				array("classes", "classes_rels", t("Seosed"), "relation_list"),
+//				array("classes", "classes_rels", t("Seosed"), "relation_list"),
 				array("classes", "classes_ui", t("Kasutajaliides"), "spec_editor"),
+				array("classes", "classes_msgs", t("Teated ja vead"), "spec_editor"),
 			array(0, "prev", t("Eeskujud"), "spec_editor"),
 			array(0, "bl", t("&Auml;riloogika"), "spec_editor"),
 				array("bl", "classes_ucase", t("Kasutajalood"), "spec_editor"),
 				array("bl", "classes_principles", t("S&uuml;steemi toimimisp&otilde;him&otilde;tted"), "spec_editor"),
 				array("bl", "classes_examples", t("N&auml;ited"), "spec_editor"),
+			array(0, "server", t("N&otilde;uded serverile"), "spec_editor"),
+			array(0, "competitors", t("Konkurendid"), "spec_editor"),
 		);
 	}
 
@@ -106,6 +118,14 @@ class aw_spec extends class_base
 	function _init_class_list_table($t)
 	{
 		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+		$t->define_field(array(
+			"name" => "class_pri",
+			"caption" => t("Prioriteet"),
+		));
+		$t->define_field(array(
 			"name" => "class_name",
 			"caption" => t("Klassi nimi"),
 		));
@@ -122,6 +142,13 @@ class aw_spec extends class_base
 			return PROP_IGNORE;
 		}
 
+		if (substr($arr["request"]["disp2"], -strlen("_rels")) == "_rels")
+		{
+			list($_t) = explode("_", $arr["request"]["disp2"]);
+			$o = obj($_t);
+			return $o->instance()->get_embed_rels($o, $arr);
+		}
+		else
 		if ($this->can("view", $arr["request"]["disp2"]))
 		{
 			$o = obj($arr["request"]["disp2"]);
@@ -150,9 +177,21 @@ class aw_spec extends class_base
 					"name" => "class_list[".$idx."][class_name]",
 					"value" => $dr->name(),
 				)),
+				"class_pri" => html::select(array(
+					"name" => "class_list[".$idx."][pri]",
+					"value" => $dr->prop("pri"),
+					"options" => aw_spec_obj::get_priority_options()
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "class_list[".$idx."][jrk]",
+					"value" => $dr->ord(),
+					"size" => 5
+				)),
+				"sort_jrk" => is_oid($dr->id()) ? $dr->ord() : 1000000000
 			));
 		}
-		$t->set_sortable(false);
+		$t->set_default_sortby("sort_jrk");
+		$t->set_numeric_field("sort_jrk");
 		$t->set_caption(t("Sisesta klassid"));
 	}
 
@@ -163,6 +202,13 @@ class aw_spec extends class_base
 			return PROP_IGNORE;
 		}
 
+		if (substr($arr["request"]["disp2"], -strlen("_rels")) == "_rels")
+		{
+			list($_t) = explode("_", $arr["request"]["disp2"]);
+			$o = obj($_t);
+			return $o->instance()->set_embed_rels($o, $arr);
+		}
+		else
 		if ($this->can("view", $arr["request"]["disp2"]))
 		{
 			$o = obj($arr["request"]["disp2"]);
@@ -233,6 +279,10 @@ class aw_spec extends class_base
 	function _init_relation_list_table($t)
 	{
 		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+		$t->define_field(array(
 			"name" => "rel_from",
 			"caption" => t("Seos kust"),
 		));
@@ -280,9 +330,16 @@ class aw_spec extends class_base
 					"value" => $dr->prop("rel_to"),
 					"options" => $class_picker
 				)),
+				"jrk" => html::textbox(array(
+					"name" => "rel_data[".$idx."][jrk]",
+					"value" => $dr->ord(),
+					"size" => 5
+				)),
+				"sort_jrk" => is_oid($dr->id()) ? $dr->ord() : 1000000000
 			));
 		}
-		$t->set_sortable(false);
+		$t->set_default_sortby("sort_jrk");
+		$t->set_numeric_field("sort_jrk");
 	}
 
 	function _set_relation_list($arr)
@@ -433,7 +490,8 @@ class aw_spec extends class_base
 			$tree->add_item($pt, array(
 				"id" => $id,
 				"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid)),
-				"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name()
+				"name" => $_GET["disp2"] == $cl_oid ? "<b>".$cl->name()."</b>" : $cl->name(),
+				"iconurl" => aw_ini_get("baseurl")."/automatweb/images/aw06/favicon.ico"
 			));
 
 			$t = obj($cl_oid);
@@ -441,6 +499,13 @@ class aw_spec extends class_base
 			{
 				$t->instance()->get_tree_items($tree, $t, $id);
 			}
+
+			$tree->add_item($id, array(
+				"id" => $id."_rels",
+				"url" => aw_url_change_var("disp", "classes_classes", aw_url_change_var("disp2", $cl_oid."_rels")),
+				"name" => $_GET["disp2"] == $cl_oid."_rels" ? "<b>".sprintf(t("%s seosed"), $cl->name())."</b>" : sprintf(t("%s seosed"), $cl->name()),
+				"iconurl" => aw_ini_get("baseurl")."/automatweb/images/nool1.gif"
+			));
 		}
 	}
 
@@ -483,6 +548,36 @@ class aw_spec extends class_base
 		$str .= $content;
 		$str .= "<br><br>";
 		return $str;
+	}
+
+	function _get_version_table($arr)
+	{
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VERSION"))),
+			array("name"),
+			CL_AW_SPEC_VERSION
+		);
+	}
+
+	function _get_version_tb($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "version",
+			"img" => "save.gif",
+			"action" => "create_new_version",
+			"tooltip" => t("Salvesta uus versioon")
+		));
+		$tb->add_delete_button();
+	}
+
+	/**
+		@attrib name=create_new_version
+	**/
+	function create_new_version($arr)
+	{
+		obj($arr["id"])->save_new_version();
+		return $arr["post_ru"];
 	}
 }
 

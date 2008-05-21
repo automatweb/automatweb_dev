@@ -10,6 +10,14 @@
             <field>aw_desc</field>
             <caption>Kirjeldus</caption>
       </property>
+      <property>
+            <name>pri</name>
+            <table>aw_spec_class</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_pri</field>
+            <caption>Prioriteet</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_AW_SPEC_CLASS</syslog_type>
             <relationmgr>yes</relationmgr>
