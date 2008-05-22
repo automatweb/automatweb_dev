@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.93 2008/05/20 11:31:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.94 2008/05/22 15:23:30 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -137,6 +137,24 @@
 
 	@property clear_discount_products type=text store=no group=discount_products
 	@caption &nbsp;
+
+	@property discount_title type=textbox group=discount_products field=meta method=serialize
+	@caption Hooajalise allahindluse nimetus
+
+	@property discount_season_parent type=textbox group=discount_products field=meta method=serialize
+	@caption Hooajalise allahindluse toodete asukoht
+
+	@property discount_date_from type=date_select group=discount_products field=meta method=serialize
+	@caption Alates
+
+	@property discount_date_to type=date_select group=discount_products field=meta method=serialize
+	@caption Kuni
+
+	@property discount_season_sum type=textbox group=discount_products field=meta method=serialize
+	@caption Summa, alates millest soodust kehtib
+
+	@property discount_season_amount type=textbox group=discount_products field=meta method=serialize
+	@caption Kui palju allahindlust tehake
 
 @groupinfo foldersa caption="Kataloogid / Kategooriad"
 
