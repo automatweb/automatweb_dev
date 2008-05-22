@@ -364,6 +364,60 @@
             <caption>&amp;amp;nbsp;</caption>
       </property>
       <property>
+            <name>discount_title</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Hooajalise allahindluse nimetus</caption>
+      </property>
+      <property>
+            <name>discount_season_parent</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Hooajalise allahindluse toodete asukoht</caption>
+      </property>
+      <property>
+            <name>discount_date_from</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>discount_date_to</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>discount_season_sum</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Summa, alates millest soodust kehtib</caption>
+      </property>
+      <property>
+            <name>discount_season_amount</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kui palju allahindlust tehake</caption>
+      </property>
+      <property>
             <name>categories</name>
             <table>objects</table>
             <group>categories</group>
@@ -630,18 +684,16 @@
             <hbox_products_manager_toolbar>
                   <type>hbox</type>
                   <group>products_manager</group>
-                  <area_caption></area_caption>
             </hbox_products_manager_toolbar>
             <hbox_products_manager>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>products_manager</group>
-                  <area_caption></area_caption>
             </hbox_products_manager>
             <vbox_products_manager_search>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;amp;nbsp;otsing</area_caption>
+                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
                   <group>products_manager</group>
                   <parent>hbox_products_manager</parent>
             </vbox_products_manager_search>
@@ -649,7 +701,6 @@
                   <type>vbox</type>
                   <group>products_manager</group>
                   <parent>hbox_products_manager</parent>
-                  <area_caption></area_caption>
             </vbox_products_manager>
             <hbox_files_import>
                   <type>hbox</type>
