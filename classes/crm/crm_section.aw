@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.33 2008/05/16 09:41:17 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.34 2008/05/22 13:38:26 instrumental Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -10,6 +10,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @default table=objects
 @default group=general
+
+@property description type=textarea field=meta method=serialize
+@caption Kirjeldus
 
 @property code type=textbox size=4 field=meta method=serialize
 @caption Kood

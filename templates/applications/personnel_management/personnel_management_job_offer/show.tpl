@@ -1,3 +1,7 @@
+<!-- SUB: AUTOINFO -->
+Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palgasooviga e-postile {VAR:contact.email} või aadressile {VAR:sect}, {VAR:sect.contact}.
+<!-- END SUB: AUTOINFO -->
+
 <table width="520" border=0 align="center" cellpadding=3 cellspacing=2 class="text">
 	<!-- SUB: COMPANY -->
 	<tr>
@@ -26,7 +30,7 @@
 	<!-- SUB: WORKINFO -->
 	<tr>
 		<td valign="top">
-			<b>Töö sisu</b>
+			<b>T&ouml;&ouml; sisu</b>
 		</td>
 		<td>
 			{VAR:workinfo}
@@ -36,7 +40,7 @@
 	<!-- SUB: REQUIREMENTS -->
 	<tr>
 		<td valign="top">
-			<b>Nõudmised kandidaadile</b>
+			<b>N&otilde;udmised kandidaadile</b>
 		</td>
 		<td>
 			{VAR:requirements}
@@ -96,7 +100,7 @@
 	<!-- SUB: START_WORKING -->
 	<tr>
 		<td valign="top">
-			<b>Tööleasumise aeg</b>
+			<b>T&ouml;&ouml;leasumise aeg</b>
 		</td>
 		<td>
 			{VAR:start_working}
@@ -106,17 +110,27 @@
 	<!-- SUB: JOB_OFFER_FILE -->
 	<tr>
 		<td valign="top">
-			<b>Tööpakkumine failina</b>
+			<b>T&ouml;&ouml;pakkumine failina</b>
 		</td>
 		<td>
 			{VAR:job_offer_file}
 		</td>
 	</tr>
 	<!-- END SUB: JOB_OFFER_FILE -->
+	<!-- SUB: CONTACT -->
+	<tr>
+		<td valign="top">
+			<b>Kontakt</b>
+		</td>
+		<td>
+			{VAR:contact.firstname} {VAR:contact.lastname}, {VAR:contact.phone} {VAR:contact.email}
+		</td>
+	</tr>
+	<!-- END SUB: CONTACT -->
 	<!-- SUB: END -->
 	<tr class="Grey">
 		<td  valign="top" colspan="2" style="padding-left: 10px; padding-right:10px; padding-top: 10px; padding-bottom:10px;">
-			Kandideerimise tähtaeg: {VAR:end}
+			Kandideerimise t&auml;htaeg: {VAR:end}
 		</td>
 	</tr>
 	<!-- END SUB: END -->
