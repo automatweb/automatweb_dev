@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.34 2008/05/22 13:38:26 instrumental Exp $
-// crm_section.aw - Üksus
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.35 2008/05/22 13:39:27 instrumental Exp $
+// crm_section.aw - &Uuml;ksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_section)
@@ -18,10 +18,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @caption Kood
 
 @property jrk type=textbox size=4
-@caption Järk
+@caption J&auml;rk
 
 @property ext_id type=textbox size=4 field=subclass
-@caption Sidussüsteemi ID
+@caption Siduss&uuml;steemi ID
 
 @property grp_crea type=chooser store=no multiple=1
 @caption Kas teen grupid ja kasutajad
@@ -72,7 +72,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 	@caption T&otilde;lgi
 
 @reltype SECTION value=1 clid=CL_CRM_SECTION
-@caption Alamüksus
+@caption Alam&uuml;ksus
 
 @reltype WORKERS value=2 clid=CL_CRM_PERSON
 @caption Liige
@@ -81,7 +81,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @caption Roll
 
 @reltype JOB_OFFER value=4 clid=CL_PERSONNEL_MANAGEMENT_JOB_OFFER
-@caption Tööpakkumine
+@caption T&ouml;&ouml;pakkumine
 
 @reltype GROUP value=5 clid=CL_GROUP
 @caption grupp
