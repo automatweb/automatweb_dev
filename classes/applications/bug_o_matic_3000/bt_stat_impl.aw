@@ -455,12 +455,31 @@ class bt_stat_impl extends core
 		}
 		// table year is group, month is col
 		// row is person
-		$ol = new object_list(array(
+		$filt = array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => $time_constraint
-		));
+		);
+
+		if (is_array($arr["request"]["stat_proj_ppl"]) && count($arr["request"]["stat_proj_ppl"]))
+		{
+			$users = array();
+			foreach($arr["request"]["stat_proj_ppl"] as $pers_id)
+			{
+				if ($this->can("view", $pers_id))
+				{
+					$po = obj($pers_id);
+					$us = $po->instance()->has_user($po);
+					if ($us)
+					{
+						$users[] = $us->prop("uid");
+					}
+				}
+			}
+			$filt["createdby"] = $users;
+		}
+		$ol = new object_list($filt);
 		$stat_hrs = array();
 		$bugids = array();
 		$sum_by_proj = array();
@@ -484,10 +503,12 @@ class bt_stat_impl extends core
 			$sum_by_proj[$bug->prop("project")] += $com->prop("add_wh");
 		}
 		$tot_sum = 0;
+		$p2uid = array();
 		foreach($stat_hrs as $uid => $coms)
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($uid);
+			$p2uid[$p->id()] = $uid;
 			foreach($coms as $com)
 			{
 				$bug = obj($com->parent());
@@ -510,7 +531,7 @@ class bt_stat_impl extends core
 					{
 						$mons[$mon] = html::href(array(
 							"url" => aw_url_change_var(array(
-								"det_uid" => $uid,
+								"det_uid" => $p2uid[$p->id()],
 								"det_proj" => $proj,
 								"det_mon" => (int)substr($mon, 1)
 							)),
@@ -551,14 +572,26 @@ class bt_stat_impl extends core
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_det_t($t);
 
+		$req_start = empty($arr["request"]["stat_proj_hrs_start"]) ? mktime(0, 0, 1, 1, 1, date("Y")) : mktime(0, 0, 0, $arr["request"]["stat_proj_hrs_start"]["month"], $arr["request"]["stat_proj_hrs_start"]["day"], $arr["request"]["stat_proj_hrs_start"]["year"], 1);
+		$req_end = empty($arr["request"]["stat_proj_hrs_end"]) ? time() + 86400 : mktime(23, 59, 59, $arr["request"]["stat_proj_hrs_end"]["month"], $arr["request"]["stat_proj_hrs_end"]["day"], $arr["request"]["stat_proj_hrs_end"]["year"], 1);
+		if (!$req_start)
+		{
+			$req_start = mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y"));
+		}
+		if (!$req_end)
+		{
+			$req_end = mktime(0,0,0, $arr["request"]["det_mon"]+1, 1, date("Y"));
+		}
+
+
 		$ol = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => new obj_predicate_compare(
 				OBJ_COMP_BETWEEN_INCLUDING,
-				mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y")),
-				mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, date("Y"))
+				$req_start,
+				$req_end
 			),
 			"createdby" => $arr["request"]["det_uid"]
 		));
@@ -591,8 +624,14 @@ class bt_stat_impl extends core
 		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"),
 			$p->name(),
 			$proj->name(),
-			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y"))),
-			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, date("Y")))
+			date("d.m.Y", $req_start),
+			date("d.m.Y", $req_end)
 		));
+	}
+
+	function _get_stat_proj_ppl($arr)
+	{
+		$arr["prop"]["options"] = $arr["obj_inst"]->instance()->get_people_list($arr["obj_inst"]);
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 	}
 }

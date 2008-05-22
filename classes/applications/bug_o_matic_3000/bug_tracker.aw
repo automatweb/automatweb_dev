@@ -375,6 +375,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property stat_proj_hrs_end type=date_select store=no
 		@caption Kuni
 
+		@property stat_proj_ppl type=chooser store=no multiple=1
+		@caption Inimesed
+
 	@property stat_proj_detail type=table store=no no_caption=1
 	@property stat_proj_detail_b type=table store=no no_caption=1
 
@@ -669,6 +672,7 @@ class bug_tracker extends class_base
 			case "stat_hrs_errs":
 			case "stat_proj_detail":
 			case "stat_proj_detail_b":
+			case "stat_proj_ppl":
 				static $st_i;
 				if (!$st_i)
 				{
@@ -2433,6 +2437,7 @@ class bug_tracker extends class_base
 		$arr["args"]["stat_hr_calls"] = $arr["request"]["stat_hr_calls"];
 		$arr["args"]["stat_hr_meetings"] = $arr["request"]["stat_hr_meetings"];
 
+		$arr["args"]["stat_proj_ppl"] = $arr["request"]["stat_proj_ppl"];
 		if ("stat_hrs_overview" === $arr["args"]["group"])
 		{
 			$arr["args"]["just_saved"] = null;
