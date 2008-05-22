@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.26 2008/05/05 16:54:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.27 2008/05/22 14:19:07 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -17,6 +17,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property name type=textbox
 @caption Nimi
+
+@property keywords type=textbox field=keywords table=personnel_management_job_offer
+@caption M&auml;rks&otilde;nad
 
 @property status type=status
 @caption Aktiivne
@@ -74,6 +77,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property info type=textarea rows=15 cols=60
 @caption Lisainfo
+
+@property autoinfo type=checkbox ch_value=1
+@caption Kuva lisainfot automaatselt
 
 @property motivation_letter type=checkbox ch_value=1
 @caption Vajalik motivatsioonikiri
@@ -252,6 +258,20 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "rate_scale":
+				if(!obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->rate_candidates)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "attachment":
+				if($arr["request"]["sms"])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "send_email_sms_select":
 				$prop["value"] = $arr["request"]["sel"];
 				break;
@@ -261,12 +281,16 @@ class personnel_management_job_offer extends class_base
 				break;
 
 			case "typical_select":
+				$prop["options"] = array();
 				$prop["options"][0] = t("--vali--");
 				if($arr["request"]["sms"])
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TYPICAL_MOBI_SMS")) as $conn)
 					{
-						$prop["options"][$conn->prop("to")] = $conn->prop("to.name");
+						if (trim($conn->prop("to.name")) != "")
+						{
+							$prop["options"][$conn->prop("to")] = $conn->prop("to.name");
+						}
 					}
 				}
 				else
@@ -279,6 +303,15 @@ class personnel_management_job_offer extends class_base
 				}
 				$prop["onchange"] = "submit_changeform();";
 				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["post_append_text"] = html::href(array(
+					"url" => "#",
+					"alt" => t("Kustuta valitud"),
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif",
+						"border" => 0
+					)),
+					"onClick" => "submit_changeform(\"delete_typical_sms\");"
+				));
 				break;
 
 			case "message_length":
@@ -378,7 +411,10 @@ class personnel_management_job_offer extends class_base
 							$ph = $o->phones("mobile");
 							foreach($ph->names() as $ph_k => $ph_v)
 							{
-								$ops[$ph_k] = $o->name()." &lt;".$ph_v."&gt;";
+								if($ph_v)
+								{
+									$ops[$ph_k] = $o->name()." &lt;".$ph_v."&gt;";
+								}
 							}
 						}
 					}
@@ -433,6 +469,10 @@ class personnel_management_job_offer extends class_base
 					"asap" => t("Niipea kui v&otilde;imalik"),
 					"date_select" => $date_edit->gen_edit_form("start_working_date", time()),
 				);
+				if(!$prop["value"])
+				{
+					$prop["value"] = "asap";
+				}
 				break;
 
 			/*
@@ -696,12 +736,10 @@ class personnel_management_job_offer extends class_base
 		$cfgform = obj($cfgform_id);
 		$cfg_proplist = $cff->get_cfg_proplist($cfgform_id);
 		$controllers = $cfgform->meta("controllers");
-		$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
-		$pm = obj($pm_id);
 		$mand_cont = $pm->prop("mandatory_controller");
 		$pm_default_cfgform = obj($pm->default_offers_cfgform);
-		foreach($cff->get_cfg_proplist($pm->default_offers_cfgform) as $pid => $pdata)
-		//foreach($pm_default_cfgform->meta("cfg_proplist") as $pid => $pdata)
+		//foreach($cff->get_cfg_proplist($pm->default_offers_cfgform) as $pid => $pdata)
+		foreach($pm_default_cfgform->meta("cfg_proplist") as $pid => $pdata)
 		//foreach(get_instance(CL_CRM_PERSON)->get_all_properties() as $pid => $pdata)
 		{
 			if(is_array($pdata["group"]))
@@ -822,7 +860,7 @@ class personnel_management_job_offer extends class_base
 			"caption" => t("E-postiaadressid"),
 			"sortable" => 1,
 		));
-		if($this->can("view", $arr["obj_inst"]->rate_scale))
+		if($this->can("view", $arr["obj_inst"]->rate_scale) && obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->rate_candidates)
 		{
 			$t->define_field(array(
 				"name" => "rate",
@@ -916,7 +954,9 @@ class personnel_management_job_offer extends class_base
 			$t->define_data(array(
 				"person" => html::href(array(
 					"caption" => $person->prop("firstname")." ".$person->prop("lastname"),
-					"url" =>  html::get_change_url($person->id(), array("group" => "cv_view", "return_url" => get_ru())),
+					"url" => $this->mk_my_orb("show_cv", array("id" => $person->id(), "die" => 1, "cv" => "cv/eesti_post.tpl"), CL_CRM_PERSON)
+//				       	http://dev.ep.cv.automatweb.com/automatweb/orb.aw?class=crm_person&action=show_cv&id=232&cv=cv%2Feesti_post.tpl&die=1
+					//html::get_change_url($person->id(), array("group" => "cv_view", "return_url" => get_ru())),
 				)),
 				"age" => $person->get_age(),
 				"phones" => $phones,
@@ -1430,28 +1470,34 @@ class personnel_management_job_offer extends class_base
 			$message = $arr["request"]["message"];
 			//$tos = $arr["request"]["receivers"];
 			$tos = array();
-			$odl = new object_data_list(
-				array(
-					"class_id" => CL_CRM_PHONE,
-					"oid" => $arr["request"]["receivers"],
-					"parent" => array(),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"status" => array(),
-				),
-				array(
-					CL_CRM_PHONE => array("clean_number" => "nr"),
-				)
-			);
-			foreach($odl->arr() as $oid => $odata)
+			if(count($arr["request"]["receivers"]) > 0)
 			{
-				$tos[] = $odata["nr"];
-				// Easier to connect the SMS to the phone this way.
-				$phs[$odata["nr"]] = $oid;
+				$odl = new object_data_list(
+					array(
+						"class_id" => CL_CRM_PHONE,
+						"oid" => $arr["request"]["receivers"],
+						"parent" => array(),
+						"lang_id" => array(),
+						"site_id" => array(),
+						"status" => array(),
+					),
+					array(
+						CL_CRM_PHONE => array("clean_number" => "nr"),
+					)
+				);
+				foreach($odl->arr() as $oid => $odata)
+				{
+					$tos[] = $odata["nr"];
+					// Easier to connect the SMS to the phone this way.
+					$phs[$odata["nr"]] = $oid;
+				}
 			}
 			if(strlen($arr["request"]["add_receivers"]) > 0)
 			{
-				$tos += explode(",", $arr["request"]["add_receivers"]);
+				foreach(explode(",", $arr["request"]["add_receivers"]) as $add_receiver)
+				{
+					$tos[] = $add_receiver;
+				}
 			}
 			$mobi = get_instance(CL_MOBI_HANDLER);
 			$mobi_handler = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->prop("mobi_handler");
@@ -1461,7 +1507,7 @@ class personnel_management_job_offer extends class_base
 			$sms->set_parent($mobi_handler);
 			$sms->comment = $message;
 			$sms->save();
-			
+
 			foreach($tos as $to)
 			{
 				$to = preg_replace("/[^0-9]/", "", $to);
@@ -1804,6 +1850,23 @@ class personnel_management_job_offer extends class_base
 			));
 		}
 
+		if($this->can("view", $ob->sect))
+		{
+			$sect = obj($ob->sect);
+			$tmpo = obj();
+			$tmpo->set_class_id(CL_CRM_ADDRESS);
+			foreach(array_keys($tmpo->get_property_list()) as $prop)
+			{
+				$this->vars(array(
+					"sect.contact.".$prop => $sect->prop("contact.".$prop),
+				));
+			}
+			$this->vars(array(
+				"sect.description" => $sect->description,
+				"sect.contact" => $sect->prop("contact.name"),
+			));
+		}
+
 		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
 		$cfgform_id = is_oid($ob->offer_cfgform) ? $ob->offer_cfgform : $pm->default_offers_cfgform;
 		
@@ -1829,8 +1892,13 @@ class personnel_management_job_offer extends class_base
 			"workinfo" => $ob->prop("workinfo"),
 			"requirements" => $ob->prop("requirements"),
 			"weoffer" => $ob->prop("weoffer"),
-			"info" => $ob->info,
 			"apply_link" => obj_link($pm->apply_doc)."?cfgform_id=".$cfgform_id."&job_offer_id=".$ob->id(),
+			"keywords" => $ob->keywords,
+		));
+		
+		$info = $ob->autoinfo ? $this->parse("AUTOINFO") : $ob->info;
+		$this->vars(array(
+			"info" => $info,
 		));
 
 		$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
@@ -2019,7 +2087,7 @@ class personnel_management_job_offer extends class_base
 		{
 			$sel[] = $conn["to"];
 		}
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "send_email_sms", "sms" => 1, "sel" => $sel));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "send_email_sms", "sms" => 1, "sel" => $sel, "return_url" => $arr["return_url"]));
 	}
 
 	function callback_pre_save($arr)
@@ -2072,6 +2140,13 @@ class personnel_management_job_offer extends class_base
 							$field = '$value'
 					");
 				}
+				return true;
+
+			case "keywords":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text"
+				));
 				return true;
 		}
 
@@ -2258,6 +2333,29 @@ class personnel_management_job_offer extends class_base
 		$autocomplete_options = array_unique($autocomplete_options);
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
+	}
+
+	function callback_just_saved_msg($arr)
+	{
+		if($arr["group"] == "send_email_sms")
+		{
+			return t("S&otilde;num saadetud!");
+		}
+	}
+
+	/**
+		@attrib name=delete_typical_sms
+	**/
+	function delete_typical_sms($arr)
+	{
+		$o = obj($arr["id"]);
+		if ($arr["typical_select"])
+		{
+			$o->disconnect(array(
+				"from" => $arr["typical_select"]
+			));
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

@@ -18,6 +18,14 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>keywords</name>
+            <table>personnel_management_job_offer</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>keywords</field>
+            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>status</name>
             <table>objects</table>
             <group>general</group>
@@ -185,6 +193,16 @@
             <rows>15</rows>
             <cols>60</cols>
             <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>autoinfo</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva lisainfot automaatselt</caption>
       </property>
       <property>
             <name>motivation_letter</name>
