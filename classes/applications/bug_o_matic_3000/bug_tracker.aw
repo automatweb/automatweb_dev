@@ -1079,16 +1079,28 @@ class bug_tracker extends class_base
 				'comment_count' => count($comments),
 				'working_hours' => $working_hours
 			));
-			$sum+=$working_hours;
-			$cnt +=  count($comments);
+			$sum += $working_hours;
+			$cnt += count($comments);
+			$i_total_lifespan += $bug->get_lifespan(array(
+				"without_string_prefix"=>true,
+				"only_days"=>true,
+			));
 		}
 
 		$t->sort_by();
 		$t->set_sortable(false);
 		$t->define_data(array(
-			"name" => t("Summa"),
-			"working_hours" => $sum,
-			"comment_count" => $cnt
+			"name" => html::strong(t("Summa")),
+			"bug_lifespan" => html::strong($i_total_lifespan),
+			"working_hours" => html::strong($sum),
+			"comment_count" => html::strong($cnt)
+		));
+		$i_bug_count = count($bugs);
+		$t->define_data(array(
+			"name" => html::strong(t("Keskmine")),
+			"bug_lifespan" => html::strong($i_total_lifespan/$i_bug_count),
+			"working_hours" => html::strong($sum/$i_bug_count),
+			"comment_count" => html::strong($cnt/$i_bug_count)
 		));
 		return PROP_OK;
 	}

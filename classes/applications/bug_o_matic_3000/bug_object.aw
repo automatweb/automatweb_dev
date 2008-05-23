@@ -58,7 +58,7 @@ class bug_object extends _int_object
 		return $sum;
 	}
 	
-	function get_lifespan()
+	function get_lifespan($arr)
 	{
 		// calculate timestamp
 		$i_created = $this->created();
@@ -83,11 +83,39 @@ class bug_object extends _int_object
 		$i_lifespan_hours = $i_lifespan/3600;
 		if ($i_lifespan_hours<=24)
 		{
-			$s_out = ($i_temp = round($i_lifespan_hours))==1 ? $i_temp." ".t("tund") : $i_temp." ".t("tundi");
+			if ($arr["only_days"])
+			{
+				if ($arr["without_string_prefix"])
+				{
+					$s_out = round($i_lifespan_hours/24);
+				}
+				else
+				{
+					$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("tund") : $i_temp." ".t("tundi");
+				}
+			}
+			else
+			{
+				if ($arr["without_string_prefix"])
+				{
+					$s_out = round($i_lifespan_hours);
+				}
+				else
+				{
+					$s_out = ($i_temp = round($i_lifespan_hours))==1 ? $i_temp." ".t("tund") : $i_temp." ".t("tundi");
+				}
+			}
 		}
 		else
 		{
-			$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("p&auml;ev") : $i_temp." ".t("p&auml;eva");
+			if ($arr["without_string_prefix"])
+			{
+				$s_out = round($i_lifespan_hours/24);
+			}
+			else
+			{
+				$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("p&auml;ev") : $i_temp." ".t("p&auml;eva");
+			}
 		}
 		
 		return $s_out;

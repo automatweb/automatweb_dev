@@ -1361,5 +1361,10 @@ class html extends aw_template
 		}
 		return $retval;
 	}
+	
+	function strong($str)
+	{
+		return "<b>".$str."</b>";
+	}
 };
 ?>
