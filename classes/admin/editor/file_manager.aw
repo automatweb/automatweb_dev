@@ -217,27 +217,10 @@ class file_manager extends aw_template
 	{
 		extract($arr);
 
-		/*$file_inst = get_instance(CL_FILE);
-		$zip = new ZipArchive;
-
-		if($GLOBALS["sited"])
-		{
-			$zipfilename = $GLOBALS["sited"]."/files/".time()."files.zip";
-		}
-		else
-		{
-			$zipfilename = $GLOBALS["site_dir"]."/files/".time()."files.zip";
-		}
-		if ($zip->open($zipfilename, ZIPARCHIVE::CREATE)!==TRUE) {
-			exit("cannot open <$zipfilename>\n");
-		}*/
-
-		// create temp folder for zipping
-		$folder = aw_ini_get("server.tmpdir")."/aw_fld_zip_".gen_uniq_id();
-		mkdir ($folder, 0777);
-		chmod($folder, 0777);
+		$zip = get_instance("core/util/file_archive");
 
 		$this->file_info = array();
+		$folder = "";
 		foreach($files as $id)
 		{
 			if(!$this->can("view" , $id))
@@ -248,11 +231,11 @@ class file_manager extends aw_template
 			$fileo = obj($id);
 			if($fileo->class_id() == CL_FILE)
 			{
-				$this->zip_add_file($folder , $id);
+				$this->zip_add_file($zip , $id, $folder);
 			}
 			elseif($fileo->class_id() == CL_MENU)
 			{
-				$this->zip_add_menu($folder , $id);
+				$this->zip_add_menu($zip, $id, $folder);
 			}
 			else
 			{
@@ -265,48 +248,19 @@ class file_manager extends aw_template
 		{
 			$str .= '"'.$item[0].'"'."\t".'"'.$item[1]."\"\r\n";
 		}
-		$f = fopen($folder."/content.csv", "w");
-		fwrite($f, $str);
-		fclose($f);
 
-		chdir($folder);
+		$zip->add_file_string($str, "content.csv");
+
 		$zipfilename = aw_ini_get("cache.page_cache")."/".time()."files.zip";
-		$cmd = aw_ini_get("server.zip_path")." -r $zipfilename *";
-		$res = `$cmd`;
-
-		$this->_req_del_fld($folder);
+		$zip->save_as_file($zipfilename);
+//die();
 		return $zipfilename;
 	}
 
-	private function _req_del_fld($dir)
-	{
-		if ($dh = opendir($dir)) 
-		{
-				while (($file = readdir($dh)) !== false) 
-				{
-					if ($file == "." || $file == "..")
-					{
-						continue;
-					}
-					if (is_dir($dir."/".$file))
-					{
-						$this->_req_del_fld($dir."/".$file);
-						rmdir($dir."/".$file);
-					}
-					else
-					{
-						unlink($dir."/".$file);
-					}
-				}
-				closedir($dh);
-				rmdir($dir);
-		}
-	}
-
-	function zip_add_menu($folder,$id,$path = "")
+	function zip_add_menu($zip,$id,$folder = "")
 	{
 		$parent = obj($id);
-		$folder .= "/".$parent->name();
+		//$folder .= "/".$parent->name();
 
 		$files = new object_list(array(
 			"class_id" => array(CL_MENU,CL_FILE),
@@ -317,24 +271,23 @@ class file_manager extends aw_template
 
 		if ($files->count())
 		{
-			mkdir ($folder, 0777);
-			chmod($folder, 0777);
+			$zip->add_folder($parent->name(), $folder);
 		}
 
 		foreach($files->arr() as $file)
 		{
 			if($file->class_id() == CL_MENU)
 			{
-				$this->zip_add_menu($folder,$file->id());
+				$this->zip_add_menu($zip, $file->id(), $folder."/".$parent->name());
 			}
 			if($file->class_id() == CL_FILE)
 			{
-				$this->zip_add_file($folder,$file->id());
+				$this->zip_add_file($zip, $file->id(), $folder."/".$parent->name());
 			}
 		}
 	}
 
-	function zip_add_file($folder,$id)
+	function zip_add_file($zip,$id, $folder)
 	{
 		$file_inst = get_instance(CL_FILE);
 		$fileo = obj($id);
@@ -344,7 +297,7 @@ class file_manager extends aw_template
 		$filepath = str_replace("/new/" , "/" , $filepath);
 		$this->file_info[] = array($fileo->path_str(),$fileo->comment());
 
-		copy($filepath, $folder."/".$filename);
+		$zip->add_file_fs($filepath, $filename, $folder);
 	}
 
 	/**
