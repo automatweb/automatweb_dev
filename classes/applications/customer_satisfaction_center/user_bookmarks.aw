@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.21 2008/04/16 13:40:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.22 2008/05/23 11:13:33 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad
 /*
 
@@ -630,6 +630,7 @@ class user_bookmarks extends class_base
 			"class_id" => CL_USER_BOOKMARKS,
 			"sharing" => 1,
 		));
+		$cur_u = aw_global_get("uid");
 		foreach($ol->arr() as $bm)
 		{
 			if($bm->createdby() == $cur_u)
@@ -1202,6 +1203,8 @@ class user_bookmarks extends class_base
 				$this->db_query("CREATE TABLE user_bookmarks (`aw_oid` int primary key, `sharing` int)");
 				$ol = new object_list(array(
 					"class_id" => CL_USER_BOOKMARKS,
+					"site_id" => array(),
+					"lang_id" => array(),
 				));
 				foreach($ol->arr() as $o)
 				{
