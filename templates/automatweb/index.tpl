@@ -33,7 +33,6 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/BronCalendar.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/shortcuts.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
 <!-- END SUB: MINIFY_JS_AND_CSS -->
