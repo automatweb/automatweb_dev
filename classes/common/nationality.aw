@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/nationality.aw,v 1.2 2008/01/31 13:52:01 kristo Exp $
-// nationality.aw - Rahvus 
 /*
-
 @classinfo syslog_type=ST_NATIONALITY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
@@ -26,7 +23,6 @@ class nationality extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
 		};
 		return $retval;
 	}
@@ -37,7 +33,6 @@ class nationality extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 		}
 		return $retval;
 	}	
@@ -46,22 +41,5 @@ class nationality extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 }
 ?>

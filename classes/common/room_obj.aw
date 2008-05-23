@@ -2,6 +2,13 @@
  
 class room_obj extends _int_object
 {
+	/** Returns the color for the given setting, based on the current settings
+		@attrib api=1 params=pos
+
+		@param var required type=string
+			The setting to return the value for. 
+
+	**/
 	function get_color($var)
 	{
 		$default = null;
@@ -21,6 +28,12 @@ class room_obj extends _int_object
 		}
 	}
 
+	/** Returns the current active settings for the room
+		@attrib api=1 
+
+		@returns
+			The cl_room_settings object active for the current user or null if none found
+	**/
 	function get_settings()
 	{
 		enter_function("room::get_settings_for_room");
@@ -30,6 +43,15 @@ class room_obj extends _int_object
 		return $rv;
 	}
 
+	/** Returns a setting from the current active room settings
+		@attrib api=1 params=pos
+
+		@param setting required type=string
+			A setting property name from the room_settings class
+
+		@returns
+			The value for the setting in the currently active settings or "" if no settings are active
+	**/
 	function get_setting($setting)
 	{
 		if(!is_object($this->settings))

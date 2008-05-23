@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.82 2008/05/14 12:12:37 kristo Exp $
-// bank_payment.aw - Bank Payment 
 /*
-
 @classinfo syslog_type=ST_BANK_PAYMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
@@ -402,7 +399,7 @@ class bank_payment extends class_base
 		)));
 	}
 
-	function _get_explanation($arr)
+	private function _get_explanation($arr)
 	{
 		extract($arr);
 		if($payment->prop("expl") && (strlen($payment->prop("expl")) + strlen($data["expl"])  < 70))
@@ -420,7 +417,7 @@ class bank_payment extends class_base
 		return trim(substr($data["expl"], 0, 70));
 	}
 
-	function _add_object_data($payment,$data)
+	private function _add_object_data($payment,$data)
 	{
 		if($payment->prop("test"))
 		{
@@ -494,12 +491,12 @@ class bank_payment extends class_base
 		return $data;
 	}
 	
-	function _add_default_data($data)
+	private function _add_default_data($data)
 	{
 		return $data;
 	}
 
-	function _init_banks($payment,$data)
+	private function _init_banks($payment,$data)
 	{
 		$bank_data = $payment->meta("bank");
 		foreach($this->banks as $bank => $name)
@@ -535,7 +532,7 @@ class bank_payment extends class_base
 		}
 	}
 
-	function _get_link_url($bank, $test = 0)
+	private function _get_link_url($bank, $test = 0)
 	{
 		$url = $this->bank_link[$bank];
 		if($test)
@@ -548,7 +545,7 @@ class bank_payment extends class_base
 		return $url;
 	}
 
-	function _get_payment_object($arr)
+	private function _get_payment_object($arr)
 	{
 		extract($arr);
 				
@@ -592,7 +589,7 @@ class bank_payment extends class_base
 		return $payment_object;
 	}
 
-	function get_log_data($o)
+	private function get_log_data($o)
 	{
 		classload("core/date/date_calc");
 		$filter = $o->meta("search_data");
@@ -709,7 +706,7 @@ class bank_payment extends class_base
 		return $log_data;
 	}
 
-	function get_log(&$arr)
+	private function get_log(&$arr)
 	{
 		$log_data = $this->get_log_data($arr["obj_inst"]);
 		classload("vcl/table");
@@ -741,7 +738,7 @@ class bank_payment extends class_base
 		return $this->get_fs_string().$t->draw();
 	}
 
-	function get_fs_string()
+	private function get_fs_string()
 	{
 		$fs = filesize($GLOBALS["site_dir"]."/bank_log.txt");
 		if($fs)
@@ -781,34 +778,36 @@ class bank_payment extends class_base
 			case "find_one":
 				$prop["value"] = 1;
 				break;
-                       case "find_date_start":
-                               if(isset($_SESSION["bank_payment"]["find_date_start"]))
-                               {
-                                       $prop["value"] = $_SESSION["bank_payment"]["find_date_start"];
-                               }
-                               else
-                               {
-                                       $prop["value"] = array(
-                                               "day" => date("d" , (time()-(31 * 24 * 3600))),
-                                               "month" => date("m" , (time()-(31 * 24 * 3600))),
-                                               "year" => date("Y" , (time()-(31 * 24 * 3600))),
-                                       );
-                               }
-                               break;
-                       case "find_date_end":
-                               if(isset($_SESSION["bank_payment"]["find_date_end"]))
-                               {
-                                       $prop["value"] = $_SESSION["bank_payment"]["find_date_end"];
-                               }
-                               else
-                               {
-                                       $prop["value"] = array(
-                                               "day" => date("d" , time()) + 1,
-                                               "month" => date("m" , time()),
-                                               "year" => date("Y" , time()),
-                                       );
-                               }
-                               break;
+
+			case "find_date_start":
+				if(isset($_SESSION["bank_payment"]["find_date_start"]))
+				{
+					$prop["value"] = $_SESSION["bank_payment"]["find_date_start"];
+				}
+				else
+				{
+					$prop["value"] = array(
+						"day" => date("d" , (time()-(31 * 24 * 3600))),
+						"month" => date("m" , (time()-(31 * 24 * 3600))),
+						"year" => date("Y" , (time()-(31 * 24 * 3600))),
+					);
+				}
+				break;
+			case "find_date_end":
+				if(isset($_SESSION["bank_payment"]["find_date_end"]))
+				{
+					$prop["value"] = $_SESSION["bank_payment"]["find_date_end"];
+				}
+				else
+				{
+					$prop["value"] = array(
+						"day" => date("d" , time()) + 1,
+						"month" => date("m" , time()),
+						"year" => date("Y" , time()),
+					);
+				}
+				break;
+
 			case "find_name":
 			case "find_ref":
 				if($search_data[$prop["name"]])
@@ -827,12 +826,11 @@ class bank_payment extends class_base
 			case "doc":
 				$prop["value"] = $this->_get_documentation();
 				break;
-			//-- get_property --//
 		};
 		return $retval;
 	}
 
-	function init_log(&$t)
+	private function init_log(&$t)
 	{
 		$t->define_field(array(
 			"name" => "time",
@@ -981,76 +979,6 @@ class bank_payment extends class_base
 			$t->define_data($data);
 		}
 	}
-/*	
-	//tekitab voimalike pankade ja propertyte nimekirja
-	function callback_bank($arr)
-	{
-		$bank_payment = get_instance(CL_BANK_PAYMENT);
-		$meta = $arr["obj_inst"]->meta("bank");
-		foreach($bank_payment->banks as $key => $val)
-		{
-			$ret[] = array(
-				"name" => "meta[".$key."][use]",
-				"type" => "chechbox" ,
-				"ch_value" => 1 ,
-				"value" => $meta["key"],
-				"caption" => $val,
-			);
-			foreach($bank_payment->bank_props as $prop=>$caption)
-			{
-				$ret[] = array(
-					"name" => "meta[".$key."][".$prop."]",
-					"type" => "textbox",
-					"value" => $meta[$key][$prop],
-					"caption" => $caption
-				);
-			}
-		}
-		return $ret;
-	}
-*/	
-	//tegelt seda pole ikka vaja.. a akki miski hetk laheb
-/*	
-	function callback_bank_test($arr)
-	{
-		$bank_payment = get_instance(CL_BANK_PAYMENT);
-		$meta = $arr["obj_inst"]->meta("bank_test");arr($meta);
-		foreach($bank_payment->banks as $key => $val)
-		{
-			if($meta[$key] || $this->test_link[$key])
-			{
-				$ret[] = array(
-					"name" => "meta[".$key."][use]",
-					"type" => "chechbox" ,
-					"ch_value" => 1 ,
-					"value" => $meta["key"],
-					"caption" => $val,
-				);
-
-				$ret[] = array(
-					"name" => "meta[".$key."][url]",
-					"type" => "textbox",
-					"value" => ($meta[$key]["url"]) ? $meta[$key]["url"] :$this->test_link[$key],
-					"caption" => t("Url , kuhu suunata"),
-				);
-			}
-		}
-		$ret[] = array(
-			"name" => "meta[new][url]",
-			"type" => "textbox",
-			"value" => "",
-			"caption" => "",
-		);
-		$ret[] = array(
-			"name" => "meta[new_bank]",
-			"type" => "select",
-			"caption" => "",
-			"options" => $bank_payment->banks,
-		);
-		
-		return $ret;
-	}
-	*/
 	
 	/**
 	@attrib api=1 params=name
@@ -1194,7 +1122,7 @@ class bank_payment extends class_base
 	}
 	
 	
-	function check_args($arr)
+	private function check_args($arr)
 	{
 		if(is_oid($arr["payment_id"]))
 		{
@@ -1246,7 +1174,7 @@ class bank_payment extends class_base
 	}
 		
 	//if form = 1, returns hrml input tags in form.
-	function submit_bank_info($args)
+	private function submit_bank_info($args)
 	{
 		extract($args);
 		$return = "";
@@ -1277,7 +1205,7 @@ class bank_payment extends class_base
 		die();	
 	}
 	
-	function snoras($args)
+	private function snoras($args)
 	{
 		extract($args);
 		$VK_message = sprintf("%03d",strlen($service)).$service;
@@ -1328,7 +1256,7 @@ class bank_payment extends class_base
 	}
 
 
-	function hansa($args) 
+	private function hansa($args) 
 	{
 		extract($args);
 		$VK_message = sprintf("%03d",strlen($service)).$service;
@@ -1377,7 +1305,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
-	function hansa_lv($args) 
+	private function hansa_lv($args) 
 	{
 		$args["lang"] = "ENG";
 		extract($args);
@@ -1428,7 +1356,7 @@ class bank_payment extends class_base
 		
 	}
 
-	function hansa_lt($args) 
+	private function hansa_lt($args) 
 	{
 		$args["lang"] = "ENG";
 		extract($args);
@@ -1478,7 +1406,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
-	function seb($args)
+	private function seb($args)
 	{
 		extract($args);
 		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
@@ -1532,7 +1460,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
-	function sampo($args)
+	private function sampo($args)
 	{
 		extract($args);
 		$VK_message = sprintf("%03d",strlen($service)).$service;
@@ -1581,7 +1509,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
-	function krediidi($args)
+	private function krediidi($args)
 	{
 		extract($args);
 		$VK_message = sprintf("%03d",strlen($service)).$service;
@@ -1630,7 +1558,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}	
 
-	function check_nordea_args($arr)
+	private function check_nordea_args($arr)
 	{
 		if(is_oid($arr["payment_id"]))
 		{
@@ -1669,7 +1597,7 @@ class bank_payment extends class_base
 		return($arr);
 	}
 
-	function check_snoras_args($arr)
+	private function check_snoras_args($arr)
 	{
 		if(is_oid($arr["payment_id"]))
 		{
@@ -1710,7 +1638,7 @@ class bank_payment extends class_base
 		return($arr);
 	}
 
-	function check_cc_args($arr)
+	private function check_cc_args($arr)
 	{
 		if(is_oid($arr["payment_id"]))
 		{
@@ -1745,7 +1673,7 @@ class bank_payment extends class_base
 		return($arr);
 	}
 	
-	function credit_card($args)
+	private function credit_card($args)
 	{
 		extract($args);
 		//test:
@@ -1809,7 +1737,7 @@ class bank_payment extends class_base
 	}
 
 
-	function nordea($args)
+	private function nordea($args)
 	{//arr($args); die();
 		extract($args);
 		$SOLOPMT_MAC      = '';
@@ -1857,7 +1785,7 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);	
 	}
 
-	function viitenr_kontroll_731($nr)
+	private function viitenr_kontroll_731($nr)
 	{
 		$nr = (string)$nr;
 		$count = strlen($nr);
@@ -2073,7 +2001,7 @@ class bank_payment extends class_base
 		return $str;
 	}
 	
-	function check_cc_response()
+	private function check_cc_response()
 	{
 		extract($_SESSION["bank_return"]["data"]);
 		$data = sprintf("%03s", $ver) . sprintf("%-10s", "$id") .
@@ -2091,7 +2019,7 @@ class bank_payment extends class_base
 		return $ok;
 	}
 
-	function check_nordea_response()
+	private function check_nordea_response()
 	{
 		extract($_SESSION["bank_return"]);
 		$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");

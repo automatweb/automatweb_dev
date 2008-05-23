@@ -669,27 +669,6 @@ class crm_bill extends class_base
 			{
 				arr($error);
 			}
-/*			if($p->prop("currency") != $this->get_bill_currency_id($o);)
-			{
-				arr("valuuta vastuolus");
-				return "";
-			}
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_BILL,
-				"lang_id" => array(),
-				"CL_CRM_BILL.RELTYPE_PAYMENT.id" => $p->id(),
-			));
-			$eb = reset($ol->arr());
-			if(is_object($eb) && $eb->prop("customer") != $o->prop("customer"))
-			{
-				arr("klient vastuolus");
-				return "";
-			}
-			$o->connect(array(
-				"to" => $p->id(),
-				"type" => "RELTYPE_PAYMENT"
-			));
-*/
 		}
 
 		if(!is_object($p))
@@ -732,10 +711,6 @@ class crm_bill extends class_base
 			return $error;
 		}
 		return $this->mk_my_orb("change", array("id" => $p->id(), "return_url" => $ru), CL_CRM_BILL_PAYMENT);
-		if($ru)
-		{
-			return $ru;
-		}
 	}
 
 	function get_customer_name($b)

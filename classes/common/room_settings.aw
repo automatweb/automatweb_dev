@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.35 2008/05/19 13:37:09 kristo Exp $
-// room_settings.aw - Ruumi seaded 
 /*
-
 @classinfo syslog_type=ST_ROOM_SETTINGS relationmgr=yes no_comment=1 no_status=1 prop_cb=1  maintainer=markop
 
 @default table=objects
@@ -263,9 +260,11 @@ class room_settings extends class_base
 			case "del_mail_legend":
 				$prop["value"] = t("#ord# - tellimuse sisu");
 				break;
+
 			case "uv_mail_legend":
 				$prop["value"] = t("#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus");
 				break;			
+
 			case "order_mail_groups":
 				$ol = new object_list(array(
 					"class_id" => CL_GROUP,
@@ -275,13 +274,14 @@ class room_settings extends class_base
 				));
 				$prop["options"] = $ol->names();
 				break;
+
 			case "order_mail_legend":
 				$prop["value"] = t("sisu tuleb common/room/preview.tpl failist");
 				break;
+
 			case "comment_pos":
 				$prop["options"] = array("Alt tekstina" , "Broneerija nime j&auml;rele");
 				break;
-			//-- get_property --//
 		};
 		return $retval;
 	}
@@ -292,7 +292,6 @@ class room_settings extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 		}
 		return $retval;
 	}	
@@ -317,24 +316,14 @@ class room_settings extends class_base
 
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
+	/** Returns the current settings for the room, based on the current user
+		@attrib api=1 params=pos
 
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-	/**
 		@param $room optional
-		room id
+			room id to return settings for
+
+		@returns
+			cl_room_settings or null if no settings found
 	**/
 	function get_current_settings($room)
 	{
@@ -430,109 +419,9 @@ class room_settings extends class_base
 			}
 		}
 		return null;
-
-		$u = get_instance(CL_USER);
-		$curp = $u->get_current_person();
-		$curco = $u->get_current_company();
-		$cd = get_instance("applications/crm/crm_data");
-		$cursec = $cd->get_current_section();
-		$curprof = $cd->get_current_profession();
-		$cur_grps = aw_global_get("gidlist_oid");
-
-		$ol = new object_list(array(
-			"class_id" => CL_ROOM_SETTINGS,
-			"lang_id" => array(),
-			"oid" => $oids,
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_ROOM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid"),
-					"CL_ROOM_SETTINGS.RELTYPE_PERSON" => $curp,
-					"CL_ROOM_SETTINGS.RELTYPE_COMPANY" => $curco,
-					"CL_ROOM_SETTINGS.RELTYPE_SECTION" => $cursec,
-					"CL_ROOM_SETTINGS.RELTYPE_PROFESSION" => $curprof,
-					"CL_ROOM_SETTINGS.RELTYPE_GROUP" => $cur_grps,
-					"CL_ROOM_SETTINGS.everyone" => 1
-				)
-			))
-		));
-
-		if ($ol->count() > 1)
-		{
-			// the most accurate setting SHALL Prevail!
-			$has_co = $has_p = $has_u = $has_all = $has_sec = $has_prof = false;
-			foreach($ol->arr() as $o)
-			{
-				if ($cursec && $o->is_connected_to(array("to" => $cursec)))
-				{
-					$has_sec = $o;
-				}
-				if ($curprof && $o->is_connected_to(array("to" => $curprof)))
-				{
-					$has_prof = $o;
-				}
-
-				if ($curco && $o->is_connected_to(array("to" => $curco)))
-				{
-					$has_co = $o;
-				}
-				if ($curp && $o->is_connected_to(array("to" => $curp)))
-				{
-					$has_p = $o;
-				}
-
-				if (aw_global_get("uid_oid") && $o->is_connected_to(array("to" => aw_global_get("uid_oid"))))
-				{
-					$has_u = $o;
-				}
-				if ($o->prop("everyone"))
-				{
-					$has_all = $o;
-				}
-
-				if (count(array_intersect($o->prop("groups"), $cur_grps)))
-				{
-					$has_grp = $o;
-				}
-			}
-
-			if ($has_u)
-			{
-				return $has_u;
-			}
-			if ($has_grp)
-			{
-				return $has_grp;
-			}
-			if ($has_p)
-			{
-				return $has_p;
-			}
-			if ($has_prof)
-			{
-				return $has_prof;
-			}
-			if ($has_sec)
-			{
-				return $has_sec;
-			}
-			if ($has_co)
-			{
-				return $has_co;
-			}
-			if ($has_all)
-			{
-				return $has_all;
-			}
-		}
-
-		if ($ol->count())
-		{
-			return $ol->begin();
-		}
 	}
 
-	function _init_bron_req_t(&$t)
+	private function _init_bron_req_t(&$t)
 	{
 		$t->define_field(array(
 			"caption" => t("Omadus"),
@@ -579,7 +468,7 @@ class room_settings extends class_base
 		$arr["obj_inst"]->set_meta("bron_req_fields", $arr["request"]["d"]);
 	}
 
-	function _init_grp_settings_t(&$t)
+	private function _init_grp_settings_t(&$t)
 	{
 		$t->define_field(array(
 			"name" => "grp",
@@ -710,6 +599,16 @@ class room_settings extends class_base
 		$arr["obj_inst"]->set_meta("grp_settings", $arr["request"]["e"]);
 	}
 
+	/** Returns the default value for the verified property based on the given settings and current group
+		@attrib api=1 params=pos
+
+		@param settings required type=cl_room_settings
+			The settings to read the default from
+
+		@returns
+			the default value for the reservation's verified property
+
+	**/
 	function get_verified_default_for_group($settings)
 	{
 		$grp_settings = safe_array($settings->meta("grp_settings"));

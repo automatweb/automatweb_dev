@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.12 2008/01/31 13:52:01 kristo Exp $
-// room_price.aw - Ruumi hind 
 /*
-
 @classinfo syslog_type=ST_ROOM_PRICE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
@@ -88,7 +85,6 @@ class room_price extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
 			case "weekdays":
 				$prop["options"] = $this->weekdays;
 				if(!$prop["value"])
@@ -96,6 +92,7 @@ class room_price extends class_base
 				    $prop["value"] = Array(1,1,1,1,1,1,1,1);
 				}
 				break;
+
 			case "nr":
 				if($arr["obj_inst"]->prop("type") == 2)
 				{
@@ -107,6 +104,7 @@ class room_price extends class_base
 				}
 				$prop["options"] = $opts;
 				break;
+
 			case "time":
 				if($arr["obj_inst"]->prop("type") == 2)
 				{
@@ -149,7 +147,6 @@ class room_price extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 			case "type":
 				$prop["value"] = $prop["value"]?$prop["value"]:$prop["default"];
 				break;
@@ -171,25 +168,7 @@ class room_price extends class_base
 		}
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
-
-
-	function get_room($oid)
+	private function get_room($oid)
 	{
 		if(!is_oid($oid))
 		{
@@ -204,7 +183,7 @@ class room_price extends class_base
 		return $c->from();
 	}
 
-	function get_currencys($oid)
+	private function get_currencys($oid)
 	{
 		return ($room = $this->get_room($oid))?$room->prop("currency"):$room;
 	}
@@ -256,7 +235,7 @@ class room_price extends class_base
 				CL_CURRENCY object oid => price
 			)
 	**/
-	function save_prices($oid, $prices)
+	private function save_prices($oid, $prices)
 	{
 		if(!is_oid($oid) || !is_array($prices))
 		{
@@ -272,7 +251,7 @@ class room_price extends class_base
 		@comment
 			Gets time caption from room object, if room is connected
 	**/
-	function get_time_caption($oid)
+	private function get_time_caption($oid)
 	{
 		$room = $this->get_room($oid);
 		if(!$room)
@@ -290,7 +269,7 @@ class room_price extends class_base
 				nr_of_units => nr_of_units unit_caption,
 			)
 	**/
-	function get_time_selections($oid)
+	private function get_time_selections($oid)
 	{
 		$data = $this->get_time_step($oid);
 		if(!$data)
@@ -317,7 +296,7 @@ class room_price extends class_base
 			)
 			.. or false if this price isn't connected to any room
 	**/
-	function get_time_step($oid)
+	private function get_time_step($oid)
 	{
 		if(!($room = $this->get_room($oid)))
 		{
@@ -336,7 +315,7 @@ class room_price extends class_base
 		return $ret;
 	}
 
-	function get_prices($oid)
+	private function get_prices($oid)
 	{
 		if(!is_oid($oid))
 		{

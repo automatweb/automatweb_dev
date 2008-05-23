@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.79 2008/03/13 13:26:29 kristo Exp $
-// room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
 @default group=general
@@ -99,14 +97,14 @@ class room_reservation extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
-
 				case "levels":
 					$this->do_table($arr);
-				break;
+					break;
+
 				case "order_mail_legend":
 					$prop["value"] = t("sisu tuleb common/room/preview.tpl failist");
-				break;
+					break;
+
 				case "reservation_template":
 					$tm = get_instance("templatemgr");
 					$prop["options"] = $tm->template_picker(array(
@@ -118,7 +116,8 @@ class room_reservation extends class_base
 		//				$prop["type"] = "text";
 		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
 					}
-				break;
+					break;
+
 				case "ver_mail_template":
 					$tm = get_instance("templatemgr");
 					$prop["options"] = $tm->template_picker(array(
@@ -130,22 +129,23 @@ class room_reservation extends class_base
 		//				$prop["type"] = "text";
 		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
 					}
-				break;
-			case "order_mail_groups":
-				$ol = new object_list(array(
-					"class_id" => CL_GROUP,
-					"type" => "0",
-					"lang_id" => array(),
-					"site_id" => array()
-				));
-				$prop["options"] = $ol->names();
-				break;
+					break;
 
-			case "prices":
-				$arr["obj_inst"]->prop("type");
-				$curr_list = new object_list(array("class_id" => CL_CURRENCY, "lang_id" => array()));
-				$prop["options"] = $curr_list->names();
-				break;
+				case "order_mail_groups":
+					$ol = new object_list(array(
+						"class_id" => CL_GROUP,
+						"type" => "0",
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					$prop["options"] = $ol->names();
+					break;
+
+				case "prices":
+					$arr["obj_inst"]->prop("type");
+					$curr_list = new object_list(array("class_id" => CL_CURRENCY, "lang_id" => array()));
+					$prop["options"] = $curr_list->names();
+					break;
 
 		};
 		return $retval;
@@ -167,7 +167,8 @@ class room_reservation extends class_base
 			}
 		return $retval;
 	}
-	function submit_meta($arr = array())
+
+	private function submit_meta($arr = array())
 	{
 		$meta = $arr["request"]["meta"];
 		//praagib v2lja tasemed, kus ei ole kas adekvaatset template faili v6i nime
@@ -192,7 +193,7 @@ class room_reservation extends class_base
 		};
 	}
 
-	function do_table($arr)
+	private function do_table($arr)
 	{
 		$levels = $arr["obj_inst"]->meta("levels");
 		$t = &$arr["prop"]["vcl_inst"];
@@ -306,26 +307,8 @@ class room_reservation extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
-
 	/**
 		@attrib name=parse_alias is_public="1" caption="Change" nologin=1
-
 	**/
 	function parse_alias($arr)
 	{
@@ -509,7 +492,7 @@ class room_reservation extends class_base
 		return $this->parse();
 	}
 
-	function set_cart_session($room)
+	private function set_cart_session($room)
 	{
 		unset($_SESSION["cart"]);
 		$_SESSION["soc_err"] = $_SESSION["room_reservation"][$room->id()]["products"];
@@ -538,14 +521,33 @@ class room_reservation extends class_base
 		}
 	}
 
-	/** get_total_bron_price
-		@param bron optional type=object
-		@param room optional type=oid
-		@param people optional type=int
-		@param start optional type=int
-		@param end optional type=int
-		@param products optional type=array
-		@comment et siis arvutab broneeringu hinna arvestades miinimumhinda, ja kui anda objekt ette, siis v6tab ylej22nud info sealt
+	/** Returns the total price for the reservation
+		@attrib api=1 params=name
+
+			@param bron optional type=object
+				The reservation to calculate price for
+
+			@param room optional type=oid
+				The room the reservation is in
+
+			@param people optional type=int
+				Number of people
+
+			@param start optional type=int
+				Timestamp for start of reservation
+
+			@param end optional type=int
+				Timestamp for end of reservation
+
+			@param products optional type=array
+				array { product_id => how_many } for all products in the reservation
+				
+		@comment 
+			et siis arvutab broneeringu hinna arvestades miinimumhinda, ja kui anda objekt ette, siis v6tab ylej22nud info sealt
+
+		@returns
+			The total price for the reservation for all defined currencies
+				array { currency_id => price in that currency }
 	**/
 	function get_total_bron_price($arr)
 	{
@@ -578,7 +580,7 @@ class room_reservation extends class_base
 		return $sum;
 	}
 
-	function get_object_data($id)
+	private function get_object_data($id)
 	{
 		$ret = array();
 		if(!is_oid($id) || !$this->can("view" , $id))
@@ -697,7 +699,7 @@ class room_reservation extends class_base
 	}
 
 	//returns url for each level
-	function get_level_urls($levels)
+	private function get_level_urls($levels)
 	{
 		$data = array();
 		foreach($levels as $key => $level)
@@ -716,7 +718,8 @@ class room_reservation extends class_base
 		$data["pay_url"] = "http://link.maksmisesse.aw";
 		return $data;
 	}
-	function get_site_props($arr)
+
+	private function get_site_props($arr)
 	{
 		extract($arr);
 		$data = array();
@@ -943,28 +946,26 @@ class room_reservation extends class_base
 		return $data;
 	}
 
-	function get_time_($arr)
+	private function get_time_($arr)
 	{
-		if(!$arr["start"]) return "";
+		if(!$arr["start"]) 
+		{
+			return "";
+		}
 		$res.= date("H:i" , $arr["start"]);
 		$res.= " - ";
 		$res.= date("H:i" , $arr["end"]);
 		return $res;
 	}
 
-	function get_date_str($arr)
+	private function get_date_str($arr)
 	{//arr($arr);
 		if(!$arr["start"]) return "";
 		$room_inst = get_instance(CL_ROOM);
 		extract($arr);
 		$res = $res1 = $res2 = "";
 
-	//	$res1 = $room_inst->weekdays[(int)date("w" , $arr["start"])];
-	//	$res1.= ", ";
 		$res1.= date("d.m.Y" , $arr["start"]);
-
-	//	$res2 = $room_inst->weekdays[(int)date("w" , $arr["end"])];
-	//	$res2.= ", ";
 		$res2.= date("d.m.Y" , $arr["end"]);
 		if($res2 == $res1)
 		{
@@ -977,7 +978,7 @@ class room_reservation extends class_base
 		return $res;
 	}
 
-	function get_time_str($arr)
+	private function get_time_str($arr)
 	{
 		$room_inst = get_instance(CL_ROOM);
 		extract($arr);
@@ -1028,17 +1029,12 @@ class room_reservation extends class_base
 		{
 			return $url["scheme"]."://".$url["host"].$url["path"]."?level=".$level;
 		}
-//		if(!$_GET["level"] &&  !($_GET["level"]==0))
-//		{
-//			return aw_url_change_var("", "" , $args["return_to"])."?level=".$level;
-//		}
-//		return aw_url_change_var("level", $level , $args["return_to"]);//."?level=".$level;
 	}
 
 	/**
 		@param room required type=oid
 	**/
-	function submit_one_room($room)
+	private function submit_one_room($room)
 	{
 		foreach($_POST as $key=>$val)
 		{
@@ -1052,7 +1048,7 @@ class room_reservation extends class_base
 		}
 	}
 
-	function check_fields($data)
+	private function check_fields($data)
 	{
 		$ret = "";
 		if(array_key_exists("name" , $data) && !(strlen($data["name"]) > 1))
@@ -1071,7 +1067,7 @@ class room_reservation extends class_base
 	}
 
 	/**
-	@attrib name=get_web_products_table api=1 params=name nologin=1
+		@attrib name=get_web_products_table api=1 params=name nologin=1
 		@param room required type=int
 	**/
 	function get_web_products_table($arr)
@@ -1131,26 +1127,25 @@ class room_reservation extends class_base
 		global $awt;
 		$sums = $awt->summaries();
 
-		                echo "<!--\n";
-				                while(list($k,$v) = each($sums))
-						                {
-								                        print "$k = $v\n";
-											                };
-													                echo " querys = ".aw_global_get("qcount")." \n";
-															                if (function_exists("get_time"))
-																	                {
-																			                        echo "total  = ".(get_time()-$GLOBALS["__START"])."\n";
-																						                        echo "proc  = ".($GLOBALS["__END_DISP"]-$GLOBALS["__START"])."\n";
-																									                        echo "print  = ".(get_time()-$GLOBALS["__END_DISP"])."\n";
-																												                }
-																														                echo "-->\n";
+		echo "<!--\n";
+		while(list($k,$v) = each($sums))
+		{
+			print "$k = $v\n";
+		};
+		echo " querys = ".aw_global_get("qcount")." \n";
+		if (function_exists("get_time"))
+		{
+			echo "total  = ".(get_time()-$GLOBALS["__START"])."\n";
+			echo "proc  = ".($GLOBALS["__END_DISP"]-$GLOBALS["__START"])."\n";
+			echo "print  = ".(get_time()-$GLOBALS["__END_DISP"])."\n";
+		}
+		echo "-->\n";
 																																
 		die($s);
-		die($t->draw()."<br>".html::submit());
 	}
 
 	/**
-	@attrib name=submit_web_products_table api=1 params=name nologin=1
+		@attrib name=submit_web_products_table api=1 params=name nologin=1
 		@param amount optional type=array
 		@param room required type=oid
 	**/
@@ -1160,10 +1155,6 @@ class room_reservation extends class_base
 		if(is_array($arr["add_to_cart"]))
 		{
 			$_SESSION["room_reservation"][$arr["room"]]["products"] = $arr["add_to_cart"];
-//			$_SESSION["soc_err"] = $arr["add_to_cart"];
-//			aw_global_set("soc_err", $arr["add_to_cart"]);
-//			"quantity" => $soce[$oid]["ordered_num_enter"],
-//			aw_global_set("quantity" => $soce[$oid]["ordered_num_enter"],
 		}
 		else
 		{
@@ -1179,7 +1170,7 @@ class room_reservation extends class_base
 	}
 
 	/**
-	@attrib name=get_web_calendar_table api=1 params=name nologin=1
+		@attrib name=get_web_calendar_table api=1 params=name nologin=1
 		@param room optional type=int
 		@param id optional type=int
 	**/
@@ -1290,7 +1281,7 @@ class room_reservation extends class_base
 	}
 
 	/**
-	@attrib name=submit_web_calendar_table api=1 params=name nologin=1
+		@attrib name=submit_web_calendar_table api=1 params=name nologin=1
 		@param bron optional type=array
 		@param room required type=oid
 		@param room_res optional type=oid
@@ -1351,9 +1342,8 @@ class room_reservation extends class_base
 		die($ret);
 	}
 
-	//makes the reservation object ... then this stuff is ready for paying and stuff
-	/**
-	@attrib name=affirm_reservation api=1 params=name nologin=1
+	/** makes the reservation object ... then this stuff is ready for paying and stuff
+		@attrib name=affirm_reservation api=1 params=name nologin=1
 		@param bron_id optional type=array
 			reservation id
 		@param room required type=oid,array
@@ -1399,8 +1389,7 @@ class room_reservation extends class_base
 		//return $section."?level=".$level;
 	}
 
-	//makes the reservation object ... then this stuff is ready for paying and stuff
-	/**
+	/** makes the reservation object ... then this stuff is ready for paying and stuff
 	@attrib name=pay_reservation api=1 params=name nologin=1
 		@param bron_id optional type=array
 			reservation id
@@ -1593,7 +1582,7 @@ class room_reservation extends class_base
 		//returni peaks miski ilusa saidi urli andma
 	}
 
-	function get_other_addresses($o)
+	private function get_other_addresses($o)
 	{
 		$set = $this->get_bron_room_settings($o);
 		if(is_object($set) && $set->prop("order_mail_from"))
@@ -1608,7 +1597,7 @@ class room_reservation extends class_base
 		return "";
 	}
 
-	function _get_order_mail_sender_addr($o)
+	private function _get_order_mail_sender_addr($o)
 	{
 		$set = $this->get_bron_room_settings($o);
 		if(is_object($set) && $set->prop("order_mail_from"))
@@ -1618,7 +1607,7 @@ class room_reservation extends class_base
 		return "automatweb@automatweb.com";
 	}
 
-	function _get_order_mail_sender_name($o)
+	private function _get_order_mail_sender_name($o)
 	{
 		$set = $this->get_bron_room_settings($o);
 		if(is_object($set) && $set->prop("order_mail_from_name"))
@@ -1628,7 +1617,7 @@ class room_reservation extends class_base
 		return str_replace("http://", "", aw_ini_get("baseurl"));
 	}
 
-	function _get_order_mail_subject($o)
+	private function _get_order_mail_subject($o)
 	{
 		$set = $this->get_bron_room_settings($o);
 		if(is_object($set) && $set->prop("order_mail_subj"))
@@ -1638,7 +1627,7 @@ class room_reservation extends class_base
 		return sprintf(t("Broneering: %s"), $o->id());
 	}
 
-	function get_bron_room_settings($o)
+	private function get_bron_room_settings($o)
 	{
 		if(is_object($this->set))
 		{
@@ -1672,6 +1661,16 @@ class room_reservation extends class_base
 		return $this->set;
 	}
 
+	/** Sends confirmation mail for a reservation
+		@attrib api=1 params=pos
+
+		@param id required type=oid
+			The oid of the reservation
+
+		@param tpl optional type=string
+			The name of the template to use for formatting the email content
+
+	**/
 	function send_affirmation_mail($id,$tpl = null)
 	{
 		if(!is_oid($id))
@@ -1711,7 +1710,7 @@ class room_reservation extends class_base
 	}
 
 	//see m2rgib ka makstuks, kui vaja seda funktsiooni ka muudmoodi kasutada, siis peaks miski muutuja juurde tekitama, mis maksmise asjadega ei tegeleks
-	function make_verified($id)
+	private function make_verified($id)
 	{
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		if(is_oid($id) && $this->can("view" , $id))
@@ -1752,9 +1751,8 @@ class room_reservation extends class_base
 		}
 	}
 
-	//makes the reservation object ... then this stuff is ready for paying and stuff
 	/**
-	@attrib name=revoke_reservation api=1 params=name nologin=1
+		@attrib name=revoke_reservation api=1 params=name nologin=1
 		@param bron_id optional type=array
 			reservation oid
 		@param room required type=oid

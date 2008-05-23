@@ -311,7 +311,7 @@ class _int_object
 			);
 			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["to"]))
 			{
-				$ret[$c_id] =& new connection($c_d);
+				$ret[$c_id] = new connection($c_d);
 			}
 		}
 		if (!empty($param["sort_by"]))

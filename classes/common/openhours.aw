@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.16 2008/04/22 08:24:06 kristo Exp $
-// openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
-
 @classinfo syslog_type=ST_OPENHOURS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
@@ -30,8 +27,6 @@ class openhours extends class_base
 {
 	function openhours()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "common",
 			"clid" => CL_OPENHOURS
@@ -85,8 +80,6 @@ class openhours extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			//-- set_property --//
-
 			case 'openhours':
 				$lastvalue = $arr['obj_inst']->meta('openhours');
 				$store = array ();
@@ -125,6 +118,7 @@ class openhours extends class_base
 										$a["day1"] > $b["day1"];');
 
 					// well.. toldya!
+					// indeed you did.  - terryf
 					usort($store, $cmp);
 				}
 				$arr['obj_inst']->set_meta('openhours', $store);
@@ -233,7 +227,7 @@ class openhours extends class_base
 		$name is prefixed
 		Returns string
 	*/
-	function _make_openhours_row($arr, $name)
+	private function _make_openhours_row($arr, $name)
 	{
 		$ret = "";
 		$minute_step = 15;
@@ -281,7 +275,7 @@ class openhours extends class_base
 	
 	// Formats submitted data to storable structure
 	// returns error message if times not valid
-	function _verified_openhours($arr)
+	private function _verified_openhours($arr)
 	{
 		$day1 = isset($arr[$name.'day1']) && is_numeric($arr[$name.'day1']) && between($arr[$name.'day1'], 0, 7) ? $arr[$name.'day1'] : null;
 		$day2 = isset($arr[$name.'day2']) && is_numeric($arr[$name.'day2']) && between($arr[$name.'day2'], 0, 7) ? $arr[$name.'day2'] : null;
@@ -428,6 +422,15 @@ class openhours extends class_base
 		return mktime(date("h" , $tm),(int)date("i" , $tm) ,0,date("n" , $tm),date("j" , $tm),date("Y" , $tm));
 	}
 	
+	/** Returns array of rooms that use the given openhours object
+		@attrib api=1 params=pos
+
+		@param o required type=cl_openhours
+			the openhours object to check 
+
+		@returns
+			array { room_id, ... } for all rooms that use the given openhours object
+	**/
 	function get_rooms_for_oh($o)
 	{
 		$rv = array();

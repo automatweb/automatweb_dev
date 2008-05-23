@@ -36,16 +36,16 @@ class pid extends core
 		$this->init();
 		$this->error_data = array (
 			PID_ERROR_CHECKSUM => t("Isikukood ei vasta Eesti Vabariigi isikukoodi standardile."),
-			PID_ERROR_INVALID_DATE => t("Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale Gregoriuse kalendris."),
+			PID_ERROR_INVALID_DATE => t("Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi kuup&auml;evale Gregoriuse kalendris."),
 			PID_ERROR_LENGTH => t("Isikukood vale pikkusega."),
 			PID_ERROR_INVALID_COUNTRY => t("Riik sobimatus formaadis."),
 		);
 	}
 
-/*
-    @attrib name=errors
-	@returns array (int error_code => string error_description) Errors that occurred during last method call. FALSE if none.
-*/
+	/*
+		@attrib name=errors api=1 
+		@returns array (int error_code => string error_description) Errors that occurred during last method call. FALSE if none.
+	*/
 	function errors ()
 	{
 		if (count ($this->errors))
@@ -65,20 +65,20 @@ class pid extends core
 		}
 	}
 
-/*
-    @attrib name=get
-	@returns PID data. Void if not defined.
-*/
+	/*
+		@attrib name=get api=1
+		@returns PID data. Void if not defined.
+	*/
 	function get ()
 	{
 		unset ($this->errors);
 		return $this->pid;
 	}
 
-/*
-    @attrib name=set
-	@param pid required type=var PID data
-*/
+	/*
+		@attrib name=set api=1
+		@param pid required type=var PID data
+	*/
 	function set ($pid)
 	{
 		unset ($this->errors);
@@ -86,10 +86,10 @@ class pid extends core
 		unset ($this->is_valid);
 	}
 
-/*
-    @attrib name=gender
-	@returns PID_GENDER_FEMALE for female PID_GENDER_MALE for male, if applicable in this country. Void if not defined. FALSE on error.
-*/
+	/*
+		@attrib name=gender api=1
+		@returns PID_GENDER_FEMALE for female PID_GENDER_MALE for male, if applicable in this country. Void if not defined. FALSE on error.
+	*/
 	function gender ()
 	{
 		unset ($this->errors);
@@ -113,10 +113,10 @@ class pid extends core
 		}
 	}
 
-/*
-    @attrib name=birth_date
-	@returns UNIX timestamp birth date corresponding to PID if applicable in this country. Void if not defined. FALSE on error.
-*/
+	/*
+		@attrib name=birth_date api=1
+		@returns UNIX timestamp birth date corresponding to PID if applicable in this country. Void if not defined. FALSE on error.
+	*/
 	function birth_date ()
 	{
 		unset ($this->errors);
@@ -140,11 +140,11 @@ class pid extends core
 		}
 	}
 
-/*
-    @attrib name=country
-	@param country optional type=object,aw_oid Set new country for this PID
-	@returns boolean success if $country specified, currently defined country othewise (void if not defined).
-*/
+	/*
+		@attrib name=country api=1
+		@param country optional type=object,aw_oid Set new country for this PID
+		@returns boolean success if $country specified, currently defined country othewise (void if not defined).
+	*/
 	function country ($country = NULL)
 	{
 		unset ($this->errors);
@@ -175,11 +175,11 @@ class pid extends core
 		}
 	}
 
-/*
-    @attrib name=country_code
-	@param code optional type=string Set new country code (ISO 3166-1 two letter) for this PID
-	@returns boolean success if $code specified, currently defined country code othewise (void if not defined).
-*/
+	/*
+		@attrib name=country_code api=1
+		@param code optional type=string Set new country code (ISO 3166-1 two letter) for this PID
+		@returns boolean success if $code specified, currently defined country code othewise (void if not defined).
+	*/
 	function country_code ($code = NULL)
 	{
 		unset ($this->errors);
@@ -195,10 +195,10 @@ class pid extends core
 		}
 	}
 
-/*
-    @attrib name=is_valid
-	@returns TRUE if currently defined PID data corresponds to PID standart of specified country, FALSE othewise.
-*/
+	/*
+		@attrib name=is_valid api=1
+		@returns TRUE if currently defined PID data corresponds to PID standart of specified country, FALSE othewise.
+	*/
 	function is_valid ()
 	{
 		unset ($this->errors);
@@ -208,7 +208,7 @@ class pid extends core
 
 /* Private methods */
 
-	function _parse ()
+	private function _parse ()
 	{
 		$parse_method = "_parse_" . strtolower ($this->country_code);
 		$this->is_valid = $this->$parse_method ();
@@ -216,7 +216,7 @@ class pid extends core
 	}
 
 	## returns TRUE if pid complies to Estonian personal identification number standard EVS 1990:585.
-	function _parse_ee ()
+	private function _parse_ee ()
 	{
 		$pid = $this->pid;
 		settype ($pid, "string");
@@ -269,7 +269,7 @@ class pid extends core
 
 		switch ($pid_1)
 		{
-			case 1: // 1800–1899  mees;
+			case 1: // 1800–1899 mees;
 				$pid_year += 1800;
 				$this->gender = PID_GENDER_MALE;
 				break;

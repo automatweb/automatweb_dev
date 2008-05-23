@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/unit.aw,v 1.2 2007/11/23 11:11:59 markop Exp $
-// unit.aw - Unit 
 /*
-
 @classinfo syslog_type=ST_UNIT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
@@ -35,8 +32,7 @@ class unit extends class_base
 		{
 			case "unit_sort":
 				$prop["options"] = array(0 => "" , 1 => t("pikkus&uuml;hik"), 2 => t("massi&uuml;hik"), 3 => t("koguse&uuml;hik"), 4 => t("mahu&uuml;hik"), 5 => t("aja&uuml;hik"));
-			
-			//-- get_property --//
+				break;
 		};
 		return $retval;
 	}
@@ -56,22 +52,5 @@ class unit extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 }
 ?>

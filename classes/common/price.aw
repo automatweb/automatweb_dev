@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/price.aw,v 1.7 2008/01/03 11:49:15 markop Exp $
-// price.aw - Hind 
 /*
-
-@tableinfo aw_prices index=aw_oid master_table=objects master_index=brother_of
+@tableinfo aw_prices index=aw_oid master_table=objects master_index=brother_of 
 
 @classinfo syslog_type=ST_PRICE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
@@ -25,7 +22,7 @@
 	@property date_to type=date_select table=aw_prices field=aw_date_to
 	@caption Kuni
 
-//idee oleks selles, et kui uuele klassile tahaks hinda külge panna, siis siia lisada lihtsalt klassi id
+//idee oleks selles, et kui uuele klassile tahaks hinda kylge panna, siis siia lisada lihtsalt klassi id
 @reltype OBJECT value=1 clid=CL_TRANSPORT_TYPE
 @caption Objekt millele hind m&otilde;jub
 
@@ -47,7 +44,6 @@ class price extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
 		};
 		return $retval;
 	}
@@ -58,7 +54,6 @@ class price extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 		}
 		return $retval;
 	}	
@@ -67,23 +62,6 @@ class price extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 
 	function do_db_upgrade($t, $f)
 	{
@@ -101,6 +79,5 @@ class price extends class_base
 		}
 		return false;
 	}
-
 }
 ?>

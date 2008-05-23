@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.245 2008/04/30 09:08:02 kristo Exp $
-// room.aw - Ruum 
 /*
-
 @classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
 @default table=objects
@@ -389,8 +386,6 @@ class room extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
-			
 			# TAB PRICE
 			case 'people':
 				$month = $_GET["month"];
@@ -478,72 +473,48 @@ class room extends class_base
 			case "calendar_tbl":
 				$this->_get_calendar_tbl($arr);
 				break;	
-				//$cal = $this->get_calendar($arr["obj_inst"]->id());
-/*				$c = &$prop["vcl_inst"];
-				$c->add_item(array(
-					"timestamp" => time(),
-					"item_start" => time()-3000,
-					"item_end" => time()+3000,
-					"data" => array(
-						"name" => "syndmus",
-						"comment" => "haahaaa... comment",
-						"icon" => "new.gif",
-					),
-				));
-				$c->add_item(array(
-					"timestamp" => time(),
-					"item_start" => time()+86000,
-					"item_end" => time()+90000,
-					"data" => array(
-						"name" => "syndmus",
-						"comment" => "haahaaa... comment",
-						"icon" => "new.gif",
-					),
-				));
-				$c->configure(array(
-					"overview_range" => 1,
-				));
-				$prop["value"] = "s"; //$c->draw_month();
-*/				case "products_tr":
-					if(!$this->_get_prod_fld($arr["obj_inst"]))
-					{
-						$prop["error"] = t("Pole valitud lao toodete kataloogi");
-						return PROP_ERROR;
-					}
-					$this->_products_tr($arr);
-					break;	
-				case "reservation_template":
-					$tm = get_instance("templatemgr");
-					$prop["options"] = $tm->template_picker(array(
-						"folder" => "common/room"
-					));
-					if(!sizeof($prop["options"]))
-					{//arr($prop);
-						$prop["caption"] .= t("\n".$this->site_template_dir."");
-		//				$prop["type"] = "text";
-		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
-					}
-					break;
-				
-				case "products_tbl":
-					$this->_products_tbl($arr);
-					break;
 
-				case "products_tb":
-					$this->_products_tb($arr);
-					break;		
+			case "products_tr":
+				if(!$this->_get_prod_fld($arr["obj_inst"]))
+				{
+					$prop["error"] = t("Pole valitud lao toodete kataloogi");
+					return PROP_ERROR;
+				}
+				$this->_products_tr($arr);
+				break;	
 
-				case "group_product_menu":
-					if(!$arr["obj_inst"]->prop("use_product_times"))
-					{
-						return PROP_IGNORE;
-					}
-					break;
+			case "reservation_template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "common/room"
+				));
+				if(!sizeof($prop["options"]))
+				{//arr($prop);
+					$prop["caption"] .= t("\n".$this->site_template_dir."");
+	//				$prop["type"] = "text";
+	//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
+				}
+				break;
+			
+			case "products_tbl":
+				$this->_products_tbl($arr);
+				break;
+
+			case "products_tb":
+				$this->_products_tb($arr);
+				break;		
+
+			case "group_product_menu":
+				if(!$arr["obj_inst"]->prop("use_product_times"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		};
 		return $retval;
 	}
 
-	function last_reservation_arrived_not_set($room)
+	private function last_reservation_arrived_not_set($room)
 	{
 		if(!(is_object($room)))
 		{
@@ -585,14 +556,6 @@ class room extends class_base
 
 	function set_property($arr = array())
 	{
-		/*
-		$doc = obj(9314);
-		$doc->connect(array(
-			"to" => $arr["obj_inst"]->id(),
-			"reltype" => "RELTYPE_ALIAS",
-		));
-		*/
-	
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -619,10 +582,7 @@ class room extends class_base
 				
 				$arr['obj_inst']->set_meta('working_days',$wd);
 				break;
-// 			case "work_graphs":
-// //				$prop["value"] = $this->get_people_work_table($arr);
-// 				arr($arr);
-// 				break;
+
 			case "products_find_product_name":
 				
 				if($arr["request"]["sel_imp"]);
@@ -659,8 +619,6 @@ class room extends class_base
 				$arr["obj_inst"]->set_meta("web_room_min_price", $arr["request"]["web_room_min_price"]);
 				break;
 				
-				//$prop[""]
-			//-- set_property --//
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -740,12 +698,6 @@ class room extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		/*
-		$o = obj(1331);
-		$o->set_prop("started", time()-7200);
-		$o->set_prop("finished", time()+7200);
-		$o->save();
-		*/
 		if(!$this->get_calendar($arr["obj_inst"]->id()))
 		{
 			$this->_create_calendar($arr["obj_inst"]);
@@ -760,23 +712,6 @@ class room extends class_base
 		$arr["set_ps"] = " ";
 		$arr["add_scenario"] = " ";
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 
 	/**
 		@attrib name=remove_images params=name all_args=1
@@ -793,18 +728,19 @@ class room extends class_base
 		return $arr["post_ru"];
 	}
 
-	function _handle_img_search_result($arr)
+	private function _handle_img_search_result($arr)
 	{
 		$p = get_instance("vcl/popup_search");
 		$p->do_create_rels(obj($arr["args"]["id"]), $arr["request"]["images_search"], 6);
 	}
-	function _handle_prc_search_result($arr)
+	
+	private function _handle_prc_search_result($arr)
 	{
 		$p = get_instance("vcl/popup_search");
 		$p->do_create_rels(obj($arr["args"]["id"]), $arr["request"]["prices_search"], 9);
 	}
 	
-	function _save_img_ord($arr)
+	private function _save_img_ord($arr)
 	{
 		$o = obj($arr["args"]["id"]);
 		$o->set_meta("img_ord", $arr["request"]["img"]);
@@ -1059,7 +995,7 @@ class room extends class_base
 		}
 	}
 
-	function get_calendar($oid)
+	private function get_calendar($oid)
 	{
 		if(!is_oid($oid))
 		{
@@ -1077,12 +1013,13 @@ class room extends class_base
 		}
 	}
 	
+	/** calendar callback **/
 	function get_overview($arr = array())
 	{
 		return $this->overview;
 	}
 
-	function _create_calendar($room)
+	private function _create_calendar($room)
 	{
 		$o = obj();
 		$o->set_class_id(CL_PLANNER);
@@ -1099,7 +1036,7 @@ class room extends class_base
 		@comment
 			returns array of CL_ROOM_PRICE objects
 	**/
-	function get_prices($oid, $bargain_prices = false)
+	private function get_prices($oid, $bargain_prices = false)
 	{
 		if(!is_oid($oid))
 		{
@@ -1370,102 +1307,6 @@ class room extends class_base
 			window.location.href='".$url."';
 			</script>
 		");
-
-		
-		classload("vcl/table");
-		$t = new vcl_table(array(
-			"layout" => "generic",
-		));
-		
-		$t->define_field(array(
-			"name" => "caption",
-		));
-		$t->define_field(array(
-			"name" => "value",
-		));
-
-		$t->define_data(array(
-			"caption" => t("Algusaeg"),
-			"value" => html::datetime_select(array(
-				"name" => "bron[start1]",
-				"value" => $start1,
-			)),
-		));
-		$t->define_data(array(
-			"caption" => t("L&otilde;ppaeg"),
-			"value" => html::datetime_select(array(
-				"name" => "bron[end]",
-				"value" => $end,
-			)),
-		));
-			
-		$t->define_data(array(
-			"caption" => t("Eesnimi"),
-			"value" => html::textbox(array(
-				"name" => "bron[firstname]",
-				"size" => 40,
-				"value" => $firstname,
-			)),
-		));
-			
-		$t->define_data(array(
-			"caption" => t("Perenimi"),
-			"value" => html::textbox(array(
-				"name" => "bron[lastname]",
-				"size" => 40,
-				"value" => $lastname,
-			)),
-		));
-			
-		$t->define_data(array(
-			"caption" => t("Organisatsioon"),
-			"value" => html::textbox(array(
-				"name" => "bron[company]",
-				"size" => 40,
-				"value" => $company,
-			)),
-		));
-		
-		$t->define_data(array(
-			"caption" => t("Telefon"),
-			"value" => html::textbox(array(
-				"name" => "bron[phone]",
-				"size" => 40,
-				"value" => $phone,
-			)),
-		));
-			
-		$t->define_data(array(
-			"caption" => t("M&auml;rkused"),
-			"value" => html::textarea(array(
-				"name" => "bron[comment]",
-				"size" => 40,
-				"value" => $comment,
-			)),
-		));	
-			
-		$t->define_data(array(
-			"caption" => t("Meie esindaja"),
-			"value" => html::select(array(
-				"name" => "bron[people]",
-				"value" => $people,
-				"options" => $people_opts,
-			)),
-		));	
-		
-		$t->define_data(array(
-			"value" => html::submit(array(
-				"value" => t("Salvesta"),
-			)),
-		));	
-		
-		$t->define_data(array(
-			"value" => html::hidden(array(
-				"name" => "bron[id]",
-				"value" => $id,
-			)),
-		));
-		die($err.html::form(array("method" => "POST", "content" => $t->draw())));
 	}
 	
 	/**
@@ -1572,49 +1413,6 @@ class room extends class_base
 	}
 	
 	
-/*	
-	function create_room_calendar ($arr)
-	{
-		$this_object =& $arr["obj_inst"];
-
-		$calendar = &$arr["prop"]["vcl_inst"];
-		classload("vcl/calendar");
-//		$calendar = new vcalendar (array ("tpldir" => "mrp_calendar"));
-//		$calendar->init_calendar (array ());
-		$calendar->configure (array (
-			"overview_func" => array (&$this, "get_overview"),
-			"full_weeks" => true,
-		));
-		$range = $calendar->get_range (array (
-			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"],
-		));
-
-		$list = new object_list(array(
-			"class_id" => array(CL_RESERVATION),
-//			"parent" => $this_object->id(),
-			"resource" => $this_object->id(),
-		));
-		
-		$calendar->init_output(array("event_template" => "my_new_templ.tpl"));
-		foreach($list->arr() as $task)
-		{
-			$calendar->add_item (array (
-				"item_start" => $task->prop("start1"),
-				"item_end" => $task->prop("end"),
-				"data" => array(
-					"name" => $task->name(),
-					"link" => html::get_change_url($task->id(), array("return_url" => get_ru())),
-					"comment" => "asd",
-					"utextarea1" => "asdd",
-				),
-			));
-			$this->cal_items[$task->prop("start1")] = html::get_change_url($task->id(), array("return_url" => get_ru()));
-		}
-		return $calendar->get_html ();
-	}
-	*/
-
 	function _get_time_select($arr)
 	{
 		$x=0;
@@ -1707,7 +1505,6 @@ class room extends class_base
 		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
 
 		return $ret;
-
 	}
 
 	function _get_hidden_fields($arr)

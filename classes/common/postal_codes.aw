@@ -1,7 +1,5 @@
 <?php
-// postal_codes.aw - Postiindeksid
 /*
-
 @classinfo syslog_type=ST_POSTAL_CODES relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
