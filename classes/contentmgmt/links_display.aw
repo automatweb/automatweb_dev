@@ -74,7 +74,7 @@ class links_display
 				$linksrc = "http://".$linksrc;
 			}
 		}
-		elseif(strpos($url_pv, "#") == 0)
+		elseif(strpos($url_pv, "#") === 0)
 		{
 			$linksrc = $url_pv;
 		}
