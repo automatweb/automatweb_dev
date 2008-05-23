@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.46 2008/04/22 08:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.47 2008/05/23 08:03:34 kristo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. &otilde;igemini ta tagastab need boxid kus seike kiri sees
@@ -710,7 +710,7 @@ class imap extends class_base
 		// XXX: check whether the message was valid
 		$msgid = $arr["msgid"];
 		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
-		$hdrinfo = @imap_headerinfo($this->mbox,$msg_no);
+		$hdrinfo = imap_headerinfo($this->mbox,$msg_no);
 
 		// I should mark the message as "read" in the cache as well	
 			
@@ -731,7 +731,7 @@ class imap extends class_base
 			"date" => $hdrinfo->MailDate,
 		);
 
-		#$overview = @imap_fetchstructure($this->mbox,$msgid,FT_UID);
+		#$overview = imap_fetchstructure($this->mbox,$msgid,FT_UID);
 
 		$fq = aw_ini_get("basedir") . "/classes/protocols/mail/MIME/mimeDecode.php";
 		require_once "$fq";

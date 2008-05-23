@@ -994,6 +994,16 @@
             <caption>Kuni</caption>
       </property>
       <property>
+            <name>stat_proj_ppl</name>
+            <table>objects</table>
+            <group>stat_proj_overview</group>
+            <type>chooser</type>
+            <store>no</store>
+            <multiple>1</multiple>
+            <field>stat_proj_ppl</field>
+            <caption>Inimesed</caption>
+      </property>
+      <property>
             <name>stat_proj_detail</name>
             <table>objects</table>
             <group>stat_proj_overview</group>

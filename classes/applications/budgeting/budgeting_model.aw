@@ -203,23 +203,23 @@ echo "created transaction ".$to->id()." <br>";
 				break;
 
 			case CL_TASK:
-				//$from_place = array("task_".$acct_id);
+				$from_place = array("task_".$acct_id);
 				break;
 
 			case CL_CRM_PERSON:
-				//$from_place = array("person_".$acct_id);
+				$from_place = array("person_".$acct_id);
 				break;
 
 			case CL_BUDGETING_FUND:
-		//		$from_place = array("fund_".$acct_id);
+				$from_place = array("fund_".$acct_id);
 				break;
 
 			case CL_SHOP_PRODUCT:
-//				$from_place = array("prod_".$acct_id);
+				$from_place = array("prod_".$acct_id);
 				break;
 
 			case CL_BUDGETING_ACCOUNT:
-				//$from_place = array("acct_".$acct_id);
+				$from_place = array("acct_".$acct_id);
 				break;
 
 		}
@@ -228,13 +228,14 @@ echo "created transaction ".$to->id()." <br>";
 		if ($from_place != "")
 		{
 			// get all taxes that go from the category
-			$ol = new object_list(array(
+/*			$ol = new object_list(array(
 				"class_id" => CL_BUDGETING_TAX,
 				"lang_id" => array(),
 				"site_id" => array(),
 				"from_place" => $from_place,
 				"sort_by" => "aw_budgeting_tax.aw_pri DESC"
-			));
+			));*/
+			$ol = $this->get_taxes_for_account($from_place);arr($from_place);arr($ol->names());
 			foreach($ol->arr() as $tax)
 			{
 				$rv[$tax->prop("pri")] = array(
@@ -295,6 +296,33 @@ echo "created transaction ".$to->id()." <br>";
 			$ret[] = get_current_company();
 		}
 		return $ret;
+	}
+
+	function get_taxes_for_account($account)
+	{
+		$btfrs = new object_list(array(
+			"class_id" => CL_BUDGETING_TAX_FOLDER_RELATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"folder" => $account,
+		));
+		$taxes = new object_list();
+
+		foreach($btfrs->arr() as $btfr)
+		{
+			if($btfr->prop("tax") && $btfr->prop("folder"))
+			{
+				if($this->can("view" , $btfr->prop("tax")))
+				{
+					$taxes->add($btfr->prop("tax")); 
+				}
+			}
+		}
+		$taxes->sort_by(array(
+			"prop" => "pri",
+			"order" => "desc"
+		));
+		return $taxes;
 	}
 
 	function get_all_taxes_above_project($p)

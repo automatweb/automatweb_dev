@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>location</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>URL/asukoht</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_GENERIC_XML_DS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -8,3 +17,4 @@
             <prop_cb>1</prop_cb>
       </classinfo>
 </properties>
+

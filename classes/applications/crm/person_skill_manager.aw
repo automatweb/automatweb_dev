@@ -117,15 +117,33 @@ class person_skill_manager extends class_base
 	function _get_workers_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_button(array(
+		$btn = array(
 			"name" => "new",
 			"img" => "new.gif",
-			"url" => html::get_new_url(
-				CL_PERSON_HAS_SKILL,
-				$arr["request"]["cat"]?$arr["request"]["cat"]:$arr["obj_inst"]->id(),
-				 array("alias_to" => $arr["request"]["cat"], "reltype" => 53, "return_url" => get_ru())
-			),
-		));
+			"url" => "javascript:alert('".t("Valige isik kellele oskus lisada!")."');",
+		);
+		$parent =  $arr["request"]["parent"];
+		if(!is_oid($parent))
+		{
+			$a = explode("_" , $parent);
+			$parent = $a[0];
+			$section = $a[1];
+		}
+		if($this->can("view" ,$parent))
+		{
+			$p = obj($parent);
+			if($p->class_id() == CL_CRM_PERSON)
+			{
+				$btn["url"] = html::get_new_url(
+					CL_PERSON_HAS_SKILL,
+					$parent?$parent:$arr["obj_inst"]->id(),
+					 array("alias_to" => $parent, "reltype" => 53, "return_url" => get_ru())
+				);
+			}
+			
+		}
+
+		$tb->add_button($btn);
 		$tb->add_delete_button();
 		$tb->add_save_button();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.115 2008/04/08 12:03:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.116 2008/05/23 08:03:28 kristo Exp $
 // here we define basic constants needed by all components
 /*
 @classinfo  maintainer=kristo
@@ -9,7 +9,7 @@ set_magic_quotes_runtime(0);
 define ("AW_SHORT_PROCESS", 1);
 define ("AW_LONG_PROCESS", 2);
 
-ini_set("memory_limit", "300M");
+ini_set("memory_limit", "700M");
 if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 {
 	function stripslashes_deep($value)

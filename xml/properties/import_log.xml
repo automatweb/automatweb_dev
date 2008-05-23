@@ -7,7 +7,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Muudetud v&amp;auml;li</caption>
+            <caption>Muudetud v&amp;amp;auml;li</caption>
       </property>
       <property>
             <name>content</name>

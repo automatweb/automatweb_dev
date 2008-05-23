@@ -90,6 +90,10 @@ function toggle_children(objref,menu_level) {
 		elemID = objref;
 	}
 	thisElem = document.getElementById(elemID);
+	if (!thisElem)
+	{
+		return;
+	}
 	has_data = thisElem.getAttribute("has_data");
 	data_loaded = thisElem.getAttribute("data_loaded");
 	thisDisp = thisElem.style.display;

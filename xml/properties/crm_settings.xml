@@ -148,18 +148,6 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <reltype>RELTYPE_CTR</reltype>
-            <field>meta</field>
-            <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
-            <method>serialize</method>
-            <caption>Kohtumise kontroller</caption>
-      </property>
-      <property>
-            <name>send_mail_feature</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
       </property>

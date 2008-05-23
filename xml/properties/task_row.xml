@@ -39,13 +39,14 @@
             <caption>Teostaja</caption>
       </property>
       <property>
-	      <name>skill_used</name>
-	      <group>general</group>
-	      <table>aw_task_rows</table>
-	      <type>select</type>
-	      <field>skill_used</field>
-	      <captionside>top</captionside>
-	      <caption>Kasutatav  P&amp;amp;auml;devus</caption>
+            <name>skill_used</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <style>select</style>
+            <field>skill_used</field>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <caption>Kasutatav P&amp;amp;auml;devus</caption>
       </property>
       <property>
             <name>time_guess</name>
