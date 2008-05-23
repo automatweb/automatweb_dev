@@ -486,6 +486,24 @@
             <caption>Minuga seotud bugid</caption>
       </property>
       <property>
+            <name>my_bugs_stat_start</name>
+            <table>objects</table>
+            <group>my_bugs_stat</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>my_bugs_stat_start</field>
+            <caption>Ajavahemiku algus</caption>
+      </property>
+      <property>
+            <name>my_bugs_stat_end</name>
+            <table>objects</table>
+            <group>my_bugs_stat</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>my_bugs_stat_end</field>
+            <caption>Ajavahemiku l&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
             <name>sp_tb</name>
             <table>objects</table>
             <group>settings_people</group>

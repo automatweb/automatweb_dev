@@ -182,6 +182,12 @@ define("BUG_STATUS_CLOSED", 5);
 	@property my_bugs_stat_table type=table no_caption=1
 	@caption Minuga seotud bugid
 
+	@property my_bugs_stat_start type=date_select store=no
+	@caption Ajavahemiku algus
+
+	@property my_bugs_stat_end type=date_select store=no
+	@caption Ajavahemiku l&otilde;pp
+
 @default group=settings_people
 
 	@property sp_tb type=toolbar store=no no_caption=1
@@ -727,6 +733,27 @@ class bug_tracker extends class_base
 					$prop["value"] = $arr["request"][$prop["name"]];
 				}
 				break;
+			case "my_bugs_stat_start":
+				classload("core/date/date_calc");
+				if(empty($arr["request"][$prop["name"]]))
+				{
+					$prop["value"] = get_week_start();
+				}
+				else
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
+			case "my_bugs_stat_end":
+				if(empty($arr["request"][$prop["name"]]))
+				{
+					$prop["value"] = time();
+				}
+				else
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
 		}
 		return $retval;
 	}
@@ -1016,12 +1043,27 @@ class bug_tracker extends class_base
 			'width' => '10%',
 			'align' => 'center'
 		));
-
+		if($st = $arr["request"]["my_bugs_stat_start"])
+		{
+			$start = mktime(0, 0, 1, $st["month"], $st["day"], $st["year"]);
+		}
+		else
+		{
+			$start = get_week_start();
+		}
+		if($e = $arr["request"]["my_bugs_stat_end"])
+		{
+			$end = mktime(23, 59, 59, $e["month"], $e["day"], $e["year"]);
+		}
+		else
+		{
+			$end = time();
+		}
 		$bug_comments = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start()/*-7*3600*24*/),
+			"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
 			"sort_by" => "objects.createdby, objects.created"
 		));
 
@@ -2455,6 +2497,8 @@ class bug_tracker extends class_base
 		$arr["args"]["stat_hr_tasks"] = $arr["request"]["stat_hr_tasks"];
 		$arr["args"]["stat_hr_calls"] = $arr["request"]["stat_hr_calls"];
 		$arr["args"]["stat_hr_meetings"] = $arr["request"]["stat_hr_meetings"];
+		$arr["args"]["my_bugs_stat_start"] = $arr["request"]["my_bugs_stat_start"];
+		$arr["args"]["my_bugs_stat_end"] = $arr["request"]["my_bugs_stat_end"];
 
 		$arr["args"]["stat_proj_ppl"] = $arr["request"]["stat_proj_ppl"];
 		if ("stat_hrs_overview" === $arr["args"]["group"])
