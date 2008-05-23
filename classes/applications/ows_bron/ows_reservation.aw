@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.16 2008/05/21 10:13:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.17 2008/05/23 08:15:37 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -301,14 +301,17 @@ if (!is_oid($arr["id"]))
       	"isHandicapped" => (bool)$o->prop("is_handicapped"),
 				"guaranteeType" => "Deposit",
       	"paymentType" => "NoPayment",
-				"guestBirthday" => $bd
+				"guestBirthday" => $bd,
+				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
+				"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id()
+
 			);
 
 			$bank_inst = get_instance(CL_BANK_PAYMENT);
 			$data = $bank_inst->get_payment_info();
 			if ($data["bank_id"] == "credit_card")
 			{
-				//$params["guaranteeType"] = "CreditCard";
+				$params["guaranteeReferenceInfo"] .= "\nCreditCard Payment";
 			}
 
 //die(dbg::dump($params));
@@ -343,7 +346,14 @@ if (!is_oid($arr["id"]))
 				$o->set_parent(aw_ini_get("ows.bron_folder"));
 			}
 			$o->set_prop("is_confirmed", 1);
-			$o->set_prop("payment_type", $params["guaranteeType"]);
+			if ($data["bank_id"] == "credit_card")
+			{
+				$o->set_prop("payment_type", "CreditCard");
+			}
+			else
+			{
+				$o->set_prop("payment_type", $params["guaranteeType"]);
+			}
 
 			$o->set_prop("confirmation_code", $return["MakeBookingExWithBirthdayResult"]["ConfirmationCode"]);
 			$o->set_prop("booking_id", $return["MakeBookingExWithBirthdayResult"]["BookingId"]);

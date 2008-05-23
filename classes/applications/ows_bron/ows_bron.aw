@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.33 2008/05/21 10:13:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.34 2008/05/23 08:15:37 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -58,6 +58,9 @@ class ows_bron extends class_base
 		));
 
 		$this->country_lut = array();
+
+		aw_ini_set("menuedit.protect_emails", 0);
+
 
 		$this->country_lut["en"] = array(
 			"EE" => "Estonia",
@@ -549,7 +552,7 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"]
 			)),
-			"step1_url" => obj_link($arr["section"])
+			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
 
 		if ($_GET["error"] > 0)
@@ -761,6 +764,7 @@ class ows_bron extends class_base
 		$o->set_prop("rate_title", $rate["Title"]);
 		$o->set_prop("rate_long_note", $rate["LongNote"]);
 		$o->set_prop("rate_room_type_code", $rate["OwsRoomTypeCode"]);
+		$o->set_meta("customer_id", reval_customer::get_cust_id());
 		$o->set_meta("bron_data", $arr);
 		aw_disable_acl();
 		$o->save();
@@ -900,7 +904,7 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"]
 			)),
-			"step1_url" => obj_link($arr["section"])
+			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
 		if ($_GET["error"] > 0)
 		{
@@ -1056,6 +1060,7 @@ class ows_bron extends class_base
       	"guaranteeCreditCardHolderName" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["confirm_card_name"])),
 				"guaranteeCreditCardNumber" => $number,
       	"guaranteeCreditCardExpirationDate" => $exp_date,
+				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["bron_comment"])),
       	"paymentType" => "NoPayment"
 			);
 			$params["customerId"] = reval_customer::get_cust_id();
@@ -1836,7 +1841,7 @@ if ($_GET["DH"] == 1)
 			"HotelPic" => $hp,
 			"HotelPicBig" => $hp_big,
 //			"step1_url" => obj_link($arr["section"])
-			"step1_url" => aw_url_change_var(array(
+			"step1_url" => obj_link(aw_ini_get("frontpage")), /*aw_url_change_var(array(
 				"i_location" => $arr["i_location"],
 				"i_checkin" => $arr["i_checkin"],
 				"i_checkout" => $arr["i_checkout"],
@@ -1844,11 +1849,11 @@ if ($_GET["DH"] == 1)
 				"i_adult1" => $arr["i_adults"],
 				"i_child1" => $arr["i_children"],
 				"i_promo" => $arr["i_promo"],
-				"section" => $arr["section"],
+				"section" => aw_ini_get("frontpage"), //$arr["section"],
 				"api_departure_days" => $arr["api_departure_days"],
 				"no_reforb" => 1,
 				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"]
-			), false, obj_link(aw_global_get("section")))
+			), false, obj_link(aw_global_get("section")))*/
 		));
 		$parameters = array();
 		$parameters["hotelId"] = $location;

@@ -11,6 +11,14 @@
 
 class reval_customer extends class_base
 {
+	private $fc_level_names = array(
+		"1" => "NO First Client",
+		"2" => "First Client",
+		"3" => "Silver",
+		"4" => "Gold",
+		"5" => "Diamond"
+	);
+
 	function reval_customer()
 	{
 		$this->init(array(
@@ -93,7 +101,7 @@ class reval_customer extends class_base
 			"class" => "http://markus.ee/RevalServices/Security/",
 			"params" => $params,
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/SecurityService.asmx"
+			"server" => "http://195.250.171.36/RevalServices/SecurityService.asmx"
 		));
 
 		if ($return["ValidateCustomerByLoginAndPasswordResult"]["ValidationStatus"] != "Success")
@@ -148,16 +156,17 @@ class reval_customer extends class_base
 			"firstname" => $this->_f($cust_data["FirstName"]),
 			"lastname" => $this->_f($cust_data["LastName"]),
 			"level" => $this->_f($cust_data["CurrentLevelId"]),
+			"level_name" => $this->fc_level_names[$this->_f($cust_data["CurrentLevelId"])],
 			"level_status" => "__undefined__",
 			"num_nights_next" => $this->_f($cust_data["NightsTillNextLevel"]),
-			"next_level_name" => $this->_f($cust_data["NextLevelId"]),
+			"next_level_name" => $this->fc_level_names[$this->_f($cust_data["NextLevelId"])],
 			"avail_free_nights" => $this->_f($cust_data["AvailableComplimentaryNights"]),
 			"customer_since" => date("d.m.Y", $this->_parse_date($cust_data["RegistrationDate"])),
 			"dob" => date("d.m.Y", $this->_parse_date($cust_data["Birthday"])),
-			"company_name" => "__undefined__",
-			"business_title" => "__undefined__",
-			"position" => "__undefined__",
-			"business_field" => "__undefined__",
+			"company_name" => $this->_f($cust_data["companyName"]),
+			"business_title" => $this->_f($cust_data["businessTitle"]),
+			"position" => $this->_f($cust_data["occupationName"]),
+			"business_field" => $this->_f($cust_data["FieldOfBusinessName"]),
 			"business_phone" => $this->_f($cust_data["BusinessPhone"]),
 			"home_phone" => $this->_f($cust_data["HomePhone"]),
 			"mobile_phone" => $this->_f($cust_data["MobilePhone"]),
@@ -171,6 +180,13 @@ class reval_customer extends class_base
 			"currency_pref" => $this->_f($cust_data["DefaultWebCurrencyLabel"]),
 			"last_visit" => date("d.m.Y H:i:s", $this->_parse_date($cust_data["LastWebLoginDateTime"]))
 		));
+
+		if ($cust_data["NextLevelId"])
+		{
+			$this->vars(array(
+				"HAS_NEXT_LEVEL" => $this->parse("HAS_NEXT_LEVEL")
+			));
+		}
 	}
 
 	private function _get_cust_comm_types($cust_data)
@@ -374,17 +390,17 @@ class reval_customer extends class_base
 			"lastname" => $this->_f($cust_data["LastName"]),
 			"country_select" => $this->_ep_do_country_select($this->_req("CountryCode", $cust_data["CountryCode"])),
 			"county_name" => $this->_req("StateOrTerritory", $cust_data["StateOrTerritory"]),
-			"personal_code" => $this->_req("PersonalCode", $cust_data["__undefined__"]),
+			"personal_code" => $this->_req("PersonalCode", $cust_data["PersonalCode"]),
 			"city_select" => $this->_ep_do_city_select($this->_req("City", $cust_data["CityId"])),
 			"city_name" => $this->_req("CityName", $cust_data["CityName"]),
 			"gender_select" => $this->_ep_do_gender_select($this->_req("Gender", $cust_data["GenderId"])),
 			"address" => $this->_req("Address", $cust_data["AddressLine1"]),
 			"dob" => $this->_req("CustomerBirthday", date("d.m.Y", $this->_parse_date($cust_data["Birthday"]))),
 			"postal_code" => $this->_req("PostalCode", $cust_data["PostalCode"]),
-			"marital_status_select" => $this->_ep_do_marital_status_select($this->_req("MaritalStatus", $cust_data["__undefined__"])),
-			"field_of_business_select" => $this->_ep_do_field_of_business_select($this->_req("FieldOfBusiness", $cust_data["__undefined__"])),
+			"marital_status_select" => $this->_ep_do_marital_status_select($this->_req("MaritalStatus", $cust_data["MaritalStatusId"])),
+			"field_of_business_select" => $this->_ep_do_field_of_business_select($this->_req("FieldOfBusiness", $cust_data["FieldOfBusinessId"])),
 			"business_phone" => $this->_req("BusinessPhone", $cust_data["BusinessPhone"]),
-			"occupation_select" => $this->_ep_do_occupation_select($this->_req("Occupation", $cust_data["__undefined__"])),
+			"occupation_select" => $this->_ep_do_occupation_select($this->_req("Occupation", $cust_data["OccupationId"])),
 			"mobile_phone" => $this->_req("MobilePhone", $cust_data["MobilePhone"]),
 			"room_preference_select" => $this->_ep_do_room_pref_select($this->_req("RoomPreference", $cust_data["RoomSmokingPreferenceId"])),
 			"home_phone" => $this->_req("HomePhone", $cust_data["HomePhone"]),
@@ -513,7 +529,6 @@ class reval_customer extends class_base
 
 	private function _ep_do_occupation_select($fb_id)
 	{
-		return;
 		$fb_list = $this->do_call("GetOccupations", array(
 			"languageId" => $this->_get_web_language_id()
 		), "Customers");
@@ -527,7 +542,6 @@ class reval_customer extends class_base
 
 	private function _ep_do_field_of_business_select($fb_id)
 	{
-		return;
 		$fb_list = $this->do_call("GetFieldsOfBusiness", array(
 			"languageId" => $this->_get_web_language_id()
 		), "Customers");
@@ -657,6 +671,10 @@ class reval_customer extends class_base
       "defaultWebCurrencyCode" => $this->_w($arr["PreferredCurrency"])
 		);
 //echo dbg::dump($d);
+if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
+{
+	//aw_global_set("soap_debug", 1);
+}
 		$rv = $this->do_call("UpdateCustomerProfile", $d, "Customers", true);
 //echo dbg::dump($rv);
 //echo "<hr>";
