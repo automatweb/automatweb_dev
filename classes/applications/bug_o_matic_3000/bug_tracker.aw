@@ -999,6 +999,12 @@ class bug_tracker extends class_base
 			'caption' => t('Nimi')
 		));
 		$t->define_field(array(
+			'name' => 'bug_lifespan',
+			'caption' => t('Bugi eluiga'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+		$t->define_field(array(
 			'name' => 'comment_count',
 			'caption' => t('Kommentaaride arv'),
 			'width' => '10%',
@@ -1069,6 +1075,7 @@ class bug_tracker extends class_base
 					), CL_BUG),
 					'caption' => $bug->name()
 				)),
+				'bug_lifespan' => $bug->get_lifespan(),
 				'comment_count' => count($comments),
 				'working_hours' => $working_hours
 			));

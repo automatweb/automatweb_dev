@@ -57,4 +57,39 @@ class bug_object extends _int_object
 		}
 		return $sum;
 	}
+	
+	function get_lifespan()
+	{
+		// calculate timestamp
+		$i_created = $this->created();
+		if ($this->prop("bug_status") == BUG_CLOSED)
+		{
+			$o_bug_comments = new object_list(array(
+				"class_id" => CL_BUG_COMMENT,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $this->id(),
+				"sort_by" => "objects.created"
+			));
+			
+			$i_lifespan = end($o_bug_comments->arr())->created() - $i_created;
+		}
+		else
+		{
+			$i_lifespan = time() - $i_created;
+		}
+		
+		// format output
+		$i_lifespan_hours = $i_lifespan/3600;
+		if ($i_lifespan_hours<=24)
+		{
+			$s_out = ($i_temp = round($i_lifespan_hours))==1 ? $i_temp." ".t("tund") : $i_temp." ".t("tundi");
+		}
+		else
+		{
+			$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("p&auml;ev") : $i_temp." ".t("p&auml;eva");
+		}
+		
+		return $s_out;
+	}
 }
