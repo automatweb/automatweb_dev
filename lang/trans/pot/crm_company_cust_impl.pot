@@ -34,7 +34,7 @@ msgstr ""
 msgid "Teostaja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:80
+#: classes/applications/crm/crm_company_cust_impl.aw:80 classes/applications/crm/crm_company_cust_impl.aw:370
 msgid "T&auml;htaeg"
 msgstr ""
 
@@ -74,10 +74,6 @@ msgstr ""
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:370
-msgid "Tähtaeg"
-msgstr ""
-
 #: classes/applications/crm/crm_company_cust_impl.aw:379
 msgid "Faas"
 msgstr ""
@@ -87,7 +83,7 @@ msgid "Projektijuht"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:389
-msgid "Müüja/looja"
+msgid "M&uuml;&uuml;ja/looja"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:394
@@ -95,7 +91,7 @@ msgid "Hind"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:399
-msgid "Välja"
+msgid "V&auml;lja"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:404
@@ -344,6 +340,10 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1868
 msgid "%s kliendid: %s"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cust_impl.aw:1873
+msgid "kliendid:"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:2064

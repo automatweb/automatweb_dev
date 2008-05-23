@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/forum/forum.aw:class_69_help
 msgid "Klassi Foorum (vana) help"
 msgstr ""
@@ -174,15 +173,14 @@ msgstr ""
 msgid "Sisestatud kontrollkood on vale"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2426
-msgid "Näita"
+#: classes/contentmgmt/forum/forum.aw:2431
+msgid "N&auml;ita"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2434
+#: classes/contentmgmt/forum/forum.aw:2439
 msgid "Ekspordi XML"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2440
+#: classes/contentmgmt/forum/forum.aw:2445
 msgid "E-posti aadressid"
 msgstr ""
-

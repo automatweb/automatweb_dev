@@ -213,28 +213,28 @@ msgstr ""
 msgid "Seose metaandmete kontroller (RELTYPE_META_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:275
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:278
 msgid ""
 "Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\n"
 "Indekseeriti %s lehte, mis sialdasid %s baiti teksti."
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:287
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:290
 msgid "Indekseerija nimega %s alustas t&ouml;&ouml;d %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:288
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:291
 msgid "Hetkel on indekseeritud %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:289
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:292
 msgid "J&auml;rjekorras on %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:290
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:293
 msgid "Viimati uuendati staatust %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:299
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:302
 msgid "Indekseerija k&auml;ivitati %s, peatati %s."
 msgstr ""

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/config/config_old_redirect.aw:class_1167_help
 msgid "Klassi Vanade aadresside suunamine help"
 msgstr ""
@@ -66,19 +65,18 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:65
+#: classes/admin/config/config_old_redirect.aw:42
 msgid "Vana aadress"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:70
+#: classes/admin/config/config_old_redirect.aw:47
 msgid "Uus aadress"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:160
+#: classes/admin/config/config_old_redirect.aw:137
 msgid "Mis asendada"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:165
+#: classes/admin/config/config_old_redirect.aw:142
 msgid "Milega asendada"
 msgstr ""
-

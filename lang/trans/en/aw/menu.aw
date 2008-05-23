@@ -208,7 +208,6 @@ $GLOBALS["TRANS"]["Ekspordi ikoonid"] = "Export icons";
 $GLOBALS["TRANS"]["Ekspordi"] = "Export";
 $GLOBALS["TRANS"]["Vali meetod"] = "Select method";
 $GLOBALS["TRANS"]["Vali meetodiga seotud objekt"] = "Select object connected to method";
-$GLOBALS["TRANS"]["Vali meetodiga seotud grupp"] = "Select group connected to method";
 $GLOBALS["TRANS"]["Meetod viitab adminni"] = "Method refers to admin";
 $GLOBALS["TRANS"]["Meetodi v&auml;ljundi kuvamisel n&auml;idatakse men&uuml;&uuml;sid"] = "Folders are shown on method's output display";
 $GLOBALS["TRANS"]["-- vali --"] = "-- select --";

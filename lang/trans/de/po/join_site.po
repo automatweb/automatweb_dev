@@ -692,8 +692,8 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:423
 #: classes/contentmgmt/join/join_site.aw:442
-#: classes/contentmgmt/join/join_site.aw:2448
-#: classes/contentmgmt/join/join_site.aw:2556
+#: classes/contentmgmt/join/join_site.aw:2458
+#: classes/contentmgmt/join/join_site.aw:2566
 msgid "Omadus"
 msgstr ""
 
@@ -730,27 +730,27 @@ msgid "<b>Vahepealkirjad</b>"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:826
-#: classes/contentmgmt/join/join_site.aw:1659
+#: classes/contentmgmt/join/join_site.aw:1656
 msgid "Maa"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:832
-#: classes/contentmgmt/join/join_site.aw:1666
+#: classes/contentmgmt/join/join_site.aw:1663
 msgid "Postiindeks"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:837
-#: classes/contentmgmt/join/join_site.aw:1672
+#: classes/contentmgmt/join/join_site.aw:1669
 msgid "Linn"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:842
-#: classes/contentmgmt/join/join_site.aw:1678
+#: classes/contentmgmt/join/join_site.aw:1675
 msgid "Maakond"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:847
-#: classes/contentmgmt/join/join_site.aw:1684
+#: classes/contentmgmt/join/join_site.aw:1681
 msgid "T&auml;nava nimi"
 msgstr ""
 
@@ -767,130 +767,130 @@ msgstr ""
 msgid "Liitun"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2328
+#: classes/contentmgmt/join/join_site.aw:2338
 msgid "Liitumise meili from aadress (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2339
+#: classes/contentmgmt/join/join_site.aw:2349
 msgid "Liitumise meili subjekt (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2352
+#: classes/contentmgmt/join/join_site.aw:2362
 msgid "Liitumise meil (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2421
+#: classes/contentmgmt/join/join_site.aw:2431
 msgid "Sellise koodiga kasutajat pole olemas!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2453
+#: classes/contentmgmt/join/join_site.aw:2463
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2458
+#: classes/contentmgmt/join/join_site.aw:2468
 msgid "Reavahetus sisu vahel"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2471
-#: classes/contentmgmt/join/join_site.aw:2703
+#: classes/contentmgmt/join/join_site.aw:2481
+#: classes/contentmgmt/join/join_site.aw:2713
 msgid "--vali--"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2472
+#: classes/contentmgmt/join/join_site.aw:2482
 msgid "Tekstikast"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2473
+#: classes/contentmgmt/join/join_site.aw:2483
 msgid "Listbox"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2474
+#: classes/contentmgmt/join/join_site.aw:2484
 msgid "Raadionupp"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2475
+#: classes/contentmgmt/join/join_site.aw:2485
 msgid "Checkbox"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2617
+#: classes/contentmgmt/join/join_site.aw:2627
 msgid "Liitu nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2618
-#: classes/contentmgmt/join/join_site.aw:2637
-#: classes/contentmgmt/join/join_site.aw:2657
+#: classes/contentmgmt/join/join_site.aw:2628
+#: classes/contentmgmt/join/join_site.aw:2647
+#: classes/contentmgmt/join/join_site.aw:2667
 msgid "<b>Nuppude tekstid</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2636
+#: classes/contentmgmt/join/join_site.aw:2646
 msgid "Salvesta nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2656
+#: classes/contentmgmt/join/join_site.aw:2666
 msgid "T&uuml;hista nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2677
+#: classes/contentmgmt/join/join_site.aw:2687
 msgid "Suunamine"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2678
+#: classes/contentmgmt/join/join_site.aw:2688
 msgid "<b>Suuna p&auml;rast registreerumist</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2698
+#: classes/contentmgmt/join/join_site.aw:2708
 msgid "T&otilde;lgi omaduste tekste"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2725
+#: classes/contentmgmt/join/join_site.aw:2735
 msgid "Veateade"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2750
+#: classes/contentmgmt/join/join_site.aw:2760
 msgid "J&auml;rgnev v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2751
-#: classes/contentmgmt/join/join_site.aw:2883
+#: classes/contentmgmt/join/join_site.aw:2761
+#: classes/contentmgmt/join/join_site.aw:2893
 msgid "Sellise kasutajanimega kasutaja on juba olemas!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2752
-#: classes/contentmgmt/join/join_site.aw:2905
+#: classes/contentmgmt/join/join_site.aw:2762
+#: classes/contentmgmt/join/join_site.aw:2915
 msgid "Sisestatud paroolid on erinevad!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2753
-#: classes/contentmgmt/join/join_site.aw:2916
+#: classes/contentmgmt/join/join_site.aw:2763
+#: classes/contentmgmt/join/join_site.aw:2926
 msgid "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2754
-#: classes/contentmgmt/join/join_site.aw:2927
+#: classes/contentmgmt/join/join_site.aw:2764
+#: classes/contentmgmt/join/join_site.aw:2937
 msgid "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2755
-#: classes/contentmgmt/join/join_site.aw:2938
+#: classes/contentmgmt/join/join_site.aw:2765
+#: classes/contentmgmt/join/join_site.aw:2948
 msgid "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2756
+#: classes/contentmgmt/join/join_site.aw:2766
 msgid "Palun sisestage korrektne e-maili aadress!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2774
+#: classes/contentmgmt/join/join_site.aw:2784
 msgid "T&otilde;lgi veateateid"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2781
+#: classes/contentmgmt/join/join_site.aw:2791
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2831
+#: classes/contentmgmt/join/join_site.aw:2841
 msgid "T&otilde;lgi vahepealkiri"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2894
+#: classes/contentmgmt/join/join_site.aw:2904
 msgid "Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!"
 msgstr ""

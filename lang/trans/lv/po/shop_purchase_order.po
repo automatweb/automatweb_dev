@@ -1,0 +1,272 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_purchase_order.aw:class_1430_help
+msgid "Klassi Lao ostutellimus help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_number
+msgid "Omaduse Number (number) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_number_comment
+msgid "Omaduse Number (number) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_number_help
+msgid "Omaduse Number (number) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_purchaser
+msgid "Omaduse Hankija (purchaser) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_purchaser_comment
+msgid "Omaduse Hankija (purchaser) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_purchaser_help
+msgid "Omaduse Hankija (purchaser) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_related_sales_orders
+msgid "Omaduse Seotud m&uuml;&uuml;gitellimused			 (related_sales_orders) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_related_sales_orders_comment
+msgid "Omaduse Seotud m&uuml;&uuml;gitellimused			 (related_sales_orders) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_related_sales_orders_help
+msgid "Omaduse Seotud m&uuml;&uuml;gitellimused			 (related_sales_orders) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_date
+msgid "Omaduse Kuup&auml;ev (date) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_date_comment
+msgid "Omaduse Kuup&auml;ev (date) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_date_help
+msgid "Omaduse Kuup&auml;ev (date) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_planned_arrival_date
+msgid "Omaduse Planeeritud saabumise kuup&auml;ev (planned_arrival_date) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_planned_arrival_date_comment
+msgid "Omaduse Planeeritud saabumise kuup&auml;ev (planned_arrival_date) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_planned_arrival_date_help
+msgid "Omaduse Planeeritud saabumise kuup&auml;ev (planned_arrival_date) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_purchaser_rep
+msgid "Omaduse Hankija esindaja (purchaser_rep) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_purchaser_rep_comment
+msgid "Omaduse Hankija esindaja (purchaser_rep) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_purchaser_rep_help
+msgid "Omaduse Hankija esindaja (purchaser_rep) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_our_rep
+msgid "Omaduse Meie esindaja (our_rep) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_our_rep_comment
+msgid "Omaduse Meie esindaja (our_rep) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_our_rep_help
+msgid "Omaduse Meie esindaja (our_rep) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_trans_cost
+msgid "Omaduse Transpordikulu (trans_cost) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_trans_cost_comment
+msgid "Omaduse Transpordikulu (trans_cost) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_trans_cost_help
+msgid "Omaduse Transpordikulu (trans_cost) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_transp_type
+msgid "Omaduse L&auml;hetusviis (transp_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_transp_type_comment
+msgid "Omaduse L&auml;hetusviis (transp_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_transp_type_help
+msgid "Omaduse L&auml;hetusviis (transp_type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_warehouse
+msgid "Omaduse Ladu (warehouse) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_warehouse_comment
+msgid "Omaduse Ladu (warehouse) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_warehouse_help
+msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_confirmed
+msgid "Omaduse Kinnitatud (confirmed) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_confirmed_comment
+msgid "Omaduse Kinnitatud (confirmed) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_confirmed_help
+msgid "Omaduse Kinnitatud (confirmed) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_closed
+msgid "Omaduse Suletud (closed) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_closed_comment
+msgid "Omaduse Suletud (closed) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_closed_help
+msgid "Omaduse Suletud (closed) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_taxed
+msgid "Omaduse Maks (taxed) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_taxed_comment
+msgid "Omaduse Maks (taxed) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_taxed_help
+msgid "Omaduse Maks (taxed) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_art_toolbar
+msgid "Omaduse  (art_toolbar) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_art_toolbar_comment
+msgid "Omaduse  (art_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_art_toolbar_help
+msgid "Omaduse  (art_toolbar) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_articles
+msgid "Omaduse Artiklid (articles) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_articles_comment
+msgid "Omaduse Artiklid (articles) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:prop_articles_help
+msgid "Omaduse Artiklid (articles) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:group_articles
+msgid "Grupi Artiklid (articles) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:group_articles_help
+msgid "Grupi Artiklid (articles) help"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:rel_RELTYPE_PURCHASER
+msgid "Seose Hankija (RELTYPE_PURCHASER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:rel_RELTYPE_PURCHASER_REP
+msgid "Seose Hankija esindaja (RELTYPE_PURCHASER_REP) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:rel_RELTYPE_SELL_ORDER
+msgid "Seose M&uuml;&uuml;gitellimus (RELTYPE_SELL_ORDER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:rel_RELTYPE_OUR_REP
+msgid "Seose Meie esindaja (RELTYPE_OUR_REP) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:rel_RELTYPE_CURRENCY
+msgid "Seose Valuuta (RELTYPE_CURRENCY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:137
+msgid "Artikkel"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:143
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:150
+msgid "&Uuml;hik"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:156
+msgid "&Uuml;hiku hind"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:162
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:168
+msgid "Maksum&auml;&auml;r"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:174
+msgid "Hankija artiklikood"
+msgstr ""
+
+#: classes/applications/shop/shop_purchase_order.aw:180
+msgid "Saadud kogus"
+msgstr ""
+

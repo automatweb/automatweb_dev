@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/shop/shop_product_category.aw:class_1435_help
+msgid "Klassi Artiklikategooria help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_desc
+msgid "Omaduse Kirjeldus (desc) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_desc_comment
+msgid "Omaduse Kirjeldus (desc) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_desc_help
+msgid "Omaduse Kirjeldus (desc) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_images
+msgid "Omaduse Pildid (images) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_images_comment
+msgid "Omaduse Pildid (images) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_images_help
+msgid "Omaduse Pildid (images) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_doc
+msgid "Omaduse Dokument (doc) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_doc_comment
+msgid "Omaduse Dokument (doc) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_doc_help
+msgid "Omaduse Dokument (doc) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_folders
+msgid "Omaduse Kaustad (folders) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_folders_comment
+msgid "Omaduse Kaustad (folders) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_folders_help
+msgid "Omaduse Kaustad (folders) help"
+msgstr ""
+

@@ -9,48 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/admin/css_style_gen.aw:class_847_help
+#: classes/admin/import/css_style_gen.aw:class_847_help
 msgid "Klassi CSS Stiilide generaator help"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_css_file
+#: classes/admin/import/css_style_gen.aw:prop_css_file
 msgid "Omaduse CSS Faili URL (css_file) caption"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_css_file_comment
+#: classes/admin/import/css_style_gen.aw:prop_css_file_comment
 msgid "Omaduse CSS Faili URL (css_file) kommentaar"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_css_file_help
+#: classes/admin/import/css_style_gen.aw:prop_css_file_help
 msgid "Omaduse CSS Faili URL (css_file) help"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_folder
+#: classes/admin/import/css_style_gen.aw:prop_folder
 msgid "Omaduse Kataloog stiilide jaoks (folder) caption"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_folder_comment
+#: classes/admin/import/css_style_gen.aw:prop_folder_comment
 msgid "Omaduse Kataloog stiilide jaoks (folder) kommentaar"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_folder_help
+#: classes/admin/import/css_style_gen.aw:prop_folder_help
 msgid "Omaduse Kataloog stiilide jaoks (folder) help"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_do_gen
+#: classes/admin/import/css_style_gen.aw:prop_do_gen
 msgid "Omaduse Genereeri! (do_gen) caption"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_do_gen_comment
+#: classes/admin/import/css_style_gen.aw:prop_do_gen_comment
 msgid "Omaduse Genereeri! (do_gen) kommentaar"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:prop_do_gen_help
+#: classes/admin/import/css_style_gen.aw:prop_do_gen_help
 msgid "Omaduse Genereeri! (do_gen) help"
 msgstr ""
 
-#: classes/admin/css_style_gen.aw:rel_RELTYPE_FOLDER
+#: classes/admin/import/css_style_gen.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
-

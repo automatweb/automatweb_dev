@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/awmyadmin/db_table_contents.aw:class_153_help
 msgid "Klassi Andmebaasitabeli sisu help"
 msgstr ""
@@ -158,7 +157,10 @@ msgstr ""
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
+#: classes/applications/awmyadmin/db_table_contents.aw:137
+msgid "Tabeli %s sisu serverist %s"
+msgstr ""
+
 #: classes/applications/awmyadmin/db_table_contents.aw:209
 msgid "Salvesta"
 msgstr ""
-

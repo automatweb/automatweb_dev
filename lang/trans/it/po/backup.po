@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/backup/backup.aw:class_814_help
 msgid "Klassi Saidi backup help"
 msgstr ""
@@ -38,7 +37,6 @@ msgstr ""
 msgid "Omaduse Loo backup (do_bup) help"
 msgstr ""
 
-#: classes/applications/backup/backup.aw:60
+#: classes/applications/backup/backup.aw:59
 msgid "backup::do_backup(): no server folder set for backup!"
 msgstr ""
-

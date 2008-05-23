@@ -910,7 +910,7 @@ msgid "Kaust"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:434
-#: classes/applications/shop/shop_order_center.aw:1593
+#: classes/applications/shop/shop_order_center.aw:1597
 msgid "Kataloog"
 msgstr "Folder"
 
@@ -931,9 +931,9 @@ msgid "Paketi teise vaate kujundus"
 msgstr "Package other view layout"
 
 #: classes/applications/shop/shop_order_center.aw:477
-#: classes/applications/shop/shop_order_center.aw:1418
-#: classes/applications/shop/shop_order_center.aw:1475
-#: classes/applications/shop/shop_order_center.aw:1619
+#: classes/applications/shop/shop_order_center.aw:1422
+#: classes/applications/shop/shop_order_center.aw:1479
+#: classes/applications/shop/shop_order_center.aw:1623
 msgid "--vali--"
 msgstr "--select--"
 
@@ -949,39 +949,39 @@ msgstr "Ascending / Descending"
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/applications/shop/shop_order_center.aw:1247
+#: classes/applications/shop/shop_order_center.aw:1251
 msgid "&nbsp"
 msgstr "&nbsp;"
 
-#: classes/applications/shop/shop_order_center.aw:1262
+#: classes/applications/shop/shop_order_center.aw:1266
 msgid "Vali t&uuml;hjaks"
 msgstr "Select one"
 
-#: classes/applications/shop/shop_order_center.aw:1365
+#: classes/applications/shop/shop_order_center.aw:1369
 msgid "Tellija andmete vorm valimata!"
 msgstr "Orderer data form not selected!"
 
-#: classes/applications/shop/shop_order_center.aw:1392
+#: classes/applications/shop/shop_order_center.aw:1396
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 
-#: classes/applications/shop/shop_order_center.aw:1524
+#: classes/applications/shop/shop_order_center.aw:1528
 msgid "Filtrid integratiooniklassist"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1550
+#: classes/applications/shop/shop_order_center.aw:1554
 msgid "Filtrid toote omadustest"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1562
+#: classes/applications/shop/shop_order_center.aw:1566
 msgid "V&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1567
+#: classes/applications/shop/shop_order_center.aw:1571
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1598
+#: classes/applications/shop/shop_order_center.aw:1602
 msgid "Kehtiv filter"
 msgstr ""
 

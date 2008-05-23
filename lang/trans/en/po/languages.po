@@ -13,6 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/languages.aw:499
+#: classes/core/languages.aw:509
 msgid "Lisas keele"
 msgstr "Added language"

@@ -66,19 +66,19 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:65
+#: classes/admin/config/config_old_redirect.aw:42
 msgid "Vana aadress"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:70
+#: classes/admin/config/config_old_redirect.aw:47
 msgid "Uus aadress"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:160
+#: classes/admin/config/config_old_redirect.aw:137
 msgid "Mis asendada"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:165
+#: classes/admin/config/config_old_redirect.aw:142
 msgid "Milega asendada"
 msgstr ""
 

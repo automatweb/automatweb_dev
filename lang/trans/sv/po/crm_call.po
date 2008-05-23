@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_call.aw:class_223_help
 msgid "Klassi K&otilde;ne help"
 msgstr ""
@@ -267,15 +266,15 @@ msgid "Omaduse Arve number (bill_no) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_time_guess
-msgid "Omaduse Prognoositav tundide arv 	 (time_guess) caption"
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) caption"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_time_guess_comment
-msgid "Omaduse Prognoositav tundide arv 	 (time_guess) kommentaar"
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_time_guess_help
-msgid "Omaduse Prognoositav tundide arv 	 (time_guess) help"
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_time_real
@@ -618,35 +617,34 @@ msgstr ""
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/crm/crm_call.aw:911
+#: classes/crm/crm_call.aw:905
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_call.aw:918
+#: classes/crm/crm_call.aw:912
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:923
+#: classes/crm/crm_call.aw:917
 msgid "Vaata"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1002
+#: classes/crm/crm_call.aw:996
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1007
+#: classes/crm/crm_call.aw:1001
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1012
+#: classes/crm/crm_call.aw:1006
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1017
+#: classes/crm/crm_call.aw:1011
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_call.aw:1051
+#: classes/crm/crm_call.aw:1045
 msgid "Loo uus arve"
 msgstr ""
-

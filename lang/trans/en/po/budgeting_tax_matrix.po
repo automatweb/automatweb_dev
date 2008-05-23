@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/budgeting/budgeting_tax_matrix.aw:class_1350_help
 msgid "Klassi Eelarvestamise maksumaatriks help"
@@ -118,7 +117,38 @@ msgstr ""
 msgid "Maks"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax_matrix.aw:271
-msgid "Seos maksu %s ja kausta %s vahel"
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:295
+msgid "T&auml;isarvuline summa"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:299
+msgid "Summa protsentides"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:303
+msgid "Miinus tolerants"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:307
+msgid "Pluss tolerants"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:311
+msgid "Tingimus"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:315
+msgid "Kasuta eraldi seadeid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:319
+msgid "Kasuta olemasolevaid seadeid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:323
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_matrix.aw:479
+msgid "Seos maksu %s ja kausta %s vahel"
+msgstr ""

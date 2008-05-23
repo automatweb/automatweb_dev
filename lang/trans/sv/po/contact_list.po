@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/quickmessage/contact_list.aw:class_811_help
 msgid "Klassi Aadressiraamat help"
 msgstr ""
@@ -118,23 +117,10 @@ msgstr ""
 msgid "Oled kindel, et tahad valitud eemaldada?"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:100 classes/applications/quickmessage/contact_list.aw:234
+#: classes/applications/quickmessage/contact_list.aw:100
 msgid "Nimi"
 msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:104
 msgid "E-Mail"
 msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:230
-msgid "ID"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:238
-msgid "E-post"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:287
-msgid "Saada sõnum"
-msgstr ""
-

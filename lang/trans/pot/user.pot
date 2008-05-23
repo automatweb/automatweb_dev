@@ -746,43 +746,43 @@ msgstr ""
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1597
+#: classes/core/users/user.aw:1589
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1646
+#: classes/core/users/user.aw:1638
 msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
 msgstr ""
 
-#: classes/core/users/user.aw:1654
+#: classes/core/users/user.aw:1646
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1659
+#: classes/core/users/user.aw:1651
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1664
+#: classes/core/users/user.aw:1656
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1674
+#: classes/core/users/user.aw:1666
 msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;igus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1710
+#: classes/core/users/user.aw:1702
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr ""
 
-#: classes/core/users/user.aw:2167
+#: classes/core/users/user.aw:2153
 msgid "Seaded"
 msgstr ""
 
-#: classes/core/users/user.aw:2214
+#: classes/core/users/user.aw:2200
 msgid "Ajalugu"
 msgstr ""
 
-#: classes/core/users/user.aw:2320
+#: classes/core/users/user.aw:2306
 msgid "could not find the group oid for gid %s"
 msgstr ""
 

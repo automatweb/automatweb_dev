@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_order_center_filter_entry.aw:class_1412_help
 msgid "Klassi Tellimiskeskkonna toodete filter help"
 msgstr ""
@@ -58,7 +57,6 @@ msgstr ""
 msgid "Grupi Koosta filter (filter) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center_filter_entry.aw:117
+#: classes/applications/shop/shop_order_center_filter_entry.aw:125
 msgid "Vali aktiivsed filtrite v&auml;&auml;rtused"
 msgstr ""
-

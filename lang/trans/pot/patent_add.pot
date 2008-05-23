@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/clients/patent_office/patent_add.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/clients/patent_office/patent_add.aw:class_1446_help
+msgid "Klassi Patenditaotluse veebist lisamine help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_add.aw:prop_procurator_menu
@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Patentide kaust (patents_menu) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent_add.aw:prop_series
+msgid "Omaduse Numbriseeria (series) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_add.aw:prop_series_comment
+msgid "Omaduse Numbriseeria (series) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_add.aw:prop_series_help
+msgid "Omaduse Numbriseeria (series) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent_add.aw:rel_RELTYPE_BANK_PAYMENT
 msgid "Seose Pangalingi objekt (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
@@ -60,5 +72,9 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/patent_add.aw:rel_RELTYPE_PATENT_MENU
 msgid "Seose Patentide kaust (RELTYPE_PATENT_MENU) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_add.aw:rel_RELTYPE_SERIES
+msgid "Seose Numbriseeria (RELTYPE_SERIES) tekst"
 msgstr ""
 

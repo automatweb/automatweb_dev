@@ -9,9 +9,116 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_warehouse_config.aw:class_296_help
 msgid "Klassi Lao konfiguratsioon help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_search_form
+msgid "Omaduse Lao otsinguvorm (search_form) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_search_form_comment
+msgid "Omaduse Lao otsinguvorm (search_form) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_search_form_help
+msgid "Omaduse Lao otsinguvorm (search_form) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_has_alternative_units
+msgid "Omaduse Alternatiiv&uuml;hikud (has_alternative_units) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_has_alternative_units_comment
+msgid "Omaduse Alternatiiv&uuml;hikud (has_alternative_units) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_has_alternative_units_help
+msgid "Omaduse Alternatiiv&uuml;hikud (has_alternative_units) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_alternative_unit_levels
+msgid "Omaduse Alternatiiv&uuml;hikute tasemeid (alternative_unit_levels) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_alternative_unit_levels_comment
+msgid "Omaduse Alternatiiv&uuml;hikute tasemeid (alternative_unit_levels) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_alternative_unit_levels_help
+msgid "Omaduse Alternatiiv&uuml;hikute tasemeid (alternative_unit_levels) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_def_price_list
+msgid "Omaduse Vaikimisi hinnakiri (def_price_list) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_def_price_list_comment
+msgid "Omaduse Vaikimisi hinnakiri (def_price_list) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_def_price_list_help
+msgid "Omaduse Vaikimisi hinnakiri (def_price_list) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_def_currency
+msgid "Omaduse Vaikimisi valuuta (def_currency) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_def_currency_comment
+msgid "Omaduse Vaikimisi valuuta (def_currency) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_def_currency_help
+msgid "Omaduse Vaikimisi valuuta (def_currency) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos
+msgid "Omaduse Haldurfirmad (manager_cos) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos_comment
+msgid "Omaduse Haldurfirmad (manager_cos) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos_help
+msgid "Omaduse Haldurfirmad (manager_cos) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods
+msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods_comment
+msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods_help
+msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets
+msgid "Omaduse Ladu ei m&uuml;&uuml; pakette (no_packets) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_comment
+msgid "Omaduse Ladu ei m&uuml;&uuml; pakette (no_packets) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_help
+msgid "Omaduse Ladu ei m&uuml;&uuml; pakette (no_packets) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count
+msgid "Omaduse Toodetel puudub laoseis (no_count) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count_comment
+msgid "Omaduse Toodetel puudub laoseis (no_count) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count_help
+msgid "Omaduse Toodetel puudub laoseis (no_count) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_fld
@@ -122,64 +229,24 @@ msgstr ""
 msgid "Omaduse Lao tellijate kataloog (buyers_fld) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:prop_search_form
-msgid "Omaduse Lao otsinguvorm (search_form) caption"
+#: classes/applications/shop/shop_warehouse_config.aw:prop_units_table
+msgid "Omaduse  (units_table) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:prop_search_form_comment
-msgid "Omaduse Lao otsinguvorm (search_form) kommentaar"
+#: classes/applications/shop/shop_warehouse_config.aw:prop_units_table_comment
+msgid "Omaduse  (units_table) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:prop_search_form_help
-msgid "Omaduse Lao otsinguvorm (search_form) help"
+#: classes/applications/shop/shop_warehouse_config.aw:prop_units_table_help
+msgid "Omaduse  (units_table) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos
-msgid "Omaduse Haldurfirmad (manager_cos) caption"
+#: classes/applications/shop/shop_warehouse_config.aw:group_units
+msgid "Grupi &Uuml;hikud (units) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos_comment
-msgid "Omaduse Haldurfirmad (manager_cos) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos_help
-msgid "Omaduse Haldurfirmad (manager_cos) help"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods
-msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods_comment
-msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods_help
-msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) help"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets
-msgid "Omaduse Ladu ei müü pakette (no_packets) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_comment
-msgid "Omaduse Ladu ei müü pakette (no_packets) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_help
-msgid "Omaduse Ladu ei müü pakette (no_packets) help"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count
-msgid "Omaduse Toodetel puudub laoseis (no_count) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count_comment
-msgid "Omaduse Toodetel puudub laoseis (no_count) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count_help
-msgid "Omaduse Toodetel puudub laoseis (no_count) help"
+#: classes/applications/shop/shop_warehouse_config.aw:group_units_help
+msgid "Grupi &Uuml;hikud (units) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_FOLDER
@@ -198,3 +265,18 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_DEF_PRICELIST
+msgid "Seose Hinnakiri (RELTYPE_DEF_PRICELIST) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_DEF_CURRENCY
+msgid "Seose Valuuta (RELTYPE_DEF_CURRENCY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:layout_left
+msgid "Kujundusosa Seaded (left) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:layout_right
+msgid "Kujundusosa Kaustad (right) pealkiri"
+msgstr ""

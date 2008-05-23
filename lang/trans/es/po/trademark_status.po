@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/patent_office/trademark_status.aw:class_1195_help
 msgid "Klassi Trademark status help"
 msgstr ""
@@ -24,6 +23,18 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_help
 msgid "Omaduse Kinnitatud (verified) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_date
+msgid "Omaduse Kinnitamise kuup&auml;ev (verified_date) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_date_comment
+msgid "Omaduse Kinnitamise kuup&auml;ev (verified_date) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_date_help
+msgid "Omaduse Kinnitamise kuup&auml;ev (verified_date) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_status.aw:prop_exported
@@ -85,4 +96,3 @@ msgstr ""
 #: classes/applications/clients/patent_office/trademark_status.aw:prop_modified_help
 msgid "Omaduse  (modified) help"
 msgstr ""
-

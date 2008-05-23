@@ -401,121 +401,121 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:202
+#: classes/contentmgmt/file.aw:206
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:222
+#: classes/contentmgmt/file.aw:226
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:223 classes/contentmgmt/file.aw:242
-msgid "Allkirjastamine"
-msgstr ""
-
-#: classes/contentmgmt/file.aw:230
-msgid "DigiDoc konteinerisse"
-msgstr ""
-
-#: classes/contentmgmt/file.aw:241
-msgid "Allkirjasta"
-msgstr ""
-
-#: classes/contentmgmt/file.aw:249
-msgid "DigiDoc konteiner"
-msgstr ""
-
-#: classes/contentmgmt/file.aw:260
-msgid "Allkirjasta fail"
-msgstr ""
-
-#: classes/contentmgmt/file.aw:261
+#: classes/contentmgmt/file.aw:227 classes/contentmgmt/file.aw:265
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:322
+#: classes/contentmgmt/file.aw:234
+msgid "DigiDoc konteinerisse"
+msgstr ""
+
+#: classes/contentmgmt/file.aw:245
+msgid "Allkirjasta"
+msgstr ""
+
+#: classes/contentmgmt/file.aw:246
+msgid "Allkirjastamine"
+msgstr ""
+
+#: classes/contentmgmt/file.aw:253
+msgid "DigiDoc konteiner"
+msgstr ""
+
+#: classes/contentmgmt/file.aw:264
+msgid "Allkirjasta fail"
+msgstr ""
+
+#: classes/contentmgmt/file.aw:326
 msgid "fail puudub"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:418
+#: classes/contentmgmt/file.aw:422
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:440
+#: classes/contentmgmt/file.aw:444
 msgid "V&otilde;imalikud asendused<br>"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:441
+#: classes/contentmgmt/file.aw:445
 msgid "#file# - faili nimi <br>"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:442
+#: classes/contentmgmt/file.aw:446
 msgid "#file_url# - link failile <br>"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:443
+#: classes/contentmgmt/file.aw:447
 msgid "#user_name# - muutja nimi"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:456
+#: classes/contentmgmt/file.aw:460
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:466
+#: classes/contentmgmt/file.aw:470
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:540
+#: classes/contentmgmt/file.aw:544
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:800
+#: classes/contentmgmt/file.aw:804
 msgid "faili ikoon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:918
+#: classes/contentmgmt/file.aw:922
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1554
+#: classes/contentmgmt/file.aw:1576
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1675
+#: classes/contentmgmt/file.aw:1697
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1683
+#: classes/contentmgmt/file.aw:1705
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1717
+#: classes/contentmgmt/file.aw:1739
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1723
+#: classes/contentmgmt/file.aw:1745
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1730
+#: classes/contentmgmt/file.aw:1752
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1740
+#: classes/contentmgmt/file.aw:1762
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1745
+#: classes/contentmgmt/file.aw:1767
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1750
+#: classes/contentmgmt/file.aw:1772
 msgid "Telefon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1755
+#: classes/contentmgmt/file.aw:1777
 msgid "E-mail"
 msgstr ""
 

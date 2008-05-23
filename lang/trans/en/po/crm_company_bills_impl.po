@@ -74,6 +74,10 @@ msgstr "Create invoice"
 msgid "Otsi"
 msgstr ""
 
+#: classes/applications/crm/crm_company_bills_impl.aw:645
+msgid "Valitud t&ouml;&ouml;d on teostatud erinevatele klientidele!"
+msgstr ""
+
 #: classes/applications/crm/crm_company_bills_impl.aw:652
 msgid "Arve"
 msgstr ""
@@ -202,6 +206,11 @@ msgstr "Export"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:1132
 msgid "Hansa raama (ridadega)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:1134
+#: classes/applications/crm/crm_company_bills_impl.aw:1141
+msgid "Sisesta arve number?"
 msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:1139

@@ -13,50 +13,50 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2183
+#: classes/contentmgmt/site_show.aw:2186
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2264
+#: classes/contentmgmt/site_show.aw:2267
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2470
+#: classes/contentmgmt/site_show.aw:2478
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2977
+#: classes/contentmgmt/site_show.aw:2989
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3168
+#: classes/contentmgmt/site_show.aw:3180
 msgid "Lisa uus k&otilde;rvale"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3178
+#: classes/contentmgmt/site_show.aw:3190
 msgid "Lisa uus alamkaust"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3188
+#: classes/contentmgmt/site_show.aw:3200
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3198
+#: classes/contentmgmt/site_show.aw:3210
 msgid "Muuda &otilde;igusi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3207
+#: classes/contentmgmt/site_show.aw:3219
 msgid "Peida"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3211
+#: classes/contentmgmt/site_show.aw:3223
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3219 classes/contentmgmt/site_show.aw:3251
+#: classes/contentmgmt/site_show.aw:3231 classes/contentmgmt/site_show.aw:3263
 msgid "Kleebi"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3239
+#: classes/contentmgmt/site_show.aw:3251
 msgid "Lisa uus"
 msgstr ""

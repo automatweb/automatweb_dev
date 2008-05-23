@@ -59,6 +59,6 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/admin/config/config_login_menus.aw:146
+#: classes/admin/config/config_login_menus.aw:141
 msgid "menyy"
 msgstr ""

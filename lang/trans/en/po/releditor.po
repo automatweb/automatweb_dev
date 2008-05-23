@@ -14,75 +14,86 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/releditor.aw:72 classes/vcl/releditor.aw:83
-#: classes/vcl/releditor.aw:1010 classes/vcl/releditor.aw:1245
+#: classes/vcl/releditor.aw:88 classes/vcl/releditor.aw:187
+#: classes/vcl/releditor.aw:1046 classes/vcl/releditor.aw:1281
+#: classes/vcl/releditor.aw:1854 classes/vcl/releditor.aw:1871
+#: classes/vcl/releditor.aw:2076
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:80 classes/vcl/releditor.aw:387
+#: classes/vcl/releditor.aw:89 classes/vcl/releditor.aw:192
+#: classes/vcl/releditor.aw:1859 classes/vcl/releditor.aw:1872
 msgid "Kustuta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:380 classes/vcl/releditor.aw:381
-msgid "Lisa uus"
-msgstr ""
-
-#: classes/vcl/releditor.aw:487
+#: classes/vcl/releditor.aw:497
 msgid "Klassi ID"
 msgstr "Class ID"
 
-#: classes/vcl/releditor.aw:488
+#: classes/vcl/releditor.aw:498
 msgid "Klass"
 msgstr "Class"
 
-#: classes/vcl/releditor.aw:506
+#: classes/vcl/releditor.aw:516
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
 
-#: classes/vcl/releditor.aw:516
+#: classes/vcl/releditor.aw:526
 msgid "Viga %s definitsioonis (seose t&uuml;&uuml;p defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:552
+#: classes/vcl/releditor.aw:562
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:682 classes/vcl/releditor.aw:881
-#: classes/vcl/releditor.aw:889 classes/vcl/releditor.aw:900
+#: classes/vcl/releditor.aw:709 classes/vcl/releditor.aw:917
+#: classes/vcl/releditor.aw:925 classes/vcl/releditor.aw:936
 msgid "Uus"
 msgstr "New"
 
-#: classes/vcl/releditor.aw:760 classes/vcl/releditor.aw:931
+#: classes/vcl/releditor.aw:787 classes/vcl/releditor.aw:967
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/vcl/releditor.aw:890
+#: classes/vcl/releditor.aw:926
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/vcl/releditor.aw:905
+#: classes/vcl/releditor.aw:941
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:908
+#: classes/vcl/releditor.aw:944
 msgid "Kustutada valitud seosed?"
 msgstr "Delete selected relations?"
 
-#: classes/vcl/releditor.aw:940
+#: classes/vcl/releditor.aw:976
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:1152
+#: classes/vcl/releditor.aw:1188
 msgid "Vali &uuml;ks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:1162 classes/vcl/releditor.aw:1229
+#: classes/vcl/releditor.aw:1198 classes/vcl/releditor.aw:1265
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:1236
+#: classes/vcl/releditor.aw:1272
 msgid "Nimi"
 msgstr "Name"
+
+#: classes/vcl/releditor.aw:1949
+msgid "Jah"
+msgstr ""
+
+#: classes/vcl/releditor.aw:1949
+msgid "Ei"
+msgstr ""
+
+#: classes/vcl/releditor.aw:2080
+msgid "Lisa"
+msgstr ""
 
 #~ msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 #~ msgstr "Error in the definition of %s (connection type undefined!)"

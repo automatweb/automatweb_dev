@@ -246,13 +246,13 @@ msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:84
-#: classes/contentmgmt/gallery/mini_gallery.aw:630
+#: classes/contentmgmt/gallery/mini_gallery.aw:637
 msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:85
-#: classes/contentmgmt/gallery/mini_gallery.aw:636
-#: classes/contentmgmt/gallery/mini_gallery.aw:738
+#: classes/contentmgmt/gallery/mini_gallery.aw:643
+#: classes/contentmgmt/gallery/mini_gallery.aw:745
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -292,30 +292,30 @@ msgstr ""
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:608
+#: classes/contentmgmt/gallery/mini_gallery.aw:615
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:614
+#: classes/contentmgmt/gallery/mini_gallery.aw:621
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:620
+#: classes/contentmgmt/gallery/mini_gallery.aw:627
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:622
+#: classes/contentmgmt/gallery/mini_gallery.aw:629
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:642
+#: classes/contentmgmt/gallery/mini_gallery.aw:649
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:648
+#: classes/contentmgmt/gallery/mini_gallery.aw:655
 msgid "Muudetud"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:733
+#: classes/contentmgmt/gallery/mini_gallery.aw:740
 msgid "Kausta nimi"
 msgstr ""

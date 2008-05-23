@@ -221,27 +221,39 @@ msgstr ""
 msgid "Omaduse Kasutajanime prefiks (aw_user_prefix) help"
 msgstr ""
 
+#: classes/core/users/auth/auth_server_openldap.aw:prop_user_bind_prefix
+msgid "Omaduse Bind prefix kasutajatele (user_bind_prefix) caption"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_openldap.aw:prop_user_bind_prefix_comment
+msgid "Omaduse Bind prefix kasutajatele (user_bind_prefix) kommentaar"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_openldap.aw:prop_user_bind_prefix_help
+msgid "Omaduse Bind prefix kasutajatele (user_bind_prefix) help"
+msgstr ""
+
 # classes/core/users/auth/auth_server_openldap.aw:rel_RELTYPE_GROUP
 #: classes/core/users/auth/auth_server_openldap.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:123
+#: classes/core/users/auth/auth_server_openldap.aw:126
 msgid "auth_server_openldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:127
+#: classes/core/users/auth/auth_server_openldap.aw:130
 msgid "LDAP Moodul pole installeeritud!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:146
+#: classes/core/users/auth/auth_server_openldap.aw:149
 msgid "Ei saanud &uuml;hendust LDAP serveriga %s"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:190
+#: classes/core/users/auth/auth_server_openldap.aw:193
 msgid "Sellist kasutajat pole v&otilde;i parool on vale!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_openldap.aw:210
+#: classes/core/users/auth/auth_server_openldap.aw:213
 msgid "Ei saanud serveriga &uuml;hendust!"
 msgstr ""

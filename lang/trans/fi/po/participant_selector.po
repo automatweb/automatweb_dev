@@ -13,22 +13,26 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/calendar/vcl/participant_selector.aw:37
+#: classes/applications/calendar/vcl/participant_selector.aw:40
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/vcl/participant_selector.aw:45
+#: classes/applications/calendar/vcl/participant_selector.aw:47
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/calendar/vcl/participant_selector.aw:51
+#: classes/applications/calendar/vcl/participant_selector.aw:53
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/calendar/vcl/participant_selector.aw:57
+#: classes/applications/calendar/vcl/participant_selector.aw:58
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/calendar/vcl/participant_selector.aw:98
+#: classes/applications/calendar/vcl/participant_selector.aw:112
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/calendar/vcl/participant_selector.aw:179
 msgid "osalejad.xls"
 msgstr ""

@@ -14,38 +14,38 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:90 classes/vcl/relpicker.aw:228
+#: classes/vcl/relpicker.aw:90 classes/vcl/relpicker.aw:233
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/vcl/relpicker.aw:148 classes/vcl/relpicker.aw:328
+#: classes/vcl/relpicker.aw:148 classes/vcl/relpicker.aw:333
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/vcl/relpicker.aw:162 classes/vcl/relpicker.aw:339
+#: classes/vcl/relpicker.aw:162 classes/vcl/relpicker.aw:344
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/relpicker.aw:190 classes/vcl/relpicker.aw:444
+#: classes/vcl/relpicker.aw:190 classes/vcl/relpicker.aw:449
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/vcl/relpicker.aw:209 classes/vcl/relpicker.aw:463
+#: classes/vcl/relpicker.aw:209 classes/vcl/relpicker.aw:468
 msgid "Lisa uus %s"
 msgstr "Add new %s"
 
-#: classes/vcl/relpicker.aw:395
+#: classes/vcl/relpicker.aw:400
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:396
+#: classes/vcl/relpicker.aw:401
 msgid "Oled kindel, et soovid valitud objektid kustutada?"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:411
+#: classes/vcl/relpicker.aw:416
 msgid "Kustuta valitud seosed"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:412
+#: classes/vcl/relpicker.aw:417
 msgid "Oled kindel, et soovid valitud seosed kustutada?"
 msgstr ""

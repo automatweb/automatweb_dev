@@ -9,50 +9,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/link_manager.aw:class__help
+#: classes/admin/editor/link_manager.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/link_manager.aw:108
+#: classes/admin/editor/link_manager.aw:108
 msgid "Uus link"
 msgstr "New link"
 
-#: classes/admin/link_manager.aw:109
+#: classes/admin/editor/link_manager.aw:109
 msgid "Vali olemasolev link"
 msgstr "Choose existing link"
 
-#: classes/admin/link_manager.aw:118
+#: classes/admin/editor/link_manager.aw:122
 msgid "Link"
 msgstr "Link"
 
-#: classes/admin/link_manager.aw:123
-msgid "Asukoht"
-msgstr "Location"
-
-#: classes/admin/link_manager.aw:128
-msgid "Vali"
-msgstr "Choose"
-
-#: classes/admin/link_manager.aw:176
+#: classes/admin/editor/link_manager.aw:158
 msgid "Vali see"
 msgstr "Choose this"
 
-#: classes/admin/link_manager.aw:214
-msgid "Nimi"
-msgstr "Name"
-
-#: classes/admin/link_manager.aw:220
+#: classes/admin/editor/link_manager.aw:190
 msgid "URL"
 msgstr "URL"
 
-#: classes/admin/link_manager.aw:227
-msgid "Otsi"
-msgstr "Search"
+#~ msgid "Asukoht"
+#~ msgstr "Location"
 
-#: classes/admin/link_manager.aw:233
-msgid "Minu lisatud"
-msgstr "Added by me"
+#~ msgid "Vali"
+#~ msgstr "Choose"
 
-#: classes/admin/link_manager.aw:240
-msgid "Viimased 30"
-msgstr "Last 30"
+#~ msgid "Nimi"
+#~ msgstr "Name"
+
+#~ msgid "Otsi"
+#~ msgstr "Search"
+
+#~ msgid "Minu lisatud"
+#~ msgstr "Added by me"
+
+#~ msgid "Viimased 30"
+#~ msgstr "Last 30"

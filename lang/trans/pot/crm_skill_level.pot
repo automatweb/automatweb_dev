@@ -46,7 +46,7 @@ msgstr ""
 msgid "Seose Oskuse tase (RELTYPE_LEVEL) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:42
+#: classes/applications/crm/crm_skill_level.aw:62 classes/applications/crm/crm_skill_level.aw:74 classes/applications/crm/crm_skill_level.aw:145
 msgid "--vali--"
 msgstr ""
 

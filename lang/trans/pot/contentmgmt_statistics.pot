@@ -94,27 +94,31 @@ msgstr ""
 msgid "Grupi Linkide kontroll (link_checker) help"
 msgstr ""
 
-#: classes/admin/contentmgmt_statistics.aw:119
+#: classes/admin/contentmgmt_statistics.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/admin/contentmgmt_statistics.aw:102
 msgid "Kontrollin linke:<br>\n"
 msgstr ""
 
-#: classes/admin/contentmgmt_statistics.aw:126
+#: classes/admin/contentmgmt_statistics.aw:109
 msgid "Leidsin %s linki<br>\n"
 msgstr ""
 
-#: classes/admin/contentmgmt_statistics.aw:129
+#: classes/admin/contentmgmt_statistics.aw:112
 msgid "Kontrollin linki %s ..."
 msgstr ""
 
-#: classes/admin/contentmgmt_statistics.aw:133
+#: classes/admin/contentmgmt_statistics.aw:116
 msgid "OK<br>\n"
 msgstr ""
 
-#: classes/admin/contentmgmt_statistics.aw:137
+#: classes/admin/contentmgmt_statistics.aw:120
 msgid "<font color=red>VIGA!!</font><br>\n"
 msgstr ""
 
-#: classes/admin/contentmgmt_statistics.aw:141
+#: classes/admin/contentmgmt_statistics.aw:124
 msgid "Valmis. <a href='%s'>Tagasi</a>"
 msgstr ""
 

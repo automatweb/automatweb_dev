@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse Keel (original_lang) help"
 msgstr ""
 
+#: classes/import/event_import.aw:prop_no_event_time_objs
+msgid "Omaduse Iga toimumisaeg eraldi s&uuml;ndmuseks (no_event_time_objs) caption"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_no_event_time_objs_comment
+msgid "Omaduse Iga toimumisaeg eraldi s&uuml;ndmuseks (no_event_time_objs) kommentaar"
+msgstr ""
+
+#: classes/import/event_import.aw:prop_no_event_time_objs_help
+msgid "Omaduse Iga toimumisaeg eraldi s&uuml;ndmuseks (no_event_time_objs) help"
+msgstr ""
+
 #: classes/import/event_import.aw:prop_translatable_fields
 msgid "Omaduse V&auml;ljad, mida v&otilde;imalusel t&otilde;lgitakse (translatable_fields) caption"
 msgstr ""
@@ -286,219 +298,219 @@ msgstr ""
 msgid "Seose S&uuml;ndmuste halduse keskkond (RELTYPE_EVENTS_MANAGER) tekst"
 msgstr ""
 
-#: classes/import/event_import.aw:153
+#: classes/import/event_import.aw:156
 msgid "Alates viimasest impordist"
 msgstr ""
 
-#: classes/import/event_import.aw:156
+#: classes/import/event_import.aw:159
 msgid "K&otilde;ik s&uuml;ndmused"
 msgstr ""
 
-#: classes/import/event_import.aw:159
+#: classes/import/event_import.aw:162
 msgid "Impordi s&uuml;ndmused (%s)"
 msgstr ""
 
-#: classes/import/event_import.aw:163
+#: classes/import/event_import.aw:166
 msgid "Impordi Kultuuriakna s&uuml;ndmused (%s)"
 msgstr ""
 
-#: classes/import/event_import.aw:175
+#: classes/import/event_import.aw:178
 msgid "Tee muudatused"
 msgstr ""
 
-#: classes/import/event_import.aw:181
+#: classes/import/event_import.aw:184
 msgid "Muuda selle s&uuml;ndmuse seda v&auml;lja automaatselt edaspidi"
 msgstr ""
 
-#: classes/import/event_import.aw:187
+#: classes/import/event_import.aw:190
 msgid "Ignoreeri selle v&auml;lja muudatusi edaspidi"
 msgstr ""
 
-#: classes/import/event_import.aw:229
+#: classes/import/event_import.aw:232
 msgid "Vali"
 msgstr ""
 
-#: classes/import/event_import.aw:233
+#: classes/import/event_import.aw:236
 msgid "S&uuml;ndmus"
 msgstr ""
 
-#: classes/import/event_import.aw:237
+#: classes/import/event_import.aw:240
 msgid "V&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:241
+#: classes/import/event_import.aw:244
 msgid "Vana sisu"
 msgstr ""
 
-#: classes/import/event_import.aw:245
+#: classes/import/event_import.aw:248
 msgid "Uus sisu"
 msgstr ""
 
-#: classes/import/event_import.aw:249
+#: classes/import/event_import.aw:252
 msgid "Aeg"
 msgstr ""
 
-#: classes/import/event_import.aw:314 classes/import/event_import.aw:332 classes/import/event_import.aw:342 classes/import/event_import.aw:404 classes/import/event_import.aw:414
+#: classes/import/event_import.aw:317 classes/import/event_import.aw:335 classes/import/event_import.aw:345 classes/import/event_import.aw:407 classes/import/event_import.aw:417
 msgid "-- Ei salvestata --"
 msgstr ""
 
-#: classes/import/event_import.aw:315 classes/import/event_import.aw:333 classes/import/event_import.aw:343 classes/import/event_import.aw:387 classes/import/event_import.aw:405 classes/import/event_import.aw:415
+#: classes/import/event_import.aw:318 classes/import/event_import.aw:336 classes/import/event_import.aw:346 classes/import/event_import.aw:390 classes/import/event_import.aw:408 classes/import/event_import.aw:418
 msgid "ID allikas"
 msgstr ""
 
-#: classes/import/event_import.aw:316 classes/import/event_import.aw:334 classes/import/event_import.aw:388 classes/import/event_import.aw:406 classes/import/event_import.aw:672 classes/import/event_import.aw:730
+#: classes/import/event_import.aw:319 classes/import/event_import.aw:337 classes/import/event_import.aw:391 classes/import/event_import.aw:409 classes/import/event_import.aw:675 classes/import/event_import.aw:733
 msgid "Nimi"
 msgstr ""
 
-#: classes/import/event_import.aw:317 classes/import/event_import.aw:389 classes/import/event_import.aw:734
+#: classes/import/event_import.aw:320 classes/import/event_import.aw:392 classes/import/event_import.aw:737
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/import/event_import.aw:318 classes/import/event_import.aw:390 classes/import/event_import.aw:738
+#: classes/import/event_import.aw:321 classes/import/event_import.aw:393 classes/import/event_import.aw:741
 msgid "Algab"
 msgstr ""
 
-#: classes/import/event_import.aw:319 classes/import/event_import.aw:391
+#: classes/import/event_import.aw:322 classes/import/event_import.aw:394
 msgid "Algab (ainult kuup&auml;ev)"
 msgstr ""
 
-#: classes/import/event_import.aw:320 classes/import/event_import.aw:392
+#: classes/import/event_import.aw:323 classes/import/event_import.aw:395
 msgid "Algab (ainult kellaaeg)"
 msgstr ""
 
-#: classes/import/event_import.aw:321 classes/import/event_import.aw:393 classes/import/event_import.aw:742
+#: classes/import/event_import.aw:324 classes/import/event_import.aw:396 classes/import/event_import.aw:745
 msgid "L&otilde;peb"
 msgstr ""
 
-#: classes/import/event_import.aw:322 classes/import/event_import.aw:394
+#: classes/import/event_import.aw:325 classes/import/event_import.aw:397
 msgid "L&otilde;peb (ainult kuup&auml;ev)"
 msgstr ""
 
-#: classes/import/event_import.aw:323 classes/import/event_import.aw:395
+#: classes/import/event_import.aw:326 classes/import/event_import.aw:398
 msgid "L&otilde;peb (ainult kellaaeg)"
 msgstr ""
 
-#: classes/import/event_import.aw:324 classes/import/event_import.aw:396 classes/import/event_import.aw:746
+#: classes/import/event_import.aw:327 classes/import/event_import.aw:399 classes/import/event_import.aw:749
 msgid "Toimumiskoha ID"
 msgstr ""
 
-#: classes/import/event_import.aw:325 classes/import/event_import.aw:397
+#: classes/import/event_import.aw:328 classes/import/event_import.aw:400
 msgid "Toimumiskoha nimi"
 msgstr ""
 
-#: classes/import/event_import.aw:335 classes/import/event_import.aw:345 classes/import/event_import.aw:407 classes/import/event_import.aw:417 classes/import/event_import.aw:618 classes/import/event_import.aw:676
+#: classes/import/event_import.aw:338 classes/import/event_import.aw:348 classes/import/event_import.aw:410 classes/import/event_import.aw:420 classes/import/event_import.aw:621 classes/import/event_import.aw:679
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/import/event_import.aw:344 classes/import/event_import.aw:416 classes/import/event_import.aw:614
+#: classes/import/event_import.aw:347 classes/import/event_import.aw:419 classes/import/event_import.aw:617
 msgid "Tegevusala nimetus"
 msgstr ""
 
-#: classes/import/event_import.aw:458
+#: classes/import/event_import.aw:461
 msgid "XML allikas"
 msgstr ""
 
-#: classes/import/event_import.aw:463
+#: classes/import/event_import.aw:466
 msgid "XML v&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:467
+#: classes/import/event_import.aw:470
 msgid "S&uuml;ndmuste vormi v&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:472 classes/import/event_import.aw:714
+#: classes/import/event_import.aw:475 classes/import/event_import.aw:717
 msgid "Toimumisaja vormi v&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:477 classes/import/event_import.aw:656
+#: classes/import/event_import.aw:480 classes/import/event_import.aw:659
 msgid "Toimumiskoha vormi v&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:482 classes/import/event_import.aw:598
+#: classes/import/event_import.aw:485 classes/import/event_import.aw:601
 msgid "Valdkonna vormi v&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:487
+#: classes/import/event_import.aw:490
 msgid "Kuup&auml;eva formaat<br>(vaikimisi Unix timestamp)"
 msgstr ""
 
-#: classes/import/event_import.aw:545
+#: classes/import/event_import.aw:548
 msgid "S&uuml;ndmuse vormi v&auml;li"
 msgstr ""
 
-#: classes/import/event_import.aw:549 classes/import/event_import.aw:602 classes/import/event_import.aw:660 classes/import/event_import.aw:718
+#: classes/import/event_import.aw:552 classes/import/event_import.aw:605 classes/import/event_import.aw:663 classes/import/event_import.aw:721
 msgid "Allikas on muudetud (AWs mitte)"
 msgstr ""
 
-#: classes/import/event_import.aw:554 classes/import/event_import.aw:607 classes/import/event_import.aw:665 classes/import/event_import.aw:723
+#: classes/import/event_import.aw:557 classes/import/event_import.aw:610 classes/import/event_import.aw:668 classes/import/event_import.aw:726
 msgid "AWs on s&uuml;ndmust muudetud (v&otilde;ib-olla ka allikas)"
 msgstr ""
 
-#: classes/import/event_import.aw:565 classes/import/event_import.aw:623 classes/import/event_import.aw:681 classes/import/event_import.aw:751
+#: classes/import/event_import.aw:568 classes/import/event_import.aw:626 classes/import/event_import.aw:684 classes/import/event_import.aw:754
 msgid "Muudatus allikas logitakse"
 msgstr ""
 
-#: classes/import/event_import.aw:566 classes/import/event_import.aw:624 classes/import/event_import.aw:682 classes/import/event_import.aw:752
+#: classes/import/event_import.aw:569 classes/import/event_import.aw:627 classes/import/event_import.aw:685 classes/import/event_import.aw:755
 msgid "Muudatus allikas viiakse automaatselt l&auml;bi ka AWs"
 msgstr ""
 
-#: classes/import/event_import.aw:567 classes/import/event_import.aw:625 classes/import/event_import.aw:683 classes/import/event_import.aw:753
+#: classes/import/event_import.aw:570 classes/import/event_import.aw:628 classes/import/event_import.aw:686 classes/import/event_import.aw:756
 msgid "Muudatust allikas ignoreeritakse"
 msgstr ""
 
-#: classes/import/event_import.aw:1305
+#: classes/import/event_import.aw:1277
 msgid "External system for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1310
+#: classes/import/event_import.aw:1282
 msgid "External system for locations not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1315
+#: classes/import/event_import.aw:1287
 msgid "External system for categories (aka sectors) not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1320
+#: classes/import/event_import.aw:1292
 msgid "External system for event times not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:1708 classes/import/event_import.aw:1906 classes/import/event_import.aw:2033 classes/import/event_import.aw:2208
+#: classes/import/event_import.aw:1681 classes/import/event_import.aw:1880 classes/import/event_import.aw:2007 classes/import/event_import.aw:2199 classes/import/event_import.aw:2296
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 
-#: classes/import/event_import.aw:2302
+#: classes/import/event_import.aw:2396
 msgid "You don't have view access to import object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2312
+#: classes/import/event_import.aw:2406
 msgid "Events manager not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2317
+#: classes/import/event_import.aw:2411
 msgid "You don't have view access to events manager object!"
 msgstr ""
 
-#: classes/import/event_import.aw:2325
+#: classes/import/event_import.aw:2419
 msgid "Events manager: Directory for events not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2331
+#: classes/import/event_import.aw:2425
 msgid "Events manager: Directory for places not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2337
+#: classes/import/event_import.aw:2431
 msgid "Events manager: Directory for organizers not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2343
+#: classes/import/event_import.aw:2437
 msgid "Events manager: Directory for categories not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2356
+#: classes/import/event_import.aw:2450
 msgid "Event form not set!"
 msgstr ""
 
-#: classes/import/event_import.aw:2361
+#: classes/import/event_import.aw:2455
 msgid "You don't have view access to eventform object!"
 msgstr ""
 

@@ -1,0 +1,132 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:98
+msgid "Checkbox"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:99
+msgid "Toolbar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:100
+msgid "Faili upload"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:101
+msgid "Tekstikast"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:102
+msgid "Tabel"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:103
+msgid "Relpicker"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:104
+msgid "Listpoks"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:105
+msgid "Releditor"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:106
+msgid "Valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:107
+msgid "Kommentaaride sisetamine"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:108
+msgid "Klassifikaator"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:109
+msgid "Puu"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:110
+msgid "Kuup&auml;eva valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:111
+msgid "Reset nupp"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:112
+msgid "Nupp"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:113
+msgid "Aliastehaldur"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:114
+msgid "Kuup&auml;eva ja aja valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:115
+msgid "Kalendri valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:116
+msgid "Projekti valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:117
+msgid "Meeldetuletaja"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:118
+msgid "Osaleja valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:119
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:120
+msgid "Mitme faili upload"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:121
+msgid "Textarea"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:122
+msgid "Parooli sisestamine"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:123
+msgid "Server kataloogi valik"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:124
+msgid "Kalender"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:125
+msgid "Mittemuudetav tekst"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:126
+msgid "Aja sisestamine"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout_obj.aw:127
+msgid "V&auml;rvivalik"
+msgstr ""
+

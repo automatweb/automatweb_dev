@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/party.aw:class_914_help
 msgid "Klassi Pidu help"
 msgstr ""
@@ -27,15 +26,15 @@ msgid "Omaduse Algus (start1) help"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_end
-msgid "Omaduse Lõpp (end) caption"
+msgid "Omaduse L&otilde;pp (end) caption"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_end_comment
-msgid "Omaduse Lõpp (end) kommentaar"
+msgid "Omaduse L&otilde;pp (end) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_end_help
-msgid "Omaduse Lõpp (end) help"
+msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_image
@@ -63,15 +62,15 @@ msgid "Omaduse Sisu (content) help"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_from_artist
-msgid "Omaduse Võta esineja objektist ürituse (from_artist) caption"
+msgid "Omaduse V&otilde;ta esineja objektist &uuml;rituse (from_artist) caption"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_from_artist_comment
-msgid "Omaduse Võta esineja objektist ürituse (from_artist) kommentaar"
+msgid "Omaduse V&otilde;ta esineja objektist &uuml;rituse (from_artist) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_from_artist_help
-msgid "Omaduse Võta esineja objektist ürituse (from_artist) help"
+msgid "Omaduse V&otilde;ta esineja objektist &uuml;rituse (from_artist) help"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:prop_relman
@@ -185,4 +184,3 @@ msgstr ""
 #: classes/applications/calendar/party.aw:171
 msgid "Amet"
 msgstr ""
-

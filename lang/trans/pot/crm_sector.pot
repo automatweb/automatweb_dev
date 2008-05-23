@@ -134,6 +134,18 @@ msgstr ""
 msgid "Omaduse Tutvustus (info_document) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_ext_id
+msgid "Omaduse V&auml;line ID (ext_id) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id_comment
+msgid "Omaduse V&auml;line ID (ext_id) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id_help
+msgid "Omaduse V&auml;line ID (ext_id) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""

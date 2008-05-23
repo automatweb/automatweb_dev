@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/obj/object_list.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -22,55 +21,54 @@ msgstr ""
 msgid "object_list::filter(): oid parameter cannot be an empty array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:311
+#: classes/core/obj/object_list.aw:314
 msgid "object_list::sort_by(): argument must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:319
+#: classes/core/obj/object_list.aw:322
 msgid "object_list::sort_by(): prop argument must be present!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:351
+#: classes/core/obj/object_list.aw:354
 msgid "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:356
+#: classes/core/obj/object_list.aw:359
 msgid "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance and the second a method name from that object!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:363
+#: classes/core/obj/object_list.aw:366
 msgid "object_list::sort_by_cb(%s): no function %s exists!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:514
+#: classes/core/obj/object_list.aw:517
 msgid "object_list::foreach_o(): parameter must be an array"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:536
+#: classes/core/obj/object_list.aw:539
 msgid "object_list::foreach_o(): %s is not a member function of the object class!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:598
+#: classes/core/obj/object_list.aw:601
 msgid "object_list::foreach_cb(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:608
+#: classes/core/obj/object_list.aw:611
 msgid "object_list::foreach_cb(): callback method %s does not exist in class %s!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:617
+#: classes/core/obj/object_list.aw:620
 msgid "object_list::foreach_cb(): callback function %s does not exist!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:700
+#: classes/core/obj/object_list.aw:703
 msgid "object_list::from_arr(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:874
+#: classes/core/obj/object_list.aw:877
 msgid "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:881
+#: classes/core/obj/object_list.aw:884
 msgid "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""
-

@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/admin/config/config_aw_document_template.aw:class_252_help
 msgid "Klassi Dokumendi Template help"
@@ -94,11 +93,10 @@ msgstr ""
 msgid "Grupi L&auml;htekood (grp_source) help"
 msgstr ""
 
-#: classes/admin/config/config_aw_document_template.aw:50
+#: classes/admin/config/config_aw_document_template.aw:45
 msgid "Lead"
 msgstr ""
 
-#: classes/admin/config/config_aw_document_template.aw:51
+#: classes/admin/config/config_aw_document_template.aw:46
 msgid "Vaatamine"
 msgstr ""
-

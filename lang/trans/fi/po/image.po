@@ -97,6 +97,18 @@ msgstr ""
 msgid "Omaduse Alt (alt) help"
 msgstr ""
 
+#: classes/contentmgmt/image.aw:prop_longdesc
+msgid "Omaduse Pikk kirjeldus (longdesc) caption"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_longdesc_comment
+msgid "Omaduse Pikk kirjeldus (longdesc) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/image.aw:prop_longdesc_help
+msgid "Omaduse Pikk kirjeldus (longdesc) help"
+msgstr ""
+
 #: classes/contentmgmt/image.aw:prop_link
 msgid "Omaduse Link (link) caption"
 msgstr ""
@@ -437,46 +449,46 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:380
+#: classes/contentmgmt/image.aw:387
 msgid "kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:380
+#: classes/contentmgmt/image.aw:387
 msgid "kommentaari"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1060
+#: classes/contentmgmt/image.aw:1104
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1061
+#: classes/contentmgmt/image.aw:1105
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1074
+#: classes/contentmgmt/image.aw:1118
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1690
+#: classes/contentmgmt/image.aw:1734
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2245
+#: classes/contentmgmt/image.aw:2301
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2304
+#: classes/contentmgmt/image.aw:2360
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2308
+#: classes/contentmgmt/image.aw:2364
 msgid "Sisu"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2312
+#: classes/contentmgmt/image.aw:2368
 msgid "Autor"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2319
+#: classes/contentmgmt/image.aw:2375
 msgid "Aeg"
 msgstr ""

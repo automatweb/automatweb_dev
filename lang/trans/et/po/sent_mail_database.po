@@ -85,22 +85,22 @@ msgstr ""
 msgid "Kujundusosa Otsing (mail_left_pane) pealkiri"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:131
+#: classes/admin/sent_mail_database.aw:97
 msgid "Programm"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:137
+#: classes/admin/sent_mail_database.aw:103
 msgid "Millal"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:146
+#: classes/admin/sent_mail_database.aw:112
 msgid "Kes"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:152
+#: classes/admin/sent_mail_database.aw:118
 msgid "Kellele"
 msgstr ""
 
-#: classes/admin/sent_mail_database.aw:158
+#: classes/admin/sent_mail_database.aw:124
 msgid "Teema"
 msgstr ""

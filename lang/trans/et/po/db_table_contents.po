@@ -194,6 +194,10 @@ msgstr ""
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
+#: classes/applications/awmyadmin/db_table_contents.aw:137
+msgid "Tabeli %s sisu serverist %s"
+msgstr ""
+
 #: classes/applications/awmyadmin/db_table_contents.aw:209
 msgid "Salvesta"
 msgstr ""

@@ -9,58 +9,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/file_manager.aw:class__help
+#: classes/admin/editor/file_manager.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/file_manager.aw:80
+#: classes/admin/editor/file_manager.aw:80
 msgid "Uus fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:81
+#: classes/admin/editor/file_manager.aw:81
 msgid "Vali olemasolev fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:90
+#: classes/admin/editor/file_manager.aw:94
 msgid "Fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:95
-msgid "Asukoht"
-msgstr ""
-
-#: classes/admin/file_manager.aw:100
-msgid "Vali"
-msgstr ""
-
-#: classes/admin/file_manager.aw:161
+#: classes/admin/editor/file_manager.aw:143
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/file_manager.aw:319
+#: classes/admin/editor/file_manager.aw:398
 msgid "zip"
 msgstr ""
 
-#: classes/admin/file_manager.aw:320
+#: classes/admin/editor/file_manager.aw:399
 msgid "Oled sa kindel et tahad seda jama pakkida?"
 msgstr ""
 
-#: classes/admin/file_manager.aw:336
-msgid "Lae alla ZIP failina"
+#: classes/admin/editor/file_manager.aw:415
+msgid "Download selected compressed in ZIP file"
 msgstr ""
 
-#: classes/admin/file_manager.aw:374
-msgid "Nimi"
-msgstr ""
-
-#: classes/admin/file_manager.aw:381
-msgid "Otsi"
-msgstr ""
-
-#: classes/admin/file_manager.aw:387
-msgid "Minu lisatud"
-msgstr ""
-
-#: classes/admin/file_manager.aw:394
-msgid "Viimased 30"
+#: classes/admin/editor/file_manager.aw:440
+msgid "Vali failid ja/v&otilde;i kataloogid!"
 msgstr ""

@@ -250,80 +250,85 @@ msgid "Impordi pildid"
 msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:175
-#: classes/applications/persona_import/persona_import.aw:251
-#: classes/applications/persona_import/persona_import.aw:1961
+#: classes/applications/persona_import/persona_import.aw:286
+#: classes/applications/persona_import/persona_import.aw:2048
 msgid "You forgot to enter server data"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:258
-msgid "Nii ei saa ju rallit s&otilde;ita!"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:269
-msgid "Isikute kataloog valimata"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:275
-msgid "Aadresside kataloog valimata"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:281
-msgid "Default kataloog valimata"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:296
-msgid "Kliendibaasil puudub muutujate haldur"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:345
-msgid "Getting source data<br>"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:388
+#: classes/applications/persona_import/persona_import.aw:241
+#: classes/applications/persona_import/persona_import.aw:426
 msgid "Not enough data to process<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:402
+#: classes/applications/persona_import/persona_import.aw:293
+msgid "Nii ei saa ju rallit s&otilde;ita!"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:294
+msgid "Kasutatav kliendibaas valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:305
+msgid "Isikute kataloog valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:311
+msgid "Aadresside kataloog valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:317
+msgid "Default kataloog valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:332
+msgid "Kliendibaasil puudub muutujate haldur"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:383
+msgid "Getting source data<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:440
 msgid "got data<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:418
+#: classes/applications/persona_import/persona_import.aw:456
 msgid "parse finished, processing starts<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:681
+#: classes/applications/persona_import/persona_import.aw:744
 msgid "creating yksused objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:734
+#: classes/applications/persona_import/persona_import.aw:800
 msgid "created new section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:747
+#: classes/applications/persona_import/persona_import.aw:813
 msgid "updating existing section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:807
+#: classes/applications/persona_import/persona_import.aw:873
 msgid "<h1>sections</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:809
+#: classes/applications/persona_import/persona_import.aw:875
 msgid "<h1>sections done</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:822
+#: classes/applications/persona_import/persona_import.aw:888
 msgid "creating person objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:850
+#: classes/applications/persona_import/persona_import.aw:915
 msgid "<br>creating new person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:856
+#: classes/applications/persona_import/persona_import.aw:921
 msgid "updating existing person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:875
-#: classes/applications/persona_import/persona_import.aw:968
+#: classes/applications/persona_import/persona_import.aw:940
+#: classes/applications/persona_import/persona_import.aw:1033
 msgid "Vaata"
 msgstr ""

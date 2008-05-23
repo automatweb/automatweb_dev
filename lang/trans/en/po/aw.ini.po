@@ -498,15 +498,6 @@ msgstr "Gallery"
 msgid "Klassi Tegevuste tabel (191) nimi"
 msgstr "Action table"
 
-# aw.ini:class_192
-#: aw.ini:class_192
-msgid "Klassi Kalendri sisu (192) nimi"
-msgstr "Calendar contents"
-
-#: aw.ini:class_193
-msgid "Klassi  (193) nimi"
-msgstr ""
-
 # aw.ini:class_194
 #: aw.ini:class_194
 msgid "Klassi Flash (194) nimi"
@@ -561,11 +552,6 @@ msgstr "Object list"
 #: aw.ini:class_211
 msgid "Klassi Foorum (211) nimi"
 msgstr "Forum"
-
-# aw.ini:class_212
-#: aw.ini:class_212
-msgid "Klassi Ekomar (212) nimi"
-msgstr "Ekomar"
 
 # aw.ini:class_218
 #: aw.ini:class_218
@@ -646,11 +632,6 @@ msgstr "Site content search group"
 msgid "Klassi Intranet (233) nimi"
 msgstr "Intranet"
 
-# aw.ini:class_234
-#: aw.ini:class_234
-msgid "Klassi T&ouml;&ouml;laud (234) nimi"
-msgstr "Desktop"
-
 # aw.ini:class_239
 #: aw.ini:class_239
 msgid "Klassi Projekt (239) nimi"
@@ -690,11 +671,6 @@ msgstr "Process workflow"
 #: aw.ini:class_255
 msgid "Klassi Kaustade nimekiri (255) nimi"
 msgstr "Folder list"
-
-# aw.ini:class_256
-#: aw.ini:class_256
-msgid "Klassi Profiil (256) nimi"
-msgstr "Profile"
 
 #: aw.ini:class_266
 msgid "Klassi S&uuml;steemikeel (266) nimi"
@@ -815,20 +791,10 @@ msgstr "Order"
 msgid "Klassi Dokumentide vaatamise statistika (303) nimi"
 msgstr "Document view statistics"
 
-# aw.ini:class_304
-#: aw.ini:class_304
-msgid "Klassi Stati aruannete upload (304) nimi"
-msgstr "Stat report upload"
-
 # aw.ini:class_305
 #: aw.ini:class_305
 msgid "Klassi Saidi sisukord (305) nimi"
 msgstr "Site contents"
-
-# aw.ini:class_306
-#: aw.ini:class_306
-msgid "Klassi Kommuun (306) nimi"
-msgstr "Commune"
 
 # aw.ini:class_313
 #: aw.ini:class_313
@@ -1047,11 +1013,6 @@ msgstr "Category"
 #: aw.ini:class_484
 msgid "Klassi Kalendri meeldetuletus (484) nimi"
 msgstr "Calendar reminder"
-
-# aw.ini:class_485
-#: aw.ini:class_485
-msgid "Klassi Kogukond (485) nimi"
-msgstr "Community"
 
 # aw.ini:class_486
 #: aw.ini:class_486
@@ -1294,11 +1255,6 @@ msgstr ""
 #: aw.ini:class_852
 msgid "Klassi Ressursihalduskeskkond (852) nimi"
 msgstr "Resource manager"
-
-# aw.ini:class_857
-#: aw.ini:class_857
-msgid "Klassi Hindamise modereerimine (857) nimi"
-msgstr "Rating moderation"
 
 # aw.ini:class_858
 #: aw.ini:class_858
@@ -2460,7 +2416,7 @@ msgid "Klassi Kaubam&auml;rgi veebist lisamine (1189) nimi"
 msgstr ""
 
 #: aw.ini:class_1190
-msgid "Klassi Kaubam&auml;rgitaotluse keskkond (1190) nimi"
+msgid "Klassi Patendiameti keskkond (1190) nimi"
 msgstr ""
 
 #: aw.ini:class_1191
@@ -2877,6 +2833,138 @@ msgstr ""
 
 #: aw.ini:class_1412
 msgid "Klassi Tellimiskeskkonna toodete filter (1412) nimi"
+msgstr ""
+
+#: aw.ini:class_1413
+msgid "Klassi Sündmuste import 2 (1413) nimi"
+msgstr ""
+
+#: aw.ini:class_1414
+msgid "Klassi Delfi JSON väljund (1414) nimi"
+msgstr ""
+
+#: aw.ini:class_1416
+msgid "Klassi Mobi SMS haldur (1416) nimi"
+msgstr ""
+
+#: aw.ini:class_1417
+msgid "Klassi Mobi SMS (1417) nimi"
+msgstr ""
+
+#: aw.ini:class_1421
+msgid "Klassi T&ouml;&ouml;pakkumised veebis (1421) nimi"
+msgstr ""
+
+#: aw.ini:class_1418
+msgid "Klassi AW Spetsifikatsioon (1418) nimi"
+msgstr ""
+
+#: aw.ini:class_1422
+msgid "Klassi Mobi SMSi saatmine (1422) nimi"
+msgstr ""
+
+#: aw.ini:class_1420
+msgid "Klassi Postiindeksid (1420) nimi"
+msgstr ""
+
+#: aw.ini:class_1423
+msgid "Klassi Revali klientide meilisaatjs (1423) nimi"
+msgstr ""
+
+#: aw.ini:class_1424
+msgid "Klassi Poe postikulu (1424) nimi"
+msgstr ""
+
+#: aw.ini:class_1425
+msgid "Klassi AW Spetsifikatsiooni klass (1425) nimi"
+msgstr ""
+
+#: aw.ini:class_1426
+msgid "Klassi AW Spetsifikatsiooni grupp (1426) nimi"
+msgstr ""
+
+#: aw.ini:class_1427
+msgid "Klassi AW Spetsifikatsiooni layout (1427) nimi"
+msgstr ""
+
+#: aw.ini:class_1428
+msgid "Klassi AW Spetsifikatsiooni omadus (1428) nimi"
+msgstr ""
+
+#: aw.ini:class_1429
+msgid "Klassi AW Spetsifikatsiooni seos (1429) nimi"
+msgstr ""
+
+#: aw.ini:class_1430
+msgid "Klassi Lao ostutellimus (1430) nimi"
+msgstr ""
+
+#: aw.ini:class_1431
+msgid "Klassi Lao m&uuml;&uuml;gitellimus (1431) nimi"
+msgstr ""
+
+#: aw.ini:class_1432
+msgid "Klassi Patent (1432) nimi"
+msgstr ""
+
+#: aw.ini:class_1433
+msgid "Klassi Kasulik mudel (1433) nimi"
+msgstr ""
+
+#: aw.ini:class_1434
+msgid "Klassi Kasuliku mudeli veebist lisamine (1434) nimi"
+msgstr ""
+
+#: aw.ini:class_1435
+msgid "Klassi Artiklikategooria (1435) nimi"
+msgstr ""
+
+#: aw.ini:class_1436
+msgid "Klassi Lao materjal (1436) nimi"
+msgstr ""
+
+#: aw.ini:class_1437
+msgid "Klassi Lao materjali t&uuml;&uuml;p (1437) nimi"
+msgstr ""
+
+#: aw.ini:class_1438
+msgid "Klassi Lao toote v&auml;rv (1438) nimi"
+msgstr ""
+
+#: aw.ini:class_1439
+msgid "Klassi Lao ostujuhi t&ouml;&ouml;laud (1439) nimi"
+msgstr ""
+
+#: aw.ini:class_1440
+msgid "Klassi Lao m&uuml;&uuml;gijuhi t&ouml;&ouml;laud (1440) nimi"
+msgstr ""
+
+#: aw.ini:class_1441
+msgid "Klassi Intellektuaalne omand (1441) nimi"
+msgstr ""
+
+#: aw.ini:class_1442
+msgid "Klassi Lao kliendikaart (1442) nimi"
+msgstr ""
+
+#: aw.ini:class_1443
+msgid "Klassi Lao br&auml;nd (1443) nimi"
+msgstr ""
+
+#: aw.ini:class_1444
+msgid "Klassi Lao br&auml;ndiseeria (1444) nimi"
+msgstr ""
+
+#: aw.ini:class_1446
+msgid "Klassi Patenditaotluse veebist lisamine (1446) nimi"
+msgstr ""
+
+#: aw.ini:class_1447
+msgid "Klassi Maksu tingimus (1447) nimi"
+msgstr ""
+
+#: aw.ini:class_1448
+msgid "Klassi P&auml;devuste haldur (1448) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29
@@ -5333,6 +5421,14 @@ msgstr ""
 msgid "syslog.type.ST_SPA_BOOKINGS_OVERVIEW"
 msgstr ""
 
+#: aw.ini:syslogtypes_1189 aw.ini:syslogtypes_1446
+msgid "syslog.type.ST_PATENT_ADD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1190
+msgid "syslog.type.ST_PATENT_MANAGER"
+msgstr ""
+
 #: aw.ini:syslogtypes_1191
 msgid "syslog.type.ST_AUTH_SERVER_USERDEFINED"
 msgstr ""
@@ -5343,6 +5439,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1193
 msgid "syslog.type.ST_ID_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_1195
+msgid "syslog.type.ST_TRADEMARK_STATUS"
 msgstr ""
 
 #: aw.ini:syslogtypes_1194
@@ -5541,12 +5641,132 @@ msgstr ""
 msgid "syslog.type.ST_RSS_IMPORT"
 msgstr ""
 
+#: aw.ini:syslogtypes_1416
+msgid "syslog.type.ST_MOBI_HANDLER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1417
+msgid "syslog.type.ST_MOBI_SMS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1413
+msgid "syslog.type.ST_EVENT_IMPORT_2"
+msgstr ""
+
+#: aw.ini:syslogtypes_1414
+msgid "syslog.type.ST_JSON_DELFI"
+msgstr ""
+
 #: aw.ini:syslogtypes_1411
 msgid "syslog.type.ST_REVAL_CUSTOMER"
 msgstr ""
 
+#: aw.ini:syslogtypes_1421
+msgid "syslog.type.ST_PERSONNEL_MANAGEMENT_JOB_OFFER_WEBVIEW"
+msgstr ""
+
 #: aw.ini:syslogtypes_1412
 msgid "syslog.type.ST_SHOP_ORDER_CENTER_FILTER_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1418
+msgid "syslog.type.ST_AW_SPEC"
+msgstr ""
+
+#: aw.ini:syslogtypes_1422
+msgid "syslog.type.ST_MOBI_SMS_SENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1420
+msgid "syslog.type.ST_POSTAL_CODES"
+msgstr ""
+
+#: aw.ini:syslogtypes_1423
+msgid "syslog.type.ST_REVAL_CUSTOMER_MAILER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1424
+msgid "syslog.type.ST_SHOP_ORDER_POSTAL_PRICE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1425
+msgid "syslog.type.ST_AW_SPEC_CLASS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1426
+msgid "syslog.type.ST_AW_SPEC_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1427
+msgid "syslog.type.ST_AW_SPEC_LAYOUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1428
+msgid "syslog.type.ST_AW_SPEC_PROPERTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1429
+msgid "syslog.type.ST_AW_SPEC_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1430
+msgid "syslog.type.ST_SHOP_PURCHASE_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1431
+msgid "syslog.type.ST_SHOP_SELL_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1435
+msgid "syslog.type.ST_SHOP_PRODUCT_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1436
+msgid "syslog.type.ST_SHOP_MATERIAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1437
+msgid "syslog.type.ST_SHOP_MATERIAL_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1438
+msgid "syslog.type.ST_SHOP_COLOUR"
+msgstr ""
+
+#: aw.ini:syslogtypes_1439
+msgid "syslog.type.ST_SHOP_PURCHASE_MANAGER_WORKSPACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1440
+msgid "syslog.type.ST_SHOP_SALES_MANAGER_WORKSPACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1442
+msgid "syslog.type.ST_SHOP_CUSTOMER_CARD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1443
+msgid "syslog.type.ST_SHOP_BRAND"
+msgstr ""
+
+#: aw.ini:syslogtypes_1444
+msgid "syslog.type.ST_SHOP_BRAND_SERIES"
+msgstr ""
+
+#: aw.ini:syslogtypes_1432
+msgid "syslog.type.ST_PATENT_PATENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1433
+msgid "syslog.type.ST_UTILITY_MODEL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1434
+msgid "syslog.type.ST_UTILITY_MODEL_ADD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1441
+msgid "syslog.type.ST_INTELLECTUAL_PROPERTY"
 msgstr ""
 
 #: aw.ini:syslogactions_1
@@ -5724,6 +5944,38 @@ msgstr ""
 #: aw.ini:languages_list_18
 msgid "languages.list.zh"
 msgstr ""
+
+# aw.ini:class_192
+#~ msgid "Klassi Kalendri sisu (192) nimi"
+#~ msgstr "Calendar contents"
+
+# aw.ini:class_212
+#~ msgid "Klassi Ekomar (212) nimi"
+#~ msgstr "Ekomar"
+
+# aw.ini:class_234
+#~ msgid "Klassi T&ouml;&ouml;laud (234) nimi"
+#~ msgstr "Desktop"
+
+# aw.ini:class_256
+#~ msgid "Klassi Profiil (256) nimi"
+#~ msgstr "Profile"
+
+# aw.ini:class_304
+#~ msgid "Klassi Stati aruannete upload (304) nimi"
+#~ msgstr "Stat report upload"
+
+# aw.ini:class_306
+#~ msgid "Klassi Kommuun (306) nimi"
+#~ msgstr "Commune"
+
+# aw.ini:class_485
+#~ msgid "Klassi Kogukond (485) nimi"
+#~ msgstr "Community"
+
+# aw.ini:class_857
+#~ msgid "Klassi Hindamise modereerimine (857) nimi"
+#~ msgstr "Rating moderation"
 
 #~ msgid "Klassi Rank (220) nimi"
 #~ msgstr "Position"

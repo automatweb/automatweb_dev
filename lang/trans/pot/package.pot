@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Pakk help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:prop_package_tb
+msgid "Omaduse  (package_tb) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_package_tb_comment
+msgid "Omaduse  (package_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_package_tb_help
+msgid "Omaduse  (package_tb) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:prop_version
 msgid "Omaduse Versioon (version) caption"
 msgstr ""
@@ -36,6 +48,18 @@ msgstr ""
 
 #: classes/applications/package_management/package.aw:prop_description_help
 msgid "Omaduse Kirjeldus (description) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_file_names
+msgid "Omaduse Failid (file_names) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_file_names_comment
+msgid "Omaduse Failid (file_names) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_file_names_help
+msgid "Omaduse Failid (file_names) help"
 msgstr ""
 
 #: classes/applications/package_management/package.aw:prop_dep_toolbar
@@ -78,31 +102,35 @@ msgstr ""
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:64
+#: classes/applications/package_management/package.aw:62
+msgid "Uuenda failide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:100
 msgid "Uus pakk"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:76
+#: classes/applications/package_management/package.aw:112
 msgid "Kustuta s&otilde;ltuvused"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:78
+#: classes/applications/package_management/package.aw:114
 msgid "Oled kindel et soovid valitud s&otilde;ltuvused kustutada?"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:102
+#: classes/applications/package_management/package.aw:138
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:106
+#: classes/applications/package_management/package.aw:142
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:110
+#: classes/applications/package_management/package.aw:146
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:115
+#: classes/applications/package_management/package.aw:151
 msgid "Kirjeldus"
 msgstr ""
 

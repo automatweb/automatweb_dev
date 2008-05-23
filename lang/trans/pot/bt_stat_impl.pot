@@ -58,15 +58,15 @@ msgstr ""
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:523
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:534
 msgid "T&ouml;&ouml;tundide statistika projektide ja kuude kaupa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:528
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:539
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:579
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:590
 msgid "%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"
 msgstr ""
 

@@ -145,42 +145,6 @@ msgstr ""
 msgid "Omaduse Mitu klikki maksimaalselt (max_clicks) help"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:prop_clicks
-msgid "Omaduse Klikke (clicks) caption"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_clicks_comment
-msgid "Omaduse Klikke (clicks) kommentaar"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_clicks_help
-msgid "Omaduse Klikke (clicks) help"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_views
-msgid "Omaduse Vaatamisi (views) caption"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_views_comment
-msgid "Omaduse Vaatamisi (views) kommentaar"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_views_help
-msgid "Omaduse Vaatamisi (views) help"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_click_through
-msgid "Omaduse Click-through ratio (click_through) caption"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_click_through_comment
-msgid "Omaduse Click-through ratio (click_through) kommentaar"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:prop_click_through_help
-msgid "Omaduse Click-through ratio (click_through) help"
-msgstr ""
-
 #: classes/applications/banner/banner.aw:prop_stats_table
 msgid "Omaduse  (stats_table) caption"
 msgstr ""
@@ -261,34 +225,38 @@ msgstr ""
 msgid "Seose Aeg (RELTYPE_TIMING) tekst"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:164
+#: classes/applications/banner/banner.aw:137
 msgid "Kokku"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:202
+#: classes/applications/banner/banner.aw:139
+msgid "Banneri %s klikkimise ja vaatamise statistika"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:176
 msgid "Click-through ratio"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:205
+#: classes/applications/banner/banner.aw:179
 msgid "Vaatamisi"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:208
+#: classes/applications/banner/banner.aw:182
 msgid "Klikke"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:239
+#: classes/applications/banner/banner.aw:211
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:286
+#: classes/applications/banner/banner.aw:255
 msgid "Banner"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:292
+#: classes/applications/banner/banner.aw:261
 msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:569
+#: classes/applications/banner/banner.aw:519
 msgid "No banner location id given"
 msgstr ""

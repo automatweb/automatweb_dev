@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_skill_level.aw:class_1401_help
 msgid "Klassi Oskuse tase help"
 msgstr ""
@@ -46,7 +45,8 @@ msgstr ""
 msgid "Seose Oskuse tase (RELTYPE_LEVEL) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:42
+#: classes/applications/crm/crm_skill_level.aw:62
+#: classes/applications/crm/crm_skill_level.aw:74
+#: classes/applications/crm/crm_skill_level.aw:145
 msgid "--vali--"
 msgstr ""
-

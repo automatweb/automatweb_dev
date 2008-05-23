@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Teostaja (impl) help"
 msgstr ""
 
+#: classes/applications/groupware/task_row.aw:prop_skill_used
+msgid "Omaduse Kasutatav  P&auml;devus (skill_used) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_skill_used_comment
+msgid "Omaduse Kasutatav  P&auml;devus (skill_used) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_skill_used_help
+msgid "Omaduse Kasutatav  P&auml;devus (skill_used) help"
+msgstr ""
+
 #: classes/applications/groupware/task_row.aw:prop_time_guess
 msgid "Omaduse Prognoositud tunde (time_guess) caption"
 msgstr ""
@@ -186,39 +198,39 @@ msgstr ""
 msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:255
+#: classes/applications/groupware/task_row.aw:267
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:260
+#: classes/applications/groupware/task_row.aw:272
 msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:265 classes/applications/groupware/task_row.aw:306
+#: classes/applications/groupware/task_row.aw:277 classes/applications/groupware/task_row.aw:318
 msgid "Tehtud"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:272 classes/applications/groupware/task_row.aw:313
+#: classes/applications/groupware/task_row.aw:284 classes/applications/groupware/task_row.aw:325
 msgid "Arvele"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:278
+#: classes/applications/groupware/task_row.aw:290
 msgid "Aegade puhul t&auml;hendab t&uuml;hi lahter stopperi aega."
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:284
+#: classes/applications/groupware/task_row.aw:296
 msgid "Prognoositud tunde"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:289
+#: classes/applications/groupware/task_row.aw:301
 msgid "Kulunud tunde"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:294
+#: classes/applications/groupware/task_row.aw:306
 msgid "Tunde kliendile"
 msgstr ""
 
-#: classes/applications/groupware/task_row.aw:325
+#: classes/applications/groupware/task_row.aw:337
 msgid "Toimetus ja tegevus peavad m&auml;&auml;ratud olema"
 msgstr ""
 

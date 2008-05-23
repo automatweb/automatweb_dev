@@ -17,7 +17,6 @@ $GLOBALS["TRANS"]["Vali"] = "Select";
 $GLOBALS["TRANS"]["Nime v&auml;li peab olema t&auml;idetud"] = "Name field must be filled";
 $GLOBALS["TRANS"]["Kommentaari v&auml;li peab olema t&auml;idetud"] = "Comment field must be filled";
 $GLOBALS["TRANS"]["Sisestatud kontrollkood on vale"] = "Verification code is incorrect";
-$GLOBALS["TRANS"]["Näita"] = "Display";
 $GLOBALS["TRANS"]["Ekspordi XML"] = "Export XML";
 $GLOBALS["TRANS"]["E-posti aadressid"] = "E-mail addresses";
 ?>

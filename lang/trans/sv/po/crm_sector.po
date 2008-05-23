@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_sector.aw:class_131_help
 msgid "Klassi Tegevusala help"
 msgstr ""
@@ -134,6 +133,18 @@ msgstr ""
 msgid "Omaduse Tutvustus (info_document) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_ext_id
+msgid "Omaduse V&auml;line ID (ext_id) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id_comment
+msgid "Omaduse V&auml;line ID (ext_id) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id_help
+msgid "Omaduse V&auml;line ID (ext_id) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -161,4 +172,3 @@ msgstr ""
 #: classes/crm/crm_sector.aw:rel_RELTYPE_DOCUMENT
 msgid "Seose Dokument (RELTYPE_DOCUMENT) tekst"
 msgstr ""
-

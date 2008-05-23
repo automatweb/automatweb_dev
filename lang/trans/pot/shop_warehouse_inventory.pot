@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Ladu (warehouse) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_confirmed
+msgid "Omaduse Kinnitatud (confirmed) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_confirmed_comment
+msgid "Omaduse Kinnitatud (confirmed) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_confirmed_help
+msgid "Omaduse Kinnitatud (confirmed) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_code
 msgid "Omaduse Kood (product_code) caption"
 msgstr ""
@@ -122,35 +134,35 @@ msgstr ""
 msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:124
+#: classes/applications/shop/shop_warehouse_inventory.aw:75
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:126
+#: classes/applications/shop/shop_warehouse_inventory.aw:77
 msgid "Oled kindel?"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:142
+#: classes/applications/shop/shop_warehouse_inventory.aw:93
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:146
+#: classes/applications/shop/shop_warehouse_inventory.aw:97
 msgid "Ribakood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:150
+#: classes/applications/shop/shop_warehouse_inventory.aw:101
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:154
+#: classes/applications/shop/shop_warehouse_inventory.aw:105
 msgid "Kogus laos"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:158
+#: classes/applications/shop/shop_warehouse_inventory.aw:109
 msgid "Tegelik kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:162
+#: classes/applications/shop/shop_warehouse_inventory.aw:113
 msgid "Vali"
 msgstr ""
 

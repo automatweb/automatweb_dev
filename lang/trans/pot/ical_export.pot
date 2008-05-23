@@ -206,19 +206,19 @@ msgstr ""
 msgid "Vali..."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:616
+#: classes/applications/calendar/ical_export.aw:615
 msgid "&uuml;le 15 s&uuml;mboli (ka t&uuml;hikud) ei soovita nimeks, kuna pikem tekst j&auml;&auml;b Google kalendris paani taha peitu."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:628
+#: classes/applications/calendar/ical_export.aw:627
 msgid "aw kalender"
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:697
+#: classes/applications/calendar/ical_export.aw:696
 msgid "n&auml;iteks Tallinn v&otilde;i Haapsalu. Kui Google kalender on avalik, siis see aitab inimestel Sinu s&uuml;ndmusi paremini leida."
 msgstr ""
 
-#: classes/applications/calendar/ical_export.aw:734
+#: classes/applications/calendar/ical_export.aw:733
 msgid "Paroolid ei &uuml;hti"
 msgstr ""
 

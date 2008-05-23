@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/awmyadmin/db_login.aw:class_148_help
 msgid "Klassi Andmebaasi sissep&auml;&auml;s help"
 msgstr ""
@@ -78,7 +77,6 @@ msgstr ""
 msgid "Seose db serveri login (RELTYPE_SERVER_LOGIN) tekst"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_login.aw:51
+#: classes/applications/awmyadmin/db_login.aw:50
 msgid "The admin user for the database server has not been set!"
 msgstr ""
-

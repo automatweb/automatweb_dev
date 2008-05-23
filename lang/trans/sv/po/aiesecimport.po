@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/import/aiesecimport.aw:class_1357_help
 msgid "Klassi Aiesec import help"
 msgstr ""
@@ -190,79 +189,79 @@ msgstr ""
 msgid "Seose Impordi kaust (RELTYPE_IMPORTFOLDER) tekst"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2145 classes/import/aiesecimport.aw:2851 classes/import/aiesecimport.aw:2989
+#: classes/import/aiesecimport.aw:2129 classes/import/aiesecimport.aw:2834
+#: classes/import/aiesecimport.aw:2972
 msgid "Id"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2153 classes/import/aiesecimport.aw:2859
+#: classes/import/aiesecimport.aw:2137 classes/import/aiesecimport.aw:2842
 msgid "Nimi"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2866
+#: classes/import/aiesecimport.aw:2849
 msgid "Aadress"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2873
+#: classes/import/aiesecimport.aw:2856
 msgid "Posti i."
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2880
+#: classes/import/aiesecimport.aw:2863
 msgid "Linn"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2887
+#: classes/import/aiesecimport.aw:2870
 msgid "Url"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2894
+#: classes/import/aiesecimport.aw:2877
 msgid "email"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2901
+#: classes/import/aiesecimport.aw:2884
 msgid "Kontakt"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2908 classes/import/aiesecimport.aw:3039
+#: classes/import/aiesecimport.aw:2891 classes/import/aiesecimport.aw:3022
 msgid "Töötelefon1"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2915 classes/import/aiesecimport.aw:3046
+#: classes/import/aiesecimport.aw:2898 classes/import/aiesecimport.aw:3029
 msgid "Töötelefon2"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2922 classes/import/aiesecimport.aw:3053
+#: classes/import/aiesecimport.aw:2905 classes/import/aiesecimport.aw:3036
 msgid "Mob1"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2929 classes/import/aiesecimport.aw:3060
+#: classes/import/aiesecimport.aw:2912 classes/import/aiesecimport.aw:3043
 msgid "Mob2"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2938
+#: classes/import/aiesecimport.aw:2921
 msgid "Tegevuse kirjeldus"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:2997
+#: classes/import/aiesecimport.aw:2980
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3004
+#: classes/import/aiesecimport.aw:2987
 msgid "Perenimi"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3011
+#: classes/import/aiesecimport.aw:2994
 msgid "Firma"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3018
+#: classes/import/aiesecimport.aw:3001
 msgid "Email"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3025
+#: classes/import/aiesecimport.aw:3008
 msgid "URL"
 msgstr ""
 
-#: classes/import/aiesecimport.aw:3032
+#: classes/import/aiesecimport.aw:3015
 msgid "Siit v6tame telefonid"
 msgstr ""
-

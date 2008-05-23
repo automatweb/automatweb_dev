@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/quickmessage/contact_list.aw:class_811_help
 msgid "Klassi Aadressiraamat help"
@@ -118,23 +117,10 @@ msgstr ""
 msgid "Oled kindel, et tahad valitud eemaldada?"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:100 classes/applications/quickmessage/contact_list.aw:234
+#: classes/applications/quickmessage/contact_list.aw:100
 msgid "Nimi"
 msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:104
 msgid "E-Mail"
 msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:230
-msgid "ID"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:238
-msgid "E-post"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:287
-msgid "Saada sõnum"
-msgstr ""
-

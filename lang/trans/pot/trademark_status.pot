@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Kinnitatud (verified) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_date
+msgid "Omaduse Kinnitamise kuup&auml;ev (verified_date) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_date_comment
+msgid "Omaduse Kinnitamise kuup&auml;ev (verified_date) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_verified_date_help
+msgid "Omaduse Kinnitamise kuup&auml;ev (verified_date) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/trademark_status.aw:prop_exported
 msgid "Omaduse Eksporditud (exported) caption"
 msgstr ""

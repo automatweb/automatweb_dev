@@ -178,15 +178,15 @@ msgstr ""
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:644
+#: classes/applications/groupware/task_quick_entry.aw:658
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:666
+#: classes/applications/groupware/task_quick_entry.aw:680
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:689
+#: classes/applications/groupware/task_quick_entry.aw:703
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 

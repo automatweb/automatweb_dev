@@ -14,11 +14,11 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/crm/crm_user_creator.aw:324
+#: classes/crm/crm_user_creator.aw:320
 msgid "Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."
 msgstr ""
 
-#: classes/crm/crm_user_creator.aw:340
+#: classes/crm/crm_user_creator.aw:336
 msgid "Valitud kasutajanimi [%s] on juba kasutusel."
 msgstr ""
 

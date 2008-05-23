@@ -58,7 +58,7 @@ msgstr ""
 msgid "Grupi Koosta filter (filter) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center_filter_entry.aw:117
+#: classes/applications/shop/shop_order_center_filter_entry.aw:125
 msgid "Vali aktiivsed filtrite v&auml;&auml;rtused"
 msgstr ""
 

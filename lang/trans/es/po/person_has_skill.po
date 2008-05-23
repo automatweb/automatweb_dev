@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/rostering/person_has_skill.aw:class_1138_help
 msgid "Klassi P&auml;devuse kehtivus help"
 msgstr ""
@@ -24,6 +23,30 @@ msgstr ""
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_help
 msgid "Omaduse P&auml;devus (skill) help"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_level
+msgid "Omaduse Tase (level) caption"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_level_comment
+msgid "Omaduse Tase (level) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_level_help
+msgid "Omaduse Tase (level) help"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_hour_price
+msgid "Omaduse P&auml;devuse kasutamise tunnihind (hour_price) caption"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_hour_price_comment
+msgid "Omaduse P&auml;devuse kasutamise tunnihind (hour_price) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_hour_price_help
+msgid "Omaduse P&auml;devuse kasutamise tunnihind (hour_price) help"
 msgstr ""
 
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_acquired
@@ -53,4 +76,3 @@ msgstr ""
 #: classes/applications/rostering/person_has_skill.aw:rel_RELTYPE_SKILL
 msgid "Seose P&auml;devus (RELTYPE_SKILL) tekst"
 msgstr ""
-

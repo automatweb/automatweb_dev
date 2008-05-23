@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Vaikimisi valim (selections) caption"] = "Default selection";
-$GLOBALS["TRANS"]["Omaduse Kirjeid ühel lehel (flimit) caption"] = "Records per page";
 $GLOBALS["TRANS"]["Omaduse Org. toolbar (orgtoolbar) caption"] = "Co toolbar";
 $GLOBALS["TRANS"]["Omaduse Compound search (search_form1) caption"] = "Comound search";
 $GLOBALS["TRANS"]["Grupi Organisatsioonid (org) pealkiri"] = "Organisations";
@@ -20,8 +19,6 @@ $GLOBALS["TRANS"]["Seose Sisestusvormid (RELTYPE_FORMS) tekst"] = "Entry forms";
 $GLOBALS["TRANS"]["Seose Muutujad (RELTYPE_METAMGR) tekst"] = "Variables";
 $GLOBALS["TRANS"]["Kustuta"] = "Delete";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Organisation";
-$GLOBALS["TRANS"]["Põhitegevus"] = "Main activity";
-$GLOBALS["TRANS"]["Õiguslik vorm"] = "Legal form";
 $GLOBALS["TRANS"]["Aadress"] = "Address";
 $GLOBALS["TRANS"]["E-post"] = "E-mail";
 $GLOBALS["TRANS"]["Telefon"] = "Phone";

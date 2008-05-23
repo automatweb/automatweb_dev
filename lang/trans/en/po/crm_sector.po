@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 22:16+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
 "Language-Team: \n"
@@ -142,6 +142,18 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_info_document_help
 msgid "Omaduse Tutvustus (info_document) help"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id
+msgid "Omaduse V&auml;line ID (ext_id) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id_comment
+msgid "Omaduse V&auml;line ID (ext_id) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ext_id_help
+msgid "Omaduse V&auml;line ID (ext_id) help"
 msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_transl

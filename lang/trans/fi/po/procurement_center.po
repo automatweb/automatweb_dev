@@ -991,7 +991,7 @@ msgid "Kataloog"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:542
-#: classes/applications/procurement_center/procurement_center.aw:4372
+#: classes/applications/procurement_center/procurement_center.aw:4368
 msgid "Hange"
 msgstr ""
 
@@ -1046,9 +1046,9 @@ msgstr ""
 #: classes/applications/procurement_center/procurement_center.aw:1655
 #: classes/applications/procurement_center/procurement_center.aw:2090
 #: classes/applications/procurement_center/procurement_center.aw:3852
-#: classes/applications/procurement_center/procurement_center.aw:4217
-#: classes/applications/procurement_center/procurement_center.aw:4482
-#: classes/applications/procurement_center/procurement_center.aw:4616
+#: classes/applications/procurement_center/procurement_center.aw:4213
+#: classes/applications/procurement_center/procurement_center.aw:4478
+#: classes/applications/procurement_center/procurement_center.aw:4612
 msgid "Nimetus"
 msgstr ""
 
@@ -1082,16 +1082,16 @@ msgstr ""
 #: classes/applications/procurement_center/procurement_center.aw:1735
 #: classes/applications/procurement_center/procurement_center.aw:2622
 #: classes/applications/procurement_center/procurement_center.aw:4054
-#: classes/applications/procurement_center/procurement_center.aw:4272
-#: classes/applications/procurement_center/procurement_center.aw:4542
+#: classes/applications/procurement_center/procurement_center.aw:4268
+#: classes/applications/procurement_center/procurement_center.aw:4538
 msgid "Pakkumine"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:1747
 #: classes/applications/procurement_center/procurement_center.aw:1967
 #: classes/applications/procurement_center/procurement_center.aw:4013
-#: classes/applications/procurement_center/procurement_center.aw:4224
-#: classes/applications/procurement_center/procurement_center.aw:4490
+#: classes/applications/procurement_center/procurement_center.aw:4220
+#: classes/applications/procurement_center/procurement_center.aw:4486
 msgid "Ost"
 msgstr ""
 
@@ -1288,9 +1288,9 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:3551
 #: classes/applications/procurement_center/procurement_center.aw:4141
-#: classes/applications/procurement_center/procurement_center.aw:4218
-#: classes/applications/procurement_center/procurement_center.aw:4483
-#: classes/applications/procurement_center/procurement_center.aw:4617
+#: classes/applications/procurement_center/procurement_center.aw:4214
+#: classes/applications/procurement_center/procurement_center.aw:4479
+#: classes/applications/procurement_center/procurement_center.aw:4613
 msgid "Hind"
 msgstr ""
 
@@ -1300,9 +1300,9 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:3554
 #: classes/applications/procurement_center/procurement_center.aw:4149
-#: classes/applications/procurement_center/procurement_center.aw:4219
-#: classes/applications/procurement_center/procurement_center.aw:4484
-#: classes/applications/procurement_center/procurement_center.aw:4618
+#: classes/applications/procurement_center/procurement_center.aw:4215
+#: classes/applications/procurement_center/procurement_center.aw:4480
+#: classes/applications/procurement_center/procurement_center.aw:4614
 msgid "Kogus"
 msgstr ""
 
@@ -1312,7 +1312,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:3556
 #: classes/applications/procurement_center/procurement_center.aw:4133
-#: classes/applications/procurement_center/procurement_center.aw:4394
+#: classes/applications/procurement_center/procurement_center.aw:4390
 msgid "Kuup&auml;ev"
 msgstr ""
 
@@ -1336,12 +1336,12 @@ msgstr ""
 #: classes/applications/procurement_center/procurement_center.aw:4009
 #: classes/applications/procurement_center/procurement_center.aw:4019
 #: classes/applications/procurement_center/procurement_center.aw:4060
-#: classes/applications/procurement_center/procurement_center.aw:4220
-#: classes/applications/procurement_center/procurement_center.aw:4232
-#: classes/applications/procurement_center/procurement_center.aw:4278
-#: classes/applications/procurement_center/procurement_center.aw:4486
-#: classes/applications/procurement_center/procurement_center.aw:4498
-#: classes/applications/procurement_center/procurement_center.aw:4548
+#: classes/applications/procurement_center/procurement_center.aw:4216
+#: classes/applications/procurement_center/procurement_center.aw:4228
+#: classes/applications/procurement_center/procurement_center.aw:4274
+#: classes/applications/procurement_center/procurement_center.aw:4482
+#: classes/applications/procurement_center/procurement_center.aw:4494
+#: classes/applications/procurement_center/procurement_center.aw:4544
 msgid "Hange:"
 msgstr ""
 
@@ -1350,25 +1350,25 @@ msgid "Liik"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:4118
-#: classes/applications/procurement_center/procurement_center.aw:4379
+#: classes/applications/procurement_center/procurement_center.aw:4375
 msgid "Pakkumise/ostu nimetus"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:4126
-#: classes/applications/procurement_center/procurement_center.aw:4387
+#: classes/applications/procurement_center/procurement_center.aw:4383
 msgid "Leping"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:4154
-#: classes/applications/procurement_center/procurement_center.aw:4485
-#: classes/applications/procurement_center/procurement_center.aw:4619
+#: classes/applications/procurement_center/procurement_center.aw:4481
+#: classes/applications/procurement_center/procurement_center.aw:4615
 msgid "Unit"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:4591
+#: classes/applications/procurement_center/procurement_center.aw:4587
 msgid "Hange M&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:4625
+#: classes/applications/procurement_center/procurement_center.aw:4621
 msgid "Show all"
 msgstr ""

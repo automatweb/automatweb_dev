@@ -9,116 +9,117 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/budgeting/budgeting_model.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:38
+#: classes/applications/budgeting/budgeting_model.aw:44
 msgid "Kontol %s ei ole piisavalt raha! Vaja on %s, kontol on %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:50
+#: classes/applications/budgeting/budgeting_model.aw:56
 msgid "Transaktsioonis esines viga %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:59
+#: classes/applications/budgeting/budgeting_model.aw:65
 msgid "Kanne kontolt %s kontole %s %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:345
+#: classes/applications/budgeting/budgeting_model.aw:483
 msgid "K&otilde;ik valdkonnad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:349
+#: classes/applications/budgeting/budgeting_model.aw:487
 msgid "K&otilde;ik fondid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:353 classes/applications/budgeting/budgeting_model.aw:377
+#: classes/applications/budgeting/budgeting_model.aw:491
+#: classes/applications/budgeting/budgeting_model.aw:515
 msgid "K&otilde;ik t&ouml;&ouml;tajad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:357
+#: classes/applications/budgeting/budgeting_model.aw:495
 msgid "K&otilde;ik teenuse liigid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:361
+#: classes/applications/budgeting/budgeting_model.aw:499
 msgid "K&otilde;ik tooteperekonnad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:365 classes/applications/budgeting/budgeting_model.aw:369
+#: classes/applications/budgeting/budgeting_model.aw:503
+#: classes/applications/budgeting/budgeting_model.aw:507
 msgid "K&otilde;ik kontod"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:373
+#: classes/applications/budgeting/budgeting_model.aw:511
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:384 classes/applications/budgeting/budgeting_model.aw:404
+#: classes/applications/budgeting/budgeting_model.aw:522
+#: classes/applications/budgeting/budgeting_model.aw:542
 msgid "Projekti %s toodete kategooria %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:391
+#: classes/applications/budgeting/budgeting_model.aw:529
 msgid "Kliendi %s toodete kategooria %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:397
+#: classes/applications/budgeting/budgeting_model.aw:535
 msgid "Projekti %s toodete kategooriad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:410
+#: classes/applications/budgeting/budgeting_model.aw:548
 msgid "Kliendi %s toodete kategooriad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:417
+#: classes/applications/budgeting/budgeting_model.aw:555
 msgid "Kliendi %s teenuste t&uuml;&uuml;pide kategooria %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:423
+#: classes/applications/budgeting/budgeting_model.aw:561
 msgid "Projekti %s teenuste liigid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:429
+#: classes/applications/budgeting/budgeting_model.aw:567
 msgid "Kliendi %s teenuse liigid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:435
+#: classes/applications/budgeting/budgeting_model.aw:573
 msgid "Toodete kategooria %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:441
+#: classes/applications/budgeting/budgeting_model.aw:579
 msgid "Teenuste liigi kategooria %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:448
+#: classes/applications/budgeting/budgeting_model.aw:586
 msgid "Projekti %s toode %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:454
+#: classes/applications/budgeting/budgeting_model.aw:592
 msgid "Kliendi %s projektid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:461
+#: classes/applications/budgeting/budgeting_model.aw:599
 msgid "Kliendi %s toode %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:467
+#: classes/applications/budgeting/budgeting_model.aw:605
 msgid "Kliendikategooria %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:473
+#: classes/applications/budgeting/budgeting_model.aw:611
 msgid "Klient %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:480
+#: classes/applications/budgeting/budgeting_model.aw:618
 msgid "Projekt %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:486
+#: classes/applications/budgeting/budgeting_model.aw:624
 msgid "Toimetus %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:492
+#: classes/applications/budgeting/budgeting_model.aw:630
 msgid "Toode %s"
 msgstr ""
-

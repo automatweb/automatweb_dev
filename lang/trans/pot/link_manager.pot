@@ -10,51 +10,27 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/admin/link_manager.aw:class__help
+#: classes/admin/editor/link_manager.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/link_manager.aw:108
+#: classes/admin/editor/link_manager.aw:108
 msgid "Uus link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:109
+#: classes/admin/editor/link_manager.aw:109
 msgid "Vali olemasolev link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:118
+#: classes/admin/editor/link_manager.aw:122
 msgid "Link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:123
-msgid "Asukoht"
-msgstr ""
-
-#: classes/admin/link_manager.aw:128
-msgid "Vali"
-msgstr ""
-
-#: classes/admin/link_manager.aw:176
+#: classes/admin/editor/link_manager.aw:158
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/link_manager.aw:214
-msgid "Nimi"
-msgstr ""
-
-#: classes/admin/link_manager.aw:220
+#: classes/admin/editor/link_manager.aw:190
 msgid "URL"
-msgstr ""
-
-#: classes/admin/link_manager.aw:227
-msgid "Otsi"
-msgstr ""
-
-#: classes/admin/link_manager.aw:233
-msgid "Minu lisatud"
-msgstr ""
-
-#: classes/admin/link_manager.aw:240
-msgid "Viimased 30"
 msgstr ""
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/orb/orb.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -26,7 +25,6 @@ msgstr ""
 msgid "orb::handle_rpc_call - Could not load request handler for request method '%s'"
 msgstr ""
 
-#: classes/core/orb/orb.aw:1184
+#: classes/core/orb/orb.aw:1173
 msgid "orb::check_class_access(%s): no permissions to access the class! (denied by %s)"
 msgstr ""
-

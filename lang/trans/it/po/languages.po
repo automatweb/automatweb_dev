@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/languages.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/languages.aw:499
+#: classes/core/languages.aw:509
 msgid "Lisas keele"
 msgstr ""
-

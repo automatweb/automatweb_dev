@@ -62,19 +62,19 @@ msgstr ""
 msgid "Kujundusosa Puu (bm_tree) pealkiri"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:79
+#: classes/admin/site_template_trans.aw:54
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:142
+#: classes/admin/site_template_trans.aw:117
 msgid "Selgitus"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:147
+#: classes/admin/site_template_trans.aw:122
 msgid "Konstant"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:152
+#: classes/admin/site_template_trans.aw:127
 msgid "T&otilde;lge"
 msgstr ""
 

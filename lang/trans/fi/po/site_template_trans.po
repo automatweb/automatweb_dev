@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/admin/site_template_trans.aw:class_1170_help
 msgid "Klassi Saidi templatede t&otilde;lkimine help"
@@ -62,19 +61,18 @@ msgstr ""
 msgid "Kujundusosa Puu (bm_tree) pealkiri"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:79
+#: classes/admin/site_template_trans.aw:54
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:142
+#: classes/admin/site_template_trans.aw:117
 msgid "Selgitus"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:147
+#: classes/admin/site_template_trans.aw:122
 msgid "Konstant"
 msgstr ""
 
-#: classes/admin/site_template_trans.aw:152
+#: classes/admin/site_template_trans.aw:127
 msgid "T&otilde;lge"
 msgstr ""
-

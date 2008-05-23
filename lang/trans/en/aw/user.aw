@@ -78,5 +78,4 @@ $GLOBALS["TRANS"]["Objektile pole sellele kasutaja gruppidele &otilde;igusi m&au
 $GLOBALS["TRANS"]["Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"] = "Info on object's acl:<br /><br />Access is set by access-relation between object %s and group %s<br /><br />ACL set for that relation are: %s";
 $GLOBALS["TRANS"]["Seaded"] = "Settings";
 $GLOBALS["TRANS"]["Ajalugu"] = "History";
-$GLOBALS["TRANS"]["Grupi &Uuml;ldine (general) pealkiri"] = "General";
 ?>

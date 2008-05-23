@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/config/config_login_menus.aw:class_251_help
 msgid "Klassi Login men&uuml;&uuml;d help"
 msgstr ""
@@ -50,7 +49,6 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/admin/config/config_login_menus.aw:146
+#: classes/admin/config/config_login_menus.aw:141
 msgid "menyy"
 msgstr ""
-

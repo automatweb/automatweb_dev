@@ -1,0 +1,232 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/aw_spec/aw_spec.aw:class_1418_help
+msgid "Klassi AW Spetsifikatsioon help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_tb
+msgid "Omaduse  (spec_tb) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_tb_comment
+msgid "Omaduse  (spec_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_tb_help
+msgid "Omaduse  (spec_tb) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_tree
+msgid "Omaduse  (spec_tree) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_tree_comment
+msgid "Omaduse  (spec_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_tree_help
+msgid "Omaduse  (spec_tree) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_class_list
+msgid "Omaduse  (class_list) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_class_list_comment
+msgid "Omaduse  (class_list) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_class_list_help
+msgid "Omaduse  (class_list) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_relation_list
+msgid "Omaduse  (relation_list) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_relation_list_comment
+msgid "Omaduse  (relation_list) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_relation_list_help
+msgid "Omaduse  (relation_list) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_editor
+msgid "Omaduse  (spec_editor) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_editor_comment
+msgid "Omaduse  (spec_editor) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_spec_editor_help
+msgid "Omaduse  (spec_editor) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_view_tb
+msgid "Omaduse  (view_tb) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_view_tb_comment
+msgid "Omaduse  (view_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_view_tb_help
+msgid "Omaduse  (view_tb) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_view_ct
+msgid "Omaduse  (view_ct) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_view_ct_comment
+msgid "Omaduse  (view_ct) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_view_ct_help
+msgid "Omaduse  (view_ct) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:group_spec
+msgid "Grupi Koosta (spec) pealkiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:group_spec_help
+msgid "Grupi Koosta (spec) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:group_spec_view
+msgid "Grupi &Uuml;levaade (spec_view) pealkiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:group_spec_view_help
+msgid "Grupi &Uuml;levaade (spec_view) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:layout_tree_border
+msgid "Kujundusosa Sisukord (tree_border) pealkiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:layout_spec_border
+msgid "Kujundusosa Sisu (spec_border) pealkiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:45
+msgid "Sissejuhatus"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:46 classes/applications/aw_spec/aw_spec.aw:53
+msgid "Kellele"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:47 classes/applications/aw_spec/aw_spec.aw:54
+msgid "Miks"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:48
+msgid "Seadistatavus"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:49
+msgid "Mida seadistada"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:50
+msgid "Kuidas"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:51
+msgid "Kes"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:52
+msgid "Klassid"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:55
+msgid "Klasside nimekiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:56
+msgid "Seosed"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:57
+msgid "Kasutajaliides"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:58
+msgid "Eeskujud"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:59
+msgid "&Auml;riloogika"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:60
+msgid "Kasutajalood"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:61
+msgid "S&uuml;steemi toimimisp&otilde;him&otilde;tted"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:62
+msgid "N&auml;ited"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:110
+msgid "Klassi nimi"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:114
+msgid "Klassi kirjeldus"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:156
+msgid "Sisesta klassid"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:237
+msgid "Seos kust"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:241
+msgid "Seose nimi"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:245
+msgid "Seos kuhu"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:309
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:329
+msgid "PDF"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:399
+msgid "Klass: %s"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:421
+msgid "Seos: %s"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:422
+msgid "Klassist %s klassi %s"
+msgstr ""
+

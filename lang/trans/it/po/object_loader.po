@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/obj/object_loader.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -50,7 +49,6 @@ msgstr ""
 msgid "object_loader::switch_db_connection(%s): could nto find root connection!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:551
+#: classes/core/obj/object_loader.aw:553
 msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
-

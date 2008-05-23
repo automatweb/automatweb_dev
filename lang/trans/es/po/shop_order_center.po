@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_order_center.aw:class_314_help
 msgid "Klassi Tellimiskeskkond help"
 msgstr ""
@@ -579,15 +578,15 @@ msgid "Omaduse Filtrid integratsiooniklassist (filter_fields_class) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_filter_fields_props
-msgid "Omaduse Filtrid toote omadustest	 (filter_fields_props) caption"
+msgid "Omaduse Filtrid toote omadustest\t (filter_fields_props) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_filter_fields_props_comment
-msgid "Omaduse Filtrid toote omadustest	 (filter_fields_props) kommentaar"
+msgid "Omaduse Filtrid toote omadustest\t (filter_fields_props) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_filter_fields_props_help
-msgid "Omaduse Filtrid toote omadustest	 (filter_fields_props) help"
+msgid "Omaduse Filtrid toote omadustest\t (filter_fields_props) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_filter_settings_tb
@@ -818,7 +817,8 @@ msgstr ""
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:434 classes/applications/shop/shop_order_center.aw:1593
+#: classes/applications/shop/shop_order_center.aw:434
+#: classes/applications/shop/shop_order_center.aw:1597
 msgid "Kataloog"
 msgstr ""
 
@@ -838,7 +838,10 @@ msgstr ""
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:477 classes/applications/shop/shop_order_center.aw:1418 classes/applications/shop/shop_order_center.aw:1475 classes/applications/shop/shop_order_center.aw:1619
+#: classes/applications/shop/shop_order_center.aw:477
+#: classes/applications/shop/shop_order_center.aw:1422
+#: classes/applications/shop/shop_order_center.aw:1479
+#: classes/applications/shop/shop_order_center.aw:1623
 msgid "--vali--"
 msgstr ""
 
@@ -854,39 +857,38 @@ msgstr ""
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1247
+#: classes/applications/shop/shop_order_center.aw:1251
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1262
+#: classes/applications/shop/shop_order_center.aw:1266
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1365
+#: classes/applications/shop/shop_order_center.aw:1369
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1392
+#: classes/applications/shop/shop_order_center.aw:1396
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1524
+#: classes/applications/shop/shop_order_center.aw:1528
 msgid "Filtrid integratiooniklassist"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1550
+#: classes/applications/shop/shop_order_center.aw:1554
 msgid "Filtrid toote omadustest"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1562
+#: classes/applications/shop/shop_order_center.aw:1566
 msgid "V&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1567
+#: classes/applications/shop/shop_order_center.aw:1571
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1598
+#: classes/applications/shop/shop_order_center.aw:1602
 msgid "Kehtiv filter"
 msgstr ""
-

@@ -86,39 +86,39 @@ msgstr ""
 msgid "Seose Muutuja (RELTYPE_META_ELEMENTS) tekst"
 msgstr ""
 
-#: classes/admin/object_type.aw:192
+#: classes/admin/object_type.aw:203
 msgid "-vali-"
 msgstr ""
 
-#: classes/admin/object_type.aw:193
+#: classes/admin/object_type.aw:204
 msgid "multiple select"
 msgstr ""
 
-#: classes/admin/object_type.aw:194
+#: classes/admin/object_type.aw:205
 msgid "select"
 msgstr ""
 
-#: classes/admin/object_type.aw:195
+#: classes/admin/object_type.aw:206
 msgid "checkboxid"
 msgstr ""
 
-#: classes/admin/object_type.aw:196
+#: classes/admin/object_type.aw:207
 msgid "radiobuttons"
 msgstr ""
 
-#: classes/admin/object_type.aw:213
+#: classes/admin/object_type.aw:224
 msgid "Oks"
 msgstr ""
 
-#: classes/admin/object_type.aw:221
+#: classes/admin/object_type.aw:232
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/object_type.aw:237
+#: classes/admin/object_type.aw:248
 msgid "Vaikimisi v&auml;limus"
 msgstr ""
 
-#: classes/admin/object_type.aw:287
+#: classes/admin/object_type.aw:298
 msgid "K&otilde;ik"
 msgstr ""
 

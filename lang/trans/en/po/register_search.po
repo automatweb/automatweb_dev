@@ -271,22 +271,22 @@ msgid "T&auml;istekstiotsing"
 msgstr "Fulltext search"
 
 #: classes/applications/register/register_search.aw:196
-#: classes/applications/register/register_search.aw:533
+#: classes/applications/register/register_search.aw:546
 msgid "Loodud"
 msgstr ""
 
 #: classes/applications/register/register_search.aw:197
-#: classes/applications/register/register_search.aw:543
+#: classes/applications/register/register_search.aw:556
 msgid "Muudetud"
 msgstr ""
 
 #: classes/applications/register/register_search.aw:198
-#: classes/applications/register/register_search.aw:538
+#: classes/applications/register/register_search.aw:551
 msgid "Looja"
 msgstr ""
 
 #: classes/applications/register/register_search.aw:199
-#: classes/applications/register/register_search.aw:548
+#: classes/applications/register/register_search.aw:561
 msgid "Muutja"
 msgstr ""
 
@@ -327,21 +327,25 @@ msgid "Vaata tulp"
 msgstr "View column"
 
 #: classes/applications/register/register_search.aw:294
+msgid "Muuda tulp"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:300
 msgid "Tulba pealkiri"
 msgstr "Column title"
 
-#: classes/applications/register/register_search.aw:1049
+#: classes/applications/register/register_search.aw:1066
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/register/register_search.aw:1063
+#: classes/applications/register/register_search.aw:1080
 msgid "Vaata"
 msgstr "View"
 
-#: classes/applications/register/register_search.aw:1074
+#: classes/applications/register/register_search.aw:1091
 msgid "Kustutada objekt?"
 msgstr "Delete object?"
 
-#: classes/applications/register/register_search.aw:1075
+#: classes/applications/register/register_search.aw:1092
 msgid "Kustuta"
 msgstr "Delete"

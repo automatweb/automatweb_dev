@@ -214,7 +214,7 @@ msgstr ""
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:646 classes/applications/customer_satisfaction_center/user_bookmarks.aw:947 classes/applications/customer_satisfaction_center/user_bookmarks.aw:1155
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:646 classes/applications/customer_satisfaction_center/user_bookmarks.aw:948 classes/applications/customer_satisfaction_center/user_bookmarks.aw:1156
 msgid "j&auml;rjehoidja"
 msgstr ""
 
@@ -230,19 +230,19 @@ msgstr ""
 msgid "j&auml;rjehoidjad"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:987
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:988
 msgid "Pane j&auml;rjehoidjasse"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:991
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:992
 msgid "Eemalda j&auml;rjehoidjast"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:995
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:996
 msgid "Toimeta j&auml;rjehoidjat"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1001
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:1002
 msgid "J&auml;rjehoidja"
 msgstr ""
 

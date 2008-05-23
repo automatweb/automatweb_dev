@@ -9,8 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/foreach_site.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/admin/foreach_site.aw:19 classes/admin/foreach_site.aw:59
+msgid "Tee igal saidil"
+msgstr ""
+
+#: classes/admin/foreach_site.aw:30
+msgid "Url"
+msgstr ""
+
+#: classes/admin/foreach_site.aw:37
+msgid "Ainult samal koodil saidid"
+msgstr ""
+
+#: classes/admin/foreach_site.aw:43
+msgid "Tee!"
+msgstr ""
+
+#: classes/admin/foreach_site.aw:167
+msgid "all done"
+msgstr ""

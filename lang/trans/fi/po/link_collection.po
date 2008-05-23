@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/contentmgmt/link_collection.aw:class_1062_help
 msgid "Klassi Lingikogu help"
@@ -27,15 +26,27 @@ msgid "Omaduse T&uuml;&uuml;p (type) help"
 msgstr ""
 
 #: classes/contentmgmt/link_collection.aw:prop_ordering
-msgid "Omaduse J&auml;rjestamine (ordering) caption"
+msgid "Omaduse Linkide j&auml;rjestamine (ordering) caption"
 msgstr ""
 
 #: classes/contentmgmt/link_collection.aw:prop_ordering_comment
-msgid "Omaduse J&auml;rjestamine (ordering) kommentaar"
+msgid "Omaduse Linkide j&auml;rjestamine (ordering) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/link_collection.aw:prop_ordering_help
-msgid "Omaduse J&auml;rjestamine (ordering) help"
+msgid "Omaduse Linkide j&auml;rjestamine (ordering) help"
+msgstr ""
+
+#: classes/contentmgmt/link_collection.aw:prop_kw_ordering
+msgid "Omaduse V&otilde;tmes&otilde;nade j&auml;rjestamine (kw_ordering) caption"
+msgstr ""
+
+#: classes/contentmgmt/link_collection.aw:prop_kw_ordering_comment
+msgid "Omaduse V&otilde;tmes&otilde;nade j&auml;rjestamine (kw_ordering) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/link_collection.aw:prop_kw_ordering_help
+msgid "Omaduse V&otilde;tmes&otilde;nade j&auml;rjestamine (kw_ordering) help"
 msgstr ""
 
 #: classes/contentmgmt/link_collection.aw:prop_folders
@@ -62,27 +73,26 @@ msgstr ""
 msgid "Seose Kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:45
+#: classes/contentmgmt/link_collection.aw:48
 msgid "Kaustadep&otilde;hine"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:46
+#: classes/contentmgmt/link_collection.aw:49
 msgid "V&otilde;tmes&otilde;nade p&otilde;hine"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:50
+#: classes/contentmgmt/link_collection.aw:53
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:51
+#: classes/contentmgmt/link_collection.aw:54
 msgid "T&auml;hestik"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:255
+#: classes/contentmgmt/link_collection.aw:268
 msgid "Kaust"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:262
+#: classes/contentmgmt/link_collection.aw:275
 msgid "K.A. alamobjektid"
 msgstr ""
-

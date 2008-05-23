@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_company_relation.aw:class_1405_help
 msgid "Klassi Organisatoorne kuuluvus help"
 msgstr ""
@@ -66,3 +65,6 @@ msgstr ""
 msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_company_relation.aw:49
+msgid "--vali--"
+msgstr ""

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/config/file_upload_config.aw:class_1329_help
 msgid "Klassi Failide &uuml;leslaadimise seaded help"
 msgstr ""
@@ -86,11 +85,10 @@ msgstr ""
 msgid "Seose Kaust (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/admin/config/file_upload_config.aw:86
+#: classes/admin/config/file_upload_config.aw:64
 msgid "Kaust"
 msgstr ""
 
-#: classes/admin/config/file_upload_config.aw:91
+#: classes/admin/config/file_upload_config.aw:69
 msgid "Kaasaarvatud alammen&uuml;&uuml;d"
 msgstr ""
-

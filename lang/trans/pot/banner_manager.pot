@@ -118,87 +118,87 @@ msgstr ""
 msgid "Kujundusosa Asukohad (mgr_tree_l) pealkiri"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:100
+#: classes/applications/banner/banner_manager.aw:97
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:132
+#: classes/applications/banner/banner_manager.aw:129
 msgid "Banner"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:175
+#: classes/applications/banner/banner_manager.aw:172
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:333
+#: classes/applications/banner/banner_manager.aw:330
 msgid "K&otilde;ik asukohad"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:386 classes/applications/banner/banner_manager.aw:525
+#: classes/applications/banner/banner_manager.aw:383 classes/applications/banner/banner_manager.aw:522
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:391 classes/applications/banner/banner_manager.aw:530
+#: classes/applications/banner/banner_manager.aw:388 classes/applications/banner/banner_manager.aw:527
 msgid "Aktiivne?"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:396
+#: classes/applications/banner/banner_manager.aw:393
 msgid "Kus n&auml;idatakse"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:420
+#: classes/applications/banner/banner_manager.aw:417
 msgid "Bannerite n&auml;itamise kohad"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:455
+#: classes/applications/banner/banner_manager.aw:452
 msgid "Igal pool"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:471
+#: classes/applications/banner/banner_manager.aw:468
 msgid "Mitte kuskil"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:485 classes/applications/banner/banner_manager.aw:625
+#: classes/applications/banner/banner_manager.aw:482 classes/applications/banner/banner_manager.aw:622
 msgid "Muuda dokumenti"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:489 classes/applications/banner/banner_manager.aw:629
+#: classes/applications/banner/banner_manager.aw:486 classes/applications/banner/banner_manager.aw:626
 msgid "Muuda asukohta"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:493 classes/applications/banner/banner_manager.aw:633
+#: classes/applications/banner/banner_manager.aw:490 classes/applications/banner/banner_manager.aw:630
 msgid "Muuda konteinerit"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:506
+#: classes/applications/banner/banner_manager.aw:503
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:535
+#: classes/applications/banner/banner_manager.aw:532
 msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:540
+#: classes/applications/banner/banner_manager.aw:537
 msgid "Aktiivne kuni"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:545
+#: classes/applications/banner/banner_manager.aw:542
 msgid "Sisu"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:550
+#: classes/applications/banner/banner_manager.aw:547
 msgid "Kuhu suunab"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:584
+#: classes/applications/banner/banner_manager.aw:581
 msgid "Bannerid, mida n&auml;idatakse asukohtades %s"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:590
+#: classes/applications/banner/banner_manager.aw:587
 msgid "Bannerid, mida n&auml;idatakse asukohas %s"
 msgstr ""
 
-#: classes/applications/banner/banner_manager.aw:621
+#: classes/applications/banner/banner_manager.aw:618
 msgid "Muuda bannerit"
 msgstr ""
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/ows_bron/ows_bron.aw:class_1323_help
 msgid "Klassi OWS Broneeringukeskus help"
 msgstr ""
@@ -154,43 +153,59 @@ msgstr ""
 msgid "Seose Kinnitatud tellimuste kaust (RELTYPE_CONFIRMED_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:645 classes/applications/ows_bron/ows_bron.aw:1000
+#: classes/applications/ows_bron/ows_bron.aw:729
+#: classes/applications/ows_bron/ows_bron.aw:1093
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2326
+#: classes/applications/ows_bron/ows_bron.aw:1275
+msgid "No such booking found!"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:1402
+msgid "No such reservation found!"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2606
 msgid "The booking you requested does not exist!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2331
+#: classes/applications/ows_bron/ows_bron.aw:2611
 msgid "The booking you requested has already been cancelled!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2621 classes/applications/ows_bron/ows_bron.aw:2699 classes/applications/ows_bron/ows_bron.aw:2747
+#: classes/applications/ows_bron/ows_bron.aw:2616
+msgid "Sorry, but it is already too late to cancel this booking!"
+msgstr ""
+
+#: classes/applications/ows_bron/ows_bron.aw:2920
+#: classes/applications/ows_bron/ows_bron.aw:2998
+#: classes/applications/ows_bron/ows_bron.aw:3046
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2626
+#: classes/applications/ows_bron/ows_bron.aw:2925
 msgid "Template"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2658
+#: classes/applications/ows_bron/ows_bron.aw:2957
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2663
+#: classes/applications/ows_bron/ows_bron.aw:2962
 msgid "Pangamakse objekt"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2674
+#: classes/applications/ows_bron/ows_bron.aw:2973
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2704 classes/applications/ows_bron/ows_bron.aw:2752
+#: classes/applications/ows_bron/ows_bron.aw:3003
+#: classes/applications/ows_bron/ows_bron.aw:3051
 msgid "BCC"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2709 classes/applications/ows_bron/ows_bron.aw:2757
+#: classes/applications/ows_bron/ows_bron.aw:3008
+#: classes/applications/ows_bron/ows_bron.aw:3056
 msgid "Kirja teema"
 msgstr ""
-

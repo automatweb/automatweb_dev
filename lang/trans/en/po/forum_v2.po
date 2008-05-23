@@ -1119,12 +1119,12 @@ msgid "teema"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:353
-#: classes/contentmgmt/forum/forum_v2.aw:2503
+#: classes/contentmgmt/forum/forum_v2.aw:2504
 msgid "Pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:354
-#: classes/contentmgmt/forum/forum_v2.aw:2513
+#: classes/contentmgmt/forum/forum_v2.aw:2514
 #: classes/contentmgmt/forum/forum_v2.aw:2701
 msgid "Autor"
 msgstr ""
@@ -1154,66 +1154,66 @@ msgstr ""
 msgid "Teemade kaust on valimata"
 msgstr "Topic folder is not selected"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1875
+#: classes/contentmgmt/forum/forum_v2.aw:1876
 msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1879
+#: classes/contentmgmt/forum/forum_v2.aw:1880
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
 msgstr "Title must be set"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1883
+#: classes/contentmgmt/forum/forum_v2.aw:1884
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr "Name must be set"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1887
+#: classes/contentmgmt/forum/forum_v2.aw:1888
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr "Email must be set"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1891
+#: classes/contentmgmt/forum/forum_v2.aw:1892
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr "Comment must be set"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1895
+#: classes/contentmgmt/forum/forum_v2.aw:1896
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2178
+#: classes/contentmgmt/forum/forum_v2.aw:2179
 #: classes/contentmgmt/forum/forum_v2.aw:2632
 #: classes/contentmgmt/forum/forum_v2.aw:2694
 msgid "Teema"
 msgstr "Topic"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2183
+#: classes/contentmgmt/forum/forum_v2.aw:2184
 msgid "J&auml;ta v&auml;lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2190
+#: classes/contentmgmt/forum/forum_v2.aw:2191
 msgid "k.a. alamkaustad"
 msgstr "incl. subfolders"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2350
+#: classes/contentmgmt/forum/forum_v2.aw:2351
 msgid "Teema muutmine"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2350
+#: classes/contentmgmt/forum/forum_v2.aw:2351
 msgid "Kommentaari muutmine"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2415
-#: classes/contentmgmt/forum/forum_v2.aw:2869
+#: classes/contentmgmt/forum/forum_v2.aw:2416
+#: classes/contentmgmt/forum/forum_v2.aw:2876
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2423
+#: classes/contentmgmt/forum/forum_v2.aw:2424
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2508
+#: classes/contentmgmt/forum/forum_v2.aw:2509
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2518
+#: classes/contentmgmt/forum/forum_v2.aw:2519
 msgid "Aeg"
 msgstr ""
 
@@ -1257,27 +1257,27 @@ msgstr ""
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2807
+#: classes/contentmgmt/forum/forum_v2.aw:2814
 msgid "Uus teema"
 msgstr "New topic"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2881
+#: classes/contentmgmt/forum/forum_v2.aw:2888
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2904
+#: classes/contentmgmt/forum/forum_v2.aw:2911
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/contentmgmt/forum/forum_v2.aw:3494
+#: classes/contentmgmt/forum/forum_v2.aw:3501
 msgid "teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3501
+#: classes/contentmgmt/forum/forum_v2.aw:3508
 msgid "aadresside kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3731
+#: classes/contentmgmt/forum/forum_v2.aw:3738
 msgid "Nimetu"
 msgstr ""
 

@@ -38,6 +38,102 @@ msgstr ""
 msgid "Omaduse Asukoht (folder) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_use_different_settings
+msgid "Omaduse Kasuta eraldi seadeid (use_different_settings) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_use_different_settings_comment
+msgid "Omaduse Kasuta eraldi seadeid (use_different_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_use_different_settings_help
+msgid "Omaduse Kasuta eraldi seadeid (use_different_settings) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_use_used_settings
+msgid "Omaduse Kasuta olemasolevaid seadeid (use_used_settings) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_use_used_settings_comment
+msgid "Omaduse Kasuta olemasolevaid seadeid (use_used_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_use_used_settings_help
+msgid "Omaduse Kasuta olemasolevaid seadeid (use_used_settings) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_amount_final
+msgid "Omaduse Summa t&auml;isarv (amount_final) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_amount_final_comment
+msgid "Omaduse Summa t&auml;isarv (amount_final) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_amount_final_help
+msgid "Omaduse Summa t&auml;isarv (amount_final) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_amount
+msgid "Omaduse Summa % (amount) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_amount_comment
+msgid "Omaduse Summa % (amount) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_amount_help
+msgid "Omaduse Summa % (amount) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_max_deviation_minus
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus - (max_deviation_minus) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_max_deviation_minus_comment
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus - (max_deviation_minus) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_max_deviation_minus_help
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus - (max_deviation_minus) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_max_deviation_plus
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus + (max_deviation_plus) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_max_deviation_plus_comment
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus + (max_deviation_plus) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_max_deviation_plus_help
+msgid "Omaduse Maksimaalne projektip&otilde;hine muudatus + (max_deviation_plus) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_pri
+msgid "Omaduse Prioriteet (pri) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_pri_comment
+msgid "Omaduse Prioriteet (pri) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_pri_help
+msgid "Omaduse Prioriteet (pri) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_term
+msgid "Omaduse Tingimus (term) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_term_comment
+msgid "Omaduse Tingimus (term) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax_folder_relation.aw:prop_term_help
+msgid "Omaduse Tingimus (term) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_tax_folder_relation.aw:rel_RELTYPE_TAX
 msgid "Seose Maks (RELTYPE_TAX) tekst"
 msgstr ""

@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse Versioon (search_version) help"
 msgstr ""
 
+#: classes/applications/package_management/package_server.aw:prop_search_file
+msgid "Omaduse Fail (search_file) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_file_comment
+msgid "Omaduse Fail (search_file) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_search_file_help
+msgid "Omaduse Fail (search_file) help"
+msgstr ""
+
 #: classes/applications/package_management/package_server.aw:prop_search_button
 msgid "Omaduse Otsi (search_button) caption"
 msgstr ""
@@ -110,39 +122,39 @@ msgstr ""
 msgid "Seose Pakkide kaust AW-s (RELTYPE_PACKAGES_FOLDER_AW) tekst"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:85
+#: classes/applications/package_management/package_server.aw:89
 msgid "Uus pakk"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:95
+#: classes/applications/package_management/package_server.aw:99
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:97
+#: classes/applications/package_management/package_server.aw:101
 msgid "Oled kindel et soovid valitud objektid kustutada?"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:108
+#: classes/applications/package_management/package_server.aw:112
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:118
+#: classes/applications/package_management/package_server.aw:122
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:122
+#: classes/applications/package_management/package_server.aw:126
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:127
+#: classes/applications/package_management/package_server.aw:131
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:132
+#: classes/applications/package_management/package_server.aw:136
 msgid "S&otilde;ltuvused"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:240
+#: classes/applications/package_management/package_server.aw:246
 msgid "Pole sellist ajsa nagu pakihalduse serveri objekt!"
 msgstr ""
 

@@ -37,6 +37,7 @@ msgid "Teostaja"
 msgstr "Implementor"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:80
+#: classes/applications/crm/crm_company_cust_impl.aw:370
 msgid "T&auml;htaeg"
 msgstr "Due date"
 
@@ -79,10 +80,6 @@ msgstr "Customer(s)"
 msgid "Algus"
 msgstr "Start"
 
-#: classes/applications/crm/crm_company_cust_impl.aw:370
-msgid "Tähtaeg"
-msgstr "Due date"
-
 #: classes/applications/crm/crm_company_cust_impl.aw:379
 msgid "Faas"
 msgstr "Phase"
@@ -92,16 +89,16 @@ msgid "Projektijuht"
 msgstr "Project manager"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:389
-msgid "Müüja/looja"
-msgstr "Created by"
+msgid "M&uuml;&uuml;ja/looja"
+msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:394
 msgid "Hind"
 msgstr "Price"
 
 #: classes/applications/crm/crm_company_cust_impl.aw:399
-msgid "Välja"
-msgstr "Out"
+msgid "V&auml;lja"
+msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:404
 msgid "Saadud"
@@ -365,6 +362,10 @@ msgstr "%s clients"
 msgid "%s kliendid: %s"
 msgstr "%s clients: %s"
 
+#: classes/applications/crm/crm_company_cust_impl.aw:1873
+msgid "kliendid:"
+msgstr ""
+
 #: classes/applications/crm/crm_company_cust_impl.aw:2064
 msgid "Vaata"
 msgstr "View"
@@ -380,6 +381,15 @@ msgstr "Remove from group"
 #: classes/applications/crm/crm_company_cust_impl.aw:2134
 msgid "Kontaktid"
 msgstr "Contacts"
+
+#~ msgid "Tähtaeg"
+#~ msgstr "Due date"
+
+#~ msgid "Müüja/looja"
+#~ msgstr "Created by"
+
+#~ msgid "Välja"
+#~ msgstr "Out"
 
 #~ msgid "Loodud"
 #~ msgstr "Created"

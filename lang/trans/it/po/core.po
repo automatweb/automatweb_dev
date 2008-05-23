@@ -9,20 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core.aw:829
+#: classes/core.aw:863
 msgid "Tagasi"
 msgstr ""
 
-#: classes/core.aw:861
+#: classes/core.aw:895
 msgid "(nimetu)"
 msgstr ""
 
-#: classes/core.aw:1017
+#: classes/core.aw:1038
 msgid "Couldn't open file '%s' for writing"
 msgstr ""
-

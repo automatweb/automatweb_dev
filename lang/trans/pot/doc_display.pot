@@ -14,75 +14,99 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1065
+#: classes/contentmgmt/doc_display.aw:1104
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1071
+#: classes/contentmgmt/doc_display.aw:1110
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1076
+#: classes/contentmgmt/doc_display.aw:1115
 msgid "Peida"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1080
+#: classes/contentmgmt/doc_display.aw:1119
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1086
+#: classes/contentmgmt/doc_display.aw:1125
 msgid "Kleebi"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1282
+#: classes/contentmgmt/doc_display.aw:1321
 msgid "jaanuar"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1283
+#: classes/contentmgmt/doc_display.aw:1322
 msgid "veebruar"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1284
+#: classes/contentmgmt/doc_display.aw:1323
 msgid "m&auml;rts"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1285
+#: classes/contentmgmt/doc_display.aw:1324
 msgid "aprill"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1286
+#: classes/contentmgmt/doc_display.aw:1325
 msgid "mai"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1287
+#: classes/contentmgmt/doc_display.aw:1326
 msgid "juuni"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1288
+#: classes/contentmgmt/doc_display.aw:1327
 msgid "juuli"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1289
+#: classes/contentmgmt/doc_display.aw:1328
 msgid "august"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1290
+#: classes/contentmgmt/doc_display.aw:1329
 msgid "september"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1291
+#: classes/contentmgmt/doc_display.aw:1330
 msgid "oktoober"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1292
+#: classes/contentmgmt/doc_display.aw:1331
 msgid "november"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1293
+#: classes/contentmgmt/doc_display.aw:1332
 msgid "detsember"
 msgstr ""
 
-#: classes/contentmgmt/doc_display.aw:1300
+#: classes/contentmgmt/doc_display.aw:1339
 msgid "Just postitatud"
+msgstr ""
+
+#: classes/contentmgmt/doc_display.aw:1346
+msgid "%s minut tagasi"
+msgstr ""
+
+#: classes/contentmgmt/doc_display.aw:1350
+msgid "%s minutit tagasi"
+msgstr ""
+
+#: classes/contentmgmt/doc_display.aw:1358
+msgid "%s tund tagasi"
+msgstr ""
+
+#: classes/contentmgmt/doc_display.aw:1362
+msgid "%s tundi tagasi"
+msgstr ""
+
+#: classes/contentmgmt/doc_display.aw:1370
+msgid "%s p&auml;ev tagasi"
+msgstr ""
+
+#: classes/contentmgmt/doc_display.aw:1374
+msgid "%s p&auml;eva tagasi"
 msgstr ""
 

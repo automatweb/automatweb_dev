@@ -59,55 +59,55 @@ msgstr ""
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3483
+#: classes/contentmgmt/document.aw:3482
 msgid "jaanuar"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3484
+#: classes/contentmgmt/document.aw:3483
 msgid "veebruar"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3485
+#: classes/contentmgmt/document.aw:3484
 msgid "m&auml;rts"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3486
+#: classes/contentmgmt/document.aw:3485
 msgid "aprill"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3487
+#: classes/contentmgmt/document.aw:3486
 msgid "mai"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3488
+#: classes/contentmgmt/document.aw:3487
 msgid "juuni"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3489
+#: classes/contentmgmt/document.aw:3488
 msgid "juuli"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3490
+#: classes/contentmgmt/document.aw:3489
 msgid "august"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3491
+#: classes/contentmgmt/document.aw:3490
 msgid "september"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3492
+#: classes/contentmgmt/document.aw:3491
 msgid "oktoober"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3493
+#: classes/contentmgmt/document.aw:3492
 msgid "november"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3494
+#: classes/contentmgmt/document.aw:3493
 msgid "detsember"
 msgstr ""
 
-#: classes/contentmgmt/document.aw:3501
+#: classes/contentmgmt/document.aw:3500
 msgid "Just postitatud"
 msgstr ""
 

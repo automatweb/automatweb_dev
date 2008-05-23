@@ -1,9 +1,7 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Algus (start1) caption"] = "Start";
-$GLOBALS["TRANS"]["Omaduse Lõpp (end) caption"] = "End";
 $GLOBALS["TRANS"]["Omaduse Flyer (image) caption"] = "Flyer";
 $GLOBALS["TRANS"]["Omaduse Sisu (content) caption"] = "Content";
-$GLOBALS["TRANS"]["Omaduse Võta esineja objektist ürituse (from_artist) caption"] = "From performer object get";
 $GLOBALS["TRANS"]["Omaduse Seostehaldur (relman) caption"] = "Connection manager";
 $GLOBALS["TRANS"]["Omaduse Esinejate toolbar (artists_toolbar) caption"] = "Performer toolbar";
 $GLOBALS["TRANS"]["Omaduse Esinejad (artists) caption"] = "Performers";

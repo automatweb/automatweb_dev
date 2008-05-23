@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/gantt_chart.aw:class_869_help
 msgid "Klassi Gantti diagramm help"
 msgstr ""
 
-#: classes/vcl/gantt_chart.aw:370
-msgid "Näita"
+#: classes/vcl/gantt_chart.aw:372
+msgid "N&auml;ita"
 msgstr ""
 
-#: classes/vcl/gantt_chart.aw:370
+#: classes/vcl/gantt_chart.aw:372
 msgid "Peida"
 msgstr ""
-

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/budgeting/budget.aw:class_1213_help
 msgid "Klassi Eelarve help"
 msgstr ""
@@ -202,15 +201,27 @@ msgstr ""
 msgid "Edasi kandub"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:211
+#: classes/applications/budgeting/budget.aw:214
 msgid "<br>(Maksimaalne erinevus %s)"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:216 classes/applications/budgeting/budget.aw:251
+#: classes/applications/budgeting/budget.aw:219
+#: classes/applications/budgeting/budget.aw:246
+#: classes/applications/budgeting/budget.aw:264
+#: classes/applications/budgeting/budget.aw:282
+#: classes/applications/budgeting/budget.aw:299
+#: classes/applications/budgeting/budget.aw:314
 msgid "Muud maksud"
 msgstr ""
 
-#: classes/applications/budgeting/budget.aw:340
-msgid "V&auml;lista"
+#: classes/applications/budgeting/budget.aw:407
+msgid "Projekti maksumus:"
 msgstr ""
 
+#: classes/applications/budgeting/budget.aw:420
+msgid "Projekt valimata"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:443
+msgid "V&auml;lista"
+msgstr ""

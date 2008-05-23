@@ -1,0 +1,176 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/event_import_2/event_import_2.aw:class_1413_help
+msgid "Klassi Sündmuste import 2 help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_slave_obj
+msgid "Omaduse Allikas (slave_obj) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_slave_obj_comment
+msgid "Omaduse Allikas (slave_obj) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_slave_obj_help
+msgid "Omaduse Allikas (slave_obj) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_events_manager
+msgid "Omaduse S&uuml;ndmuste halduse keskkond (events_manager) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_events_manager_comment
+msgid "Omaduse S&uuml;ndmuste halduse keskkond (events_manager) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_events_manager_help
+msgid "Omaduse S&uuml;ndmuste halduse keskkond (events_manager) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_event_cfgform
+msgid "Omaduse Seadete vorm (event_cfgform) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_event_cfgform_comment
+msgid "Omaduse Seadete vorm (event_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_event_cfgform_help
+msgid "Omaduse Seadete vorm (event_cfgform) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_language
+msgid "Omaduse Keel (language) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_language_comment
+msgid "Omaduse Keel (language) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_language_help
+msgid "Omaduse Keel (language) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_last_import
+msgid "Omaduse Viimane import (last_import) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_last_import_comment
+msgid "Omaduse Viimane import (last_import) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_last_import_help
+msgid "Omaduse Viimane import (last_import) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_invoke
+msgid "Omaduse Import (invoke) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_invoke_comment
+msgid "Omaduse Import (invoke) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_invoke_help
+msgid "Omaduse Import (invoke) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_event
+msgid "Omaduse  (urt_event) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_event_comment
+msgid "Omaduse  (urt_event) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_event_help
+msgid "Omaduse  (urt_event) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_location
+msgid "Omaduse  (urt_location) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_location_comment
+msgid "Omaduse  (urt_location) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_location_help
+msgid "Omaduse  (urt_location) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_organizer
+msgid "Omaduse  (urt_organizer) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_organizer_comment
+msgid "Omaduse  (urt_organizer) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_organizer_help
+msgid "Omaduse  (urt_organizer) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_sector
+msgid "Omaduse  (urt_sector) caption"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_sector_comment
+msgid "Omaduse  (urt_sector) kommentaar"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:prop_urt_sector_help
+msgid "Omaduse  (urt_sector) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:group_update_rules
+msgid "Grupi Muudatuste reeglid (update_rules) pealkiri"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:group_update_rules_help
+msgid "Grupi Muudatuste reeglid (update_rules) help"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:rel_RELTYPE_SLAVE
+msgid "Seose Allikas (RELTYPE_SLAVE) tekst"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:rel_RELTYPE_EVENTS_MANAGER
+msgid "Seose S&uuml;ndmuste halduse keskkond (RELTYPE_EVENTS_MANAGER) tekst"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:rel_RELTYPE_EVENT_CFGFORM
+msgid "Seose Seadete vorm (RELTYPE_EVENT_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:rel_RELTYPE_EVENT_LANGUAGE
+msgid "Seose Keel (RELTYPE_EVENT_LANGUAGE) tekst"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:82
+msgid "K&auml;ivita import"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:96 classes/applications/event_import_2/event_import_2.aw:146
+msgid "S&uuml;ndmuse v&auml;li, kuhu salvestada"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:101 classes/applications/event_import_2/event_import_2.aw:151
+msgid "Uuenda v&auml;lja sisu, isegi kui nii AWs kui ka allikas on v&auml;lja sisu muudetud"
+msgstr ""
+
+#: classes/applications/event_import_2/event_import_2.aw:141
+msgid "V&auml;li"
+msgstr ""
+

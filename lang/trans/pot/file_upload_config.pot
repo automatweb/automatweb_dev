@@ -86,11 +86,11 @@ msgstr ""
 msgid "Seose Kaust (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/admin/config/file_upload_config.aw:86
+#: classes/admin/config/file_upload_config.aw:64
 msgid "Kaust"
 msgstr ""
 
-#: classes/admin/config/file_upload_config.aw:91
+#: classes/admin/config/file_upload_config.aw:69
 msgid "Kaasaarvatud alammen&uuml;&uuml;d"
 msgstr ""
 

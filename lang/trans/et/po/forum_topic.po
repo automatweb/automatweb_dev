@@ -95,6 +95,18 @@ msgstr ""
 msgid "Omaduse Autori e-post (author_email) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_topic.aw:prop_ip
+msgid "Omaduse IP (ip) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_ip_comment
+msgid "Omaduse IP (ip) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_ip_help
+msgid "Omaduse IP (ip) help"
+msgstr ""
+
 # classes/contentmgmt/forum/forum_topic.aw:prop_locked
 #: classes/contentmgmt/forum/forum_topic.aw:prop_locked
 msgid "Omaduse Teema lukus (locked) caption"
@@ -180,10 +192,10 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:135
+#: classes/contentmgmt/forum/forum_topic.aw:144
 msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:151
+#: classes/contentmgmt/forum/forum_topic.aw:160
 msgid "Sisestatud kontrollnumber on vale!"
 msgstr ""

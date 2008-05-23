@@ -14,3 +14,83 @@ msgstr ""
 msgid "Klassi Reval Klienditsoon help"
 msgstr ""
 
+#: classes/applications/clients/reval/customer/reval_customer.aw:478 classes/applications/clients/reval/customer/reval_customer.aw:520 classes/applications/clients/reval/customer/reval_customer.aw:534 classes/applications/clients/reval/customer/reval_customer.aw:565
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:479
+msgid "Eesti"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:480
+msgid "L&auml;ti"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:481
+msgid "Leedu"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:482
+msgid "Inglise"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:483
+msgid "Vene"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:484
+msgid "Saksa"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:485
+msgid "Soome"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:496 classes/applications/clients/reval/customer/reval_customer.aw:506
+msgid "Ei ole eelistust"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:496
+msgid "&Uuml;lemine korrus"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:496
+msgid "Alumine korrus"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:506
+msgid "Suitsetav"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:506
+msgid "Suitsuvaba"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544 classes/applications/clients/reval/customer/reval_customer.aw:549
+msgid "Ei soovi avaldada"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+msgid "Abielus"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+msgid "Lahutatud"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+msgid "Vallaline"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:549
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:549
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:866
+msgid "No such booking found!"
+msgstr ""
+

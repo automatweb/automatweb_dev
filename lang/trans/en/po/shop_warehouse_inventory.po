@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:class_1044_help
 msgid "Klassi Inventuur help"
@@ -36,6 +35,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_warehouse_help
 msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_confirmed
+msgid "Omaduse Kinnitatud (confirmed) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_confirmed_comment
+msgid "Omaduse Kinnitatud (confirmed) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_inventory.aw:prop_confirmed_help
+msgid "Omaduse Kinnitatud (confirmed) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_inventory.aw:prop_product_code
@@ -122,35 +133,34 @@ msgstr ""
 msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:124
+#: classes/applications/shop/shop_warehouse_inventory.aw:75
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:126
+#: classes/applications/shop/shop_warehouse_inventory.aw:77
 msgid "Oled kindel?"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:142
+#: classes/applications/shop/shop_warehouse_inventory.aw:93
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:146
+#: classes/applications/shop/shop_warehouse_inventory.aw:97
 msgid "Ribakood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:150
+#: classes/applications/shop/shop_warehouse_inventory.aw:101
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:154
+#: classes/applications/shop/shop_warehouse_inventory.aw:105
 msgid "Kogus laos"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:158
+#: classes/applications/shop/shop_warehouse_inventory.aw:109
 msgid "Tegelik kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse_inventory.aw:162
+#: classes/applications/shop/shop_warehouse_inventory.aw:113
 msgid "Vali"
 msgstr ""
-

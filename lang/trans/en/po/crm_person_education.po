@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 # classes/applications/crm/crm_person_education.aw:class_487_help
 #: classes/applications/crm/crm_person_education.aw:class_487_help
@@ -215,13 +214,16 @@ msgstr "Doctor"
 msgid "Teaduste kandidaat"
 msgstr "Master of science"
 
-#: classes/applications/crm/crm_person_education.aw:126
+#: classes/applications/crm/crm_person_education.aw:125
 #: classes/applications/crm/crm_person_education.aw:133
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_person_education.aw:127
+#: classes/applications/crm/crm_person_education.aw:126
 #: classes/applications/crm/crm_person_education.aw:134
 msgid "Ei"
 msgstr "No"
 
+#: classes/applications/crm/crm_person_education.aw:148
+msgid "--vali--"
+msgstr ""

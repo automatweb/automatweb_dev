@@ -9,162 +9,162 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/object_export.aw:class_477_help
+#: classes/admin/export/object_export.aw:class_477_help
 msgid "Klassi Objektide eksport help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_object_type
+#: classes/admin/export/object_export.aw:prop_object_type
 msgid "Omaduse Objektit&uuml;&uuml;p mida eksportida (object_type) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_object_type_comment
+#: classes/admin/export/object_export.aw:prop_object_type_comment
 msgid "Omaduse Objektit&uuml;&uuml;p mida eksportida (object_type) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_object_type_help
+#: classes/admin/export/object_export.aw:prop_object_type_help
 msgid "Omaduse Objektit&uuml;&uuml;p mida eksportida (object_type) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_root_folder
+#: classes/admin/export/object_export.aw:prop_root_folder
 msgid "Omaduse Kaust, kust objektid v&otilde;tta (root_folder) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_root_folder_comment
+#: classes/admin/export/object_export.aw:prop_root_folder_comment
 msgid "Omaduse Kaust, kust objektid v&otilde;tta (root_folder) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_root_folder_help
+#: classes/admin/export/object_export.aw:prop_root_folder_help
 msgid "Omaduse Kaust, kust objektid v&otilde;tta (root_folder) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_csv_separator
+#: classes/admin/export/object_export.aw:prop_csv_separator
 msgid "Omaduse CSV Faili tulpade eraldaja (csv_separator) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_csv_separator_comment
+#: classes/admin/export/object_export.aw:prop_csv_separator_comment
 msgid "Omaduse CSV Faili tulpade eraldaja (csv_separator) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_csv_separator_help
+#: classes/admin/export/object_export.aw:prop_csv_separator_help
 msgid "Omaduse CSV Faili tulpade eraldaja (csv_separator) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_mktbl
+#: classes/admin/export/object_export.aw:prop_mktbl
 msgid "Omaduse  (mktbl) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_mktbl_comment
+#: classes/admin/export/object_export.aw:prop_mktbl_comment
 msgid "Omaduse  (mktbl) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_mktbl_help
+#: classes/admin/export/object_export.aw:prop_mktbl_help
 msgid "Omaduse  (mktbl) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_link
+#: classes/admin/export/object_export.aw:prop_export_link
 msgid "Omaduse  (export_link) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_link_comment
+#: classes/admin/export/object_export.aw:prop_export_link_comment
 msgid "Omaduse  (export_link) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_link_help
+#: classes/admin/export/object_export.aw:prop_export_link_help
 msgid "Omaduse  (export_link) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_link2
+#: classes/admin/export/object_export.aw:prop_export_link2
 msgid "Omaduse  (export_link2) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_link2_comment
+#: classes/admin/export/object_export.aw:prop_export_link2_comment
 msgid "Omaduse  (export_link2) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_link2_help
+#: classes/admin/export/object_export.aw:prop_export_link2_help
 msgid "Omaduse  (export_link2) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_table
+#: classes/admin/export/object_export.aw:prop_export_table
 msgid "Omaduse Esimesed 10 rida (export_table) caption"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_table_comment
+#: classes/admin/export/object_export.aw:prop_export_table_comment
 msgid "Omaduse Esimesed 10 rida (export_table) kommentaar"
 msgstr ""
 
-#: classes/admin/object_export.aw:prop_export_table_help
+#: classes/admin/export/object_export.aw:prop_export_table_help
 msgid "Omaduse Esimesed 10 rida (export_table) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:group_mktbl
+#: classes/admin/export/object_export.aw:group_mktbl
 msgid "Grupi Koosta tabel (mktbl) pealkiri"
 msgstr ""
 
-#: classes/admin/object_export.aw:group_mktbl_help
+#: classes/admin/export/object_export.aw:group_mktbl_help
 msgid "Grupi Koosta tabel (mktbl) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:group_export
+#: classes/admin/export/object_export.aw:group_export
 msgid "Grupi Ekspordi (export) pealkiri"
 msgstr ""
 
-#: classes/admin/object_export.aw:group_export_help
+#: classes/admin/export/object_export.aw:group_export_help
 msgid "Grupi Ekspordi (export) help"
 msgstr ""
 
-#: classes/admin/object_export.aw:rel_RELTYPE_OBJECT_TYPE
+#: classes/admin/export/object_export.aw:rel_RELTYPE_OBJECT_TYPE
 msgid "Seose objektit&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"
 msgstr ""
 
-#: classes/admin/object_export.aw:rel_RELTYPE_FOLDER
+#: classes/admin/export/object_export.aw:rel_RELTYPE_FOLDER
 msgid "Seose kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/admin/object_export.aw:95
+#: classes/admin/export/object_export.aw:92
 msgid "Ekspordi CSV fail"
 msgstr ""
 
-#: classes/admin/object_export.aw:106
+#: classes/admin/export/object_export.aw:103
 msgid "Ekspordi XLS fail"
 msgstr ""
 
-#: classes/admin/object_export.aw:140
+#: classes/admin/export/object_export.aw:137
 msgid "Element"
 msgstr ""
 
-#: classes/admin/object_export.aw:146
+#: classes/admin/export/object_export.aw:143
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/admin/object_export.aw:153
+#: classes/admin/export/object_export.aw:150
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/admin/object_export.aw:159
+#: classes/admin/export/object_export.aw:156
 msgid "Ekspordi v&auml;&auml;rtus"
 msgstr ""
 
-#: classes/admin/object_export.aw:166
+#: classes/admin/export/object_export.aw:163
 msgid "Eksporditav"
 msgstr ""
 
-#: classes/admin/object_export.aw:182
+#: classes/admin/export/object_export.aw:179
 msgid "Objekti id"
 msgstr ""
 
-#: classes/admin/object_export.aw:254
+#: classes/admin/export/object_export.aw:251
 msgid "Looja"
 msgstr ""
 
-#: classes/admin/object_export.aw:261
+#: classes/admin/export/object_export.aw:258
 msgid "Loodud"
 msgstr ""
 
-#: classes/admin/object_export.aw:268
+#: classes/admin/export/object_export.aw:265
 msgid "Muutja"
 msgstr ""
 
-#: classes/admin/object_export.aw:275
+#: classes/admin/export/object_export.aw:272
 msgid "Muudetud"
 msgstr ""

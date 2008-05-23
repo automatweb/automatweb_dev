@@ -118,7 +118,6 @@ msgid "Oled kindel, et tahad valitud eemaldada?"
 msgstr "Are you sure you want to delete selected?"
 
 #: classes/applications/quickmessage/contact_list.aw:100
-#: classes/applications/quickmessage/contact_list.aw:234
 msgid "Nimi"
 msgstr "Name"
 
@@ -126,14 +125,11 @@ msgstr "Name"
 msgid "E-Mail"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:230
-msgid "ID"
-msgstr "ID"
+#~ msgid "ID"
+#~ msgstr "ID"
 
-#: classes/applications/quickmessage/contact_list.aw:238
-msgid "E-post"
-msgstr "E-mail"
+#~ msgid "E-post"
+#~ msgstr "E-mail"
 
-#: classes/applications/quickmessage/contact_list.aw:287
-msgid "Saada sõnum"
-msgstr "Send message"
+#~ msgid "Saada sõnum"
+#~ msgstr "Send message"

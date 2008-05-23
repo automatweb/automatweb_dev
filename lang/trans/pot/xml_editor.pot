@@ -38,7 +38,11 @@ msgstr ""
 msgid "Omaduse xml-i sisu tabel (xml_content) help"
 msgstr ""
 
-#: classes/applications/xml_editor/xml_editor.aw:91
+#: classes/applications/xml_editor/xml_editor.aw:88
+msgid "XML fail ei ole kirjutatav"
+msgstr ""
+
+#: classes/applications/xml_editor/xml_editor.aw:99
 msgid "xml elements"
 msgstr ""
 

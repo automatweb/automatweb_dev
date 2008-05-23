@@ -9,8 +9,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/reval/customer/reval_customer.aw:class_1411_help
 msgid "Klassi Reval Klienditsoon help"
 msgstr ""
 
+#: classes/applications/clients/reval/customer/reval_customer.aw:478
+#: classes/applications/clients/reval/customer/reval_customer.aw:520
+#: classes/applications/clients/reval/customer/reval_customer.aw:534
+#: classes/applications/clients/reval/customer/reval_customer.aw:565
+msgid "--vali--"
+msgstr "--select--"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:479
+msgid "Eesti"
+msgstr "Estonian"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:480
+msgid "L&auml;ti"
+msgstr "Latvian"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:481
+msgid "Leedu"
+msgstr "Lithuanian"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:482
+msgid "Inglise"
+msgstr "English"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:483
+msgid "Vene"
+msgstr "Russian"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:484
+msgid "Saksa"
+msgstr "German"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:485
+msgid "Soome"
+msgstr "Finnish"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:496
+#: classes/applications/clients/reval/customer/reval_customer.aw:506
+msgid "Ei ole eelistust"
+msgstr "No preferences"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:496
+msgid "&Uuml;lemine korrus"
+msgstr "Higher floors"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:496
+msgid "Alumine korrus"
+msgstr "Lower floors"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:506
+msgid "Suitsetav"
+msgstr "Smoking"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:506
+msgid "Suitsuvaba"
+msgstr "Non-Smoking"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+#: classes/applications/clients/reval/customer/reval_customer.aw:549
+msgid "Ei soovi avaldada"
+msgstr "Not applicable"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+msgid "Abielus"
+msgstr "Married"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+msgid "Lahutatud"
+msgstr "Divorced"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:544
+msgid "Vallaline"
+msgstr "Single"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:549
+msgid "Mees"
+msgstr "Male"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:549
+msgid "Naine"
+msgstr "Female"
+
+#: classes/applications/clients/reval/customer/reval_customer.aw:866
+msgid "No such booking found!"
+msgstr "No such booking found!"

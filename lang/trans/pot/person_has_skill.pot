@@ -26,6 +26,30 @@ msgstr ""
 msgid "Omaduse P&auml;devus (skill) help"
 msgstr ""
 
+#: classes/applications/rostering/person_has_skill.aw:prop_level
+msgid "Omaduse Tase (level) caption"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_level_comment
+msgid "Omaduse Tase (level) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_level_help
+msgid "Omaduse Tase (level) help"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_hour_price
+msgid "Omaduse P&auml;devuse kasutamise tunnihind (hour_price) caption"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_hour_price_comment
+msgid "Omaduse P&auml;devuse kasutamise tunnihind (hour_price) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/person_has_skill.aw:prop_hour_price_help
+msgid "Omaduse P&auml;devuse kasutamise tunnihind (hour_price) help"
+msgstr ""
+
 #: classes/applications/rostering/person_has_skill.aw:prop_skill_acquired
 msgid "Omaduse Omandatud (skill_acquired) caption"
 msgstr ""
