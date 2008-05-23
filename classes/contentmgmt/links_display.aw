@@ -74,6 +74,10 @@ class links_display
 				$linksrc = "http://".$linksrc;
 			}
 		}
+		elseif(strpos($url_pv, "#") == 0)
+		{
+			$linksrc = $url_pv;
+		}
 		else
 		{
 			$linksrc = aw_ini_get("baseurl")."/".$link->id();
