@@ -24,6 +24,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_ajaxQueue.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_thickbox-compressed.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_autocomplete.min.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_hotkeys_0.0.3.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -41,20 +42,21 @@
 
 <script type="text/javascript">
 xchanged = 0;
-shortcut("Ctrl+Shift+A",function() {
+jQuery.hotkeys.add('Ctrl+Shift+a', function(){
 	desc = prompt("Kirjeldus", "nimetu");
 	if(desc){
 		aw_popup_scroll("{VAR:stop_pop_url_add}&name=" + desc, "quick_task_entry", 800,600);
 	}
 });
 
-shortcut("Ctrl+Shift+Q",function() {
+jQuery.hotkeys.add('Ctrl+Shift+q', function(){
 	aw_popup_scroll("{VAR:stop_pop_url_quick_add}", "quick_task_entry", 800,600);
 });
 
-shortcut("Ctrl+Shift+E", function() {
+jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
 });
+
 </script>
 
 

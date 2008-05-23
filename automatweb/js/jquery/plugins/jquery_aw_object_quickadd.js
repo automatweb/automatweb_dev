@@ -54,7 +54,7 @@
 			$("*").not("input").keydown(function(e){
 				if (b_object_quickadd_isopen===false)
 				{
-					if (e.ctrlKey && e.shiftKey && e.keyCode==85)
+					if (e.ctrlKey && e.altKey && e.keyCode==85)
 					{
 						if ($("#"+d_quickadd_box.attr("id")).css("display") == "block")
 						{
