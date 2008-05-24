@@ -2062,5 +2062,6 @@ class awex_obj extends aw_exception
 
 class awex_obj_method extends awex_obj {}
 class awex_obj_acl extends awex_obj {}
+class awex_obj_type extends awex_obj {}
 
 ?>
