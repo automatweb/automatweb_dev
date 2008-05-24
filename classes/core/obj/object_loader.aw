@@ -23,11 +23,14 @@ class _int_object_loader extends core
 	var $cache;					// cache class instance
 	var $__aw_acl_cache;		// acl memory cache
 
+	private $acl_ids;
+
 	function _int_object_loader()
 	{
 		$this->init();
 
 		$this->__aw_acl_cache = array();
+		$this->acl_ids = aw_ini_get("acl.ids");
 
 		$this->all_ot_flds = array_flip(array(
 			"parent", "name", "class_id",
@@ -437,6 +440,13 @@ class _int_object_loader extends core
 
 	function can($acl_name, $oid, $dbg = false)
 	{
+		$acl_name = "can_" . $acl_name;
+
+		if (!in_array($acl_name, $this->acl_ids))
+		{
+			return 0;
+		}
+
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
@@ -451,13 +461,9 @@ class _int_object_loader extends core
 				$max_acl = $this->_calc_max_acl($oid);
 				if ($max_acl === false)
 				{
-					$max_acl = array(
-						"can_view" => false,
-						"can_edit" => false,
-						"can_delete" => false,
-						"can_admin" => false
-					);
+					$max_acl = array_combine($this->acl_ids, array_fill(0, count($this->acl_ids), false));
 				}
+
 				if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
 				{
 					$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
@@ -466,11 +472,12 @@ class _int_object_loader extends core
 
 			$this->__aw_acl_cache[$oid] = $max_acl;
 		}
+
 		if (!isset($max_acl["can_view"]) && $_SESSION["uid"] == "")
 		{
 			return $GLOBALS["cfg"]["acl"]["default"];
 		}
-		return (int)$max_acl["can_".$acl_name];
+		return (int) $max_acl[$acl_name];
 	}
 
 	function _calc_max_acl($oid)
