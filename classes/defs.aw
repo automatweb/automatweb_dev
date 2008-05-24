@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.263 2008/04/08 14:42:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.264 2008/05/24 09:47:57 voldemar Exp $
 // defs.aw - common functions
 
 /*
@@ -912,7 +912,7 @@ if (!defined("DEFS"))
 	**/
 	function checked($arg)
 	{
-		return ($arg) ? "CHECKED" : "";
+		return ($arg) ? " checked=\"checked\"" : "";
 	}
 
 	/** helper for generating html selectbox options
@@ -1279,7 +1279,7 @@ if (!defined("DEFS"))
 		// why? well, then you can't override server vars from the url.
 
 		// known variables - these can be modified by the user and are not to be trusted, so we get them first
-		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date", "project", "view");
+		$impvars = array("lang_id","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date", "project", "view");
 		foreach($impvars as $k)
 		{
 			if (isset($GLOBALS[$k]))
@@ -2249,6 +2249,7 @@ if (!defined("DEFS"))
 		**/
 		function process_backtrace($bt, $skip = -1)
 		{
+			$error_reporting = error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
 			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
 			for ($i = count($bt)-1; $i > $skip; $i--)
 			{
@@ -2305,6 +2306,7 @@ if (!defined("DEFS"))
 
 				$msg .= " <br><br>\n\n";
 			}
+			error_reporting($error_reporting);
 			return $msg;
 		}
 

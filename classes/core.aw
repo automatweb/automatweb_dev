@@ -133,26 +133,22 @@ class core extends acl_base
 				$object_name = $this->db_fetch_field("SELECT name FROM objects where oid = '$oid'", "name");
 			}
 			$this->quote(&$object_name);
-			$mail_id = (int)$_GET["mlx"];
+			$mail_id = (int)@$_GET["mlx"];
 			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer", "object_name", "session_id", "mail_id");
 			$values = array($t,aw_global_get("uid"),$type,$text,$ip,(int)$oid,$action,$ref,$object_name, $session_id, $mail_id);
-			if (aw_ini_get("users.tafkap"))
-			{
-				$fields[] = "tafkap";
-				$values[] = aw_global_get("tafkap");
-			};
 
 			if (aw_ini_get("syslog.has_site_id") == 1)
 			{
 				$fields[] = "site_id";
 				$values[] = $this->cfg["site_id"];
-			};
+			}
 
 			if (aw_ini_get("syslog.has_lang_id") == 1)
 			{
 				$fields[] = "lang_id";
 				$values[] = aw_global_get("lang_id");
-			};
+			}
+
 			/*
 				It seems that mssql doesn't support insert delayd syntax.
 				We're on the safe side as long as AWs running on
@@ -287,6 +283,7 @@ class core extends acl_base
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
+		$e = error_reporting(0);
 		if (!function_exists("aw_global_get"))
 		{
 			classload("defs");
@@ -300,6 +297,7 @@ class core extends acl_base
 		$msg = htmlentities($msg);
 		if (aw_global_get("__from_raise_error") > 0)
 		{
+			error_reporting($e);
 			return false;
 		}
 		aw_global_set("__from_raise_error",1);
@@ -347,15 +345,16 @@ class core extends acl_base
 		{
 			header("X-AW-Error: 1");
 		}
+
 		$content = "\nVeateade: " . htmlspecialchars_decode(strip_tags($msg));
 		$content.= "\nKood: ".$err_type;
 		$content.= "\nFatal: " . (int) $fatal;
 		$content.= "\nPHP_SELF: ".aw_global_get("PHP_SELF");
 		$content.= "\nlang_id: ".aw_global_get("lang_id");
 		$content.= "\nuid: ".aw_global_get("uid");
-		$content.= "\nsection: ".$_REQUEST["section"];
+		$content.= "\nsection: ".@$_REQUEST["section"];
 		$content.= "\nurl: " . $this->cfg["baseurl"] . aw_global_get("REQUEST_URI");
-		$content.= "\nreferer: " . $_SERVER["HTTP_REFERER"];
+		$content.= "\nreferer: " . @$_SERVER["HTTP_REFERER"];
 		$content.= "\nis_rpc_call: " . (int) $is_rpc_call;
 		$content.= "\nrpc_call_type: " . $rpc_call_type;
 
@@ -430,12 +429,12 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
-		if (substr($_REQUEST["class"], 0, 4) == "http" || substr($_REQUEST["entry_id"], 0, 4) == "http")
+		if (substr(@$_REQUEST["class"], 0, 4) == "http" || substr(@$_REQUEST["entry_id"], 0, 4) == "http")
 		{
 			$send_mail = false;
 		}
 
-                if ($err_type == "ERR_ACL" && substr($_REQUEST["id"], 0, 4) == "http")
+                if ($err_type == "ERR_ACL" && substr(@$_REQUEST["id"], 0, 4) == "http")
                 {
                         $send_mail = false;
                 }
@@ -564,8 +563,9 @@ class core extends acl_base
 		if ($silent)
 		{
 			aw_global_set("__from_raise_error",0);
+			error_reporting($e);
 			return;
-		};
+		}
 
 		if ($fatal)
 		{
@@ -668,12 +668,12 @@ class core extends acl_base
 			$r_use_orb = false;
 		}
 
-		$in_admin = $GLOBALS["cfg"]["in_admin"];
+		$in_admin = isset($GLOBALS["cfg"]["in_admin"]) ? (bool) $GLOBALS["cfg"]["in_admin"] : false;
 
 		if (empty($this->use_empty))
 		{
 			$this->use_empty = false;
-		};
+		}
 
 		$ru = null;
 		if (isset($arr["return_url"]))
@@ -734,18 +734,17 @@ class core extends acl_base
 	**/
 	function mk_reforb($fun,$arr = array(),$cl_name = "")
 	{
-
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
 		// tracked_vars comes from orb->process_request
-		$this->orb_values = $GLOBALS["tracked_vars"];
+		$this->orb_values = @$GLOBALS["tracked_vars"];
 		$this->orb_values["class"] = $cl_name;
 		$this->orb_values["action"] = $fun;
 
 		if (empty($arr["no_reforb"]))
 		{
 			$this->orb_values["reforb"] = 1;
-		};
+		}
 
 		$this->use_empty = true;
 
@@ -756,7 +755,7 @@ class core extends acl_base
 		{
 			$value = str_replace("\"","&amp;",$value);
 			$res .= "<input type='hidden' name='$name' value='$value' />\n";
-		};
+		}
 		return $res;
 	}
 
@@ -1296,12 +1295,11 @@ class core extends acl_base
 		return $ret;
 	}
 
-	function parse_alias($args)
+	function parse_alias($args = array())
 	{
-		extract($args);
-		if (isset($alias['target']))
+		if (isset($args["alias"]['target']))
 		{
-			return $this->show(array('id' => $alias['target']));
+			return $this->show(array('id' => $args["alias"]['target']));
 		}
 		else
 		{

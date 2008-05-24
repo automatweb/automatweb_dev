@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.406 2008/03/21 16:01:31 sander Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -75,7 +74,7 @@ class menuedit extends aw_template implements request_startup
 			{
 				$section_a = aw_ini_get("frontpage");
 			}
-			
+
 			if ($lc != "" && $section_a != "")
 			{
 				// switch to lang
@@ -166,7 +165,7 @@ class menuedit extends aw_template implements request_startup
 			setcookie("ct_lang_id", $set_ct_lang_id, time() + 3600, "/");
 			setcookie("ct_lang_lc", $_SESSION["ct_lang_lc"], time() + 3600, "/");
 		}
-		
+
 		if ($set_lang_id)
 		{
 			$la = get_instance("languages");
@@ -202,7 +201,7 @@ class menuedit extends aw_template implements request_startup
 			aw_ini_set("frontpage",$frontpage);
 			$this->cfg["frontpage"] = $frontpage;
 		}
-		// kui sektsiooni viimane m?k on "-", paneme selle objekti sees psti
+		// kui sektsiooni viimane m2rk on "-", paneme selle objekti sees pysti
 		// raw flagi
 
 		if (substr($section,-1) == "-")
@@ -221,7 +220,7 @@ class menuedit extends aw_template implements request_startup
 
 		// if the baseurl is site.ee/foo/bla, then cut that out from section
 		$bits = parse_url(aw_ini_get("baseurl"));
-		if ($bits["path"] != "")
+		if (!empty($bits["path"]))
 		{
 			$section = str_replace(substr($bits["path"], 1), "", $section);
 		}
@@ -249,7 +248,7 @@ class menuedit extends aw_template implements request_startup
 			$c = get_instance(CL_MENU);
 			$c->get_sitemap();
 		}
-		
+
 		// sektsioon ei olnud numbriline
 		if (!is_oid($section))
 		{

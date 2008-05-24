@@ -314,7 +314,7 @@ class class_base extends aw_template
 		$filter = array(
 			"clid" => $this->clid,
 			"clfile" => $this->clfile,
-			"group" => $args["group"],
+			"group" => @$args["group"],
 			"cfgform_id" => $cfgform_id,
 			"cb_part" => isset($args["cb_part"]) ? $args["cb_part"] : "",
 		);
@@ -563,7 +563,7 @@ class class_base extends aw_template
 			"caption" => t("T&otilde;lgi"),
 			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array(
 				"clid" => $this->clid,
-				"group" => $args["group"],
+				"group" => @$args["group"],
 			),
 			"cb_translate")."\",\"awtrans\",\"width=1200,height=900,resizable=1,scrollbars=1\");",
 		));
@@ -578,7 +578,7 @@ class class_base extends aw_template
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array(
 				"clid" => $this->clid,
-				"group" => $args["group"],
+				"group" => @$args["group"],
 			),
 			"help"),
 
@@ -765,7 +765,7 @@ class class_base extends aw_template
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
 		};
 
-		if(is_array($GLOBALS["add_mod_reforb"])) // et saaks m6nest x kohast veel v2lju juurde, n2iteks mingist komponendist
+		if(isset($GLOBALS["add_mod_reforb"]) and is_array($GLOBALS["add_mod_reforb"])) // et saaks m6nest x kohast veel v2lju juurde, n2iteks mingist komponendist
 		{
 			foreach($GLOBALS["add_mod_reforb"] as $key => $val)
 			{
@@ -865,7 +865,7 @@ class class_base extends aw_template
 		$msgid = "Grupi ".$groups[$argblock["group"]]["caption"]." (".$argblock["group"].") comment";
 		$help = strlen(t2($msgid))?"<div>".t($msgid)."</div>":t("Lisainfo grupi kohta puudub");
 		//
-		$cli->view_layout = $args["view_layout"]?$args["view_layout"]:false;
+		$cli->view_layout = !empty($args["view_layout"]) ? $args["view_layout"] : false;
 		$cli->view_outer = true;//$args["view_outer"]?$args["view_layout"]:false;
 		$cli->finish_output(array(
 			"method" => $method,
@@ -1575,9 +1575,9 @@ class class_base extends aw_template
 		// but that doesn't really belong to classinfo
 		if (empty($no_yah))
 		{
-			if ($_GET["class"] == "admin_if")
+			if (@$_GET["class"] == "admin_if")
 			{
-				$parent = $_GET["parent"];
+				$parent = @$_GET["parent"];
 			}
 			if ($this->obj_inst->class_id() == CL_MENU)
 			{
@@ -1587,7 +1587,7 @@ class class_base extends aw_template
 			{
 				$this->mk_path($parent,$title,aw_global_get("period"));
 			}
-		};
+		}
 
 
 		// I need a way to let the client (the class using class_base to
@@ -2917,6 +2917,7 @@ class class_base extends aw_template
 
 			$pname = $val["name"];
 			$getter = "_get_" . $pname;
+			$status = null;
 			if ( !empty($this->classinfo['prop_cb']) && in_array($getter,$class_methods))
 			{
 				$awt->start("getter $getter");
@@ -2930,7 +2931,7 @@ class class_base extends aw_template
 				$awt->start("get_property_${pname}");
 				$status = $this->inst->get_property($argblock);
 				$awt->stop("get_property_${pname}");
-			};
+			}
 
 			$val["_parsed"] = 1;
 
@@ -3006,7 +3007,7 @@ class class_base extends aw_template
 				};
 
 
-				if (!empty($this->vcl_register[$val["orig_type"]]) && isset($this->vcl_has_getter[$val["orig_type"]]))
+				if (!empty($val["orig_type"]) and !empty($this->vcl_register[$val["orig_type"]]) and isset($this->vcl_has_getter[$val["orig_type"]]))
 				{
 					$reginst = $this->vcl_register[$val["orig_type"]];
 					$ot = get_instance($reginst);
@@ -6065,9 +6066,9 @@ class class_base extends aw_template
 
 	function callback_generate_scripts($arr)
 	{
-		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && $arr["request"]["group"] != "relationmgr")
+		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && @$arr["request"]["group"] != "relationmgr")
 		{
-			if($arr["request"]["class"] == "admin_if")
+			if(@$arr["request"]["class"] == "admin_if")
 			{
 				$if_clause = "
 				anything_changed = false;
@@ -6094,7 +6095,7 @@ class class_base extends aw_template
 			else
 			{
 				$if_clause2 = "el_exists('status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1)."') == 1";
-				if($arr["request"]["class"] == "language")
+				if(@$arr["request"]["class"] == "language")
 				{
 					$status_variable = "lang_status_".(($arr["obj_inst"]->status() == STAT_ACTIVE) ? 2 : 1);
 				}
