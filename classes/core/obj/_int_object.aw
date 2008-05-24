@@ -572,13 +572,12 @@ class _int_object
 
 	function parent()
 	{
-		return @$this->obj["parent"];
+		return isset($this->obj["parent"]) ? $this->obj["parent"] : null;
 	}
 
 	function set_parent($parent)
 	{
-		$prev = @$this->obj["parent"];
-
+		$prev = isset($this->obj["parent"]) ? $this->obj["parent"] : null;
 		$parent = $GLOBALS["object_loader"]->param_to_oid($parent);
 
 		if (!$parent)
@@ -623,13 +622,12 @@ class _int_object
 
 	function name()
 	{
-		return @$this->obj["name"];
+		return isset($this->obj["name"]) ? $this->obj["name"] : null;
 	}
 
 	function set_name($param)
 	{
-		$prev = @$this->obj["name"];
-
+		$prev = isset($this->obj["name"]) ? $this->obj["name"] : null;
 		$this->_int_set_of_value("name", $param);
 		$this->_int_do_implicit_save();
 		return $prev;
@@ -637,12 +635,12 @@ class _int_object
 
 	function class_id()
 	{
-		return @$this->obj["class_id"];
+		return isset($this->obj["class_id"]) ? $this->obj["class_id"] : null;
 	}
 
 	function set_class_id($param)
 	{
-		$prev = @$this->obj["class_id"];
+		$prev = isset($this->obj["class_id"]) ? $this->obj["class_id"] : null;
 
 		if (!is_class_id($param))
 		{
@@ -664,12 +662,12 @@ class _int_object
 
 	function status()
 	{
-		return @$this->obj["status"];
+		return isset($this->obj["status"]) ? $this->obj["status"] : null;
 	}
 
 	function set_status($param)
 	{
-		$prev = @$this->obj["status"];
+		$prev = isset($this->obj["status"]) ? $this->obj["status"] : null;
 
 		switch($param)
 		{
@@ -712,12 +710,13 @@ class _int_object
 
 	function lang_id()
 	{
-		return @$this->obj["lang_id"];
+		return isset($this->obj["lang_id"]) ? $this->obj["lang_id"] : null;
 	}
 
 	function set_lang_id($param)
 	{
-		$prev = @$this->obj['lang_id'];
+		$prev = isset($this->obj["lang_id"]) ? $this->obj["lang_id"] : null;
+
 		if (!is_numeric($param))
 		{
 			error::raise(array(
@@ -751,12 +750,12 @@ class _int_object
 
 	function comment()
 	{
-		return @$this->obj["comment"];
+		return isset($this->obj["comment"]) ? $this->obj["comment"] : null;
 	}
 
 	function set_comment($param)
 	{
-		$prev = @$this->obj["comment"];
+		$prev = isset($this->obj["comment"]) ? $this->obj["comment"] : null;
 		$this->_int_set_of_value("comment", $param);
 		$this->_int_do_implicit_save();
 		return $prev;
@@ -764,12 +763,12 @@ class _int_object
 
 	function ord()
 	{
-		return @$this->obj["jrk"];
+		return isset($this->obj["jrk"]) ? $this->obj["jrk"] : null;
 	}
 
 	function set_ord($param)
 	{
-		$prev = @$this->obj["jrk"];
+		$prev = isset($this->obj["jrk"]) ? $this->obj["jrk"] : null;
 
 		if (!is_numeric($param) && $param != "")
 		{
@@ -787,13 +786,12 @@ class _int_object
 
 	function alias()
 	{
-		return @$this->obj["alias"];
+		return isset($this->obj["alias"]) ? $this->obj["alias"] : null;
 	}
 
 	function set_alias($param)
 	{
-		$prev = @$this->obj["alias"];
-
+		$prev = isset($this->obj["alias"]) ? $this->obj["alias"] : null;
 		$this->_int_set_of_value("alias", $param);
 		$this->_int_do_implicit_save();
 		return $prev;
@@ -801,37 +799,37 @@ class _int_object
 
 	function id()
 	{
-		return @$this->obj["oid"];
+		return isset($this->obj["oid"]) ? $this->obj["oid"] : null;
 	}
 
 	function createdby()
 	{
-		return @$this->obj["createdby"];
+		return isset($this->obj["createdby"]) ? $this->obj["createdby"] : null;
 	}
 
 	function created()
 	{
-		return @$this->obj["created"];
+		return isset($this->obj["created"]) ? $this->obj["created"] : null;
 	}
 
 	function modifiedby()
 	{
-		return @$this->obj["modifiedby"];
+		return isset($this->obj["modifiedby"]) ? $this->obj["modifiedby"] : null;
 	}
 
 	function modified()
 	{
-		return @$this->obj["modified"];
+		return isset($this->obj["modified"]) ? $this->obj["modified"] : null;
 	}
 
 	function period()
 	{
-		return @$this->obj["period"];
+		return isset($this->obj["period"]) ? $this->obj["period"] : null;
 	}
 
 	function set_period($param)
 	{
-		$prev = @$this->obj["period"];
+		$prev = isset($this->obj["period"]) ? $this->obj["period"] : null;
 
 		if (!is_numeric($param) && $param != "")
 		{
@@ -849,12 +847,12 @@ class _int_object
 
 	function is_periodic()
 	{
-		return @$this->obj["periodic"];
+		return isset($this->obj["periodic"]) ? $this->obj["periodic"] : null;
 	}
 
 	function set_periodic($param)
 	{
-		$prev = @$this->obj["periodic"];
+		$prev = isset($this->obj["periodic"]) ? $this->obj["periodic"] : null;
 
 		if (!(is_numeric($param) || is_bool($param)) && $param != "")
 		{
@@ -872,12 +870,12 @@ class _int_object
 
 	function site_id()
 	{
-		return @$this->obj["site_id"];
+		return isset($this->obj["site_id"]) ? $this->obj["site_id"] : null;
 	}
 
 	function set_site_id($param)
 	{
-		$prev = @$this->obj["site_id"];
+		$prev = isset($this->obj["site_id"]) ? $this->obj["site_id"] : null;
 
 		if (!is_numeric($param))
 		{
@@ -906,7 +904,7 @@ class _int_object
 	function get_original()
 	{
 		$ib = $this->is_brother();
-		$cv = $GLOBALS["object_loader"]->ds->can("view", @$this->obj["brother_of"]);
+		$cv = $GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]);
 		if ($ib && $cv)
 		{
 			aw_global_set("__from_raise_error", 1);
@@ -923,12 +921,12 @@ class _int_object
 
 	function subclass()
 	{
-		return @$this->obj["subclass"];
+		return isset($this->obj["subclass"]) ? $this->obj["subclass"] : null;
 	}
 
 	function set_subclass($param)
 	{
-		$prev = @$this->obj["subclass"];
+		$prev = isset($this->obj["subclass"]) ? $this->obj["subclass"] : null;
 
 		if ($param  == "")
 		{
@@ -951,12 +949,12 @@ class _int_object
 
 	function flags()
 	{
-		return @$this->obj["flags"];
+		return isset($this->obj["flags"]) ? $this->obj["flags"] : null;
 	}
 
 	function set_flags($param)
 	{
-		$prev = @$this->obj["flags"];
+		$prev = isset($this->obj["flags"]) ? $this->obj["flags"] : null;
 
 		if ($param  == "")
 		{
@@ -988,7 +986,14 @@ class _int_object
 			return;
 		}
 
-		return @$this->obj["flags"] & $param;
+		if (isset($this->obj["flags"]))
+		{
+			return $this->obj["flags"] & $param;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	function set_flag($flag, $val)
@@ -1011,16 +1016,17 @@ class _int_object
 		}
 
 		$prev = $this->flag($flag);
+		$flags = isset($this->obj["flags"]) ? $this->obj["flags"] : 0;
 
 		if ($val)
 		{
 			// if set flag, then or the current bits with the value
-			$value = @$this->obj["flags"] | $flag;
+			$value = $flags | $flag;
 		}
 		else
 		{
 			$mask = OBJ_FLAGS_ALL ^ $flag;
-			$value = @$this->obj["flags"] & $mask;
+			$value = $flags & $mask;
 		}
 
 		$this->_int_set_of_value("flags", $value);
@@ -1034,19 +1040,17 @@ class _int_object
 		// site_content->build_menu_chain for example needs access to the whole metainfo at once -- duke
 		if ($param === false)
 		{
-			$retval = $this->obj["meta"];
+			return $this->obj["meta"];
 		}
 		else
 		{
-			$retval = isset($this->obj["meta"][$param]) ? $this->obj["meta"][$param] : null;
+			return isset($this->obj["meta"][$param]) ? $this->obj["meta"][$param] : null;
 		}
-		return $retval;
 	}
 
 	function set_meta($key, $value)
 	{
-		$prev = @$this->obj["meta"][$key];
-
+		$prev = isset($this->obj["meta"][$key]) ? $this->obj["meta"][$key] : null;
 		$this->_int_set_ot_mod("metadata", $prev, $value);
 		$this->obj["meta"][$key] = $value;
 
@@ -1069,7 +1073,7 @@ class _int_object
 
 	function get_group_list()
 	{
-		$clid = @$this->obj["class_id"];
+		$clid = isset($this->obj["class_id"]) ? $this->obj["class_id"] : null; //!!! return default kui clid null
 		$classes = aw_ini_get("classes");
 		$inf = $GLOBALS["object_loader"]->load_properties(array(
 			"file" => ($clid == CL_DOCUMENT ? "doc" : basename($classes[$clid]["file"])),
@@ -1419,12 +1423,12 @@ class _int_object
 	function last()
 	{
 		// god damn, no setter for this or we'll never get rid of it!
-		return @$this->obj["last"];
+		return isset($this->obj["last"]) ? $this->obj["last"] : null;
 	}
 
 	function brother_of()
 	{
-		return @$this->obj["brother_of"];
+		return isset($this->obj["brother_of"]) ? $this->obj["brother_of"] : null;
 	}
 
 	function instance()
@@ -1524,10 +1528,10 @@ class _int_object
 
 	function trans_get_val($prop)
 	{
-		if (@$this->obj["oid"] != @$this->obj["brother_of"])
+		if (isset($this->obj["oid"]) and $this->obj["oid"] != $this->obj["brother_of"])
 		{
 			$tmp = $this->get_original();
-			if ($tmp->id() != @$this->obj["oid"]) // if no view access for original, bro can return the same object
+			if ($tmp->id() != $this->obj["oid"]) // if no view access for original, bro can return the same object
 			{
 				return $tmp->trans_get_val($prop);
 			}
@@ -1604,8 +1608,9 @@ class _int_object
 
 		if ($trans)
 		{
-			$trs = @$this->obj["meta"]["translations"];
-			if (/*!empty($trs[$cur_lid]) &&*/ @$this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			// $trs = $this->obj["meta"]["translations"];
+			// if (/*!empty($trs[$cur_lid]) &&*/ @$this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			if (isset($this->obj["meta"]["trans_".$cur_lid."_status"]) and $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
 			{
 				return true;
 			}
@@ -1616,13 +1621,13 @@ class _int_object
 
 	function trans_get_val_str($param)
 	{
-		if (@$this->obj["oid"] != @$this->obj["brother_of"])
+		if (isset($this->obj["oid"]) and $this->obj["oid"] != $this->obj["brother_of"])
 		{
 			$tmp = $this->get_original();
 			return $tmp->trans_get_val_str($prop);
 		}
 
-		$pd = @$GLOBALS["properties"][$this->obj["class_id"]][$param];
+		$pd = isset($GLOBALS["properties"][$this->obj["class_id"]][$param]) ? $GLOBALS["properties"][$this->obj["class_id"]][$param] : null;
 		if (!$pd)
 		{
 			return $this->trans_get_val($param);
@@ -2373,6 +2378,7 @@ class _int_object
 			{
 				$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
 			}
+
 			if (!$type)
 			{
 				$type = 10000;
