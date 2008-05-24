@@ -65,7 +65,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$ps = $GLOBALS["properties"][$td["class_id"]];
 				$rts = $GLOBALS["relinfo"][$td["class_id"]];
 
-				$cfp_dat = array(); 
+				$cfp_dat = array();
 				foreach($GLOBALS["read_properties_data_cache_conn"][$oid] as $_tmp => $d)
 				{
 					foreach($d as $_tmp2 => $d2)
@@ -787,7 +787,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		// we need to clear the html cache here, not in ds_cache, because ds_cache can be not loaded
 		// even when html caching is turned on
-		
+
 		if (!obj_get_opt("no_cache"))
 		{
 			$this->cache->file_clear_pt("html");
@@ -966,8 +966,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			// actually, this is a bit mopre complicated here - if this is a brother
 			// and the table is the objects table, then we must ONLY write the metadata field
-			// to the original object. because if we write all, then ot fields will be the same for the brother and the original 
-			// always. and that's not good. 
+			// to the original object. because if we write all, then ot fields will be the same for the brother and the original
+			// always. and that's not good.
 			if ($tbl == "objects" && $objdata["brother_of"] != $objdata["oid"])
 			{
 				$seta = array("metadata" => $seta["metadata"]);
@@ -1931,7 +1931,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						{
 							$pd = $this->properties[$sl_item["prop"]];
 						}
-						if ($pd["table"])	
+						if ($pd["table"])
 						{
 							$this->used_tables[$pd["table"]] = $pd["table"];
 						}
@@ -2055,11 +2055,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objdata["createdby"] = $objdata["modifiedby"] = aw_global_get("uid");
 		$objdata["created"] = $objdata["modified"] = time();
 
-		$objdata["lang_id"] = aw_global_get("lang_id");	
+		$objdata["lang_id"] = aw_global_get("lang_id");
 
 		// fetch site id from the parent
 		$od = $this->get_objdata($parent);
-		$objdata["site_id"] = $od["site_id"];//aw_ini_get("site_id");		
+		$objdata["site_id"] = $od["site_id"];//aw_ini_get("site_id");
 
 		$acld_fld = $acld_val = "";
 		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
@@ -2175,7 +2175,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 								return array("objects", $filt[1]);
 						}
 					}
-					
+
 					if ($prop["store"] == "connect" || $prop["method"] == "serialize")	// need psecial handling, rewrite to undefined class filter
 					{
 						return array("__rewrite_prop", $filt[1]);
@@ -2694,7 +2694,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$joins = array();
 		foreach($clids as $clid)
 		{
-			// this can not be cached, because it holds in it object id's for the query. silly, really. 
+			// this can not be cached, because it holds in it object id's for the query. silly, really.
 			if (true || !($sql = aw_cache_get("storage::get_read_properties_sql",$clid)))
 			{
 				$sql = $this->get_read_properties_sql(array(
@@ -2763,7 +2763,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!is_array($to_fetch))
 		{
-			return array(0 => "", 1 => array(), 2 => array());
+			return array(0 => "", 1 => array(), 2 => array(), 3 => false);
 		}
 		$has_func = false;
 		$ret = array();
@@ -2890,7 +2890,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$acld
 			";
 		}
-	
+
 		$res =  $fetch_sql.join(",", $ret);
 		return array($res, array_keys($ret), $sf, $has_func);
 	}
@@ -3392,7 +3392,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function originalize_cache_update($oid)
 	{
-	
+
 	}
 
 	/** returns table.field, for the given prop **/
@@ -3445,8 +3445,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		// parse into bits
 		preg_match("/SELECT(.*)FROM(.*)WHERE(.*?)/imsU", $oql, $mt);
-		
-		// now turn it into sql 
+
+		// now turn it into sql
 		$main_clid = constant(trim($mt[2]));
 		error::raise_if(!is_class_id($main_clid), array(
 			"id" => "ERR_NO_MAIN_CLID",
@@ -3471,7 +3471,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		$this->db_query($sql);
 		$rv = array();
-		while ($row = $this->db_next()) 
+		while ($row = $this->db_next())
 		{
 			$rv[$row["oid"]] = $row;
 		}
@@ -3490,7 +3490,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function _parse_where($str, $main_clid)
 	{
-		// we have to tokenize things here. 
+		// we have to tokenize things here.
 		$p = get_instance("core/aw_code_analyzer/parser");
 		$p->p_init(trim($str));
 		$new_str = " objects.status > 0 AND objects.class_id = $main_clid AND ";
