@@ -24,8 +24,8 @@ class _int_object
 	private static $global_save_count = 0;
 	private static $cache_off = false;
 
-	/** 
-		This defines, after how many object saves cache will automatically be turned off for the rest of the request. 
+	/**
+		This defines, after how many object saves cache will automatically be turned off for the rest of the request.
 		It's here so that the cache will not be cleared a million times pointlessly when you are creating a million objects in one request.
 	**/
 	const CACHE_OFF_ON_SAVE_COUNT = 3;
@@ -539,7 +539,7 @@ class _int_object
 
 	function can($param)
 	{
-		if (!$this->obj["oid"])
+		if (empty($this->obj["oid"]))
 		{
 			error::raise(array(
 				"id" => ERR_ACL,
@@ -572,12 +572,12 @@ class _int_object
 
 	function parent()
 	{
-		return $this->obj["parent"];
+		return @$this->obj["parent"];
 	}
 
 	function set_parent($parent)
 	{
-		$prev = $this->obj["parent"];
+		$prev = @$this->obj["parent"];
 
 		$parent = $GLOBALS["object_loader"]->param_to_oid($parent);
 
@@ -623,12 +623,12 @@ class _int_object
 
 	function name()
 	{
-		return $this->obj["name"];
+		return @$this->obj["name"];
 	}
 
 	function set_name($param)
 	{
-		$prev = $this->obj["name"];
+		$prev = @$this->obj["name"];
 
 		$this->_int_set_of_value("name", $param);
 		$this->_int_do_implicit_save();
@@ -637,12 +637,12 @@ class _int_object
 
 	function class_id()
 	{
-		return $this->obj["class_id"];
+		return @$this->obj["class_id"];
 	}
 
 	function set_class_id($param)
 	{
-		$prev = $this->obj["class_id"];
+		$prev = @$this->obj["class_id"];
 
 		if (!is_class_id($param))
 		{
@@ -664,12 +664,12 @@ class _int_object
 
 	function status()
 	{
-		return $this->obj["status"];
+		return @$this->obj["status"];
 	}
 
 	function set_status($param)
 	{
-		$prev = $this->obj["status"];
+		$prev = @$this->obj["status"];
 
 		switch($param)
 		{
@@ -712,12 +712,12 @@ class _int_object
 
 	function lang_id()
 	{
-		return $this->obj["lang_id"];
+		return @$this->obj["lang_id"];
 	}
 
 	function set_lang_id($param)
 	{
-		$prev = $this->obj['lang_id'];
+		$prev = @$this->obj['lang_id'];
 		if (!is_numeric($param))
 		{
 			error::raise(array(
@@ -751,12 +751,12 @@ class _int_object
 
 	function comment()
 	{
-		return $this->obj["comment"];
+		return @$this->obj["comment"];
 	}
 
 	function set_comment($param)
 	{
-		$prev = $this->obj["comment"];
+		$prev = @$this->obj["comment"];
 		$this->_int_set_of_value("comment", $param);
 		$this->_int_do_implicit_save();
 		return $prev;
@@ -764,12 +764,12 @@ class _int_object
 
 	function ord()
 	{
-		return $this->obj["jrk"];
+		return @$this->obj["jrk"];
 	}
 
 	function set_ord($param)
 	{
-		$prev = $this->obj["jrk"];
+		$prev = @$this->obj["jrk"];
 
 		if (!is_numeric($param) && $param != "")
 		{
@@ -787,12 +787,12 @@ class _int_object
 
 	function alias()
 	{
-		return $this->obj["alias"];
+		return @$this->obj["alias"];
 	}
 
 	function set_alias($param)
 	{
-		$prev = $this->obj["alias"];
+		$prev = @$this->obj["alias"];
 
 		$this->_int_set_of_value("alias", $param);
 		$this->_int_do_implicit_save();
@@ -801,37 +801,37 @@ class _int_object
 
 	function id()
 	{
-		return $this->obj["oid"];
+		return @$this->obj["oid"];
 	}
 
 	function createdby()
 	{
-		return $this->obj["createdby"];
+		return @$this->obj["createdby"];
 	}
 
 	function created()
 	{
-		return $this->obj["created"];
+		return @$this->obj["created"];
 	}
 
 	function modifiedby()
 	{
-		return $this->obj["modifiedby"];
+		return @$this->obj["modifiedby"];
 	}
 
 	function modified()
 	{
-		return $this->obj["modified"];
+		return @$this->obj["modified"];
 	}
 
 	function period()
 	{
-		return $this->obj["period"];
+		return @$this->obj["period"];
 	}
 
 	function set_period($param)
 	{
-		$prev = $this->obj["period"];
+		$prev = @$this->obj["period"];
 
 		if (!is_numeric($param) && $param != "")
 		{
@@ -849,12 +849,12 @@ class _int_object
 
 	function is_periodic()
 	{
-		return $this->obj["periodic"];
+		return @$this->obj["periodic"];
 	}
 
 	function set_periodic($param)
 	{
-		$prev = $this->obj["periodic"];
+		$prev = @$this->obj["periodic"];
 
 		if (!(is_numeric($param) || is_bool($param)) && $param != "")
 		{
@@ -872,12 +872,12 @@ class _int_object
 
 	function site_id()
 	{
-		return $this->obj["site_id"];
+		return @$this->obj["site_id"];
 	}
 
 	function set_site_id($param)
 	{
-		$prev = $this->obj["site_id"];
+		$prev = @$this->obj["site_id"];
 
 		if (!is_numeric($param))
 		{
@@ -895,7 +895,7 @@ class _int_object
 
 	function is_brother()
 	{
-		if (!$this->obj["oid"])
+		if (!isset($this->obj["oid"]))
 		{
 			return NULL;
 		}
@@ -906,7 +906,7 @@ class _int_object
 	function get_original()
 	{
 		$ib = $this->is_brother();
-		$cv = $GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]);
+		$cv = $GLOBALS["object_loader"]->ds->can("view", @$this->obj["brother_of"]);
 		if ($ib && $cv)
 		{
 			aw_global_set("__from_raise_error", 1);
@@ -923,12 +923,12 @@ class _int_object
 
 	function subclass()
 	{
-		return $this->obj["subclass"];
+		return @$this->obj["subclass"];
 	}
 
 	function set_subclass($param)
 	{
-		$prev = $this->obj["subclass"];
+		$prev = @$this->obj["subclass"];
 
 		if ($param  == "")
 		{
@@ -951,12 +951,12 @@ class _int_object
 
 	function flags()
 	{
-		return $this->obj["flags"];
+		return @$this->obj["flags"];
 	}
 
 	function set_flags($param)
 	{
-		$prev = $this->obj["flags"];
+		$prev = @$this->obj["flags"];
 
 		if ($param  == "")
 		{
@@ -988,7 +988,7 @@ class _int_object
 			return;
 		}
 
-		return $this->obj["flags"] & $param;
+		return @$this->obj["flags"] & $param;
 	}
 
 	function set_flag($flag, $val)
@@ -1015,12 +1015,12 @@ class _int_object
 		if ($val)
 		{
 			// if set flag, then or the current bits with the value
-			$value = $this->obj["flags"] | $flag;
+			$value = @$this->obj["flags"] | $flag;
 		}
 		else
 		{
 			$mask = OBJ_FLAGS_ALL ^ $flag;
-			$value = $this->obj["flags"] & $mask;
+			$value = @$this->obj["flags"] & $mask;
 		}
 
 		$this->_int_set_of_value("flags", $value);
@@ -1039,13 +1039,13 @@ class _int_object
 		else
 		{
 			$retval = isset($this->obj["meta"][$param]) ? $this->obj["meta"][$param] : null;
-		};
+		}
 		return $retval;
 	}
 
 	function set_meta($key, $value)
 	{
-		$prev = $this->obj["meta"][$key];
+		$prev = @$this->obj["meta"][$key];
 
 		$this->_int_set_ot_mod("metadata", $prev, $value);
 		$this->obj["meta"][$key] = $value;
@@ -1069,7 +1069,7 @@ class _int_object
 
 	function get_group_list()
 	{
-		$clid = $this->obj["class_id"];
+		$clid = @$this->obj["class_id"];
 		$classes = aw_ini_get("classes");
 		$inf = $GLOBALS["object_loader"]->load_properties(array(
 			"file" => ($clid == CL_DOCUMENT ? "doc" : basename($classes[$clid]["file"])),
@@ -1419,12 +1419,12 @@ class _int_object
 	function last()
 	{
 		// god damn, no setter for this or we'll never get rid of it!
-		return $this->obj['last'];
+		return @$this->obj["last"];
 	}
 
 	function brother_of()
 	{
-		return $this->obj['brother_of'];
+		return @$this->obj["brother_of"];
 	}
 
 	function instance()
@@ -1438,13 +1438,13 @@ class _int_object
 			));
 			return;
 		}
-		$clss = aw_ini_get("classes");
-		return get_instance($clss[$clid]["file"]);
+		$cl = aw_ini_get("classes." . $clid . ".file");
+		return new $cl;
 	}
 
 	function create_brother($parent)
 	{
-		if (!$this->obj["oid"])
+		if (empty($this->obj["oid"]))
 		{
 			$this->obj["_create_brothers"][] = $parent;
 			return;
@@ -1524,10 +1524,10 @@ class _int_object
 
 	function trans_get_val($prop)
 	{
-		if ($this->obj["oid"] != $this->obj["brother_of"])
+		if (@$this->obj["oid"] != @$this->obj["brother_of"])
 		{
 			$tmp = $this->get_original();
-			if ($tmp->id() != $this->obj["oid"]) // if no view access for original, bro can return the same object
+			if ($tmp->id() != @$this->obj["oid"]) // if no view access for original, bro can return the same object
 			{
 				return $tmp->trans_get_val($prop);
 			}
@@ -1568,7 +1568,7 @@ class _int_object
 			$trans = true;
 			$cur_lid = $cl;
 		}
-		if ($trans)
+		if ($trans and isset($this->obj["meta"]["translations"]))
 		{
 			$trs = $this->obj["meta"]["translations"];
 			if ($prop == "status") // check transl status
@@ -1604,8 +1604,8 @@ class _int_object
 
 		if ($trans)
 		{
-			$trs = $this->obj["meta"]["translations"];
-			if (/*!empty($trs[$cur_lid]) &&*/ $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			$trs = @$this->obj["meta"]["translations"];
+			if (/*!empty($trs[$cur_lid]) &&*/ @$this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
 			{
 				return true;
 			}
@@ -1616,13 +1616,13 @@ class _int_object
 
 	function trans_get_val_str($param)
 	{
-		if ($this->obj["oid"] != $this->obj["brother_of"])
-                {
-                        $tmp = $this->get_original();
-                        return $tmp->trans_get_val_str($prop);
-                }
+		if (@$this->obj["oid"] != @$this->obj["brother_of"])
+		{
+			$tmp = $this->get_original();
+			return $tmp->trans_get_val_str($prop);
+		}
 
-		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
+		$pd = @$GLOBALS["properties"][$this->obj["class_id"]][$param];
 		if (!$pd)
 		{
 			return $this->trans_get_val($param);
@@ -2017,8 +2017,8 @@ class _int_object
 		}
 
 		// this here is bad, I know, but it is necessary. Why? because if for some of the connections that are created
-		// there is a message handler, that reies to load the object just created, it errors out, because it is in a state of flux - 
-		// it should be in the objects array, but that gets done in the object_loader that called here. 
+		// there is a message handler, that reies to load the object just created, it errors out, because it is in a state of flux -
+		// it should be in the objects array, but that gets done in the object_loader that called here.
 		// so we have to do it here as well to fix the in-between state to the correct one right now
 		$GLOBALS["objects"][$this->obj["oid"]] =& $this;
 
@@ -2185,7 +2185,7 @@ class _int_object
 				$__from_raise_error = aw_global_get("__from_raise_error");
 				aw_global_set("__from_raise_error", 1);
 				$t = new object($parent);
-				if ($GLOBALS["aw_is_error"])
+				if (!empty($GLOBALS["aw_is_error"]))
 				{
 					$parent = 0;
 					break;
@@ -2510,12 +2510,17 @@ class _int_object
 		{
 			$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
 		}
-		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
+		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects" && isset($this->obj["meta"][$pd["name"]]))
 		{
 			$this->_scan_warning_possibility($this->obj["meta"][$pd["name"]], $pd);
 			return isset($this->obj["meta"][$pd["name"]]) ? $this->obj["meta"][$pd["name"]] : null;
 		}
-		$this->_scan_warning_possibility($this->obj["properties"][$prop], $pd);
+
+		if (isset($this->obj["properties"][$prop]))
+		{
+			$this->_scan_warning_possibility($this->obj["properties"][$prop], $pd);
+		}
+
 		return isset($this->obj["properties"][$prop]) ? $this->obj["properties"][$prop] : null;
 	}
 
@@ -2541,13 +2546,14 @@ class _int_object
 		{
 			return false;
 		}
-		if(!strlen($prop["warning"]))
+
+		if(isset($prop["warning"]) and !strlen($prop["warning"]))
 		{
 			$prop["warning"] = ($prop["type"] == "relpicker")?2:1;
 		}
 		//arr($this->obj["oid"]);
 		//arr($prop);
-		$prop["warning"]?warning_prop($prop["warning"], $this->obj["oid"], $prop["name"]):"";
+		!empty($prop["warning"]) ? warning_prop($prop["warning"], $this->obj["oid"], $prop["name"]) : "";
 		return false;
 	}
 
@@ -2555,7 +2561,7 @@ class _int_object
 	{
 		$this->_int_load_properties();
 
-		if (!is_oid($this->obj["oid"]))
+		if (!isset($this->obj["oid"]) or !is_oid($this->obj["oid"]))
 		{
 			// do not try to read an empty object
 			return;
