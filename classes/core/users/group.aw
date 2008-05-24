@@ -989,7 +989,7 @@ class group extends class_base
 		));
 		return $ol->arr();
 	}
-	
+
 	/** adds a group
 		@attrib api=1 params=pos
 
@@ -1049,7 +1049,7 @@ class group extends class_base
 	}
 
 	/** returns the oid for the non logged in group. if it does not exist yet, creates it
-		@attrib api=1 
+		@attrib api=1
 	**/
 	static public function get_non_logged_in_group()
 	{
@@ -1061,7 +1061,7 @@ class group extends class_base
 
 		$c = get_instance("config");
 
-		if ($_SESSION["non_logged_in_users_group_oid"])
+		if (!empty($_SESSION["non_logged_in_users_group_oid"]))
 		{
 			$nlg_oid = $_SESSION["non_logged_in_users_group_oid"];
 		}

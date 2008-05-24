@@ -92,6 +92,7 @@ class site_template_compiler extends aw_template
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
 		enter_function("site_template_compiler::compile");
+		$e = error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
 		$this->tpl_init($path, true);
 		$this->no_use_ma_cache = $no_cache;
 		//echo "compiling \$this->read_template($tpl,true)<br>";
@@ -104,6 +105,7 @@ class site_template_compiler extends aw_template
 		$this->parse_template_parts($mdefs);
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
+		error_reporting($e);
 		exit_function("site_template_compiler::compile");
 		return $code;
 	}
@@ -113,12 +115,11 @@ class site_template_compiler extends aw_template
 	// so this is sort of a 3-step compilation process
 	function parse_template_parts($mdefs = NULL)
 	{
-
 		$this->menu_areas = array();
 
 		// get all subtemplates
 		$tpls = $this->get_subtemplates_regex("(MENU_.*)");
-		
+
 		// now figure out the menu areas that are used
 		$_tpls = array();
  		foreach($tpls as $tpl)
@@ -1404,7 +1405,7 @@ class site_template_compiler extends aw_template
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
-		$ret .= $this->_gi()."\$mmi_cnt = 0;if(!\$cnt_menus)\$cnt_menus = 0;\n";
+		$ret .= $this->_gi()."\$mmi_cnt = 0; if(empty(\$cnt_menus))\$cnt_menus = 0;\n";
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." = ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)?(\$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus))  : (null)),".$loop_counter_name." = 0, ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)? \$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." = ".$list_name."->next())), ".$loop_counter_name."++\n)\n";
 		$ret .= $this->_gi()."{\nif(".$fun_name."_cb)\$cnt_menus++;";
 		$this->brace_level++;

@@ -1,6 +1,8 @@
 <?php
 class site_loginmenu extends class_base
 {
+	var $current_login_menu_id;
+
 	function site_loginmenu()
 	{
 		$this->init(array(
@@ -8,7 +10,7 @@ class site_loginmenu extends class_base
 			"clid" => CL_SITE_LOGINMENU
 		));
 	}
-	
+
 	function get_site_loginmenu($that)
 	{
 		if (aw_global_get("uid") == "")
@@ -29,7 +31,7 @@ class site_loginmenu extends class_base
 				"class_id" => CL_MENU,
 				"parent" => $o->id()
 			));
-			
+
 			$tmp_L2 = "";
 			for($o2 = $ol2->begin(); !$ol2->end(); $o2 = $ol2->next())
 			{
@@ -65,10 +67,10 @@ class site_loginmenu extends class_base
 		$this->vars(array(
 			"MENU_LOGGED_L1_ITEM" => $tmp_L1,
 		));
-		
+
 		return $this->parse();
 	}
-	
+
 }
 
 ?>

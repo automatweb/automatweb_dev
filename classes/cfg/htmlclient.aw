@@ -418,6 +418,7 @@ class htmlclient extends aw_template
 				"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
 		$add = "";
+		$add2 = "";
 		if(!empty($args["capt_ord"]))
 		{
 			$add = strtoupper("_".$args["capt_ord"]);
@@ -602,7 +603,7 @@ class htmlclient extends aw_template
 		{
 			$var_name = "SUBMIT";
 			$tpl_vars = array(
-				"sbt_caption" => $sbt_caption != "" ? $sbt_caption : t("Salvesta"),
+				"sbt_caption" => !empty($sbt_caption) ? $sbt_caption : t("Salvesta"),
 			);
 			// I need to figure out whether I have a relation manager
 			$this->vars_safe($tpl_vars);
@@ -801,7 +802,7 @@ class htmlclient extends aw_template
 		}
 
 		// options from cfgform
-		if (is_object($arr["awcb_cfgform"]))
+		if (isset($arr["awcb_cfgform"]) and is_object($arr["awcb_cfgform"]))
 		{ // load misc options from given cfgform
 			$cfgform_o = $arr["awcb_cfgform"];
 
@@ -879,7 +880,7 @@ class htmlclient extends aw_template
 			$bm_h->begin_menu("history_pop");
 
 			$tp->vars_safe(array(
-				"warn" => $this->config["warn"],
+				"warn" => isset($this->config["warn"]) ? $this->config["warn"] : null,
 			));
 			$tp->vars_safe(array(
 				"help" => $this->vars["help"],
@@ -889,12 +890,12 @@ class htmlclient extends aw_template
 				"more_help_text" => $this->config["more_help_text"],
 				"close_help_text" => $this->config["close_help_text"],
 				"open_help_text" => $this->config["open_help_text"],
-				"WARNING_LAYER" => $this->config["warn"]?$tp->parse("WARNING_LAYER"):"",
-				"HAS_WARNING" => $this->config["warn"]?$tp->parse("HAS_WARNING"):"",
+				"WARNING_LAYER" => !empty($this->config["warn"]) ? $tp->parse("WARNING_LAYER") : "",
+				"HAS_WARNING" => !empty($this->config["warn"]) ? $tp->parse("HAS_WARNING") : "",
 				"feedback_link" => $this->mk_my_orb("redir_new_feedback", array(
-					"d_class" => $_GET["class"],
-					"d_obj" => $_GET["id"],
-					"object_grp" => $_GET["group"],
+					"d_class" => isset($_GET["class"]) ? $_GET["class"] : null,
+					"d_obj" => isset($_GET["id"]) ? $_GET["id"] : null,
+					"object_grp" => isset($_GET["group"]) ? $_GET["group"] : null,
 					"url" => get_ru()
 				), "customer_feedback_entry"),
 				"feedback_text" => t("Tagasiside"),
@@ -1275,7 +1276,7 @@ class htmlclient extends aw_template
 				$layout_items[] = $html;
 			}
 		}
-		
+
 		if($this->view_layout)
 		{
 			if(!$this->show_layouts[$this->parent_layouts[$layout_name]] && !$this->show_layouts[$layout_name])

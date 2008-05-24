@@ -283,7 +283,7 @@ class core extends acl_base
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
-		$e = error_reporting(0);
+		$e = error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
 		if (!function_exists("aw_global_get"))
 		{
 			classload("defs");

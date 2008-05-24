@@ -52,16 +52,16 @@ class languages extends aw_template implements request_startup
 		@param set_for_user optional type=bool
 			If set to true, only the languages that are selected from the user config are returned, defaults to false
 
-		@returns 
+		@returns
 			list of languages as an array { key => language_data }
 
-	**/			
+	**/
 	function get_list($arr = array())
 	{
 		extract($arr);
 		$dat = $this->listall(isset($ignore_status) ? $ignore_status : false);
 
-		
+
 		if (isset($addempty))
 		{
 			$ret = array("0" => "");
@@ -89,7 +89,7 @@ class languages extends aw_template implements request_startup
 					$ret[$ldat[$use_key]] = $ldat;
 				}
 				else
-				{	
+				{
 					$ret[$ldat[$use_key]] = $ldat["name"];
 				}
 			}
@@ -137,10 +137,10 @@ class languages extends aw_template implements request_startup
 			if ($row["site_id"] != 0)
 			{
 				// get site name from site server
-				$this->save_handle();	
+				$this->save_handle();
 				$sd = $this->do_orb_method_call(array(
-					"class" => "site_list", 
-					"action" => "get_site_data", 
+					"class" => "site_list",
+					"action" => "get_site_data",
 					"params" => array(
 						"site_id" => $row["site_id"]
 					),
@@ -213,9 +213,9 @@ class languages extends aw_template implements request_startup
 		}
 		return $id;
 	}
-	
+
 	////
-	// !this tries to figure out the balance between the user's language preferences and the 
+	// !this tries to figure out the balance between the user's language preferences and the
 	// languages that are available. this will only return active languages.
 	private function find_best()
 	{
@@ -244,7 +244,7 @@ class languages extends aw_template implements request_startup
 		while (list(,$v) = each($larr))
 		{
 			$la = substr($v,0,strcspn($v,"-; "));
-			if ($langs[$la])
+			if (!empty($langs[$la]))
 			{
 				// and accept the first match, nobody uses the really fancy features anyway :P
 				return $langs[$la];
@@ -255,7 +255,7 @@ class languages extends aw_template implements request_startup
 		{
 			return $def;
 		}
-		// if no languages are active, then get the first one. 
+		// if no languages are active, then get the first one.
 		if (is_array($la))
 		{
 			reset($la);
@@ -292,7 +292,7 @@ class languages extends aw_template implements request_startup
 			The code to find the language id for
 
 		@returns
-			NULL if no language for the code is defined in the system, language id (not language object id) 
+			NULL if no language for the code is defined in the system, language id (not language object id)
 
 	**/
 	function get_langid_for_code($code)
@@ -314,11 +314,11 @@ class languages extends aw_template implements request_startup
 	{
 		if ($force_read || !($_it = aw_global_get("lang_cache_init")))
 		{
-			// now try the file cache thingie - maybe it's faster :) I mean, yeah, ok, 
+			// now try the file cache thingie - maybe it's faster :) I mean, yeah, ok,
 			// this doesn't exactly take much time anyway, but still, can't be bad, can it?
 
 			// if the file cache exists and this is not an update, then read from that
-			if (!$force_read && ($cc = $this->file_cache->file_get($this->cf_name))) 	
+			if (!$force_read && ($cc = $this->file_cache->file_get($this->cf_name)))
 			{
 				aw_cache_set_array("languages", aw_unserialize($cc));
 			}
@@ -355,7 +355,7 @@ class languages extends aw_template implements request_startup
 			return;
 		}
 		$init_done++;
-		
+
 		$lang_id = aw_global_get("lang_id");
 
 		// if we explicitly request language change, we get that, except if the language is not active
@@ -363,7 +363,7 @@ class languages extends aw_template implements request_startup
 		if (($sl = aw_global_get("set_lang_id")))
 		{
 			// if language has not changed, don't waste time re-setting it
-			if ($sl != $lang_id)	
+			if ($sl != $lang_id)
 			{
 				if (($_l = $this->set_active($sl)))
 				{
@@ -439,7 +439,7 @@ class languages extends aw_template implements request_startup
 
 		// assign the correct language so we can find translations
 		$LC=$la["acceptlang"];
-		if ($_GET["LC_DBG"] == 1)
+		if (!empty($_GET["LC_DBG"]))
 		{
 			echo dbg::dump($la);
 		}
@@ -468,7 +468,7 @@ class languages extends aw_template implements request_startup
 
 		aw_global_set("lang_oid", $la["oid"]);
 		// and we should be all done. if after this, lang_id will still be not set I won't be able to write the
-		// code that fixes it anyway. 
+		// code that fixes it anyway.
 
 		// also, if we are in the site, not admin
 		// set the ui language to the active language
@@ -513,7 +513,7 @@ class languages extends aw_template implements request_startup
 			}
 		}
 	}
-	
+
 	/**
 		@attrib name=get_trans_lc
 	**/

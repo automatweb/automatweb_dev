@@ -27,7 +27,7 @@ interface main_subtemplate_handler
 			The request parameters
 
 		@comment
-			This callback must fill in the contents of the template SUB, in the given instance. 
+			This callback must fill in the contents of the template SUB, in the given instance.
 
 		@examples
 			class foo implements main_subtemplate_handler
@@ -64,6 +64,9 @@ class site_show extends class_base
 	var $cache;				// cache class instance
 
 	var $image;				// image class instance
+
+	var $add_url;
+	var $_is_in_document_list;
 
 	function site_show()
 	{
@@ -1024,7 +1027,7 @@ class site_show extends class_base
 				$noc_val = obj_set_opt("no_cache", 1);
 			}
 
-			if (is_array($arr["date_filter"]))
+			if (isset($arr["date_filter"]) and is_array($arr["date_filter"]))
 			{
 				$df = $arr["date_filter"];
 				if ($df["day"])
@@ -1258,7 +1261,7 @@ class site_show extends class_base
 		{
 			$awt->start("get-long");
 
-			if ($_GET["only_document_content"] && $_GET["templ"] != "")
+			if (!empty($_GET["only_document_content"]) && $_GET["templ"] != "")
                         {
                                 $template = $_GET["templ"];
                         }
@@ -1354,7 +1357,7 @@ class site_show extends class_base
 	function show_documents(&$arr)
 	{
 		$p = array();
-		if ($_GET["year"] || $_GET["month"] || $_GET["day"] || $_GET["week"])
+		if (!empty($_GET["year"]) || !empty($_GET["month"]) || !empty($_GET["day"]) || !empty($_GET["week"]))
 		{
 			$p = array("date_filter" => array(
 				"year" => $_GET["year"],
@@ -1844,7 +1847,10 @@ class site_show extends class_base
 			$this->site_title = strip_tags($this->title_yah);
 		}
 
-		$ya.=$GLOBALS["yah_end"];
+		if (isset($GLOBALS["yah_end"]))
+		{
+			$ya.=$GLOBALS["yah_end"];
+		}
 
 		$this->vars(array(
 			"YAH_LINK" => $ya,
@@ -1895,7 +1901,7 @@ class site_show extends class_base
 			}
 
 			$num++;
-			$grp = $row["meta"]["lang_group"];
+			$grp = isset($row["meta"]["lang_group"]) ? $row["meta"]["lang_group"] : null;
 			$grp_spec = $grp;
 			if ($grp != "")
 			{
@@ -1905,7 +1911,7 @@ class site_show extends class_base
 			$sel_img_url = "";
 			$img_url = "";
 			// if the language has an image
-			if ($row["meta"]["lang_img"])
+			if (!empty($row["meta"]["lang_img"]))
 			{
 				if ($lang_id == $row["id"] && $row["meta"]["lang_img_act"])
 				{
@@ -1916,21 +1922,13 @@ class site_show extends class_base
 			}
 
 			$url = $this->cfg["baseurl"] . "/?".$var."=$row[id]";
-			if ($row["meta"]["temp_redir_url"] != "" && $uid == "")
+			if (!empty($row["meta"]["temp_redir_url"]) && $uid == "")
 			{
 				$url = $row["meta"]["temp_redir_url"];
 			}
+
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
-				/*$url = get_ru();
-				if (strpos($url, "/".aw_global_get("ct_lang_lc")."/") === false)
-				{
-					$url = aw_ini_get("baseurl")."/".$row["acceptlang"];
-				}
-				else
-				{
-					$url = str_replace("/".aw_global_get("ct_lang_lc")."/", "/".$row["acceptlang"]."/", $url);
-				}*/
 				// get the current url.
 				// check if it has the language set in it
 				// if it does, then replace it with the new one
@@ -1971,7 +1969,7 @@ class site_show extends class_base
 				"target" => "",
 				"img_url" => $img_url,
 				"sel_img_url" => $sel_img_url,
-				"fp_text" => $row["meta"]["fp_text"]
+				"fp_text" => isset($row["meta"]["fp_text"]) ? $row["meta"]["fp_text"] : null
 			));
 			if (!isset($l[$grp]))
 			{
@@ -2015,7 +2013,8 @@ class site_show extends class_base
 				}
 			}
 		}
-		if (!$sel_lang)
+
+		if (empty($sel_lang))
 		{
 			$ll = get_instance("languages");
 			$sel_lang = $ll->fetch(aw_global_get("lang_id"),true);
@@ -2361,7 +2360,7 @@ class site_show extends class_base
 	{
 		$section = $this->section_obj->id();
 		$frontpage = $this->cfg["frontpage"];
-		
+
 		$islm = get_instance("site_loginmenu");
 		$site_loginmenu = $islm->get_site_loginmenu($this);
 
@@ -2655,7 +2654,7 @@ class site_show extends class_base
 				$link_str = $dd->get_doc_link($linked_obj);
 			}
 		}
-		
+
 		if ($o->prop("type") == MN_PMETHOD)
 		{
 			// I should retrieve orb definitions for the requested class
@@ -3027,8 +3026,8 @@ class site_show extends class_base
 		}
 
 		// until we can have class-static variables, this actually SETS current text content
-		classload("layout/active_page_data");
-		active_page_data::get_text_content(isset($arr["text"]) ? $arr["text"] : "");
+		$apd = new active_page_data();
+		$apd->get_text_content(isset($arr["text"]) ? $arr["text"] : "");
 
 		// save path
 		// get path from the real rootmenu so we catch props?
