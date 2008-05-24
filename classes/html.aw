@@ -40,30 +40,50 @@ class html extends aw_template
 	function select($args = array())
 	{
 		extract($args);
-		$disabled = ($disabled ? " disabled" : "");
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
-		$sz = $mz = $onc = $cl = $wid = "";
+		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
+		$sz = $mz = $onc = $cl = $w = $ts = "";
 		// things that make one go humm.. -- duke
+
+		// style attributes
+		if (!empty($width))
+		{
+			$width = " width: {$width}px;";
+		}
+
+		if (!empty($textsize))
+		{
+			$ts = " font-size: {$textsize};";
+		}
+
+		$style = ($ts or $w) ? " style=\"{$ts}{$w}\"" : "";
+
+		//
 		if (empty($selected) && isset($value))
 		{
 			$selected = $value;
-		};
-		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
-		if (isset($size))
+		}
+
+		$ti = isset($tabindex) ? " tabindex=\"{$tabindex}\"" : "";
+		if (!empty($size))
 		{
-			$sz = "size=\"$size\" ";
-		};
+			$sz = " size=\"{$size}\" ";
+		}
 
 		if (!empty($class))
 		{
-			$cl = "class=\"$class\"";
+			$cl = " class=\"{$class}\"";
+		}
+
+		if (empty($id))
+		{
+			$id = $name;
 		}
 
 		if (!empty($multiple))
 		{
-			$mz = "multiple ";
+			$mz = ' multiple="multiple" ';
 			$name .= "[]";
-		};
+		}
 
 		if (isset($selected) && is_array($selected))
 		{
@@ -84,37 +104,27 @@ class html extends aw_template
 
 		foreach(safe_array($options) as $k => $v)
 		{
-			$selected = isset($sel_array[$k]) ? " selected " : "";
+			$selected = isset($sel_array[$k]) ? ' selected="selected" ' : "";
 			$d = in_array($k, $disabled_options) ? " disabled=\"disabled\"" : "";
-			$optstr .= "<option $selected value=\"$k\"$d>$v</option>\n";
+			$optstr .= "<option{$selected}value=\"{$k}\"{$d}>{$v}</option>\n";
 		}
 		// implementing a thing called optgroup -- ahz
 		foreach(safe_array($optgroup) as $key => $val)
 		{
-			$optstr .= "<optgroup label=\"".$optgnames[$key]."\">\n";
+			$optstr .= "<optgroup label=\"{$optgnames[$key]}\">\n";
 			foreach(safe_array($val) as $key2 => $val2)
 			{
-				$selected = isset($sel_array[$key2]) ? " selected " : "";
-				$optstr .= "<option $selected value=\"$key2\">$val2</option>\n";
+				$selected = isset($sel_array[$key2]) ? " selected=\"selected\" " : "";
+				$optstr .= "<option{$selected}value=\"{$key2}\">{$val2}</option>\n";
 			}
 			$optstr .= "</optgroup>\n";
 		}
 		if (!empty($onchange))
 		{
-			$onc = 'onchange="'.$onchange.'"';
+			$onc = " onchange=\"{$onchange}\"";
 		}
 
-		if (!empty($width))
-		{
-			$wid = "STYLE='width: ".$width."px'";
-		}
-
-		if (empty($id))
-		{
-			$id = $name;
-		}
-
-		return "<select name=\"$name\" $cl id=\"$id\" $sz $mz $onc $disabled $textsize{$ti} $wid>\n$optstr</select>$post_append_text\n";
+		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$textsize}{$ti}{$wid}>\n{$optstr}</select>{$post_append_text}\n";
 	}
 
 	/**
@@ -190,26 +200,27 @@ class html extends aw_template
 	function textbox($args = array())
 	{
 		extract($args);
-		$disabled = ($disabled ? " disabled" : "");
-		$textsize = ($textsize ? ' style="font-size: ' . $textsize . ';"' : "");
+		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
+		$post_append_text = (!empty($post_append_text) ? $post_append_text : "");
+		$textsize = (!empty($textsize) ? " style=\"font-size: {$textsize};\"" : "");
 		$size = isset($size) ? $size : 40;
-		$maxlength = isset($maxlength) ? $maxlength : "";
+		$maxlength = isset($maxlength) ? " maxlength=\"{$maxlength}\"" : "";
 		$id = str_replace("[","_",$name);
 		$id = str_replace("]","_",$id);
 		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
 		settype ($option_is_tuple, "boolean");
-		$onkeypress = isset($onkeypress) ? ' onkeypress="'.$onkeypress.'"' : "";
-		$onFocus = isset($onFocus) ? ' onfocus="'.$onFocus.'"' : '';
-		$onBlur = isset($onBlur) ? ' onblur="'.$onBlur.'"' : '';
-		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
+		$onkeypress = isset($onkeypress) ? " onkeypress=\"{$onkeypress}\"" : "";
+		$onFocus = isset($onFocus) ? " onfocus=\"{$onFocus}\"" : '';
+		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
+		$ti = isset($tabindex) ? " tabindex=\"{$tabindex}\"" : '';
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
-		$onchange = $onChange != "" ? "onChange=\"$onChange\"" : "";
-		$style = isset($style)?" style=\"".$style."\"":"";
+		$onchange = !empty($onChange) ? " onchange=\"{$onChange}\"" : "";
+		$style = isset($style) ? " style=\"{$style}\"":"";
 
 		### compose autocompletes source url
-		if ($autocomplete_source or is_array($options) or $autocomplete_source_method)
+		if (!empty($autocomplete_source) or !empty($options) and is_array($options) or !empty($autocomplete_source_method))
 		{
 			if (!defined("AW_AUTOCOMPLETE_INITIALIZED"))
 			{
@@ -286,7 +297,7 @@ class html extends aw_template
 		if ($autocomplete)
 		{
 			$onkeypress = "";
-			$ac_off = "autocomplete=\"off\"";
+			$ac_off = " autocomplete=\"off\"";
 
 			if ($option_is_tuple)
 			{
@@ -309,14 +320,14 @@ class html extends aw_template
 					}
 				}
 
-				$value_elem = "<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$hidden_value\">\n";
+				$value_elem = "<input type=\"hidden\" id=\"{$id}\" name=\"{$name}\" value=\"{$hidden_value}\">\n";
 				$id .= "AWAutoCompleteTextbox";
 				$name .= "_awAutoCompleteTextbox";
 				$value = $content;
 			}
 		}
 
-		return "<input $style type=\"text\" id=\"$id\" $ac_off name=\"$name\" $onchange size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange} />{$post_append_text}\n{$value_elem}{$autocomplete}";
 	}
 
 	/**
@@ -330,8 +341,6 @@ class html extends aw_template
 		number of columns
 	@param rows optional type=int
 		number of rows
-	@param wrap optional type=string
-		if set, wrap='$wrap'
 	@param disabled optional type=bool
 		if true, textarea is disabled
 	@param textsize optional type=string
@@ -343,6 +352,8 @@ class html extends aw_template
 		if set, onBlur=$onBlur.
 	@param onkeyup optional type=string
 		if set, onkeyup=$onkeyup.
+	@param onchange optional type=string
+		if set, onchange=$onchange.
 
 	@returns string / html textarea
 
@@ -354,22 +365,24 @@ class html extends aw_template
 		$cols = !empty($cols) ? $cols : 60;
 		$rows = !empty($rows) ? $rows : 40;
 		$value = isset($value) ? $value : "";
-		$onFocus = isset($onFocus) ? ' onfocus="'.$onFocus.'"' : '';
-		$onBlur = isset($onBlur) ? ' onblur="'.$onBlur.'"' : '';
-		$onkeyup = isset($onkeyup) ? ' onkeyup="'.$onkeyup.'"' : '';
-
+		$onFocus = isset($onFocus) ? " onfocus=\"{$onFocus}\"" : '';
+		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
+		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
+		$onchange = !empty($onchange) ? " onchange=\"{$onchange}\"" : "";
 
 		if (strpos($value, "<") !== false)
 		{
 			$value = htmlspecialchars($value);
 		}
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
+
+		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
 		// now, the browser detection is best done in javascript
+
 		if (!empty($richtext))
 		{
 			if($rte_type == 2)
 			{
-				$retval .= "<textarea $onchange $onkeyup id='$name' name='$name' cols='$cols' rows='$rows' $disabled $textsize>$value</textarea>\n";
+				$retval .= "<textarea id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$textsize}{$onkeyup}{$onchange}>{$value}</textarea>\n";
 			}
 			else
 			{
@@ -383,15 +396,10 @@ class html extends aw_template
 		}
 		else
 		{
-			$disabled = ($disabled ? " disabled" : "");
-			$wrap = isset($wrap) ? $wrap : "soft";
-			if (!empty($width))
-			{
-				$style .= ";width: $width;";
-			}
-			//$style = isset($style) ? " style='$style' " : ""; if anyone knows why was this needed you may revert the changes but at the moment it only gave style='Array' in html
-			$retval = "<textarea $onchange $onkeyup id='$name' name='$name' cols='$cols' rows='$rows' $disabled $textsize $onFocus $onBlur>$value</textarea>\n";
-		};
+			$disabled = ($disabled ? ' disabled="disabled"' : "");
+			$retval = "<textarea id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$disabled}{$textsize}{$onkeyup}{$onFocus}{$onBlur}{$onchange}>{$value}</textarea>\n";
+		}
+
 		return $retval;
 	}
 
@@ -434,7 +442,7 @@ class html extends aw_template
 		extract($args);
 		$width = isset($width) ? $width : '300';
 		$height = isset($height) ? $height : '200';
-		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
+		return "<iframe src=\"{$src}\" name=\"{$name}\" width=\"{$width}\" height=\"{$height}\"></iframe>\n";
 	}
 
 	/**
@@ -456,9 +464,10 @@ class html extends aw_template
 	function password($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
-		$size = isset($size) ? $size : 40;
-		return "<input type='password' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength' $textsize />\n";
+		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
+		$size = isset($size) ? $size : "40";
+		$maxlength = isset($maxlength) ? " maxlength=\"{$maxlength}\"" : "";
+		return "<input type=\"password\" id=\"{$name}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$textsize} />\n";
 	}
 
 	/**Simple text
@@ -476,7 +485,7 @@ class html extends aw_template
 	{
 		if (!empty($args["textsize"]))
 		{
-			$element = '<span style="font-size: ' . $args["textsize"] . ';">' . $args["value"] . '</span>';
+			$element = "<span style=\"font-size: {$args["textsize"]};\">{$args["value"]}</span>";
 		}
 		else
 		{
@@ -498,7 +507,7 @@ class html extends aw_template
 	{
 		extract($args);
 		$value = isset($value) ? $value : '';
-		return "<input type='hidden' id='$name' name='$name' value='$value' />\n";
+		return "<input type=\"hidden\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\" />\n";
 	}
 
 	/**File upload
@@ -517,14 +526,14 @@ class html extends aw_template
 	function fileupload($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
-		$disabled = ($disabled ? " disabled" : "");
+		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
+		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$rv = "";
 		if (!empty($value))
 		{
 			$rv = $value . "<br />";
 		}
-		return $rv . "<input type='file' id='$name' name='$name' $disabled $textsize />\n";
+		return $rv . "<input type=\"file\" id=\"{$name}\" name=\"{$name}\"{$disabled}{$textsize} />\n";
 	}
 
 	/**Checkbox
@@ -555,16 +564,19 @@ class html extends aw_template
 	{
 		extract($args);
 		$checked = isset($checked) ? checked($checked) : '';
-		$disabled = ($disabled ? "disabled" : "");
+		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$capt = '';
+
 		if (empty($value))
 		{
 			$value = 1;
-		};
+		}
+
 		if (isset($label))
 		{
 			$capt .= $label;
-		};
+		}
+
 		if (isset($caption))
 		{
 			$capt .= " " . $caption;
@@ -576,13 +588,13 @@ class html extends aw_template
 		}
 		if(isset($title))
 		{
-			$title = "title='".$title."'";
+			$title = " title=\"{$title}\"";
 		}
 		if (isset($onclick))
 		{
-			$onc = "onClick='$onclick'";
+			$onc = " onclick=\"{$onclick}\"";
 		}
-		$rv = "<input type='checkbox' id='$name' $title name='$name' value='$value' $onc $checked $disabled /> $capt\n";
+		$rv = "<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} /> $capt\n";
 		return $rv;
 	}
 
@@ -611,7 +623,7 @@ class html extends aw_template
 	{
 		extract($args);
 		$checked = checked($checked);
-		$disabled = ($disabled ? "disabled" : "");
+		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 
 		if ($textsize and $caption)
 		{
@@ -621,8 +633,12 @@ class html extends aw_template
 		{
 			$id = $name."_".$value;
 		}
+		if (isset($onclick))
+		{
+			$onc = " onclick=\"{$onclick}\"";
+		}
 
-		return "<input type='radio' name='$name' id='$id' value='$value' $checked onClick='$onclick' $disabled />\n $caption";
+		return "<input type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$value}\"{$onc}{$checked}{$disabled} />\n {$caption}";
 	}
 
 	/**Submit button
@@ -643,14 +659,11 @@ class html extends aw_template
 	function submit($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
+		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
+		$class = !empty($class) ? " class=\"{$class}\"" : "";
+		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
 
-		if (isset($onclick))
-		{
-			$onclick = 'onclick="'.$onclick.'"';
-		}
-
-		return "<input id='cbsubmit' type='submit' name='$name' value='$value' class='$class' $onclick $textsize />\n";
+		return "<input id=\"cbsubmit\" type=\"submit\" name=\"{$name}\" value='{$value}'{$class}{$onclick}{$textsize} />\n";
 	}
 
 	/**Simple button
@@ -673,9 +686,13 @@ class html extends aw_template
 	function button($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
-		$disabled = ($disabled ? " disabled" : "");
-		return "<input type='".($type ? $type : "button")."' class='$class' value='$value' onClick=\"".$onclick."\" $disabled $textsize />\n";
+		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
+		$disabled = !empty($disabled) ? ' disabled="disabled"' : "";
+		$type = empty($type) ? "button" : $type;
+		$class = !empty($class) ? " class=\"{$class}\"" : "";
+		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
+
+		return "<input type='{$type}' value='{$value}'{$onclick}{$class}{$disabled}{$textsize} />\n";
 	}
 
 	/**Time selector
@@ -1051,11 +1068,11 @@ class html extends aw_template
 		}
 		$textsize = isset($textsize) ? ' style="font-size: ' . $textsize . ';"' : "";
 		$target = isset($target) ? " target='$target'" : "";
-		$onClick = isset($onClick) ? " onClick='$onClick'" : "";
+		$onClick = isset($onClick) ? " onclick='$onClick'" : "";
 		$title = isset($title) ? " alt='$title' title='$title'" : "";
 		$class = isset($class) ? " class='$class'" : "";
-		$onMouseOver = isset($onmouseover)?" onMouseOver='".$onmouseover."'":"";
-		$onMouseOut = isset($onmouseout)?" onMouseOut='".$onmouseout."'":"";
+		$onMouseOver = isset($onmouseover)?" onmouseover='".$onmouseover."'":"";
+		$onMouseOut = isset($onmouseout)?" onmouseout='".$onmouseout."'":"";
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
 		$rel = isset($rel) ? " rel='$rel'" : "";
@@ -1276,14 +1293,8 @@ class html extends aw_template
 	**/
 	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
-		if (empty($this))
-		{
-			$inst = get_instance(CL_FILE);
-		}
-		else
-		{
-			$inst = $this;
-		}
+		$inst = new core();
+
 		if (!$inst->can("view", $oid))
 		{
 			if ($caption != "")
@@ -1305,7 +1316,7 @@ class html extends aw_template
 			$act = "view";
 		}
 
-		if (is_oid($_GET["section"]) and !isset($params["section"]))
+		if (is_oid(@$_GET["section"]) and !isset($params["section"]))
 		{
 			$params["section"] = $_GET["section"];
 		}
@@ -1361,7 +1372,7 @@ class html extends aw_template
 		}
 		return $retval;
 	}
-	
+
 	function strong($str)
 	{
 		return "<b>".$str."</b>";

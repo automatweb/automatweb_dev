@@ -80,20 +80,27 @@ class date_edit
 
 	/**
 		@attrib params=pos api=1
+
 		@param varname
 		Sets the varname for the date form that is posted.
 		varname[year],varname[month],varname[day],varname[hour],varname[minute]
+
 		@param timestamp optional type=int
 		Sets the time to be selected(unix timestamp). Default is current time +24h
+
 		@param range1 optional type=int
 		Sets the start year(default is 2003)
+
 		@param range2 optional type=int
 		Sets the end year(default is 2010)
+
 		@add_empty optional type=bool
 		If set tu true, adds an '---' item  and selects it(adds for everythind.. selects only for year)
 		Default is false. If this is set range1 and range2 must be manually set.
+
 		@comment
 		Generates the date edit html code accorndig to options
+
 		@returns
 		The form elements html code to be printed on page
 	**/
@@ -101,8 +108,8 @@ class date_edit
 	{
 		if (is_array ($varname))
 		{
-			$textsize = isset ($varname["textsize"]) ? 'style="font-size: ' . (string) $varname["textsize"] . ';"' : "";
-			$disabled = isset ($varname["disabled"]) ? "disabled" : "";
+			$textsize = isset ($varname["textsize"]) ? ' style="font-size: ' . (string) $varname["textsize"] . ';"' : "";
+			$disabled = isset ($varname["disabled"]) ? ' disabled="disabled"' : "";
 			$varname = $varname["name"];
 		}
 		else
@@ -124,7 +131,7 @@ class date_edit
 		$clid = "";
 		if ($this->classid != "")
 		{
-			$clid="class=\"$this->classid\"";
+			$clid=" class=\"{$this->classid}\"";
 		};
 		// support for ISO-8601 date format
 		list($year,$month,$day) = sscanf($this->timestamp,"%4d-%2d-%2d");
@@ -147,7 +154,7 @@ class date_edit
 			switch($k)
 			{
 				case "year":
-					$retval .= sprintf("<select $clid name='%s[year]' $disabled $textsize>\n",$this->varname);
+					$retval .= "<select name=\"{$this->varname}[year]\'{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -174,11 +181,11 @@ class date_edit
 					{
 						$year = "";
 					}
-					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year' $disabled $textsize>\n",$this->varname);
+					$retval .= "<input type='text' name='{$this->varname}[year]' size='4' maxlength='4' value='{$year}'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 
 				case "month":
-					$retval .= sprintf("<select $clid name='%s[month]' $disabled $textsize>\n",$this->varname);
+					$retval .= "<select name='{$this->varname}[month]'{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -219,11 +226,11 @@ class date_edit
 					{
 						$month = "";
 					}
-					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month' $disabled $textsize>\n",$this->varname);
+					$retval .= "<input type='text' name='{$this->varname}[month]' size='2' maxlength='2' value='$month'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 
 				case "day":
-					$retval .= sprintf("<select $clid name='%s[day]' $disabled $textsize>\n",$this->varname);
+					$retval .= "<select name='{$this->varname}[day]'{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -240,7 +247,7 @@ class date_edit
 					{
 						$day = "";
 					}
-					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day' $disabled $textsize>\n",$this->varname);
+					$retval .= "<input type='text' name='{$this->varname}[day]' size='2' maxlength='2' value='$day'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 
 				case "hour":
@@ -253,7 +260,7 @@ class date_edit
 						$retval .= "<span style='white-space: nowrap'>";
 						$prev_hr_span = true;
 					}
-					$retval .= sprintf("<select $clid name='%s[hour]' $disabled $textsize>\n",$this->varname);
+					$retval .= "<select name='{$this->varname}[hour]'{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -266,11 +273,11 @@ class date_edit
 					break;
 
 				case "hour_textbox":
-					$retval .= sprintf("<input type='text' name='%s[hour]' size='2' maxlength='2' value='$hour' $disabled $textsize>\n",$this->varname);
+					$retval .= "<input type='text' name='{$this->varname}[hour]' size='2' maxlength='2' value='$hour' $disabled $textsize>\n";
 					break;
 
 				case "minute":
-					$retval .= sprintf("<select $clid name='%s[minute]' $disabled $textsize>\n",$this->varname);
+					$retval .= "<select name='{$this->varname}[minute]'{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -289,7 +296,7 @@ class date_edit
 					break;
 
 				case "minute_textbox":
-					$retval .= sprintf("<input type='text' name='%s[minute]' size='2' maxlength='2' value='$minute' $disabled $textsize>\n",$this->varname);
+					$retval .= "<input type='text' name='{$this->varname}[minute]' size='2' maxlength='2' value='$minute'{$disabled}{$textsize}{$clid} \>\n";
 					break;
 			}; // end switch
 		}; // end while
@@ -308,9 +315,9 @@ class date_edit
 				$date_clear_img_url = '/automatweb/images/icons/delete.gif';
 			}
 
-			$retval .= "<span style='white-space: nowrap;'><a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."' tabindex='10'>"; 
-			$retval .= "<img id='".$this->varname."_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0'></a> ";	
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");' tabindex='10'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a></span>";
+			$retval .= "<span style='white-space: nowrap;'><a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"{$this->varname}\");' id='{$this->varname}' name='{$this->varname}' tabindex='10'>";
+			$retval .= "<img id='{$this->varname}_ico"."' src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0'></a> ";
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"{$this->varname}\");' tabindex='10'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a></span>";
 		}
 
 		return $retval;
