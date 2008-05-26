@@ -30,12 +30,12 @@ class postal_codes_obj extends _int_object
 		$db_fields = self::get_db_fields();
 		foreach($arr as $var => $val)
 		{
-			if($db_fields[$var])
+			if($db_fields[$var] && self::parameter_check($val))
 			{
 				$where[] = "`".$var."` LIKE '".htmlspecialchars($val)."'";
 			}
 		}
-		if(isset($arr["house"]))
+		if(self::parameter_check($arr["house"]))
 		{
 			$hn = $arr["house"];
 			if(is_numeric($hn))
@@ -89,40 +89,43 @@ class postal_codes_obj extends _int_object
 		$where = array();
 		foreach($arr as $var=>$val)
 		{
-			if($db_fields[$var])
+			if(self::parameter_check($val))
 			{
-				$add = "";
-				if(substr($val, 0, 1)=="!")
+				if($db_fields[$var])
 				{
-					$add = "!";
+					$add = "";
+					if(substr($val, 0, 1)=="!")
+					{
+						$add = "!";
+					}
+					$where[] = "`".$var."`".$add."='".iconv("UTF-8", aw_global_get("charset"), $val)."'";
 				}
-				$where[] = "`".$var."`".$add."='".iconv("UTF-8", aw_global_get("charset"), $val)."'";
-			}
-			elseif($var == "house")
-			{
-				$tmp = explode(" - ", $val);
-				if(count($tmp) == 2)
+				elseif($var == "house")
 				{
-					$where[] = "`house_start`='".$tmp[0]."'";
-					$where[] = "`house_end`='".$tmp[1]."'";
+					$tmp = explode(" - ", $val);
+					if(count($tmp) == 2)
+					{
+						$where[] = "`house_start`='".$tmp[0]."'";
+						$where[] = "`house_end`='".$tmp[1]."'";
+					}
+					else
+					{
+						$where[] = "`house_start`='".$val."'";
+					}
 				}
-				else
+				elseif($var == "userhouse")
 				{
-					$where[] = "`house_start`='".$val."'";
-				}
-			}
-			elseif($var == "userhouse")
-			{
-				$hn = $val;
-				if(is_numeric($val))
-				{
-					$where[] = "`house_start` <= ".$val."";
-					$where[] = "`house_end` >= ".$val."";
-				}
-				else
-				{
-					$where["house_start"] = "`house_start` = '".$val."'";
-					$where["house_end"] = "`house_end` = '".$val."'";
+					$hn = $val;
+					if(is_numeric($val))
+					{
+						$where[] = "`house_start` <= ".$val."";
+						$where[] = "`house_end` >= ".$val."";
+					}
+					else
+					{
+						$where["house_start"] = "`house_start` = '".$val."'";
+						$where["house_end"] = "`house_end` = '".$val."'";
+					}
 				}
 			}
 		}
@@ -442,6 +445,19 @@ class postal_codes_obj extends _int_object
 			{
 				$i->db_query($query);
 			}
+		}
+	}
+
+	private function parameter_check($value)
+	{
+		$letters = "&auml;&Auml;&ouml;&Ouml;&uuml;&Uuml;&otilde;&Otilde;";
+		if(ereg("[0-9a-zA-Z".html_entity_decode($letters)."\/\-]", $value))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 }
