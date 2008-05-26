@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.126 2008/05/26 09:56:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.127 2008/05/26 14:29:46 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -3330,7 +3330,10 @@ class ml_list extends class_base
 			}
 			$msg_data["message"] = $this->parse();
 		}
-		$msg_data["return"] = "id";
+
+		//et igasugu urlid saaks kas urli objektist k"tte v6i salvestaks v2hemalt baseurli ette.
+		$msg_data["message"] = $this->make_fck_urls_good($msg_data["message"]);
+
 		//uhh......minuarust on selle koigega ikka miski jama
 		//toenaoliselt on varsti jalle miski probleem selle kohaga...a noh
 		//no kui kirja kirjutad html vaates ja ei pane html kirjaks, siis on ikka enda viga kui miski vigane vark ara saadetakse
@@ -3345,8 +3348,6 @@ class ml_list extends class_base
 */		$writer = get_instance(CL_MESSAGE);
 		//$writer->init_class_base();
 		//$message_id = $writer->submit($msg_data);die();
-		$msg_data["message"] = str_replace("href='/", "href='".aw_ini_get("baseurl")."/" , $msg_data["message"]);
-		$msg_data["message"] = str_replace('href="/', 'href="'.aw_ini_get("baseurl").'/' , $msg_data["message"]);
 
 		foreach($msg_data as $prop => $val)
 		{
@@ -3426,6 +3427,55 @@ arr($msg_obj->prop("message"));
 	//						   // be sent right away
 	//						   // submit_post_message method will not be called
         //      )
+
+	//teeb fck igasugu urlid mailile kohaseks, et mujal maailmas ka aru saaks kuhu asi viitab
+	function make_fck_urls_good($msg)
+	{
+		$x = 0;//igaks juhuks, et mingi valemiga tsyklisse ei l2heks
+		while (ereg('^(.*href=\"/([0-9]+)\".*)+$', $msg, $regs)) 
+		{
+			if($x > 100) break;
+			foreach($regs as $reg)
+			{
+				if($this->can("view" , $reg))
+				{
+					$link = obj($reg);
+					if($link->class_id() == CL_EXTLINK)
+					{
+						$msg = str_replace('href="/'.$link->id().'"', 'href="'.$link->prop("url").'"' , $msg);
+						continue;
+					}
+				}
+				if($reg > 1)
+				{
+					$msg = str_replace('href="/'.$reg.'"', 'href="'.aw_ini_get("baseurl").'/'.$reg.'"' , $msg);
+				}
+			}
+			$x++;
+		}
+		while (ereg("^(.*href=\'/([0-9]+)\'.*)+$", $msg, $regs)) 
+		{
+			if($x > 100) break;
+			foreach($regs as $reg)
+			{
+				if($this->can("view" , $reg))
+				{
+					$link = obj($reg);
+					if($link->class_id() == CL_EXTLINK)
+					{
+						$msg = str_replace("href='/".$link->id()."'", "href='".$link->prop("url")."'" , $msg);
+						continue;
+					}
+				}
+				if($reg > 1)
+				{
+					$msg = str_replace("href='/".$reg."'", "href='".aw_ini_get("baseurl")."/".$reg."'" , $msg);
+				}
+			}
+ 			$x++;
+		}
+		return $msg;
+	}
 
 	function send_message($arr)
 	{
