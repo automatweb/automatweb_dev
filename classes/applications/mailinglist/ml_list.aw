@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.125 2008/04/29 13:12:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.126 2008/05/26 09:56:59 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -3345,6 +3345,8 @@ class ml_list extends class_base
 */		$writer = get_instance(CL_MESSAGE);
 		//$writer->init_class_base();
 		//$message_id = $writer->submit($msg_data);die();
+		$msg_data["message"] = str_replace("href='/", "href='".aw_ini_get("baseurl")."/" , $msg_data["message"]);
+		$msg_data["message"] = str_replace('href="/', 'href="'.aw_ini_get("baseurl").'/' , $msg_data["message"]);
 
 		foreach($msg_data as $prop => $val)
 		{
