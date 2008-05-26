@@ -364,6 +364,115 @@ class crm_person_obj extends _int_object
 		}
 		return $ret;
 	}
+
+	function has_tasks()
+	{
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $this->id(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON_TASK",
+		));
+		if(sizeof($cs))
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function has_meetings()
+	{
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $this->id(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON_MEETING",
+		));
+		if(sizeof($cs))
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function has_calls()
+	{
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $this->id(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON_CALL",
+		));
+		if(sizeof($cs))
+		{
+			return 1;
+		}
+		return 0;
+	}
+	
+	function has_ovrv_offers()
+	{
+		$filt = array(
+			"class_id" => CL_CRM_DOCUMENT_ACTION,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"actor" => $this->id(),
+		);
+		
+		$ol = new object_list($filt);
+		if(sizeof($ol->ids()))
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function has_bugs()
+	{
+		$c = new connection();
+		$cs = $c->find(array(
+			"to" => $this->id(),
+			"from.class_id" => CL_BUG,
+			"type" => "RELTYPE_MONITOR",
+			"bug_status" => array(1,2,10,11),
+		));
+		if(sizeof($cs))
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function has_projects()
+	{
+		$col = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_PROJECT.RELTYPE_PARTICIPANT" => $this->id(),
+		));
+		if($col->count())
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function is_cust_mgr()
+	{
+		$col = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_CRM_COMPANY.client_manager" => $this->id(),
+		));
+		if($col->count())
+		{
+			return 1;
+		}
+		return 0;
+	}
+
 }
 
 ?>

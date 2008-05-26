@@ -1580,7 +1580,10 @@ class crm_company_cust_impl extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			$v = $p->name();
+			if($p->has_projects())
+			{
+				$v = $p->name();
+			}
 		}
 		else
 		{
@@ -1601,7 +1604,10 @@ class crm_company_cust_impl extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			$v = $p->name();
+			if($p->has_projects())
+			{
+				$v = $p->name();
+			}
 		}
 		else
 		{
@@ -1622,7 +1628,10 @@ class crm_company_cust_impl extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			$v = $p->name();
+			if($p->is_cust_mgr())
+			{
+				$v = $p->name();
+			}
 		}
 		else
 		{
@@ -2317,7 +2326,7 @@ class crm_company_cust_impl extends class_base
 						$conn_filt["to"] = $something;
 					}
 				}
-				$orgs = (count($conn_filt))?$organization->connections_from($conn_filt):array();
+				$orgs = (count($conn_filt) > 2)?$organization->connections_from($conn_filt):array();
 				$orglist = array();
 				foreach($orgs as $org)
 				{

@@ -1446,7 +1446,48 @@ class crm_company_overview_impl extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			$v = $p->name();
+			//$v = $p->name();
+			switch($_GET["group"])
+			{
+				case "all_actions":
+				case "my_tasks":
+					if($p->has_tasks())
+					{
+						$v = $p->name();
+					}
+					break;
+				case "meetings":
+					if($p->has_meetings())
+					{
+						$v = $p->name();
+					}
+					break;
+				case "calls":
+					if($p->has_calls())
+					{
+						$v = $p->name();
+					}
+					break;
+				case "ovrv_offers":
+					if($p->has_ovrv_offers())
+					{
+						$v = $p->name();
+					}
+					break;
+			}
+			
+
+// 			$col = new object_list(array(
+// 				"class_id" => array(CL_CRM_MEETING, CL_CRM_CALL, CL_TASK, CL_BUG , CL_DOCUMENT),
+// 				"site_id" => array(),
+// 				"lang_id" => array(),
+// 				"name" => "%".$p->name()."%",
+// 			));
+// 			if($col->count())
+// 			{
+// 				$v = $p->name();
+// 			}
+
 		}
 		else
 		{
