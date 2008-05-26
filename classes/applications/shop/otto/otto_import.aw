@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.94 2008/05/22 15:23:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.95 2008/05/26 13:29:48 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1377,15 +1377,9 @@ class otto_import extends class_base
 			$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
 			
 			list($image_width, $image_height) = $image_converter->size();
-			if ($image_width >= $image_height)
-			{
-				$new_image_height = ($image_height * 168) / $image_width;
-				$image_converter->resize_simple(168, $new_image_height);
-			}
-			else
-			{
-				$image_converter->resize_simple(168, 240);
-			}
+			$new_image_height = ($image_height * 168) / $image_width;
+			$image_converter->resize_simple(168, $new_image_height);
+
 			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
 			$image_converter->save($small_picture, 2);
 
