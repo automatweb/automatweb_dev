@@ -17,6 +17,7 @@ class obj_predicate_compare
 {
 	/**
 		@attrib api=1 params=pos
+
 		@param comparator required type=int
 		Comparator type.
 		Available types:
@@ -25,18 +26,20 @@ class obj_predicate_compare
 		OBJ_COMP_GREATER (2) - values greater than $data
 		OBJ_COMP_LESS_OR_EQ (4) - values less or equal to $data
 		OBJ_COMP_GREATER_OR_EQ (8) - values greater or equal to $data
-		OBJ_COMP_BETWEEN (16) - values between £data and $data2
+		OBJ_COMP_BETWEEN (16) - values between $data and $data2
 		OBJ_COMP_EQUAL (32) - values equal to $data
 		OBJ_COMP_BETWEEN_INCLUDING (64) - values between and $data and $data2, including $data & $data2 themselves
 		OBJ_COMP_NULL (128) - value NULL
 		OBJ_COMP_IN_TIMESPAN (256) - takes two arrays as parameters, first has two entries containing the properties defining the timespan, second is an array containing two elements, defining the searchable timespan
-		
-		@param data required type=string
-		data to compared
+
+		@param data optional type=string
+		data to compare
+
 		@param data2 optional type=string
-		data to compared
+		data to compare
+
 		@param type optional type=string
-			data type
+		data type
 
 		@comment
 		Used in object list filtering property values.
@@ -46,10 +49,10 @@ class obj_predicate_compare
 			"bug_status" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, 1, 6),
 		);
 		$ol = new object_list($filt);
-		
+
 		// generates list of bugs with statuses from 1 to 6 (inclucing 1 and 6)
 	**/
-	function obj_predicate_compare($comparator, $data, $data2 = NULL, $type)
+	function obj_predicate_compare($comparator, $data = null, $data2 = NULL, $type = null)
 	{
 		$this->comparator = $comparator;
 		$this->data = $data;
@@ -58,7 +61,7 @@ class obj_predicate_compare
 	}
 
 	function __toString()
-	{	
+	{
 		$str = "objcompare-".$this->comparator."-".$this->data."-".$this->data2."-".$this->type;
 		return $str;
 	}
