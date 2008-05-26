@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.7 2008/04/28 13:59:37 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.8 2008/05/26 09:19:30 voldemar Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -119,7 +119,7 @@ class users extends users_user implements request_startup
 	}
 
 	/** saves the users changed password
-		@attrib name=submit_change_pwd params=name 
+		@attrib name=submit_change_pwd params=name
 	**/
 	function submit_change_pwd($arr)
 	{
@@ -157,7 +157,7 @@ class users extends users_user implements request_startup
 	}
 
 	/** Generates an unique hash, which when used in a url can be used to let the used change his/her password
-		@attrib name=send_hash params=name nologin="1" 
+		@attrib name=send_hash params=name nologin="1"
 	**/
 	function send_hash($args = array())
 	{
@@ -178,7 +178,7 @@ class users extends users_user implements request_startup
 	}
 
 	/** Handles hash sender submit
-		@attrib name=submit_send_hash params=name nologin="1" 
+		@attrib name=submit_send_hash params=name nologin="1"
 	**/
 	function submit_send_hash($args = array())
 	{
@@ -233,8 +233,8 @@ class users extends users_user implements request_startup
 			$from = sprintf("%s <%s>", aw_ini_get("users.webmaster_name"), aw_ini_get("users.webmaster_mail"));
 			send_mail(
 				$o->prop("email"),
-				sprintf(t("Paroolivahetus saidil %s"), aw_global_get("HTTP_HOST")), 
-				$msg, 
+				sprintf(t("Paroolivahetus saidil %s"), aw_global_get("HTTP_HOST")),
+				$msg,
 				"From: $from"
 			);
 			aw_session_set(
@@ -329,7 +329,7 @@ die();
 	**/
 	function submit_password_hash($args = array())
 	{
-		extract($args);	
+		extract($args);
 		aw_disable_acl();
 		$uo = obj($args["uid"]);
 		aw_restore_acl();
@@ -366,7 +366,7 @@ die();
 		aw_session_set("status_msg","<b><font color=green>".t("Parool on edukalt vahetatud.")."</font></b>");
 		return $this->login(array("uid" => $uo->prop("uid"), "password" => $newpass));
 	}
-	
+
 	private function create_gidlists($u_oid)
 	{
 		$gidlist = array();
@@ -510,7 +510,9 @@ die();
 			// now the only problem is how do I identify the group.
 			// that's gonna be a problem, but I guess the only way is the config table.
 
+			aw_disable_acl();//!!! peaks olema ajutine! See grupp peab olema aw default obj ja k6igile antud 6igustega
 			$nlg_o = obj(group::get_non_logged_in_group());
+			aw_restore_acl();
 			$nlg = $nlg_o->prop("gid");
 
 			$gidlist = array($nlg => $nlg);
@@ -540,7 +542,7 @@ die();
 		}
 	}
 
-	/** Returns a link that allows the user to change his/her password 
+	/** Returns a link that allows the user to change his/her password
 		@attrib api=1 params=pos
 
 		@param u_oid required type=oid
@@ -681,7 +683,7 @@ die();
 
 	/** sends user welcome mail to user and others
 		@attrib api=1 params=name
-		
+
 		@param u_oid required type=oid
 			the user oid whose mail to send
 
@@ -984,7 +986,7 @@ die();
 	/** logs the current user out
 		@attrib name=logout params=name nologin="1" is_public="1" caption="Logi v&auml;lja"
 
-		@param redir_to optional 
+		@param redir_to optional
 	**/
 	function orb_logout($arr = array())
 	{
@@ -995,7 +997,7 @@ die();
 		@comment
 			converts certificates subject value to ISO-8859-1
 	**/
-	private function certstr2utf8($str) 
+	private function certstr2utf8($str)
 	{
 		$result="";
 		$encoding=mb_detect_encoding($str,"ASCII, UTF-8");
