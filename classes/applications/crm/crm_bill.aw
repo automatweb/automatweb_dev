@@ -673,37 +673,7 @@ class crm_bill extends class_base
 
 		if(!is_object($p))
 		{
-			$sum = $this->get_bill_sum($o,BILL_SUM) - $o->prop("partial_recieved");
-			$p = new object();
-			$p-> set_parent($o->id());
-			$p-> set_name($o->name() . " " . t("laekumine"));
-			$p-> set_class_id(CL_CRM_BILL_PAYMENT);
-			$p->save();
-			$o->connect(array(
-				"to" => $p->id(),
-				"type" => "RELTYPE_PAYMENT"
-			));
-			$p-> set_prop("date", time());
-			$p-> set_prop("sum", $sum);//see koht sureb miskiprast
-			$curr = $this->get_bill_currency_id($o);
-
-			if($curr)
-			{
-				$ci = get_instance(CL_CURRENCY);
-				$p -> set_prop("currency", $curr);
-				$rate = 1;
-				if(($default_c = $ci->get_default_currency) != $curr)
-				{
-					$rate = $ci->convert(array(
-						"sum" => 1,
-						"from" => $curr,
-						"to" => $default_c,
-						"date" => time(),
-					));
-				}
-				$p -> set_prop("currency_rate", $rate);
-			}
-			$p-> save();
+			$p = obj($o->add_payment($sum));
 		}
 
 		if($show_error == 1)

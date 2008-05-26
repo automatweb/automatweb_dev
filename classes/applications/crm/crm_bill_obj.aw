@@ -72,6 +72,46 @@ class crm_bill_obj extends _int_object
 		return "EEK";
 	}
 
+	function add_payment($sum = 0)
+	{
+		$i = get_instance(CL_CRM_BILL);
+		if(!$sum)
+		{
+			$sum = $i->get_bill_sum($this,BILL_SUM) - $this->prop("partial_recieved");
+		}
+		$p = new object();
+		$p-> set_parent($this->id());
+		$p-> set_name($this->name() . " " . t("laekumine"));
+		$p-> set_class_id(CL_CRM_BILL_PAYMENT);
+		$p->save();
+		$this->connect(array(
+			"to" => $p->id(),
+			"type" => "RELTYPE_PAYMENT"
+		));
+		$p-> set_prop("date", time());
+		$p-> set_prop("sum", $sum);//see koht sureb miskiprast
+		$curr = $i->get_bill_currency_id($this);
+		if($curr)
+		{
+			$ci = get_instance(CL_CURRENCY);
+			$p -> set_prop("currency", $curr);
+			$rate = 1;
+			if(($default_c = $ci->get_default_currency) != $curr)
+			{
+				$rate = $ci->convert(array(
+					"sum" => 1,
+					"from" => $curr,
+					"to" => $default_c,
+					"date" => time(),
+				));
+			}
+			$p -> set_prop("currency_rate", $rate);
+		}
+		$p-> save();
+
+		return $p->id();
+	}
+
 }
 
 ?>
