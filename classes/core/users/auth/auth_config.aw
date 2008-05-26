@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.30 2008/04/28 13:59:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.31 2008/05/26 07:06:59 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -318,14 +318,13 @@ class auth_config extends class_base
 			"lang_id" => array(),
 			"brother_of" => new obj_predicate_prop("id")
 		));
-
 		$confo = obj($auth_id);
 
 		$has = false;
 		$obo = false;
 		foreach($ol->arr() as $_o)
 		{
-			if ($_o->prop("uid") == $cred["uid"])
+			if (strtolower(trim($_o->prop("uid"))) == strtolower(trim($cred["uid"])))
 			{
 				$has = true;
 				$obo = $_o;
