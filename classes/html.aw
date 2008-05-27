@@ -104,7 +104,7 @@ class html extends aw_template
 
 		foreach(safe_array($options) as $k => $v)
 		{
-			$selected = isset($sel_array[$k]) ? ' selected="selected" ' : "";
+			$selected = isset($sel_array[$k]) ? ' selected="selected"' : "";
 			$d = in_array($k, $disabled_options) ? " disabled=\"disabled\"" : "";
 			$optstr .= "<option{$selected} value=\"{$k}\"{$d}>{$v}</option>\n";
 		}
