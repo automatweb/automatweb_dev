@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.46 2008/04/14 11:55:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.47 2008/05/27 15:14:03 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 
@@ -768,11 +768,14 @@ class ml_queue extends aw_template
 			"subject" => $msg["subject"],
 			"To" => $msg["target"],
 			//"Sender"=>"bounces@struktuur.ee",
-			"body" => $message,
-			//"body" => $is_html ? strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n"))) : $message,
+			//"body" => $message,
+			"body" => $is_html ? strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n"))) : $message,
 		));
 		if ($is_html)
 		{
+			$message = str_replace("<br />", "<br />\n" ,$message);
+			$message = str_replace("<br>", "<br>\n" ,$message);
+	 		$message = str_replace("</p>", "</p>\n" ,$message);	
 			$this->awm->htmlbodyattach(array(
 				"data" => $message,
 			));

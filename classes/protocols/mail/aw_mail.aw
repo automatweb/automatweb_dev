@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.15 2008/02/12 13:18:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.16 2008/05/27 15:14:06 markop Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
 // I am not too happy with the structure of this class. Parts of need to be redesigned and rewritten
 // badly
 // Minu unistus ( :) ) on selline, et kohe peale parsimist, voiks sellesama klassi abil
-// teate kohe ka välja saata
+// teate kohe ka v2lja saata
 
 // ideaalis peaks see edaspidi toetama ka teisi mailisaatmismeetodeid
 // peale PHP mail funktsiooni
@@ -459,7 +459,8 @@ class aw_mail {
 
 		$plain = strtr($this->body,array("<br />"=>"\r\n","<br />"=>"\r\n","</p>"=>"\r\n","</p>"=>"\r\n"));
 		$plain = $this->strip_html($plain);
-				
+		
+		$atc.= "--".$boundary. CRLF;
 		$atc.="Content-Type: text/plain; charset=".CHARSET . CRLF;
 		$atc.="Content-Transfer-Encoding: 8bit".CRLF.CRLF.$plain.CRLF.CRLF;
 		$atc.="--".$boundary.CRLF;
@@ -470,7 +471,7 @@ class aw_mail {
 
 		$atc .= "--".$boundary."--".CRLF;
 		
-		// see peab kindlalt olema esimene ättäts.
+		// see peab kindlalt olema esimene 2tt2ts.
 		$this->mimeparts=array_merge(array($atc),$this->mimeparts);
 		unset($this->body);
 	}
