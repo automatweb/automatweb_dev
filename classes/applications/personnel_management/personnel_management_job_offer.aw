@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.28 2008/05/27 12:00:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.29 2008/05/27 12:39:44 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1006,7 +1006,7 @@ class personnel_management_job_offer extends class_base
 		switch($prop["name"])
 		{
 			case "contact":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
+				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0 && $prop["value"] != "0")
 				{
 					$ol_prms = array(
 						"class_id" => CL_CRM_PERSON,
@@ -1048,8 +1048,8 @@ class personnel_management_job_offer extends class_base
 						$new_p->set_class_id(CL_CRM_PERSON);
 						$new_p->set_parent($arr["obj_inst"]->id());
 						$new_p->set_name($prop["value"]);
-						$new_p->firstname = substr($prop["value"], 0, strrchr($prop["value"], " "));
-						$new_p->lastname = substr($prop["value"], strrchr($prop["value"], " "));
+						$new_p->lastname = substr(strrchr($prop["value"], " "), 1);
+						$new_p->firstname = substr($prop["value"], 0, strrpos($prop["value"], " "));
 						if($this->can("view", $org))
 						{
 							$new_p->set_prop("work_contact", $org);
