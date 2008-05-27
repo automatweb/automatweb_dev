@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.8 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.9 2008/05/27 12:55:43 robert Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -10,6 +10,11 @@
 @default field=meta 
 @default method=serialize
 
+@default group=data
+
+	@property name type=textbox parent=gen_left
+	@caption Nimi
+
 	@property wh type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 
 	@caption Ladu
 
@@ -18,6 +23,12 @@
 
 	@property objs_in_res type=select 
 	@caption Tulemuseks on 
+
+@default group=folders
+
+	@property fld_tb type=toolbar store=no no_caption=1
+
+	@property fld_tbl type=table store=no no_caption=1
 
 @default group=s_form
 	@property s_form type=table no_caption=1
@@ -38,7 +49,8 @@
 
 	@property s_res type=text no_caption=1
 
-
+@groupinfo data caption="Andmed" parent=general
+@groupinfo folders caption="Otsingu l&auml;htekohad" parent=general
 @groupinfo s_form caption="Koosta otsinguvorm"
 @groupinfo s_res caption="Koosta tulemuste tabel"
 @groupinfo s_res_ctr caption="Kontrollerid"
@@ -55,6 +67,9 @@
 
 @reltype TRANSFORM value=4 clid=CL_OTV_DATA_FILTER
 @caption Muundaja
+
+@reltype FOLDER value=5 clid=CL_MENU
+@caption Otsingu kaust
 */
 
 class shop_product_search extends class_base
@@ -89,6 +104,14 @@ class shop_product_search extends class_base
 				$this->_s_res_tb($arr);
 				break;
 
+			case "fld_tb":
+				$this->_fld_tb($arr);
+				break;
+
+			case "fld_tbl":
+				$this->_fld_tbl($arr);
+				break;
+
 			case "objs_in_res":
 				$prop["options"] = array(
 					CL_SHOP_PACKET => "Paketid",
@@ -113,12 +136,16 @@ class shop_product_search extends class_base
 			case "s_tbl":
 				$this->_save_s_tbl($arr);
 				break;
+			case "fld_tbl":
+				$this->_save_fld_tbl($arr);
+				break;
 		}
 		return $retval;
 	}	
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["add_fld"] = 0;
 		$arr["post_ru"] = post_ru();
 	}
 
@@ -178,6 +205,72 @@ class shop_product_search extends class_base
 			), "shop_order_cart")
 		));
 		return $this->parse();
+	}
+
+	function _fld_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_search_button(array(
+			"pn" => "add_fld",
+			"clid" => CL_MENU,
+			"multiple" => 1,
+		));
+		$tb->add_delete_rels_button();
+		$tb->add_save_button();
+	}
+
+	function _fld_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "subs",
+			"align" => "center",
+			"caption" => t("Ka alamkaustad"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$subs = $arr["obj_inst"]->meta("subfolders");
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_FOLDER",
+		));
+		foreach($conn as $c)
+		{
+			$fld = $c->to();
+			$t->define_data(array(
+				"oid" => $fld->id(),
+				"name" => $fld->name(),
+				"subs" => html::checkbox(array(
+					"name" => "subs[".$fld->id()."]",
+					"value" => 1,
+					"checked" => $subs[$fld->id()]?1:0,
+				)),
+			));
+		}
+	}
+
+	function _save_fld_tbl($arr)
+	{
+		$add = $arr["request"]["add_fld"];
+		if($add)
+		{
+			$tmp = explode(",", $add);
+			foreach($tmp as $fld)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $fld,
+					"type" => "RELTYPE_FOLDER"
+				));
+			}
+		}
+		$arr["obj_inst"]->set_meta("subfolders", $arr["request"]["subs"]);
+		$arr["obj_inst"]->save();
 	}
 
 	function _init_s_form_t(&$t)
@@ -637,9 +730,33 @@ class shop_product_search extends class_base
 	function get_search_results($o, $params)
 	{
 		$wh_i = get_instance(CL_SHOP_WAREHOUSE);
-		list($main_fld, $subs) = $wh_i->get_packet_folder_list(array("id" => $o->prop("wh")));
-		$folders = $subs->ids();
-		$folders[] = $main_fld->id();
+		$conn = $o->connections_from(array(
+			"type" => "RELTYPE_FOLDER",
+		));
+		if(count($conn))
+		{
+			$subs = $o->meta("subfolders");
+			$folders = array();
+			foreach($conn as $c)
+			{
+				$id = $c->prop("to");
+				if($subs[$id])
+				{
+					$ot = new object_tree(array(
+						"parent" => $id,
+						"class_id" => CL_MENU,
+					));
+					$folders = array_merge($ot->ids(), $folders);
+				}
+				$folders[$id] = $id;
+			}
+		}
+		else
+		{
+			list($main_fld, $subs) = $wh_i->get_packet_folder_list(array("id" => $o->prop("wh")));
+			$folders = $subs->ids();
+			$folders[] = $main_fld->id();
+		}
 
 		$res_type = $o->prop("objs_in_res");
 		$filt = array(

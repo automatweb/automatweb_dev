@@ -1,9 +1,19 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>gen_left</parent>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>wh</name>
             <table>objects</table>
-            <group>general</group>
+            <group>data</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -14,7 +24,7 @@
       <property>
             <name>oc</name>
             <table>objects</table>
-            <group>general</group>
+            <group>data</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -25,11 +35,31 @@
       <property>
             <name>objs_in_res</name>
             <table>objects</table>
-            <group>general</group>
+            <group>data</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
             <caption>Tulemuseks on </caption>
+      </property>
+      <property>
+            <name>fld_tb</name>
+            <table>objects</table>
+            <group>folders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>fld_tbl</name>
+            <table>objects</table>
+            <group>folders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>s_form</name>
@@ -96,6 +126,14 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
+            <data>
+                  <caption>Andmed</caption>
+                  <parent>general</parent>
+            </data>
+            <folders>
+                  <caption>Otsingu l&amp;amp;auml;htekohad</caption>
+                  <parent>general</parent>
+            </folders>
             <s_form>
                   <caption>Koosta otsinguvorm</caption>
             </s_form>
@@ -132,6 +170,11 @@
                   <clid>CL_OTV_DATA_FILTER</clid>
                   <caption>Muundaja</caption>
             </TRANSFORM>
+            <FOLDER>
+                  <value>5</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Otsingu kaust</caption>
+            </FOLDER>
       </reltypes>
 </properties>
 
