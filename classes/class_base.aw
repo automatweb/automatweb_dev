@@ -16,18 +16,15 @@
 
 	@property name type=textbox rel=1 trans=1
 	@caption Nimi
-	@comment Objekti nimi
 
 	@property comment type=textbox
 	@caption Kommentaar
-	@comment Vabas vormis tekst objekti kohta
 
 	// translated objects have their own status fields .. they don't
 	// have to sync with the original .. allthu .. I do feel that
 	// we need to do this in a different way
 	@property status type=status trans=1 default=1
 	@caption Aktiivne
-	@comment Kas objekt on aktiivne
 
 	@property needs_translation type=checkbox field=flags method=bitmask ch_value=2 // OBJ_NEEDS_TRANSLATION
 	@caption Vajab t&otilde;lget
@@ -1164,6 +1161,15 @@ class class_base extends aw_template
 					}
 				}
 			}
+		}
+
+		$si = __get_site_instance();
+		if(method_exists($si, "override_retval"))
+		{
+			$override_retval = $si->override_retval(array(
+				"request" => $request,
+			));
+			$retval = $override_retval ? $override_retval : $retval;
 		}
 
 		if (empty($retval))

@@ -174,6 +174,10 @@
 
 
 @default group=cfgview_settings
+	
+	@property cfgform_id_from_url type=checkbox field=meta method=serialize
+	@caption Seadetevormi ID URList
+
 	@property cfgview_action type=select field=meta method=serialize
 	@caption N&auml;itamise meetod
 
@@ -4103,6 +4107,11 @@ class cfgform extends class_base
 
 	function parse_alias($args)
 	{
+		$cff = obj($args["alias"]["target"]);
+		if(is_object($cff) && $cff->cfgform_id_from_url && $this->can("view", $_GET["cfgform_id"]))
+		{
+			$args["alias"]["target"] = $_GET["cfgform_id"];
+		}
 		return $this->get_class_cfgview(array(
 			"id" => $args["alias"]["target"],
 			"display_mode" => "cfg_embed",
