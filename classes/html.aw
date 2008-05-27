@@ -106,7 +106,7 @@ class html extends aw_template
 		{
 			$selected = isset($sel_array[$k]) ? ' selected="selected" ' : "";
 			$d = in_array($k, $disabled_options) ? " disabled=\"disabled\"" : "";
-			$optstr .= "<option{$selected}value=\"{$k}\"{$d}>{$v}</option>\n";
+			$optstr .= "<option{$selected} value=\"{$k}\"{$d}>{$v}</option>\n";
 		}
 		// implementing a thing called optgroup -- ahz
 		foreach(safe_array($optgroup) as $key => $val)
@@ -115,7 +115,7 @@ class html extends aw_template
 			foreach(safe_array($val) as $key2 => $val2)
 			{
 				$selected = isset($sel_array[$key2]) ? " selected=\"selected\" " : "";
-				$optstr .= "<option{$selected}value=\"{$key2}\">{$val2}</option>\n";
+				$optstr .= "<option{$selected} value=\"{$key2}\">{$val2}</option>\n";
 			}
 			$optstr .= "</optgroup>\n";
 		}
