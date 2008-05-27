@@ -568,8 +568,11 @@ class relpicker extends  core
 		{
 			$prop["value"] = $arr["obj_inst"]->prop($arr["prop"]["name"].".name");
 		}
-		$prop["autocomplete_source"] = $this->mk_my_orb("get_relp_opts", array("clids" => $clids));
-		$prop["autocomplete_params"] = array($arr["prop"]["name"]);
+		if (is_admin())
+		{
+			$prop["autocomplete_source"] = $this->mk_my_orb("get_relp_opts", array("clids" => $clids));
+			$prop["autocomplete_params"] = array($arr["prop"]["name"]);
+		}
 		return array($arr["prop"]["name"] => $prop);
 	}
 
@@ -641,7 +644,7 @@ class relpicker extends  core
 				$item->save();
 			}
 
-			if ($arr["prop"]["store"] == "connect")
+			if ($arr["prop"]["store"] == "connect" && is_oid($arr["obj_inst"]->id()))
 			{
 				foreach($arr["obj_inst"]->connections_from(array("type" => $arr["prop"]["reltype"])) as $c)
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.6 2008/05/15 07:43:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.7 2008/05/27 09:21:29 instrumental Exp $
 /*
 
 
@@ -320,11 +320,10 @@ class file extends class_base
 				classload("core/icons");
 
 				$fname = $this->check_file_path($arr["obj_inst"]->prop("file"));
-
 				if ($fname == "" && $arr["obj_inst"]->prop("file_url") == "")
 				{
 					$data["value"] = t("fail puudub");
-					return PROP_OK;
+					return PROP_IGNORE;
 				}
 				else
 				{
@@ -1709,6 +1708,10 @@ class file extends class_base
 
 	function check_file_path($fname)
 	{
+		if ($fname == "")
+		{
+			return "";
+		}
 		// get the file name
 		$slash = strrpos($fname, "/");
 		$f1 = substr($fname, 0, $slash);

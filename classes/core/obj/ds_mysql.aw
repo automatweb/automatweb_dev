@@ -2502,7 +2502,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::raise_if($cur_prop["method"] == "serialize", array(
+				error::raise_if($cur_prop["method"] == "serialize" && $cur_prop["store"] != "connect", array(
 					"id" => ERR_OBJ_NO_META,
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
 				));

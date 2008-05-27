@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.48 2008/03/13 13:26:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.49 2008/05/27 09:23:04 instrumental Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -20,6 +20,9 @@
 	@caption Kellelt
 	
 	@property mto type=textbox size=80
+	@caption Kellele
+
+	@property mto_relpicker type=relpicker reltype=RELTYPE_TO_MAIL_ADDRESS store=connect
 	@caption Kellele
 
 	@property cc type=textbox field=mtargets1 size=80
@@ -110,6 +113,9 @@
 
 	@reltype PROJECT value=4 clid=CL_PROJECT
 	@caption Projekt
+
+	@reltype TO_MAIL_ADDRESS value=4 clid=CL_ML_MEMBER
+	@caption Meiliaadress (kellele)
 
 */
 
@@ -616,7 +622,7 @@ class mail_message extends class_base
 					$prop["autocomplete_params"] = array("mto");
 				};
 				
-				//loodan, et see mujal toimuvat ei mõjuta
+				//loodan, et see mujal toimuvat ei m6juta
 				//crmist maili saatmisel seda vaja siis
 				if($arr["request"]["mto"])
 				{
