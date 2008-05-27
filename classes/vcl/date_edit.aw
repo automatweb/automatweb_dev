@@ -154,7 +154,7 @@ class date_edit
 			switch($k)
 			{
 				case "year":
-					$retval .= "<select name=\"{$this->varname}[year]\'{$disabled}{$textsize}{$clid}>\n";
+					$retval .= "<select name=\"{$this->varname}[year]\"{$disabled}{$textsize}{$clid}>\n";
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
