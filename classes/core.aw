@@ -358,6 +358,15 @@ class core extends acl_base
 		$content.= "\nis_rpc_call: " . (int) $is_rpc_call;
 		$content.= "\nrpc_call_type: " . $rpc_call_type;
 
+		if (!empty($_GET["password"]))
+		{
+			$_GET["password"] = "xxx";
+		}
+		if (!empty($_POST["password"]))
+		{
+			$_POST["password"] = "xxx";
+		}
+
 		$content .= "\n\n\$_GET:\n";
 		$content .= print_r($_GET, true);
 		$content .= "\n\n\$_POST:\n";
