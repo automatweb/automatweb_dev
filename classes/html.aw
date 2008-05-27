@@ -1293,7 +1293,7 @@ class html extends aw_template
 	**/
 	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
-		$inst = new core();
+		$inst = get_instance(CL_FILE);
 
 		if (!$inst->can("view", $oid))
 		{
