@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.27 2008/05/22 14:19:07 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.28 2008/05/27 12:00:26 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -101,6 +101,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE
 @caption Hindamise skaala
+
+@property notify_me type=checkbox ch_value=1
+@caption Soovin teadet kandideerimisest e-postiga
 
 @groupinfo candidate caption=Kandideerimised submit=no
 @default group=candidate
@@ -238,6 +241,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @reltype ATTACHMENT value=19 clid=CL_FILE
 @caption E-kirja manus
 
+@reltype NOTIFY_ME value=20 clid=CL_CRM_PERSON
+@caption Teata kandideerimisest
+
 */
 
 class personnel_management_job_offer extends class_base
@@ -258,6 +264,10 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "notify_me":
+				$prop["value"] = $arr["obj_inst"]->get_prop($prop["name"]);
+				break;
+
 			case "rate_scale":
 				if(!obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->rate_candidates)
 				{
@@ -818,7 +828,8 @@ class personnel_management_job_offer extends class_base
 				"name" => "preview",
 				"tooltip" => t("Eelvaade"),
 				"img" => "preview.gif",
-				"url" => $this->mk_my_orb("show", array("id" => $arr["obj_inst"]->id())),
+				//"url" => $this->mk_my_orb("show", array("id" => $arr["obj_inst"]->id())),
+				"url" => aw_ini_get("baseurl")."/".$arr["obj_inst"]->id(),
 				"target" => "_blank",
 			));
 			$tb->add_button(array(
@@ -827,6 +838,12 @@ class personnel_management_job_offer extends class_base
 				"tooltip" => t("Genereeri PDF"),
 				"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id())),
 				"target" => "_blank",
+			));
+			$tb->add_button(array(
+				"name" => "save_copy",
+				"img" => "copy.gif",
+				"tooltip" => t("Salvesta koopia"),
+				"action" => "save_copy",
 			));
 		}
 	}
@@ -1031,6 +1048,8 @@ class personnel_management_job_offer extends class_base
 						$new_p->set_class_id(CL_CRM_PERSON);
 						$new_p->set_parent($arr["obj_inst"]->id());
 						$new_p->set_name($prop["value"]);
+						$new_p->firstname = substr($prop["value"], 0, strrchr($prop["value"], " "));
+						$new_p->lastname = substr($prop["value"], strrchr($prop["value"], " "));
 						if($this->can("view", $org))
 						{
 							$new_p->set_prop("work_contact", $org);
@@ -2019,6 +2038,7 @@ class personnel_management_job_offer extends class_base
 		$target_obj = $conn->to();
 		if($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
 		{
+			$this->notify_me($arr);
 			$target_obj->connect(array(
 				'to' => $conn->prop('from'),
 				'reltype' => "RELTYPE_CANDIDATE",
@@ -2356,6 +2376,38 @@ class personnel_management_job_offer extends class_base
 			));
 		}
 		return $arr["post_ru"];
+	}
+
+	function notify_me($arr)
+	{
+		$conn = $arr['connection'];
+		$job_offer = $conn->to();
+		$candidate = $conn->from();
+		foreach($job_offer->connections_from(array("type" => "RELTYPE_NOTIFY_ME")) as $cn)
+		{
+			$p = $cn->to();
+			$ml = $p->emails()->begin();
+			if(is_object($ml))
+			{
+				mail($ml->mail(), "Kandidatuur on lisatud!", $candidate->name());
+				mail("kaareln@gmail.com", "meil, millele saadeti", "--->".$ml->mail()."<---");
+			}
+		}
+	}
+
+	/**
+		@attrib name=save_copy api=1 params=name
+
+		@param id required type=oid
+
+		@param post_ru optional type=string
+
+	**/
+	function save_copy($arr)
+	{
+		$o = obj($arr["id"]);
+		$new_oid = $o->save_new();
+		return $this->mk_my_orb("change", array("id" => $new_oid, "return_url" => $arr["post_ru"]));
 	}
 }
 ?>
