@@ -555,9 +555,10 @@ class html extends aw_template
 		Checkbox caption
 	@param onclick optional type=string
 		stuff what will happen if you click on checkbox - javascript
-
 	@param title optional
 		title
+	@param nbsp optional type=bool
+		If set, the caption is separated from checbox with non-breaking spaces.
 	@returns string/html checkbox
 	**/
 	function checkbox($args = array())
@@ -579,7 +580,7 @@ class html extends aw_template
 
 		if (isset($caption))
 		{
-			$capt .= " " . $caption;
+			$capt .= ($nbsp ? "&nbsp;" : " ") . $caption;
 		}
 
 		if ($textsize and $capt)
@@ -594,7 +595,7 @@ class html extends aw_template
 		{
 			$onc = " onclick=\"{$onclick}\"";
 		}
-		$rv = "<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} /> $capt\n";
+		$rv = "<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />$capt\n";
 		return $rv;
 	}
 
