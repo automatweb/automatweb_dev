@@ -69,6 +69,32 @@ class room_obj extends _int_object
 		return $this->settings->prop($setting);
 	}
 
+	/** Returns the current workers for the room
+		@attrib api=1 
+		@returns
+			array(person id => person name)
+	**/
+	function get_all_workers()
+	{
+		$pro = array();
+		if(is_array($this->prop("professions")))
+		{
+			$pro = $this->prop("professions");
+		}
+
+		$ol2 = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
+					"oid" => $pro,
+				)
+			)),
+		));
+		return $ol2->names();
+	}
 }
 
 ?>
