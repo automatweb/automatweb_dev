@@ -1458,7 +1458,7 @@ class room_reservation extends class_base
 				"tpl" => $tpl,
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
-			$bron->set_meta("bank_name",$this->get_bank_caption($_SESSION["room_reservation"][$room->id()]));
+			$bron->set_meta("bank_name",$this->get_bank_caption($_SESSION["room_reservation"][$r->id()]));
 			$bron->set_meta("room_reservation_id",$arr["res"]);
 			$bron->save();
 //			$bron->set_meta("lang" , $lang);
