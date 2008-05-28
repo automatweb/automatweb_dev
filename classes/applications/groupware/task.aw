@@ -4284,7 +4284,7 @@ class task extends class_base
 			{
 				$customer = $c->to();
 				$cust_workers = $ci->get_employee_picker($customer, false, true);
-				if(!count($workers))
+				if(!count($cust_workers))
 				{
 					$cust_workers = $ci->get_employee_picker($customer, false, false);
 				}
