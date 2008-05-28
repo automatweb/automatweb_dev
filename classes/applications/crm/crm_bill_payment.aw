@@ -34,8 +34,8 @@
 @caption valuuta
 
 
-- Kuupäev
-- Tasumisviis (Ülekandega, sularahas)
+- Kuup2ev
+- Tasumisviis (Ylekandega, sularahas)
 - Valuuta
 - Valuutakurss
 Arvete nimekiri, mis selle laekumisega on seotud
@@ -409,7 +409,7 @@ class crm_bill_payment extends class_base
 				}
 				elseif($srch["bill_payments_bill_no"])
 				{
-					$bfilter["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["request"]["bill_payments_bill_no"], "","int");
+					$bfilter["bill_no"] = $srch["bill_payments_bill_no"];
 				}
 
 				$bills = new object_list($bfilter);
