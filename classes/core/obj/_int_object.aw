@@ -1442,13 +1442,9 @@ class _int_object
 			));
 			return;
 		}
-		$clss = aw_ini_get("classes");
-		return get_instance($clss[$clid]["file"]);
-		/*
-		// Sorry, ve. This update generates error with cfg/cfgform
-		$cl = aw_ini_get("classes." . $clid . ".file");
+
+		$cl = basename(aw_ini_get("classes." . $clid . ".file"));
 		return new $cl;
-		*/
 	}
 
 	function create_brother($parent)
