@@ -1241,10 +1241,17 @@ class class_base extends aw_template
 		if($all_trans_status != 0)
 		{
 			$o = obj($id);
+			$langs = aw_ini_get("languages");
+			foreach(array_keys($langs["list"]) as $lid)
+			{
+				$o->set_meta("trans_".$lid."_status", 2 - $all_trans_status);
+			}
+			/*
 			foreach($o->meta("translations") as $lid => $ldata)
 			{
 				$o->set_meta("trans_".$lid."_status", 2 - $all_trans_status);
 			}
+			*/
 			$o->save();
 		}
 
