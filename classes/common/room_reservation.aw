@@ -71,7 +71,7 @@ class room_reservation extends class_base
 			"clid" => CL_ROOM_RESERVATION
 		));
 		$this->bank_inst = get_instance(CL_BANK_PAYMENT);
-		$this->banks = array(
+/*		$this->banks = array(
 			"hansapank" => "Hansapank",
 			"seb" => "&Uuml;hispank",
 			"sampopank" => "Sampopank",
@@ -79,10 +79,10 @@ class room_reservation extends class_base
 			"hansapanklv" => "LV-Hansasabankas",
 			"hansapanklt" => "LT-Hansasabankas",
 		);
-
+*/
 		$this->obligatory = array("name","phone","email");
 
-		$this->banks = $this->banks + $this->bank_inst->banks;
+		$this->banks = $this->bank_inst->banks;//$this->banks + $this->bank_inst->banks;
 
 		$this->obligatory = array("name","phone","email");
 
@@ -942,9 +942,20 @@ class room_reservation extends class_base
 		{
 			$data[$key."_value"] = $val;
 		}
-		$data["bank_value"] = $this->banks[$_SESSION["room_reservation"][$room->id()]["bank"].$_SESSION["room_reservation"][$room->id()]["bank_country"]];
+		$data["bank_value"] = $this->get_bank_caption($_SESSION["room_reservation"][$room->id()]);
 		return $data;
 	}
+
+	private function get_bank_caption($sess_data)
+	{
+		$ret = $this->banks[$sess_data["bank"]."_".$sess_data["bank_country"]];
+		if(!$ret)
+		{
+			$ret = $this->banks[$sess_data["bank"]];
+		}
+		return $ret;
+	}
+
 
 	private function get_time_($arr)
 	{
@@ -1447,7 +1458,7 @@ class room_reservation extends class_base
 				"tpl" => $tpl,
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
-			$bron->set_meta("bank_name",$this->banks[$_SESSION["room_reservation"][$r->id()]["bank"].$_SESSION["room_reservation"][$r->id()]["bank_country"]]);
+			$bron->set_meta("bank_name",$this->get_bank_caption($_SESSION["room_reservation"][$room->id()]));
 			$bron->set_meta("room_reservation_id",$arr["res"]);
 			$bron->save();
 //			$bron->set_meta("lang" , $lang);
