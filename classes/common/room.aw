@@ -3673,7 +3673,8 @@ class room extends class_base
 				$ol = new object_list(array(
 					"oid" => $pk_ids,
 					"lang_id" => array(),
-					"site_id" => array()
+					"site_id" => array(),
+					"sort_by" => "objects.jrk",
 				));
 			}
 			/*foreach($prods->arr() as $product)
@@ -3740,7 +3741,7 @@ class room extends class_base
                         "class_id" => CL_SHOP_PRODUCT,
                         "lang_id" => array(),
 	                "parent" => $prods,
-        	     //   "sort_by" => "jrk ASC",
+			"sort_by" => "objects.jrk",
                 ));
 		$p_ol->arr();
 		$p_ol->sort_by_cb(array(&$this, "__prod_sorter"));
