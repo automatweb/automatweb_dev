@@ -178,6 +178,12 @@ class crm_company_bills_impl extends class_base
 			$po = obj($p);
 			$ord = $po->prop("orderer");
 			$ord = is_array($ord) ? reset($ord) : $ord;
+			$ord_name = "";
+			if($this->can("view" , $ord))
+			{
+				$orderer = obj($ord);
+				$ord_name = $orderer->name();
+			}
 
 			$lister = "<span id='cust".$po->id()."' style='display: none;'>";
 
@@ -202,6 +208,7 @@ class crm_company_bills_impl extends class_base
 				)),
 				"cust" => html::obj_change_url($ord),
 				"sum" => number_format($sum2proj[$p], 2).$lister
+,				"cust_name" => $ord_name,
 			);
 			if ($this->can("view", $ord))
 			{
@@ -215,6 +222,8 @@ class crm_company_bills_impl extends class_base
 		{
 			$t->define_data($dr);
 		}
+
+		$t->set_default_sortby("cust_name");
 		return;
 
 		// get all open tasks
