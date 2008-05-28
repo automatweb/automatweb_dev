@@ -52,17 +52,37 @@ class aw_spec extends class_base
 
 		$this->tree_struct = array(
 			array(0, "intro", t("Sissejuhatus"), "spec_editor"),
-				array("intro", "intro_whom", t("Kellele"), "spec_editor"),
-				array("intro", "intro_why", t("Miks"), "spec_editor"),
+				array("intro", "intro_overview", t("&Uuml;levaade"), "spec_editor"),
+				array("intro", "intro_whom", t("Eesm&auml;rgid"), "spec_editor"),
+				array("intro", "intro_why", t("&Auml;riline taust"), "spec_editor"),
+				array("intro", "intro_scope", t("Ulatus, Skoop"), "spec_editor"),
+				array("intro", "intro_users", t("Kasutajate kirjeldus"), "spec_editor"),
+				array("intro", "intro_competitors", t("Konkurendid"), "spec_editor"),
+
+			array(0, "pred", t("Eeldused, s&otilde;ltuvused ja piirangud"), "spec_editor"),
+				array("pred", "pred_pred", t("Eeldused"), "spec_editor"),
+				array("pred", "pred_dep", t("S&otilde;ltuvused"), "spec_editor"),
+				array("pred", "pred_constraints", t("Piirangud"), "spec_editor"),
+
+			array(0, "demands", t("N&otilde;uded"), "spec_editor"),
+				array("demands", "demands_business", t("&Auml;rin&otilde;uded"), "spec_editor"),
+				array("demands", "demands_func", t("Funktsionaalsed n&otilde;uded"), "spec_editor"),
+				array("demands", "demands_log_data", t("Loogilised andmete n&otilde;uded"), "spec_editor"),
+				array("demands", "demands_users", t("Kasutajan&otilde;uded"), "spec_editor"),
+				array("demands", "demands_infomgmt", t("Infohalduse n&otilde;uded"), "spec_editor"),
+				array("demands", "demands_server", t("N&otilde;uded serverile"), "spec_editor"),
+				array("demands", "demands_other", t("Muud n&otilde;uded"), "spec_editor"),
+
+
 			array(0, "conf", t("Seadistatavus"), "spec_editor"),
 				array("conf", "conf_what", t("Mida seadistada"), "spec_editor"),
 				array("conf", "intro_how", t("Kuidas"), "spec_editor"),
 				array("conf", "intro_who", t("Kes"), "spec_editor"),
+
 			array(0, "classes", t("Klassid"), "spec_editor"),
 				array("classes", "classes_who", t("Kellele"), "spec_editor"),
 				array("classes", "classe_why", t("Miks"), "spec_editor"),
 				array("classes", "classes_classes", t("Klasside nimekiri"), "class_list"),
-//				array("classes", "classes_rels", t("Seosed"), "relation_list"),
 				array("classes", "classes_ui", t("Kasutajaliides"), "spec_editor"),
 				array("classes", "classes_msgs", t("Teated ja vead"), "spec_editor"),
 			array(0, "prev", t("Eeskujud"), "spec_editor"),
@@ -70,8 +90,6 @@ class aw_spec extends class_base
 				array("bl", "classes_ucase", t("Kasutajalood"), "spec_editor"),
 				array("bl", "classes_principles", t("S&uuml;steemi toimimisp&otilde;him&otilde;tted"), "spec_editor"),
 				array("bl", "classes_examples", t("N&auml;ited"), "spec_editor"),
-			array(0, "server", t("N&otilde;uded serverile"), "spec_editor"),
-			array(0, "competitors", t("Konkurendid"), "spec_editor"),
 		);
 	}
 
