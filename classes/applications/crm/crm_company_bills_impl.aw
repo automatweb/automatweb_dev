@@ -70,23 +70,21 @@ class crm_company_bills_impl extends class_base
 		$tasks = new object_list();
 		$sum2proj = array();
 
-		//kokkuleppe hinnaga toimetused... sellega peaks miski optimaalsema variandi valja motlema ka
+		//kokkuleppe hinnaga toimetused... sellega peaks miski optimaalsema variandi valja m6tlema ka
 		$all_tasks = new object_list(array(
 			"class_id" => CL_TASK,
 			"send_bill" => 1,
 	//		"is_done" => 1,
 			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
 		));
 
 		$deal_tasks = array();
 		foreach($all_tasks->arr() as $row)
 		{
-			if($row->is_brother()) continue;
 			if(strlen($row->prop("deal_price")) > 0)
 			{
-	//			$projs[$row->prop("project")] = $row->prop("project");
 				$deal_tasks[] = $row->id();
-	//			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
 			}
 		}
 
@@ -358,15 +356,15 @@ class crm_company_bills_impl extends class_base
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					new object_list_filter(array(
+/*					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array(
 							"class_id" => CL_TASK_ROW,
 							"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 							"on_bill" => 1,
-							"done" => 1
+							"done" => 1,
 						)
-					)),
+					)),*/
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array(
@@ -376,15 +374,15 @@ class crm_company_bills_impl extends class_base
 							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
 						)
 					)),
-					new object_list_filter(array(
+/*					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array(
 							"class_id" => CL_CRM_EXPENSE,
-//							"send_bill" => 1,
-//							"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+	//						"on_bill" => 1,
+	//						"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 //							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
 						)
-					))
+					))*/
 				)
 			))
 		));
@@ -401,8 +399,11 @@ class crm_company_bills_impl extends class_base
 		$hr2task = array();
 		$task2row = array();
 		$deal_tasks = array();
+		$possible_task_rows = $possible_expenses = array();
 		foreach($all_tasks->arr() as $row)
 		{
+			$possible_task_rows = array_merge($possible_task_rows , $row->get_all_rows());
+			$rows->add($row->get_all_expenses());
 			if((strlen($row->prop("deal_price")) > 0) && ($row->prop("send_bill")))
 			{
 				$t->define_data(array(
@@ -418,6 +419,26 @@ class crm_company_bills_impl extends class_base
 				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
 			}
 		}
+		
+		//toimetuse read lykkas tahapoole, et saaks vaid need toimetuste read, mis on 6igete toimetuste kyljes
+		$task_rows = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1,
+			"oid" => $possible_task_rows
+		));
+
+/*		$task_expenses = new object_list(array(
+			"class_id" => CL_CRM_EXPENSE,
+	//		"on_bill" => 1,
+	//		"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+//			"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
+			"oid" => $possible_expenses,
+		);
+		$rows->add($task_expenses);*/
+		$rows->add($task_rows);
+
 
 		if ($rows->count())
 		{

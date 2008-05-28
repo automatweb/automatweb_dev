@@ -94,5 +94,31 @@ class task_object extends _int_object
 		}
 		return 0;
 	}
+
+	function get_all_rows()
+	{
+		$ret = array();
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_ROW",
+		));
+		foreach($conns as $con)
+		{
+			$ret[] = $con->prop("to");
+		}
+		return $ret;
+	}
+
+	function get_all_expenses()
+	{
+		$ret = array();
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_EXPENSE",
+		));
+		foreach($conns as $con)
+		{
+			$ret[] = $con->prop("to");
+		}
+		return $ret;
+	}
 }
 ?>
