@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.54 2008/04/23 14:45:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.55 2008/05/29 14:26:36 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -541,8 +541,11 @@ class spa_bookings_overview extends class_base
 		}
 		if ($this->do_print_results == 2)
 		{
-			header("Content-type: text/csv; charset=aw_global_get('charset')");
-			header("Content-disposition: inline; filename=stats.csv;");
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+			header("Cache-Control: must-revalidate");
+			$file = "stats". date("ymdhis") . ".csv";
+			header("Content-type: text/csv; charset=".aw_global_get('charset'));
+			header("Content-disposition: inline; filename=".$file.";");
 			die(html_entity_decode($t->get_csv_file()));
 		}
 	}
@@ -2438,8 +2441,11 @@ class spa_bookings_overview extends class_base
 		}
 		if ($this->do_print_results == 2)
 		{
-			header("Content-type: text/csv; charset=aw_global_get('charset')");
-			header("Content-disposition: inline; filename=stats.csv;");
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+			header("Cache-Control: must-revalidate");
+			$file = "stats". date("ymdhis") . ".csv";
+			header("Content-type: text/csv; charset=".aw_global_get('charset'));
+			header("Content-disposition: inline; filename=".$file.";");
 			die(html_entity_decode($t->get_csv_file()));
 		}
 	}
