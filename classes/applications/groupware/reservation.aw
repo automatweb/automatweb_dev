@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.95 2008/05/23 08:03:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.96 2008/05/29 14:31:31 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -230,7 +230,12 @@ class reservation extends class_base
 					$prop["value"] = 1;
 				}
 				break;
-				
+			case "sbt":
+				$prop["type"] = "button";
+				$prop["value"] = t("Salvesta!");
+				$prop["onclick"] = "javascript:submit_changeform();";
+				$prop["class"] = "sbtbutton";
+				break;
 			case "start1":
 			case "end":
 			case "resource":
@@ -381,7 +386,6 @@ class reservation extends class_base
 				}
 				$prop["onchange"] = "window.location.href='".aw_url_change_var("set_cust", null)."&set_cust='+this.options[this.selectedIndex].value";
 				break;
-
 		};
 		return $retval;
 	}
