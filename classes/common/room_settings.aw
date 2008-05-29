@@ -129,6 +129,9 @@
 	@property show_workers_in_calander type=checkbox ch_value=1
 	@caption N&auml;ita t&ouml;&ouml;tajaid kalendrivaates
 
+	@property show_only_my_graphs type=checkbox ch_value=1
+	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
+
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 
