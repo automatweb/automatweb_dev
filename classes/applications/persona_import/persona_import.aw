@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.41 2008/05/08 09:35:45 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.42 2008/05/29 08:28:23 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -163,9 +163,12 @@ class persona_import extends class_base
 	}	
 	*/
 
-	function get_config($arr)
+	function get_config($obj)
 	{
-		$obj = new object($arr["id"]);
+		if(!is_object($obj))
+		{
+			$obj = obj($obj["id"]);
+		}
 		$ftp_conns = $obj->connections_from(array(
 			"type" => "RELTYPE_DATA_SERVER",
 		));
@@ -198,53 +201,11 @@ class persona_import extends class_base
 	**/
 	function show_xml($arr)
 	{
-		aw_disable_acl();
+		// aw_disable_acl();
+
 		$obj = new object($arr["id"]);
-		$import_id = $obj->prop("xml_link");
-		if(!$this->can("view" , $import_id))
-		{
-			$config = $this->get_config($arr);
-		}
-
-		if($this->can("view" , $import_id))
-		{
-			$import_obj = get_instance(CL_TAAVI_IMPORT);
-			$fdat = $import_obj->export_xml($import_id);
-		}
-		
-		else
-		{	
-			$c = get_instance(CL_FTP_LOGIN);
-			$c->connect($config["ftp"]);
-
-			$fdat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			$fdat .= "<XML_DATA>\n";
-
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-	
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_personnel_file");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-	
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_education_file");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-
-			$fdat .= "</XML_DATA>\n";
-
-			$c->disconnect();
-		}
-		if (strlen($fdat) <= 62)
-		{
-			die(t("Not enough data to process<br>"));
-		}
-		else
-		{
-			header("Content-type: text/xml");
-			die($fdat);
-		}
+		header("Content-type: text/xml");
+		die($this->get_xml_data($obj, false));
 	}
 
 	/**
@@ -253,13 +214,7 @@ class persona_import extends class_base
 	**/
 	function invoke($arr)
 	{
-		$config_inst = get_instance("config");
-		$inp = $config_inst->get_simple_config("persona_import_in_progress");
-		if((time() - $inp) < 3600 * 10)
-		{
-//			die("already in progress");
-		}
-		$config_inst->set_simple_config("persona_import_in_progress", time());
+		$this->check_in_progress();
 		/*
 		$ol = new object_list(array(
 			"parent" => 26366,
@@ -270,13 +225,13 @@ class persona_import extends class_base
 		$cache->full_flush();
 		exit;
 		*/
-//		aw_disable_acl();
+		// aw_disable_acl();
 		$obj = new object($arr["id"]);
 		
 		$import_id = $obj->prop("xml_link");
 		if(!$this->can("view" , $import_id))
 		{
-			$config = $this->get_config($arr);
+			$config = $this->get_config($obj);
 		}
 
 		
@@ -339,8 +294,6 @@ class persona_import extends class_base
 			"parent" => $metamgr->id(),
 			"class_id" => CL_META,
 			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
 		));
 
 		$meta1 = array_flip($meta1list->names());
@@ -357,7 +310,9 @@ class persona_import extends class_base
 			$m1->set_class_id(CL_META);
 			$m1->set_status(STAT_ACTIVE);
 			$m1->set_name("Puhkuste liigid");
+			aw_disable_acl();
 			$m1->save();
+			aw_restore_acl();
 			$meta_cat["puhkused"] = $m1->id();
 		}
 		else
@@ -372,7 +327,9 @@ class persona_import extends class_base
 			$m1->set_class_id(CL_META);
 			$m1->set_status(STAT_ACTIVE);
 			$m1->set_name("Peatumiste liigid");
+			aw_disable_acl();
 			$m1->save();
+			aw_restore_acl();
 			$meta_cat["peatumised"] = $m1->id();
 		}
 		else
@@ -383,44 +340,8 @@ class persona_import extends class_base
 		print t("Getting source data<br>");
 		flush();
 
-		if($this->can("view" , $import_id))
-		{
-			$import_obj = get_instance(CL_TAAVI_IMPORT);
-			$fdat = $import_obj->export_xml($import_id);
-		}
-		
-		else
-		{	
-			$c = get_instance(CL_FTP_LOGIN);
-			$c->connect($config["ftp"]);
+		$fdat = $this->get_xml_data($obj);
 
-			$fdat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			$fdat .= "<XML_DATA>\n";
-
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-			print "<h5>" . $fqfn . "</h5>";
-	
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_personnel_file");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-			print "<h5>" . $fqfn . "</h5>";
-	
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_education_file");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-			print "<h5>" . $fqfn . "</h5>";
-//	die("<pre>".htmlentities($c->get_file($fqfn)));
-			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_work_relations_ending_file");
-			$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
-			print "<h5>" . $fqfn . "</h5>";
-
-//die("<pre>".htmlspecialchars($c->get_file($fqfn)));
-			// THESE SHOULD BE DONE WITH preg_replace()
-
-			$fdat .= "</XML_DATA>\n";
-
-			$c->disconnect();
-		}
-//die("a");
 		if (strlen($fdat) <= 62)
 		{
 			die(t("Not enough data to process<br>"));
@@ -462,7 +383,9 @@ class persona_import extends class_base
 		$process_workers = $process_stops = false;
 
 		$obj->set_prop("last_import",time());
+		aw_disable_acl();
 		$obj->save();
+		aw_restore_acl();
 
 		$interesting_containers = array("TOOTAJAD","PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
 
@@ -493,6 +416,7 @@ class persona_import extends class_base
 					$processing[$val["tag"]] = true;
 					$target = $val["tag"];
 					print "setting target to $target<br>";
+					flush();
 				}
 				elseif ("close" == $val["type"])
 				{
@@ -557,16 +481,18 @@ class persona_import extends class_base
 		{
 			// load status array back into memory
 			print "Trying to continue aborted import process<br>";
+			flush();
 			$persona_to_process = aw_unserialize($stat_file_content);
 		};
 
 		// $folder for persons is defined in the connected crm_db
+		print "creating person list<br>";
+		flush();
 		$person_list = new object_list(array(
 			"parent" => $folder_person,
 			"class_id" => CL_CRM_PERSON,
 			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
+//			"lang_id" => array(),
 		));
 		
 		foreach($person_list->arr() as $person_obj)
@@ -632,13 +558,14 @@ class persona_import extends class_base
 			};
 		};
 
+		print "creating address list<br>";
+		flush();
+
 		// list of addresses
 		$addr_list = new object_list(array(
 			"class_id" => CL_CRM_ADDRESS,
 			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
-			"parent" => array(),
+//			"lang_id" => array()
 		));
 
 		$addr = $addr_list->names();
@@ -658,14 +585,16 @@ class persona_import extends class_base
 		{
 			$email_links[$email_connection["from"]] = $email_connection["to"];
 		};
+ 
+		print "creating phone list<br>";
+		flush();
 
 		// list of phone numbers
 		$phone_list = new object_list(array(
 			"class_id" => CL_CRM_PHONE,
 			"parent" => $dir_default,
 			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
+//			"lang_id" => array()
 		));
 
 		$phones = array_flip($phone_list->names());
@@ -709,39 +638,55 @@ class persona_import extends class_base
 				"class_id" => $sdata["clid"],
 				"parent" => $dir_default,
 				"site_id" => array(),
-				"lang_id" => array(),
-				"status" => array(),
+//				"lang_id" => array()
 			));
 			$simple_data[$key] = array_flip($olist->names());
 
 		};
-
-		// Collecting all imported company objs.		
-		$olist = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
-			"parent" => array($dir_default, $dir_company),
-			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
-		));
-		$impd_company_objs = array_flip($olist->names());
-
-		// Collecting all imported substitutes		
-		$subst_ol = new object_list(array(
-			"parent" => $dir_default,
-			"class_id" => CL_CRM_PROFESSION,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
-		));
-		$subst_ol_arr = $subst_ol->arr();
 		
 		/*
 		arr($simple_data);
 		exit;
 		*/
+		print "creating company list<br>";
+		flush();
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"parent" => array($dir_default, $dir_company),
+		));
+
+		$impd_objs_comp = array_flip($ol->names());
+		foreach($impd_objs_comp as $impd_objs_comp_name => $impd_objs_comp_el)
+		{
+			print "got company named '".$impd_objs_comp_name."'<br>";
+			flush();
+			$ol->remove($impd_objs_comp_el);
+		}
+		/*
+		if($ol->count() > 0)
+		{
+			print "deleting duplicate companies<br>";
+			arr($ol->ids());
+			flush();
+			aw_disable_acl();
+			$ol->delete();
+			aw_restore_acl();
+		}
+		*/
+
+		
+		print "creating substitute list<br>";
+		flush();
+
+		$subst_ol = new object_list(array(
+			"parent" => $dir_default,
+			"class_id" => CL_CRM_PROFESSION,
+		));
+		$subst_ol_arr = $subst_ol->arr();
+
 
 		print t("creating yksused objects<br>");
+		flush();
 		/*
 			 <yksused>
 				  <rida>
@@ -758,9 +703,6 @@ class persona_import extends class_base
 		$seco = new object_list(array(
 			"class_id" => CL_CRM_SECTION,
 			"site_id" => array(),
-			"parent" => array(),
-			"lang_id" => array(),
-			"status" => array(),
 		));
 
 		$sections = array();
@@ -803,7 +745,9 @@ class persona_import extends class_base
 				$yk->set_class_id(CL_CRM_SECTION);
 				$yk->set_prop("ext_id",$ext_id);
 				$yk->set_name($name);
+				aw_disable_acl();
 				$yk->save();
+				aw_restore_acl();
 
 				$ykid = $yk->id();
 				$sections[$ext_id] = $ykid;
@@ -813,7 +757,9 @@ class persona_import extends class_base
 				print t("updating existing section<br>");
 				$yk = new object($sections[$ext_id]);
 				$yk->set_name($name);
+				aw_disable_acl();
 				$yk->save();
+				aw_restore_acl();
 				print "done<br>";
 			};
 		}
@@ -984,7 +930,9 @@ class persona_import extends class_base
 	
 				$ml->set_name($worker["E_POST"]);
 				$ml->set_prop("mail",$worker["E_POST"]);
+				aw_disable_acl();
 				$ml->save();
+				aw_restore_acl();
 	
 				$mid = $ml->id();
 							
@@ -1019,7 +967,9 @@ class persona_import extends class_base
 					$tmp_o->set_parent($dir_default);
 					$tmp_o->set_class_id($sdata["clid"]);
 					$tmp_o->set_status(STAT_ACTIVE);
+					aw_disable_acl();
 					$tmp_o->save();
+					aw_restore_acl();
 					print "creating and connecting to $skey object<br>";
 				};
 
@@ -1036,7 +986,9 @@ class persona_import extends class_base
 
 				$simple_data[$skey][$_name] = $tmp_id;
 
+				aw_disable_acl();
 				$tmp_o->save();
+				aw_restore_acl();
 
 				$person_obj->connect(array(
 					"to" => $tmp_id,
@@ -1077,8 +1029,13 @@ class persona_import extends class_base
 				if ($this->can("view", $phones[$worker[$pkey]]))
 				{
 					$po = new object($phones[$worker[$pkey]]);
-					$po->set_prop("type",$pval);
-					$po->save();
+					if($po->prop("type") != $pval)
+					{
+						$po->set_prop("type",$pval);
+						aw_disable_acl();
+						$po->save();
+						aw_restore_acl();
+					}
 
 					print "connecting to existing $pkey phone object " . $po->id() . "<br>";
 
@@ -1107,7 +1064,9 @@ class persona_import extends class_base
 			print "phones connected<bR>";
 			flush();
 
+			aw_disable_acl();
 			$person_obj->save();
+			aw_restore_acl();
 
 			/*
 			// I accidentally generated quite a few of aliases. Need to get rid of 'em.
@@ -1125,12 +1084,14 @@ class persona_import extends class_base
 			if(!empty($worker["HARIDUSTASE"]))
 			{
 				$haridustase = iconv("UTF-8", "ISO-8859-4", $worker["HARIDUSTASE"]);
-				$person_obj->set_prop("edulevel", str_replace("&otilde;", "o", $haridustase));
+				// Whatta hack!
+				$person_obj->set_prop("edulevel", str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $haridustase)));
+				aw_disable_acl();
 				$person_obj->save();
+				aw_restore_acl();
 				print "Setting education level to ".$haridustase.".<br>";
 				flush();
 			}
-
 			if(!empty($worker["AMETIKOHT_NIMETUS"]))
 			{
 				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKOHT_NIMETUS"]);
@@ -1141,26 +1102,9 @@ class persona_import extends class_base
 
 				if(!empty($asutus))
 				{
-					/*
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_COMPANY,
-						"parent" => array($dir_default, $dir_company),
-						"name" => $asutus,
-						"site_id" => array(),
-						"lang_id" => array(),
-						"status" => array(),
-					));
-					if($ol->count() > 0)
+					if(array_key_exists($asutus, $impd_objs_comp))
 					{
-						foreach($ol->arr() as $company_obj)
-						{
-							break;
-						}
-					}
-					*/
-					if(array_key_exists($asutus, $impd_company_objs))
-					{
-						$company_obj = obj($impd_company_objs[$asutus]);
+						$company_obj = obj($impd_objs_comp[$asutus]);
 					}
 					else
 					{
@@ -1170,8 +1114,9 @@ class persona_import extends class_base
 						$company_obj->set_class_id(CL_CRM_COMPANY);
 						$company_obj->set_parent($dir_company);
 						$company_obj->set_prop("name", $asutus);
+						aw_disable_acl();
 						$company_obj->save();
-						$impd_company_objs[$asutus] = $company_obj->id();
+						aw_restore_acl();
 					}
 					/*
 					print "connecting section ".iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"])." to company object ".$asutus."<br>";
@@ -1181,6 +1126,7 @@ class persona_import extends class_base
 					));
 					/**/
 					$company_id = $company_obj->id();
+					$impd_objs_comp[$asutus] = $company_id;
 				}
 
 				unset($profession_id);
@@ -1208,7 +1154,9 @@ class persona_import extends class_base
 					$rank->set_status(STAT_ACTIVE);
 					$rank->set_prop("name", $ametikoht_nimetus);
 					$rank->set_meta("external_id", $worker["TOOTAJA_ID"]);
+					aw_disable_acl();
 					$rank->save();
+					aw_restore_acl();
 					$profession_id = $rank->id();
 					print "connecting profession object<br>";
 					$person_obj->connect(array(
@@ -1267,7 +1215,9 @@ class persona_import extends class_base
 //					$prevjob->set_prop("end", );
 					$prevjob->set_prop("org", $company_id);
 					$prevjob->set_prop("profession", $profession_id);
+					aw_disable_acl();
 					$prevjob->save();
+					aw_restore_acl();
 					/*
 					$prevjob->connect(array(
 						"to" => ,
@@ -1283,6 +1233,7 @@ class persona_import extends class_base
 				}
 			}
 
+//echo __FILE__."::".__LINE__." <br>\n";flush();
 			if($worker["ON_ASENDAJA"] == 1 && !empty($worker["ASENDAMINE_TOOKOHT"]))
 			{
 				$asendamine_tookoht = iconv("UTF-8", "ISO-8859-4", $worker["ASENDAMINE_TOOKOHT"]);
@@ -1311,16 +1262,6 @@ class persona_import extends class_base
 				{
 					unset($substitute_id);
 
-					/*
-					$subst_ol = new object_list(array(
-						"parent" => $dir_default,
-						"class_id" => CL_CRM_PROFESSION,
-						"site_id" => array(),
-						"lang_id" => array(),
-						"status" => array(),
-					));
-					foreach($subst_ol->arr() as $subst_obj)
-					*/
 					foreach($subst_ol_arr as $subst_obj)
 					{
 //						print $subst_obj->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
@@ -1340,7 +1281,9 @@ class persona_import extends class_base
 						$subst->set_status(STAT_ACTIVE);
 						$subst->set_prop("name", $asendamine_tookoht);
 						$subst->set_meta("external_id", $worker["TOOTAJA_ID"]);
+						aw_disable_acl();
 						$subst->save();
+						aw_restore_acl();
 						$substitute_id = $subst->id();
 						$subst_ol_arr[$substitute_id] = $subst;
 					}
@@ -1371,7 +1314,9 @@ class persona_import extends class_base
 					$ylem_yksus->set_class_id(CL_CRM_SECTION);
 					$ylem_yksus->set_parent($dir_default);
 					$ylem_yksus->set_name($worker["ALLASUTUS"]);
+					aw_disable_acl();
 					$ylem_yksus->save();
+					aw_restore_acl();
 					$ylem_ykid = $ylem_yksus->id();
 					$sections_byname[$worker["ALLASUTUS"]] = $ylem_ykid;
 				}
@@ -1432,7 +1377,9 @@ class persona_import extends class_base
 					$yk->set_prop("ext_id", $worker["YKSUS_ID"]);
 					$yk->set_subclass($worker["YKSUS_ID"]);
 					$yk->set_name($worker["YKSUS"]);
+					aw_disable_acl();
 					$yk->save();
+					aw_restore_acl();
 
 					$ykid = $yk->id();
 					$sections[$worker["YKSUS_ID"]] = $ykid;
@@ -1501,7 +1448,9 @@ class persona_import extends class_base
 			print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus." ID - ".$rank->id()."<br>";
 			print $ametikirjeldus_viit."<br>";
 			$rank->set_prop("directive_link", $ametikirjeldus_viit);
+			aw_disable_acl();
 			$rank->save();
+			aw_restore_acl();
 			/*
 			print "setting 'Viit ametijuhendile' property for work relation object ".$prevjob->name()."<br>";
 //				$ametijuhend_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIJUHEND_VIIT"]);
@@ -1513,7 +1462,9 @@ class persona_import extends class_base
 			// let us keep track of all existing workers, so I can properly assign vacations and contract_stops
 			$persons[$ext_id] = $person_obj->id();
 
+			aw_disable_acl();
 			$person_obj->save();
+			aw_restore_acl();
 			print "person done<br><br>";
 			flush();
 
@@ -1544,7 +1495,7 @@ class persona_import extends class_base
 					
 					// This one doesn't seem to work.
 //					header("Location: " . $request_uri);
-//s					exit;
+//					exit;
 					
 					// Therefore using this instead					
 					print "<head><meta http-equiv=\"REFRESH\" content=\"1;url=".$request_uri."\"></head>";
@@ -1594,9 +1545,6 @@ class persona_import extends class_base
 		$mx = new object_list(array(
 			"class_id" => CL_META,
 			"parent" => $meta_cat["peatumised"],
-			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
 		));
 
 		$mxlist = array_flip($mx->names());
@@ -1640,7 +1588,9 @@ class persona_import extends class_base
 							{
 								$stop = $t3;
 								$stop->set_prop("end", $b);
+								aw_disable_acl();
 								$stop->save();
+								aw_restore_acl();
 								print "connected to existing contract stop object ".$stop->name()."<br>";
 								flush();
 								$stop_done = true;
@@ -1681,7 +1631,9 @@ class persona_import extends class_base
 					$xo->set_class_id(CL_META);
 					$xo->set_status(STAT_ACTIVE);
 					$xo->set_name($peatumise_liik);
+					aw_disable_acl();
 					$xo->save();
+					aw_restore_acl();
 					$mxlist[$peatumise_liik] = $xo->id();
 				};
 
@@ -1697,7 +1649,9 @@ class persona_import extends class_base
 				$stop->set_prop("type", $xo->id());
 				//$stop->set_name($t->name());
 				$stop->set_name($peatumise_liik);
+				aw_disable_acl();
 				$stop->save();
+				aw_restore_acl();
 				
 
 				// I was told to connect these to 'T&ouml;&ouml;suhe' object instead
@@ -1800,16 +1754,24 @@ class persona_import extends class_base
 				$education = $edu_conn->to();
 				$end_date = $education->prop("end_date");
 				
-				if($education->prop("name") == $oppeasutus && $education->prop("speciality") == iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]) && (empty($end_date) || //$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
+				if($education->prop("name") == $oppeasutus && ($t->prop("edulevel") == "keskharidus" || $education->prop("speciality") == iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"])) && (empty($end_date) || //$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
 				$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"])))
 				{
 					$haridus_conns[$t->id()][$edu_conn->id()] = 2;
-					print "connected to existing education object ".$education->name()."<br>";					
+					print "connected to existing education object ".$education->name()."<br>";
+					if($t->prop("edulevel") != "keskharidus")
+					{
+						$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]));
+					}
+					else
+					{
+						$education->set_prop("speciality", "");
+					}
 					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);					
 					$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
 					$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
 					// P&otilde;hiharidus might cause some drama. We wanna avoid that.
-					$education->set_prop("degree", $degree[str_replace("&otilde;", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
+					$education->set_prop("degree", $degree[str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $hariduskaik["AKADEEMILINE_KRAAD"]))]);
 					$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
 //					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
 					if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
@@ -1819,7 +1781,9 @@ class persona_import extends class_base
 						// Do ya think I should import the same value here as well?
 //						$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
 					}
+					aw_disable_acl();
 					$education->save();
+					aw_restore_acl();
 
 					$edu_done = true;
 //					break;
@@ -1833,12 +1797,15 @@ class persona_import extends class_base
 				$education->set_class_id(CL_CRM_PERSON_EDUCATION);
 				$education->set_parent($dir_default);
 				$education->set_prop("name", $oppeasutus);
-				$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]));
+				if($t->prop("edulevel") != "keskharidus")
+				{
+					$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]));
+				}
 				$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
 				$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
 				$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
 				// P&otilde;hiharidus might cause some drama. We wanna avoid that.
-				$education->set_prop("degree", $degree[str_replace("&otilde;", "o", $hariduskaik["AKADEEMILINE_KRAAD"])]);
+				$education->set_prop("degree", $degree[str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $hariduskaik["AKADEEMILINE_KRAAD"]))]);
 				$education->set_prop("obtain_language", iconv("UTF-8", "ISO-8859-4", $hariduskaik["KEEL"]));
 //				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
 				if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
@@ -1848,7 +1815,9 @@ class persona_import extends class_base
 					// Do ya think I should import the same value here as well?
 //					$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
 				}
+				aw_disable_acl();
 				$education->save();
+				aw_restore_acl();
 
 				print "connecting ".$t->name()." to new education object ".$oppeasutus."<br>";
 				/*
@@ -1904,9 +1873,6 @@ class persona_import extends class_base
 		$mx = new object_list(array(
 			"parent" => $meta_cat["puhkused"],
 			"class_id" => CL_META,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"status" => array(),
 		));
 
 		$mxlist = array_flip($mx->names());
@@ -1925,7 +1891,9 @@ class persona_import extends class_base
 			$stop->set_prop("start1",$a);
 			$stop->set_prop("end",$b);
 			$stop->set_status(STAT_ACTIVE);
+			aw_disable_acl();
 			$stop->save();
+			aw_restore_acl();
 
 			$t->connect(array(
 				"to" => $stop->id(),
@@ -1943,7 +1911,9 @@ class persona_import extends class_base
 				$xo->set_class_id(CL_META);
 				$xo->set_status(STAT_ACTIVE);
 				$xo->set_name($puhkus["PUHKUSE_LIIK"]);
+				aw_disable_acl();
 				$xo->save();
+				aw_restore_acl();
 				$mxlist[$puhkus["PUHKUSE_LIIK"]] = $xo->id();
 			};
 
@@ -2041,7 +2011,7 @@ class persona_import extends class_base
 		
 		$obj = new object($arr["id"]);
 		
-		$config = $this->get_config($arr);
+		$config = $this->get_config($obj);
 
 		if (sizeof($config["ftp"]) == 0)
 		{
@@ -2065,9 +2035,6 @@ class persona_import extends class_base
 		$persons = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
 			"status" => STAT_ACTIVE,
-			"site_id" => array(),
-			"parent" => array(),
-			"lang_id" => array(),
 		));	
 		$px = array();
 		foreach($persons->arr() as $person_obj)
@@ -2152,8 +2119,10 @@ class persona_import extends class_base
 								"contents" => $pilt_data,
 								"type" => "image/jpg",
 							);
-
+							
+							aw_disable_acl();
 							$timg = $ti->submit($emb);
+							aw_restore_acl();
 
 							$t->connect(array(
 								"to" => $timg,
@@ -2161,7 +2130,9 @@ class persona_import extends class_base
 							));
 
 							$t->set_prop("picture",$timg);
+							aw_disable_acl();
 							$t->save();
+							aw_restore_acl();
 						}
 						else
 						{
@@ -2171,13 +2142,17 @@ class persona_import extends class_base
 							{
 								print "changing parent<br>";
 								$img_o->set_parent($image_folder);
+								aw_disable_acl();
 								$img_o->save();
+								aw_restore_acl();
 							};
 							if ($t->prop("picture") != $img_o->id())
 							{
 								$t->set_prop("picture",$img_o->id());
 								print "setting pic property<br>";
+								aw_disable_acl();
 								$t->save();
+								aw_restore_acl();
 							};
 							$url = substr($ti->get_url($img_o->prop("file")),$baselen);
 							print "url = $url<br>";
@@ -2265,7 +2240,14 @@ class persona_import extends class_base
 		$ml->set_class_id(CL_CRM_PHONE);
 		$ml->set_name($arr["phone"]);
 		$ml->set_prop("type",$arr["type"]);
+		// Work phone is public by default
+		if($arr["type"] == "work")
+		{
+			$ml->set_prop("is_public", 1);
+		}
+		aw_disable_acl();
 		$ml->save();
+		aw_restore_acl();
 
 		$mid = $ml->id();
 
@@ -2288,19 +2270,73 @@ class persona_import extends class_base
 
 	}
 
+	function get_xml_data($obj, $print = true)
+	{		
+		$import_id = $obj->prop("xml_link");
+
+		if($this->can("view" , $import_id))
+		{
+			$import_obj = get_instance(CL_TAAVI_IMPORT);
+			$fdat = $import_obj->export_xml($import_id);
+		}
+		
+		else
+		{
+			$config = $this->get_config($obj);
+			
+			$c = get_instance(CL_FTP_LOGIN);
+			$c->connect($config["ftp"]);
+
+			$fs = array("xml_filename", "xml_personnel_file", "xml_education_file", "xml_work_relations_ending_file");
+
+			$fdat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			$fdat .= "<XML_DATA>\n";
+
+			foreach($fs as $f)
+			{				
+				$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop($f);
+				// THESE SHOULD BE DONE WITH preg_replace()
+				$fdat .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $c->get_file($fqfn));
+				if($print)
+				{
+					print "<h5>" . $fqfn . "</h5>";
+				}
+			}
+
+			$fdat .= "</XML_DATA>\n";
+
+			$c->disconnect();
+		}
+		return $fdat;
+	}
+
+	function check_in_progress()
+	{
+		// In order to avoid persona import being triggered from both intranet.envir.ee and www.envir.ee
+		$config_inst = get_instance("config");
+		$inp = $config_inst->get_simple_config("persona_import_in_progress");
+		$inp_url = $config_inst->get_simple_config("persona_import_in_progress_url");
+		if((time() - $inp) < 3600 * 10 && $inp_url != aw_ini_get("baseurl"))
+		{
+			die("already in progress with url ".$inp_url);
+		}
+		$config_inst->set_simple_config("persona_import_in_progress", time());
+		$config_inst->set_simple_config("persona_import_in_progress_url", aw_ini_get("baseurl"));
+	}
+
 	function callback_post_save($arr)
 	{
 		$o = $arr["obj_inst"];
 		$conns = $o->connections_from(array(
 			"type" => "RELTYPE_RECURRENCE",
 		));
-		// iga asja kohta on vaja teada seda, et millal ta v2lja kutsutakse
+		// iga asja kohta on vaja teada seda, et millal ta v&auml;lja kutsutakse
 		$sch = get_instance("scheduler");
 		foreach($conns as $conn)
 		{
 			$rep_id = $conn->prop("to");
 			$event_url = $this->mk_my_orb("invoke",array("id" => $o->id()));
-			// lisab iga yhendatud recurrence objekti kohta kirje scheduleri
+			// lisab iga &uuml;hendatud recurrence objekti kohta kirje scheduleri
 			$sch->add(array(
 			 	"event" => $event_url,
 				"rep_id" => $rep_id,
