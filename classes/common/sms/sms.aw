@@ -1,16 +1,13 @@
 <?php
-// mobi_sms.aw - Mobi SMS
+// sms.aw - SMS
 /*
 
-@classinfo syslog_type=ST_MOBI_SMS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SMS relationmgr=yes no_status=1 prop_cb=1 maintainer=instrumental
 
 @default table=objects
 @default group=general
 
-	@property name type=textbox
-	@caption Number
-
-	@property comment type=textbox field=comment
+	@property comment type=textarea field=comment
 	@caption S&otilde;num
 
 @groupinfo sent caption="Saatmised"
@@ -18,15 +15,21 @@
 
 	@property sent_tbl type=table store=no no_caption=1
 
+@reltype PHONE value=1 clid=CL_CRM_PHONE
+@caption Saaja
+
+@reltype SMS_SENT value=2 clid=CL_SMS_SENT
+@caption SMSi saatmine
+
 */
 
-class mobi_sms extends class_base
+class sms extends class_base
 {
-	function mobi_sms()
+	function sms()
 	{
 		$this->init(array(
-			"tpldir" => "common/mobi_sms",
-			"clid" => CL_MOBI_SMS
+			"tpldir" => "common/sms/sms",
+			"clid" => CL_SMS
 		));
 	}
 
@@ -46,22 +49,34 @@ class mobi_sms extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
+			"name" => "number",
+			"caption" => t("Number"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Aeg"),
 			"align" => "center",
+			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "mobi_answer",
 			"caption" => t("Mobi vastus"),
 			"align" => "center",
+			"sortable" => 1,
 		));
-		foreach($arr["obj_inst"]->meta("log") as $d)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SMS_SENT")) as $conn)
 		{
+			$to = $conn->to();
 			$t->define_data(array(
-				"time" => date("Y-m-d H:i:s", $d["t"]),
-				"mobi_answer" => $d["m"],
+				"number" => $to->prop("phone.name"),
+				"time" => date("Y-m-d H:i:s", $to->created()),
+				"timestamp" => $to->created(),
+				"mobi_answer" => $to->comment,
 			));
 		}
+		$t->set_default_sortby("timestamp");
 	}
 
 	function set_property($arr = array())

@@ -16,13 +16,16 @@
 	@property url type=textbox field=meta method=serialize
 	@caption Mobi URL
 
+	@property phone_dir type=relpicker reltype=RELTYPE_MENU store=connect
+	@caption Saajate kaust
+
 @groupinfo send_sms caption="Saada SMS" submit=no
 @default group=send_sms
 
 	@property number type=textbox store=no
 	@caption Telefoninumber
 
-	@property message type=textarea rows=7 cols=20 store=no
+	@property message type=textarea rows=7 cols=50 store=no
 	@caption S&otilde;num
 	@comment Maksimaalselt 160 t&auml;hem&auml;rki.
 
@@ -37,6 +40,9 @@
 
 	@property log_tbl type=table store=no no_caption=1
 
+@reltype MENU value=1 clid=CL_MENU
+@caption Saajate kaust
+
 */
 
 class mobi_handler extends class_base
@@ -44,7 +50,7 @@ class mobi_handler extends class_base
 	function mobi_handler()
 	{
 		$this->init(array(
-			"tpldir" => "common/mobi_handler",
+			"tpldir" => "common/sms/service_provider/mobi_handler",
 			"clid" => CL_MOBI_HANDLER
 		));
 	}
@@ -57,7 +63,7 @@ class mobi_handler extends class_base
 		switch($prop["name"])
 		{
 			case "message":
-				$prop["onkeyup"] = "aw_get_el('symbol_count').value = this.value.length";
+				$prop["onkeyup"] = " if(this.value.length > 160) { this.value = this.value.substr(0, 160); } aw_get_el('symbol_count').value = this.value.length;";
 				break;
 		}
 
@@ -92,21 +98,28 @@ class mobi_handler extends class_base
 			"sortable" => 1,
 		));
 		$ol = new object_list(array(
-			"class_id" => CL_MOBI_SMS,
-			"parent" => $arr["obj_inst"]->id(),
+			"class_id" => CL_SMS,
 			"status" => array(),
 			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $arr["obj_inst"]->id(),
+					"CL_SMS.RELTYPE_SMS_SENT.RELTYPE_MOBI_HANDLER" => $arr["obj_inst"]->id(),
+				)
+			)),
 		));
 		foreach($ol->arr() as $o)
 		{
-			foreach($o->meta("log") as $log)
+			foreach($o->connections_from(array("type" => "RELTYPE_SMS_SENT")) as $conn)
 			{
+				$to = $conn->to();
 				$t->define_data(array(
-					"number" => $o->name,
+					"number" => $to->prop("phone.name"),
 					"message" => $o->comment,
-					"mobi_ans" => $log["m"],
-					"time" => date("Y-d-m H:i:s", $log["t"]),
-					"timestamp" => $log["t"],
+					"mobi_ans" => $to->comment,
+					"time" => date("Y-d-m H:i:s", $to->created()),
+					"timestamp" => $to->created(),
 				));
 			}
 		}
@@ -172,26 +185,36 @@ class mobi_handler extends class_base
 		@param id required type=oid
 			The OID of the Mobi handler object, that describes the service ID, password and Mobi URL.
 
-		@param number required type=string
+		@param number optional type=string
 			The phone number to send the SMS to. Must contain aera code, only digits. (Example: 3725123456)
 
-		@param message required type=string
+		@param message optional type=string
 			The content of the SMS. No more than 160 symbols.
 
-		@param sms optional type=*oid
-			Used to get the OID of the SMS object.
+		@param phone optional type=oid
+			The phone object's OID to send the SMS to.
+
+		@param sms optional type=oid
+			The oid of SMS object to be sent.
 
 		@example
-			$send = get_instance(CL_MOBI_HANDLER)->send_sms(array(
+			get_instance(CL_MOBI_HANDLER)->send_sms(array(
 				"id" => 2312,
 				"number" => "3725123456",
 				"message" => "The quick brown fox jumps over the lazy dog!",
-				"sms" => &$sms,
+			));
+
+			get_instance(CL_MOBI_HANDLER)->send_sms(array(
+				"id" => 2312,
+				"sms" => $sms_obj->id(),
+				"phone" => $phone_obj->id(),
 			));
 
 		@comment
+			Either 'sms' or 'message' must be set. If 'sms' attribute is set, 'message' is ignored.
+			Either 'phone' or 'number' must be set. If 'phone' attribute is set, 'number' is ignored.
 
-		@returns True on success, false on failure.
+		@returns The sms_sent object.
 
 		@errors Returns error if number contains other symbols beside digits. Returns error if message contains more than 160 symbols.
 	**/
@@ -201,7 +224,7 @@ class mobi_handler extends class_base
 		{
 			error::raise(array(
 				"id" => "ERR_PARAM",
-				"msg" => t("personnel_management_mobi_handler::send_sms(number => ".$arr['number']."): number must only contain digits!")
+				"msg" => t("mobi_handler::send_sms(number => ".$arr['number']."): number must only contain digits!")
 			));
 		}
 
@@ -209,7 +232,7 @@ class mobi_handler extends class_base
 		{
 			error::raise(array(
 				"id" => "ERR_PARAM",
-				"msg" => t("personnel_management_mobi_handler::send_sms(message => ".$arr['message']."): message must be no more than 160 symbols!")
+				"msg" => t("mobi_handler::send_sms(message => ".$arr['message']."): message must be no more than 160 symbols!")
 			));
 		}
 		$o = obj($arr["id"]);
@@ -220,6 +243,41 @@ class mobi_handler extends class_base
 		// This has to be unique every time. So we'll increase it no matter what.
 		$o->set_meta("request_id", $request_id + 1);
 		$o->save();
+
+		if($this->can("view", $arr["phone"]))
+		{
+			$phone_obj = obj($arr["phone"]);
+			$arr["number"] = $phone_obj->name;
+		}
+		else
+		{
+			$phone_obj = obj();
+			$phone_obj->set_class_id(CL_CRM_PHONE);
+			if($this->can("add", $o->phone_dir))
+			{
+				$phone_obj->set_parent($o->phone_dir);
+			}
+			else
+			{
+				$phone_obj->set_parent($o->id());
+			}
+			$phone_obj->name = $arr["number"];
+			$phone_obj->save();
+		}
+
+		if($this->can("view", $arr["sms"]))
+		{
+			$sms_obj = obj($arr["sms"]);
+			$arr["message"] = $sms_obj->comment;
+		}
+		else
+		{
+			$sms_obj = obj();
+			$sms_obj->set_class_id(CL_SMS);
+			$sms_obj->set_parent($o->id());
+			$sms_obj->comment = $arr["message"];
+			$sms_obj->save();
+		}
 
 		$params = array(
 			"serviceid" => $service_id,
@@ -237,25 +295,31 @@ class mobi_handler extends class_base
 		);
 		$context = stream_context_create($args);
 		// I know, it works. No need to send 'em anymore for testing purposes.
-		//$mobi_answer = file_get_contents($url, false, $context);
+		$mobi_answer = file_get_contents($url, false, $context);
 
-		$log = array();
-		$log[] = array("t" => time(), "m" => $mobi_answer);
+		$sms_sent = obj();
+		$sms_sent->set_class_id(CL_SMS_SENT);
+		$sms_sent->set_parent($sms_obj->id());
+		$sms_sent->comment = $mobi_answer;
+		$sms_sent->save();
 
-		$sms = obj();
-		$sms->parent = $o->id();
-		$sms->class_id = CL_MOBI_SMS;
-		$sms->name = $arr["number"];
-		$sms->comment = $arr["message"];
-		$sms->set_meta("log", $log);
-		$sms->save();
+		$sms_obj->connect(array(
+			"to" => $sms_sent->id(),
+			"type" => "RELTYPE_SMS_SENT",
+		));
 
-		if(isset($arr["sms"]))
-		{
-			$arr["sms"] = $sms->id();
-		}
+		$sms_sent->connect(array(
+			"to" => $phone_obj,
+			"type" => "RELTYPE_PHONE",
+		));
 
-		return substr($mobi_answer, 0, 2) == "OK";
+		$sms_sent->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_MOBI_HANDLER",
+		));
+
+		//return substr($mobi_answer, 0, 2) == "OK";
+		return $sms_sent;
 	}
 }
 

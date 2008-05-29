@@ -1,8 +1,8 @@
 <?php
-// mobi_sms_sent.aw - Mobi SMSi saatmine
+// sms_sent.aw - SMSi saatmine
 /*
 
-@classinfo syslog_type=ST_MOBI_SMS_SENT relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SMS_SENT relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -18,13 +18,13 @@
 
 */
 
-class mobi_sms_sent extends class_base
+class sms_sent extends class_base
 {
-	function mobi_sms_sent()
+	function sms_sent()
 	{
 		$this->init(array(
-			"tpldir" => "common/mobi_sms_sent",
-			"clid" => CL_MOBI_SMS_SENT
+			"tpldir" => "common/sms/sms_sent",
+			"clid" => CL_SMS_SENT
 		));
 	}
 
