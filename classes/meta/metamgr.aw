@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.17 2008/04/01 12:45:16 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.18 2008/05/29 10:44:30 kristo Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -169,6 +169,7 @@ class metamgr extends class_base
 				}
 			}
 		}
+		$langdata_full = $lg->get_list(array("all_data" => true));
 
 		$t->define_field(array(
 			"name" => "value",
@@ -226,7 +227,6 @@ class metamgr extends class_base
 		}		
 
 		$t->define_data($new_data);
-
 		foreach($olist->arr() as $o)
 		{
 			$id = $o->id();
@@ -252,7 +252,7 @@ class metamgr extends class_base
 				 $trans[$lid] = html::textbox(array(
 					"name" => "submeta[".$id."][tolge][".$lid."][name]",
 					"size" => 15,
-					"value" => iconv(aw_global_get("charset"), "UTF-8",$tr[$lid]["name"]),
+					"value" => iconv($langdata_full[$lid]["charset"], "UTF-8",$tr[$lid]["name"]),
 				));
 			}
 
@@ -458,8 +458,8 @@ class metamgr extends class_base
 			$nv = iconv("UTF-8", $lang["charset"]."//IGNORE", $str);
 
 			$all_vals[$lid][$nm] = $nv;
+			$obj->set_meta("trans_".$lid."_status", 1);
 		}
-		$obj->set_meta("trans_".$lid."_status", 1);
 		$obj->set_meta("translations", $all_vals);
 		$obj->save();
 	}

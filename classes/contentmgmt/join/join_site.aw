@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.70 2008/04/28 13:59:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.71 2008/05/29 10:44:27 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -319,7 +319,7 @@ class join_site extends class_base
 				break;
 
 			case "trans_tb":
-				$arr["obj_inst"]->set_meta("lang_props", $arr["request"]["d"]);
+				$this->_set_trans_tb($arr);
 				break;
 
 			case "trans_ttl_t":
@@ -1123,10 +1123,10 @@ class join_site extends class_base
 		{
 			$cb = $o->prop("cancel_but_text");
 		}
-                if (!empty($lang_props["bt"]["__cancel_but"][$langid]))
-                {
-                        $cb = $lang_props["bt"]["__cancel_but"][$langid];
-                }
+		if (!empty($lang_props["bt"]["__cancel_but"][$langid]))
+		{
+			$cb = $lang_props["bt"]["__cancel_but"][$langid];
+		}
 
 		$this->vars(array(
 			"form" => $this->get_form_from_obj(array(
@@ -1352,6 +1352,7 @@ class join_site extends class_base
 				post_message("MSG_USER_JOINED", array(
 					"user" => $u_oid
 				));
+				$_SESSION["last_join_data"] = $_SESSION["site_join_status"];
 				// we also gots to clear out all the join data
 				aw_session_set("site_join_status", array());
 			}
@@ -2585,6 +2586,7 @@ class join_site extends class_base
 
 	function _trans_tb($arr)
 	{
+		aw_global_set("output_charset","UTF-8");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_trans_tb($t, $arr["obj_inst"]);
 
@@ -2615,7 +2617,7 @@ class join_site extends class_base
 					}
 					$d["l".$lid] = html::textbox(array(
 						"name" => "d[$clid][$pn][$lid]",
-						"value" => $lang_props[$clid][$pn][$lid],
+						"value" => iconv($lang["charset"], "utf-8", $lang_props[$clid][$pn][$lid]),
 						"size" => 20
 					));
 				}
@@ -2636,7 +2638,7 @@ class join_site extends class_base
 			}
 			$d["l".$lid] = html::textbox(array(
 				"name" => "d[$clid][__join_but][$lid]",
-				"value" => $lang_props[$clid]["__join_but"][$lid],
+				"value" => iconv($lang["charset"], "utf-8", $lang_props[$clid]["__join_but"][$lid]),
 				"size" => 20
 			));
 		}
@@ -2655,7 +2657,7 @@ class join_site extends class_base
 			}
 			$d["l".$lid] = html::textbox(array(
 				"name" => "d[$clid][__save_but][$lid]",
-				"value" => $lang_props[$clid]["__save_but"][$lid],
+				"value" => iconv($lang["charset"], "utf-8", $lang_props[$clid]["__save_but"][$lid]),
 				"size" => 20
 			));
 			
@@ -2663,49 +2665,66 @@ class join_site extends class_base
 		$t->define_data($d);
 
 		$d = array(
-                        "orig" => t("T&uuml;hista nupu tekst"),
-                        "class" => t("<b>Nuppude tekstid</b>")
-                );
-                $clid = "bt";
-                foreach($ll as $lid => $lang)
-                {
-                        if ($lid == $arr["obj_inst"]->lang_id())
-                        {
-                                continue;
-                        }
-                        $d["l".$lid] = html::textbox(array(
-                                "name" => "d[$clid][__cancel_but][$lid]",
-                                "value" => $lang_props[$clid]["__cancel_but"][$lid],
-                                "size" => 20
-                        ));
+			"orig" => t("T&uuml;hista nupu tekst"),
+			"class" => t("<b>Nuppude tekstid</b>")
+		);
+		$clid = "bt";
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+			$d["l".$lid] = html::textbox(array(
+				"name" => "d[$clid][__cancel_but][$lid]",
+				"value" => iconv($lang["charset"], "utf-8", $lang_props[$clid]["__cancel_but"][$lid]),
+				"size" => 20
+			));
 
-                }
-                $t->define_data($d);
+		}
+		$t->define_data($d);
 
 
 		$d = array(
-                        "orig" => t("Suunamine"),
-                        "class" => t("<b>Suuna p&auml;rast registreerumist</b>")
-                );
-                $clid = "bt";
-                foreach($ll as $lid => $lang)
-                {
-                        if ($lid == $arr["obj_inst"]->lang_id())
-                        {
-                                continue;
-                        }
-                        $d["l".$lid] = html::textbox(array(
-                                "name" => "d[$clid][__after_join_url][$lid]",
-                                "value" => $lang_props[$clid]["__after_join_url"][$lid],
-                                "size" => 20
-                        ));
-
-                }
-                $t->define_data($d);
+			"orig" => t("Suunamine"),
+			"class" => t("<b>Suuna p&auml;rast registreerumist</b>")
+		);
+		$clid = "bt";
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+			$d["l".$lid] = html::textbox(array(
+				"name" => "d[$clid][__after_join_url][$lid]",
+				"value" => iconv($lang["charset"], "utf-8", $lang_props[$clid]["__after_join_url"][$lid]),
+				"size" => 20
+			));
+		}
+		$t->define_data($d);
 
 
 		$t->set_rgroupby(array("class" => "class"));
 		$t->set_caption(t("T&otilde;lgi omaduste tekste"));
+	}
+
+	function _set_trans_tb($arr)
+	{
+		$l = get_instance("languages");
+		$ll = $l->get_list(array("all_data" => true));
+		
+		foreach($arr["request"]["d"] as $clid => $d2)
+		{
+			foreach($d2 as $key => $d3)
+			{
+				foreach($d3 as $lang_id => $string)
+				{
+					$arr["request"]["d"][$clid][$key][$lang_id] = iconv("utf-8", $ll[$lang_id]["charset"], $string);
+				}
+			}
+		}
+		$arr["obj_inst"]->set_meta("lang_props", $arr["request"]["d"]);
 	}
 
 	function _username_element($arr)
