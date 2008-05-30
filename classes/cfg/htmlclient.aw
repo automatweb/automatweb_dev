@@ -896,10 +896,10 @@ class htmlclient extends aw_template
 					"d_class" => isset($_GET["class"]) ? $_GET["class"] : null,
 					"d_obj" => isset($_GET["id"]) ? $_GET["id"] : null,
 					"object_grp" => isset($_GET["group"]) ? $_GET["group"] : null,
-					"url" => get_ru()
+					"url" => get_ru(),
 				), "customer_feedback_entry"),
 				"feedback_text" => t("Tagasiside"),
-				"feedback_m_link" => $this->mk_my_orb("redir_m", array("url" => get_ru()), "customer_feedback_manager"),
+				"feedback_m_link" => $this->mk_my_orb("redir_m", array("url" => $this->my_get_ru("customer_feedback_manager")), "customer_feedback_manager"),
 				"feedback_m_text" => t("Kasutajatugi"),
 				"help_text" => t("Abi"),
 				"search_text" => t("Otsi"),
@@ -916,7 +916,7 @@ class htmlclient extends aw_template
 					"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
 				)) : "",
 				"settings_pop" => $bmb->get_menu(array("load_on_demand_url" => $this->mk_my_orb("settings_lod", array("url" => get_ru()), "user"))),
-				"srch_link" => $this->mk_my_orb("redir_search", array("url" => get_ru()), "aw_object_search")
+				"srch_link" => $this->mk_my_orb("redir_search", array("url" => $this->my_get_ru("aw_object_search")), "aw_object_search")
 			));
 
 			if ($this->prog_acl("view", "can_search"))
@@ -1556,6 +1556,15 @@ class htmlclient extends aw_template
 		}
 
 		return $this->parse($tpl);
+	}
+
+	private function my_get_ru($class)
+	{
+		if($class == $_GET["class"])
+		{
+			return isset($_GET["return_url"]) ? $_GET["return_url"] : $_GET["url"];
+		}
+		return get_ru();
 	}
 }
 
