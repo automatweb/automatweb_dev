@@ -32,13 +32,13 @@
 				matchContains: true,
 				autoFill: true,
 				formatItem: function(row, i, max) {
-					return row.name;
+					return row.name+" ( "+row.class+" )";
 				},
 				formatMatch: function(row, i, max) {
-					return row.name;
+					return row.name+" ( "+"CL_"+row.class+" )";
 				},
 				formatResult: function(row) {			
-					return row.name;
+					return row.name+" ( "+"CL_"+row.class+" )";
 				}
 		}).result(function(event, data, formatted) {
 			url = settings.baseurl+"/automatweb/"+data.url_obj.replace("--p--", settings.parent)
