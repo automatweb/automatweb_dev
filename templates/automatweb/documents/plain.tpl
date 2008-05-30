@@ -1,10 +1,6 @@
 {VAR:title}<br>
 {VAR:text}
 
-
-
-
-
 <!-- SUB: image -->
 <table cellspacing="0" cellpadding="5" border="0" align="{VAR:alignstr}">
 <tr>
@@ -13,7 +9,6 @@
 	</tr>
 </table>
 <!-- END SUB: image -->
-
 
 <!-- SUB: image_has_big -->
 <table cellspacing="0" cellpadding="5" border="0" align="{VAR:alignstr}">
