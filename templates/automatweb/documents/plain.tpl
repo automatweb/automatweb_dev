@@ -27,7 +27,6 @@
 </table>
 <!-- END SUB: image -->
 
-
 <!-- SUB: image_has_big -->
 <table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
 <tr>
