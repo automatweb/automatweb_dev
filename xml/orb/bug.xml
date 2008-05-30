@@ -42,6 +42,13 @@
 			</function>
 		</action>
 
+		<action name="maintainer_ajax" all_args="1">
+			<function name="maintainer_ajax">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="check_multiple_content">
 			<function name="check_multiple_content">
 				<arguments>

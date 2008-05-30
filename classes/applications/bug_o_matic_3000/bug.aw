@@ -2760,54 +2760,57 @@ die($email);
 		
 		$("#bug_stopper_watch_time").stopper_watch();
 EOF;
-
-		$url = $this->mk_my_orb("maintainer_ajax", array("id" => $this->_get_bt($arr["obj_inst"])->id()));
-		$maintainers = '
-		url = "'.$url.'"
-		function check_class_maintainer()
+		$bt = $this->_get_bt($arr["obj_inst"]);
+		if($bt)
 		{
-			cl_el = aw_get_el("bug_class")
-			cl = cl_el.value
-			geturl = url + "&clid=" + cl
-			data = aw_get_url_contents(geturl)
-			tmp = data.split("|")
-			if(tmp[0] == "found")
+			$url = $this->mk_my_orb("maintainer_ajax", array("id" => $bt->id()));
+			$maintainers = '
+			url = "'.$url.'"
+			function check_class_maintainer()
 			{
-				oid = tmp[1]
-				name = tmp[2]
-				who_el = aw_get_el("who")
-				who_num = null
-				for(i = 0; i < who_el.options.length; i++)
+				cl_el = aw_get_el("bug_class")
+				cl = cl_el.value
+				geturl = url + "&clid=" + cl
+				data = aw_get_url_contents(geturl)
+				tmp = data.split("|")
+				if(tmp[0] == "found")
 				{
-					if(who_el.options[i].value == oid)
+					oid = tmp[1]
+					name = tmp[2]
+					who_el = aw_get_el("who")
+					who_num = null
+					for(i = 0; i < who_el.options.length; i++)
 					{
-						who_num = i
+						if(who_el.options[i].value == oid)
+						{
+							who_num = i
+						}
 					}
-				}
-				if(who_num == null)
-				{
-					who_num = who_el.options.length
-					who_el.options[who_num] = new Option(name, oid)
-				}
-				who_el.value = oid
-				mon_el = aw_get_el("monitors")
-				mon_num = null
-				alert("Bugi t'.html_entity_decode("&auml;").'itjaks seati klassi maintainer.")
-				for(i = 0; i < mon_el.options.length; i++)
-				{
-					if(mon_el.options[i].value == oid)
+					if(who_num == null)
 					{
-						mon_num = i
+						who_num = who_el.options.length
+						who_el.options[who_num] = new Option(name, oid)
 					}
+					who_el.value = oid
+					mon_el = aw_get_el("monitors")
+					mon_num = null
+					alert("Bugi t'.html_entity_decode("&auml;").'itjaks seati klassi maintainer.")
+					for(i = 0; i < mon_el.options.length; i++)
+					{
+						if(mon_el.options[i].value == oid)
+						{
+							mon_num = i
+						}
+					}
+					if(mon_num == null)
+					{
+						mon_num = mon_el.options.length
+						mon_el.options[mon_num] = new Option(name, oid)
+					}
+					mon_el.options[mon_num].selected = true
 				}
-				if(mon_num == null)
-				{
-					mon_num = mon_el.options.length
-					mon_el.options[mon_num] = new Option(name, oid)
-				}
-				mon_el.options[mon_num].selected = true
-			}
-		}';
+			}';
+		}
 
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
 		{
