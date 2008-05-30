@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/scheduler.aw,v 1.1 2008/02/21 21:42:18 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/scheduler.aw,v 1.2 2008/05/30 11:29:59 kristo Exp $
 @classinfo  maintainer=kristo
 */
 
@@ -157,8 +157,8 @@ class scheduler extends aw_template
 				// read properties into tmp array, this way accessing login_uid for object
 				// without such property should not cause a fatal error
 				//foreach($o->connections_from(array("type" => 1)) as $c)
-				// see 1 annab target objekti .. aga kõik need probleemid ju tulenevad
-				// sellest, et sihtobjektil võib olla olla seos hoopid scheduleriga
+				// see 1 annab target objekti .. aga k6ik need probleemid ju tulenevad
+				// sellest, et sihtobjektil v6ib olla olla seos hoopid scheduleriga
 				foreach($o->connections_from(array("type" => "RELTYPE_TARGET_OBJ")) as $c)
 				{
 					$event = str_replace("automatweb/", "", $this->mk_my_orb("invoke",array("id" => $c->prop("to")),$c->prop('to.class_id')));
@@ -179,7 +179,7 @@ class scheduler extends aw_template
 			{
 				foreach($o->connections_to(array("to.class_id" => CL_RECURRENCE)) as $c)
 				{
-					// see asi siin peab invoke uuesti scheduleri sisse püsti panema?
+					// see asi siin peab invoke uuesti scheduleri sisse pysti panema?
 					$event = str_replace("automatweb/", "", $this->mk_my_orb("invoke",array("id" => $c->prop("from")),$c->prop("from.class_id")));
 						$re = $event."&ts=".$row["recur_start"];
 						$this->evnt_add(
@@ -274,7 +274,7 @@ class scheduler extends aw_template
 	{
 		$this->session_fp = fopen($this->cfg["sched_file"], "a+");
 
-		//kui juhtub ime ja samalajal keegi tegutseb selle failiga, siis on kahetsusväärne kui lihtsalt die tuleb... asjad võivad katki minna nii... see on paha... väga paha
+		//kui juhtub ime ja samalajal keegi tegutseb selle failiga, siis on kahetsusv22rne kui lihtsalt die tuleb... asjad v6ivad katki minna nii... see on paha... v2ga paha
 		$reading_start = time();
 		while(!$this->session_fp && ($reading_start + 15 > time()))
 		{
@@ -798,7 +798,26 @@ class scheduler extends aw_template
 		{
 			if ($val["tag"] == "REPEAT" && $val["type"] == "complete")
 			{
-				list($hr, $min) = explode(":", $val["attributes"]["TIME"]);
+				if (strpos($val["attributes"]["TIME"], "+") !== false)
+				{
+					list($tm, $add) = explode("+", $val["attributes"]["TIME"]);
+
+					list($hr, $min) = explode(":", $tm);
+					if (substr($add, 0, 4) == "rand")
+					{
+						if (preg_match("/rand\((\d)\)/", $add, $mt))
+						{
+							$t_mins = $hr * 60 + $min;
+							$t_mins += rand(1, $mt[1]*60);
+							$hr = floor($t_mins / 60);
+							$min = $t_mins % 60;
+						}
+					}
+				}
+				else
+				{
+					list($hr, $min) = explode(":", $val["attributes"]["TIME"]);
+				}
 				if ($val["attributes"]["TYPE"] == "daily" && date("H") == ($hr-1))
 				{
 					// add to scheduler
