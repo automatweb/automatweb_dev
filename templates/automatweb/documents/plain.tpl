@@ -3,7 +3,7 @@
 <!-- END SUB: SHOW_TITLE -->
 
 <!-- SUB: PRINTANDSEND -->
-<p class="printlink"><a href="{VAR:printlink}"  target="_new"></a></p>
+<p class="printlink"><a href="{VAR:printlink}" target="_new"></a></p>
 <!-- END SUB: PRINTANDSEND -->
 
 {VAR:text}
