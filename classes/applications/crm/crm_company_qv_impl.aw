@@ -132,7 +132,7 @@ class crm_company_qv_impl extends class_base
 				"date" => date("d.m.Y", $o->prop("start")).($o->prop("end") > 100 ? " - ".date("d.m.Y", $o->prop("end")) : ""),
 				"name" => html::obj_change_url($o),
 				"parts" => join(", ",array_unique($parts)),
-				"hrs" => number_format($hrs, 3, ',', ''),
+				"hrs" => $stat->hours_format($hrs),//number_format($hrs, 3, ',', ''),
 				"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $pd,
 				"grp_num" => 1,
