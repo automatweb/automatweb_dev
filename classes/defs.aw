@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.264 2008/05/24 09:47:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.265 2008/05/30 07:15:57 instrumental Exp $
 // defs.aw - common functions
 
 /*
@@ -130,6 +130,19 @@ if (!defined("DEFS"))
 	**/
 	function get_ru()
 	{
+		$query = parse_url(aw_global_get("REQUEST_URI"));
+		if(isset($query["query"]))
+		{
+			parse_str($query["query"], &$result);
+			// Some use url parameter instead of return_url
+			$return_url = isset($result["return_url"]) ? $result["return_url"] : $result["url"];
+			$query_ru = parse_url($return_url);
+			parse_str($query_ru["query"], &$result_ru);
+			if($result["class"] == $result_ru["class"] && $result["action"] == $result_ru["action"] && $result["id"] == $result_ru["id"])
+			{
+				return $return_url;
+			}
+		}
 		return aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
 	}
 
