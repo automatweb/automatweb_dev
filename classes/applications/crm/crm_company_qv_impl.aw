@@ -95,6 +95,7 @@ class crm_company_qv_impl extends class_base
 		}
 		$pi = get_instance(CL_PROJECT);
 		$t_i = get_instance(CL_TASK);
+		$stat = get_instance("applications/crm/crm_company_stats_impl");
 		$r = array();
 		$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
 		$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
