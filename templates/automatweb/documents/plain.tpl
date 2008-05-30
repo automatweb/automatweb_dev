@@ -56,7 +56,7 @@
 	</span></td>
 	</tr>
 </table>
-<!-- END SUB: image_has_big -->
+<!-- END SUB: image_linked -->
 
 <!-- SUB: file -->
 <img alt="faili ikoon" title="faili ikoon" src="{VAR:file_icon}">
