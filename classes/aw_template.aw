@@ -927,7 +927,11 @@ class aw_template extends core
 	{
 		if ($this->debug_mode != 0 && isset($_GET["TPL"]) && $_GET["TPL"] == 1)
 		{
-			print "using " . $this->template_filename . "<br />\n";
+			// this will add link to documentation
+			$pos = strpos($this->template_filename, aw_ini_get("tpldir"));
+			$tpl_doc_link = ($pos === false) ? str_replace($this->cfg['basedir']."/templates", "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename) : 
+			str_replace(aw_ini_get("tpldir"), "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename);
+			print "using " . $this->template_filename . " - <a href='" . $tpl_doc_link . "' target='_blank'>Read doc</a><br />\n";
 		};
 		$this->tpl_reset();
 		if (is_array($arr))
