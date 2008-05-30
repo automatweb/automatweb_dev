@@ -711,6 +711,7 @@ class bug extends class_base
 
 			case "bug_class":
 				$prop["options"] = array("" => "") + $this->get_class_list();
+				$prop["onchange"] = "check_class_maintainer();";
 				break;
 
 			case "project":
@@ -2760,9 +2761,57 @@ die($email);
 		$("#bug_stopper_watch_time").stopper_watch();
 EOF;
 
+		$url = $this->mk_my_orb("maintainer_ajax", array("id" => $this->_get_bt($arr["obj_inst"])->id()));
+		$maintainers = '
+		url = "'.$url.'"
+		function check_class_maintainer()
+		{
+			cl_el = aw_get_el("bug_class")
+			cl = cl_el.value
+			geturl = url + "&clid=" + cl
+			data = aw_get_url_contents(geturl)
+			tmp = data.split("|")
+			if(tmp[0] == "found")
+			{
+				oid = tmp[1]
+				name = tmp[2]
+				who_el = aw_get_el("who")
+				who_num = null
+				for(i = 0; i < who_el.options.length; i++)
+				{
+					if(who_el.options[i].value == oid)
+					{
+						who_num = i
+					}
+				}
+				if(who_num == null)
+				{
+					who_num = who_el.options.length
+					who_el.options[who_num] = new Option(name, oid)
+				}
+				who_el.value = oid
+				mon_el = aw_get_el("monitors")
+				mon_num = null
+				alert("Bugi t'.html_entity_decode("&auml;").'itjaks seati klassi maintainer.")
+				for(i = 0; i < mon_el.options.length; i++)
+				{
+					if(mon_el.options[i].value == oid)
+					{
+						mon_num = i
+					}
+				}
+				if(mon_num == null)
+				{
+					mon_num = mon_el.options.length
+					mon_el.options[mon_num] = new Option(name, oid)
+				}
+				mon_el.options[mon_num].selected = true
+			}
+		}';
+
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
 		{
-			return $s_bug_stopper_watch_v2;
+			return $maintainers.$s_bug_stopper_watch_v2;
 		}
 		
 		if (!$arr["new"])
@@ -2785,6 +2834,41 @@ EOF;
 			}
 		}".
 		"return true;}";
+	}
+
+	/**
+	@attrib name=maintainer_ajax all_args=1
+	**/
+	function maintainer_ajax($arr)
+	{
+		$o = obj();
+		$o->set_class_id($arr["clid"]);
+		$dat = $o->get_classinfo();
+		$mu = $dat["maintainer"];
+		$bt = obj($arr["id"]);
+		$map = explode(chr(13).chr(10), $bt->prop("cvs2uidmap"));
+		foreach($map as $row)
+		{
+			$tmp = explode("=", $row);
+			if($tmp[0] == $mu)
+			{
+				$user = $tmp[1];
+			}
+		}
+		if($user)
+		{
+			$ui = get_instance(CL_USER);
+			$uo = $ui->get_obj_for_uid($user);
+			if($uo)
+			{
+				$po = $uo->get_first_obj_by_reltype("RELTYPE_PERSON");
+			}
+		}
+		if($po)
+		{
+			die("found|".$po->id()."|".$po->name());
+		}
+		die();
 	}
 
 	/**
