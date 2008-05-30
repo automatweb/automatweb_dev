@@ -13,7 +13,7 @@
 <!-- END SUB: ablock -->
 
 <!-- SUB: image -->
-<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" type="image">
+<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
 <tr>
 	<td><img src="{VAR:imgref}" alt="{VAR:alt}" title="VAR:alt}">
 	<br/>
@@ -29,7 +29,7 @@
 
 
 <!-- SUB: image_has_big -->
-<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" type="image_has_big">
+<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
 <tr>
 	<td><a href="JavaScript: void(0)" 
 	onClick="window.open('{VAR:bi_show_link}','popup','width={VAR:big_width},height={VAR:big_height}');">
@@ -45,7 +45,7 @@
 <!-- END SUB: image_has_big -->
 
 <!-- SUB: image_linked -->
-<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" type="image_linked">
+<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
 <tr>
 	<td><a {VAR:target} href="{VAR:plink}">
 	<img src="{VAR:imgref}" alt="{VAR:alt}" title="{VAR:alt}"></a>
