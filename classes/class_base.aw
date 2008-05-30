@@ -453,11 +453,12 @@ class class_base extends aw_template
 			$gdata["submit"] = "no";
 		}
 
-		if (!empty($args["no_rte"]))
+		$user_obj = obj(aw_global_get("uid_oid"));
+		if (!empty($args["no_rte"]) || $user_obj->prop("rte_disabled"))
 		{
 			$this->no_rte = 1;
 		}
-
+		
 		// and, if we are in fixed toolbar layout mode, then we should
 		// probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?

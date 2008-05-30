@@ -421,6 +421,26 @@
             <caption>P&amp;amp;auml;rast sisse logimist suunamine</caption>
       </property>
       <property>
+            <name>rte_hd</name>
+            <table>users</table>
+            <group>settings</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>rte_hd</field>
+            <caption>Liidese seaded</caption>
+      </property>
+      <property>
+            <name>rte_disabled</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Keela RTE</caption>
+      </property>
+      <property>
             <name>stoppers</name>
             <table>objects</table>
             <group>settings</group>

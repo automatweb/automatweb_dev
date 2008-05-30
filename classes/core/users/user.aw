@@ -175,6 +175,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property after_login_redir type=textbox field=meta method=serialize table=objects
 	@caption P&auml;rast sisse logimist suunamine
 
+	@property rte_hd type=text subtitle=1 store=no
+	@caption Liidese seaded
+
+	@property rte_disabled type=checkbox ch_value=1 field=meta method=serialize table=objects
+	@caption Keela RTE
 
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
