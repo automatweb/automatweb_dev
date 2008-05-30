@@ -22,7 +22,7 @@ class aw_object_quickadd extends class_base
 		header("Expires: ".gmdate("D, d M Y H:i:s", time()+43200)." GMT");
 		header("Cache-Control: max-age=315360000");
 		echo $this->get_objects_to_js_array(array(
-			"pack" => false,
+			"pack" => true,
 		));
 		die();
 	}
