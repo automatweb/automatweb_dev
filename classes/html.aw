@@ -1077,13 +1077,14 @@ class html extends aw_template
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
 		$rel = isset($rel) ? " rel='$rel'" : "";
+		$style = isset($rel) ? " style='$style'" : "";
 
 		if (empty($caption))
 		{
 			$caption = $url;
 		}
 
-		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . $rel. ">{$caption}</a>";
+		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . $rel . $style. ">{$caption}</a>";
 	}
 
 	/**Popup
