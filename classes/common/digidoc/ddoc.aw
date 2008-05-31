@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.31 2008/05/07 10:50:13 kristo Exp $
-// ddoc.aw - DigiDoc 
+// ddoc.aw - DigiDoc
 /*
 
 @classinfo syslog_type=ST_DDOC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
@@ -19,7 +18,7 @@
 
 @groupinfo files caption="Failid" submit=no
 @default group=files
-	
+
 	@property files_tb type=toolbar no_caption=1
 	@property files_tbl type=table no_caption=1
 	@property popup_search_res type=hidden name=search_result_file store=no
@@ -38,10 +37,14 @@
 @reltype SIGNED_FILE value=1 clid=CL_FILE,CL_PATENT
 @caption Allkirjastatud fail
 
-@reltype SIGNER value=2 clid=CL_CRM_PERSON 
+@reltype SIGNER value=2 clid=CL_CRM_PERSON
 @caption Allkirjastaja
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PATENT, on_save_patent)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PATENT, on_save_intellectual_property)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PATENT_PATENT, on_save_intellectual_property)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_UTILITY_MODEL, on_save_intellectual_property)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_INDUSTRIAL_DESIGN, on_save_intellectual_property)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_EURO_PATENT_ET_DESC, on_save_intellectual_property)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_FILE, on_save_file)
 
 */
@@ -196,7 +199,7 @@ class ddoc extends class_base
 				break;
 			case "signatures_tb":
 				$tb = &$prop["vcl_inst"];
-				
+
 				$sign_url = $this->sign_url(array(
 					"ddoc_oid" => $arr["obj_inst"]->id(),
 				));
@@ -213,7 +216,7 @@ class ddoc extends class_base
 					"action" => "rem_sig",
 					"img" => "delete.gif",
 				));
-				
+
 				break;
 			case "signatures_tbl":
 				$t = &$prop["vcl_inst"];
@@ -245,7 +248,7 @@ class ddoc extends class_base
 					"name" => "location",
 					"caption" => t("Asukoht"),
 				));
-				
+
 				$signatures = aw_unserialize($arr["obj_inst"]->prop("signatures"));
 				foreach($signatures as $sig_id => $sig)
 				{
@@ -292,7 +295,7 @@ class ddoc extends class_base
 					$file_name = $_FILES["ddoc"]["name"];
 					$file_type = $_FILES["ddoc"]["type"];
 				};
-				
+
 				classload("common/digidoc/ddoc_parser");
 				$parser = new ddoc2_parser();
 				$parser->setDigiDocFormatAndVersion(file_get_contents($file));
@@ -305,7 +308,7 @@ class ddoc extends class_base
 
 				if (is_uploaded_file($file))
 				{
-					
+
 					$pathinfo = pathinfo($file_name);
 					if (empty($file_type))
 					{
@@ -316,7 +319,7 @@ class ddoc extends class_base
 					$final_name = $cl_file->generate_file_path(array(
 						"type" => $file_type,
 					));
-						
+
 					move_uploaded_file($file, $final_name);
 					$arr["obj_inst"]->set_name($file_name);
 					// vetax vana faili 2ra igaks-juhuks
@@ -354,13 +357,13 @@ class ddoc extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
-	
+
 	function callback_pre_save($arr)
 	{
 		if($arr["request"]["search_result_file"])
@@ -387,7 +390,7 @@ class ddoc extends class_base
 					"file_oid" => $file,
 				));
 			}
-		}	
+		}
 	}
 
 	function callback_post_save($arr)
@@ -417,9 +420,10 @@ class ddoc extends class_base
 //-- msg methods --//
 
 	// these functions remove dha signatures when saving a signed object
-	function on_save_patent($arr)
+	function on_save_intellectual_property($arr)
 	{
-		$inst = get_instance(CL_PATENT);
+		$o = new object($arr["oid"]);
+		$inst = $o->instance();
 		$res = $inst->is_signed($arr["oid"]);
 		if($res["status"] == 1)
 		{
@@ -516,7 +520,7 @@ class ddoc extends class_base
 						"msg" => t("Faili lisamine eba&otilde;nnestus!"),
 					));
 				}
-			
+
 			}
 			$contents = $tpl->parse("DONE");
 		}
@@ -527,7 +531,7 @@ class ddoc extends class_base
 			));
 			$contents = $tpl->parse("UPLOAD");
 		}
-		
+
 		die($contents);
 
 	}
@@ -683,7 +687,7 @@ class ddoc extends class_base
 			the ddoc object oid
 		@comment
 			finds out if this document is signed or not
-		@returns 
+		@returns
 			true if document is signed, false otherwise
 		@errors
 			error will be raised if oid is wrong.
@@ -823,7 +827,7 @@ class ddoc extends class_base
 		$o = obj($oid);
 		return file_get_contents($o->prop("ddoc_location"));
 	}
-	
+
 	/**
 		@attrib api=1 params=pos
 		@param oid required type=oid
@@ -960,7 +964,7 @@ class ddoc extends class_base
 				"name" => $file["name"],
 				"hash" => $hash["DigestValue"],
 			));
-			
+
 			$this->_e();
 		}
 		elseif($arr["other_oid"])
@@ -1030,7 +1034,7 @@ class ddoc extends class_base
 				"name" => $file["name"],
 				"hash" => $hash["DigestValue"],
 			));
-			
+
 			$this->_e();
 		}
 		elseif($arr["file"]["name"] || $arr["file"]["size"] || $arr["file"]["MIME"] || $arr["file"]["content"])
@@ -1057,7 +1061,7 @@ class ddoc extends class_base
 					"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
 				));
 			}
-			
+
 			// lets get the new and improved ddoc file
 			//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 			$ret = $this->digidoc->WSDL->GetSignedDoc((int)$_SESSION["scode"]);
@@ -1079,12 +1083,12 @@ class ddoc extends class_base
 		}
 		else
 		{
-			// et parameetrid valed siis vist 
+			// et parameetrid valed siis vist
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 		@attrib params=pos api=1
 		@param oid optional type=oid
@@ -1119,7 +1123,7 @@ class ddoc extends class_base
 		}
 		return false;
 	}
-	
+
 	/**
 		@param ddoc_id required type=int
 			file id in the ddoc file container
@@ -1165,7 +1169,7 @@ class ddoc extends class_base
 		$o->save();
 		return true;
 	}
-	
+
 	/**
 		@attrib params=pos
 		@param oid required type=oid
@@ -1182,7 +1186,7 @@ class ddoc extends class_base
 			$this->sign_err(DDOC_ERR_DDDOC, "_do_reset_ddoc", "Incorrect parameter oid.");
 			return false;
 		}
-		
+
 		$this->_clear_old_signatures($oid);
 		if(!$save)
 		{
@@ -1192,7 +1196,7 @@ class ddoc extends class_base
 		$o = obj($oid);
 
 		$this->_s($oid);
-		
+
 		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 		$ret =  $this->digidoc->WSDL->GetSignedDocInfo((int)$_SESSION["scode"]);
 		if(PEAR::isError($ret))
@@ -1228,7 +1232,7 @@ class ddoc extends class_base
 				"content" => base64_decode($file["DataFileData"]->DfData),
 			), $file["DataFileData"]->Id);
 			$hash = $hash["DigestValue"];
-			
+
 			$files[$file["DataFileData"]->Id] = array(
 				"content" => base64_decode($file["DataFileData"]->DfData),
 				"name" => $file["DataFileData"]->Filename,
@@ -1242,7 +1246,7 @@ class ddoc extends class_base
 		// i don't use the parser results here because i don't get the file contents from there so easily
 		foreach($files as $ddoc_id => $data)
 		{
-			// anyway.. this checks if there is need to recreate aw file objects($save var), 
+			// anyway.. this checks if there is need to recreate aw file objects($save var),
 			// and if given hash exists already in ddoc metadata. if it doesen't aw file object is created
 			$_inside_new_ddoc[$ddoc_id] = $data["hash"];
 			if(!$save || !($from_hash_exists = $this->_hash_exists($oid, $data["hash"])))
@@ -1271,7 +1275,7 @@ class ddoc extends class_base
 			else
 			{
 				// well.. this is for the moment's where connection to aw file object is lost somewhy
-				// actually i should do a object check also ..:S 
+				// actually i should do a object check also ..:S
 				$o->connect(array(
 					"type" => "RELTYPE_SIGNED_FILE",
 					"to" => $from_hash_exists["file"],
@@ -1303,7 +1307,7 @@ class ddoc extends class_base
 		{
 			$name = $sign["Signer"]["CommonName"];
 			$name = split(",", $name);
-			// why the hell do they put the T in the middle???.. 
+			// why the hell do they put the T in the middle???..
 			$signing_time = strtotime(str_replace("T", " ",$sign["SigningTime"]));
 
 			$filter = array(
@@ -1347,11 +1351,11 @@ class ddoc extends class_base
 				"type" => "RELTYPE_SIGNER",
 				"to" => $p_obj->id(),
 			));
-			
+
 			// close the session
 			$this->_e();
 		}aw_disable_acl();
-	
+
 		$o->save();aw_restore_acl();
 	}
 
@@ -1374,7 +1378,7 @@ class ddoc extends class_base
 		{
 			return t("#");
 		}
-		
+
 		return $this->mk_my_orb("sign", $arr, CL_DDOC);
 	}
 
@@ -1395,9 +1399,9 @@ class ddoc extends class_base
 			unset($argv[1]);
 		}
 		$backtrace = debug_backtrace();
-		
+
 		$handle = fopen(aw_ini_get("site_basedir")."/files/digidoc_error_dbg", 'a');
-		
+
 		fwrite($handle, "\n---------");
 		// ususal error info
 		fwrite($handle, "\n[".date("d.m.Y h:i:s", time())."]");
@@ -1421,7 +1425,7 @@ class ddoc extends class_base
 		fclose($handle);
 		return $msg;
 	}
-	
+
 	/**
 		@attrib params=name name=sign all_args=1
 		@param step optional type=string
@@ -1519,7 +1523,7 @@ class ddoc extends class_base
 						));
 					}
 					$arr["ddoc_oid"] = $new_ddoc->id();
-				
+
 				}
 				else
 				{
@@ -1599,7 +1603,7 @@ class ddoc extends class_base
 			break;
 			case "FINALIZE":
 				$tpl->read_template("sign_finalize.tpl");
-				
+
 				// viimati finalize etapi l2binud korra kontroll
 				$use_prev = false;
 				if(isset($_SESSION["prev_sign_mark"]))
@@ -1703,7 +1707,7 @@ class ddoc extends class_base
 					}
 					*/
 					$tpl->read_template("sign_end.tpl");
-					$html = $tpl->parse();	
+					$html = $tpl->parse();
 					$this->sign_err(DDOC_WARN_DDOC, "NO_BACKTRACE", "sign", "Signature succesfully added.");
 				}
 
@@ -1808,7 +1812,7 @@ class ddoc extends class_base
 			signer personal id code
 		@param signing_time required type=int
 			signing time
-	
+
 		@param signing_town optional
 		@param signing_county optional
 		@param signing_index optional
