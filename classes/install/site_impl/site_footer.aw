@@ -80,7 +80,7 @@ if ($_GET["TPL"] == 1)
 	}
 	else
 	{
-		$cache->file_set("tpl_equals_1_cache_".aw_global_get("section"),"");
+		$cache->file_set("tpl_equals_1_cache_".aw_global_get("section"), aw_global_get("TPL=1"));
 	}
 	
 	$sf->read_template("debug/tpl_equals_1.tpl");
