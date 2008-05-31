@@ -931,7 +931,7 @@ class aw_template extends core
 			$pos = strpos($this->template_filename, aw_ini_get("tpldir"));
 			$tpl_doc_link = ($pos === false) ? str_replace($this->cfg['basedir']."/templates", "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename) : 
 			str_replace(aw_ini_get("tpldir"), "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename);
-			print "using " . $this->template_filename . " - <a href='" . $tpl_doc_link . "' target='_blank'>Read doc</a><br />\n";
+			aw_global_set("TPL=1", aw_global_get("TPL=1")."using <a href='" . $tpl_doc_link . "' target='_blank' style='color: #006A80; text-decoration: none; font-weight: normal;' onMouseOut='this.style.textDecoration=\"none\"' onMouseOver='this.style.textDecoration=\"underline\"'>" . $this->template_filename . "</a><br />\n");
 		};
 		$this->tpl_reset();
 		if (is_array($arr))

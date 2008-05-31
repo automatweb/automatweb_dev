@@ -63,6 +63,16 @@ if (aw_ini_get("ga_id"))
 	$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_code."</body>\n</html>" , $str);
 }
 
+if ($_GET["TPL"] == 1)
+{
+	$sf->read_template("debug/tpl_equals_1.tpl");
+	$sf->vars(array(
+		"content" => aw_global_get("TPL=1")
+	));
+	aw_global_set("TPL=1", $sf->parse());
+	$str = preg_replace("/^(.*)<body.*>/imsU", "\\0".aw_global_get("TPL=1"), $str);
+}
+
 if (aw_ini_get("content.compress") == 1)
 {
 	ob_start( 'ob_gzhandler' );
