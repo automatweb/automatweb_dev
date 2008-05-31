@@ -1,52 +1,60 @@
-			<table width="383" border="0" cellpadding="0" cellspacing="0">
-			<!-- begin doc -->
-			<tr>
-			<td width="283" valign="top" class="textmoodul">
+<!-- SUB: SHOW_TITLE -->
+<p class="title"><a href="{VAR:document_link}">{VAR:title}</a></p>
+<!-- END SUB: SHOW_TITLE -->
 
-				<a href="{VAR:baseurl}/{VAR:docid}"><b>{VAR:title}</b></a>
-	<!-- SUB: FORUM_ADD_SUB -->
-	(<a href="{VAR:comm_link}" class="textrubriikcomm">{VAR:num_comments}</a>)
-	<!-- END SUB: FORUM_ADD_SUB -->
-	<br>
-				<IMG SRC="{VAR:baseurl}/img/trans.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""><br>
-				{VAR:text}
+<!-- SUB: ablock -->
+<p class="author">teksti autor: {VAR:author} {VAR:modified}</p>
+<!-- END SUB: ablock -->
 
-			</td>
-			</tr>
-			<!-- end doc -->
-			</table>
-
-
-
-
-
-<!-- SUB ablock
-<span class="textauthor">by {VAR:author} {VAR:modified}</span><br>
-END SUB ablock -->
+{VAR:text}
 
 <!-- SUB: image -->
-<table border=0 cellpadding=0 cellspacing=0 {VAR:align}>
-	<tr>
-		<td><img src='{VAR:imgref}'></td>
-	</tr>
-	<tr>
-		<td class="text">{VAR:imgcaption}</td>
-	</tr>
+<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
+<tr>
+    <td><img src="{VAR:imgref}" alt="{VAR:alt}" title="VAR:alt}">
+    <br/>
+    <span class="imagecomment">{VAR:imgcaption}
+        <!-- SUB: HAS_AUTHOR -->
+        (Foto: {VAR:author})
+        <!-- END SUB: HAS_AUTHOR -->
+    </span>
+    </td>
+    </tr>
 </table>
 <!-- END SUB: image -->
-
+ 
+<!-- SUB: image_has_big -->
+<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
+<tr>
+    <td><a href="JavaScript: void(0)" 
+    onClick="window.open('{VAR:bi_show_link}','popup','width={VAR:big_width},height={VAR:big_height}');">
+    <img src="{VAR:imgref}" alt="{VAR:alt}" title="{VAR:alt}"></a>
+    <br/>
+    <span class="imagecomment">{VAR:imgcaption}
+    <!-- SUB: HAS_AUTHOR -->
+    (Foto: {VAR:author})
+    <!-- END SUB: HAS_AUTHOR -->
+    </span></td>
+    </tr>
+</table>
+<!-- END SUB: image_has_big -->
+ 
 <!-- SUB: image_linked -->
-<table border=0 cellpadding=0 cellspacing=0 {VAR:align}>
-	<tr>
-		<td><a href='{VAR:plink}'><img border=0 src='{VAR:imgref}'></a></td>
-	</tr>
-	<tr>
-		<td class="text">{VAR:imgcaption}</td>
-	</tr>
+<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
+<tr>
+    <td><a {VAR:target} href="{VAR:plink}">
+    <img src="{VAR:imgref}" alt="{VAR:alt}" title="{VAR:alt}"></a>
+    <br/>
+    <span class="imagecomment">{VAR:imgcaption}
+    <!-- SUB: HAS_AUTHOR -->
+    (Foto: {VAR:author})
+    <!-- END SUB: HAS_AUTHOR -->
+    </span></td>
+    </tr>
 </table>
 <!-- END SUB: image_linked -->
-
-<!-- SUB: link -->
-<a {VAR:target} href='{VAR:url}'>{VAR:caption}</a>
-<!-- END SUB: link -->
-
+ 
+<!-- SUB: file -->
+<img alt="faili ikoon" title="faili ikoon" src="{VAR:file_icon}">
+<a href="{VAR:file_url}">{VAR:file_name}</a>
+<!-- END SUB: file -->
