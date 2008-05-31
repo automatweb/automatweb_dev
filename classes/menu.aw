@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.236 2008/05/20 11:43:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.237 2008/05/31 08:30:07 voldemar Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -156,7 +156,7 @@
 		caption Dokumente j&auml;rjestatakse
 
 		property sort_ord type=select table=objects field=meta method=serialize group=doc_ord
-		
+
 		@property doc_ord_apply_to_admin type=checkbox table=objects field=meta method=serialize group=doc_ord
 		@caption Kehtib ka adminis
 
@@ -423,7 +423,7 @@
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
 
-	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW,CL_PERSONS_WEBVIEW,CL_CFGFORM,CL_TRADEMARK_ADD
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW,CL_PERSONS_WEBVIEW,CL_CFGFORM,CL_TRADEMARK_ADD,CL_PATENT_ADD,CL_UTILITY_MODEL_ADD,CL_INDUSTRIAL_DESIGN_ADD,CL_EURO_PATENT_ET_DESC_ADD
 	@caption alammen&uuml;&uuml;d objektist
 
 	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
@@ -474,20 +474,20 @@ class menu extends class_base implements main_subtemplate_handler
 		);
 	}
 
-	/** Generate a form for adding or changing an object 	 
-		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa" 	 
-	**/ 	 
-	function new_change($args) 	 
-	{ 	 
-		return $this->change($args); 	 
-	} 	 
-	  	 
-	/** 	 
-		@attrib name=change params=name all_args="1" is_public="1" caption="Muuda" 	 
-	**/ 	 
-	function change($args = array()) 	 
-	{ 	 
-		return parent::change($args); 	 
+	/** Generate a form for adding or changing an object
+		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
+	**/
+	function new_change($args)
+	{
+		return $this->change($args);
+	}
+
+	/**
+		@attrib name=change params=name all_args="1" is_public="1" caption="Muuda"
+	**/
+	function change($args = array())
+	{
+		return parent::change($args);
 	}
 
 	function get_property($arr)
@@ -951,7 +951,7 @@ class menu extends class_base implements main_subtemplate_handler
 				$url = $imi->get_url_by_id($imdata[$i]["image_id"]);
 				if ($url)
 				{
-					// kix will burn me alive for this html in here 
+					// kix will burn me alive for this html in here
 					$url =  "<div id='preview_div_".$k."'>".html::img(array(
 						"url" => $url,
 						"id" => "preview_img_".$k
@@ -962,14 +962,14 @@ class menu extends class_base implements main_subtemplate_handler
 						"target" => "_blank",
 						"id" => "preview_url_".$k,
 					))." </div> ";
-					
+
 					$rel = html::select(array(
 						"name" => "img[$k]",
 						"options" => $imgrels,
 						"selected" => $imdata[$i]["image_id"],
 						"onchange" => "menu_images_update_image (this, $k)",
 					));
-		
+
 					$t->define_data(array(
 						"nr" => "$k",
 						"ord" => html::textbox(array(
@@ -992,17 +992,17 @@ class menu extends class_base implements main_subtemplate_handler
 				}
 			}
 		}
-		
+
 		if ($k<$cnt)
 		{
 			$url = "<div id='preview_div_".$k."'></div>";
-			
+
 			$rel = html::select(array(
 				"name" => "img[$k]",
 				"options" => $imgrels,
 				"onchange" => "menu_images_add_row(this); menu_images_update_image (this, $k);",
 			));
-	
+
 			$t->define_data(array(
 				"nr" => "$k",
 				"ord" => html::textbox(array(
@@ -1025,7 +1025,7 @@ class menu extends class_base implements main_subtemplate_handler
 		$t->set_default_sortby("nr");
 		$t->sort_by();
 	}
-	
+
 	function callback_generate_scripts ()
 	{
 		$output = "";
@@ -1033,28 +1033,28 @@ class menu extends class_base implements main_subtemplate_handler
 		{
 			$id = $_GET["id"];
 			$menu_images_cnt = $this->menu_images_get_cnt(array("id"=>$id));
-			
+
 			$output = '
-			
+
 			var menu_images_cnt = '.$menu_images_cnt.'
 			// get imgrels array for making select menu
 			'.$this->menu_images_get_imgrels(array(
 					"id"=>$id
 			)).'
-			
+
 			// get connected images as js array into menu_images
 			'.$this->menu_images_get(array(
 					"id"=>$id,
 					"cnt"=>'.$menu_images_cnt.'
 			)).'
-			
+
 			function menu_images_add_row (that)
 			{
 				row_clicked = that.parentNode.parentNode.childNodes[0].innerHTML*1.0;
 				if ((menu_images_cnt*1.0+1) <'.aw_ini_get("menu.num_menu_images").' && row_clicked == (menu_images_cnt*1.0)  )
 				{
 					menu_images_cnt++;
-					
+
 					$("<tr class=awmenuedittablerow>"+
 						"<td align=center class=awmenuedittabletext>"+menu_images_cnt+"</td>"+
 						"<td align=center><div id=preview_div_"+menu_images_cnt+"></div></td>"+
@@ -1063,11 +1063,11 @@ class menu extends class_base implements main_subtemplate_handler
 					"</tr>").appendTo(that.parentNode.parentNode.parentNode);
 				}
 			}
-			
+
 			function create_select (name, options)
 			{
 				s_html = "<select  name=\'"+name+"\' onchange=\'row_nr = this.parentNode.parentNode.childNodes[0].innerHTML*1.0;menu_images_add_row (this);	menu_images_update_image (this, row_nr); ;\'>";
-				
+
 				for (key in options)
 				{
 					if (options[key].length > 0)
@@ -1078,7 +1078,7 @@ class menu extends class_base implements main_subtemplate_handler
 				s_html += "</select>";
 				return s_html;
 			}
-			
+
 			function menu_images_update_image (that, row_nr)
 			{
 					sel_img_id = that.value;
@@ -1103,14 +1103,14 @@ class menu extends class_base implements main_subtemplate_handler
 					}
 			}';
 		}
-		
+
 		return $output;
 	}
-	
-	/**  
+
+	/**
 	@attrib name=ajax_menu_images_new_row
 	@param menuid required type=int
-	
+
 	@comment
 	**/
 	function ajax_menu_images_new_row ($arr)
@@ -1118,16 +1118,16 @@ class menu extends class_base implements main_subtemplate_handler
 		classload("vcl/table");
 		$t =  new aw_table();
 		$this -> _get_images_table_cols ($t);
-		
+
 		$menu_obj = obj($arr["menuid"]);
 		$imdata = $menu_obj->meta("menu_images");
-		
+
 		$imgrels = array(0 => t("Vali pilt.."));
 		foreach($menu_obj->connections_from(array("type" => "RELTYPE_IMAGE")) as $conn)
 		{
 			$imgrels[$conn->prop("to")] = $conn->prop("to.name");
 		}
-		
+
 		$output = '
 
 		';
@@ -1140,17 +1140,17 @@ class menu extends class_base implements main_subtemplate_handler
 		classload("vcl/table");
 		$t =  new aw_table();
 		$this -> _get_images_table_cols ($t);
-		
+
 		$menu_obj = obj($arr["id"]);
 		$imdata = $menu_obj->meta("menu_images");
-		
+
 		$i = 0;
 		foreach ($imdata as $img)
 		{
 			if ($img["image_id"] > 0)
 				$i++;
 		}
-		
+
 		return $i;
 	}
 
@@ -1159,22 +1159,22 @@ class menu extends class_base implements main_subtemplate_handler
 		classload("vcl/table");
 		$t =  new aw_table();
 		$this -> _get_images_table_cols ($t);
-		
+
 		$menu_obj = obj($arr["id"]);
 		$imdata = $menu_obj->meta("menu_images");
-		
+
 		$imgrels = array(0 => t("Vali pilt.."));
 		foreach($menu_obj->connections_from(array("type" => "RELTYPE_IMAGE")) as $conn)
 		{
 			$imgrels[$conn->prop("to")] = $conn->prop("to.name");
 		}
-		
+
 		$output = 'var imgrels = new Array();';
 		foreach ($imgrels as $key => $value)
 		{
 			$output .= 'imgrels['.$key.'] = "'.$value.'";';
 		}
-		
+
 		return $output;
 	}
 
@@ -1183,25 +1183,25 @@ class menu extends class_base implements main_subtemplate_handler
 		classload("vcl/table");
 		$t =  new aw_table();
 		$this -> _get_images_table_cols ($t);
-		
+
 		$menu_obj = obj($arr["id"]);
 		$imdata = $menu_obj->meta("menu_images");
-		
+
 		$imgrels = array(0 => t("Vali pilt.."));
 		foreach($menu_obj->connections_from(array("type" => "RELTYPE_IMAGE")) as $conn)
 		{
 			$imgrels[$conn->prop("to")] = $conn->prop("to.name");
 		}
-		
+
 		$output = 'var menu_images = new Array();';
 		foreach ($imgrels as $key => $value)
 		{
-			
+
 			if ($key>0)
 			{
 				$imi = get_instance(CL_IMAGE);
 				$url = $imi -> get_url_by_id ($key);
-			
+
 				$output .= '
 				img = document.createElement ("img");
 				img.src = "'.$url.'";
@@ -1211,7 +1211,7 @@ class menu extends class_base implements main_subtemplate_handler
 				';
 			}
 		}
-		
+
 		return  $output;
 	}
 
