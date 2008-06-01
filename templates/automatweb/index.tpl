@@ -67,8 +67,6 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 <div style="padding:10px 20px; width:200px; left: 50%; margin-left: -100px; height:200; top:50%; margin-top:-100; background-color:white; border:1px solid silver; position:absolute; text-align:center; color:gray; font-size:12px; display:none;" id="ajax_loader_div"><img src="{VAR:baseurl}/automatweb/images/ajax-loader.gif"><br/><br/>Laadin...</div>
 <body onLoad="check_generic_loader();">
 
-<div id="test"></div>
-
 <div id="aw_object_quickadd" style="display: none;">
 <!--	<div class="icon"><img src="http://register.automatweb.com/automatweb/images/icons/class_1.gif" width="40" alt="" /></div>-->
 	<!--<div class="icon"><img src="http://register.automatweb.com/automatweb/images/icons/class_129.gif" width="40" alt="" /></div>-->
