@@ -36,6 +36,11 @@ class aw_uri
 		}
 	}
 
+	/**
+	@attrib api=1
+	@returns string
+		Returns uri as string
+	**/
 	public function get()
 	{
 		if (!$this->updated)
@@ -93,18 +98,11 @@ class aw_uri
 	@param name required type=string
 		URI query argument/parameter name
 	@returns string
-		Query argument value
-	@errors
-		Throws awex_uri_not_available if argument by that name not set.
+		Query argument value. Returns NULL if argument not set.
 	**/
 	public function arg($name)
 	{
-		if (!isset($this->args[$name]))
-		{
-			throw new awex_uri_not_available("URL query argument not set.");
-		}
-
-		return $this->args[$name];
+		return isset($this->args[$name]) ? $this->args[$name] : null;
 	}
 
 	/**
