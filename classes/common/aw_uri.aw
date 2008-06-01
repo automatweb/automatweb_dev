@@ -194,6 +194,5 @@ class aw_uri
 
 class awex_uri extends aw_exception {}
 class awex_uri_arg extends awex_uri {}
-class awex_uri_not_available extends awex_uri {}
 
 ?>
