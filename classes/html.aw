@@ -507,7 +507,7 @@ class html extends aw_template
 	{
 		extract($args);
 		$value = isset($value) ? $value : '';
-		return "<input type=\"hidden\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\" />\n";
+		return "<input type=\"hidden\" id=\"{$name}\" name=\"{$name}\" value='{$value}' />\n";
 	}
 
 	/**File upload
