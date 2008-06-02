@@ -993,11 +993,11 @@ aw_restore_acl();
 		}
 		if(!isset($_GET["ft_page"]))
 		{
-			$filter["limit"] = "0,".$this_o->prop("events_per_page");
+			$filter["limit"] = "0,".((int)$this_o->prop("events_per_page"));
 		}
 		else
 		{
-			$filter["limit"] = ($_GET["ft_page"]? ($_GET["ft_page"] * $this_o->prop("events_per_page").",") : "").$this_o->prop("events_per_page");
+			$filter["limit"] = ($_GET["ft_page"]? ($_GET["ft_page"] * $this_o->prop("events_per_page").",") : "").((int)$this_o->prop("events_per_page"));
 		}
 		return new object_list($filter);
 	}
