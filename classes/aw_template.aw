@@ -314,7 +314,22 @@ class aw_template extends core
 		// try to load a template from aw directory then
 		if (file_exists($this->template_filename))
 		{
-			$retval = $this->read_tpl(file($this->template_filename));
+			// validate filename, it has to be in either site_basedir or basedir
+			if (!$this->_validate_pathname($this->template_filename))
+			{
+				if ($silent)
+				{
+					return false;
+				}
+				else
+				{
+					throw new awex_bad_file_path($this->template_filename);
+				}
+			}
+			else
+			{
+				$retval = $this->read_tpl(file($this->template_filename));
+			}
 		}
 		else
 		{
@@ -1088,6 +1103,29 @@ class aw_template extends core
 		$tmp = isset($this->v2_name_map[$name]) ? $this->v2_name_map[$name] : "";
 		return isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : "";
 	}
+
+	private function _validate_pathname($path)
+	{
+		$pt = realpath($path);
+		$sd = aw_ini_get("site_basedir");
+		$bd = aw_ini_get("basedir");
+		
+		if (substr($pt, 0, strlen($sd)) == $sd || substr($pt, 0, strlen($bd)) == $bd)
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
+/** Throw this when you get a file name that is invalid. or should not be read. **/
+class awex_bad_file_path extends aw_exception
+{
+	public $path;
+
+	function __construct($path)
+	{
+		$this->path = $path;
+	}
+}
 ?>
