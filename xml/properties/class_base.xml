@@ -9,7 +9,6 @@
             <trans>1</trans>
             <field>name</field>
             <caption>Nimi</caption>
-            <comment>Objekti nimi</comment>
       </property>
       <property>
             <name>comment</name>
@@ -18,7 +17,6 @@
             <type>textbox</type>
             <field>comment</field>
             <caption>Kommentaar</caption>
-            <comment>Vabas vormis tekst objekti kohta</comment>
       </property>
       <property>
             <name>status</name>
@@ -29,7 +27,6 @@
             <default>1</default>
             <field>status</field>
             <caption>Aktiivne</caption>
-            <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
             <name>needs_translation</name>
