@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.116 2008/05/07 10:50:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.117 2008/06/03 15:46:55 markop Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -124,6 +124,11 @@ class aw_table extends aw_template
 		{
 			aw_global_set ($this->filter_name . "_saved", aw_serialize ($this->selected_filters));
 		}
+	}
+
+	function unset_filter()
+	{
+		$this->filter_name = null;
 	}
 
 	/**

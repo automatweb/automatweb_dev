@@ -357,6 +357,7 @@ class crm_company_bills_impl extends class_base
 			return PROP_IGNORE;
 		}
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->unset_filter();
 		$this->_init_bill_task_list_t($t, $arr["request"]["proj"]);
 
 		// list all task rows that are not billed yet
