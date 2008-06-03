@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.22 2008/04/27 11:50:58 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.23 2008/06/03 09:31:15 hannes Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -1335,7 +1335,7 @@ topic");
 			aw_session_set('no_cache', 1);
 			$image_verification_obj = new object($image_verification_oid);
 			$this->vars(array(
-				'image_verification_url' => aw_ini_get("baseurl")."/".$image_verification_oid,
+				'image_verification_url' => aw_ini_get("baseurl")."/".$image_verification_oid."?rand=".rand(1, 99999),
 				'image_verification_width' => $image_verification_obj->prop('width'),
 				'image_verification_height' => $image_verification_obj->prop('height')
 			));
