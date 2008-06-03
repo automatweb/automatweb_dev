@@ -967,8 +967,8 @@ class crm_person extends class_base
 			0 => t("--vali--"),
 			1 => t("P&otilde;hiharidus"),
 			2 => t("Keskharidus"),
-			3 => t("Kesk-eriharidus"),
-			4 => t("Kutsekeskharidus"),
+			3 => t("Kutsekeskharidus"),
+			4 => t("Kesk-eriharidus"),
 			5 => t("Kutsek&otilde;rgharidus"),
 			6 => t("Rakendusk&otilde;rgharidus"),
 //			7 => t("K&otilde;rgharidus"),
@@ -998,7 +998,7 @@ class crm_person extends class_base
 			"f" => t("T&otilde;stuk"),
 		);
 		$this->drivers_licence_original_categories = $this->drivers_licence_categories;
-		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		$pm = new object(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
 		$pm_dl = $pm->prop("drivers_license");
 		$data["options"] = $this->drivers_licence_categories;
 		if(is_array($pm_dl))
@@ -1377,10 +1377,10 @@ class crm_person extends class_base
 			"sortable" => 1,
 		));
 		$phones = $arr["obj_inst"]->phones();
-		foreach(connection::find(array("to" => $phones->ids(), "from.class_id" => CL_MOBI_SMS_SENT, "type" => "RELTYPE_PHONE")) as $conn)
+		foreach(connection::find(array("to" => $phones->ids(), "from.class_id" => CL_SMS_SENT, "type" => "RELTYPE_PHONE")) as $conn)
 		{
 			$to = $conn->to();
-			$sms_arr = $to->connections_to(array("from.class_id" => CL_MOBI_SMS, "type" => "RELTYPE_SMS_SENT"));
+			$sms_arr = $to->connections_to(array("from.class_id" => CL_SMS, "type" => "RELTYPE_SMS_SENT"));
 			foreach($sms_arr as $cn)
 			{
 				$sms = $cn->from();
@@ -3036,10 +3036,11 @@ class crm_person extends class_base
 		$relpicker = get_instance("vcl/relpicker");
 		foreach($arr["obj_inst"]->connections_from(array("type" => 67)) as $conn)
 		{
+			//arr($conn);
 			$wr = $conn->to();
 			$orgid = $wr->prop("org");
 			$secid = $wr->prop("section");
-			if($orgid != $org_fixed && $org_fixed != 0)
+			if($orgid !== $org_fixed && $org_fixed !== 0)
 			{
 				continue;
 			}
@@ -5566,6 +5567,8 @@ class crm_person extends class_base
 		{
 			$proplist = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist = array();
 
 		//////////////////// CAPTIONS
 		$tmpo = obj();
@@ -5976,6 +5979,9 @@ class crm_person extends class_base
 		{
 			$proplist_education = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_education = array();
+
 		$props = array("degree", "field", "speciality", "main_speciality", "obtain_language", "start", "end", "end_date", "diploma_nr");
 		foreach($props as $prop)
 		{
@@ -6073,6 +6079,9 @@ class crm_person extends class_base
 		{
 			$proplist_add_education = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_add_education = array();
+
 		$props = array("org", "field", "time", "time_text", "length", "length_hrs");
 		foreach($props as $prop)
 		{
@@ -6141,6 +6150,9 @@ class crm_person extends class_base
 		{
 			$proplist_crm_person_language = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_crm_person_language = array();
+
 		$props = array("talk", "understand", "write");
 		
 		$options = $pers_lang_inst->lang_lvl_options;
@@ -6304,6 +6316,9 @@ class crm_person extends class_base
 		{
 			$proplist_company_relation = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_company_relation = array();
+
 		$props = array("org", "start", "end", "add_info");
 		foreach($props as $prop)
 		{
@@ -6553,6 +6568,9 @@ class crm_person extends class_base
 		{
 			$proplist_work_relation = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_work_relation = array();
+
 		$props = array("org", "section", "profession", "start", "end", "tasks", "load", "salary", "benefits", "field");
 		foreach($props as $prop)
 		{
@@ -6626,6 +6644,9 @@ class crm_person extends class_base
 		{
 			$proplist_job_wanted = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_job_wanted = array();
+
 		if(array_key_exists("field", $proplist_job_wanted) || count($proplist_job_wanted) == 0)
 		{
 			$this->vars(array(
@@ -7158,6 +7179,9 @@ class crm_person extends class_base
 		{
 			$proplist_job_offer = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_job_offer = array();
+
 		$props = array("profession", "field", "end", "addinfo");
 		foreach($props as $prop)
 		{
@@ -7237,6 +7261,9 @@ class crm_person extends class_base
 		{
 			$proplist_job_offer = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_job_offer = array();
+
 		if(array_key_exists("company", $proplist_job_offer) || count($proplist_job_offer) == 0)
 		{
 			$this->vars(array(
@@ -7368,6 +7395,9 @@ class crm_person extends class_base
 		{
 			$proplist_family_relation = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_family_relation = array();
+
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
@@ -7471,6 +7501,8 @@ class crm_person extends class_base
 		{
 			$proplist_recommendation = array();
 		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_recommendation = array();
 
 		$props = array("person", "relation");
 		foreach($props as $prop)
@@ -7939,11 +7971,26 @@ class crm_person extends class_base
 		$tb =& $arr["prop"]["vcl_inst"];
 		$confirm_test = t("Kustutada valitud objektid?");
 
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"name" => "new_work_relation",
+			"text" => t("T&ouml;&ouml;suhe"),
+			"title" => t("T&ouml;&ouml;suhe2"),
+			"action" => "new_work_relation",
+		));
+
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
 			"action" => "delete_objects"
 		));
+
+		$tb->add_save_button();
 	}
 
 	function _init_my_stats_rows_t(&$t)
@@ -8206,16 +8253,16 @@ class crm_person extends class_base
 				"proj" => html::obj_change_url($task->prop("project")),
 				"task" => html::obj_change_url($task),
 				"content" => $bi->_split_long_words($o->prop("content")),
-				"length" => $stat_inst->hours_format($time_real),// 3, ',', ''),
+				"length" => number_format($time_real, 3, ',', ''),
 				//"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 				"length_cust" => (!is_oid($bn))?html::textbox(array(
 					"name" => "rows[".$o->id()."][time_to_cust]",
-					"value" => $stat_inst->hours_format($ttc),//number_format($ttc, 3, ',', ''),
+					"value" => number_format($ttc, 3, ',', ''),
 					"size" => 4,
 				)).html::hidden(array(
 					"name" => "rows[".$o->id()."][time_to_cust_real]",
-					"value" => $stat_inst->hours_format($ttc),//number_format($ttc, 3, ',', ''),
-				)): $stat_inst->hours_format($ttc),//number_format($ttc, 3, ',', ''),
+					"value" => number_format($ttc, 3, ',', ''),
+				)):number_format($ttc, 3, ',', ''),
 
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
@@ -8233,9 +8280,9 @@ class crm_person extends class_base
 
 		$t->define_data(array(
 			"content" => t("<b>Summa</b>"),
-			"length" =>  $stat_inst->hours_format($l_sum),//number_format($l_sum, 3, ',', ''),
+			"length" => number_format($l_sum, 3, ',', ''),
 			"sum" => number_format($s_sum, 2, ',', ''),
-			"length_cust" =>  $stat_inst->hours_format($l_cus_s),//number_format($l_cus_s, 3, ',', ''),
+			"length_cust" => number_format($l_cus_s, 3, ',', ''),
 		));
 		$arr["prop"]["value"] = $t->draw();
 	}
@@ -8824,6 +8871,48 @@ class crm_person extends class_base
 	function _get_not_working($arr)
 	{
 		$arr["prop"]["onclick"] = "el=document.getElementById(\"current_job_edit_caption\");if (this.checked) { el.style.display=\"none\"; } else { el.style.display=\"\"}";
+	}
+
+	/**
+	@attrib name=new_work_relation params=name
+
+	@param id required type=oid
+
+	@param post_ru required type=string
+
+	**/
+	function new_work_relation($arr)
+	{
+		extract($arr);
+
+		$o = obj($id);
+		$wr = obj();
+		$wr->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+		$wr->set_parent($id);
+		
+		$url = parse_url($post_ru);
+		$qry = parse_str($url["query"], $res);
+		$url2 = parse_url($res["return_url"]);
+		$qry2 = parse_str($url2["query"], $res2);
+		if($res2["class"] == "crm_company")
+		{
+			if($this->can("view", $res2["id"]))
+			{
+				$wr->org = $res2["id"];
+			}
+			if($this->can("view", $res2["unit"]))
+			{
+				$wr->section = $res2["unit"];
+			}
+		}
+
+		$wr->save();
+		$o->connect(array(
+			"to" => $wr,
+			"type" => "RELTYPE_CURRENT_JOB",
+		));
+
+		return $post_ru;
 	}
 }
 ?>

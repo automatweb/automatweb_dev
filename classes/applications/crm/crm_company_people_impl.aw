@@ -106,7 +106,7 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "important",
-			"text" => t("Eemalda olulisuse märge"),
+			"text" => t("Eemalda olulisuse m&auml;rge"),
 			"action" => "unmark_p_as_important",
 		));
 
@@ -465,13 +465,16 @@ class crm_company_people_impl extends class_base
 
 			if(is_oid($arr['request']['cat']) || is_oid($arr['request']['unit']))
 			{
+				/*
 				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
 				$pdat["rank"] = html::obj_change_url($ol->ids());
+				*/
+				$pdat["rank"] = html::obj_change_url($person->rank);
 			}
 
 			$sections_professions = array();
 			$section = '';
-			foreach($pdat['sections_arr'] as $key=>$value)
+			foreach($pdat['sections_arr'] as $key => $value)
 			{
 				$crm_section = get_instance(CL_CRM_SECTION);
 				$sections_professions[$key] = $crm_section->get_professions($key);
@@ -1252,7 +1255,7 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "important",
-			"text" => t("Eemalda olulisuse märge"),
+			"text" => t("Eemalda olulisuse m&auml;rge"),
 			"action" => "unmark_p_as_important",
 		));
 

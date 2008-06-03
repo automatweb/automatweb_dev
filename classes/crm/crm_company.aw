@@ -4413,14 +4413,14 @@ class crm_company extends class_base
 			));
 			list($work_contact,) = each($work_contact);
 		}
-		//$person->set_prop('work_contact',$work_contact);
+		$person->set_prop('work_contact',$work_contact);
 
 		$orgs = array();
 		foreach($person->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
 			$orgs[$c->prop("to")] = $c->prop("to");
 		}
-		//$person->set_prop("org_section", $orgs);
+		$person->set_prop("org_section", $orgs);
 		$person->save();
 
 		$u = get_instance(CL_USER);
