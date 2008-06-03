@@ -74,6 +74,10 @@ class _int_object
 	{
 		$this->_int_set_of_value("oid", 0);
 		$this->_int_set_of_value("brother_of", 0);
+		foreach($this->get_property_list() as $pn => $pd)
+		{
+			$this->set_prop($pn, $this->prop($pn));
+		}
 		return $this->save();
 	}
 
