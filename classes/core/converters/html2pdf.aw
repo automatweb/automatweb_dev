@@ -24,7 +24,7 @@ class html2pdf extends class_base
 		}
 		return false;
 	}
-	
+
 	////
 	// !converts html to pdf, returns pdf content
 	// parameters:
@@ -40,9 +40,9 @@ class html2pdf extends class_base
 		@comment
 			converts html contents to pdf
 		@returns
-			converted pdf 
+			converted pdf
 		@errors
-			raises ERR_CONVERT error if there aren't any available converters found. 
+			raises ERR_CONVERT error if there aren't any available converters found.
 	**/
 	function convert($arr)
 	{
@@ -55,7 +55,7 @@ class html2pdf extends class_base
 		}
 		else
 		{
-			$this->raise_error(ERR_CONVERT, "html2pdf::convert(): no available converters found!");
+			throw new awex_html2pdf("No available converters found!");
 		}
 	}
 
@@ -70,16 +70,18 @@ class html2pdf extends class_base
 		@comment
 			generates pdf and outputs it to browser with correct headers.
 		@errors
-			raises ERR_CONVERT error if there aren't any available converters found. 
+			raises ERR_CONVERT error if there aren't any available converters found.
 
 	**/
 	function gen_pdf($arr)
 	{
 		$str = $this->convert($arr);
+		$file_name = strpos($arr["filename"], ".pdf") === (strlen($arr["filename"]) - 4) ? $arr["filename"] : $arr["filename"].".pdf";
 		header("Content-type: application/pdf");
-		header("Content-Disposition: filename=".(strpos($arr["filename"], ".pdf") !== false ? $arr["filename"] : $arr["filename"].".pdf"));
+		header("Content-disposition: attachment; filename={$file_name}");
 		header("Content-Length: ".strlen($str));
-		die($str);
+		echo $str;
+		exit;
 	}
 
 	function _convert_using_htmldoc($arr)
@@ -108,4 +110,7 @@ class html2pdf extends class_base
 		return $pdf;
 	}
 }
+
+class awex_html2pdf extends aw_exception {}
+
 ?>
