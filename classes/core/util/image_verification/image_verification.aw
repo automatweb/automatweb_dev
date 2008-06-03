@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.11 2008/06/03 11:03:21 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.12 2008/06/03 11:08:35 hannes Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
