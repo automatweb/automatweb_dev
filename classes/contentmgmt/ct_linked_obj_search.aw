@@ -4,6 +4,7 @@
 */
 
 classload("vcl/popup_search");
+/** Linked object (link property) search for menu and container. popup_search extender **/
 class ct_linked_obj_search extends popup_search
 {
 	function ct_linked_obj_search()
@@ -11,7 +12,7 @@ class ct_linked_obj_search extends popup_search
 		$this->popup_search();
 	}
 
-	function _insert_form_props(&$htmlc, $arr)
+	protected function _insert_form_props(&$htmlc, $arr)
 	{
 		parent::_insert_form_props($htmlc, $arr);
 
@@ -29,14 +30,14 @@ class ct_linked_obj_search extends popup_search
 		));
 	}
 
-	function _process_reforb_args(&$data)
+	protected function _process_reforb_args(&$data)
 	{
 		$data["s"] = array(
 			"co" => $_GET["s"]["co"]
 		);
 	}
 
-	function _get_filter_props(&$filter, $arr)
+	protected function _get_filter_props(&$filter, $arr)
 	{
 		parent::_get_filter_props($filter, $arr);
 

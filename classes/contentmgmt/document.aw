@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document.aw,v 1.9 2008/04/18 09:04:09 kristo Exp $
-// document.aw - Dokumentide haldus.
 /*
 @classinfo  maintainer=kristo
 */
@@ -31,282 +29,61 @@ class document extends aw_template
 		// mida voidakse muuta
 
 		$this->knownfields = array("title","subtitle","author","photos","keywords","names",
-	"lead","showlead","content","esilehel","jrk1","jrk2", "jrk3",
-	"esileht_yleval","esilehel_uudis","title_clickable","cite","channel","tm",
-	"is_forum","link_text","lead_comments","newwindow","yleval_paremal",
-	"show_title","copyright","long_title","nobreaks","no_left_pane","no_right_pane",
-	"no_search","show_modified","frontpage_left","frontpage_center","frontpage_center_bottom",
-	"frontpage_right","frontpage_left_jrk","frontpage_center_jrk","frontpage_center_bottom_jrk",
-	"frontpage_right_jrk","no_last","dcache","moreinfo",
-);
+			"lead","showlead","content","esilehel","jrk1","jrk2", "jrk3",
+			"esileht_yleval","esilehel_uudis","title_clickable","cite","channel","tm",
+			"is_forum","link_text","lead_comments","newwindow","yleval_paremal",
+			"show_title","copyright","long_title","nobreaks","no_left_pane","no_right_pane",
+			"no_search","show_modified","frontpage_left","frontpage_center","frontpage_center_bottom",
+			"frontpage_right","frontpage_left_jrk","frontpage_center_jrk","frontpage_center_bottom_jrk",
+			"frontpage_right_jrk","no_last","dcache","moreinfo",
+		);
 
-// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-$this->metafields = array("show_print","show_last_changed","show_real_pos","dcache");
+		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
+		$this->metafields = array("show_print","show_last_changed","show_real_pos","dcache");
 
 
-lc_site_load("document",&$this);
+		lc_site_load("document",&$this);
 
-if (isset($GLOBALS["lc_document"]) && is_array($GLOBALS["lc_document"]))
-{
-	$this->vars($GLOBALS["lc_document"]);
-}
-
-$this->subtpl_handlers["FILE"] = "_subtpl_file";
-}
-
-////
-// !Sets period to use
-function set_period($period)
-{
-$this->period = $period;
-}
-
-////
-// !Listib dokud mingi menyy all
-function list_docs($parent,$period = -1,$status = -1,$visible = -1)
-{
-if ($period == -1)
-{
-	if ($this->period > 0)
-	{
-		$period = (int)$this->period;
-	}
-	else
-	{
-		$period = (int)$this->get_cval("activeperiod");
-	};
-};
-$period = (int)$period;
-$row = obj($parent);
-$me = obj($parent);
-$gm_subs = $me->meta("section_include_submenus");
-$gm_c = $me->connections_from(array(
-	"type" => "RELTYPE_DOCS_FROM_MENU",
-));
-foreach($gm_c as $gm)
-{
-	$gm_id = $gm->prop("to");
-	$sections[$gm_id] = $gm_id;
-	if ($gm_subs[$gm_id])
-	{
-		$ot = new object_tree(array(
-			"class_id" => CL_MENU,
-			"parent" => $gm_id,
-			"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
-			"sort_by" => "objects.parent"
-		));
-		$sections = $ot->ids();
-	}
-}
-
-if ($row->meta("all_pers"))
-{
-	$period_instance = get_instance(CL_PERIOD);
-	$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
-}
-else
-{
-	$periods = $row->meta("pers");
-}
-
-if (is_array($sections))
-{
-	$pstr = join(",",$sections);
-	if ($pstr != "")
-	{
-		$pstr = "objects.parent IN ($pstr)";
-	}
-	else
-	{
-		$pstr = "objects.parent = '$parent'";
-	};
-}
-else
-{
-	$pstr = "objects.parent = '$parent'";
-};
-
-// _if_ we are showing documents from multiple periods, then we should not use
-// the period field in the document "fetch" function
-$this->ignore_periods = false;
-
-if (is_array($periods))
-{
-	$rstr = join(",",$periods);
-	if ($rstr != "")
-	{
-		$this->ignore_periods = true;
-		$rstr = "objects.period IN ($rstr)";
-	}
-	else
-	{
-		$rstr = "objects.period = '$period'";
-	}
-}
-else
-{
-	$rstr = "objects.period = '$period'";
-};
-
-// kui staatus on defineerimata, siis n?itame ainult aktiivseid dokumente
-$v.= " AND objects.status = " . (($status == -1) ? 2 : $status);
-
-if ($row->prop("ndocs") > 0)
-{
-	$lm = "LIMIT ".$row->prop("ndocs");
-};
-
-if ($ordby == "")
-{
-	$obj = obj($parent);
-	if ($obj->meta("sort_by") != "")
-	{
-		$ordby = $obj->meta("sort_by");
-		if ($obj->meta("sort_by") == "RAND()")
+		if (isset($GLOBALS["lc_document"]) && is_array($GLOBALS["lc_document"]))
 		{
-			$has_rand = true;
+			$this->vars($GLOBALS["lc_document"]);
 		}
-		if ($obj->meta("sort_ord") != "")
-		{
-			$ordby .= " ".$obj->meta("sort_ord");
-		}
-		if ($obj->meta("sort_by") == "documents.modified")
-		{
-			$ordby .= ", objects.created DESC";
-		};
+
+		$this->subtpl_handlers["FILE"] = "_subtpl_file";
 	}
-	else
+
+	/** Fetches a document from the database
+		@attrib name=fetch params=name default="0"
+
+		@param docid required type=int
+	**/
+	function fetch($docid, $no_acl_checks = false)
 	{
-		$ordby = aw_ini_get("menuedit.document_list_order_by");
-	}
-
-	if ($obj->meta("sort_by2") != "")
-	{
-		if ($obj->meta("sort_by2") == "RAND()")
+		if (!$this->can("view",$docid))
 		{
-			$has_rand = true;
+			//	and why is this commented out?
+			$this->data = false;
+			return false;
 		}
-		$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
-		if ($obj->meta("sort_ord2") != "")
+
+		$docobj = new object($docid);
+		if ($this->period > 0 && !$this->ignore_periods)
 		{
-			$ordby .= " ".$obj->meta("sort_ord2");
+			if ($docobj->prop("period") != $this->period)
+			{
+				// maintain status quote .. e.g. do not return anything if
+				// the document is not in the correct period or we are ignoring
+				// periods (which is the case if a menu is set to show documents
+				// from multiple periods
+				$docobj = false;
+			}
 		}
-		if ($obj->meta("sort_by2") == "documents.modified")
+
+		$this->docobj = $docobj;
+		if (is_object($docobj))
 		{
-			$ordby .= ", objects.created DESC";
-		};
-	}
-
-	if ($obj->meta("sort_by3") != "")
-	{
-		if ($obj->meta("sort_by3") == "RAND()")
-		{
-			$has_rand = true;
-		}
-		$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
-		if ($obj->meta("sort_ord3") != "")
-		{
-			$ordby .= " ".$obj->meta("sort_ord3");
-		}
-		if ($obj->meta("sort_by3") == "documents.modified")
-		{
-			$ordby .= ", objects.created DESC";
-		};
-	}
-}
-
-if ($ordby == "")
-{
-	$ordby = "objects.period DESC, objects.jrk ASC, objects.modified DESC";
-}
-$q = "SELECT documents.lead AS lead,
-	documents.docid AS docid,
-	documents.title AS title,
-	documents.*,
-	objects.period AS period,
-	objects.class_id as class_id,
-	objects.parent as parent,
-	objects.period AS period
-	FROM documents
-	LEFT JOIN objects ON
-	(documents.docid = objects.brother_of)
-	WHERE $pstr && $rstr $v
-	ORDER BY $ordby $lm";
-$this->db_query($q);
-}
-
-/** Fetces a document from the database
-
-@attrib name=fetch params=name default="0"
-
-@param docid required type=int
-
-@returns
-
-
-@comment
-
-**/
-function fetch($docid, $no_acl_checks = false)
-{
-if (is_array($docid))
-{
-	extract($docid);
-}
-
-if (not($this->can("view",$docid)))
-{
-	//	and why is this commented out?
-	$this->data = false;
-	return false;
-}
-
-if ($this->period > 0 && !$this->ignore_periods)
-{
-	$sufix = " && objects.period = " . $this->period;
-}
-else
-{
-	$sufix = "";
-};
-
-// I could really use some kind of check in the object constructor ...
-// so that the object is only loaded when it has a correct class id ...
-// it is not a good idea to try to handle some random object as a document ...
-
-// and right now it's too damn hot (32C) .. to implement this feature
-// into the object loader.. -- duke
-$docobj = new object($docid);
-
-if ($this->period > 0 && !$this->ignore_periods)
-{
-	if ($docobj->prop("period") != $this->period)
-	{
-		// maintain status quote .. e.g. do not return anything if
-		// the document is not in the correct period or we are ignoring
-		// periods (which is the case if a menu is set to show documents
-		// from multiple periods
-		$docobj = false;
-	}
-}
-
-if ($docobj->status() == STAT_DELETED)
-{
-	$docobj = false;
-};
-
-$this->docobj = $docobj;
-if (is_object($docobj))
-{
-	$retval = $docobj->fetch();
-	$retval["docid"] = $retval["oid"];
-
-/*			print "<pre>";
-	print_r($retval);
-	print "------<br>";
-			print_r($docobj->arr());
-			print "</pre>";*/
-
+			$retval = $docobj->fetch();
+			$retval["docid"] = $retval["oid"];
 		};
 		$retval["title"] = $docobj->trans_get_val("title"); // fix condition when brother has a different name
 		return $retval;
@@ -2657,13 +2434,13 @@ if (is_object($docobj))
 	function send($arr)
 	{
 		extract($arr);
-		$data = $this->fetch($section);
+		$o = obj($section);
 		$this->read_template("email.tpl");
 		lc_site_load("document", $this);
 		$this->vars(array(
 			"docid" => $section,
 			"section" => $section,
-			"doc_name" => $data["title"],
+			"doc_name" => $o->title,
 			"reforb" => $this->mk_reforb("submit_send", array("section" => $section))
 		));
 		return $this->parse();
@@ -2739,7 +2516,7 @@ if (is_object($docobj))
 	{
 		extract($arr);
 		$feedback = get_instance("contentmgmt/feedback");
-		$inf = $this->fetch($section);
+		$inf = obj($section);
 		$this->read_template("feedback.tpl");
 		if ($e == 1)
 		{
@@ -2790,7 +2567,7 @@ if (is_object($docobj))
 			"struktuur" => $struktuur,
 			"ala" => $ala,
 			"tehnika" => $tehnika,
-			"title" => $inf["title"],
+			"title" => $inf->title,
 			"reforb" => $this->mk_reforb("submit_feedback", array("docid" => $section))
 		));
 		return $this->parse();
@@ -2810,9 +2587,9 @@ if (is_object($docobj))
 	function submit_feedback($arr)
 	{
 		extract($arr);
-		$inf = $this->fetch($docid);
+		$inf = obj($docid);
 		$feedback = get_instance("contentmgmt/feedback");
-		$arr["title"] = $inf["title"];
+		$arr["title"] = $inf->title;
 		$feedback->add_feedback($arr);
 		$this->_log(ST_DOCUMENT, SA_SEND, "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
 		return $this->mk_my_orb("thanks", array("section" => $docid,"eesnimi" => $eesnimi));

@@ -34,7 +34,7 @@ class _int_object_loader extends core
 
 		$this->all_ot_flds = array_flip(array(
 			"parent", "name", "class_id",
-			"modified", "status", "lang_id",
+			"modified", "created", "status", "lang_id",
 			"comment", "modifiedby", "jrk",
 			"period", "alias", "periodic",
 			"site_id", "metadata",

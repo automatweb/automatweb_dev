@@ -12,17 +12,6 @@
             <caption>Toolbar</caption>
       </property>
       <property>
-            <name>plugins</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>callback</type>
-            <callback>callback_get_doc_plugins</callback>
-            <field>meta</field>
-            <method>serialize</method>
-            <trans>1</trans>
-            <caption>Pluginad</caption>
-      </property>
-      <property>
             <name>brother_warning</name>
             <table>documents</table>
             <group>general</group>
@@ -700,16 +689,6 @@
             <caption>Keel</caption>
       </property>
       <property>
-            <name>calendar_relation</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <trans>1</trans>
-            <caption>P&amp;amp;otilde;hikalender</caption>
-      </property>
-      <property>
             <name>gen_static</name>
             <table>documents</table>
             <group>general</group>
@@ -893,18 +872,6 @@
             <caption>Dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>sections</name>
-            <table>documents</table>
-            <group>vennastamine</group>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>20</size>
-            <store>no</store>
-            <trans>1</trans>
-            <field>sections</field>
-            <caption>Sektsioonid</caption>
-      </property>
-      <property>
             <name>aliasmgr</name>
             <table>documents</table>
             <group>relationmgr</group>
@@ -1031,9 +998,6 @@
             <calendar>
                   <caption>Kalender</caption>
             </calendar>
-            <vennastamine>
-                  <caption>Vennastamine</caption>
-            </vennastamine>
             <settings>
                   <caption>Seadistused</caption>
                   <icon>archive.gif</icon>

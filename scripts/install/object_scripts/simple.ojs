@@ -120,8 +120,6 @@ ini { amenustart=${admin_root} }
 
 ini { admin_rootmenu2=${klient} }
 
-ini { document.no_static_forms = 1 }
-
 ini { document.default_cfgform = ${doc_conf_form} }
 
 ini { menuedit.num_menu_images = 3 }

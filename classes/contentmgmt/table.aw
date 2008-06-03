@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/table.aw,v 1.1 2008/02/29 19:05:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/table.aw,v 1.2 2008/06/03 09:25:34 kristo Exp $
 // table.aw - tabelite haldus
 /*
 @classinfo  maintainer=kristo
@@ -1911,8 +1911,7 @@ class table extends aw_template
 			if ($used[$stylid] != 1)
 			{
 				$used[$stylid] = 1;
-				$css_info = obj($stylid);
-				$css_file .= $css->_gen_css_style("st".$stylid,$css_info->meta("css"));
+				$css_file .= $css->get_style_data_by_id($stylid);
 			}
 		}
 		if ($css_file != "")

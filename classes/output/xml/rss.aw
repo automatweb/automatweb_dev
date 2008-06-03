@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.5 2008/02/05 09:23:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.6 2008/06/03 09:25:58 kristo Exp $
 // rss.aw - RSS feed generator
 /*
 @classinfo maintainer=kristo
@@ -107,33 +107,20 @@ class rss extends aw_template
 
 		if ($periodic)
 		{
-			// if $section is a periodic document then emulate the current period for it
-			if ($obj->class_id() == CL_PERIODIC_SECTION)
+			$docid = $m->get_default_document(array(
+				"periodic_content" => true,
+				"obj" => obj($parent)
+			));
+			foreach((array)$docid as $id)
 			{
-				$activeperiod = $obj->period();
-			}
-			else
-			{
-				$activeperiod = aw_global_get("act_per_id");
-			}
-			$d->set_period($activeperiod);
-			$d->list_docs($parent, $activeperiod,2);
-			$cont = "";
-			if ($d->num_rows() > 1)
-			{
-				while($row = $d->db_next())
-				{
-					$this->add_item($row);
-				}
-			}
-			// on 1 doku
-			else
-			{
-				$q = "SELECT docid,title,lead,author,objects.modified FROM documents
-					LEFT JOIN objects ON (documents.docid = objects.oid)
-					WHERE docid = '$parent'";
-				$this->db_query($q);
-				$row = $this->db_next();
+				$o = obj($id);
+				$row = array(
+					"docid" => $id,
+					"title" => $o->title,
+					"lead" => $o->lead,
+					"author" => $o->author,
+					"modified" => $o->modified
+				);
 				$this->add_item($row);
 			}
 		}

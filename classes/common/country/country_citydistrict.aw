@@ -1,7 +1,5 @@
 <?php
-// country_citydistrict.aw - Linnaosa
 /*
-
 @classinfo syslog_type=ST_COUNTRY_CITYDISTRICT relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 @extends common/country/country_administrative_unit
 

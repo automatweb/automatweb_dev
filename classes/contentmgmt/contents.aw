@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.8 2008/03/28 08:04:21 kristo Exp $
-// contents.aw - Saidi sisukord
 /*
-
 @classinfo syslog_type=ST_CONTENTS relationmgr=yes no_status=1  maintainer=kristo
 
 @default table=objects
@@ -31,19 +28,12 @@ class contents extends class_base
 	}
 
 	/**  
-		
 		@attrib name=show params=name nologin="1" is_public="1" caption="Show" default="1"
 		
 		@param leadonly optional type=int
 		@param max optional type=int
 		@param tpl optional
 		@param d_tpl optional
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function show($arr = array())
 	{
@@ -78,15 +68,7 @@ class contents extends class_base
 			$this->leadonly = $arr["leadonly"];
 		}
 
-		// this will not work if there are different menu areas for 
-		// different languages .e.g menuedit.menu_defs[1][YLEMINE] = 66
-		// menuedit.menu_defs[2][YLEMINE] = 88
-
-		// there are not many sites that use this feature .. actually
-		// I can't remember even one that uses it .. but I'm sure there
- 		// is one.
 		$mareas = aw_ini_get("menuedit.menu_defs");
-	
 		$morder = aw_ini_get("contents.menu_order");
 
 		if (is_array($morder))
@@ -101,9 +83,19 @@ class contents extends class_base
 		}
 		else
 		{
-			foreach($mareas as $pid => $an)
+			if (aw_ini_get("menuedit.lang_defs"))
 			{
-				$this->req_menus($pid);
+				foreach($mareas[aw_global_get("lang_id")] as $pid => $an)
+				{
+					$this->req_menus($pid);
+				}
+			}
+			else
+			{
+				foreach($mareas as $pid => $an)
+				{
+					$this->req_menus($pid);
+				}
 			}
 		}
 
@@ -161,7 +153,7 @@ class contents extends class_base
 		return $this->parse();
 	}
 
-	function req_menus($pid)
+	private function req_menus($pid)
 	{
 		if (!is_oid($pid))
 		{
@@ -226,11 +218,6 @@ class contents extends class_base
 			}
 			$this->req_menus($o->id());
 		}
-	}
-
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 }
 ?>

@@ -1,7 +1,5 @@
 <?php
-// country_administrative_structure_encoding.aw - Haldusjaotuse kodeering
 /*
-
 @classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=voldemar
 
 @groupinfo grp_encodings caption="Vasted"
@@ -126,7 +124,7 @@ class country_administrative_structure_encoding extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function _encodings_list ($arr)
+	private function _encodings_list ($arr)
 	{
 		$division = aw_global_get ($this->division_selection_var);
 
@@ -165,7 +163,7 @@ class country_administrative_structure_encoding extends class_base
 		}
 	}
 
-	function _init_encodings_list ($arr)
+	private function _init_encodings_list ($arr)
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$table->define_field(array(
@@ -181,7 +179,7 @@ class country_administrative_structure_encoding extends class_base
 		$table->set_default_sorder ("asc");
 	}
 
-	function _save_encodings ($arr)
+	private function _save_encodings ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.19 2008/04/08 08:13:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.20 2008/06/03 09:25:48 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -405,6 +405,10 @@ class currency extends class_base
 				"site_id" => array(),
 			));
 			$c = reset($cs->arr());
+			if (!$c)
+			{
+				return false;
+			}
 			$curr = $c->id();
 		}
 		$this->default_currency = $curr;

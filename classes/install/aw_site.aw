@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.56 2008/04/24 14:09:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.57 2008/06/03 09:25:53 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1 maintainer=kristo
@@ -1116,7 +1116,6 @@ $dbi->db_connect(array(
 		// create temp ini file, then use su_exec to copy it to the correct place
 		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
 
-		$ini_opts["document.no_static_forms"] = 1;
 		$ini_opts["menuedit.promo_lead_only"] = 1;
 
 		if ($ini_opts["tpldir"] == "")

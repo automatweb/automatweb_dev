@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.147 2008/05/06 11:23:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.148 2008/06/03 09:25:01 kristo Exp $
 // planner.aw - kalender
 /*
 
@@ -595,11 +595,6 @@ class planner extends class_base
 		{
 			case "add_event":
 				$this->register_event_with_planner($arr);
-				break;
-
-			case "calendar_relation":
-				// this is where I need to read the type of the output
-				// and put it .. somewhere
 				break;
 
 			case "vacancies":

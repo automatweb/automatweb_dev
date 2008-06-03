@@ -127,7 +127,7 @@ class address_object extends _int_object
 
     // @attrib name=as_get_array
 	// @returns Associative array: administrative_division_oid => administrative_unit name
-	function as_get_array ()
+	private function as_get_array ()
 	{
 		### make address array
 		$address_array = array ();
@@ -147,7 +147,7 @@ class address_object extends _int_object
 		return $address_array;
 	}
 
-	function as_get_string ()
+	private function as_get_string ()
 	{
 		$address_array = $this->as_get_array ();
 		$street_address = $this->prop ("street_address");
@@ -164,7 +164,7 @@ class address_object extends _int_object
 
     // @attrib name=as_get_id_array
 	// @returns Associative array: administrative_division_oid => administrative_unit oid
-	function as_get_id_array ()
+	private function as_get_id_array ()
 	{
 		### make address array
 		$address_array = array ();
@@ -188,7 +188,7 @@ class address_object extends _int_object
 	// @param id required
 	// @param division optional
 	// @comment Sets administrative unit corresponding to division of given id
-	function as_set_by_id ($arr)
+	private function as_set_by_id ($arr)
 	{
 		### get&validate admin division
 		if (is_object ($arr["division"]))
@@ -265,7 +265,7 @@ class address_object extends _int_object
 	// @param division required
 	// @param name required
 	// @comment Sets administrative unit corresponding to given division (admin division object, oid or ADDRESS_STREET_TYPE)
-	function as_set_by_name ($arr)
+	private function as_set_by_name ($arr)
 	{
 		### validate name. validation needed here to give a chance to avoid corruptions in address structure -- spot errors before any changes made.
 		if (empty ($arr["name"]))
@@ -327,7 +327,7 @@ class address_object extends _int_object
     // @attrib name=as_get_by_id
 	// @param id required
 	// @returns administrative unit corresponding to given id
-	function as_get_by_id ($id)
+	private function as_get_by_id ($id)
 	{
 		if (is_oid ($id))
 		{
@@ -353,7 +353,7 @@ class address_object extends _int_object
     // @attrib name=as_get_by_division
 	// @param name required
 	// @comment returns first administrative unit corresponding to given division
-	function as_get_by_division ($division)
+	private function as_get_by_division ($division)
 	{
 		### get&validate admin division
 		if (is_object ($division))
@@ -377,7 +377,7 @@ class address_object extends _int_object
 	// @param division required
 	// @param encoding required
 	// @returns String encoded value for unit of $division.
-	function as_get_unit_encoded ($arr)
+	private function as_get_unit_encoded ($arr)
 	{
 		### get&validate admin division
 		if (is_object ($arr["division"]))
@@ -443,7 +443,7 @@ class address_object extends _int_object
     // @attrib name=as_get_envelope_label
 	// @param this required
 	// @returns String address for printing on envelopes etc.
-	function as_get_envelope_label ($arr)///!!!todo
+	private function as_get_envelope_label ($arr)///!!!todo
 	{
 			//!!! use address array from property if adm str etc not changed, otherwise build array from current values
 			//!!! teha nii et viimane rida oleks: T2nav majanr-krtnr
@@ -456,7 +456,7 @@ class address_object extends _int_object
     // @attrib name=as_set_structure
 	// @param structure required
 	// @returns boolean success
-	function as_set_structure ($structure)
+	private function as_set_structure ($structure)
 	{
 		if (is_oid ($structure))
 		{
@@ -483,7 +483,7 @@ class address_object extends _int_object
     // @attrib name=as_set_country
 	// @param country required
 	// @returns boolean success
-	function as_set_country ($country)
+	private function as_set_country ($country)
 	{
 		if (is_oid ($country))
 		{
@@ -516,7 +516,7 @@ class address_object extends _int_object
     // @attrib name=as_save
 	// @returns boolean success
 	// @comment Saves address location currently defined in this address object
-	function as_save ()
+	private function as_save ()
 	{
 		$this->as_load_structure();
 
@@ -596,7 +596,7 @@ class address_object extends _int_object
 		return true;
 	}
 
-	function as_load_structure ()
+	private function as_load_structure ()
 	{
 		if (!is_object($this->as_administrative_structure))
 		{
@@ -615,7 +615,7 @@ class address_object extends _int_object
 		}
 	}
 
-	function as_load_country ()
+	private function as_load_country ()
 	{
 		if (!is_object ($this->as_country))
 		{
@@ -630,7 +630,7 @@ class address_object extends _int_object
 		}
 	}
 
-	function as_load_data ()
+	private function as_load_data ()
 	{
 		if (!$this->as_address_data_loaded)
 		{

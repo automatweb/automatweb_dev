@@ -1,7 +1,5 @@
 <?php
-// address.aw - Aadress v2
 /*
-
 @classinfo syslog_type=ST_ADDRESS relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_address caption="Aadress"
@@ -154,21 +152,6 @@ class address extends class_base
 				}
 			}
 		}
-	}
-
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	function show($arr)
-	{
-		$this_object = obj ($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $this_object->prop("name"),
-		));
-		return $this->parse();
 	}
 /* END classbase methods */
 
@@ -351,7 +334,7 @@ class address extends class_base
 		return $prop;
 	}
 
-	function get_autocomplete_parameters ($arr)
+	private function get_autocomplete_parameters ($arr)
 	{
 		$parameters = array ();
 

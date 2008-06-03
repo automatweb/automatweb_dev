@@ -1,9 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/doc.aw,v 1.6 2008/05/20 11:18:57 robert Exp $
-// doc.aw - document class which uses cfgform based editing forms
-// this will be integrated back into the documents class later on
 /*
-
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
@@ -14,9 +10,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property navtoolbar type=toolbar no_caption=1 store=no trans=1
 	@caption Toolbar
-
-	@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize trans=1
-	@caption Pluginad
 
 	@property brother_warning type=text store=no no_caption=1
 
@@ -217,9 +210,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property language type=text type=text store=no trans=1
 	@caption Keel
 
-	@property calendar_relation type=select field=meta method=serialize table=objects trans=1
-	@caption P&otilde;hikalender
-
 	@property gen_static type=checkbox store=no trans=1
 	@caption Genereeri staatiline
 
@@ -277,11 +267,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property doc_content_type type=chooser  store=connect multiple=1 reltype=RELTYPE_DOC_CONTENT_TYPE table=documents field=aw_doc_content_type
 	@caption Dokumendi sisu t&uuml;&uuml;p
 
-@default group=vennastamine
-
-	@property sections type=select multiple=1 size=20 store=no trans=1
-	@caption Sektsioonid
-
 @default group=relationmgr
 
 	@property aliasmgr type=aliasmgr store=no editonly=1 trans=1
@@ -324,7 +309,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@caption T&otilde;lgi
 
 @groupinfo calendar caption=Kalender
-@groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused icon=archive.gif
 @groupinfo kws caption="V&otilde;tmes&otilde;nad"
 @groupinfo versions caption="Versioonid"
@@ -368,8 +352,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @caption V&otilde;tmes&otilde;na
 
 */
-
-define(RELTYPE_COMMENT,1);
 
 class doc extends class_base
 {
@@ -430,43 +412,8 @@ class doc extends class_base
 				$this->kw_tb($arr);
 				break;
 
-			case "lead":
-				$val = $data["value"];
-				if ($data["richtext"] == 1)
-				{
-					/*
-					$nlcount = substr_count($val,"\n");
-					$brcount = substr_count($val,"<br>");
-					if ($nlcount > 3 && $brcount == 0)
-					{
-						$data["value"] = nl2br($data["value"]);
-					};
-					*/
-				}
-				else
-				{
-					//$data["value"] = htmlspecialchars($data["value"]);
-				};
-				break;
-
 			case "content":
 				$data["value"] = htmlspecialchars($data["value"]);
-				$val = $data["value"];
-				if ($data["richtext"] == 1)
-				{
-					/*
-					$nlcount = substr_count($val,"\n");
-					$brcount = substr_count($val,"<br>");
-					if ($nlcount > 3 && $brcount == 0)
-					{
-						$data["value"] = nl2br($data["value"]);
-					};
-					*/
-				}
-				else
-				{
-					//$data["value"] = htmlspecialchars($data["value"]);
-				};
 				break;
 
 			case "name":
@@ -490,20 +437,6 @@ class doc extends class_base
 				};
 				break;
 
-			case "sections":
-				$d = get_instance(CL_DOCUMENT);
-				list($selected,$options) = $this->get_brothers(array(
-					"id" => $arr["obj_inst"]->id(),
-				));
-				$data["options"] = array("" => "") + $options;
-				$data["selected"] = $selected;
-				break;
-
-			case "calendar_relation":
-				$cl = new aw_array($this->calendar_list);
-				$data["options"] = array(-1 => t("puudub")) + $cl->get();
-				break;
-
 			case "duration":
 				$_tmp = $arr["data"]["planner"]["end"] - $arr["data"]["planner"]["start"];
 				$data["value"] = array(
@@ -522,16 +455,6 @@ class doc extends class_base
 				{
 					$this->gen_navtoolbar($arr);
 				};
-				break;
-
-			case "language":
-				/*
-				$objdata = $arr["obj_inst"];
-				$lg = get_instance("languages");
-				$lang_list = $lg->get_list();
-				$lang_id = $lg->get_langid_for_code($objdata->lang());
-				$data["value"] = $lang_list[$lang_id];
-				*/
 				break;
 
 			case "edit_version":
@@ -570,13 +493,6 @@ class doc extends class_base
 
 			case "create_new_version":
 
-				break;
-
-			case "sections":
-				$this->update_brothers(array(
-					"id" => $args["obj_inst"]->id(),
-					"sections" => $args["request"]["sections"],
-				));
 				break;
 
 			case "link_calendars":
@@ -676,46 +592,6 @@ class doc extends class_base
 					// but this dies anyway
 					$dcx->gen_static_doc($args["obj_inst"]->id());
 				};
-				break;
-
-			case "calendar_relation":
-				// I need to create a brother here
-				// to $data["value"];
-				// I need to figure out to which calendar that relation object belongs to
-				if (!empty($data["value"]))
-				{
-					$q = "SELECT aliases2.target AS target FROM aliases
-						LEFT JOIN aliases AS aliases2 ON (aliases.target = aliases2.relobj_id)
-						WHERE aliases.relobj_id = $data[value]";
-					$target_relation = $this->db_fetch_field($q,"target");
-
-					// now I have to figure out the event folder for that planner
-					$pl = new object($target_relation);
-
-					$fldr = $pl->prop("event_folder");
-
-					if (is_numeric($fldr))
-					{
-						// do not create duplicates
-						$b = $args["obj_inst"]->id();
-						$q = sprintf("SELECT oid FROM objects
-								WHERE parent = %d AND brother_of = $b
-								AND status != 0 AND class_id IN (%d,%d)",
-								$fldr,CL_DOCUMENT,CL_BROTHER_DOCUMENT);
-						$xrow = $this->db_fetch_row($q);
-						if (empty($xrow))
-						{
-							$args["obj_inst"]->create_brother($fldr);
-						};
-					}
-				}
-				elseif ($data["value"] == -1)
-				{
-					// nuke all brothers
-					$q = sprintf("UPDATE objects SET status = 0 WHERE brother_of = %d AND class_id = %d",
-							$args["obj_inst"]->id(),CL_BROTHER_DOCUMENT);
-					$this->db_query($q);
-				}
 				break;
 
 			case "clear_styles":
@@ -856,6 +732,7 @@ class doc extends class_base
 			parse_str($args["request"]["edit_version"], $out);
 			if ($out["edit_version"] != "")
 			{
+				$this->quote($out["edit_version"]);
 				$modby = $this->db_fetch_field("SELECT vers_crea_by FROM documents_versions WHERE docid = ".$obj_inst->id()." AND version_id = '".$out["edit_version"]."'", "vers_crea_by");
 			}
 		}
@@ -919,7 +796,7 @@ class doc extends class_base
 		}
 	}
 
-	function _doc_strip_tags($arg)
+	private function _doc_strip_tags($arg)
 	{
 		$arg = strip_tags($arg,"<b>,<i>,<u>,<br />,<p><ul><li><ol>");
 		$arg = str_replace("<p>","",$arg);
@@ -929,7 +806,7 @@ class doc extends class_base
 		return $arg;
 	}
 
-	function gen_navtoolbar($arr)
+	private function gen_navtoolbar($arr)
 	{
 		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
@@ -966,16 +843,8 @@ class doc extends class_base
 	}
 
 	/**
-
 		@attrib name=show params=name default="0"
-
 		@param id required
-
-		@returns
-
-
-		@comment
-
 	**/
 	function show($args = array())
 	{
@@ -984,133 +853,22 @@ class doc extends class_base
 		return $d->gen_preview(array("docid" => $args["id"]));
 	}
 
-	function callback_get_doc_plugins($args = array())
-	{
-		if (!is_object($args["obj_inst"]) || !is_oid($args["obj_inst"]->id()))
-		{
-			return false;
-		};
+	/** Returns array of addable document types
+		@attrib api=1 params=pos
+		
+		@param parent required type=oid
+			The object the add links point to 
 
-		$plugins = $this->parse_long_template(array(
-			"parent"=> $args["obj_inst"]->parent(),
-			"template_dir" => $this->template_dir,
-		));
+		@param period required type=int
+			The period the add links point to 
 
-		$plg_ldr = get_instance("plugins/plugin_loader");
-		$plugindata = $plg_ldr->load_by_category(array(
-			"category" => "document",
-			"plugins" => $plugins,
-			"method" => "get_property",
-			"args" => $args["obj_inst"]->meta("plugins"),
-		));
-
-		return $plugindata;
-	}
-
-	// creates a list of brothers for a document
-	function _get_brother_documents($docid)
-	{
-		if (!is_numeric($docid))
-		{
-			return false;
-		}
-		$retval = array();
-		$this->db_query("SELECT oid,parent FROM objects WHERE brother_of = $docid AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
-		while ($arow = $this->db_next())
-		{
-			$retval[$arow["parent"]] = $arow;
-		}
-		return $retval;
-	}
-
-	function get_brothers($args = array())
-	{
-		extract($args);
-		$sar = array();
-		$this->db_query("SELECT parent FROM objects WHERE brother_of = '$id' AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
-		while ($arow = $this->db_next())
-		{
-			$sar[$arow["parent"]] = $arow["parent"];
-		}
-
-		return array($sar,$this->get_menu_list(true));
-	}
-
-	function update_brothers($args = array())
-	{
-		extract($args);
-		if (!$id)
-		{
-			return;
-		}
-		$obj = new object($id);
-
-		$sar = array(); $oidar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = '$id' AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
-		while ($row = $this->db_next())
-		{
-			$sar[$row["parent"]] = $row["parent"];
-			$oidar[$row["parent"]] = $row["oid"];
-		}
-
-		$not_changed = array();
-		$added = array();
-		if (is_array($sections))
-		{
-			reset($sections);
-			$a = array();
-			while (list(,$v) = each($sections))
-			{
-				if ($sar[$v])
-				{
-					$not_changed[$v] = $v;
-				}
-				else
-				{
-					$added[$v] = $v;
-				}
-				$a[$v]=$v;
-			}
-		}
-		$deleted = array();
-		reset($sar);
-		while (list($oid,) = each($sar))
-		{
-			if (!$a[$oid])
-			{
-				$deleted[$oid] = $oid;
-			}
-		}
-
-		reset($deleted);
-		while (list($oid,) = each($deleted))
-		{
-			$tmp = obj($oidar[$oid]);
-			$tmp->delete();
-		}
-		reset($added);
-		while(list($oid,) = each($added))
-		{
-			if ($oid != $id)	// no recursing , please
-			{
-				$tmp = obj($id);
-				$noid = $tmp->create_brother($oid);
-			}
-		}
-	}
-
+		@returns
+			array { doc_type => array { name => type name , link => add link }, ... } for all doc types in the system. or a default type if none found
+	**/
 	function get_doc_add_menu($parent, $period)
 	{
 		$cfgforms = $this->get_cfgform_list();
 		$retval = array();
-		if (aw_ini_get("document.no_static_forms") == 0)
-		{
-			$tmp = aw_ini_get("classes");
-			$retval["doc_default"] = array(
-				"name" => $tmp[CL_DOCUMENT]["name"],
-				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
-			);
-		};
 
 		// can't use empty on function
 		$def_cfgform = aw_ini_get("document.default_cfgform");
@@ -1174,11 +932,6 @@ class doc extends class_base
 				$args["edit_version"] = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
 				$_SESSION["vers_created"][$args["id"]] = $args["edit_version"];
 			}
-
-			if ($args["edit_version"] == "" && $_SESSION["vers_created"][$args["id"]])
-			{
-				//$args["edit_version"] = $_SESSION["vers_created"][$args["id"]];
-			}
 		}
 	}
 
@@ -1194,65 +947,6 @@ class doc extends class_base
 			$args["edit_version"] = $_GET["edit_version"];
 		}
 		$args["temp_var1"] = " 0 ";
-	}
-
-	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different
-
-		@attrib name=show_pic1 params=name caption="N&auml;ita pilti" default="0"
-
-		@param id required
-
-		@returns
-
-
-		@comment
-		values
-
-	**/
-	function show_pic1($args = array())
-	{
-		$retval = "";
-		if (isset($args["id"]))
-		{
-			$q = sprintf("SELECT target FROM aliases WHERE source = %d AND type = %d AND pri = 1",
-					$args["id"],CL_IMAGE);
-
-			$tgt = $this->db_fetch_field($q,"target");
-
-
-			if (!empty($tgt))
-			{
-				$awi = get_instance(CL_IMAGE);
-				$picdata = $awi->get_image_by_id($tgt);
-				$retval = html::img(array(
-					"url" => $picdata["url"],
-					"border" => 0,
-				));
-			};
-		};
-		return $retval;
-	}
-
-	////
-	// !Retrieves some information from the "show" template
-	// parent - id of the menu from which to start the template search
-	// template_dir - root template dir
-	// inst - reference to an object that has loaded the required template (optional)
-	// hm, maybe this should be a separate class? one which handles all
-	// that document template class
-	function parse_long_template($args = array())
-	{
-		// now, I want to gather some information about the "show" template:
-		extract($args);
-		if (!is_object($inst))
-		{
-			$tplmgr = get_instance("templatemgr");
-			$_long = $tplmgr->get_long_template($parent);
-			$inst = get_instance(CL_DOCUMENT);
-			$inst->read_any_template($_long);
-		};
-
-		return $inst->get_subtemplates_regex("plugin\.(\w*)");
 	}
 
 	function on_save_document($params)
@@ -1323,79 +1017,6 @@ class doc extends class_base
 		}
 	}
 
-	/**
-
-		@attrib name=upg nologin="1"
-
-	**/
-	function upg($arr)
-	{
-	}
-
-	/**
-		@attrib name=convert_br
-		@param id optional
-
-	**/
-	function convert_br($arr)
-	{
-		$ol_args = array(
-			"class_id" => CL_DOCUMENT,
-			"site_id" => array(),
-			"lang_id" => array(),
-		);
-
-		if (is_oid($arr["id"]))
-		{
-			$ol_args["oid"] = $arr["id"];
-		};
-
-		$ol = new object_list($ol_args);
-
-		//arr($ol);
-
-		foreach($ol->arr() as $o)
-		{
-			print "n = " . $o->name() . "<br>";
-			print "nobr = ";
-			$cbdat = $o->meta("cb_nobreaks");
-			$save = false;
-			if (empty($cbdat["content"]))
-			{
-				$o->set_prop("content",str_replace("\n","<br>\n",$o->prop("content")));
-				$cbdat["content"] = 1;
-				$save = true;
-			};
-			if (empty($cbdat["lead"]))
-			{
-				$o->set_prop("lead",str_replace("\n","<br>\n",$o->prop("lead")));
-				$cbdat["lead"] = 1;
-				$save = true;
-			};
-			if (empty($cbdat["moreinfo"]))
-			{
-				$o->set_prop("moreinfo",str_replace("\n","<br>\n",$o->prop("moreinfo")));
-				$cbdat["moreinfo"] = 1;
-				$save = true;
-			};
-			if ($save)
-			{
-				$o->set_meta("cb_nobreaks",$cbdat);
-				print "saving";
-				$o->save();
-			}
-			else
-			{
-				print "not saving";
-			};
-			//arr($o->meta());
-			print "done";
-			print "<hr>";
-			flush();
-		};
-
-	}
-
 	function on_add_doc_rel($arr)
 	{
 		if ($arr["connection"]->prop("reltype") != 22)
@@ -1412,7 +1033,7 @@ class doc extends class_base
 		));
 	}
 
-	function get_version_list($did)
+	private function get_version_list($did)
 	{
 		$ret = array(aw_url_change_var("edit_version", NULL) => t("Aktiivne"));
 		$this->db_query("SELECT version_id, vers_crea, vers_crea_by FROM documents_versions WHERE docid = '$did' order by vers_crea desc");
@@ -1432,12 +1053,6 @@ class doc extends class_base
 			$GLOBALS["confirm_save_data"] = 1;
 		}
 
-		if ($_SERVER["REQUEST_METHOD"] == "GET" && empty($p["request"]["edit_version"]) && $_SESSION["vers_created"][$p["request"]["id"]])
-		{
-			//header("Location: ".aw_url_change_var("edit_version", $_SESSION["vers_created"][$p["request"]["id"]]));
-			//die();
-		}
-
 		if (!empty($p["request"]["edit_version"]))
 		{
 			$out = array();
@@ -1453,11 +1068,10 @@ class doc extends class_base
 				$o = obj($p["request"]["id"]);
 				$o->load_version($out["edit_version"]);
 			}
-
 		}
 	}
 
-	function _init_versions_t(&$t)
+	private function _init_versions_t(&$t)
 	{
 		$t->define_field(array(
 			"name" => "ver",
@@ -1496,7 +1110,7 @@ class doc extends class_base
 		));
 	}
 
-	function _versions($arr)
+	private function _versions($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_versions_t($t);
@@ -1564,7 +1178,7 @@ class doc extends class_base
 		$t->set_default_sorder("desc");
 	}
 
-	function _save_versions($arr)
+	private function _save_versions($arr)
 	{
 		$arr["obj_inst"]->set_no_modify(true);
 
@@ -1642,7 +1256,7 @@ class doc extends class_base
 		}
 	}
 
-	function _versions_tb($arr)
+	private function _versions_tb($arr)
 	{
 		$toolbar = &$arr["prop"]["vcl_inst"];
 		$toolbar->add_button(array(
@@ -1673,7 +1287,7 @@ class doc extends class_base
 		return $arr["retu"];
 	}
 
-	function kw_tb($arr)
+	private function kw_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
@@ -1753,12 +1367,11 @@ class doc extends class_base
 		}
 
 		$val = '<div id="floatlayerk" style="left: 800px; top: 200px; width: 250px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
-			t("<b>".$pl["title"]["caption"].":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("title"))."<br><br>".
-			t("<b>".$pl["lead"]["caption"].":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("lead"))."<br><br>".
-			t("<b>".$pl["content"]["caption"].":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("content")).
+			("<b>".iconv(aw_global_get("charset"), "UTF-8", $pl["title"]["caption"]).":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("title"))."<br><br>".
+			("<b>".iconv(aw_global_get("charset"), "UTF-8", $pl["lead"]["caption"]).":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("lead"))."<br><br>".
+			("<b>".iconv(aw_global_get("charset"), "UTF-8", $pl["content"]["caption"]).":</b>")." ".iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->prop("content")).
 			'</div>';
 		$val .= '<script language="javascript">el=document.getElementById(\'floatlayerk\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
-
 
 
 		$rv = $this->trans_callback($arr, $this->trans_props, array("user1", "user3", "user5", "userta2", "userta3", "userta4", "userta5", "userta6"));
@@ -1774,7 +1387,7 @@ class doc extends class_base
 		return $rvv + $rv;
 	}
 
-	function _trans_tb($arr)
+	private function _trans_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_menu_button(array(
@@ -1809,7 +1422,7 @@ class doc extends class_base
 		}
 	}
 
-	function funnel_ct_content($arr)
+	private function funnel_ct_content($arr)
 	{
 		// check table
 		$this->db_last_error = false;
@@ -1870,7 +1483,7 @@ class doc extends class_base
 		}
 	}
 
-	function _conv_ct_docs()
+	private function _conv_ct_docs()
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_DOCUMENT
@@ -1920,9 +1533,5 @@ class doc extends class_base
 			return true;
 		}
 	}
-
-
 }
-
-
 ?>

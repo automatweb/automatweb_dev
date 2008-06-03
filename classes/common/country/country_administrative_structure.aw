@@ -1,7 +1,5 @@
 <?php
-// country_administrative_structure.aw - Riigi haldusjaotus
 /*
-
 @classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_STRUCTURE relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @groupinfo grp_administrative_structure caption="Haldusjaotuse struktuur"

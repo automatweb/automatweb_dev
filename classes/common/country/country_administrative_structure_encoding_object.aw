@@ -60,7 +60,7 @@ class country_administrative_structure_encoding_object extends _int_object
     // @attrib name=as_get_unit_encoding
 	// @param unit required
 	// @returns Encoded value for unit.
-	function as_get_unit_encoding ($arr)
+	private function as_get_unit_encoding ($arr)
 	{
 		### validate unit object
 		if (is_object ($arr["unit"]))

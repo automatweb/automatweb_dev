@@ -1,5 +1,4 @@
 <?php
-// generic_xml_ds.aw - Yldine XML datasource
 /*
 
 @classinfo syslog_type=ST_GENERIC_XML_DS relationmgr=yes no_comment=1 no_status=1 prop_cb=1

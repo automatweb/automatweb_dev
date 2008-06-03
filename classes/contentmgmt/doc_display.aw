@@ -13,15 +13,24 @@ class doc_display extends aw_template
 	}
 
 	/** displays document
+		@attrib api=1 params=name
 
-		@comment
-			docid - document id
-			tpl - template file to use
-			leadonly - show only lead, defaults to full
-			vars - extra vars for doc template
+		@param docid required type=oid
+			document id
+		
+		@param tpl optional type=string
+			template file to use
+
+		@param leadonly optional type=bool
+			show only lead, defaults to full
+
+		@param vars optional type=array
+			extra vars for doc template
 			
-			not_last_in_list
-			no_link_if_not_act
+		@param not_last_in_list optional type=bool
+			
+		@param no_link_if_not_act optional type=bool
+
 	**/
 	function gen_preview($arr)
 	{
@@ -48,7 +57,7 @@ class doc_display extends aw_template
 	
 		if ($this->template_has_var("text"))
 		{
-			$text = $this->_get_text($arr, $doc);
+			$text = $this->get_document_text($arr, $doc);
 		}
 		if ($this->template_has_var("lead"))
 		{
@@ -177,10 +186,10 @@ class doc_display extends aw_template
 	
 		$title = $doc->trans_get_val("title");
 		if (aw_global_get("set_doc_title") != "")
-                {
-                        $title = aw_global_get("set_doc_title");
-                        aw_global_set("set_doc_title","");
-                }
+		{
+			$title = aw_global_get("set_doc_title");
+			aw_global_set("set_doc_title","");
+		}
 		
 		$uinst = get_instance(CL_USER);
 		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
@@ -192,7 +201,7 @@ class doc_display extends aw_template
 		$this->vars_safe(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
-			"fullcontent" => $this->_get_text($tmp, $doc),
+			"fullcontent" => $this->get_document_text($tmp, $doc),
 			"text_no_aliases" => $text_no_aliases,
 			"title" => $title,
 			"author" => $doc->prop("author"),
@@ -284,9 +293,8 @@ class doc_display extends aw_template
 		}
 
 		$this->vars(array(
-                        "SHOW_MODIFIED" => ($doc->prop("show_modified") ? $this->parse("SHOW_MODIFIED") : ""),
-                ));
-
+			"SHOW_MODIFIED" => ($doc->prop("show_modified") ? $this->parse("SHOW_MODIFIED") : ""),
+		));
 
 		$ps = "";
 		if (( ($doc->prop("show_print")) && empty($_GET["print"]) && $arr["leadonly"] != 1))
@@ -332,7 +340,7 @@ class doc_display extends aw_template
 		return $str;
 	}
 
-	function _get_template($arr)
+	private function _get_template($arr)
 	{
 		// use special template for printing if one is set in the cfg file
 		if (aw_global_get("print") && aw_ini_get("document.print_tpl"))
@@ -361,7 +369,20 @@ class doc_display extends aw_template
 		return $tpl;
 	}
 
-	function _get_text($arr, $doc)
+	/** Returns the text for the document, based on the settings. 
+		@attrib api=1 params=pos
+
+		@param arr required type=array
+			array { no_strip_lead => [bool], leadonly => [-1 / > -1 ], showlead => [bool] }
+
+		@param doc required type=cl_document
+			The document to get text for
+
+		@returns 
+			Text content for the document, as per the settings
+
+	**/
+	function get_document_text($arr, $doc)
 	{
 		$lead = $doc->trans_get_val("lead");
 		if (!$arr["no_strip_lead"])
@@ -383,13 +404,12 @@ class doc_display extends aw_template
 		$content = str_replace("]-->","] -->", $content);
 		if ($arr["leadonly"] > -1)
 		{
-			$text = $lead; //$doc->trans_get_val("lead");
+			$text = $lead; 
 		}
 		else
 		{
 			if ($doc->prop("showlead") || $arr["showlead"])
 			{
-				//$lead = $doc->trans_get_val("lead");
 				if (trim(strtolower($lead)) == "<br>")
 				{
 					$lead = "";
@@ -400,22 +420,22 @@ class doc_display extends aw_template
 					{
 						$lead = "<b>".$lead."</b>";
 					}
-					$text = $lead.aw_ini_get("document.lead_splitter").$content; //$doc->trans_get_val("content");
+					$text = $lead.aw_ini_get("document.lead_splitter").$content;
 				}
 				else
 				{
-					$text = $content; //$doc->trans_get_val("content");
+					$text = $content; 
 				}
 			}
 			else
 			{
-				$text = $content; //$doc->trans_get_val("content");
+				$text = $content; 
 			}
 		}
 		
 		if (aw_ini_get("document.use_wiki_parser") == 1)
 		{
-			$this->_parse_wiki(& $text, $doc);
+			$this->parse_wiki(& $text, $doc);
 		}
 		
 		// line break conversion between wysiwyg and not
@@ -429,9 +449,9 @@ class doc_display extends aw_template
 		}
 
 		if (strpos($text, "#login#") !== false)
-                {
-                        if (aw_global_get("uid") == "")
-                        {
+		{
+			if (aw_global_get("uid") == "")
+			{
 				if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
 				{
 					if (!$_SERVER["HTTPS"])
@@ -441,17 +461,17 @@ class doc_display extends aw_template
 						die();
 					}
 				}
-                                $li = get_instance("aw_template");
-                                $li->init();
+				$li = get_instance("aw_template");
+				$li->init();
 				lc_site_load("login", &$li);
-                                $li->read_template("login.tpl");
-                                $text = str_replace("#login#", $li->parse(), $text);
-                        }
-                        else
-                        {
-                                $text = str_replace("#login#", "", $text);
-                        }
-                }
+				$li->read_template("login.tpl");
+				$text = str_replace("#login#", $li->parse(), $text);
+			}
+			else
+			{
+				$text = str_replace("#login#", "", $text);
+			}
+		}
 
 		// if show in iframe is set, just return the iframe
 		if ($doc->prop("show_in_iframe") && !$_REQUEST["only_document_content"])
@@ -465,7 +485,7 @@ class doc_display extends aw_template
 		return $text;
 	}
 	
-	function _get_lead($arr, $doc)
+	private function _get_lead($arr, $doc)
 	{
 		$lead = $doc->trans_get_val("lead");
 		if (!$arr["no_strip_lead"])
@@ -488,7 +508,7 @@ class doc_display extends aw_template
 		
 		if (aw_ini_get("document.use_wiki_parser") == 1)
 		{
-			$this->_parse_wiki(& $text, $doc);
+			$this->parse_wiki(& $text, $doc);
 		}
 		
 		// line break conversion between wysiwyg and not
@@ -504,7 +524,7 @@ class doc_display extends aw_template
 		return $text;
 	}
 	
-	function _get_content($arr, $doc)
+	private function _get_content($arr, $doc)
 	{
 		$content = $doc->trans_get_val("content");
 		$content = str_replace("<!--[", "<!-- [", $content);
@@ -514,7 +534,7 @@ class doc_display extends aw_template
 		
 		if (aw_ini_get("document.use_wiki_parser") == 1)
 		{
-			$this->_parse_wiki(& $text, $doc);
+			$this->parse_wiki(& $text, $doc);
 		}
 		
 		// line break conversion between wysiwyg and not
@@ -537,7 +557,19 @@ class doc_display extends aw_template
 		return $text;
 	}
 	
-	function _parse_wiki($str, $doc)
+	/** Parses the given text as a wiki entry and formats it for display
+		@attrib api=1 params=pos
+
+		@param str required type=string
+			The string to parse and format. Passed by reference
+
+		@param doc required type=cl_document
+			The object that the text belongs to
+
+		@returns
+			none, the string is parsed and formatted in-place
+	**/
+	function parse_wiki($str, $doc)
 	{
 		$str = trim($str);
 		$this->_parse_wiki_links(& $str);
@@ -556,7 +588,7 @@ class doc_display extends aw_template
 		$this->_parse_wiki_table(& $str);
 	}
 	
-	function _parse_wiki_table($str)
+	private function _parse_wiki_table($str)
 	{
 		if ( preg_match_all("/{\|.*\|}/imsU", $str, $mt_wiki_tables ) !== 0)
 		{
@@ -602,7 +634,7 @@ class doc_display extends aw_template
 		}
 	}
 	
-	function _parse_wiki_table_parse_array_to_html($a_table, $i_tableid)
+	private function _parse_wiki_table_parse_array_to_html($a_table, $i_tableid)
 	{
 		$ti = get_instance("vcl/table");
 		$ti = new aw_table();
@@ -653,7 +685,7 @@ class doc_display extends aw_template
 		return $ti->draw();
 	}
 	
-	function _parse_wiki_table_get_to_array($s_table)
+	private function _parse_wiki_table_get_to_array($s_table)
 	{
 		$a_out = array();
 		
@@ -686,7 +718,7 @@ class doc_display extends aw_template
 		return $a_out;
 	}
 	
-	function _parse_wiki_links($str)
+	private function _parse_wiki_links($str)
 	{
 		$a_pattern = array();
 		$a_replacement = array();
@@ -706,7 +738,7 @@ class doc_display extends aw_template
 		$str = preg_replace  ( $a_pattern  , $a_replacement  , $str );
 	}
 	
-	function _parse_wiki_sign($str, $doc)
+	private function _parse_wiki_sign($str, $doc)
 	{
 		if (strpos($str, "~~~")!== false )
 		{
@@ -727,7 +759,7 @@ class doc_display extends aw_template
 		}
 	}
 	
-	function _parse_wiki_fontstyle($str)
+	private function _parse_wiki_fontstyle($str)
 	{
 		if (strpos($str, "''")!== false)
 		{
@@ -746,7 +778,7 @@ class doc_display extends aw_template
 	}
 	
 	// because 2 br's dont't make paragraph
-	function _parse_wiki_create_paragraphs($str)
+	private function _parse_wiki_create_paragraphs($str)
 	{
 		if (strlen(trim($str))>0)
 		{
@@ -758,7 +790,7 @@ class doc_display extends aw_template
 		}
 	}
 	
-	function _parse_wiki_titles($str)
+	private function _parse_wiki_titles($str)
 	{
 		$a_str = explode("\r\n", $str);
 		$i_a_str_count = count($a_str);
@@ -785,7 +817,7 @@ class doc_display extends aw_template
 		$str = implode  ( "\r\n", $a_str );
 	}
 	
-	function _parse_wiki_lists($str)
+	private function _parse_wiki_lists($str)
 	{
 		$tmp = $str;
 		$a_text = array();
@@ -902,7 +934,7 @@ class doc_display extends aw_template
 		$str = $tmp;
 	}
 	
-	function _parse_wiki_lists_get_info_about_listitem_at_line($s_line)
+	private function _parse_wiki_lists_get_info_about_listitem_at_line($s_line)
 	{
 		if ( preg_match  ( "/^(\*.*)\s/U" , $s_line, $mt) )
 		{
@@ -951,7 +983,7 @@ class doc_display extends aw_template
 		);
 	}
 	
-	function _parse_youtube_links($str)
+	private function _parse_youtube_links($str)
 	{
 		$tmp_template = end(explode("/", $this->template_filename));
 		if ( $this->is_template("youtube_link") && (strpos($str, "http://www.youtube.com/")!==false || strpos($str, "http://youtube.com/")!==false))
@@ -965,7 +997,7 @@ class doc_display extends aw_template
 		}
 	}
 	
-	function _do_forum($doc)
+	private function _do_forum($doc)
 	{
 		if ($doc->prop("is_forum") &&
 			($this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS") || $this->is_template("FORUM_ADD"))
@@ -1031,7 +1063,7 @@ class doc_display extends aw_template
 				{
 					$s_comment = $row["comment"];
 					//$this->_parse_youtube_links(& $s_comment);
-					$this->_parse_wiki(& $s_comment, $doc);
+					$this->parse_wiki(& $s_comment, $doc);
 					$s_name = $row["name"];
 					$s_url = $row["url"];
 					if (strlen($s_url)>0)
@@ -1062,7 +1094,7 @@ class doc_display extends aw_template
 		}
 	}
 
-	function _do_charset($doc)
+	private function _do_charset($doc)
 	{
 		if ($this->template_has_var("charset"))
 		{
@@ -1074,7 +1106,7 @@ class doc_display extends aw_template
 		};
 	}
 
-	function _do_checkboxes($doc)
+	private function _do_checkboxes($doc)
 	{
 		if ($doc->prop("ucheck1") == 1)
 		{
@@ -1092,7 +1124,7 @@ class doc_display extends aw_template
 		}
 	}
 	
-	function _get_edit_menu($menu)
+	private function _get_edit_menu($menu)
 	{
 		if (!$this->prog_acl() || !empty($_SESSION["no_display_site_editing"]))
 		{
@@ -1130,6 +1162,15 @@ class doc_display extends aw_template
 		return $pm->get_menu();
 	}
 
+	/** Converts aw-style relative links (#1# ... #s1#, ... } to real relative hrefs
+		@attrib api=1 params=pos
+
+		@param text required type=string 
+			Passed by reference, The text to replace
+
+		@returns
+			none, text is replaced in-place. 
+	**/
 	function create_relative_links(&$text)
 	{
 		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/imsU",$text,$matches))
@@ -1142,7 +1183,7 @@ class doc_display extends aw_template
 		}
 	}
 
-	function _do_user_subs($doc)
+	private function _do_user_subs($doc)
 	{
 		$u1s = "";
 		if ($doc->prop("user1") != "")
@@ -1274,6 +1315,18 @@ class doc_display extends aw_template
 		));
 	}
 
+	/** Returns a correct link for the given document
+		@attrib api=1 params=pos
+
+		@param doc required type=cl_document
+			The document to create link for
+
+		@param lc optional type=string
+			The language to create the link for. Defaults to the current language
+
+		@returns 
+			A link that displays the current document in the website
+	**/
 	function get_doc_link($doc, $lc = null)
 	{
 		$doc_link = obj_link($doc->id());
@@ -1296,27 +1349,27 @@ class doc_display extends aw_template
 			$doc_link = $ss_i->make_menu_link($doc, $lc);
 		}
 
-                if (!empty($_GET["path"]))
-                {
-                        $new_path = array();
-                        $path_ids = explode(",", $_GET["path"]);
-                        foreach($path_ids as $_path_id)
-                        {
-                                $new_path[] = $_path_id;
-                                $pio = obj($_path_id);
-                                if ($pio->brother_of() == $doc->parent())
-                                {
-                                        break;
-                                }
-                        }
-                        $doc_link = aw_ini_get("baseurl")."/?section=".$doc->id()."&path=".join(",",$new_path).",".$doc->id();
-                }
+		if (!empty($_GET["path"]))
+		{
+			$new_path = array();
+			$path_ids = explode(",", $_GET["path"]);
+			foreach($path_ids as $_path_id)
+			{
+				$new_path[] = $_path_id;
+				$pio = obj($_path_id);
+				if ($pio->brother_of() == $doc->parent())
+				{
+					break;
+				}
+			}
+			$doc_link = aw_ini_get("baseurl")."/?section=".$doc->id()."&path=".join(",",$new_path).",".$doc->id();
+		}
 
 		return $doc_link;
 	}
 	
 	// todo 2 viimast if'i
-	function get_date_human_readable($i_timestamp_created)
+	private function get_date_human_readable($i_timestamp_created)
 	{
 		$a_months = array(
 			1=>t("jaanuar"),
@@ -1385,7 +1438,7 @@ class doc_display extends aw_template
 		}
 	}
 	
-	function parse_keywords($doc)
+	private function parse_keywords($doc)
 	{
 		// parse subs KEYWORD_BEGIN, KEYWORD and KEYWORD_END
 		if ($doc->prop("keywords") != "")

@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.16 2008/01/31 13:52:14 kristo Exp $
-// css.aw - CSS (Cascaded Style Sheets) haldus
 /*
-
 @classinfo syslog_type=ST_CSS relationmgr=yes maintainer=kristo
 
 @default group=general 
@@ -134,13 +131,13 @@
 @caption css stiil
 */
 
-//define("RELTYPE_CSS", 1);
-
 class css extends class_base
 {
+	private $font_families;
+	private $ff;
+
 	function css ($args = array())
 	{
-		// kuidas ma seda edimisvormi alati automawebi juurest lugeda saan?
 		$this->init(array(
 			"tpldir" => "css",
 			"clid" => CL_CSS
@@ -165,15 +162,7 @@ class css extends class_base
 
 
 	/** I could not think of another place to stick this. oh well. whatever
-
 		@attrib name=colorpicker params=name all_args="1" default="0"
-
-
-		@returns
-
-
-		@comment
-
 	**/
 	function colorpicker($arr)
 	{
@@ -189,7 +178,15 @@ class css extends class_base
 		die($this->parse());
 	}
 
+	/** Generates a css style definition from the given css object
+		@attrib api=1 params=pos
 
+		@param id required type=oid
+			The oid of the css style object to generate the style from 
+		
+		@returns
+			css style definition
+	**/
 	function get_style_data_by_id($id)
 	{
 		if (!empty($id))
@@ -204,10 +201,10 @@ class css extends class_base
 		};
 	}
 
-	////
-	// !genereerib arrayst tegeliku stiili
-	// name - stiili nimi, data, array css atribuutidest
-	function _gen_css_style($name,$data = array())
+	/** genereerib arrayst tegeliku stiili
+		name - stiili nimi, data, array css atribuutidest
+	**/
+	private function _gen_css_style($name,$data = array())
 	{
 		$retval = ".$name {\n";
 		if (!(is_array($data)))
@@ -418,7 +415,7 @@ class css extends class_base
 		return $retval;
 	}
 
-	function get_cached_style_data($id)
+	private function get_cached_style_data($id)
 	{
 		if (!aw_cache_get("AW_CSS_STYLE_CACHE",$id))
 		{
@@ -428,6 +425,15 @@ class css extends class_base
 		return aw_cache_get("AW_CSS_STYLE_CACHE",$id);
 	}
 
+	/** Returns a list of css styles available
+		@attrib api=1 params=pos
+
+		@param addempty optional type=bool
+			If you want an empty element to be the first one in the returned array, say true here
+
+		@returns
+			array { style_id => style_name, .. } for all css styles in the system in the current language and site
+	**/
 	function get_select($addempty = false)
 	{
 		$ret = array();

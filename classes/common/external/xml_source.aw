@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/xml_source.aw,v 1.5 2008/02/14 14:44:36 instrumental Exp $
-// xml_source.aw - XML source 
 /*
-
 @classinfo syslog_type=ST_XML_SOURCE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
 
 @default table=objects
@@ -149,23 +146,18 @@ class xml_source extends class_base
 {
 	function xml_source()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "datasource/xml_source",
 			"clid" => CL_XML_SOURCE
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
 		};
 		return $retval;
 	}
@@ -409,7 +401,7 @@ class xml_source extends class_base
 		}
 	}
 	
-	function subt_subt($arr)
+	private function subt_subt($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$saved_table["subtag"] = $arr["obj_inst"]->meta("subtag_table");
@@ -544,32 +536,5 @@ class xml_source extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 }
 ?>

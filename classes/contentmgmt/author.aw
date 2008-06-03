@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.7 2008/01/31 13:52:14 kristo Exp $
-// author.aw - Autori artiklid 
 /*
-
 @classinfo syslog_type=ST_AUTHOR no_status=1 no_comment=1 maintainer=dragut
 
 @default table=objects
@@ -20,58 +17,19 @@
 
 */
 
-// esimene asi - näitamisviis
-
-// võiks saada määrata mitmest viimasest perioodist lugusid võetakse?
+// esimene asi - n2itamisviis
+// v6iks saada m22rata mitmest viimasest perioodist lugusid v6etakse?
 
 class author extends class_base
 {
+	const DEFAULT_LIMIT = 20;
+
 	function author()
 	{
 		$this->init(array(
 			"tpldir" => "contentmgmt/author",
 			"clid" => CL_AUTHOR
 		));
-	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
-	function get_property($arr)
-	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-
-		};
-		return $retval;
-	}
-	*/
-	/*
-	function set_property($arr = array())
-	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-                {
-
-		}
-		return $retval;
-	}	
-	*/
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	function show($arr)
@@ -83,9 +41,8 @@ class author extends class_base
 
 	////
 	// !This will list all documents created by an author
-        function author_docs($arr)
-        {
-
+	private function author_docs($arr)
+	{
 		$author = $arr['obj_inst']->prop("name");
 		$limit = $arr['obj_inst']->prop("limit");
 		$only_active_period = $arr['obj_inst']->prop("only_active_period");
@@ -131,42 +88,62 @@ class author extends class_base
 
 			// if there are comments, then parse the HAS_COMMENTS sub
 			$has_comments  = "";
-                        if ($comments_count > 0)
-                        {
-                                $has_comments = $this->parse("HAS_COMMENTS");
-                        }
-                        $this->vars(array("HAS_COMMENTS" => $has_comments));
+			if ($comments_count > 0)
+			{
+				$has_comments = $this->parse("HAS_COMMENTS");
+			}
+			$this->vars(array("HAS_COMMENTS" => $has_comments));
 
-                        $retval .= $this->parse("AUTHOR_DOCUMENT");
+			$retval .= $this->parse("AUTHOR_DOCUMENT");
 
 		}
-                return $retval;
-        }
+		return $retval;
+	}
 
 	// This is used at least in crm_person class, so it cannot be removed
+	/** Returns a list of documents for an author
+		@attrib api=1 params=name
+
+		@param author required type=string
+			The author to search for
+
+		@param limit optional type=int
+			Limit documents, defaults to self::DEFAULT_LIMIT
+
+		@param date optional type=int
+			Find documents around the given date
+
+		@returns
+			array { array { prev => bool, next => bool }, array { doc_oid => array { docid => doc_oid, mod => timestamp, commcount => int } } }
+	**/
 	function get_docs_by_author($arr)
 	{
-		$aname = $arr["author"];
-		$_lim = !empty($arr["limit"]) ? $arr["limit"] : $this->lim;
+		$filt = array(
+			"class_id" => CL_DOCUMENT,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"author" => $arr["author"],
+			"status" => STAT_ACTIVE,
+			new obj_predicate_sort(array("created" => "desc"))
+		);
+
+		$_lim = !empty($arr["limit"]) ? $arr["limit"] : self::DEFAULT_LIMIT;
 		if ($_lim)
 		{
-			$lim = "LIMIT ".($_lim + 1);
+			$filt[] = new obj_predicate_limit($_lim + 1);
 		}
-
-		$perstr = "";
 
 		if (aw_ini_get("search_conf.only_active_periods"))
 		{
 			$pei = get_instance(CL_PERIOD);
 			$plist = $pei->period_list(0,false,1);
-			$perstr = " AND objects.period IN (".join(",", array_keys($plist)).")";
+			$filt["period"] = array_keys($plist);
 		}
 
 		if ($arr["date"])
 		{
-			$datelim = " AND documents.modified <= " . $arr["date"];
+			$filt["doc_modified"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["date"]);
 			// now I also have to figure out whether there is a document after this one
-
 		}
 
 		// ookey, now I need to implement look-ahead and look-back to determine whether
@@ -186,32 +163,26 @@ class author extends class_base
 		// if (int)$_REQUEST["date"] == $_REQUEST["date"] - use it as a timestamp then?
 
 		// get documents from active periods only
-		$sql = "SELECT docid,title,objects.parent,documents.modified AS mod FROM documents
-				LEFT JOIN objects ON objects.brother_of = documents.docid
-				LEFT JOIN objects AS objects2 ON objects.parent = objects2.brother_of
-				WHERE objects2.status != 0 AND author = '$aname' AND objects.status = 2 $perstr $datelim
-				ORDER BY objects.created DESC $lim";
+		$ol = new object_list($filt);
 		$ids = array();
-		$this->db_query($sql);
 		$c = 0;
 		$has_prev = false;
-		$max = $this->num_rows();
-		while($row = $this->db_next())
+		$max = $ol->count();
+		foreach($ol->arr() as $o)
 		{
 			$c++;
 			if ($c == $max && $max == ($_lim + 1))
 			{
-				$has_prev = $row["mod"];
+				$has_prev = $o->doc_modified;
 			}
 			else
 			{
-				$ids[$row["docid"]] = array(
-					"docid" => $row["docid"],
-					"mod" => $row["mod"],
+				$ids[$o->id()] = array(
+					"docid" => $o->id(),
+					"mod" => $o->doc_modified,
 				);
 			};
 		};
-
 
 		$nav = array();
 
@@ -219,35 +190,18 @@ class author extends class_base
 		{
 			// nüüd on vaja teada, et kas järgmisi dokke on olemas või mitte ja kui on,
 			// sii on vaja leida viimane nendest
-			$datelim =  "AND documents.modified > " . $arr["date"];
-			$sql = "SELECT documents.modified AS mod FROM documents
-					LEFT JOIN objects ON objects.brother_of = documents.docid
-					LEFT JOIN objects AS objects2 ON objects.parent = objects2.brother_of
-					WHERE objects2.status != 0 AND author = '$aname' AND objects.status = 2 $perstr $datelim
-					ORDER BY objects.created LIMIT " . $arr["limit"];
-			$this->db_query($sql);
-			$max = $this->num_rows();
-			$row = $this->db_next();
+			$filt["doc_modified"] = new obj_predicate_compare(OBJ_COMP_GREATER, $arr["date"]);
+			$ol = new object_list($filt);
+			$max = $ol->count();
 			$last_mod = 0;
-			while($row = $this->db_next())
+			foreach($ol->arr() as $o)
 			{
-				$last_mod = $row["mod"];
+				$last_mod = $o->doc_modified;
 			};
 			if ($last_mod)
 			{
 				$has_next = $last_mod;
 			};
-			/*
-			$c = 0;
-			if ($row)
-			{
-				$c++;
-				if ($c == $max)
-				{
-					$has_next = $row["mod"];
-				};
-			};
-			*/
 		};
 
 		if ($has_prev)

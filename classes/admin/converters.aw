@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.85 2008/05/14 11:56:27 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.86 2008/06/03 09:24:57 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1901,6 +1901,67 @@ echo "mod ".$con["to.name"]."<br>";
 			$this->restore_handle();
 		}
 		die("all done");
+	}
+
+	/**
+		@attrib name=convert_br
+		@param id optional
+	**/
+	function convert_br($arr)
+	{
+		$ol_args = array(
+			"class_id" => CL_DOCUMENT,
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+
+		if (is_oid($arr["id"]))
+		{
+			$ol_args["oid"] = $arr["id"];
+		};
+
+		$ol = new object_list($ol_args);
+
+		foreach($ol->arr() as $o)
+		{
+			print "n = " . $o->name() . "<br>";
+			print "nobr = ";
+			$cbdat = $o->meta("cb_nobreaks");
+			$save = false;
+			if (empty($cbdat["content"]))
+			{
+				$o->set_prop("content",str_replace("\n","<br>\n",$o->prop("content")));
+				$cbdat["content"] = 1;
+				$save = true;
+			};
+			if (empty($cbdat["lead"]))
+			{
+				$o->set_prop("lead",str_replace("\n","<br>\n",$o->prop("lead")));
+				$cbdat["lead"] = 1;
+				$save = true;
+			};
+			if (empty($cbdat["moreinfo"]))
+			{
+				$o->set_prop("moreinfo",str_replace("\n","<br>\n",$o->prop("moreinfo")));
+				$cbdat["moreinfo"] = 1;
+				$save = true;
+			};
+			if ($save)
+			{
+				$o->set_meta("cb_nobreaks",$cbdat);
+				print "saving";
+				$o->save();
+			}
+			else
+			{
+				print "not saving";
+			};
+			//arr($o->meta());
+			print "done";
+			print "<hr>";
+			flush();
+		};
+
 	}
 };
 ?>

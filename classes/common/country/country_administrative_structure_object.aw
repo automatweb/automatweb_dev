@@ -88,7 +88,7 @@ class country_administrative_structure_object extends _int_object
 		return parent::save();
 	}
 
-	function as_get_descendant_unit_ids($parent)
+	private function as_get_descendant_unit_ids($parent)
 	{
 		if (!is_oid($parent))
 		{
@@ -116,7 +116,7 @@ class country_administrative_structure_object extends _int_object
 	}
 
 	// returns object list of all addresses under $unit and its subunits
-	function as_get_addresses_by_unit($unit)
+	private function as_get_addresses_by_unit($unit)
 	{
 		if (!is_object($unit))
 		{
@@ -135,7 +135,7 @@ class country_administrative_structure_object extends _int_object
 		return $list;
 	}
 
-	function as_index_unit($unit)
+	private function as_index_unit($unit)
 	{
 		$unit_index = (array) $this->meta("unit_hierarchy_index");
 		$unit_index[$unit->id()] = $unit->parent();
@@ -144,7 +144,7 @@ class country_administrative_structure_object extends _int_object
 
     // @attrib name=as_get_structure
 	// @returns
-	function as_get_structure ()
+	private function as_get_structure ()
 	{
 		if (!isset($this->as_structure_array))
 		{
@@ -168,7 +168,7 @@ class country_administrative_structure_object extends _int_object
 	// @param division required
 	// @returns Created unit object. If existing unit with $name was found that will be returned.
 	// @comment division is object or oid of object from class CL_COUNTRY_ADMINISTRATIVE_DIVISION or ADDRESS_STREET_TYPE in case a street is to be added
-	function as_add_adminunit ($arr)
+	private function as_add_adminunit ($arr)
 	{
 		### validate division object
 		if (is_object ($arr["division"]))
@@ -244,7 +244,7 @@ class country_administrative_structure_object extends _int_object
 	// @param type required
 	// @param calling_address_obj_oid optional for address system internal use
 	// @returns Unit object corresponding to name.
-	function as_get_unit_by_name ($arr)
+	private function as_get_unit_by_name ($arr)
 	{
 		$name = trim ($arr["name"]);
 		$parent = is_object ($arr["parent"]) ? $arr["parent"]->id () : $arr["parent"];
@@ -333,7 +333,7 @@ class country_administrative_structure_object extends _int_object
 	// @param division required
 	// @param parent optional type=int
 	// @returns AW object list of admin units corresponding to $division
-	function as_get_units_by_division ($arr)
+	private function as_get_units_by_division ($arr)
 	{
 		$division = $arr["division"];
 
@@ -378,7 +378,7 @@ class country_administrative_structure_object extends _int_object
 		return $list;
 	}
 
-	function as_save()
+	private function as_save()
 	{
 		//// create division hierarchy sequence
 		$division_topology = array();

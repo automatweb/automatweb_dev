@@ -1063,6 +1063,18 @@ class site_show extends class_base
 				}
 			}
 
+			if ($arr["periodic_content"] == 1)
+			{
+				if (is_array($periods))
+				{
+					$filter["period"] = $periods;
+				}
+				else
+				{
+					$filter["period"] = aw_global_get("act_per_id");
+				}
+			}
+
 			// what is going on here: we can't limit the list as the user said, if
 			// we are going to flter the list later, because it will get less items as requested
 			// so, if we are not filtering the list, limit the query, else just read the ids
@@ -1179,25 +1191,10 @@ class site_show extends class_base
 		}
 		else
 		{
-			$activeperiod = aw_global_get("act_per_id");
-			$d = get_instance(CL_DOCUMENT);
-			$d->set_period($activeperiod);
-			$d->list_docs($this->section_obj->id(), $activeperiod,2);
-
-			if ($d->num_rows() > 1)
-			{
-				$docid = array();
-				while($row = $d->db_next())
-				{
-					$docid[] = $row["docid"];
-				}
-			}
-			else
-			if ($d->num_rows() == 1)
-			{
-				$row = $d->db_next();
-				$docid = $row["docid"];
-			}
+			$docid = $this->get_default_document(array(
+				"periodic_content" => true,
+				"obj" => $this->section_obj
+			));
 		}
 		return isset($docid) ? $this->_int_show_documents($docid) : "";
 	}

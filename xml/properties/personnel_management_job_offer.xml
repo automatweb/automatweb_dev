@@ -275,6 +275,16 @@
             <caption>Hindamise skaala</caption>
       </property>
       <property>
+            <name>notify_me</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Soovin teadet kandideerimisest e-postiga</caption>
+      </property>
+      <property>
             <name>candidate_toolbar</name>
             <table>objects</table>
             <group>candidate</group>
@@ -639,6 +649,11 @@
                   <clid>CL_FILE</clid>
                   <caption>E-kirja manus</caption>
             </ATTACHMENT>
+            <NOTIFY_ME>
+                  <value>20</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Teata kandideerimisest</caption>
+            </NOTIFY_ME>
       </reltypes>
       <layout>
             <send_email_sms>

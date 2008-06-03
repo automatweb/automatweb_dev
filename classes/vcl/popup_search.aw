@@ -450,7 +450,7 @@ class popup_search extends aw_template
 					}
 			}
 	**/
-	function _insert_form_props(&$htmlc, $arr)
+	protected function _insert_form_props(&$htmlc, $arr)
 	{
 		$htmlc->add_property(array(
 			"name" => "s[name]",
@@ -514,7 +514,7 @@ class popup_search extends aw_template
 		return $html;
 	}
 
-	function _process_reforb_args(&$data)
+	protected function _process_reforb_args(&$data)
 	{
 	}
 
@@ -533,7 +533,7 @@ class popup_search extends aw_template
 		@examples
 			#_insert_form_props
 	**/
-	function _get_filter_props(&$filter, $arr)
+	protected function _get_filter_props(&$filter, $arr)
 	{
 		if ($arr["s"]["name"] != "")
 		{

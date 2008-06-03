@@ -1,7 +1,6 @@
 <?php
 // ddoc.aw - DigiDoc
 /*
-
 @classinfo syslog_type=ST_DDOC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
@@ -94,6 +93,9 @@ class ddoc extends class_base
 
 	}
 
+	/** Initializes the digidoc class
+		@attrib api=1
+	**/
 	function do_init()
 	{
 		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
@@ -402,10 +404,6 @@ class ddoc extends class_base
 		}
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
@@ -553,15 +551,13 @@ class ddoc extends class_base
 		ddFile::saveAs($name, $content);
 	}
 
-	/*
+	/** creates a new empty container.
 		@attrib params=pos api=1
 		@param oid required type=oid
 			ddoc object oid.
 		@param name optional type=string
-			new ddoc object name(default is:'Digidoc (dd/mm/yyyy hh:mm)')
-		@comment
-			creates a new empty container.
-	*/
+			new ddoc object name(default is:'Digidoc (dd/mm/yyyy hh:mm)')		
+	**/
 	function create_empty($oid, $name = false)
 	{
 		if(!is_oid($oid))
@@ -615,14 +611,13 @@ class ddoc extends class_base
 		return true;
 	}
 
-	/**
+	/** Removes file from ddoc container. Given ddoc can't be signed.
 		@attrib params=pos api=1
 		@param id required type=string
 			file id in the ddoc container
 		@param oid required type=oid
 			ddoc object oid.
-		@comment
-			Removes file from ddoc container. Given ddoc can't be signed.
+			
 		@returns
 			true if given file was removed, false otherwise.
 		@errors
@@ -681,13 +676,12 @@ class ddoc extends class_base
 		return true;
 	}
 
-	/**
+	/** finds out if this document is signed or not
 		@attrib params=pos api=1
 		@param ddoc required type=oid
 			the ddoc object oid
-		@comment
-			finds out if this document is signed or not
-		@returns
+			
+		@returns 
 			true if document is signed, false otherwise
 		@errors
 			error will be raised if oid is wrong.
@@ -707,12 +701,11 @@ class ddoc extends class_base
 		return $sign > 0?true:false;
 	}
 
-	/**
+	/** removes all the signatures from given ddoc.
 		@attrib params=pos api=1
 		@param oid required type=oid
 			the ddoc object oid
-		@comment
-			removes all the signatures from given ddoc.
+			
 		@returns
 			true or false depending on the success of the opertaion(true - succeeded)
 	**/
@@ -744,7 +737,7 @@ class ddoc extends class_base
 		return true;
 	}
 
-	function raise($msg, $halt = true)
+	private function raise($msg, $halt = true)
 	{
 		$this->read_template("error.tpl");
 		$msgs = is_array($msg)?$msg:array($msg);
@@ -765,7 +758,7 @@ class ddoc extends class_base
 		}
 	}
 
-	function _s($oid = false)
+	private function _s($oid = false)
 	{
 		if(!$this->digidoc)
 		{
@@ -796,7 +789,7 @@ class ddoc extends class_base
 		}
 	}
 
-	function _e()
+	private function _e()
 	{
 		//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 		$ret = $this->digidoc->WSDL->CloseSession((int)$_SESSION["code"]);
@@ -808,12 +801,11 @@ class ddoc extends class_base
 		return true;
 	}
 
-	/**
+	/** Enables you to get ddoc contents if needed
 		@attrib api=1 params=pos
 		@param oid required type=oid
 			CL_DDOC object oid
-		@comment
-			Enables you to get ddoc contents if needed
+			
 		@returns
 			Retursn ddoc file contents.
 	**/
@@ -827,15 +819,14 @@ class ddoc extends class_base
 		$o = obj($oid);
 		return file_get_contents($o->prop("ddoc_location"));
 	}
-
-	/**
+	
+	/** Sets ddoc object($oid) contents(overwrites). All the cache data is renrewed automagically.
 		@attrib api=1 params=pos
 		@param oid required type=oid
 			CL_DDOC objects oid
 		@param contents required type=string
 			DDoc file contents
-		@comment
-			Sets ddoc object($oid) contents(overwrites). All the cache data is renrewed automagically.
+			
 		@returns
 			true/false depending if the operation succeeded or not.
 	**/
@@ -867,7 +858,7 @@ class ddoc extends class_base
 		return true;
 	}
 
-	/**
+	/** adds file to ddoc container.
 		@attrib api=1
 		@param oid required type=oid
 			ddoc object oid
@@ -1088,13 +1079,12 @@ class ddoc extends class_base
 		}
 		return true;
 	}
-
-	/**
+	
+	/** Get signers, signing times etc..
 		@attrib params=pos api=1
 		@param oid optional type=oid
 			ddoc object oid
-		@comment
-			Get signers, signing times etc..
+			
 	**/
 	function get_signatures($oid)
 	{
@@ -1110,7 +1100,7 @@ class ddoc extends class_base
 		@comment
 			used internally by _do_reset_ddoc
 	**/
-	function _hash_exists($ddoc, $hash)
+	private function _hash_exists($ddoc, $hash)
 	{
 		$o = obj($ddoc);
 		$m = aw_unserialize($o->prop("files"));
@@ -1142,7 +1132,7 @@ class ddoc extends class_base
 		@returns
 			true on success, false otherwise
 	**/
-	function _write_file_metainfo($arr)
+	private function _write_file_metainfo($arr)
 	{
 		if(!is_oid($arr["oid"]) || !strlen($arr["ddoc_id"]) || (!is_oid($arr["file"]) && !$arr["remove"]))
 		{
@@ -1179,7 +1169,7 @@ class ddoc extends class_base
 		@comment
 			resets the ddoc metadata.
 	**/
-	function _do_reset_ddoc($oid, $save = true)
+	private function _do_reset_ddoc($oid, $save = true)
 	{
 		if(!is_oid($oid))
 		{
@@ -1361,7 +1351,7 @@ class ddoc extends class_base
 
 /// SIGNING PROCESS
 
-	/**
+	/** Well, this method gives a link that pop's up the singing window!!
 		@attrib api=1
 		@param ddoc_oid optional type=oid
 			aw CL_DDOC object oid
@@ -1382,6 +1372,9 @@ class ddoc extends class_base
 		return $this->mk_my_orb("sign", $arr, CL_DDOC);
 	}
 
+	/** Call this when signing errors out
+		@attrib api=1
+	**/
 	function sign_err()
 	{
 		if(($argc = func_num_args()) < 1)
@@ -1718,14 +1711,12 @@ class ddoc extends class_base
 		die($html);
 	}
 
-	/**
+	/** Removes signature from $oid. Param $id can be either the CL_CRM_PERSON oid attached to the signature, or signature id itself.
 		@attrib api=1 params=pos
 		@param id required type=string
 			Can be CL_CRM_PERSON oid or signature id itself(in ddoc container. Format: 'Sxx' where the x's are numbers).
 		@param oid required type=oid
 			The CL_DDOC object oid
-		@comment
-			Removes signature from $oid. Param $id can be either the CL_CRM_PERSON oid attached to the signature, or signature id itself.
 	**/
 	function remove_signature($id, $oid)
 	{
@@ -1822,7 +1813,7 @@ class ddoc extends class_base
 		@comment
 			write sigantures metainfo into ddoc object
 	**/
-	function _write_signature_metainfo($arr)
+	private function _write_signature_metainfo($arr)
 	{
 		if(!strlen($arr["ddoc_id"]) || !is_oid($arr["oid"]) || !is_oid($arr["signer"]) || !strlen($arr["signer_fn"]) || !strlen($arr["signer_ln"]) || !strlen($arr["signer_pid"]) || !strlen($arr["signing_time"]))
 		{
@@ -1838,7 +1829,7 @@ class ddoc extends class_base
 		return true;
 	}
 
-	function _clear_old_signed_files($oid)
+	private function _clear_old_signed_files($oid)
 	{
 		if(!is_oid($oid))
 		{
@@ -1866,7 +1857,7 @@ class ddoc extends class_base
 		@comment
 			clears all cached data from object. Used internally, when new ddoc file is uploaded, or just the info needs to refreshed shomewhy..
 	**/
-	function _clear_old_signatures($oid)
+	private function _clear_old_signatures($oid)
 	{
 		if(!is_oid($oid))
 		{

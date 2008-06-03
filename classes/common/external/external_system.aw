@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/external/external_system.aw,v 1.5 2008/03/17 11:42:56 robert Exp $
-// external_system.aw - Siduss&uuml;steem 
 /*
-
 @classinfo syslog_type=ST_EXTERNAL_SYSTEM relationmgr=yes no_comment=1 prop_cb=1 maintainer=voldemar
 
 @tableinfo aw_ext_systems index=aw_oid master_table=objects master_index=brother_of
@@ -77,7 +74,7 @@ class external_system extends class_base
 		}
 	}
 
-	function _get_ext_sys_arr($arr)
+	private function _get_ext_sys_arr($arr)
 	{
 		$ss = $arr["obj_inst"]->prop("systems");
 		if(count($ss))
@@ -96,7 +93,7 @@ class external_system extends class_base
 		return $arr;
 	}
 
-	function _init_data_table(&$t, $arr)
+	private function _init_data_table(&$t, $arr)
 	{
 		$t->define_field(array(
 			"name" => "co",

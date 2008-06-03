@@ -1,14 +1,5 @@
 <?xml version='1.0'?>
 <properties>
-      <property>
-            <name>json_url</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>URL</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_JSON_SOURCE</syslog_type>
             <relationmgr>yes</relationmgr>

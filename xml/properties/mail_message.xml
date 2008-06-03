@@ -48,6 +48,16 @@
             <caption>Kellele</caption>
       </property>
       <property>
+            <name>mto_relpicker</name>
+            <group>general</group>
+            <table>messages</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TO_MAIL_ADDRESS</reltype>
+            <store>connect</store>
+            <field>mto_relpicker</field>
+            <caption>Kellele</caption>
+      </property>
+      <property>
             <name>cc</name>
             <group>general</group>
             <table>messages</table>
@@ -280,6 +290,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
+            <TO_MAIL_ADDRESS>
+                  <value>4</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Meiliaadress (kellele)</caption>
+            </TO_MAIL_ADDRESS>
       </reltypes>
       <forminfo>
             <showmsg>

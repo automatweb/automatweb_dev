@@ -1,7 +1,5 @@
 <?php
-// country_administrative_division.aw - Haldusüksus
 /*
-
 @classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_DIVISION relationmgr=yes no_comment=1 no_status=1 maintainer=voldemar
 
 @default table=objects
@@ -106,21 +104,6 @@ class country_administrative_division extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-	}
-
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 }
 

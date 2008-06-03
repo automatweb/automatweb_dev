@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.100 2008/03/13 13:26:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.101 2008/06/03 09:25:39 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1675,7 +1675,7 @@ class site_search_content extends class_base
 			}
 			if ($this->can("view", $results[$i]["docid"]))
 			{
-				$doc_text = strip_tags(str_replace(">", "> ", $di->_get_text(array(), obj($results[$i]["docid"]))));
+				$doc_text = strip_tags(str_replace(">", "> ", $di->get_document_text(array(), obj($results[$i]["docid"]))));
 			}
 			else
 			{

@@ -425,6 +425,15 @@
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <property>
+            <name>cfgform_id_from_url</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Seadetevormi ID URList</caption>
+      </property>
+      <property>
             <name>cfgview_action</name>
             <table>objects</table>
             <group>cfgview_settings</group>

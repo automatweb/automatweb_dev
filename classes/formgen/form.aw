@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.130 2008/02/11 09:43:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.131 2008/06/03 09:25:48 kristo Exp $
 // form.aw - Class for creating forms
 /*
 @classinfo  maintainer=kristo
@@ -1715,8 +1715,7 @@ class form extends form_base
 				if ($used[$stylid] != 1)
 				{
 					$used[$stylid] = 1;
-					$css_info = obj($stylid);
-					$css_file .= $css->_gen_css_style($stylname,$css_info->meta("css"));
+					$css_file .= $css->get_style_data_by_id($stylid);
 				}
 			}
 			$st = "<style type=\"text/css\">".$css_file."</style>\n".$st;
