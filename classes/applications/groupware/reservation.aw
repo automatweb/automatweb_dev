@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.96 2008/05/29 14:31:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.97 2008/06/03 13:44:25 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 @default group=general
 #TAB GENERAL
 
-@groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=cp_fn
+@groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=cp_fn submit=no
 
 @layout general_split type=hbox
 
@@ -235,6 +235,10 @@ class reservation extends class_base
 				$prop["value"] = t("Salvesta!");
 				$prop["onclick"] = "javascript:submit_changeform();";
 				$prop["class"] = "sbtbutton";
+				break;
+			case "sbt_close":
+				$prop["type"] = "text";
+				$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' onclick=''  />";
 				break;
 			case "start1":
 			case "end":

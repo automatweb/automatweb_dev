@@ -470,6 +470,7 @@
                   <default>1</default>
                   <icon>edit</icon>
                   <focus>cp_fn</focus>
+                  <submit>no</submit>
             </general>
             <reserved_resources>
                   <caption>Ressursid</caption>
