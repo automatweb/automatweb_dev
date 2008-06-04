@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.11 2008/05/13 13:37:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.12 2008/06/04 12:33:32 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -49,6 +49,9 @@
 
 	@property ord type=text table=aw_task_rows field=aw_task_ord no_caption=1
 	@caption Jrk
+
+	@property task type=hidden table=aw_task_rows field=aw_task no_caption=1
+	@caption Toimetus
 
 @default group=comments
 
@@ -133,6 +136,7 @@ class task_row extends class_base
 				return true;
 			case "aw_task_ord":
 			case "skill_used":
+			case "aw_task":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
@@ -339,18 +343,19 @@ class task_row extends class_base
 			$o = obj($arr["data"]["task"]["value"]);
 			$cp = get_current_person();
 
-			$row = obj();
+			$row = $o->add_row();
+/*			$row = obj();
 			$row->set_parent($o->id());
-			$row->set_class_id(CL_TASK_ROW);
+			$row->set_class_id(CL_TASK_ROW);*/
 			$row->set_prop("content", $arr["data"]["desc"]["value"]);
 			$row->set_prop("date", $arr["start"]);
 			$row->set_prop("impl", array($cp->id() => $cp->id()));
 			$row->save();
 			$arr["oid"] = $row->id();
-			$o->connect(array(
+/*			$o->connect(array(
 				"to" => $row->id(),
 				"type" => "RELTYPE_ROW"
-			));
+			));*/
 		}
 
 		$row = obj($arr["oid"]);

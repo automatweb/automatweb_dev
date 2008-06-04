@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.86 2008/06/03 09:24:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.87 2008/06/04 12:29:57 markop Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1520,9 +1520,11 @@ class converters extends aw_template
 			// get all rows from task, convert to objects below task, connect to task and clear rows
 			foreach(safe_array($o->meta("rows")) as $row)
 			{
-				$ro = obj();
-				$ro->set_parent($o->id());
-				$ro->set_class_id(CL_TASK_ROW);
+//				$ro = obj();
+//				$ro->set_parent($o->id());
+//				$ro->set_class_id(CL_TASK_ROW);
+				$ro = $o->add_row();
+
 				$ro->set_name($row["task"]);
 				$ro->set_prop("content", $row["task"]);
 				$ro->set_prop("date", $row["date"]);
@@ -1535,10 +1537,10 @@ class converters extends aw_template
 				$ro->set_prop("bill_id", $row["bill_id"]);
 				$ro->save();
 
-				$o->connect(array(
-					"to" => $ro->id(),
-					"type" => "RELTYPE_ROW"
-				));
+//				$o->connect(array(
+//					"to" => $ro->id(),
+//					"type" => "RELTYPE_ROW"
+//				));
 
 				$o->set_meta("rows", null);
 				$o->save();

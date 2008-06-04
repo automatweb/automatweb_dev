@@ -108,6 +108,25 @@ class task_object extends _int_object
 		return $ret;
 	}
 
+	/** makes new task row
+		@attrib api=1
+		@returns object
+			row object
+	**/
+	function add_row()
+	{
+		$new_row = new object();
+		$new_row->set_class_id(CL_TASK_ROW);
+		$new_row->set_parent($this->id());
+		$new_row->set_prop("task" , $this->id());
+		$new_row->save();
+		$this->connect(array(
+			"to" => $new_row->id(),
+			"type" => "RELTYPE_ROW"
+		));
+		return $new_row;
+	}
+
 	function get_all_expenses()
 	{
 		$ret = array();
