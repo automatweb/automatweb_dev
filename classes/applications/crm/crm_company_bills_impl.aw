@@ -52,25 +52,39 @@ class crm_company_bills_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
+/*
+	//konvertimise algoritm
+	$cnt = 0;
 
+	if(aw_global_get("uid") == "Teddi.Rull"){
+		$tasks = new object_list(array(
+			"class_id" => CL_TASK,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
+		));
+		arr($tasks->count());
+		foreach($tasks->arr() as $task)
+		{
+			foreach($task->get_all_rows() as $row_id)
+			{$row = obj($row_id);
+				if($row->prop("task")) continue;
+				$cnt++;
+				
+//				print "rida id=".$row_id." nimi=".$row->name()." saab taski id=".$task->id()." nimega ".$task->name()."<br>\n";
+				$row->set_prop("task", $task->id());
+				$row->save();
+			}
+		}
+		arr($cnt);
+	}
+*/
+
+	enter_function("bills_impl::_get_bill_proj_list1");
 		$t =& $arr["prop"]["vcl_inst"];
-
 		$format = t('%s maksmata t&ouml;&ouml;d');
 		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
-
-		// list all task rows that are not billed yet
-		$rows = new object_list(array(
-			"class_id" => CL_TASK_ROW,
-			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"on_bill" => 1,
-			"done" => 1
-		));
-
-		$projs = array();
-		$tasks = new object_list();
-		$sum2proj = array();
-
-		//kokkuleppe hinnaga toimetused... sellega peaks miski optimaalsema variandi valja m6tlema ka
+		//k6ik arvele minevad taskid
 		$all_tasks = new object_list(array(
 			"class_id" => CL_TASK,
 			"send_bill" => 1,
@@ -79,53 +93,78 @@ class crm_company_bills_impl extends class_base
 			"brother_of" => new obj_predicate_prop("id"),
 		));
 
-		$deal_tasks = array();
+		// list all task rows that are not billed yet
+		$rows = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1,
+			"task" => $all_tasks->ids(),
+		));
+
+		$projs = array();
+		$tasks = new object_list();
+		$sum2proj = array();
+		$agreement_tasks = array();
+
+		//kokkuleppehinnaga taskid
+		$this->deal_tasks = array();
 		foreach($all_tasks->arr() as $row)
 		{
 			if(strlen($row->prop("deal_price")) > 0)
 			{
-				$deal_tasks[] = $row->id();
+				$this->deal_tasks[] = $row->id();
+				$projs[$row->prop("project")] = $row->prop("project");
+				$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
 			}
 		}
 
-		$agreement_tasks = array();
-		if ($rows->count())
-		{
-			$c = new connection();
-			$t2row = $c->find(array(
-				"from.class_id" => CL_TASK,
-				"to" => $rows->ids(),
-				"type" => "RELTYPE_ROW"
-			));
-			foreach($t2row as $conn)
+//		if ($rows->count())
+//		{
+//			$c = new connection();
+//			$t2row = $c->find(array(
+//				"from.class_id" => CL_TASK,
+//				"to" => $rows->ids(),
+//				"type" => "RELTYPE_ROW",
+//				"to.bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+//				"to.on_bill" => 1,
+//				"to.done" => 1,
+//				"to.class_id" => CL_TASK_ROW,
+//			));
+			foreach($rows->arr() as $row)
 			{
-				$task = obj($conn["from"]);
-				if(in_array($task->id(), $deal_tasks)){
-					$greement_tasks[] = $task;
+				if(!$row->prop("task")) continue;
+				$task = obj($row->prop("task"));
+				if(in_array($task->id(), $this->deal_tasks)){
+//					$agreement_tasks[] = $task;
 					continue;
 				}
 				if ($task->prop("send_bill"))
 				{
-					$row = obj($conn["to"]);
+//					$row = obj($conn["to"]);
 					$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
-					$tasks->add($conn["from"]);
+					$tasks->add($task->id());
+					$projs[$task->prop("project")] = $task->prop("project");
 				}
 			}
-		}
-		//siia vaid need kokkuleppehinna taskid, millel on moni arvele minev rida ka olemas
-		foreach($greement_tasks as $row)
-		{
-			$projs[$row->prop("project")] = $row->prop("project");
-			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
-		}
+//		}
+
+		exit_function("bills_impl::_get_bill_proj_list1");
+		enter_function("bills_impl::_get_bill_proj_list2");
+		//siia vaid need kokkuleppehinna taskid, millel on m6ni arvele minev rida ka olemas
+//		foreach($agreement_tasks as $row)
+//		{
+//			$projs[$row->prop("project")] = $row->prop("project");
+//			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
+//		}
 
 
 		// get all projects from the lists
-		foreach($tasks->arr() as $row)
+/*		foreach($tasks->arr() as $row)
 		{
 			$projs[$row->prop("project")] = $row->prop("project");
 		}
-
+*/
 		// list all meetings that are not billed yet
 		$meetings = new object_list(array(
 			"class_id" => CL_CRM_MEETING,
@@ -143,31 +182,35 @@ class crm_company_bills_impl extends class_base
 			"class_id" => CL_CRM_EXPENSE,
 //			"on_bill" => 1,
 			"bill_id" => '',
+			"parent" => $all_tasks->ids(),
 		));
-
+		
 		foreach($other_expenses->arr() as $row)
 		{
-			$c = new connection();
-			$t2row = $c->find(array(
-				"to.class_id" => CL_CRM_EXPENSE,
-				"to" => $row->id(),
+//			$c = new connection();
+//			$t2row = $c->find(array(
+//				"to.class_id" => CL_CRM_EXPENSE,
+//				"to" => $row->id(),
+//				"to.send_bill" => 
 //				"type" => "RELTYPE_EXPENSE"
-			));
-			foreach($t2row as $conn)
-			{
-				$task = obj($conn["from"]);
-				$row = obj($conn["to"]);
-				if(!$task->prop("send_bill"))
-				{
-					continue;
-				}
+//			));
+
+//			foreach($t2row as $conn)
+//			{
+				$task = obj($row->parent());
+//				$row = obj($conn["to"]);
+//				if(!$task->prop("send_bill"))
+//				{
+//					continue;
+//				}//if(aw_global_get("uid") == "Teddi.Rull") {arr($row->properties());}
 				$projs[$task->prop("project")] = $task->prop("project");
 				$sum2proj[$task->prop("project")] += $row->prop("cost");
-			}
+//			}
 		//	$projs[$row->prop("project")] = $row->prop("project");
 		//	$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
-
+		exit_function("bills_impl::_get_bill_proj_list2");
+		enter_function("bills_impl::_get_bill_proj_list3");
 		$custs = array();
 		foreach($projs as $p)
 		{
@@ -224,6 +267,7 @@ class crm_company_bills_impl extends class_base
 		}
 
 		$t->set_default_sortby("cust_name");
+		exit_function("bills_impl::_get_bill_proj_list3");
 		return;
 
 		// get all open tasks
@@ -356,6 +400,7 @@ class crm_company_bills_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
+		enter_function("bills_impl::_get_bill_task_list");
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->unset_filter();
 		$this->_init_bill_task_list_t($t, $arr["request"]["proj"]);
@@ -403,16 +448,18 @@ class crm_company_bills_impl extends class_base
 			"send_bill" => 1,
 	//		"is_done" => 1,
 			"project" => $arr["request"]["proj"],
+			"brother_of" => new obj_predicate_prop("id"),
 		));
+
 		$tasks = new object_list();
 		$sum2task = array();
 		$hr2task = array();
 		$task2row = array();
-		$deal_tasks = array();
-		$possible_task_rows = $possible_expenses = array();
+//		$deal_tasks = array();
+//		$possible_task_rows = $possible_expenses = array();
 		foreach($all_tasks->arr() as $row)
 		{
-			$possible_task_rows = array_merge($possible_task_rows , $row->get_all_rows());
+//			$possible_task_rows = array_merge($possible_task_rows , $row->get_all_rows());
 			$rows->add($row->get_all_expenses());
 			if((strlen($row->prop("deal_price")) > 0) && ($row->prop("send_bill")))
 			{
@@ -424,7 +471,7 @@ class crm_company_bills_impl extends class_base
 						"sum" => $row->prop("deal_price").t("(Kokkuleppehind)"),
 						"set_date" => $row->prop("to_bill_date"),
 				));
-				$deal_tasks[] = $row->id();
+//				$deal_tasks[] = $row->id();
 				$sum2task[$row->id()] += str_replace(",", ".", $row->prop("deal_price"));
 				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
 			}
@@ -436,9 +483,10 @@ class crm_company_bills_impl extends class_base
 			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 			"on_bill" => 1,
 			"done" => 1,
-			"oid" => $possible_task_rows
+//			"oid" => $possible_task_rows
+			"task" => $all_tasks->ids(),
 		));
-
+		
 /*		$task_expenses = new object_list(array(
 			"class_id" => CL_CRM_EXPENSE,
 	//		"on_bill" => 1,
@@ -448,7 +496,6 @@ class crm_company_bills_impl extends class_base
 		);
 		$rows->add($task_expenses);*/
 		$rows->add($task_rows);
-
 
 		if ($rows->count())
 		{
@@ -466,7 +513,7 @@ class crm_company_bills_impl extends class_base
 				$task2row[$task->id()][] = $row->id();
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
-					if(!in_array($task->id(), $deal_tasks))
+					if(!in_array($task->id(), $this->deal_tasks))
 					{
 						$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
 						$hr2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust"));
@@ -504,7 +551,7 @@ class crm_company_bills_impl extends class_base
 		foreach($tasks->arr() as $o)
 		{
 			if(!$o->prop("send_bill"))
-			{
+			{	
 				continue;
 			}
 			$rs = $task2row[$o->id()];
@@ -578,7 +625,7 @@ class crm_company_bills_impl extends class_base
 		$t->set_default_sorder("asc");
 		$t->set_default_sortby("set_date");
 		$t->sort_by();
-
+exit_function("bills_impl::_get_bill_task_list");
 		return;
 		if ($arr["request"]["cust"])
 		{
