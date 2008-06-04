@@ -86,7 +86,7 @@ class crm_person_obj extends _int_object
 		{
 			return $this->get_org_section();
 		}
-		if($k = "title" && parent::prop($k) === 0)
+		if($k == "title" && parent::prop($k) === 0)
 		{
 			return 3;
 		}
