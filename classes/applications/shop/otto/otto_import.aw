@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.96 2008/06/04 13:10:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.97 2008/06/04 13:43:21 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2355,7 +2355,6 @@ class otto_import extends class_base
 			'chgbgcolor' => 'line_color'
 		));
 
-		$count = 0;
 		$saved_data = $args['obj_inst']->meta('bubble_pictures');
 
 		$filter_bubble_category = $args['request']['bubble_filter']['category'];
@@ -2427,22 +2426,25 @@ class otto_import extends class_base
 						'value' => $data['image_url']
 					)),
 				));
-				$count++;
 
 			}
 		}
-		$t->define_data(array(
-			'category' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][category]'
-			)),
-			'title' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][title]',
-			)),
-			'image_url' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][image_url]'
-			)),
-			'line_color' => 'lightblue'
-		));
+
+		for ($i = 0; $i < 5; $i++ )
+		{
+			$t->define_data(array(
+				'category' => html::textbox(array(
+					'name' => 'new_bubble_data['.$i.'][category]'
+				)),
+				'title' => html::textbox(array(
+					'name' => 'new_bubble_data['.$i.'][title]',
+				)),
+				'image_url' => html::textbox(array(
+					'name' => 'new_bubble_data['.$i.'][image_url]'
+				)),
+				'line_color' => 'lightblue'
+			));
+		}
 		return PROP_OK;
 	}
 
@@ -2467,6 +2469,17 @@ class otto_import extends class_base
 					);
 				}
 			}
+			foreach (safe_array($args['request']['new_bubble_data']) as $key => $data)
+			{
+				if (!empty($data['category']))
+				{
+					$valid_data[$data['category']] = array(
+						'title' => $data['title'],
+						'image_url' => $data['image_url']
+					);
+				}
+			}
+
 			$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
 		}
 		return PROP_OK;
@@ -2545,7 +2558,6 @@ class otto_import extends class_base
 			'chgbgcolor' => 'line_color'
 		));
 
-		$count = 0;
 		$saved_data = $args['obj_inst']->meta('firm_pictures');
 
 		$filter_firm_category = $args['request']['firm_filter']['category'];
@@ -2615,7 +2627,6 @@ class otto_import extends class_base
 						'value' => $data['image_url']
 					)),
 				));
-				$count++;
 			}
 		}
 
@@ -2623,17 +2634,16 @@ class otto_import extends class_base
 		{	
 			$t->define_data(array(
 				'category' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][category]'
+					'name' => 'new_firm_data['.$i.'][category]'
 				)),
 				'title' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][title]'
+					'name' => 'new_firm_data['.$i.'][title]'
 				)),
 				'image_url' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][image_url]'
+					'name' => 'new_firm_data['.$i.'][image_url]'
 				)),
 				'line_color' => 'lightblue'
 			));
-			$count++;
 		}
 		return PROP_OK;
 	}
@@ -2654,6 +2664,16 @@ class otto_import extends class_base
 					}
 
 					$valid_data[$category] = array(
+						'title' => $data['title'],
+						'image_url' => $data['image_url']
+					);
+				}
+			}
+			foreach (safe_array($args['request']['new_firm_data']) as $key => $data)
+			{
+				if (!empty($data['category']))
+				{
+					$valid_data[$data['category']] = array(
 						'title' => $data['title'],
 						'image_url' => $data['image_url']
 					);

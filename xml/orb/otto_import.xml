@@ -61,5 +61,18 @@
 			</function>
 		</action>
 
+		<action name="_delete_firm_picture">
+			<function name="_delete_firm_picture">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="_delete_bubble_picture">
+			<function name="_delete_bubble_picture">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
