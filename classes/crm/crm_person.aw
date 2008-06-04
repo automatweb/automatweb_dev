@@ -2342,9 +2342,9 @@ class crm_person extends class_base
 				break;
 			case "title":
 				$data["options"] = array(
-					t("H&auml;rra"),
-					t("Proua"),
-					t("Preili")
+					3 => t("H&auml;rra"),
+					1 => t("Proua"),
+					2 => t("Preili")
 				);
 				break;
 
