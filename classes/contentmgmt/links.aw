@@ -229,7 +229,6 @@ class links extends class_base
 	{
 		extract($arr);
 		$link = obj($id);
-		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
 		$url = $this->trans_get_val($link, "url");
 		if (substr(trim($url), 0, 3) == "www")
 		{
@@ -244,6 +243,8 @@ class links extends class_base
 		{
 			$url = aw_ini_get("baseurl").$url;
 		}
+
+		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
 		header("Location: ".$url);
 		die();
 	}
@@ -392,17 +393,13 @@ class links extends class_base
 	// peab ehitama ka mehhanisimi sp&auml;mmimise v&auml;ltimiseks
 	function add_hit($id,$host,$uid)
 	{
-		if (!aw_ini_get("links.use_hit_counter"))
-		{
-			return;
-		}
 		$o = obj($id);
 		aw_disable_acl();
+		$prev = obj_set_opt("no_cache", 1);
 		$o->set_prop("hits", $o->prop("hits")+1);
-		// this would clear the entire site cache and nothing can possibly change from this, so I'm commenting this out.
-		// does anyone really need this hit count thingie anyway?
 		$o->save();
 		aw_restore_acl();
+		obj_set_opt("no_cache", $prev);
 
 		$this->_log(ST_EXTLINK, SA_CLICK, $o->name(), $id);
 	}
