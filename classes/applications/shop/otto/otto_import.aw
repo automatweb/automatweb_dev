@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.95 2008/05/26 13:29:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.96 2008/06/04 13:10:08 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -162,14 +162,23 @@
 		
 		@property categories type=table store=no group=categories no_caption=1
 		@caption Kategooriad
-	
-	@groupinfo category_settings caption="Kategooriate seaded" parent=foldersa
 
-		@property bubble_pictures type=table group=category_settings
+	@groupinfo firm_pictures_group caption="Firmapildid" parent=foldersa
+
+		@property firm_pictures_toolbar type=toolbar group=firm_pictures_group no_caption=1
+
+		@property firm_pictures type=table group=firm_pictures_group no_caption=1
+		@caption Firmapildid
+
+	@groupinfo bubble_pictures_group caption="Mullipildid" parent=foldersa
+	
+		@property bubble_pictures_toolbar type=toolbar group=bubble_pictures_group no_caption=1
+
+		@property bubble_pictures type=table group=bubble_pictures_group no_caption=1
 		@caption Mullipildid
 
-		@property firm_pictures type=table group=category_settings
-		@caption Firmapildid
+
+	@groupinfo category_settings caption="Kategooriate seaded" parent=foldersa
 
 		@property sideways_pages type=textarea rows=4 cols=80 table=objects field=meta method=serialize group=category_settings
 		@comment Ilmselt hetkel ei t&ouml;&ouml;ta!
@@ -2297,14 +2306,42 @@ class otto_import extends class_base
 		return PROP_OK;
 	}
 
+	function _get_bubble_pictures_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			'action' => '_delete_bubble_picture',
+			'confirm' => t('Oled kindel et soovid valitud read kustutada?')
+		));
+
+		return PROP_OK;
+
+	}
+
 	function _get_bubble_pictures($args)
 	{
 		$t = &$args['prop']['vcl_inst'];
 		$t->set_sortable(false);
 
 		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'width' => '5%',
+			'chgbgcolor' => 'line_color',
+			'align' => 'center'
+		));
+		$t->define_field(array(
 			'name' => 'category',
 			'caption' => t('Kategooria'),
+			'chgbgcolor' => 'line_color'
+		));
+		$t->define_field(array(
+			'name' => 'title',
+			'caption' => t('Pealkiri'),
 			'chgbgcolor' => 'line_color'
 		));
 		$t->define_field(array(
@@ -2312,13 +2349,6 @@ class otto_import extends class_base
 			'caption' => t('Pildi aadress'),
 			'chgbgcolor' => 'line_color'
 		));
-
-		$t->define_field(array(
-			'name' => 'title',
-			'caption' => t('Nimetus'),
-			'chgbgcolor' => 'line_color'
-		));
-
 		$t->define_field(array(
 			'name' => 'filter_button',
 			'caption' => t('Filtreeri'),
@@ -2327,31 +2357,23 @@ class otto_import extends class_base
 
 		$count = 0;
 		$saved_data = $args['obj_inst']->meta('bubble_pictures');
-		$show_data = array();
 
 		$filter_bubble_category = $args['request']['bubble_filter']['category'];
 		$filter_bubble_image_url = $args['request']['bubble_filter']['image_url'];
 		$filter_bubble_title = $args['request']['bubble_filter']['title'];
-
-		foreach (safe_array($saved_data) as $category => $data)
-		{
-			$show_data[$data['image_url']]['category'][] = $category;
-			$show_data[$data['image_url']]['image_url'] = $data['image_url'];
-			$show_data[$data['image_url']]['title'] = $data['title'];
-		}
 
 		$t->define_data(array(
 			'category' => html::textbox(array(
 				'name' => 'bubble_filter[category]',
 				'value' => $filter_bubble_category
 			)),
-			'image_url' => html::textbox(array(
-				'name' => 'bubble_filter[image_url]',
-				'value' => $filter_bubble_image_url
-			)),
 			'title' => html::textbox(array(
 				'name' => 'bubble_filter[title]',
 				'value' => $filter_bubble_title
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'bubble_filter[image_url]',
+				'value' => $filter_bubble_image_url
 			)),
 			'filter_button' => html::submit(array(
 				'name' => 'filter_bubble_images',
@@ -2360,13 +2382,12 @@ class otto_import extends class_base
 			'line_color' => 'green'
 		));
 
-		foreach ( $show_data as $data )
+		foreach ( $saved_data as $category => $data )
 		{
 			$add_line = false;
-			$categories_str = implode(',', $data['category']);
 			if (!empty($filter_bubble_category) || !empty($filter_bubble_image_url) || !empty($filter_bubble_title))
 			{
-				if (strpos($categories_str, $filter_bubble_category) !== false)
+				if (strpos($category, $filter_bubble_category) !== false)
 				{
 					$add_line = true;
 				}
@@ -2389,23 +2410,22 @@ class otto_import extends class_base
 			{
 
 				$t->define_data(array(
-					'category' => html::textbox(array(
-						'name' => 'bubble_data['.$count.'][category]',
-						'value' => $categories_str
+					'select' => html::checkbox(array(
+						'name' => 'bubble_select['.$category.']',
+						'value' => $category
 					)),
-					'image_url' => html::textbox(array(
-						'name' => 'bubble_data['.$count.'][image_url]',
-						'value' => $data['image_url']
+					'category' => html::textbox(array(
+						'name' => 'bubble_data['.$category.'][category]',
+						'value' => $category
 					)),
 					'title' => html::textbox(array(
-						'name' => 'bubble_data['.$count.'][title]',
+						'name' => 'bubble_data['.$category.'][title]',
 						'value' => $data['title']
 					)),
-	/*
-					'image_upload' => html::fileupload(array(
-						'name' => 'bubble_data['.$count.'][image_upload]'
+					'image_url' => html::textbox(array(
+						'name' => 'bubble_data['.$category.'][image_url]',
+						'value' => $data['image_url']
 					)),
-	*/
 				));
 				$count++;
 
@@ -2415,11 +2435,11 @@ class otto_import extends class_base
 			'category' => html::textbox(array(
 				'name' => 'bubble_data['.$count.'][category]'
 			)),
-			'image_url' => html::textbox(array(
-				'name' => 'bubble_data['.$count.'][image_url]'
-			)),
 			'title' => html::textbox(array(
 				'name' => 'bubble_data['.$count.'][title]',
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][image_url]'
 			)),
 			'line_color' => 'lightblue'
 		));
@@ -2431,23 +2451,64 @@ class otto_import extends class_base
 		if (!array_key_exists('filter_bubble_images', $args['request']))
 		{
 			$valid_data = $args['obj_inst']->meta('bubble_pictures');
-			foreach (safe_array($args['request']['bubble_data']) as $data)
+			foreach (safe_array($args['request']['bubble_data']) as $category => $data)
 			{
-				if (!empty($data['category']) && !empty($data['image_url']))
+				if (!empty($data['category']))
 				{
-					$categories = explode(',', $data['category']);
-					foreach ($categories as $category)
+					if ($category != $data['category'])
 					{
-						$valid_data[$category] = array(
-							'image_url' => $data['image_url'], 
-							'title' => $data['title']
-						);
+						unset($valid_data[$category]);
+						$category = $data['category'];
 					}
+
+					$valid_data[$category] = array(
+						'title' => $data['title'],
+						'image_url' => $data['image_url']
+					);
 				}
 			}
 			$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
 		}
-			return PROP_OK;
+		return PROP_OK;
+
+	}
+
+        /**
+                @attrib name=_delete_bubble_picture
+        **/
+	function _delete_bubble_picture($arr)
+	{
+		if ($this->can('view', $arr['id']))
+		{
+			$o = new object($arr['id']);
+			$data = $o->meta('bubble_pictures');
+			foreach ($arr['bubble_select'] as $cat)
+			{
+				unset($data[$cat]);
+			}
+			$o->set_meta('bubble_pictures', $data);
+			$o->save();
+		}
+
+		return $this->mk_my_orb("change", array(
+			'id' => $arr['id'],
+			'group' => $arr['group']
+		), CL_OTTO_IMPORT);
+	}
+
+	function _get_firm_pictures_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			'action' => '_delete_firm_picture',
+			'confirm' => t('Oled kindel et soovid valitud read kustutada?')
+		));
+
+		return PROP_OK;
 
 	}
 
@@ -2457,18 +2518,25 @@ class otto_import extends class_base
 		$t->set_sortable(false);		
 
 		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'width' => '5%',
+			'chgbgcolor' => 'line_color',
+			'align' => 'center'
+		));
+		$t->define_field(array(
 			'name' => 'category',
 			'caption' => t('Kategooria'),
 			'chgbgcolor' => 'line_color'
 		));
 		$t->define_field(array(
-			'name' => 'image_url',
-			'caption' => t('Pildi aadress'),
+			'name' => 'title',
+			'caption' => t('Pealkiri'),
 			'chgbgcolor' => 'line_color'
 		));
 		$t->define_field(array(
-			'name' => 'title',
-			'caption' => t('Nimetus'),
+			'name' => 'image_url',
+			'caption' => t('Pildi aadress'),
 			'chgbgcolor' => 'line_color'
 		));
 		$t->define_field(array(
@@ -2484,39 +2552,18 @@ class otto_import extends class_base
 		$filter_firm_image_url = $args['request']['firm_filter']['image_url'];
 		$filter_firm_title = $args['request']['firm_filter']['title'];
 
-		$show_data = array();
-		foreach (safe_array($saved_data) as $category => $data)
-		{
-			// ilmselt on vaja refaktoorida seda siin, kui seda grupeerimist t6esti vaja ei ole
-			// samas oleks variant kasutada ka image_url-title kombinatsiooni grupeerimiseks
-			// siis ei tohiks ka mingit "kokku klappimist" enam juhtuda, juhuk kui t6esti kuskil
-			// sama kombo ei esine.
-			if ($_GET['grouped'])
-			{
-				$key = (empty($data['image_url'])) ? $data['title'] : $data['image_url'];
-			}
-			else
-			{
-				$key = $category;	
-			}
-			
-			$show_data[$key]['category'][] = $category;
-			$show_data[$key]['image_url'] = $data['image_url'];
-			$show_data[$key]['title'] = $data['title'];
-		}
-
 		$t->define_data(array(
 			'category' => html::textbox(array(
 				'name' => 'firm_filter[category]',
 				'value' => $filter_firm_category
 			)),
-			'image_url' => html::textbox(array(
-				'name' => 'firm_filter[image_url]',
-				'value' => $filter_firm_image_url
-			)),
 			'title' => html::textbox(array(
 				'name' => 'firm_filter[title]',
 				'value' => $filter_firm_title
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'firm_filter[image_url]',
+				'value' => $filter_firm_image_url
 			)),
 			'filter_button' => html::submit(array(
 				'name' => 'filter_firm_images',
@@ -2525,13 +2572,12 @@ class otto_import extends class_base
 			'line_color' => 'green'
 		));
 
-		foreach ($show_data as $data)
+		foreach ($saved_data as $category => $data)
 		{
 			$add_line = false;
-			$categories_str = implode(',', $data['category']);
 			if (!empty($filter_firm_category) || !empty($filter_firm_image_url) || !empty($filter_firm_title))
 			{
-				if (strpos($categories_str, $filter_firm_category) !== false)
+				if (strpos($category, $filter_firm_category) !== false)
 				{
 					$add_line = true;
 				}
@@ -2552,17 +2598,21 @@ class otto_import extends class_base
 			if ($add_line)
 			{
 				$t->define_data(array(
-					'category' => html::textbox(array(
-						'name' => 'firm_data['.$count.'][category]',
-						'value' => $categories_str
+					'select' => html::checkbox(array(
+						'name' => 'firm_select['.$category.']',
+						'value' => $category
 					)),
-					'image_url' => html::textbox(array(
-						'name' => 'firm_data['.$count.'][image_url]',
-						'value' => $data['image_url']
+					'category' => html::textbox(array(
+						'name' => 'firm_data['.$category.'][category]',
+						'value' => $category
 					)),
 					'title' => html::textbox(array(
-						'name' => 'firm_data['.$count.'][title]',
+						'name' => 'firm_data['.$category.'][title]',
 						'value' => $data['title']
+					)),
+					'image_url' => html::textbox(array(
+						'name' => 'firm_data['.$category.'][image_url]',
+						'value' => $data['image_url']
 					)),
 				));
 				$count++;
@@ -2575,11 +2625,11 @@ class otto_import extends class_base
 				'category' => html::textbox(array(
 					'name' => 'firm_data['.$count.'][category]'
 				)),
-				'image_url' => html::textbox(array(
-					'name' => 'firm_data['.$count.'][image_url]'
-				)),
 				'title' => html::textbox(array(
 					'name' => 'firm_data['.$count.'][title]'
+				)),
+				'image_url' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][image_url]'
 				)),
 				'line_color' => 'lightblue'
 			));
@@ -2593,31 +2643,48 @@ class otto_import extends class_base
 		if (!array_key_exists('filter_firm_images', $args['request']))
 		{
 			$valid_data = $args['obj_inst']->meta('firm_pictures');
-			foreach (safe_array($args['request']['firm_data']) as $data)
+			foreach (safe_array($args['request']['firm_data']) as $category => $data)
 			{
 				if (!empty($data['category']))
 				{
-					$categories = explode(',', $data['category']);
-					foreach ($categories as $category)
+					if ($category != $data['category'])
 					{
-					//	$valid_data[$data['category']] = array(
-						if (empty($data['image_url']) && empty($data['title']))
-						{
-							unset($valid_data[$category]);
-						}
-						else
-						{
-							$valid_data[$category] = array(
-								'image_url' => $data['image_url'],
-								'title' => $data['title']
-							);
-						}
+						unset($valid_data[$category]);
+						$category = $data['category'];
 					}
+
+					$valid_data[$category] = array(
+						'title' => $data['title'],
+						'image_url' => $data['image_url']
+					);
 				}
 			}
 			$args['obj_inst']->set_meta('firm_pictures', $valid_data);
 		}
 		return PROP_OK;
+	}
+
+        /**
+                @attrib name=_delete_firm_picture
+        **/
+	function _delete_firm_picture($arr)
+	{
+		if ($this->can('view', $arr['id']))
+		{
+			$o = new object($arr['id']);
+			$data = $o->meta('firm_pictures');
+			foreach ($arr['firm_select'] as $cat)
+			{
+				unset($data[$cat]);
+			}
+			$o->set_meta('firm_pictures', $data);
+			$o->save();
+		}
+
+		return $this->mk_my_orb("change", array(
+			'id' => $arr['id'],
+			'group' => $arr['group']
+		), CL_OTTO_IMPORT);
 	}
 
 	function get_product_codes($o)
@@ -5637,6 +5704,10 @@ class otto_import extends class_base
 							user6 like '%".trim($fields[1])."%' and 
 							lang_id = ".aw_global_get('lang_id').";
 					", "aw_oid");
+					if (empty($prod_oid)){
+					//	echo "## tootekoodile ".trim($fields[1])." ei leitud toote objekti<br />\n";
+						$prod_oid = 0;
+					}
 
 					$sql = "insert into bp_discount_products set ";
 					$sql .= "prom='".trim($fields[0])."',";
