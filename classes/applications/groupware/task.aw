@@ -2945,10 +2945,13 @@ class task extends class_base
 			{
 				if(!$this->can("view" , $row)) continue;
 				$ro = obj($row);
-				$new_row = new object();
-				$new_row->set_class_id(CL_TASK_ROW);
+//				$new_row = new object();
+//				$new_row->set_class_id(CL_TASK_ROW);
+//				$new_row->set_parent($ro->parent());
+
+				$new_row = $task->add_row();
 				$new_row->set_name($ro->name());
-				$new_row->set_parent($ro->parent());
+
 				foreach($ro->properties() as $prop => $val)
 				{
 					if($new_row->is_property($prop) && !in_array($prop,$nc_props))
@@ -2956,10 +2959,11 @@ class task extends class_base
 						$new_row->set_prop($prop , $val);
 					}
 				}
+				$new_row->save();
 				//metas ei n2i miskit kasulikku olevat... loodetavasti ka ei tule
 //				$new_row->set_meta($ro->meta());
-				$new_row->save();
-				$task->connect(array("to"=> $new_row->id(), "type" => "RELTYPE_ROW"));
+//				$new_row->save();
+//				$task->connect(array("to"=> $new_row->id(), "type" => "RELTYPE_ROW"));
 			}
 		}
 		$_SESSION["task_rows"] = null;
@@ -3516,10 +3520,12 @@ class task extends class_base
 				{
 					continue;
 				}
+				$o = $task->add_row();
+				/*
 				$o = obj();
 				$o->set_class_id(CL_TASK_ROW);
 				$o->set_parent($arr["request"]["id"]);
-				$o->save();
+				$o->save();*/
 				$is_mod = true;
 			}
 			else
@@ -3882,26 +3888,28 @@ class task extends class_base
 		$o->set_prop("num_hrs_real", $o->prop("nuh_hrs_real") + $arr["hours"]);
 		$o->set_prop("num_hrs_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
 		$o->set_prop("end", time());
-
+		
 		$cp = get_current_person();
 
-		$row = obj();
-		$row->set_parent($o->id());
-		$row->set_class_id(CL_TASK_ROW);
+//		$row = obj();
+//		$row->set_parent($o->id());
+//		$row->set_class_id(CL_TASK_ROW);
+		$row = $o->add_row();
+
 		$row->set_prop("content", $arr["data"]["desc"]["value"]);
 		$row->set_prop("date", $arr["start"]);
 		$row->set_prop("impl", array($cp->id() => $cp->id()));
-
+		
 		$row->set_prop("time_guess", strlen($arr["data"]["timeguess"]["value"])?$arr["data"]["timeguess"]["value"]:$arr["hours"]);
 		$row->set_prop("time_real", strlen($arr["data"]["timereal"]["value"])?$arr["data"]["timereal"]["value"]:$arr["hours"]);
 		$row->set_prop("time_to_cust", strlen($arr["data"]["timetocust"]["value"])?$arr["data"]["timetocust"]["value"]:$arr["hours"]);
 		$row->set_prop("done", $arr["data"]["isdone"]["value"]?1:0);
 		$row->set_prop("on_bill", $arr["data"]["tobill"]["value"]?1:0);
 		$row->save();
-		$o->connect(array(
-			"to" => $row->id(),
-			"type" => "RELTYPE_ROW"
-		));
+//		$o->connect(array(
+//			"to" => $row->id(),
+//			"type" => "RELTYPE_ROW"
+//		));
 	}
 
 	function _hrs_table($arr)
