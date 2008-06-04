@@ -133,6 +133,19 @@ function cfgformToggleSelectProps(grpId)
 </fieldset>
 <!-- END SUB: group -->
 
+<!-- SUB: image_verification_options -->
+			{VAR:width_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][width]" value="{VAR:width}"/><br/>
+			{VAR:height_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][height]" value="{VAR:height}"/><br/>
+			{VAR:text_color_caption} <input type="text" size="6" name="prpconfig[{VAR:prp_key}][text_color]" value="{VAR:text_color}"/><br/>
+			{VAR:background_color_caption} <input type="text" size="6" name="prpconfig[{VAR:prp_key}][background_color]" value="{VAR:background_color}"/><br/>
+			{VAR:font_size_caption} <input type="text" size="6" name="prpconfig[{VAR:prp_key}][font_size]" value="{VAR:font_size}"/><br/>
+			{VAR:sidetop_caption} <input type="radio" size="2" name="prpconfig[{VAR:prp_key}][side]" value="top"{VAR:sidetop_ch}/><br/>
+			{VAR:sidebottom_caption} <input type="radio" size="2" name="prpconfig[{VAR:prp_key}][side]" value="bottom"{VAR:sidebottom_ch}/><br/>
+			{VAR:sideleft_caption} <input type="radio" size="2" name="prpconfig[{VAR:prp_key}][side]" value="left"{VAR:sideleft_ch}/><br/>
+			{VAR:sideright_caption} <input type="radio" size="2" name="prpconfig[{VAR:prp_key}][side]" value="right"{VAR:sideright_ch}/><br/>
+			{VAR:textbox_size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][textbox_size]" value="{VAR:textbox_size}"/><br/>
+<!-- END SUB: image_verification_options -->
+
 <!-- SUB: textarea_options -->
 			{VAR:richtext_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1"{VAR:richtext_checked}/>
 			<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}"/><br/>

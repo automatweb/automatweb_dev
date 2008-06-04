@@ -1888,6 +1888,34 @@ class cfgform extends class_base
 						// additional options
 						switch ($property["type"])
 						{
+							case "image_verification":
+								$this->vars(array(
+									"width_caption" => t("Laius"),
+									"width" => $property["width"],
+									"height_caption" => t("K&otilde;rgus"),
+									"height" => $property["height"],
+									"text_color_caption" => t("Teksti v&auml;rv"),
+									"text_color" => $property["text_color"],
+									"background_color_caption" => t("Tausta v&auml;rv"),
+									"background_color" => $property["background_color"],
+									"font_size_caption" => t("Teksti suurus pildid"),
+									"font_size" => $property["font_size"],
+									"sidetop_caption" => t("Tekstikast &uuml;leval"),
+									"sidetop_ch" => checked($property["side"] == "top"),
+									"sidebottom_caption" => t("Tekstikast all"),
+									"sidebottom_ch" => checked($property["side"] == "bottom"),
+									"sideleft_caption" => t("Tekstikast vasakul"),
+									"sideleft_ch" => checked($property["side"] == "left"),
+									"sideright_caption" => t("Tekstikast paremal"),
+									"sideright_ch" => checked($property["side"] == "right"),
+									"textbox_size_caption" => t("Tekstikasti laius"),
+									"textbox_size" => $property["textbox_size"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("image_verification_options");
+								$this->vars(array("image_verification_options" => ""));
+								break;
+
 							case "textarea":
 								$this->vars(array(
 									"richtext_caption" => t("RTE"),
