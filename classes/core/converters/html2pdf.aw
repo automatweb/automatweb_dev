@@ -42,7 +42,7 @@ class html2pdf extends class_base
 		@returns
 			converted pdf
 		@errors
-			raises ERR_CONVERT error if there aren't any available converters found.
+			throws awex_html2pdf if there aren't any available converters found.
 	**/
 	function convert($arr)
 	{
