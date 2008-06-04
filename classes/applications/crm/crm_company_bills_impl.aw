@@ -133,9 +133,11 @@ class crm_company_bills_impl extends class_base
 //			));
 			foreach($rows->arr() as $row)
 			{
-				if(!$row->prop("task")) continue;
+//				if(!$row->prop("task")) continue;
+//				$project_id = $row->prop("task.project");
 				$task = obj($row->prop("task"));
-				if(in_array($task->id(), $this->deal_tasks)){
+				if(in_array($task->id(), $this->deal_tasks))
+				{
 //					$agreement_tasks[] = $task;
 					continue;
 				}
