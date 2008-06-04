@@ -102,15 +102,11 @@ msgid "Omaduse Tellimise kontroller (finish_handler) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
-msgid "Seose Toote kujundus (RELTYPE_PROD_LAYOUT) tekst"
+msgid "Seose toote kujundus (RELTYPE_PROD_LAYOUT) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_CONTROLLER
-msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
-msgstr ""
-
-#: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_POSTAL_PRICE
-msgid "Seose Postikulu (RELTYPE_POSTAL_PRICE) tekst"
+msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:165

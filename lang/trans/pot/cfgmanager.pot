@@ -54,11 +54,7 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_C_CFGFORM) tekst"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:74
+#: classes/cfg/cfgmanager.aw:70
 msgid "Grupp"
-msgstr ""
-
-#: classes/cfg/cfgmanager.aw:80
-msgid "Seadete vorm"
 msgstr ""
 

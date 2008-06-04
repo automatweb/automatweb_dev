@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/room_reservation.aw:class_1174_help
 msgid "Klassi Ruumi broneerimine help"
 msgstr ""
@@ -210,67 +209,70 @@ msgstr ""
 msgid "Seose Ruum mida broneerida (RELTYPE_ROOM) tekst"
 msgstr ""
 
-#: classes/common/room_reservation.aw:108
+#: classes/common/room_reservation.aw:105
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_reservation.aw:117 classes/common/room_reservation.aw:129
+#: classes/common/room_reservation.aw:115
+#: classes/common/room_reservation.aw:128
 msgid "\n"
 msgstr ""
 
-#: classes/common/room_reservation.aw:119 classes/common/room_reservation.aw:131
+#: classes/common/room_reservation.aw:117
+#: classes/common/room_reservation.aw:130
 msgid "Template fail peab asuma kataloogis :"
 msgstr ""
 
-#: classes/common/room_reservation.aw:202
+#: classes/common/room_reservation.aw:203
 msgid "Tase"
 msgstr ""
 
-#: classes/common/room_reservation.aw:207
+#: classes/common/room_reservation.aw:208
 msgid "Etapi nimi"
 msgstr ""
 
-#: classes/common/room_reservation.aw:227
+#: classes/common/room_reservation.aw:228
 msgid "Template"
 msgstr ""
 
-#: classes/common/room_reservation.aw:467 classes/common/room_reservation.aw:468
+#: classes/common/room_reservation.aw:450
+#: classes/common/room_reservation.aw:451
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
 msgstr ""
 
-#: classes/common/room_reservation.aw:673
+#: classes/common/room_reservation.aw:675
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/common/room_reservation.aw:673
+#: classes/common/room_reservation.aw:675
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1060
+#: classes/common/room_reservation.aw:1056
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1064
+#: classes/common/room_reservation.aw:1060
 msgid "Telefon on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1068
+#: classes/common/room_reservation.aw:1064
 msgid "E-Mail on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1281
+#: classes/common/room_reservation.aw:1272
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1560
+#: classes/common/room_reservation.aw:1549
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1638 classes/common/room_reservation.aw:1687
+#: classes/common/room_reservation.aw:1627
+#: classes/common/room_reservation.aw:1686
 msgid "Broneering: %s"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1745
+#: classes/common/room_reservation.aw:1744
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
-

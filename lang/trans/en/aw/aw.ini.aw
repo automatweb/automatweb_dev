@@ -49,7 +49,6 @@ $GLOBALS["TRANS"]["Klassi Scheduler (108) nimi"] = "Scheduler";
 $GLOBALS["TRANS"]["Klassi Objekti t&uuml;&uuml;p (115) nimi"] = "Object Type";
 $GLOBALS["TRANS"]["Klassi Lisamise puu seaded (118) nimi"] = "Add tree settings";
 $GLOBALS["TRANS"]["Klassi Seadete vorm (119) nimi"] = "Configuration form";
-$GLOBALS["TRANS"]["Klassi Salvestatud seaded (120) nimi"] = "Saved settings";
 $GLOBALS["TRANS"]["Klassi Seadete haldur (122) nimi"] = "Configuration manager";
 $GLOBALS["TRANS"]["Klassi Objekti otsing (124) nimi"] = "Object search";
 $GLOBALS["TRANS"]["Klassi Kalender (126) nimi"] = "Calendar";

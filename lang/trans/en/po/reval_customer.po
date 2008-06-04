@@ -13,87 +13,87 @@ msgstr ""
 msgid "Klassi Reval Klienditsoon help"
 msgstr ""
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:478
-#: classes/applications/clients/reval/customer/reval_customer.aw:520
-#: classes/applications/clients/reval/customer/reval_customer.aw:534
-#: classes/applications/clients/reval/customer/reval_customer.aw:565
+#: classes/applications/clients/reval/customer/reval_customer.aw:494
+#: classes/applications/clients/reval/customer/reval_customer.aw:535
+#: classes/applications/clients/reval/customer/reval_customer.aw:548
+#: classes/applications/clients/reval/customer/reval_customer.aw:579
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:479
+#: classes/applications/clients/reval/customer/reval_customer.aw:495
 msgid "Eesti"
 msgstr "Estonian"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:480
+#: classes/applications/clients/reval/customer/reval_customer.aw:496
 msgid "L&auml;ti"
 msgstr "Latvian"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:481
+#: classes/applications/clients/reval/customer/reval_customer.aw:497
 msgid "Leedu"
 msgstr "Lithuanian"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:482
+#: classes/applications/clients/reval/customer/reval_customer.aw:498
 msgid "Inglise"
 msgstr "English"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:483
+#: classes/applications/clients/reval/customer/reval_customer.aw:499
 msgid "Vene"
 msgstr "Russian"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:484
+#: classes/applications/clients/reval/customer/reval_customer.aw:500
 msgid "Saksa"
 msgstr "German"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:485
+#: classes/applications/clients/reval/customer/reval_customer.aw:501
 msgid "Soome"
 msgstr "Finnish"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:496
-#: classes/applications/clients/reval/customer/reval_customer.aw:506
+#: classes/applications/clients/reval/customer/reval_customer.aw:512
+#: classes/applications/clients/reval/customer/reval_customer.aw:522
 msgid "Ei ole eelistust"
 msgstr "No preferences"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:496
+#: classes/applications/clients/reval/customer/reval_customer.aw:512
 msgid "&Uuml;lemine korrus"
 msgstr "Higher floors"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:496
+#: classes/applications/clients/reval/customer/reval_customer.aw:512
 msgid "Alumine korrus"
 msgstr "Lower floors"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:506
+#: classes/applications/clients/reval/customer/reval_customer.aw:522
 msgid "Suitsetav"
 msgstr "Smoking"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:506
+#: classes/applications/clients/reval/customer/reval_customer.aw:522
 msgid "Suitsuvaba"
 msgstr "Non-Smoking"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:544
-#: classes/applications/clients/reval/customer/reval_customer.aw:549
+#: classes/applications/clients/reval/customer/reval_customer.aw:558
+#: classes/applications/clients/reval/customer/reval_customer.aw:563
 msgid "Ei soovi avaldada"
 msgstr "Not applicable"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:544
+#: classes/applications/clients/reval/customer/reval_customer.aw:558
 msgid "Abielus"
 msgstr "Married"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:544
+#: classes/applications/clients/reval/customer/reval_customer.aw:558
 msgid "Lahutatud"
 msgstr "Divorced"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:544
+#: classes/applications/clients/reval/customer/reval_customer.aw:558
 msgid "Vallaline"
 msgstr "Single"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:549
+#: classes/applications/clients/reval/customer/reval_customer.aw:563
 msgid "Mees"
 msgstr "Male"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:549
+#: classes/applications/clients/reval/customer/reval_customer.aw:563
 msgid "Naine"
 msgstr "Female"
 
-#: classes/applications/clients/reval/customer/reval_customer.aw:866
+#: classes/applications/clients/reval/customer/reval_customer.aw:884
 msgid "No such booking found!"
 msgstr "No such booking found!"

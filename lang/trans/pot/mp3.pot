@@ -426,3 +426,7 @@ msgstr ""
 msgid "lae alla"
 msgstr ""
 
+#: classes/applications/mp3player/mp3.aw:533
+msgid "nimetu.mp3"
+msgstr ""
+

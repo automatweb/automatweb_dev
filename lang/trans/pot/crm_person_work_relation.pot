@@ -27,15 +27,15 @@ msgid "Omaduse Organisatsioon (org) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section
-msgid "Omaduse  (section) caption"
+msgid "Omaduse &Uuml;ksus (section) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section_comment
-msgid "Omaduse  (section) kommentaar"
+msgid "Omaduse &Uuml;ksus (section) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section_help
-msgid "Omaduse  (section) help"
+msgid "Omaduse &Uuml;ksus (section) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section2

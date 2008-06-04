@@ -38,3 +38,7 @@ msgstr ""
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) help"
 msgstr ""
 
+#: classes/cfg/cb_search_synonyms.aw:32
+msgid "Sisestage ridadele sama t&auml;hendusega s&otilde;nad, eraldatud komadega"
+msgstr ""
+

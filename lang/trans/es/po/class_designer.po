@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/class_designer/class_designer.aw:class_320_help
 msgid "Klassi Klassidisainer help"
 msgstr ""
@@ -574,7 +573,10 @@ msgstr ""
 msgid "SQL table is up to date"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:361 classes/applications/class_designer/class_designer.aw:368 classes/applications/class_designer/class_designer.aw:458 classes/applications/class_designer/class_designer.aw:462
+#: classes/applications/class_designer/class_designer.aw:361
+#: classes/applications/class_designer/class_designer.aw:368
+#: classes/applications/class_designer/class_designer.aw:458
+#: classes/applications/class_designer/class_designer.aw:462
 msgid "Eelvaade"
 msgstr ""
 
@@ -586,7 +588,8 @@ msgstr ""
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:631 classes/applications/class_designer/class_designer.aw:935
+#: classes/applications/class_designer/class_designer.aw:631
+#: classes/applications/class_designer/class_designer.aw:935
 msgid "Grupp"
 msgstr ""
 
@@ -598,7 +601,8 @@ msgstr ""
 msgid "tab"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:674 classes/applications/class_designer/class_designer.aw:967
+#: classes/applications/class_designer/class_designer.aw:674
+#: classes/applications/class_designer/class_designer.aw:967
 msgid "vbox"
 msgstr ""
 
@@ -630,39 +634,49 @@ msgstr ""
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:837 classes/applications/class_designer/class_designer.aw:1833 classes/applications/class_designer/class_designer.aw:1858 classes/applications/class_designer/class_designer.aw:1912 classes/applications/class_designer/class_designer.aw:1996
+#: classes/applications/class_designer/class_designer.aw:837
+#: classes/applications/class_designer/class_designer.aw:1840
+#: classes/applications/class_designer/class_designer.aw:1865
+#: classes/applications/class_designer/class_designer.aw:1919
+#: classes/applications/class_designer/class_designer.aw:2003
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:842 classes/applications/class_designer/class_designer.aw:1916 classes/applications/class_designer/class_designer.aw:2000
+#: classes/applications/class_designer/class_designer.aw:842
+#: classes/applications/class_designer/class_designer.aw:1923
+#: classes/applications/class_designer/class_designer.aw:2007
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:847 classes/applications/class_designer/class_designer.aw:903 classes/applications/class_designer/class_designer.aw:1931 classes/applications/class_designer/class_designer.aw:1975
+#: classes/applications/class_designer/class_designer.aw:847
+#: classes/applications/class_designer/class_designer.aw:903
+#: classes/applications/class_designer/class_designer.aw:1938
+#: classes/applications/class_designer/class_designer.aw:1982
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1879 classes/applications/class_designer/class_designer.aw:1890 classes/applications/class_designer/class_designer.aw:1901
+#: classes/applications/class_designer/class_designer.aw:1886
+#: classes/applications/class_designer/class_designer.aw:1897
+#: classes/applications/class_designer/class_designer.aw:1908
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1921
+#: classes/applications/class_designer/class_designer.aw:1928
 msgid "Sisemine seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1926
+#: classes/applications/class_designer/class_designer.aw:1933
 msgid "Väline seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1943
+#: classes/applications/class_designer/class_designer.aw:1950
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1988
+#: classes/applications/class_designer/class_designer.aw:1995
 msgid "ID"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1992
+#: classes/applications/class_designer/class_designer.aw:1999
 msgid "Parent"
 msgstr ""
-

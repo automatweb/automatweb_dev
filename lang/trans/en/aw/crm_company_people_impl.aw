@@ -7,7 +7,6 @@ $GLOBALS["TRANS"]["Uus toimetus"] = "New task";
 $GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Isikuid"] = "Persons";
 $GLOBALS["TRANS"]["Lisa isikud organisatisooni"] = "Add persons into organisation";
-$GLOBALS["TRANS"]["Oluliseks"] = "Mark as important";
 $GLOBALS["TRANS"]["Saada kiri"] = "Send e-mail";
 $GLOBALS["TRANS"]["T&uuml;hista"] = "Cancel";
 $GLOBALS["TRANS"]["(Valitud)"] = "(Selected)";

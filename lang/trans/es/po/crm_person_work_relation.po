@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_person_work_relation.aw:class_1060_help
 msgid "Klassi T&ouml;&ouml;suhe help"
 msgstr ""
@@ -27,15 +26,15 @@ msgid "Omaduse Organisatsioon (org) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section
-msgid "Omaduse  (section) caption"
+msgid "Omaduse &Uuml;ksus (section) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section_comment
-msgid "Omaduse  (section) kommentaar"
+msgid "Omaduse &Uuml;ksus (section) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section_help
-msgid "Omaduse  (section) help"
+msgid "Omaduse &Uuml;ksus (section) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_work_relation.aw:prop_section2
@@ -253,4 +252,3 @@ msgstr ""
 #: classes/applications/crm/crm_person_work_relation.aw:rel_RELTYPE_FIELD
 msgid "Seose Valdkond (RELTYPE_FIELD) tekst"
 msgstr ""
-

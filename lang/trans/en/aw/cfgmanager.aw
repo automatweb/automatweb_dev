@@ -5,5 +5,4 @@ $GLOBALS["TRANS"]["Grupi Seaded (config) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Seose Grupp (RELTYPE_C_GROUP) tekst"] = "Group";
 $GLOBALS["TRANS"]["Seose Seadete vorm (RELTYPE_C_CFGFORM) tekst"] = "Configuration form";
 $GLOBALS["TRANS"]["Grupp"] = "Group";
-$GLOBALS["TRANS"]["Seadete vorm"] = "Configuration form";
 ?>

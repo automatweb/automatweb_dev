@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -62,39 +62,27 @@ msgid "Omaduse Callback element (cb) help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_ignore
-msgid ""
-"Omaduse This should be blocked by get_property (get_property_prop_ignore) "
-"caption"
+msgid "Omaduse This should be blocked by get_property (get_property_prop_ignore) caption"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_ignore_comment
-msgid ""
-"Omaduse This should be blocked by get_property (get_property_prop_ignore) "
-"kommentaar"
+msgid "Omaduse This should be blocked by get_property (get_property_prop_ignore) kommentaar"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_ignore_help
-msgid ""
-"Omaduse This should be blocked by get_property (get_property_prop_ignore) "
-"help"
+msgid "Omaduse This should be blocked by get_property (get_property_prop_ignore) help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_error
-msgid ""
-"Omaduse This should be flagged as error by get_property "
-"(get_property_prop_error) caption"
+msgid "Omaduse This should be flagged as error by get_property (get_property_prop_error) caption"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_error_comment
-msgid ""
-"Omaduse This should be flagged as error by get_property "
-"(get_property_prop_error) kommentaar"
+msgid "Omaduse This should be flagged as error by get_property (get_property_prop_error) kommentaar"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_error_help
-msgid ""
-"Omaduse This should be flagged as error by get_property "
-"(get_property_prop_error) help"
+msgid "Omaduse This should be flagged as error by get_property (get_property_prop_error) help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_dummy
@@ -161,10 +149,10 @@ msgstr ""
 msgid "Seose Image (RELTYPE_IMAGE) tekst"
 msgstr ""
 
-#: classes/cfg/proptest.aw:104
+#: classes/cfg/proptest.aw:103
 msgid "CB1"
 msgstr ""
 
-#: classes/cfg/proptest.aw:111
+#: classes/cfg/proptest.aw:110
 msgid "CB2"
 msgstr ""

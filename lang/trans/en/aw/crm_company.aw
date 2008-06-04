@@ -342,6 +342,7 @@ $GLOBALS["TRANS"]["Maakond"] = "County";
 $GLOBALS["TRANS"]["Piirkond"] = "Area";
 $GLOBALS["TRANS"]["Riik"] = "Country";
 $GLOBALS["TRANS"]["Aadressid"] = "Addresses";
+$GLOBALS["TRANS"]["T&uuml;&uuml;p:"] = "Type";
 $GLOBALS["TRANS"]["Aeg:"] = "Time:";
 $GLOBALS["TRANS"]["Autor:"] = "Author:";
 $GLOBALS["TRANS"]["Kommentaare pole"] = "No comments";

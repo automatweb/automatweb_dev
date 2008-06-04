@@ -152,7 +152,3 @@ msgstr ""
 #: classes/applications/package_management/package_server.aw:136
 msgid "S&otilde;ltuvused"
 msgstr ""
-
-#: classes/applications/package_management/package_server.aw:246
-msgid "Pole sellist ajsa nagu pakihalduse serveri objekt!"
-msgstr ""

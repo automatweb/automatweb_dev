@@ -70,7 +70,7 @@ msgstr ""
 msgid "AW KLASSIDE T&Otilde;LKIMINE"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:108
+#: classes/applications/cb_trans/cb_translate.aw:108 classes/applications/cb_trans/cb_translate.aw:1628
 msgid "Salvesta"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Seosed"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:405 classes/applications/cb_trans/cb_translate.aw:1983
+#: classes/applications/cb_trans/cb_translate.aw:405 classes/applications/cb_trans/cb_translate.aw:2025
 msgid "CVS commit"
 msgstr ""
 
@@ -126,7 +126,7 @@ msgstr ""
 msgid "Tekst"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1020 classes/applications/cb_trans/cb_translate.aw:1205 classes/applications/cb_trans/cb_translate.aw:1388 classes/applications/cb_trans/cb_translate.aw:1577 classes/applications/cb_trans/cb_translate.aw:1752 classes/applications/cb_trans/cb_translate.aw:1823
+#: classes/applications/cb_trans/cb_translate.aw:1020 classes/applications/cb_trans/cb_translate.aw:1205 classes/applications/cb_trans/cb_translate.aw:1388 classes/applications/cb_trans/cb_translate.aw:1576 classes/applications/cb_trans/cb_translate.aw:1794 classes/applications/cb_trans/cb_translate.aw:1865
 msgid "Keel"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgstr ""
 msgid "seos"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1081 classes/applications/cb_trans/cb_translate.aw:1659
+#: classes/applications/cb_trans/cb_translate.aw:1081 classes/applications/cb_trans/cb_translate.aw:1678
 msgid "t&uuml;&uuml;pi"
 msgstr ""
 
@@ -154,11 +154,11 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1218 classes/applications/cb_trans/cb_translate.aw:1403 classes/applications/cb_trans/cb_translate.aw:1590
+#: classes/applications/cb_trans/cb_translate.aw:1218 classes/applications/cb_trans/cb_translate.aw:1403 classes/applications/cb_trans/cb_translate.aw:1589
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1226 classes/applications/cb_trans/cb_translate.aw:1411 classes/applications/cb_trans/cb_translate.aw:1598
+#: classes/applications/cb_trans/cb_translate.aw:1226 classes/applications/cb_trans/cb_translate.aw:1411 classes/applications/cb_trans/cb_translate.aw:1597
 msgid "Abitekst"
 msgstr ""
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1284 classes/applications/cb_trans/cb_translate.aw:1473 classes/applications/cb_trans/cb_translate.aw:1656
+#: classes/applications/cb_trans/cb_translate.aw:1284 classes/applications/cb_trans/cb_translate.aw:1473 classes/applications/cb_trans/cb_translate.aw:1675
 msgid "Klass"
 msgstr ""
 
@@ -178,71 +178,75 @@ msgstr ""
 msgid "Grupi nimi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1474 classes/applications/cb_trans/cb_translate.aw:1657
+#: classes/applications/cb_trans/cb_translate.aw:1474 classes/applications/cb_trans/cb_translate.aw:1676
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1583
+#: classes/applications/cb_trans/cb_translate.aw:1582
 msgid "Omaduse nimi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1658
+#: classes/applications/cb_trans/cb_translate.aw:1636
+msgid "Salvesta ja edasi"
+msgstr ""
+
+#: classes/applications/cb_trans/cb_translate.aw:1677
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1758
+#: classes/applications/cb_trans/cb_translate.aw:1800
 msgid "Kujundusosa nimi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1828
+#: classes/applications/cb_trans/cb_translate.aw:1870
 msgid "Element"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1833
+#: classes/applications/cb_trans/cb_translate.aw:1875
 msgid "Ennem"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1838
+#: classes/applications/cb_trans/cb_translate.aw:1880
 msgid "P&auml;rast"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1860 classes/applications/cb_trans/cb_translate.aw:1870
+#: classes/applications/cb_trans/cb_translate.aw:1902 classes/applications/cb_trans/cb_translate.aw:1912
 msgid "tekst puudus"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1861 classes/applications/cb_trans/cb_translate.aw:1871
+#: classes/applications/cb_trans/cb_translate.aw:1903 classes/applications/cb_trans/cb_translate.aw:1913
 msgid "tekst eemaldati"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1877
+#: classes/applications/cb_trans/cb_translate.aw:1919
 msgid "punasega t&auml;histatud ridu ei ole v&otilde;imalik t&otilde;lkefailide kirjutus&otilde;iguste puudumise t&otilde;ttu salvestada!"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1897
+#: classes/applications/cb_trans/cb_translate.aw:1939
 msgid "Sooritatud muudatused"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1906
+#: classes/applications/cb_trans/cb_translate.aw:1948
 msgid "Kinnita muudatused"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1913
+#: classes/applications/cb_trans/cb_translate.aw:1955
 msgid "muudatusi pole"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1976
+#: classes/applications/cb_trans/cb_translate.aw:2018
 msgid "Muudetud faile ei ole!"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1987
+#: classes/applications/cb_trans/cb_translate.aw:2029
 msgid "Seletus"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1988
+#: classes/applications/cb_trans/cb_translate.aw:2030
 msgid "Commitimisele minevad failid"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:2586
+#: classes/applications/cb_trans/cb_translate.aw:2678
 msgid "Otsitav s&otilde;na"
 msgstr ""
 

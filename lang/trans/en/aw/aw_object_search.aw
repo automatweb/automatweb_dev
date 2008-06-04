@@ -51,7 +51,5 @@ $GLOBALS["TRANS"]["Looja"] = "Created by";
 $GLOBALS["TRANS"]["Muudetud"] = "Modified";
 $GLOBALS["TRANS"]["Muutja"] = "Modified by";
 $GLOBALS["TRANS"]["Ava"] = "Open";
-$GLOBALS["TRANS"]["Leiti"] = "Found";
-$GLOBALS["TRANS"]["objekti"] = "objects";
 $GLOBALS["TRANS"]["AW Objektide otsing"] = "Search for objects";
 ?>

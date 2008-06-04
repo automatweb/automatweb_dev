@@ -235,107 +235,115 @@ msgstr ""
 msgid "Seose Tellimuste tabeli kujundus (RELTYPE_ORDER_TABLE_LAYOUT) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:105
+#: classes/applications/shop/shop_order.aw:rel_RELTYPE_ROW
+msgid "Seose Tellimuse rida (RELTYPE_ROW) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order.aw:107
 msgid "Eemalda tellimusest tooted"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:106
+#: classes/applications/shop/shop_order.aw:108
 msgid "Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:149
+#: classes/applications/shop/shop_order.aw:151
 msgid "Kliendi nr: %s<br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:150
+#: classes/applications/shop/shop_order.aw:152
 msgid "Eesnimi:<b> %s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:151
+#: classes/applications/shop/shop_order.aw:153
 msgid "Perekonnanimi:<b> %s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:153
+#: classes/applications/shop/shop_order.aw:155
 msgid "Aadress: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:154
+#: classes/applications/shop/shop_order.aw:156
 msgid "Postiindeks: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:155
+#: classes/applications/shop/shop_order.aw:157
 msgid "Linn: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:156
+#: classes/applications/shop/shop_order.aw:158
 msgid "E-mail: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:157
+#: classes/applications/shop/shop_order.aw:159
 msgid "Telefon kodus: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:158
+#: classes/applications/shop/shop_order.aw:160
 msgid "Telefon t&ouml;&ouml;l: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:159
+#: classes/applications/shop/shop_order.aw:161
 msgid "Mobiil: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:160
+#: classes/applications/shop/shop_order.aw:162
 msgid "Isikukood: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:162
+#: classes/applications/shop/shop_order.aw:164
 msgid "Tellimuse kuup&auml;ev: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:163
+#: classes/applications/shop/shop_order.aw:165
 msgid "Tellimuse number: <b>%s</b><br />"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:235
+#: classes/applications/shop/shop_order.aw:271
+msgid "rida:"
+msgstr ""
+
+#: classes/applications/shop/shop_order.aw:308
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:244
+#: classes/applications/shop/shop_order.aw:317
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:249
+#: classes/applications/shop/shop_order.aw:322
 msgid "Tellitav kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:307
+#: classes/applications/shop/shop_order.aw:396
 msgid "Pakend:"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:307
+#: classes/applications/shop/shop_order.aw:396
 msgid "Toode:"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:382
+#: classes/applications/shop/shop_order.aw:471
 msgid "Tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:382
+#: classes/applications/shop/shop_order.aw:471
 msgid "T&auml;idetud tellimus/arve number"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:463
+#: classes/applications/shop/shop_order.aw:558
 msgid "shop_order::do_confirm(): could not find parent folder for warehouse export!"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:470
+#: classes/applications/shop/shop_order.aw:565
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:563
-#: classes/applications/shop/shop_order.aw:722
+#: classes/applications/shop/shop_order.aw:668
+#: classes/applications/shop/shop_order.aw:848
 msgid "Tellimus laost %s"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:997
+#: classes/applications/shop/shop_order.aw:1135
 msgid "Tellimus laost"
 msgstr ""

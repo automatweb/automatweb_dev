@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/unit.aw:class_1126_help
 msgid "Klassi &Uuml;hik help"
 msgstr ""
@@ -38,23 +37,22 @@ msgstr ""
 msgid "Omaduse &Uuml;hiku liik (unit_sort) help"
 msgstr ""
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "pikkus&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "massi&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "koguse&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "mahu&uuml;hik"
 msgstr ""
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "aja&uuml;hik"
 msgstr ""
-

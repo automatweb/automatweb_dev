@@ -257,11 +257,6 @@ msgstr ""
 msgid "Klassi Seadete vorm (119) nimi"
 msgstr ""
 
-# aw.ini:class_120
-#: aw.ini:class_120
-msgid "Klassi Salvestatud seaded (120) nimi"
-msgstr ""
-
 # aw.ini:class_122
 #: aw.ini:class_122
 msgid "Klassi Seadete haldur (122) nimi"
@@ -2831,10 +2826,6 @@ msgstr ""
 msgid "Klassi Revali klientide meilisaatjs (1423) nimi"
 msgstr ""
 
-#: aw.ini:class_1424
-msgid "Klassi Poe postikulu (1424) nimi"
-msgstr ""
-
 #: aw.ini:class_1425
 msgid "Klassi AW Spetsifikatsiooni klass (1425) nimi"
 msgstr ""
@@ -2925,6 +2916,38 @@ msgstr ""
 
 #: aw.ini:class_1448
 msgid "Klassi P&auml;devuste haldur (1448) nimi"
+msgstr ""
+
+#: aw.ini:class_1449
+msgid "Klassi  (1449) nimi"
+msgstr ""
+
+#: aw.ini:class_1450
+msgid "Klassi Pakihalduse klient (1450) nimi"
+msgstr ""
+
+#: aw.ini:class_1451
+msgid "Klassi iAW (1451) nimi"
+msgstr ""
+
+#: aw.ini:class_1452
+msgid "Klassi T&ouml;&ouml;stusdisainilahendus (1452) nimi"
+msgstr ""
+
+#: aw.ini:class_1453
+msgid "Klassi Euroopa patendi eestikeelne patendikirjeldus (1453) nimi"
+msgstr ""
+
+#: aw.ini:class_1454
+msgid "Klassi Euroopa patendi eestikeelse patendikirjelduse veebist lisamine (1454) nimi"
+msgstr ""
+
+#: aw.ini:class_1455
+msgid "Klassi T&ouml;&ouml;stusdisainilahenduse veebist lisamine (1455) nimi"
+msgstr ""
+
+#: aw.ini:class_1456
+msgid "Klassi AW Spetsifikatsiooni versioon (1456) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29
@@ -5716,6 +5739,34 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1441
 msgid "syslog.type.ST_INTELLECTUAL_PROPERTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1449
+msgid "syslog.type.ST_SITE_LOGINMENU"
+msgstr ""
+
+#: aw.ini:syslogtypes_1451
+msgid "syslog.type.ST_IAW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1452
+msgid "syslog.type.ST_INDUSTRIAL_DESIGN"
+msgstr ""
+
+#: aw.ini:syslogtypes_1453
+msgid "syslog.type.ST_EURO_PATENT_ET_DESC"
+msgstr ""
+
+#: aw.ini:syslogtypes_1454
+msgid "syslog.type.ST_EURO_PATENT_ET_DESC_ADD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1455
+msgid "syslog.type.ST_INDUSTRIAL_DESIGN_ADD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1456
+msgid "syslog.type.ST_AW_SPEC_VERSION"
 msgstr ""
 
 #: aw.ini:syslogactions_1

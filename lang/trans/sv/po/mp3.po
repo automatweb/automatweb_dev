@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/mp3player/mp3.aw:class_1352_help
 msgid "Klassi MP3 help"
 msgstr ""
@@ -410,15 +409,18 @@ msgstr ""
 msgid "Grupi MPEG info (info_mpeg) help"
 msgstr ""
 
-#: classes/applications/mp3player/mp3.aw:138 classes/applications/mp3player/mp3.aw:166
+#: classes/applications/mp3player/mp3.aw:138
+#: classes/applications/mp3player/mp3.aw:166
 msgid "lasering.ee"
 msgstr ""
 
-#: classes/applications/mp3player/mp3.aw:144 classes/applications/mp3player/mp3.aw:172
+#: classes/applications/mp3player/mp3.aw:144
+#: classes/applications/mp3player/mp3.aw:172
 msgid "amazon.com"
 msgstr ""
 
-#: classes/applications/mp3player/mp3.aw:150 classes/applications/mp3player/mp3.aw:178
+#: classes/applications/mp3player/mp3.aw:150
+#: classes/applications/mp3player/mp3.aw:178
 msgid "wikipedia"
 msgstr ""
 
@@ -426,3 +428,6 @@ msgstr ""
 msgid "lae alla"
 msgstr ""
 
+#: classes/applications/mp3player/mp3.aw:533
+msgid "nimetu.mp3"
+msgstr ""

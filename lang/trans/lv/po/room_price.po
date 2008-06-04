@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -209,46 +209,46 @@ msgstr ""
 msgid "Seose Kehtib grupile (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/room_price.aw:75
+#: classes/common/room_price.aw:72
 msgid "E"
 msgstr ""
 
-#: classes/common/room_price.aw:76
+#: classes/common/room_price.aw:73
 msgid "T"
 msgstr ""
 
-#: classes/common/room_price.aw:77
+#: classes/common/room_price.aw:74
 msgid "K"
 msgstr ""
 
-#: classes/common/room_price.aw:78
+#: classes/common/room_price.aw:75
 msgid "N"
 msgstr ""
 
-#: classes/common/room_price.aw:79
+#: classes/common/room_price.aw:76
 msgid "R"
 msgstr ""
 
-#: classes/common/room_price.aw:80
+#: classes/common/room_price.aw:77
 msgid "L"
 msgstr ""
 
-#: classes/common/room_price.aw:81
+#: classes/common/room_price.aw:78
 msgid "P"
 msgstr ""
 
-#: classes/common/room_price.aw:120
+#: classes/common/room_price.aw:118
 msgid "Hind"
 msgstr ""
 
-#: classes/common/room_price.aw:121
+#: classes/common/room_price.aw:119
 msgid "Soodushind"
 msgstr ""
 
-#: classes/common/room_price.aw:242
+#: classes/common/room_price.aw:221
 msgid "Valuutad"
 msgstr ""
 
-#: classes/common/room_price.aw:243
+#: classes/common/room_price.aw:222
 msgid "Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"
 msgstr ""

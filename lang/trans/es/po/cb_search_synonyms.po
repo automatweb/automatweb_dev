@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cfg/cb_search_synonyms.aw:class_830_help
 msgid "Klassi Classbase otsingu s&uuml;non&uuml;mid help"
 msgstr ""
@@ -38,3 +37,6 @@ msgstr ""
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) help"
 msgstr ""
 
+#: classes/cfg/cb_search_synonyms.aw:32
+msgid "Sisestage ridadele sama t&auml;hendusega s&otilde;nad, eraldatud komadega"
+msgstr ""

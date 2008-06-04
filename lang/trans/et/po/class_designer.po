@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -758,48 +758,48 @@ msgid "Jrk"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:837
-#: classes/applications/class_designer/class_designer.aw:1833
-#: classes/applications/class_designer/class_designer.aw:1858
-#: classes/applications/class_designer/class_designer.aw:1912
-#: classes/applications/class_designer/class_designer.aw:1996
+#: classes/applications/class_designer/class_designer.aw:1840
+#: classes/applications/class_designer/class_designer.aw:1865
+#: classes/applications/class_designer/class_designer.aw:1919
+#: classes/applications/class_designer/class_designer.aw:2003
 msgid "Nimi"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:842
-#: classes/applications/class_designer/class_designer.aw:1916
-#: classes/applications/class_designer/class_designer.aw:2000
+#: classes/applications/class_designer/class_designer.aw:1923
+#: classes/applications/class_designer/class_designer.aw:2007
 msgid "Tüüp"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:847
 #: classes/applications/class_designer/class_designer.aw:903
-#: classes/applications/class_designer/class_designer.aw:1931
-#: classes/applications/class_designer/class_designer.aw:1975
+#: classes/applications/class_designer/class_designer.aw:1938
+#: classes/applications/class_designer/class_designer.aw:1982
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1879
-#: classes/applications/class_designer/class_designer.aw:1890
-#: classes/applications/class_designer/class_designer.aw:1901
+#: classes/applications/class_designer/class_designer.aw:1886
+#: classes/applications/class_designer/class_designer.aw:1897
+#: classes/applications/class_designer/class_designer.aw:1908
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1921
+#: classes/applications/class_designer/class_designer.aw:1928
 msgid "Sisemine seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1926
+#: classes/applications/class_designer/class_designer.aw:1933
 msgid "Väline seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1943
+#: classes/applications/class_designer/class_designer.aw:1950
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1988
+#: classes/applications/class_designer/class_designer.aw:1995
 msgid "ID"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1992
+#: classes/applications/class_designer/class_designer.aw:1999
 msgid "Parent"
 msgstr ""

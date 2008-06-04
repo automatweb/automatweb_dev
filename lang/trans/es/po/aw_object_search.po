@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:class_1132_help
 msgid "Klassi AW Objektide otsing help"
 msgstr ""
@@ -374,7 +373,8 @@ msgstr ""
 msgid "Gruppidest"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:196 classes/applications/customer_satisfaction_center/aw_object_search.aw:214
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:196
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:214
 msgid "K&otilde;ik"
 msgstr ""
 
@@ -386,7 +386,8 @@ msgstr ""
 msgid "Deaktiivsed"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:233 classes/applications/customer_satisfaction_center/aw_object_search.aw:246
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:233
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:246
 msgid "Igalt poolt"
 msgstr ""
 
@@ -442,19 +443,15 @@ msgstr ""
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:369 classes/applications/customer_satisfaction_center/aw_object_search.aw:418
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:369
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:418
 msgid "Ava"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
-msgid "Leiti"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
-msgid "objekti"
+msgid "Leiti %s objekti"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:635
 msgid "AW Objektide otsing"
 msgstr ""
-

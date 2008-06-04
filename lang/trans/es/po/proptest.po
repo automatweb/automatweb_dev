@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cfg/proptest.aw:class_1027_help
 msgid "Klassi Property Test help"
 msgstr ""
@@ -150,11 +149,10 @@ msgstr ""
 msgid "Seose Image (RELTYPE_IMAGE) tekst"
 msgstr ""
 
-#: classes/cfg/proptest.aw:104
+#: classes/cfg/proptest.aw:103
 msgid "CB1"
 msgstr ""
 
-#: classes/cfg/proptest.aw:111
+#: classes/cfg/proptest.aw:110
 msgid "CB2"
 msgstr ""
-

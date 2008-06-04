@@ -1513,22 +1513,22 @@ msgstr ""
 msgid "shop_product::draw(): no layout set!"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1636
+#: classes/applications/shop/shop_product.aw:1642
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1641
+#: classes/applications/shop/shop_product.aw:1647
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1646
+#: classes/applications/shop/shop_product.aw:1652
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1680
+#: classes/applications/shop/shop_product.aw:1686
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1685
+#: classes/applications/shop/shop_product.aw:1691
 msgid "Asukoht"
 msgstr ""

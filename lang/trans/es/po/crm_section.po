@@ -9,9 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_section.aw:class_321_help
 msgid "Klassi &Uuml;ksus help"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_description
+msgid "Omaduse Kirjeldus (description) caption"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_description_comment
+msgid "Omaduse Kirjeldus (description) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_description_help
+msgid "Omaduse Kirjeldus (description) help"
 msgstr ""
 
 #: classes/crm/crm_section.aw:prop_code
@@ -206,6 +217,14 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/crm/crm_section.aw:group_Kontaktid
+msgid "Grupi Kontaktid (Kontaktid) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_section.aw:group_Kontaktid_help
+msgid "Grupi Kontaktid (Kontaktid) help"
+msgstr ""
+
 #: classes/crm/crm_section.aw:group_wpls
 msgid "Grupi T&ouml;&ouml;kohad (wpls) pealkiri"
 msgstr ""
@@ -220,14 +239,6 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
-msgstr ""
-
-#: classes/crm/crm_section.aw:group_Kontaktid
-msgid "Grupi Kontaktid (Kontaktid) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_section.aw:group_Kontaktid_help
-msgid "Grupi Kontaktid (Kontaktid) help"
 msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_SECTION
@@ -277,4 +288,3 @@ msgstr ""
 #: classes/crm/crm_section.aw:rel_RELTYPE_URL
 msgid "Seose Veebiaadress (RELTYPE_URL) tekst"
 msgstr ""
-

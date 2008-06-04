@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cfg/htmlclient.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -42,63 +41,64 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:452 classes/cfg/htmlclient.aw:582
+#: classes/cfg/htmlclient.aw:475 classes/cfg/htmlclient.aw:605
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:597
+#: classes/cfg/htmlclient.aw:620
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:598
+#: classes/cfg/htmlclient.aw:621
 msgid "submit_and_back"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:608
+#: classes/cfg/htmlclient.aw:631
 msgid "Edasi &gt;&gt;&gt;"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:609
+#: classes/cfg/htmlclient.aw:632
 msgid "submit_and_forward"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:816
+#: classes/cfg/htmlclient.aw:839
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:877
+#: classes/cfg/htmlclient.aw:900
 msgid "Tagasiside"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:879
+#: classes/cfg/htmlclient.aw:902
 msgid "Kasutajatugi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:880
+#: classes/cfg/htmlclient.aw:903
 msgid "Abi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:881
+#: classes/cfg/htmlclient.aw:904
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:884
+#: classes/cfg/htmlclient.aw:907
 msgid "J&auml;rjehoidja"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:888
+#: classes/cfg/htmlclient.aw:911
 msgid "Ajalugu"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:892
+#: classes/cfg/htmlclient.aw:915
 msgid "Lisa kiiresti"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1363 classes/cfg/htmlclient.aw:1365 classes/cfg/htmlclient.aw:1437 classes/cfg/htmlclient.aw:1439
+#: classes/cfg/htmlclient.aw:1386 classes/cfg/htmlclient.aw:1388
+#: classes/cfg/htmlclient.aw:1460 classes/cfg/htmlclient.aw:1462
 msgid "Kinni"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1364 classes/cfg/htmlclient.aw:1365 classes/cfg/htmlclient.aw:1438 classes/cfg/htmlclient.aw:1439
+#: classes/cfg/htmlclient.aw:1387 classes/cfg/htmlclient.aw:1388
+#: classes/cfg/htmlclient.aw:1461 classes/cfg/htmlclient.aw:1462
 msgid "Lahti"
 msgstr ""
-

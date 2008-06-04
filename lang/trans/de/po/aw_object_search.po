@@ -449,11 +449,7 @@ msgid "Ava"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
-msgid "Leiti"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:390
-msgid "objekti"
+msgid "Leiti %s objekti"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:635

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -37,22 +37,22 @@ msgstr ""
 msgid "Omaduse &Uuml;hiku liik (unit_sort) help"
 msgstr ""
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "pikkus&uuml;hik"
 msgstr "lenght unit"
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "massi&uuml;hik"
 msgstr "weight unit"
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "koguse&uuml;hik"
 msgstr "amount unit"
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "mahu&uuml;hik"
 msgstr "capacity unit"
 
-#: classes/common/unit.aw:37
+#: classes/common/unit.aw:34
 msgid "aja&uuml;hik"
 msgstr "time unit"

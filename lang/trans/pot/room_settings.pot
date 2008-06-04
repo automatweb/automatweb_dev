@@ -814,11 +814,11 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:264
+#: classes/common/room_settings.aw:261
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:267
+#: classes/common/room_settings.aw:265
 msgid "#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus"
 msgstr ""
 
@@ -826,59 +826,59 @@ msgstr ""
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:538
+#: classes/common/room_settings.aw:427
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:544
+#: classes/common/room_settings.aw:433
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:586
+#: classes/common/room_settings.aw:475
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:591
+#: classes/common/room_settings.aw:480
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:597
+#: classes/common/room_settings.aw:486
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:603 classes/common/room_settings.aw:615
+#: classes/common/room_settings.aw:492 classes/common/room_settings.aw:504
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:609
+#: classes/common/room_settings.aw:498
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:622
+#: classes/common/room_settings.aw:511
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:628
+#: classes/common/room_settings.aw:517
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:634
+#: classes/common/room_settings.aw:523
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:645
+#: classes/common/room_settings.aw:534
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:646
+#: classes/common/room_settings.aw:535
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:647
+#: classes/common/room_settings.aw:536
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:691
+#: classes/common/room_settings.aw:580
 msgid "Vali"
 msgstr ""
 

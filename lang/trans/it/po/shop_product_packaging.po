@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_product_packaging.aw:class_327_help
 msgid "Klassi Toote pakend help"
 msgstr ""
@@ -650,11 +649,10 @@ msgstr ""
 msgid "Maksimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:591
+#: classes/applications/shop/shop_product_packaging.aw:596
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:596
+#: classes/applications/shop/shop_product_packaging.aw:601
 msgid "Valuuta"
 msgstr ""
-

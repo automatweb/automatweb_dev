@@ -127,4 +127,5 @@ $GLOBALS["TRANS"]["-- Vali --"] = "-- Select --";
 $GLOBALS["TRANS"]["Registreeru"] = "Register";
 $GLOBALS["TRANS"]["Saada"] = "Send";
 $GLOBALS["TRANS"]["Liigu edasi &raquo;"] = "Go on &raquo;";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
 ?>

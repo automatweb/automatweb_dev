@@ -13,6 +13,6 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/applications/package_management/package_server_obj.aw:66
+#: classes/applications/package_management/package_server_obj.aw:68
 msgid "Pakkide kaust"
 msgstr ""
