@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.33 2008/05/15 07:43:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.34 2008/06/04 12:35:31 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -281,7 +281,7 @@ class orb extends aw_template
 			$_o = new aw_array($optional);
 			foreach($_o->get() as $key => $val)
 			{
-				if (isset($vars[$key]))
+				if (!empty($vars[$key]))
 				{
 					$this->validate_value(array(
 						"type" => isset($orb_defs[$class][$action]["types"][$key]) ? $orb_defs[$class][$action]["types"][$key] : null,
@@ -829,7 +829,7 @@ class orb extends aw_template
 				foreach($optional as $key => $val)
 				{
 					$vartype = $orb_defs[$class][$action]["types"][$key];
-					if (isset($params[$key]))
+					if (!empty($params[$key]))
 					{
 						if ( ($vartype == "int") && ($params[$key] != sprintf("%d",$vars[$key])) )
 						{
