@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.12 2008/06/03 11:08:35 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.13 2008/06/04 14:56:35 instrumental Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -269,9 +269,19 @@ class image_verification extends class_base
 	{
 		if(is_admin())
 		{
-			return PROP_IGNORE;
+			//return PROP_IGNORE;
 		}
-		$arr["property"]["value"] = html::img(array(
+		$default = array(
+			"width" => 130,
+			"height" => 19,
+			"text_color" => "000000",
+			"background_color" => "FFFFFF",
+			"font_size" => 8,
+			"side" => "right",
+			"textbox_size" => 4,
+		);
+		$arr["property"] = array_merge($default, $arr["property"]);
+		$img = html::img(array(
 			'url' => $this->mk_my_orb(
 				"draw_image",
 				array(
@@ -286,11 +296,28 @@ class image_verification extends class_base
 			'width' => $arr["property"]["width"],
 			'height' => $arr["property"]["height"],
 		));
-		$arr["property"]["value"] .= "<br /><br />";
-		$arr["property"]["value"] .= html::textbox(array(
+		$textbox = html::textbox(array(
 			"name" => $arr["property"]["name"],
-			"size" => 4,
+			"size" => $arr["property"]["textbox_size"],
 		));
+		switch($arr["property"]["side"])
+		{
+			case "top":
+				$arr["property"]["value"] = "<div style=\"text-align: center; width: ".$arr["property"]["width"]."px\">".$textbox."<br /><br />".$img."</div>";
+				break;
+
+			case "bottom":
+				$arr["property"]["value"] = "<div style=\"text-align: center; width: ".$arr["property"]["width"]."px\">".$img."<br /><br />".$textbox."</div>";
+				break;
+
+			case "left":
+				$arr["property"]["value"] = $textbox." ".$img;
+				break;
+
+			case "right":
+				$arr["property"]["value"] = $img." ".$textbox;
+				break;
+		}
 		return array($arr["property"]["name"] => $arr["property"]);
 	}
 
