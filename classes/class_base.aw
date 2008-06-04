@@ -1585,7 +1585,6 @@ class class_base extends aw_template
 		}
 
 		$no_yah = $this->classinfo(array("name" => "no_yah"));
-
 		// but that doesn't really belong to classinfo
 		if (empty($no_yah))
 		{
@@ -3574,14 +3573,13 @@ class class_base extends aw_template
 
 		if (empty($id))
 		{
-			$period = aw_global_get("period");
 			$o = new object;
 			$o->set_class_id($this->clid);
 			$o->set_parent($parent);
 			$o->set_status($status ? $status : STAT_ACTIVE);
-			if ($period)
+			if ($args["period"])
 			{
-				$o->set_period($period);
+				$o->set_period($args["period"]);
 			}
 			if (isset($rawdata["lang_id"]))
 			{

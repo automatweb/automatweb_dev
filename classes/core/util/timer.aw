@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/timer.aw,v 1.3 2008/01/31 13:54:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/timer.aw,v 1.4 2008/06/04 10:35:55 kristo Exp $
 // klass taimerite jaoks
 /*
 @classinfo  maintainer=kristo
@@ -38,7 +38,7 @@ class aw_timer
 		{
 			if ($this->timers[$name]["running"])
 			{
-				// kui taimer juba käib, siis me ei tee midagi
+				// kui taimer juba k2ib, siis me ei tee midagi
 				return true;
 			} 
 			else 
@@ -136,7 +136,7 @@ class aw_timer
 			};
 		};
 		// sort timers by time desc
-		arsort($retval);
+		arsort($retval, SORT_NUMERIC);
 
 		$tmp = array();
 		if (is_array($this->counters))
@@ -160,7 +160,7 @@ class aw_timer
 		return ((float)$sec + (float)$micro);
 	}
 
-	// kas taimer töötab?
+	// kas taimer t88tab?
 	function is_running($name) 
 	{
 		return ($this->timers[$name]["running"] == 1);

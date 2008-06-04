@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.21 2008/05/15 07:43:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.22 2008/06/04 10:35:47 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -242,7 +242,7 @@ class shop_product_table_layout extends class_base
 		if ($this->is_template("FILTER_CONTENT"))
 		{
 			$fc = $this->parse("FILTER_CONTENT");
-			if ($_GET["in_filter"] == 1)
+			if ($_GET["is_ajax"] == 1)
 			{
 				return $fc;
 			}
@@ -267,7 +267,7 @@ class shop_product_table_layout extends class_base
 		for($i = 0; $i < $num_pages;  $i++)
 		{
 			$this->vars(array(
-				"page_link" => aw_url_change_var("sptlp", $i),
+				"page_link" => aw_url_change_var("is_ajax", null, aw_url_change_var("sptlp", $i)),
 				"page_number" => $i+1
 			));
 			if ($cur_page == $i)
@@ -318,6 +318,8 @@ class shop_product_table_layout extends class_base
 		}
 		$active_filter_obj = obj($active_filter_set);
 		$fh2 = "";
+		$user_captions = $active_filter_obj->filter_get_user_captions();
+
 		foreach($oc->filter_get_fields() as $field_name => $field_caption)
 		{
 			$vals = $active_filter_obj->filter_get_selected_values($field_name);
@@ -327,7 +329,7 @@ class shop_product_table_layout extends class_base
 			}
 
 			$this->vars(array(
-				"filter_caption" => $field_caption,
+				"filter_caption" => isset($user_captions[$field_name]) ? $user_captions[$field_name] : $field_caption,
 				"filter_name" => $field_name
 			));
 			$fh .= $this->parse("PROD_FILTER_HEADER");

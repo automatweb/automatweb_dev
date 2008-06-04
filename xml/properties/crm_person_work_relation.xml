@@ -107,7 +107,6 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Kuutasu</caption>
-            <comment>Bruto</comment>
       </property>
       <property>
             <name>salary_currency</name>

@@ -2174,7 +2174,6 @@ class site_show extends class_base
 		{
 			$this->read_template("../../".$tpldir."/".$tpl,true);
 		}
-
 		if ($filename == "")
 		{
 			error::raise(array(
@@ -2919,7 +2918,6 @@ class site_show extends class_base
 			$this->compiled_filename = $this->cache_compile_template($tpldir, $arr["template"]);
 		}
 		$awt->stop("build-popups");
-
 
 		$this->read_template($arr["template"]);
 

@@ -3619,6 +3619,8 @@ class shop_warehouse extends class_base
 			Parent folder id or array of parent folders
 		@param only_active optional type=bool
 			To get only active packets/products
+		@param no_subitems optional type=bool
+			If true, sub-products are not requested
 
 		@returns Array of packet/product objects
 			
@@ -3676,7 +3678,7 @@ class shop_warehouse extends class_base
 		));
 		$ret = array_merge($ret, $ol->arr());
 		exit_function("warehouse::object_list");
-		if(!$conf->prop("sell_prods"))
+		if(!$conf->prop("sell_prods") && empty($arr["no_subitems"]))
 		{
 			// now, let the classes add sub-items to the list
 			$tmp = array();

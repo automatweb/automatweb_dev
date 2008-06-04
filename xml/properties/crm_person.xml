@@ -875,8 +875,8 @@
             <mode>manager2</mode>
             <reltype>RELTYPE_EDUCATION</reltype>
             <props>
-                  <num_0>school_1</num_0>
-                  <num_1>school_2</num_1>
+                  <num_0>school1</num_0>
+                  <num_1>school2</num_1>
                   <num_2>degree</num_2>
                   <num_3>field</num_3>
                   <num_4>speciality</num_4>
@@ -890,8 +890,8 @@
                   <num_12>diploma_nr</num_12>
             </props>
             <table_fields>
-                  <num_0>school_1</num_0>
-                  <num_1>school_2</num_1>
+                  <num_0>school1</num_0>
+                  <num_1>school2</num_1>
                   <num_2>degree</num_2>
                   <num_3>field</num_3>
                   <num_4>speciality</num_4>

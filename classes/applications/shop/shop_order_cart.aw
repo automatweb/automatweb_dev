@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.73 2008/05/23 08:03:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.74 2008/06/04 10:35:47 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -833,7 +833,6 @@ class shop_order_cart extends class_base
 			$params["lang_id"] = $oc->meta("lang_id");
 			$params["lang_lc"] = $oc->meta("lang_lc");
 		}
-		die(arr($params));
 		$rval = $so->finish_order($params);
 		$this->clear_cart($oc);
 		return $rval;

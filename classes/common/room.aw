@@ -3681,7 +3681,7 @@ class room extends class_base
 			{
 				$ol->add($this->get_package_list($product));
 			}*/
-		}
+		}//arr($ol);
 		return $ol;
 	}
 	

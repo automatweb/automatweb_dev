@@ -54,7 +54,7 @@ class shop_order_center_obj extends _int_object
 			);
 			foreach($odl->arr() as $od)
 			{
-				$rv[] = $od["value"];
+				$rv[$od["value"]] = $od["value"];
 			}
 			return $rv;
 		}

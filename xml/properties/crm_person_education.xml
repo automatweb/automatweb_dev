@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>school_1</name>
+            <name>school1</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
             <type>relpicker</type>
@@ -10,7 +10,7 @@
             <caption>Kool</caption>
       </property>
       <property>
-            <name>school_2</name>
+            <name>school2</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
             <type>textbox</type>

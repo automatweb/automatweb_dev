@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.62 2008/04/29 12:10:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.63 2008/06/04 10:35:47 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -850,6 +850,8 @@ class shop_order_center extends class_base
 				$t_layout - table layout to use
 				$layout - product layout to use
 				$pl - array of product object instances
+				$total_count - number of total products
+				$pl_on_page - list ofprods on the current page - if set, $pl is ignored
 	**/
 	function do_draw_prods_with_layout($arr)
 	{
@@ -872,32 +874,56 @@ class shop_order_center extends class_base
 
 		lc_site_load("shop_order_center", &$this);
 		$last_menu = "";
-		foreach($pl as $o)
+		if (isset($arr["pl_on_page"]))
 		{
-			$i = $o->instance();
-			$tl_inst->cnt++;
-			if ($tl_inst->is_on_cur_page())
+			$tl_inst->cnt = $tl_inst->per_page * (int)$_GET["sptlp"];
+			$this->_init_draw_prod();
+			foreach($arr["pl_on_page"] as $o)
 			{
-				$oid = $o->id();
-				//if(aw_global_get("uid") == "struktuur")arr($soce[$oid]);
-				$tl_inst->add_product($i->do_draw_product(array(
-					"bgcolor" => $xi % 2 ? "cartbgcolor1" : "cartbgcolor2",
-					"prod" => $o,
-					"layout" => $layout,
-					"oc_obj" => $soc,
-					"l_inst" => $l_inst,
-					"quantity" => $soce[$oid]["ordered_num_enter"],
-					"is_err" => $soce[$oid]["is_err"],
-					"prod_link_cb" => $arr["prod_link_cb"],
-					"last_product_menu" => $last_menu,
-				)));
-				$tl_inst->cnt--;
-				$xi++;
+				$this->_draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, $arr["prod_link_cb"]);
 			}
-			$last_menu =  $o->parent();
+			$tl_inst->cnt = $arr["total_count"];
 		}
-		$tl_inst->cnt = count($pl);
+		else
+		{
+			foreach($pl as $o)
+			{
+				$tl_inst->cnt++;
+				if ($tl_inst->is_on_cur_page())
+				{
+					$this->_draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, $arr["prod_link_cb"]);
+					$tl_inst->cnt--;
+				}
+				$this->last_menu =  $o->parent();
+			}
+			$tl_inst->cnt = count($pl);
+		}
 		return $tl_inst->finish_table();
+	}
+
+	private function _init_draw_prod()
+	{
+		$this->xi = 0;
+		$this->last_menu = "";
+	}
+
+	private function _draw_one_prod($o, $tl_inst, $layout, $soc, $l_inst, $soce, $prod_link_cb)
+	{
+		$i = $o->instance();
+		$oid = $o->id();
+		$tl_inst->add_product($i->do_draw_product(array(
+			"bgcolor" => $this->xi % 2 ? "cartbgcolor1" : "cartbgcolor2",
+			"prod" => $o,
+			"layout" => $layout,
+			"oc_obj" => $soc,
+			"l_inst" => $l_inst,
+			"quantity" => $soce[$oid]["ordered_num_enter"],
+			"is_err" => $soce[$oid]["is_err"],
+			"prod_link_cb" => $prod_link_cb,
+			"last_product_menu" => $this->last_menu,
+		)));
+		$this->xi++;
+		$this->last_menu =  $o->parent();
 	}
 
 	/** returns the long layout object for the product, based on the view given in the url
@@ -1668,6 +1694,7 @@ class shop_order_center extends class_base
 
 	function do_filter_packet_list(&$pl, $f, $soc)
 	{
+//die(dbg::dump($f));
 		$filter_ic = array();
 		$filter_prod = array();
 		foreach($f as $filter_name => $filter_value)
@@ -1687,7 +1714,6 @@ class shop_order_center extends class_base
 				$filter_prod[$name] = $filter_value;
 			}
 		}
-
 		if (count($filter_ic) && count($pl))
 		{
 			$inst = $soc->get_integration_class_instance();
@@ -1701,13 +1727,9 @@ class shop_order_center extends class_base
 
 	function apply_filter_to_product_list(&$pl, $filter_prod)
 	{
-		$pl_ids = array();
-		foreach($pl as $item)
-		{
-			$pl_ids[] = $item->id();
-		}
+		enter_function("shop_product::apply_filter_to_product_list");
 		$filt = array(
-			"oid" => $pl_ids,
+			"oid" => $pl,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_SHOP_PRODUCT
@@ -1717,7 +1739,8 @@ class shop_order_center extends class_base
 			$filt[$prop] = array_keys($vals);
 		}
 		$ol = new object_list($filt);
-		$pl = $ol->arr();
+		$pl = $this->make_keys($ol->ids());
+		exit_function("shop_product::apply_filter_to_product_list");
 	}
 }
 

@@ -392,7 +392,7 @@ class htmlclient extends aw_template
 		}
 
 		// give the first letter of a caption a tooltip
-		if (!empty($args["comment"]))
+		if (false && !empty($args["comment"]))
 		{
 			if ($this->config["show_help"])
 			{

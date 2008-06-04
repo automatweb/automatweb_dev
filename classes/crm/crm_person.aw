@@ -377,7 +377,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 	#@property education_tbl type=table no_caption=1 store=no
 
-	@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=school_1,school_2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school_1,school_2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
+	@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
 
 ------------------------------------------------------------------
 
@@ -2861,7 +2861,7 @@ class crm_person extends class_base
 			$to = $conn->to();
 			$t->define_data(array(
 				"oid" => $to->id(),
-				"school" => is_oid($to->prop("school_1")) ? html::obj_change_url($to->prop("school_1")) : $to->prop("school_2"),
+				"school" => is_oid($to->prop("school1")) ? html::obj_change_url($to->prop("school1")) : $to->prop("school2"),
 				"degree" => $deg_ops[$to->prop("degree")],
 				"field" => $to->prop("field.name"),
 				"speciality" => $to->prop("speciality"),
@@ -6000,7 +6000,7 @@ class crm_person extends class_base
 				"CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATIONS.HEADER.IN_PROGRESS"),
 			));
 		}
-		if(array_key_exists("school_1", $proplist_education) || array_key_exists("school_2", $proplist_education) || count($proplist_education) == 0)
+		if(array_key_exists("school1", $proplist_education) || array_key_exists("school2", $proplist_education) || count($proplist_education) == 0)
 		//if(true)
 		{
 			$this->vars(array(
@@ -6013,7 +6013,7 @@ class crm_person extends class_base
 			//	SUB: CRM_PERSON_EDUCATION
 			$to = $conn->to();
 			$this->vars(array(
-				"crm_person_education.school" => is_oid($to->prop("school_1")) ? $to->prop("school_1.name") : $to->prop("school_2"),
+				"crm_person_education.school" => is_oid($to->prop("school1")) ? $to->prop("school1.name") : $to->prop("school2"),
 				"crm_person_education.degree" => $options[$to->prop("degree")],
 				"crm_person_education.field" => $to->prop("field.name"),
 				"crm_person_education.speciality" => $to->prop("speciality"),
@@ -6042,7 +6042,7 @@ class crm_person extends class_base
 					"CRM_PERSON_EDUCATION.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATION.IN_PROGRESS"),
 				));
 			}
-			if(array_key_exists("school_1", $proplist_education) || array_key_exists("school_2", $proplist_education) || count($proplist_education) == 0)
+			if(array_key_exists("school1", $proplist_education) || array_key_exists("school2", $proplist_education) || count($proplist_education) == 0)
 			//if(true)
 			{
 				$this->vars(array(

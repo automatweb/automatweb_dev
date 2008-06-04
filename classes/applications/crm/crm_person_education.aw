@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.15 2008/05/08 09:51:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.16 2008/06/04 10:35:44 kristo Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -11,10 +11,10 @@
 
 @default table=kliendibaas_haridus
 
-@property school_1 type=relpicker reltype=RELTYPE_SCHOOL field=school_1
+@property school1 type=relpicker reltype=RELTYPE_SCHOOL field=school_1
 @caption Kool
 
-@property school_2 type=textbox field=school_2
+@property school2 type=textbox field=school_2
 @caption Muu kool
 
 @property degree type=select field=degree
@@ -140,6 +140,7 @@ class crm_person_education extends class_base
 				$arr["prop"]["options"] = $this->degree_options;
 				break;
 
+			case "school1":
 			case "school_1":
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_COMPANY,
@@ -166,7 +167,7 @@ class crm_person_education extends class_base
 			"start" => "start",
 			"end" => "end",
 			"end_date" => "end_date",
-			"school_2" => "school",
+			"school2" => "school",
 			"degree" => "degree",
 			"speciality" => "speciality",
 			"diploma_nr" => "diploma_nr",
@@ -174,7 +175,7 @@ class crm_person_education extends class_base
 
 		switch($field)
 		{
-			case "school_1":
+			case "school1":
 			case "main_speciality":
 			case "in_progress":
 			case "obtain_language":

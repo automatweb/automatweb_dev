@@ -933,6 +933,8 @@ class doc extends class_base
 				$_SESSION["vers_created"][$args["id"]] = $args["edit_version"];
 			}
 		}
+
+		$args["period"] = $_POST["period"];
 	}
 
 	function callback_mod_reforb($args = array())

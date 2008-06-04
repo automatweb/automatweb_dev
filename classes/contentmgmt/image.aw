@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.20 2008/05/14 13:42:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.21 2008/06/04 10:35:53 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2170,7 +2170,11 @@ class image extends class_base
 	**/
 	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL, $size = array())
 	{
-		$that = get_instance(CL_IMAGE);
+		static $that;
+		if (!$that)
+		{
+			$that = get_instance(CL_IMAGE);
+		}
 		$u = $that->get_url_by_id($id);
 
 		$o = obj($id);
@@ -2183,7 +2187,7 @@ class image extends class_base
 		if ($o->prop("file2") != "")
 		{
 			$file2 = basename($o->prop("file2"));
-			$file2 = $this->cfg["site_basedir"]."/files/".$file2{0}."/".$file2;
+			$file2 = $that->cfg["site_basedir"]."/files/".$file2{0}."/".$file2;
 			if ($has_big_alt !== NULL)
 			{
 				$alt = $has_big_alt;

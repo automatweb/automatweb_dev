@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.68 2008/05/21 10:10:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.69 2008/06/04 10:35:47 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -831,7 +831,7 @@ class shop_order extends class_base
 			foreach($quantx->get() as $x => $quant)
 			{
 				$row = obj();
-				$row->set_class_id(CL_SHOP_ORDER_ROW);
+				/*$row->set_class_id(CL_SHOP_ORDER_ROW);
 				$row->set_prop("items", $quant["items"]);
 				$row->set_name($i_o->name());
 				$row->set_prop("price", $price);
@@ -841,7 +841,7 @@ class shop_order extends class_base
 				$oi->connect(array(
 					"to" => $row->id(),
 					"type" => "RELTYPE_ROW",
-				));
+				));*/
 			}
 		}
 

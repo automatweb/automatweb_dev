@@ -605,8 +605,8 @@ class core extends acl_base
 				}
 				if ($u != "" && !headers_sent() && !in_array(aw_global_get("uid"), $uid_arr) )
 				{
-					header("Location: $u");
-					die();
+					//header("Location: $u");
+				//	die();
 				}
 				flush();
 				die("<br /><b>".

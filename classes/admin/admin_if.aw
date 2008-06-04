@@ -90,7 +90,7 @@ class admin_if extends class_base
 				"tooltip" => t("Lisa"),
 			));
 			
-			$this->generate_new($tb, $parent);
+			$this->generate_new($tb, $parent, $arr["request"]["period"]);
 		}
 
 		$tb->add_button(array(
@@ -882,7 +882,7 @@ class admin_if extends class_base
 		return $pm->get_menu();
 	}
 	
-	private function generate_new($tb, $i_parent)
+	private function generate_new($tb, $i_parent, $period)
 	{
 		$atc = get_instance(CL_ADD_TREE_CONF);
 		
@@ -926,7 +926,7 @@ class admin_if extends class_base
 				{
 					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $el_data["link"]);
 					//$url = str_replace("--pt--", $arr["parent"], $el_data["link"]);
-					$url =  str_replace("--pt--", $i_parent, str_replace("--pr--", $arr["period"], $url));
+					$url =  str_replace("--pt--", $i_parent, str_replace("--pr--", $period, $url));
 					// docs menu has links ..
 					$tb->add_menu_item(array(
 						"name" => $el_data["id"],
@@ -1579,7 +1579,7 @@ class admin_if extends class_base
 	**/
 	static public function get_link_for_obj($parent, $period = null)
 	{
-		return html::get_change_url(self::find_admin_if_id(), array("group" => "o", "parent" => $parent));
+		return html::get_change_url(self::find_admin_if_id(), array("group" => "o", "parent" => $parent, "period" => $period));
 	}
 
 	/** shows menus importing form 
@@ -1880,6 +1880,8 @@ class admin_if extends class_base
 		$period_list = new object_list(array(
 			"class_id" => CL_PERIOD,
 			"sort_by" => "objects.jrk DESC",
+			"lang_id" => array(),
+			"site_id" => array()
 		));
 
 		for ($period_obj = $period_list->begin(); !$period_list->end(); $period_obj = $period_list->next())

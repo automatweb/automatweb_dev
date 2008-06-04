@@ -342,7 +342,7 @@ class form_controller extends form_base
 		}
 		else
 		{
-			@eval($eq);
+			eval($eq);
 		}
 
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br /><br />");

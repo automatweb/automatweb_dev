@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.52 2008/03/13 13:26:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.53 2008/06/04 10:35:54 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -163,7 +163,7 @@ class site_cache extends aw_template
 			}
 		}
 		// here we sould add all the variables that are in the url to the cache parameter list
-		foreach($GLOBALS["HTTP_GET_VARS"] as $var => $val)
+		foreach($_GET as $var => $val)
 		{
 			// just to make sure that each user does not get it's own copy
 			if ($var != "automatweb" && $var != "set_lang_id")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.138 2008/05/29 17:05:45 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.139 2008/06/04 10:35:57 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1720,6 +1720,7 @@ class releditor extends core
 	**/
 	function handle_js_submit($arr)
 	{
+$this->site_log("js sbt ".dbg::dump($arr));
 		$propn = null;
 		foreach($arr as $k => $d)
 		{
@@ -1782,6 +1783,10 @@ class releditor extends core
 		}
 
 
+$this->site_log("js sbt return ".html::hidden(array(
+			"name" => $propn."_data",
+			"value" => serialize($prev_dat)
+		)));
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($t->draw().html::hidden(array(
 			"name" => $propn."_data",
@@ -1809,6 +1814,7 @@ class releditor extends core
 			$rel_props = $this->_get_props_from_clid($rel_clid);
 		}
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
+$this->site_log("cf = $cfgform_id \n");
 		if ($this->can("view", $cfgform_id))
 		{
 			$cfo = obj($cfgform_id);
@@ -1841,6 +1847,7 @@ class releditor extends core
 		}
 		else
 		{
+$this->site_log("\n\nrel_props = ".dbg::dump($rel_props)." \n\n");
 			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 			{
 				if (isset($rel_props[$prop_name]))
@@ -2031,6 +2038,7 @@ class releditor extends core
 	**/
 	function js_change_data($arr)
 	{
+$this->site_log("change ".dbg::dump($arr));
 		$releditor_name = $arr["releditor_name"];
 		$d = unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$releditor_name."_data"]));
 		$idx = $arr["edit_index"];
@@ -2059,7 +2067,7 @@ class releditor extends core
 		$s_out = "edit_data = {";
 		$s_out .= join(",\n", $r);
 		$s_out .= " }; ";
-
+$this->site_log("\n\n\nchange ret $s_out\n\n\n");
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		echo $s_out;
 		die();

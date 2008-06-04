@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.265 2008/05/30 07:15:57 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.266 2008/06/04 10:35:43 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -2880,6 +2880,34 @@ if (!defined("DEFS"))
 			return date("j",mktime(0,0,0,$month+1,0,$year));
 		}
 	}
+
+	/** Evaluates php code in given string
+		@attrib api=1 params=pos
+
+		@param res required type=string
+			The buffer to evaluate
+
+		@returns
+			Evaluated buffer contents
+	**/
+	function eval_buffer($res)
+	{
+		if (strpos($res, "<?php") !== false)
+		{
+			ob_start();
+			$tres = $res;
+			$res = str_replace("<?xml", "&lt;?xml", $res);
+			eval("?>".$res);
+			$res = ob_get_contents();
+			ob_end_clean();
+			if (strpos($res, "syntax err") !== false)
+			{
+				return $res;
+			}
+		}
+		return $res;
+	}
+
 	class defs {};
 };
 ?>

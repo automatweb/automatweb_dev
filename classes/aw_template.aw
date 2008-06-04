@@ -17,7 +17,7 @@ class aw_template extends core
 
 	private $debug_mode;
 	private $use_eval;
-	private $v2_templates;
+	public $v2_templates;
 	private $v2_arr;
 	private $v2_parent_map;
 	private $c_templates;

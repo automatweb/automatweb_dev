@@ -94,6 +94,7 @@ class shop_order_center_filter_entry extends class_base
 			}
 			$arr["obj_inst"]->filter_set_selected_values($field_name, $sel_vals);
 		}
+		$arr["obj_inst"]->filter_set_user_captions($arr["request"]["field_caption"]);
 		$oc->save();
 	}
 
@@ -101,7 +102,19 @@ class shop_order_center_filter_entry extends class_base
 	{
 		$td = array();
 
+		$field_captions = $o->filter_get_user_captions();
+
 		$oc = obj($oc);
+		foreach($oc->filter_get_fields() as $field_name => $field_caption)
+		{
+			$td[$field_name] = t("Tulba nimi")."<br/>".html::textbox(array(
+				"name" => "field_caption[$field_name]",
+				"value" => $field_captions[$field_name],
+			))."<br/>".t("Tulba valikud");
+		}
+		$t->define_data($td);
+
+		$td = array();
 		foreach($oc->filter_get_fields() as $field_name => $field_caption)
 		{
 			$values = $oc->filter_get_all_values($field_name);

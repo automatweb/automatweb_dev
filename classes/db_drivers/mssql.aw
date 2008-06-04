@@ -66,6 +66,7 @@ class mssql
 
 	function db_query($qtext,$errors = true)
 	{
+		enter_function("mssql::db_query");
 		global $DUKE, $INTENSE_DUKE;
 		//$qtext = preg_replace("/`([^`]+)`/i","[\${1}]",$qtext);
 
@@ -133,6 +134,7 @@ class mssql
 			$tm = sprintf("%0.04f",$ts_e - $ts_s);
 			echo "query took $tm seconds <br />";
 		}
+		exit_function("mssql::db_query");
 		return true;
 	}
 
