@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.11 2008/03/05 13:21:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.12 2008/06/05 16:38:49 markop Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -190,9 +190,6 @@ class crm_number_series extends class_base
 					$num++;
 				}
 
-				$nums[$idx] = $num;
-				$series->set_meta("ser_vals", $nums);
-				$series->save();
 				// actually, just list all bills and get max number+1 for bills
 				$filter = array(					
 					"class_id" => $class,					
@@ -203,7 +200,7 @@ class crm_number_series extends class_base
 				);
 				if($time)
 				{
-					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, (int)($row["start"]) , (int)($row["end"]) , "int");
+					$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, (int)($row["start"]) , (int)($row["end"]) , "int");
 				}
 				else
 				{
@@ -215,11 +212,15 @@ class crm_number_series extends class_base
 					$o = $ol->begin();
 					$num = $o->prop("bill_no") + 1;
 				}
-				
-				//siia teeb nyyd eriti raige kirvemeetodi
-				//kui mingil x pohjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel kaib voi maailmalopuni... voi vahemalt niikaua kuni leiab numbri mis pole kasutuses voi tuleb miski muu piirang peale ja on niisama p...
-				
-				while(true)
+				else
+				{
+					$num = $row["start"];//ma ei tea mis sest kogu eelnevast systeemist kasu on... niikuinii on vaja algusest alustada ju kui ei ole neid
+				}
+
+				//siia teeb nyyd eriti r2ige kirvemeetodi
+				//kui mingil x p6hjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel k2ib v6i maailmal6puni... v6i v2hemalt niikaua kuni leiab numbri mis pole kasutuses v6i tuleb miski muu piirang peale ja on niisama p...
+				//see on siin v2ga halb, kuid t666tab... niiet 
+				while(true)//eisteks kontrollib seda numbrit mille sai, et ega see olemas ole
 				{
 					$ol2 = new object_list(array(
 						"class_id" => $class,
@@ -229,9 +230,33 @@ class crm_number_series extends class_base
 					));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
 					if (!$ol2->count())
 					{
+						break;
+					}
+					$num++;
+				}
+
+				$nums[$idx] = $num;
+				$series->set_meta("ser_vals", $nums);
+				$series->save();
+
+				/*while(true)//ja teiseks, 2kki on eespoolt 2ra kustutatud juba m6ni, selleks peab veenduma, et eelmine on olemas
+				{
+					$ol2 = new object_list(array(
+						"class_id" => $class,
+						"bill_no" => $num,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
+					if ($ol2->count())
+					{
+						return $num+1;
+					}
+					if($num <= $row["start"])
+					{
 						return $num;
 					}
-				}
+					$num--;
+				}*/
 				return $num;
 			}
 		}
@@ -251,8 +276,8 @@ class crm_number_series extends class_base
 			$num = $o->prop("bill_no") + 1;
 		}
 			
-		//siia teeb nyyd eriti raige kirvemeetodi
-		//kui mingil x pohjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel kaib voi maailmalopuni... voi vahemalt niikaua kuni leiab numbri mis pole kasutuses voi tuleb miski muu piirang peale ja on niisama p...
+		//siia teeb nyyd eriti r2ige kirvemeetodi
+		//kui mingil x p6hjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel k2ib v6i maailmal6puni... v6i v2hemalt niikaua kuni leiab numbri mis pole kasutuses v6i tuleb miski muu piirang peale ja on niisama p...
 		while(true)
 		{
 			$ol2 = new object_list(array(
