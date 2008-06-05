@@ -211,7 +211,7 @@ if ($_GET["PROMO_DBG"] == 1)
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
 }
 			$so = obj(aw_global_get("section"));
-			if ($o->meta("not_in_doc_view") == 1 && ($so->class_id() == CL_DOCUMENT || $_GET["docid"]))
+			if ($o->meta("not_in_doc_view") == 1 && (($so->class_id() == CL_DOCUMENT || $_GET["docid"]) || (is_oid($inst->get_default_document_list()))))
 			{
 				$show_promo = false;
 			}

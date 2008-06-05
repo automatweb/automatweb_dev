@@ -1199,6 +1199,11 @@ class site_show extends class_base
 		return isset($docid) ? $this->_int_show_documents($docid) : "";
 	}
 
+	function get_default_document_list()
+	{
+		return $this->default_document_list; 
+	}
+
 	function _int_show_documents($docid)
 	{
 		global $awt;
@@ -1378,6 +1383,9 @@ class site_show extends class_base
 		{
 			$si->handle_default_document_list($docid);
 		}
+
+		$this->default_document_list = $docid;
+
 		return $this->_int_show_documents($docid);
 	}
 
