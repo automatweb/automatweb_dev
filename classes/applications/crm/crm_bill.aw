@@ -9,78 +9,108 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property billp_tb type=toolbar store=no no_caption=1
 	@caption Arve toolbar
+
+	@layout top_split type=hbox
+
+	@layout top_left type=vbox parent=top_split closeable=1
  
-	@property name type=textbox table=objects field=name
+	@property name type=textbox table=objects field=name parent=top_left
 	@caption Nimi
 
-	@property comment type=textbox table=objects field=comment
+	@property comment type=textbox table=objects field=comment parent=top_left
 	@caption Kommentaar lisale
 
-	@property time_spent_desc type=textbox table=aw_crm_bill field=aw_time_spent_desc
+	@property time_spent_desc type=textbox table=aw_crm_bill field=aw_time_spent_desc parent=top_left
 	@caption Kulunud aeg tekstina
 
-	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no
+	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no parent=top_left
 	@caption Number
 
-	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete
+	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete parent=top_left
 	@caption Klient
 
-	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name
+	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name parent=top_left
 	@caption Kliendi nimi
 	
-	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address
+	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address parent=top_left
 	@caption Kliendi aadress
 	
-	@property customer_address_meta type=text no_caption=1
+	@property customer_address_meta type=text no_caption=1 parent=top_left
 	@caption Kliendi aadressi muutujad metas
 
-	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code
+	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code parent=top_left
 	@caption Kliendikood
 
-	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
+	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl parent=top_left reltype=RELTYPE_IMPL
 	@caption Arve esitaja
 
-	@property bill_date type=date_select table=aw_crm_bill field=aw_date
+	@property bill_date type=date_select table=aw_crm_bill field=aw_date parent=top_left
 	@caption Kuup&auml;ev
 
-	@property bill_due_date_days type=textbox table=aw_crm_bill field=aw_due_date_days size=5
+	@property bill_due_date_days type=textbox table=aw_crm_bill field=aw_due_date_days size=5 parent=top_left
 	@caption Makset&auml;htaeg (p&auml;evi)
 
-	@property bill_due_date type=date_select table=aw_crm_bill field=aw_due_date
+	@property bill_due_date type=date_select table=aw_crm_bill field=aw_due_date parent=top_left
 	@caption Tasumise kuup&auml;ev
 
-	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved default=-1
+	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved default=-1 parent=top_left
 	@caption Laekumiskuup&auml;ev
 
-	@property bill_trans_date type=date_select table=aw_crm_bill field=aw_trans_date default=-1
+	@property bill_trans_date type=date_select table=aw_crm_bill field=aw_trans_date default=-1 parent=top_left
 	@caption Kandekuup&auml;ev
 
-	@property payment_mode type=select table=aw_crm_bill field=aw_payment_mode
+	@property payment_mode type=select table=aw_crm_bill field=aw_payment_mode parent=top_left
 	@caption Makseviis
 
-	@property state type=select table=aw_crm_bill field=aw_state
+	@property state type=select table=aw_crm_bill field=aw_state parent=top_left
 	@caption Staatus
 
-	@property on_demand type=checkbox table=aw_crm_bill field=aw_on_demand
+	@property on_demand type=checkbox table=aw_crm_bill field=aw_on_demand parent=top_left
 	@caption Sissen&otilde;udmisel
 
-	@property partial_recieved type=text field=meta method=serialize
+	@property partial_recieved type=text field=meta method=serialize parent=top_left
 	@caption Osaline laekumine
 
-	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
+	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5  parent=top_left
 	@caption Allahindlus (%)
 
-	@property sum type=text table=aw_crm_bill field=aw_sum size=5 
+	@property sum type=text table=aw_crm_bill field=aw_sum size=5  parent=top_left
 	@caption Summa
 
-	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
+	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill parent=top_left
 	@caption Kuuarve
 
-	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE
+	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE parent=top_left
 	@caption Keel
 
-	@property rows_different_pages type=text field=meta method=serialize
+	@property rows_different_pages type=text field=meta method=serialize parent=top_left
 	@caption Read erinevatel lehek&uuml;lgedel
+
+	@layout top_right parent=top_split type=vbox closeable=1
+
+	@property warehouse type=relpicker table=aw_crm_bill field=aw_warehouse reltype=RELTYPE_WAREHOUSE parent=top_right
+	@caption Ladu
+
+	@property price_list type=relpicker table=aw_crm_bill field=aw_price_list reltype=RELTYPE_PRICE_LIST parent=top_right
+	@caption Hinnakiri
+
+	@property transfer_method table=aw_crm_bill type=relpicker field=aw_transfer_method reltype=RELTYPE_TRANSFER_METHOD parent=top_right
+	@caption L&auml;hetusviis
+	
+	@property transfer_condition table=aw_crm_bill type=relpicker field=aw_transfer_condition reltype=RELTYPE_TRANSFER_CONDITION parent=top_right
+	@caption L&auml;hetustingimus
+
+	@property selling_order type=relpicker table=aw_crm_bill field=aw_selling_order reltype=RELTYPE_SELLING_ORDER parent=top_right
+	@caption M&uuml;&uuml;gitellimus
+
+	@property transfer_address type=relpicker table=aw_crm_bill reltype=RELTYPE_ADDRESS field=aw_transfer_address parent=top_right
+	@caption L&auml;hetusaadress
+	
+	@property mail_notify type=checkbox ch_value=1 store=no parent=top_right
+	@caption Teade laekumisest e-postile
+
+	@property approved type=checkbox table=aw_crm_bill ch_value=1 field=aw_approved parent=top_right
+	@caption Kinnitatud
 
 	@property bill_rows type=text store=no no_caption=1
 	@caption Arveread
@@ -109,6 +139,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property udef5 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 5
 
+@default group=delivery_notes
+	@property dn_tb type=toolbar store=no no_caption=1
+	@property dn_tbl type=table store=no no_caption=1
+
 @default group=preview
 	@property preview type=text store=no no_caption=1
 
@@ -122,6 +156,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_tb type=toolbar store=no no_caption=1
 	@property bill_task_list type=table store=no no_caption=1
 
+@groupinfo delivery_notes caption="Saatelehed"
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
 @groupinfo preview_add caption="Arve Lisa"
@@ -151,6 +186,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @reltype PAYMENT value=8 clid=CL_CRM_BILL_PAYMENT
 @caption Laekumine
+
+@reltype WAREHOUSE value=9 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
+
+@reltype PRICE_LIST value=10 clid=CL_SHOP_PRICE_LIST
+@caption Hinnakiri
+
+@reltype TRANSFER_METHOD value=11 clid=CL_TRANSFER_METHOD
+@caption L&auml;hetusviis
+
+@reltype TRANSFER_CONDITION value=12 clid=CL_TRANSFER_CONDITION
+@caption L&auml;hetustingimus
+
+@reltype SELLING_ORDER value=13 clid=CL_SHOP_WAREHOUSE_SELLING_ORDER
+@caption M&uuml;&uuml;gitellimus
+
+@reltype DELIVERY_NOTE value=14 clid=CL_SHOP_DELIVERY_NOTE
+@caption Saateleht
+
+@reltype ADDRESS value=15 clid=CL_CRM_ADDRESS
+@caption L&auml;hetusaadress
 */
 
 define("BILL_SUM", 1);
@@ -268,6 +324,14 @@ class crm_bill extends class_base
 				$this->_billt_tb($arr);
 				break;
 		
+			case 'dn_tb':
+				$this->_dn_tb($arr);
+				break;
+
+			case 'dn_tbl':
+				$this->_dn_tbl($arr);
+				break;
+
 			case "bill_no":
 				if ($prop["value"] == "")
 				{
@@ -798,8 +862,67 @@ class crm_bill extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
+		$arr["add_dn"] = 0;
 	}
 
+	function _dn_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_SHOP_DELIVERY_NOTE), $arr["obj_inst"]->id(), 14);
+		$tb->add_search_button(array(
+			"pn" => "add_dn",
+			"clid" => CL_SHOP_DELIVERY_NOTE,
+			"multiple" => 1,
+		));
+		$tb->add_delete_rels_button();
+	}
+
+	function _dn_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel",
+		));
+		$t->define_field(array(
+			"name" => "number",
+			"caption" => t("Number"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+		));
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_DELIVERY_NOTE",
+		));
+		foreach($conn as $c)
+		{
+			$dn = $c->to();
+			$t->define_data(array(
+				"number" => html::obj_change_url($dn, ($no = $dn->prop("number")) ? $no : t("(Puudub)")),
+				"date" => date('d.m.Y', $dn->prop("delivery_date")),
+				"oid" => $dn->id(),
+			));
+		}
+	}
+
+	function _set_dn_tb($arr)
+	{
+		if($add = $arr["request"]["add_dn"])
+		{
+			$tmp = explode(",", $add);
+			foreach($tmp as $dn)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $dn,
+					"type" => "RELTYPE_DELIVERY_NOTE",
+				));
+			}
+		}
+	}
+	
 	function _init_bill_rows_t(&$t)
 	{
 		$t->define_field(array(
@@ -812,11 +935,6 @@ class crm_bill extends class_base
 			"name" => "code",
 			"caption" => t("Kood")
 		));*/
-
-		$t->define_field(array(
-			"name" => "date",
-			"caption" => t("Kuup&auml;ev"),
-		));
 
 		$t->define_field(array(
 			"name" => "unit",
@@ -936,39 +1054,38 @@ class crm_bill extends class_base
 					"value" => $t_inf["jrk"],
 					"size" => 3
 				)).html::textbox(array(
+					"name" => "rows[$id][date]",
+					"value" => $t_inf["date"],
+					"size" => 8
+				))."<br>".html::textbox(array(
 					"name" => "rows[$id][comment]",
 					"value" => $t_inf["comment"],
-					"size" => 41
+					"size" => 35
 				))."<br>".html::textarea(array(
 					"name" => "rows[$id][name]",
 					"value" => $t_inf["name"],
 					"rows" => 5,
-					"cols" => 45
+					"cols" => 40
 				)),
 				"code" => html::textbox(array(
 					"name" => "rows[$id][code]",
 					"value" => $t_inf["code"],
 					"size" => 10
 				)),
-				"date" => html::textbox(array(
-					"name" => "rows[$id][date]",
-					"value" => $t_inf["date"],
-					"size" => 8
-				)),
 				"unit" => html::textbox(array(
 					"name" => "rows[$id][unit]",
 					"value" => $t_inf["unit"],
-					"size" => 3
+					"size" => 3,
 				)),
 				"price" => html::textbox(array(
 					"name" => "rows[$id][price]",
 					"value" => $t_inf["price"],
-					"size" => 5
+					"size" => 4
 				)),
 				"amt" => html::textbox(array(
 					"name" => "rows[$id][amt]",
 					"value" => $t_inf["amt"],
-					"size" => 5
+					"size" => 3
 				)),
 				"sum" => $t_inf["sum"],
 				"has_tax" => html::checkbox(array(
@@ -1039,37 +1156,37 @@ class crm_bill extends class_base
 				if(($agreement_price["name"] && $agreement_price["price"]) || !$done_new_line)
 				{
 					$t->define_data(array(
-						"name" => t("Kokkuleppehind")." ".($x+1)
-						."<br>".html::textarea(array(
+						"name" => t("Kokkuleppehind")." ".($x+1)."<br>".html::textbox(array(
+							"name" => "agreement_price[".$x."][date]",
+							"value" => $agreement_price["date"],
+							"size" => 8
+						))."<br>".html::textarea(array(
 							"name" => "agreement_price[".$x."][name]",
 							"value" => $agreement_price["name"],
 							"rows" => 5,
-							"cols" => 45
+							"cols" => 40
 						)),
 						"code" => html::textbox(array(
 							"name" => "agreement_price[".$x."][code]",
 							"value" => $agreement_price["code"],
 							"size" => 10
 						)),
-						"date" => html::textbox(array(
-							"name" => "agreement_price[".$x."][date]",
-							"value" => $agreement_price["date"],
-							"size" => 8
-						)),
 						"unit" => html::textbox(array(
 							"name" => "agreement_price[".$x."][unit]",
 							"value" => $agreement_price["unit"],
-							"size" => 3
+							"size" => 3,
+							"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
+							"autocomplete_params" => array("agreement_price[".$x."][unit]"),
 						)),
 						"price" => html::textbox(array(
 							"name" => "agreement_price[".$x."][price]",
 							"value" => $agreement_price["price"],
-							"size" => 5
+							"size" => 4
 						)),
 						"amt" => html::textbox(array(
 							"name" => "agreement_price[".$x."][amt]",
 							"value" => $agreement_price["amt"],
-							"size" => 5
+							"size" => 3
 						)),
 						"sum" => $agreement_price["sum"],
 						"has_tax" => html::checkbox(array(
@@ -1109,6 +1226,31 @@ class crm_bill extends class_base
 // 			}
 		}
 		$arr["prop"]["value"] = $t->draw();
+	}
+
+	/**
+	@attrib name=unit_options_autocomplete_source all_args=1
+	**/
+	function unit_options_autocomplete_source($arr)
+	{
+		die(arr($arr));
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_UNIT,
+			"mail" => $arr["search_mail_email"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		$res = array();
+		foreach($ol->arr() as $o)
+		{
+			$res[$o->id()] = $o->prop("mail");
+		}
+
+		return $ac->finish_ac($res);
 	}
 
 	function get_sum($bill)
@@ -2486,6 +2628,27 @@ class crm_bill extends class_base
 	{
 		$url = $this->mk_my_orb("get_comment_for_prod");
 		return '
+			var date_day_el = aw_get_el("bill_date[day]")
+			var date_month_el = aw_get_el("bill_date[month]")
+			var date_year_el = aw_get_el("bill_date[year]")
+			var date_day = date_day_el.value
+			var date_month = date_month_el.value
+			var date_year = date_year_el.value
+			var date_trans_day_el = aw_get_el("bill_trans_date[day]")
+			var date_trans_month_el = aw_get_el("bill_trans_date[month]")
+			var date_trans_year_el = aw_get_el("bill_trans_date[year]")
+			$.timer(200, function (timer) {
+				if(date_day_el.value != date_day || date_month_el.value != date_month || date_year_el.value != date_year)
+				{
+					date_day = date_day_el.value
+					date_month = date_month_el.value
+					date_year = date_year_el.value
+					date_trans_day_el.value = date_day
+					date_trans_month_el.value = date_month
+					date_trans_year_el.value = date_year
+				}
+			});
+			
 			function upd_notes()
 			{
 				set_changed();
@@ -2574,6 +2737,8 @@ class crm_bill extends class_base
 			"img" => "new.gif",
 			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
 		));
+
+		$tb->add_save_button();
 
 		$tb->add_menu_button(array(
 			"name" => "print",
@@ -2732,6 +2897,13 @@ class crm_bill extends class_base
 			case "aw_trans_date":
 			case "aw_payment_mode":
 			case "aw_on_demand":
+			case "aw_warehouse":
+			case "aw_price_list":
+			case "aw_transfer_method":
+			case "aw_transfer_condition":
+			case "aw_selling_order":
+			case "aw_transfer_address":
+			case "aw_approved":
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "int"

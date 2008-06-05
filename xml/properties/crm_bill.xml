@@ -16,6 +16,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>name</field>
+            <parent>top_left</parent>
             <caption>Nimi</caption>
       </property>
       <property>
@@ -24,6 +25,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>comment</field>
+            <parent>top_left</parent>
             <caption>Kommentaar lisale</caption>
       </property>
       <property>
@@ -32,6 +34,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_time_spent_desc</field>
+            <parent>top_left</parent>
             <caption>Kulunud aeg tekstina</caption>
       </property>
       <property>
@@ -40,6 +43,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_bill_no</field>
+            <parent>top_left</parent>
             <caption>Number</caption>
       </property>
       <property>
@@ -54,6 +58,7 @@
                   <num_1>CL_CRM_PERSON</num_1>
             </clid>
             <style>autocomplete</style>
+            <parent>top_left</parent>
             <caption>Klient</caption>
       </property>
       <property>
@@ -62,6 +67,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_customer_name</field>
+            <parent>top_left</parent>
             <caption>Kliendi nimi</caption>
       </property>
       <property>
@@ -70,6 +76,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_customer_address</field>
+            <parent>top_left</parent>
             <caption>Kliendi aadress</caption>
       </property>
       <property>
@@ -78,6 +85,7 @@
             <group>general</group>
             <type>text</type>
             <no_caption>1</no_caption>
+            <parent>top_left</parent>
             <field>customer_address_meta</field>
             <caption>Kliendi aadressi muutujad metas</caption>
       </property>
@@ -87,6 +95,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_customer_code</field>
+            <parent>top_left</parent>
             <caption>Kliendikood</caption>
       </property>
       <property>
@@ -96,6 +105,7 @@
             <type>popup_search</type>
             <style>relpicker</style>
             <field>aw_impl</field>
+            <parent>top_left</parent>
             <reltype>RELTYPE_IMPL</reltype>
             <caption>Arve esitaja</caption>
       </property>
@@ -105,6 +115,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_date</field>
+            <parent>top_left</parent>
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
@@ -114,6 +125,7 @@
             <type>textbox</type>
             <field>aw_due_date_days</field>
             <size>5</size>
+            <parent>top_left</parent>
             <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
@@ -122,6 +134,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_due_date</field>
+            <parent>top_left</parent>
             <caption>Tasumise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
@@ -131,6 +144,7 @@
             <type>date_select</type>
             <field>aw_recieved</field>
             <default>-1</default>
+            <parent>top_left</parent>
             <caption>Laekumiskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
@@ -140,6 +154,7 @@
             <type>date_select</type>
             <field>aw_trans_date</field>
             <default>-1</default>
+            <parent>top_left</parent>
             <caption>Kandekuup&amp;amp;auml;ev</caption>
       </property>
       <property>
@@ -148,6 +163,7 @@
             <group>general</group>
             <type>select</type>
             <field>aw_payment_mode</field>
+            <parent>top_left</parent>
             <caption>Makseviis</caption>
       </property>
       <property>
@@ -156,6 +172,7 @@
             <group>general</group>
             <type>select</type>
             <field>aw_state</field>
+            <parent>top_left</parent>
             <caption>Staatus</caption>
       </property>
       <property>
@@ -164,6 +181,7 @@
             <group>general</group>
             <type>checkbox</type>
             <field>aw_on_demand</field>
+            <parent>top_left</parent>
             <caption>Sissen&amp;amp;otilde;udmisel</caption>
       </property>
       <property>
@@ -173,6 +191,7 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
+            <parent>top_left</parent>
             <caption>Osaline laekumine</caption>
       </property>
       <property>
@@ -182,6 +201,7 @@
             <type>textbox</type>
             <field>aw_discount</field>
             <size>5</size>
+            <parent>top_left</parent>
             <caption>Allahindlus (%)</caption>
       </property>
       <property>
@@ -191,6 +211,7 @@
             <type>text</type>
             <field>aw_sum</field>
             <size>5</size>
+            <parent>top_left</parent>
             <caption>Summa</caption>
       </property>
       <property>
@@ -200,6 +221,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_monthly_bill</field>
+            <parent>top_left</parent>
             <caption>Kuuarve</caption>
       </property>
       <property>
@@ -211,6 +233,7 @@
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_LANGUAGE</reltype>
+            <parent>top_left</parent>
             <caption>Keel</caption>
       </property>
       <property>
@@ -220,7 +243,89 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
+            <parent>top_left</parent>
             <caption>Read erinevatel lehek&amp;amp;uuml;lgedel</caption>
+      </property>
+      <property>
+            <name>warehouse</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_warehouse</field>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <parent>top_right</parent>
+            <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>price_list</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_price_list</field>
+            <reltype>RELTYPE_PRICE_LIST</reltype>
+            <parent>top_right</parent>
+            <caption>Hinnakiri</caption>
+      </property>
+      <property>
+            <name>transfer_method</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_transfer_method</field>
+            <reltype>RELTYPE_TRANSFER_METHOD</reltype>
+            <parent>top_right</parent>
+            <caption>L&amp;amp;auml;hetusviis</caption>
+      </property>
+      <property>
+            <name>transfer_condition</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_transfer_condition</field>
+            <reltype>RELTYPE_TRANSFER_CONDITION</reltype>
+            <parent>top_right</parent>
+            <caption>L&amp;amp;auml;hetustingimus</caption>
+      </property>
+      <property>
+            <name>selling_order</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_selling_order</field>
+            <reltype>RELTYPE_SELLING_ORDER</reltype>
+            <parent>top_right</parent>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gitellimus</caption>
+      </property>
+      <property>
+            <name>transfer_address</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
+            <field>aw_transfer_address</field>
+            <parent>top_right</parent>
+            <caption>L&amp;amp;auml;hetusaadress</caption>
+      </property>
+      <property>
+            <name>mail_notify</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>top_right</parent>
+            <field>mail_notify</field>
+            <caption>Teade laekumisest e-postile</caption>
+      </property>
+      <property>
+            <name>approved</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_approved</field>
+            <parent>top_right</parent>
+            <caption>Kinnitatud</caption>
       </property>
       <property>
             <name>bill_rows</name>
@@ -314,6 +419,24 @@
             <caption>Kasutajadefineeritud muutuja 5</caption>
       </property>
       <property>
+            <name>dn_tb</name>
+            <table>objects</table>
+            <group>delivery_notes</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>dn_tb</field>
+      </property>
+      <property>
+            <name>dn_tbl</name>
+            <table>objects</table>
+            <group>delivery_notes</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>dn_tbl</field>
+      </property>
+      <property>
             <name>preview</name>
             <table>objects</table>
             <group>preview</group>
@@ -367,6 +490,9 @@
             <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
+            <delivery_notes>
+                  <caption>Saatelehed</caption>
+            </delivery_notes>
             <tasks>
                   <caption>Toimetused</caption>
                   <submit>no</submit>
@@ -435,6 +561,62 @@
                   <clid>CL_CRM_BILL_PAYMENT</clid>
                   <caption>Laekumine</caption>
             </PAYMENT>
+            <WAREHOUSE>
+                  <value>9</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
+            <PRICE_LIST>
+                  <value>10</value>
+                  <clid>CL_SHOP_PRICE_LIST</clid>
+                  <caption>Hinnakiri</caption>
+            </PRICE_LIST>
+            <TRANSFER_METHOD>
+                  <value>11</value>
+                  <clid>CL_TRANSFER_METHOD</clid>
+                  <caption>L&amp;amp;auml;hetusviis</caption>
+            </TRANSFER_METHOD>
+            <TRANSFER_CONDITION>
+                  <value>12</value>
+                  <clid>CL_TRANSFER_CONDITION</clid>
+                  <caption>L&amp;amp;auml;hetustingimus</caption>
+            </TRANSFER_CONDITION>
+            <SELLING_ORDER>
+                  <value>13</value>
+                  <clid>CL_SHOP_WAREHOUSE_SELLING_ORDER</clid>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gitellimus</caption>
+            </SELLING_ORDER>
+            <DELIVERY_NOTE>
+                  <value>14</value>
+                  <clid>CL_SHOP_DELIVERY_NOTE</clid>
+                  <caption>Saateleht</caption>
+            </DELIVERY_NOTE>
+            <ADDRESS>
+                  <value>15</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>L&amp;amp;auml;hetusaadress</caption>
+            </ADDRESS>
       </reltypes>
+      <layout>
+            <top_split>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </top_split>
+            <top_left>
+                  <type>vbox</type>
+                  <parent>top_split</parent>
+                  <closeable>1</closeable>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </top_left>
+            <top_right>
+                  <parent>top_split</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </top_right>
+      </layout>
 </properties>
 

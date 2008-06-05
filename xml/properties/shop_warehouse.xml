@@ -78,12 +78,23 @@
             <field>productgroups_toolbar</field>
       </property>
       <property>
+            <name>productgroups_tree</name>
+            <table>objects</table>
+            <group>productgroups</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>productgroups_l</parent>
+            <field>productgroups_tree</field>
+      </property>
+      <property>
             <name>productgroups_list</name>
             <table>objects</table>
             <group>productgroups</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>productgroups_r</parent>
             <field>productgroups_list</field>
             <caption>Tootegruppide nimekiri </caption>
       </property>
@@ -107,14 +118,24 @@
             <field>prod_tree</field>
       </property>
       <property>
+            <name>prod_cat_tree</name>
+            <table>objects</table>
+            <group>products</group>
+            <type>treeview</type>
+            <parent>prod_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prod_cat_tree</field>
+      </property>
+      <property>
             <name>prod_s_name</name>
             <table>objects</table>
             <group>products</group>
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
+            <size>20</size>
+            <parent>prod_s_top_box</parent>
             <field>prod_s_name</field>
             <caption>Nimi </caption>
       </property>
@@ -125,8 +146,8 @@
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
+            <size>20</size>
+            <parent>prod_s_top_box</parent>
             <field>prod_s_code</field>
             <caption>Kood</caption>
       </property>
@@ -137,8 +158,8 @@
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
+            <size>20</size>
+            <parent>prod_s_top_box</parent>
             <field>prod_s_barcode</field>
             <caption>Ribakood</caption>
       </property>
@@ -146,11 +167,10 @@
             <name>prod_s_cat</name>
             <table>objects</table>
             <group>products</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
+            <parent>prod_s_top_box</parent>
             <field>prod_s_cat</field>
             <caption>Kategooria</caption>
       </property>
@@ -158,10 +178,11 @@
             <name>prod_s_count</name>
             <table>objects</table>
             <group>products</group>
-            <type>select</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>prod_left_search</parent>
+            <parent>prod_s_top_box</parent>
+            <size>30</size>
             <field>prod_s_count</field>
             <caption>Laoseis</caption>
       </property>
@@ -172,19 +193,30 @@
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
-            <parent>prod_left_search</parent>
+            <size>8</size>
+            <parent>prod_s_price_box</parent>
             <field>prod_s_price_from</field>
             <caption>Hind alates</caption>
       </property>
       <property>
-            <name>prod_s_pricelist</name>
+            <name>prod_s_price_to</name>
             <table>objects</table>
             <group>products</group>
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
+            <size>8</size>
+            <parent>prod_s_price_box</parent>
+            <field>prod_s_price_to</field>
+            <caption>Hind kuni</caption>
+      </property>
+      <property>
+            <name>prod_s_pricelist</name>
+            <table>objects</table>
+            <group>products</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
             <parent>prod_left_search</parent>
             <field>prod_s_pricelist</field>
             <caption>Hinnakiri</caption>
@@ -273,10 +305,9 @@
             <name>packets_s_cat</name>
             <table>objects</table>
             <group>packets</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>packets_left_search</parent>
             <field>packets_s_cat</field>
             <caption>Kategooria</caption>
@@ -400,7 +431,7 @@
             <name>storage_income_s_status</name>
             <table>objects</table>
             <group>storage_income</group>
-            <type>textbox</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
@@ -539,7 +570,7 @@
             <name>storage_export_s_status</name>
             <table>objects</table>
             <group>storage_export</group>
-            <type>textbox</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
@@ -1976,42 +2007,42 @@
             <CONFIG>
                   <value>1</value>
                   <clid>CL_SHOP_WAREHOUSE_CONFIG</clid>
-                  <caption>konfiguratsioon</caption>
+                  <caption>Konfiguratsioon</caption>
             </CONFIG>
             <PRODUCT>
                   <value>2</value>
                   <clid>CL_SHOP_PRODUCT</clid>
-                  <caption>toode</caption>
+                  <caption>Toode</caption>
             </PRODUCT>
             <PACKET>
                   <value>2</value>
                   <clid>CL_SHOP_PACKET</clid>
-                  <caption>pakett</caption>
+                  <caption>Pakett</caption>
             </PACKET>
             <STORAGE_INCOME>
                   <value>3</value>
                   <clid>CL_SHOP_WAREHOUSE_RECEPTION</clid>
-                  <caption>lao sissetulek</caption>
+                  <caption>Lao sissetulek</caption>
             </STORAGE_INCOME>
             <STORAGE_EXPORT>
                   <value>4</value>
                   <clid>CL_SHOP_WAREHOUSE_EXPORT</clid>
-                  <caption>lao v&amp;amp;auml;jaminek</caption>
+                  <caption>Lao v&amp;amp;auml;jaminek</caption>
             </STORAGE_EXPORT>
             <ORDER>
                   <value>5</value>
                   <clid>CL_SHOP_ORDER</clid>
-                  <caption>tellimus</caption>
+                  <caption>Tellimus</caption>
             </ORDER>
             <ORDER_CENTER>
                   <value>6</value>
                   <clid>CL_SHOP_ORDER_CENTER</clid>
-                  <caption>tellimiskeskkond</caption>
+                  <caption>Tellimiskeskkond</caption>
             </ORDER_CENTER>
             <EMAIL>
                   <value>7</value>
                   <clid>CL_ML_MEMBER</clid>
-                  <caption>saada tellimused</caption>
+                  <caption>Saada tellimused</caption>
             </EMAIL>
             <CFGMANAGER>
                   <value>8</value>
@@ -2040,6 +2071,25 @@
             </INVENTORY>
       </reltypes>
       <layout>
+            <productgroups_c>
+                  <width>30%:70%</width>
+                  <type>hbox</type>
+                  <group>productgroups</group>
+                  <area_caption></area_caption>
+            </productgroups_c>
+            <productgroups_l>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tootegrupid</area_caption>
+                  <parent>productgroups_c</parent>
+                  <group>productgroups</group>
+            </productgroups_l>
+            <productgroups_r>
+                  <type>vbox</type>
+                  <parent>productgroups_c</parent>
+                  <group>productgroups</group>
+                  <area_caption></area_caption>
+            </productgroups_r>
             <prod_split>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -2066,6 +2116,18 @@
                   <closeable>1</closeable>
                   <group>products</group>
             </prod_left_search>
+            <prod_s_top_box>
+                  <type>vbox</type>
+                  <parent>prod_left_search</parent>
+                  <group>products</group>
+                  <area_caption></area_caption>
+            </prod_s_top_box>
+            <prod_s_price_box>
+                  <type>hbox</type>
+                  <parent>prod_left_search</parent>
+                  <group>products</group>
+                  <area_caption></area_caption>
+            </prod_s_price_box>
             <packets_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

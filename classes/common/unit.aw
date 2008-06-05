@@ -52,5 +52,19 @@ class unit extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
+
+	function get_unit_list($choose = null)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_UNIT,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		if($choose)
+		{
+			return array(0=>t("--vali--")) + $ol->names();
+		}
+		return $ol->names();
+	}
 }
 ?>

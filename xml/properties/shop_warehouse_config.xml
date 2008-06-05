@@ -4,10 +4,9 @@
             <name>name</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <parent>left</parent>
+            <field>name</field>
             <caption>Nimi</caption>
             <comment>Objekti nimi</comment>
       </property>
@@ -15,10 +14,9 @@
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <parent>left</parent>
+            <field>comment</field>
             <caption>Kommentaar</caption>
             <comment>Vabas vormis tekst objekti kohta</comment>
       </property>
@@ -26,12 +24,11 @@
             <name>status</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>status</type>
             <trans>1</trans>
             <default>1</default>
             <parent>left</parent>
+            <field>status</field>
             <caption>Aktiivne</caption>
             <comment>Kas objekt on aktiivne</comment>
       </property>
@@ -245,6 +242,28 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>prodg_tree</name>
+            <table>objects</table>
+            <group>units</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>units_tree_box</parent>
+      </property>
+      <property>
+            <name>units_tbl</name>
+            <table>objects</table>
+            <group>units</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>units_tbl_box</parent>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -278,7 +297,7 @@
             </CFGFORM>
             <DEF_PRICELIST>
                   <value>5</value>
-                  <clid>CL_SHOP_PRICELIST</clid>
+                  <clid>CL_SHOP_PRICE_LIST</clid>
                   <caption>Hinnakiri</caption>
             </DEF_PRICELIST>
             <DEF_CURRENCY>
@@ -307,6 +326,26 @@
                   <parent>split</parent>
                   <group>general</group>
             </right>
+            <units_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>units</group>
+                  <area_caption></area_caption>
+            </units_split>
+            <units_tree_box>
+                  <type>vbox</type>
+                  <area_caption>Artiklikategooriad</area_caption>
+                  <closeable>1</closeable>
+                  <parent>units_split</parent>
+                  <group>units</group>
+            </units_tree_box>
+            <units_tbl_box>
+                  <type>vbox</type>
+                  <parent>units_split</parent>
+                  <area_caption>&amp;amp;Uuml;hikud</area_caption>
+                  <closeable>1</closeable>
+                  <group>units</group>
+            </units_tbl_box>
       </layout>
 </properties>
 

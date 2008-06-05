@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="unit_options_autocomplete_source" all_args="1">
+			<function name="unit_options_autocomplete_source">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="_preview_popup">
 			<function name="_preview_popup">
 				<arguments>

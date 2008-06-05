@@ -1,13 +1,45 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_item_price.aw,v 1.3 2008/01/31 13:50:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_item_price.aw,v 1.4 2008/06/05 11:27:27 robert Exp $
 // shop_item_price.aw - Toote Hind 
 /*
-
+@tableinfo aw_shop_item_prices index=aw_oid master_table=objects master_index=brother_of
 @classinfo syslog_type=ST_SHOP_ITEM_PRICE relationmgr=yes maintainer=kristo
 
-@default table=objects
+@default table=aw_shop_item_prices
 @default group=general
 
+@property product type=relpicker reltype=RELTYPE_PRODUCT
+@caption Artikkel
+
+@property price type=textbox datatype=int
+@caption Hind
+
+@property currency type=relpicker reltype=RELTYPE_CURRENCY
+@caption Valuuta
+
+@property price_list type=relpicker reltype=RELTYPE_PRICE_LIST
+@caption Hinnakiri
+
+@property valid_from type=date_select
+@caption Kehtib alates
+
+@property valid_to type=date_select
+@caption Kehtib kuni
+
+@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE
+@caption Ladu
+
+@reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
+@caption Toode
+
+@reltype CURRENCY value=2 clid=CL_CURRENCY
+@caption Valuuta
+
+@reltype PRICE_LIST value=3 clid=CL_SHOP_PRICE_LIST
+@caption Hinnakiri
+
+@reltype WAREHOUSE value=4 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
 */
 
 class shop_item_price extends class_base
@@ -74,6 +106,48 @@ class shop_item_price extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "")
+		{
+			$this->db_query("CREATE TABLE aw_shop_item_prices(aw_oid int primary key)");
+			return true;
+		}
+		$ret = false;
+		switch($f)
+		{
+			case "valid_from":
+			case "valid_to":
+			case "product":
+			case "currency":
+			case "warehouse":
+			case "price_list":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				$ret = true;
+				break;
+			case "price":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "float"
+				));
+				$ret = true;
+				break;
+		}
+
+		switch($f)
+		{
+			case "product":
+			case "currency":
+			case "warehouse":
+			case "price_list":
+				$this->db_query("ALTER TABLE aw_shop_item_prices ADD INDEX(".$f.")");
+		}
+		return $ret;
 	}
 }
 ?>

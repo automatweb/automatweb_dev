@@ -98,12 +98,14 @@
       </property>
       <property>
             <name>brand</name>
-            <table>aw_shop_products</table>
+            <table>objects</table>
             <group>general_general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_BRAND</reltype>
-            <field>aw_brand</field>
+            <store>connect</store>
             <parent>gen_left</parent>
+            <multiple>1</multiple>
+            <field>brand</field>
             <caption>Brand</caption>
       </property>
       <property>
@@ -435,6 +437,96 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>singles_table</field>
+      </property>
+      <property>
+            <name>color</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COLOR</reltype>
+            <field>color</field>
+            <multiple>1</multiple>
+            <caption>V&amp;amp;auml;rvus</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>height</field>
+            <caption>K&amp;amp;otilde;rgus</caption>
+      </property>
+      <property>
+            <name>width</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>width</field>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>depth</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>depth</field>
+            <caption>S&amp;amp;uuml;gavus</caption>
+      </property>
+      <property>
+            <name>wideness</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>wideness</field>
+            <caption>Paksus</caption>
+      </property>
+      <property>
+            <name>density</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>density</field>
+            <caption>Tihedus</caption>
+      </property>
+      <property>
+            <name>weight</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>weight</field>
+            <caption>Kaal</caption>
+      </property>
+      <property>
+            <name>gramweight</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>gramweight</field>
+            <caption>Grammkaal</caption>
+      </property>
+      <property>
+            <name>raster</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>raster</field>
+            <caption>Rasteritihedus</caption>
+      </property>
+      <property>
+            <name>bulk</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>bulk</field>
+            <caption>Mahulisus</caption>
+      </property>
+      <property>
+            <name>guarantee</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>guarantee</field>
+            <caption>Garantii kuudes</caption>
       </property>
       <property>
             <name>userch1</name>
@@ -1044,6 +1136,60 @@
             <caption>Lingid</caption>
       </property>
       <property>
+            <name>companies_tb</name>
+            <table>objects</table>
+            <group>purveyors</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>companies_tb</field>
+      </property>
+      <property>
+            <name>companies_tbl</name>
+            <table>objects</table>
+            <group>purveyors</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>companies_tbl</field>
+      </property>
+      <property>
+            <name>materials_tb</name>
+            <table>objects</table>
+            <group>materials</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>materials_tb</field>
+      </property>
+      <property>
+            <name>materials_tbl</name>
+            <table>objects</table>
+            <group>materials</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>materials_tbl</field>
+      </property>
+      <property>
+            <name>brands_tb</name>
+            <table>objects</table>
+            <group>brands</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>brands_tb</field>
+      </property>
+      <property>
+            <name>brands_tbl</name>
+            <table>objects</table>
+            <group>brands</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>brands_tbl</field>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -1110,9 +1256,21 @@
                   <parent>moreinfo</parent>
             </lnk>
             <data>
-                  <caption>Toote info</caption>
+                  <caption>Andmed</caption>
                   <parent>moreinfo</parent>
             </data>
+            <purveyors>
+                  <caption>Tarnijad</caption>
+                  <parent>moreinfo</parent>
+            </purveyors>
+            <materials>
+                  <caption>Materjalid</caption>
+                  <parent>moreinfo</parent>
+            </materials>
+            <brands>
+                  <caption>Br&amp;amp;auml;ndid</caption>
+                  <parent>moreinfo</parent>
+            </brands>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -1246,6 +1404,36 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Asendustoode</caption>
             </REPLACEMENT_PROD>
+            <CATEGORY>
+                  <value>23</value>
+                  <clid>CL_SHOP_PRODUCT_CATEGORY</clid>
+                  <caption>Kategooria</caption>
+            </CATEGORY>
+            <PRICE>
+                  <value>24</value>
+                  <clid>CL_SHOP_ITEM_PRICE</clid>
+                  <caption>Hind</caption>
+            </PRICE>
+            <WAREHOUSE>
+                  <value>25</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
+            <COLOR>
+                  <value>26</value>
+                  <clid>CL_SHOP_COLOUR</clid>
+                  <caption>V&amp;amp;auml;rvus</caption>
+            </COLOR>
+            <PURVEYOR>
+                  <value>27</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Tarnija</caption>
+            </PURVEYOR>
+            <MATERIAL>
+                  <value>28</value>
+                  <clid>CL_SHOP_MATERIAL</clid>
+                  <caption>Materjal</caption>
+            </MATERIAL>
       </reltypes>
       <layout>
             <gen_split>
