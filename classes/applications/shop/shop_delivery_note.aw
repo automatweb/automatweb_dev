@@ -102,13 +102,13 @@ class shop_delivery_note extends class_base
 		switch($prop["name"])
 		{
 			case "approved":
-				if($prop["value"] && !$arr["obj_inst"]->prop($prop["name"]))
+				if($prop["value"] && !($arr["obj_inst"]->prop("approved")))
 				{
 					$ret = $this->create_movement($arr);
 					if(!$ret)
 					{
 						$prop["error"] = $this->err;
-						return PROP_FATAL_ERROR;
+						$retval = PROP_FATAL_ERROR;
 					}
 				}
 				break;
@@ -285,8 +285,11 @@ class shop_delivery_note extends class_base
 			$unit_list = array();
 			foreach($prod_unit_list as $i=>$unit)
 			{
-				$uo = obj($unit);
-				$unit_list[$unit] = $uo->name();
+				if($this->can("view", $unit))
+				{
+					$uo = obj($unit);
+					$unit_list[$unit] = $uo->name();
+				}
 			}
 			$art = array(
 				"oid" => $id,
@@ -459,7 +462,6 @@ class shop_delivery_note extends class_base
 	//the new amounts for different units are calculated using unit calculation formulas
 	function create_movement($arr)
 	{
-		return ;
 		$from_wh_id = $arr["obj_inst"]->prop("from_warehouse");
 		if(is_oid($from_wh_id))
 		{
@@ -487,6 +489,15 @@ class shop_delivery_note extends class_base
 				"single_type" => "1",
 			),
 		);
+		$pi = get_instance(CL_SHOP_PRODUCT);
+		foreach($rowdata as $prod_id => $row)
+		{
+			if(!$row["unit"])
+			{
+				$this->err = t("Igal tootel tuleb &uuml;hik m&auml;&auml;rata.");
+				return false;
+			}
+		}
 		foreach($rowdata as $prod_id => $row)
 		{
 			$prod = obj($prod_id);
@@ -495,7 +506,6 @@ class shop_delivery_note extends class_base
 			{
 				if($prod->prop($sv["prod_prop"]))
 				{
-					$singles = 1;
 					if(!($no = $row[$sv["row_prop"]]))
 					{
 						$this->err = t($sv["err_word1"]." p&otilde;hise arvestusega tootel tuleb ".$sv["err_word2"]." m&auml;&auml;rata.");
@@ -516,6 +526,7 @@ class shop_delivery_note extends class_base
 						$o = obj();
 						$o->set_class_id(CL_SHOP_PRODUCT_SINGLE);
 						$o->set_parent($prod_id);
+						$o->set_name($row[$sv["row_prop"]]);
 						$o->set_prop("product", $prod_id);
 						$o->set_prop("type", $sv["single_type"]);
 						$o->set_prop("code", $row[$sv["row_prop"]]);
@@ -524,7 +535,73 @@ class shop_delivery_note extends class_base
 					}
 				}
 			}
+			if(!count($singles))
+			{
+				$singles = array(0=>null);
+			}
+			$wh_vars = array(
+				0 => array(
+					"amt_mod" => -1,
+					"var" => "from_wh",
+				),
+				1 => array(
+					"amt_mod" => 1,
+					"var" => "to_wh",
+				),
+			);
+			foreach($singles as $single)
+			{
+				$sid = $single?$single->id():null;
+				foreach($wh_vars as $whv)
+				{
+					if(${$whv["var"]})
+					{
+						$amount = $pi->get_amount(array(
+							"unit" => $row["unit"],
+							"prod" => $prod_id,
+							"single" => $sid,
+							"warehouse" => ${$whv["var"]}->id(),
+						));
+						if(!$amount->count())
+						{
+							$amt = obj();
+							$amt->set_class_id(CL_SHOP_WAREHOUSE_AMOUNT);
+							$amt->set_parent($prod_id);
+							$amt->set_prop("warehouse", ${$whv["var"]}->id());
+							$amt->set_prop("product", $prod_id);
+							$amt->set_prop("single", $sid);
+							$amt->set_prop("amount", $whv["amt_mod"]*$row["amount"]);
+							$amt->set_prop("unit", $row["unit"]);
+							$amt->set_name(sprintf(t("%s laoseis"), $prod->name()));
+							$amt->save();
+						}
+						else
+						{
+							$amt = $amount->begin();
+							$amt->set_prop("amount", $amt->prop("amount") + $whv["amt_mod"]*$row["amount"]);
+							$amt->save();
+						}
+					}
+				}
+				$mvo = obj();
+				$mvo->set_class_id(CL_SHOP_WAREHOUSE_MOVEMENT);
+				$mvo->set_prop("from_wh", $from_wh?$from_wh->id():null);
+				$mvo->set_prop("to_wh", $to_wh?$to_wh->id():null);
+				$mvo->set_prop("product", $prod_id);
+				$mvo->set_prop("single", $sid);
+				$mvo->set_prop("amount", $row["amount"]);
+				$mvo->set_prop("unit", $row["unit"]);
+				$mvo->set_prop("price", $row["price"]);
+				$mvo->set_prop("transport", $arr["obj_inst"]->prop("transport"));
+				$mvo->set_prop("customs", $arr["obj_inst"]->prop("customs"));
+				$mvo->set_prop("date", $arr["obj_inst"]->prop("delivery_date"));
+				$mvo->set_prop("delivery_note", $arr["obj_inst"]->id());
+				$mvo->set_parent($prod_id);
+				$mvo->set_name(sprintf(t("%s liikumine"), $prod->name()));
+				$mvo->save();
+			}
 		}
+		return true;
 	}
 
 	/**

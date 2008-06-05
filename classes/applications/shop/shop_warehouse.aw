@@ -2141,7 +2141,10 @@ class shop_warehouse extends class_base
 			{
 				$data["sales_price"] = $pi->calc_price($o);
 			}
-			$amounts = $pi->get_amount(array("prod"=>$o->id()));
+			$amounts = $pi->get_amount(array(
+				"prod" => $o->id(),
+				"warehouse" => $arr["obj_inst"]->id(),
+			));
 			if($this->config->prop("has_alternative_units"))
 			{
 				$units = $pi->get_units($o);
