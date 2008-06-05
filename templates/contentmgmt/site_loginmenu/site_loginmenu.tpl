@@ -8,14 +8,14 @@
 <!-- SUB: MENU_LOGGED_L1_ITEM_BEGIN -->
 	<!-- SUB: MENU_LOGGED_L2_ITEM_BEGIN -->		
 	<div class="L2" style="float: left; ">
-	<a href="{VAR:link}" {VAR:target} style="color: black; display: block; padding: 6px 8px 0 8px; font-weight: bold;">{VAR:text}</a>
+	<a href="{VAR:link}" {VAR:target} style="font-size: 12px; color: black; display: block; padding: 6px 8px 0 8px; font-weight: bold;">{VAR:text}</a>
 	</div>
 	<!-- END SUB: MENU_LOGGED_L2_ITEM_BEGIN -->
 	
 	<!-- SUB: MENU_LOGGED_L2_ITEM -->		
 	<div class="vahe" style="float: left;padding: 6px 8px 0 8px; ">|</div>
 	<div class="L2" style="float: left; ">
-	<a  href="{VAR:link}" {VAR:target} style="color: black; display: block; padding: 6px 8px 0 8px; font-weight: bold;" >{VAR:text}</a>
+	<a  href="{VAR:link}" {VAR:target} style="font-size: 12px; color: black; display: block; padding: 6px 8px 0 8px; font-weight: bold;" >{VAR:text}</a>
 	</div>
 	<!-- END SUB: MENU_LOGGED_L2_ITEM -->
 <!-- END SUB: MENU_LOGGED_L1_ITEM_BEGIN -->
@@ -24,14 +24,14 @@
 	<div class="vahe" style="float: left;padding: 6px 8px 0 8px; ">|</div>
 	<!-- SUB: MENU_LOGGED_L2_ITEM_BEGIN -->		
 	<div class="L2" style="float: left; ">
-	<a href="{VAR:link}" {VAR:target} style="color: black;  display: block; padding: 6px 8px 0 8px; font-weight: bold;">{VAR:text}</a>
+	<a href="{VAR:link}" {VAR:target} style="font-size: 12px; color: black;  display: block; padding: 6px 8px 0 8px; font-weight: bold;">{VAR:text}</a>
 	</div>
 	<!-- END SUB: MENU_LOGGED_L2_ITEM_BEGIN -->
 	
 	<!-- SUB: MENU_LOGGED_L2_ITEM -->		
 	<div class="vahe" style="float: left;padding: 6px 8px 0 8px; ">|</div>
 	<div class="L2" style="float: left; ">
-	<a href="{VAR:link}" {VAR:target} style="color: black;  display: block; padding: 6px 8px 0 8px; font-weight: bold;">{VAR:text}</a>
+	<a href="{VAR:link}" {VAR:target} style="font-size: 12px; color: black;  display: block; padding: 6px 8px 0 8px; font-weight: bold;">{VAR:text}</a>
 	</div>
 	<!-- END SUB: MENU_LOGGED_L2_ITEM -->
 <!-- END SUB: MENU_LOGGED_L1_ITEM -->
