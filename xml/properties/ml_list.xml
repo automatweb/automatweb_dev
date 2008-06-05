@@ -10,6 +10,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Kaustad millega liituda</caption>
       </property>
       <property>
@@ -154,6 +155,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Kaustad kust otsida</caption>
       </property>
       <property>
@@ -215,6 +217,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Kaustad, kuhu liituda</caption>
       </property>
       <property>
@@ -269,6 +272,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Kaustad, kust lahkuda</caption>
       </property>
       <property>
@@ -342,6 +346,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Listi liikmete allikas</caption>
       </property>
       <property>
@@ -374,6 +379,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Kaustad, mida eksportida</caption>
       </property>
       <property>
@@ -584,6 +590,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <parent>wml</parent>
             <captionside>top</captionside>
             <caption>Grupid kellele kiri saata</caption>

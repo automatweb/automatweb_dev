@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.127 2008/05/26 14:29:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.128 2008/06/05 13:33:54 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -13,7 +13,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 ------------------------------------------------------------------------
 
-@property choose_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@property choose_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad millega liituda
 
 @property choose_languages type=select multiple=1 field=meta method=serialize
@@ -60,7 +60,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property search_tb type=toolbar no_caption=1
 @caption Otsingu toolbar
 
-@property search_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@property search_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad kust otsida
 
 @property req_members_s type=text
@@ -84,7 +84,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo subscribing caption=Liitumine parent=membership
 @default group=subscribing
 
-@property admin_subscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@property admin_subscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad, kuhu liituda
 
 @property confirm_subscribe type=checkbox ch_value=1 
@@ -105,7 +105,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo unsubscribing caption=Lahkumine parent=membership
 @default group=unsubscribing
 
-@property admin_unsubscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@property admin_unsubscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad, kust lahkuda
 
 @property confirm_unsubscribe type=checkbox ch_value=1 
@@ -130,7 +130,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property file_separator type=textbox 
 @caption Failis nime ja mailiaadressi eraldaja (tab=/t)
 
-@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Listi liikmete allikas
 
 @property req_members type=text
@@ -144,7 +144,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo export_members caption=Eksport parent=membership
 @default group=export_members
 
-@property export_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@property export_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 delete_rels_popup_button=1
 @caption Kaustad, mida eksportida
 
 @property req_members_e type=text
@@ -231,7 +231,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @layout write_message_layout type=hbox width=40%:60% 
 	@layout wml type=vbox parent=write_message_layout area_caption=&nbsp;
 	
-		@property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1 parent=wml captionside=top
+		@property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1  delete_rels_popup_button=1 parent=wml captionside=top
 		@caption Grupid kellele kiri saata
 		
 		@property req_members_m type=text parent=wml captionside=top
