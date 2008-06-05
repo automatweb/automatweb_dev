@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.97 2008/06/04 13:43:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.98 2008/06/05 13:39:24 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -4906,14 +4906,20 @@ class otto_import extends class_base
 
 					// save rundum
 					// get rundum imnr from html
-					preg_match_all("/javascript:setnewRUA\('format360\/(.*)', \d+\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
-					$flash_file_names = $mt[1];
-					foreach ($flash_file_names as $flash_file_name)
+				//	preg_match_all("/javascript:setnewRUA\('format360\/(.*)', \d+\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
+					preg_match_all("/writeFlashCode_superzoom3d\('(.*)'\);/imsU", $r_html, $mt, PREG_PATTERN_ORDER);
+
+					$flash_file_urls = $mt[1];
+					foreach ($flash_file_urls as $flash_file_url)
 					{
-						$flash_file_url = "http://image01.otto.de:80/pool/format360/".$flash_file_name.".swf";
+						$flash_file_name = basename($flash_file_url);
+
+						$flash_file_url .= '.swf';
+
 						$video_download_result = $this->get_video(array(
 							'source' => $flash_file_url,
-							'otto_import' => $import_obj
+							'otto_import' => $import_obj,
+							'overwrite' => true
 						));
 						if ($video_download_result !== false)
 						{
@@ -5890,7 +5896,7 @@ class otto_import extends class_base
 		
 		$new_file = $folder.'/'.$filename;
 
-		if (!file_exists($new_file))
+		if (!file_exists($new_file) || $arr['overwrite'] === true)
 		{
 			$result = $this->copy_file(array(
 				'source' => $arr['source'],
