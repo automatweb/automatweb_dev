@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.128 2008/06/05 13:33:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.129 2008/06/05 13:50:13 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1954,10 +1954,13 @@ class ml_list extends class_base
 						"from_user" => true,
 					));
 					$joined = $memberdata["joined"];
-					$source = html::href(array(
-						"url" => admin_if::get_link_for_obj($val["parent"]),
-						"caption" => $parent_name,
-					));
+						$source = ($parent_obj->class_id() == $parent_obj->prop("parent.class_id") ? html::href(array(
+							"url" => admin_if::get_link_for_obj($parent_obj->parent()),
+							"caption" => $parent_obj->prop("parent.name"),
+						))."->" : "" ). html::href(array(
+							"url" => admin_if::get_link_for_obj($val["parent"]),
+							"caption" => $parent_name,
+						));
 					$others = html::href(array(
 						"caption" => t("Vaata"),
 						"url" => $this->mk_my_orb("change", array(
@@ -3836,7 +3839,11 @@ arr($msg_obj->prop("message"));
 							"from_user" => true,
 						));
 						$joined = $memberdata["joined"];
-						$source = html::href(array(
+
+						$source = ($parent_obj->class_id() == $parent_obj->prop("parent.class_id") ? html::href(array(
+							"url" => admin_if::get_link_for_obj($parent_obj->parent()),
+							"caption" => $parent_obj->prop("parent.name"),
+						))."->" : "" ). html::href(array(
 							"url" => admin_if::get_link_for_obj($val["parent"]),
 							"caption" => $parent_name,
 						));
