@@ -1,0 +1,1 @@
+﻿FCKLang.AWFileUpload = 'Faili üleslaadimine';
