@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.98 2008/06/05 13:39:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.99 2008/06/05 13:46:16 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -4925,6 +4925,10 @@ class otto_import extends class_base
 						{
 							echo " | <a href='".$flash_file_url."'>".$flash_file_name."</a>";
 							$this->db_query("update otto_prod_img set video = '".addslashes(strip_tags($flash_file_name))."' where pcode = '".$pcode."'");
+						}
+						else
+						{
+							echo " | failed to get videofile!";
 						}
 					}
 					echo "<br /> \n";
