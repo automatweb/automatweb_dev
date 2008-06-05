@@ -606,6 +606,7 @@ class bank_payment extends class_base
 		$to = date_edit::get_timestamp($_SESSION["bank_payment"]["find_date_end"]);
 		if(!($to > 100)) $to = time();
 		if(!($from > 100)) $from = time() - 3600*24*31;
+		$log_array = array_reverse($log_array);
 		foreach($log_array as $log)
 		{
 			if(is_array(unserialize($log)))
@@ -639,7 +640,7 @@ class bank_payment extends class_base
 				{
 					continue;
 				}
-				if(!array_key_exists("find_one" , $_SESSION["bank_payment"]) || ($filter["find_one"]  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000" || $val["SOLOPMT-RETURN-VERSION"])))
+				if(!array_key_exists("find_one" , $_SESSION["bank_payment"]) || ($filter["find_one"]))/*  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000" || $val["SOLOPMT-RETURN-VERSION"])))*/
 				{
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
