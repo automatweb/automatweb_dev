@@ -2791,10 +2791,18 @@ EOF;
 						who_num = who_el.options.length
 						who_el.options[who_num] = new Option(name, oid)
 					}
+					if(who_el.value == oid)
+					{
+						return 0
+					}
+					var chk = confirm("'.t("Panen klassi maintaineri bugi tegijaks?").'")
+					if(!chk)
+					{
+						return 0
+					}
 					who_el.value = oid
 					mon_el = aw_get_el("monitors")
 					mon_num = null
-					alert("Bugi t'.html_entity_decode("&auml;").'itjaks seati klassi maintainer.")
 					for(i = 0; i < mon_el.options.length; i++)
 					{
 						if(mon_el.options[i].value == oid)
