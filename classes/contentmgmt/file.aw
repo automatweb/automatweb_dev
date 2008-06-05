@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.7 2008/05/27 09:21:29 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.8 2008/06/05 17:04:55 hannes Exp $
 /*
 
 
@@ -626,7 +626,7 @@ class file extends class_base
 		if ($arr["request"]["save_and_doc"] != "")
 		{
 			$link_url = $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name());
-			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+			$url = $this->mk_my_orb("fetch_file_alias_for_doc", array("doc_id" => $arr["request"]["docid"], "file_id" => $arr["obj_inst"]->id()), CL_FILE);
 			$i = get_instance(CL_IMAGE);
 			$i->gen_image_alias_for_doc(array(
 				"img_id" => $arr["obj_inst"]->id(),
@@ -635,9 +635,8 @@ class file extends class_base
 			));
 
 			die("
-				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
+				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/jquery/jquery-1.2.3.min.js\"></script>
 				<script language='javascript'>
-
 
 				function SetAttribute( element, attName, attValue )
 				{
@@ -661,10 +660,13 @@ class file extends class_base
 				}
 				else
 				{
-					FCK.InsertHtml(aw_get_url_contents(\"$url\"));
+					//window.parent.opener.FCKPlaceholders.Add(\"tere\");
+					$.get(\"$url\", function(data){
+						window.parent.opener.FCKPlaceholders.Add(data);
+						window.parent.close();
+					});
 				}
 
-				window.parent.close();
 			</script>
 			");
 		}
@@ -1654,6 +1656,48 @@ class file extends class_base
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(str_replace(aw_ini_get("baseurl"), "", $s));
 	}
+	
+	/**
+		@attrib name=fetch_file_alias_for_doc
+		@param doc_id required
+		@param file_id required
+	**/
+	function fetch_file_alias_for_doc($arr)
+	{
+		$alp = get_instance("alias_parser");
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ($obj_id == $arr["file_id"])
+			{
+				die(str_replace("#", "", $alias_string));
+			}
+		}
+		
+		die();
+	}
+	
+	/**
+		@attrib name=fetch_file_name_for_alias
+		@param doc_id required
+		@param file_id required
+	**/
+	function fetch_file_name_for_alias($arr)
+	{
+		$alp = get_instance("alias_parser");
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ($obj_id == $arr["file_id"])
+			{
+				die(str_replace("#", "", $alias_string));
+			}
+		}
+		
+		die();
+	}
 
 	/**
 		@attrib name=gen_file_alias_for_doc params=name
@@ -1677,6 +1721,34 @@ class file extends class_base
 		javascript:window.parent.close();
 		</script>";
 		$out = $arr["close"]?$close:$c->id();
+		die($out);
+	}
+	
+	/**
+		@attrib name=get_connection_details_for_doc params=name
+		@param doc_id required type=int
+		@param alias_name required type=string
+		@param use_br optional type=int
+	**/
+	function get_connection_details_for_doc($arr)
+	{
+		if ($arr["use_br"])
+		{
+			$sufix = "\n";
+		}
+		$out = "";
+		$alp = get_instance("alias_parser");
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		$out = 'connection_details_for_doc = new Array();'.$sufix;
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ("#".$arr["alias_name"]."#" == $alias_string)
+			{
+				$o = obj($obj_id);
+				$out .= 'item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
+				$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
+			}
+		}
 		die($out);
 	}
 
