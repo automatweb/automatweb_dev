@@ -14,6 +14,7 @@ class file_manager extends aw_template
 		@attrib name=manage default=1
 		@param doc required
 		@param link_url optional
+		@param file_id optional
 	**/
 	function manage($arr)
 	{
@@ -50,7 +51,14 @@ class file_manager extends aw_template
 			// parse the documents parent from the url
 			$parent = $params["parent"];
 		}
-		$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1, "docid" => $doc->id()));
+		if ($arr["file_id"])
+		{
+			$image_url = html::get_change_url($arr["file_id"], array("in_popup" => $_GET["in_popup"]));
+		}
+		else
+		{
+			$image_url = html::get_new_url(CL_FILE, $parent, array("in_popup"=>1, "docid" => $doc->id()));
+		}
 		$this->read_template("manage.tpl");
 
 		$this->vars(array(
