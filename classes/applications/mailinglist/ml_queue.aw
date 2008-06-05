@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.47 2008/05/27 15:14:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.48 2008/06/05 16:16:56 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 
@@ -762,6 +762,10 @@ class ml_queue extends aw_template
 		//echo "from = {$msg["mailfrom"]}  <br />\n";
 		flush();
 	//	echo dbg::dump($msg);
+
+		//et sp2mmifiltrid kisama ei hakkaks
+		$msg["subject"]="=?".$msg["charset"]."?B?".base64_encode($msg["subject"])."?=\n";
+
 		$this->awm->create_message(array(
 
 			"froma" => $msg["mailfrom"],
@@ -769,7 +773,7 @@ class ml_queue extends aw_template
 			"To" => $msg["target"],
 			//"Sender"=>"bounces@struktuur.ee",
 			//"body" => $message,
-			"body" => $is_html ? strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n"))) : $message,
+			"body" => $is_html ? html_entity_decode(strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n")))) : $message,
 		));
 		if ($is_html)
 		{
