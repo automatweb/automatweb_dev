@@ -1,0 +1,1 @@
+﻿FCKLang.AWLinkUpload = 'Lisa link';

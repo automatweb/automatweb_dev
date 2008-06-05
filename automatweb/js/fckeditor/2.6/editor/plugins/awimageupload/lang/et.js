@@ -1,0 +1,1 @@
+﻿FCKLang.AWUploadImage = 'Pildi üleslaadimine';
