@@ -18,6 +18,17 @@
 			</function>
 		</action>
 
+		<action name="rels_del_popup">
+			<function name="rels_del_popup">
+				<arguments>
+					<required name="reltype" type="string" />
+					<required name="id" type="oid" />
+					<required name="return_url" type="string" />
+					<optional name="del_rels" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_relp_opts" all_args="1">
 			<function name="get_relp_opts">
 				<arguments>

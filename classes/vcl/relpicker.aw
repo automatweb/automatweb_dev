@@ -350,7 +350,7 @@ class relpicker extends  core
 			));
 		}
 		
-		if($val["delete_button"] || $val["delete_rels_button"])
+		if($val["delete_button"] || $val["delete_rels_button"] || $val["delete_rels_popup_button"])
 		{
 			$oids = array();
 			$allow_delete = true;
@@ -424,6 +424,18 @@ class relpicker extends  core
 					"tabindex" => "10",
 				));
 			}
+			if($val["delete_rels_popup_button"])
+			{
+				$url = $this->mk_my_orb("rels_del_popup", array(
+					"id" => $arr["id"],
+					"return_url" => get_ru(),
+					"reltype" => $arr["prop"]["reltype"],
+				));
+				$button = '<a title="Eemalda" alt="Eemalda" href="javascript:void();"
+					onclick="window.open(\''.$url.'\',\'\', \'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=800\');">
+					<img src="'.aw_ini_get("baseurl").'/automatweb/images/icons/delete.gif" border=0></a>';
+				$val["post_append_text"] .= $button;
+			}
 		}
 		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()) && !$val["no_edit"])
 		{
@@ -480,6 +492,73 @@ class relpicker extends  core
 		}
 		return array($val["name"] => $val);
 	}
+
+
+	/** connection deleting popup
+		@attrib name=rels_del_popup all_ags=1 api=1
+		@param reltype required type=string
+		@param id required type=oid
+		@param return_url required type=string
+		@param del_rels optional
+	**/
+	function rels_del_popup($arr)
+	{
+		$o = obj($arr["id"]);
+
+		if($arr["del_rels"])
+		{
+			$o->disconnect(array(
+				"from" => $arr["del_rels"],
+			));
+			die("<script language='javascript'>
+				if (window.opener)
+				{
+					window.opener.location.reload();
+				}
+				window.close();
+			</script>");
+		}
+
+		$ol = new object_list();
+		
+		$conns = $o->connections_from(array(
+			"type" => $arr["reltype"],
+		));
+
+		classload("vcl/table");
+		$t = new vcl_table;
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Seotud objekt"),
+			"align" => "right",
+		));
+
+		$t->define_chooser(array(
+			"name" => "del_rels",
+			"field" => "oid"
+		));
+
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => t("Kustuta seos"),
+			"align" => "right",
+		));
+
+		foreach($conns as $con)
+		{
+			$t->define_data(array(
+				"oid" => $con->prop("to"),
+				"name" => $con->prop("to.name"),
+				"del" => html::href(array("caption" => t("Kustuta"), "url" => aw_url_change_var("del_rels", $con->prop("to")),)),
+			));
+		}
+		print "<form method=POST action=".get_ru().">";
+		print $t->draw();
+		print html::submit(array("name" => "submit", "value" => t("Kustuta valitud seosed")));
+		print "</form>";
+	}
+
 
 	function process_vcl_property($arr)
 	{
