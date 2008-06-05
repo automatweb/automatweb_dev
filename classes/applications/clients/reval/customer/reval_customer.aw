@@ -60,6 +60,13 @@ class reval_customer extends class_base
 	{ 
 		if (!$this->get_cust_id())
 		{
+			if ($_GET["do"] == "verifyForgotPassword")
+			{
+				$nr = str_replace("http://www.revalhotels.com/firstclient-zone?do=verifyForgotPassword", "https://clients.revalhotels.com/clients/?do=verifyForgotPassword", get_ru());
+				//die($nr);
+				header("Location: ".$nr);
+				die();
+			}
 			return $this->_disp_login();
 		}
 		$ob = new object($arr["id"]);
@@ -81,7 +88,7 @@ class reval_customer extends class_base
 		lc_site_load("reval_customer", $this);
 
 		$this->vars(array(
-				"reforb" => $this->mk_reforb("login", array(), "users")
+				"reforb" => $this->mk_reforb("login", array("fail_return" => get_ru()), "users")
 		));
 		return $this->parse();
 	}
@@ -101,7 +108,7 @@ class reval_customer extends class_base
 			"class" => "http://markus.ee/RevalServices/Security/",
 			"params" => $params,
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServices/SecurityService.asmx"
+			"server" => "http://195.250.171.36/RevalServicesTest/SecurityService.asmx"
 		));
 
 		if ($return["ValidateCustomerByLoginAndPasswordResult"]["ValidationStatus"] != "Success")
@@ -147,7 +154,7 @@ class reval_customer extends class_base
 			"customerId" => $this->get_cust_id(),
 			"webLanguageId" => $this->_get_web_language_id()
 		), "Customers");
-
+//die(dbg::dump($cust_data));
 		$lang_opts = $this->_get_language_options();
 		$country_opts = crm_address::get_country_list();
 		$room_pref_options = $this->_get_room_preference_options();
@@ -163,9 +170,9 @@ class reval_customer extends class_base
 			"avail_free_nights" => $this->_f($cust_data["AvailableComplimentaryNights"]),
 			"customer_since" => date("d.m.Y", $this->_parse_date($cust_data["RegistrationDate"])),
 			"dob" => date("d.m.Y", $this->_parse_date($cust_data["Birthday"])),
-			"company_name" => $this->_f($cust_data["companyName"]),
-			"business_title" => $this->_f($cust_data["businessTitle"]),
-			"position" => $this->_f($cust_data["occupationName"]),
+			"company_name" => $this->_f($cust_data["CompanyName"]),
+			"business_title" => $this->_f($cust_data["BusinessTitle"]),
+			"position" => $this->_f($cust_data["OccupationName"]),
 			"business_field" => $this->_f($cust_data["FieldOfBusinessName"]),
 			"business_phone" => $this->_f($cust_data["BusinessPhone"]),
 			"home_phone" => $this->_f($cust_data["HomePhone"]),
@@ -215,56 +222,28 @@ class reval_customer extends class_base
 		return (int)$_SESSION["reval_fc"]["id"];
 	}
 
-	private function _fetch_aw_oids_for_bookings($book_data)
-	{
-		$rv = array();
-		$ids = array();
-		foreach($book_data["BookingDetails"] as $booking)
-		{
-			$ids[] = $booking["ConfirmationCode"];
-		}
-		if (!count($ids))
-		{
-			return $rv;
-		}
-		$ol = new object_list(array(
-			"class_id" => CL_OWS_RESERVATION,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"confirmation_code" => $ids
-		));
-		foreach($ol->arr() as $o)
-		{
-			$rv[$o->prop("confirmation_code")] = $o->id();
-		}
-		return $rv;
-	}
-
 	private function _insert_web_bookings($limit = null, $arr)
 	{
 		$book_data = $this->do_call("GetCustomerBookings", array(
 			"customerId" => $this->get_cust_id(),
 			"webLanguageId" => $this->_get_web_language_id()
 		), "Customers");
-//echo dbg::dump($book_data);
 
-		$conf_id2aw_id = $this->_fetch_aw_oids_for_bookings($book_data);
 		$bs = "";
-		foreach($book_data["BookingDetails"] as $booking)
+		if (isset($book_data["BookingDetails"]["BookingDetails"]["BookingId"]))
 		{
-			if ($conf_id2aw_id[$booking["ConfirmationCode"]])
-			{
+			$var = array($book_data["BookingDetails"]["BookingDetails"]);
+		}
+		else
+		{
+			$var = $book_data["BookingDetails"]["BookingDetails"];
+		}
+		foreach($var as $booking)
+		{
 				$this->vars(array(
-					"view_booking" => $this->mk_my_orb("display_final_page", array("rvs_id" => $conf_id2aw_id[$booking["ConfirmationCode"]], "section" => aw_global_get("section")), CL_OWS_BRON),
+					"view_booking" => $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $booking["ConfirmationCode"], "section" => 107220 /*aw_global_get("section")*/), CL_OWS_BRON),
 				));
-			}
-			else
-			{
-			continue;
-				$this->vars(array(
-					"view_booking" => $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $booking["ConfirmationCode"], "section" => aw_global_get("section")), CL_OWS_BRON),
-				));
-			}
+			
 			$this->vars(array(
 				"booking_id" => $this->_f($booking["ConfirmationCode"]),
 				"booking_status" => $this->_f($booking["Status"]),
@@ -384,13 +363,13 @@ class reval_customer extends class_base
 			"webLanguageId" => $this->_get_web_language_id()
 		), "Customers");
 //die(dbg::dump($cust_data));
-//die(dbg::dump($cust_data));
 		$this->vars(array(
 			"firstname" => $this->_f($cust_data["FirstName"]),
 			"lastname" => $this->_f($cust_data["LastName"]),
 			"country_select" => $this->_ep_do_country_select($this->_req("CountryCode", $cust_data["CountryCode"])),
 			"county_name" => $this->_req("StateOrTerritory", $cust_data["StateOrTerritory"]),
 			"personal_code" => $this->_req("PersonalCode", $cust_data["PersonalCode"]),
+			"company_name" => $this->_req("CompanyName", $cust_data["CompanyName"]),
 			"city_select" => $this->_ep_do_city_select($this->_req("City", $cust_data["CityId"])),
 			"city_name" => $this->_req("CityName", $cust_data["CityName"]),
 			"gender_select" => $this->_ep_do_gender_select($this->_req("Gender", $cust_data["GenderId"])),
@@ -400,6 +379,7 @@ class reval_customer extends class_base
 			"marital_status_select" => $this->_ep_do_marital_status_select($this->_req("MaritalStatus", $cust_data["MaritalStatusId"])),
 			"field_of_business_select" => $this->_ep_do_field_of_business_select($this->_req("FieldOfBusiness", $cust_data["FieldOfBusinessId"])),
 			"business_phone" => $this->_req("BusinessPhone", $cust_data["BusinessPhone"]),
+			"business_title" => $this->_req("BusinessTitle", $cust_data["BusinessTitle"]),
 			"occupation_select" => $this->_ep_do_occupation_select($this->_req("Occupation", $cust_data["OccupationId"])),
 			"mobile_phone" => $this->_req("MobilePhone", $cust_data["MobilePhone"]),
 			"room_preference_select" => $this->_ep_do_room_pref_select($this->_req("RoomPreference", $cust_data["RoomSmokingPreferenceId"])),
@@ -647,8 +627,9 @@ class reval_customer extends class_base
       //"hasChildren" => false,	__undefined__
       "occupationId" => (int)$this->_w($arr["Occupation"]),
       "fieldOfBusinessId" => (int)$this->_w($arr["FieldOfBusiness"]),
-      //"businessTitle" => $arr["__undefined__"],
+      "businessTitle" => $arr["BusinessTitle"],
       "businessPhone" => $this->_w($arr["BusinessPhone"]),
+      "CompanyName" => $this->_w($arr["CompanyName"]),
       "homePhone" => $this->_w($arr["HomePhone"]),
       "mobilePhone" => $this->_w($arr["MobilePhone"]),
       "addressLine1" => $this->_w($arr["Address"]),

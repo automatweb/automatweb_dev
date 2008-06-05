@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.34 2008/05/23 08:15:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.35 2008/06/05 09:15:45 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -402,53 +402,74 @@ class ows_bron extends class_base
 //$_SESSION["reval_fc"]["data"] = reval_customer::do_call("GetCustomerProfile", array("customerId" => 24419, "webLanguageId" => 1), "Customers");
 		if ($_SESSION["reval_fc"]["data"])
 		{
+				$rc = get_instance(CL_REVAL_CUSTOMER);
+				$cust_data = $rc->do_call("GetCustomerProfile", array(
+					"customerId" => $rc->get_cust_id(),
+					"webLanguageId" => 0//$rc->_get_web_language_id()
+				), "Customers");
 			if (empty($arr["is_allergic"]))
 			{
-				$arr["is_allergic"] = $_SESSION["reval_fc"]["data"]["IsAllergic"] == "true";
+				$arr["is_allergic"] = $cust_data["IsAllergic"] == "true";
 			}
 			if (empty($arr["is_handicapped"]))
 			{
-				$arr["is_handicapped"] = $_SESSION["reval_fc"]["data"]["IsHandicapped"] == "true";
+				$arr["is_handicapped"] = $cust_data["IsHandicapped"] == "true";
 			}
 			if (empty($arr["ct_firstname"]))
 			{
-				$arr["ct_firstname"] = $_SESSION["reval_fc"]["data"]["FirstName"];
+				$arr["ct_firstname"] = iconv("utf-8", aw_global_get("charset"), $cust_data["FirstName"]);
 			}
 			if (empty($arr["ct_lastname"]))
 			{
-				$arr["ct_lastname"] = $_SESSION["reval_fc"]["data"]["LastName"];
+				$arr["ct_lastname"] = iconv("utf-8", aw_global_get("charset"), $cust_data["LastName"]);
 			}
 			if (empty($arr["ct_dob"]))
 			{
-				$arr["ct_dob"] = date("d.m.Y", reval_customer::_parse_date($_SESSION["reval_fc"]["data"]["Birthday"]));
+				$arr["ct_dob"] = date("d.m.Y", reval_customer::_parse_date($cust_data["Birthday"]));
 			}
 			if (empty($arr["ct_adr1"]))
 			{
-				$arr["ct_adr1"] = $_SESSION["reval_fc"]["data"]["AddressLine1"];
+				$arr["ct_adr1"] = iconv("utf-8", aw_global_get("charset"), $cust_data["AddressLine1"]);
 			}
 			if (empty($arr["ct_adr2"]))
 			{
-				$arr["ct_adr2"] = $_SESSION["reval_fc"]["data"]["AddressLine2"];
+				$arr["ct_adr2"] = iconv("utf-8", aw_global_get("charset"), $cust_data["AddressLine2"]);
 			}
 			if (empty($arr["ct_postalcode"]))
 			{
-				$arr["ct_postalcode"] = $_SESSION["reval_fc"]["data"]["PostalCode"];
+				$arr["ct_postalcode"] = iconv("utf-8", aw_global_get("charset"), $cust_data["PostalCode"]);
 			}
 			if (empty($arr["ct_city"]))
 			{
-				$arr["ct_city"] = $_SESSION["reval_fc"]["data"]["CityName"];
+				$arr["ct_city"] = iconv("utf-8", aw_global_get("charset"), $cust_data["CityName"]);
 			}
 			if (empty($arr["ct_phone"]))
 			{
-				$arr["ct_phone"] = $_SESSION["reval_fc"]["data"]["HomePhone"];
+				$arr["ct_phone"] = iconv("utf-8", aw_global_get("charset"), $cust_data["MobilePhone"]);
+				if (empty($arr["ct_phone"]))
+				{
+					$arr["ct_phone"] = iconv("utf-8", aw_global_get("charset"), $cust_data["HomePhone"]);
+				}
 			}
 			if (empty($arr["ct_email"]))
 			{
-				$arr["ct_email"] = $_SESSION["reval_fc"]["data"]["Email"];
+				$arr["ct_email"] = iconv("utf-8", aw_global_get("charset"), $cust_data["Email"]);
 			}
 			if (empty($arr["ct_country"]))
 			{
-				$arr["ct_country"] = trim($_SESSION["reval_fc"]["data"]["CountryCode"]);
+				$arr["ct_country"] = trim($cust_data["CountryCode"]);
+
+				if ($arr["ct_country"] != "")
+				{
+					// get telephone code for couintry and remove it from in front of the phone number
+					$ca = get_instance(CL_CRM_ADDRESS);
+					$phe = $ca->get_phone_ext_list();
+					$ext = $phe[$arr["ct_country"]];
+					if (substr($arr["ct_phone"], 0, strlen($ext)) == $ext)
+					{
+						$arr["ct_phone"] = trim(substr($arr["ct_phone"], strlen($ext)));
+					}
+				}
 			}
 
 		}
@@ -683,6 +704,11 @@ class ows_bron extends class_base
 
 		$rate = $return['GetRateDetailsResult'];
 
+		if($rate["ResultCode"] != 'Success' && $rate["ResultMessage"] == "ROOM RESTRICTED")
+		{
+				return aw_url_change_var("error", 0, $arr["r_url"]);
+		}
+
 		if($rate["ResultCode"] != 'Success')
 		{
 			//die(dbg::dump($parameters).dbg::dump($return));
@@ -766,6 +792,7 @@ class ows_bron extends class_base
 		$o->set_prop("rate_room_type_code", $rate["OwsRoomTypeCode"]);
 		$o->set_meta("customer_id", reval_customer::get_cust_id());
 		$o->set_meta("bron_data", $arr);
+		$o->set_meta("join_fc", $arr["join_fc"]);
 		aw_disable_acl();
 		$o->save();
 		aw_restore_acl();
@@ -786,9 +813,23 @@ class ows_bron extends class_base
 			}
 		//echo "<!-- bpo = $bpo , loc = ".$arr["i_location"]." bs = ".dbg::dump($bs)." --> ";
 		}
+
+		$code =  $hotel["OwsHotelCode"]."-".$rate["OwsRoomTypeCode"];
+		$ol = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"user4" => $code
+		));
+		$doc = $ol->begin();
+		if (!$doc)
+		{
+			$doc = obj();
+		}
+
 		$this->vars(array(
 			"guest_comments" => nl2br($arr["bron_comment"]),
-			"room_type" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
+			"room_type" => $doc->name(), //iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
 			"pound_url" => aw_url_change_var("set_currency", "GBP"),
 			"usd_url" => aw_url_change_var("set_currency", "USD"),
@@ -1221,6 +1262,26 @@ class ows_bron extends class_base
 			));
 			$awm->gen_mail();
 		}
+
+		if ($o->meta("join_fc"))
+		{
+			$this->read_any_template("go_to_join_mail_content.tpl");
+			lc_site_load("ows_bron", $this);
+			$content = $this->parse();
+
+			$subj = $this->parse("SUBJECT");
+			$from = $this->parse("FROM");
+
+			send_mail($o->prop("guest_email"), $subj, $content, "From: $from");
+/*			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+				"froma" => $from,
+				"subject" => $subj,
+				"to" => $o->prop("guest_email"),
+				"body" => $content
+			));
+			$awm->gen_mail();*/
+		}
 	}
 
 	function validate_cc_num($number) 
@@ -1308,12 +1369,18 @@ class ows_bron extends class_base
 		{
 			$doc = obj();
 		}
-
+if ($_GET["a"] == 1)
+{
+echo dbg::dump($rvs_data);
+}
 		$this->vars(array(
 			"doc_room_type" => $doc->name(),
 			"guest_phone" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rvs_data["GuestPhone"]),
 			"confirmation_number" => htmlentities($arr["ows_rvs_id"]),
-			"cancel_url" => $this->mk_my_orb("cancel_booking", array("confirmation_number" => $arr["ows_rvs_id"])),
+			"cancel_url" => str_replace("/orb.aw?", "/?", $this->mk_my_orb("show_cancel_page", array(
+					"confirmation_number" => $arr["ows_rvs_id"], 
+					"last_name" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rvs_data["GuestLastName"])
+				))),
 			"checkin" => date("d.m.Y", $this->parse_date_int($rvs_data["ArrivalDate"])),
 			"checkout" => date("d.m.Y", $this->parse_date_int($rvs_data["DepartureDate"])),
 			"nights" => $rvs_data["LengthOfStay"],
@@ -1404,10 +1471,10 @@ class ows_bron extends class_base
 			}
 			else
 			{
+			return $this->final_page_from_ows($arr);
 				return t("No such reservation found!");
 			}
 
-//			return $this->final_page_from_ows($arr);
 		}
 
 		$o = obj($arr["rvs_id"]);
@@ -1432,39 +1499,6 @@ class ows_bron extends class_base
 		lc_site_load("ows_bron", $this);
 
 		$lc = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC");
-
-		/*$parameters = array();
-		$parameters["hotelId"] = $o->prop("hotel_id");
-		$parameters["rateId"] = $o->prop("rate_id");
-		$parameters["arrivalDate"] = date("Y-m-d", $o->prop("arrival_date"))."T".date("H:i:s", $o->prop("arrival_date"));
-		$parameters["departureDate"] = date("Y-m-d", $o->prop("departure_date"))."T".date("H:i:s",$o->prop("departure_date"));
-		$parameters["numberOfRooms"] = $o->prop("num_rooms");
-		$parameters["numberOfAdultsPerRoom"] = (int)$o->prop("adults_per_room");
-		$parameters["numberOfChildrenPerRoom"] = (int)$o->prop("child_per_room");
-		$parameters["promotionCode"] = $o->prop("promo_code");
-		$parameters["webLanguageId"] = $this->get_web_language_id($lc);
-		$parameters["customerId"] = 0;
-		$parameters["ow_bron"] = $arr["ow_bron"];
-		if($currency)
-		{
-			$parameters["customCurrencyCode"] = $o->prop("currency");
-		}
-
-		$return = $this->do_orb_method_call(array(
-			"action" => "GetRateDetails",
-			"class" => "http://markus.ee/RevalServices/Booking/",
-			"params" => $parameters,
-			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
-		));
-
-		$rate = $return['GetRateDetailsResult'];
-		if($rate["ResultCode"] != 'Success')
-		{
-			//die(dbg::dump($parameters).dbg::dump($return));
-			$this->proc_ws_error($parameters, $return);
-		}
-		$rate = $rate["RateDetails"];*/
 
 		$parameters = array();
 		$parameters["hotelId"] = $o->prop("hotel_id");
@@ -1497,8 +1531,8 @@ class ows_bron extends class_base
 			$doc = obj();
 		}
 
-		$cancel_url = $this->mk_my_orb("cancel_booking", array("confirmation_number" => $o->prop("confirmation_code")));
-		$cancel_url = str_replace("automatweb/", "", $cancel_url);
+		$cancel_url = $this->mk_my_orb("show_cancel_page", array("confirmation_number" => $o->prop("confirmation_code")));
+		$cancel_url = str_replace("/orb.aw?", "/?", str_replace("automatweb/", "", $cancel_url));
 	
 		$nb_url = $this->mk_my_orb("show_available_rooms", array(
 			"i_location" => $o->prop("hotel_id"),
@@ -1532,25 +1566,13 @@ class ows_bron extends class_base
 			"tot_price" => $o->prop("total_charge"),
 			"currency" => $o->prop("currency"),
 			"guarantee_cc_exp_date" => date("m/Y", $o->prop("guarantee_cc_exp_date")),
-			"new_booking_url" => $nb_url,/*$this->mk_my_orb("show_available_rooms", array(
-				"i_location" => $o->prop("hotel_id"),
-				"i_checkin" => date("d.m.Y", $o->prop("arrival_date")),
-				"i_checkout" => date("d.m.Y", $o->prop("departure_date")),
-				"i_rooms" => $o->prop("num_rooms"),
-				"i_adult1" => $o->prop("adults_per_room"),
-				"i_child1" => $o->prop("child_per_room"),
-				"i_promo" => $o->prop("promo_code"),
-				"section" => aw_global_get("section"),
-				"no_reforb" => 1,
-				"ow_bron" => $_GET["ow_bron"],
-				"r_url" => obj_link(aw_global_get("section"))
-			)),*/
+			"new_booking_url" => $nb_url,
 			"guest_email" => urldecode($o->prop("guest_email"))
 		));
 
 		// if cc data exists, then let the user see it.
 		if ($o->prop("guarantee_cc_exp_date") > 100)
-		{
+		{ 
 			$this->vars(array("HAS_CC_DATA" => $this->parse("HAS_CC_DATA")));
 		}
 		// if payment was by cc, then write that
@@ -1709,7 +1731,6 @@ class ows_bron extends class_base
 			$arr["r_url"] = aw_url_change_var("error", 7, $arr["r_url"]);
 			return $arr["r_url"];
 		}
-
 
 		classload("core/date/date_calc");
 		if ($checkoutdata2[2] < date("Y") || $checkindata2[2] < date("Y") || $checkindata2[2] > (date("Y")+5) || $checkoutdata2[2] > (date("Y")+5) || ($checkin_ts < get_day_start()))
@@ -1881,7 +1902,6 @@ enter_function("ws:GetAvailableRates");
 		));
 
 exit_function("ws:GetAvailableRates");
-
 /*echo dbg::dump($parameters);
 echo dbg::dump($return);
 echo date("d.m.Y H:i:s");*/
@@ -2034,6 +2054,10 @@ $rate_ids = array();
 			{
 				$name = $rate["Title"];
 			}
+			if ($_GET["dbg"] == 1)
+			{
+//				die(dbg::dump($rate));
+				}
 			$this->vars(array(
 				"big_img_1_url" => $i1b_url,
 				"big_img_2_url" => $i2b_url,
@@ -2209,9 +2233,9 @@ $rate_ids = array();
 			"eek_sel" => $currency == "EEK" ? "SELECTED" : "",
 			"cur_select" => $this->picker($currency, $this->currency_picker),
 			"RateList" => $tmp,
-			"currentdate" => date('d.m.Y'),
+			"currentdate" => date('d.m.Y', $checkin_ts),
 			"i_promo" => $arr["i_promo"],
-			"tomorrow" => date("d.m.Y", time() + 24*3600),
+			"tomorrow" => date("d.m.Y", $checkout_ts),
 			"reforb1" => $this->mk_reforb(
 				"show_available_rooms",
 				array(
@@ -2266,6 +2290,23 @@ $rate_ids = array();
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
+if ($_GET["finder"])
+{
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetBookingDetails",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => array("confirmationCode" => $_GET["finder"]),
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+		));
+die(dbg::dump($return));
+	
+	$ol = new object_list(array(
+		"class_id" => CL_OWS_RESERVATION,
+		"confirmation_code" => $_GET["finder"]
+	));
+	die(dbg::dump($ol->arr()));
+}
 		$ob = new object($arr["id"]);
 
 		$tpl = "bron_box.tpl";
@@ -2283,7 +2324,7 @@ $rate_ids = array();
 			"name" => $ob->prop("name"),
 		));
 
-		$this->_insert_hotel_list($_GET["i_location"]);
+		$this->_insert_hotel_list($_GET["i_location"] ? $_GET["i_location"] : $this->detect_hotel());
 
 		$error1 = ' class="error"';
 		$error2 = '<p class="error">Maximum number of persons per room is 4. Please review</p>';
@@ -2592,10 +2633,18 @@ $rate_ids = array();
 				"reason_comment" => $arr["reason_comment"]
 			));
 		}
+
+		$reason_lut = array(
+			"change_dates" => t("Dates changed"),
+			"plans_changed" => t("Plans changed"),
+			"wrong_price" => t("Wrong price"),
+			"other" => t("Other")
+		);
+
 		$parameters = array(
 			"confirmationCode" => $arr["confirmation_number"],
 			"cancellationReasonCode" => 1,
-			"cancellationReasonText" => "Customer clicked on cancel link"
+			"cancellationReasonText" => sprintf("Reason: %s / Comment: %s", iconv("utf-8", aw_global_get("charset"), $reason_lut[$arr["reason"]]), iconv("utf-8", aw_global_get("charset"), $arr["reason_comment"]))
 		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "CancelBooking",
@@ -2687,7 +2736,9 @@ $rate_ids = array();
 		$rate = $rate["RateDetails"];*/
 
 		$this->vars($o->properties());
+		
 		$this->vars(array(
+			"guest_email" => iconv("utf-8", aw_global_get("charset"),urldecode($o->prop("guest_email"))),
 			"confirmation_number" => $o->prop("confirmation_code"),
 			"checkin" => date("d.m.Y", $o->prop("arrival_date")),
 			"checkout" => date("d.m.Y", $o->prop("departure_date")),
@@ -2843,7 +2894,7 @@ echo dbg::dump($return);
 			$domain = strtoupper(substr($adr, strrpos($adr, ".")));
 			return $domain;
 		}
-		return $v["country_code2"];
+		return $v["country_code3"];
 	}
 
 	function __sort_rt($code1, $code2)
@@ -3090,6 +3141,19 @@ echo dbg::dump($return);
 	{
 		$arr["obj_inst"]->set_meta("hotel_bank_bcc", $arr["request"]["bcc"]);
 		$arr["obj_inst"]->set_meta("hotel_bank_bcc_titles", $arr["request"]["subj"]);
+	}
+	
+	function detect_hotel()
+	{
+		$o = obj(aw_global_get("section")); 
+		foreach($o->path() as $path_item)
+		{
+				if ($path_item->prop("color"))
+				{
+					return $path_item->prop("color");
+				}
+		}
+		return null;
 	}
 }
 ?>

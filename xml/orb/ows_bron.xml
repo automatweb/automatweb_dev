@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="ows_bron" folder="applications/ows_bron" extends="class_base">
-		<action name="show_cancel_page" nologin="1" all_args="1">
+		<action name="show_cancel_page" nologin="1">
 			<function name="show_cancel_page">
 				<arguments>
 				</arguments>
@@ -32,6 +32,7 @@
 		<action name="ask_confirm" nologin="1">
 			<function name="ask_confirm">
 				<arguments>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
@@ -84,5 +85,6 @@
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

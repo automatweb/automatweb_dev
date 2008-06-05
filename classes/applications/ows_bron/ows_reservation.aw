@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.17 2008/05/23 08:15:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.18 2008/06/05 09:15:45 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -248,16 +248,20 @@ class ows_reservation extends class_base
 
 	function bank_return($arr)
 	{
+/*$f = fopen(aw_ini_get("site_basedir")."/files/ows.log", "a");
+fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($arr));
+*/
 if (!is_oid($arr["id"]))
 {
+//fwrite($f, "die error\n");
 	die("error!");
 }
 			$o = obj($arr["id"]);
 			if ($o->prop("is_confirmed") == 1)
 			{
+//fwrite($f, "return is conf\n");
 					return;
 			}
-
 			$checkin = date("Y", $o->prop("arrival_date")).'-'.date("m", $o->prop("arrival_date")).'-'.date("d", $o->prop("arrival_date")).'T00:00:00';
 
 			$checkout = date("Y", $o->prop("departure_date")).'-'.date("m", $o->prop("departure_date")).'-'.date("d", $o->prop("departure_date")).'T23:59:00';
@@ -295,8 +299,8 @@ if (!is_oid($arr["id"]))
       	"guestPhone" => $o->prop("guest_phone"),
       	"guestEmail" => $o->prop("guest_email"),
       	"guestComments" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
-      	"roomSmokingPreferenceId" => (int)$o->prop("smoking"),
-      	"floorPreferenceId" => (int)$o->prop("low_floor"),
+      	"roomSmokingPreferenceId" => (int)$o->prop("smoking") ? 3 : 2,
+      	"floorPreferenceId" => ((int)$o->prop("high_floor")) ? 2 : (((int)$o->prop("low_floor")) ? 3 : 1),
       	"isAllergic" => (bool)$o->prop("is_allergic"),
       	"isHandicapped" => (bool)$o->prop("is_handicapped"),
 				"guaranteeType" => "Deposit",
@@ -322,6 +326,7 @@ if (!is_oid($arr["id"]))
 				"method" => "soap",
 				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 			));
+//fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\n\n");
 	//echo dbg::dump($return);
 			if ($return["MakeBookingExWithBirthdayResult"]["ResultCode"] != "Success")
 			{
@@ -378,6 +383,9 @@ if (!is_oid($arr["id"]))
 
 			$url = $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $o->prop("confirmation_code"), "section" => 107221), "ows_bron");
 			$url = str_replace("automatweb/", "", $url);
+			$url = str_replace("/orb.aw?", "/?", $url);
+//fwrite($f, "redir to $url \n\n\n");
+//fclose($f);
 			header("Location: ".$url);
 			die("<script language=javascript>window.location.href='".$url."';</script>");
 	}
@@ -392,6 +400,21 @@ if (!is_oid($arr["id"]))
 		//die("ws error ".dbg::dump($return));
 header("Location: http://www.revalhotels.com");
 die();
+	}
+
+	function bank_get_payment_info($o)
+	{
+		if ($o->prop("confirmation_code"))
+		{
+			return $o->prop("guest_firstname")." ".$o->prop("guest_lastname")." / ".html::href(array(
+					"caption" => $o->prop("confirmation_code"),
+					"url" => str_replace("automatweb/orb.aw", "", $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $o->prop("confirmation_code"), "section" => 107220), CL_OWS_BRON)),
+			));
+		}
+		else
+		{
+			return $o->prop("guest_firstname")." ".$o->prop("guest_lastname");
+		}
 	}
 }
 ?>
