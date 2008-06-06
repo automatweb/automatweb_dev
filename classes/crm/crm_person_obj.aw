@@ -287,7 +287,9 @@ class crm_person_obj extends _int_object
 		}*/
 		foreach(parent::connections_from($prms) as $cn)
 		{
-			$ol->add($cn->prop("to"));
+			$o = $cn->to();
+			$o->conn_id = $cn->id();
+			$ol->add($o);
 		}
 		$ids = array();
 		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
@@ -304,7 +306,9 @@ class crm_person_obj extends _int_object
 			}*/
 			foreach(connection::find($prms) as $cn)
 			{
-				$ol->add($cn["to"]);
+				$o = obj($cn["to"]);
+				$o->conn_id = $cn["id"];
+				$ol->add($o);
 			}
 		}
 		if(isset($type))
