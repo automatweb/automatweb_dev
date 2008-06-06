@@ -7,11 +7,13 @@
 				</arguments>
 			</function>
 		</action>
+
 		<action name="workers_tree_leaf" all_args="1">
 			<function name="workers_tree_leaf">
 				<arguments>
 				</arguments>
 			</function>
-		</action>		
+		</action>
+
 	</class>
 </orb>

@@ -459,11 +459,12 @@
             <field>meta</field>
             <method>serialize</method>
             <type>image_verification</type>
-            <width>200</width>
-            <height>40</height>
+            <width>150</width>
+            <height>30</height>
             <text_color>000000</text_color>
             <background_color>FFFFFF</background_color>
             <font_size>10</font_size>
+            <side>right</side>
             <caption>Kontrolltekst</caption>
       </property>
       <property>

@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="doc" />
 					<optional name="link_url" />
+					<optional name="file_id" />
 				</arguments>
 			</function>
 		</action>

@@ -1,6 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="docgen_viewer" folder="applications/docgen" extends="class_base">
+		<action name="iniviewer">
+			<function name="iniviewer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_ini_setting">
+			<function name="show_ini_setting">
+				<arguments>
+					<required name="setting" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="intro">
 			<function name="intro">
 				<arguments>

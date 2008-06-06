@@ -28,7 +28,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kuhu &amp;uuml;mbersuunata peale andmete salvestamist</caption>
+            <caption>Kuhu &amp;amp;uuml;mbersuunata peale andmete salvestamist</caption>
       </property>
       <property>
             <name>data_rootmenu</name>

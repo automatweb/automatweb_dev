@@ -1,5 +1,8 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <comment>some e-mail addresses were originally created as link objects whereas</comment>
+      </property>
       <classinfo>
             <maintainer>kristo</maintainer>
       </classinfo>

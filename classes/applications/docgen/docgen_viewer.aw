@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.26 2008/05/09 10:45:43 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.27 2008/06/06 13:54:14 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -154,6 +154,75 @@ class docgen_viewer extends class_base
 			}
 		}
 		$arr["prop"]["value"] = $op;
+	}
+
+	/**
+		@attrib name=iniviewer
+	**/
+	function iniviewer($arr)
+	{	
+		$this->read_template("classlist.tpl");
+
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgini",
+			"persist_state" => true,
+			"root_name" => t("Ini file"),
+			"url_target" => "list"
+		));
+
+		$ip = get_instance("applications/docgen/docgen_ini_file_parser");
+		$ks = $ip->get_tree_items();
+		ksort($ks);
+		foreach($ks as $id => $desc)
+		{
+			$tv->add_item(0, array(
+				"id" => $id,
+				"parent" => 0,
+				"name" => $desc,
+				"url" => $this->mk_my_orb("show_ini_setting", array("setting" => $id))
+			));
+		}
+
+		$this->vars(array(
+			"list" => $tv->finalize_tree(array(
+				"rootnode" => 0,
+			))
+		));
+
+		return $this->finish_with_style($this->parse());
+	}
+
+	/**
+		@attrib name=show_ini_setting
+		@param setting required
+	**/
+	function show_ini_setting($arr)
+	{
+		$this->read_template("show_ini_setting.tpl");
+
+		$ip = get_instance("applications/docgen/docgen_ini_file_parser");
+		$d = $ip->get_setting_data($arr["setting"]);
+
+		$il = "";
+		foreach($d as $setting => $info)
+		{
+			$this->vars(array(
+				"setting" => $setting,
+				"comment" => $info["comment"],
+				"default_value" => $info["default_value"],
+			));	
+			$il .= $this->parse("INI_LINE");
+		}
+
+		$this->vars(array(
+			"parent" => $arr["setting"],
+			"INI_LINE" => $il
+		));
+
+		return $this->finish_with_style($this->parse());
 	}
 
 	function get_property($arr)
@@ -1375,6 +1444,12 @@ class docgen_viewer extends class_base
 			"url" => $this->mk_my_orb("doclist"),
 			"target" => "classlist",
 			"caption" => t("Separate documentation")
+		));
+
+		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("iniviewer"),
+			"target" => "classlist",
+			"caption" => t("INI")
 		));
 
 

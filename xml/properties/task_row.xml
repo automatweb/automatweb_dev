@@ -120,6 +120,15 @@
             <caption>Jrk</caption>
       </property>
       <property>
+            <name>task</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_task</field>
+            <no_caption>1</no_caption>
+            <caption>Toimetus</caption>
+      </property>
+      <property>
             <name>comments</name>
             <table>objects</table>
             <group>comments</group>

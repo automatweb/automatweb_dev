@@ -9,29 +9,6 @@
 			</function>
 		</action>
 
-		<action name="show_pic1" caption="N&amp;auml;ita pilti">
-			<function name="show_pic1">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="upg" nologin="1">
-			<function name="upg">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="convert_br">
-			<function name="convert_br">
-				<arguments>
-					<optional name="id" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="set_act_ver">
 			<function name="set_act_ver">
 				<arguments>
