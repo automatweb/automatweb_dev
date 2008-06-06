@@ -2723,6 +2723,10 @@ class site_show extends class_base
 				if ($_cl == "menu")
 				{
 					$values["parent"] = aw_global_get("section");
+					if ($_act == "change")
+					{
+						$values["id"] = $this->sel_section_obj->id();
+					}
 				}
 
 				if (not($err))
