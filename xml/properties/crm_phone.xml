@@ -54,10 +54,19 @@
             <name>is_public</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Avalik (endine checkbox)</caption>
+      </property>
+      <property>
+            <name>is_public_conn</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>is_public_conn</field>
             <caption>Avalik</caption>
       </property>
       <property>

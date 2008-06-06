@@ -7812,17 +7812,25 @@ class crm_person extends class_base
 			foreach($to->connections_from(array("type" => 8)) as $cn)		// RELTYPE_PHONE
 			{
 				if($this->can("view", $cn->conn["to"]))
+				{
+					$ph_obj = $cn->to();
+					$ph_obj->conn_id = $cn->id();
 					$cwrs[$orgid]["phones"][$cn->conn["to"]] = $cn->conn["to.name"];
+				}
 			}
 			foreach($to->connections_from(array("type" => 9)) as $cn)		// RELTYPE_EMAIL
 			{
 				if($this->can("view", $cn->conn["to"]))
+				{
 					$cwrs[$orgid]["emails"][$cn->conn["to"]] = $cn->conn["to.name"];
+				}
 			}
 			foreach($to->connections_from(array("type" => 10)) as $cn)		// RELTYPE_FAX
 			{
 				if($this->can("view", $cn->conn["to"]))
+				{
 					$cwrs[$orgid]["faxes"][$cn->conn["to"]] = $cn->conn["to.name"];
+				}
 			}
 
 			$cou++;
@@ -7833,7 +7841,6 @@ class crm_person extends class_base
 		foreach($p->connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
 		{
 			$to = $cn->to();
-			//$ret .= ", ".$phone_types[$to->prop("type")]." ".html::obj_change_url($to->id());
 			$ret .= ", ".$phone_types[$to->prop("type")]." ".html::obj_change_url($to->id(), $to->name, array("conn_id" => $cn->id()));
 		}
 		foreach($p->connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
@@ -7865,12 +7872,15 @@ class crm_person extends class_base
 			foreach($data["professions"] as $prof)
 			{
 				if(!$this->can("view", $prof))
+				{
 					continue;
+				}
 				$ret .= ", ".html::obj_change_url($prof);
 			}
 			foreach($data["phones"] as $ph_id => $ph)
 			{
-				$ret .= ", ".html::obj_change_url($ph_id);
+				$ph_obj = obj($ph_id);
+				$ret .= ", ".html::obj_change_url($ph_id, $ph, array("conn_id" => $ph_obj->conn_id));
 			}
 			foreach($data["emails"] as $ml_id => $ml)
 			{

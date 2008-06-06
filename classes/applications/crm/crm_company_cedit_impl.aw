@@ -73,6 +73,7 @@ class crm_company_cedit_impl extends core
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
+			$obj->conn_id = $conn->id();
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
 				"value" => $obj->id(),

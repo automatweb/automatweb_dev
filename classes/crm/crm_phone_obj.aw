@@ -46,6 +46,24 @@ class crm_phone_obj extends _int_object
 
 		return $ret;
 	}
+	
+	function prop($k)
+	{
+		if($k == "is_public" && is_numeric(parent::prop("conn_id")))
+		{
+			try
+			{
+				$c = new connection();
+				$c->load(parent::prop("conn_id"));
+				return $c->prop("data");
+			}
+			catch (Exception $e)
+			{
+				return parent::prop($k);
+			}
+		}
+		return parent::prop($k);
+	}
 
 	function set_prop($k, $v)
 	{
@@ -53,6 +71,21 @@ class crm_phone_obj extends _int_object
 		{
 			parent::set_prop("clean_number", preg_replace("/[^0-9]/", "", $v));
 			//parent::set_prop("clean_number", str_replace(array(" ", "-", "(", ")") , "", $v));
+		}
+		if($k == "is_public" && is_numeric(parent::prop("conn_id")))
+		{
+			try
+			{
+				$c = new connection();
+				$c->load(parent::prop("conn_id"));
+				$c->change(array(
+					"data" => $v,
+				));
+			}
+			catch (Exception $e)
+			{
+				return parent::prop($k);
+			}
 		}
 		return parent::set_prop($k, $v);
 	}
@@ -121,7 +154,6 @@ class crm_phone_obj extends _int_object
 							"from" => $c->prop("from") == $oid ? $pho->id() : $c->prop("from"),
 							"to" => $c->prop("to") == $oid ? $pho->id() : $c->prop("to"),
 						));
-						$c->save();
 					}
 					catch (Exception $e)
 					{

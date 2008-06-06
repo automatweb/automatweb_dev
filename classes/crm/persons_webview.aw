@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.39 2008/05/07 10:51:15 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.40 2008/06/06 10:51:40 instrumental Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1094,9 +1094,10 @@ class persons_webview extends class_base
 			$phone = $phone_obj->name();
 		}
 
-		$phone_list = new object_list($worker->connections_from (array (
+		/*$phone_list = new object_list($worker->connections_from (array (
 			"type" => "RELTYPE_PHONE",
-		)));
+		)));*/
+		$phone_list = $worker->phones();
 		foreach($phone_list->arr() as $phone_obj)
 		{
 			if(!$this->view_obj->prop("show_only_public_phones") || $phone_obj->prop("is_public"))

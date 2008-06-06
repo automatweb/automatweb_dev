@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.23 2008/06/06 07:21:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.24 2008/06/06 10:51:40 instrumental Exp $
 // phone.aw - Telefon
 /*
 
@@ -28,7 +28,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1
 @caption Riik
 
-@property is_public type=checkbox ch_value=1 field=meta method=serialize 
+@property is_public type=hidden field=meta method=serialize 
+@caption Avalik (endine checkbox)
+
+@property is_public_conn type=checkbox ch_value=1 store=no
 @caption Avalik
 
 @groupinfo transl caption=T&otilde;lgi
@@ -76,6 +79,23 @@ class crm_phone extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "is_public_conn":
+				if(isset($arr["request"]["conn_id"]) && is_numeric($arr["request"]["conn_id"]))
+				{
+					try
+					{
+						$c = new connection();
+						$c->load($arr["request"]["conn_id"]);
+						$c->change(array(
+							"data" => $prop["value"],
+						));
+					}
+					catch (Exception $e)
+					{
+					}
+				}
+				break;
+
 			case "clean_number":
 				$prop["value"] = str_replace(array(" ", "-", "(", ")") , "", $arr["request"]["name"]);
 				break;
@@ -98,6 +118,25 @@ class crm_phone extends class_base
 		$prop = &$arr["prop"];
 		switch($prop["name"])
 		{
+			case "is_public_conn":
+				if(isset($arr["request"]["conn_id"]) && is_numeric($arr["request"]["conn_id"]))
+				{
+					try
+					{
+						$c = new connection();
+						$c->load($arr["request"]["conn_id"]);
+						$prop["value"] = $c->prop("data");
+					}
+					catch (Exception $e)
+					{
+					}
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "conn_id":
 				if(isset($arr["request"]["conn_id"]))
 				{
@@ -229,44 +268,13 @@ class crm_phone extends class_base
 	{
 		return $this->trans_callback($arr, $this->trans_props);
 	}
-	
-	/*
-	function callback_pre_save($arr)
+
+	function callback_mod_retval($arr)
 	{
-		arr($arr);
-		exit;
-		if(!$arr["new"] && $arr["obj_inst"]->name != $arr["request"]["name"])
+		if(isset($arr["request"]["conn_id"]))
 		{
-			$ol = object_list(array(
-				"class_id" => CL_CRM_PHONE,
-				"name" => $arr["request"]["name"],
-				"lang_id" => array(),
-				"site_id" => array(),
-				"limit" => 1,
-			));
-			if($ol->count() > 0)
-			{
-				$pho = $ol->begin();
-			}
-			else
-			{
-				$pho = obj($arr["obj_inst"]->save_new());
-				$pho->name = $arr["request"]["name"];
-				$pho->save();
-			}
-
-			foreach($arr["obj_inst"]->connections_from() as $cn)
-			{
-				$pho->connect(array(
-					"to" => "",
-					"reltype" => "",
-				));
-			}
-
-			// To prevent the original object's name from changing
-			$arr["request"]["name"] = $arr["obj_inst"]->name;
+			$arr["args"]["conn_id"] = $arr["request"]["conn_id"];
 		}
 	}
-	*/
 };
 ?>
