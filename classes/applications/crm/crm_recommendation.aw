@@ -15,16 +15,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_
 @property relation type=classificator reltype=RELTYPE_RELATION store=connect
 @caption Suhe soovitajaga
 
-@property phones type=text store=no
+@property phones type=textbox store=no
 @caption Telefon
 
-@property emails type=text store=no
+@property emails type=textbox store=no
 @caption E-postiaadress
 
-@property org type=text store=no
+@property org type=textbox store=no
 @caption T&ouml;&ouml;koht
 
-@property profession type=text store=no
+@property profession type=textbox store=no
 @caption Amet
 
 @property contact_lang type=relpicker reltype=RELTYPE_CONTACT_LANGUAGE no_edit=1 store=connect
@@ -77,6 +77,7 @@ class crm_recommendation extends class_base
 			case "emails":
 				if($this->can("view", $arr["obj_inst"]->prop("person")))
 				{
+					$prop["type"] = "text";
 					$p = obj($arr["obj_inst"]->prop("person"));
 					$ol = $p->$prop["name"]();
 					$val = "";
@@ -90,11 +91,6 @@ class crm_recommendation extends class_base
 						$val .= html::obj_change_url($o, $c);
 					}
 					$prop["value"] = $val;
-				}
-				if(!$prop["value"])
-				{
-					$prop["post_append_text"] = "";
-					$prop["type"] = "textbox";
 				}
 				break;
 
@@ -114,6 +110,7 @@ class crm_recommendation extends class_base
 			case "profession":
 				if($this->can("view", $arr["obj_inst"]->prop("person")))
 				{
+					$prop["type"] = "text";
 					$p = obj($arr["obj_inst"]->prop("person"));
 					foreach($p->connections_from(array("type" => "RELTYPE_ORG_RELATION", "to.class_id" => CL_CRM_PERSON_WORK_RELATION)) as $cn)
 					{
@@ -121,15 +118,6 @@ class crm_recommendation extends class_base
 						$prop["value"] = html::obj_change_url($wr->prop($prop["name"]));
 						break;
 					}
-				}
-				if(!$prop["value"])
-				{
-					$prop["post_append_text"] = "";
-					$prop["type"] = "textbox";
-					/*
-					$prop["autocomplete_source"] = $this->mk_my_orb("autocomp");
-					$prop["autocomplete_params"] = array();
-					*/
 				}
 				break;
 		}

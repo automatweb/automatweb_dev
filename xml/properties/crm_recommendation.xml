@@ -25,7 +25,7 @@
             <name>phones</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
+            <type>textbox</type>
             <store>no</store>
             <field>phones</field>
             <caption>Telefon</caption>
@@ -34,7 +34,7 @@
             <name>emails</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
+            <type>textbox</type>
             <store>no</store>
             <field>emails</field>
             <caption>E-postiaadress</caption>
@@ -43,7 +43,7 @@
             <name>org</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
+            <type>textbox</type>
             <store>no</store>
             <field>org</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;koht</caption>
@@ -52,7 +52,7 @@
             <name>profession</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
+            <type>textbox</type>
             <store>no</store>
             <field>profession</field>
             <caption>Amet</caption>
