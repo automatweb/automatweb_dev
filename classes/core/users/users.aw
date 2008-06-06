@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.8 2008/05/26 09:19:30 voldemar Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.9 2008/06/06 13:47:50 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("users_user");
@@ -146,7 +146,7 @@ class users extends users_user implements request_startup
 		{
 			// send him some email as well if the users selected to do so
 			$this->send_welcome_mail(array(
-				"u_oid" => $oid,
+				"u_uid" => $oid,
 				"pass" => $arr["pwd"]
 			));
 		}
@@ -695,7 +695,7 @@ die();
 	**/
 	function send_welcome_mail($arr)
 	{
-		$o = obj($arr["u_oid"]);
+		$o = obj($arr["u_uid"]);
 		$c = get_instance("config");
 		$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
 		$mail = str_replace("#parool#", $arr["pass"],$mail);
