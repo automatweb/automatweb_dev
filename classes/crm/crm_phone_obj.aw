@@ -117,13 +117,11 @@ class crm_phone_obj extends _int_object
 					{
 						$c = new connection();
 						$c->load($conn_id);
-						$c2 = new connection(array(
-							"from" => $c->prop("from") == $oid ? $pho->id() : $oid,
-							"to" => $c->prop("to") == $oid ? $pho->id() : $oid,
-							"reltype" => $c->prop("reltype"),
+						$c->change(array(
+							"from" => $c->prop("from") == $oid ? $pho->id() : $c->prop("from"),
+							"to" => $c->prop("to") == $oid ? $pho->id() : $c->prop("to"),
 						));
-						$c2->save();
-						$c->delete();
+						$c->save();
 					}
 					catch (Exception $e)
 					{
