@@ -99,6 +99,9 @@ class crm_company_cedit_impl extends core
 						"name" => "cedit_phone[".$obj->id()."][name]",
 						"value" => $obj->name(),
 						"size" => 15
+					)).html::hidden(array(
+						"name" => "cedit_phone[".$obj->id()."][conn_id]",
+						"value" => $conn->id(),
 					)),
 					"is_public" => html::checkbox(array(
 						"name" => "cedit_phone[".$obj->id()."][is_public]",
@@ -345,7 +348,6 @@ class crm_company_cedit_impl extends core
 		}
 		foreach(safe_array($arr["request"]["cedit_phone"]) as $id => $data)
 		{
-
 			if ($this->can("view", $id))
 			{
 				$o = obj($id);

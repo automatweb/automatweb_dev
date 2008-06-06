@@ -16,6 +16,13 @@
             <field>number</field>
       </property>
       <property>
+            <name>conn_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>conn_id</field>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>

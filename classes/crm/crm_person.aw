@@ -7833,7 +7833,8 @@ class crm_person extends class_base
 		foreach($p->connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
 		{
 			$to = $cn->to();
-			$ret .= ", ".$phone_types[$to->prop("type")]." ".html::obj_change_url($to->id());
+			//$ret .= ", ".$phone_types[$to->prop("type")]." ".html::obj_change_url($to->id());
+			$ret .= ", ".$phone_types[$to->prop("type")]." ".html::obj_change_url($to->id(), $to->name, array("conn_id" => $cn->id()));
 		}
 		foreach($p->connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
 		{

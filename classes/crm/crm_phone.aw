@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.22 2008/04/28 13:59:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.23 2008/06/06 07:21:23 instrumental Exp $
 // phone.aw - Telefon
 /*
 
@@ -16,6 +16,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @caption Number
 
 @property clean_number type=hidden field=number table=kliendibaas_telefon
+
+@property conn_id type=hidden
 
 @property comment type=textbox
 @caption Kommentaar
@@ -77,6 +79,7 @@ class crm_phone extends class_base
 			case "clean_number":
 				$prop["value"] = str_replace(array(" ", "-", "(", ")") , "", $arr["request"]["name"]);
 				break;
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -95,6 +98,13 @@ class crm_phone extends class_base
 		$prop = &$arr["prop"];
 		switch($prop["name"])
 		{
+			case "conn_id":
+				if(isset($arr["request"]["conn_id"]))
+				{
+					$prop["value"] = $arr["request"]["conn_id"];
+				}
+				break;
+
 			case "type":
 				$prop["options"] = $this->phone_types;
 				break;
@@ -219,5 +229,44 @@ class crm_phone extends class_base
 	{
 		return $this->trans_callback($arr, $this->trans_props);
 	}
+	
+	/*
+	function callback_pre_save($arr)
+	{
+		arr($arr);
+		exit;
+		if(!$arr["new"] && $arr["obj_inst"]->name != $arr["request"]["name"])
+		{
+			$ol = object_list(array(
+				"class_id" => CL_CRM_PHONE,
+				"name" => $arr["request"]["name"],
+				"lang_id" => array(),
+				"site_id" => array(),
+				"limit" => 1,
+			));
+			if($ol->count() > 0)
+			{
+				$pho = $ol->begin();
+			}
+			else
+			{
+				$pho = obj($arr["obj_inst"]->save_new());
+				$pho->name = $arr["request"]["name"];
+				$pho->save();
+			}
+
+			foreach($arr["obj_inst"]->connections_from() as $cn)
+			{
+				$pho->connect(array(
+					"to" => "",
+					"reltype" => "",
+				));
+			}
+
+			// To prevent the original object's name from changing
+			$arr["request"]["name"] = $arr["obj_inst"]->name;
+		}
+	}
+	*/
 };
 ?>
