@@ -1,17 +1,44 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.2 2008/04/26 16:21:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.3 2008/06/06 09:11:30 instrumental Exp $
 // terminator.aw - The Terminator 
 /*
 
 @classinfo syslog_type=ST_TERMINATOR relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
-@default group=general
+@default group=general2
 
-@property pers type=relpicker reltype=RELTYPE_PERSON store=connect delete_button=1 delete_rels_button=1
-@caption Isik
+	@property skills_releditor1 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor1
+
+	@property skills_releditor2 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL2 props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor2
+
+	@property skills_releditor3 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL3 props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor3
+
+	@property skills_releditor4 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL4 props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor4
+
+	@property skills_releditor5 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL5 props=skill,level table_fields=skill,level store=no
+	@caption Oskused releditor5
 
 @reltype PERSON value=1 clid=CL_CRM_PERSON
+@caption Isik
+
+@reltype SKILL_LEVEL value=2 clid=CL_CRM_SKILL_LEVEL
+@caption Isik
+
+@reltype SKILL_LEVEL2 value=3 clid=CL_CRM_SKILL_LEVEL
+@caption Isik
+
+@reltype SKILL_LEVEL3 value=4 clid=CL_CRM_SKILL_LEVEL
+@caption Isik
+
+@reltype SKILL_LEVEL4 value=5 clid=CL_CRM_SKILL_LEVEL
+@caption Isik
+
+@reltype SKILL_LEVEL5 value=6 clid=CL_CRM_SKILL_LEVEL
 @caption Isik
 
 */
@@ -28,11 +55,12 @@ class terminator extends class_base
 
 	function get_property($arr)
 	{
-		$o = obj();
-		$o->set_class_id(CL_CRM_PERSON);
-		$o->set_parent($arr["obj_inst"]->id());
-		$o->set_prop("rank", 40753);
-		$o->save();
+		$o = obj(177);
+		arr($o->phones());
+		foreach($o->phones()->arr() as $ph)
+		{
+			arr($ph->conn_id);
+		}
 		exit;
 
 		$prop = &$arr["prop"];
@@ -73,86 +101,6 @@ class terminator extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
-	}
-
-//-- methods --//
-	function milliaeg(){ // tekitame funktsiooni, mis väljastab hetke aja
-		list($usec, $sec) = explode(" ", microtime()); // leiame hetkeaja mikrosekundites
-		return ((float)$usec+(float)$sec); // väljastame funktsioonist praeguse aja
-	}
-
-	function juhuslik_parool($pikkus) {
-		$uus_parool = "";
-		$rida = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-		mt_srand((double)microtime()*1000000);
-
-		for ($i=1; $i <= $pikkus; $i++) {
-			$uus_parool .= substr($rida, mt_rand(0,strlen($rida)-1), 1);
-		}
-		
-		return $uus_parool;
-	} 
-
-	function init_arr()
-	{
-		$r = array();
-		for($i = 0; $i < 10000; $i++)
-		{
-			$r[$this->juhuslik_parool(10)] = $this->juhuslik_parool(100);
-		}
-		return $r;
-	}
-
-	function test_speed()
-	{
-		$arr = $this->init_arr();
-
-		print "aw_serialize()<br>";
-		$leheAlgusAeg = $this->milliaeg(); // määrame lehe laadimise algusaja (hetkeaeg) 
-		for($i = 0; $i < 15; $i++)
-		{
-			$str = aw_serialize($arr);
-		}
-		$leheLoppAeg = $this->milliaeg(); // määrame lehe laadimise lõpuaja (hetkeaeg)
-		$leheKulunudAeg = $leheLoppAeg-$leheAlgusAeg; // arvutame lehe laadimisele kulunud aja
-		$t = number_format($leheKulunudAeg, 4); // kuna aega väljendatakse väga pikalt, teeme selle lühemale kujule (4 kohta peale koma)
-		print "Aega kulus: ".$t."<br>";
-		print "Stringi suurus: ".strlen($str)."<br><br>";
-
-		print "aw_unserialize()<br>";
-		$leheAlgusAeg = $this->milliaeg(); // määrame lehe laadimise algusaja (hetkeaeg) 
-		for($i = 0; $i < 15; $i++)
-		{
-			$arr2 = aw_unserialize($str);
-		}
-		$leheLoppAeg = $this->milliaeg(); // määrame lehe laadimise lõpuaja (hetkeaeg)
-		$leheKulunudAeg = $leheLoppAeg-$leheAlgusAeg; // arvutame lehe laadimisele kulunud aja
-		$t = number_format($leheKulunudAeg, 4); // kuna aega väljendatakse väga pikalt, teeme selle lühemale kujule (4 kohta peale koma)
-		print "Aega kulus: ".$t."<br><br>";
-		
-		print "json_encode()<br>";
-		$leheAlgusAeg = $this->milliaeg(); // määrame lehe laadimise algusaja (hetkeaeg) 
-		for($i = 0; $i < 15; $i++)
-		{
-			$str = json_encode($arr);
-		}
-		$leheLoppAeg = $this->milliaeg(); // määrame lehe laadimise lõpuaja (hetkeaeg)
-		$leheKulunudAeg = $leheLoppAeg-$leheAlgusAeg; // arvutame lehe laadimisele kulunud aja
-		$t = number_format($leheKulunudAeg, 4); // kuna aega väljendatakse väga pikalt, teeme selle lühemale kujule (4 kohta peale koma)
-		print "Aega kulus: ".$t."<br>";
-		print "Stringi suurus: ".strlen($str)."<br><br>";
-		
-		print "json_decode()<br>";
-		$leheAlgusAeg = $this->milliaeg(); // määrame lehe laadimise algusaja (hetkeaeg) 
-		for($i = 0; $i < 15; $i++)
-		{
-			$arr2 = json_decode($str);
-		}
-		$leheLoppAeg = $this->milliaeg(); // määrame lehe laadimise lõpuaja (hetkeaeg)
-		$leheKulunudAeg = $leheLoppAeg-$leheAlgusAeg; // arvutame lehe laadimisele kulunud aja
-		$t = number_format($leheKulunudAeg, 4); // kuna aega väljendatakse väga pikalt, teeme selle lühemale kujule (4 kohta peale koma)
-		print "Aega kulus: ".$t."<br>";
 	}
 }
 ?>
