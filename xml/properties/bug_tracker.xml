@@ -431,6 +431,15 @@
             <caption>Kelle buge n&amp;amp;auml;idata</caption>
       </property>
       <property>
+            <name>gantt_end</name>
+            <table>objects</table>
+            <group>gantt_chart</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>gantt_end</field>
+            <caption>Ajavahemiku l&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
             <name>gantt</name>
             <table>objects</table>
             <group>gantt_chart</group>
@@ -1198,7 +1207,6 @@
             <gantt_chart>
                   <caption>Gantti diagramm</caption>
                   <parent>charts</parent>
-                  <submit>no</submit>
             </gantt_chart>
             <complete>
                   <caption>Valmis (minu lisatud)</caption>

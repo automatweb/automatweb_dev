@@ -162,6 +162,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property gantt_p type=text store=no
 	@caption Kelle buge n&auml;idata
 
+	@property gantt_end type=date_select store=no
+	@caption Ajavahemiku l&otilde;pp
+
 	@property gantt type=text store=no no_caption=1
 
 	@property gantt_summary type=text store=no
@@ -428,7 +431,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo problems_req caption="N&otilde;uete kaupa" parent=problems submit=no
 
 @groupinfo charts caption="Kaardid" submit=no
-	@groupinfo gantt_chart caption="Gantti diagramm" parent=charts submit=no
+	@groupinfo gantt_chart caption="Gantti diagramm" parent=charts
 	@groupinfo complete caption="Valmis (minu lisatud)" parent=charts submit=no
 	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
 	@groupinfo stat_hrs_overview caption="T&ouml;&ouml;aja &uuml;levaade" parent=charts
@@ -614,6 +617,17 @@ class bug_tracker extends class_base
 				$this->_gantt($arr);
 				break;
 
+			case "gantt_end":
+				$udata = $arr["obj_inst"]->meta("gantt_user_ends");
+				$cur = aw_global_get("uid_oid");
+				$days = 7;
+				if($ue = $udata[$cur])
+				{
+					$days = $ue;
+				}
+				$prop["value"] = time() + ($days-1) * 24 * 60 * 60;
+				break;
+
 			case "gantt_p":
 			case "unset_p":
 			case "my_bugs_stat_p":
@@ -764,6 +778,24 @@ class bug_tracker extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "gantt_end":
+				$t = date_edit::get_timestamp($prop["value"]);
+				$day_start = mktime(0,0,1, date('m', $t), date('d', $t), date('Y', $t));
+				$day = 24 * 60 * 60;
+				if(($day_start + $day) < time())
+				{
+					$prop["error"] = t("Ajavahemiku l&otilde;pp ei saa olla minevikus");
+					$retval = PROP_ERROR;
+				}
+				else
+				{
+					$udata = $arr["obj_inst"]->meta("gantt_user_ends");
+					$cur = aw_global_get("uid_oid");
+					$udata[$cur] = ceil(($day_start - time() + $day)/$day);
+					$arr["obj_inst"]->set_meta("gantt_user_ends", $udata);
+					$arr["obj_inst"]->save();
+				}
+				break;
 			case "unset_table":
 				$this->_save_estimates($arr);
 				break;
@@ -3084,7 +3116,16 @@ class bug_tracker extends class_base
 	function _gantt($arr)
 	{
 		$chart = get_instance ("vcl/gantt_chart");
-		$columns = 7;
+		$udata = $arr["obj_inst"]->meta("gantt_user_ends");
+		$cur = aw_global_get("uid_oid");
+		if($cs = $udata[$cur])
+		{
+			$columns = $cs;
+		}
+		else
+		{
+			$columns = 7;
+		}
 
 		if ($this->can("view", $arr["request"]["filt_p"]))
 		{
