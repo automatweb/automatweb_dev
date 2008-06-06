@@ -1,4 +1,4 @@
-FCKConfig.CustomConfigurationsPath = '' ;
+//FCKConfig.CustomConfigurationsPath = '/js/fckeditor/2.6/fmyconfig.js' ;
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
 FCKConfig.EditorAreaStyles = '' ;
@@ -13,7 +13,7 @@ FCKConfig.FullPage = false ;
 // The following option determines whether the "Show Blocks" feature is enabled or not at startup.
 FCKConfig.StartupShowBlocks = false ;
 
-FCKConfig.Debug = true ;
+FCKConfig.Debug = false ;
 FCKConfig.AllowQueryStringDebug = true ;
 
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
