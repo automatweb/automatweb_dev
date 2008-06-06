@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/fckeditor/2.6/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
 
@@ -70,7 +70,7 @@ window.onload = function()
 {
 	<!-- SUB: EDITOR -->
 	var fck{VAR:name} = new FCKeditor("{VAR:name}");
-	fck{VAR:name}.BasePath = "/automatweb/js/fckeditor/";
+	fck{VAR:name}.BasePath = "/automatweb/js/fckeditor/2.6/";
 	fck{VAR:name}.Width = "{VAR:width}";
 	fck{VAR:name}.Height = "{VAR:height}";
 	fck{VAR:name}.Config["AutoDetectLanguage"] = false;
