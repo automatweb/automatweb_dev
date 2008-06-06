@@ -1867,7 +1867,7 @@ class _int_object
 		if (!empty($cld["object_override"]))
 		{
 			$cln = basename($cld["object_override"]);
-			$i = new $cln;
+			$i = new $cln($oid);
 			// copy props
 			$i->obj = $this->obj;
 			$i->implicit_save = $this->implicit_save;
