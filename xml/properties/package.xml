@@ -46,6 +46,45 @@
             <caption>Failid</caption>
       </property>
       <property>
+            <name>contents_tb</name>
+            <table>objects</table>
+            <group>package_contents</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>contents_tb</field>
+      </property>
+      <property>
+            <name>contents_classes_tree</name>
+            <table>objects</table>
+            <group>package_contents</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>contents_tree_lay</parent>
+            <field>contents_classes_tree</field>
+      </property>
+      <property>
+            <name>contents_classes_tbl</name>
+            <table>objects</table>
+            <group>package_contents</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>contents_tbl_top</parent>
+            <field>contents_classes_tbl</field>
+      </property>
+      <property>
+            <name>contents_tbl</name>
+            <table>objects</table>
+            <group>package_contents</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>contents_tbl_bottom</parent>
+            <field>contents_tbl</field>
+      </property>
+      <property>
             <name>dep_toolbar</name>
             <table>objects</table>
             <group>dependencies</group>
@@ -74,6 +113,9 @@
             <maintainer>dragut</maintainer>
       </classinfo>
       <groupinfo>
+            <package_contents>
+                  <caption>Paki sisu</caption>
+            </package_contents>
             <dependencies>
                   <caption>S&amp;amp;otilde;ltuvused</caption>
                   <no_submit>1</no_submit>
@@ -98,5 +140,40 @@
                   <caption>Fail</caption>
             </FILE>
       </reltypes>
+      <layout>
+            <contents_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>package_contents</group>
+                  <area_caption></area_caption>
+            </contents_split>
+            <contents_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kaustad</area_caption>
+                  <parent>contents_split</parent>
+                  <group>package_contents</group>
+            </contents_tree_lay>
+            <contents_tbl_lay>
+                  <type>vbox</type>
+                  <parent>contents_split</parent>
+                  <group>package_contents</group>
+                  <area_caption></area_caption>
+            </contents_tbl_lay>
+            <contents_tbl_top>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klassid</area_caption>
+                  <parent>contents_tbl_lay</parent>
+                  <group>package_contents</group>
+            </contents_tbl_top>
+            <contents_tbl_bottom>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Pakk</area_caption>
+                  <parent>contents_tbl_lay</parent>
+                  <group>package_contents</group>
+            </contents_tbl_bottom>
+      </layout>
 </properties>
 

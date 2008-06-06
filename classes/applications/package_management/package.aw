@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.3 2008/04/18 12:11:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.4 2008/06/06 11:02:10 robert Exp $
 // package.aw - Pakk 
 /*
 
@@ -22,6 +22,27 @@
 
 	@property file_names type=text rows=10 cols=40 table=aw_packages field=file_names
 	@caption Failid
+
+@groupinfo package_contents caption="Paki sisu"
+@default group=package_contents
+
+	@property contents_tb type=toolbar store=no no_caption=1
+
+	@layout contents_split type=hbox width=20%:80%
+
+		@layout contents_tree_lay type=vbox closeable=1 area_caption=Kaustad parent=contents_split
+
+			@property contents_classes_tree type=treeview store=no no_caption=1 parent=contents_tree_lay
+
+		@layout contents_tbl_lay type=vbox parent=contents_split
+
+		@layout contents_tbl_top type=vbox closeable=1 area_caption=Klassid parent=contents_tbl_lay
+
+			@property contents_classes_tbl type=table store=no no_caption=1 parent=contents_tbl_top
+
+		@layout contents_tbl_bottom type=vbox closeable=1 area_caption=Pakk parent=contents_tbl_lay
+
+			@property contents_tbl type=table store=no no_caption=1 parent=contents_tbl_bottom 
 
 @groupinfo dependencies caption="S&otilde;ltuvused" no_submit=1
 @default group=dependencies
@@ -71,6 +92,145 @@ class package extends class_base
 		return $retval;
 	}
 
+	function _get_contents_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Eemalda klassid'),
+			'action' => 'remove_content_class',
+			'confirm' => t('Oled kindel et soovid valitud klassid eemaldada?')
+		));
+		$tb->add_save_button();
+		$tb->add_button(array(
+			'name' => 'zip',
+			'img' => 'archive_small.gif',
+			'tooltip' => t('Loo zip-fail'),
+			'action' => 'create_content_zip',
+		));
+	}
+
+	function _get_contents_classes_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		
+		$t->define_field(array(
+			"name" => "sel",
+			"caption" => t("Lisa"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		if($fn = $arr["request"]["tf"])
+		{
+			$files = $arr["obj_inst"]->get_contents_class_files(aw_ini_get("basedir").$fn);
+			foreach($files as $file)
+			{
+				$t->define_data(array(
+					"sel" => html::checkbox(array(
+						"name" => "add_file[".$file["id"]."]",
+						"value" => $file["name"],
+					)),
+					"name" => $file["name"],
+				));
+			}
+		}
+		
+	}
+
+	function _set_contents_classes_tbl($arr)
+	{
+		$add = $arr["request"]["add_file"];
+		$add_others = array();
+		if(count($add))
+		{
+			$files = $arr["obj_inst"]->meta("package_contents");
+			foreach($add as $file)
+			{
+				$fname = $arr["request"]["tf"]."/".$file;
+				$others = $arr["obj_inst"]->get_other_files($fname);
+				$add_others = array_merge($others, $add_others);
+			}
+			foreach($add as $file)
+			{
+				$fname = $arr["request"]["tf"]."/".$file;
+				if(array_search($fname, $files) === false)
+				{
+					$files[] = $fname;
+				}
+			}
+			foreach($add_others as $file)
+			{
+				if(array_search($file, $files) === false)
+				{
+					$files[] = $file;
+				}
+			}
+			$arr["obj_inst"]->set_meta("package_contents", $files);
+			$arr["obj_inst"]->save();
+		}
+	}
+
+	function _get_contents_classes_tree($arr)
+	{
+		$tree = &$arr["prop"]["vcl_inst"];
+
+		$tree->start_tree(array(
+			"root_name" => "automatweb_dev",
+			"root_url" => aw_url_change_var("tf", 0),
+			"has_root" => true,
+			"type" => TREE_DHTML,
+			"persist_state" => true,
+			"tree_id" => "package_classfolders"
+		));
+
+		$folders = $arr["obj_inst"]->get_class_folders(aw_ini_get("basedir"));
+		$this->insert_contents_class_folders(&$tree, $folders, 0);
+	}
+
+	function _get_contents_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+	
+		$t->set_caption(t("Paki sisu"));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_chooser(array(
+			"name" => "sel2",
+			"field" => "id",
+		));
+		$files = $arr["obj_inst"]->meta("package_contents");
+		foreach($files as $id=>$file)
+		{
+			$t->define_data(array(
+				"id" => "file_".$id,
+				"name" => $file,
+			));
+		}
+		
+	}
+
+	function insert_contents_class_folders($tree, $folders, $parent)
+	{
+		foreach($folders as $folder)
+		{
+			$tree->add_item($parent, array(
+				"id" => $folder["id"],
+				"name" => $folder["name"],
+				"url" => aw_url_change_var("tf", str_replace(aw_ini_get("basedir"), "", $folder["folder"])),
+				"iconurl" => icons::get_icon_url(CL_MENU),
+			));
+			$this->insert_contents_class_folders(&$tree, $folder["level"], $folder["id"]);
+		}
+	}
+
 	/**
 		@attrib name=get_file_names params=name all_args=1
 		@param id required type=int
@@ -117,6 +277,22 @@ class package extends class_base
 		return PROP_OK;
 	}
 
+	/**
+		@attrib name=remove_content_class
+	**/
+	function remove_content_class($arr)
+	{
+		$o = obj($arr["id"]);
+		$files = $o->meta("package_contents");
+		foreach($arr["sel2"] as $id)
+		{
+			$id = str_replace("file_", "", $id);
+			unset($files[$id]);
+		}
+		$o->set_meta("package_contents", $files);
+		$o->save();
+		return $arr["post_ru"];
+	}
 	/**
 		@attrib name=remove_dep_packages
 	**/
@@ -182,6 +358,15 @@ class package extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["tf"] = $_GET["tf"];
+	}
+
+	function callback_mod_retval($arr)
+	{
+		if (!empty($arr['request']['tf']))
+		{
+			$arr['args']['tf'] = $arr['request']['tf'];
+		}
 	}
 
 	function callback_pre_save($arr)

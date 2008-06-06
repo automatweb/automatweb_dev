@@ -10,6 +10,13 @@
 			</function>
 		</action>
 
+		<action name="remove_content_class">
+			<function name="remove_content_class">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_dep_packages">
 			<function name="remove_dep_packages">
 				<arguments>
