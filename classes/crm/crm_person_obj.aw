@@ -298,7 +298,7 @@ class crm_person_obj extends _int_object
 		}
 		if(count($ids) > 0)
 		{			
-			$prms = array("from" => $ids, "type" => "RELTYPE_PHONE");
+			$prms = array("from" => $ids, "type" => "RELTYPE_PHONE", "from.class_id" => CL_CRM_PERSON_WORK_RELATION);
 			// You wish! -kaarel
 			/*if(isset($type))
 			{
