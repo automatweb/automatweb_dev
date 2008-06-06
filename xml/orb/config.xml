@@ -36,5 +36,19 @@
 			</function>
 		</action>
 
+		<action name="join_mail">
+			<function name="join_mail">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_join_mail">
+			<function name="submit_join_mail">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -329,5 +329,77 @@ class config extends aw_template
 		}
 		return $this->mk_my_orb("config");
 	}
+
+	/**  
+		
+		@attrib name=join_mail params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function join_mail($arr)
+	{
+		$this->read_template("join_mail.tpl");
+
+		$la = get_instance("languages");
+		$ll = $la->listall();
+
+		foreach($ll as $lid => $ldata)
+		{
+			$this->vars(array(
+				"join_mail" => $this->get_simple_config("join_mail".$ldata["acceptlang"]),
+				"pwd_mail" => $this->get_simple_config("remind_pwd_mail".$ldata["acceptlang"]),
+				"join_mail_subj" => $this->get_simple_config("join_mail_subj".$ldata["acceptlang"]),
+				"pwd_mail_subj" => $this->get_simple_config("remind_pwd_mail_subj".$ldata["acceptlang"]),
+				"join_hash_section" => $this->get_simple_config("join_hash_section".$ldata["acceptlang"]),
+				"acceptlang" => $ldata["acceptlang"],
+				"name" => $ldata["name"]
+			));
+			$lb.=$this->parse("LANG");
+		}
+
+		$this->vars(array(
+			"LANG" => $lb,
+			"reforb" => $this->mk_reforb("submit_join_mail", array()),
+			"join_send_also" => $this->get_simple_config("join_send_also"),
+		));
+
+		return $this->parse();
+	}
+
+	/**  
+		
+		@attrib name=submit_join_mail params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function submit_join_mail($arr)
+	{
+		extract($arr);
+
+		$la = get_instance("languages");
+		$ll = $la->listall();
+
+		foreach($ll as $lid => $ldata)
+		{
+			$this->set_simple_config("join_mail".$ldata["acceptlang"],$join_mail[$ldata["acceptlang"]]);
+			$this->set_simple_config("remind_pwd_mail".$ldata["acceptlang"],$pwd_mail[$ldata["acceptlang"]]);
+			$this->set_simple_config("join_mail_subj".$ldata["acceptlang"],$join_mail_subj[$ldata["acceptlang"]]);
+			$this->set_simple_config("remind_pwd_mail_subj".$ldata["acceptlang"],$pwd_mail_subj[$ldata["acceptlang"]]);
+			$this->set_simple_config("join_hash_section".$ldata["acceptlang"],$join_hash_section[$ldata["acceptlang"]]);
+		}
+		$this->set_simple_config("join_send_also",$join_send_also);
+
+		return $this->mk_orb("join_mail", array());
+	}
 }
 ?>
