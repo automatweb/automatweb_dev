@@ -1193,6 +1193,8 @@ class html extends aw_template
 		object to be changed
 	@param caption optional type=string
 		the text user can see,(objects name, or "(nimetu)" if the object has no name) if set, returns html href tags.
+	@param prms optional type=array
+		parameters to be added in the url
 	@returns string/url or string/html href
 
 	@comments
@@ -1200,7 +1202,7 @@ class html extends aw_template
 	@example
 		$url = html::obj_change_url($object);
 	**/
-	function obj_change_url($o, $caption = NULL)
+	function obj_change_url($o, $caption = NULL, $prms = array())
 	{
 		if (!$this)
 		{
@@ -1231,7 +1233,8 @@ class html extends aw_template
 				return "";
 			}
 		}
-		return html::get_change_url($o->id(), array("return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
+		$prms = array_merge(array("return_url" => get_ru()), safe_array($prms));
+		return html::get_change_url($o->id(), $prms, $caption === null ? parse_obj_name($o->name()) : $caption);
 	}
 
 	/**
