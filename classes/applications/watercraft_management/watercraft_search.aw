@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.30 2007/11/23 07:10:01 dragut Exp $
-// watercraft_search.aw - Veesõidukite otsing 
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.31 2008/06/06 08:07:14 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_WATERCRAFT_SEARCH relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=dragut
@@ -611,6 +610,8 @@ class watercraft_search extends class_base
 				));
 				$items_count = $items_ol->count();
 
+				$this->quote(&$_GET['sortby']);
+				$this->quote(&$_GET['order']);
 				$items = $this->search(array(
 					'obj_inst' => $obj,
 					'request' => $search_params,
@@ -892,6 +893,7 @@ class watercraft_search extends class_base
 		// this here is .. a temperory line. really, i do have a plan to make it better one day!! 
 		if (!empty($arr['sort_by']))
 		{
+			$this->quote(&$arr['sort_by']);
 			$filter['sort_by'] = $arr['sort_by'];
 		}
 		else

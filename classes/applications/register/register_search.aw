@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.51 2008/04/23 11:37:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.52 2008/06/06 08:07:11 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -956,6 +956,7 @@ class register_search extends class_base
 			$sp = $f_props[$GLOBALS["sortby"]];
 			if ($sp)
 			{
+				$this->quote(&$GLOBALS["sort_order"]);
 				$filter["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
 			}
 		}

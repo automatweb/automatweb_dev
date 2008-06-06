@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.25 2007/12/06 14:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.26 2008/06/06 08:07:11 kristo Exp $
 // register.aw - Register 
 /*
  
@@ -17,7 +17,7 @@
 @caption Tee seadete vorm andmetele default'iks
 
 @property data_return_url type=textbox
-@caption Kuhu ümbersuunata peale andmete salvestamist
+@caption Kuhu &uuml;mbersuunata peale andmete salvestamist
 
 @property data_rootmenu type=relpicker reltype=RELTYPE_MENU
 @caption Andmete kataloog
@@ -262,6 +262,8 @@ class register extends class_base
 			$arr["request"]["sort_order"] = "desc";
 		}
 
+		$this->quote(&$arr["request"]["sortby"]);
+		$this->quote(&$arr["request"]["sort_order"]);
 		$filt["sort_by"] = $arr["request"]["sortby"]." ".$arr["request"]["sort_order"];
 
 		if (($dtf = $arr["obj_inst"]->prop("data_tree_field")))

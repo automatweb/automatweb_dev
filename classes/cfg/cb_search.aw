@@ -699,6 +699,7 @@ class cb_search extends class_base
 				if ($GLOBALS["sortby"] != "")
 				{
 					$sp = $f_props[$GLOBALS["sortby"]];
+					$this->quote(&$GLOBALS["sort_order"]);
 					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
 				}
 				else
