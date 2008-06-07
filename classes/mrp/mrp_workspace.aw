@@ -11,23 +11,23 @@
 
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
-	@groupinfo grp_printer_current caption="Jooksvad tööd" parent=grp_printer submit=no
-	groupinfo grp_printer_old caption="Tegemata tööd" parent=grp_printer submit=no
-	@groupinfo grp_printer_done caption="Tehtud tööd" parent=grp_printer submit=no
-	@groupinfo grp_printer_aborted caption="Katkestatud tööd" parent=grp_printer submit=no
+	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
+	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
+	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
+	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
 
-	@groupinfo grp_printer_in_progress caption="Kõik töös olevad" parent=grp_printer submit=no
-	@groupinfo grp_printer_startable caption="Kõik tööd mida oleks võimalik alustada" parent=grp_printer submit=no
-	@groupinfo grp_printer_notstartable caption="Tööd, mida ei ole veel võimalik alustada" parent=grp_printer submit=no
+	@groupinfo grp_printer_in_progress caption="K&otilde;ik t&ouml;&ouml;s olevad" parent=grp_printer submit=no
+	@groupinfo grp_printer_startable caption="K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada" parent=grp_printer submit=no
+	@groupinfo grp_printer_notstartable caption="T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada" parent=grp_printer submit=no
 
 
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
-	@groupinfo grp_settings_salesman caption="Müügimehe seaded" parent=grp_settings
+	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=grp_settings
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_settings submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_settings submit=no
 	@groupinfo grp_resources caption="Ressursside haldus" parent=grp_settings
-	@groupinfo grp_worksheet caption="Töölehed" parent=grp_settings submit_method=get
+	@groupinfo grp_worksheet caption="T&ouml;&ouml;lehed" parent=grp_settings submit_method=get
 
 @groupinfo grp_login_select_res caption="Vali kasutatav ressurss"
 
@@ -70,7 +70,7 @@
 	@caption Alustamisaeg (materjalide saabumine) alates
 
 	@property sp_due_date type=datetime_select view_element=1
-	@caption Tähtaeg alates
+	@caption T&auml;htaeg alates
 
 	@property sp_customer type=textbox view_element=1
 	@caption Klient
@@ -127,10 +127,10 @@
 	@caption Otsi
 
 	@property chart_start_date type=date_select store=no
-	@caption Näidatava perioodi algus
+	@caption N&auml;idatava perioodi algus
 
 	@property chart_submit type=submit store=no
-	@caption Näita
+	@caption N&auml;ita
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1
@@ -157,7 +157,7 @@
 	@caption Projektide kaust
 
 	@property jobs_folder type=relpicker reltype=RELTYPE_MRP_FOLDER clid=CL_MENU
-	@caption Tööde kaust
+	@caption T&ouml;&ouml;de kaust
 
 	@property workspace_configmanager type=relpicker reltype=RELTYPE_MRP_WORKSPACE_CFGMGR clid=CL_CFGMANAGER
 	@caption Keskkonna seadetehaldur
@@ -166,44 +166,44 @@
 	@caption Projekti headeri kontroller
 
 	@property pv_per_page type=textbox default=30 datatype=int
-	@caption Operaatori vaates töid lehel
+	@caption Operaatori vaates t&ouml;id lehel
 
 	@property projects_list_objects_perpage type=textbox default=30 datatype=int
 	@comment Projektide vaates objekte lehel
 	@caption Projekte lehel
 
 	@property max_subcontractor_timediff type=textbox default=1
-	@comment Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettejõudmise piires.
+	@comment Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettej&otilde;udmise piires.
 	@caption Allhanke suurim ajanihe (h)
 
 	@layout box1 type=vbox
-	@comment Kui on määratud (nullist suurem) ajavahemik, arhiveeritakse automaatselt projektid, mille Valmissaamisest on möödunud see ajavahemik. Positiivne täisarv.
+	@comment Kui on m&auml;&auml;ratud (nullist suurem) ajavahemik, arhiveeritakse automaatselt projektid, mille Valmissaamisest on m&ouml;&ouml;dunud see ajavahemik. Positiivne t&auml;isarv.
 	@caption Automaatne arhiveerimine
 	@property automatic_archiving_period type=textbox no_caption=1 parent=box1 datatype=int
 	@property automatic_archiving_period_unit type=text no_caption=1 parent=box1 store=no
 
 	// @property default_global_buffer type=textbox default=4
-	// @comment Uutele loodavatele ressurssidele vaikimisi pandav päeva üldpuhver.
-	// @caption Vaikimisi üldpuhver (h)
+	// @comment Uutele loodavatele ressurssidele vaikimisi pandav p&auml;eva &uuml;ldpuhver.
+	// @caption Vaikimisi &uuml;ldpuhver (h)
 
 
 
 	@property title_sceduler_parameters type=text store=no subtitle=1
 	@caption Planeerija parameetrid
 		@property parameter_due_date_overdue_slope type=textbox default=0.5
-		@caption Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas
+		@caption &Uuml;le t&auml;htaja olevate projektide t&auml;htsuse t&otilde;us t&auml;htaja &uuml;letamise suurenemise suunas
 
 		@property parameter_due_date_overdue_intercept type=textbox default=10
-		@caption Just tähtaja ületanud projekti tähtsus
+		@caption Just t&auml;htaja &uuml;letanud projekti t&auml;htsus
 
 		@property parameter_due_date_decay type=textbox default=0.05
-		@caption Projekti tähtsuse langus tähtaja kaugenemise suunas
+		@caption Projekti t&auml;htsuse langus t&auml;htaja kaugenemise suunas
 
 		@property parameter_due_date_intercept type=textbox default=0.1
-		@caption Planeerimise hetkega võrdse tähtajaga projekti tähtsus
+		@caption Planeerimise hetkega v&otilde;rdse t&auml;htajaga projekti t&auml;htsus
 
 		@property parameter_priority_slope type=textbox default=0.8
-		@caption Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga
+		@caption Kliendi ja projektiprioriteedi suhtelise v&auml;&auml;rtuse t&otilde;us vrd. t&auml;htajaga
 
 		@property separator type=text store=no no_caption=1
 
@@ -211,23 +211,23 @@
 		@caption Ajaplaani ulatus (a)
 
 		@property parameter_min_planning_jobstart type=textbox default=300
-		@caption Ajavahemik planeerimise alguse hetkest milles algavaid töid ei planeerita (s)
+		@caption Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei planeerita (s)
 
 		@property parameter_schedule_start type=textbox default=300
 		@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
 
 		@property parameter_start_priority type=textbox default=1
-		@comment Positiivne reaalarv või 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset tööd võimaldavate ressursside juures tööle kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2
-		@caption Töö algusaja kaal
+		@comment Positiivne reaalarv v&otilde;i 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset t&ouml;&ouml;d v&otilde;imaldavate ressursside juures t&ouml;&ouml;le kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2
+		@caption T&ouml;&ouml; algusaja kaal
 
 		@property parameter_length_priority type=textbox default=1
-		@comment Vt. töö algusaja kaalu selgitust.
-		@caption Töö pikkuse kaal
+		@comment Vt. t&ouml;&ouml; algusaja kaalu selgitust.
+		@caption T&ouml;&ouml; pikkuse kaal
 
 		@property parameter_timescale type=textarea
 		@caption Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)
 		@property parameter_timescale_unit type=select
-		@caption Skaala ajaühik
+		@caption Skaala aja&uuml;hik
 
 @default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
 
@@ -261,7 +261,7 @@
 	@property pj_change_comment_history type=text store=no parent=comment_hbox no_caption=1
 
 	@property pj_title_job_data type=text store=no subtitle=1
-	@caption Töö andmed
+	@caption T&ouml;&ouml; andmed
 
 	@property pj_starttime type=text store=no
 	@caption Algus
@@ -270,10 +270,10 @@
 	@caption Plaanitud kestus (h)
 
 	@property pj_minstart type=datetime_select store=no
-	@caption Arvatav jätkamisaeg
+	@caption Arvatav j&auml;tkamisaeg
 
 	@property pj_remaining_length type=textbox store=no
-	@caption Arvatav lõpetamiseks kuluv aeg (h)
+	@caption Arvatav l&otilde;petamiseks kuluv aeg (h)
 
 	@property pj_submit type=submit store=no
 	@caption Salvesta
@@ -282,7 +282,7 @@
 	caption Eelpuhveraeg (h)
 
 	property pj_post_buffer type=text store=no
-	caption Järelpuhveraeg (h)
+	caption J&auml;relpuhveraeg (h)
 
 	@layout resource_hbox type=hbox width="50%:50%"
 	@caption Ressurss
@@ -291,7 +291,7 @@
 	@caption Ressurss
 
 	@property pj_job_comment type=text store=no parent=resource_hbox
-	@caption Töö kommentaar
+	@caption T&ouml;&ouml; kommentaar
 
 	@property pj_state type=text store=no
 	@caption Staatus
@@ -309,19 +309,19 @@
 	@caption Kaane lk arv
 
 	@property pjp_sisu_varvid type=text store=no
-	@caption Sisu värvid
+	@caption Sisu v&auml;rvid
 
 	@property pjp_sisu_varvid_notes type=text store=no
-	@caption Sisu värvid Notes
+	@caption Sisu v&auml;rvid Notes
 
 	@property pjp_sisu_lakk_muu type=text store=no
 	@caption Sisu lakk/muu
 
 	@property pjp_kaane_varvid type=text store=no
-	@caption Kaane värvid
+	@caption Kaane v&auml;rvid
 
 	@property pjp_kaane_varvid_notes type=text store=no
-	@caption Kaane värvid Notes
+	@caption Kaane v&auml;rvid Notes
 
 	@property pjp_kaane_lakk_muu type=text store=no
 	@caption Kaane lakk/muu
@@ -333,10 +333,10 @@
 	@caption Kaane paber
 
 	@property pjp_trykiarv type=text store=no
-	@caption Trükiarv
+	@caption Tr&uuml;kiarv
 
 	@property pjp_trykise_ehitus type=text store=no
-	@caption Trükise ehitus
+	@caption Tr&uuml;kise ehitus
 
 	@property pjp_kromaliin type=text store=no
 	@caption Kromalin
@@ -345,10 +345,10 @@
 	@caption Makett
 
 	@property pjp_naidis type=text store=no
-	@caption Näidis
+	@caption N&auml;idis
 
 	@property pjp_title_case_wf type=text store=no subtitle=1
-	@caption Projekti töövoog
+	@caption Projekti t&ouml;&ouml;voog
 
 	@property pjp_case_wf type=table store=no no_caption=1
 
@@ -369,7 +369,7 @@
 	@caption Kuni
 
 	@property ws_sbt type=submit store=no
-	@caption Näita
+	@caption N&auml;ita
 
 	@property ws_tbl type=table store=no no_caption=1
 
@@ -423,13 +423,13 @@ class mrp_workspace extends class_base
 		$this->states = array (
 			MRP_STATUS_NEW => t("Uus"),
 			MRP_STATUS_PLANNED => t("Planeeritud"),
-			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_INPROGRESS => t("T&ouml;&ouml;s"),
 			MRP_STATUS_ABORTED => t("Katkestatud"),
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
-			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud")
 		);
 
@@ -1093,12 +1093,12 @@ class mrp_workspace extends class_base
 
 			### settings tab
 			case "automatic_archiving_period_unit":
-				$prop["value"] = t("Päev(a) peale projekti valmimist");
+				$prop["value"] = t("P&auml;ev(a) peale projekti valmimist");
 				break;
 
 			case "parameter_timescale_unit":
 				$prop["options"] = array (
-					"86400" => t("Päev"),
+					"86400" => t("P&auml;ev"),
 					"60" => t("Minut"),
 				);
 				break;
@@ -1347,6 +1347,7 @@ class mrp_workspace extends class_base
 			case "automatic_archiving_period":
 				$requested_period = (int) abs($prop["value"]);
 				$saved_period = (int) $this_object->prop("automatic_archiving_period");
+				$time = mktime(28,0,0, date("m"), date("d"), date("Y")); // four a.m. next day
 
 				if ($requested_period and !$saved_period)
 				{
@@ -1356,7 +1357,7 @@ class mrp_workspace extends class_base
 
 					$scheduler->add(array(
 						"event" => $event,
-						"time" => time() + 300,
+						"time" => $time,
 						"uid" => aw_global_get("uid"),
 						"auth_as_local_user" => true,
 					));
@@ -1368,6 +1369,23 @@ class mrp_workspace extends class_base
 					$event = $this->mk_my_orb("archive_projects", array("id" => $this_object->id()));
 					$scheduler->remove(array(
 						"event" => $event,
+					));
+				}
+				elseif ($requested_period and $saved_period and $requested_period != $saved_period)
+				{
+					### delete old event
+					$scheduler = get_instance("scheduler");
+					$event = $this->mk_my_orb("archive_projects", array("id" => $this_object->id()));
+					$scheduler->remove(array(
+						"event" => $event,
+					));
+
+					### add new
+					$scheduler->add(array(
+						"event" => $event,
+						"time" => $time,
+						"uid" => aw_global_get("uid"),
+						"auth_as_local_user" => true,
 					));
 				}
 				break;
@@ -1703,7 +1721,7 @@ class mrp_workspace extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Arhiveeri"),
 			"action" => "delete",
-			"confirm" => t("Arhiveerida kõik valitud ressursid?"),
+			"confirm" => t("Arhiveerida k&otilde;ik valitud ressursid?"),
 		));
 	}
 
@@ -1726,7 +1744,7 @@ class mrp_workspace extends class_base
 			"name" => "delete",
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta valitud projekt(id)"),
-			"confirm" => t("Kustutada kõik valitud projektid?"),
+			"confirm" => t("Kustutada k&otilde;ik valitud projektid?"),
 			"action" => "delete",
 		));
 	}
@@ -1758,7 +1776,7 @@ class mrp_workspace extends class_base
 				"mrp_tree_active_item" => "all",
 				"ft_page" => 0
 			)),
-			"root_name" => t("Kõik projektid") . " (" . $this->projects_all_count . ")",
+			"root_name" => t("K&otilde;ik projektid") . " (" . $this->projects_all_count . ")",
 			"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
 				"id" => $this_object->id(),
 				"url" => urlencode(aw_global_get("REQUEST_URI")),
@@ -1789,7 +1807,7 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Hetkel töös") . " (" . $this->projects_in_work_count . ")",
+			"name" => t("Hetkel t&ouml;&ouml;s") . " (" . $this->projects_in_work_count . ")",
 			"id" => "inwork",
 			"parent" => 0,
 			"url" => aw_url_change_var (array(
@@ -1799,7 +1817,7 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Planeeritud üle tähtaja") . " (" . $this->projects_planned_overdue_count . ")",
+			"name" => t("Planeeritud &uuml;le t&auml;htaja") . " (" . $this->projects_planned_overdue_count . ")",
 			"id" => "planned_overdue",
 			"parent" => 0,
 			"url" => aw_url_change_var (array(
@@ -1809,7 +1827,7 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Üle tähtaja") . " (" . $this->projects_overdue_count . ")",
+			"name" => t("&Uuml;le t&auml;htaja") . " (" . $this->projects_overdue_count . ")",
 			"id" => "overdue",
 			"parent" => 0,
 			"url" => aw_url_change_var (array(
@@ -1839,7 +1857,7 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Plaanist väljas") . " (" . $this->projects_onhold_count . ")",
+			"name" => t("Plaanist v&auml;ljas") . " (" . $this->projects_onhold_count . ")",
 			"id" => "onhold",
 			"parent" => 0,
 			"url" => aw_url_change_var (array(
@@ -1962,7 +1980,7 @@ class mrp_workspace extends class_base
 				));
 				$table->define_field(array(
 					"name" => "due_date",
-					"caption" => t("Tähtaeg"),
+					"caption" => t("T&auml;htaeg"),
 					"type" => "time",
 					"format" => MRP_DATE_FORMAT,
 					"chgbgcolor" => "bgcolour_overdue",
@@ -1993,7 +2011,7 @@ class mrp_workspace extends class_base
 		$table->define_field(array(
 			"name" => "sales_priority",
 			"caption" => t("MP"),
-			"tooltip" => t("Müügi prioriteet"),
+			"tooltip" => t("M&uuml;&uuml;gi prioriteet"),
 			"chgbgcolor" => "bgcolour_overdue",
 			// "sortable" => 1,
 		));
@@ -2280,12 +2298,12 @@ class mrp_workspace extends class_base
 			"type" => "time",
 			"format" => MRP_DATE_FORMAT,
 			"numeric" => 1,
-			"caption" => t("Projekti tähtaeg"),
+			"caption" => t("Projekti t&auml;htaeg"),
 			"sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "minstart",
-			"caption" => t("Vara&shy;seim jätka&shy;mis&shy;aeg"),
+			"caption" => t("Vara&shy;seim j&auml;tka&shy;mis&shy;aeg"),
 		));
 		$table->define_field (array (
 			"name" => "reschedule",
@@ -2717,7 +2735,7 @@ class mrp_workspace extends class_base
 				"layer" => 0,
 				"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res:" . $resource->id () . " töö:" . $job["oid"] . " proj:" . $project->id () . "]"
+/* dbg */ . " [res:" . $resource->id () . " t&ouml;&ouml;:" . $job["oid"] . " proj:" . $project->id () . "]"
 			);
 
 			$chart->add_bar ($bar);
@@ -2825,7 +2843,7 @@ class mrp_workspace extends class_base
 			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away (5*$columns, $start))),
 		));
 
-		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
+		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;P&auml;evi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
 
 		if (is_oid ($arr["request"]["mrp_hilight"]))
 		{
@@ -5283,7 +5301,7 @@ class mrp_workspace extends class_base
 		}
 
 		### archive projects finished before now minus autoarchive period
-		$a_time = time() -  $aap * 86400;
+		$a_time = time() - $aap * 86400;
 
 		$projects = new object_list (array (
 			"class_id" => CL_MRP_CASE,
