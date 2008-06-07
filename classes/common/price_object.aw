@@ -5,16 +5,6 @@
 
 class price_object extends _int_object
 {
-	function _init_override_object()
-	{
-		;
-	}
-
-	function price_object()
-	{
-		parent::_int_object();
-	}
-
 	function name()
 	{
 		return parent::name();

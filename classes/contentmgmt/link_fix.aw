@@ -4,11 +4,6 @@
 */
 class link_fix extends _int_object
 {
-	function __construct($param)
-	{
-		parent::_int_object($param);
-	}
-	
 	function set_prop($var, $val)
 	{
 		if($var == "url")
