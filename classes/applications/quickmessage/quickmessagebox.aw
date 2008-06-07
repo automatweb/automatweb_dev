@@ -302,7 +302,15 @@ class quickmessagebox extends class_base
 	**/
 	function get_new_msgs_count($arr)
 	{
-		echo quickmessagebox_obj::get_new_msgs_count($arr["id"]);
+		try
+		{
+			echo quickmessagebox_obj::get_new_msgs_count($arr["id"]);
+		}
+		catch (Exception $e)
+		{
+			echo t("Error");
+		}
+
 		exit;
 	}
 }
