@@ -443,17 +443,11 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
-		/*$tf->define_field(array(
-			"name" => "pohitegevus",
-			"caption" => t("P&otilde;hitegevus"),
-			"sortable" => 1,
-		));*/
-
-		/*$tf->define_field(array(
-			"name" => "corpform",
-			"caption" => t("&Otilde;iguslik vorm"),
-			"sortable" => 1,
-		));*/
+		$tf->define_field(array(
+			"name" => "classif1",
+			"caption" => t("Asutuse omadused"),
+			"sortable" => 1
+		));
 
 		$tf->define_field(array(
 			"name" => "address",
@@ -464,6 +458,7 @@ class crm_company_cust_impl extends class_base
 		$tf->define_field(array(
 			"name" => "email",
 			"caption" => t("Kontakt"),
+			"align" => "center",
 			"sortable" => 1,
 		));
 
@@ -1804,6 +1799,28 @@ class crm_company_cust_impl extends class_base
 			));
 		}
 
+		if ($r["customer_search_classif1"] != "")
+		{
+			$oids = array();
+			foreach ($r["customer_search_classif1"] as $val)
+			{
+				if (is_oid($val))
+				{
+					$oids[] = $val;
+				}
+				elseif ("NA" === $val)
+				{
+					$oids[] = new obj_predicate_compare(OBJ_COMP_NULL);
+				}
+			}
+
+			if (count($oids))
+			{
+				$ret["CL_CRM_COMPANY.RELTYPE_METAMGR"] = $oids;
+				$has_params = true;
+			}
+		}
+
 		if (!$has_params)
 		{
 			//$ret["oid"] = -1;
@@ -2142,10 +2159,29 @@ class crm_company_cust_impl extends class_base
 			n_td.colSpan=9;
 			'>".t("Kontaktid")."</a>) ";
 
+			$c = $o->connections_from(array(
+				"type" => "RELTYPE_METAMGR"
+			));
+
+			if (count($c))
+			{
+				$classif1 = array();
+				foreach ($c as $c_o)
+				{
+					$classif1[] = $c_o->prop("to.name");
+				}
+				$classif1 = implode(", ", $classif1);
+			}
+			else
+			{
+				$classif1 = t("N/A");
+			}
+
 			//!!! todo: define and get data only for fields configured to be shown in current crm settings.
 			$tf->define_data(array(
 				"id" => $o->id(),
 				"name" => $name.$namp,
+				"classif1" => $classif1,
 				"reg_nr" => $o->prop("reg_nr"),
 				// "pohitegevus" => $o->prop_str("pohitegevus"),
 				// "corpform" => $vorm,

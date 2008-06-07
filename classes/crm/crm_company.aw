@@ -517,6 +517,9 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 					@property customer_search_cust_grp type=select store=no parent=vbox_customers_left_top captionside=top
 					@caption Kliendigrupp
 
+					@property customer_search_classif1 type=classificator store=no parent=vbox_customers_left_top captionside=top
+					@caption Asutuse omadused
+
 					@property customer_search_insurance_exp type=select store=no parent=vbox_customers_left_top captionside=top
 					@caption Kindlustus aegund
 
@@ -2316,6 +2319,10 @@ class crm_company extends class_base
 				$data['value'] = $s;
 				break;
 
+			case "customer_search_classif1":
+				$data["options"]["NA"] = t("N/A");
+				break;
+
 			case "proj_search_dl_from":
 				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
 				{
@@ -4030,6 +4037,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
 			$arr["args"]["customer_search_print_view"] = $arr["request"]["customer_search_print_view"];
 			$arr["args"]["customer_search_keywords"] = $arr["request"]["customer_search_keywords"];
+			$arr["args"]["customer_search_classif1"] = $arr["request"]["customer_search_classif1"];
 		}
 
 		if ($arr["request"]["proj_search_sbt"])
