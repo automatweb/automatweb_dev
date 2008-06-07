@@ -89,6 +89,15 @@
 
 class patent extends intellectual_property
 {
+	public static $level_index = array(
+		0 => 0,
+		1 => 1,
+		2 => 2,
+		3 => 3,
+		4 => 4,
+		5 => 5
+	);
+
 	function __construct()
 	{
 		parent::__construct();
@@ -105,6 +114,7 @@ class patent extends intellectual_property
 			5 => "check"
 		);
 		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
+		$this->types_disp = array(t("(541) S&otilde;nam&auml;rk"),t("(546) Kujutism&auml;rk"),t("(546) Kombineeritud m&auml;rk"),t("(554) Ruumiline m&auml;rk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
 		$this->pdf_file_name = "Kaubam".chr(228)."rgitaotlus";
 		$this->show_template = "show_tm.tpl";
@@ -246,7 +256,12 @@ class patent extends intellectual_property
 		foreach($classes as $class => $prods)
 		{
 			$t->define_data(array(
-				"prod" => html::textarea(array("name" => "products[".$class."]" , "value" => join("\n" , $prods))),
+				"prod" => html::textarea(array(
+					"name" => "products[".$class."]" ,
+					"cols" => 40,
+					"rows" => 5,
+					"value" => join("\n" , $prods)
+				)),
 				"class" => $class,
 				"delete" => html::href(array(
 					"url" => "#",
@@ -267,7 +282,7 @@ class patent extends intellectual_property
 		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
 		$_SESSION["patent"]["classes_fee"]= $this->get_classes_fee();
 
-		$data["type_text"] = $this->types[$_SESSION["patent"]["type"]];
+		$data["type_text"] = $this->types_disp[$_SESSION["patent"]["type"]];
 		//$data["products_value"] = $this->_get_products_and_services_tbl();
 		$data["type"] = t("S&otilde;nam&auml;rk ").html::radiobutton(array(
 				"value" => 0,
@@ -744,9 +759,9 @@ class patent extends intellectual_property
 			}
 		}
 
-		if($err)
+		if(empty($err))
 		{
-			$_SESSION["patent"]["checked"] = $_GET["data_type"] - 1;
+			$_SESSION["patent"]["checked"][] = $_GET["data_type"];
 		}
 
 		return $err;

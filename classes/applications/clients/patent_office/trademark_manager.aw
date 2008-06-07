@@ -213,6 +213,26 @@ class trademark_manager extends class_base
 				"p_cl" => "um"
 			)),
 		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 14,
+			"name" => t('T&ouml;&ouml;stusdisain'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "verified",
+				"p_cl" => "ind"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 15,
+			"name" => t('EP patent'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "verified",
+				"p_cl" => "epat"
+			)),
+		));
 
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"id" => 2,
@@ -251,6 +271,26 @@ class trademark_manager extends class_base
 				"group" => "applications",
 				"p_id" => "archive",
 				"p_cl" => "um"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 24,
+			"name" => t('T&ouml;&ouml;stusdisain'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "archive",
+				"p_cl" => "ind"
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => 25,
+			"name" => t('EP patent'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "archive",
+				"p_cl" => "epat"
 			)),
 		));
 
@@ -297,6 +337,22 @@ class trademark_manager extends class_base
 							"class_id" => array(CL_PATENT),
 							"CL_PATENT.RELTYPE_APPLICANT.name" => $applicant_name,
 							"CL_PATENT.RELTYPE_PROCURATOR.name" => $procurator_name,
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_INDUSTRIAL_DESIGN),
+							"CL_INDUSTRIAL_DESIGN.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_INDUSTRIAL_DESIGN.RELTYPE_PROCURATOR.name" => $procurator_name,
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array (
+							"class_id" => array(CL_EURO_PATENT_ET_DESC),
+							"CL_EURO_PATENT_ET_DESC.RELTYPE_APPLICANT.name" => $applicant_name,
+							"CL_EURO_PATENT_ET_DESC.RELTYPE_PROCURATOR.name" => $procurator_name,
 						)
 					)),
 				)
@@ -375,6 +431,26 @@ class trademark_manager extends class_base
 				"site_id" => array()
 			);
 		}
+		elseif ("ind" === $cl)
+		{
+			$filter = array(
+				"class_id" => array(CL_INDUSTRIAL_DESIGN),
+				"CL_INDUSTRIAL_DESIGN.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+				"CL_INDUSTRIAL_DESIGN.RELTYPE_TRADEMARK_STATUS.verified_date" => $age,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+		}
+		elseif ("epat" === $cl)
+		{
+			$filter = array(
+				"class_id" => array(CL_EURO_PATENT_ET_DESC),
+				"CL_EURO_PATENT_ET_DESC.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+				"CL_EURO_PATENT_ET_DESC.RELTYPE_TRADEMARK_STATUS.verified_date" => $age,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+		}
 		else
 		{
 			$filter = array(
@@ -403,6 +479,22 @@ class trademark_manager extends class_base
 								"class_id" => array(CL_PATENT),
 								"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
 								"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified_date" => $age
+							)
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array (
+								"class_id" => array(CL_INDUSTRIAL_DESIGN),
+								"CL_INDUSTRIAL_DESIGN.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+								"CL_INDUSTRIAL_DESIGN.RELTYPE_TRADEMARK_STATUS.verified_date" => $age
+							)
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array (
+								"class_id" => array(CL_EURO_PATENT_ET_DESC),
+								"CL_EURO_PATENT_ET_DESC.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+								"CL_EURO_PATENT_ET_DESC.RELTYPE_TRADEMARK_STATUS.verified_date" => $age
 							)
 						)),
 					)
@@ -689,6 +781,28 @@ class trademark_manager extends class_base
 				"parent" => "add_item",
 				"text" => t("Kasuliku mudeli taotlus"),
 				"link" => $add_utility_model_url,
+				"target" => "_blank"
+			));
+		}
+
+		if (is_oid($arr["obj_inst"] ->prop("industrial_design_add")))
+		{
+			$add_industrial_design_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("industrial_design_add");
+			$tb->add_menu_item(array(
+				"parent" => "add_item",
+				"text" => t("T&ouml;&ouml;stusdisaini taotlus"),
+				"link" => $add_industrial_design_url,
+				"target" => "_blank"
+			));
+		}
+
+		if (is_oid($arr["obj_inst"] ->prop("euro_patent_et_desc_add")))
+		{
+			$add_industrial_design_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("euro_patent_et_desc_add");
+			$tb->add_menu_item(array(
+				"parent" => "add_item",
+				"text" => t("EP patendi taotlus"),
+				"link" => $add_euro_patent_et_desc_url,
 				"target" => "_blank"
 			));
 		}

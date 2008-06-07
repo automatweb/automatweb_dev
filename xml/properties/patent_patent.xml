@@ -184,6 +184,16 @@
             <caption>Maksekorraldus</caption>
       </property>
       <property>
+            <name>applicant_reg</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <store>no</store>
+            <caption>Taotleja on saanud patendi taotlemise &amp;amp;otilde;iguse kui</caption>
+      </property>
+      <property>
             <name>author</name>
             <table>objects</table>
             <group>author</group>

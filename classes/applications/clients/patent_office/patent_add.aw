@@ -74,12 +74,11 @@ class patent_add extends class_base
 	function get_folders_as_object_list($o, $level, $parent)
 	{
 		$ol = new object_list();
-		if((isset($_GET["data_type"]) && $_GET["data_type"] < 6 )|| isset($_GET["trademark_id"]))
+		if((isset($_GET["data_type"])) or isset($_GET["trademark_id"]))
 		{
 			$links = $o->meta("meaningless_sh__");
-			//arr($links);
-			$_SESSION["patent"]["jrk"] = 0;
-			if(is_array($links) && sizeof($links) == 6)
+
+			if(is_array($links) && sizeof($links) == 7)
 			{
 				foreach($links as $link)
 				{
@@ -90,7 +89,8 @@ class patent_add extends class_base
 					else break;
 				}
 			}
-			if(!(is_array($links) && sizeof($links) == 6))
+
+			if(!(is_array($links) && sizeof($links) == 7))
 			{
 				$ol = new object_list();
 				$o1 = new object();
@@ -158,28 +158,40 @@ class patent_add extends class_base
 
 	function make_menu_link($o, $ref = NULL)
 	{
-		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
+		if($this->can("view" , $_SESSION["patent"]["id"]))
 		{
 			$tr_inst = get_instance(CL_PATENT_PATENT);
 			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
+
 			if($res["status"] == 1)
 			{
 				return aw_url_change_var()."#";
 			}
 		}
-		if($_SESSION["patent"]["jrk"] == 0)
+
+		static $jrk;
+
+		if (empty($jrk))
 		{
-			$url = $_SERVER["SCRIPT_URI"]."?section=".$_GET["section"]."&data_type=0";
+			$jrk = 0;
 		}
-		elseif(
-			($_SESSION["patent"]["checked"] > -1) && (
-			(!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))|| (($_SESSION["patent"]["checked"]+1) >= $_SESSION["patent"]["jrk"])))
+
+		$item = patent_patent::$level_index[$jrk];
+
+		if($jrk === 0)
 		{
-			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
+			$url = $_SERVER["SCRIPT_URI"]."?data_type=0" . (!empty($_GET["section"]) ? ("&section=".$_GET["section"]) : "");
+		}
+		elseif (in_array($item, $_SESSION["patent"]["checked"]))
+		{
+			$url = aw_url_change_var("data_type", $item);
 		}
 		else
-		$url = aw_url_change_var()."#";
-		$_SESSION["patent"]["jrk"]++;
+		{
+			$url = aw_url_change_var()."#";
+		}
+
+		++$jrk;
 		return $url;
 	}
 }

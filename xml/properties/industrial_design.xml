@@ -183,6 +183,156 @@
             </form>
             <caption>Maksekorraldus</caption>
       </property>
+      <property>
+            <name>applicant_reg</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <store>no</store>
+            <caption>Taotleja on saanud t&amp;amp;ouml;&amp;amp;ouml;stusdisaini registreerimise taotlemise &amp;amp;otilde;iguse kui</caption>
+      </property>
+      <property>
+            <name>author</name>
+            <table>objects</table>
+            <group>author</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_AUTHOR</reltype>
+            <caption>Autor</caption>
+      </property>
+      <property>
+            <name>author_disallow_disclose</name>
+            <table>objects</table>
+            <group>author</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <caption>Mitte avalikustada minu nime autorina</caption>
+      </property>
+      <property>
+            <name>industrial_design_name</name>
+            <table>objects</table>
+            <group>industrial_design</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;stusdisainilahenduse nimetus</caption>
+      </property>
+      <property>
+            <name>industrial_design_variant</name>
+            <table>objects</table>
+            <group>industrial_design</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;stusdisainilahenduse variantide arv</caption>
+      </property>
+      <property>
+            <name>industrial_design_variant_count</name>
+            <table>objects</table>
+            <group>industrial_design</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Variantide arv</caption>
+      </property>
+      <property>
+            <name>childtitle110</name>
+            <table>objects</table>
+            <group>priority</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Pariisi konventsiooni vm. kokkuleppe taotluse alusel</caption>
+      </property>
+      <property>
+            <name>prio_convention_date</name>
+            <table>objects</table>
+            <group>priority</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>Kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>prio_convention_country</name>
+            <table>objects</table>
+            <group>priority</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Riigi kood</caption>
+      </property>
+      <property>
+            <name>prio_convention_nr</name>
+            <table>objects</table>
+            <group>priority</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Taotluse number</caption>
+      </property>
+      <property>
+            <name>process_postpone</name>
+            <table>objects</table>
+            <group>process_postpone</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Taotleja soovib t&amp;amp;ouml;&amp;amp;ouml;stusdisainilahenduse registrisse kandmist edasi l&amp;amp;uuml;kata</caption>
+      </property>
+      <property>
+            <name>doc_repro</name>
+            <table>objects</table>
+            <group>docs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>multifile_upload</type>
+            <reltype>RELTYPE_DOC_REPRO</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Reproduktsioon(id)</caption>
+      </property>
+      <property>
+            <name>doc_warrant</name>
+            <table>objects</table>
+            <group>docs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_DOC_WARRANT</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Volikiri</caption>
+      </property>
+      <property>
+            <name>doc_description</name>
+            <table>objects</table>
+            <group>docs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_DOC_DESCRIPTION</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>T&amp;ouml;&amp;ouml;stusdisainilahenduse kirjeldus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_INDUSTRIAL_DESIGN</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -198,6 +348,18 @@
             <fee>
                   <caption>Riigil&amp;amp;otilde;iv</caption>
             </fee>
+            <author>
+                  <caption>Autor</caption>
+            </author>
+            <industrial_design>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;stusdisainilahendus</caption>
+            </industrial_design>
+            <process_postpone>
+                  <caption>Menetluse peatamise n&amp;amp;otilde;ue</caption>
+            </process_postpone>
+            <docs>
+                  <caption>Dokumentide loetelu</caption>
+            </docs>
       </groupinfo>
       <tableinfo>
             <aw_trademark>
@@ -205,11 +367,6 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </aw_trademark>
-            <aw_industrial_design>
-                  <master_index>brother_of</master_index>
-                  <master_table>objects</master_table>
-                  <index>aw_oid</index>
-            </aw_industrial_design>
       </tableinfo>
       <reltypes>
             <APPLICANT>
@@ -270,6 +427,26 @@
                   <clid>CL_TRADEMARK_STATUS</clid>
                   <caption>Staatus</caption>
             </TRADEMARK_STATUS>
+            <AUTHOR>
+                  <value>17</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Autor</caption>
+            </AUTHOR>
+            <DOC_DESCRIPTION>
+                  <value>100</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa kirjeldus</caption>
+            </DOC_DESCRIPTION>
+            <DOC_REPRO>
+                  <value>101</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa reproduktsioon</caption>
+            </DOC_REPRO>
+            <DOC_WARRANT>
+                  <value>102</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa volikiri</caption>
+            </DOC_WARRANT>
       </reltypes>
 </properties>
 

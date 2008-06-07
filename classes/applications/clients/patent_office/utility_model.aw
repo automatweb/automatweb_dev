@@ -2,9 +2,14 @@
 // utility_model.aw - Kasulik mudel
 /*
 
-@classinfo syslog_type=ST_UTILITY_MODEL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_UTILITY_MODEL relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 @extends applications/clients/patent_office/intellectual_property
 @tableinfo aw_trademark index=aw_oid master_table=objects master_index=brother_of
+
+@default group=general
+	@property applicant_reg type=chooser store=no
+	@caption Taotleja on saanud kasuliku mudeli taotlemise &otilde;iguse kui
+
 
 @groupinfo author caption="Autor"
 @default group=author
@@ -116,6 +121,16 @@
 
 class utility_model extends intellectual_property
 {
+	public static $level_index = array(
+		0 => 0,
+		1 => 11,
+		2 => 12,
+		3 => 3,
+		4 => 14,
+		5 => 4,
+		6 => 5
+	);
+
 	function __construct()
 	{
 		parent::__construct();
@@ -124,7 +139,7 @@ class utility_model extends intellectual_property
 			"clid" => CL_UTILITY_MODEL
 		));
 		$this->info_levels = array(
-			0 => "applicant",
+			0 => "applicant_ind",
 			11 => "author",
 			12 => "invention_um",
 			3 => "priority_um",
@@ -139,7 +154,24 @@ class utility_model extends intellectual_property
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplication_nr","attachment_demand_points"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "attachment_invention_description", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
+		$this->select_vars = array_merge($this->select_vars, array("applicant_reg"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "attachment_invention_description", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans", "applicant_reg"));
+	}
+
+	public function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "applicant_reg":
+				$prop["options"] = $arr["obj_inst"]->get_applicant_reg_options();
+				break;
+
+			default:
+				$retval = parent::get_property($arr);
+		}
+		return $retval;
 	}
 
 	protected function save_priority($patent)
@@ -164,7 +196,6 @@ class utility_model extends intellectual_property
 		$this->fileupload_save($patent);
 		$this->save_attachments($patent);
 		$this->final_save($patent);
-		$patent->set_meta("products" , $_SESSION["patent"]["products"]);
 	}
 
 	protected function save_invention($patent)
@@ -268,14 +299,30 @@ class utility_model extends intellectual_property
 
 		if(((int) $_POST["data_type"]) === 14)
 		{
-			if(empty($_FILES["attachment_invention_description_upload"]["tmp_name"]))
+			foreach ($_FILES as $var => $file_data)
+			{
+				if (is_uploaded_file($file_data["tmp_name"]))
+				{
+					$fp = fopen($file_data["tmp_name"], "r");
+					flock($fp, LOCK_SH);
+					$sig = fread($fp, 4);
+					fclose($fp);
+					if("%PDF" !== $sig)
+					{
+						unset($_FILES[$var]["tmp_name"]);
+						$err.= t("Ainult pdf formaadis failid lubatud")."\n<br>";
+					}
+				}
+			}
+
+			if(!is_oid($_SESSION["patent"]["attachment_invention_description"]) and empty($_FILES["attachment_invention_description_upload"]["tmp_name"]))
 			{
 				$err.= t("Leiutiskirjeldus peab olema lisatud")."\n<br>";
 			}
 
-			if($err)
+			if(empty($err))
 			{
-				$_SESSION["patent"]["checked"] = 3;
+				$_SESSION["patent"]["checked"][] = 14;
 			}
 		}
 
@@ -304,10 +351,15 @@ class utility_model extends intellectual_property
 				$address_obj = obj($address);
 				$_SESSION["patent"]["authors"][$key]["street"] = $address_obj->prop("aadress");
 				$_SESSION["patent"]["authors"][$key]["index"] = $address_obj->prop("postiindeks");
-				if(is_oid($address_obj->prop("linn")) && $this->can("view" , $address_obj->prop("linn")))
+				if($this->can("view" , $address_obj->prop("linn")))
 				{
 					$city = obj($address_obj->prop("linn"));
 					$_SESSION["patent"]["authors"][$key]["city"] = $city->name();
+				}
+				if($this->can("view" , $address_obj->prop("maakond")))
+				{
+					$county = obj($address_obj->prop("maakond"));
+					$_SESSION["patent"]["authors"][$key]["county"] = $county->name();
 				}
 				$_SESSION["patent"]["authors"][$key]["country_code"] = $address_inst->get_country_code($address_obj->prop("riik"));
 			}

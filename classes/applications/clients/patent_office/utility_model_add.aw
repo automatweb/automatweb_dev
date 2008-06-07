@@ -74,12 +74,11 @@ class utility_model_add extends class_base
 	function get_folders_as_object_list($o, $level, $parent)
 	{
 		$ol = new object_list();
-		if((isset($_GET["data_type"]) && $_GET["data_type"] < 6 )|| isset($_GET["trademark_id"]))
+		if(isset($_GET["data_type"]) or isset($_GET["trademark_id"]))
 		{
 			$links = $o->meta("meaningless_sh__");
-			//arr($links);
-			$_SESSION["patent"]["jrk"] = 0;
-			if(is_array($links) && sizeof($links) == 6)
+
+			if(is_array($links) && sizeof($links) == 7)
 			{
 				foreach($links as $link)
 				{
@@ -90,7 +89,8 @@ class utility_model_add extends class_base
 					else break;
 				}
 			}
-			if(!(is_array($links) && sizeof($links) == 6))
+
+			if(!(is_array($links) && sizeof($links) == 7))
 			{
 				$ol = new object_list();
 				$o1 = new object();
@@ -151,10 +151,7 @@ class utility_model_add extends class_base
 
 	function make_menu_link($o, $ref = NULL)
 	{
-		//arr($_SESSION["patent"]["checked"]);
-		//r($_SESSION);
-//arr($_SESSION["patent"]["id"]);
-		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
+		if($this->can("view" , $_SESSION["patent"]["id"]))
 		{
 			$tr_inst = get_instance(CL_UTILITY_MODEL);
 			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
@@ -162,44 +159,32 @@ class utility_model_add extends class_base
 			{
 				return aw_url_change_var()."#";
 			}
+		}
 
-/*
-			switch($res["status"])
-			$tm = obj($_SESSION["patent"]["id"]);
-*/
-		}
-		if($_SESSION["patent"]["jrk"] == 0)
+		static $jrk;
+
+		if (empty($jrk))
 		{
-			$url = $_SERVER["SCRIPT_URI"]."?section=".$_GET["section"]."&data_type=0";
-			//aw_url_change_var("data_type", "0");
-		//arr($_GET["section"]);
-		//arr();
+			$jrk = 0;
 		}
-		elseif(
-			($_SESSION["patent"]["checked"] > -1) && (
-			(!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))|| (($_SESSION["patent"]["checked"]+1) >= $_SESSION["patent"]["jrk"])))
+
+		$item = utility_model::$level_index[$jrk];
+
+		if($jrk === 0)
 		{
-			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
+			$url = $_SERVER["SCRIPT_URI"]."?data_type=0" . (!empty($_GET["section"]) ? ("&section=".$_GET["section"]) : "");
+		}
+		elseif (in_array($item, $_SESSION["patent"]["checked"]))
+		{
+			$url = aw_url_change_var("data_type", $item);
 		}
 		else
-		$url = aw_url_change_var()."#";//aw_url_change_var("", "#");
-		// $url =$_SERVER["SCRIPT_URI"]."?section=".aw_ini_get("section")."&data_type=".$_SESSION["patent"]["jrk"];
+		{
+			$url = aw_url_change_var()."#";
+		}
 
-	//		$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
-		$_SESSION["patent"]["jrk"]++;
-	//	arr($_SESSION["patent"]["data_type"]);
-	//arr($_SESSION["patent"]["data_type"]); arr(($_SESSION["patent"]["jrk"]-2));
+		++$jrk;
 		return $url;
-	//	else return "";
-		$this->mk_my_orb("parse_alias",
-			array(
-				"id" => $_SESSION["persons_webview"],
-				"section" => $o->id(),
-				"view" => 1,
-				"level" => $this->jrks[$o->id()],
-				"company_id" => $_SESSION["company"],
-		),
-		CL_PERSONS_WEBVIEW);
 	}
 }
 ?>

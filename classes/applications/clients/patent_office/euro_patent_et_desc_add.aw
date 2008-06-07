@@ -1,10 +1,38 @@
 <?php
+// euro_patent_et_desc_add.aw - Euroopa patendi eestikeelse kirjelduse veebist lisamine
 /*
-@classinfo syslog_type=ST_EURO_PATENT_ET_DESC_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=ma
-@tableinfo aw_euro_patent_et_desc_add master_index=brother_of master_table=objects index=aw_oid
 
-@default table=aw_euro_patent_et_desc_add
+@classinfo syslog_type=ST_EURO_PATENT_ET_DESC_ADD relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
+
+@default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+	@property procurator_menu type=relpicker reltype=RELTYPE_PROCURATOR_MENU
+	@caption Volinike kaust
+
+	@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
+	@caption Pangamakse objekt
+
+	@property trademarks_menu type=relpicker reltype=RELTYPE_TRADEMARK_MENU
+	@caption Euroopa patendi eestikeelse kirjelduse taotluste kaust
+
+	@property series type=relpicker reltype=RELTYPE_SERIES
+	@caption Numbriseeria
+
+@reltype BANK_PAYMENT value=11 clid=CL_BANK_PAYMENT
+@caption Pangalingi objekt
+
+@reltype PROCURATOR_MENU value=8 clid=CL_MENU
+@caption Volinike kaust
+
+@reltype TRADEMARK_MENU value=9 clid=CL_MENU
+@caption EP patendi taotluste kaust
+
+@reltype SERIES clid=CL_CRM_NUMBER_SERIES value=3
+@caption Numbriseeria
+
 
 */
 
@@ -13,33 +41,9 @@ class euro_patent_et_desc_add extends class_base
 	function euro_patent_et_desc_add()
 	{
 		$this->init(array(
-			"tpldir" => "applications/clients/patent_office/euro_patent_et_desc_add",
+			"tpldir" => "applications/patent",
 			"clid" => CL_EURO_PATENT_ET_DESC_ADD
 		));
-	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
 	}
 
 	function callback_mod_reforb($arr)
@@ -47,6 +51,7 @@ class euro_patent_et_desc_add extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -57,23 +62,108 @@ class euro_patent_et_desc_add extends class_base
 		return $this->parse();
 	}
 
-	function do_db_upgrade($t, $f)
+	/**
+		@attrib name=parse_alias is_public="1" caption="Change"
+	**/
+	function parse_alias($arr)
 	{
-		if ($f == "")
+		$tm_inst = get_instance(CL_EURO_PATENT_ET_DESC);
+		return $tm_inst->parse_alias($arr);
+	}
+
+	function get_folders_as_object_list($o, $level, $parent)
+	{
+		$ol = new object_list();
+		if(isset($_GET["data_type"]) or isset($_GET["trademark_id"]))
 		{
-			$this->db_query("CREATE TABLE aw_euro_patent_et_desc_add(aw_oid int primary_key)");
-			return true;
+			$links = $o->meta("meaningless_sh__");
+
+			if(is_array($links) && sizeof($links) == 4)
+			{
+				foreach($links as $link)
+				{
+					if($this->can("view" , $link))
+					{
+						$ol->add($link);
+					}
+					else break;
+				}
+			}
+
+			if(!(is_array($links) && sizeof($links) == 4))
+			{
+				$ol = new object_list();
+				$o1 = new object();
+				$o1->set_name("Patendiomaniku andmed");
+				$o1->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o1->set_parent($o->id());
+				$o1->save();
+				$ol->add($o1);
+
+				$o3 = new object();
+				$o3->set_name("Leiutis");
+				$o3->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o3->set_parent($o->id());
+				$o3->save();
+				$ol->add($o3);
+
+				$o5 = new object();
+				$o5->set_name("Riigil".chr(245)."iv");
+				$o5->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o5->set_parent($o->id());
+				$o5->save();
+				$ol->add($o5);
+
+				$o6 = new object();
+				$o6->set_name("Andmete kontroll/edastamine");
+				$o6->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o6->set_parent($o->id());
+				$o6->save();
+				$ol->add($o6);
+
+				$o->set_meta("meaningless_sh__" , $ol->ids());
+				$o->save();
+			}
+		}
+		return $ol;
+	}
+
+	function make_menu_link($o, $ref = NULL)
+	{
+		if($this->can("view" , $_SESSION["patent"]["id"]))
+		{
+			$tr_inst = get_instance(CL_EURO_PATENT_ET_DESC);
+			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
+			if($res["status"] == 1)
+			{
+				return aw_url_change_var()."#";
+			}
 		}
 
-		switch($f)
+		static $jrk;
+
+		if (empty($jrk))
 		{
-			case "":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => ""
-				));
-				return true;
+			$jrk = 0;
 		}
+
+		$item = euro_patent_et_desc::$level_index[$jrk];
+
+		if($jrk === 0)
+		{
+			$url = $_SERVER["SCRIPT_URI"]."?data_type=0" . (!empty($_GET["section"]) ? ("&section=".$_GET["section"]) : "");
+		}
+		elseif (in_array($item, $_SESSION["patent"]["checked"]))
+		{
+			$url = aw_url_change_var("data_type", $item);
+		}
+		else
+		{
+			$url = aw_url_change_var()."#";
+		}
+
+		++$jrk;
+		return $url;
 	}
 }
 
