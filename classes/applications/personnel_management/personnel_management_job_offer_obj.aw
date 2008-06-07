@@ -2,6 +2,62 @@
 
 class personnel_management_job_offer_obj extends _int_object
 {
+	function set_prop($k, $v)
+	{
+		if($k == "notify_me")
+		{
+			$p = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
+			if($v == 1)
+			{
+				parent::connect(array(
+					"to" => $p->id(),
+					"type" => "RELTYPE_NOTIFY_ME",
+				));
+			}
+			else
+			{
+				$conns = connection::find(array(
+					"from" => parent::id(),
+					"to" => $p->id(),
+					"reltype" => "RELTYPE_NOTIFY_ME",
+				));
+				if(count($conns) > 0)
+				{
+					parent::disconnect(array(
+						"from" => $p->id(),
+						"type" => "RELTYPE_NOTIFY_ME",
+					));
+				}
+			}
+			return true;
+		}
+		else
+		{
+			return parent::set_prop($k, $v);
+		}
+	}
+
+	function get_prop($k)
+	{
+		if($k == "notify_me")
+		{
+			$p = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
+			$conns = connection::find(array(
+				"from" => parent::id(),
+				"to" => $p->id(),
+				"reltype" => "RELTYPE_NOTIFY_ME",
+			));
+			if(count($conns) > 0)
+			{
+				return 1;
+			}
+		}
+		else
+		{
+			return parent::get_prop($k);
+		}
+	}
+	
 	function get_candidates()
 	{
 		$ret = new object_list();

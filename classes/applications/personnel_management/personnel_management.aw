@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.34 2008/05/21 17:48:36 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.35 2008/06/07 20:24:28 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes r2=yes no_status=1 no_comment=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes r2=yes no_status=1 no_comment=1 prop_cb=1 maintainer=instrumental
 
 @default group=general
 @default table=objects
@@ -96,6 +96,9 @@
 		@property rate_candidates type=checkbox ch_value=1 field=meta method=serialize
 		@caption Hinda kandideerijaid
 
+		@property notify_me_tpl type=relpicker reltype=RELTYPE_NOTIFICATION_TPL store=connect
+		@caption Kandidatuurist teavitamise kiri
+
 	@groupinfo job_wanted_conf caption="T&ouml;&ouml;soovi seaded" parent=general
 	@default group=job_wanted_conf
 
@@ -183,10 +186,19 @@
 					@property cv_age_to type=textbox parent=cv_age captionside=top size=4 store=no
 					@caption Vanus kuni
 
+				@property cv_mod_from type=date_select default=-1 parent=isikuandmed captionside=top store=no
+				@caption CV muudetud alates
+
+				@property cv_mod_to type=date_select default=-1 parent=isikuandmed captionside=top store=no
+				@caption CV muudetud kuni
+
 			@layout haridus type=vbox parent=employee_search area_caption=Haridus closeable=1
 
 				@property cv_edulvl type=select parent=haridus captionside=top store=no
 				@caption Haridustase
+
+				@property cv_edu_exact type=checkbox ch_value=1 parent=haridus captionside=top store=no no_caption=1
+				@caption T&auml;pne vaste
 
 				@property cv_acdeg type=select parent=haridus captionside=top store=no
 				@caption Akadeemiline kraad
@@ -205,8 +217,13 @@
 				@property cv_job type=textbox size=18 parent=soovitud_t88 captionside=top store=no
 				@caption Ametinimetus
 
-				@property cv_paywish type=textbox parent=soovitud_t88 captionside=top size=6 store=no
-				@caption Palk
+				@layout cv_paywish_lt type=hbox parent=soovitud_t88
+
+					@property cv_paywish type=textbox parent=cv_paywish_lt captionside=top size=6 store=no
+					@caption Palk alates
+
+					@property cv_paywish2 type=textbox parent=cv_paywish_lt captionside=top size=6 store=no
+					@caption Palk kuni
 
 				@property cv_field type=textbox size=18 multiple=1 orient=vertical parent=soovitud_t88 captionside=top store=no
 				@caption Tegevusala
@@ -294,49 +311,49 @@
 ----------------------------------------
 @groupinfo offers caption="T&ouml;&ouml;pakkumised" submit=no
 
-@groupinfo offers_ parent=offers caption="&Uuml;ldine" submit=no
-@default group=offers_
+	@groupinfo offers_ parent=offers caption="&Uuml;ldine" submit=no
+	@groupinfo offers_archive parent=offers caption="Arhiiv" submit=no
+	@default group=offers_,offers_archive
 
-	@property offers_toolbar type=toolbar no_caption=1
+		@property offers_toolbar type=toolbar no_caption=1
 
-	@layout offers type=hbox width=15%:85%
+		@layout offers type=hbox width=15%:85%
 
-		@layout offers_tree_n_search type=vbox parent=offers
+			@layout offers_tree_n_search type=vbox parent=offers
 
-			@layout offers_tree type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumised
+				@layout offers_tree type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumised
 
-				@property offers_tree type=treeview no_caption=1 parent=offers_tree
-			
-			@layout offers_search type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumiste&nbsp;otsing
+					@property offers_tree type=treeview no_caption=1 parent=offers_tree
+				
+				@layout offers_search type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumiste&nbsp;otsing
 
-				@forminfo offers_search onload=init_offers_search onsubmit=do_offers_search method=post
+					@layout os_top type=vbox parent=offers_search
 
-				@layout os_top type=vbox parent=offers_search
+						@property os_pr type=textbox parent=os_top captionside=top store=no size=18
+						@caption Ametikoht
 
-					@property os_pr type=textbox parent=os_top captionside=top store=no size=18 form=offers_search
-					@caption Ametikoht
+						@property os_county type=textbox parent=os_top captionside=top store=no size=18
+						@caption Maakond
 
-					@property os_county type=textbox parent=os_top captionside=top store=no size=18 form=offers_search
-					@caption Maakond
+						@property os_city type=textbox parent=os_top captionside=top store=no size=18
+						@caption Linn
 
-					@property os_city type=textbox parent=os_top captionside=top store=no size=18 form=offers_search
-					@caption Linn
+					@layout os_dl_layout type=vbox parent=offers_search
 
-				@layout os_dl_layout type=vbox parent=offers_search
+						@property os_dl_from type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox
+						@caption T&auml;htaeg alates
 
-					@property os_dl_from type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox form=offers_search
-					@caption T&auml;htaeg alates
+						@property os_dl_to type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox
+						@caption T&auml;htaeg kuni
 
-					@property os_dl_to type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox form=offers_search
-					@caption T&auml;htaeg kuni
+					@property os_status type=chooser store=no parent=offers_search captionside=top
+					@caption Staatus
 
-				@property os_status type=chooser store=no parent=offers_search captionside=top form=offers_search
-				@caption Staatus
+					@property os_sbt type=submit parent=offers_search no_caption=1
+					@caption Otsi
 
-				@property os_sbt type=submit parent=offers_search no_caption=1 form=offers_search
-				@caption Otsi
+		@property offers_table type=table no_caption=1 parent=offers
 
-	@property offers_table type=table no_caption=1 parent=offers
 
 ----------------------------------------
 
@@ -392,6 +409,9 @@
 
 @reltype DOC value=13 clid=CL_DOCUMENT
 @caption Dokument veebist kandideerimiseks
+
+@reltype NOTIFICATION_TPL value=14 clid=CL_MESSAGE_TEMPLATE
+@caption Kandidatuurist teavitamise kiri
 
 */
 
@@ -575,6 +595,7 @@ class personnel_management extends class_base
 			case "cv_age_from":
 			case "cv_age_to":
 			case "cv_previous_rank":
+			case "cv_edu_exact":
 
 			case "os_pr":
 			case "os_county":
@@ -583,6 +604,14 @@ class personnel_management extends class_base
 				$s = $arr['request'][$prop["name"]];
 				$this->dequote(&$s);
 				$prop['value'] = $s;
+				break;
+
+			case "cv_mod_from":
+			case "cv_mod_to":
+				if(is_numeric($arr['request'][$prop["name"]]["day"]) && is_numeric($arr['request'][$prop["name"]]["month"]) && is_numeric($arr['request'][$prop["name"]]["year"]))
+				{
+					$prop["value"] = $arr['request'][$prop["name"]];
+				}
 				break;
 				
 			case "os_dl_to":
@@ -599,6 +628,7 @@ class personnel_management extends class_base
 						"value" => $k,
 						"checked" => $arr["request"]["cv_driving_licence"][$k] == $k,
 						"caption" => t($c),
+						"nbsp" => 1,
 					))."&nbsp;";
 				}
 				break;
@@ -888,11 +918,19 @@ class personnel_management extends class_base
 				));
 				foreach($objs->arr() as $o)
 				{
-					$cnt_ol = $o->$fn(array(
+					$fn_prms = array(
 						"parent" => $this->$fld,
 						"personnel_management" => $arr["obj_inst"]->id(),
 						"by_jobwish" => ($fn == "get_residents") ? 1 : 0,
-					));
+					);
+					if($fn == "get_job_offers")
+					{
+						$fn_prms["props"] = array(
+							"archive" => ($arr["request"]["group"] != "offers_archive" || $arr["request"]["group"] == "candidate") ? 0 : 1,
+						);
+						$fn_prms["status"] = object::STAT_ACTIVE;
+					}
+					$cnt_ol = $o->$fn($fn_prms);
 					$cnt = $cnt_ol->count();
 					$cnt_tot += $cnt;
 				}
@@ -919,11 +957,19 @@ class personnel_management extends class_base
 			));
 			foreach($objs->arr() as $o)
 			{
-				$cnt_ol = $o->$fn(array(
+				$fn_prms = array(
 					"parent" => $this->$fld,
 					"personnel_management" => $arr["obj_inst"]->id(),
 					"by_jobwish" => ($fn == "get_residents") ? 1 : 0,
-				));
+				);
+				if($fn == "get_job_offers")
+				{
+					$fn_prms["props"] = array(
+						"archive" => ($arr["request"]["group"] != "offers_archive" || $arr["request"]["group"] == "candidate") ? 0 : 1,
+					);
+					$fn_prms["status"] = object::STAT_ACTIVE;
+				}
+				$cnt_ol = $o->$fn($fn_prms);
 				if($arr["request"]["group"] != "candidate")
 				{
 					$cnt = $cnt_ol->count();
@@ -1129,6 +1175,34 @@ class personnel_management extends class_base
 			)
 		));
 
+		if($r["cv_mod_from"] && is_numeric($r["cv_mod_from"]["month"]) && is_numeric($r["cv_mod_from"]["day"]) && is_numeric($r["cv_mod_from"]["year"]))
+		{
+			$t = mktime(0, 0, 0, $r["cv_mod_from"]["month"], $r["cv_mod_from"]["day"], $r["cv_mod_from"]["year"]);
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"modified" => new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$t
+					),
+				),
+			));
+		}
+
+		if($r["cv_mod_to"] && is_numeric($r["cv_mod_to"]["month"]) && is_numeric($r["cv_mod_to"]["day"]) && is_numeric($r["cv_mod_to"]["year"]))
+		{
+			$t = mktime(23, 59, 59, $r["cv_mod_to"]["month"], $r["cv_mod_to"]["day"], $r["cv_mod_to"]["year"]);
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"modified" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						$t
+					),
+				),
+			));
+		}
+
 		if($r["cv_age_from"] && $r["cv_age_to"])
 		{
 			// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
@@ -1219,9 +1293,16 @@ class personnel_management extends class_base
 			$odl_prms["gender"] = $r["cv_gender"];
 		}
 		// HARIDUS
-		if($r["cv_edulvl"])
+		if($r["cv_edulvl"] && $r["cv_edu_exact"])
 		{
 			$odl_prms["edulevel"] = $r["cv_edulvl"];
+		}
+		elseif($r["cv_edulvl"])
+		{
+			$odl_prms["edulevel"] = new obj_predicate_compare(
+				OBJ_COMP_GREATER_OR_EQ,
+				$r["cv_edulvl"]
+			);
 		}
 		if($r["cv_acdeg"])
 		{
@@ -1254,52 +1335,29 @@ class personnel_management extends class_base
 			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.in_progress"] = 2 - $r["cv_schl_stat"];
 		}
 		// SOOVITUD T88
-		if($r["cv_paywish"] && $r["cv_paywish2"])
+		if($r["cv_paywish"])
 		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay"] = new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING,
-				$r["cv_paywish"],
-				$r["cv_paywish2"]
-			);
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay2"] = new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING,
-				$r["cv_paywish"],
-				$r["cv_paywish2"]
-			);
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay" => new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$r["cv_paywish"]
+					),
+				),
+			));
 		}
-		else
+		if($r["cv_paywish2"])
 		{
-			if($r["cv_paywish"])
-			{
-				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay"] = new obj_predicate_compare(
-					OBJ_COMP_BETWEEN_INCLUDING,
-					1,
-					$r["cv_paywish"]
-				);
-				/*
-				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER_OR_EQ,
-					$r["cv_paywish"]
-				);
-				// The lower limit might not be set.
-				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay2"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER_OR_EQ,
-					$r["cv_paywish"]
-				);
-				*/
-			}
-			if($r["cv_paywish2"])
-			{
-				// The upper limit might not be set.
-				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay"] = new obj_predicate_compare(
-					OBJ_COMP_LESS_OR_EQ,
-					$r["cv_paywish2"]
-				);
-				$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay2"] = new obj_predicate_compare(
-					OBJ_COMP_LESS_OR_EQ,
-					$r["cv_paywish2"]
-				);
-			}
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						$r["cv_paywish2"]
+					),
+				),
+			));
 		}
 		if($r["cv_job"])
 		{
@@ -1321,12 +1379,21 @@ class personnel_management extends class_base
 		}
 		if($r["cv_location"])
 		{
+			$cv_locs = explode(", ", $r["cv_location"]);
+			foreach($cv_locs as $cv_loc)
+			{
+				$cv_loc = trim($cv_loc);
+				$conditions[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.name" => "%".$cv_loc."%",
+						"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2.name" => "%".$cv_loc."%",
+					),
+				));
+			}
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.name" => "%".$r["cv_location"]."%",
-					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2.name" => "%".$r["cv_location"]."%",
-				),
+				"conditions" => $conditions,
 			));
 		}
 		if($r["cv_load"])
@@ -1576,6 +1643,19 @@ class personnel_management extends class_base
 			"class_id" => array(CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 			"sort_by" => "objects.class_id, objects.name",
 			"status" => object::STAT_ACTIVE,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+							"archive" => 0,
+						),
+					)),
+					"class_id" => CL_MENU,
+				)
+			)),
 		));
 		$obx = $objs->to_list()->arr();
 		// First we'll run through the job offer objs.
@@ -1652,6 +1732,9 @@ class personnel_management extends class_base
 				$ofrs = $o->get_job_offers(array(
 					"parent" => $this->offers_fld,
 					"status" => object::STAT_ACTIVE,
+					"props" => array(
+						"archive" => 0,
+					),
 				));
 				$cnt = 0;
 				foreach($ofrs->arr() as $ofr)
@@ -1669,7 +1752,7 @@ class personnel_management extends class_base
 							"fld_id" => $ofr->id(),
 							"ofr_id" => $ofr->id(),
 						)),
-					"iconurl" => icons::get_icon_url($ob->class_id()),
+						"iconurl" => icons::get_icon_url($o->class_id()),
 					));
 					//$cnt += $cnt_cands;
 					$cnt++;
@@ -1720,6 +1803,7 @@ class personnel_management extends class_base
 		$childs = new object_list(array(
 			"parent" => $this->offers_fld,
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
 		));
 		$cnt = $childs->count();
 		$str = $cnt > 0 ? " ($cnt)" : "";
@@ -1735,6 +1819,7 @@ class personnel_management extends class_base
 			$childs = new object_list(array(
 				"parent" => $id,
 				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+				"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
 			));
 			$cnt = $childs->count();
 			$str = $cnt > 0 ? " ($cnt)" : "";
@@ -1769,6 +1854,9 @@ class personnel_management extends class_base
 			{
 				$cnt = $o->get_job_offers(array(
 					"parent" => $this->offers_fld,
+					"props" => array(
+						"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
+					),
 				))->count();
 				if($cnt == 0)
 				{
@@ -1879,11 +1967,18 @@ class personnel_management extends class_base
 		$tb->add_button(array(
 			"name" => "save",
 			"caption" => t("Salvesta"),
+			"tooltip" => t("Salvesta"),
 			"img" => "save.gif",
 			"action" => "save_offers",
 		));
 		$tb->add_delete_button();
-
+		$tb->add_button(array(
+			"name" => "archive",
+			"caption" => $arr["request"]["group"] != "offers_archive" ? t("Arhiveeri") : t("Dearhiveeri"),
+			"tooltip" => $arr["request"]["group"] != "offers_archive" ? t("Arhiveeri t&ouml;&ouml;pakkumised") : t("Dearhiveeri t&ouml;&ouml;pakkumised"),
+			"img" => "archive_small.gif",
+			"action" => "archive",
+		));
 	}
 
 	function _get_employee_list_table($arr)
@@ -1952,6 +2047,19 @@ class personnel_management extends class_base
 					"class_id" => array(CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 					"sort_by" => "objects.class_id, objects.name",
 					"status" => object::STAT_ACTIVE,
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							new object_list_filter(array(
+								"logic" => "AND",
+								"conditions" => array(
+									"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+									"archive" => 0,
+								),
+							)),
+							"class_id" => CL_MENU,
+						)
+					)),
 				));
 				$obx = $objs->to_list()->arr();
 			}
@@ -2177,7 +2285,10 @@ class personnel_management extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_offers_table(&$t);
 
-		$ol_arr = array("class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER);
+		$ol_arr = array(
+			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
+		);
 		if($r["os_status"] == 1 || $r["os_status"] == 2)
 		{
 			$ol_arr["status"] = $r["os_status"];
@@ -2191,11 +2302,15 @@ class personnel_management extends class_base
 			if($r["os_pr"])
 			{
 				if(!$this->can("view", $obj->prop("profession")))
+				{
 					continue;
+				}
 				$pr = obj($obj->prop("profession"));
 				$prof = $pr->name();
 				if(strpos(strtolower($pr->name()), strtolower($r["os_pr"])) === false)
+				{
 					continue;
+				}
 			}
 			if($r["os_county"])
 			{
@@ -2203,12 +2318,18 @@ class personnel_management extends class_base
 				foreach($obj->connections_from(array("type" => 5, "class_id" => CL_CRM_COUNTY)) as $conn)
 				{
 					if(strpos(strtolower($conn->conn["to.name"]), strtolower($r["os_county"])) === false)
+					{
 						continue;
+					}
 					else
+					{
 						$ok = true;
+					}
 				}
 				if(!$ok)
+				{
 					continue;
+				}
 			}
 			if($r["os_city"])
 			{
@@ -2216,22 +2337,32 @@ class personnel_management extends class_base
 				foreach($obj->connections_from(array("type" => 5, "class_id" => CL_CRM_CITY)) as $conn)
 				{
 					if(strpos(strtolower($conn->conn["to.name"]), strtolower($r["os_city"])) === false)
+					{
 						continue;
+					}
 					else
+					{
 						$ok = true;
+					}
 				}
 				if(!$ok)
+				{
 					continue;
+				}
 			}
 			if($r["os_dl_from_time"])
 			{
 				if($obj->prop("end") < $r["os_dl_from_time"])
+				{
 					continue;
+				}
 			}
 			if($r["os_dl_to_time"])
 			{
 				if($obj->prop("end") > $r["os_dl_to_time"])
+				{
 					continue;
+				}
 			}
 			if($this->can("view", $obj->prop("profession")))
 			{
@@ -2297,6 +2428,7 @@ class personnel_management extends class_base
 			$objs = new object_list(array(
 				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 				"parent" => $fld_id,
+				"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
 			));
 		}
 		else
@@ -2304,6 +2436,9 @@ class personnel_management extends class_base
 			$o = obj($oid);
 			$objs = $o->get_job_offers(array(
 				"parent" => $this->offers_fld,
+				"props" => array(
+					"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
+				)
 			));
 		}
 
@@ -2592,6 +2727,8 @@ class personnel_management extends class_base
 			$arr["args"]["cv_exp_lvl"] = $arr["request"]["cv_exp_lvl"];
 			$arr["args"]["cv_gender"] = $arr["request"]["cv_gender"];
 			$arr["args"]["cv_age_from"] = $arr["request"]["cv_age_from"];
+			$arr["args"]["cv_mod_to"] = $arr["request"]["cv_mod_to"];
+			$arr["args"]["cv_mod_from"] = $arr["request"]["cv_mod_from"];
 			$arr["args"]["cv_age_to"] = $arr["request"]["cv_age_to"];
 			$arr["args"]["cv_previous_rank"] = $arr["request"]["cv_previous_rank"];
 			$arr["args"]["cv_driving_licence"] = $arr["request"]["cv_driving_licence"];
@@ -2599,6 +2736,7 @@ class personnel_management extends class_base
 			$arr["args"]["cv_email"] = $arr["request"]["cv_email"];
 			$arr["args"]["cv_addinfo"] = $arr["request"]["cv_addinfo"];
 			$arr["args"]["cv_edulvl"] = $arr["request"]["cv_edulvl"];
+			$arr["args"]["cv_edu_exact"] = $arr["request"]["cv_edu_exact"];
 			$arr["args"]["cv_acdeg"] = $arr["request"]["cv_acdeg"];
 			$arr["args"]["cv_schl"] = $arr["request"]["cv_schl"];
 			$arr["args"]["cv_schl_area"] = $arr["request"]["cv_schl_area"];
@@ -2762,7 +2900,9 @@ class personnel_management extends class_base
 		{
 			$to = $conn->to();
 			if(in_array($to->prop("person"), $arr["sel"]))
+			{
 				$to->delete();
+			}
 		}
 		return $arr["post_ru"];
 	}
@@ -2803,6 +2943,20 @@ class personnel_management extends class_base
 			$options[$sid] = $str.$sdata["name"];
 			$this->add_skill_options(&$skills, &$options, &$disabled_options, $sid, $lvl + 1);
 		}
+	}
+	
+	/**
+		@attrib name=archive params=name
+	**/
+	function archive($arr)
+	{
+		foreach($arr["sel"] as $id)
+		{
+			$o = obj($id);
+			$o->archive = 1 - $o->archive;
+			$o->save();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

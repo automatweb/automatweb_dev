@@ -2,9 +2,10 @@
 
 class ml_member_obj extends _int_object
 {
-	/*
+	/**
+		@attrib name=get_persons api=1 params=name
 		@param id required type=oid,array(oid)
-	*/
+	**/
 	function get_persons($arr)
 	{
 		$ret = new object_list;

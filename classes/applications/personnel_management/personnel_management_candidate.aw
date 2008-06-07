@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.8 2008/04/07 11:45:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.9 2008/06/07 20:24:28 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @default table=objects
 @default field=meta
 
-@property person type=relpicker reltype=RELTYPE_PERSON method=serialize
+@property person type=relpicker reltype=RELTYPE_PERSON store=connect
 @caption Isik
 
 @property job_offer type=relpicker reltype=RELTYPE_JOB_OFFER store=connect
@@ -105,6 +105,26 @@ class personnel_management_candidate extends class_base
 		return $retval;
 	}
 
+	function callback_post_save($arr)
+	{
+		if($this->can("view", aw_global_get("person_obj_id_for_candidate")))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => aw_global_get("person_obj_id_for_candidate"),
+				"type" => "RELTYPE_PERSON",
+			));
+			aw_session_set("person_obj_id_for_candidate", "");
+		}
+		if($this->can("view", aw_global_get("job_offer_obj_id_for_candidate")))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => aw_global_get("job_offer_obj_id_for_candidate"),
+				"type" => "RELTYPE_JOB_OFFER",
+			));
+			aw_session_set("job_offer_obj_id_for_candidate", "");
+		}
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -128,6 +148,30 @@ class personnel_management_candidate extends class_base
 			return $intro;
 		}
 		return "kaaskiri puudub";
+	}
+
+	/**
+		@attrib name=new nologin=1 all_args=1
+	**/
+	function pnew($arr)
+	{
+		return parent::change($arr);
+	}
+
+	/**
+		@attrib name=change nologin=1 all_args=1
+	**/
+	function pchange($arr)
+	{
+		return parent::change($arr);
+	}
+
+	/**
+		@attrib name=submit all_args=1 nologin=1
+	**/
+	function psubmit($arr)
+	{
+		return parent::submit($arr);
 	}
 
 	function on_connect_person_to_candidate($arr)

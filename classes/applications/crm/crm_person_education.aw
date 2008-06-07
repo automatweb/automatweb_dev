@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.16 2008/06/04 10:35:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.17 2008/06/07 20:24:34 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -77,8 +77,11 @@ class crm_person_education extends class_base
 		$this->degree_options = array(
 			"pohiharidus" => t("P&otilde;hiharidus"),
 			"keskharidus" => t("Keskharidus"),
+			3 => t("Kutsekeskharidus"),
 			"keskeriharidus" => t("Kesk-eriharidus"),
-			"diplom" => t("Diplom"),
+			5 => t("Kutsek&otilde;rgharidus"),
+			6 => t("Rakendusk&otilde;rgharidus"),
+			"diplom" => t("K&otilde;rghariduse diplom"),
 			"bakalaureus" => t("Bakalaureus"),
 			"magister" => t("Magister"),
 			"doktor" => t("Doktor"),

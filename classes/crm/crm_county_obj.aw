@@ -14,17 +14,27 @@ class crm_county_obj extends _int_object
 		@param childs optional type=boolean default=true
 			If set true all objects that's parent is either the parent folder or subfolder of the parent folder is returned. Has effect only if parent folder is set. (folder = CL_MENU object)
 
+		@param props optional type=array
+			You can add here filters for the object list.
+
 	**/
 	function get_job_offers($arr)
 	{
 		$this->prms(&$arr);
 
-		return new object_list(array(
+		$ol_prms = array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"parent" => $arr["parent"],
 			"CL_PERSONNEL_MANAGEMENT_JOB_OFFER.RELTYPE_COUNTY" => parent::id(),
 			"status" => $arr["status"],
-		));
+		);
+
+		if(is_array($arr["props"]) && count($arr["props"]) > 0)
+		{
+			$ol_prms += $arr["props"];
+		}
+
+		return new object_list($ol_prms);
 	}
 
 	/**

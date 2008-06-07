@@ -134,6 +134,34 @@ class crm_company_obj extends _int_object
 		return $r;
 	}
 
+	function get_employees()
+	{
+		$ol = new object_list();
+		//getting all the workers for the $obj
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_WORKERS",
+		));
+		foreach($conns as $conn)
+		{
+			$ol->add($conn->prop('to'));
+		}
+
+		//getting all the sections
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_SECTION",
+		));
+		foreach($conns as $conn)
+		{
+			$section = $conn->to();
+			foreach($section->get_employees()->ids() as $oid)
+			{
+				$ol->add($oid);
+			}
+		}
+
+		return $ol;
+	}
+
 	function get_root_sections()
 	{
 		$r = new object_list();
@@ -165,8 +193,6 @@ class crm_company_obj extends _int_object
 		}
 		return $r;
 	}
-
-
 }
 
 ?>

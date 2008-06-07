@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.13 2008/04/02 10:35:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.14 2008/06/07 20:24:28 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -43,11 +43,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @property ready_for_errand type=checkbox ch_value=1 	 
 @caption Olen valmis t&ouml;&ouml;l&auml;hetusteks
 
-@property location type=relpicker multiple=1 automatic=1 orient=vertical store=connect reltype=RELTYPE_LOCATION
+@property location type=relpicker multiple=1 orient=vertical store=connect reltype=RELTYPE_LOCATION
 @caption T&ouml;&ouml; asukoht
 @comment Esimene valik 	 
 	  	 
-@property location_2 type=relpicker multiple=1 automatic=1 orient=vertical store=connect reltype=RELTYPE_LOCATION2 	 
+@property location_2 type=relpicker multiple=1 orient=vertical store=connect reltype=RELTYPE_LOCATION2 	 
 @caption T&ouml;&ouml; asukoht 	 
 @comment Teine valik 	 
  
@@ -119,6 +119,26 @@ class personnel_management_job_wanted extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "location":
+			case "location_2":
+				$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
+				if($this->can("view", $pm_id))
+				{
+					$pm = obj($pm_id);
+					$conf = $pm->prop($prop["name"]."_conf");
+					if(is_array($conf) && count($conf))
+					{
+						$ol = new object_list(array(
+							"class_id" => $conf,
+							"parent" => array(),
+							"sort_by" => "objects.jrk ASC, objects.name ASC"
+						));
+						$ops = $ol->names();
+						$prop["options"] = is_array($prop["options"]) ? ($prop["options"] + $ops) : $ops;
+					}
+				}
+				break;
+
 			case "start_working": 	 
 				$prop["options"] = $this->start_working_options; 	 
 				break;
