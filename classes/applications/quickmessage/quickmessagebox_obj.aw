@@ -207,7 +207,9 @@ class quickmessagebox_obj extends _int_object
 				$box->set_parent($user->id());
 				$box->set_name(sprintf(t("Quickmessagebox of %s"), $user->name()));
 				$box->set_prop("owner", $user->id());
+				aw_disable_acl(); // because trying to save under another user object
 				$box->save();
+				aw_restore_acl();
 				$box->connect(array(
 					"to" => $user->id(),
 					"type" => "RELTYPE_OWNER"
