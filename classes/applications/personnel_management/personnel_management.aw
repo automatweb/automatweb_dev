@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.36 2008/06/08 08:44:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.37 2008/06/08 11:45:54 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1380,7 +1380,7 @@ class personnel_management extends class_base
 		}
 		if($r["cv_location"])
 		{
-			$cv_locs = explode(", ", $r["cv_location"]);
+			$cv_locs = explode(",", $r["cv_location"]);
 			foreach($cv_locs as $cv_loc)
 			{
 				$cv_loc = trim($cv_loc);
