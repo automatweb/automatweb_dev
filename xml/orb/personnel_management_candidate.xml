@@ -9,5 +9,26 @@
 			</function>
 		</action>
 
+		<action name="new" nologin="1" all_args="1">
+			<function name="pnew">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change" nologin="1" all_args="1">
+			<function name="pchange">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit" nologin="1" all_args="1">
+			<function name="psubmit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

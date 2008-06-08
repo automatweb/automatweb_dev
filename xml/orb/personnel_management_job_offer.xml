@@ -119,5 +119,12 @@
 			</function>
 		</action>
 
+		<action name="typical_data" all_args="1">
+			<function name="typical_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

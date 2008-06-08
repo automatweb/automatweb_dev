@@ -239,6 +239,17 @@
             <caption>Hinda kandideerijaid</caption>
       </property>
       <property>
+            <name>notify_me_tpl</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_NOTIFICATION_TPL</reltype>
+            <store>connect</store>
+            <caption>Kandidatuurist teavitamise kiri</caption>
+      </property>
+      <property>
             <name>location_conf</name>
             <group>job_wanted_conf</group>
             <table>objects</table>
@@ -518,6 +529,38 @@
             <caption>Vanus kuni</caption>
       </property>
       <property>
+            <name>cv_mod_from</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <default>-1</default>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>CV muudetud alates</caption>
+      </property>
+      <property>
+            <name>cv_mod_to</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <default>-1</default>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>CV muudetud kuni</caption>
+      </property>
+      <property>
             <name>cv_edulvl</name>
             <group>
                   <num_0>employee</num_0>
@@ -531,6 +574,23 @@
             <captionside>top</captionside>
             <store>no</store>
             <caption>Haridustase</caption>
+      </property>
+      <property>
+            <name>cv_edu_exact</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>T&amp;amp;auml;pne vaste</caption>
       </property>
       <property>
             <name>cv_acdeg</name>
@@ -621,11 +681,27 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <parent>soovitud_t88</parent>
+            <parent>cv_paywish_lt</parent>
             <captionside>top</captionside>
             <size>6</size>
             <store>no</store>
-            <caption>Palk</caption>
+            <caption>Palk alates</caption>
+      </property>
+      <property>
+            <name>cv_paywish2</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>cv_paywish_lt</parent>
+            <captionside>top</captionside>
+            <size>6</size>
+            <store>no</store>
+            <caption>Palk kuni</caption>
       </property>
       <property>
             <name>cv_field</name>
@@ -915,7 +991,10 @@
       </property>
       <property>
             <name>offers_toolbar</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -925,7 +1004,10 @@
       </property>
       <property>
             <name>offers_tree</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -936,7 +1018,10 @@
       </property>
       <property>
             <name>os_pr</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -945,12 +1030,14 @@
             <captionside>top</captionside>
             <store>no</store>
             <size>18</size>
-            <form>offers_search</form>
             <caption>Ametikoht</caption>
       </property>
       <property>
             <name>os_county</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -959,12 +1046,14 @@
             <captionside>top</captionside>
             <store>no</store>
             <size>18</size>
-            <form>offers_search</form>
             <caption>Maakond</caption>
       </property>
       <property>
             <name>os_city</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -973,12 +1062,14 @@
             <captionside>top</captionside>
             <store>no</store>
             <size>18</size>
-            <form>offers_search</form>
             <caption>Linn</caption>
       </property>
       <property>
             <name>os_dl_from</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -991,12 +1082,14 @@
                   <num_1>month_textbox</num_1>
                   <num_2>year_textbox</num_2>
             </format>
-            <form>offers_search</form>
             <caption>T&amp;amp;auml;htaeg alates</caption>
       </property>
       <property>
             <name>os_dl_to</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -1009,12 +1102,14 @@
                   <num_1>month_textbox</num_1>
                   <num_2>year_textbox</num_2>
             </format>
-            <form>offers_search</form>
             <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
             <name>os_status</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -1022,25 +1117,29 @@
             <store>no</store>
             <parent>offers_search</parent>
             <captionside>top</captionside>
-            <form>offers_search</form>
             <caption>Staatus</caption>
       </property>
       <property>
             <name>os_sbt</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
             <parent>offers_search</parent>
             <no_caption>1</no_caption>
-            <form>offers_search</form>
             <store>no</store>
             <caption>Otsi</caption>
       </property>
       <property>
             <name>offers_table</name>
-            <group>offers_</group>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -1076,7 +1175,7 @@
             <no_status>1</no_status>
             <no_comment>1</no_comment>
             <prop_cb>1</prop_cb>
-            <maintainer>kristo</maintainer>
+            <maintainer>instrumental</maintainer>
       </classinfo>
       <groupinfo>
             <general2>
@@ -1124,6 +1223,11 @@
                   <caption>&amp;amp;Uuml;ldine</caption>
                   <submit>no</submit>
             </offers_>
+            <offers_archive>
+                  <parent>offers</parent>
+                  <caption>Arhiiv</caption>
+                  <submit>no</submit>
+            </offers_archive>
             <actions>
                   <caption>Tegevused</caption>
                   <submit>no</submit>
@@ -1199,6 +1303,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument veebist kandideerimiseks</caption>
             </DOC>
+            <NOTIFICATION_TPL>
+                  <value>14</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>Kandidatuurist teavitamise kiri</caption>
+            </NOTIFICATION_TPL>
       </reltypes>
       <layout>
             <employee>
@@ -1287,6 +1396,15 @@
                         <num_1>candidate</num_1>
                   </group>
             </soovitud_t88>
+            <cv_paywish_lt>
+                  <type>hbox</type>
+                  <parent>soovitud_t88</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </cv_paywish_lt>
             <oskused>
                   <type>vbox</type>
                   <parent>employee_search</parent>
@@ -1328,13 +1446,19 @@
             <offers>
                   <type>hbox</type>
                   <width>15%:85%</width>
-                  <group>offers_</group>
+                  <group>
+                        <num_0>offers_</num_0>
+                        <num_1>offers_archive</num_1>
+                  </group>
                   <area_caption></area_caption>
             </offers>
             <offers_tree_n_search>
                   <type>vbox</type>
                   <parent>offers</parent>
-                  <group>offers_</group>
+                  <group>
+                        <num_0>offers_</num_0>
+                        <num_1>offers_archive</num_1>
+                  </group>
                   <area_caption></area_caption>
             </offers_tree_n_search>
             <offers_tree>
@@ -1342,34 +1466,39 @@
                   <parent>offers_tree_n_search</parent>
                   <closeable>1</closeable>
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</area_caption>
-                  <group>offers_</group>
+                  <group>
+                        <num_0>offers_</num_0>
+                        <num_1>offers_archive</num_1>
+                  </group>
             </offers_tree>
             <offers_search>
                   <type>vbox</type>
                   <parent>offers_tree_n_search</parent>
                   <closeable>1</closeable>
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste&amp;amp;nbsp;otsing</area_caption>
-                  <group>offers_</group>
+                  <group>
+                        <num_0>offers_</num_0>
+                        <num_1>offers_archive</num_1>
+                  </group>
             </offers_search>
             <os_top>
                   <type>vbox</type>
                   <parent>offers_search</parent>
-                  <group>offers_</group>
+                  <group>
+                        <num_0>offers_</num_0>
+                        <num_1>offers_archive</num_1>
+                  </group>
                   <area_caption></area_caption>
             </os_top>
             <os_dl_layout>
                   <type>vbox</type>
                   <parent>offers_search</parent>
-                  <group>offers_</group>
+                  <group>
+                        <num_0>offers_</num_0>
+                        <num_1>offers_archive</num_1>
+                  </group>
                   <area_caption></area_caption>
             </os_dl_layout>
       </layout>
-      <forminfo>
-            <offers_search>
-                  <onload>init_offers_search</onload>
-                  <onsubmit>do_offers_search</onsubmit>
-                  <method>post</method>
-            </offers_search>
-      </forminfo>
 </properties>
 

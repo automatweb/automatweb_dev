@@ -6,6 +6,7 @@
 				<arguments>
 					<optional name="parent" type="oid,array(oid)" acl="view" />
 					<optional name="status" type="int" />
+					<optional name="props" type="array" />
 				</arguments>
 			</function>
 		</action>

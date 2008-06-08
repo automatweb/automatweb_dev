@@ -34,6 +34,16 @@
             <caption>Aktiivne</caption>
       </property>
       <property>
+            <name>archive</name>
+            <table>personnel_management_job_offer</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>archive</field>
+            <default>0</default>
+            <caption>Arhiveeritud</caption>
+      </property>
+      <property>
             <name>company</name>
             <table>objects</table>
             <group>general</group>
@@ -292,6 +302,7 @@
             <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
+            <no_rte_button>1</no_rte_button>
             <store>no</store>
       </property>
       <property>
@@ -522,7 +533,7 @@
             <r2>yes</r2>
             <no_comment>1</no_comment>
             <prop_cb>1</prop_cb>
-            <maintainer>kristo</maintainer>
+            <maintainer>instrumental</maintainer>
       </classinfo>
       <groupinfo>
             <candidate>
@@ -616,7 +627,7 @@
             </JOB_OFFER_FILE>
             <MOBI_SMS_SENT>
                   <value>13</value>
-                  <clid>CL_MOBI_SMS_SENT</clid>
+                  <clid>CL_SMS_SENT</clid>
                   <caption>Kandideerijale saadetud SMSi saatmine</caption>
             </MOBI_SMS_SENT>
             <SECTION>
@@ -631,7 +642,7 @@
             </COUNTRY>
             <TYPICAL_MOBI_SMS>
                   <value>16</value>
-                  <clid>CL_MOBI_SMS</clid>
+                  <clid>CL_SMS</clid>
                   <caption>T&amp;amp;uuml;&amp;amp;uuml;s&amp;amp;otilde;num</caption>
             </TYPICAL_MOBI_SMS>
             <TYPICAL_MAIL_MESSAGE>

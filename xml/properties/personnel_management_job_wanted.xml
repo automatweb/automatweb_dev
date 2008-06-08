@@ -94,7 +94,6 @@
             <group>general</group>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <automatic>1</automatic>
             <orient>vertical</orient>
             <store>connect</store>
             <reltype>RELTYPE_LOCATION</reltype>
@@ -108,7 +107,6 @@
             <group>general</group>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <automatic>1</automatic>
             <orient>vertical</orient>
             <store>connect</store>
             <reltype>RELTYPE_LOCATION2</reltype>

@@ -51,5 +51,12 @@
 			</function>
 		</action>
 
+		<action name="archive">
+			<function name="archive">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

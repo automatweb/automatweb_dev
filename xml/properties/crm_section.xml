@@ -26,7 +26,7 @@
             <type>textbox</type>
             <size>4</size>
             <field>jrk</field>
-            <caption>J&amp;auml;rk</caption>
+            <caption>J&amp;amp;auml;rk</caption>
       </property>
       <property>
             <name>ext_id</name>
@@ -35,7 +35,7 @@
             <type>textbox</type>
             <size>4</size>
             <field>subclass</field>
-            <caption>Siduss&amp;uuml;steemi ID</caption>
+            <caption>Siduss&amp;amp;uuml;steemi ID</caption>
       </property>
       <property>
             <name>grp_crea</name>
@@ -189,7 +189,7 @@
             <SECTION>
                   <value>1</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>Alam&amp;uuml;ksus</caption>
+                  <caption>Alam&amp;amp;uuml;ksus</caption>
             </SECTION>
             <WORKERS>
                   <value>2</value>
@@ -204,7 +204,7 @@
             <JOB_OFFER>
                   <value>4</value>
                   <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
-                  <caption>T&amp;ouml;&amp;ouml;pakkumine</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine</caption>
             </JOB_OFFER>
             <GROUP>
                   <value>5</value>

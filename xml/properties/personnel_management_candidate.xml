@@ -7,7 +7,7 @@
             <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_PERSON</reltype>
-            <method>serialize</method>
+            <store>connect</store>
             <caption>Isik</caption>
       </property>
       <property>
