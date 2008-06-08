@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.29 2008/05/08 13:31:39 instrumental Exp $
+$Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.30 2008/06/08 12:38:34 instrumental Exp $
 
 @classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE maintainer=kristo
 
@@ -411,8 +411,15 @@ class object_type extends class_base
 			"parent" => $conf["classificator"][$arr["classificator"]],
 			"status" => object::STAT_ACTIVE,
 			"sort_by" => "jrk",
+			"lang_id" => array(),
 		));
-		return $ol->names();
+		//return $ol->names();
+		$ops = array();
+		foreach($ol->arr() as $o)
+		{
+			$ops[$o->id()] = $o->trans_get_val("name");
+		}
+		return $ops;
 	}
 }
 ?>

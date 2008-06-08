@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.15 2008/06/08 11:52:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.16 2008/06/08 12:39:25 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -131,9 +131,15 @@ class personnel_management_job_wanted extends class_base
 						$ol = new object_list(array(
 							"class_id" => $conf,
 							"parent" => array(),
-							"sort_by" => "objects.jrk ASC, objects.name ASC"
+							"sort_by" => "objects.jrk ASC, objects.name ASC",
+							"lang_id" => array(),
 						));
-						$ops = $ol->names();
+						//$ops = $ol->names();
+						$ops = array();
+						foreach($ol->arr() as $o)
+						{
+							$ops[$o->id()] = $o->trans_get_val("name");
+						}
 						$prop["options"] = is_array($prop["options"]) ? ($prop["options"] + $ops) : $ops;
 					}
 				}
@@ -157,7 +163,11 @@ class personnel_management_job_wanted extends class_base
 							"status" => object::STAT_ACTIVE,
 							"lang_id" => array(),
 						));
-						$prop["options"] = $ol->names();
+						//$prop["options"] = $ol->names();
+						foreach($ol->arr() as $o)
+						{
+							$prop["options"][$o->id()] = $o->trans_get_val("name");
+						}
 					}
 				}
 				break;
