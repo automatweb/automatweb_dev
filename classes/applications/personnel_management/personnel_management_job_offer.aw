@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.35 2008/06/08 11:58:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.36 2008/06/08 12:41:14 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -607,7 +607,7 @@ class personnel_management_job_offer extends class_base
 		));
 		$t->define_field(array(
 			"name" => "ml",
-			"caption" => t("E-postiaadress"),
+			"caption" => t("E-posti aadress"),
 			"align" => "center",
 			"sortable" => 1,
 		));
@@ -927,7 +927,7 @@ class personnel_management_job_offer extends class_base
 		));
 		$t->define_field(array(
 			"name" => "emails",
-			"caption" => t("E-postiaadressid"),
+			"caption" => t("E-posti aadressid"),
 			"sortable" => 1,
 		));
 		if($this->can("view", $arr["obj_inst"]->rate_scale) && obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->rate_candidates)
