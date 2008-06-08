@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.17 2008/06/07 20:24:34 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.18 2008/06/08 12:48:02 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -148,8 +148,14 @@ class crm_person_education extends class_base
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_COMPANY,
 					"parent" => obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->shools_fld,
+					"lang_id" => array(),
 				));
-				$prop["options"] = array("" => t("--vali--")) + $ol->names();
+				$ops = array();
+				foreach($ol->arr() as $o)
+				{
+					$ops[$o->id()] = $o->trans_get_val("name");
+				}
+				$prop["options"] = array("" => t("--vali--")) + $ops;
 				break;
 		};
 		return $retval;
