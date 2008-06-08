@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.32 2008/06/08 09:12:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.33 2008/06/08 10:14:48 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -530,6 +530,7 @@ class personnel_management_job_offer extends class_base
 						}
 					}
 				}
+				$prop["onchange"] = "if(this.value != ".$prop["value"].") { aw_get_el('offer_cfgform_changed').value = 1; } else { aw_get_el('offer_cfgform_changed').value = 0; }";
 				break;
 			
 			case "contact":
@@ -1312,6 +1313,11 @@ class personnel_management_job_offer extends class_base
 				{
 					$this->set_new_cfgform_tbl($arr);
 				}
+				else
+				if(!$arr["request"]["offer_cfgform_changed"])
+				{
+					$this->set_new_cfgform_tbl($arr, 1);
+				}
 				break;
 
 			case "candidate_table":
@@ -1589,6 +1595,7 @@ class personnel_management_job_offer extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["typical_name"] = "";
 		$arr["click_send"] = "";
+		$arr["offer_cfgform_changed"] = 0;
 	}
 
 	function callback_mod_retval($arr)
@@ -1640,21 +1647,29 @@ class personnel_management_job_offer extends class_base
 		}
 	}
 
-	function set_new_cfgform_tbl($arr)
+	function set_new_cfgform_tbl($arr, $old)
 	{
 		$data = $arr["request"]["new_cfgform_tbl"]["selected"];
 		$data2 = $arr["request"]["new_cfgform_tbl"]["mandatory"];
 		$data3 = $arr["request"]["new_cfgform_tbl"]["jrk"];
-		$cfgform_id = $arr["obj_inst"]->prop("offer_cfgform");
+		$cfgform_id = $old ? $arr["request"]["offer_cfgform"] : $arr["obj_inst"]->prop("offer_cfgform");
 		if(!$this->can("view", $cfgform_id))
 		{
 			return false;
 		}
-		$cfgform = obj($cfgform_id);
-		$cfgform_inst = $cfgform->instance();
-		$new_cfgform_id = $cfgform->save_new();
-		$new_cfgform = obj($new_cfgform_id);
-		$new_cfgform->set_name($arr["request"]["new_cfgform_name"]);
+		if(!$old)
+		{
+			$cfgform = obj($cfgform_id);
+			$new_cfgform_id = $cfgform->save_new();
+			$new_cfgform = obj($new_cfgform_id);
+			$new_cfgform->set_name($arr["request"]["new_cfgform_name"]);
+		}
+		else
+		{
+			$new_cfgform = obj($cfgform_id);
+			$new_cfgform_id = $new_cfgform->id();
+		}
+		$cfgform_inst = $new_cfgform->instance();
 		$cfg_proplist = $new_cfgform->meta("cfg_proplist");
 		$controllers = $new_cfgform->meta("controllers");
 
@@ -1679,12 +1694,16 @@ class personnel_management_job_offer extends class_base
 			{
 				//$v = explode(',', str_replace($mand_cont.',', '', (join(',', $v))));
 				$v = explode(',,', trim(str_replace(','.$mand_cont.',', '', ',,'.(join(',,', $v)).',,'), ','));
+				$controllers[$i] = $v;
 			}
 		}
 		// Add the controller, if it's mandatory
 		foreach($data2 as $i => $v)
 		{
-			$controllers[$i][] = $mand_cont;
+			if(!in_array($mand_cont, $controllers[$i]))
+			{
+				$controllers[$i][] = $mand_cont;
+			}
 		}
 
 		// Connect the controller to the cfgform, if any props are mandatory.
