@@ -4,7 +4,7 @@
 // Copied from metamgr.aw and modified.
 /*
 
-@classinfo syslog_type=ST_CRM_SKILL_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_SKILL_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
 
 @default table=objects
 @default group=general
@@ -131,6 +131,16 @@ class crm_skill_manager extends class_base
 			"callb_pass_row" => true,
 			"align" => "center",
 		));
+		$langs = get_instance("languages")->get_list();
+		unset($langs[$arr["obj_inst"]->lang_id()]);
+		foreach($langs as $lang_id => $lang)
+		{
+			$t->define_field(array(
+				"name" => $lang_id,
+				"caption" => t("Nimi")." (".$lang.")",
+				"align" => "center",
+			));
+		}
 		if(!empty($arr["request"]["skill"]))
 		{
 			$t->define_field(array(
@@ -210,6 +220,14 @@ class crm_skill_manager extends class_base
 				"value" => $arr["obj_inst"]->prop("default_lvls"),
 			)),
 		);
+		foreach($langs as $lang_id => $lang)
+		{
+			$new_data[$lang_id] = html::textbox(array(
+				"name" => "submeta[new][trans][".$lang_id."]",
+				"value" => "",
+				"size" => 40,
+			));
+		}
 
 		$t->define_data($new_data);
 
@@ -237,6 +255,15 @@ class crm_skill_manager extends class_base
 				)),
 				"ord" => $o->ord(),
 			);
+			$tr = $o->meta("translations");
+			foreach($langs as $lang_id => $lang)
+			{
+				$trans[$lang_id] = html::textbox(array(
+					"name" => "submeta[" . $id . "][trans][".$lang_id."]",
+					"value" => $tr[$lang_id]["name"],
+					"size" => 40,
+				));
+			}
 			$t->define_data($trans);
 		};
 
@@ -339,12 +366,21 @@ class crm_skill_manager extends class_base
 			$no = new object;
 			$no->set_class_id(CL_CRM_SKILL);
 			$no->set_status(STAT_ACTIVE);
+			$no->set_lang_id($obj->lang_id());
 			$no->set_parent($parent);
 			$no->set_name($new["name"]);
 			$no->set_prop("subheading", $new["subheading"]);
 			$no->set_prop("lvl", $new["lvl"]);
 			$no->set_prop("lvl_meta", $new["lvl_meta"]);
 			$no->set_ord((int)$new["ord"]);
+			$tr = array();
+			foreach($new["trans"] as $lang_id => $trans_name)
+			{
+				$tr[$lang_id]["name"] = $trans_name;
+				$no->set_meta("trans_".$lang_id."_status", 1);
+				$no->set_meta("trans_".$lang_id."_modified", time());
+			}
+			$no->set_meta("translations", $tr);
 			$no->save();
 		};	
 		$submeta = $arr["request"]["submeta"];
@@ -367,6 +403,14 @@ class crm_skill_manager extends class_base
 					$so->set_prop("lvl", $parent_obj->prop("lvl"));
 					$so->set_prop("lvl_meta", $parent_obj->prop("lvl_meta"));
 				}
+				$tr = $so->meta("translations");
+				foreach($sval["trans"] as $lang_id => $trans_name)
+				{
+					$tr[$lang_id]["name"] = $trans_name;
+					$so->set_meta("trans_".$lang_id."_status", 1);
+					$so->set_meta("trans_".$lang_id."_modified", time());
+				}
+				$so->set_meta("translations", $tr);
 				$so->set_ord($sval["ord"]);
 				$so->save();
 			};
