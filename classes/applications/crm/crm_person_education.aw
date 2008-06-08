@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.18 2008/06/08 12:48:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.19 2008/06/08 17:09:31 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -116,7 +116,7 @@ class crm_person_education extends class_base
 			case "end":
 			case "start":
 				$ops["---"] = "---";
-				for($i = 1950; $i <= date("Y") + 5; $i++)
+				for($i = 1950; $i <= date("Y") + 1; $i++)
 				{
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
@@ -149,6 +149,10 @@ class crm_person_education extends class_base
 					"class_id" => CL_CRM_COMPANY,
 					"parent" => obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->shools_fld,
 					"lang_id" => array(),
+					new obj_predicate_sort(array(
+						"jrk" => "asc",
+						"name" => "asc",
+					)),
 				));
 				$ops = array();
 				foreach($ol->arr() as $o)
