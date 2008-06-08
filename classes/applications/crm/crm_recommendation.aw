@@ -63,6 +63,7 @@ class crm_recommendation extends class_base
 					"class_id" => CL_LANGUAGE,
 					"parent" => array(),
 					"site_id" => array(),
+					"lang_id" => array(),
 				);
 				$oid = get_instance(CL_PERSONNEL_MANAGEMENT)->get_rec_lang_conf();
 				if(is_array($oid) && count($oid) > 0)
@@ -70,7 +71,11 @@ class crm_recommendation extends class_base
 					$ol_prms["oid"] = array_keys($oid);
 				}
 				$ol = new object_list($ol_prms);
-				$prop["options"] = $ol->names();
+				//$prop["options"] = $ol->names();
+				foreach($ol->arr() as $o)
+				{
+					$prop["options"][$o->id()] = $o->trans_get_val("name");
+				}
 				break;
 
 			case "phones":
