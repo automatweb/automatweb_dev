@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.37 2008/06/08 11:45:54 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.38 2008/06/08 13:23:31 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2825,7 +2825,7 @@ class personnel_management extends class_base
 		return $o->meta("udef_skills");
 	}
 
-	function get_lang_conf($arr)
+	function get_lang_conf($arr = array())
 	{
 		if(!is_oid($arr["id"]))
 		{
@@ -2852,7 +2852,7 @@ class personnel_management extends class_base
 		@param id optional type=oid
 			The oid of the personnel management object. If not set, system default is used.
 	**/
-	function get_languages($arr)
+	function get_languages($arr = array())
 	{
 		$odl = new object_data_list(
 			array(

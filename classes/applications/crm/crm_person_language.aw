@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.6 2008/03/28 09:28:37 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.7 2008/06/08 13:23:28 instrumental Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -54,9 +54,8 @@ class crm_person_language extends class_base
 		switch($prop["name"])
 		{
 			case "language":
-				$pm = obj($personnel_management_inst->get_sysdefault());
 				$prop["options"][0] = t("--vali--");
-				foreach(personnel_management::get_languages() as $lkey => $lname)
+				foreach($personnel_management_inst->get_languages() as $lkey => $lname)
 				{
 					$prop["options"][$lkey] = $lname;
 				}
