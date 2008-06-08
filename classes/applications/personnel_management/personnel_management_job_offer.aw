@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.34 2008/06/08 11:42:18 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.35 2008/06/08 11:58:13 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -187,6 +187,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@default group=sent_fb_email
 	
 		@property sent_fb_email_tbl type=table store=no no_caption=1
+		
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 @reltype CANDIDATE value=1 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
 @caption Kandidatuur
@@ -260,6 +266,9 @@ class personnel_management_job_offer extends class_base
 			"tpldir" => "applications/personnel_management/personnel_management_job_offer",
 			"clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 		));
+		$this->trans_props = array(
+			"subject", "keywords", "workinfo", "requirements", "weoffer", "info",
+		);
 	}
 
 	function get_property($arr)
@@ -268,6 +277,10 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "notify_me":
 				$prop["value"] = $arr["obj_inst"]->get_prop($prop["name"]);
 				break;
@@ -2542,6 +2555,11 @@ class personnel_management_job_offer extends class_base
 		{
 			exit(json_encode(array("subject" => iconv($charset, "UTF-8", $o->prop("subject")), "message" => iconv($charset, "UTF-8", $o->prop("content")))));
 		}
+	}
+	
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
