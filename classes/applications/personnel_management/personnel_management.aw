@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.38 2008/06/08 13:23:31 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.39 2008/06/08 17:06:53 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -70,6 +70,12 @@
 
 		@property drivers_license type=select multiple=1
 		@caption Juhilubade kategooriad
+
+		@property yob_from type=textbox size=4 default=1930
+		@caption S&uuml;nniaasta alates
+
+		@property yob_to type=textbox size=4
+		@caption S&uuml;nniaasta kuni
 
 	@groupinfo lang_conf caption="Keelte seaded" parent=general
 	@default group=lang_conf
@@ -2861,8 +2867,11 @@ class personnel_management extends class_base
 				"status" => array(),
 				"site_id" => array(),
 				"lang_id" => array(),
-				"sort_by" => "jrk",
 				"oid" => array_keys(personnel_management::get_lang_conf($arr)),
+				new obj_predicate_sort(array(
+					"jrk" => "asc",
+					"name" => "asc",
+				)),
 			),
 			array(
 				CL_CRM_LANGUAGE => array("oid" => "oid", "name" => "name"),

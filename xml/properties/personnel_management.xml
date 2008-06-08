@@ -170,6 +170,27 @@
             <caption>Juhilubade kategooriad</caption>
       </property>
       <property>
+            <name>yob_from</name>
+            <group>skill_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <default>1930</default>
+            <caption>S&amp;amp;uuml;nniaasta alates</caption>
+      </property>
+      <property>
+            <name>yob_to</name>
+            <group>skill_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <caption>S&amp;amp;uuml;nniaasta kuni</caption>
+      </property>
+      <property>
             <name>lang_tb</name>
             <group>lang_conf</group>
             <table>objects</table>

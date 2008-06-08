@@ -1839,6 +1839,27 @@ class crm_person extends class_base
 		$personnel_management_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 		switch($data["name"])
 		{
+			case "birthday":
+				$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+				if($pm->yob_from)
+				{
+					arr($pm->yob_from);
+					if((int)$pm->yob_from < 0)
+					{
+						$pm->yob_from = date("Y") + (int)$pm->yob_from;
+					}
+					$data["year_from"] = $pm->yob_from;
+				}
+				if($pm->yob_to)
+				{
+					if((int)$pm->yob_to < 0)
+					{
+						$pm->yob_to = date("Y") + (int)$pm->yob_to;
+					}
+					$data["year_to"] = $pm->yob_to;
+				}
+				break;
+
 			case "current_job_edit":
 				if($arr["obj_inst"]->not_working)
 				{
