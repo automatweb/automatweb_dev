@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.10 2008/03/27 09:23:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.11 2008/06/08 11:52:09 instrumental Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CV_SEARCH relationmgr=yes r2=yes no_comment=1 no_status=1 maintainer=kristo
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CV_SEARCH relationmgr=yes r2=yes no_comment=1 no_status=1 maintainer=instrumental
 
 @default table=objects
 @default group=general

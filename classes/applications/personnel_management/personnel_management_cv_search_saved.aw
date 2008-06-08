@@ -2,7 +2,7 @@
 // personnel_management_cv_search_saved.aw - Salvestatud CV otsing
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
 
 @default table=objects
 @default group=general

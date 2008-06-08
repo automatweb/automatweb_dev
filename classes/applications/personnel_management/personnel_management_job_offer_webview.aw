@@ -2,7 +2,7 @@
 // personnel_management_job_offer_webview.aw - T&ouml;&ouml;pakkumised veebis
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER_WEBVIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER_WEBVIEW relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=instrumental
 
 @default table=objects
 @default group=general
