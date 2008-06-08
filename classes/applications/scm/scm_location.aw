@@ -185,5 +185,26 @@ class scm_location extends class_base
 		}
 		return false;
 	}
+	
+	/**
+	@attrib name=location_data params=name all_args=1
+	**/
+	function location_data($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SCM_LOCATION,
+			"name" => $arr["name"],
+			"lang_id" => array(),
+			"limit" => 1,
+		));
+		if($ol->count > 0)
+		{
+			$o = $ol->begin();
+			$d = array(
+			);
+			die(json_encode($d));
+		}
+		die(json_encode(array()));
+	}
 }
 ?>
