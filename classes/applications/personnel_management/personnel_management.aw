@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.35 2008/06/07 20:24:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.36 2008/06/08 08:44:47 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -629,6 +629,7 @@ class personnel_management extends class_base
 						"checked" => $arr["request"]["cv_driving_licence"][$k] == $k,
 						"caption" => t($c),
 						"nbsp" => 1,
+						"span" => 1,
 					))."&nbsp;";
 				}
 				break;

@@ -559,6 +559,8 @@ class html extends aw_template
 		title
 	@param nbsp optional type=bool
 		If set, the caption is separated from checbox with non-breaking spaces.
+	@param span optional type=bool
+
 	@returns string/html checkbox
 	**/
 	function checkbox($args = array())
@@ -566,6 +568,8 @@ class html extends aw_template
 		extract($args);
 		$checked = isset($checked) ? checked($checked) : '';
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
+		$span = $span ? "<span>" : "";
+		$span_ = $span ? "</span>" : "";
 		$capt = '';
 
 		if (empty($value))
@@ -595,7 +599,7 @@ class html extends aw_template
 		{
 			$onc = " onclick=\"{$onclick}\"";
 		}
-		$rv = "<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />$capt\n";
+		$rv = "$span<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
 		return $rv;
 	}
 
