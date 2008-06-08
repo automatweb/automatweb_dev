@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.33 2008/06/08 10:14:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.34 2008/06/08 11:42:18 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -780,11 +780,16 @@ class personnel_management_job_offer extends class_base
 		$cfg_proplist = $cff->get_cfg_proplist($cfgform_id);
 		$controllers = $cfgform->meta("controllers");
 		$mand_cont = $pm->prop("mandatory_controller");
+		$existing_props = get_instance(CL_CRM_PERSON)->get_all_properties();
 		$pm_default_cfgform = obj($pm->default_offers_cfgform);
 		//foreach($cff->get_cfg_proplist($pm->default_offers_cfgform) as $pid => $pdata)
 		foreach($pm_default_cfgform->meta("cfg_proplist") as $pid => $pdata)
 		//foreach(get_instance(CL_CRM_PERSON)->get_all_properties() as $pid => $pdata)
 		{
+			if(!array_key_exists($pid, $existing_props))
+			{
+				continue;
+			}
 			if(is_array($pdata["group"]))
 			{
 				$pdata["group"] = $this->heavy_implode(", ", $pdata["group"]);
