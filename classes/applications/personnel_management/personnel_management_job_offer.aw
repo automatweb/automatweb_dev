@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.30 2008/06/07 20:24:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.31 2008/06/08 09:07:32 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1903,11 +1903,20 @@ class personnel_management_job_offer extends class_base
 			$sect = obj($ob->sect);
 			$tmpo = obj();
 			$tmpo->set_class_id(CL_CRM_ADDRESS);
-			foreach(array_keys($tmpo->get_property_list()) as $prop)
+			foreach($tmpo->get_property_list() as $prop => $pdata)
 			{
-				$this->vars(array(
-					"sect.contact.".$prop => $sect->prop("contact.".$prop),
-				));
+				if($pdata["type"] == "relpicker")
+				{					
+					$this->vars(array(
+						"sect.contact.".$prop => $sect->prop("contact.".$prop.".name"),
+					));
+				}
+				else
+				{					
+					$this->vars(array(
+						"sect.contact.".$prop => $sect->prop("contact.".$prop),
+					));
+				}
 			}
 			$this->vars(array(
 				"sect.description" => $sect->description,
