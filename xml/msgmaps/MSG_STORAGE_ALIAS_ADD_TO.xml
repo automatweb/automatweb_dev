@@ -55,4 +55,9 @@
       <func>on_add_alias_for_group</func>
       <param>CL_GROUP</param>
 </num_10>
+<num_11>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>notify_me</func>
+      <param>CL_PERSONNEL_MANAGEMENT_CANDIDATE</param>
+</num_11>
 </xml>
