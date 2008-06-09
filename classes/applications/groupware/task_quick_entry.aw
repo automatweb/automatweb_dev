@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.36 2008/06/09 12:53:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.37 2008/06/09 18:05:43 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -571,9 +571,10 @@ $start = ((float)$usec + (float)$sec);
 			}
 			
 			// add row to task
-			$r = obj();
-			$r->set_class_id(CL_TASK_ROW);
-			$r->set_parent($t->id());
+			$r = $t->add_row();
+//			$r->set_class_id(CL_TASK_ROW);
+//			$r->set_parent($t->id());
+
 			$r->set_prop("content", $arr["request"]["content"]);
 			$r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
 			$r->set_prop("time_guess", $arr["request"]["duration"]);
@@ -585,12 +586,18 @@ $start = ((float)$usec + (float)$sec);
 			$r->set_prop("ord", $max_ord);
 			$r->save();
 
-			$t->connect(array(
-				"to" => $r->id(),
-				"type" => "RELTYPE_ROW"
-			));
+//			$t->connect(array(
+//				"to" => $r->id(),
+//				"type" => "RELTYPE_ROW"
+//			));
+			$t_id = $t->id();
 		}
 
+	}
+	else
+	{
+		$row = reset($rows->arr());
+		$t_id = $row->prop("task");
 	}
 
 		if ($arr["request"]["submit_and_add"] != "")
@@ -601,7 +608,7 @@ $start = ((float)$usec + (float)$sec);
 		else
 		{
 			die("<script language=javascript>window.opener.location='"
-			.html::get_change_url($t->id(), array("group" => "rows", "return_url" => "javascript:history.go(-1)")).
+			.html::get_change_url($t_id, array("group" => "rows", "return_url" => "javascript:history.go(-1)")).
 			"';window.close();</script>");
 		}
 	}
