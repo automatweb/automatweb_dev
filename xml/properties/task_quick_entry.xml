@@ -4,6 +4,7 @@
             <name>date</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>datetime_select</type>
             <store>no</store>
             <field>date</field>
@@ -13,6 +14,7 @@
             <name>cust_type</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>select</type>
             <field>cust_type</field>
             <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
@@ -21,6 +23,7 @@
             <name>customer</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textbox</type>
             <store>no</store>
             <field>customer</field>
@@ -30,6 +33,7 @@
             <name>custp_fn</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textbox</type>
             <field>custp_fn</field>
             <caption>Eesnimi</caption>
@@ -38,6 +42,7 @@
             <name>custp_ln</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textbox</type>
             <field>custp_ln</field>
             <caption>Perenimi</caption>
@@ -46,6 +51,7 @@
             <name>project</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textbox</type>
             <store>no</store>
             <field>project</field>
@@ -55,6 +61,7 @@
             <name>task</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textbox</type>
             <store>no</store>
             <field>task</field>
@@ -64,6 +71,7 @@
             <name>duration</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>5</size>
@@ -71,19 +79,10 @@
             <caption>Kestvus</caption>
       </property>
       <property>
-            <name>parts</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>chooser</type>
-            <multiple>1</multiple>
-            <orient>vertical</orient>
-            <field>parts</field>
-            <caption>Osalejad</caption>
-      </property>
-      <property>
             <name>content</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textarea</type>
             <store>no</store>
             <rows>10</rows>
@@ -95,6 +94,7 @@
             <name>submit_but</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>submit</type>
             <store>no</store>
             <field>submit_but</field>
@@ -104,9 +104,21 @@
             <name>submit_and_add</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>text</type>
             <field>submit_and_add</field>
             <caption>&amp;amp;nbsp;</caption>
+      </property>
+      <property>
+            <name>parts</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <field>parts</field>
+            <caption>Osalejad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_TASK_QUICK_ENTRY</syslog_type>
@@ -123,5 +135,26 @@
                   <focus>customer</focus>
             </general>
       </groupinfo>
+      <layout>
+            <general_split>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </general_split>
+            <general_up>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>&amp;amp;Uuml;ldinfo</area_caption>
+                  <parent>general_split</parent>
+                  <group>general</group>
+            </general_up>
+            <general_down>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Osalejad</area_caption>
+                  <parent>general_split</parent>
+                  <group>general</group>
+            </general_down>
+      </layout>
 </properties>
 

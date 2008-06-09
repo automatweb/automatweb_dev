@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.35 2008/06/04 12:31:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.36 2008/06/09 12:53:33 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -9,6 +9,11 @@
 
 @default table=objects
 @default group=general
+
+@layout general_split type=hbox
+@layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
+@default parent=general_up
+
 
 @property date type=datetime_select store=no
 @caption Aeg
@@ -34,9 +39,6 @@
 @property duration type=textbox store=no size=5
 @caption Kestvus
 
-@property parts type=chooser multiple=1 orient=vertical
-@caption Osalejad
-
 @property content type=textarea store=no rows=10 cols=50
 @caption Sisu
 
@@ -45,6 +47,15 @@
 
 @property submit_and_add type=text 
 @caption &nbsp;
+
+	
+@layout general_down type=vbox closeable=1 area_caption=Osalejad parent=general_split
+@default parent=general_down
+
+
+@property parts type=chooser multiple=1 orient=vertical
+@caption Osalejad
+
 
 */
 
@@ -79,7 +90,6 @@ class task_quick_entry extends class_base
 			case "customer":
 				$prop["autocomplete_source"] = $this->mk_my_orb("cust_autocomplete_source");
 				$prop["autocomplete_params"] = array("customer");
-				if(aw_global_get("uid") == "marko") arr($prop);
 				break;
 
 			case "project":
