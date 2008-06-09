@@ -587,7 +587,7 @@ class crm_bill extends class_base
 			case "customer_name":
 			case "customer_code":
 			case "customer_address":
-				if($arr["request"]["customer"])
+				if($arr["request"]["customer"] || $arr["request"]["customer_awAutoCompleteTextbox"])
 				{
 					return PROP_IGNORE;
 				}
