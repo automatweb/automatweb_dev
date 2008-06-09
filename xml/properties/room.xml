@@ -86,6 +86,7 @@
             <multiple>1</multiple>
             <parent>general_up</parent>
             <size>4</size>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <caption>Ametinimetused</caption>
       </property>
       <property>
@@ -98,6 +99,7 @@
             <reltype>RELTYPE_PROFESSION</reltype>
             <multiple>1</multiple>
             <parent>general_up</parent>
+            <delete_rels_popup_button>1</delete_rels_popup_button>
             <size>4</size>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;giesindajate ametinimetused</caption>
       </property>

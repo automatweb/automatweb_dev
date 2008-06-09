@@ -36,10 +36,10 @@
 		@property area type=relpicker reltype=RELTYPE_AREA parent=general_up
 		@caption Valdkond
 
-		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up size=4
+		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up size=4  delete_rels_popup_button=1
 		@caption Ametinimetused
 
-		@property seller_professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up size=4
+		@property seller_professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up  delete_rels_popup_button=1 size=4
 		@caption M&uuml;&uuml;giesindajate ametinimetused
 	
 		@property inherit_prods_from type=relpicker reltype=RELTYPE_ROOM parent=general_up
