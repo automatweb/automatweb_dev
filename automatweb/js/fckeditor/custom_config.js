@@ -27,7 +27,7 @@ FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ; 
-FCKConfig.Plugins.Add( 'placeholder', 'en,et' ) ; 
+//FCKConfig.Plugins.Add( 'placeholder', 'en,et' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
@@ -80,8 +80,9 @@ FCKConfig.ToolbarSets["aw"] = [
 		['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 		['Subscript','Superscript'],
 		['awlup','Unlink','Anchor'],
-		['awimageupload','awfup','Placeholder','Table','Rule','Smiley','SpecialChar'],
-		['Templates'],
+		['awimageupload','awfup','Table','Rule','Smiley','SpecialChar'],
+		//['Templates'],
+		['Style','FontFormat'],
 		['FitWindow','ShowBlocks']		// No comma for the last row.
 ] ; 
 

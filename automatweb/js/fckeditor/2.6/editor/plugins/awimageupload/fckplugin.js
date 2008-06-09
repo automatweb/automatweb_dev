@@ -8,7 +8,7 @@ InsertAWImageCommand.Execute=function() {
 }
 FCKCommands.RegisterCommand('awimageupload', InsertAWImageCommand ); 
 var oawimageuploadItem = new FCKToolbarButton('awimageupload', FCKLang.AWUploadImage);
-oawimageuploadItem.IconPath = '/automatweb/js/fckeditor/editor/plugins/awimageupload/image.gif' ;
+oawimageuploadItem.IconPath = FCKPlugins.Items['awimageupload'].Path + 'image.gif' ;
 
 FCKToolbarItems.RegisterItem( 'awimageupload', oawimageuploadItem ) ;
 

@@ -8,7 +8,7 @@ InsertAWLupCommand.Execute=function() {
 }
 FCKCommands.RegisterCommand('awlup', InsertAWLupCommand ); 
 var oawlupItem = new FCKToolbarButton('awlup', FCKLang.AWLinkUpload);
-oawlupItem.IconPath = '/automatweb/js/fckeditor/editor/plugins/awlup/image.gif' ;
+oawlupItem.IconPath = FCKPlugins.Items['awlup'].Path + 'image.gif' ;
 
 
 FCKToolbarItems.RegisterItem( 'awlup', oawlupItem ) ;
