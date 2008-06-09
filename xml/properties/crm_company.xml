@@ -2386,7 +2386,7 @@
                   <num_2>year_textbox</num_2>
             </format>
             <field>bill_payments_from</field>
-            <caption>Esitatud alates</caption>
+            <caption>Laekunud alates</caption>
       </property>
       <property>
             <name>bill_payments_to</name>
@@ -2402,7 +2402,7 @@
                   <num_2>year_textbox</num_2>
             </format>
             <field>bill_payments_to</field>
-            <caption>Esitatud kuni</caption>
+            <caption>Laekunud kuni</caption>
       </property>
       <property>
             <name>bill_payments_client_mgr</name>

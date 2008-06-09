@@ -811,10 +811,10 @@ default group=org_objects
 			@caption Arve nr kuni
 
 			@property bill_payments_from type=date_select store=no parent=bills_payments_s captionside=top format=day_textbox,month_textbox,year_textbox
-			@caption Esitatud alates
+			@caption Laekunud alates
 
 			@property bill_payments_to type=date_select store=no parent=bills_payments_s captionside=top format=day_textbox,month_textbox,year_textbox
-			@caption Esitatud kuni
+			@caption Laekunud kuni
 
 			@property bill_payments_client_mgr type=text store=no parent=bills_payments_s captionside=top
 			@caption Kliendihaldur

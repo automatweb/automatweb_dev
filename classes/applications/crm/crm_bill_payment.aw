@@ -443,7 +443,7 @@ class crm_bill_payment extends class_base
 			}
 			if($srch["bill_payments_to"])
 			{
-				$to = date_edit::get_timestamp($srch["bill_payments_to"]);
+				$to = date_edit::get_day_end_timestamp($srch["bill_payments_to"]);
 			}
 			if($srch["bill_payments_from"] || $srch["bill_payments_to"])
 			{
