@@ -976,7 +976,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 				$filt["bill_date_range"] = array(
 					"from" => date_edit::get_timestamp($arr["request"]["bill_s_from"]),
-					"to" => date_edit::get_timestamp($arr["request"]["bill_s_to"])
+					"to" => date_edit::get_day_end_timestamp($arr["request"]["bill_s_to"])
 				);
 				if ($arr["request"]["bill_s_client_mgr"] != "")
 				{

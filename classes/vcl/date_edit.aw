@@ -380,4 +380,35 @@ class date_edit
 		$tmp =  mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
 		return $tmp;
 	}
+
+	/**
+		@attrib params=name api=1
+		@param year required type=int
+		sets the year
+		@param month required type=int
+		sets the month
+		@param day required type=int
+		sets the day
+		@comment
+		Generates unix timestamp according to given values
+		@returns
+		Returns Unix timestamp
+	**/
+	function get_day_end_timestamp($var)
+	{
+		if ($var['month'] == '---' || $var['day'] == '---' || $var['year'] == '---')
+		{
+			return -1;
+		}
+		if ($var['month'] == 0 || $var['day'] == 0 || $var['year'] == 0)
+		{
+			return -1;
+		}
+		if (!is_array($var))
+		{
+			return -1;
+		}
+		$tmp =  mktime(23, 59, 59, $var["month"], $var["day"], $var["year"]);
+		return $tmp;
+	}
 }; // end class
