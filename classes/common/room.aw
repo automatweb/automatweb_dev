@@ -962,6 +962,7 @@ class room extends class_base
 				$wds[$nr] = $price_inst->weekdays[$nr];
 			}
 			$prices = $price_inst->get_prices($oid);
+			$prc = array();
 			foreach($prices as $cur_oid => $price)
 			{
 				$prc["currency_".$cur_oid] = $price;
