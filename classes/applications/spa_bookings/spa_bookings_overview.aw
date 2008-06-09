@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.55 2008/05/29 14:26:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.56 2008/06/09 11:54:57 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1857,7 +1857,9 @@ class spa_bookings_overview extends class_base
 						"time_to" => date("H:i", $r->prop("end")),
 						"customer" => $r->prop("customer.name"),
 						"products" => $r_inst->get_products_text($r, " "),
-						"cust_arrived" => ($r->prop("client_arrived") == 0 ? "" : ($r->prop("client_arrived") == 1 ? t("Klient saabus") : t("Klient ei saabunud")))
+						"products_wo_amount" => $r_inst->get_products_wo_amount_text($r, " "),
+						"cust_arrived" => ($r->prop("client_arrived") == 0 ? "" : ($r->prop("client_arrived") == 1 ? t("Klient saabus") : t("Klient ei saabunud"))),
+						"comment" => $r->comment(),
 					));
 					$books .= $this->parse("BOOKING");
 				}

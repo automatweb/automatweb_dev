@@ -7,7 +7,7 @@
 		<div style='padding-left: 10px; font-size: 13px; padding-bottom: 30px;'>
 
 		<!-- SUB: BOOKING -->
-			{VAR:time_from} - {VAR:time_to}: {VAR:customer} / {VAR:products} {VAR:cust_arrived}<Br>
+			{VAR:time_from} - {VAR:time_to}: {VAR:customer} / {VAR:products_wo_amount} / {VAR:comment}  {VAR:cust_arrived}<Br>
 		<!-- END SUB: BOOKING -->
 		</div>
 	<!-- END SUB: DAY -->

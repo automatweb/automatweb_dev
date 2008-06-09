@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.97 2008/06/03 13:44:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.98 2008/06/09 11:54:56 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1894,6 +1894,21 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 					$amt,
 					$str
 				);
+			}
+		}
+		return join($val , $sep);
+	}
+
+	function get_products_wo_amount_text($o, $sep = "<BR>")
+	{
+		$amount = $o->meta("amount");
+		$val = array();
+		foreach($amount as $product => $amt)
+		{
+			if($amt && $this->can("view", $product))
+			{
+				$prod=obj($product);
+				$val[] = $prod->name();
 			}
 		}
 		return join($val , $sep);
