@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.20 2008/06/03 09:25:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.21 2008/06/09 14:42:25 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -203,6 +203,10 @@ class currency extends class_base
 			"name" => "sell_rate",
 			"caption" => t("M&uuml;&uuml;gikurss"),
 		));
+		$t->define_field(array(
+			"name" => "current_currency",
+			"caption" => "",
+		));
 		for($i = 0; $i < $count+1; $i++)
 		{
 			$t->define_data(array(
@@ -212,10 +216,10 @@ class currency extends class_base
 				"end_date" => html::date_select(array(
 					"name" => "rates[".$i."][end_date]",
 					"value" => $rates[$i]["end_date"])),
-				"currency" => html::select(array(
+				"currency" => "1 ".html::select(array(
 					"name" => "rates[".$i."][currency]",
 					"options" => $curr_opt,
-					"value" => $rates[$i]["currency"])),
+					"value" => $rates[$i]["currency"]))." = ",
 				"rate"	=> html::textbox(array(
 					"name" => "rates[".$i."][rate]",
 					"value" => $rates[$i]["rate"],
@@ -231,6 +235,7 @@ class currency extends class_base
 					"value" => $rates[$i]["sell_rate"],
 					"size" => 5,
 				)),
+				"current_currency" => " ". $arr["obj_inst"]->name(),
 			));
 		}
 		$ret["rates"] = array(
