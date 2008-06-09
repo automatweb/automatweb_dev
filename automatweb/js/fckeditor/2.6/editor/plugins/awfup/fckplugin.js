@@ -53,6 +53,21 @@ FCKAWFilePlaceholders.Add = function( name )
 	this.SetupSpan( oSpan, name ) ;
 }
 
+FCKAWFilePlaceholders.GUP = function(param)
+{
+	param = param.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	var regexS = "[\\?&]"+param+"=([^&#]*)";
+	var regex = new RegExp( regexS );
+	var results = regex.exec( window.parent.location.href );
+	if( results == null )
+	{
+		return "";
+	}
+	else
+	{
+		return results[1];
+	}
+}
 
 FCKAWFilePlaceholders.GetUrlContents = function( url )
 {
@@ -78,9 +93,8 @@ FCKAWFilePlaceholders.GetUrlContents = function( url )
 
 FCKAWFilePlaceholders.SetupSpan = function( span, name )
 {
-	//span.innerHTML = '[[ ' + name + ' ]]' ;
-	
-	tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id=5631&alias_name="+name);
+	doc_id = FCKAWFilePlaceholders.GUP("id");
+	tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 	eval(tmp);
 	span.innerHTML = '<img src="http://register.automatweb.com/automatweb/images/icons/class_5.gif" />' + connection_details_for_doc["#"+name+"#"]["name"];
 	
