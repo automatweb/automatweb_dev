@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.30 2008/01/29 16:04:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.31 2008/06/09 13:43:22 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -72,6 +72,9 @@
 	@property show_files_and_docs_in_tree type=checkbox ch_value=1 table=objects field=meta
 	@caption N&auml;ita puus faile ja dokumente
 
+	@property billable_only_by_mrg type=checkbox ch_value=1 table=objects field=meta
+	@caption Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur
+
 	@property default_task_rows_bills_filter type=select table=objects field=meta
 	@caption Toimetuse ridades valitud Arve tulba vaikimisi filter
 
@@ -85,7 +88,7 @@
 	@caption Organisatsioonide linkide kataloog
 
   	@property insurance_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
-	@caption Kindlustuse tüüpide kataloog
+	@caption Kindlustuse t&uuml;&uuml;pide kataloog
 
 
 	@property default_my_company_tab type=select table=objects field=meta
@@ -96,14 +99,14 @@
 
 
 
-- Organisatsiooni Vaade Võtmesõnad, kus saab märkida süsteemis olevaid võtmesõnu, mis on süsteemis olemas ja mida õigused lubavad näha (ja ei salvesta üle neid võtmesõnu mida kasutaja "ei näe")
+- Organisatsiooni Vaade V6tmes6nad, kus saab m2rkida systeemis olevaid v6tmes6nu, mis on systeemis olemas ja mida 6igused lubavad n2ha (ja ei salvesta yle neid v6tmes6nu mida kasutaja "ei n2e")
 
 
-- Töötajad vaatesse
-Võimalus määrata, kes on volitatud isikud ja volituse alus. Töötaja nime järele on võimalik panna märkeruut tulpa &#8220;Volitatud&#8221;. Selle märkimisel avaneb uus aken, kus küsitakse volituse alust (Objektitüüp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
+- T88tajad vaatesse
+V6imalus m22rata, kes on volitatud isikud ja volituse alus. T88taja nime j2rele on v6imalik panna m2rkeruut tulpa &#8220;Volitatud&#8221;. Selle m2rkimisel avaneb uus aken, kus kysitakse volituse alust (Objektityyp Volitus). Volitus kehtib kolmese seosena (Meie firma, klientfirma, volitatav isik).
 
 - Kontaktandmetesse seos: Keel
-Vaikimisi eesti keel. Keelele peab saama määrata, milline on süsteemi default. Vaikimisi väärtus Arve-saatelehel
+Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. Vaikimisi v22rtus Arve-saatelehel
 
 
 @default group=tables
@@ -366,8 +369,8 @@ class crm_settings extends class_base
 			$t->define_data($data);
 		}
 /*- Kliendibaasi seadetesse vaade: Staatuste piirangud
-See võimaldab vastavusse viia mitmesuguseid piiranguid mingi kliendi staatusega (crm_company_status).
-Nt staatus Halb maksja seotakse piiranguga: Sularahata müük keelatud. Selliseid piiranguid võib olla veel (müük keelatud, pakkumised keelatud, lähetamine keelatud) ja lisaks saab määrata kasutajagruppe, kellel on õigus sellest piirangust üle minna, ehk defineerida erandid.
+See v6imaldab vastavusse viia mitmesuguseid piiranguid mingi kliendi staatusega (crm_company_status).
+Nt staatus Halb maksja seotakse piiranguga: Sularahata myyk keelatud. Selliseid piiranguid v6ib olla veel (myyk keelatud, pakkumised keelatud, l2hetamine keelatud) ja lisaks saab m22rata kasutajagruppe, kellel on 6igus sellest piirangust yle minna, ehk defineerida erandid.
 */
 	}
 
@@ -387,7 +390,7 @@ Nt staatus Halb maksja seotakse piiranguga: Sularahata müük keelatud. Selliseid 
 		}
 
 		$ignore_groups = $obj_limits["ignore_groups"];
-		//nüüd tarvis veel kontroll, kas kasutaja kuskil antud grupis
+		//nyyd tarvis veel kontroll, kas kasutaja kuskil antud grupis
 		$gl = aw_global_get("gidlist_pri_oid");
 		asort($gl);
 		$gl = array_keys($gl);
@@ -432,7 +435,7 @@ Nt staatus Halb maksja seotakse piiranguga: Sularahata müük keelatud. Selliseid 
 					"name" => "defaults",
 					"img" => "delete.gif",
 					"tooltip" => t("Taasta algseaded"),
-					"confirm" => t("Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"),
+					"confirm" => t("Muudetud seaded kaovad kui algseaded taastada, kas j&auml;tkata?"),
 					"url" => $load_defaults_url,
 				));
 			}
@@ -527,7 +530,7 @@ Nt staatus Halb maksja seotakse piiranguga: Sularahata müük keelatud. Selliseid 
 		));
 		$table->define_field(array(
 			"name" => "order",
-			"caption" => t("Järjekord"),
+			"caption" => t("J&auml;rjekord"),
 		));
 		$table->define_field(array(
 			"name" => "visible",

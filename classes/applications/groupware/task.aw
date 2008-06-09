@@ -1520,9 +1520,19 @@ class task extends class_base
 				$arr["obj_inst"]->set_prop("whole_day", $prop["value"]["whole_day"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_goal", $prop["value"]["is_goal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $prop["value"]["is_personal"] ? 1 : 0);
-				$arr["obj_inst"]->set_prop("send_bill", $prop["value"]["send_bill"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("in_budget", $prop["value"]["in_budget"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_work", $prop["value"]["is_work"] ? 1 : 0);
+
+				if(!$prop["value"]["send_bill"] || $arr["obj_inst"]->if_can_set_billable())
+				{
+					$arr["obj_inst"]->set_prop("send_bill", $prop["value"]["send_bill"] ? 1 : 0);
+				}
+				else
+				{
+					$prop["error"] = sprintf(t("Puuduvad &otilde;igused m&auml;&auml;rata tehtud t&ouml;id arvele! P&ouml;&ouml;rduge kliendihaldur %s poole!"), $arr["obj_inst"]->get_client_mgr_name());
+					return PROP_ERROR;
+				}
+
 				break;
 
 			case "is_done":

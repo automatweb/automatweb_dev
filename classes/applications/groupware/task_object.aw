@@ -139,5 +139,48 @@ class task_object extends _int_object
 		}
 		return $ret;
 	}
+
+	/** returns task client manager oid
+		@attrib api=1
+		@returns oid	
+	**/
+	function get_client_mgr()
+	{
+		return $this->prop("customer.client_manager");
+	}
+
+	/** returns task client manager name
+		@attrib api=1
+		@returns string	
+	**/
+	function get_client_mgr_name()
+	{
+		return $this->prop("customer.client_manager.name");
+	}
+
+	/** user can check the send_bill checkbox or not
+		@attrib api=1
+		@returns boolean
+			true , if can, false if not
+	**/
+	function if_can_set_billable()
+	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if ($sts && $sts->prop("billable_only_by_mrg"))
+		{
+			$u = get_instance(CL_USER);
+			$p = $u->get_current_person();//arr($p); arr($this -> get_client_mgr());
+			if($this -> get_client_mgr() == $p)
+			{
+				return true;
+			}
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }
 ?>

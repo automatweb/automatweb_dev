@@ -161,6 +161,15 @@
             <caption>N&amp;amp;auml;ita puus faile ja dokumente</caption>
       </property>
       <property>
+            <name>billable_only_by_mrg</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>Saata arve saab m&amp;amp;auml;&amp;amp;auml;rata toimetusele vaid kliendihaldur</caption>
+      </property>
+      <property>
             <name>org_link_menu</name>
             <table>objects</table>
             <group>general</group>
@@ -176,7 +185,7 @@
             <type>relpicker</type>
             <field>meta</field>
             <reltype>RELTYPE_MENU</reltype>
-            <caption>Kindlustuse t&amp;uuml;&amp;uuml;pide kataloog</caption>
+            <caption>Kindlustuse t&amp;amp;uuml;&amp;amp;uuml;pide kataloog</caption>
       </property>
       <property>
             <name>default_my_company_tab</name>
