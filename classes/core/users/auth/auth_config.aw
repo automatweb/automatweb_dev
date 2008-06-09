@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.31 2008/05/26 07:06:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.32 2008/06/09 11:31:31 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -380,6 +380,12 @@ class auth_config extends class_base
 	**/
 	function show_login($args = array())
 	{
+		if (($auth_srv = aw_ini_get("auth.central_server")) != "")
+		{
+			header("Location: ".$srv."/?sid=".aw_ini_get("site_id"));
+			die();
+		}
+
 		if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
 		{
 			if (!$_SERVER["HTTPS"])
