@@ -669,7 +669,7 @@ class room extends class_base
 			$arr["args"]["start"] = date_edit::get_timestamp($arr["request"]["set_d_from"]);
 			if ($arr["request"]["set_view_dates"] == 1)
 			{
-				$arr["args"]["end"] = date_edit::get_timestamp($arr["request"]["set_d_to"]);
+				$arr["args"]["end"] = date_edit::get_day_end_timestamp($arr["request"]["set_d_to"]);
 			}
 			else
 			if ($arr["request"]["set_view_dates"] == 2)
@@ -1705,7 +1705,7 @@ class room extends class_base
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
 		{
-			$len = floor(($_GET["end"] - $_GET["start"]) / 86400);
+			$len = floor(($_GET["end"]+1 - $_GET["start"]) / 86400);
 		}
 		$this->len = $len;
 		enter_function("get_calendar_tbl::3::genres");
