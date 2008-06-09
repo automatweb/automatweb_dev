@@ -274,7 +274,7 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/register/register.aw:236 classes/applications/register/register.aw:324
+#: classes/applications/register/register.aw:236 classes/applications/register/register.aw:326
 msgid "Muuda"
 msgstr ""
 

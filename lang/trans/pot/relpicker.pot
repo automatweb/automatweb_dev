@@ -26,11 +26,11 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:192 classes/vcl/relpicker.aw:456
+#: classes/vcl/relpicker.aw:192 classes/vcl/relpicker.aw:468
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:211 classes/vcl/relpicker.aw:475
+#: classes/vcl/relpicker.aw:211 classes/vcl/relpicker.aw:487
 msgid "Lisa uus %s"
 msgstr ""
 
@@ -42,11 +42,23 @@ msgstr ""
 msgid "Oled kindel, et soovid valitud objektid kustutada?"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:422
+#: classes/vcl/relpicker.aw:422 classes/vcl/relpicker.aw:558
 msgid "Kustuta valitud seosed"
 msgstr ""
 
 #: classes/vcl/relpicker.aw:423
 msgid "Oled kindel, et soovid valitud seosed kustutada?"
+msgstr ""
+
+#: classes/vcl/relpicker.aw:533
+msgid "Seotud objekt"
+msgstr ""
+
+#: classes/vcl/relpicker.aw:544
+msgid "Kustuta seos"
+msgstr ""
+
+#: classes/vcl/relpicker.aw:553
+msgid "Kustuta"
 msgstr ""
 

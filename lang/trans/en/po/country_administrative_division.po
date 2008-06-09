@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -77,15 +77,15 @@ msgstr ""
 msgid "Seose Kõrgem haldusüksus (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:76
+#: classes/common/country/country_administrative_division.aw:74
 msgid "Haldusüksus"
 msgstr "Administrative division"
 
-#: classes/common/country/country_administrative_division.aw:77
+#: classes/common/country/country_administrative_division.aw:75
 msgid "Linna tüüpi haldusüksus"
 msgstr "Division of City type"
 
-#: classes/common/country/country_administrative_division.aw:78
+#: classes/common/country/country_administrative_division.aw:76
 msgid "Linnaosa tüüpi haldusüksus"
 msgstr "Division of Citypart type"
 

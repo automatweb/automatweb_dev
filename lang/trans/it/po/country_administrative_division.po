@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country_administrative_division.aw:class_1034_help
 msgid "Klassi Haldus&uuml;ksus v2 help"
 msgstr ""
@@ -78,15 +77,14 @@ msgstr ""
 msgid "Seose Kõrgem haldusüksus (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:76
+#: classes/common/country/country_administrative_division.aw:74
 msgid "Haldusüksus"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:77
+#: classes/common/country/country_administrative_division.aw:75
 msgid "Linna tüüpi haldusüksus"
 msgstr ""
 
-#: classes/common/country/country_administrative_division.aw:78
+#: classes/common/country/country_administrative_division.aw:76
 msgid "Linnaosa tüüpi haldusüksus"
 msgstr ""
-

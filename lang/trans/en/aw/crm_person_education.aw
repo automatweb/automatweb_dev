@@ -1,6 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Kool (school_1) caption"] = "School";
-$GLOBALS["TRANS"]["Omaduse Muu kool (school_2) caption"] = "Other school";
 $GLOBALS["TRANS"]["Omaduse Akadeemiline kraad (degree) caption"] = "Academic degree";
 $GLOBALS["TRANS"]["Omaduse Valdkond (field) caption"] = "Field";
 $GLOBALS["TRANS"]["Omaduse Eriala (speciality) caption"] = "Speciality";

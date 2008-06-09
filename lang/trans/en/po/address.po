@@ -133,23 +133,23 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr "Administrative structure"
 
-#: classes/common/address/address.aw:89
+#: classes/common/address/address.aw:87
 msgid "Haldusjaotus m22ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:108
+#: classes/common/address/address.aw:106
 msgid "Riik/haldusjaotus peab olema valitud!"
 msgstr ""
 
-#: classes/common/address/address.aw:231
+#: classes/common/address/address.aw:214
 msgid "Viga: k6rgem haldusjaotus m22ramata."
 msgstr "Error: parent administrative unit not defined"
 
-#: classes/common/address/address.aw:253
+#: classes/common/address/address.aw:236
 msgid "Valikute taotleja-property m22ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:347
+#: classes/common/address/address.aw:330
 msgid "T&auml;nav"
 msgstr ""
 

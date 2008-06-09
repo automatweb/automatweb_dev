@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country.aw:class_949_help
 msgid "Klassi Riik v2 help"
 msgstr ""
@@ -50,11 +49,10 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
-#: classes/common/country/country.aw:62
+#: classes/common/country/country.aw:60
 msgid "%s aadressi kasutab hetkel valitud haldusjaotust! Muudatuste salvestamisel ..."
 msgstr ""
 
-#: classes/common/country/country.aw:86
+#: classes/common/country/country.aw:84
 msgid "Riigi adminstratiivjaotuse objekt peab asuma riigiobjekti all"
 msgstr ""
-

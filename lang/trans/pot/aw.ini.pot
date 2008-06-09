@@ -2478,10 +2478,6 @@ msgstr ""
 msgid "Klassi D&uuml;naamilise k&uuml;simustiku vastus (1395) nimi"
 msgstr ""
 
-#: aw.ini:class_1396
-msgid "Klassi Mobi SMS haldur (1396) nimi"
-msgstr ""
-
 #: aw.ini:class_1397
 msgid "Klassi AW v&auml;line teenus (1397) nimi"
 msgstr ""
@@ -2543,7 +2539,7 @@ msgid "Klassi Mobi SMS haldur (1416) nimi"
 msgstr ""
 
 #: aw.ini:class_1417
-msgid "Klassi Mobi SMS (1417) nimi"
+msgid "Klassi SMS (1417) nimi"
 msgstr ""
 
 #: aw.ini:class_1421
@@ -2555,7 +2551,7 @@ msgid "Klassi AW Spetsifikatsioon (1418) nimi"
 msgstr ""
 
 #: aw.ini:class_1422
-msgid "Klassi Mobi SMSi saatmine (1422) nimi"
+msgid "Klassi SMSi saatmine (1422) nimi"
 msgstr ""
 
 #: aw.ini:class_1420
@@ -2675,11 +2671,11 @@ msgid "Klassi T&ouml;&ouml;stusdisainilahendus (1452) nimi"
 msgstr ""
 
 #: aw.ini:class_1453
-msgid "Klassi Euroopa patendi eestikeelne patendikirjeldus (1453) nimi"
+msgid "Klassi EP patent (1453) nimi"
 msgstr ""
 
 #: aw.ini:class_1454
-msgid "Klassi Euroopa patendi eestikeelse patendikirjelduse veebist lisamine (1454) nimi"
+msgid "Klassi EP patendi veebist lisamine (1454) nimi"
 msgstr ""
 
 #: aw.ini:class_1455
@@ -2688,6 +2684,26 @@ msgstr ""
 
 #: aw.ini:class_1456
 msgid "Klassi AW Spetsifikatsiooni versioon (1456) nimi"
+msgstr ""
+
+#: aw.ini:class_1457
+msgid "Klassi Hinnakiri (1457) nimi"
+msgstr ""
+
+#: aw.ini:class_1458
+msgid "Klassi Laoseis (1458) nimi"
+msgstr ""
+
+#: aw.ini:class_1459
+msgid "Klassi Saateleht (1459) nimi"
+msgstr ""
+
+#: aw.ini:class_1461
+msgid "Klassi Lao liikumine (1461) nimi"
+msgstr ""
+
+#: aw.ini:class_1462
+msgid "Klassi &Uuml;ksiktoode (1462) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -5311,7 +5327,7 @@ msgid "syslog.type.ST_MOBI_HANDLER"
 msgstr ""
 
 #: aw.ini:syslogtypes_1417
-msgid "syslog.type.ST_MOBI_SMS"
+msgid "syslog.type.ST_SMS"
 msgstr ""
 
 #: aw.ini:syslogtypes_1413
@@ -5339,7 +5355,7 @@ msgid "syslog.type.ST_AW_SPEC"
 msgstr ""
 
 #: aw.ini:syslogtypes_1422
-msgid "syslog.type.ST_MOBI_SMS_SENT"
+msgid "syslog.type.ST_SMS_SENT"
 msgstr ""
 
 #: aw.ini:syslogtypes_1420
@@ -5460,6 +5476,26 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1456
 msgid "syslog.type.ST_AW_SPEC_VERSION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1457
+msgid "syslog.type.ST_SHOP_PRICE_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_1458
+msgid "syslog.type.ST_SHOP_WAREHOUSE_AMOUNT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1459
+msgid "syslog.type.ST_SHOP_DELIVERY_NOTE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1461
+msgid "syslog.type.ST_SHOP_WAREHOUSE_MOVEMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1462
+msgid "syslog.type.ST_SHOP_PRODUCT_SINGLE"
 msgstr ""
 
 #: aw.ini:syslogactions_1

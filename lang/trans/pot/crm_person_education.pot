@@ -14,28 +14,28 @@ msgstr ""
 msgid "Klassi Haridus help"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_1
-msgid "Omaduse Kool (school_1) caption"
+#: classes/applications/crm/crm_person_education.aw:prop_school1
+msgid "Omaduse Kool (school1) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_1_comment
-msgid "Omaduse Kool (school_1) kommentaar"
+#: classes/applications/crm/crm_person_education.aw:prop_school1_comment
+msgid "Omaduse Kool (school1) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_1_help
-msgid "Omaduse Kool (school_1) help"
+#: classes/applications/crm/crm_person_education.aw:prop_school1_help
+msgid "Omaduse Kool (school1) help"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_2
-msgid "Omaduse Muu kool (school_2) caption"
+#: classes/applications/crm/crm_person_education.aw:prop_school2
+msgid "Omaduse Muu kool (school2) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_2_comment
-msgid "Omaduse Muu kool (school_2) kommentaar"
+#: classes/applications/crm/crm_person_education.aw:prop_school2_comment
+msgid "Omaduse Muu kool (school2) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:prop_school_2_help
-msgid "Omaduse Muu kool (school_2) help"
+#: classes/applications/crm/crm_person_education.aw:prop_school2_help
+msgid "Omaduse Muu kool (school2) help"
 msgstr ""
 
 #: classes/applications/crm/crm_person_education.aw:prop_degree
@@ -222,7 +222,7 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:148
+#: classes/applications/crm/crm_person_education.aw:149
 msgid "--vali--"
 msgstr ""
 

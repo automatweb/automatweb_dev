@@ -241,6 +241,30 @@ msgstr ""
 msgid "Omaduse  (units_table) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prodg_tree
+msgid "Omaduse  (prodg_tree) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prodg_tree_comment
+msgid "Omaduse  (prodg_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prodg_tree_help
+msgid "Omaduse  (prodg_tree) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_units_tbl
+msgid "Omaduse  (units_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_units_tbl_comment
+msgid "Omaduse  (units_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_units_tbl_help
+msgid "Omaduse  (units_tbl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_config.aw:group_units
 msgid "Grupi &Uuml;hikud (units) pealkiri"
 msgstr ""
@@ -279,4 +303,32 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:layout_right
 msgid "Kujundusosa Kaustad (right) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:layout_units_tree_box
+msgid "Kujundusosa Artiklikategooriad (units_tree_box) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:layout_units_tbl_box
+msgid "Kujundusosa &Uuml;hikud (units_tbl_box) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:147
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:148
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:182
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:189
+msgid "Alternatiiv&uuml;hik %s"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:189
+msgid "P&otilde;hi&uuml;hik"
 msgstr ""

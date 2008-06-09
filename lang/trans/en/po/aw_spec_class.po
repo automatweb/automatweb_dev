@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/aw_spec/aw_spec_class.aw:class_1425_help
 msgid "Klassi AW Spetsifikatsiooni klass help"
 msgstr ""
@@ -26,27 +25,55 @@ msgstr ""
 msgid "Omaduse Kirjeldus (desc) help"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_class.aw:32
+#: classes/applications/aw_spec/aw_spec_class.aw:prop_pri
+msgid "Omaduse Prioriteet (pri) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_class.aw:prop_pri_comment
+msgid "Omaduse Prioriteet (pri) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_class.aw:prop_pri_help
+msgid "Omaduse Prioriteet (pri) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_class.aw:35
 msgid "Sisesta klassi %s grupid"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_class.aw:61
+#: classes/applications/aw_spec/aw_spec_class.aw:72
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_class.aw:73
+#: classes/applications/aw_spec/aw_spec_class.aw:84
+#: classes/applications/aw_spec/aw_spec_class.aw:227
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_class.aw:88
 msgid "Grupi nimi"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_class.aw:77
+#: classes/applications/aw_spec/aw_spec_class.aw:92
 msgid "Parent grupp"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_class.aw:133
+#: classes/applications/aw_spec/aw_spec_class.aw:153
 msgid "Grupp: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_class.aw:134
+#: classes/applications/aw_spec/aw_spec_class.aw:154
 msgid "Parent grupp: %s"
 msgstr ""
 
+#: classes/applications/aw_spec/aw_spec_class.aw:188
+msgid "Sisesta klassi %s seosed"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_class.aw:231
+msgid "Soese nimi"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_class.aw:235
+msgid "Seos klassiga"
+msgstr ""

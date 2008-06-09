@@ -14,3 +14,15 @@ msgstr ""
 msgid "Klassi XML andmeallikas help"
 msgstr ""
 
+#: classes/common/external/generic_xml_ds.aw:prop_location
+msgid "Omaduse URL/asukoht (location) caption"
+msgstr ""
+
+#: classes/common/external/generic_xml_ds.aw:prop_location_comment
+msgid "Omaduse URL/asukoht (location) kommentaar"
+msgstr ""
+
+#: classes/common/external/generic_xml_ds.aw:prop_location_help
+msgid "Omaduse URL/asukoht (location) help"
+msgstr ""
+

@@ -18,27 +18,31 @@ msgstr ""
 msgid "Sisesta klassi %s grupi %s layoudid"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group.aw:66
+#: classes/applications/aw_spec/aw_spec_group.aw:74
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_group.aw:78
 msgid "Layoudi nimi"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group.aw:70
+#: classes/applications/aw_spec/aw_spec_group.aw:82
 msgid "Layoudi t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group.aw:74
+#: classes/applications/aw_spec/aw_spec_group.aw:86
 msgid "Layoudi parent"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group.aw:81
+#: classes/applications/aw_spec/aw_spec_group.aw:92
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group.aw:140
+#: classes/applications/aw_spec/aw_spec_group.aw:155
 msgid "Layout: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group.aw:141
+#: classes/applications/aw_spec/aw_spec_group.aw:156
 msgid "Parent: %s , t&uuml;&uuml;p: %s"
 msgstr ""
 

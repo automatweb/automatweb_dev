@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/messenger/mail_message.aw:class_52_help
 msgid "Klassi Message help"
 msgstr ""
@@ -60,6 +59,18 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_mto_help
 msgid "Omaduse Kellele (mto) help"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_mto_relpicker
+msgid "Omaduse Kellele (mto_relpicker) caption"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_mto_relpicker_comment
+msgid "Omaduse Kellele (mto_relpicker) kommentaar"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:prop_mto_relpicker_help
+msgid "Omaduse Kellele (mto_relpicker) help"
 msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_cc
@@ -274,79 +285,83 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:229
+#: classes/applications/messenger/mail_message.aw:rel_RELTYPE_TO_MAIL_ADDRESS
+msgid "Seose Meiliaadress (kellele) (RELTYPE_TO_MAIL_ADDRESS) tekst"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:235
 msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:368
+#: classes/applications/messenger/mail_message.aw:374
 msgid "Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:900
+#: classes/applications/messenger/mail_message.aw:906
 msgid "Saada"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:907
+#: classes/applications/messenger/mail_message.aw:913
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:930
+#: classes/applications/messenger/mail_message.aw:936
 msgid "Vasta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:937
+#: classes/applications/messenger/mail_message.aw:943
 msgid "Vasta/k&otilde;igile"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:944
+#: classes/applications/messenger/mail_message.aw:950
 msgid "Edasta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:952
+#: classes/applications/messenger/mail_message.aw:958
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:953
+#: classes/applications/messenger/mail_message.aw:959
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:975
+#: classes/applications/messenger/mail_message.aw:981
 msgid "Lisa kalendrisse"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1007 classes/applications/messenger/mail_message.aw:1077
+#: classes/applications/messenger/mail_message.aw:1013
+#: classes/applications/messenger/mail_message.aw:1083
 msgid "Lisa bugiks"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1089
+#: classes/applications/messenger/mail_message.aw:1095
 msgid "P&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1094
+#: classes/applications/messenger/mail_message.aw:1100
 msgid "Tavaline"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1100
+#: classes/applications/messenger/mail_message.aw:1106
 msgid "K&otilde;ik p&auml;ised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1169
+#: classes/applications/messenger/mail_message.aw:1175
 msgid "Meilide kaust"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1476
+#: classes/applications/messenger/mail_message.aw:1482
 msgid "kustutatud!"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1478
+#: classes/applications/messenger/mail_message.aw:1484
 msgid "sulge aken"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1557
+#: classes/applications/messenger/mail_message.aw:1563
 msgid "saadetud<p>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1680
+#: classes/applications/messenger/mail_message.aw:1686
 msgid "----Forwarded message-----\n"
 msgstr ""
-

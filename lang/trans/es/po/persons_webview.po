@@ -213,38 +213,38 @@ msgstr ""
 msgid "pole asutust valitud"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1127
+#: classes/crm/persons_webview.aw:1128
 msgid "Palk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1160
+#: classes/crm/persons_webview.aw:1161
 msgid "P&otilde;hiharidus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1161
+#: classes/crm/persons_webview.aw:1162
 msgid "Keskharidus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1162
+#: classes/crm/persons_webview.aw:1163
 msgid "Kesk-eriharidus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1163
+#: classes/crm/persons_webview.aw:1164
 msgid "Diplom"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1164
+#: classes/crm/persons_webview.aw:1165
 msgid "Bakalaureus"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1165
+#: classes/crm/persons_webview.aw:1166
 msgid "Magister"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1166
+#: classes/crm/persons_webview.aw:1167
 msgid "Doktor"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:1167
+#: classes/crm/persons_webview.aw:1168
 msgid "Teaduste kandidaat"
 msgstr ""

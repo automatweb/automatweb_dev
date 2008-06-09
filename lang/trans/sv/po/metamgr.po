@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/meta/metamgr.aw:class_279_help
 msgid "Klassi Muutujate haldus help"
 msgstr ""
@@ -102,11 +101,11 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:175
+#: classes/meta/metamgr.aw:176
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:182
+#: classes/meta/metamgr.aw:183
 msgid "Jrk"
 msgstr ""
 
@@ -137,4 +136,3 @@ msgstr ""
 #: classes/meta/metamgr.aw:555
 msgid "Kustuta valitud muutujad?"
 msgstr ""
-

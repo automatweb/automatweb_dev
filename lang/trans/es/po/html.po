@@ -12,3 +12,23 @@ msgstr ""
 #: classes/html.aw:class__help
 msgid "Klassi  help"
 msgstr ""
+
+#: classes/html.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/html.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/html.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/html.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/html.aw:group__help
+msgid "Grupi  () help"
+msgstr ""

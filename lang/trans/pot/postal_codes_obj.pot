@@ -10,39 +10,39 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/common/postal_codes_obj.aw:217
+#: classes/common/postal_codes_obj.aw:208
 msgid "Riik"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:218
+#: classes/common/postal_codes_obj.aw:209
 msgid "Maakond"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:219
+#: classes/common/postal_codes_obj.aw:210
 msgid "Vald"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:220
+#: classes/common/postal_codes_obj.aw:211
 msgid "Linn / Alev / K&uuml;la"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:221
+#: classes/common/postal_codes_obj.aw:212
 msgid "T&auml;nav / Talu"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:222
+#: classes/common/postal_codes_obj.aw:213
 msgid "Maja nr algus"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:223
+#: classes/common/postal_codes_obj.aw:214
 msgid "Maja nr l&otilde;pp"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:224
+#: classes/common/postal_codes_obj.aw:215
 msgid "T&uuml;&uuml;p (linn / alev / k&uuml;la)"
 msgstr ""
 
-#: classes/common/postal_codes_obj.aw:225
+#: classes/common/postal_codes_obj.aw:216
 msgid "Postiindeks"
 msgstr ""
 

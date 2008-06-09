@@ -74,11 +74,11 @@ msgstr ""
 msgid "Seose Siduss&uuml;steem (RELTYPE_SYSTEM) tekst"
 msgstr ""
 
-#: classes/common/external/external_system.aw:103
+#: classes/common/external/external_system.aw:100
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/common/external/external_system.aw:208
+#: classes/common/external/external_system.aw:205
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 

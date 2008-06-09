@@ -102,11 +102,11 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:175
+#: classes/meta/metamgr.aw:176
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:182
+#: classes/meta/metamgr.aw:183
 msgid "Jrk"
 msgstr ""
 

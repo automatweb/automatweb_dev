@@ -488,6 +488,138 @@ msgstr ""
 msgid "Omaduse  (singles_table) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_color
+msgid "Omaduse V&auml;rvus (color) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_color_comment
+msgid "Omaduse V&auml;rvus (color) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_color_help
+msgid "Omaduse V&auml;rvus (color) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_height
+msgid "Omaduse K&otilde;rgus (height) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_height_comment
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_height_help
+msgid "Omaduse K&otilde;rgus (height) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_width
+msgid "Omaduse Laius (width) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_width_comment
+msgid "Omaduse Laius (width) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_width_help
+msgid "Omaduse Laius (width) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_depth
+msgid "Omaduse S&uuml;gavus (depth) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_depth_comment
+msgid "Omaduse S&uuml;gavus (depth) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_depth_help
+msgid "Omaduse S&uuml;gavus (depth) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_wideness
+msgid "Omaduse Paksus (wideness) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_wideness_comment
+msgid "Omaduse Paksus (wideness) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_wideness_help
+msgid "Omaduse Paksus (wideness) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_density
+msgid "Omaduse Tihedus (density) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_density_comment
+msgid "Omaduse Tihedus (density) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_density_help
+msgid "Omaduse Tihedus (density) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_weight
+msgid "Omaduse Kaal (weight) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_weight_comment
+msgid "Omaduse Kaal (weight) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_weight_help
+msgid "Omaduse Kaal (weight) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_gramweight
+msgid "Omaduse Grammkaal (gramweight) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_gramweight_comment
+msgid "Omaduse Grammkaal (gramweight) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_gramweight_help
+msgid "Omaduse Grammkaal (gramweight) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_raster
+msgid "Omaduse Rasteritihedus (raster) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_raster_comment
+msgid "Omaduse Rasteritihedus (raster) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_raster_help
+msgid "Omaduse Rasteritihedus (raster) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_bulk
+msgid "Omaduse Mahulisus (bulk) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_bulk_comment
+msgid "Omaduse Mahulisus (bulk) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_bulk_help
+msgid "Omaduse Mahulisus (bulk) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_guarantee
+msgid "Omaduse Garantii kuudes (guarantee) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_guarantee_comment
+msgid "Omaduse Garantii kuudes (guarantee) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_guarantee_help
+msgid "Omaduse Garantii kuudes (guarantee) help"
+msgstr ""
+
 # classes/applications/shop/shop_product.aw:prop_userch1
 #: classes/applications/shop/shop_product.aw:prop_userch1
 msgid "Omaduse User-defined checkbox 1 (userch1) caption"
@@ -1427,6 +1559,78 @@ msgstr ""
 msgid "Omaduse Lingid (lnk) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_companies_tb
+msgid "Omaduse  (companies_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_companies_tb_comment
+msgid "Omaduse  (companies_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_companies_tb_help
+msgid "Omaduse  (companies_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_companies_tbl
+msgid "Omaduse  (companies_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_companies_tbl_comment
+msgid "Omaduse  (companies_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_companies_tbl_help
+msgid "Omaduse  (companies_tbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_materials_tb
+msgid "Omaduse  (materials_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_materials_tb_comment
+msgid "Omaduse  (materials_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_materials_tb_help
+msgid "Omaduse  (materials_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_materials_tbl
+msgid "Omaduse  (materials_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_materials_tbl_comment
+msgid "Omaduse  (materials_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_materials_tbl_help
+msgid "Omaduse  (materials_tbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_brands_tb
+msgid "Omaduse  (brands_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_brands_tb_comment
+msgid "Omaduse  (brands_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_brands_tb_help
+msgid "Omaduse  (brands_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_brands_tbl
+msgid "Omaduse  (brands_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_brands_tbl_comment
+msgid "Omaduse  (brands_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_brands_tbl_help
+msgid "Omaduse  (brands_tbl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -1553,14 +1757,36 @@ msgstr ""
 msgid "Grupi Lingid (lnk) help"
 msgstr ""
 
-# classes/applications/shop/shop_product.aw:group_data
 #: classes/applications/shop/shop_product.aw:group_data
-msgid "Grupi Toote info (data) pealkiri"
+msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
 
-# classes/applications/shop/shop_product.aw:group_data_help
 #: classes/applications/shop/shop_product.aw:group_data_help
-msgid "Grupi Toote info (data) help"
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_purveyors
+msgid "Grupi Tarnijad (purveyors) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_purveyors_help
+msgid "Grupi Tarnijad (purveyors) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_materials
+msgid "Grupi Materjalid (materials) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_materials_help
+msgid "Grupi Materjalid (materials) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_brands
+msgid "Grupi Br&auml;ndid (brands) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_brands_help
+msgid "Grupi Br&auml;ndid (brands) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_transl
@@ -1673,6 +1899,30 @@ msgstr ""
 msgid "Seose Asendustoode (RELTYPE_REPLACEMENT_PROD) tekst"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_CATEGORY
+msgid "Seose Kategooria (RELTYPE_CATEGORY) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_PRICE
+msgid "Seose Hind (RELTYPE_PRICE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_COLOR
+msgid "Seose V&auml;rvus (RELTYPE_COLOR) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_PURVEYOR
+msgid "Seose Tarnija (RELTYPE_PURVEYOR) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_MATERIAL
+msgid "Seose Materjal (RELTYPE_MATERIAL) tekst"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:layout_gen_left
 msgid "Kujundusosa Andmed (gen_left) pealkiri"
 msgstr ""
@@ -1689,62 +1939,103 @@ msgstr ""
 msgid "Kujundusosa Puhveraeg (buffer) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:549
+#: classes/applications/shop/shop_product.aw:612
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:550
+#: classes/applications/shop/shop_product.aw:613
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:595
-msgid "Kustuta"
+#: classes/applications/shop/shop_product.aw:651
+msgid "Jah"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:598
-msgid "Kas olete kindel, et soovite kustutada kogusepiirangud valitud gruppidele?"
+#: classes/applications/shop/shop_product.aw:652
+msgid "Ei"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:612
-msgid "Kasutajagrupp"
+#: classes/applications/shop/shop_product.aw:688
+msgid "Alternatiiv&uuml;hik %s"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:617
-msgid "Minimaalne kogus"
+#: classes/applications/shop/shop_product.aw:688
+msgid "P&otilde;hi&uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:622
-msgid "Maksimaalne kogus"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:668
-msgid "Hind"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:673
-msgid "Valuuta"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:854
-msgid "shop_product::draw(): no layout set!"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:1642
-msgid "Kood"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:1647
-msgid "Kogus"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:1652
-msgid "&Uuml;hik"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:1686
+#: classes/applications/shop/shop_product.aw:727
+#: classes/applications/shop/shop_product.aw:789
+#: classes/applications/shop/shop_product.aw:843
+#: classes/applications/shop/shop_product.aw:2246
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1691
+#: classes/applications/shop/shop_product.aw:732
+msgid "Tootja"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:794
+msgid "Kirjeldus"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:848
+msgid "Sarjad"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:951
+#: classes/applications/shop/shop_product.aw:1075
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:956
+msgid "Alates"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:963
+msgid "Kuni"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:970
+#: classes/applications/shop/shop_product.aw:1080
+msgid "Valuuta"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:1002
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:1005
+msgid "Kas olete kindel, et soovite kustutada kogusepiirangud valitud gruppidele?"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:1019
+msgid "Kasutajagrupp"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:1024
+msgid "Minimaalne kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:1029
+msgid "Maksimaalne kogus"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:1260
+msgid "shop_product::draw(): no layout set!"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:2149
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:2158
+msgid "Kogus %s"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:2236
+msgid "(Puudub)"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:2251
 msgid "Asukoht"
 msgstr ""

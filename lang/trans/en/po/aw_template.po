@@ -13,14 +13,18 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/aw_template.aw:328
+#: classes/aw_template.aw:343
 msgid "Template '%s/%s' not found"
 msgstr "Template '%s/%s' not found"
 
-#: classes/aw_template.aw:401 classes/aw_template.aw:447
+#: classes/aw_template.aw:416 classes/aw_template.aw:462
 msgid "Template '%s' not found"
 msgstr "Template '%s' not found"
 
-#: classes/aw_template.aw:499
+#: classes/aw_template.aw:514
 msgid "Template '%s' not found in admin or site folder"
 msgstr "Template '%s' not found in admin or site folder"
+
+#: classes/aw_template.aw:949
+msgid "using"
+msgstr ""

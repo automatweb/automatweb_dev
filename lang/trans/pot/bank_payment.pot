@@ -398,195 +398,195 @@ msgstr ""
 msgid "Kujundusosa &nbsp; (general_right) pealkiri"
 msgstr ""
 
-#: classes/common/bank_payment.aw:726
+#: classes/common/bank_payment.aw:727
 msgid "&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:726
+#: classes/common/bank_payment.aw:727
 msgid "eba&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:727
+#: classes/common/bank_payment.aw:728
 msgid "ok"
 msgstr ""
 
-#: classes/common/bank_payment.aw:735
+#: classes/common/bank_payment.aw:736
 msgid "Kokku:"
 msgstr ""
 
-#: classes/common/bank_payment.aw:746
+#: classes/common/bank_payment.aw:747
 msgid "Logifaili suurus on hetkel"
 msgstr ""
 
-#: classes/common/bank_payment.aw:746
+#: classes/common/bank_payment.aw:747
 msgid "baiti"
 msgstr ""
 
-#: classes/common/bank_payment.aw:750
+#: classes/common/bank_payment.aw:751
 msgid "Mingine jama on failiga"
 msgstr ""
 
-#: classes/common/bank_payment.aw:750
+#: classes/common/bank_payment.aw:751
 msgid "Kas pole &otilde;igusi, v&otilde; faili"
 msgstr ""
 
-#: classes/common/bank_payment.aw:774
+#: classes/common/bank_payment.aw:775
 msgid "Hetkel pole kataloogis"
 msgstr ""
 
-#: classes/common/bank_payment.aw:774
+#: classes/common/bank_payment.aw:775
 msgid "&uuml;htegi temleidi faili"
 msgstr ""
 
-#: classes/common/bank_payment.aw:837
+#: classes/common/bank_payment.aw:838
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/bank_payment.aw:843
+#: classes/common/bank_payment.aw:844
 msgid "Maksja"
 msgstr ""
 
-#: classes/common/bank_payment.aw:849
+#: classes/common/bank_payment.aw:850
 msgid "Viitenumber"
 msgstr ""
 
-#: classes/common/bank_payment.aw:855
+#: classes/common/bank_payment.aw:856
 msgid "Summa"
 msgstr ""
 
-#: classes/common/bank_payment.aw:861
+#: classes/common/bank_payment.aw:862
 msgid "Seletus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:867 classes/common/bank_payment.aw:944
+#: classes/common/bank_payment.aw:868 classes/common/bank_payment.aw:945
 msgid "Pank"
 msgstr ""
 
-#: classes/common/bank_payment.aw:873
+#: classes/common/bank_payment.aw:874
 msgid "Arve"
 msgstr ""
 
-#: classes/common/bank_payment.aw:879
+#: classes/common/bank_payment.aw:880
 msgid "IP"
 msgstr ""
 
-#: classes/common/bank_payment.aw:885
+#: classes/common/bank_payment.aw:886
 msgid "&Otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:890
+#: classes/common/bank_payment.aw:891
 msgid "SK"
 msgstr ""
 
-#: classes/common/bank_payment.aw:1190
+#: classes/common/bank_payment.aw:1191
 msgid "Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage"
 msgstr ""
 
-#: classes/common/bank_payment.aw:1190
+#: classes/common/bank_payment.aw:1191
 msgid "siia"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2038
+#: classes/common/bank_payment.aw:2039
 msgid "Veidi olulisemat infot"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2040
+#: classes/common/bank_payment.aw:2041
 msgid "Alustamiseks:"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2044
+#: classes/common/bank_payment.aw:2045
 msgid "Vaja s&otilde;lmida pangalingi leping pankadega - ilma ei juhtu midagi..."
 msgstr ""
 
-#: classes/common/bank_payment.aw:2048
+#: classes/common/bank_payment.aw:2049
 msgid "Vaja tekitada kaupmehele privaatv&otilde;ti ja sertifikaadi p&auml;ring"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2052
+#: classes/common/bank_payment.aw:2053
 msgid "privkey.pem on tekkinud privaatv&otilde;ti mis peab saama asukohaks"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2056
+#: classes/common/bank_payment.aw:2057
 msgid "cert_req.pem on tekkinud sertifikaadip&auml;ring mis tuleb saata pankadele"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2064
+#: classes/common/bank_payment.aw:2065
 msgid "Vastu saadakse avalikud v&otilde;tmed, mis peavad j&otilde;udma kataloogi"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2068
+#: classes/common/bank_payment.aw:2069
 msgid "failide nimed peaksid olema vastavalt pankadele:"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2073
+#: classes/common/bank_payment.aw:2074
 msgid "Tab'i \"Pankade info\" alla pangalt saadud kaupmehe ID, \n<br>kui kindlale arvele vaja raha saata, siis oleks vaja m&auml;rkida ka arve number ja saaja nimi (toimib pankadel millel on ka selline v&otilde;imalus olemas)"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2077
+#: classes/common/bank_payment.aw:2078
 msgid "Kontrolli , et kataloogis"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2077
+#: classes/common/bank_payment.aw:2078
 msgid "oleks olemas ja kirjutamis&otilde;igustega fail nimega bank_log.txt"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2081
+#: classes/common/bank_payment.aw:2082
 msgid "Lihtsamal juhul peaks n&uuml;&uuml;d maksmine toimima, keerulisemal on vaja templeitides v&ouml;i koodis mudida"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2085
+#: classes/common/bank_payment.aw:2086
 msgid "Kasutab lihtsalt &uuml;ht MAC v&otilde;tit, mis peaks asuma v&otilde;tmete kataloogis nimega nordea.mac"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2089
+#: classes/common/bank_payment.aw:2090
 msgid "Neile vaja saata tagasiside url, milleks on"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2091
+#: classes/common/bank_payment.aw:2092
 msgid "Vaja teha veel testv&otilde;ti ja sertifikaadi p&auml;ring testimiseks(seal tuleb enne katsetada testkeskkonnas ja vastavad tegelased (Kaardikeskusest) peaks saama &uuml;le vaadata kas k&otilde;ik on nagu peab)"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2095
+#: classes/common/bank_payment.aw:2096
 msgid "Toimib vaid Krediitkaardi , SEB &uuml;hispanga ja Nordea'ga"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2096
+#: classes/common/bank_payment.aw:2097
 msgid "Nordea puhul peab pangast saama testkasutaja andmed &uuml;hekordsete testmaksete jaoks (k&otilde;ik toimib nagu p&auml;riselt, lihtsalt raha ei tule arvele)\n<br>"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2097
+#: classes/common/bank_payment.aw:2098
 msgid "Krediitkaardi puhul peab lisama testprivaatv&ouml;tme Tab'i test alla"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2098
+#: classes/common/bank_payment.aw:2099
 msgid "SEB puhul peab lisama testprivaatv&ouml;tmeks SEB testkaupmehe privaatv&otilde;tme"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2099
+#: classes/common/bank_payment.aw:2100
 msgid "Nii krediitkaardi kui ka SEB puhul on eraldi testkeskkond, kus saab tegutseda pangalt saadud testkasutajaga.. et suunamine sinna toimuks, vaja m&auml;rkida testrezhiim linnuke"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2102
+#: classes/common/bank_payment.aw:2103
 msgid "Kaupluse avaleht"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2103
+#: classes/common/bank_payment.aw:2104
 msgid "Kauluse avalehel tahavad pangad n&auml;ha viidet selle kohta, et saidil saab maksta nende pangalingiga.. selleks peaks olema avalehel vastav ikoon. Neid saab :"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2104 classes/common/bank_payment.aw:2106
+#: classes/common/bank_payment.aw:2105 classes/common/bank_payment.aw:2107
 msgid "panga kood"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2105
+#: classes/common/bank_payment.aw:2106
 msgid "Maksmisele minnes tuleks &uuml;ldjuhul kasutada ka pankade poolt antud ikoone. Neid saab :"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2109
+#: classes/common/bank_payment.aw:2110
 msgid "Panga koodid"
 msgstr ""
 
-#: classes/common/bank_payment.aw:2110
+#: classes/common/bank_payment.aw:2111
 msgid "(Neid l&auml;heb vaja templeitide valmistamisel m&otilde;nel juhul)"
 msgstr ""
 

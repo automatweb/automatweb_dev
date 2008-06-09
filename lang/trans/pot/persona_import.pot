@@ -250,83 +250,83 @@ msgstr ""
 msgid "Impordi pildid"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:175 classes/applications/persona_import/persona_import.aw:286 classes/applications/persona_import/persona_import.aw:2048
+#: classes/applications/persona_import/persona_import.aw:178 classes/applications/persona_import/persona_import.aw:241 classes/applications/persona_import/persona_import.aw:2018
 msgid "You forgot to enter server data"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:241 classes/applications/persona_import/persona_import.aw:426
-msgid "Not enough data to process<br>"
-msgstr ""
-
-#: classes/applications/persona_import/persona_import.aw:293
+#: classes/applications/persona_import/persona_import.aw:248
 msgid "Nii ei saa ju rallit s&otilde;ita!"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:294
+#: classes/applications/persona_import/persona_import.aw:249
 msgid "Kasutatav kliendibaas valimata"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:305
+#: classes/applications/persona_import/persona_import.aw:260
 msgid "Isikute kataloog valimata"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:311
+#: classes/applications/persona_import/persona_import.aw:266
 msgid "Aadresside kataloog valimata"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:317
+#: classes/applications/persona_import/persona_import.aw:272
 msgid "Default kataloog valimata"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:332
+#: classes/applications/persona_import/persona_import.aw:287
 msgid "Kliendibaasil puudub muutujate haldur"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:383
+#: classes/applications/persona_import/persona_import.aw:340
 msgid "Getting source data<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:440
+#: classes/applications/persona_import/persona_import.aw:347
+msgid "Not enough data to process<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:361
 msgid "got data<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:456
+#: classes/applications/persona_import/persona_import.aw:377
 msgid "parse finished, processing starts<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:744
+#: classes/applications/persona_import/persona_import.aw:688
 msgid "creating yksused objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:800
+#: classes/applications/persona_import/persona_import.aw:742
 msgid "created new section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:813
+#: classes/applications/persona_import/persona_import.aw:757
 msgid "updating existing section<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:873
+#: classes/applications/persona_import/persona_import.aw:819
 msgid "<h1>sections</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:875
+#: classes/applications/persona_import/persona_import.aw:821
 msgid "<h1>sections done</h1>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:888
+#: classes/applications/persona_import/persona_import.aw:834
 msgid "creating person objects<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:915
+#: classes/applications/persona_import/persona_import.aw:861
 msgid "<br>creating new person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:921
+#: classes/applications/persona_import/persona_import.aw:867
 msgid "updating existing person object<br>"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:940 classes/applications/persona_import/persona_import.aw:1033
+#: classes/applications/persona_import/persona_import.aw:886 classes/applications/persona_import/persona_import.aw:983
 msgid "Vaata"
 msgstr ""
 

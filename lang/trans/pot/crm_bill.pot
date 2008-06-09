@@ -302,6 +302,102 @@ msgstr ""
 msgid "Omaduse Read erinevatel lehek&uuml;lgedel (rows_different_pages) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:prop_warehouse
+msgid "Omaduse Ladu (warehouse) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_warehouse_comment
+msgid "Omaduse Ladu (warehouse) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_warehouse_help
+msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_price_list
+msgid "Omaduse Hinnakiri (price_list) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_price_list_comment
+msgid "Omaduse Hinnakiri (price_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_price_list_help
+msgid "Omaduse Hinnakiri (price_list) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_method
+msgid "Omaduse L&auml;hetusviis (transfer_method) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_method_comment
+msgid "Omaduse L&auml;hetusviis (transfer_method) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_method_help
+msgid "Omaduse L&auml;hetusviis (transfer_method) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_condition
+msgid "Omaduse L&auml;hetustingimus (transfer_condition) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_condition_comment
+msgid "Omaduse L&auml;hetustingimus (transfer_condition) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_condition_help
+msgid "Omaduse L&auml;hetustingimus (transfer_condition) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_selling_order
+msgid "Omaduse M&uuml;&uuml;gitellimus (selling_order) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_selling_order_comment
+msgid "Omaduse M&uuml;&uuml;gitellimus (selling_order) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_selling_order_help
+msgid "Omaduse M&uuml;&uuml;gitellimus (selling_order) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_address
+msgid "Omaduse L&auml;hetusaadress (transfer_address) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_address_comment
+msgid "Omaduse L&auml;hetusaadress (transfer_address) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_transfer_address_help
+msgid "Omaduse L&auml;hetusaadress (transfer_address) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_mail_notify
+msgid "Omaduse Teade laekumisest e-postile (mail_notify) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_mail_notify_comment
+msgid "Omaduse Teade laekumisest e-postile (mail_notify) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_mail_notify_help
+msgid "Omaduse Teade laekumisest e-postile (mail_notify) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_approved
+msgid "Omaduse Kinnitatud (approved) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_approved_comment
+msgid "Omaduse Kinnitatud (approved) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_approved_help
+msgid "Omaduse Kinnitatud (approved) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:prop_bill_rows
 msgid "Omaduse Arveread (bill_rows) caption"
 msgstr ""
@@ -410,6 +506,30 @@ msgstr ""
 msgid "Omaduse Kasutajadefineeritud muutuja 5 (udef5) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:prop_dn_tb
+msgid "Omaduse  (dn_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_dn_tb_comment
+msgid "Omaduse  (dn_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_dn_tb_help
+msgid "Omaduse  (dn_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_dn_tbl
+msgid "Omaduse  (dn_tbl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_dn_tbl_comment
+msgid "Omaduse  (dn_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_dn_tbl_help
+msgid "Omaduse  (dn_tbl) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:prop_preview
 msgid "Omaduse  (preview) caption"
 msgstr ""
@@ -468,6 +588,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_task_list_help
 msgid "Omaduse  (bill_task_list) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_delivery_notes
+msgid "Grupi Saatelehed (delivery_notes) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_delivery_notes_help
+msgid "Grupi Saatelehed (delivery_notes) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_tasks
@@ -534,191 +662,223 @@ msgstr ""
 msgid "Seose Laekumine (RELTYPE_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:172
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_PRICE_LIST
+msgid "Seose Hinnakiri (RELTYPE_PRICE_LIST) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_TRANSFER_METHOD
+msgid "Seose L&auml;hetusviis (RELTYPE_TRANSFER_METHOD) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_TRANSFER_CONDITION
+msgid "Seose L&auml;hetustingimus (RELTYPE_TRANSFER_CONDITION) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_SELLING_ORDER
+msgid "Seose M&uuml;&uuml;gitellimus (RELTYPE_SELLING_ORDER) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_DELIVERY_NOTE
+msgid "Seose Saateleht (RELTYPE_DELIVERY_NOTE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_ADDRESS
+msgid "Seose L&auml;hetusaadress (RELTYPE_ADDRESS) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:228
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:173
+#: classes/applications/crm/crm_bill.aw:229
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:174
+#: classes/applications/crm/crm_bill.aw:230
 msgid "Makstud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:175
+#: classes/applications/crm/crm_bill.aw:231
 msgid "Laekunud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:176
+#: classes/applications/crm/crm_bill.aw:232
 msgid "Osaliselt laekunud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:177
+#: classes/applications/crm/crm_bill.aw:233
 msgid "Kreeditarve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:178
+#: classes/applications/crm/crm_bill.aw:234
 msgid "Tehtud kreeditarve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:179
+#: classes/applications/crm/crm_bill.aw:235
 msgid "Maha kantud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:246
+#: classes/applications/crm/crm_bill.aw:302
 msgid "Lisa laekumine!"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:251
+#: classes/applications/crm/crm_bill.aw:307
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:257
+#: classes/applications/crm/crm_bill.aw:313
 msgid "&Uuml;lekandega"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:257
+#: classes/applications/crm/crm_bill.aw:313
 msgid "Sularahas"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:297 classes/applications/crm/crm_bill.aw:901 classes/applications/crm/crm_bill.aw:949
+#: classes/applications/crm/crm_bill.aw:361 classes/applications/crm/crm_bill.aw:989 classes/applications/crm/crm_bill.aw:1037
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:336
+#: classes/applications/crm/crm_bill.aw:400
 msgid "Riik"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:336
+#: classes/applications/crm/crm_bill.aw:400
 msgid "Riik inglise keeles"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:336
+#: classes/applications/crm/crm_bill.aw:400
 msgid "Maakond"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:336
+#: classes/applications/crm/crm_bill.aw:400
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:336
+#: classes/applications/crm/crm_bill.aw:400
 msgid "T&auml;nav, maja, korter"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:336
+#: classes/applications/crm/crm_bill.aw:400
 msgid "Postiindeks"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:482
+#: classes/applications/crm/crm_bill.aw:546
 msgid "Selle numbriga arve on juba olemas"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:489
+#: classes/applications/crm/crm_bill.aw:553
 msgid "Number ei ole seerias!"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:679
-msgid "laekumine"
+#: classes/applications/crm/crm_bill.aw:889
+msgid "Number"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:837
-msgid "Nimetus"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:843
-msgid "Kood"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:848
+#: classes/applications/crm/crm_bill.aw:894
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:853
-msgid "&Uuml;hik"
+#: classes/applications/crm/crm_bill.aw:904
+msgid "(Puudub)"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:858 classes/applications/crm/crm_bill.aw:2703
-msgid "Hind"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:863
-msgid "Kogus"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:868
-msgid "Summa"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:873
-msgid "Artikkel"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:877
-msgid "Isik"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:882
-msgid "+KM?"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:887 classes/applications/crm/crm_bill.aw:1018 classes/applications/crm/crm_bill.aw:1119
-msgid "Vali"
+#: classes/applications/crm/crm_bill.aw:930
+msgid "Nimetus"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:936
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:941
+msgid "&Uuml;hik"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:946 classes/applications/crm/crm_bill.aw:2838
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:951
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:956
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:961
+msgid "Artikkel"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:965
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:970
+msgid "+KM?"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:975 classes/applications/crm/crm_bill.aw:1105 classes/applications/crm/crm_bill.aw:1206
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1024
 msgid "Kulud:"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1072
+#: classes/applications/crm/crm_bill.aw:1159
 msgid "Kokkuleppehind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1823 classes/applications/crm/crm_bill.aw:2233
+#: classes/applications/crm/crm_bill.aw:1935 classes/applications/crm/crm_bill.aw:2345
 msgid "Prinditav arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2603
+#: classes/applications/crm/crm_bill.aw:2736
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2610
+#: classes/applications/crm/crm_bill.aw:2745
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2615 classes/applications/crm/crm_bill.aw:2627 classes/applications/crm/crm_bill.aw:2640
+#: classes/applications/crm/crm_bill.aw:2750 classes/applications/crm/crm_bill.aw:2762 classes/applications/crm/crm_bill.aw:2775
 msgid "Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2623
+#: classes/applications/crm/crm_bill.aw:2758
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2636
+#: classes/applications/crm/crm_bill.aw:2771
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2648
+#: classes/applications/crm/crm_bill.aw:2783
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2653
+#: classes/applications/crm/crm_bill.aw:2788
 msgid "Koonda read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2662
+#: classes/applications/crm/crm_bill.aw:2797
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2663
+#: classes/applications/crm/crm_bill.aw:2798
 msgid "Oled kindel et soovid read kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2692
+#: classes/applications/crm/crm_bill.aw:2827
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2697
+#: classes/applications/crm/crm_bill.aw:2832
 msgid "Tunde"
 msgstr ""
 

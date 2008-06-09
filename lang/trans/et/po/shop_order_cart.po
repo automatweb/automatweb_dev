@@ -110,8 +110,8 @@ msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:165
-#: classes/applications/shop/shop_order_cart.aw:1020
-#: classes/applications/shop/shop_order_cart.aw:1290
+#: classes/applications/shop/shop_order_cart.aw:1019
+#: classes/applications/shop/shop_order_cart.aw:1289
 msgid "shop_order_cart::show(): no product layout set for cart (%s)"
 msgstr ""
 

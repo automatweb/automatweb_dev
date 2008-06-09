@@ -9,36 +9,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/formgen/form.aw:class_2_help
 msgid "Klassi Vorm help"
 msgstr ""
 
-#: classes/formgen/form.aw:2264
+#: classes/formgen/form.aw:2263
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s"
 msgstr ""
 
-#: classes/formgen/form.aw:3031
+#: classes/formgen/form.aw:3030
 msgid "No table selected for showing search results for form %s!"
 msgstr ""
 
-#: classes/formgen/form.aw:3380
+#: classes/formgen/form.aw:3379
 msgid "form->search(%s): no forms selected as search targets!"
 msgstr ""
 
-#: classes/formgen/form.aw:3568
+#: classes/formgen/form.aw:3567
 msgid "No forms selected as search targets!"
 msgstr ""
 
-#: classes/formgen/form.aw:3774
+#: classes/formgen/form.aw:3773
 msgid "No table selected for showing data!"
 msgstr ""
 
-#: classes/formgen/form.aw:3822
+#: classes/formgen/form.aw:3821
 msgid "Tulemuste kuvamise tabelis pole yhtegi elementi!"
 msgstr ""
 
-#: classes/formgen/form.aw:4729
+#: classes/formgen/form.aw:4728
 msgid "form->metainfo(): weird error!"
 msgstr ""
-

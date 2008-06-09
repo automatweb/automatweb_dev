@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/external/external_system.aw:class_1073_help
 msgid "Klassi Siduss&uuml;steem help"
 msgstr ""
@@ -74,11 +73,10 @@ msgstr ""
 msgid "Seose Siduss&uuml;steem (RELTYPE_SYSTEM) tekst"
 msgstr ""
 
-#: classes/common/external/external_system.aw:103
+#: classes/common/external/external_system.aw:100
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/common/external/external_system.aw:208
+#: classes/common/external/external_system.aw:205
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
-

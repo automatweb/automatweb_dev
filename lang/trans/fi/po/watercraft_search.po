@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -365,270 +365,270 @@ msgstr ""
 msgid "Grupi Otsing (search) help"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:123
+#: classes/applications/watercraft_management/watercraft_search.aw:122
 msgid "Aluse t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:124
+#: classes/applications/watercraft_management/watercraft_search.aw:123
 msgid "Seisukord"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:125
+#: classes/applications/watercraft_management/watercraft_search.aw:124
 msgid "Kerematerjal"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:126
-#: classes/applications/watercraft_management/watercraft_search.aw:404
+#: classes/applications/watercraft_management/watercraft_search.aw:125
+#: classes/applications/watercraft_management/watercraft_search.aw:403
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:127
+#: classes/applications/watercraft_management/watercraft_search.aw:126
 msgid "Pikkus"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:128
+#: classes/applications/watercraft_management/watercraft_search.aw:127
 msgid "Laius"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:129
+#: classes/applications/watercraft_management/watercraft_search.aw:128
 msgid "K&otilde;rgus"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:130
+#: classes/applications/watercraft_management/watercraft_search.aw:129
 msgid "Raskus"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:131
+#: classes/applications/watercraft_management/watercraft_search.aw:130
 msgid "S&uuml;vis"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:132
-#: classes/applications/watercraft_management/watercraft_search.aw:177
+#: classes/applications/watercraft_management/watercraft_search.aw:131
+#: classes/applications/watercraft_management/watercraft_search.aw:176
 msgid "Valmistamisaasta"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:133
+#: classes/applications/watercraft_management/watercraft_search.aw:132
 msgid "Reisijaid"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:134
+#: classes/applications/watercraft_management/watercraft_search.aw:133
 msgid "Lisavarustus"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:135
-#: classes/applications/watercraft_management/watercraft_search.aw:408
+#: classes/applications/watercraft_management/watercraft_search.aw:134
+#: classes/applications/watercraft_management/watercraft_search.aw:407
 msgid "M&uuml;&uuml;ja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:136
+#: classes/applications/watercraft_management/watercraft_search.aw:135
 msgid "Kontaktisik"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:137
-#: classes/applications/watercraft_management/watercraft_search.aw:176
-#: classes/applications/watercraft_management/watercraft_search.aw:412
+#: classes/applications/watercraft_management/watercraft_search.aw:136
+#: classes/applications/watercraft_management/watercraft_search.aw:175
+#: classes/applications/watercraft_management/watercraft_search.aw:411
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:138
-#: classes/applications/watercraft_management/watercraft_search.aw:384
+#: classes/applications/watercraft_management/watercraft_search.aw:137
+#: classes/applications/watercraft_management/watercraft_search.aw:383
 msgid "Kuulutuse ID"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:139
+#: classes/applications/watercraft_management/watercraft_search.aw:138
 msgid "Tehingu t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:143
+#: classes/applications/watercraft_management/watercraft_search.aw:142
 msgid "Elekter 110V"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:144
+#: classes/applications/watercraft_management/watercraft_search.aw:143
 msgid "Elekter 220V"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:145
+#: classes/applications/watercraft_management/watercraft_search.aw:144
 msgid "Raadiojaam"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:146
+#: classes/applications/watercraft_management/watercraft_search.aw:145
 msgid "Stereo"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:147
+#: classes/applications/watercraft_management/watercraft_search.aw:146
 msgid "CD"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:148
+#: classes/applications/watercraft_management/watercraft_search.aw:147
 msgid "Veekindlad k&otilde;larid"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:149
+#: classes/applications/watercraft_management/watercraft_search.aw:148
 msgid "Signalisatsioon"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:150
+#: classes/applications/watercraft_management/watercraft_search.aw:149
 msgid "Navigatsioonis&uuml;steem"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:151
+#: classes/applications/watercraft_management/watercraft_search.aw:150
 msgid "Navigatsioonituled"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:152
+#: classes/applications/watercraft_management/watercraft_search.aw:151
 msgid "Treiler"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:153
+#: classes/applications/watercraft_management/watercraft_search.aw:152
 msgid "Tualett"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:154
+#: classes/applications/watercraft_management/watercraft_search.aw:153
 msgid "Dush"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:155
+#: classes/applications/watercraft_management/watercraft_search.aw:154
 msgid "P&auml;&auml;stevest"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:156
+#: classes/applications/watercraft_management/watercraft_search.aw:155
 msgid "Ujumisredel"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:157
+#: classes/applications/watercraft_management/watercraft_search.aw:156
 msgid "Varikatus"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:158
+#: classes/applications/watercraft_management/watercraft_search.aw:157
 msgid "K&ouml;&ouml;k/Pliit"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:159
+#: classes/applications/watercraft_management/watercraft_search.aw:158
 msgid "Vendrid"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:160
+#: classes/applications/watercraft_management/watercraft_search.aw:159
 msgid "K&uuml;lmkapp"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:161
+#: classes/applications/watercraft_management/watercraft_search.aw:160
 msgid "Ankur"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:162
+#: classes/applications/watercraft_management/watercraft_search.aw:161
 msgid "Aerud"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:163
+#: classes/applications/watercraft_management/watercraft_search.aw:162
 msgid "TV-video"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:164
+#: classes/applications/watercraft_management/watercraft_search.aw:163
 msgid "K&uuml;te"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:165
+#: classes/applications/watercraft_management/watercraft_search.aw:164
 msgid "Veepaak"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:166
+#: classes/applications/watercraft_management/watercraft_search.aw:165
 msgid "P&auml;&auml;stepaat"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:170
+#: classes/applications/watercraft_management/watercraft_search.aw:169
 msgid "Eraisik"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:171
+#: classes/applications/watercraft_management/watercraft_search.aw:170
 msgid "Firma"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:175
+#: classes/applications/watercraft_management/watercraft_search.aw:174
 msgid "J&auml;rjekorranumber"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:178
+#: classes/applications/watercraft_management/watercraft_search.aw:177
 msgid "Lisatud"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:194
+#: classes/applications/watercraft_management/watercraft_search.aw:193
 msgid "Sorteeritav omadus"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:198
+#: classes/applications/watercraft_management/watercraft_search.aw:197
 msgid "Sorteerimise suund"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:205
+#: classes/applications/watercraft_management/watercraft_search.aw:204
 msgid "-- Valige omadus --"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:210
+#: classes/applications/watercraft_management/watercraft_search.aw:209
 msgid "-- Valige suund --"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_search.aw:210
+#: classes/applications/watercraft_management/watercraft_search.aw:227
+msgid "V&auml;iksemad (vanemad) ennem"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:211
 #: classes/applications/watercraft_management/watercraft_search.aw:228
-msgid "V&auml;iksemad (vanemad) ennem"
-msgstr ""
-
-#: classes/applications/watercraft_management/watercraft_search.aw:212
-#: classes/applications/watercraft_management/watercraft_search.aw:229
 msgid "Suuremad (uuemad) ennem"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:250
-#: classes/applications/watercraft_management/watercraft_search.aw:258
+#: classes/applications/watercraft_management/watercraft_search.aw:249
+#: classes/applications/watercraft_management/watercraft_search.aw:257
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:277
-#: classes/applications/watercraft_management/watercraft_search.aw:280
-#: classes/applications/watercraft_management/watercraft_search.aw:284
-#: classes/applications/watercraft_management/watercraft_search.aw:288
-#: classes/applications/watercraft_management/watercraft_search.aw:292
-#: classes/applications/watercraft_management/watercraft_search.aw:328
+#: classes/applications/watercraft_management/watercraft_search.aw:276
+#: classes/applications/watercraft_management/watercraft_search.aw:279
+#: classes/applications/watercraft_management/watercraft_search.aw:283
+#: classes/applications/watercraft_management/watercraft_search.aw:287
+#: classes/applications/watercraft_management/watercraft_search.aw:291
+#: classes/applications/watercraft_management/watercraft_search.aw:327
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:376
+#: classes/applications/watercraft_management/watercraft_search.aw:375
 msgid "Otsingu tulemused"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:388
+#: classes/applications/watercraft_management/watercraft_search.aw:387
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:392
+#: classes/applications/watercraft_management/watercraft_search.aw:391
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:396
+#: classes/applications/watercraft_management/watercraft_search.aw:395
 msgid "Tootja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:400
+#: classes/applications/watercraft_management/watercraft_search.aw:399
 msgid "Mark"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:416
+#: classes/applications/watercraft_management/watercraft_search.aw:415
 msgid "N&auml;htav"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:422
+#: classes/applications/watercraft_management/watercraft_search.aw:421
 msgid "Arhiivis"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_search.aw:455
+#: classes/applications/watercraft_management/watercraft_search.aw:454
 msgid "- nimetu -"
 msgstr ""
 
+#: classes/applications/watercraft_management/watercraft_search.aw:502
 #: classes/applications/watercraft_management/watercraft_search.aw:503
-#: classes/applications/watercraft_management/watercraft_search.aw:504
 msgid "Jah"
 msgstr ""
 
+#: classes/applications/watercraft_management/watercraft_search.aw:502
 #: classes/applications/watercraft_management/watercraft_search.aw:503
-#: classes/applications/watercraft_management/watercraft_search.aw:504
 msgid "Ei"
 msgstr ""

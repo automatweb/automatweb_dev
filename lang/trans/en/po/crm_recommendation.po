@@ -109,10 +109,10 @@ msgstr ""
 msgid "Seose Soovitaja poole p&ouml;&ouml;rduda (RELTYPE_CONTACT_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_recommendation.aw:414
+#: classes/applications/crm/crm_recommendation.aw:402
 msgid "Vigane argument '"
 msgstr ""
 
-#: classes/applications/crm/crm_recommendation.aw:450
+#: classes/applications/crm/crm_recommendation.aw:438
 msgid "soovitus isikule"
 msgstr "recommendation to"

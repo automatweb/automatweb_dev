@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/external/xml_source.aw:class_1339_help
 msgid "Klassi XML allikas help"
 msgstr ""
@@ -410,55 +409,55 @@ msgstr ""
 msgid "Seose Toimumisaegade sidussüsteem (RELTYPE_EXTERNAL_SYSTEM_EVENT_TIME) tekst"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:182
+#: classes/common/external/xml_source.aw:174
 msgid "-- XML väljund on ainult eesti keeles --"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:187
+#: classes/common/external/xml_source.aw:179
 msgid "-- Keel defineeritakse URLi parameetri abil --"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:314
+#: classes/common/external/xml_source.aw:306
 msgid "Keel"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:318
+#: classes/common/external/xml_source.aw:310
 msgid "Parameetri väärtus"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:342
+#: classes/common/external/xml_source.aw:334
 msgid "Tase"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:346
+#: classes/common/external/xml_source.aw:338
 msgid "Väärtused allikas (komaga eraldatud)"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:352
+#: classes/common/external/xml_source.aw:344
 msgid "&Uuml;leriikliku t&auml;htsusega"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:359
+#: classes/common/external/xml_source.aw:351
 msgid "Kohaliku t&auml;htsusega"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:366
+#: classes/common/external/xml_source.aw:358
 msgid "V&auml;lismaal toimuv"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:458 classes/common/external/xml_source.aw:493
+#: classes/common/external/xml_source.aw:450
+#: classes/common/external/xml_source.aw:485
 msgid "T&auml;&auml;g"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:462
+#: classes/common/external/xml_source.aw:454
 msgid "Subt&auml;&auml;gid"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:466
+#: classes/common/external/xml_source.aw:458
 msgid "Mitu"
 msgstr ""
 
-#: classes/common/external/xml_source.aw:497
+#: classes/common/external/xml_source.aw:489
 msgid "Argumendid"
 msgstr ""
-

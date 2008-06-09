@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/patent_office/intellectual_property.aw:class_1441_help
 msgid "Klassi Intellektuaalne omand help"
 msgstr ""
@@ -182,18 +181,6 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:prop_classes_fee
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/intellectual_property.aw:prop_classes_fee_comment
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/intellectual_property.aw:prop_classes_fee_help
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/intellectual_property.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -282,10 +269,6 @@ msgstr ""
 msgid "Seose E-mail (RELTYPE_EMAIL) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:rel_RELTYPE_COUNTRY
-msgid "Seose P&auml;riltolumaa (RELTYPE_COUNTRY) tekst"
-msgstr ""
-
 #: classes/applications/clients/patent_office/intellectual_property.aw:rel_RELTYPE_PROCURATOR_MENU
 msgid "Seose Volinike kaust (RELTYPE_PROCURATOR_MENU) tekst"
 msgstr ""
@@ -310,7 +293,10 @@ msgstr ""
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:158 classes/applications/clients/patent_office/intellectual_property.aw:177 classes/applications/clients/patent_office/intellectual_property.aw:196 classes/applications/clients/patent_office/intellectual_property.aw:1664
+#: classes/applications/clients/patent_office/intellectual_property.aw:158
+#: classes/applications/clients/patent_office/intellectual_property.aw:177
+#: classes/applications/clients/patent_office/intellectual_property.aw:196
+#: classes/applications/clients/patent_office/intellectual_property.aw:1664
 msgid "Allkirjastamine"
 msgstr ""
 
@@ -318,7 +304,9 @@ msgstr ""
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:176 classes/applications/clients/patent_office/intellectual_property.aw:467 classes/applications/clients/patent_office/intellectual_property.aw:499
+#: classes/applications/clients/patent_office/intellectual_property.aw:176
+#: classes/applications/clients/patent_office/intellectual_property.aw:467
+#: classes/applications/clients/patent_office/intellectual_property.aw:499
 msgid "Allkirjasta"
 msgstr ""
 
@@ -350,15 +338,22 @@ msgstr ""
 msgid "Saadan taotluse"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:658 classes/applications/clients/patent_office/intellectual_property.aw:745 classes/applications/clients/patent_office/intellectual_property.aw:1201 classes/applications/clients/patent_office/intellectual_property.aw:1245 classes/applications/clients/patent_office/intellectual_property.aw:1812 classes/applications/clients/patent_office/intellectual_property.aw:1860
+#: classes/applications/clients/patent_office/intellectual_property.aw:658
+#: classes/applications/clients/patent_office/intellectual_property.aw:745
+#: classes/applications/clients/patent_office/intellectual_property.aw:1201
+#: classes/applications/clients/patent_office/intellectual_property.aw:1245
+#: classes/applications/clients/patent_office/intellectual_property.aw:1812
+#: classes/applications/clients/patent_office/intellectual_property.aw:1860
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:671 classes/applications/clients/patent_office/intellectual_property.aw:1193
+#: classes/applications/clients/patent_office/intellectual_property.aw:671
+#: classes/applications/clients/patent_office/intellectual_property.aw:1193
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:672 classes/applications/clients/patent_office/intellectual_property.aw:1194
+#: classes/applications/clients/patent_office/intellectual_property.aw:672
+#: classes/applications/clients/patent_office/intellectual_property.aw:1194
 msgid "Reg.kood"
 msgstr ""
 
@@ -386,7 +381,8 @@ msgstr ""
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Juriidiline isik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:1559 classes/applications/clients/patent_office/intellectual_property.aw:1613
+#: classes/applications/clients/patent_office/intellectual_property.aw:1559
+#: classes/applications/clients/patent_office/intellectual_property.aw:1613
 msgid "Vali"
 msgstr ""
 
@@ -398,11 +394,13 @@ msgstr ""
 msgid "Allkirjastaja ametinimetus"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:1839 classes/applications/clients/patent_office/intellectual_property.aw:1873
+#: classes/applications/clients/patent_office/intellectual_property.aw:1839
+#: classes/applications/clients/patent_office/intellectual_property.aw:1873
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:1842 classes/applications/clients/patent_office/intellectual_property.aw:1876
+#: classes/applications/clients/patent_office/intellectual_property.aw:1842
+#: classes/applications/clients/patent_office/intellectual_property.aw:1876
 msgid "Kustuta"
 msgstr ""
 
@@ -442,11 +440,14 @@ msgstr ""
 msgid "Postiindeks on kohustuslik"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:2659 classes/applications/clients/patent_office/intellectual_property.aw:2845 classes/applications/clients/patent_office/intellectual_property.aw:3029
+#: classes/applications/clients/patent_office/intellectual_property.aw:2659
+#: classes/applications/clients/patent_office/intellectual_property.aw:2845
+#: classes/applications/clients/patent_office/intellectual_property.aw:3029
 msgid "Vastu v&otilde;etud"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:2659 classes/applications/clients/patent_office/intellectual_property.aw:2845 classes/applications/clients/patent_office/intellectual_property.aw:3029
+#: classes/applications/clients/patent_office/intellectual_property.aw:2659
+#: classes/applications/clients/patent_office/intellectual_property.aw:2845
+#: classes/applications/clients/patent_office/intellectual_property.aw:3029
 msgid "Saadetud"
 msgstr ""
-

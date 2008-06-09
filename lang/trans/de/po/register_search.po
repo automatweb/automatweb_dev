@@ -299,18 +299,18 @@ msgstr ""
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1066
+#: classes/applications/register/register_search.aw:1067
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1080
+#: classes/applications/register/register_search.aw:1081
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1091
+#: classes/applications/register/register_search.aw:1092
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1092
+#: classes/applications/register/register_search.aw:1093
 msgid "Kustuta"
 msgstr ""

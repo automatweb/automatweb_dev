@@ -9,8 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/external/generic_xml_ds.aw:class_1391_help
 msgid "Klassi XML andmeallikas help"
 msgstr ""
 
+#: classes/common/external/generic_xml_ds.aw:prop_location
+msgid "Omaduse URL/asukoht (location) caption"
+msgstr ""
+
+#: classes/common/external/generic_xml_ds.aw:prop_location_comment
+msgid "Omaduse URL/asukoht (location) kommentaar"
+msgstr ""
+
+#: classes/common/external/generic_xml_ds.aw:prop_location_help
+msgid "Omaduse URL/asukoht (location) help"
+msgstr ""

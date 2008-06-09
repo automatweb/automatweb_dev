@@ -61,6 +61,54 @@ msgstr ""
 msgid "Omaduse Failid (file_names) help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:prop_contents_tb
+msgid "Omaduse  (contents_tb) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_tb_comment
+msgid "Omaduse  (contents_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_tb_help
+msgid "Omaduse  (contents_tb) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_classes_tree
+msgid "Omaduse  (contents_classes_tree) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_classes_tree_comment
+msgid "Omaduse  (contents_classes_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_classes_tree_help
+msgid "Omaduse  (contents_classes_tree) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_classes_tbl
+msgid "Omaduse  (contents_classes_tbl) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_classes_tbl_comment
+msgid "Omaduse  (contents_classes_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_classes_tbl_help
+msgid "Omaduse  (contents_classes_tbl) help"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_tbl
+msgid "Omaduse  (contents_tbl) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_tbl_comment
+msgid "Omaduse  (contents_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_contents_tbl_help
+msgid "Omaduse  (contents_tbl) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:prop_dep_toolbar
 msgid "Omaduse Seoste toolbar (dep_toolbar) caption"
 msgstr ""
@@ -85,6 +133,14 @@ msgstr ""
 msgid "Omaduse S&otilde;ltuvused (dependencies) help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:group_package_contents
+msgid "Grupi Paki sisu (package_contents) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:group_package_contents_help
+msgid "Grupi Paki sisu (package_contents) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:group_dependencies
 msgid "Grupi S&otilde;ltuvused (dependencies) pealkiri"
 msgstr ""
@@ -101,34 +157,68 @@ msgstr ""
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:62
+#: classes/applications/package_management/package.aw:layout_contents_tree_lay
+msgid "Kujundusosa Kaustad (contents_tree_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:layout_contents_tbl_top
+msgid "Kujundusosa Klassid (contents_tbl_top) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:layout_contents_tbl_bottom
+msgid "Kujundusosa Pakk (contents_tbl_bottom) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:83
 msgid "Uuenda failide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:100
-msgid "Uus pakk"
+#: classes/applications/package_management/package.aw:101
+msgid "Eemalda klassid"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:112
-msgid "Kustuta s&otilde;ltuvused"
+#: classes/applications/package_management/package.aw:103
+msgid "Oled kindel et soovid valitud klassid eemaldada?"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:114
-msgid "Oled kindel et soovid valitud s&otilde;ltuvused kustutada?"
+#: classes/applications/package_management/package.aw:109
+msgid "Loo zip-fail"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:138
-msgid "Pakkide nimekiri"
+#: classes/applications/package_management/package.aw:120
+msgid "Lisa"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:142
+#: classes/applications/package_management/package.aw:125
+#: classes/applications/package_management/package.aw:202
+#: classes/applications/package_management/package.aw:318
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:146
+#: classes/applications/package_management/package.aw:199
+msgid "Paki sisu"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:260
+msgid "Uus pakk"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:272
+msgid "Kustuta s&otilde;ltuvused"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:274
+msgid "Oled kindel et soovid valitud s&otilde;ltuvused kustutada?"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:314
+msgid "Pakkide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:322
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:151
+#: classes/applications/package_management/package.aw:327
 msgid "Kirjeldus"
 msgstr ""

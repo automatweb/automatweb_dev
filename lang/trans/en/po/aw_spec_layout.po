@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/aw_spec/aw_spec_layout.aw:class_1427_help
 msgid "Klassi AW Spetsifikatsiooni layout help"
 msgstr ""
@@ -46,23 +45,26 @@ msgstr ""
 msgid "Sisesta klassi %s grupi %s layoudi %s omadused"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_layout.aw:90
+#: classes/applications/aw_spec/aw_spec_layout.aw:98
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_layout.aw:102
 msgid "Omaduse nimi"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_layout.aw:94
+#: classes/applications/aw_spec/aw_spec_layout.aw:106
 msgid "Omaduse t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_layout.aw:98
+#: classes/applications/aw_spec/aw_spec_layout.aw:110
 msgid "Omaduse kirjeldus"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_layout.aw:119
+#: classes/applications/aw_spec/aw_spec_layout.aw:131
 msgid "Omadus: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_layout.aw:120
+#: classes/applications/aw_spec/aw_spec_layout.aw:132
 msgid "T&uuml;&uuml;p: %s<br>"
 msgstr ""
-

@@ -38,18 +38,6 @@ msgstr ""
 msgid "Omaduse Toolbar (navtoolbar) help"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:prop_plugins
-msgid "Omaduse Pluginad (plugins) caption"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:prop_plugins_comment
-msgid "Omaduse Pluginad (plugins) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:prop_plugins_help
-msgid "Omaduse Pluginad (plugins) help"
-msgstr ""
-
 #: classes/contentmgmt/doc.aw:prop_brother_warning
 msgid "Omaduse  (brother_warning) caption"
 msgstr ""
@@ -866,18 +854,6 @@ msgstr ""
 msgid "Omaduse Keel (language) help"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:prop_calendar_relation
-msgid "Omaduse P&otilde;hikalender (calendar_relation) caption"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:prop_calendar_relation_comment
-msgid "Omaduse P&otilde;hikalender (calendar_relation) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:prop_calendar_relation_help
-msgid "Omaduse P&otilde;hikalender (calendar_relation) help"
-msgstr ""
-
 #: classes/contentmgmt/doc.aw:prop_gen_static
 msgid "Omaduse Genereeri staatiline (gen_static) caption"
 msgstr ""
@@ -1094,18 +1070,6 @@ msgstr ""
 msgid "Omaduse Dokumendi sisu t&uuml;&uuml;p (doc_content_type) help"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:prop_sections
-msgid "Omaduse Sektsioonid (sections) caption"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:prop_sections_comment
-msgid "Omaduse Sektsioonid (sections) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:prop_sections_help
-msgid "Omaduse Sektsioonid (sections) help"
-msgstr ""
-
 #: classes/contentmgmt/doc.aw:prop_aliasmgr
 msgid "Omaduse Aliastehaldur (aliasmgr) caption"
 msgstr ""
@@ -1266,14 +1230,6 @@ msgstr ""
 msgid "Grupi Kalender (calendar) help"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:group_vennastamine
-msgid "Grupi Vennastamine (vennastamine) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:group_vennastamine_help
-msgid "Grupi Vennastamine (vennastamine) help"
-msgstr ""
-
 #: classes/contentmgmt/doc.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
@@ -1366,75 +1322,67 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:406
+#: classes/contentmgmt/doc.aw:388
 msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:407
+#: classes/contentmgmt/doc.aw:389
 msgid "Originaal"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:504
-msgid "puudub"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:937
+#: classes/contentmgmt/doc.aw:814
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:958 classes/contentmgmt/doc.aw:1782
+#: classes/contentmgmt/doc.aw:835 classes/contentmgmt/doc.aw:1397
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1120
+#: classes/contentmgmt/doc.aw:878
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1133
+#: classes/contentmgmt/doc.aw:891
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1417 classes/contentmgmt/doc.aw:1512 classes/contentmgmt/doc.aw:1516
+#: classes/contentmgmt/doc.aw:1040 classes/contentmgmt/doc.aw:1128 classes/contentmgmt/doc.aw:1132
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1464
+#: classes/contentmgmt/doc.aw:1080
 msgid "Versioon"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1470 classes/contentmgmt/doc.aw:1530 classes/contentmgmt/doc.aw:1558
+#: classes/contentmgmt/doc.aw:1086 classes/contentmgmt/doc.aw:1146 classes/contentmgmt/doc.aw:1174
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1476
+#: classes/contentmgmt/doc.aw:1092
 msgid "Hinne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1482
+#: classes/contentmgmt/doc.aw:1098
 msgid "Hinda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1488
+#: classes/contentmgmt/doc.aw:1104
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1494
+#: classes/contentmgmt/doc.aw:1110
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1525 classes/contentmgmt/doc.aw:1553
+#: classes/contentmgmt/doc.aw:1141 classes/contentmgmt/doc.aw:1169
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1650
+#: classes/contentmgmt/doc.aw:1266
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1718
+#: classes/contentmgmt/doc.aw:1334
 msgid "V&otilde;tmes&otilde;na"
-msgstr ""
-
-#: classes/contentmgmt/doc.aw:1756 classes/contentmgmt/doc.aw:1757 classes/contentmgmt/doc.aw:1758
-msgid "<b>"
 msgstr ""
 

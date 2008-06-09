@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/aw_spec/aw_spec_group_obj.aw:98
+#: classes/applications/aw_spec/aw_spec_group_obj.aw:100
 msgid "Horisontaalne kast"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec_group_obj.aw:99
+#: classes/applications/aw_spec/aw_spec_group_obj.aw:101
 msgid "Vertikaalne kast"
 msgstr ""
-

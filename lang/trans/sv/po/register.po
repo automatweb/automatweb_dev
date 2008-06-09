@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/register/register.aw:class_341_help
 msgid "Klassi Register help"
 msgstr ""
@@ -274,7 +273,7 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/register/register.aw:236 classes/applications/register/register.aw:324
+#: classes/applications/register/register.aw:236
+#: classes/applications/register/register.aw:326
 msgid "Muuda"
 msgstr ""
-

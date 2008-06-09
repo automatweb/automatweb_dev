@@ -48,7 +48,7 @@ msgid "Pealkiri"
 msgstr "Name"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:493
-#: classes/applications/crm/crm_company_overview_impl.aw:2147
+#: classes/applications/crm/crm_company_overview_impl.aw:2188
 msgid "Aeg"
 msgstr "Time"
 
@@ -87,8 +87,8 @@ msgid "Peata stopper (%s)"
 msgstr "Stop timer (%s)"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:824
-#: classes/applications/crm/crm_company_overview_impl.aw:1455
-#: classes/applications/crm/crm_company_overview_impl.aw:1480
+#: classes/applications/crm/crm_company_overview_impl.aw:1496
+#: classes/applications/crm/crm_company_overview_impl.aw:1521
 msgid "Kustuta"
 msgstr "Delete"
 
@@ -132,51 +132,51 @@ msgstr "Import e-mails"
 msgid "M&auml;&auml;ra projekt"
 msgstr "Apply project"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1978
+#: classes/applications/crm/crm_company_overview_impl.aw:2019
 msgid "%s dokumendid"
 msgstr "%s documents"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1984
+#: classes/applications/crm/crm_company_overview_impl.aw:2025
 msgid ", milles on %s osaline"
 msgstr ", where %s is as participant"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1992
+#: classes/applications/crm/crm_company_overview_impl.aw:2033
 msgid "%s dokumendid, milles on %s osaline"
 msgstr "%s documents, where %s is as participant"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2132
+#: classes/applications/crm/crm_company_overview_impl.aw:2173
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2137
+#: classes/applications/crm/crm_company_overview_impl.aw:2178
 msgid "Teostaja"
 msgstr "Implementor"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2142
+#: classes/applications/crm/crm_company_overview_impl.aw:2183
 msgid "Millal"
 msgstr "When"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2152
+#: classes/applications/crm/crm_company_overview_impl.aw:2193
 msgid "Tehtud?"
 msgstr "Done?"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2180
+#: classes/applications/crm/crm_company_overview_impl.aw:2221
 msgid "Toimetuse rida"
 msgstr "Task row"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2183
+#: classes/applications/crm/crm_company_overview_impl.aw:2224
 msgid "Stopper"
 msgstr "Timer"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2190
+#: classes/applications/crm/crm_company_overview_impl.aw:2231
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2190
+#: classes/applications/crm/crm_company_overview_impl.aw:2231
 msgid "Ei"
 msgstr "No"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2195
+#: classes/applications/crm/crm_company_overview_impl.aw:2236
 msgid "Kokku:"
 msgstr "Total:"
 

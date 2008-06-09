@@ -1,7 +1,7 @@
 <?php
-$GLOBALS["TRANS"]["Kliendid"] = "Customers";
-$GLOBALS["TRANS"]["Projektid"] = "Projects";
 $GLOBALS["TRANS"]["Toimetused"] = "Tasks";
+$GLOBALS["TRANS"]["Projektid"] = "Projects";
+$GLOBALS["TRANS"]["Kliendid"] = "Customers";
 $GLOBALS["TRANS"]["Kliendid - detailvaade"] = "Customers - detailed view";
 $GLOBALS["TRANS"]["Isik"] = "Person";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Company";

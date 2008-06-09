@@ -352,7 +352,7 @@ msgstr ""
 msgid "Tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:235 classes/cfg/cb_search.aw:1009
+#: classes/cfg/cb_search.aw:235 classes/cfg/cb_search.aw:1010
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -376,74 +376,74 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:968
+#: classes/cfg/cb_search.aw:969
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:974
+#: classes/cfg/cb_search.aw:975
 msgid "Kataloog"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:980
+#: classes/cfg/cb_search.aw:981
 msgid "Mitu kirjet lehel"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1016
+#: classes/cfg/cb_search.aw:1017
 msgid "Element"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1022
+#: classes/cfg/cb_search.aw:1023
 msgid "Tabelis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1028
+#: classes/cfg/cb_search.aw:1029
 msgid "Hind"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1034
+#: classes/cfg/cb_search.aw:1035
 msgid "Sorditav"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1040
+#: classes/cfg/cb_search.aw:1041
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1046
+#: classes/cfg/cb_search.aw:1047
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1052
+#: classes/cfg/cb_search.aw:1053
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1068
+#: classes/cfg/cb_search.aw:1069
 msgid "Muuda"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1069
+#: classes/cfg/cb_search.aw:1070
 msgid "Vaata"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1070
+#: classes/cfg/cb_search.aw:1071
 msgid "Kustuta"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1165
+#: classes/cfg/cb_search.aw:1166
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1458
+#: classes/cfg/cb_search.aw:1459
 msgid "OID"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1465
+#: classes/cfg/cb_search.aw:1466
 msgid "Nimi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1472
+#: classes/cfg/cb_search.aw:1473
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1478
+#: classes/cfg/cb_search.aw:1479
 msgid "K.A. Alamkataloogid?"
 msgstr ""

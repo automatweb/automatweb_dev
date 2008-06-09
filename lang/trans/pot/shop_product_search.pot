@@ -50,6 +50,30 @@ msgstr ""
 msgid "Omaduse Tulemuseks on  (objs_in_res) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_search.aw:prop_fld_tb
+msgid "Omaduse  (fld_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_fld_tb_comment
+msgid "Omaduse  (fld_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_fld_tb_help
+msgid "Omaduse  (fld_tb) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_fld_tbl
+msgid "Omaduse  (fld_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_fld_tbl_comment
+msgid "Omaduse  (fld_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_fld_tbl_help
+msgid "Omaduse  (fld_tbl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_search.aw:prop_s_form
 msgid "Omaduse  (s_form) caption"
 msgstr ""
@@ -122,6 +146,22 @@ msgstr ""
 msgid "Omaduse  (s_res) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_search.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:group_folders
+msgid "Grupi Otsingu l&auml;htekohad (folders) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:group_folders_help
+msgid "Grupi Otsingu l&auml;htekohad (folders) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_search.aw:group_s_form
 msgid "Grupi Koosta otsinguvorm (s_form) pealkiri"
 msgstr ""
@@ -170,43 +210,55 @@ msgstr ""
 msgid "Seose Muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:187 classes/applications/shop/shop_product_search.aw:324
+#: classes/applications/shop/shop_product_search.aw:rel_RELTYPE_FOLDER
+msgid "Seose Otsingu kaust (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:227
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:233
+msgid "Ka alamkaustad"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:280 classes/applications/shop/shop_product_search.aw:417
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:193 classes/applications/shop/shop_product_search.aw:330
+#: classes/applications/shop/shop_product_search.aw:286 classes/applications/shop/shop_product_search.aw:423
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:199
+#: classes/applications/shop/shop_product_search.aw:292
 msgid "Vormis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:205 classes/applications/shop/shop_product_search.aw:342
+#: classes/applications/shop/shop_product_search.aw:298 classes/applications/shop/shop_product_search.aw:435
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:211
+#: classes/applications/shop/shop_product_search.aw:304
 msgid "Tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:336
+#: classes/applications/shop/shop_product_search.aw:429
 msgid "Tabelis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:348
+#: classes/applications/shop/shop_product_search.aw:441
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:353
+#: classes/applications/shop/shop_product_search.aw:446
 msgid "Muundaja"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:366
+#: classes/applications/shop/shop_product_search.aw:459
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:494
+#: classes/applications/shop/shop_product_search.aw:587
 msgid "Vali"
 msgstr ""
 

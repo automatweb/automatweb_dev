@@ -165,7 +165,7 @@ msgstr ""
 msgid "Valitud periood: %s"
 msgstr ""
 
-#: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1906
+#: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1908
 msgid "(A)"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgstr ""
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1914
+#: classes/admin/admin_if.aw:1916
 msgid "Mitteperioodilised"
 msgstr ""
 

@@ -58,3 +58,7 @@ msgstr ""
 msgid "aja&uuml;hik"
 msgstr ""
 
+#: classes/common/unit.aw:65
+msgid "--vali--"
+msgstr ""
+

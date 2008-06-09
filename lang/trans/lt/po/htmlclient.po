@@ -41,64 +41,64 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:475 classes/cfg/htmlclient.aw:605
+#: classes/cfg/htmlclient.aw:476 classes/cfg/htmlclient.aw:606
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:620
+#: classes/cfg/htmlclient.aw:621
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:621
+#: classes/cfg/htmlclient.aw:622
 msgid "submit_and_back"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:631
+#: classes/cfg/htmlclient.aw:632
 msgid "Edasi &gt;&gt;&gt;"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:632
+#: classes/cfg/htmlclient.aw:633
 msgid "submit_and_forward"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:839
+#: classes/cfg/htmlclient.aw:840
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:900
+#: classes/cfg/htmlclient.aw:901
 msgid "Tagasiside"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:902
+#: classes/cfg/htmlclient.aw:903
 msgid "Kasutajatugi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:903
+#: classes/cfg/htmlclient.aw:904
 msgid "Abi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:904
+#: classes/cfg/htmlclient.aw:905
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:907
+#: classes/cfg/htmlclient.aw:908
 msgid "J&auml;rjehoidja"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:911
+#: classes/cfg/htmlclient.aw:912
 msgid "Ajalugu"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:915
+#: classes/cfg/htmlclient.aw:916
 msgid "Lisa kiiresti"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1386 classes/cfg/htmlclient.aw:1388
-#: classes/cfg/htmlclient.aw:1460 classes/cfg/htmlclient.aw:1462
+#: classes/cfg/htmlclient.aw:1387 classes/cfg/htmlclient.aw:1389
+#: classes/cfg/htmlclient.aw:1461 classes/cfg/htmlclient.aw:1463
 msgid "Kinni"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:1387 classes/cfg/htmlclient.aw:1388
-#: classes/cfg/htmlclient.aw:1461 classes/cfg/htmlclient.aw:1462
+#: classes/cfg/htmlclient.aw:1388 classes/cfg/htmlclient.aw:1389
+#: classes/cfg/htmlclient.aw:1462 classes/cfg/htmlclient.aw:1463
 msgid "Lahti"
 msgstr ""

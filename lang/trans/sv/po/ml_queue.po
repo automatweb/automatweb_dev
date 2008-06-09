@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/mailinglist/ml_queue.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -55,14 +54,15 @@ msgid "Now sending next"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_queue.aw:643
-msgid "done\n<br>"
+msgid ""
+"done\n"
+"<br>"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_queue.aw:711
 msgid "couldn't send mail<br />\n"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:799
+#: classes/applications/mailinglist/ml_queue.aw:806
 msgid "sending mail to:"
 msgstr ""
-

@@ -182,18 +182,6 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/intellectual_property.aw:prop_classes_fee
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/intellectual_property.aw:prop_classes_fee_comment
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/intellectual_property.aw:prop_classes_fee_help
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/intellectual_property.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -280,10 +268,6 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/intellectual_property.aw:rel_RELTYPE_EMAIL
 msgid "Seose E-mail (RELTYPE_EMAIL) tekst"
-msgstr ""
-
-#: classes/applications/clients/patent_office/intellectual_property.aw:rel_RELTYPE_COUNTRY
-msgid "Seose P&auml;riltolumaa (RELTYPE_COUNTRY) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/intellectual_property.aw:rel_RELTYPE_PROCURATOR_MENU

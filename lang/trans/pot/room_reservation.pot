@@ -246,31 +246,31 @@ msgstr ""
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1056
+#: classes/common/room_reservation.aw:1067
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1060
+#: classes/common/room_reservation.aw:1071
 msgid "Telefon on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1064
+#: classes/common/room_reservation.aw:1075
 msgid "E-Mail on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1272
+#: classes/common/room_reservation.aw:1283
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1549
+#: classes/common/room_reservation.aw:1560
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1627 classes/common/room_reservation.aw:1686
+#: classes/common/room_reservation.aw:1638 classes/common/room_reservation.aw:1697
 msgid "Broneering: %s"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1744
+#: classes/common/room_reservation.aw:1755
 msgid "%s - Sorry, but Your payment was made too late and another person has already booked this time!"
 msgstr ""
 

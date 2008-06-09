@@ -26,3 +26,7 @@ msgstr ""
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_obj.aw:84
+msgid "laekumine"
+msgstr ""
+

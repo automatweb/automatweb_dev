@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bill_obj.aw:11
 msgid "Arve nr"
 msgstr ""
@@ -26,3 +25,6 @@ msgstr ""
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_obj.aw:84
+msgid "laekumine"
+msgstr ""

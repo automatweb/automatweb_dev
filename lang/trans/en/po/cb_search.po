@@ -353,7 +353,7 @@ msgstr "Default"
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/cfg/cb_search.aw:235 classes/cfg/cb_search.aw:1009
+#: classes/cfg/cb_search.aw:235 classes/cfg/cb_search.aw:1010
 msgid "J&auml;rjekord"
 msgstr "Order"
 
@@ -377,75 +377,75 @@ msgstr "Radiobutton"
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/cfg/cb_search.aw:968
+#: classes/cfg/cb_search.aw:969
 msgid "T&auml;istekstiotsing"
 msgstr "Fulltext search"
 
-#: classes/cfg/cb_search.aw:974
+#: classes/cfg/cb_search.aw:975
 msgid "Kataloog"
 msgstr "Folder"
 
-#: classes/cfg/cb_search.aw:980
+#: classes/cfg/cb_search.aw:981
 msgid "Mitu kirjet lehel"
 msgstr "How many rows per page"
 
-#: classes/cfg/cb_search.aw:1016
+#: classes/cfg/cb_search.aw:1017
 msgid "Element"
 msgstr "Element"
 
-#: classes/cfg/cb_search.aw:1022
+#: classes/cfg/cb_search.aw:1023
 msgid "Tabelis"
 msgstr "In table"
 
-#: classes/cfg/cb_search.aw:1028
+#: classes/cfg/cb_search.aw:1029
 msgid "Hind"
 msgstr "Price"
 
-#: classes/cfg/cb_search.aw:1034
+#: classes/cfg/cb_search.aw:1035
 msgid "Sorditav"
 msgstr "Sortable"
 
-#: classes/cfg/cb_search.aw:1040
+#: classes/cfg/cb_search.aw:1041
 msgid "Vaikimisi sort"
 msgstr "Default sort"
 
-#: classes/cfg/cb_search.aw:1046
+#: classes/cfg/cb_search.aw:1047
 msgid "Vaata tulp"
 msgstr "View column"
 
-#: classes/cfg/cb_search.aw:1052
+#: classes/cfg/cb_search.aw:1053
 msgid "Tulba pealkiri"
 msgstr "Column title"
 
-#: classes/cfg/cb_search.aw:1068
+#: classes/cfg/cb_search.aw:1069
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/cfg/cb_search.aw:1069
+#: classes/cfg/cb_search.aw:1070
 msgid "Vaata"
 msgstr "View"
 
-#: classes/cfg/cb_search.aw:1070
+#: classes/cfg/cb_search.aw:1071
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/cfg/cb_search.aw:1165
+#: classes/cfg/cb_search.aw:1166
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/cb_search.aw:1458
+#: classes/cfg/cb_search.aw:1459
 msgid "OID"
 msgstr "OID"
 
-#: classes/cfg/cb_search.aw:1465
+#: classes/cfg/cb_search.aw:1466
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/cfg/cb_search.aw:1472
+#: classes/cfg/cb_search.aw:1473
 msgid "Kasuta?"
 msgstr "Use?"
 
-#: classes/cfg/cb_search.aw:1478
+#: classes/cfg/cb_search.aw:1479
 msgid "K.A. Alamkataloogid?"
 msgstr "Incl. subfolders?"
 

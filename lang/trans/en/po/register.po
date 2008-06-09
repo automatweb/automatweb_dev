@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -31,14 +31,12 @@ msgstr ""
 
 # classes/applications/register/register.aw:prop_default_cfgform
 #: classes/applications/register/register.aw:prop_default_cfgform
-msgid ""
-"Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) caption"
+msgid "Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) caption"
 msgstr "Form is default for data"
 
 # classes/applications/register/register.aw:prop_default_cfgform_comment
 #: classes/applications/register/register.aw:prop_default_cfgform_comment
-msgid ""
-"Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) kommentaar"
+msgid "Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) kommentaar"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_default_cfgform_help
@@ -48,22 +46,17 @@ msgstr ""
 
 # classes/applications/register/register.aw:prop_data_return_url
 #: classes/applications/register/register.aw:prop_data_return_url
-msgid ""
-"Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) "
-"caption"
+msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) caption"
 msgstr "Redirect after data save"
 
 # classes/applications/register/register.aw:prop_data_return_url_comment
 #: classes/applications/register/register.aw:prop_data_return_url_comment
-msgid ""
-"Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) "
-"kommentaar"
+msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) kommentaar"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_data_return_url_help
 #: classes/applications/register/register.aw:prop_data_return_url_help
-msgid ""
-"Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) help"
+msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) help"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_data_rootmenu
@@ -113,22 +106,17 @@ msgstr ""
 
 # classes/applications/register/register.aw:prop_show_all
 #: classes/applications/register/register.aw:prop_show_all
-msgid ""
-"Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) "
-"caption"
+msgid "Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) caption"
 msgstr "If not selected, show all entries"
 
 # classes/applications/register/register.aw:prop_show_all_comment
 #: classes/applications/register/register.aw:prop_show_all_comment
-msgid ""
-"Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) "
-"kommentaar"
+msgid "Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) kommentaar"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_show_all_help
 #: classes/applications/register/register.aw:prop_show_all_help
-msgid ""
-"Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) help"
+msgid "Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) help"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_per_page
@@ -148,23 +136,17 @@ msgstr ""
 
 # classes/applications/register/register.aw:prop_cfgform_name_in_field
 #: classes/applications/register/register.aw:prop_cfgform_name_in_field
-msgid ""
-"Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja "
-"(cfgform_name_in_field) caption"
+msgid "Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja (cfgform_name_in_field) caption"
 msgstr "On add, write configuration form name in field"
 
 # classes/applications/register/register.aw:prop_cfgform_name_in_field_comment
 #: classes/applications/register/register.aw:prop_cfgform_name_in_field_comment
-msgid ""
-"Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja "
-"(cfgform_name_in_field) kommentaar"
+msgid "Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja (cfgform_name_in_field) kommentaar"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_cfgform_name_in_field_help
 #: classes/applications/register/register.aw:prop_cfgform_name_in_field_help
-msgid ""
-"Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja "
-"(cfgform_name_in_field) help"
+msgid "Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja (cfgform_name_in_field) help"
 msgstr ""
 
 # classes/applications/register/register.aw:prop_data_tb
@@ -351,6 +333,6 @@ msgid "Muudetud"
 msgstr "Modified"
 
 #: classes/applications/register/register.aw:236
-#: classes/applications/register/register.aw:324
+#: classes/applications/register/register.aw:326
 msgid "Muuda"
 msgstr "Change"

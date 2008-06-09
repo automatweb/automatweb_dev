@@ -14,19 +14,3 @@ msgstr ""
 msgid "Klassi The Terminator help"
 msgstr ""
 
-#: classes/terminator.aw:prop_pers
-msgid "Omaduse Isik (pers) caption"
-msgstr ""
-
-#: classes/terminator.aw:prop_pers_comment
-msgid "Omaduse Isik (pers) kommentaar"
-msgstr ""
-
-#: classes/terminator.aw:prop_pers_help
-msgid "Omaduse Isik (pers) help"
-msgstr ""
-
-#: classes/terminator.aw:rel_RELTYPE_PERSON
-msgid "Seose Isik (RELTYPE_PERSON) tekst"
-msgstr ""
-

@@ -14,35 +14,35 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:80
+#: classes/admin/editor/file_manager.aw:88
 msgid "Uus fail"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:81
+#: classes/admin/editor/file_manager.aw:89
 msgid "Vali olemasolev fail"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:94
+#: classes/admin/editor/file_manager.aw:102
 msgid "Fail"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:143
+#: classes/admin/editor/file_manager.aw:151
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:398
+#: classes/admin/editor/file_manager.aw:359
 msgid "zip"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:399
+#: classes/admin/editor/file_manager.aw:360
 msgid "Oled sa kindel et tahad seda jama pakkida?"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:415
+#: classes/admin/editor/file_manager.aw:376
 msgid "Download selected compressed in ZIP file"
 msgstr ""
 
-#: classes/admin/editor/file_manager.aw:440
+#: classes/admin/editor/file_manager.aw:401
 msgid "Vali failid ja/v&otilde;i kataloogid!"
 msgstr ""
 

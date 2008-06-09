@@ -20,7 +20,6 @@ $GLOBALS["TRANS"]["Grupi Pildid (img) pealkiri"] = "Images";
 $GLOBALS["TRANS"]["Grupi Failid (fls) pealkiri"] = "Files";
 $GLOBALS["TRANS"]["Grupi Dokumendid (doc) pealkiri"] = "Documents";
 $GLOBALS["TRANS"]["Grupi Lingid (lnk) pealkiri"] = "Links";
-$GLOBALS["TRANS"]["Grupi Toote info (data) pealkiri"] = "Product info";
 $GLOBALS["TRANS"]["Seose pilt (RELTYPE_IMAGE) tekst"] = "image";
 $GLOBALS["TRANS"]["Seose pakend (RELTYPE_PACKAGING) tekst"] = "packaging";
 $GLOBALS["TRANS"]["Seose kasutajadefineeritud muutuja 1 (RELTYPE_VARUSERM1) tekst"] = " ";

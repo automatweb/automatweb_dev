@@ -154,7 +154,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:597
 #: classes/applications/crm/crm_company_cust_impl.aw:975
-#: classes/applications/crm/crm_company_cust_impl.aw:1809
+#: classes/applications/crm/crm_company_cust_impl.aw:1818
 msgid "Organisatsioon"
 msgstr ""
 
@@ -202,9 +202,9 @@ msgstr ""
 #: classes/applications/crm/crm_company_cust_impl.aw:871
 #: classes/applications/crm/crm_company_cust_impl.aw:1349
 #: classes/applications/crm/crm_company_cust_impl.aw:1483
-#: classes/applications/crm/crm_company_cust_impl.aw:1589
-#: classes/applications/crm/crm_company_cust_impl.aw:1610
-#: classes/applications/crm/crm_company_cust_impl.aw:1631
+#: classes/applications/crm/crm_company_cust_impl.aw:1592
+#: classes/applications/crm/crm_company_cust_impl.aw:1616
+#: classes/applications/crm/crm_company_cust_impl.aw:1640
 msgid "Kustuta"
 msgstr ""
 
@@ -350,34 +350,34 @@ msgstr ""
 msgid "%s raportid, milles on %s osaline"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1810
+#: classes/applications/crm/crm_company_cust_impl.aw:1819
 msgid "Eraisik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1867
+#: classes/applications/crm/crm_company_cust_impl.aw:1876
 msgid "%s kliendid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1868
+#: classes/applications/crm/crm_company_cust_impl.aw:1877
 msgid "%s kliendid: %s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1873
+#: classes/applications/crm/crm_company_cust_impl.aw:1882
 msgid "kliendid:"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2064
+#: classes/applications/crm/crm_company_cust_impl.aw:2073
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2068
+#: classes/applications/crm/crm_company_cust_impl.aw:2077
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2074
+#: classes/applications/crm/crm_company_cust_impl.aw:2083
 msgid "Eemalda kliendigrupist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2134
+#: classes/applications/crm/crm_company_cust_impl.aw:2143
 msgid "Kontaktid"
 msgstr ""

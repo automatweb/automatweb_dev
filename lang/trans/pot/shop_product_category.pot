@@ -50,15 +50,55 @@ msgstr ""
 msgid "Omaduse Dokument (doc) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_category.aw:prop_folders_tb
+msgid "Omaduse  (folders_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_folders_tb_comment
+msgid "Omaduse  (folders_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_folders_tb_help
+msgid "Omaduse  (folders_tb) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_category.aw:prop_folders
-msgid "Omaduse Kaustad (folders) caption"
+msgid "Omaduse  (folders) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_product_category.aw:prop_folders_comment
-msgid "Omaduse Kaustad (folders) kommentaar"
+msgid "Omaduse  (folders) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_product_category.aw:prop_folders_help
-msgid "Omaduse Kaustad (folders) help"
+msgid "Omaduse  (folders) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_DOC
+msgid "Seose Dokument (RELTYPE_DOC) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_DISPLAY_FOLDER
+msgid "Seose Kuvamise kaust (RELTYPE_DISPLAY_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:73
+msgid "Eemalda"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:78
+msgid "Kuvamise kaust"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:83
+msgid "Salvestamise kaust"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:88
+msgid "Nimi"
 msgstr ""
 

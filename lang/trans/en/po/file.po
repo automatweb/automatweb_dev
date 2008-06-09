@@ -433,89 +433,89 @@ msgstr "Digidoc container"
 msgid "Allkirjasta fail"
 msgstr "Sign file"
 
-#: classes/contentmgmt/file.aw:326
+#: classes/contentmgmt/file.aw:325
 msgid "fail puudub"
 msgstr "file missing"
 
-#: classes/contentmgmt/file.aw:422
+#: classes/contentmgmt/file.aw:421
 msgid "Paiguta dokumenti"
 msgstr "Insert into document"
 
-#: classes/contentmgmt/file.aw:444
+#: classes/contentmgmt/file.aw:443
 msgid "V&otilde;imalikud asendused<br>"
 msgstr "Possible substitutions"
 
-#: classes/contentmgmt/file.aw:445
+#: classes/contentmgmt/file.aw:444
 msgid "#file# - faili nimi <br>"
 msgstr "#file# - file name <br>"
 
-#: classes/contentmgmt/file.aw:446
+#: classes/contentmgmt/file.aw:445
 msgid "#file_url# - link failile <br>"
 msgstr "#file_url# - link to file <br>"
 
-#: classes/contentmgmt/file.aw:447
+#: classes/contentmgmt/file.aw:446
 msgid "#user_name# - muutja nimi"
 msgstr "#user_name# - modified by"
 
-#: classes/contentmgmt/file.aw:460
+#: classes/contentmgmt/file.aw:459
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:470
+#: classes/contentmgmt/file.aw:469
 msgid "Teavitus muutunud dokumendist"
 msgstr "Notification about modified document"
 
-#: classes/contentmgmt/file.aw:544
+#: classes/contentmgmt/file.aw:543
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr "File type is not allowed"
 
-#: classes/contentmgmt/file.aw:804
+#: classes/contentmgmt/file.aw:805
 msgid "faili ikoon"
 msgstr "file icon"
 
-#: classes/contentmgmt/file.aw:922
+#: classes/contentmgmt/file.aw:923
 msgid "Vale objekti id!"
 msgstr "Wrong object ID"
 
-#: classes/contentmgmt/file.aw:1576
+#: classes/contentmgmt/file.aw:1577
 msgid "Need either id or parent"
 msgstr "Need either id or parent"
 
-#: classes/contentmgmt/file.aw:1697
+#: classes/contentmgmt/file.aw:1768
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr "Save and index for search"
 
-#: classes/contentmgmt/file.aw:1705
+#: classes/contentmgmt/file.aw:1776
 msgid "Salvesta ja paiguta dokumenti"
 msgstr "Save and insert into document"
 
-#: classes/contentmgmt/file.aw:1739
+#: classes/contentmgmt/file.aw:1814
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/contentmgmt/file.aw:1745
+#: classes/contentmgmt/file.aw:1820
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/contentmgmt/file.aw:1752
+#: classes/contentmgmt/file.aw:1827
 msgid "Saada teavitusmeil"
 msgstr "Send notification e-mail"
 
-#: classes/contentmgmt/file.aw:1762
+#: classes/contentmgmt/file.aw:1837
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/file.aw:1767
+#: classes/contentmgmt/file.aw:1842
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/contentmgmt/file.aw:1772
+#: classes/contentmgmt/file.aw:1847
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/contentmgmt/file.aw:1777
+#: classes/contentmgmt/file.aw:1852
 msgid "E-mail"
 msgstr "E-mail"
 

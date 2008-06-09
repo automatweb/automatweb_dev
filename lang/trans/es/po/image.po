@@ -473,22 +473,22 @@ msgstr ""
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2301
+#: classes/contentmgmt/image.aw:2305
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2360
+#: classes/contentmgmt/image.aw:2364
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2364
+#: classes/contentmgmt/image.aw:2368
 msgid "Sisu"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2368
+#: classes/contentmgmt/image.aw:2372
 msgid "Autor"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:2375
+#: classes/contentmgmt/image.aw:2379
 msgid "Aeg"
 msgstr ""

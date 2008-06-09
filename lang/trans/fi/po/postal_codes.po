@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/postal_codes.aw:class_1420_help
 msgid "Klassi Postiindeksid help"
 msgstr ""
@@ -86,35 +85,34 @@ msgstr ""
 msgid "Seose Andmefail (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/common/postal_codes.aw:71
+#: classes/common/postal_codes.aw:69
 msgid "Impordi registrist"
 msgstr ""
 
-#: classes/common/postal_codes.aw:74 classes/common/postal_codes.aw:87
+#: classes/common/postal_codes.aw:72 classes/common/postal_codes.aw:85
 msgid "Oled kindel? Vanad andmed kustutatakse"
 msgstr ""
 
-#: classes/common/postal_codes.aw:84
+#: classes/common/postal_codes.aw:82
 msgid "Impordi failist"
 msgstr ""
 
-#: classes/common/postal_codes.aw:91
+#: classes/common/postal_codes.aw:89
 msgid "Ekspordi csv"
 msgstr ""
 
-#: classes/common/postal_codes.aw:106
+#: classes/common/postal_codes.aw:104
 msgid "Fail on m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/common/postal_codes.aw:132
+#: classes/common/postal_codes.aw:130
 msgid "Andmebaasi v&auml;li"
 msgstr ""
 
-#: classes/common/postal_codes.aw:136
+#: classes/common/postal_codes.aw:134
 msgid "CSV v&auml;li"
 msgstr ""
 
-#: classes/common/postal_codes.aw:141
+#: classes/common/postal_codes.aw:139
 msgid "Vaikimisi v&auml;&auml;rtus"
 msgstr ""
-

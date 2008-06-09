@@ -71,6 +71,6 @@ msgstr ""
 msgid "couldn't send mail<br />\n"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:799
+#: classes/applications/mailinglist/ml_queue.aw:806
 msgid "sending mail to:"
 msgstr ""
