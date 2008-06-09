@@ -1871,7 +1871,7 @@ class crm_bill extends class_base
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
 				"desc" => $name,
-				"date" => $row["date"] 
+				"date" => "(".$row["date"].")",
 			));
 	
 			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"] , "id" => $grp_row["id"],);
