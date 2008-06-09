@@ -51,7 +51,7 @@
 		// and document.location upon enter
 		function handle_object_quickadd_activation()
 		{
-			$("*").not("input").keydown(function(e){
+			$("*").keydown(function(e){
 				if (b_object_quickadd_isopen===false)
 				{
 					if (e.ctrlKey && e.altKey && e.keyCode==85)
@@ -72,17 +72,19 @@
 				{
 					if (e.keyCode == 13)
 					{
-						if (a_active_list.length>0)
-						{
-							if(($("#"+d_quickadd_box.attr("id")).css("display") == "block"))
+						try { 
+							if (a_active_list.length>0)
 							{
-								$("#"+d_quickadd_box.attr("id")+" input.text").val("");
-								$("#"+d_quickadd_box.attr("id")).css("display", "none");
-								url = options["baseurl"]+"/automatweb/"+a_active_list[i_selected_index]["url_obj"];
-								url = url.replace("--p--", settings.parent)
-								document.location = url
+								if(($("#"+d_quickadd_box.attr("id")).css("display") == "block"))
+								{
+									$("#"+d_quickadd_box.attr("id")+" input.text").val("");
+									$("#"+d_quickadd_box.attr("id")).css("display", "none");
+									url = options["baseurl"]+"/automatweb/"+a_active_list[i_selected_index]["url_obj"];
+									url = url.replace("--p--", settings.parent)
+									document.location = url
+								}
 							}
-						}
+						} catch(e) {}
 					}
 					b_object_quickadd_isopen = false;
 				}
