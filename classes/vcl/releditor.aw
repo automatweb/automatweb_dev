@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.139 2008/06/04 10:35:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.140 2008/06/09 08:39:15 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1814,7 +1814,6 @@ $this->site_log("js sbt return ".html::hidden(array(
 			$rel_props = $this->_get_props_from_clid($rel_clid);
 		}
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
-$this->site_log("cf = $cfgform_id \n");
 		if ($this->can("view", $cfgform_id))
 		{
 			$cfo = obj($cfgform_id);
@@ -1847,7 +1846,6 @@ $this->site_log("cf = $cfgform_id \n");
 		}
 		else
 		{
-$this->site_log("\n\nrel_props = ".dbg::dump($rel_props)." \n\n");
 			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 			{
 				if (isset($rel_props[$prop_name]))
@@ -1971,7 +1969,7 @@ $this->site_log("\n\nrel_props = ".dbg::dump($rel_props)." \n\n");
 		}
 		$d = array(
 			"name" => $pd["name"],
-			"caption" => $pd["caption"],
+			"caption" => $pd["emb_tbl_caption"] ? $pd["emb_tbl_caption"] : $pd["caption"],
 		);
 		if ($pd["type"] == "date_select")
 		{

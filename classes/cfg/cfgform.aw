@@ -2090,7 +2090,9 @@ class cfgform extends class_base
 								"emb_tbl_controller" => $property["emb_tbl_controller"],
 								"show_in_emb_tbl_caption" => t("N&auml;ita releditori tabelis"),
 								"show_in_emb_tbl_checked" => checked(!empty($property["show_in_emb_tbl"])),
-								"show_in_emb_tbl" => $property["show_in_emb_tbl"]
+								"show_in_emb_tbl" => $property["show_in_emb_tbl"],
+								"emb_tbl_caption" => $property["emb_tbl_caption"],
+								"emb_tbl_caption_caption" => t("Tulba pealkiri")
 							));
 							$emb_tbl = $this->parse("emb_tbl");
 						}

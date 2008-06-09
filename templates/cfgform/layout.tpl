@@ -112,6 +112,7 @@ function cfgformToggleSelectProps(grpId)
 				{VAR:show_in_emb_tbl_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][show_in_emb_tbl]" value="1"{VAR:show_in_emb_tbl_checked}/>
 				<input type="hidden" name="xconfig[{VAR:prp_key}][show_in_emb_tbl]" value="{VAR:show_in_emb_tbl}"/><br/>
 				{VAR:emb_tbl_controller_caption} <input type="text" size="7" name="prpconfig[{VAR:prp_key}][emb_tbl_controller]" value="{VAR:emb_tbl_controller}"/><br/>
+				{VAR:emb_tbl_caption_caption} <input type="text" size="30" name="prpconfig[{VAR:prp_key}][emb_tbl_caption]" value="{VAR:emb_tbl_caption}"/><br/>
 				<!-- END SUB: emb_tbl -->
 			</div>
 		<!-- END SUB: options -->
