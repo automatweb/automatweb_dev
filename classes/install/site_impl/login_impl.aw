@@ -3,7 +3,7 @@ include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".a
 
 if (($auth_srv = aw_ini_get("auth.central_server")) != "")
 {
-	header("Location: ".$srv."/?sid=".aw_ini_get("site_id"));
+	header("Location: ".$auth_srv."/?sid=".aw_ini_get("site_id"));
 	die();
 }
 if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)

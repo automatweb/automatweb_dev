@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.32 2008/06/09 11:31:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.33 2008/06/09 11:37:53 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -382,7 +382,7 @@ class auth_config extends class_base
 	{
 		if (($auth_srv = aw_ini_get("auth.central_server")) != "")
 		{
-			header("Location: ".$srv."/?sid=".aw_ini_get("site_id"));
+			header("Location: ".$auth_srv."/?sid=".aw_ini_get("site_id"));
 			die();
 		}
 
