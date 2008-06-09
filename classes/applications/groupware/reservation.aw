@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.98 2008/06/09 11:54:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.99 2008/06/09 16:22:25 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -319,7 +319,8 @@ class reservation extends class_base
 				}
 				if(is_object($room))
 				{
-					$professions = $room->prop("professions");
+					$prop["options"] = array("") + $room->get_all_workers();
+	/*				$professions = $room->prop("professions");
 					if(is_array($professions) && sizeof($professions))
 					{
 						$ol = new object_list(array(
@@ -328,7 +329,7 @@ class reservation extends class_base
 							"CL_CRM_PERSON.RELTYPE_RANK" => $professions,
 						));
 						$prop["options"] = array("") + $ol->names();
-					}
+					}*/
 				}
 				break;
 			case "inbetweener":
@@ -345,7 +346,8 @@ class reservation extends class_base
 				}
 				if(is_object($room))
 				{
-					$professions = $room->prop("seller_professions");
+					$prop["options"] = array("") + $room->get_all_sellers();
+/*					$professions = $room->prop("seller_professions");
 					if(is_array($professions) && sizeof($professions))
 					{
 						$ol = new object_list(array(
@@ -354,7 +356,7 @@ class reservation extends class_base
 							"CL_CRM_PERSON.RELTYPE_RANK" => $professions,
 						));
 						$prop["options"] = array("") + $ol->names();
-					}
+					}*/
 				}
 				break;
 				

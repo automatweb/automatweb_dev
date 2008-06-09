@@ -95,6 +95,33 @@ class room_obj extends _int_object
 		));
 		return $ol2->names();
 	}
+
+	/** Returns the current sellers for the room
+		@attrib api=1 
+		@returns
+			array(person id => person name)
+	**/
+	function get_all_sellers()
+	{
+		$pro = array();
+		if(is_array($this->prop("seller_professions")))
+		{
+			$pro = $this->prop("seller_professions");
+		}
+
+		$ol2 = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RANK" => $pro,
+					"oid" => $pro,
+				)
+			)),
+		));
+		return $ol2->names();
+	}
 }
 
 ?>
