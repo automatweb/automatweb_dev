@@ -36,7 +36,7 @@ if (!empty($_GET["class"]))
 	}
 }
 $ru = isset($_GET["return_url"]) ? $_GET["return_url"] : null;
-while (!empty($ru))
+while (!empty($ru) && empty($pf))
 {
 	$url_bits = parse_url($ru);
 	$vals = array();
