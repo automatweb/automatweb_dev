@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.39 2008/06/08 17:06:53 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.40 2008/06/10 13:10:27 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -240,7 +240,7 @@
 				@property cv_location type=textbox size=18 multiple=1 orient=vertical parent=soovitud_t88 captionside=top store=no
 				@caption T&ouml;&ouml;tamise piirkond
 
-				@property cv_load type=classificator multiple=1 orient=vertical reltype=RELTYPE_JOB_WANTED_LOAD parent=soovitud_t88 captionside=top store=no
+				@property cv_load type=classificator multiple=1 orient=vertical reltype=RELTYPE_JOB_WANTED_LOAD parent=soovitud_t88 captionside=top store=no sort_callback=cmp_function
 				@caption T&ouml;&ouml;koormus
 
 			@layout oskused type=vbox parent=employee_search area_caption=Oskused closeable=1
@@ -522,6 +522,7 @@ class personnel_management extends class_base
 					"class_id" => CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED,
 					"parent" => array(),
 					"status" => array(),
+					"lang_id" => array(),
 					"createdby" => $u->name(),
 				));
 				$prop["options"] = array(0 => t("--vali--")) + $ssol->names();
@@ -1021,6 +1022,7 @@ class personnel_management extends class_base
 			"class_id" => CL_CRM_CATEGORY,
 			"parent" => array(),
 			"sort_by" => "name",
+			"lang_id" => array(),
 		));
 		if($lists->count() > 0)
 		{
@@ -1174,6 +1176,9 @@ class personnel_management extends class_base
 
 		$r = &$arr["request"];
 		$odl_prms["class_id"] = CL_CRM_PERSON;
+		$odl_prms["lang_id"] = array();
+		$odl_prms["site_id"] = array();
+		$odl_prms["status"] = array();
 		$odl_prms[] = new object_list_filter(array(
 			"logic" => "OR",
 			"conditions" => array(
@@ -1327,7 +1332,7 @@ class personnel_management extends class_base
 							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("shools_fld"),
 						),
 					)),
-					"CL_CRM_PERSON.RELTYPE_EDUCATION.school_2" => "%".$r["cv_schl"]."%",
+					"CL_CRM_PERSON.RELTYPE_EDUCATION.school2" => "%".$r["cv_schl"]."%",
 				),
 			));
 		}
@@ -1646,6 +1651,8 @@ class personnel_management extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$objs = new object_tree(array(
+			"lang_id" => array(),
+			"site_id" => array(),
 			"parent" => $this->offers_fld,
 			"class_id" => array(CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 			"sort_by" => "objects.class_id, objects.name",
@@ -1802,12 +1809,14 @@ class personnel_management extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$objs = new object_tree(array(
+			"lang_id" => array(),
 			"parent" => $this->offers_fld,
 			"class_id" => CL_MENU,
 			"sort_by" => "objects.name",
 		));
 		$obj = obj($this->offers_fld);
 		$childs = new object_list(array(
+			"lang_id" => array(),
 			"parent" => $this->offers_fld,
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
@@ -1824,6 +1833,7 @@ class personnel_management extends class_base
 		{
 			$id = $ob->id();
 			$childs = new object_list(array(
+				"lang_id" => array(),
 				"parent" => $id,
 				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 				"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
@@ -2050,6 +2060,8 @@ class personnel_management extends class_base
 			else
 			{
 				$objs = new object_tree(array(
+					"lang_id" => array(),
+					"site_id" => array(),
 					"parent" => $arr["request"]["fld_id"],
 					"class_id" => array(CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 					"sort_by" => "objects.class_id, objects.name",
@@ -2293,6 +2305,8 @@ class personnel_management extends class_base
 		$this->_init_offers_table(&$t);
 
 		$ol_arr = array(
+			"site_id" => array(),
+			"lang_id" => array(),
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
 		);
@@ -2433,6 +2447,7 @@ class personnel_management extends class_base
 			$fld_id = $this->can("view", $arr["request"]["fld_id"]) ? $arr["request"]["fld_id"] : $this->offers_fld; 
 
 			$objs = new object_list(array(
+				"lang_id" => array(),
 				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 				"parent" => $fld_id,
 				"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
@@ -2616,6 +2631,7 @@ class personnel_management extends class_base
 		$obj = obj($arr["id"]);
 		$this->read_template("show.tpl");
 		$objs = new object_list(array(
+			"lang_id" => array(),
 			"parent" => $obj->prop("offers_fld"),
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 		));
@@ -2967,6 +2983,21 @@ class personnel_management extends class_base
 			$o->save();
 		}
 		return $arr["post_ru"];
+	}
+	
+	/**
+		@attrib name=cmp_function api=1
+	**/
+	function cmp_function($a, $b)
+	{
+		if($a->ord() == $b->ord())
+		{
+			return strcmp($a->trans_get_val("name"), $b->trans_get_val("name"));
+		}
+		else
+		{
+			return (int)$a->ord() > (int)$b->ord() ? 1 : -1;
+		}
 	}
 }
 ?>

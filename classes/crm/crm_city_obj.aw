@@ -21,9 +21,11 @@ class crm_city_obj extends _int_object
 
 		$ol_prms = array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
-			"parent" => $arr["parent"],
 			"CL_PERSONNEL_MANAGEMENT_JOB_OFFER.RELTYPE_CITY" => parent::id(),
 			"status" => $arr["status"],
+			"parent" => $arr["parent"],
+			"lang_id" => array(),
+			"site_id" => array(),
 		);
 
 		if(is_array($arr["props"]) && count($arr["props"]) > 0)
@@ -104,6 +106,7 @@ class crm_city_obj extends _int_object
 					"class_id" => CL_MENU,
 					"status" => $arr["status"],
 					"parent" => $par,
+					"lang_id" => array(),
 				));
 				foreach($ot->ids() as $oid)
 				{
