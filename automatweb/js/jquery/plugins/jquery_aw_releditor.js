@@ -198,8 +198,8 @@ jQuery.aw_releditor = function(arr) {
 	function _get_prop_name(s_input_name)
 	{
 		// i don't undrestand why I had to doublescape: \\[
-		var re  =  new RegExp("^.+\[[0-9]+\\](.*)$", "g").exec(s_input_name);
-		return re[1];
+		var re  =  new RegExp("^.+\\[[0-9]+\\]\\[(.*)\\]$", "g").exec(s_input_name);
+		return "["+re[1]+"]";
 	}
 	
 	/*
