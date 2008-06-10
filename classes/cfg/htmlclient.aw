@@ -140,6 +140,7 @@ class htmlclient extends aw_template
 		}
 
 		$this->read_template($tpl);
+		lc_site_load("htmlclient", &$this);
 
 		if(!empty($this->tpl_vars))
 		{
