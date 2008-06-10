@@ -2121,7 +2121,11 @@ class cfgform extends class_base
 								"show_in_emb_tbl_checked" => checked(!empty($property["show_in_emb_tbl"])),
 								"show_in_emb_tbl" => $property["show_in_emb_tbl"],
 								"emb_tbl_caption" => $property["emb_tbl_caption"],
-								"emb_tbl_caption_caption" => t("Tulba pealkiri")
+								"emb_tbl_col_num" => $property["emb_tbl_col_num"],
+								"emb_tbl_col_sep" => $property["emb_tbl_col_sep"],
+								"emb_tbl_caption_caption" => t("Tulba pealkiri"),
+								"emb_tbl_col_num_caption" => t("Tulba grupp"),
+								"emb_tbl_col_sep_caption" => t("Eraldaja"),
 							));
 							$emb_tbl = $this->parse("emb_tbl");
 						}

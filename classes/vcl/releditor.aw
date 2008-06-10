@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.140 2008/06/09 08:39:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.141 2008/06/10 09:35:19 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1720,7 +1720,6 @@ class releditor extends core
 	**/
 	function handle_js_submit($arr)
 	{
-$this->site_log("js sbt ".dbg::dump($arr));
 		$propn = null;
 		foreach($arr as $k => $d)
 		{
@@ -1734,7 +1733,7 @@ $this->site_log("js sbt ".dbg::dump($arr));
 		{
 			die("error, no property data! given: ".dbg::dump($arr));
 		}
-
+$this->site_log(date("d.m.Y H:i:s").": ".dbg::dump($arr));
 		$num = reset(array_keys($arr[$propn]));
 
 		$t = new aw_table;
@@ -1779,14 +1778,10 @@ $this->site_log("js sbt ".dbg::dump($arr));
 
 		foreach($prev_dat  as $idx => $dat_row)
 		{
-			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx);
+			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx, $arr["cfgform"]);
 		}
 
 
-$this->site_log("js sbt return ".html::hidden(array(
-			"name" => $propn."_data",
-			"value" => serialize($prev_dat)
-		)));
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($t->draw().html::hidden(array(
 			"name" => $propn."_data",
@@ -1836,20 +1831,25 @@ $this->site_log("js sbt return ".html::hidden(array(
 
 		if ($this->loaded_from_cfgform)
 		{
+			$defs = array();
 			foreach ($rel_props as $name => $data)
 			{
-				if ($data["show_in_emb_tbl"])
+				if ($data["show_in_emb_tbl"] && (!$data["emb_tbl_col_num"] || !isset($defs[$data["emb_tbl_col_num"]])))
 				{
+					$defs[$data["emb_tbl_col_num"]] = 1;
 					$this->_define_table_col_from_prop($t, $data);
 				}
 			}
 		}
 		else
 		{
+			$defs = array();
 			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 			{
-				if (isset($rel_props[$prop_name]))
+				$data = $rel_props[$prop_name];
+				if (isset($rel_props[$prop_name]) && (!$data["emb_tbl_col_num"] || !isset($defs[$data["emb_tbl_col_num"]])))
 				{
+					$defs[$data["emb_tbl_col_num"]] = 1;
 					$this->_define_table_col_from_prop($t, $rel_props[$prop_name]);
 				}
 			}
@@ -1866,10 +1866,29 @@ $this->site_log("js sbt return ".html::hidden(array(
 		));
 	}
 
-	private function _insert_js_data_to_table($t, $cur_prop, $prop_data, $clid, $idx)
+	private function _insert_js_data_to_table($t, $cur_prop, $prop_data, $clid, $idx, $cfgform_id)
 	{
 		$rel_clid = $this->_get_related_clid($clid, $cur_prop["name"]);
 		$rel_props = $this->_get_props_from_clid($rel_clid);
+		if ($this->can("view", $cfgform_id))
+		{
+			$cfo = obj($cfgform_id);
+			$cf = get_instance(CL_CFGFORM);
+			$props = $cf->get_cfg_proplist($cfgform_id);
+			$cur_prop = $props[$cur_prop["name"]];
+
+			if ($this->can("view", $cur_prop["cfgform_id"]))
+			{
+				$rel_props = $cf->get_cfg_proplist($cur_prop["cfgform_id"]);
+				foreach($rel_props as $pn => $pd)
+				{
+					if (!$pd["show_in_emb_tbl"])
+					{
+						unset($rel_props[$pn]);
+					}
+				}
+			}
+		}
 
 		$d = array(
 			"oid" => $idx+1,
@@ -1881,20 +1900,33 @@ $this->site_log("js sbt return ".html::hidden(array(
 		$o = obj();
 		$o->set_class_id($rel_clid);
 		$i = $o->instance();
-//echo dbg::dump($_POST);
+		$defs = array();
+
 		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 		{
-			if ($rel_props[$prop_name]["type"] == "date_select" || $rel_props[$prop_name]["type"] == "datetime_select")
+			$tc_name = $prop_name;
+
+			$data = $rel_props[$prop_name];
+			if (!empty($data["emb_tbl_col_num"]) && isset($defs[$data["emb_tbl_col_num"]]))
 			{
-				$d[$prop_name] = date_edit::get_timestamp($prop_data[$prop_name], $rel_props[$prop_name]);
+				$tc_name = $defs[$data["emb_tbl_col_num"]];
 			}
 			else
 			{
-				$d[$prop_name] = $prop_data[$prop_name];
+				$defs[$data["emb_tbl_col_num"]] = $tc_name;
+			}
+
+			if ($rel_props[$prop_name]["type"] == "date_select" || $rel_props[$prop_name]["type"] == "datetime_select")
+			{
+				$tc_val = date_edit::get_timestamp($prop_data[$prop_name], $rel_props[$prop_name]);
+			}
+			else
+			{
+				$tc_val = $prop_data[$prop_name];
 			}
 
 			$pv = $rel_props[$prop_name];
-			$pv["value"] = $d[$prop_name];
+			$pv["value"] = $tc_val;
 			$args = array(
 				"obj_inst" => $o,
 				"request" => $_POST,
@@ -1918,12 +1950,12 @@ $this->site_log("js sbt return ".html::hidden(array(
 					if ($this->can("view", $pv["value"]))
 					{
 						$tmp = obj($pv["value"]);
-						$d[$prop_name] = parse_obj_name($tmp->name());
+						$tc_val = parse_obj_name($tmp->name());
 					}
 					else
 					if (is_oid($pv["value"]))
 					{
-						$d[$prop_name] = "";
+						$tc_val = "";
 					}
 					else
 					if (is_array($pv["value"]))
@@ -1937,25 +1969,33 @@ $this->site_log("js sbt return ".html::hidden(array(
 								$strs[] = parse_obj_name($tmp->name());
 							}
 						}
-						$d[$prop_name] = join(", ", $strs);
+						$tc_val = join(", ", $strs);
 					}
 					else
 					{
-						$d[$prop_name] = $pv["value"];
+						$tc_val = $pv["value"];
 					}
 					break;
 
 				case "chooser":
 				case "select":
-					$d[$prop_name] = $pv["options"][$pv["value"]];
+					$tc_val = $pv["options"][$pv["value"]];
 					break;
 
 				case "checkbox":
-					$d[$prop_name] = $pv["value"] == $pv["ch_value"] ? t("Jah") : t("Ei");
+					$tc_val = $pv["value"] == $pv["ch_value"] ? t("Jah") : t("Ei");
 					break;
 
 				default:
-					$d[$prop_name] = $pv["value"];
+					$tc_val = $pv["value"];
+			}
+			if (!empty($d[$tc_name]))
+			{
+				$d[$tc_name] .= $data["emb_tbl_col_sep"].$tc_val;
+			}
+			else
+			{
+				$d[$tc_name] = $tc_val;
 			}
 		}
 		$t->define_data($d);
@@ -2036,7 +2076,6 @@ $this->site_log("js sbt return ".html::hidden(array(
 	**/
 	function js_change_data($arr)
 	{
-$this->site_log("change ".dbg::dump($arr));
 		$releditor_name = $arr["releditor_name"];
 		$d = unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$releditor_name."_data"]));
 		$idx = $arr["edit_index"];
@@ -2065,7 +2104,6 @@ $this->site_log("change ".dbg::dump($arr));
 		$s_out = "edit_data = {";
 		$s_out .= join(",\n", $r);
 		$s_out .= " }; ";
-$this->site_log("\n\n\nchange ret $s_out\n\n\n");
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		echo $s_out;
 		die();
@@ -2149,7 +2187,7 @@ $this->site_log("\n\n\nchange ret $s_out\n\n\n");
 
 		foreach($prev_dat  as $idx => $dat_row)
 		{
-			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx);
+			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx, $arr["cfgform"]);
 		}
 
 
