@@ -47,7 +47,7 @@ class crm_company_relation extends class_base
 			case "start":
 			case "end":
 				$prop["options"][""] = t("--vali--");
-				for($i = 1950; $i <= date("Y"); $i++)
+				for($i = date("Y"); $i >= 1950; $i--)
 				{
 					$prop["options"][$i."-01-01"] = $i;
 				}

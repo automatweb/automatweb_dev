@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.19 2008/06/08 17:09:31 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.20 2008/06/10 09:53:49 kristo Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -116,7 +116,7 @@ class crm_person_education extends class_base
 			case "end":
 			case "start":
 				$ops["---"] = "---";
-				for($i = 1950; $i <= date("Y") + 1; $i++)
+				for($i = date("Y") + 1; $i >= 1950; $i--)
 				{
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}

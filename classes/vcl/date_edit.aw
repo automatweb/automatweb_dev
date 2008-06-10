@@ -168,7 +168,7 @@ class date_edit
 					}
 					else
 					{
-						for ($i = $range1; $i <= $range2; $i++)
+						for ($i = $range2; $i >= $range1; $i--)
 						{
 							$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $year),$i);
 						};
