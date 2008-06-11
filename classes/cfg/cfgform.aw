@@ -156,6 +156,8 @@
 
 	@property trans_tbl_grps type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
 
+	@property trans_tbl_lays type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
+
 
 @default group=system
 	@property sysdefault type=table no_caption=1
@@ -497,6 +499,10 @@ class cfgform extends class_base
 				$this->_trans_tbl_grps($arr);
 				break;
 
+			case "trans_tbl_lays":
+				$this->_trans_tbl_lays($arr);
+				break;
+
 			case "treeview":
 				$this->do_meta_tree($arr);
 				break;
@@ -812,6 +818,37 @@ class cfgform extends class_base
 				))
 			));
 		}
+	}
+
+	function _trans_tbl_lays($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ld = $this->_init_trans_tbl($t, $arr["obj_inst"], $arr["request"], "Layout");
+		$lid = $ld["acceptlang"];
+
+		$trans = $arr["obj_inst"]->meta("layout_translations");
+
+		$ps = $arr["obj_inst"]->meta("cfg_layout");
+		foreach($ps as $pn => $pd)
+		{
+			$capt = iconv($ld["charset"], "utf-8", $pd["area_caption"]);
+			$v = iconv($ld["charset"], "utf-8", $trans[$lid][$pn]);
+
+			if (trim($v) == "")
+			{
+				$v = iconv(aw_global_get("charset"), "utf-8", $trans[$lid][$pn]);
+			}
+
+			$t->define_data(array(
+				"property" => $pn,
+				"orig_str" => $capt,
+				"trans_str" => html::textbox(array(
+					"name" => "dat[".$lid."][$pn]",
+					"value" => $v
+				))
+			));
+		}
+		$t->set_caption(t("Layoutid"));
 	}
 
 	function gen_default_table($arr)
@@ -1180,6 +1217,21 @@ class cfgform extends class_base
 					$trans[$lid] = $ldat;
 				}
 				$arr["obj_inst"]->set_meta("grp_translations", $trans);
+				break;
+
+			case "trans_tbl_lays":
+				$l = get_instance("languages");
+				$trans = safe_array($arr["obj_inst"]->meta("layout_translations"));
+				foreach(safe_array($arr["request"]["dat"]) as $lid => $ldat)
+				{
+					$ld = $l->fetch($l->get_langid_for_code($lid), false);
+					foreach(safe_array($ldat) as $pn => $c)
+					{
+						$ldat[$pn] = iconv("utf-8", $ld["charset"], $c);
+					}
+					$trans[$lid] = $ldat;
+				}
+				$arr["obj_inst"]->set_meta("layout_translations", $trans);
 				break;
 
 			case "props_list":
@@ -3384,7 +3436,22 @@ class cfgform extends class_base
 
 	function get_cfg_layout($o)
 	{
-		return $o->meta("cfg_layout");
+		$ll =  $o->meta("cfg_layout");
+
+		$lc = aw_ini_get("user_interface.default_language");
+		$trans = $o->meta("layout_translations");
+		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
+		{
+			$tc = $trans[$lc];
+			foreach($ll as $pn => $pd)
+			{
+				if ($tc[$pn] != "")
+				{
+					$ll[$pn]["area_caption"] = $tc[$pn];
+				}
+			}
+		}
+		return $ll;
 	}
 
 	/** Returns the properties for the config form
