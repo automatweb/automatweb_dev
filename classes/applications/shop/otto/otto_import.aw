@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.99 2008/06/05 13:46:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.100 2008/06/11 12:37:41 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -36,6 +36,15 @@
 
 	@property do_safe_update type=checkbox ch_value=1 store=no
 	@caption &Auml;ra uuenda pilte, kategooriaid ja seotud tooteid
+
+	@property update_product_images type=checkbox ch_value=1 store=no
+	@caption Uuenda toote pilte (arenduses!)
+
+	@property update_product_categories type=checkbox ch_value=1 store=no
+	@caption Uuenda toote kategooriaid (arenduses!)
+
+	@property update_products_connected_products type=checkbox ch_value=1 store=no
+	@caption Uuenda toote seotud tooteid (arenduses!)
 
 	@property last_import_log type=text store=no
 	@caption Viimase impordi logi
@@ -1385,9 +1394,23 @@ class otto_import extends class_base
 			$image_converter = get_instance('core/converters/image_convert');
 			$image_converter->load_from_file($folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.BIG_PICTURE.'.jpg');
 			
+			$max_image_width = 168;
+			$max_image_height = 240;
+
 			list($image_width, $image_height) = $image_converter->size();
-			$new_image_height = ($image_height * 168) / $image_width;
-			$image_converter->resize_simple(168, $new_image_height);
+
+			$new_image_width = $max_image_width;
+			$new_image_height = ($max_image_width * $image_height) / $image_width;
+			
+			if ($new_image_height > $max_image_height)
+			{
+				$new_image_width = ($max_image_height * $image_width) / $image_height;
+				$new_image_height = ($new_image_width * $image_height) / $image_width;
+			}
+
+			$image_converter->resize_simple($new_image_width, $new_image_height);
+
+			
 
 			$small_picture = $folder.'/'.$filename{0}.'/'.$filename{1}.'/'.$filename.'_'.SMALL_PICTURE.'.jpg';
 			$image_converter->save($small_picture, 2);
@@ -3202,9 +3225,6 @@ class otto_import extends class_base
 
 			echo "<b>product: ".$product['title']."</b><br>\n";
 
-			// niisiis, kuidas ma teada saan kas sellisele tootele on juba objekt olemas ...
-			// ilmselt peab tootekoodide j2rgi vaatama, et kas selline tootekood on lut-is olemas
-
 			// get all product codes and colors:
 			$product_codes = array();
 			$colors = array();
@@ -3216,18 +3236,16 @@ class otto_import extends class_base
 				$colors[] = $value['color'];
 				
 				// add some information into otto_prod_img table (refactor: see tuleks liigutada piltide impordi juurde imo):
-			// and this output isn't needed in regular basis --dragut 17.01.2008
-			//	echo "UPDATE otto_prod_img table, set page code and product number in file: pcode = [".$value['code']."] page = [".$product['pg']."] nr = [".$product['nr']."]<br />\n";
 				$this->db_query("UPDATE otto_prod_img SET p_pg='".$product['pg']."', p_nr='".$product['nr']."' WHERE pcode='".$value['code']."'");
 
 			}
 
 			echo "product codes: ".implode(',', $product_codes)."<br>\n";
-			echo "v&auml;rvid: ".implode(',', $colors)."<br />\n";
+			echo "colors: ".implode(',', $colors)."<br />\n";
 			flush();
 
 			if (empty($product_codes)){
-				echo "<strong>[FATAL ERROR]</strong> No product codes found for this product so skipping it.  Check if the CSV files are containing proper data.<br />\n";
+				echo "<strong>[ FATAL ERROR ]</strong> No product codes found for this product so skipping it.  Check if the CSV files are containing proper data.<br />\n";
 				flush();
 				continue;
 			}
@@ -3285,10 +3303,10 @@ class otto_import extends class_base
 			$product_obj->set_prop("user18", $product["pg"]);
 			$product_obj->set_prop("user19", $product["nr"]);
 			
-			// user6 - tootekoodid, komadega eraldatult
+			// user6 - product codes, comma separated list
 			$product_obj->set_prop('user6', implode(',', $product_codes));
 			
-			// user7 - v2rvid, komadega eraldatult
+			// user7 - colors, comma separated list
 			$product_obj->set_prop('user7', implode(',', $colors));
 
 			// is categories and images update allowed for this product:
