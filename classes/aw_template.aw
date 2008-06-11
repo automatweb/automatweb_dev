@@ -1107,9 +1107,8 @@ class aw_template extends core
 	private function _validate_pathname($path)
 	{
 		$pt = realpath($path);
-		$sd = aw_ini_get("site_basedir");
-		$bd = aw_ini_get("basedir");
-		
+		$sd = realpath(aw_ini_get("site_basedir"));
+		$bd = realpath(aw_ini_get("basedir"));
 		if (substr($pt, 0, strlen($sd)) == $sd || substr($pt, 0, strlen($bd)) == $bd)
 		{
 			return true;
