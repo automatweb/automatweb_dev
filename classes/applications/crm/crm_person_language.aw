@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.7 2008/06/08 13:23:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.8 2008/06/11 09:41:35 instrumental Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -22,6 +22,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_PERSON_LANGUAGE, on_save)
 
 @property write type=select field=sk_write
 @caption Kirjutan
+
+@property other type=textbox field=other
+@caption Muu keel
 
 @property person type=hidden field=meta method=serialize table=objects
 
@@ -59,6 +62,8 @@ class crm_person_language extends class_base
 				{
 					$prop["options"][$lkey] = $lname;
 				}
+				$prop["options"]["other"] = t("Muu keel");
+				$prop["onchange"] = "var id = this.id.replace('[language]', '_other_').replace('[', '_').replace(']', '_'); if(this.value == 'other') { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
 				break;
 
 			case "talk":
@@ -92,7 +97,14 @@ class crm_person_language extends class_base
 					"name" => $field,
 					"type" => "int",
 				));
-			return true;
+				return true;
+
+			case "other":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text",
+				));
+				return true;
 		}
 
 		return false;

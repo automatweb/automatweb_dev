@@ -412,6 +412,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property mlang type=relpicker reltype=RELTYPE_MOTHER_TONGUE table=kliendibaas_isik field=mlang no_edit=1
 	@caption Emakeel
 
+	@property other_mlang type=textbox field=other_mlang table=kliendibaas_isik
+	@caption Muu emakeel
+
 	@property skills_lang_tbl type=table store=no
 	@caption Keeleoskus
 
@@ -1934,6 +1937,8 @@ class crm_person extends class_base
 				{
 					$data["options"][$lkey] = $lname;
 				}
+				$data["options"]["other"] = t("Muu keel");
+				$data["onchange"] = "if(this.value == 'other') { $('#other_mlang').parent().parent().show(); } else { $('#other_mlang').parent().parent().hide(); }";
 				break;
 
 			case "drivers_license":
@@ -4972,6 +4977,7 @@ class crm_person extends class_base
 			case "user5":
 			case "ext_id_alphanumeric":
 			case "addinfo":
+			case "other_mlang":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "text"
@@ -5102,6 +5108,12 @@ class crm_person extends class_base
 
 	function callback_generate_scripts($arr)
 	{
+		$f = "
+		$(document).ready(function() {
+			$('#languages_releditor_0__other_').parent().parent().hide();
+			$('#other_mlang').parent().parent().hide();
+		});
+		";
 		if (!$arr["new"])
 		{
 			if ($arr["request"]["warn_conflicts"] == 1)
@@ -5120,14 +5132,14 @@ class crm_person extends class_base
 				if ($ol->count())
 				{
 					$link = $this->mk_my_orb("disp_conflict_pop", array("id" => $arr["obj_inst"]->id()),CL_CRM_COMPANY);
-					return "aw_popup_scroll('$link','confl','200','200');";
+					return $f."aw_popup_scroll('$link','confl','200','200');";
 				}
 			}
-			return "";
+			return $f;
 		}
 		if (is_admin())
 		{
-		return
+		return 
 		"function aw_submit_handler() {".
 		"if (document.changeform.firstname.value=='".$arr["obj_inst"]->prop("firstname")."' && document.changeform.lastname.value=='".$arr["obj_inst"]->prop("lastname")."') { return true; }".
 		// fetch list of companies with that name and ask user if count > 0
@@ -5144,8 +5156,9 @@ class crm_person extends class_base
 				return false;
 			}
 		}".
-		"return true;}";
+		"return true;}".$f;
 		}
+		return $f;
 	}
 
 	// args:

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.20 2008/06/10 09:53:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.21 2008/06/11 09:41:35 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -20,7 +20,7 @@
 @property degree type=select field=degree
 @caption Akadeemiline kraad
 
-@property field type=classificator reltype=RELTYPE_FIELD store=connect
+@property field type=classificator reltype=RELTYPE_FIELD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 @caption Valdkond
 
 @property speciality type=textbox field=speciality
@@ -116,7 +116,7 @@ class crm_person_education extends class_base
 			case "end":
 			case "start":
 				$ops["---"] = "---";
-				for($i = date("Y") + 1; $i >= 1950; $i--)
+				for($i = 1950; $i <= date("Y") + 1; $i++)
 				{
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
@@ -149,13 +149,13 @@ class crm_person_education extends class_base
 					"class_id" => CL_CRM_COMPANY,
 					"parent" => obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->shools_fld,
 					"lang_id" => array(),
-					new obj_predicate_sort(array(
-						"jrk" => "asc",
-						"name" => "asc",
-					)),
 				));
 				$ops = array();
-				foreach($ol->arr() as $o)
+				$ol_arr = $ol->arr();
+				enter_function("uasort");
+				uasort($ol_arr, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
+				exit_function("uasort");
+				foreach($ol_arr as $o)
 				{
 					$ops[$o->id()] = $o->trans_get_val("name");
 				}
@@ -188,7 +188,7 @@ class crm_person_education extends class_base
 
 		switch($field)
 		{
-			case "school1":
+			case "school_1":
 			case "main_speciality":
 			case "in_progress":
 			case "obtain_language":

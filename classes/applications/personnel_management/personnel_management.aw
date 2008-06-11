@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.40 2008/06/10 13:10:27 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.41 2008/06/11 09:41:40 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -240,7 +240,7 @@
 				@property cv_location type=textbox size=18 multiple=1 orient=vertical parent=soovitud_t88 captionside=top store=no
 				@caption T&ouml;&ouml;tamise piirkond
 
-				@property cv_load type=classificator multiple=1 orient=vertical reltype=RELTYPE_JOB_WANTED_LOAD parent=soovitud_t88 captionside=top store=no sort_callback=cmp_function
+				@property cv_load type=classificator multiple=1 orient=vertical reltype=RELTYPE_JOB_WANTED_LOAD parent=soovitud_t88 captionside=top store=no sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 				@caption T&ouml;&ouml;koormus
 
 			@layout oskused type=vbox parent=employee_search area_caption=Oskused closeable=1

@@ -68,6 +68,7 @@ class crm_skill_level extends class_base
 					// list only items under top-level items with jrk no 1
 					$this->_filter_opts_by_level_jrk($prop["options"], $mt[1]);
 				}
+				$this->ord_skills($prop["options"]);
 				break;
 
 			case "level":
@@ -78,7 +79,7 @@ class crm_skill_level extends class_base
 				}
 				else
 				{
-					$ol = new object_list(array("class_id" => CL_CRM_SKILL, "lang_id" => array(),"site_id" => array()));
+					$ol = new object_list(array("class_id" => CL_CRM_SKILL, "lang_id" => array(), "site_id" => array()));
 					if ($ol->count())
 					{
 						foreach($ol->arr() as $tmp)
@@ -215,6 +216,22 @@ class crm_skill_level extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	private function ord_skills(&$arr)
+	{
+		$ol = new object_list();
+		$ol->add(array_keys($arr));
+		$objs = $ol->arr();
+		enter_function("uasort");
+		uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
+		exit_function("uasort");
+		$r = array("" => t("--vali--"));
+		foreach($objs as $o)
+		{
+			$r[$o->id()] = $o->trans_get_val("name");
+		}
+		$arr = $r;
 	}
 }
 

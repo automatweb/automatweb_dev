@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.16 2008/06/08 12:39:25 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.17 2008/06/11 09:41:40 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -13,10 +13,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @default table=personnel_management_job_wanted
 @default group=general
 
-@property field type=classificator multiple=1 reltype=RELTYPE_FIELD orient=vertical store=connect
+@property field type=classificator multiple=1 reltype=RELTYPE_FIELD orient=vertical store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 @caption Tegevusala
 
-@property job_type type=classificator multiple=1 reltype=RELTYPE_JOB_TYPE store=connect
+@property job_type type=classificator multiple=1 reltype=RELTYPE_JOB_TYPE store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 @caption T&ouml;&ouml; liik
 
 @property professions_rels type=relpicker reltype=RELTYPE_PROFESSION multiple=1 store=connect no_edit=1
@@ -136,7 +136,11 @@ class personnel_management_job_wanted extends class_base
 						));
 						//$ops = $ol->names();
 						$ops = array();
-						foreach($ol->arr() as $o)
+						$objs = $ol->arr();
+						enter_function("uasort");
+						uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
+						exit_function("uasort");
+						foreach($objs as $o)
 						{
 							$ops[$o->id()] = $o->trans_get_val("name");
 						}
@@ -164,7 +168,11 @@ class personnel_management_job_wanted extends class_base
 							"lang_id" => array(),
 						));
 						//$prop["options"] = $ol->names();
-						foreach($ol->arr() as $o)
+						$objs = $ol->arr();
+						enter_function("uasort");
+						uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
+						exit_function("uasort");
+						foreach($objs as $o)
 						{
 							$prop["options"][$o->id()] = $o->trans_get_val("name");
 						}
@@ -173,10 +181,12 @@ class personnel_management_job_wanted extends class_base
 				break;
 
 			case "load":
-				$prop["options"] = object_type::get_classificator_options(array(
+				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
 					"clid" => CL_PERSONNEL_MANAGEMENT,
-					"classificator" => "cv_load",
+					"name" => "cv_load",
+					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
 				));
+				$prop["options"] = $r[4]["list_names"];
 				break;
 
 			case "sbutton":

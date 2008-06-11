@@ -78,6 +78,10 @@ class classificator extends class_base
 		{
 			$ch_args["object_type_id"] = $prop["object_type_id"];
 		}
+		if(isset($prop["sort_callback"]))
+		{
+			$ch_args["sort_callback"] = $prop["sort_callback"];
+		}
 
 		list($achoices,$name,$use_type,$default_value,$choices) = $this->get_choices($ch_args);
 
@@ -204,6 +208,9 @@ class classificator extends class_base
 		@param sort_by optional type=string
 			The database field to sort the returned classificators by, defaults to objects.jrk
 
+		@param sort_callback optional type=string
+			The callback to be used in usort() function for the objects.
+
 		@errors
 			none
 
@@ -304,16 +311,45 @@ class classificator extends class_base
 		{
 			$langid = aw_global_get("ct_lang_id"); 
 		}
-
-		$ret = array(
-			"list" => $olx->ids(),
-			"list_names" => $olx->names(),
-		);
+		if(isset($arr["sort_callback"]))
+		{
+			list($sc_clid, $sc_fn) = explode("::", $arr["sort_callback"]);
+			if(!isset($sc_fn))
+			{
+				$sc_fn = $sc_clid;
+				$sc_clid = $arr["clid"];
+			}
+			else
+			{
+				$sc_clid = constant($sc_clid);
+			}
+			$objs = $olx->arr();
+			enter_function("uasort");
+			uasort($objs, array(get_instance($sc_clid), "cmp_function"));
+			exit_function("uasort");
+			foreach($objs as $o)
+			{
+				$olx_ids[] = $o->id();
+				$olx_names[$o->id()] = $o->name();
+			}
+			$ret = array(
+				"list" => $olx_ids,
+				"list_names" => $olx_names,
+			);
+		}
+		else
+		{
+			$ret = array(
+				"list" => $olx->ids(),
+				"list_names" => $olx->names(),
+			);
+		}
 		$metamgr_obj = new object($ofto->parent());
 		$transyes = $metamgr_obj->prop("transyes");
 		if ($transyes)
 		{
-			foreach($olx->arr() as $o)
+			$objs = isset($arr["sort_callback"]) ? $objs : $olx->arr();
+			foreach($objs as $o)
 			{
 				$obj_id = $o->id();
 				$obj_meta = $o->meta("tolge");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.22 2008/06/10 09:53:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.23 2008/06/11 09:41:35 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -27,7 +27,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete
 @caption Amet
 
-@property field type=classificator reltype=RELTYPE_FIELD store=connect 
+@property field type=classificator reltype=RELTYPE_FIELD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 @caption Valdkond
 
 @default field=meta
@@ -133,10 +133,12 @@ class crm_person_work_relation extends class_base
 				break;
 
 			case "load":
-				$data["options"] = object_type::get_classificator_options(array(
+				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
 					"clid" => CL_PERSONNEL_MANAGEMENT,
-					"classificator" => "cv_load",
+					"name" => "cv_load",
+					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
 				));
+				$data["options"] = $r[4]["list_names"];
 				break;
 
 			case "section2":
@@ -208,6 +210,18 @@ class crm_person_work_relation extends class_base
 					"errors" => false
 				));
 			}
+		}
+	}
+
+	function cmp_function($a, $b)
+	{
+		if($a->ord() == $b->ord())
+		{
+			return strcmp($a->trans_get_val("name"), $b->trans_get_val("name"));
+		}
+		else
+		{
+			return (int)$a->ord() > (int)$b->ord() ? 1 : -1;
 		}
 	}
 }
