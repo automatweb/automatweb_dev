@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_APPLICANT</reltype>
-            <caption>Taotleja</caption>
+            <caption>Patendiomanik</caption>
       </property>
       <property>
             <name>signed</name>
@@ -183,6 +183,49 @@
             </form>
             <caption>Maksekorraldus</caption>
       </property>
+      <property>
+            <name>epat_nr</name>
+            <table>objects</table>
+            <group>invention</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Euroopa patendi number</caption>
+      </property>
+      <property>
+            <name>epat_date</name>
+            <table>objects</table>
+            <group>invention</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <year_from>2002</year_from>
+            <caption>Euroopa patenditaotluse esitamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>invention_name_et</name>
+            <table>objects</table>
+            <group>invention</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Leiutise nimetus (eesti keeles)</caption>
+      </property>
+      <property>
+            <name>epat_desc_trans</name>
+            <table>objects</table>
+            <group>invention</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_INVENTION_DESCRIPTION_TRANS</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Patendikirjelduse t&amp;amp;otilde;lge</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_EURO_PATENT_ET_DESC</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -198,6 +241,9 @@
             <fee>
                   <caption>Riigil&amp;amp;otilde;iv</caption>
             </fee>
+            <invention>
+                  <caption>Leiutis</caption>
+            </invention>
       </groupinfo>
       <tableinfo>
             <aw_trademark>
@@ -205,11 +251,6 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </aw_trademark>
-            <aw_euro_patent_et_desc>
-                  <master_index>brother_of</master_index>
-                  <master_table>objects</master_table>
-                  <index>aw_oid</index>
-            </aw_euro_patent_et_desc>
       </tableinfo>
       <reltypes>
             <APPLICANT>
@@ -270,6 +311,11 @@
                   <clid>CL_TRADEMARK_STATUS</clid>
                   <caption>Staatus</caption>
             </TRADEMARK_STATUS>
+            <INVENTION_DESCRIPTION_TRANS>
+                  <value>100</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Patendikirjelduse t6lge</caption>
+            </INVENTION_DESCRIPTION_TRANS>
       </reltypes>
 </properties>
 

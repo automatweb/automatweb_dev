@@ -141,6 +141,7 @@ class site_show extends class_base
 
 		$awt->stop("xshow2");
 		$apd->on_shutdown_get_styles($rv);
+
 		return $rv;
 	}
 

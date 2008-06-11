@@ -13,6 +13,7 @@ $sf->vars(array(
 	"title_action" => aw_global_get("title_action"),
 ));
 
+
 if (aw_global_get("uid"))
 {
 	$sf->vars(array(
@@ -36,7 +37,6 @@ else
 {
 	$str = $sf->parse();
 }
-
 if (aw_ini_get("content.doctype") == "html" )
 {
 	$str = str_replace  ( "<br />", "<br>", $str);

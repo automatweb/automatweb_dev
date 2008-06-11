@@ -331,7 +331,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>T&amp;ouml;&amp;ouml;stusdisainilahenduse kirjeldus</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;stusdisainilahenduse kirjeldus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_INDUSTRIAL_DESIGN</syslog_type>

@@ -976,8 +976,6 @@ class class_base extends aw_template
 
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
-
-
 		return $rv;
 	}
 

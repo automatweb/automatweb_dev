@@ -8915,7 +8915,7 @@ class crm_person extends class_base
 
 	function _get_not_working($arr)
 	{
-		$arr["prop"]["onclick"] = "el=document.getElementById(\"current_job_edit_caption\");if (this.checked) { el.style.display=\"none\"; } else { el.style.display=\"\"}";
+		$arr["prop"]["onclick"] = "el=document.getElementById(\"current_workplace_outer\");if (this.checked) { el.style.display=\"none\"; } else { el.style.display=\"\"}";
 	}
 
 	/**

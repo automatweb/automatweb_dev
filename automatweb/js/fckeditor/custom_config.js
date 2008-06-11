@@ -135,7 +135,7 @@ FCKConfig.IeSpellDownloadUrl	= 'http://www.iespell.com/download.php' ;
 FCKConfig.SpellerPagesServerScript = 'server-scripts/spellchecker.php' ;	// Available extension: .php .cfm .pl
 FCKConfig.FirefoxSpellChecker	= false ;
 
-FCKConfig.MaxUndoLevels = 15 ;
+FCKConfig.MaxUndoLevels = 99 ;
 
 FCKConfig.DisableObjectResizing = false ;
 FCKConfig.DisableFFTableHandles = true ;

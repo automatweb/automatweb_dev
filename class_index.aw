@@ -397,6 +397,12 @@ class class_index
 
 		$parents = array();
 
+		if (class_exists($name, false))
+		{
+			$i = new $name;
+			return $i instanceof $parent;
+		}
+
 		do
 		{
 			$class_dfn_file = aw_ini_get("basedir") . self::INDEX_DIR . $name . "." . aw_ini_get("ext");
