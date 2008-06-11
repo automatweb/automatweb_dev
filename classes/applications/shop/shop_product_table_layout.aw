@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.22 2008/06/04 10:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.23 2008/06/11 14:14:27 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -340,7 +340,8 @@ class shop_product_table_layout extends class_base
 			{
 				$this->vars(array(
 					"filter_value" => $val,
-					"filter_label" => $val_caption
+					"filter_label" => $val_caption,
+					"checked" => checked($_GET["f"][$field_name][$val])
 				));
 				$v .= $this->parse("PROD_FILTER_VALUE");
 			}
