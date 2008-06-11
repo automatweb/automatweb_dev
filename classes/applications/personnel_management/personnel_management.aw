@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.41 2008/06/11 09:41:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.42 2008/06/11 19:22:41 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2876,26 +2876,21 @@ class personnel_management extends class_base
 	**/
 	function get_languages($arr = array())
 	{
-		$odl = new object_data_list(
-			array(
-				"class_id" => CL_LANGUAGE,
-				"parent" => array(),
-				"status" => array(),
-				"site_id" => array(),
-				"lang_id" => array(),
-				"oid" => array_keys(personnel_management::get_lang_conf($arr)),
-				new obj_predicate_sort(array(
-					"jrk" => "asc",
-					"name" => "asc",
-				)),
-			),
-			array(
-				CL_CRM_LANGUAGE => array("oid" => "oid", "name" => "name"),
-			)
-		);
-		foreach($odl->arr() as $odle)
+		$ol = new object_list(array(
+			"class_id" => CL_LANGUAGE,
+			"parent" => array(),
+			"status" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"oid" => array_keys(personnel_management::get_lang_conf($arr)),
+		));
+		$objs = $ol->arr();
+		enter_function("uasort");
+		uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
+		exit_function("uasort");
+		foreach($objs as $o)
 		{
-			$options[$odle["oid"]] = $odle["name"];
+			$options[$o->id()] = $o->trans_get_val("name");
 		}
 		return $options;
 	}
