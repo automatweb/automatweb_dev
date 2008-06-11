@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.6 2008/03/27 09:18:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.7 2008/06/11 19:00:43 instrumental Exp $
 // crm_area.aw - Piirkond 
 /*
 
@@ -9,11 +9,18 @@
 @default group=general
 
 @default field=meta
-@property country type=relpicker reltype=RELTYPE_COUNTRY
-@caption Riik
 
-@property comment type=textarea cols=40 rows=3 table=objects field=comment
-@caption Kommentaar
+	@property country type=relpicker reltype=RELTYPE_COUNTRY
+	@caption Riik
+
+	@property comment type=textarea cols=40 rows=3 table=objects field=comment
+	@caption Kommentaar
+		
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 @reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
 @caption Riik
@@ -28,6 +35,9 @@ class crm_area extends class_base
 			"tpldir" => "applications/crm/crm_area",
 			"clid" => CL_CRM_AREA
 		));
+		$this->trans_props = array(
+			"name", "comment"
+		);
 	}
 
 	function get_property($arr)
@@ -71,35 +81,10 @@ class crm_area extends class_base
 		));
 		return $this->parse();
 	}
-
-	/** Returns object list of personnel_management_job_offer objects that are connected to the area.
-
-	@attrib name=get_job_offers params=name api=1
-
-	@param id required type=oid acl=view
-
-	@param parent optional type=oid,array acl=view
-
-	**/
-	function get_job_offers($arr)
+	
+	function callback_get_transl($arr)
 	{
-		if(!is_array($arr["parent"]) && isset($arr["parent"]))
-		{
-			$arr["parent"] = array(0 => $arr["parent"]);
-		}
-		$o = obj($arr["id"]);
-		$conns2 = $o->connections_to(array(
-			"class" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
-		));
-		$ret = new object_list();
-		foreach($conns2 as $conn2)
-		{
-			if(!isset($arr["parent"]) || in_array($conn2->conn["from.parent"], $arr["parent"]))
-			{
-				$ret->add($conn2->conn["from"]);
-			}
-		}
-		return $ret;
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 
 //-- methods --//

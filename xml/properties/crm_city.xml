@@ -46,11 +46,26 @@
             <rows>3</rows>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <no_status>1</no_status>
             <syslog_type>ST_CRM_CITY</syslog_type>
             <maintainer>markop</maintainer>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_linn>
                   <index>oid</index>

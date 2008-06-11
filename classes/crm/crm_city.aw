@@ -20,6 +20,12 @@
 
 	@property comment type=textarea cols=40 rows=3 table=objects field=comment
 	@caption Kommentaar
+		
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 
 @reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
@@ -59,36 +65,14 @@ class crm_city extends class_base
 		$this->init(array(
 			'clid' => CL_CRM_CITY,
 		));
+		$this->trans_props = array(
+			"name", "comment"
+		);
 	}
-
-	/** Returns object list of personnel_management_job_offer objects that are connected to the city.
-
-	@attrib name=get_job_offers params=name api=1
-
-	@param id required type=oid acl=view
-
-	@param parent optional type=oid,array acl=view
-
-	**/
-	function get_job_offers($arr)
+	
+	function callback_get_transl($arr)
 	{
-		if(!is_array($arr["parent"]) && isset($arr["parent"]))
-		{
-			$arr["parent"] = array(0 => $arr["parent"]);
-		}
-		$o = obj($arr["id"]);
-		$conns2 = $o->connections_to(array(
-			"class" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
-		));
-		$ret = new object_list();
-		foreach($conns2 as $conn2)
-		{
-			if(!isset($arr["parent"]) || in_array($conn2->conn["from.parent"], $arr["parent"]))
-			{
-				$ret->add($conn2->conn["from"]);
-			}
-		}
-		return $ret;
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 };
 ?>

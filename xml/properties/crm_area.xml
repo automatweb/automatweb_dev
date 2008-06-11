@@ -19,6 +19,16 @@
             <rows>3</rows>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_AREA</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -26,6 +36,11 @@
             <prop_cb>1</prop_cb>
             <maintainer>markop</maintainer>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <reltypes>
             <COUNTRY>
                   <value>1</value>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.9 2008/03/27 09:10:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.10 2008/06/11 19:00:40 instrumental Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
@@ -15,10 +15,15 @@
 	
 	@property area type=relpicker reltype=RELTYPE_AREA
 	@caption Piirkond
-	
-	
-@property comment type=textarea cols=40 rows=3 table=objects field=comment
-@caption Kommentaar
+		
+	@property comment type=textarea cols=40 rows=3 table=objects field=comment
+	@caption Kommentaar
+		
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 	
 @reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
 @caption Riik	
@@ -57,6 +62,14 @@ class crm_county extends class_base
 		$this->init(array(
 			'clid' => CL_CRM_COUNTY,
 		));
+		$this->trans_props = array(
+			"name", "comment"
+		);
+	}
+	
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
