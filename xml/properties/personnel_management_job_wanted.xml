@@ -9,6 +9,7 @@
             <reltype>RELTYPE_FIELD</reltype>
             <orient>vertical</orient>
             <store>connect</store>
+            <sort_callback>CL_PERSONNEL_MANAGEMENT::cmp_function</sort_callback>
             <field>field</field>
             <caption>Tegevusala</caption>
       </property>
@@ -20,6 +21,7 @@
             <multiple>1</multiple>
             <reltype>RELTYPE_JOB_TYPE</reltype>
             <store>connect</store>
+            <sort_callback>CL_PERSONNEL_MANAGEMENT::cmp_function</sort_callback>
             <field>job_type</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
       </property>

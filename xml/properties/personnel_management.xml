@@ -793,6 +793,7 @@
             <parent>soovitud_t88</parent>
             <captionside>top</captionside>
             <store>no</store>
+            <sort_callback>CL_PERSONNEL_MANAGEMENT::cmp_function</sort_callback>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
       </property>
       <property>

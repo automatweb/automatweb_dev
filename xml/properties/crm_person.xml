@@ -1002,6 +1002,14 @@
             <caption>Emakeel</caption>
       </property>
       <property>
+            <name>other_mlang</name>
+            <table>kliendibaas_isik</table>
+            <group>addinfo_new</group>
+            <type>textbox</type>
+            <field>other_mlang</field>
+            <caption>Muu emakeel</caption>
+      </property>
+      <property>
             <name>skills_lang_tbl</name>
             <table>objects</table>
             <group>addinfo_new</group>

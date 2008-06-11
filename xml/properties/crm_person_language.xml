@@ -35,6 +35,14 @@
             <caption>Kirjutan</caption>
       </property>
       <property>
+            <name>other</name>
+            <group>general</group>
+            <table>kliendibaas_keeleoskus</table>
+            <type>textbox</type>
+            <field>other</field>
+            <caption>Muu keel</caption>
+      </property>
+      <property>
             <name>person</name>
             <group>general</group>
             <table>objects</table>

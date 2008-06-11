@@ -58,5 +58,12 @@
 			</function>
 		</action>
 
+		<action name="cmp_function">
+			<function name="cmp_function">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

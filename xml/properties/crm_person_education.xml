@@ -32,6 +32,7 @@
             <type>classificator</type>
             <reltype>RELTYPE_FIELD</reltype>
             <store>connect</store>
+            <sort_callback>CL_PERSONNEL_MANAGEMENT::cmp_function</sort_callback>
             <field>field</field>
             <caption>Valdkond</caption>
       </property>
