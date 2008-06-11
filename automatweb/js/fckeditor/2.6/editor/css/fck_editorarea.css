@@ -90,3 +90,12 @@ p, ul, li
 	font-family: 'Courier New' , Monospace;
 	background-color: #ff9933;
 }
+
+.verdana_s { font-face: Verdana; font-weight: bold; color: rgb(153, 204, 0); font-size: 11px; }
+.verdana {font-face: Verdana; color: #99cc00; text-decoration: bold; font-weight: bold; font-size: 12px;}
+.verdana_xl {font-face: Verdana; color: #99cc00; text-decoration: bold; font-weight: bold; font-size: 14px;}
+.verdana_xxl {font-face: Verdana; color: #99cc00; text-decoration: bold; font-weight: bold; font-size: 16px;}
+.verdana_pun {font-face: Verdana; color: #ff0000; text-decoration: bold; font-size: 12px;}
+.verdana_pun_xl {font-face: Verdana; color: #ff0000; text-decoration: bold; font-weight: bold; font-size: 14px;}
+.verdana_sin {color: #0000ff;font-face: Verdana;}
+.verdana_sin_xl {font-face: Verdana; color: #0000ff; text-decoration: bold; font-weight: bold; font-size: 14px;}

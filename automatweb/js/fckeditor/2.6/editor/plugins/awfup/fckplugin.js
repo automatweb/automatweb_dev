@@ -23,7 +23,7 @@ InsertAWFupCommand.prototype.Execute=function(){}
 InsertAWFupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWFupCommand.Execute=function() {
 	window.open('/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&file_id="+FCK.Selection.GetSelectedElement()._oid, 
-		'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
+		'InsertAWFupCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awfilechange', InsertAWFupCommand );
 
@@ -50,6 +50,13 @@ var FCKAWFilePlaceholders = new Object() ;
 FCKAWFilePlaceholders.Add = function( name )
 {
 	var oSpan = FCK.InsertElement( 'span' ) ;
+	this.SetupSpan( oSpan, name ) ;
+}
+
+// Add a new placeholder at the actual selection.
+FCKAWFilePlaceholders.Change = function( span, name )
+{
+	var oSpan = span;
 	this.SetupSpan( oSpan, name ) ;
 }
 
