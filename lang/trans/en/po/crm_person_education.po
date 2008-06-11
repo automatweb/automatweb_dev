@@ -191,42 +191,57 @@ msgid "Keskharidus"
 msgstr "Middle education"
 
 #: classes/applications/crm/crm_person_education.aw:80
+msgid "Kutsekeskharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:81
 msgid "Kesk-eriharidus"
 msgstr "Middle-special education"
 
-#: classes/applications/crm/crm_person_education.aw:81
-msgid "Diplom"
-msgstr "Diploma"
-
 #: classes/applications/crm/crm_person_education.aw:82
+msgid "Kutsek&otilde;rgharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:83
+msgid "Rakendusk&otilde;rgharidus"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:84
+msgid "K&otilde;rghariduse diplom"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:85
 msgid "Bakalaureus"
 msgstr "Bachelor"
 
-#: classes/applications/crm/crm_person_education.aw:83
+#: classes/applications/crm/crm_person_education.aw:86
 msgid "Magister"
 msgstr "Magistar"
 
-#: classes/applications/crm/crm_person_education.aw:84
+#: classes/applications/crm/crm_person_education.aw:87
 msgid "Doktor"
 msgstr "Doctor"
 
-#: classes/applications/crm/crm_person_education.aw:85
+#: classes/applications/crm/crm_person_education.aw:88
 msgid "Teaduste kandidaat"
 msgstr "Master of science"
 
-#: classes/applications/crm/crm_person_education.aw:125
-#: classes/applications/crm/crm_person_education.aw:133
+#: classes/applications/crm/crm_person_education.aw:128
+#: classes/applications/crm/crm_person_education.aw:136
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_person_education.aw:126
-#: classes/applications/crm/crm_person_education.aw:134
+#: classes/applications/crm/crm_person_education.aw:129
+#: classes/applications/crm/crm_person_education.aw:137
 msgid "Ei"
 msgstr "No"
 
-#: classes/applications/crm/crm_person_education.aw:149
+#: classes/applications/crm/crm_person_education.aw:162
 msgid "--vali--"
 msgstr ""
+
+#~ msgid "Diplom"
+#~ msgstr "Diploma"
 
 #~ msgid "Omaduse Kool (school_1) caption"
 #~ msgstr "School"

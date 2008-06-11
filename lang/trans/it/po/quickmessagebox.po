@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/quickmessage/quickmessagebox.aw:class_816_help
 msgid "Klassi Kiirteadete haldus help"
 msgstr ""
@@ -198,3 +197,6 @@ msgstr ""
 msgid "Delete selected messages?"
 msgstr ""
 
+#: classes/applications/quickmessage/quickmessagebox.aw:311
+msgid "Error"
+msgstr ""

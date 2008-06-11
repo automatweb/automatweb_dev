@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/patent_office/utility_model_add.aw:class_1434_help
 msgid "Klassi Kasuliku mudeli veebist lisamine help"
 msgstr ""
@@ -38,16 +37,16 @@ msgstr ""
 msgid "Omaduse Pangamakse objekt (bank_payment) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model_add.aw:prop_utility_models_menu
-msgid "Omaduse Kasuliku mudeli reg. taotluste kaust (utility_models_menu) caption"
+#: classes/applications/clients/patent_office/utility_model_add.aw:prop_trademarks_menu
+msgid "Omaduse Kasuliku mudeli reg. taotluste kaust (trademarks_menu) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model_add.aw:prop_utility_models_menu_comment
-msgid "Omaduse Kasuliku mudeli reg. taotluste kaust (utility_models_menu) kommentaar"
+#: classes/applications/clients/patent_office/utility_model_add.aw:prop_trademarks_menu_comment
+msgid "Omaduse Kasuliku mudeli reg. taotluste kaust (trademarks_menu) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model_add.aw:prop_utility_models_menu_help
-msgid "Omaduse Kasuliku mudeli reg. taotluste kaust (utility_models_menu) help"
+#: classes/applications/clients/patent_office/utility_model_add.aw:prop_trademarks_menu_help
+msgid "Omaduse Kasuliku mudeli reg. taotluste kaust (trademarks_menu) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/utility_model_add.aw:prop_series
@@ -70,11 +69,10 @@ msgstr ""
 msgid "Seose Volinike kaust (RELTYPE_PROCURATOR_MENU) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model_add.aw:rel_RELTYPE_UTILITY_MODEL_MENU
-msgid "Seose Kasuliku mudeli reg. taotluste kaust (RELTYPE_UTILITY_MODEL_MENU) tekst"
+#: classes/applications/clients/patent_office/utility_model_add.aw:rel_RELTYPE_TRADEMARK_MENU
+msgid "Seose Kasuliku mudeli reg. taotluste kaust (RELTYPE_TRADEMARK_MENU) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/utility_model_add.aw:rel_RELTYPE_SERIES
 msgid "Seose Numbriseeria (RELTYPE_SERIES) tekst"
 msgstr ""
-

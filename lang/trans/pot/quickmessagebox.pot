@@ -198,3 +198,7 @@ msgstr ""
 msgid "Delete selected messages?"
 msgstr ""
 
+#: classes/applications/quickmessage/quickmessagebox.aw:311
+msgid "Error"
+msgstr ""
+

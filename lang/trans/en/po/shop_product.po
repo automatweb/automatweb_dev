@@ -1752,7 +1752,7 @@ msgstr ""
 #: classes/applications/shop/shop_product.aw:727
 #: classes/applications/shop/shop_product.aw:789
 #: classes/applications/shop/shop_product.aw:843
-#: classes/applications/shop/shop_product.aw:2246
+#: classes/applications/shop/shop_product.aw:2247
 msgid "Nimi"
 msgstr ""
 
@@ -1810,19 +1810,19 @@ msgstr ""
 msgid "shop_product::draw(): no layout set!"
 msgstr "shop_product::draw(): no layout set!"
 
-#: classes/applications/shop/shop_product.aw:2149
+#: classes/applications/shop/shop_product.aw:2150
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2158
+#: classes/applications/shop/shop_product.aw:2159
 msgid "Kogus %s"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2236
+#: classes/applications/shop/shop_product.aw:2237
 msgid "(Puudub)"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2251
+#: classes/applications/shop/shop_product.aw:2252
 msgid "Asukoht"
 msgstr ""
 

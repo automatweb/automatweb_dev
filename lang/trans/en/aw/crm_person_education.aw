@@ -13,7 +13,6 @@ $GLOBALS["TRANS"]["Omaduse Diplomi number (diploma_nr) caption"] = "Diploma no";
 $GLOBALS["TRANS"]["P&otilde;hiharidus"] = "Main education";
 $GLOBALS["TRANS"]["Keskharidus"] = "Middle education";
 $GLOBALS["TRANS"]["Kesk-eriharidus"] = "Middle-special education";
-$GLOBALS["TRANS"]["Diplom"] = "Diploma";
 $GLOBALS["TRANS"]["Bakalaureus"] = "Bachelor";
 $GLOBALS["TRANS"]["Magister"] = "Magistar";
 $GLOBALS["TRANS"]["Doktor"] = "Doctor";

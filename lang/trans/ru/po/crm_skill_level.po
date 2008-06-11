@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_skill_level.aw:prop_skill
 msgid "Omaduse Oskus (skill) caption"
-msgstr ""
+msgstr "Умение"
 
 #: classes/applications/crm/crm_skill_level.aw:prop_skill_comment
 msgid "Omaduse Oskus (skill) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_skill_level.aw:prop_level
 msgid "Omaduse Tase (level) caption"
-msgstr ""
+msgstr "Уровень"
 
 #: classes/applications/crm/crm_skill_level.aw:prop_level_comment
 msgid "Omaduse Tase (level) kommentaar"
@@ -49,4 +49,4 @@ msgstr ""
 #: classes/applications/crm/crm_skill_level.aw:74
 #: classes/applications/crm/crm_skill_level.aw:145
 msgid "--vali--"
-msgstr ""
+msgstr "--Выбери--"

@@ -676,10 +676,18 @@ msgstr "Language"
 msgid "Klassi Personalikeskkond (275) nimi"
 msgstr "Personnell center"
 
+#: aw.ini:class_prodfamily_275
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (275) nimi"
+msgstr ""
+
 # aw.ini:class_285
 #: aw.ini:class_285
 msgid "Klassi Tööpakkumine (285) nimi"
 msgstr "Job offer"
+
+#: aw.ini:class_prodfamily_285
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (285) nimi"
+msgstr ""
 
 # aw.ini:class_277
 #: aw.ini:class_277
@@ -870,6 +878,10 @@ msgstr "Product packaging"
 msgid "Klassi CV Otsing (328) nimi"
 msgstr "CV Search"
 
+#: aw.ini:class_prodfamily_328
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (328) nimi"
+msgstr ""
+
 # aw.ini:class_329
 #: aw.ini:class_329
 msgid "Klassi Objektide Import (329) nimi"
@@ -963,6 +975,10 @@ msgstr "Questionnaire namanger"
 #: aw.ini:class_351
 msgid "Klassi T&ouml;&ouml;soov (351) nimi"
 msgstr "Desired job"
+
+#: aw.ini:class_prodfamily_351
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (351) nimi"
+msgstr ""
 
 # aw.ini:class_428
 #: aw.ini:class_428
@@ -1104,6 +1120,10 @@ msgstr "Address book"
 #: aw.ini:class_812
 msgid "Klassi Kandidatuur (812) nimi"
 msgstr "Candidature"
+
+#: aw.ini:class_prodfamily_812
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (812) nimi"
+msgstr ""
 
 # aw.ini:class_814
 #: aw.ini:class_814
@@ -2814,6 +2834,10 @@ msgstr ""
 msgid "Klassi Salvestatud CV otsing (1408) nimi"
 msgstr ""
 
+#: aw.ini:class_prodfamily_1408
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (1408) nimi"
+msgstr ""
+
 #: aw.ini:class_1410
 msgid "Klassi Sugulusside (1410) nimi"
 msgstr ""
@@ -2844,6 +2868,10 @@ msgstr ""
 
 #: aw.ini:class_1421
 msgid "Klassi T&ouml;&ouml;pakkumised veebis (1421) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_1421
+msgid "Klassi tooteperekonna V&auml;rbamiskeskkond (1421) nimi"
 msgstr ""
 
 #: aw.ini:class_1418

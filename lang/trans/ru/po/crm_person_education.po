@@ -190,39 +190,51 @@ msgid "Keskharidus"
 msgstr "Среднее образование"
 
 #: classes/applications/crm/crm_person_education.aw:80
+msgid "Kutsekeskharidus"
+msgstr "Профессиональное среднее образование"
+
+#: classes/applications/crm/crm_person_education.aw:81
 msgid "Kesk-eriharidus"
 msgstr "Средне-специальное образование"
 
-#: classes/applications/crm/crm_person_education.aw:81
-msgid "Diplom"
-msgstr ""
-
 #: classes/applications/crm/crm_person_education.aw:82
-msgid "Bakalaureus"
-msgstr ""
+msgid "Kutsek&otilde;rgharidus"
+msgstr "Профессиональное высшее образование"
 
 #: classes/applications/crm/crm_person_education.aw:83
-msgid "Magister"
-msgstr ""
+msgid "Rakendusk&otilde;rgharidus"
+msgstr "Прикладное высшее образование"
 
 #: classes/applications/crm/crm_person_education.aw:84
-msgid "Doktor"
-msgstr ""
+msgid "K&otilde;rghariduse diplom"
+msgstr "Диплом о высшем образовании"
 
 #: classes/applications/crm/crm_person_education.aw:85
+msgid "Bakalaureus"
+msgstr "Бакалавр"
+
+#: classes/applications/crm/crm_person_education.aw:86
+msgid "Magister"
+msgstr "Магистр"
+
+#: classes/applications/crm/crm_person_education.aw:87
+msgid "Doktor"
+msgstr "Доктор"
+
+#: classes/applications/crm/crm_person_education.aw:88
 msgid "Teaduste kandidaat"
-msgstr ""
+msgstr "Кандидат наук"
 
-#: classes/applications/crm/crm_person_education.aw:125
-#: classes/applications/crm/crm_person_education.aw:133
+#: classes/applications/crm/crm_person_education.aw:128
+#: classes/applications/crm/crm_person_education.aw:136
 msgid "Jah"
-msgstr ""
+msgstr "Да"
 
-#: classes/applications/crm/crm_person_education.aw:126
-#: classes/applications/crm/crm_person_education.aw:134
+#: classes/applications/crm/crm_person_education.aw:129
+#: classes/applications/crm/crm_person_education.aw:137
 msgid "Ei"
-msgstr ""
+msgstr "Нет"
 
-#: classes/applications/crm/crm_person_education.aw:149
+#: classes/applications/crm/crm_person_education.aw:162
 msgid "--vali--"
 msgstr "--Выбери--"

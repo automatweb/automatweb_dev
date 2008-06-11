@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/patent_office/patent_patent.aw:class_1432_help
 msgid "Klassi Patent help"
 msgstr ""
@@ -182,18 +181,6 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_classes_fee
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_classes_fee_comment
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_classes_fee_help
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -242,6 +229,18 @@ msgstr ""
 msgid "Omaduse Maksekorraldus (payment_order) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_applicant_reg
+msgid "Omaduse Taotleja on saanud patendi taotlemise &otilde;iguse kui (applicant_reg) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_applicant_reg_comment
+msgid "Omaduse Taotleja on saanud patendi taotlemise &otilde;iguse kui (applicant_reg) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_applicant_reg_help
+msgid "Omaduse Taotleja on saanud patendi taotlemise &otilde;iguse kui (applicant_reg) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_author
 msgid "Omaduse Autor (author) caption"
 msgstr ""
@@ -279,15 +278,15 @@ msgid "Omaduse Leiutise nimetus (eesti keeles) (invention_name_et) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_invention_name_en
-msgid "Omaduse Leiutise nimetus (eesti inglise) (invention_name_en) caption"
+msgid "Omaduse Leiutise nimetus (inglise keeles) (invention_name_en) caption"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_invention_name_en_comment
-msgid "Omaduse Leiutise nimetus (eesti inglise) (invention_name_en) kommentaar"
+msgid "Omaduse Leiutise nimetus (inglise keeles) (invention_name_en) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_invention_name_en_help
-msgid "Omaduse Leiutise nimetus (eesti inglise) (invention_name_en) help"
+msgid "Omaduse Leiutise nimetus (inglise keeles) (invention_name_en) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle110
@@ -446,16 +445,16 @@ msgstr ""
 msgid "Omaduse Taotluse number (prio_prevapplication_nr) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_first_application_data
-msgid "Omaduse Esmase taotluse andmed (seaduse &#0167;21 l&otilde;ige 2) (other_first_application_data) caption"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle114
+msgid "Omaduse Esmase taotluse andmed (seaduse &#0167;21 l&otilde;ige 2) (childtitle114) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_first_application_data_comment
-msgid "Omaduse Esmase taotluse andmed (seaduse &#0167;21 l&otilde;ige 2) (other_first_application_data) kommentaar"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle114_comment
+msgid "Omaduse Esmase taotluse andmed (seaduse &#0167;21 l&otilde;ige 2) (childtitle114) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_first_application_data_help
-msgid "Omaduse Esmase taotluse andmed (seaduse &#0167;21 l&otilde;ige 2) (other_first_application_data) help"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle114_help
+msgid "Omaduse Esmase taotluse andmed (seaduse &#0167;21 l&otilde;ige 2) (childtitle114) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_other_first_application_data_date
@@ -494,16 +493,16 @@ msgstr ""
 msgid "Omaduse Taotluse number (other_first_application_data_nr) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_bio
-msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed: (other_bio) caption"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle115
+msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed: (childtitle115) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_bio_comment
-msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed: (other_bio) kommentaar"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle115_comment
+msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed: (childtitle115) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_bio_help
-msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed: (other_bio) help"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle115_help
+msgid "Omaduse Bioloogilise aine, sealhulgas mikroorganismi deponeerimise andmed: (childtitle115) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_other_bio_nr
@@ -542,16 +541,16 @@ msgstr ""
 msgid "Omaduse Deponeerimise asutuse nimi (other_bio_inst) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_datapub
-msgid "Omaduse Patendiseaduse &#0167;8 l&otilde;ikes 3 nimetatud teabe avalikustamise kuup&auml;ev (23) ja andmed: (other_datapub) caption"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle116
+msgid "Omaduse Patendiseaduse &#0167;8 l&otilde;ikes 3 nimetatud teabe avalikustamise kuup&auml;ev (23) ja andmed: (childtitle116) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_datapub_comment
-msgid "Omaduse Patendiseaduse &#0167;8 l&otilde;ikes 3 nimetatud teabe avalikustamise kuup&auml;ev (23) ja andmed: (other_datapub) kommentaar"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle116_comment
+msgid "Omaduse Patendiseaduse &#0167;8 l&otilde;ikes 3 nimetatud teabe avalikustamise kuup&auml;ev (23) ja andmed: (childtitle116) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:prop_other_datapub_help
-msgid "Omaduse Patendiseaduse &#0167;8 l&otilde;ikes 3 nimetatud teabe avalikustamise kuup&auml;ev (23) ja andmed: (other_datapub) help"
+#: classes/applications/clients/patent_office/patent_patent.aw:prop_childtitle116_help
+msgid "Omaduse Patendiseaduse &#0167;8 l&otilde;ikes 3 nimetatud teabe avalikustamise kuup&auml;ev (23) ja andmed: (childtitle116) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_patent.aw:prop_other_datapub_date
@@ -794,10 +793,6 @@ msgstr ""
 msgid "Seose E-mail (RELTYPE_EMAIL) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:rel_RELTYPE_COUNTRY
-msgid "Seose P&auml;riltolumaa (RELTYPE_COUNTRY) tekst"
-msgstr ""
-
 #: classes/applications/clients/patent_office/patent_patent.aw:rel_RELTYPE_PROCURATOR_MENU
 msgid "Seose Volinike kaust (RELTYPE_PROCURATOR_MENU) tekst"
 msgstr ""
@@ -862,7 +857,10 @@ msgstr ""
 msgid "Seose Lisa biol. depon. toend (RELTYPE_ATTACHMENT_BIO) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_patent.aw:363
-msgid "Leiutiskirjeldus peab olema lisatud"
+#: classes/applications/clients/patent_office/patent_patent.aw:403
+msgid "Ainult pdf formaadis failid lubatud"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent_patent.aw:410
+msgid "Leiutiskirjeldus peab olema lisatud"
+msgstr ""

@@ -14,7 +14,7 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/common/price_object.aw:131
+#: classes/common/price_object.aw:121
 msgid "hind"
 msgstr ""
 

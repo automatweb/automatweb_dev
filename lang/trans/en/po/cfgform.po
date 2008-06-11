@@ -1006,9 +1006,9 @@ msgstr ""
 msgid "Omadused:"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:612 classes/cfg/cfgform.aw:910
-#: classes/cfg/cfgform.aw:1437 classes/cfg/cfgform.aw:2255
-#: classes/cfg/cfgform.aw:2285
+#: classes/cfg/cfgform.aw:612 classes/cfg/cfgform.aw:927
+#: classes/cfg/cfgform.aw:1466 classes/cfg/cfgform.aw:2290
+#: classes/cfg/cfgform.aw:2320
 msgid "Nimi"
 msgstr "Name"
 
@@ -1016,490 +1016,502 @@ msgstr "Name"
 msgid "ID"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:805
+#: classes/cfg/cfgform.aw:822
 msgid "Omadus"
 msgstr "Property"
 
-#: classes/cfg/cfgform.aw:809 classes/cfg/cfgform.aw:1447
-#: classes/cfg/cfgform.aw:2257 classes/cfg/cfgform.aw:2291
+#: classes/cfg/cfgform.aw:826 classes/cfg/cfgform.aw:1476
+#: classes/cfg/cfgform.aw:2292 classes/cfg/cfgform.aw:2326
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:813
+#: classes/cfg/cfgform.aw:830
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:903
+#: classes/cfg/cfgform.aw:920
 msgid "S&uuml;steemi default"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:915 classes/cfg/cfgform.aw:1452
-#: classes/cfg/cfgform.aw:3921 classes/cfg/cfgform.aw:4082
+#: classes/cfg/cfgform.aw:932 classes/cfg/cfgform.aw:1481
+#: classes/cfg/cfgform.aw:3956 classes/cfg/cfgform.aw:4117
 msgid "Tab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:937
+#: classes/cfg/cfgform.aw:954
 msgid "&Auml;ra kasuta vormi"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:982
+#: classes/cfg/cfgform.aw:999
 msgid "this is not a valid config form - class_id not specified"
 msgstr "this is not a valid config form - class_id not specified"
 
-#: classes/cfg/cfgform.aw:1431 classes/cfg/cfgform.aw:2254
-#: classes/cfg/cfgform.aw:3931
+#: classes/cfg/cfgform.aw:1460 classes/cfg/cfgform.aw:2289
+#: classes/cfg/cfgform.aw:3966
 msgid "Jrk."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1442 classes/cfg/cfgform.aw:2256
-#: classes/cfg/cfgform.aw:2297 classes/cfg/cfgform.aw:3212
-#: classes/cfg/cfgform.aw:3926
+#: classes/cfg/cfgform.aw:1471 classes/cfg/cfgform.aw:2291
+#: classes/cfg/cfgform.aw:2332 classes/cfg/cfgform.aw:3247
+#: classes/cfg/cfgform.aw:3961
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/cfg/cfgform.aw:1457
+#: classes/cfg/cfgform.aw:1486
 msgid "Parent"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1462
+#: classes/cfg/cfgform.aw:1491
 msgid "Laiusjaotus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1467
+#: classes/cfg/cfgform.aw:1496
 msgid "Suletav"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1496
+#: classes/cfg/cfgform.aw:1525
 msgid "Horis."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1497
+#: classes/cfg/cfgform.aw:1526
 msgid "Vertik."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1601
+#: classes/cfg/cfgform.aw:1630
 msgid "Lisa uus layout"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1611 classes/cfg/cfgform.aw:2378
-#: classes/cfg/cfgform.aw:2602 classes/cfg/cfgform.aw:3028
-#: classes/cfg/cfgform.aw:3217 classes/cfg/cfgform.aw:3891
+#: classes/cfg/cfgform.aw:1640 classes/cfg/cfgform.aw:2413
+#: classes/cfg/cfgform.aw:2637 classes/cfg/cfgform.aw:3063
+#: classes/cfg/cfgform.aw:3252 classes/cfg/cfgform.aw:3926
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/cfg/cfgform.aw:1616
+#: classes/cfg/cfgform.aw:1645
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1618
+#: classes/cfg/cfgform.aw:1647
 msgid "Kustutada valitud layoudid?"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1893 classes/cfg/cfgform.aw:1926
-#: classes/cfg/cfgform.aw:1936
+#: classes/cfg/cfgform.aw:1922 classes/cfg/cfgform.aw:1955
+#: classes/cfg/cfgform.aw:1965
 msgid "Laius"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1895 classes/cfg/cfgform.aw:1924
-#: classes/cfg/cfgform.aw:1957 classes/cfg/cfgform.aw:1980
+#: classes/cfg/cfgform.aw:1924 classes/cfg/cfgform.aw:1953
+#: classes/cfg/cfgform.aw:1986 classes/cfg/cfgform.aw:2009
 msgid "K&otilde;rgus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1897
+#: classes/cfg/cfgform.aw:1926
 msgid "Teksti v&auml;rv"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1899
+#: classes/cfg/cfgform.aw:1928
 msgid "Tausta v&auml;rv"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1901
+#: classes/cfg/cfgform.aw:1930
 msgid "Teksti suurus pildid"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1903
+#: classes/cfg/cfgform.aw:1932
 msgid "Tekstikast &uuml;leval"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1905
+#: classes/cfg/cfgform.aw:1934
 msgid "Tekstikast all"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1907
+#: classes/cfg/cfgform.aw:1936
 msgid "Tekstikast vasakul"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1909
+#: classes/cfg/cfgform.aw:1938
 msgid "Tekstikast paremal"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1911
+#: classes/cfg/cfgform.aw:1940
 msgid "Tekstikasti laius"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1921
+#: classes/cfg/cfgform.aw:1950
 msgid "RTE"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1946
+#: classes/cfg/cfgform.aw:1975
 msgid "Nuppudeta"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1949
+#: classes/cfg/cfgform.aw:1978
 msgid "Valikud"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1951
+#: classes/cfg/cfgform.aw:1980
 msgid "Selectbox"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1953
+#: classes/cfg/cfgform.aw:1982
 msgid "Tavaline"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1955
+#: classes/cfg/cfgform.aw:1984
 msgid "Autocomplete"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1967
+#: classes/cfg/cfgform.aw:1996
 msgid "Seadetevormi id"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1993
+#: classes/cfg/cfgform.aw:2022
 msgid "Nupud: jah"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1995
+#: classes/cfg/cfgform.aw:2024
 msgid "ei"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1997 classes/cfg/cfgform.aw:2006
-#: classes/cfg/cfgform.aw:2013 classes/cfg/cfgform.aw:2020
-#: classes/cfg/cfgform.aw:2027 classes/cfg/cfgform.aw:2034
+#: classes/cfg/cfgform.aw:2026 classes/cfg/cfgform.aw:2035
+#: classes/cfg/cfgform.aw:2042 classes/cfg/cfgform.aw:2049
+#: classes/cfg/cfgform.aw:2056 classes/cfg/cfgform.aw:2063
 msgid "m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2000
+#: classes/cfg/cfgform.aw:2029
 msgid "Formaat:"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2002 classes/cfg/cfgform.aw:2044
+#: classes/cfg/cfgform.aw:2031 classes/cfg/cfgform.aw:2073
 msgid "P&auml;ev: select"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2004 classes/cfg/cfgform.aw:2011
-#: classes/cfg/cfgform.aw:2018 classes/cfg/cfgform.aw:2025
-#: classes/cfg/cfgform.aw:2032
+#: classes/cfg/cfgform.aw:2033 classes/cfg/cfgform.aw:2040
+#: classes/cfg/cfgform.aw:2047 classes/cfg/cfgform.aw:2054
+#: classes/cfg/cfgform.aw:2061
 msgid "text"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2009 classes/cfg/cfgform.aw:2048
+#: classes/cfg/cfgform.aw:2038 classes/cfg/cfgform.aw:2077
 msgid "Kuu: select"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2016
+#: classes/cfg/cfgform.aw:2045
 msgid "Aasta: select"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2023
+#: classes/cfg/cfgform.aw:2052
 msgid "Tund: select"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2030
+#: classes/cfg/cfgform.aw:2059
 msgid "Minut: select"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2046 classes/cfg/cfgform.aw:2050
+#: classes/cfg/cfgform.aw:2075 classes/cfg/cfgform.aw:2079
 msgid "textbox"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2059
+#: classes/cfg/cfgform.aw:2088
 msgid "Horisontaalselt"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2061
+#: classes/cfg/cfgform.aw:2090
 msgid "Vertikaalselt"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2071
+#: classes/cfg/cfgform.aw:2100
 msgid "Horisontaalne"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2073
+#: classes/cfg/cfgform.aw:2102
 msgid "Vertikaalne"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2089
+#: classes/cfg/cfgform.aw:2118
 msgid "Tabeli kontrolleri id"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2091
+#: classes/cfg/cfgform.aw:2120
 msgid "N&auml;ita releditori tabelis"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2104
+#: classes/cfg/cfgform.aw:2126
+msgid "Tulba pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:2127
+msgid "Tulba grupp"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:2128
+msgid "Eraldaja"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:2139
 msgid "&Auml;ra n&auml;ita pealkirja"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2107
+#: classes/cfg/cfgform.aw:2142
 msgid "Pealkiri vasakul"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2109
+#: classes/cfg/cfgform.aw:2144
 msgid "Pealkiri &uuml;lal"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2111
+#: classes/cfg/cfgform.aw:2146
 msgid "CSS formaadis:"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2111
+#: classes/cfg/cfgform.aw:2146
 msgid "Tekstisuurus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2113
+#: classes/cfg/cfgform.aw:2148
 msgid "Mitteaktiivne (disabled)"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2117
+#: classes/cfg/cfgform.aw:2152
 msgid "Lisavalikud"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2236 classes/cfg/cfgform.aw:2246
+#: classes/cfg/cfgform.aw:2271 classes/cfg/cfgform.aw:2281
 msgid "Inverteeri valik"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2253
+#: classes/cfg/cfgform.aw:2288
 msgid "Tabi pealkiri (tabi_nimi)"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2303
+#: classes/cfg/cfgform.aw:2338
 msgid "Vaikimisi tab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2310
+#: classes/cfg/cfgform.aw:2345
 msgid "K"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2311
+#: classes/cfg/cfgform.aw:2346
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2385
+#: classes/cfg/cfgform.aw:2420
 msgid "Eemalda valitud omadused tab-ist"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2392
+#: classes/cfg/cfgform.aw:2427
 msgid "<small>Liiguta omadused:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2403
+#: classes/cfg/cfgform.aw:2438
 msgid "&nbsp;&nbsp;&nbsp;Layouti:"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2409
+#: classes/cfg/cfgform.aw:2444
 msgid "Tabi:"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2419 classes/cfg/cfgform.aw:2592
+#: classes/cfg/cfgform.aw:2454 classes/cfg/cfgform.aw:2627
 msgid "&Uuml;htegi tabi pole veel!"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2430
+#: classes/cfg/cfgform.aw:2465
 msgid "Liiguta"
 msgstr "Move"
 
-#: classes/cfg/cfgform.aw:2437
+#: classes/cfg/cfgform.aw:2472
 msgid "<small>Lisa tab:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2444
+#: classes/cfg/cfgform.aw:2479
 msgid "<small>Millise tabi alla:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2466 classes/cfg/cfgform.aw:3883
+#: classes/cfg/cfgform.aw:2501 classes/cfg/cfgform.aw:3918
 msgid "Lisa tab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2483
+#: classes/cfg/cfgform.aw:2518
 msgid "Loe klassi uuendused seadetevormi"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2489 classes/cfg/cfgform.aw:2540
+#: classes/cfg/cfgform.aw:2524 classes/cfg/cfgform.aw:2575
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2500 classes/cfg/cfgform.aw:2551
+#: classes/cfg/cfgform.aw:2535 classes/cfg/cfgform.aw:2586
 msgid "Ainult omadused"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2511 classes/cfg/cfgform.aw:2562
+#: classes/cfg/cfgform.aw:2546 classes/cfg/cfgform.aw:2597
 msgid "Ainult tabid"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2522 classes/cfg/cfgform.aw:2573
+#: classes/cfg/cfgform.aw:2557 classes/cfg/cfgform.aw:2608
 msgid "Ainult layoudid"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2534
+#: classes/cfg/cfgform.aw:2569
 msgid "Tee seadetele alglaadimine"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2696
+#: classes/cfg/cfgform.aw:2731
 msgid "Layoudil puudub tab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:2702
+#: classes/cfg/cfgform.aw:2737
 msgid "Viga p&auml;ringu formaadis"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3210
+#: classes/cfg/cfgform.aw:3245
 msgid "T&ouml;&ouml;riistariba"
 msgstr "Toolbar"
 
-#: classes/cfg/cfgform.aw:3211
+#: classes/cfg/cfgform.aw:3246
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/cfg/cfgform.aw:3213
+#: classes/cfg/cfgform.aw:3248
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/cfg/cfgform.aw:3214
+#: classes/cfg/cfgform.aw:3249
 msgid "Sissejuhatus"
 msgstr "Lead"
 
-#: classes/cfg/cfgform.aw:3215
+#: classes/cfg/cfgform.aw:3250
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/cfg/cfgform.aw:3216
+#: classes/cfg/cfgform.aw:3251
 msgid "Toimetamata"
 msgstr "Unedited"
 
-#: classes/cfg/cfgform.aw:3218
+#: classes/cfg/cfgform.aw:3253
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/cfg/cfgform.aw:3221
+#: classes/cfg/cfgform.aw:3256
 msgid "N&auml;ita pealkirja"
 msgstr "Show title"
 
-#: classes/cfg/cfgform.aw:3222
+#: classes/cfg/cfgform.aw:3257
 msgid "N&auml;ita sissejuhatust"
 msgstr "Show lead"
 
-#: classes/cfg/cfgform.aw:3223
+#: classes/cfg/cfgform.aw:3258
 msgid "N&auml;ita prindi nuppu"
 msgstr "Show 'Print' button"
 
-#: classes/cfg/cfgform.aw:3224
+#: classes/cfg/cfgform.aw:3259
 msgid "Pealkiri klikitav"
 msgstr "Title clickable"
 
-#: classes/cfg/cfgform.aw:3256 classes/cfg/cfgform.aw:3311
-#: classes/cfg/cfgform.aw:3335
+#: classes/cfg/cfgform.aw:3291 classes/cfg/cfgform.aw:3346
+#: classes/cfg/cfgform.aw:3370
 msgid "Bujaka"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3699 classes/cfg/cfgform.aw:3741
-#: classes/cfg/cfgform.aw:3777 classes/cfg/cfgform.aw:3837
+#: classes/cfg/cfgform.aw:3734 classes/cfg/cfgform.aw:3776
+#: classes/cfg/cfgform.aw:3812 classes/cfg/cfgform.aw:3872
 msgid "no edit access"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3782 classes/cfg/cfgform.aw:3842
+#: classes/cfg/cfgform.aw:3817 classes/cfg/cfgform.aw:3877
 msgid "invalid action scope"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3904
+#: classes/cfg/cfgform.aw:3939
 msgid "Kustuta tab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3911
+#: classes/cfg/cfgform.aw:3946
 msgid "Kustuta"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3936
+#: classes/cfg/cfgform.aw:3971
 msgid "Fookus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3941
+#: classes/cfg/cfgform.aw:3976
 msgid "Sisu kontroller"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3946
+#: classes/cfg/cfgform.aw:3981
 msgid "N&auml;itamise kontroller"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3951
+#: classes/cfg/cfgform.aw:3986
 msgid "Submit nupu tekst"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3956
+#: classes/cfg/cfgform.aw:3991
 msgid "V"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3957
+#: classes/cfg/cfgform.aw:3992
 msgid "Vaikimisi view vaade"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3962
+#: classes/cfg/cfgform.aw:3997
 msgid "N"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3963
+#: classes/cfg/cfgform.aw:3998
 msgid "N&auml;ita tabi"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3968
+#: classes/cfg/cfgform.aw:4003
 msgid "S"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3969
+#: classes/cfg/cfgform.aw:4004
 msgid "N&auml;ita submit nuppu"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:3982
+#: classes/cfg/cfgform.aw:4017
 msgid "vaikestiil"
 msgstr "default style"
 
-#: classes/cfg/cfgform.aw:3983
+#: classes/cfg/cfgform.aw:4018
 msgid "pealkiri yleval, sisu all"
 msgstr "title on top, content below"
 
-#: classes/cfg/cfgform.aw:4049 classes/cfg/cfgform.aw:4054
+#: classes/cfg/cfgform.aw:4084 classes/cfg/cfgform.aw:4089
 msgid "--vali--"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4088
+#: classes/cfg/cfgform.aw:4123
 msgid "Tagasi nupp"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4094
+#: classes/cfg/cfgform.aw:4129
 msgid "Edasi nupp"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4108
+#: classes/cfg/cfgform.aw:4143
 msgid "Ei ole nuppu"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4401
+#: classes/cfg/cfgform.aw:4436
 msgid "Vali, millised kasutajagrupid ei tohi milliseid actione kasutada."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4532
+#: classes/cfg/cfgform.aw:4567
 msgid "Ebasobiv tabi nimi."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4537
+#: classes/cfg/cfgform.aw:4572
 msgid "Selle nimega tab juba olemas."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4543
+#: classes/cfg/cfgform.aw:4578
 msgid "Selle tabi alla pole v&otilde;imalik luua."
 msgstr ""
 
-#: classes/cfg/cfgform.aw:4547
+#: classes/cfg/cfgform.aw:4582
 msgid "Uus tab %s"
 msgstr ""
 

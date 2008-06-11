@@ -198,6 +198,10 @@ msgstr "Delete"
 msgid "Delete selected messages?"
 msgstr "Delete selected messages?"
 
+#: classes/applications/quickmessage/quickmessagebox.aw:311
+msgid "Error"
+msgstr ""
+
 #~ msgid "Omaduse Contacts (contactlist) caption"
 #~ msgstr "Contacts"
 

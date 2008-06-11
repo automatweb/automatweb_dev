@@ -266,11 +266,11 @@ msgstr ""
 msgid "Kokkuleppel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:162
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:192
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:170
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:200
 msgid "Nimi"
 msgstr ""
 

@@ -40,14 +40,12 @@ $GLOBALS["TRANS"]["Tabelvaade"] = "Table view";
 $GLOBALS["TRANS"]["Kalendervaade"] = "Calendar view";
 $GLOBALS["TRANS"]["Salvesta tabeli seaded"] = "Save table settings";
 $GLOBALS["TRANS"]["Taasta algseaded"] = "Restore defaults";
-$GLOBALS["TRANS"]["Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"] = "Modified settings will be lost when You restore defaults, continue?";
 $GLOBALS["TRANS"]["Minu t&ouml;&ouml;koht"] = "My workplace";
 $GLOBALS["TRANS"]["Klient"] = "Client";
 $GLOBALS["TRANS"]["Eraisikust klient"] = "Private person client";
 $GLOBALS["TRANS"]["T&ouml;&ouml;kaaslane"] = "Workmate";
 $GLOBALS["TRANS"]["Kliendi t&ouml;&ouml;taja"] = "Clients worker";
 $GLOBALS["TRANS"]["Veeru nimi"] = "Column name";
-$GLOBALS["TRANS"]["Järjekord"] = "Order";
 $GLOBALS["TRANS"]["Kasutusel"] = "Used";
 $GLOBALS["TRANS"]["Pealkiri"] = "Title";
 ?>

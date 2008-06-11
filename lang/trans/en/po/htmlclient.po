@@ -13,93 +13,93 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:274
+#: classes/cfg/htmlclient.aw:275
 msgid "Viga sisendandmetes"
 msgstr "Error in data"
 
-#: classes/cfg/htmlclient.aw:297
+#: classes/cfg/htmlclient.aw:298
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/cfg/htmlclient.aw:298
+#: classes/cfg/htmlclient.aw:299
 msgid "Ei"
 msgstr "No"
 
-#: classes/cfg/htmlclient.aw:324
+#: classes/cfg/htmlclient.aw:325
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/cfg/htmlclient.aw:325
+#: classes/cfg/htmlclient.aw:326
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/cfg/htmlclient.aw:326
+#: classes/cfg/htmlclient.aw:327
 msgid "Deaktiivne"
 msgstr "Not active"
 
-#: classes/cfg/htmlclient.aw:360
+#: classes/cfg/htmlclient.aw:361
 msgid "Vali"
 msgstr "Select"
 
-#: classes/cfg/htmlclient.aw:476 classes/cfg/htmlclient.aw:606
+#: classes/cfg/htmlclient.aw:477 classes/cfg/htmlclient.aw:607
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/cfg/htmlclient.aw:621
+#: classes/cfg/htmlclient.aw:622
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr "&lt;&lt;&lt; Go back"
 
-#: classes/cfg/htmlclient.aw:622
+#: classes/cfg/htmlclient.aw:623
 msgid "submit_and_back"
 msgstr "Submit and go back"
 
-#: classes/cfg/htmlclient.aw:632
+#: classes/cfg/htmlclient.aw:633
 msgid "Edasi &gt;&gt;&gt;"
 msgstr "Forward &gt;&gt;&gt;"
 
-#: classes/cfg/htmlclient.aw:633
+#: classes/cfg/htmlclient.aw:634
 msgid "submit_and_forward"
 msgstr "Submit and go forward"
 
-#: classes/cfg/htmlclient.aw:840
+#: classes/cfg/htmlclient.aw:841
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr "Data is not saved, do you wish to save before you continue?"
 
-#: classes/cfg/htmlclient.aw:901
+#: classes/cfg/htmlclient.aw:902
 msgid "Tagasiside"
 msgstr "Feedback"
 
-#: classes/cfg/htmlclient.aw:903
+#: classes/cfg/htmlclient.aw:904
 msgid "Kasutajatugi"
 msgstr "Support"
 
-#: classes/cfg/htmlclient.aw:904
+#: classes/cfg/htmlclient.aw:905
 msgid "Abi"
 msgstr "Help"
 
-#: classes/cfg/htmlclient.aw:905
+#: classes/cfg/htmlclient.aw:906
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/htmlclient.aw:908
+#: classes/cfg/htmlclient.aw:909
 msgid "J&auml;rjehoidja"
 msgstr "Bookmarks"
 
-#: classes/cfg/htmlclient.aw:912
+#: classes/cfg/htmlclient.aw:913
 msgid "Ajalugu"
 msgstr "History"
 
-#: classes/cfg/htmlclient.aw:916
+#: classes/cfg/htmlclient.aw:917
 msgid "Lisa kiiresti"
 msgstr "Add quickly"
 
-#: classes/cfg/htmlclient.aw:1387 classes/cfg/htmlclient.aw:1389
-#: classes/cfg/htmlclient.aw:1461 classes/cfg/htmlclient.aw:1463
+#: classes/cfg/htmlclient.aw:1388 classes/cfg/htmlclient.aw:1390
+#: classes/cfg/htmlclient.aw:1462 classes/cfg/htmlclient.aw:1464
 msgid "Kinni"
 msgstr "Close"
 
-#: classes/cfg/htmlclient.aw:1388 classes/cfg/htmlclient.aw:1389
-#: classes/cfg/htmlclient.aw:1462 classes/cfg/htmlclient.aw:1463
+#: classes/cfg/htmlclient.aw:1389 classes/cfg/htmlclient.aw:1390
+#: classes/cfg/htmlclient.aw:1463 classes/cfg/htmlclient.aw:1464
 msgid "Lahti"
 msgstr "Open"
 

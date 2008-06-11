@@ -470,83 +470,83 @@ msgstr ""
 msgid "Seose Kataloog (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:252
+#: classes/applications/crm/crm_settings.aw:255
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:253
+#: classes/applications/crm/crm_settings.aw:256
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:254
+#: classes/applications/crm/crm_settings.aw:257
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:255
+#: classes/applications/crm/crm_settings.aw:258
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:268
+#: classes/applications/crm/crm_settings.aw:271
 msgid "Tabelvaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:269
+#: classes/applications/crm/crm_settings.aw:272
 msgid "Kalendervaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:305
+#: classes/applications/crm/crm_settings.aw:308
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:326
+#: classes/applications/crm/crm_settings.aw:329
 msgid "Grupid kellele piirang ei m&otilde;ju"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:413
+#: classes/applications/crm/crm_settings.aw:416
 msgid "Salvesta tabeli seaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:434
+#: classes/applications/crm/crm_settings.aw:437
 msgid "Taasta algseaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:435
-msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
+#: classes/applications/crm/crm_settings.aw:438
+msgid "Muudetud seaded kaovad kui algseaded taastada, kas j&auml;tkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:448
+#: classes/applications/crm/crm_settings.aw:451
 msgid "Minu t&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:455
+#: classes/applications/crm/crm_settings.aw:458
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:462
+#: classes/applications/crm/crm_settings.aw:465
 msgid "Eraisikust klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:469
+#: classes/applications/crm/crm_settings.aw:472
 msgid "T&ouml;&ouml;kaaslane"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:476
+#: classes/applications/crm/crm_settings.aw:479
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:526
+#: classes/applications/crm/crm_settings.aw:529
 msgid "Veeru nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:530
-msgid "Järjekord"
+#: classes/applications/crm/crm_settings.aw:533
+msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:534
+#: classes/applications/crm/crm_settings.aw:537
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:538
+#: classes/applications/crm/crm_settings.aw:541
 msgid "Pealkiri"
 msgstr ""
 

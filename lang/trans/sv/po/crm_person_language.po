@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_person_language.aw:class_489_help
 msgid "Klassi Keeleoskus help"
 msgstr ""
@@ -98,7 +97,7 @@ msgstr ""
 msgid "v&auml;ga hea"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:58 classes/applications/crm/crm_person_language.aw:68
+#: classes/applications/crm/crm_person_language.aw:57
+#: classes/applications/crm/crm_person_language.aw:67
 msgid "--vali--"
 msgstr ""
-

@@ -182,18 +182,6 @@ msgstr ""
 msgid "Omaduse Taotlusl&otilde;iv (request_fee) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_classes_fee
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_classes_fee_comment
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_classes_fee_help
-msgid "Omaduse Lisaklasside l&otilde;iv (classes_fee) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/utility_model.aw:prop_payer
 msgid "Omaduse Maksja nimi (payer) caption"
 msgstr ""
@@ -242,52 +230,28 @@ msgstr ""
 msgid "Omaduse Maksekorraldus (payment_order) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_first_name
-msgid "Omaduse Eesnimi (author_first_name) caption"
+#: classes/applications/clients/patent_office/utility_model.aw:prop_applicant_reg
+msgid "Omaduse Taotleja on saanud kasuliku mudeli taotlemise &otilde;iguse kui (applicant_reg) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_first_name_comment
-msgid "Omaduse Eesnimi (author_first_name) kommentaar"
+#: classes/applications/clients/patent_office/utility_model.aw:prop_applicant_reg_comment
+msgid "Omaduse Taotleja on saanud kasuliku mudeli taotlemise &otilde;iguse kui (applicant_reg) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_first_name_help
-msgid "Omaduse Eesnimi (author_first_name) help"
+#: classes/applications/clients/patent_office/utility_model.aw:prop_applicant_reg_help
+msgid "Omaduse Taotleja on saanud kasuliku mudeli taotlemise &otilde;iguse kui (applicant_reg) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_last_name
-msgid "Omaduse Perekonnanimi (author_last_name) caption"
+#: classes/applications/clients/patent_office/utility_model.aw:prop_author
+msgid "Omaduse Autor (author) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_last_name_comment
-msgid "Omaduse Perekonnanimi (author_last_name) kommentaar"
+#: classes/applications/clients/patent_office/utility_model.aw:prop_author_comment
+msgid "Omaduse Autor (author) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_last_name_help
-msgid "Omaduse Perekonnanimi (author_last_name) help"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_address
-msgid "Omaduse Aadress (author_address) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_address_comment
-msgid "Omaduse Aadress (author_address) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_address_help
-msgid "Omaduse Aadress (author_address) help"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_country_code
-msgid "Omaduse Riigi kood (author_country_code) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_country_code_comment
-msgid "Omaduse Riigi kood (author_country_code) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_author_country_code_help
-msgid "Omaduse Riigi kood (author_country_code) help"
+#: classes/applications/clients/patent_office/utility_model.aw:prop_author_help
+msgid "Omaduse Autor (author) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/utility_model.aw:prop_author_disallow_disclose
@@ -446,18 +410,6 @@ msgstr ""
 msgid "Omaduse Leiutiskirjeldus (attachment_invention_description) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_seq
-msgid "Omaduse J&auml;rjestuse loetelu (attachment_seq) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_seq_comment
-msgid "Omaduse J&auml;rjestuse loetelu (attachment_seq) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_seq_help
-msgid "Omaduse J&auml;rjestuse loetelu (attachment_seq) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_demand
 msgid "Omaduse Kasuliku mudeli n&otilde;udlus (attachment_demand) caption"
 msgstr ""
@@ -494,28 +446,16 @@ msgstr ""
 msgid "Omaduse Leiutise olemuse l&uuml;hikokkuv&otilde;te (attachment_summary_et) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_summary_en
-msgid "Omaduse Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles (attachment_summary_en) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_summary_en_comment
-msgid "Omaduse Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles (attachment_summary_en) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_summary_en_help
-msgid "Omaduse Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles (attachment_summary_en) help"
-msgstr ""
-
 #: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_dwgs
-msgid "Omaduse Joonised ja muu illustreeriv materjal (attachment_dwgs) caption"
+msgid "Omaduse Illustratsioonid (attachment_dwgs) caption"
 msgstr ""
 
 #: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_dwgs_comment
-msgid "Omaduse Joonised ja muu illustreeriv materjal (attachment_dwgs) kommentaar"
+msgid "Omaduse Illustratsioonid (attachment_dwgs) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_dwgs_help
-msgid "Omaduse Joonised ja muu illustreeriv materjal (attachment_dwgs) help"
+msgid "Omaduse Illustratsioonid (attachment_dwgs) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/utility_model.aw:prop_attachment_fee
@@ -630,10 +570,6 @@ msgstr ""
 msgid "Seose E-mail (RELTYPE_EMAIL) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:rel_RELTYPE_COUNTRY
-msgid "Seose P&auml;riltolumaa (RELTYPE_COUNTRY) tekst"
-msgstr ""
-
 #: classes/applications/clients/patent_office/utility_model.aw:rel_RELTYPE_PROCURATOR_MENU
 msgid "Seose Volinike kaust (RELTYPE_PROCURATOR_MENU) tekst"
 msgstr ""
@@ -698,7 +634,11 @@ msgstr ""
 msgid "Seose Lisa prioriteeditoendi tolked (RELTYPE_ATTACHMENT_PRIO_TRANS) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/utility_model.aw:273
+#: classes/applications/clients/patent_office/utility_model.aw:313
+msgid "Ainult pdf formaadis failid lubatud"
+msgstr ""
+
+#: classes/applications/clients/patent_office/utility_model.aw:320
 msgid "Leiutiskirjeldus peab olema lisatud"
 msgstr ""
 

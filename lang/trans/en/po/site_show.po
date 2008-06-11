@@ -13,51 +13,51 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2189
+#: classes/contentmgmt/site_show.aw:2190
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr "site_show::do_draw_menus(): no compiled filename set!"
 
-#: classes/contentmgmt/site_show.aw:2270
+#: classes/contentmgmt/site_show.aw:2271
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 
-#: classes/contentmgmt/site_show.aw:2481
+#: classes/contentmgmt/site_show.aw:2482
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr "site_show::make_final_vars(): need JOIN_FORM sub back!"
 
-#: classes/contentmgmt/site_show.aw:2995
+#: classes/contentmgmt/site_show.aw:2996
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:3186
+#: classes/contentmgmt/site_show.aw:3187
 msgid "Lisa uus k&otilde;rvale"
 msgstr "Add new on same level"
 
-#: classes/contentmgmt/site_show.aw:3196
+#: classes/contentmgmt/site_show.aw:3197
 msgid "Lisa uus alamkaust"
 msgstr "Add new subfolder"
 
-#: classes/contentmgmt/site_show.aw:3206
+#: classes/contentmgmt/site_show.aw:3207
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/contentmgmt/site_show.aw:3216
+#: classes/contentmgmt/site_show.aw:3217
 msgid "Muuda &otilde;igusi"
 msgstr "Change rights"
 
-#: classes/contentmgmt/site_show.aw:3225
+#: classes/contentmgmt/site_show.aw:3226
 msgid "Peida"
 msgstr "Hide"
 
-#: classes/contentmgmt/site_show.aw:3229
+#: classes/contentmgmt/site_show.aw:3230
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/contentmgmt/site_show.aw:3237 classes/contentmgmt/site_show.aw:3269
+#: classes/contentmgmt/site_show.aw:3238 classes/contentmgmt/site_show.aw:3270
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/contentmgmt/site_show.aw:3257
+#: classes/contentmgmt/site_show.aw:3258
 msgid "Lisa uus"
 msgstr "Add new"
 

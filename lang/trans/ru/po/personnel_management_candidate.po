@@ -73,6 +73,18 @@ msgstr ""
 msgid "Omaduse Lisainfo (addinfo) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_recommendations
+msgid "Omaduse Soovitajad (recommendations) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_recommendations_comment
+msgid "Omaduse Soovitajad (recommendations) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_recommendations_help
+msgid "Omaduse Soovitajad (recommendations) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_PERSON
 msgid "Seose Kandideerja (RELTYPE_PERSON) tekst"
 msgstr ""
@@ -83,6 +95,10 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_JOB_OFFER
 msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_RECOMMENDATION
+msgid "Seose Soovitus (RELTYPE_RECOMMENDATION) tekst"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_candidate.aw:92

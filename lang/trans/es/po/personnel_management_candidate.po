@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_management/personnel_management_candidate.aw:class_812_help
 msgid "Klassi Kandidatuur help"
 msgstr ""
@@ -74,6 +73,18 @@ msgstr ""
 msgid "Omaduse Lisainfo (addinfo) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_recommendations
+msgid "Omaduse Soovitajad (recommendations) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_recommendations_comment
+msgid "Omaduse Soovitajad (recommendations) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_recommendations_help
+msgid "Omaduse Soovitajad (recommendations) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_PERSON
 msgid "Seose Kandideerja (RELTYPE_PERSON) tekst"
 msgstr ""
@@ -86,6 +97,10 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_RECOMMENDATION
+msgid "Seose Soovitus (RELTYPE_RECOMMENDATION) tekst"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_candidate.aw:92
 msgid "--vali--"
 msgstr ""
@@ -93,4 +108,3 @@ msgstr ""
 #: classes/applications/personnel_management/personnel_management_candidate.aw:102
 msgid "%s kandidatuur kohale %s"
 msgstr ""
-

@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:class_1453_help
-msgid "Klassi Euroopa patendi eestikeelne patendikirjeldus help"
+msgid "Klassi EP patent help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:prop_applicant
@@ -289,4 +288,3 @@ msgstr ""
 #: classes/applications/clients/patent_office/euro_patent_et_desc.aw:rel_RELTYPE_TRADEMARK_STATUS
 msgid "Seose Staatus (RELTYPE_TRADEMARK_STATUS) tekst"
 msgstr ""
-

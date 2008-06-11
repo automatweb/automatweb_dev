@@ -37,16 +37,16 @@ msgstr ""
 msgid "Omaduse Pangamakse objekt (bank_payment) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_add.aw:prop_patents_menu
-msgid "Omaduse Patentide kaust (patents_menu) caption"
+#: classes/applications/clients/patent_office/patent_add.aw:prop_trademarks_menu
+msgid "Omaduse Patentide kaust (trademarks_menu) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_add.aw:prop_patents_menu_comment
-msgid "Omaduse Patentide kaust (patents_menu) kommentaar"
+#: classes/applications/clients/patent_office/patent_add.aw:prop_trademarks_menu_comment
+msgid "Omaduse Patentide kaust (trademarks_menu) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_add.aw:prop_patents_menu_help
-msgid "Omaduse Patentide kaust (patents_menu) help"
+#: classes/applications/clients/patent_office/patent_add.aw:prop_trademarks_menu_help
+msgid "Omaduse Patentide kaust (trademarks_menu) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_add.aw:prop_series
@@ -69,8 +69,8 @@ msgstr ""
 msgid "Seose Volinike kaust (RELTYPE_PROCURATOR_MENU) tekst"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent_add.aw:rel_RELTYPE_PATENT_MENU
-msgid "Seose Patentide kaust (RELTYPE_PATENT_MENU) tekst"
+#: classes/applications/clients/patent_office/patent_add.aw:rel_RELTYPE_TRADEMARK_MENU
+msgid "Seose Patentide kaust (RELTYPE_TRADEMARK_MENU) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent_add.aw:rel_RELTYPE_SERIES

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_skill_manager.aw:class_1407_help
 msgid "Klassi Oskuste haldur help"
 msgstr ""
@@ -91,26 +90,26 @@ msgid "ID"
 msgstr ""
 
 #: classes/applications/crm/crm_skill_manager.aw:129
+#: classes/applications/crm/crm_skill_manager.aw:140
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:138
+#: classes/applications/crm/crm_skill_manager.aw:148
 msgid "Vahepealkiri (ei saa siduda isikuga)"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:146
+#: classes/applications/crm/crm_skill_manager.aw:156
 msgid "Saab m&auml;&auml;rata taset"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:151
+#: classes/applications/crm/crm_skill_manager.aw:161
 msgid "Tasemed"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:157
+#: classes/applications/crm/crm_skill_manager.aw:167
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_manager.aw:187
+#: classes/applications/crm/crm_skill_manager.aw:197
 msgid "--vali--"
 msgstr ""
-
