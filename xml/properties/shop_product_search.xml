@@ -2,18 +2,16 @@
 <properties>
       <property>
             <name>name</name>
-            <table>objects</table>
             <group>data</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>objects</table>
             <type>textbox</type>
-            <parent>gen_left</parent>
+            <field>name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>wh</name>
-            <table>objects</table>
             <group>data</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -23,8 +21,8 @@
       </property>
       <property>
             <name>oc</name>
-            <table>objects</table>
             <group>data</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -34,8 +32,8 @@
       </property>
       <property>
             <name>objs_in_res</name>
-            <table>objects</table>
             <group>data</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -43,8 +41,8 @@
       </property>
       <property>
             <name>fld_tb</name>
-            <table>objects</table>
             <group>folders</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
@@ -53,8 +51,8 @@
       </property>
       <property>
             <name>fld_tbl</name>
-            <table>objects</table>
             <group>folders</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -63,8 +61,8 @@
       </property>
       <property>
             <name>s_form</name>
-            <table>objects</table>
             <group>s_form</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -73,8 +71,8 @@
       </property>
       <property>
             <name>search_btn_caption</name>
-            <table>objects</table>
             <group>s_form</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -82,8 +80,8 @@
       </property>
       <property>
             <name>s_tbl</name>
-            <table>objects</table>
             <group>s_res</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -92,8 +90,8 @@
       </property>
       <property>
             <name>s_tbl_ctr</name>
-            <table>objects</table>
             <group>s_res_ctr</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -102,8 +100,8 @@
       </property>
       <property>
             <name>search_form</name>
-            <table>objects</table>
             <group>search</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
@@ -111,8 +109,8 @@
       </property>
       <property>
             <name>s_res</name>
-            <table>objects</table>
             <group>search</group>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>

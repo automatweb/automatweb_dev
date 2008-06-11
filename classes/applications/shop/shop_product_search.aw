@@ -1,19 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.9 2008/05/27 12:55:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.10 2008/06/11 10:16:40 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
 @classinfo syslog_type=ST_SHOP_PRODUCT_SEARCH relationmgr=yes no_comment=1 no_status=1 maintainer=kristo
 
-@default table=objects
 @default group=general
+@default table=objects
+
+	@property name type=textbox group=data
+	@caption Nimi
+
 @default field=meta 
 @default method=serialize
-
 @default group=data
-
-	@property name type=textbox parent=gen_left
-	@caption Nimi
 
 	@property wh type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 
 	@caption Ladu
