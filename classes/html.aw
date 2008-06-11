@@ -597,7 +597,7 @@ class html extends aw_template
 		}
 		if (isset($onclick))
 		{
-			$onc = " onclick=\"{$onclick}\"";
+			$onc = " onclick='{$onclick}'";
 		}
 		$rv = "$span<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
 		return $rv;
