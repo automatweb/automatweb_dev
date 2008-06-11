@@ -10,36 +10,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property billp_tb type=toolbar store=no no_caption=1
 	@caption Arve toolbar
 
-	@layout top_split type=hbox
+	@layout main_split type=vbox
+		@layout top_split parent=main_split type=hbox
 
-	@layout top_left type=vbox parent=top_split closeable=1
+			@layout left_split type=vbox parent=top_split
+
+				@layout top_left type=vbox parent=left_split closeable=1 area_caption=&Uuml;ldandmed
+
+				@layout bottom_left type=vbox parent=left_split closeable=1 area_caption=Lisainfo
+
+			@layout right_split type=vbox parent=top_split
+
+				@layout top_right type=vbox parent=right_split closeable=1 area_caption=Kliendi&nbsp;andmed
+
+				@layout bottom_right type=vbox parent=right_split closeable=1 area_caption=Ladu
+
+		@layout bottom parent=main_split type=vbox closeable=1 area_caption=Read
  
+	// top left lyt
 	@property name type=textbox table=objects field=name parent=top_left
 	@caption Nimi
-
-	@property comment type=textbox table=objects field=comment parent=top_left
-	@caption Kommentaar lisale
-
-	@property time_spent_desc type=textbox table=aw_crm_bill field=aw_time_spent_desc parent=top_left
-	@caption Kulunud aeg tekstina
-
+	
 	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no parent=top_left
 	@caption Number
-
-	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete parent=top_left
-	@caption Klient
-
-	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name parent=top_left
-	@caption Kliendi nimi
-	
-	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address parent=top_left
-	@caption Kliendi aadress
-	
-	@property customer_address_meta type=text no_caption=1 parent=top_left
-	@caption Kliendi aadressi muutujad metas
-
-	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code parent=top_left
-	@caption Kliendikood
 
 	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl parent=top_left reltype=RELTYPE_IMPL
 	@caption Arve esitaja
@@ -56,73 +49,113 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved default=-1 parent=top_left
 	@caption Laekumiskuup&auml;ev
 
-	@property bill_trans_date type=date_select table=aw_crm_bill field=aw_trans_date default=-1 parent=top_left
-	@caption Kandekuup&auml;ev
-
 	@property payment_mode type=select table=aw_crm_bill field=aw_payment_mode parent=top_left
 	@caption Makseviis
 
 	@property state type=select table=aw_crm_bill field=aw_state parent=top_left
 	@caption Staatus
 
-	@property on_demand type=checkbox table=aw_crm_bill field=aw_on_demand parent=top_left
-	@caption Sissen&otilde;udmisel
+	@property sum type=text table=aw_crm_bill field=aw_sum size=5  parent=top_left
+	@caption Summa
 
 	@property partial_recieved type=text field=meta method=serialize parent=top_left
 	@caption Osaline laekumine
 
-	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5  parent=top_left
+
+
+	// bottom left lyt
+	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5  parent=bottom_left
 	@caption Allahindlus (%)
 
-	@property sum type=text table=aw_crm_bill field=aw_sum size=5  parent=top_left
-	@caption Summa
-
-	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill parent=top_left
-	@caption Kuuarve
-
-	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE parent=top_left
+	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE parent=bottom_left
 	@caption Keel
 
-	@property rows_different_pages type=text field=meta method=serialize parent=top_left
-	@caption Read erinevatel lehek&uuml;lgedel
+	@property on_demand type=checkbox table=aw_crm_bill field=aw_on_demand parent=bottom_left
+	@caption Sissen&otilde;udmisel
 
-	@layout top_right parent=top_split type=vbox closeable=1
-
-	@property warehouse type=relpicker table=aw_crm_bill field=aw_warehouse reltype=RELTYPE_WAREHOUSE parent=top_right
-	@caption Ladu
-
-	@property price_list type=relpicker table=aw_crm_bill field=aw_price_list reltype=RELTYPE_PRICE_LIST parent=top_right
-	@caption Hinnakiri
-
-	@property transfer_method table=aw_crm_bill type=relpicker field=aw_transfer_method reltype=RELTYPE_TRANSFER_METHOD parent=top_right
-	@caption L&auml;hetusviis
-	
-	@property transfer_condition table=aw_crm_bill type=relpicker field=aw_transfer_condition reltype=RELTYPE_TRANSFER_CONDITION parent=top_right
-	@caption L&auml;hetustingimus
-
-	@property selling_order type=relpicker table=aw_crm_bill field=aw_selling_order reltype=RELTYPE_SELLING_ORDER parent=top_right
-	@caption M&uuml;&uuml;gitellimus
-
-	@property transfer_address type=relpicker table=aw_crm_bill reltype=RELTYPE_ADDRESS field=aw_transfer_address parent=top_right
-	@caption L&auml;hetusaadress
-	
-	@property mail_notify type=checkbox ch_value=1 store=no parent=top_right
+	@property mail_notify type=checkbox ch_value=1 store=no parent=bottom_left
 	@caption Teade laekumisest e-postile
 
-	@property approved type=checkbox table=aw_crm_bill ch_value=1 field=aw_approved parent=top_right
+	@property approved type=checkbox table=aw_crm_bill ch_value=1 field=aw_approved parent=bottom_left
 	@caption Kinnitatud
 
-	@property bill_rows type=text store=no no_caption=1
-	@caption Arveread
+	@property bill_trans_date type=date_select table=aw_crm_bill field=aw_trans_date default=-1 parent=bottom_left
+	@caption Kandekuup&auml;ev
 
-	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker
+	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker parent=bottom_left
 	@caption Allkirjastajad
 
-	@property ctp_text type=textbox table=objects field=meta method=serialize
+
+
+	// top right lyt
+	@property customer_name type=textbox table=aw_crm_bill field=aw_customer_name parent=top_right
+	@caption Kliendi nimi
+	
+	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete parent=top_right
+	@caption Klient
+
+	@property customer_code type=textbox table=aw_crm_bill field=aw_customer_code parent=top_right
+	@caption Kliendikood
+
+	@property customer_address type=textbox table=aw_crm_bill field=aw_customer_address parent=top_right
+	@caption Kliendi aadress
+
+	@property customer_add_meta_cb type=callback callback=customer_add_meta_cb store=no
+	
+	@property customer_address_meta type=text no_caption=1 parent=top_right
+	@caption Kliendi aadressi muutujad metas
+	
+	@property ctp_text type=textbox table=objects field=meta method=serialize parent=top_right
 	@caption Kontaktisik vabatekstina
+
+
+
+	// bottom right lyt
+	@property warehouse type=relpicker table=aw_crm_bill field=aw_warehouse reltype=RELTYPE_WAREHOUSE parent=bottom_right
+	@caption Ladu
+
+	@property price_list type=relpicker table=aw_crm_bill field=aw_price_list reltype=RELTYPE_PRICE_LIST parent=bottom_right
+	@caption Hinnakiri
+
+	@property transfer_method table=aw_crm_bill type=relpicker field=aw_transfer_method reltype=RELTYPE_TRANSFER_METHOD parent=bottom_right
+	@caption L&auml;hetusviis
+	
+	@property transfer_condition table=aw_crm_bill type=relpicker field=aw_transfer_condition reltype=RELTYPE_TRANSFER_CONDITION parent=bottom_right
+	@caption L&auml;hetustingimus
+
+	@property selling_order type=relpicker table=aw_crm_bill field=aw_selling_order reltype=RELTYPE_SELLING_ORDER parent=bottom_right
+	@caption M&uuml;&uuml;gitellimus
+
+	@property transfer_address type=relpicker table=aw_crm_bill reltype=RELTYPE_ADDRESS field=aw_transfer_address parent=bottom_right
+	@caption L&auml;hetusaadress
+	
+	// bottom lyt
+
+	@property bill_rows type=text store=no no_caption=1 parent=bottom
+	@caption Arveread
+
+
+
+
+	#leftovers
+
+
+@default group=other_data
 
 	@property show_oe_add type=checkbox ch_value=1 field=meta method=serialize
 	@caption N&auml;ita arve lisas muid kulusid
+
+	@property rows_different_pages type=text field=meta method=serialize
+	@caption Read erinevatel lehek&uuml;lgedel
+
+	@property comment type=textbox table=objects field=comment
+	@caption Kommentaar lisale
+
+	@property time_spent_desc type=textbox table=aw_crm_bill field=aw_time_spent_desc
+	@caption Kulunud aeg tekstina
+
+	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
+	@caption Kuuarve
 
 	@property udef1 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 1
@@ -156,6 +189,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_tb type=toolbar store=no no_caption=1
 	@property bill_task_list type=table store=no no_caption=1
 
+@groupinfo other_data caption="Muud andmed"
 @groupinfo delivery_notes caption="Saatelehed"
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
@@ -392,27 +426,7 @@ class crm_bill extends class_base
 				break;
 				
 			case "customer_address_meta":
-				if(!$arr["obj_inst"]->prop("customer_name"))
-				{
 					return PROP_IGNORE;
-				}
-				$ad = $arr["obj_inst"]->meta("customer_addr");
-				$dt = array("country" => t("Riik"),"country_en" => t("Riik inglise keeles"),"county" => t("Maakond"),"city" => t("Linn"),"street" => t("T&auml;nav, maja, korter"),"index" => t("Postiindeks"));
-				$prop["value"] = "<table><tr>";
-				foreach($ad as $key => $val)
-				{
-					$prop["value"] .= "<td>" . $dt[$key] . "</td>";
-				}
-				$prop["value"].= "</tr><tr>";
-				foreach($ad as $key => $val)
-				{
-					$prop["value"].= "<td>" . html::textbox(array(
-						"name" => "address_meta[".$key."]",
-						"size" => 20,
-						"value" => $val,
-					)) . "</td>";
-				}
-				$prop["value"].= "</tr></table>";
 				break;
 
 			case "customer":
@@ -708,6 +722,38 @@ class crm_bill extends class_base
 		return $retval;
 	}
 
+
+	function customer_add_meta_cb($arr)
+	{
+		if(!$arr["obj_inst"]->prop("customer_name"))
+		{
+			return PROP_IGNORE;
+		}
+		$ad = $arr["obj_inst"]->meta("customer_addr");
+		$dt = array(
+			"street" => t("T&auml;nav, maja, korter"),
+			"index" => t("Postiindeks"),
+			"city" => t("Linn"),
+			"county" => t("Maakond"),
+			"country" => t("Riik"),
+			"country_en" => t("Riik inglise keeles"),
+		);
+		classload('cfg/htmlclient');
+		
+		foreach($ad as $key => $val)
+		{
+			$retval["address_meta[".$key."]"] = array(
+				"name" => "address_meta[".$key."]",
+				"type" => "textbox",
+				"parent" => "top_right",
+				"caption" => $dt[$key],
+				"size" => 20,
+				"value" => $val,
+			);
+		}
+
+		return $retval;
+	}
 
 	/**
 		@attrib name=add_payment all_args=1
