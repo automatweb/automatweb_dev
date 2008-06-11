@@ -1846,7 +1846,6 @@ class crm_person extends class_base
 				$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
 				if($pm->yob_from)
 				{
-					arr($pm->yob_from);
 					if((int)$pm->yob_from < 0)
 					{
 						$pm->yob_from = date("Y") + (int)$pm->yob_from;
