@@ -70,6 +70,19 @@ class crm_city extends class_base
 		);
 	}
 	
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+		}
+		return $retval;
+	}
+	
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);

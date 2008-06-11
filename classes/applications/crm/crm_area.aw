@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.7 2008/06/11 19:00:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.8 2008/06/11 19:09:30 instrumental Exp $
 // crm_area.aw - Piirkond 
 /*
 
@@ -39,25 +39,16 @@ class crm_area extends class_base
 			"name", "comment"
 		);
 	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
+	
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	

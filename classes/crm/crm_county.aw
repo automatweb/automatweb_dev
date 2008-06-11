@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.10 2008/06/11 19:00:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.11 2008/06/11 19:09:29 instrumental Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
@@ -65,6 +65,19 @@ class crm_county extends class_base
 		$this->trans_props = array(
 			"name", "comment"
 		);
+	}
+	
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+		}
+		return $retval;
 	}
 	
 	function callback_get_transl($arr)
