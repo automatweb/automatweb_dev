@@ -53,7 +53,7 @@ class file_manager extends aw_template
 		}
 		if ($arr["file_id"])
 		{
-			$image_url = html::get_change_url($arr["file_id"], array("in_popup" => $_GET["in_popup"]));
+			$image_url = html::get_change_url($arr["file_id"], array("in_popup" => $_GET["in_popup"], "docid" => $doc->id()));
 		}
 		else
 		{

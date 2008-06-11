@@ -27,17 +27,20 @@ InsertAWFupCommand.Execute=function() {
 }
 FCKCommands.RegisterCommand('awfilechange', InsertAWFupCommand );
 
+
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function( menu, tag, tagName )
 	{
-		if ( tag.tagName == 'SPAN' && tag._awfileplaceholder )
-		{
-			menu.AddSeparator();
-			menu.AddItem( "awfilechange", "Faili atribuudid", 37 ) ;
-		}
-	}}
-);
-
+			if ( tagName == 'SPAN' )
+			{
+				if (tag._awfileplaceholder)
+				{
+					menu.AddSeparator();
+					menu.AddItem( "awfilechange", FCKLang.AWFileAttributes, 37 ) ;
+				}
+			}
+	}
+});
 
 /**
  * placeholder code
@@ -50,13 +53,6 @@ var FCKAWFilePlaceholders = new Object() ;
 FCKAWFilePlaceholders.Add = function( name )
 {
 	var oSpan = FCK.InsertElement( 'span' ) ;
-	this.SetupSpan( oSpan, name ) ;
-}
-
-// Add a new placeholder at the actual selection.
-FCKAWFilePlaceholders.Change = function( span, name )
-{
-	var oSpan = span;
 	this.SetupSpan( oSpan, name ) ;
 }
 

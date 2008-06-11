@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.8 2008/06/05 17:04:55 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.9 2008/06/11 10:31:41 hannes Exp $
 /*
 
 
@@ -299,18 +299,6 @@ class file extends class_base
 				$retval = PROP_IGNORE;
 				break;
 			case "comment":
-				$js = "<script>
-					tb = document.getElementById(\"".$data["name"]."\");
-					if(window.parent.name == \"InsertAWFupCommand\" && tb.value == \"\")
-					{
-						FCK=window.parent.opener.FCK;
-						if(FCK.Selection.GetType() == \"Text\")
-						{
-							tb.value = (FCK.EditorDocument.selection)?FCK.EditorDocument.selection.createRange().text:FCK.EditorDocument.getSelection();
-						}
-					}
-				</script>";
-				$data["post_append_text"] = $js;
 			break;
 			case "filename":
 				if ($arr["new"])
@@ -651,22 +639,27 @@ class file extends class_base
 				}
 
 				FCK=window.parent.opener.FCK;
-				var eSelected = FCK.Selection.MoveToAncestorNode(\"A\");
+				
+				var eSelected = FCK.Selection.GetSelectedElement() ;
+				
 				if (eSelected)
 				{
-					eSelected.href=\"".$link_url."\";
-					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\";
-					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ;
+					if (eSelected.tagName == 'SPAN' && eSelected._awfileplaceholder  )
+					{
+						eSelected.parentNode.removeChild( eSelected ) ;
+						$.get(\"$url\", function(data){
+							window.parent.opener.FCKAWFilePlaceholders.Add(data);
+							window.parent.close();
+						});
+					}
 				}
 				else
 				{
-					//window.parent.opener.FCKPlaceholders.Add(\"tere\");
 					$.get(\"$url\", function(data){
-						window.parent.opener.FCKPlaceholders.Add(data);
+						window.parent.opener.FCKAWFilePlaceholders.Add(data);
 						window.parent.close();
 					});
 				}
-
 			</script>
 			");
 		}
