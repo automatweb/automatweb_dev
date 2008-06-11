@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.141 2008/06/10 09:35:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.142 2008/06/11 09:35:22 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -375,14 +375,17 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
-		$xprops[$prop["name"]."[0]_caption"] = array(
-			"type" => "text",
-			"value" => $prop["caption"],
-			"subtitle" => 1,
-			"store" => "no",
-			"name" => $this->elname."_caption",
-			"caption" => " ",
- 		);
+		if (empty($arr["prop"]["parent"]))
+		{
+			$xprops[$prop["name"]."[0]_caption"] = array(
+				"type" => "text",
+				"value" => $prop["caption"],
+				"subtitle" => 1,
+				"store" => "no",
+				"name" => $this->elname."_caption",
+				"caption" => " ",
+	 		);
+		}
 
 		$xprops[$prop["name"]."[0]table"] = array(
 			"type" => "text",
@@ -428,7 +431,7 @@ class releditor extends core
 		$xprops[$prop["name"]."[0]add_button"] = array(
 			"type" => "text",
 			"value" => '
-			<input type="submit" value="Lisa" name="'.$prop["name"].'" id="button" onchange="null;set_changed();"/>
+			<input type="submit" value="'.t("Lisa").'" name="'.$prop["name"].'" id="button" onchange="null;set_changed();"/>
 			<script>
 				$.aw_releditor({
 					"releditor_name" : "'.$prop["name"].'",
@@ -443,6 +446,7 @@ class releditor extends core
 			"caption" => " ",//$this->elname."_add_button",
  		);
 
+		$arp = $arr["prop"]["parent"];
 		foreach($xprops as $key => $prop)
 		{
 			$get_prop_arr = $arr;
@@ -456,8 +460,11 @@ class releditor extends core
 			}
 			$get_prop_arr["prop"]["name"] = $prop["name"];
 			$xprops[$key] = $get_prop_arr["prop"];
+			if ($arp != "")
+			{
+				$xprops[$key]["parent"] = $arp;
+			}
 		}
-
 		return $xprops;
 
 	}
@@ -2115,13 +2122,14 @@ $this->site_log(date("d.m.Y H:i:s").": ".dbg::dump($arr));
 	**/
 	function js_get_button_name($arr)
 	{
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		if ($arr["is_edit"] == 1)
 		{
 			die(trim(t("Muuda")));
 		}
 		else
 		{
-			die(trim(t("Lisa")));
+			die(t("Lisa"));
 		}
 	}
 
