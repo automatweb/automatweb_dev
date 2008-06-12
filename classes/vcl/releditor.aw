@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.142 2008/06/11 09:35:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.143 2008/06/12 09:41:22 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -392,8 +392,8 @@ class releditor extends core
 			"value" => $this->init_new_rel_table($arr),
 			"store" => "no",
 			"name" => $this->elname."_table",
-			"caption" => " ",
-			"no_caption" => 1
+			"caption" => "",
+			"no_caption" => 1,
  		);
 
 		$tmp = $t->parse_properties(array(
@@ -1740,7 +1740,7 @@ class releditor extends core
 		{
 			die("error, no property data! given: ".dbg::dump($arr));
 		}
-$this->site_log(date("d.m.Y H:i:s").": ".dbg::dump($arr));
+
 		$num = reset(array_keys($arr[$propn]));
 
 		$t = new aw_table;
@@ -1851,6 +1851,8 @@ $this->site_log(date("d.m.Y H:i:s").": ".dbg::dump($arr));
 		else
 		{
 			$defs = array();
+			$this->sort_relp = $rel_props;
+			uasort($cur_prop["table_fields"], array(&$this, "__props_sort"));
 			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 			{
 				$data = $rel_props[$prop_name];
@@ -1871,6 +1873,13 @@ $this->site_log(date("d.m.Y H:i:s").": ".dbg::dump($arr));
 			"caption" => t("Kustuta"),
 			"align" => "center"
 		));
+	}
+
+	function __props_sort($a, $b)
+	{
+		$a = $this->sort_relp[$a];
+		$b = $this->sort_relp[$b];
+		return $a["ord"] - $b["ord"];
 	}
 
 	private function _insert_js_data_to_table($t, $cur_prop, $prop_data, $clid, $idx, $cfgform_id)
@@ -1996,9 +2005,9 @@ $this->site_log(date("d.m.Y H:i:s").": ".dbg::dump($arr));
 				default:
 					$tc_val = $pv["value"];
 			}
-			if (!empty($d[$tc_name]))
+			if (trim($d[$tc_name]) != "")
 			{
-				$d[$tc_name] .= $data["emb_tbl_col_sep"].$tc_val;
+				$d[$tc_name] .= ($tc_val != "" ? $data["emb_tbl_col_sep"] : "").$tc_val;
 			}
 			else
 			{
