@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.36 2008/06/08 12:41:14 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.37 2008/06/12 06:59:26 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -267,7 +267,7 @@ class personnel_management_job_offer extends class_base
 			"clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 		));
 		$this->trans_props = array(
-			"subject", "keywords", "workinfo", "requirements", "weoffer", "info",
+			"name", "keywords", "workinfo", "requirements", "weoffer", "info",
 		);
 	}
 
@@ -277,10 +277,6 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "transl":
-				$this->trans_save($arr, $this->trans_props);
-				break;
-
 			case "notify_me":
 				$prop["value"] = $arr["obj_inst"]->get_prop($prop["name"]);
 				break;
@@ -1058,6 +1054,10 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "contact":
 				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0 && $prop["value"] != "0")
 				{
