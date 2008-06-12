@@ -42,6 +42,11 @@ class crm_skill_manager extends class_base
 
 	function callback_pre_edit($arr)
 	{
+		if($arr["request"]["group"] == "skills")
+		{
+			aw_global_set("output_charset", "utf-8");
+		}
+
 		$meta_tree = new object_tree(array(
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => CL_CRM_SKILL,
@@ -85,12 +90,15 @@ class crm_skill_manager extends class_base
 	}
 
 	function _get_skills_tree($arr)
-	{	
+	{
+		$ini_langs = aw_ini_get("languages.list");
+
 		$tree = &$arr["prop"]["vcl_inst"];
 		$obj = $arr["obj_inst"];
 		$object_name = $obj->name();
 		$tree->add_item(0, array(
-			"name" => $object_name,
+			// For translation purposes is the charset for this view UTF-8...
+			"name" => iconv($ini_langs[$obj->lang_id]["charset"], "UTF-8", $object_name),
 			"id" => $obj->id(),
 			"url" => $this->mk_my_orb("change", array(
 				"id" => $obj->id(),
@@ -104,7 +112,7 @@ class crm_skill_manager extends class_base
 			{
 				$o = new object($obj_id);
 				$tree->add_item($o->parent(),array(
-					"name" => $o->name(),
+					"name" => iconv($ini_langs[$o->lang_id()]["charset"], "UTF-8", $o->name()),
 					"id" => $o->id(),
 					"url" => aw_url_change_var(array("skill" => $o->id())),
 				));
@@ -131,8 +139,10 @@ class crm_skill_manager extends class_base
 			"callb_pass_row" => true,
 			"align" => "center",
 		));
+		$ini_langs = aw_ini_get("languages.list");
 		$langs = get_instance("languages")->get_list();
-		unset($langs[$arr["obj_inst"]->lang_id()]);
+		$olid = $arr["obj_inst"]->lang_id();
+		unset($langs[$olid]);
 		foreach($langs as $lang_id => $lang)
 		{
 			$t->define_field(array(
@@ -239,7 +249,7 @@ class crm_skill_manager extends class_base
 			$trans = array(
 				"is_new" => 0,
 				"id" => $id,
-				"name" => $var_name,
+				"name" => iconv($ini_langs[$olid]["charset"], "UTF-8", $var_name),
 				"subheading" => html::checkbox(array(
 					"name" => "submeta[".$id."][subheading]",
 					"checked" => $o->prop("subheading"),
@@ -260,43 +270,31 @@ class crm_skill_manager extends class_base
 			{
 				$trans[$lang_id] = html::textbox(array(
 					"name" => "submeta[" . $id . "][trans][".$lang_id."]",
-					"value" => $tr[$lang_id]["name"],
+					"value" => iconv($ini_langs[$lang_id]["charset"], "UTF-8", $tr[$lang_id]["name"]),
 					"size" => 40,
 				));
 			}
 			$t->define_data($trans);
 		};
 
-		// now add the textbox thingies to allow adding of new data
-
-		$obj_name = $arr["obj_inst"]->name();
-		$pathstr[] = html::href(array(
-			"url" => aw_url_change_var(array(
-				"skill" => "",
-			)),
-			"caption" => $obj_name,
-		));
-
-		// I need to calculate the path
-		if ($arr["request"]["skill"])
+		if(!empty($arr["request"]["skill"]))
 		{
-			$ox = new object($arr["request"]["skill"]);
-			$stop = $arr["obj_inst"]->id();
-			$path = $ox->path(array("to" => $stop));
-			foreach($path as $po)
+			$other_data = array(
+				"id" => "other",
+				"name" => iconv($ini_langs[$olid]["charset"], "UTF-8", $root_obj->other),
+			);
+			$tr = $root_obj->meta("translations");
+			foreach($langs as $lang_id => $lang)
 			{
-				if ($po->id() != $stop)
-				{
-					$po_name = $po->name();
-					$pathstr[] = html::href(array(
-						"url" => aw_url_change_var(array(
-							"skill" => $po->id(),
-						)),
-						"caption" => $po_name,
-					));
-				};
-			};
-		};
+				$other_data[$lang_id] = html::textbox(array(
+					"name" => "submeta[other][trans][".$lang_id."]",
+					"value" => iconv($ini_langs[$lang_id]["charset"], "UTF-8", $tr[$lang_id]["other"]),
+					"size" => 40,
+				));
+			}
+			$t->define_data($other_data);
+		}
+
 		$t->set_sortable(false);
 	}
 
@@ -311,6 +309,10 @@ class crm_skill_manager extends class_base
 
 	function callb_ord($arr)
 	{
+		if($arr["id"] == "other")
+		{
+			return "";
+		}
 		return html::textbox(array(
 			"name" => "submeta[" . $arr["id"] . "][ord]",
 			"size" => 4,
@@ -351,6 +353,9 @@ class crm_skill_manager extends class_base
 	function submit_meta($arr = array())
 	{
 		$obj = $arr["obj_inst"];
+		$olid = $obj->lang_id();
+		$curlid = aw_global_get("lang_id");
+		$ini_langs = aw_ini_get("languages.list");
 		$new = $arr["request"]["submeta"]["new"];
 		if ($new["name"])
 		{
@@ -360,15 +365,15 @@ class crm_skill_manager extends class_base
 			{
 				$parent = $arr["request"]["skill"];
 				$parent_obj = obj($parent);
-				$new["lvl"] = $parent->prop("lvl");
-				$new["lvl_meta"] = $parent->prop("lvl_meta");
+				$new["lvl"] = $parent_obj->prop("lvl");
+				$new["lvl_meta"] = $parent_obj->prop("lvl_meta");
 			}
 			$no = new object;
 			$no->set_class_id(CL_CRM_SKILL);
 			$no->set_status(STAT_ACTIVE);
-			$no->set_lang_id($obj->lang_id());
+			$no->set_lang_id($olid);
 			$no->set_parent($parent);
-			$no->set_name($new["name"]);
+			$no->set_name(iconv("UTF-8", $ini_langs[$olid]["charset"], $new["name"]));
 			$no->set_prop("subheading", $new["subheading"]);
 			$no->set_prop("lvl", $new["lvl"]);
 			$no->set_prop("lvl_meta", $new["lvl_meta"]);
@@ -376,21 +381,55 @@ class crm_skill_manager extends class_base
 			$tr = array();
 			foreach($new["trans"] as $lang_id => $trans_name)
 			{
-				$tr[$lang_id]["name"] = $trans_name;
+				$tr[$lang_id]["name"] = iconv("UTF-8", $ini_langs[$lang_id]["charset"], $trans_name);
 				$no->set_meta("trans_".$lang_id."_status", 1);
 				$no->set_meta("trans_".$lang_id."_modified", time());
 			}
 			$no->set_meta("translations", $tr);
 			$no->save();
-		};	
+		};
+
+		$other = $arr["request"]["submeta"]["other"];
+		if($this->can("edit", $arr["request"]["skill"]) && $other["name"])
+		{
+			$o = obj($arr["request"]["skill"]);
+			$t = $o->meta("translations");
+			$o->set_prop("other", iconv("UTF-8", $ini_langs[$olid]["charset"], $other["name"]));
+			$o->set_prop("other_jrk", $other["ord"]);
+			foreach($other["trans"] as $lang_id => $trans_other)
+			{
+				$t[$lang_id]["other"] = iconv("UTF-8", $ini_langs[$lang_id]["charset"], $trans_other);
+				$o->set_meta("trans_".$lang_id."_status", 1);
+				$o->set_meta("trans_".$lang_id."_modified", time());
+			}
+			$o->set_meta("translations", $t);
+			$o->save();
+		}
+		else
+		if($this->can("edit", $arr["request"]["skill"]))
+		{
+			$o = obj($arr["request"]["skill"]);
+			$t = $o->meta("translations");
+			$o->set_prop("other", "");
+			$o->set_prop("other_jrk", 0);
+			foreach(array_keys($t) as $lang_id)
+			{
+				unset($t[$lang_id]["other"]);
+				$o->set_meta("trans_".$lang_id."_modified", time());
+			}
+			$o->set_meta("translations", $t);
+			$o->save();
+		}
+
 		$submeta = $arr["request"]["submeta"];
 		unset($submeta["new"]);
+		unset($submeta["other"]);
 		if (is_array($submeta))
 		{
 			foreach($submeta as $skey => $sval)
 			{
 				$so = new object($skey);
-				$so->set_name($sval["name"]);
+				$so->set_name(iconv("UTF-8", $ini_langs[$olid]["charset"], $sval["name"]));
 				$so->set_prop("subheading", $sval["subheading"]);
 				if($so->parent() == $arr["obj_inst"]->id())
 				{
@@ -406,7 +445,7 @@ class crm_skill_manager extends class_base
 				$tr = $so->meta("translations");
 				foreach($sval["trans"] as $lang_id => $trans_name)
 				{
-					$tr[$lang_id]["name"] = $trans_name;
+					$tr[$lang_id]["name"] = iconv("UTF-8", $ini_langs[$lang_id]["charset"], $trans_name);
 					$so->set_meta("trans_".$lang_id."_status", 1);
 					$so->set_meta("trans_".$lang_id."_modified", time());
 				}
