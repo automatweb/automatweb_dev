@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.143 2008/06/12 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.144 2008/06/12 11:35:28 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1958,11 +1958,16 @@ class releditor extends core
 			{
 				$i->get_property($args);
 			}
-
+ 
 			switch($pv["type"])
 			{
 				case "relpicker":
 				case "classificator":
+					if (isset($pv["options"][$pv["value"]]))
+					{
+						$tc_val = $pv["options"][$pv["value"]];
+					}
+					else
 					if ($this->can("view", $pv["value"]))
 					{
 						$tmp = obj($pv["value"]);
@@ -2106,10 +2111,12 @@ class releditor extends core
 		{
 			if (is_array($d[$idx][$rel_prop_name]))
 			{
+				$d2 = array();
 				foreach($d[$idx][$rel_prop_name] as $k => $v)
 				{
-					$r[] = "'[$rel_prop_name][$k]': '".$v."'";
+					$d2[] = " '$k' : '$v' ";
 				}
+				$r[] = "'[$rel_prop_name][]': { ".join(", ", $d2)." } ";
 			}
 			else
 			{
@@ -2120,6 +2127,7 @@ class releditor extends core
 		$s_out = "edit_data = {";
 		$s_out .= join(",\n", $r);
 		$s_out .= " }; ";
+
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		echo $s_out;
 		die();
