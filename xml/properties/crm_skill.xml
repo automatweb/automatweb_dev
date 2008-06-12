@@ -19,12 +19,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>Saab</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>Saab</field>
+            <caption>Saab m&amp;amp;auml;&amp;amp;auml;rata taset</caption>
       </property>
       <property>
             <name>lvl_meta</name>
@@ -34,12 +29,23 @@
             <reltype>RELTYPE_LEVELS</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Tasemed</caption>
       </property>
       <property>
-            <name></name>
-            <table>objects</table>
+            <name>other</name>
+            <table>kliendibaas_oskus</table>
             <group>general</group>
-            <field></field>
+            <type>textbox</type>
+            <field>other_capt</field>
+            <caption>Muu oskus caption</caption>
+      </property>
+      <property>
+            <name>other_jrk</name>
+            <table>kliendibaas_oskus</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>other_jrk</field>
+            <caption>Muu oskus jrk</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_SKILL</syslog_type>
@@ -48,6 +54,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_oskus>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_oskus>
+      </tableinfo>
       <reltypes>
             <LEVELS>
                   <value>1</value>

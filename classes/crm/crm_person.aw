@@ -6271,6 +6271,15 @@ class crm_person extends class_base
 			$CRM_SKILL = "";
 
 			$skills = $sm_inst->get_skills(array("id" => $sm_id));
+			$parent_skill_ids = array_keys($skills[$sm_id]);
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_SKILL,
+				"sort_by" => "objects.jrk",
+				"oid" => $parent_skill_ids,
+				"lang_id" => array(),
+			));
+			$parent_skills = $ol->ids();
+
 			$conns = $o->connections_from(array(
 				"type" => array("RELTYPE_SKILL_LEVEL", "RELTYPE_SKILL_LEVEL2", "RELTYPE_SKILL_LEVEL3", "RELTYPE_SKILL_LEVEL4", "RELTYPE_SKILL_LEVEL5")
 			));
@@ -6303,7 +6312,8 @@ class crm_person extends class_base
 					else
 					if(strlen($to->other) > 0)
 					{
-						if(in_array(substr($to->other, 6), $ids) || substr($to->other, 6) == $id)
+						$jrk = $conn->prop("reltype") - 81;
+						if($parent_skills[$jrk] == $id)
 						{
 							$skills_by_parent[$to->prop("skill.parent")][$to->id()]["skill.name"] = $to->prop("other");
 							$skills_by_parent[$to->prop("skill.parent")][$to->id()]["level.name"] = $to->prop("level.name");
