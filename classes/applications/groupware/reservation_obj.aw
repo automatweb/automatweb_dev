@@ -56,5 +56,15 @@ class reservation_obj extends _int_object
 		$this->set_meta("sum_saved_time" , time());
 		return $sum;
 	}
+
+	function get_room_setting($setting)
+	{
+		if(!$this->prop("resource"))
+		{
+			return null;
+		}
+		$room = obj($this->prop("resource"));
+		return $room->get_setting($setting);
+	}
 }
 ?>

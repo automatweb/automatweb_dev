@@ -132,6 +132,9 @@
 	@property show_only_my_graphs type=checkbox ch_value=1
 	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
 
+	@property dont_ask_close_reason type=checkbox ch_value=1
+	@caption Ei k&uuml;si sulgemise p&otuilde;hjust
+
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 

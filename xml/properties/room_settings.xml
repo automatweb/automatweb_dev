@@ -370,6 +370,16 @@
             <caption>N&amp;amp;auml;ita ainult enda t&amp;amp;ouml;&amp;amp;ouml;graafikuid</caption>
       </property>
       <property>
+            <name>dont_ask_close_reason</name>
+            <table>objects</table>
+            <group>settings_gen</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ei k&amp;amp;uuml;si sulgemise p&amp;amp;otuilde;hjust</caption>
+      </property>
+      <property>
             <name>bron_required_fields</name>
             <table>objects</table>
             <group>settings_gen</group>
