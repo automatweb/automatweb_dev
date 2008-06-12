@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_city.aw:class_139_help
 msgid "Klassi Linn help"
 msgstr ""
@@ -62,6 +61,26 @@ msgstr ""
 msgid "Omaduse Maakond (county) help"
 msgstr ""
 
+#: classes/crm/crm_city.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_city.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_city.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_city.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/crm/crm_city.aw:rel_RELTYPE_COUNTRY
 msgid "Seose Riik (RELTYPE_COUNTRY) tekst"
 msgstr ""
@@ -73,4 +92,3 @@ msgstr ""
 #: classes/crm/crm_city.aw:rel_RELTYPE_COUNTY
 msgid "Seose Maakond (RELTYPE_COUNTY) tekst"
 msgstr ""
-

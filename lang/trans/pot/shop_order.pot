@@ -298,11 +298,11 @@ msgstr ""
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:668 classes/applications/shop/shop_order.aw:848
+#: classes/applications/shop/shop_order.aw:668 classes/applications/shop/shop_order.aw:855
 msgid "Tellimus laost %s"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:1135
+#: classes/applications/shop/shop_order.aw:1142
 msgid "Tellimus laost"
 msgstr ""
 

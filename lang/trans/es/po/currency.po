@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/formgen/currency.aw:class_67_help
 msgid "Klassi Valuutakurss help"
 msgstr ""
@@ -150,11 +149,10 @@ msgstr ""
 msgid "M&uuml;&uuml;gikurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:238
+#: classes/formgen/currency.aw:243
 msgid "Kursid"
 msgstr ""
 
-#: classes/formgen/currency.aw:316
+#: classes/formgen/currency.aw:321
 msgid "currency::convert - kas %s v&otilde;i %s pole valuutadaobjektide id'd"
 msgstr ""
-

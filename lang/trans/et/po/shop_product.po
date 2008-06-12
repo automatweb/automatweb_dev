@@ -1966,7 +1966,7 @@ msgstr ""
 #: classes/applications/shop/shop_product.aw:727
 #: classes/applications/shop/shop_product.aw:789
 #: classes/applications/shop/shop_product.aw:843
-#: classes/applications/shop/shop_product.aw:2247
+#: classes/applications/shop/shop_product.aw:2253
 msgid "Nimi"
 msgstr ""
 
@@ -2020,22 +2020,22 @@ msgstr ""
 msgid "Maksimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1260
+#: classes/applications/shop/shop_product.aw:1267
 msgid "shop_product::draw(): no layout set!"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2150
+#: classes/applications/shop/shop_product.aw:2156
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2159
+#: classes/applications/shop/shop_product.aw:2165
 msgid "Kogus %s"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2237
+#: classes/applications/shop/shop_product.aw:2243
 msgid "(Puudub)"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2252
+#: classes/applications/shop/shop_product.aw:2258
 msgid "Asukoht"
 msgstr ""

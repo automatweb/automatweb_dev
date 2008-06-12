@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_skill.aw:class_1400_help
 msgid "Klassi Oskus help"
 msgstr ""
@@ -27,54 +26,53 @@ msgid "Omaduse Vahepealkiri (subheading) help"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:prop_lvl
-msgid "Omaduse  (lvl) caption"
+msgid "Omaduse Saab m&auml;&auml;rata taset (lvl) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:prop_lvl_comment
-msgid "Omaduse  (lvl) kommentaar"
+msgid "Omaduse Saab m&auml;&auml;rata taset (lvl) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:prop_lvl_help
-msgid "Omaduse  (lvl) help"
-msgstr ""
-
-#: classes/applications/crm/crm_skill.aw:prop_Saab
-msgid "Omaduse  (Saab) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_skill.aw:prop_Saab_comment
-msgid "Omaduse  (Saab) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_skill.aw:prop_Saab_help
-msgid "Omaduse  (Saab) help"
+msgid "Omaduse Saab m&auml;&auml;rata taset (lvl) help"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:prop_lvl_meta
-msgid "Omaduse  (lvl_meta) caption"
+msgid "Omaduse Tasemed (lvl_meta) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:prop_lvl_meta_comment
-msgid "Omaduse  (lvl_meta) kommentaar"
+msgid "Omaduse Tasemed (lvl_meta) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:prop_lvl_meta_help
-msgid "Omaduse  (lvl_meta) help"
+msgid "Omaduse Tasemed (lvl_meta) help"
 msgstr ""
 
-#: classes/applications/crm/crm_skill.aw:prop_
-msgid "Omaduse  () caption"
+#: classes/applications/crm/crm_skill.aw:prop_other
+msgid "Omaduse Muu oskus caption (other) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_skill.aw:prop__comment
-msgid "Omaduse  () kommentaar"
+#: classes/applications/crm/crm_skill.aw:prop_other_comment
+msgid "Omaduse Muu oskus caption (other) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_skill.aw:prop__help
-msgid "Omaduse  () help"
+#: classes/applications/crm/crm_skill.aw:prop_other_help
+msgid "Omaduse Muu oskus caption (other) help"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_other_jrk
+msgid "Omaduse Muu oskus jrk (other_jrk) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_other_jrk_comment
+msgid "Omaduse Muu oskus jrk (other_jrk) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_skill.aw:prop_other_jrk_help
+msgid "Omaduse Muu oskus jrk (other_jrk) help"
 msgstr ""
 
 #: classes/applications/crm/crm_skill.aw:rel_RELTYPE_LEVELS
 msgid "Seose Tasemed (RELTYPE_LEVELS) tekst"
 msgstr ""
-

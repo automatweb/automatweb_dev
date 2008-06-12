@@ -2550,27 +2550,27 @@ msgid "Omaduse Arve nr kuni (bill_payments_bill_to) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_from
-msgid "Omaduse Esitatud alates (bill_payments_from) caption"
-msgstr "Date from"
+msgid "Omaduse Laekunud alates (bill_payments_from) caption"
+msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_from_comment
-msgid "Omaduse Esitatud alates (bill_payments_from) kommentaar"
+msgid "Omaduse Laekunud alates (bill_payments_from) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_from_help
-msgid "Omaduse Esitatud alates (bill_payments_from) help"
+msgid "Omaduse Laekunud alates (bill_payments_from) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_to
-msgid "Omaduse Esitatud kuni (bill_payments_to) caption"
-msgstr "Date to"
+msgid "Omaduse Laekunud kuni (bill_payments_to) caption"
+msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_to_comment
-msgid "Omaduse Esitatud kuni (bill_payments_to) kommentaar"
+msgid "Omaduse Laekunud kuni (bill_payments_to) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_to_help
-msgid "Omaduse Esitatud kuni (bill_payments_to) help"
+msgid "Omaduse Laekunud kuni (bill_payments_to) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_bill_payments_client_mgr
@@ -5035,6 +5035,12 @@ msgstr "Name"
 #: classes/crm/crm_company.aw:8898 classes/crm/crm_company.aw:8951
 msgid "Vali"
 msgstr "Select"
+
+#~ msgid "Omaduse Esitatud alates (bill_payments_from) caption"
+#~ msgstr "Date from"
+
+#~ msgid "Omaduse Esitatud kuni (bill_payments_to) caption"
+#~ msgstr "Date to"
 
 # classes/crm/crm_company.aw:group_general
 #~ msgid "Grupi &Uuml;ldine (general) pealkiri"

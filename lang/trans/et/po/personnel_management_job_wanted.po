@@ -265,10 +265,10 @@ msgstr ""
 msgid "Kokkuleppel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:192
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:202
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:200
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:210
 msgid "Nimi"
 msgstr ""

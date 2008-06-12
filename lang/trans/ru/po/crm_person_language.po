@@ -61,6 +61,18 @@ msgstr ""
 msgid "Omaduse Kirjutan (write) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_language.aw:prop_other
+msgid "Omaduse Muu keel (other) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_language.aw:prop_other_comment
+msgid "Omaduse Muu keel (other) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_language.aw:prop_other_help
+msgid "Omaduse Muu keel (other) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_language.aw:prop_person
 msgid "Omaduse  (person) caption"
 msgstr ""
@@ -77,27 +89,31 @@ msgstr ""
 msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:41
-msgid "ei oska"
-msgstr ""
-
-#: classes/applications/crm/crm_person_language.aw:42
-msgid "napp"
-msgstr ""
-
-#: classes/applications/crm/crm_person_language.aw:43
-msgid "keskmine"
-msgstr ""
-
 #: classes/applications/crm/crm_person_language.aw:44
-msgid "hea"
-msgstr ""
+msgid "ei oska"
+msgstr "не владею"
 
 #: classes/applications/crm/crm_person_language.aw:45
+msgid "napp"
+msgstr "маловат"
+
+#: classes/applications/crm/crm_person_language.aw:46
+msgid "keskmine"
+msgstr "средний"
+
+#: classes/applications/crm/crm_person_language.aw:47
+msgid "hea"
+msgstr "хороший"
+
+#: classes/applications/crm/crm_person_language.aw:48
 msgid "v&auml;ga hea"
+msgstr "очень хороший"
+
+#: classes/applications/crm/crm_person_language.aw:60
+#: classes/applications/crm/crm_person_language.aw:72
+msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:57
-#: classes/applications/crm/crm_person_language.aw:67
-msgid "--vali--"
+#: classes/applications/crm/crm_person_language.aw:65
+msgid "Muu keel"
 msgstr ""

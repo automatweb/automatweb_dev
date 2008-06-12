@@ -109,18 +109,6 @@ msgstr ""
 msgid "Omaduse Kestvus (duration) help"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:prop_parts
-msgid "Omaduse Osalejad (parts) caption"
-msgstr ""
-
-#: classes/applications/groupware/task_quick_entry.aw:prop_parts_comment
-msgid "Omaduse Osalejad (parts) kommentaar"
-msgstr ""
-
-#: classes/applications/groupware/task_quick_entry.aw:prop_parts_help
-msgid "Omaduse Osalejad (parts) help"
-msgstr ""
-
 #: classes/applications/groupware/task_quick_entry.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr ""
@@ -157,34 +145,54 @@ msgstr ""
 msgid "Omaduse &nbsp; (submit_and_add) help"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:70
+#: classes/applications/groupware/task_quick_entry.aw:prop_parts
+msgid "Omaduse Osalejad (parts) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_parts_comment
+msgid "Omaduse Osalejad (parts) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_parts_help
+msgid "Omaduse Osalejad (parts) help"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:layout_general_up
+msgid "Kujundusosa &Uuml;ldinfo (general_up) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:layout_general_down
+msgid "Kujundusosa Osalejad (general_down) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:81
 msgid "Salvesta ja lisa uus"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:101
+#: classes/applications/groupware/task_quick_entry.aw:111
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:101
+#: classes/applications/groupware/task_quick_entry.aw:111
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:131
+#: classes/applications/groupware/task_quick_entry.aw:141
 msgid "--Vali--"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:164
+#: classes/applications/groupware/task_quick_entry.aw:174
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:660
+#: classes/applications/groupware/task_quick_entry.aw:676
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:682
+#: classes/applications/groupware/task_quick_entry.aw:698
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:705
+#: classes/applications/groupware/task_quick_entry.aw:721
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""

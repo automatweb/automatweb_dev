@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Kirjutan (write) help"
 msgstr ""
 
+#: classes/applications/crm/crm_person_language.aw:prop_other
+msgid "Omaduse Muu keel (other) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_person_language.aw:prop_other_comment
+msgid "Omaduse Muu keel (other) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_person_language.aw:prop_other_help
+msgid "Omaduse Muu keel (other) help"
+msgstr ""
+
 #: classes/applications/crm/crm_person_language.aw:prop_person
 msgid "Omaduse  (person) caption"
 msgstr ""
@@ -78,27 +90,31 @@ msgstr ""
 msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:41
+#: classes/applications/crm/crm_person_language.aw:44
 msgid "ei oska"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:42
+#: classes/applications/crm/crm_person_language.aw:45
 msgid "napp"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:43
+#: classes/applications/crm/crm_person_language.aw:46
 msgid "keskmine"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:44
+#: classes/applications/crm/crm_person_language.aw:47
 msgid "hea"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:45
+#: classes/applications/crm/crm_person_language.aw:48
 msgid "v&auml;ga hea"
 msgstr ""
 
-#: classes/applications/crm/crm_person_language.aw:57 classes/applications/crm/crm_person_language.aw:67
+#: classes/applications/crm/crm_person_language.aw:60 classes/applications/crm/crm_person_language.aw:72
 msgid "--vali--"
+msgstr ""
+
+#: classes/applications/crm/crm_person_language.aw:65
+msgid "Muu keel"
 msgstr ""
 

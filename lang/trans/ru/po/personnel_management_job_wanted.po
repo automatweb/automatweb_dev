@@ -251,24 +251,24 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:109
 msgid "Kohe"
-msgstr ""
+msgstr "Немедленно"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:110
 msgid "1 kuu jooksul"
-msgstr ""
+msgstr "В течение 1 месяца"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:111
 msgid "2 kuu jooksul"
-msgstr ""
+msgstr "В течение 2 месяцев"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:112
 msgid "Kokkuleppel"
-msgstr ""
+msgstr "По договоренности"
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:192
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:202
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_wanted.aw:200
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:210
 msgid "Nimi"
 msgstr ""

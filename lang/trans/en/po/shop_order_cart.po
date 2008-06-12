@@ -112,8 +112,8 @@ msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "controller"
 
 #: classes/applications/shop/shop_order_cart.aw:165
-#: classes/applications/shop/shop_order_cart.aw:1019
-#: classes/applications/shop/shop_order_cart.aw:1289
+#: classes/applications/shop/shop_order_cart.aw:1018
+#: classes/applications/shop/shop_order_cart.aw:1288
 msgid "shop_order_cart::show(): no product layout set for cart (%s)"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr "For product %s, you must order an amount that is divisble by %s, currently you ordered %s"
 
-#: classes/applications/shop/shop_order_cart.aw:798
+#: classes/applications/shop/shop_order_cart.aw:797
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 

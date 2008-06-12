@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_county.aw:class_140_help
 msgid "Klassi Maakond help"
 msgstr ""
@@ -50,11 +49,30 @@ msgstr ""
 msgid "Omaduse Piirkond (area) help"
 msgstr ""
 
+#: classes/crm/crm_county.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_county.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_county.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/crm/crm_county.aw:rel_RELTYPE_COUNTRY
-msgid "Seose Riik	 (RELTYPE_COUNTRY) tekst"
+msgid "Seose Riik\t (RELTYPE_COUNTRY) tekst"
 msgstr ""
 
 #: classes/crm/crm_county.aw:rel_RELTYPE_AREA
-msgid "Seose Piirkond		 (RELTYPE_AREA) tekst"
+msgid "Seose Piirkond\t\t (RELTYPE_AREA) tekst"
 msgstr ""
-

@@ -150,11 +150,11 @@ msgstr ""
 msgid "M&uuml;&uuml;gikurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:238
+#: classes/formgen/currency.aw:243
 msgid "Kursid"
 msgstr ""
 
-#: classes/formgen/currency.aw:316
+#: classes/formgen/currency.aw:321
 msgid "currency::convert - kas %s v&otilde;i %s pole valuutadaobjektide id'd"
 msgstr ""
 
