@@ -181,6 +181,10 @@ function cfgformToggleSelectProps(grpId)
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"/><br/>
 <!-- END SUB: select_options -->
 
+<!-- SUB: classificator_options -->
+			{VAR:sort_callback_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][sort_callback]" value="{VAR:sort_callback}"/><br/>
+<!-- END SUB: classificator_options -->
+
 <!-- SUB: date_select_options -->
 			{VAR:buttons_show_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][buttons]" value="1"{VAR:buttons_show_ch}/>
 			{VAR:buttons_hide_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][buttons]" value="0"{VAR:buttons_hide_ch}/>

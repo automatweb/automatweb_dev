@@ -2020,6 +2020,16 @@ class cfgform extends class_base
 						// additional options
 						switch ($property["type"])
 						{
+							case "classificator":
+								$this->vars(array(
+									"sort_callback_caption" => t("Sorteerimise callback"),
+									"sort_callback" => $property["sort_callback"],
+									"prp_key" => $property["name"],
+								));
+								$property["cfgform_additional_options"] = $this->parse("classificator_options");
+								$this->vars(array("classificator_options" => ""));
+								break;
+
 							case "image_verification":
 								$this->vars(array(
 									"width_caption" => t("Laius"),
