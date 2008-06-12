@@ -132,9 +132,10 @@
             <table>planner</table>
             <group>general</group>
             <parent>general_up_up</parent>
-            <type>relpicker</type>
+            <type>popup_search</type>
             <field>project</field>
             <reltype>RELTYPE_PROJECT</reltype>
+            <style>autocomplete</style>
             <caption>Projekt</caption>
       </property>
       <property>

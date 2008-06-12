@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.101 2008/06/12 13:03:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.102 2008/06/12 13:38:08 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -58,7 +58,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property cp_email type=textbox store=no size=20
 	@caption E-mail
 	
-	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
+	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT type=popup_search style=autocomplete
 	@caption Projekt
 	
 	@property send_bill type=checkbox ch_value=1 table=planner field=send_bill no_caption=1
@@ -392,8 +392,47 @@ class reservation extends class_base
 				}
 				$prop["onchange"] = "window.location.href='".aw_url_change_var("set_cust", null)."&set_cust='+this.options[this.selectedIndex].value";
 				break;
+			case "project":
+				$prop["autocomplete_source"] = $this->mk_my_orb("proj_autocomplete_source");
+				$prop["autocomplete_params"] = array("project");
+				break;
 		};
 		return $retval;
+	}
+
+	/**
+		@attrib name=proj_autocomplete_source
+		@param project optional
+	**/
+	function proj_autocomplete_source($arr)
+	{
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		$ol = new object_list(array(
+			"class_id" => array(CL_PROJECT),
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"state" => new obj_predicate_not(PROJ_DONE)
+		));
+		$autocomplete_options = $ol->names();
+             $autocomplete_options = $ol->names();
+                foreach($autocomplete_options as $k => $v)
+                {
+                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+                }
+		header("Content-type: text/html; charset=utf-8");
+		exit ($cl_json->encode($option_data));
 	}
 
 	function callback_generate_scripts($arr)
@@ -478,6 +517,27 @@ class reservation extends class_base
 					"sum" => $prop["value"],
 				));
 				break;
+			case "project":
+				if(!is_oid($prop["value"]))
+				{
+					if(is_oid($arr["request"]["project_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["project_awAutoCompleteTextbox"]))
+					{
+						$prop["value"] = $arr["request"]["project_awAutoCompleteTextbox"];
+					}
+					else
+					{
+						$ol = new object_list(array(
+							"name" => $arr["request"]["project_awAutoCompleteTextbox"],
+							"class_id" => array(CL_PROJECT),
+							"lang_id" => array(),
+						));
+						$cust_obj = $ol->begin();
+						if(is_object($cust_obj))
+						{
+							$prop["value"] = $cust_obj->id();
+						}
+					}
+				}
 		}
 		return $retval;
 	}	
