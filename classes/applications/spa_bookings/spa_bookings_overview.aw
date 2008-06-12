@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.56 2008/06/09 11:54:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.57 2008/06/12 14:10:03 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -784,11 +784,19 @@ class spa_bookings_overview extends class_base
 			default:
 				foreach($brons->arr() as $b)
 				{
-					if(($b->prop("end") - $b->prop("start1")) > 0) $bron_array[$b->prop($prop)]["time"] = $bron_array[$b->prop($prop)]["time"] + ($b->prop("end") - $b->prop("start1"));
-					$bron_array[$b->prop($prop)]["brons"]++;
+					$index = $b->prop($prop);
+					if(!$index)
+					{
+						$index = 0;
+					}
+					if(($b->prop("end") - $b->prop("start1")) > 0)
+					{
+						$bron_array[$index]["time"] = $bron_array[$index]["time"] + ($b->prop("end") - $b->prop("start1"));
+					}
+					$bron_array[$index]["brons"]++;
 					if($b->meta("redecleared"))
 					{
-						$bron_array[$b->prop($prop)]["redecleared"] ++;
+						$bron_array[$index]["redecleared"] ++;
 					}
 				}
 		}
