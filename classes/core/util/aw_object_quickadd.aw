@@ -104,7 +104,7 @@ class aw_object_quickadd extends class_base
 				$a_out[] = '{name: "'.html_entity_decode ($a_items[$key][$key2]["name"]).'",';
 				$a_out[] = 'url_obj: "'.$a_items[$key][$key2]["url"].'",'.$line_prefix;
 				$a_out[] = 'icon: "'.$a_items[$key][$key2]["icon"].'",'.$line_prefix;
-				$a_out[] = 'class: "'.$a_items[$key][$key2]["class"].'"'.$line_prefix;
+				$a_out[] = '"class": "'.$a_items[$key][$key2]["class"].'"'.$line_prefix;
 				//$s_out .= 'priority: 5,'.$line_prefix;
 				$a_out[] = '},'.$line_prefix;
 			}
