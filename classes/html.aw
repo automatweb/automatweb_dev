@@ -599,7 +599,7 @@ class html extends aw_template
 		{
 			$onc = " onclick='{$onclick}'";
 		}
-		$rv = "$span<input type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
+		$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
 		return $rv;
 	}
 
@@ -643,7 +643,7 @@ class html extends aw_template
 			$onc = " onclick=\"{$onclick}\"";
 		}
 
-		return "<input type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$value}\"{$onc}{$checked}{$disabled} />\n {$caption}";
+		return "<input class=\"radiobutton\" type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$value}\"{$onc}{$checked}{$disabled} />\n {$caption}";
 	}
 
 	/**Submit button
