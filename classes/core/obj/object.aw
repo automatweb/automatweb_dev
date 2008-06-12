@@ -1931,7 +1931,7 @@ class object
 	**/
 	function from_xml($xml, $parent)
 	{
-		return $GLOBALS["objects"][$this->oid]->from_xml($xml, $parent);
+		return _int_object::from_xml($xml, $parent);
 	}
 
 	function set_create_new_version()
