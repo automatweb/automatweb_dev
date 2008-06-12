@@ -13,6 +13,9 @@
 @property level type=relpicker reltype=RELTYPE_LEVEL store=connect no_edit=1 
 @caption Tase
 
+@property other type=textbox field=comment
+@caption Muu
+
 @reltype SKILL value=1 clid=CL_CRM_SKILL
 @caption Oskus
 
@@ -57,6 +60,7 @@ class crm_skill_level extends class_base
 						$by_parent[$tmp->parent()][] = $opt_id;
 					}
 				}
+				$this->get_other_opts($by_parent);
 
 				$prop["options"] = array();
 				$prop["options"][""] = t("--vali--");
@@ -68,7 +72,18 @@ class crm_skill_level extends class_base
 					// list only items under top-level items with jrk no 1
 					$this->_filter_opts_by_level_jrk($prop["options"], $mt[1]);
 				}
-				$this->ord_skills($prop["options"]);
+				$other_ids = $this->other_ids($prop["options"]);
+				if(count($other_ids) > 0)
+				{
+					$vals = "";
+					foreach($other_ids as $other_id)
+					{
+						$vals .= (strlen($vals) > 0) ? " || " : "";
+						$vals .= "this.value == '".$other_id."'";
+					}
+					$prop["onchange"] = "var id = this.id.replace('[skill]', '_other_').replace('[', '_').replace(']', '_'); if(".$vals.") { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
+				}
+				//$this->ord_skills($prop["options"]);
 				break;
 
 			case "level":
@@ -104,7 +119,15 @@ class crm_skill_level extends class_base
 							"status" => object::STAT_ACTIVE,
 							"sort_by" => "jrk",
 						));
-						$prop["options"] += $ol->names();
+						$objs = $ol->arr();
+						enter_function("uasort");
+						uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT, "cmp_function")));
+						exit_function("uasort");
+						foreach($objs as $o)
+						{
+							$prop["options"][$o->id()] = $o->trans_get_val("name");
+						}
+						//$prop["options"] += $ol->names();
 					}
 				}
 				break;
@@ -131,10 +154,16 @@ class crm_skill_level extends class_base
 		{
 			foreach($opts as $k => $v)
 			{
+				if(substr($k, 0, 6) == "other_" && !$this->_opt_is_below(substr($k, 6), $filter_opt, $opts) && substr($k, 6) != $filter_opt)
+				{
+					unset($opts[$k]);
+				}
+				else
 				if (!is_oid($k))
 				{
 					continue;
 				}
+				else
 				if ($k == $filter_opt || !$this->_opt_is_below($k, $filter_opt, $opts))
 				{
 					unset($opts[$k]);
@@ -166,11 +195,19 @@ class crm_skill_level extends class_base
 		$cnt = 0;
 		foreach($by_parent[$parent] as $opt_id)
 		{
-			$tmp = obj($opt_id);
-			$opts[$opt_id] = str_repeat("&nbsp;&nbsp;", $this->level-1).$tmp->trans_get_val("name");
-			if ($this->_format_opts($opts, $opt_id, $by_parent, $disabled_opts) != 0)
+			if(substr($opt_id, 0, 6) == "other_")
 			{
-				$disabled_opts[$opt_id] = $opt_id;
+				$tmp = obj($parent);
+				$opts[$opt_id] = str_repeat("&nbsp;&nbsp;", $this->level-1).$tmp->trans_get_val("other");
+			}
+			else
+			{
+				$tmp = obj($opt_id);
+				$opts[$opt_id] = str_repeat("&nbsp;&nbsp;", $this->level-1).$tmp->trans_get_val("name");
+				if ($this->_format_opts($opts, $opt_id, $by_parent, $disabled_opts) != 0)
+				{
+					$disabled_opts[$opt_id] = $opt_id;
+				}
 			}
 			$cnt++;
 		}
@@ -232,6 +269,35 @@ class crm_skill_level extends class_base
 			$r[$o->id()] = $o->trans_get_val("name");
 		}
 		$arr = $r;
+	}
+
+	private function get_other_opts(&$opts)
+	{
+		foreach(array_keys($opts) as $oid)
+		{
+			if(!is_oid($oid))
+			{
+				continue;
+			}
+			$o = obj($oid);
+			if($o->trans_get_val("other"))
+			{
+				$opts[$oid][] = "other_".$oid;
+			}
+		}
+	}
+
+	private function other_ids($opts)
+	{
+		$ret = array();
+		foreach(array_keys($opts) as $k)
+		{
+			if(substr($k, 0, 6) == "other_")
+			{
+				$ret[] = $k;
+			}
+		}
+		return $ret;
 	}
 }
 
