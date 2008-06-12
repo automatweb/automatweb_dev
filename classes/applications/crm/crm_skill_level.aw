@@ -3,17 +3,18 @@
 /*
 
 @classinfo syslog_type=ST_CRM_SKILL_LEVEL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@tableinfo kliendibaas_oskuse_tase index=oid master_table=objects master_index=oid
 
 @default table=objects
 @default group=general
 
-@property skill type=relpicker reltype=RELTYPE_SKILL store=connect no_edit=1 automatic=1
+@property skill type=relpicker reltype=RELTYPE_SKILL no_edit=1 automatic=1 field=skill table=kliendibaas_oskuse_tase
 @caption Oskus
 
 @property level type=relpicker reltype=RELTYPE_LEVEL store=connect no_edit=1 
 @caption Tase
 
-@property other type=textbox field=comment
+@property other type=textbox field=other table=kliendibaas_oskuse_tase
 @caption Muu
 
 @reltype SKILL value=1 clid=CL_CRM_SKILL
@@ -298,6 +299,74 @@ class crm_skill_level extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "kliendibaas_oskuse_tase" && $field == "")
+		{
+			$this->db_query("create table kliendibaas_oskuse_tase (oid int primary key)");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "other":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_SKILL,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$value = $o->meta($field);
+					$oid = $o->id();
+					$this->db_query("
+						INSERT INTO
+							kliendibaas_oskuse_tase (oid, $field)
+						VALUES
+							('$oid', '$value')
+						ON DUPLICATE KEY UPDATE
+							$field = '$value'
+					");
+				}
+				return true;
+
+			case "skill":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_SKILL,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$value = $o->meta($field);
+					$oid = $o->id();
+					$this->db_query("
+						INSERT INTO
+							kliendibaas_oskuse_tase (oid, $field)
+						VALUES
+							('$oid', '$value')
+						ON DUPLICATE KEY UPDATE
+							$field = '$value'
+					");
+				}
+				return true;
+		}
+
+		return false;
 	}
 }
 

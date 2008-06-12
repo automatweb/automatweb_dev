@@ -421,22 +421,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property skills_tbl type=table store=no
 	@caption Oskused
 
-	@property skills_releditor1 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level table_fields=skill,level store=no
+	@property skills_releditor1 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL props=skill,level,other table_fields=skill,level store=no
 	@caption Oskused releditor1
 
-	@property skills_releditor2 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL2 props=skill,level table_fields=skill,level store=no
+	@property skills_releditor2 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL2 props=skill,level,other table_fields=skill,level store=no
 	@caption Oskused releditor2
 
-	@property skills_releditor3 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL3 props=skill,level table_fields=skill,level store=no
+	@property skills_releditor3 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL3 props=skill,level,other table_fields=skill,level store=no
 	@caption Oskused releditor3
 
-	@property skills_releditor4 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL4 props=skill,level table_fields=skill,level store=no
+	@property skills_releditor4 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL4 props=skill,level,other table_fields=skill,level store=no
 	@caption Oskused releditor4
 
-	@property skills_releditor5 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL5 props=skill,level table_fields=skill,level store=no
+	@property skills_releditor5 type=releditor mode=manager2 reltype=RELTYPE_SKILL_LEVEL5 props=skill,level,other table_fields=skill,level store=no
 	@caption Oskused releditor5
 
-	@property languages_releditor type=releditor mode=manager2 reltype=RELTYPE_LANGUAGE_SKILL props=language,talk,understand,write table_fields=language,talk,understand,write store=no
+	@property languages_releditor type=releditor mode=manager2 reltype=RELTYPE_LANGUAGE_SKILL props=language,talk,understand,write,other table_fields=language,talk,understand,write store=no
 	@caption Keeled releditor
 
 	@property drivers_license type=select multiple=1 field=drivers_license_2 table=kliendibaas_isik
@@ -5110,6 +5110,11 @@ class crm_person extends class_base
 		$f = "
 		$(document).ready(function() {
 			$('#languages_releditor_0__other_').parent().parent().hide();
+			$('#skills_releditor1_0__other_').parent().parent().hide();
+			$('#skills_releditor2_0__other_').parent().parent().hide();
+			$('#skills_releditor3_0__other_').parent().parent().hide();
+			$('#skills_releditor4_0__other_').parent().parent().hide();
+			$('#skills_releditor5_0__other_').parent().parent().hide();
 			$('#other_mlang').parent().parent().hide();
 		});
 		";
@@ -5867,6 +5872,17 @@ class crm_person extends class_base
 			));
 			$parse_cppi++;
 		}
+		else
+		if(strlen($o->prop("other_mlang")) > 0 && (array_key_exists("mlang", $proplist) || count($proplist) == 0))
+		{
+			$this->vars(array(
+				"crm_person.mlang" => $o->prop("other_mlang"),
+			));
+			$this->vars(array(
+				"CRM_PERSON.MLANG" => $this->parse("CRM_PERSON.MLANG"),
+			));
+			$parse_cppi++;
+		}
 		//		END SUB: CRM_PERSON.MLANG
 
 		//		SUB: CRM_PERSON.EDULEVEL
@@ -6213,6 +6229,27 @@ class crm_person extends class_base
 				}
 				$CRM_PERSON_LANGUAGE .= $this->parse("CRM_PERSON_LANGUAGE");
 			}
+			else
+			if(strlen($to->other) > 0)
+			{
+				$this->vars(array(
+					"crm_person_language.language" => $to->other,
+					"crm_person_language.talk" => $options[$to->prop("talk")],
+					"crm_person_language.understand" => $options[$to->prop("understand")],
+					"crm_person_language.write" => $options[$to->prop("write")],
+				));
+				foreach($props as $prop)
+				{
+					if(array_key_exists($prop, $proplist_crm_person_language) || count($proplist_crm_person_language) == 0)
+					//if(true)
+					{
+						$this->vars(array(
+							"CRM_PERSON_LANGUAGE.".strtoupper($prop) => $this->parse("CRM_PERSON_LANGUAGE.".strtoupper($prop)),
+						));
+					}
+				}
+				$CRM_PERSON_LANGUAGE .= $this->parse("CRM_PERSON_LANGUAGE");
+			}
 			$parse_cpl++;
 		}
 
@@ -6262,6 +6299,15 @@ class crm_person extends class_base
 						));
 						$CRM_SKILL_LEVEL .= $this->parse("CRM_SKILL_LEVEL");
 						*/
+					}
+					else
+					if(strlen($to->other) > 0)
+					{
+						if(in_array(substr($to->other, 6), $ids) || substr($to->other, 6) == $id)
+						{
+							$skills_by_parent[$to->prop("skill.parent")][$to->id()]["skill.name"] = $to->prop("other");
+							$skills_by_parent[$to->prop("skill.parent")][$to->id()]["level.name"] = $to->prop("level.name");
+						}
 					}
 				}
 				$CRM_SKILL_LEVEL_GROUP = "";

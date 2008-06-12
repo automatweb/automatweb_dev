@@ -2,11 +2,10 @@
 <properties>
       <property>
             <name>skill</name>
-            <table>objects</table>
+            <table>kliendibaas_oskuse_tase</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_SKILL</reltype>
-            <store>connect</store>
             <no_edit>1</no_edit>
             <automatic>1</automatic>
             <field>skill</field>
@@ -23,6 +22,14 @@
             <field>level</field>
             <caption>Tase</caption>
       </property>
+      <property>
+            <name>other</name>
+            <table>kliendibaas_oskuse_tase</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>other</field>
+            <caption>Muu</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SKILL_LEVEL</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -30,6 +37,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_oskuse_tase>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_oskuse_tase>
+      </tableinfo>
       <reltypes>
             <SKILL>
                   <value>1</value>
