@@ -408,3 +408,8 @@ function aw_timer(timer)
 	}
 }
 
+
+function check_generic_loader()
+{
+	
+}
