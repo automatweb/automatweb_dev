@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.100 2008/06/12 10:51:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.101 2008/06/12 13:03:22 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -440,7 +440,7 @@ class reservation extends class_base
 				break;
 
 			case "time_closed":
-				if ($prop["value"]  && $arr["request"]["closed_info"] == "")
+				if ($prop["value"]  && $arr["request"]["closed_info"] == "" && !$arr["obj_inst"]->get_room_setting("dont_ask_close_reason"))
 				{
 					$prop["error"] = t("Sulgemise p&otilde;hjus peab olema t&auml;idetud!");
 					return PROP_FATAL_ERROR;
@@ -1397,17 +1397,12 @@ class reservation extends class_base
 		}
 		if ($arr["obj_inst"]->prop("verified"))
 		{
-			$bt = array(
+			$tb->add_button(array(
 				"name" => "unverify",
 				"tooltip" => t("T&uuml;hista kinnitus"),
 				"onClick" => "document.changeform.reason.value=prompt('Sisestage t&uuml;histuse p&otilde;hjus');submit_changeform('unverify')",
 				"action" => ""
-			);
-			if($arr["obj_inst"]->get_room_setting("dont_ask_close_reason"))
-			{
-				$bt["onClick"] = "submit_changeform('unverify')";
-			}
-			$tb->add_button($bt);
+			));
 			$has = true;
 		}
 
