@@ -3116,7 +3116,7 @@ class bug_tracker extends class_base
 	function _gantt($arr)
 	{
 		$chart = get_instance ("vcl/gantt_chart");
-		$udata = $arr["obj_inst"]->meta("gantt_user_ends");
+		$udata = is_object($arr["obj_inst"]) ? $arr["obj_inst"]->meta("gantt_user_ends") : array();
 		$cur = aw_global_get("uid_oid");
 		if($cs = $udata[$cur])
 		{
