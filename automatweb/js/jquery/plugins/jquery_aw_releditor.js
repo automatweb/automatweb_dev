@@ -71,8 +71,33 @@ jQuery.aw_releditor = function(arr) {
 		}
 		form = $("[name^="+arr["releditor_name"]+"\["+current_index+"][type!=submit]").not("a");
 		form.each(function(){
+			$(this).reset();
 			s_prop_name = _get_prop_name($(this).attr("name"));
-			$(this).attr("value", edit_data[s_prop_name]);
+			if ($(this).attr("multiple"))
+			{
+				$("option", $(this)).each(function(){
+					for (key in edit_data[s_prop_name])
+					{
+						if ($(this).val() == edit_data[s_prop_name][key])
+						{
+							$(this).attr("selected", true)
+						}
+					}
+					
+				});
+			}
+			else if ($(this).attr("type") == "checkbox")
+			{
+				if (edit_data[s_prop_name] == 1)
+				{
+					this.checked = true;
+					$(this).attr("value", 1);
+				}
+			}
+			else
+			{
+				$(this).attr("value", edit_data[s_prop_name]);
+			}
 			$(this).attr("name", arr["releditor_name"]+"["+i_releditor_edit_index+"]"+s_prop_name);
 		});
 		i_releditor_edit_index_last_edit = i_releditor_edit_index;
@@ -198,8 +223,8 @@ jQuery.aw_releditor = function(arr) {
 	function _get_prop_name(s_input_name)
 	{
 		// i don't undrestand why I had to doublescape: \\[
-		var re  =  new RegExp("^.+\\[[0-9]+\\]\\[(.*)\\]$", "g").exec(s_input_name);
-		return "["+re[1]+"]";
+		var re  =  new RegExp("^.+\\[[0-9]+\\](.*)$", "g").exec(s_input_name);
+		return re[1];
 	}
 	
 	/*
