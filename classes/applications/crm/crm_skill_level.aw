@@ -60,6 +60,7 @@ class crm_skill_level extends class_base
 						$by_parent[$tmp->parent()][] = $opt_id;
 					}
 				}
+				$this->ord_skills($by_parent);
 				$this->get_other_opts($by_parent);
 
 				$prop["options"] = array();
@@ -257,18 +258,17 @@ class crm_skill_level extends class_base
 
 	private function ord_skills(&$arr)
 	{
-		$ol = new object_list();
-		$ol->add(array_keys($arr));
-		$objs = $ol->arr();
-		enter_function("uasort");
-		uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
-		exit_function("uasort");
-		$r = array("" => t("--vali--"));
-		foreach($objs as $o)
+		foreach($arr as $k => $v)
 		{
-			$r[$o->id()] = $o->trans_get_val("name");
+			usort($arr[$k], array($this, "cmp_function"));
 		}
-		$arr = $r;
+	}
+
+	private function cmp_function($a, $b)
+	{
+		$a_obj = obj($a);
+		$b_obj = obj($b);
+		return get_instance(CL_PERSONNEL_MANAGEMENT)->cmp_function($a_obj, $b_obj);
 	}
 
 	private function get_other_opts(&$opts)
