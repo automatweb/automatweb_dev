@@ -614,6 +614,34 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property uservar10 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER10 store=connect
 @caption User-defined var 10
 
+
+// fake address props here, so we can write to them and they go to the real address property
+@property fake_address_address type=textbox store=no user=1
+@caption Fake aadress
+
+@property fake_address_address2 type=textbox store=no user=1
+@caption Fake aadress 2
+
+@property fake_address_postal_code type=textbox store=no user=1
+@caption Fake postiindeks
+
+@property fake_address_city type=textbox store=no user=1
+@caption Fake linn
+
+@property fake_address_county type=textbox store=no user=1
+@caption Fake maakond
+
+@property fake_address_country type=textbox store=no user=1
+@caption Fake riik
+
+@property fake_phone type=textbox store=no user=1
+@caption Fake telefon
+
+@property fake_email type=textbox store=no user=1
+@caption Fake email
+
+
+
 ------------------------------------------------------------------
 
 @groupinfo my_stats caption="Minu statistika" submit=no submit_method=get

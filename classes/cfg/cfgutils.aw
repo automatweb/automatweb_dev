@@ -688,7 +688,7 @@ class cfgutils extends aw_template
 			$cache_d = aw_unserialize($res);
 		}
 
-		if (is_array($cache_d) && !$sc)
+		if (false && is_array($cache_d) && !$sc)
 		{
 			foreach($cache_d as $k => $v)
 			{
@@ -709,7 +709,6 @@ class cfgutils extends aw_template
 			);
 			$this->cache->file_set($key, aw_serialize($cache_d, SERIALIZE_PHP_FILE));
 		}
-
 		return $ret;
 	}
 

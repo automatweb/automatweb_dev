@@ -157,6 +157,7 @@
 	@property trans_tbl_grps type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
 
 	@property trans_tbl_lays type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
+	@property trans_tbl_table_capts type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
 
 
 @default group=system
@@ -501,6 +502,10 @@ class cfgform extends class_base
 
 			case "trans_tbl_lays":
 				$this->_trans_tbl_lays($arr);
+				break;
+
+			case "trans_tbl_table_capts":
+				$this->_trans_tbl_table_capts($arr);
 				break;
 
 			case "treeview":
@@ -849,6 +854,37 @@ class cfgform extends class_base
 			));
 		}
 		$t->set_caption(t("Layoutid"));
+	}
+
+	function _trans_tbl_table_capts($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ld = $this->_init_trans_tbl($t, $arr["obj_inst"], $arr["request"], t("Tabelite pealkirjad"));
+		$lid = $ld["acceptlang"];
+
+		$trans = $arr["obj_inst"]->meta("tbl_capt_translations");
+
+		$ps = $arr["obj_inst"]->meta("cfg_proplist");
+		foreach($ps as $pn => $pd)
+		{
+			$capt = iconv($ld["charset"], "utf-8", $pd["emb_tbl_caption"]);
+			$v = iconv($ld["charset"], "utf-8", $trans[$lid][$pn."_tbl_capt"]);
+
+			if (trim($v) == "")
+			{
+				$v = iconv(aw_global_get("charset"), "utf-8", $trans[$lid][$pn."_tbl_capt"]);
+			}
+
+			$t->define_data(array(
+				"property" => $pn,
+				"orig_str" => $capt,
+				"trans_str" => html::textbox(array(
+					"name" => "dat[".$lid."][".$pn."_tbl_capt]",
+					"value" => $v
+				))
+			));
+		}
+		$t->set_caption(t("Tabeli tulpade pealkirjad"));
 	}
 
 	function gen_default_table($arr)
@@ -1232,6 +1268,21 @@ class cfgform extends class_base
 					$trans[$lid] = $ldat;
 				}
 				$arr["obj_inst"]->set_meta("layout_translations", $trans);
+				break;
+
+			case "trans_tbl_table_capts":
+				$l = get_instance("languages");
+				$trans = safe_array($arr["obj_inst"]->meta("tbl_capt_translations"));
+				foreach(safe_array($arr["request"]["dat"]) as $lid => $ldat)
+				{
+					$ld = $l->fetch($l->get_langid_for_code($lid), false);
+					foreach(safe_array($ldat) as $pn => $c)
+					{
+						$ldat[$pn] = iconv("utf-8", $ld["charset"], $c);
+					}
+					$trans[$lid] = $ldat;
+				}
+				$arr["obj_inst"]->set_meta("tbl_capt_translations", $trans);
 				break;
 
 			case "props_list":
@@ -3476,6 +3527,7 @@ class cfgform extends class_base
 		$ret = $o->meta("cfg_proplist");
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("translations");
+		$tbl_capt_trans = $o->meta("tbl_capt_translations");
 
 		// okay, here, if there is no translation for the requested language, then
 		// read the captions from the translations file.
@@ -3484,6 +3536,7 @@ class cfgform extends class_base
 		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
 		{
 			$tc = $trans[$lc];
+			$tc_capt = $tbl_capt_trans[$lc];
 			foreach($ret as $pn => $pd)
 			{
 				if ($tc[$pn] != "")
@@ -3497,6 +3550,10 @@ class cfgform extends class_base
 						$ret[$pn]["caption"] = $tc[$pn];
 					}
 					$read_from_trans = false;
+				}
+				if ($tc_capt[$pn."_tbl_capt"] != "")
+				{
+					$ret[$pn]["emb_tbl_caption"] = $tc_capt[$pn."_tbl_capt"];
 				}
 			}
 		}

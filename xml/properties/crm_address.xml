@@ -19,6 +19,16 @@
             <caption>T&amp;amp;auml;nav/K&amp;amp;uuml;la</caption>
       </property>
       <property>
+            <name>aadress2</name>
+            <table>kliendibaas_address</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>50</size>
+            <maxlength>100</maxlength>
+            <field>aadress2</field>
+            <caption>T&amp;amp;auml;nav/K&amp;amp;uuml;la2</caption>
+      </property>
+      <property>
             <name>postiindeks</name>
             <table>kliendibaas_address</table>
             <group>general</group>

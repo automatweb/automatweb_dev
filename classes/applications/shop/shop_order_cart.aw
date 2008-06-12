@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.74 2008/06/04 10:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.75 2008/06/12 13:22:38 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -556,7 +556,6 @@ class shop_order_cart extends class_base
 		// neighter do i... -- ahz
 		$awa = new aw_array($arr["add_to_cart"]);
 		$order_data = safe_array($order_data);
-
 		foreach($awa->get() as $iid => $quantx)
 		{
 			$cart["items"][$iid] = safe_array($cart["items"][$iid]);
@@ -809,7 +808,6 @@ class shop_order_cart extends class_base
 			$params["postal_price"] = $order_cart->prop("postal_price");
 		}
 		$cart = $this->get_cart($oc);
-
 		$this->update_user_data_from_order($oc, $warehouse, $params);
 
 		$so->start_order(obj($warehouse), $oc);
@@ -1369,6 +1367,14 @@ class shop_order_cart extends class_base
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
+		// since this view should be confirm view, then show the previously entered data. 
+		// if this nees to be different, we need some sort of config switch for it
+		$ud = safe_array($cart["user_data"]);
+		foreach($els as $pn => $pd)
+		{
+			$els[$pn]["value"] = $ud[$pn];
+		}
+
 		$prevd = $els["userdate1"]["value"];
 
 		$rd = get_instance(CL_REGISTER_DATA);
@@ -1380,6 +1386,7 @@ class shop_order_cart extends class_base
 
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
+
 		foreach($els as $pn => $pd)
 		{
 			if ($pd["type"] == "date_select")
@@ -1416,7 +1423,7 @@ class shop_order_cart extends class_base
 			"raw_output" => 1
 		));
 
-		if (aw_global_get("uid") != "")
+		if (false && aw_global_get("uid") != "")
 		{
 			$us = get_instance(CL_USER);
 			$objs = array(
@@ -1802,7 +1809,9 @@ class shop_order_cart extends class_base
 		{
 			return;
 		}
-		$ud = safe_array($_POST["user_data"]);
+		$cart = $this->get_cart($oc);
+
+		$ud = is_array($_POST["user_data"]) ? $_POST["user_data"] : safe_array($cart["user_data"]);
 		
 		$ps_pmap = safe_array($oc->meta("ps_pmap"));
 		$org_pmap = safe_array($oc->meta("org_pmap"));

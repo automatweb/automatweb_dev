@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.69 2008/06/04 10:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.70 2008/06/12 13:22:38 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -792,6 +792,13 @@ class shop_order extends class_base
 				continue;
 			}
 			$i_o = obj($iid);
+
+			$si = __get_site_instance();
+			if (method_exists($si, "handle_product_display"))
+			{
+				$si->handle_product_display($i_o);
+			}
+
 			$orig_count = $i_o->prop("item_count");
 			$i_inst = $i_o->instance();
 			$price = $i_inst->get_calc_price($i_o);
@@ -1414,6 +1421,12 @@ class shop_order extends class_base
 			}
 			$prodx = new aw_array($prodx);
 			$prod = obj($id);
+
+			$si = __get_site_instance();
+			if (method_exists($si, "handle_product_display"))
+			{
+				$si->handle_product_display($prod);
+			}
 
 			if ($fld != "")
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.34 2008/03/31 13:48:18 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.35 2008/06/12 13:22:35 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -16,6 +16,9 @@
 	
 	@property aadress type=textbox size=50 maxlength=100
 	@caption T&auml;nav/K&uuml;la
+	
+	@property aadress2 type=textbox size=50 maxlength=100
+	@caption T&auml;nav/K&uuml;la2
 	
 	@property postiindeks type=textbox size=5 maxlength=100
 	@caption Postiindeks
@@ -278,6 +281,7 @@ class crm_address extends class_base
 				));
 				return true;
 			case 'name':
+			case 'aadress2':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(200)'

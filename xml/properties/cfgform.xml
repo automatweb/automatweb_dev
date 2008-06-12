@@ -405,6 +405,29 @@
             <store>no</store>
       </property>
       <property>
+            <name>trans_tbl_table_capts</name>
+            <table>objects</table>
+            <group>
+                  <num_0>lang_1</num_0>
+                  <num_1>lang_2</num_1>
+                  <num_2>lang_3</num_2>
+                  <num_3>lang_4</num_3>
+                  <num_4>lang_5</num_4>
+                  <num_5>lang_6</num_5>
+                  <num_6>lang_7</num_6>
+                  <num_7>lang_8</num_7>
+                  <num_8>lang_9</num_8>
+                  <num_9>lang_10</num_9>
+                  <num_10>lang_11</num_10>
+                  <num_11>lang_12</num_11>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>sysdefault</name>
             <table>objects</table>
             <group>system</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.24 2008/06/06 10:51:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.25 2008/06/12 13:22:35 kristo Exp $
 // phone.aw - Telefon
 /*
 
@@ -237,6 +237,7 @@ class crm_phone extends class_base
 					"type" => "varchar(50)"
 				));
 
+				aw_restore_acl();
 				// Now let's fill this property for all existing persons.
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_PHONE,

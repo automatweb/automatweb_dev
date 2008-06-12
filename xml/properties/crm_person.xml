@@ -1037,6 +1037,7 @@
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
+                  <num_2>other</num_2>
             </props>
             <table_fields>
                   <num_0>skill</num_0>
@@ -1056,6 +1057,7 @@
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
+                  <num_2>other</num_2>
             </props>
             <table_fields>
                   <num_0>skill</num_0>
@@ -1075,6 +1077,7 @@
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
+                  <num_2>other</num_2>
             </props>
             <table_fields>
                   <num_0>skill</num_0>
@@ -1094,6 +1097,7 @@
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
+                  <num_2>other</num_2>
             </props>
             <table_fields>
                   <num_0>skill</num_0>
@@ -1113,6 +1117,7 @@
             <props>
                   <num_0>skill</num_0>
                   <num_1>level</num_1>
+                  <num_2>other</num_2>
             </props>
             <table_fields>
                   <num_0>skill</num_0>
@@ -1134,6 +1139,7 @@
                   <num_1>talk</num_1>
                   <num_2>understand</num_2>
                   <num_3>write</num_3>
+                  <num_4>other</num_4>
             </props>
             <table_fields>
                   <num_0>language</num_0>
@@ -1665,6 +1671,86 @@
             <reltype>RELTYPE_VARUSER10</reltype>
             <store>connect</store>
             <caption>User-defined var 10</caption>
+      </property>
+      <property>
+            <name>fake_address_address</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_address_address</field>
+            <caption>Fake aadress</caption>
+      </property>
+      <property>
+            <name>fake_address_address2</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_address_address2</field>
+            <caption>Fake aadress 2</caption>
+      </property>
+      <property>
+            <name>fake_address_postal_code</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_address_postal_code</field>
+            <caption>Fake postiindeks</caption>
+      </property>
+      <property>
+            <name>fake_address_city</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_address_city</field>
+            <caption>Fake linn</caption>
+      </property>
+      <property>
+            <name>fake_address_county</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_address_county</field>
+            <caption>Fake maakond</caption>
+      </property>
+      <property>
+            <name>fake_address_country</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_address_country</field>
+            <caption>Fake riik</caption>
+      </property>
+      <property>
+            <name>fake_phone</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_phone</field>
+            <caption>Fake telefon</caption>
+      </property>
+      <property>
+            <name>fake_email</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>textbox</type>
+            <store>no</store>
+            <user>1</user>
+            <field>fake_email</field>
+            <caption>Fake email</caption>
       </property>
       <property>
             <name>stats_s_from</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.63 2008/06/04 10:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.64 2008/06/12 13:22:38 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -1318,7 +1318,7 @@ class shop_order_center extends class_base
 		foreach($props as $pn => $pd)
 		{
 			$row = array(
-				"desc" => $pd["caption"],
+				"desc" => $pd["caption"]." [$pn]",
 				"empty" => html::radiobutton(array(
 					"name" => "pmap[$pn]",
 					"value" => "",
