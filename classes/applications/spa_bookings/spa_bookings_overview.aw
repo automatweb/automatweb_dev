@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.57 2008/06/12 14:10:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.58 2008/06/12 14:55:56 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -210,6 +210,7 @@ class spa_bookings_overview extends class_base
 			"r_ra_seller",
 			"r_ra_worker",
 			"r_ra_project",
+			"r_ra_location",
 			"r_ra_unconfirmed",
 			"r_ra_weekdays",
 			"r_ra_res_style",
@@ -251,6 +252,7 @@ class spa_bookings_overview extends class_base
 						$prop["options"][$loc_id] = $loco->name();
 					}
 				}
+				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "r_ra_booking_from":
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -757,6 +759,8 @@ class spa_bookings_overview extends class_base
 	{
 		extract($arr);
 		$bron_array = array();
+		$bron_inst = get_instance(CL_RESERVATION);
+		$reasons = $bron_inst->reason_list();
 		switch($this->result_type)
 		{
 			case "weekdays":
@@ -777,7 +781,7 @@ class spa_bookings_overview extends class_base
 					}
 					$bron_array[$b->id()]["room"] = $b->prop("resource.name");
 					$bron_array[$b->id()]["person"] = $b->prop("customer.name");
-					$bron_array[$b->id()]["not_reason"] = "";
+					$bron_array[$b->id()]["not_reason"] = $reasons[$b->prop("client_arrived")];
 					$bron_array[$b->id()]["time"] = date("d.m.Y h:i",$b->prop("start1"))." - ".date("d.m.Y h:i",$b->prop("end"));
 				}
 				break;
@@ -1055,6 +1059,27 @@ class spa_bookings_overview extends class_base
 		{
 			//$filter["CL_RESERVATION.RELTYPE_PROJECT.name"] = "%".$r_ra_project."%";
 			$filter["CL_RESERVATION.RELTYPE_PROJECT.id"] = $r_ra_project;
+		}
+
+		//asukoht
+		if($r_ra_location)
+		{
+			$params["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+				"tree_opts" => array(
+				"type" => TREE_DHTML,
+					"tree_id" => "rooms_ovtr",
+					"persist_state" => true,
+				),
+				"root_item" => obj($r_ra_location),
+				"ot" => new object_tree(array(
+					"class_id" => array(CL_MENU),
+					"parent" => $r_ra_location
+				)),
+				"var" => "tf"
+			));
+
+			$locs = $params["prop"]["vcl_inst"]->get_item_ids();
+			$filter["CL_RESERVATION.RELTYPE_RESOURCE.parent"] = $locs;
 		}
 
 		//broneerimis aja j2rgi

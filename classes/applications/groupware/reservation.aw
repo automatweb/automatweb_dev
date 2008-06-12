@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.102 2008/06/12 13:38:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.103 2008/06/12 14:55:52 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -209,6 +209,16 @@ class reservation extends class_base
 			"tpldir" => "applications/groupware/reservation",
 			"clid" => CL_RESERVATION
 		));
+	}
+
+	function reason_list()
+	{
+		return array(
+			3 => t("Loobus"),
+			4 => t("Uus aeg"),
+			5 => t("P&otilde;hjus teadmata"),
+			6 => t("Paneb ise uue aja"),
+		);
 	}
 
 	function get_property($arr)
