@@ -2,21 +2,15 @@
 <properties>
       <property>
             <name>skill</name>
-            <table>kliendibaas_oskuse_tase</table>
+            <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_SKILL</reltype>
+            <store>connect</store>
             <no_edit>1</no_edit>
             <automatic>1</automatic>
             <field>skill</field>
             <caption>Oskus</caption>
-      </property>
-      <property>
-            <name>other_parent</name>
-            <table>kliendibaas_oskuse_tase</table>
-            <group>general</group>
-            <type>hidden</type>
-            <field>other_parent</field>
       </property>
       <property>
             <name>level</name>
@@ -31,10 +25,10 @@
       </property>
       <property>
             <name>other</name>
-            <table>kliendibaas_oskuse_tase</table>
+            <table>objects</table>
             <group>general</group>
             <type>textbox</type>
-            <field>other</field>
+            <field>comment</field>
             <caption>Muu</caption>
       </property>
       <classinfo>
@@ -44,13 +38,6 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
-      <tableinfo>
-            <kliendibaas_oskuse_tase>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_oskuse_tase>
-      </tableinfo>
       <reltypes>
             <SKILL>
                   <value>1</value>
