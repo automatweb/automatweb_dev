@@ -1172,9 +1172,9 @@ class bug_tracker extends class_base
 		$i_bug_count = count($bugs);
 		$t->define_data(array(
 			"name" => html::strong(t("Keskmine")),
-			"bug_lifespan" => html::strong($i_total_lifespan/$i_bug_count),
-			"working_hours" => html::strong($sum/$i_bug_count),
-			"comment_count" => html::strong($cnt/$i_bug_count)
+			"bug_lifespan" => html::strong(number_format($i_total_lifespan/$i_bug_count, 2)),
+			"working_hours" => html::strong(number_format($sum/$i_bug_count, 2)),
+			"comment_count" => html::strong(number_format($cnt/$i_bug_count, 2))
 		));
 		return PROP_OK;
 	}
