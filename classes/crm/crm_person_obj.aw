@@ -55,8 +55,20 @@ class crm_person_obj extends _int_object
 		return $org_rel->prop("profession");
 	}
 
+	function set_name($v)
+	{
+		$v = htmlspecialchars($v);
+		return parent::set_name($v);
+	}
+
 	function set_prop($k, $v)
 	{
+		$html_allowed = array();
+		if(!in_array($k, $html_allowed))
+		{
+			$v = htmlspecialchars($v);
+		}
+
 		switch($k)
 		{
 			case "rank":
