@@ -4,7 +4,17 @@ class crm_company_obj extends _int_object
 {
 	function set_prop($name,$value)
 	{
+		if($name == "name")
+		{
+			$value = htmlspecialchars($value);
+		}
 		parent::set_prop($name,$value);
+	}
+
+	function set_name($v)
+	{
+		$v = htmlspecialchars($v);
+		return parent::set_name($v);
 	}
 
 	function get_undone_orders()

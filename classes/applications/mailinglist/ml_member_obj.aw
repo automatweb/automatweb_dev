@@ -2,6 +2,22 @@
 
 class ml_member_obj extends _int_object
 {
+	function set_name($v)
+	{
+		$v = htmlspecialchars($v);
+		return parent::set_name($v);
+	}
+
+	function set_prop($k, $v)
+	{
+		$html_allowed = array();
+		if(!in_array($k, $html_allowed))
+		{
+			$v = htmlspecialchars($v);
+		}
+		return parent::set_prop($k, $v);
+	}
+
 	/**
 		@attrib name=get_persons api=1 params=name
 		@param id required type=oid,array(oid)
