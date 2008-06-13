@@ -127,7 +127,30 @@ FCKConfig.FontFormats	= 'p;h1;h2;h3;h4;h5;h6;pre;address;div' ;
 FCKConfig.FontNames		= 'Arial;Comic Sans MS;Courier New;Tahoma;Times New Roman;Verdana' ;
 FCKConfig.FontSizes		= 'smaller;larger;xx-small;x-small;small;medium;large;x-large;xx-large' ;
 
-FCKConfig.StylesXmlPath		= FCKConfig.EditorPath + 'fckstyles.xml' ;
+function aw_fck_get_url_contents(url)
+{
+        var req;
+        if (window.XMLHttpRequest)
+        {
+                req = new XMLHttpRequest();
+                req.open('GET', url, false);
+                req.send(null);
+        }
+        else
+        if (window.ActiveXObject)
+        {
+                req = new ActiveXObject('Microsoft.XMLHTTP');
+                if (req)
+                {
+                        req.open('GET', url, false);
+                        req.send();
+                }
+        }
+        return req.responseText;
+}
+
+
+FCKConfig.StylesXmlPath		= aw_fck_get_url_contents('/orb.aw?class=doc&action=get_fckstyles_path');
 FCKConfig.TemplatesXmlPath	= FCKConfig.EditorPath + 'fcktemplates.xml' ;
 
 FCKConfig.SpellChecker			= 'ieSpell' ;	// 'ieSpell' | 'SpellerPages'
