@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.30 2008/06/03 09:25:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.31 2008/06/13 09:04:04 tarvo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -18,16 +18,16 @@
 @default method=serialize
 
 	@property feedtype type=chooser orient=vertical
-	@caption Tüüp
+	@caption T&uuml;&uuml;p
 
 	@property limittype type=chooser orient=vertical
-	@caption Milliseid uudiseid näidata?
+	@caption Milliseid uudiseid n&auml;idata?
 
 	@property count type=textbox size=2
 	@caption Mitu viimast
 
 	@property days type=textbox size=2
-	@caption Mitme viimase päeva omad
+	@caption Mitme viimase p&auml;eva omad
 
 	@property sort_by type=select 
 	@caption Mille j&auml;rgi sorteeritakse
@@ -35,10 +35,10 @@
 	@property sort_ord type=select 
 
 	@property parse_embed type=checkbox ch_value=1 default=1
-	@caption Näita ka lisatud objekte
+	@caption N&auml;ita ka lisatud objekte
 
 	@property folder_name type=checkbox ch_value=1
-	@caption Näita dokumendi kausta nime
+	@caption N&auml;ita dokumendi kausta nime
 
 @default group=folders
 
@@ -124,8 +124,8 @@ class newsfeed extends class_base
 
 			case "limittype":
 				$prop["options"] = array(
-					"last" => "Viimased X uudist",
-					"days" => "Viimase X päeva uudised",
+					"last" => t("Viimased X uudist"),
+					"days" => t("Viimase X p&auml;eva uudised"),
 				);
 				break;
 
@@ -198,7 +198,7 @@ class newsfeed extends class_base
 		));
 		$t->define_field(array(
 			"name" => "include_subs",
-			"caption" => t("Võta alamkaustadest ka"),
+			"caption" => t("V&ouml;ta alamkaustadest ka"),
 			"align" => "center",
 			"width" => 150,
 		));
@@ -404,6 +404,7 @@ class newsfeed extends class_base
 				$ol_args["CL_DOCUMENT.doc_modified"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
 			};
 
+			$ol_args["site_id"] = array();
 			$ol = new object_list($ol_args);
 
 			$first = 0;
