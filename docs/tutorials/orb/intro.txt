@@ -49,7 +49,7 @@ The parts of the comment that are relevant to orb definitions are (the full form
 
 @param param_name [required|optional|define] - defines an argument to the function
 
-required arguments must be present, otherwise an error is thrown. ptional arguments are optional, passed if present, they can have default values, like this:
+required arguments must be present, otherwise an error is thrown. optional arguments are optional, passed if present, they can have default values, like this:
 @param bar optional default=12
 
 define type arguments values are always passed and their value is read from the @param definition, like this:
@@ -65,7 +65,7 @@ example:
 example:
 @param oid required acl="view;edit"
 
-- class_id- if present, it is assumed that this argument containt an object's id ant that the object is of that class. several classes can be defined separated by commas. works only when acl is defined.
+- class_id- if present, it is assumed that this argument contains an object's id and that the object is of that class. several classes can be defined separated by commas. works only when acl is defined.
 example:
 @param oid required acl="view;edit" class_id=CL_FOO,CL_BAR
 
