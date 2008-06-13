@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.75 2008/06/12 13:22:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.76 2008/06/13 09:43:41 instrumental Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -400,6 +400,22 @@ class shop_order_cart extends class_base
 			$i_o = obj($iid);
 			$i_i = $i_o->instance();
 			$mon = $i_i->get_must_order_num($i_o);
+			$uid = aw_global_get("uid");
+			$group = strlen($uid) > 0 ? get_instance(CL_USER)->get_groups_for_user($uid)->ids() : get_instance(CL_GROUP)->get_non_logged_in_group();
+			$am_limits = $i_i->get_amount_limits(array("id" => $iid, "group" => $group));
+			foreach($am_limits as $limits)
+			{
+				// Determine the lowest minimum for current user
+				if(!isset($am_limit["min"]) || $am_limit["min"] > $limits["min"])
+				{
+					$am_limit["min"] = $limits["min"];
+				}
+				// Determine the highest maximum for current user
+				if(!isset($am_limit["max"]) || $am_limit["max"] < $limits["max"])
+				{
+					$am_limit["max"] = $limits["max"];
+				}
+			}
 			$quantx = new aw_array($quantx);
 			foreach($quantx->get() as $x => $quant)
 			{
@@ -410,6 +426,48 @@ class shop_order_cart extends class_base
 				else
 				{
 					$cc = (int)$cart["items"][$iid][$x]["items"] + $quant;
+				}
+				if(is_array($am_limit))
+				{
+					if($am_limit["min"] > $cc)
+					{
+						$soce = aw_global_get("soc_err");
+						if (!is_array($soce))
+						{
+							$soce = array();
+						}
+						$soce[$iid] = array(
+							"msg" => sprintf(t("%s minimaalne tellimiskogus on %s, hetkel korvis %s."), $i_o->name(), $am_limit["min"], $cc),
+							"prod_name" => $i_o->name(),
+							"prod_id" => $i_o->id(),
+							"amount_limit_min" => $am_limit["min"],
+							"ordered_num" => $cc,
+							"ordered_num_enter" => $quant,
+							"is_err" => true
+						);
+						aw_session_set("soc_err", $soce);
+						$order_ok = false;
+					}
+					else
+					if($am_limit["max"] < $cc)
+					{
+						$soce = aw_global_get("soc_err");
+						if (!is_array($soce))
+						{
+							$soce = array();
+						}
+						$soce[$iid] = array(
+							"msg" => sprintf(t("%s maksimaalne tellimiskogus on %s, hetkel korvis %s."), $i_o->name(), $am_limit["max"], $cc),
+							"prod_name" => $i_o->name(),
+							"prod_id" => $i_o->id(),
+							"amount_limit_max" => $am_limit["max"],
+							"ordered_num" => $cc,
+							"ordered_num_enter" => $quant,
+							"is_err" => true
+						);
+						aw_session_set("soc_err", $soce);
+						$order_ok = false;
+					}
 				}
 				if ($mon)
 				{
@@ -444,16 +502,16 @@ class shop_order_cart extends class_base
 
 						}
 						$soce[$iid] = array(
-                                                        "msg" => $rv["msg"], 
-                                                        "prod_name" => $i_o->name(),
-                                                        "prod_id" => $i_o->id(),
-                                                        "must_order_num" => $mon,
-                                           //             "ordered_num" => $cc,
-                                            //            "ordered_num_enter" => $quant,
-                                                        "is_err" => true
-                                                );
-                                                aw_session_set("soc_err", $soce);
-                                                $order_ok = false;
+							"msg" => $rv["msg"], 
+							"prod_name" => $i_o->name(),
+							"prod_id" => $i_o->id(),
+							"must_order_num" => $mon,
+			   //             "ordered_num" => $cc,
+				//            "ordered_num_enter" => $quant,
+							"is_err" => true
+						);
+						aw_session_set("soc_err", $soce);
+						$order_ok = false;
 
 					}
 				}
