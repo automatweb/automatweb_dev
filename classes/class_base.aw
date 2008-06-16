@@ -1004,6 +1004,14 @@ class class_base extends aw_template
 	**/
 	function submit($args = array())
 	{
+		if ($args["posted_by_js"] == 1)
+		{
+			foreach($args as $k => $v)
+			{
+				$args[$k] = iconv("utf-8", aw_global_get("charset"), $v);
+			}
+		}
+
 		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
