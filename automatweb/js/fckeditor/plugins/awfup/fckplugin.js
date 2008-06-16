@@ -172,7 +172,6 @@ if ( FCKBrowserInfo.IsIE )
 			if ( oRange.findText( aPlaholders[i] ) )
 			{
 				var name = aPlaholders[i].match( /#([^#]*?)#/ )[1] ;
-				alert (name);
 			
 				doc_id = FCKAWFilePlaceholders.GUP("id");
 				tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
