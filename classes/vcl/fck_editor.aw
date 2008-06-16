@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.19 2008/01/31 13:55:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.20 2008/06/16 15:53:25 hannes Exp $
 // fck_editor.aw - FCKeditor
 /*
 @classinfo  maintainer=hannes
@@ -11,6 +11,7 @@ class fck_editor extends aw_template
 		$this->init (array (
 			"tpldir" => "vcl/fck_editor",
 		));
+		$this->fck_version = "2.6.1";
 	}
 	
 	function get_rte_toolbar($arr)
@@ -89,6 +90,7 @@ class fck_editor extends aw_template
 				"height"=> $height,
 				"lang" => $strFcklang,
 				"toolbarset" => $s_toolbarset,
+				"fck_version" => $this->fck_version
 			));
 			$tmp.= $this->parse("EDITOR");
 		}
@@ -96,6 +98,7 @@ class fck_editor extends aw_template
 		$this->vars(array(
 				"EDITOR" => $tmp,
 				"msg_leave" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"),
+				"msg_leave_error" => html_entity_decode(t("Andmete salvestamine kahjuks ei &otilde;nnestunud")),
 		));
 		
 		return $this->parse();

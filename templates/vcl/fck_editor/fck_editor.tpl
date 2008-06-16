@@ -1,76 +1,112 @@
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/fckeditor/2.6/fckeditor.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/fckeditor/{VAR:fck_version}/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
+var document_form = new Array();
+var document_form_original = new Array();
+var content_changed = false;
 
-changed = 0;
-function set_changed()
-{
-changed = 1;
-}
-
-function generic_loader()
-{
-	// set onchange event handlers for all form elements
-	var els = document.changeform.elements;
-	var cnt = els.length;
-	for(var i = 0; i < cnt; i++)
-	{
-		if (els[i].attachEvent)
-		{
-			els[i].attachEvent("onChange",set_changed);
-		}
-		else
-		{
-			els[i].setAttribute("onChange",els[i].getAttribute("onChange")+ ";set_changed();");
-		}
-	}
-}
-
-function generic_unloader()
-{
-	if (changed)
-	{
-		if (confirm("{VAR:msg_leave}"))
-		{
-			document.changeform.submit();
-			return false;
-		}
-	}
-} 
-
+/*
+ * here we set change listeners
+ */
 function FCKeditor_OnComplete( editorInstance )
 {
-	var browser = navigator.userAgent.toLowerCase();
-	var int_content_length_original = editorInstance.EditorDocument.body.innerHTML.length;
-	var bool_changed=false;
-	
-	if (browser.indexOf('msie')>0)	{
+	if ($.browser.msie)	{
 		editorInstance.Events.AttachEvent( 'OnSelectionChange', FCKeditor_OnChange ) ;
 		editorInstance.EditorDocument.attachEvent( 'onkeyup', FCKeditor_OnChange ) ;
 		editorInstance.EditorDocument.attachEvent( 'onkeydown', FCKeditor_OnChange ) ;
-	} 
-	else 
+	}
+	else
 	{
 		editorInstance.Events.AttachEvent( 'OnSelectionChange', FCKeditor_OnChange ) ;
 		editorInstance.EditorDocument.addEventListener( 'keyup', FCKeditor_OnChange, true ) ;
 		editorInstance.EditorDocument.addEventListener( 'keydown', FCKeditor_OnChange, true ) ;
 	}
 	
-	function FCKeditor_OnChange(  )
+	document_form_original[editorInstance.Name] = editorInstance.EditorDocument.body.innerHTML;
+	
+	function FCKeditor_OnChange()
 	{
-		if (int_content_length_original!=editorInstance.EditorDocument.body.innerHTML.length && bool_changed == false)
+		document_form[editorInstance.Name] = editorInstance.EditorDocument.body.innerHTML;
+		if (document_form_original[editorInstance.Name].length != document_form[editorInstance.Name].length)
 		{
-			bool_changed = true;
 			set_changed();
 		}
 	}
 }
-oldload = window.onload;
+
+/*
+ * prototype for array
+ */
+function serializeArray () {
+	s_out = "";
+	a_keys = new Array();
+	
+	for (key in this)
+	{
+		a_keys[a_keys.length] = key;
+	}
+	
+	for(i=0;i<a_keys.length-1;i++)
+	{
+		key = a_keys[i];
+		s_out += encodeURIComponent(key)+"="+encodeURIComponent(this[key])+"&";
+	}
+	s_out = s_out.substr(0, s_out.length-1);
+	return s_out;
+}
+window.Array.prototype.serializeArray = serializeArray;
+
+/*
+ * if executed, content has been modified
+ */
+function set_changed()
+{
+	content_changed = true;
+}
+
+if ($.browser.opera && jQuery.browser.version>="9.50")
+{	
+	// don't really know what i need for new opera here... nothing seems to work
+}
+else
+{
+	$(window).unload( function () {
+		unloadHandler ();
+	});
+}
+
+/*
+ * executed after leaving page if content has changed and not saved
+ */
+function unloadHandler()
+{
+	if(content_changed)
+	{
+		var prompt = "{VAR:msg_leave}";
+		if(confirm(prompt))
+		{
+			 $.ajax({
+				type: "POST",
+				url: "orb.aw",
+				data: $("form").serialize()+"&"+document_form.serializeArray()+"&posted_by_js=1",
+				async: false,
+				success: function(msg){
+				 //alert( "Data Saved: " + msg );
+				},
+				error: function(msg){
+					alert( "{VAR:msg_leave_error}");
+				}
+
+			});
+		}
+	}
+}
+
 window.onload = function()
 {
 	<!-- SUB: EDITOR -->
 	var fck{VAR:name} = new FCKeditor("{VAR:name}");
-	fck{VAR:name}.BasePath = "/automatweb/js/fckeditor/2.6/";
+	fck{VAR:name}.BasePath = "/automatweb/js/fckeditor/{VAR:fck_version}/";
 	fck{VAR:name}.Width = "{VAR:width}";
 	fck{VAR:name}.Height = "{VAR:height}";
 	fck{VAR:name}.Config["AutoDetectLanguage"] = false;
@@ -78,11 +114,6 @@ window.onload = function()
 	fck{VAR:name}.ReplaceTextarea();
 	fck{VAR:name}.Config["CustomConfigurationsPath"] = "/automatweb/orb.aw?class=fck_editor&action=get_fck_config" + ( new Date() * 1 ) ;
 	<!-- END SUB: EDITOR -->
-	
- 	if (oldload)
-	{
-		oldload();
-	}
 }
 
 -->
