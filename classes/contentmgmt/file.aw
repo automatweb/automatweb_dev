@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.9 2008/06/11 10:31:41 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.10 2008/06/16 15:49:53 hannes Exp $
 /*
 
 
@@ -646,7 +646,7 @@ class file extends class_base
 				{
 					if (eSelected.tagName == 'SPAN' && eSelected._awfileplaceholder  )
 					{
-						eSelected.parentNode.removeChild( eSelected ) ;
+						//eSelected.parentNode.removeChild( eSelected ) ;
 						$.get(\"$url\", function(data){
 							window.parent.opener.FCKAWFilePlaceholders.Add(data);
 							window.parent.close();
@@ -1738,7 +1738,7 @@ class file extends class_base
 			if ("#".$arr["alias_name"]."#" == $alias_string)
 			{
 				$o = obj($obj_id);
-				$out .= 'item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
+				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
 				$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
 			}
 		}
