@@ -73,6 +73,10 @@ class reservation_obj extends _int_object
 		{
 			$parent = $this->id();
 		}
+		if(!$parent)
+		{
+			$parent = $this->parent();
+		}
 		$project = new object();
 		$project->set_parent($parent);
 		$project->set_class_id(CL_PROJECT);
