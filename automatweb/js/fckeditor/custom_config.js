@@ -1,6 +1,6 @@
 //FCKConfig.CustomConfigurationsPath = '/js/fckeditor/2.6/fmyconfig.js' ;
 
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
+FCKConfig.EditorAreaCSS = '/automatweb/js/fckeditor/fck_editorarea.css' ;
 FCKConfig.EditorAreaStyles = '' ;
 FCKConfig.ToolbarComboPreviewCSS = '' ;
 
@@ -22,12 +22,11 @@ FCKConfig.SkinDialogCSS = '' ;	// FCKConfig.SkinPath + "|<minified css>" ;
 
 FCKConfig.PreloadImages = [ FCKConfig.SkinPath + 'images/toolbar.start.gif', FCKConfig.SkinPath + 'images/toolbar.buttonarrow.gif' ] ;
 
-FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
+FCKConfig.PluginsPath = '/automatweb/js/fckeditor/plugins/' ;
 
 FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ; 
-//FCKConfig.Plugins.Add( 'placeholder', 'en,et' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
@@ -80,7 +79,7 @@ FCKConfig.ToolbarSets["aw"] = [
 		['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 		['Subscript','Superscript'],
 		['awlup','Unlink','Anchor'],
-		['awimageupload','awfup','Table','Rule','Smiley','SpecialChar'],
+		['awfup','awimageupload','Table','Rule','Smiley','SpecialChar'],
 		//['Templates'],
 		['Style','FontFormat'],
 		['FitWindow','ShowBlocks']		// No comma for the last row.
