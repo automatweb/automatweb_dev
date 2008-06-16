@@ -13,6 +13,7 @@ class image_manager extends aw_editor_manager_base
 		@attrib name=manage default=1
 		@param doc required
 		@param imgsrc optional
+		@param image_id optional
 	**/
 	function manage($arr)
 	{
@@ -53,10 +54,9 @@ class image_manager extends aw_editor_manager_base
 			$doc = obj($params["id"]);
 		}
 
-		if ($image_list->count())
+		if ($arr["image_id"])
 		{
-			$imgo = $image_list->begin();
-			$image_url = html::get_change_url($imgo->id(), array("in_popup" => $_GET["in_popup"]));
+			$image_url = html::get_change_url($arr["image_id"], array("in_popup" => $_GET["in_popup"], "docid" => $doc->id()));
 		}
 		else
 		{

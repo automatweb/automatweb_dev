@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="doc" />
 					<optional name="imgsrc" />
+					<optional name="image_id" />
 				</arguments>
 			</function>
 		</action>
