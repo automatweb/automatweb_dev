@@ -32,6 +32,9 @@
 	@property customer_menu type=relpicker field=meta method=serialize reltype=RELTYPE_MENU
 	@caption Kataloog kuhu kliendid salvestada
 	
+	@property projects_menu type=relpicker field=meta method=serialize reltype=RELTYPE_MENU
+	@caption Kataloog kuhu projektid salvestada
+
 	@property min_price_to_all type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Miinimumhind m&otilde;jub k&otilde;igile
 	

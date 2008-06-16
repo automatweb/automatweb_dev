@@ -57,6 +57,32 @@ class reservation_obj extends _int_object
 		return $sum;
 	}
 
+	/** adds new project to reservation
+		@attrib api=1
+		@returns oid
+			project id
+	**/
+	function set_new_project($name)
+	{
+		if(!strlen($name))
+		{
+			return;
+		}
+		$parent = $this->get_room_setting("projects_menu");
+		if(!$parent)
+		{
+			$parent = $this->id();
+		}
+		$project = new object();
+		$project->set_parent($parent);
+		$project->set_class_id(CL_PROJECT);
+		$project->set_name($name);
+		$project->save();
+		$this->set_prop("project" , $project->id());
+		$this->save();
+		return $project->id();
+	}
+
 	function get_room_setting($setting)
 	{
 		if(!$this->prop("resource"))

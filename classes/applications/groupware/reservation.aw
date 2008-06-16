@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.103 2008/06/12 14:55:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.104 2008/06/16 09:47:24 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -545,6 +545,10 @@ class reservation extends class_base
 						if(is_object($cust_obj))
 						{
 							$prop["value"] = $cust_obj->id();
+						}
+						else
+						{
+							$prop["value"] = $arr["obj_inst"]->set_new_project($arr["request"]["project_awAutoCompleteTextbox"]);
 						}
 					}
 				}
