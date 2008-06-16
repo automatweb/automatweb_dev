@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.58 2008/06/12 14:55:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.59 2008/06/16 10:39:35 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -601,6 +601,10 @@ class spa_bookings_overview extends class_base
 		foreach ($brons->arr() as $b)
 		{
 			$project_id = $b->prop($props[$this->result_data]);
+			if(!$project_id)//et tyhjad ja 0 jne eraldi v2ljadesse ei l2heks
+			{
+				$project_id = "0";
+			}
 			$projects[$project_id] = $project_id;
 			$data[date("Ymd" , $b->prop("start1"))][$project_id]++;
 			$proj_sum[$project_id]++;
