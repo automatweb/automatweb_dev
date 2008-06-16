@@ -3,7 +3,7 @@
 <!--
 var document_form = new Array();
 var document_form_original = new Array();
-var content_changed = false;
+var changed = false;
 
 /*
  * here we set change listeners
@@ -61,7 +61,7 @@ window.Array.prototype.serializeArray = serializeArray;
  */
 function set_changed()
 {
-	content_changed = true;
+	changed = true;
 }
 
 if ($.browser.opera && jQuery.browser.version>="9.50")
@@ -80,7 +80,7 @@ else
  */
 function unloadHandler()
 {
-	if(content_changed)
+	if(changed)
 	{
 		var prompt = "{VAR:msg_leave}";
 		if(confirm(prompt))
