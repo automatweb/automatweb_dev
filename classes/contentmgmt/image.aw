@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.21 2008/06/04 10:35:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.22 2008/06/16 15:51:07 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1585,7 +1585,8 @@ class image extends class_base
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 		if ($arr["request"]["save_and_doc"] != "")
 		{
-			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
+			//$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
+			$url = $this->mk_my_orb("fetch_image_alias_for_doc", array("doc_id" => $arr["request"]["docid"], "image_id" => $arr["obj_inst"]->id()));
 
 			$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
 			$this->gen_image_alias_for_doc(array(
@@ -1595,8 +1596,37 @@ class image extends class_base
 			));
 
 			die("
-				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
+				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/jquery/jquery-1.2.3.min.js\"></script>
 				<script language='javascript'>
+				
+				
+				FCK=window.parent.opener.FCK;
+				
+				var eSelected = FCK.Selection.GetSelectedElement() ;
+				
+				if (eSelected)
+				{
+					if (eSelected.tagName == 'SPAN' && eSelected._awfileplaceholder  )
+					{
+					/*
+						eSelected.parentNode.removeChild( eSelected ) ;
+						$.get(\"$url\", function(data){
+							window.parent.opener.FCKAWFilePlaceholders.Add(data);
+							window.parent.close();
+						});
+						*/
+					}
+				}
+				else
+				{
+					$.get(\"$url\", function(data){
+						window.parent.opener.FCKAWImagePlaceholders.Add(data);
+						window.parent.close();
+					});
+				}
+				
+				
+				/*
 				FCK=window.parent.opener.FCK;
 				var eSelected = FCK.Selection.GetSelectedElement() ;
 				if (\"\"+eSelected == \"HTMLImageElement\") 
@@ -1609,6 +1639,7 @@ class image extends class_base
 					FCK.InsertHtml(ct); 
 				} 
 				window.parent.close();
+				*/
 			</script>
 			");
 		}
@@ -2347,6 +2378,55 @@ class image extends class_base
 		{
 			die($arr["img_id"]);
 		}
+	}
+	
+	/**
+		@attrib name=fetch_image_alias_for_doc
+		@param doc_id required
+		@param image_id required
+	**/
+	function fetch_image_alias_for_doc($arr)
+	{
+		$alp = get_instance("alias_parser");
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ($obj_id == $arr["image_id"])
+			{
+				die(str_replace("#", "", $alias_string));
+			}
+		}
+		
+		die();
+	}
+	
+	/**
+		@attrib name=get_connection_details_for_doc params=name
+		@param doc_id required type=int
+		@param alias_name required type=string
+		@param use_br optional type=int
+	**/
+	function get_connection_details_for_doc($arr)
+	{
+		if ($arr["use_br"])
+		{
+			$sufix = "\n";
+		}
+		$out = "";
+		$alp = get_instance("alias_parser");
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		$out = 'connection_details_for_doc = new Array();'.$sufix;
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ("#".$arr["alias_name"]."#" == $alias_string)
+			{
+				$o = obj($obj_id);
+				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
+				$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
+			}
+		}
+		die($out);
 	}
 
 	function _comments_tb($arr)
