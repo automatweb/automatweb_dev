@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.10 2008/06/08 11:52:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.11 2008/06/17 20:37:26 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -105,23 +105,16 @@ class personnel_management_candidate extends class_base
 		return $retval;
 	}
 
-	function callback_post_save($arr)
+	function callback_pre_save($arr)
 	{
-		if($this->can("view", aw_global_get("person_obj_id_for_candidate")))
+		if($this->can("edit", aw_global_get("candidate_obj_id_for_candidate")))
 		{
-			$arr["obj_inst"]->connect(array(
-				"to" => aw_global_get("person_obj_id_for_candidate"),
-				"type" => "RELTYPE_PERSON",
-			));
-			aw_session_set("person_obj_id_for_candidate", "");
-		}
-		if($this->can("view", aw_global_get("job_offer_obj_id_for_candidate")))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => aw_global_get("job_offer_obj_id_for_candidate"),
-				"type" => "RELTYPE_JOB_OFFER",
-			));
-			aw_session_set("job_offer_obj_id_for_candidate", "");
+			$arr["new"] = "";
+			$arr["request"]["new"] = "";
+			$o = obj(aw_global_get("candidate_obj_id_for_candidate"));
+			$arr["id"] = $o->id();
+			$arr["obj_inst"] = $o;
+			aw_session_set("candidate_obj_id_for_candidate", "");
 		}
 	}
 
