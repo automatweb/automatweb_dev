@@ -26,7 +26,7 @@ function FCKeditor_OnComplete( editorInstance )
 	
 	function FCKeditor_OnChange()
 	{
-		document_form[editorInstance.Name] = editorInstance.EditorDocument.body.innerHTML;
+		document_form[editorInstance.Name] = editorInstance.GetHTML();
 		if (document_form_original[editorInstance.Name].length != document_form[editorInstance.Name].length)
 		{
 			set_changed();

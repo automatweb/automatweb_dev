@@ -91,6 +91,12 @@ p, ul, li
 	background-color: #ff9933;
 }
 
+.Fck_image 
+{
+	margin: 7px;
+	display: block;
+}
+
 .verdana_s { font-face: Verdana; font-weight: bold; color: rgb(153, 204, 0); font-size: 11px; }
 .verdana {font-face: Verdana; color: #99cc00; text-decoration: bold; font-weight: bold; font-size: 12px;}
 .verdana_xl {font-face: Verdana; color: #99cc00; text-decoration: bold; font-weight: bold; font-size: 14px;}

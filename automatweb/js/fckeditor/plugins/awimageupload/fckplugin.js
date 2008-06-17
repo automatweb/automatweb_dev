@@ -24,9 +24,28 @@ InsertAWImageCommand.Execute=function() {
 }
 FCKCommands.RegisterCommand('awimagechange', InsertAWImageCommand ); 
 
+
+/** backward compability 
+ *
+ */
+var InsertAWImageCommandOld=function(){};
+InsertAWImageCommandOld.Name='ImageChangeOld';
+InsertAWImageCommandOld.prototype.Execute=function(){}
+InsertAWImageCommandOld.GetState=function() { return FCK_TRISTATE_OFF; }
+InsertAWImageCommandOld.Execute=function() {
+  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&imgsrc="+escape(FCK.Selection.GetSelectedElement().src), 
+					'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
+}
+FCKCommands.RegisterCommand('awimagechange_old', InsertAWImageCommandOld ); 
+
 FCK.ContextMenu.RegisterListener( {
 	AddItems : function( menu, tag, tagName )
 	{
+		if ( tagName == 'IMG')
+		{
+			menu.AddSeparator();
+			menu.AddItem( "awimagechange_old", "Pildi atribuudid", 37 ) ;
+		}
 		if ( tagName == 'SPAN')
 		{
 			if (tag._awimageplaceholder)
@@ -38,10 +57,7 @@ FCK.ContextMenu.RegisterListener( {
 		}
 	}}
 );
-
-
-
-
+ 
 /**
  * placeholder code
  */
@@ -52,8 +68,8 @@ var FCKAWImagePlaceholders = new Object() ;
 // Add a new placeholder at the actual selection.
 FCKAWImagePlaceholders.Add = function( name )
 {
-	var oSpan = FCK.InsertElement( 'SPAN' ) ;
-	this.SetupImageDIV( oSpan, name ) ;
+	var oSpan = FCK.InsertElement( 'span' ) ;
+	this.SetupSpan( oSpan, name ) ;
 }
 
 FCKAWImagePlaceholders.GUP = function(param)
@@ -94,15 +110,56 @@ FCKAWImagePlaceholders.GetUrlContents = function( url )
 	return req.responseText; 
 }
 
+
+FCKAWImagePlaceholders.GetImageFloat = function( image_name )
+{
+	float_sufix = image_name.match( /[a-z]*[0-9]{1,}(.*)$/ )[1];
+	var out;
+	if (float_sufix.length > 0)
+	{
+		if (float_sufix=="p")
+		{
+			out = "right";
+		}
+		else if (float_sufix=="v")
+		{
+			out = "left";
+		}
+		else if (float_sufix=="k")
+		{
+			out = "center";
+		}
+		return out;
+	}
+	else
+	{
+		return false;
+	}
+}
+	
+	
 FCKAWImagePlaceholders.SetupSpan = function( span, name )
 {
 	doc_id = FCKAWImagePlaceholders.GUP("id");
 	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 	eval(tmp);
-	span.innerHTML = connection_details_for_doc["#"+name+"#"]["name"];
-	
-	//span.style.backgroundColor = '#ffff00' ;
-	//span.style.color = '#000000' ;
+	span.className = "Fck_image";
+	span.style.display = "block";
+	span.style.width = connection_details_for_doc["#"+name+"#"]["width"]+"px ! important";
+	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
+	if (img_float == "left" || img_float == "right")
+	{
+		span.setAttribute("style","float:"+img_float);
+		span.style.styleFloat = img_float;
+	}
+	else if (img_float == "center")
+	{
+		span.style.textAlign = "center";
+		span.style.width= "100%";
+	}
+	span.innerHTML = "<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
+			"<br />"+
+			"<b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>";
 
 	if ( FCKBrowserInfo.IsGecko )
 		span.style.cursor = 'default' ;
@@ -119,28 +176,6 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 	}
 }
 
-FCKAWImagePlaceholders.SetupImageDIV = function( div, name )
-{
-	doc_id = FCKAWImagePlaceholders.GUP("id");
-	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
-	eval(tmp);
-	div.innerHTML = connection_details_for_doc["#"+name+"#"]["name"];
-
-	if ( FCKBrowserInfo.IsGecko )
-		div.style.cursor = 'default' ;
-
-	div._awimageplaceholder = name ;
-	div._oid = connection_details_for_doc["#"+name+"#"]["id"]
-	//table.style.border = "0";
-
-	// To avoid it to be resized.
-	div.onresizestart = function()
-	{	
-		FCK.EditorWindow.event.returnValue = false ;
-		return false ;
-	}
-}
-
 // On Gecko we must do this trick so the user select all the SPAN when clicking on it.
 FCKAWImagePlaceholders._SetupClickListener = function()
 {
@@ -148,16 +183,42 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	{
 		if ( e.target.tagName == 'SPAN' && e.target._awimageplaceholder )
 			FCKSelection.SelectNode( e.target ) ;
+		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
+		{
+			FCKSelection.SelectNode( e.target.parentNode ) ;
+		}
 	}
-
-	FCK.EditorDocument.addEventListener( 'click', FCKAWImagePlaceholders._ClickListener, true ) ;
+	
+	FCKAWImagePlaceholders._ClickListenerIE = function(  )
+	{
+		var e = FCK.EditorWindow.event ;
+		// alert (e.srcElement.tagName);
+		e.target = e.srcElement
+		if ( e.target.parentNode.tagName == 'SPAN' && e.target.parentNode._awimageplaceholder )
+		{
+			FCKSelection.SelectNode( e.target.parentNode ) ;
+		}
+		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
+		{
+			FCKSelection.SelectNode( e.target.parentNode ) ;
+		}
+	}
+	
+	if (document.all) {        // If Internet Explorer.
+		// this was intended for ie's right click, so image caption could also be right clicked
+		//FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
+	} else {                // If Gecko.
+		//FCK.EditorDocument.addEventListener( 'click', DenGecko_OnKeyDown, true ) ;
+		FCK.EditorDocument.addEventListener( 'click', FCKAWImagePlaceholders._ClickListener, true ) ;
+	}
+	
 }
 
 // Open the AWFilePlaceholder dialog on double click.
-FCKAWImagePlaceholders.OnDoubleClick = function( div )
+FCKAWImagePlaceholders.OnDoubleClick = function( span )
 {
-	if ( div.tagName == 'SPAN' && div._awimageplaceholder )
-		FCKCommands.GetCommand( 'awimagechange' ).Execute() ;
+	if ( span.tagName == 'SPAN' && span._awimageplaceholder )
+		FCKCommands.GetCommand( 'AWFilePlaceholder' ).Execute() ;
 }
 
 FCK.RegisterDoubleClickHandler( FCKAWImagePlaceholders.OnDoubleClick, 'SPAN' ) ;
@@ -165,11 +226,11 @@ FCK.RegisterDoubleClickHandler( FCKAWImagePlaceholders.OnDoubleClick, 'SPAN' ) ;
 // Check if a Placholder name is already in use.
 FCKAWImagePlaceholders.Exist = function( name )
 {
-	var aDivs = FCK.EditorDocument.getElementsByTagName( 'SPAN' ) ;
+	var aSpans = FCK.EditorDocument.getElementsByTagName( 'SPAN' ) ;
 
-	for ( var i = 0 ; i < aDivs.length ; i++ )
+	for ( var i = 0 ; i < aSpans.length ; i++ )
 	{
-		if ( aDivs[i]._awimageplaceholder == name )
+		if ( aSpans[i]._awimageplaceholder == name )
 			return true ;
 	}
 
@@ -194,14 +255,31 @@ if ( FCKBrowserInfo.IsIE )
 			if ( oRange.findText( aPlaholders[i] ) )
 			{
 				var name = aPlaholders[i].match( /#([^#]*?)#/ )[1] ;
-			
+
 				doc_id = FCKAWImagePlaceholders.GUP("id");
 				tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 				eval(tmp);
-
-				oRange.pasteHTML('<span style="display: block; width: 150px;" contenteditable="false" _awimageplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + connection_details_for_doc["#"+name+"#"]["name"]) + '</span>';
+				img_float = FCKAWImagePlaceholders.GetImageFloat(name);
+				img_align = "";
+				
+				if (img_float)
+				{
+					if (img_float == "left" || img_float == "right")
+					{
+						img_align = "style=\"float:"+img_float+"\"";
+					}
+					else if (img_float == "center" ) 
+					{
+						img_align = "style=\"text-align: center\"";
+					}
+				}
+				oRange.pasteHTML('<span class="Fck_image" '+img_align+' width='+connection_details_for_doc["#"+name+"#"]["width"]+' _awimageplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + 
+					"<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
+					"<br /><b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>"+
+				  	'</span>');
 			}
 		}
+		FCKAWImagePlaceholders._SetupClickListener() ;
 	}
 }
 else
@@ -232,10 +310,10 @@ else
 					{
 						var sName = aPieces[i].match( /#\s*([^#]*?)\s*#/ )[1] ;
 
-						var oDiv = FCK.EditorDocument.createElement( 'SPAN' ) ;
-						FCKAWImagePlaceholders.SetupImageDIV( oDiv, sName ) ;
+						var oSpan = FCK.EditorDocument.createElement( 'span' ) ;
+						FCKAWImagePlaceholders.SetupSpan( oSpan, sName ) ;
 
-						aNodes[n].parentNode.insertBefore( oDiv, aNodes[n] ) ;
+						aNodes[n].parentNode.insertBefore( oSpan, aNodes[n] ) ;
 					}
 					else
 						aNodes[n].parentNode.insertBefore( FCK.EditorDocument.createTextNode( aPieces[i] ) , aNodes[n] ) ;
@@ -261,7 +339,7 @@ else
 FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKAWImagePlaceholders.Redraw ) ;
 
 // We must process the SPAN tags to replace then with the real resulting value of the placeholder.
-FCKXHtml.TagProcessors['SPAN'] = function( node, htmlNode )
+FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
 {
 	if ( htmlNode._awimageplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
