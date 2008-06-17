@@ -2362,13 +2362,13 @@ class crm_company_cust_impl extends class_base
 						$conn_filt["to"] = $something;
 					}
 				}
-				$orgs = (count($conn_filt) > 2)?$organization->connections_from($conn_filt):array();
+				//ma ei saa mitte aru miks siin oli nii ,et k6ikide klientide puhul ei n2itaks midagi
+				$orgs = (count($conn_filt) > 1)?$organization->connections_from($conn_filt):array();
 				$orglist = array();
 				foreach($orgs as $org)
 				{
 					$orglist[$org->prop("to")] = $org->prop("to");
 				}
-
 				/*
 				//don't need categories in the table any more -- taiu
 				if ($arr["request"]["category"])
