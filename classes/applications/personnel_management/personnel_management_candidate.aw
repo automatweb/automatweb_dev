@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.11 2008/06/17 20:37:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.12 2008/06/17 20:53:09 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -113,6 +113,12 @@ class personnel_management_candidate extends class_base
 			$arr["request"]["new"] = "";
 			$o = obj(aw_global_get("candidate_obj_id_for_candidate"));
 			$arr["id"] = $o->id();
+			$props = array("intro_file", "intro", "addinfo", "recommendations");
+			foreach($props as $prop)
+			{
+				$v = $arr["obj_inst"]->prop($prop);
+				$o->set_prop($prop, $v);
+			}
 			$arr["obj_inst"] = $o;
 			aw_session_set("candidate_obj_id_for_candidate", "");
 		}
