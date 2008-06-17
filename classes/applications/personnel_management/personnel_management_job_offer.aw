@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.41 2008/06/17 16:43:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.42 2008/06/17 19:41:52 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -2001,6 +2001,11 @@ class personnel_management_job_offer extends class_base
 		$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
 		// Add SUBs
 		$props += array("apply");
+		if($ob->autoinfo)
+		{
+			$props[] = "info";
+			$ok["info"] = 1;
+		}
 
 		// 
 		foreach($props as $prop)
