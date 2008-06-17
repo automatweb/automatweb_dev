@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.22 2008/06/16 15:51:07 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.23 2008/06/17 18:27:24 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1599,14 +1599,13 @@ class image extends class_base
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/jquery/jquery-1.2.3.min.js\"></script>
 				<script language='javascript'>
 				
-				
 				FCK=window.parent.opener.FCK;
 				
 				var eSelected = FCK.Selection.GetSelectedElement() ;
 				
 				if (eSelected)
 				{
-					if (eSelected.tagName == 'SPAN' && eSelected._awfileplaceholder  )
+					if (eSelected.tagName == 'TABLE' && eSelected._awfileplaceholder  )
 					{
 					/*
 						eSelected.parentNode.removeChild( eSelected ) ;
@@ -1615,6 +1614,17 @@ class image extends class_base
 							window.parent.close();
 						});
 						*/
+							$.get(\"$url\", function(data){
+							window.parent.opener.FCKAWImagePlaceholders.Add(data);
+							window.parent.close();
+						});
+					}
+					else if (eSelected.tagName == 'IMG' )
+					{
+						$.get(\"$url\", function(data){
+							window.parent.opener.FCKAWImagePlaceholders.Add(data);
+							window.parent.close();
+						});
 					}
 				}
 				else
@@ -1624,22 +1634,6 @@ class image extends class_base
 						window.parent.close();
 					});
 				}
-				
-				
-				/*
-				FCK=window.parent.opener.FCK;
-				var eSelected = FCK.Selection.GetSelectedElement() ;
-				if (\"\"+eSelected == \"HTMLImageElement\") 
-				{
-					 eSelected.src=\"$image_url\"; 
-				} 
-				else 
-				{ 
-					ct=aw_get_url_contents(\"$url\"); 
-					FCK.InsertHtml(ct); 
-				} 
-				window.parent.close();
-				*/
 			</script>
 			");
 		}
@@ -2398,6 +2392,12 @@ class image extends class_base
 			}
 		}
 		
+		$this->gen_image_alias_for_doc(array(
+			"img_id" => $arr["image_id"],
+			"doc_id" => $arr["doc_id"],
+			"no_die" => true
+		));
+		
 		die();
 	}
 	
@@ -2419,11 +2419,13 @@ class image extends class_base
 		$out = 'connection_details_for_doc = new Array();'.$sufix;
 		foreach($alias_list as $obj_id => $alias_string)
 		{
-			if ("#".$arr["alias_name"]."#" == $alias_string)
+			$alias_name = preg_replace  ( "/^([a-z]*[0-9]{1,}).?$/isU", "\\1", $arr["alias_name"]);
+			if ("#".$alias_name."#" == $alias_string)
 			{
 				$o = obj($obj_id);
-				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
-				$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
+				$size = @getimagesize($o->prop("file"));
+				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.', "comment" : "'.utf8_encode($o->prop("comment")).'", "url" : "'.$this->get_url_by_id($obj_id).'", "width" : '.$size[0].', "height" : '.$size[1].'};'.$sufix;
+				$out .= 'connection_details_for_doc["#'.$arr["alias_name"].'#"] = item;'.$sufix;
 			}
 		}
 		die($out);
