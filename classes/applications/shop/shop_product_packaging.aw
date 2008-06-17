@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.34 2008/05/21 10:10:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.35 2008/06/17 19:25:15 instrumental Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -153,6 +153,12 @@
 
 	@property amount_limits_tb type=toolbar no_caption=1
 
+	@property aml_inheritable type=checkbox ch_value=1 field=aml_inheritable table=aw_shop_packaging
+	@caption P&auml;ritav
+
+	@property inherit_aml_from type=relpicker reltype=RELTYPE_INHERIT_AML_FROM store=connect
+	@caption P&auml;ri kogusepiirangud
+
 	@property amount_limits_tbl type=table no_caption=1 store=no
 
 @groupinfo transl caption=T&otilde;lgi
@@ -182,6 +188,9 @@
 @reltype USERVAR5 value=7 clid=CL_META
 @caption muutuja5
 
+@reltype INHERIT_AML_FROM value=8 clid=CL_SHOP_PRODUCT,CL_SHOP_PRODUCT_PACKAGING
+@caption P&auml;ri kogusepiirangud
+
 */
 
 class shop_product_packaging extends class_base
@@ -205,6 +214,16 @@ class shop_product_packaging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "inherit_aml_from":
+				$ol = new object_list(array(
+					"class_id" => array(CL_SHOP_PRODUCT, CL_SHOP_PRODUCT_PACKAGING),
+					"aml_inheritable" => 1,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$data["options"] = array("" => t("--vali--")) + $ol->names();
+				break;
+
 			case "amount_limits_tb":
 				shop_product::_get_amount_limits_tb($arr);
 				break;
@@ -300,10 +319,13 @@ class shop_product_packaging extends class_base
 
 			case "amount_limits_tbl":
 				if(empty($arr["request"]["amount_limits"]))
+				{
 					$arr["obj_inst"]->set_meta("amount_limits", $arr["request"]["limits"]);
+				}
 				break;
 
 			case "price_cur":
+
 				$arr["obj_inst"]->set_meta("cur_prices", $arr["request"]["cur_prices"]);
 				break;
 
@@ -636,6 +658,11 @@ class shop_product_packaging extends class_base
 	function get_amount_limits($arr)
 	{
 		$o = obj($arr["id"]);
+		if($this->can("view", $o->inherit_aml_from))
+		{
+			$arr["id"] = $o->inherit_aml_from;
+			return $this->get_amount_limits($arr);
+		}
 		$amount_limits = $o->meta("amount_limits");
 		if(is_oid($arr["group"]))
 		{
@@ -692,6 +719,46 @@ class shop_product_packaging extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+	
+	function do_db_upgrade($t, $f)
+	{
+		if ($tbl == "aw_shop_packaging" && $field == "")
+		{
+			$this->db_query("create table aw_shop_packaging (oid int primary key)");
+			return true;
+		}
+
+		switch($f)
+		{
+			case "aml_inheritable":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_PRODUCT_PACKAGING,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"parent" => array(),
+					"status" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$v = 0;
+					$oid = $o->id();
+					$this->db_query("
+						INSERT INTO
+							aw_shop_packaging (oid, $f)
+						VALUES
+							('$oid', '$v')
+						ON DUPLICATE KEY UPDATE
+							$f = '$v'
+					");
+				}
+				return true;
+		}
+		return false;
 	}
 }
 ?>
