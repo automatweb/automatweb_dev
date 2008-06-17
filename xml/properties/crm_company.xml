@@ -2550,6 +2550,32 @@
             <caption>K&amp;amp;auml;ibemaksuta/K&amp;amp;auml;ibemaksuga</caption>
       </property>
       <property>
+            <name>show_bill_balance</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>checkbox</type>
+            <parent>bills_list_s</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <ch_value>1</ch_value>
+            <no_caption>1</no_caption>
+            <field>show_bill_balance</field>
+            <caption>Kuva arve saldot</caption>
+      </property>
+      <property>
+            <name>currency_grouping</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>checkbox</type>
+            <parent>bills_list_s</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <ch_value>1</ch_value>
+            <no_caption>1</no_caption>
+            <field>currency_grouping</field>
+            <caption>Kuva valuutade l&amp;amp;otilde;ikes</caption>
+      </property>
+      <property>
             <name>bill_s_search</name>
             <table>objects</table>
             <group>bills_list</group>

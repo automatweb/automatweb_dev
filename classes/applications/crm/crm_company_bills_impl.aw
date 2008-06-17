@@ -921,6 +921,15 @@ exit_function("bills_impl::_get_bill_task_list");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bills_list_t($t, $arr["request"]);
 
+		if($arr["request"]["bill_s_with_tax"] == 0)
+		{
+			$tax_add = 2;
+		}
+		else
+		{
+			$tax_add = $arr["request"]["bill_s_with_tax"];
+		}
+		$cg = $arr["request"]["currency_grouping"];
 		$d = get_instance("applications/crm/crm_data");
 		if(!$arr["request"]["bill_s_with_tax"])
 		{
@@ -930,8 +939,7 @@ exit_function("bills_impl::_get_bill_task_list");
 		{
 			$tax_add = $arr["request"]["bill_s_with_tax"];
 		}
-
-
+		
 		if ($arr["request"]["group"] == "bills_monthly")
 		{
 			$bills = $d->get_bills_by_co($arr["obj_inst"], array("monthly" => 1));
@@ -973,7 +981,6 @@ exit_function("bills_impl::_get_bill_task_list");
 //					$filt["bill_no"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["request"]["bill_s_bill_to"], "","int");
 					$filt["bill_no"] = $arr["request"]["bill_s_bill_to"];
 				}
-
 				$filt["bill_date_range"] = array(
 					"from" => date_edit::get_timestamp($arr["request"]["bill_s_from"]),
 					"to" => date_edit::get_day_end_timestamp($arr["request"]["bill_s_to"])
@@ -990,14 +997,15 @@ exit_function("bills_impl::_get_bill_task_list");
 				{
 					$filt["state"] = $arr["request"]["bill_s_status"];
 				}
-			}
+			}//arr($filt);
 			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
 			$format = t('%s arved');
 		}
 
-		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
+		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		$bill_i = get_instance(CL_CRM_BILL);
+		$curr_inst = get_instance(CL_CURRENCY);
 		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
 		$company_curr = $co_stat_inst->get_company_currency();
 
@@ -1010,7 +1018,8 @@ exit_function("bills_impl::_get_bill_task_list");
 			}
 			$this->_do_export_hr($bills, $arr, $arr["request"]["export_hr"]);
 		}
-
+		$sum_in_curr = $bal_in_curr = array();
+		$balance = 0;
 		foreach($bills->arr() as $bill)
 		{
 			$cust = "";
@@ -1024,7 +1033,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			if ($arr["request"]["group"] == "bills_search")
 			{
 				$state = $bill_i->states[$bill->prop("state")];
-			}
+			}	
 			else
 			{
 				$state = html::select(array(
@@ -1034,16 +1043,25 @@ exit_function("bills_impl::_get_bill_task_list");
 					"width" => 100,
 				));
 			}
-			$cursum = $bill_i->get_bill_sum($bill,$tax_add);
 
-			//paneme ikka oma valuutasse ymber asja
+			$cursum = $own_currency_sum = $bill_i->get_bill_sum($bill,$tax_add);
 			$curid = $bill->prop("customer.currency");
+			$cur_name = $bill->get_bill_currency_name();
 			if($company_curr && $curid && ($company_curr != $curid))
 			{
-				$cursum  = $co_stat_inst->convert_to_company_currency(array(
+				$own_currency_sum  = $co_stat_inst->convert_to_company_currency(array(
 					"sum" =>  $cursum,
 					"o" => $bill,
 				));
+			}
+			if($cg)//kliendi valuutas
+			{
+				$sum_str = number_format($cursum, 2)." ".$cur_name;
+				$sum_in_curr[$cur_name] += $cursum;
+			}
+			else//oma organisatsiooni valuutas
+			{
+				$sum_str = number_format($own_currency_sum, 2);
 			}
 
 			$pop = get_instance("vcl/popup_menu");
@@ -1065,11 +1083,11 @@ exit_function("bills_impl::_get_bill_task_list");
 			));
 			$partial = "";
 			if($bill->prop("state") == 3 && $bill->prop("partial_recieved") && $bill->prop("partial_recieved") < $cursum) $partial = '<br>'.t("osaliselt");
-			$t->define_data(array(
+			$bill_data = array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
 				"create_new" => html::href(array(
 					"url" => $this->mk_my_orb("create_new_monthly_bill", array(
-						"id" => $bill->id(),
+						"id" => $bill->id(), 
 						"co" => $arr["obj_inst"]->id(),
 						"post_ru" => get_ru()
 						), CL_CRM_COMPANY),
@@ -1079,12 +1097,57 @@ exit_function("bills_impl::_get_bill_task_list");
 				"bill_due_date" => $bill->prop("bill_due_date"),
 				"customer" => $cust,
 				"state" => $state.$partial,
-				"sum" => number_format($cursum, 2),
+				"sum" => $sum_str,
 				"client_manager" => $cm,
 				"oid" => $bill->id(),
-				"print" => $pop->get_menu()
-			));
-			$sum+= number_format($cursum,2,".", "");
+				"print" => $pop->get_menu(),
+			);
+			if($arr["request"]["show_bill_balance"])
+			{
+				$curr_balance = $bill->get_bill_needs_payment();
+				if($company_curr && $curid && ($company_curr != $curid))
+				{
+					
+					$total_balance = $own_currency_sum;
+					foreach($bill->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+					{
+						$p = $conn->to();
+						if($p->prop("currency_rate") && $p->prop("currency_rate") != 1)
+						{
+							$total_balance -= $p->get_free_sum($bill->id()) / $p->prop("currency_rate");
+						}
+						else
+						{
+							$total_balance -= $curr_inst->convert(array(
+								"from" => $curid,
+								"to" => $company_curr,
+								"sum" => $p->get_free_sum($bill->id()),
+								"date" =>  $p->prop("date"),
+							));
+						}
+					}
+				}
+				else
+				{
+					$total_balance = $curr_balance;
+				}
+
+				if($cg)
+				{
+					$bill_data["balance"] = number_format($curr_balance, 2)." ". $bill->get_bill_currency_name();
+					$bal_in_curr[$cur_name] += $curr_balance;
+				}
+				else
+				{
+					$bill_data["balance"] = number_format($total_balance, 2);
+				}
+				$balance += $total_balance;
+//				$bill_data["balance"] = number_format($bill_data["balance"], 2);
+			}
+
+			$t->define_data($bill_data);
+			// number_format here to round the number the same way in the add, so the sum is correct
+			$sum+= number_format($own_currency_sum,2,".", "");
 		}
 
 		$t->set_default_sorder("desc");
@@ -1092,10 +1155,40 @@ exit_function("bills_impl::_get_bill_task_list");
 		$t->sort_by();
 		$t->set_sortable(false);
 
-		$t->define_data(array(
-			"sum" => "<b>".number_format($sum, 2)."</b>",
+		$final_dat = array(
 			"bill_no" => t("<b>Summa</b>")
-		));
+		);
+		if($cg)
+		{
+			foreach($sum_in_curr as $cur_name => $amount)
+			{
+				$final_dat["sum"] .= "<b>".number_format($amount, 2)." ".$cur_name."</b><br>";
+				if($arr["request"]["show_bill_balance"])
+				{
+					$final_dat["balance"] .= "<b>".number_format($bal_in_curr[$cur_name], 2)." ".$cur_name."</b><br>";
+				}
+			}
+			$co_currency_name = "";
+			if($this->can("view" , $company_curr))
+			{
+				$company_curr_obj = obj($company_curr);
+				$co_currency_name = $company_curr_obj->name();
+			}
+			$final_dat["sum"] .= "<b>Kokku: ".number_format($sum, 2).$co_currency_name."</b><br>";
+			if($arr["request"]["show_bill_balance"])
+			{
+				$final_dat["balance"] .= "<b>Kokku: ".number_format($balance, 2).$co_currency_name."</b><br>";
+			}
+		}
+		else
+		{
+			$final_dat["sum"] = "<b>".number_format($sum, 2)."</b>";
+			if($arr["request"]["show_bill_balance"])
+			{
+				$final_dat["balance"] .= "<b>".number_format($balance, 2)."</b><br>";
+			}
+		}
+		$t->define_data($final_dat);
 	}
 
 	function _get_bill_s_with_tax($arr)

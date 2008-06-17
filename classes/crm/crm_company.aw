@@ -864,6 +864,12 @@ default group=org_objects
 			@property bill_s_with_tax type=chooser store=no parent=bills_list_s captionside=top no_caption=1
 			@caption K&auml;ibemaksuta/K&auml;ibemaksuga
 
+			@property show_bill_balance type=checkbox parent=bills_list_s store=no captionside=top ch_value=1 no_caption=1
+			@caption Kuva arve saldot
+
+			@property currency_grouping type=checkbox parent=bills_list_s store=no captionside=top ch_value=1 no_caption=1
+			@caption Kuva valuutade l&otilde;ikes
+
 			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1 group=bills_list
 			@caption Otsi
 
@@ -2675,6 +2681,9 @@ class crm_company extends class_base
 
 			case "bill_s_cust":
 			case "bill_s_bill_no":
+			case "bill_s_bill_to":
+			case "show_bill_balance":
+			case "currency_grouping":
 				$data['value'] = $arr['request'][$data["name"]];
 				break;
 
@@ -4187,12 +4196,16 @@ class crm_company extends class_base
 		{
 			$arr["args"]["bill_s_cust"] = $arr["request"]["bill_s_cust"];
 			$arr["args"]["bill_s_bill_no"] = $arr["request"]["bill_s_bill_no"];
+			$arr["args"]["bill_s_bill_to"] = $arr["request"]["bill_s_bill_to"];
+			$arr["args"]["show_bill_balance"] = $arr["request"]["show_bill_balance"];
+			$arr["args"]["currency_grouping"] = $arr["request"]["currency_grouping"];
 			$arr["args"]["bill_s_from"] = $arr["request"]["bill_s_from"];
 			$arr["args"]["bill_s_to"] = $arr["request"]["bill_s_to"];
 			$arr["args"]["bill_s_client_mgr"] = $arr["request"]["bill_s_client_mgr"];
 			$arr["args"]["bill_s_with_tax"] = $arr["request"]["bill_s_with_tax"];
 			$arr["args"]["bill_s_status"] = $arr["request"]["bill_s_status"];
 			$arr["args"]["bill_s_search"] = $arr["request"]["bill_s_search"];
+
 		}
 		if ($arr["request"]["bill_payments_search"] != "")
 		{

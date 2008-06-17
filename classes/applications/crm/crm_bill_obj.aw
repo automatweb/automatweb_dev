@@ -57,7 +57,7 @@ class crm_bill_obj extends _int_object
 	{
 		if($this->prop("customer.currency"))
 		{
-			$company_curr = $b->prop("customer.currency");
+			$company_curr = $this->prop("customer.currency");
 		}
 		else
 		{
@@ -70,6 +70,41 @@ class crm_bill_obj extends _int_object
 			return $cu_o->name();
 		}
 		return "EEK";
+	}
+
+
+	/**
+		@attrib api=1 all_args=1
+	@param payment optional type=oid
+		payment id you want to ignore
+	@returns string error
+	@comment
+		returns sum not paid for bill
+	**/
+	function get_bill_needs_payment($arr)
+	{
+		$payment = $arr["payment"];
+		$bi = get_instance(CL_CRM_BILL);
+		$bill_sum = $bi->get_bill_sum($this);
+		$sum = 0;
+		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+		{
+			$p = $conn->to();//echo $p->id();
+			if($payment && $payment == $p->id())
+			{
+				if(($bill_sum - $sum) > $p->prop("sum")) // kui arve summa - juba makstud summa on suurem kui antud laekumine , siis tagastaks selle sama laekumise summa, sest rohkem vtta ju pole
+				{
+					return $p->prop("sum");
+				}
+				break;
+			}
+			$sum = $sum + $p->get_free_sum($this->id());
+		}
+		if($bill_sum < $sum)
+		{
+			$sum = $bill_sum;
+		}
+		return $bill_sum - $sum;
 	}
 
 	/** Adds payment in the given amount to the bill
