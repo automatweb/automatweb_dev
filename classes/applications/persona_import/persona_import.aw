@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.42 2008/05/29 08:28:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.43 2008/06/17 18:37:48 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1138,6 +1138,7 @@ class persona_import extends class_base
 					if($rank->meta("external_id") == $worker["TOOTAJA_ID"] && $rank->name() == $ametikoht_nimetus)
 					{
 						$profession_id = $rank->id();
+						$person_obj->set_prop("rank", $profession_id);
 						print "using existing crm_profession object ".$ametikoht_nimetus." ID - ".$profession_id.".<br>";
 					}
 					else
@@ -1163,6 +1164,7 @@ class persona_import extends class_base
 						"to" => $rank->id(),
 						"type" => 7,
 					));
+					$person_obj->set_prop("rank", $profession_id);
 				}
 
 				foreach($person_obj->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
