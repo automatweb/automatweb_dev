@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.23 2008/06/11 09:41:35 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.24 2008/06/17 18:13:49 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -122,14 +122,24 @@ class crm_person_work_relation extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "start":
-			case "end":				
+			case "start":		
 				$ops["---"] = "---";
 				for($i = date("Y") +1; $i >= 1970; $i--)
 				{
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$data["options"] = $ops;
+				$prop["onchange"] = "id = this.id.replace('start', 'end'); if(aw_get_el(id).value - this.value < 0){ aw_get_el(id).value = this.value; }";
+				break;
+
+			case "end":	
+				$ops["---"] = "---";
+				for($i = date("Y") +1; $i >= 1970; $i--)
+				{
+					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
+				}
+				$data["options"] = $ops;
+				$prop["onchange"] = "id = this.id.replace('end', 'start'); if(aw_get_el(id).value - this.value > 0){ aw_get_el(id).value = this.value; }";
 				break;
 
 			case "load":

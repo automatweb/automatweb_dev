@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.22 2008/06/11 17:48:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.23 2008/06/17 18:13:49 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -113,7 +113,6 @@ class crm_person_education extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "end":
 			case "start":
 				$ops["---"] = "---";
 				for($i = date("Y") + 1; $i >= 1950; $i--)
@@ -121,7 +120,18 @@ class crm_person_education extends class_base
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$prop["options"] = $ops;
+				$prop["onchange"] = "id = this.id.replace('start', 'end'); if(aw_get_el(id).value - this.value < 0){ aw_get_el(id).value = this.value; }";
 				break;
+				
+			case "end":
+				$ops["---"] = "---";
+				for($i = date("Y") + 1; $i >= 1950; $i--)
+				{
+					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
+				}
+				$prop["options"] = $ops;
+				$prop["onchange"] = "id = this.id.replace('end', 'start'); if(aw_get_el(id).value - this.value > 0){ aw_get_el(id).value = this.value; }";
+			break;
 
 			case "main_speciality":
 				$arr["prop"]["options"] = array(
