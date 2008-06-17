@@ -3,4 +3,3 @@
 	<class name="euro_patent_et_desc" folder="applications/clients/patent_office" extends="intellectual_property">
 	</class>
 </orb>
-

@@ -1124,6 +1124,15 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
 	@caption V&otilde;tmes&otilde;nad
 
+
+@default group=activity_stats_types
+
+	@property activity_stats_toolbar type=toolbar store=no no_caption=1
+	@caption Tegevuse statistika t&uuml;&uuml;pide toolbar
+
+	@property activity_stats_table type=table store=no no_caption=1
+	@caption Tegevuse statistika t&uuml;&uuml;pide tabel
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
 @groupinfo cedit caption="&Uuml;ldkontaktid" parent=general
@@ -1152,6 +1161,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
 	@groupinfo ovrv_email caption="Meilid" parent=overview submit=no save=no
 	@groupinfo ovrv_mails caption="Meilikast" parent=overview submit=no save=no
+	@groupinfo activity_stats_types caption="Tegevuste statistika t&uuml;&uuml;bid" parent=overview submit=no save=no
 
 @groupinfo projs caption="Projektid"
 	@groupinfo my_projects caption="Projektid" parent=projs submit=no
@@ -1424,6 +1434,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype MAILS_FOLDER value=70 clid=CL_MENU
 @caption Meilide kataloog
+
+@reltype ACTIVITY_STATS_TYPE value=71 clid=CL_CRM_ACTIVITY_STATS_TYPE
+@caption Tegevuse statistika t&uuml;&uuml;p
 
 
 */
@@ -2520,6 +2533,8 @@ class crm_company extends class_base
 			case "act_s_cal_name":
 			case "mail_tbl":
 			case "mail_tb":
+			case "activity_stats_toolbar":
+			case "activity_stats_table":
 				static $overview_impl;
 				if (!$overview_impl)
 				{

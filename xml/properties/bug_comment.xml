@@ -35,6 +35,32 @@
             <field>aw_add_wh</field>
             <caption>Lisandunud t&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
       </property>
+      <property>
+            <name>add_wh_cust</name>
+            <table>aw_bug_comments</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_add_wh_cust</field>
+            <caption>Lisandunud tunnid kliendile</caption>
+      </property>
+      <property>
+            <name>send_bill</name>
+            <table>aw_bug_comments</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>aw_send_bill</field>
+            <ch_value>1</ch_value>
+            <caption>Saata arve</caption>
+      </property>
+      <property>
+            <name>activity_stats_type</name>
+            <table>aw_bug_comments</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_activity_stats_type</field>
+            <caption>Statistika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_COMMENT</syslog_type>
             <relationmgr>yes</relationmgr>

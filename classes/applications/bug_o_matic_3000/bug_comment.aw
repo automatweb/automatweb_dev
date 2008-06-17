@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.5 2007/12/06 14:32:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.6 2008/06/17 12:56:54 kristo Exp $
 // bug_comment.aw - Bugi kommentaar 
 /*
 
@@ -22,6 +22,14 @@
 @property add_wh type=textbox size=5 table=aw_bug_comments field=aw_add_wh
 @caption Lisandunud t&ouml;&ouml;tunnid
 
+@property add_wh_cust type=textbox size=5 table=aw_bug_comments field=aw_add_wh_cust
+@caption Lisandunud tunnid kliendile
+
+@property send_bill type=checkbox table=aw_bug_comments field=aw_send_bill ch_value=1
+@caption Saata arve
+
+@property activity_stats_type type=hidden table=aw_bug_comments field=aw_activity_stats_type
+@caption Statistika t&uuml;&uuml;p
 */
 
 class bug_comment extends class_base
@@ -70,6 +78,25 @@ class bug_comment extends class_base
 		if ($f == "")
 		{
 			$this->db_query("CREATE TABLE aw_bug_comments (aw_oid int primary key, aw_prev_state int, aw_new_state int, aw_add_wh double)");
+			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_add_wh_cust":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+				return true;
+
+			case "aw_send_bill":
+			case "aw_activity_stats_type":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 	}
 }

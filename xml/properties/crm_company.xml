@@ -3486,6 +3486,26 @@
             <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
       </property>
       <property>
+            <name>activity_stats_toolbar</name>
+            <table>objects</table>
+            <group>activity_stats_types</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>activity_stats_toolbar</field>
+            <caption>Tegevuse statistika t&amp;amp;uuml;&amp;amp;uuml;pide toolbar</caption>
+      </property>
+      <property>
+            <name>activity_stats_table</name>
+            <table>objects</table>
+            <group>activity_stats_types</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>activity_stats_table</field>
+            <caption>Tegevuse statistika t&amp;amp;uuml;&amp;amp;uuml;pide tabel</caption>
+      </property>
+      <property>
             <name>see_all_link</name>
             <table>objects</table>
             <group>sell_offers_grp_offers</group>
@@ -3645,6 +3665,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </ovrv_mails>
+            <activity_stats_types>
+                  <caption>Tegevuste statistika t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </activity_stats_types>
             <projs>
                   <caption>Projektid</caption>
             </projs>
@@ -4217,6 +4243,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Meilide kataloog</caption>
             </MAILS_FOLDER>
+            <ACTIVITY_STATS_TYPE>
+                  <value>71</value>
+                  <clid>CL_CRM_ACTIVITY_STATS_TYPE</clid>
+                  <caption>Tegevuse statistika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </ACTIVITY_STATS_TYPE>
       </reltypes>
       <layout>
             <co_top>

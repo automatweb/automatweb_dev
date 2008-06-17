@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.129 2008/03/12 21:22:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.130 2008/06/17 12:57:00 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -31,7 +31,7 @@
 			@caption Staatus
 
 			@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc parent=left_bit
-			@caption Loe lähemalt
+			@caption Loe l&auml;hemalt
 
 			@property proj_price type=textbox table=objects field=meta method=serialize size=5 parent=left_bit
 			@caption Projekti hind
@@ -55,7 +55,7 @@
 
 			@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker parent=left_bit
 
-			@property proj_mgr type=relpicker clid=CL_CRM_PERSON reltype=RELTYPE_PARTICIPANT field=meta method=serialize parent=left_bit no_edit=1
+			@property proj_mgr type=relpicker reltype=RELTYPE_PARTICIPANT field=meta method=serialize parent=left_bit clid=CL_CRM_PERSON
 			@caption Projekti juht
 
 
@@ -103,16 +103,16 @@
 
 @default group=web_settings
 	@property project_navigator type=checkbox ch_value=1 table=aw_projects field=aw_project_navigator
-	@caption Näita projektide navigaatorit
+	@caption N&auml;ita projektide navigaatorit
 
 	@property use_template type=select table=aw_projects field=aw_use_template
-	@caption Välimus
+	@caption V&auml;limus
 
 	@property doc_id type=textbox size=6 table=aw_projects field=aw_doc_id
-	@caption Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse
+	@caption Dokumendi ID, milles asub kalendri vaade, milles s&uuml;ndmusi kuvatakse
 
 	@property skip_subproject_events type=checkbox ch_value=1 table=aw_projects field=aw_skip_subproject_events
-	@caption Ära näita alamprojektide sündmusi
+	@caption &Auml;ra n&auml;ita alamprojektide s&uuml;ndmusi
 
 	@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
 	@caption Pilt
@@ -120,7 +120,7 @@
 
 @default group=event_list_cal
 	@property event_toolbar type=toolbar no_caption=1
-	@caption Sündmuste toolbar
+	@caption S&uuml;ndmuste toolbar
 
 	@property event_list type=calendar no_caption=1
 	@caption Tegevused
@@ -128,7 +128,7 @@
 
 @default group=add_event
 	@property add_event callback=callback_get_add_event store=no
-	@caption Lisa sündmus
+	@caption Lisa s&uuml;ndmus
 
 
 @default group=files
@@ -158,7 +158,7 @@
 
 @default group=trans
 	@property trans type=translator store=no props=name
-	@caption Tõlkimine
+	@caption T&otilde;lkimine
 
 
 @default group=sides
@@ -279,6 +279,14 @@
 	@property stats type=text store=no
 	@caption T&ouml;&ouml;tunnid
 
+	@property stats_table type=table store=no no_caption=1
+	@caption T&ouml;&ouml;tunnid inimeste kaupa
+
+@default group=stats_entry
+	
+	@property stats_entry_table type=table store=no no_caption=1
+	@caption Sisesta t&ouml;&ouml;tunnid
+
 @default group=prods
 
 	@property prods_toolbar type=toolbar store=no no_caption=1
@@ -299,15 +307,17 @@
 	@groupinfo req caption="N&otilde;uded" submit=no parent=event_list
 	@groupinfo req_process caption="N&otilde;uded protsessidega" submit=no parent=event_list
 	@groupinfo stats caption="Statistika" submit=no parent=event_list
-@groupinfo event_list_premise caption="Tegevused eeldustegevuste põhiselt" submit=no
+	@groupinfo stats_entry caption="Vali t&uuml;&uuml;bid" parent=event_list
+
+@groupinfo event_list_premise caption="Tegevused eeldustegevuste p&otilde;hiselt" submit=no
 @groupinfo info caption="Projekti info"
 @groupinfo valuation caption="Hindamine" submit=no
 	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=valuation store=no submit=no
-@groupinfo add_event caption="Muuda sündmust"
+@groupinfo add_event caption="Muuda s&uuml;ndmust"
 @groupinfo files_main caption="Dokumendid" submit=no
 	@groupinfo files caption="Dokumendid" submit=no parent=files_main
 	@groupinfo prods caption="Tooted" submit=no parent=files_main
-@groupinfo trans caption="Tõlkimine"
+@groupinfo trans caption="T&otilde;lkimine"
 @groupinfo team caption="Meeskond" submit=no
 @groupinfo transl caption=T&otilde;lgi
 
@@ -319,13 +329,13 @@
 @caption osaleja
 
 @reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING,CL_PARTY,CL_COMICS
-@caption Sündmus
+@caption S&uuml;ndmus
 
 @reltype PRJ_FILE value=4 clid=CL_FILE
 @caption Fail
 
 @reltype TAX_CHAIN value=5 clid=CL_TAX_CHAIN
-@caption Maksu pärg
+@caption Maksu p&auml;rg
 
 @reltype PRJ_CFGFORM value=6 clid=CL_CFGFORM
 @caption Seadete vorm
@@ -800,7 +810,7 @@ class project extends class_base
 
 			case "use_template":
 				$data["options"] = array(
-					"weekview" => t("Nädala vaade"),
+					"weekview" => t("N&auml;dala vaade"),
 				);
 				break;
 
@@ -844,6 +854,14 @@ class project extends class_base
 
 			case "stats":
 				$data["value"] = $this->_get_stats($arr["obj_inst"]);
+				break;
+
+			case "stats_table":
+				$data["value"] = $this->_get_stats_table($arr);
+				break;
+
+			case "stats_entry_table":
+				$this->_get_stats_entry_table($arr);
 				break;
 		}
 		return $retval;
@@ -969,6 +987,10 @@ class project extends class_base
 				{
 					$prop["value"] = PROJ_IN_PROGRESS ;
 				}
+				break;
+
+			case "stats_entry_table":
+				$this->_set_stats_entry_table($arr);
 				break;
 		}
 		return $retval;
@@ -1169,12 +1191,12 @@ class project extends class_base
 			$users = get_instance("users");
 			if (aw_global_get("uid"))
 			{
-				// see asi peab nüüd hakkama tagastame foldereid!
+				// see asi peab n&uuml;&uuml;d hakkama tagastame foldereid!
 				$user_obj = new object($arr["user_ids"][0]);
 				$conns = $user_obj->connections_to(array(
 					"from.class_id" => CL_PROJECT,
 				));
-				// ei mingit bloody cyclet, see hakkab lihtsalt tagastame projektide id-sid, onjä!
+				// ei mingit bloody cyclet, see hakkab lihtsalt tagastame projektide id-sid, onj2!
 				$ev_ids = array();
 				foreach($conns as $conn)
 				{
@@ -1356,15 +1378,15 @@ class project extends class_base
 		{
 			// ah vitt .. see project map algab ju parajasti aktiivsest projektist.
 
-			// aga valik "näita alamprojektide sündmusi" ei oma ju üleüldse mitte mingit mõtet
-			// kui mul on vennad kõigis ülemprojektides ka
+			// aga valik "n2ita alamprojektide syndmusi" ei oma ju yleyldse mitte mingit m6tet
+			// kui mul on vennad k6igis ylemprojektides ka
 			foreach($this->prj_map as $key => $val)
 			{
-				// nii . aga nüüd ta näitab mulle ju ka master projektide sündmusi .. which is NOT what I want
+				// nii . aga nyyd ta n2itab mulle ju ka master projektide syndmusi .. which is NOT what I want
 
-				// teisisõnu - mul ei ole sündmuste lugemisel vaja kõiki peaprojekte
+				// teisis6nu - mul ei ole syndmuste lugemisel vaja k6iki peaprojekte
 
-				// küll aga on vaja neid näitamisel - et ma oskaksin kuvada asukohti. so there
+				// kyll aga on vaja neid n2itamisel - et ma oskaksin kuvada asukohti. so there
 				foreach($val as $k1 => $v1)
 				{
 					$parents[$k1] = $k1;
@@ -1382,7 +1404,7 @@ class project extends class_base
 			$limit_num = $arr["range"]["limit_events"];
 		}
 
-		// ma pean lugema sündmusi sellest projektist ja selle alamprojektidest.
+		// ma pean lugema syndmusi sellest projektist ja selle alamprojektidest.
 		$_start = $arr["range"]["start"];
 		/* this code is ev0l, we should outcomment it -- ahz
 		if ($arr["range"]["overview_start"])
@@ -1462,7 +1484,7 @@ class project extends class_base
 		$ids = array();
 		$projects = $by_parent = array();
 		$lang_id = aw_global_get("lang_id");
-		// weblingi jaoks on vaja küsida connectioneid selle projekti juurde!
+		// weblingi jaoks on vaja kysida connectioneid selle projekti juurde!
 		while($row = $this->db_next())
 		{
 
@@ -1502,7 +1524,7 @@ class project extends class_base
 			// mida fakki .. miks see asi NII on?
 			$projects[$prid] = $prid;
 
-			// äkki ma saan siis siin ka kasutada seda tsüklite ühendamist?
+			// 2kki ma saan siis siin ka kasutada seda tsyklite yhendamist?
 
 			$eid = $e_obj->id();
 
@@ -1589,7 +1611,7 @@ class project extends class_base
 		};
 
 
-		// nii .. ühesõnaga me diilime kogu aeg originaalprojektidega siin. eks?
+		// nii .. yhes6naga me diilime kogu aeg originaalprojektidega siin. eks?
 		$conns = $c->find(array(
 			"to" => $projects,
 			"from.lang_id" => aw_global_get("lang_id"),
@@ -1637,7 +1659,7 @@ class project extends class_base
 			{
 				// nii, aga mind huvitab see, et kas mul on seos olemas aktiivse keele jaoks
 
-				// ja mida ma teen, kui ei ole? Kuidas ma saan selle õige asja leida?
+				// ja mida ma teen, kui ei ole? Kuidas ma saan selle 6ige asja leida?
 				$o1 = new object($conn["from"]);
 				$o2 = new object($conn["to"]);
 
@@ -1662,7 +1684,7 @@ class project extends class_base
 
 				$v_o = new object($conn["to"]);
 				//$v_o = $conn->to();
-				// aga miks siis see asi ei anna mulle tõlget õiges keeles?
+				// aga miks siis see asi ei anna mulle t6lget 6iges keeles?
 				$tmp = $v_o->properties();
 				$tmp["media_id"] = $conn["to"];
 				$tmp["name"] = $prop_val = iconv("UTF-8",$current_charset . "//TRANSLIT",$tmp["trans"][$lc]["name"]);
@@ -1800,7 +1822,7 @@ class project extends class_base
 
 			// aaah, see on see bloody brother_list ju
 
-			// iga eventi kohta on vaja teada kõiki vendi
+			// iga eventi kohta on vaja teada k6iki vendi
 			$ol = new object_list(array(
 				"brother_of" => $ids,
 				"lang_id" => array(),
@@ -1830,7 +1852,7 @@ class project extends class_base
 				{
 					continue;
 				}
-				// et siis teeme uue nimekirja kõigist objektidest, jees?
+				// et siis teeme uue nimekirja k6igist objektidest, jees?
 				$prnt = new object($brot->parent());
 				$pid = $prnt->id();
 				$prj_level = $this->_ptree[$pid];
@@ -2183,10 +2205,10 @@ class project extends class_base
 
 		//arr($this->prj_map);
 
-		// obviuously peab lingis olema mingi lisaargument. Mille puudumisel omadust ei näidata ..
+		// obviuously peab lingis olema mingi lisaargument. Mille puudumisel omadust ei n2idata ..
 		// ja mille eksisteerimisel kuvatakse korrektne vorm.
 
-		// ja siin on nüüd see asi, et property pannakse eraldi tabi peale .. mis teeb asju veel
+		// ja siin on nyyd see asi, et property pannakse eraldi tabi peale .. mis teeb asju veel
 		// palju-palju raskemaks.
 
 		// embedded form looks somewhat like a releditor .. but it can actually have multiple groups..
@@ -2280,7 +2302,7 @@ class project extends class_base
 	// a 2 level array where the key is the name of the project with no children
 	// and the value is an array of names of the parents
 
-	// seega .. alustades ühest projektist leiame kõik selle projekti alamprojektid
+	// seega .. alustades yhest projektist leiame k6ik selle projekti alamprojektid
 	// ma pean siis iga projekti kohta leidma et millisel tasemel ta on.
 
 	////
@@ -2377,7 +2399,7 @@ class project extends class_base
 
 		$res_props = array();
 
-		// nii - aga kuidas ma lahenda probleemi sündmuste panemisest teise kalendrisse?
+		// nii - aga kuidas ma lahenda probleemi syndmuste panemisest teise kalendrisse?
 		// see peaks samamoodi planneri funktsionaalsus olema. wuhuhuuu
 
 		// no there are 3 possible scenarios.
@@ -2393,7 +2415,7 @@ class project extends class_base
 			{
 				return array(array(
 					"type" => "text",
-					"value" => t("Seda klassi ei saa kasutada sündmuste sisestamiseks"),
+					"value" => t("Seda klassi ei saa kasutada s&uuml;ndmuste sisestamiseks"),
 				));
 			}
 			else
@@ -2528,14 +2550,14 @@ class project extends class_base
 		// this deals with creating of one additional connection .. hm. I wonder whether
 		// there is a better way to do that.
 
-		// tolle uue objekti juurest luuakse seos äsja loodud eventi juurde jah?
+		// tolle uue objekti juurest luuakse seos 2sja loodud eventi juurde jah?
 
-		// aga kui ma lisaks lihtsalt sündmuse isiku juurde?
+		// aga kui ma lisaks lihtsalt syndmuse isiku juurde?
 		// ja see tekiks automaatselt parajasti sisse logitud kasutaja kalendrisse,
 		// kui tal selline olemas on? See oleks ju palju parem lahendus.
-		// aga kuhu kurat ma sellisel juhul selle sündmuse salvestan?
-		// äkki ma saan seda nii teha, et isiku juures üldse sündmust ei salvestata,
-		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle sündmuse?
+		// aga kuhu kurat ma sellisel juhul selle syndmuse salvestan?
+		// 2kki ma saan seda nii teha, et isiku juures yldse syndmust ei salvestata,
+		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle syndmuse?
 
 		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
 		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
@@ -2707,7 +2729,7 @@ class project extends class_base
 
 		// no need for that .. I just get the type from url
 
-		// argh .. projekti otse vaatamin on ikka paras sitt küll
+		// argh .. projekti otse vaatamin on ikka paras sitt kyll
 
 		$caldata = $cal_view->parse_alias(array(
 			"obj_inst" => $project_obj,
@@ -2753,7 +2775,7 @@ class project extends class_base
 			[15:17] <terryf_home> ja muidu ei t6lgi
 			[15:18] <terryf_home> and I haven't goot the faintest idea, miks see nii on
 			[15:18] <terryf_home> ja mida see katki teeks kui ma selle 2ra muudan
-			[15:18] <duke> oki, loen siis kõik seosed ja võtan ise need mis mul vaja on
+			[15:18] <duke> oki, loen siis k6ik seosed ja v6tan ise need mis mul vaja on
 		*/
 
 
@@ -2892,7 +2914,7 @@ class project extends class_base
 
 	function get_event_overview($arr)
 	{
-		// saan ette project id, alguse ja lõpu
+		// saan ette project id, alguse ja l6pu
 		$rv = array();
 		$ol = new object_list(array(
 			"parent" => $arr["id"],
@@ -3134,7 +3156,7 @@ class project extends class_base
 //			"brother_of" => new obj_predicate_prop("id")
 		));
 
-		//kuna nüüd asi peaks toimuma nii et mis omab connectionit, on
+		//kuna nyyd asi peaks toimuma nii et mis omab connectionit, on
 		foreach($arr["obj_inst"]->connections_to(array("type" => 4)) as $c)
 		{
 			$goals->add($c->prop("from"));
@@ -3166,7 +3188,7 @@ class project extends class_base
 		$this_object =& $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
 
-		//kõigepealt default väärtused ... mis siis muutuvad kui tegu on kuude või nädalatega
+		//k6igepealt default v22rtused ... mis siis muutuvad kui tegu on kuude v6i n2dalatega
 		$subdivisions = 1;
 		$subdivisions = ((int)6/$columns)*4;
 		$days = array ("P", "E", "T", "K", "N", "R", "L");
@@ -5382,6 +5404,332 @@ class project extends class_base
 			array("name", "comment", "price"),
 			CL_SHOP_PRODUCT
 		);
+	}
+
+	private function _init_stats_table(&$t, $types)
+	{
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "right" 
+		));
+
+		$clss = aw_ini_get("classes");
+		$all_types = array(
+			"paid" => t("Makstud"),
+			"unpaid" => t("Tasuta")
+		);
+		foreach($types as $type_id => $subs)
+		{
+			$t->define_field(array(
+				"name" => "type_".$type_id,
+				"caption" => $clss[$type_id]["name"],
+				"align" => "center" 
+			));
+
+			$t->define_field(array(
+				"name" => "type_".$type_id."_sub_paid",
+				"caption" => t("Makstud"),
+				"align" => "center" ,
+				"parent" => "type_".$type_id
+			));
+			$t->define_field(array(
+				"name" => "type_".$type_id."_sub_unpaid",
+				"caption" => t("Tasuta"),
+				"align" => "center" ,
+				"parent" => "type_".$type_id
+			));
+
+			foreach(get_current_company()->get_activity_stats_types() as $a_type_id => $a_type_name)
+			{
+				$t->define_field(array(
+					"name" => "type_".$type_id."_sub_".$a_type_id,
+					"caption" => $a_type_name,
+					"align" => "center",
+					"parent" => "type_".$type_id
+				));
+				$all_types[$a_type_id] = $a_type_name;
+			}
+		}
+
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center"
+		));
+		foreach($all_types as $sub_id => $sub_capt)
+		{
+			$t->define_field(array(
+				"name" => "sum_".$sub_id,
+				"caption" => $sub_capt,
+				"align" => "center",
+				"parent" => "sum"
+			));
+		}
+	}
+
+	private function _get_stats_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$stats_by_ppl = $arr["obj_inst"]->stats_get_by_person();
+		$types = array();
+		$tot_sums = array();
+		foreach($stats_by_ppl as $person => $data)
+		{
+			$d = array(
+				"person" => html::obj_change_url($person),
+			);
+			$sum = array();
+			foreach($data as $type_id => $inf)
+			{
+				$sum["paid"] += $inf["paid"];
+				$sum["unpaid"] += $inf["unpaid"];
+				foreach(safe_array($inf["act_type"]) as $a_type_id => $a_type_hrs)
+				{
+					$sum[$a_type_id] += $a_type_hrs;
+					$d["type_".$type_id."_sub_".$a_type_id] = $a_type_hrs;
+				}
+
+				$d["type_".$type_id."_sub_paid"] += $inf["paid"];
+				$d["type_".$type_id."_sub_unpaid"] += $inf["unpaid"];
+
+				$types[$type_id] = $type_id;
+			}
+
+			foreach($sum as $sum_id => $sum_val)
+			{
+				$d["sum_".$sum_id] = $sum_val;
+			}
+
+			foreach($d as $k => $v)
+			{
+				$tot_sums[$k] += $v;
+			}
+			$t->define_data($d);
+		}
+
+		$this->_init_stats_table($t, $types);
+
+		$tot_sums["person"] = t("Summa");
+		$t->define_data(array_map(create_function('$a', 'return html::strong($a);'), $tot_sums));
+
+		$t->set_sortable(false);
+	}
+
+	private function _init_stats_entry_table($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "content",
+			"caption" => t("Sisu"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "add_wh",
+			"caption" => t("Lisandunud t&ouml;&ouml;tunnid"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => t("Arvele?"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "hrs_cust",
+			"caption" => t("Tunde kliendile"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "act_type",
+			"caption" => t("Tegevuse t&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		foreach(get_current_company()->get_activity_stats_types() as $type_id => $type_name)
+		{
+			$t->define_field(array(
+				"name" => "sa_type_".$type_id,
+				"caption" => $type_name,
+				"align" => "center",
+				"parent" => "act_type"
+			));
+		}
+	}
+
+	private function _get_stats_entry_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_stats_entry_table($t);
+
+		$this->clss = aw_ini_get("classes");
+		$this->act_stats_types = get_current_company()->get_activity_stats_types();
+
+		if ($arr["request"]["show_last"])
+		{
+			classload("core/date/date_calc");
+			$com_list = $arr["obj_inst"]->get_bug_comments(get_day_start()-24*3600)->arr();
+		}
+		else
+		{
+			$com_list = $arr["obj_inst"]->get_bug_comments()->arr();
+		}
+
+		foreach($com_list as $task)
+		{
+			$this->_stats_entry_insert_row($t, $task);
+		}
+	}
+
+	private function _stats_entry_insert_row($t, $o)
+	{
+		$d = array(
+			"name" => html::obj_change_url($o->parent()),
+			"person" => html::obj_change_url(get_instance(CL_USER)->get_person_for_uid($o->createdby)),
+			"type" => $this->clss[$o->class_id]["name"],
+			"content" => nl2br($o->comment),
+			"add_wh" => $o->add_wh,
+			"on_bill" => html::checkbox(array(
+				"name" => "d[".$o->id."][send_bill]",
+				"value" => 1,
+				"checked" => $o->send_bill,
+			)),
+			"hrs_cust" => html::textbox(array(
+				"name" => "d[".$o->id."][hrs_cust]",
+				"value" => $o->add_wh_cust,
+				"size" => 5,
+				"onFocus" => "el = getElementById('d[".$o->id."][send_bill]'); el.checked=true;"
+			))
+		);
+		foreach($this->act_stats_types as $type_id => $type_name)
+		{
+			$d["sa_type_".$type_id] = html::radiobutton(array(
+				"name" => "d[".$o->id."][act_type]",
+				"value" => $type_id,
+				"checked" => $o->activity_stats_type == $type_id
+			));
+		}
+		$t->define_data($d);
+	}
+
+	private function _set_stats_entry_table($arr)
+	{
+		foreach($arr["obj_inst"]->get_bug_comments()->arr() as $task)
+		{
+			$mod = false;
+			if ($task->send_bill != $arr["request"]["d"][$task->id]["send_bill"])
+			{
+				$task->send_bill = $arr["request"]["d"][$task->id]["send_bill"];
+				$mod = true;
+			}
+
+			if ($task->send_bill && $mod)
+			{
+				// write hrs to cust
+				$hrs = trim($arr["request"]["d"][$task->id]["hrs_cust"]);
+				if (empty($hrs))
+				{
+					$tmp = $task->add_wh;
+					// round to 30min
+					$mins = $tmp - floor($tmp);
+					if ($mins > 0.5)
+					{
+						$mins = 1;
+					}
+					else
+					if ($mins > 0)
+					{
+						$mins = 0.5;
+					}
+					$hrs = floor($tmp) + $mins;
+				}
+
+				$task->add_wh_cust = $hrs;
+			}
+			else
+			if (!$task->send_bill && $mod)
+			{
+				$task->add_wh_cust = 0;
+			}
+
+			if ($task->activity_stats_type != $arr["request"]["d"][$task->id]["act_type"])
+			{
+				$task->activity_stats_type = $arr["request"]["d"][$task->id]["act_type"];
+				$mod = true;
+			}
+
+			if ($mod)
+			{
+				$task->save();
+			}
+		}
+	}
+
+	/**
+		@attrib name=daily_stats_type_check nologin="1"
+	**/
+	function daily_stats_type_check($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		
+		$send = array();
+		foreach($ol->arr() as $o)
+		{
+			if (!$this->can("view", $o->proj_mgr))
+			{
+				continue;
+			}	
+			$eml = $o->prop("proj_mgr.email.mail");
+			if (!is_email($eml))
+			{
+				continue;
+			}
+			classload("core/date/date_calc");
+			$com_list = $o->get_bug_comments(get_day_start()-24*3600)->arr();
+			if (count($com_list) > 0)
+			{
+				// send mail to maintainer
+				$send[$eml][] = $o->id;
+			}
+		}
+
+		foreach($send as $email => $projs)
+		{
+			$ct = "Tere!\n\nTeie projektidesse on lisandunud tegevusi. Palun m2rkige nende tyybid:\n\n";
+			foreach($projs as $proj)
+			{
+				$ct .= $this->mk_my_orb("change", array("id" => $proj, "group" => "stats_entry", "show_last" => 1), "project")."\n";
+			}
+	
+			echo "send mail to $email <pre>$ct</pre><Br>";
+			send_mail($email, t("Uued projekti tegevused"), $ct, "From: ".aw_ini_get("baseurl")." <info@struktuur.ee>");
+		}
+		die("all done");
 	}
 };
 ?>

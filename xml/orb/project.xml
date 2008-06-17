@@ -138,5 +138,12 @@
 			</function>
 		</action>
 
+		<action name="daily_stats_type_check" nologin="1">
+			<function name="daily_stats_type_check">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

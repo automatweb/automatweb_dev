@@ -151,12 +151,11 @@
             <table>objects</table>
             <group>general2</group>
             <type>relpicker</type>
-            <clid>CL_CRM_PERSON</clid>
             <reltype>RELTYPE_PARTICIPANT</reltype>
             <field>meta</field>
             <method>serialize</method>
             <parent>left_bit</parent>
-            <no_edit>1</no_edit>
+            <clid>CL_CRM_PERSON</clid>
             <caption>Projekti juht</caption>
       </property>
       <property>
@@ -790,6 +789,26 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
       </property>
       <property>
+            <name>stats_table</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stats_table</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid inimeste kaupa</caption>
+      </property>
+      <property>
+            <name>stats_entry_table</name>
+            <table>objects</table>
+            <group>stats_entry</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stats_entry_table</field>
+            <caption>Sisesta t&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
+      </property>
+      <property>
             <name>prods_toolbar</name>
             <table>objects</table>
             <group>prods</group>
@@ -882,6 +901,10 @@
                   <submit>no</submit>
                   <parent>event_list</parent>
             </stats>
+            <stats_entry>
+                  <caption>Vali t&amp;amp;uuml;&amp;amp;uuml;bid</caption>
+                  <parent>event_list</parent>
+            </stats_entry>
             <event_list_premise>
                   <caption>Tegevused eeldustegevuste p&amp;otilde;hiselt</caption>
                   <submit>no</submit>

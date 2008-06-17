@@ -72,8 +72,24 @@ class crm_bill_obj extends _int_object
 		return "EEK";
 	}
 
-	function add_payment($sum = 0)
+	/** Adds payment in the given amount to the bill
+		@attrib api=1 params=pos
+
+		@param sum optional type=double 
+			The sum the payment was for. defaults to the entire sum of the bill
+
+		@param tm optional type=int
+			Time for the payment. defaults to current time
+
+		@returns
+			oid of the payment object
+	**/
+	function add_payment($sum = 0, $tm = null)
 	{
+		if ($tm === null)
+		{
+			$tm = time();
+		}
 		$i = get_instance(CL_CRM_BILL);
 		if(!$sum)
 		{
@@ -88,7 +104,7 @@ class crm_bill_obj extends _int_object
 			"to" => $p->id(),
 			"type" => "RELTYPE_PAYMENT"
 		));
-		$p-> set_prop("date", time());
+		$p-> set_prop("date", $tm);
 		$p-> set_prop("sum", $sum);//see koht sureb miskiprast
 		$curr = $i->get_bill_currency_id($this);
 		if($curr)

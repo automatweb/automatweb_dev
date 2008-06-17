@@ -20,7 +20,6 @@ if (!empty($_GET["set_ui_lang"]))
 }
 
 lc_init();
-
 classload("core/util/timer");
 classload("aw_template");
 classload("defs");

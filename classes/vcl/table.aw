@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.117 2008/06/03 15:46:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.118 2008/06/17 12:57:07 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -2837,6 +2837,19 @@ class vcl_table extends aw_table
 		}
 	}
 
+	/** Defines and populates a table from an object_list
+		@attrib api=1 params=pos
+
+		@param ol required type=object_list
+			The object_list instance to read data from
+
+		@param props required type=array
+			array { property_name, ... } for all props to include in the list
+
+		@param clid required type=clid
+			The class_id of the objects in the table, for reading property captions
+
+	**/
 	function table_from_ol(&$ol, $props, $clid)
 	{
 		$tmp = obj();

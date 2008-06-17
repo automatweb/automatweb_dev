@@ -1066,6 +1066,7 @@ class bug extends class_base
 				{
 					$com = sprintf(t("Tunde kliendile arv muudeti %s => %s"), $old, $prop["value"]);
 					$this->add_comments[] = $com;
+					$this->_acc_add_wh_cust = $prop["value"] - $old;
 				}
 				break;
 
@@ -1577,7 +1578,7 @@ class bug extends class_base
 		return $comt;
 	}
 
-	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null, $notify = true)
+	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null, $notify = true, $add_wh_cust = null)
 	{
 		if (!is_oid($bug->id()))
 		{
@@ -1596,6 +1597,7 @@ class bug extends class_base
 		$o->set_prop("prev_state", $old_state);
 		$o->set_prop("new_state", $new_state);
 		$o->set_prop("add_wh", $add_wh);
+		$o->set_prop("add_wh_cust", $add_wh_cust);
 		$o->save();
 		$bug->connect(array(
 			"to" => $o->id(),
@@ -1728,7 +1730,7 @@ class bug extends class_base
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
 		{
-			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh);
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, false, $this->_acc_add_wh_cust);
 		}
 
 		if ($arr["new"])

@@ -3,4 +3,3 @@
 	<class name="industrial_design" folder="applications/clients/patent_office" extends="intellectual_property">
 	</class>
 </orb>
-

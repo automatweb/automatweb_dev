@@ -2272,5 +2272,26 @@ class crm_company_overview_impl extends class_base
 			$ol->arr();
 		}
 	}
+
+	function _get_activity_stats_toolbar($arr)
+	{
+		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(
+			array(CL_CRM_ACTIVITY_STATS_TYPE), 
+			$arr["obj_inst"]->id(), 
+			71 /* RELTYPE_ACTIVITY_STATS_TYPE */
+		);
+		$tb->add_delete_button();
+	}
+
+	function _get_activity_stats_table($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ACTIVITY_STATS_TYPE"))),
+			array("name", "created", "createdby"),
+			CL_CRM_ACTIVITY_STATS_TYPE
+		);
+	}
 }
 ?>

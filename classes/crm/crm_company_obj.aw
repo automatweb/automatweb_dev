@@ -203,6 +203,19 @@ class crm_company_obj extends _int_object
 		}
 		return $r;
 	}
+
+	/** Returns a list of task stats types for the company
+		@attrib api=1 params=pos
+
+		@returns
+			array { type_id => type_desc }
+
+	**/
+	function get_activity_stats_types()
+	{
+		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_ACTIVITY_STATS_TYPE")));
+		return $ol->names();
+	}
 }
 
 ?>

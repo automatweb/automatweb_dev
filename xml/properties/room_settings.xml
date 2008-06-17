@@ -90,6 +90,16 @@
             <caption>Kataloog kuhu kliendid salvestada</caption>
       </property>
       <property>
+            <name>projects_menu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Kataloog kuhu projektid salvestada</caption>
+      </property>
+      <property>
             <name>min_price_to_all</name>
             <table>objects</table>
             <group>general</group>

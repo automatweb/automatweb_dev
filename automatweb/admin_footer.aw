@@ -275,6 +275,7 @@ if (function_exists("get_time"))
 {
 	$GLOBALS["__END_DISP"] = get_time();
 }
+
 if (!empty($GLOBALS["__aw_op_handler"]))
 {
 	$f = $GLOBALS["__aw_op_handler"][1];

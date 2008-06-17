@@ -177,6 +177,25 @@
 			</function>
 		</action>
 
+		<action name="fetch_image_alias_for_doc">
+			<function name="fetch_image_alias_for_doc">
+				<arguments>
+					<required name="doc_id" />
+					<required name="image_id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_connection_details_for_doc">
+			<function name="get_connection_details_for_doc">
+				<arguments>
+					<required name="doc_id" type="int" />
+					<required name="alias_name" type="string" />
+					<optional name="use_br" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="del_comment" all_args="1">
 			<function name="del_comment">
 				<arguments>
