@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.37 2008/06/12 06:59:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.38 2008/06/17 15:29:00 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1958,6 +1958,7 @@ class personnel_management_job_offer extends class_base
 			$this->vars(array(
 				"sect.description" => $sect->description,
 				"sect.contact" => $sect->prop("contact.name"),
+				"sect.email" => $sect->prop("email_id.name"),
 			));
 		}
 
