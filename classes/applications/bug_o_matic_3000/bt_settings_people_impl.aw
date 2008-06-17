@@ -88,7 +88,8 @@ class bt_settings_people_impl extends core
 			);
 			if ($arr["request"]["sp_p_co"] != "")
 			{
-				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+				//$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+				$param["CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name"] = "%".$arr["request"]["sp_p_co"]."%";
 			}
 			$ol = new object_list($param);
 			foreach($ol->arr() as $p)
