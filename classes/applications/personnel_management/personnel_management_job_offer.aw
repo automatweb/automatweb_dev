@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.39 2008/06/17 15:43:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.40 2008/06/17 15:47:11 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -305,7 +305,7 @@ class personnel_management_job_offer extends class_base
 
 			case "typical_select":
 				$prop["options"] = array();
-				$prop["options"][0] = t("--vali--");
+				$prop["options"][""] = t("--vali--");
 				if($arr["request"]["sms"])
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TYPICAL_MOBI_SMS")) as $conn)
@@ -583,8 +583,10 @@ class personnel_management_job_offer extends class_base
 					"class_id" => CL_CRM_COUNTY,
 				));
 				if(!is_array($prop["options"]))
+				{
 					$prop["options"] = array();
-				$prop["options"] += array(0 => t("--vali--")) + $objs->names();
+				}
+				$prop["options"] += array("" => t("--vali--")) + $objs->names();
 				if(is_oid($arr["request"]["county_id"]))
 					$prop["value"] = $arr["request"]["county_id"];
 				break;
