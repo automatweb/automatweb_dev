@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.38 2008/06/17 15:29:00 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.39 2008/06/17 15:43:23 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1974,11 +1974,11 @@ class personnel_management_job_offer extends class_base
 			"loc_county" => $ob->prop("loc_county.name"),
 			"loc_city" => $ob->prop("loc_city.name"),
 			"sectors" => $tmp_sectors,
-			"end" => get_lc_date($ob->prop("end")),
+			"end" => get_lc_date($ob->prop("end"), LC_DATE_FORMAT_LONG_FULLYEAR),
 			"description" => $ob->prop("toosisu"),
 			"requirements" => $ob->prop("noudmised"),
-			"start_date" => $ob->prop("job_from") > 100 ? get_lc_date($ob->prop("job_from")) : " - ",
-			"start_working" => $ob->start_working == "asap" ? t("Niipea kui v&otilde;imalik") : get_lc_date($ob->start_working_date),
+			"start_date" => $ob->prop("job_from") > 100 ? get_lc_date($ob->prop("job_from"), LC_DATE_FORMAT_LONG_FULLYEAR) : " - ",
+			"start_working" => $ob->start_working == "asap" ? t("Niipea kui v&otilde;imalik") : get_lc_date($ob->start_working_date, LC_DATE_FORMAT_LONG_FULLYEAR),
 			"tookoormused" => join(",", $ks),
 			"contact_person" => $ob->prop("contact_person"),
 			"job_nr" => $ob->prop("job_nr"),
