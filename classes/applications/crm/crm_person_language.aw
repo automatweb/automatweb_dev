@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.9 2008/06/17 10:52:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.10 2008/06/17 18:24:13 instrumental Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -69,8 +69,8 @@ class crm_person_language extends class_base
 			case "talk":
 			case "understand":
 			case "write":
-				$prop["options"][0] = t("--vali--");
-				$prop["options"] += $this->lang_lvl_options;
+				//$prop["options"][0] = t("--vali--");
+				$prop["options"] = $this->lang_lvl_options;
 				break;
 			case "person":
 				$prop["value"] = $arr["request"]["person"];
