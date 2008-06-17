@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.42 2008/06/17 19:41:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.43 2008/06/17 20:21:05 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -539,7 +539,7 @@ class personnel_management_job_offer extends class_base
 						}
 					}
 				}
-				$prop["onchange"] = "if(this.value != ".$prop["value"].") { aw_get_el('offer_cfgform_changed').value = 1; } else { aw_get_el('offer_cfgform_changed').value = 0; }";
+				$prop["onchange"] = "if(this.value != '".$prop["value"]."') { aw_get_el('offer_cfgform_changed').value = 1; } else { aw_get_el('offer_cfgform_changed').value = 0; }";
 				break;
 			
 			case "contact":
