@@ -77,7 +77,7 @@ class scm_location extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			//-- get_property --//			
 		};
 		return $retval;
 	}
@@ -88,7 +88,6 @@ class scm_location extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -191,20 +190,35 @@ class scm_location extends class_base
 	**/
 	function location_data($arr)
 	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		
 		$ol = new object_list(array(
 			"class_id" => CL_SCM_LOCATION,
-			"name" => $arr["name"],
 			"lang_id" => array(),
-			"limit" => 1,
+			"site_id" => array(),
+			"limit" => 500,
 		));
-		if($ol->count > 0)
+		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $k => $v)
 		{
-			$o = $ol->begin();
-			$d = array(
-			);
-			die(json_encode($d));
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
 		}
-		die(json_encode(array()));
+
+		$autocomplete_options = array_unique($autocomplete_options);
+		header("Content-type: text/html; charset=utf-8");
+		exit ($cl_json->encode($option_data));
 	}
 }
 ?>
