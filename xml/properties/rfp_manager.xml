@@ -22,6 +22,17 @@
             <caption>Ruumide kaust</caption>
       </property>
       <property>
+            <name>catering_room_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_CATERING_ROOM_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toitlustuse ruumide kaust</caption>
+      </property>
+      <property>
             <name>prod_vars_folder</name>
             <table>objects</table>
             <group>general</group>
@@ -29,7 +40,7 @@
             <reltype>RELTYPE_PROD_VARS_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Toodete muutujate asukoht</caption>
+            <caption>Tootepakettide asukoht</caption>
       </property>
       <property>
             <name>default_table</name>
@@ -208,8 +219,13 @@
                         <num_0>CL_MENU</num_0>
                         <num_1>CL_META</num_1>
                   </clid>
-                  <caption>Toodete muutujate kaust</caption>
+                  <caption>Tootepakettide kaust</caption>
             </PROD_VARS_FOLDER>
+            <CATERING_ROOM_FOLDER>
+                  <value>5</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Toitluste ruumide kaust</caption>
+            </CATERING_ROOM_FOLDER>
       </reltypes>
       <layout>
             <hsplit>

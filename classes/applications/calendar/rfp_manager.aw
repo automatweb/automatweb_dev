@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.19 2008/04/08 12:40:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.20 2008/06/18 08:47:10 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -14,8 +14,11 @@
 @property room_folder type=relpicker multiple=1 reltype=RELTYPE_ROOM_FOLDER field=meta method=serialize
 @caption Ruumide kaust
 
+@property catering_room_folder type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM_FOLDER field=meta method=serialize
+@caption Toitlustuse ruumide kaust
+
 @property prod_vars_folder type=relpicker reltype=RELTYPE_PROD_VARS_FOLDER field=meta method=serialize
-@caption Toodete muutujate asukoht
+@caption Tootepakettide asukoht
 
 @property default_table type=table no_caption=1 store=no
 
@@ -64,7 +67,10 @@
 @caption Pakettide kaust
 
 @reltype PROD_VARS_FOLDER value=4 clid=CL_MENU,CL_META
-@caption Toodete muutujate kaust
+@caption Tootepakettide kaust
+
+@reltype CATERING_ROOM_FOLDER value=5 clid=CL_MENU
+@caption Toitluste ruumide kaust
 */
 
 class rfp_manager extends class_base
@@ -316,7 +322,7 @@ class rfp_manager extends class_base
 			));
 		}
 		$pk_fld = $arr["obj_inst"]->prop("packages_folder");
-		$prices = $arr["obj_inst"]->meta("pk_prices");
+		$prices = is_array($_tmp = $arr["obj_inst"]->meta("pk_prices"))?$_tmp:array();
 		if($this->can("view", $pk_fld))
 		{
 			$ol = new object_list(array(
