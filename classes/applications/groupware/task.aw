@@ -1234,6 +1234,7 @@ class task extends class_base
 
 			case "rows":
 				$this->_rows($arr);
+				$arr["prop"]["value"] = null;
 				break;
 
 			case "participants":
