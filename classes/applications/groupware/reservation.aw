@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.104 2008/06/16 09:47:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.105 2008/06/18 11:11:47 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -248,7 +248,16 @@ class reservation extends class_base
 				break;
 			case "sbt_close":
 				$prop["type"] = "text";
-				$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' onclick=''  />";
+				$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' 
+					onclick='
+						if (typeof(aw_submit_handler) != \"undefined\")
+						{
+							if (aw_submit_handler() == false)
+							{
+								return false;
+							}
+						}'
+					/>";
 				break;
 			case "start1":
 			case "end":
@@ -447,7 +456,39 @@ class reservation extends class_base
 
 	function callback_generate_scripts($arr)
 	{
-		return $arr["request"]["saved"] ? "if (window.opener) { window.opener.location.reload(); }" : "";
+		$check_url = $this->mk_my_orb("is_there_project", array("project" => " "));
+		$script = "function aw_submit_handler() {
+			url = '".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value;
+			el=aw_get_url_contents('".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value);
+			if(!(el>0))
+			{
+				return confirm('".t("Sellise nimelist projekti pole, kas lisada?")."')
+			}
+			return false;
+		}";
+		if($arr["request"]["saved"])
+		{
+			$script .= "if (window.opener) {window.opener.location.reload();}";
+		}
+		return $script;
+	}
+
+	/**
+		@attrib name=is_there_project
+		@param project optional
+	**/
+	function is_there_project($arr)
+	{
+		$arr["project"] = substr($arr["project"],1);
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $arr["project"],
+		));
+		$res = sizeof($ol->ids());
+		header("Content-type: text/html; charset=utf-8");
+		exit ($res."");
 	}
 
 	function set_property($arr = array())

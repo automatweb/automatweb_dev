@@ -9,6 +9,14 @@
 			</function>
 		</action>
 
+		<action name="is_there_project">
+			<function name="is_there_project">
+				<arguments>
+					<optional name="project" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="mark_arrived_popup" all_args="1">
 			<function name="mark_arrived_popup">
 				<arguments>
