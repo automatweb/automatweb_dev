@@ -4,7 +4,7 @@
 #aw_object_quickadd .selected_object_name {text-align: center; color: white; font-size: 12px;height: 13px;}
 #aw_object_quickadd .icon {margin-right: 5px;height: 42px;}
 .selected_object_name {}
-#aw_object_quickadd_results {background: white; position: fixed; z-idnex: 999;}
+#aw_object_quickadd_results {background: white; position: fixed; z-index: 999;}
 #aw_object_quickadd_results a {font-size: 12px; display: block;width: 432px; padding: 4px 0 4px 30px; color: black; background-repeat: no-repeat; background-position: 4px center;}
 #aw_object_quickadd_results a.odd {background-color: #CFE7EC; }
 #aw_object_quickadd_results a.even { background-color: white;}
