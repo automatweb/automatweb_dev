@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.35 2008/06/17 19:25:15 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.36 2008/06/18 07:49:58 instrumental Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -725,7 +725,7 @@ class shop_product_packaging extends class_base
 	{
 		if ($tbl == "aw_shop_packaging" && $field == "")
 		{
-			$this->db_query("create table aw_shop_packaging (oid int primary key)");
+			$this->db_query("create table aw_shop_packaging (id int primary key)");
 			return true;
 		}
 
@@ -749,7 +749,7 @@ class shop_product_packaging extends class_base
 					$oid = $o->id();
 					$this->db_query("
 						INSERT INTO
-							aw_shop_packaging (oid, $f)
+							aw_shop_packaging (id, $f)
 						VALUES
 							('$oid', '$v')
 						ON DUPLICATE KEY UPDATE

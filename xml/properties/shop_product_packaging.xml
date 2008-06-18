@@ -404,6 +404,25 @@
             <field>amount_limits_tb</field>
       </property>
       <property>
+            <name>aml_inheritable</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aml_inheritable</field>
+            <caption>P&amp;amp;auml;ritav</caption>
+      </property>
+      <property>
+            <name>inherit_aml_from</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_INHERIT_AML_FROM</reltype>
+            <store>connect</store>
+            <field>inherit_aml_from</field>
+            <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
+      </property>
+      <property>
             <name>amount_limits_tbl</name>
             <table>aw_shop_packaging</table>
             <group>amount_limits</group>
@@ -487,6 +506,14 @@
                   <clid>CL_META</clid>
                   <caption>muutuja5</caption>
             </USERVAR5>
+            <INHERIT_AML_FROM>
+                  <value>8</value>
+                  <clid>
+                        <num_0>CL_SHOP_PRODUCT</num_0>
+                        <num_1>CL_SHOP_PRODUCT_PACKAGING</num_1>
+                  </clid>
+                  <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
+            </INHERIT_AML_FROM>
       </reltypes>
       <layout>
             <reservation>

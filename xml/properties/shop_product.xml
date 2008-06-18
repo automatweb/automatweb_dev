@@ -350,6 +350,25 @@
             <field>amount_limits_tb</field>
       </property>
       <property>
+            <name>aml_inheritable</name>
+            <table>aw_shop_products</table>
+            <group>general_limits</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aml_inheritable</field>
+            <caption>P&amp;amp;auml;ritav</caption>
+      </property>
+      <property>
+            <name>inherit_aml_from</name>
+            <table>objects</table>
+            <group>general_limits</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_INHERIT_AML_FROM</reltype>
+            <store>connect</store>
+            <field>inherit_aml_from</field>
+            <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
+      </property>
+      <property>
             <name>amount_limits_tbl</name>
             <table>objects</table>
             <group>general_limits</group>
@@ -1434,6 +1453,14 @@
                   <clid>CL_SHOP_MATERIAL</clid>
                   <caption>Materjal</caption>
             </MATERIAL>
+            <INHERIT_AML_FROM>
+                  <value>29</value>
+                  <clid>
+                        <num_0>CL_SHOP_PRODUCT</num_0>
+                        <num_1>CL_SHOP_PRODUCT_PACKAGING</num_1>
+                  </clid>
+                  <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
+            </INHERIT_AML_FROM>
       </reltypes>
       <layout>
             <gen_split>
