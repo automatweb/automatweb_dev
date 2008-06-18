@@ -247,7 +247,7 @@ div.menuBar a.menuButton {
 
 div.menuBar a.menuButton:hover {
 	background-color: #e1e1e1;
-	border-color: #ffffff
+	border-color: #ffffff;
 	color: #000000;
 	cursor: pointer;
 }
