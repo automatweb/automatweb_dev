@@ -4276,8 +4276,6 @@ class crm_person extends class_base
 
 	function callback_post_save($arr)
 	{
-		aw_session_set("person_obj_id_for_candidate", $arr["obj_inst"]->id());
-
 		if($this->can("view", aw_global_get("person_obj_id_for_candidate")) && $this->can("view", aw_global_get("job_offer_obj_id_for_candidate")))
 		{
 			$candidate = obj();
@@ -4285,7 +4283,7 @@ class crm_person extends class_base
 			$candidate->set_parent($arr["obj_inst"]->id());
 			$candidate->save();
 			$candidate->connect(array(
-				"to" => aw_global_get("person_obj_id_for_candidate"),
+				"to" => $arr["obj_inst"]->id(),
 				"type" => "RELTYPE_PERSON",
 			));
 			$candidate->connect(array(
@@ -4293,6 +4291,8 @@ class crm_person extends class_base
 				"type" => "RELTYPE_JOB_OFFER",
 			));
 			aw_session_set("candidate_obj_id_for_candidate", $candidate->id());
+			// Don't need this one anymore.
+			aw_session_set("job_offer_obj_id_for_candidate", "");
 		}
 		/*
 		if($arr["obj_inst"]->prop("work_contact"))
