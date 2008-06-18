@@ -6,6 +6,10 @@ bronTexts["BRON"] = "Reserve";
 bronTexts["FREE"] = "FREE";
 var bronErrors = Array();
 bronErrors["CANT_BRON"] = "Unable to add reservation";
+bronErrors["CANT_BRON_NO_TIME"] = "Time decreased to fit current between current timespan";
+var room_reservation_length_max = false
+var room_reservation_length_clone = false;
+var room_reservation_index = false;
 
 /**
 	* does bron and goes to the next step as well
@@ -28,7 +32,43 @@ function doBronExec(strId, intCalendarIntervall, intRoomReservationLength, intPr
  */
 function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProduct)
 {
+	// find the max value from input#room_reservation_length
+	if (room_reservation_length_max == false)
+	{
+		room_reservation_length_max = $("#room_reservation_length option:last").html()
+	}
+	
+	if (!room_reservation_length_clone)
+	{
+		//room_reservation_length_clone = $("#room_reservation_length").clone();
+	}
+	else
+	{
+		//room_reservation_length_clone.selectedIndex = room_reservation_index;
+		//$("#room_reservation_length").html(room_reservation_length_clone.html());
+	}
+
 	isClicked = intCalendarIntervall;
+	
+	// change hour dropdown according to available actual available time
+	max_bron_hours = getMaxBronHours (strId, intCalendarIntervall)
+	i = 0;
+	$("#room_reservation_length option").each(function(){
+		if ($(this).attr("selected"))
+		{
+			room_reservation_index = $(this).html()-1;
+		}
+
+		if (max_bron_hours == 1)
+		{
+			document.getElementById("room_reservation_length").selectedIndex = 0;
+		}
+		else if (($(this).html()*1.0)==max_bron_hours-1 && room_reservation_index===false)
+		{
+			$(this).next().attr("selected", true);
+		}
+	});
+	room_reservation_index = false;
 	
 	if (!intRoomReservationLength)
 	{
@@ -47,9 +87,18 @@ function changeRoomReservationLength(that)
 	if (isClicked)
 	{
 		intCalendarIntervall = isClicked;
-		intRoomReservationLength = that[that.selectedIndex].value*intCalendarIntervall;
+		
 		strId = arrBronsActive[0];
-	
+		
+		// change hour dropdown according to available actual available time
+		max_bron_hours = getMaxBronHours (strId, intCalendarIntervall);
+		if (that.selectedIndex>max_bron_hours-1)
+		{
+			alert (bronErrors["CANT_BRON_NO_TIME"]);
+			that.selectedIndex = max_bron_hours-1;
+		}
+		
+		intRoomReservationLength = that[that.selectedIndex].value*intCalendarIntervall;
 		setBrons (strId, intCalendarIntervall, intRoomReservationLength);
 	}
 }
@@ -141,6 +190,28 @@ function canBron ()
 		}
 	}
 	return true;
+}
+
+function getMaxBronHours (strId, intCalendarIntervall)
+{
+	var strNextId = strId;
+	var intTS = getTSFromPrefixAndTimestamp(strId) ;
+	var intRID = getRIDFromPrefixAndTimestamp (strId);
+	var tmp;
+	var i=1;
+	intRoomReservationLength = room_reservation_length_max * intCalendarIntervall;
+	while (intRoomReservationLength>0)
+	{
+		tmp = intCalendarIntervall+getTSFromPrefixAndTimestamp(strNextId);
+		strNextId = intRID+"_"+tmp;
+		intRoomReservationLength -= intCalendarIntervall;
+		try {
+			document.getElementById(strNextId).childNodes[2].id;
+		}
+		catch (e) {return i}
+		i++;
+	}
+	return 6;
 }
 
 /**
