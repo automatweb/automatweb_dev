@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.10 2008/04/15 07:08:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.11 2008/06/18 08:10:50 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -83,7 +83,7 @@ class user_manager extends class_base
 	function user_manager()
 	{
 		// HTML for permissions_form used in popup when linking group to folders and objects
-		$this->permissions_form = "<p class='plain'>".t("Vali õigused").":<br>".html::checkbox(array(
+		$this->permissions_form = "<p class='plain'>".t("Vali &otilde;igused").":<br>".html::checkbox(array(
 			'name' => 'sel_can_view',
 			'caption' => t("Vaatamine"),
 		));
@@ -788,7 +788,6 @@ class user_manager extends class_base
 			$lm = $loginconf->meta('lm');
 			$users = get_instance("users");
 		}
-		
 		$fields = array(
 			array(
 				'name' => 'action',
@@ -861,7 +860,7 @@ class user_manager extends class_base
 
 
 		// Now, find data for the table
-
+	
 		if (isset($arr['groups_list']))
 		{
 			foreach ($arr['groups_list'] as $g)
@@ -877,10 +876,10 @@ class user_manager extends class_base
 			));
 			$target = $ol->arr();
 		}
-
+		
 		if (!count($target) && !isset($arr['title'])) // the title is the message.
 		{
-			$table = "";
+			//$table = "";
 		}
 
 		foreach ($target as $oid => $o)
