@@ -25,6 +25,13 @@ class reval_customer extends class_base
 			"tpldir" => "applications/clients/reval/customer/reval_customer",
 			"clid" => CL_REVAL_CUSTOMER
 		));
+
+		if ($v = $_SESSION["go_to_lang"])
+		{
+			unset($_SESSION["go_to_lang"]);
+			header("Location: ".aw_ini_get("baseurl")."/$v/firstclient-zone");
+			die();
+		}
 	}
 
 	function get_property($arr)
@@ -983,6 +990,44 @@ if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 	function _u($url)
 	{
 		return str_replace("/orb.aw", "/?", $url);
+	}
+
+	/**
+		@attrib name=display_visits
+	**/
+	function display_visits($arr)
+	{
+		if (!$this->get_cust_id())
+		{
+			return $this->_disp_login();
+		}
+
+		$this->read_template("all_visits.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$return = $this->do_orb_method_call(array(
+			"action" => "GetCustomerVisits",
+			"class" => "http://markus.ee/RevalServices/Customers/",
+			"params" => array("customerId" => $this->get_cust_id()),
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServicesTest/CustomerService.asmx"
+		));
+
+		$v = "";
+		foreach($return["GetCustomerVisitsResult"]["Visits"]["HotelVisit"] as $visit)
+		{
+			$this->vars(array(
+				"hotel" => $visit["Hotel"],
+				"arrival" => date("d.m.Y", $this->_parse_date($visit["ArrivalDate"])),
+				"departure" => date("d.m.Y", $this->_parse_date($visit["DepartureDate"])),
+				"num_nights" => $visit["RoomNights"]
+			));
+			$v .= $this->parse("VISIT");
+		}
+		$this->vars(array(
+			"VISIT" => $v
+		));
+		return $this->parse();
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.35 2008/06/05 09:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.36 2008/06/19 09:42:17 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -495,6 +495,7 @@ class ows_bron extends class_base
 		$this->vars(array(
 			"cur_select" => $this->picker($currency, $this->currency_picker),
 			"room_type" => $doc->name(),  //iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
+			"rate_title" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Title"]),
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
 			"pound_url" => aw_url_change_var("set_currency", "GBP"),
 			"usd_url" => aw_url_change_var("set_currency", "USD"),
@@ -510,6 +511,7 @@ class ows_bron extends class_base
 			"hotelname" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"]),
 			"arrival" => $arr["i_checkin"],
 			"departure" => $arr["i_checkout"],
+			"promo" => $arr["i_promo"],
 			"nights" => max(1,$nights),
 			"currency" => $currency,
 			"reforb" => $this->mk_reforb("show_confirm_view", array(
@@ -830,6 +832,7 @@ class ows_bron extends class_base
 		$this->vars(array(
 			"guest_comments" => nl2br($arr["bron_comment"]),
 			"room_type" => $doc->name(), //iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Name"]),
+			"rate_title" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rate["Title"]),
 			"eur_url" => aw_url_change_var("set_currency", "EUR"),
 			"pound_url" => aw_url_change_var("set_currency", "GBP"),
 			"usd_url" => aw_url_change_var("set_currency", "USD"),
@@ -1369,10 +1372,7 @@ class ows_bron extends class_base
 		{
 			$doc = obj();
 		}
-if ($_GET["a"] == 1)
-{
-echo dbg::dump($rvs_data);
-}
+
 		$this->vars(array(
 			"doc_room_type" => $doc->name(),
 			"guest_phone" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $rvs_data["GuestPhone"]),
@@ -1852,7 +1852,11 @@ if ($_GET["DH"] == 1)
 		$hpo = str_replace("_170", "", $hpo);
 		$hp = str_replace(".jpg", "_170.jpg", str_replace(".gif", "_170.gif", $hpo));
 		$hp_big = str_replace(".jpg", "_500.jpg", str_replace(".gif", "_500.gif", $hpo));
+
 		$this->vars(array(
+			"i_adults" => $arr["i_adult1"],
+			"i_children" => $arr["i_child1"],
+			"i_promo" => $arr["i_promo"],
 			"HotelName" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"]),
 			"HotelDesc" => nl2br(iconv("utf-8", aw_global_get("charset")."//IGNORE",$hotel["ShortNote"])),
 			"HotelAddress" => iconv("utf-8", aw_global_get("charset")."//IGNORE",$hotel["AddressLine1"].', '.$hotel["AddressLine2"]),
@@ -2292,6 +2296,16 @@ $rate_ids = array();
 	{
 if ($_GET["finder"])
 {
+ob_end_clean();
+aw_global_set("soap_debug", 1);
+			$return = $this->do_orb_method_call(array(
+				"action" => "GetHotelDescriptions",
+				"class" => "http://markus.ee/RevalServices/Booking/",
+				"params" => array(),
+				"method" => "soap",
+				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+			));
+die(dbg::dump($return));
 		$return = $this->do_orb_method_call(array(
 			"action" => "GetBookingDetails",
 			"class" => "http://markus.ee/RevalServices/Booking/",
@@ -2574,7 +2588,7 @@ die(dbg::dump($return));
 			die($bp->do_payment(array(
 				"payment_id" => $arr["bpo"],
 				"bank_id" => "credit_card",
-				"amount" => $rate["TotalPriceInEur"]*16.0,
+				"amount" => $rate["TotalPriceInEur"]*15.65,
 				"reference_nr" => $arr["aw_rvs_id"],
 				"expl" => "webID:".$arr["aw_rvs_id"]." ".$arr["i_checkin"]."-".$arr["i_checkout"]." ".iconv("utf-8", aw_global_get("charset")."//IGNORE", $hotel["HotelName"])." ".$arr["ct"]["firstname"]." ".$arr["ct"]["lastname"],
 				"lang" => $lc
