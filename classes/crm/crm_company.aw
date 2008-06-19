@@ -1235,7 +1235,7 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @groupinfo versions caption=Versioonid submit=no save=no parent=stats
 @groupinfo open_hrs caption="Avamisajad" parent=people
 @groupinfo user_settings caption="Seaded" parent=people
-@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all submit=no
+@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=documents_all
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption &Otilde;iguslik vorm
