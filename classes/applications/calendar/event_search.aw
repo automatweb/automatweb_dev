@@ -1193,7 +1193,7 @@ class event_search extends class_base
 				$search["lang_id"] = array();
 			}
 
-			if ($ob->prop('dont_search_from_all_sites'))
+			if ($ob->prop('dont_search_from_all_sites') != 1)
 			{
 				$search["site_id"] = array();
 			}
