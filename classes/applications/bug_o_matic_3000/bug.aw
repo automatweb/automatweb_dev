@@ -41,7 +41,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
 		@caption Kellele
 
-		@property skill_used style=select table=aw_bugs field=skill_used parent=settings_col1 captionside=top
+		@property skill_used type=select table=aw_bugs field=skill_used parent=settings_col1 captionside=top
 		@caption Kasutatav P&auml;devus
 
 		@property is_order type=checkbox ch_value=1 parent=settings_col1 no_caption=1
@@ -398,6 +398,11 @@ class bug extends class_base
 				}
 				$who = obj($arr["obj_inst"]->prop("who"));
 				$prop["options"] = $who->get_skill_names();
+				if(!sizeof($prop["options"]))
+				{
+					$prop["type"] = "text";
+					$prop["value"] = t("p&auml;devused m&auml;&auml;ramata");
+				}
 				break;
 			case "customer_unit":
 				if ($this->can("view", $arr["obj_inst"]->prop("customer")))

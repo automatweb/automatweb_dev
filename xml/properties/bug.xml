@@ -82,7 +82,7 @@
             <name>skill_used</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <style>select</style>
+            <type>select</type>
             <field>skill_used</field>
             <parent>settings_col1</parent>
             <captionside>top</captionside>
