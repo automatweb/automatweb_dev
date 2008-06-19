@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.144 2008/06/12 11:35:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.145 2008/06/19 09:14:29 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1782,12 +1782,10 @@ class releditor extends core
 			$rv = $i->submit($row);
 		}
 
-
 		foreach($prev_dat  as $idx => $dat_row)
 		{
 			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx, $arr["cfgform"]);
 		}
-
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($t->draw().html::hidden(array(
@@ -1896,11 +1894,16 @@ class releditor extends core
 			if ($this->can("view", $cur_prop["cfgform_id"]))
 			{
 				$rel_props = $cf->get_cfg_proplist($cur_prop["cfgform_id"]);
+				$cur_prop["table_fields"] = array();
 				foreach($rel_props as $pn => $pd)
 				{
 					if (!$pd["show_in_emb_tbl"])
 					{
 						unset($rel_props[$pn]);
+					}
+					else
+					{
+						$cur_prop["table_fields"][] = $pn;
 					}
 				}
 			}
@@ -1943,6 +1946,17 @@ class releditor extends core
 
 			$pv = $rel_props[$prop_name];
 			$pv["value"] = $tc_val;
+
+			if ($pv["type"] == "relpicker")
+			{
+				$ri = get_instance("vcl/relpicker");
+				$ri->init_vcl_property(array(
+					"obj_inst" => $o,
+					"request" => $_POST,
+					"property" => &$pv,
+					"relinfo" => $o->get_relinfo()
+				));
+			}
 			$args = array(
 				"obj_inst" => $o,
 				"request" => $_POST,
@@ -1958,7 +1972,6 @@ class releditor extends core
 			{
 				$i->get_property($args);
 			}
- 
 			switch($pv["type"])
 			{
 				case "relpicker":
