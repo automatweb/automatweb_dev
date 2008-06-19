@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.27 2008/04/15 07:08:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.28 2008/06/19 08:45:28 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -30,7 +30,7 @@
 @property lang_site_id table=languages type=select multiple=1 field=site_id
 @caption Saidid kus keel on valitav
 
-@property lang_id table=languages type=hidden field=id
+@property db_lang_id table=languages type=hidden field=id
 @caption Keele ID
 
 @property lang_trans_msg table=languages type=textarea rows=5 cols=30 field=meta method=serialize
@@ -190,7 +190,7 @@ class language extends class_base
 						$o->set_prop("lang_status", $arr["request"]["act"][$o->id()] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE);
 						$o->save();
 						$al = get_instance("core/languages");
-						$al->set_status($o->prop("lang_id"), $arr["request"]["act"][$o->id()] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE);
+						$al->set_status($o->prop("db_lang_id"), $arr["request"]["act"][$o->id()] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE);
 					}
 				}
 				if ($arr["request"]["set_sel_lang"] != aw_global_get("lang_id"))
@@ -239,10 +239,10 @@ class language extends class_base
 
 	function callback_pre_save($arr)
 	{
-		if (!$arr["obj_inst"]->prop("lang_id"))
+		if (!$arr["obj_inst"]->prop("db_lang_id"))
 		{
 			$id = $this->db_fetch_field("SELECT max(id) as id FROM languages", "id")+1;
-			$arr["obj_inst"]->set_prop("lang_id", $id);
+			$arr["obj_inst"]->set_prop("db_lang_id", $id);
 		}
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("lang_name"));
 	}
@@ -289,8 +289,8 @@ class language extends class_base
 				)),
 				"sel" => html::radiobutton(array(
 					"name" => "set_sel_lang",
-					"value" => $o->prop("lang_id"),
-					"checked" => (aw_global_get("lang_id") == $o->prop("lang_id"))
+					"value" => $o->prop("db_lang_id"),
+					"checked" => (aw_global_get("lang_id") == $o->prop("db_lang_id"))
 				))
 			));
 		}

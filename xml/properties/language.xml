@@ -51,7 +51,7 @@
             <caption>Saidid kus keel on valitav</caption>
       </property>
       <property>
-            <name>lang_id</name>
+            <name>db_lang_id</name>
             <table>languages</table>
             <group>general</group>
             <type>hidden</type>
