@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.27 2008/04/28 12:15:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.28 2008/06/19 10:30:43 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1 maintainer=dragut
@@ -115,10 +115,17 @@ class forum_topic extends class_base
 				break;
 			case "name":
 			case "author_name":
-			case "author_email":
 				if (empty($prop["value"]))
 				{
 					$prop["error"] = $prop["caption"] . " ei tohi olla t&uuml;hi!";
+					$retval = PROP_FATAL_ERROR;
+				};
+
+				break;
+			case "author_email":
+				if (!is_email($prop["value"]))
+				{
+					$prop["error"] = $prop["caption"] . " ei ole korrektne!";
 					$retval = PROP_FATAL_ERROR;
 				};
 

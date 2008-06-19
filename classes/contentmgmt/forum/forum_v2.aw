@@ -1885,7 +1885,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				}
 				if ( $_SESSION['forum_comment_error']['email'] )
 				{
-					$error_msg .= t('E-maili v&auml;li peab olema t&auml;idetud! <br />');
+					$error_msg .= t('E-mail ei ole korrektne! <br />');
 				}
 				if ( $_SESSION['forum_comment_error']['commtext'] )
 				{
@@ -3206,9 +3206,19 @@ class forum_v2 extends class_base implements site_search_content_group_interface
                 );
                 foreach($req_f as $field)
                 {
-                        if(isset($arr[$field]) && empty($arr[$field]))
+                        if ($conv[$field] == 'email')
                         {
-                                $errors[$conv[$field]] = 1;
+                                if(isset($arr[$field]) && !is_email($arr[$field]))
+                                {
+                                        $errors[$conv[$field]] = 1;
+                                }
+                        }
+                        else
+                        {
+                                if(isset($arr[$field]) && empty($arr[$field]))
+                                {
+                                        $errors[$conv[$field]] = 1;
+                                }
                         }
                 }
 
