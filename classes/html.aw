@@ -191,6 +191,9 @@ class html extends aw_template
 
 	@param tabindex optional type=string
 		tab index
+		
+	@param onkeyup optional type=string
+		if set, onkeyup=$onkeyup.
 
 	@returns string / html textbox
 
@@ -217,6 +220,7 @@ class html extends aw_template
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
 		$onchange = !empty($onChange) ? " onchange=\"{$onChange}\"" : "";
+		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
 		$style = isset($style) ? " style=\"{$style}\"":"";
 
 		### compose autocompletes source url
@@ -327,7 +331,7 @@ class html extends aw_template
 			}
 		}
 
-		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange} />{$post_append_text}\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange} />{$post_append_text}\n{$value_elem}{$autocomplete}";
 	}
 
 	/**
