@@ -1669,6 +1669,7 @@ class task extends class_base
 								$obj->set_prop("cost" , $entry["cost"]);
 								$obj->set_prop("who" , $entry["who"]);
 								$obj->set_prop("currency" , $entry["currency"]);
+								$obj->set_prop("has_tax" , $entry["has_tax"]);
 								$obj->save();
 							}
 							continue;
@@ -1685,6 +1686,7 @@ class task extends class_base
 						$row->set_prop("cost", $entry["cost"]);
 						$row->set_prop("who" , $entry["who"]);
 						$row->set_prop("currency" , $entry["currency"]);
+						$row->set_prop("has_tax" , $entry["has_tax"]);
 						$row->save();
 						$arr["obj_inst"]->connect(array(
 							"to" => $row->id(),
@@ -1905,6 +1907,14 @@ class task extends class_base
 			"caption" => t("Hind")
 		));
 		$t->define_field(array(
+			"name" => "currency",
+			"caption" => t("Valuuta")
+		));
+		$t->define_field(array(
+			"name" => "km",
+			"caption" => t("KM")
+		));
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev")
 		));
@@ -1921,28 +1931,28 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "bill",
 			"caption" => t("Arve nr.")
-		));
+		));	
 	}
 
 	function _other_expenses($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_other_exp_t($t);
-
+		
 		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
 // 		$dat = array();
 		$dat[] = array();
 		$dat[] = array();
 		$dat[] = array();
 		$nr = 1;
-
+		
 		$participians = $this->get_partipicants($arr);
 		$pa_list = new object_list();
 		if (is_oid($participians) || (is_array($participians) && count($participians)))
 		{
 			$pa_list->add($participians);
 		}
-
+		
 		$cs = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_EXPENSE",
 		));
@@ -1970,7 +1980,9 @@ class task extends class_base
 						"currency"=> $ob->prop("currency"),
 						"date" => date("d.m.Y" , date_edit::get_timestamp($ob->prop("date"))),
 						"who" => $ob->prop("who.name"),
-						"bill" => $onbill
+						"bill" => $onbill,
+						"currency" => $ob->prop("currency.name"),
+						"km" => $ob->prop("has_tax")? "*" : "",
 					));
 				}
 				else
@@ -2004,8 +2016,13 @@ class task extends class_base
 							"value" => 1,
 							"checked" => $checked,
 						)),
-						"bill" => $onbill
-						,
+						"bill" => $onbill,
+						"km" =>  html::checkbox(array(
+							"name" => "exp[".$ob->id()."][has_tax]",
+							"value" => 1,
+							"checked" => $ob->prop("has_tax")?1:0,
+						)),
+						
 					));
 		//			$nr++;
 				}
