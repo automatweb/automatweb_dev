@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.105 2008/06/18 11:11:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.106 2008/06/19 14:33:40 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -462,7 +462,7 @@ class reservation extends class_base
 			el=aw_get_url_contents('".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value);
 			if(!(el>0))
 			{
-				return confirm('".t("Sellise nimelist projekti pole, kas lisada?")."')
+				return confirm('".t("Sellise nimega projekti ei ole veel andmebaasis, kas soovite uut lisada?")."')
 			}
 			return false;
 		}";
@@ -1989,7 +1989,7 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 			if($amt && $this->can("view", $product))
 			{
 				$prod=obj($product);
-				if($prod->meta("cur_prices"))
+				if($prod->meta("cur_prices") && array_sum($prod->meta("cur_prices")))
 				{
 					$str = "";
 					foreach($prod->meta("cur_prices") as $curr => $sum)
