@@ -395,12 +395,41 @@ class mail_notify extends core
 			"action" => "remove_p_from_l_list",
 		));
 		$popup_search = get_instance("vcl/popup_search");
-		$search_butt = $popup_search->get_popup_search_link(array(
+/*		$search_butt = $popup_search->get_popup_search_link(array(
 			"pn" => "add_selected_people",
 			"clid" => array(CL_CRM_PERSON,CL_GROUP)
 		));
+*/
+//		$tb->add_cdata($search_butt);
 
-		$tb->add_cdata($search_butt);
+		$url1 = $popup_search->mk_my_orb("do_search", array(
+			"pn" => "add_selected_people",
+			"clid" => CL_CRM_PERSON
+		), "popup_search");
+		$url2 = $popup_search->mk_my_orb("do_search", array(
+			"pn" => "add_selected_people",
+			"clid" => CL_GROUP
+		), "popup_search");
+
+		$tb->add_menu_button(array(
+			"name" => "search",
+			"tooltip" => t("Search"),
+			"img" => "search.gif",
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Isikuid"),
+			"link" => "javascript:aw_popup_scroll('".$url1."','Search',550,500);",
+
+		));
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Gruppe"),
+			"link" => "javascript:aw_popup_scroll('".$url2."','Search',550,500);",
+		));
+
+
 /*		$tb->add_button(array(
 			"name" => "search",
 			"tooltip" => t("Otsi isikuid hulgast"),
