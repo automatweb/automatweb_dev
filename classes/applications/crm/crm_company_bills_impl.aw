@@ -470,7 +470,7 @@ class crm_company_bills_impl extends class_base
 						"name" => $row->name(),
 //						"hrs" => number_format(str_replace(",", ".", $row->prop("time_to_cust")), 2),
 //						"hr_price" => number_format($row->prop("hr_price"),2),
-						"sum" => $row->prop("deal_price").t("(Kokkuleppehind)"),
+						"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
 						"set_date" => $row->prop("to_bill_date"),
 				));
 //				$deal_tasks[] = $row->id();

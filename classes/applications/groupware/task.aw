@@ -132,6 +132,8 @@ caption Kokkuleppehind
 	@property deal_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout
 	@caption Kokkuleppehind
 
+	@property deal_has_tax type=checkbox size=5 field=meta method=serialize parent=hr_price_layout
+	@caption Sisestati koos k&auml;ibemaksuga
 
 @property bill_no type=text table=planner
 @caption Arve number
@@ -1080,6 +1082,7 @@ class task extends class_base
 			case "priority":
 			case "bill_no":
 			case "deal_price":
+			case "deal_has_tax":
 			case "deal_unit":
 			case "deal_amount":
 			case "num_hrs_guess":
@@ -4133,8 +4136,8 @@ class task extends class_base
 				"value" => $arr["obj_inst"]->prop("hr_price"),
 				"size" => 5
 			)),
-			"deal_price" =>
-				"<table border=0><tr><td>".t("Hind")."</td><td>".t("Kogus")."</td><td>".t("&Uuml;hik")."</td></tr><tr>".
+			"deal_price" => 
+				"<table border=0><tr><td>".t("Hind")."</td><td>".t("Kogus")."</td><td>".t("&Uuml;hik")."</td><td>".t("KM")."</td></tr><tr>".
 				"<td>".html::textbox(array(
 				"name" => "deal_price",
 				"value" => $arr["obj_inst"]->prop("deal_price"),
@@ -4147,6 +4150,10 @@ class task extends class_base
 				"name" => "deal_unit",
 				"value" => $arr["obj_inst"]->prop("deal_unit"),
 				"size" => 5
+			))."</td><td>".html::checkbox(array(
+				"name" => "deal_has_tax",
+				"value" => 1,
+				"checked" => $arr["obj_inst"]->prop("deal_has_tax"),
 			))."</td></tr></table>",
 			"hr_price_currency" => html::select(array(
 				"name" => "hr_price_currency",

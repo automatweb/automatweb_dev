@@ -5551,6 +5551,7 @@ class crm_company extends class_base
 			{
 				$agreement = $bill->meta("agreement_price");
 				if(!is_array($agreement)) $agreement = array();
+				$tax = 0.18;//default
 
 				$deal_name = $to->name();
 				if ($sts)
@@ -5559,6 +5560,11 @@ class crm_company extends class_base
 					{
 						$prod_obj = obj($sts->prop("bill_def_prod"));
 						$deal_name = $prod_obj->comment();
+						$tr = obj($prod_obj->prop("tax_rate"));
+						if (time() >= $tr->prop("act_from") && time() < $tr->prop("act_to"))
+						{
+							$tax = $tr->prop("tax_amt")/100.0;
+						}
 					}
 				}
 
@@ -5571,13 +5577,19 @@ class crm_company extends class_base
 					$prod = $sts->prop("bill_def_prod");
 				}
 
+				$price = $to->prop("deal_price");
+				if($to->prop("deal_has_tax"))
+				{
+					$price = $price / (1 + $tax);
+				}
 				$agreement[] = array(
 					"unit" => $to->prop("deal_unit"),
-					"price" => $to->prop("deal_price"),
+					"price" => $price,
 					"amt" => $to->prop("deal_amount"),
 					"name" => $deal_name,
 					"prod" => $prod,
 					"comment" => $deal_name,
+					"has_tax" => $to->prop("deal_has_tax"),
 				);
 				$bill->set_meta("agreement_price" , $agreement);
 				$bill->save();

@@ -348,6 +348,17 @@
             <caption>Kokkuleppehind</caption>
       </property>
       <property>
+            <name>deal_has_tax</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>hr_price_layout</parent>
+            <caption>Sisestati koos k&amp;amp;auml;ibemaksuga</caption>
+      </property>
+      <property>
             <name>bill_no</name>
             <table>planner</table>
             <group>general</group>
