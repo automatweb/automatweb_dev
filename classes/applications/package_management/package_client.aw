@@ -136,6 +136,23 @@ class package_client extends class_base
 		return PROP_IGNORE;
 	}
 
+	/**
+	@attrib name=download_package api=1 params=name
+		@param client_id required type=oid
+			packaging client
+		@param package_id required type=oid
+			package file id in server
+		@param return_url required type=string
+			Url to return
+	**/
+	function download_package($arr)
+	{
+		extract($arr);
+		$client = obj($arr["client_id"]);
+		$client->download_package($arr["package_id"]);
+		return $arr["return_url"];
+	}
+
 	function _get_list($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -168,18 +185,30 @@ class package_client extends class_base
 			'caption' => t('S&otilde;ltuvused'),
 		));
 
+		$t->define_field(array(
+			'name' => 'down',
+			'caption' => t('x'),
+		));
+
 		$filter = array(
 			'search_name' => $arr['request']['search_name'],
 			'search_version' => $arr['request']['search_version'],
 			'search_file' => $arr['request']['search_file'],
 		);
 		$packages = $arr["obj_inst"]->get_packages($filter);
+
 		foreach ($packages as $data)
 		{
+			$down_url = $this->mk_my_orb("download_package", array(
+				"client_id" => $arr["obj_inst"]->id(),
+				"package_id" =>  $data["id"],
+				"return_url" => get_ru(),
+			));
 			$t->define_data(array(
 				'select' => $data["id"],
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
 				'version' => $data["version"],
+				'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
 			));
 		}
 		return PROP_OK;

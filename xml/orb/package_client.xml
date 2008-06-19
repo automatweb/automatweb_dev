@@ -1,5 +1,15 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="package_client" folder="applications/package_management" extends="class_base">
+		<action name="download_package">
+			<function name="download_package">
+				<arguments>
+					<required name="client_id" type="oid" />
+					<required name="package_id" type="oid" />
+					<required name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

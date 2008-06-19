@@ -36,15 +36,55 @@ class package_obj extends _int_object
 
 	function download_package()
 	{
+		$file_objects = $this->get_files();
 		foreach($file_objects->arr() as $file_object)
 		{
 			$data = $file_object->get_file();
 		}
+
+		
+/*		header ("Content-Type: application/xml");
+
+		$out_charset = "ISO-8859-4";
+		$this_object = obj ($arr["id"]);
+		$import_url = $this_object->prop ("city24_import_url");
+		$xml = file_get_contents ($import_url);
+		// $xml = iconv ("UTF-8", $out_charset, $xml);
+		// $xml = preg_replace ('/encoding\=\"UTF\-8\"/Ui', 'encoding="' . $out_charset . '"', $xml, 1);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $import_url);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
+		// $xml = curl_exec($ch);
+		curl_exec($ch);
+		curl_close($ch);
+
+		// echo $xml;
+		exit;
+*/
+
 		header("Content-type: application/zip");
 		header("Content-length: ".filesize($data["properties"]["file"]));
 		header("Content-disposition: inline; filename=".$data["name"].";");
-		readfile($data["properties"]["file"]);
+		print $data["content"];
+		flush();
 		die();
+	}
+
+	function get_package_file_size()
+	{
+		$file_objects = $this->get_files();
+		foreach($file_objects->arr() as $file_object)
+		{
+			$data = $file_object->get_file();
+		}
+		return filesize($data["properties"]["file"]);
 	}
 
 	function get_package_file_names()
@@ -73,89 +113,6 @@ class package_obj extends _int_object
 		$filenamestring = join("<br>\n" , $files);
 		$this->set_prop("file_names" , $filenamestring);
 		$this->save();
-	}
-
-	function get_class_folders($dir)
-	{
-		$dp = opendir($dir);
-		$bd = aw_ini_get("basedir");
-		$folders = array();
-		while (false !== ($filename = readdir($dp)))
-		{
-			if($filename != '.' && $filename != '..' && $filename != "CVS")
-			{
-				$this->fid++;
-				if(is_dir($dir.'/'.$filename))
-				{
-					$folder = array();
-					$newdir = $dir.'/'.$filename;
-					$folder["id"] = $this->fid;
-					$folder["name"] = $filename;
-					$folder["folder"] = $newdir;
-					$folder["level"] = $this->get_class_folders($newdir);
-					$folders[] = $folder;
-				}
-			}
-		}
-		usort($folders, array(self, "__file_arr_sort"));
-		return $folders;
-	}
-
-	function get_contents_class_files($dir)
-	{
-		$dp = opendir($dir);
-		$files = array();
-		while (false !== ($filename = readdir($dp)))
-		{
-			if($filename != '.' && $filename != '..' && substr($filename, 0, 2) != ".#")
-			{
-				$this->fid++;
-				if(!is_dir($dir.'/'.$filename))
-				{
-					$file = array();
-					$file["id"] = $this->fid;
-					$file["name"] = $filename;
-					$files[] = $file;
-				}
-			}
-		}
-		usort($files, array(self, "__file_arr_sort"));
-		return $files;
-	}
-
-	function __file_arr_sort($a, $b)
-	{
-		return strcasecmp($a["name"], $b["name"]);
-	}
-
-
-	//this should maybe look for some more files, not just xml props and orbs
-	function get_other_files($file)
-	{
-		$fname = aw_ini_get("basedir").$file;
-		$data = @file_get_contents($fname);
-		$others = array();
-		if($data)
-		{
-			if(strpos($data, "extends class_base"))
-			{
-				$name = str_replace(".aw", "", basename($file));
-				$xml = array("properties", "orb");
-				foreach($xml as $x)
-				{
-					$check = "/xml/".$x."/".$name.".xml";
-					if(file_exists(aw_ini_get("basedir").$check))
-					{
-						$others[] = $check;
-					}
-				}
-			}
-			//this regexp should find the classes template directory, but, well, it doesn't.
-			if(ereg('tpldir[\"\']{1}[\s]*\=\>[\s]*[\"\']{1}*([a-zA-Z\_\/0-9]+)[\"\']{1}', $data, $res))
-			{
-			}
-		}
-		return $others;
 	}
 }
 ?>

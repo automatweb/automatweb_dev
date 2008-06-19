@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.8 2008/05/16 11:55:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.9 2008/06/19 13:53:46 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -330,14 +330,24 @@ class package_server extends class_base
 
 	/** 
 		@attrib name=download_package_file nologin=1 is_public=1 all_args=1
-
  	**/
 	function download_package_file($arr)
 	{
 		extract($arr);
-		$file_manager = get_instance("admin/file_manager");
-		$package = obj($pid);
-		$pid->download_package();
+		$package = obj($id);
+		$package->download_package();
+	}
+
+	/** 
+		@attrib name=get_package_file_size nologin=1 is_public=1 all_args=1
+		@param id required type=oid
+			package id
+ 	**/ 
+	function get_package_file_size($arr)
+	{
+		extract($arr);
+		$package = obj($id);
+		return $package->get_package_file_size();
 	}
 
 	function do_db_upgrade($table, $field, $query, $error)
