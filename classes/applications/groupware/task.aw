@@ -1951,50 +1951,64 @@ class task extends class_base
 			$ob = $ro->to();
 			if($ob->class_id() == CL_CRM_EXPENSE)
 			{
-					$bno = "";
-					if ($this->can("view", $ob->prop("bill_id")))
-					{
-						$bo = obj($ob->prop("bill_id"));
-						$bno = $bo->prop("bill_no");
-					}
-					$onbill = "";
-					if ($ob->prop("bill_id"))
-					{
-						$onbill = sprintf(t("Arve nr %s"), $bno);
-					}
-				$t->define_data(array(
-					"name" => html::textbox(array(
-						"name" => "exp[".$ob->id()."][name]",
-						"value" => $ob->name(),
-					)),
-					"cost" => html::textbox(array(
-						"name" => "exp[".$ob->id()."][cost]",
-						"size" => 5,
-						"value" => $ob->prop("cost"),
-					)),
-					"currency"=> html::select(array(
-						"options" => $this->_get_currencys(),
-						"name" => "exp[".$ob->id()."][currency]",
-						"value" => $ob->prop("currency"),
-					)),
-					"date" => html::date_select(array(
-						"name" => "exp[".$ob->id()."][date]",
-						"value" => $ob->prop("date"),
-					)),
-					"who" => html::select(array(
-						"name" => "exp[".$ob->id()."][who]",
-						"value" => $ob->prop("who"),
-						"options" => $pa_list->names(),
-					)),
-					"on_bill" => html::checkbox(array(
-						"name" => "exp[".$ob->id()."][on_bill]",
-						"value" => 1,
-						"checked" => $checked,
-					)),
-					"bill" => $onbill
-					,
-				));
-	//			$nr++;
+				$bno = "";
+				if ($this->can("view", $ob->prop("bill_id")))
+				{
+					$bo = obj($ob->prop("bill_id"));
+					$bno = $bo->prop("bill_no");
+				}
+				$onbill = "";
+				if ($ob->prop("bill_id"))
+				{
+					$onbill = sprintf(t("Arve nr %s"), $bno);
+				}
+				if($bno)//kui kulu on arvel, siis ei tasu muuta lasta
+				{
+					$t->define_data(array(
+						"name" => $ob->name(),
+						"cost" => $ob->prop("cost"),
+						"currency"=> $ob->prop("currency"),
+						"date" => date("d.m.Y" , date_edit::get_timestamp($ob->prop("date"))),
+						"who" => $ob->prop("who.name"),
+						"bill" => $onbill
+					));
+				}
+				else
+				{
+					$t->define_data(array(
+						"name" => html::textbox(array(
+							"name" => "exp[".$ob->id()."][name]",
+							"value" => $ob->name(),
+						)),
+						"cost" => html::textbox(array(
+							"name" => "exp[".$ob->id()."][cost]",
+							"size" => 5,
+							"value" => $ob->prop("cost"),
+						)),
+						"currency"=> html::select(array(
+							"options" => $this->_get_currencys(),
+							"name" => "exp[".$ob->id()."][currency]",
+							"value" => $ob->prop("currency"),
+						)),
+						"date" => html::date_select(array(
+							"name" => "exp[".$ob->id()."][date]",
+							"value" => $ob->prop("date"),
+						)),
+						"who" => html::select(array(
+							"name" => "exp[".$ob->id()."][who]",
+							"value" => $ob->prop("who"),
+							"options" => $pa_list->names(),
+						)),
+						"on_bill" => html::checkbox(array(
+							"name" => "exp[".$ob->id()."][on_bill]",
+							"value" => 1,
+							"checked" => $checked,
+						)),
+						"bill" => $onbill
+						,
+					));
+		//			$nr++;
+				}
 			}
 		}
 		foreach($dat as $exp)
