@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.48 2008/06/05 16:16:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.49 2008/06/19 14:16:57 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 
@@ -207,6 +207,7 @@ class ml_queue extends aw_template
 	function orb_queue_change($arr)
 	{
 		extract($arr);
+		$id = (int)$id;
 		$this->db_query("SELECT * FROM ml_queue WHERE qid='$id'");
 		$r=$this->db_next();
 //	echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
@@ -266,7 +267,9 @@ class ml_queue extends aw_template
 		{
 			$field="last_sent";
 		};
-
+		$delay = (int)$delay;
+		$patch_size = (int)$patch_size;
+		$id = (int)$id;
 		switch($timing)
 		{
 			default:
