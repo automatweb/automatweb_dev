@@ -66,10 +66,10 @@ FCK.ContextMenu.RegisterListener( {
 var FCKAWImagePlaceholders = new Object() ;
 
 // Add a new placeholder at the actual selection.
-FCKAWImagePlaceholders.Add = function( name )
+FCKAWImagePlaceholders.Add = function( oEditor, name )
 {
-	var oSpan = FCK.InsertElement( 'span' ) ;
-	this.SetupSpan( oSpan, name ) ;
+	oEditor.InsertHtml( '#' + name + '#'  )
+	FCKAWImagePlaceholders.Redraw();
 }
 
 FCKAWImagePlaceholders.GUP = function(param)
@@ -136,8 +136,7 @@ FCKAWImagePlaceholders.GetImageFloat = function( image_name )
 		return false;
 	}
 }
-	
-	
+
 FCKAWImagePlaceholders.SetupSpan = function( span, name )
 {
 	doc_id = FCKAWImagePlaceholders.GUP("id");
@@ -147,6 +146,7 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 	span.style.display = "block";
 	span.style.width = connection_details_for_doc["#"+name+"#"]["width"]+"px ! important";
 	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
+	span.alias = "#"+name+"#";
 	if (img_float == "left" || img_float == "right")
 	{
 		span.setAttribute("style","float:"+img_float);
@@ -157,7 +157,7 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 		span.style.textAlign = "center";
 		span.style.width= "100%";
 	}
-	span.innerHTML = "<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
+	span.innerHTML = "<img _awimageplaceholder=\""+name+"\" alias=\"#"+name+"#\" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
 			"<br />"+
 			"<b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>";
 
@@ -179,8 +179,44 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 // On Gecko we must do this trick so the user select all the SPAN when clicking on it.
 FCKAWImagePlaceholders._SetupClickListener = function()
 {
+	// because we call out FCKAWImagePlaceholders.Redraw() many times we 
+	// can't attach multiple events doing the same things
+	if (!FCKAWImagePlaceholders._SetupClickListenerInitialized)
+	{
+		FCKAWImagePlaceholders._SetupClickListenerInitialized = true
+	}
+	else
+	{
+		return false;
+	}
+	
+	FCKAWImagePlaceholders.onPaste = function( e )
+	{
+		if (!e) var e = FCK.EditorWindow.event ;
+
+		setTimeout(function() {
+			sHTML = FCK.EditorDocument.body.innerHTML;
+			var re=/alias/;
+			if (re.test(sHTML))
+			{
+				FCK.EditorDocument.body.innerHTML = sHTML.replace(/<span.*img.*?alias="(.*?)".*?span>/g, "$1")
+				FCKAWImagePlaceholders.Redraw();
+				e.returnValue = false;
+			}
+		}, 1); // 1ms should be enough
+	}
+	
+	FCKAWImagePlaceholders.onPasteIE = function(  )
+	{
+		var e = FCK.EditorWindow.event ;
+		e.target = e.srcElement
+		e.preventDefault();
+		e.stopPropagation(); // ie
+	}
+
 	FCKAWImagePlaceholders._ClickListener = function( e )
 	{
+		if (!e) {var e = FCK.EditorWindow.event ; e.target = e.srcElement}
 		if ( e.target.tagName == 'SPAN' && e.target._awimageplaceholder )
 			FCKSelection.SelectNode( e.target ) ;
 		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
@@ -192,7 +228,6 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	FCKAWImagePlaceholders._ClickListenerIE = function(  )
 	{
 		var e = FCK.EditorWindow.event ;
-		// alert (e.srcElement.tagName);
 		e.target = e.srcElement
 		if ( e.target.parentNode.tagName == 'SPAN' && e.target.parentNode._awimageplaceholder )
 		{
@@ -200,18 +235,22 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 		}
 		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
 		{
+			//e.target.onclick = this;
 			FCKSelection.SelectNode( e.target.parentNode ) ;
+			
 		}
+		//alert (e.target.tagName);
 	}
 	
 	if (document.all) {        // If Internet Explorer.
 		// this was intended for ie's right click, so image caption could also be right clicked
-		//FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
+		FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
+		//FCK.EditorDocument.attachEvent( 'OnPaste', FCKAWImagePlaceholders.onPasteIE ) ;
 	} else {                // If Gecko.
 		//FCK.EditorDocument.addEventListener( 'click', DenGecko_OnKeyDown, true ) ;
 		FCK.EditorDocument.addEventListener( 'click', FCKAWImagePlaceholders._ClickListener, true ) ;
+		FCK.EditorDocument.addEventListener( 'paste', FCKAWImagePlaceholders.onPaste, true ) ;	
 	}
-	
 }
 
 // Open the AWFilePlaceholder dialog on double click.
