@@ -4,7 +4,8 @@ class ml_member_obj extends _int_object
 {
 	function set_name($v)
 	{
-		$v = htmlspecialchars($v);
+// this breaks e-mail sending!
+//		$v = htmlspecialchars($v);
 		return parent::set_name($v);
 	}
 

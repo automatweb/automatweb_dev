@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.25 2008/04/28 13:59:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.26 2008/06/19 06:31:05 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
