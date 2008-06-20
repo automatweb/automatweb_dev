@@ -579,6 +579,7 @@ class bug extends class_base
 				break;
 
 			case "bug_status":
+				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') }";
 				$prop["options"] = $this->bug_statuses;
 				break;
 
@@ -608,11 +609,6 @@ class bug extends class_base
 
 
 			case "bug_feedback_p":
-				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
-				{
-					return PROP_IGNORE;
-				}
-
 			case "who":
 			case "monitors":
 				if ($arr["new"] || true)
@@ -2825,6 +2821,16 @@ EOF;
 					mon_el.options[mon_num].selected = true
 				}
 			}';
+		}
+		
+		if ($arr["request"]["group"] == "general")
+		{
+			return <<<EOF
+				if ($("#bug_status").val() != 10)
+				{
+					$("#bug_feedback_p").parent().parent().css("display", "none");
+				}
+EOF;
 		}
 
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
