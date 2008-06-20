@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.7 2008/01/31 13:52:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.8 2008/06/20 09:34:27 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 /*
 @classinfo  maintainer=kristo
@@ -24,6 +24,13 @@ class objects extends core
 
 		$o =&obj($id);
 		$i = $o->instance();
+		if (get_class($i) == "document")
+		{
+			$ret = $i->gen_preview(array(
+				"docid" => $id
+			));
+		}
+		else
 		if (method_exists($i, "parse_alias"))
 		{
 			$ret = $i->parse_alias(array(
@@ -81,6 +88,7 @@ class objects extends core
 		@param modifiedby optional
 		@param status optional type=int
 		@param lang_id optional type=int
+		@param oid optional type=int
 	**/
 	function storage_query($arr)
 	{
