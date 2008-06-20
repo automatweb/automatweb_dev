@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.9 2008/06/19 13:53:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.10 2008/06/20 09:55:06 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -335,6 +335,7 @@ class package_server extends class_base
 	{
 		extract($arr);
 		$package = obj($id);
+		$package->add_site($site_id);
 		$package->download_package();
 	}
 

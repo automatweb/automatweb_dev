@@ -6,7 +6,7 @@
 @default table=aw_package_site_relation
 @default group=general
 
-@property site_id type=textbox size=5 table=aw_package_site_relation field=aw_site_id
+@property site type=textbox size=5 table=aw_package_site_relation field=aw_site
 @caption Saidi id
 
 */
@@ -70,7 +70,7 @@ class package_site_relation extends class_base
 
 		switch($f)
 		{
-			case "aw_site_id":
+			case "aw_site":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

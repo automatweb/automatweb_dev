@@ -34,6 +34,20 @@ class package_obj extends _int_object
 		return $ol;
 	}
 
+	function get_sites_used()
+	{
+		$ret = array();
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_SITE_RELATION",
+		));
+		foreach($conns as $conn)
+		{
+			$o = $conn->to();
+			$ret[] = $o->prop("site");
+		}
+		return $ret;
+	}
+
 	function download_package()
 	{
 		$file_objects = $this->get_files();
@@ -85,6 +99,20 @@ class package_obj extends _int_object
 			$data = $file_object->get_file();
 		}
 		return filesize($data["properties"]["file"]);
+	}
+
+	function add_site($site_id)
+	{
+		$rel = new object();
+		$rel->set_class_id(CL_PACKAGE_SITE_RELATION);
+		$rel->set_parent($this->id());
+		$rel->set_prop("site" , $site_id);
+		$rel->save();
+		$this->connect(array(
+			"to" => $rel->id(),
+			"reltype" => "RELTYPE_SITE_RELATION"
+		));
+		return $rel->id();
 	}
 
 	function get_package_file_names()

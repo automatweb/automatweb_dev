@@ -104,6 +104,16 @@
             <field>dependencies</field>
             <caption>S&amp;amp;otilde;ltuvused</caption>
       </property>
+      <property>
+            <name>used_tbl</name>
+            <table>objects</table>
+            <group>used</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>used_tbl</field>
+            <caption>Kasutusel tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -120,6 +130,10 @@
                   <caption>S&amp;amp;otilde;ltuvused</caption>
                   <no_submit>1</no_submit>
             </dependencies>
+            <used>
+                  <caption>Kasutuses</caption>
+                  <no_submit>1</no_submit>
+            </used>
       </groupinfo>
       <tableinfo>
             <aw_packages>
@@ -139,6 +153,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Fail</caption>
             </FILE>
+            <SITE_RELATION>
+                  <value>3</value>
+                  <clid>CL_PACKAGE_SITE_RELATION</clid>
+                  <caption>Seos saidiga</caption>
+            </SITE_RELATION>
       </reltypes>
       <layout>
             <contents_split>

@@ -147,7 +147,6 @@ class package_client extends class_base
 	**/
 	function download_package($arr)
 	{
-		extract($arr);
 		$client = obj($arr["client_id"]);
 		$client->download_package($arr["package_id"]);
 		return $arr["return_url"];

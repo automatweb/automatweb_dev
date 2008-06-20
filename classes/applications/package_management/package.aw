@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.4 2008/06/06 11:02:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.5 2008/06/20 09:55:06 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -53,11 +53,20 @@
 	@property dependencies type=table no_caption=1
 	@caption S&otilde;ltuvused
 
+@groupinfo used caption="Kasutuses" no_submit=1
+@default group=used
+
+	@property used_tbl type=table no_caption=1
+	@caption Kasutusel tabel
+
 @reltype DEPENDENCY value=1 clid=CL_PACKAGE
 @caption S&otilde;ltuvus
 
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
+
+@reltype SITE_RELATION value=3 clid=CL_PACKAGE_SITE_RELATION
+@caption Seos saidiga
 
 */
 
@@ -90,6 +99,26 @@ class package extends class_base
 			//-- get_property --//
 		};
 		return $retval;
+	}
+
+	function _get_used_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "site_id",
+			"caption" => t("Id"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "url",
+			"caption" => t("Url"),
+			"align" => "center",
+		));
+		$used = $arr["obj_inst"]->get_sites_used();
+		foreach($used as $u)
+		{
+			$t->define_data(array("site_id" => $u));
+		}
 	}
 
 	function _get_contents_tb($arr)

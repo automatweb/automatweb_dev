@@ -24,7 +24,7 @@ class package_client_obj extends _int_object
 	{
 		if($this->prop("packages_server"))
 		{
-			$url = $this->prop("packages_server")."/orb.aw?class=package_server&action=download_package_file&id=".$id;
+			$url = $this->prop("packages_server")."/orb.aw?class=package_server&action=download_package_file&id=".$id."&site_id=".$this->site_id();
 			$inst = $this->instance();
 
 			$fs = $inst->do_orb_method_call(array(
@@ -63,12 +63,12 @@ class package_client_obj extends _int_object
 					}
 					$path = substr($path , strpos($path,"/", 1)+1);
 					print aw_ini_get("basedir").'/'.$path ." ... ";
-					$res = $zip->extractTo(aw_ini_get("basedir") , array($dat["index"]));
+	//selle peab paremini t88le saama... p2rast ei jaksa keegi seda jama kustutada muidu
+	//				$res = $zip->extractTo(aw_ini_get("basedir") , array($dat["index"]));
 					print ($res? "6nnestus" : "ei 6nnestunud")." <br>\n";	
 					print aw_ini_get("basedir").$dat["name"]." <br>\n";	
 				}
 			}
-			die();
 		}
 	}
 
