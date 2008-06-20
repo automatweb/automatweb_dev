@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.49 2008/05/27 09:23:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.50 2008/06/20 14:16:46 voldemar Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -12,13 +12,13 @@
 
 	@property uidl type=hidden
 	@caption UIDL
-	
+
 	@property mfrom_name type=hidden table=objects field=meta method=serialize
 	@caption Kellelt nimi
 
 	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS no_sel=1
 	@caption Kellelt
-	
+
 	@property mto type=textbox size=80
 	@caption Kellele
 
@@ -36,7 +36,7 @@
 
 	property date type=text store=no
 	caption Kuup&auml;ev
-	
+
 	@property customer type=relpicker reltype=RELTYPE_CUSTOMER multiple=1 table=objects field=meta method=serialize
 	@caption Klient
 
@@ -55,7 +55,7 @@
 	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no new_items=5
 	@caption Manused
 
-	property send type=submit value=Saada store=no 
+	property send type=submit value=Saada store=no
 	caption Saada
 
 	property aliasmgr type=aliasmgr store=no
@@ -77,7 +77,7 @@
 	@groupinfo add caption="Lisa"
 
 	@tableinfo messages index=id master_table=objects master_index=oid
-	
+
 	/@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
 	/@caption Kirja vaatamise toolbar
 
@@ -86,10 +86,10 @@
 
 	@property msg_content type=text store=no form=showmsg no_caption=1
 	@caption Kirja sisu
-	
+
 	@property msg_contener_title type=textbox field=meta method=serialize table=objects group=add
 	@caption Konteineri pealkiri
-	
+
 	@property msg_contener_content type=textarea field=meta method=serialize table=objects group=add
 	@caption Konteineri sisu
 
@@ -104,7 +104,7 @@
 
 	@reltype MAIL_ADDRESS value=2 clid=CL_ML_MEMBER
 	@caption Meiliaadress
-	
+
 	@reltype RELTYPE_REGISTER_DATA value=3 clid=CL_REGISTER_DATA
 	@caption Registri andmed
 
@@ -173,7 +173,7 @@ class mail_message extends class_base
 			}
 			$this->vars(array(
 				"caption" => $imap->msg_field_captions[$name],
-				"content" => $value,	
+				"content" => $value,
 			));
 			$headers .= $this->parse("header_line");
 		}
@@ -196,17 +196,17 @@ class mail_message extends class_base
 		{
 			list($mailbox,$msgid) = explode("*",$arr["msgid"]);
 		}
-		else 
+		else
 		{
 			$msgid = $arr["msgid"];
 			$mailbox = $arr["mailbox"];
 		};
 		$this->msgr->set_opt("use_mailbox",$mailbox);
-		
+
 		$this->msgr->_connect_server(array(
 			"msgr_id" => $arr["msgrid"],
 		));
-           
+
 		$rv = $this->msgr->drv_inst->fetch_message(array(
 			"msgid" => $msgid,
 		));
@@ -229,7 +229,7 @@ class mail_message extends class_base
 			"msgid" => $arr["msgid"],
 			"fullheaders" => $arr["viewmode"] == "headers",
 		));
-		
+
 		if (empty($msgdata))
 		{
 			print sprintf(t("couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"), $arr["request"]["msgid"]);
@@ -273,12 +273,12 @@ class mail_message extends class_base
 			//$outbox = $msgrobj->prop("msg_outbox");
 			$arr["request"]["parent"] = $msgrobj->prop("msg_outbox");
 			$fxt = true;
-		};	
+		};
 		*/
 
 		$to_addr = $msgobj->prop("mto");
 		$from = $msgobj->prop("mfrom");
-		
+
 		if($this->can("view", $from))
 		{
 			$adr = obj($from);
@@ -291,14 +291,14 @@ class mail_message extends class_base
 			{
 				$name = $adr->name();
 			}
-			
+
 			if($adr->class_id() == CL_CRM_PERSON)
 			{
 				if(is_oid($address))
 				{
 					$address_obj = obj($address);
 				}
-				else 
+				else
 				{
 					$address_obj = $adr->get_first_obj_by_reltype("RELTYPE_EMAIL");
 				}
@@ -307,9 +307,9 @@ class mail_message extends class_base
 					$address = $address_obj->prop("mail");
 				}
 			}
-			
-		}		
-		
+
+		}
+
 		// jesus fucking christ, I hate this approach
 		// now I need to fix sending from lists as well. How tha fuck am I going to do that?
 		if (is_numeric($to_addr))
@@ -330,7 +330,7 @@ class mail_message extends class_base
 			$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid")+1;
 			$mllist = get_instance(CL_ML_LIST);
 			// if sending from messenger, then we are inside a popup
-			// and don't want to display the rest of the list interface 
+			// and don't want to display the rest of the list interface
 			// form (or perhaps I do?)
 			if ($fxt)
 			{
@@ -484,7 +484,7 @@ class mail_message extends class_base
 			case "view_toolbar":
 				$this->view_toolbar($arr);
 			break;
-			
+
 			case "msg_headers":
 				$this->read_template("headers.tpl");
 				$rv = "";
@@ -593,7 +593,7 @@ class mail_message extends class_base
 				break;
 
 			case "mto":
-				// check whether the messenger object has any connections to 
+				// check whether the messenger object has any connections to
 				// a list object
 				// XXX: this kind of lock-down is bad, ok?
 				$msgr = get_instance(CL_MESSENGER_V2);
@@ -621,7 +621,7 @@ class mail_message extends class_base
 					$prop["autocomplete_source"] = $this->mk_my_orb ("get_autocomplete");
 					$prop["autocomplete_params"] = array("mto");
 				};
-				
+
 				//loodan, et see mujal toimuvat ei m6juta
 				//crmist maili saatmisel seda vaja siis
 				if($arr["request"]["mto"])
@@ -629,7 +629,7 @@ class mail_message extends class_base
 					$prop["type"] = "textbox";
 					$prop["value"] = $arr["request"]["mto"];
 				}
-				
+
 				if($this->msgdata["to"])
 				{
 					$prop["value"] = $this->msgdata["to"];
@@ -676,8 +676,8 @@ class mail_message extends class_base
 					if(is_oid($msgrid))
 					{
 						$msgr = obj($msgrid);
+						$prop["value"] = $msgr->prop("fromname");
 					}
-					$prop["value"] = $msgr->prop("fromname");
 				}
 				break;
 
@@ -710,7 +710,7 @@ class mail_message extends class_base
 					"value" => $this->msgdata["content"]? nl2br(htmlspecialchars($this->msgdata["content"])): $prop["value"],
 				));
 				$fck_inst = get_instance("vcl/fck_editor");
-				
+
 				$prop["value"] .= $fck_inst->draw_editor(array(
 					"props" => array(
 						"message",
@@ -718,7 +718,7 @@ class mail_message extends class_base
 					"toolbarset" => "aw_email",
 				));
 				break;
-				
+
 			case "customer":
 				$tmp[] = $this->msgdata["fromarr"][0]->host;
 				foreach($this->msgdata["toarr"] as $to)
@@ -803,9 +803,9 @@ class mail_message extends class_base
 			LEFT JOIN messages ON (objects.oid = messages.id)
 			WHERE objects.oid = $oid";
 		$this->db_query($q);
-		
+
 		$row = $this->db_next();
-		
+
 		$message = $row["message"];
 		if (is_array($args["replacements"]))
 		{
@@ -816,14 +816,14 @@ class mail_message extends class_base
 		}
 		$mto = $row["mto"];
 		$awm = get_instance("protocols/mail/aw_mail");
-		
+
 		$confirm_msg = obj($oid);
-		
+
 		if(!$row["mfrom"])
 		{
 			$row["mfrom"] = $confirm_msg->prop("mfrom");
 		}
-		
+
 		$from = $row["mfrom"];
 		if(is_oid($row["mfrom"]) && $this->can("view", $row["mfrom"]))
 		{
@@ -837,10 +837,10 @@ class mail_message extends class_base
 			"body" => $message,
 		));
 		$awm->gen_mail();
-		
+
 		if($args["confirm_mail"])
 		{
-			
+
 			$awm_admin = get_instance("protocols/mail/aw_mail");
 			$from = $row["mfrom"];
 			$awm_admin->create_message(array(
@@ -897,7 +897,7 @@ class mail_message extends class_base
 	{
 		$tb = &$arr["toolbar"];
 		// now, how do I figure out that the send button was clicked in my set_property calls?
-		// it needs to act exactly like save in every aspect, except that it has to 
+		// it needs to act exactly like save in every aspect, except that it has to
 		// send the message as well
 		$tb->add_button(array(
 			"name" => "send",
@@ -1023,7 +1023,7 @@ class mail_message extends class_base
 
 
 				$url = $this->mk_my_orb(
-					"fetch_structure_in_xml", 
+					"fetch_structure_in_xml",
 					array(
 						"id" => $bt->id()
 					),
@@ -1042,7 +1042,7 @@ class mail_message extends class_base
 						aw_do_xmlhttprequest('$url', handle_bug_parent_retrieve);
 					}
 
-					
+
 					function handle_bug_parent_retrieve()
 					{
 						response = req.responseXML.documentElement;
@@ -1050,7 +1050,7 @@ class mail_message extends class_base
 						list = document.getElementById(\"pick_bug_parent\");
 
 						aw_clear_list(list);
-						aw_add_list_el(list, '', '');						
+						aw_add_list_el(list, '', '');
 
 						for(i = 0; i < items.length; i++)
 						{
@@ -1058,7 +1058,7 @@ class mail_message extends class_base
 							text = items[i].childNodes[1].firstChild.data;
 							//value = value.replace(/a/g, ' ');
 							//text = text.replace(/a/g, '&nbsp;');
-							aw_add_list_el(list, value, text);						
+							aw_add_list_el(list, value, text);
 						}
 					}
 
@@ -1109,15 +1109,15 @@ class mail_message extends class_base
 	}
 
 
-	/**  
-		
-		@attrib name=deliver params=name 
-		
+	/**
+
+		@attrib name=deliver params=name
+
 		@param id required type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1208,7 +1208,7 @@ class mail_message extends class_base
 			$arr["prop"]["options"][$key] = $item;
 		};
 	}
-	
+
 	function callback_on_load($arr)
 	{
 		if($arr["request"]["mailbox"] && $arr["request"]["msgrid"] && $arr["request"]["msgid"])
@@ -1217,18 +1217,18 @@ class mail_message extends class_base
 		}
 	}
 
-	/** Can be used to download message parts 
-		
-		@attrib name=get_part params=name 
-		
+	/** Can be used to download message parts
+
+		@attrib name=get_part params=name
+
 		@param msgrid required type=int
 		@param msgid required type=int
 		@param mailbox required
 		@param part required type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1246,17 +1246,17 @@ class mail_message extends class_base
 			"part" => $arr["part"],
 		));
 	}
-	
+
 	/** Creates a message draft
-		
-		@attrib name=create_draft params=name 
-		
+
+		@attrib name=create_draft params=name
+
 		@param msgrid required type=int
 		@param cb_part optional type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1265,15 +1265,15 @@ class mail_message extends class_base
 		$msgobj = $this->_create_draft(array(
 			"msgrid" => $arr["msgrid"],
 		));
-	
+
 		$arr["id"] = $msgobj->id();
 		return $arr["id"];
 		//rem related
 		//return $this->_gen_edit_url($arr);
 	}
 
-	/** Creates a calendar event from a message object 
-		
+	/** Creates a calendar event from a message object
+
 		@attrib name=register_event
 
 		@param msgrid required type=int
@@ -1295,7 +1295,7 @@ class mail_message extends class_base
 
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
-		
+
 		$pl = get_instance(CL_PLANNER);
 		$cal_o = $pl->get_calendar_obj_for_useR();
 		$user_cal = $cal_o->id();
@@ -1347,7 +1347,7 @@ class mail_message extends class_base
 			"sort_by" => "from.name",
 			"type" => "RELTYPE_PARTICIPANT",
 		));
-				
+
 		foreach($conns as $conn)
 		{
 			$props["projects"]["options"][$conn->prop("from")] = $conn->prop("from.name");
@@ -1379,13 +1379,13 @@ class mail_message extends class_base
 	function submit_register_event($arr)
 	{
 		load_vcl("date_edit");
-		
+
 		$msgdata = $this->fetch_message(array(
 			"mailbox" => $arr["mailbox"],
 			"msgrid" => $arr["msgrid"],
 			"msgid" => $arr["msgid"],
 		));
-		
+
 		$main_calendar = new object($arr["main_calendar"]);
 		$event_folder = $main_calendar->prop("event_folder");
 		$evt = new object();
@@ -1413,7 +1413,7 @@ class mail_message extends class_base
 				$evt->create_brother($project);
 			}
 		};
-	
+
 		$msgr = get_instance(CL_MESSENGER_V2);
 		$msgr->set_opt("use_mailbox",$arr["mailbox"]);
                 $msgr->_connect_server(array(
@@ -1452,7 +1452,7 @@ class mail_message extends class_base
 			));
 
 		};
-		
+
 		//print "creating the fucking event";
 
 
@@ -1464,9 +1464,9 @@ class mail_message extends class_base
 			"mailbox" => $arr["mailbox"]),"mail_message");
 
 	}
-	
-	/** Deletes a message / kind'a deprecated i guess 
-		
+
+	/** Deletes a message / kind'a deprecated i guess
+
 		@attrib name=mail_delete all_args=1
 
 	**/
@@ -1484,7 +1484,7 @@ class mail_message extends class_base
 		print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
 		exit;
 	}
-	
+
 	/**	deletes a message
 	**/
 	function delete_message($arg)
@@ -1498,7 +1498,7 @@ class mail_message extends class_base
 	}
 
 	/** Sends a message stored in local folders
-		
+
 		@attrib name=mail_send
 
 	**/
@@ -1508,7 +1508,7 @@ class mail_message extends class_base
 
 		// mfrom is a select box containing all the different identities for
 		// this messenger, but I need the textual value for it
-		// field, I'll resolve the numeric 
+		// field, I'll resolve the numeric
 		$msgr = get_instance(CL_MESSENGER_V2);
 		$msgr->_connect_server(array(
 			"msgr_id" => $arr["msgrid"],
@@ -1526,8 +1526,8 @@ class mail_message extends class_base
 		$this->send_message(array(
 			"id" => $msgid,
 		));
-		
-		
+
+
 		// I'll also have to move the message from drafts folder to the outbox
 		// if there is such a thing that is
 
@@ -1559,7 +1559,7 @@ class mail_message extends class_base
 				"message" => $this->awm->bodytext,
 			));
 		}
-               		
+
 		//print t("saadetud<p>");
 		if($adr && $adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
 		{
@@ -1590,10 +1590,10 @@ class mail_message extends class_base
 			"cb_part" => $arr["cb_part"],
 		));
 	}
-	
+
 	/** Prepares a message for replying
-		
-		@attrib name=mail_reply all_args=1 
+
+		@attrib name=mail_reply all_args=1
 	**/
 	function mail_reply($arr)
 	{
@@ -1619,10 +1619,10 @@ class mail_message extends class_base
 		}
 		return $this->_gen_edit_url($arr);
 	}
-	
+
 	/** Prepares a message for replying to all addresses
-		
-		@attrib name=mail_reply_all  
+
+		@attrib name=mail_reply_all
 	**/
 	function mail_reply_all($arr)
 	{
@@ -1644,7 +1644,7 @@ class mail_message extends class_base
 		{
 			$addrs1 = array_merge($addrs1,explode(",",$msgdata["cc"]));
 		};
-		// XXX: implement something to exclude any addresses in the identities 
+		// XXX: implement something to exclude any addresses in the identities
 		// from the aadress list
 		$to = $msgdata["reply_to"] ? $msgdata["reply_to"] : $msgdata["from"];
 		$uniqs = array_unique($addrs1);
@@ -1661,14 +1661,14 @@ class mail_message extends class_base
 		$msgobj->set_name("Re: " . $msgdata["subject"]);
 		$msgobj->set_prop("message","\n\n\n> " . str_replace("\n","\n> ",$msgdata["content"]));
 		$msgobj->save();
-		
+
 		$arr["id"] = $msgobj->id();
 		return $this->_gen_edit_url($arr);
-		
+
 	}
-	
+
 	/** Prepares a message for forwarding
-		
+
 		@attrib name=mail_forward
 	**/
 	function mail_forward($arr)
@@ -1692,7 +1692,7 @@ class mail_message extends class_base
 		$msgobj->set_name("Fwd: " . $msgdata["subject"]);
 		$msgobj->set_prop("message","\n\n\n" . $hdr . "> " . str_replace("\n","\n> ",$msgdata["content"]));
 		$msgobj->save();
-		
+
 		$arr["id"] = $msgobj->id();
 		return $this->_gen_edit_url($arr);
 	}
@@ -1706,7 +1706,7 @@ class mail_message extends class_base
 		// Will show only users own messages
 		//$q = sprintf("UPDATE messages SET status = %d WHERE id = %d",MSG_STATUS_READ,$args["id"]);
 		//$this->db_query($q);
-		$q = sprintf("SELECT *,objects.* 
+		$q = sprintf("SELECT *,objects.*
 				FROM messages
 				LEFT JOIN objects ON (messages.id = objects.oid)
 				WHERE id = '%d'",
