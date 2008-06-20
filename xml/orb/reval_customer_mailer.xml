@@ -8,5 +8,19 @@
 			</function>
 		</action>
 
+		<action name="sbt_daily_check">
+			<function name="sbt_daily_check">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="sbt_daily_confirm">
+			<function name="sbt_daily_confirm">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

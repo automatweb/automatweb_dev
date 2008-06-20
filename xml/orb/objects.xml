@@ -28,6 +28,7 @@
 					<optional name="modifiedby" />
 					<optional name="status" type="int" />
 					<optional name="lang_id" type="int" />
+					<optional name="oid" type="int" />
 				</arguments>
 			</function>
 		</action>

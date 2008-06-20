@@ -63,7 +63,7 @@
             <reltype>RELTYPE_PRJ_DOCUMENT</reltype>
             <field>aw_doc</field>
             <parent>left_bit</parent>
-            <caption>Loe l&amp;auml;hemalt</caption>
+            <caption>Loe l&amp;amp;auml;hemalt</caption>
       </property>
       <property>
             <name>proj_price</name>
@@ -283,7 +283,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_project_navigator</field>
-            <caption>N&amp;auml;ita projektide navigaatorit</caption>
+            <caption>N&amp;amp;auml;ita projektide navigaatorit</caption>
       </property>
       <property>
             <name>use_template</name>
@@ -291,7 +291,7 @@
             <group>web_settings</group>
             <type>select</type>
             <field>aw_use_template</field>
-            <caption>V&amp;auml;limus</caption>
+            <caption>V&amp;amp;auml;limus</caption>
       </property>
       <property>
             <name>doc_id</name>
@@ -300,7 +300,7 @@
             <type>textbox</type>
             <size>6</size>
             <field>aw_doc_id</field>
-            <caption>Dokumendi ID, milles asub kalendri vaade, milles s&amp;uuml;ndmusi kuvatakse</caption>
+            <caption>Dokumendi ID, milles asub kalendri vaade, milles s&amp;amp;uuml;ndmusi kuvatakse</caption>
       </property>
       <property>
             <name>skip_subproject_events</name>
@@ -309,7 +309,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_skip_subproject_events</field>
-            <caption>&amp;Auml;ra n&amp;auml;ita alamprojektide s&amp;uuml;ndmusi</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita alamprojektide s&amp;amp;uuml;ndmusi</caption>
       </property>
       <property>
             <name>prj_image</name>
@@ -331,7 +331,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_toolbar</field>
-            <caption>S&amp;uuml;ndmuste toolbar</caption>
+            <caption>S&amp;amp;uuml;ndmuste toolbar</caption>
       </property>
       <property>
             <name>event_list</name>
@@ -350,7 +350,7 @@
             <callback>callback_get_add_event</callback>
             <store>no</store>
             <field>add_event</field>
-            <caption>Lisa s&amp;uuml;ndmus</caption>
+            <caption>Lisa s&amp;amp;uuml;ndmus</caption>
       </property>
       <property>
             <name>files_tb</name>
@@ -433,7 +433,7 @@
             <store>no</store>
             <props>name</props>
             <field>trans</field>
-            <caption>T&amp;otilde;lkimine</caption>
+            <caption>T&amp;amp;otilde;lkimine</caption>
       </property>
       <property>
             <name>sides_tb</name>
@@ -906,7 +906,7 @@
                   <parent>event_list</parent>
             </stats_entry>
             <event_list_premise>
-                  <caption>Tegevused eeldustegevuste p&amp;otilde;hiselt</caption>
+                  <caption>Tegevused eeldustegevuste p&amp;amp;otilde;hiselt</caption>
                   <submit>no</submit>
             </event_list_premise>
             <info>
@@ -923,7 +923,7 @@
                   <submit>no</submit>
             </strat_res>
             <add_event>
-                  <caption>Muuda s&amp;uuml;ndmust</caption>
+                  <caption>Muuda s&amp;amp;uuml;ndmust</caption>
             </add_event>
             <files_main>
                   <caption>Dokumendid</caption>
@@ -940,7 +940,7 @@
                   <parent>files_main</parent>
             </prods>
             <trans>
-                  <caption>T&amp;otilde;lkimine</caption>
+                  <caption>T&amp;amp;otilde;lkimine</caption>
             </trans>
             <team>
                   <caption>Meeskond</caption>
@@ -988,7 +988,7 @@
                         <num_5>CL_PARTY</num_5>
                         <num_6>CL_COMICS</num_6>
                   </clid>
-                  <caption>S&amp;uuml;ndmus</caption>
+                  <caption>S&amp;amp;uuml;ndmus</caption>
             </PRJ_EVENT>
             <PRJ_FILE>
                   <value>4</value>
@@ -998,7 +998,7 @@
             <TAX_CHAIN>
                   <value>5</value>
                   <clid>CL_TAX_CHAIN</clid>
-                  <caption>Maksu p&amp;auml;rg</caption>
+                  <caption>Maksu p&amp;amp;auml;rg</caption>
             </TAX_CHAIN>
             <PRJ_CFGFORM>
                   <value>6</value>
