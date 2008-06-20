@@ -222,7 +222,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			if (!obj_get_opt("no_cache"))
 			{
-				$this->cache->file_clear_pt_oid_fn("storage_object_data", $data["id"], "connection-".$oid);
+				$this->cache->file_clear_pt_oid_fn("storage_object_data", $oid, "connection-".$oid);
 			}
 		}
 		

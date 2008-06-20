@@ -310,7 +310,6 @@ class connection
 		{
 			$this->conn[$k] = $v;
 		}
-
 		$this->_int_save();
 	}
 
