@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.129 2008/06/05 13:50:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.130 2008/06/20 10:16:54 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -3012,7 +3012,7 @@ class ml_list extends class_base
 
 	function gen_ml_message_view($arr)
 	{
-		$mail_id = $arr["request"]["s_mail_id"];
+		$mail_id = (int)$arr["request"]["s_mail_id"];
 		if (!is_array($this->msg_view_data))
 		{
 			$this->msg_view_data = $this->db_fetch_row("SELECT * FROM ml_sent_mails WHERE id = '$mail_id'");
@@ -3229,7 +3229,7 @@ class ml_list extends class_base
 	}
 */
 
-	function submit_write_mail($arr)
+	function submit_write_mail($arr)//+-+-
 	{
 		$img_inst = get_instance(CL_IMAGE);
 		$msg_data = $arr["request"];
@@ -3680,6 +3680,7 @@ arr($msg_obj->prop("message"));
 	{
 		extract($arr);
 		$time = time()-3*30*3600;
+		$ml = (int)$ml;
 		$row = $this->db_fetch_row("DELETE FROM ml_sent_mails WHERE lid = '$ml' AND mail_sent = 1 and tm < '$time'");
 		print "<script language='javascript'>window.opener.location.reload();;
 			window.close();
