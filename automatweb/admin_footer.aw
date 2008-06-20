@@ -130,6 +130,7 @@ $sf->vars(array(
 		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
 	"parent" => $parent,
+	"random" => rand(100000,1000000),
 ));
 
 if ($sf->prog_acl("view", "disp_person"))

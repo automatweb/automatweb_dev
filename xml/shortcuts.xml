@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shortcuts>
+	<classes>
+	<class name="aw_object_quickadd">
+		<shortcut description="Opens quickadd window">
+			<function name="handle_object_quickadd_activation">
+				<arguments>
+					<required name="shortcut" value="Alt+Ctrl+u" />
+				</arguments>
+			</function>
+		</shortcut>
+
+		<shortcut description="Closes shortcut window">
+			<function name="handle_object_quickadd_exit">
+				<arguments>
+					<required name="shortcut" value="Esc" />
+				</arguments>
+			</function>
+		</shortcut>
+		
+	</class>
+	</classes>
+	
+	<urls>
+		
+	</urls>
+</shortcuts>

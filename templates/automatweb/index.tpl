@@ -5,6 +5,7 @@
 <title>{VAR:html_title} {VAR:title_action}</title>
 <link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
 
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shorcuts_from_xml&{VAR:random}"></script>
 <!-- SUB: MINIFY_JS_AND_CSS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
@@ -37,7 +38,6 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
 <!-- END SUB: MINIFY_JS_AND_CSS -->
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects"></script>
-
 
 <script type="text/javascript">
 xchanged = 0;
@@ -80,9 +80,9 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 var options = {
 	maxresults : 8,
 	baseurl    : "{VAR:baseurl}",
-	parent     : '{VAR:parent}'
+	parent     : "{VAR:parent}"
 };
-$("#aw_object_quickadd").AWObjectQuickAdd(items, options);
+$("#aw_object_quickadd").aw_object_quickadd(items, options);
 </script>
 
 <!-- päis -->
