@@ -94,15 +94,23 @@ msgstr ""
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:165 classes/applications/shop/shop_order_cart.aw:1018 classes/applications/shop/shop_order_cart.aw:1288
+#: classes/applications/shop/shop_order_cart.aw:165 classes/applications/shop/shop_order_cart.aw:1075 classes/applications/shop/shop_order_cart.aw:1345
 msgid "shop_order_cart::show(): no product layout set for cart (%s)"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:424
+#: classes/applications/shop/shop_order_cart.aw:440
+msgid "%s minimaalne tellimiskogus on %s, hetkel korvis %s."
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:460
+msgid "%s maksimaalne tellimiskogus on %s, hetkel korvis %s."
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:482
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:797
+#: classes/applications/shop/shop_order_cart.aw:855
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr ""
 
