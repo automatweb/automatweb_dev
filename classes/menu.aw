@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.237 2008/05/31 08:30:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.238 2008/06/25 12:14:38 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2329,6 +2329,9 @@ class menu extends class_base implements main_subtemplate_handler
 		));
 		$ol = $ot->to_list();
 		$si = get_instance("contentmgmt/site_show");
+		$arr = array();
+		$si->_init_path_vars($arr);
+		$si->sel_section_obj = obj($this->sel_section);
 		$l = get_instance("languages");
 		$l_list = $l->get_list(array("all_data" => true));
 		foreach($ol->arr() as $item)
@@ -2359,15 +2362,9 @@ class menu extends class_base implements main_subtemplate_handler
 			}
 		}
 		$xml .= "</urlset>";
-		$tmpf = aw_ini_get("cache.page_cache")."/sitemap.xml";
-		$this->put_file(array("file" => $tmpf, "content" => $xml));
-		$cmd = aw_ini_get("server.gzip_path")." $tmpf";
-		$res = `$cmd`;
 		header("Content-Type: text/html");
 		header("Content-Encoding: x-gzip");
-		echo file_get_contents($tmpf.".gz");
-		unlink($tmpf);
-		unlink($tmpf.".gz");
+		echo gzencode($xml);
 		die();
 	}
 
