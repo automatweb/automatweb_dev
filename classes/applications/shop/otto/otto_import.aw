@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.100 2008/06/11 12:37:41 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.101 2008/06/25 11:01:56 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -31,20 +31,11 @@
 	@property do_pict_i type=checkbox ch_value=1
 	@caption Teosta piltide import
 
-	@property force_full_update type=checkbox ch_value=1 store=no
-	@caption Import uuendab k&otilde;iki v&auml;lju
+	property force_full_update type=checkbox ch_value=1 store=no
+	caption Import uuendab k&otilde;iki v&auml;lju
 
-	@property do_safe_update type=checkbox ch_value=1 store=no
-	@caption &Auml;ra uuenda pilte, kategooriaid ja seotud tooteid
-
-	@property update_product_images type=checkbox ch_value=1 store=no
-	@caption Uuenda toote pilte (arenduses!)
-
-	@property update_product_categories type=checkbox ch_value=1 store=no
-	@caption Uuenda toote kategooriaid (arenduses!)
-
-	@property update_products_connected_products type=checkbox ch_value=1 store=no
-	@caption Uuenda toote seotud tooteid (arenduses!)
+	@property update_params_table type=table 
+	@caption Toodete uuendamine
 
 	@property last_import_log type=text store=no
 	@caption Viimase impordi logi
@@ -631,16 +622,19 @@ class otto_import extends class_base
 			if ($arr["obj_inst"]->prop("do_pict_i"))
 			{
 				echo "[ Tee piltide import ]<br>\n";
-			//	$this->doing_pict_i = true;
 			}
 			$arr["obj_inst"]->set_prop("do_i", 0);
 			$arr["obj_inst"]->set_prop("do_pict_i", 0);
-			
 			$this->do_prod_import(array(
 				'otto_import' => $arr["obj_inst"],
 				'doing_pict_i' => $arr['request']['do_pict_i'],
-				'force_full_update' => $arr['request']['force_full_update'],
-				'do_safe_update' => $arr['request']['do_safe_update']
+			//	'force_full_update' => $arr['request']['force_full_update'],
+				'update_product_images' => $arr['request']['update_product_images'],
+				'force_update_product_images' => $arr['request']['force_update_product_images'],
+				'update_product_categories' => $arr['request']['update_product_categories'],
+				'force_update_product_categories' => $arr['request']['force_update_product_categories'],
+				'update_connected_products' => $arr['request']['update_connected_products'],
+				'force_update_connected_products' => $arr['request']['force_update_connected_products']
 			));
 		}
 
@@ -708,6 +702,69 @@ class otto_import extends class_base
 			$cnt++;
 		}
 		$t->set_sortable(false);
+	}
+
+	function _get_update_params_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			'name' => 'caption',
+		));
+		$t->define_field(array(
+			'name' => 'update',
+			'caption' => t('Uuenda'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'force_update',
+			'caption' => t('Uuenda alati'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'desc',
+			'caption' => t('Kirjeldus')
+		));
+
+		$t->set_header( t('* Kui on valitud "Uuenda", siis arvestatakse toote juures olevat m&auml;rget, et selle toote andmeid ei tohi uundada. See m&auml;rge tekib tavaliselt siis, kui tootele on k&auml;sitsi lisatud pilte/kategooriaid vms. Kui valida "Uuenda alati", siis uuendatakse vastavaid toote andmeid igal juhul, hoolimata sellest m&auml;rkest.') );
+
+		$t->define_data(array(
+			'caption' => t('uuenda toote pilte'),
+			'update' => html::checkbox(array(
+				'name' => 'update_product_images',
+				'value' => 1
+			)),
+			'force_update' => html::checkbox(array(
+				'name' => 'force_update_product_images',
+				'value' => 1
+			)),
+			'desc' => t('Uuendatakse toote juures olevaid pilte. Kui toode on juba olemas, ja seal on pilte, siis need pildid j&auml;etakse samuti alles. ')
+		));
+		$t->define_data(array(
+			'caption' => t('uuenda toote kategooriaid'),
+			'update' => html::checkbox(array(
+				'name' => 'update_product_categories',
+				'value' => 1
+			)),
+			'force_update' => html::checkbox(array(
+				'name' => 'force_update_product_categories',
+				'value' => 1
+			)),
+			'desc' => t('Uuendatakse toote kategooriaid ja seda, milliste sektsioonide/kataloogide all tooteid n&auml;idatakse. Kui on vaja, et tooted ilmuksid m&otilde;ne uue kausta alla v&otilde;i et kuskilt kausta alt &auml;ra liiguksid, siis tuleb see valik &aumlMra m&auml;rkida.')
+		));
+		$t->define_data(array(
+			'caption' => t('uuenda seotud tooteid'),
+			'update' => html::checkbox(array(
+				'name' => 'update_connected_products',
+				'value' => 1
+			)),
+			'force_update' => html::checkbox(array(
+				'name' => 'force_update_connected_products',
+				'value' => 1
+			)),
+			'desc' => t('Uuendatakse &uuml;henduspiltide j&auml;rgi toodete n&auml;htavust erinevate kataloogide all. Ehk uuendatakse toote juures valikut, kas toode on toodete nimekirjas n&auml;htav v&otilde;i mitte.')
+		));
 	}
 
 	function _get_import_log_list($arr)
@@ -1070,11 +1127,16 @@ class otto_import extends class_base
 			));
 
 			$t->define_data(array(
-				'caption' => t('N&auml;idatakse toodete nimekirjas'),
 				'data' => html::checkbox(array(
 					'name' => 'show_in_products_list',
+					'label' => t('N&auml;idatakse toodete nimekirjas'),
 					'value' => 1,
 					'checked' => ($prod_obj->prop('userch4') == 1) ? true : false
+				)).' '.html::checkbox(array(
+					'name' => 'update_allowed',
+					'label' => t('Toote andmeid ei uuendata impordi k&auml;igus'),
+					'value' => 1,
+					'checked' => ($prod_obj->prop('userch2') == 1) ? true : false
 				)),
 			));
 
@@ -1292,6 +1354,13 @@ class otto_import extends class_base
 		if ($prod_obj->prop('userch4') != $arr['request']['show_in_products_list'])
 		{
 			$prod_obj->set_prop('userch4', (int)$arr['request']['show_in_products_list']);
+			$save = true;
+		}
+
+		// If products import is allowed to change the data
+		if ($prod_obj->prop('userch2') != $arr['request']['update_allowed'])
+		{
+			$prod_obj->set_prop('userch2', (int)$arr['request']['update_allowed']);
 			$save = true;
 		}
 
@@ -3150,8 +3219,13 @@ class otto_import extends class_base
 
 		$this->import_product_objects(array(
 			'otto_import' => $o,
-			'force_full_update' => $arr['force_full_update'],
-			'do_safe_update' => $arr['do_safe_update']
+		//	'force_full_update' => $arr['force_full_update'],
+			'update_product_images' => $arr['update_product_images'],
+			'force_update_product_images' => $arr['force_update_product_images'],
+			'update_product_categories' => $arr['update_product_categories'],
+			'force_update_product_categories' => $arr['force_update_product_categories'],
+			'update_connected_products' => $arr['update_connected_products'],
+			'force_update_connected_products' => $arr['force_update_connected_products']
 		));
 
 		// flush cache
@@ -3189,7 +3263,6 @@ class otto_import extends class_base
 	// takes otto_import obj. instance as parameter
 	function import_product_objects($arr)
 	{
-
 		$import_time = time();
 
 		$o = $arr['otto_import'];
@@ -3237,7 +3310,6 @@ class otto_import extends class_base
 				
 				// add some information into otto_prod_img table (refactor: see tuleks liigutada piltide impordi juurde imo):
 				$this->db_query("UPDATE otto_prod_img SET p_pg='".$product['pg']."', p_nr='".$product['nr']."' WHERE pcode='".$value['code']."'");
-
 			}
 
 			echo "product codes: ".implode(',', $product_codes)."<br>\n";
@@ -3279,6 +3351,7 @@ class otto_import extends class_base
 
 				$product_object_id = reset($product_object_ids);
 				$product_obj = new object($product_object_id);
+				echo "found existing product <br>\n";
 			}
 			else
 			{
@@ -3309,26 +3382,36 @@ class otto_import extends class_base
 			// user7 - colors, comma separated list
 			$product_obj->set_prop('user7', implode(',', $colors));
 
-			// is categories and images update allowed for this product:
-			$categories_update_allowed = false;
-			$images_update_allowed = false;
-			$other_products_update_allowed = false;
-			/*
-				if userch2 prop value is 1, then this products categories and images shouldn't be updated
-				this feature can be overrided with setting force_full_update parameter while doing import
-				if do_safe_update is set, then categories and pictures are not updated at all during the import --dragut
-			*/
-			if ( ( $product_obj->prop('userch2') != 1 || $arr['force_full_update'] ) && !$arr['do_safe_update'] )
-			{
-				$categories_update_allowed = true;
-				$images_update_allowed = true;
-				$other_products_update_allowed = true;
-
-				$product_obj->set_prop("user11", $product["extrafld"]);
-			}
-		
 			$product_obj->save();
 
+			// allow to update images
+			$update_product_images = false;
+			if ( ( $product_obj->prop('userch2') != 1 && $arr['update_product_images'] ) || $arr['force_update_product_images'] )
+			{
+				$update_product_images = true;
+			}
+
+			// allow to update categories
+			$update_product_categories = false;
+			if ( ( $product_obj->prop('userch2') != 1 && $arr['update_product_categories'] ) || $arr['force_update_product_categories'] )
+			{
+				$update_product_categories = true;
+			}
+
+			// allow to update connected products
+			$update_connected_products = false;
+			if ( ( $product_obj->prop('userch2') != 1 && $arr['update_connected_products'] ) || $arr['force_update_connected_products'] )
+			{
+				$update_connected_products = true;
+			}
+/*
+			if ($arr['force_full_update'])
+			{
+				$update_product_images = true;
+				$update_product_categories = true;
+				$update_connected_products = true;
+			}
+*/
 			////
 			// otto_prod_to_code_lut tabelisse tootekood <-> toote objekti id seosed:
 			foreach ($product_codes as $product_code)
@@ -3344,12 +3427,12 @@ class otto_import extends class_base
 			}
 
 			////
-			// categories
+			// CATEGORIES
 			////
-			// ysnaga hakkab see asi siin siis nyyd niimoodi t88le, et on 1 tabel, kus on kirjas milliseid tooteid millise sektsiooni all n2idata on vaja
-			// nothing more, nothing less
-			// korjame need kategooriad toote juurest kokku k6igepealt:
-			if ($categories_update_allowed)
+			// products belong to several categories
+			// every category is shown under specified section
+			// to skip the categories level while showing the products, I have a section<->product lookup table
+			if ($update_product_categories)
 			{
 				$categories = array($product['pg']);
 				foreach (explode(',', $product['extrafld']) as $extrafld)
@@ -3379,6 +3462,8 @@ class otto_import extends class_base
 					');
 					$product_sections[$section['aw_folder']] = $section['aw_folder'];
 				}
+				// save additional categories to product
+				$product_obj->set_prop("user11", $product["extrafld"]);
 			}
 			else
 			{
@@ -3401,7 +3486,7 @@ class otto_import extends class_base
 			}
 
 			////
-			// images
+			// IMAGES
 			////
 			$images = $this->db_fetch_array("
 				select 
@@ -3413,121 +3498,127 @@ class otto_import extends class_base
 					p_nr = '".$product['nr']."'
 			");
 
-			// here i need to check the flag, if the images should be updated on this object:
 
-			if (!empty($images) && $images_update_allowed)
+			$images_arr = array();
+			// lets get the images from current product as well and merge them with new ones
+			foreach (safe_array(explode(',', $product_obj->prop('user3'))) as $value)
 			{
-
-				$images_arr = array();
-				$connection_image = '';
-				foreach ($images as $value)
+				if (!empty($value))
 				{
-					if (!empty($value['imnr']))
-					{
-						$images_arr[$value['imnr']] = $value['imnr'];
-					}
-
-					// siin v6ib olla nyyd see probleem, et vahel, m6nel tootel ei ole seda yhenduspilti
-					// k6ikide tootekoodide kohta. ma arvan, et see on otto poolne black tegelt
-					// nii et niikui leian selle yhenduspildi, siis aitab kyll:
-					if (!empty($value['conn_img']) && empty($connection_image))
-					{
-						$connection_image = $value['conn_img'];	
-					}
+					$images_arr[$value] = $value;
 				}
-				echo "selle toote koodidele leiti j&auml;rgmised pildid: ".implode(',', $images_arr)."<br />\n";
-				$product_obj->set_prop('user3', implode(',', $images_arr));
-				$product_obj->set_prop('user8', $images[0]['video']);
-
-				if ($other_products_update_allowed)
+			}
+			$connection_image = '';
+			foreach (safe_array($images) as $value)
+			{
+				if (!empty($value['imnr']))
 				{
-					////
-					// scanning which products should be visible via connection images and categories
-					////
-					// ysnaga, on vaja otsida teisi toote objekte nyyd, millel
-					// oleks sama yhenduse pildi id ja millel oleks see n2itamise linnuke pysti
-					if (!empty($connection_image))
+					$images_arr[$value['imnr']] = $value['imnr'];
+				}
+
+				// siin v6ib olla nyyd see probleem, et vahel, m6nel tootel ei ole seda yhenduspilti
+				// k6ikide tootekoodide kohta. ma arvan, et see on otto poolne black tegelt
+				// nii et niikui leian selle yhenduspildi, siis aitab kyll:
+				if (!empty($value['conn_img']) && empty($connection_image))
+				{
+					$connection_image = $value['conn_img'];	
+				}
+			}
+			echo "selle toote koodidele leiti j&auml;rgmised pildid: ".implode(',', $images_arr)."<br />\n";
+			if ($update_product_images)
+			{
+				echo "Saving images to product: ".implode(',', $images_arr)."<br />\n";
+				$product_obj->set_prop('user3', implode(',', $images_arr));
+			}
+			$product_obj->set_prop('user8', $images[0]['video']);
+
+			////
+			// CONNECTED PRODUCTS
+			////
+			if ($update_connected_products)
+			{
+				////
+				// scanning which products should be visible via connection images and categories
+				////
+				// I need to find other products which have the same 
+				// connection image and which should have been shown under products list
+				if (!empty($connection_image))
+				{
+					echo "&uuml;hendav pilt: [".$connection_image."]<br />\n";
+					$products_ol = new object_list(array(
+						'class_id' => CL_SHOP_PRODUCT,
+						'user2' => $connection_image,
+						'status' => array(STAT_ACTIVE, STAT_NOTACTIVE),
+						'oid' => new obj_predicate_not($product_obj->id())
+					));
+					
+					$product_obj->set_prop('user2', $connection_image);
+					if ($products_ol->count())
 					{
-						echo "&uuml;hendav pilt: [".$connection_image."]<br />\n";
-						$products_ol = new object_list(array(
-							'class_id' => CL_SHOP_PRODUCT,
-							'user2' => $connection_image,
-							'status' => array(STAT_ACTIVE, STAT_NOTACTIVE),
-							'oid' => new obj_predicate_not($product_obj->id())
-						));
-						
-						$product_obj->set_prop('user2', $connection_image);
-						if ($products_ol->count())
+						echo "found more products with this connection image <br />\n";
+
+						$products_ol_ids = $products_ol->ids() + array($product_obj->id());
+						$product_obj->set_prop('user4', implode(',', $product_ol_ids));
+						$product_obj->set_prop('userch4', 1);
+						echo "product oids with this connection image: ".implode(',', $products_ol_ids)."<br />\n";
+
+						$visible_product = false;
+						foreach ($products_ol->arr() as $products_ol_item_id => $products_ol_item)
 						{
-							echo "leidsin veel objekte selle yhenduspildiga <br />\n";
-						//	$products_ol->add($product_obj);
+							// nyyd on asi nii, et siin ma panen k6ik objektid listis mitte n2htavaks
+							// n2htavaks objektiks selles pundis saab alati just 2sja imporditud toode
 
-							$products_ol_ids = $products_ol->ids() + array($product_obj->id());
-							$product_obj->set_prop('user4', implode(',', $product_ol_ids));
-							$product_obj->set_prop('userch4', 1);
-							echo "selle yhenduspildiga olevate toodete id-d: ".implode(',', $products_ol_ids)."<br />\n";
+							// aga samal ajal ma peaks tsekkima ka sektsioone, et kui sektsioonid on erinevad
+							// siis peaks ka toote n2htavaks panema.
 
-							// lets make sure, that the current product is not present in the object_list
-							// or it might be set unvisible in products list:
-						//	$products_ol->remove($product_obj->id());
-
-							$visible_product = false;
-							foreach ($products_ol->arr() as $products_ol_item_id => $products_ol_item)
+							// ysnaga ma pean tegema query otto_prod_to_section_lut-i selle objekti id kohta
+							$this->db_query("select section from otto_prod_to_section_lut where product = ".$products_ol_item_id);
+							$product_ol_item_sections = array();
+							while ($row = $this->db_next())
 							{
-								// nyyd on asi nii, et siin ma panen k6ik objektid listis mitte n2htavaks
-								// n2htavaks objektiks selles pundis saab alati just 2sja imporditud toode
-
-								// aga samal ajal ma peaks tsekkima ka sektsioone, et kui sektsioonid on erinevad
-								// siis peaks ka toote n2htavaks panema.
-
-								// ysnaga ma pean tegema query otto_prod_to_section_lut-i selle objekti id kohta
-								$this->db_query("select section from otto_prod_to_section_lut where product = ".$products_ol_item_id);
-								$product_ol_item_sections = array();
-								while ($row = $this->db_next())
-								{
-									$product_ol_item_sections[$row['section']] = $row['section'];
-								}
-
-								if (count($product_sections) > count($product_ol_item_sections))
-								{
-									$array_diff_res = array_diff($product_sections, $product_ol_item_sections);
-								}
-								else
-								{
-									$array_diff_res = array_diff($product_ol_item_sections, $product_sections);
-								}
-								if (!empty($array_diff_res))
-								{
-									echo "Seda toodet n&auml;idatakse erinevate sektsioonide all, nii, et m2rgin ka selle toote listis n2htavaks <br />\n";
-									$products_ol_item->set_prop('userch4', 1);
-								}
-								else
-								{
-									$products_ol_item->set_prop('userch4', '');
-								}
-
-								$products_ol_item->set_prop('user4', implode(',', $products_ol_ids));
-								$products_ol_item->save();
+								$product_ol_item_sections[$row['section']] = $row['section'];
 							}
-							
+
+							if (count($product_sections) > count($product_ol_item_sections))
+							{
+								$array_diff_res = array_diff($product_sections, $product_ol_item_sections);
+							}
+							else
+							{
+								$array_diff_res = array_diff($product_ol_item_sections, $product_sections);
+							}
+							if (!empty($array_diff_res))
+							{
+								echo "Seda toodet n&auml;idatakse erinevate sektsioonide all, nii, et m2rgin ka selle toote listis n2htavaks <br />\n";
+								$products_ol_item->set_prop('userch4', 1);
+							}
+							else
+							{
+								$products_ol_item->set_prop('userch4', '');
+							}
+
+							$products_ol_item->set_prop('user4', implode(',', $products_ol_ids));
+							$products_ol_item->save();
 						}
-						else
-						{
-							echo "teisi selle yhenduspildiga tooteid ei leidnud, m&auml;rgin selle toote listis n&auml;idatavaks: [".$product_obj->id()."]<br />\n";
-							$product_obj->set_prop('userch4', 1);
-						}
+						
 					}
 					else
 					{
-						echo "&uuml;hendav pilt puudub, m&auml;rgin selle toote listis n&auml;idatavaks [".$product_obj->id()."]<br />\n";
+						echo "teisi selle yhenduspildiga tooteid ei leidnud, m&auml;rgin selle toote listis n&auml;idatavaks: [".$product_obj->id()."]<br />\n";
 						$product_obj->set_prop('userch4', 1);
 					}
 				}
 				else
 				{
-					echo "ei uuendatud teisi tooteid, toodete nimekirjas n&auml;htavust ega &uuml;henduspilte <br />\n";
+					echo "&uuml;hendav pilt puudub, m&auml;rgin selle toote listis n&auml;idatavaks [".$product_obj->id()."]<br />\n";
+					$product_obj->set_prop('userch4', 1);
 				}
 			}
+			else
+			{
+				echo "ei uuendatud teisi tooteid, toodete nimekirjas n&auml;htavust ega &uuml;henduspilte <br />\n";
+			}
+	
 
 			$product_obj->save();
 
