@@ -222,7 +222,8 @@ class site_show extends class_base
 			"ip_allowed" => array(),
 			"ip_denied" => array(),
 			"images" => array(),
-			"has_ctx" => 0
+			"has_ctx" => 0,
+			"keywords" => "",
 		);
 
 		$ni = aw_ini_get("menuedit.num_menu_images");
@@ -277,6 +278,11 @@ class site_show extends class_base
 					{
 						$this->properties[$key] = $obj->prop($key);
 					}
+				}
+				else
+				if ($key == "keywords" && !isset($this->properties[$key]) && strlen($_t = $obj->trans_get_val($key)))
+				{
+					$this->properties[$key] = $_t;
 				}
 				else
 				{
@@ -2385,7 +2391,6 @@ class site_show extends class_base
 		aw_disable_acl();
 		$p = obj($u->get_current_person());
 		aw_restore_acl();
-
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -2408,7 +2413,7 @@ class site_show extends class_base
 			"cur_section" => aw_global_get("section"),
 			"section_name" => $this->section_obj->name(),
 			"meta_description" => $this->section_obj->trans_get_val("description"),
-			"meta_keywords" => $this->section_obj->trans_get_val("keywords"),
+			"meta_keywords" => $this->properties["keywords"], //$this->section_obj->trans_get_val("keywords"), // hell i know if this is the right solution !?!
 			"trans_lc" => aw_global_get("ct_lang_lc"),
 			"site_loginmenu" => $site_loginmenu
 		));
