@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.130 2008/06/20 10:16:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.131 2008/06/25 10:41:31 robert Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -712,6 +712,7 @@ class ml_list extends class_base
 			$request["mail"] = $_POST["mail"];
 			aw_session_set("cb_reqdata", $request);
 			aw_session_set("cb_errmsg", $errmsg);
+			aw_session_set("cb_errmsgs", $errors);
 			//die();
 			return aw_global_get("HTTP_REFERER");
 		};
@@ -2648,8 +2649,10 @@ class ml_list extends class_base
 		$targ = obj($args["alias"]["target"]);
 		enter_function("ml_list::parse_alias");
 		$cb_errmsg = aw_global_get("cb_errmsg");
+		$cb_errmsgs = aw_global_get("cb_errmsgs");
 		$cb_reqdata = aw_global_get("cb_reqdata");
 		aw_session_del("cb_errmsg", "");
+		aw_session_del("cb_errmsgs", "");
 		aw_session_del("cb_reqdata", "");
 		$tobj = new object($args["alias"]["target"]);
 		$sub_form_type = $tobj->prop("sub_form_type");
@@ -2795,6 +2798,16 @@ class ml_list extends class_base
 		{
 			$this->vars($cb_reqdata);
 		};
+
+		if(is_array($cb_errmsgs) && count($cb_errmsgs))
+		{
+			foreach($cb_errmsgs as $errprop => $msg)
+			{
+				$this->vars(array(
+					"err_".$errprop => $msg["msg"],
+				));
+			}
+		}
 
 		$this->vars(array(
 			"listname" => $tobj->name(),
