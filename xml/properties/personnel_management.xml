@@ -381,6 +381,36 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise seadetevorm</caption>
       </property>
       <property>
+            <name>needed_acl_employee</name>
+            <group>rights</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
+      </property>
+      <property>
+            <name>needed_acl_candidate</name>
+            <group>rights</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Kandideerijad</caption>
+      </property>
+      <property>
+            <name>needed_acl_job_offer</name>
+            <group>rights</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</caption>
+      </property>
+      <property>
             <name>employee_tb</name>
             <group>
                   <num_0>employee</num_0>
@@ -1228,6 +1258,10 @@
                   <caption>Seadete vormid</caption>
                   <parent>general</parent>
             </cfgforms>
+            <rights>
+                  <caption>Objektide n&amp;amp;auml;gemiseks vajalikud &amp;amp;otilde;igused</caption>
+                  <parent>general</parent>
+            </rights>
             <employee>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
                   <submit>no</submit>

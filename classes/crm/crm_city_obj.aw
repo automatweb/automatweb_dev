@@ -33,7 +33,27 @@ class crm_city_obj extends _int_object
 			$ol_prms += $arr["props"];
 		}
 
-		return new object_list($ol_prms);
+		$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_job_offer;
+
+		$ol_tmp = new object_list($ol_prms);
+		$ids = (is_array($needed_acl) && count($needed_acl) > 0) ? array() : $ol_tmp->ids();
+		foreach($ol_tmp->ids() as $oid)
+		{
+			$acl_ok = true;
+			foreach($needed_acl as $acl)
+			{
+				$acl_ok = $acl_ok && $this->can($acl, $oid);
+			}
+			if($acl_ok)
+			{
+				$ids[] = $oid;
+			}
+		}
+
+		$ol = new object_list();
+		$ol->add($ids);
+
+		return $ol;
 	}
 
 	/**
@@ -84,7 +104,34 @@ class crm_city_obj extends _int_object
 			));
 		}
 
-		return new object_list($ol_prms);
+		if($arr["by_jobwish"])
+		{
+			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employees;
+
+			$ol_tmp = new object_list($ol_prms);
+			$ids = (is_array($needed_acl) && count($needed_acl) > 0) ? array() : $ol_tmp->ids();
+			foreach($ol_tmp->ids() as $oid)
+			{
+				$acl_ok = true;
+				foreach($needed_acl as $acl)
+				{
+					$acl_ok = $acl_ok && $this->can($acl, $oid);
+				}
+				if($acl_ok)
+				{
+					$ids[] = $oid;
+				}
+			}
+
+			$ol = new object_list();
+			$ol->add($ids);
+
+			return $ol;
+		}
+		else
+		{
+			return new object_list($ol_prms);
+		}
 	}
 
 	function prms($arr)

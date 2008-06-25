@@ -68,7 +68,12 @@ class personnel_management_job_offer_obj extends _int_object
 			if(!isset($arr["status"]) || $conn->conn["to.status"] == $arr["status"])
 			{
 				$to = $conn->to();
-				if($i->can("view", $to->prop("person")))
+				$acl_ok = true;
+				foreach(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_candidate as $acl)
+				{
+					$acl_ok = $acl_ok && $this->can($acl, $to->prop("person"));
+				}
+				if($i->can("view", $to->prop("person")) && $acl_ok)
 				{
 					$ret->add($to->prop("person"));
 				}

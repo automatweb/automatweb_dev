@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.42 2008/06/11 19:22:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.43 2008/06/25 12:32:07 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -143,6 +143,18 @@
 
 		@property cff_job_offer type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
 		@caption T&ouml;&ouml;pakkumise seadetevorm
+
+	@groupinfo rights caption="Objektide n&auml;gemiseks vajalikud &otilde;igused" parent=general
+	@default group=rights
+
+		@property needed_acl_employee type=select multiple=1 field=meta method=serialize
+		@caption T&ouml;&ouml;otsijad
+
+		@property needed_acl_candidate type=select multiple=1 field=meta method=serialize
+		@caption Kandideerijad
+
+		@property needed_acl_job_offer type=select multiple=1 field=meta method=serialize
+		@caption T&ouml;&ouml;pakkumised
 
 -------------------T88OTSIJAD-----------------------
 @groupinfo employee caption="T&ouml;&ouml;otsijad" submit=no
@@ -493,6 +505,18 @@ class personnel_management extends class_base
 
 		switch($prop["name"])
 		{
+			case "needed_acl_employee":
+			case "needed_acl_candidate":
+			case "needed_acl_job_offer":
+				$prop["options"] = array(
+					"view" => t("Vaatamine"),
+					"edit" => t("Muutmine"),
+					"add" => t("Lisamine"),
+					"delete" => t("Kustutamine"),
+					"admin" => t("Admin"),
+				);
+				break;
+
 			case "location_conf":
 			case "location_2_conf":
 				$prop["options"] = array(
@@ -1140,9 +1164,19 @@ class personnel_management extends class_base
 				$sso = obj($arr["request"]["search_save"]);
 				$arr["request"] += $sso->meta();
 			}
+			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employee;
 			$res = $this->search_employee($arr);
 			foreach($res as $person)
 			{
+				$acl_ok = true;
+				foreach($needed_acl as $acl)
+				{
+					$acl_ok = $acl_ok && $this->can($acl, $person["oid"]);
+				}
+				if(!$acl_ok)
+				{
+					continue;
+				}
 				unset($apps);
 				$obj = obj($person["oid"]);
 				foreach($obj->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
@@ -1821,7 +1855,19 @@ class personnel_management extends class_base
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
 		));
-		$cnt = $childs->count();
+		$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_job_offer;
+		$cnt = (is_array($needed_acl) && count($needed_acl) > 0) ? 0 : $childs->count();
+		foreach($childs->ids() as $oid)
+		{
+			foreach($needed_acl as $acl)
+			{
+				$acl_ok = $acl_ok && $this->can($acl, $oid);
+			}
+			if($acl_ok)
+			{
+				$cnt++;
+			}
+		}
 		$str = $cnt > 0 ? " ($cnt)" : "";
 		$obx = $objs->to_list();
 		$t->add_item(0, array(
@@ -1832,6 +1878,15 @@ class personnel_management extends class_base
 		foreach($obx->arr() as $ob)
 		{
 			$id = $ob->id();
+			$acl_ok = true;
+			foreach($needed_acl as $acl)
+			{
+				$acl_ok = $acl_ok && $this->can($acl, $id);
+			}
+			if(!$acl_ok)
+			{
+				continue;
+			}
 			$childs = new object_list(array(
 				"lang_id" => array(),
 				"parent" => $id,
@@ -2167,9 +2222,19 @@ class personnel_management extends class_base
 				$sso = obj($arr["request"]["search_save"]);
 				$arr["request"] += $sso->meta();
 			}
+			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employee;
 			$res = $this->search_employee($arr);
 			foreach($res as $person)
 			{
+				$acl_ok = true;
+				foreach($needed_acl as $acl)
+				{
+					$acl_ok = $acl_ok && $this->can($acl, $person["oid"]);
+				}
+				if(!$acl_ok)
+				{
+					continue;
+				}
 				$apps = "";
 				$obj = obj($person["oid"]);
 				foreach($obj->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
