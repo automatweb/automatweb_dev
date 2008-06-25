@@ -69,59 +69,14 @@
             <caption>Teosta piltide import</caption>
       </property>
       <property>
-            <name>force_full_update</name>
+            <name>update_params_table</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>table</type>
             <store>no</store>
-            <caption>Import uuendab k&amp;amp;otilde;iki v&amp;amp;auml;lju</caption>
-      </property>
-      <property>
-            <name>do_safe_update</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
-            <caption>&amp;amp;Auml;ra uuenda pilte, kategooriaid ja seotud tooteid</caption>
-      </property>
-      <property>
-            <name>update_product_images</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
-            <caption>Uuenda toote pilte (arenduses!)</caption>
-      </property>
-      <property>
-            <name>update_product_categories</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
-            <caption>Uuenda toote kategooriaid (arenduses!)</caption>
-      </property>
-      <property>
-            <name>update_products_connected_products</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
-            <caption>Uuenda toote seotud tooteid (arenduses!)</caption>
+            <caption>Toodete uuendamine</caption>
       </property>
       <property>
             <name>last_import_log</name>
@@ -747,18 +702,16 @@
             <hbox_products_manager_toolbar>
                   <type>hbox</type>
                   <group>products_manager</group>
-                  <area_caption></area_caption>
             </hbox_products_manager_toolbar>
             <hbox_products_manager>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>products_manager</group>
-                  <area_caption></area_caption>
             </hbox_products_manager>
             <vbox_products_manager_search>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;amp;nbsp;otsing</area_caption>
+                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
                   <group>products_manager</group>
                   <parent>hbox_products_manager</parent>
             </vbox_products_manager_search>
@@ -766,18 +719,16 @@
                   <type>vbox</type>
                   <group>products_manager</group>
                   <parent>hbox_products_manager</parent>
-                  <area_caption></area_caption>
             </vbox_products_manager>
             <hbox_files_import>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>files_import</group>
-                  <area_caption></area_caption>
             </hbox_files_import>
             <vbox_files_import_filenames>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Toodete&amp;amp;nbsp;otsing</area_caption>
+                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
                   <group>files_import</group>
                   <parent>hbox_files_import</parent>
             </vbox_files_import_filenames>
@@ -785,7 +736,6 @@
                   <type>vbox</type>
                   <group>files_import</group>
                   <parent>hbox_files_import</parent>
-                  <area_caption></area_caption>
             </vbox_files_import_sites>
       </layout>
 </properties>
