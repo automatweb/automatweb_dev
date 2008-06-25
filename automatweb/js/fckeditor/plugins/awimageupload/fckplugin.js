@@ -176,7 +176,6 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 	}
 }
 
-// On Gecko we must do this trick so the user select all the SPAN when clicking on it.
 FCKAWImagePlaceholders._SetupClickListener = function()
 {
 	// because we call out FCKAWImagePlaceholders.Redraw() many times we 
@@ -229,14 +228,18 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	{
 		var e = FCK.EditorWindow.event ;
 		e.target = e.srcElement
+
 		if ( e.target.parentNode.tagName == 'SPAN' && e.target.parentNode._awimageplaceholder )
 		{
-			FCKSelection.SelectNode( e.target.parentNode ) ;
+			setTimeout(function() {
+				FCKSelection.SelectNode( e.target.parentNode ) ;
+			}, 1); // 1ms should be enough
 		}
 		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
 		{
-			//e.target.onclick = this;
-			FCKSelection.SelectNode( e.target.parentNode ) ;
+			setTimeout(function() {
+				FCKSelection.SelectNode( e.target.parentNode ) ;
+			}, 1); // 1ms should be enough
 			
 		}
 		//alert (e.target.tagName);
@@ -244,7 +247,8 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	
 	if (document.all) {        // If Internet Explorer.
 		// this was intended for ie's right click, so image caption could also be right clicked
-		FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
+		//FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
+		FCK.EditorDocument.attachEvent("onmousedown", FCKAWImagePlaceholders._ClickListenerIE ) ;
 		//FCK.EditorDocument.attachEvent( 'OnPaste', FCKAWImagePlaceholders.onPasteIE ) ;
 	} else {                // If Gecko.
 		//FCK.EditorDocument.addEventListener( 'click', DenGecko_OnKeyDown, true ) ;
