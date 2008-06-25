@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.20 2008/06/16 15:53:25 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.21 2008/06/25 11:20:57 hannes Exp $
 // fck_editor.aw - FCKeditor
 /*
 @classinfo  maintainer=hannes
@@ -11,7 +11,7 @@ class fck_editor extends aw_template
 		$this->init (array (
 			"tpldir" => "vcl/fck_editor",
 		));
-		$this->fck_version = "2.6.1";
+		$this->fck_version = "2.6.2";
 	}
 	
 	function get_rte_toolbar($arr)
