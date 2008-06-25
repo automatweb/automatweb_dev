@@ -47,7 +47,7 @@ class shortcut_manager extends class_base
 						foreach($arguments->getElementsByTagName( "required" ) as $required)
 						{
 							$s_shortcut = $required->getAttribute("value");
-							$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";'."<br>";
+							$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";';
 						}
 					}
 				}
