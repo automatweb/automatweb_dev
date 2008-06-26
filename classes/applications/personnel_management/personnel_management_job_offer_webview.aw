@@ -391,7 +391,7 @@ class personnel_management_job_offer_webview extends class_base
 							"JOB_OFFERS.HEADER" => $this->job_offers_header($props),
 						));
 						$this->vars(array(
-							"group.lvl2" => $loc->name,
+							"group.lvl2" => $loc->trans_get_val("name"),
 							"JOB_OFFERS" => $this->parse("JOB_OFFERS"),
 						));
 						$GROUP_LVL2 .= $this->parse("GROUP.LVL2");
@@ -439,7 +439,7 @@ class personnel_management_job_offer_webview extends class_base
 						"JOB_OFFERS.HEADER" => $this->job_offers_header($props),
 					));
 					$this->vars(array(
-						"group.lvl1" => $comp->name,
+						"group.lvl1" => $comp->trans_get_val("name"),
 						"JOB_OFFERS" => $this->parse("JOB_OFFERS"),
 					));
 					$GROUP_LVL1 .= $this->parse("GROUP.LVL1");
@@ -480,7 +480,7 @@ class personnel_management_job_offer_webview extends class_base
 						"JOB_OFFERS.HEADER" => $this->job_offers_header($props),
 					));
 					$this->vars(array(
-						"group.lvl1" => $sec->name,
+						"group.lvl1" => $sec->trans_get_val("name"),
 						"JOB_OFFERS" => $this->parse("JOB_OFFERS"),
 					));
 					$GROUP_LVL1 .= $this->parse("GROUP.LVL1");
@@ -526,13 +526,13 @@ class personnel_management_job_offer_webview extends class_base
 							"JOB_OFFERS.HEADER" => $this->job_offers_header($props),
 						));
 						$this->vars(array(
-							"group.lvl2" => $sec->name,
+							"group.lvl2" => $sec->trans_get_val("name"),
 							"JOB_OFFERS" => $this->parse("JOB_OFFERS"),
 						));
 						$GROUP_LVL2 .= $this->parse("GROUP.LVL2");
 					}
 					$this->vars(array(
-						"group.lvl2" => $comp->name,
+						"group.lvl2" => $comp->trans_get_val("name"),
 						"GROUP.LVL2" => $GROUP_LVL2,
 						"JOB_OFFERS" => "",
 					));
@@ -639,7 +639,7 @@ class personnel_management_job_offer_webview extends class_base
 				return get_lc_date($o->prop($p));
 
 			default:
-				return $o->prop($p);
+				return $o->trans_get_val($p);
 		}
 	}
 
