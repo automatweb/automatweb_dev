@@ -52,11 +52,11 @@ class crm_company_bills_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
-/*
-	//konvertimise algoritm
-	$cnt = 0;
 
-	if(aw_global_get("uid") == "Teddi.Rull"){
+	//konvertimise algoritm
+/*	$cnt = 0;
+
+	if(aw_global_get("uid") == "marko"){
 		$tasks = new object_list(array(
 			"class_id" => CL_TASK,
 			"lang_id" => array(),
@@ -71,7 +71,7 @@ class crm_company_bills_impl extends class_base
 				if($row->prop("task")) continue;
 				$cnt++;
 				
-//				print "rida id=".$row_id." nimi=".$row->name()." saab taski id=".$task->id()." nimega ".$task->name()."<br>\n";
+				print "rida id=".$row_id." nimi=".$row->name()." saab taski id=".$task->id()." nimega ".$task->name()."<br>\n";
 				$row->set_prop("task", $task->id());
 				$row->save();
 			}
@@ -403,6 +403,7 @@ class crm_company_bills_impl extends class_base
 			return PROP_IGNORE;
 		}
 		enter_function("bills_impl::_get_bill_task_list");
+		enter_function("bills_impl::_get_bill_task_list1");
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->unset_filter();
 		$this->_init_bill_task_list_t($t, $arr["request"]["proj"]);
@@ -452,6 +453,8 @@ class crm_company_bills_impl extends class_base
 			"project" => $arr["request"]["proj"],
 			"brother_of" => new obj_predicate_prop("id"),
 		));
+		exit_function("bills_impl::_get_bill_task_list1");
+		enter_function("bills_impl::_get_bill_task_list2");
 
 		$tasks = new object_list();
 		$sum2task = array();
@@ -478,17 +481,23 @@ class crm_company_bills_impl extends class_base
 				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
 			}
 		}
-		
+//		if(aw_global_get("uid") == "marko") {arr($arr["request"]["proj"]);arr("taskid:");arr($all_tasks);}
 		//toimetuse read lykkas tahapoole, et saaks vaid need toimetuste read, mis on 6igete toimetuste kyljes
-		$task_rows = new object_list(array(
-			"class_id" => CL_TASK_ROW,
-			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"on_bill" => 1,
-			"done" => 1,
-//			"oid" => $possible_task_rows
-			"task" => $all_tasks->ids(),
-		));
-		
+		if(sizeof($all_tasks->ids()))
+		{
+			$task_rows = new object_list(array(
+				"class_id" => CL_TASK_ROW,
+				"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+				"on_bill" => 1,
+				"done" => 1,
+	//			"oid" => $possible_task_rows
+				"task" => $all_tasks->ids(),
+	//			"CL_TASK_ROW.task.send_bill" => 1,
+		//		"is_done" => 1,
+			));
+			$rows->add($task_rows);
+		}
+//		if(aw_global_get("uid") == "marko") arr($task_rows);
 /*		$task_expenses = new object_list(array(
 			"class_id" => CL_CRM_EXPENSE,
 	//		"on_bill" => 1,
@@ -497,7 +506,9 @@ class crm_company_bills_impl extends class_base
 			"oid" => $possible_expenses,
 		);
 		$rows->add($task_expenses);*/
-		$rows->add($task_rows);
+
+		exit_function("bills_impl::_get_bill_task_list2");
+		enter_function("bills_impl::_get_bill_task_list3");
 
 		if ($rows->count())
 		{
@@ -549,6 +560,8 @@ class crm_company_bills_impl extends class_base
 				}
 			}
 		}
+		exit_function("bills_impl::_get_bill_task_list3");
+		enter_function("bills_impl::_get_bill_task_list4");
 
 		foreach($tasks->arr() as $o)
 		{
@@ -627,6 +640,8 @@ class crm_company_bills_impl extends class_base
 		$t->set_default_sorder("asc");
 		$t->set_default_sortby("set_date");
 		$t->sort_by();
+		exit_function("bills_impl::_get_bill_task_list4");
+
 exit_function("bills_impl::_get_bill_task_list");
 		return;
 		if ($arr["request"]["cust"])
