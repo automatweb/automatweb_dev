@@ -560,6 +560,16 @@ class room extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "work_graphs":
+				if($arr["request"]["extend"])
+				{
+					$arr["obj_inst"]->extend_work_graph(array(
+						"person" => $arr["request"]["extend"],
+						"start" => $arr["request"]["scenario"][$arr["request"]["extend"]]["start"],
+						"end" => $arr["request"]["scenario"][$arr["request"]["extend"]]["end"],
+					));
+				}
+				break;
 			case 'people':
 				$wd = $arr['obj_inst']->meta("working_days");
 				foreach($arr["request"]["hidden_days"] as $p => $times)
@@ -709,6 +719,7 @@ class room extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["set_view_dates"] = " ";
 		$arr["set_oh"] = " ";
+		$arr["extend"] = " ";
 		$arr["set_ps"] = " ";
 		$arr["add_scenario"] = " ";
 	}
@@ -5775,6 +5786,10 @@ class room extends class_base
 			"caption" => t("L&otilde;pp"),
 		));
 		$t->define_field(array(
+			"name" => "extend",
+			"caption" => t("Pikenda kehtivat graafikut"),
+		));
+		$t->define_field(array(
 			"name" => "scenario",
 			"caption" => t("Stsenaarium"),
 		));
@@ -5823,17 +5838,6 @@ class room extends class_base
 			"title" => t("Otsi")
 		));
 
-		if($arr["obj_inst"]->get_setting("show_only_my_graphs"))
-		{
-			$user = get_instance(CL_USER);
-			$person = $user->get_current_person();	
-			$ol = new object_list();
-			if(in_array($person , $pl->ids()))
-			{
-				$ol->add($person);
-			}
-			$pl = $ol;
-		}
 
 		foreach($pl->arr() as $po)
 		{
@@ -5843,20 +5847,14 @@ class room extends class_base
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
 					"title" => t("Muuda")
 			));
-//<<<<<<< room.aw
-/*			$delete_sc = html::href(array(
-				"url" => 'javascript:alert(document.changeform.scenario[420][scenario]);',
-				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
-				"title" => t("Kustuta")
-			));*/
-//=======
+
 			$delete_sc = html::href(array(
 				"url" => 'javascript:confirm_delete("scenario['.$po->id().'][scenario]","'.aw_url_change_var('return_url' , '').'","delete_scenario")',
 				//	window.location.href="'.aw_url_change_var("return_url" , "").'&delete_scenario="+document.getElementById("scenario[420][scenario]").value;',
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 				"title" => t("Kustuta")
 			));
-//>>>>>>> 1.239
+
 			$data = array();
 			$data["name"] = $po->name();
 			$data["start"] = html::date_select(array(
@@ -5866,6 +5864,11 @@ class room extends class_base
 			$data["end"] = html::date_select(array(
 				"name" => "scenario[".$po->id()."][end]",
 				"value" => time() + 24*3600*28,
+			));
+
+			$data["extend"] = html::button(array(
+				"value" => "Pikenda",
+				"onclick" => "document.changeform.extend.value=".$po->id().";submit_changeform();",
 			));
 
 			$data["scenario"] = html::select(array(
