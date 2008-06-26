@@ -311,7 +311,13 @@ class personnel_management_job_offer_webview extends class_base
 			"status" => object::STAT_ACTIVE,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time() - (24*3600 - 1)),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"endless" => 1,
+					"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time() - (24*3600 - 1)),
+				),
+			)),
 			"start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
 		);
 		if(is_array($o->org) && count($o->org) > 0)
@@ -635,8 +641,10 @@ class personnel_management_job_offer_webview extends class_base
 		switch($p)
 		{
 			case "start":
-			case "end":
 				return get_lc_date($o->prop($p));
+
+			case "end":
+				return $o->get_end();
 
 			default:
 				return $o->trans_get_val($p);

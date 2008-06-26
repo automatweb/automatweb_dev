@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.46 2008/06/26 15:26:35 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.47 2008/06/26 16:03:31 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -280,10 +280,6 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "notify_me":
-				$prop["value"] = $arr["obj_inst"]->get_prop($prop["name"]);
-				break;
-
 			case "rate_scale":
 				if(!obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->rate_candidates)
 				{
@@ -1282,7 +1278,7 @@ class personnel_management_job_offer extends class_base
 				break;
 
 			case "loc_city":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0 && (int)$prop["value"] !== 0)
+				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0 && $prop["value"] != "0")
 				{
 					$crm_db = obj(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->crmdb);
 					$ol = new object_list(array(
@@ -2230,6 +2226,7 @@ class personnel_management_job_offer extends class_base
 
 		switch($field)
 		{
+			case "endless":
 			case "jo_start":
 			case "jo_end":
 			case "archive":

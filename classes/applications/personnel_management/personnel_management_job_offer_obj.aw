@@ -37,6 +37,15 @@ class personnel_management_job_offer_obj extends _int_object
 		}
 	}
 
+	function get_end()
+	{
+		if($this->prop("endless"))
+		{
+			return t("T&auml;htajatu");
+		}
+		return get_lc_date($this->prop("end"));
+	}
+
 	function prop($k)
 	{
 		if($k == "notify_me")
@@ -51,6 +60,12 @@ class personnel_management_job_offer_obj extends _int_object
 			{
 				return 1;
 			}
+		}
+		else
+		if($k == "end" && $this->prop("endless"))
+		{
+			// Endless - as BIG as possible!
+			return pow(2, 31) - 1;
 		}
 		else
 		{
