@@ -109,7 +109,6 @@ $("#aw_object_quickadd").aw_object_quickadd(items, options);
 		<a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a>
 		<!-- END SUB: SHOW_CUR_OBJ -->
 	</div>
-<!--	<div class="top-left-menyy">{VAR:cur_p_url} | {VAR:cur_co_url} | {VAR:cur_class} | <a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a></div>-->
 	<div class="top-right-menyy">
 		{VAR:lang_pop}
 		{VAR:settings_pop}
