@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.24 2008/06/26 18:01:18 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.25 2008/06/26 23:40:21 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -120,7 +120,7 @@ class crm_person_education extends class_base
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$prop["options"] = $ops;
-				$prop["onchange"] = "id = this.id.replace('start', 'end'); if(aw_get_el(id).value - this.value < 0){ alert('".t("Algus ei saa olla suurem kui l&otilde;pp!")."'); aw_get_el(id).value = this.value; }";
+				$prop["onchange"] = "asd = this.name; asd = asd.replace('start', 'end'); if(aw_get_el(asd).value - this.value < 0 && aw_get_el(asd).value != 0){ alert('".t("Algus ei saa olla suurem kui l&otilde;pp!")."'); aw_get_el(asd).value = this.value; }";
 				break;
 				
 			case "end":
@@ -130,7 +130,7 @@ class crm_person_education extends class_base
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$prop["options"] = $ops;
-				$prop["onchange"] = "id = this.id.replace('end', 'start'); if(aw_get_el(id).value - this.value > 0){ alert('".t("L&otilde;pp ei saa olla v&auml;iksem kui algus!")."'); aw_get_el(id).value = this.value; }";
+				$prop["onchange"] = "asd = this.name; asd = asd.replace('end', 'start'); if(aw_get_el(asd).value - this.value > 0 && aw_get_el(asd).value != 0){ alert('".t("L&otilde;pp ei saa olla v&auml;iksem kui algus!")."'); aw_get_el(asd).value = this.value; }";
 			break;
 
 			case "main_speciality":
