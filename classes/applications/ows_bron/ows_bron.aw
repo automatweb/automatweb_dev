@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.36 2008/06/19 09:42:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.37 2008/06/26 11:47:22 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -1615,6 +1615,20 @@ class ows_bron extends class_base
 		{
 				$arr["i_checkout"] = date("d.m.Y", time() + 24*3600);
 		}
+
+		$checkindata = $arr["i_checkin"];
+		$checkindata2 = explode('.', $checkindata);
+		$checkin = 
+			sprintf("%04d",$checkindata2[2]).'-'.
+			sprintf("%02d",$checkindata2[1]).'-'.
+			sprintf("%02d",$checkindata2[0]).'T00:00:00';
+
+		$checkin_ts = mktime(0,0,0,$checkindata2[1], $checkindata2[0], $checkindata2[2]);
+		$checkoutdata = $arr["i_checkout"];
+		$checkoutdata2 = explode('.', $checkoutdata);
+		$checkout = sprintf("%04d", $checkoutdata2[2]).'-'.sprintf("%02d",$checkoutdata2[1]).'-'.sprintf("%02d",$checkoutdata2[0]).'T23:59:00';
+		$checkout_ts = mktime(0,0,0,$checkoutdata2[1], $checkoutdata2[0], $checkoutdata2[2]);
+
 		if (strpos($arr["i_location"], ",") !== false)
 		{
 				$this->read_template("multi_hotel.tpl");
@@ -1651,9 +1665,9 @@ class ows_bron extends class_base
 					"usd_sel" => $currency == "USD" ? "SELECTED" : "",
 					"eek_sel" => $currency == "EEK" ? "SELECTED" : "",
 					"RateList" => $tmp,
-					"currentdate" => date('d.m.Y'),
+					"currentdate" => date('d.m.Y', $checkin_ts),
 					"i_promo" => $arr["i_promo"],
-					"tomorrow" => date("d.m.Y", time() + 24*3600),
+					"tomorrow" => date("d.m.Y", $checkout_ts),
 					"reforb1" => $this->mk_reforb(
 						"show_available_rooms",
 						array(
@@ -1713,18 +1727,6 @@ class ows_bron extends class_base
 			header("Location: http://www.revalinn.com/en/reval-inn-vilnius");
 			die();
 		}
-		$checkindata = $arr["i_checkin"];
-		$checkindata2 = explode('.', $checkindata);
-		$checkin = 
-			sprintf("%04d",$checkindata2[2]).'-'.
-			sprintf("%02d",$checkindata2[1]).'-'.
-			sprintf("%02d",$checkindata2[0]).'T00:00:00';
-
-		$checkin_ts = mktime(0,0,0,$checkindata2[1], $checkindata2[0], $checkindata2[2]);
-		$checkoutdata = $arr["i_checkout"];
-		$checkoutdata2 = explode('.', $checkoutdata);
-		$checkout = sprintf("%04d", $checkoutdata2[2]).'-'.sprintf("%02d",$checkoutdata2[1]).'-'.sprintf("%02d",$checkoutdata2[0]).'T23:59:00';
-		$checkout_ts = mktime(0,0,0,$checkoutdata2[1], $checkoutdata2[0], $checkoutdata2[2]);
 
 		if (($checkout_ts - $checkin_ts) > (24*3600*99))
 		{
@@ -2879,6 +2881,10 @@ echo dbg::dump($return);
 				$hotel_list = "";
 				foreach($hotels as $hid => $hn)
 				{
+					if ($hid == 38 && aw_ini_get("site_id") == 354)
+					{
+						continue;
+					}
 					$this->vars(array(
 						"hotel_id" => $hid,
 						"hotel_name" => $hn,
