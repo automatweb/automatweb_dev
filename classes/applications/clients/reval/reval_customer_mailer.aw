@@ -11,7 +11,7 @@
 
 class reval_customer_mailer extends class_base
 {
-	private $hotel_lut;
+	public $hotel_lut;
 
 	function reval_customer_mailer()
 	{
@@ -94,22 +94,50 @@ class reval_customer_mailer extends class_base
 	**/
 	function daily_check($arr)
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$rv = $this->do_call("GetGuestsWithEmailByCODate", array(
 			"CODate" => date("Y-m-d", time() - 24*3600)
 		));
-		
-		echo "<html><body><form action='/orb.aw' method=POST><table><Tr><td>Name</td><td>E-mail</td><td>Hotel</td><td>From</td><td>To</td><td>Confirmation no</td><td>&nbsp;</td></tr>";
+		echo "<html><body>"; //<form action='/orb.aw' method=POST><table><Tr><td>Name</td><td>E-mail</td><td>Hotel</td><td>From</td><td>To</td><td>Confirmation no</td><td>&nbsp;</td></tr>";
 		foreach($rv["GetGuestsWithEmailByCODateResult"]["GuestEMailsClass"] as $entry)
 		{
-			echo "<tr><td>".$entry["First"]." ".$entry["Last"]."</td>";
+			$row = $this->db_fetch_row("SELECT * FROM reval_daily_bookings WHERE conf_no = $entry[Confirmation_No]");
+			if (!$row)
+			{
+				$this->quote(&$entry);
+				$this->db_query("INSERT INTO reval_daily_bookings(conf_no, hotel, name, email) values($entry[Confirmation_No], '$entry[Resort]','".$entry["First"]." ".$entry["Last"]."', '$entry[EMail]')");
+			}
+			else
+			{
+				continue;
+			}
+/*			echo "<tr><td>".$entry["First"]." ".$entry["Last"]."</td>";
 			echo "<td>".$entry["EMail"]."</td>";
 			echo "<td>".$entry["Resort"]."</td>";
 			echo "<td>".$entry["Reserv_Begin_Date"]."</td>";
 			echo "<td>".$entry["Reserv_End_Date"]."</td>";
 			echo "<td>".$entry["Confirmation_No"]."</td>";
 			echo "<td><input name=sel[] type=checkbox value=".$entry["Confirmation_No"]." ></td>";
-			echo "</tr>\n";
+			echo "</tr>\n";*/
+
+			$html = $this->_gen_mail_ct($entry);
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+							"froma" => "info@revalhotels.com",
+							"fromn" => "Reval Hotels",
+							"subject" => "Your visit",
+							"to" => $entry["EMail"],//"erki@struktuur.ee", //$arr["sendto"],
+							"body" => strip_tags($html),
+			));
+			$awm->htmlbodyattach(array(
+							"data" => $html,
+			));
+			//$awm->gen_mail();
+			echo "sent to $entry[EMail] for $entry[Confirmation_No] <br>\n";
+			flush();
+
 		}
+		die("all done");
 		die("</table><input type=hidden name=class value=reval_customer_mailer> <input type=hidden name=action value=sbt_daily_check><input type=submit value=Salvesta></form></body>");
 		//die(str_replace("@", "", dbg::dump($rv)));
 	}

@@ -298,6 +298,11 @@ class reval_customer extends class_base
 		{
 			$fn = "CustomerService";
 		}
+		else
+		if ($ns == "Security")
+		{
+			$fn = "SecurityService";
+		}
 		$return = $this->do_orb_method_call(array(
 			"action" => $action,
 			"class" => "http://markus.ee/RevalServices/$ns/",
@@ -686,7 +691,7 @@ if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 			"subscribedCategoryIds" => $sel_ids
 		), "Customers");
 //echo dbg::dump($rv2);
-		return $this->_u($this->mk_my_orb("edit_profile", array("section" => $arr["section"], "id" => $arr["id"], "reval_customer", false, false, "&", false)));
+		return $this->_u($this->mk_my_orb("edit_profile", array("error" => 100, "section" => $arr["section"], "id" => $arr["id"], "reval_customer", false, false, "&", false)));
 	}
 
 	private function _req($request, $ows)
@@ -845,7 +850,7 @@ if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 		lc_site_load("reval_customer", $this);
 
 		$this->_insert_web_bookings(null,array("id" => $arr["id"]));
-		return $this->parse();
+		return $this->parse().$this->display_visits();
 	}
 
 	/**
@@ -1014,6 +1019,7 @@ if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 		));
 
 		$v = "";
+		$sum = 0;
 		foreach($return["GetCustomerVisitsResult"]["Visits"]["HotelVisit"] as $visit)
 		{
 			$this->vars(array(
@@ -1022,12 +1028,236 @@ if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 				"departure" => date("d.m.Y", $this->_parse_date($visit["DepartureDate"])),
 				"num_nights" => $visit["RoomNights"]
 			));
+			$sum += $visit["RoomNights"];
 			$v .= $this->parse("VISIT");
 		}
 		$this->vars(array(
-			"VISIT" => $v
+			"VISIT" => $v,
+			"sum_nights" => $sum
 		));
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=register_as_customer nologin="1"
+		@param card_number optional
+		@param bd optional
+	**/
+	function register_as_customer($arr)
+	{
+		$this->read_template("register_as_customer.tpl");
+		lc_site_load("reval_customer", $this);
+		$this->_do_errors();
+
+		$this->vars(array(
+			"card_number" => htmlspecialchars($arr["card_number"]),
+			"bd" => htmlspecialchars($arr["bd"]),
+			"reforb" => $this->mk_reforb("submit_register_as_customer", array("section" => aw_global_get("section"), "id" => 1))
+		));
+
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=submit_register_as_customer nologin="1"
+	**/
+	function submit_register_as_customer($arr)
+	{
+		if (empty($arr["card_number"]))
+		{
+			return $this->_err_ret("register_as_customer", $arr, 1);
+		}
+		list($d,$m, $y) = explode(".", $arr["bd"]);
+		if (empty($arr["bd"]) || $y < 1800 || $y > date("Y") || $m < 1 || $m > 12 || $d < 1 || $d > 31)
+		{
+			return $this->_err_ret("register_as_customer", $arr, 2);
+		}
+
+		$rv = $this->do_call("ValidateCustomerByCardNumberAndBirthday", array(
+			"cardNumber" => $arr["card_number"],
+			"birthday" => sprintf("%04d", $y).'-'.sprintf("%02d", $m).'-'.sprintf("%02d", $d).'T00:00:00'
+		), "Security");
+
+		if ($rv["ValidationStatus"] != "Success")
+		{
+			return $this->_err_ret("register_as_customer", $arr, 3);
+		}
+	
+		// write data to session, so that the person can edit their profile
+		$_SESSION["reval_fc"]["id"] = $rv["CustomerId"];
+		return $this->mk_my_orb("edit_profile", array("section" => $arr["section"], "id" => $arr["id"]), "reval_customer", false, false, "&", false);
+
+		// create temp hash and send e-mail
+		$hash = gen_uniq_id();
+		//$this->_insert_temp_hash($hash, $rv["CustomerId"]);
+
+		//$this->_send_temp_email($hash, $rv);
+		$_SESSION["reval"]["temp_mail_adr"] = $rv["Email"];
+
+		return $this->mk_my_orb("register_as_customer_median", array("section" => $arr["section"]), "reval_customer", false, false, "&", false);
+	}
+
+	private function _insert_temp_hash($hash, $cust_id)
+	{
+		$this->db_query("INSERT INTO reval_customer_temp_hashes(hash, customer, tm) values('$hash','$cust_id',".time().")");
+	}
+
+	private function _send_temp_email($hash, $rv)
+	{
+			$content = "hash: $hash \nlink: ".$this->mk_my_orb("validate", array("hash" => $hash));
+
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+							"froma" => "info@revalhotels.com",
+							"fromn" => "Reval Hotels",
+							"subject" => t("Your registration on revalhotels.com"),
+							"to" => "kristo@struktuur.ee", //$email,
+							"body" => strip_tags($content),
+			));
+			$awm->htmlbodyattach(array(
+							"data" => $content,
+			));
+			$awm->gen_mail();
+	}
+
+	/**
+		@attrib name=register_as_customer_median nologin="1"
+	**/
+	function register_as_customer_median($arr)
+	{
+		$this->read_template("register_as_customer_intermediate.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->vars(array(
+			"email" => $_SESSION["reval"]["temp_mail_adr"]
+		));
+		unset($_SESSION["reval"]["temp_mail_adr"]);
+
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=validate nologin="1"
+		@param hash required
+	**/
+	function validate($arr)
+	{
+		$cust = $this->_get_cust_by_temp_hash($arr["hash"]);
+		if (!$cust)
+		{
+			$this->read_template("validate_invalid.tpl");
+			lc_site_load("reval_customer", $this);
+			return $this->parse();
+		}
+
+		$this->read_template("validate.tpl");
+		lc_site_load("reval_customer", $this);
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("final_validate_customer", array("hash" => $arr["hash"], "section" => $arr["section"]))
+		));
+
+		return $this->parse();
+	}
+
+	private function _get_cust_by_temp_hash($hash)
+	{
+		$rv = $this->db_fetch_row("SELECT * FROM reval_customer_temp_hashes WHERE hash = '$hash' AND tm > ".(time() - 24*3600));
+		return $rv["customer"];
+	}
+
+	/**
+		@attrib name=final_validate_customer nologin="1"
+	**/
+	function final_validate_customer($arr)
+	{
+		// change emailand whatever to what's needed
+	}
+
+	/**
+		@attrib name=forgot_password nologin="1"
+	**/
+	function forgot_password($arr)
+	{
+			$this->read_template("forgot_password.tpl");
+			lc_site_load("reval_customer", $this);
+			$this->_do_errors();
+		
+			$this->vars(array(
+				"reforb" => $this->mk_reforb("submit_forgot_password", array("section" => aw_global_get("section")))
+			));
+			return $this->parse();
+	}
+
+	/**
+		@attrib name=submit_forgot_password
+	**/
+	function submit_forgot_password($arr)
+	{
+		if (empty($arr["first_name"]))
+		{
+			return $this->_err_ret("forgot_password", $arr, 1);
+		}
+		if (empty($arr["last_name"]))
+		{
+			return $this->_err_ret("forgot_password", $arr, 2);
+		}
+		if (empty($arr["email"]))
+		{
+			return $this->_err_ret("forgot_password", $arr, 3);
+		}
+		$rv = $this->do_call("ValidateCustomerByFirstNameLastNameAndEmail", array(
+			"firstName" => $arr["first_name"],
+			"lastName" => $arr["last_name"],
+			"email" => $arr["email"],
+		), "Security");
+
+		if ($rv["ValidationStatus"] != "Success")
+		{
+			return $this->_err_ret("forgot_password", $arr, 4);
+		}
+
+		// generate new password, set it to the user and mail them about it
+		$password = generate_password();
+
+		$rv = $this->do_call("SetCustomerPassword", array(
+			"customerId" => $rv["CustomerId"],
+			"password" => $password
+		), "Customers", true);
+		if ($rv["SetCustomerPasswordResult"]["ResultCode"] != "Success")
+		{
+				return $this->_err_ret("forgot_password", $arr, 5);
+		}
+
+		$this->_mail_customer_password($rv, $password);
+		return $this->mk_my_orb("forgot_password", array("section" => aw_global_get("section"), "error" => 100));
+	}
+
+	private function _mail_customer_password($rv, $password)
+	{
+			$this->read_template("password_remind_mail.tpl");
+			lc_site_load("reval_customer", $this);
+		
+			$this->vars(array(
+				"first_name" => $rv["FirstName"],
+				"last_name" => $rv["LastName"],
+				"password" => $password,
+			));
+			$subject = $this->parse("SUBJECT");
+			$content = $this->parse("CONTENT");
+
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+							"froma" => "info@revalhotels.com",
+							"fromn" => "Reval Hotels",
+							"subject" => trim($subject),
+							"to" => "kristo@struktuur.ee", //$email,
+							"body" => strip_tags($content),
+			));
+			$awm->htmlbodyattach(array(
+							"data" => $content,
+			));
+			$awm->gen_mail();
 	}
 }
 
