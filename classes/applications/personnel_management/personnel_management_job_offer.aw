@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.45 2008/06/26 12:35:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.46 2008/06/26 15:26:35 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -42,6 +42,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property end type=date_select table=personnel_management_job_offer field=jo_end
 @caption Konkursi t&auml;htaeg
+
+@property endless type=checkbox ch_value=1 table=personnel_management_job_offer field=endless
+@caption T&auml;htajatu
 
 @property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect
 @caption Ametikoht

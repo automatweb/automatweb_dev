@@ -90,6 +90,15 @@
             <caption>Konkursi t&amp;amp;auml;htaeg</caption>
       </property>
       <property>
+            <name>endless</name>
+            <table>personnel_management_job_offer</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>endless</field>
+            <caption>T&amp;amp;auml;htajatu</caption>
+      </property>
+      <property>
             <name>profession</name>
             <table>objects</table>
             <group>general</group>

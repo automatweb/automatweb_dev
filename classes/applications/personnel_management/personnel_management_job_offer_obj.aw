@@ -53,11 +53,6 @@ class personnel_management_job_offer_obj extends _int_object
 			}
 		}
 		else
-		if($k == "end" && parent::prop("endless"))
-		{
-			return t("T&auml;htajatu");
-		}
-		else
 		{
 			return parent::prop($k);
 		}
