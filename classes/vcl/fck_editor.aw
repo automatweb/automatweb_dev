@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.21 2008/06/25 11:20:57 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.22 2008/06/26 14:38:09 hannes Exp $
 // fck_editor.aw - FCKeditor
 /*
 @classinfo  maintainer=hannes
@@ -85,21 +85,41 @@ class fck_editor extends aw_template
 				$strFcklang = "en-uk";
 			
 			$this->vars(array(
-				"name" => $nm,
-				"width"=> "600px",
-				"height"=> $height,
-				"lang" => $strFcklang,
-				"toolbarset" => $s_toolbarset,
-				"fck_version" => $this->fck_version
-			));
-			$tmp.= $this->parse("EDITOR");
+					"name" => $nm,
+					"width"=> "600px",
+					"height"=> $height,
+					"lang" => $strFcklang,
+					"toolbarset" => $s_toolbarset,
+					"fck_version" => $this->fck_version
+				));
+			
+			if ($nm != "moreinfo")
+			{
+				$tmp.= $this->parse("EDITOR_FCK");
+			}
+			else
+			{
+				$tmp.= $this->parse("EDITOR_ONDEMAND");
+			}
 		}
 		
 		$this->vars(array(
-				"EDITOR" => $tmp,
 				"msg_leave" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"),
 				"msg_leave_error" => html_entity_decode(t("Andmete salvestamine kahjuks ei &otilde;nnestunud")),
 		));
+		
+		if ($nm != "moreinfo")
+		{
+			$this->vars(array(
+				"EDITOR_FCK" => $tmp,
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"EDITOR_ONDEMAND" => $tmp,
+			));
+		}
 		
 		return $this->parse();
 	}

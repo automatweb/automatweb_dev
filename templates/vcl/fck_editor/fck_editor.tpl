@@ -34,6 +34,19 @@ function FCKeditor_OnComplete( editorInstance )
 	}
 }
 
+function FCKeditor_CreateEditor(name, version, width, height, lang)
+{
+	var oFCKeditor = new FCKeditor(name);
+	oFCKeditor.BasePath = "/automatweb/js/fckeditor/"+version+"/";
+	oFCKeditor.Width = width;
+	oFCKeditor.Height = height;
+	oFCKeditor.Config["AutoDetectLanguage"] = false;
+	oFCKeditor.Config["DefaultLanguage"] = lang;
+	oFCKeditor.ReplaceTextarea();
+	oFCKeditor.Config["CustomConfigurationsPath"] = "/automatweb/orb.aw?class=fck_editor&action=get_fck_config" + ( new Date() * 1 ) ;
+}
+
+
 /*
  * prototype for array
  */
@@ -102,19 +115,15 @@ function unloadHandler()
 	}
 }
 
-window.onload = function()
-{
-	<!-- SUB: EDITOR -->
-	var fck{VAR:name} = new FCKeditor("{VAR:name}");
-	fck{VAR:name}.BasePath = "/automatweb/js/fckeditor/{VAR:fck_version}/";
-	fck{VAR:name}.Width = "{VAR:width}";
-	fck{VAR:name}.Height = "{VAR:height}";
-	fck{VAR:name}.Config["AutoDetectLanguage"] = false;
-	fck{VAR:name}.Config["DefaultLanguage"] = "{VAR:lang}";
-	fck{VAR:name}.ReplaceTextarea();
-	fck{VAR:name}.Config["CustomConfigurationsPath"] = "/automatweb/orb.aw?class=fck_editor&action=get_fck_config" + ( new Date() * 1 ) ;
-	<!-- END SUB: EDITOR -->
-}
+<!-- SUB: EDITOR_FCK -->
+FCKeditor_CreateEditor("{VAR:name}", "{VAR:fck_version}", "{VAR:width}", "{VAR:height}", "{VAR:lang}")
+<!-- END SUB: EDITOR_FCK -->
+
+<!-- SUB: EDITOR_ONDEMAND -->
+$("#{VAR:name}").css("width", "{VAR:width}").click(function(){
+	FCKeditor_CreateEditor("{VAR:name}", "{VAR:fck_version}", "{VAR:width}", "{VAR:height}", "{VAR:lang}")
+});
+<!-- END SUB: EDITOR_ONDEMAND -->
 
 -->
 </script>

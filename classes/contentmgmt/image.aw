@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.23 2008/06/17 18:27:24 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.24 2008/06/26 14:38:05 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1585,16 +1585,13 @@ class image extends class_base
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 		if ($arr["request"]["save_and_doc"] != "")
 		{
-			//$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
 			$url = $this->mk_my_orb("fetch_image_alias_for_doc", array("doc_id" => $arr["request"]["docid"], "image_id" => $arr["obj_inst"]->id()));
-
 			$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
 			$this->gen_image_alias_for_doc(array(
 				"img_id" => $arr["obj_inst"]->id(),
 				"doc_id" => $arr["request"]["docid"] ? $arr["request"]["docid"] : $arr["request"]["id"],
 				"no_die" => 1
 			));
-
 			die("
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/jquery/jquery-1.2.3.min.js\"></script>
 				<script language='javascript'>
@@ -1605,24 +1602,18 @@ class image extends class_base
 				
 				if (eSelected)
 				{
-					if (eSelected.tagName == 'TABLE' && eSelected._awfileplaceholder  )
+					if (eSelected.tagName == 'SPAN' && eSelected._awimageplaceholder  )
 					{
-					/*
-						eSelected.parentNode.removeChild( eSelected ) ;
 						$.get(\"$url\", function(data){
-							window.parent.opener.FCKAWFilePlaceholders.Add(data);
-							window.parent.close();
-						});
-						*/
-							$.get(\"$url\", function(data){
-							window.parent.opener.FCKAWImagePlaceholders.Add(data);
+							window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);
 							window.parent.close();
 						});
 					}
+					// ok, this should never happen but still.. u never know
 					else if (eSelected.tagName == 'IMG' )
 					{
 						$.get(\"$url\", function(data){
-							window.parent.opener.FCKAWImagePlaceholders.Add(data);
+							window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);
 							window.parent.close();
 						});
 					}
@@ -1630,7 +1621,7 @@ class image extends class_base
 				else
 				{
 					$.get(\"$url\", function(data){
-						window.parent.opener.FCKAWImagePlaceholders.Add(data);
+						window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);
 						window.parent.close();
 					});
 				}
@@ -2366,7 +2357,7 @@ class image extends class_base
 			die($close);
 		}
 		$from = obj($arr["doc_id"]);
-		$from->connect(array("to" => $arr["img_id"]));
+		$rv = $from->connect(array("to" => $arr["img_id"]));
 
 		if (!$arr["no_die"])
 		{
@@ -2419,7 +2410,7 @@ class image extends class_base
 		$out = 'connection_details_for_doc = new Array();'.$sufix;
 		foreach($alias_list as $obj_id => $alias_string)
 		{
-			$alias_name = preg_replace  ( "/^([a-z]*[0-9]{1,}).?$/isU", "\\1", $arr["alias_name"]);
+			$alias_name = preg_replace  ( "/^([a-z]*[0-9]{1,})[vkp]?$/isU", "\\1", $arr["alias_name"]);
 			if ("#".$alias_name."#" == $alias_string)
 			{
 				$o = obj($obj_id);
