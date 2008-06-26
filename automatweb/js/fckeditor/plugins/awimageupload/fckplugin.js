@@ -386,8 +386,10 @@ FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
 {
 	if ( htmlNode._awimageplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
+	else if ( htmlNode._awfileplaceholder )
+		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
 	else
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
-
+		
 	return node ;
 }

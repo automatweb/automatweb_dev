@@ -239,12 +239,5 @@ else
 FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKAWFilePlaceholders.Redraw ) ;
 
 // We must process the SPAN tags to replace then with the real resulting value of the placeholder.
-FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
-{
-	if ( htmlNode._awfileplaceholder )
-		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
-	else
-		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
-
-	return node ;
-}
+// FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
+// But we do it from awimageupload
