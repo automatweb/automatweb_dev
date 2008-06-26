@@ -4276,7 +4276,7 @@ class crm_person extends class_base
 
 	function callback_post_save($arr)
 	{
-		if($this->can("view", aw_global_get("person_obj_id_for_candidate")) && $this->can("view", aw_global_get("job_offer_obj_id_for_candidate")))
+		if($this->can("view", $arr["obj_inst"]->id()) && $this->can("view", aw_global_get("job_offer_obj_id_for_candidate")))
 		{
 			$candidate = obj();
 			$candidate->set_class_id(CL_PERSONNEL_MANAGEMENT_CANDIDATE);
