@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.47 2008/06/26 16:03:31 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.48 2008/06/26 17:18:37 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -280,6 +280,13 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "sect":
+				$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
+				$secs = $cp->get_sections();
+				$prop["options"] = is_array($prop["options"]) ? $prop["options"] : array();
+				$prop["options"] += array(0 => t("--vali--")) + $secs->names();
+				break;
+
 			case "rate_scale":
 				if(!obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->rate_candidates)
 				{
@@ -573,7 +580,7 @@ class personnel_management_job_offer extends class_base
 					$prop["value"] = "";
 					$prop["type"] = "textbox";
 					$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_".$prop["name"]);
-					$prop["autocomplete_params"] = array();
+					$prop["autocomplete_params"] = array($prop["name"]);
 				}
 				break;
 				

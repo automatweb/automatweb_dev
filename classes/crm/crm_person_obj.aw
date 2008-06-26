@@ -252,13 +252,24 @@ class crm_person_obj extends _int_object
 			"from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
 			"type" => "RELTYPE_PERSON"
 		));
+		$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_candidate;
 		foreach($conns as $conn)
 		{
-			$ids[] = $conn["from"];
+			$acl_ok = true;
+			foreach($needed_acl as $acl)
+			{
+				$acl_ok = $acl_ok && $this->can($acl, $conn["from"]);
+			}
+			if($acl_ok)
+			{
+				$ids[] = $conn["from"];
+			}
 		}
 
 		if(count($ids) == 0)
+		{
 			return $ret;
+		}
 
 		$conns = connection::find(array(
 			"to" => $ids,
@@ -656,6 +667,23 @@ class crm_person_obj extends _int_object
 		$ro->save();
 
 		$o->set_prop($prop, $ro->id());
+	}
+
+	/**
+	@attrib name=get_sections api=1
+	**/
+	function get_sections()
+	{
+		$ol = new object_list();
+		foreach($this->connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $conn)
+		{
+			$to = $conn->to();
+			if(is_oid($to->section) && $this->can("view", $to->section))
+			{
+				$ol->add($to->section);
+			}
+		}
+		return $ol;
 	}
 }
 
