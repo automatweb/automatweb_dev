@@ -15,6 +15,7 @@ class personnel_management_job_offer_obj extends _int_object
 				));
 			}
 			else
+			if(is_oid(parent::id()))
 			{
 				$conns = connection::find(array(
 					"from" => parent::id(),
