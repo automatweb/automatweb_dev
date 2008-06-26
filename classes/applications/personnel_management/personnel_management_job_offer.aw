@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.44 2008/06/26 11:57:17 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.45 2008/06/26 12:35:08 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1279,7 +1279,7 @@ class personnel_management_job_offer extends class_base
 				break;
 
 			case "loc_city":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
+				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0 && (int)$prop["value"] !== 0)
 				{
 					$crm_db = obj(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->crmdb);
 					$ol = new object_list(array(
