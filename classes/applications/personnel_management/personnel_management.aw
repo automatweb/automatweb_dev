@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.45 2008/06/26 16:13:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.46 2008/06/26 23:29:47 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -873,6 +873,10 @@ class personnel_management extends class_base
 			$tot = 0;
 			foreach($objs->arr() as $o)
 			{
+				if(!$this->check_special_acl_for_cat($o, CL_CRM_PERSON))
+				{
+					continue;
+				}
 				$cnt = $o->get_residents(array(
 					"parent" => $this->persons_fld,
 					"personnel_management" => $arr["obj_inst"]->id(),
@@ -950,6 +954,10 @@ class personnel_management extends class_base
 				));
 				foreach($objs->arr() as $o)
 				{
+					if(!$this->check_special_acl_for_cat($o, $arr["request"]["group"] == "employee" ? CL_CRM_PERSON : CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
+					{
+						continue;
+					}
 					$fn_prms = array(
 						"parent" => $this->$fld,
 						"personnel_management" => $arr["obj_inst"]->id(),
@@ -989,6 +997,10 @@ class personnel_management extends class_base
 			));
 			foreach($objs->arr() as $o)
 			{
+				if(!$this->check_special_acl_for_cat($o, $arr["request"]["group"] == "employee" ? CL_CRM_PERSON : CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
+				{
+					continue;
+				}
 				$fn_prms = array(
 					"parent" => $this->$fld,
 					"personnel_management" => $arr["obj_inst"]->id(),
@@ -1164,21 +1176,16 @@ class personnel_management extends class_base
 				$sso = obj($arr["request"]["search_save"]);
 				$arr["request"] += $sso->meta();
 			}
-			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employee;
 			$res = $this->search_employee($arr);
+			$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
 			foreach($res as $person)
 			{
-				$acl_ok = true;
-				foreach($needed_acl as $acl)
-				{
-					$acl_ok = $acl_ok && $this->can($acl, $person["oid"]);
-				}
-				if(!$acl_ok)
+				unset($apps);
+				$obj = obj($person["oid"]);
+				if(!$pm->check_special_acl_for_obj($obj))
 				{
 					continue;
 				}
-				unset($apps);
-				$obj = obj($person["oid"]);
 				foreach($obj->get_applications(array("parent" => $this->offers_fld, "status" => object::STAT_ACTIVE))->names() as $app_id => $app_name)
 				{
 					$apps .= (strlen($apps) > 0) ? ", " : "";
@@ -1713,6 +1720,10 @@ class personnel_management extends class_base
 			{
 				continue;
 			}
+			if(!$this->check_special_acl_for_obj($ob))
+			{
+				continue;
+			}
 			$cnt_cands = $ob->get_candidates()->count();
 			if($cnt_cands == 0)
 			{
@@ -1735,6 +1746,10 @@ class personnel_management extends class_base
 		foreach($obx as $ob)
 		{
 			if($ob->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER || !$cnt[$ob->id()])
+			{
+				continue;
+			}
+			if(!$this->check_special_acl_for_cat($ob, CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
 			{
 				continue;
 			}
@@ -1777,6 +1792,10 @@ class personnel_management extends class_base
 			$tot = 0;
 			foreach($objs->arr() as $o)
 			{
+				if(!$this->check_special_acl_for_cat($o, CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
+				{
+					continue;
+				}
 				$ofrs = $o->get_job_offers(array(
 					"parent" => $this->offers_fld,
 					"status" => object::STAT_ACTIVE,
@@ -1855,35 +1874,21 @@ class personnel_management extends class_base
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"archive" => $arr["request"]["group"] != "offers_archive" ? 0 : 1,
 		));
-		$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_job_offer;
-		$cnt = (is_array($needed_acl) && count($needed_acl) > 0) ? 0 : $childs->count();
-		foreach($childs->ids() as $oid)
-		{
-			foreach($needed_acl as $acl)
-			{
-				$acl_ok = $acl_ok && $this->can($acl, $oid);
-			}
-			if($acl_ok)
-			{
-				$cnt++;
-			}
-		}
+		$cnt = $childs->count();
 		$str = $cnt > 0 ? " ($cnt)" : "";
 		$obx = $objs->to_list();
-		$t->add_item(0, array(
-			"id" => $this->offers_fld,
-			"name" => $arr["request"]["fld_id"] == $this->offers_fld ? "<b>".$obj->name().$str."</b>" : $obj->name().$str,
-			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $this->offers_fld)),
-		));
+		if($this->check_special_acl_for_cat($this->offers_fld, CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
+		{
+			$t->add_item(0, array(
+				"id" => $this->offers_fld,
+				"name" => $arr["request"]["fld_id"] == $this->offers_fld ? "<b>".$obj->name().$str."</b>" : $obj->name().$str,
+				"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $this->offers_fld)),
+			));
+		}
 		foreach($obx->arr() as $ob)
 		{
 			$id = $ob->id();
-			$acl_ok = true;
-			foreach($needed_acl as $acl)
-			{
-				$acl_ok = $acl_ok && $this->can($acl, $id);
-			}
-			if(!$acl_ok)
+			if(!$this->check_special_acl_for_cat($id, CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
 			{
 				continue;
 			}
@@ -1924,6 +1929,10 @@ class personnel_management extends class_base
 			$tot = 0;
 			foreach($objs->arr() as $o)
 			{
+				if(!$this->check_special_acl_for_cat($o, CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
+				{
+					continue;
+				}
 				$cnt = $o->get_job_offers(array(
 					"parent" => $this->offers_fld,
 					"props" => array(
@@ -2144,6 +2153,10 @@ class personnel_management extends class_base
 				{
 					continue;
 				}
+				if(!$this->check_special_acl_for_obj($ob))
+				{
+					continue;
+				}
 				$cnt_cands = $ob->get_candidates()->count();
 				$cnt[$ob->parent()] += $cnt_cands;
 				$total += $cnt_cands;
@@ -2170,6 +2183,10 @@ class personnel_management extends class_base
 			foreach($obx as $ob)
 			{
 				if($ob->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER || !$cnt[$ob->id()] || ($ob->parent() != $arr["request"]["fld_id"] && !is_oid($oid)))
+				{
+					continue;
+				}
+				if(!$this->check_special_acl_for_cat($ob, CL_PERSONNEL_MANAGEMENT_JOB_OFFER))
 				{
 					continue;
 				}
@@ -3067,6 +3084,116 @@ class personnel_management extends class_base
 		else
 		{
 			return (int)$a->ord() > (int)$b->ord() ? 1 : -1;
+		}
+	}
+
+
+	/** Returns true if the current user is allowed to see this category according to the special rules declared in personnel management settings.
+	@attrib name=check_special_acl_for_cat api=1 params=pos
+
+	@param object required type=object/oid
+
+	@param clid optional type=class_id
+
+	@param personnel_management optional type=object
+
+	**/
+	function check_special_acl_for_cat($oid, $clid, $pm = NULL)
+	{
+		if(!is_object($pm))
+		{
+			$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		}
+		if(is_object($oid))
+		{
+			$oid = $oid->id();
+		}
+
+		$acls = array(
+			CL_PERSONNEL_MANAGEMENT_JOB_OFFER => "needed_acl_job_offer",
+			CL_CRM_PERSON => "needed_acl_employee",
+			CL_PERSONNEL_MANAGEMENT_CANDIDATE => "needed_acl_candidate",
+		);
+		$acl = $pm->prop($acls[$clid]);
+
+		$ok = true;
+		foreach($acl as $a)
+		{
+			$ok = $ok && $this->can($a, $oid);
+		}
+		return $ok;
+	}
+
+	/** Returns true if the current user is allowed to see this object according to the special rules declared in personnel management settings.
+	@attrib name=check_special_acl api=1 params=pos
+
+	@param object required type=object
+
+	@param personnel_management optional type=object
+
+	**/
+	function check_special_acl_for_obj($o, $pm = NULL)
+	{
+		if(!is_object($pm))
+		{
+			$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		}
+		$clid = $o->class_id();
+		switch($clid)
+		{
+			case CL_PERSONNEL_MANAGEMENT_JOB_OFFER:
+				$ok = $this->check_special_acl_for_cat($o->parent(), $clid);
+				$locs = array("country", "area", "county", "city");
+				foreach($locs as $loc)
+				{
+					$ok = $ok || $this->check_special_acl_for_cat($o->prop("loc_".$loc), $clid);
+				}
+				return $ok;
+			
+			case CL_CRM_PERSON:
+				$ok = false;
+				$check_cnt = 0;
+				foreach($o->connections_from(array("type" => "RELTYPE_WORK_WANTED")) as $conn)
+				{
+					$to = $conn->to();
+					$prps = array("location", "location_2");
+					foreach($prps as $prp)
+					{
+						foreach($to->$prp as $lid)
+						{
+							if(is_oid($lid))
+							{
+								$ok = $ok || $this->check_special_acl_for_cat($lid, $clid);
+								$check_cnt++;
+							}
+						}
+					}
+				}
+				$ol = new object_list(array(
+					"class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
+					"person" => $id,
+					"site_id" => array(),
+					"lang_id" => array(),
+				));
+				foreach($ol->arr() as $cand)
+				{
+					$prps = array("loc_country", "loc_country", "loc_area", "loc_county", "loc_city", "parent");
+					foreach($prps as $prp)
+					{
+						$lid = $cand->prop("job_offer.".$prp);
+						if(is_oid($lid))
+						{
+							$ok = $ok || $this->check_special_acl_for_cat($lid, $clid);
+							$check_cnt++;
+						}
+					}
+				}
+				// If there's no reason to show it and no reason not to show it, we'l show it.
+				$ok = $check_cnt == 0 || $ok;
+				return $ok;
+			
+			case CL_PERSONNEL_MANAGEMENT_CANDIDATE:
+				return false;
 		}
 	}
 }

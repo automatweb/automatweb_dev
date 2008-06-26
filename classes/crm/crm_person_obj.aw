@@ -252,18 +252,9 @@ class crm_person_obj extends _int_object
 			"from.class_id" => CL_PERSONNEL_MANAGEMENT_CANDIDATE,
 			"type" => "RELTYPE_PERSON"
 		));
-		$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_candidate;
 		foreach($conns as $conn)
 		{
-			$acl_ok = true;
-			foreach($needed_acl as $acl)
-			{
-				$acl_ok = $acl_ok && $this->can($acl, $conn["from"]);
-			}
-			if($acl_ok)
-			{
-				$ids[] = $conn["from"];
-			}
+			$ids[] = $conn["from"];
 		}
 
 		if(count($ids) == 0)
@@ -276,9 +267,12 @@ class crm_person_obj extends _int_object
 			"from.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"type" => "RELTYPE_CANDIDATE"
 		));
+		
+		$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
 		foreach($conns as $conn)
 		{
-			if((in_array($conn["from.status"], $arr["status"]) || count($arr["status"]) == 0) && (in_array($conn["from.parent"], $arr["parent"]) || count($arr["parent"]) == 0))
+			$from = obj($conn["from"]);
+			if((in_array($conn["from.status"], $arr["status"]) || count($arr["status"]) == 0) && (in_array($conn["from.parent"], $arr["parent"]) || count($arr["parent"]) == 0) && $pm->check_special_acl_for_obj($from))
 			{
 				$ret->add($conn["from"]);
 			}

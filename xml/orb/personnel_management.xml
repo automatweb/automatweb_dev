@@ -65,5 +65,24 @@
 			</function>
 		</action>
 
+		<action name="check_special_acl_for_cat">
+			<function name="check_special_acl_for_cat">
+				<arguments>
+					<required name="object" type="object/oid" />
+					<optional name="clid" type="class_id" />
+					<optional name="personnel_management" type="object" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="check_special_acl">
+			<function name="check_special_acl_for_obj">
+				<arguments>
+					<required name="object" type="object" />
+					<optional name="personnel_management" type="object" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

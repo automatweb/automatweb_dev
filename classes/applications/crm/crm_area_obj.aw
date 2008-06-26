@@ -14,8 +14,6 @@ class crm_area_obj extends _int_object
 		@param props optional type=array
 			You can add here filters for the object list.
 
-		@param check_special_acl type=boolean
-
 	**/
 	function get_job_offers($arr)
 	{
@@ -35,34 +33,7 @@ class crm_area_obj extends _int_object
 			$ol_prms += $arr["props"];
 		}
 
-		if($arr["check_special_acl"])
-		{
-			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_job_offer;
-
-			$ol_tmp = new object_list($ol_prms);
-			$ids = (is_array($needed_acl) && count($needed_acl) > 0) ? array() : $ol_tmp->ids();
-			foreach($ol_tmp->ids() as $oid)
-			{
-				$acl_ok = true;
-				foreach($needed_acl as $acl)
-				{
-					$acl_ok = $acl_ok && $this->can($acl, $oid);
-				}
-				if($acl_ok)
-				{
-					$ids[] = $oid;
-				}
-			}
-
-			$ol = new object_list();
-			$ol->add($ids);
-		}
-		else
-		{
-			$ol = new object_list($ol_prms);
-		}
-
-		return $ol;
+		return new object_list($ol_prms);
 	}
 
 	/**
@@ -121,34 +92,7 @@ class crm_area_obj extends _int_object
 			));
 		}
 
-		if($arr["by_jobwish"])
-		{
-			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employees;
-
-			$ol_tmp = new object_list($ol_prms);
-			$ids = (is_array($needed_acl) && count($needed_acl) > 0) ? array() : $ol_tmp->ids();
-			foreach($ol_tmp->ids() as $oid)
-			{
-				$acl_ok = true;
-				foreach($needed_acl as $acl)
-				{
-					$acl_ok = $acl_ok && $this->can($acl, $oid);
-				}
-				if($acl_ok)
-				{
-					$ids[] = $oid;
-				}
-			}
-
-			$ol = new object_list();
-			$ol->add($ids);
-
-			return $ol;
-		}
-		else
-		{
-			return new object_list($ol_prms);
-		}
+		return new object_list($ol_prms);
 	}
 
 	function prms($arr)
