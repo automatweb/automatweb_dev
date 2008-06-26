@@ -50,11 +50,11 @@ function FCKeditor_CreateEditor(name, version, width, height, lang)
 /*
  * prototype for array
  */
-function serializeArray () {
+function serializeArray (arr) {
 	s_out = "";
 	a_keys = new Array();
 	
-	for (key in this)
+	for (key in arr)
 	{
 		a_keys[a_keys.length] = key;
 	}
@@ -67,7 +67,6 @@ function serializeArray () {
 	s_out = s_out.substr(0, s_out.length-1);
 	return s_out;
 }
-window.Array.prototype.serializeArray = serializeArray;
 
 /*
  * if executed, content has been modified
@@ -101,7 +100,7 @@ function unloadHandler()
 			 $.ajax({
 				type: "POST",
 				url: "orb.aw",
-				data: $("form").serialize()+"&"+document_form.serializeArray()+"&posted_by_js=1",
+				data: $("form").serialize()+"&"+serializeArray(document_form)+"&posted_by_js=1",
 				async: false,
 				success: function(msg){
 				 //alert( "Data Saved: " + msg );
