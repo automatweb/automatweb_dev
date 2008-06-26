@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.13 2008/06/19 07:40:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.14 2008/06/26 09:29:15 tarvo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -10,6 +10,8 @@
 
 @default field=meta
 @default method=serialize
+
+@property general_tb type=toolbar no_caption=1
 
 @layout main_split type=hbox
 
@@ -81,24 +83,17 @@
 
 @layout mid_box type=vbox closeable=1 area_caption=Skeemivalik
 
-	@property discount_scheme_tb type=toolbar strore=no no_caption=1 parent=mid_box
-
 	@property discount_scheme type=select parent=mid_box
 	@caption Skeem
 
 	@property discount_scheme_tbl type=table store=no no_caption=1 parent=mid_box
 
-	@property discount_scheme_data type=hidden no_caption=1 parent=mid_box
-
 
 
 @layout down_box type=vbox closeable=1 area_caption=Artiklikategooriate&nbsp;soodustused
 
-	@property product_groups_tb type=toolbar strore=no no_caption=1 parent=down_box
 	
 	@property product_groups_tbl type=table store=no no_caption=1 parent=down_box
-
-	@property product_groups_data type=hidden no_caption=1 parent=down_box
 
 
 
@@ -178,20 +173,24 @@ class shop_special_offer extends class_base
 				"buy_product" => array(
 					"type" => "textbox",
 				       	"caption" => t("Ostad toote"),
+					"obj_check" => true,
 				),
 				"get_product" => array(
 					"type" => "textbox",
 				       	"caption" => t("Saad toote"),
+					"obj_check" => true,
 				),
 			),
 			DISCOUNT_SCHEME_2 => array(
 				"buy_price" => array(
 					"type" => "textbox",
 				       	"caption" => t("Ostad summa eest"),
+					"isset_check" => true,
 				),
 				"get_discount" => array(
 					"type" => "textbox",
-				       	"caption" => t("Saad soodust"),
+					"caption" => t("Saad soodust"),
+					"isset_check" => true,
 				),
 				"get_discount_type" => array(
 					"type" => "select",
@@ -211,7 +210,8 @@ class shop_special_offer extends class_base
 						"buy_product"
 					),
 					"size" => 20,
-				       	"caption" => t("Ostad toote"),
+					"caption" => t("Ostad toote"),
+					"obj_check" => true,
 				),
 				"buy_unit" => array(
 					"type" => "textbox",
@@ -222,7 +222,8 @@ class shop_special_offer extends class_base
 						"buy_unit",
 					),
 					"size" => 10,
-				       	"caption" => t("Ostetav &uuml;hik"),
+					"caption" => t("Ostetav &uuml;hik"),
+					"obj_check" => true,
 				),
 				"buy_amount" => array(
 					"type" => "textbox",
@@ -234,26 +235,28 @@ class shop_special_offer extends class_base
 					"autocomplete_source_method" => "_get_ac_products",
 					"option_is_tuple" => true,
 					"autocomplete_params" => array(
-						"buy_product"
+						"get_product"
 					),
 					"size" => 20,
-				       	"caption" => t("Soodustoode"),
+					"caption" => t("Soodustoode"),
+					"obj_check" => true,
 				),
 				"get_unit" => array(
 					"type" => "textbox",
 					"autocomplete_source_method" => "_get_ac_product_units",
 					"option_is_tuple" => true,
 					"autocomplete_params" => array(
-						"buy_product",
-						"buy_unit",
+						"get_product",
+						"get_unit",
 					),
 					"size" => 10,
-				       	"caption" => t("Soodus&uuml;hik"),
+					"caption" => t("Soodus&uuml;hik"),
+					"obj_check" => true,
 				),
 				"get_amount" => array(
 					"type" => "textbox",
 					"size" => 10,
-				       	"caption" => t("Sooduskogus"),
+					"caption" => t("Sooduskogus"),
 				),
 
 			),
@@ -266,7 +269,8 @@ class shop_special_offer extends class_base
 						"buy_cat"
 					),
 					"size" => 20,
-				       	"caption" => t("Ostetav kategooria/brand/..."),
+					"caption" => t("Ostetav kategooria/brand/..."),
+					"obj_check" => true,
 				),
 				"buy_product" => array(
 					"type" => "textbox",
@@ -277,27 +281,41 @@ class shop_special_offer extends class_base
 						"buy_product",
 					),
 					"size" => 20,
-				       	"caption" => t("Ostetav toode"),
+					"caption" => t("Ostetav toode"),
+					"obj_check" => true,
 				),
 				"buy_amount" => array(
 					"type" => "textbox",
 					"size" => 5,
-				       	"caption" => t("Ostetav kogus"),
+					"caption" => t("Ostetav kogus"),
 				),
 				"get_cat" => array(
 					"type" => "textbox",
+					"autocomplete_source_method" => "_get_ac_cats",
+					"option_is_tuple" => true,
+					"autocomplete_params" => array(
+						"get_cat"
+					),
 					"size" => 20,
-				       	"caption" => t("Sooduskategooria, -brand..."),
+					"caption" => t("Sooduskategooria, -brand..."),
+					"obj_check" => true,
 				),
 				"get_product" => array(
 					"type" => "textbox",
+					"autocomplete_source_method" => "_get_ac_products",
+					"option_is_tuple" => true,
+					"autocomplete_params" => array(
+						"get_cat",
+						"get_product",
+					),
 					"size" => 20,
-				       	"caption" => t("Soodustoode"),
+					"caption" => t("Soodustoode"),
+					"obj_check" => true,
 				),
 				"get_amount" => array(
 					"type" => "textbox",
 					"size" => 5,
-				       	"caption" => t("Sooduskogus"),
+					"caption" => t("Sooduskogus"),
 				),
 
 			),
@@ -325,10 +343,13 @@ class shop_special_offer extends class_base
 			case "product_groups_tbl":
 				$this->_get_product_groups_tbl($arr);
 				break;
-			case "product_groups_tb":
-			case "discount_scheme_tb":
+			case "general_tb":
 				$arr["prop"]["vcl_inst"]->add_save_button();
 				$arr["prop"]["vcl_inst"]->add_delete_rels_button();
+				$arr["prop"]["vcl_inst"]->add_cdata(html::hidden(array(
+					"name" => "rurl",
+					"value" => post_ru(),
+				)));
 				break;
 		};
 		return $retval;
@@ -344,9 +365,22 @@ class shop_special_offer extends class_base
 				$this->_add_new_product_to_request($arr);
 				$arr["obj_inst"]->set_meta("prodat", $arr["request"]["prodat"]);
 				break;
-			case "product_groups_tb":
+			case "product_groups_tbl":
 				$this->_add_new_product_group_to_request($arr);
 				$arr["obj_inst"]->set_meta("pro_gr_dat", $arr["request"]["pro_gr_dat"]);
+				break;
+			case "discount_scheme_tbl":
+				break;
+			case "discount_scheme":
+				if($arr["obj_inst"]->prop("discount_scheme") != $arr["request"]["discount_scheme"])
+				{
+					$arr["obj_inst"]->set_meta("discount_scheme_data", array());
+				}
+				else
+				{
+					$this->_add_new_discount_scheme_row_to_request($arr);
+					$arr["obj_inst"]->set_meta("discount_scheme_data", $arr["request"]["discount_scheme_data"]);
+				}
 				break;
 		}
 		return $retval;
@@ -356,6 +390,10 @@ class shop_special_offer extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$ds = $arr["obj_inst"]->prop("discount_scheme");
+		$t->define_chooser(array(
+			"name" => "discount_scheme_sel",
+			"field" => "discount_scheme_id",
+		));
 		foreach($this->discount_scheme_tbl_info[$ds] as $elem => $data)
 		{
 			$t->define_field(array(
@@ -369,20 +407,17 @@ class shop_special_offer extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$ds = $arr["obj_inst"]->prop("discount_scheme");
-		$ds_data = $arr["obj_inst"]->prop("discount_scheme_data");
+		$ds_data = array_reverse($arr["obj_inst"]->meta("discount_scheme_data"));
 		foreach($ds_data as $row_id => $row)
 		{
-			$altered_row = $this->_gen_discount_scheme_tbl_fields($ds, $row);
+			$altered_row = $this->_gen_discount_scheme_tbl_fields($ds, $row, false, $row_id);
+			$altered_row["discount_scheme_id"] = ++$row_id;
 			$t->define_data($altered_row);
 		}
 	}
 
 	function _gen_discount_scheme_tbl_field_elem($type, $name, $data, $value)
 	{
-		if($data["options"] == "callback")
-		{
-			$data["options"] = $this->$data["callback"]($type, $name, $data, $value);
-		}
 		switch($type)
 		{
 			case "textbox":
@@ -390,6 +425,14 @@ class shop_special_offer extends class_base
 					"name" => $name,
 					"value" => $value,
 				);
+				if($params["option_is_tuple"])
+				{
+					$params["selected"] = array(
+						$value => $data["content"],
+					);
+					unset($params["value"]);
+					unset($params["content"]);
+				}
 				$value = html::textbox($params);
 				break;
 			case "select":
@@ -402,24 +445,67 @@ class shop_special_offer extends class_base
 		}
 		return $value;
 	}
-	function _gen_discount_scheme_tbl_fields($scheme, $val)
+
+	function _add_new_discount_scheme_row_to_request(&$arr)
+	{
+		$ds = $arr["obj_inst"]->prop("discount_scheme");
+		$errorstring = false;
+		foreach($arr["request"]["new_discount_scheme"] as $k => $v)
+		{
+			if($this->discount_scheme_tbl_info[$ds][$k]["obj_check"] && !$this->can("view", $v))
+			{
+				$errorstring = sprintf(t("Palun valida v&auml;lja '%s' korrektne objekt."), $this->discount_scheme_tbl_info[$ds][$k]["caption"]);
+			}
+			if($this->discount_scheme_tbl_info[$ds][$k]["isset_check"] && !strlen($v))
+			{
+				$errorstring = sprintf(t("Palun t&auml;ita v&auml;i: '%s'"), $this->discount_scheme_tbl_info[$ds][$k]["caption"]);
+			}
+		}
+		if(!$errorstring)
+		{
+			if(!is_array($arr["request"]["discount_scheme_data"]))
+			{
+				$arr["request"]["discount_scheme_data"] = array();
+			}
+			array_push($arr["request"]["discount_scheme_data"], $arr["request"]["new_discount_scheme"]);
+		}
+		else
+		{
+			//somesort of errormanagment
+		}
+	}
+
+	function _gen_discount_scheme_tbl_fields($scheme, $val, $new = false, $rowid = false)
 	{
 		$inf = $this->discount_scheme_tbl_info[$scheme];
 		foreach($val as $name => $value)
 		{
-			$row[$name] = $this->_gen_discount_scheme_tbl_field_elem($inf[$name]["type"], $name, $inf[$name], $value);
+			$form_name = $new?"new_discount_scheme[".$name."]":"discount_scheme_data[".$rowid."][".$name."]";
+			foreach($inf[$name]["autocomplete_params"] as $k => $param)
+			{
+				$inf[$name]["autocomplete_params"][$k] = $new?"new_discount_scheme[".$param."]":"discount_scheme_data[".$param."]";
+			}
+			// i'm not gonna do the $value this->can(view) check here because this is time-consuming and every element with option_is_tuple should validate as an object !!!
+			if($inf[$name]["option_is_tuple"])
+			{
+				$o = obj($value);
+				$inf[$name]["content"] = $o->name();
+			}
+			$row[$name] = $this->_gen_discount_scheme_tbl_field_elem($inf[$name]["type"], $form_name, $inf[$name], $value);
 		}
 		return $row;
 	}
+
 	function _get_discount_scheme_tbl(&$arr)
 	{
 		$this->_init_discount_scheme_tbl($arr);
-		$this->_gen_discount_scheme_tbl($arr);
 		$ds = $arr["obj_inst"]->prop("discount_scheme");
-		$ds_data = $arr["obj_inst"]->prop("discount_scheme_data");
+		$ds_data = $arr["obj_inst"]->meta("discount_scheme_data");
 		$empty_row = array_combine(array_keys($this->discount_scheme_tbl_info[$ds]), array_fill(0,count($this->discount_scheme_tbl_info[$ds]), ""));
-		$empty_row = $this->_gen_discount_scheme_tbl_fields($ds, $empty_row);
+		$empty_row = $this->_gen_discount_scheme_tbl_fields($ds, $empty_row, true);
 		$arr["prop"]["vcl_inst"]->define_data($empty_row);
+
+		$this->_gen_discount_scheme_tbl($arr);
 	}
 
 	function _init_products_table(&$arr)
@@ -427,8 +513,8 @@ class shop_special_offer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid",
+			"name" => "products_sel",
+			"field" => "products_id",
 		));
 		$t->define_field(array(
 			"name" => "product",
@@ -477,7 +563,7 @@ class shop_special_offer extends class_base
 				));
 			}
 
-			$dat["oid"] = $k+1;
+			$dat["products_id"] = $k+1;
 			$arr["prop"]["vcl_inst"]->define_data($dat);
 		}
 	}
@@ -554,6 +640,10 @@ class shop_special_offer extends class_base
 	function _init_product_groups_tbl(&$arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "product_group_sel",
+			"field" => "product_group_id",
+		));
 		$t->define_field(array(
 			"name" => "product_group",
 			"caption" => t("Artikligrupp"),
@@ -610,6 +700,7 @@ class shop_special_offer extends class_base
 				"name" => "pro_gr_dat[".$k."][discount]",
 				"value" => $v["discount"],
 			));
+			$v["product_group_id"] = ++$k;
 			$t->define_data($v);
 		}
 
@@ -680,14 +771,6 @@ class shop_special_offer extends class_base
 		}
 
 		return $html;
-	}
-
-	private function _get_product_units($type, $name, $data, $value)
-	{
-		return array(
-			1 => "g",
-			2 => "ml"
-		);
 	}
 
 
@@ -785,8 +868,8 @@ class shop_special_offer extends class_base
 		{
 			$cats[$oid] = $obj->name();
 		}
-
-		$opts = array_merge($brands, $cats);
+		//$opts = array_merge($brands, $cats);
+		$opts = $brands + $cats;
 		$return = array(
 			"error" => $error,
 			"errorstring" => $errorstring,
@@ -862,9 +945,15 @@ class shop_special_offer extends class_base
 		$json = new json();
 		$error = false;
 		$units = array();
-		if($this->can("view", $args["buy_product"]))
+		preg_match("/(.*)\[(.*)\].*/", $args["requester"], $matches, PREG_OFFSET_CAPTURE);
+		$elem_name = $matches[1][0];
+		$requester = $matches[2][0];
+
+
+		$product = (substr($requester, 0, 4) == "buy_")?$args[$elem_name]["buy_product"]:$args[$elem_name]["get_product"];
+		if($this->can("view", $product))
 		{
-			$prod_obj = obj($args["buy_product"]);
+			$prod_obj = obj($product);
 			$prod = get_instance(CL_SHOP_PRODUCT);
 			$prod_units = $prod->get_units($prod_obj);
 			$ui = get_instance(CL_UNIT);
@@ -912,13 +1001,24 @@ class shop_special_offer extends class_base
 		if($this->can("view", $arr["id"]))
 		{
 			$o = obj($arr["id"]);
-			$d = $o->meta("prodat");
-			foreach(safe_array($arr["sel"]) as $sel)
+			$array = array(
+				"products_sel" => "prodat",
+				"product_group_sel" => "pro_gr_dat",
+				"discount_scheme_sel" => "discount_scheme_data",
+			);
+			foreach($array as $sel => $meta)
 			{
-				unset($d[--$sel]);
+				if(is_array($arr[$sel]))
+				{
+					$d = $o->meta($meta);
+					foreach(safe_array($arr[$sel]) as $selected)
+					{
+						unset($d[--$selected]);
+					}
+					$o->set_meta($meta, $d);
+					$o->save();
+				}
 			}
-			$o->set_meta("prodat", $d);
-			$o->save();
 		}
 		return $arr["rurl"];
 	}

@@ -1692,9 +1692,10 @@ class shop_warehouse extends class_base
 			"set_retu" => get_ru(),
 			"parent" => " ",
 		), CL_SHOP_WAREHOUSE);
+		$act = $arr["request"]["pgtf"] == $root->id()?true:false;
 		$tree->start_tree(array(
 			"has_root" => true,
-			"root_name" => $root->name(),
+			"root_name" => $this->bolden($root->name(), $act),
 			"root_url" => aw_url_change_var(array("pgtf"=> $this->prod_type_fld, "ptf" => null)),
 			"root_icon" => icons::get_icon_url(CL_MENU),
 			"type" => TREE_DHTML,
@@ -1705,7 +1706,7 @@ class shop_warehouse extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$url = aw_url_change_var(array("pgtf" => $o->id(), "ptf" => null));
-			$this->insert_prodg_tree_item(&$tree, $o, $url);
+			$this->insert_prodg_tree_item(&$tree, $o, $url, $arr["request"]["pgtf"] == $o->id()?true:false);
 		}
 	}
 
@@ -1736,11 +1737,16 @@ class shop_warehouse extends class_base
 		die($tree->finalize_tree());
 	}
 
-	function insert_prodg_tree_item($tree, $o, $url)
+	function bolden($str, $bold = true)
+	{
+		return $bold?html::strong($str):$str;
+	}
+
+	function insert_prodg_tree_item($tree, $o, $url, $active)
 	{
 		$tree->add_item(0, array(
 			"url" => $url,
-			"name" => $o->name(),
+			"name" => $this->bolden($o->name(), $active),
 			"id" => $o->id(),
 		));
 		$check_ol = new object_list(array(
