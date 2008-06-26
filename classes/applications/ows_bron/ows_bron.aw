@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.37 2008/06/26 11:47:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.38 2008/06/26 12:56:45 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -119,7 +119,7 @@ class ows_bron extends class_base
 			"42" => "Reval Hotel Lietuva",
 			"17969" => "Reval Inn Vilnius",
 			"17971" => "Reval Inn Klaipeda",
-			"18941" => "Reval Hotels Elizabete",
+			"18941" => "Reval Hotel Elizabete",
 			"17380" => "Reval Hotel Neris"
 		);
 

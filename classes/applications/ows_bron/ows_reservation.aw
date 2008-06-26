@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.18 2008/06/05 09:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.19 2008/06/26 12:56:45 kristo Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -409,7 +409,7 @@ die();
 			return $o->prop("guest_firstname")." ".$o->prop("guest_lastname")." / ".html::href(array(
 					"caption" => $o->prop("confirmation_code"),
 					"url" => str_replace("automatweb/orb.aw", "", $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $o->prop("confirmation_code"), "section" => 107220), CL_OWS_BRON)),
-			));
+			))."<br>".(get_instance(CL_OWS_BRON)->hotel_list[$o->prop("hotel_id")]);
 		}
 		else
 		{
