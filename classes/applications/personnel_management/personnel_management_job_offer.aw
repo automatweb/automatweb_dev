@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.43 2008/06/17 20:21:05 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.44 2008/06/26 11:57:17 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1991,6 +1991,7 @@ class personnel_management_job_offer extends class_base
 			"weoffer" => $ob->prop("weoffer"),
 			"apply_link" => obj_link($pm->apply_doc)."?cfgform_id=".$cfgform_id."&job_offer_id=".$ob->id(),
 			"keywords" => $ob->keywords,
+			"suplementary" => $ob->suplementary,
 		));
 		
 		$info = $ob->autoinfo ? $this->parse("AUTOINFO") : $ob->info;
