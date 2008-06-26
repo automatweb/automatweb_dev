@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.43 2008/06/25 12:32:07 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.44 2008/06/26 14:52:41 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2759,12 +2759,22 @@ class personnel_management extends class_base
 	**/
 	function save_offers($arr)
 	{
+		$all_trans_status = $arr["all_trans_status"];
+		$langs = aw_ini_get("languages");
+
 		foreach($arr["old"]["status"] as $oid => $old_status)
 		{
 			if($arr["new"]["status"][$oid] != $old_status)
 			{
 				$o = obj($oid);
-				$o->set_prop("status", ($arr["new"]["status"][$oid] == 2 ? 2 : 1));
+				$o->set_prop("status", ($arr["new"]["status"][$oid] == 2 ? object::STAT_ACTIVE : object::STAT_NOTACTIVE));
+				if($all_trans_status != 0)
+				{
+					foreach(array_keys($langs["list"]) as $lid)
+					{
+						$o->set_meta("trans_".$lid."_status", 2 - $all_trans_status);
+					}
+				}
 				$o->save();
 			}
 		}

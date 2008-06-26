@@ -6086,7 +6086,7 @@ class class_base extends aw_template
 	{
 		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && @$arr["request"]["group"] != "relationmgr")
 		{
-			if(@$arr["request"]["class"] == "admin_if")
+			if(@$arr["request"]["class"] == "admin_if" || @$arr["request"]["class"] == "personnel_management" && @$arr["request"]["group"] == "offers")
 			{
 				$if_clause = "
 				anything_changed = false;
