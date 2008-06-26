@@ -37,7 +37,7 @@ class personnel_management_job_offer_obj extends _int_object
 		}
 	}
 
-	function get_prop($k)
+	function prop($k)
 	{
 		if($k == "notify_me")
 		{
@@ -53,8 +53,13 @@ class personnel_management_job_offer_obj extends _int_object
 			}
 		}
 		else
+		if($k == "end" && parent::prop("endless"))
 		{
-			return parent::get_prop($k);
+			return t("T&auml;htajatu");
+		}
+		else
+		{
+			return parent::prop($k);
 		}
 	}
 	
