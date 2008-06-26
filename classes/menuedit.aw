@@ -100,6 +100,7 @@ class menuedit extends aw_template implements request_startup
 				if (strpos($_obj->trans_get_val("link"), $_obj->id()) === false &&
 					!($realsect == aw_ini_get("frontpage") 	&& $_obj->trans_get_val("link") == "/")
 					&& !$_GET["class"]
+					&& $_obj->trans_get_val("link") != $_obj->alias()
 				)
 				{
 					$ls = $_obj->trans_get_val("link");
