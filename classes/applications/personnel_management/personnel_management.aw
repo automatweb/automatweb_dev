@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.44 2008/06/26 14:52:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.45 2008/06/26 16:13:26 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1689,7 +1689,7 @@ class personnel_management extends class_base
 			"site_id" => array(),
 			"parent" => $this->offers_fld,
 			"class_id" => array(CL_MENU, CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
-			"sort_by" => "objects.class_id, objects.name",
+			"sort_by" => "objects.class_id, objects.jrk, objects.name",
 			"status" => object::STAT_ACTIVE,
 			new object_list_filter(array(
 				"logic" => "OR",
@@ -1846,7 +1846,7 @@ class personnel_management extends class_base
 			"lang_id" => array(),
 			"parent" => $this->offers_fld,
 			"class_id" => CL_MENU,
-			"sort_by" => "objects.name",
+			"sort_by" => "objects.jrk, objects.name",
 		));
 		$obj = obj($this->offers_fld);
 		$childs = new object_list(array(
