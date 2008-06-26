@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.48 2008/06/26 17:18:37 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.49 2008/06/26 18:58:50 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -280,6 +280,10 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "notify_me": 	 
+				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]); 	 
+				break;
+
 			case "sect":
 				$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
 				$secs = $cp->get_sections();

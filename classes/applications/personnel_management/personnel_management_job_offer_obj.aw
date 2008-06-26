@@ -60,6 +60,10 @@ class personnel_management_job_offer_obj extends _int_object
 			{
 				return 1;
 			}
+			else
+			{
+				return 0;
+			}
 		}
 		else
 		if($k == "end" && $this->prop("endless"))
