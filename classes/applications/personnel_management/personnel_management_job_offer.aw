@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.49 2008/06/26 18:58:50 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.50 2008/06/26 19:09:58 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1986,7 +1986,7 @@ class personnel_management_job_offer extends class_base
 			"loc_county" => $ob->prop("loc_county.name"),
 			"loc_city" => $ob->prop("loc_city.name"),
 			"sectors" => $tmp_sectors,
-			"end" => get_lc_date($ob->prop("end"), LC_DATE_FORMAT_LONG_FULLYEAR),
+			"end" => $ob->prop("endless") ? t("T&auml;htajatu") : get_lc_date($ob->prop("end"), LC_DATE_FORMAT_LONG_FULLYEAR),
 			"description" => $ob->prop("toosisu"),
 			"requirements" => $ob->prop("noudmised"),
 			"start_date" => $ob->prop("job_from") > 100 ? get_lc_date($ob->prop("job_from"), LC_DATE_FORMAT_LONG_FULLYEAR) : " - ",
