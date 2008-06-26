@@ -610,7 +610,7 @@ class connection
 		{
 			foreach($ext_conns as $ext_conn)
 			{
-				$this->conn["id"] = $ext_conn["id"];
+				$this->_int_load($ext_conn["id"]);
 				break;
 			}
 		}
