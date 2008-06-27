@@ -19,8 +19,16 @@ InsertAWImageCommand.Name='ImageChange';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
-  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+FCK.Selection.GetSelectedElement()._oid,
-					'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
+	if (FCK.Selection.GetSelectedElement()._oid)
+	{
+		oid = FCK.Selection.GetSelectedElement()._oid;
+	}
+	else
+	{
+		oid = FCK.Selection.GetSelectedElement().parentNode._oid;
+	}
+	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+oid,
+		'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimagechange', InsertAWImageCommand ); 
 
@@ -43,8 +51,21 @@ FCK.ContextMenu.RegisterListener( {
 	{
 		if ( tagName == 'IMG')
 		{
-			menu.AddSeparator();
-			menu.AddItem( "awimagechange_old", "Pildi atribuudid", 37 ) ;
+			if (tag._awimageplaceholder)
+			{
+				menu.AddSeparator();
+				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
+			} // probably IE
+			else if (tag.parentNode._awimageplaceholder)
+			{
+				menu.AddSeparator();
+				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
+			}
+			else
+			{
+				menu.AddSeparator();
+				menu.AddItem( "awimagechange_old", "Pildi atribuudid vana", 37 ) ;
+			}
 		}
 		if ( tagName == 'SPAN')
 		{
@@ -248,7 +269,7 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	if (document.all) {        // If Internet Explorer.
 		// this was intended for ie's right click, so image caption could also be right clicked
 		//FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
-		FCK.EditorDocument.attachEvent("onmousedown", FCKAWImagePlaceholders._ClickListenerIE ) ;
+		//FCK.EditorDocument.attachEvent("onmousedown", FCKAWImagePlaceholders._ClickListenerIE ) ;
 		//FCK.EditorDocument.attachEvent( 'OnPaste', FCKAWImagePlaceholders.onPasteIE ) ;
 	} else {                // If Gecko.
 		//FCK.EditorDocument.addEventListener( 'click', DenGecko_OnKeyDown, true ) ;
@@ -318,7 +339,6 @@ if ( FCKBrowserInfo.IsIE )
 				}
 				oRange.pasteHTML('<span class="Fck_image" '+img_align+' width='+connection_details_for_doc["#"+name+"#"]["width"]+' _awimageplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + 
 					"<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
-					"<br /><b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>"+
 				  	'</span>');
 			}
 		}
