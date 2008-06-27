@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.26 2008/06/26 23:40:21 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.27 2008/06/27 08:16:42 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -129,7 +129,7 @@ class crm_person_work_relation extends class_base
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$data["options"] = $ops;
-				$prop["onchange"] = "asd = this.name; asd = asd.replace('start', 'end'); if(aw_get_el(asd).value - this.value < 0 && aw_get_el(asd).value != 0){ alert('".t("Algus ei saa olla suurem kui l&otilde;pp!")."'); aw_get_el(asd).value = this.value; }";
+				$data["onchange"] = "asd = this.name; asd = asd.replace('start', 'end'); if(aw_get_el(asd).value - this.value < 0 && aw_get_el(asd).value != 0){ alert('".t("Algus ei saa olla suurem kui l&otilde;pp!")."'); aw_get_el(asd).value = this.value; }";
 				break;
 
 			case "end":	
@@ -139,7 +139,7 @@ class crm_person_work_relation extends class_base
 					$ops[mktime(0, 0, 0, 1, 1, $i)] = $i;
 				}
 				$data["options"] = $ops;
-				$prop["onchange"] = "asd = this.name; asd = asd.replace('end', 'start'); if(aw_get_el(asd).value - this.value > 0 && aw_get_el(asd).value != 0){ alert('".t("L&otilde;pp ei saa olla v&auml;iksem kui algus!")."'); aw_get_el(asd).value = this.value; }";
+				$data["onchange"] = "asd = this.name; asd = asd.replace('end', 'start'); if(aw_get_el(asd).value - this.value > 0 && aw_get_el(asd).value != 0){ alert('".t("L&otilde;pp ei saa olla v&auml;iksem kui algus!")."'); aw_get_el(asd).value = this.value; }";
 				break;
 
 			case "load":
