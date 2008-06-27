@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.238 2008/06/25 12:14:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.239 2008/06/27 07:50:47 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2574,7 +2574,7 @@ class menu extends class_base implements main_subtemplate_handler
 				$parent = $po->id();
 			}
 		}
-		return $this->mk_my_orb("change", array("parent" => $parent, "group" => "o"), "admin_if");;
+		return admin_if::get_link_for_obj($parent);
 	}
 
 	private function _check_alias($arr)
