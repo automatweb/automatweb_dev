@@ -57,10 +57,26 @@ class http
 		));
 		$socket->write($req);
 		$ipd = "";
+		$len = null;
 		while($data = $socket->read(10000))
 		{
 			//echo "data = $data <br>";
 			$ipd .= $data;
+
+			if (preg_match("/Content-Length: (\d+)/imsU", $data, $mt))
+			{
+				$max_len = $mt[1];
+			}
+			if (strpos($data, "Connection: close") !== false)
+			{
+				$close_on_len = true;
+			}
+
+			list($tmp_headers,$tmp_data) = explode("\r\n\r\n",$ipd,2);
+			if ($close_on_len && $max_len && strlen($tmp_data) >= $max_len)
+			{
+				break;
+			}
 		};
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
 		$this->last_request_headers = $headers;

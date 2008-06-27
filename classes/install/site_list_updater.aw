@@ -14,8 +14,7 @@ class site_list_updater extends aw_template
 	}
 
 	/**
-
-		@attrib name=on_login
+		@attrib api=1
 
 		@param uid required
 	**/
@@ -32,8 +31,36 @@ class site_list_updater extends aw_template
 		{
 			return;
 		}
+		
+		// no go to background
+		$url = str_replace("/automatweb", "", $this->mk_my_orb("bg_do_update", array("uid" => $arr["uid"]), "site_list_updater", false, true, "&", false));
+		get_instance("protocols/file/http")->get($url);
+	}
+
+	/**
+		@attrib name=ping nologin="1"
+	**/
+	function ping($arr)
+	{
+		die("pong");
+	}
+
+	/**
+		@attrib name=bg_do_update nologin="1"
+		@param uid optional
+	**/
+	function bg_do_update($arr)
+	{
+		// go to bg. 
+                // let the user continue with their business
+		ignore_user_abort(true);
+                header("Content-Type: image/gif");
+                header("Content-Length: 43");
+                header("Connection: close");
+                echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
+                flush();
+
 		$this->_set_last_update_time();
-		// else
 		// update this site's info in the site list
 		// check if we have a session key for this site
 		if (!($key = $this->_get_session_key()) || $key == "Array")

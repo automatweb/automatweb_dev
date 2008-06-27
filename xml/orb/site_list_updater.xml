@@ -1,10 +1,17 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="site_list_updater" folder="install" extends="aw_template">
-		<action name="on_login">
-			<function name="on_login">
+		<action name="ping" nologin="1">
+			<function name="ping">
 				<arguments>
-					<required name="uid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="bg_do_update" nologin="1">
+			<function name="bg_do_update">
+				<arguments>
+					<optional name="uid" />
 				</arguments>
 			</function>
 		</action>
