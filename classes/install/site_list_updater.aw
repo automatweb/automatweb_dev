@@ -52,13 +52,13 @@ class site_list_updater extends aw_template
 	function bg_do_update($arr)
 	{
 		// go to bg. 
-                // let the user continue with their business
+		// let the user continue with their business
 		ignore_user_abort(true);
-                header("Content-Type: image/gif");
-                header("Content-Length: 43");
-                header("Connection: close");
-                echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
-                flush();
+		header("Content-Type: image/gif");
+		header("Content-Length: 43");
+		header("Connection: close");
+		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
+		flush();
 
 		$this->_set_last_update_time();
 		// update this site's info in the site list
