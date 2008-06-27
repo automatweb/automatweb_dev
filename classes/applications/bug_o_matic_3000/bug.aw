@@ -2764,6 +2764,20 @@ die($email);
 		$("#bug_stopper_watch_time").stopper_watch();
 EOF;
 		$bt = $this->_get_bt($arr["obj_inst"]);
+		if(!$bt && $arr["request"]["action"] == "new")
+		{
+			$p = $arr["request"]["parent"];
+			$tmpo = obj($p);
+			$path = $tmpo->path();
+			foreach($path as $po)
+			{
+				if($po->class_id() == CL_BUG_TRACKER)
+				{
+					$bt = $po;
+					break;
+				}
+			}
+		}
 		if($bt)
 		{
 			$url = $this->mk_my_orb("maintainer_ajax", array("id" => $bt->id()));
