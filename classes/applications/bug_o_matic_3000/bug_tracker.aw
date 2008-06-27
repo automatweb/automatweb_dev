@@ -1,4 +1,4 @@
-<?php
+f<?php
 // bug_tracker.aw - BugTrack
 
 define("MENU_ITEM_LENGTH", 20);
@@ -4434,6 +4434,7 @@ echo "<div style='font-size: 10px;'>";
 			$content .= "\n\nKommentaar:\n".$arr["comment"];
 			$o->set_prop("bug_content", $content);
 			$o->set_prop("bug_priority", 6 - $arr["seriousness"]);
+			$o->set_prop("bug_status", 1);
 			$obj_link = str_replace(aw_ini_get("baseurl"),$arr["site"]."/automatweb",$this->mk_my_orb("change", array("id" => $arr["oid"], "group" => $arr["group"]), $arr["fb_class"]));
 			$o->set_prop("bug_url", $obj_link);
 			$o->set_prop("bug_class", $arr["fb_class"]);
