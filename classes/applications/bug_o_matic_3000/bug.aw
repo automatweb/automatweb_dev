@@ -846,7 +846,12 @@ class bug extends class_base
 				break;
 
 			case "bug_url":
-				$prop["post_append_text"] = ' <a href="' . $prop["value"] . '">Ava</a>';
+				$url = $prop["value"];
+				if(strpos($url, "?") !== 0 && strpos($url, "orb.aw") !== 0 && strpos($url, "://") === false)
+				{
+					$url = "http://" . $url;
+				}
+				$prop["post_append_text"] = ' <a href="' . $url . '">Ava</a>';
 				break;
 
 			case "bug_property":
@@ -1507,7 +1512,7 @@ class bug extends class_base
 		$u = get_instance(CL_USER);
 		foreach($ol->arr() as $com)
 		{
-			$comt = create_links(htmlspecialchars($com->comment()));
+			$comt = create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($com->comment())));
 			$comt = preg_replace("/(>http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", ">Diff", $comt);
 
 			if ($nl2br)
@@ -1518,7 +1523,7 @@ class bug extends class_base
 			$comt = $this->_split_long_words($comt);
 
 			// replace #675656 with link to bug
-			$comt = preg_replace("/#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
+			$comt = preg_replace("/(?<!&)#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
 
 
 //			$comt = $this->parse_commited_msg($comt);
@@ -1534,11 +1539,11 @@ class bug extends class_base
 		}
 		if($base_com)
 		{
-			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
+			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("bug_content"))))));
 		}
 		elseif($o->prop("com"))
 		{
-			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("com")))));
+			$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($o->prop("com"))))));
 		}
 		else
 		{
