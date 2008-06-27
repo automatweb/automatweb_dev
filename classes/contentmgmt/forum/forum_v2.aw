@@ -1246,11 +1246,11 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			$ii = get_instance(CL_IMAGE);
 			$icon = $ii->get_url_by_id($icon);
 			$topics_list[$topic_oid] = array(
-				'name' => ( 1 == $topic->prop('locked') ) ? '[L] '.$topic->name() : $topic->name(),
-				'author' => $topic->prop('author_name'),
+				'name' => ( 1 == $topic->prop('locked') ) ? '[L] '.htmlspecialchars($topic->name()) : htmlspecialchars($topic->name()),
+				'author' => htmlspecialchars($topic->prop('author_name')),
 				'comment_count' => (int)$comment_counts[$topic_oid],
 				'last_date' => ( empty($last_comment['created']) ) ? $topic->created() : $last_comment['created'],
-				'last_createdby' => $last_comment['uname'],
+				'last_createdby' => htmlspecialchars($last_comment['uname']),
 				'topic_id' => $topic_oid,
 				'jrk' => $jrk,
 				'jrk_text' => $text,
@@ -1648,7 +1648,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 						"section" => $section,
 						"_alias" => get_class($this),
 					)),
-					"caption" => $obj->name(),
+					"caption" => htmlspecialchars($obj->name()),
 				));
 			}
 			elseif ($clid == CL_MSGBOARD_TOPIC)
@@ -1661,7 +1661,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 						"section" => $section,
 						"_alias" => get_class($this),
 					)),
-					"caption" => $obj->name(),
+					"caption" => htmlspecialchars($obj->name()),
 				));
 			};
 
@@ -1756,8 +1756,8 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		}
 		$this->vars(array(
 			"active_page" => $pager,
-			"name" => $topic_obj->name(),
-			"createdby" => $topic_obj->prop("author_name"),
+			"name" => htmlspecialchars($topic_obj->name()),
+			"createdby" => htmlspecialchars($topic_obj->prop("author_name")),
 			"author_email" => $topic_obj->prop("author_email"),
 			"date" => $this->time2date($topic_obj->created(),2),
 			"comment" => $this->_filter_output($topic_obj->comment()),
