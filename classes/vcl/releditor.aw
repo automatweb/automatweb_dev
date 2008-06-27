@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.145 2008/06/19 09:14:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.146 2008/06/27 10:34:13 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -2013,7 +2013,19 @@ class releditor extends core
 
 				case "chooser":
 				case "select":
-					$tc_val = $pv["options"][$pv["value"]];
+					if (is_array($pv["value"]))
+					{
+						$tmp = array();
+						foreach($pv["value"] as $k => $v)
+						{
+							$tmp[] = $pv["options"][$v];
+						}
+						$tc_val = join(", ", $tmp);
+					}
+					else
+					{
+						$tc_val = $pv["options"][$pv["value"]];
+					}
 					break;
 
 				case "checkbox":
