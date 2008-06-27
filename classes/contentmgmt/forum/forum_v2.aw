@@ -1522,12 +1522,12 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				}
 				$this->vars(array(
 					"id" => $comment["oid"],
-					"name" => $comment["name"],
+					"name" => htmlspecialchars($comment["name"]),
 					"commtext" => $this->_filter_output($comment["commtext"]),
 					"date" => $this->time2date($comment["created"],2),
-					"createdby" => $comment["createdby"],
-					"uname" => $comment["uname"],
-					"pname" => $comment["pname"],
+					"createdby" => htmlspecialchars($comment["createdby"]),
+					"uname" => htmlspecialchars($comment["uname"]),
+					"pname" => htmlspecialchars($comment["pname"]),
 					"uemail" => $comment["uemail"],
 					"ip" => $comment["ip"],
 					"comment_image1" => $this->get_image_tag(array("id" => $comment['oid'])),
@@ -3222,23 +3222,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
                         }
                 }
 
-		/*if ( isset($arr['name']) && empty($arr['name']) )
-		{
-			$errors['name'] = 1;
-		}
-		if ( isset($arr['commtext']) && empty($arr['commtext']) )
-		{
-			$errors['commtext'] = 1;
-		}
-		if ( isset($arr['uname']) && empty($arr['uname']) )
-		{
-			$errors['author'] = 1;
-		}
-		if ( isset($arr['uemail']) && empty($arr['uemail']) )
-		{
-			$errors['email'] = 1;
-		}*/
-
 		if ( !empty($errors) )
 		{
 			$_SESSION['forum_comment_error'] = $errors;
@@ -3301,22 +3284,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			"topic_url" => $return_url,
 		));
 		return $return_url;
-
-		/*
-                $this->comm_id = $t->submit($emb);
-		unset($arr["class"]);
-		$arr["alias"] = get_class($this);
-
-		$topic->mail_subscribers(array(
-			"id" => $arr["topic"],
-			"message" => $arr["commtext"],
-			"forum_id" => $arr["id"],
-		));
-
-		$rv = $this->finish_action($arr);
-		$rv = aw_url_change_var("class","",$rv);
-		return $rv;
-		*/
 	}
 
 	/**
@@ -3490,6 +3457,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 
 	function _filter_output($text)
 	{
+		$text = htmlspecialchars($text);
 		if (false !== strpos($text,"#php#"))
 		{
 			$text = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$text);
