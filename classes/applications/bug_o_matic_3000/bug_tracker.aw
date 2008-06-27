@@ -1,4 +1,4 @@
-f<?php
+<?php
 // bug_tracker.aw - BugTrack
 
 define("MENU_ITEM_LENGTH", 20);
