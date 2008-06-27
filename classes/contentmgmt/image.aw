@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.24 2008/06/26 14:38:05 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.25 2008/06/27 10:05:22 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2414,7 +2414,7 @@ class image extends class_base
 			if ("#".$alias_name."#" == $alias_string)
 			{
 				$o = obj($obj_id);
-				$size = @getimagesize($o->prop("file"));
+				$size = @getimagesize($this->_get_fs_path($o->prop("file")));
 				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.', "comment" : "'.utf8_encode($o->prop("comment")).'", "url" : "'.$this->get_url_by_id($obj_id).'", "width" : '.$size[0].', "height" : '.$size[1].'};'.$sufix;
 				$out .= 'connection_details_for_doc["#'.$arr["alias_name"].'#"] = item;'.$sufix;
 			}
