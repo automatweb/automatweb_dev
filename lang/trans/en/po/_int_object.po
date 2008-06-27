@@ -137,15 +137,15 @@ msgstr "object::instance(): no object loaded or class id not set!"
 msgid "object::create_brother(%s): no parent!"
 msgstr "object::create_brother(%s): no parent!"
 
-#: classes/core/obj/_int_object.aw:2228
+#: classes/core/obj/_int_object.aw:2229
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr "object::path(%s): error in object hierarchy, infinite loop!"
 
-#: classes/core/obj/_int_object.aw:2277
+#: classes/core/obj/_int_object.aw:2278
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr "object::save(): no acess to save object %s under %s !"
 
-#: classes/core/obj/_int_object.aw:2292
+#: classes/core/obj/_int_object.aw:2293
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr "object::save(): no access to add object under folder %s (gidlist = %s)!"
 

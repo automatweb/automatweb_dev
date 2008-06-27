@@ -122,23 +122,31 @@ msgstr ""
 msgid "Failid:"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:144
+#: classes/applications/package_management/package_client.aw:161
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:154
+#: classes/applications/package_management/package_client.aw:171
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:158
+#: classes/applications/package_management/package_client.aw:175
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:163
+#: classes/applications/package_management/package_client.aw:180
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:168
+#: classes/applications/package_management/package_client.aw:185
 msgid "S&otilde;ltuvused"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:190
+msgid "x"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:211
+msgid "Download"
 msgstr ""
 

@@ -771,7 +771,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:308
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:528
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:587
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:589
 msgid "--vali--"
 msgstr ""
 
@@ -792,159 +792,159 @@ msgid "Kandideerin"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:492
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:1980
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:1983
 msgid "Niipea kui v&otilde;imalik"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:600
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:661
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:602
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:663
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:606
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:608
 msgid "E-posti aadress"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:612
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:673
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:614
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:675
 msgid "S&otilde;num"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:618
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:679
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:620
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:681
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:624
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:685
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:626
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:687
 msgid "Saatja"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:637
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:707
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:639
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:709
 msgid "M&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:667
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:669
 msgid "Number"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:770
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:772
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:771
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:773
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:772
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:774
 msgid "N&auml;ita vormis"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:773
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:775
 msgid "Kohustuslik"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:774
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:776
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:839
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:841
 msgid "Lisa uus kandideerija"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:852
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:854
 msgid "Saada e-kiri"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:859
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:861
 msgid "Saada SMS"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:870
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:872
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:878
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:880
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:887
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:889
 msgid "Genereeri PDF"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:894
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:896
 msgid "Salvesta koopia"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:906
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:908
 msgid "Kandideerija nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:911
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:913
 msgid "Kandidatuuri lisamise aeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:916
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:918
 msgid "Vanus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:921
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:923
 msgid "Telefonid"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:926
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:928
 msgid "E-posti aadressid"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:933
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:935
 msgid "Hinne"
 msgstr "Grade"
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:937
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:939
 msgid "Keskmine hinne"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:943
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:945
 msgid "Kaaskiri"
 msgstr "Additional letter"
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:947
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:949
 msgid "Kaaskiri (failina)"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:951
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:953
 msgid "Lisainfo"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:955
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:1046
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:957
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:1048
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:977
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:987
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:979
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:989
 msgid "kaaskiri"
 msgstr "additional letter"
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:983
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:990
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:985
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:992
 msgid "Puudub"
 msgstr "Missing"
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:1766
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:1768
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:1772
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:1774
 msgid "Vaatamisi"
 msgstr "Views"
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:2154
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:2162
 msgid "Sisestage salvestatava seadetevormi nimi:"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:2450
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:2458
 msgid "S&otilde;num saadetud!"
 msgstr ""
 

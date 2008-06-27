@@ -226,15 +226,15 @@ msgstr ""
 msgid "Teaduste kandidaat"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:128 classes/applications/crm/crm_person_education.aw:136
+#: classes/applications/crm/crm_person_education.aw:138 classes/applications/crm/crm_person_education.aw:146
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:129 classes/applications/crm/crm_person_education.aw:137
+#: classes/applications/crm/crm_person_education.aw:139 classes/applications/crm/crm_person_education.aw:147
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_person_education.aw:162
+#: classes/applications/crm/crm_person_education.aw:172
 msgid "--vali--"
 msgstr ""
 

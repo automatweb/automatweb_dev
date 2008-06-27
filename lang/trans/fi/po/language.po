@@ -85,16 +85,16 @@ msgstr ""
 msgid "Omaduse Saidid kus keel on valitav (lang_site_id) help"
 msgstr ""
 
-#: classes/core/language.aw:prop_lang_id
-msgid "Omaduse Keele ID (lang_id) caption"
+#: classes/core/language.aw:prop_db_lang_id
+msgid "Omaduse Keele ID (db_lang_id) caption"
 msgstr ""
 
-#: classes/core/language.aw:prop_lang_id_comment
-msgid "Omaduse Keele ID (lang_id) kommentaar"
+#: classes/core/language.aw:prop_db_lang_id_comment
+msgid "Omaduse Keele ID (db_lang_id) kommentaar"
 msgstr ""
 
-#: classes/core/language.aw:prop_lang_id_help
-msgid "Omaduse Keele ID (lang_id) help"
+#: classes/core/language.aw:prop_db_lang_id_help
+msgid "Omaduse Keele ID (db_lang_id) help"
 msgstr ""
 
 #: classes/core/language.aw:prop_lang_trans_msg

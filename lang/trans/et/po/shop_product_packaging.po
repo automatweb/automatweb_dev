@@ -632,6 +632,30 @@ msgstr ""
 msgid "Omaduse  (amount_limits_tb) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable
+msgid "Omaduse P&auml;ritav (aml_inheritable) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable_comment
+msgid "Omaduse P&auml;ritav (aml_inheritable) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_aml_inheritable_help
+msgid "Omaduse P&auml;ritav (aml_inheritable) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from
+msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from_comment
+msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_inherit_aml_from_help
+msgid "Omaduse P&auml;ri kogusepiirangud (inherit_aml_from) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:prop_amount_limits_tbl
 msgid "Omaduse  (amount_limits_tbl) caption"
 msgstr ""
@@ -745,30 +769,38 @@ msgstr ""
 msgid "Seose muutuja5 (RELTYPE_USERVAR5) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:222
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_INHERIT_AML_FROM
+msgid "Seose P&auml;ri kogusepiirangud (RELTYPE_INHERIT_AML_FROM) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:224
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:241
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:223
+#: classes/applications/shop/shop_product_packaging.aw:242
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:240
+#: classes/applications/shop/shop_product_packaging.aw:259
 msgid "Kasutajagrupp"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:245
+#: classes/applications/shop/shop_product_packaging.aw:264
 msgid "Minimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:250
+#: classes/applications/shop/shop_product_packaging.aw:269
 msgid "Maksimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:596
+#: classes/applications/shop/shop_product_packaging.aw:618
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:601
+#: classes/applications/shop/shop_product_packaging.aw:623
 msgid "Valuuta"
 msgstr ""

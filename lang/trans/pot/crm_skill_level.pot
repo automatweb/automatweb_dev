@@ -26,18 +26,6 @@ msgstr ""
 msgid "Omaduse Oskus (skill) help"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:prop_other_parent
-msgid "Omaduse  (other_parent) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_skill_level.aw:prop_other_parent_comment
-msgid "Omaduse  (other_parent) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_skill_level.aw:prop_other_parent_help
-msgid "Omaduse  (other_parent) help"
-msgstr ""
-
 #: classes/applications/crm/crm_skill_level.aw:prop_level
 msgid "Omaduse Tase (level) caption"
 msgstr ""
@@ -70,7 +58,7 @@ msgstr ""
 msgid "Seose Oskuse tase (RELTYPE_LEVEL) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_skill_level.aw:66 classes/applications/crm/crm_skill_level.aw:90 classes/applications/crm/crm_skill_level.aw:175 classes/applications/crm/crm_skill_level.aw:266
+#: classes/applications/crm/crm_skill_level.aw:67 classes/applications/crm/crm_skill_level.aw:91 classes/applications/crm/crm_skill_level.aw:176
 msgid "--vali--"
 msgstr ""
 

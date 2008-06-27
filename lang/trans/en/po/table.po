@@ -41,23 +41,23 @@ msgstr "Select"
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/vcl/table.aw:2845
+#: classes/vcl/table.aw:2858
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/vcl/table.aw:2846
+#: classes/vcl/table.aw:2859
 msgid "Looja"
 msgstr "Created by"
 
-#: classes/vcl/table.aw:2847
+#: classes/vcl/table.aw:2860
 msgid "Loodud"
 msgstr "Created"
 
-#: classes/vcl/table.aw:2848
+#: classes/vcl/table.aw:2861
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/vcl/table.aw:2849
+#: classes/vcl/table.aw:2862
 msgid "Muudetud"
 msgstr "Modified"
 

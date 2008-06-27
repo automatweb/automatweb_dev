@@ -115,6 +115,6 @@ msgid "--vali--"
 msgstr ""
 
 #: classes/applications/crm/crm_person_language.aw:65
-msgid "Muu keel"
+msgid "muu keel"
 msgstr ""
 

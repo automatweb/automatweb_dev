@@ -2733,6 +2733,18 @@ msgstr ""
 msgid "Klassi &Uuml;ksiktoode (1462) nimi"
 msgstr ""
 
+#: aw.ini:class_1465
+msgid "Klassi Tegevuse statistika t&uuml;&uuml;p (1465) nimi"
+msgstr ""
+
+#: aw.ini:class_1466
+msgid "Klassi Objekt teisest saidist (1466) nimi"
+msgstr ""
+
+#: aw.ini:class_1467
+msgid "Klassi Paketi Saidi seos (1467) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -5523,6 +5535,14 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1462
 msgid "syslog.type.ST_SHOP_PRODUCT_SINGLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1465
+msgid "syslog.type.ST_CRM_ACTIVITY_STATS_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1466
+msgid "syslog.type.ST_REMOTE_OBJECT_INCLUDE"
 msgstr ""
 
 #: aw.ini:syslogactions_1

@@ -1167,8 +1167,8 @@ msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr "Name must be set"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1888
-msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
-msgstr "Email must be set"
+msgid "E-mail ei ole korrektne! <br />"
+msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:1892
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
@@ -1269,17 +1269,20 @@ msgstr ""
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/contentmgmt/forum/forum_v2.aw:3501
+#: classes/contentmgmt/forum/forum_v2.aw:3511
 msgid "teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3508
+#: classes/contentmgmt/forum/forum_v2.aw:3518
 msgid "aadresside kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:3738
+#: classes/contentmgmt/forum/forum_v2.aw:3748
 msgid "Nimetu"
 msgstr ""
+
+#~ msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
+#~ msgstr "Email must be set"
 
 #~ msgid " teemade kaust"
 #~ msgstr " topic folder"

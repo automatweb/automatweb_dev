@@ -70,7 +70,6 @@ $GLOBALS["TRANS"]["Enim kommenteeritud eespool"] = "The most commented before";
 $GLOBALS["TRANS"]["Teemade kaust on valimata"] = "Topic folder is not selected";
 $GLOBALS["TRANS"]["Pealkirja v&auml;li peab olema t&auml;idetud! <br />"] = "Title must be set";
 $GLOBALS["TRANS"]["Nime v&auml;li peab olema t&auml;idetud! <br />"] = "Name must be set";
-$GLOBALS["TRANS"]["E-maili v&auml;li peab olema t&auml;idetud! <br />"] = "Email must be set";
 $GLOBALS["TRANS"]["Kommentaari v&auml;li peab olema t&auml;idetud!"] = "Comment must be set";
 $GLOBALS["TRANS"]["Teema"] = "Topic";
 $GLOBALS["TRANS"]["k.a. alamkaustad"] = "incl. subfolders";

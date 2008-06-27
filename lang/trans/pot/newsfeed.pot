@@ -27,27 +27,27 @@ msgid "Omaduse Alias (alias) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_feedtype
-msgid "Omaduse Tüüp (feedtype) caption"
+msgid "Omaduse T&uuml;&uuml;p (feedtype) caption"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_feedtype_comment
-msgid "Omaduse Tüüp (feedtype) kommentaar"
+msgid "Omaduse T&uuml;&uuml;p (feedtype) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_feedtype_help
-msgid "Omaduse Tüüp (feedtype) help"
+msgid "Omaduse T&uuml;&uuml;p (feedtype) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_limittype
-msgid "Omaduse Milliseid uudiseid näidata? (limittype) caption"
+msgid "Omaduse Milliseid uudiseid n&auml;idata? (limittype) caption"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_limittype_comment
-msgid "Omaduse Milliseid uudiseid näidata? (limittype) kommentaar"
+msgid "Omaduse Milliseid uudiseid n&auml;idata? (limittype) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_limittype_help
-msgid "Omaduse Milliseid uudiseid näidata? (limittype) help"
+msgid "Omaduse Milliseid uudiseid n&auml;idata? (limittype) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_count
@@ -63,15 +63,15 @@ msgid "Omaduse Mitu viimast (count) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_days
-msgid "Omaduse Mitme viimase päeva omad (days) caption"
+msgid "Omaduse Mitme viimase p&auml;eva omad (days) caption"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_days_comment
-msgid "Omaduse Mitme viimase päeva omad (days) kommentaar"
+msgid "Omaduse Mitme viimase p&auml;eva omad (days) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_days_help
-msgid "Omaduse Mitme viimase päeva omad (days) help"
+msgid "Omaduse Mitme viimase p&auml;eva omad (days) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_sort_by
@@ -99,27 +99,27 @@ msgid "Omaduse  (sort_ord) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_parse_embed
-msgid "Omaduse Näita ka lisatud objekte (parse_embed) caption"
+msgid "Omaduse N&auml;ita ka lisatud objekte (parse_embed) caption"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_parse_embed_comment
-msgid "Omaduse Näita ka lisatud objekte (parse_embed) kommentaar"
+msgid "Omaduse N&auml;ita ka lisatud objekte (parse_embed) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_parse_embed_help
-msgid "Omaduse Näita ka lisatud objekte (parse_embed) help"
+msgid "Omaduse N&auml;ita ka lisatud objekte (parse_embed) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_folder_name
-msgid "Omaduse Näita dokumendi kausta nime (folder_name) caption"
+msgid "Omaduse N&auml;ita dokumendi kausta nime (folder_name) caption"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_folder_name_comment
-msgid "Omaduse Näita dokumendi kausta nime (folder_name) kommentaar"
+msgid "Omaduse N&auml;ita dokumendi kausta nime (folder_name) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_folder_name_help
-msgid "Omaduse Näita dokumendi kausta nime (folder_name) help"
+msgid "Omaduse N&auml;ita dokumendi kausta nime (folder_name) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_folders
@@ -242,7 +242,15 @@ msgstr ""
 msgid "Atom (implementeerimata)"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:585
+#: classes/contentmgmt/newsfeed.aw:127
+msgid "Viimased X uudist"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:128
+msgid "Viimase X p&auml;eva uudised"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:149 classes/contentmgmt/newsfeed.aw:586
 msgid "Vali"
 msgstr ""
 
@@ -263,10 +271,10 @@ msgid "Name"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:201
-msgid "Võta alamkaustadest ka"
+msgid "V&ouml;ta alamkaustadest ka"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:579
+#: classes/contentmgmt/newsfeed.aw:580
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 

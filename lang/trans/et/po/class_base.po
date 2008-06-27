@@ -103,87 +103,87 @@ msgstr ""
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:953 classes/class_base.aw:1646
+#: classes/class_base.aw:953 classes/class_base.aw:1654
 msgid "Nimetu"
 msgstr ""
 
-#: classes/class_base.aw:1522
+#: classes/class_base.aw:1530
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1530
+#: classes/class_base.aw:1538
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1576 classes/class_base.aw:1664
+#: classes/class_base.aw:1584 classes/class_base.aw:1672
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1799
+#: classes/class_base.aw:1807
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3476
+#: classes/class_base.aw:3484
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3485
+#: classes/class_base.aw:3493
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4286
+#: classes/class_base.aw:4294
 msgid "ACL error saidil %s: CAN_%s denied for oid %s"
 msgstr ""
 
-#: classes/class_base.aw:4594 classes/class_base.aw:5056
-#: classes/class_base.aw:5068
+#: classes/class_base.aw:4602 classes/class_base.aw:5064
+#: classes/class_base.aw:5076
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:4935
+#: classes/class_base.aw:4943
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5503
+#: classes/class_base.aw:5511
 msgid "(l&auml;htetekst)"
 msgstr ""
 
-#: classes/class_base.aw:5510
+#: classes/class_base.aw:5518
 msgid "(t&otilde;lge)"
 msgstr ""
 
-#: classes/class_base.aw:5518 classes/class_base.aw:5572
-#: classes/class_base.aw:5605
+#: classes/class_base.aw:5526 classes/class_base.aw:5580
+#: classes/class_base.aw:5613
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5527 classes/class_base.aw:5580
-#: classes/class_base.aw:5613
+#: classes/class_base.aw:5535 classes/class_base.aw:5588
+#: classes/class_base.aw:5621
 msgid "Salvesta"
 msgstr ""
 
-#: classes/class_base.aw:5778 classes/class_base.aw:5815
+#: classes/class_base.aw:5786 classes/class_base.aw:5823
 msgid "aliase number oli juba olemas, seega uuendas"
 msgstr ""
 
-#: classes/class_base.aw:5782
+#: classes/class_base.aw:5790
 msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr ""
 
-#: classes/class_base.aw:5822
+#: classes/class_base.aw:5830
 msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr ""
 
-#: classes/class_base.aw:5852
+#: classes/class_base.aw:5860
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 
-#: classes/class_base.aw:6262
+#: classes/class_base.aw:6270
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/class_base.aw:6281
+#: classes/class_base.aw:6289
 msgid "Teavitus muutunud dokumendist"
 msgstr ""

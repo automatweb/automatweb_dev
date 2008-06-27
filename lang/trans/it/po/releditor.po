@@ -15,17 +15,17 @@ msgstr ""
 
 #: classes/vcl/releditor.aw:88 classes/vcl/releditor.aw:187
 #: classes/vcl/releditor.aw:1053 classes/vcl/releditor.aw:1288
-#: classes/vcl/releditor.aw:1868 classes/vcl/releditor.aw:1911
-#: classes/vcl/releditor.aw:2140
+#: classes/vcl/releditor.aw:1866 classes/vcl/releditor.aw:1914
+#: classes/vcl/releditor.aw:2158
 msgid "Muuda"
 msgstr ""
 
 #: classes/vcl/releditor.aw:89 classes/vcl/releditor.aw:192
-#: classes/vcl/releditor.aw:1873 classes/vcl/releditor.aw:1912
+#: classes/vcl/releditor.aw:1871 classes/vcl/releditor.aw:1915
 msgid "Kustuta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:434 classes/vcl/releditor.aw:2144
+#: classes/vcl/releditor.aw:434 classes/vcl/releditor.aw:2162
 msgid "Lisa"
 msgstr ""
 
@@ -86,10 +86,10 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/releditor.aw:2002
+#: classes/vcl/releditor.aw:2020
 msgid "Jah"
 msgstr ""
 
-#: classes/vcl/releditor.aw:2002
+#: classes/vcl/releditor.aw:2020
 msgid "Ei"
 msgstr ""

@@ -288,7 +288,7 @@ msgstr "Import images"
 
 #: classes/applications/persona_import/persona_import.aw:178
 #: classes/applications/persona_import/persona_import.aw:241
-#: classes/applications/persona_import/persona_import.aw:2018
+#: classes/applications/persona_import/persona_import.aw:2020
 msgid "You forgot to enter server data"
 msgstr "You forgot to enter server data"
 

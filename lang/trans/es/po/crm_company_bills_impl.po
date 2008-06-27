@@ -60,8 +60,12 @@ msgstr ""
 msgid "(Kokkuleppehind)"
 msgstr ""
 
+#: classes/applications/crm/crm_company_bills_impl.aw:473
+msgid "KMga"
+msgstr ""
+
 #: classes/applications/crm/crm_company_bills_impl.aw:696
-#: classes/applications/crm/crm_company_bills_impl.aw:1163
+#: classes/applications/crm/crm_company_bills_impl.aw:1256
 msgid "Lisa"
 msgstr ""
 
@@ -116,7 +120,7 @@ msgid "Number"
 msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:860
-#: classes/applications/crm/crm_company_bills_impl.aw:1076
+#: classes/applications/crm/crm_company_bills_impl.aw:1094
 msgid "Loo uus"
 msgstr ""
 
@@ -140,90 +144,90 @@ msgstr ""
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:938
+#: classes/applications/crm/crm_company_bills_impl.aw:946
 msgid "%s kuuarved"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:995
+#: classes/applications/crm/crm_company_bills_impl.aw:1002
 msgid "%s arved"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1052
+#: classes/applications/crm/crm_company_bills_impl.aw:1070
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1057
+#: classes/applications/crm/crm_company_bills_impl.aw:1075
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1062
+#: classes/applications/crm/crm_company_bills_impl.aw:1080
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1067
+#: classes/applications/crm/crm_company_bills_impl.aw:1085
 msgid "osaliselt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1097
+#: classes/applications/crm/crm_company_bills_impl.aw:1159
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1104
+#: classes/applications/crm/crm_company_bills_impl.aw:1197
 msgid "K&auml;ibemaksuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1105
+#: classes/applications/crm/crm_company_bills_impl.aw:1198
 msgid "K&auml;ibemaksuga"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1134
+#: classes/applications/crm/crm_company_bills_impl.aw:1227
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1146
+#: classes/applications/crm/crm_company_bills_impl.aw:1239
 msgid "Sissen&otilde;udmisel"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1170
-#: classes/applications/crm/crm_company_bills_impl.aw:1212
+#: classes/applications/crm/crm_company_bills_impl.aw:1263
+#: classes/applications/crm/crm_company_bills_impl.aw:1305
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1176
-#: classes/applications/crm/crm_company_bills_impl.aw:1218
+#: classes/applications/crm/crm_company_bills_impl.aw:1269
+#: classes/applications/crm/crm_company_bills_impl.aw:1311
 msgid "Kustuta valitud arved"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1177
-#: classes/applications/crm/crm_company_bills_impl.aw:1219
+#: classes/applications/crm/crm_company_bills_impl.aw:1270
+#: classes/applications/crm/crm_company_bills_impl.aw:1312
 msgid "Oled kindel et soovid valitud arved kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1185
+#: classes/applications/crm/crm_company_bills_impl.aw:1278
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1193
+#: classes/applications/crm/crm_company_bills_impl.aw:1286
 msgid "Hansa raama (ridadega)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1195
-#: classes/applications/crm/crm_company_bills_impl.aw:1202
+#: classes/applications/crm/crm_company_bills_impl.aw:1288
+#: classes/applications/crm/crm_company_bills_impl.aw:1295
 msgid "Sisesta arve number?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1200
+#: classes/applications/crm/crm_company_bills_impl.aw:1293
 msgid "Hansa raama (koondatud)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1229
+#: classes/applications/crm/crm_company_bills_impl.aw:1322
 msgid "Loo arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1261
+#: classes/applications/crm/crm_company_bills_impl.aw:1354
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1362
+#: classes/applications/crm/crm_company_bills_impl.aw:1455
 msgid "EEK"
 msgstr ""

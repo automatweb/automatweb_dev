@@ -137,14 +137,14 @@ msgstr ""
 msgid "object::create_brother(%s): no parent!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:2228
+#: classes/core/obj/_int_object.aw:2229
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:2277
+#: classes/core/obj/_int_object.aw:2278
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:2292
+#: classes/core/obj/_int_object.aw:2293
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr ""

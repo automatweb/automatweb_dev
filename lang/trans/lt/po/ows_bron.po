@@ -153,12 +153,12 @@ msgstr ""
 msgid "Seose Kinnitatud tellimuste kaust (RELTYPE_CONFIRMED_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:758
-#: classes/applications/ows_bron/ows_bron.aw:1139
+#: classes/applications/ows_bron/ows_bron.aw:760
+#: classes/applications/ows_bron/ows_bron.aw:1142
 msgid "OWS Bron %s %s @ %s"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:1341
+#: classes/applications/ows_bron/ows_bron.aw:1344
 msgid "No such booking found!"
 msgstr ""
 
@@ -166,62 +166,62 @@ msgstr ""
 msgid "No such reservation found!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2638
+#: classes/applications/ows_bron/ows_bron.aw:2652
 msgid "Dates changed"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2639
+#: classes/applications/ows_bron/ows_bron.aw:2653
 msgid "Plans changed"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2640
+#: classes/applications/ows_bron/ows_bron.aw:2654
 msgid "Wrong price"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2641
+#: classes/applications/ows_bron/ows_bron.aw:2655
 msgid "Other"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2660
+#: classes/applications/ows_bron/ows_bron.aw:2674
 msgid "The booking you requested does not exist!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2665
+#: classes/applications/ows_bron/ows_bron.aw:2679
 msgid "The booking you requested has already been cancelled!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2670
+#: classes/applications/ows_bron/ows_bron.aw:2684
 msgid "Sorry, but it is already too late to cancel this booking!"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2976
-#: classes/applications/ows_bron/ows_bron.aw:3054
-#: classes/applications/ows_bron/ows_bron.aw:3102
+#: classes/applications/ows_bron/ows_bron.aw:2990
+#: classes/applications/ows_bron/ows_bron.aw:3068
+#: classes/applications/ows_bron/ows_bron.aw:3116
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:2981
+#: classes/applications/ows_bron/ows_bron.aw:2995
 msgid "Template"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3013
+#: classes/applications/ows_bron/ows_bron.aw:3027
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3018
+#: classes/applications/ows_bron/ows_bron.aw:3032
 msgid "Pangamakse objekt"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3029
+#: classes/applications/ows_bron/ows_bron.aw:3043
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3059
-#: classes/applications/ows_bron/ows_bron.aw:3107
+#: classes/applications/ows_bron/ows_bron.aw:3073
+#: classes/applications/ows_bron/ows_bron.aw:3121
 msgid "BCC"
 msgstr ""
 
-#: classes/applications/ows_bron/ows_bron.aw:3064
-#: classes/applications/ows_bron/ows_bron.aw:3112
+#: classes/applications/ows_bron/ows_bron.aw:3078
+#: classes/applications/ows_bron/ows_bron.aw:3126
 msgid "Kirja teema"
 msgstr ""

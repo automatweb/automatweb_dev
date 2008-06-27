@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/mail_notify.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -22,11 +21,13 @@ msgstr ""
 msgid "Isik"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:43 classes/vcl/mail_notify.aw:186 classes/vcl/mail_notify.aw:305
+#: classes/vcl/mail_notify.aw:43 classes/vcl/mail_notify.aw:186
+#: classes/vcl/mail_notify.aw:305
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:50 classes/vcl/mail_notify.aw:51 classes/vcl/mail_notify.aw:194
+#: classes/vcl/mail_notify.aw:50 classes/vcl/mail_notify.aw:51
+#: classes/vcl/mail_notify.aw:194
 msgid "Otsi"
 msgstr ""
 
@@ -71,7 +72,9 @@ msgid "Teavitus muutunud dokumendist"
 msgstr ""
 
 #: classes/vcl/mail_notify.aw:246
-msgid "User %s has added/changed the following file %s. Please click the link below to view the document \n %s"
+msgid ""
+"User %s has added/changed the following file %s. Please click the link below to view the document \n"
+" %s"
 msgstr ""
 
 #: classes/vcl/mail_notify.aw:300
@@ -94,11 +97,22 @@ msgstr ""
 msgid "Kustuta valitute hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:406
+#: classes/vcl/mail_notify.aw:416
+msgid "Search"
+msgstr ""
+
+#: classes/vcl/mail_notify.aw:422
+msgid "Isikuid"
+msgstr ""
+
+#: classes/vcl/mail_notify.aw:428
+msgid "Gruppe"
+msgstr ""
+
+#: classes/vcl/mail_notify.aw:435
 msgid "Otsi isikuid hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:417
+#: classes/vcl/mail_notify.aw:446
 msgid "Saada teavitusmeil"
 msgstr ""
-

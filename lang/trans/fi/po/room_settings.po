@@ -121,6 +121,18 @@ msgstr ""
 msgid "Omaduse Kataloog kuhu kliendid salvestada (customer_menu) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_projects_menu
+msgid "Omaduse Kataloog kuhu projektid salvestada (projects_menu) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_projects_menu_comment
+msgid "Omaduse Kataloog kuhu projektid salvestada (projects_menu) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_projects_menu_help
+msgid "Omaduse Kataloog kuhu projektid salvestada (projects_menu) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_min_price_to_all
 msgid "Omaduse Miinimumhind m&otilde;jub k&otilde;igile (min_price_to_all) caption"
 msgstr ""
@@ -837,70 +849,70 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:267
+#: classes/common/room_settings.aw:270
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:271
+#: classes/common/room_settings.aw:274
 msgid "#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus"
 msgstr ""
 
-#: classes/common/room_settings.aw:285
+#: classes/common/room_settings.aw:288
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:433
+#: classes/common/room_settings.aw:436
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:439
+#: classes/common/room_settings.aw:442
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:481
+#: classes/common/room_settings.aw:484
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:486
+#: classes/common/room_settings.aw:489
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:492
+#: classes/common/room_settings.aw:495
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:498 classes/common/room_settings.aw:510
+#: classes/common/room_settings.aw:501 classes/common/room_settings.aw:513
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:504
+#: classes/common/room_settings.aw:507
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:517
+#: classes/common/room_settings.aw:520
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:523
+#: classes/common/room_settings.aw:526
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:529
+#: classes/common/room_settings.aw:532
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:540
+#: classes/common/room_settings.aw:543
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:541
+#: classes/common/room_settings.aw:544
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:542
+#: classes/common/room_settings.aw:545
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:586
+#: classes/common/room_settings.aw:589
 msgid "Vali"
 msgstr ""

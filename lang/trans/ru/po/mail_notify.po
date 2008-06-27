@@ -97,10 +97,22 @@ msgstr ""
 msgid "Kustuta valitute hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:406
+#: classes/vcl/mail_notify.aw:416
+msgid "Search"
+msgstr ""
+
+#: classes/vcl/mail_notify.aw:422
+msgid "Isikuid"
+msgstr ""
+
+#: classes/vcl/mail_notify.aw:428
+msgid "Gruppe"
+msgstr ""
+
+#: classes/vcl/mail_notify.aw:435
 msgid "Otsi isikuid hulgast"
 msgstr ""
 
-#: classes/vcl/mail_notify.aw:417
+#: classes/vcl/mail_notify.aw:446
 msgid "Saada teavitusmeil"
 msgstr ""

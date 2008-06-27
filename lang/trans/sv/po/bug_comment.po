@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/bug_o_matic_3000/bug_comment.aw:class_1058_help
 msgid "Klassi Bugi kommentaar help"
 msgstr ""
@@ -50,7 +49,42 @@ msgstr ""
 msgid "Omaduse Lisandunud t&ouml;&ouml;tunnid (add_wh) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_comment.aw:46
-msgid "--vali--"
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_cust
+msgid "Omaduse Lisandunud tunnid kliendile (add_wh_cust) caption"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_cust_comment
+msgid "Omaduse Lisandunud tunnid kliendile (add_wh_cust) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_cust_help
+msgid "Omaduse Lisandunud tunnid kliendile (add_wh_cust) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_send_bill
+msgid "Omaduse Saata arve (send_bill) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_send_bill_comment
+msgid "Omaduse Saata arve (send_bill) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_send_bill_help
+msgid "Omaduse Saata arve (send_bill) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_activity_stats_type
+msgid "Omaduse Statistika t&uuml;&uuml;p (activity_stats_type) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_activity_stats_type_comment
+msgid "Omaduse Statistika t&uuml;&uuml;p (activity_stats_type) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_activity_stats_type_help
+msgid "Omaduse Statistika t&uuml;&uuml;p (activity_stats_type) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:54
+msgid "--vali--"
+msgstr ""

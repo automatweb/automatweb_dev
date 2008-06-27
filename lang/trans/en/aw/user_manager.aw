@@ -8,7 +8,6 @@ $GLOBALS["TRANS"]["Omaduse Grupid  (table_groups) caption"] = "Groups";
 $GLOBALS["TRANS"]["Omaduse Kasutajad  (table_users) caption"] = "Users";
 $GLOBALS["TRANS"]["Grupi Kasutajad (users) pealkiri"] = "Users";
 $GLOBALS["TRANS"]["Grupi Mitteaktiivsed kasutajad (inactive_users) pealkiri"] = "Deactive users";
-$GLOBALS["TRANS"]["Vali õigused"] = "Select rights";
 $GLOBALS["TRANS"]["Vaatamine"] = "View";
 $GLOBALS["TRANS"]["Muutmine"] = "Edit";
 $GLOBALS["TRANS"]["Kustutamine"] = "Delete";

@@ -37,16 +37,28 @@ msgstr ""
 msgid "Omaduse Ruumide kaust (room_folder) help"
 msgstr ""
 
+#: classes/applications/calendar/rfp_manager.aw:prop_catering_room_folder
+msgid "Omaduse Toitlustuse ruumide kaust (catering_room_folder) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_catering_room_folder_comment
+msgid "Omaduse Toitlustuse ruumide kaust (catering_room_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_catering_room_folder_help
+msgid "Omaduse Toitlustuse ruumide kaust (catering_room_folder) help"
+msgstr ""
+
 #: classes/applications/calendar/rfp_manager.aw:prop_prod_vars_folder
-msgid "Omaduse Toodete muutujate asukoht (prod_vars_folder) caption"
+msgid "Omaduse Tootepakettide asukoht (prod_vars_folder) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:prop_prod_vars_folder_comment
-msgid "Omaduse Toodete muutujate asukoht (prod_vars_folder) kommentaar"
+msgid "Omaduse Tootepakettide asukoht (prod_vars_folder) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:prop_prod_vars_folder_help
-msgid "Omaduse Toodete muutujate asukoht (prod_vars_folder) help"
+msgid "Omaduse Tootepakettide asukoht (prod_vars_folder) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:prop_default_table
@@ -214,105 +226,109 @@ msgid "Seose Pakettide kaust (RELTYPE_PACKAGE_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:rel_RELTYPE_PROD_VARS_FOLDER
-msgid "Seose Toodete muutujate kaust (RELTYPE_PROD_VARS_FOLDER) tekst"
+msgid "Seose Tootepakettide kaust (RELTYPE_PROD_VARS_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:rel_RELTYPE_CATERING_ROOM_FOLDER
+msgid "Seose Toitluste ruumide kaust (RELTYPE_CATERING_ROOM_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/calendar/rfp_manager.aw:layout_searchbox
 msgid "Kujundusosa Otsing (searchbox) pealkiri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:110
+#: classes/applications/calendar/rfp_manager.aw:116
 msgid "&Uuml;ritus"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:115
+#: classes/applications/calendar/rfp_manager.aw:121
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:120
+#: classes/applications/calendar/rfp_manager.aw:126
 msgid "Tagasiside aeg"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:125
+#: classes/applications/calendar/rfp_manager.aw:131
 msgid "Ajavahemik"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:130
+#: classes/applications/calendar/rfp_manager.aw:136
 msgid "Majutus"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:135
+#: classes/applications/calendar/rfp_manager.aw:141
 msgid "Inimeste arv"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:140
+#: classes/applications/calendar/rfp_manager.aw:146
 msgid "Kontaktisik"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:145
+#: classes/applications/calendar/rfp_manager.aw:151
 msgid "Kontaktandmed"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:150
+#: classes/applications/calendar/rfp_manager.aw:156
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:158
+#: classes/applications/calendar/rfp_manager.aw:164
 msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:189
+#: classes/applications/calendar/rfp_manager.aw:195
 msgid "Si"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:193
+#: classes/applications/calendar/rfp_manager.aw:199
 msgid "Do"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:197
+#: classes/applications/calendar/rfp_manager.aw:203
 msgid "Su"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:210
+#: classes/applications/calendar/rfp_manager.aw:216
 msgid "(Nimetu)"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:224
+#: classes/applications/calendar/rfp_manager.aw:230
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:224
+#: classes/applications/calendar/rfp_manager.aw:230
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:242
+#: classes/applications/calendar/rfp_manager.aw:248
 msgid "S&uuml;steemi vaikimisi objekt"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:245
+#: classes/applications/calendar/rfp_manager.aw:251
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:250
+#: classes/applications/calendar/rfp_manager.aw:256
 msgid "Objekt"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:298
+#: classes/applications/calendar/rfp_manager.aw:304
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:303
+#: classes/applications/calendar/rfp_manager.aw:309
 msgid "Hind/in"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:544
+#: classes/applications/calendar/rfp_manager.aw:550
 msgid "Aktiviseeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:544
+#: classes/applications/calendar/rfp_manager.aw:550
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:551
+#: classes/applications/calendar/rfp_manager.aw:557
 msgid "Kustuta"
 msgstr ""
