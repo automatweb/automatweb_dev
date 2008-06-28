@@ -20,7 +20,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: PROFESSION -->
 	<tr>
 		<td>
-			<b>Pakutav ametikoht</b>
+			<b>{VAR:profession.caption}</b>
 		</td>
 		<td>
 			<b>{VAR:profession}</b>
@@ -30,7 +30,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: WORKINFO -->
 	<tr>
 		<td valign="top">
-			<b>T&ouml;&ouml; sisu</b>
+			<b>{VAR:workinfo.caption}</b>
 		</td>
 		<td>
 			{VAR:workinfo}
@@ -40,7 +40,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: REQUIREMENTS -->
 	<tr>
 		<td valign="top">
-			<b>N&otilde;udmised kandidaadile</b>
+			<b>{VAR:requirements.caption}</b>
 		</td>
 		<td>
 			{VAR:requirements}
@@ -50,7 +50,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: WEOFFER -->
 	<tr>
 		<td valign="top">
-			<b>Omaltpoolt pakume</b>
+			<b>{VAR:weoffer.caption}</b>
 		</td>
 		<td>
 			{VAR:weoffer}
@@ -60,7 +60,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: INFO -->
 	<tr>
 		<td valign="top">
-			<b>Lisainfo</b>
+			<b>{VAR:info.caption}</b>
 		</td>
 		<td>
 			{VAR:info}
@@ -70,7 +70,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: LOC_AREA -->
 	<tr>
 		<td valign="top">
-			<b>Piirkond</b>
+			<b>{VAR:loc_area.caption}</b>
 		</td>
 		<td>
 			{VAR:loc_area}
@@ -80,7 +80,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: LOC_COUNTY -->
 	<tr>
 		<td valign="top">
-			<b>Maakond</b>
+			<b>{VAR:loc_county.caption}</b>
 		</td>
 		<td>
 			{VAR:loc_county}
@@ -90,7 +90,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: LOC_CITY -->
 	<tr>
 		<td valign="top">
-			<b>Linn</b>
+			<b>{VAR:loc_city.caption}</b>
 		</td>
 		<td>
 			{VAR:loc_city}
@@ -100,7 +100,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: START_WORKING -->
 	<tr>
 		<td valign="top">
-			<b>T&ouml;&ouml;leasumise aeg</b>
+			<b>{VAR:start_working.caption}</b>
 		</td>
 		<td>
 			{VAR:start_working}
@@ -110,7 +110,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: JOB_OFFER_FILE -->
 	<tr>
 		<td valign="top">
-			<b>T&ouml;&ouml;pakkumine failina</b>
+			<b>{VAR:job_offer_file.caption}</b>
 		</td>
 		<td>
 			{VAR:job_offer_file}
@@ -120,7 +120,7 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: CONTACT -->
 	<tr>
 		<td valign="top">
-			<b>Kontakt</b>
+			<b>{VAR:contact.caption}</b>
 		</td>
 		<td>
 			{VAR:contact.firstname} {VAR:contact.lastname}, {VAR:contact.phone} {VAR:contact.email}
@@ -130,14 +130,14 @@ Kandideerimiseks saada oma CV m&auml;rks&otilde;naga "{VAR:keywords}" koos palga
 	<!-- SUB: END -->
 	<tr class="Grey">
 		<td  valign="top" colspan="2" style="padding-left: 10px; padding-right:10px; padding-top: 10px; padding-bottom:10px;">
-			Kandideerimise t&auml;htaeg: {VAR:end}
+			{VAR:end.caption}: {VAR:end}
 		</td>
 	</tr>
 	<!-- END SUB: END -->
 	<!-- SUB: APPLY -->
 	<tr>
 		<td colspan="2">
-			<a href='{VAR:apply_link}'>Kandideeri</a>
+			<a href='{VAR:apply_link}'>{VAR:apply.caption}</a>
 		</td>
 	</tr>
 	<!-- END SUB: APPLY -->

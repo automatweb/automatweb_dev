@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.50 2008/06/26 19:09:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.51 2008/06/28 14:03:22 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1845,6 +1845,13 @@ class personnel_management_job_offer extends class_base
 		
 		//T88pakkumise objekt
 		$ob = new object($arr["id"]);
+
+		// CAPTIONS. Added first so we can use 'em in all the SUBs we want. :P
+		$cff = get_instance(CL_CFGFORM);
+		foreach($cff->get_cfg_proplist($cff->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))) as $prop)
+		{
+			$this->vars(array($prop["name"].".caption" => $prop["caption"]));
+		}
 		
 		//Kui t88pakkumist vaatas t88otsija , siis lisame yhe HITI.
 		if($this->my_profile["group"]=="employee")
