@@ -6728,6 +6728,10 @@ class crm_person extends class_base
 			// $end = !empty($e) ? get_lc_date($e, LC_DATE_FORMAT_SHORT_FULLYEAR) : t("M&auml;&auml;ramata");
 			$start = !empty($s) ? date("Y", $s) : t("M&auml;&auml;ramata");
 			$end = !empty($e) ? date("Y", $e) : t("M&auml;&auml;ramata");
+			if($to->endless)
+			{
+				$end = t("T&auml;htajatu");
+			}
 			$this->vars(array(
 				"crm_person_work_relation.org" => $to->prop("org.name"),
 				"crm_person_work_relation.section" => $to->prop("section.name"),
@@ -7355,6 +7359,12 @@ class crm_person extends class_base
 				"personnel_management_job_offer.rating" => is_oid($jo->prop("rate_scale")) ? $rate_inst->get_rating_for_object($from->id(), RATING_AVERAGE, $jo->prop("rate_scale")) : t("M&auml;&auml;ramata"),
 				"personnel_management_job_offer.addinfo" => nl2br($jo->prop("addinfo")),
 			));
+			if($jo->endless)
+			{
+				$this->vars(array(
+					"personnel_management_job_offer.end" => t("T&auml;htajatu"),
+				));
+			}
 			foreach($props as $prop)
 			{
 				if(array_key_exists($prop, $proplist_job_offer) || count($proplist_job_offer) == 0)
