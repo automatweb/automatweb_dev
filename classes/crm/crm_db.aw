@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.47 2008/04/27 15:04:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.48 2008/06/29 21:43:48 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -41,6 +41,9 @@
 
 @property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT
 @caption Toodete kaust
+
+@property dir_comment type=relpicker reltype=RELTYPE_KOMMENTAAR_CAT
+@caption Kommentaaride kaust
 
 @property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
 @caption Kaust, kui m&otilde;ni eelnevatest pole m&auml;&auml;ratud, siis kasutatakse seda
@@ -145,6 +148,8 @@ class crm_db extends class_base
 		
 	function get_property(&$arr)
 	{
+		arr(html_entity_decode("&Auml;"));
+		exit;
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -302,7 +307,7 @@ class crm_db extends class_base
 		{
 			$all_letters[] = $v;
 		}
-		$let = array("Ö", "Ä", "Ü", "Õ");
+		$let = array(html_entity_decode("&Ouml;"), html_entity_decode("&Auml;"), html_entity_decode("&Uuml;"), html_entity_decode("&Otilde;"));
 		foreach($let as $l)
 		{
 			$all_letters[] = $l;
