@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.51 2008/06/28 14:03:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.52 2008/06/29 14:10:22 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -2518,10 +2518,10 @@ class personnel_management_job_offer extends class_base
 				$tpl = obj($tpl_id);
 				$vars = array(
 					"job_offer.name" => $job_offer->name,
-					"job_offer.url" => $this->mk_my_orb("change", array("id" => $job_offer->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+					"job_offer.url" => $this->mk_my_orb("change", array("id" => $job_offer->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true),
 					"candidate.person" => $candidate->prop("person.name"),
-					"candidate.person.cv" => $this->mk_my_orb("show_cv", array("id" => $candidate->person, "die" => 1, "cv" => $cv_tpl), CL_CRM_PERSON),
-					"candidate.person.url" => $this->mk_my_orb("change", array("id" => $candidate->person), CL_CRM_PERSON),
+					"candidate.person.cv" => $this->mk_my_orb("show_cv", array("id" => $candidate->person, "die" => 1, "cv" => $cv_tpl), CL_CRM_PERSON, true, true),
+					"candidate.person.url" => $this->mk_my_orb("change", array("id" => $candidate->person), CL_CRM_PERSON, true, true),
 				);
 				$subject = $tpl->subject;
 				$message = $tpl->content;
