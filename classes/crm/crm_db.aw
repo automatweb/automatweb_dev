@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.48 2008/06/29 21:43:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.49 2008/06/29 21:45:13 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -148,8 +148,6 @@ class crm_db extends class_base
 		
 	function get_property(&$arr)
 	{
-		arr(html_entity_decode("&Auml;"));
-		exit;
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -307,6 +305,7 @@ class crm_db extends class_base
 		{
 			$all_letters[] = $v;
 		}
+		// Although I don't think this is any better...
 		$let = array(html_entity_decode("&Ouml;"), html_entity_decode("&Auml;"), html_entity_decode("&Uuml;"), html_entity_decode("&Otilde;"));
 		foreach($let as $l)
 		{
