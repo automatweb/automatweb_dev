@@ -7930,12 +7930,19 @@ class crm_person extends class_base
 	function get_short_description($arr)
 	{
 		$org_fixed = 0;
-		$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
-		if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+		if(!is_array($arr))
 		{
-			$org_fixed = $query["id"];
+			$p = obj($arr);
 		}
-		$p = $arr["obj_inst"];
+		else
+		{
+			$query = $this->parse_url_parse_query($arr["request"]["return_url"]);
+			if($query["class"] == "crm_company" && $this->can("view", $query["id"]))
+			{
+				$org_fixed = $query["id"];
+			}
+			$p = $arr["obj_inst"];
+		}
 		$p_href = html::obj_change_url($p->id());
 
 		if (!is_oid($p->id()))
