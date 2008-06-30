@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.34 2008/03/28 11:28:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.35 2008/06/30 10:36:07 kristo Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -624,6 +624,13 @@ class toolbar extends aw_template
 		$this->add_cdata($i->get_popup_search_link($arr));
 	}
 
+	/** Adds a generic cut button to the toolbar that moves selected objects parents around
+		@attrib api=1 params=name
+
+		@param var required type=string
+			An unique name for the cut buffer
+
+	**/
 	function add_cut_button($ar)
 	{
 		$this->add_button(array(
@@ -635,6 +642,15 @@ class toolbar extends aw_template
 		$GLOBALS["tb"]["_add_var"] = $ar["var"];
 	}
 
+	/** Adds a generic paste button, that only supports pasting from generic cut button
+		@attrib api=1 params=pos
+
+		@param var required type=string
+			The cut buffer name
+
+		@param folder_var required type=string
+			The name of the variable from the request that contains the folder to paste to
+	**/
 	function add_paste_button($ar)
 	{
 		if (is_array($_SESSION["tb_cuts"][$ar["var"]]) && count($_SESSION["tb_cuts"][$ar["var"]]))

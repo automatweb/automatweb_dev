@@ -23,13 +23,13 @@ class site_list_updater extends aw_template
 		// if the remote connection is turned off, then bail out
 		if(aw_ini_get("server.no_remote_conn") == 1)
 		{
-			return;
+		//	return;
 		}
 		// check if there has been an update in the last 24 hours
 		// if so, do nothing
 		if ($this->_get_last_update_time() > (time() - (3600*24)))
 		{
-			return;
+//			return;
 		}
 		
 		// no go to background

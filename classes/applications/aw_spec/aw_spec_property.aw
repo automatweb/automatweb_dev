@@ -7,13 +7,29 @@
 @default group=general
 
 
-@property prop_type type=select field=aw_prop_type
-@caption Omaduse t&uuml;&uuml;p
+	@property prop_type type=select field=aw_prop_type
+	@caption Omaduse t&uuml;&uuml;p
 
-@property prop_desc type=textarea field=aw_prop_desc rows=10 cols=50
-@caption Omaduse kirjeldus
+	@property prop_desc type=textarea field=aw_prop_desc rows=10 cols=50
+	@caption Omaduse kirjeldus
 
+	@property errors_and_messages type=textarea rows=10 cols=50 field=aw_errors_and_messages
+	@caption Teated ja vead
 
+@default group=longdesc
+	
+	@property longdesc type=textarea rows=80 cols=80 field=aw_longdesc
+	@caption Pikem kirjeldus
+
+@default group=use_cases
+
+	@property use_cases type=releditor mode=manager reltype=RELTYPE_USE_CASE no_caption=1 store=connect props=name table_fields=name direct_links=1
+
+@groupinfo longdesc caption="Kirjeldus"
+@groupinfo use_cases caption="Kasutuslood"
+
+@reltype USE_CASE value=10 clid=CL_AW_SPEC_USE_CASE 
+@caption Kasutuslugu
 */
 
 class aw_spec_property extends class_base
@@ -37,6 +53,17 @@ class aw_spec_property extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_spec_properties(aw_oid int primary key, aw_prop_type varchar(255), aw_prop_desc text)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_longdesc":
+			case "aw_errors_and_messages":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "mediumtext"
+				));
+				return true;
 		}
 	}
 }

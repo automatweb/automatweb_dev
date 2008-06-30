@@ -18,6 +18,40 @@
             <cols>50</cols>
             <caption>Omaduse kirjeldus</caption>
       </property>
+      <property>
+            <name>errors_and_messages</name>
+            <table>aw_spec_properties</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>aw_errors_and_messages</field>
+            <caption>Teated ja vead</caption>
+      </property>
+      <property>
+            <name>longdesc</name>
+            <table>aw_spec_properties</table>
+            <group>longdesc</group>
+            <type>textarea</type>
+            <rows>80</rows>
+            <cols>80</cols>
+            <field>aw_longdesc</field>
+            <caption>Pikem kirjeldus</caption>
+      </property>
+      <property>
+            <name>use_cases</name>
+            <table>aw_spec_properties</table>
+            <group>use_cases</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_USE_CASE</reltype>
+            <no_caption>1</no_caption>
+            <store>connect</store>
+            <props>name</props>
+            <table_fields>name</table_fields>
+            <direct_links>1</direct_links>
+            <field>use_cases</field>
+      </property>
       <classinfo>
             <syslog_type>ST_AW_SPEC_PROPERTY</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -26,6 +60,14 @@
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <longdesc>
+                  <caption>Kirjeldus</caption>
+            </longdesc>
+            <use_cases>
+                  <caption>Kasutuslood</caption>
+            </use_cases>
+      </groupinfo>
       <tableinfo>
             <aw_spec_properties>
                   <master_index>brother_of</master_index>
@@ -33,5 +75,12 @@
                   <index>aw_oid</index>
             </aw_spec_properties>
       </tableinfo>
+      <reltypes>
+            <USE_CASE>
+                  <value>10</value>
+                  <clid>CL_AW_SPEC_USE_CASE</clid>
+                  <caption>Kasutuslugu</caption>
+            </USE_CASE>
+      </reltypes>
 </properties>
 

@@ -365,6 +365,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_INHERIT_AML_FROM</reltype>
             <store>connect</store>
+            <no_edit>1</no_edit>
             <field>inherit_aml_from</field>
             <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
       </property>

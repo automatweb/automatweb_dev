@@ -15,8 +15,14 @@
 
 			@property spec_tree type=treeview store=no no_caption=1 parent=tree_border
 
-		@property class_list type=table store=no no_caption=1 parent=v_split
-		@property relation_list type=table store=no no_caption=1 parent=v_split
+		@layout table_border type=vbox parent=v_split 
+
+			@layout toolbar_border type=vbox parent=table_border area_caption=Toolbari&nbsp;nupud closeable=1
+
+				@property enter_toolbar type=textbox store=no no_caption=1 parent=toolbar_border size=80
+
+			@property class_list type=table store=no no_caption=1 parent=v_split parent=table_border
+			@property relation_list type=table store=no no_caption=1 parent=v_split parent=table_border
 		
 		@layout spec_border type=vbox parent=v_split area_caption=Sisu closeable=1
 
@@ -59,7 +65,7 @@ class aw_spec extends class_base
 				array("intro", "intro_users", t("Kasutajate kirjeldus"), "spec_editor"),
 				array("intro", "intro_competitors", t("Konkurendid"), "spec_editor"),
 
-			array(0, "pred", t("Eeldused, s&otilde;ltuvused ja piirangud"), "spec_editor"),
+			array(0, "pred", t("Ulatus"), "spec_editor"),
 				array("pred", "pred_pred", t("Eeldused"), "spec_editor"),
 				array("pred", "pred_dep", t("S&otilde;ltuvused"), "spec_editor"),
 				array("pred", "pred_constraints", t("Piirangud"), "spec_editor"),
@@ -71,6 +77,7 @@ class aw_spec extends class_base
 				array("demands", "demands_users", t("Kasutajan&otilde;uded"), "spec_editor"),
 				array("demands", "demands_infomgmt", t("Infohalduse n&otilde;uded"), "spec_editor"),
 				array("demands", "demands_server", t("N&otilde;uded serverile"), "spec_editor"),
+				array("demands", "demands_usability", t("K&auml;ideldavuse n&otilde;uded"), "spec_editor"),
 				array("demands", "demands_other", t("Muud n&otilde;uded"), "spec_editor"),
 
 
@@ -90,6 +97,10 @@ class aw_spec extends class_base
 				array("bl", "classes_ucase", t("Kasutajalood"), "spec_editor"),
 				array("bl", "classes_principles", t("S&uuml;steemi toimimisp&otilde;him&otilde;tted"), "spec_editor"),
 				array("bl", "classes_examples", t("N&auml;ited"), "spec_editor"),
+			array(0, "sol", t("Lahendus"), "spec_editor"),
+				array("sol", "sol_gen", t("&Uuml;ldine"), "spec_editor"),
+				array("sol", "sol_api", t("API Meetodid"), "spec_editor"),
+				array("sol", "sol_int", t("S&uuml;steemiintegratsioon"), "spec_editor"),
 		);
 	}
 
@@ -109,6 +120,10 @@ class aw_spec extends class_base
 	function _get_spec_tb($arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
+		$tb->add_delete_button();
+		$tb->add_separator();	
+		$tb->add_cut_button(array("var" => "aw_spec_cut"));
+		$tb->add_paste_button(array("var" => "aw_spec_cut", "folder_var" => "disp2"));
 	}
 
 	function _get_spec_tree($arr)
@@ -150,6 +165,14 @@ class aw_spec extends class_base
 		$t->define_field(array(
 			"name" => "class_desc",
 			"caption" => t("Klassi kirjeldus"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 
@@ -205,7 +228,12 @@ class aw_spec extends class_base
 					"value" => $dr->ord(),
 					"size" => 5
 				)),
-				"sort_jrk" => is_oid($dr->id()) ? $dr->ord() : 1000000000
+				"sort_jrk" => is_oid($dr->id()) ? $dr->ord() : 1000000000,
+				"change" => is_oid($dr->id()) ? html::href(array(
+					"url" => html::get_change_url($dr->id(), array("return_url" => get_ru())),
+					"caption" => t("Muuda")
+				)) : "",
+				"oid" => $dr->id()
 			));
 		}
 		$t->set_default_sortby("sort_jrk");
@@ -596,6 +624,29 @@ class aw_spec extends class_base
 	{
 		obj($arr["id"])->save_new_version();
 		return $arr["post_ru"];
+	}
+
+	function _get_enter_toolbar($arr)
+	{
+		if (empty($arr["request"]["disp2"]))
+		{
+			return PROP_IGNORE;
+		}
+		$d2 = obj($arr["request"]["disp2"]);
+		switch($d2->class_id)
+		{
+			case CL_AW_SPEC_CLASS:
+				return PROP_IGNORE;
+		}
+
+		$d = $this->_get_disp($arr);
+		$arr["prop"]["value"] = $arr["obj_inst"]->meta("tb_".$d);
+	}
+
+	function _set_enter_toolbar($arr)
+	{
+		$d = $this->_get_disp($arr);
+		$arr["obj_inst"]->set_meta("tb_".$d, $arr["prop"]["value"]);
 	}
 }
 

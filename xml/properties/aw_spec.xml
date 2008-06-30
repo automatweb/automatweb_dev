@@ -20,13 +20,24 @@
             <field>spec_tree</field>
       </property>
       <property>
+            <name>enter_toolbar</name>
+            <table>objects</table>
+            <group>spec</group>
+            <type>textbox</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>toolbar_border</parent>
+            <size>80</size>
+            <field>enter_toolbar</field>
+      </property>
+      <property>
             <name>class_list</name>
             <table>objects</table>
             <group>spec</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>v_split</parent>
+            <parent>table_border</parent>
             <field>class_list</field>
       </property>
       <property>
@@ -36,7 +47,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>v_split</parent>
+            <parent>table_border</parent>
             <field>relation_list</field>
       </property>
       <property>
@@ -130,6 +141,19 @@
                   <closeable>1</closeable>
                   <group>spec</group>
             </tree_border>
+            <table_border>
+                  <type>vbox</type>
+                  <parent>v_split</parent>
+                  <group>spec</group>
+                  <area_caption></area_caption>
+            </table_border>
+            <toolbar_border>
+                  <type>vbox</type>
+                  <parent>table_border</parent>
+                  <area_caption>Toolbari&amp;amp;nbsp;nupud</area_caption>
+                  <closeable>1</closeable>
+                  <group>spec</group>
+            </toolbar_border>
             <spec_border>
                   <type>vbox</type>
                   <parent>v_split</parent>

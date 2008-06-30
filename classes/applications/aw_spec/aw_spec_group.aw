@@ -5,6 +5,14 @@
 @default table=objects
 @default group=general
 
+@default group=use_cases
+
+	@property use_cases type=releditor mode=manager reltype=RELTYPE_USE_CASE no_caption=1 store=connect props=name table_fields=name direct_links=1
+
+@groupinfo use_cases caption="Kasutuslood"
+
+@reltype USE_CASE value=10 clid=CL_AW_SPEC_USE_CASE 
+@caption Kasutuslugu
 */
 
 class aw_spec_group extends class_base
@@ -60,7 +68,11 @@ class aw_spec_group extends class_base
 					"value" => $g_obj->ord(),
 					"size" => 5
 				)),
-				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000
+				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000,
+				"change" => is_oid($g_obj->id()) ? html::href(array(
+					"url" => html::get_change_url($g_obj->id(), array("return_url" => get_ru())),
+					"caption" => t("Muuda")
+				)) : ""
 			));
 		}
 		$t->set_default_sortby("sort_jrk");
@@ -84,6 +96,11 @@ class aw_spec_group extends class_base
 		$t->define_field(array(
 			"name" => "parent_layout_name",
 			"caption" => t("Layoudi parent"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
 		));
 	}
 
@@ -127,7 +144,6 @@ class aw_spec_group extends class_base
 					:
 						aw_ini_get("baseurl")."/automatweb/images/split_cell_left.gif"
 				));
-
 				if (!$this->get_tree_items($tree, $o, $id, $cl_oid))
 				{
 					if ($has_cb)

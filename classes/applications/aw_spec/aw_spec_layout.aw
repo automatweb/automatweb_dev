@@ -12,6 +12,14 @@
 @property parent_layout_name type=relpicker field=aw_parent_layout_name reltype=RELTYPE_PARENT_LAYOUT
 @caption Parent layout
 
+@default group=use_cases
+
+	@property use_cases type=releditor mode=manager reltype=RELTYPE_USE_CASE no_caption=1 store=connect props=name table_fields=name direct_links=1
+
+@groupinfo use_cases caption="Kasutuslood"
+
+@reltype USE_CASE value=10 clid=CL_AW_SPEC_USE_CASE 
+@caption Kasutuslugu
 
 @reltype PARENT_LAYOUT value=1 clid=CL_AW_SPEC_LAYOUT
 @caption Parent layout
@@ -84,7 +92,11 @@ class aw_spec_layout extends class_base
 					"value" => $g_obj->ord(),
 					"size" => 5
 				)),
-				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000
+				"sort_jrk" => is_oid($g_obj->id()) ? $g_obj->ord() : 1000000000,
+				"change" => is_oid($g_obj->id()) ? html::href(array(
+					"url" => html::get_change_url($g_obj->id(), array("return_url" => get_ru())),
+					"caption" => t("Muuda")
+				)) : ""
 			));
 		}
 		$t->set_default_sortby("sort_jrk");
@@ -108,6 +120,11 @@ class aw_spec_layout extends class_base
 		$t->define_field(array(
 			"name" => "layout_desc",
 			"caption" => t("Omaduse kirjeldus"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
 		));
 		$t->set_sortable(false);
 	}
