@@ -615,7 +615,8 @@ class crm_company_bills_impl extends class_base
 			"class_id" => CL_CRM_MEETING,
 			"send_bill" => 1,
 			"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"is_done" => 1
+			"is_done" => 1,
+			"project" => $arr["request"]["proj"],
 		));
 		foreach($meetings->arr() as $row)
 		{
