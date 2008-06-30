@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.21 2008/04/08 12:40:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.22 2008/06/30 09:24:23 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -405,6 +405,30 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "final_rooms":
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$rfpm = $rfpm->get_sysdefault();
+				$rfpm = obj($rfpm);
+				$conns = $arr["obj_inst"]->connections_from();
+				foreach($conns as $conn)
+				{
+					$to = $conn->to();
+					$exist[$to->id()] = $to->id();
+				}
+				$ol = $rfpm->get_rooms_from_room_folder();
+				foreach($ol->arr() as $oid => $o)
+				{
+					if(in_array($oid, $exist))
+					{
+						continue;
+					}
+					$arr["obj_inst"]->connect(array(
+						"to" => $oid,
+						"type" => "RELTYPE_ROOM",
+					));
+					$prop["options"][$oid] = $o->name();
+				}
+				break;
 			// final_data thingies
 			case "data_mf_catering_end_admin":
 			case "data_mf_catering_start_admin":
@@ -582,13 +606,13 @@ class rfp extends class_base
 				break;
 
 			case "tmp4":
-				$prop["value"] = "Ruumi hindade/soodustuste & koguhinna/soodustuse määramine";
+				$prop["value"] = "Ruumi hindade/soodustuste & koguhinna/soodustuse m&auml;&auml;ramine";
 				break;
 			case "tmp5":
 				// tmp
 				$url  = get_ru();
 				$url .= "&pdf=1";
-				$pdf = "<a href=\"".$url."\">pdf (kohe üldse üldse üldse ei vungsi)</a><br/><br/>";
+				$pdf = "<a href=\"".$url."\">pdf (kohe &uuml;ldse &uuml;ldse &uuml;ldse ei vungsi)</a><br/><br/>";
 				//
 				$prop["value"] = $pdf.$this->rfp_reservation_description($arr["obj_inst"]->id(), $arr["request"]["pdf"]?"pdf":"html");
 				break;
