@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.43 2008/06/17 18:37:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.44 2008/06/30 13:24:55 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -2079,6 +2079,12 @@ class persona_import extends class_base
 			{
 				print "retrieving and parsing $file<br>";
 				$fdat = $c->get_file($file);
+				if(strlen($fdat) == $o->meta("XML_file_size_".$file))
+				{
+					print "XML file size same as last time. Skipping.";
+					continue;
+				}
+				$o->set_meta("XML_file_size_".$file, strlen($fdat));
 				$p = xml_parser_create();
 				xml_parse_into_struct($p, $fdat, $vals, $index);
 				xml_parser_free($p);
