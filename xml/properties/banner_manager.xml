@@ -70,6 +70,35 @@
             <parent>mgr_tbls</parent>
             <field>mgr_tbl_locs</field>
       </property>
+      <property>
+            <name>mth_ovr_tb</name>
+            <table>objects</table>
+            <group>month_overview</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mth_ovr_tb</field>
+      </property>
+      <property>
+            <name>mth_ovr_tree</name>
+            <table>objects</table>
+            <group>month_overview</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>mth_ovr_left</parent>
+            <field>mth_ovr_tree</field>
+      </property>
+      <property>
+            <name>mth_ovr_tbl</name>
+            <table>objects</table>
+            <group>month_overview</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>mth_ovr_right</parent>
+            <field>mth_ovr_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BANNER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -83,6 +112,10 @@
                   <caption>Haldus</caption>
                   <submit>no</submit>
             </mgr>
+            <month_overview>
+                  <caption>Kuu&amp;amp;uuml;levaade</caption>
+                  <submit>no</submit>
+            </month_overview>
       </groupinfo>
       <reltypes>
             <CONTAINER_FOLDER>
@@ -116,6 +149,26 @@
                   <group>mgr</group>
                   <area_caption></area_caption>
             </mgr_tbls>
+            <mth_ovr_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>month_overview</group>
+                  <area_caption></area_caption>
+            </mth_ovr_split>
+            <mth_ovr_left>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Periood</area_caption>
+                  <parent>mth_ovr_split</parent>
+                  <group>month_overview</group>
+            </mth_ovr_left>
+            <mth_ovr_right>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Bannerid</area_caption>
+                  <parent>mth_ovr_split</parent>
+                  <group>month_overview</group>
+            </mth_ovr_right>
       </layout>
 </properties>
 

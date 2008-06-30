@@ -31,7 +31,18 @@
 
 			@property mgr_tbl_locs type=table store=no no_caption=1 parent=mgr_tbls
 
+@default group=month_overview
+	@property mth_ovr_tb type=toolbar no_caption=1 store=no
+
+	@layout mth_ovr_split type=hbox width=20%:80%
+		@layout mth_ovr_left type=vbox closeable=1 area_caption=Periood parent=mth_ovr_split
+			@property mth_ovr_tree type=treeview store=no no_caption=1 parent=mth_ovr_left
+
+		@layout mth_ovr_right type=vbox closeable=1 area_caption=Bannerid parent=mth_ovr_split
+			@property mth_ovr_tbl type=table store=no no_caption=1 parent=mth_ovr_right
+
 @groupinfo mgr caption="Haldus" submit=no 
+@groupinfo month_overview caption="Kuu&uuml;levaade" submit=no
 
 @reltype CONTAINER_FOLDER value=1 clid=CL_MENU
 @caption Konteinerite kaust
@@ -74,6 +85,180 @@ class banner_manager extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+
+	function _get_mth_ovr_tb(&$arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "gen_overview",
+			"tooltip" => t("Genereeri uued andmed"),
+			"img" => "archive_small.gif",
+			"action" => "#"
+		));
+	}
+
+	function _get_mth_ovr_tree(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_root_name(t("Kuud"));
+		$t->set_root_icon(icons::get_icon_url("archive_small.gif"));
+		$s = $this->_get_banner_first_action();
+		$e = $this->_get_banner_last_action();
+		for($y = date("Y", $s); $y <= date("Y", $e); $y++)
+		{
+			$t->add_item(0, array(
+				"id" => $y,
+				"name" => $y,
+				"action" => "#",
+				"url" => "#",
+			));
+			$m = ($y == date("Y", $s))?date("m",$s):1;
+			$me = ($y == date("Y", $e))?date("m",$e):12;
+			for($m; $m <= $me; $m++)
+			{
+				$t->add_item($y, array(
+					"id" => $y."_".$m,
+					"name" => date("M", mktime(0,0,0,($m +1),0,$y)),
+					"url" => $this->mk_my_orb("change", $arr["request"] + array(
+						"month" => $m,
+						"year" => $y,
+						"return_url" => get_ru(),
+					)),
+				));
+			}
+		}
+	}
+
+
+	/**
+		@attrib params=name
+		@param month int required
+		@param year int required
+		@returns
+			array(
+				banner_id => array(
+					lang_id => views
+			)
+		)
+		@comment
+			returns bannerclicks for month from db
+	 **/
+	function _get_banner_clicks($arr)
+	{
+		$start = mktime(0, 0, 0, $arr["month"], 1, $arr["year"]);
+		$end = mktime(0, 0, 0, ++$arr["month"], 1, $arr["year"]);
+		$this->db_query("SELECT * FROM banner_clicks WHERE tm >=".$start." AND tm < ".$end);
+		while($row = $this->db_next())
+		{
+			$return[$row["bid"]][$row["langid"]]++;
+		}
+		return $return;
+	}
+
+	/**
+		@attrib params=name
+		@param month int required
+		@param year int required
+		@returns
+			array(
+				banner_id => array(
+					lang_id => views
+			)
+		)
+		@comment
+			returns bannerviews for month from db
+	 **/
+	function _get_banner_views($arr)
+	{
+		$start = mktime(0, 0, 0, $arr["month"], 1, $arr["year"]);
+		$end = mktime(0, 0, 0, ++$arr["month"], 1, $arr["year"]);
+		$this->db_query("SELECT * FROM banner_views WHERE tm >=".$start." AND tm < ".$end);
+		while($row = $this->db_next())
+		{
+			$return[$row["bid"]][$row["langid"]]++;
+		}
+		return $return;
+	}
+
+	function _get_banner_last_action()
+	{
+		$this->db_query("SELECT MAX(tm) as tm FROM banner_views");
+		$view  = $this->db_next();
+		$this->db_query("SELECT MAX(tm) as tm FROM banner_clicks");
+		$click  = $this->db_next();
+		return $view["tm"] > $click["tm"]?$view["tm"]:$click["tm"];
+	}
+
+	function _get_banner_first_action()
+	{
+		$this->db_query("SELECT MIN(tm) as tm FROM banner_views");
+		$view  = $this->db_next();
+		$this->db_query("SELECT MIN(tm) as tm FROM banner_clicks");
+		$click  = $this->db_next();
+		return $view["tm"] < $click["tm"]?$view["tm"]:$click["tm"];
+	}
+
+	function _get_distinct_langs_for_month($arr)
+	{
+		$this->db_query("SELECT DISTINCT(langid) as langid from banner_views");
+		while($row = $this->db_next())
+		{
+			$langs[$row["langid"]] = $row["langid"];
+		}
+		$this->db_query("SELECT DISTINCT(langid) as langid from banner_clicks");
+		while($row = $this->db_next())
+		{
+			$langs[$row["langid"]] = $row["langid"];
+		}
+		return $langs;
+	}
+
+	function _init_mth_ovr_tbl(&$arr)
+	{
+		//error_reporting(E_ALL);
+		//ini_set("display_errors", "1");
+		//$langs = get_instance(CL_LANGUAGES);
+		//$langs = $langs->get_list();
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_header(t("Veebruar 2008"));
+		$t->define_field(array(
+			"name" => "banner",
+			"caption" => t("B&auml;nner"),
+		));
+		foreach($this->_get_distinct_langs_for_month($time_arr) as $lang)
+		{
+			$t->define_field(array(
+				"name" => "views[".$lang."]",
+				"caption" => t("Vaatamiste arv (".$lang.")"),
+			));
+			$t->define_field(array(
+				"name" => "clicks[".$lang."]",
+				"caption" => t("Klikkide arv (".$lang.")"),
+			));
+		}
+	}
+
+	function _get_mth_ovr_tbl(&$arr)
+	{
+		$this->_init_mth_ovr_tbl($arr);
+		$t =& $arr["prop"]["vcl_inst"];
+		$v = $this->_get_banner_views($arr["request"]);
+		$c = $this->_get_banner_clicks($arr["request"]);
+		foreach(array_unique(array_merge(array_keys($v), array_keys($c))) as $banner)
+		{
+			$d = array();
+			foreach($v[$banner] as $lang => $vs)
+			{
+				$d["views[".$lang."]"] += $vs;
+			}
+			foreach($c[$banner] as $lang => $vs)
+			{
+				$d["clicks[".$lang."]"] += $vs;
+			}
+			$d["banner"] = html::obj_change_url(obj($banner));
+			$t->define_data($d);
+		}
 	}
 
 	function _get_container_places($arr)
