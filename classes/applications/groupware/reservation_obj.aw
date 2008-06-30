@@ -60,6 +60,33 @@ class reservation_obj extends _int_object
 		return $sum;
 	}
 
+	/** returns reservation price in currency
+		@attrib api=1
+		@param curr type=int/string
+			currency id or 
+		@returns double
+			reservation price
+	**/
+	function get_sum_in_curr($curr)
+	{
+		if(!is_oid($curr))
+		{
+			$ol = new object_list(array(
+				"site_id" => array(),
+				"lang_id" => array(),
+				"class_id" => CL_CURRENCY,
+				"name" => $curr,
+			));
+			$curr = reset($ol->ids());
+		}
+		if(!is_oid($curr))
+		{
+			return "";
+		}
+		$sum = $this->get_sum();
+		return $sum[$curr];
+	}
+
 	/** adds new project to reservation
 		@attrib api=1
 		@returns oid

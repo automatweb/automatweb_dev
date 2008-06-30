@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.107 2008/06/30 13:44:07 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.108 2008/06/30 14:39:39 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1889,7 +1889,24 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 		if(is_array($arr["obj_inst"]->meta("payment_info")))
 		{
 			$inf = $arr["obj_inst"]->meta("payment_info");
+			$sum = $inf["sum"];
 
+			$bron_cost = $arr["obj_inst"]->get_sum_in_curr($inf["curr"]);
+			if($bron_cost != "")
+			{
+				if($sum > $bron_cost)
+				{
+					$inf["sum"] = $bron_cost." (".$sum.")";
+				}
+				elseif($sum == $bron_cost)
+				{
+					$inf["sum"] = $sum;
+				}
+				else
+				{
+					$inf["sum"] = $bron_cost;
+				}
+			}
 			$arr["prop"]["value"].= sprintf(
 				t("<br>Tasutud %s %s (%s) %s , maksja %s"),
 				$inf["sum"],
