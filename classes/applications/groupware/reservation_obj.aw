@@ -20,8 +20,20 @@ class reservation_obj extends _int_object
 				{
 					$this->set_meta("redecleared" , 1);
 				}
+				break;
+			case "customer":
+				if(is_oid($pv))
+				{
+					$person = obj($pv);
+					$parent = $this->get_room_setting("customer_menu");
+					if($parent && $parent != $person->parent())
+					{
+						$person->set_parent($parent);
+						$person->save();
+					}
+				}
+				break;
 		}
-
 		return parent::set_prop($pn, $pv);
 	}
 
