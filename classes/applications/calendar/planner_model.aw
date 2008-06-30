@@ -372,14 +372,11 @@ class planner_model extends core
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			if($row["brother_of"] == $row["id"])
-			{
-				$rv[$row["brother_of"]] = array(
-					"id" => $row["brother_of"],
-					"start" => $row["start"],
-					"end" => $row["end"],
-				);
-			}
+			$rv[$row["brother_of"]] = array(
+				"id" => $row["brother_of"],
+				"start" => $row["start"],
+				"end" => $row["end"],
+			);
 		};
 		exit_function("get_event_list::query");
 
