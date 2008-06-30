@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.59 2008/06/16 10:39:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.60 2008/06/30 13:27:49 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -2017,7 +2017,9 @@ class spa_bookings_overview extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$ol = new object_list();
-
+		$co = get_instance(CL_CRM_COMPANY);
+		$room_instance = get_instance(CL_ROOM);
+		$pi = get_instance(CL_USER);
 		$from = date_edit::get_timestamp($arr["request"]["stats_rs_booking_from"]);
 		$to = date_edit::get_timestamp($arr["request"]["stats_rs_booking_to"]);
 		$srch = !empty($arr["request"]["stats_rs_name"]) || !empty($arr["request"]["stats_rs_booker_name"]) || $from > 1 || $to > 1 || !empty($arr["request"]["stats_rs_package"]);	
@@ -2025,6 +2027,7 @@ class spa_bookings_overview extends class_base
 		{
 			return;
 		}
+
 
 		$f = array(
 			"class_id" => CL_SPA_BOOKING,
@@ -2047,7 +2050,7 @@ class spa_bookings_overview extends class_base
 				"site_id" => array(),
 				"name" => "%".$arr["request"]["stats_rs_booker_name"]."%"
 			));
-			$co = get_instance(CL_CRM_COMPANY);
+
 			foreach($ol->arr() as $o)
 			{
 				foreach($co->get_employee_picker($o) as $pid => $pnm)
@@ -2094,7 +2097,7 @@ class spa_bookings_overview extends class_base
 		$pks = array();
 		$d = array();
 		enter_function("sbo::_get_stats_r_list");
-		$room_instance = get_instance(CL_ROOM);
+
 		foreach($ol->arr() as $o)
 		{
 			if (!$this->can("view", $o->prop("package")) || $o->createdby() == "")
@@ -2139,7 +2142,7 @@ class spa_bookings_overview extends class_base
 			));
 		}
 
-		$pi = get_instance(CL_USER);
+
 		foreach($d as $uid => $d1)
 		{
 			// get person for user and from person get co 
