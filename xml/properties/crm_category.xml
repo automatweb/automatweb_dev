@@ -94,7 +94,10 @@
             </CATEGORY>
             <CUSTOMER>
                   <value>3</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Klient</caption>
             </CUSTOMER>
       </reltypes>

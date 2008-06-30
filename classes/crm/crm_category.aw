@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.11 2008/03/05 12:01:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.12 2008/06/30 10:25:48 kristo Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -38,7 +38,7 @@
 @reltype CATEGORY value=2 clid=CL_CRM_CATEGORY
 @caption Alam kategooria
 
-@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
 
 */

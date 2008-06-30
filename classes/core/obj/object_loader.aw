@@ -451,7 +451,7 @@ class _int_object_loader extends core
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
 			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
-			if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
+			if (false && empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
 			{
 				$max_acl = aw_unserialize($str_max_acl);
 			}
@@ -486,8 +486,6 @@ class _int_object_loader extends core
 		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
 
 		$gl = aw_global_get("gidlist_pri_oid");
-//echo "calc for $oid <br>\n";
-
 		// go through the object tree and find the acl that is of highest priority among the current users group
 		$cur_oid = $oid;
 		$do_orig = false;
@@ -542,7 +540,6 @@ class _int_object_loader extends core
 
 			// now, iterate over the current acl data with the current gidlist
 			// and find the highest priority acl currently
-
 			foreach($acld as $g_oid => $g_acld)
 			{
 				// this applies the affects subobjects setting - if the first object has this set, then ignore the acls for that
@@ -575,7 +572,6 @@ class _int_object_loader extends core
 			$rv["can_delete"] = $max_acl["can_delete"];
 			return $rv;
 		}
-
 		return $max_acl;
 	}
 

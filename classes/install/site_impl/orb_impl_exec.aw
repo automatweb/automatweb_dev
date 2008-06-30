@@ -68,8 +68,8 @@ $orb->process_request(array(
 $content = $orb->get_data();
 exit_function("orb_impl_exec::process_request");
 
-// et kui orb_data on link, siis teeme ümbersuunamise
-// see ei ole muidugi parem lahendus. In fact, see pole üleüldse
+// et kui orb_data on link, siis teeme ymbersuunamise
+// see ei ole muidugi parem lahendus. In fact, see pole yldse
 // mingi lahendus
 if (substr($content,0,5) == "http:" || !empty($vars["reforb"]) || substr($content,0,6) == "https:")
 {
@@ -77,11 +77,13 @@ if (substr($content,0,5) == "http:" || !empty($vars["reforb"]) || substr($conten
         {
                 print html::href(array(
                         "url" => $content,
-                        "caption" => t("Kliki siia jätkamiseks"),
+                        "caption" => t("Kliki siia j&auml;tkamiseks"),
                 ));
         }
         else
         {
+//error_reporting(E_ALL);
+//ini_set("display_errors", "1");
                 header("Location: $content");
                 print "\n\n";
         };

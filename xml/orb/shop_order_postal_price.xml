@@ -3,4 +3,3 @@
 	<class name="shop_order_postal_price" folder="applications/shop" extends="class_base">
 	</class>
 </orb>
-		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.130 2008/06/17 12:57:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.131 2008/06/30 10:25:45 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -5416,7 +5416,7 @@ class project extends class_base
 
 		$clss = aw_ini_get("classes");
 		$all_types = array(
-			"paid" => t("Makstud"),
+			"paid" => t("Tasuline"),
 			"unpaid" => t("Tasuta")
 		);
 		foreach($types as $type_id => $subs)
@@ -5429,7 +5429,7 @@ class project extends class_base
 
 			$t->define_field(array(
 				"name" => "type_".$type_id."_sub_paid",
-				"caption" => t("Makstud"),
+				"caption" => t("Tasuline"),
 				"align" => "center" ,
 				"parent" => "type_".$type_id
 			));
@@ -5598,7 +5598,10 @@ class project extends class_base
 
 		foreach($com_list as $task)
 		{
-			$this->_stats_entry_insert_row($t, $task);
+			if ($task->add_wh > 0)
+			{
+				$this->_stats_entry_insert_row($t, $task);
+			}
 		}
 	}
 
@@ -5608,7 +5611,7 @@ class project extends class_base
 			"name" => html::obj_change_url($o->parent()),
 			"person" => html::obj_change_url(get_instance(CL_USER)->get_person_for_uid($o->createdby)),
 			"type" => $this->clss[$o->class_id]["name"],
-			"content" => nl2br($o->comment),
+			"content" => nl2br(substr($o->comment, 0, 100)),
 			"add_wh" => $o->add_wh,
 			"on_bill" => html::checkbox(array(
 				"name" => "d[".$o->id."][send_bill]",
@@ -5691,6 +5694,7 @@ class project extends class_base
 	**/
 	function daily_stats_type_check($arr)
 	{
+		get_instance("users")->login(array("uid" => aw_ini_get("project.default_uid"), "password" => aw_ini_get("project.default_password")));
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 			"lang_id" => array(),

@@ -239,7 +239,7 @@ class obj_xml_gen
 		//xml_parse_into_struct($parser,$xml,&$keys,&$values);
 		xml_set_element_handler($parser, array(&$this, "_start_el"), array(&$this, "_end_el"));
 		xml_set_character_data_handler($parser, array(&$this, "_chard"));
-		$res = xml_parse($parser, $xml, true);
+		$res = xml_parse($parser, $xml, true);if(aw_global_get("uid") == "markop") arr($xml);
 		if (!$res)
 		{
 echo xml_error_string  (xml_get_error_code($parser))."<br>";

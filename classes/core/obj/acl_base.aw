@@ -510,17 +510,6 @@ class acl_base extends db_connector
 		}
 		else
 		{
-			// the only program you can ask for is PRG_MENUEDIT
-			/*error::raise_if($progid != PRG_MENUEDIT, array(
-				"id" => ERR_PROG_ACL,
-				"msg" => sprintf(t("acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"), $right, $progid)
-			));
-
-			$can_adm = aw_global_get("acl_base::prog_acl_cache");
-			if ($can_adm > 0)
-			{
-				return $can_adm - 1;
-			}*/
 			if (is_numeric($progid))
 			{
 				$progid = "can_admin_interface";
@@ -541,7 +530,10 @@ class acl_base extends db_connector
 				{
 					continue;
 				}
-				if ($o->prop("priority") > $can_adm_max)
+				// idea here is, that for if acls we go through the group list until we find one that has if acls set
+				// if none have, then default to all access
+				// but for can admin interface we always thake the highest group for bc
+				if ($o->prop("priority") > $can_adm_max && ($progid == "can_admin_interface" || $o->prop("if_acls_set")))
 				{
 					// all settings except can use admin depend on if_acls_set being true
 					$can_adm = $o->prop($progid) || ($progid == "can_admin_interface" ? false : !$o->prop("if_acls_set"));
@@ -549,6 +541,11 @@ class acl_base extends db_connector
 				}
 			}
 			$GLOBALS["cfg"]["acl"]["no_check"] = $tmp;
+
+			if ($can_adm_max == 0 && $progid != "can_admin_interface")
+			{
+				$can_adm = 1;
+			}
 
 			aw_global_set("acl_base::prog_acl_cache", $can_adm+1);
 			return $can_adm;

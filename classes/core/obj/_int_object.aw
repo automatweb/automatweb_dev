@@ -1577,6 +1577,7 @@ class _int_object
 			$trans = true;
 			$cur_lid = $cl;
 		}
+
 		if ($trans and isset($this->obj["meta"]["translations"]))
 		{
 			$trs = $this->obj["meta"]["translations"];

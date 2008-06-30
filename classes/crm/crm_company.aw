@@ -7172,6 +7172,7 @@ class crm_company extends class_base
 		// add all custs in $check as cust to $cust_cat
 
 		$stchk = explode('_', $arr["cust_cat"]);
+
 		if($stchk[0] == 'status')
 		{
 			$status = obj($stchk[1]);

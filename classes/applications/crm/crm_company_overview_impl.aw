@@ -592,7 +592,7 @@ class crm_company_overview_impl extends class_base
 
 		enter_function("get_my_tasks:1.5");
 		classload("core/icons");
-		$ol = $this->_get_task_list($arr);//if(aw_global_get("uid") == "marko"){ arr($ol);}
+		$ol = $this->_get_task_list($arr);//if(aw_global_get("uid") == "marko"){ arr($ol);arr($arr);}
 		exit_function("get_my_tasks:1.5");
 
 		enter_function("get_my_tasks:2");
@@ -1302,13 +1302,13 @@ class crm_company_overview_impl extends class_base
 				$res["flags"] = array("mask" => OBJ_IS_DONE, "flags" => $r["act_s_status"] == 1 ? 0 : OBJ_IS_DONE);
 			}
 		}
-		$res[] = new object_list_filter(array(
-			"logic" => "OR",
-			"conditions" => array(
-				"CL_BUG.bug_status" => array(1,2,10,11),
-				//"CL_TASK.oid" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
-			)
-		));
+//		$res[] = new object_list_filter(array(
+//			"logic" => "OR",
+//			"conditions" => array(
+//				"CL_BUG.bug_status" => array(1,2,10,11),
+//				//"CL_TASK.oid" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+//			)
+//		));
 		return $res;
 	}
 

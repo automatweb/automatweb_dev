@@ -2185,7 +2185,7 @@ class crm_company_cust_impl extends class_base
 				"reg_nr" => $o->prop("reg_nr"),
 				// "pohitegevus" => $o->prop_str("pohitegevus"),
 				// "corpform" => $vorm,
-				"address" => $o->class_id() == CL_CRM_COMPANY ? $o->prop_str("contact") : $o->prop_str("address"),
+				"address" => $o->class_id() == CL_CRM_COMPANY ? $o->prop_str("contact") : $o->prop("RELTYPE_ADDRESS.name"),
 				"ceo" => $ceo,
 				"phone" => $phone,
 				"fax" => $fax,
@@ -2341,7 +2341,7 @@ class crm_company_cust_impl extends class_base
 
 				$conn_filt = array(
 					"type" => "RELTYPE_CUSTOMER",
-					"class" => CL_CRM_COMPANY,
+					"class" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
 				);
 				if($arr["request"]["group"] != "relorg_t" && $arr["request"]["group"] != "relorg")
 				{
