@@ -1196,7 +1196,6 @@ class bug extends class_base
 		{
 			$notify_addresses[] = $bt->prop("def_notify_list");
 		}
-
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
@@ -1210,7 +1209,6 @@ class bug extends class_base
 				continue;
 			}
 			$email = $person_obj->prop("email");
-
 			if (is_oid($email))
 			{
 				$email_obj = new object($email);
@@ -1230,7 +1228,6 @@ class bug extends class_base
 				$notify_addresses[] = $addr;
 			};
 		};
-
 		if (sizeof($notify_addresses) == 0)
 		{
 			return false;
@@ -1736,7 +1733,7 @@ class bug extends class_base
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
 		{
-			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, false, $this->_acc_add_wh_cust);
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, true, $this->_acc_add_wh_cust);
 		}
 
 		if ($arr["new"])
