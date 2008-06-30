@@ -6264,14 +6264,13 @@ class class_base extends aw_template
 		}
 		foreach($ppl as $oid => $nm)
 		{
-
-			if(!$o->prop("sp_content"))
+			if(!$o->meta("sp_content"))
 			{
 				$message = sprintf(t("User %s has added/changed the following file %s. Please click the link below to view the document \n %s"), $user_name , $o->name(), html::get_change_url($o->id()));
 			}
 			else
 			{
-				$message = $o->prop("sp_content");
+				$message = $o->meta("sp_content");
 
 				$replace_vars = array(
 					"#file#" => $o->name(),
@@ -6284,22 +6283,22 @@ class class_base extends aw_template
 				}
 			}
 
-			if(!$o->prop("sst"))
+			if(!$o->meta("sst"))
 			{
 				$subject = t("Teavitus muutunud dokumendist");
 			}
 			else
 			{
-				$subject = $o->prop("sp_subject");
+				$subject = $o->meta("sp_subject");
 			}
 
-			if(!$o->prop("sp_from"))
+			if(!$o->meta("sp_from"))
 			{
 				$from = "From: ".aw_ini_get("baseurl");
 			}
 			else
 			{
-				$from = $o->prop("sp_from");
+				$from = $o->meta("sp_from");
 			}
 
 			$p = obj($oid);
