@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.21 2008/06/30 10:16:00 tarvo Exp $
+
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.22 2008/06/30 13:44:01 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -13,10 +14,6 @@
 
 @property room_folder type=relpicker multiple=1 reltype=RELTYPE_ROOM_FOLDER field=meta method=serialize
 @caption Ruumide kaust
-
-@property catering_room_folder type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM_FOLDER field=meta method=serialize
-@caption Toitlustuse ruumide kaust
-
 
 @property catering_room_folder type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM_FOLDER field=meta method=serialize
 @caption Toitlustuse ruumide kaust

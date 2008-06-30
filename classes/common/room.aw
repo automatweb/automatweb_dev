@@ -1543,7 +1543,7 @@ class room extends class_base
                 while($x<20)
                 {//arr(date("d-m-Y h:i",($weekstart + 8000)));
                         $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
-                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul yle tunni ka mojuks
+                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul yle tunni ka m6juks
                         if($arr["request"]["start"] == $weekstart) $selected = $url;
                         $weekstart = $weekstart + 604800;
                         $x++;
@@ -1605,7 +1605,7 @@ class room extends class_base
 		enter_function("get_calendar_tbl");
 		//kkui asi tuleb veebist
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
-		{
+		{	
 			$arr["obj_inst"] = obj($arr["room"]);
 			if($_GET["start"])
 			{
@@ -1847,7 +1847,7 @@ class room extends class_base
 							}
 							$val = 0;
 							$string = $settings->prop("available_time_string")?$settings->prop("available_time_string") :t("VABA");
-							$col[$x] = $arr["obj_inst"]->get_color("available");
+							$col[$x] = "#E1E1E1";
 							if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 							{
 								//teeb selle kontrolli ka , et 2kki tyybid yltse teist ruumi tahavad juba... et siis l2heks sassi
@@ -1990,6 +1990,27 @@ class room extends class_base
 										"border" => 0
 									)),
 									"title" => t("Saata arve")
+								))." ".$d[$x];
+							}
+							$rfpc = $last_bron->connections_to(array(
+								"from.class_id" => CL_RFP,
+								"type" => "RELTYPE_CATERING_RESERVATION",
+							));
+							if(count($rfpc))
+							{
+								foreach($rfpc as $co)
+								{
+									$rfp = $co->from();
+								}
+								
+								$d[$x] = html::href(array(
+									"url" => $this->mk_my_orb("change", array("id" => $rfp->id(), "group" =>"final_catering"), CL_RFP),
+									"caption" => html::img(array(
+										"url" => aw_ini_get("baseurl")."/automatweb/images/icons/create_bill.jpg",
+										"border" => 0
+									)),
+									"target" => "_blank",
+									"title" => t("Vaata tellimuskinnitust")
 								))." ".$d[$x];
 							}
 							$d[$x] .= " ";
@@ -2142,7 +2163,7 @@ class room extends class_base
 				}
 				else
 				{
-					$d[$x] = "<span>".$settings->prop("closed__time_string")?$settings->prop("closed__time_string") :t("Suletud")."</span>";
+					$d[$x] = "<span>".t("Suletud")."</span>";
 				}
 				//$ids[$x] = $arr["room"]."_".$start_step;
 				$ids[$x] = $room_id."_".$start_step;
@@ -2175,7 +2196,7 @@ class room extends class_base
 			$t->set_lower_titlebar_display(true);
 		}
 		
-		if(!$arr["web"] && $settings->prop("show_workers_in_calander"))
+		if(!$arr["web"])
 		{
 			$t->define_data($this->get_day_workers_row($arr["obj_inst"]));
 		}
@@ -2626,7 +2647,7 @@ class room extends class_base
 			{
 				$t->define_field(array(
 					"name" => "d".$i,
-					"caption" => substr(ucwords(locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
+					"caption" => substr(date("l" , $tm) , 0 , 2).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
 					"width" => $pct."%",
 					"chgbgcolor" => "col".$i,
 					"id" => "id".$i,
@@ -4927,12 +4948,6 @@ class room extends class_base
 			return false;
 		}
 		$room = obj($room);
-		$set = $this->get_settings_for_room($room);
-		$tm = 600000;
-		if ($set->prop("cal_refresh_time") > 0)
-		{
-			$tm = $set->prop("cal_refresh_time") * 60000;
-		}
 		$buff_before = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
 		$buff_after = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
 	
@@ -4974,7 +4989,7 @@ class room extends class_base
 				$verified_reservations->add($res->id());
 //				$reservations->remove($res->id());
 			}
-			elseif(!(is_object($set) && $set->prop("show_unverified")) && !($res->prop("deadline") > time()))
+			elseif(!($res->prop("deadline") > time()))
 			{
 				$reservations->remove($res->id());
 			}
@@ -5183,16 +5198,6 @@ class room extends class_base
 			function refresh()
 			{
 				window.location.reload();
-			}
-	
-			function confirm_delete(field,url,change_var)
-			{
-				fRet=confirm("'.t("Olete kindel et kustutada ").":".'" + document.getElementById(field).options[document.getElementById(field).selectedIndex].text);
-				if(fRet)
-				{
-					window.location.href=url + "&" + change_var + "="+document.getElementById(field).value;
-				}
-				;
 			}
 		';
 	}
@@ -5751,16 +5756,6 @@ class room extends class_base
 	
 	function get_people_work_table($arr)
 	{
-		if($this->can("view" , $_GET["delete_scenario"]))
-		{
-			$del_c = obj($_GET["delete_scenario"]);
-			$del_c->delete();
-			die(
-				'<script type="text/javascript">
-				history.go(-1);
-				</script>'
-			);
-		}
 		$working_days = $arr["obj_inst"]->meta("working_days");
 		classload("vcl/table");
 		if($arr["month"])

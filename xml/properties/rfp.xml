@@ -124,6 +124,15 @@
             <field>resources_tbl</field>
       </property>
       <property>
+            <name>housing_tbl</name>
+            <table>rfp</table>
+            <group>final_housing</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>housing_tbl</field>
+      </property>
+      <property>
             <name>prices_tree</name>
             <table>rfp</table>
             <group>final_prices</group>
@@ -828,6 +837,10 @@
                   <caption>Ressursid</caption>
                   <parent>final_info</parent>
             </final_resource>
+            <final_housing>
+                  <caption>Majutus</caption>
+                  <parent>final_info</parent>
+            </final_housing>
             <final_prices>
                   <caption>Hinnad</caption>
                   <parent>final_info</parent>
@@ -918,11 +931,16 @@
                   <value>9</value>
                   <caption>Laudade paigutus</caption>
             </TABLES>
+            <CATERING_RESERVATION>
+                  <clid>CL_RESERVATION</clid>
+                  <value>10</value>
+                  <caption>Toitlustuse broneering</caption>
+            </CATERING_RESERVATION>
       </reltypes>
       <layout>
             <cat_hsplit>
                   <type>hbox</type>
-                  <width>30%:70%</width>
+                  <width>25%:75%</width>
                   <group>final_catering</group>
                   <area_caption></area_caption>
             </cat_hsplit>
