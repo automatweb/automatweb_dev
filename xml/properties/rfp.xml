@@ -22,6 +22,17 @@
             <comment>Konverentsi jaoks kasutatavad ruumid</comment>
       </property>
       <property>
+            <name>final_catering_rooms</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_CATERING_ROOM</reltype>
+            <field>final_catering_rooms</field>
+            <caption>Toitlustuse ruumid</caption>
+            <comment>Toitlustuse jaoks kasutatavad ruumid</comment>
+      </property>
+      <property>
             <name>final_theme</name>
             <table>rfp</table>
             <group>final_general</group>
@@ -862,6 +873,11 @@
                   <value>1</value>
                   <caption>Konverentsi toimumiskoht</caption>
             </ROOM>
+            <CATERING_ROOM>
+                  <clid>CL_ROOM</clid>
+                  <value>10</value>
+                  <caption>Konveretsi toitlustuse ruumid</caption>
+            </CATERING_ROOM>
             <WEBFORM>
                   <clid>CL_CONFERENCE_PLANNING</clid>
                   <value>2</value>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.22 2008/06/30 09:24:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.23 2008/06/30 10:16:00 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -23,6 +23,10 @@
 			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM
 			@caption Ruumid
 			@comment Konverentsi jaoks kasutatavad ruumid
+
+			@property final_catering_rooms type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM
+			@caption Toitlustuse ruumid
+			@comment Toitlustuse jaoks kasutatavad ruumid
 
 			@property final_theme type=textbox
 			@caption Teema
@@ -331,6 +335,9 @@
 @reltype ROOM clid=CL_ROOM value=1
 @caption Konverentsi toimumiskoht
 
+@reltype CATERING_ROOM clid=CL_ROOM value=10
+@caption Konveretsi toitlustuse ruumid
+
 @reltype WEBFORM clid=CL_CONFERENCE_PLANNING value=2
 @caption Tellimuse vorm
 
@@ -406,16 +413,24 @@ class rfp extends class_base
 		switch($prop["name"])
 		{
 			case "final_rooms":
+			case "final_catering_rooms":
+				
+				$type = ($prop["name"] == "final_rooms")?"":"catering_";
+
+
 				$rfpm = get_instance(CL_RFP_MANAGER);
 				$rfpm = $rfpm->get_sysdefault();
 				$rfpm = obj($rfpm);
-				$conns = $arr["obj_inst"]->connections_from();
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_".strtoupper($type)."ROOM",
+				));
 				foreach($conns as $conn)
 				{
 					$to = $conn->to();
 					$exist[$to->id()] = $to->id();
 				}
-				$ol = $rfpm->get_rooms_from_room_folder();
+				$fun = "get_rooms_from_".$type."room_folder";
+				$ol = $rfpm->$fun();
 				foreach($ol->arr() as $oid => $o)
 				{
 					if(in_array($oid, $exist))
@@ -424,7 +439,7 @@ class rfp extends class_base
 					}
 					$arr["obj_inst"]->connect(array(
 						"to" => $oid,
-						"type" => "RELTYPE_ROOM",
+						"type" => "RELTYPE_".strtoupper($type)."ROOM",
 					));
 					$prop["options"][$oid] = $o->name();
 				}
@@ -1378,77 +1393,95 @@ class rfp extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
+
+		$fields = array(
+			array("final_rooms", "varchar(255)"),
+			array("final_catering_rooms", "varchar(255)"),
+			array("final_theme", "varchar(255)"),
+			array("final_international", "int"),
+			array("final_native_guests", "int"),
+			array("final_foreign_guests", "int"),
+			array("data_subm_name", "varchar(255)"),
+			array("data_subm_country", "varchar(255)"),
+			array("data_subm_organisation", "varchar(255)"),
+			array("data_subm_organizer", "varchar(255)"),
+			array("data_subm_email", "varchar(255)"),
+			array("data_subm_phone", "varchar(255)"),
+			array("data_subm_contact_preference", "varchar(255)"),
+			array("data_gen_function_name", "varchar(255)"),
+			array("data_gen_attendees_no", "int"),
+			array("data_gen_response_date_admin", "int"),
+			array("data_gen_decision_date_admin", "int"),
+			array("data_gen_departure_date_admin", "int"),
+			array("data_gen_arrival_date_admin", "int"),
+			array("data_gen_open_for_alternative_dates", "int"),
+			array("data_gen_accommodation_requirements", "int"),
+			array("data_gen_multi_day", "varchar(255)"),
+			array("data_gen_single_rooms", "int"),
+			array("data_gen_double_rooms", "int"),
+			array("data_gen_suites", "int"),
+			array("data_gen_acc_start_admin", "int"),
+			array("data_gen_acc_end_admin", "int"),
+			array("data_gen_dates_are_flexible", "int"),
+			array("data_gen_meeting_pattern", "varchar(255)"),
+			array("data_gen_date_comments", "text"),
+			array("data_gen_city", "int"),
+			array("data_gen_hotel", "int"),
+			array("archived", "int"),
+			array("urgent", "int"),
+			array("data_gen_alternative_dates", "int"),
+			array("data_gen_package", "int"),
+			array("data_mf_table", "varchar(255)"),
+			array("data_mf_event_type", "int"),
+			array("data_mf_table_form", "int"),
+			array("data_mf_tech", "varchar(255)"),
+			array("data_mf_additional_tech", "text"),
+			array("data_mf_additional_decorations", "text"),
+			array("data_mf_additional_entertainment", "text"),
+			array("data_mf_additional_catering", "text"),
+			array("data_mf_breakout_rooms", "int"),
+			array("data_mf_breakout_room_setup", "text"),
+			array("data_mf_breakout_room_additional_tech", "text"),
+			array("data_mf_door_sign", "varchar(255)"),
+			array("data_mf_attendees_no", "int"),
+			array("data_mf_start_date_admin", "int"),
+			array("data_mf_end_date_admin", "int"),
+			array("data_mf_24h", "varchar(255)"),
+			array("data_mf_catering", "text"),
+			array("data_mf_catering_type", "varchar(255)"),
+			array("data_mf_catering_attendees_no", "int"),
+			array("data_mf_catering_start_admin", "int"),
+			array("data_mf_catering_end_admin", "int"),
+			array("data_billing_company", "varchar(255)"),
+			array("data_billing_contact", "varchar(255)"),
+			array("data_billing_street", "varchar(255)"),
+			array("data_billing_city", "varchar(255)"),
+			array("data_billing_zip", "varchar(255)"),
+			array("data_billing_country", "varchar(255)"),
+			array("data_billing_name", "varchar(255)"),
+			array("data_billing_phone", "varchar(255)"),
+			array("data_billing_email", "varchar(255)"),
+		);
+		if(strlen($field))
+		{
+			foreach($fields as $fafa)
+			{
+				if($field == $fafa[0])
+				{
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => $fafa[1],
+					));
+					return true;
+
+				}
+			}
+		}
 		if($tbl == "rfp")
 		{
 			if($field=="")
 			{
-				$fields = array(
-					array("final_rooms", "varchar(255)"),
-					array("final_theme", "varchar(255)"),
-					array("final_international", "int"),
-					array("final_native_guests", "int"),
-					array("final_foreign_guests", "int"),
-					array("data_subm_name", "varchar(255)"),
-					array("data_subm_country", "varchar(255)"),
-					array("data_subm_organisation", "varchar(255)"),
-					array("data_subm_organizer", "varchar(255)"),
-					array("data_subm_email", "varchar(255)"),
-					array("data_subm_phone", "varchar(255)"),
-					array("data_subm_contact_preference", "varchar(255)"),
-					array("data_gen_function_name", "varchar(255)"),
-					array("data_gen_attendees_no", "int"),
-					array("data_gen_response_date_admin", "int"),
-					array("data_gen_decision_date_admin", "int"),
-					array("data_gen_departure_date_admin", "int"),
-					array("data_gen_arrival_date_admin", "int"),
-					array("data_gen_open_for_alternative_dates", "int"),
-					array("data_gen_accommodation_requirements", "int"),
-					array("data_gen_multi_day", "varchar(255)"),
-					array("data_gen_single_rooms", "int"),
-					array("data_gen_double_rooms", "int"),
-					array("data_gen_suites", "int"),
-					array("data_gen_acc_start_admin", "int"),
-					array("data_gen_acc_end_admin", "int"),
-					array("data_gen_dates_are_flexible", "int"),
-					array("data_gen_meeting_pattern", "varchar(255)"),
-					array("data_gen_date_comments", "text"),
-					array("data_gen_city", "int"),
-					array("data_gen_hotel", "int"),
-					array("archived", "int"),
-					array("urgent", "int"),
-					array("data_gen_alternative_dates", "int"),
-					array("data_gen_package", "int"),
-					array("data_mf_table", "varchar(255)"),
-					array("data_mf_event_type", "int"),
-					array("data_mf_table_form", "int"),
-					array("data_mf_tech", "varchar(255)"),
-					array("data_mf_additional_tech", "text"),
-					array("data_mf_additional_decorations", "text"),
-					array("data_mf_additional_entertainment", "text"),
-					array("data_mf_additional_catering", "text"),
-					array("data_mf_breakout_rooms", "int"),
-					array("data_mf_breakout_room_setup", "text"),
-					array("data_mf_breakout_room_additional_tech", "text"),
-					array("data_mf_door_sign", "varchar(255)"),
-					array("data_mf_attendees_no", "int"),
-					array("data_mf_start_date_admin", "int"),
-					array("data_mf_end_date_admin", "int"),
-					array("data_mf_24h", "varchar(255)"),
-					array("data_mf_catering", "text"),
-					array("data_mf_catering_type", "varchar(255)"),
-					array("data_mf_catering_attendees_no", "int"),
-					array("data_mf_catering_start_admin", "int"),
-					array("data_mf_catering_end_admin", "int"),
-					array("data_billing_company", "varchar(255)"),
-					array("data_billing_contact", "varchar(255)"),
-					array("data_billing_street", "varchar(255)"),
-					array("data_billing_city", "varchar(255)"),
-					array("data_billing_zip", "varchar(255)"),
-					array("data_billing_country", "varchar(255)"),
-					array("data_billing_name", "varchar(255)"),
-					array("data_billing_phone", "varchar(255)"),
-					array("data_billing_email", "varchar(255)"),
-				);
+
 
 				foreach($fields as $f)
 				{
