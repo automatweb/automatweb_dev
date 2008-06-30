@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.38 2008/04/08 12:04:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.39 2008/06/30 12:18:18 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -140,9 +140,14 @@ class spa_customer_interface extends class_base
 			$has_prods = false;
 			foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
 			{
-				$has_prods = true;
 				$bron = $c->to();
 				$confirmed &= $bron->prop("verified");
+				//Mitte kuvada tavakliendile aegu, mis on maksmata ja vanemad kui 24h
+				if(!$confirmed && ($bron->created() < (time() - 24*3600)))
+				{
+					continue;
+				}
+				$has_prods = true;
 				if ($bron->prop("start1") < 100)
 				{
 					$has_times = false;
