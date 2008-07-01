@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.118 2008/06/17 12:57:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.119 2008/07/01 15:23:40 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -28,6 +28,7 @@ class aw_table extends aw_template
 	var $records_per_page;
 	var $final_enum;
 	var $titlebar_repeat_bottom;
+	var $hide_rgroupby;
 
 	function aw_table($data = array())
 	{
@@ -148,6 +149,25 @@ class aw_table extends aw_template
 	function set_rgroupby($arg)
 	{
 		$this->rgroupby = $arg;
+	}
+
+	/** hides rgrouping fields if needed
+		@attrib params=name api=1
+		@param fields type=array optional
+		@example
+		$t->set_rgroupby(array(
+			"field_a" => "field_a",
+			"field_b" => "field_b",
+		));
+		$t->hide_rgroupby(array(
+			"field_a" => "field_a",
+		));
+
+		// well, this rgroups using values from two fields, but hides one of these fields from table.
+	 **/
+	function hide_rgroupby($arg)
+	{
+		$this->hide_rgroupby = $arg;
 	}
 
 	/**
@@ -1043,9 +1063,9 @@ class aw_table extends aw_template
 
 
 				$tmp = "";
-				// grpupeerimine
 				if (isset($rgroupby) && is_array($rgroupby))
 				{
+					// XXY siin peaks yhe colspani v2hemaks v6tma
 					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
 				};
 				if ($tmp != "")
@@ -1087,6 +1107,11 @@ class aw_table extends aw_template
 				foreach($this->rowdefs as $k1 => $v1)
 				{
 					if ($this->sh_counts_by_parent[$v1["name"]] > 0)
+					{
+						continue;
+					}
+					// hides a the rgroupby column if told so
+					if(in_array($v1["name"], $this->hide_rgroupby))
 					{
 						continue;
 					}
@@ -2063,12 +2088,13 @@ class aw_table extends aw_template
 			}
 			if ($this->lgrpvals[$rgel] != $_a)
 			{
+				//$this->rgroupby
 				// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
 				if (is_array($rgroupdat[$rgel]) && count($rgroupdat[$rgel]) > 0)
 				{
 					$tbl.=$this->opentag(array(
 						"name" => "td",
-						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0),
+						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0) - count($this->hide_rgroupby),
 					));
 
 					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
@@ -2094,7 +2120,7 @@ class aw_table extends aw_template
 				{
 					$tbl.=$this->opentag(array(
 						"name" => "td",
-						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0),
+						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0) - count($this->hide_rgroupby),
 						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
 					));
 					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
@@ -2366,7 +2392,11 @@ class aw_table extends aw_template
 			{
 				continue;
 			}
-
+			// hides a the rgroupby column if told so
+			if(in_array($v["name"], $this->hide_rgroupby))
+			{
+				continue;
+			}
 			$style = false;
 			if (isset($v["sortable"]))
 			{
