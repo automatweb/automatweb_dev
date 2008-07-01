@@ -33,5 +33,91 @@ class crm_bill_row_object extends _int_object
 		}
 		return $sum;
 	}
+
+	/** checks if task_row is connected to task
+		@attrib api=1
+		@returns boolean
+			reservation price
+	**/
+	function has_task_row()
+	{
+		foreach($this->connections_from(array("type" => "RELTYPE_TASK_ROW"))as $c)
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	/** returns bill row bill id
+		@attrib api=1
+		@returns oid
+			bill id
+	**/
+	function get_bill()
+	{
+		$bills_list = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"CL_CRM_BILL.RELTYPE_ROW" => $this->id(),
+		));
+		return reset($bills_list->ids());
+	}
+
+	/** checks if bill has other customers...
+		@attrib api=1
+		@param customer type=oid
+		@returns string/int
+			error, if true, if not, then 0
+	**/
+	function check_if_has_other_customers($customer)
+	{
+		$bill = $this->get_bill();
+		if(!is_oid($bill) || !is_oid($customer))
+		{
+			return 0;
+		}
+		$bill = obj($bill);
+		if(!$bill->prop("customer"))
+		{
+			return 0;
+		}
+		if($customer != $bill->prop("customer"))
+		{
+			return "on teised kliendid...";
+		}
+		return 0;
+	}
+
+	/** connects bill row to a task row
+		@attrib api=1
+		@returns 
+			error string if unsuccessful
+	**/
+	function connect_task_row($row)
+	{
+		if(!is_oid($row))
+		{
+			return t("Pole piisavalt p&auml;dev klassi id");
+		}
+		$row_obj = obj($row);
+		$tasko = obj($row_obj->prop("task"));
+		$error = $this->check_if_has_other_customers($tasko->prop("project.orderer"));
+		if($error)
+		{
+			return $error;
+		}
+		$this->connect(array("to"=> $row, "type" => "RELTYPE_TASK_ROW"));
+		$this->connect(array("to"=> $row_obj->prop("task"), "type" => "RELTYPE_TASK"));
+		$bill = $this->get_bill();
+		if(is_oid($bill))
+		{
+			$billo = obj($bill);
+			$billo->connect(array("to"=> $row_obj->prop("task"), "type" => "RELTYPE_TASK"));
+		}
+		$tasko->connect(array("to"=> $bill, "type" => "RELTYPE_BILL"));
+		$row_obj->set_prop("bill_id" , $bill);
+		$row_obj->save();
+		return 0;
+	}
 }
 ?>

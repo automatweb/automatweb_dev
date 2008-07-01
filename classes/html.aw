@@ -177,6 +177,9 @@ class html extends aw_template
 	@param autocomplete_delimiters optional type=array
 		Delimiter strings for multiple part autocomplete (autocomplete options given again after typing text after a delimiter string). Default empty.
 
+	@param autocomplete_class_id optional type=array
+		Classes to search with autocomlete. If set, no other autocomplete params needed
+
 	@param options optional type=array
 		Initial autocomplete options. If $option_is_tuple then associative. Default empty.
 
@@ -222,6 +225,17 @@ class html extends aw_template
 		$onchange = !empty($onChange) ? " onchange=\"{$onChange}\"" : "";
 		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
 		$style = isset($style) ? " style=\"{$style}\"":"";
+
+		if($autocomplete_class_id)
+		{
+			$params = array(
+				"id" => $_GET["id"],
+				"class_ids" => $autocomplete_class_id,
+				"param" => $name,
+			);
+			$autocomplete_source = $this->mk_my_orb("object_name_autocomplete_source", $params, $_GET["class"], false, true);
+			$autocomplete_params = array($name);
+		}
 
 		### compose autocompletes source url
 		if (!empty($autocomplete_source) or !empty($options) and is_array($options) or !empty($autocomplete_source_method))

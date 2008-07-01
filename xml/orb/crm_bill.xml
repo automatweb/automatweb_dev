@@ -8,6 +8,19 @@
 			</function>
 		</action>
 
+		<action name="add_task_row_to_bill_row">
+			<function name="add_task_row_to_bill_row">
+				<arguments>
+					<optional name="row" type="oid" />
+					<optional name="task_row" type="oid" />
+					<optional name="content" type="string" />
+					<optional name="task" type="string" />
+					<optional name="project" type="string" />
+					<optional name="customer" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="unit_options_autocomplete_source" all_args="1">
 			<function name="unit_options_autocomplete_source">
 				<arguments>

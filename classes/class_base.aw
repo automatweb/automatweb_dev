@@ -6160,6 +6160,27 @@ class class_base extends aw_template
 		}
 	}
 
+	//yldine autocomplete funktsioon juhuks kui on vaja leida vaid objekti nime ja klassi j2rgi
+	/**
+		@attrib name=object_name_autocomplete_source all_args=1
+		@param class_ids optional
+		@param param required
+	**/
+	function object_name_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => $arr["class_ids"],
+			"name" => $arr[$arr["param"]]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 100
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
 //--------------- mailiga teavitamise komponentide orb funktsuoonid------------
 //t6en4oliselt koristab need 4ra kui parema mooduse leiab kuda neid hoida
 	/**

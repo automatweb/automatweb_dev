@@ -116,6 +116,15 @@
 			</function>
 		</action>
 
+		<action name="object_name_autocomplete_source" all_args="1">
+			<function name="object_name_autocomplete_source">
+				<arguments>
+					<optional name="class_ids" />
+					<required name="param" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="co_autocomplete_source">
 			<function name="co_autocomplete_source">
 				<arguments>

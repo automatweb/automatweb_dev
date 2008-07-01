@@ -1093,6 +1093,15 @@ class crm_bill extends class_base
 			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
 			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
 			$default_row_jrk = $default_row_jrk + 10;
+			$connect_row_url =  $this->mk_my_orb("add_task_row_to_bill_row", array(
+				"row" => $id,
+			));
+
+			$connect_row_link.= html::href(array(
+				"url" => "javascript:aw_popup_scroll(\"$connect_row_url\",\"Otsing\",550,500)",
+				"caption" => t("Lisa toimetuse rida"),
+				"title" => t("Otsi")
+			));
 
 			$t->define_data(array(
 			"name" => html::textbox(array(
@@ -1112,7 +1121,7 @@ class crm_bill extends class_base
 					"value" => $t_inf["name"],
 					"rows" => 5,
 					"cols" => 40
-				)),
+				)).(!$row["has_task_row"] ? "<br>".$connect_row_link :""),
 				"code" => html::textbox(array(
 					"name" => "rows[$id][code]",
 					"value" => $t_inf["code"],
@@ -1272,6 +1281,166 @@ class crm_bill extends class_base
 // 			}
 		}
 		$arr["prop"]["value"] = $t->draw();
+	}
+
+	/** searches and connects bill row to task row
+		@attrib name=add_task_row_to_bill_row
+		@param row optional type=oid
+			row id
+		@param task_row optional type=oid
+			task row id
+		@param  content optional type=string
+			task row content
+		@param  task optional type=string
+			task name
+		@param  project optional type=string
+			project name
+		@param  customer optional type=string
+			customer name
+	**/
+	function add_task_row_to_bill_row($arr)
+	{
+		$content = "";
+		if(is_oid($arr["task_row"]))
+		{
+			$bill_row = obj($arr["row"]);
+			$error = $bill_row->connect_task_row($arr["task_row"]);
+			if($error)
+			{
+				$content.= $error."<br>";
+			}
+			else
+			{
+				die("<script language='javascript'>
+					if (window.opener)
+					{
+						window.opener.location.reload();
+					}
+					window.close();
+				</script>");
+			}
+		}
+		$content.= "<form method=POST action=".get_ru().">";
+		$content.= t("Toimetuse rea sisu");
+		$content.= "<br>".html::textbox(array(
+			"name" => "content",
+			"value" => $arr["content"],
+		))."<br><br>";
+		$content.= t("Toimetus");
+		$content.= "<br>".html::textbox(array(
+			"name" => "task",
+			"value" => $arr["task"],
+			"autocomplete_class_id" =>  array(CL_TASK),
+		))."<br><br>";
+
+		$content.= t("Klient");
+		$content.= "<br>".html::textbox(array(
+			"name" => "customer",
+			"value" => $arr["customer"],
+			"autocomplete_class_id" =>  array(CL_CRM_COMPANY,CL_CRM_PERSON),
+		))."<br><br>";
+		$content.= t("Projekt");
+		$content.= "<br>".html::textbox(array(
+			"name" => "project",
+			"value" => $arr["project"],
+			"autocomplete_class_id" =>  array(CL_PROJECT),
+		))."<br><br>";
+
+		$content.= "<br>".html::submit(array(
+//			"onclick" => "submit_changeform();",
+        	        "value" => t("Otsi")
+                ))."<br>";
+
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));		
+		$t->define_field(array(
+			"name" => "content",
+			"caption" => t("Sisu"),
+		));
+		$t->define_field(array(
+			"name" => "task",
+			"caption" => t("Toimetus"),
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+		));
+		$t->define_field(array(
+			"name" => "customer",
+			"caption" => t("Klient"),
+		));
+		$t->define_field(array(
+			"name" => "choose",
+			"caption" => "",
+		));
+		
+		$filter = array(
+			"class_id" => CL_TASK_ROW,
+			"lang_id" => array(),
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, 1),
+		);
+
+		$task_filter = array(
+			"class_id" => CL_TASK,
+			"lang_id" => array(),
+		);
+
+		if($arr["task"])
+		{
+			$task_filter["name"] = "%".$arr["task"]."%";
+		}
+		if($arr["project"])
+		{
+			$task_filter["CL_TASK.project.name"] = "%".$arr["project"]."%";
+		}
+		if($arr["customer"])
+		{
+			$task_filter["CL_TASK.customer.name"] = "%".$arr["customer"]."%";
+		}
+		if(sizeof($task_filter) > 2)
+		{
+			$tasks = new object_list($task_filter);
+			$filter["task"] = $tasks->ids();
+			if(!sizeof($filter["task"]))
+			{
+				$filter["oid"] = 1;
+			}
+		}
+
+		if($arr["content"])
+		{
+			$filter["content"] = "%".$arr["content"]."%";
+		}
+		$ol = new object_list($filter);
+		foreach($ol->arr() as $o)
+		{
+			$cust = "";
+			if($this->can("view" ,$o->prop("task.project")))
+			{
+				$p = obj($o->prop("task.project"));
+				$c = $p->get_first_obj_by_reltype("RELTYPE_ORDERER");
+				if(is_object($c))
+				{
+					$cust = $c->name();
+				}
+			}
+			$t->define_data(array(
+				"content" => $o->prop("content"),
+				"choose" => html::href(array(
+					"caption" => t("Vali see"),
+					"url" => aw_url_change_var("task_row", $o->id()),
+				)),
+				"task" => $o->prop("task.name"),
+				"project" => $o->prop("task.project.name"),
+				"customer" => $cust,
+			));
+		}
+
+		$content.= $t->draw();
+		$content.="</form>";
+		print $content;
 	}
 
 	/**
@@ -2054,7 +2223,8 @@ class crm_bill extends class_base
 				"has_tax" => $row->prop("has_tax"),
 				"date" => $row->prop("date"),
 				"id" => $row->id(),
-				"persons" => $ppl
+				"persons" => $ppl,
+				"has_task_row" => $row->has_task_row(),
 			);
 			$inf[] = $rd;
 		}
