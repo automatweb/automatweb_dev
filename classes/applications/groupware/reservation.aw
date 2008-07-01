@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.108 2008/06/30 14:39:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.109 2008/07/01 09:35:38 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -240,7 +240,6 @@ class reservation extends class_base
 					$prop["value"] = 1;
 				}
 				break;
-
 			case "sbt":
 				$prop["type"] = "button";
 				$prop["value"] = t("Salvesta!");
@@ -260,7 +259,6 @@ class reservation extends class_base
 						}'
 					/>";
 				break;
-
 			case "start1":
 			case "end":
 			case "resource":
@@ -1886,11 +1884,16 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 	
 		//l6ppu maksmise infi, juhul kui on makstud
 		//ei n2inud m6tet eraldi property tegemiseks
+		//default valuuta tuleb systeemis olev default, juhul kui makse infost seda k2tte ei saa
 		if(is_array($arr["obj_inst"]->meta("payment_info")))
 		{
 			$inf = $arr["obj_inst"]->meta("payment_info");
 			$sum = $inf["sum"];
-
+			if(!$inf["curr"])
+			{
+				$currency = get_instance(CL_CURRENCY);
+				$inf["curr"] = $currency->get_default_currency_name();
+			}
 			$bron_cost = $arr["obj_inst"]->get_sum_in_curr($inf["curr"]);
 			if($bron_cost != "")
 			{
@@ -1907,6 +1910,7 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 					$inf["sum"] = $bron_cost;
 				}
 			}
+
 			$arr["prop"]["value"].= sprintf(
 				t("<br>Tasutud %s %s (%s) %s , maksja %s"),
 				$inf["sum"],
