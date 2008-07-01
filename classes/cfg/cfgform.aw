@@ -1053,6 +1053,7 @@ class cfgform extends class_base
 		{
 			foreach ($this->cfg_proplist as $name => $cfg)
 			{
+				$this->cfg_proplist[$name] = safe_array($this->cfg_proplist[$name]) + safe_array($this->all_props[$name]);
 				if(is_array($this->cfg_proplist[$name]) and is_array($this->all_props[$name]) and empty($this->cfg_proplist[$name]["type"]))
 				{
 					$this->cfg_proplist[$name]["type"] = $this->all_props[$name]["type"];
@@ -1061,7 +1062,9 @@ class cfgform extends class_base
 
 			$obj->set_meta("cfg_proplist", $this->cfg_proplist);
 			$obj->set_meta("cfg_proplist_format_updated", "1");
+			aw_disable_acl();
 			$obj->save();
+			aw_restore_acl();
 		}
 	}
 
