@@ -1439,7 +1439,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			}
 			$min = min($min, $b->prop("bill_date"));
 			$max = max($max, $b->prop("bill_date"));
-
+			$payment_mode = $b->prop("payment_mode");
 
 			// bill info row
 			$brow = array();
@@ -1458,7 +1458,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			$brow[] = 0;						// 0 (teadmata - vaikevaartus 0)
 			$brow[] = $penalty;					// 0,00 (teadmata - vaikevaartus 0,00) viivis
 			$brow[] = "";
-			$brow[] = 1;						// 1 (teadmata - vaikevaartus 1)
+			$brow[] = $payment_mode?$payment_mode:1;//1;		// 1 (teadmata - vaikev22rtus 1) 
 			$brow[] = "";
 			$brow[] = $rfn;						// OBJEKT (kasutaja eesnimi suurte tahtedega, nt TEDDI)
 			$brow[] = "";
