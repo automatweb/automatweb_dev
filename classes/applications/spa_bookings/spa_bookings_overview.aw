@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.60 2008/06/30 13:27:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.61 2008/07/01 09:56:05 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -495,13 +495,13 @@ class spa_bookings_overview extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
-		if ($selectah)
-		{
+//		if ($selectah)
+//		{
 			$t->define_chooser(array(
 				"name" => "sel",
 				"field" => "oid"
 			));
-		}
+//		}
 	}
 
 	function _get_report_table(&$arr)
