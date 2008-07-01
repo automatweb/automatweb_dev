@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.109 2008/07/01 09:35:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.110 2008/07/01 11:14:18 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -713,6 +713,20 @@ class reservation extends class_base
 				"to" => $arr["obj_inst"]->id(),
 			));
 		}
+		// well, this here makes a new person when rfp class makes a new reservation and personal data is provided also
+		/*
+		if($arr["new"])
+		{
+			$arr["request"]["new"] = array(
+				"firstname" => $arr["request"]["person_fname"],
+				"name" => $arr["request"]["person_lname"],
+				"email" => $arr["request"]["person_email"],
+				"phone" => $arr["request"]["person_phone"],
+			);
+			$this->_set_ppl($arr);
+		}
+		 */
+
 
 		if ($arr["request"]["sbt_close"] != "")
 		{
@@ -1625,8 +1639,12 @@ class reservation extends class_base
 
 	function _get_cp_fn($arr)
 	{
-if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+		if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 		{
+			if($arr["request"]["person_rfp_fname"])
+			{
+				$arr["prop"]["value"] = $arr["request"]["person_rfp_fname"];
+			}
 			return PROP_OK;
 		}
 		$cust = obj($arr["obj_inst"]->prop("customer"));
@@ -1644,6 +1662,10 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
         {
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
+			if($arr["request"]["person_rfp_lname"])
+			{
+				$arr["prop"]["value"] = $arr["request"]["person_rfp_lname"];
+			}
                         return PROP_OK;
                 }
 
@@ -1662,6 +1684,10 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
         {
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
+			if($arr["request"]["person_rfp_phone"])
+			{
+				$arr["prop"]["value"] = $arr["request"]["person_rfp_phone"];
+			}
                         return PROP_OK;
                 }
 
@@ -1680,6 +1706,10 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
         {
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
+			if($arr["request"]["person_rfp_email"])
+			{
+				$arr["prop"]["value"] = $arr["request"]["person_rfp_email"];
+			}
                         return PROP_OK;
                 }
 

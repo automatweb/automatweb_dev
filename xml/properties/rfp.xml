@@ -11,207 +11,12 @@
             <caption>Tellimuse vorm</caption>
       </property>
       <property>
-            <name>final_rooms</name>
-            <table>rfp</table>
-            <group>final_general</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_ROOM</reltype>
-            <field>final_rooms</field>
-            <caption>Ruumid</caption>
-            <comment>Konverentsi jaoks kasutatavad ruumid</comment>
-      </property>
-      <property>
-            <name>final_catering_rooms</name>
-            <table>rfp</table>
-            <group>final_general</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_CATERING_ROOM</reltype>
-            <field>final_catering_rooms</field>
-            <caption>Toitlustuse ruumid</caption>
-            <comment>Toitlustuse jaoks kasutatavad ruumid</comment>
-      </property>
-      <property>
-            <name>final_theme</name>
-            <table>rfp</table>
-            <group>final_general</group>
-            <type>textbox</type>
-            <field>final_theme</field>
-            <caption>Teema</caption>
-            <comment>Konverentsi valdkond(&amp;amp;uml;ldteema)</comment>
-      </property>
-      <property>
-            <name>final_international</name>
-            <table>rfp</table>
-            <group>final_general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>0</default>
-            <field>final_international</field>
-            <caption>Rahvusvaheline</caption>
-            <comment>Kas &amp;amp;uuml;ritus on rahvusvaheline</comment>
-      </property>
-      <property>
-            <name>final_native_guests</name>
-            <table>rfp</table>
-            <group>final_general</group>
-            <type>textbox</type>
-            <field>final_native_guests</field>
-            <caption>Kohalike k&amp;amp;uuml;laliste arv</caption>
-            <comment>Konverentsil viibivate kohalike k&amp;amp;uuml;laliste arv</comment>
-      </property>
-      <property>
-            <name>final_foreign_guests</name>
-            <table>rfp</table>
-            <group>final_general</group>
-            <type>textbox</type>
-            <field>final_foreign_guests</field>
-            <caption>V&amp;amp;auml;lisk&amp;amp;uuml;laliste arv</caption>
-            <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
-      </property>
-      <property>
-            <name>final_add_reservation_tb</name>
-            <table>rfp</table>
-            <group>
-                  <num_0>final_prices</num_0>
-                  <num_1>final_resource</num_1>
-                  <num_2>final_catering</num_2>
-            </group>
-            <no_caption>1</no_caption>
-            <type>toolbar</type>
-            <store>no</store>
-            <field>final_add_reservation_tb</field>
-      </property>
-      <property>
-            <name>products_tree</name>
-            <table>rfp</table>
-            <group>final_catering</group>
-            <parent>cat_left</parent>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>products_tree</field>
-      </property>
-      <property>
-            <name>products_tbl</name>
-            <table>rfp</table>
-            <group>final_catering</group>
-            <parent>cat_right</parent>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>products_tbl</field>
-      </property>
-      <property>
-            <name>resources_tree</name>
-            <table>rfp</table>
-            <group>final_resource</group>
-            <parent>res_left</parent>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>resources_tree</field>
-      </property>
-      <property>
-            <name>resources_tbl</name>
-            <table>rfp</table>
-            <group>final_resource</group>
-            <parent>res_right</parent>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>resources_tbl</field>
-      </property>
-      <property>
-            <name>housing_tbl</name>
-            <table>rfp</table>
-            <group>final_housing</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>housing_tbl</field>
-      </property>
-      <property>
-            <name>prices_tree</name>
-            <table>rfp</table>
-            <group>final_prices</group>
-            <parent>prs_left</parent>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>prices_tree</field>
-      </property>
-      <property>
-            <name>prices_tbl</name>
-            <table>rfp</table>
-            <group>final_prices</group>
-            <parent>prs_right</parent>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>prices_tbl</field>
-      </property>
-      <property>
-            <name>data_contactperson</name>
-            <table>objects</table>
-            <group>final_submission</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kontaktisik</caption>
-      </property>
-      <property>
-            <name>data_send_date</name>
-            <table>objects</table>
-            <group>final_submission</group>
-            <type>date_select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Saatmise kuup&amp;amp;auml;ev</caption>
-      </property>
-      <property>
-            <name>data_pointer_text</name>
-            <table>objects</table>
-            <group>final_submission</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tekst suunaviitadele</caption>
-      </property>
-      <property>
-            <name>data_payment_method</name>
-            <table>objects</table>
-            <group>final_submission</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Maksmisviis</caption>
-      </property>
-      <property>
-            <name>pdf</name>
-            <table>rfp</table>
-            <group>final_submission</group>
-            <type>text</type>
-            <store>no</store>
-            <field>pdf</field>
-            <caption>Lae PDF</caption>
-      </property>
-      <property>
-            <name>submission</name>
-            <table>rfp</table>
-            <group>final_submission</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>submission</field>
-      </property>
-      <property>
             <name>data_subm_name</name>
             <table>rfp</table>
             <group>submitter_info</group>
             <type>textbox</type>
             <field>data_subm_name</field>
+            <method>serialize</method>
             <caption>Ankeedi t&amp;amp;auml;itja</caption>
       </property>
       <property>
@@ -813,6 +618,195 @@
             <no_caption>1</no_caption>
             <field>files_tbl</field>
       </property>
+      <property>
+            <name>final_rooms</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_ROOM</reltype>
+            <store>connect</store>
+            <field>final_rooms</field>
+            <caption>Ruumid</caption>
+            <comment>Konverentsi jaoks kasutatavad ruumid</comment>
+      </property>
+      <property>
+            <name>final_catering_rooms</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_CATERING_ROOM</reltype>
+            <store>connect</store>
+            <field>final_catering_rooms</field>
+            <caption>Toitlustuse ruumid</caption>
+            <comment>Toitlustuse jaoks kasutatavad ruumid</comment>
+      </property>
+      <property>
+            <name>final_theme</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>textbox</type>
+            <field>final_theme</field>
+            <caption>Teema</caption>
+            <comment>Konverentsi valdkond(&amp;amp;uml;ldteema)</comment>
+      </property>
+      <property>
+            <name>final_international</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>0</default>
+            <field>final_international</field>
+            <caption>Rahvusvaheline</caption>
+            <comment>Kas &amp;amp;uuml;ritus on rahvusvaheline</comment>
+      </property>
+      <property>
+            <name>final_native_guests</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>textbox</type>
+            <field>final_native_guests</field>
+            <caption>Kohalike k&amp;amp;uuml;laliste arv</caption>
+            <comment>Konverentsil viibivate kohalike k&amp;amp;uuml;laliste arv</comment>
+      </property>
+      <property>
+            <name>final_foreign_guests</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>textbox</type>
+            <field>final_foreign_guests</field>
+            <caption>V&amp;amp;auml;lisk&amp;amp;uuml;laliste arv</caption>
+            <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
+      </property>
+      <property>
+            <name>final_add_reservation_tb</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>final_prices</num_0>
+                  <num_1>final_resource</num_1>
+                  <num_2>final_catering</num_2>
+            </group>
+            <no_caption>1</no_caption>
+            <type>toolbar</type>
+            <store>no</store>
+            <field>final_add_reservation_tb</field>
+      </property>
+      <property>
+            <name>prices_tree</name>
+            <table>rfp</table>
+            <group>final_prices</group>
+            <parent>prs_left</parent>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prices_tree</field>
+      </property>
+      <property>
+            <name>prices_tbl</name>
+            <table>rfp</table>
+            <group>final_prices</group>
+            <parent>prs_right</parent>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prices_tbl</field>
+      </property>
+      <property>
+            <name>products_tree</name>
+            <table>rfp</table>
+            <group>final_catering</group>
+            <parent>cat_left</parent>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>products_tree</field>
+      </property>
+      <property>
+            <name>products_tbl</name>
+            <table>rfp</table>
+            <group>final_catering</group>
+            <parent>cat_right</parent>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>products_tbl</field>
+      </property>
+      <property>
+            <name>resources_tree</name>
+            <table>rfp</table>
+            <group>final_resource</group>
+            <parent>res_left</parent>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>resources_tree</field>
+      </property>
+      <property>
+            <name>resources_tbl</name>
+            <table>rfp</table>
+            <group>final_resource</group>
+            <parent>res_right</parent>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>resources_tbl</field>
+      </property>
+      <property>
+            <name>data_contactperson</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>data_send_date</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saatmise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>data_pointer_text</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tekst suunaviitadele</caption>
+      </property>
+      <property>
+            <name>data_payment_method</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maksmisviis</caption>
+      </property>
+      <property>
+            <name>pdf</name>
+            <table>rfp</table>
+            <group>final_submission</group>
+            <type>text</type>
+            <store>no</store>
+            <field>pdf</field>
+            <caption>Lae PDF</caption>
+      </property>
+      <property>
+            <name>submission</name>
+            <table>rfp</table>
+            <group>final_submission</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>submission</field>
+      </property>
       <classinfo>
             <syslog_type>ST_RFP</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -822,33 +816,6 @@
             <maintainer>tarvo</maintainer>
       </classinfo>
       <groupinfo>
-            <final_info>
-                  <caption>Tellimuskirjeldus</caption>
-            </final_info>
-            <final_general>
-                  <caption>&amp;amp;Uuml;ldine</caption>
-                  <parent>final_info</parent>
-            </final_general>
-            <final_catering>
-                  <caption>Toitlustus</caption>
-                  <parent>final_info</parent>
-            </final_catering>
-            <final_resource>
-                  <caption>Ressursid</caption>
-                  <parent>final_info</parent>
-            </final_resource>
-            <final_housing>
-                  <caption>Majutus</caption>
-                  <parent>final_info</parent>
-            </final_housing>
-            <final_prices>
-                  <caption>Hinnad</caption>
-                  <parent>final_info</parent>
-            </final_prices>
-            <final_submission>
-                  <caption>Kinnitamine</caption>
-                  <parent>final_info</parent>
-            </final_submission>
             <data>
                   <caption>Andmed</caption>
             </data>
@@ -872,6 +839,29 @@
                   <caption>Failid</caption>
                   <parent>data</parent>
             </files>
+            <final_info>
+                  <caption>Tellimuskirjeldus</caption>
+            </final_info>
+            <final_general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>final_info</parent>
+            </final_general>
+            <final_prices>
+                  <caption>Ruumid</caption>
+                  <parent>final_info</parent>
+            </final_prices>
+            <final_catering>
+                  <caption>Toitlustus</caption>
+                  <parent>final_info</parent>
+            </final_catering>
+            <final_resource>
+                  <caption>Ressursid</caption>
+                  <parent>final_info</parent>
+            </final_resource>
+            <final_submission>
+                  <caption>Kinnitamine</caption>
+                  <parent>final_info</parent>
+            </final_submission>
       </groupinfo>
       <tableinfo>
             <rfp>
@@ -938,9 +928,29 @@
             </CATERING_RESERVATION>
       </reltypes>
       <layout>
+            <prs_hsplit>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>final_prices</group>
+                  <area_caption></area_caption>
+            </prs_hsplit>
+            <prs_left>
+                  <parent>prs_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ruumid&amp;amp;nbsp;ja&amp;amp;nbsp;reserveeringud</area_caption>
+                  <group>final_prices</group>
+            </prs_left>
+            <prs_right>
+                  <parent>prs_hsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Hinnad</area_caption>
+                  <group>final_prices</group>
+            </prs_right>
             <cat_hsplit>
                   <type>hbox</type>
-                  <width>25%:75%</width>
+                  <width>30%:70%</width>
                   <group>final_catering</group>
                   <area_caption></area_caption>
             </cat_hsplit>
@@ -978,26 +988,6 @@
                   <area_caption>Ressursid</area_caption>
                   <group>final_resource</group>
             </res_right>
-            <prs_hsplit>
-                  <type>hbox</type>
-                  <width>30%:70%</width>
-                  <group>final_prices</group>
-                  <area_caption></area_caption>
-            </prs_hsplit>
-            <prs_left>
-                  <parent>prs_hsplit</parent>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Ruumid&amp;amp;nbsp;ja&amp;amp;nbsp;reserveeringud</area_caption>
-                  <group>final_prices</group>
-            </prs_left>
-            <prs_right>
-                  <parent>prs_hsplit</parent>
-                  <type>vbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Hinnad</area_caption>
-                  <group>final_prices</group>
-            </prs_right>
       </layout>
 </properties>
 

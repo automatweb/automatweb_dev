@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.24 2008/06/30 13:44:01 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.25 2008/07/01 11:14:13 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -17,96 +17,6 @@
 @default table=rfp
 @default group=general
 
-	@groupinfo final_info caption="Tellimuskirjeldus"
-		
-		@groupinfo final_general caption="&Uuml;ldine" parent=final_info
-		@default group=final_general
-			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM
-			@caption Ruumid
-			@comment Konverentsi jaoks kasutatavad ruumid
-
-			@property final_catering_rooms type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM
-			@caption Toitlustuse ruumid
-			@comment Toitlustuse jaoks kasutatavad ruumid
-
-			@property final_theme type=textbox
-			@caption Teema
-			@comment Konverentsi valdkond(&uml;ldteema)
-
-			@property final_international type=checkbox ch_value=1 default=0
-			@caption Rahvusvaheline
-			@comment Kas &uuml;ritus on rahvusvaheline
-
-			@property final_native_guests type=textbox
-			@caption Kohalike k&uuml;laliste arv
-			@comment Konverentsil viibivate kohalike k&uuml;laliste arv
-
-			@property final_foreign_guests type=textbox
-			@caption V&auml;lisk&uuml;laliste arv
-			@comment Konverentsil viibivate v&auml;lisk&uuml;aliste arv
-
-		@groupinfo final_catering caption="Toitlustus" parent=final_info
-		@default group=final_catering
-
-			@property final_add_reservation_tb group=final_prices,final_resource,final_catering no_caption=1 type=toolbar
-
-			@layout cat_hsplit type=hbox width=25%:75%
-
-				@layout cat_left parent=cat_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
-					@property products_tree parent=cat_left type=treeview store=no no_caption=1
-
-				@layout cat_right parent=cat_hsplit type=vbox closeable=1 area_caption=Tooted
-					
-					@property products_tbl parent=cat_right type=text store=no no_caption=1
-
-		@groupinfo final_resource caption="Ressursid" parent=final_info
-		@default group=final_resource
-
-			@layout res_hsplit type=hbox width=30%:70%
-
-				@layout res_left parent=res_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
-					@property resources_tree parent=res_left type=treeview store=no no_caption=1
-
-				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Ressursid
-					@property resources_tbl parent=res_right type=text store=no no_caption=1
-
-		@groupinfo final_housing caption="Majutus" parent=final_info
-		@default group=final_housing
-
-			@property housing_tbl type=table store=no no_caption=1
-
-		@groupinfo final_prices caption="Hinnad" parent=final_info
-		@default group=final_prices
-			
-
-			@layout prs_hsplit type=hbox width=30%:70%
-
-				@layout prs_left parent=prs_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
-					@property prices_tree parent=prs_left type=treeview store=no no_caption=1
-
-				@layout prs_right parent=prs_hsplit type=vbox closeable=1 area_caption=Hinnad
-					@property prices_tbl parent=prs_right type=text store=no no_caption=1
-
-		@groupinfo final_submission caption="Kinnitamine" parent=final_info
-		@default group=final_submission
-
-			@property data_contactperson type=textbox table=objects field=meta method=serialize
-			@caption Kontaktisik
-
-			@property data_send_date type=date_select table=objects field=meta method=serialize
-			@caption Saatmise kuup&auml;ev
-
-			@property data_pointer_text type=textbox table=objects field=meta method=serialize
-			@caption Tekst suunaviitadele
-
-			@property data_payment_method type=textbox table=objects field=meta method=serialize
-			@caption Maksmisviis
-
-			@property pdf type=text store=no
-			@caption Lae PDF
-
-			@property submission type=text no_caption=1 store=no
-	
 	@groupinfo data caption="Andmed"
 
 		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
@@ -336,6 +246,93 @@
 			
 			@property files_tbl type=table store=no no_caption=1
 
+
+
+	@groupinfo final_info caption="Tellimuskirjeldus"
+		
+		@groupinfo final_general caption="&Uuml;ldine" parent=final_info
+		@default group=final_general
+			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect
+			@caption Ruumid
+			@comment Konverentsi jaoks kasutatavad ruumid
+
+			@property final_catering_rooms type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM store=connect
+			@caption Toitlustuse ruumid
+			@comment Toitlustuse jaoks kasutatavad ruumid
+
+			@property final_theme type=textbox
+			@caption Teema
+			@comment Konverentsi valdkond(&uml;ldteema)
+
+			@property final_international type=checkbox ch_value=1 default=0
+			@caption Rahvusvaheline
+			@comment Kas &uuml;ritus on rahvusvaheline
+
+			@property final_native_guests type=textbox
+			@caption Kohalike k&uuml;laliste arv
+			@comment Konverentsil viibivate kohalike k&uuml;laliste arv
+
+			@property final_foreign_guests type=textbox
+			@caption V&auml;lisk&uuml;laliste arv
+			@comment Konverentsil viibivate v&auml;lisk&uuml;aliste arv
+
+		@groupinfo final_prices caption="Ruumid" parent=final_info
+		@default group=final_prices
+
+			@property final_add_reservation_tb group=final_prices,final_resource,final_catering no_caption=1 type=toolbar
+
+			@layout prs_hsplit type=hbox width=30%:70%
+
+				@layout prs_left parent=prs_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+					@property prices_tree parent=prs_left type=treeview store=no no_caption=1
+
+				@layout prs_right parent=prs_hsplit type=vbox closeable=1 area_caption=Hinnad
+					@property prices_tbl parent=prs_right type=text store=no no_caption=1
+
+
+		@groupinfo final_catering caption="Toitlustus" parent=final_info
+		@default group=final_catering
+
+			@layout cat_hsplit type=hbox width=30%:70%
+
+				@layout cat_left parent=cat_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+					@property products_tree parent=cat_left type=treeview store=no no_caption=1
+
+				@layout cat_right parent=cat_hsplit type=vbox closeable=1 area_caption=Tooted
+					
+					@property products_tbl parent=cat_right type=text store=no no_caption=1
+
+		@groupinfo final_resource caption="Ressursid" parent=final_info
+		@default group=final_resource
+
+			@layout res_hsplit type=hbox width=30%:70%
+
+				@layout res_left parent=res_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+					@property resources_tree parent=res_left type=treeview store=no no_caption=1
+
+				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Ressursid
+					@property resources_tbl parent=res_right type=text store=no no_caption=1
+
+		@groupinfo final_submission caption="Kinnitamine" parent=final_info
+		@default group=final_submission
+
+			@property data_contactperson type=textbox table=objects field=meta method=serialize
+			@caption Kontaktisik
+
+			@property data_send_date type=date_select table=objects field=meta method=serialize
+			@caption Saatmise kuup&auml;ev
+
+			@property data_pointer_text type=textbox table=objects field=meta method=serialize
+			@caption Tekst suunaviitadele
+
+			@property data_payment_method type=textbox table=objects field=meta method=serialize
+			@caption Maksmisviis
+
+			@property pdf type=text store=no
+			@caption Lae PDF
+
+			@property submission type=text no_caption=1 store=no
+	
 #reltypes
 
 @reltype ROOM clid=CL_ROOM value=1
@@ -382,12 +379,19 @@ class rfp extends class_base
 		));
 	}
 
-	function date_to_stamp($date)
+	private function date_to_stamp($date)
 	{
 		$day = explode(".", $date["date"]);
 		$time = explode(":", $date["time"]);
 		$stamp = mktime($time[0], $time[1], 0, $day[1], $day[0], $day[2]);
 		return $stamp;
+	}
+
+	private function arr_to_date($date)
+	{
+		$return["date"] = (is_numeric($date["day"])?$date["day"]:0).".".(is_numeric($date["month"])?$date["month"]:0).".".(is_numeric($date["year"])?$date["year"]:0);
+		$return["time"] = $date["hour"].":".$date["minute"];
+		return $return;
 	}
 
 	function get_property($arr)
@@ -423,7 +427,7 @@ class rfp extends class_base
 		{
 			case "final_rooms":
 			case "final_catering_rooms":
-				
+				$prop["selected"] = $arr["obj_inst"]->prop($prop["name"]);
 				$type = ($prop["name"] == "final_rooms")?"":"catering_";
 
 
@@ -464,14 +468,14 @@ class rfp extends class_base
 			case "data_gen_arrival_date_admin":
 			case "data_gen_decision_date_admin":
 			case "data_gen_response_date_admin":
-				if($prop["value"] < 1)
-				{
+				//if($prop["value"] < 1)
+				//{
 					$svar = substr($prop["name"], 0, -6);
 					if($ov = $arr["obj_inst"]->prop($svar))
 					{
 						$prop["value"] = $this->date_to_stamp($ov);
 					}
-				}
+				//}
 				break;
 			case "final_add_reservation_tb":
 				$tb = &$prop["vcl_inst"];
@@ -481,18 +485,28 @@ class rfp extends class_base
 					"tooltip" => t("Reserveering"),
 				));
 				$rooms = $this->get_rooms($arr);
+				
+
+				$data_name = $arr["obj_inst"]->prop("data_subm_name");
+				$data_name = split("[ ]", $data_name);
+				$new_reservation_args["person_rfp_fname"] = $data_name[0];
+				unset($data_name[0]);
+				$new_reservation_args["person_rfp_lname"] = count($data_name)?join(" ", $data_name):"";
+				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
+				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
+				$new_reservation_args["start1"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_start_date"));
+				$new_reservation_args["end"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_end_date"));
+				$new_reservation_args["return_url"] = get_ru();
+				$new_reservation_args["rfp"] = $arr["obj_inst"]->id();
+
+				
 				foreach($rooms as $room)
 				{
-					$url = $this->mk_my_orb("new", array(
-						"start1" => time(),
-						"end" => time(),
-						"resource" => $room,
-						"parent" => $room,
-						"rfp" => $arr["obj_inst"]->id(),
-						"return_url" => get_ru(),
-					), CL_RESERVATION);
-					
+					$new_reservation_args["resource"] = $room;
+					$new_reservation_args["parent"] = $room;
+					$url = $this->mk_my_orb("new", $new_reservation_args, CL_RESERVATION);
 					$o = obj($room);
+					
 					$tb->add_menu_item(array(
 						"parent" => "add",
 						"text" => sprintf(t("Ruumi '%s'"), $o->name()),
@@ -1237,27 +1251,47 @@ class rfp extends class_base
 
 	function get_rooms($arr)
 	{
+		$type = split("[_]",$arr["request"]["group"]);
+		$type = end($type);
+		
+		if($type == "prices")
+		{
+			$prop = "final_rooms";
+		}
+		elseif($type == "catering")
+		{
+			$prop = "final_catering_rooms";
+		}
+		else
+		{
+			$prop = "final_rooms";
+		}
 		$rm = get_instance(CL_RFP_MANAGER);
 		$def = $rm->get_sysdefault();
 		if($def)
 		{
 			$defo = obj($def);
-			$rfs = $defo->prop("room_folder");
+			$rfs = $defo->prop($prop);
 		}
+		/*
 		$rooms = array();
-		unset($rfs[0]);
 		if(count($rfs))
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_ROOM,
 				"lang_id" => array(),
-				"parent" => $rfids
+				"parent" => $rfs
 			));
 			foreach($ol->arr() as $oid=>$o)
 			{
 				$rooms[$oid] = $oid;
 			}
 		}
+		 */
+		$rooms = $arr["obj_inst"]->prop($prop);
+		// wtf is this here for??
+
+		/*
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_ROOM",
 		));
@@ -1276,6 +1310,7 @@ class rfp extends class_base
 				$rooms[$room] = $room;
 			}
 		}
+		 */
 		return $rooms;
 	}
 
@@ -1304,7 +1339,7 @@ class rfp extends class_base
 		}
 		else
 		{
-			die("Serveris puudub htmldoc. PDF-i ei saa genereerida");
+			die(t("Serveris puudub htmldoc. PDF-i ei saa genereerida"));
 		}
 	}
 
@@ -1566,6 +1601,10 @@ class rfp extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "final_rooms":
+			case "final_catering_rooms":
+				break;
+
 			//-- set_property --//
 			case "products_tbl":
 				if($this->can("view", $arr["request"]["reservation_oid"]))
@@ -1623,6 +1662,39 @@ class rfp extends class_base
 					}
 				}			
 			break;
+	
+			// tsiisas, these date thingies are really shitty
+			// this must be the ugliest solution EVER and this may be the ugliest class EVER!!
+			case "data_mf_catering_end":
+			case "data_mf_catering_start":
+			case "data_mf_end_date":
+			case "data_mf_start_date":
+			case "data_gen_acc_end":
+			case "data_gen_acc_start":
+			case "data_gen_departure_date":
+			case "data_gen_arrival_date":
+			case "data_gen_decision_date":
+			case "data_gen_response_date":
+				return PROP_IGNORE;
+				break;
+			case "data_mf_catering_end_admin":
+			case "data_mf_catering_start_admin":
+			case "data_mf_end_date_admin":
+			case "data_mf_start_date_admin":
+			case "data_gen_acc_end_admin":
+			case "data_gen_acc_start_admin":
+			case "data_gen_departure_date_admin":
+			case "data_gen_arrival_date_admin":
+			case "data_gen_decision_date_admin":
+			case "data_gen_response_date_admin":
+				if(is_array($prop["value"]))
+				{
+					$new_val = $this->arr_to_date($prop["value"]);
+					$svar = substr($prop["name"], 0, -6);
+					$arr["obj_inst"]->set_prop($svar, $new_val);
+					$arr["obj_inst"]->save();
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -1826,8 +1898,8 @@ class rfp extends class_base
 	{
 
 		$fields = array(
-			array("final_rooms", "varchar(255)"),
-			array("final_catering_rooms", "varchar(255)"),
+			array("final_rooms", "text"),
+			array("final_catering_rooms", "text"),
 			array("final_theme", "varchar(255)"),
 			array("final_international", "int"),
 			array("final_native_guests", "int"),
