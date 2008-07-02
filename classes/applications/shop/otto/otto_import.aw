@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.101 2008/06/25 11:01:56 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.102 2008/07/02 12:47:45 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2184,6 +2184,7 @@ class otto_import extends class_base
 					'value' => implode(',', $categories),
 					'size' => '80',
 				)),
+				'line_color' => ($this->can('view', $aw_folder)) ? '' : '#FFFF8F'
 			));
 			$count++;
 
@@ -2237,7 +2238,6 @@ class otto_import extends class_base
 					$added_categories = array_diff($categories, $old_categories);
 					$deleted_categories = array_diff($old_categories, $categories);
 
-				//	arr($added_categories);
 					$tmp_added_categories = array();
 					foreach ($added_categories as $key => $value)
 					{
@@ -2250,10 +2250,6 @@ class otto_import extends class_base
 
 					if (!empty($added_categories))
 					{
-/*
-						echo "added categories <br /> \n";
-						arr($added_categories);
-*/
 						// mul on vaja k6iki nende kategooriatega tooteid
 
 						$prod_ol = new object_list(array(
@@ -2279,7 +2275,6 @@ class otto_import extends class_base
 							{
 								$tmp_prods[$row['product']] = $row['section'];
 							}
-						//	arr($tmp_prods);
 						}
 
 						foreach ($prod_ol_ids as $prod_id)
@@ -2304,9 +2299,6 @@ class otto_import extends class_base
 						
 					}
 
-
-
-				//	arr($deleted_categories);
 					$tmp_deleted_categories = array();
 					foreach ($deleted_categories as $key => $value)
 					{
@@ -2379,17 +2371,41 @@ class otto_import extends class_base
 
 			foreach ($args['request']['new_data'] as $data)
 			{
-				$categories = explode(',', $data['categories']);
-				$categories = array_unique($categories);
-				foreach ($categories as $category)
+				if (!empty($data['aw_folder_id']))
 				{
-					if (!empty($category) && !empty($data['aw_folder_id']))
+					echo "--- Adding new section data: <br />\n";
+					$categories = explode(',', $data['categories']);
+					$categories = array_unique($categories);
+
+					$prod_ol = new object_list(array(
+						'class_id' => CL_SHOP_PRODUCT,
+						'user11' => $categories
+					));
+					$prod_ol_ids = $prod_ol->ids();
+
+					foreach ($prod_ol_ids as $prod_id)
 					{
-						$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
-							category = '$category',
-							aw_folder = ".$data['aw_folder_id'].",
-							lang_id = ".aw_global_get('lang_id')."
+						echo ">>> ".$prod_id." lisatakse sektsiooni ".$data['aw_folder_id']." alla <br /> \n";
+						$this->db_query("
+							insert into 
+								otto_prod_to_section_lut 
+							set
+								product = ".$prod_id.",
+								section = ".$data['aw_folder_id'].",
+								lang_id = ".aw_global_get('lang_id')."
 						");
+					}
+
+					foreach ($categories as $category)
+					{
+						if (!empty($category) && !empty($data['aw_folder_id']))
+						{
+							$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
+								category = '$category',
+								aw_folder = ".$data['aw_folder_id'].",
+								lang_id = ".aw_global_get('lang_id')."
+							");
+						}
 					}
 				}
 			}
