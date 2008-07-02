@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.47 2008/06/30 10:25:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.48 2008/07/02 12:42:01 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -760,6 +760,11 @@ class personnel_management extends class_base
 				"lang_id" => array(),
 				"sort_by" => "jrk",
 			));
+			// There's no point in adding empty select fields.
+			if(!strlen(trim($data["name"])) && count($options) == 1 && $ol->count() == 0)
+			{
+				continue;
+			}
 			// Need to add caption manually.
 			$ret .= $data["name"]."<br />";
 			$ret .= html::select(array(
