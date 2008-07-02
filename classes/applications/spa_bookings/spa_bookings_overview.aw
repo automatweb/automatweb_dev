@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.61 2008/07/01 09:56:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.62 2008/07/02 11:59:39 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1471,6 +1471,7 @@ class spa_bookings_overview extends class_base
 			"bureau" => $b->prop("seller")?$b->prop("seller.name"):$b->createdby(),
 			"person" => $p->trans_get_val("name"),
 			"package" => $b->trans_get_val_str("package"),
+			"agency" => $b->trans_get_val_str("seller"),
 			"from" => date("d.m.Y", $_from),
 			"to" => date("d.m.Y", $_to),
 			"person_comment" => $p->prop("comment"),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.80 2008/04/28 13:59:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.81 2008/07/02 11:59:39 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2392,6 +2392,7 @@ class spa_bookigs_entry extends class_base
 			$b->set_prop("start", date_edit::get_timestamp($arr["ud"]["pk_arrival"]));
 			$b->set_prop("end", date_edit::get_timestamp($arr["ud"]["pk_leave"]));
 			$b->set_prop("package", $arr["ud"]["pk_name"]);
+			$b->set_prop("seller", $arr["ud"]["pk_tb_name"]);
 			$b->save();
 			foreach($arr["out_arr"] as $r_id)
 			{
