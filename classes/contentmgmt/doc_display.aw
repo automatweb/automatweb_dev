@@ -437,6 +437,7 @@ class doc_display extends aw_template
 		{
 			$this->parse_wiki(& $text, $doc);
 		}
+		$this->_parse_youtube_links(& $text);
 		
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
@@ -575,7 +576,6 @@ class doc_display extends aw_template
 		$this->_parse_wiki_links(& $str);
 		$this->_parse_wiki_lists(& $str);
 		$this->_parse_wiki_titles(& $str);
-		$this->_parse_youtube_links(& $str);
 		$this->_parse_wiki_create_paragraphs(& $str);
 		// ''italic''
 		// '''bold'''
@@ -993,7 +993,7 @@ class doc_display extends aw_template
 				"video_id" => "\${1}\${2}\${3}\${4}",
 			));
 			$s_embed = $this->parse("youtube_link");
-			$str = preg_replace  ("/http:\/\/www.youtube.com\/v\/([A-Za-z0-9_-]*)|http:\/\/www.youtube.com\/v\/([A-Za-z0-9_-]*)/ims", $s_embed, $str);
+			$str = preg_replace  ("/http:\/\/www.youtube.com\/v\/([A-Za-z0-9]*)|http:\/\/www.youtube.com\/v\/([A-Za-z0-9]*)/ims", $s_embed, $str);
 		}
 	}
 	
