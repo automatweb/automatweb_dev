@@ -133,6 +133,11 @@ class popup_search extends aw_template
 			{
 				$as = $this->mk_my_orb("autocomplete_source", array("pn" => $arr["property"]["name"], "clid" => $clid));
 			}
+			if(!$arr["property"]["autocomplete_params"])
+			{
+				$arr["property"]["autocomplete_params"] = array($arr["property"]["name"]);
+			}
+
 			$as = parse_url ($as);
 			$as = $as["path"] . "?" . $as["query"];
 			$tmp["value"] = html::textbox(array(
