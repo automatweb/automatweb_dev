@@ -993,7 +993,7 @@ class doc_display extends aw_template
 				"video_id" => "\${1}\${2}\${3}\${4}",
 			));
 			$s_embed = $this->parse("youtube_link");
-			$str = preg_replace  ("/http:\/\/www.youtube.com\/v\/(.*)\s|http:\/\/www.youtube.com\/v\/(.*)$/imsU", $s_embed, $str);
+			$str = preg_replace  ("/http:\/\/www.youtube.com\/v\/([A-Za-z0-9_-]*)|http:\/\/www.youtube.com\/v\/([A-Za-z0-9_-]*)/ims", $s_embed, $str);
 		}
 	}
 	
