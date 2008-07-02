@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.38 2008/06/09 18:11:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.39 2008/07/02 12:23:57 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -558,7 +558,8 @@ $start = ((float)$usec + (float)$sec);
 		else
 		{
 			$t = $ol->begin();
-			
+			$t_i = $t->instance();
+
 			//jarjekorranumbri andmine
 			$max_ord = 0;
 			foreach($t->connections_from(array("type" => 7)) as $row)
@@ -585,6 +586,11 @@ $start = ((float)$usec + (float)$sec);
 			$r->set_prop("impl", $cur_p->id());
 			$r->set_prop("ord", $max_ord);
 			$r->save();
+
+			foreach(safe_array($arr["request"]["parts"]) as $part)
+			{
+				$t_i->add_participant($t, obj($part));
+			}
 
 //			$t->connect(array(
 //				"to" => $r->id(),
