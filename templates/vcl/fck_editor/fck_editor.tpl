@@ -11,14 +11,13 @@ var changed = false;
 function FCKeditor_OnComplete( editorInstance )
 {
 	if ($.browser.msie)	{
-		editorInstance.Events.AttachEvent( 'OnSelectionChange', FCKeditor_OnChange ) ;
-		editorInstance.EditorDocument.attachEvent( 'onkeyup', FCKeditor_OnChange ) ;
+		//editorInstance.EditorDocument.attachEvent( 'onkeyup', FCKeditor_OnChange ) ;
 		editorInstance.EditorDocument.attachEvent( 'onkeydown', FCKeditor_OnChange ) ;
 	}
 	else
 	{
 		editorInstance.Events.AttachEvent( 'OnSelectionChange', FCKeditor_OnChange ) ;
-		editorInstance.EditorDocument.addEventListener( 'keyup', FCKeditor_OnChange, true ) ;
+		//editorInstance.EditorDocument.addEventListener( 'keyup', FCKeditor_OnChange, true ) ;
 		editorInstance.EditorDocument.addEventListener( 'keydown', FCKeditor_OnChange, true ) ;
 	}
 	
@@ -46,9 +45,8 @@ function FCKeditor_CreateEditor(name, version, width, height, lang)
 	oFCKeditor.Config["CustomConfigurationsPath"] = "/automatweb/orb.aw?class=fck_editor&action=get_fck_config" + ( new Date() * 1 ) ;
 }
 
-
 /*
- * prototype for array
+ * turns array to string
  */
 function serializeArray (arr) {
 	s_out = "";
