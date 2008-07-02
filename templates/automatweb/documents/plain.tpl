@@ -62,3 +62,7 @@
 <img alt="faili ikoon" title="faili ikoon" src="{VAR:file_icon}">
 <a href="{VAR:file_url}">{VAR:file_name}</a>
 <!-- END SUB: file -->
+
+<!-- SUB: youtube_link -->
+<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/{VAR:video_id}&hl=en"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.youtube.com/v/{VAR:video_id}&hl=en" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="344"></embed></object>
+<!-- END SUB: youtube_link -->
