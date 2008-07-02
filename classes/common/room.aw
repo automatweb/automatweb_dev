@@ -2200,6 +2200,10 @@ class room extends class_base
 		{
 			$t->define_data($this->get_day_workers_row($arr["obj_inst"]));
 		}
+		if(!$arr["web"])
+		{
+			$t->define_data($this->get_sum_row($arr["obj_inst"]));
+		}
 
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
@@ -2230,6 +2234,22 @@ class room extends class_base
 		return $res;
 	}
 	
+	function get_sum_row($o)
+	{
+		$res = array();
+		$x = 0;
+		$time = $this->start;
+		$res["time"] = t("Summa kokku:");
+		while($x < $this->len)
+		{
+			$reserv = $o->get_day_reservations($time);
+			$res["d".$x].= $reserv->count();
+			$time = $time + 24*3600;
+			$x++;
+		}
+		return $res;
+	}
+
 	function get_room_prod_menu($arr, $immediate = false)
 	{
 		$menus = $arr["obj_inst"]->meta("group_product_menu");

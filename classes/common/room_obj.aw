@@ -247,6 +247,21 @@ class room_obj extends _int_object
 		return $ol;
 	}
 
+
+	/** returns one day reservation list
+		@attrib api=1 params=pos
+		@param time optional type=int
+			start timestamp
+		@returns object list
+	**/
+	function get_day_reservations($time)
+	{
+		$arr = array();
+		$arr["start"] = mktime(0, 0, 0, date("m" , $time), date("d" , $time), date("Y" , $time));
+		$arr["end"] = mktime(0, 0, 0, date("m" , $time), (date("d" , $time)+1), date("Y" , $time));
+		return $this->get_reservations($arr);
+	}
+
 	/** adds reservation
 		@attrib api=1
 		@param start required type=int
