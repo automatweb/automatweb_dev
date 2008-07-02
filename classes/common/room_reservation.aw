@@ -1049,6 +1049,7 @@ class room_reservation extends class_base
 	{
 		foreach($_POST as $key=>$val)
 		{
+			$val = htmlspecialchars($val);
 			$_SESSION["room_reservation"][$room][$key] = $val;
 		}
 
