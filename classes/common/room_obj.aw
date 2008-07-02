@@ -251,7 +251,7 @@ class room_obj extends _int_object
 	/** returns one day reservation list
 		@attrib api=1 params=pos
 		@param time optional type=int
-			start timestamp
+			timestamp
 		@returns object list
 	**/
 	function get_day_reservations($time)
@@ -260,6 +260,28 @@ class room_obj extends _int_object
 		$arr["start"] = mktime(0, 0, 0, date("m" , $time), date("d" , $time), date("Y" , $time));
 		$arr["end"] = mktime(0, 0, 0, date("m" , $time), (date("d" , $time)+1), date("Y" , $time));
 		return $this->get_reservations($arr);
+	}
+
+	/** returns one day reservation sum
+		@attrib api=1 params=pos
+		@param time optional type=int
+			start timestamp
+		@returns array
+			summ in different currencys
+	**/
+	function get_day_sum($time)
+	{
+		$reserv = $this->get_day_reservations($time);
+		$sum = array();
+		foreach($reserv->arr() as $r)
+		{
+			$rs = $r->get_sum();
+			foreach($rs as $key => $val)
+			{
+				$sum[$key]+=$val;
+			}
+		}
+		return $sum;
 	}
 
 	/** adds reservation

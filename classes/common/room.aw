@@ -2242,8 +2242,17 @@ class room extends class_base
 		$res["time"] = t("Summa kokku:");
 		while($x < $this->len)
 		{
-			$reserv = $o->get_day_reservations($time);
-			$res["d".$x].= $reserv->count();
+			$sum = $o->get_day_sum($time);
+			$result = "";
+			foreach($sum as $curr => $s)
+			{
+				if(is_oid($curr))
+				{
+					$currency = obj($curr);
+					$result.= $currency->name(). ": ".$s."\n<br>";
+				}
+			}
+			$res["d".$x].= $result;
 			$time = $time + 24*3600;
 			$x++;
 		}
