@@ -1012,6 +1012,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function save_connection($data)
 	{
+		if (!$data["type"]) 	 
+		{
+			if (isset($GLOBALS["objects"][$data["to"]]))
+			{
+				$data["type"] = $GLOBALS["objects"][$data["to"]]->class_id();
+			}
+			else
+			{
+				$data["type"] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '".$data["to"]."'", "class_id"); 	 
+			}
+		}
+
 		if ($data["id"])
 		{
 			$q = "UPDATE aliases SET
@@ -2369,14 +2381,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if (is_array($new_t) && count($new_t))
 				{
 					$tbl = $tbl_r = reset(array_keys($new_t));
-					$field = $new_t[$tbl]["index"];
-					$tbl .= "_".$join["from_class"]."_".$join["field"];
-					if (!isset($done_ot_js[$tbl_r]))
+					if ($tbl)
 					{
-						$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
-						$this->joins[] = $str;
-						$done_ot_js[$tbl_r] = 1;
-						$prev_t = $tbl;
+						$field = $new_t[$tbl]["index"];
+						$tbl .= "_".$join["from_class"]."_".$join["field"];
+						if (!isset($done_ot_js[$tbl_r]))
+						{
+							$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
+							$this->joins[] = $str;
+							$done_ot_js[$tbl_r] = 1;
+							$prev_t = $tbl;
+						}
 					}
 
 					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that
