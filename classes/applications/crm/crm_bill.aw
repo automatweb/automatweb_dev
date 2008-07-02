@@ -1098,7 +1098,7 @@ class crm_bill extends class_base
 			));
 
 			$connect_row_link.= html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$connect_row_url\",\"Otsing\",550,500)",
+				"url" => "javascript:aw_popup_scroll(\"$connect_row_url\",\"Otsing\",1100,700)",
 				"caption" => t("Lisa toimetuse rida"),
 				"title" => t("Otsi")
 			));
@@ -1413,6 +1413,7 @@ class crm_bill extends class_base
 		{
 			$filter["content"] = "%".$arr["content"]."%";
 		}
+		$filter["limit"] = 500;
 		$ol = new object_list($filter);
 		foreach($ol->arr() as $o)
 		{
