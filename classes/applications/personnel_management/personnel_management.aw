@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.48 2008/07/02 12:42:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.49 2008/07/02 13:10:04 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1221,17 +1221,20 @@ class personnel_management extends class_base
 		$o = $arr["obj_inst"];
 
 		$r = &$arr["request"];
-		$odl_prms["class_id"] = CL_CRM_PERSON;
-		$odl_prms["lang_id"] = array();
-		$odl_prms["site_id"] = array();
-		$odl_prms["status"] = array();
-		$odl_prms[] = new object_list_filter(array(
-			"logic" => "OR",
-			"conditions" => array(
-				"parent" => $this->persons_fld,
-				"CL_CRM_PERSON.RELTYPE_PERSONNEL_MANAGEMENT" => $arr["obj_inst"]->id(),
-			)
-		));
+		$odl_prms_immutable = array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"status" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $this->persons_fld,
+					"CL_CRM_PERSON.RELTYPE_PERSONNEL_MANAGEMENT" => $arr["obj_inst"]->id(),
+				)
+			)),
+		);
+		$odl_prms = array();
 
 		if($r["cv_mod_from"] && is_numeric($r["cv_mod_from"]["month"]) && is_numeric($r["cv_mod_from"]["day"]) && is_numeric($r["cv_mod_from"]["year"]))
 		{
@@ -1626,7 +1629,27 @@ class personnel_management extends class_base
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
-		// arr($odl_prms);
+		// Too many tables. MySQL can only use 31 tables in a join
+		// So we'll have to do a hack. :P
+		$hack = 0;
+		$odl_prms_tmp = $odl_prms;
+		foreach($odl_prms as $odl_key => $odl_prm)
+		{
+			if($hack % 2 == 0)
+			{
+				unset($odl_prms[$odl_key]);
+			}
+			else
+			{
+				unset($odl_prms_tmp[$odl_key]);
+			}
+			$hack++;
+		}
+		$odl_prms_tmp = $odl_prms_immutable + $odl_prms_tmp;
+		$ol_tmp = new object_list($odl_prms_tmp);
+		$odl_prms = $odl_prms_immutable + $odl_prms;
+		$odl_prms["oid"] = $ol_tmp->ids();
+		// End of hack.
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
@@ -2020,7 +2043,6 @@ class personnel_management extends class_base
 		$arr["request"]["fld_id"] = $arr["request"]["fld_id"] == "location" ? $this->offers_fld : $arr["request"]["fld_id"];
 		$arr["request"]["fld_id"] = $arr["request"]["fld_id"] == $arr["request"]["county_id"] ? $this->offers_fld : $arr["request"]["fld_id"];
 		$pt = $arr["request"]["fld_id"] ? $arr["request"]["fld_id"] : $this->offers_fld;
-
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("T&ouml;&ouml;pakkumine"),
