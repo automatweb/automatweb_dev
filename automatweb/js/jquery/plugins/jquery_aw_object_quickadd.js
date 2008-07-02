@@ -3,7 +3,7 @@
  *
  */
 (function($) {
-	jQuery.fn.AWObjectQuickAdd = function(items, options)
+	jQuery.fn.aw_object_quickadd = function(items, options)
 	{
 		var settings = {
 			maxresults     : 4,
@@ -22,8 +22,9 @@
 		var b_object_quickadd_isopen = false;
 		var i_selected_index = 0;
 		
-		handle_object_quickadd_activation();
-		handle_object_quickadd_exit();
+		
+		jQuery.hotkeys.add(aw_shortcut_db['aw_object_quickadd']["handle_object_quickadd_activation"], handle_object_quickadd_activation);
+		jQuery.hotkeys.add(aw_shortcut_db['aw_object_quickadd']["handle_object_quickadd_exit"], handle_object_quickadd_exit);
 		set_object_quickadd_locations();
 
 		d_input.autocomplete(items, {
@@ -51,59 +52,31 @@
 		// and document.location upon enter
 		function handle_object_quickadd_activation()
 		{
-			$("*").keydown(function(e){
-				if (b_object_quickadd_isopen===false)
-				{
-					if (e.ctrlKey && e.altKey && e.keyCode==85)
+			if (b_object_quickadd_isopen===false)
+			{
+					if ($("#"+d_quickadd_box.attr("id")).css("display") == "block")
 					{
-						if ($("#"+d_quickadd_box.attr("id")).css("display") == "block")
-						{
-							
-						}
-						else if ($("#"+d_quickadd_box.attr("id")).css("display") == "none")
-						{
-							$("#"+d_quickadd_box.attr("id")).css("display", "block");
-							$("#"+d_quickadd_box.attr("id")+" input.text").focus();
-						}
+						
 					}
-					b_object_quickadd_isopen = true
-				}
-				else
-				{
-					if (e.keyCode == 13)
+					else if ($("#"+d_quickadd_box.attr("id")).css("display") == "none")
 					{
-						try { 
-							if (a_active_list.length>0)
-							{
-								if(($("#"+d_quickadd_box.attr("id")).css("display") == "block"))
-								{
-									$("#"+d_quickadd_box.attr("id")+" input.text").val("");
-									$("#"+d_quickadd_box.attr("id")).css("display", "none");
-									url = options["baseurl"]+"/automatweb/"+a_active_list[i_selected_index]["url_obj"];
-									url = url.replace("--p--", settings.parent)
-									document.location = url
-								}
-							}
-						} catch(e) {}
+						$("#"+d_quickadd_box.attr("id")).css("display", "block");
+						$("#"+d_quickadd_box.attr("id")+" input.text").focus();
 					}
-					b_object_quickadd_isopen = false;
-				}
-			});
+				b_object_quickadd_isopen = true
+			}
 		}
 		
 		// handles the closing of quickadd layer
 		function handle_object_quickadd_exit()
 		{
-			$("#"+d_quickadd_box.attr("id")+" input.text").keyup(function(e){
-				if (e.keyCode==27)
+				if ($("#"+d_quickadd_box.attr("id")).css("display") == "block")
 				{
-					if ($("#"+d_quickadd_box.attr("id")).css("display") == "block")
-					{
-						$("#"+d_quickadd_box.attr("id")+" input.text").val("");
-						$("#"+d_quickadd_box.attr("id")).css("display", "none");
-					}
+					$("#"+d_quickadd_box.attr("id")+" input.text").val("");
+					$("#"+d_quickadd_box.attr("id")).css("display", "none");
+					b_object_quickadd_isopen = false;
 				}
-			});
+				
 		}
 		
 		// sets location of the quickadd on the screen
