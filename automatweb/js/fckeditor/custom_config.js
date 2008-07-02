@@ -16,7 +16,7 @@ FCKConfig.StartupShowBlocks = false ;
 FCKConfig.Debug = false ;
 FCKConfig.AllowQueryStringDebug = true ;
 
-FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
+FCKConfig.SkinPath = '/automatweb/js/fckeditor/skins/automatweb/' ;
 FCKConfig.SkinEditorCSS = '' ;	// FCKConfig.SkinPath + "|<minified css>" ;
 FCKConfig.SkinDialogCSS = '' ;	// FCKConfig.SkinPath + "|<minified css>" ;
 
@@ -27,6 +27,7 @@ FCKConfig.PluginsPath = '/automatweb/js/fckeditor/plugins/' ;
 FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ; 
+FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
