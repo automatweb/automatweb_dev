@@ -1,6 +1,9 @@
 <!--[if lt IE 7]>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/fixed.js"></script>
 <![endif]-->
+<style type="text/css">
+body { background-position: 0 30px ! important; }
+</style>
 <div id="login_menu_height" style="height: 30px;">
 <div id="login_menu" style="height: 30px;position: fixed; top: 0; width: 100%; background: #F5F4F9; border-bottom: 1px solid #96969D;z-index: 999;left: 0;">
 <div class="container" style="margin: 0 auto; width: 867px;">
