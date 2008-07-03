@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SPEC_GROUP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_AW_SPEC_GROUP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo allow_rte=2
 
 @default table=objects
 @default group=general

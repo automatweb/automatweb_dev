@@ -8,6 +8,7 @@
             <rows>10</rows>
             <cols>50</cols>
             <field>aw_desc</field>
+            <richtext>1</richtext>
             <caption>Kirjeldus</caption>
       </property>
       <property>
@@ -26,6 +27,7 @@
             <rows>10</rows>
             <cols>50</cols>
             <field>aw_ini_settings</field>
+            <richtext>1</richtext>
             <caption>INI settingud</caption>
       </property>
       <property>
@@ -36,6 +38,7 @@
             <rows>10</rows>
             <cols>50</cols>
             <field>aw_errors_and_messages</field>
+            <richtext>1</richtext>
             <caption>Teated ja vead</caption>
       </property>
       <property>
@@ -59,6 +62,7 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
+            <allow_rte>2</allow_rte>
       </classinfo>
       <groupinfo>
             <use_cases>

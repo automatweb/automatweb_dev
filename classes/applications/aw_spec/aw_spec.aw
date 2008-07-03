@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SPEC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_AW_SPEC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo allow_rte=2
 
 @default table=objects
 @default group=general
@@ -26,7 +26,7 @@
 		
 		@layout spec_border type=vbox parent=v_split area_caption=Sisu closeable=1
 
-			@property spec_editor type=textarea rows=30 cols=80 richtext=1 store=no no_caption=1 parent=spec_border
+			@property spec_editor type=textarea rows=30 cols=80 richtext=1 store=no no_caption=1 parent=spec_border richtext=1
 
 		
 @default group=spec_view

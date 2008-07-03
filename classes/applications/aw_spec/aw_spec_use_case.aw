@@ -1,12 +1,12 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SPEC_USE_CASE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_AW_SPEC_USE_CASE relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo allow_rte=2
 @tableinfo aw_aw_spec_use_case master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_aw_spec_use_case
 @default group=general
 
-	@property desc type=textarea rows=40 cols=80 field=aw_desc
+	@property desc type=textarea rows=40 cols=80 field=aw_desc richtext=1
 	@caption Kirjeldus
 */
 

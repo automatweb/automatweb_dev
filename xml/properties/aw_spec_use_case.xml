@@ -8,6 +8,7 @@
             <rows>40</rows>
             <cols>80</cols>
             <field>aw_desc</field>
+            <richtext>1</richtext>
             <caption>Kirjeldus</caption>
       </property>
       <classinfo>
@@ -17,6 +18,7 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <maintainer>kristo</maintainer>
+            <allow_rte>2</allow_rte>
       </classinfo>
       <tableinfo>
             <aw_aw_spec_use_case>

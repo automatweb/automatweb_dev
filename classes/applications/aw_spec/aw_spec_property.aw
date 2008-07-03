@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SPEC_PROPERTY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_AW_SPEC_PROPERTY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo allow_rte=2
 @tableinfo aw_spec_properties master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_spec_properties
@@ -10,15 +10,15 @@
 	@property prop_type type=select field=aw_prop_type
 	@caption Omaduse t&uuml;&uuml;p
 
-	@property prop_desc type=textarea field=aw_prop_desc rows=10 cols=50
+	@property prop_desc type=textarea field=aw_prop_desc rows=10 cols=50  richtext=1
 	@caption Omaduse kirjeldus
 
-	@property errors_and_messages type=textarea rows=10 cols=50 field=aw_errors_and_messages
+	@property errors_and_messages type=textarea rows=10 cols=50 field=aw_errors_and_messages  richtext=1
 	@caption Teated ja vead
 
 @default group=longdesc
 	
-	@property longdesc type=textarea rows=80 cols=80 field=aw_longdesc
+	@property longdesc type=textarea rows=80 cols=80 field=aw_longdesc  richtext=1
 	@caption Pikem kirjeldus
 
 @default group=use_cases

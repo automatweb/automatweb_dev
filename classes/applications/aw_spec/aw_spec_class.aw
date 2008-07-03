@@ -1,21 +1,21 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SPEC_CLASS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
+@classinfo syslog_type=ST_AW_SPEC_CLASS relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo allow_rte=2
 @tableinfo aw_spec_class master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_spec_class
 @default group=general
 
-	@property desc type=textarea rows=10 cols=50 field=aw_desc
+	@property desc type=textarea rows=10 cols=50 field=aw_desc  richtext=1
 	@caption Kirjeldus
 
 	@property pri type=select field=aw_pri
 	@caption Prioriteet
 
-	@property ini_settings type=textarea rows=10 cols=50 field=aw_ini_settings
+	@property ini_settings type=textarea rows=10 cols=50 field=aw_ini_settings  richtext=1
 	@caption INI settingud
 
-	@property errors_and_messages type=textarea rows=10 cols=50 field=aw_errors_and_messages
+	@property errors_and_messages type=textarea rows=10 cols=50 field=aw_errors_and_messages  richtext=1
 	@caption Teated ja vead
 
 @default group=use_cases
