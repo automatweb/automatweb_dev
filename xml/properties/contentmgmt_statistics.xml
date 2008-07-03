@@ -42,6 +42,36 @@
             <no_caption>1</no_caption>
             <field>link_checker</field>
       </property>
+      <property>
+            <name>link_check_bg</name>
+            <table>objects</table>
+            <group>auto_link_checker</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontrolli linke taustal</caption>
+      </property>
+      <property>
+            <name>link_check_mailto</name>
+            <table>objects</table>
+            <group>auto_link_checker</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kellele saata kontrolli raport</caption>
+      </property>
+      <property>
+            <name>recur_edit</name>
+            <table>objects</table>
+            <group>auto_link_checker</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <field>recur_edit</field>
+            <caption>Automaatse impordi seadistamine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONTENTMGMT_STATISTICS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -65,6 +95,9 @@
             <link_checker>
                   <caption>Linkide kontroll</caption>
             </link_checker>
+            <auto_link_checker>
+                  <caption>Linkide kontrolli automaatika</caption>
+            </auto_link_checker>
       </groupinfo>
       <reltypes>
             <FOLDER>
@@ -72,6 +105,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </FOLDER>
+            <RECURRENCE>
+                  <value>2</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>kordus</caption>
+            </RECURRENCE>
       </reltypes>
 </properties>
 

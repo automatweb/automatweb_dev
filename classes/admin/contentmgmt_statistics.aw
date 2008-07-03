@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/contentmgmt_statistics.aw,v 1.4 2008/04/15 07:08:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/contentmgmt_statistics.aw,v 1.5 2008/07/03 13:05:47 kristo Exp $
 // contentmgmt_statistics.aw - Sisuhalduse statistika 
 /*
 
@@ -19,15 +19,30 @@
 
 	@property link_checker type=text store=no no_caption=1 group=link_checker
 
+@default group=auto_link_checker
+
+	@property link_check_bg type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kontrolli linke taustal
+
+	@property link_check_mailto type=textbox field=meta method=serialize
+	@caption Kellele saata kontrolli raport
+
+	@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb rel_id=first
+	@caption Automaatse impordi seadistamine
+
 @groupinfo stats caption="Statistika"
 
 	@groupinfo stats_lastmod caption="Viimati muudetud" parent=stats
 	@groupinfo stats_unmod caption="Ammu muudetud" parent=stats
 
 @groupinfo link_checker caption="Linkide kontroll"
+@groupinfo auto_link_checker caption="Linkide kontrolli automaatika"
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Kaust
+
+@reltype RECURRENCE value=2 clid=CL_RECURRENCE
+@caption kordus
 */
 
 class contentmgmt_statistics extends class_base
@@ -97,7 +112,7 @@ class contentmgmt_statistics extends class_base
 		return $rv;
 	}
 
-	function _get_link_checker($arr)
+	function _get_link_checker($arr, $die = true)
 	{
 		echo t("Kontrollin linke:<br>\n");
 		flush();
@@ -121,7 +136,14 @@ class contentmgmt_statistics extends class_base
 			}
 			flush();
 		}
-		die(sprintf(t("Valmis. <a href='%s'>Tagasi</a>"), aw_url_change_var("group", "general")));
+		if ($die)
+		{
+			die(sprintf(t("Valmis. <a href='%s'>Tagasi</a>"), aw_url_change_var("group", "general")));
+		}
+		else
+		{
+			echo t("Valmis.");
+		}
 	}
 
 	private function _check_link($url)
@@ -168,6 +190,53 @@ class contentmgmt_statistics extends class_base
 		}
 		fclose($f);
 		return true;
+	}
+
+	function callback_post_save($arr)
+	{
+		if (($re = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_RECURRENCE")))
+		{
+			get_instance("core/scheduler")->add(array(
+				"event" => $this->mk_my_orb("invoke", array("id" => $arr["obj_inst"]->id())),
+				"time" => $re->instance()->get_next_event(array("id" => $re->id()))
+			));
+		}
+	}
+
+	/**
+		@attrib name=invoke nologin="1"
+		@param id required type=int acl=view
+	**/
+	function invoke($arr)
+	{
+		echo "checking links <br>\n";
+		flush();
+		ob_start();
+		$this->_get_link_checker(array(), false);
+		$ct = ob_get_contents();
+		ob_end_clean();
+		
+		$awm = get_instance("protocols/mail/aw_mail");
+		$awm->create_message(array(
+			"froma" => "info@".aw_ini_get("baseurl"),
+			"subject" => t("Lingikontrolli tulemus"),
+			"to" => obj($arr["id"])->link_check_mailto,
+			"body" => strip_tags($ct),
+		));
+		$awm->htmlbodyattach(array(
+			"data" => $ct,
+		));
+		$awm->gen_mail();
+
+		if (($re = obj($arr["id"])->get_first_obj_by_reltype("RELTYPE_RECURRENCE")))
+		{
+			get_instance("core/scheduler")->add(array(
+				"event" => $this->mk_my_orb("invoke", array("id" => $arr["id"])),
+				"time" => $re->instance()->get_next_event(array("id" => $re->id()))
+			));
+		}
+
+		die("all done");
 	}
 }
 ?>
