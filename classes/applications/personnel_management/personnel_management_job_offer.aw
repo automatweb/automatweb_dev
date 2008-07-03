@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.53 2008/06/30 10:25:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.54 2008/07/03 12:37:30 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1829,9 +1829,13 @@ class personnel_management_job_offer extends class_base
 	/**
 		@attrib name=show nologin=1
 		@param id required type=int
+		@param tpl optional type=string
 	**/
 	function show($arr)
 	{
+		$tpl = isset($arr["tpl"]) > 0 ? $arr["tpl"] : "show.tpl";
+		$this->read_template($tpl);
+
 		if(is_oid($arr["cfgform_id"]))
 		{
 			return get_instance(CL_CFGFORM)->get_class_cfgview(array("id" => $arr["cfgform_id"], "display_mode" => "cfg_embed"));
@@ -1869,9 +1873,7 @@ class personnel_management_job_offer extends class_base
 			{
 				$location = &obj($ob->prop("asukoht")); 
 				$location = $location->name();
-			}
-			$this->read_template("show.tpl");
-			
+			}			
 			
 			//ORGANISATION DESCRIPTION SUB
 			if($job_parse_props["org_description"]["view"] == true && $company->prop("tegevuse_kirjeldus"))
@@ -2080,13 +2082,13 @@ class personnel_management_job_offer extends class_base
 	**/
 	function gen_job_pdf($arr)
 	{
-		$job = obj($arr["id"]);
 		$pdf_gen = get_instance("core/converters/html2pdf");
 		session_cache_limiter("public");
 		die($pdf_gen->gen_pdf(array(
 			"filename" => $arr["id"],
 			"source" => $this->show(array(
-				"id" => $arr["id"]
+				"id" => $arr["id"],
+				"tpl" => obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->pdf_tpl,
 			))
 		)));
 	}

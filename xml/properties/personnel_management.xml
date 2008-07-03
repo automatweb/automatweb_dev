@@ -220,6 +220,15 @@
             <caption>CV templeit</caption>
       </property>
       <property>
+            <name>pdf_tpl</name>
+            <group>job_offer_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise PDFi templeit</caption>
+      </property>
+      <property>
             <name>job_offer_cv_tbl</name>
             <group>job_offer_conf</group>
             <table>objects</table>

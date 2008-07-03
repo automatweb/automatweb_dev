@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.51 2008/07/03 11:24:54 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.52 2008/07/03 12:37:30 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -89,6 +89,9 @@
 
 		@property cv_tpl type=select
 		@caption CV templeit
+
+		@property pdf_tpl type=select
+		@caption T&ouml;&ouml;pakkumise PDFi templeit
 
 		@property job_offer_cv_tbl type=select multiple=1 field=meta method=serialize
 		@caption Uus seadetevorm
@@ -733,6 +736,11 @@ class personnel_management extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function _get_pdf_tpl($arr)
+	{
+		$arr["prop"]["options"] = $this->pdf_tpl_options();
 	}
 
 	function _get_cv_tpl($arr)
@@ -3240,6 +3248,21 @@ class personnel_management extends class_base
 			case CL_PERSONNEL_MANAGEMENT_CANDIDATE:
 				return false;
 		}
+	}
+
+	private function pdf_tpl_options()
+	{
+		$dir = aw_ini_get("tpldir")."/applications/personnel_management/personnel_management_job_offer/";
+		$handle = opendir($dir);
+		$ret = array();
+		while(false !== ($file = readdir($handle)))
+		{
+			if(preg_match("/\\.tpl/", $file))
+			{
+				$ret[$file] = str_replace(".tpl", "", $file);
+			}
+		}
+		return $ret;
 	}
 }
 ?>

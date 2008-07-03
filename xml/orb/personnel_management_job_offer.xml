@@ -5,6 +5,7 @@
 			<function name="show">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="tpl" type="string" />
 				</arguments>
 			</function>
 		</action>
