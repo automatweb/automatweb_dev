@@ -2226,7 +2226,17 @@ class room extends class_base
 			$workers = $this->get_day_workers($o , $time);
 			foreach($workers->arr() as $worker)
 			{
-				$res["d".$x].= $worker->name()."<br>\n";
+				$sum = $o->get_person_day_sum($time,$worker->id());
+				$result = "";
+				foreach($sum as $curr => $s)
+				{
+					if(is_oid($curr))
+					{
+						$currency = obj($curr);
+						$result.= $currency->name(). ": ".$s."\n<br>";
+					}
+				}
+				$res["d".$x].= $worker->name()."<br>\n".$result;
 			}
 			$time = $time + 24*60*60;
 			$x++;

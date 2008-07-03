@@ -222,6 +222,8 @@ class room_obj extends _int_object
 			start timestamp
 		@param end required type=int
 			end timestamp
+		@param worker optional
+			person id
 		@returns object list
 	**/
 	function get_reservations($arr = array())
@@ -243,10 +245,13 @@ class room_obj extends _int_object
 		{
 			$filter["sort_by"] = "planner.end DESC"; // kui seda planneri tabelit sisse ei loeta, siis ei hakka jamama
 		}
+		if($arr["worker"])
+		{
+			$filter["people"] = $arr["worker"];
+		}
 		$ol = new object_list($filter);
 		return $ol;
 	}
-
 
 	/** returns one day reservation list
 		@attrib api=1 params=pos
@@ -272,6 +277,26 @@ class room_obj extends _int_object
 	function get_day_sum($time)
 	{
 		$reserv = $this->get_day_reservations($time);
+		$sum = array();
+		foreach($reserv->arr() as $r)
+		{
+			$rs = $r->get_sum();
+			foreach($rs as $key => $val)
+			{
+				$sum[$key]+=$val;
+			}
+		}
+		return $sum;
+	}
+
+
+	function get_person_day_sum($time,$worker)
+	{
+		$arr = array();
+		$arr["start"] = mktime(0, 0, 0, date("m" , $time), date("d" , $time), date("Y" , $time));
+		$arr["end"] = mktime(0, 0, 0, date("m" , $time), (date("d" , $time)+1), date("Y" , $time));
+		$arr["worker"] = $worker;
+ 		$reserv = $this->get_reservations($arr);
 		$sum = array();
 		foreach($reserv->arr() as $r)
 		{
