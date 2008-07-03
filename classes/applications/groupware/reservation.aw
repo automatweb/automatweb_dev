@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.110 2008/07/01 11:14:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.111 2008/07/03 11:35:52 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -248,7 +248,8 @@ class reservation extends class_base
 				break;
 			case "sbt_close":
 				$prop["type"] = "text";
-				$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' 
+				$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' onclick=''  />";
+				/*$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' 
 					onclick='
 						if (typeof(aw_submit_handler) != \"undefined\")
 						{
@@ -257,7 +258,8 @@ class reservation extends class_base
 								return false;
 							}
 						}'
-					/>";
+						/>";
+				*/
 				break;
 			case "start1":
 			case "end":

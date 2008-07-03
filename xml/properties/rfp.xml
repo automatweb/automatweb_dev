@@ -16,7 +16,6 @@
             <group>submitter_info</group>
             <type>textbox</type>
             <field>data_subm_name</field>
-            <method>serialize</method>
             <caption>Ankeedi t&amp;amp;auml;itja</caption>
       </property>
       <property>
@@ -748,10 +747,19 @@
             <table>rfp</table>
             <group>final_resource</group>
             <parent>res_right</parent>
-            <type>text</type>
+            <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>resources_tbl</field>
+      </property>
+      <property>
+            <name>housing_tbl</name>
+            <table>rfp</table>
+            <group>final_housing</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>housing_tbl</field>
       </property>
       <property>
             <name>data_contactperson</name>
@@ -858,6 +866,10 @@
                   <caption>Ressursid</caption>
                   <parent>final_info</parent>
             </final_resource>
+            <final_housing>
+                  <caption>Majutus</caption>
+                  <parent>final_info</parent>
+            </final_housing>
             <final_submission>
                   <caption>Kinnitamine</caption>
                   <parent>final_info</parent>

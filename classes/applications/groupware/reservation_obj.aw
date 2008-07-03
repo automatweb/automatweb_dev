@@ -99,6 +99,92 @@ class reservation_obj extends _int_object
 		return $sum[$curr];
 	}
 
+	/** Returns resouces data
+		@attrib api=1
+	 **/
+	function get_resources_data()
+	{
+		$inst = $this->instance();
+		return $inst->get_resources_data($this->id());
+	}
+
+	/** Returns resources special prices
+		@attrib api=1
+	 **/
+	function get_resources_price()
+	{
+		$inst = $this->instance();
+		return $inst->get_resources_price($this->id());
+	}
+
+	/** Returns resources special discount
+		@attrib api=1
+	 **/
+	function get_resources_discount()
+	{
+		$inst = $this->instance();
+		return $inst->get_resources_discount($this->id());
+	}
+
+	/** returns resources sum
+		@attrib api=1 params=pos
+		@param special_discounts_off bool optional default=false
+			
+		@returns
+			returns reservations resources sum in different currencies
+	 **/
+	function get_resources_sum($special_discounts_off = false)
+	{
+		$info = $this->get_resources_data();
+		$price = $this->get_resources_price();
+		$discount = $this->get_resources_discount();
+		foreach($this->get_currencies_in_use() as $oid => $obj)
+		{
+			// check if special price is set
+			if(strlen($price[$oid]))
+			{
+				$sum[$oid] = $price[$oid];
+			}
+			else // no special price, calc resources prices
+			{
+
+				foreach($info as $resource => $r_data) // loop over resources
+				{
+					if(strlen($r_data["prices"][$oid])) // if price is set
+					{
+						$count_total = $r_data["prices"][$oid] * $r_data["count"]; // amount * price
+						$sum[$oid] += (strlen($r_data["discount"]) && $r_data["discount"] != 0)?$count_total * ((100 - $r_data["discount"]) / 100):$count_total; // discount and sum up
+					}
+				}
+			}
+
+			if(strlen($discount) && $discount != 0 && !$special_discounts_off) // calc special discount for all
+			{
+				$sum[$oid] *= ((100 - $discount) / 100);
+			}
+		}
+		return $sum;
+	}
+
+	/** Returns currencies in use
+		@attrib api=1
+		@returns
+			array(
+				cur_oid => cur_obj
+			)
+		@comment
+			Actually what this does is just return all system currencies right now, and all the places even don't use this in reservation obj(but they should).
+	 **/
+	function get_currencies_in_use()
+	{
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"class_id" => CL_CURRENCY,
+		));
+		return $ol->arr();
+	}
+
 	/** adds new project to reservation
 		@attrib api=1
 		@returns oid

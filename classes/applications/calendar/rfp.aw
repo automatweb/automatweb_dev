@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.25 2008/07/01 11:14:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.26 2008/07/03 11:35:49 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -311,7 +311,15 @@
 					@property resources_tree parent=res_left type=treeview store=no no_caption=1
 
 				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Ressursid
-					@property resources_tbl parent=res_right type=text store=no no_caption=1
+					@property resources_tbl parent=res_right type=table store=no no_caption=1
+					
+
+                @groupinfo final_housing caption="Majutus" parent=final_info
+                @default group=final_housing
+
+                        @property housing_tbl type=table store=no no_caption=1
+
+
 
 		@groupinfo final_submission caption="Kinnitamine" parent=final_info
 		@default group=final_submission
@@ -583,6 +591,10 @@ class rfp extends class_base
 				{
 					$prop["value"] = $this->get_products_tbl($arr);
 				}
+				elseif($prop["name"] == "resources_tbl")
+				{
+					$prop["value"] == $this->get_resources_tbl($arr);
+				}
 				else
 				{
 					$prop["value"] = t("Palun valige reserveering");
@@ -792,6 +804,158 @@ class rfp extends class_base
 		return $retval;
 	}
 
+	function _init_resources_tbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "reservation",
+			"caption" => t("Broneering"),
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"chgbgcolor" => "split",
+		));
+		
+		$curs = $this->gather_reservation_currencys($arr["obj_inst"]);
+		
+		foreach($curs as $cur)
+		{
+			$cur = obj($cur);
+			$t->define_field(array(
+				"name" => "price[".$cur->id()."]",
+				"caption" => $cur->name(),
+				"chgbgcolor" => "split",
+			));
+		}
+		$t->define_field(array(
+			"name" => "discount",
+			"caption" => t("Allahindlus %"),
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"chgbgcolor" => "split",
+		));
+
+	}
+	
+	public function gather_reservation_currencys($obj)
+	{
+		$cs = $obj->connections_from(array(
+			"type" => "RELTYPE_RESERVATION",
+		));
+		foreach($cs as $c)
+		{
+			$r = $c->to();
+			$ress[$r->id()] = $r;
+		}
+		return $this->_gather_resources_currencys($ress);
+	}
+	
+	function _gather_resources_currencys($reservations = array())
+	{
+		$curs = array();
+		foreach($reservations as $id => $res)
+		{
+			$room = obj($res->prop("resource"));
+			$curs += $room->prop("currency");
+		}
+		return array_unique($curs);
+	}
+
+	function get_resources_tbl(&$arr)
+	{
+		$this->_init_resources_tbl($arr);
+		$total_price = array();
+		$t =& $arr["prop"]["vcl_inst"];
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_RESERVATION",
+		));
+
+		$currencys_in_use = $this->gather_reservation_currencys($arr["obj_inst"]);
+		foreach($conns as $c)
+		{
+			$res = $c->to();
+			$res_inst = get_instance(CL_RESERVATION);
+			$resources_calculated_price = $res->get_resources_sum();
+			$resources_calculated_price_without_special_discount = $res->get_resources_sum(true);
+
+			$resources_data = $res_inst->get_resources_data($res->id());
+
+			$reservation_room = $res->prop("resource");
+			$room_inst = get_instance(CL_ROOM);
+			$room_resources = $room_inst->get_room_resources($reservation_room);
+
+			// special row for every resevation
+			$data = array(
+				"price" => $resources_price[$k],
+				"reservation" => html::obj_change_url($c->to()),
+				"split" => "#CCCCCC",
+				"discount" => $resources_discount,
+			);
+			foreach($resources_calculated_price_without_special_discount as $k => $price)
+			{
+				$price = $price;
+				$data["price[".$k."]"] = $price;
+			}
+			$t->define_data($data);
+			// rows for every resource in reservations
+			foreach($room_resources as $k => $resource)
+			{
+				$data = array(
+					"resource_room" => $reservation_room,
+					"room_resource" => $k,
+					"amount" => $resources_data[$k]["count"],
+					"resource" => html::obj_change_url($resource),
+					"reservation" => $res->name(),
+					"discount" => $resources_data[$k]["discount"],
+					"comment" => $resources_data[$k]["comment"],
+					"time" => $resources_data[$k]["time"],
+				);
+
+				foreach($resources_data[$k]["prices"] as $oid => $price)
+				{
+					$cur_reservation_price_from_resources[$oid] += $price;
+					$data["price[".$oid."]"] = $price;
+				}
+
+				$t->define_data($data);
+			}
+			//totalpricecalc.com
+			foreach($currencys_in_use as $cur)
+			{
+				$total_price[$cur] += $resources_calculated_price[$cur];
+			}
+		}
+		$t->set_sortable(false);
+		
+		// total-total
+		$t->define_data(array(
+			"split" => "#CCCCCC",
+		));
+		$data = array(
+			"resource" => html::strong(t("Kokku:")),
+		);
+		foreach($currencys_in_use as $cur)
+		{
+			$data["price[".$cur."]"] = $total_price[$cur];
+		}
+		$t->define_data($data);
+	}
+
 	function update_products_info($rvid, $obj)
 	{
 		if($this->can("view", $rvid))
@@ -908,7 +1072,7 @@ class rfp extends class_base
 		$prods = $arr["obj_inst"]->meta("prods");
 		foreach($conn as $c)
 		{
-			if($this->can("view", $c->prop("to")))
+			if($this->can("view", $c->prop("to")) && in_array($c->prop("to.parent"), $arr["obj_inst"]->prop("final_catering_rooms"))) // that parent & catering is fishy
 			{
 				$rv = $c->to();
 				$prod_list = $rvi->get_room_products($rv->prop("resource"));
@@ -1132,7 +1296,7 @@ class rfp extends class_base
 			"chgbgcolor" => "split",
 		));
 		
-		$rooms = $arr["obj_inst"]->meta("housing");
+		$rooms = array_reverse($arr["obj_inst"]->meta("housing"));
 		if(is_array($rooms))
 		{
 			$totalsum = 0;
@@ -1169,13 +1333,13 @@ class rfp extends class_base
 				$key = $id;
 				if($id == "new")
 				{
-					$key = count($housing)-1;
+					$key = count($housing) + 1;
 				}
 				if(!$row["price"] && !$row["rooms"])
 				{
 					continue;
 				}
-				$sum = $row["rooms"]*$row["price"];
+				$sum = $row["rooms"] * $row["price"];
 				$start = mktime(0,0,1, $row["datefrom"]["month"], $row["datefrom"]["day"], $row["datefrom"]["year"]);
 				$end = mktime(0,0,2, $row["dateto"]["month"], $row["dateto"]["day"], $row["dateto"]["year"]);
 				$days = ceil(($end - $start) / (60*60*24));
@@ -1187,7 +1351,7 @@ class rfp extends class_base
 				$row["datefrom"] = $start;
 				$row["dateto"] = $end;
 				$row["sum"] = $sum;
-				$output[$key] = $row;
+				$output[] = $row;
 			}
 			$arr["obj_inst"]->set_meta("housing", $output);
 		}
@@ -1541,12 +1705,12 @@ class rfp extends class_base
 					"prod_event" => $varname,
 					"prod_count" => $prod["amount"],
 					"prod_prod" => $po->name(),
-					"prod_price" => $prod["price"],
-					"prod_sum" => round($prod["sum"]),
+					"prod_price" => $this->_format_price($prod["price"]),
+					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
 				));
 				$pds .= $this->parse("PRODUCT");
-				$prod_total += round($prod["sum"]);
+				$prod_total += round($this->_format_price($prod["sum"]));
 			}
 			$this->vars(array(
 				"PRODUCT" => $pds,
@@ -1892,6 +2056,12 @@ class rfp extends class_base
 			"parent" => $arr["obj_inst"]->id(),
 		));
 		$t->table_from_ol($ol, array("name", "modifiedby", "modified"), CL_FILE);
+	}
+
+
+	private function _format_price($price)
+	{
+		return join("", split("[,]", $price));
 	}
 
 	function do_db_upgrade($tbl, $field, $q, $err)
