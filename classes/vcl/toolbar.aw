@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.35 2008/06/30 10:36:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.36 2008/07/03 14:15:48 markop Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -173,6 +173,8 @@ class toolbar extends aw_template
 			Text to display for the item
 		@param parent required type=string
 			Name of the item under what to add the submenu
+		@param link optional type=string
+			An URL, to where the item links to.
 		@comment
 			Adds an submenu to the toolbar menu item. Basically you can go to infinite depths(i think so).
 		@examples
@@ -202,7 +204,7 @@ class toolbar extends aw_template
 	{
 		$arr["sub_menu_id"] = $arr["name"];
 		$baseurl = $this->cfg["baseurl"];
-		$rv = '<a class="menuItem menuItem_sub" href="" onclick="return false;"
+		$rv = '<a class="menuItem menuItem_sub" href="'.$arr["link"].'" '.($arr["link"] ? "" : 'onclick="return false;"').'
 			        onmouseover="menuItemMouseover(event, \''.$arr["sub_menu_id"].'\');">
 				<span class="menuItemText">'.$arr["text"].'</span>
 				</a>';
