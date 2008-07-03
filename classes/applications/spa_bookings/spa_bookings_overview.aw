@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.62 2008/07/02 11:59:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.63 2008/07/03 14:41:29 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -413,7 +413,7 @@ class spa_bookings_overview extends class_base
 		switch($prop["name"])
 		{
 			case "rooms_folder":
-				if ($arr["group"] != "general")
+				if ($arr["request"]["group"] != "general")
 				{
 					return PROP_IGNORE;
 				}
@@ -1391,11 +1391,25 @@ class spa_bookings_overview extends class_base
 			"name" => "print",
 			"img" => "print.gif",
 		));
-				
+
+		$rooms = new object_list(array(
+			"class_id" => CL_ROOM,
+			"lang_id" => array(),
+			"name" => "%".$arr["request"]["rs_name"]."%",
+		));
+
+		$submenu_link = $this->mk_my_orb("room_booking_printer", array(
+			"from" => date_edit::get_timestamp($arr["request"]["rs_booking_from"]),
+			"to" => date_edit::get_timestamp($arr["request"]["rs_booking_to"]),
+			"group" => $grp,
+			"rooms" => join(",",$rooms->ids()),
+		));
+
 		$tb->add_sub_menu(array(
 			"parent" => "print",
 			"name" => "p_all_g",
 			"text" => t("K&otilde;ik"),
+			"link" => "javascript:aw_popup_scroll('".$submenu_link."','mulcal',700,500);",
 		));
 
 		// add yesterday/today/tomorrow subs
@@ -1408,10 +1422,19 @@ class spa_bookings_overview extends class_base
 				continue;
 			}
 			$go = obj($grp_id);
+
+			$submenu_link = $this->mk_my_orb("room_booking_printer", array(
+				"from" => date_edit::get_timestamp($arr["request"]["rs_booking_from"]),
+				"to" => date_edit::get_timestamp($arr["request"]["rs_booking_to"]),
+				"group" => $grp_id,
+				"rooms" => join(",",$rooms->ids()),
+			));
+
 			$tb->add_sub_menu(array(
 				"parent" => "print",
 				"text" => $go->name(),
-				"name" => "g_".$grp_id
+				"name" => "g_".$grp_id,
+				"link" => "javascript:aw_popup_scroll('".$submenu_link."','mulcal',700,500);",
 			));
 			$this->_add_day_subs($tb, "g_".$grp_id , $grp_id);
 		}
