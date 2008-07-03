@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.63 2008/07/03 14:41:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.64 2008/07/03 14:58:03 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1398,12 +1398,20 @@ class spa_bookings_overview extends class_base
 			"name" => "%".$arr["request"]["rs_name"]."%",
 		));
 
+		$extra = array("rooms" => join(",",$rooms->ids()));
+		if($arr["request"]["rs_unconfirmed"])
+		{
+			$extra["unverified"] = 1;
+		}
+		if($arr["request"]["rs_booker_name"])
+		{
+			$extra["person"] = $arr["request"]["rs_booker_name"];
+		}
 		$submenu_link = $this->mk_my_orb("room_booking_printer", array(
 			"from" => date_edit::get_timestamp($arr["request"]["rs_booking_from"]),
 			"to" => date_edit::get_timestamp($arr["request"]["rs_booking_to"]),
 			"group" => $grp,
-			"rooms" => join(",",$rooms->ids()),
-		));
+		) + $extra);
 
 		$tb->add_sub_menu(array(
 			"parent" => "print",
@@ -1428,7 +1436,7 @@ class spa_bookings_overview extends class_base
 				"to" => date_edit::get_timestamp($arr["request"]["rs_booking_to"]),
 				"group" => $grp_id,
 				"rooms" => join(",",$rooms->ids()),
-			));
+			) + $extra);
 
 			$tb->add_sub_menu(array(
 				"parent" => "print",
@@ -1861,6 +1869,8 @@ class spa_bookings_overview extends class_base
 		@param from optional
 		@param to optional
 		@param group optional
+		@param unverified optional
+		@param person optional
 	**/
 	function room_booking_printer($arr)
 	{
@@ -1907,6 +1917,14 @@ class spa_bookings_overview extends class_base
 					{
 						$ft["createdby"][] = $user->prop("uid");
 					}
+				}
+				if ($arr["person"])
+				{
+					$ft["customer"] = "%".$arr["person"]."%";
+				}
+				if ($arr["unverified"])
+				{
+					$ft["verified"] = new obj_predicate_not(1);
 				}
 				$books = "";
 				$reservation_ol = new object_list($ft);
