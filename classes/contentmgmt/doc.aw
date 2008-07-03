@@ -12,6 +12,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@caption Toolbar
 
 	@property brother_warning type=text store=no no_caption=1
+	@property simultaneous_warning type=text store=no no_caption=1
 
 	@property title type=textbox size=60 trans=1
 	@caption Pealkiri
@@ -474,6 +475,9 @@ class doc extends class_base
 			case "trans_tb":
 				$this->_trans_tb($arr);
 				break;
+
+			case "simultaneous_warning":
+				return $this->_get_simultaneous_warning($arr);
 		};
 		return $retval;
 	}
@@ -496,7 +500,7 @@ class doc extends class_base
 				break;
 
 			case "link_calendars":
-				$this->update_link_calendars($args);
+				$this->update_link_calendars($arg);
 				break;
 
 			case "link_keywords":
@@ -1534,6 +1538,136 @@ class doc extends class_base
 				));
 			return true;
 		}
+	}
+
+	private function _get_simultaneous_key($o)
+	{
+		return "document_editor_open_".$o->id();
+	}
+
+	private function _get_simultaneous_warning($arr)
+	{
+		if ($arr["new"])
+		{
+			return PROP_IGNORE;
+		}
+
+		$key = $this->_get_simultaneous_key($arr["obj_inst"]);
+
+		// check if someone is editing this doc
+		// if so, then check if the edit open date is longer than the session timeout
+		// if it is, then no editing, else warning
+		$data = aw_unserialize($this->get_cval($key));
+		if (!is_array($data))
+		{
+			return PROP_IGNORE;
+		}
+
+		$mod = false;
+		foreach($data as $uid => $d)
+		{
+			if ($d["tm"] < (time() - ini_get("session.gc_maxlifetime")))
+			{
+				unset($data[$uid]);
+				$mod = true;
+			}
+		}
+
+		if ($mod)
+		{
+			$this->set_cval($key, serialize($data));
+		}
+
+		unset($data[aw_global_get("uid")]);
+
+		if (!count($data))
+		{
+			return PROP_IGNORE;
+		}
+
+		if (count($data) == 1)
+		{
+			$data = reset($data);
+			$arr["prop"]["value"] = html::strong(sprintf(t("Hoiatus, seda dokumenti muudab hetkel kasutaja %s, muutmisvaate avas %s"), 
+				obj($data["person"])->name,
+				date("d.m.Y H:i:s", $data["tm"])
+			));
+		}
+		else
+		{
+			$str = t("Hoiatus, seda dokumenti muudavad hetkel kasutajad:");
+			foreach($data as $entry)
+			{
+				$str .= " ".(obj($entry["person"])->name)." ".t("avas muutmisvaate")." ".date("d.m.Y H:i:s", $entry["tm"]);
+			}
+			$arr["prop"]["value"] = $str;
+		}
+		return PROP_OK;
+	}
+
+	function callback_pre_edit($arr)
+	{	
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$key = $this->_get_simultaneous_key($arr["obj_inst"]);
+			$data = aw_unserialize($this->get_cval($key));
+
+			$data[aw_global_get("uid")] = array(
+				"tm" => time(),
+				"uid" => aw_global_get("uid_oid"),
+				"person" => get_current_person()->id()
+			);
+			$this->set_cval($key, serialize($data));
+		}
+	}
+
+	/**
+		@attrib name=mark_leave_editor nologin=1
+		@param oid optional
+	**/
+	function mark_leave_editor($arr)
+	{
+		if (!is_oid($arr["oid"]))
+		{
+			die();
+		}
+
+		$key = $this->_get_simultaneous_key(obj($arr["oid"]));
+
+		$data = unserialize($this->get_cval($key));
+
+		if (isset($data[aw_global_get("uid")]))
+		{
+			unset($data[aw_global_get("uid")]);
+
+			$this->set_cval($key, serialize($data));
+		}
+		
+		die();
+	}
+
+	function callback_generate_scripts($arr)
+	{
+$rv = <<<EOF
+$(window).unload( function () {
+	awDocUnloadHandler ();
+});
+function awDocUnloadHandler()
+{
+	$.ajax({
+		type: "GET",
+		url: "orb.aw?class=doc&action=mark_leave_editor",
+		data: "&oid="+$.gup("id"),
+		async: false,
+		success: function(msg){
+		},
+		error: function(msg){
+			alert( "{VAR:msg_leave_error}");
+		}
+	});
+}
+EOF;
+		return $rv;
 	}
 }
 ?>

@@ -110,6 +110,7 @@ function unloadHandler()
 			});
 		}
 	}
+
 }
 
 <!-- SUB: EDITOR_FCK -->

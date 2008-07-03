@@ -33,5 +33,13 @@
 			</function>
 		</action>
 
+		<action name="mark_leave_editor" nologin="1">
+			<function name="mark_leave_editor">
+				<arguments>
+					<optional name="oid" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

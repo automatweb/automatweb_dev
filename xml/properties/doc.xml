@@ -21,6 +21,15 @@
             <field>brother_warning</field>
       </property>
       <property>
+            <name>simultaneous_warning</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>simultaneous_warning</field>
+      </property>
+      <property>
             <name>title</name>
             <table>documents</table>
             <group>general</group>

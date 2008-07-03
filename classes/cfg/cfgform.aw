@@ -3359,6 +3359,7 @@ class cfgform extends class_base
 		$els = array(
 			"general" => array(
 				"navtoolbar" => array(100, t("T&ouml;&ouml;riistariba")),
+				"simultaneous_warning" => array(150, t("Samaaegse muutmise hoiatus")),
 				"status" => array(200, t("Aktiivne")),
 				"title" => array(300, t("Pealkiri")),
 				"tm" => array(400, t("Kuup&auml;ev")),
