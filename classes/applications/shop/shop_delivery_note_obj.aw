@@ -125,7 +125,7 @@ class shop_delivery_note_obj extends _int_object
 					{
 						$singles[] = $find_ol->begin();
 					}
-					elseif(!$arr["obj_inst"]->prop("from_wh"))
+					elseif(!$arr["obj_inst"]->prop("from_warehouse"))
 					{
 						$o = obj();
 						$o->set_class_id(CL_SHOP_PRODUCT_SINGLE);
@@ -174,16 +174,16 @@ class shop_delivery_note_obj extends _int_object
 			$from_wh = obj($from_wh_id);
 		}
 		$twh = $row->prop("warehouse");
-		if(is_oid($twh) && $twh)
+		if(is_oid($twh))
 		{
 			$to_wh = obj($twh);
 		}
 		$to_wh_id = $arr["obj_inst"]->prop("to_warehouse");
-		if(is_oid($to_wh_id) && !$to_wh)
+		if(is_oid($to_wh_id))
 		{
 			$to_wh = obj($to_wh_id);
 		}
-		if($to_wh->id() == $from_wh->id())
+		if($to_wh && $from_wh && $to_wh->id() == $from_wh->id())
 		{
 			return;
 		}

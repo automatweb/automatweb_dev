@@ -731,7 +731,7 @@ class shop_delivery_note extends class_base
 				}
 				if(proceed == 1)
 				{
-					//submit_changeform(\"\")
+					submit_changeform(\"\")
 				}
 				else if(proceed == \"no\")
 				{
@@ -745,7 +745,7 @@ class shop_delivery_note extends class_base
 			$js = "
 			function dn_submit()
 			{
-				//submit_changeform(\"\")
+				submit_changeform(\"\")
 			}";
 		}
 		return $js;
