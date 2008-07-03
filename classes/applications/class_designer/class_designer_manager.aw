@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.8 2007/12/06 14:33:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.9 2008/07/03 06:43:28 tarvo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -558,19 +558,22 @@ class class_designer_manager extends class_base
 	{
 		$clss = aw_ini_get("classes");
 
+
 		$cut = safe_array($_SESSION["class_designer"]["cut_classes"]);
 		foreach($cut as $clid)
 		{
-			$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$clid][parents]", $arr["tf"]);
-			$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$clid][parents]", $arr["tf"]);
+			//$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$clid][parents]", $arr["tf"]);
+			//$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$clid][parents]", $arr["tf"]);
+			$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_cls.ini", "classes[$clid][parents]", $arr["tf"]);
 		}
 		$_SESSION["class_designer"]["cut_classes"] = array();
 
 		$cut = safe_array($_SESSION["class_designer"]["cut_folders"]);
 		foreach($cut as $fld)
 		{
-			$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$fld][parent]", $arr["tf"]);
-			$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$fld][parent]", $arr["tf"]);
+			//$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$fld][parent]", $arr["tf"]);
+			//$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$fld][parent]", $arr["tf"]);
+			$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$fld][parent]", $arr["tf"]);
 		}
 		$_SESSION["class_designer"]["cut_folders"] = array();
 
@@ -584,8 +587,9 @@ class class_designer_manager extends class_base
 				$curp[$arr["tf"]] = $arr["tf"];
 				$np = join(",", array_values($curp));
 			}
-			$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$clid][parents]", $np);
-			$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$clid][parents]", $np);
+			//$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$clid][parents]", $np);
+			//$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$clid][parents]", $np);
+			$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_cls.ini", "classes[$clid][parents]", $np);
 		}
 		$_SESSION["class_designer"]["copied_classes"] = array();
 
@@ -597,11 +601,13 @@ class class_designer_manager extends class_base
 			$np = $arr["tf"];
 			$ds = $flds[$clid];
 
-			$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][name]", $ds["name"]);
-			$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][parent]", $np);
+			//$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][name]", $ds["name"]);
+			//$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][parent]", $np);
+			$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][name]", $ds["name"]);
+			$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][parent]", $np);
 
-			$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $ds["name"]);
-			$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $np);
+			//$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $ds["name"]);
+			//$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $np);
 		}
 		$_SESSION["class_designer"]["copied_folders"] = array();
 
@@ -627,7 +633,12 @@ class class_designer_manager extends class_base
 			if (substr($line, 0, strlen($k)) == $k)
 			{
 				$ls[$key] = $k." = ".$v."\n";
+				$found = true;
 			}
+		}
+		if(!$found)
+		{
+			$ls[] = $k." = ".$v."\n";
 		}
 		$this->put_file(array(
 			"file" => $file,
@@ -698,8 +709,10 @@ class class_designer_manager extends class_base
 		$flds = aw_ini_get("classfolders");
 		$max_fld = max(array_keys($flds))+1;
 
-		$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
-		$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
+		//$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
+		//$this->_add_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
+		$this->_add_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
+		$this->_add_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
 
 		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
 		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
@@ -777,8 +790,9 @@ class class_designer_manager extends class_base
 	**/
 	function change_clf_name($arr)
 	{
-		$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
-		$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		//$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		//$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
 		return $arr["post_ru"];
 	}
 
@@ -789,8 +803,9 @@ class class_designer_manager extends class_base
 	**/
 	function change_class_name($arr)
 	{
-		$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
-		$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		//$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		//$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		$this->_set_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
 		return $arr["post_ru"];
 	}
 
@@ -806,18 +821,21 @@ class class_designer_manager extends class_base
 	{
 		$inif1 = aw_ini_get("basedir")."/config/ini/classfolders.ini";
 		$inif2 = aw_ini_get("basedir")."/aw.ini";
+		$inif3 = aw_ini_get("site_basedir")."/files/classdesigner_clsfld.ini";
 		foreach(safe_array($arr["sel_fld"]) as $fld_id)
 		{
-			$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
-			$this->_del_ini_file_value($inif2, "classfolders[$fld_id]");
+			//$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
+			//$this->_del_ini_file_value($inif2, "classfolders[$fld_id]");
+			$this->_del_ini_file_value($inif3, "classfolders[$fld_id]");
 		}
 
 		$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
 		$inif2 = aw_ini_get("basedir")."/aw.ini";
 		foreach(safe_array($arr["sel"]) as $fld_id)
 		{
-			$this->_del_ini_file_value($inif1, "classes[$fld_id]");
-			$this->_del_ini_file_value($inif2, "classes[$fld_id]");
+			//$this->_del_ini_file_value($inif1, "classes[$fld_id]");
+			//$this->_del_ini_file_value($inif2, "classes[$fld_id]");
+			$this->_del_ini_file_value($inif3, "classes[$fld_id]");
 		}
 		return $arr["post_ru"];
 	}
