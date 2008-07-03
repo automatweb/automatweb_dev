@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.52 2008/07/03 12:37:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.53 2008/07/03 12:50:13 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -3252,9 +3252,10 @@ class personnel_management extends class_base
 
 	private function pdf_tpl_options()
 	{
-		$dir = aw_ini_get("tpldir")."/applications/personnel_management/personnel_management_job_offer/";
-		$handle = opendir($dir);
 		$ret = array();
+
+		$dir = aw_ini_get("basedir")."templates/applications/personnel_management/personnel_management_job_offer/";
+		$handle = opendir($dir);
 		while(false !== ($file = readdir($handle)))
 		{
 			if(preg_match("/\\.tpl/", $file))
@@ -3262,6 +3263,17 @@ class personnel_management extends class_base
 				$ret[$file] = str_replace(".tpl", "", $file);
 			}
 		}
+		
+		$dir = aw_ini_get("site_basedir")."templates/applications/personnel_management/personnel_management_job_offer/";
+		$handle = opendir($dir);
+		while(false !== ($file = readdir($handle)))
+		{
+			if(preg_match("/\\.tpl/", $file))
+			{
+				$ret[$file] = str_replace(".tpl", "", $file);
+			}
+		}
+
 		return $ret;
 	}
 }
