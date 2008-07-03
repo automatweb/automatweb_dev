@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.10 2008/06/20 09:55:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.11 2008/07/03 11:09:13 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -42,6 +42,34 @@
 			@property list type=table no_caption=1 parent=packages_list
 			@caption Pakkide nimekiri
 
+@groupinfo sites caption="Saidid" no_submit=1
+@default group=sites
+
+	@layout sites_frame type=hbox width=20%:80%
+
+		@layout sites_search type=vbox parent=packages_frame 
+
+			@property sites_search_id type=textbox size=20 store=no captionside=top parent=sites_search
+			@caption Saidi ID
+
+			@property sites_search_url type=textbox size=20 store=no captionside=top parent=sites_search
+			@caption Url
+
+			@property sites_search_package type=textbox size=20 store=no captionside=top parent=sites_search
+			@caption Pakett
+
+			@property sites_search_file type=textbox size=20 store=no captionside=top parent=sites_search
+			@caption Fail
+
+			@property sites_search_button type=submit no_caption=1 parent=sites_search
+			@caption Otsi
+
+		@layout sites_list type=vbox parent=sites_frame
+
+			@property sites_list type=table no_caption=1 parent=sites_list
+			@caption Saitide nimekiri
+
+
 @reltype PACKAGES_FOLDER_AW value=1 clid=CL_MENU
 @caption Pakkide kaust AW-s
 
@@ -72,6 +100,10 @@ class package_server extends class_base
 			case 'search_name':
 			case 'search_version':
 			case 'search_file':
+			case 'sites_search_url':
+			case 'sites_search_id':
+			case 'sites_search_package':
+			case 'sites_search_file':
 				$prop['value'] = $arr['request'][$prop['name']];
 				break;
 		};
@@ -179,6 +211,124 @@ class package_server extends class_base
 		return PROP_OK;
 	}
 
+	function _get_sites_list($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->set_caption(t('Saitide nimekiri'));
+
+		$t->define_field(array(
+			'name' => 'id',
+			'caption' => t('ID')
+		));
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi')
+		));
+		$t->define_field(array(
+			'name' => 'url',
+			'caption' => t('Url'),
+		));
+		$t->define_field(array(
+			'name' => 'packages',
+			'caption' => t('Paketid')
+		));
+
+		$sites = $this->get_sites($arr["request"]);
+		$list = $this->get_site_list();
+		foreach ($sites as $sid)
+		{
+			$p = "";
+			foreach($this->get_site_packages($sid) as $pid)
+			{
+				$pac = obj($pid);
+				$p.= html::obj_change_url($pac->id(),($pac->name()." ".$pac->prop("version")))."<br>\n";
+			}
+			$t->define_data(array(
+				'id' => $sid,
+				'name' => $list[$sid]["name"],
+				'url' => $list[$sid]["url"],
+				'packages' => $p,
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function get_sites($filter)
+	{
+		$list = $this->get_site_list();	
+		$result = array_keys($list);
+
+		$f = array(
+			"class_id" => CL_PACKAGE_SITE_RELATION,
+			"lang_id" => array(),
+		);
+
+		if($filter["sites_search_id"])
+		{
+			$result = array_intersect($result, array($filter["sites_search_id"]));
+		}
+
+		if($filter["sites_search_url"])
+		{
+			$url_list = array();
+			foreach($list as $key => $data)
+			{
+				if(substr_count($data["url"], $filter["sites_search_url"]))
+				{
+					$url_list[] = $key;
+				}
+			}
+			$result = array_intersect($result, $url_list);
+		}
+
+		if($filter["sites_search_package"] || $filter["sites_search_file"])
+		{
+			$package_list = array();
+			$pf = array(
+				"class_id" => CL_PACKAGE,
+				"lang_id" => array(),
+			);
+			if($filter["sites_search_package"])
+			{
+				$pf["name"] = "%".$filter["sites_search_package"]."%";
+			}
+			if($filter["sites_search_file"])
+			{
+				$pf["file_names"] = "%".$filter["sites_search_file"]."%";
+			}
+			$packages = new object_list($pf);
+			foreach($packages->arr() as $package)
+			{
+				$package_list = $package_list + $package->get_sites_used();
+			}
+			$result = array_intersect($result, $package_list);
+		}
+		return $result;
+	}
+
+	function get_site_packages($sid)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PACKAGE,
+			"lang_id" => array(),
+			"CL_PACKAGE.RELTYPE_SITE_RELATION.site" => $sid,
+		));
+		return $ol->ids();
+	}
+
+	function get_site_packages_names($sid)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PACKAGE,
+			"lang_id" => array(),
+			"CL_PACKAGE.RELTYPE_SITE_RELATION.site" => $sid,
+		));
+		return $ol->names();
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -192,12 +342,16 @@ class package_server extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		if (!empty($arr['request']['search_button']))
-		{
+//		if (!empty($arr['request']['search_button']) || !empty($arr['request']['sites_search_button']))
+//		{
 			$arr['args']['search_name'] = $arr['request']['search_name'];
 			$arr['args']['search_version'] = $arr['request']['search_version'];
 			$arr['args']['search_file'] = $arr['request']['search_file'];
-		}
+			$arr['args']['sites_search_id'] = $arr['request']['sites_search_id'];
+			$arr['args']['sites_search_url'] = $arr['request']['sites_search_url'];
+			$arr['args']['sites_search_package'] = $arr['request']['sites_search_package'];
+			$arr['args']['sites_search_file'] = $arr['request']['sites_search_file'];
+//		}
 	}
 
 	function callback_mod_reforb($arr)
@@ -349,6 +503,16 @@ class package_server extends class_base
 		extract($arr);
 		$package = obj($id);
 		return $package->get_package_file_size();
+	}
+
+	function get_site_list()
+	{
+		if(!$this->site_list)
+		{
+			$listinst = get_instance("install/site_list");
+			$this->site_list = $listinst->get_site_list();
+		}
+		return $this->site_list;
 	}
 
 	function do_db_upgrade($table, $field, $query, $error)

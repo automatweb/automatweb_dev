@@ -85,6 +85,76 @@
             <field>list</field>
             <caption>Pakkide nimekiri</caption>
       </property>
+      <property>
+            <name>sites_search_id</name>
+            <table>objects</table>
+            <group>sites</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>sites_search</parent>
+            <field>sites_search_id</field>
+            <caption>Saidi ID</caption>
+      </property>
+      <property>
+            <name>sites_search_url</name>
+            <table>objects</table>
+            <group>sites</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>sites_search</parent>
+            <field>sites_search_url</field>
+            <caption>Url</caption>
+      </property>
+      <property>
+            <name>sites_search_package</name>
+            <table>objects</table>
+            <group>sites</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>sites_search</parent>
+            <field>sites_search_package</field>
+            <caption>Pakett</caption>
+      </property>
+      <property>
+            <name>sites_search_file</name>
+            <table>objects</table>
+            <group>sites</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>sites_search</parent>
+            <field>sites_search_file</field>
+            <caption>Fail</caption>
+      </property>
+      <property>
+            <name>sites_search_button</name>
+            <table>objects</table>
+            <group>sites</group>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <parent>sites_search</parent>
+            <store>no</store>
+            <field>sites_search_button</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>sites_list</name>
+            <table>objects</table>
+            <group>sites</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>sites_list</parent>
+            <store>no</store>
+            <field>sites_list</field>
+            <caption>Saitide nimekiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE_SERVER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -98,6 +168,10 @@
                   <caption>Pakid</caption>
                   <no_submit>1</no_submit>
             </packages>
+            <sites>
+                  <caption>Saidid</caption>
+                  <no_submit>1</no_submit>
+            </sites>
       </groupinfo>
       <tableinfo>
             <aw_package_server>
@@ -132,6 +206,24 @@
                   <group>packages</group>
                   <area_caption></area_caption>
             </packages_list>
+            <sites_frame>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>sites</group>
+                  <area_caption></area_caption>
+            </sites_frame>
+            <sites_search>
+                  <type>vbox</type>
+                  <parent>packages_frame</parent>
+                  <group>sites</group>
+                  <area_caption></area_caption>
+            </sites_search>
+            <sites_list>
+                  <type>vbox</type>
+                  <parent>sites_frame</parent>
+                  <group>sites</group>
+                  <area_caption></area_caption>
+            </sites_list>
       </layout>
 </properties>
 

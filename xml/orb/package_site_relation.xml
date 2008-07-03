@@ -3,4 +3,3 @@
 	<class name="package_site_relation" folder="applications/package_management" extends="class_base">
 	</class>
 </orb>
-		

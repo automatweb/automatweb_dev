@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.5 2008/06/20 09:55:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.6 2008/07/03 11:09:13 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -110,14 +110,25 @@ class package extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "site_name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "url",
 			"caption" => t("Url"),
 			"align" => "center",
 		));
 		$used = $arr["obj_inst"]->get_sites_used();
+		$listinst = get_instance("install/site_list");
+		$this->site_list = $listinst->get_site_list();
 		foreach($used as $u)
 		{
-			$t->define_data(array("site_id" => $u));
+			$t->define_data(array(
+				"site_id" => $u,
+				"site_name" => $this->site_list[$u]["name"],
+				"url" => $this->site_list[$u]["url"]
+			));
 		}
 	}
 
