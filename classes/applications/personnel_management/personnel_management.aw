@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.53 2008/07/03 12:50:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.54 2008/07/03 12:51:13 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -3254,7 +3254,7 @@ class personnel_management extends class_base
 	{
 		$ret = array();
 
-		$dir = aw_ini_get("basedir")."templates/applications/personnel_management/personnel_management_job_offer/";
+		$dir = aw_ini_get("basedir")."/templates/applications/personnel_management/personnel_management_job_offer/";
 		$handle = opendir($dir);
 		while(false !== ($file = readdir($handle)))
 		{
@@ -3264,7 +3264,7 @@ class personnel_management extends class_base
 			}
 		}
 		
-		$dir = aw_ini_get("site_basedir")."templates/applications/personnel_management/personnel_management_job_offer/";
+		$dir = aw_ini_get("site_basedir")."/templates/applications/personnel_management/personnel_management_job_offer/";
 		$handle = opendir($dir);
 		while(false !== ($file = readdir($handle)))
 		{
