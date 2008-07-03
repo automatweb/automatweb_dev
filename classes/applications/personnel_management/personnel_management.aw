@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.49 2008/07/02 13:10:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.50 2008/07/03 11:15:08 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1629,27 +1629,36 @@ class personnel_management extends class_base
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
-		// Too many tables. MySQL can only use 31 tables in a join
-		// So we'll have to do a hack. :P
-		$hack = 0;
-		$odl_prms_tmp = $odl_prms;
-		foreach($odl_prms as $odl_key => $odl_prm)
+		if(!$_GET["kaarel"])
 		{
-			if($hack % 2 == 0)
+			// Too many tables. MySQL can only use 31 tables in a join
+			// So we'll have to do a hack. :P
+			$hack = 0;
+			$odl_prms_tmp = $odl_prms;
+			foreach($odl_prms as $odl_key => $odl_prm)
 			{
-				unset($odl_prms[$odl_key]);
+				if($hack % 2 == 0)
+				{
+					unset($odl_prms[$odl_key]);
+				}
+				else
+				{
+					unset($odl_prms_tmp[$odl_key]);
+				}
+				$hack++;
 			}
-			else
-			{
-				unset($odl_prms_tmp[$odl_key]);
-			}
-			$hack++;
+			$odl_prms_tmp = $odl_prms_immutable + $odl_prms_tmp;
+			$ol_tmp = new object_list($odl_prms_tmp);
+			$odl_prms = $odl_prms_immutable + $odl_prms;
+			$odl_prms["oid"] = $ol_tmp->ids();
+			// End of hack.
 		}
-		$odl_prms_tmp = $odl_prms_immutable + $odl_prms_tmp;
-		$ol_tmp = new object_list($odl_prms_tmp);
-		$odl_prms = $odl_prms_immutable + $odl_prms;
-		$odl_prms["oid"] = $ol_tmp->ids();
-		// End of hack.
+		else
+		{
+			$odl_prms = is_array($odl_prms) ? $odl_prms : array();
+			$odl_prms = $odl_prms_immutable + $odl_prms;
+			arr($odl_prms);
+		}
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
