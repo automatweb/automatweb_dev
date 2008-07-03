@@ -3,6 +3,7 @@
 <!--
 var document_form = new Array();
 var document_form_original = new Array();
+var document_instances = new Array();
 var changed = false;
 
 /*
@@ -11,22 +12,23 @@ var changed = false;
 function FCKeditor_OnComplete( editorInstance )
 {
 	if ($.browser.msie)	{
-		//editorInstance.EditorDocument.attachEvent( 'onkeyup', FCKeditor_OnChange ) ;
+		editorInstance.EditorDocument.attachEvent( 'onkeyup', FCKeditor_OnChange ) ;
 		editorInstance.EditorDocument.attachEvent( 'onkeydown', FCKeditor_OnChange ) ;
 	}
 	else
 	{
 		editorInstance.Events.AttachEvent( 'OnSelectionChange', FCKeditor_OnChange ) ;
-		//editorInstance.EditorDocument.addEventListener( 'keyup', FCKeditor_OnChange, true ) ;
+		editorInstance.EditorDocument.addEventListener( 'keyup', FCKeditor_OnChange, true ) ;
 		editorInstance.EditorDocument.addEventListener( 'keydown', FCKeditor_OnChange, true ) ;
 	}
 	
 	document_form_original[editorInstance.Name] = editorInstance.EditorDocument.body.innerHTML;
+	// we'll use those instances to get the content of FCK in unloadHandler() just after leaving page
+	document_instances[editorInstance.Name] = editorInstance;
 	
 	function FCKeditor_OnChange()
 	{
-		document_form[editorInstance.Name] = editorInstance.GetHTML();
-		if (document_form_original[editorInstance.Name].length != document_form[editorInstance.Name].length)
+		if (!changed)
 		{
 			set_changed();
 		}
@@ -48,20 +50,15 @@ function FCKeditor_CreateEditor(name, version, width, height, lang)
 /*
  * turns array to string
  */
-function serializeArray (arr) {
+function serializeArray (arr)
+{
 	s_out = "";
-	a_keys = new Array();
 	
 	for (key in arr)
 	{
-		a_keys[a_keys.length] = key;
+		s_out += encodeURIComponent(key)+"="+encodeURIComponent(arr[key])+"&";
 	}
 	
-	for(i=0;i<a_keys.length-1;i++)
-	{
-		key = a_keys[i];
-		s_out += encodeURIComponent(key)+"="+encodeURIComponent(this[key])+"&";
-	}
 	s_out = s_out.substr(0, s_out.length-1);
 	return s_out;
 }
@@ -95,6 +92,11 @@ function unloadHandler()
 		var prompt = "{VAR:msg_leave}";
 		if(confirm(prompt))
 		{
+			for (key in document_instances)
+			{
+				editorInstance = document_instances[key];
+				document_form[editorInstance.Name] = editorInstance.GetHTML();
+			}
 			 $.ajax({
 				type: "POST",
 				url: "orb.aw",
