@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.64 2008/06/12 13:22:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.65 2008/07/03 10:55:31 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -1231,6 +1231,8 @@ class shop_order_center extends class_base
 			$cur_co = obj($cur_co_id);
 		}
 
+		$cart = get_instance(CL_SHOP_ORDER_CART)->get_cart($oc);
+
 		// rewrite names as user_data[prop]
 		foreach($cf_ps as $pn => $pd)
 		{
@@ -1255,6 +1257,11 @@ class shop_order_center extends class_base
 				}
 			}
 
+			if (!empty($cart["user_data"][$pn]))
+			{
+				$ret[$pn]["value"] = $cart["user_data"][$pn];
+			}
+			else
 			if ($ret[$pn]["type"] == "date_select")
 			{
 				$ret[$pn]["value"] = date_edit::get_timestamp($cud[$pn]);

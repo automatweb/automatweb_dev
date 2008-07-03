@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.76 2008/06/13 09:43:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.77 2008/07/03 10:55:31 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -224,6 +224,7 @@ class shop_order_cart extends class_base
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o
 		));
+
 		$els = $this->do_insert_user_data_errors($els);
 	
 
@@ -518,11 +519,11 @@ class shop_order_cart extends class_base
 			}
 		}
 
-		if (($arr["from"] != "confirm" && $arr["from"] != "") || (is_array($GLOBALS["user_data"]) && count($GLOBALS["user_data"])))
+		if (($arr["from"] != "confirm" && $arr["from"] != "") || (is_array($_REQUEST["user_data"]) && count($_REQUEST["user_data"])))
 		{
 			$cart["user_data"] = $_REQUEST["user_data"];
 		}
-		
+
 		if (isset($arr["payment_method"]))
 		{
 			$cart["payment_method"] = $arr["payment_method"];
