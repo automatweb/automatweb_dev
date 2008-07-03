@@ -2297,15 +2297,16 @@ class room extends class_base
 		$this->prod_data = $this->get_prod_data_for_room($arr["obj_inst"]);
 		$item_list = $this->get_active_items($arr["obj_inst"]->id());
 		$item_list->arr();	//optimization to fetc all at once
-		$prod_list = $item_list->names();
+//		$prod_list = $item_list->names();
 		$times = array();
-		foreach($prod_list as $oid => $pname)
+		foreach($item_list->names() as $oid => $pname)
 		{
 			$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid , "room" => $arr["obj_inst"]->id()));
 		}
-		foreach($prod_list as $oid => $name)
+		foreach($item_list->arr() as $product)
 		{
-			$product = obj($oid);
+			//$product = obj($oid);
+			$name = $product->name();
 			$parent = $product->parent();
 	//		$parents[$parent][] = $oid;
 
@@ -3753,8 +3754,32 @@ class room extends class_base
 			{
 				$ol->add($this->get_package_list($product));
 			}*/
-		}//arr($ol);
+		}
+		$this->menus = $o->meta("group_product_menu");
+		$ol->sort_by_cb(array($this, "__sort_prod_list"));
 		return $ol;
+	}
+	
+	function __sort_prod_list($a , $b)
+	{
+		if($this->menus)
+		{
+			if((int)$this->prod_data[$a->parent()]["ord"] - (int)$this->prod_data[$b->parent()]["ord"])
+			{
+				return (int)$this->prod_data[$a->parent()]["ord"] - (int)$this->prod_data[$b->parent()]["ord"];
+			}
+			
+			if($a->parent() != $b->parent())
+			{
+				return strcmp($a->prop("parent.name"), $b->prop("parent.name"));
+			}
+		}
+		if((int)$this->prod_data[$a->id()]["ord"] - (int)$this->prod_data[$b->id()]["ord"])
+		{
+			return (int)$this->prod_data[$a->id()]["ord"] - (int)$this->prod_data[$b->id()]["ord"];
+		}
+		return strcmp($a->name(), $b->name());
+		return 0;
 	}
 	
 	//returns active products
