@@ -4,6 +4,7 @@
 @tableinfo aw_shop_delivery_note master_index=brother_of master_table=objects index=aw_oid
 
 @default table=aw_shop_delivery_note
+@groupinfo general caption=&Uuml;ldine submit=no
 @default group=general
 
 	@property number type=textbox
@@ -12,16 +13,16 @@
 	@property delivery_date type=date_select
 	@caption Kuup&auml;ev
 
-	@property from_warehouse type=relpicker reltype=RELTYPE_FROM_WAREHOUSE
+	@property from_warehouse type=textbox
 	@caption Laost
 	
-	@property to_warehouse type=relpicker reltype=RELTYPE_TO_WAREHOUSE
+	@property to_warehouse type=textbox
 	@caption Lattu
 
-	@property customer type=relpicker reltype=RELTYPE_CUST
+	@property customer type=textbox
 	@caption Klient
 
-	@property impl type=relpicker reltype=RELTYPE_IMPL
+	@property impl type=textbox
 	@caption Hankija
 
 	@property transport type=textbox
@@ -30,8 +31,11 @@
 	@property customs type=textbox
 	@caption Toll
 
-	@property currency type=relpicker reltype=RELTYPE_CURRENCY
+	@property currency type=textbox
 	@caption Valuuta
+
+	@property writeoff type=checkbox ch_value=1
+	@caption Mahakandmine
 
 	@property approved type=checkbox ch_value=1
 	@caption Kinnitatud
@@ -39,6 +43,8 @@
 	@property articles_tb store=no no_caption=1 type=toolbar
 
 	@property articles_tbl store=no no_caption=1 type=table
+
+	@property gen_submit type=button store=no
 
 @groupinfo bills caption=Arved
 @default group=bills
@@ -62,14 +68,17 @@
 @reltype BILL value=4 clid=CL_CRM_BILL
 @caption Arve
 
-@reltype PRODUCT value=5 clid=CL_SHOP_PRODUCT
-@caption Artikkel
+@reltype ROW value=5 clid=CL_SHOP_DELIVERY_NOTE_ROW
+@caption Rida
 
 @reltype CUST value=6 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
 
 @reltype IMPL value=7 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Teostaja
+
+@reltype PRODUCT value=8 clid=CL_SHOP_PRODUCT
+@caption Artikkel
 */
 
 class shop_delivery_note extends class_base
@@ -89,6 +98,25 @@ class shop_delivery_note extends class_base
 
 		switch($prop["name"])
 		{
+			case "gen_submit":
+				$prop["class"] = "sbtbutton";
+				$prop["onclick"] = "dn_submit()";
+				$prop["caption"] = t("Salvesta");
+				break;
+
+			case "to_warehouse":
+			case "from_warehouse":
+			case "customer":
+			case "impl":
+			case "currency":
+				if($this->can("view", $prop["value"]))
+				{
+					$o = obj($prop["value"]);
+					$prop["selected"] = array($prop["value"] => $o->name());
+				}
+				$prop["option_is_tuple"] = 1;
+				$prop["autocomplete_source"] = $this->mk_my_orb("prop_autocomplete_source");
+				break;
 		}
 
 		return $retval;
@@ -102,19 +130,86 @@ class shop_delivery_note extends class_base
 		switch($prop["name"])
 		{
 			case "approved":
+				$this->set_articles_tbl($arr);
 				if($prop["value"] && !($arr["obj_inst"]->prop("approved")))
 				{
-					$ret = $this->create_movement($arr);
+					$ret = $arr["obj_inst"]->create_movement($arr);
 					if(!$ret)
 					{
-						$prop["error"] = $this->err;
+						$err = aw_global_get("dn_err");
+						$prop["error"] = $err;
 						$retval = PROP_FATAL_ERROR;
 					}
 				}
 				break;
+			case "to_warehouse":
+			case "from_warehouse":
+			case "customer":
+			case "impl":
+			case "currency":
+				$ac_props = $this->get_ac_props();
+				$rt = $ac_props[$prop["name"]]["reltype"];
+				$val = $prop["value"];
+				$isval = $this->can("view", $val);
+				if(!$arr["new"] && (!$isval || !$arr["obj_inst"]->is_connected_to(array("type" => $rt, "to" => $val))))
+				{
+					if($arr["obj_inst"]->is_connected_to(array("type" => $rt)))
+					{
+						$arr["obj_inst"]->disconnect(array(
+							"from" => $arr["obj_inst"]->prop($prop["name"]),
+							"type" => $rt,
+						));
+					}
+				}
+				$arr["obj_inst"]->set_prop($prop["name"], $val);
+				break;
 		}
 
 		return $retval;
+	}
+
+	function callback_post_save($arr)
+	{
+		$this->create_ac_prop_rels($arr);
+	}
+
+	function create_ac_prop_rels($arr)
+	{
+		$ac_props = $this->get_ac_props();
+		foreach($ac_props as $prop=>$p)
+		{
+			$val = $arr["obj_inst"]->prop($prop);
+			$isval = $this->can("view", $val);
+			if($isval)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $val,
+					"type" => $p["reltype"],
+				));
+			}
+		}
+	}
+
+	function get_ac_props()
+	{
+		$ac_props = array(
+			"to_warehouse" => array(
+				"reltype" => "RELTYPE_TO_WAREHOUSE",
+			),
+			"from_warehouse" => array(
+				"reltype" => "RELTYPE_FROM_WAREHOUSE",
+			),
+			"customer" => array(
+				"reltype" => "RELTYPE_CUST",
+			),
+			"impl" => array(
+				"reltype" => "RELTYPE_IMPL",
+			),
+			"currency" => array(
+				"reltype" => "RELTYPE_CURRENCY"
+			),
+		);
+		return $ac_props;
 	}
 
 	function _get_articles_tb($arr)
@@ -231,21 +326,17 @@ class shop_delivery_note extends class_base
 		$t->define_data(array(
 			"code" => html::select(array(
 				"name" => "addcode",
-				"options" => $this->_get_article_code_chooser(),
+				"options" => $arr["obj_inst"]->_get_article_code_chooser(),
 			)),
 			"add" => t("<strong>Lisa uus</strong>")
 		));
 		$data = $arr["obj_inst"]->meta("articles");
 		$conn = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_PRODUCT",
+			"type" => "RELTYPE_ROW",
 		));
 		if($to = $arr["obj_inst"]->prop("to_warehouse"))
 		{
 			$warehouse = $to;
-		}
-		elseif($from = $arr["obj_inst"]->prop("from_warehouse"))
-		{
-			$warehouse = $from;
 		}
 		if($this->can("view",$warehouse))
 		{
@@ -255,9 +346,9 @@ class shop_delivery_note extends class_base
 		$pi = get_instance(CL_SHOP_PRODUCT);
 		foreach($conn as $c)
 		{
-			$prod = $c->to();
-			$id = $prod->id();
-			$totalprices[$prod->id()] = $data[$id]["price"]*$data[$id]["amount"];
+			$row = $c->to();
+			$amounts[$row->id()] = ($a = $row->prop("amount"))?$a:$arr["obj_inst"]->get_wh_amount($row, $arr["obj_inst"]);
+			$totalprices[$row->id()] = $row->prop("price")*$amounts[$row->id()];
 		}
 		$total = 0;
 		foreach($totalprices as $id=>$price)
@@ -265,21 +356,27 @@ class shop_delivery_note extends class_base
 			$total += $price;
 		}
 		$other_prices = $arr["obj_inst"]->prop("customs") + $arr["obj_inst"]->prop("transport");
-		$warehouse_list = $this->_get_warehouse_chooser();
+		$warehouse_list = $arr["obj_inst"]->_get_warehouse_chooser();
 		$pi = get_instance(CL_SHOP_PRODUCT);
 		foreach($conn as $c)
 		{
-			$prod = $c->to();
-			$id = $prod->id();
-			$price = $pi->calc_price($prod);;
-			$amount = $data[$id]["amount"];
+			$row = $c->to();
+			$id = $row->prop("product");
+			if(!$this->can("view", $id))
+			{
+				continue;
+			}
+			$prod = obj($id);
+			$bprice = $pi->calc_price($prod);
+			$amount = $row->prop("amount");
+			$price = $row->prop("price");
 			if($total>0 && $amount>0)
 			{
-				$ourprice_sum = round((($data[$id]["price"]*$amount/$total) * $other_prices)/$amount + $data[$id]["price"], 2);
+				$ourprice_sum = round((($price*$amount/$total) * $other_prices)/$amount + $price, 2);
 			}
 			else
 			{
-				$ourprice_sum = ($p = $data[$id]["price"])?$p:0;
+				$ourprice_sum = ($p = $price)?$p:0;
 			}
 			$prod_unit_list = $pi->get_units($prod);
 			$unit_list = array();
@@ -292,48 +389,52 @@ class shop_delivery_note extends class_base
 				}
 			}
 			$art = array(
-				"oid" => $id,
+				"oid" => $row->id(),
 				"code" => $prod->prop("code"),
 				"name" => html::obj_change_url($prod, $prod->name()),
 				"barcode" => $prod->prop("barcode"),
 				"description" => $prod->comment(),
 				"serial_no" => $prod->prop("serial_number_based")?html::textbox(array(
-					"name" => "articles[".$id."][serial_no]",
+					"name" => "rows[".$row->id()."][serial_no]",
 					"size" => 5,
-					"value" => $data[$id]["serial_no"],
+					"value" => $row->prop("serial_no"),
 				)):'',
 				"set_no" => $prod->prop("order_based")?html::textbox(array(
-					"name" => "articles[".$id."][set_no]",
+					"name" => "rows[".$row->id()."][set_no]",
 					"size" => 5,
-					"value" => $data[$id]["set_no"],
+					"value" => $row->prop("set_no"),
+					/*"option_is_tuple" => 1,
 					"autocomplete_source" => $this->mk_my_orb("articles_set_no_autocomplete_source"),
-					"autocomplete_params" => array("articles[".$id."][set_no]"),
+					"autocomplete_params" => array("rows[".$row->id()."][prodid]"),*/
+				)).html::hidden(array(
+					"name" => "rows[".$row->id()."][prodid]",
+					"value" => $id,
 				)):'',
 				"warehouse" => html::select(array(
-					"name" => "articles[".$id."][warehouse]",
-					"value" => $data[$id]["warehouse"] ? $data[$id]["warehouse"] : $warehouse,
+					"name" => "rows[".$row->id()."][warehouse]",
+					"value" => ($wh = $row->prop("warehouse")) ? $wh : $warehouse,
 					"options" => $warehouse_list,
 				)),
 				"purchase_price" => ($calc_type == 2) ? $pi->get_fifo_price($prod) : $pi->get_last_purchase_price($prod),
-				"base_price" => $price,
-				"base_price_tax" => round($price*1.18, 2),
+				"base_price" => $bprice,
+				"base_price_tax" => round($bprice*1.18, 2),
 				"price" => html::textbox(array(
-					"name" => "articles[".$id."][price]",
+					"name" => "rows[".$row->id()."][price]",
 					"size" => 4,
-					"value" => $data[$id]["price"],
+					"value" => $price,
 				)),
 				"ourprice_sum" => $ourprice_sum,
 				"unit" => html::select(array(
-					"name" => "articles[".$id."][unit]",
-					"value" => $data[$id]["unit"],
+					"name" => "rows[".$row->id()."][unit]",
+					"value" => $row->prop("unit"),
 					"options" => $unit_list,
 				)),
 				"amount" => html::textbox(array(
-					"name" => "articles[".$id."][amount]",
+					"name" => "rows[".$row->id()."][amount]",
 					"size" => 3,
-					"value" => $data[$id]["amount"],
+					"value" => $amounts[$row->id()],
 				)),
-				"sum" => $totalprices[$id],
+				"sum" => $totalprices[$row->id()],
 				"add" => t("<strong>Saatelehe read</strong>"),
 			);
 			$t->define_data($art);
@@ -341,60 +442,39 @@ class shop_delivery_note extends class_base
 		$t->set_rgroupby(array("add"=>"add"));
 	}
 
-	function _get_warehouse_chooser()
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_WAREHOUSE,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
-		$res = $ol->names();
-		natcasesort($res);
-		return $res;	
-	}
+	
 
-	function _get_article_code_chooser()
+	function set_articles_tbl($arr)
 	{
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
-		$res = array();
-		foreach($ol->arr() as $o)
-		{
-			if($code = $o->prop("code"))
-			{
-				$res[$o->id()] = $code;
-			}
-		}
-		$res[0] = " ".t("--vali--");
-		natcasesort($res);
-		return $res;
-	}
-
-	function _set_articles_tbl($arr)
-	{
-		$data = $arr["request"]["articles"];
 		$add = $arr["request"]["addcode"];
-		if($add && !$data[$add])
+		if($add)
 		{
-			$data[$add] = array();
+			$o = obj();
+			$o->set_class_id(CL_SHOP_DELIVERY_NOTE_ROW);
+			$o->set_name(sprintf(t("%s rida"), $arr["obj_inst"]->name()));
+			$o->set_parent($arr["obj_inst"]->id());
+			$o->set_prop("product", $add);
+			$o->save();
 			$arr["obj_inst"]->connect(array(
-				"to" => $add,
+				"type" => "RELTYPE_ROW",
+				"to" => $o->id(),
+			));
+			$arr["obj_inst"]->connect(array(
 				"type" => "RELTYPE_PRODUCT",
+				"to" => $add,
 			));
 		}
-		foreach($data as $id=>$row)
+		foreach($arr["request"]["rows"] as $rowid => $data)
 		{
-			$vars = array("amount", "price");
-			foreach($vars as $var)
-			{
-				$data[$id][$var] = str_replace(",",".",$row[$var]);
-			}
+			$ro = obj($rowid);
+			$ro->set_prop("serial_no", $data["serial_no"]);
+			$ro->set_prop("set_no", $data["set_no"]);
+			$ro->set_prop("warehouse", $data["warehouse"]);
+			$ro->set_prop("unit", $data["unit"]);
+			$ro->set_prop("amount", $data["amount"]);
+			$ro->set_prop("price", $data["price"]);
+			$ro->save();
 		}
-		$arr["obj_inst"]->set_meta("articles", $data);
-		$arr["obj_inst"]->save();
 	}
 
 	function _get_bills_tb($arr)
@@ -455,154 +535,7 @@ class shop_delivery_note extends class_base
 		}
 	}
 
-
-	//this function should create a new movement object for each row
-	//then update warehouse_amount objects so the amounts are correct
-	//all warehouse_amounts (with different units) have to be changed
-	//the new amounts for different units are calculated using unit calculation formulas
-	function create_movement($arr)
-	{
-		$from_wh_id = $arr["obj_inst"]->prop("from_warehouse");
-		if(is_oid($from_wh_id))
-		{
-			$from_wh = obj($from_wh_id);
-		}
-		$to_wh_id = $arr["obj_inst"]->prop("to_warehouse");
-		if(is_oid($to_wh_id))
-		{
-			$to_wh = obj($to_wh_id);
-		}
-		$rowdata = $arr["obj_inst"]->meta("articles");
-		$single_vars = array(
-			0 => array(
-				"prod_prop" => "serial_number_based",
-				"err_word1" => "Seerianumbri",
-				"err_word2" => "seerianumber",
-				"row_prop" => "serial_no",
-				"single_type" => "0",
-			),
-			1 => array(
-				"prod_prop" => "order_based",
-				"err_word1" => "Partii numbri",
-				"err_word2" => "partiinumber",
-				"row_prop" => "set_no",
-				"single_type" => "1",
-			),
-		);
-		$pi = get_instance(CL_SHOP_PRODUCT);
-		foreach($rowdata as $prod_id => $row)
-		{
-			if(!$row["unit"])
-			{
-				$this->err = t("Igal tootel tuleb &uuml;hik m&auml;&auml;rata.");
-				return false;
-			}
-		}
-		foreach($rowdata as $prod_id => $row)
-		{
-			$prod = obj($prod_id);
-			$singles = array();
-			foreach($single_vars as $sv)
-			{
-				if($prod->prop($sv["prod_prop"]))
-				{
-					if(!($no = $row[$sv["row_prop"]]))
-					{
-						$this->err = t($sv["err_word1"]." p&otilde;hise arvestusega tootel tuleb ".$sv["err_word2"]." m&auml;&auml;rata.");
-						return false;
-					}
-					$find_ol = new object_list(array(
-						"class_id" => CL_SHOP_PRODUCT_SINGLE,
-						"code" => $no,
-						"type" => $sv["single_type"],
-						"product" => $prod_id,
-					));
-					if($find_ol->count())
-					{
-						$singles[] = $find_ol->begin();
-					}
-					else
-					{
-						$o = obj();
-						$o->set_class_id(CL_SHOP_PRODUCT_SINGLE);
-						$o->set_parent($prod_id);
-						$o->set_name($row[$sv["row_prop"]]);
-						$o->set_prop("product", $prod_id);
-						$o->set_prop("type", $sv["single_type"]);
-						$o->set_prop("code", $row[$sv["row_prop"]]);
-						$o->save();
-						$singles[] = $o;
-					}
-				}
-			}
-			if(!count($singles))
-			{
-				$singles = array(0=>null);
-			}
-			$wh_vars = array(
-				0 => array(
-					"amt_mod" => -1,
-					"var" => "from_wh",
-				),
-				1 => array(
-					"amt_mod" => 1,
-					"var" => "to_wh",
-				),
-			);
-			foreach($singles as $single)
-			{
-				$sid = $single?$single->id():null;
-				foreach($wh_vars as $whv)
-				{
-					if(${$whv["var"]})
-					{
-						$amount = $pi->get_amount(array(
-							"unit" => $row["unit"],
-							"prod" => $prod_id,
-							"single" => $sid,
-							"warehouse" => ${$whv["var"]}->id(),
-						));
-						if(!$amount->count())
-						{
-							$amt = obj();
-							$amt->set_class_id(CL_SHOP_WAREHOUSE_AMOUNT);
-							$amt->set_parent($prod_id);
-							$amt->set_prop("warehouse", ${$whv["var"]}->id());
-							$amt->set_prop("product", $prod_id);
-							$amt->set_prop("single", $sid);
-							$amt->set_prop("amount", $whv["amt_mod"]*$row["amount"]);
-							$amt->set_prop("unit", $row["unit"]);
-							$amt->set_name(sprintf(t("%s laoseis"), $prod->name()));
-							$amt->save();
-						}
-						else
-						{
-							$amt = $amount->begin();
-							$amt->set_prop("amount", $amt->prop("amount") + $whv["amt_mod"]*$row["amount"]);
-							$amt->save();
-						}
-					}
-				}
-				$mvo = obj();
-				$mvo->set_class_id(CL_SHOP_WAREHOUSE_MOVEMENT);
-				$mvo->set_prop("from_wh", $from_wh?$from_wh->id():null);
-				$mvo->set_prop("to_wh", $to_wh?$to_wh->id():null);
-				$mvo->set_prop("product", $prod_id);
-				$mvo->set_prop("single", $sid);
-				$mvo->set_prop("amount", $row["amount"]);
-				$mvo->set_prop("unit", $row["unit"]);
-				$mvo->set_prop("price", $row["price"]);
-				$mvo->set_prop("transport", $arr["obj_inst"]->prop("transport"));
-				$mvo->set_prop("customs", $arr["obj_inst"]->prop("customs"));
-				$mvo->set_prop("date", $arr["obj_inst"]->prop("delivery_date"));
-				$mvo->set_prop("delivery_note", $arr["obj_inst"]->id());
-				$mvo->set_parent($prod_id);
-				$mvo->set_name(sprintf(t("%s liikumine"), $prod->name()));
-				$mvo->save();
-			}
-		}
-		return true;
-	}
+	
 
 	/**
 	@attrib name=del_article_rels all_args=1
@@ -610,15 +543,29 @@ class shop_delivery_note extends class_base
 	function del_article_rels($arr)
 	{
 		$o = obj($arr["id"]);
-		$data = $o->meta("articles");
 		foreach($arr["sel"] as $oid)
 		{
-			$o->disconnect(array(
-				"from" => $oid,
-			));
-			unset($data[$oid]);
+			$ro = obj($oid);
+			$prod = $ro->prop("product");
+			$ro->delete();
 		}
-		$o->set_meta("articles", $data);
+		$del = true;
+		foreach($o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			$ro = $c->to();
+			$chp = $ro->prop("product");
+			if($chp == $prod)
+			{
+				$del = false;
+			}
+		}
+		if($del)
+		{
+			$o->disconnect(array(
+				"from" => $prod,
+				"type" => "RELTYPE_PRODUCT",
+			));
+		}
 		return $arr["post_ru"];
 	}
 
@@ -627,7 +574,181 @@ class shop_delivery_note extends class_base
 	**/
 	function articles_set_no_autocomplete_source($arr)
 	{
-		return array();
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		foreach($arr["rows"] as $tmp)
+		{
+			foreach($tmp as $tmp2)
+			{
+				$prodid = $tmp2["prodid"];
+			}
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_SINGLE,
+			"product" => $prodid,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200,
+			"type" => 1,
+		));
+		$res = array();
+		foreach($ol->arr() as $o)
+		{
+			$res[$o->id()] = $o->prop("name");
+		}
+		return $ac->finish_ac($res);
+	}
+
+	/**
+	@attrib name=prop_autocomplete_source all_args=1
+	**/
+	function articles_prop_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		$requester = substr($arr["requester"], 0, strpos($arr["requester"], "_awAuto"));
+		switch($requester)
+		{
+			case "from_warehouse":
+			case "to_warehouse":
+				$clids = array(CL_SHOP_WAREHOUSE);
+				break;
+			case "customer":
+			case "impl":
+				$clids = array(CL_CRM_PERSON, CL_CRM_COMPANY);
+				break;
+			case "currency":
+				$clids = array(CL_CURRENCY);
+				break;
+			default:
+				$clids = array(CL_MENU);
+				break;
+		}
+		$ol = new object_list(array(
+			"class_id" => $clids,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200,
+		));
+		$res = array();
+		foreach($ol->arr() as $o)
+		{
+			$res[$o->id()] = $o->name;
+		}
+		return $ac->finish_ac($res);
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$g = $arr["request"]["group"];
+		if($g == "general" || empty($g) && !$arr["new"])
+		{
+			$js = "
+			var approved = ".($arr["obj_inst"]->prop("approved")?1:0)."
+			var amounts = Array()
+			var names = Array()";
+			$conn = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_ROW",
+			));
+			$fwh = $arr["obj_inst"]->prop("from_warehouse");
+			foreach($conn as $c)
+			{
+				$row = $c->to();
+				$amount = $arr["obj_inst"]->get_wh_amount($row, $arr["obj_inst"], true);
+				if(!$fwh)
+				{
+					$val = "\"ok\"";
+				}
+				elseif(!is_numeric($amount))
+				{
+					$val = "\"none\"";
+				}
+				else
+				{
+					$val = $amount;
+				}
+				$js .= "
+				amounts[".$row->id()."] = ".$val."
+				names[".$row->id()."] = \"".html_entity_decode($row->prop("product.name"))."\"";
+			}
+			$js .= "
+			function dn_submit()
+			{
+				var approved_f = aw_get_el(\"approved\")
+				if(approved_f.checked && !approved)
+				{
+					var form = document.forms.changeform
+					var len = form.elements.length
+					count = 0
+					ask_els = Array()
+					ask_nums = Array()
+					proceed = 1
+					for(i = 0; i < len; i++)
+					{
+						el = form.elements[i]
+						if (el.name.indexOf(\"rows\") != -1 && el.name.indexOf(\"[amount]\") != -1)
+						{
+							tmp = el.name.split(\"[\")
+							tmp = tmp[1].split(\"]\")
+							num = parseInt(tmp[0]);
+							if(amounts[parseInt(num)] == \"none\")
+							{
+								proceed = \"no\"
+								name = names[num]
+								break
+							}
+							else if(el.value > amounts[num])
+							{
+								ask_els[count] = el
+								ask_nums[count] = num
+								proceed = \"ask\"
+								count++
+							}
+						}
+					}
+				}
+				else
+				{
+					proceed = 1
+				}
+				if(proceed == \"ask\")
+				{
+					for(i = 0; i<count; i++)
+					{
+						el = ask_els[i]
+						num = ask_nums[i]
+						var confm = confirm(\"Artiklil, millel on koguseks m".html_entity_decode("&auml;")."rgitud \"+el.value+\", on l".html_entity_decode("&auml;")."htelaos j".html_entity_decode("&auml;")."".html_entity_decode("&auml;")."k ainult \"+amounts[num]+\", saatelehe kinnitamisel j".html_entity_decode("&auml;")."".html_entity_decode("&auml;")."b laoseis negatiivseks\")
+						if(!confm)
+						{
+							proceed = 0
+							break
+						}
+						else
+						{
+							proceed = 1
+						}
+					}
+				}
+				if(proceed == 1)
+				{
+					//submit_changeform(\"\")
+				}
+				else if(proceed == \"no\")
+				{
+					alert(\"Artiklil \"+name+\" puudub l".html_entity_decode("&auml;")."htelaos laoseis\")
+				}
+			}";
+			return $js;
+		}
+		else
+		{
+			$js = "
+			function dn_submit()
+			{
+				//submit_changeform(\"\")
+			}";
+		}
+		return $js;
 	}
 
 	function callback_mod_reforb($arr)
@@ -678,6 +799,7 @@ class shop_delivery_note extends class_base
 			case "approved":
 			case "customer":
 			case "impl":
+			case "writeoff":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int",

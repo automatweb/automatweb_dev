@@ -22,6 +22,17 @@
             <caption>Pildid</caption>
       </property>
       <property>
+            <name>unit_formula</name>
+            <table>aw_shop_product_category</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_UNIT_FORMULA</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <field>unit_formula</field>
+            <caption>&amp;amp;Uuml;hikute valemid</caption>
+      </property>
+      <property>
             <name>doc</name>
             <table>aw_shop_product_category</table>
             <group>general</group>
@@ -79,6 +90,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Kuvamise kaust</caption>
             </DISPLAY_FOLDER>
+            <UNIT_FORMULA>
+                  <value>4</value>
+                  <clid>CL_SHOP_UNIT_FORMULA</clid>
+                  <caption>&amp;amp;Uuml;hikute valem</caption>
+            </UNIT_FORMULA>
       </reltypes>
 </properties>
 

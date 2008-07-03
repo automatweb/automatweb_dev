@@ -2,7 +2,7 @@
 <properties>
       <property>
             <name>product</name>
-            <table>aw_shop_warehouse_amount</table>
+            <table>aw_shop_delivery_note_row</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PRODUCT</reltype>
@@ -10,17 +10,24 @@
             <caption>Artikkel</caption>
       </property>
       <property>
-            <name>single</name>
-            <table>aw_shop_warehouse_amount</table>
+            <name>serial_no</name>
+            <table>aw_shop_delivery_note_row</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SINGLE</reltype>
-            <field>single</field>
-            <caption>&amp;amp;Uuml;ksiktoode</caption>
+            <type>textbox</type>
+            <field>serial_no</field>
+            <caption>Seerianumber</caption>
+      </property>
+      <property>
+            <name>set_no</name>
+            <table>aw_shop_delivery_note_row</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>set_no</field>
+            <caption>Partiinumber</caption>
       </property>
       <property>
             <name>warehouse</name>
-            <table>aw_shop_warehouse_amount</table>
+            <table>aw_shop_delivery_note_row</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_WAREHOUSE</reltype>
@@ -28,25 +35,34 @@
             <caption>Ladu</caption>
       </property>
       <property>
-            <name>amount</name>
-            <table>aw_shop_warehouse_amount</table>
+            <name>price</name>
+            <table>aw_shop_delivery_note_row</table>
             <group>general</group>
             <type>textbox</type>
             <datatype>int</datatype>
-            <field>amount</field>
-            <caption>Kogus</caption>
+            <field>price</field>
+            <caption>Hind</caption>
       </property>
       <property>
             <name>unit</name>
-            <table>aw_shop_warehouse_amount</table>
+            <table>aw_shop_delivery_note_row</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_UNIT</reltype>
             <field>unit</field>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
+      <property>
+            <name>amount</name>
+            <table>aw_shop_delivery_note_row</table>
+            <group>general</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>amount</field>
+            <caption>Kogus</caption>
+      </property>
       <classinfo>
-            <syslog_type>ST_SHOP_WAREHOUSE_AMOUNT</syslog_type>
+            <syslog_type>ST_SHOP_DELIVERY_NOTE_ROW</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
@@ -54,11 +70,11 @@
             <maintainer>robert</maintainer>
       </classinfo>
       <tableinfo>
-            <aw_shop_warehouse_amount>
+            <aw_shop_delivery_note_row>
                   <master_index>brother_of</master_index>
                   <master_table>objects</master_table>
                   <index>aw_oid</index>
-            </aw_shop_warehouse_amount>
+            </aw_shop_delivery_note_row>
       </tableinfo>
       <reltypes>
             <PRODUCT>
@@ -74,13 +90,7 @@
             <UNIT>
                   <value>3</value>
                   <clid>CL_UNIT</clid>
-                  <caption>&amp;amp;Uuml;hik</caption>
             </UNIT>
-            <SINGLE>
-                  <value>4</value>
-                  <clid>CL_SHOP_PRODUCT_SINGLE</clid>
-                  <caption>&amp;amp;Uuml;ksiktoode</caption>
-            </SINGLE>
       </reltypes>
 </properties>
 

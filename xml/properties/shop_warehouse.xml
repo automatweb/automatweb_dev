@@ -339,10 +339,9 @@
             <name>packets_s_pricelist</name>
             <table>objects</table>
             <group>packets</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>packets_left_search</parent>
             <field>packets_s_pricelist</field>
             <caption>Hinnakiri</caption>
@@ -390,6 +389,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>storage_income_tree</field>
+      </property>
+      <property>
+            <name>storage_income_prod_tree</name>
+            <table>objects</table>
+            <group>storage_income</group>
+            <type>treeview</type>
+            <parent>storage_income_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>storage_income_prod_tree</field>
       </property>
       <property>
             <name>storage_income_s_acquiredby</name>
@@ -475,13 +484,24 @@
             <caption>Artikkel</caption>
       </property>
       <property>
-            <name>storage_income_s_art_cat</name>
+            <name>storage_income_s_articlecode</name>
             <table>objects</table>
             <group>storage_income</group>
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
+            <parent>storage_income_left_search</parent>
+            <field>storage_income_s_articlecode</field>
+            <caption>Artikli kood</caption>
+      </property>
+      <property>
+            <name>storage_income_s_art_cat</name>
+            <table>objects</table>
+            <group>storage_income</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
             <parent>storage_income_left_search</parent>
             <field>storage_income_s_art_cat</field>
             <caption>Artikli kategooria</caption>
@@ -529,6 +549,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>storage_export_tree</field>
+      </property>
+      <property>
+            <name>storage_export_prod_tree</name>
+            <table>objects</table>
+            <group>storage_export</group>
+            <type>treeview</type>
+            <parent>storage_export_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>storage_export_prod_tree</field>
       </property>
       <property>
             <name>storage_export_s_acquiredby</name>
@@ -614,13 +644,24 @@
             <caption>Artikkel</caption>
       </property>
       <property>
-            <name>storage_export_s_art_cat</name>
+            <name>storage_export_s_articlecode</name>
             <table>objects</table>
             <group>storage_export</group>
             <type>textbox</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
+            <parent>storage_export_left_search</parent>
+            <field>storage_export_s_articlecode</field>
+            <caption>Artikli kood</caption>
+      </property>
+      <property>
+            <name>storage_export_s_art_cat</name>
+            <table>objects</table>
+            <group>storage_export</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
             <parent>storage_export_left_search</parent>
             <field>storage_export_s_art_cat</field>
             <caption>Artikli kategooria</caption>
@@ -744,10 +785,9 @@
             <name>storage_movements_s_art_cat</name>
             <table>objects</table>
             <group>storage_movements</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>storage_movements_left_search</parent>
             <field>storage_movements_s_art_cat</field>
             <caption>Artikli kategooria</caption>
@@ -800,7 +840,7 @@
             <name>storage_writeoffs_s_warehouse</name>
             <table>objects</table>
             <group>storage_writeoffs</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
@@ -824,7 +864,7 @@
             <name>storage_writeoffs_s_status</name>
             <table>objects</table>
             <group>storage_writeoffs</group>
-            <type>textbox</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
@@ -871,10 +911,9 @@
             <name>storage_writeoffs_s_art_cat</name>
             <table>objects</table>
             <group>storage_writeoffs</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>storage_writeoffs_left_search</parent>
             <field>storage_writeoffs_s_art_cat</field>
             <caption>Artikli kategooria</caption>
@@ -960,21 +999,21 @@
             <caption>Ribakood</caption>
       </property>
       <property>
-            <name>storage_status_s_category</name>
+            <name>storage_status_s_art_cat</name>
             <table>objects</table>
             <group>status_status</group>
-            <type>date_select</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
             <parent>storage_status_left_search</parent>
-            <field>storage_status_s_category</field>
+            <field>storage_status_s_art_cat</field>
             <caption>Kategooria</caption>
       </property>
       <property>
             <name>storage_status_s_status</name>
             <table>objects</table>
             <group>status_status</group>
-            <type>date_select</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
@@ -998,10 +1037,9 @@
             <name>storage_status_s_pricelist</name>
             <table>objects</table>
             <group>status_status</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>storage_status_left_search</parent>
             <field>storage_status_s_pricelist</field>
             <caption>Hinnakiri</caption>
@@ -1016,6 +1054,7 @@
             <captionside>top</captionside>
             <size>30</size>
             <parent>storage_status_left_search</parent>
+            <no_caption>1</no_caption>
             <field>storage_status_s_below_min</field>
             <caption>Alla miinimumi</caption>
       </property>
@@ -1100,21 +1139,21 @@
             <caption>Ribakood</caption>
       </property>
       <property>
-            <name>storage_prognosis_s_category</name>
+            <name>storage_prognosis_s_art_cat</name>
             <table>objects</table>
             <group>status_prognosis</group>
-            <type>date_select</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
             <parent>storage_prognosis_left_search</parent>
-            <field>storage_prognosis_s_category</field>
+            <field>storage_prognosis_s_art_cat</field>
             <caption>Kategooria</caption>
       </property>
       <property>
             <name>storage_prognosis_s_status</name>
             <table>objects</table>
             <group>status_prognosis</group>
-            <type>date_select</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
@@ -1138,10 +1177,9 @@
             <name>storage_prognosis_s_pricelist</name>
             <table>objects</table>
             <group>status_prognosis</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>storage_prognosis_left_search</parent>
             <field>storage_prognosis_s_pricelist</field>
             <caption>Hinnakiri</caption>
@@ -1156,6 +1194,7 @@
             <captionside>top</captionside>
             <size>30</size>
             <parent>storage_prognosis_left_search</parent>
+            <no_caption>1</no_caption>
             <field>storage_prognosis_s_below_min</field>
             <caption>Alla miinimumi</caption>
       </property>
@@ -1396,10 +1435,9 @@
             <name>purchase_orders_s_art_cat</name>
             <table>objects</table>
             <group>purchase_orders</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>purchase_orders_left_search</parent>
             <field>purchase_orders_s_art_cat</field>
             <caption>Artikli kategooria</caption>
@@ -1523,10 +1561,9 @@
             <name>sell_orders_s_art_cat</name>
             <table>objects</table>
             <group>sell_orders</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>sell_orders_left_search</parent>
             <field>sell_orders_s_art_cat</field>
             <caption>Artikli kategooria</caption>

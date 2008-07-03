@@ -20,8 +20,7 @@
             <name>from_warehouse</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FROM_WAREHOUSE</reltype>
+            <type>textbox</type>
             <field>from_warehouse</field>
             <caption>Laost</caption>
       </property>
@@ -29,8 +28,7 @@
             <name>to_warehouse</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TO_WAREHOUSE</reltype>
+            <type>textbox</type>
             <field>to_warehouse</field>
             <caption>Lattu</caption>
       </property>
@@ -38,8 +36,7 @@
             <name>customer</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CUST</reltype>
+            <type>textbox</type>
             <field>customer</field>
             <caption>Klient</caption>
       </property>
@@ -47,8 +44,7 @@
             <name>impl</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_IMPL</reltype>
+            <type>textbox</type>
             <field>impl</field>
             <caption>Hankija</caption>
       </property>
@@ -72,10 +68,18 @@
             <name>currency</name>
             <table>aw_shop_delivery_note</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CURRENCY</reltype>
+            <type>textbox</type>
             <field>currency</field>
             <caption>Valuuta</caption>
+      </property>
+      <property>
+            <name>writeoff</name>
+            <table>aw_shop_delivery_note</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>writeoff</field>
+            <caption>Mahakandmine</caption>
       </property>
       <property>
             <name>approved</name>
@@ -105,6 +109,14 @@
             <field>articles_tbl</field>
       </property>
       <property>
+            <name>gen_submit</name>
+            <table>aw_shop_delivery_note</table>
+            <group>general</group>
+            <type>button</type>
+            <store>no</store>
+            <field>gen_submit</field>
+      </property>
+      <property>
             <name>bills_tb</name>
             <table>aw_shop_delivery_note</table>
             <group>bills</group>
@@ -131,6 +143,10 @@
             <maintainer>robert</maintainer>
       </classinfo>
       <groupinfo>
+            <general>
+                  <caption>&amp;Uuml;ldine</caption>
+                  <submit>no</submit>
+            </general>
             <bills>
                   <caption>Arved</caption>
             </bills>
@@ -166,11 +182,11 @@
                   <clid>CL_CRM_BILL</clid>
                   <caption>Arve</caption>
             </BILL>
-            <PRODUCT>
+            <ROW>
                   <value>5</value>
-                  <clid>CL_SHOP_PRODUCT</clid>
-                  <caption>Artikkel</caption>
-            </PRODUCT>
+                  <clid>CL_SHOP_DELIVERY_NOTE_ROW</clid>
+                  <caption>Rida</caption>
+            </ROW>
             <CUST>
                   <value>6</value>
                   <clid>
@@ -187,6 +203,11 @@
                   </clid>
                   <caption>Teostaja</caption>
             </IMPL>
+            <PRODUCT>
+                  <value>8</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Artikkel</caption>
+            </PRODUCT>
       </reltypes>
 </properties>
 

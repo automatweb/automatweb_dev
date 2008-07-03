@@ -24,6 +24,9 @@
 @property unit type=relpicker reltype=RELTYPE_UNIT
 @caption &Uuml;hik
 
+@property currency type=relpicker reltype=RELTYPE_CURRENCY
+@caption Valuuta
+
 @property price type=textbox datatype=int
 @caption Hind
 
@@ -56,6 +59,9 @@
 
 @reltype DELIVERY_NOTE value=6 clid=CL_SHOP_DELIVERY_NOTE
 @caption Saateleht
+
+@reltype CURRENCY value=7 clid=CL_CURRENCY
+@caption Valuuta
 */
 
 class shop_warehouse_movement extends class_base
@@ -124,6 +130,7 @@ class shop_warehouse_movement extends class_base
 			case "unit":
 			case "date":
 			case "delivery_note":
+			case "currency":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

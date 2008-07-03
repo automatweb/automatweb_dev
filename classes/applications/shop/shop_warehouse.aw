@@ -136,7 +136,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property packets_s_price_from type=textbox store=no captionside=top size=30 parent=packets_left_search
 				@caption Hind alates
 				
-				@property packets_s_pricelist type=textbox store=no captionside=top size=30  parent=packets_left_search
+				@property packets_s_pricelist type=select store=no captionside=top parent=packets_left_search
 				@caption Hinnakiri
 				
 				@property packets_s_sbt type=submit store=no captionside=top  parent=packets_left_search value="Otsi"
@@ -158,6 +158,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 			@layout storage_income_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_income_left
 	
 				@property storage_income_tree type=treeview parent=storage_income_tree_lay store=no no_caption=1
+
+				@property storage_income_prod_tree type=treeview parent=storage_income_tree_lay store=no no_caption=1
 
 			@layout storage_income_left_search type=vbox parent=storage_income_left area_caption=Otsing closeable=1
 
@@ -182,7 +184,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property storage_income_s_article type=textbox store=no captionside=top size=30  parent=storage_income_left_search
 				@caption Artikkel
 				
-				@property storage_income_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_income_left_search
+				@property storage_income_s_articlecode type=textbox store=no captionside=top size=30  parent=storage_income_left_search
+				@caption Artikli kood
+
+				@property storage_income_s_art_cat type=select store=no captionside=top  parent=storage_income_left_search
 				@caption Artikli kategooria
 				
 				@property storage_income_s_sbt type=submit store=no captionside=top  parent=storage_income_left_search value="Otsi"
@@ -204,6 +209,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 			@layout storage_export_tree_lay type=vbox closeable=1 area_caption=Filtreeri parent=storage_export_left
 	
 				@property storage_export_tree type=treeview parent=storage_export_tree_lay store=no no_caption=1
+
+				@property storage_export_prod_tree type=treeview parent=storage_export_tree_lay store=no no_caption=1
 
 			@layout storage_export_left_search type=vbox parent=storage_export_left area_caption=Otsing closeable=1
 
@@ -228,7 +235,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property storage_export_s_article type=textbox store=no captionside=top size=30  parent=storage_export_left_search
 				@caption Artikkel
 				
-				@property storage_export_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_export_left_search
+				@property storage_export_s_articlecode type=textbox store=no captionside=top size=30  parent=storage_export_left_search
+				@caption Artikli kood
+
+				@property storage_export_s_art_cat type=select store=no captionside=top  parent=storage_export_left_search
 				@caption Artikli kategooria
 				
 				@property storage_export_s_sbt type=submit store=no captionside=top  parent=storage_export_left_search value="Otsi"
@@ -271,7 +281,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property storage_movements_s_article type=textbox store=no captionside=top size=30  parent=storage_movements_left_search
 				@caption Artikkel
 				
-				@property storage_movements_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_movements_left_search
+				@property storage_movements_s_art_cat type=select store=no captionside=top parent=storage_movements_left_search
 				@caption Artikli kategooria
 				
 				@property storage_movements_s_sbt type=submit store=no captionside=top  parent=storage_movements_left_search value="Otsi"
@@ -296,13 +306,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 			@layout storage_writeoffs_left_search type=vbox parent=storage_writeoffs_left area_caption=Otsing closeable=1
 
-				@property storage_writeoffs_s_warehouse type=textbox store=no captionside=top size=30 parent=storage_writeoffs_left_search
+				@property storage_writeoffs_s_warehouse type=select store=no captionside=top size=30 parent=storage_writeoffs_left_search
 				@caption Ladu
 				
 				@property storage_writeoffs_s_number type=textbox store=no captionside=top size=30 parent=storage_writeoffs_left_search
 				@caption Number
 				
-				@property storage_writeoffs_s_status type=textbox store=no captionside=top size=30 parent=storage_writeoffs_left_search
+				@property storage_writeoffs_s_status type=chooser store=no captionside=top size=30 parent=storage_writeoffs_left_search
 				@caption Staatus
 				
 				@property storage_writeoffs_s_from type=date_select store=no captionside=top parent=storage_writeoffs_left_search
@@ -314,7 +324,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property storage_writeoffs_s_article type=textbox store=no captionside=top size=30  parent=storage_writeoffs_left_search
 				@caption Artikkel
 				
-				@property storage_writeoffs_s_art_cat type=textbox store=no captionside=top size=30  parent=storage_writeoffs_left_search
+				@property storage_writeoffs_s_art_cat type=select store=no captionside=top  parent=storage_writeoffs_left_search
 				@caption Artikli kategooria
 				
 				@property storage_writeoffs_s_sbt type=submit store=no captionside=top  parent=storage_writeoffs_left_search value="Otsi"
@@ -348,19 +358,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property storage_status_s_barcode type=textbox store=no captionside=top size=30 parent=storage_status_left_search
 				@caption Ribakood
 				
-				@property storage_status_s_category type=date_select store=no captionside=top parent=storage_status_left_search
+				@property storage_status_s_art_cat type=select store=no captionside=top parent=storage_status_left_search
 				@caption Kategooria
 
-				@property storage_status_s_status type=date_select store=no captionside=top size=30 parent=storage_status_left_search
+				@property storage_status_s_status type=chooser store=no captionside=top size=30 parent=storage_status_left_search
 				@caption Laoseis
 				
 				@property storage_status_s_price type=textbox store=no captionside=top size=30  parent=storage_status_left_search
 				@caption Hind
 				
-				@property storage_status_s_pricelist type=textbox store=no captionside=top size=30  parent=storage_status_left_search
+				@property storage_status_s_pricelist type=select store=no captionside=top  parent=storage_status_left_search
 				@caption Hinnakiri
 				
-				@property storage_status_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_status_left_search
+				@property storage_status_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_status_left_search no_caption=1
 				@caption Alla miinimumi
 				
 				@property storage_status_s_sbt type=submit store=no captionside=top  parent=storage_status_left_search value="Otsi"
@@ -394,19 +404,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property storage_prognosis_s_barcode type=textbox store=no captionside=top size=30 parent=storage_prognosis_left_search
 				@caption Ribakood
 				
-				@property storage_prognosis_s_category type=date_select store=no captionside=top parent=storage_prognosis_left_search
+				@property storage_prognosis_s_art_cat type=select store=no captionside=top parent=storage_prognosis_left_search
 				@caption Kategooria
 
-				@property storage_prognosis_s_status type=date_select store=no captionside=top size=30 parent=storage_prognosis_left_search
+				@property storage_prognosis_s_status type=chooser store=no captionside=top size=30 parent=storage_prognosis_left_search
 				@caption Laoseis
 				
 				@property storage_prognosis_s_price type=textbox store=no captionside=top size=30  parent=storage_prognosis_left_search
 				@caption Hind
 				
-				@property storage_prognosis_s_pricelist type=textbox store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@property storage_prognosis_s_pricelist type=select store=no captionside=top  parent=storage_prognosis_left_search
 				@caption Hinnakiri
 				
-				@property storage_prognosis_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
+				@property storage_prognosis_s_below_min type=checkbox ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search no_caption=1
 				@caption Alla miinimumi
 				
 				@property storage_prognosis_s_date type=date_select ch_value=1 store=no captionside=top size=30  parent=storage_prognosis_left_search
@@ -489,7 +499,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property purchase_orders_s_art type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
 				@caption Artikkel
 
-				@property purchase_orders_s_art_cat type=textbox store=no captionside=top size=30 parent=purchase_orders_left_search
+				@property purchase_orders_s_art_cat type=select store=no captionside=top parent=purchase_orders_left_search
 				@caption Artikli kategooria
 
 				@property purchase_orders_s_sbt type=submit store=no captionside=top  parent=purchase_orders_left_search value="Otsi"
@@ -532,7 +542,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 				@property sell_orders_s_art type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
 				@caption Artikkel
 
-				@property sell_orders_s_art_cat type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@property sell_orders_s_art_cat type=select store=no captionside=top parent=sell_orders_left_search
 				@caption Artikli kategooria
 
 				@property sell_orders_s_sbt type=submit store=no captionside=top  parent=sell_orders_left_search value="Otsi"
@@ -730,7 +740,7 @@ define("QUANT_POSITIVE", 3);
 
 define("STORAGE_FILTER_BILLS", 1);
 define("STORAGE_FILTER_DNOTES", 2);
-define("STORAGE_FILTER_ALL", 0);
+define("STORAGE_FILTER_ALL", 3);
 
 define("STORAGE_FILTER_CONFIRMED", 1);
 define("STORAGE_FILTER_UNCONFIRMED", 2);
@@ -760,7 +770,7 @@ class shop_warehouse extends class_base
 
 	function get_property($arr)
 	{
-		if (!$this->_init_view($arr))
+		if (!$arr["new"] && !$this->_init_view($arr))
 		{
 			return PROP_OK;
 		}
@@ -892,7 +902,10 @@ class shop_warehouse extends class_base
 				break;
 
 			case "prod_s_cat":
-				$prop["options"] = $this->get_cat_picker();
+			case "storage_status_s_art_cat":
+			case "storage_income_s_art_cat":
+			case "storage_export_s_art_cat":
+				$prop["options"] = $this->get_cat_picker($arr);
 				if (!empty($arr["request"][$prop["name"]]))
 				{
 					$prop["value"] = $arr["request"][$prop["name"]];
@@ -904,6 +917,7 @@ class shop_warehouse extends class_base
 				break;
 
 			case "prod_s_count":
+			case "storage_status_s_status":
 				if($this->no_count)
 				{
 					return PROP_IGNORE;
@@ -925,6 +939,7 @@ class shop_warehouse extends class_base
 				break;
 			
 			case "prod_s_pricelist":
+			case "storage_status_s_pricelist":
 				$prop["options"] = $this->get_pricelist_picker();
 				if (isset($arr["request"][$prop["name"]]))
 				{
@@ -940,12 +955,17 @@ class shop_warehouse extends class_base
 			case "prod_s_barcode":
 			case "storage_income_s_acquiredby":
 			case "storage_income_s_article":
-			case "storage_income_s_art_cat":
 			case "storage_income_s_number":
 			case "storage_export_s_acquiredby":
 			case "storage_export_s_article":
-			case "storage_export_s_art_cat":
 			case "storage_export_s_number":
+			case "storage_export_s_articlecode":
+			case "storage_income_s_articlecode":
+			case "storage_status_s_below_min":
+			case "storage_status_s_price":
+			case "storage_status_s_barcode":
+			case "storage_status_s_code":
+			case "storage_status_s_name":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "storage_export_s_to":
@@ -1678,6 +1698,63 @@ class shop_warehouse extends class_base
 		$tb->add_delete_button();
 	}
 	
+	function _get_storage_income_prod_tree($arr)
+	{
+		return $this->mk_storage_prodg_tree($arr);
+	}
+
+	function _get_storage_export_prod_tree($arr)
+	{
+		return $this->mk_storage_prodg_tree($arr);
+	}
+
+	function mk_storage_prodg_tree($arr)
+	{
+		$pt = $this->get_warehouse_configs($arr, "prod_type_fld");
+		$ol = new object_list(array(
+			"parent" => $pt,
+			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$tree = &$arr["prop"]["vcl_inst"];
+		if($arr["request"]["group"] == "storage_income" || $arr["request"]["group"] == "storage")
+		{
+			$group = "storage_income";
+		}
+		elseif($arr["request"]["group"] == "storage_export")
+		{
+			$group = "storage_export";
+		}
+		$cls = $arr["request"][$group."_s_type"];
+		if(empty($cls))
+		{
+			$cls = STORAGE_FILTER_ALL;
+		}
+		$gbf = $this->mk_my_orb("get_prodg_tree_level",array(
+			"set_retu" => get_ru(),
+			"tree_type" => "storage",
+			"cls" => $cls,
+			"group" => $group,
+			"parent" => " ",
+		), CL_SHOP_WAREHOUSE);
+		$tree->start_tree(array(
+			"has_root" => true,
+			"root_name" => t("Artiklid"),
+			"root_url" => aw_url_change_var(array("pgtf"=> null)),
+			"root_icon" => icons::get_icon_url(CL_MENU),
+			"type" => TREE_DHTML,
+			"tree_id" => "storage_prodg_tree",
+			"persist_state" => 1,
+			"get_branch_func" => $gbf,
+		));
+		foreach($ol->arr() as $o)
+		{
+			$url = aw_url_change_var(array("pgtf" => $o->id(), $group."_s_type" => $cls, $group."_s_art_cat" => $o->name(), $group."_s_article" => null));
+			$this->insert_prodg_tree_item(&$tree, $o, $url);
+		}
+	}
+
 	function mk_prodg_tree($arr)
 	{
 		$ol = new object_list(array(
@@ -1692,10 +1769,9 @@ class shop_warehouse extends class_base
 			"set_retu" => get_ru(),
 			"parent" => " ",
 		), CL_SHOP_WAREHOUSE);
-		$act = $arr["request"]["pgtf"] == $root->id()?true:false;
 		$tree->start_tree(array(
 			"has_root" => true,
-			"root_name" => $this->bolden($root->name(), $act),
+			"root_name" => $root->name(),
 			"root_url" => aw_url_change_var(array("pgtf"=> $this->prod_type_fld, "ptf" => null)),
 			"root_icon" => icons::get_icon_url(CL_MENU),
 			"type" => TREE_DHTML,
@@ -1706,7 +1782,7 @@ class shop_warehouse extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$url = aw_url_change_var(array("pgtf" => $o->id(), "ptf" => null));
-			$this->insert_prodg_tree_item(&$tree, $o, $url, $arr["request"]["pgtf"] == $o->id()?true:false);
+			$this->insert_prodg_tree_item(&$tree, $o, $url);
 		}
 	}
 
@@ -1715,6 +1791,7 @@ class shop_warehouse extends class_base
 	**/
 	function get_prodg_tree_level($arr)
 	{
+		parse_str($_SERVER['QUERY_STRING'], $arr);
 		$tree = get_instance("vcl/treeview");
 		$arr["parent"] = trim($arr["parent"]);
 		$tree->start_tree(array (
@@ -1723,37 +1800,80 @@ class shop_warehouse extends class_base
 			"tree_id" => "prodg_tree_s",
 			"persist_state" => 1,
 		));
+		if($arr["tree_type"] == "storage")
+		{
+			$clids = array(CL_SHOP_PRODUCT_CATEGORY, CL_SHOP_PRODUCT);
+		}
 		$ol = new object_list(array(
 			"parent" => $arr["parent"],
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"site_id" => array(),
 			"lang_id" => array(),
 		));
+		if($arr["tree_type"] == "storage")
+		{
+			$po = obj($arr["parent"]);
+			$conn = $po->connections_to(array(
+				"from.class_id" => CL_SHOP_PRODUCT,
+				"type" => "RELTYPE_CATEGORY",
+			));
+			foreach($conn as $c)
+			{
+				$ol->add($c->from());
+			}
+		}
 		foreach($ol->arr() as $o)
 		{
-			$url = aw_url_change_var(array("pgtf" => $o->id(), "ptf" => null), false,  $arr["set_retu"]);
-			$this->insert_prodg_tree_item(&$tree, $o, $url);
+			if($arr["tree_type"] == "storage")
+			{
+				if($o->class_id() != CL_SHOP_PRODUCT)
+				{
+					$params["pgtf"] = $o->id();
+					$params[$arr["group"]."_s_art_cat"] = $o->name();
+					$params[$arr["group"]."_s_article"] = null;
+				}
+				else
+				{
+					$params[$arr["group"]."_s_article"] = $o->name();
+					$params[$arr["group"]."_s_art_cat"] = $po->name();
+				}
+				$params[$arr["group"]."_s_type"] = $arr["cls"]."";
+				$url = aw_url_change_var($params, false, $arr["set_retu"]);
+			}
+			else
+			{
+				$url = aw_url_change_var(array("pgtf" => $o->id(), "ptf" => null), false,  $arr["set_retu"]);
+			}
+			$this->insert_prodg_tree_item(&$tree, $o, $url, $arr["tree_type"]);
 		}
 		die($tree->finalize_tree());
 	}
 
-	function bolden($str, $bold = true)
+	function insert_prodg_tree_item($tree, $o, $url, $type = null)
 	{
-		return $bold?html::strong($str):$str;
-	}
-
-	function insert_prodg_tree_item($tree, $o, $url, $active)
-	{
+		$clid = $o->class_id();
 		$tree->add_item(0, array(
 			"url" => $url,
-			"name" => $this->bolden($o->name(), $active),
+			"name" => $o->name(),
 			"id" => $o->id(),
+			"iconurl" => icons::get_icon_url(($clid == CL_SHOP_PRODUCT)?$clid:CL_MENU),
 		));
 		$check_ol = new object_list(array(
 			"parent" => $o->id(),
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 		));
-		if($check_ol->count())
+		if($type == "storage" &&  $clid == CL_SHOP_PRODUCT_CATEGORY)
+		{
+			$conn = $o->connections_to(array(
+				"from.class_id" => CL_SHOP_PRODUCT,
+				"type" => "RELTYPE_CATEGORY",
+			));
+			if(count($conn))
+			{
+				$subitems = 1;
+			}
+		}
+		if($check_ol->count() || $subitems)
 		{
 			$tree->add_item($o->id(), array(
 				"name" => "foo",
@@ -1841,22 +1961,31 @@ class shop_warehouse extends class_base
 
 	function get_prod_tree($arr)
 	{
+		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
+		{
+			$pt = $this->prod_fld;
+			$root_name = obj($pt)->name();
+		}
+		else
+		{
+			$pt = $this->get_warehouse_configs($arr, "prod_fld");
+			$root_name = t("Artiklid");
+		}
 		$ol = new object_list(array(
-			"parent" => $this->prod_fld,
+			"parent" => $pt,
 			"class_id" => CL_MENU,
 			"site_id" => array(),
 			"lang_id" => array(),
 			"sort_by" => "objects.jrk"
 		));
-		$root = obj($this->prod_fld);
 		$tree = &$arr["prop"]["vcl_inst"];
 		$gbf = $this->mk_my_orb("get_prod_tree_level",array(
 			"set_retu" => get_ru(),
 			"parent" => " ",
-		));
+		), CL_SHOP_WAREHOUSE);
 		$tree->start_tree(array(
 			"has_root" => true,
-			"root_name" => $root->name(),
+			"root_name" => $root_name,
 			"root_url" => aw_url_change_var(array("ptf"=> $this->prod_fld, "pgtf"=>null)),
 			"root_icon" => icons::get_icon_url(CL_MENU),
 			"type" => TREE_DHTML,
@@ -1933,16 +2062,17 @@ class shop_warehouse extends class_base
 		{
 			$params["barcode"] = "%".$varcode."%";
 		}
-		if(($from = $arr["request"]["prod_s_price_from"]) || ( $arr["request"]["prod_s_price_to"]))
+		$group = $this->get_search_group($arr);
+		if(($from = $arr["request"][$group."_s_price_from"]) || ( $arr["request"][$group."_s_price_to"]))
 		{
-			$to = $arr["request"]["prod_s_price_to"];
+			$to = $arr["request"][$group."_s_price_to"];
 			$cparams = array(
 				"class_id" => CL_SHOP_ITEM_PRICE,
 				"currency" => $this->def_currency,
 				"valid_from" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 				"valid_to" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),	
 			);
-			if($pl = $arr["request"]["price_list"])
+			if($pl = $arr["request"][$group."_s_pricelist"])
 			{
 				$cparams["price_list"] = $pl;
 			}
@@ -1970,22 +2100,22 @@ class shop_warehouse extends class_base
 			}
 			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
 		}
-		if($q = $arr["request"]["prod_s_count"])
+		if($q = $arr["request"][$group."_s_count"])
 		{
 			unset($cparams);
 			$cparams["class_id"] = CL_SHOP_WAREHOUSE_AMOUNT;
 			$cparams["warehouse"] = $arr["obj_inst"]->id();
 			if($q == QUANT_NEGATIVE)
 			{
-				$cparams["quant"] = new obj_predicate_compare(OBJ_COMP_LESS, 0);
+				$cparams["amount"] = new obj_predicate_compare(OBJ_COMP_LESS, 0);
 			}
 			elseif($q == QUANT_ZERO)
 			{
-				$cparams["quant"] = 0;
+				$cparams["amount"] = 0;
 			}
 			elseif($q = QUANT_POSITIVE)
 			{
-				$cparams["quant"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+				$cparams["amount"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
 			}
 			$cparams["site_id"] = array();
 			$cparams["lang_id"] = array();
@@ -2001,11 +2131,15 @@ class shop_warehouse extends class_base
 			}
 			$params["oid"] = isset($params["oid"])?array_intersect($params["oid"], $oids):$oids;
 		}
-		// get items 
-		if ($this->can("view", $arr["request"]["pgtf"]))
+		// get items arr
+		if(!($cat = $arr["request"][$group."_s_art_cat"]))
 		{
-			$cat = obj($arr["request"]["pgtf"]);
-			$conn = $cat->connections_to(array(
+			$cat = $arr["request"]["pgtf"];
+		}
+		if ($this->can("view", $cat))
+		{
+			$cato = obj($cat);
+			$conn = $cato->connections_to(array(
 				"type" => "RELTYPE_CATEGORY",
 				"from.class_id" => CL_SHOP_PRODUCT,
 			));
@@ -2039,6 +2173,23 @@ class shop_warehouse extends class_base
 		else
 		{
 			$ot = new object_list();
+		}
+		if(($p = $arr["request"][$group."_s_show_pieces"]) || ($s = $arr["request"][$group."_s_show_batches"]))
+		{
+			$sparams["class_id"] = CL_SHOP_PRODUCT_SINGLE;
+			$sparams["site_id"] = array();
+			$sparams["lang_id"] = array();
+			$sparams["product"] = $ot->ids();
+			$sparams["type"] = array();
+			if($p)
+			{
+				$sparams["type"][] = 2;
+			}
+			if($s)
+			{
+				$sparams["type"][] = 1;
+			}
+			$ot->add(new object_list($sparams));
 		}
 		return $ot;
 	}
@@ -2196,6 +2347,7 @@ class shop_warehouse extends class_base
 
 	function _init_prod_list_list_tbl(&$t, $arr)
 	{
+		$group = $this->get_search_group($arr);
 		$t->define_field(array(
 			"name" => "icon",
 			"caption" => t("&nbsp;"),
@@ -2228,7 +2380,8 @@ class shop_warehouse extends class_base
 			"caption" => t("FIFO"),
 			"align" => "center"
 		));
-		if((!isset($arr["request"]["prod_s_pricelist"]) && $this->def_price_list) || $arr["request"]["prod_s_pricelist"])
+		$def_price_list = $this->get_warehouse_configs($arr, "def_price_list");
+		if((!isset($arr["request"][$group."_s_pricelist"]) && count($def_price_list)) || $arr["request"][$group."_s_pricelist"])
 		{
 			$t->define_field(array(
 				"sortable" => 1,
@@ -2240,9 +2393,9 @@ class shop_warehouse extends class_base
 		if(!$this->no_count)
 		{
 			$levels = 0;
-			if($this->config->prop("has_alternative_units"))
+			if(count($this->get_warehouse_configs($arr, "has_alternative_units")))
 			{
-				$levels += (int)$this->config->prop("alternative_unit_levels");
+				$levels += (int)$this->get_warehouse_configs($arr, "alternative_unit_levels");
 			}
 			for($i = 0; $i <= $levels; $i++)
 			{
@@ -2264,7 +2417,7 @@ class shop_warehouse extends class_base
 			));
 		}
 
-		if(!$arr["request"]["pgtf"] && $arr["request"]["pgtf"] != $this->prod_type_fld && !$arr["request"]["prod_s_cat"])
+		if(!$arr["request"]["pgtf"] && $arr["request"]["pgtf"] != $this->prod_type_fld && !$arr["request"][$group."_s_cat"])
 		{
 			$t->define_field(array(
 				"name" => "cat",
@@ -2279,7 +2432,7 @@ class shop_warehouse extends class_base
 			"lang_id" => array(),
 			"class_id" => CL_SHOP_PRODUCT_TYPE,
 		));
-		if($ol->count()>1)
+		if($ol->count()>0)
 		{
 			$t->define_field(array(
 				"sortable" => 1,
@@ -2328,7 +2481,12 @@ class shop_warehouse extends class_base
 	{
 		if (!$arr["obj_inst"]->prop("conf"))
 		{
-			$arr["prop"]["value"] =  t("VIGA: konfiguratsioon on valimata!");
+			if($arr["prop"]["type"] == "table" || $arr["prop"]["type"] == "toolbar")
+			{
+				$arr["prop"]["value"] =  null;
+				$arr["prop"]["error"] = $this->err_set?null:t("VIGA: konfiguratsioon on valimata!");
+				$this->err_set = 1;
+			}
 			return false;
 		}
 		$this->config = obj($arr["obj_inst"]->prop("conf"));
@@ -2724,14 +2882,7 @@ class shop_warehouse extends class_base
 
 	function _get_storage_ol($arr)
 	{
-		if($arr["request"]["group"] == "storage_income" || $arr["request"]["group"] == "storage")
-		{
-			$group = "storage_income";
-		}
-		elseif($arr["request"]["group"] == "storage_export")
-		{
-			$group = "storage_export";
-		}
+		$group = $this->get_search_group($arr);
 		if($arr["request"][$group."_s_type"] == STORAGE_FILTER_BILLS)
 		{
 			$bills = 1;
@@ -2783,7 +2934,7 @@ class shop_warehouse extends class_base
 			$pparams["oid"] = array();
 			$cats = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_CATEGORY,
-				"name" => "%".$artcat."%",
+				"oid" => $artcat,
 			));
 			if($cats->count())
 			{
@@ -2805,9 +2956,19 @@ class shop_warehouse extends class_base
 		}
 		if($art = $arr["request"][$group."_s_article"])
 		{
-			$pparams["class_id"] = CL_SHOP_PRODUCT;
 			$pparams["name"] = "%".$art."%";
+		}
+		if($code = $arr["request"][$group."_s_articlecode"])
+		{
+			$pparams["code"] = "%".$code."%";
+		}
+		if(is_array($pparams) && count($pparams))
+		{
+			$pparams["class_id"] = CL_SHOP_PRODUCT;
+			$pparams["lang_id"] = array();
+			$pparams["site_id"] = array();
 			$prod_ol = new object_list($pparams);
+			$art = 1;
 		}
 		if($dnotes)
 		{
@@ -2848,7 +3009,7 @@ class shop_warehouse extends class_base
 			{
 				$params["CL_SHOP_DELIVERY_NOTE.".$sprop.".name"] = "%".$co."%";
 			}
-			$params[$prop] = $arr["obj_inst"]->id();
+			$params[$prop] = $arr["warehouses"];
 			if($timefilter)
 			{
 				$params["delivery_date"] = $timefilter;
@@ -2860,7 +3021,8 @@ class shop_warehouse extends class_base
 		if($bills)
 		{
 			unset($params);
-			$cos = $this->config->prop("manager_cos");
+			$chk = obj($arr["obj_inst"]->prop("conf"));
+			$cos = $this->get_warehouse_configs($arr, "manager_cos");
 			if(count($cos) && is_array($cos))
 			{
 				if($art)
@@ -2940,9 +3102,75 @@ class shop_warehouse extends class_base
 		return $ol;
 	}
 
+	function get_warehouse_configs($arr, $prop = null)
+	{
+		$cfgs = array();
+		foreach($arr["warehouses"] as $wh)
+		{
+			$who = obj($wh);
+			$cfgid = $who->prop("conf");
+			if($this->can("view", $cfgid))
+			{
+				$cfgs[] = obj($cfgid);
+			}
+		}
+		if($prop)
+		{
+			switch($prop)
+			{
+				case "alternative_unit_levels":
+					$high = 0;
+					foreach($cfgs as $cfg)
+					{
+						$val = $cfg->prop($prop);
+						if($val > $high)
+						{
+							$high = $val;
+						}
+					}
+					$vals = $high;
+					break;
+				default:
+					$vals = array();
+					if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
+					{
+						if($val = $this->$prop)
+						{
+							$vals[$val] = $val;
+						}
+					}
+					else
+					{
+						foreach($cfgs as $cfg)
+						{
+							$val = $cfg->prop($prop);
+							if(is_array($val))
+							{
+								foreach($val as $v)
+								{
+									$vals[$v] = $v;
+								}
+							}
+							elseif(!empty($val))
+							{
+								$vals[$val] = $val;
+							}
+						}
+					}
+					break;
+			}
+			return $vals;
+		}
+		return $cfgs;
+	}
+
 	function _get_storage_income(&$arr)
 	{
 		$this->_init_storage_income_tbl($arr);
+		if(!isset($arr["warehouses"]))
+		{
+			$arr["warehouses"] = array($arr["obj_inst"]->id());
+		}
 		$ol = $this->_get_storage_ol($arr);
 		foreach($ol->arr() as $o)
 		{
@@ -2976,15 +3204,14 @@ class shop_warehouse extends class_base
 			}
 			else
 			{
-				$data = $o->meta("articles");
 				$conn = $o->connections_from(array(
-					"type" => "RELTYPE_PRODUCT",
+					"type" => "RELTYPE_ROW",
 				));
 				foreach($conn as $c)
 				{
-					$prod = $c->to();
-					$id = $prod->id();
-					$sum += $data[$id]["price"]*$data[$id]["amount"];
+					$row = $c->to();
+					$id = $row->prop("product");
+					$sum += $row->prop("price")*$row->prop("amount");
 				}
 				$sum += $o->prop("customs") + $o->prop("transport");
 			}
@@ -4667,30 +4894,21 @@ class shop_warehouse extends class_base
 		{
 			$arr["args"]["pgtf"] = $arr["request"]["pgtf"];
 		}
-		$arr["args"]["prod_s_name"] = $arr["request"]["prod_s_name"];
-		$arr["args"]["prod_s_code"] = $arr["request"]["prod_s_code"];
-		$arr["args"]["prod_s_barcode"] = $arr["request"]["prod_s_barcode"];
-		$arr["args"]["prod_s_cat"] = $arr["request"]["prod_s_cat"];
-		$arr["args"]["prod_s_count"] = $arr["request"]["prod_s_count"];
-		$arr["args"]["prod_s_price_from"] = $arr["request"]["prod_s_price_from"];
-		$arr["args"]["prod_s_price_to"] = $arr["request"]["prod_s_price_to"];
-		$arr["args"]["prod_s_pricelist"] = $arr["request"]["prod_s_pricelist"];
-		$arr["args"]["storage_income_s_acquiredby"] = $arr["request"]["storage_income_s_acquiredby"];
-		$arr["args"]["storage_income_s_type"] = $arr["request"]["storage_income_s_type"];
-		$arr["args"]["storage_income_s_number"] = $arr["request"]["storage_income_s_number"];
-		$arr["args"]["storage_income_s_status"] = $arr["request"]["storage_income_s_status"];
-		$arr["args"]["storage_income_s_from"] = $arr["request"]["storage_income_s_from"];
-		$arr["args"]["storage_income_s_to"] = $arr["request"]["storage_income_s_to"];
-		$arr["args"]["storage_income_s_article"] = $arr["request"]["storage_income_s_article"];
-		$arr["args"]["storage_income_s_art_cat"] = $arr["request"]["storage_income_s_art_cat"];
-		$arr["args"]["storage_export_s_acquiredby"] = $arr["request"]["storage_export_s_acquiredby"];
-		$arr["args"]["storage_export_s_type"] = $arr["request"]["storage_export_s_type"];
-		$arr["args"]["storage_export_s_number"] = $arr["request"]["storage_export_s_number"];
-		$arr["args"]["storage_export_s_status"] = $arr["request"]["storage_export_s_status"];
-		$arr["args"]["storage_export_s_from"] = $arr["request"]["storage_export_s_from"];
-		$arr["args"]["storage_export_s_to"] = $arr["request"]["storage_export_s_to"];
-		$arr["args"]["storage_export_s_article"] = $arr["request"]["storage_export_s_article"];
-		$arr["args"]["storage_export_s_art_cat"] = $arr["request"]["storage_export_s_art_cat"];
+
+		$vars = obj($arr["request"]["id"])->get_property_list();
+		$groups = array("prod", "storage_income", "storage_export", "storage_status");
+		foreach($vars as $var => $c)
+		{
+			$chk = null;
+			if(($pos = strpos($var, "_s_")) && strpos($var, "_sbt") === false)
+			{
+				$chk = substr($var, 0, $pos);
+			}
+			if(in_array($chk, $groups) && isset($arr["request"][$var]))
+			{
+				$arr["args"][$var] = $arr["request"][$var];
+			}
+		}
 	}
 
 	/** returns a list of config forms that can be used to enter products
@@ -5201,7 +5419,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	function _get_storage_status(&$arr)
 	{
-		$this->_init_storage_status_tbl($arr["prop"]["vcl_inst"]);
+		$this->get_products_list($arr);
 	}
 
 	function _get_storage_prognosis_toolbar($arr)
@@ -5453,10 +5671,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 		));
 	}
 
-	function get_cat_picker()
+	function get_cat_picker($arr)
 	{
 		$ol = new object_list(array(
-			"parent" => $this->prod_type_fld,
+			"parent" => $this->get_warehouse_configs($arr, "prod_type_fld"),
 			"class_id" => CL_SHOP_PRODUCT_CATEGORY,
 			"site_id" => array(),
 			"lang_id" => array(),
@@ -5499,6 +5717,37 @@ $oo = get_instance(CL_SHOP_ORDER);
 			"lang_id" => array(),
 		));
 		return array(0 => t("--vali--")) + $ol->names();
+	}
+
+	function get_search_group($arr)
+	{
+		switch($arr["request"]["group"])
+		{
+			case "articles":
+			case "products":
+				$group = "prod";
+				break;
+			case "storage":
+				$group = "storage_income";
+				break;
+			case "status":
+			case "status_status":
+				$group = "storage_status";
+				break;
+			case "status_prognosis":
+				$group = "storage_prognosis";
+				break;
+			case "status_inventories":
+				$group = "storage_inventories";
+				break;
+			case "purchases":
+				$group = "purchase_orders";
+				break;
+			default:
+				$group = $arr["request"]["group"];
+				break;
+		}
+		return $group;
 	}
 }
 

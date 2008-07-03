@@ -55,6 +55,15 @@
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>aw_shop_warehouse_movement</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <field>currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>price</name>
             <table>aw_shop_warehouse_movement</table>
             <group>general</group>
@@ -143,6 +152,11 @@
                   <clid>CL_SHOP_DELIVERY_NOTE</clid>
                   <caption>Saateleht</caption>
             </DELIVERY_NOTE>
+            <CURRENCY>
+                  <value>7</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </CURRENCY>
       </reltypes>
 </properties>
 

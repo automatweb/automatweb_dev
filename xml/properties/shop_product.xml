@@ -1462,6 +1462,11 @@
                   </clid>
                   <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
             </INHERIT_AML_FROM>
+            <UNIT_FORMULA>
+                  <value>30</value>
+                  <clid>CL_SHOP_UNIT_FORMULA</clid>
+                  <caption>&amp;amp;Uuml;hikute valem</caption>
+            </UNIT_FORMULA>
       </reltypes>
       <layout>
             <gen_split>

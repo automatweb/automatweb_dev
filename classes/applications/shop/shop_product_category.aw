@@ -12,6 +12,9 @@
 @property images type=relpicker reltype=RELTYPE_IMAGE multiple=1 store=connect 
 @caption Pildid
 
+@property unit_formula type=relpicker reltype=RELTYPE_UNIT_FORMULA store=connect multiple=1
+@caption &Uuml;hikute valemid
+
 @property doc type=relpicker reltype=RELTYPE_DOC field=aw_doc
 @caption Dokument
 
@@ -27,6 +30,9 @@
 
 @reltype DISPLAY_FOLDER value=3 clid=CL_MENU
 @caption Kuvamise kaust
+
+@reltype UNIT_FORMULA value=4 clid=CL_SHOP_UNIT_FORMULA
+@caption &Uuml;hikute valem
 */
 
 class shop_product_category extends class_base
