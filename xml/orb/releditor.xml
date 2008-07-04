@@ -30,6 +30,13 @@
 			</function>
 		</action>
 
+		<action name="js_get_delete_confirmation_text" nologin="1">
+			<function name="js_get_delete_confirmation_text">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="js_delete_rows" nologin="1" all_args="1">
 			<function name="js_delete_rows">
 				<arguments>

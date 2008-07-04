@@ -3,6 +3,10 @@ jQuery.aw_releditor = function(arr) {
 	var i_releditor_edit_index = false; // if being edited
 	var i_releditor_edit_index_last_edit = false; // for multiple change button clicks if not saved between
 	var is_edit_mode = false; // edit or new data
+	var s_alert_on_delete;
+	$.get("/orb.aw?class=releditor&action=js_get_delete_confirmation_text", function(data){
+		s_alert_on_delete = data;
+	});
 	
 	$(document).ready(function() {
    		_handle_events();
@@ -28,8 +32,6 @@ jQuery.aw_releditor = function(arr) {
 		handle_delete_links();
 	}
 
-	
-	
 	/*
 		gets data to be edited to form
 	*/
@@ -110,7 +112,7 @@ jQuery.aw_releditor = function(arr) {
 	function handle_delete_links()
 	{
 		$("a[name^="+arr["releditor_name"]+"_delete_]").click(function() {
-			if(true)
+			if(confirm(s_alert_on_delete))
 			{
 				//delete_data = $("input[name^="+arr["releditor_name"]+"_delete_][type=checkbox][checked]").serialize();
 				s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();

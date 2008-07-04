@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.146 2008/06/27 10:34:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.147 2008/07/04 14:23:14 hannes Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -2173,6 +2173,15 @@ class releditor extends core
 		{
 			die(t("Lisa"));
 		}
+	}
+	
+	/**
+		@attrib name=js_get_delete_confirmation_text nologin=1
+	**/
+	function js_get_delete_confirmation_text($arr)
+	{
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		die(t("Oled kindel, et soovid kustutada?"));
 	}
 
 	/**
