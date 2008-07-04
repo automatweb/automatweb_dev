@@ -214,7 +214,7 @@
             </sites_frame>
             <sites_search>
                   <type>vbox</type>
-                  <parent>packages_frame</parent>
+                  <parent>sites_frame</parent>
                   <group>sites</group>
                   <area_caption></area_caption>
             </sites_search>

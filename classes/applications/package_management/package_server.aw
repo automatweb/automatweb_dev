@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.11 2008/07/03 11:09:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.12 2008/07/04 12:11:07 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -47,7 +47,7 @@
 
 	@layout sites_frame type=hbox width=20%:80%
 
-		@layout sites_search type=vbox parent=packages_frame 
+		@layout sites_search type=vbox parent=sites_frame 
 
 			@property sites_search_id type=textbox size=20 store=no captionside=top parent=sites_search
 			@caption Saidi ID

@@ -87,6 +87,16 @@
             <field>files_list</field>
             <caption>Failide nimekiri</caption>
       </property>
+      <property>
+            <name>my_list</name>
+            <table>aw_package_client</table>
+            <group>my_packages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_list</field>
+            <caption>Pakkide nimekiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE_CLIENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -100,6 +110,10 @@
                   <caption>Pakid</caption>
                   <no_submit>1</no_submit>
             </packages>
+            <my_packages>
+                  <caption>Minu pakid</caption>
+                  <no_submit>1</no_submit>
+            </my_packages>
       </groupinfo>
       <tableinfo>
             <aw_package_client>

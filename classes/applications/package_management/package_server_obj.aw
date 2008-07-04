@@ -49,6 +49,11 @@ class package_server_obj extends _int_object
 			// right now it is possible to search by the beginning of version number
 			$filter['file_names'] = '%'.$params['filter']['search_file'].'%'; 
 		}
+		if (!empty($params['filter']['site_id']))
+		{
+			// right now it is possible to search by the beginning of version number
+			$filter['CL_PACKAGE.RELTYPE_SITE_RELATION.site'] = $params['filter']['site_id'];
+		}
 
 		$ol = new object_list($filter);
 

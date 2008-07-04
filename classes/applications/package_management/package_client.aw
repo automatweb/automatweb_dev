@@ -39,6 +39,12 @@
 			@property files_list type=text no_caption=1 parent=packages_list store=no
 			@caption Failide nimekiri
 
+@groupinfo my_packages caption="Minu pakid" no_submit=1
+@default group=my_packages
+
+	@property my_list type=table no_caption=1 store=no
+	@caption Pakkide nimekiri
+
 */
 
 class package_client extends class_base
@@ -208,6 +214,57 @@ class package_client extends class_base
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
 				'version' => $data["version"],
 				'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
+			));
+		}
+		return PROP_OK;
+	}
+
+	function _get_my_list($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->set_caption(t('Minu pakkide nimekiri'));
+
+		$t->define_chooser(array(
+			'name' => 'selected_ids',
+			'field' => 'select',
+			'width' => '5%'
+		));
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi')
+		));
+		$t->define_field(array(
+			'name' => 'version',
+			'caption' => t('Versioon'),
+			'width' => '5%'
+		));
+		$t->define_field(array(
+			'name' => 'description',
+			'caption' => t('Kirjeldus')
+		));
+
+		$t->define_field(array(
+			'name' => 'dep',
+			'caption' => t('S&otilde;ltuvused'),
+		));
+
+		$t->define_field(array(
+			'name' => 'down',
+			'caption' => t('Uuemad  versioonid'),
+		));
+
+		$packages = $arr["obj_inst"]->get_my_packages();
+
+		foreach ($packages as $data)
+		{
+			$t->define_data(array(
+				'select' => $data["id"],
+				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
+				'version' => $data["version"],
+				//'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
 			));
 		}
 		return PROP_OK;
