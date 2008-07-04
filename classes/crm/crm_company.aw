@@ -164,9 +164,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 
 @default group=open_hrs
 
-	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
-	@caption Avamisajad
+	property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb
+	caption Avamisajad
 
+	@property oh_tb type=toolbar no_caption=1 store=no
+	@property oh_t type=table store=no no_caption=1 parent=oh
 
 ------ Yldine - Tegevused grupp -----
 @default group=org_sections
@@ -6865,6 +6867,52 @@ class crm_company extends class_base
 		if (!$arr["new"])
 		{
 			$sc = "";
+
+			$sc.="function co_contact(id,url)
+				{
+				if ((trel = document.getElementById(\"trows\"+id)))
+				{
+					if (trel.style.display == \"none\")
+					{
+						if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0)
+						{
+							trel.style.display= \"block\";
+						}
+						else
+						{
+							trel.style.display= \"table-row\";
+						}
+					}
+					else
+					{
+						trel.style.display=\"none\";
+					}
+					return false;
+				}
+				el=document.getElementById(\"tnr\"+id);
+				td = el.parentNode;
+				tr = td.parentNode;
+	
+				tbl = tr;
+				while(tbl.tagName.toLowerCase() != \"table\")
+				{
+					tbl = tbl.parentNode;
+				}
+				p_row = tbl.insertRow(tr.rowIndex+1);
+				p_row.className=\"awmenuedittablerow\";
+				p_row.id=\"trows\"+id;
+				n_td = p_row.insertCell(-1);
+				n_td.className=\"awmenuedittabletext\";
+				n_td.innerHTML=\"&nbsp;\";
+				n_td = p_row.insertCell(-1);
+				n_td.className=\"awmenuedittabletext\";
+				n_td.innerHTML=\"&nbsp;\";
+				n_td = p_row.insertCell(-1);
+				n_td.className=\"awmenuedittabletext\";
+				n_td.innerHTML=aw_get_url_contents(url);
+				n_td.colSpan=9;
+				}";
+			
 			if ($arr["request"]["group"] == "bills")
 			{
 				$sc .= '
@@ -9081,7 +9129,6 @@ Bank accounts: yksteise all
 		}
 		return "general";
 	}
-
 }
 
 ?>

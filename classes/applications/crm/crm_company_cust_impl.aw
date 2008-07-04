@@ -1888,6 +1888,8 @@ class crm_company_cust_impl extends class_base
 
 	function _finish_org_tbl($arr, &$orglist)
 	{
+		enter_function("company::_finish_org_tbl");
+enter_function("company::_finish_org_tbl_5");
 		$tf = &$arr["prop"]["vcl_inst"];
 		$org = obj($arr["request"]["id"]);
 		$format_s = t("%s kliendid");
@@ -1907,9 +1909,9 @@ class crm_company_cust_impl extends class_base
 		$default_cfg = true;
 
 		$cl_crm_settings = get_instance(CL_CRM_SETTINGS);
+		$cl_crm_company = get_instance(CL_CRM_COMPANY);
 		if ($o = $cl_crm_settings->get_current_settings())
 		{
-			$cl_crm_company = get_instance(CL_CRM_COMPANY);
 			$usecase = $cl_crm_company->get_current_usecase($arr);//$arr["obj_inst"] peab olemas olema.
 			$cl_crm_settings->apply_table_cfg($o, $usecase, $arr["prop"]["name"], &$tf);
 			$visible_fields = $cl_crm_settings->get_visible_fields($o, $usecase, $arr["prop"]["name"]);
@@ -1951,10 +1953,11 @@ class crm_company_cust_impl extends class_base
 					);
 			}
 		}
-
+exit_function("company::_finish_org_tbl_5");
 		# table contents
 		foreach($orglist as $org)
 		{
+enter_function("company::_finish_org_tbl_6");
 			if($filter)
 			{
 				if(!in_array($org,$filter))
@@ -1992,7 +1995,8 @@ class crm_company_cust_impl extends class_base
 					"rc_by_co" => $rc_by_co
 				));
 			}
-
+exit_function("company::_finish_org_tbl_6");
+enter_function("company::_finish_org_tbl_7");
 			if ($o->class_id() == CL_CRM_COMPANY)
 			{
 				# ceo
@@ -2080,7 +2084,8 @@ class crm_company_cust_impl extends class_base
 			{
 				$client_manager = html::obj_change_url($o->prop("client_manager"));
 			}
-
+exit_function("company::_finish_org_tbl_7");
+enter_function("company::_finish_org_tbl_8");
 			# pop
 			if ($default_cfg or in_array("pop", $visible_fields))
 			{
@@ -2107,7 +2112,8 @@ class crm_company_cust_impl extends class_base
 				}
 				$pm = $pm->get_menu();
 			}
-
+exit_function("company::_finish_org_tbl_8");
+enter_function("company::_finish_org_tbl_9");
 			# name
 			if ($default_cfg or in_array("name", $visible_fields))
 			{
@@ -2115,49 +2121,7 @@ class crm_company_cust_impl extends class_base
 			}
 
 			$_url = $this->mk_my_orb("get_cust_contact_table", array("id" => $o->id(), "return_url" => post_ru()));
-			$namp = " (<a id='tnr".$o->id()."' href='javascript:void(0)' onClick='
-			if ((trel = document.getElementById(\"trows".$o->id()."\")))
-			{
-				if (trel.style.display == \"none\")
-				{
-					if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0)
-					{
-						trel.style.display= \"block\";
-					}
-					else
-					{
-						trel.style.display= \"table-row\";
-					}
-				}
-				else
-				{
-					trel.style.display=\"none\";
-				}
-				return false;
-			}
-			el=document.getElementById(\"tnr".$o->id()."\");
-			td = el.parentNode;
-			tr = td.parentNode;
-
-			tbl = tr;
-			while(tbl.tagName.toLowerCase() != \"table\")
-			{
-				tbl = tbl.parentNode;
-			}
-			p_row = tbl.insertRow(tr.rowIndex+1);
-			p_row.className=\"awmenuedittablerow\";
-			p_row.id=\"trows".$o->id()."\";
-			n_td = p_row.insertCell(-1);
-			n_td.className=\"awmenuedittabletext\";
-			n_td.innerHTML=\"&nbsp;\";
-			n_td = p_row.insertCell(-1);
-			n_td.className=\"awmenuedittabletext\";
-			n_td.innerHTML=\"&nbsp;\";
-			n_td = p_row.insertCell(-1);
-			n_td.className=\"awmenuedittabletext\";
-			n_td.innerHTML=aw_get_url_contents(\"$_url\");
-			n_td.colSpan=9;
-			'>".t("Kontaktid")."</a>) ";
+			$namp = " (<a id='tnr".$o->id()."' href='javascript:void(0)' onClick='co_contact(".$o->id().",\"".$_url."\");'>".t("Kontaktid")."</a>) ";
 
 			$c = $o->connections_from(array(
 				"type" => "RELTYPE_METAMGR"
@@ -2176,7 +2140,7 @@ class crm_company_cust_impl extends class_base
 			{
 				$classif1 = t("N/A");
 			}
-
+exit_function("company::_finish_org_tbl_9");
 			//!!! todo: define and get data only for fields configured to be shown in current crm settings.
 			$tf->define_data(array(
 				"id" => $o->id(),
@@ -2196,8 +2160,8 @@ class crm_company_cust_impl extends class_base
 				"pop" => $o->class_id() == CL_CRM_CATEGORY ? "" : $pm,
 			));
 		}
-
 		$tf->set_default_sortby("name");
+		exit_function("company::_finish_org_tbl");
 	}
 
 	function _get_customer($arr, $filter = NULL)
