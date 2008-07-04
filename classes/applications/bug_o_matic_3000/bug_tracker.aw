@@ -3126,6 +3126,13 @@ class bug_tracker extends class_base
 		{
 			$columns = 7;
 		}
+		$this->gt_days_in_col = 1;
+		if($columns > 10)
+		{
+			$this->gt_days_in_col = ceil($columns/10);
+			$columns = 10;
+		}
+		$col_length = $this->gt_days_in_col*24*60*60;
 
 		if ($this->can("view", $arr["request"]["filt_p"]))
 		{
@@ -3144,7 +3151,7 @@ class bug_tracker extends class_base
 
 		classload("core/date/date_calc");
 		$range_start = get_day_start();
-		$range_end = time() + 24*3600*14;
+		$range_end = time() + $columns * $col_length;
 
 		$subdivisions = 1;
 
@@ -3174,14 +3181,16 @@ class bug_tracker extends class_base
 			$gt_list[] = $arr["ret_b"];
 			usort($gt_list, array(&$this, "__gantt_sort"));
 		}
-		$day2wh = $this->get_person_whs($p);
+		$this->day2wh = $this->get_person_whs($p);
 
-		$start = $this->get_next_avail_time_from(time(), $day2wh);
+		$this->gt_start = $this->get_next_avail_time_from(time(), $this->day2wh);
 
+		$sect = $this->get_sect();
+		$curday = 0;
 		$this->job_count = count($gt_list);
 		foreach ($gt_list as $gt)
 		{
-			$start = $this->get_next_avail_time_from($start, $day2wh);
+			$this->gt_start = $this->get_next_avail_time_from($this->gt_start, $this->day2wh);
 			if ($gt->prop("num_hrs_guess") > 0)
 			{
 				$length = $gt->prop("num_hrs_guess") * 3600 - ($gt->prop("num_hrs_real") * 3600);
@@ -3195,82 +3204,75 @@ class bug_tracker extends class_base
 				$length = 7200;
 			}
 			$this->job_hrs += $length;
-			$day_info = $day2wh[date("w", $start)];
-			$day_start = $day_info[0];
-			$day_end = $day_info[1];
-
+			$this->check_sect($sect, $curday);
 			$cdata = $this->get_gantt_bug_colors($gt);
 			$color = $cdata["color"];
-			if (date("H", $start+$length) > $day_end || ($length > (3600 * 7)))
+			if ($length > $sect[$curday]["len"])
 			{
 				// split into parts
-				$wd_end = mktime($day_end, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
 				$tot_len = $length;
-				$length = $wd_end - $start;
+				$length = $sect[$curday]["len"];
 				$remaining_len = $tot_len - $length;
-				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
-
+				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $this->gt_start)." - ".date("d.m.Y H:i", $this->gt_start + $length)." ) ";
 				$bar = array (
 					"id" => $gt->id (),
 					"row" => $gt->id (),
-					"start" => $start,
+					"start" => $this->gt_start,
 					"length" => $length,
 					"title" => $title,
 					"colour" => $color,
 				);
 
 				$chart->add_bar ($bar);
-				$start += $length;
+				$this->gt_start += $length;
+				$curday++;
 
 				while($remaining_len > 0)
 				{
-					$length = min($remaining_len, 8*3600);
+					$this->check_sect($sect, $curday);
+					$length = min($remaining_len, $sect[$curday]["len"]);
 					$remaining_len -= $length;
-					$start = $this->get_next_avail_time_from($start, $day2wh);
-
-					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
-
+					$this->gt_start = $this->get_next_avail_time_from($this->gt_start, $this->day2wh);
+					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $this->gt_start)." - ".date("d.m.Y H:i", $this->gt_start + $length)." ) ";
 					$bar = array (
 						"id" => $gt->id (),
 						"row" => $gt->id (),
-						"start" => $start,
+						"start" => $this->gt_start,
 						"length" => $length,
 						"title" => $title,
 						"colour" => $color,
 					);
-
 					$chart->add_bar ($bar);
-					$start += $length;
+					$this->gt_start += $length;
+					$sect[$curday]["len"] -= $length;
 				}
 			}
 			else
 			{
-				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
-
+				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $this->gt_start)." - ".date("d.m.Y H:i", $this->gt_start + $length)." ) ";
 				$bar = array (
 					"id" => $gt->id (),
 					"row" => $gt->id (),
-					"start" => $start,
+					"start" => $this->gt_start,
 					"length" => $length,
 					"title" => $title,
 					"colour" => $color,
 				);
-
+				$sect[$curday]["len"] -= $length;
 				$chart->add_bar ($bar);
-				$start += $length;
+				$this->gt_start += $length;
 			}
-
-			if ($gt->prop("deadline") > 300 && $start > $gt->prop("deadline"))
+			if ($gt->prop("deadline") > 300 && $this->gt_start > $gt->prop("deadline"))
 			{
 				$this->over_deadline[$gt->id()] = $gt;
 			}
 
 			if ($gt->id() == $arr["ret_b_time"])
 			{
-				return $start;
+				return $this->gt_start;
 			}
 		}
-		$this->job_end = $start;
+		$this->job_end = $this->gt_start;
 		$chart->configure_chart (array (
 			"chart_id" => "bt_gantt",
 			"style" => "aw",
@@ -3281,6 +3283,7 @@ class bug_tracker extends class_base
 			"timespans" => $subdivisions,
 			"width" => 850,
 			"row_height" => 10,
+			"column_length" => $col_length,
 		));
 
 		### define columns
@@ -3289,7 +3292,7 @@ class bug_tracker extends class_base
 
 		while ($i < $columns)
 		{
-			$day_start = (get_day_start() + ($i * 86400));
+			$day_start = (get_day_start() + ($i * $this->gt_days_in_col * 86400));
 			$day = date ("w", $day_start);
 			$date = date ("j/m/Y", $day_start);
 			$uri = aw_url_change_var ("mrp_chart_length", 1);
@@ -3305,6 +3308,66 @@ class bug_tracker extends class_base
 		$arr["prop"]["value"] = $chart->draw_chart ();
 	}
 
+	function check_sect(&$sect, &$curday)
+	{
+		if($sect[$curday]["len"] <= 0)
+		{
+			$curday++;
+			if(is_array($sect[$curday]))
+			{
+				$this->gt_start = $sect[$curday]["start"];
+			}
+		}
+		if(!is_array($sect[$curday]))
+		{
+			$this->gt_start = $this->get_next_avail_time_from($this->gt_start, $this->day2wh);
+			$sect = $this->get_sect();
+			$curday = 0;
+			$this->gt_start = $sect[$curday]["start"];
+		}
+	}
+
+	function get_sect()
+	{
+		$sect_len = 0;
+		$i = 0;
+		$sect["lens"] = array();
+		while($i < $this->gt_days_in_col)
+		{
+			$cur =  $this->gt_start + $i * 24 * 60 * 60;
+			$day_info = $this->day2wh[date("w", $cur)];
+			$day_start = $day_info[0];
+			$day_end = $day_info[1];
+			$chlen = $day_end - $day_start;
+			if($chlen <= 0)
+			{
+				$daylen = 0;
+			}
+			else
+			{
+				
+				$st =  mktime($day_start, 0, 0, date('m', $cur), date('d', $cur), date('Y', $cur));
+				if($this->gt_start == $cur)
+				{
+					$st2 = mktime(date('H', $cur), date('i', $cur), 0, date('m', $cur), date('d', $cur), date('Y', $cur));
+					if($st2 > $st)
+					{
+						$st = $st2;
+					}
+				}
+				$end = mktime($day_end, 0, 0, date('m', $cur), date('d', $cur), date('Y', $cur));
+				$daylen = $end - $st;
+			}
+			//$sect_len += $daylen;
+			$sect_lens[] = array(
+				"len" => $daylen,
+				"start" => mktime($day_start, 0, 0, date('m', $cur), date('d', $cur), date('Y', $cur)),
+				//"end" => mktime($day_end, 0, 0, date('m', $cur), date('d', $cur), date('Y', $cur)),
+			);
+			$i++;
+		}
+		return $sect_lens;
+	}
 	function get_gantt_bug_colors($gt)
 	{
 		$color = "silver";
