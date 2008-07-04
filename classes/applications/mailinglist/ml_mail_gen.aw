@@ -40,6 +40,7 @@ class ml_mail_gen extends run_in_background
 		}
 		$arr = $o->meta("mail_data");
 		extract($arr);
+		$qid = (int)$qid;
 		if(!(sizeof($this->mails_to_gen) > 0))
 		{// now I should mark the queue as "ready to send" or 0
 			$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
@@ -72,6 +73,9 @@ class ml_mail_gen extends run_in_background
 		$this->made_mails = array();
 		$arr = $o->meta("mail_data");
 		extract($arr);
+		$qid = (int)$qid;
+		$mail_id = (int)$mail_id;
+		$list_id = (int)$list_id;
 		$q = "SELECT target FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id' AND qid = '$qid'";
 		$this->db_query($q);
 		while($w = $this->db_next())
@@ -309,8 +313,8 @@ class ml_mail_gen extends run_in_background
 		$parser->parse_oo_aliases($arr["mail_id"], $message);
 		
 		$message = $this->replace_tags($message, $data);
-		$message = str_replace("a href='/", "a href='".aw_ini_get("baseurl")."/" , $message);
-		$message = str_replace('a href="/', 'a href="'.aw_ini_get("baseurl").'/' , $message);
+		$message = str_replace("href='/", "href='".aw_ini_get("baseurl")."/" , $message);
+		$message = str_replace('href="/', 'href="'.aw_ini_get("baseurl").'/' , $message);
 		return $message;
 	}
 
