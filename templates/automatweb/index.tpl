@@ -4,7 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:html_title} {VAR:title_action}</title>
 <link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
-
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shorcuts_from_xml&{VAR:random}"></script>
 <!-- SUB: MINIFY_JS_AND_CSS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
@@ -12,6 +11,7 @@
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/jquery_aw_object_quickadd.css" rel="stylesheet" type="text/css" />
 
+{VAR:javascript}
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_timer.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_releditor.js"></script>

@@ -251,7 +251,12 @@ if ($sf->is_template("aw_styles"))
 {
 	$sf->vars(array("aw_styles" => $styles));
 	$styles_done = true;
-};
+}
+
+// include those javascript files to header which are loaded in application classes
+$sf->vars(array("javascript" => $apd->get_javascript()));
+
+
 //if (!empty($output_charset))
 //{
 //	echo iconv($page_charset,$output_charset . "//TRANSLIT",$sf->parse());

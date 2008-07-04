@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.266 2008/06/04 10:35:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.267 2008/07/04 12:00:05 dragut Exp $
 // defs.aw - common functions
 
 /*
@@ -2906,6 +2906,14 @@ if (!defined("DEFS"))
 			}
 		}
 		return $res;
+	}
+
+	function load_javascript($file)
+	{
+		$js = aw_global_get("__aw_javascript");
+		$file = aw_ini_get("baseurl")."/automatweb/js/".$file;
+		$js[$file] = $file;
+		aw_global_set("__aw_javascript", $js);
 	}
 
 	class defs {};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.15 2008/03/31 10:44:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.16 2008/07/04 12:00:19 dragut Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -102,6 +102,17 @@ class active_page_data extends class_base
 		else
 		{
 			$text .= $ret;
+		}
+		return $text;
+	}
+
+	function get_javascript()
+	{
+		$js = aw_global_get("__aw_javascript");
+		$text = "";
+		foreach ($js as $file)
+		{
+			$text .= "<script type=\"text/javascript\" src=\"".$file."\"></script>";
 		}
 		return $text;
 	}
