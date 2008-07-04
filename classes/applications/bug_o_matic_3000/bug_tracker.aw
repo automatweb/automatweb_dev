@@ -3284,6 +3284,7 @@ class bug_tracker extends class_base
 			"width" => 850,
 			"row_height" => 10,
 			"column_length" => $col_length,
+			"timespan_range" => $col_length,
 		));
 
 		### define columns

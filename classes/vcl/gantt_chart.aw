@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.23 2008/05/13 10:39:16 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.24 2008/07/04 15:00:14 robert Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -527,6 +527,7 @@ class gantt_chart extends class_base
 
 				$columns--;
 			}
+			unset($this->pending_bars);
 
 			### parse row
 			$this->vars (array (
