@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.131 2008/06/25 10:41:31 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.132 2008/07/04 09:31:44 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -494,12 +494,13 @@ class ml_list extends class_base
 	{
 		extract($args);
 		$id = (int)$id;
+		$gid = (int)$gid;
 		load_vcl('date_edit');
 		unset($aid);//umm?
-		$list_id = $args["list_id"];
+		$list_id = (int)$args["list_id"];
 		$_start_at = date_edit::get_timestamp($start_at);
 		$_delay = $delay * 60;
-		$_patch_size = $patch_size;
+		$_patch_size = (int)$patch_size;
 		$count = 0;
 		$this->list_id = $list_id;
 		$this->get_members(array("id" => $id, "no_return" => 1));
@@ -1184,7 +1185,7 @@ class ml_list extends class_base
 			case "mail_start_date":
 			case "mail_last_batch":
 				$list_id = $arr["obj_inst"]->id();
-				$mail_id = $arr["request"]["mail_id"];
+				$mail_id = (int)$arr["request"]["mail_id"];
 				$row = $this->db_fetch_row("SELECT * FROM ml_queue WHERE lid = ${list_id} ANd mid = ${mail_id}");
 				if ($prop["name"] == "mail_start_date")
 				{
@@ -1290,6 +1291,7 @@ class ml_list extends class_base
 			case "list_status_table":
 				foreach($arr["request"]["pach_sizes"] as $qid => $val)
 				{
+					$qid = (int)$qid;
 					if($val > 0 && $val < 5001)
 					{
 						$this->db_fetch_row("UPDATE ml_queue SET patch_size='$val' where qid='$qid'");
@@ -2272,6 +2274,10 @@ class ml_list extends class_base
 	**/
 	function delete_queue_items($arr)
 	{
+		foreach($arr["sel"] as $key => $val)
+		{
+			$arr["sel"][$key] = (int)$val;
+		}
 		if (is_array($arr["sel"]))
 		{
 			$q = sprintf("DELETE FROM ml_queue WHERE qid IN (%s)",join(",",$arr["sel"]));
@@ -2872,6 +2878,7 @@ class ml_list extends class_base
 	function gen_ready_indicator($p)
 	{
 		extract($p);
+		$qid = (int)$qid;
 		$q = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = '$qid'";
 		$this->db_query($q);
 		while($w = $this->db_next())
@@ -2922,8 +2929,8 @@ class ml_list extends class_base
 			"name" => "clicked",
 			"caption" => t("Klikitud"),
 		));
-		$_mid = $arr["request"]["mail_id"];
-		$qid = $arr["request"]["qid"];
+		$_mid = (int)$arr["request"]["mail_id"];
+		$qid = (int)$arr["request"]["qid"];
 		$id = $arr["obj_inst"]->id();
 		$q1 = "SELECT COUNT(*) as cnt FROM ml_sent_mails WHERE lid = '$id' AND mail='$_mid' AND qid = '$qid' AND mail_sent = 1";
 		$cnt = $this->db_fetch_field($q1, "cnt");
@@ -2972,12 +2979,12 @@ class ml_list extends class_base
 	function gen_percentage($arr)
 	{
 		$list_id = $arr["obj_inst"]->id();
-		$mail_id = $arr["request"]["mail_id"];
+		$mail_id = (int)$arr["request"]["mail_id"];
 		
 		// how many members does this list have?
 		$row = $this->db_fetch_row("SELECT total,qid,position,status FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
 		$member_count = $row["total"];
-		$qid = $row["qid"];
+		$qid = (int)$row["qid"];
 		
 		// how many members have been served?
 		$served_count = 0;
@@ -3246,7 +3253,7 @@ class ml_list extends class_base
 	{
 		$img_inst = get_instance(CL_IMAGE);
 		$msg_data = $arr["request"];
-		$msg_data["id"] = $arr["request"]["message_id"];
+		$msg_data["id"] = (int)$arr["request"]["message_id"];
 		$msg_data["name"] = $arr["request"]["subject"];
 		if(!$msg_data["html_mail"])
 		{
