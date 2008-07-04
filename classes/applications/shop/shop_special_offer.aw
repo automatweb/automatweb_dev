@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.14 2008/06/26 09:29:15 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.15 2008/07/04 08:27:28 tarvo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -570,13 +570,37 @@ class shop_special_offer extends class_base
 
 	function _add_new_product_to_request(&$arr)
 	{
-		if($this->can("view", $arr["request"]["new_product"]["product"]))
+		if(strlen($arr["request"]["new_product"]["product"]))
 		{
+			$whs = $arr["obj_inst"]->prop("warehouses");
+			$fnd = false;
+			foreach($whs as $wh)
+			{
+				if($this->can("view", $wh))
+				{
+					$fnd = true;
+					break;
+				}
+			}
+			if(!$fnd)
+			{
+				return false;
+			}
+			$wh = obj($wh);
+			$fld = $wh->prop("conf.prod_fld");
+			$prod = obj();
+			$prod->set_name($arr["request"]["new_product"]["product"]);
+			$prod->set_class_id(CL_SHOP_PRODUCT);
+			$prod->set_parent($fld);
+			$prod->save();
+			$arr["request"]["new_product"]["product"] = $prod->id();
+
 			if(!is_array($arr["request"]["prodat"]))
 			{
 				$arr["request"]["prodat"] = array();
 			}
 			$prc = $this->_get_product_prices($arr["request"]["new_product"]["product"]);
+			
 			foreach($arr["request"]["new_product"]["currency"] as $oid => $val)
 			{
 				if(empty($val))
