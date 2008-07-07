@@ -1825,7 +1825,17 @@ class crm_company_cust_impl extends class_base
 		{
 			//$ret["oid"] = -1;
 		}
+		switch($_GET["sortby"])
+		{
 
+			default:
+				$ret["sort_by"] = "name";	
+			
+		}
+		$ret["limit"] = (100*$_GET["ft_page"]).", 100";
+
+		$ret["sort_by"].= " ".( $_GET["sort_order"] == "desc" ? "DESC" : "ASC");
+//if(aw_global_get("uid") == "marko") {arr($_GET);arr($ret);}
 		return $ret;
 	}
 
@@ -1955,8 +1965,20 @@ enter_function("company::_finish_org_tbl_5");
 		}
 exit_function("company::_finish_org_tbl_5");
 		# table contents
+		$org_count = 0;
 		foreach($orglist as $org)
 		{
+/*			$org_count++;
+			if(!($_GET["ft_page"] * 100 < $org_count && (($_GET["ft_page"]+1) * 100 > $org_count)))
+			{
+//				$tf->define_data(array(
+//					"id" => "0",
+//					"name" => $o->name(),
+//				));
+				continue;
+			}
+*/
+
 enter_function("company::_finish_org_tbl_6");
 			if($filter)
 			{
@@ -2160,6 +2182,17 @@ exit_function("company::_finish_org_tbl_9");
 				"pop" => $o->class_id() == CL_CRM_CATEGORY ? "" : $pm,
 			));
 		}
+
+		// make pageselector.
+		$perpage = 100;
+		$tf->d_row_cnt = $this->result_count;
+		if($tf->d_row_cnt > $perpage)
+		{
+			$pageselector = $tf->draw_lb_pageselector(array(
+				"records_per_page" => $perpage
+			));
+			$tf->table_header = $pageselector;
+		}
 		$tf->set_default_sortby("name");
 		exit_function("company::_finish_org_tbl");
 	}
@@ -2170,7 +2203,7 @@ exit_function("company::_finish_org_tbl_9");
 		{
 			return PROP_IGNORE;
 		}
-
+enter_function("company::_get_customer");
 
 		if ($filter)
 		{
@@ -2200,7 +2233,8 @@ exit_function("company::_finish_org_tbl_9");
 			$co = $u->get_current_company();
 			if ($arr["obj_inst"]->id() == $co)
 			{
-				$ol = new object_list($this->_get_customer_search_filter($arr["request"], $ol2));
+				$filt = $this->_get_customer_search_filter($arr["request"], $ol2);
+				$ol = new object_list($filt);
 				$orglist = $this->make_keys($ol->ids());
 
 				/*
@@ -2218,7 +2252,8 @@ exit_function("company::_finish_org_tbl_9");
 			}
 			else
 			{
-				$ol = new object_list($this->_get_customer_search_filter($arr["request"], $ol2));
+				$filt = $this->_get_customer_search_filter($arr["request"], $ol2);
+				$ol = new object_list($filt);
 				$orglist = $this->make_keys($ol->ids());
 				/*
 				if ($arr["request"]["customer_search_submit"] != "")
@@ -2232,8 +2267,18 @@ exit_function("company::_finish_org_tbl_9");
 				}
 				*/
 			}
-		}
 
+			unset($filt["sort_by"]); unset($filt["limit"]);
+			$t = new object_data_list(
+				$filt,
+				array(
+					CL_CRM_COMPANY =>  array(new obj_sql_func(OBJ_SQL_COUNT,"cnt" , "*"))
+				)
+			);
+			$this->result_count = reset(reset($t->arr()));
+		}
+exit_function("company::_get_customer");
+//if(aw_global_get("uid") == "marko") arr($this->result_count);
 		$this->_finish_org_tbl($arr, $orglist);
 
 		if ($arr["request"]["customer_search_print_view"] == 1)
@@ -2253,7 +2298,7 @@ exit_function("company::_finish_org_tbl_9");
 	}
 
 	function _get_my_customers_table($arr)
-	{
+	{//if(aw_global_get("uid") == "marko") $GLOBALS["DUKE"] = 1;
 		if($arr["request"]["customer_search_submit"] || $arr["request"]["customer_search_submit_and_change"])
 		{
 			$this->_get_customer(&$arr);
@@ -2327,6 +2372,7 @@ exit_function("company::_finish_org_tbl_9");
 					}
 				}
 				//ma ei saa mitte aru miks siin oli nii ,et k6ikide klientide puhul ei n2itaks midagi
+
 				$orgs = (count($conn_filt) > 1)?$organization->connections_from($conn_filt):array();
 				$orglist = array();
 				foreach($orgs as $org)
