@@ -3110,6 +3110,38 @@ class crm_company extends class_base
 
 			case "contact":
 				return PROP_IGNORE;
+			case "client_category":
+				if($arr["request"]["category"])
+				{
+					if($this->can("view" , $arr["request"]["category"]))
+					{
+						$conns = $arr["obj_inst"]->connections_from(array(
+							"type" => "RELTYPE_CATEGORY"
+						));
+						foreach($conns as $conn)
+						{
+							$conn->delete();
+						}
+						$conns = $arr["obj_inst"]->connections_to(array(
+							"from.class_id" => CL_CRM_CATEGORY,
+							"type" => "RELTYPE_CUSTOMER"
+						));
+						foreach($conns as $conn)
+						{
+							$conn->delete();
+						}
+						$cat = obj($arr["request"]["category"]);
+						$cat->connect(array(
+							"to" => $arr["obj_inst"]->id(),
+							"type" => "RELTYPE_CUSTOMER",
+						));
+						$arr["obj_inst"]->connect(array(
+							"to" =>	$cat->id(),
+							"type" => "RELTYPE_CATEGORY",
+						));
+					}
+				}
+				break;
 		}
 		return PROP_OK;
 	}
@@ -7720,9 +7752,19 @@ class crm_company extends class_base
 				$cat = $c->from();
 			}
 		}
-		$arr["prop"]["value"] = join(" / ", array_reverse($cats));
+		$url = $this->mk_my_orb(
+			"do_search",array(
+			'id' => $arr['id'],
+			"return_url" => $arr["post_ru"],
+		 	"pn" => "category",
+		 	"clid" => array(CL_CRM_CATEGORY),
+		 	),"popup_search");
+
+		$arr["prop"]["value"] = join(" / ", array_reverse($cats)).
+		'<a href=\'javascript:aw_popup_scroll("'.$url.'","Otsing",550,500)\' alt="Otsi" title="Otsi" tabindex="10" style=""><img src="http://intranet.automatweb.com/automatweb/images/icons/search.gif" border="0"></a>';
 		return PROP_OK;
 	}
+
 
 	/** implement our own view!
 		@attrib name=view nologin=1
