@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.147 2008/07/04 14:23:14 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.148 2008/07/07 12:09:40 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -389,7 +389,7 @@ class releditor extends core
 
 		$xprops[$prop["name"]."[0]table"] = array(
 			"type" => "text",
-			"value" => $this->init_new_rel_table($arr),
+			"value" => "<a name='".$arr["prop"]["name"]."'></a>".$this->init_new_rel_table($arr),
 			"store" => "no",
 			"name" => $this->elname."_table",
 			"caption" => "",
