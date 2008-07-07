@@ -175,6 +175,7 @@ jQuery.aw_releditor = function(arr) {
 				$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
 				handle_change_links();
 				handle_delete_links();
+				location.href="#"+arr["releditor_name"];
 			}
 		});
 		
