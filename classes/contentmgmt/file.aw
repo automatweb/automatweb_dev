@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.11 2008/06/26 14:38:05 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.12 2008/07/07 11:33:01 kristo Exp $
 /*
 
 
@@ -1624,6 +1624,10 @@ class file extends class_base
 
 	function callback_mod_tab($arr)
 	{
+		if ($_REQUEST["docid"])
+		{
+			$arr["link"] = aw_url_change_var("docid", $_REQUEST["docid"], $arr["link"]);
+		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
@@ -1631,6 +1635,11 @@ class file extends class_base
 		return true;
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["docid"] = $arr["request"]["docid"];
+	}
+	
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);

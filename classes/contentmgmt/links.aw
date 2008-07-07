@@ -480,6 +480,11 @@ class links extends class_base
 		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["docid"] = $arr["request"]["docid"];
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["ldocid"] = $_GET["ldocid"];
@@ -487,6 +492,10 @@ class links extends class_base
 
 	function callback_mod_tab($arr)
 	{
+		if ($_REQUEST["docid"])
+		{
+			$arr["link"] = aw_url_change_var("docid", $_REQUEST["docid"], $arr["link"]);
+		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;

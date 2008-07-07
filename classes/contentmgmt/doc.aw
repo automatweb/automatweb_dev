@@ -790,7 +790,7 @@ class doc extends class_base
 			if(!strlen($args["obj_inst"]->alias()))
 			{
 				$m = get_instance(CL_MENU);
-				$new_alias = $m->gen_nice_alias($args["request"]["title"]);
+				$new_alias = $m->gen_nice_alias($args["obj_inst"]->name());
 				if ($new_alias != $args["obj_inst"]->alias())
 				{
 					$args["obj_inst"]->set_alias($new_alias);

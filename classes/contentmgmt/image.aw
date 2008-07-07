@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.25 2008/06/27 10:05:22 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.26 2008/07/07 11:33:01 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -918,7 +918,7 @@ class image extends class_base
 
 					if(strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]) > filemtime($fname))
 					{
-						header("HTTP/1.x 304 Not Modified1");
+						header("HTTP/1.x 304 Not Modified");
 						die();
 					}
 
@@ -2275,8 +2275,17 @@ class image extends class_base
 		$arr["docid"] = $_GET["docid"];
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["docid"] = $arr["request"]["docid"];
+	}
+
 	function callback_mod_tab($arr)
 	{
+		if ($_REQUEST["docid"])
+		{
+			$arr["link"] = aw_url_change_var("docid", $_REQUEST["docid"], $arr["link"]);
+		}
 		if ($arr["id"] == "resize" || $arr["id"] == "resize_big")
 		{
 			$cv = get_instance("core/converters/image_convert");
