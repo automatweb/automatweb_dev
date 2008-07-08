@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.119 2008/05/14 06:48:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.120 2008/07/08 07:06:44 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -710,12 +710,15 @@ class object_treeview_v2 extends class_base
 
 		foreach ($fld as $id => $data)
 		{
-			if (!array_key_exists($data["parent"], $fld))
+			if (!array_key_exists($data["parent"], $fld) && $this->can("view", $id))
 			{
 				$tmp = obj($id);
-				$tmp = obj($tmp->parent());
-				$folders_parent_caption = $tmp->name();
-				break;
+				if ($this->can("view", $tmp->parent()))
+				{
+					$tmp = obj($tmp->parent());
+					$folders_parent_caption = $tmp->name();
+					break;
+				}
 			}
 		}
 
