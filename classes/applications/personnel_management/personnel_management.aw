@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.55 2008/07/03 12:57:12 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.56 2008/07/08 10:16:17 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1674,6 +1674,10 @@ class personnel_management extends class_base
 			$odl_prms = is_array($odl_prms) ? $odl_prms : array();
 			$odl_prms = $odl_prms_immutable + $odl_prms;
 			arr($odl_prms);
+		}
+		if(is_array($odl_prms["oid"]) && count($odl_prms["oid"]) == 0)
+		{
+			return array();
 		}
 		$odl = new object_data_list(
 			$odl_prms,
