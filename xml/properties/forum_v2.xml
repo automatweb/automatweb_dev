@@ -429,6 +429,17 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>topic_form_fields</name>
+            <table>objects</table>
+            <group>topic_form_fields</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Teema lisamise vormi v&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
             <name>topics_on_page</name>
             <table>objects</table>
             <group>topic_selector</group>
@@ -734,6 +745,10 @@
                   <caption>J&amp;amp;auml;rjekorrad</caption>
                   <parent>look</parent>
             </jrks>
+            <topic_form_fields>
+                  <caption>Teema vormi v&amp;amp;auml;ljad</caption>
+                  <parent>look</parent>
+            </topic_form_fields>
             <settings>
                   <caption>Sisu seaded</caption>
             </settings>

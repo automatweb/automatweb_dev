@@ -170,6 +170,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		
 		@property jrks type=callback callback=callback_gen_jrks no_caption=1
 
+	@groupinfo topic_form_fields caption="Teema vormi v&auml;ljad" parent=look
+	@default group=topic_form_fields
+		
+                @property topic_form_fields type=chooser multiple=1 orient=vertical
+                @caption Teema lisamise vormi v&auml;ljad
+
 @groupinfo settings caption="Sisu seaded"
 
 	@groupinfo topic_selector caption=Teemad parent=settings
@@ -357,6 +363,14 @@ class forum_v2 extends class_base implements site_search_content_group_interface
                         "commtext" => t("Kommentaar"),
                 );
 
+		$this->topic_fields = array(
+                        "name" => t("Pealkiri"),
+                        "author_name" => t("Autori nimi"),
+                        "author_email" => t("Autori e-mail"),
+                        "answers_to_mail" => t("Vastused e-mailile"),
+                        "comment" => t("Kommentaar"),
+                );
+
 	}
 
 	function get_property($arr)
@@ -377,6 +391,14 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				break;
 			case "required_fields":
 				$data["options"] = $this->comment_fields;
+				break;
+
+			case "topic_form_fields":
+				if (empty($data['value']))
+				{
+					$data['value'] = array_combine(array_keys($this->topic_fields), array_keys($this->topic_fields));
+				}
+				$data["options"] = $this->topic_fields;
 				break;
 
 			case "topics_sort_order":
@@ -2821,7 +2843,14 @@ class forum_v2 extends class_base implements site_search_content_group_interface
                 $props = $cfgu->load_class_properties(array(
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
-		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
+
+//		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
+		$use_props = $this->obj_inst->prop('topic_form_fields');
+		// if there is no topic fields selected, then assume that all should be displayed, it should maintain backward compatibility and in my opinion is sensible anyway --dragut@08.07.2008
+		if (empty($use_props))
+		{
+			$use_props = array_keys($this->topic_fields);
+		}
 
 		// if user is logged in,
 		$uid = aw_global_get("uid");
