@@ -33,6 +33,12 @@ class reservation_obj extends _int_object
 					}
 				}
 				break;
+			case "verified":
+				if($this->get_room_setting("send_verify_mail"))
+				{
+					$this->send_affirmation_mail();
+				}
+				break;
 		}
 		return parent::set_prop($pn, $pv);
 	}
@@ -215,14 +221,202 @@ class reservation_obj extends _int_object
 		return $project->id();
 	}
 
+	/** Returns this reservation room setting
+		@attrib api=1 params=pos
+		@param setting required type=string
+			room setting
+		@return 
+			room setting value , or 0
+	**/
 	function get_room_setting($setting)
 	{
-		if(!$this->prop("resource"))
+		if(!is_object($this->room))
 		{
-			return null;
+			if(!$this->prop("resource"))
+			{
+				return null;
+			}
+			$this->room = obj($this->prop("resource"));
 		}
+		return $this->room->get_setting($setting);
+	}
+
+	/** Sends confirmation mail for a reservation
+		@attrib api=1 params=pos
+		@param tpl optional type=string
+			The name of the template to use for formatting the email content
+		@return boolean
+			1 if mail sent, 0 if not
+	**/
+	function send_affirmation_mail($tpl = null)
+	{
+		if($this->meta("mail_sent"))
+		{
+			return 0;
+		}
+		$res_inst = get_instance(CL_ROOM_RESERVATION);
+		$_send_to = $this->prop("customer.email.mail");
+
+		$email_subj = $this->get_room_setting("verify_mail_subj");
+		$mail_from_addr = $this->get_room_setting("verify_mail_from");
+		$mail_from_name = $this->get_room_setting("verify_mail_from_name");
+		if(!$tpl)
+		{
+			$tpl = "preview.tpl";
+		}
+		$res_inst->read_site_template($tpl);
+		lc_site_load("room_reservation", &$res_inst);
+		$res_inst->vars($this->get_bron_data());
+		$html =  $res_inst->parse();
+
+		$awm = get_instance("protocols/mail/aw_mail");
+		$awm->create_message(array(
+			"froma" => $mail_from_addr,
+			"fromn" => $mail_from_name,
+			"subject" => $email_subj,
+			"to" => $_send_to,
+			"body" => strip_tags(str_replace("<br>", "\n",$html)),
+		));
+		$awm->htmlbodyattach(array(
+			"data" => $html
+		));
+		$awm->gen_mail();
+		$this->set_meta("mail_sent" , 1);
+		$this->save();
+		return 1;
+	}
+
+	/** Returns object data for printing or sending mail ...
+		@attrib api=1 params=pos
+		@param tpl optional type=string
+			The name of the template to use for formatting the email content
+		@return boolean
+			1 if mail sent, 0 if not
+	**/
+	function get_bron_data()
+	{
+		$ret = array();
 		$room = obj($this->prop("resource"));
-		return $room->get_setting($setting);
+		$ret["room_name"] = $room->name();
+		$ret["time_str"] = $this->get_time_str(array(
+			"start" => $this->prop("start1"),
+			"end" => $this->prop("end"),
+		));
+		$ret["hours"] = ($this->prop("end")-$this->prop("start1"))/3600;
+		$ret["people_value"] = $this->prop("people_count");
+
+		$room_inst = get_instance(CL_ROOM);
+		$sum = $room_inst->cal_room_price(array(
+			"room" => $this->prop("resource"),
+			"people" => $ret["people_value"],
+			"start" => $this->prop("start1"),
+			"end" => $this->prop("end"),
+			"products" => -1,
+		//	"products" => $bron->meta("amount"),
+		));
+		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = $data["menu_sum_left"] = array();
+
+		$prod_discount = $room_inst->get_prod_discount(array(
+			"room" => $this->prop("resource"),
+			"start" => $this->prop("start1"),
+			"end" => $this->prop("end"))
+		);
+		foreach($sum as $curr => $val)
+		{
+			$currency = obj($curr);
+	//		$data["sum"][] =  $val." ".$currency->name();
+			$data["bargain"][] = (0+$room_inst->bargain_value[$curr])." ".$currency->name();
+			$data["sum_wb"][] = ((double) $val + (double)$room_inst->bargain_value[$curr]) ." ".$currency->name();
+		}
+		foreach ($this->meta("amount") as $prod => $amount)
+		{
+			if($amount)
+			{
+				$product = obj($prod);
+				$prices = $product->meta("cur_prices");
+				foreach ($sum as $curr=> $val)
+				{
+					if($prices[$curr] || $prices[$curr] === 0)
+					{
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr] + $prices[$curr]*$amount*(100-$prod_discount)*0.01;
+					}
+					else
+					{
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount*(100-$prod_discount)*0.01;
+					}
+				}
+			}
+		}
+		foreach ($sum as $curr=> $val)
+		{
+			$currency = obj($curr);
+			if(!$data["menu_sum"][$curr])
+			{
+				$data["menu_sum"][$curr] = 0;
+			}
+			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
+		}
+
+		$sum = $this->get_sum();
+
+		foreach($sum as $curr => $val)
+		{
+			$currency = obj($curr);
+			$data["sum"][] =  $val." ".$currency->name();
+			$min_prices = $room->meta("web_room_min_price");
+			$min_sum = $min_prices[$curr] - $val;
+			if($min_sum < 0)
+			{
+				$min_sum = 0;
+			}
+			$data["min_sum_left"][] = $min_sum." ".$currency->name();
+		}
+		$ret["sum"] = join("/" , $data["sum"]);
+		$ret["bargain"] = join("/" , $data["bargain"]);
+		$ret["sum_wb"] = join("/" , $data["sum_wb"]);
+		$ret["menu_sum"] = join("/" , $data["menu_sum"]);
+		$ret["comment_value"] = $this->prop("content");
+		$ret["min_sum_left"] = join("/" , $data["min_sum_left"]);
+
+		$ret["status"] = ($this->prop("verified") ? t("Kinnitatud") : t("Kinnitamata"));
+		$ret["bank_value"] = $this->meta("bank_name");
+		foreach ($this->meta("amount") as $prod => $amount)
+		{
+			if($amount)
+			{
+				$product = obj($prod);
+
+				$this->vars(array(
+					"prod_name" => $product->name(), "prod_amount" => $amount  , "prod_value"=> $product->prop("price") ,
+				));
+				$p.= $this->parse("PROD");
+			}
+		}
+
+		if(is_oid($this->prop("customer")))
+		{
+			$customer = obj($this->prop("customer"));
+			$ret["phone_value"] = $customer->prop("phone.name");
+			$ret["email_value"] = $customer->prop("email.mail");;
+		}
+		$ret["name_value"] = $this->prop_str("customer");
+		$ret["PROD"] = $p;
+		return $ret;
+	}
+
+	private function get_time_str($arr)
+	{
+		$room_inst = get_instance(CL_ROOM);
+		extract($arr);
+		$res = "";
+		$res.= $room_inst->weekdays[(int)date("w" , $arr["start"])];
+		$res.= ", ";
+		$res.= date("d.m.Y" , $arr["start"]);
+		$res.= ", ";
+		$res.= date("H:i" , $arr["start"]);
+		$res.= " - ";
+		$res.= date("H:i" , $arr["end"]);
+		return $res;
 	}
 }
 ?>

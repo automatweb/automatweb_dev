@@ -85,6 +85,12 @@
 	@property col_recent type=colorpicker 
 	@caption Hiljuti muudetud reserveeringud
 
+@groupinfo calendar_view caption="Kalendrivaade"
+@default group=calendar_view
+
+	@property bron_props type=table save=no no_caption=1
+	@caption Broneeringu omaduste tabel
+
 @groupinfo settings caption="Muud seaded"
 	@groupinfo settings_gen caption="Muud seaded" parent=settings
 	
@@ -217,6 +223,24 @@
 		@property order_mail_groups type=select multiple=1
 		@caption Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse
 
+	@groupinfo verify_email caption="Kinnitusmeil" parent=email
+	@default group=verify_email
+		
+		@property send_verify_mail type=checkbox ch_value=1
+		@caption Saada kinnituse mail
+
+		@property verify_mail_from type=textbox 
+		@caption Meili from aadress
+
+		@property verify_mail_from_name type=textbox
+		@caption Meili from nimi
+
+		@property verify_mail_subj type=textbox
+		@caption Meili subjekt
+
+		@property verify_mail_legend type=text
+		@caption Meili sisu legend
+
 Meili sisu peab saama t6lkida, ilmselt seadetele T6lgi vaade teha lisaks.
 
 @groupinfo grp_settings caption="Gruppide seaded"
@@ -285,6 +309,7 @@ class room_settings extends class_base
 				break;
 
 			case "order_mail_legend":
+			case "verify_mail_legend":
 				$prop["value"] = t("sisu tuleb common/room/preview.tpl failist");
 				break;
 
@@ -632,6 +657,46 @@ class room_settings extends class_base
 		}
 		
 		return $grp_settings[$grp]["confirmed_default"];
+	}
+
+	function _get_bron_props($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "prop_name",
+			"caption" => t("Omaduse nimi"),
+		));
+		$t->define_field(array(
+			"name" => "before",
+			"caption" => t("Eraldaja enne"),
+		));
+		$t->define_field(array(
+			"name" => "after",
+			"caption" => t("Eraldaja p&auml;rast"),
+		));			
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+		$t->define_field(array(
+			"name" => "text",
+			"caption" => t("Tekstina"),
+		));
+		$t->define_field(array(
+			"name" => "alt",
+			"caption" => t("Alt-tekstina"),
+		));
+
+		$bol = new object_list(array("class_id" => CL_RESERVATION, "lang_id" => array()));
+		$b = reset($bol->arr());
+		foreach($b->properties() as $prop => $data)
+		{
+			$t->define_data(array(
+				"prop_name" => $prop,
+
+
+			));
+		}
 	}
 }
 ?>

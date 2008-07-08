@@ -246,6 +246,18 @@
             <caption>Hiljuti muudetud reserveeringud</caption>
       </property>
       <property>
+            <name>bron_props</name>
+            <table>objects</table>
+            <group>calendar_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <save>no</save>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Broneeringu omaduste tabel</caption>
+      </property>
+      <property>
             <name>comment_pos</name>
             <table>objects</table>
             <group>settings_gen</group>
@@ -587,6 +599,52 @@
             <caption>Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse</caption>
       </property>
       <property>
+            <name>send_verify_mail</name>
+            <table>objects</table>
+            <group>verify_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saada kinnituse mail</caption>
+      </property>
+      <property>
+            <name>verify_mail_from</name>
+            <table>objects</table>
+            <group>verify_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>verify_mail_from_name</name>
+            <table>objects</table>
+            <group>verify_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>verify_mail_subj</name>
+            <table>objects</table>
+            <group>verify_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
+            <name>verify_mail_legend</name>
+            <table>objects</table>
+            <group>verify_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Meili sisu legend</caption>
+      </property>
+      <property>
             <name>grp_settings</name>
             <table>objects</table>
             <group>grp_settings</group>
@@ -611,6 +669,9 @@
             <colours>
                   <caption>V&amp;amp;auml;rvid</caption>
             </colours>
+            <calendar_view>
+                  <caption>Kalendrivaade</caption>
+            </calendar_view>
             <settings>
                   <caption>Muud seaded</caption>
             </settings>
@@ -633,6 +694,10 @@
                   <caption>Tellimusmeil</caption>
                   <parent>email</parent>
             </order_email>
+            <verify_email>
+                  <caption>Kinnitusmeil</caption>
+                  <parent>email</parent>
+            </verify_email>
             <grp_settings>
                   <caption>Gruppide seaded</caption>
             </grp_settings>
