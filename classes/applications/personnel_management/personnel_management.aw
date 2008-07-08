@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.56 2008/07/08 10:16:17 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.57 2008/07/08 12:57:54 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1229,7 +1229,8 @@ class personnel_management extends class_base
 		$o = $arr["obj_inst"];
 
 		$r = &$arr["request"];
-		$odl_prms_immutable = array(
+		//$odl_prms_immutable = array(
+		$odl_prms = array(
 			"class_id" => CL_CRM_PERSON,
 			"lang_id" => array(),
 			"site_id" => array(),
@@ -1637,6 +1638,7 @@ class personnel_management extends class_base
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
 		}
+		/*
 		if(!$_GET["kaarel"])
 		{
 			// Too many tables. MySQL can only use 31 tables in a join
@@ -1679,6 +1681,7 @@ class personnel_management extends class_base
 		{
 			return array();
 		}
+		*/
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
