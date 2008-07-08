@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.45 2008/07/08 19:05:03 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.46 2008/07/08 19:10:32 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -64,7 +64,7 @@
 	@groupinfo tags caption="Tagid"
 	@default group=tags
 	
-		@property workes_tag type=textbox default=tootaja
+		@property worker_tag type=textbox default=tootaja
 		@caption T&ouml;&ouml;taja tag XMLis
 	
 		@property workers_tag type=textbox default=tootajad
@@ -402,10 +402,10 @@ class persona_import extends class_base
 		$obj->save();
 		aw_restore_acl();
 
-		$worker_tag = strlen($obj->prop("worker_tag")) > 0 ? $obj->prop("") : "TOOTAJA";
-		$workers_tag = strlen($obj->prop("workers_tag")) > 0 ? $obj->prop("") : "TOOTAJAD";
+		$worker_tag = strlen($obj->prop("worker_tag")) > 0 ? strtoupper($obj->prop("worker_tag")) : "TOOTAJA";
+		$workers_tag = strlen($obj->prop("workers_tag")) > 0 ? strtoupper($obj->prop("workers_tag")) : "TOOTAJAD";
 
-		$interesting_containers = array(strtoupper($workers_tag),"PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
+		$interesting_containers = array($workers_tag,"PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
 
 		$w_open = false;
 		$tmp = array();

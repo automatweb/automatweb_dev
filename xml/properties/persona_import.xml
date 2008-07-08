@@ -139,7 +139,7 @@
             <caption>Struktuuri&amp;amp;uuml;ksuste XML fail</caption>
       </property>
       <property>
-            <name>workes_tag</name>
+            <name>worker_tag</name>
             <table>objects</table>
             <group>tags</group>
             <field>meta</field>
