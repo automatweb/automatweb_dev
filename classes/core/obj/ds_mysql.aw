@@ -3661,7 +3661,7 @@ enter_function("ds_mysql::optimize_joins");
 		
 			if ($joined_table !== null)
 			{
-				if (isset($this->search_tables_used[trim($joined_table)]))
+				if (isset($this->search_tables_used[trim($joined_table)]) || $joined_table == "documents")
 				{
 					$rs .= $join_line." ";
 				}
