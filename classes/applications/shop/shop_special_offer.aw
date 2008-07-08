@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.15 2008/07/04 08:27:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.16 2008/07/08 13:01:00 tarvo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -363,6 +363,7 @@ class shop_special_offer extends class_base
 		{
 			case "products_table":
 				$this->_add_new_product_to_request($arr);
+				$this->_reset_product_rels($arr["obj_inst"], $arr["request"]["prodat"]);
 				$arr["obj_inst"]->set_meta("prodat", $arr["request"]["prodat"]);
 				break;
 			case "product_groups_tbl":
@@ -588,11 +589,18 @@ class shop_special_offer extends class_base
 			}
 			$wh = obj($wh);
 			$fld = $wh->prop("conf.prod_fld");
-			$prod = obj();
-			$prod->set_name($arr["request"]["new_product"]["product"]);
-			$prod->set_class_id(CL_SHOP_PRODUCT);
-			$prod->set_parent($fld);
-			$prod->save();
+			if($this->can("view", $arr["request"]["new_product"]["product"]))
+			{
+				$prod = obj($arr["request"]["new_product"]["product"]);
+			}
+			else
+			{
+				$prod = obj();
+				$prod->set_name($arr["request"]["new_product"]["product"]);
+				$prod->set_class_id(CL_SHOP_PRODUCT);
+				$prod->set_parent($fld);
+				$prod->save();
+			}
 			$arr["request"]["new_product"]["product"] = $prod->id();
 
 			if(!is_array($arr["request"]["prodat"]))
@@ -1017,6 +1025,24 @@ class shop_special_offer extends class_base
 		return $prod->meta("cur_prices");
 	}
 
+	private function _reset_product_rels(&$obj_inst, $data = false)
+	{
+		// we also have to connect dha prouct to special offer
+		// this don't make duplicate connections!!
+		foreach($obj_inst->connections_from(array("type" => "RELTYPE_PRODUCT")) as $conn)
+		{
+			$conn->delete();
+		}
+		$data = $data?$data:$obj_inst->meta("prodat");
+		foreach($data as $dat)
+		{
+			$obj_inst->connect(array(
+				"type" => "RELTYPE_PRODUCT",
+				"to" => $dat["product"],
+			));
+		}
+	}
+
 	/**
 		@attrib name=delete_rels params=name all_args=1
 	**/
@@ -1040,6 +1066,10 @@ class shop_special_offer extends class_base
 						unset($d[--$selected]);
 					}
 					$o->set_meta($meta, $d);
+					if($sel == "products_sel")
+					{
+						$this->_reset_product_rels(&$o, false);
+					}
 					$o->save();
 				}
 			}
