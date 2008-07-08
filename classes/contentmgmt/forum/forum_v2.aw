@@ -173,8 +173,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@groupinfo topic_form_fields caption="Teema vormi v&auml;ljad" parent=look
 	@default group=topic_form_fields
 		
-                @property topic_form_fields type=chooser multiple=1 orient=vertical
-                @caption Teema lisamise vormi v&auml;ljad
+		@property topic_form_fields type=chooser multiple=1 orient=vertical
+		@caption Teema lisamise vormi v&auml;ljad
 
 @groupinfo settings caption="Sisu seaded"
 
@@ -356,20 +356,20 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		lc_site_load("forum",&$this);
 
 		$this->comment_fields = array(
-                        "name" => t("Pealkiri"),
-                        "uname" => t("Autor"),
-                        "pname" => t("Autori nimi"),
-                        "uemail" => t("Autori e-mail"),
-                        "commtext" => t("Kommentaar"),
-                );
+			"name" => t("Pealkiri"),
+			"uname" => t("Autor"),
+			"pname" => t("Autori nimi"),
+			"uemail" => t("Autori e-mail"),
+			"commtext" => t("Kommentaar"),
+		);
 
 		$this->topic_fields = array(
-                        "name" => t("Pealkiri"),
-                        "author_name" => t("Autori nimi"),
-                        "author_email" => t("Autori e-mail"),
-                        "answers_to_mail" => t("Vastused e-mailile"),
-                        "comment" => t("Kommentaar"),
-                );
+			"name" => t("Pealkiri"),
+			"author_name" => t("Autori nimi"),
+			"author_email" => t("Autori e-mail"),
+			"answers_to_mail" => t("Vastused e-mailile"),
+			"comment" => t("Kommentaar"),
+		);
 
 	}
 
@@ -2840,9 +2840,9 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		));
 
 		$cfgu = get_instance("cfg/cfgutils");
-                $props = $cfgu->load_class_properties(array(
-                        "clid" => CL_MSGBOARD_TOPIC,
-                ));
+		$props = $cfgu->load_class_properties(array(
+			"clid" => CL_MSGBOARD_TOPIC,
+		));
 
 //		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
 		$use_props = $this->obj_inst->prop('topic_form_fields');
