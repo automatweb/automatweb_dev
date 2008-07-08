@@ -5735,7 +5735,7 @@ class crm_company extends class_base
 			$task_i = get_instance(CL_TASK);
 			if(sizeof($arr["sel"]) > 1)
 			{
-				continue;
+			//	continue;
 			}
 			foreach($task_i->get_task_bill_rows($task_o, true, $bill->id()) as $row)
 			{
