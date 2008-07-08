@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.44 2008/06/30 13:24:55 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.45 2008/07/08 19:05:03 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -19,46 +19,61 @@
 @property show_xml type=text store=no
 @caption XML
 
+@groupinfo settings caption="Seaded"
 @default group=settings
 
-@property ftp_settings type=releditor reltype=RELTYPE_DATA_SERVER rel_id=first props=server,username,password
-@caption FTP seaded
+	@groupinfo genset caption="&Uuml;ldised seaded"
+	@default group=genset	
 
-@property xml_folder type=textbox
-@caption XML faili asukoht serveris
+		@property xml_link type=relpicker reltype=RELTYPE_LINK_REL
+		@caption Impordi objekt
 
-@property xml_filename type=textbox
-@caption XML faili nimi
+		@property xml_image_folder type=textbox
+		@caption Pildifailide kataloog (kui on eraldi)
 
-@property xml_personnel_file type=textbox
-@caption T&ouml;&ouml;tajate XML fail
+		@property aw_image_folder type=relpicker reltype=RELTYPE_FOLDER
+		@caption Pildiobjektide kataloog
 
-@property xml_education_file type=textbox
-@caption Haridusk&auml;igu XML fail
+		@property crm_db_id type=relpicker reltype=RELTYPE_CRM_DB
+		@caption Kasutatav kliendibaas
 
-@property xml_work_relations_ending_file type=textbox
-@caption T&ouml;&ouml;suhete peatumise XML fail
+	@groupinfo ftp caption="FTP seaded"
+	@default group=ftp
 
-@property xml_structure_file type=textbox
-@caption Struktuuri&uuml;ksuste XML fail
+		@property ftp_settings type=releditor reltype=RELTYPE_DATA_SERVER rel_id=first props=server,username,password
+		@caption FTP seaded
 
-@property xml_link type=relpicker reltype=RELTYPE_LINK_REL
-@caption Impordi objekt
+		@property xml_folder type=textbox
+		@caption XML faili asukoht serveris
 
-@property xml_image_folder type=textbox
-@caption Pildifailide kataloog (kui on eraldi)
+		@property xml_filename type=textbox
+		@caption XML faili nimi
 
-@property aw_image_folder type=relpicker reltype=RELTYPE_FOLDER
-@caption Pildiobjektide kataloog
+		@property xml_personnel_file type=textbox
+		@caption T&ouml;&ouml;tajate XML fail
 
-@property crm_db_id type=relpicker reltype=RELTYPE_CRM_DB
-@caption Kasutatav kliendibaas
+		@property xml_education_file type=textbox
+		@caption Haridusk&auml;igu XML fail
 
-@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb group=autoimport rel_id=first
-@caption Automaatse impordi seadistamine
+		@property xml_work_relations_ending_file type=textbox
+		@caption T&ouml;&ouml;suhete peatumise XML fail
 
-@groupinfo settings caption="Seaded"
+		@property xml_structure_file type=textbox
+		@caption Struktuuri&uuml;ksuste XML fail
+
+	@groupinfo tags caption="Tagid"
+	@default group=tags
+	
+		@property workes_tag type=textbox default=tootaja
+		@caption T&ouml;&ouml;taja tag XMLis
+	
+		@property workers_tag type=textbox default=tootajad
+		@caption T&ouml;&ouml;tajate tag XMLis
+
 @groupinfo autoimport caption="Automaatne import"
+
+	@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb group=autoimport rel_id=first
+	@caption Automaatse impordi seadistamine
 
 @reltype CRM_DB value=1 clid=CL_CRM_DB
 @caption kliendibaas
@@ -387,7 +402,10 @@ class persona_import extends class_base
 		$obj->save();
 		aw_restore_acl();
 
-		$interesting_containers = array("TOOTAJAD","PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
+		$worker_tag = strlen($obj->prop("worker_tag")) > 0 ? $obj->prop("") : "TOOTAJA";
+		$workers_tag = strlen($obj->prop("workers_tag")) > 0 ? $obj->prop("") : "TOOTAJAD";
+
+		$interesting_containers = array(strtoupper($workers_tag),"PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
 
 		$w_open = false;
 		$tmp = array();
@@ -426,7 +444,7 @@ class persona_import extends class_base
 			};
 
 
-			if ($target && ("TOOTAJA" == $val["tag"] || "HARIDUSKAIK" == $val["tag"] || "TOOSUHTE_PEATUMINE" == $val["tag"]))
+			if ($target && ($worker_tag == $val["tag"] || "HARIDUSKAIK" == $val["tag"] || "TOOSUHTE_PEATUMINE" == $val["tag"]))
 			{
 				if ("open" == $val["type"])
 				{
@@ -466,7 +484,7 @@ class persona_import extends class_base
 		{
 			// fill the array with pairs of ext_id => person_done pairs
 			// at the start everyone gets flagged with 0
-			foreach($data["TOOTAJAD"] as $worker)
+			foreach($data[$workers_tag] as $worker)
 			{
 				$ext_id = $worker["TOOTAJA_ID"];
 				$persona_to_process[$ext_id] = 0;
@@ -839,7 +857,7 @@ class persona_import extends class_base
 		$time_limit = 90;
 
 		$aw_timer->start("personimport");
-		foreach($data["TOOTAJAD"] as $worker)
+		foreach($data[$workers_tag] as $worker)
 		{
 			$ext_id = $worker["TOOTAJA_ID"];
 			$worker["EESNIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["EESNIMI"]);
