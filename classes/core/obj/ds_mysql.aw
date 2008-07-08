@@ -1267,6 +1267,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->done_ot_js = array();
 		$this->joins = array();
 
+		// this contains the full names of all the tables used in any part of the sql ( fetch, join, where) so that we ca use this to leave out unused tables from the resulting query. 
+		// this could of course be done during query construction, but it is much much harder to do it there, so we do it as a post-process step. 
+		$this->search_tables_used = array("objects" => 1);
+
 		$this->has_data_table_filter = false;
 		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func) = $this->_get_search_fetch($to_fetch, $params);
 
@@ -1288,6 +1292,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		$joins = $this->_get_joins($params);
+
+		// now, optimize out the joins that are not needed
+		$joins = $this->_optimize_joins($joins, $this->search_tables_used);
 
 		$ret = array();
 		if ($where != "")
@@ -1543,6 +1550,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$is_done = true;
 				}
+				$this->_add_s($tbl);
 			}
 
 			if (!$is_done && isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
@@ -1566,6 +1574,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					));
 				}
 				$this->used_tables[$tbl] = $tbl;
+				$this->_add_s($tbl);
 			}
 
 			if ($tbl != "objects")
@@ -1589,6 +1598,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					"name" => "aliases_".$key,
 					"on" => $tbl.".".$idx." = "."aliases_".$key.".source AND aliases_".$key.".reltype=".$GLOBALS["relinfo"][$this->class_id][$this->properties[$key]["reltype"]]["value"]
 				);
+				$this->_add_s("aliases_".$key);
 			}
 
 			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect" && $fld == "meta")
@@ -1597,6 +1607,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$tbl = "aliases_".$key;
 				$fld = "target";
 				$tf = $tbl.".`".$fld."`";
+				$this->_add_s($tbl);
 			}
 
 			if (is_array($val) && ((isset($this->properties[$key]["method"]) && $this->properties[$key]["method"] == "bitmask") || $key == "flags"))
@@ -2211,7 +2222,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$str = " LEFT JOIN $tbl ".$tbl."_".$clid." ON ".$tbl."_".$clid.".".$tbldat["index"]." = ".$tbldat["master_table"].".".$tbldat["master_index"]." ";
 			if (!in_array($str, $this->joins))
 			{
-				$this->joins[] = $str;
+				//$this->joins[] = $str;
+				$this->_add_join($str);
+				$this->_add_s($tbldat["master_table"]);
 			}
 		}
 
@@ -2244,26 +2257,33 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				if ($tmp_prev["via"] == "rel")
 				{
-					$str .= " objects__".$tmp_prev["from_class"]."_".$join["from_class"]."_".$tmp_prev["reltype"].".oid ";
+					$_tb_name = "objects__".$tmp_prev["from_class"]."_".$join["from_class"]."_".$tmp_prev["reltype"];
+					$str .= " ".$_tb_name.".oid ";
+					$this->_add_s($_tb_name);
 				}
 				else
 				{
-					$str .= " objects_".$join["from_class"].".oid ";
+					$_tb_name = "objects_".$join["from_class"];
+					$str .= " ".$_tb_name.".oid ";
+					$this->_add_s($_tb_name);
 				}
 
 				if ($join["reltype"])
 				{
 					$str .= " AND ".$cur_al_name.".reltype = ".$join["reltype"];
 				}
-				$this->joins[] = $str;
+				$this->_add_join($str);
+//				$this->joins[] = $str;
 
 				$tmp_cur_obj_name = "objects_".$tmp_prev["reltype"]."_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"];
 
 				$str  = " LEFT JOIN objects $tmp_cur_obj_name  ON ".$cur_al_name.".target = ";
 				$str .= " ".$tmp_cur_obj_name.".oid ";
 				$prev_clid = $join["to_class"];
+				$this->_add_s($cur_al_name);
 
-				$this->joins[] = $str;
+				$this->_add_join($str);
+//				$this->joins[] = $str;
 
 				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
 
@@ -2278,7 +2298,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						if (!isset($done_ot_js[$tbl_r]))
 						{
 							$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
-							$this->joins[] = $str;
+							$this->_add_s($objt_name);
+							$this->_add_join($str);
+//							$this->joins[] = $str;
 							$done_ot_js[$tbl_r] = 1;
 							$prev_t = $tbl;
 						}
@@ -2292,7 +2314,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						if (!isset($done_ot_js[$o_tbl]))
 						{
 							$str = " LEFT JOIN objects $o_tbl ON ".$o_tbl.".".$o_field." = ".$tbl.".".$field;
-							$this->joins[] = $str;
+							$this->_add_s($tbl);
+							$this->_add_join($str);
+//							$this->joins[] = $str;
 						}
 					}
 				}
@@ -2333,7 +2357,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 
 					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".target ";
-					$this->joins[] = $str;
+					$this->_add_s($prev_t);
+					$this->_add_join($str);
+//					$this->joins[] = $str;
 					$ret = array(
 						$tbl,
 						$join["field"],
@@ -2372,7 +2398,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$objt_name = "objects_".$join["from_class"]."_".$join["field"];
 				if (!isset($done_ot_js[$objt_name]))
 				{
-					$this->joins[] = " LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ";
+					$this->_add_join(" LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ");
+//					$this->joins[] = " LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ";
+					$this->_add_s($prev_t);
 					$done_ot_js[$objt_name] = 1;
 				}
 
@@ -2388,7 +2416,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						if (!isset($done_ot_js[$tbl_r]))
 						{
 							$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
-							$this->joins[] = $str;
+							$this->_add_s($objt_name);
+							$this->_add_join($str);
+//							$this->joins[] = $str;
 							$done_ot_js[$tbl_r] = 1;
 							$prev_t = $tbl;
 						}
@@ -2402,7 +2432,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						if (!isset($done_ot_js[$o_tbl]))
 						{
 							$str = " LEFT JOIN objects $o_tbl ON ".$o_tbl.".".$o_field." = ".$tbl.".".$field;
-							$this->joins[] = $str;
+							$this->_add_s($tbl);
+							$this->_add_join($str);
+//							$this->joins[] = $str;
 						}
 					}
 				}
@@ -2800,6 +2832,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if (isset($p[$param]))
 					{
 						$param = $p[$param]["table"].".`".$p[$param]["field"]."`";
+						$this->_add_s($p[$param]["table"]);
 					}
 					switch($resn->sql_func)
 					{
@@ -2852,6 +2885,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					else
 					{
 						$serialized_fields[$p[$pn]["table"].".`".$p[$pn]["field"]."`"][] = substr($pn, 5);
+						$this->_add_s($p[$pn]["table"]);
 					}
 				}
 				else
@@ -2862,15 +2896,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						$filter[$pn] = new obj_predicate_anything();
 						$ret[$pn] = " aliases_".$pn.".target AS $resn ";
+						$this->_add_s("aliases_".$pn);
 					}
 					else
 					{
-						$ret[$pn] = " aliases_".$clid."_".$GLOBALS["relinfo"][$clid][$p[$pn]["reltype"]]["value"].".target AS $resn ";
+						$tbl_name = "aliases_".$clid."_".$GLOBALS["relinfo"][$clid][$p[$pn]["reltype"]]["value"];
+						$ret[$pn] = " ".$tbl_name.".target AS $resn ";
+						$this->_add_s($tbl_name);
 					}
 				}
 				else
 				{
 					$ret[$pn] = " ".$p[$pn]["table"].".`".$p[$pn]["field"]."` AS $resn ";
+					$this->_add_s($p[$pn]["table"]);
 				}
 			}
 		}
@@ -3586,6 +3624,51 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$str[] = " $tf AS `$as` ";
 		}
 		return "objects.oid AS oid, objects.parent AS parent, objects.acldata AS acldata, ".join(",", $str);
+	}
+
+	private function _add_s($tbl)
+	{
+		$this->search_tables_used[$tbl] = dbg::short_backtrace();
+	}
+
+	private function _add_join($str)
+	{
+		$this->joins[] = $str;
+	}
+
+	private function _optimize_joins($j, $used)
+	{
+enter_function("ds_mysql::optimize_joins");
+		$j = trim(substr($j, strlen("objects")));
+		$js = explode("\n", str_replace("LEFT JOIN", "\nLEFT JOIN", $j));
+		$rs = "objects ";
+		foreach($js as $join_line)
+		{
+			if (trim($join_line) == "")
+			{
+				continue;
+			}
+			$joined_table = null;
+			if (preg_match("/LEFT JOIN (.*) (.*) ON (.*)\.(.*) = (.*)\.(\S*)/imsU", $join_line, $mt))
+			{
+				$joined_table = $mt[2];
+			}
+			else	// no rename table
+			if (preg_match("/LEFT JOIN (.*) ON (.*)\.(.*) = (.*)\.(\S+?)/imsU", $join_line, $mt))
+			{
+				$joined_table = $mt[1];
+			}
+		
+			if ($joined_table !== null)
+			{
+				if (isset($this->search_tables_used[trim($joined_table)]))
+				{
+					$rs .= $join_line." ";
+				}
+			}
+		}
+exit_function("ds_mysql::optimize_joins");
+		return $rs;
 	}
 }
 
