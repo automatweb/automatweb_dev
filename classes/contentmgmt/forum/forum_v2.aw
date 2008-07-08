@@ -2822,7 +2822,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
 		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
-		$use_props = array("name","answers_to_mail","comment");
 
 		// if user is logged in,
 		$uid = aw_global_get("uid");
