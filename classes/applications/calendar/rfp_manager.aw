@@ -1,13 +1,16 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.22 2008/06/30 13:44:01 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.23 2008/07/08 09:02:11 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
-@classinfo syslog_type=ST_RFP_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
+@classinfo syslog_type=ST_RFP_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo allow_rte=2
 
 @default table=objects
 @default group=general
+
+@property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY store=connect
+@caption Vaikevaluuta
 
 @property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
 @caption Edasisuunamisdokument
@@ -58,6 +61,15 @@
 
 	@property packages_tbl type=table store=no no_caption=1
 
+@groupinfo terms caption="Tingimused"
+@default group=terms
+
+	@property cancel_and_payment_terms type=textarea richtext=1 table=objects field=meta method=serialize
+	@caption Konvererntside annuleerimis- ja maksetingimused
+
+	@property accomondation_terms type=textarea richtext=1 table=objects field=meta method=serialize
+	@caption Majutuse annuleerimis- ja maksetingimused
+
 @reltype REDIR_DOC value=1 clid=CL_DOCUMENT
 @caption Konverentsiplaneerija
 
@@ -72,6 +84,10 @@
 
 @reltype CATERING_ROOM_FOLDER value=5 clid=CL_MENU
 @caption Toitluste ruumide kaust
+
+@reltype DEFAULT_CURRENCY clid=CL_CURRENCY value=6
+@caption RFP vaikevaluuta
+
 */
 
 class rfp_manager extends class_base
@@ -91,6 +107,20 @@ class rfp_manager extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "default_currency":
+				if($prop["value"] == "")
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CURRENCY,
+						"lang_id" => array(),
+					));
+					$cur = reset($ol->arr());
+					$prop["options"] = array(
+						$cur->id() => $cur->name(),
+					);
+					$prop["selected"] = $cur->id();
+				}
+				break;
 			case "s_name":
 			case "s_org":
 			case "s_contact":

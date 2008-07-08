@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.26 2008/07/03 11:35:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.27 2008/07/08 09:02:11 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
-@classinfo syslog_type=ST_RFP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
+@classinfo syslog_type=ST_RFP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo allow_rte=2
 
 @tableinfo rfp index=aw_oid master_index=brother_of master_table=objects
 
@@ -135,10 +135,10 @@
 		@groupinfo main_fun caption="P&otilde;hi&uuml;ritus" parent=data
 		@default group=main_fun
 
-			@property data_mf_table type=textbox no_caption=1
+			@property data_mf_table type=textbox
 			@caption Pea&uuml;ritus
 
-			@property data_mf_event_type type=relpicker reltype=RELTYPE_EVENT_TYPE
+			@property data_mf_event_type type=relpicker reltype=RELTYPE_EVENT_TYPE store=connect
 			@caption &Uuml;rituse t&uuml;&uuml;p
 
 			@property data_mf_table_form type=relpicker reltype=RELTYPE_TABLES
@@ -247,11 +247,23 @@
 			@property files_tbl type=table store=no no_caption=1
 
 
+	@groupinfo terms caption="Tingimused"
+	@default group=terms
+
+		@property cancel_and_payment_terms type=textarea richtext=1
+		@caption Konvererntside annuleerimis- ja maksetingimused
+
+		@property accomondation_terms type=textarea richtext=1
+		@caption Majutuse annuleerimis- ja maksetingimused
 
 	@groupinfo final_info caption="Tellimuskirjeldus"
 		
 		@groupinfo final_general caption="&Uuml;ldine" parent=final_info
 		@default group=final_general
+
+			@property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY store=connect
+			@caption Vaikevaluuta
+
 			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect
 			@caption Ruumid
 			@comment Konverentsi jaoks kasutatavad ruumid
@@ -375,6 +387,9 @@
 
 @reltype CATERING_RESERVATION clid=CL_RESERVATION value=10
 @caption Toitlustuse broneering
+
+@reltype DEFAULT_CURRENCY clid=CL_CURRENCY value=11
+@caption Arvutuste vaikevaluuta
 */
 
 class rfp extends class_base
@@ -433,6 +448,29 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "cancel_and_payment_terms":
+			case "accomondation_terms":
+				if($prop["value"] == "")
+				{
+					$inst = get_instance(CL_RFP_MANAGER);
+					$rfpm = $inst->get_sysdefault();
+					$rfpmo = obj($rfpm);
+					$prop["value"] = $rfpmo->prop($prop["name"]);
+				}
+				break;
+			case "default_currency":
+				if($prop["value"] == "")
+				{
+					$inst = get_instance(CL_RFP_MANAGER);
+					$rfpm = $inst->get_sysdefault();
+					$rfpmo = obj($rfpm);
+					$cur = obj($rfpmo->prop($prop["name"]));
+					$prop["options"] = array(
+						$cur->id() => $cur->name(),
+					);
+					$prop["selected"] = $cur->id();
+				}
+			break;
 			case "final_rooms":
 			case "final_catering_rooms":
 				$prop["selected"] = $arr["obj_inst"]->prop($prop["name"]);
@@ -608,6 +646,7 @@ class rfp extends class_base
 						"class" => "reservation",
 						"action" => "change",
 						"id" => $bron,
+						"default_currency" => $arr["obj_inst"]->prop("default_currency"),
 					),
 					"groupinfo" => array(),
 					"prop" => array(
@@ -674,7 +713,9 @@ class rfp extends class_base
 				break;
 
 			case "data_mf_event_type":
-				$prop["value"] = aw_unserialize($prop["value"]);
+				// wtff???
+				$prop["selected"] = $prop["value"];
+				//$prop["value"] = aw_unserialize($prop["value"]);
 			/*case "data_mf_catering_type":
 				$prop["value"] = ($prop["value"]["radio"] == 1)?$this->_gen_prop_autom_value($prop["value"]["select"]):$prop["value"]["text"];
 				break;*/
@@ -808,11 +849,6 @@ class rfp extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
-			"name" => "reservation",
-			"caption" => t("Broneering"),
-			"chgbgcolor" => "split",
-		));
-		$t->define_field(array(
 			"name" => "resource",
 			"caption" => t("Ressurss"),
 			"chgbgcolor" => "split",
@@ -848,6 +884,10 @@ class rfp extends class_base
 			"name" => "time",
 			"caption" => t("Aeg"),
 			"chgbgcolor" => "split",
+		));
+
+		$t->set_rgroupby(array(
+			"reservation" => "reservation",
 		));
 
 	}
@@ -898,20 +938,6 @@ class rfp extends class_base
 			$reservation_room = $res->prop("resource");
 			$room_inst = get_instance(CL_ROOM);
 			$room_resources = $room_inst->get_room_resources($reservation_room);
-
-			// special row for every resevation
-			$data = array(
-				"price" => $resources_price[$k],
-				"reservation" => html::obj_change_url($c->to()),
-				"split" => "#CCCCCC",
-				"discount" => $resources_discount,
-			);
-			foreach($resources_calculated_price_without_special_discount as $k => $price)
-			{
-				$price = $price;
-				$data["price[".$k."]"] = $price;
-			}
-			$t->define_data($data);
 			// rows for every resource in reservations
 			foreach($room_resources as $k => $resource)
 			{
@@ -920,10 +946,18 @@ class rfp extends class_base
 					"room_resource" => $k,
 					"amount" => $resources_data[$k]["count"],
 					"resource" => html::obj_change_url($resource),
-					"reservation" => $res->name(),
+					"reservation" => html::obj_change_url($res),
 					"discount" => $resources_data[$k]["discount"],
 					"comment" => $resources_data[$k]["comment"],
-					"time" => $resources_data[$k]["time"],
+					"time" => date("H:i", $resources_data[$k]["start1"]).t(" - ").date("H:i", $resources_data[$k]["end"]),
+					/*
+					"time" => $this->_gen_time_form(array(
+						"varname" => "time[".$k."]",
+						"start1" => $resources_data[$k]["start1"],
+						"end" => $resources_data[$k]["end"],
+					)),
+					 */
+					//$resources_data[$k]["time"],
 				);
 
 				foreach($resources_data[$k]["prices"] as $oid => $price)
@@ -939,6 +973,22 @@ class rfp extends class_base
 			{
 				$total_price[$cur] += $resources_calculated_price[$cur];
 			}
+
+			// special row for every resevation
+			$data = array(
+				"price" => $resources_price[$k],
+				"reservation" => html::obj_change_url($c->to()),
+				"resource" => t("Kokku"),
+				//"split" => "#CCCCCC",
+				"discount" => $resources_discount,
+			);
+			foreach($resources_calculated_price_without_special_discount as $k => $price)
+			{
+				$price = $price;
+				$data["price[".$k."]"] = $price;
+			}
+			$t->define_data($data);
+
 		}
 		$t->set_sortable(false);
 		
@@ -1020,50 +1070,63 @@ class rfp extends class_base
 		}
 		classload("vcl/table");
 		$t = new aw_table;
+		$t->set_sortable(false);
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "discount",
 			"caption" => t("Soodus"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Summa"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Aeg"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "var",
 			"caption" => t("Nimetus"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "room",
 			"caption" => t("Ruum"),
 			"align" => "center",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "comment",
 			"caption" => t("Kommentaar"),
 			"align" => "center",
+			"chgbgcolor" => "color",
+		));
+		$t->set_rgroupby(array(
+			"reserv_group" => "reserv_group",
 		));
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_RESERVATION",
@@ -1075,9 +1138,11 @@ class rfp extends class_base
 			if($this->can("view", $c->prop("to")) && in_array($c->prop("to.parent"), $arr["obj_inst"]->prop("final_catering_rooms"))) // that parent & catering is fishy
 			{
 				$rv = $c->to();
+				$rvo = obj($c->to());
 				$prod_list = $rvi->get_room_products($rv->prop("resource"));
 				$amount = $rv->meta("amount");
 				$discount = $rvi->get_product_discount($rv->id());
+
 				foreach($prod_list->arr() as $prod)
 				{
 					if($count = $amount[$prod->id()])
@@ -1091,10 +1156,18 @@ class rfp extends class_base
 						$times = array();
 						if($this->can("view", $prvid))
 						{
-							$prv = obj($prvid);
-							$times = $this->_get_rv_times($prv);
-							$room = $prv->prop("resource");
+							$take_times = $prvid;
 						}
+						else
+						{
+							$take_times = $rv;
+						}
+						$prv = obj($take_times);
+						$elem_id = $prod->id().".".$rv->id();
+						$res_start = $prods[$elem_id]["start1"]?$prods[$elem_id]["start1"]:$prv->prop("start1");
+						$res_end = $prods[$elem_id]["end"]?$prods[$elem_id]["end"]:$prv->prop("end");
+
+						$room = $prv->prop("resource");
 						$data = array(
 							"name" => $prod->name(),
 							"price" => html::hidden(array(
@@ -1113,28 +1186,18 @@ class rfp extends class_base
 								"name" => "prods[".$prod->id().".".$rv->id()."][sum]",
 								"value" => $prod_sum,
 							)).$prod_sum,
-							"time" => html::textbox(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][time_from_h]",
-								"value" => $times["time_from_h"],
-								"size" => 1,
-							)).":".html::textbox(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][time_from_m]",
-								"value" => $times["time_from_m"],
-								"size" => 1,
-							))."<br />".t("kuni")."<br />".html::textbox(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][time_to_h]",
-								"value" => $times["time_to_h"],
-								"size" => 1,
-							)).":".html::textbox(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][time_to_m]",
-								"value" => $times["time_to_m"],
-								"size" => 1,
+							"time" => $this->gen_time_form(array(
+								"varname" => "prods[".$elem_id."]",
+								"start1" => $res_start,
+								"end" => $res_end,
 							)),
 							"room" => html::select(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][room]",
 								"width" => 70,
-								"value" => $room,
+								//"value" => $room,
+								//"selected" => $room,
 								"options" => $rooms,
+								"selected" => ($_t = $prods[$prod->id().".".$rv->id()]["room"])?$_t:$room,
 							)),
 							"var" => html::select(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][var]",
@@ -1149,8 +1212,9 @@ class rfp extends class_base
 								"rows" => 2,
 							)).html::hidden(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][bronid]",
-								"value" => $prods[$prod->id().".".$rv->id()]["bronid"],
+								"value" => strlen($_t = $prods[$prod->id().".".$rv->id()]["bronid"])?$_t:$rv,
 							)),
+							"reserv_group" => html::obj_change_url($rvo),
 						);
 						$t->define_data($data);
 					}
@@ -1160,34 +1224,21 @@ class rfp extends class_base
 		return $t->draw();
 	}
 
-	function _get_rv_times($rvo)
-	{
-		$start = $rvo->prop("start1");
-		$end = $rvo->prop("end");
-		$result = array(
-			"time_from_h" => date('H', $start),
-			"time_from_m" => date('i', $start),
-			"time_to_h" => date('H', $end),
-			"time_to_m" => date('i', $end),
-		);
-		return $result;
-	}
-
 	function set_products_tbl($arr)
 	{
 		$prods = $arr["request"]["prods"];
 		if(count($prods))
 		{
 			$date = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
-			if($date > 1)
-			{
+			//if($date > 1)
+			//{
 				foreach($prods as $tmp1 => $data)
 				{
 					$tmp2 = explode(".", $tmp1);
-					if($data["room"] && $data["time_to_h"] && $data["time_to_m"] && $data["time_from_h"] && $data["time_from_m"])
+					if($data["room"] && strlen($data["to"]["hour"]) && strlen($data["to"]["minute"]) && strlen($data["from"]["hour"]) && strlen($data["from"]["minute"]))
 					{
-						$start1 = mktime($data["time_from_h"], $data["time_from_m"], 0, date('m', $date), date('d', $date), date('Y', $date));
-						$end = mktime($data["time_to_h"], $data["time_to_m"], 0, date('m', $date), date('d', $date), date('Y', $date));
+						$start1 = mktime($data["from"]["hour"], $data["from"]["minute"], 0, date('m', $date), date('d', $date), date('Y', $date));
+						$end = mktime($data["to"]["hour"], $data["to"]["minute"], 0, date('m', $date), date('d', $date), date('Y', $date));
 						if(!$data["bronid"])
 						{
 							$bron = obj();
@@ -1231,9 +1282,11 @@ class rfp extends class_base
 							);
 							$bri->set_products_info($bron->id(), $params);
 						}
+						$prods[$tmp1]["start1"] = $start1;
+						$prods[$tmp1]["end"] = $end;
 					}
 				}
-			}
+			//}
 			$arr["obj_inst"]->set_meta("prods", $prods);
 			$arr["obj_inst"]->save();
 		}
@@ -1364,11 +1417,13 @@ class rfp extends class_base
 				"name" => "housing[".$id."][datefrom]",
 				"value" => $room["datefrom"],
 				"size" => 12,
+				"month_as_numbers" => true,
 			)),
 			"dateto" => html::date_select(array(
 				"name" => "housing[".$id."][dateto]",
 				"value" => $room["dateto"],
 				"size" => 12,
+				"month_as_numbers" => true,
 			)),
 			"type" => html::select(array(
 				"name" => "housing[".$id."][type]",
@@ -1535,8 +1590,10 @@ class rfp extends class_base
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_RESERVATION",
 		));
+		$reservated_rooms = $arr["obj_inst"]->prop("final_rooms");
 		$brons = "";
-		$currency = 745;
+		//$currency = 745;
+		$currency = $arr["obj_inst"]->prop("default_currency");
 		$resources_total = 0;
 		$colspan = 6;
 		if($package)
@@ -1559,6 +1616,10 @@ class rfp extends class_base
 		foreach($conn as $c)
 		{
 			$rv = obj($c->prop("to"));
+			if(!in_array($rv->prop("resource"), $reservated_rooms))
+			{
+				continue;
+			}
 			$start = $rv->prop("start1");
 			$end = $rv->prop("end");
 			$timefrom = date('H:i', $start);
@@ -1648,7 +1709,10 @@ class rfp extends class_base
 							"price" => $price,
 							"count" => $count,
 							"total" => $total,
-							"time" => $data["time"],
+							"from_hour" => date("H", $data["start1"]),
+							"from_minute" => date("i", $data["start1"]),
+							"to_hour" => date("H", $data["end"]),
+							"to_minute" => date("i", $data["end"]),
 							"comment" => $data["comment"],
 						);
 					}
@@ -1671,7 +1735,10 @@ class rfp extends class_base
 					"res_count" => $r["count"],
 					"res_price" => $r["price"],
 					"res_total" => $r["total"],
-					"res_time" => $r["time"],
+					"res_from_hour" => $r["from_hour"],
+					"res_from_minute" => $r["from_minute"],
+					"res_to_hour" => $r["to_hour"],
+					"res_to_minute" => $r["to_minute"],
 					"res_comment" => $r["comment"],
 				));
 				$res .= $this->parse("RESOURCE");
@@ -1701,7 +1768,10 @@ class rfp extends class_base
 					$varname = $var->name();
 				}
 				$this->vars(array(
-					"prod_time" => $prod["time"],
+					"prod_from_hour" => date("H", $prod["start1"]),
+					"prod_from_minute" => date("i", $prod["start1"]),
+					"prod_to_hour" => date("H", $prod["end"]),
+					"prod_to_minute" => date("i", $prod["end"]),
 					"prod_event" => $varname,
 					"prod_count" => $prod["amount"],
 					"prod_prod" => $po->name(),
@@ -1735,7 +1805,7 @@ class rfp extends class_base
 					"hs_rooms" => $rooms["rooms"],
 					"hs_people" => $rooms["people"],
 					"hs_price" => $rooms["price"],
-					"hs_discount" => $rooms["discount"],
+					"hs_discount" => strlen($rooms["discount"])?sprintf("%s %%", $rooms["discount"]):"-",
 					"hs_sum" => $rooms["sum"],
 				));
 				$hss .= $this->parse("ROOMS");
@@ -1750,6 +1820,8 @@ class rfp extends class_base
 		}
 		$totalprice = round($totalprice, -1);
 		$this->vars(array(
+			"cancel_and_payment_terms" => $arr["obj_inst"]->prop("cancel_and_payment_terms"),
+			"accomondation_terms" => $arr["obj_inst"]->prop("accomondation_terms"),
 			"BRON" => $brons,
 			"RESOURCES" => $res_sub,
 			"PRODUCTS" => $pd_sub,
@@ -1802,6 +1874,11 @@ class rfp extends class_base
 				
 				if(count($arr["request"]["resources_info"]) && $this->can("view", $arr["request"]["reservation_oid"]))
 				{
+					foreach($arr["request"]["resources_info"] as $k => $dat)
+					{
+						$arr["request"]["resources_info"][$k]["start1"] = mktime($dat["from"]["hour"], $dat["from"]["minute"], 0, 0, 0, 0);
+						$arr["request"]["resources_info"][$k]["end"] = mktime($dat["to"]["hour"], $dat["to"]["minute"], 0, 0, 0, 0);
+					}
 					$res->set_resources_data(array(
 						"reservation" => $arr["request"]["reservation_oid"],
 						"resources_info" => $arr["request"]["resources_info"],
@@ -2068,6 +2145,8 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("cancel_and_payment_terms", "text"),
+			array("accomondation_terms", "text"),
 			array("final_rooms", "text"),
 			array("final_catering_rooms", "text"),
 			array("final_theme", "varchar(255)"),
@@ -2184,6 +2263,29 @@ class rfp extends class_base
 				return true;
 			}
 		}
+	}
+
+	/**
+		@attirb api=1
+		@comment
+			generates time select form... resrvation class uses this
+	 **/
+	function gen_time_form($arr)
+	{
+		$ret = html::time_select(array(
+			"name" => $arr["varname"]."[from]",
+			"value" => array(
+				"hour" => date("H", $arr["start1"]),
+				"minute" => date("i", $arr["start1"]),
+			),
+		))."<br />".t("kuni")."<br />".html::time_select(array(
+			"name" => $arr["varname"]."[to]",
+			"value" => array(
+				"hour" => date("H", $arr["end"]),
+				"minute" => date("i", $arr["end"]),
+			),
+		));
+		return $ret;
 	}
 }
 ?>

@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>default_currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_CURRENCY</reltype>
+            <store>connect</store>
+            <field>default_currency</field>
+            <caption>Vaikevaluuta</caption>
+      </property>
+      <property>
             <name>copy_redirect</name>
             <table>objects</table>
             <group>general</group>
@@ -170,6 +180,26 @@
             <no_caption>1</no_caption>
             <field>packages_tbl</field>
       </property>
+      <property>
+            <name>cancel_and_payment_terms</name>
+            <table>objects</table>
+            <group>terms</group>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konvererntside annuleerimis- ja maksetingimused</caption>
+      </property>
+      <property>
+            <name>accomondation_terms</name>
+            <table>objects</table>
+            <group>terms</group>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Majutuse annuleerimis- ja maksetingimused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_RFP_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -177,6 +207,7 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <maintainer>tarvo</maintainer>
+            <allow_rte>2</allow_rte>
       </classinfo>
       <groupinfo>
             <rfps>
@@ -193,6 +224,9 @@
             <packages>
                   <caption>Paketid</caption>
             </packages>
+            <terms>
+                  <caption>Tingimused</caption>
+            </terms>
       </groupinfo>
       <reltypes>
             <REDIR_DOC>
@@ -226,6 +260,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Toitluste ruumide kaust</caption>
             </CATERING_ROOM_FOLDER>
+            <DEFAULT_CURRENCY>
+                  <clid>CL_CURRENCY</clid>
+                  <value>6</value>
+                  <caption>RFP vaikevaluuta</caption>
+            </DEFAULT_CURRENCY>
       </reltypes>
       <layout>
             <hsplit>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.112 2008/07/03 15:08:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.113 2008/07/08 09:00:08 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -943,16 +943,16 @@ class reservation extends class_base
 		$room_inst = $room->instance();
 		$rdata = $this->get_resources_data($arr["obj_inst"]->id());
 		$rss = $room_inst->get_room_resources($room->id());
+		$rfp = get_instance(CL_RFP);
 		foreach($rss as $res_obj)
 		{
 			$res = $res_obj->id();
 			$data = array();
 			$data = array(
-				"date" => html::textbox(array(
-					//"name" => "discount[".$res."]",
-					"name" => "resources_info[".$res."][time]",
-					"value" => $rdata[$res]["time"],
-					"size" => 5,
+				"date" => $rfp->gen_time_form(array(
+					"varname" => "resources_info[".$res."]",
+					"start1" => $rdata[$res]["start1"],
+					"end" => $rdata[$res]["end"],
 				)),
 				"name" => $res_obj->name(),
 				"amount" => html::textbox(array(
@@ -1306,6 +1306,11 @@ class reservation extends class_base
 		return $t;
 	}
 
+	private function _sort_by_time($a, $b)
+	{
+		return $a->prop("start1") - $b->prop("start1");
+	}
+
 	function _get_prices_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -1326,6 +1331,7 @@ class reservation extends class_base
 				$rvs[] = obj($id);
 			}
 		}
+		usort(&$rvs, array($this, "_sort_by_time"));
 		$t->define_field(array(
 			"name" => "discount",
 			"caption" => t("Soodustus %"),
@@ -1376,14 +1382,14 @@ class reservation extends class_base
 				));
 				$setcur["total"] = 1;
 			}
-			
 			foreach($sum["room_price"] as $cur => $price)
 			{
 				$price = number_format($price, 2);
 				$d["price".$cur] = $price;
-				$total += $price;
+
+				$total += ($arr["request"]["default_currency"] == $cur)?str_replace(",","",$price):0;
 			}
-			$d["name"] = $o->name();
+			$d["name"] = html::obj_change_url($o); //->name();
 			$d["discount"] = html::textbox(array(
 				"name" => "discount_".$o->id(),
 				"value" => $o->prop("special_discount"),

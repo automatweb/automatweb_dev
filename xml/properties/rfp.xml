@@ -323,7 +323,6 @@
             <table>rfp</table>
             <group>main_fun</group>
             <type>textbox</type>
-            <no_caption>1</no_caption>
             <field>data_mf_table</field>
             <caption>Pea&amp;amp;uuml;ritus</caption>
       </property>
@@ -333,6 +332,7 @@
             <group>main_fun</group>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_TYPE</reltype>
+            <store>connect</store>
             <field>data_mf_event_type</field>
             <caption>&amp;amp;Uuml;rituse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
@@ -618,6 +618,34 @@
             <field>files_tbl</field>
       </property>
       <property>
+            <name>cancel_and_payment_terms</name>
+            <table>rfp</table>
+            <group>terms</group>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <field>cancel_and_payment_terms</field>
+            <caption>Konvererntside annuleerimis- ja maksetingimused</caption>
+      </property>
+      <property>
+            <name>accomondation_terms</name>
+            <table>rfp</table>
+            <group>terms</group>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <field>accomondation_terms</field>
+            <caption>Majutuse annuleerimis- ja maksetingimused</caption>
+      </property>
+      <property>
+            <name>default_currency</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_CURRENCY</reltype>
+            <store>connect</store>
+            <field>default_currency</field>
+            <caption>Vaikevaluuta</caption>
+      </property>
+      <property>
             <name>final_rooms</name>
             <table>rfp</table>
             <group>final_general</group>
@@ -822,6 +850,7 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <maintainer>tarvo</maintainer>
+            <allow_rte>2</allow_rte>
       </classinfo>
       <groupinfo>
             <data>
@@ -847,6 +876,9 @@
                   <caption>Failid</caption>
                   <parent>data</parent>
             </files>
+            <terms>
+                  <caption>Tingimused</caption>
+            </terms>
             <final_info>
                   <caption>Tellimuskirjeldus</caption>
             </final_info>
@@ -938,6 +970,11 @@
                   <value>10</value>
                   <caption>Toitlustuse broneering</caption>
             </CATERING_RESERVATION>
+            <DEFAULT_CURRENCY>
+                  <clid>CL_CURRENCY</clid>
+                  <value>11</value>
+                  <caption>Arvutuste vaikevaluuta</caption>
+            </DEFAULT_CURRENCY>
       </reltypes>
       <layout>
             <prs_hsplit>
