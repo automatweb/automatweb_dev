@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.28 2008/06/19 10:30:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.29 2008/07/08 10:53:37 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1 maintainer=dragut
@@ -105,6 +105,7 @@ class forum_topic extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		$required_fields = $arr['request']['required_fields'];
 		switch($prop["name"])
 		{
 			case "ip":
@@ -114,16 +115,21 @@ class forum_topic extends class_base
 				};
 				break;
 			case "name":
-			case "author_name":
-				if (empty($prop["value"]))
+				if (empty($prop["value"]) && !empty($required_fields['name']))
 				{
 					$prop["error"] = $prop["caption"] . " ei tohi olla t&uuml;hi!";
 					$retval = PROP_FATAL_ERROR;
 				};
-
+				break;
+			case "author_name":
+				if (empty($prop["value"]) && !empty($required_fields['pname']))
+				{
+					$prop["error"] = $prop["caption"] . " ei tohi olla t&uuml;hi!";
+					$retval = PROP_FATAL_ERROR;
+				};
 				break;
 			case "author_email":
-				if (!is_email($prop["value"]))
+				if (!is_email($prop["value"]) && !empty($required_fields['uemail']))
 				{
 					$prop["error"] = $prop["caption"] . " ei ole korrektne!";
 					$retval = PROP_FATAL_ERROR;
@@ -131,7 +137,7 @@ class forum_topic extends class_base
 
 				break;
 			case "comment":
-				if (empty($prop["value"]))
+				if (empty($prop["value"]) && !empty($required_fields['commtext']))
 				{
 					$prop["error"] = $prop["caption"] . " ei tohi olla t&uuml;hi!";
 					$retval = PROP_FATAL_ERROR;

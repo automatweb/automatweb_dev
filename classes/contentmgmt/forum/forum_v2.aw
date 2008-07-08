@@ -1084,6 +1084,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	// !Draws the contents of a single folder
 	function draw_folder($args = array())
 	{
+		load_javascript("aw.js");
 		extract($args);
 
 		$topics_on_page = $args["obj_inst"]->prop("topics_on_page");
@@ -2821,6 +2822,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
 		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
+		$use_props = array("name","answers_to_mail","comment");
 
 		// if user is logged in,
 		$uid = aw_global_get("uid");
@@ -3076,6 +3078,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		$emb["status"] = STAT_ACTIVE;
 		$emb["return"] = "id";
 		unset($emb["id"]);
+		$emb['required_fields'] = $obj_inst->prop('required_fields');
 		$this->topic_id = $t->submit($emb);
 
 		$image_inst = get_instance(CL_IMAGE);
