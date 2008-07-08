@@ -82,21 +82,27 @@ class date_edit
 		@attrib params=pos api=1
 
 		@param varname
-		Sets the varname for the date form that is posted.
-		varname[year],varname[month],varname[day],varname[hour],varname[minute]
+			Sets the varname for the date form that is posted.
+			varname[year],varname[month],varname[day],varname[hour],varname[minute]
 
 		@param timestamp optional type=int
-		Sets the time to be selected(unix timestamp). Default is current time +24h
+			Sets the time to be selected(unix timestamp). Default is current time +24h
 
 		@param range1 optional type=int
-		Sets the start year(default is 2003)
+			Sets the start year(default is 2003)
 
 		@param range2 optional type=int
-		Sets the end year(default is 2010)
+			Sets the end year(default is 2010)
 
-		@add_empty optional type=bool
-		If set tu true, adds an '---' item  and selects it(adds for everythind.. selects only for year)
-		Default is false. If this is set range1 and range2 must be manually set.
+		@param add_empty optional type=bool
+			If set tu true, adds an '---' item  and selects it(adds for everythind.. selects only for year)
+			Default is false. If this is set range1 and range2 must be manually set.
+
+		@param buttons type=bool
+		@param no_buttons_in_admin type=bool
+
+		@param month_as_numbers type=bool default=false
+			if set to true, monthnames are replaced with numbers
 
 		@comment
 		Generates the date edit html code accorndig to options
@@ -104,7 +110,7 @@ class date_edit
 		@returns
 		The form elements html code to be printed on page
 	**/
-	function gen_edit_form($varname, $timestamp, $range1 = 2003, $range2 = 2010, $add_empty = false, $buttons = false, $no_buttons_in_admin = false)
+	function gen_edit_form($varname, $timestamp, $range1 = 2003, $range2 = 2010, $add_empty = false, $buttons = false, $no_buttons_in_admin = false, $month_as_numbers = false)
 	{
 		if (is_array ($varname))
 		{
@@ -216,7 +222,7 @@ class date_edit
 					}
 					foreach($mnames as $mk => $mv)
 					{
-						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp != -1),$mv);
+						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp != -1),$month_as_numbers?$mk:$mv);
 					};
 					$retval .= "</select>\n";
 					break;

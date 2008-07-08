@@ -888,6 +888,8 @@ class html extends aw_template
 		if month = "text" then month is shown as textbox, not selectbox
 	@param day optional type=string
 		if day = "text" then day is shown as textbox, not selectbox
+	@param month_as_numbers type=bool default=false
+		if set to true, monthnames are replaced with numbers
 	@returns string/html date selector
 
 	@comments
@@ -990,7 +992,7 @@ class html extends aw_template
 			$name = $args["name"];
 		}
 
-		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons, !$buttons);
+		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons, !$buttons, $args["month_as_numbers"]?true:false);
 		$res .= $args["post_append_text"];
 		return $res;
 	}
