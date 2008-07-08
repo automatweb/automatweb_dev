@@ -60,6 +60,10 @@ class banner_manager extends class_base
 			"tpldir" => "applications/banner/banner_manager",
 			"clid" => CL_BANNER_MANAGER
 		));
+
+		$this->mth_overview_tbl = "banner_monthly_overview";
+		$this->clicks = "banner_clicks";
+		$this->views = "banner_views";
 	}
 
 	function get_property($arr)
@@ -94,7 +98,10 @@ class banner_manager extends class_base
 			"name" => "gen_overview",
 			"tooltip" => t("Genereeri uued andmed"),
 			"img" => "archive_small.gif",
-			"action" => "#"
+			"url" => $this->mk_my_orb("gen_monthly_overview", array(
+				"rurl" => get_ru(),
+				"class_id" => CL_BANNER_MANAGER,
+			)),
 		));
 	}
 
@@ -113,100 +120,140 @@ class banner_manager extends class_base
 				"action" => "#",
 				"url" => "#",
 			));
-			$m = ($y == date("Y", $s))?date("m",$s):1;
-			$me = ($y == date("Y", $e))?date("m",$e):12;
+			$m = ($y == date("Y", $s))?date("n",$s):1;
+			$me = ($y == date("Y", $e))?date("n",$e):12;
 			for($m; $m <= $me; $m++)
 			{
+				$args = array(
+					"class_id" => CL_BANNER_MANAGER,
+					"id" => $arr["obj_inst"]->id(),
+					"group" => $arr["request"]["group"],
+					"month" => $m,
+					"year" => $y,
+				);
 				$t->add_item($y, array(
 					"id" => $y."_".$m,
-					"name" => date("M", mktime(0,0,0,($m +1),0,$y)),
-					"url" => $this->mk_my_orb("change", $arr["request"] + array(
-						"month" => $m,
-						"year" => $y,
-						"return_url" => get_ru(),
-					)),
+					"name" => date("M", mktime(0,0,0,($m + 1),0,$y)),
+					"url" => $this->mk_my_orb("change", $args),
 				));
 			}
 		}
 	}
 
 
-	/**
-		@attrib params=name
-		@param month int required
-		@param year int required
-		@returns
-			array(
-				banner_id => array(
-					lang_id => views
-			)
-		)
-		@comment
-			returns bannerclicks for month from db
+	/** Generates monthly overview to separate table from banner_clicks & banner_views
+		@attrib paramas=name api=1 name=gen_monthly_overview all_args=1
 	 **/
-	function _get_banner_clicks($arr)
+	public function gen_monthly_overview($arr)
 	{
-		$start = mktime(0, 0, 0, $arr["month"], 1, $arr["year"]);
-		$end = mktime(0, 0, 0, ++$arr["month"], 1, $arr["year"]);
-		$this->db_query("SELECT * FROM banner_clicks WHERE tm >=".$start." AND tm < ".$end);
+		$this->_gen_ovrview_conversion(1);
+		$this->_gen_ovrview_conversion(2);
+		return $arr["rurl"];
+	}
+
+	private function _check_mth_ovrview_tbl()
+	{
+		$this->db_query("SHOW TABLES");
+		$found = false;
 		while($row = $this->db_next())
 		{
-			$return[$row["bid"]][$row["langid"]]++;
+			$tbl = reset($row);
+			if($tbl == $this->mth_overview_tbl)
+			{
+				$found = true;
+				break;
+			}
+		}
+		if(!$found)
+		{
+			$ovr_fields = array(
+				"banner_oid" => "int",
+				"year" => "int",
+				"month" => "int",
+				"type" => "int",
+				"langid" => "int",
+				"count" => "int",
+			);
+
+			foreach($ovr_fields as $f => $t)
+			{
+				$cfields[] = "`".$f."` ".$t;
+				$ifields[] = "`".$f."`";
+			}
+			
+			$cfieldsql = implode(", ", $cfields);
+			$ifieldsql = implode(", ", $ifields);
+
+			$this->db_query("CREATE TABLE ".$this->mth_overview_tbl." (`oid` int primary key, ".$cfieldsql.")");
+		}
+	}
+
+	private function _gen_ovrview_conversion($t)
+	{
+		$this->_check_mth_ovrview_tbl();
+		$type = array(
+			1 => $this->views,
+			2 => $this->clicks,
+		);
+		$this->db_query("SELECT * FROM ".$type[$t]);
+		while($row = $this->db_next())
+		{
+			$Y = date("Y", $row["tm"]);
+			$m = date("n", $row["tm"]);
+			$data[$row["bid"].".".$Y.".".$m.".".$row["langid"].".".$t]++;
+		}
+		$this->db_query("SELECT * FROM ".$this->mth_overview_tbl);
+		while($row = $this->db_next())
+		{
+			$exist[$row["banner_oid"].".".$row["year"].".".$row["month"].".".$row["langid"].".".$row["type"]] = $row["count"];
+		}
+		foreach($data as $k => $val)
+		{
+			$spl = split("[.]", $k);
+			if(array_key_exists($k, $exist))
+			{
+				$sql = "UPDATE ".$this->mth_overview_tbl." SET count='".($exist[$k] + $val)."' WHERE banner_oid='".$spl[0]."' AND year='".$spl[1]."' AND month='".$spl[2]."' AND type='".$spl[4]."' AND langid='".$spl[3]."'";
+			}
+			else
+			{
+				$sql = "INSERT INTO ".$this->mth_overview_tbl." values(0, '".$spl[0]."', '".$spl[1]."', '".$spl[2]."', '".$spl[4]."', '".$spl[3]."', '".$val."')";
+			}
+			$this->db_query($sql);
+		}
+		$remove = "DELETE FROM ".$type[$t];
+		$this->db_query($remove);
+	}
+
+
+	private function _get_overview($arr)
+	{
+		$arr["year"] = $arr["year"]?$arr["year"]:0;
+		$arr["month"] = $arr["month"]?++$arr["month"]:0;
+		$this->db_query("SELECT * FROM ".$this->mth_overview_tbl." WHERE year='".$arr["year"]."' AND month='".$arr["month"]."'");
+		while($row = $this->db_next())
+		{
+			$return[$row["banner_oid"]][$row["langid"]][$row["type"]] = $row;
 		}
 		return $return;
 	}
 
-	/**
-		@attrib params=name
-		@param month int required
-		@param year int required
-		@returns
-			array(
-				banner_id => array(
-					lang_id => views
-			)
-		)
-		@comment
-			returns bannerviews for month from db
-	 **/
-	function _get_banner_views($arr)
+	private function _get_banner_last_action()
 	{
-		$start = mktime(0, 0, 0, $arr["month"], 1, $arr["year"]);
-		$end = mktime(0, 0, 0, ++$arr["month"], 1, $arr["year"]);
-		$this->db_query("SELECT * FROM banner_views WHERE tm >=".$start." AND tm < ".$end);
-		while($row = $this->db_next())
-		{
-			$return[$row["bid"]][$row["langid"]]++;
-		}
-		return $return;
+		$this->db_query("SELECT MAX(CONCAT(year,LPAD(month, 2, 0))) as comp FROM ".$this->mth_overview_tbl);
+		$r = $this->db_next();
+		return mktime(0,0,0, substr($r["comp"], 4, 2), 0, substr($r["comp"],0, 4));
 	}
 
-	function _get_banner_last_action()
+	private function _get_banner_first_action()
 	{
-		$this->db_query("SELECT MAX(tm) as tm FROM banner_views");
-		$view  = $this->db_next();
-		$this->db_query("SELECT MAX(tm) as tm FROM banner_clicks");
-		$click  = $this->db_next();
-		return $view["tm"] > $click["tm"]?$view["tm"]:$click["tm"];
+		$this->db_query("SELECT MIN(CONCAT(year,LPAD(month, 2, 0))) as comp FROM ".$this->mth_overview_tbl);
+		$r = $this->db_next();
+		return mktime(0,0,0, substr($r["comp"], 4, 2), 0, substr($r["comp"],0, 4));
 	}
 
-	function _get_banner_first_action()
+	private function _get_distinct_langs_for_month($arr)
 	{
-		$this->db_query("SELECT MIN(tm) as tm FROM banner_views");
-		$view  = $this->db_next();
-		$this->db_query("SELECT MIN(tm) as tm FROM banner_clicks");
-		$click  = $this->db_next();
-		return $view["tm"] < $click["tm"]?$view["tm"]:$click["tm"];
-	}
-
-	function _get_distinct_langs_for_month($arr)
-	{
-		$this->db_query("SELECT DISTINCT(langid) as langid from banner_views");
-		while($row = $this->db_next())
-		{
-			$langs[$row["langid"]] = $row["langid"];
-		}
-		$this->db_query("SELECT DISTINCT(langid) as langid from banner_clicks");
+		$this->db_query("SELECT DISTINCT(langid) as langid from ".$this->mth_overview_tbl);
 		while($row = $this->db_next())
 		{
 			$langs[$row["langid"]] = $row["langid"];
@@ -214,27 +261,37 @@ class banner_manager extends class_base
 		return $langs;
 	}
 
-	function _init_mth_ovr_tbl(&$arr)
+	private function _init_mth_ovr_tbl(&$arr)
 	{
 		//error_reporting(E_ALL);
 		//ini_set("display_errors", "1");
 		//$langs = get_instance(CL_LANGUAGES);
 		//$langs = $langs->get_list();
 		$t =& $arr["prop"]["vcl_inst"];
-		$t->define_header(t("Veebruar 2008"));
+		if($arr["request"]["month"] && $arr["request"]["year"])
+		{
+			$t->define_header(date("M Y", mktime(0,0,0, ($arr["request"]["month"] +1), 0, $arr["request"]["year"])));
+		}
 		$t->define_field(array(
 			"name" => "banner",
 			"caption" => t("B&auml;nner"),
 		));
+		$langs = get_instance("languages")->get_list();
 		foreach($this->_get_distinct_langs_for_month($time_arr) as $lang)
 		{
 			$t->define_field(array(
+				"name" => "lang_".$lang,
+				"caption" => $langs[$lang],
+			));
+			$t->define_field(array(
 				"name" => "views[".$lang."]",
-				"caption" => t("Vaatamiste arv (".$lang.")"),
+				"caption" => t("Vaatamiste arv"),
+				"parent" => "lang_".$lang,
 			));
 			$t->define_field(array(
 				"name" => "clicks[".$lang."]",
-				"caption" => t("Klikkide arv (".$lang.")"),
+				"caption" => t("Klikkide arv"),
+				"parent" => "lang_".$lang,
 			));
 		}
 	}
@@ -243,18 +300,13 @@ class banner_manager extends class_base
 	{
 		$this->_init_mth_ovr_tbl($arr);
 		$t =& $arr["prop"]["vcl_inst"];
-		$v = $this->_get_banner_views($arr["request"]);
-		$c = $this->_get_banner_clicks($arr["request"]);
-		foreach(array_unique(array_merge(array_keys($v), array_keys($c))) as $banner)
+		$v = $this->_get_overview($arr["request"]);
+		foreach($v as $banner => $data)
 		{
-			$d = array();
-			foreach($v[$banner] as $lang => $vs)
+			foreach($data as $lang => $types)
 			{
-				$d["views[".$lang."]"] += $vs;
-			}
-			foreach($c[$banner] as $lang => $vs)
-			{
-				$d["clicks[".$lang."]"] += $vs;
+				$d["clicks[".$lang."]"] = $types[2]["count"];
+				$d["views[".$lang."]"] = $types[1]["count"];
 			}
 			$d["banner"] = html::obj_change_url(obj($banner));
 			$t->define_data($d);
