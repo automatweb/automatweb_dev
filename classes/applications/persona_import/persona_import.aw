@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.46 2008/07/08 19:10:32 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.47 2008/07/08 19:15:41 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -22,8 +22,8 @@
 @groupinfo settings caption="Seaded"
 @default group=settings
 
-	@groupinfo genset caption="&Uuml;ldised seaded"
-	@default group=genset	
+	@groupinfo genset caption="&Uuml;ldised seaded" parent=settings
+	@default group=genset
 
 		@property xml_link type=relpicker reltype=RELTYPE_LINK_REL
 		@caption Impordi objekt
@@ -37,7 +37,7 @@
 		@property crm_db_id type=relpicker reltype=RELTYPE_CRM_DB
 		@caption Kasutatav kliendibaas
 
-	@groupinfo ftp caption="FTP seaded"
+	@groupinfo ftp caption="FTP seaded" parent=settings
 	@default group=ftp
 
 		@property ftp_settings type=releditor reltype=RELTYPE_DATA_SERVER rel_id=first props=server,username,password
@@ -61,7 +61,7 @@
 		@property xml_structure_file type=textbox
 		@caption Struktuuri&uuml;ksuste XML fail
 
-	@groupinfo tags caption="Tagid"
+	@groupinfo tags caption="Tagid" parent=settings
 	@default group=tags
 	
 		@property worker_tag type=textbox default=tootaja
