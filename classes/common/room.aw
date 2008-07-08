@@ -972,7 +972,8 @@ class room extends class_base
 			{
 				$wds[$nr] = $price_inst->weekdays[$nr];
 			}
-			$prices = $price_inst->get_prices($oid);
+			$prices = $obj->prop("prices");
+			//$prices = $price_inst->get_prices($oid); // someone made the get_prices method private
 			$prc = array();
 			foreach($prices as $cur_oid => $price)
 			{
