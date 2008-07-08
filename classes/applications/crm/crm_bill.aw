@@ -1287,7 +1287,7 @@ class crm_bill extends class_base
 		@attrib name=add_task_row_to_bill_row
 		@param row optional type=oid
 			row id
-		@param task_row optional type=oid
+		@param task_row optional
 			task row id
 		@param  content optional type=string
 			task row content
@@ -1301,10 +1301,21 @@ class crm_bill extends class_base
 	function add_task_row_to_bill_row($arr)
 	{
 		$content = "";
-		if(is_oid($arr["task_row"]))
+		if(is_oid($arr["task_row"]) || (is_array($arr["task_row"]) && sizeof($arr["task_row"])))
 		{
+			if(is_oid($arr["task_row"]))
+			{
+				$arr["task_row"] = array($arr["task_row"]);
+			}
 			$bill_row = obj($arr["row"]);
-			$error = $bill_row->connect_task_row($arr["task_row"]);
+			foreach($arr["task_row"] as $tr)
+			{
+				$error = $bill_row->connect_task_row($tr);
+				if($error)
+				{
+					break;
+				}
+			}
 			if($error)
 			{
 				$content.= $error."<br>";
@@ -1320,41 +1331,68 @@ class crm_bill extends class_base
 				</script>");
 			}
 		}
-		$content.= "<form method=POST action=".get_ru().">";
-		$content.= t("Toimetuse rea sisu");
-		$content.= "<br>".html::textbox(array(
+
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$htmlc->add_property(array(
 			"name" => "content",
+			"type" => "textbox",
 			"value" => $arr["content"],
-		))."<br><br>";
-		$content.= t("Toimetus");
-		$content.= "<br>".html::textbox(array(
+			"caption" => t("Toimetuse rea sisu"),
+		));
+		$htmlc->add_property(array(
 			"name" => "task",
+			"type" => "textbox",
 			"value" => $arr["task"],
-			"autocomplete_class_id" =>  array(CL_TASK),
-		))."<br><br>";
-
-		$content.= t("Klient");
-		$content.= "<br>".html::textbox(array(
+			"caption" => t("Toimetus"),
+			"autocomplete_class_id" => array(CL_TASK),
+		));
+		$htmlc->add_property(array(
 			"name" => "customer",
+			"type" => "textbox",
 			"value" => $arr["customer"],
-			"autocomplete_class_id" =>  array(CL_CRM_COMPANY,CL_CRM_PERSON),
-		))."<br><br>";
-		$content.= t("Projekt");
-		$content.= "<br>".html::textbox(array(
+			"caption" => t("Klient"),
+			"autocomplete_class_id" => array(CL_CRM_COMPANY,CL_CRM_PERSON),
+		));
+		$htmlc->add_property(array(
 			"name" => "project",
+			"type" => "textbox",
 			"value" => $arr["project"],
-			"autocomplete_class_id" =>  array(CL_PROJECT),
-		))."<br><br>";
+			"caption" => t("Projekt"),
+			"autocomplete_class_id" => array(CL_PROJECT),
+		));
+		$htmlc->add_property(array(
+			"name" => "submit",
+			"type" => "submit",
+			"value" => t("Otsi"),
+			"caption" => t("Otsi")
+		));
+		$data = array(
+			"row" => $arr["row"],
+			"orb_class" => $_GET["class"]?$_GET["class"]:$_POST["class"],
+			"reforb" => 0,
+		);
+/*		$htmlc->finish_output(array(
+			"action" => "add_task_row_to_bill_row",
+			"method" => "POST",
+			"data" => $data
+		));
 
-		$content.= "<br>".html::submit(array(
-//			"onclick" => "submit_changeform();",
-        	        "value" => t("Otsi")
-                ))."<br>";
-
-		classload("vcl/table");
+		$content.= $htmlc->get_result();
+*/		classload("vcl/table");
 		$t = new vcl_table(array(
 			"layout" => "generic",
-		));		
+		));
+		$t->define_field(array(
+			"name" => "choose",
+			"caption" => "",
+		));
+		$t->define_chooser(array(
+			"name" => "task_row",
+			"field" => "oid",
+		));
 		$t->define_field(array(
 			"name" => "content",
 			"caption" => t("Sisu"),
@@ -1370,10 +1408,6 @@ class crm_bill extends class_base
 		$t->define_field(array(
 			"name" => "customer",
 			"caption" => t("Klient"),
-		));
-		$t->define_field(array(
-			"name" => "choose",
-			"caption" => "",
 		));
 		
 		$filter = array(
@@ -1414,7 +1448,14 @@ class crm_bill extends class_base
 			$filter["content"] = "%".$arr["content"]."%";
 		}
 		$filter["limit"] = 500;
-		$ol = new object_list($filter);
+		if(sizeof($filter) < 5)
+		{
+			$ol = new object_list();
+		}
+		else
+		{
+			$ol = new object_list($filter);
+		}
 		foreach($ol->arr() as $o)
 		{
 			$cust = "";
@@ -1428,10 +1469,16 @@ class crm_bill extends class_base
 				}
 			}
 			$t->define_data(array(
+				"oid" => $o->id(),
 				"content" => $o->prop("content"),
 				"choose" => html::href(array(
 					"caption" => t("Vali see"),
-					"url" => aw_url_change_var("task_row", $o->id()),
+					"url" => $this->mk_my_orb("add_task_row_to_bill_row",
+						array(
+							"task_row" => $o->id(),
+							"row" => $arr["row"],
+						), "crm_bill"
+					),
 				)),
 				"task" => $o->prop("task.name"),
 				"project" => $o->prop("task.project.name"),
@@ -1439,9 +1486,35 @@ class crm_bill extends class_base
 			));
 		}
 
-		$content.= $t->draw();
-		$content.="</form>";
-		print $content;
+
+		$htmlc->add_property(array(
+			"name" => "table",
+			"type" => "text",
+			"value" => $t->draw(),
+			"no_caption" => 1,
+		));
+
+
+		$htmlc->add_property(array(
+			"name" => "submit2",
+			"type" => "submit",
+			"value" => t("Salvesta"),
+			"caption" => t("Salvesta")
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "add_task_row_to_bill_row",
+			"method" => "POST",
+			"data" => $data
+		));
+
+		$content.= $htmlc->get_result();
+
+
+/*		$content.= "<form action='orb.aw' method='POST' name='changeform2' enctype='multipart/form-data' >".$t->draw()."
+			<input id='button' type='submit' name='submit' value='Salvesta'/>
+		</form>";*/
+		return $content;
 	}
 
 	/**

@@ -233,7 +233,12 @@ class html extends aw_template
 				"class_ids" => $autocomplete_class_id,
 				"param" => $name,
 			);
-			$autocomplete_source = $this->mk_my_orb("object_name_autocomplete_source", $params, $_GET["class"], false, true);
+			$class = $_GET["class"];
+			if(!$class)
+			{
+				$class = $_POST["class"];
+			}
+			$autocomplete_source = $this->mk_my_orb("object_name_autocomplete_source", $params, $class , false, true);
 			$autocomplete_params = array($name);
 		}
 

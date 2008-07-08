@@ -100,6 +100,10 @@ class crm_bill_row_object extends _int_object
 			return t("Pole piisavalt p&auml;dev klassi id");
 		}
 		$row_obj = obj($row);
+		if(!is_oid($row_obj->prop("task")))
+		{
+			return t("Ridadel pole toimetust m&auml;&auml;ratud");
+		}
 		$tasko = obj($row_obj->prop("task"));
 		$error = $this->check_if_has_other_customers($tasko->prop("project.orderer"));
 		if($error)
