@@ -1520,6 +1520,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 					if (aw_global_get("uid") === $comment["createdby"] || $ca)
 					{
 						$url = $this->mk_my_orb("edit_post", array(
+							"section" => aw_global_get("section"),
 							"id" => $oid,
 							"post" => $comment["oid"],
 							"ru" => get_ru(),
