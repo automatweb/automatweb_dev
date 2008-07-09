@@ -267,7 +267,7 @@ class relationmgr extends aw_template
 			if (is_oid($def_val) && $this->can("view", $def_val) && $this->can("add", $def_val))
 			{
 				$this->vars(array(
-					"parent" => $def_val,
+					"def_parent" => $def_val,
 					"period" => $period,
 					"id" => $arr["obj_inst"]->id(),
 					"return_url" => urlencode($return_url),
@@ -677,14 +677,11 @@ class relationmgr extends aw_template
 				$single_select = "capt_new_object";
 				$sele = NULL;
 				$vals = $this->true_rel_classes[$k];
-				$vals = str_replace("&auml;", "ä", $vals);
-				$vals = str_replace("&Auml;", "Ä", $vals);
-				$vals = str_replace("&ouml;", "ö", $vals);
-				$vals = str_replace("&Ouml;", "Ö;", $vals);
-				$vals = str_replace("&uuml;", "ü", $vals);
-				$vals = str_replace("&Uuml;", "Ü", $vals);
-				$vals = str_replace("&otilde;", "õ", $vals);
-				$vals = str_replace("&Otilde;", "Õ", $vals);
+				$ls = array("&auml;", "&Auml;", "&ouml", "&Ouml;", "&uuml;", "&Uuml;", "&otilde;", "&Otilde;", );
+				foreach($ls as $l)
+				{
+					$vals = str_replace($l, html_entity_decode($l), $vals);
+				}
 				$vals = $this->mk_kstring($vals);
 				if (isset($this->true_rel_classes[$k][$objtype]))
 				{
@@ -1128,7 +1125,7 @@ class relationmgr extends aw_template
 			if (is_oid($def_val) && $this->can("view", $def_val) && $this->can("add", $def_val))
 			{
 				$this->vars(array(
-					"parent" => $def_val,
+					"def_parent" => $def_val,
 					"period" => $period,
 					"id" => $arr["obj_inst"]->id(),
 					"return_url" => urlencode($return_url),
