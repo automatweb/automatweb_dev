@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.21 2008/05/16 09:57:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.22 2008/07/09 13:43:16 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -489,7 +489,7 @@ class aw_object_search extends class_base
 			}
 		}
 
-		$nf = array("s_status" => "status", "s_oid" => "oid", "s_site_id" => "site_id", "s_period" => "period", "s_language" => "lang_id");
+		$nf = array("s_status" => "status", /*"s_oid" => "oid",*/ "s_site_id" => "site_id", "s_period" => "period", "s_language" => "lang_id");
 		foreach($nf as $pn => $ofn)
 		{
 			if ($arr["request"][$pn] > 0)
@@ -503,6 +503,29 @@ class aw_object_search extends class_base
 			$filt["brother_of"] = new obj_predicate_prop("id");
 		}
 
+		if (is_numeric($arr["request"]["s_oid"]))
+		{
+			$filt["oid"] = $arr["request"]["s_oid"];
+		}
+		else
+		if ($arr["request"]["s_oid"][0] == "<")
+		{
+			$filt["oid"] = new obj_predicate_compare(OBJ_COMP_LESS, substr($arr["request"]["s_oid"], 1));
+		}
+		else
+		if ($arr["request"]["s_oid"][0] == ">")
+		{
+			$filt["oid"] = new obj_predicate_compare(OBJ_COMP_GREATER, substr($arr["request"]["s_oid"], 1));
+		}
+		else
+		if (strpos($arr["request"]["s_oid"], "-") !== false)
+		{
+			list($o_from, $o_to) = explode("-", $arr["request"]["s_oid"]);
+			if (is_numeric($o_from) && is_numeric($o_to))
+			{
+				$filt["oid"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $o_from, $o_to);
+			}
+		}
 
 		$c_from = date_edit::get_timestamp($arr["request"]["s_crea_from"]);
 		$c_to = date_edit::get_timestamp($arr["request"]["s_crea_to"]);
