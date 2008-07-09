@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.57 2008/07/08 12:57:54 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.58 2008/07/09 10:02:41 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -800,10 +800,7 @@ class personnel_management extends class_base
 	function _get_lang_tb($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->add_new_button(array(
-			"clids" => CL_LANGUAGE,
-			"pt" => $arr["obj_inst"]->id(),
-		));
+		$t->add_new_button(array(CL_LANGUAGE), $arr["obj_inst"]->id());
 		$t->add_save_button();
 	}
 
