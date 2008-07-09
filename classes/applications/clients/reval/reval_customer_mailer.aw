@@ -105,7 +105,7 @@ class reval_customer_mailer extends class_base
 			if (!$row)
 			{
 				$this->quote(&$entry);
-				$this->db_query("INSERT INTO reval_daily_bookings(conf_no, hotel, name, email) values($entry[Confirmation_No], '$entry[Resort]','".$entry["First"]." ".$entry["Last"]."', '$entry[EMail]')");
+				$this->db_query("INSERT INTO reval_daily_bookings(conf_no, hotel, name, email, tm) values($entry[Confirmation_No], '$entry[Resort]','".$entry["First"]." ".$entry["Last"]."', '$entry[EMail]',".time().")");
 			}
 			else
 			{
@@ -132,7 +132,7 @@ class reval_customer_mailer extends class_base
 			$awm->htmlbodyattach(array(
 							"data" => $html,
 			));
-			//$awm->gen_mail();
+			$awm->gen_mail();
 			echo "sent to $entry[EMail] for $entry[Confirmation_No] <br>\n";
 			flush();
 
@@ -220,7 +220,7 @@ class reval_customer_mailer extends class_base
 
 	private function _gen_mail_ct($e)
 	{
-		$name = $e["First"]." ".$e["Last"];
+		$name = iconv("utf-8", aw_global_get("charset")."//IGNORE", $e["First"]." ".$e["Last"]);
 		$hotel = $this->hotel_lut[$e["Resort"]];
 		$date = date("Y-m-d", time() - 24*3600);
 $html = <<<EOT

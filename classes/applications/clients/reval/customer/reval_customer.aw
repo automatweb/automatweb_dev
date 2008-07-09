@@ -179,7 +179,7 @@ class reval_customer extends class_base
 			"dob" => date("d.m.Y", $this->_parse_date($cust_data["Birthday"])),
 			"company_name" => $this->_f($cust_data["CompanyName"]),
 			"business_title" => $this->_f($cust_data["BusinessTitle"]),
-			"position" => $this->_f($cust_data["OccupationName"]),
+			//"position" => $this->_f($cust_data["OccupationName"]),
 			"business_field" => $this->_f($cust_data["FieldOfBusinessName"]),
 			"business_phone" => $this->_f($cust_data["BusinessPhone"]),
 			"home_phone" => $this->_f($cust_data["HomePhone"]),
@@ -211,11 +211,11 @@ class reval_customer extends class_base
 			$rv[] = "Email";
 		}
 		else
-		if ($cust_data["IsMailCommunication"])
+		/*if ($cust_data["IsMailCommunication"])
 		{
 			$rv[] = "Mail";
 		}
-		else
+		else*/
 		if ($cust_data["IsSmsCommunication"])
 		{
 			$rv[] = "Sms";
@@ -388,11 +388,11 @@ class reval_customer extends class_base
 			"address" => $this->_req("Address", $cust_data["AddressLine1"]),
 			"dob" => $this->_req("CustomerBirthday", date("d.m.Y", $this->_parse_date($cust_data["Birthday"]))),
 			"postal_code" => $this->_req("PostalCode", $cust_data["PostalCode"]),
-			"marital_status_select" => $this->_ep_do_marital_status_select($this->_req("MaritalStatus", $cust_data["MaritalStatusId"])),
+			//"marital_status_select" => $this->_ep_do_marital_status_select($this->_req("MaritalStatus", $cust_data["MaritalStatusId"])),
 			"field_of_business_select" => $this->_ep_do_field_of_business_select($this->_req("FieldOfBusiness", $cust_data["FieldOfBusinessId"])),
 			"business_phone" => $this->_req("BusinessPhone", $cust_data["BusinessPhone"]),
 			"business_title" => $this->_req("BusinessTitle", $cust_data["BusinessTitle"]),
-			"occupation_select" => $this->_ep_do_occupation_select($this->_req("Occupation", $cust_data["OccupationId"])),
+			//"occupation_select" => $this->_ep_do_occupation_select($this->_req("Occupation", $cust_data["OccupationId"])),
 			"mobile_phone" => $this->_req("MobilePhone", $cust_data["MobilePhone"]),
 			"room_preference_select" => $this->_ep_do_room_pref_select($this->_req("RoomPreference", $cust_data["RoomSmokingPreferenceId"])),
 			"home_phone" => $this->_req("HomePhone", $cust_data["HomePhone"]),
@@ -400,7 +400,7 @@ class reval_customer extends class_base
 			"preferred_language_select" => $this->_ep_do_pref_language_select($this->_req("PreferredLanguage", $cust_data["PreferredLanguageId"])),
 			"is_allergic_sel" => checked($this->_req("IsAllergic", $cust_data["IsAllergic"]) == "true"),
 			"is_handicapped_sel" => checked($this->_req("IsHandicapped", $cust_data["IsHandicapped"]) == "true"),
-			"is_mail_comm_sel" => checked($this->_req("IsMailCommunication", $cust_data["IsMailCommunication"]) == "true"),
+			//"is_mail_comm_sel" => checked($this->_req("IsMailCommunication", $cust_data["IsMailCommunication"]) == "true"),
 			"is_email_comm_sel" => checked($this->_req("IsEmailCommunication", $cust_data["IsEmailCommunication"]) == "true"),
 			"is_sms_comm_sel" => checked($this->_req("IsSMSCommunication", $cust_data["IsSmsCommunication"]) == "true"),
 			"pref_currency_select" => $this->_ep_do_pref_currency_select($this->_req("PreferredCurrency", $cust_data["DefaultWebCurrencyLabel"]))
@@ -622,22 +622,28 @@ class reval_customer extends class_base
 		{
 				return $this->_err_ret("edit_profile", $arr, 3);
 		}
-		if (empty($arr["IsMailCommunication"]) && empty($arr["IsEmailCommunication"]) && empty($arr["IsSMSCommunication"]))
+		if (/*empty($arr["IsMailCommunication"]) && */empty($arr["IsEmailCommunication"]) && empty($arr["IsSMSCommunication"]))
 		{
 				return $this->_err_ret("edit_profile", $arr, 4);
 		}
+//die(dbg::Dump($arr));
+		if ($arr["IsSMSCommunication"] == "on" && trim($this->_w($arr["MobilePhone"])) == "")
+		{
+				return $this->_err_ret("edit_profile", $arr, 5);
+		}
+
 		$dob = mktime(1,1,1, $m, $d, $y);
 
 		$d = array(
       "customerId" => $this->get_cust_id(),
       "firstName" => $cust_data["FirstName"],
       "lastName" => $cust_data["LastName"],
-      "maritalStatusId" => (int)$arr["MaritalStatus"],
+      //"maritalStatusId" => (int)$arr["MaritalStatus"],
       "genderId" => (int)$arr["Gender"],
       "birthday" => date("Y-m-d", $dob)."T00:00:00",
       "personalCode" => $this->_w($arr["PersonalCode"]),
       //"hasChildren" => false,	__undefined__
-      "occupationId" => (int)$this->_w($arr["Occupation"]),
+      //"occupationId" => (int)$this->_w($arr["Occupation"]),
       "fieldOfBusinessId" => (int)$this->_w($arr["FieldOfBusiness"]),
       "businessTitle" => $arr["BusinessTitle"],
       "businessPhone" => $this->_w($arr["BusinessPhone"]),
@@ -652,7 +658,7 @@ class reval_customer extends class_base
       "postalCode" => $this->_w($arr["PostalCode"]),
       "countryCode" => $this->_w($arr["CountryCode"]),
       //"isBusinessAddress" => $arr["__undefined__"],
-      "isMailCommunication" => $arr["IsMailCommunication"] == "true",
+      //"isMailCommunication" => $arr["IsMailCommunication"] == "true",
       "isEmailCommunication" => $arr["IsEmailCommunication"] == "true",
       "isSmsCommunication" => $arr["IsSMSCommunication"] == "true",
       "preferredLanguageId" => (int)$this->_w($arr["PreferredLanguage"]),
@@ -664,6 +670,7 @@ class reval_customer extends class_base
       "defaultWebCurrencyCode" => $this->_w($arr["PreferredCurrency"])
 		);
 //echo dbg::dump($d);
+//die();
 if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 {
 	//aw_global_set("soap_debug", 1);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.38 2008/06/26 12:56:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.39 2008/07/09 09:58:08 kristo Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -1994,6 +1994,12 @@ $rate_ids = array();
 			{
 				continue;
 			}
+
+			if (!empty($arr["rate_id"]) && $rate["RateId"] != $arr["rate_id"])
+			{
+				continue;
+			}
+
 			if (!is_array($rt2rates[$hotel["OwsHotelCode"]."-".$rate["OwsRoomTypeCode"]]))
 			{
 				$rt2rates[$hotel["OwsHotelCode"]."-".$rate["OwsRoomTypeCode"]] = array();
