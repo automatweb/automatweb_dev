@@ -143,6 +143,18 @@ fclose($fh);
 else
 {
 	$url = $_SESSION["bank_payment"]["cancel"];
+	if($bi->can("view" , $id))
+	{
+		$obj = obj($id);
+		$inst = $obj->instance();
+		if (method_exists($inst,"bank_fail"))
+		{
+			$inst->bank_fail(array(
+				"id" => $obj->id(),
+				"url" => $url,
+			));
+		}
+	}
 }
 /*
 if(!$url)

@@ -228,7 +228,16 @@ class bank_payment extends class_base
 		"nordeapank" => "SOLOPMT-RETURN-REF",
 		"snoras" => "VK_REF",
 	);
-	
+		
+	var $cur = array(
+		"seb" => "VK_CURR",
+		"hansapank" => "VK_CURR",
+		"sampopank" => "VK_CURR",
+		"credit_card" => "cur",
+		"nordeapank" => "SOLOPMT-CURR",
+		"snoras" => "VK_CURR",
+	);
+
 	var $languages = array(
 		"hansa" => array(
 			"et" => "EST",
@@ -1909,20 +1918,35 @@ class bank_payment extends class_base
 			$bank_id = $this->merchant_id[$val["VK_SND_ID"]];
 			$ret["sum"] = $val["VK_AMOUNT"];
 			$ret["payer"] = $val["VK_SND_NAME"];
+
+			unset($val["VK_MAC"]);
 		}
 		elseif($val["action"])
 		{
 			$bank_id = $this->merchant_id[$val["action"]];
 			$ret["sum"] = $val["eamount"]/100;
 			$ret["payer"] = $val["msgdata"];
+
+			unset($val["mac"]);
 		}
 		else
 		{
 			$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
+			unset($val["SOLOPMT-RETURN-MAC"]);
 		}
 		$ret["bank"] = $this->banks[$bank_id];
 		$ret["bank_id"] = $bank_id;
-		$ret["curr"] = $val["VK_CURR"];
+		$ret["curr"] = $val[$this->curr[$bank_id]];
+		$ret["time"] = $val["timestamp"];
+
+		//kogu infi ka yheks stringiks kokku
+		unset($val["timestamp"]);
+		$ret["all"] = "";
+		foreach($val as $var => $val)
+		{
+			$ret["all"].= $var."=\"".$val."\",";
+		}
+		$ret["all"] = substr($ret["all"], 0, 255);
 		return $ret;
 	}
 

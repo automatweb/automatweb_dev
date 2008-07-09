@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.19 2008/06/26 12:56:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.20 2008/07/09 13:58:01 markop Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -246,20 +246,78 @@ class ows_reservation extends class_base
 		}
 	}
 
+	function bank_fail($arr)
+	{
+		$o = obj($arr["id"]);
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$data = $bank_inst->get_payment_info();
+
+//makse kohta info ka eba6nnestunud makse puhul info saata
+		$params = array(
+  	 		"dttmPayment" => date("Y-m-d" , $data["time"])."T".date("h:m:s", $data["time"]),//?????????????
+      			"paymentMethodSubtypeId" => 2,//--------------------
+      			"paymentLogPaymentResultId" => 2,//eba6nnestunud makse
+      			"paymentCurrency" => $data["curr"]?$data["curr"]:"EEK",
+      			"paymentReceived" => $data["sum"]?$data["sum"]:0,
+      			"remoteTransactionIdentifier" => $o->id()."".$ret["time"],//suvaline tehingu identifikaator
+      			"remoteReference" => $o->id(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
+      			"resultMessage" => $data["all"]?$data["all"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
+      			"description" => "tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
+      			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
+      			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
+		);
+		$return = $this->do_orb_method_call(array(
+			"action" => "RecordPaymentLogEntry",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
+		));
+
+		return $arr["url"];
+	}
+	
 	function bank_return($arr)
 	{
-/*$f = fopen(aw_ini_get("site_basedir")."/files/ows.log", "a");
+$f = fopen(aw_ini_get("site_basedir")."/files/ows.log", "a");
 fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($arr));
-*/
+
 if (!is_oid($arr["id"]))
 {
-//fwrite($f, "die error\n");
+fwrite($f, "die error\n");
 	die("error!");
 }
-			$o = obj($arr["id"]);
+
+		$o = obj($arr["id"]);
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$data = $bank_inst->get_payment_info();
+
+	//makse kohta info 2ra saata v6i nii
+
+		$params = array(
+  	 		"dttmPayment" => date("Y-m-d" , $data["time"])."T".date("h:m:s", $data["time"]),//?????????????
+     			"paymentMethodSubtypeId" => 2,//--------------------
+      			"paymentLogPaymentResultId" => 1,//edukas makse,... praegu igatahes siia funktsiooni muud ei j6uagi
+      			"paymentCurrency" => $data["curr"]?$data["curr"]:"EEK",
+      			"paymentReceived" => $data["sum"]?$data["sum"]:0,
+      			"remoteTransactionIdentifier" => $o->id()."".$ret["time"],//suvaline tehingu identifikaator
+      			"remoteReference" => $o->id(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
+      			"resultMessage" => $data["all"]?$data["all"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
+      			"description" => "tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
+      			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
+      			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
+		);
+		$return = $this->do_orb_method_call(array(
+			"action" => "RecordPaymentLogEntry",
+			"class" => "http://markus.ee/RevalServices/Booking/",
+			"params" => $params,
+			"method" => "soap",
+			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
+		));
+fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($return)."\n");
 			if ($o->prop("is_confirmed") == 1)
 			{
-//fwrite($f, "return is conf\n");
+fwrite($f, "return is conf\n");
 					return;
 			}
 			$checkin = date("Y", $o->prop("arrival_date")).'-'.date("m", $o->prop("arrival_date")).'-'.date("d", $o->prop("arrival_date")).'T00:00:00';
@@ -307,12 +365,10 @@ if (!is_oid($arr["id"]))
       	"paymentType" => "NoPayment",
 				"guestBirthday" => $bd,
 				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
-				"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id()
-
+				"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
+				"bookingId" => $o->meta("booking_id"),
 			);
 
-			$bank_inst = get_instance(CL_BANK_PAYMENT);
-			$data = $bank_inst->get_payment_info();
 			if ($data["bank_id"] == "credit_card")
 			{
 				$params["guaranteeReferenceInfo"] .= "\nCreditCard Payment";
@@ -326,7 +382,7 @@ if (!is_oid($arr["id"]))
 				"method" => "soap",
 				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 			));
-//fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\n\n");
+fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\n\n");
 	//echo dbg::dump($return);
 			if ($return["MakeBookingExWithBirthdayResult"]["ResultCode"] != "Success")
 			{
@@ -384,8 +440,8 @@ if (!is_oid($arr["id"]))
 			$url = $this->mk_my_orb("display_final_page", array("ows_rvs_id" => $o->prop("confirmation_code"), "section" => 107221), "ows_bron");
 			$url = str_replace("automatweb/", "", $url);
 			$url = str_replace("/orb.aw?", "/?", $url);
-//fwrite($f, "redir to $url \n\n\n");
-//fclose($f);
+fwrite($f, "redir to $url \n\n\n");
+fclose($f);
 			header("Location: ".$url);
 			die("<script language=javascript>window.location.href='".$url."';</script>");
 	}
