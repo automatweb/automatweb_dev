@@ -19,6 +19,17 @@
             <method>serialize</method>
             <reltype>RELTYPE_EXPORT</reltype>
             <store>connect</store>
+            <caption>Ekspordiobjekt</caption>
+      </property>
+      <property>
+            <name>max_items</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maksimaalne kirjete arv</caption>
       </property>
       <classinfo>
             <syslog_type>ST_OBJECT_BASKET</syslog_type>

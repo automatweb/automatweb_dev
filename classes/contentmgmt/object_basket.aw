@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.8 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.9 2008/07/09 08:09:46 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -12,7 +12,10 @@
 	@caption Korvi t&uuml;&uuml;p
 
 	@property export type=relpicker field=meta method=serialize reltype=RELTYPE_EXPORT store=connect
-	@Ekspordiobjekt
+	@caption Ekspordiobjekt
+
+	@property max_items type=textbox size=5 field=meta method=serialize
+	@caption Maksimaalne kirjete arv
 	
 @reltype EXPORT clid=CL_ICAL_EXPORT value=1
 @caption iCal eksport
@@ -170,12 +173,18 @@ class object_basket extends class_base
 		$bt = $this->make_keys($o->prop("basket_type"));
 		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
 		{
-			return safe_array(aw_unserialize($this->get_cval("object_basket_".$o->id()."_".aw_global_get("uid"))));
+			$rv = safe_array(aw_unserialize($this->get_cval("object_basket_".$o->id()."_".aw_global_get("uid"))));
 		}
 		if ($bt[OBJ_BASKET_SESSION])
 		{
-			return safe_array($_SESSION["object_basket"][$o->id()]["content"]);
+			$rv = safe_array($_SESSION["object_basket"][$o->id()]["content"]);
 		}
+
+		if ($o->max_items && count($rv) > $o->max_items)
+		{
+			$rv = array_slice($rv, -$o->max_items);
+		}
+		return $rv;
 	}
 
 	/**
