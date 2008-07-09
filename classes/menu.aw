@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.239 2008/06/27 07:50:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.240 2008/07/09 08:32:42 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2506,7 +2506,6 @@ class menu extends class_base implements main_subtemplate_handler
 		$o = $arr["obj_inst"];
 		$l = get_instance("languages");
 		$ll = $l->get_list(array("all_data" => true, "set_for_user" => true));
-		$this->db_query("DELETE FROM aw_alias_trans WHERE menu_id = ".$o->id());
 		foreach($ll as $lid => $lang)
 		{
 			if ($lid == $o->lang_id())
@@ -2515,6 +2514,7 @@ class menu extends class_base implements main_subtemplate_handler
 			}
 			if ($arr["request"]["act_".$lid])
 			{
+				$this->db_query("DELETE FROM aw_alias_trans WHERE menu_id = ".$o->id(). " AND lang_id = ".$lid);
 				$str = $arr["request"]["trans_".$lid."_alias"];
 				$nv = iconv("UTF-8", $lang["charset"], $str);
 				$this->quote(&$nv);
