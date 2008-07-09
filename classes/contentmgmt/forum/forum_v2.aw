@@ -1106,7 +1106,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	// !Draws the contents of a single folder
 	function draw_folder($args = array())
 	{
-		load_javascript("aw.js");
 		extract($args);
 
 		$topics_on_page = $args["obj_inst"]->prop("topics_on_page");
