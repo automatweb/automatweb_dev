@@ -103,6 +103,9 @@ function buttonClick(event, menuId) {
 
   if (button.menu == null) {
     button.menu = document.getElementById(menuId);
+    $("#"+menuId).each(function() {
+      button.menu = this
+    });
 	if (!button.menu.style.zIndex)
 	{
 		button.menu.style.zIndex = XBrowserZindex;
