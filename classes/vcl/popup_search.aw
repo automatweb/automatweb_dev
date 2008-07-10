@@ -9,6 +9,9 @@ EMIT_MESSAGE(MSG_POPUP_SEARCH_CHANGE)
 */
 class popup_search extends aw_template
 {
+	const PS_WIDTH = 800;
+	const PS_HEIGHT = 500;
+
 	function popup_search()
 	{
 		$this->init("popup_search");
@@ -161,7 +164,7 @@ class popup_search extends aw_template
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
 			$tmp["value"] .= html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 				"title" => t("Otsi")
 			));
@@ -244,7 +247,7 @@ class popup_search extends aw_template
 					"clid" => $clid,
 				));
 				$tmp["value"] .= " ".html::href(array(
-					"url" => "javascript:aw_popup_scroll(\"$url2\",\"Eemalda\",550,500)",
+					"url" => "javascript:aw_popup_scroll(\"$url2\",\"Eemalda\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 					"title" => t("Eemalda")
 				));
@@ -918,7 +921,7 @@ function aw_get_el(name,form)
 		unset($arr["confirm"]);
 		$url = $this->mk_my_orb("do_search", $arr);
 		$s = t("Otsi");
-		return "<a class=\"aw04toolbarbutton\" title=\"$s\" alt=\"$s\" href='javascript:aw_popup_scroll(\"$url\",\"$s\",550,500)'$c onMouseOver=\"this.className='aw04toolbarbuttonhover'\" onMouseOut=\"this.className='aw04toolbarbutton'\" onMouseDown=\"this.className='aw04toolbarbuttondown'\" onMouseUp=\"this.className='aw04toolbarbuttonhover'\"><img alt=\"$s\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0></a>";
+		return "<a class=\"aw04toolbarbutton\" title=\"$s\" alt=\"$s\" href='javascript:aw_popup_scroll(\"$url\",\"$s\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")'$c onMouseOver=\"this.className='aw04toolbarbuttonhover'\" onMouseOut=\"this.className='aw04toolbarbutton'\" onMouseDown=\"this.className='aw04toolbarbuttondown'\" onMouseUp=\"this.className='aw04toolbarbuttonhover'\"><img alt=\"$s\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0></a>";
 	}
 
 	/**

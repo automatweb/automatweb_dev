@@ -143,7 +143,7 @@ class relpicker extends  core
 		if (!$no_edit)
 		{
 			$r .= " ".html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 				"title" => t("Otsi"),
 				"tabindex" => "10",
@@ -331,7 +331,7 @@ class relpicker extends  core
 			if (/*is_oid($this->obj->id()) &&*/ !$val["no_edit"] || $val["search_button"])
 			{
 				$val["post_append_text"] .= " ".html::href(array(
-					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 					"title" => t("Otsi"),
 					"tabindex" => "10",
