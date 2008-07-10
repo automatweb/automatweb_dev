@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.267 2008/07/04 12:00:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.268 2008/07/10 09:14:52 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -1687,7 +1687,11 @@ if (!defined("DEFS"))
 	**/
 	function aw_disable_acl()
 	{
-		$GLOBALS["__aw_disable_acl"] = $GLOBALS["cfg"]["acl"]["no_check"];
+		if (!is_array($GLOBALS["__aw_disable_acl"]))
+		{
+			$GLOBALS["__aw_disable_acl"] = array();
+		}
+		$GLOBALS["__aw_disable_acl"][] = $GLOBALS["cfg"]["acl"]["no_check"];
 		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
 	}
 
@@ -1699,7 +1703,7 @@ if (!defined("DEFS"))
 	**/
 	function aw_restore_acl()
 	{
-		$GLOBALS["cfg"]["acl"]["no_check"] = $GLOBALS["__aw_disable_acl"];
+		$GLOBALS["cfg"]["acl"]["no_check"] = array_pop($GLOBALS["__aw_disable_acl"]);
 	}
 
 	/** Finds the class id, given the class name
