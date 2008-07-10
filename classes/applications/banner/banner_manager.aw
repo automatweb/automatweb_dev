@@ -140,6 +140,18 @@ class banner_manager extends class_base
 		}
 	}
 
+	/** Generates monthly overview to separate table from banner vlicks & banner_views
+		@attrib params=name api=1 name=gen_monthly_overview_from_last_months all_args=1
+		@param months optional type=int default=3
+			number of last months from what the conversion will be done
+	 **/
+	public function gen_montly_overview_from_last_months($arr)
+	{
+		$mth = $arr["months"]?$arr["months"]:3;
+		$this->_gen_ovrview_conversion(1, $mth);
+		$this->_gen_ovrview_conversion(2, $mth);
+		return $arr["rurl"];
+	}
 
 	/** Generates monthly overview to separate table from banner_clicks & banner_views
 		@attrib paramas=name api=1 name=gen_monthly_overview all_args=1
@@ -188,19 +200,28 @@ class banner_manager extends class_base
 		}
 	}
 
-	private function _gen_ovrview_conversion($t)
+	private function _gen_ovrview_conversion($t, $mth = false)
 	{
 		$this->_check_mth_ovrview_tbl();
 		$type = array(
 			1 => $this->views,
 			2 => $this->clicks,
 		);
-		$this->db_query("SELECT * FROM ".$type[$t]);
+		//$this->db_query("SELECT * FROM ".$type[$t]);
+		if($mth)
+		{
+			$m = date("n") - ($mth - 1);
+			$tm = mktime(0,0,0, $m, 0, date("Y"));
+			$where = " WHERE tm > ".$tm;
+		}
+		else
+		{
+			$where = "";
+		}
+		$this->db_query("select bid,langid, month(from_unixtime(tm)) as month, year(from_unixtime(tm)) as year, count(concat(year(from_unixtime(tm)), month(from_unixtime(tm)))) as kokku from ".$type[$t]." group by concat(year(from_unixtime(tm)),month(from_unixtime(tm))),bid,langid". $where);
 		while($row = $this->db_next())
 		{
-			$Y = date("Y", $row["tm"]);
-			$m = date("n", $row["tm"]);
-			$data[$row["bid"].".".$Y.".".$m.".".$row["langid"].".".$t]++;
+			$data[$row["bid"].".".$row["year"].".".$row["month"].".".$row["langid"].".".$t] += $row["kokku"];
 		}
 		$this->db_query("SELECT * FROM ".$this->mth_overview_tbl);
 		while($row = $this->db_next())
