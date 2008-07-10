@@ -419,16 +419,23 @@
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>openhours</name>
+            <name>oh_tb</name>
             <table>objects</table>
             <group>open_hrs</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_OPENHOURS</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <field>openhours</field>
-            <caption>Avamisajad</caption>
+            <field>oh_tb</field>
+      </property>
+      <property>
+            <name>oh_t</name>
+            <table>objects</table>
+            <group>open_hrs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>oh</parent>
+            <field>oh_t</field>
       </property>
       <property>
             <name>kaubamargid</name>

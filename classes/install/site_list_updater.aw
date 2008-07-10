@@ -31,7 +31,6 @@ class site_list_updater extends aw_template
 		{
 			return;
 		}
-		
 		// no go to background
 		$url = str_replace("/automatweb", "", $this->mk_my_orb("bg_do_update", array("uid" => $arr["uid"]), "site_list_updater", false, true, "&", false));
 		get_instance("protocols/file/http")->get($url);
