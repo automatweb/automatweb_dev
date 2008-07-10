@@ -8,18 +8,30 @@
 @default field=meta
 @default method=serialize
 
-@groupinfo translation caption="T&otilde;lkimine"
-@default group=translation
-	@property translation_tb type=toolbar no_caption=1
-
-	@layout translation_hsplit_1 type=hbox width=15%:85%
-		@layout translation_vsplit_left type=vbox closeable=1 area_caption=Klassihierarhia parent=translation_hsplit_1
-			@property classtree type=treeview parent=translation_vsplit_left no_caption=1
-
-		@layout translation_vsplit_right type=vbox closeable=1 area_caption=Tolgitavad_asjad parent=translation_hsplit_1
-			@property tmp1 type=text parent=translation_vsplit_right
-			@caption fafa1
+@groupinfo translation caption="T&otilde;lkimine" submit=no
 	
+	@groupinfo translation_sub caption="T&otilde;lkimine" submit=no parent=translation
+	@default group=translation_sub
+		@property translation_tb type=toolbar no_caption=1
+
+		@layout translation_hsplit_1 type=hbox width=15%:85%
+			@layout translation_vsplit_left type=vbox closeable=1 area_caption=Klassihierarhia parent=translation_hsplit_1
+				@property classtree type=treeview parent=translation_vsplit_left no_caption=1
+
+			@layout translation_vsplit_right type=vbox closeable=1 area_caption=T&otilde;lked parent=translation_hsplit_1
+				/@property translation_area type=text parent=translation_vsplit_right no_caption=1
+				@property translation_area type=callback callback=translation_area_callback parent=translation_vsplit_right no_caption=1
+
+	@groupinfo translation_confirm caption="Kinnita t&otilde;lked" parent=translation
+	@default group=translation_confirm
+		@property remove_changes type=toolbar store=no no_caption=1
+		@property show_changes type=table store=no no_caption=1
+	
+
+@groupinfo activity caption=Aktiivsus
+
+	@property activity type=table group=activity no_caption=1
+	@caption Aktiivsus
 */
 
 define("FLD", 1);
@@ -55,6 +67,103 @@ class cb_translate extends class_base
 		}
 	}
 
+
+	function _get_remove_changes($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_save_button();
+		$tb->add_delete_button();
+	}
+
+
+	function _get_translation_area($arr)
+	{
+		$prop = &$arr["prop"];
+		$arr["request"]["area"] = method_exists($this, $arr["request"]["area"])?$arr["request"]["area"]:"classeditor";
+		$prop["value"] = $this->$arr["request"]["area"]($arr["request"]);
+		/*
+		$prop["value"] = $this->classeditor(array(
+			"clid" => $arr["request"]["clid"],
+		));
+		 */
+	}
+
+	function translation_area_callback($arr)
+	{
+		$arr["request"]["area"] = method_exists($this, $arr["request"]["area"])?$arr["request"]["area"]:"classeditor";
+		$data = $this->$arr["request"]["area"]($arr["request"]);
+		foreach($data as $k => $el)
+		{
+			$data[$k]["parent"] = "translation_vsplit_right";
+		}
+		return $data;
+	}
+
+	function _set_translation_area($arr)
+	{
+		// i have no fooking idea why this submit ends up here, but i dont have dha brains to figrue ei out right now.. 
+		// now i know.. there are two forms in the page, and the outer one is submitted.. anyway.. i leave it like that at the moment.. 
+		//$arr["request"]["return_url"] = $this->submit_editor($arr["request"]);
+	}
+
+	function _get_activity($arr)
+	{
+		// this is supposed to return a list of all active polls
+		// to let the user choose the active one
+		$table = &$arr["prop"]["vcl_inst"];
+		$table->parse_xml_def("activity_list");
+
+		$pl = new object_list(array(
+			"class_id" => CL_CB_TRANSLATE
+		));	
+		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+		{
+			$actcheck = checked($o->flag(OBJ_FLAG_IS_SELECTED));
+			$act_html = "<input type='radio' name='active' $actcheck value='".$o->id()."'>";
+			$row = $o->arr();
+			$row["active"] = $act_html;
+			$table->define_data($row);
+		};
+	}
+
+	function _set_activity($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CB_TRANSLATE,
+		));
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->flag(OBJ_FLAG_IS_SELECTED) && $o->id() != $arr["request"]["active"])
+			{
+				$o->set_flag(OBJ_FLAG_IS_SELECTED, false);
+				$o->save();
+			}
+			else
+			if ($o->id() == $arr["request"]["active"] && !$o->flag(OBJ_FLAG_IS_SELECTED))
+			{
+				$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+				$o->save();
+			}
+		}
+	}
+
+	/** Gets the active cb_translate object from system
+
+	 **/
+	public function get_sysdefault()
+	{
+		$pl = new object_list(array(
+			"class_id" => CL_CB_TRANSLATE,
+			"status" => STAT_ACTIVE,
+		));
+		return $pl->begin();
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["return_url"] = post_ru();
+	}
+
 // get props
 	function _get_translation_tb($arr)
 	{
@@ -63,6 +172,7 @@ class cb_translate extends class_base
 			"name" => "fafa",
 			"caption" => "fafa",
 			"img" => "save.gif",
+			"action" => "submit_editor",
 		));
 	}
 
@@ -75,7 +185,7 @@ class cb_translate extends class_base
 			//"open_path" => array("fld_1"),
 			//"open_path" => array("fld_10","fld_37","fld_59","867"),
 			"root_name" => iconv("iso-8859-1", "utf-8", t("AW KLASSIDE T&Otilde;LKIMINE")),
-			"url_target" => "editorcontent",
+			//"url_target" => "editorcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $clid, "parent" => " ")),
 			"has_root" => 1,
 			"baseurl" => aw_ini_get("baseurl"),
@@ -222,7 +332,7 @@ class cb_translate extends class_base
 			//"open_path" => array("fld_1"),
 			//"open_path" => array("fld_10","fld_37","fld_59","867"),
 			"root_name" => iconv("iso-8859-1", "utf-8", t("AW KLASSIDE T&Otilde;LKIMINE")),
-			"url_target" => "editorcontent",
+			//"url_target" => "editorcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			"has_root" => 1,
 			"root_id" => 0,
@@ -423,6 +533,16 @@ class cb_translate extends class_base
 
 	}
 
+	// XXX: think it through !!!!
+	// NO I WILL NOT! .. i'm gonna go nuts if i do so
+	private function _gen_trans_url($arr)
+	{
+		$arr["group"] = "translation";
+		$arr["id"] = $this->get_sysdefault()->id();
+		$arr["return_url"] = post_ru();
+		return $this->mk_my_orb("change", $arr);
+	}
+
 	function _gen_tree(&$tree, $start_id)
 	{
 		// checks what's current tree root
@@ -449,10 +569,16 @@ class cb_translate extends class_base
 			$tree->add_item(0,array(
 				"name" => iconv(aw_global_get("charset"), "utf-8", $cls[$start_id]["name"]),
 				"id" => "root",
+				/*
 				"url" => $this->mk_my_orb("classeditor", array("clid" => $start_id)),
+				 */
+				"url" => $this->_gen_trans_url(array(
+					"area" => "classeditor",
+					"clid" => $start_id,
+				)),
 				"is_open" => 1,
 				"iconurl" => icons::get_icon_url($start_id),
-				"url_target" => "editorcontent",
+				//"url_target" => "editorcontent",
 			));
 
 			// sets data_in_place feature
@@ -476,9 +602,15 @@ class cb_translate extends class_base
 				"name" => "varia",
 				"id" => $parent."_".PI,
 				"iconurl" => "images/icons/rte_align_center.gif",
+				"url" => $this->_gen_trans_url(array(
+					"clid" => trim($start_id),
+					"area" => "lineeditor",
+				)),
+				/*
 				"url" => $this->mk_my_orb("lineeditor",array(
 					"clid" => trim($start_id),
 				)),
+				 */
 			));
 		}
 
@@ -502,7 +634,13 @@ class cb_translate extends class_base
 						$tree->add_item(0,array(
 							"name" => iconv(aw_global_get("charset"), "utf-8", $el_data["name"]),
 							"id" => $el_data["id"],
+							/*
 							"url" => $this->mk_my_orb("classeditor", array("clid" => $el_data["id"])),
+							 */
+							"url" => $this->_gen_trans_url(array(
+								"clid" => $el_data["id"],
+								"area" => "classeditor",
+							)),
 							"is_open" => 0,
 							"iconurl" => empty($el_data["clid"]) ? "" : icons::get_icon_url($el_data["clid"]),
 						));
@@ -523,7 +661,7 @@ class cb_translate extends class_base
 		@attrib name=get_node all_args=1
 
 	**/
-	function get_node($arr)
+	function get_node($arr) // my god .. i've got to document this function.. inside!!
 	{
 		aw_global_set("output_charset", "UTF-8");
 		$this->read_template("editor.tpl");
@@ -553,7 +691,7 @@ class cb_translate extends class_base
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
-			"url_target" => "editorcontent",
+			//"url_target" => "editorcontent",
 		));
 
 		classload("core/icons");
@@ -596,9 +734,15 @@ class cb_translate extends class_base
 					$tree->add_item(0,array(
 						"name" => iconv(aw_global_get("charset"), "utf-8",$el_data["name"]),
 						"id" => $el_data["id"],
+						"url" => $this->_gen_trans_url(array(
+							"clid" => $el_data["id"],
+							"area" => "classeditor",
+						)),
+						/*
 						"url" => $this->mk_my_orb("classeditor",array(
 							"clid" => $el_data["id"],
 						)),
+						 */
 						"is_open" => 0,
 						"iconurl" => empty($el_data["clid"]) ? "" : icons::get_icon_url($el_data["clid"]),
 					));
@@ -636,9 +780,15 @@ class cb_translate extends class_base
 				"name" => "varia",
 				"id" => $parent."_".PI,
 				"iconurl" => "images/icons/rte_align_center.gif",
+				"url" => $this->_gen_trans_url(array(
+					"clid" => trim($arr["parent"]),
+					"area" => "lineeditor",
+				)),
+				/*
 				"url" => $this->mk_my_orb("lineeditor",array(
 					"clid" => trim($arr["parent"]),
 				)),
+				 */
 			));
 		}
 
@@ -670,7 +820,14 @@ class cb_translate extends class_base
 			$tree->add_item($node_parent,array(
 				"name" => iconv(aw_global_get("charset"), "utf-8", $gdata["caption"]),
 				"id" => $clid."_grp_".$gkey,
+				/*
 				"url" => $this->mk_my_orb("groupedit",array(
+					"clid" => trim($clid),
+					"grpid" => $gkey,
+				)),
+				 */
+				"url" => $this->_gen_trans_url(array(
+					"area" => "groupedit",
 					"clid" => trim($clid),
 					"grpid" => $gkey,
 				)),
@@ -700,10 +857,18 @@ class cb_translate extends class_base
 				$tree->add_item($clid."_grp_".$parent_group ,array(
 					"name" => iconv(aw_global_get("charset"), "utf-8", $caption),
 					"id" => $parent."_".$pkey,
+					/*
 					"url" => $this->mk_my_orb("proptrans",array(
 						"clid" => trim($clid),
 						"grpid" => $parent_group,
 						"propid" => $pkey,
+					)),
+					*/
+					"url" => $this->_gen_trans_url(array(
+						"clid" => trim($clid),
+						"grpid" => $parent_group,
+						"propid" => $pkey,
+						"area" => "proptrans",
 					)),
 					//"is_open" => 1,
 					"iconurl" => icons::get_icon_url(86),
@@ -732,9 +897,16 @@ class cb_translate extends class_base
 					$tree->add_item("rel_root", array(
 						"name" => iconv(aw_global_get("charset"), "utf-8", html_entity_decode($rel["caption"])),
 						"id" => $key,
+						/*
 						"url" => $this->mk_my_orb("releditor",array(
 							"clid" => trim($clid),
 							"reltype" => $key,
+						)),
+						*/
+						"url" => $this->_gen_trans_url(array(
+							"clid" => trim($clid),
+							"reltype" => $key,
+							"area" => "releditor",
 						)),
 						"iconurl" => "images/icons/connectionmanager.gif",
 					));
@@ -763,9 +935,16 @@ class cb_translate extends class_base
 					$tree->add_item("layout_0",array(
 						"name" => iconv(aw_global_get("charset"), "utf-8", $ldata["area_caption"]?$ldata["area_caption"]:t("Nimetu")),
 						"id" => "lyt_".$lkey,
+						/*
 						"url" => $this->mk_my_orb("layouttrans",array(
 							"clid" => trim($clid),
 							"lid" => $lkey,
+						)),
+						 */
+						"url" => $this->_gen_trans_url(array(
+							"clid" => trim($clid),
+							"lid" => $lkey,
+							"area" => "layouttrans",
 						)),
 						//"is_open" => 1,
 						"iconurl" => "images/icons/help_topic.gif",
@@ -807,19 +986,14 @@ class cb_translate extends class_base
 			$mod_lang[$lang["acceptlang"]] = $lang;
 		}
 		
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-
 		$title = sprintf("Klass '%s' tekstid.", $cls[$arr["clid"]]["name"]);
-		$this->cb_htmlc->add_property(array(
+		$callback_data[] = array(
 			"name" => "general_title",
 			"type" => "text",
 			"no_caption" => 1,
 			"value" => $title,
 			"textsize" => "17px;",
-		));
+		);
 	
 
 		foreach($languages as $key => $language)
@@ -847,36 +1021,21 @@ class cb_translate extends class_base
 		}
 		foreach($data_to_be_shown as $text => $data)
 		{
-			/*
-			$this->vars(array(
-				"text" => iconv($charset_from_local, "utf-8", $text),
-			));
-			$tmp .= $this->parse("SUB_TRANSLATE");
-			*/
-
-			$this->cb_htmlc->add_property(array(
+			$callback_data[] = array(
 				"name" => "txt_".++$i,
 				"type" => "text",
 				"caption" => t("Tekst"),
 				"value" => iconv($charset_from_local, "utf-8", $text),
-			));
+			);
 			foreach($data as $lang => $inf)
 			{
-				$this->cb_htmlc->add_property(array(
+				$callback_data[] = array(
 					"name" => "vars[".$lang."][".iconv($charset_from_local, "utf-8", $text)."]",
 					"type" => "textbox",
 					"caption" => iconv($charset_from_local, "utf-8", $inf["lang_name"]),
 					"value" => $inf["caption"],
 					"size" => 80,
-				));
-				/*
-				$this->vars(array(
-						"lang_short" => iconv($charset_from_local, "utf-8", $lang),
-						"lang_name" => $inf["lang_name"],
-						"lang_caption" => $inf["caption"],
-				));
-				$tmp .= $this->parse("LANG_TRANSLATE");
-				*/
+				);
 			}
 			// shows languages which don't have an entry, but hide languges that haven't write access
 			foreach(array_diff(array_diff($no_writable_short, $languages), array_keys($data)) as $l)
@@ -889,54 +1048,36 @@ class cb_translate extends class_base
 					}
 				}
 				
-				$this->cb_htmlc->add_property(array(
+				$callback_data[] = array(
 					"name" => "vars[".$l."][".$text."]",
 					"type" => "textbox",
 					"caption" => iconv($charset_from_local, "utf-8", $lang_tmp["name"]),
 					"size" => 80,
-				));
-				/*
-				$this->vars(array(
-						"lang_short" => iconv($charset_from_local, "utf-8", $l),
-						"lang_name" => $lang_tmp["name"],
-						"lang_caption" => "",
-				));
-				$tmp .= $this->parse("LANG_TRANSLATE");
-				*/
+				);
 			}
-			$this->cb_htmlc->add_property(array(
+			$callback_data[] = array(
 				"name" => "sp_".$i,
 				"no_caption" => 1,
 				"value" => "&nbsp;",
-			));
+			);
 
 		}
 
 		if(count($no_writable_langs))
 		{
-			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+			$this->gen_no_permission_error($no_writable_langs);
 		}
-		$this->cb_htmlc->finish_output(array(
-			"action" => "submit_editor",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-				"clid" => trim($arr["clid"]),
-				"text" => 1,
-			),
-		));
-		
-		$save_msg = array();
-		if(strlen($arr["saved_langs"]))
-		{
-			foreach(split(",", $arr["saved_langs"]) as $lng)
-			{
-				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
-			}
-		}
-		return $this->cb_htmlc->get_result(array(
-			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
-		));
+		$callback_data[] = array(
+			"name" => "clid",
+			"value" => trim($arr["clid"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "text",
+			"value" => "1",
+			"type" => "hidden",
+		);
+		return $callback_data;
 	}
 
 	/** manages single class or classfolder editing
@@ -976,21 +1117,16 @@ class cb_translate extends class_base
 			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
 		}
 
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-
 		// gen title
 		$title = sprintf("Klassi '%s' seos '%s' ('%s' t&uuml;&uuml;pi)", iconv($charset_from_local, "UTF-8", $cls[$arr["clid"]]["name"]), "<b>".iconv($charset_from_local, "UTF-8", $rels[$arr["reltype"]]["caption"])."</b>", $arr["reltype"]);
 
-		$this->cb_htmlc->add_property(array(
+		$callback_data[] = array(
 			"name" => "general_title",
 			"type" => "text",
 			"no_caption" => 1,
 			"value" => $title,
 			"textsize" => "17px;",
-		));
+		);
 
 		foreach($languages as $key => $language)
 		{
@@ -1007,89 +1143,55 @@ class cb_translate extends class_base
 			foreach($class_po_file as $po)
 			{
 				//$comp = "Seose ".iconv($charset_from_local, $lang["charset"], $rels[$arr["reltype"]]["caption"])." (".$arr["reltype"].") tekst";
-				$comp = "Seose ".htmlentities($rels[$arr["reltype"]]["caption"], $charset["from"])." (".$arr["reltype"].") tekst";
+				//$comp = "Seose ".htmlentities($rels[$arr["reltype"]]["caption"], $charset["from"])." (".$arr["reltype"].") tekst";
+				$comp = "Seose ".$rels[$arr["reltype"]]["caption"]." (".$arr["reltype"].") tekst";
 				if($po["msgid"] == $comp)
 				{
 					$caption = $po["msgstr"];
 				}
 			}
 
-			$this->cb_htmlc->add_property(array(
+			$callback_data[] = array(
 				"name" => "langname_".$language,
 				"type" => "text",
 				"caption" => t("Keel"),
 				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
 				"caption" => t("Seose nimi"),
 				"size" => 50,
 				"value" => iconv($charset_from, "utf-8", $caption),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "sp_".$language,
 				"no_caption" => 1,
 				"value" => "&nbsp;",
-			));
-			/*
-			$this->vars(array(
-					"lang_short" => iconv($charset_from_local, "utf-8", $language),
-					"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
-					"lang_caption" => iconv($charset_from, "utf-8", $caption),
-			));
-			$this->parse("SUB_TRANSLATE");
-			*/
+			);
 		}
 
 		if(count($no_writable_langs))
 		{
-			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+			$this->gen_no_permission_error($no_writable_langs);
 		}
-		$this->cb_htmlc->finish_output(array(
-			"action" => "submit_editor",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-				"clid" => trim($arr["clid"]),
-				"reltype" => $arr["reltype"],
-				"caption" => iconv($charset_from_local, "UTF-8", $rels[$arr["reltype"]]["caption"]),
-			),
-		));
-		
-		$save_msg = array();
-		if(strlen($arr["saved_langs"]))
-		{
-			foreach(split(",", $arr["saved_langs"]) as $lng)
-			{
-				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
-			}
-		}
-		return $this->cb_htmlc->get_result(array(
-			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
-		));
-/*
-		if(count($no_writable_langs))
-		{
-			$this->vars(array(
-				"caption" => join(", ", $no_writable_langs),
-			));
-			$this->parse("FILE_ACCESS_ERROR");
-		}
+		$callback_data[] = array(
+			"name" => "caption",
+			"value" => iconv($charset_from_local, "UTF-8", $rels[$arr["reltype"]]["caption"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "clid",
+			"value" => trim($arr["clid"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "reltype",
+			"value" => $arr["reltype"],
+			"type" => "hidden",
+		);
 
-		$title = t("Klassi")." '".$cls[$arr["clid"]]["name"]."' ".t("seos")." '".$rels[$arr["reltype"]]["caption"]."'";
-		$title .= " ('".$arr["reltype"]."' ".t("t&uuml;&uuml;pi").")";
-		$this->vars(array(
-			"title" => iconv($charset_from_local, "utf-8", $title),
-			"caption" => $rels[$arr["reltype"]]["caption"],
-			"reforb" => $this->mk_reforb("submit_editor",array(
-				"clid" => $arr["clid"],
-				"reltype" => $arr["reltype"],
-			)),
-		));
-		//return die($this->parse());
-		return $this->parse();
-*/
+		return $callback_data;
 	}
 
 	/** manages single class or classfolder editing
@@ -1113,7 +1215,7 @@ class cb_translate extends class_base
 		*/
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
-
+		// where the fuck are langs???????
 		if(!$obj_is_folder)
 		{
 			$cls = aw_ini_get("classes"); //$cls["classes"];
@@ -1129,170 +1231,124 @@ class cb_translate extends class_base
 			$mod_lang[$lang_info["acceptlang"]] = $lang_info;
 		}
 				
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-
-		// gen title
-
 		// gen title
 		$cls = aw_ini_get("classes");
-		$title = sprintf("%s '%s' nimi", $obj_is_folder?t("Kausta"):t("Klassi"), "<b>".($obj_is_folder?$clsfld[$arr["clid"]]["name"]:$cls[$arr["clid"]]["name"])."</b>");
-		$this->cb_htmlc->add_property(array(
-			"name" => "general_title",
-			"type" => "text",
-			"no_caption" => 1,
-			"value" => $title,
-			"textsize" => "17px;",
-		));
-	
-		foreach($languages as $key => $language)
+
+		if(strlen($arr["clid"]))
 		{
-			$charset_from = $mod_lang[$language]["charset"];
-			unset($caption,$comment,$help);
-			$ini_po_loc = aw_ini_get("basedir")."/lang/trans/".$language."/po/aw.ini.po";
-			if(!$this->check_langfile($language, "aw.ini.po"))
-			{
-				$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
-				continue;
-			}
-			$ini_po_file = $pot_scanner->parse_po_file($ini_po_loc);
-			foreach($ini_po_file as $po)
-			{
-				$cls_start = "Klassi ".$cls[$arr["clid"]]["name"]." (".$arr["clid"].") ";
-				// class
-				if($cls_start."nimi" == $po["msgid"] && $obj_is_folder == false)
-				{
-					$caption = $po["msgstr"];
-				}
-				if($cls_start."comment" == $po["msgid"] && $obj_is_folder == false)
-				{
-					$comment = $po["msgstr"];
-				}
-				if($cls_start."help" == $po["msgid"] && $obj_is_folder == false)
-				{
-					$help = $po["msgstr"];
-				}
-
-				$fld_start = "Klassi kataloogi ".$clsfld[$arr["clid"]]["name"]." (".$arr["clid"].") ";
-				// dir
-				if($fld_start."nimi" == $po["msgid"] && $obj_is_folder == true)
-				{
-					$caption = $po["msgstr"];
-				}
-				if($fld_start."comment" == $po["msgid"] && $obj_is_folder == true)
-				{
-					$comment = $po["msgstr"];
-				}
-				if($fld_start."help" == $po["msgid"] && $obj_is_folder == true)
-				{
-					$help = $po["msgstr"];
-				}
-			}
-
-			foreach($langs_info as $lang)
-			{
-				if($lang["acceptlang"] == $language)
-				{
-					break;
-				}
-			}
-
-			$this->cb_htmlc->add_property(array(
-				"name" => "langname_".$language,
+			$title = sprintf("%s '%s' nimi", $obj_is_folder?t("Kausta"):t("Klassi"), "<b>".($obj_is_folder?$clsfld[$arr["clid"]]["name"]:$cls[$arr["clid"]]["name"])."</b>");
+			$callback_data[] = array(
+				"name" => "general_title",
 				"type" => "text",
-				"caption" => t("Keel"),
-				"value" => iconv($charset_from_local, "utf-8", $mod_lang[$language]["name"]),
-			));
-			$this->cb_htmlc->add_property(array(
-				"name" => "vars[".$language."][caption]",
-				"type" => "textbox",
-				"caption" => t("Nimi"),
-				"value" => iconv($charset_from, "utf-8", $caption),
-				"size" => 50,
-			));
-			$this->cb_htmlc->add_property(array(
-				"name" => "vars[".$language."][comment]",
-				"type" => "textarea",
-				"caption" => t("Kommentaar"),
-				"value" => iconv($charset_from, "utf-8", $comment),
-				"cols" => 50,
-				"rows" => 5,
-			));
-			$this->cb_htmlc->add_property(array(
-				"name" => "vars[".$language."][help]",
-				"type" => "textarea",
-				"caption" => t("Abitekst"),
-				"value" => iconv($charset_from, "utf-8", $help),
-				"cols" => 50,
-				"rows" => 10,
-			));
-			$this->cb_htmlc->add_property(array(
-				"name" => "sp_".$language,
 				"no_caption" => 1,
-				"value" => "&nbsp;",
-			));
-/*
-			$this->vars(array(
-				"lang_short" => iconv($charset_from_local, "utf-8", $language),
-				"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
-				"lang_caption" => iconv($charset_from, "utf-8", $caption),
-				"lang_comment" => iconv($charset_from, "utf-8", $comment),
-				"lang_help" => iconv($charset_from, "utf-8", $help),
-			));
-			$this->parse("SUB_TRANSLATE");
-*/
-		}
-
-		if(count($no_writable_langs))
-		{
-			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
-		}
-		$this->cb_htmlc->finish_output(array(
-			"action" => "submit_editor",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-				"clid" => ($obj_is_folder)?"fld_".$arr["clid"]:"".$arr["clid"],
-				"caption" => ($obj_is_folder)?iconv($charset_from_local, "utf-8",$clsfld[$arr["clid"]]["name"]):iconv($charset_from_local, "utf-8",$cls[$arr["clid"]]["name"]),
-			),
-		));
-		
-		$save_msg = array();
-		if(strlen($arr["saved_langs"]))
-		{
-			foreach(split(",", $arr["saved_langs"]) as $lng)
+				"value" => $title,
+				"textsize" => "17px;",
+			);
+			foreach($languages as $key => $language)
 			{
-				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
+				$charset_from = $mod_lang[$language]["charset"];
+				unset($caption,$comment,$help);
+				$ini_po_loc = aw_ini_get("basedir")."/lang/trans/".$language."/po/aw.ini.po";
+				if(!$this->check_langfile($language, "aw.ini.po"))
+				{
+					$no_writable_langs[] = $mod_lang[$language]["name"]."(".$language.")";
+					continue;
+				}
+				$ini_po_file = $pot_scanner->parse_po_file($ini_po_loc);
+				foreach($ini_po_file as $po)
+				{
+					$cls_start = "Klassi ".$cls[$arr["clid"]]["name"]." (".$arr["clid"].") ";
+					// class
+					if($cls_start."nimi" == $po["msgid"] && $obj_is_folder == false)
+					{
+						$caption = $po["msgstr"];
+					}
+					if($cls_start."comment" == $po["msgid"] && $obj_is_folder == false)
+					{
+						$comment = $po["msgstr"];
+					}
+					if($cls_start."help" == $po["msgid"] && $obj_is_folder == false)
+					{
+						$help = $po["msgstr"];
+					}
+
+					$fld_start = "Klassi kataloogi ".$clsfld[$arr["clid"]]["name"]." (".$arr["clid"].") ";
+					// dir
+					if($fld_start."nimi" == $po["msgid"] && $obj_is_folder == true)
+					{
+						$caption = $po["msgstr"];
+					}
+					if($fld_start."comment" == $po["msgid"] && $obj_is_folder == true)
+					{
+						$comment = $po["msgstr"];
+					}
+					if($fld_start."help" == $po["msgid"] && $obj_is_folder == true)
+					{
+						$help = $po["msgstr"];
+					}
+				}
+
+				foreach($langs_info as $lang)
+				{
+					if($lang["acceptlang"] == $language)
+					{
+						break;
+					}
+				}
+
+				$callback_data[] = array(
+					"name" => "langname_".$language,
+					"type" => "text",
+					"caption" => t("Keel"),
+					"value" => iconv($charset_from_local, "utf-8", $mod_lang[$language]["name"]),
+				);
+				$callback_data[] = array(
+					"name" => "vars[".$language."][caption]",
+					"type" => "textbox",
+					"caption" => t("Nimi"),
+					"value" => iconv($charset_from, "utf-8", $caption),
+					"size" => 50,
+				);
+				$callback_data[] = array(
+					"name" => "vars[".$language."][comment]",
+					"type" => "textarea",
+					"caption" => t("Kommentaar"),
+					"value" => iconv($charset_from, "utf-8", $comment),
+					"cols" => 50,
+					"rows" => 5,
+				);
+				$callback_data[] = array(
+					"name" => "vars[".$language."][help]",
+					"type" => "textarea",
+					"caption" => t("Abitekst"),
+					"value" => iconv($charset_from, "utf-8", $help),
+					"cols" => 50,
+					"rows" => 10,
+				);
+				$callback_data[] = array(
+					"name" => "sp_".$language,
+					"no_caption" => 1,
+					"value" => "&nbsp;",
+				);
 			}
 		}
-		return $this->cb_htmlc->get_result(array(
-			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
-		));
-/*
+
+		$callback_data[] = array(
+			"name" => "clid",
+			"value" => ($obj_is_folder)?"fld_".$arr["clid"]:"".$arr["clid"],
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "caption",
+			"value" => ($obj_is_folder)?iconv($charset_from_local, "utf-8",$clsfld[$arr["clid"]]["name"]):iconv($charset_from_local, "utf-8",$cls[$arr["clid"]]["name"]),
+			"type" => "hidden",
+		);
 		if(count($no_writable_langs))
 		{
-			$this->vars(array(
-				"caption" => join(", ", $no_writable_langs),
-			));
-			$this->parse("FILE_ACCESS_ERROR");
+			$this->gen_no_permission_error($no_writable_langs);
 		}
 
-		// gen title
-		$cls = aw_ini_get("classes");
-		$title = ($obj_is_folder)?t("Kaust")." '".$clsfld[$arr["clid"]]["name"]."'":t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
-		$this->vars(array(
-			"caption" => ($obj_is_folder)?iconv($charset_from_local, "utf-8",$clsfld[$arr["clid"]]["name"]):iconv($charset_from_local, "utf-8",$cls[$arr["clid"]]["name"]),
-			"title" => iconv($charset_from_local, "utf-8", $title),
-			"reforb" => $this->mk_reforb("submit_editor",array(
-				"clid" => ($obj_is_folder)?"fld_".$arr["clid"]:"".$arr["clid"],
-			)),
-		));
-
-		return ($this->parse());
-		//return die($this->parse());
-*/
+		return strlen($arr["clid"])?$callback_data:array();
 	}
 
 	/**
@@ -1307,10 +1363,6 @@ class cb_translate extends class_base
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
 		aw_global_set("output_charset", "UTF-8");
-		/*
-		$this->read_template("proptrans.tpl");
-		$this->sub_merge = 1;
-		*/
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$props = $cfgu->load_properties(array(
@@ -1325,20 +1377,15 @@ class cb_translate extends class_base
 		$po_file = $po[count($po)-1];
 
 		
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-
 		$title = sprintf(t("Klass '%s', Grupp '%s'"), $cls[$arr["clid"]]["name"], "<b>".$groups[$arr["grpid"]]["caption"]."</b>");
 
-		$this->cb_htmlc->add_property(array(
+		$callback_data[] = array(
 			"name" => "general_title",
 			"type" => "text",
 			"no_caption" => 1,
 			"value" => $title,
 			"textsize" => "17px;",
-		));
+		);
 
 
 		$langs_info = aw_ini_get("languages.list");
@@ -1382,107 +1429,63 @@ class cb_translate extends class_base
 			}
 
 			// new
-			$this->cb_htmlc->add_property(array(
+			$callback_data[] = array(
 				"name" => "langname_".$language,
 				"type" => "text",
 				"caption" => t("Keel"),
 				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
 				"caption" => t("Grupi nimi"),
 				"size" => 50,
 				"value" => iconv($charset_from, "utf-8", $caption),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][comment]",
 				"type" => "textarea",
 				"cols" => 50,
 				"rows" => 5,
 				"caption" => t("Kommentaar"),
 				"value" => iconv($charset_from, "utf-8", $comment),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][help]",
 				"type" => "textarea",
 				"cols" => 50,
 				"rows" => 10,
 				"caption" => t("Abitekst"),
 				"value" => iconv($charset_from, "utf-8", $help),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "sp_".$language,
 				"no_caption" => 1,
 				"value" => "&nbsp;",
-			));
-			/// new
-/*
-			$this->vars(array(
-					"lang_short" => iconv($charset_from_local, "utf-8", $language),
-					"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
-					"lang_caption" => iconv($charset_from, "utf-8", $caption),
-					"lang_comment" => iconv($charset_from, "utf-8", $comment),
-					"lang_help" => iconv($charset_from, "utf-8", $help),
-			));
-			$this->parse("SUB_TRANSLATE");
-*/
+			);
 		};
 
 
 		if(count($no_writable_langs))
 		{
-			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
-			$this->vars(array(
-				"caption" => join(", ", $no_writable_langs),
-			));
-			$this->parse("FILE_ACCESS_ERROR");
+			$this->gen_no_permission_error($no_writable_langs);
 		}
-		$this->cb_htmlc->finish_output(array(
-			"action" => "submit_editor",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-				"clid" => trim($arr["clid"]),
-				"grpid" => $arr["grpid"],
-				"caption" => iconv($charset_from_local, "utf-8", $groups[$arr["grpid"]]["caption"]),
-			),
-		));
-		
-		$save_msg = array();
-		if(strlen($arr["saved_langs"]))
-		{
-			foreach(split(",", $arr["saved_langs"]) as $lng)
-			{
-				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
-			}
-		}
-		return $this->cb_htmlc->get_result(array(
-			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
-		));
-/*
-		if(count($no_writable_langs))
-		{
-			$this->vars(array(
-				"caption" => join(", ", $no_writable_langs),
-			));
-			$this->parse("FILE_ACCESS_ERROR");
-		}
-
-		// gen title
-		$title = t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
-		$title .= ", ".t("Grupp")." '".$groups[$arr["grpid"]]["caption"]."'";
-		$this->vars(array(
-			"caption" => iconv($charset_from_local, "utf-8", $groups[$arr["grpid"]]["caption"]),
-			"title" => iconv(aw_global_get("charset"), "utf-8", $title),
-			"reforb" => $this->mk_reforb("submit_editor",array(
-				"clid" => $arr["clid"],
-				"grpid" => $arr["grpid"],
-			)),
-		));
-		return ($this->parse());
-		//return die($this->parse());
-*/
+		$callback_data[] = array(
+			"name" => "caption",
+			"value" => iconv($charset_from_local, "utf-8", $groups[$arr["grpid"]]["caption"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "clid",
+			"value" => trim($arr["clid"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "grpid",
+			"value" => $arr["grpid"],
+			"type" => "hidden",
+		);
+		return $callback_data;
 	}
 
 
@@ -1515,20 +1518,15 @@ class cb_translate extends class_base
 		$groups = $cfgu->get_groupinfo();
 		$langs_info = aw_ini_get("languages.list");
 		
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-
 		$title = sprintf("Klass '%s', Grupp '%s', Omadus '%s'('%s' t&uuml;&uuml;pi)", $cls[$arr["clid"]]["name"], $groups[$arr["grpid"]]["caption"], "<b>".$props[$arr["propid"]]["caption"]."</b>", $props[$arr["propid"]]["type"]);
 
-		$this->cb_htmlc->add_property(array(
+		$callback_data[] = array(
 			"name" => "general_title",
 			"type" => "text",
 			"no_caption" => 1,
 			"value" => $title,
 			"textsize" => "17px;",
-		));
+		);
 
 
 		foreach($langs_info as $lang_info)
@@ -1551,7 +1549,7 @@ class cb_translate extends class_base
 			{
 				if($language == aw_global_get("LC"))
 				{
-					$correct_prop_name = ($po["msgid"] == "Omaduse  (".$arr["propid"].") caption")?$po["msgstr"]:$correct_prop_name;
+					$correct_prop_name = ($po["msgid"] == "Omaduse ".$props[$arr["propid"]]["caption"]." (".$arr["propid"].") caption")?$po["msgstr"]:$correct_prop_name;
 				}
 				if(strstr($po["msgid"], "Omaduse") && strstr($po["msgid"], $arr["propid"]) && strstr($po["msgid"], "caption"))
 				{
@@ -1570,124 +1568,67 @@ class cb_translate extends class_base
 			$langdir = aw_ini_get("basedir")."/lang/trans/".$language."/po/".$arr["proptrans"].".po";
 
 			// new
-			$this->cb_htmlc->add_property(array(
+			$callback_data[] = array(
 				"name" => "langname_".$language,
 				"type" => "text",
 				"caption" => t("Keel"),
 				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][caption]",
 				"type" => "textbox",
 				"caption" => t("Omaduse nimi"),
 				"value" => iconv($charset_from, "utf-8", $caption),
 				"size" => 50,
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][comment]",
 				"type" => "textarea",
 				"caption" => t("Kommentaar"),
 				"value" => iconv($charset_from, "utf-8", $comment),
 				"rows" => 5,
 				"cols" => 50,
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][help]",
 				"type" => "textarea",
 				"caption" => t("Abitekst"),
 				"value" => iconv($charset_from, "utf-8", $help),
 				"rows" => 10,
 				"cols" => 50,
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "sp_".$language,
 				"no_caption" => 1,
 				"value" => "&nbsp;",
-			));
-			/// new
-
-			$this->vars(array(
-				"lang_name" => iconv($charset_from_local, "utf-8", $lang["name"]),
-				"lang_short" => iconv($charset_from_local, "utf-8", $language),
-				"lang_caption" => iconv($charset_from, "utf-8", $caption),
-				"lang_comment" => iconv($charset_from, "utf-8", $comment),
-				"lang_help" => iconv($charset_from, "utf-8", $help),
-			));
-
-			$this->parse("SUB_TRANSLATE");
+			);
 		};
-
-		$this->cb_htmlc->add_property(array(
-			"type" => "hidden",
-			"name" => "forward",
-			"value" => 1,
-		));
-
-		$this->cb_htmlc->add_property(array(
-			"name" => "save",
-			"caption" => t("Salvesta"),
-			"type" => "button",
-			"class" => "sbtbutton",
-			"onclick" => "cf = document.forms.changeform; cf.forward.value=0; submit_changeform('');",
-		));
-
-		$this->cb_htmlc->add_property(array(
-			"no_caption" => 1,
-			"value" => t("Salvesta ja edasi"),
-			"type" => "submit",
-			"name" => "continue",
-		));
 
 		if(count($no_writable_langs))
 		{
-			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
-			$this->vars(array(
-				"caption" => join(", ", $no_writable_langs),
-			));
-			$this->parse("FILE_ACCESS_ERROR");
+			$this->gen_no_permission_error($no_writable_langs);
 		}
-		$this->cb_htmlc->finish_output(array(
-			"action" => "submit_editor",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-				"clid" => trim($arr["clid"]),
-				"grpid" => $arr["grpid"],
-				"propid" => $arr["propid"],
-				"caption" => iconv($charset_from_local, "utf-8", $props[$arr["propid"]]["caption"]),
-			),
-		));
-		
-		$save_msg = array();
-		if(strlen($arr["saved_langs"]))
-		{
-			foreach(split(",", $arr["saved_langs"]) as $lng)
-			{
-				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
-			}
-		}
-		return $this->cb_htmlc->get_result(array(
-			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
-		));
-
-		/*
-		// gen title
-		$title = t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
-		$title .= ", ".t("Grupp")." '".$groups[$arr["grpid"]]["caption"]."'";
-		$title .= ", ".t("Omadus")." '".$props[$arr["propid"]]["caption"]."'";
-		$title .= " ('".$props[$arr["propid"]]["type"]."' ".t("t&uuml;&uuml;pi").")";
-
-		$this->vars(array(
-			"caption" => iconv($charset_from_local, "utf-8", $props[$arr["propid"]]["caption"]),
-			"title" => iconv($charset_from_local, "utf-8", $title),
-			"reforb" => $this->mk_reforb("submit_editor",array(
-				"clid" => trim($arr["clid"]),
-				"grpid" => $arr["grpid"],
-				"propid" => $arr["propid"],
-			)),
-		));
-		return ($this->parse());
-		*/
+		$callback_data[] = array(
+			"name" => "caption",
+			"value" => iconv($charset_from_local, "utf-8", $props[$arr["propid"]]["caption"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "clid",
+			"value" => trim($arr["clid"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "grpid",
+			"value" => $arr["grpid"],
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "propid",
+			"value" => $arr["propid"],
+			"type" => "hidden",
+		);
+		return $callback_data;
 	}
 
 	function get_use_languages()
@@ -1696,7 +1637,7 @@ class cb_translate extends class_base
 		$languages = $pot_scanner->get_langs();
 		$uo = obj(aw_global_get("uid_oid"));
 		$use_langs = $uo->prop("target_lang");
-		if(count($use_langs))
+		if(is_array($use_langs) && count($use_langs))
 		{
 			$li = get_instance("core/languages");
 			$langs = array();
@@ -1746,20 +1687,15 @@ class cb_translate extends class_base
 
 		$langs_info = aw_ini_get("languages.list");
 		
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-
 		// gen title
 		$title = sprintf("Klass '%s', Kujudusosa '%s' ('%s' t&uuml;&uuml;pi)", iconv($charset_from_local, "UTF-8", $cls[$arr["clid"]]["name"]), "<b>".iconv($charset_from_local, "UTF-8", $layouts[$arr["lid"]]["area_caption"])."</b>", $layouts[$arr["lid"]]["type"]);
-		$this->cb_htmlc->add_property(array(
+		$callback_data[] = array(
 			"name" => "general_title",
 			"type" => "text",
 			"no_caption" => 1,
 			"value" => $title,
 			"textsize" => "17px;",
-		));
+		);
 
 		foreach($langs_info as $lang_info)
 		{
@@ -1788,78 +1724,65 @@ class cb_translate extends class_base
 				}
 			}
 
-			$this->cb_htmlc->add_property(array(
+			$callback_data[] = array(
 				"name" => "langname_".$language,
 				"type" => "text",
 				"caption" => t("Keel"),
 				"value" => iconv($charset_from_local, "utf-8", $lang["name"]),
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "vars[".$language."][pealkiri]",
 				"type" => "textbox",
 				"caption" => t("Kujundusosa nimi"),
 				"value" => iconv($lang["charset"], "utf-8", $caption),
 				"size" => 50,
-			));
-			$this->cb_htmlc->add_property(array(
+			);
+			$callback_data[] = array(
 				"name" => "sp_".$language,
 				"no_caption" => 1,
 				"value" => "&nbsp;",
-			));
+			);
 		};
 
 		if(count($no_writable_langs))
 		{
-			$this->gen_error(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $no_writable_langs)));
+			$this->gen_no_permission_error($no_writable_langs);
 		}
-		$this->cb_htmlc->finish_output(array(
-			"action" => "submit_editor",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-				"clid" => trim($arr["clid"]),
-				"lid" => $arr["lid"],
-				"caption" => str_replace("&#44;", ",", iconv($charset_from_local, "utf-8", $layouts[$arr["lid"]]["area_caption"])),
-			),
-		));
-		
-		$save_msg = array();
-		if(strlen($arr["saved_langs"]))
-		{
-			foreach(split(",", $arr["saved_langs"]) as $lng)
-			{
-				$save_msg[] = $mod_lang[$lng]["name"]."(".$lng.")";
-			}
-		}
-		return $this->cb_htmlc->get_result(array(
-			"save_message" => count($save_msg)?sprintf("Salvestati j&auml;rgmiste keelte tekstid: %s",join(", ", $save_msg)):null,
-		));
+		$callback_data[] = array(
+			"name" => "caption",
+			"value" => str_replace("&#44;", ",", iconv($charset_from_local, "utf-8", $layouts[$arr["lid"]]["area_caption"])),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "clid",
+			"value" => trim($arr["clid"]),
+			"type" => "hidden",
+		);
+		$callback_data[] = array(
+			"name" => "lid",
+			"value" => $arr["lid"],
+			"type" => "hidden",
+		);
+		return $callback_data;
 	}
 
-	/**
-		@attrib name=show_changes
-	**/
-	function show_changes()
+
+	function _set_show_changes($arr)
+	{
+		$this->apply_changes();
+	}
+
+	function _get_show_changes($arr)
 	{
 		aw_global_set("output_charset", "utf-8");
 		
-		/*
-		$this->read_template("show_changes.tpl");
-		$this->sub_merge = 1;
-		*/
-
 		$data = aw_unserialize(core::get_cval("trans_changes"));
 		$langs_info = aw_ini_get("languages.list");
 		foreach($langs_info as $lang)
 		{
 			$mod_lang[$lang["acceptlang"]] = $lang;
 		}
-		$this->cb_htmlc = get_instance("cfg/htmlclient");
-		$this->cb_htmlc->start_output(array(
-			"template" => "default",
-		));
-		classload("vcl/table");
-		$t = new aw_table();
+		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "lang",
 			"caption" => t("Keel"),
@@ -1916,56 +1839,23 @@ class cb_translate extends class_base
 		}
 		if($any_non_writable)
 		{
-			$this->gen_error(t("punasega t&auml;histatud ridu ei ole v&otilde;imalik t&otilde;lkefailide kirjutus&otilde;iguste puudumise t&otilde;ttu salvestada!"));
+			warning(t("Punasega t&auml;histatud ridu ei ole v&otilde;imalik t&otilde;lkefailide kirjutus&otilde;iguste puudumise t&otilde;ttu salvestada!"));
 		}
 		
-		$this->cb_htmlc->add_property(array(
-			"name" => "changetable",
-			"type" => "text",
-			"no_caption" => 1,
-			"value" => $t->draw(),
-		));
-		$this->cb_htmlc->finish_output(array(
-			"action" => "apply_changes",
-			"method" => "POST",
-			"data" => array(
-				"class" => "cb_translate",
-			),
-		));
-		return $this->cb_htmlc->get_result();
-
-		/*
-		$this->vars(array(
-			"caption" => iconv(aw_global_get("charset"), "utf-8",t("Sooritatud muudatused")),
-		));
-		if($is)
-		{
-			$this->vars(array(
-				"apply_link" => html::href(array(
-					"url" => $this->mk_my_orb("apply_changes"),
-					"target" => "editorcontent",
-					"class" => "apply",
-					"caption" => iconv(aw_global_get("charset") , "utf-8", t("Kinnita muudatused")),
-				)),
-			));
-		}
-		else
-		{
-			$this->vars(array(
-				"nochange" => iconv(aw_global_get("charset"), "utf-8",t("muudatusi pole")),
-			));
-			$this->parse("NO_CHANGE");
-		}
-		return die($this->parse());
-		*/
 	}
 
-	function gen_error($str)
+	/** Removes translation changes, called from toolbar
+		@attrib name=delete_objects api=1 all_args=1
+	 **/
+	function delete_objects($arr)
 	{
-		$this->cb_htmlc->vars(array(
-			"error_text" => $str,
-		));
-		$this->cb_htmlc->error = $this->cb_htmlc->parse("ERROR");
+		core::set_cval("trans_changes", aw_serialize(array(), SERIALIZE_NATIVE));
+		return $arr["return_url"];
+	}
+
+	private function gen_no_permission_error($langs)
+	{
+		warning(sprintf("J&auml;rgmiste keelte t&otilde;lkefailidel ei ole kirjutus&otilde;igust. Palun kontrollige &uuml;le: %s", join(", ", $langs)));
 	}
 
 	/**
@@ -2082,7 +1972,7 @@ class cb_translate extends class_base
 	}
 
 	/**
-		@attrib name=submit_editor
+		@attrib name=submit_editor all_args=1
 	**/
 	function submit_editor($arr)
 	{
@@ -2398,7 +2288,6 @@ class cb_translate extends class_base
 				}
 			}
 		}
-		//die(arr($change_log));
 		if(count($change_log) > 0)
 		{
 			foreach($change_log as $change_nr => $change)
@@ -2604,8 +2493,7 @@ class cb_translate extends class_base
 				$return_params["grpid"] = $props[$prop]["group"];
 			}
 		}
-		$url = $this->mk_my_orb($return_params["action"], $return_params,"",1);
-		return $url;
+		return $arr["return_url"];
 
 	}
 

@@ -76,8 +76,8 @@
 			</function>
 		</action>
 
-		<action name="show_changes">
-			<function name="show_changes">
+		<action name="delete_objects" all_args="1">
+			<function name="delete_objects">
 				<arguments>
 				</arguments>
 			</function>
@@ -104,7 +104,7 @@
 			</function>
 		</action>
 
-		<action name="submit_editor">
+		<action name="submit_editor" all_args="1">
 			<function name="submit_editor">
 				<arguments>
 				</arguments>
