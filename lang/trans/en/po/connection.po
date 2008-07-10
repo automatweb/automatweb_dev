@@ -29,27 +29,27 @@ msgstr "connection::find(): parameter must be an array of filter parameters!"
 msgid "connection::change(%s): parameter must be an array!"
 msgstr "connection::change(%s): parameter must be an array!"
 
-#: classes/core/obj/connection.aw:337
+#: classes/core/obj/connection.aw:336
 msgid "connection::delete(): no current connection to delete!"
 msgstr "connection::delete(): no current connection to delete!"
 
-#: classes/core/obj/connection.aw:347
+#: classes/core/obj/connection.aw:346
 msgid "connection::delete(): no view access for this connection (%s)!"
 msgstr "connection::delete(): no view access for this connection (%s)!"
 
-#: classes/core/obj/connection.aw:499 classes/core/obj/connection.aw:526
+#: classes/core/obj/connection.aw:498 classes/core/obj/connection.aw:525
 msgid "connection::to(): no current connection!"
 msgstr "connection::to(): no current connection!"
 
-#: classes/core/obj/connection.aw:565
+#: classes/core/obj/connection.aw:564
 msgid "connection::load(%s): no connection with id $id!"
 msgstr "connection::load(%s): no connection with id $id!"
 
-#: classes/core/obj/connection.aw:575 classes/core/obj/connection.aw:599
+#: classes/core/obj/connection.aw:574 classes/core/obj/connection.aw:598
 msgid "connection::load(%s): no view access for this connection!"
 msgstr "connection::load(%s): no view access for this connection!"
 
-#: classes/core/obj/connection.aw:587
+#: classes/core/obj/connection.aw:586
 msgid "connection::save(): connection must have both ends defined!"
 msgstr "connection::save(): connection must have both ends defined!"
 

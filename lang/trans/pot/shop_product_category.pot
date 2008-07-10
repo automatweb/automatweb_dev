@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_category.aw:prop_unit_formula
+msgid "Omaduse &Uuml;hikute valemid (unit_formula) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_unit_formula_comment
+msgid "Omaduse &Uuml;hikute valemid (unit_formula) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:prop_unit_formula_help
+msgid "Omaduse &Uuml;hikute valemid (unit_formula) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_category.aw:prop_doc
 msgid "Omaduse Dokument (doc) caption"
 msgstr ""
@@ -86,19 +98,23 @@ msgstr ""
 msgid "Seose Kuvamise kaust (RELTYPE_DISPLAY_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:73
+#: classes/applications/shop/shop_product_category.aw:rel_RELTYPE_UNIT_FORMULA
+msgid "Seose &Uuml;hikute valem (RELTYPE_UNIT_FORMULA) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_category.aw:79
 msgid "Eemalda"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:78
+#: classes/applications/shop/shop_product_category.aw:84
 msgid "Kuvamise kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:83
+#: classes/applications/shop/shop_product_category.aw:89
 msgid "Salvestamise kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_product_category.aw:88
+#: classes/applications/shop/shop_product_category.aw:94
 msgid "Nimi"
 msgstr ""
 

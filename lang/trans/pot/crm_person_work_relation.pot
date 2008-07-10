@@ -254,3 +254,11 @@ msgstr ""
 msgid "Seose Valdkond (RELTYPE_FIELD) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_person_work_relation.aw:132
+msgid "Algus ei saa olla suurem kui l&otilde;pp!"
+msgstr ""
+
+#: classes/applications/crm/crm_person_work_relation.aw:142
+msgid "L&otilde;pp ei saa olla v&auml;iksem kui algus!"
+msgstr ""
+

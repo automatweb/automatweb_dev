@@ -447,50 +447,50 @@ msgstr ""
 msgid "Faili t&uuml;&uuml;p ei ole lubatud!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:798
+#: classes/contentmgmt/file.aw:797
 msgid "faili ikoon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:916
+#: classes/contentmgmt/file.aw:915
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1570
+#: classes/contentmgmt/file.aw:1569
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1761
+#: classes/contentmgmt/file.aw:1769
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1769
+#: classes/contentmgmt/file.aw:1777
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1807
+#: classes/contentmgmt/file.aw:1815
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1813
+#: classes/contentmgmt/file.aw:1821
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1820
+#: classes/contentmgmt/file.aw:1828
 msgid "Saada teavitusmeil"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1830
+#: classes/contentmgmt/file.aw:1838
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1835
+#: classes/contentmgmt/file.aw:1843
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1840
+#: classes/contentmgmt/file.aw:1848
 msgid "Telefon"
 msgstr ""
 
-#: classes/contentmgmt/file.aw:1845
+#: classes/contentmgmt/file.aw:1853
 msgid "E-mail"
 msgstr ""

@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 # classes/applications/shop/shop_order_cart.aw:class_319_help
 #: classes/applications/shop/shop_order_cart.aw:class_319_help
@@ -113,24 +112,23 @@ msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "controller"
 
 #: classes/applications/shop/shop_order_cart.aw:165
-#: classes/applications/shop/shop_order_cart.aw:1075
-#: classes/applications/shop/shop_order_cart.aw:1345
+#: classes/applications/shop/shop_order_cart.aw:1076
+#: classes/applications/shop/shop_order_cart.aw:1346
 msgid "shop_order_cart::show(): no product layout set for cart (%s)"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:440
+#: classes/applications/shop/shop_order_cart.aw:441
 msgid "%s minimaalne tellimiskogus on %s, hetkel korvis %s."
 msgstr "%s minimum order is %s, there is %s in the basket."
 
-#: classes/applications/shop/shop_order_cart.aw:460
+#: classes/applications/shop/shop_order_cart.aw:461
 msgid "%s maksimaalne tellimiskogus on %s, hetkel korvis %s."
 msgstr "%s maximum order is %s, there is %s in the basket."
 
-#: classes/applications/shop/shop_order_cart.aw:482
+#: classes/applications/shop/shop_order_cart.aw:483
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr "For product %s, you must order an amount that is divisble by %s, currently you ordered %s"
 
-#: classes/applications/shop/shop_order_cart.aw:855
+#: classes/applications/shop/shop_order_cart.aw:856
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
-

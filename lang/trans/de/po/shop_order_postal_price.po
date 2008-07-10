@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/shop/shop_order_postal_price.aw:class_1424_help
-msgid "Klassi Poe postikulu help"
+#: classes/applications/shop/shop_order_postal_price.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_postal_price.aw:prop_price_from
@@ -89,4 +88,3 @@ msgstr ""
 #: classes/applications/shop/shop_order_postal_price.aw:rel_RELTYPE_COUNTRY
 msgid "Seose Riik (RELTYPE_COUNTRY) tekst"
 msgstr ""
-

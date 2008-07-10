@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_warehouse_movement.aw:class_1461_help
 msgid "Klassi Lao liikumine help"
 msgstr ""
@@ -84,6 +83,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_movement.aw:prop_unit_help
 msgid "Omaduse &Uuml;hik (unit) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_movement.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_movement.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_movement.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_movement.aw:prop_price
@@ -170,3 +181,6 @@ msgstr ""
 msgid "Seose Saateleht (RELTYPE_DELIVERY_NOTE) tekst"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_movement.aw:rel_RELTYPE_CURRENCY
+msgid "Seose Valuuta (RELTYPE_CURRENCY) tekst"
+msgstr ""

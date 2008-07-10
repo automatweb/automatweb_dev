@@ -1838,59 +1838,59 @@ msgstr ""
 msgid "Otsingu parameetrid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3395
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3459
 msgid "keelatud nimi: %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3400
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3464
 msgid "eval() keelatud."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3404
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3468
 msgid "global keelatud."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3410
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3474
 msgid "globaalsed muutujad keelatud."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3418
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3482
 msgid "include() keelatud."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3424
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3488
 msgid "'backtick' operaator keelatud."
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3690
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3754
 msgid "bug_tracker::get_next_avail_time_from(): time is in loop!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3819
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3883
 msgid "Tere!\nMina olen AW Bugtrack. Sul (%s) on prognoositavad ajad m22ramata nendele bugidele, palun tee seda kohe!\n\n"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3827
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3891
 msgid "Bugtracki M22ramata ajad"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3883
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3947
 msgid "Bugtracki vastamata bugid"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3885
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3949
 msgid "all done"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3914
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3978
 msgid "Arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3919
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3983
 msgid "Prognoositud aeg"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:3947
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:4011
 msgid "Esimesed 10 ennustamata bugi"
 msgstr ""
 

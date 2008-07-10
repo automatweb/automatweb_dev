@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Poe eripakkumine help"
 msgstr ""
 
+#: classes/applications/shop/shop_special_offer.aw:prop_general_tb
+msgid "Omaduse  (general_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_general_tb_comment
+msgid "Omaduse  (general_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_general_tb_help
+msgid "Omaduse  (general_tb) help"
+msgstr ""
+
 #: classes/applications/shop/shop_special_offer.aw:prop_valid_from_date
 msgid "Omaduse Kehtib alates (valid_from_date) caption"
 msgstr ""
@@ -242,18 +254,6 @@ msgstr ""
 msgid "Omaduse Kliendigrupid (client_groups) help"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme_tb
-msgid "Omaduse  (discount_scheme_tb) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme_tb_comment
-msgid "Omaduse  (discount_scheme_tb) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme_tb_help
-msgid "Omaduse  (discount_scheme_tb) help"
-msgstr ""
-
 #: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme
 msgid "Omaduse Skeem (discount_scheme) caption"
 msgstr ""
@@ -278,30 +278,6 @@ msgstr ""
 msgid "Omaduse  (discount_scheme_tbl) help"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme_data
-msgid "Omaduse  (discount_scheme_data) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme_data_comment
-msgid "Omaduse  (discount_scheme_data) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_discount_scheme_data_help
-msgid "Omaduse  (discount_scheme_data) help"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_product_groups_tb
-msgid "Omaduse  (product_groups_tb) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_product_groups_tb_comment
-msgid "Omaduse  (product_groups_tb) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_product_groups_tb_help
-msgid "Omaduse  (product_groups_tb) help"
-msgstr ""
-
 #: classes/applications/shop/shop_special_offer.aw:prop_product_groups_tbl
 msgid "Omaduse  (product_groups_tbl) caption"
 msgstr ""
@@ -312,18 +288,6 @@ msgstr ""
 
 #: classes/applications/shop/shop_special_offer.aw:prop_product_groups_tbl_help
 msgid "Omaduse  (product_groups_tbl) help"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_product_groups_data
-msgid "Omaduse  (product_groups_data) caption"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_product_groups_data_comment
-msgid "Omaduse  (product_groups_data) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/shop_special_offer.aw:prop_product_groups_data_help
-msgid "Omaduse  (product_groups_data) help"
 msgstr ""
 
 # classes/applications/shop/shop_special_offer.aw:prop_template
@@ -455,48 +419,48 @@ msgstr ""
 msgid "Kujundusosa Artiklikategooriate&nbsp;soodustused (down_box) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:171
+#: classes/applications/shop/shop_special_offer.aw:166
 msgid "Osta x, saad y"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:172
+#: classes/applications/shop/shop_special_offer.aw:167
 msgid "Soodustus ostusumma pealt"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:173
+#: classes/applications/shop/shop_special_offer.aw:168
 msgid "Soodustus ostes teatud toodet teatud koguses"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:174
+#: classes/applications/shop/shop_special_offer.aw:169
 msgid "Soodustus ostes teatud tootesarja/brandi/kategooria toodet teatud koguses"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:180
-#: classes/applications/shop/shop_special_offer.aw:214
+#: classes/applications/shop/shop_special_offer.aw:175
+#: classes/applications/shop/shop_special_offer.aw:213
 msgid "Ostad toote"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:184
+#: classes/applications/shop/shop_special_offer.aw:180
 msgid "Saad toote"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:190
+#: classes/applications/shop/shop_special_offer.aw:187
 msgid "Ostad summa eest"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:194
+#: classes/applications/shop/shop_special_offer.aw:192
 msgid "Saad soodust"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:198
+#: classes/applications/shop/shop_special_offer.aw:197
 msgid "Allahindluse t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:200
+#: classes/applications/shop/shop_special_offer.aw:199
 msgid "%"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:201
+#: classes/applications/shop/shop_special_offer.aw:200
 msgid "kr"
 msgstr ""
 
@@ -504,62 +468,70 @@ msgstr ""
 msgid "Ostetav &uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:230
-#: classes/applications/shop/shop_special_offer.aw:285
+#: classes/applications/shop/shop_special_offer.aw:231
+#: classes/applications/shop/shop_special_offer.aw:290
 msgid "Ostetav kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:240
-#: classes/applications/shop/shop_special_offer.aw:295
+#: classes/applications/shop/shop_special_offer.aw:241
+#: classes/applications/shop/shop_special_offer.aw:312
 msgid "Soodustoode"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:251
+#: classes/applications/shop/shop_special_offer.aw:253
 msgid "Soodus&uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:256
-#: classes/applications/shop/shop_special_offer.aw:300
+#: classes/applications/shop/shop_special_offer.aw:259
+#: classes/applications/shop/shop_special_offer.aw:318
 msgid "Sooduskogus"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:269
+#: classes/applications/shop/shop_special_offer.aw:272
 msgid "Ostetav kategooria/brand/..."
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:280
+#: classes/applications/shop/shop_special_offer.aw:284
 msgid "Ostetav toode"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:290
+#: classes/applications/shop/shop_special_offer.aw:300
 msgid "Sooduskategooria, -brand..."
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:435
+#: classes/applications/shop/shop_special_offer.aw:458
+msgid "Palun valida v&auml;lja '%s' korrektne objekt."
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:462
+msgid "Palun t&auml;ita v&auml;i: '%s'"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:522
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:450
+#: classes/applications/shop/shop_special_offer.aw:537
 msgid "Soodus %"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:559
+#: classes/applications/shop/shop_special_offer.aw:681
 msgid "Artikligrupp"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:563
+#: classes/applications/shop/shop_special_offer.aw:685
 msgid "Soodustus"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:632
+#: classes/applications/shop/shop_special_offer.aw:755
 msgid "shop_special_offer::show(): no layout set for product display in special offer!"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:747
-#: classes/applications/shop/shop_special_offer.aw:850
+#: classes/applications/shop/shop_special_offer.aw:862
+#: classes/applications/shop/shop_special_offer.aw:965
 msgid "Teadmata viga!"
 msgstr ""
 
-#: classes/applications/shop/shop_special_offer.aw:880
+#: classes/applications/shop/shop_special_offer.aw:1001
 msgid "Valige toode"
 msgstr ""

@@ -110,6 +110,78 @@ msgstr ""
 msgid "Omaduse Pakkide nimekiri (list) help"
 msgstr ""
 
+#: classes/applications/package_management/package_server.aw:prop_sites_search_id
+msgid "Omaduse Saidi ID (sites_search_id) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_id_comment
+msgid "Omaduse Saidi ID (sites_search_id) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_id_help
+msgid "Omaduse Saidi ID (sites_search_id) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_url
+msgid "Omaduse Url (sites_search_url) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_url_comment
+msgid "Omaduse Url (sites_search_url) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_url_help
+msgid "Omaduse Url (sites_search_url) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_package
+msgid "Omaduse Pakett (sites_search_package) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_package_comment
+msgid "Omaduse Pakett (sites_search_package) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_package_help
+msgid "Omaduse Pakett (sites_search_package) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_file
+msgid "Omaduse Fail (sites_search_file) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_file_comment
+msgid "Omaduse Fail (sites_search_file) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_file_help
+msgid "Omaduse Fail (sites_search_file) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_button
+msgid "Omaduse Otsi (sites_search_button) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_button_comment
+msgid "Omaduse Otsi (sites_search_button) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_search_button_help
+msgid "Omaduse Otsi (sites_search_button) help"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_list
+msgid "Omaduse Saitide nimekiri (sites_list) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_list_comment
+msgid "Omaduse Saitide nimekiri (sites_list) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:prop_sites_list_help
+msgid "Omaduse Saitide nimekiri (sites_list) help"
+msgstr ""
+
 #: classes/applications/package_management/package_server.aw:group_packages
 msgid "Grupi Pakid (packages) pealkiri"
 msgstr ""
@@ -118,39 +190,63 @@ msgstr ""
 msgid "Grupi Pakid (packages) help"
 msgstr ""
 
+#: classes/applications/package_management/package_server.aw:group_sites
+msgid "Grupi Saidid (sites) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:group_sites_help
+msgid "Grupi Saidid (sites) help"
+msgstr ""
+
 #: classes/applications/package_management/package_server.aw:rel_RELTYPE_PACKAGES_FOLDER_AW
 msgid "Seose Pakkide kaust AW-s (RELTYPE_PACKAGES_FOLDER_AW) tekst"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:89
+#: classes/applications/package_management/package_server.aw:121
 msgid "Uus pakk"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:99
+#: classes/applications/package_management/package_server.aw:131
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:101
+#: classes/applications/package_management/package_server.aw:133
 msgid "Oled kindel et soovid valitud objektid kustutada?"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:112
+#: classes/applications/package_management/package_server.aw:144
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:122
+#: classes/applications/package_management/package_server.aw:154 classes/applications/package_management/package_server.aw:227
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:126
+#: classes/applications/package_management/package_server.aw:158
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:131
+#: classes/applications/package_management/package_server.aw:163
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/package_management/package_server.aw:136
+#: classes/applications/package_management/package_server.aw:168
 msgid "S&otilde;ltuvused"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:219
+msgid "Saitide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:223
+msgid "ID"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:231
+msgid "Url"
+msgstr ""
+
+#: classes/applications/package_management/package_server.aw:235
+msgid "Paketid"
 msgstr ""
 

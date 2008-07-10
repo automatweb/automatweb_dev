@@ -37,6 +37,18 @@ msgstr ""
 msgid "Omaduse  (spec_tree) help"
 msgstr ""
 
+#: classes/applications/aw_spec/aw_spec.aw:prop_enter_toolbar
+msgid "Omaduse  (enter_toolbar) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_enter_toolbar_comment
+msgid "Omaduse  (enter_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:prop_enter_toolbar_help
+msgid "Omaduse  (enter_toolbar) help"
+msgstr ""
+
 #: classes/applications/aw_spec/aw_spec.aw:prop_class_list
 msgid "Omaduse  (class_list) caption"
 msgstr ""
@@ -153,203 +165,232 @@ msgstr ""
 msgid "Kujundusosa Sisukord (tree_border) pealkiri"
 msgstr ""
 
+#: classes/applications/aw_spec/aw_spec.aw:layout_toolbar_border
+msgid "Kujundusosa Toolbari&nbsp;nupud (toolbar_border) pealkiri"
+msgstr ""
+
 #: classes/applications/aw_spec/aw_spec.aw:layout_spec_border
 msgid "Kujundusosa Sisu (spec_border) pealkiri"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:54
+#: classes/applications/aw_spec/aw_spec.aw:60
 msgid "Sissejuhatus"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:55
+#: classes/applications/aw_spec/aw_spec.aw:61
 msgid "&Uuml;levaade"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:56
+#: classes/applications/aw_spec/aw_spec.aw:62
 msgid "Eesm&auml;rgid"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:57
+#: classes/applications/aw_spec/aw_spec.aw:63
 msgid "&Auml;riline taust"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:58
+#: classes/applications/aw_spec/aw_spec.aw:64
 msgid "Ulatus, Skoop"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:59
+#: classes/applications/aw_spec/aw_spec.aw:65
 msgid "Kasutajate kirjeldus"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:60
+#: classes/applications/aw_spec/aw_spec.aw:66
 msgid "Konkurendid"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:62
-msgid "Eeldused, s&otilde;ltuvused ja piirangud"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:63
-msgid "Eeldused"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:64
-msgid "S&otilde;ltuvused"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:65
-msgid "Piirangud"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:67
-msgid "N&otilde;uded"
-msgstr ""
-
 #: classes/applications/aw_spec/aw_spec.aw:68
-msgid "&Auml;rin&otilde;uded"
+msgid "Ulatus"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:69
-msgid "Funktsionaalsed n&otilde;uded"
+msgid "Eeldused"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:70
-msgid "Loogilised andmete n&otilde;uded"
+msgid "S&otilde;ltuvused"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:71
-msgid "Kasutajan&otilde;uded"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:72
-msgid "Infohalduse n&otilde;uded"
+msgid "Piirangud"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:73
-msgid "N&otilde;uded serverile"
+msgid "N&otilde;uded"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:74
-msgid "Muud n&otilde;uded"
+msgid "&Auml;rin&otilde;uded"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:75
+msgid "Funktsionaalsed n&otilde;uded"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:76
+msgid "Loogilised andmete n&otilde;uded"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:77
-msgid "Seadistatavus"
+msgid "Kasutajan&otilde;uded"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:78
-msgid "Mida seadistada"
+msgid "Infohalduse n&otilde;uded"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:79
-msgid "Kuidas"
+msgid "N&otilde;uded serverile"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:80
-msgid "Kes"
+msgid "K&auml;ideldavuse n&otilde;uded"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:82
-msgid "Klassid"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:83
-msgid "Kellele"
+#: classes/applications/aw_spec/aw_spec.aw:81
+msgid "Muud n&otilde;uded"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:84
-msgid "Miks"
+msgid "Seadistatavus"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:85
-msgid "Klasside nimekiri"
+msgid "Mida seadistada"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:86
-msgid "Kasutajaliides"
+msgid "Kuidas"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:87
-msgid "Teated ja vead"
-msgstr ""
-
-#: classes/applications/aw_spec/aw_spec.aw:88
-msgid "Eeskujud"
+msgid "Kes"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:89
-msgid "&Auml;riloogika"
+msgid "Klassid"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:90
-msgid "Kasutajalood"
+msgid "Kellele"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:91
-msgid "S&uuml;steemi toimimisp&otilde;him&otilde;tted"
+msgid "Miks"
 msgstr ""
 
 #: classes/applications/aw_spec/aw_spec.aw:92
+msgid "Klasside nimekiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:93
+msgid "Kasutajaliides"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:94
+msgid "Teated ja vead"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:95
+msgid "Eeskujud"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:96
+msgid "&Auml;riloogika"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:97
+msgid "Kasutajalood"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:98
+msgid "S&uuml;steemi toimimisp&otilde;him&otilde;tted"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:99
 msgid "N&auml;ited"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:140
-#: classes/applications/aw_spec/aw_spec.aw:301
+#: classes/applications/aw_spec/aw_spec.aw:100
+msgid "Lahendus"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:101
+msgid "&Uuml;ldine"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:102
+msgid "API Meetodid"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:103
+msgid "S&uuml;steemiintegratsioon"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:155
+#: classes/applications/aw_spec/aw_spec.aw:329
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:144
+#: classes/applications/aw_spec/aw_spec.aw:159
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:148
+#: classes/applications/aw_spec/aw_spec.aw:163
 msgid "Klassi nimi"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:152
+#: classes/applications/aw_spec/aw_spec.aw:167
 msgid "Klassi kirjeldus"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:213
+#: classes/applications/aw_spec/aw_spec.aw:171
+#: classes/applications/aw_spec/aw_spec.aw:234
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec.aw:241
 msgid "Sisesta klassid"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:305
+#: classes/applications/aw_spec/aw_spec.aw:333
 msgid "Seos kust"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:309
+#: classes/applications/aw_spec/aw_spec.aw:337
 msgid "Seose nimi"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:313
+#: classes/applications/aw_spec/aw_spec.aw:341
 msgid "Seos kuhu"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:384
+#: classes/applications/aw_spec/aw_spec.aw:412
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:404
+#: classes/applications/aw_spec/aw_spec.aw:432
 msgid "PDF"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:474
+#: classes/applications/aw_spec/aw_spec.aw:502
 msgid "Klass: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:496
+#: classes/applications/aw_spec/aw_spec.aw:524
 msgid "Seos: %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:497
+#: classes/applications/aw_spec/aw_spec.aw:525
 msgid "Klassist %s klassi %s"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:524
+#: classes/applications/aw_spec/aw_spec.aw:552
 msgid "%s seosed"
 msgstr ""
 
-#: classes/applications/aw_spec/aw_spec.aw:587
+#: classes/applications/aw_spec/aw_spec.aw:615
 msgid "Salvesta uus versioon"
 msgstr ""

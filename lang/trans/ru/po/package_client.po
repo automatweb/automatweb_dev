@@ -109,6 +109,18 @@ msgstr ""
 msgid "Omaduse Failide nimekiri (files_list) help"
 msgstr ""
 
+#: classes/applications/package_management/package_client.aw:prop_my_list
+msgid "Omaduse Pakkide nimekiri (my_list) caption"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:prop_my_list_comment
+msgid "Omaduse Pakkide nimekiri (my_list) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:prop_my_list_help
+msgid "Omaduse Pakkide nimekiri (my_list) help"
+msgstr ""
+
 #: classes/applications/package_management/package_client.aw:group_packages
 msgid "Grupi Pakid (packages) pealkiri"
 msgstr ""
@@ -117,34 +129,55 @@ msgstr ""
 msgid "Grupi Pakid (packages) help"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:129
+#: classes/applications/package_management/package_client.aw:group_my_packages
+msgid "Grupi Minu pakid (my_packages) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:group_my_packages_help
+msgid "Grupi Minu pakid (my_packages) help"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:135
 msgid "Failid:"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:161
+#: classes/applications/package_management/package_client.aw:166
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:171
+#: classes/applications/package_management/package_client.aw:176
+#: classes/applications/package_management/package_client.aw:237
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:175
+#: classes/applications/package_management/package_client.aw:180
+#: classes/applications/package_management/package_client.aw:241
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:180
+#: classes/applications/package_management/package_client.aw:185
+#: classes/applications/package_management/package_client.aw:246
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:185
+#: classes/applications/package_management/package_client.aw:190
+#: classes/applications/package_management/package_client.aw:251
 msgid "S&otilde;ltuvused"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:190
+#: classes/applications/package_management/package_client.aw:195
 msgid "x"
 msgstr ""
 
-#: classes/applications/package_management/package_client.aw:211
+#: classes/applications/package_management/package_client.aw:216
+#: classes/applications/package_management/package_client.aw:267
 msgid "Download"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:227
+msgid "Minu pakkide nimekiri"
+msgstr ""
+
+#: classes/applications/package_management/package_client.aw:256
+msgid "Uuemad  versioonid"
 msgstr ""

@@ -13,50 +13,50 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:194
+#: classes/vcl/date_edit.aw:200
 msgid "Jaanuar"
 msgstr "January"
 
-#: classes/vcl/date_edit.aw:195
+#: classes/vcl/date_edit.aw:201
 msgid "Veebruar"
 msgstr "February"
 
-#: classes/vcl/date_edit.aw:196
+#: classes/vcl/date_edit.aw:202
 msgid "M&auml;rts"
 msgstr "March"
 
-#: classes/vcl/date_edit.aw:197
+#: classes/vcl/date_edit.aw:203
 msgid "Aprill"
 msgstr "April"
 
-#: classes/vcl/date_edit.aw:198
+#: classes/vcl/date_edit.aw:204
 msgid "Mai"
 msgstr "May"
 
-#: classes/vcl/date_edit.aw:199
+#: classes/vcl/date_edit.aw:205
 msgid "Juuni"
 msgstr "June"
 
-#: classes/vcl/date_edit.aw:200
+#: classes/vcl/date_edit.aw:206
 msgid "Juuli"
 msgstr "July"
 
-#: classes/vcl/date_edit.aw:201
+#: classes/vcl/date_edit.aw:207
 msgid "August"
 msgstr "August"
 
-#: classes/vcl/date_edit.aw:202
+#: classes/vcl/date_edit.aw:208
 msgid "September"
 msgstr "September"
 
-#: classes/vcl/date_edit.aw:203
+#: classes/vcl/date_edit.aw:209
 msgid "Oktoober"
 msgstr "October"
 
-#: classes/vcl/date_edit.aw:204
+#: classes/vcl/date_edit.aw:210
 msgid "November"
 msgstr "November"
 
-#: classes/vcl/date_edit.aw:205
+#: classes/vcl/date_edit.aw:211
 msgid "Detsember"
 msgstr "December"

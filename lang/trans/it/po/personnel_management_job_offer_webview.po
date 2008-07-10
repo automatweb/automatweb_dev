@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:class_1421_help
 msgid "Klassi T&ouml;&ouml;pakkumised veebis help"
 msgstr ""
@@ -210,7 +209,11 @@ msgstr ""
 msgid "Seose Piirkond (RELTYPE_AREA) tekst"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:94 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:140 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:197 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:94
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:140
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:197
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
 msgid "--vali--"
 msgstr ""
 
@@ -230,15 +233,18 @@ msgstr ""
 msgid "Organisatsiooni ja &uuml;ksuste j&auml;rgi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:126 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:183
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:126
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:183
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:131 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:188
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:131
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:188
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:136 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:193
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:136
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:193
 msgid "J&auml;rjestus"
 msgstr ""
 
@@ -250,11 +256,17 @@ msgstr ""
 msgid "Grupi jrk"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:156 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:215 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:156
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:215
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
 msgid "Kasvav"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:156 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:215 classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:156
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:171
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:215
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:230
 msgid "Kahanev"
 msgstr ""
 
@@ -274,15 +286,14 @@ msgstr ""
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:352
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:358
 msgid "Piirkonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:353
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:359
 msgid "Maakonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:354
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:360
 msgid "Linnad"
 msgstr ""
-

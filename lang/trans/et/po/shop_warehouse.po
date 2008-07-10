@@ -431,6 +431,18 @@ msgstr ""
 msgid "Omaduse  (storage_income_tree) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_prod_tree
+msgid "Omaduse  (storage_income_prod_tree) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_prod_tree_comment
+msgid "Omaduse  (storage_income_prod_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_prod_tree_help
+msgid "Omaduse  (storage_income_prod_tree) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_income_s_acquiredby
 msgid "Omaduse Hankija (storage_income_s_acquiredby) caption"
 msgstr ""
@@ -515,6 +527,18 @@ msgstr ""
 msgid "Omaduse Artikkel (storage_income_s_article) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_s_articlecode
+msgid "Omaduse Artikli kood (storage_income_s_articlecode) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_s_articlecode_comment
+msgid "Omaduse Artikli kood (storage_income_s_articlecode) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_s_articlecode_help
+msgid "Omaduse Artikli kood (storage_income_s_articlecode) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_income_s_art_cat
 msgid "Omaduse Artikli kategooria (storage_income_s_art_cat) caption"
 msgstr ""
@@ -579,6 +603,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_export_tree_help
 msgid "Omaduse  (storage_export_tree) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_prod_tree
+msgid "Omaduse  (storage_export_prod_tree) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_prod_tree_comment
+msgid "Omaduse  (storage_export_prod_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_prod_tree_help
+msgid "Omaduse  (storage_export_prod_tree) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_export_s_acquiredby
@@ -663,6 +699,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_export_s_article_help
 msgid "Omaduse Artikkel (storage_export_s_article) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_s_articlecode
+msgid "Omaduse Artikli kood (storage_export_s_articlecode) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_s_articlecode_comment
+msgid "Omaduse Artikli kood (storage_export_s_articlecode) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_s_articlecode_help
+msgid "Omaduse Artikli kood (storage_export_s_articlecode) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_export_s_art_cat
@@ -1028,16 +1076,16 @@ msgstr ""
 msgid "Omaduse Ribakood (storage_status_s_barcode) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_category
-msgid "Omaduse Kategooria (storage_status_s_category) caption"
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_art_cat
+msgid "Omaduse Kategooria (storage_status_s_art_cat) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_category_comment
-msgid "Omaduse Kategooria (storage_status_s_category) kommentaar"
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_art_cat_comment
+msgid "Omaduse Kategooria (storage_status_s_art_cat) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_category_help
-msgid "Omaduse Kategooria (storage_status_s_category) help"
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_art_cat_help
+msgid "Omaduse Kategooria (storage_status_s_art_cat) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_status_s_status
@@ -1172,16 +1220,16 @@ msgstr ""
 msgid "Omaduse Ribakood (storage_prognosis_s_barcode) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_category
-msgid "Omaduse Kategooria (storage_prognosis_s_category) caption"
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_art_cat
+msgid "Omaduse Kategooria (storage_prognosis_s_art_cat) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_category_comment
-msgid "Omaduse Kategooria (storage_prognosis_s_category) kommentaar"
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_art_cat_comment
+msgid "Omaduse Kategooria (storage_prognosis_s_art_cat) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_category_help
-msgid "Omaduse Kategooria (storage_prognosis_s_category) help"
+#: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_art_cat_help
+msgid "Omaduse Kategooria (storage_prognosis_s_art_cat) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:prop_storage_prognosis_s_status
@@ -2499,589 +2547,594 @@ msgstr ""
 msgid "Kujundusosa Otsing (sell_orders_left_search) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:780
+#: classes/applications/shop/shop_warehouse.aw:790
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:781
+#: classes/applications/shop/shop_warehouse.aw:791
 msgid "kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:782
+#: classes/applications/shop/shop_warehouse.aw:792
 msgid "kinnitamata"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:891
+#: classes/applications/shop/shop_warehouse.aw:901
 msgid "<br><br>Hetkel pakkumises olevad tooted:"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:912
-#: classes/applications/shop/shop_warehouse.aw:969
-#: classes/applications/shop/shop_warehouse.aw:978
+#: classes/applications/shop/shop_warehouse.aw:926
+#: classes/applications/shop/shop_warehouse.aw:989
+#: classes/applications/shop/shop_warehouse.aw:998
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:913
+#: classes/applications/shop/shop_warehouse.aw:927
 msgid "< 0"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:914
+#: classes/applications/shop/shop_warehouse.aw:928
 msgid "= 0"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:915
+#: classes/applications/shop/shop_warehouse.aw:929
 msgid "> 0"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:970
-#: classes/applications/shop/shop_warehouse.aw:4888
+#: classes/applications/shop/shop_warehouse.aw:990
+#: classes/applications/shop/shop_warehouse.aw:5112
 msgid "Arved"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:971
-#: classes/applications/shop/shop_warehouse.aw:4870
-#: classes/applications/shop/shop_warehouse.aw:4934
+#: classes/applications/shop/shop_warehouse.aw:991
+#: classes/applications/shop/shop_warehouse.aw:5094
+#: classes/applications/shop/shop_warehouse.aw:5158
 msgid "Saatelehed"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:979
-#: classes/applications/shop/shop_warehouse.aw:2996
-#: classes/applications/shop/shop_warehouse.aw:4882
-#: classes/applications/shop/shop_warehouse.aw:4900
-#: classes/applications/shop/shop_warehouse.aw:4946
-#: classes/applications/shop/shop_warehouse.aw:5245
+#: classes/applications/shop/shop_warehouse.aw:999
+#: classes/applications/shop/shop_warehouse.aw:3229
+#: classes/applications/shop/shop_warehouse.aw:5106
+#: classes/applications/shop/shop_warehouse.aw:5124
+#: classes/applications/shop/shop_warehouse.aw:5170
+#: classes/applications/shop/shop_warehouse.aw:5469
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:980
-#: classes/applications/shop/shop_warehouse.aw:2996
-#: classes/applications/shop/shop_warehouse.aw:4876
-#: classes/applications/shop/shop_warehouse.aw:4894
-#: classes/applications/shop/shop_warehouse.aw:4940
-#: classes/applications/shop/shop_warehouse.aw:5239
+#: classes/applications/shop/shop_warehouse.aw:1000
+#: classes/applications/shop/shop_warehouse.aw:3229
+#: classes/applications/shop/shop_warehouse.aw:5100
+#: classes/applications/shop/shop_warehouse.aw:5118
+#: classes/applications/shop/shop_warehouse.aw:5164
+#: classes/applications/shop/shop_warehouse.aw:5463
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1077
+#: classes/applications/shop/shop_warehouse.aw:1097
 msgid "Tellimus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1078
-#: classes/applications/shop/shop_warehouse.aw:1324
+#: classes/applications/shop/shop_warehouse.aw:1098
+#: classes/applications/shop/shop_warehouse.aw:1344
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1079
+#: classes/applications/shop/shop_warehouse.aw:1099
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1080
+#: classes/applications/shop/shop_warehouse.aw:1100
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1081
+#: classes/applications/shop/shop_warehouse.aw:1101
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1082
+#: classes/applications/shop/shop_warehouse.aw:1102
 msgid "Telliti"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1173
-#: classes/applications/shop/shop_warehouse.aw:1215
+#: classes/applications/shop/shop_warehouse.aw:1193
+#: classes/applications/shop/shop_warehouse.aw:1235
 msgid "<center>Leiti"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1226
+#: classes/applications/shop/shop_warehouse.aw:1246
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1235
+#: classes/applications/shop/shop_warehouse.aw:1255
 msgid "Genereeri HTML pakkumine"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1243
+#: classes/applications/shop/shop_warehouse.aw:1263
 msgid "Saada meilile"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1250
+#: classes/applications/shop/shop_warehouse.aw:1270
 msgid "Uus pakkumine"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1261
+#: classes/applications/shop/shop_warehouse.aw:1281
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1268
-#: classes/applications/shop/shop_warehouse.aw:1786
-#: classes/applications/shop/shop_warehouse.aw:2201
-#: classes/applications/shop/shop_warehouse.aw:2515
-#: classes/applications/shop/shop_warehouse.aw:2687
-#: classes/applications/shop/shop_warehouse.aw:3431
-#: classes/applications/shop/shop_warehouse.aw:3620
-#: classes/applications/shop/shop_warehouse.aw:3679
-#: classes/applications/shop/shop_warehouse.aw:5122
-#: classes/applications/shop/shop_warehouse.aw:5265
+#: classes/applications/shop/shop_warehouse.aw:1288
+#: classes/applications/shop/shop_warehouse.aw:1912
+#: classes/applications/shop/shop_warehouse.aw:2359
+#: classes/applications/shop/shop_warehouse.aw:2679
+#: classes/applications/shop/shop_warehouse.aw:2851
+#: classes/applications/shop/shop_warehouse.aw:3664
+#: classes/applications/shop/shop_warehouse.aw:3853
+#: classes/applications/shop/shop_warehouse.aw:3912
+#: classes/applications/shop/shop_warehouse.aw:5346
+#: classes/applications/shop/shop_warehouse.aw:5489
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1273
-#: classes/applications/shop/shop_warehouse.aw:2246
-#: classes/applications/shop/shop_warehouse.aw:2550
-#: classes/applications/shop/shop_warehouse.aw:5157
+#: classes/applications/shop/shop_warehouse.aw:1293
+#: classes/applications/shop/shop_warehouse.aw:2405
+#: classes/applications/shop/shop_warehouse.aw:2714
+#: classes/applications/shop/shop_warehouse.aw:5381
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1318
-#: classes/applications/shop/shop_warehouse.aw:2208
-#: classes/applications/shop/shop_warehouse.aw:2522
-#: classes/applications/shop/shop_warehouse.aw:5129
+#: classes/applications/shop/shop_warehouse.aw:1338
+#: classes/applications/shop/shop_warehouse.aw:2366
+#: classes/applications/shop/shop_warehouse.aw:2686
+#: classes/applications/shop/shop_warehouse.aw:5353
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1329
+#: classes/applications/shop/shop_warehouse.aw:1349
 msgid "M&otilde;&otilde;t&uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1335
+#: classes/applications/shop/shop_warehouse.aw:1355
 msgid "Pakend"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1341
+#: classes/applications/shop/shop_warehouse.aw:1361
 msgid "Tellitav Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1348
+#: classes/applications/shop/shop_warehouse.aw:1368
 msgid "Soovitav tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1355
-#: classes/applications/shop/shop_warehouse.aw:1362
+#: classes/applications/shop/shop_warehouse.aw:1375
+#: classes/applications/shop/shop_warehouse.aw:1382
 msgid "Tellimuse kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1369
+#: classes/applications/shop/shop_warehouse.aw:1389
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1376
+#: classes/applications/shop/shop_warehouse.aw:1396
 msgid "Tellimuse nr."
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1430
+#: classes/applications/shop/shop_warehouse.aw:1450
 msgid "Exceli-tabeli vormis"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1441
-#: classes/applications/shop/shop_warehouse.aw:3285
+#: classes/applications/shop/shop_warehouse.aw:1461
+#: classes/applications/shop/shop_warehouse.aw:3518
 msgid "Kinnita tellimused"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1443
-#: classes/applications/shop/shop_warehouse.aw:3287
+#: classes/applications/shop/shop_warehouse.aw:1463
+#: classes/applications/shop/shop_warehouse.aw:3520
 msgid "Oled kindel, et soovid valitud tellimused kinnitada?"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1541
+#: classes/applications/shop/shop_warehouse.aw:1561
 msgid "Kokku:"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1573
-#: classes/applications/shop/shop_warehouse.aw:2377
-#: classes/applications/shop/shop_warehouse.aw:3094
-#: classes/applications/shop/shop_warehouse.aw:3145
-#: classes/applications/shop/shop_warehouse.aw:4909
-#: classes/applications/shop/shop_warehouse.aw:5036
+#: classes/applications/shop/shop_warehouse.aw:1593
+#: classes/applications/shop/shop_warehouse.aw:2541
+#: classes/applications/shop/shop_warehouse.aw:3327
+#: classes/applications/shop/shop_warehouse.aw:3378
+#: classes/applications/shop/shop_warehouse.aw:5133
+#: classes/applications/shop/shop_warehouse.aw:5260
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1586
-#: classes/applications/shop/shop_warehouse.aw:2062
+#: classes/applications/shop/shop_warehouse.aw:1606
+#: classes/applications/shop/shop_warehouse.aw:2219
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1595
-#: classes/applications/shop/shop_warehouse.aw:1649
+#: classes/applications/shop/shop_warehouse.aw:1615
+#: classes/applications/shop/shop_warehouse.aw:1669
 msgid "Artikkel"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1606
-#: classes/applications/shop/shop_warehouse.aw:2408
+#: classes/applications/shop/shop_warehouse.aw:1626
+#: classes/applications/shop/shop_warehouse.aw:2572
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1613
-#: classes/applications/shop/shop_warehouse.aw:2415
+#: classes/applications/shop/shop_warehouse.aw:1633
+#: classes/applications/shop/shop_warehouse.aw:2579
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1620
-#: classes/applications/shop/shop_warehouse.aw:2422
+#: classes/applications/shop/shop_warehouse.aw:1640
+#: classes/applications/shop/shop_warehouse.aw:2586
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1632
+#: classes/applications/shop/shop_warehouse.aw:1652
 msgid "Artiklikategooria"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1670
+#: classes/applications/shop/shop_warehouse.aw:1690
 msgid "Lisa uus tootegrupp"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1776
-#: classes/applications/shop/shop_warehouse.aw:1790
-#: classes/applications/shop/shop_warehouse.aw:2118
-#: classes/applications/shop/shop_warehouse.aw:2311
-#: classes/applications/shop/shop_warehouse.aw:2491
-#: classes/applications/shop/shop_warehouse.aw:2615
+#: classes/applications/shop/shop_warehouse.aw:1743
+#: classes/applications/shop/shop_warehouse.aw:1972
+msgid "Artiklid"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:1902
+#: classes/applications/shop/shop_warehouse.aw:1916
+#: classes/applications/shop/shop_warehouse.aw:2275
+#: classes/applications/shop/shop_warehouse.aw:2470
+#: classes/applications/shop/shop_warehouse.aw:2655
+#: classes/applications/shop/shop_warehouse.aw:2779
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2045
+#: classes/applications/shop/shop_warehouse.aw:2202
 msgid "Artiklid kategoorias %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2049
+#: classes/applications/shop/shop_warehouse.aw:2206
 msgid "Artiklid kaustas %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2083
-#: classes/applications/shop/shop_warehouse.aw:2298
-#: classes/applications/shop/shop_warehouse.aw:2479
-#: classes/applications/shop/shop_warehouse.aw:2602
-#: classes/applications/shop/shop_warehouse.aw:2660
-#: classes/applications/shop/shop_warehouse.aw:2707
+#: classes/applications/shop/shop_warehouse.aw:2240
+#: classes/applications/shop/shop_warehouse.aw:2457
+#: classes/applications/shop/shop_warehouse.aw:2643
+#: classes/applications/shop/shop_warehouse.aw:2766
+#: classes/applications/shop/shop_warehouse.aw:2824
+#: classes/applications/shop/shop_warehouse.aw:2871
 msgid "V&otilde;ta laost"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2095
-#: classes/applications/shop/shop_warehouse.aw:2304
-#: classes/applications/shop/shop_warehouse.aw:2499
-#: classes/applications/shop/shop_warehouse.aw:2608
-#: classes/applications/shop/shop_warehouse.aw:2674
-#: classes/applications/shop/shop_warehouse.aw:2713
+#: classes/applications/shop/shop_warehouse.aw:2252
+#: classes/applications/shop/shop_warehouse.aw:2463
+#: classes/applications/shop/shop_warehouse.aw:2663
+#: classes/applications/shop/shop_warehouse.aw:2772
+#: classes/applications/shop/shop_warehouse.aw:2838
+#: classes/applications/shop/shop_warehouse.aw:2877
 msgid "Vii lattu"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2195
-#: classes/applications/shop/shop_warehouse.aw:2509
-#: classes/applications/shop/shop_warehouse.aw:5116
+#: classes/applications/shop/shop_warehouse.aw:2353
+#: classes/applications/shop/shop_warehouse.aw:2673
+#: classes/applications/shop/shop_warehouse.aw:5340
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2215
-#: classes/applications/shop/shop_warehouse.aw:2529
-#: classes/applications/shop/shop_warehouse.aw:5136
+#: classes/applications/shop/shop_warehouse.aw:2373
+#: classes/applications/shop/shop_warehouse.aw:2693
+#: classes/applications/shop/shop_warehouse.aw:5360
 msgid "Ostuhind"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2222
-#: classes/applications/shop/shop_warehouse.aw:2536
-#: classes/applications/shop/shop_warehouse.aw:5143
+#: classes/applications/shop/shop_warehouse.aw:2380
+#: classes/applications/shop/shop_warehouse.aw:2700
+#: classes/applications/shop/shop_warehouse.aw:5367
 msgid "FIFO"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2230
-#: classes/applications/shop/shop_warehouse.aw:2543
-#: classes/applications/shop/shop_warehouse.aw:5150
+#: classes/applications/shop/shop_warehouse.aw:2389
+#: classes/applications/shop/shop_warehouse.aw:2707
+#: classes/applications/shop/shop_warehouse.aw:5374
 msgid "M&uuml;&uuml;gihind"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2246
+#: classes/applications/shop/shop_warehouse.aw:2405
 msgid "Kogus %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2256
-#: classes/applications/shop/shop_warehouse.aw:2578
+#: classes/applications/shop/shop_warehouse.aw:2415
+#: classes/applications/shop/shop_warehouse.aw:2742
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2265
+#: classes/applications/shop/shop_warehouse.aw:2424
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2281
-#: classes/applications/shop/shop_warehouse.aw:2585
-#: classes/applications/shop/shop_warehouse.aw:2693
-#: classes/applications/shop/shop_warehouse.aw:3017
-#: classes/applications/shop/shop_warehouse.aw:5186
+#: classes/applications/shop/shop_warehouse.aw:2440
+#: classes/applications/shop/shop_warehouse.aw:2749
+#: classes/applications/shop/shop_warehouse.aw:2857
+#: classes/applications/shop/shop_warehouse.aw:3250
+#: classes/applications/shop/shop_warehouse.aw:5410
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2291
-#: classes/applications/shop/shop_warehouse.aw:2595
+#: classes/applications/shop/shop_warehouse.aw:2450
+#: classes/applications/shop/shop_warehouse.aw:2759
 msgid "Kogus laos"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2325
+#: classes/applications/shop/shop_warehouse.aw:2487
 msgid "VIGA: konfiguratsioon on valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2332
+#: classes/applications/shop/shop_warehouse.aw:2496
 msgid "VIGA: konfiguratsioonist on toodete kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2333
+#: classes/applications/shop/shop_warehouse.aw:2497
 msgid "VIGA: konfiguratsioonist on pakettide kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2334
+#: classes/applications/shop/shop_warehouse.aw:2498
 msgid "VIGA: konfiguratsioonist on sissetulekute kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2335
+#: classes/applications/shop/shop_warehouse.aw:2499
 msgid "VIGA: konfiguratsioonist on v&auml;jaminekute kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2336
+#: classes/applications/shop/shop_warehouse.aw:2500
 msgid "VIGA: konfiguratsioonist on toodete t&uuml;&uuml;pide kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2337
+#: classes/applications/shop/shop_warehouse.aw:2501
 msgid "VIGA: konfiguratsioonist on tellimuste kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2338
+#: classes/applications/shop/shop_warehouse.aw:2502
 msgid "VIGA: konfiguratsioonist on tellijate kataloog valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2339
+#: classes/applications/shop/shop_warehouse.aw:2503
 msgid "VIGA: konfiguratsioonist on vaikimisi valuuta valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2382
+#: classes/applications/shop/shop_warehouse.aw:2546
 msgid "Lisa pakett"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2394
+#: classes/applications/shop/shop_warehouse.aw:2558
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2401
+#: classes/applications/shop/shop_warehouse.aw:2565
 msgid "Lisa korvi"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2557
-#: classes/applications/shop/shop_warehouse.aw:5164
+#: classes/applications/shop/shop_warehouse.aw:2721
+#: classes/applications/shop/shop_warehouse.aw:5388
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2564
-#: classes/applications/shop/shop_warehouse.aw:5171
+#: classes/applications/shop/shop_warehouse.aw:2728
+#: classes/applications/shop/shop_warehouse.aw:5395
 msgid "Kogus 2"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2571
-#: classes/applications/shop/shop_warehouse.aw:5178
+#: classes/applications/shop/shop_warehouse.aw:2735
+#: classes/applications/shop/shop_warehouse.aw:5402
 msgid "&Uuml;hik 2"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2638
+#: classes/applications/shop/shop_warehouse.aw:2802
 msgid "Pakett"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2700
+#: classes/applications/shop/shop_warehouse.aw:2864
 msgid "Laoseis"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2956
+#: classes/applications/shop/shop_warehouse.aw:3190
 msgid "(Number puudub)"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2990
+#: classes/applications/shop/shop_warehouse.aw:3223
 msgid "(Puudub)"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2991
+#: classes/applications/shop/shop_warehouse.aw:3224
 msgid "Arve"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2991
+#: classes/applications/shop/shop_warehouse.aw:3224
 msgid "Saateleht"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3010
-#: classes/applications/shop/shop_warehouse.aw:5328
-#: classes/applications/shop/shop_warehouse.aw:5404
+#: classes/applications/shop/shop_warehouse.aw:3243
+#: classes/applications/shop/shop_warehouse.aw:5552
+#: classes/applications/shop/shop_warehouse.aw:5628
 msgid "Number"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3026
-#: classes/applications/shop/shop_warehouse.aw:5410
+#: classes/applications/shop/shop_warehouse.aw:3259
+#: classes/applications/shop/shop_warehouse.aw:5634
 msgid "Ostja"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3035
-#: classes/applications/shop/shop_warehouse.aw:5334
+#: classes/applications/shop/shop_warehouse.aw:3268
+#: classes/applications/shop/shop_warehouse.aw:5558
 msgid "Hankija"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3043
-#: classes/applications/shop/shop_warehouse.aw:4968
-#: classes/applications/shop/shop_warehouse.aw:5272
-#: classes/applications/shop/shop_warehouse.aw:5341
-#: classes/applications/shop/shop_warehouse.aw:5417
+#: classes/applications/shop/shop_warehouse.aw:3276
+#: classes/applications/shop/shop_warehouse.aw:5192
+#: classes/applications/shop/shop_warehouse.aw:5496
+#: classes/applications/shop/shop_warehouse.aw:5565
+#: classes/applications/shop/shop_warehouse.aw:5641
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3051
-#: classes/applications/shop/shop_warehouse.aw:5350
-#: classes/applications/shop/shop_warehouse.aw:5426
+#: classes/applications/shop/shop_warehouse.aw:3284
+#: classes/applications/shop/shop_warehouse.aw:5574
+#: classes/applications/shop/shop_warehouse.aw:5650
 msgid "Seosed"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3057
-#: classes/applications/shop/shop_warehouse.aw:4976
-#: classes/applications/shop/shop_warehouse.aw:5281
-#: classes/applications/shop/shop_warehouse.aw:5357
-#: classes/applications/shop/shop_warehouse.aw:5433
+#: classes/applications/shop/shop_warehouse.aw:3290
+#: classes/applications/shop/shop_warehouse.aw:5200
+#: classes/applications/shop/shop_warehouse.aw:5505
+#: classes/applications/shop/shop_warehouse.aw:5581
+#: classes/applications/shop/shop_warehouse.aw:5657
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3066
-#: classes/applications/shop/shop_warehouse.aw:4983
-#: classes/applications/shop/shop_warehouse.aw:5288
-#: classes/applications/shop/shop_warehouse.aw:5364
-#: classes/applications/shop/shop_warehouse.aw:5440
+#: classes/applications/shop/shop_warehouse.aw:3299
+#: classes/applications/shop/shop_warehouse.aw:5207
+#: classes/applications/shop/shop_warehouse.aw:5512
+#: classes/applications/shop/shop_warehouse.aw:5588
+#: classes/applications/shop/shop_warehouse.aw:5664
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3099
-#: classes/applications/shop/shop_warehouse.aw:3150
+#: classes/applications/shop/shop_warehouse.aw:3332
+#: classes/applications/shop/shop_warehouse.aw:3383
 msgid "Lisa saateleht"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3108
-#: classes/applications/shop/shop_warehouse.aw:3159
+#: classes/applications/shop/shop_warehouse.aw:3341
+#: classes/applications/shop/shop_warehouse.aw:3392
 msgid "Lisa arve"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3192
+#: classes/applications/shop/shop_warehouse.aw:3425
 msgid "Lao v&auml;ljaminek: %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3239
+#: classes/applications/shop/shop_warehouse.aw:3472
 msgid "Lao sissetulek: %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3269
-#: classes/applications/shop/shop_warehouse.aw:3487
+#: classes/applications/shop/shop_warehouse.aw:3502
+#: classes/applications/shop/shop_warehouse.aw:3720
 msgid "Uus tellimus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3274
-#: classes/applications/shop/shop_warehouse.aw:3492
+#: classes/applications/shop/shop_warehouse.aw:3507
+#: classes/applications/shop/shop_warehouse.aw:3725
 msgid "Lisa tellimus"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3291
-#: classes/applications/shop/shop_warehouse.aw:3502
+#: classes/applications/shop/shop_warehouse.aw:3524
+#: classes/applications/shop/shop_warehouse.aw:3735
 msgid "Prindi tellimused"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3406
-#: classes/applications/shop/shop_warehouse.aw:3470
-#: classes/applications/shop/shop_warehouse.aw:3604
-#: classes/applications/shop/shop_warehouse.aw:3650
-#: classes/applications/shop/shop_warehouse.aw:3696
-#: classes/applications/shop/shop_warehouse.aw:3785
-#: classes/applications/shop/shop_warehouse.aw:5017
-#: classes/applications/shop/shop_warehouse.aw:5082
+#: classes/applications/shop/shop_warehouse.aw:3639
+#: classes/applications/shop/shop_warehouse.aw:3703
+#: classes/applications/shop/shop_warehouse.aw:3837
+#: classes/applications/shop/shop_warehouse.aw:3883
+#: classes/applications/shop/shop_warehouse.aw:3929
+#: classes/applications/shop/shop_warehouse.aw:4018
+#: classes/applications/shop/shop_warehouse.aw:5241
+#: classes/applications/shop/shop_warehouse.aw:5306
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3425
-#: classes/applications/shop/shop_warehouse.aw:3615
+#: classes/applications/shop/shop_warehouse.aw:3658
+#: classes/applications/shop/shop_warehouse.aw:3848
 msgid "ID"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3438
-#: classes/applications/shop/shop_warehouse.aw:3625
-#: classes/applications/shop/shop_warehouse.aw:3684
+#: classes/applications/shop/shop_warehouse.aw:3671
+#: classes/applications/shop/shop_warehouse.aw:3858
+#: classes/applications/shop/shop_warehouse.aw:3917
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3445
+#: classes/applications/shop/shop_warehouse.aw:3678
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3452
-#: classes/applications/shop/shop_warehouse.aw:3630
-#: classes/applications/shop/shop_warehouse.aw:3688
+#: classes/applications/shop/shop_warehouse.aw:3685
+#: classes/applications/shop/shop_warehouse.aw:3863
+#: classes/applications/shop/shop_warehouse.aw:3921
 msgid "Kes"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3460
-#: classes/applications/shop/shop_warehouse.aw:3642
-#: classes/applications/shop/shop_warehouse.aw:3692
+#: classes/applications/shop/shop_warehouse.aw:3693
+#: classes/applications/shop/shop_warehouse.aw:3875
+#: classes/applications/shop/shop_warehouse.aw:3925
 msgid "Millal"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:3636
+#: classes/applications/shop/shop_warehouse.aw:3869
 msgid "Kinnitas"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4087
+#: classes/applications/shop/shop_warehouse.aw:4320
 msgid "shop_warehouse::gen_order(): no order center object selected!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4129
+#: classes/applications/shop/shop_warehouse.aw:4362
 msgid "Lisa pakkumisse"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4136
+#: classes/applications/shop/shop_warehouse.aw:4369
 msgid "Moodusta pakkumine"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4392
+#: classes/applications/shop/shop_warehouse.aw:4625
 msgid "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4400
+#: classes/applications/shop/shop_warehouse.aw:4633
 msgid "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4417
+#: classes/applications/shop/shop_warehouse.aw:4650
 msgid "shop_warehouse::get_products_folder(%s): the warehouse has not configuration object set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4425
+#: classes/applications/shop/shop_warehouse.aw:4658
 msgid "shop_warehouse::get_products_folder(%s): the warehouse configuration has no products folder set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4579
+#: classes/applications/shop/shop_warehouse.aw:4812
 msgid "Tellimus laost %s"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4813
+#: classes/applications/shop/shop_warehouse.aw:5037
 msgid "Pole midagi printida"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4829
-#: classes/applications/shop/shop_warehouse.aw:5458
-#: classes/applications/shop/shop_warehouse.aw:5495
+#: classes/applications/shop/shop_warehouse.aw:5053
+#: classes/applications/shop/shop_warehouse.aw:5682
+#: classes/applications/shop/shop_warehouse.aw:5719
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4914
-#: classes/applications/shop/shop_warehouse.aw:5041
+#: classes/applications/shop/shop_warehouse.aw:5138
+#: classes/applications/shop/shop_warehouse.aw:5265
 msgid "Lisa sissetulek"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4955
+#: classes/applications/shop/shop_warehouse.aw:5179
 msgid "number"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:4961
+#: classes/applications/shop/shop_warehouse.aw:5185
 msgid "Ladu"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:5004
-#: classes/applications/shop/shop_warehouse.aw:5069
+#: classes/applications/shop/shop_warehouse.aw:5228
+#: classes/applications/shop/shop_warehouse.aw:5293
 msgid "Sissetulek kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:5101
-#: classes/applications/shop/shop_warehouse.aw:5206
+#: classes/applications/shop/shop_warehouse.aw:5325
+#: classes/applications/shop/shop_warehouse.aw:5430
 msgid "Uuenda"
 msgstr ""

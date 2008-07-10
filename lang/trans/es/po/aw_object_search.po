@@ -452,6 +452,6 @@ msgstr ""
 msgid "Leiti %s objekti"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:635
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:658
 msgid "AW Objektide otsing"
 msgstr ""

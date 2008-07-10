@@ -516,7 +516,7 @@ msgstr "Don't show in print view"
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/contentmgmt/image.aw:1759
+#: classes/contentmgmt/image.aw:1750
 msgid "Lisa"
 msgstr "Add"
 

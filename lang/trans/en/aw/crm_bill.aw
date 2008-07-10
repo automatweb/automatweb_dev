@@ -69,6 +69,7 @@ $GLOBALS["TRANS"]["+KM?"] = "+VAT?";
 $GLOBALS["TRANS"]["Vali"] = "Select";
 $GLOBALS["TRANS"]["Kulud:"] = "Expenses";
 $GLOBALS["TRANS"]["Kokkuleppehind"] = "Agreed price";
+$GLOBALS["TRANS"]["Toimetus"] = "Task";
 $GLOBALS["TRANS"]["Prinditav arve"] = "Printable version";
 $GLOBALS["TRANS"]["Lisa rida"] = "Add row";
 $GLOBALS["TRANS"]["Prindi"] = "Print";
@@ -79,6 +80,5 @@ $GLOBALS["TRANS"]["Prindi arve koos lisaga"] = "Print invoice with appendix";
 $GLOBALS["TRANS"]["Koonda read"] = "Consolidate rows";
 $GLOBALS["TRANS"]["Kustuta read"] = "Delete rows";
 $GLOBALS["TRANS"]["Oled kindel et soovid read kustutada?"] = "Are You sure?";
-$GLOBALS["TRANS"]["Toimetus"] = "Task";
 $GLOBALS["TRANS"]["Tunde"] = "Hours";
 ?>

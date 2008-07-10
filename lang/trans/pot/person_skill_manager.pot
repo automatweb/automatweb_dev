@@ -15,15 +15,15 @@ msgid "Klassi P&auml;devuste haldur help"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_company
-msgid "Omaduse Default tasemed (company) caption"
+msgid "Omaduse Organisatsioon (company) caption"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_company_comment
-msgid "Omaduse Default tasemed (company) kommentaar"
+msgid "Omaduse Organisatsioon (company) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_company_help
-msgid "Omaduse Default tasemed (company) help"
+msgid "Omaduse Organisatsioon (company) help"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_skills_tb

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -29,19 +29,16 @@ msgstr ""
 msgid "Omaduse Algab (start) help"
 msgstr ""
 
-# classes/applications/calendar/calendar_vacancy.aw:prop_end
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end
-msgid "Omaduse Lõpeb (end) caption"
+msgid "Omaduse L&otilde;peb (end) caption"
 msgstr ""
 
-# classes/applications/calendar/calendar_vacancy.aw:prop_end_comment
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end_comment
-msgid "Omaduse Lõpeb (end) kommentaar"
+msgid "Omaduse L&otilde;peb (end) kommentaar"
 msgstr ""
 
-# classes/applications/calendar/calendar_vacancy.aw:prop_end_help
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end_help
-msgid "Omaduse Lõpeb (end) help"
+msgid "Omaduse L&otilde;peb (end) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_vacancy.aw:prop_info_on_object

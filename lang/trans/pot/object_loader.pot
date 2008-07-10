@@ -50,7 +50,7 @@ msgstr ""
 msgid "object_loader::switch_db_connection(%s): could nto find root connection!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:560
+#: classes/core/obj/object_loader.aw:557
 msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
 

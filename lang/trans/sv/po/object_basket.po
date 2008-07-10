@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/object_basket.aw:class_1201_help
 msgid "Klassi Objektide korv help"
 msgstr ""
@@ -27,26 +26,37 @@ msgid "Omaduse Korvi t&uuml;&uuml;p (basket_type) help"
 msgstr ""
 
 #: classes/contentmgmt/object_basket.aw:prop_export
-msgid "Omaduse  (export) caption"
+msgid "Omaduse Ekspordiobjekt (export) caption"
 msgstr ""
 
 #: classes/contentmgmt/object_basket.aw:prop_export_comment
-msgid "Omaduse  (export) kommentaar"
+msgid "Omaduse Ekspordiobjekt (export) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/object_basket.aw:prop_export_help
-msgid "Omaduse  (export) help"
+msgid "Omaduse Ekspordiobjekt (export) help"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:prop_max_items
+msgid "Omaduse Maksimaalne kirjete arv (max_items) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:prop_max_items_comment
+msgid "Omaduse Maksimaalne kirjete arv (max_items) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_basket.aw:prop_max_items_help
+msgid "Omaduse Maksimaalne kirjete arv (max_items) help"
 msgstr ""
 
 #: classes/contentmgmt/object_basket.aw:rel_RELTYPE_EXPORT
 msgid "Seose iCal eksport (RELTYPE_EXPORT) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_basket.aw:33
+#: classes/contentmgmt/object_basket.aw:36
 msgid "Sessioonip&otilde;hine"
 msgstr ""
 
-#: classes/contentmgmt/object_basket.aw:34
+#: classes/contentmgmt/object_basket.aw:37
 msgid "Kasutajap&otilde;hine"
 msgstr ""
-

@@ -2281,10 +2281,6 @@ msgstr ""
 msgid "Klassi Impordi logi (1338) nimi"
 msgstr ""
 
-#: aw.ini:class_1339
-msgid "Klassi XML allikas (1339) nimi"
-msgstr ""
-
 #: aw.ini:class_1323
 msgid "Klassi OWS Broneeringukeskus (1323) nimi"
 msgstr ""
@@ -2557,6 +2553,10 @@ msgstr ""
 msgid "Klassi Delfi JSON väljund (1414) nimi"
 msgstr ""
 
+#: aw.ini:class_1415
+msgid "Klassi Tellimuse rida (1415) nimi"
+msgstr ""
+
 #: aw.ini:class_1416
 msgid "Klassi Mobi SMS haldur (1416) nimi"
 msgstr ""
@@ -2743,6 +2743,18 @@ msgstr ""
 
 #: aw.ini:class_1467
 msgid "Klassi Paketi Saidi seos (1467) nimi"
+msgstr ""
+
+#: aw.ini:class_1469
+msgid "Klassi &Uuml;hikute valem (1469) nimi"
+msgstr ""
+
+#: aw.ini:class_1470
+msgid "Klassi Saatelehe rida (1470) nimi"
+msgstr ""
+
+#: aw.ini:class_1471
+msgid "Klassi AW Spetisifikatsiooni kasutuslugu (1471) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -5543,6 +5555,18 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1466
 msgid "syslog.type.ST_REMOTE_OBJECT_INCLUDE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1469
+msgid "syslog.type.ST_SHOP_UNIT_FORMULA"
+msgstr ""
+
+#: aw.ini:syslogtypes_1470
+msgid "syslog.type.ST_SHOP_DELIVERY_NOTE_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1471
+msgid "syslog.type.ST_AW_SPEC_USE_CASE"
 msgstr ""
 
 #: aw.ini:syslogactions_1

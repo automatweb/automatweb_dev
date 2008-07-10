@@ -299,5 +299,4 @@ $GLOBALS["TRANS"]["Lisa uus kodakondsus"] = "Add new cityzenship";
 $GLOBALS["TRANS"]["Lisan uue kodakondsuse?"] = "Add new cityzenship?";
 $GLOBALS["TRANS"]["kodakondsus"] = "citizenship";
 $GLOBALS["TRANS"]["Kodakondsused"] = "Citizenships";
-$GLOBALS["TRANS"]["&lt;b&gt;Summa&lt;/b&gt;"] = "<b>Sum</b>";
 ?>

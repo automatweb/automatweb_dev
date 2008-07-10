@@ -13,73 +13,73 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:151
+#: classes/vcl/popup_search.aw:156
 msgid "--Vali--"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:161 classes/vcl/popup_search.aw:492
-#: classes/vcl/popup_search.aw:493 classes/vcl/popup_search.aw:915
+#: classes/vcl/popup_search.aw:166 classes/vcl/popup_search.aw:497
+#: classes/vcl/popup_search.aw:498 classes/vcl/popup_search.aw:920
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/vcl/popup_search.aw:170
+#: classes/vcl/popup_search.aw:175
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/popup_search.aw:210
+#: classes/vcl/popup_search.aw:215
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/vcl/popup_search.aw:228
+#: classes/vcl/popup_search.aw:233
 msgid "Lisa uus %s"
 msgstr "Add new %s"
 
-#: classes/vcl/popup_search.aw:244
+#: classes/vcl/popup_search.aw:249
 msgid "Eemalda"
 msgstr "Remove"
 
-#: classes/vcl/popup_search.aw:329
+#: classes/vcl/popup_search.aw:334
 msgid "Vali eemaldatavad objektid"
 msgstr "Select objects to remove"
 
-#: classes/vcl/popup_search.aw:345 classes/vcl/popup_search.aw:626
-#: classes/vcl/popup_search.aw:630 classes/vcl/popup_search.aw:713
+#: classes/vcl/popup_search.aw:350 classes/vcl/popup_search.aw:631
+#: classes/vcl/popup_search.aw:635 classes/vcl/popup_search.aw:718
 msgid "Vali"
 msgstr "Select"
 
-#: classes/vcl/popup_search.aw:429
+#: classes/vcl/popup_search.aw:434
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/vcl/popup_search.aw:459 classes/vcl/popup_search.aw:602
+#: classes/vcl/popup_search.aw:464 classes/vcl/popup_search.aw:607
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/vcl/popup_search.aw:466
+#: classes/vcl/popup_search.aw:471
 msgid "Objekti id"
 msgstr "Object ID"
 
-#: classes/vcl/popup_search.aw:569
+#: classes/vcl/popup_search.aw:574
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:595
+#: classes/vcl/popup_search.aw:600
 msgid "OID"
 msgstr "OID"
 
-#: classes/vcl/popup_search.aw:608
+#: classes/vcl/popup_search.aw:613
 msgid "Asukoht"
 msgstr "Location in system"
 
-#: classes/vcl/popup_search.aw:614
+#: classes/vcl/popup_search.aw:619
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/vcl/popup_search.aw:618
+#: classes/vcl/popup_search.aw:623
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/vcl/popup_search.aw:695
+#: classes/vcl/popup_search.aw:700
 msgid "Vali see"
 msgstr "Select this"
 

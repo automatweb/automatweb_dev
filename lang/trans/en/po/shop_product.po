@@ -1737,6 +1737,10 @@ msgstr ""
 msgid "Seose P&auml;ri kogusepiirangud (RELTYPE_INHERIT_AML_FROM) tekst"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_UNIT_FORMULA
+msgid "Seose &Uuml;hikute valem (RELTYPE_UNIT_FORMULA) tekst"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:layout_gen_left
 msgid "Kujundusosa Andmed (gen_left) pealkiri"
 msgstr ""
@@ -1753,108 +1757,112 @@ msgstr ""
 msgid "Kujundusosa Puhveraeg (buffer) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:618
+#: classes/applications/shop/shop_product.aw:621
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:627
+#: classes/applications/shop/shop_product.aw:630
 msgid "Minutit"
 msgstr "Minutes"
 
-#: classes/applications/shop/shop_product.aw:628
+#: classes/applications/shop/shop_product.aw:631
 msgid "Tundi"
 msgstr "Hours"
 
-#: classes/applications/shop/shop_product.aw:666
+#: classes/applications/shop/shop_product.aw:669
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:667
+#: classes/applications/shop/shop_product.aw:670
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:703
+#: classes/applications/shop/shop_product.aw:706
 msgid "Alternatiiv&uuml;hik %s"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:703
+#: classes/applications/shop/shop_product.aw:706
 msgid "P&otilde;hi&uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:742
-#: classes/applications/shop/shop_product.aw:804
-#: classes/applications/shop/shop_product.aw:858
-#: classes/applications/shop/shop_product.aw:2274
+#: classes/applications/shop/shop_product.aw:745
+#: classes/applications/shop/shop_product.aw:807
+#: classes/applications/shop/shop_product.aw:861
+#: classes/applications/shop/shop_product.aw:2291
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:747
+#: classes/applications/shop/shop_product.aw:750
 msgid "Tootja"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:809
+#: classes/applications/shop/shop_product.aw:812
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:863
+#: classes/applications/shop/shop_product.aw:866
 msgid "Sarjad"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:966
-#: classes/applications/shop/shop_product.aw:1090
+#: classes/applications/shop/shop_product.aw:969
+#: classes/applications/shop/shop_product.aw:1093
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/shop/shop_product.aw:971
+#: classes/applications/shop/shop_product.aw:974
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:978
+#: classes/applications/shop/shop_product.aw:981
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:985
-#: classes/applications/shop/shop_product.aw:1095
+#: classes/applications/shop/shop_product.aw:988
+#: classes/applications/shop/shop_product.aw:1098
 msgid "Valuuta"
 msgstr "Currency"
 
-#: classes/applications/shop/shop_product.aw:1017
+#: classes/applications/shop/shop_product.aw:1020
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1020
+#: classes/applications/shop/shop_product.aw:1023
 msgid "Kas olete kindel, et soovite kustutada kogusepiirangud valitud gruppidele?"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1034
+#: classes/applications/shop/shop_product.aw:1037
 msgid "Kasutajagrupp"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1039
+#: classes/applications/shop/shop_product.aw:1042
 msgid "Minimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1044
+#: classes/applications/shop/shop_product.aw:1047
 msgid "Maksimaalne kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:1282
+#: classes/applications/shop/shop_product.aw:1285
 msgid "shop_product::draw(): no layout set!"
 msgstr "shop_product::draw(): no layout set!"
 
-#: classes/applications/shop/shop_product.aw:2177
+#: classes/applications/shop/shop_product.aw:2221
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2186
+#: classes/applications/shop/shop_product.aw:2232
 msgid "Kogus %s"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2264
+#: classes/applications/shop/shop_product.aw:2239
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:2281
 msgid "(Puudub)"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:2279
+#: classes/applications/shop/shop_product.aw:2296
 msgid "Asukoht"
 msgstr ""
 

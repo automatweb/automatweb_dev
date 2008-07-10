@@ -122,6 +122,18 @@ msgstr ""
 msgid "Omaduse Valuuta (currency) help"
 msgstr ""
 
+#: classes/applications/shop/shop_delivery_note.aw:prop_writeoff
+msgid "Omaduse Mahakandmine (writeoff) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:prop_writeoff_comment
+msgid "Omaduse Mahakandmine (writeoff) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:prop_writeoff_help
+msgid "Omaduse Mahakandmine (writeoff) help"
+msgstr ""
+
 #: classes/applications/shop/shop_delivery_note.aw:prop_approved
 msgid "Omaduse Kinnitatud (approved) caption"
 msgstr ""
@@ -158,6 +170,18 @@ msgstr ""
 msgid "Omaduse  (articles_tbl) help"
 msgstr ""
 
+#: classes/applications/shop/shop_delivery_note.aw:prop_gen_submit
+msgid "Omaduse  (gen_submit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:prop_gen_submit_comment
+msgid "Omaduse  (gen_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:prop_gen_submit_help
+msgid "Omaduse  (gen_submit) help"
+msgstr ""
+
 #: classes/applications/shop/shop_delivery_note.aw:prop_bills_tb
 msgid "Omaduse  (bills_tb) caption"
 msgstr ""
@@ -180,6 +204,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_delivery_note.aw:prop_bills_tbl_help
 msgid "Omaduse  (bills_tbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/shop/shop_delivery_note.aw:group_bills
@@ -214,8 +246,8 @@ msgstr ""
 msgid "Seose Arve (RELTYPE_BILL) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:rel_RELTYPE_PRODUCT
-msgid "Seose Artikkel (RELTYPE_PRODUCT) tekst"
+#: classes/applications/shop/shop_delivery_note.aw:rel_RELTYPE_ROW
+msgid "Seose Rida (RELTYPE_ROW) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_delivery_note.aw:rel_RELTYPE_CUST
@@ -226,107 +258,103 @@ msgstr ""
 msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:129
+#: classes/applications/shop/shop_delivery_note.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Artikkel (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:104
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/shop/shop_delivery_note.aw:224
 msgid "Eemalda valitud artiklid"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:142
+#: classes/applications/shop/shop_delivery_note.aw:237
 msgid "Artiklikood"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:147
+#: classes/applications/shop/shop_delivery_note.aw:242
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:152
+#: classes/applications/shop/shop_delivery_note.aw:247
 msgid "KM kood"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:157
+#: classes/applications/shop/shop_delivery_note.aw:252
 msgid "Ribakood"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:162
+#: classes/applications/shop/shop_delivery_note.aw:257
 msgid "Kirjeldus"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:167
+#: classes/applications/shop/shop_delivery_note.aw:262
 msgid "Seerianumber"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:172
+#: classes/applications/shop/shop_delivery_note.aw:267
 msgid "Partiinumber"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:177
+#: classes/applications/shop/shop_delivery_note.aw:272
 msgid "Ladu"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:182
+#: classes/applications/shop/shop_delivery_note.aw:277
 msgid "Ostuhind"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:187
+#: classes/applications/shop/shop_delivery_note.aw:282
 msgid "P&otilde;hihind"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:192
+#: classes/applications/shop/shop_delivery_note.aw:287
 msgid "P&otilde;hihind KM-ga"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:197
+#: classes/applications/shop/shop_delivery_note.aw:292
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:202
+#: classes/applications/shop/shop_delivery_note.aw:297
 msgid "Omahinna summa"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:207
+#: classes/applications/shop/shop_delivery_note.aw:302
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:212
+#: classes/applications/shop/shop_delivery_note.aw:307
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:217
+#: classes/applications/shop/shop_delivery_note.aw:312
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:236
+#: classes/applications/shop/shop_delivery_note.aw:331
 msgid "<strong>Lisa uus</strong>"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:337
+#: classes/applications/shop/shop_delivery_note.aw:438
 msgid "<strong>Saatelehe read</strong>"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:371
-msgid "--vali--"
+#: classes/applications/shop/shop_delivery_note.aw:454
+msgid "%s rida"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:421
+#: classes/applications/shop/shop_delivery_note.aw:501
 msgid "Number"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:426
+#: classes/applications/shop/shop_delivery_note.aw:506
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/shop/shop_delivery_note.aw:436
+#: classes/applications/shop/shop_delivery_note.aw:516
 msgid "(Puudub)"
-msgstr ""
-
-#: classes/applications/shop/shop_delivery_note.aw:497
-msgid "Igal tootel tuleb &uuml;hik m&auml;&auml;rata."
-msgstr ""
-
-#: classes/applications/shop/shop_delivery_note.aw:575
-msgid "%s laoseis"
-msgstr ""
-
-#: classes/applications/shop/shop_delivery_note.aw:600
-msgid "%s liikumine"
 msgstr ""
 

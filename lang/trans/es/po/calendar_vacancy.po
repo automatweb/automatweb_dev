@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/calendar_vacancy.aw:class_802_help
 msgid "Klassi Vakants help"
 msgstr ""
@@ -27,15 +26,15 @@ msgid "Omaduse Algab (start) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end
-msgid "Omaduse Lõpeb (end) caption"
+msgid "Omaduse L&otilde;peb (end) caption"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end_comment
-msgid "Omaduse Lõpeb (end) kommentaar"
+msgid "Omaduse L&otilde;peb (end) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end_help
-msgid "Omaduse Lõpeb (end) help"
+msgid "Omaduse L&otilde;peb (end) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_info_on_object
@@ -189,4 +188,3 @@ msgstr ""
 #: classes/applications/calendar/calendar_vacancy.aw:254
 msgid "Salvesta"
 msgstr ""
-

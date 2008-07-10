@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse  (brother_warning) help"
 msgstr ""
 
+#: classes/contentmgmt/doc.aw:prop_simultaneous_warning
+msgid "Omaduse  (simultaneous_warning) caption"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_simultaneous_warning_comment
+msgid "Omaduse  (simultaneous_warning) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:prop_simultaneous_warning_help
+msgid "Omaduse  (simultaneous_warning) help"
+msgstr ""
+
 #: classes/contentmgmt/doc.aw:prop_title
 msgid "Omaduse Pealkiri (title) caption"
 msgstr ""
@@ -1322,67 +1334,79 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:388
+#: classes/contentmgmt/doc.aw:389
 msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:389
+#: classes/contentmgmt/doc.aw:390
 msgid "Originaal"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:814
+#: classes/contentmgmt/doc.aw:818
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:835 classes/contentmgmt/doc.aw:1397
+#: classes/contentmgmt/doc.aw:839 classes/contentmgmt/doc.aw:1401
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:878
+#: classes/contentmgmt/doc.aw:882
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:891
+#: classes/contentmgmt/doc.aw:895
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1040 classes/contentmgmt/doc.aw:1128 classes/contentmgmt/doc.aw:1132
+#: classes/contentmgmt/doc.aw:1044 classes/contentmgmt/doc.aw:1132 classes/contentmgmt/doc.aw:1136
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1080
+#: classes/contentmgmt/doc.aw:1084
 msgid "Versioon"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1086 classes/contentmgmt/doc.aw:1146 classes/contentmgmt/doc.aw:1174
+#: classes/contentmgmt/doc.aw:1090 classes/contentmgmt/doc.aw:1150 classes/contentmgmt/doc.aw:1178
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1092
+#: classes/contentmgmt/doc.aw:1096
 msgid "Hinne"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1098
+#: classes/contentmgmt/doc.aw:1102
 msgid "Hinda"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1104
+#: classes/contentmgmt/doc.aw:1108
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1110
+#: classes/contentmgmt/doc.aw:1114
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1141 classes/contentmgmt/doc.aw:1169
+#: classes/contentmgmt/doc.aw:1145 classes/contentmgmt/doc.aw:1173
 msgid "--Vali--"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1266
+#: classes/contentmgmt/doc.aw:1270
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/doc.aw:1334
+#: classes/contentmgmt/doc.aw:1338
 msgid "V&otilde;tmes&otilde;na"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1591
+msgid "Hoiatus, seda dokumenti muudab hetkel kasutaja %s, muutmisvaate avas %s"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1598
+msgid "Hoiatus, seda dokumenti muudavad hetkel kasutajad:"
+msgstr ""
+
+#: classes/contentmgmt/doc.aw:1601
+msgid "avas muutmisvaate"
 msgstr ""
 

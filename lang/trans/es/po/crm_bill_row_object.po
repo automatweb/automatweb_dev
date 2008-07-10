@@ -9,8 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bill_row_object.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_row_object.aw:100
+msgid "Pole piisavalt p&auml;dev klassi id"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row_object.aw:105
+msgid "Ridadel pole toimetust m&auml;&auml;ratud"
+msgstr ""

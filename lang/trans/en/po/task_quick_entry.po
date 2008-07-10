@@ -185,14 +185,14 @@ msgstr "--Select--"
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr "All fields should be filled"
 
-#: classes/applications/groupware/task_quick_entry.aw:676
+#: classes/applications/groupware/task_quick_entry.aw:682
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "Client named %s does not exist, if You click OK, it will be added\n"
 
-#: classes/applications/groupware/task_quick_entry.aw:698
+#: classes/applications/groupware/task_quick_entry.aw:704
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "Project named %s does not exist, if You click OK, it will be added\n"
 
-#: classes/applications/groupware/task_quick_entry.aw:721
+#: classes/applications/groupware/task_quick_entry.aw:727
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "Task named %s does not exist, if You click OK, it will be added\n"

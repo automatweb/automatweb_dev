@@ -38,3 +38,59 @@ msgstr ""
 msgid "Omaduse Omaduse kirjeldus (prop_desc) help"
 msgstr ""
 
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_errors_and_messages
+msgid "Omaduse Teated ja vead (errors_and_messages) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_errors_and_messages_comment
+msgid "Omaduse Teated ja vead (errors_and_messages) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_errors_and_messages_help
+msgid "Omaduse Teated ja vead (errors_and_messages) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_longdesc
+msgid "Omaduse Pikem kirjeldus (longdesc) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_longdesc_comment
+msgid "Omaduse Pikem kirjeldus (longdesc) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_longdesc_help
+msgid "Omaduse Pikem kirjeldus (longdesc) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_use_cases
+msgid "Omaduse  (use_cases) caption"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_use_cases_comment
+msgid "Omaduse  (use_cases) kommentaar"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:prop_use_cases_help
+msgid "Omaduse  (use_cases) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:group_longdesc
+msgid "Grupi Kirjeldus (longdesc) pealkiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:group_longdesc_help
+msgid "Grupi Kirjeldus (longdesc) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:group_use_cases
+msgid "Grupi Kasutuslood (use_cases) pealkiri"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:group_use_cases_help
+msgid "Grupi Kasutuslood (use_cases) help"
+msgstr ""
+
+#: classes/applications/aw_spec/aw_spec_property.aw:rel_RELTYPE_USE_CASE
+msgid "Seose Kasutuslugu (RELTYPE_USE_CASE) tekst"
+msgstr ""
+

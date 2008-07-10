@@ -1715,62 +1715,62 @@ msgstr ""
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/menu.aw:2385
+#: classes/menu.aw:2382
 msgid "V&otilde;ta viimaseid dokumente"
 msgstr ""
 
-#: classes/menu.aw:2386 classes/menu.aw:2391
+#: classes/menu.aw:2383 classes/menu.aw:2388
 msgid "Otsi"
 msgstr ""
 
-#: classes/menu.aw:2390
+#: classes/menu.aw:2387
 msgid "&Auml;ra v&otilde;ta viimaseid dokumente"
 msgstr ""
 
-#: classes/menu.aw:2419
+#: classes/menu.aw:2416
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/menu.aw:2425
+#: classes/menu.aw:2422
 msgid "Otsi uus objekt:"
 msgstr ""
 
-#: classes/menu.aw:2436
+#: classes/menu.aw:2433
 msgid "Aeg"
 msgstr ""
 
-#: classes/menu.aw:2445
+#: classes/menu.aw:2442
 msgid "Isik"
 msgstr ""
 
-#: classes/menu.aw:2451
+#: classes/menu.aw:2448
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/menu.aw:2457
+#: classes/menu.aw:2454
 msgid "Kasutajagrupp"
 msgstr ""
 
-#: classes/menu.aw:2559
+#: classes/menu.aw:2556
 msgid "Sektsioon"
 msgstr ""
 
-#: classes/menu.aw:2560
+#: classes/menu.aw:2557
 msgid "Klient"
 msgstr ""
 
-#: classes/menu.aw:2561
+#: classes/menu.aw:2558
 msgid "Adminni men&uuml;&uuml;"
 msgstr ""
 
-#: classes/menu.aw:2562
+#: classes/menu.aw:2559
 msgid "Kataloog"
 msgstr ""
 
-#: classes/menu.aw:2563
+#: classes/menu.aw:2560
 msgid "Avalik meetod"
 msgstr ""
 
-#: classes/menu.aw:2619 classes/menu.aw:2629
+#: classes/menu.aw:2616 classes/menu.aw:2626
 msgid "Selline alias on juba olemas!"
 msgstr ""

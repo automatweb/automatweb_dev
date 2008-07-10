@@ -274,15 +274,15 @@ msgstr ""
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:352
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:358
 msgid "Piirkonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:353
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:359
 msgid "Maakonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:354
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:360
 msgid "Linnad"
 msgstr ""
 

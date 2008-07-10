@@ -110,15 +110,15 @@ msgstr ""
 msgid "Lisa perekond"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:130 classes/applications/class_designer/class_designer_manager.aw:726 classes/applications/class_designer/class_designer_manager.aw:754
+#: classes/applications/class_designer/class_designer_manager.aw:130 classes/applications/class_designer/class_designer_manager.aw:739 classes/applications/class_designer/class_designer_manager.aw:767
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:138 classes/applications/class_designer/class_designer_manager.aw:724 classes/applications/class_designer/class_designer_manager.aw:752
+#: classes/applications/class_designer/class_designer_manager.aw:138 classes/applications/class_designer/class_designer_manager.aw:737 classes/applications/class_designer/class_designer_manager.aw:765
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:145 classes/applications/class_designer/class_designer_manager.aw:725 classes/applications/class_designer/class_designer_manager.aw:753
+#: classes/applications/class_designer/class_designer_manager.aw:145 classes/applications/class_designer/class_designer_manager.aw:738 classes/applications/class_designer/class_designer_manager.aw:766
 msgid "Kopeeri"
 msgstr ""
 
@@ -166,19 +166,19 @@ msgstr ""
 msgid "Lisa seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:723 classes/applications/class_designer/class_designer_manager.aw:742
+#: classes/applications/class_designer/class_designer_manager.aw:736 classes/applications/class_designer/class_designer_manager.aw:755
 msgid "Muuda nime"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:741
+#: classes/applications/class_designer/class_designer_manager.aw:754
 msgid "Demo objekt"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:746
+#: classes/applications/class_designer/class_designer_manager.aw:759
 msgid "Disaini"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:750
+#: classes/applications/class_designer/class_designer_manager.aw:763
 msgid "Loo disainer"
 msgstr ""
 

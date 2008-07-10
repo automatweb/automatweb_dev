@@ -14,8 +14,8 @@ msgid "Klassi  help"
 msgstr ""
 
 #: classes/vcl/toolbar.aw:54 classes/vcl/toolbar.aw:99
-#: classes/vcl/toolbar.aw:156 classes/vcl/toolbar.aw:181
-#: classes/vcl/toolbar.aw:348
+#: classes/vcl/toolbar.aw:156 classes/vcl/toolbar.aw:183
+#: classes/vcl/toolbar.aw:350
 msgid "Kustuta"
 msgstr ""
 
@@ -27,66 +27,66 @@ msgstr ""
 msgid "kustuta fail"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:186
+#: classes/vcl/toolbar.aw:188
 msgid "text"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:187
+#: classes/vcl/toolbar.aw:189
 msgid "tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:192
+#: classes/vcl/toolbar.aw:194
 msgid "suubmenuuu"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:196
+#: classes/vcl/toolbar.aw:198
 msgid "teine tekst"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:197
+#: classes/vcl/toolbar.aw:199
 msgid "teine tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:255
+#: classes/vcl/toolbar.aw:257
 msgid "neti.ee"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:256
+#: classes/vcl/toolbar.aw:258
 msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:497
+#: classes/vcl/toolbar.aw:499
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:543 classes/vcl/toolbar.aw:551
+#: classes/vcl/toolbar.aw:545 classes/vcl/toolbar.aw:553
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:574
+#: classes/vcl/toolbar.aw:576
 msgid "Kustuta valitud objektid"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:575
+#: classes/vcl/toolbar.aw:577
 msgid "Oled kindel et soovit valitud objektid kustutada?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:589
+#: classes/vcl/toolbar.aw:591
 msgid "Kustuta valitud seosed"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:590
+#: classes/vcl/toolbar.aw:592
 msgid "Oled kindel et soovid valitud seosed kustutada?"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:603
+#: classes/vcl/toolbar.aw:605
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:633
+#: classes/vcl/toolbar.aw:642
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:646
+#: classes/vcl/toolbar.aw:664
 msgid "Kleebi"
 msgstr ""

@@ -19,7 +19,6 @@ $GLOBALS["TRANS"]["Grupi T&auml;ienduskoolitus (add_edu) pealkiri"] = "Дополните
 $GLOBALS["TRANS"]["Grupi Organisatoorne kuuluvus (orgs) pealkiri"] = "Принадлежность к организациям ";
 $GLOBALS["TRANS"]["Grupi Soovitajad (recommends) pealkiri"] = "Рекомендатели ";
 $GLOBALS["TRANS"]["Grupi Soovitud t&ouml;&ouml; (work_wanted) pealkiri"] = "желаемая работа ";
-$GLOBALS["TRANS"]["--vali--"] = "--Выбери--";
 $GLOBALS["TRANS"]["P&otilde;hiharidus"] = "Основное образование";
 $GLOBALS["TRANS"]["Keskharidus"] = "Среднее образование";
 $GLOBALS["TRANS"]["Kutsekeskharidus"] = "Профессиональное среднее образование";

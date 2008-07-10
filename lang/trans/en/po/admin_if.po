@@ -159,19 +159,19 @@ msgstr "Preview"
 
 #: classes/admin/admin_if.aw:188
 msgid "Vali periood"
-msgstr ""
+msgstr "Select period"
 
 #: classes/admin/admin_if.aw:195
 msgid "Valitud periood: %s"
-msgstr ""
+msgstr "Selected period: %s"
 
 #: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1908
 msgid "(A)"
-msgstr ""
+msgstr "(A)"
 
 #: classes/admin/admin_if.aw:236
 msgid "<b>AutomatWeb</b>"
-msgstr ""
+msgstr "<b>AutomatWeb</b>"
 
 #: classes/admin/admin_if.aw:538
 msgid "Nimi"
@@ -219,39 +219,39 @@ msgstr "Change"
 
 #: classes/admin/admin_if.aw:1053
 msgid "Vali kuidas objekte kopeerida"
-msgstr ""
+msgstr "Select how objects are copied"
 
 #: classes/admin/admin_if.aw:1060
 msgid "Objekti kopeerimine"
-msgstr ""
+msgstr "Object copying"
 
 #: classes/admin/admin_if.aw:1067
 msgid "Objektid"
-msgstr ""
+msgstr "Objects"
 
 #: classes/admin/admin_if.aw:1074
 msgid "Kopeeri alamobjektid"
-msgstr ""
+msgstr "Copy sub-objects"
 
 #: classes/admin/admin_if.aw:1075
 msgid "Kopeeri alammen&uuml;&uuml;d"
-msgstr ""
+msgstr "Copy sub-menus"
 
 #: classes/admin/admin_if.aw:1076
 msgid "Kopeeri dokumendid"
-msgstr ""
+msgstr "Copy documents"
 
 #: classes/admin/admin_if.aw:1083
 msgid "Seosed"
-msgstr ""
+msgstr "Relations"
 
 #: classes/admin/admin_if.aw:1090
 msgid "Seosta samade objektidega"
-msgstr ""
+msgstr "Create relations with same objects"
 
 #: classes/admin/admin_if.aw:1091
 msgid "Loo uued seotud objektid"
-msgstr ""
+msgstr "Create relations to new objects"
 
 #: classes/admin/admin_if.aw:1243
 msgid "Administreerimisliides"
@@ -283,35 +283,35 @@ msgstr "File %s found and saved<br />\n"
 
 #: classes/admin/admin_if.aw:1593
 msgid "Impordi men&uuml;&uuml;sid"
-msgstr ""
+msgstr "Import menus"
 
 #: classes/admin/admin_if.aw:1600
 msgid "Vali fail"
-msgstr ""
+msgstr "Choose file"
 
 #: classes/admin/admin_if.aw:1605
 msgid "Vali faili t&uuml;&uuml;p"
-msgstr ""
+msgstr "Choose file type"
 
 #: classes/admin/admin_if.aw:1607
 msgid "Eksporditud AW'st"
-msgstr ""
+msgstr "Exported from AW"
 
 #: classes/admin/admin_if.aw:1608
 msgid "Tekstifail"
-msgstr ""
+msgstr "Textfile"
 
 #: classes/admin/admin_if.aw:1755
 msgid "Menyyde importimisel tekkis viga real %s"
-msgstr ""
+msgstr "Menu import failed on line %s"
 
 #: classes/admin/admin_if.aw:1772
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s"
-msgstr ""
+msgstr "Parent menu not found on line %s in menu import file"
 
 #: classes/admin/admin_if.aw:1916
 msgid "Mitteperioodilised"
-msgstr ""
+msgstr "Non-periodic"
 
 #~ msgid "Leidsin faili %s, l&otilde;in AW objekti %s&lt;br&gt;\n"
 #~ msgstr "File %s found and saved<br />\n"

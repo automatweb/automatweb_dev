@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Algab (start) caption"] = "Starts";
-$GLOBALS["TRANS"]["Omaduse Lõpeb (end) caption"] = "Ends";
 $GLOBALS["TRANS"]["Omaduse Osalejad (info_on_object) caption"] = "PArticipants";
 $GLOBALS["TRANS"]["Omaduse Muuda (morph_to) caption"] = "Change";
 $GLOBALS["TRANS"]["Omaduse \"Toolbar\" (task_toolbar) caption"] = "Toolbar";

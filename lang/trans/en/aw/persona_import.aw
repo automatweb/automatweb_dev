@@ -1,12 +1,12 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Viimane import toimus (last_import) caption"] = "Last import took place at";
 $GLOBALS["TRANS"]["Omaduse Import (invk) caption"] = "Import";
-$GLOBALS["TRANS"]["Omaduse FTP seaded (ftp_settings) caption"] = "FTP Settings";
-$GLOBALS["TRANS"]["Omaduse XML faili asukoht serveris (xml_folder) caption"] = "XML file location in server";
-$GLOBALS["TRANS"]["Omaduse XML faili nimi (xml_filename) caption"] = "XML file name";
 $GLOBALS["TRANS"]["Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) caption"] = "Images folder (if separate)";
 $GLOBALS["TRANS"]["Omaduse Pildiobjektide kataloog (aw_image_folder) caption"] = "AW folder for image objects";
 $GLOBALS["TRANS"]["Omaduse Kasutatav kliendibaas (crm_db_id) caption"] = "Client database to use";
+$GLOBALS["TRANS"]["Omaduse FTP seaded (ftp_settings) caption"] = "FTP Settings";
+$GLOBALS["TRANS"]["Omaduse XML faili asukoht serveris (xml_folder) caption"] = "XML file location in server";
+$GLOBALS["TRANS"]["Omaduse XML faili nimi (xml_filename) caption"] = "XML file name";
 $GLOBALS["TRANS"]["Omaduse Automaatse impordi seadistamine (recur_edit) caption"] = "Automatic import settings";
 $GLOBALS["TRANS"]["Grupi Seaded (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Automaatne import (autoimport) pealkiri"] = "Automatic import";

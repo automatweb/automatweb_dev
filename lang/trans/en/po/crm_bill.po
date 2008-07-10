@@ -766,6 +766,9 @@ msgid "Lisa laekumine!"
 msgstr "Add payment!"
 
 #: classes/applications/crm/crm_bill.aw:341
+#: classes/applications/crm/crm_bill.aw:1103
+#: classes/applications/crm/crm_bill.aw:1369
+#: classes/applications/crm/crm_bill.aw:1370
 msgid "Otsi"
 msgstr "Search"
 
@@ -840,7 +843,7 @@ msgid "&Uuml;hik"
 msgstr "Unit"
 
 #: classes/applications/crm/crm_bill.aw:992
-#: classes/applications/crm/crm_bill.aw:2884
+#: classes/applications/crm/crm_bill.aw:3128
 msgid "Hind"
 msgstr "Price"
 
@@ -865,8 +868,8 @@ msgid "+KM?"
 msgstr "+VAT?"
 
 #: classes/applications/crm/crm_bill.aw:1021
-#: classes/applications/crm/crm_bill.aw:1151
-#: classes/applications/crm/crm_bill.aw:1252
+#: classes/applications/crm/crm_bill.aw:1160
+#: classes/applications/crm/crm_bill.aw:1261
 msgid "Vali"
 msgstr "Select"
 
@@ -874,58 +877,91 @@ msgstr "Select"
 msgid "Kulud:"
 msgstr "Expenses"
 
-#: classes/applications/crm/crm_bill.aw:1205
+#: classes/applications/crm/crm_bill.aw:1102
+msgid "Lisa toimetuse rida"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1214
 msgid "Kokkuleppehind"
 msgstr "Agreed price"
 
-#: classes/applications/crm/crm_bill.aw:1981
-#: classes/applications/crm/crm_bill.aw:2391
-msgid "Prinditav arve"
-msgstr "Printable version"
+#: classes/applications/crm/crm_bill.aw:1343
+msgid "Toimetuse rea sisu"
+msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:2782
-msgid "Lisa rida"
-msgstr "Add row"
-
-#: classes/applications/crm/crm_bill.aw:2791
-msgid "Prindi"
-msgstr "Print"
-
-#: classes/applications/crm/crm_bill.aw:2796
-#: classes/applications/crm/crm_bill.aw:2808
-#: classes/applications/crm/crm_bill.aw:2821
-msgid "Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni"
-msgstr "There are rows with value of 0 on invoice"
-
-#: classes/applications/crm/crm_bill.aw:2804
-msgid "Prindi arve"
-msgstr "Print invoice"
-
-#: classes/applications/crm/crm_bill.aw:2817
-msgid "Prindi arve lisa"
-msgstr "Print appendix"
-
-#: classes/applications/crm/crm_bill.aw:2829
-msgid "Prindi arve koos lisaga"
-msgstr "Print invoice with appendix"
-
-#: classes/applications/crm/crm_bill.aw:2834
-msgid "Koonda read"
-msgstr "Consolidate rows"
-
-#: classes/applications/crm/crm_bill.aw:2843
-msgid "Kustuta read"
-msgstr "Delete rows"
-
-#: classes/applications/crm/crm_bill.aw:2844
-msgid "Oled kindel et soovid read kustutada?"
-msgstr "Are You sure?"
-
-#: classes/applications/crm/crm_bill.aw:2873
+#: classes/applications/crm/crm_bill.aw:1349
+#: classes/applications/crm/crm_bill.aw:1402
+#: classes/applications/crm/crm_bill.aw:3117
 msgid "Toimetus"
 msgstr "Task"
 
-#: classes/applications/crm/crm_bill.aw:2878
+#: classes/applications/crm/crm_bill.aw:1356
+#: classes/applications/crm/crm_bill.aw:1410
+msgid "Klient"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1363
+#: classes/applications/crm/crm_bill.aw:1406
+msgid "Projekt"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1398
+msgid "Sisu"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1475
+msgid "Vali see"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1501
+#: classes/applications/crm/crm_bill.aw:1502
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:2224
+#: classes/applications/crm/crm_bill.aw:2635
+msgid "Prinditav arve"
+msgstr "Printable version"
+
+#: classes/applications/crm/crm_bill.aw:3026
+msgid "Lisa rida"
+msgstr "Add row"
+
+#: classes/applications/crm/crm_bill.aw:3035
+msgid "Prindi"
+msgstr "Print"
+
+#: classes/applications/crm/crm_bill.aw:3040
+#: classes/applications/crm/crm_bill.aw:3052
+#: classes/applications/crm/crm_bill.aw:3065
+msgid "Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni"
+msgstr "There are rows with value of 0 on invoice"
+
+#: classes/applications/crm/crm_bill.aw:3048
+msgid "Prindi arve"
+msgstr "Print invoice"
+
+#: classes/applications/crm/crm_bill.aw:3061
+msgid "Prindi arve lisa"
+msgstr "Print appendix"
+
+#: classes/applications/crm/crm_bill.aw:3073
+msgid "Prindi arve koos lisaga"
+msgstr "Print invoice with appendix"
+
+#: classes/applications/crm/crm_bill.aw:3078
+msgid "Koonda read"
+msgstr "Consolidate rows"
+
+#: classes/applications/crm/crm_bill.aw:3087
+msgid "Kustuta read"
+msgstr "Delete rows"
+
+#: classes/applications/crm/crm_bill.aw:3088
+msgid "Oled kindel et soovid read kustutada?"
+msgstr "Are You sure?"
+
+#: classes/applications/crm/crm_bill.aw:3122
 msgid "Tunde"
 msgstr "Hours"
 

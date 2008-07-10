@@ -168,12 +168,12 @@ msgstr ""
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 
-#: classes/class_base.aw:6270
+#: classes/class_base.aw:6290
 msgid ""
 "User %s has added/changed the following file %s. Please click the link below to view the document \n"
 " %s"
 msgstr ""
 
-#: classes/class_base.aw:6289
+#: classes/class_base.aw:6309
 msgid "Teavitus muutunud dokumendist"
 msgstr ""

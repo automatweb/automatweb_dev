@@ -134,6 +134,18 @@ msgstr ""
 msgid "Omaduse S&otilde;ltuvused (dependencies) help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:prop_used_tbl
+msgid "Omaduse Kasutusel tabel (used_tbl) caption"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_used_tbl_comment
+msgid "Omaduse Kasutusel tabel (used_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:prop_used_tbl_help
+msgid "Omaduse Kasutusel tabel (used_tbl) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:group_package_contents
 msgid "Grupi Paki sisu (package_contents) pealkiri"
 msgstr ""
@@ -150,12 +162,24 @@ msgstr ""
 msgid "Grupi S&otilde;ltuvused (dependencies) help"
 msgstr ""
 
+#: classes/applications/package_management/package.aw:group_used
+msgid "Grupi Kasutuses (used) pealkiri"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:group_used_help
+msgid "Grupi Kasutuses (used) help"
+msgstr ""
+
 #: classes/applications/package_management/package.aw:rel_RELTYPE_DEPENDENCY
 msgid "Seose S&otilde;ltuvus (RELTYPE_DEPENDENCY) tekst"
 msgstr ""
 
 #: classes/applications/package_management/package.aw:rel_RELTYPE_FILE
 msgid "Seose Fail (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:rel_RELTYPE_SITE_RELATION
+msgid "Seose Seos saidiga (RELTYPE_SITE_RELATION) tekst"
 msgstr ""
 
 #: classes/applications/package_management/package.aw:layout_contents_tree_lay
@@ -170,55 +194,63 @@ msgstr ""
 msgid "Kujundusosa Pakk (contents_tbl_bottom) pealkiri"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:83
+#: classes/applications/package_management/package.aw:92
 msgid "Uuenda failide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:101
-msgid "Eemalda klassid"
-msgstr ""
-
-#: classes/applications/package_management/package.aw:103
-msgid "Oled kindel et soovid valitud klassid eemaldada?"
-msgstr ""
-
 #: classes/applications/package_management/package.aw:109
-msgid "Loo zip-fail"
+msgid "Id"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:120
-msgid "Lisa"
-msgstr ""
-
-#: classes/applications/package_management/package.aw:125 classes/applications/package_management/package.aw:202 classes/applications/package_management/package.aw:318
+#: classes/applications/package_management/package.aw:114 classes/applications/package_management/package.aw:165 classes/applications/package_management/package.aw:242 classes/applications/package_management/package.aw:358
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:199
+#: classes/applications/package_management/package.aw:119
+msgid "Url"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:141
+msgid "Eemalda klassid"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:143
+msgid "Oled kindel et soovid valitud klassid eemaldada?"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:149
+msgid "Loo zip-fail"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:160
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/package_management/package.aw:239
 msgid "Paki sisu"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:260
+#: classes/applications/package_management/package.aw:300
 msgid "Uus pakk"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:272
+#: classes/applications/package_management/package.aw:312
 msgid "Kustuta s&otilde;ltuvused"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:274
+#: classes/applications/package_management/package.aw:314
 msgid "Oled kindel et soovid valitud s&otilde;ltuvused kustutada?"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:314
+#: classes/applications/package_management/package.aw:354
 msgid "Pakkide nimekiri"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:322
+#: classes/applications/package_management/package.aw:362
 msgid "Versioon"
 msgstr ""
 
-#: classes/applications/package_management/package.aw:327
+#: classes/applications/package_management/package.aw:367
 msgid "Kirjeldus"
 msgstr ""
 

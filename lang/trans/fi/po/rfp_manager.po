@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi RFP Haldus help"
 msgstr ""
 
+#: classes/applications/calendar/rfp_manager.aw:prop_default_currency
+msgid "Omaduse Vaikevaluuta (default_currency) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_default_currency_comment
+msgid "Omaduse Vaikevaluuta (default_currency) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_default_currency_help
+msgid "Omaduse Vaikevaluuta (default_currency) help"
+msgstr ""
+
 #: classes/applications/calendar/rfp_manager.aw:prop_copy_redirect
 msgid "Omaduse Edasisuunamisdokument (copy_redirect) caption"
 msgstr ""
@@ -181,6 +193,30 @@ msgstr ""
 msgid "Omaduse  (packages_tbl) help"
 msgstr ""
 
+#: classes/applications/calendar/rfp_manager.aw:prop_cancel_and_payment_terms
+msgid "Omaduse Konvererntside annuleerimis- ja maksetingimused (cancel_and_payment_terms) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_cancel_and_payment_terms_comment
+msgid "Omaduse Konvererntside annuleerimis- ja maksetingimused (cancel_and_payment_terms) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_cancel_and_payment_terms_help
+msgid "Omaduse Konvererntside annuleerimis- ja maksetingimused (cancel_and_payment_terms) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_accomondation_terms
+msgid "Omaduse Majutuse annuleerimis- ja maksetingimused (accomondation_terms) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_accomondation_terms_comment
+msgid "Omaduse Majutuse annuleerimis- ja maksetingimused (accomondation_terms) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_accomondation_terms_help
+msgid "Omaduse Majutuse annuleerimis- ja maksetingimused (accomondation_terms) help"
+msgstr ""
+
 #: classes/applications/calendar/rfp_manager.aw:group_rfps
 msgid "Grupi Pakkumise saamis palved (rfps) pealkiri"
 msgstr ""
@@ -213,6 +249,14 @@ msgstr ""
 msgid "Grupi Paketid (packages) help"
 msgstr ""
 
+#: classes/applications/calendar/rfp_manager.aw:group_terms
+msgid "Grupi Tingimused (terms) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_terms_help
+msgid "Grupi Tingimused (terms) help"
+msgstr ""
+
 #: classes/applications/calendar/rfp_manager.aw:rel_RELTYPE_REDIR_DOC
 msgid "Seose Konverentsiplaneerija (RELTYPE_REDIR_DOC) tekst"
 msgstr ""
@@ -233,102 +277,106 @@ msgstr ""
 msgid "Seose Toitluste ruumide kaust (RELTYPE_CATERING_ROOM_FOLDER) tekst"
 msgstr ""
 
+#: classes/applications/calendar/rfp_manager.aw:rel_RELTYPE_DEFAULT_CURRENCY
+msgid "Seose RFP vaikevaluuta (RELTYPE_DEFAULT_CURRENCY) tekst"
+msgstr ""
+
 #: classes/applications/calendar/rfp_manager.aw:layout_searchbox
 msgid "Kujundusosa Otsing (searchbox) pealkiri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:116
+#: classes/applications/calendar/rfp_manager.aw:147
 msgid "&Uuml;ritus"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:121
+#: classes/applications/calendar/rfp_manager.aw:152
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:126
+#: classes/applications/calendar/rfp_manager.aw:157
 msgid "Tagasiside aeg"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:131
+#: classes/applications/calendar/rfp_manager.aw:162
 msgid "Ajavahemik"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:136
+#: classes/applications/calendar/rfp_manager.aw:167
 msgid "Majutus"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:141
+#: classes/applications/calendar/rfp_manager.aw:172
 msgid "Inimeste arv"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:146
+#: classes/applications/calendar/rfp_manager.aw:177
 msgid "Kontaktisik"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:151
+#: classes/applications/calendar/rfp_manager.aw:182
 msgid "Kontaktandmed"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:156
+#: classes/applications/calendar/rfp_manager.aw:187
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:164
+#: classes/applications/calendar/rfp_manager.aw:195
 msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:195
+#: classes/applications/calendar/rfp_manager.aw:226
 msgid "Si"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:199
+#: classes/applications/calendar/rfp_manager.aw:230
 msgid "Do"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:203
+#: classes/applications/calendar/rfp_manager.aw:234
 msgid "Su"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:216
+#: classes/applications/calendar/rfp_manager.aw:247
 msgid "(Nimetu)"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:230
+#: classes/applications/calendar/rfp_manager.aw:261
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:230
+#: classes/applications/calendar/rfp_manager.aw:261
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:248
+#: classes/applications/calendar/rfp_manager.aw:279
 msgid "S&uuml;steemi vaikimisi objekt"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:251
+#: classes/applications/calendar/rfp_manager.aw:282
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:256
+#: classes/applications/calendar/rfp_manager.aw:287
 msgid "Objekt"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:304
+#: classes/applications/calendar/rfp_manager.aw:335
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:309
+#: classes/applications/calendar/rfp_manager.aw:340
 msgid "Hind/in"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:550
+#: classes/applications/calendar/rfp_manager.aw:581
 msgid "Aktiviseeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:550
+#: classes/applications/calendar/rfp_manager.aw:581
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:557
+#: classes/applications/calendar/rfp_manager.aw:588
 msgid "Kustuta"
 msgstr ""

@@ -9,21 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/person_skill_manager.aw:class_1448_help
 msgid "Klassi P&auml;devuste haldur help"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_company
-msgid "Omaduse Default tasemed (company) caption"
+msgid "Omaduse Organisatsioon (company) caption"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_company_comment
-msgid "Omaduse Default tasemed (company) kommentaar"
+msgid "Omaduse Organisatsioon (company) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_company_help
-msgid "Omaduse Default tasemed (company) help"
+msgid "Omaduse Organisatsioon (company) help"
 msgstr ""
 
 #: classes/applications/crm/person_skill_manager.aw:prop_skills_tb
@@ -146,7 +145,8 @@ msgstr ""
 msgid "K&otilde;ik t&ouml;&ouml;tajad"
 msgstr ""
 
-#: classes/applications/crm/person_skill_manager.aw:524 classes/applications/crm/person_skill_manager.aw:600
+#: classes/applications/crm/person_skill_manager.aw:524
+#: classes/applications/crm/person_skill_manager.aw:600
 msgid "Nimi"
 msgstr ""
 
@@ -181,4 +181,3 @@ msgstr ""
 #: classes/applications/crm/person_skill_manager.aw:619
 msgid "Kommentaar"
 msgstr ""
-

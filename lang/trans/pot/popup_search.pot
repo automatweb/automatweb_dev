@@ -14,71 +14,71 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:151
+#: classes/vcl/popup_search.aw:156
 msgid "--Vali--"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:161 classes/vcl/popup_search.aw:492 classes/vcl/popup_search.aw:493 classes/vcl/popup_search.aw:915
+#: classes/vcl/popup_search.aw:166 classes/vcl/popup_search.aw:497 classes/vcl/popup_search.aw:498 classes/vcl/popup_search.aw:920
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:170
+#: classes/vcl/popup_search.aw:175
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:210
+#: classes/vcl/popup_search.aw:215
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:228
+#: classes/vcl/popup_search.aw:233
 msgid "Lisa uus %s"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:244
+#: classes/vcl/popup_search.aw:249
 msgid "Eemalda"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:329
+#: classes/vcl/popup_search.aw:334
 msgid "Vali eemaldatavad objektid"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:345 classes/vcl/popup_search.aw:626 classes/vcl/popup_search.aw:630 classes/vcl/popup_search.aw:713
+#: classes/vcl/popup_search.aw:350 classes/vcl/popup_search.aw:631 classes/vcl/popup_search.aw:635 classes/vcl/popup_search.aw:718
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:429
+#: classes/vcl/popup_search.aw:434
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:459 classes/vcl/popup_search.aw:602
+#: classes/vcl/popup_search.aw:464 classes/vcl/popup_search.aw:607
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:466
+#: classes/vcl/popup_search.aw:471
 msgid "Objekti id"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:569
+#: classes/vcl/popup_search.aw:574
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:595
+#: classes/vcl/popup_search.aw:600
 msgid "OID"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:608
+#: classes/vcl/popup_search.aw:613
 msgid "Asukoht"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:614
+#: classes/vcl/popup_search.aw:619
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:618
+#: classes/vcl/popup_search.aw:623
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:695
+#: classes/vcl/popup_search.aw:700
 msgid "Vali see"
 msgstr ""
 
