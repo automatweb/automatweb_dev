@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.33 2008/06/09 11:37:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.34 2008/07/10 12:36:20 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -311,6 +311,7 @@ class auth_config extends class_base
 		{
 			$cred["uid"] .= ".".$cred["server"];
 		}
+		aw_disable_acl();
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
 			"name" => $cred["uid"],
@@ -319,7 +320,7 @@ class auth_config extends class_base
 			"brother_of" => new obj_predicate_prop("id")
 		));
 		$confo = obj($auth_id);
-
+		
 		$has = false;
 		$obo = false;
 		foreach($ol->arr() as $_o)
@@ -331,6 +332,7 @@ class auth_config extends class_base
 				break;
 			}
 		}
+		aw_restore_acl();
 
 		if ($has)
 		{
