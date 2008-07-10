@@ -1334,12 +1334,7 @@ class doc_display extends aw_template
 		{
 			$doc_link = aw_url_change_var("docid", $doc->id(), obj_link(aw_global_get("section")));
 		}
-		if ($doc->prop("alias") != "")
-		{
-			$doc_link = obj_link($doc->prop("alias"));
-		}
-
-		if (aw_ini_get("menuedit.language_in_url"))
+		if ($doc->prop("alias") != "" || aw_ini_get("menuedit.language_in_url"))
 		{
 			static $ss_i;
 			if (!$ss_i)
