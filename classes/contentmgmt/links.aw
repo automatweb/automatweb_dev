@@ -20,9 +20,6 @@
 	@property hits type=text table=extlinks
 	@caption Klikke
 
-	@property url_int_text type=text store=no
-	@caption Saidi sisene link
-
 	@property alt type=textbox table=objects field=meta method=serialize search=1
 	@caption Alt tekst
 
@@ -311,20 +308,22 @@ class links extends class_base
 				}
 				break;
 
-			case "url_int_text":
-				$this->read_template("intlink.tpl");
-				$this->vars(array(
-					'search_doc' => $this->mk_my_orb('search_doc'),
-					"int_link_caption" => t("Saidi sisene link"),
-				));
-				$prop['value'] = $this->parse();
-				break;
-
 			case "url":
-				if ($prop["value"] == "" && $arr["obj_inst"]->prop("docid") != "")
+				$o = $arr["obj_inst"];
+				$p =& $arr["prop"];
+				$ps = get_instance("contentmgmt/ct_linked_obj_search");
+				if ($this->can("view", $o->meta("linked_obj")))
 				{
-					$prop["value"] = "/".$arr["obj_inst"]->prop("docid");
+					$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));
+					$p["post_append_text"] .= " ".html::href(array(
+						"url" => $this->mk_my_orb("remove_linked", array("id" => $o->id(), "ru" => get_ru()), "menu"),
+						"caption" => html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif", "border" => 0))
+					))." / ";
 				}
+				$p["post_append_text"] .= t(" Otsi uus objekt: ").$ps->get_popup_search_link(array(
+					"pn" => "link_pops",
+					"clid" => array(CL_DOCUMENT,CL_LINK)
+				));
 				break;
 
 			case "link_image_active_until":
@@ -488,6 +487,7 @@ class links extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["ldocid"] = $_GET["ldocid"];
+		$arr["link_pops"] = "0";
 	}
 
 	function callback_mod_tab($arr)
@@ -530,6 +530,14 @@ class links extends class_base
 		</script>";
 		$out = $arr["close"]?$close:$c->id();
 		die($out);
+	}
+
+	function callback_pre_save($arr)
+	{
+		if ($this->can("view", $arr["request"]["link_pops"]))
+		{
+			$arr["obj_inst"]->set_meta("linked_obj", $arr["request"]["link_pops"]);
+		}
 	}
 }
 ?>

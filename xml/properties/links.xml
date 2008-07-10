@@ -44,14 +44,6 @@
             <caption>Klikke</caption>
       </property>
       <property>
-            <name>url_int_text</name>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>url_int_text</field>
-            <caption>Saidi sisene link</caption>
-      </property>
-      <property>
             <name>alt</name>
             <group>general</group>
             <type>textbox</type>
