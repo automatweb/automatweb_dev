@@ -941,6 +941,11 @@ class event_search extends class_base
 					else
 					{
 						$rn1[] = $tmp->id();
+						$event_folders_tree = new object_tree(array(
+							'parent' => $tmp->id(),
+							'class_id' => CL_MENU
+						));
+						$rn1 = array_merge($rn1, $event_folders_tree->ids());
 					}
 				}
 				elseif($clid == CL_PLANNER)
@@ -1005,6 +1010,11 @@ class event_search extends class_base
 					else
 					{
 						$rn2[] = $tmp->id();
+						$event_folders_tree = new object_tree(array(
+							'parent' => $tmp->id(),
+							'class_id' => CL_MENU
+						));
+						$rn2 = array_merge($rn2, $event_folders_tree->ids());
 					}
 				}
 				elseif($tmp->class_id() == CL_PLANNER)
