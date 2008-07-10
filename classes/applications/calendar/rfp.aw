@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.27 2008/07/08 09:02:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.28 2008/07/10 13:04:57 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1620,6 +1620,8 @@ class rfp extends class_base
 			{
 				continue;
 			}
+
+			// roomcrap
 			$start = $rv->prop("start1");
 			$end = $rv->prop("end");
 			$timefrom = date('H:i', $start);
@@ -1643,7 +1645,7 @@ class rfp extends class_base
 				$price = $sum[$currency];
 			}
 			$comment = $rv->prop("comment");
-			$this->vars(array(
+			$room_data = array(
 				"datefrom" => $datefrom,
 				"timefrom" => $timefrom,
 				"timeto" => $timeto,
@@ -1653,7 +1655,10 @@ class rfp extends class_base
 				"people" => $people,
 				"comments" => $comment,
 				"colspan" => $colspan,
-			));
+				"separate_price" => $price,
+				"price" => $price,
+			);
+			//$this->vars($room_data);
 			if($package)
 			{
 				$mgri = get_instance(CL_RFP_MANAGER);
@@ -1668,18 +1673,23 @@ class rfp extends class_base
 					}
 				}
 				$price = $unitprice*$people;
-				$this->vars(array(
+				$room_data["package_data"] = array(
 					"unitprice" => $unitprice,
 					"package" => $package,
 					"price" => $price,
-				));
+				);
+				$room_data["separate_price"] = $price;
+				/*
+				$this->vars($room_data["package_data"]);
 				$tmp = $this->parse("VALUES_PACKAGE");
 				$this->vars(array(
 					"VALUES_PACKAGE" => $tmp,
 				));
+				 */
 			}
 			else
 			{
+				/*
 				$this->vars(array(
 					"price" => $price,
 				));
@@ -1687,9 +1697,13 @@ class rfp extends class_base
 				$this->vars(array(
 					"VALUES_NO_PACKAGE" => $tmp,
 				));
+				 */
 			}
-			$bron_totalprice += $price;
-			$brons .= $this->parse("BRON");
+			//$bron_totalprice += $price;
+			$bronnings[] = $room_data;
+			//$brons .= $this->parse("BRON");
+
+			// resources
 			$resources_tmp = $rv->meta("resources_info");
 			if(count($resources_tmp))
 			{
@@ -1719,12 +1733,56 @@ class rfp extends class_base
 				}
 			}
 		}
+
+		// roomcrap to be sorted and parseod
+		uasort($bronnings, array($this, "_sort_submission_rooms"));
+		$mgri = get_instance(CL_RFP_MANAGER);
+		$mgrid = $mgri->get_sysdefault();
+		foreach($bronnings as $dat)
+		{
+			$this->vars($dat);
+			if($package)
+			{
+				if($this->can("view", $mgrid))
+				{
+					$mgr = obj($mgrid);
+					$pk_prices = $mgr->meta("pk_prices");
+					if(is_array($pk_prices))
+					{
+						$unitprice = $pk_prices[$package_id][$currency];
+					}
+				}
+				$this->vars($dat["package_data"]);
+				$tmp = $this->parse("VALUES_PACKAGE");
+				$this->vars(array(
+					"VALUES_PACKAGE" => $tmp,
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"price" => $dat["price"],
+				));
+				$tmp = $this->parse("VALUES_NO_PACKAGE");
+				$this->vars(array(
+					"VALUES_NO_PACKAGE" => $tmp,
+				));
+			}
+			$bron_totalprice += $dat["separate_price"];
+			$brons .= $this->parse("BRON");
+
+
+		}
+
+
 		$this->vars(array(
 			"total_colspan" => $colspan - 2,
 			"bron_totalprice" => $bron_totalprice,
 		));
-		$totalprice += $bron_totalprice;
 		$res_sub = "";
+
+		// brons
+		uasort($resources, array($this, "_sort_submission_resources"));
 		if(count($resources))
 		{
 			$res = "";
@@ -1752,6 +1810,7 @@ class rfp extends class_base
 		}
 		$prods = $arr["obj_inst"]->meta("prods");
 		$pd_sub = "";
+		uasort(&$prods, array($this, "_sort_submission_products"));
 		if(count($prods))
 		{
 			$prod_total = 0;
@@ -1791,6 +1850,7 @@ class rfp extends class_base
 		}
 		$housing = $arr["obj_inst"]->meta("housing");
 		$hs_sub = "";
+		uasort($housing, array($this, "_sort_submission_housing"));
 		if(count($housing))
 		{
 			$housing_total = 0;
@@ -1829,6 +1889,26 @@ class rfp extends class_base
 			"totalprice" => $totalprice,
 		));
 		return $this->parse();
+	}
+
+	private function _sort_submission_rooms($a, $b)
+	{
+		return (join("", array_reverse(split("[.]", $a["datefrom"]))).join(split(":", $a["timefrom"]))) - (join("", array_reverse(split("[.]", $b["datefrom"]))).join(split(":", $b["timefrom"])));
+	}
+
+	private function _sort_submission_housing($a, $b)
+	{
+		return $a["datefrom"].$a["dateto"] - $b["datefrom"].$b["dateto"];
+	}
+
+	private function _sort_submission_resources($a, $b)
+	{
+		return ($a["from_hour"].str_pad($a["from_minute"], 2, "0", STR_PAD_LEFT)) - ($b["from_hour"].str_pad($b["from_minute"], 2, "0", STR_PAD_LEFT));
+	}
+
+	private function _sort_submission_products($a, $b)
+	{
+		return ($a["from"]["hour"].str_pad($a["from"]["minute"], 2, "0", STR_PAD_LEFT)) - ($b["from"]["hour"].str_pad($b["from"]["minute"], 2, "0", STR_PAD_LEFT));
 	}
 
 	function set_property($arr = array())
