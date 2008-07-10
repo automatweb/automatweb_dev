@@ -451,7 +451,7 @@ class _int_object_loader extends core
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
 			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
-			if (false && empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
+			if (empty($GLOBALS["__obj_sys_opts"]["no_cache"]) && ($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) != false)
 			{
 				$max_acl = aw_unserialize($str_max_acl);
 			}
@@ -489,6 +489,7 @@ class _int_object_loader extends core
 		// go through the object tree and find the acl that is of highest priority among the current users group
 		$cur_oid = $oid;
 		$do_orig = false;
+
 		while ($cur_oid > 0)
 		{
 			$tmp = null;
