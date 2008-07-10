@@ -2554,12 +2554,13 @@ class _int_object
 		{
 			return false;
 		}
-		if(!empty($value))
+		if(!empty($value) || strlen($value))
 		{
 			return false;
 		}
 
-		if(isset($prop["warning"]) and !strlen($prop["warning"]))
+		//if($prop["warning"]) and !strlen($prop["warning"]))
+		if(!strlen($prop["warning"]))
 		{
 			$prop["warning"] = ($prop["type"] == "relpicker")?2:1;
 		}
