@@ -102,7 +102,6 @@ function buttonClick(event, menuId) {
   // Additionally, initialize menu display.
 
   if (button.menu == null) {
-    button.menu = document.getElementById(menuId);
     $("#"+menuId).each(function() {
       button.menu = this
     });
