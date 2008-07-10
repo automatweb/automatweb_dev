@@ -7791,6 +7791,17 @@ class crm_person extends class_base
 		}
 		// END SUB: CRM_PERSON.NOTES
 
+		$charset = aw_global_get("charset");
+		if($ob->meta("insertion_lang"))
+		{
+			$llist = aw_ini_get("languages.list");
+			$charset = $llist[$ob->meta("insertion_lang")]["charset"];
+			aw_global_set("charset", $charset);
+		}
+		$this->vars(array(
+			"charset" => $charset,
+		));
+
 		return $arr["die"]?die($this->parse()):$this->parse();
 	}
 
