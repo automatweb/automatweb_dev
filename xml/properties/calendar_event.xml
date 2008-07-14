@@ -385,7 +385,7 @@
             <type>releditor</type>
             <store>no</store>
             <mode>manager2</mode>
-            <reltype>RELTYPE_EVENT_TIME</reltype>
+            <reltype>RELTYPE_EVENT_TIMES</reltype>
             <props>
                   <num_0>start</num_0>
                   <num_1>end</num_1>
@@ -552,6 +552,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Fail</caption>
             </FILE>
+            <EVENT_TIMES>
+                  <value>11</value>
+                  <clid>CL_EVENT_TIME</clid>
+                  <caption>Toimumisaeg</caption>
+            </EVENT_TIMES>
       </reltypes>
 </properties>
 

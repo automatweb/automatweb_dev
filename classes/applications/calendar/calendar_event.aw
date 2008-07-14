@@ -170,7 +170,7 @@ caption Korraldaja tabel
 property event_time_table type=table no_caption=1 store=no
 caption Toimumisaegade tabel
 
-@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIME props=start,end,location table_fields=start,end,location
+@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIMES props=start,end,location table_fields=start,end,location
 @caption Toimumisajad
 
 
@@ -238,6 +238,9 @@ caption Toimumisaegade tabel
 
 @reltype FILE value=10 clid=CL_FILE
 @caption Fail
+
+@reltype EVENT_TIMES value=11 clid=CL_EVENT_TIME
+@caption Toimumisaeg
 
 
 */
