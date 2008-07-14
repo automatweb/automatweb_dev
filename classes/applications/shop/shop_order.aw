@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.70 2008/06/12 13:22:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.71 2008/07/14 12:49:24 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -815,6 +815,7 @@ class shop_order extends class_base
 				}
 				$mp[$iid] = $quant["items"];
 				$sum += ($quant["items"] * $price);
+				$this->order_items[$iid][$x]["unsent"] = $quant["items"];
 				if ($i_o->is_property("item_count"))
 				{
 					$i_o->set_prop("item_count", $i_o->prop("item_count")-$quant["items"]);

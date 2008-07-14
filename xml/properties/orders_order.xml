@@ -64,7 +64,7 @@
             <default>-1</default>
             <store>no</store>
             <field>person_birthday</field>
-            <caption>S&amp;uuml;nnip&amp;auml;ev</caption>
+            <caption>S&amp;amp;uuml;nnip&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>order_completed</name>
@@ -295,13 +295,13 @@
             <field>orders</field>
       </property>
       <property>
-            <name>submit</name>
+            <name>add_order_button</name>
             <table>orders_order</table>
             <group>orderitems</group>
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>submit</field>
+            <field>add_order_button</field>
             <caption>Lisa tellimus</caption>
       </property>
       <property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.32 2008/01/24 15:10:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.33 2008/07/14 12:49:21 markop Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes maintainer=markop
@@ -27,7 +27,7 @@
 @caption Aadress
 
 @property person_birthday type=date_select year_from=1930 year_to=2010 default=-1 store=no
-@caption Sünnipäev
+@caption S&uuml;nnip&auml;ev
 
 @property order_completed type=hidden field=meta method=serialize table=objects
 @property order_confirmed type=hidden field=meta method=serialize table=objects
@@ -71,7 +71,7 @@
 
 @property orders type=releditor store=no props=name,product_code,product_color,product_size,product_count,product_count_undone,product_price reltype=RELTYPE_ORDER group=orderitems
 
-@property submit type=submit group=orderitems store=no no_caption=1
+@property add_order_button type=submit group=orderitems store=no no_caption=1
 @caption Lisa tellimus
 
 @property forward type=submit action=do_persondata_form group=orderitems store=no
@@ -308,6 +308,9 @@ class orders_order extends class_base
 				$this->_init_product_table(&$table, $cfgform);
 				$this->define_table_data(&$table , $ol);
 				break;
+			case "submit":
+				$prop["name"] = "add_order_button";
+				break;
 		};
 		return $retval;
 	}
@@ -405,7 +408,7 @@ class orders_order extends class_base
 					if($prop == "product_duedate" || $prop == "product_bill")
 					{
 						$data[$prop].= '<a href="javascript:void(0);" onClick="var cal = new CalendarPopup();
-	cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$obj->id().'" id="anchor'.$obj->id().'">vali</a>';
+	cal.select(changeform.rows_'.$obj->id().'__'.$prop.'_,\'anchor'.$obj->id().'\',\'dd/MM/yy\'); return false;" title="Vali kuup&auml;ev" name="anchor'.$obj->id().'" id="anchor'.$obj->id().'">vali</a>';
 					}
 				}
 			}
@@ -767,7 +770,7 @@ class orders_order extends class_base
 			"froma" => $froma,
 			"subject" => $form->name(),
 			"to" => $admin_mail,
-			"body" => t("Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"),
+			"body" => t("Kahjuks sinu meililugeja ei oska nidata HTML formaadis kirju"),
 		));
 		$awm->htmlbodyattach(array(
 			"data" => $content,
