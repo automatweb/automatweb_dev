@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.64 2008/07/03 14:58:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.65 2008/07/14 13:16:44 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -548,7 +548,7 @@ class spa_bookings_overview extends class_base
 			$file = "stats". date("ymdhis") . ".csv";
 			header("Content-type: text/csv; charset=".aw_global_get('charset'));
 			header("Content-disposition: inline; filename=".$file.";");
-			die(html_entity_decode($t->get_csv_file()));
+			die(html_entity_decode($arr["prop"]["vcl_inst"]->get_csv_file()));
 		}
 	}
 
