@@ -113,16 +113,6 @@
             <caption>Toodete kaust</caption>
       </property>
       <property>
-            <name>dir_comment</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_KOMMENTAAR_CAT</reltype>
-            <caption>Kommentaaride kaust</caption>
-      </property>
-      <property>
             <name>dir_default</name>
             <table>objects</table>
             <group>general</group>

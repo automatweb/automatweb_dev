@@ -188,6 +188,16 @@
             <caption>Kindlustuse t&amp;amp;uuml;&amp;amp;uuml;pide kataloog</caption>
       </property>
       <property>
+            <name>comment_menu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kommentaaride kaust</caption>
+      </property>
+      <property>
             <name>default_my_company_tab</name>
             <table>objects</table>
             <group>general</group>

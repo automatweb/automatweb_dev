@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="get_companies">
+			<function name="get_companies">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.31 2008/06/09 13:43:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.32 2008/07/14 18:13:38 instrumental Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -89,6 +89,9 @@
 
   	@property insurance_link_menu type=relpicker table=objects field=meta reltype=RELTYPE_MENU
 	@caption Kindlustuse t&uuml;&uuml;pide kataloog
+
+	@property comment_menu type=relpicker reltype=RELTYPE_MENU table=objects field=meta method=serialize
+	@caption Kommentaaride kaust
 
 
 	@property default_my_company_tab type=select table=objects field=meta

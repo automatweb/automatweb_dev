@@ -530,5 +530,21 @@
 			</function>
 		</action>
 
+		<action name="company_props" all_args="1">
+			<function name="company_props">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_comment">
+			<function name="del_comment">
+				<arguments>
+					<required name="id" type="oid" acl="delete" />
+					<required name="post_ru" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

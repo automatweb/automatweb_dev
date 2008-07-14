@@ -3432,8 +3432,8 @@
             <table>objects</table>
             <group>comments</group>
             <type>hidden</type>
-            <method>serialize</method>
             <field>meta</field>
+            <method>serialize</method>
       </property>
       <property>
             <name>comments_display</name>
@@ -3443,6 +3443,24 @@
             <store>no</store>
             <field>comments_display</field>
             <caption>Sisestatud kommentaarid</caption>
+      </property>
+      <property>
+            <name>last_com_type</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>text</type>
+            <store>no</store>
+            <field>last_com_type</field>
+            <caption>Viimase kommentaari t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>com_statistics</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>text</type>
+            <store>no</store>
+            <field>com_statistics</field>
+            <caption>Kommentaaride statistika</caption>
       </property>
       <property>
             <name>comments_title</name>
@@ -3471,24 +3489,6 @@
             <store>no</store>
             <field>comment_type</field>
             <caption>Kommentaari t&amp;amp;uuml;&amp;amp;uuml;p</caption>
-      </property>
-      <property>
-            <name>last_com_type</name>
-            <table>objects</table>
-            <group>comments</group>
-            <type>text</type>
-            <store>no</store>
-            <field>last_com_type</field>
-            <caption>Viimase kommentaari t&amp;amp;uuml;&amp;amp;uuml;p</caption>
-      </property>
-      <property>
-            <name>com_statistics</name>
-            <table>objects</table>
-            <group>comments</group>
-            <type>text</type>
-            <store>no</store>
-            <field>com_statistics</field>
-            <caption>Kommentaaride statistika</caption>
       </property>
       <property>
             <name>ext_sys_t</name>
@@ -4280,6 +4280,11 @@
                   <clid>CL_CRM_ACTIVITY_STATS_TYPE</clid>
                   <caption>Tegevuse statistika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </ACTIVITY_STATS_TYPE>
+            <COMMENT>
+                  <value>73</value>
+                  <clid>CL_COMMENT</clid>
+                  <caption>Kommentaar</caption>
+            </COMMENT>
       </reltypes>
       <layout>
             <co_top>

@@ -679,6 +679,23 @@ class crm_person_obj extends _int_object
 		}
 		return $ol;
 	}
+
+	/**
+	@attrib name=get_companies api=1
+	**/
+	function get_companies()
+	{
+		$ol = new object_list();
+		foreach($this->connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $conn)
+		{
+			$to = $conn->to();
+			if(is_oid($to->org) && $this->can("view", $to->org))
+			{
+				$ol->add($to->org);
+			}
+		}
+		return $ol;
+	}
 }
 
 ?>

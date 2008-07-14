@@ -1098,10 +1098,17 @@ default group=org_objects
 	@property my_view type=text store=no no_caption=1
 
 @default group=comments
-    @property comment_history type=hidden method=serialize field=meta table=objects
+
+	@property comment_history type=hidden field=meta method=serialize
 
     @property comments_display type=text store=no
 	@caption Sisestatud kommentaarid
+
+	@property last_com_type type=text store=no
+	@caption Viimase kommentaari t&uuml;&uuml;p
+
+	@property com_statistics type=text store=no
+	@caption Kommentaaride statistika
 
     @property comments_title type=text store=no subtitle=1
 	@caption Lisa kommentaar
@@ -1111,12 +1118,6 @@ default group=org_objects
 
     @property comment_type type=chooser store=no
 	@caption Kommentaari t&uuml;&uuml;p
-
-	@property last_com_type type=text store=no
-	@caption Viimase kommentaari t&uuml;&uuml;p
-
-	@property com_statistics type=text store=no
-	@caption Kommentaaride statistika
 
 @default group=ext_sys
 
@@ -1445,6 +1446,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype ACTIVITY_STATS_TYPE value=71 clid=CL_CRM_ACTIVITY_STATS_TYPE
 @caption Tegevuse statistika t&uuml;&uuml;p
+
+@reltype COMMENT value=73 clid=CL_COMMENT
+@caption Kommentaar
 
 
 */
@@ -1970,19 +1974,35 @@ class crm_company extends class_base
 				return $this->_client_category($arr);
 
 			case "comments_display":
-				$comments = (array) $arr["obj_inst"]->prop("comment_history");
-				$tmp = array();
-
-				foreach ($comments as $t)
+				if(!$arr["obj_inst"]->meta("comments_stored_in_objects"))
 				{
-					if (strlen(trim($t["text"])))
+					$this->move_comments_from_meta_to_objects($arr);
+				}
+				$tmp = array();
+				
+				foreach($arr["obj_inst"]->get_comments()->arr() as $comm)
+				{
+					if(strlen(trim($comm->commtext)))
 					{
-						$tmp[] = $t["text"] .
-							"<br /><br /><b>" . t("T&uuml;&uuml;p:") . "</b> " . $this->comment_types[$t["type"]] .
-							// "<br /><b>" . t("Aeg:") . "</b> " . date("d. M Y H:i", $t["time"]) .
-							"<br /><b>" . t("Aeg:") . "</b> " . strftime("%d. %b %Y %H:%M", $t["time"]) .
-							"<br /><b>" . t("Autor:") . "</b> " . $t["user"] . "<br />";
-
+						$comment = $comm->commtext .
+							"<br /><br /><b>" . t("T&uuml;&uuml;p:") . "</b> " . (array_key_exists($comm->commtype, $this->comment_types) ? $this->comment_types[$comm->commtype] : t("M&auml;&auml;ramata")) .
+							"<br /><b>" . t("Aeg:") . "</b> " . strftime("%d. %b %Y %H:%M", $comm->created()) .
+							"<br /><b>" . t("Autor:") . "</b> " . $comm->uname . "<br />";
+						if($this->can("edit", $comm->id()))
+						{
+							$comment .= html::href(array(
+								"url" => $this->mk_my_orb("change", array("id" => $comm->id()), CL_COMMENT),
+								"caption" => t("Muuda"),
+							))."&nbsp; &nbsp;";
+						}
+						if($this->can("edit", $comm->id()))
+						{
+							$comment .= html::href(array(
+								"url" => $this->mk_my_orb("del_comment", array("id" => $comm->id(), "post_ru" => get_ru())),
+								"caption" => t("Kustuta"),
+							));
+						}
+						$tmp[] = $comment;
 					}
 				}
 
@@ -1991,23 +2011,26 @@ class crm_company extends class_base
 
 			/// GENERAL TAB
 			case "last_com_type":
+				$data["value"] = array_key_exists($arr["obj_inst"]->meta("last_com_type"), $this->comment_types) ? $this->comment_types[$arr["obj_inst"]->meta("last_com_type")] : t("M&auml;&auml;ramata");
+				/*
 				$tmp = (array) $arr["obj_inst"]->prop("comment_history");
 				$tt = array_pop($tmp);
 				$data["value"] = $tt ? $this->comment_types[$tt["type"]] : t("Kommentaare pole");
+				*/
 				break;
 
 			case "com_statistics":
-				$tmp = (array) $arr["obj_inst"]->prop("comment_history");
-				$total = count($tmp);
-				$pos = $neutr = $neg = 0;
+				$comms = $arr["obj_inst"]->get_comments();
+				$total = $comms->count();
+				$pos = $neutr = $neg = $undef = 0;
 
 				if ($total)
 				{
-					foreach ($tmp as $tt)
+					foreach ($comms->arr() as $comm)
 					{
-						if (strlen(trim($tt["text"])))
+						if (strlen(trim($comm->commtext)))
 						{
-							switch ($tt["type"])
+							switch ($comm->commtype)
 							{
 								case CRM_COMMENT_POSITIVE:
 									$pos++;
@@ -2022,7 +2045,8 @@ class crm_company extends class_base
 									break;
 
 								default:
-									$total--;
+									$undef++;
+									//$total--;
 							}
 						}
 						else
@@ -2034,6 +2058,7 @@ class crm_company extends class_base
 					$data["value"] = $this->comment_types[CRM_COMMENT_POSITIVE] . ": " . number_format((($pos/$total)*100), 1, ".", "") . "% ({$pos})<br />" .
 						$this->comment_types[CRM_COMMENT_NEUTRAL] . ": " . number_format((($neutr/$total)*100), 1, ".", "") . "% ({$neutr})<br />" .
 						$this->comment_types[CRM_COMMENT_NEGATIVE] . ": " . number_format((($neg/$total)*100), 1, ".", "") . "% ({$neg})<br /><br />" .
+						($undef ? t("M&auml;&auml;ramata") . ": " . number_format((($undef/$total)*100), 1, ".", "") . "% ({$undef})<br /><br />" : "") .
 						t("Kokku") . ": " . $total;
 				}
 				else
@@ -2098,9 +2123,11 @@ class crm_company extends class_base
 				break;
 
 			case "name":
-				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				//$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				$data["autocomplete_source"] = $this->mk_my_orb("name_autocomplete_source");
 				$data["autocomplete_params"] = array("name");
 				//$data["option_is_tuple"] = true;
+				$data["onkeyup"] = "load_company_data(this.id);";
 				break;
 
 			case "reg_nr":
@@ -2160,6 +2187,12 @@ class crm_company extends class_base
 
 			case "comment_type":
 				$data["options"] = $this->comment_types;
+			case "comments_title":
+			case "comment_text":
+				if(!$this->can("add", $this->eligible_to_comment($arr)))
+				{
+					return PROP_IGNORE;
+				}
 				break;
 
 			case "bank_account":
@@ -3012,8 +3045,33 @@ class crm_company extends class_base
 				break;
 
 			case "comment_history":
-				if (strlen(trim($arr['request']['comment_text'])))
+				$connect_comment_to_customer_data = false;
+				$parent = $this->eligible_to_comment($arr, $connect_comment_to_customer_data);
+				if (strlen(trim($arr['request']['comment_text'])) && $this->can("add", $parent))
 				{
+					$comm = obj();
+					$comm->set_class_id(CL_COMMENT);
+					$comm->set_parent($parent);
+					$comm->name = sprintf(t("%s kommentaar organisatsioonile %s"), aw_global_get("uid"), $arr["obj_inst"]->name);
+					$comm->uname = aw_global_get("uid");
+					$comm->commtext = $arr['request']['comment_text'];
+					$comm->commtype = $arr['request']['comment_type'];
+					$comm->save();
+					if($connect_comment_to_customer_data)
+					{
+						$o = obj($parent);
+						$o->connect(array(
+							"to" => $comm->id(),
+							"type" => "RELTYPE_COMMENT_TO_COMPANY"
+						));
+					}
+					// Connect to the company object anyway. Otherwise I have no way of knowing which company this comment concerns.
+					$arr["obj_inst"]->connect(array(
+						"to" => $comm->id(),
+						"reltype" => "RELTYPE_COMMENT",
+					));
+					$arr["obj_inst"]->set_meta("last_com_type", $arr['request']['comment_type']);
+					/*
 					$tmp = (array) $data["value"];
 					array_push($tmp, array(
 						"text" => $arr['request']['comment_text'],
@@ -3022,6 +3080,7 @@ class crm_company extends class_base
 						"user" => aw_global_get("uid"),
 					));
 					$data["value"] = $tmp;
+					*/
 				}
 				break;
 
@@ -3660,7 +3719,7 @@ class crm_company extends class_base
 	*/
 	function callback_on_load($arr)
 	{
-		$this->comment_types= array (
+		$this->comment_types = array (
 			CRM_COMMENT_POSITIVE => t("Positiivne"),
 			CRM_COMMENT_NEUTRAL => t("Neutraalne"),
 			CRM_COMMENT_NEGATIVE => t("Negatiivne"),
@@ -6896,10 +6955,18 @@ class crm_company extends class_base
 
 	function callback_generate_scripts($arr)
 	{
+		$sc = '
+			function load_company_data(id)
+			{
+				$.getJSON("'.$this->mk_my_orb("company_props").'", {name: $("#" + id).val()}, function(data)
+				{
+					id2 = id.replace("name", "comment");
+					$("#" + id2).val(data.comment.toString());
+				});
+			}
+		';
 		if (!$arr["new"])
 		{
-			$sc = "";
-
 			$sc.="function co_contact(id,url)
 				{
 				if ((trel = document.getElementById(\"trows\"+id)))
@@ -6944,7 +7011,7 @@ class crm_company extends class_base
 				n_td.innerHTML=aw_get_url_contents(url);
 				n_td.colSpan=9;
 				}";
-			
+
 			if ($arr["request"]["group"] == "bills")
 			{
 				$sc .= '
@@ -7012,7 +7079,7 @@ class crm_company extends class_base
 			}
 			return $sc;
 		}
-		return
+		return $sc.
 		"function aw_submit_handler() {".
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("get_company_count_by_name")."';".
@@ -9170,6 +9237,137 @@ Bank accounts: yksteise all
 			}
 		}
 		return "general";
+	}
+
+	/**
+	@attrib name=company_props all_args=1 api=1 params=name
+	**/
+	function company_props($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["name"],
+			"lang_id" => array(),
+			"limit" => 1,
+		));
+		$d = array();
+		if($ol->count() > 0){
+			$o = $ol->begin();
+			foreach(array_keys($o->instance()->get_all_properties()) as $p)
+			{
+				$d[$p] = iconv(aw_global_get("charset"), "UTF-8", $o->prop($p));
+			}
+		}
+		die(json_encode($d));
+	}
+
+	private function move_comments_from_meta_to_objects($arr)
+	{
+		$comments = (array) $arr["obj_inst"]->prop("comment_history");
+		
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_SETTINGS,
+			"CL_CRM_SETTINGS.RELTYPE_USER" => get_instance(CL_USER)->get_obj_for_uid(aw_global_get("uid"))->id(),
+			"lang_id" => array(),
+			"limit" => 1,
+		));
+		$crm_settings = $ol->begin();
+		$parent = $this->can("add", $crm_settings->comment_menu) ? $crm_settings->comment_menu : $arr["obj_inst"]->id();
+
+		foreach ($comments as $t)
+		{
+			if (strlen(trim($t["text"])))
+			{
+				// Store comment as obj
+				$comm = obj();
+				$comm->set_class_id(CL_COMMENT);
+				$comm->set_parent($parent);
+				$comm->name = sprintf(t("%s kommentaar organisatsioonile %s"), $t["user"], $arr["obj_inst"]->name);
+				$comm->uname = $t["user"];
+				$comm->commtext = $t["text"];
+				$comm->commtype = $t["type"];
+				aw_disable_acl();
+				$comm->save();
+				aw_restore_acl();
+				$arr["obj_inst"]->connect(array(
+					"to" => $comm->id(),
+					"type" => "RELTYPE_COMMENT",
+				));
+				$this->db_query("UPDATE objects SET created = '".$t["time"]."' WHERE oid = '".$comm->id()."'");
+			}
+		}
+		$arr["obj_inst"]->set_meta("comments_stored_in_objects", 1);
+		$arr["obj_inst"]->save();
+	}
+
+	private function eligible_to_comment($arr, &$connect_comment_to_customer_data = false)
+	{
+		$person = obj(get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid")));
+		$parent = 0;
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_SETTINGS,
+			"CL_CRM_SETTINGS.RELTYPE_USER" => get_instance(CL_USER)->get_obj_for_uid(aw_global_get("uid"))->id(),
+			"lang_id" => array(),
+			"limit" => 1,
+		));
+		$crm_settings = $ol->begin();
+		if($this->can("add", $crm_settings->comment_menu))
+		{
+			$parent = $crm_settings->comment_menu;
+		}
+
+		$orgs = $person->get_companies()->ids();
+		if(count($orgs) > 0 && !$this->can("add", $parent))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"buyer" => $arr["obj_inst"]->id(),
+								"seller" => $orgs,
+							),
+						)),
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"buyer" => $orgs,
+								"seller" => $arr["obj_inst"]->id(),
+							),
+						)),
+					),
+				)),
+				"limit" => 1,
+			));
+			if($ol->count() > 0 && $this->can("add", reset($ol->ids())))
+			{
+				$parent = reset($ol->ids());
+				$connect_comment_to_customer_data = true;
+			}
+		}
+		if(!$this->can("add", $parent))
+		{
+			$parent = $arr["obj_inst"]->id();
+		}
+		return $parent;
+	}
+
+	/**
+	@attrib name=del_comment api=1 params=name
+	
+	@param id required type=oid acl=delete
+
+	@param post_ru required type=string
+	**/
+	function del_comment($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->delete();
+		return $arr["post_ru"];
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.49 2008/06/29 21:45:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.50 2008/07/14 18:13:41 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -41,9 +41,6 @@
 
 @property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT
 @caption Toodete kaust
-
-@property dir_comment type=relpicker reltype=RELTYPE_KOMMENTAAR_CAT
-@caption Kommentaaride kaust
 
 @property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
 @caption Kaust, kui m&otilde;ni eelnevatest pole m&auml;&auml;ratud, siis kasutatakse seda
