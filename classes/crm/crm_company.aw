@@ -9264,18 +9264,17 @@ Bank accounts: yksteise all
 	private function move_comments_from_meta_to_objects($arr)
 	{
 		$comments = (array) $arr["obj_inst"]->prop("comment_history");
-		
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_SETTINGS,
-			"CL_CRM_SETTINGS.RELTYPE_USER" => get_instance(CL_USER)->get_obj_for_uid(aw_global_get("uid"))->id(),
-			"lang_id" => array(),
-			"limit" => 1,
-		));
-		$crm_settings = $ol->begin();
-		$parent = $this->can("add", $crm_settings->comment_menu) ? $crm_settings->comment_menu : $arr["obj_inst"]->id();
 
 		foreach ($comments as $t)
 		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_SETTINGS,
+				"CL_CRM_SETTINGS.RELTYPE_USER" => get_instance(CL_USER)->get_obj_for_uid($t["user"])->id(),
+				"lang_id" => array(),
+				"limit" => 1,
+			));
+			$crm_settings = $ol->begin();
+			$parent = $this->can("add", $crm_settings->comment_menu) ? $crm_settings->comment_menu : $arr["obj_inst"]->id();
 			if (strlen(trim($t["text"])))
 			{
 				// Store comment as obj
