@@ -62,6 +62,34 @@
             <field>default_table</field>
       </property>
       <property>
+            <name>packages_folder</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pakettide kaust</caption>
+      </property>
+      <property>
+            <name>packages_tbl</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>packages_tbl</field>
+      </property>
+      <property>
+            <name>rooms_table</name>
+            <table>objects</table>
+            <group>rooms</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>rooms_table</field>
+      </property>
+      <property>
             <name>s_name</name>
             <table>objects</table>
             <group>
@@ -162,25 +190,6 @@
             <field>rfps</field>
       </property>
       <property>
-            <name>packages_folder</name>
-            <table>objects</table>
-            <group>packages</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PACKAGE_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Pakettide kaust</caption>
-      </property>
-      <property>
-            <name>packages_tbl</name>
-            <table>objects</table>
-            <group>packages</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>packages_tbl</field>
-      </property>
-      <property>
             <name>cancel_and_payment_terms</name>
             <table>objects</table>
             <group>terms</group>
@@ -210,6 +219,17 @@
             <allow_rte>2</allow_rte>
       </classinfo>
       <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
+            <packages>
+                  <caption>Paketid</caption>
+                  <parent>settings</parent>
+            </packages>
+            <rooms>
+                  <caption>Ruumid</caption>
+                  <parent>settings</parent>
+            </rooms>
             <rfps>
                   <caption>Pakkumise saamis palved</caption>
             </rfps>
@@ -221,9 +241,6 @@
                   <caption>Arhiiv</caption>
                   <parent>rfps</parent>
             </rfps_archive>
-            <packages>
-                  <caption>Paketid</caption>
-            </packages>
             <terms>
                   <caption>Tingimused</caption>
             </terms>

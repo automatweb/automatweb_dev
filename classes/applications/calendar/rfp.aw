@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.28 2008/07/10 13:04:57 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.29 2008/07/14 05:44:23 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -892,6 +892,10 @@ class rfp extends class_base
 
 	}
 	
+	/** Finds and returns currency oids used by rfp system
+		@param obj required
+			RFP obj
+	 **/
 	public function gather_reservation_currencys($obj)
 	{
 		$cs = $obj->connections_from(array(
@@ -1613,6 +1617,10 @@ class rfp extends class_base
 		}
 		$totalprice = 0;
 		$bron_totalprice = 0;
+		$mgri = get_instance(CL_RFP_MANAGER);
+		$mgrid = $mgri->get_sysdefault();
+		$mgro = obj($mgrid);
+		$extra_bron_prices = $mgro->get_extra_hours_prices();
 		foreach($conn as $c)
 		{
 			$rv = obj($c->prop("to"));
@@ -1620,7 +1628,6 @@ class rfp extends class_base
 			{
 				continue;
 			}
-
 			// roomcrap
 			$start = $rv->prop("start1");
 			$end = $rv->prop("end");
@@ -1628,6 +1635,8 @@ class rfp extends class_base
 			$timeto = date('H:i', $end);
 			$datefrom = date('d.m.Y', $start);
 			$dateto = date('d.m.Y', $end);
+			$tot_time = ($end - $start) / 3600;
+
 			$people = $rv->prop("people_count");
 			if($roomid = $rv->prop("resource"))
 			{
@@ -1643,6 +1652,16 @@ class rfp extends class_base
 					"bron" => $rv,
 				));
 				$price = $sum[$currency];
+				// lets check for min & max hours and their extra prices
+				if($tot_time < $extra_bron_prices[$roomid]["min_hours"] && $price < $extra_bron_prices[$roomid]["min_prices"][$currency])
+				{
+					$price = $extra_bron_prices[$roomid]["min_prices"][$currency];
+				}
+				if($tot_time > $extra_bron_prices[$roomid]["max_hours"])
+				{
+					$over = floor($tot_time - $extra_bron_prices[$roomid]["max_hours"]);
+					$price += $extra_bron_prices[$roomid]["max_prices"][$currency] * $over;
+				}
 			}
 			$comment = $rv->prop("comment");
 			$room_data = array(
@@ -1661,8 +1680,6 @@ class rfp extends class_base
 			//$this->vars($room_data);
 			if($package)
 			{
-				$mgri = get_instance(CL_RFP_MANAGER);
-				$mgrid = $mgri->get_sysdefault();
 				if($this->can("view", $mgrid))
 				{
 					$mgr = obj($mgrid);

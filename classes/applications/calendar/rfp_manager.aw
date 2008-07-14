@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.23 2008/07/08 09:02:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.24 2008/07/14 05:44:23 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -25,6 +25,19 @@
 @caption Tootepakettide asukoht
 
 @property default_table type=table no_caption=1 store=no
+
+@groupinfo settings caption="Seaded"
+
+	@groupinfo packages caption="Paketid" parent=settings
+		@default group=packages
+		@property packages_folder type=relpicker reltype=RELTYPE_PACKAGE_FOLDER field=meta method=serialize
+		@caption Pakettide kaust
+
+		@property packages_tbl type=table store=no no_caption=1
+	
+	@groupinfo rooms caption="Ruumid" parent=settings
+		@property rooms_table type=table store=no no_caption=1 group=rooms
+
 
 @groupinfo rfps caption="Pakkumise saamis palved"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
@@ -53,13 +66,6 @@
 		@layout main type=vbox parent=hsplit
 			@property rfps type=table parent=main no_caption=1
 
-@groupinfo packages caption="Paketid"
-@default group=packages
-
-	@property packages_folder type=relpicker reltype=RELTYPE_PACKAGE_FOLDER field=meta method=serialize
-	@caption Pakettide kaust
-
-	@property packages_tbl type=table store=no no_caption=1
 
 @groupinfo terms caption="Tingimused"
 @default group=terms
@@ -271,6 +277,94 @@ class rfp_manager extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function _init_rooms_table(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "room",
+			"caption" => t("Ruum"),
+		));
+		$t->define_field(array(
+			"name" => "min_hours",
+			"caption" => t("Min. tunde"),
+		));
+		$t->define_field(array(
+			"name" => "min_add_price",
+			"caption" => t("Lisahind"),
+		));
+		foreach($this->rfp_currencies() as $oid => $obj)
+		{
+			$t->define_field(array(
+				"name" => "min_price[".$oid."]",
+				"caption" => $obj->name(),
+				"parent" => "min_add_price",
+			));
+		}
+		$t->define_field(array(
+			"name" => "max_hours",
+			"caption" => t("Max. tunde"),
+		));
+		$t->define_field(array(
+			"name" => "max_add_price",
+			"caption" => t("Lisahind"),
+		));
+		foreach($this->rfp_currencies() as $oid => $obj)
+		{
+			$t->define_field(array(
+				"name" => "max_price[".$oid."]",
+				"caption" => $obj->name(),
+				"parent" => "max_add_price",
+			));
+		}
+	}
+	function _get_rooms_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_rooms_table($arr);
+		$extra_data = $arr["obj_inst"]->get_extra_hours_prices();
+		foreach($arr["obj_inst"]->get_rooms_from_room_folder("room_fld")->arr() as $room_oid => $room)
+		{
+			$room = obj($room);
+			$data = array(
+				"room" => html::obj_change_url($room),
+				"min_hours" => html::textbox(array(
+					"name" => "rooms_table[".$room_oid."][min_hours]",
+					"size" => "10",
+					"value" => $extra_data[$room_oid]["min_hours"],
+				)),
+				"max_hours" => html::textbox(array(
+					"name" => "rooms_table[".$room_oid."][max_hours]",
+					"size" => "10",
+					"value" => $extra_data[$room_oid]["max_hours"],
+				)),
+			);
+
+			foreach($this->rfp_currencies() as $oid => $obj)
+			{
+				$data["min_price[".$oid."]"] = html::textbox(array(
+					"value" => $extra_data[$room->id()]["min_prices"][$oid],
+					"name" => "rooms_table[".$room_oid."][min_prices][".$oid."]",
+					"size" => 10,
+				));
+				$data["max_price[".$oid."]"] = html::textbox(array(
+					"value" => $extra_data[$room->id()]["max_prices"][$oid],
+					"name" => "rooms_table[".$room_oid."][max_prices][".$oid."]",
+					"size" => 10,
+				));
+			}
+
+			$t->define_data($data);
+		}
+	}
+
+	function _set_rooms_table($arr)
+	{
+		if(is_array($arr["request"]["rooms_table"]))
+		{
+			$arr["obj_inst"]->set_extra_hours_prices($arr["request"]["rooms_table"]);
+		}
 	}
 
 	function _get_default_table($arr)
@@ -776,6 +870,21 @@ class rfp_manager extends class_base
 		$c = $self->prop("copy_redirect");
 
 		return aw_ini_get("baseurl")."/".$c."?sub=1";
+	}
+
+	/** Finds and returns currencies used by rfp system
+		@returns
+			array(
+				oid => obj
+			)
+	 **/
+	public function rfp_currencies()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+		));
+		return $ol->arr();
 	}
 }
 ?>
