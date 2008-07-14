@@ -216,6 +216,20 @@ class crm_company_obj extends _int_object
 		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_ACTIVITY_STATS_TYPE")));
 		return $ol->names();
 	}
+
+	/** Returns object list of comments for the company.
+	@attrib name=get_comments api=1 params=name
+	**/
+	function get_comments()
+	{
+		$ol = new object_list();
+		$conns = $this->connections_from(array("type" => "RELTYPE_COMMENT"));
+		foreach($conns as $conn)
+		{
+			$ol->add($conn->prop("to"));
+		}
+		return $ol;
+	}
 }
 
 ?>

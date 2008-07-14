@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.28 2008/03/31 11:24:54 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.29 2008/07/14 18:16:47 instrumental Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -28,6 +28,9 @@
 
 @property ip type=textbox
 @caption IP
+
+@property commtype type=select
+@caption T&uuml;&uuml;p
 
 @classinfo syslog_type=ST_COMMENT no_status=1 relationmgr=yes maintainer=dragut
 
@@ -71,6 +74,15 @@ class forum_comment extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "commtype":
+				$prop["options"] = array(
+					"" => t("--vali--"),
+					1 => t("Positiivne"),
+					2 => t("Neutraalne"),
+					3 => t("Negatiivne"),
+				);
+				break;
+
 			case "uname":
 				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
@@ -78,6 +90,7 @@ class forum_comment extends class_base
 					$this->dequote($prop["value"]);
 				};
 				break;
+
 			case "pname":
 				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
@@ -95,6 +108,7 @@ class forum_comment extends class_base
 					}
 				}
 				break;
+
 			case "uemail":
 				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
@@ -103,6 +117,7 @@ class forum_comment extends class_base
 
 				};
 				break;
+
 			case "comment":
 			case "ip":
 				$retval = PROP_IGNORE;
@@ -133,7 +148,6 @@ class forum_comment extends class_base
 					$prop["value"] = aw_global_get("REMOTE_ADDR");
 				};
 				break;
-
 		};
 		return $retval;
 	}
@@ -222,9 +236,17 @@ class forum_comment extends class_base
 						"name" => $field,
 						"type" => "VARCHAR(255)"
 					));
-					break;
+					return true;
+
+				case "commtype":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "int",
+					));
+					return true;
 			}
 		}
+		return false;
 	}
 }
 ?>

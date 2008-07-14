@@ -57,6 +57,14 @@
             <field>ip</field>
             <caption>IP</caption>
       </property>
+      <property>
+            <name>commtype</name>
+            <table>forum_comments</table>
+            <group>general</group>
+            <type>select</type>
+            <field>commtype</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_COMMENT</syslog_type>
             <no_status>1</no_status>
