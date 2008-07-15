@@ -62,6 +62,15 @@
             <field>default_table</field>
       </property>
       <property>
+            <name>packages_tb</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>packages_tb</field>
+      </property>
+      <property>
             <name>packages_folder</name>
             <table>objects</table>
             <group>packages</group>
@@ -88,6 +97,98 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>rooms_table</field>
+      </property>
+      <property>
+            <name>raports_search_from_date</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>date_select</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_from_date</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>raports_search_until_date</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>date_select</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_until_date</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>raports_search_covering</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_covering</field>
+            <caption>Mille l&amp;amp;otilde;ikes</caption>
+      </property>
+      <property>
+            <name>raports_search_with_products</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_with_products</field>
+            <caption>Koos toodetega</caption>
+      </property>
+      <property>
+            <name>raports_search_group</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>chooser</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_group</field>
+            <caption>Grupeeri</caption>
+      </property>
+      <property>
+            <name>raports_search_rooms</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rooms</field>
+            <caption>Ruumid</caption>
+      </property>
+      <property>
+            <name>raports_search_rfp_status</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rfp_status</field>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
+            <name>raports_table</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>raports_table</parent>
+            <field>raports_table</field>
       </property>
       <property>
             <name>s_name</name>
@@ -230,6 +331,9 @@
                   <caption>Ruumid</caption>
                   <parent>settings</parent>
             </rooms>
+            <raports>
+                  <caption>Raportid</caption>
+            </raports>
             <rfps>
                   <caption>Pakkumise saamis palved</caption>
             </rfps>
@@ -284,6 +388,26 @@
             </DEFAULT_CURRENCY>
       </reltypes>
       <layout>
+            <raports_hsplit>
+                  <type>hbox</type>
+                  <group>raports</group>
+                  <width>25%:75%</width>
+                  <area_caption></area_caption>
+            </raports_hsplit>
+            <raports_search>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <parent>raports_hsplit</parent>
+                  <group>raports</group>
+            </raports_search>
+            <raports_table>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Raportid</area_caption>
+                  <parent>raports_hsplit</parent>
+                  <group>raports</group>
+            </raports_table>
             <hsplit>
                   <type>hbox</type>
                   <group>

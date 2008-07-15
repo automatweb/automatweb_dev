@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.29 2008/07/14 05:44:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.30 2008/07/15 12:10:05 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property conference_planner type=relpicker reltype=RELTYPE_WEBFORM field=meta method=serialize
 	@caption Tellimuse vorm
+
+	@property confirmed type=select table=rfp field=confirmed
+	@caption Staatus
 
 @default table=rfp
 @default group=general
@@ -392,6 +395,12 @@
 @caption Arvutuste vaikevaluuta
 */
 
+define("RFP_STATUS_SENT", 1);
+define("RFP_STATUS_CONFIRMED", 2);
+define("RFP_STATUS_ON_HOLD", 3);
+define("RFP_STATUS_REJECTED", 4);
+define("RFP_STATUS_CANCELLED", 5);
+
 class rfp extends class_base
 {
 	function rfp()
@@ -400,6 +409,14 @@ class rfp extends class_base
 			"tpldir" => "applications/calendar/rfp",
 			"clid" => CL_RFP
 		));
+
+		$this->rfp_status = array(
+			1 => t("Saadetud"),
+			2 => t("Kinnitatud"),
+			3 => t("T&auml;psustamisel"),
+			4 => t("Tagasi l&uuml;katud"),
+			5 => t("T&uuml;histatud"),
+		);
 	}
 
 	private function date_to_stamp($date)
@@ -448,6 +465,9 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "confirmed":
+				$prop["options"] = $this->get_rfp_statuses();
+			break;
 			case "cancel_and_payment_terms":
 			case "accomondation_terms":
 				if($prop["value"] == "")
@@ -1216,7 +1236,7 @@ class rfp extends class_base
 								"rows" => 2,
 							)).html::hidden(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][bronid]",
-								"value" => strlen($_t = $prods[$prod->id().".".$rv->id()]["bronid"])?$_t:$rv,
+								"value" => strlen($_t = $prods[$prod->id().".".$rv->id()]["bronid"])?$_t:$rv->id(),
 							)),
 							"reserv_group" => html::obj_change_url($rvo),
 						);
@@ -1843,6 +1863,17 @@ class rfp extends class_base
 					$var = obj($varid);
 					$varname = $var->name();
 				}
+				$room = obj($prod["room"]);
+				//gen nice event/room combo
+				$evt_room = array();
+				if(strlen($varname))
+				{
+					$evt_room[] = $varname;
+				}
+				if(strlen($room->name()))
+				{
+					$evt_room[] = $room->name();
+				}
 				$this->vars(array(
 					"prod_from_hour" => date("H", $prod["start1"]),
 					"prod_from_minute" => date("i", $prod["start1"]),
@@ -1854,6 +1885,8 @@ class rfp extends class_base
 					"prod_price" => $this->_format_price($prod["price"]),
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
+					"prod_event_and_room" => join(", ",$evt_room),
+					"prod_room_name" => $room->name(),
 				));
 				$pds .= $this->parse("PRODUCT");
 				$prod_total += round($this->_format_price($prod["sum"]));
@@ -2242,6 +2275,7 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("confirmed", "int"),
 			array("cancel_and_payment_terms", "text"),
 			array("accomondation_terms", "text"),
 			array("final_rooms", "text"),
@@ -2383,6 +2417,11 @@ class rfp extends class_base
 			),
 		));
 		return $ret;
+	}
+
+	public function get_rfp_statuses()
+	{
+		return $this->rfp_status;
 	}
 }
 ?>

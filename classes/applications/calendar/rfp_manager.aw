@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.24 2008/07/14 05:44:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.25 2008/07/15 12:10:05 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -30,6 +30,9 @@
 
 	@groupinfo packages caption="Paketid" parent=settings
 		@default group=packages
+
+		@property packages_tb type=toolbar store=no no_caption=1
+
 		@property packages_folder type=relpicker reltype=RELTYPE_PACKAGE_FOLDER field=meta method=serialize
 		@caption Pakettide kaust
 
@@ -37,6 +40,35 @@
 	
 	@groupinfo rooms caption="Ruumid" parent=settings
 		@property rooms_table type=table store=no no_caption=1 group=rooms
+
+@groupinfo raports caption="Raportid"
+@default group=raports
+	@layout raports_hsplit type=hbox group=raports width=25%:75%
+		@layout raports_search type=vbox closeable=1 area_caption="Otsing" parent=raports_hsplit
+			@property raports_search_from_date type=date_select parent=raports_search captionside=top store=no
+			@caption Alates
+
+			@property raports_search_until_date type=date_select parent=raports_search captionside=top store=no
+			@caption Kuni
+
+			@property raports_search_covering type=chooser multiple=1 orient=vertical parent=raports_search captionside=top store=no
+			@caption Mille l&otilde;ikes
+
+			@property raports_search_with_products type=chooser multiple=1 parent=raports_search captionside=top store=no
+			@caption Koos toodetega
+
+			@property raports_search_group type=chooser parent=raports_search captionside=top store=no
+			@caption Grupeeri
+
+			@property raports_search_rooms type=select multiple=1 parent=raports_search captionside=top store=no
+			@caption Ruumid
+
+			@property raports_search_rfp_status type=chooser orient=vertical parent=raports_search captionside=top store=no
+			@caption Kinnitatud
+
+		@layout raports_table type=vbox closeable=1 area_caption="Raportid" parent=raports_hsplit
+			/@property raports_table type=table no_caption=1 store=no parent=raports_table
+			@property raports_table type=text no_caption=1 store=no parent=raports_table
 
 
 @groupinfo rfps caption="Pakkumise saamis palved"
@@ -96,23 +128,86 @@
 
 */
 
+
+define("RFP_RAPORT_TYPE_ROOMS", 1);
+define("RFP_RAPORT_TYPE_HOUSING", 2);
+define("RFP_RAPORT_TYPE_RESOURCES", 3);
+define("RFP_RAPORT_TYPE_CATERING", 4);
+
 class rfp_manager extends class_base
 {
 	function rfp_manager()
 	{
 		$this->init(array(
-			"tpldir" => "applications/conference_planning_webview",
+			"tpldir" => "applications/calendar/rfp_manager",
 			"clid" => CL_RFP_MANAGER
 		));
+
+		$this->raport_types = array(
+			1 => t("Ruumid"),
+			2 => t("Majutus"),
+			3 => t("Ressursid"),
+			4 => t("Toitlustus"),
+		);
+		$this->tpl_subs = array(
+			1 => "ROOMS",
+			2 => "HOUSING",
+			3 => "RESOURCES",
+			4 => "CATERING",
+		);
 	}
 
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		// little hack, but hey.. nothing to do..
+		if(substr($prop["name"], 0, 15) == "raports_search_")
+		{
+			$prop["value"] = $arr["request"][$prop["name"]];
+		}
+
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			// search
+			case "raports_search_covering":
+				$prop["options"] = array(
+					"1" => t("K&otilde;ik"),
+					"2" => t("Ruumid"),
+					"3" => t("Toitlustus"),
+					"4" => t("Majutus"),
+					"5" => t("Ressursid"),
+				);
+				break;
+			case "raports_search_with_products":
+				$prop["options"] = array(
+					"1" => t("Koos toodetega"),
+				);
+				break;
+			case "raports_search_group":
+				$prop["options"] = array(
+					"1" => t("Ajaaliselt"),
+					"2" => t("Klientide l&otilde;ikes"),
+				);
+				break;
+			case "raports_search_rooms":
+				$ol = $arr["obj_inst"]->get_rooms_from_room_folder();
+				$ol->add($arr["obj_inst"]->get_rooms_from_catering_room_folder());
+				foreach($ol->arr() as $oid => $obj)
+				{
+					$prop["options"][$oid] = $obj->name(); 
+				}
+				break;
+			case "raports_search_rfp_status":
+				$rfp = get_instance(CL_RFP);
+				$prop["options"] = array(
+					"0" => t("K&otilde;ik"),
+				);
+				$prop["options"] += $rfp->get_rfp_statuses();
+				break;
+
+			// search end
 			case "default_currency":
 				if($prop["value"] == "")
 				{
@@ -279,6 +374,205 @@ class rfp_manager extends class_base
 		return $retval;
 	}
 
+	function _init_raports_table(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "client",
+			"caption" => t("Klient"),
+		));
+		$t->define_field(array(
+			"name" => "event_type",
+			"caption" => t("&Uuml;ritus"),
+		));
+		$t->define_field(array(
+			"name" => "from",
+			"caption" => t("Alates"),
+		));
+		$t->define_field(array(
+			"name" => "to",
+			"caption" => t("Kuni"),
+		));
+		$t->define_field(array(
+			"name" => "room",
+			"caption" => t("Ruumis"),
+		));
+		$t->define_field(array(
+			"name" => "people_count",
+			"caption" => t("Inimesi"),
+		));
+		$t->define_field(array(
+			"name" => "raport_type",
+			"caption" => t("T&uuml;&uuml;p"),
+		));
+
+	}
+
+	function _get_raports_table($arr)
+	{
+		$res = $this->search_rfp_raports(array(
+			"from" => mktime(0, 0, 0, $arr["request"]["raports_search_from_date"]["month"], $arr["request"]["raports_search_from_date"]["day"], $arr["request"]["raports_search_from_date"]["year"]),
+			"to" => mktime(0, 0, 0, $arr["request"]["raports_search_until_date"]["month"], $arr["request"]["raports_search_until_date"]["day"], $arr["request"]["raports_search_until_date"]["year"]),
+			"search" => $arr["request"]["raports_search_covering"],
+			"rooms" => (is_array($arr["request"]["raports_search_rooms"]) AND count($arr["request"]["raports_search_rooms"]))?$arr["request"]["raports_search_rooms"]:NULL,
+			"rfp_status" => $arr["request"]["raports_search_rfp_status"],
+		));
+
+		/* this was for test period
+		$this->_init_raports_table($arr);
+		$t =& $arr["prop"]["vcl_inst"];
+		foreach($res as $data)
+		{
+			$rfp = $data["rfp"]?obj($data["rfp"]):false;
+			$t->define_data(array(
+				"from" => date("d.m.Y H:i", $data["start1"]),
+				"to" => date("d.m.Y H:i", $data["end"]),
+				"room" => $data["room"]?html::obj_change_url(obj($data["room"])):t("-"),
+				"client" => $rfp?$rfp->prop("data_subm_name"):t("-"),
+				"people_count" => $data["people_count"],
+				"event_type" => $rfp?$rfp->prop("data_mf_event_type.name"):t("-"),
+				"raport_type" => $this->raport_types[$data["result_type"]],
+			));
+		}
+		 */
+		$arr["prop"]["value"] = $this->display_search_result($res, ($arr["request"]["raports_search_group"] == 2)?true:false, ($arr["request"]["raports_search_with_products"])?true:false);
+	}
+
+	/** Returns nicely formatted search result 
+		@attrib api=1
+		@param result type=array
+			Search result from search_rfp_raports()
+		@returns
+			Parsed html
+	 **/
+	public function display_search_result($result, $gr_by_client = false, $with_products = false)
+	{
+		$this->read_template("search_result.tpl");
+		if(is_array($result) && count($result))
+		{
+			$cfgu = get_instance("cfg/cfgutils");
+			$rfp_props = $cfgu->load_properties(array(
+				"clid" => CL_RFP,
+			));
+			$min_time = mktime(0,0,0,0,0, 2000);
+			$cur_time = time();
+			foreach($result as $data)
+			{
+				$rfp = $data["rfp"]?obj($data["rfp"]):false;
+				$room = $data["room"]?obj($data["room"]):false;
+				$row_vars = array(
+					"from_date" => date("d.m.Y", $data["start1"]),
+					"from_time" => date("H:i", $data["start1"]),
+					"to_date" => date("d.m.Y", $data["end"]),
+					"to_time" => date("H:i", $data["end"]),
+					"room" => $room?$room->name():t("-"),
+					"people_count" => $data["people_count"],
+					"raport_type" => $this->raport_types[$data["result_type"]],
+				);
+				if($rfp)
+				{
+					foreach($rfp_props as $prop => $propdata)
+					{
+						if(substr($prop, 0, 5) == "data_")
+						{
+							$pval = $rfp->prop($prop);
+							if($this->can("view", $pval))
+							{
+								$_t = obj($pval);
+								$pval = $_t->name();
+							}
+							elseif($pval > $min_time AND $pval < $cur_time)
+							{
+								$rfp_prop_values[$prop."_date"] = date("d.m.Y", $pval);
+								$rfp_prop_values[$prop."_time"] = date("H:i", $pval);
+							}
+							$rfp_prop_values[$prop] = $pval;
+							$rfp_prop_captions[$prop."_caption"] = $propdata["caption"];
+						}
+					}
+
+				}
+				$this->vars($row_vars);
+				$this->vars($rfp_prop_values);
+				$this->vars($rfp_prop_captions);
+				
+				$row_type_var = "ROW_TYPE_".$this->tpl_subs[$data["result_type"]];
+				if($gr_by_client)
+				{
+					$clients[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] = array(
+						"data_subm_name" => $rfp->prop("data_subm_name"),
+						"data_subm_organisation" => $rfp->prop("data_subm_organisation"),
+					);
+					$row_type_html = array();
+					$row_type_html[$row_type_var] = $this->parse($row_type_var);
+					$this->vars($row_type_html);
+					$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+				}
+				else
+				{
+					$row_type_html = array();
+					$row_type_html[$row_type_var] = $this->parse($row_type_var);
+					$this->vars($row_type_html);
+					$row_html .= $this->parse("ROW");
+				}
+				// now lets empty the row
+				$empty[$row_type_var] = "";
+				$this->vars($empty);
+
+				if($with_products AND $data["result_type"] == RFP_RAPORT_TYPE_CATERING)
+				{
+					foreach($data["products"] as $product => $product_data)
+					{
+						$product_data["room_name"] = obj($product_data["room"])->name();
+						$product_data["product_name"] = obj($product)->name();
+						$product_data["product_from_time"] = date("H:i", $product_data["start1"]);
+						$product_data["product_to_time"] = date("H:i", $product_data["end"]);
+
+						$this->vars($product_data); // price & stuff maybe also???
+						$prod_type_var = "ROW_TYPE_CATERING_PRODUCT";
+						$row_type_html = array();
+						if($gr_by_client)
+						{
+							$row_type_html[$prod_type_var] .= $this->parse($prod_type_var);
+							$this->vars($row_type_html);
+							$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+						}
+						else
+						{
+							$row_type_html[$prod_type_var] .= $this->parse($prod_type_var);
+							$this->vars($row_type_html);
+							$row_html .= $this->parse("ROW");
+						}
+						$row_type_html[$prod_type_var] = "";
+						$this->vars($row_type_html);
+					}
+				}
+			}
+
+				
+			if($gr_by_client)
+			{
+				foreach($clients as $key => $data)
+				{
+					$this->vars($data);
+					$row_html_tmp .= $this->parse("CLIENT_ROW");
+					$row_html_tmp .= $row_html[$key];
+				}
+				$row_html = $row_html_tmp;
+
+			}
+			$this->vars(array(
+				"HEADER" => $this->parse("HEADER"),
+				"ROW" => $row_html,
+			));
+			return $this->parse("HAS_RESULT");
+		}
+		else
+		{
+			return $this->parse("HAS_NO_RESULT");
+		}
+	}
+
 	function _init_rooms_table(&$arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -421,12 +715,70 @@ class rfp_manager extends class_base
 		};
 	}
 
-	function _get_packages_tbl($arr)
+
+	function _get_packages_tb(&$arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"image" => "new.gif",
+			"tooltip" => t("Lisa uus hind"),
+		));
+		foreach($arr["obj_inst"]->get_packages() as $mt_oid => $pck_data)
+		{
+			$meta = obj($mt_oid);
+			$tb->add_menu_item(array(
+				"parent" => "new",
+				"name" => "add_under_".$mt_oid,
+				"url" => html::get_new_url(CL_ROOM_PRICE, $mt_oid, array(
+					"return_url" => get_ru(),
+					"pseh" => aw_register_ps_event_handler(
+						CL_RFP_MANAGER,
+						"handle_new_room_price",
+						array(
+							"rfp_manager_oid" => $arr["obj_inst"]->id(),
+							"rfp_package_oid" => $mt_oid,
+						),
+						CL_ROOM_PRICE
+					),
+				)),
+				"text" => sprintf(t("'%s' juurde"), $meta->name()),
+			));
+		}
+
+		$tb->add_button(array(
+			"name" => "rem_prcs",
+			"img" => "delete.gif",
+			"action" => "remove_prices",
+			"tooltip" => t("Eemalda valitud hinnad"),
+		));
+	}
+
+	/** Invoked by pseh, writes newly created room_price id to packages data. for internal use.
+		@attrib params=name name=create_new_room_price api=1
+	 **/
+	function handle_new_room_price($room_price, $arr)
+	{
+		$rfp_man = obj($arr["rfp_manager_oid"]);
+		$packages = $rfp_man->get_packages();
+		$packages[$arr["rfp_package_oid"]]["prices"][$room_price->id()] = array();
+		$rfp_man->set_packages($packages);
+		$rfp_man->save();
+	}
+
+	function _init_packages_tbl(&$arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		/*
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		 */
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Kehtib"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -434,10 +786,7 @@ class rfp_manager extends class_base
 			"caption" => t("Hind/in"),
 			"align" => "center",
 		));
-		$cur_ol = new object_list(array(
-			"class_id" => CL_CURRENCY,
-		));
-		foreach($cur_ol->arr() as $cur)
+		foreach($this->rfp_currencies() as $cur)
 		{
 			$t->define_field(array(
 				"name" => "price".$cur->id(),
@@ -446,35 +795,64 @@ class rfp_manager extends class_base
 				"parent" => "price",
 			));
 		}
+		$t->set_rgroupby(array(
+			"name" => "name",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "prices_sel",
+		));
+
+	}
+
+	function _get_packages_tbl($arr)
+	{
+		$this->_init_packages_tbl($arr);
+		$t = &$arr["prop"]["vcl_inst"];
 		$pk_fld = $arr["obj_inst"]->prop("packages_folder");
-		$prices = is_array($_tmp = $arr["obj_inst"]->meta("pk_prices"))?$_tmp:array();
-		if($this->can("view", $pk_fld))
+		$prices = $arr["obj_inst"]->get_packages();
+		$room_price_inst = get_instance(CL_ROOM_PRICE);
+		foreach($prices as $meta_oid => $package_data)
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_META,
-				"parent" => $pk_fld,
-			));
-			foreach($ol->arr() as $pko)
+			$meta_obj = obj($meta_oid);
+			$data = array(
+				"name" => $meta_obj->name(),
+			);
+			$_ent = false;
+			foreach(array_reverse(safe_array($package_data["prices"]), true) as $room_price => $currencies) // dont mind the array reverse here
 			{
-				$data = array(
-					"name" => $pko->name(),
-				);
-				foreach($cur_ol->arr() as $cur)
+				$_ent = true;
+				$room_price = obj($room_price);
+				$_date = date("Y.m.d", $room_price->prop("date_from")). " - ".date("Y.m.d", $room_price->prop("date_to"));
+				$time_from = $room_price->prop("time_from");
+				$time_to = $room_price->prop("time_to");
+				$_time = date("H:i", mktime($time_from["hour"], $time_from["minute"], 0, 0, 0, 0)). " - ".date("H:i", mktime($time_to["hour"], $time_to["minute"], 0, 0, 0, 0));
+				$weekd = $room_price->prop("weekdays");
+				foreach($weekd as $wd)
+				{
+					$_weekd[] = $room_price_inst->weekdays[$wd];
+				}
+				$time = sprintf("%s / %s / %s / %s", html::obj_change_url($room_price), $_time, $_date, join(", ", $_weekd));
+				foreach($this->rfp_currencies() as $cur)
 				{
 					$data["price".$cur->id()] = html::textbox(array(
-						"name" => "prices[".$pko->id()."][".$cur->id()."]",
-						"value" => $prices[$pko->id()][$cur->id()],
+						"name" => "prices[".$meta_obj->id()."][prices][".$room_price->id()."][".$cur->id()."]",
+						"value" => $currencies[$cur->id()],
 						"size" => 5,
 					));
+					$data["time"] = $time;
+					$data["prices_sel"] = $meta_oid."][".$room_price->id();
 				}
 				$t->define_data($data);
 			}
+			!$_ent?$t->define_data($data):NULL;
 		}
 	}
 
 	function _set_packages_tbl($arr)
 	{
-		$arr["obj_inst"]->set_meta("pk_prices", $arr["request"]["prices"]);
+		
+		$arr["obj_inst"]->set_packages($arr["request"]["prices"]);
 		$arr["obj_inst"]->save();
 	}
 
@@ -520,6 +898,13 @@ class rfp_manager extends class_base
 		foreach($todo as $do)
 		{
 			$arr["args"][$do] = $arr["request"][$do];
+		}
+
+		// raports search 
+		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status");
+		foreach($todo as $do)
+		{
+			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
 		}
 	}
 
@@ -885,6 +1270,229 @@ class rfp_manager extends class_base
 			"lang_id" => array(),
 		));
 		return $ol->arr();
+	}
+
+	/** All mighty rfp raports search engine
+		@attrib params=name
+		@param rfp_status optional type=int
+			Rfp status or 0 for all
+		@param rooms optional type=array
+			From which rooms to look for (room oid's)
+		@param include_products optional type=bool default=false
+			Include products in search results if there are any
+		@param search optional type=array
+			What to search. Options:
+			1 => All,
+			2 => Rooms,
+			3 => Catering,
+			4 => Housing,
+			5 => Resources,
+		@param from optional type=int
+			Start time
+		@param to optional type=int
+			End time
+	 **/
+	public function search_rfp_raports($arr = array())
+	{
+		$rfps = array(
+			"class_id" => CL_RFP,
+			"lang_id" => array(),
+		);
+
+		$raport_sub_methods = array(
+			2 => "rooms",
+			3 => "catering",
+			4 => "housing",
+			5 => "resources",
+		);
+
+		if($arr["rfp_status"])
+		{
+			$rfps["confirmed"] = $arr["rfp_status"];
+		}
+
+		$rfp_ol = new object_list($rfps);
+			
+		if(!is_array($arr["search"]) OR in_array(1, $arr["search"]))
+		{
+			$arr["search"] = array_keys($raport_sub_methods);
+		}
+
+		$result = array();
+		foreach($arr["search"] as $submethod)
+		{
+			$method = "_search_rfp_".$raport_sub_methods[$submethod]."_raports";
+			if(method_exists($this, $method))
+			{
+				$result = array_merge($result, $this->$method($rfp_ol));
+			}
+		}
+		foreach($result as $k => $data)
+		{
+			if($arr["from"] && $data["start1"] < $arr["from"])
+			{
+				unset($result[$k]);
+				continue;
+			}
+			if($arr["to"] && $data["end"] > $arr["to"])
+			{
+				unset($result[$k]);
+				continue;
+			}
+			if(is_array($arr["rooms"]) AND $data["room"] AND !in_array($data["room"], $arr["rooms"]))
+			{
+				unset($result[$k]);
+				continue;
+			}
+		}
+		uasort($result, array($this, "_sort_raport_search_result"));
+		return $result;
+	}
+	private function _sort_raport_search_result($a, $b)
+	{
+		return (($t = $a["start1"] - $b["start1"]) == 0)?$a["end"] - $b["end"]:$t;
+	}
+
+	private function _search_rfp_rooms_raports($ol = array())
+	{
+		$reservations = array();
+		foreach($ol->arr() as $oid => $obj)
+		{
+			$reservations += $obj->get_reservations();
+		}
+		foreach($reservations as $reservation_id => $data)
+		{
+			$new = array(
+				"room" => $data["resource"],
+				"reservation" => $reservation_id,
+				"result_type" => RFP_RAPORT_TYPE_ROOMS,
+			);
+			unset($data["resource"], $data["reservation"]);
+			$return[] = $new + $data;
+		}
+		return $return;
+	}
+
+	private function _search_rfp_housing_raports($ol = array())
+	{
+		$housing = array();
+		foreach($ol->arr() as $oid => $obj)
+		{
+			$_housing[$oid] = $obj->get_housing();
+			foreach($_housing[$oid] as $k => $v)
+			{
+				$v["rfp"] = $oid;
+				$housing[] = $v;
+			}
+		}
+		// remapping time params
+		foreach($housing as $k => $data)
+		{
+			$new = array(
+				"start1" => $data["datefrom"],
+				"end" => $data["dateto"],
+				"people_count" => $data["people"],
+				"room" => false,
+				"result_type" => RFP_RAPORT_TYPE_HOUSING,
+			);
+			unset($data["datefrom"], $data["dateto"], $data["people"]);
+			$return[] = $new + $data;
+		}
+		return $return;
+	}
+
+	private function _search_rfp_resources_raports($ol = array())
+	{
+		$resources = array();
+		foreach($ol->arr() as $oid => $obj)
+		{
+			$resources += $obj->get_resources();
+		}
+		foreach($resources as $data)
+		{
+			$new = array(
+				"room" => $data["resource"],
+				"result_type" => RFP_RAPORT_TYPE_RESOURCES,
+			);
+			unset($data["resource"]);
+			$return[] = $new + $data;
+		}
+		return $return;
+	}
+
+	private function _search_rfp_catering_raports($ol = array())
+	{
+		$prods = array();
+		foreach($ol->arr() as $oid => $obj)
+		{
+			$_prods[$oid] = $obj->get_catering();
+			foreach($_prods[$oid] as $k => $v)
+			{
+				$v["rfp"] = $oid;
+				$prods[$k] = $v;
+			}
+		}
+		foreach($prods as $prod_and_rv => $data)
+		{
+			$spl = split("[.]", $prod_and_rv);
+			$product_id = $spl[0];
+			$reservation = obj($spl[1]);
+			if(is_array($data["from"]))
+			{
+				$from = mktime($data["from"]["hour"], $data["from"]["minute"], 0, date("m"), date("d"), date("Y"));
+			}
+			else
+			{
+				$from = $reservation->prop("start1");
+			}
+			if(is_array($data["to"]))
+			{
+				$to = mktime($data["to"]["hour"], $data["to"]["minute"], 0, date("m"), date("d"), date("Y"));
+			}
+			else
+			{
+				$to = $reservation->prop("end");
+			}
+			$new = array(
+				"start1" => $from,
+				"end" => $to,
+				"room" => $reservation->prop("resource"),
+				"people_count" => $reservation->prop("people_count"),
+				"reservation" => $reservation->id(),
+				"result_type" => RFP_RAPORT_TYPE_CATERING,
+				"rfp" => $data["rfp"],
+			);
+			if(!is_array($return[$reservation->id()]))
+			{
+				$return[$reservation->id()] = $new;
+			}
+			$return[$reservation->id()]["products"][$product_id] = $data;
+		}
+		return $return;
+	}
+
+	/** For internal use, removes prices from packages
+		@attrib name=remove_prices params=name all_args=1
+	 **/
+	function remove_prices($arr)
+	{
+		if($this->can("view", $arr["id"]))
+		{
+			$rfp_man = obj($arr["id"]);
+			$pck = $rfp_man->get_packages();
+			foreach($arr["sel"] as $meta => $room_prices)
+			{
+				foreach(array_keys($room_prices) as $room_price)
+				{
+					unset($pck[$meta]["prices"][$room_price]);
+					$room_price = obj($room_price);
+					$room_price->delete();
+				}
+			}
+			$rfp_man->set_packages($pck);
+			$rfp_man->save();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

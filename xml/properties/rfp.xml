@@ -11,6 +11,14 @@
             <caption>Tellimuse vorm</caption>
       </property>
       <property>
+            <name>confirmed</name>
+            <table>rfp</table>
+            <group>general</group>
+            <type>select</type>
+            <field>confirmed</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>data_subm_name</name>
             <table>rfp</table>
             <group>submitter_info</group>

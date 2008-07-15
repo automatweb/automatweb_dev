@@ -55,13 +55,39 @@ class rfp_manager_obj extends _int_object
 	}
 	
 	/** Sets the extra hours pricedata
-		@attrib params=pos
+		@attrib params=pos api=1
 		@param data type=array
 			the pricedata, example array in #get_extra_hours_prices
 	 **/
 	public function set_extra_hours_prices($data = array())
 	{
 		$this->set_meta("extra_hours_prices", $data);
+	}
+
+	/** Returns packages and their info
+		@attrib api=1
+	 **/
+	public function get_packages()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_META,
+			"parent" => $this->prop("packages_folder"),
+		));
+		$metainfo = $this->meta("pk_prices");
+		$return = array();
+		foreach($ol->arr() as $oid => $obj)
+		{
+			$return[$oid] = $metainfo[$oid];
+		}
+		return $return;
+	}
+
+	/** Sets packages and their info
+		@attrib api=1
+	 **/
+	public function set_packages($data = array())
+	{
+		$this->set_meta("pk_prices", $data);
 	}
 }
 ?>
