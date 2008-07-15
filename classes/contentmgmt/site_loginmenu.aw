@@ -29,7 +29,8 @@ class site_loginmenu extends class_base
 		{
 			$ol2 = new object_list(array(
 				"class_id" => CL_MENU,
-				"parent" => $o->id()
+				"parent" => $o->id(),
+				"status" => 2,
 			));
 
 			$tmp_L2 = "";
