@@ -66,5 +66,15 @@
 			</function>
 		</action>
 
+		<action name="get_default_cfg_proplist">
+			<function name="get_default_proplist">
+				<arguments>
+					<optional name="o" type="object" acl="view" />
+					<optional name="oid" type="oid" acl="view" />
+					<optional name="clid" type="class_id" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

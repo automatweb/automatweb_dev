@@ -105,4 +105,9 @@
       <func>on_connect_person_to_recommendation</func>
       <param>CL_CRM_PERSON</param>
 </num_20>
+<num_21>
+      <class>applications/calendar/event_time</class>
+      <func>on_connect_event_to_time</func>
+      <param>CL_CALENDAR_EVENT</param>
+</num_21>
 </xml>

@@ -135,9 +135,10 @@ class event_webview extends class_base
 		$events = new object_list($ol_args);
 		$EVENT = "";
 		$oid_props = array("relpicker", "classificator");
+		$props = get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => CL_CALENDAR_EVENT));
 		foreach($events->arr() as $event)
 		{
-			foreach(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_CALENDAR_EVENT))) as $k => $p)
+			foreach($props as $k => $p)
 			{
 				$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
 				$this->vars(array(

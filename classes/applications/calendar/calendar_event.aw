@@ -188,7 +188,7 @@ caption Toimumisaegade tabel
 @caption Pilt
 
 @property seealso type=relpicker reltype=RELTYPE_SEEALSO
-@caption
+@caption Vaata lisaks
 
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
 @caption Kordused
@@ -720,14 +720,15 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 
 	function request_execute($o)
 	{
-		//if ($_GET["exp"] == 1)
-		//{
+		// if ($_GET["exp"] == 1)
+		if (aw_ini_get("calender_event.use_show2_instead_of_show"))
+		{
 			return $this->show2(array("id" => $o->id()));
-		//}
-		//else
-		//{
-		//	return $this->show(array("id" => $o->id()));
-		//};
+		}
+		else
+		{
+			return $this->show(array("id" => $o->id()));
+		};
 	}
 
 	function show2($arr)
@@ -827,22 +828,51 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	/**
-	@attrib name=show all_args=1
+	@attrib name=show all_args=1 params=name
 	**/
 	function show($arr)
 	{
-		// nii .. kuidas ma siin saan ara kasutada classbaset mulle vajaliku vormi genereerimiseks?
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		$vars = $ob->properties();
-		$data = array();
-		foreach($vars as $k => $v)
+
+		$oid_props = array("classificator", "relpicker", "releditor");
+
+		$props = get_instance(CL_CFGFORM)->get_default_proplist(array("o" => $ob));
+		foreach($props as $k => $p)
 		{
+			switch($k)
+			{
+				case "seealso":
+					$v = $this->can("view", $ob->$k) ? get_instance(CL_DOCUMENT)->show(array("id" => $ob->$k)) : "";
+					break;
+
+				case "start1":
+				case "end":
+					$v = date("d-m-Y H:i:s", $ob->$k);
+					$data[$k.".date"] = get_lc_date($ob->$k, LC_DATE_FORMAT_LONG_FULLYEAR);
+					$data[$k.".time"] = date("H:i", $ob->$k);
+					break;
+
+				default:
+					$v = in_array($p["type"], $oid_props) ? $ob->prop($k.".name") : $ob->$k;
+					if($v == 185815){arr($p);}
+					break;
+			}
 			$data[$k] = nl2br($v);
 		}
+
+		if($this->can("view", $_GET["event_time"]))
+		{
+			$time = obj($_GET["event_time"]);
+			$data["start1"] = date("d-m-Y H:i:s", $time->start);
+			$data["start1.date"] = get_lc_date($time->start, LC_DATE_FORMAT_LONG_FULLYEAR);
+			$data["start1.time"] = date("H:i", $time->start);
+			$data["end"] = date("d-m-Y H:i:s", $time->end);
+			$data["end.date"] = get_lc_date($time->end, LC_DATE_FORMAT_LONG_FULLYEAR);
+			$data["end.time"] = date("H:i", $time->end);
+			$data["location"] = $time->prop("location.name");
+		}
+
 		$this->vars($data);
 		return $this->parse();
 	}

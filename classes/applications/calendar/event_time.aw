@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.6 2008/04/09 15:58:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.7 2008/07/15 10:14:50 instrumental Exp $
 // event_time.aw - Toimumisaeg 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CALENDAR_EVENT, on_connect_event_to_time)
 
 @tableinfo aw_event_time index=aw_oid master_table=objects master_index=brother_of 
 @classinfo syslog_type=ST_EVENT_TIME relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -118,6 +120,15 @@ class event_time extends class_base
 		return false;
 	}
 
-//-- methods --//
+	function on_connect_event_to_time($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_EVENT_TIME)
+		{
+			$target_obj->event = $conn->prop("from");
+			$target_obj->save();
+		}
+	}
 }
 ?>

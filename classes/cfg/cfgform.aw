@@ -4728,6 +4728,33 @@ class cfgform extends class_base
 
 		return true;
 	}
+
+	/** Returns default cfg form property list for the class id of the object/oid given. If no cfg form exists, returns the property list defined in the class header.
+	@attrib name=get_default_cfg_proplist api=1 params=name
+	
+	@param o optional type=object acl=view
+	
+	@param oid optional type=oid acl=view
+
+	@param clid optional type=class_id
+	**/
+	public function get_default_proplist($arr)
+	{
+		extract($arr);
+
+		$o = is_object($o) && $this->can("view", $o->id()) ? $o : obj($oid);
+		$clid = $this->can("view", $o->id()) ? $o->class_id() : $clid;
+		
+		if(!$this->can("view", $o->id()))
+		{
+			$o = obj();
+			$o->set_class_id($clid);
+		}
+
+		$cffi = get_instance(CL_CFGFORM);
+		$cff = $cffi->get_sysdefault(array("clid" => $clid));
+		return $this->can("view", $cff) ? $cffi->get_cfg_proplist($cff) : $o->get_property_list();
+	}
 }
 
 ?>
