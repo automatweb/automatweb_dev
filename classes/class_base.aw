@@ -2515,27 +2515,36 @@ class class_base extends aw_template
 	function process_view_controllers(&$properties, $controllers, $argblock)
 	{
 		$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
-
 		foreach ($controllers as $key => $value)
 		{
+			$parse_props = array($key);
+			$op = $properties[$key]["otherprops"];
+			if(is_array($op))
+			{
+				$parse_props = array_merge($parse_props, $op);
+			}
 			if($value)
 			{
 				$val = is_array($value) ? $value : array($value);
 				foreach($val as $value)
 				{
-					// &$properties[$key], $value, $argblock
-					// $prop, $controller_oid, $arr
-					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
-					/*
-					$retval = $view_controller_inst->check_property(array(
-						"prop" => &$properties[$key],
-						"controller_oid" => $value,
-						"arr" => $argblock,
-					));
-					*/
-					if($retval == PROP_IGNORE)
+					
+					foreach($parse_props as $prop)
 					{
-						unset($properties[$key]);
+						// &$properties[$key], $value, $argblock
+						// $prop, $controller_oid, $arr
+						$retval = $view_controller_inst->check_property(&$properties[$prop], $value, $argblock);
+						/*
+						$retval = $view_controller_inst->check_property(array(
+							"prop" => &$properties[$key],
+							"controller_oid" => $value,
+							"arr" => $argblock,
+						));
+						*/
+						if($retval == PROP_IGNORE)
+						{
+							unset($properties[$prop]);
+						}
 					}
 				}
 			}
@@ -3081,6 +3090,7 @@ class class_base extends aw_template
 							{
 								unset($resprops[$rkey]["parent"]);
 							}
+							$resprops[$val["name"]]["otherprops"][$rkey] = $rkey;
 						};
 					};
 					if (is_callable(array($val["vcl_inst"], "callback_mod_reforb")))
