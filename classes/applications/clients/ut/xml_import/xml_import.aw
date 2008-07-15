@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.14 2007/12/12 12:50:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.15 2008/07/15 12:30:15 markop Exp $
 /*
         @default table=objects
         @default group=general
@@ -11,7 +11,7 @@
         @caption Impordifunktsioon
         
 	@property run_import type=text editonly=1 store=no
-        @caption Käivita import
+        @caption K&auml;ivita import
 
 	@classinfo no_status=1 syslog_type=ST_UT_XML_IMPORT maintainer=kristo
                                                                                                                             
@@ -50,22 +50,16 @@ class xml_import extends class_base
 				classload("html");
 				$id	= $args["obj_inst"]->id();
 				$url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
-				$data["value"] = html::href(array("url" => $url,"caption" => t("Käivita import"),"target" => "_blank"));
+				$data["value"] = html::href(array("url" => $url,"caption" => t("K&auml;ivita import"),"target" => "_blank"));
 				break;
 		};
 	}
 
-	/**  
-		
-		@attrib name=invoke params=name 
-		
+	/**
+		@attrib name=invoke params=name nologin=1
 		@param id required
-		
 		@returns
-		
-		
 		@comment
-
 	**/
 	function invoke($args = array())
 	{
@@ -384,7 +378,7 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 			if ( ($token["tag"] == "tootaja") && ($token["type"] == "open") )
 			{
 				$t_attr = $token["attributes"];
-				// lisame uue töötaja baasi
+				// lisame uue t88taja baasi
 				$this->quote($t_attr);
 				// collect the data for later use
 				$enimi = $this->convert_charset($t_attr["enimi"]);
@@ -428,11 +422,11 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 				$eriala = preg_replace("/\s$/","&nbsp;",$eriala);
 
 				/*
-				Lisaks tuleb koormuse import ümber teha selliselt, et kui koormus on 1,
-				 siis jäetakse koormus_view lahter tühjaks. kui koormus on
-				midagi muud, kui 1, siis kirjutatakse sama väärtus nii tulpa koormus kui
+				Lisaks tuleb koormuse import ymber teha selliselt, et kui koormus on 1,
+				 siis j2etakse koormus_view lahter tyhjaks. kui koormus on
+				midagi muud, kui 1, siis kirjutatakse sama v22rtus nii tulpa koormus kui
 				koormus_view, koormus_view lahtrisse lisatakse veel ka
-				tühik ja täht "k".
+				tyhik ja t2ht "k".
 				*/
 				$koormus = (float)$attr["koormus"];
 				if ($koormus == 1)
@@ -611,8 +605,8 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 			print "<br />";
 
 		}
-		// kahjuks ma ei saa mysql-ist kätte ainult neid, millel count=0, niet ma teen
-		// tsükli
+		// kahjuks ma ei saa mysql-ist k2tte ainult neid, millel count=0, niet ma teen
+		// tsykli
 		$q = "SELECT ut_struktuurid.id,nimetus,COUNT(nimi) AS cnt FROM ut_struktuurid
 			LEFT OUTER JOIN $ametid_table ON (ut_struktuurid.id = ${ametid_table}.struktuur_id)
 			GROUP BY ut_struktuurid.id ORDER BY cnt";
@@ -644,31 +638,13 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 		$retval = $source;
 		// suur katusega S
 		$retval = str_replace(chr(0xA9),chr(0xA6),$retval);
-		// väike katusega s
+		// v2ike katusega s
 		$retval = str_replace(chr(0xB9),chr(0xA8),$retval);
 		// suur katusega Z
 		$retval = str_replace(chr(0xAE),chr(0xB4),$retval);
 		// vaike katusega Z
 		$retval = str_replace(chr(0xBE),chr(0xB8),$retval);
 
-
-		/*
-		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
-		$retval = str_replace(chr(0xC3). chr(0xBC),"ü",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xB6),"ö",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xA4),"ä",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x96),"Ö",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x95),"Õ",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xB4),"õ",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x84),"Ä",$retval);
-		$retval = str_replace(chr(0xC3). chr(0x9C),"Ü",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xA0),"&#0352;",$retval);
-		$retval = str_replace(chr(0xC3). chr(0xA9),"&#0233;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
-		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
-		*/
-		
 		return $retval;
 	}
 	
@@ -921,7 +897,7 @@ oon, eesmark) values('$ainekood', '$maht', '$nimetus', '$anno', '$eesm')");
 	function bitch_and_die(&$parser,&$contents)
 	{
 		$err = xml_error_string(xml_get_error_code($parser));
-		print "Viga lähteandmetes<br />"; 
+		print "Viga l&auml;hteandmetes<br />"; 
 		print "<font color='red'><strong>$err</strong></font><br />";
 		$b_idx = xml_get_current_byte_index($parser);
 		$frag = substr($contents,$b_idx - 100, 200);

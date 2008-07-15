@@ -58,7 +58,7 @@
             <method>serialize</method>
             <type>text</type>
             <editonly>1</editonly>
-            <caption>K&amp;auml;ivita</caption>
+            <caption>K&amp;amp;auml;ivita</caption>
       </property>
       <property>
             <name>ll_username</name>

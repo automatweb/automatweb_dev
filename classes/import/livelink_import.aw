@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.28 2008/01/31 13:54:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.29 2008/07/15 12:30:18 markop Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -25,7 +25,7 @@
 	@caption Objekti staatus
 
 	@property invoke type=text editonly=1
-	@caption Käivita
+	@caption K&auml;ivita
 
 	@default group=auth
 	@property ll_username type=textbox size=40
@@ -110,7 +110,7 @@ class livelink_import extends class_base
 		else
 		if (!is_writable($_dir))
 		{
-			$msg = "Väljundkataloog pole kirjutatav!";
+			$msg = "V&auml;ljundkataloog pole kirjutatav!";
 		}
 		else
 		{
@@ -176,17 +176,11 @@ class livelink_import extends class_base
 		$this->_close_logfile($arr["id"]);
 	}
 
-	/**  
-		
-		@attrib name=invoke params=name default="0"
-		
+	/**
+		@attrib name=invoke params=name default="0" nologin=1
 		@param id required type=int
-		
 		@returns
-		
-		
 		@comment
-
 	**/
 	function invoke($args = array())
 	{
