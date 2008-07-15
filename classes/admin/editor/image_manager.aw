@@ -58,6 +58,11 @@ class image_manager extends aw_editor_manager_base
 		{
 			$image_url = html::get_change_url($arr["image_id"], array("in_popup" => $_GET["in_popup"], "docid" => $doc->id()));
 		}
+		else if ($image_list->count())
+		{
+			$imgo = $image_list->begin();
+			$image_url = html::get_change_url($imgo->id(), array("in_popup" => $_GET["in_popup"]));
+		}
 		else
 		{
 			$parent = $this->get_def_img_folder_from_path(obj($doc->parent()));
@@ -138,7 +143,7 @@ class image_manager extends aw_editor_manager_base
 		$ii = get_instance(CL_IMAGE);
 		foreach($ol->arr() as $o)
 		{
-			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $o->id()), CL_IMAGE);
+			$url = $this->mk_my_orb("fetch_image_alias_for_doc", array("doc_id" => $arr["docid"], "image_id" => $o->id()), CL_IMAGE);
 			$pop_url = $ii->get_url_by_id($o->id());
 
 			$image_url = $ii->get_url_by_id($o->id());
@@ -167,17 +172,30 @@ class image_manager extends aw_editor_manager_base
 					"onClick" => "
 						FCK=window.parent.opener.FCK;
 						var eSelected = FCK.Selection.GetSelectedElement() ; 
-						aw_get_url_contents(\"".$gen_alias_url."\");
-						if (\"\"+eSelected == \"HTMLImageElement\")
+						if (eSelected)
 						{
-							eSelected.src=\"$image_url\";
+							if (eSelected.tagName == \"SPAN\" && eSelected._awimageplaceholder  )
+							{
+								$.get(\"$url\", function(data){
+									window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);
+									window.parent.close();
+								});
+							}
+							else if (eSelected.tagName == \"IMG\" )
+							{
+								$.get(\"$url\", function(data){
+									window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);
+									window.parent.close();
+								});
+							}
 						}
 						else
 						{
-							ct=aw_get_url_contents(\"$url\");
-							FCK.InsertHtml(ct);		
+							$.get(\"$url\", function(data){
+								window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);
+								window.parent.close();
+							});
 						}
-						window.parent.close();
 					"
 				))
 			));
