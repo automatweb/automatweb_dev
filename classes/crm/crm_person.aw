@@ -378,6 +378,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	#@property education_tbl type=table no_caption=1 store=no
 
 	@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
+	@caption Haridusk&auml;ik
+
+	@property education_edit_2 type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION_2 props=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
+	@caption Haridusk&auml;ik 2
 
 ------------------------------------------------------------------
 
@@ -975,7 +979,9 @@ caption S&otilde;bragrupid
 @reltype RECOMMENDATION value=87 clid=CL_CRM_RECOMMENDATION
 @caption Soovitus
 
-// last id 91
+@reltype EDUCATION_2 value=92 clid=CL_CRM_PERSON_EDUCATION
+@caption Haridus (teine releditor)
+
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");

@@ -905,6 +905,48 @@
                   <num_12>diploma_nr</num_12>
             </table_fields>
             <field>education_edit</field>
+            <caption>Haridusk&amp;amp;auml;ik</caption>
+      </property>
+      <property>
+            <name>education_edit_2</name>
+            <table>kliendibaas_isik</table>
+            <group>education</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager2</mode>
+            <reltype>RELTYPE_EDUCATION_2</reltype>
+            <props>
+                  <num_0>school1</num_0>
+                  <num_1>school2</num_1>
+                  <num_2>degree</num_2>
+                  <num_3>field</num_3>
+                  <num_4>speciality</num_4>
+                  <num_5>main_speciality</num_5>
+                  <num_6>in_progress</num_6>
+                  <num_7>dnf</num_7>
+                  <num_8>obtain_language</num_8>
+                  <num_9>start</num_9>
+                  <num_10>end</num_10>
+                  <num_11>end_date</num_11>
+                  <num_12>diploma_nr</num_12>
+            </props>
+            <table_fields>
+                  <num_0>school1</num_0>
+                  <num_1>school2</num_1>
+                  <num_2>degree</num_2>
+                  <num_3>field</num_3>
+                  <num_4>speciality</num_4>
+                  <num_5>main_speciality</num_5>
+                  <num_6>in_progress</num_6>
+                  <num_7>dnf</num_7>
+                  <num_8>obtain_language</num_8>
+                  <num_9>start</num_9>
+                  <num_10>end</num_10>
+                  <num_11>end_date</num_11>
+                  <num_12>diploma_nr</num_12>
+            </table_fields>
+            <field>education_edit_2</field>
+            <caption>Haridusk&amp;amp;auml;ik 2</caption>
       </property>
       <property>
             <name>add_edu_edit</name>
@@ -2417,6 +2459,11 @@
                   <clid>CL_CRM_RECOMMENDATION</clid>
                   <caption>Soovitus</caption>
             </RECOMMENDATION>
+            <EDUCATION_2>
+                  <value>92</value>
+                  <clid>CL_CRM_PERSON_EDUCATION</clid>
+                  <caption>Haridus (teine releditor)</caption>
+            </EDUCATION_2>
       </reltypes>
       <layout>
             <co_bottom_seller>
