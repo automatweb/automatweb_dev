@@ -152,7 +152,7 @@ class event_webview extends class_base
 				"event.end" => date("d-m-Y H:i:s", $event->end),
 				"event.end.date" => get_lc_date($event->end, LC_DATE_FORMAT_LONG_FULLYEAR),
 				"event.end.time" => date("H:i", $event->end),
-				"event.AWurl" => aw_ini_get("baseurl")."/".$event->id(),
+				"event.AWurl" => obj_link($event->id()),
 			));
 			if($ob->display_by === "event_times")
 			{
@@ -167,6 +167,7 @@ class event_webview extends class_base
 						"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
 						"event.end.time" => date("H:i", $to->end),
 						"event.location" => $to->prop("location.name"),
+						"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
 					));
 					$EVENT .= $this->parse("EVENT");
 				}
