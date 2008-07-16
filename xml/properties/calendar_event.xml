@@ -429,6 +429,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SEEALSO</reltype>
+            <caption>Vaata lisaks</caption>
       </property>
       <property>
             <name>recurrence</name>
