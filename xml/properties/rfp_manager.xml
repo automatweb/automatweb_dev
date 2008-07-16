@@ -172,13 +172,34 @@
             <name>raports_search_rfp_status</name>
             <table>objects</table>
             <group>raports</group>
-            <type>chooser</type>
-            <orient>vertical</orient>
+            <type>select</type>
             <parent>raports_search</parent>
             <captionside>top</captionside>
             <store>no</store>
             <field>raports_search_rfp_status</field>
-            <caption>Kinnitatud</caption>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>raports_search_rfp_submitter</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>textbox</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rfp_submitter</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>raports_search_submit</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>submit</type>
+            <parent>raports_search</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>raports_search_submit</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>raports_table</name>

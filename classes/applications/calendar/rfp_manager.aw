@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.25 2008/07/15 12:10:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.26 2008/07/16 05:18:02 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -63,8 +63,14 @@
 			@property raports_search_rooms type=select multiple=1 parent=raports_search captionside=top store=no
 			@caption Ruumid
 
-			@property raports_search_rfp_status type=chooser orient=vertical parent=raports_search captionside=top store=no
-			@caption Kinnitatud
+			@property raports_search_rfp_status type=select parent=raports_search captionside=top store=no
+			@caption Staatus
+
+			@property raports_search_rfp_submitter type=textbox parent=raports_search captionside=top store=no
+			@caption Klient
+
+			@property raports_search_submit type=submit parent=raports_search store=no no_caption=1
+			@caption Otsi
 
 		@layout raports_table type=vbox closeable=1 area_caption="Raportid" parent=raports_hsplit
 			/@property raports_table type=table no_caption=1 store=no parent=raports_table
@@ -187,7 +193,7 @@ class rfp_manager extends class_base
 				break;
 			case "raports_search_group":
 				$prop["options"] = array(
-					"1" => t("Ajaaliselt"),
+					"1" => t("Ajaliselt"),
 					"2" => t("Klientide l&otilde;ikes"),
 				);
 				break;
@@ -374,40 +380,6 @@ class rfp_manager extends class_base
 		return $retval;
 	}
 
-	function _init_raports_table(&$arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "client",
-			"caption" => t("Klient"),
-		));
-		$t->define_field(array(
-			"name" => "event_type",
-			"caption" => t("&Uuml;ritus"),
-		));
-		$t->define_field(array(
-			"name" => "from",
-			"caption" => t("Alates"),
-		));
-		$t->define_field(array(
-			"name" => "to",
-			"caption" => t("Kuni"),
-		));
-		$t->define_field(array(
-			"name" => "room",
-			"caption" => t("Ruumis"),
-		));
-		$t->define_field(array(
-			"name" => "people_count",
-			"caption" => t("Inimesi"),
-		));
-		$t->define_field(array(
-			"name" => "raport_type",
-			"caption" => t("T&uuml;&uuml;p"),
-		));
-
-	}
-
 	function _get_raports_table($arr)
 	{
 		$res = $this->search_rfp_raports(array(
@@ -416,25 +388,9 @@ class rfp_manager extends class_base
 			"search" => $arr["request"]["raports_search_covering"],
 			"rooms" => (is_array($arr["request"]["raports_search_rooms"]) AND count($arr["request"]["raports_search_rooms"]))?$arr["request"]["raports_search_rooms"]:NULL,
 			"rfp_status" => $arr["request"]["raports_search_rfp_status"],
+			"client" => $arr["request"]["raports_search_rfp_submitter"],
 		));
 
-		/* this was for test period
-		$this->_init_raports_table($arr);
-		$t =& $arr["prop"]["vcl_inst"];
-		foreach($res as $data)
-		{
-			$rfp = $data["rfp"]?obj($data["rfp"]):false;
-			$t->define_data(array(
-				"from" => date("d.m.Y H:i", $data["start1"]),
-				"to" => date("d.m.Y H:i", $data["end"]),
-				"room" => $data["room"]?html::obj_change_url(obj($data["room"])):t("-"),
-				"client" => $rfp?$rfp->prop("data_subm_name"):t("-"),
-				"people_count" => $data["people_count"],
-				"event_type" => $rfp?$rfp->prop("data_mf_event_type.name"):t("-"),
-				"raport_type" => $this->raport_types[$data["result_type"]],
-			));
-		}
-		 */
 		$arr["prop"]["value"] = $this->display_search_result($res, ($arr["request"]["raports_search_group"] == 2)?true:false, ($arr["request"]["raports_search_with_products"])?true:false);
 	}
 
@@ -901,7 +857,7 @@ class rfp_manager extends class_base
 		}
 
 		// raports search 
-		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status");
+		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter");
 		foreach($todo as $do)
 		{
 			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
@@ -1291,6 +1247,8 @@ class rfp_manager extends class_base
 			Start time
 		@param to optional type=int
 			End time
+		@param client optional type=string
+			searches from rfp submitter name and organisation
 	 **/
 	public function search_rfp_raports($arr = array())
 	{
@@ -1343,6 +1301,15 @@ class rfp_manager extends class_base
 			{
 				unset($result[$k]);
 				continue;
+			}
+			if(strlen($arr["client"])) // the smartest thing would be to take those props away from meta and use the filter on the rfp obj list..
+			{
+				$rfp = obj($data["rfp"]);
+				if(!strstr($rfp->prop("data_subm_name"), trim($arr["client"])) AND !strstr($rfp->prop("data_subm_organisation"), trim($arr["client"])))
+				{
+					unset($result[$k]);
+					continue;
+				}
 			}
 		}
 		uasort($result, array($this, "_sort_raport_search_result"));
