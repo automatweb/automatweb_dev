@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.21 2008/07/16 13:20:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.22 2008/07/16 13:52:55 markop Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -266,7 +266,7 @@ class ows_reservation extends class_base
       			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
       			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
      			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
-      			"partnEerWebsiteDomain" => $o->meta("partnEerWebsiteDomain") ? $o->meta("partnEerWebsiteDomain") : 0,
+      			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
 		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "RecordPaymentLogEntry",
@@ -309,7 +309,7 @@ fwrite($f, "die error\n");
       			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
       			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
       			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
-      			"partnEerWebsiteDomain" => $o->meta("partnEerWebsiteDomain") ? $o->meta("partnEerWebsiteDomain") : 0,
+      			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
 		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "RecordPaymentLogEntry",

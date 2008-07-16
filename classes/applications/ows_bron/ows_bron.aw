@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.41 2008/07/16 13:20:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.42 2008/07/16 13:52:55 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -193,7 +193,7 @@ class ows_bron extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["partnerWebsiteGuid"] = $arr["partnerWebsiteGuid"];
-		$arr["partnEerWebsiteDomain"] = $arr["partnEerWebsiteDomain"];
+		$arr["partnerWebsiteDomain"] = $arr["partnerWebsiteDomain"];
 	}
 
 	/**
@@ -532,7 +532,7 @@ class ows_bron extends class_base
 				"r_url" => aw_url_change_var("error", null, get_ru()),
 				"ow_bron" => $arr["ow_bron"],
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
 			"prev_url" => $this->mk_my_orb("show_available_rooms", array(
 				"i_location" => $arr["i_location"],
@@ -547,7 +547,7 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"set_currency" => $currency,
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
 			"phone_ext_list_as_js_array" => $adr->get_phone_ext_list_as_js_array(),
 			"country_list" => $this->picker($arr["ct_country"], $adr->get_country_list()),
@@ -581,7 +581,7 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"],
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
 			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
@@ -766,7 +766,7 @@ class ows_bron extends class_base
 		//genereerib uue bookingu id et saaks seda kasutada makse logimisel
 		$parameters = array(
 			"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-			"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+			"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "GenerateNewBookingID",
@@ -817,7 +817,7 @@ class ows_bron extends class_base
 		$o->set_meta("customer_id", reval_customer::get_cust_id());
 		$o->set_meta("booking_id", $return["GenerateNewBookingIDResult"]);
 		$o->set_meta("partnerWebsiteGuid", $arr["partnerWebsiteGuid"]);
-		$o->set_meta("partnEerWebsiteDomain", $arr["partnEerWebsiteDomain"]);
+		$o->set_meta("partnerWebsiteDomain", $arr["partnerWebsiteDomain"]);
 		$o->set_meta("bron_data", $arr);
 		$o->set_meta("join_fc", $arr["join_fc"]);
 		aw_disable_acl();
@@ -888,7 +888,7 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"set_currency" => $currency,
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
 			"ct_firstname" => $arr["ct"]["firstname"],
 			"ct_lastname" => $arr["ct"]["lastname"],
@@ -962,7 +962,7 @@ class ows_bron extends class_base
 				"ct_phone_ext" => $arr["ct"]["phone_ext"],
 				"ct_email" => $arr["ct"]["email"],
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
 			"step2_url" => $this->mk_my_orb("show_available_rooms", array(
 				"i_location" => $arr["i_location"],
@@ -977,7 +977,7 @@ class ows_bron extends class_base
 				"no_reforb" => 1,
 				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"],
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
 			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
@@ -1138,7 +1138,7 @@ class ows_bron extends class_base
 	"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["bron_comment"])),
       	"paymentType" => "NoPayment",
 	"partnerWebsiteGuid" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["partnerWebsiteGuid"])),
-	"partnEerWebsiteDomain" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["partnEerWebsiteDomain"])),
+	"partnerWebsiteDomain" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["partnerWebsiteDomain"])),
 			);
 			$params["customerId"] = reval_customer::get_cust_id();
 			$return = $this->do_orb_method_call(array(
@@ -1726,11 +1726,11 @@ class ows_bron extends class_base
 							"ow_bron" => $arr["ow_bron"],
 							"api_departure_days" => $arr["api_departure_days"],
 							"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-							"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+							"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 						)
 					),
 					"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-					"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+					"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 				));
 				return $this->parse();
 		}
@@ -2310,11 +2310,11 @@ $rate_ids = array();
 					"ow_bron" => $arr["ow_bron"],
 					"api_departure_days" => $arr["api_departure_days"],
 					"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-					"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+					"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 				)
 			),
 			"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
-			"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+			"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 		));
 
 		if ($_GET["error"] > 0)
