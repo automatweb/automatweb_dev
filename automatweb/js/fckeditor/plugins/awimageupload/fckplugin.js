@@ -1,3 +1,7 @@
+var _aw_fck_selected_image_oid = false;
+var _aw_fck_selected_image_alias = false;
+
+
 var InsertAWImageCommand=function(){};
 InsertAWImageCommand.Name='ImageUpload';
 InsertAWImageCommand.prototype.Execute=function(){}
@@ -19,19 +23,33 @@ InsertAWImageCommand.Name='ImageChange';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
-	if (FCK.Selection.GetSelectedElement()._oid)
-	{
-		oid = FCK.Selection.GetSelectedElement()._oid;
-	}
-	else
-	{
-		oid = FCK.Selection.GetSelectedElement().parentNode._oid;
-	}
+	oid =  _aw_fck_selected_image_oid;
+	//alert (_aw_fck_selected_image_alias);
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+oid,
 		'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimagechange', InsertAWImageCommand ); 
 
+
+var FloatImage2LeftCommand=function(){};
+FloatImage2LeftCommand.Name='Float2Left';
+FloatImage2LeftCommand.prototype.Execute=function(){}
+FloatImage2LeftCommand.GetState=function() { return FCK_TRISTATE_OFF; }
+FloatImage2LeftCommand.Execute=function() {
+	FCKAWImagePlaceholders.Add(FCK, _aw_fck_selected_image_alias, "v" )
+}
+FCKCommands.RegisterCommand('awimagechange_float_left', FloatImage2LeftCommand ); 
+
+
+// float to right command
+var FloatImage2RightCommand=function(){};
+FloatImage2RightCommand.Name='Float2Right';
+FloatImage2RightCommand.prototype.Execute=function(){}
+FloatImage2RightCommand.GetState=function() { return FCK_TRISTATE_OFF; }
+FloatImage2RightCommand.Execute=function() {
+	FCKAWImagePlaceholders.Add(FCK, _aw_fck_selected_image_alias, "p" )
+}
+FCKCommands.RegisterCommand('awimagechange_float_right', FloatImage2RightCommand ); 
 
 /** backward compability 
  *
@@ -72,6 +90,9 @@ FCK.ContextMenu.RegisterListener( {
 			if (tag._awimageplaceholder)
 			{
 				menu.AddSeparator();
+				menu.AddItem( "awimagechange_float_left", "Joonda vasakule", 37 ) ;
+				menu.AddItem( "awimagechange_float_right", "Joonda paremale", 37 ) ;
+				menu.AddSeparator();
 				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
 			}
 			
@@ -90,6 +111,19 @@ var FCKAWImagePlaceholders = new Object() ;
 FCKAWImagePlaceholders.Add = function( oEditor, name )
 {
 	oEditor.InsertHtml( '#' + name + '#'  )
+	FCKAWImagePlaceholders.Redraw();
+}
+
+// Add a new placeholder at the actual selection.
+FCKAWImagePlaceholders.Add = function( oEditor, name, float2 )
+{
+	name = name.match(/pict[0-9]/ig);
+	// otherwise we insert the new alias into placeholder span
+	if (FCKBrowserInfo.IsIE)
+	{
+		//FCKSelection.SelectNode( FCK.Selection.GetSelectedElement().parentNode ) ;
+	}
+	oEditor.InsertHtml( '#' + name + float2 +'#'  )
 	FCKAWImagePlaceholders.Redraw();
 }
 
@@ -238,9 +272,13 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	{
 		if (!e) {var e = FCK.EditorWindow.event ; e.target = e.srcElement}
 		if ( e.target.tagName == 'SPAN' && e.target._awimageplaceholder )
+			_aw_fck_selected_image_oid = e.target._oid;
+			_aw_fck_selected_image_alias = e.target._awimageplaceholder;
 			FCKSelection.SelectNode( e.target ) ;
 		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
 		{
+			_aw_fck_selected_image_oid = e.target.parentNode._oid;
+			_aw_fck_selected_image_alias = e.target.parentNode._awimageplaceholder;
 			FCKSelection.SelectNode( e.target.parentNode ) ;
 		}
 	}
@@ -253,23 +291,25 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 		if ( e.target.parentNode.tagName == 'SPAN' && e.target.parentNode._awimageplaceholder )
 		{
 			setTimeout(function() {
-				FCKSelection.SelectNode( e.target.parentNode ) ;
+				_aw_fck_selected_image_oid = e.target._oid;
+				_aw_fck_selected_image_alias = e.target._awimageplaceholder;
+				//FCKSelection.SelectNode( e.target ) ;
 			}, 1); // 1ms should be enough
 		}
 		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
 		{
 			setTimeout(function() {
-				FCKSelection.SelectNode( e.target.parentNode ) ;
+				_aw_fck_selected_image_oid = e.target._oid;
+				_aw_fck_selected_image_alias = e.target._awimageplaceholder;
+				//FCKSelection.SelectNode( e.target.parentNode ) ;
 			}, 1); // 1ms should be enough
-			
 		}
-		//alert (e.target.tagName);
 	}
 	
 	if (document.all) {        // If Internet Explorer.
 		// this was intended for ie's right click, so image caption could also be right clicked
 		//FCK.EditorDocument.attachEvent("onclick", FCKAWImagePlaceholders._ClickListenerIE ) ;
-		//FCK.EditorDocument.attachEvent("onmousedown", FCKAWImagePlaceholders._ClickListenerIE ) ;
+		FCK.EditorDocument.attachEvent("onmousedown", FCKAWImagePlaceholders._ClickListenerIE ) ;
 		//FCK.EditorDocument.attachEvent( 'OnPaste', FCKAWImagePlaceholders.onPasteIE ) ;
 	} else {                // If Gecko.
 		//FCK.EditorDocument.addEventListener( 'click', DenGecko_OnKeyDown, true ) ;
@@ -338,7 +378,7 @@ if ( FCKBrowserInfo.IsIE )
 					}
 				}
 				oRange.pasteHTML('<span class="Fck_image" '+img_align+' width='+connection_details_for_doc["#"+name+"#"]["width"]+' _awimageplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + 
-					"<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
+					"<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' _awimageplaceholder="+name+" _oid="+connection_details_for_doc["#"+name+"#"]["id"]+" />"+
 				  	'</span>');
 			}
 		}
