@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.27 2008/07/08 14:00:40 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.28 2008/07/16 07:28:27 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2397,6 +2397,16 @@ class image extends class_base
 			"doc_id" => $arr["doc_id"],
 			"no_die" => true
 		));
+		
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ($obj_id == $arr["image_id"])
+			{
+				die(str_replace("#", "", $alias_string));
+			}
+		}
 		
 		die();
 	}
