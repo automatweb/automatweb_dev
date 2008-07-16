@@ -5865,6 +5865,19 @@ class crm_person extends class_base
 		}
 		//		END SUB: CRM_PERSON.NAME
 
+		//		SUB: CRM_PERSON.PREVIOUS_LASTNAME
+		if(strlen($o->previous_lastname) > 0 && (array_key_exists("previous_lastname", $proplist) || count($proplist) == 0))
+		{
+			$this->vars(array(
+				"crm_person.previous_lastname" => $o->previous_lastname,
+			));
+			$this->vars(array(
+				"CRM_PERSON.PREVIOUS_LASTNAME" => $this->parse("CRM_PERSON.PREVIOUS_LASTNAME"),
+			));
+			$parse_cppi++;
+		}
+		//		END SUB: CRM_PERSON.PREVIOUS_LASTNAME
+
 		//		SUB: CRM_PERSON.PERSONAL_ID
 		// This needs some heavier check. Maybe I'll come back to it later. Don't think it's that important. Prolly should be checked already when setting the property.
 		if(preg_match("/[34]\d{10}/", $o->prop("personal_id")) && (array_key_exists("personal_id", $proplist) || count($proplist) == 0))
