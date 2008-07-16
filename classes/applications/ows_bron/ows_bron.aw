@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.40 2008/07/09 13:58:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.41 2008/07/16 13:20:15 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -192,6 +192,8 @@ class ows_bron extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["partnerWebsiteGuid"] = $arr["partnerWebsiteGuid"];
+		$arr["partnEerWebsiteDomain"] = $arr["partnEerWebsiteDomain"];
 	}
 
 	/**
@@ -529,6 +531,8 @@ class ows_bron extends class_base
 				"api_departure_days" => $arr["api_departure_days"],
 				"r_url" => aw_url_change_var("error", null, get_ru()),
 				"ow_bron" => $arr["ow_bron"],
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 			)),
 			"prev_url" => $this->mk_my_orb("show_available_rooms", array(
 				"i_location" => $arr["i_location"],
@@ -541,7 +545,9 @@ class ows_bron extends class_base
 				"section" => aw_global_get("section"),
 				"api_departure_days" => $arr["api_departure_days"],
 				"no_reforb" => 1,
-				"set_currency" => $currency
+				"set_currency" => $currency,
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 			)),
 			"phone_ext_list_as_js_array" => $adr->get_phone_ext_list_as_js_array(),
 			"country_list" => $this->picker($arr["ct_country"], $adr->get_country_list()),
@@ -573,7 +579,9 @@ class ows_bron extends class_base
 				"section" => $arr["section"],
 				"api_departure_days" => $arr["api_departure_days"],
 				"no_reforb" => 1,
-				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"]
+				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"],
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 			)),
 			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
@@ -756,7 +764,10 @@ class ows_bron extends class_base
 
 		
 		//genereerib uue bookingu id et saaks seda kasutada makse logimisel
-		$parameters = array();
+		$parameters = array(
+			"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+			"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
+		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "GenerateNewBookingID",
 			"class" => "http://markus.ee/RevalServices/Booking/",
@@ -764,7 +775,7 @@ class ows_bron extends class_base
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
 		));
-//arr($return);
+
 		$o = obj();
 		$o->set_parent(aw_ini_get("ows.bron_folder"));
 		$o->set_class_id(CL_OWS_RESERVATION);
@@ -805,12 +816,14 @@ class ows_bron extends class_base
 		$o->set_prop("rate_room_type_code", $rate["OwsRoomTypeCode"]);
 		$o->set_meta("customer_id", reval_customer::get_cust_id());
 		$o->set_meta("booking_id", $return["GenerateNewBookingIDResult"]);
+		$o->set_meta("partnerWebsiteGuid", $arr["partnerWebsiteGuid"]);
+		$o->set_meta("partnEerWebsiteDomain", $arr["partnEerWebsiteDomain"]);
 		$o->set_meta("bron_data", $arr);
 		$o->set_meta("join_fc", $arr["join_fc"]);
 		aw_disable_acl();
 		$o->save();
 		aw_restore_acl();
-//arr($o->id());
+
 		if (!$arr["ow_bron"])
 		{
 			$arr["ow_bron"] = 107222;
@@ -873,7 +886,9 @@ class ows_bron extends class_base
 				"i_child1" => $arr["i_children"],
 				"section" => aw_global_get("section"),
 				"no_reforb" => 1,
-				"set_currency" => $currency
+				"set_currency" => $currency,
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 			)),
 			"ct_firstname" => $arr["ct"]["firstname"],
 			"ct_lastname" => $arr["ct"]["lastname"],
@@ -945,7 +960,9 @@ class ows_bron extends class_base
 				"ct_country" => $arr["ct"]["country"],
 				"ct_phone" => $arr["ct"]["phone"],
 				"ct_phone_ext" => $arr["ct"]["phone_ext"],
-				"ct_email" => $arr["ct"]["email"]
+				"ct_email" => $arr["ct"]["email"],
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 			)),
 			"step2_url" => $this->mk_my_orb("show_available_rooms", array(
 				"i_location" => $arr["i_location"],
@@ -958,7 +975,9 @@ class ows_bron extends class_base
 				"i_promo" => $arr["i_promo"],
 				"section" => $arr["section"],
 				"no_reforb" => 1,
-				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"]
+				"r_url" => obj_link($arr["section"])."&ow_bron=".$arr["ow_bron"],
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 			)),
 			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
@@ -1105,7 +1124,7 @@ class ows_bron extends class_base
       	"guestAddress2" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["ct"]["adr2"])),
       	"guestPhone" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["ct"]["phone_ext"])." ".urldecode($arr["ct"]["phone"])),
       	"guestEmail" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["ct"]["email"])),
-				"guestBirthday" => $bd,
+	"guestBirthday" => $bd,
       	"roomSmokingPreferenceId" => (int)$arr["smoking"] ? 3 : 2,
       	"floorPreferenceId" => $arr["high_floor"] ? 2 : ($arr["low_floor"] ? 3 : 1),
       	"isAllergic" => (bool)$arr["is_allergic"],
@@ -1114,10 +1133,12 @@ class ows_bron extends class_base
       	"guaranteeType" => "CreditCard",
       	"guaranteeCreditCardType" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["confirm_card_type"])),
       	"guaranteeCreditCardHolderName" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["confirm_card_name"])),
-				"guaranteeCreditCardNumber" => $number,
+	"guaranteeCreditCardNumber" => $number,
       	"guaranteeCreditCardExpirationDate" => $exp_date,
-				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["bron_comment"])),
-      	"paymentType" => "NoPayment"
+	"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["bron_comment"])),
+      	"paymentType" => "NoPayment",
+	"partnerWebsiteGuid" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["partnerWebsiteGuid"])),
+	"partnEerWebsiteDomain" => iconv(aw_global_get("charset"), "UTF-8", urldecode($arr["partnEerWebsiteDomain"])),
 			);
 			$params["customerId"] = reval_customer::get_cust_id();
 			$return = $this->do_orb_method_call(array(
@@ -1704,8 +1725,12 @@ class ows_bron extends class_base
 							"i_promo" => $arr["i_promo"],
 							"ow_bron" => $arr["ow_bron"],
 							"api_departure_days" => $arr["api_departure_days"],
+							"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+							"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 						)
-					)
+					),
+					"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+					"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 				));
 				return $this->parse();
 		}
@@ -2284,8 +2309,12 @@ $rate_ids = array();
 					"i_promo" => $arr["i_promo"],
 					"ow_bron" => $arr["ow_bron"],
 					"api_departure_days" => $arr["api_departure_days"],
+					"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+					"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 				)
-			)
+			),
+			"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+			"partnEerWebsiteDomain" => $arr["partnEerWebsiteDomain"],
 		));
 
 		if ($_GET["error"] > 0)
