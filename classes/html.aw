@@ -247,8 +247,10 @@ class html extends aw_template
 		{
 			if (!defined("AW_AUTOCOMPLETE_INITIALIZED"))
 			{
-				$baseurl = aw_ini_get("baseurl") . "/automatweb/js/";
-				$autocomplete = '<script type="text/javascript" src="' . $baseurl . 'autocomplete_lib.js"></script><script type="text/javascript" src="' . $baseurl . 'autocomplete.js"></script>';
+				/*$baseurl = aw_ini_get("baseurl") . "/automatweb/js/";
+				$autocomplete = '<script type="text/javascript" src="' . $baseurl . 'autocomplete_lib.js"></script><script type="text/javascript" src="' . $baseurl . 'autocomplete.js"></script>';*/
+				load_javascript("autocomplete.js");
+				load_javascript("autocomplete_lib.js");
 				define("AW_AUTOCOMPLETE_INITIALIZED", 1);
 			}
 
