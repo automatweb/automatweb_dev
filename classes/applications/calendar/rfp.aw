@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.30 2008/07/15 12:10:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.31 2008/07/16 10:23:08 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -291,10 +291,21 @@
 			@caption V&auml;lisk&uuml;laliste arv
 			@comment Konverentsil viibivate v&auml;lisk&uuml;aliste arv
 
+			@property additional_information type=textarea rows=20
+			@caption Lisainfo
+
+			@property additional_admin_information type=textarea rows=20
+			@caption Administraatori lisainfo
+
 		@groupinfo final_prices caption="Ruumid" parent=final_info
 		@default group=final_prices
 
 			@property final_add_reservation_tb group=final_prices,final_resource,final_catering no_caption=1 type=toolbar
+
+			@layout add_inf_room type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_room_information type=textarea parent=add_inf_room rows=20
+				@caption Ruumide lisainfo
 
 			@layout prs_hsplit type=hbox width=30%:70%
 
@@ -308,6 +319,12 @@
 		@groupinfo final_catering caption="Toitlustus" parent=final_info
 		@default group=final_catering
 
+			@layout add_inf_catering type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_catering_information type=textarea parent=add_inf_catering rows=20
+				@caption Toitlustuse lisainfo
+
+
 			@layout cat_hsplit type=hbox width=30%:70%
 
 				@layout cat_left parent=cat_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
@@ -320,6 +337,12 @@
 		@groupinfo final_resource caption="Ressursid" parent=final_info
 		@default group=final_resource
 
+			@layout add_inf_resource type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_resource_information type=textarea parent=add_inf_resource rows=20
+				@caption Ressursside lisainfo
+
+
 			@layout res_hsplit type=hbox width=30%:70%
 
 				@layout res_left parent=res_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
@@ -331,6 +354,12 @@
 
                 @groupinfo final_housing caption="Majutus" parent=final_info
                 @default group=final_housing
+
+			@layout add_inf_housing type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_housing_information type=textarea parent=add_inf_housing rows=20
+				@caption Majutuse lisainfo
+
 
                         @property housing_tbl type=table store=no no_caption=1
 
@@ -580,6 +609,32 @@ class rfp extends class_base
 					));
 					$tb->add_save_button();
 				}
+
+				$ol = new object_list(array(
+					"class_id" => CL_SPA_BOOKINGS_OVERVIEW,
+				));
+				$o = $ol->begin();
+				$url = $this->mk_my_orb("show_cals_pop", array(
+					//"id" => $o->id(),
+					"class" => "spa_bookings_overview",
+					"pseh" => aw_register_ps_event_handler(
+						CL_RFP,
+						"handle_new_reservation",
+						array(
+							"rfp_manager_oid" => $arr["obj_inst"]->id(),
+							"rfp_package_oid" => "juhuu",
+						),
+						CL_RESERVATION
+					),
+					"rooms" => "0",
+
+				));
+				$tb->add_button(array(
+					"name" => "cal",
+					"tooltip" => t("Kalender"),
+					"img" => "icon_cal_today.gif",
+					"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};if (vals != '') {aw_popup_scroll('$url'+vals,'mulcal',700,500);} else { alert('".t("Valige palun v&auml;hemalt &uuml;ks ruum!")."');} return false;",
+				));
 				break;
 			case "products_tree":
 			case "resources_tree":
@@ -667,6 +722,8 @@ class rfp extends class_base
 						"action" => "change",
 						"id" => $bron,
 						"default_currency" => $arr["obj_inst"]->prop("default_currency"),
+						"define_chooser" => 1,
+						"chooser" => "room",
 					),
 					"groupinfo" => array(),
 					"prop" => array(
@@ -1603,6 +1660,12 @@ class rfp extends class_base
 			"data_name" => $arr["obj_inst"]->prop("data_billing_name"),
 			"data_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_billing_email"),
+			"additional_information" => $arr["obj_inst"]->prop("additional_information"),
+			"additional_admin_information" => $arr["obj_inst"]->prop("additional_admin_information"),
+			"additional_room_information" => $arr["obj_inst"]->prop("additional_room_information"),
+			"additional_catering_information" => $arr["obj_inst"]->prop("additional_catering_information"),
+			"additional_resource_information" => $arr["obj_inst"]->prop("additional_resource_information"),
+			"additional_housing_information" => $arr["obj_inst"]->prop("additional_housing_information"),
 		));
 		$package_id = $arr["obj_inst"]->prop("data_gen_package");
 		if($this->can("view", $package_id))
@@ -2275,6 +2338,12 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("additional_information", "text"),
+			array("additional_admin_information", "text"),
+			array("additional_room_information", "text"),
+			array("additional_catering_information", "text"),
+			array("additional_resource_information", "text"),
+			array("additional_housing_information", "text"),
 			array("confirmed", "int"),
 			array("cancel_and_payment_terms", "text"),
 			array("accomondation_terms", "text"),
@@ -2422,6 +2491,15 @@ class rfp extends class_base
 	public function get_rfp_statuses()
 	{
 		return $this->rfp_status;
+	}
+
+	/**
+		@attrib name=handle_new_reservation all_args=1 params=name
+	 **/
+	public function handle_new_reservation($arr)
+	{
+		arr($arr);
+		die();
 	}
 }
 ?>

@@ -716,6 +716,24 @@
             <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
       </property>
       <property>
+            <name>additional_information</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>textarea</type>
+            <rows>20</rows>
+            <field>additional_information</field>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>additional_admin_information</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>textarea</type>
+            <rows>20</rows>
+            <field>additional_admin_information</field>
+            <caption>Administraatori lisainfo</caption>
+      </property>
+      <property>
             <name>final_add_reservation_tb</name>
             <table>rfp</table>
             <group>
@@ -727,6 +745,16 @@
             <type>toolbar</type>
             <store>no</store>
             <field>final_add_reservation_tb</field>
+      </property>
+      <property>
+            <name>additional_room_information</name>
+            <table>rfp</table>
+            <group>final_prices</group>
+            <type>textarea</type>
+            <parent>add_inf_room</parent>
+            <rows>20</rows>
+            <field>additional_room_information</field>
+            <caption>Ruumide lisainfo</caption>
       </property>
       <property>
             <name>prices_tree</name>
@@ -749,6 +777,16 @@
             <field>prices_tbl</field>
       </property>
       <property>
+            <name>additional_catering_information</name>
+            <table>rfp</table>
+            <group>final_catering</group>
+            <type>textarea</type>
+            <parent>add_inf_catering</parent>
+            <rows>20</rows>
+            <field>additional_catering_information</field>
+            <caption>Toitlustuse lisainfo</caption>
+      </property>
+      <property>
             <name>products_tree</name>
             <table>rfp</table>
             <group>final_catering</group>
@@ -769,6 +807,16 @@
             <field>products_tbl</field>
       </property>
       <property>
+            <name>additional_resource_information</name>
+            <table>rfp</table>
+            <group>final_resource</group>
+            <type>textarea</type>
+            <parent>add_inf_resource</parent>
+            <rows>20</rows>
+            <field>additional_resource_information</field>
+            <caption>Ressursside lisainfo</caption>
+      </property>
+      <property>
             <name>resources_tree</name>
             <table>rfp</table>
             <group>final_resource</group>
@@ -787,6 +835,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>resources_tbl</field>
+      </property>
+      <property>
+            <name>additional_housing_information</name>
+            <table>rfp</table>
+            <group>final_housing</group>
+            <type>textarea</type>
+            <parent>add_inf_housing</parent>
+            <rows>20</rows>
+            <field>additional_housing_information</field>
+            <caption>Majutuse lisainfo</caption>
       </property>
       <property>
             <name>housing_tbl</name>
@@ -985,6 +1043,12 @@
             </DEFAULT_CURRENCY>
       </reltypes>
       <layout>
+            <add_inf_room>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Lisainfo</area_caption>
+                  <group>final_prices</group>
+            </add_inf_room>
             <prs_hsplit>
                   <type>hbox</type>
                   <width>30%:70%</width>
@@ -1005,6 +1069,12 @@
                   <area_caption>Hinnad</area_caption>
                   <group>final_prices</group>
             </prs_right>
+            <add_inf_catering>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Lisainfo</area_caption>
+                  <group>final_catering</group>
+            </add_inf_catering>
             <cat_hsplit>
                   <type>hbox</type>
                   <width>30%:70%</width>
@@ -1025,6 +1095,12 @@
                   <area_caption>Tooted</area_caption>
                   <group>final_catering</group>
             </cat_right>
+            <add_inf_resource>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Lisainfo</area_caption>
+                  <group>final_resource</group>
+            </add_inf_resource>
             <res_hsplit>
                   <type>hbox</type>
                   <width>30%:70%</width>
@@ -1045,6 +1121,12 @@
                   <area_caption>Ressursid</area_caption>
                   <group>final_resource</group>
             </res_right>
+            <add_inf_housing>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Lisainfo</area_caption>
+                  <group>final_housing</group>
+            </add_inf_housing>
       </layout>
 </properties>
 
