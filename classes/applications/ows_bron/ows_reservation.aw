@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.22 2008/07/16 13:52:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.23 2008/07/16 14:57:08 markop Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -366,6 +366,8 @@ fwrite($f, "return is conf\n");
       	"isAllergic" => (bool)$o->prop("is_allergic"),
       	"isHandicapped" => (bool)$o->prop("is_handicapped"),
 				"guaranteeType" => "Deposit",
+      			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
+      			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
       	"paymentType" => "NoPayment",
 				"guestBirthday" => $bd,
 				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
