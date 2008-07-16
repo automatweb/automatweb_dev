@@ -82,17 +82,4 @@
 	<Style name="Verdana Sin XL" element="span">
 		<Attribute name="class" value="verdana_sin_xl" />
 	</Style>
-
-	<!-- Object Styles -->
-
-	<Style name="Image on Left" element="img">
-		<Attribute name="style" value="padding: 5px; margin-right: 5px" />
-		<Attribute name="border" value="0" />
-		<Attribute name="align" value="left" />
-	</Style>
-	<Style name="Image on Right" element="img">
-		<Attribute name="style" value="padding: 5px; margin-left: 5px" />
-		<Attribute name="border" value="0" />
-		<Attribute name="align" value="right" />
-	</Style>
 </Styles>
