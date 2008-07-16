@@ -33,6 +33,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property lastname type=textbox size=15 maxlength=50
 @caption Perekonnanimi
 
+@property previous_lastname type=textbox size=15 maxlength=50
+@caption Eelmine perekonnanimi
+
 @property nickname type=textbox size=10 maxlength=20
 @caption H&uuml;&uuml;dnimi
 
@@ -5074,6 +5077,13 @@ class crm_person extends class_base
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "varchar(20)"
+				));
+				return true;
+
+			case "previous_lastname":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(50)"
 				));
 				return true;
 		}
