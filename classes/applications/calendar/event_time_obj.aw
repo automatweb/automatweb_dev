@@ -28,7 +28,7 @@ class event_time_obj extends _int_object
 
 	function prop($k)
 	{
-		if(($k == "location" || substr($k, 0, 9) == "location.") && !is_oid(parent::prop("location")) && $this->can("view", parent::prop("event")) && is_oid(parent::prop("event")))
+		if(is_oid(parent::id()) && ($k == "location" || substr($k, 0, 9) == "location.") && !is_oid(parent::prop("location")) && $this->can("view", parent::prop("event")) && is_oid(parent::prop("event")))
 		{
 			// If the location is always the same, there's no need to copy it into event_time object.
 			return obj(parent::prop("event"))->prop($k);
