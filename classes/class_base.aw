@@ -967,8 +967,10 @@ class class_base extends aw_template
 				{
 					continue;
 				}
+				$warns = array_unique($warns);
 				$final_warns[] = join("<br/>", $warns);
 			}
+			$final_warns = array_unique($final_warns);
 			// LETS STOP ROKKIN'
 			$this->cli->config = count($final_warns)?($this->cli->config + array( "warn" => join("<br/>", $final_warns))):$this->cli->config;
 		}
