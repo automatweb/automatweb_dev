@@ -523,11 +523,11 @@ class crm_company_bills_impl extends class_base
 				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
 
-				$task2row[$task->id()][] = $row->id();
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
 					if(!in_array($task->id(), $this->deal_tasks))
 					{
+						$task2row[$task->id()][] = $row->id();
 						$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
 						$hr2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust"));
 						$tasks->add($conn["from"]);
@@ -542,21 +542,20 @@ class crm_company_bills_impl extends class_base
 			$t2row = $c->find(array(
 				"to.class_id" => CL_CRM_EXPENSE,
 				"to" => $rows->ids(),
-//				"type" => "RELTYPE_EXPENSE"
 			));
 			foreach($t2row as $conn)
 			{
 				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
 				if(is_oid($row->prop("bill_id")) && $this->can("view" , $row->prop("bill_id"))) continue;
-				$task2row[$task->id()][] = $row->id();
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
-//					if(!in_array($task->id(), $deal_tasks))
-//					{
+					if(!in_array($task->id(), $this->deal_tasks))
+					{
+						$task2row[$task->id()][] = $row->id();
 						$sum2task[$task->id()] += str_replace(",", ".", $row->prop("cost"));
 						$tasks->add($conn["from"]);
-//					}
+					}
 				}
 			}
 		}
@@ -566,7 +565,7 @@ class crm_company_bills_impl extends class_base
 		foreach($tasks->arr() as $o)
 		{
 			if(!$o->prop("send_bill"))
-			{	
+			{
 				continue;
 			}
 			$rs = $task2row[$o->id()];
@@ -578,7 +577,8 @@ class crm_company_bills_impl extends class_base
 				//	$sel_ = 0;
 				//	if(in_array($_SESSION["task_sel"],$row_id)) $sel_ =1;
 					if($ro->class_id() == CL_CRM_EXPENSE)
-					{$date = $ro->prop("date");
+					{
+						$date = $ro->prop("date");
 						$t->define_data(array(
 							"oid" => $row_id,
 							"name" => $ro->name(),
