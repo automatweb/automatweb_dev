@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.64 2008/07/17 12:13:25 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.65 2008/07/17 12:18:34 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -638,6 +638,8 @@ class personnel_management extends class_base
 			case "os_county":
 			case "os_city":
 			case "os_dl_from":
+			case "os_dl_to":
+			case "endless":
 				$s = $arr['request'][$prop["name"]];
 				$this->dequote(&$s);
 				$prop['value'] = $s;
@@ -2456,30 +2458,22 @@ class personnel_management extends class_base
 		}
 		if($r["os_dl_from_time"])
 		{
-			$conditions = array(
-				"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
-			);
-			if($r["endless"])
-			{
-				$conditions["endless"] = 1;
-			}
 			$ol_arr[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => $conditions,
+				"conditions" => array(
+					"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
+					"endless" => $r["endless"],
+				),
 			));
 		}
 		if($r["os_dl_to_time"])
 		{
-			$conditions = array(
-				"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["os_dl_to_time"] + (24 * 3600 - 1)),
-			);
-			if($r["endless"])
-			{
-				$conditions["endless"] = 1;
-			}
 			$ol_arr[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => $conditions,
+				"conditions" => array(
+					"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["os_dl_to_time"] + (24 * 3600 - 1)),
+					"endless" => $r["endless"],
+				),
 			));
 		}
 		$ol = new object_list($ol_arr);
