@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.23 2008/07/16 14:57:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.24 2008/07/17 14:51:08 markop Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -259,14 +259,16 @@ class ows_reservation extends class_base
       			"paymentLogPaymentResultId" => 2,//eba6nnestunud makse
       			"paymentCurrency" => $data["curr"]?$data["curr"]:"EEK",
       			"paymentReceived" => $data["sum"]?$data["sum"]:0,
-      			"remoteTransactionIdentifier" => $o->id()."".$ret["time"],//suvaline tehingu identifikaator
-      			"remoteReference" => $o->id(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
-      			"resultMessage" => $data["all"]?$data["all"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
-      			"description" => "tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
+      			"remoteTransactionIdentifier" => $data["ref"]?$data["ref"]:time(),//suvaline tehingu identifikaator
+      			"remoteReference" => $data["receipt_no"]?$data["receipt_no"]:time(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
+      			"resultMessage" =>  $data["msg"]?$data["msg"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
+      			"description" => $data["all"]?$data["all"]:"tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
       			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
       			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
-     			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
+      			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
       			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
+			"userInfo" => $data["payer"]?$data["payer"]:" ",
+   			"hotelId" => $o->prop("hotel_id")?$o->prop("hotel_id"):0,
 		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "RecordPaymentLogEntry",
@@ -274,6 +276,7 @@ class ows_reservation extends class_base
 			"params" => $params,
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
+//			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
 
 		return $arr["url"];
@@ -302,14 +305,16 @@ fwrite($f, "die error\n");
       			"paymentLogPaymentResultId" => 1,//edukas makse,... praegu igatahes siia funktsiooni muud ei j6uagi
       			"paymentCurrency" => $data["curr"]?$data["curr"]:"EEK",
       			"paymentReceived" => $data["sum"]?$data["sum"]:0,
-      			"remoteTransactionIdentifier" => $o->id()."".$ret["time"],//suvaline tehingu identifikaator
-      			"remoteReference" => $o->id(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
-      			"resultMessage" => $data["all"]?$data["all"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
-      			"description" => "tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
+      			"remoteTransactionIdentifier" => $data["ref"]?$data["ref"]:time(),//suvaline tehingu identifikaator
+      			"remoteReference" => $data["receipt_no"]?$data["receipt_no"]:time(),//misiganes asi, mille abil on meil v6imalik maksele v6i maksel meie tehingule viidata
+      			"resultMessage" =>  $data["msg"]?$data["msg"]:"tekst",//kogu makes kohta tagatstatav info, mida tuleks salvestada
+      			"description" => $data["all"]?$data["all"]:"tekst",//k6ik muu tekst, mis eelmiste hulka ei mahu
       			"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
       			"onlineBookingId" => $o->meta("booking_id") ? $o->meta("booking_id") : 0,
       			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
       			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
+			"userInfo" => $data["payer"]?$data["payer"]:" ",
+   			"hotelId" => $o->prop("hotel_id")?$o->prop("hotel_id"):0,
 		);
 		$return = $this->do_orb_method_call(array(
 			"action" => "RecordPaymentLogEntry",
@@ -317,7 +322,9 @@ fwrite($f, "die error\n");
 			"params" => $params,
 			"method" => "soap",
 			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
+//			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
 		));
+//if(aw_global_get("uid") == "struktuur"){		arr($params); arr($return);}
 fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($return)."\n");
 			if ($o->prop("is_confirmed") == 1)
 			{
@@ -368,11 +375,12 @@ fwrite($f, "return is conf\n");
 				"guaranteeType" => "Deposit",
       			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
       			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
+
       	"paymentType" => "NoPayment",
 				"guestBirthday" => $bd,
 				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
 				"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
-				"bookingId" => $o->meta("booking_id"),
+				"bookingID" => $o->meta("booking_id"),
 			);
 
 			if ($data["bank_id"] == "credit_card")
@@ -382,12 +390,26 @@ fwrite($f, "return is conf\n");
 
 //die(dbg::dump($params));
 			$return = $this->do_orb_method_call(array(
+	//			"action" => "MakeBookingExWithBirthdayAndBookingID",
 				"action" => "MakeBookingExWithBirthday",
 				"class" => "http://markus.ee/RevalServices/Booking/",
 				"params" => $params,
 				"method" => "soap",
-				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx",
+	//			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
 			));
+
+/*			$return2 = $this->do_orb_method_call(array(
+				"action" => "MakeBookingExWithBirthdayAndBookingID",
+	//			"action" => "MakeBookingExWithBirthday",
+				"class" => "http://markus.ee/RevalServices/Booking/",
+				"params" => $params,
+				"method" => "soap",
+				"server" => "http://195.250.171.36/RevalServices/BookingService.asmx",
+//				"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
+			));
+*/
+//if(aw_global_get("uid") == "struktuur"){			arr($return);arr($return2);}
 fwrite($f, date("d.m.Y H:i:s").": ".dbg::dump($params).dbg::dump($return)."\n\n\n\n");
 	//echo dbg::dump($return);
 			if ($return["MakeBookingExWithBirthdayResult"]["ResultCode"] != "Success")

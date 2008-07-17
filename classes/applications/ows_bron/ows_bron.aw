@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.42 2008/07/16 13:52:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.43 2008/07/17 14:51:08 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -773,7 +773,9 @@ class ows_bron extends class_base
 			"class" => "http://markus.ee/RevalServices/Booking/",
 			"params" => $parameters,
 			"method" => "soap",
-			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx"
+			"server" => "http://195.250.171.36/RevalServicesTest/BookingService.asmx",
+//			"server" => "http://195.250.171.36/RevalServices/BookingService.asmx"
+
 		));
 
 		$o = obj();
@@ -823,7 +825,7 @@ class ows_bron extends class_base
 		aw_disable_acl();
 		$o->save();
 		aw_restore_acl();
-
+//if(aw_global_get("uid") == "struktuur"){ arr($return); arr($parameters);arr($o->id());}//33685 , 215250
 		if (!$arr["ow_bron"])
 		{
 			$arr["ow_bron"] = 107222;
