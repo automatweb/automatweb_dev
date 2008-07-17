@@ -36,7 +36,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Puu t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Puu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>icon_folder_open</name>

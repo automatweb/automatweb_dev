@@ -176,7 +176,7 @@ class admin_if extends class_base
 			"url" => obj_link($parent),
 			"img" => "preview.gif",
 		));
-		$file_manager = get_instance("admin/file_manager");
+		$file_manager = get_instance("admin/editor/file_manager");
 		$file_manager->add_zip_button(array("tb" => $tb));
 
 		if (aw_ini_get("per_oid"))

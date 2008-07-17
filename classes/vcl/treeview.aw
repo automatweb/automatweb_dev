@@ -17,7 +17,7 @@
 	@caption Root objekti ikoon
 
 	@property treetype type=select field=meta method=serialize
-	@caption Puu tüüp
+	@caption Puu t&uuml;&uuml;p
 
 	@property icon_folder_open type=relpicker reltype=RELTYPE_ICON field=meta method=serialize
 	@caption Lahtise kausta ikoon
@@ -624,7 +624,7 @@ class treeview extends class_base
 
 		$this->r_path = array();
 		// now figure out the paths to selected nodse
-		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
+		// ja nagu sellest veel kyllalt poleks .. I can have multiple opened nodes. yees!
 		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
 		{
 			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
@@ -640,7 +640,7 @@ class treeview extends class_base
 		{
 			$this->r_path = $this->r_path + $this->open_nodes;
 		};
-		$t = get_instance("languages");
+		$t = get_instance("core/languages");
 
 		$level = !empty($_REQUEST["called_by_js"]) ? $_COOKIE[$this->tree_id."_level"] : 1;
 		if(!strlen($this->auto_open))
@@ -731,7 +731,7 @@ class treeview extends class_base
 		$this->r_path = array();
 		// now figure out the paths to selected nodes
 
-		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
+		// ja nagu sellest veel kyllalt poleks .. I can have multiple opened nodes. yees!
 		if ($this->has_feature(PERSIST_STATE))
 		{
 			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
@@ -803,7 +803,7 @@ class treeview extends class_base
 		$this->r_path = array();
 		// now figure out the paths to selected nodes
 
-		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
+		// ja nagu sellest veel kyllalt poleks .. I can have multiple opened nodes. yees!
 		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
 		{
 			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
