@@ -71,7 +71,7 @@ jQuery.aw_releditor = function(arr) {
 		{
 			current_index = i_releditor_form_index;
 		}
-		form = $("[name^="+arr["releditor_name"]+"\["+current_index+"][type!=submit]").not("a");
+		form = $("form [name^="+arr["releditor_name"]+"\["+current_index+"][type!=submit]").not("a");
 		form.each(function(){
 			$(this).reset();
 			s_prop_name = _get_prop_name($(this).attr("name"));
@@ -116,9 +116,9 @@ jQuery.aw_releditor = function(arr) {
 			{
 				//delete_data = $("input[name^="+arr["releditor_name"]+"_delete_][type=checkbox][checked]").serialize();
 				s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();
-				s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
+				s_form_extension_class_info = $("form [name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
 				data = s_form_extension+"&"+s_form_extension_class_info+"&"+arr["releditor_name"]+"_delete_index="+_get_delete_index($(this).attr("name"));
-				s_form_cfgform = $("[name^=cfgform][type=hidden]").serialize();
+				s_form_cfgform = $("form [name^=cfgform][type=hidden]").serialize();
 	                        data = s_form_cfgform.length>0 ? data+"&"+s_form_cfgform : data;
 				data += "&id="+arr["id"];
 				$.ajax({
@@ -158,12 +158,12 @@ jQuery.aw_releditor = function(arr) {
 			i_releditor_form_index = i_releditor_edit_index
 			// class info
 		}
-		form = $("[name^="+arr["releditor_name"]+"\["+i_releditor_form_index+"][type!=submit]").not("a");
+		form = $("form [name^="+arr["releditor_name"]+"\["+i_releditor_form_index+"][type!=submit]").not("a");
 		s_form = form.serialize();
 		s_form_extension = $("#"+arr["releditor_name"]+"_data").serialize();
 		data = s_form_extension.length>0 ? s_form+"&"+s_form_extension : s_form;
-		s_form_extension_class_info = $("[name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
-		s_form_cfgform = $("[name^=cfgform][type=hidden]").serialize();
+		s_form_extension_class_info = $("form [name^="+arr["releditor_name"]+"_reled_data][type=hidden]").serialize();
+		s_form_cfgform = $("form [name^=cfgform][type=hidden]").serialize();
 		data = s_form_extension_class_info.length>0 ? data+"&"+s_form_extension_class_info : data;
 		data = s_form_cfgform.length>0 ? data+"&"+s_form_cfgform : data;
 		data += "&id="+arr["id"];
