@@ -380,7 +380,7 @@
       </property>
       <property>
             <name>event_time_edit</name>
-            <group>general</group>
+            <group>event_times</group>
             <table>planner</table>
             <type>releditor</type>
             <store>no</store>
@@ -491,6 +491,9 @@
             <recurrence>
                   <caption>Kordumine</caption>
             </recurrence>
+            <event_times>
+                  <caption>Toimumisajad</caption>
+            </event_times>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

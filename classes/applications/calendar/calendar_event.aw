@@ -170,7 +170,7 @@ caption Korraldaja tabel
 property event_time_table type=table no_caption=1 store=no
 caption Toimumisaegade tabel
 
-@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIMES props=start,end,location table_fields=start,end,location
+@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIMES props=start,end,location table_fields=start,end,location group=event_times
 @caption Toimumisajad
 
 
@@ -198,6 +198,7 @@ caption Toimumisaegade tabel
 
 @groupinfo projects caption="Projektid"
 @groupinfo recurrence caption=Kordumine
+@groupinfo event_times caption="Toimumisajad"
 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
