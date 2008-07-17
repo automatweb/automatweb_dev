@@ -243,9 +243,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 			@property cedit_profession_tbl type=table store=no no_caption=1 parent=ceditprof store=no
 
-		#@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
+		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
 
-			#@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
+			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
 
 			@property address_edit type=releditor mode=manager2 store=no props=name,aadress,postiindex,linn,maakond,piirkond,riik,comment table_fields=name,aadress,postiindex,linn,maakond,piirkond,riik,comment reltype=RELTYPE_ADDRESS
 

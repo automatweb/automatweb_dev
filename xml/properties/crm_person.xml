@@ -512,6 +512,16 @@
             <field>cedit_profession_tbl</field>
       </property>
       <property>
+            <name>cedit_adr_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ceditadr</parent>
+            <field>cedit_adr_tbl</field>
+      </property>
+      <property>
             <name>address_edit</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -2585,6 +2595,12 @@
                   <area_caption>Eelnev&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;kogemus</area_caption>
                   <group>contact</group>
             </ceditprof>
+            <ceditadr>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Aadressid</area_caption>
+                  <group>contact</group>
+            </ceditadr>
             <ceditmsn>
                   <type>vbox</type>
                   <closeable>1</closeable>
