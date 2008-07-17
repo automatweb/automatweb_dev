@@ -53,6 +53,16 @@
             <caption>Tootepakettide asukoht</caption>
       </property>
       <property>
+            <name>meta_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_META_OBJECT_FOLDER</reltype>
+            <store>connect</store>
+            <field>meta_folder</field>
+            <caption>Muutujate kaust</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
@@ -407,6 +417,11 @@
                   <value>6</value>
                   <caption>RFP vaikevaluuta</caption>
             </DEFAULT_CURRENCY>
+            <META_OBJECT_FOLDER>
+                  <clid>CL_FOLDER</clid>
+                  <value>7</value>
+                  <caption>Muutujate kaust</caption>
+            </META_OBJECT_FOLDER>
       </reltypes>
       <layout>
             <raports_hsplit>

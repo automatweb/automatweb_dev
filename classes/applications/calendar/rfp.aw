@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.31 2008/07/16 10:23:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.32 2008/07/17 09:45:26 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1541,12 +1541,39 @@ class rfp extends class_base
 
 	function _get_room_types()
 	{
+		$rfp_admin = get_instance(CL_RFP_MANAGER);
+		$s = $rfp_admin->get_sysdefault();
+		if(!$s)
+		{
+			warning(t("Teil on valimata s&uuml;steemi vaike-RFP Halduskeskkond."));
+			return array();
+		}
+		else
+		{
+			$o = obj($s);
+			if(!$this->can("view", $o->prop("meta_folder")))
+			{
+				warning("Objektis ".html::obj_change_url($o)." on m&auml;&auml;ramata muutujate kataloog.");
+				return array();
+			}
+			$ol = new object_list(array(
+				"class_id" => CL_META,
+				"parent" => $o->prop("meta_folder"),
+			));
+			foreach($ol->arr() as $oid => $obj)
+			{
+				$ret[$oid] = $obj->name();
+			}
+			return $ret;
+		}
+		/* old solution
 		$types = array(
 			1 => t("&Uuml;hekohaline"),
 			2 => t("Kahekohaline"),
 			3 => t("Sviit"),
 		);
 		return $types;
+		 */
 	}
 
 	function get_rooms($arr)

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.26 2008/07/16 05:18:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.27 2008/07/17 09:45:26 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -23,6 +23,9 @@
 
 @property prod_vars_folder type=relpicker reltype=RELTYPE_PROD_VARS_FOLDER field=meta method=serialize
 @caption Tootepakettide asukoht
+
+@property meta_folder type=relpicker reltype=RELTYPE_META_OBJECT_FOLDER store=connect
+@caption Muutujate kaust
 
 @property default_table type=table no_caption=1 store=no
 
@@ -131,6 +134,9 @@
 
 @reltype DEFAULT_CURRENCY clid=CL_CURRENCY value=6
 @caption RFP vaikevaluuta
+
+@reltype META_OBJECT_FOLDER clid=CL_FOLDER value=7
+@caption Muutujate kaust
 
 */
 
