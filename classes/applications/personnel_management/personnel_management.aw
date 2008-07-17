@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.62 2008/07/17 11:55:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.63 2008/07/17 12:06:04 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2457,7 +2457,7 @@ class personnel_management extends class_base
 		if($r["os_dl_from_time"])
 		{
 			$conditions = array(
-				"end" => new obj_predicate_prop(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
+				"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
 			);
 			if($r["endless"])
 			{
@@ -2471,7 +2471,7 @@ class personnel_management extends class_base
 		if($r["os_dl_from_time"])
 		{
 			$conditions = array(
-				"end" => new obj_predicate_prop(OBJ_COMP_LESS_OR_EQ, $r["os_dl_from_time"] + (24 * 3600 - 1)),
+				"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["os_dl_from_time"] + (24 * 3600 - 1)),
 			);
 			if($r["endless"])
 			{
