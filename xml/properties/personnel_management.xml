@@ -1166,6 +1166,23 @@
             <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
+            <name>os_endless</name>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <caption>Otsi ka t&amp;amp;auml;htajatuid</caption>
+      </property>
+      <property>
             <name>os_status</name>
             <group>
                   <num_0>offers_</num_0>

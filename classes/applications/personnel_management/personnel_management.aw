@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.61 2008/07/17 08:31:17 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.62 2008/07/17 11:55:46 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -366,6 +366,9 @@
 
 						@property os_dl_to type=date_select store=no parent=os_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox
 						@caption T&auml;htaeg kuni
+
+					@property os_endless type=checkbox ch_value=1 store=no parent=offers_search captionside=top no_caption=1
+					@caption Otsi ka t&auml;htajatuid
 
 					@property os_status type=chooser store=no parent=offers_search captionside=top
 					@caption Staatus
@@ -2450,7 +2453,35 @@ class personnel_management extends class_base
 		if($r["os_status"] == 1 || $r["os_status"] == 2)
 		{
 			$ol_arr["status"] = $r["os_status"];
-		}		
+		}
+		if($r["os_dl_from_time"])
+		{
+			$conditions = array(
+				"end" => new obj_predicate_prop(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
+			);
+			if($r["endless"])
+			{
+				$conditions["endless"] = 1;
+			}
+			$ol_arr[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => $conditions,
+			));
+		}
+		if($r["os_dl_from_time"])
+		{
+			$conditions = array(
+				"end" => new obj_predicate_prop(OBJ_COMP_LESS_OR_EQ, $r["os_dl_from_time"] + (24 * 3600 - 1)),
+			);
+			if($r["endless"])
+			{
+				$conditions["endless"] = 1;
+			}
+			$ol_arr[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => $conditions,
+			));
+		}
 		$ol = new object_list($ol_arr);
 		foreach($ol->arr() as $obj)
 		{
@@ -2504,20 +2535,6 @@ class personnel_management extends class_base
 					}
 				}
 				if(!$ok)
-				{
-					continue;
-				}
-			}
-			if($r["os_dl_from_time"])
-			{
-				if($obj->prop("end") < $r["os_dl_from_time"])
-				{
-					continue;
-				}
-			}
-			if($r["os_dl_to_time"])
-			{
-				if($obj->prop("end") > $r["os_dl_to_time"])
 				{
 					continue;
 				}
@@ -2875,6 +2892,7 @@ class personnel_management extends class_base
 			$arr["args"]["os_dl_to"] = $arr["request"]["os_dl_to"];
 			$arr["args"]["os_dl_to_time"] = mktime(0, 0, 0, $arr["request"]["os_dl_to"]["month"], $arr["request"]["os_dl_to"]["day"], $arr["request"]["os_dl_to"]["year"]);
 			$arr["args"]["os_status"] = $arr["request"]["os_status"];
+			$arr["args"]["os_endless"] = $arr["request"]["os_endless"];
 			$arr["args"]["os_sbt"] = $arr["request"]["os_sbt"];
 		}
 
