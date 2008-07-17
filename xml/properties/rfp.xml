@@ -856,6 +856,25 @@
             <field>housing_tbl</field>
       </property>
       <property>
+            <name>offer_pdf</name>
+            <table>rfp</table>
+            <group>final_offer</group>
+            <type>text</type>
+            <store>no</store>
+            <field>offer_pdf</field>
+            <caption>Lae PDF		</caption>
+      </property>
+      <property>
+            <name>offer_preface</name>
+            <table>rfp</table>
+            <group>final_offer</group>
+            <type>textarea</type>
+            <cols>70</cols>
+            <rows>20</rows>
+            <field>offer_preface</field>
+            <caption>Pakkumise eess&amp;amp;otilde;na</caption>
+      </property>
+      <property>
             <name>data_contactperson</name>
             <table>objects</table>
             <group>final_submission</group>
@@ -968,6 +987,10 @@
                   <caption>Majutus</caption>
                   <parent>final_info</parent>
             </final_housing>
+            <final_offer>
+                  <caption>Pakkumine</caption>
+                  <parent>final_info</parent>
+            </final_offer>
             <final_submission>
                   <caption>Kinnitamine</caption>
                   <parent>final_info</parent>

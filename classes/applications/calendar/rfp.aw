@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.32 2008/07/17 09:45:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.33 2008/07/17 10:30:43 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -365,6 +365,15 @@
 
 
 
+		@groupinfo final_offer caption="Pakkumine" parent=final_info
+		@default group=final_offer
+	
+			@property offer_pdf type=text store=no
+			@caption Lae PDF		
+			
+			@property offer_preface type=textarea cols=70 rows=20
+			@caption Pakkumise eess&otilde;na
+			
 		@groupinfo final_submission caption="Kinnitamine" parent=final_info
 		@default group=final_submission
 
@@ -913,8 +922,12 @@ class rfp extends class_base
 				$prop["value"] = $t->draw();
 				break;
 			case "pdf":
+			case "offer_pdf":
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("get_pdf_file", array("id" => $arr["obj_inst"]->id())),
+					"url" => $this->mk_my_orb("get_pdf_file", array(
+						"id" => $arr["obj_inst"]->id(),
+						"pdf" => $prop["name"],
+					)),
 					"caption" => t("Fail"),
 				));
 				break;
@@ -1653,6 +1666,7 @@ class rfp extends class_base
 	**/
 	function get_pdf_file($arr)
 	{
+
 		$arr["obj_inst"] = obj($arr["id"]);
 		$html = $this->_get_submission_data($arr);
 		classload("core/converters/html2pdf");
@@ -1672,6 +1686,8 @@ class rfp extends class_base
 
 	function _get_submission_data($arr)
 	{
+		$pdf = ($arr["pdf"] == "offer_pdf")?"OFFER":"CONFIRMATION";
+
 		$this->read_template("submission.tpl");
 		$this->vars(array(
 			"send_date" => date('d.m.Y', $arr["obj_inst"]->prop("data_send_date")),
@@ -1693,6 +1709,7 @@ class rfp extends class_base
 			"additional_catering_information" => $arr["obj_inst"]->prop("additional_catering_information"),
 			"additional_resource_information" => $arr["obj_inst"]->prop("additional_resource_information"),
 			"additional_housing_information" => $arr["obj_inst"]->prop("additional_housing_information"),
+			"offer_preface" => $arr["obj_inst"]->prop("offer_preface"),
 		));
 		$package_id = $arr["obj_inst"]->prop("data_gen_package");
 		if($this->can("view", $package_id))
@@ -2027,6 +2044,7 @@ class rfp extends class_base
 			"PRODUCTS" => $pd_sub,
 			"HOUSING" => $hs_sub,
 			"totalprice" => $totalprice,
+			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
 		));
 		return $this->parse();
 	}
@@ -2365,6 +2383,7 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("offer_preface", "text"),
 			array("additional_information", "text"),
 			array("additional_admin_information", "text"),
 			array("additional_room_information", "text"),
