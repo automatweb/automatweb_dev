@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.120 2008/07/17 09:49:35 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.121 2008/07/17 13:28:26 robert Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -69,6 +69,8 @@ class aw_table extends aw_template
 		$this->selected_filters = array();
 		$this->filter_index = array();
 		$this->rowspans = array();
+
+		$this->titlebar_display = true;
 
 		if ($data["prop_name"] != "")
 		{
@@ -517,7 +519,6 @@ class aw_table extends aw_template
 				}
 			}
 		}
-
 		// now figure out the order of sorting
 		// start with parameters
 		if (!($this->sorder = $params["sorder"]))
@@ -1012,7 +1013,7 @@ class aw_table extends aw_template
 		}
 
 		// if we show title under grouping elements, then we must not show it on the first line!
-		if (empty($this->titlebar_under_groups) && empty($arr["no_titlebar"]))
+		if (empty($this->titlebar_under_groups) && empty($arr["no_titlebar"]) && $this->titlebar_display)
 		{
 			$tbl .= $this->_req_draw_header("");
 		}
@@ -1102,7 +1103,9 @@ class aw_table extends aw_template
 							$tbl .= "<td align='center'>&nbsp;</td>";
 						}
 					};
+
 				$cols = 0;
+
 				// ts&uuml;kkel &uuml;le rowdefsi, et andmed oleksid oiges j&auml;rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
@@ -1354,6 +1357,37 @@ class aw_table extends aw_template
 				if($this->final_enum)
 				{
 					aw_session_set("table_enum", $enum);
+				}
+				if($v["add_row"])
+				{
+					$add_rows = array();
+					if(is_array($v["add_row"]))
+					{
+						$add_rows = array_merge($add_rows, $v["add_row"]);
+					}
+					else
+					{
+						$add_rows[] = $v["add_row"];
+					}
+					foreach($add_rows as $rv)
+					{
+						$tbl .= "<tr>\n";
+						$tag = array(
+							"name"    => "td",
+							"classid" => $style,
+							"colspan" => count($this->rowdefs) + ($this->use_chooser?1:0),
+						);
+						$val = $rv;
+						if(is_array($rv))
+						{
+							$tag = array_merge($tag, $rv);
+							unset($tag["value"]);
+							$val = $rv["value"];
+						}
+						$tbl .= $this->opentag($tag);
+						$tbl .= $val."\n";
+						$tbl .= "</td>\n</tr>\n";
+					}
 				}
 			};
 		};
@@ -2680,6 +2714,15 @@ class aw_table extends aw_template
 	function set_lower_titlebar_display($display_titlebar_below)
 	{
 		$this->titlebar_repeat_bottom = $display_titlebar_below;
+	}
+
+	/** Sets whether to display the titlebar at the top of the table
+		@attrib api=1
+		@param display_titlebar required type=bool
+	**/
+	function set_titlebar_display($display_titlebar)
+	{
+		$this->titlebar_display = $display_titlebar;
 	}
 }
 
