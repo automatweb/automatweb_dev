@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.59 2008/07/17 08:19:14 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.60 2008/07/17 08:23:10 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2605,7 +2605,7 @@ class personnel_management extends class_base
 
 		foreach ($objs->arr() as $obj)
 		{
-			if($obj_>endless)
+			if($obj->endless)
 			{
 				$end = t("T&auml;htajatu");
 			}
