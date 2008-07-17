@@ -1097,7 +1097,7 @@ class crm_bill extends class_base
 				"row" => $id,
 			));
 
-			$connect_row_link.= html::href(array(
+			$connect_row_link = html::href(array(
 				"url" => "javascript:aw_popup_scroll(\"$connect_row_url\",\"Otsing\",1100,700)",
 				"caption" => t("Lisa toimetuse rida"),
 				"title" => t("Otsi")

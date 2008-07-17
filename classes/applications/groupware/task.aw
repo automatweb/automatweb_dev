@@ -2815,7 +2815,7 @@ class task extends class_base
 					$rows[$id] = array(
 						"name" => $ob->name(),
 						"unit" => "",
-
+						"row_oid" => $ob->id(),
 						"price" => $stats_inst->convert_to_company_currency(array(
 							"sum" => $ob->prop("cost"),
 							"o" => $ob,
@@ -3722,7 +3722,7 @@ class task extends class_base
 					}
 				}
 			}
-
+//if(aw_global_get("uid") == "Teddi.Rull") {arr($o->prop("to_bill_date")); arr($o->is_property("to_bill_date")); arr($o->prop("on_bill")); arr($e);die();}
 			if(!$o->prop("bill_no"))//isset($e["on_bill"]))
 			{
 				if ($o->class_id() != CL_CRM_MEETING)
