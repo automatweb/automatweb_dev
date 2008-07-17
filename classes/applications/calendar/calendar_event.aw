@@ -240,7 +240,7 @@ caption Toimumisaegade tabel
 @caption Fail
 
 @reltype EVENT_TIMES value=11 clid=CL_EVENT_TIME
-@caption Toimumisaeg
+@caption Toimumisaeg (releditor)
 
 
 */

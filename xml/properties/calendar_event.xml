@@ -556,7 +556,7 @@
             <EVENT_TIMES>
                   <value>11</value>
                   <clid>CL_EVENT_TIME</clid>
-                  <caption>Toimumisaeg</caption>
+                  <caption>Toimumisaeg (releditor)</caption>
             </EVENT_TIMES>
       </reltypes>
 </properties>
