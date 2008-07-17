@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.58 2008/07/09 10:02:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.59 2008/07/17 08:19:14 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2547,7 +2547,7 @@ class personnel_management extends class_base
 			}
 			$loc .= $obj->prop("loc_city.name"); 
 
-			$end = $obj->prop("end") ? get_lc_date($obj->prop("end")) : t("M&auml;&auml;ramata");
+			$end = $obj->endless ? t("T&aumlhtajatu") : $obj->prop("end") ? get_lc_date($obj->prop("end")) : t("M&auml;&auml;ramata");
 			$t->define_data(array(
 				"name" => html::obj_change_url($obj),
 				"profession" => $prof,
@@ -2605,13 +2605,18 @@ class personnel_management extends class_base
 
 		foreach ($objs->arr() as $obj)
 		{
+			if($obj_>endless)
+			{
+				$end = t("T&auml;htajatu");
+			}
+			else
 			if($obj->prop("end"))
 			{
         		$end = get_lc_date($obj->prop("end"));
         	}
         	else
         	{
-        		$end = t("m&auml;&auml;ramata");
+        		$end = t("M&auml;&auml;ramata");
         	}
 			
 			// Location
