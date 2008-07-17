@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.67 2008/07/17 12:24:00 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.68 2008/07/17 12:29:39 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2462,7 +2462,7 @@ class personnel_management extends class_base
 				"logic" => $r["os_endless"] ? "OR" : "AND",
 				"conditions" => array(
 					"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
-					"endless" => $r["os_endless"],
+					"endless" => $r["os_endless"] ? 1 : new obj_predicate_not(1),
 				),
 			));
 		}
@@ -2472,7 +2472,7 @@ class personnel_management extends class_base
 				"logic" => $r["os_endless"] ? "OR" : "AND",
 				"conditions" => array(
 					"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["os_dl_to_time"] + (24 * 3600 - 1)),
-					"endless" => $r["os_endless"],
+					"endless" => $r["os_endless"] ? 1 : new obj_predicate_not(1),
 				),
 			));
 		}
@@ -2560,7 +2560,7 @@ class personnel_management extends class_base
 			}
 			$loc .= $obj->prop("loc_city.name"); 
 
-			$end = $obj->endless ? t("T&aumlhtajatu") : ($obj->prop("end") ? get_lc_date($obj->prop("end")) : t("M&auml;&auml;ramata"));
+			$end = $obj->endless ? t("T&auml;htajatu") : ($obj->prop("end") ? get_lc_date($obj->prop("end")) : t("M&auml;&auml;ramata"));
 			$t->define_data(array(
 				"name" => html::obj_change_url($obj),
 				"profession" => $prof,
