@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.113 2008/07/08 09:00:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.114 2008/07/17 09:25:30 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -951,8 +951,8 @@ class reservation extends class_base
 			$data = array(
 				"date" => $rfp->gen_time_form(array(
 					"varname" => "resources_info[".$res."]",
-					"start1" => $rdata[$res]["start1"],
-					"end" => $rdata[$res]["end"],
+					"start1" => ($rdata[$res]["start1"])?$rdata[$res]["start1"]:$arr["obj_inst"]->prop("start1"),
+					"end" => ($rdata[$res]["end"])?$rdata[$res]["end"]:$arr["obj_inst"]->prop("end"),
 				)),
 				"name" => $res_obj->name(),
 				"amount" => html::textbox(array(
@@ -1342,6 +1342,13 @@ class reservation extends class_base
 			"caption" => t("Kokkuleppehind"),
 			"chgbgcolor" => "split",
 		));
+		if($arr["request"]["define_chooser"])
+		{
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "reservation",
+			));
+		}
 		$t->set_sortable(false);
 		$setcur = array();
 		$totals = 0;
@@ -1400,6 +1407,10 @@ class reservation extends class_base
 				"value" => $o->prop("special_sum"),
 				"size" => 5
 			));
+			if($arr["request"]["define_chooser"])
+			{
+				$d["reservation"] = ($arr["request"]["chooser"] == "room")?$o->prop("resource"):$o->id();
+			}
 			if($c = $o->prop("special_sum"))
 			{
 				$total = $c;
