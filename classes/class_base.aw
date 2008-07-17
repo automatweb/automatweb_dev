@@ -556,15 +556,20 @@ class class_base extends aw_template
 
 		$this->cli = &$cli;
 		// aga mis siis, kui see on sama aken?
+		$cbtrans = get_instance("applications/cb_trans/cb_translate");
+		$trans_default_id = $cbtrans->get_sysdefault();
 		$translate_url = html::href(array(
-			"url" => "javascript:void(0);",
 			"caption" => t("T&otilde;lgi"),
-			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array(
+			"url" => $this->mk_my_orb("change",array(
 				"clid" => $this->clid,
-				"group" => @$args["group"],
+				"group" => "translation_sub",
+				"grpid" => @$args["group"],
+				"id" => $trans_default_id->id(),
+				"area" => "groupedit",
 			),
-			"cb_translate")."\",\"awtrans\",\"width=1200,height=900,resizable=1,scrollbars=1\");",
+			"cb_translate"),
 		));
+		
 
 		$add_txt = "";
 		if (method_exists($this->inst,"callback_get_add_txt"))

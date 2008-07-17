@@ -444,6 +444,7 @@ function lc_init()
 			{
 				require_once($trans_fn);
 			}
+			$GLOBALS["cfg"]["untrans_classes"] = $GLOBALS["cfg"]["classes"];
 			foreach($GLOBALS["cfg"]["classes"] as $clid => $cld)
 			{
 				if (isset($cld["name"]) && ($_tmp = t2("Klassi ".$cld["name"]." ($clid) nimi")) != "")
@@ -456,6 +457,7 @@ function lc_init()
 				}
 			}
 
+			$GLOBALS["cfg"]["untrans_classfolders"] = $GLOBALS["cfg"]["classfolders"];
 			foreach($GLOBALS["cfg"]["classfolders"] as $clid => $cld)
 			{
 				if (($_tmp = t2("Klassi kataloogi ".$cld["name"]." ($clid) nimi")) != "")
