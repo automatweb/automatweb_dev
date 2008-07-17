@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>event_name</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>jrk</name>
             <group>general</group>
             <table>objects</table>
@@ -380,7 +388,7 @@
       </property>
       <property>
             <name>event_time_edit</name>
-            <group>event_times</group>
+            <group>general</group>
             <table>planner</table>
             <type>releditor</type>
             <store>no</store>
@@ -483,6 +491,7 @@
             <syslog_type>ST_CALENDAR_EVENT</syslog_type>
             <relationmgr>yes</relationmgr>
             <maintainer>kristo</maintainer>
+            <no_name>1</no_name>
       </classinfo>
       <groupinfo>
             <projects>
@@ -491,9 +500,6 @@
             <recurrence>
                   <caption>Kordumine</caption>
             </recurrence>
-            <event_times>
-                  <caption>Toimumisajad</caption>
-            </event_times>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

@@ -1,10 +1,13 @@
 <?php
 // calendar_event.aw - Kalendri syndmus
 /*
-@classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo
+@classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo no_name=1
 
 @default group=general
 @default table=planner
+
+@property event_name type=textbox field=name table=objects
+@caption Nimi
 
 @property jrk type=textbox size=4 table=objects
 @caption Jrk
@@ -170,7 +173,7 @@ caption Korraldaja tabel
 property event_time_table type=table no_caption=1 store=no
 caption Toimumisaegade tabel
 
-@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIMES props=start,end,location table_fields=start,end,location group=event_times
+@property event_time_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EVENT_TIMES props=start,end,location table_fields=start,end,location
 @caption Toimumisajad
 
 
@@ -198,7 +201,6 @@ caption Toimumisaegade tabel
 
 @groupinfo projects caption="Projektid"
 @groupinfo recurrence caption=Kordumine
-@groupinfo event_times caption="Toimumisajad"
 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
