@@ -15,7 +15,9 @@ e-mail: central.sales@revalhotels.com
 <!-- END SUB: CONFIRMATION_ONLY -->
 <!-- SUB: OFFER_ONLY -->
 <h3>Pakkumine</h3>
-{VAR:offer_preface}
+{VAR:offer_preface}<br/>
+{VAR:offer_price_comment}<br/>
+kehtib: {VAR:offer_expire_date}
 <!-- END SUB: OFFER_ONLY -->
 
 <table border="1" cellspacing="0" cellpadding="5" width="100%" bgcolor="#efefef" bordercolor="#ffffff" style="border-collapse: collapse">

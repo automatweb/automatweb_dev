@@ -862,7 +862,25 @@
             <type>text</type>
             <store>no</store>
             <field>offer_pdf</field>
-            <caption>Lae PDF		</caption>
+            <caption>Lae PDF</caption>
+      </property>
+      <property>
+            <name>offer_expire_date</name>
+            <table>rfp</table>
+            <group>final_offer</group>
+            <type>date_select</type>
+            <field>offer_expire_date</field>
+            <caption>Pakkumise aegumist&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>offer_price_comment</name>
+            <table>rfp</table>
+            <group>final_offer</group>
+            <type>textarea</type>
+            <cols>70</cols>
+            <rows>20</rows>
+            <field>offer_price_comment</field>
+            <caption>Hinna kommentaar</caption>
       </property>
       <property>
             <name>offer_preface</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.34 2008/07/17 10:57:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.35 2008/07/17 11:23:19 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -369,8 +369,14 @@
 		@default group=final_offer
 	
 			@property offer_pdf type=text store=no
-			@caption Lae PDF		
-			
+			@caption Lae PDF
+
+			@property offer_expire_date type=date_select
+			@caption Pakkumise aegumist&auml;htaeg
+
+			@property offer_price_comment type=textarea cols=70 rows=20
+			@caption Hinna kommentaar
+
 			@property offer_preface type=textarea cols=70 rows=20
 			@caption Pakkumise eess&otilde;na
 			
@@ -1714,6 +1720,8 @@ class rfp extends class_base
 			"additional_resource_information" => $arr["obj_inst"]->prop("additional_resource_information"),
 			"additional_housing_information" => $arr["obj_inst"]->prop("additional_housing_information"),
 			"offer_preface" => $arr["obj_inst"]->prop("offer_preface"),
+			"offer_price_comment" => $arr["obj_inst"]->prop("offer_price_comment"),
+			"offer_expire_date" => date("Y.m.d", $arr["obj_inst"]->prop("offer_expire_date")),
 		));
 		$package_id = $arr["obj_inst"]->prop("data_gen_package");
 		if($this->can("view", $package_id))
@@ -2387,6 +2395,8 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("offer_price_comment", "text"),
+			array("offer_expire_date", "int"),
 			array("offer_preface", "text"),
 			array("additional_information", "text"),
 			array("additional_admin_information", "text"),
