@@ -1,9 +1,9 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.9 2008/06/06 13:47:50 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.10 2008/07/17 13:58:07 tarvo Exp $
 @classinfo  maintainer=kristo
 */
-classload("users_user");
+classload("core/users/users_user");
 class users extends users_user implements request_startup
 {
 	function users()

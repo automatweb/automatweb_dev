@@ -23,8 +23,8 @@ lc_init();
 classload("core/util/timer");
 classload("aw_template");
 classload("defs");
-classload("users");
-classload("languages");
+classload("core/users/users");
+classload("core/languages");
 classload("core/error", "core/obj/object");
 
 // you cannot aw_startup() here, it _will_ break things

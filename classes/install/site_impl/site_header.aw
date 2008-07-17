@@ -18,8 +18,8 @@ classload("defs");
 classload("cache");
 classload("core/util/timer");
 classload("menuedit");
-classload("document");
-classload("file");
+classload("contentmgmt/document");
+classload("contentmgmt/file");
 
 $awt = new aw_timer();
 enter_function("site_header::aw_startup");

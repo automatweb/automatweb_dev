@@ -592,7 +592,7 @@ class core extends acl_base
 			else
 			{
 				$co = get_instance("config");
-				$la = get_instance("languages");
+				$la = get_instance("core/languages");
 				$ld = $la->fetch(aw_global_get("lang_id"));
 				$u = $co->get_simple_config("error_redirect_".$ld["acceptlang"]);
 				if (!$u)
