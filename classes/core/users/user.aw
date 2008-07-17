@@ -214,7 +214,7 @@ class user extends class_base
 			'tpldir' => 'core/users/user',
 			'clid' => CL_USER
 		));
-		$this->users = get_instance("users");
+		$this->users = get_instance("core/users/users");
 	}
 
 	function get_property(&$arr)
