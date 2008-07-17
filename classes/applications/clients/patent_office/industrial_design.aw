@@ -323,7 +323,7 @@ class industrial_design extends intellectual_property
 
 				if (is_uploaded_file($file_data["tmp_name"]))
 				{
-					if ("doc_description" === $var)
+					if ("doc_description_upload" === $var)
 					{
 						$fp = fopen($file_data["tmp_name"], "r");
 						flock($fp, LOCK_SH);
@@ -382,6 +382,87 @@ class industrial_design extends intellectual_property
 				$_SESSION["patent"]["authors"][$key]["country_code"] = $address_inst->get_country_code($address_obj->prop("riik"));
 			}
 		}
+	}
+
+	/**
+		@attrib api=1
+		@param o required type=object
+		@returns
+			PHP DOMDocument instance
+	**/
+	public function get_po_xml(object $o)
+	{
+		$xml = parent::get_po_xml($o);
+		$xpath = new DOMXPath($xml);
+		$root = $xpath->query("//BIRTH")->item(0);
+		$despg = $xpath->query("//DESPG")->item(0);
+		$holgr_following = $xpath->query("//BIRTH/HOLGR[last()]")->item(0);
+		$holgr_following = $xpath->query("following-sibling::REPGR|following-sibling::DESPG", $holgr)->item(0);
+
+		// author(s)
+		$adr_i = get_instance(CL_CRM_ADDRESS);
+		$author_disallow_disclose = (array) $o->meta("author_disallow_disclose");
+
+		foreach($o->connections_from(array("type" => "RELTYPE_AUTHOR")) as $c)
+		{
+			$author = $c->to();
+
+			if ($this->can("view", $author->id()))
+			{
+				$author_el = $xml->createElement("INVENTOR");
+				$name = $xml->createElement("NAME");
+				$addr = $xml->createElement("ADDRESS");
+				$root->insertBefore($author_el, $holgr_following);
+
+				// author name
+				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("firstname"))));
+				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
+
+				// author address
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.aadress"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.linn.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.maakond.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.postiindeks"))));
+
+				if ($this->can("view", $author->prop("address.riik")))
+				{
+					$author_el->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
+				}
+
+				//
+				$author_el->appendChild($name);
+				$author_el->appendChild($addr);
+				$author_el->appendChild(new DOMElement("SECRET", (int) (bool) $author_disallow_disclose[$author->id()]));
+			}
+		}
+
+		//
+		$el = $xml->createElement("TITLE");
+		$el->setAttribute("TEXT", trademark_manager::rere($o->prop("industrial_design_name")));
+		$root->insertBefore($el, $despg);
+
+		//
+		$type = $o->prop("industrial_design_variant") == industrial_design_obj::VARIANT_COMPLEX ? 2 : 1;
+		$el = $xml->createElement("TYPEVAR", $type);
+		$root->insertBefore($el, $despg);
+
+		//
+		$el = $xml->createElement("NBVAR", $o->prop("industrial_design_variant_count"));
+		$root->insertBefore($el, $despg);
+
+		// priority
+		if($o->prop("prio_convention_date") > 1 or $o->prop("prio_convention_nr"))
+		{
+			$el = $xml->createElement("PRIGR");
+			$el->appendChild(new DOMElement("PRICP", $o->prop("prio_convention_country")));
+			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_convention_date"))));
+			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_convention_nr")));
+			$el->appendChild(new DOMElement("PRITYPE", "1"));
+			$root->insertBefore($el, $despg);
+		}
+
+		//
+		return $xml;
 	}
 }
 

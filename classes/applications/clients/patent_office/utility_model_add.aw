@@ -177,10 +177,11 @@ class utility_model_add extends class_base
 		elseif (in_array($item, $_SESSION["patent"]["checked"]))
 		{
 			$url = aw_url_change_var("data_type", $item);
+			$url = aw_url_change_var("new_application" , null , $url);
 		}
 		else
 		{
-			$url = aw_url_change_var()."#";
+			$url = aw_url_change_var("new_application" , null) . "#";
 		}
 
 		++$jrk;

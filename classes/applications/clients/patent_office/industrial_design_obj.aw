@@ -14,10 +14,10 @@ class industrial_design_obj extends _int_object
 	public static function get_applicant_reg_options()
 	{
 		return array(
-			APPLICANT_REG_AUTHOR => t("autor"),
-			APPLICANT_REG_AUTHOR_SUCCESOR => t("autori &otilde;igusj&auml;rglane"),
-			APPLICANT_REG_EMPLOYER => t("t&ouml;&ouml;andja"),
-			APPLICANT_REG_OTHER => t("muu isik vastavalt lepingule")
+			self::APPLICANT_REG_AUTHOR => t("autor"),
+			self::APPLICANT_REG_AUTHOR_SUCCESOR => t("autori &otilde;igusj&auml;rglane"),
+			self::APPLICANT_REG_EMPLOYER => t("t&ouml;&ouml;andja"),
+			self::APPLICANT_REG_OTHER => t("muu isik vastavalt lepingule")
 		);
 	}
 
@@ -47,7 +47,7 @@ class industrial_design_obj extends _int_object
 	{
 		$options = self::get_industrial_design_variant_options();
 
-		if (!isset($options[$value]))
+		if (!empty($value) and !isset($options[$value]))
 		{
 			throw new awex_obj_type("Not a valid option.");
 		}
@@ -59,7 +59,7 @@ class industrial_design_obj extends _int_object
 	{
 		$options = self::get_applicant_reg_options();
 
-		if (!isset($options[$value]))
+		if (!empty($value) and !isset($options[$value]))
 		{
 			throw new awex_obj_type("Not a valid option.");
 		}

@@ -766,6 +766,165 @@ class patent extends intellectual_property
 
 		return $err;
 	}
+
+	/**
+		@attrib api=1
+		@param o required type=object
+		@returns
+			PHP DOMDocument instance
+	**/
+	public function get_po_xml(object $o)
+	{
+		$xml = parent::get_po_xml($o);
+		$xpath = new DOMXPath($xml);
+		$root = $xpath->query("//BIRTH")->item(0);
+		$despg = $xpath->query("//DESPG")->item(0);
+
+		$type = "";
+		// save image to folder
+		if ($this->can("view", $o->prop("reproduction")))
+		{
+			$im = obj($o->prop("reproduction"));
+			$type = strtoupper(substr($im->name(), strrpos($im->name(), ".")));
+
+			$fld = aw_ini_get("site_basedir")."/patent_files/";
+			$fn = $fld .sprintf("%08d", $status->prop("nr")).$type;
+			echo "saving file $fn <br>";
+			$image_inst = get_instance(CL_FILE);
+			$imd = $image_inst->get_file_by_id($im->id(), true);
+			$f = fopen($fn ,"w");
+			fwrite($f, $imd["content"]);
+			fclose($f);
+		}//t6stsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult s6nalist osa n2ha
+
+		$img = $xml->createElement("IMAGE");
+		$img->setAttribute("NAME", sprintf("%08d", $status->prop("nr")));
+		$img->setAttribute("TEXT", trademark_manager::rere($o->prop("word_mark")));
+		$img->setAttribute("COLOUR", ($o->prop("colors") != "" ? "Y" : "N"));
+		$img->setAttribute("TYPE", trademark_manager::rere($type));
+		$root->insertBefore($img, $despg);
+
+		$el = $xml->createElement("MARTRGR");
+		$el->appendChild(new DOMElement("MARTREN", trademark_manager::rere($o->prop("element_translation"))));
+		$root->insertBefore($el, $despg);
+
+		$typm = $o->prop("trademark_type");
+		$el = $xml->createElement("TYPMARI", ($typm["1"] == "1" ? "G" : "").($typm["0"] === "0" ? "C" : ""));
+		$root->insertBefore($el, $despg);
+
+		//
+		$el = $xml->createElement("MARDESGR");
+		$el2 = $xml->createElement("MARDESEN");
+		if ($o->prop("trademark_character"))
+		{
+			$cdata = $xml->createCDATASection(trademark_manager::rere($o->prop("element_translation")));
+			$el2->appendChild($cdata);
+		}
+		$el->appendChild($el2);
+		$root->insertBefore($el, $despg);
+
+		//
+		$el = $xml->createElement("DISCLAIMGR");
+		$el2 = $xml->createElement("DISCLAIMEREN");
+		if ($o->prop("undefended_parts"))
+		{
+			$cdata = $xml->createCDATASection($o->prop("undefended_parts"));
+			$el2->appendChild($cdata);
+		}
+		$el->appendChild($el2);
+		$root->insertBefore($el, $despg);
+
+		//
+		if ($o->prop("colors") != "")
+		{
+			$el = $xml->createElement("MARCOLI");
+			$root->insertBefore($el, $despg);
+		}
+
+		//
+		if ($o->prop("type") == 3)
+		{
+			$el = $xml->createElement("THRDMAR");
+			$root->insertBefore($el, $despg);
+		}
+
+		//
+		$el = $xml->createElement("COLCLAGR");
+		$el2 = $xml->createElement("COLCLAEN");
+		if ($o->prop("colors"))
+		{
+			$cdata = $xml->createCDATASection($o->prop("colors"));
+			$el2->appendChild($cdata);
+		}
+		$el->appendChild($el2);
+		$root->insertBefore($el, $despg);
+
+		// products
+		$el = $xml->createElement("BASICGS");
+		$el->setAttribute("NICEVER", "9");
+
+		foreach(safe_array($o->meta("products")) as $k => $v)
+		{
+			$el2 = $xml->createElement("GSGR");
+			$el2->setAttribute("NICCLAI", trademark_manager::rere($k));
+			$el3 = $xml->createElement("GSTERMEN");
+			$cdata = $xml->createCDATASection(strtolower(str_replace("\r" , "", str_replace("\n",", ",$v))));
+			$el3->appendChild($cdata);
+			$el2->appendChild($el3);
+			$el->appendChild($el2);
+		}
+
+		$root->insertBefore($el, $despg);
+
+		//
+		$el = $xml->createElement("BASGR");
+		$el2 = $xml->createElement("BASAPPGR");
+		$el->appendChild($el2);
+		$el2->appendChild(new DOMElement("BASAPPD", date("Ymd", $status->prop("modified"))));
+		$el2->appendChild(new DOMElement("BASAPPN", sprintf("%08d", $status->prop("nr"))));
+		$root->insertBefore($el, $despg);
+
+		// priority
+		$pri_co = $pri_date = $pri_name = "";
+		if($o->prop("convention_date") > 1)
+		{
+			$pri_date = date("Ymd",$o->prop("convention_date"));
+		}
+
+		if($o->prop("exhibition_date") > 1)
+		{
+			$pri_date = date("Ymd",$o->prop("exhibition_date"));
+		}
+
+		if($o->prop("convention_nr"))
+		{
+			$pri_name = $o->prop("convention_nr");
+		}
+
+		if($o->prop("exhibition_name"))
+		{
+			$pri_name = $o->prop("exhibition_name");
+		}
+
+		if($o->prop("convention_nr") || $o->prop("exhibition_name"))
+		{
+			$pri_co = ($o->prop("convention_country")) ? $o->prop("convention_country") : $o->prop("exhibition_country");
+		}
+
+		$el = $xml->createElement("PRIGR");
+		$el->appendChild(new DOMElement("PRICP", $pri_co));
+
+		if ($o->prop("convention_date") > 1|| $o->prop("exhibition_date") > 1)
+		{
+			$el->appendChild(new DOMElement("PRIAPPD", $pri_date));
+		}
+
+		$el->appendChild(new DOMElement("PRIAPPN", trademark_manager::rere($pri_name)));
+		$root->insertBefore($el, $despg);
+
+		//
+		return $xml;
+	}
 }
 
 ?>

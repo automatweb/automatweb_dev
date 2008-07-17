@@ -144,6 +144,34 @@ class euro_patent_et_desc extends intellectual_property
 	function check_fields()
 	{
 		$err = parent::check_fields();
+
+		if(((int) $_POST["data_type"]) === 12)
+		{
+			foreach ($_FILES as $var => $file_data)
+			{
+				if (is_uploaded_file($file_data["tmp_name"]))
+				{
+					if ("epat_desc_trans_upload" === $var)
+					{
+						$fp = fopen($file_data["tmp_name"], "r");
+						flock($fp, LOCK_SH);
+						$sig = fread($fp, 4);
+						fclose($fp);
+						if("%PDF" !== $sig)
+						{
+							unset($_FILES[$var]["tmp_name"]);
+							$err.= t("Ainult pdf formaadis fail lubatud")."\n<br>";
+						}
+					}
+				}
+			}
+
+			if(empty($err))
+			{
+				$_SESSION["patent"]["checked"][] = 18;
+			}
+		}
+
 		return $err;
 	}
 

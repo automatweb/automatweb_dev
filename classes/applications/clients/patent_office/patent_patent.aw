@@ -455,6 +455,137 @@ class patent_patent extends intellectual_property
 			}
 		}
 	}
+
+	/**
+		@attrib api=1
+		@param o required type=object
+		@returns
+			PHP DOMDocument instance
+	**/
+	public function get_po_xml(object $o)
+	{
+		$xml = parent::get_po_xml($o);
+		$xpath = new DOMXPath($xml);
+		$root = $xpath->query("//BIRTH")->item(0);
+		$despg = $xpath->query("//DESPG")->item(0);
+		$holgr_following = $xpath->query("//BIRTH/HOLGR[last()]")->item(0);
+		$holgr_following = $xpath->query("following-sibling::REPGR|following-sibling::DESPG", $holgr_following)->item(0);
+
+		// author(s)
+		$adr_i = get_instance(CL_CRM_ADDRESS);
+		$author_disallow_disclose = (array) $o->meta("author_disallow_disclose");
+
+		foreach($o->connections_from(array("type" => "RELTYPE_AUTHOR")) as $c)
+		{
+			$author = $c->to();
+
+			if ($this->can("view", $author->id()))
+			{
+				$author_el = $xml->createElement("INVENTOR");
+				$name = $xml->createElement("NAME");
+				$addr = $xml->createElement("ADDRESS");
+				$root->insertBefore($author_el, $holgr_following);
+
+				// author name
+				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("firstname"))));
+				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
+
+				// author address
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.aadress"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.linn.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.maakond.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.postiindeks"))));
+
+				if ($this->can("view", $author->prop("address.riik")))
+				{
+					$author_el->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
+				}
+
+				//
+				$author_el->appendChild($name);
+				$author_el->appendChild($addr);
+				$author_el->appendChild(new DOMElement("SECRET", (int) (bool) $author_disallow_disclose[$author->id()]));
+			}
+		}
+
+		//
+		$el = $xml->createElement("TITLE");
+		$el->setAttribute("TEXT", trademark_manager::rere($o->prop("invention_name_et")));
+		$el->setAttribute("TEXTI", trademark_manager::rere($o->prop("invention_name_en")));
+		$root->insertBefore($el, $despg);
+
+		//
+		$types = array(
+			patent_patent_obj::APPLICANT_REG_AUTHOR_SUCCESOR => 2,
+			patent_patent_obj::APPLICANT_REG_EMPLOYEE => 3,
+			patent_patent_obj::APPLICANT_REG_OTHER_CONTRACT => 4
+		);
+		$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
+		$applicant_reg = (array) $o->meta("applicant_reg");
+		$applicant_reg = in_array($applicant_reg[$applicant->id()], $types) ? $types[$applicant_reg[$applicant->id()]] : 1;
+		$el = $xml->createElement("TYPMARI", $applicant_reg);
+		$root->insertBefore($el, $despg);
+
+		// priority
+		if($o->prop("prio_convention_date") > 1 or $o->prop("prio_convention_nr"))
+		{ // Pariisi konventsiooni vm. kokkuleppe taotluse alusel
+			$el = $xml->createElement("PRIGR");
+			$el->appendChild(new DOMElement("PRICP", $o->prop("prio_convention_country")));
+			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_convention_date"))));
+			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_convention_nr")));
+			$el->appendChild(new DOMElement("PRITYPE", "1"));
+			$root->insertBefore($el, $despg);
+		}
+
+		if($o->prop("prio_prevapplicationsep_date") > 1 or $o->prop("prio_prevapplicationsep_nr"))
+		{ // Varasema patenditaotluse alusel sellest eraldatud patenditaotluse puhul
+			$el = $xml->createElement("PRIGR");
+			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplicationsep_date"))));
+			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_prevapplicationsep_nr")));
+			$el->appendChild(new DOMElement("PRITYPE", "2"));
+			$root->insertBefore($el, $despg);
+		}
+
+		if($o->prop("prio_prevapplicationadd_date") > 1 or $o->prop("prio_prevapplicationadd_nr"))
+		{ // Varasema patenditaotluse paranduste ja t&auml;ienduste alusel
+			$el = $xml->createElement("PRIGR");
+			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplicationadd_date"))));
+			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_prevapplicationadd_nr")));
+			$el->appendChild(new DOMElement("PRITYPE", "4"));
+			$root->insertBefore($el, $despg);
+		}
+
+		if($o->prop("prio_prevapplication_date") > 1 or $o->prop("prio_prevapplication_nr"))
+		{ // Varasema taotluse alusel
+			$el = $xml->createElement("PRIGR");
+			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplication_date"))));
+			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_prevapplication_nr")));
+			$el->appendChild(new DOMElement("PRITYPE", "3"));
+			$root->insertBefore($el, $despg);
+		}
+
+		//
+		$el = $xml->createElement("BASED");
+		$el->appendChild(new DOMElement("BASCP", $o->prop("other_first_application_data_country")));
+		$el->appendChild(new DOMElement("BASAPPD", date("Ymd",$o->prop("other_first_application_data_date"))));
+		$el->appendChild(new DOMElement("BASAPPN", $o->prop("other_first_application_data_nr")));
+		$root->insertBefore($el, $despg);
+
+		//
+		$el = $xml->createElement("MICRO");
+		$el->appendChild(new DOMElement("MICCN", $o->prop("other_bio_nr")));
+		$el->appendChild(new DOMElement("MICAPPD", date("Ymd",$o->prop("other_bio_date"))));
+		$el->appendChild(new DOMElement("MICAPPN", $o->prop("other_bio_inst")));
+		$root->insertBefore($el, $despg);
+
+		//
+		$el = $xml->createElement("ADVERT");
+		$el->appendChild(new DOMElement("ADVCP", date("Ymd",$o->prop("other_datapub_date"))));
+		$root->insertBefore($el, $despg);
+
+		//
+		return $xml;
+	}
 }
 
 ?>
