@@ -72,7 +72,7 @@ $bmb->begin_menu("settings_pop");
 $bml = get_instance("vcl/popup_menu");
 $bml->begin_menu("lang_pop");
 
-$l = get_instance("languages");
+$l = get_instance("core/languages");
 if (aw_ini_get("user_interface.full_content_trans"))
 {
 	$ld = $l->fetch(aw_global_get("ct_lang_id"));
