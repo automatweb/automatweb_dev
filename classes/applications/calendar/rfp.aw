@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.33 2008/07/17 10:30:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.34 2008/07/17 10:57:30 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1666,8 +1666,12 @@ class rfp extends class_base
 	**/
 	function get_pdf_file($arr)
 	{
-
 		$arr["obj_inst"] = obj($arr["id"]);
+		$client_name = strtr($arr["obj_inst"]->prop("data_subm_name"), " ", "_");
+		$arrival = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
+		$dep = $arr["obj_inst"]->prop("data_gen_departure_date_admin");
+		$date = (date("Ymd", $arrival) == date("Ydm", $dep))?date("dmY",$arrival):date("dmY", $arrival)."-".date("dmY", $dep);
+		$fname = sprintf("%s-%s-%s", ($arr["pdf"] == "offer_pdf")?t("Pakkumine"):t("Kinnitus"), $client_name, $date);
 		$html = $this->_get_submission_data($arr);
 		classload("core/converters/html2pdf");
 		$i = new html2pdf;
@@ -1675,7 +1679,7 @@ class rfp extends class_base
 		{
 			$i->gen_pdf(array(
 				"source" => $html,
-				"filename" => "kinnitus",
+				"filename" => $fname,
 			));
 		}
 		else
