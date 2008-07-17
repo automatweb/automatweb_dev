@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.119 2008/07/01 15:23:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.120 2008/07/17 09:49:35 robert Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -1102,7 +1102,7 @@ class aw_table extends aw_template
 							$tbl .= "<td align='center'>&nbsp;</td>";
 						}
 					};
-
+				$cols = 0;
 				// ts&uuml;kkel &uuml;le rowdefsi, et andmed oleksid oiges j&auml;rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
@@ -1200,12 +1200,18 @@ class aw_table extends aw_template
 						$rowspan = $v[$v1["rowspan"]];
 						$this->rowspans[$v1["name"]] = $v[$v1["rowspan"]];
 					}
+					$colspan = isset($v1["colspan"]) && $v[$v1["colspan"]] ? $v[$v1["colspan"]] : 1;
+					$cols += $colspan;
+					if($cols > count($this->rowdefs))
+					{
+						break;
+					}
 					$tbl .= $this->opentag(array(
 						"name"    => "td",
 						"classid" => $style,
 						"width" => isset($v1["width"]) ? $v1["width"] : "",
 						"rowspan" => ($rowspan > 1) ? $rowspan : 0,
-						"colspan" => isset($v1["colspan"]) && $v[$v1["colspan"]] ? $v[$v1["colspan"]] : 1,
+						"colspan" => $colspan,
 						"style" => ((!empty($v1["chgbgcolor"]) && !empty($v[$v1["chgbgcolor"]])) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
 						"align" => isset($v1["align"]) ? $v1["align"] : "",
 						"valign" => isset($v1["valign"]) ? $v1["valign"] : "",
