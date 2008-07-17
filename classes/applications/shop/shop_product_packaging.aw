@@ -1,15 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.36 2008/06/18 07:49:58 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.37 2008/07/17 10:38:36 robert Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
 @classinfo syslog_type=ST_SHOP_PRODUCT_PACKAGING relationmgr=yes maintainer=kristo
 
 @default table=objects
-@default group=general
+@default group=general_general
 
 @tableinfo aw_shop_packaging index=id master_table=objects master_index=brother_of
 @default table=aw_shop_packaging
+
+@groupinfo general_general parent=general caption=&Uuml;ldine
+
+@property name type=textbox table=objects
+@caption Nimi
+
+@property comment type=textbox table=objects
+@caption Kommentaar
 
 @property jrk type=textbox size=5 table=objects field=jrk
 @caption J&auml;rjekord
@@ -20,24 +28,55 @@
 @property price_cur type=table store=no
 @caption Hinnad valuutades
 
-@layout reservation type=hbox width=20%:80%
+@groupinfo general_time_settings caption="Ajaseaded" parent=general
+@default group=general_time_settings
+@layout gentms_main type=hbox 
 
-	@property reservation_time type=textbox size=5 table=objects field=meta method=serialize parent=reservation
-	@caption Broneeritav aeg
-	@property reservation_time_unit type=select table=objects field=meta method=serialize parent=reservation no_caption=1
+		@layout reservation type=hbox area_caption=Broneeritav&nbsp;aeg closeable=1 parent=gentms_main
 	
-@layout buffer type=hbox width=20%:80%
+			@property reservation_time type=textbox size=5 table=objects field=meta method=serialize parent=reservation
+			@caption Broneeritav aeg
 
-	@property buffer_time_before type=textbox size=5 table=objects field=meta method=serialize parent=buffer
-	@caption Puhveraeg enne
-	@property buffer_time_after type=textbox size=5 table=objects field=meta method=serialize parent=buffer
-	@caption Puhveraeg p&auml;rast
-	@property buffer_time_unit type=select  table=objects field=meta method=serialize parent=buffer no_caption=1
+			@property reservation_time_unit type=select table=objects field=meta method=serialize parent=reservation no_caption=1
+	
+		@layout buffer type=hbox area_caption=Puhveraeg closeable=1 parent=gentms_main
 
+			@property buffer_time_before type=textbox size=5 table=objects field=meta method=serialize parent=buffer
+			@caption Puhveraeg enne
 
+			@property buffer_time_after type=textbox size=5 table=objects field=meta method=serialize parent=buffer
+			@caption Puhveraeg p&auml;rast
+	
+			@property buffer_time_unit type=select  table=objects field=meta method=serialize parent=buffer no_caption=1
 
-@groupinfo data caption="Andmed"
-@groupinfo file caption="Failid"
+@groupinfo amount_limits caption="Kogusepiirangud" parent=general
+@default group=amount_limits
+
+	@property amount_limits type=hidden store=no
+
+	@property amount_limits_tb type=toolbar no_caption=1
+
+	@property aml_inheritable type=checkbox ch_value=1 field=aml_inheritable table=aw_shop_packaging
+	@caption P&auml;ritav
+
+	@property inherit_aml_from type=relpicker reltype=RELTYPE_INHERIT_AML_FROM store=connect
+	@caption P&auml;ri kogusepiirangud
+
+	@property amount_limits_tbl type=table no_caption=1 store=no
+
+@groupinfo info caption="Lisainfo"
+
+@groupinfo file caption="Failid" parent=info
+
+@property files type=releditor reltype=RELTYPE_FILE table=objects field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow group=file table_fields=name
+@caption Failid
+
+@groupinfo img caption=Pildid parent=info
+
+@property images type=releditor reltype=RELTYPE_IMAGE table=objects field=meta method=serialize mode=manager props=name,ord,status,file group=img
+@caption Pildid
+
+@groupinfo data caption="Andmed" parent=info
 @default group=data
 
 @property user1 type=textbox field=user1 group=data
@@ -119,12 +158,6 @@
 @property uservar5 type=classificator field=uservar5 group=data store=connect reltype=RELTYPE_USERVAR5
 @caption User-defined var 5
 
-@property images type=releditor reltype=RELTYPE_IMAGE table=objects field=meta method=serialize mode=manager props=name,ord,status,file group=img
-@caption Pildid
-
-@property files type=releditor reltype=RELTYPE_FILE table=objects field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow group=file table_fields=name
-@caption Failid
-
 @property userch1 type=checkbox ch_value=1  field=userch1 group=data datatype=int
 @caption User-defined checkbox 1
 
@@ -145,21 +178,6 @@
 	
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
-
-@groupinfo amount_limits caption="Kogusepiirangud"
-@default group=amount_limits
-
-	@property amount_limits type=hidden store=no
-
-	@property amount_limits_tb type=toolbar no_caption=1
-
-	@property aml_inheritable type=checkbox ch_value=1 field=aml_inheritable table=aw_shop_packaging
-	@caption P&auml;ritav
-
-	@property inherit_aml_from type=relpicker reltype=RELTYPE_INHERIT_AML_FROM store=connect
-	@caption P&auml;ri kogusepiirangud
-
-	@property amount_limits_tbl type=table no_caption=1 store=no
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl

@@ -1,9 +1,25 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
             <name>jrk</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_general</group>
             <type>textbox</type>
             <size>5</size>
             <field>jrk</field>
@@ -12,7 +28,7 @@
       <property>
             <name>price</name>
             <table>aw_shop_packaging</table>
-            <group>general</group>
+            <group>general_general</group>
             <type>textbox</type>
             <size>5</size>
             <field>aw_price</field>
@@ -21,7 +37,7 @@
       <property>
             <name>price_cur</name>
             <table>aw_shop_packaging</table>
-            <group>general</group>
+            <group>general_general</group>
             <type>table</type>
             <store>no</store>
             <field>price_cur</field>
@@ -30,7 +46,7 @@
       <property>
             <name>reservation_time</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_time_settings</group>
             <type>textbox</type>
             <size>5</size>
             <field>meta</field>
@@ -41,7 +57,7 @@
       <property>
             <name>reservation_time_unit</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_time_settings</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
@@ -51,7 +67,7 @@
       <property>
             <name>buffer_time_before</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_time_settings</group>
             <type>textbox</type>
             <size>5</size>
             <field>meta</field>
@@ -62,7 +78,7 @@
       <property>
             <name>buffer_time_after</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_time_settings</group>
             <type>textbox</type>
             <size>5</size>
             <field>meta</field>
@@ -73,12 +89,94 @@
       <property>
             <name>buffer_time_unit</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_time_settings</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
             <parent>buffer</parent>
             <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>amount_limits</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>amount_limits</field>
+      </property>
+      <property>
+            <name>amount_limits_tb</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>amount_limits_tb</field>
+      </property>
+      <property>
+            <name>aml_inheritable</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aml_inheritable</field>
+            <caption>P&amp;amp;auml;ritav</caption>
+      </property>
+      <property>
+            <name>inherit_aml_from</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_INHERIT_AML_FROM</reltype>
+            <store>connect</store>
+            <field>inherit_aml_from</field>
+            <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
+      </property>
+      <property>
+            <name>amount_limits_tbl</name>
+            <table>aw_shop_packaging</table>
+            <group>amount_limits</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>amount_limits_tbl</field>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>file</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>file</num_1>
+                  <num_2>type</num_2>
+                  <num_3>comment</num_3>
+                  <num_4>file_url</num_4>
+                  <num_5>newwindow</num_5>
+            </props>
+            <table_fields>name</table_fields>
+            <caption>Failid</caption>
+      </property>
+      <property>
+            <name>images</name>
+            <table>objects</table>
+            <group>img</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+                  <num_2>status</num_2>
+                  <num_3>file</num_3>
+            </props>
+            <caption>Pildid</caption>
       </property>
       <property>
             <name>user1</name>
@@ -291,43 +389,6 @@
             <caption>User-defined var 5</caption>
       </property>
       <property>
-            <name>images</name>
-            <table>objects</table>
-            <group>img</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_IMAGE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>ord</num_1>
-                  <num_2>status</num_2>
-                  <num_3>file</num_3>
-            </props>
-            <caption>Pildid</caption>
-      </property>
-      <property>
-            <name>files</name>
-            <table>objects</table>
-            <group>file</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>file</num_1>
-                  <num_2>type</num_2>
-                  <num_3>comment</num_3>
-                  <num_4>file_url</num_4>
-                  <num_5>newwindow</num_5>
-            </props>
-            <table_fields>name</table_fields>
-            <caption>Failid</caption>
-      </property>
-      <property>
             <name>userch1</name>
             <table>aw_shop_packaging</table>
             <group>data</group>
@@ -387,51 +448,6 @@
             <caption>&amp;amp;Otilde;igused</caption>
       </property>
       <property>
-            <name>amount_limits</name>
-            <table>aw_shop_packaging</table>
-            <group>amount_limits</group>
-            <type>hidden</type>
-            <store>no</store>
-            <field>amount_limits</field>
-      </property>
-      <property>
-            <name>amount_limits_tb</name>
-            <table>aw_shop_packaging</table>
-            <group>amount_limits</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>amount_limits_tb</field>
-      </property>
-      <property>
-            <name>aml_inheritable</name>
-            <table>aw_shop_packaging</table>
-            <group>amount_limits</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aml_inheritable</field>
-            <caption>P&amp;amp;auml;ritav</caption>
-      </property>
-      <property>
-            <name>inherit_aml_from</name>
-            <table>aw_shop_packaging</table>
-            <group>amount_limits</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_INHERIT_AML_FROM</reltype>
-            <store>connect</store>
-            <field>inherit_aml_from</field>
-            <caption>P&amp;amp;auml;ri kogusepiirangud</caption>
-      </property>
-      <property>
-            <name>amount_limits_tbl</name>
-            <table>aw_shop_packaging</table>
-            <group>amount_limits</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>amount_limits_tbl</field>
-      </property>
-      <property>
             <name>transl</name>
             <table>aw_shop_packaging</table>
             <group>transl</group>
@@ -447,18 +463,36 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <groupinfo>
-            <data>
-                  <caption>Andmed</caption>
-            </data>
+            <general_general>
+                  <parent>general</parent>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+            </general_general>
+            <general_time_settings>
+                  <caption>Ajaseaded</caption>
+                  <parent>general</parent>
+            </general_time_settings>
+            <amount_limits>
+                  <caption>Kogusepiirangud</caption>
+                  <parent>general</parent>
+            </amount_limits>
+            <info>
+                  <caption>Lisainfo</caption>
+            </info>
             <file>
                   <caption>Failid</caption>
+                  <parent>info</parent>
             </file>
+            <img>
+                  <caption>Pildid</caption>
+                  <parent>info</parent>
+            </img>
+            <data>
+                  <caption>Andmed</caption>
+                  <parent>info</parent>
+            </data>
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
-            <amount_limits>
-                  <caption>Kogusepiirangud</caption>
-            </amount_limits>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -516,17 +550,24 @@
             </INHERIT_AML_FROM>
       </reltypes>
       <layout>
+            <gentms_main>
+                  <type>hbox</type>
+                  <group>general_time_settings</group>
+                  <area_caption></area_caption>
+            </gentms_main>
             <reservation>
                   <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>general</group>
-                  <area_caption></area_caption>
+                  <area_caption>Broneeritav&amp;amp;nbsp;aeg</area_caption>
+                  <closeable>1</closeable>
+                  <parent>gentms_main</parent>
+                  <group>general_time_settings</group>
             </reservation>
             <buffer>
                   <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>general</group>
-                  <area_caption></area_caption>
+                  <area_caption>Puhveraeg</area_caption>
+                  <closeable>1</closeable>
+                  <parent>gentms_main</parent>
+                  <group>general_time_settings</group>
             </buffer>
       </layout>
 </properties>
