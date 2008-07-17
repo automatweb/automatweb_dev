@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.24 2008/07/17 14:51:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.25 2008/07/17 17:30:55 markop Exp $
 // ows_reservation.aw - OWS Broneering 
 /*
 
@@ -371,17 +371,26 @@ fwrite($f, "return is conf\n");
       	"roomSmokingPreferenceId" => (int)$o->prop("smoking") ? 3 : 2,
       	"floorPreferenceId" => ((int)$o->prop("high_floor")) ? 2 : (((int)$o->prop("low_floor")) ? 3 : 1),
       	"isAllergic" => (bool)$o->prop("is_allergic"),
-      	"isHandicapped" => (bool)$o->prop("is_handicapped"),
-				"guaranteeType" => "Deposit",
-      			"partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
-      			"partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
+        "isHandicapped" => (bool)$o->prop("is_handicapped"),
+                                "guaranteeType" => "Deposit",
+                //      "partnerWebsiteGuid" => $o->meta("partnerWebsiteGuid") ? $o->meta("partnerWebsiteGuid") : 0,
+                //      "partnerWebsiteDomain" => $o->meta("partnerWebsiteDomain") ? $o->meta("partnerWebsiteDomain") : 0,
 
-      	"paymentType" => "NoPayment",
-				"guestBirthday" => $bd,
-				"guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
-				"customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
-				"bookingID" => $o->meta("booking_id"),
-			);
+        "paymentType" => "NoPayment",
+                                "guestBirthday" => $bd,
+                                "guaranteeReferenceInfo" => iconv(aw_global_get("charset"), "utf-8", $o->prop("guest_comments")),
+                                "customerId" => $o->meta("customer_id") ? $o->meta("customer_id") : reval_customer::get_cust_id(),
+                                "bookingID" => $o->meta("booking_id"),
+                        );
+if($o->meta("partnerWebsiteGuid"))
+{
+        $params["partnerWebsiteGuid"] = $o->meta("partnerWebsiteGuid");
+}
+
+if($o->meta("partnerWebsiteDomain"))
+{
+ $params["partnerWebsiteDomain"] = $o->meta("partnerWebsiteDomain");
+}
 
 			if ($data["bank_id"] == "credit_card")
 			{
