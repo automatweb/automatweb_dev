@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.65 2008/07/17 12:18:34 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.66 2008/07/17 12:21:33 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -639,7 +639,7 @@ class personnel_management extends class_base
 			case "os_city":
 			case "os_dl_from":
 			case "os_dl_to":
-			case "endless":
+			case "os_endless":
 				$s = $arr['request'][$prop["name"]];
 				$this->dequote(&$s);
 				$prop['value'] = $s;
@@ -2462,7 +2462,7 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["os_dl_from_time"]),
-					"endless" => $r["endless"],
+					"endless" => $r["os_endless"],
 				),
 			));
 		}
@@ -2472,7 +2472,7 @@ class personnel_management extends class_base
 				"logic" => "OR",
 				"conditions" => array(
 					"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["os_dl_to_time"] + (24 * 3600 - 1)),
-					"endless" => $r["endless"],
+					"endless" => $r["os_endless"],
 				),
 			));
 		}
@@ -2532,6 +2532,10 @@ class personnel_management extends class_base
 				{
 					continue;
 				}
+			}
+			if($obj->endless && !$r["os_endless"])
+			{
+				continue;
 			}
 			if($this->can("view", $obj->prop("profession")))
 			{
