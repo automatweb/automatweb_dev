@@ -5658,6 +5658,18 @@ class crm_person extends class_base
 		{
 			return false;
 		}
+		
+		$charset = aw_global_get("charset");
+		if($o->meta("insertion_lang"))
+		{
+			$llist = aw_ini_get("languages.list");
+			$charset = $llist[$o->meta("insertion_lang")]["charset"];
+			aw_global_set("charset", $charset);
+		}
+		$this->vars(array(
+			"charset" => $charset,
+		));
+
 		if($this->can("view", $arr["cfgform"]))
 		{
 			$proplist = $cff_inst->get_cfg_proplist($arr["cfgform"]);
@@ -5703,7 +5715,7 @@ class crm_person extends class_base
 			foreach($tmpo->get_property_list() as $prop_id => $prop_data)
 			{
 				$this->vars(array(
-					$prefix.$prop_id.".caption" => $prop_data["caption"],
+					$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"]),
 				));
 			}
 
@@ -5716,7 +5728,7 @@ class crm_person extends class_base
 				foreach($cpl as $prop_id => $prop_data)
 				{
 					$this->vars(array(
-						$prefix.$prop_id.".caption" => $prop_data["caption"],
+						$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"]),
 					));
 				}
 			}
@@ -5732,7 +5744,7 @@ class crm_person extends class_base
 				foreach($cpl as $prop_id => $prop_data)
 				{
 					$this->vars(array(
-						$prefix.$prop_id.".caption" => $prop_data["caption"],
+						$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"]),
 					));
 				}
 			}
@@ -7819,17 +7831,6 @@ class crm_person extends class_base
 			));
 		}
 		// END SUB: CRM_PERSON.NOTES
-
-		$charset = aw_global_get("charset");
-		if($ob->meta("insertion_lang"))
-		{
-			$llist = aw_ini_get("languages.list");
-			$charset = $llist[$ob->meta("insertion_lang")]["charset"];
-			aw_global_set("charset", $charset);
-		}
-		$this->vars(array(
-			"charset" => $charset,
-		));
 
 		return $arr["die"]?die($this->parse()):$this->parse();
 	}
