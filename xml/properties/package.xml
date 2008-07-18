@@ -182,7 +182,7 @@
             <contents_tbl_top>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Klassid</area_caption>
+                  <area_caption>Failid</area_caption>
                   <parent>contents_tbl_lay</parent>
                   <group>package_contents</group>
             </contents_tbl_top>

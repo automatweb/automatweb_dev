@@ -10,6 +10,13 @@
 			</function>
 		</action>
 
+		<action name="create_content_zip">
+			<function name="create_content_zip">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="remove_content_class">
 			<function name="remove_content_class">
 				<arguments>

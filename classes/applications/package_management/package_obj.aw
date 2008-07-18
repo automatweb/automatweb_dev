@@ -142,5 +142,150 @@ class package_obj extends _int_object
 		$this->set_prop("file_names" , $filenamestring);
 		$this->save();
 	}
+
+	function get_class_folders($dir)
+	{
+		$dp = opendir($dir);
+		$bd = aw_ini_get("basedir");
+		$folders = array();
+		while (false !== ($filename = readdir($dp)))
+		{
+			if($filename != '.' && $filename != '..' && $filename != "CVS")
+			{
+				$this->fid++;
+				if(is_dir($dir.'/'.$filename))
+				{
+					$folder = array();
+					$newdir = $dir.'/'.$filename;
+					$folder["id"] = $this->fid;
+					$folder["name"] = $filename;
+					$folder["folder"] = $newdir;
+					$folder["level"] = $this->get_class_folders($newdir);
+					$folders[] = $folder;
+				}
+			}
+		}
+		usort($folders, array(self, "__file_arr_sort"));
+		return $folders;
+	}
+
+	function get_contents_class_files($dir)
+	{
+		$dp = opendir($dir);
+		$files = array();
+		while (false !== ($filename = readdir($dp)))
+		{
+			if($filename != '.' && $filename != '..' && substr($filename, 0, 2) != ".#")
+			{
+				$this->fid++;
+				if(!is_dir($dir.'/'.$filename))
+				{
+					$file = array();
+					$file["id"] = $this->fid;
+					$file["name"] = $filename;
+					$files[] = $file;
+				}
+			}
+		}
+		usort($files, array(self, "__file_arr_sort"));
+		return $files;
+	}
+
+	function __file_arr_sort($a, $b)
+	{
+		return strcasecmp($a["name"], $b["name"]);
+	}
+
+
+	//this should maybe look for some more files, not just xml props and orbs
+	function get_other_files($file)
+	{
+		$fname = aw_ini_get("basedir").$file;
+		$data = @file_get_contents($fname);
+		$others = array();
+		if($data)
+		{
+			if(strpos($data, "extends class_base"))
+			{
+				$name = str_replace(".aw", "", basename($file));
+				$xml = array("properties", "orb");
+				foreach($xml as $x)
+				{
+					$check = "/xml/".$x."/".$name.".xml";
+					if(file_exists(aw_ini_get("basedir").$check))
+					{
+						$others[] = $check;
+					}
+				}
+				$dir = "/templates".str_replace("classes/", "", str_replace(".aw", "", $file));
+				$tpldir = aw_ini_get("basedir").$dir;
+				if(is_dir($tpldir))
+				{
+					$files = $this->get_contents_class_files($tpldir);
+					foreach($files as $file)
+					{
+						$others[] = $dir."/".$file["name"];
+					}
+				}
+			}
+		}
+		return $others;
+	}
+
+	function create_package_zip($o)
+	{
+		$files = $o->meta("package_contents");
+		if(!is_array($files) || !count($files))
+		{
+			return;
+		}
+		$i = new file_archive;
+		$fi = get_instance(CL_FILE);
+		$zipname = $o->name().(($v = $o->prop("version"))?"-".$v:"").".zip";
+		$ftype = "application/zip";
+		$fpath = $fi->generate_file_path(array("file_name" => $zipname, "type" => $ftype));
+		$folders = array();
+		foreach($files as $filepath)
+		{
+			$pieces = explode("/", $filepath);
+			$path = "";
+			foreach($pieces as $piece)
+			{
+				if(empty($piece))
+				{
+					continue;
+				}
+				$add = "/".$piece;
+				$file = aw_ini_get("basedir").$path.$add;
+				if(is_dir($file) && array_search($path.$add, $folders) === false)
+				{
+					$to = substr($path, 1);
+					$i->add_folder($piece, $to);
+					$path .= $add;
+					$folders[] = $path;
+				}
+				elseif(is_dir($file))
+				{
+					$path .= $add;
+				}
+				elseif(is_file($file))
+				{
+					$i->add_file_fs($file, "", $path);
+				}
+			}
+		}
+		$i->save_as_file($fpath);
+		$fo = obj();
+		$fo->set_class_id(CL_FILE);
+		$fo->set_name($zipname);
+		$fo->set_prop("type", $ftype);
+		$fo->set_prop("file", $fpath);
+		$fo->set_parent($o->id());
+		$fo->save();
+		$o->connect(array(
+			"to" => $fo->id(),
+			"type" => "RELTYPE_FILE",
+		));
+	}
 }
 ?>

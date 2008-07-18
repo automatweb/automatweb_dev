@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.6 2008/07/03 11:09:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.7 2008/07/18 11:38:50 robert Exp $
 // package.aw - Pakk 
 /*
 
@@ -36,7 +36,7 @@
 
 		@layout contents_tbl_lay type=vbox parent=contents_split
 
-		@layout contents_tbl_top type=vbox closeable=1 area_caption=Klassid parent=contents_tbl_lay
+		@layout contents_tbl_top type=vbox closeable=1 area_caption=Failid parent=contents_tbl_lay
 
 			@property contents_classes_tbl type=table store=no no_caption=1 parent=contents_tbl_top
 
@@ -287,6 +287,20 @@ class package extends class_base
 		$o = obj($id);
 		$o->set_package_file_names();
 		return $return_url;
+	}
+
+	/**
+		@attrib name=create_content_zip
+	**/
+	function create_content_zip($arr)
+	{
+		if(!$this->can("view" , $arr["id"]))
+		{
+			return $arr["post_ru"];
+		}
+		$o = obj($arr["id"]);
+		$o->create_package_zip($o);
+		return $arr["post_ru"];
 	}
 
 	function _get_dep_toolbar($arr)
