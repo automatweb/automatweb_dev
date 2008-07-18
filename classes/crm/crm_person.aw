@@ -5715,7 +5715,7 @@ class crm_person extends class_base
 			foreach($tmpo->get_property_list() as $prop_id => $prop_data)
 			{
 				$this->vars(array(
-					$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"]),
+					$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"], ENT_NOQUOTES, "ISO-8859-1", false),
 				));
 			}
 
@@ -5728,7 +5728,7 @@ class crm_person extends class_base
 				foreach($cpl as $prop_id => $prop_data)
 				{
 					$this->vars(array(
-						$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"]),
+						$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"], ENT_NOQUOTES, "ISO-8859-1", false),
 					));
 				}
 			}
@@ -5744,7 +5744,7 @@ class crm_person extends class_base
 				foreach($cpl as $prop_id => $prop_data)
 				{
 					$this->vars(array(
-						$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"]),
+						$prefix.$prop_id.".caption" => htmlentities($prop_data["caption"], ENT_NOQUOTES, "ISO-8859-1", false),
 					));
 				}
 			}
