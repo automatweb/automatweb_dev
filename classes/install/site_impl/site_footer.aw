@@ -84,8 +84,28 @@ if ($_GET["TPL"] == 1)
 	}
 	
 	$sf->read_template("debug/tpl_equals_1.tpl");
+	eval (aw_global_get("TPL=1"));
+	foreach ($_aw_tpl_equals_1 as $key=>$var)
+	{
+		$count = 0;
+		foreach($_aw_tpl_equals_1_counter as $var2)
+		{
+			if ($key == $var2)
+			{
+				$count++;
+			}
+		}
+	
+		$sf->vars(array(
+			"text" => $key,
+			"link" => $var["link"],
+			"count" => $count,
+		));
+		$tmp .= $sf->parse("TEMPLATE");
+	}
+	
 	$sf->vars(array(
-		"content" => aw_global_get("TPL=1")
+		"TEMPLATE" => $tmp
 	));
 	aw_global_set("TPL=1", $sf->parse());
 	$str = preg_replace("/^(.*)<body.*>/imsU", "\\0".aw_global_get("TPL=1"), $str);
