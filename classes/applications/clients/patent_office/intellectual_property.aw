@@ -2975,6 +2975,8 @@ abstract class intellectual_property extends class_base
 			krsort($objects_array);
 		}
 
+		$send_patent = (int) $_GET["send_patent"];
+
 		if ($this->is_template("PAT_LIST"))
 		{
 			$pat_l = "";
