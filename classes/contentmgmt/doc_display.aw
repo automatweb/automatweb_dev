@@ -1364,7 +1364,7 @@ class doc_display extends aw_template
 	}
 	
 	// todo 2 viimast if'i
-	private function get_date_human_readable($i_timestamp_created)
+	public function get_date_human_readable($i_timestamp_created)
 	{
 		$a_months = array(
 			1=>t("jaanuar"),
