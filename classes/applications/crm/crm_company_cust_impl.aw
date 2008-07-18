@@ -446,26 +446,26 @@ class crm_company_cust_impl extends class_base
 		$tf->define_field(array(
 			"name" => "classif1",
 			"caption" => t("Asutuse omadused"),
-			"sortable" => 1
+//			"sortable" => 1
 		));
 
 		$tf->define_field(array(
 			"name" => "address",
 			"caption" => t("Aadress"),
-			"sortable" => 1,
+//			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "email",
 			"caption" => t("Kontakt"),
 			"align" => "center",
-			"sortable" => 1,
+//			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "url",
 			"caption" => t("WWW"),
-			"sortable" => 1,
+//			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
@@ -481,13 +481,13 @@ class crm_company_cust_impl extends class_base
 		$tf->define_field(array(
 			"name" => "ceo",
 			"caption" => t("Juht"),
-			"sortable" => 1,
+//			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "rollid",
 			"caption" => t("Rollid"),
-			"sortable" => 0,
+//			"sortable" => 0,
 		));
 
 		$tf->define_field(array(
@@ -1978,7 +1978,6 @@ exit_function("company::_finish_org_tbl_5");
 				continue;
 			}
 */
-
 enter_function("company::_finish_org_tbl_6");
 			if($filter)
 			{
@@ -2266,6 +2265,11 @@ enter_function("company::_get_customer");
 					$orglist = $d->get_customers_for_company($arr["obj_inst"]);
 				}
 				*/
+			}
+
+			if($arr["request"]["filt_p"])
+			{
+				$filt["name"] = $arr["request"]["filt_p"].$filt["name"]."%";
 			}
 
 			unset($filt["sort_by"]); unset($filt["limit"]);
