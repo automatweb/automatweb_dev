@@ -22,7 +22,7 @@ class reval_customer_mailer extends class_base
 
 		$this->hotel_lut = array(
 			"CENT" => t("Reval Hotel Central"),
-			"ELIZ" => t("Reval hotel Elizabete"),
+			"ELIZ" => t("Reval Hotel Elizabete"),
 			"EXP" => t("Reval Inn Tallinn"),
 			"LAT" => t("Reval Hotel Latvija"),
 			"LIET" => t("Reval Hotel Lietuva"),
