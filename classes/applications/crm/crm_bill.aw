@@ -3332,5 +3332,25 @@ class crm_bill extends class_base
 		}
 		return true;
 	}
+
+	/** returns bill id
+		@attrib api=1 all_args=1
+	@param no required type=int
+		bill no.
+	@returns int
+		bill id
+	**/
+	function get_bill_id($arr)
+	{
+		$bills = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"bill_no" => $arr["no"],
+		));
+		if(sizeof($bills->ids()))
+		{
+			return reset($bills->ids());
+		}
+	}
 }
 ?>
