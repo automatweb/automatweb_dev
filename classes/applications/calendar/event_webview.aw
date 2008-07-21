@@ -159,6 +159,10 @@ class event_webview extends class_base
 				foreach($event->connections_from(array("type" => "RELTYPE_EVENT_TIMES")) as $conn)
 				{
 					$to = $conn->to();
+					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
+					{
+						continue;
+					}
 					$this->vars(array(
 						"event.start1" => date("d-m-Y H:i:s", $to->start),
 						"event.start1.date" => get_lc_date($to->start, LC_DATE_FORMAT_LONG_FULLYEAR),
