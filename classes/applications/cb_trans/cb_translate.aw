@@ -157,7 +157,7 @@ class cb_translate extends class_base
 			"status" => STAT_ACTIVE,
 		);
 		$pl = new object_list($args);
-		if($ol->count() == 0)
+		if($pl->count() == 0)
 		{
 			$new = new object();
 			$new->set_class_id(CL_CB_TRANSLATE);
