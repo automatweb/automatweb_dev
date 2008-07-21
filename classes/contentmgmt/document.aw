@@ -2668,9 +2668,19 @@ class document extends aw_template
 					"/href\s*=\s*[\"']{1}(http.*)[\"']{1}(.*)>(.*)</U",
 				);
 
-				$a_print_link_replace = array(
-					"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
-				);
+				if (strpos($a_link_matches[1][$key], "http") === false)
+				{
+					$a_print_link_replace = array(
+						"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
+					);
+				}
+				else
+				{
+					$a_print_link_replace = array(
+						"href=\"\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
+					);
+				}
+				
 				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
 				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
 			}
