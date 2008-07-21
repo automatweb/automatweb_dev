@@ -3,7 +3,7 @@
 @classinfo maintainer=kristo
 */
 
-class file_manager extends aw_template
+class file_manager extends aw_editor_manager_base
 {
 	function file_manager()
 	{
@@ -124,11 +124,8 @@ class file_manager extends aw_template
 		$ii = get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
 		{
-			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $o->id()), CL_FILE);
-			$gen_alias_url = $this->mk_my_orb("gen_file_alias_for_doc", array(
-				"doc_id" => $arr["docid"],
-				"file_id" => $o->id(),
-			), CL_FILE);
+			//$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $o->id()), CL_FILE);
+			$url = $this->mk_my_orb("fetch_file_alias_for_doc", array("doc_id" => $arr["docid"], "file_id" => $o->id()), CL_FILE);
 			$image_url = $ii->get_url($o->id(), $o->name());
 			$link_name = $o->name();
 			$location = $this->gen_location_for_obj($o);
@@ -146,25 +143,29 @@ class file_manager extends aw_template
 				"name" => $name,
 				"location" => $location,
 				"sel" => html::href(array(
-//					"url" => "javascript:void(0)",
 					"url" => ($doctype == "mail") ? $this->mk_my_orb("attach_to_message", array("file" => $o->id() , "message" => $arr["docid"])): "javascript:void(0)",
 					"caption" => t("Vali see"),
 					"onClick" => ($doctype == "mail") ? null:"
 						FCK=window.parent.opener.FCK;
-						var eSelected = FCK.Selection.MoveToAncestorNode(\"A\") ; 
-						aw_get_url_contents(\"".$gen_alias_url."\");
+						var eSelected = FCK.Selection.GetSelectedElement() ; 
 						if (eSelected)
 						{
-							eSelected.href=\"$image_url\";
-							eSelected.innerHTML=\"$link_name\";
-							SetAttribute( eSelected, \"_fcksavedurl\", \"$image_url\" ) ;
+							if (eSelected.tagName == \"SPAN\" && eSelected._awfileplaceholder  )
+							{
+								$.get(\"$url\", function(data){
+									window.parent.opener.FCKAWFilePlaceholders.Add(FCK, data);
+									window.parent.close();
+								});
+							}
 						}
 						else
 						{
-							ct=aw_get_url_contents(\"$url\");
-							FCK.InsertHtml(ct);		
+							$.get(\"$url\", function(data){
+							alert (data);
+								window.parent.opener.FCKAWFilePlaceholders.Add(FCK, data);
+								window.parent.close();
+							});
 						}
-						window.parent.close();
 					"
 				))
 			));

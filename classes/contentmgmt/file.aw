@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.12 2008/07/07 11:33:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.13 2008/07/21 10:02:35 hannes Exp $
 /*
 
 
@@ -1676,6 +1676,22 @@ class file extends class_base
 			}
 		}
 		
+		$this->gen_file_alias_for_doc(array(
+			"file_id" => $arr["file_id"],
+			"doc_id" => $arr["doc_id"],
+			"no_die" => true
+		));
+		
+		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
+		
+		foreach($alias_list as $obj_id => $alias_string)
+		{
+			if ($obj_id == $arr["file_id"])
+			{
+				die(str_replace("#", "", $alias_string));
+			}
+		}
+		
 		die();
 	}
 	
@@ -1745,9 +1761,15 @@ class file extends class_base
 		{
 			if ("#".$arr["alias_name"]."#" == $alias_string)
 			{
+				//$o = obj($obj_id);
+				//$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
+				//$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
+				
+				
+				
 				$o = obj($obj_id);
 				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
-				$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
+				$out .= 'connection_details_for_doc["#'.$arr["alias_name"].'#"] = item;'.$sufix;
 			}
 		}
 		die($out);

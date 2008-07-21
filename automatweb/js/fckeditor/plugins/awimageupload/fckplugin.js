@@ -271,15 +271,23 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	FCKAWImagePlaceholders._ClickListener = function( e )
 	{
 		if (!e) {var e = FCK.EditorWindow.event ; e.target = e.srcElement}
-		if ( e.target.tagName == 'SPAN' && e.target._awimageplaceholder )
-			_aw_fck_selected_image_oid = e.target._oid;
-			_aw_fck_selected_image_alias = e.target._awimageplaceholder;
-			FCKSelection.SelectNode( e.target ) ;
-		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
+		if ( e.target.tagName == 'SPAN' )
 		{
-			_aw_fck_selected_image_oid = e.target.parentNode._oid;
-			_aw_fck_selected_image_alias = e.target.parentNode._awimageplaceholder;
-			FCKSelection.SelectNode( e.target.parentNode ) ;
+			if (e.target._awimageplaceholder )
+			{
+				_aw_fck_selected_image_oid = e.target._oid;
+				_aw_fck_selected_image_alias = e.target._awimageplaceholder;
+				FCKSelection.SelectNode( e.target ) ;
+			}
+		}
+		if ( e.target.tagName == 'IMG')
+		{
+			if (e.target.parentNode._awimageplaceholder )
+			{
+				_aw_fck_selected_image_oid = e.target.parentNode._oid;
+				_aw_fck_selected_image_alias = e.target.parentNode._awimageplaceholder;
+				FCKSelection.SelectNode( e.target.parentNode ) ;
+			}
 		}
 	}
 	

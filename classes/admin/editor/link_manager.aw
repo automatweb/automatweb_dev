@@ -4,7 +4,7 @@
 @classinfo maintainer=kristo
 */
 
-class link_manager extends aw_template
+class link_manager extends aw_editor_manager_base
 {
 	function link_manager()
 	{
