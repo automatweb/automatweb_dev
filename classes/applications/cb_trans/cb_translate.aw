@@ -152,10 +152,21 @@ class cb_translate extends class_base
 	 **/
 	public function get_sysdefault()
 	{
-		$pl = new object_list(array(
+		$args = array(
 			"class_id" => CL_CB_TRANSLATE,
 			"status" => STAT_ACTIVE,
-		));
+		);
+		$pl = new object_list($args);
+		if($ol->count() == 0)
+		{
+			$new = new object();
+			$new->set_class_id(CL_CB_TRANSLATE);
+			$new->set_name("T&otilde;lkekeskkond");
+			$new->set_parent(aw_ini_get("users.root_folder"));
+			$new->set_status(STAT_ACTIVE);
+			$new->save_new();
+			$pl = new object_list($args);
+		}
 		return $pl->begin();
 	}
 
