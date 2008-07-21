@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.148 2008/07/07 12:09:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.149 2008/07/21 09:47:07 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -396,6 +396,9 @@ class releditor extends core
 			"no_caption" => 1,
  		);
 
+		// Adding the cfgform OID allows us to use view controllers. :P
+		//													-kaarel
+		$t->cfgform_id = $cfgform_id;
 		$tmp = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => $this->elname."[".$conns_count."]",
@@ -1389,6 +1392,8 @@ class releditor extends core
 			}
 		}
 
+		$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["request"]["cfgform"]);
+
 		foreach($dat as $idx => $row)
 		{
 			$row["class"] = $class_name;
@@ -1398,6 +1403,7 @@ class releditor extends core
 			$row["alias_to_prop"] = $arr["prop"]["name"];
 			$row["reltype"] = $arr["prop"]["reltype"];
 			$row["id"] = $idx2rel[$idx];
+			$row["cfgform"] = $cfgproplist[$arr["prop"]["name"]]["cfgform_id"];
 			$i = get_instance($to_clid);
 			$i->submit($row);
 		}
@@ -1746,6 +1752,9 @@ class releditor extends core
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 
+		$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["cfgform"]);
+		$cfgcontroller_inst = get_instance(CL_CFGCONTROLLER);
+
 		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
 		foreach($arr[$propn][$num] as $k => $v)
 		{
@@ -1753,6 +1762,10 @@ class releditor extends core
 			{
 				$arr[$propn][$num][$k] = iconv("utf-8", aw_global_get("charset")."//IGNORE", $v);
 			}
+			/*
+			$tmp = array("value" => &$arr[$propn][$num][$k]);
+			$cfgcontroller_inst->check_property($cfg_cntrl_id, $arr["id"], $tmp, $_GET, array(), obj($arr["id"]));
+			*/
 		}
 		$prev_dat[$num] = $arr[$propn][$num];
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
@@ -1778,6 +1791,7 @@ class releditor extends core
 			$row["alias_to"] = $arr["id"];
 			$row["alias_to_prop"] = $propn;
 			$row["reltype"] = $cur_prop["reltype"];
+			$row["cfgform"] = $cfgproplist[$propn]["cfgform_id"];
 			$i = get_instance($this->_get_related_clid($clid, $propn));
 			$rv = $i->submit($row);
 		}
