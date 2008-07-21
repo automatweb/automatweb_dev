@@ -179,6 +179,29 @@ class euro_patent_et_desc extends intellectual_property
 	{
 		parent::fill_session($id);
 	}
+
+	/**
+		@attrib api=1
+		@param o required type=object
+		@returns
+			PHP DOMDocument instance
+	**/
+	public function get_po_xml(object $o)
+	{
+		$xml = parent::get_po_xml($o);
+		$xpath = new DOMXPath($xml);
+		$root = $xpath->query("//BIRTH")->item(0);
+		$despg = $xpath->query("//DESPG")->item(0);
+		$root->setAttribute("REGREN", trademark_manager::rere($o->prop("epat_nr")));
+
+		//
+		$el = $xml->createElement("TITLE");
+		$el->setAttribute("TEXT", trademark_manager::rere($o->prop("invention_name_et")));
+		$root->insertBefore($el, $despg);
+
+		//
+		return $xml;
+	}
 }
 
 ?>

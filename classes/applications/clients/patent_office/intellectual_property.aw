@@ -3945,9 +3945,7 @@ abstract class intellectual_property extends class_base
 				$xml .= "</NAME>";
 				$xml .= $addr;
 
-				$xml .= '<LEGNATU>
-					<LEGNATT>'.trademark_manager::rere($appl->prop("ettevotlusvorm.name")).'</LEGNATT>
-				</LEGNATU>';
+				$xml .= '<LEGNATU><LEGNATT>'.trademark_manager::rere($appl->prop("ettevotlusvorm.name")).'</LEGNATT></LEGNATU>';
 			}
 
 			$xml .= "</HOLGR>";
@@ -3956,12 +3954,7 @@ abstract class intellectual_property extends class_base
 		if ($this->can("view", $o->prop("procurator")))
 		{
 			$proc = obj($o->prop("procurator"));
-			$xml .= '<REPGR CLID="'.$proc->prop("code").'">
-				<NAME>
-					<NAMEL>'.$proc->prop("firstname").'</NAMEL>
-					<NAMEL>'.$proc->prop("lastname").'</NAMEL>
-				</NAME>
-			</REPGR>';
+			$xml .= '<REPGR CLID="'.$proc->prop("code").'"><NAME><NAMEL>'.trademark_manager::rere($proc->prop("firstname")).'</NAMEL><NAMEL>'.trademark_manager::rere($proc->prop("lastname")).'</NAMEL></NAME></REPGR>';
 		}
 
 		$xml .= '<DESPG><DCPCD>EE</DCPCD></DESPG>';
