@@ -913,95 +913,64 @@ class trademark_manager extends class_base
 	{
 		classload("core/date/date_calc");
 
-		// list all intellectual prop objs created yesterday
-		$verified = 1;
-		$age = new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start());
-		$filter = array(
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array (
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_PATENT_PATENT),
-							"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
-							"CL_PATENT_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => $age
-						)
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_UTILITY_MODEL),
-							"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
-							"CL_UTILITY_MODEL.RELTYPE_TRADEMARK_STATUS.modified" => $age
-						)
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_PATENT),
-							"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
-							"CL_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => $age
-						)
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_INDUSTRIAL_DESIGN),
-							"CL_INDUSTRIAL_DESIGN.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
-							"CL_INDUSTRIAL_DESIGN.RELTYPE_TRADEMARK_STATUS.modified" => $age
-						)
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array (
-							"class_id" => array(CL_EURO_PATENT_ET_DESC),
-							"CL_EURO_PATENT_ET_DESC.RELTYPE_TRADEMARK_STATUS.verified" => $verified,
-							"CL_EURO_PATENT_ET_DESC.RELTYPE_TRADEMARK_STATUS.modified" => $age
-						)
-					)),
-				)
-			)),
-			"lang_id" => array(),
-			"site_id" => array()
-		);
-
-		$ol = new object_list($filter);
-		$ol->sort_by_cb(array(&$this, "__application_sorter"));
-
-		// parse objs
-		$xml_data = array(); // array of DOMDocuments grouped by aw class id
-
-		foreach($ol->arr() as $o)
-		{
-			// get xml from ip obj
-			$inst = $o->instance();
-			$xml_data[$o->class_id()]["data"] .= $inst->get_po_xml($o)->saveXML();
-			$xml_data[$o->class_id()]["count"] += 1;
-
-			// indicate that object has been exported
-			$status->set_no_modify(true);
-			$status->set_prop("exported", 1);
-			$status->set_prop("export_date", time());
-			$o->set_no_modify(true);
-			aw_disable_acl();
-			aw_disable_messages();
-			$status->save();
-			aw_restore_messages();
-			aw_restore_acl();
-		}
-
 		$clidx = array( // needed for file name prefixes
 			CL_PATENT => "kaubam2rgid_",
 			CL_PATENT_PATENT => "patendid_",
 			CL_UTILITY_MODEL => "kasulikudmudelid_",
 			CL_INDUSTRIAL_DESIGN => "t88stusdisainid_"
 		);
+		$clidx2 = array( // needed for file name prefixes
+			CL_PATENT => "CL_PATENT",
+			CL_PATENT_PATENT => "CL_PATENT_PATENT",
+			CL_UTILITY_MODEL => "CL_UTILITY_MODEL",
+			CL_INDUSTRIAL_DESIGN => "CL_INDUSTRIAL_DESIGN"
+		);
+
+		// list all intellectual prop objs created yesterday
+		$verified = 1;
+		$age = new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start());
+
+		// parse objs
+		$xml_data = array(); // array of DOMDocuments grouped by aw class id
+
+		foreach ($clidx as $clid => $value)
+		{
+			$filter = array(
+				"class_id" => $clid,
+				$clidx2[$clid] . ".RELTYPE_TRADEMARK_STATUS.verified" => $verified,
+				$clidx2[$clid] . ".RELTYPE_TRADEMARK_STATUS.modified" => $age,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+
+			$ol = new object_list($filter);
+			$ol->sort_by_cb(array(&$this, "__application_sorter"));
+
+			foreach($ol->arr() as $o)
+			{
+				// get xml from ip obj
+				$inst = $o->instance();
+				$xml_data[$o->class_id()]["data"] .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $inst->get_po_xml($o)->saveXML());
+				$xml_data[$o->class_id()]["count"] += 1;
+
+				// indicate that object has been exported
+				$status = $inst->get_status($o);
+				$status->set_no_modify(true);
+				$status->set_prop("exported", 1);
+				$status->set_prop("export_date", time());
+				$o->set_no_modify(true);
+				aw_disable_acl();
+				aw_disable_messages();
+				$status->save();
+				aw_restore_messages();
+				aw_restore_acl();
+			}
+		}
 
 		foreach ($xml_data as $clid => $data)
 		{
 			// xml header and contents
-			$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-4\"?>\n";
+			$xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-4\"?>\n";
 			$xml .= '<ENOTIF BIRTHCOUNT="'.$data["count"].'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">' . "\n";
 			$xml .= $data["data"];
 			$xml .= "</ENOTIF>\n";
@@ -1010,7 +979,7 @@ class trademark_manager extends class_base
 			$cl = $clidx[$clid];// file name prefix
 			$fn = aw_ini_get("site_basedir")."/patent_xml/" . $cl . date("Ymd") . ".xml";
 			$f = fopen($fn, "w");
-			fwrite($f, $xml);
+			fwrite($f, iconv("UTF-8", "ISO-8859-4", $xml));
 			fclose($f);
 			echo "wrote {$fn}\n";
 		}
@@ -1336,6 +1305,7 @@ class trademark_manager extends class_base
 		$string = str_replace("%" , "&#37;" , $string);
 		$string = str_replace('"' , " &quot;" , $string);
 		$string = str_replace("'" , "&apos;" , $string);
+		$string = iconv("iso-8859-4", "UTF-8", $string);
 		return $string;
 	}
 }

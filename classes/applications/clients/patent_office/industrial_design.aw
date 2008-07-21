@@ -397,7 +397,7 @@ class industrial_design extends intellectual_property
 		$root = $xpath->query("//BIRTH")->item(0);
 		$despg = $xpath->query("//DESPG")->item(0);
 		$holgr_following = $xpath->query("//BIRTH/HOLGR[last()]")->item(0);
-		$holgr_following = $xpath->query("following-sibling::REPGR|following-sibling::DESPG", $holgr)->item(0);
+		$holgr_following = $xpath->query("following-sibling::REPGR|following-sibling::DESPG", $holgr_following)->item(0);
 
 		// author(s)
 		$adr_i = get_instance(CL_CRM_ADDRESS);
@@ -419,10 +419,10 @@ class industrial_design extends intellectual_property
 				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
 
 				// author address
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.aadress"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.linn.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.maakond.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.postiindeks"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
 
 				if ($this->can("view", $author->prop("address.riik")))
 				{

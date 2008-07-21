@@ -401,10 +401,10 @@ class utility_model extends intellectual_property
 				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
 
 				// author address
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.aadress"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.linn.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.maakond.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->name("address.postiindeks"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
+				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
 
 				if ($this->can("view", $author->prop("address.riik")))
 				{
