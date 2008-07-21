@@ -5426,6 +5426,8 @@ class crm_person extends class_base
 			$email_obj = new object();
 		$phone_obj = &obj($person_obj->prop("phone"));
 
+		// Why did I write the next line of code? Good question. See init.aw:319. -kaarel
+		$this->template_dir = aw_ini_get("site_tpldir")."/crm/person";
 		$this->read_template($arr["cv"]);
 
 		if($person_obj->prop("gender") == 1)
