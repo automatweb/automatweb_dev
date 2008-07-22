@@ -562,7 +562,7 @@ class room extends class_base
 		switch($prop["name"])
 		{
 			case "work_graphs":
-				if($arr["request"]["extend"])
+				if($arr["request"]["extend"] > 0)
 				{
 					$arr["obj_inst"]->extend_work_graph(array(
 						"person" => $arr["request"]["extend"],
@@ -698,13 +698,13 @@ class room extends class_base
 				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*31;
 			}
 		}
-		if($arr["request"]["submit_scenario"])
-		{
+//		if($arr["request"]["submit_scenario"])
+//		{
 			foreach($arr["request"]["sel"] as $sel)
 			{
 				$arr["args"]["scenario"][$sel] = $arr["request"]["scenario"][$sel];
 			}
-		}
+//		}
 	}
 
 	function callback_pre_edit($arr)
@@ -5953,6 +5953,11 @@ class room extends class_base
 		foreach($pl->arr() as $po)
 		{
 			$person_scenario = $po->meta("last_used_working_scenario");
+			if(!$this->can("view" , $person_scenario))
+			{
+				$person_scenario = reset(array_keys($soptions));
+			}
+
 			$edit_sc = html::href(array(
 				"url" => html::get_change_url($person_scenario, array("return_url" => get_ru())),
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
