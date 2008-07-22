@@ -5365,13 +5365,26 @@ class crm_person extends class_base
 
 	function get_cv_tpl()
 	{
+		$ret = array();
+
 		$dir = aw_ini_get("tpldir")."/crm/person/cv/";
 		$handle = opendir($dir);
-		$ret = array();
 		while(false !== ($file = readdir($handle)))
 		{
 			if(preg_match("/\\.tpl/", $file))
-				$ret[$dir.$file] = str_replace(".tpl", "", $file);
+			{
+				$ret[$file] = str_replace(".tpl", "", $file);
+			}
+		}
+
+		$dir = aw_ini_get("site_tpldir")."/crm/person/cv/";
+		$handle = opendir($dir);
+		while(false !== ($file = readdir($handle)))
+		{
+			if(preg_match("/\\.tpl/", $file))
+			{
+				$ret[$file] = str_replace(".tpl", "", $file);
+			}
 		}
 		return $ret;
 	}
