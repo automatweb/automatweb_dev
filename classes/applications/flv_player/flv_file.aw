@@ -25,7 +25,7 @@
 	@caption Laius
 	
 	@property meta_height type=text
-	@caption K&omul;rgus
+	@caption K&ouml;rgus
 	
 	@property meta_video_data_rate type=text
 	@caption video_data_rate
