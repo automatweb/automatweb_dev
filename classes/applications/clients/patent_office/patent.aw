@@ -780,6 +780,10 @@ class patent extends intellectual_property
 		$root = $xpath->query("//BIRTH")->item(0);
 		$despg = $xpath->query("//DESPG")->item(0);
 
+		$inst = $o->instance();
+		$status = $inst->get_status($o);
+		$root->setAttribute("EXPDATE", date("Ymd", $status->prop("modified")));
+
 		$type = "";
 		// save image to folder
 		if ($this->can("view", $o->prop("reproduction")))
@@ -797,8 +801,6 @@ class patent extends intellectual_property
 			fclose($f);
 		}//t6stsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult s6nalist osa n2ha
 
-		$inst = $o->instance();
-		$status = $inst->get_status($o);
 		$img = $xml->createElement("IMAGE");
 		$img->setAttribute("NAME", sprintf("%08d", $status->prop("nr")));
 		$img->setAttribute("TEXT", trademark_manager::rere($o->prop("word_mark")));

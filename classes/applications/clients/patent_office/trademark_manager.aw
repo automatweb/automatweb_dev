@@ -952,8 +952,8 @@ class trademark_manager extends class_base
 			{
 				// get xml from ip obj
 				$inst = $o->instance();
-				$xml_data[$o->class_id()]["data"] .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $inst->get_po_xml($o)->saveXML());
-				$xml_data[$o->class_id()]["count"] += 1;
+				$xml_data[$clid]["data"] .= str_replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "", $inst->get_po_xml($o)->saveXML());
+				$xml_data[$clid]["count"] += 1;
 
 				// indicate that object has been exported
 				$status = $inst->get_status($o);

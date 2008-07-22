@@ -3886,7 +3886,7 @@ abstract class intellectual_property extends class_base
 		$ip_inst = $o->instance();
 		$status = $ip_inst->get_status($o);
 		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		$xml .= '<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $status->prop("modified")).'" REGEDAT="'.date("Ymd", $status->prop("sent_date")).'" INTREGD="'.date("Ymd", $status->prop("modified")).'" DESUNDER="P">';
+		$xml .= '<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" REGEDAT="'.date("Ymd", $status->prop("sent_date")).'" INTREGD="'.date("Ymd", $status->prop("modified")).'" DESUNDER="P">';
 
 		// common object xml data
 		$adr_i = get_instance(CL_CRM_ADDRESS);
