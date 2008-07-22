@@ -1260,9 +1260,9 @@ class crm_person extends class_base
 				break;
 
 			case "lastname":
-				if (!empty($form["firstname"]) || !empty($form["lastname"]))
+				if (!empty($form["firstname"]) || !empty($form["lastname"]) || !empty($form["previous_lastname"]))
 				{
-					$arr["obj_inst"]->set_name($form["firstname"]." ".$form["lastname"]);
+					$arr["obj_inst"]->set_name($form["firstname"]." ".$form["lastname"].(empty($form["previous_lastname"]) ? "" : " (".$form["previous_lastname"].")"));
 				}
 				break;
 
