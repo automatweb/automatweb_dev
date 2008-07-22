@@ -188,7 +188,7 @@ class scm_location extends class_base
 	}
 	
 	/**
-	@attrib name=location_data params=name all_args=1
+	@attrib name=autocomplete_location params=name all_args=1
 	**/
 	function autocomplete_location($arr)
 	{
@@ -224,7 +224,7 @@ class scm_location extends class_base
 	}
 
 	/**
-	@attrib name=location_props params=name all_args=1
+	@attrib name=location_data params=name all_args=1
 	**/
 	function location_data($arr)
 	{
