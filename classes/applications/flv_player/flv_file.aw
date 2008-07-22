@@ -25,7 +25,7 @@
 	@caption Laius
 	
 	@property meta_height type=text
-	@caption Kõrgus
+	@caption K&omul;rgus
 	
 	@property meta_video_data_rate type=text
 	@caption video_data_rate
@@ -268,7 +268,8 @@ class flv_file extends class_base
 			"action" => "view",
 		));
 		$s_url = str_replace("&", "/", $s_url)."/video.flv";
-		
+		$s_url = str_replace("?", "orb.aw/", $s_url);
+	
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			// id has to be unique. if one puts more than 1 same vidoe on same page then it does not work in opera
