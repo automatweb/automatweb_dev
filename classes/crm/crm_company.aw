@@ -2127,7 +2127,6 @@ class crm_company extends class_base
 				$data["autocomplete_source"] = $this->mk_my_orb("name_autocomplete_source");
 				$data["autocomplete_params"] = array("name");
 				//$data["option_is_tuple"] = true;
-				$data["onkeyup"] = "load_company_data(this.id);";
 				break;
 
 			case "reg_nr":
@@ -6955,16 +6954,7 @@ class crm_company extends class_base
 
 	function callback_generate_scripts($arr)
 	{
-		$sc = '
-			function load_company_data(id)
-			{
-				$.getJSON("'.$this->mk_my_orb("company_props").'", {name: $("#" + id).val()}, function(data)
-				{
-					id2 = id.replace("name", "comment");
-					$("#" + id2).val(data.comment.toString());
-				});
-			}
-		';
+		$sc = "";
 		if (!$arr["new"])
 		{
 			$sc.="function co_contact(id,url)
