@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.37 2008/07/22 09:48:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.38 2008/07/22 11:07:20 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -306,10 +306,6 @@
 
 			@property final_add_reservation_tb group=final_prices,final_resource,final_catering no_caption=1 type=toolbar
 
-			@layout add_inf_room type=vbox closeable=1 area_caption="Lisainfo"
-				
-				@property additional_room_information type=textarea parent=add_inf_room rows=20
-				@caption Ruumide lisainfo
 
 			@layout prs_hsplit type=hbox width=30%:70%
 
@@ -319,15 +315,14 @@
 				@layout prs_right parent=prs_hsplit type=vbox closeable=1 area_caption=Hinnad
 					@property prices_tbl parent=prs_right type=text store=no no_caption=1
 
+			@layout add_inf_room type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_room_information type=textarea parent=add_inf_room rows=20
+				@caption Ruumide lisainfo
+
 
 		@groupinfo final_catering caption="Toitlustus" parent=final_info
 		@default group=final_catering
-
-			@layout add_inf_catering type=vbox closeable=1 area_caption="Lisainfo"
-				
-				@property additional_catering_information type=textarea parent=add_inf_catering rows=20
-				@caption Toitlustuse lisainfo
-
 
 			@layout cat_hsplit type=hbox width=30%:70%
 
@@ -337,15 +332,17 @@
 				@layout cat_right parent=cat_hsplit type=vbox closeable=1 area_caption=Tooted
 					
 					@property products_tbl parent=cat_right type=text store=no no_caption=1
+		
+			@layout add_inf_catering type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_catering_information type=textarea parent=add_inf_catering rows=20
+				@caption Toitlustuse lisainfo
+
+
+
 
 		@groupinfo final_resource caption="Ressursid" parent=final_info
 		@default group=final_resource
-
-			@layout add_inf_resource type=vbox closeable=1 area_caption="Lisainfo"
-				
-				@property additional_resource_information type=textarea parent=add_inf_resource rows=20
-				@caption Ressursside lisainfo
-
 
 			@layout res_hsplit type=hbox width=30%:70%
 
@@ -354,18 +351,22 @@
 
 				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Ressursid
 					@property resources_tbl parent=res_right type=table store=no no_caption=1
+
+			@layout add_inf_resource type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_resource_information type=textarea parent=add_inf_resource rows=20
+				@caption Ressursside lisainfo
 					
 
                 @groupinfo final_housing caption="Majutus" parent=final_info
                 @default group=final_housing
 
+                        @property housing_tbl type=table store=no no_caption=1
+
 			@layout add_inf_housing type=vbox closeable=1 area_caption="Lisainfo"
 				
 				@property additional_housing_information type=textarea parent=add_inf_housing rows=20
 				@caption Majutuse lisainfo
-
-
-                        @property housing_tbl type=table store=no no_caption=1
 
 
 
