@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.36 2008/07/22 07:49:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.37 2008/07/22 09:48:12 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1718,8 +1718,59 @@ class rfp extends class_base
 		}
 	}
 
+	private function _reload_lang_trans($lang_to)
+	{
+		$langs = aw_ini_get("languages.list");
+		$lang_f = false;
+		foreach($langs as $lang)
+		{
+			if($lang["acceptlang"] == $lang_to)
+			{
+				$lang_to = $lang;
+				$lang_f = true;
+				break;
+			}
+		}
+		if(!$lang_f)
+		{
+			return false;
+		}
+		
+		// these are for obj prop translations
+		aw_ini_set("user_interface.content_trans", 1);
+		aw_global_set("lang_id", $lang_to["acceptlang"]);
+		
+		//$GLOBALS["cfg"]["user_interface"]["full_content_trans"]
+		aw_ini_set("user_interface.full_content_trans", 1);
+		//$GLOBALS["cfg"]["user_interface"]["trans_classes"][$this->class_id()]
+		aw_ini_set("user_interface.trans_classes.".CL_RFP, 1);
+		aw_global_set("ct_lang_id", $lang_to["acceptlang"]);
+
+
+
+		$cur_admin_lang_lc = $GLOBALS["__aw_globals"]["admin_lang_lc"];
+		$GLOBALS["__aw_globals"]["admin_lang_lc"] = $lang_to["acceptlang"];
+		lc_load("rfp");
+		//$this->lc_load("rfp", "lc_rfp");
+		$GLOBALS["__aw_globals"]["admin_lang_lc"] = $cur_admin_lang_lc;
+		global $lc_rfp;
+		$this->vars($lc_rfp);
+
+		$trans_fn = aw_ini_get("basedir")."/lang/trans/".$lang_to["acceptlang"]."/aw/rfp.aw";
+		if (file_exists($trans_fn))
+		{
+			incl_f($trans_fn);
+			require_once($trans_fn);
+		}
+		//$trans_fn = aw_ini_get("basedir")."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
+	}
+
 	function _get_submission_data($arr)
 	{
+		$default_lang = $arr["obj_inst"]->prop("default_language");
+		// set output language, terrible hack
+		$this->_reload_lang_trans($default_lang);
+
 		$pdf = ($arr["pdf"] == "offer_pdf")?"OFFER":"CONFIRMATION";
 
 		$this->read_template("submission.tpl");
@@ -1728,7 +1779,7 @@ class rfp extends class_base
 			"contactperson" => $arr["obj_inst"]->prop("data_contactperson"),
 			"payment_method" => $arr["obj_inst"]->prop("data_payment_method"),
 			"pointer_text" => $arr["obj_inst"]->prop("data_pointer_text"),
-			"title" => $arr["obj_inst"]->prop("data_mf_event_type.name"),
+			"title" => $arr["obj_inst"]->trans_get_val("data_mf_event_type.name"),
 			"data_contact" => $arr["obj_inst"]->prop("data_billing_contact"),
 			"data_street" => $arr["obj_inst"]->prop("data_billing_street"),
 			"data_city" => $arr["obj_inst"]->prop("data_billing_street"),
@@ -1737,23 +1788,23 @@ class rfp extends class_base
 			"data_name" => $arr["obj_inst"]->prop("data_billing_name"),
 			"data_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_billing_email"),
-			"additional_information" => $arr["obj_inst"]->prop("additional_information"),
-			"additional_admin_information" => $arr["obj_inst"]->prop("additional_admin_information"),
-			"additional_room_information" => $arr["obj_inst"]->prop("additional_room_information"),
-			"additional_catering_information" => $arr["obj_inst"]->prop("additional_catering_information"),
-			"additional_resource_information" => $arr["obj_inst"]->prop("additional_resource_information"),
-			"additional_housing_information" => $arr["obj_inst"]->prop("additional_housing_information"),
-			"offer_preface" => $arr["obj_inst"]->prop("offer_preface"),
-			"offer_price_comment" => $arr["obj_inst"]->prop("offer_price_comment"),
+			"additional_information" => $arr["obj_inst"]->trans_get_val("additional_information"),
+			"additional_admin_information" => $arr["obj_inst"]->trans_get_val("additional_admin_information"),
+			"additional_room_information" => $arr["obj_inst"]->trans_get_val("additional_room_information"),
+			"additional_catering_information" => $arr["obj_inst"]->trans_get_val("additional_catering_information"),
+			"additional_resource_information" => $arr["obj_inst"]->trans_get_val("additional_resource_information"),
+			"additional_housing_information" => $arr["obj_inst"]->trans_get_val("additional_housing_information"),
+			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
+			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("Y.m.d", $arr["obj_inst"]->prop("offer_expire_date")),
 		));
-		$package_id = $arr["obj_inst"]->prop("data_gen_package");
+		$package_id = $arr["obj_inst"]->trans_get_val("data_gen_package");
 		if($this->can("view", $package_id))
 		{
 			$package_o = obj($package_id);
 			$package = $package_o->name();
 		}
-		$tables = $arr["obj_inst"]->prop("data_mf_table_form.name");
+		$tables = $arr["obj_inst"]->trans_get_val("data_mf_table_form.name");
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_RESERVATION",
 		));
@@ -1761,7 +1812,6 @@ class rfp extends class_base
 		$brons = "";
 		//$currency = 745;
 		$currency = $arr["obj_inst"]->prop("default_currency");
-		$default_lang = $arr["obj_inst"]->prop("default_language");
 		$resources_total = 0;
 		$colspan = 6;
 		if($package)
@@ -1827,7 +1877,7 @@ class rfp extends class_base
 					$price += $extra_bron_prices[$roomid]["max_prices"][$currency] * $over;
 				}
 			}
-			$comment = $rv->prop("comment");
+			$comment = $rv->trans_get_val("comment");
 			$room_data = array(
 				"datefrom" => $datefrom,
 				"timefrom" => $timefrom,
@@ -1900,7 +1950,7 @@ class rfp extends class_base
 						$resources_total += $total;
 						$resources[] = array(
 							"rid" => $rid,
-							"name" => $r->name(),
+							"name" => $r->trans_get_val("name"),
 							"price" => $price,
 							"count" => $count,
 							"total" => $total,
@@ -2025,12 +2075,12 @@ class rfp extends class_base
 					"prod_to_minute" => date("i", $prod["end"]),
 					"prod_event" => $varname,
 					"prod_count" => $prod["amount"],
-					"prod_prod" => $po->name(),
+					"prod_prod" => $po->trans_get_val("name"),
 					"prod_price" => $this->_format_price($prod["price"]),
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
 					"prod_event_and_room" => join(", ",$evt_room),
-					"prod_room_name" => $room->name(),
+					"prod_room_name" => $room->trans_get_val("name"),
 				));
 				$pds .= $this->parse("PRODUCT");
 				$prod_total += round($this->_format_price($prod["sum"]));
@@ -2083,6 +2133,10 @@ class rfp extends class_base
 			"totalprice" => $totalprice,
 			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
 		));
+
+		// set back the language thingie
+		$this->_reload_lang_trans(aw_ini_get("user_interface.default_language"));
+
 		return $this->parse();
 	}
 
