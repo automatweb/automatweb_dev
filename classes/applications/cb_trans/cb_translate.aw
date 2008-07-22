@@ -50,7 +50,10 @@ class cb_translate extends class_base
 			"tpldir" => "applications/cb_translate",
 			"clid" => CL_CB_TRANSLATE,
 		));
-		aw_global_set("output_charset", "utf-8");
+		if($_GET["class"] == "cb_translate")
+		{
+			aw_global_set("output_charset", "utf-8");
+		}
 	}
 	
 	function init_cfgu($clid = false)
