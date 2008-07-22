@@ -530,8 +530,8 @@
 			</function>
 		</action>
 
-		<action name="company_props" all_args="1">
-			<function name="company_props">
+		<action name="company_data" all_args="1">
+			<function name="company_data">
 				<arguments>
 				</arguments>
 			</function>

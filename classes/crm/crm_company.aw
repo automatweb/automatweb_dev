@@ -9230,9 +9230,9 @@ Bank accounts: yksteise all
 	}
 
 	/**
-	@attrib name=company_props all_args=1 api=1 params=name
+	@attrib name=company_data all_args=1 api=1 params=name
 	**/
-	function company_props($arr)
+	function company_data($arr)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_COMPANY,
