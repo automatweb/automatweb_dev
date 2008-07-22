@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.9 2008/07/03 06:43:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.10 2008/07/22 08:23:59 tarvo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -714,8 +714,8 @@ class class_designer_manager extends class_base
 		$this->_add_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
 		$this->_add_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
 
-		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
-		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
+		//$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
+		//$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
 		
 		return $arr["post_ru"];
 	}
