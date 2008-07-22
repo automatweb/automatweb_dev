@@ -13,9 +13,14 @@
 		<action name="show_cals_pop">
 			<function name="show_cals_pop">
 				<arguments>
-					<required name="id" />
+					<optional name="id" />
 					<optional name="rooms" />
 					<optional name="title" />
+					<optional name="post_msg_after_reservation" type="array" />
+					<optional name="firstname" type="string" />
+					<optional name="lastname" type="string" />
+					<optional name="company" type="string" />
+					<optional name="phone" type="string" />
 				</arguments>
 			</function>
 		</action>

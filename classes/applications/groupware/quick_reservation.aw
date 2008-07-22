@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.2 2008/03/04 12:57:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.3 2008/07/22 07:48:59 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -107,6 +107,7 @@ class quick_reservation extends class_base
 			"parent" => $arr["request"]["bron"]["parent"],
 			"resource" => $arr["request"]["bron"]["resource"],
 			"product" => $arr["request"]["bron"]["product"],
+			"post_msg_after_reservation" => $arr["request"]["post_msg_after_reservation"],
 		));
 
 		die("<script type='text/javascript'>
@@ -124,6 +125,11 @@ class quick_reservation extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function callback_mod_reforb($arr, $request)
+	{
+		$arr["post_msg_after_reservation"] = $request["post_msg_after_reservation"];
 	}
 }
 ?>

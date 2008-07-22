@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.35 2008/07/17 11:23:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.36 2008/07/22 07:49:02 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
 @classinfo syslog_type=ST_RFP relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo allow_rte=2
+
 
 @tableinfo rfp index=aw_oid master_index=brother_of master_table=objects
 
@@ -267,6 +268,9 @@
 			@property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY store=connect
 			@caption Vaikevaluuta
 
+			@property default_language type=select table=rfp field=default_language
+			@caption Vaikevaluuta
+
 			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect
 			@caption Ruumid
 			@comment Konverentsi jaoks kasutatavad ruumid
@@ -509,6 +513,25 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "default_language":
+				$l = get_instance("core/trans/pot_scanner");
+				$tl = $l->get_langs();
+				foreach(aw_ini_get("languages.list") as $ldat)
+				{
+					if(!in_array($ldat["acceptlang"], $tl))
+					{
+						continue;
+					}
+					$opts[$ldat["acceptlang"]] = $ldat["name"];
+				}
+				$prop["options"] = $opts;
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$obj = obj($rfpm->get_sysdefault());
+				if(!$prop["value"])
+				{
+					$prop["value"] = $obj->prop("default_language");
+				}
+			break;
 			case "confirmed":
 				$prop["options"] = $this->get_rfp_statuses();
 			break;
@@ -629,18 +652,19 @@ class rfp extends class_base
 					"class_id" => CL_SPA_BOOKINGS_OVERVIEW,
 				));
 				$o = $ol->begin();
+				$spl = split("[ ]", $arr["obj_inst"]->prop("data_subm_name"));
 				$url = $this->mk_my_orb("show_cals_pop", array(
 					//"id" => $o->id(),
 					"class" => "spa_bookings_overview",
-					"pseh" => aw_register_ps_event_handler(
-						CL_RFP,
-						"handle_new_reservation",
-						array(
-							"rfp_manager_oid" => $arr["obj_inst"]->id(),
-							"rfp_package_oid" => "juhuu",
-						),
-						CL_RESERVATION
+					"post_msg_after_reservation" => array(
+						"rfp_oid" => $arr["obj_inst"]->id(),
+						"class_id" => CL_RFP,
+						"action" => "handle_new_reservation" 
 					),
+					"firstname" => $spl[0],
+					"lastname" => join(" ", array_slice($spl, 1)),
+					"company" => $arr["obj_inst"]->prop("data_subm_organisation"),
+					"phone" => $arr["obj_inst"]->prop("data_subm_phone"),
 					"rooms" => "0",
 
 				));
@@ -1737,6 +1761,7 @@ class rfp extends class_base
 		$brons = "";
 		//$currency = 745;
 		$currency = $arr["obj_inst"]->prop("default_currency");
+		$default_lang = $arr["obj_inst"]->prop("default_language");
 		$resources_total = 0;
 		$colspan = 6;
 		if($package)
@@ -2395,6 +2420,7 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("default_language", "varchar(3)"),
 			array("offer_price_comment", "text"),
 			array("offer_expire_date", "int"),
 			array("offer_preface", "text"),
@@ -2558,8 +2584,11 @@ class rfp extends class_base
 	 **/
 	public function handle_new_reservation($arr)
 	{
-		arr($arr);
-		die();
+		$rfp = obj($arr["rfp_oid"]);
+		$rfp->connect(array(
+			"type" => "RELTYPE_RESERVATION",
+			"to" => $arr["reservation"]->id(),
+		));
 	}
 }
 ?>

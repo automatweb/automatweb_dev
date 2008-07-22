@@ -654,6 +654,14 @@
             <caption>Vaikevaluuta</caption>
       </property>
       <property>
+            <name>default_language</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>select</type>
+            <field>default_language</field>
+            <caption>Vaikevaluuta</caption>
+      </property>
+      <property>
             <name>final_rooms</name>
             <table>rfp</table>
             <group>final_general</group>

@@ -418,5 +418,14 @@ class reservation_obj extends _int_object
 		$res.= date("H:i" , $arr["end"]);
 		return $res;
 	}
+
+	/** Sets correct reservation name
+	 **/
+	public function set_correct_name()
+	{
+		$res_inst = get_instance(CL_RESERVATION);
+		$this->set_name($res_inst->get_correct_name($this));
+		$this->save();
+	}
 }
 ?>

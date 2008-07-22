@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.65 2008/07/14 13:16:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.66 2008/07/22 07:48:50 tarvo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1595,9 +1595,27 @@ class spa_bookings_overview extends class_base
 
 	/**
 		@attrib name=show_cals_pop
-		@param id required
+		@param id optional
 		@param rooms optional
 		@param title optional
+		@param post_msg_after_reservation optional type=array
+			Array(
+				class_id => CL_WHATEVER,
+				method => "some_method",
+				another_param => value,
+			)
+			After creating reservation object, some_mehtod on cl_whatever is called with this same array as param. One parameter is added to array before that:
+			array(
+				reservation => reservation_obj,
+			)
+		@param firstname optional type=string
+			Firstname for reservation object.
+		@param lastname optional type=string
+			Lastname for reservation object.
+		@param company optional type=string
+			Company for reservation object.
+		@param phone optional type=string
+			Phone number for reservation object.
 	**/
 	function show_cals_pop($arr)
 	{
@@ -1658,22 +1676,37 @@ class spa_bookings_overview extends class_base
 						"to" => $end
 					))
 				));
-				$oo = obj($arr["id"]);
-				foreach(safe_array($oo->prop("groups")) as $grp_id)
+				if($this->can("view", $arr["id"]))
 				{
-					$go = obj($grp_id);
-					$toolbar->add_menu_item(array(
-						"parent" => "print",
-						"text" => $go->name(),
-						"link" => $this->mk_my_orb("room_booking_printer", array(
-							"rooms" => $r_ol->ids(),
-							"from" => $_GET["start"],
-							"to" => $_GET["end"],
-							"group" => $grp_id
-						))
-					));
+					$oo = obj($arr["id"]);
+					foreach(safe_array($oo->prop("groups")) as $grp_id)
+					{
+						$go = obj($grp_id);
+						$toolbar->add_menu_item(array(
+							"parent" => "print",
+							"text" => $go->name(),
+							"link" => $this->mk_my_orb("room_booking_printer", array(
+								"rooms" => $r_ol->ids(),
+								"from" => $_GET["start"],
+								"to" => $_GET["end"],
+								"group" => $grp_id
+							))
+						));
+					}
 				}
 				
+				// generate the post_msg_params
+				foreach($arr["post_msg_after_reservation"] as $k => $v)
+				{
+					$reforb["post_msg_after_reservation[".$k."]"] = $v;
+				}
+				$reforb["id"] = $room_id;
+				$reforb["set_view_dates"] = "0";
+				$reforb["post_ru"] = get_ru(); 
+				$reforb["firstname"] = $arr["firstname"];
+				$reforb["lastname"] = $arr["lastname"];
+				$reforb["company"] = $arr["company"];
+				$reforb["phone"] = $arr["phone"];
 
 				$this->vars(array(
 					"toolbar" => $toolbar->get_toolbar(),
@@ -1684,11 +1717,7 @@ class spa_bookings_overview extends class_base
 						),
 						"obj_inst" => obj($room_id)
 					)),
-					"reforb" => $this->mk_reforb("do_add_reservation", array(
-						"id" => $room_id, 
-						"set_view_dates" => "0",
-						"post_ru" => get_ru()
-					))
+					"reforb" => $this->mk_reforb("do_add_reservation", $reforb),
 				));
 			}
 

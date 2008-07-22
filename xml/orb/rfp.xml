@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="handle_new_reservation" all_args="1">
+			<function name="handle_new_reservation">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.114 2008/07/17 09:25:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.115 2008/07/22 07:48:59 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -390,13 +390,7 @@ class reservation extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"] = sprintf(t("%s: %s / %s-%s %s"), 
-					$arr["obj_inst"]->prop("customer.name"),
-					date("d.m.Y", $arr["obj_inst"]->prop("start1")),
-					date("H:i", $arr["obj_inst"]->prop("start1")),
-					date("H:i", $arr["obj_inst"]->prop("end")),
-					$arr["obj_inst"]->prop("resource.name")
-				);
+				$prop["value"] = $this->get_correct_name($arr["obj_inst"]);
 				$prop["type"] = "text";
 				break;
 
@@ -3447,6 +3441,22 @@ flush();
 			}
 		}
 		else return false;
+	}
+
+	/** returns correct reservation name
+		@attrib params=pos
+		@param obj
+			Reservation obj
+	 **/
+	public function get_correct_name($obj)
+	{
+		return sprintf(t("%s: %s / %s-%s %s"), 
+			$obj->prop("customer.name"),
+			date("d.m.Y", $obj->prop("start1")),
+			date("H:i", $obj->prop("start1")),
+			date("H:i", $obj->prop("end")),
+			$obj->prop("resource.name")
+		);
 	}
 }
 ?>

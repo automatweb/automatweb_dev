@@ -2,6 +2,7 @@
 /*
 @classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=markop
 
+
 @default table=objects
 @default field=meta
 @default method=serialize
@@ -1131,7 +1132,6 @@ class room extends class_base
 			));
 			$people_opts = array("") + $ol->names();
 		}
-		
 		if(is_array($_POST["bron"]) || is_array($_GET["bron"]))
 		{
 			$room_inst = get_instance(CL_ROOM);
@@ -1279,7 +1279,14 @@ class room extends class_base
 						$co->save();
 					}
 				}
+				$bron->set_correct_name();
 				$bron->save();
+
+				if(is_array($arr["post_msg_after_reservation"]) && ($inst = get_instance($arr["post_msg_after_reservation"]["class_id"])) && is_callable(array($inst, $arr["post_msg_after_reservation"]["action"])))
+				{
+					$arr["post_msg_after_reservation"]["reservation"] = $bron;
+					$inst->$arr["post_msg_after_reservation"]["action"]($arr["post_msg_after_reservation"]);
+				}
 				$id = $bron->id();
 				die("<script type='text/javascript'>
 					if (window.opener)
@@ -1299,6 +1306,7 @@ class room extends class_base
 			CL_QUICK_RESERVATION,
 			$room->id(),
 			array(
+				"post_msg_after_reservation" => $arr["post_msg_after_reservation"],
 				"product" => $product,
 				"end" => $end,
 				"start1" => $start1,
@@ -2760,6 +2768,7 @@ class room extends class_base
 		if ($settings->prop("bron_popup_detailed"))
 		{
 			$url = html::get_new_url(CL_RESERVATION, $parent, array(
+				"post_msg_after_reservation" => $arr["post_msg_after_reservation"],
 				"return_url" => $arr["post_ru"],
 				"start1" => $start,
 				"calendar" => $cal,
@@ -2773,6 +2782,7 @@ class room extends class_base
 		else
 		{
 			$url = $this->mk_my_orb("admin_add_bron_popup", array(
+				"post_msg_after_reservation" => $arr["post_msg_after_reservation"],
                                 "parent" => $parent,
                                 "calendar" => $cal,
                                 "start1" => $start,
@@ -2780,6 +2790,10 @@ class room extends class_base
                                 "resource" => $arr["id"],
                                 "return_url" => $arr["post_ru"],
                                 "product" => $product,
+				"firstname" => $arr["firstname"],
+				"lastname" => $arr["lastname"],
+				"company" => $arr["company"],
+				"phone" => $arr["phone"],
                         ));
 			$w = 500;
 			$h = 400;
