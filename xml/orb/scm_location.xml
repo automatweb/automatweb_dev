@@ -2,6 +2,13 @@
 <orb>
 	<class name="scm_location" folder="applications/scm" extends="class_base">
 		<action name="location_data" all_args="1">
+			<function name="autocomplete_location">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="location_props" all_args="1">
 			<function name="location_data">
 				<arguments>
 				</arguments>

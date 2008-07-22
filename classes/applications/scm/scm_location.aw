@@ -77,7 +77,7 @@ class scm_location extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//			
+
 		};
 		return $retval;
 	}
@@ -94,6 +94,8 @@ class scm_location extends class_base
 		}
 		return $retval;
 	}
+
+
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
@@ -188,7 +190,7 @@ class scm_location extends class_base
 	/**
 	@attrib name=location_data params=name all_args=1
 	**/
-	function location_data($arr)
+	function autocomplete_location($arr)
 	{
 		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
@@ -220,5 +222,28 @@ class scm_location extends class_base
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
+
+	/**
+	@attrib name=location_props params=name all_args=1
+	**/
+	function location_data($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SCM_LOCATION,
+			"name" => $arr["name"],
+			"lang_id" => array(),
+			"limit" => 1,
+		));
+		$d = array();
+		if($ol->count() > 0){
+			$o = $ol->begin();
+			foreach(array_keys($o->instance()->get_all_properties()) as $p)
+			{
+				$d[$p] = iconv(aw_global_get("charset"), "UTF-8", $o->prop($p));
+			}
+		}
+		die(json_encode($d));
+	}
+
 }
 ?>
