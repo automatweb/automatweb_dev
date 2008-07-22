@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.240 2008/07/09 08:32:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.241 2008/07/22 13:41:29 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2323,11 +2323,17 @@ class menu extends class_base implements main_subtemplate_handler
 		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.google.com/schemas/sitemap/0.84\">\n";
 
 		$xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.google.com/schemas/sitemap/0.84" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
+/*
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
 			"parent" => aw_ini_get("site_rootmenu"),
 		));
 		$ol = $ot->to_list();
+*/
+		$mt = get_instance(CL_MENU_TREE);
+		$mt_obj = obj($mt->get_sysdefault());
+		$ol = $mt_obj->sitemap_menulist();
+		
 		$si = get_instance("contentmgmt/site_show");
 		$arr = array();
 		$si->_init_path_vars($arr);

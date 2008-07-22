@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.30 2008/03/13 13:26:32 kristo Exp $
-// menu_tree.aw - menüüpuu
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.31 2008/07/22 13:41:33 tarvo Exp $
+// menu_tree.aw - men&uuml;&uuml;puu
 
 /*
 	@default table=objects
@@ -32,6 +32,9 @@
 	@property menu_table type=table no_caption=1
 	@caption Men&uuml;&uuml; seoste tabel
 
+	@groupinfo activity caption="Aktiivsus"
+		@property default_table type=table no_caption=1 store=no group=activity
+
 	@reltype ROOT_MENU value=1 clid=CL_MENU
 	@caption Men&uuml;&uuml;
 
@@ -52,6 +55,9 @@ class menu_tree extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
+			case "default_table":
+				$this->_get_default_table(&$args);
+			break;
 			case "num_levels":
 				$data["options"] = array(
 					0 => t("K&otilde;ik"),
@@ -65,8 +71,8 @@ class menu_tree extends class_base
 			case "root_menu":
 				return PROP_IGNORE;
 			case "menus":
-				//nüüdsest peaks seostega seda asja tegema
-				//et üleminek oleks valutu :
+				//nyydsest peaks seostega seda asja tegema
+				//et yleminek oleks valutu :
 				if(!is_oid($args["obj_inst"]->id()) || !$data["value"]) return PROP_IGNORE;
 				$cs = $args["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ROOT_MENU",
@@ -124,6 +130,102 @@ class menu_tree extends class_base
 		}
 		return PROP_OK;
 	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "default_table":
+				$this->{"_set_".$prop["name"]}(&$arr);
+				break;
+		}
+		return PROP_OK;
+	}
+
+	function _get_default_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_header(t("S&uuml;steemi vaikimisi objekt"));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Objekt"),
+		));
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$active = $this->get_sysdefault();
+		foreach($ol->arr() as $oid=>$o)
+		{
+			$t->define_data(array(
+				"select" => html::radiobutton(array(
+					"name" => "default",
+					"value" => $oid,
+					"checked" => ($oid == $active)?1:0,
+				)),
+				"name" => html::get_change_url($oid, array(), $o->name()),
+			));
+		}
+	}
+
+
+	function _set_default_table($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"lang_id" => array(),
+		));
+		foreach ($ol->arr() as $item)
+		{
+			if ($item->id() != $arr["request"]["default"])
+			{
+				$item->set_status(STAT_NOTACTIVE);
+			}
+			else
+			{
+				$item->set_status(STAT_ACTIVE);
+			}
+			$item->save();
+		}
+	}
+
+	function get_sysdefault()
+	{
+		$active = false;
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"status" => STAT_ACTIVE,
+			"lang_id" => array(),
+		));
+		if (sizeof($ol->ids()) > 0)
+		{
+			$first = $ol->begin();
+			$active = $first->id();
+		}
+		else
+		{
+			$mt_obj = new obj();
+			$mt_obj->set_class_id(CL_MENU_TREE);
+			$mt_obj->set_parent(aw_ini_get("users.root_folder"));
+			$mt_obj->set_status(STAT_ACTIVE);
+			$mt_obj->set_name("Menu tree");
+			$mt_obj->save();
+			$mt_obj->connect(array(
+				"to" => aw_ini_get("site_rootmenu"),
+				"type" => "RELTYPE_ROOT_MENU",
+			));
+			$active = $mt_obj->id();
+		}
+		return $active;
+	}
+
 
 	function parse_alias($args = array())
 	{
@@ -277,7 +379,7 @@ class menu_tree extends class_base
 	}
 
 	////
-	// !Rekursiivne funktsioon, kutsutakse välja gen_rec_list seest
+	// !Rekursiivne funktsioon, kutsutakse v&auml;lja gen_rec_list seest
 	function _gen_rec_list($parents = array())
 	{
 		$this->save_handle();
