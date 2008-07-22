@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.10 2008/07/22 08:23:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.11 2008/07/22 08:28:56 tarvo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -819,9 +819,9 @@ class class_designer_manager extends class_base
 	**/
 	function delete_p($arr)
 	{
-		$inif1 = aw_ini_get("basedir")."/config/ini/classfolders.ini";
-		$inif2 = aw_ini_get("basedir")."/aw.ini";
-		$inif3 = aw_ini_get("site_basedir")."/files/classdesigner_clsfld.ini";
+		//$inif1 = aw_ini_get("basedir")."/config/ini/classfolders.ini";
+		//$inif2 = aw_ini_get("basedir")."/aw.ini";
+		$inif3 = aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini";
 		foreach(safe_array($arr["sel_fld"]) as $fld_id)
 		{
 			//$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
@@ -829,8 +829,9 @@ class class_designer_manager extends class_base
 			$this->_del_ini_file_value($inif3, "classfolders[$fld_id]");
 		}
 
-		$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
-		$inif2 = aw_ini_get("basedir")."/aw.ini";
+		//$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
+		//$inif2 = aw_ini_get("basedir")."/aw.ini";
+		$inif3 = aw_ini_get("site_basedir")."/files/class_designer_cls.ini";
 		foreach(safe_array($arr["sel"]) as $fld_id)
 		{
 			//$this->_del_ini_file_value($inif1, "classes[$fld_id]");
