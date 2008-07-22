@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.16 2008/07/08 13:01:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.17 2008/07/22 06:58:51 tarvo Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -757,12 +757,17 @@ class shop_special_offer extends class_base
 
 		$layout = obj($ob->prop("template"));
 		$prodat = $ob->meta("prodat");
+		foreach($prodat as $dat)
+		{
+			$n_prodat[$dat["product"]] = $dat;
+		}
+		$prodat = $n_prodat;
 
 		$html = "";
 		$plut = array();
 		foreach($ob->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
-			$plut[$c->prop("to")] = $prodat[$c->prop("to")]["ord"];
+			$plut[$c->prop("to")] = $prodat[$c->prop("to")]["product"];
 		}
 
 		asort($plut);
@@ -792,10 +797,11 @@ class shop_special_offer extends class_base
 				$param = array(
 					"layout" => $layout,
 					"prod" => $prod,
-					"prodat" => $prodat,
-					"plut" => $plut,
+					"prodat" => $prodat, // deprecated?
+					"plut" => $plut, // what for?
 					"l_inst" => $l_inst,
-					"price" => $prodat[$pid]["price"]
+					"shop_special_offer_price" => $prodat[$pid]["currency"],
+					"shop_special_offer_discount" => $prodat[$pid]["currency"],
 				);
 
 				$html .= $prod_i->do_draw_product($param);
