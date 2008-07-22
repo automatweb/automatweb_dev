@@ -5938,6 +5938,17 @@ class room extends class_base
 			"title" => t("Otsi")
 		));
 
+		if($arr["obj_inst"]->get_setting("show_only_my_graphs"))
+		{
+			$user = get_instance(CL_USER);
+			$person = $user->get_current_person();	
+			$ol = new object_list();
+			if(in_array($person , $pl->ids()))
+			{
+				$ol->add($person);
+			}
+			$pl = $ol;
+		}
 
 		foreach($pl->arr() as $po)
 		{
