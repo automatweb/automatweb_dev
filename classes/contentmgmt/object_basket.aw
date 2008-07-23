@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.9 2008/07/09 08:09:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.10 2008/07/23 09:38:37 tarvo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -175,7 +175,7 @@ class object_basket extends class_base
 		{
 			$rv = safe_array(aw_unserialize($this->get_cval("object_basket_".$o->id()."_".aw_global_get("uid"))));
 		}
-		if ($bt[OBJ_BASKET_SESSION])
+		elseif ($bt[OBJ_BASKET_SESSION])
 		{
 			$rv = safe_array($_SESSION["object_basket"][$o->id()]["content"]);
 		}
