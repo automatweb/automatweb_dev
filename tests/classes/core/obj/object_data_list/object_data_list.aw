@@ -92,7 +92,7 @@ class object_data_list_test extends UnitTestCase
 		}
 		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $row["name"]);
 	}
-*/
+
 	function test_filter_props_props()
 	{
 		$o1 = obj();
@@ -384,7 +384,7 @@ class object_data_list_test extends UnitTestCase
 		$this->tmp_objs[] = $o;
 
 		return $o;
-	}
+	}*/
 }
 
 ?>
