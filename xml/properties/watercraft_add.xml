@@ -18,6 +18,14 @@
             <caption>Vees&amp;amp;otilde;idukite haldus</caption>
       </property>
       <property>
+            <name>redir_after_publish</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>redir_after_publish</field>
+            <caption>Peale avaldamist suuna</caption>
+      </property>
+      <property>
             <name>required_fields_table</name>
             <table>objects</table>
             <group>required_fields</group>
