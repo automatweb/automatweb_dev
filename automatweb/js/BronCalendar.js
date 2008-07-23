@@ -30,7 +30,7 @@ function doBronExec(
 	{
 		cancel_bron_popup_dialog();
 
-		if (!intRoomReservationLength)
+		if (intRoomReservationLength===false)
 		{
 			sel = document.getElementById("room_reservation_length");
 			intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
@@ -68,7 +68,7 @@ function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProdu
 {
 	isClicked = intCalendarIntervall;
 	
-	if (!intRoomReservationLength)
+	if (intRoomReservationLength===false)
 	{
 		sel = document.getElementById("room_reservation_length");
 		intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
