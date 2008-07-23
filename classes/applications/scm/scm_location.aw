@@ -234,7 +234,12 @@ class scm_location extends class_base
 			"lang_id" => array(),
 			"limit" => 1,
 		));
-		$d = array();
+		$d = array(
+			"country" => "",
+			"county" => "",
+			"city" => "",
+			"address" => "",
+		);
 		if($ol->count() > 0){
 			$o = $ol->begin();
 			foreach(array_keys($o->instance()->get_all_properties()) as $p)
