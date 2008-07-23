@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.19 2008/07/23 10:27:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.20 2008/07/23 10:50:10 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -526,12 +526,16 @@ class watercraft_add extends class_base
 		if (isset($arr['cancel']))
 		{
 			$arr["keep_obj_on_cancel"] = isset($arr["keep_obj_on_cancel"])?$arr["keep_obj_on_cancel"]:false;
-			if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']) && $arr["keep_obj_on_cancel"])
+			if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']) && !$arr["keep_obj_on_cancel"])
 			{
 				$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);
 				$watercraft_obj->delete(true);
 			}
 			unset($_SESSION['watercraft_input_data']);
+			if(strlen($arr["redir_to"]) && substr($arr["redir_to"], 0, 4) == "http")
+			{
+				return $arr["redir_to"];
+			}
 			return aw_ini_get('baseurl').'/'.aw_global_get('section');
 		}
 
@@ -695,14 +699,13 @@ class watercraft_add extends class_base
 			$_SESSION['watercraft_input_data']['watercraft_id'] = $watercraft_obj->save();
 		}
 
-		if($just_published)
+		if($just_published && !$err_url)
 		{
-			/*
 			return $this->submit_data(array(
 				"cancel" => true,
 				"keep_obj_on_cancel" => true,
+				"redir_to" => $o->prop("redir_after_publish"),
 			));
-*/
 		}
 		return $err_url ? $err_url : $return_url;
 	}
