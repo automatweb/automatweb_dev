@@ -241,6 +241,14 @@ class scm_location extends class_base
 			{
 				$d[$p] = iconv(aw_global_get("charset"), "UTF-8", $o->prop($p));
 			}
+			if($this->can("view", $o->address))
+			{
+				$address = obj($o->address);
+				$d["country"] = $address->riik;
+				$d["county"] = $address->maakond;
+				$d["city"] = $address->linn;
+				$d["address"] = $address->aadress;
+			}
 		}
 		die(json_encode($d));
 	}
