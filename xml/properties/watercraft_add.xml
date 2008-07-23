@@ -19,7 +19,7 @@
       </property>
       <property>
             <name>redir_after_publish</name>
-            <table>objects</table>
+            <table>watercraft_add</table>
             <group>general</group>
             <type>textbox</type>
             <field>redir_after_publish</field>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.18 2008/07/23 10:24:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.19 2008/07/23 10:27:39 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -15,7 +15,7 @@
 	@property watercraft_management type=relpicker reltype=RELTYPE_WATERCRAFT_MANAGEMENT table=watercraft_add
 	@caption Vees&otilde;idukite haldus
 
-	@property redir_after_publish type=textbox 
+	@property redir_after_publish type=textbox table=watercraft_add
 	@caption Peale avaldamist suuna
 
 @groupinfo required_fields caption="Kohustuslikud v&auml;ljad"
