@@ -22,7 +22,7 @@ class oql_test extends UnitTestCase
 		}
 		aw_restore_acl();
 	}
-
+/*
 	function test_execute_query_clid_without_where_clause()
 	{
 		$rv = oql::compile_query("
@@ -43,7 +43,7 @@ class oql_test extends UnitTestCase
 		}
 		$this->assertTrue($ok);
 	}
-
+*/
 	// I'm using "WHERE true" cause the darn thing won't work without WHERE clause.
 	function test_execute_query_clid_with_where_clause()
 	{

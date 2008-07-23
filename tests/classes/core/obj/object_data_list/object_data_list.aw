@@ -22,7 +22,7 @@ class object_data_list_test extends UnitTestCase
 		}
 		//aw_restore_acl();
 	}
-*/
+
 	function test_construct_aliases()
 	{
 		$odl = new object_data_list(
@@ -72,7 +72,7 @@ class object_data_list_test extends UnitTestCase
 		);
 		$odl_arr = $odl->arr();
 		$this->assertTrue($row["name"] == $odl_arr[$row["id"]]["name"]);
-	}
+	}*/
 /*
 	function test_construct_no_aliases()
 	{
