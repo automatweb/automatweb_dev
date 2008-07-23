@@ -9238,6 +9238,8 @@ Bank accounts: yksteise all
 			"class_id" => CL_CRM_COMPANY,
 			"name" => $arr["name"],
 			"lang_id" => array(),
+			"parent" => array(),
+			"site_id" => array(),
 			"limit" => 1,
 		));
 		$d = array(
