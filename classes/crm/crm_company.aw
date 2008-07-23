@@ -9243,7 +9243,7 @@ Bank accounts: yksteise all
 			"limit" => 1,
 		));
 		$d = array(
-			"phone" => "",
+			"address" => "",
 			"mail" => "",
 			"url" => "http://",
 			"phone" => "(+372)",
