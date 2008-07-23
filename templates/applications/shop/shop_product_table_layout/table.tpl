@@ -153,9 +153,10 @@ function submit_form()
 	toggle('product_filter_layout');
 	$$("#filter_btn").removeClass("filter_btn_sel");
 
-//window.location.href = "http://walking.automatweb.com/orb.aw?section="+document.products_form.section.value+"&class=shop_order_center&action=show_items&id=192&in_filter=1&is_ajax=1"+params;
-	sisu_el.innerHTML = aw_get_url_contents("http://walking.automatweb.com/orb.aw?section="+document.products_form.section.value+"&class=shop_order_center&action=show_items&id=192&in_filter=1&is_ajax=1"+params);
-
+	url = window.location.href+"&in_filter=1&is_ajax=1"+params;
+	url = url.replace (/sptlp=[0-9]*/, "sptlp=0");
+	url = url.replace (/#/, "");
+	sisu_el.innerHTML = aw_get_url_contents(url);
 }
 
 $$('.filter_btn a').addEvent('click', function(e)
