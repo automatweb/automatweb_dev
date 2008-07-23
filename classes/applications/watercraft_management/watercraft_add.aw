@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.17 2007/11/23 07:10:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.18 2008/07/23 10:24:00 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -14,6 +14,9 @@
 
 	@property watercraft_management type=relpicker reltype=RELTYPE_WATERCRAFT_MANAGEMENT table=watercraft_add
 	@caption Vees&otilde;idukite haldus
+
+	@property redir_after_publish type=textbox 
+	@caption Peale avaldamist suuna
 
 @groupinfo required_fields caption="Kohustuslikud v&auml;ljad"
 @default group=required_fields
@@ -514,13 +517,16 @@ class watercraft_add extends class_base
                 @attrib name=submit_data 
                 @param id required type=int acl=view
                 @param rel_id required type=int 
+		@param redir_to optional type=string
+		@param keep_obj_on_cancel type=bool default=false
         **/
 	function submit_data($arr)
 	{
 
 		if (isset($arr['cancel']))
 		{
-			if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']))
+			$arr["keep_obj_on_cancel"] = isset($arr["keep_obj_on_cancel"])?$arr["keep_obj_on_cancel"]:false;
+			if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']) && $arr["keep_obj_on_cancel"])
 			{
 				$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);
 				$watercraft_obj->delete(true);
@@ -652,9 +658,15 @@ class watercraft_add extends class_base
 			"weight",
 			"draught",
 		);
+		$just_published = false;
+
 		// so, here i should have an watercraft_obj, so set the properties:
 		foreach ($arr as $prop_name => $prop_value)
 		{
+			if($prop_name == "visible" AND $prop_value == 1 AND $watercraft_obj->prop("visible") == 0)
+			{
+				$just_published = true;
+			}
 			// another really ugly hack for sail_table property
 			if($prop_name == "sail_table")
 			{
@@ -681,6 +693,16 @@ class watercraft_add extends class_base
 		else
 		{
 			$_SESSION['watercraft_input_data']['watercraft_id'] = $watercraft_obj->save();
+		}
+
+		if($just_published)
+		{
+			/*
+			return $this->submit_data(array(
+				"cancel" => true,
+				"keep_obj_on_cancel" => true,
+			));
+*/
 		}
 		return $err_url ? $err_url : $return_url;
 	}
@@ -891,6 +913,12 @@ class watercraft_add extends class_base
 
 		switch ($field)
 		{
+			case 'redir_after_publish':
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "varchar(255)",
+				));
+				return true;
 			case 'watercraft_type':
 			case 'watercraft_management':
 				$this->db_add_col($table, array(
