@@ -20,7 +20,7 @@ class object_list_test extends UnitTestCase
 			}
 		}
 	}
-
+/*
 	public function setUp()
 	{
 		if (0 === $this->oltst_read_tests_performed)
@@ -538,7 +538,7 @@ class object_list_test extends UnitTestCase
 		$this->assertTrue(in_array($this->oltst_test_data[1], $ids));
 	}
 
-	/* helper methods used by tests */
+	/* helper methods used by tests *//*
 	public function tmp_sorter($a, $b)
 	{
 		return $a->ord() === $b->ord() ? 0 :  ($a->ord() < $b->ord() ? -1 : 1);
@@ -547,7 +547,7 @@ class object_list_test extends UnitTestCase
 	public function tmp_foreach_cb(&$o, $param)
 	{
 		$o->set_name($param);
-	}
+	}*/
 	/* END helper methods used by tests */
 }
 
