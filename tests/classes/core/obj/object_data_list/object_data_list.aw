@@ -13,7 +13,7 @@ class object_data_list_test extends UnitTestCase
 		//aw_disable_acl();
 		$this->tmp_objs = array();
 	}
-
+/*
 	function tearDown()
 	{
 		foreach($this->tmp_objs as $doomed_obj);
@@ -22,7 +22,7 @@ class object_data_list_test extends UnitTestCase
 		}
 		//aw_restore_acl();
 	}
-
+*/
 	function test_construct_aliases()
 	{
 		$odl = new object_data_list(

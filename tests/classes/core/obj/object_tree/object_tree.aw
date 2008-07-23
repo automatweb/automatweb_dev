@@ -6,7 +6,7 @@ class object_tree_test extends UnitTestCase
 	{
 		 $this->UnitTestCase($name);
 	}
-
+/*
 	function setUp()
 	{
 		$this->db = get_instance("class_base");
@@ -156,7 +156,7 @@ class object_tree_test extends UnitTestCase
 		$this->assertTrue(__is_err());
 		$this->_del_tree($tree);
 	}*/
-
+/*
 	function test_level()
 	{
 		aw_disable_acl();
@@ -329,6 +329,6 @@ class object_tree_test extends UnitTestCase
 		$o->delete(true);
 		$o1->delete(true);
 		$o2->delete(true);
-	}
+	}*/
 }
 ?>
