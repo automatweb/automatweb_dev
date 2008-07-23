@@ -6,7 +6,7 @@ class object_data_list_test extends UnitTestCase
 	{
 		 $this->UnitTestCase($name);
 	}
-
+/*
 	function setUp()
 	{
 		$this->db = get_instance("class_base");
@@ -73,7 +73,7 @@ class object_data_list_test extends UnitTestCase
 		$odl_arr = $odl->arr();
 		$this->assertTrue($row["name"] == $odl_arr[$row["id"]]["name"]);
 	}
-
+/*
 	function test_construct_no_aliases()
 	{
 		$odl = new object_data_list(
@@ -92,7 +92,7 @@ class object_data_list_test extends UnitTestCase
 		}
 		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $row["name"]);
 	}
-
+*/
 	function test_filter_props_props()
 	{
 		$o1 = obj();
