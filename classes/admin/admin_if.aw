@@ -888,8 +888,11 @@ class admin_if extends class_base
 		
 		// although fast enough allready .. caching makes it 3 times as fast
 		$c = get_instance("cache");
-		$tree = $c->file_get("newbtn_tree_cache_".aw_global_get("uid"));
-		$tree = unserialize($tree);
+		if(aw_ini_get("admin_if.cache_toolbar_new"))
+		{
+			$tree = $c->file_get("newbtn_tree_cache_".aw_global_get("uid"));
+			$tree = unserialize($tree);
+		}
 		
 		if(!is_array($tree))
 		{

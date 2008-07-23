@@ -99,3 +99,4 @@ include ${ini_dir}/ows.ini
 include ${ini_dir}/otto.ini
 include ${ini_dir}/calendar.ini
 include ${ini_dir}/quickmessaging.ini
+include ${ini_dir}/admin_if.ini
