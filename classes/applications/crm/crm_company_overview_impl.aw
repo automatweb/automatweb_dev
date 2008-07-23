@@ -1302,13 +1302,14 @@ class crm_company_overview_impl extends class_base
 				$res["flags"] = array("mask" => OBJ_IS_DONE, "flags" => $r["act_s_status"] == 1 ? 0 : OBJ_IS_DONE);
 			}
 		}
-//		$res[] = new object_list_filter(array(
-//			"logic" => "OR",
-//			"conditions" => array(
-//				"CL_BUG.bug_status" => array(1,2,10,11),
-//				//"CL_TASK.oid" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
-//			)
-//		));
+		$res[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => array(
+				"class_id" => new obj_predicate_not(CL_BUG),
+				"CL_BUG.bug_status" => array(1,2,10,11),
+//				"CL_TASK.oid" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+			)
+		));
 		return $res;
 	}
 
