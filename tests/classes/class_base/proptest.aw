@@ -9,8 +9,8 @@ class proptest_test extends UnitTestCase
 	var $cb;
 	function proptest_test()
 	{
-/*-		$this->UnitTestCase("Classbase testid");
-		$this->cb = get_instance("cfg/proptest");
+		$this->UnitTestCase("Classbase testid");
+/*		$this->cb = get_instance("cfg/proptest");
 		$this->cb->change(array(
 			"id" => 1,
 			"cbcli" => "debugclient",
