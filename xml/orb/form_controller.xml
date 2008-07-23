@@ -5,6 +5,7 @@
 			<function name="add">
 				<arguments>
 					<required name="parent" type="int" acl="add" />
+					<optional name="alias_to" type="int" />
 				</arguments>
 			</function>
 		</action>

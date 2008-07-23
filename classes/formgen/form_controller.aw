@@ -24,7 +24,8 @@ class form_controller extends form_base
 		@attrib name=new params=name default="0"
 		
 		@param parent required type=int acl="add"
-		
+		@param alias_to optional type=int
+
 		@returns
 		
 		
@@ -49,7 +50,7 @@ class form_controller extends form_base
 		}
 		$this->vars(array(
 			"LANG" => $la,
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to))
 		));
 		return $this->parse();
 	}
@@ -100,6 +101,13 @@ class form_controller extends form_base
 			$o->set_meta("error_js_pop" , $error_js_pop);
 			$o->set_meta("error_icon" , $error_icon);
 			$id = $o->save();
+			if($alias_to)
+			{
+				$to_o = obj($alias_to);
+				$to_o->connect(array(
+					"to" => $id,
+				));
+			}
 		}
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
