@@ -9240,13 +9240,18 @@ Bank accounts: yksteise all
 			"lang_id" => array(),
 			"limit" => 1,
 		));
-		$d = array();
+		$d = array(
+			"phone" => "",
+			"mail" => "",
+			"url" => "http://",
+			"phone" => "(+372)",
+		);
 		if($ol->count() > 0){
 			$o = $ol->begin();
-			foreach(array_keys($o->instance()->get_all_properties()) as $p)
-			{
-				$d[$p] = iconv(aw_global_get("charset"), "UTF-8", $o->prop($p));
-			}
+			$d["phone"] = $o->prop("phone_id.name");
+			$d["mail"] = $o->prop("email_id.mail");
+			$d["url"] = $o->prop("url_id.url");
+			$d["address"] = $o->prop("address.name");
 		}
 		die(json_encode($d));
 	}
