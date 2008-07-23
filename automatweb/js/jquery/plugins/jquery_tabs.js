@@ -18,6 +18,10 @@ jQuery.iTTabs =
 	{
 		pressedKey = e.charCode || e.keyCode || -1;
 		if (pressedKey == 9) {
+			if ($.browser.mozilla)
+			{
+				scrollTop = this.scrollTop;
+			}
 			if (window.event) {
 				window.event.cancelBubble = true;
 				window.event.returnValue = false;
@@ -34,6 +38,10 @@ jQuery.iTTabs =
 				this.value = this.value.substring(0, start) + "\t" + this.value.substr(end);
 				this.setSelectionRange(start + 1, start + 1);
 				this.focus();
+				if ($.browser.mozilla)
+				{
+					this.scrollTop = scrollTop;
+				}
 			}
 			return false;
 		}
