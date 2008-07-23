@@ -242,10 +242,6 @@ class scm_location extends class_base
 		);
 		if($ol->count() > 0){
 			$o = $ol->begin();
-			foreach(array_keys($o->instance()->get_all_properties()) as $p)
-			{
-				$d[$p] = iconv(aw_global_get("charset"), "UTF-8", $o->prop($p));
-			}
 			if($this->can("view", $o->address))
 			{
 				$address = obj($o->address);

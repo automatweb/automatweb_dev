@@ -9253,7 +9253,7 @@ Bank accounts: yksteise all
 			$d["phone"] = $o->prop("phone_id.name");
 			$d["mail"] = $o->prop("email_id.mail");
 			$d["url"] = $o->prop("url_id.url");
-			$d["address"] = $o->prop("address.name");
+			$d["address"] = $o->prop("contact.name");
 		}
 		die(json_encode($d));
 	}
