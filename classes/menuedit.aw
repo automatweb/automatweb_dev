@@ -249,6 +249,11 @@ class menuedit extends aw_template implements request_startup
 			$c = get_instance(CL_MENU);
 			$c->get_sitemap();
 		}
+		if($section == 'robots.txt')
+		{
+			echo "Sitemap: ".aw_ini_get("baseurl")."/sitemap.gz";
+			die();
+		}
 
 		// sektsioon ei olnud numbriline
 		if (!is_oid($section))

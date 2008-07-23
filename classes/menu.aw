@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.241 2008/07/22 13:41:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.242 2008/07/23 07:04:10 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2331,8 +2331,15 @@ class menu extends class_base implements main_subtemplate_handler
 		$ol = $ot->to_list();
 */
 		$mt = get_instance(CL_MENU_TREE);
-		$mt_obj = obj($mt->get_sysdefault());
-		$ol = $mt_obj->sitemap_menulist();
+		if($this->can("view", $_id = $mt->get_sysdefault()))
+		{
+			$mt_obj = obj($_id);
+			$ol = $mt_obj->sitemap_menulist();
+		}
+		else
+		{
+			$ol = new object_list();
+		}
 		
 		$si = get_instance("contentmgmt/site_show");
 		$arr = array();

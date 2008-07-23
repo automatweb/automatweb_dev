@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.31 2008/07/22 13:41:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.32 2008/07/23 07:04:18 tarvo Exp $
 // menu_tree.aw - men&uuml;&uuml;puu
 
 /*
@@ -211,7 +211,7 @@ class menu_tree extends class_base
 		}
 		else
 		{
-			$mt_obj = new obj();
+			$mt_obj = obj();
 			$mt_obj->set_class_id(CL_MENU_TREE);
 			$mt_obj->set_parent(aw_ini_get("users.root_folder"));
 			$mt_obj->set_status(STAT_ACTIVE);
