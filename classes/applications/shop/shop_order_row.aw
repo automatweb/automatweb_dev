@@ -5,23 +5,44 @@
 @classinfo syslog_type=ST_SHOP_ORDER_ROW relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 @tableinfo aw_shop_order_rows index=aw_oid master_index=brother_of master_table=objects
 
-@default table=objects
 @default group=general
+@default table=aw_shop_order_rows
 
-@property prod_name type=textbox table=aw_shop_order_rows field=aw_prod_name
+@property prod_name type=textbox field=aw_prod_name
 @caption Toote nimi
 
-@property prod type=relpicker reltype=RELTYPE_PRODUCT table=aw_shop_order_rows field=aw_product
+@property prod type=relpicker reltype=RELTYPE_PRODUCT field=aw_product
 @caption Toode
 
-@property price type=textbox table=aw_shop_order_rows field=aw_prod_price
-@caption Toote hind
+@property unit type=relpicker reltype=RELTYPE_UNIT
+@caption &Uuml;hik
 
-@property items type=textbox size=3 table=aw_shop_order_rows field=aw_items
+@property price type=textbox field=aw_prod_price
+@caption &Uuml;hiku hind
+
+@property items type=textbox field=aw_items
+@caption Kogus t&uuml;kkides
+
+@property required type=textbox
+@caption Vajadus
+
+@property amount type=textbox datatype=int
 @caption Kogus
+
+@property real_amount type=text datatype=int
+@caption Reaalne kogus
+
+@property tax_rate type=relpicker reltype=RELTYPE_TAX_RATE
+@caption Maksum&auml;&auml;r
+
+@property other_code type=textbox
+@caption Teine artiklikood
 
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption Toode
+
+@reltype UNIT value=2 clid=CL_UNIT
+@caption &Uuml;hik
 */
 
 class shop_order_row extends class_base
@@ -85,18 +106,30 @@ class shop_order_row extends class_base
 			switch($field)
 			{
 				case "aw_prod_name":
+				case "other_code":
+				case "required":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "VARCHAR(255)"
 					));
 					return true;
 					break;
-				case "aw_prod_price":
 				case "aw_product":
 				case "aw_items":
+				case "unit":
+				case "tax_rate":
 					$this->db_add_col($table, array(
 						"name" => $field,
 						"type" => "int"
+					));
+					return true;
+					break;
+				case "aw_prod_price":
+				case "amount":
+				case "real_amount":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "double"
 					));
 					return true;
 					break;
@@ -104,5 +137,4 @@ class shop_order_row extends class_base
 		}
 	}
 }
-
 ?>

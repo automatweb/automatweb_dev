@@ -25,5 +25,12 @@
 			</function>
 		</action>
 
+		<action name="create_new_dn">
+			<function name="create_new_dn">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

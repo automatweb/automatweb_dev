@@ -18,14 +18,23 @@
             <caption>Hankija</caption>
       </property>
       <property>
-            <name>related_sales_orders</name>
+            <name>job</name>
+            <table>aw_shop_purcahse_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JOB</reltype>
+            <field>aw_job</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;</caption>
+      </property>
+      <property>
+            <name>related_orders</name>
             <table>aw_shop_purcahse_orders</table>
             <group>general</group>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_SELL_ORDER</reltype>
             <store>connect</store>
-            <field>related_sales_orders</field>
+            <field>related_orders</field>
             <caption>Seotud m&amp;amp;uuml;&amp;amp;uuml;gitellimused			</caption>
       </property>
       <property>
@@ -37,7 +46,15 @@
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
-            <name>planned_arrival_date</name>
+            <name>deal_date</name>
+            <table>aw_shop_purcahse_orders</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_deal_date</field>
+            <caption>Tegelemise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>planned_date</name>
             <table>aw_shop_purcahse_orders</table>
             <group>general</group>
             <type>date_select</type>
@@ -68,14 +85,25 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_trans_cost</field>
+            <datatype>int</datatype>
             <caption>Transpordikulu</caption>
+      </property>
+      <property>
+            <name>customs_cost</name>
+            <table>aw_shop_purcahse_orders</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_customs_cost</field>
+            <datatype>int</datatype>
+            <caption>Tollikulu</caption>
       </property>
       <property>
             <name>transp_type</name>
             <table>aw_shop_purcahse_orders</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
             <field>aw_transp_type</field>
+            <reltype>RELTYPE_TRANSFER_METHOD</reltype>
             <caption>L&amp;amp;auml;hetusviis</caption>
       </property>
       <property>
@@ -194,6 +222,26 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>Ladu</caption>
             </WAREHOUSE>
+            <TRANSFER_METHOD>
+                  <value>7</value>
+                  <clid>CL_CRM_TRANSFER_METHOD</clid>
+                  <caption>L&amp;amp;auml;hetusviis</caption>
+            </TRANSFER_METHOD>
+            <PRODUCT>
+                  <value>8</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Artikkel</caption>
+            </PRODUCT>
+            <ROW>
+                  <value>9</value>
+                  <clid>CL_SHOP_ORDER_ROW</clid>
+                  <caption>Rida</caption>
+            </ROW>
+            <JOB>
+                  <value>10</value>
+                  <clid>CL_MRP_CASE</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;</caption>
+            </JOB>
       </reltypes>
 </properties>
 

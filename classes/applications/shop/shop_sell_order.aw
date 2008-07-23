@@ -12,13 +12,19 @@
 @property purchaser type=relpicker reltype=RELTYPE_PURCHASER field=aw_purchaser
 @caption Tellija
 
-@property related_purchase_orders type=relpicker multiple=1 reltype=RELTYPE_PURCHASE_ORDER store=connect
+@property job type=relpicker reltype=RELTYPE_JOB field=aw_job
+@caption T&ouml;&ouml;
+
+@property related_orders type=relpicker multiple=1 reltype=RELTYPE_PURCHASE_ORDER store=connect
 @caption Seotud ostutellimused			
 
 @property date type=date_select field=aw_date
 @caption Kuup&auml;ev
 
-@property planned_send_date type=date_select field=aw_planned_send_date
+@property deal_date type=date_select field=aw_deal_date
+@caption Tegelemise kuup&auml;ev
+
+@property planned_date type=date_select field=aw_planned_send_date
 @caption Planeeritud saatmise kuup&auml;ev
 
 @property buyer_rep type=relpicker reltype=RELTYPE_BUYER_REP field=aw_buyer_rep
@@ -30,7 +36,10 @@
 @property trans_cost type=textbox field=aw_trans_cost
 @caption Transpordikulu
 
-@property transp_type type=textbox field=aw_transp_type
+@property customs_cost type=textbox field=aw_customs_cost datatype=int
+@caption Tollikulu
+
+@property transp_type type=relpicker field=aw_transp_type reltype=RELTYPE_TRANSFER_METHOD
 @caption L&auml;hetusviis
 
 @property currency type=relpicker reltype=RELTYPE_CURRENCY automatic=1 field=aw_currency
@@ -78,6 +87,18 @@
 
 @reltype WAREHOUSE value=6 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
+
+@reltype TRANSFER_METHOD value=7 clid=CL_CRM_TRANSFER_METHOD
+@caption L&auml;hetusviis
+
+@reltype PRODUCT value=8 clid=CL_SHOP_PRODUCT
+@caption Artikkel
+
+@reltype ROW value=9 clid=CL_SHOP_ORDER_ROW
+@caption Rida
+
+@reltype JOB value=10 clid=CL_MRP_CASE
+@caption T&ouml;&ouml;
 */
 
 class shop_sell_order extends class_base
@@ -92,7 +113,7 @@ class shop_sell_order extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["post_ru"] = post_ru();
+		return get_instance(CL_SHOP_PURCHASE_ORDER)->callback_mod_reforb(&$arr);
 	}
 
 	function _get_taxed($arr)
@@ -107,6 +128,24 @@ class shop_sell_order extends class_base
 			$this->db_query("CREATE TABLE aw_shop_sell_orders(aw_oid int primary key, aw_number varchar(255), aw_purchaser int, related_purcahse_orders int, aw_date int, aw_planned_send_date int, aw_buyer_rep int, aw_our_rep int, aw_trans_cost double, aw_transp_type varchar(255), aw_currency int, aw_warehouse int, aw_confirmed int, aw_closed int, aw_taxed int)");
 			return true;
 		}
+		switch($f)
+		{
+			case "aw_customs_cost":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+				return true;
+				break;
+			case "aw_job":
+			case "aw_deal_date":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+				break;
+		}
 	}
 
 	function _get_warehouse($arr)
@@ -120,67 +159,17 @@ class shop_sell_order extends class_base
 
 	function _get_art_toolbar($arr)
 	{
-		$tb = $arr["prop"]["vcl_inst"];
-		$tb->add_search_button();
+		return get_instance(CL_SHOP_PURCHASE_ORDER)->_get_art_toolbar($arr);
 	}
 
 	function _get_articles($arr)
 	{
-		$t = $arr["prop"]["vcl_inst"];
-		$this->_init_articles_tbl($t);
+		return get_instance(CL_SHOP_PURCHASE_ORDER)->_get_articles($arr);
 	}
 
-	private function _init_articles_tbl($t)
+	function _set_articles($arr)
 	{
-		$t->define_field(array(
-			"caption" => t("Artikkel"),
-			"align" => "center",
-			"name" => "name",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Kogus"),
-			"align" => "center",
-			"name" => "amount",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"caption" => t("&Uuml;hik"),
-			"align" => "center",
-			"name" => "unit",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("&Uuml;hiku hind"),
-			"align" => "center",
-			"name" => "unit_price",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Summa"),
-			"align" => "center",
-			"name" => "sum",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Maksum&auml;&auml;r"),
-			"align" => "center",
-			"name" => "tax_rate",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Tellija artiklikood"),
-			"align" => "center",
-			"name" => "buyer_art_code",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Saadud kogus"),
-			"align" => "center",
-			"name" => "gotten_amt",
-			"sortable" => 1
-		));
+		return get_instance(CL_SHOP_PURCHASE_ORDER)->_set_articles($arr);
 	}
 }
 ?>

@@ -108,7 +108,7 @@ class shop_delivery_note_row extends class_base
 			case "price":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => "float"
+					"type" => "double"
 				));
 				$ret = true;
 				break;

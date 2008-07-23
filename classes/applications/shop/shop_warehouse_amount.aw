@@ -106,7 +106,7 @@ class shop_warehouse_amount extends class_base
 			case "amount":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => "float"
+					"type" => "double"
 				));
 				$ret = true;
 				break;

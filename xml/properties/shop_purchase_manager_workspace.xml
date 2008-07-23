@@ -43,6 +43,16 @@
             <caption>Laod</caption>
       </property>
       <property>
+            <name>show_alt_units</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva alternatiiv&amp;amp;uuml;hikuid</caption>
+      </property>
+      <property>
             <name>storage_income_toolbar</name>
             <table>objects</table>
             <group>storage_income</group>
@@ -372,6 +382,16 @@
             <field>storage_movements_toolbar</field>
       </property>
       <property>
+            <name>storage_movements_tree2</name>
+            <table>objects</table>
+            <group>storage_movements</group>
+            <type>treeview</type>
+            <parent>storage_movements_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>storage_movements_tree2</field>
+      </property>
+      <property>
             <name>storage_movements_tree</name>
             <table>objects</table>
             <group>storage_movements</group>
@@ -388,10 +408,20 @@
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>storage_movements_left_search</parent>
             <field>storage_movements_s_warehouse</field>
             <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>storage_movements_s_direction</name>
+            <table>objects</table>
+            <group>storage_movements</group>
+            <type>chooser</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>storage_movements_left_search</parent>
+            <field>storage_movements_s_direction</field>
+            <caption>Liikumise suund</caption>
       </property>
       <property>
             <name>storage_movements_s_number</name>
@@ -403,19 +433,7 @@
             <size>30</size>
             <parent>storage_movements_left_search</parent>
             <field>storage_movements_s_number</field>
-            <caption>Number</caption>
-      </property>
-      <property>
-            <name>storage_movements_s_status</name>
-            <table>objects</table>
-            <group>storage_movements</group>
-            <type>chooser</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>storage_movements_left_search</parent>
-            <field>storage_movements_s_status</field>
-            <caption>Staatus</caption>
+            <caption>Saatelehe number</caption>
       </property>
       <property>
             <name>storage_movements_s_from</name>
@@ -451,6 +469,18 @@
             <parent>storage_movements_left_search</parent>
             <field>storage_movements_s_article</field>
             <caption>Artikkel</caption>
+      </property>
+      <property>
+            <name>storage_movements_s_articlecode</name>
+            <table>objects</table>
+            <group>storage_movements</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>storage_movements_left_search</parent>
+            <field>storage_movements_s_articlecode</field>
+            <caption>Artiklikood</caption>
       </property>
       <property>
             <name>storage_movements_s_art_cat</name>
@@ -498,6 +528,16 @@
             <field>storage_writeoffs_toolbar</field>
       </property>
       <property>
+            <name>storage_writeoffs_tree2</name>
+            <table>objects</table>
+            <group>storage_writeoffs</group>
+            <type>treeview</type>
+            <parent>storage_writeoffs_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>storage_writeoffs_tree2</field>
+      </property>
+      <property>
             <name>storage_writeoffs_tree</name>
             <table>objects</table>
             <group>storage_writeoffs</group>
@@ -514,7 +554,6 @@
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <size>30</size>
             <parent>storage_writeoffs_left_search</parent>
             <field>storage_writeoffs_s_warehouse</field>
             <caption>Ladu</caption>
@@ -529,19 +568,7 @@
             <size>30</size>
             <parent>storage_writeoffs_left_search</parent>
             <field>storage_writeoffs_s_number</field>
-            <caption>Number</caption>
-      </property>
-      <property>
-            <name>storage_writeoffs_s_status</name>
-            <table>objects</table>
-            <group>storage_writeoffs</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>storage_writeoffs_left_search</parent>
-            <field>storage_writeoffs_s_status</field>
-            <caption>Staatus</caption>
+            <caption>Saatelehe number</caption>
       </property>
       <property>
             <name>storage_writeoffs_s_from</name>
@@ -577,6 +604,18 @@
             <parent>storage_writeoffs_left_search</parent>
             <field>storage_writeoffs_s_article</field>
             <caption>Artikkel</caption>
+      </property>
+      <property>
+            <name>storage_writeoffs_s_articlecode</name>
+            <table>objects</table>
+            <group>storage_writeoffs</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>30</size>
+            <parent>storage_writeoffs_left_search</parent>
+            <field>storage_writeoffs_s_articlecode</field>
+            <caption>Artiklikood</caption>
       </property>
       <property>
             <name>storage_writeoffs_s_art_cat</name>
@@ -634,6 +673,16 @@
             <field>storage_status_tree</field>
       </property>
       <property>
+            <name>storage_status_tree2</name>
+            <table>objects</table>
+            <group>status_status</group>
+            <type>treeview</type>
+            <parent>storage_status_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>storage_status_tree2</field>
+      </property>
+      <property>
             <name>storage_status_s_name</name>
             <table>objects</table>
             <group>status_status</group>
@@ -681,7 +730,7 @@
             <caption>Kategooria</caption>
       </property>
       <property>
-            <name>storage_status_s_status</name>
+            <name>storage_status_s_count</name>
             <table>objects</table>
             <group>status_status</group>
             <type>chooser</type>
@@ -689,7 +738,7 @@
             <captionside>top</captionside>
             <size>30</size>
             <parent>storage_status_left_search</parent>
-            <field>storage_status_s_status</field>
+            <field>storage_status_s_count</field>
             <caption>Laoseis</caption>
       </property>
       <property>
@@ -741,7 +790,7 @@
             <parent>storage_status_left_search</parent>
             <no_caption>1</no_caption>
             <field>storage_status_s_show_pieces</field>
-            <caption>Kuva t&amp;amp;uuml;&amp;amp;uuml;kkidena</caption>
+            <caption>Kuva t&amp;amp;uuml;kkidena</caption>
       </property>
       <property>
             <name>storage_status_s_show_batches</name>
@@ -802,6 +851,16 @@
             <field>storage_prognosis_tree</field>
       </property>
       <property>
+            <name>storage_prognosis_tree2</name>
+            <table>objects</table>
+            <group>status_prognosis</group>
+            <type>treeview</type>
+            <parent>storage_prognosis_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>storage_prognosis_tree2</field>
+      </property>
+      <property>
             <name>storage_prognosis_s_name</name>
             <table>objects</table>
             <group>status_prognosis</group>
@@ -849,15 +908,15 @@
             <caption>Kategooria</caption>
       </property>
       <property>
-            <name>storage_prognosis_s_status</name>
+            <name>storage_prognosis_s_count</name>
             <table>objects</table>
             <group>status_prognosis</group>
-            <type>date_select</type>
+            <type>chooser</type>
             <store>no</store>
             <captionside>top</captionside>
             <size>30</size>
             <parent>storage_prognosis_left_search</parent>
-            <field>storage_prognosis_s_status</field>
+            <field>storage_prognosis_s_count</field>
             <caption>Laoseis</caption>
       </property>
       <property>
@@ -893,8 +952,9 @@
             <captionside>top</captionside>
             <size>30</size>
             <parent>storage_prognosis_left_search</parent>
+            <no_caption>1</no_caption>
             <field>storage_prognosis_s_below_min</field>
-            <caption>Alla miinimumi no_caption=1</caption>
+            <caption>Alla miinimumi</caption>
       </property>
       <property>
             <name>storage_prognosis_s_date</name>
@@ -1215,18 +1275,6 @@
             <parent>purchase_orders_left_search</parent>
             <field>purchase_orders_s_sales_manager</field>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gijuht</caption>
-      </property>
-      <property>
-            <name>purchase_orders_s_group_by_order</name>
-            <table>objects</table>
-            <group>purchase_orders</group>
-            <type>textbox</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <size>30</size>
-            <parent>purchase_orders_left_search</parent>
-            <field>purchase_orders_s_group_by_order</field>
-            <caption>Grupeeri ostutellimuste alusel</caption>
       </property>
       <property>
             <name>purchase_orders_s_sbt</name>

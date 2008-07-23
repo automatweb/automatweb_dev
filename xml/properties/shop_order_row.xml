@@ -2,37 +2,88 @@
 <properties>
       <property>
             <name>prod_name</name>
-            <table>aw_shop_order_rows</table>
             <group>general</group>
+            <table>aw_shop_order_rows</table>
             <type>textbox</type>
             <field>aw_prod_name</field>
             <caption>Toote nimi</caption>
       </property>
       <property>
             <name>prod</name>
-            <table>aw_shop_order_rows</table>
             <group>general</group>
+            <table>aw_shop_order_rows</table>
             <type>relpicker</type>
             <reltype>RELTYPE_PRODUCT</reltype>
             <field>aw_product</field>
             <caption>Toode</caption>
       </property>
       <property>
-            <name>price</name>
-            <table>aw_shop_order_rows</table>
+            <name>unit</name>
             <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_UNIT</reltype>
+            <field>unit</field>
+            <caption>&amp;amp;Uuml;hik</caption>
+      </property>
+      <property>
+            <name>price</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
             <type>textbox</type>
             <field>aw_prod_price</field>
-            <caption>Toote hind</caption>
+            <caption>&amp;amp;Uuml;hiku hind</caption>
       </property>
       <property>
             <name>items</name>
-            <table>aw_shop_order_rows</table>
             <group>general</group>
+            <table>aw_shop_order_rows</table>
             <type>textbox</type>
-            <size>3</size>
             <field>aw_items</field>
+            <caption>Kogus t&amp;amp;uuml;kkides</caption>
+      </property>
+      <property>
+            <name>required</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>textbox</type>
+            <field>required</field>
+            <caption>Vajadus</caption>
+      </property>
+      <property>
+            <name>amount</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>amount</field>
             <caption>Kogus</caption>
+      </property>
+      <property>
+            <name>real_amount</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>text</type>
+            <datatype>int</datatype>
+            <field>real_amount</field>
+            <caption>Reaalne kogus</caption>
+      </property>
+      <property>
+            <name>tax_rate</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TAX_RATE</reltype>
+            <field>tax_rate</field>
+            <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
+      </property>
+      <property>
+            <name>other_code</name>
+            <group>general</group>
+            <table>aw_shop_order_rows</table>
+            <type>textbox</type>
+            <field>other_code</field>
+            <caption>Teine artiklikood</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_ROW</syslog_type>
@@ -54,6 +105,11 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Toode</caption>
             </PRODUCT>
+            <UNIT>
+                  <value>2</value>
+                  <clid>CL_UNIT</clid>
+                  <caption>&amp;amp;Uuml;hik</caption>
+            </UNIT>
       </reltypes>
 </properties>
 

@@ -4,7 +4,7 @@
             <name>date</name>
             <table>shop_warehouse_inventory</table>
             <group>general</group>
-            <type>date_select</type>
+            <type>datetime_select</type>
             <field>date</field>
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
@@ -14,6 +14,8 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_WAREHOUSE</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
             <field>warehouse</field>
             <caption>Ladu</caption>
       </property>
@@ -27,6 +29,16 @@
             <caption>Kinnitatud</caption>
       </property>
       <property>
+            <name>toolbar</name>
+            <table>objects</table>
+            <group>products</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>toolbar</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
             <name>product_code</name>
             <table>objects</table>
             <group>products</group>
@@ -34,6 +46,7 @@
             <store>no</store>
             <parent>product_search_params_frame</parent>
             <captionside>top</captionside>
+            <size>30</size>
             <field>product_code</field>
             <caption>Kood</caption>
       </property>
@@ -45,6 +58,7 @@
             <store>no</store>
             <parent>product_search_params_frame</parent>
             <captionside>top</captionside>
+            <size>30</size>
             <field>product_barcode</field>
             <caption>Ribakood</caption>
       </property>
@@ -56,6 +70,7 @@
             <store>no</store>
             <parent>product_search_params_frame</parent>
             <captionside>top</captionside>
+            <size>30</size>
             <field>product_name</field>
             <caption>Nimetus</caption>
       </property>
@@ -63,7 +78,7 @@
             <name>product_group</name>
             <table>objects</table>
             <group>products</group>
-            <type>textbox</type>
+            <type>select</type>
             <store>no</store>
             <parent>product_search_params_frame</parent>
             <captionside>top</captionside>
@@ -71,15 +86,15 @@
             <caption>Tootegrupp</caption>
       </property>
       <property>
-            <name>toolbar</name>
+            <name>product_sbmt</name>
             <table>objects</table>
             <group>products</group>
-            <type>toolbar</type>
-            <parent>product_result_frame</parent>
-            <no_caption>1</no_caption>
+            <type>submit</type>
             <store>no</store>
-            <field>toolbar</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+            <parent>product_search_params_frame</parent>
+            <captionside>top</captionside>
+            <field>product_sbmt</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>product_result</name>
@@ -87,9 +102,9 @@
             <group>products</group>
             <type>table</type>
             <parent>product_result_frame</parent>
+            <no_caption>1</no_caption>
             <store>no</store>
             <field>product_result</field>
-            <caption>Tooted</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_INVENTORY</syslog_type>
@@ -128,8 +143,9 @@
             <product_search_params_frame>
                   <type>vbox</type>
                   <parent>products_frame</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>products</group>
-                  <area_caption></area_caption>
             </product_search_params_frame>
             <product_result_frame>
                   <type>vbox</type>

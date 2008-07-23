@@ -30,6 +30,9 @@
 @property price type=textbox datatype=int
 @caption Hind
 
+@property base_price type=textbox datatype=int
+@caption Hind p&otilde;hivaluutas
+
 @property transport type=textbox datatype=int
 @caption Transport
 
@@ -141,9 +144,10 @@ class shop_warehouse_movement extends class_base
 			case "price":
 			case "transport":
 			case "customs":
+			case "base_price":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => "float"
+					"type" => "double"
 				));
 				return true;
 				break;

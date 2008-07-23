@@ -584,12 +584,12 @@
             </PRICE_LIST>
             <TRANSFER_METHOD>
                   <value>11</value>
-                  <clid>CL_TRANSFER_METHOD</clid>
+                  <clid>CL_CRM_TRANSFER_METHOD</clid>
                   <caption>L&amp;amp;auml;hetusviis</caption>
             </TRANSFER_METHOD>
             <TRANSFER_CONDITION>
                   <value>12</value>
-                  <clid>CL_TRANSFER_CONDITION</clid>
+                  <clid>CL_CRM_TRANSFER_CONDITION</clid>
                   <caption>L&amp;amp;auml;hetustingimus</caption>
             </TRANSFER_CONDITION>
             <SELLING_ORDER>

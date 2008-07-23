@@ -227,10 +227,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 @reltype PRICE_LIST value=10 clid=CL_SHOP_PRICE_LIST
 @caption Hinnakiri
 
-@reltype TRANSFER_METHOD value=11 clid=CL_TRANSFER_METHOD
+@reltype TRANSFER_METHOD value=11 clid=CL_CRM_TRANSFER_METHOD
 @caption L&auml;hetusviis
 
-@reltype TRANSFER_CONDITION value=12 clid=CL_TRANSFER_CONDITION
+@reltype TRANSFER_CONDITION value=12 clid=CL_CRM_TRANSFER_CONDITION
 @caption L&auml;hetustingimus
 
 @reltype SELLING_ORDER value=13 clid=CL_SHOP_WAREHOUSE_SELLING_ORDER

@@ -44,28 +44,6 @@
             <caption>Hinnakujundus</caption>
       </property>
       <property>
-            <name>sales_price_tbl</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>gen_left</parent>
-            <field>sales_price_tbl</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;gihind</caption>
-      </property>
-      <property>
-            <name>purchase_price_tbl</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>gen_left</parent>
-            <field>purchase_price_tbl</field>
-            <caption>Ostuhind</caption>
-      </property>
-      <property>
             <name>short_name</name>
             <table>aw_shop_products</table>
             <group>general_general</group>
@@ -97,6 +75,17 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gihinnad</caption>
       </property>
       <property>
+            <name>prev_purchase_price_tbl</name>
+            <table>objects</table>
+            <group>general_general</group>
+            <type>table</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>gen_left</parent>
+            <field>prev_purchase_price_tbl</field>
+            <caption>Ostuhinnad</caption>
+      </property>
+      <property>
             <name>brand</name>
             <table>objects</table>
             <group>general_general</group>
@@ -117,17 +106,6 @@
             <parent>gen_left</parent>
             <field>brand_series</field>
             <caption>Brandisarjad</caption>
-      </property>
-      <property>
-            <name>prev_purchase_price_tbl</name>
-            <table>objects</table>
-            <group>general_general</group>
-            <type>table</type>
-            <store>no</store>
-            <captionside>top</captionside>
-            <parent>gen_left</parent>
-            <field>prev_purchase_price_tbl</field>
-            <caption>Ostuhinnad</caption>
       </property>
       <property>
             <name>price_cur</name>
@@ -379,6 +357,24 @@
             <field>amount_limits_tbl</field>
       </property>
       <property>
+            <name>wh_minimum</name>
+            <table>aw_shop_products</table>
+            <group>general_limits</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>wh_minimum</field>
+            <caption>Miinimumkogus laos</caption>
+      </property>
+      <property>
+            <name>wh_maximum</name>
+            <table>aw_shop_products</table>
+            <group>general_limits</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>wh_maximum</field>
+            <caption>Maksimumkogus laos</caption>
+      </property>
+      <property>
             <name>match_prod</name>
             <table>objects</table>
             <group>general_match_prod</group>
@@ -438,6 +434,7 @@
             </table_fields>
             <clone_link>1</clone_link>
             <filt_edit_fields>1</filt_edit_fields>
+            <direct_links>1</direct_links>
             <caption>Pakendid</caption>
       </property>
       <property>
@@ -1227,7 +1224,7 @@
       </classinfo>
       <groupinfo>
             <general_general>
-                  <caption>&amp;amp;Uuml;dine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_general>
             <general_categories>

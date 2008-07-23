@@ -25,6 +25,9 @@
 	@property warehouses type=relpicker multiple=1 reltype=RELTYPE_WAREHOUSE store=connect
 	@caption Laod
 
+	@property show_alt_units type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kuva alternatiiv&uuml;hikuid
+
 @default group=products
 
 	@property products_toolbar type=toolbar no_caption=1 store=no
@@ -289,6 +292,18 @@
 				@property sell_orders_s_art_cat type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
 				@caption Artikli kategooria
 
+				@property sell_orders_s_purchaser type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption Hankija
+
+				@property sell_orders_s_job_name type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption T&ouml;&ouml; nimi
+
+				@property sell_orders_s_job_number type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption T&ouml;&ouml; number
+
+				@property sell_orders_s_sales_manager type=textbox store=no captionside=top size=30 parent=sell_orders_left_search
+				@caption M&uuml;&uuml;gijuht
+
 				@property sell_orders_s_sbt type=submit store=no captionside=top  parent=sell_orders_left_search value="Otsi"
 				@caption Otsi
 				
@@ -461,9 +476,9 @@
 
 @groupinfo purchases caption="Tellimused"
 
+	@groupinfo sell_orders caption="M&uuml;&uuml;gitellimused" parent=purchases
 	@groupinfo purchase_orders caption="Ostutellimused" parent=purchases
 	@groupinfo offers caption="Pakkumised" parent=purchases
-	@groupinfo sell_orders caption="M&uuml;&uuml;gitellimused" parent=purchases
 
 @groupinfo sales caption="M&uuml;&uuml;giedendus"
 
@@ -485,37 +500,45 @@ class shop_sales_manager_workspace extends class_base
 		));
 	}
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		if (substr($prop["name"], 0, strlen("storage_")) == "storage_" || substr($prop["name"], 0, strlen("purchase_")) == "purchase_" || substr($prop["name"], 0, strlen("sell_")) == "sell_" || substr($prop["name"], 0, strlen("status_")) == "status_")
-		{
-			return $this->_delegate_warehouse($arr);
-		}
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($prop["name"])
-		{
-		}
-
-		return $retval;
-	}
-
 	function callback_mod_reforb($arr)
 	{
+		$arr["ptf"] = $_GET["ptf"];
+		$arr["pgtf"] = $_GET["pgtf"];
 		$arr["post_ru"] = post_ru();
+	}
+
+	function get_property($arr)
+	{
+		$prop =& $arr["prop"];
+		$arr["warehouses"] = $arr["obj_inst"]->prop("warehouses");
+		if (substr($prop["name"], 0, strlen("storage_")) == "storage_" || substr($prop["name"], 0, strlen("purchase_")) == "purchase_" || substr($prop["name"], 0, strlen("sell_")) == "sell_" || substr($prop["name"], 0, strlen("status_")) == "status_")
+		{
+			$ret = $this->_delegate_warehouse($arr);
+			if($ret)
+			{
+				return $ret;
+			}
+		}
+		$retval = PROP_OK;
+
+		switch($prop["name"])
+		{
+		}
+		return $retval;
+	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+		$retval = PROP_OK;
+		$i = get_instance(CL_SHOP_WAREHOUSE);
+		switch($prop["name"])
+		{
+			case "purchase_orders":
+				return $i->_set_purchase_orders($arr);
+				break;
+		}
+		return $retval;
 	}
 
 	private function _delegate_warehouse($arr)
@@ -527,6 +550,19 @@ class shop_sales_manager_workspace extends class_base
 		{
 			return $i->$fn($arr);
 		}
+		elseif($ret = $i->process_search_param($arr))
+		{
+			return $ret;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function callback_mod_retval($arr)
+	{
+		return get_instance(CL_SHOP_WAREHOUSE)->callback_mod_retval(&$arr);
 	}
 
 	function _get_offers_tree($arr)
@@ -628,7 +664,24 @@ class shop_sales_manager_workspace extends class_base
 
 	function _get_specialoffers(&$arr)
 	{
-		$this->_init_specialoffers_tbl($arr["prop"]["vcl_inst"]);
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_specialoffers_tbl($t);
+		$ol = new object_list(array(
+			"warehouses" => $arr["obj_inst"]->prop("warehouses"),
+			"class_id" => CL_SHOP_SPECIAL_OFFER,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => html::obj_change_url($o, parse_obj_name($o->name())),
+				"from" => $o->prop("valid_from_date"),
+				"to" => $o->prop("valid_to_date"),
+				"active" => $o->prop("valid")?t("Jah"):t("Ei"),
+				"who" => "",
+			));
+		}
 	}
 
 	private function _init_specialoffers_tbl($t)
@@ -680,7 +733,7 @@ class shop_sales_manager_workspace extends class_base
 	function _get_sales_specialoffers_toolbar($arr)
 	{
 		$tb = $arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_MENU));
+		$tb->add_new_button(array(CL_SHOP_SPECIAL_OFFER), $arr["obj_inst"]->id());
 		$tb->add_save_button();
 		$tb->add_delete_button();
 	}

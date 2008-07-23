@@ -37,15 +37,17 @@ class shop_product_single extends class_base
 		switch($prop["name"])
 		{
 			case "type":
-				$prop["options"] = array(
-					0 => t("&Uuml;ksiktoode"),
-					1 => t("Partii"),
-				);
+				$prop["options"] = $this->get_types();
 				if(!$prop["value"])
 				{
-					$prop["value"] = 0;
+					$prop["value"] = 2;
 				}
 				break;
+
+			case "name":
+				$retval = PROP_IGNORE;
+				break;
+
 			case "product":
 				if($arr["request"]["action"] == "new" && $pid = $arr["request"]["product"])
 				{
@@ -58,6 +60,15 @@ class shop_product_single extends class_base
 		return $retval;
 	}
 
+	function get_types()
+	{
+		$types = array(
+			2 => t("&Uuml;ksiktoode"),
+			1 => t("Partii"),
+		);
+		return $types;
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -65,8 +76,15 @@ class shop_product_single extends class_base
 
 		switch($prop["name"])
 		{
+			case "name":
+				if($pid = $arr["request"]["product"])
+				{
+					$po = obj($pid);
+					$types = $this->get_types();
+					$prop["value"] = sprintf("%s %s", $po->name(), ($c = $arr["request"]["code"]) ? "(".$c.")" : $types[$arr["request"]["type"]]);
+				}
+				break;
 		}
-
 		return $retval;
 	}
 

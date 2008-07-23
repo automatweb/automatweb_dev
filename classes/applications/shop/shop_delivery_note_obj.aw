@@ -13,7 +13,7 @@ class shop_delivery_note_obj extends _int_object
 				"err_word1" => t("Seerianumbri"),
 				"err_word2" => t("seerianumber"),
 				"row_prop" => "serial_no",
-				"single_type" => "0",
+				"single_type" => "2",
 			),
 			1 => array(
 				"prod_prop" => "order_based",
@@ -26,8 +26,10 @@ class shop_delivery_note_obj extends _int_object
 		$pi = get_instance(CL_SHOP_PRODUCT);
 		$ufi = obj();
 		$ufi->set_class_id(CL_SHOP_UNIT_FORMULA);
+		$ci = get_instance(CL_CURRENCY);
 		$wo = $arr["obj_inst"]->prop("writeoff");
 		$twh = $arr["obj_inst"]->prop("to_warehouse");
+		$fwh = $arr["obj_inst"]->prop("from_warehouse");
 		foreach($conn as $c)
 		{
 			$row = $c->to();
@@ -47,6 +49,37 @@ class shop_delivery_note_obj extends _int_object
 				{
 					aw_session_set("dn_err",  t("Mahakandmist ei saa teostada, kuna on m&auml;&auml;ratud sihtladu"));
 					return false;
+				}
+			}
+			if($twh && !$fwh)
+			{
+				$def_cur = obj($twh)->prop("conf.def_currency");
+				if(!$def_cur)
+				{
+					aw_session_set("dn_err",  t("Sihtlao seadetes puudub vaikimisi valuuta"));
+					return false;
+				}
+				$sum = $row->prop("price");
+				$cur = $arr["obj_inst"]->prop("currency");
+				if(!$cur)
+				{
+					aw_session_set("dn_err", t("Valuuta on m&auml;&auml;ramata"));
+					return false;
+				}
+				$base_prices[$row->id()] = $sum;
+				if($cur != $def_cur)
+				{
+					$newsum = $ci->convert(array(
+						"sum" => $sum,
+						"from" => $cur,
+						"to" => $def_cur,
+					));
+					if($sum == $newsum && $sum)
+					{
+						aw_session_set("dn_err", sprintf(t("Puudub kurss valuutade %s ja %s vahel"), obj($cur)->name(), obj($def_cur)->name()));
+						return false;
+					}
+					$base_prices[$row->id()] = $newsum;
 				}
 			}
 			$prod_id = $row->prop("product");
@@ -115,12 +148,15 @@ class shop_delivery_note_obj extends _int_object
 						aw_session_set("dn_err", sprintf(t("%s p&otilde;hise arvestusega tootel %s tuleb %s m&auml;&auml;rata."), $sv["err_word1"], $prod->name(), $sv["err_word2"]));
 						return false;
 					}
-					$find_ol = new object_list(array(
+					$sp = array(
 						"class_id" => CL_SHOP_PRODUCT_SINGLE,
 						"code" => $no,
 						"type" => $sv["single_type"],
 						"product" => $prod_id,
-					));
+						"site_id" => array(),
+						"lang_id" => array(),
+					);
+					$find_ol = new object_list($sp);
 					if($find_ol->count())
 					{
 						$singles[] = $find_ol->begin();
@@ -130,7 +166,8 @@ class shop_delivery_note_obj extends _int_object
 						$o = obj();
 						$o->set_class_id(CL_SHOP_PRODUCT_SINGLE);
 						$o->set_parent($prod_id);
-						$o->set_name($row->prop($sv["row_prop"]));
+						$types = $o->instance()->get_types();
+						$o->set_name(sprintf("%s %s", $prod->name(), $row->prop($sv["row_prop"])));
 						$o->set_prop("product", $prod_id);
 						$o->set_prop("type", $sv["single_type"]);
 						$o->set_prop("code", $row->prop($sv["row_prop"]));
@@ -148,6 +185,7 @@ class shop_delivery_note_obj extends _int_object
 				"units" => $prod_units[$prod_id],
 				"obj_inst" => $arr["obj_inst"],
 				"amounts" => $amts,
+				"base_prices" => $base_prices,
 			);
 			if(!$uses_single)
 			{
@@ -252,6 +290,7 @@ class shop_delivery_note_obj extends _int_object
 		$mvo->set_prop("amount", $defamt);
 		$mvo->set_prop("unit", $arr["units"][0]);
 		$mvo->set_prop("price", $row->prop("price"));
+		$mvo->set_prop("base_price", $arr["base_prices"][$row->id()]);
 		$mvo->set_prop("transport", $arr["obj_inst"]->prop("transport"));
 		$mvo->set_prop("customs", $arr["obj_inst"]->prop("customs"));
 		$mvo->set_prop("date", $arr["obj_inst"]->prop("delivery_date"));
@@ -260,6 +299,7 @@ class shop_delivery_note_obj extends _int_object
 		$mvo->set_parent($prod_id);
 		$mvo->set_name(sprintf(t("%s liikumine"), $prod->name()));
 		$mvo->save();
+		$pi->calc_fifo_price($prod);
 	}
 
 	function get_wh_amount($row, $o, $set_chk = false, $unit = null)
@@ -299,7 +339,7 @@ class shop_delivery_note_obj extends _int_object
 			$params["unit"] = $unit ? $unit : $row->prop("unit");
 			$pi = get_instance(CL_SHOP_PRODUCT);
 			$ol = $pi->get_amount($params);
-			if($ol && $ol->count() == 1)
+			if($ol && $ol->count() > 0)
 			{
 				$amount = $ol->begin();
 				if($set_chk && !$set_checked && $set)

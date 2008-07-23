@@ -73,6 +73,15 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>base_price</name>
+            <table>aw_shop_warehouse_movement</table>
+            <group>general</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>base_price</field>
+            <caption>Hind p&amp;amp;otilde;hivaluutas</caption>
+      </property>
+      <property>
             <name>transport</name>
             <table>aw_shop_warehouse_movement</table>
             <group>general</group>
