@@ -9,14 +9,14 @@ class proptest_test extends UnitTestCase
 	var $cb;
 	function proptest_test()
 	{
-		$this->UnitTestCase("Classbase testid");
+/*-		$this->UnitTestCase("Classbase testid");
 		$this->cb = get_instance("cfg/proptest");
 		$this->cb->change(array(
 			"id" => 1,
 			"cbcli" => "debugclient",
-		));
+		));*/
 	}
-
+/*
 	function setUp()
 	{
 		$this->testclass = "proptest";
@@ -120,7 +120,7 @@ class proptest_test extends UnitTestCase
 		$this->assertEqual("works",$this->cb->cli->formdata["data"]["added_by_mod_reforb"]);
 		
 	}
-
+*/
 }
 
 ?>
