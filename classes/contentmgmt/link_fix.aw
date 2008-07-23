@@ -9,7 +9,7 @@ class link_fix extends _int_object
 	function prop($k)
 	{
 		$rv = parent::prop($k);
-		if ($k == "url" && $GLOBALS["object_loader"]->can("view", $this->meta("linked_obj")))
+		if ($k == "url" && $this->meta("linked_obj") && $GLOBALS["object_loader"]->can("view", $this->meta("linked_obj")))
 		{
 			if (!is_object($this->si))
 			{
