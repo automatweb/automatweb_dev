@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.12 2008/07/22 10:54:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.13 2008/07/23 12:26:48 tarvo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -714,8 +714,8 @@ class class_designer_manager extends class_base
 		$this->_add_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
 		$this->_add_ini_file_value(aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
 
-		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
-		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
+		//$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
+		//$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
 		
 		return $arr["post_ru"];
 	}
@@ -821,21 +821,21 @@ class class_designer_manager extends class_base
 	{
 		$inif1 = aw_ini_get("basedir")."/config/ini/classfolders.ini";
 		$inif2 = aw_ini_get("basedir")."/aw.ini";
-		$inif3 = aw_ini_get("site_basedir")."/files/classdesigner_clsfld.ini";
+		$inif3 = aw_ini_get("site_basedir")."/files/class_designer_clsfld.ini";
 		foreach(safe_array($arr["sel_fld"]) as $fld_id)
 		{
-			$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
-			$this->_del_ini_file_value($inif2, "classfolders[$fld_id]");
-			//$this->_del_ini_file_value($inif3, "classfolders[$fld_id]");
+			//$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
+			//$this->_del_ini_file_value($inif2, "classfolders[$fld_id]");
+			$this->_del_ini_file_value($inif3, "classfolders[$fld_id]");
 		}
 
-		$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
-		$inif2 = aw_ini_get("basedir")."/aw.ini";
-		//$inif3 = aw_ini_get("site_basedir")."/files/class_designer_cls.ini";
+		//$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
+		//$inif2 = aw_ini_get("basedir")."/aw.ini";
+		$inif3 = aw_ini_get("site_basedir")."/files/class_designer_cls.ini";
 		foreach(safe_array($arr["sel"]) as $fld_id)
 		{
-			$this->_del_ini_file_value($inif1, "classes[$fld_id]");
-			$this->_del_ini_file_value($inif2, "classes[$fld_id]");
+			//$this->_del_ini_file_value($inif1, "classes[$fld_id]");
+			//$this->_del_ini_file_value($inif2, "classes[$fld_id]");
 			$this->_del_ini_file_value($inif3, "classes[$fld_id]");
 		}
 		return $arr["post_ru"];
