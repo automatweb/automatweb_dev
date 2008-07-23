@@ -6,7 +6,7 @@ class oql_test extends UnitTestCase
 	{
 		 $this->UnitTestCase($name);
 	}
-
+/*
 	function setUp()
 	{
 		$this->db = get_instance("class_base");
@@ -22,7 +22,7 @@ class oql_test extends UnitTestCase
 		}
 		aw_restore_acl();
 	}
-/*
+
 	function test_execute_query_clid_without_where_clause()
 	{
 		$rv = oql::compile_query("
@@ -45,7 +45,7 @@ class oql_test extends UnitTestCase
 	}
 */
 	// I'm using "WHERE true" cause the darn thing won't work without WHERE clause.
-	function test_execute_query_clid_with_where_clause()
+/*	function test_execute_query_clid_with_where_clause()
 	{
 		$rv = oql::compile_query("
 		SELECT
@@ -892,7 +892,7 @@ class oql_test extends UnitTestCase
 		$this->tmp_objs[] = $o;
 
 		return $o;
-	}
+	}*/
 }
 
 ?>
