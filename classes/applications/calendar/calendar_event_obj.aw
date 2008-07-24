@@ -53,10 +53,35 @@ class calendar_event_obj extends _int_object
 		{
 			$this->set_prop("start1", $eventstart);
 		}
-
 		$this->save();
-
 	}
+
+	function get_locations()
+	{
+		$ret = array();
+		//syndmusega seotud asukohad
+		foreach($this->connections_from(array(
+			"type" => "RELTYPE_LOCATION",
+		)) as $c)
+		{
+			$ret[$c->prop("to")] = $c->prop("to.name");
+		}
+		// + syndmusega seotud aegadega seotud asukohad
+		foreach($this->connections_from(array(
+			"type" => "RELTYPE_EVENT_TIMES",
+		)) as $c)
+		{
+			$event_time = $c->to();
+			foreach($event_time->connections_from(array(
+				"type" => "RELTYPE_LOCATION",
+			)) as $l)
+			{
+				$ret[$l->prop("to")] = $l->prop("to.name");
+			}
+		}
+		return $ret;
+	}
+
 }
 
 ?>

@@ -36,6 +36,24 @@ class event_time_obj extends _int_object
 
 		return parent::prop($k);
 	}
+
+	function get_locations()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CALENDAR_EVENT,
+			"lang_id" => array(),
+			"CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES" => $this->id(),
+		));
+		$o = reset($ol->arr());
+		if(is_object($o))
+		{
+			return $o->get_locations();
+		}
+		else
+		{
+			return array();
+		}
+	}
 }
 
 ?>
