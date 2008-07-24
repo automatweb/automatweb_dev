@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.46 2008/07/24 12:42:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.47 2008/07/24 13:16:17 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1499,7 +1499,7 @@ class rfp extends class_base
 				"split" => "#CCCCCC",
 			));
 		}
-		$t->define_data($this->_get_housing_row($t));
+		$t->define_data($this->_get_housing_row($t, array(), "new", $arr["obj_inst"]));
 		if(is_array($rooms))
 		{
 			foreach($rooms as $id => $room)
@@ -1544,18 +1544,40 @@ class rfp extends class_base
 		}
 	}
 
-	function _get_housing_row(&$t, $room = array(), $id = "new")
+	function _get_housing_row(&$t, $room = array(), $id = "new", $obj = false)
 	{
+		if($obj)
+		{
+			$start = $obj->prop("data_gen_acc_start");
+			if(is_array($start = split("[.]", $start["date"])))
+			{
+				$start = mktime(0,0,0, $start[1], $start[0], $start[2]);
+			}
+			else
+			{
+				$start = $obj->prop("data_gen_arrival_date_admin");
+			}
+
+			$end = $obj->prop("data_gen_acc_end");
+			if(is_array($end = split("[.]", $end["date"])))
+			{
+				$end = mktime(0,0,0, $end[1], $end[0], $end[2]);
+			}
+			else
+			{
+				$end = $obj->prop("data_gen_departure_date_admin");
+			}
+		}
 		$data = array(
 			"datefrom" => html::date_select(array(
 				"name" => "housing[".$id."][datefrom]",
-				"value" => $room["datefrom"],
+				"value" => ($id === "new")?$start:$room["datefrom"],
 				"size" => 12,
 				"month_as_numbers" => true,
 			)),
 			"dateto" => html::date_select(array(
 				"name" => "housing[".$id."][dateto]",
-				"value" => $room["dateto"],
+				"value" => ($id === "new")?$end:$room["dateto"],
 				"size" => 12,
 				"month_as_numbers" => true,
 			)),
