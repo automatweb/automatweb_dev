@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.38 2008/07/22 11:07:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.39 2008/07/24 07:33:24 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -673,7 +673,7 @@ class rfp extends class_base
 					"name" => "cal",
 					"tooltip" => t("Kalender"),
 					"img" => "icon_cal_today.gif",
-					"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};if (vals != '') {aw_popup_scroll('$url'+vals,'mulcal',700,500);} else { alert('".t("Valige palun v&auml;hemalt &uuml;ks ruum!")."');} return false;",
+					"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('room_sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};if (vals != '') {aw_popup_scroll('$url'+vals,'mulcal',700,500);} else { alert('".t("Valige palun v&auml;hemalt &uuml;ks ruum!")."');} return false;",
 				));
 				break;
 			case "products_tree":
@@ -762,7 +762,7 @@ class rfp extends class_base
 						"action" => "change",
 						"id" => $bron,
 						"default_currency" => $arr["obj_inst"]->prop("default_currency"),
-						"define_chooser" => 1,
+						//"define_chooser" => 1,
 						"chooser" => "room",
 					),
 					"groupinfo" => array(),
@@ -803,6 +803,8 @@ class rfp extends class_base
 							}
 						}
 					}
+					$args["request"]["do_room_separators"] = true;
+					$args["request"]["extra_rooms_for_separators"] = $rooms;
 					$args["ids"] = $ids;
 				}
 				$inst = get_instance(CL_RESERVATION);
@@ -1620,7 +1622,7 @@ class rfp extends class_base
 		 */
 	}
 
-	function get_rooms($arr)
+	private function get_rooms($arr)
 	{
 		$type = split("[_]",$arr["request"]["group"]);
 		$type = end($type);

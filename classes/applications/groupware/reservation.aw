@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.115 2008/07/22 07:48:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.116 2008/07/24 07:33:29 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1325,6 +1325,12 @@ class reservation extends class_base
 				$rvs[] = obj($id);
 			}
 		}
+		if($arr["request"]["do_room_separators"])
+		{
+			$t->set_rgroupby(array(
+				"room" => "room",
+			));
+		}
 		usort(&$rvs, array($this, "_sort_by_time"));
 		$t->define_field(array(
 			"name" => "discount",
@@ -1390,6 +1396,14 @@ class reservation extends class_base
 
 				$total += ($arr["request"]["default_currency"] == $cur)?str_replace(",","",$price):0;
 			}
+			if($arr["request"]["do_room_separators"])
+			{
+				$d["room"] = html::checkbox(array(
+					"name" => "room_sel[".$o->prop("resource")."]",
+					"value" => $o->prop("resource"),
+				)).html::obj_change_url(obj($o->prop("resource")));
+				$rooms_added[] = $o->prop("resource");
+			}
 			$d["name"] = html::obj_change_url($o); //->name();
 			$d["discount"] = html::textbox(array(
 				"name" => "discount_".$o->id(),
@@ -1412,6 +1426,23 @@ class reservation extends class_base
 			$totals += $total;
 			$d["total"] = number_format($total,2);
 			$t->define_data($d);
+		}
+		if($arr["request"]["do_room_separators"] and is_array($arr["request"]["extra_rooms_for_separators"]))
+		{
+			foreach($arr["request"]["extra_rooms_for_separators"] as $room)
+			{
+				if(in_array($room, $rooms_added))
+				{
+					continue;
+				}
+
+				$t->define_data(array(
+					"room" => html::checkbox(array(
+						"name" => "room_sel[".$room."]",
+						"value" => $room,
+					)).html::obj_change_url(obj($room)),
+				));
+			}
 		}
 		if(count($rvs) > 1)
 		{
