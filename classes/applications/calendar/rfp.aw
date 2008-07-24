@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.44 2008/07/24 11:57:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.45 2008/07/24 12:09:06 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -708,9 +708,12 @@ class rfp extends class_base
 					$oid = $c->prop("to");
 					$obj = obj($oid);
 					$room = $obj->prop("resource");
+					$date = date("d.m.Y H:i", $obj->prop("start1")). " - " . date("d.m.Y H:i", $obj->prop("end"));
+					df($oid);
+					df($arr["request"]);
 					$t->add_item("room_".$room, array(
 						"id" => "reserv_".$oid,
-						"name" => date("d.m.Y H:i", $obj->prop("start1")). " - " . date("d.m.Y H:i", $obj->prop("end")),
+						"name" => ($arr["request"]["reservation_oid"] == $oid)?"<b>".$date."</b>":$date,
 						"url" => aw_url_change_var(array(
 							"reservation_oid" => $oid,
 						)),
