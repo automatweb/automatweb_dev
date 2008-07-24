@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.29 2008/07/22 14:11:22 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.30 2008/07/24 12:18:14 sander Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -452,7 +452,7 @@ class image extends class_base
 				"imgcaption" => $idata["comment"],
 				"align" => isset($align[$matches[4]]) ? $align[$matches[4]] : null,
 				"alignstr" => $alstr[$matches[4]],
-				"plink" => $idata["link"],
+				"plink" => str_replace("&", "&amp;", $idata["link"]),
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
 				"img_name" => $idata["name"],
 				"alt" => $alt,
@@ -527,16 +527,16 @@ class image extends class_base
 					}
 					if ($idata["comment"] != "" || $authortxt != "")
 					{
-						$replacement = sprintf("<table border='0' cellpadding='0' cellspacing='0' %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
+						$replacement = sprintf("<table border='0' cellpadding='0' cellspacing='0' %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],str_replace("&", "&amp;", $idata["link"]),$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
 					if ($vars["align"] != "")
 					{
-						$replacement = sprintf("<table border='0' cellpadding='0' cellspacing='0' %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
+						$replacement = sprintf("<table border='0' cellpadding='0' cellspacing='0' %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a></td></tr></table>",$vars['align'],str_replace("&", "&amp;", $idata["link"]),$vars["target"],$idata["url"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a>", $idata["link"], $vars["target"], $idata["url"]);
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'$xhtml_slash></a>", str_replace("&", "&amp;", $idata["link"]), $vars["target"], $idata["url"]);
 					}
 				};
 			}
