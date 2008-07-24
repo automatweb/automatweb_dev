@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.40 2008/07/24 07:51:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.41 2008/07/24 07:51:42 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -807,7 +807,6 @@ class rfp extends class_base
 					$args["request"]["extra_rooms_for_separators"] = $rooms;
 					$args["ids"] = $ids;
 				}
-				df($args);
 				$inst = get_instance(CL_RESERVATION);
 				$function = "_get_".$arr["prop"]["name"];
 				$inst->$function(&$args);
