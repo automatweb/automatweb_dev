@@ -635,7 +635,7 @@ class core extends acl_base
 			if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 			directly, without drawing menus and stuff
 	**/
-	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&amp;",$honor_r_orb = true)
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&",$honor_r_orb = true)
 	{
 		// resolve to name
 
