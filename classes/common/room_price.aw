@@ -180,7 +180,7 @@ class room_price extends class_base
 			"reltype" => "RELTYPE_ROOM_PRICE",
 		));
 		$c = reset($cs);
-		return $c->from();
+		return $this->can("view", $c->from()->id())?$c->from():"";
 	}
 
 	private function get_currencys($oid)
