@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.10 2008/06/11 10:16:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.11 2008/07/24 10:23:13 robert Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -43,6 +43,9 @@
 
 	@property s_tbl_ctr type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Tulemuste andmete n&auml;itamise kontroller
+
+	@property s_tbl_ctr2 type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Tulemuste tabeli kontroller
 
 @default group=search
 	@property search_form type=callback callback=callback_gen_search_form
@@ -722,6 +725,11 @@ class shop_product_search extends class_base
 				}
 				$t->define_data($data);
 			}
+		}
+		$ctr = NULL;
+		if (is_oid($ctr_id = $arr["obj_inst"]->prop("s_tbl_ctr2")) && $this->can("view", $ctr_id))
+		{
+			$ctr_i->eval_controller_ref($ctr_id, $foo, $foo, $t);
 		}
 		$html = $t->draw();
 		$arr["prop"]["value"] = $html;

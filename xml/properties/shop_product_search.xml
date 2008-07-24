@@ -99,6 +99,16 @@
             <caption>Tulemuste andmete n&amp;amp;auml;itamise kontroller</caption>
       </property>
       <property>
+            <name>s_tbl_ctr2</name>
+            <group>s_res_ctr</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Tulemuste tabeli kontroller</caption>
+      </property>
+      <property>
             <name>search_form</name>
             <group>search</group>
             <table>objects</table>
