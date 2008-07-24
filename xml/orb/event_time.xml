@@ -4,6 +4,9 @@
 		<action name="locations_search">
 			<function name="locations_search">
 				<arguments>
+					<optional name="loc" />
+					<optional name="location_name" type="string" />
+					<optional name="field" />
 				</arguments>
 			</function>
 		</action>
