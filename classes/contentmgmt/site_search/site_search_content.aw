@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.101 2008/06/03 09:25:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.102 2008/07/24 14:34:12 sander Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -619,7 +619,7 @@ class site_search_content extends class_base
 		{
 			$_SESSION["active_section"] = $arr["field"];
 		}
-		if($cid->class_id() == CL_CRM_DB_SEARCH)
+		if($cid && $cid->class_id() == CL_CRM_DB_SEARCH)
 		{
 			$sector_parents = new object_list(array(
 				"oid" => $cid->prop("dir_tegevusala"),
@@ -1541,7 +1541,7 @@ class site_search_content extends class_base
 				$link = $this->mk_my_orb("do_search", $params);
 			}
 			$this->vars(array(
-				"page" => $link,
+				"page" => str_replace("&", "&amp;", $link),
 				"page_from" => ($i*$per_page)+1,
 				"page_to" => min(($i+1)*$per_page,$cnt)
 			));
@@ -1555,11 +1555,11 @@ class site_search_content extends class_base
 			}
 		}
 		$this->vars(array(
-			"prev" => aw_url_change_var("page", (string)max((int)$page-1,0))
+			"prev" => str_replace("&", "&amp;", aw_url_change_var("page", (string)max((int)$page-1,0)))
 		));
 
 		$this->vars(array(
-			"next" => aw_url_change_var("page", min((int)$page+1,$num_pages-1))
+			"next" => str_replace("&", "&amp;", aw_url_change_var("page", min((int)$page+1,$num_pages-1)))
 		));
 		if ($page > 0)
 		{
