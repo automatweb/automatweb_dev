@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.43 2008/07/24 11:30:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.44 2008/07/24 11:57:20 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -663,6 +663,8 @@ class rfp extends class_base
 						"class_id" => CL_RFP,
 						"action" => "handle_new_reservation" 
 					),
+					"start" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+					"end" => $arr["obj_inst"]->prop("data_gen_departure_date_admin"),
 					"firstname" => $spl[0],
 					"lastname" => join(" ", array_slice($spl, 1)),
 					"company" => $arr["obj_inst"]->prop("data_subm_organisation"),
