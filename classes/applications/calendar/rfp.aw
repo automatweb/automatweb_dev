@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.45 2008/07/24 12:09:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.46 2008/07/24 12:42:35 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -692,9 +692,10 @@ class rfp extends class_base
 						$room_o = obj($room);
 						$t->add_item(0, array(
 							"id" => "room_".$room,
-							"name" => $room_o->name(),
+							"name" => ($room_o->id() == $arr["request"]["room_oid"])?html::strong($room_o->name()):$room_o->name(),
 							"url" => aw_url_change_var(array(
 								"room_oid" => $room,
+								"reservation_oid" => "",
 							)),
 						));
 					}
@@ -709,13 +710,12 @@ class rfp extends class_base
 					$obj = obj($oid);
 					$room = $obj->prop("resource");
 					$date = date("d.m.Y H:i", $obj->prop("start1")). " - " . date("d.m.Y H:i", $obj->prop("end"));
-					df($oid);
-					df($arr["request"]);
 					$t->add_item("room_".$room, array(
 						"id" => "reserv_".$oid,
-						"name" => ($arr["request"]["reservation_oid"] == $oid)?"<b>".$date."</b>":$date,
+						"name" => ($arr["request"]["reservation_oid"] == $oid)?html::strong($date):$date,
 						"url" => aw_url_change_var(array(
 							"reservation_oid" => $oid,
+							"room_oid" => "",
 						)),
 					));
 				}
