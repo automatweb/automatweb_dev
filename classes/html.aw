@@ -1031,6 +1031,11 @@ class html extends aw_template
 	**/
 	function img($args = array())
 	{
+		$xhtml_slash = "";
+		if (aw_ini_get("content.doctype") == "xhtml")
+		{
+			$xhtml_slash = " /";
+		}
 		extract($args);
 		$ret = "<img src='$url'";
 		if (isset($width))
@@ -1061,7 +1066,7 @@ class html extends aw_template
 		{
 			$ret.=" id='$id'";
 		}
-		return $ret.">";
+		return $ret.$xhtml_slash.">";
 	}
 
 	/**Link
