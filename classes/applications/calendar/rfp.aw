@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.48 2008/07/24 13:35:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.49 2008/07/24 13:50:25 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -628,6 +628,7 @@ class rfp extends class_base
 				$new_reservation_args["person_rfp_lname"] = count($data_name)?join(" ", $data_name):"";
 				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
 				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
+				$new_reservation_args["people_count_rfp"] = $arr["obj_inst"]->prop("data_gen_attendees_no");
 				$new_reservation_args["start1"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_start_date"));
 				$new_reservation_args["end"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_end_date"));
 				$new_reservation_args["return_url"] = get_ru();
