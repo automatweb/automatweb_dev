@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.47 2008/07/24 13:16:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.48 2008/07/24 13:35:30 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1529,7 +1529,7 @@ class rfp extends class_base
 				$sum = $row["rooms"] * $row["price"];
 				$start = mktime(0,0,1, $row["datefrom"]["month"], $row["datefrom"]["day"], $row["datefrom"]["year"]);
 				$end = mktime(0,0,2, $row["dateto"]["month"], $row["dateto"]["day"], $row["dateto"]["year"]);
-				$days = ceil(($end - $start) / (60*60*24));
+				$days = floor(($end - $start) / (60*60*24));
 				$sum = $sum*$days;
 				if($dc = $row["discount"])
 				{
