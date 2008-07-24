@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.42 2008/07/24 07:53:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.43 2008/07/24 11:30:42 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -648,6 +648,7 @@ class rfp extends class_base
 					));
 					$tb->add_save_button();
 				}
+				$tb->add_delete_button();
 
 				$ol = new object_list(array(
 					"class_id" => CL_SPA_BOOKINGS_OVERVIEW,
@@ -673,6 +674,7 @@ class rfp extends class_base
 					"name" => "cal",
 					"tooltip" => t("Kalender"),
 					"img" => "icon_cal_today.gif",
+					"url" => "#",
 					"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('room_sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};if (vals != '') {aw_popup_scroll('$url'+vals,'mulcal',700,500);} else { alert('".t("Valige palun v&auml;hemalt &uuml;ks ruum!")."');} return false;",
 				));
 				break;
@@ -762,8 +764,8 @@ class rfp extends class_base
 						"action" => "change",
 						"id" => $bron,
 						"default_currency" => $arr["obj_inst"]->prop("default_currency"),
-						//"define_chooser" => 1,
-						"chooser" => "room",
+						"define_chooser" => 1,
+						//"chooser" => "room",
 					),
 					"groupinfo" => array(),
 					"prop" => array(
@@ -2646,6 +2648,36 @@ class rfp extends class_base
 			"type" => "RELTYPE_RESERVATION",
 			"to" => $arr["reservation"]->id(),
 		));
+	}
+
+
+	/**
+		@attrib name=delete_objects all_args=1
+	 **/
+	function delete_objects($arr)
+	{
+		$o = obj($arr["id"]);
+		if($arr["group"] == "final_prices")
+		{
+			// remove rooms
+			if(is_array($arr["room_sel"]) and count($arr["room_sel"]))
+			{
+				foreach($arr["room_sel"] as $room)
+				{
+					$o->remove_room_reservations($room);
+				}
+			}
+
+			// remove reservations
+			if(is_array($arr["sel"]) and count($arr["sel"]))
+			{
+				foreach($arr["sel"] as $reservation)
+				{
+					$o->remove_room_reservation($reservation);
+				}
+			}
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

@@ -92,5 +92,45 @@ class rfp_obj extends _int_object
 		$products = $this->meta("prods");
 		return $products;
 	}
+
+	/** Removes given room reservation
+		@attrib api=1 params=pos
+		@param reservation type=oid required
+	 **/
+	public function remove_room_reservation($reservation)
+	{
+		if($this->can("view", $reservation))
+		{
+			$this->disconnect(array(
+				"from" => $reservation,
+				"type" => 3,
+			));
+			return true;
+		}
+		return false;
+	}
+
+	/** Removes all given rooms reservations
+		@attrib api=1 params=pos
+		@param room type=oid required
+	 **/
+	public function remove_room_reservations($room)
+	{
+		if($this->can("view", $room))
+		{
+			$conns = $this->connections_from(array(
+				"to.class_id" => CL_RESERVATION,
+				"CL_RESERVATION.resource" => $room,
+				"type" => 3,
+			));
+			foreach($conns as $conn)
+			{
+				$conn->delete();
+			}
+			return true;
+		}
+		return false;
+	}
+
 }
 ?>
