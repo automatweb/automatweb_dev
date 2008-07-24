@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.68 2008/07/17 12:29:39 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.69 2008/07/24 12:43:39 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -2074,7 +2074,7 @@ class personnel_management extends class_base
 			"name" => "add",
 			"tooltip" => t("Uus"),
 		));
-		$pt = obj($arr["request"]["fld_id"])->class_id() == CL_MENU ? $arr["request"]["fld_id"] : $this->offers_fld;
+		$pt = is_oid($arr["request"]["fld_id"]) && obj($arr["request"]["fld_id"])->class_id() == CL_MENU ? $arr["request"]["fld_id"] : $this->offers_fld;
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("T&ouml;&ouml;pakkumine"),
