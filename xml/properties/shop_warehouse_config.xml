@@ -134,6 +134,28 @@
             <caption>Toodetel puudub laoseis</caption>
       </property>
       <property>
+            <name>no_prod_tree</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>left</parent>
+            <caption>Toodete kaustade puud ei kuvata</caption>
+      </property>
+      <property>
+            <name>no_prodg_tree</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>left</parent>
+            <caption>Tootekategooriate puud ei kuvata</caption>
+      </property>
+      <property>
             <name>prod_fld</name>
             <table>objects</table>
             <group>general</group>

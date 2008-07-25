@@ -51,6 +51,12 @@
 			@property no_count type=checkbox ch_value=1 parent=left
 			@caption Toodetel puudub laoseis
 
+			@property no_prod_tree type=checkbox ch_value=1 parent=left
+			@caption Toodete kaustade puud ei kuvata
+
+			@property no_prodg_tree type=checkbox ch_value=1 parent=left
+			@caption Tootekategooriate puud ei kuvata
+
 		@layout right type=vbox area_caption=Kaustad closeable=1 parent=split
 
 			@property prod_fld type=relpicker reltype=RELTYPE_FOLDER parent=right

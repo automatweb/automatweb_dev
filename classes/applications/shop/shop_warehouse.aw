@@ -1643,7 +1643,10 @@ class shop_warehouse extends class_base
 			"tooltip" => t("Uus")
 		));
 
-		//$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
+		if($this->can("view", $this->prod_type_fld))
+		{
+			//$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
+		}
 
 		$tb->add_delete_button();
 
@@ -1800,6 +1803,11 @@ class shop_warehouse extends class_base
 
 	function mk_prodg_tree($arr)
 	{
+		$chk = $this->get_warehouse_configs($arr, "no_prodg_tree");
+		if(count($chk))
+		{
+			return PROP_IGNORE;
+		}
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$pt = $this->prod_type_fld;
@@ -1979,7 +1987,7 @@ class shop_warehouse extends class_base
 	{
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"class_id" => array(CL_MENU, CL_SHOP_PRODUCT_CATEGORY),
+			"class_id" => array(CL_MENU, CL_SHOP_PRODUCT_TYPE),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -2015,6 +2023,11 @@ class shop_warehouse extends class_base
 
 	function get_prod_tree($arr)
 	{
+		$chk = $this->get_warehouse_configs($arr, "no_prod_tree");
+		if(count($chk))
+		{
+			return PROP_IGNORE;
+		}
 		if($arr["obj_inst"]->class_id() == CL_SHOP_WAREHOUSE)
 		{
 			$pt = $this->prod_fld;
@@ -2251,10 +2264,6 @@ class shop_warehouse extends class_base
 				"valid_from" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 				"valid_to" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),	
 			);
-			if($pl = $arr["request"][$group."_s_pricelist"])
-			{
-				$cparams["price_list"] = $pl;
-			}
 			if($from && $to)
 			{
 				$cparams["price"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
@@ -2305,6 +2314,21 @@ class shop_warehouse extends class_base
 			$params["class_id"] = array(CL_MENU, CL_SHOP_PRODUCT);
 		}
 		if(count($params) || $arr["request"]["just_saved"])
+		{
+			$show = 1;
+		}
+		if(!$show)
+		{
+			foreach($arr["request"] as $var => $val)
+			{
+				if(strpos($var, $group."_s_") !== false)
+				{
+
+				}
+				$show = 1;
+			}
+		}
+		if($show)
 		{
 			if(!$params["class_id"])
 			{
@@ -5082,12 +5106,12 @@ class shop_warehouse extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "order")
+		if($arr["id"] == "order")
 		{
 			return false;
 		}
 
-		if ($arr["id"] == "storage" && $arr["obj_inst"]->prop("conf.no_count") == 1)
+		if(($arr["id"] == "status" || $arr["id"] == "storage") && $arr["obj_inst"]->prop("conf.no_count") == 1)
 		{
 			return false;
 		}
@@ -6038,9 +6062,17 @@ $oo = get_instance(CL_SHOP_ORDER);
 		{
 			$params[$class_id.".purchaser.name"] = "%".$co."%";
 		}
+		if($n = $arr["request"][$group."_s_number"])
+		{
+			$params["number"] = "%".$n."%";
+		}
 		if($co = $arr["request"][$group."_s_".$co_prop])
 		{
 			$params[$class_id.".related_orders.purchaser.name"] = "%".$co."%";
+		}
+		if($sm = $arr["request"][$group."_s_sales_manager"])
+		{
+			$params[$class_id.".job.RELTYPE_MRP_MANAGER.name"] = "%".$sm."%";
 		}
 		if($jn = $arr["request"][$group."_s_job_name"])
 		{
