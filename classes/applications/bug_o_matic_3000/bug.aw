@@ -146,7 +146,7 @@ define("BUG_STATUS_CLOSED", 5);
 					@property project type=relpicker reltype=RELTYPE_PROJECT  parent=data_r_bot_left captionside=top
 					@caption Projekt
 
-					@property bug_component type=textbox parent=data_r_bot_left captionside=top
+					@property bug_component type=textbox parent=data_r_bot_left captionside=top size=15
 					@caption Komponent
 
 
@@ -155,7 +155,7 @@ define("BUG_STATUS_CLOSED", 5);
 					@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot_right captionside=top store=no
 					@caption Fail
 
-					@property bug_predicates type=textbox parent=data_r_bot_right captionside=top field=aw_bug_predicates
+					@property bug_predicates type=textbox parent=data_r_bot_right captionside=top field=aw_bug_predicates size=15
 					@caption Eeldusbugid
 	
 					@property bug_mail type=textbox parent=data_r_bot_right captionside=top size=15

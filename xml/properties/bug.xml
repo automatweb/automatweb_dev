@@ -364,6 +364,7 @@
             <type>textbox</type>
             <parent>data_r_bot_left</parent>
             <captionside>top</captionside>
+            <size>15</size>
             <field>bug_component</field>
             <caption>Komponent</caption>
       </property>
@@ -387,6 +388,7 @@
             <parent>data_r_bot_right</parent>
             <captionside>top</captionside>
             <field>aw_bug_predicates</field>
+            <size>15</size>
             <caption>Eeldusbugid</caption>
       </property>
       <property>
