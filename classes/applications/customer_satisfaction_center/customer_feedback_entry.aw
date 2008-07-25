@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.8 2008/04/15 13:38:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.9 2008/07/25 09:42:40 robert Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -508,11 +508,15 @@ class customer_feedback_entry extends class_base
 		$ct .= "Tagasiside email: ".$o->prop("fb_email")."\n";
 		$ct .= "Tagasiside telefon: ".$o->prop("fb_phone")."\n";
 		$ct .= "\n\nMuutmise aadress: \n".$this->mk_my_orb("change", array("id" => $o->id(), "auth_code" => $o->meta("auth_code")));
-		if(aw_ini_get("customer_feedback.btsite"))
+		try
+		{
+			$chk = aw_ini_get("customer_feedback.btsite");
+		}
+		catch(Exception $e){}
+		if($chk)
 		{
 			$ct .= "\n\n Bugi loomine: \n".$this->mk_my_orb("create_bug", array("id" => $o->id()));
 		}
-
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
 			"froma" => $o->prop("fb_email"),
