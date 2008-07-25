@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.268 2008/07/10 09:14:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.269 2008/07/25 12:03:01 sander Exp $
 // defs.aw - common functions
 
 /*
@@ -941,7 +941,7 @@ if (!defined("DEFS"))
 	**/
 	function selected($arg)
 	{
-		return ($arg) ? "SELECTED" : "";
+		return ($arg) ? "selected=\"selected\"" : "";
 	}
 
 	/** helper for generating disabled html elements
