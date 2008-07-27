@@ -109,7 +109,7 @@ class industrial_design extends intellectual_property
 			18 => "docs",
 			5 => "check"
 		);
-		$this->pdf_file_name = "T".chr(246).chr(246)."stusdisainiLahenduseTaotlus";
+		$this->pdf_file_name = "ToostusdisainiLahenduseTaotlus";
 		$this->show_template = "show_ind.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("prio_convention_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("doc_warrant", "doc_description"));

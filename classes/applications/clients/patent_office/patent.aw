@@ -116,7 +116,7 @@ class patent extends intellectual_property
 		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
 		$this->types_disp = array(t("(541) S&otilde;nam&auml;rk"),t("(546) Kujutism&auml;rk"),t("(546) Kombineeritud m&auml;rk"),t("(554) Ruumiline m&auml;rk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
-		$this->pdf_file_name = "Kaubam".chr(228)."rgitaotlus";
+		$this->pdf_file_name = "Kaubamargitaotlus";
 		$this->show_template = "show_tm.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("exhibition_date", "convention_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("reproduction" , "g_statues","c_statues"));

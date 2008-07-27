@@ -1681,6 +1681,36 @@ abstract class intellectual_property extends class_base
 			}
 			$data["classes_fee"] = $_SESSION["patent"]["classes_fee"];
 		}
+		elseif (CL_PATENT_PATENT === $this->clid)
+		{
+			if(!empty($_SESSION["patent"]["attachment_demand_points"]) and 10 < $_SESSION["patent"]["attachment_demand_points"])
+			{
+				$add_fee = ($_SESSION["patent"]["attachment_demand_points"] - 10) * 200;
+			}
+
+			if($this->is_template("ADD_FEE") and $add_fee)
+			{
+				$this->vars(array(
+					"add_fee" => $add_fee
+				));
+				$data["ADD_FEE"] = $this->parse("ADD_FEE");
+			}
+		}
+		elseif (CL_INDUSTRIAL_DESIGN === $this->clid)
+		{
+			if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
+			{
+				$add_fee = $_SESSION["patent"]["industrial_design_variant_count"] * 400;
+			}
+
+			if($this->is_template("ADD_FEE") and $add_fee)
+			{
+				$this->vars(array(
+					"add_fee" => $add_fee
+				));
+				$data["ADD_FEE"] = $this->parse("ADD_FEE");
+			}
+		}
 
 		if($_SESSION["patent"]["errors"])
 		{
@@ -2979,6 +3009,7 @@ abstract class intellectual_property extends class_base
 
 		if ($this->is_template("PAT_LIST"))
 		{
+			$obj_count = 0;
 			$pat_l = "";
 			foreach($objects_array as $key => $patent)
 			{
@@ -3084,9 +3115,10 @@ abstract class intellectual_property extends class_base
 					"send"		=> $send_url,
 				));
 				$pat_l .= $this->parse("PAT_LIST");
+				++$obj_count;
 			}
 
-			if (count($objects_array))
+			if ($obj_count)
 			{
 				$this->vars(array(
 					"PAT_LIST" => $pat_l
@@ -3165,6 +3197,7 @@ abstract class intellectual_property extends class_base
 
 		if ($this->is_template("TM_LIST"))
 		{
+			$obj_count = 0;
 			$tm_l = "";
 			foreach($objects_array as $key => $patent)
 			{
@@ -3270,9 +3303,10 @@ abstract class intellectual_property extends class_base
 					"send"		=> $send_url,
 				));
 				$tm_l .= $this->parse("TM_LIST");
+				++$obj_count;
 			}
 
-			if (count($objects_array))
+			if ($obj_count)
 			{
 				$this->vars(array(
 					"TM_LIST" => $tm_l
@@ -3351,6 +3385,7 @@ abstract class intellectual_property extends class_base
 
 		if ($this->is_template("UM_LIST"))
 		{
+			$obj_count = 0;
 			$um_l = "";
 			foreach($objects_array as $key => $patent)
 			{
@@ -3454,9 +3489,10 @@ abstract class intellectual_property extends class_base
 					"send"		=> $send_url,
 				));
 				$um_l .= $this->parse("UM_LIST");
+				++$obj_count;
 			}
 
-			if (count($objects_array))
+			if ($obj_count)
 			{
 				$this->vars(array(
 					"UM_LIST" => $um_l
@@ -3536,6 +3572,7 @@ abstract class intellectual_property extends class_base
 
 		if ($this->is_template("IND_LIST"))
 		{
+			$obj_count = 0;
 			$ind_l = "";
 			foreach($objects_array as $key => $patent)
 			{
@@ -3639,9 +3676,10 @@ abstract class intellectual_property extends class_base
 					"send"		=> $send_url,
 				));
 				$ind_l .= $this->parse("IND_LIST");
+				++$obj_count;
 			}
 
-			if (count($objects_array))
+			if ($obj_count)
 			{
 				$this->vars(array(
 					"IND_LIST" => $ind_l
@@ -3721,6 +3759,7 @@ abstract class intellectual_property extends class_base
 
 		if ($this->is_template("EPAT_LIST"))
 		{
+			$obj_count = 0;
 			$epat_l = "";
 			foreach($objects_array as $key => $patent)
 			{
@@ -3824,9 +3863,10 @@ abstract class intellectual_property extends class_base
 					"send"		=> $send_url,
 				));
 				$epat_l .= $this->parse("EPAT_LIST");
+				++$obj_count;
 			}
 
-			if (count($objects_array))
+			if ($obj_count)
 			{
 				$this->vars(array(
 					"EPAT_LIST" => $epat_l
@@ -3909,10 +3949,10 @@ abstract class intellectual_property extends class_base
 					$xml .= "<NAMEL>".trademark_manager::rere($applicant->prop("lastname"))."</NAMEL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.aadress"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.linn.name"))."</ADDRL>";
+					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.maakond.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.postiindeks"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("phone.name")).",".$appl->prop("fax.name")."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("email.mail"))."</ADDRL>";
-					$addr .= "<ADDRL></ADDRL>";
 					if ($this->can("view", $appl->prop("address.riik")))
 					{
 						$addr .= "<COUNTRY>".trademark_manager::rere($adr_i->get_country_code(obj($appl->prop("address.riik"))))."</COUNTRY>";
@@ -3924,10 +3964,10 @@ abstract class intellectual_property extends class_base
 					$xml .= "<NAMEL>".trademark_manager::rere($applicant->name())."</NAMEL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.aadress"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.linn.name"))."</ADDRL>";
+					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.maakond.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.postiindeks"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("phone_id.name")).",".trademark_manager::rere($appl->prop("telefax_id.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("email_id.mail"))."</ADDRL>";
-					$addr .= "<ADDRL></ADDRL>";
 					if ($this->can("view", $appl->prop("contact.riik")))
 					{
 						$addr .= "<COUNTRY>".trademark_manager::rere($adr_i->get_country_code(obj($appl->prop("contact.riik"))))."</COUNTRY>";

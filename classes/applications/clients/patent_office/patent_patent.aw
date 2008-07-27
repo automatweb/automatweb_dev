@@ -191,7 +191,7 @@ class patent_patent extends intellectual_property
 			"clid" => CL_PATENT_PATENT
 		));
 		$this->info_levels = array(
-			0 => "applicant_ind",
+			0 => "applicant_pat",
 			11 => "author",
 			12 => "invention_pat",
 			3 => "priority_pat",
@@ -281,6 +281,13 @@ class patent_patent extends intellectual_property
 		$patent->set_prop("other_bio_inst" , $_SESSION["patent"]["other_bio_inst"]);
 		$patent->set_prop("other_datapub_date" , $_SESSION["patent"]["other_datapub_date"]);
 		$patent->set_prop("other_datapub_data" , $_SESSION["patent"]["other_datapub_data"]);
+		$patent->save();
+	}
+
+	protected function save_fee($patent)
+	{
+		parent::save_fee($patent);
+		$patent->set_prop("fee_copies" , $_SESSION["patent"]["fee_copies"]);
 		$patent->save();
 	}
 
@@ -425,6 +432,7 @@ class patent_patent extends intellectual_property
 		$patent = obj($id);
 		parent::fill_session($id);
 		$author_disallow_disclose = (array) $patent->meta("author_disallow_disclose");
+		$_SESSION["patent"]["fee_copies"] = $o->prop("fee_copies");
 
 		foreach($patent->connections_from(array("type" => "RELTYPE_AUTHOR")) as $key => $c)
 		{

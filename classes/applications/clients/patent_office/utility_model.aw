@@ -139,7 +139,7 @@ class utility_model extends intellectual_property
 			"clid" => CL_UTILITY_MODEL
 		));
 		$this->info_levels = array(
-			0 => "applicant_ind",
+			0 => "applicant_um",
 			11 => "author",
 			12 => "invention_um",
 			3 => "priority_um",
