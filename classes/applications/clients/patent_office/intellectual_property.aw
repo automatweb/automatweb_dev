@@ -3041,7 +3041,8 @@ abstract class intellectual_property extends class_base
 				}
 
 				$url = aw_url_change_var("trademark_id", $patent->id());
-				$url = aw_url_change_var("data_type", null , $url);
+				$url = aw_url_change_var("data_type", 0 , $url);
+				$url = aw_url_change_var("new_application", null , $url);
 
 				try
 				{
@@ -3050,6 +3051,7 @@ abstract class intellectual_property extends class_base
 				}
 				catch (Exception $e)
 				{
+					$url = "";
 				}
 
 				if(!$status->prop("verified") &&	!$status->prop("nr"))
@@ -3227,7 +3229,8 @@ abstract class intellectual_property extends class_base
 				}
 
 				$url = aw_url_change_var("trademark_id", $patent->id());
-				$url = aw_url_change_var("data_type", null , $url);
+				$url = aw_url_change_var("data_type", 0 , $url);
+				$url = aw_url_change_var("new_application", null , $url);
 
 				try
 				{
@@ -3236,6 +3239,7 @@ abstract class intellectual_property extends class_base
 				}
 				catch (Exception $e)
 				{
+					$url = "";
 				}
 
 				if(!$status->prop("verified") &&	!$status->prop("nr"))
@@ -3415,7 +3419,8 @@ abstract class intellectual_property extends class_base
 				}
 
 				$url = aw_url_change_var("trademark_id", $patent->id());
-				$url = aw_url_change_var("data_type", null , $url);
+				$url = aw_url_change_var("data_type", 0 , $url);
+				$url = aw_url_change_var("new_application", null , $url);
 
 				try
 				{
@@ -3424,6 +3429,7 @@ abstract class intellectual_property extends class_base
 				}
 				catch (Exception $e)
 				{
+					$url = "";
 				}
 
 				if(!$status->prop("verified") &&	!$status->prop("nr"))
@@ -3602,15 +3608,17 @@ abstract class intellectual_property extends class_base
 				}
 
 				$url = aw_url_change_var("trademark_id", $patent->id());
-				$url = aw_url_change_var("data_type", null , $url);
+				$url = aw_url_change_var("data_type", 0 , $url);
+				$url = aw_url_change_var("new_application", null , $url);
 
 				try
 				{
-					$section = aw_ini_get("clients.patent_office.pat_edit_section_id");
+					$section = aw_ini_get("clients.patent_office.ind_edit_section_id");
 					$url = aw_url_change_var("section", $section, $url);
 				}
 				catch (Exception $e)
 				{
+					$url = "";
 				}
 
 				if(!$status->prop("verified") &&	!$status->prop("nr"))
@@ -3789,15 +3797,17 @@ abstract class intellectual_property extends class_base
 				}
 
 				$url = aw_url_change_var("trademark_id", $patent->id());
-				$url = aw_url_change_var("data_type", null , $url);
+				$url = aw_url_change_var("data_type", 0 , $url);
+				$url = aw_url_change_var("new_application", null , $url);
 
 				try
 				{
-					$section = aw_ini_get("clients.patent_office.pat_edit_section_id");
+					$section = aw_ini_get("clients.patent_office.epat_edit_section_id");
 					$url = aw_url_change_var("section", $section, $url);
 				}
 				catch (Exception $e)
 				{
+					$url = "";
 				}
 
 				if(!$status->prop("verified") &&	!$status->prop("nr"))

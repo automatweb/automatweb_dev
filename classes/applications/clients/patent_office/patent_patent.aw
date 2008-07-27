@@ -284,7 +284,7 @@ class patent_patent extends intellectual_property
 		$patent->save();
 	}
 
-	protected function save_fee($patent)
+	public function save_fee($patent)
 	{
 		parent::save_fee($patent);
 		$patent->set_prop("fee_copies" , $_SESSION["patent"]["fee_copies"]);
