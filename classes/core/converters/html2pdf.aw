@@ -77,6 +77,8 @@ class html2pdf extends class_base
 	{
 		$str = $this->convert($arr);
 		$file_name = strpos($arr["filename"], ".pdf") === (strlen($arr["filename"]) - 4) ? $arr["filename"] : $arr["filename"].".pdf";
+		header("Cache-Control: private, must-revalidate, post-check=0, pre-check=0");
+		header("Pragma: private");
 		header("Content-type: application/pdf");
 		header("Content-disposition: attachment; filename={$file_name}");
 		header("Content-Length: ".strlen($str));
