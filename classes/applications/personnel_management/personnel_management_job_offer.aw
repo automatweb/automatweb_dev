@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.56 2008/07/28 13:19:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.57 2008/07/28 13:21:25 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1952,9 +1952,9 @@ class personnel_management_job_offer extends class_base
 				$c_email = $c_email_obj->mail;
 			}
 			$this->vars(array(
-				"contact.name" => $ob->prop("contact.name"),
-				"contact.firstname" => $ob->prop("contact.firstname"),
-				"contact.lastname" => $ob->prop("contact.lastname"),
+				"contact.name" => htmlentities($ob->prop("contact.name")),
+				"contact.firstname" => htmlentities($ob->prop("contact.firstname")),
+				"contact.lastname" => htmlentities($ob->prop("contact.lastname")),
 				"contact.phone" => $c_phone,
 				"contact.email" => $c_email,
 			));
