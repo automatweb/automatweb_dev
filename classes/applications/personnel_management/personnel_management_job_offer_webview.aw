@@ -652,7 +652,7 @@ class personnel_management_job_offer_webview extends class_base
 				return $o->get_end();
 
 			default:
-				return $o->trans_get_val($p);
+				return htmlentities($o->trans_get_val($p));
 		}
 	}
 
