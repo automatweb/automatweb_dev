@@ -874,11 +874,11 @@ class shop_warehouse extends class_base
 				break;
 
 			case "prod_tree":
-				$this->get_prod_tree($arr);
+				$retval = $this->get_prod_tree($arr);
 				break;
 
 			case "prod_cat_tree":
-				$this->mk_prodg_tree($arr);
+				$retval = $this->mk_prodg_tree($arr);
 				break;
 
 			case "products_list":
@@ -1639,14 +1639,9 @@ class shop_warehouse extends class_base
 		$tb =& $data["prop"]["toolbar"];
 
 		$tb->add_menu_button(array(
-			"name" => "crt_".$this->prod_type_fld,
+			"name" => "new",
 			"tooltip" => t("Uus")
 		));
-
-		if($this->can("view", $this->prod_type_fld))
-		{
-			//$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
-		}
 
 		$tb->add_delete_button();
 
@@ -1654,8 +1649,12 @@ class shop_warehouse extends class_base
 		
 		if($data["request"]["ptf"] && !$data["request"]["pgtf"])
 		{
+			if(!$this->prod_tree_root)
+			{
+				$this->prod_tree_root = $arr["request"]["ptf"];	
+			}
 			$tb->add_menu_item(array(
-				"parent" => "crt_".$this->prod_type_fld,
+				"parent" => "new",
 				"text" => t("Kaust"),
 				"link" => $this->mk_my_orb("new", array(
 					"parent" => $this->prod_tree_root,
@@ -1664,7 +1663,7 @@ class shop_warehouse extends class_base
 			));
 
 			$tb->add_menu_item(array(
-				"parent" => "crt_".$this->prod_type_fld,
+				"parent" => "new",
 				"text" => t("Artikkel"),
 				"link" => $this->mk_my_orb("new", array(
 					"parent" => $this->prod_tree_root,
@@ -1701,7 +1700,7 @@ class shop_warehouse extends class_base
 		elseif(!$data["request"]["ptf"] && $data["request"]["pgtf"])
 		{
 			$tb->add_menu_item(array(
-				"parent" => "crt_".$this->prod_type_fld,
+				"parent" => "new",
 				"text" => t("Artiklikategooria"),
 				"link" => $this->mk_my_orb("new", array(
 					"parent" => $data["request"]["pgtf"],
@@ -1718,7 +1717,7 @@ class shop_warehouse extends class_base
 					if($this->can("view", $fid))
 					{
 						$tb->add_menu_item(array(
-							"parent" => "crt_".$this->prod_type_fld,
+							"parent" => "new",
 							"text" => t("Artikkel"),
 							"link" => $this->mk_my_orb("new", array(
 								"parent" => $fid,
@@ -1727,9 +1726,17 @@ class shop_warehouse extends class_base
 								"warehouse" => $data["obj_inst"]->id(),
 							), CL_SHOP_PRODUCT)
 						));
+						if(!$this->prod_tree_root)
+						{
+							$this->prod_tree_root = $fid;	
+						}
 					}
 				}
 			}
+		}
+		if($this->can("view", $this->prod_type_fld) && $this->prod_tree_root)
+		{
+			$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
 		}
 	}
 	
@@ -1991,12 +1998,13 @@ class shop_warehouse extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
+		$tbparent = ($parent == $this->prod_type_fld)?"new":"new".$parent;
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($o->class_id() != CL_MENU)
 			{
 				$tb->add_menu_item(array(
-					"parent" => "crt_".$parent,
+					"parent" => $tbparent,
 					"text" => $o->name(),
 					"link" => $this->mk_my_orb("new", array(
 						"item_type" => $o->id(),
@@ -2012,11 +2020,11 @@ class shop_warehouse extends class_base
 			else
 			{
 				$tb->add_sub_menu(array(
-					"parent" => "crt_".$parent,
+					"parent" => $tbparent,
 					"name" => "crt_".$o->id(),
 					"text" => $o->name()
 				));
-				$this->_req_add_itypes($tb, $o->id(), $data);
+				$this->_req_add_itypes($tb, "n".$o->id(), $data);
 			}
 		}
 	}
@@ -2323,9 +2331,8 @@ class shop_warehouse extends class_base
 			{
 				if(strpos($var, $group."_s_") !== false)
 				{
-
+					$show = 1;
 				}
-				$show = 1;
 			}
 		}
 		if($show)
@@ -2795,7 +2802,7 @@ class shop_warehouse extends class_base
 		}
 
 		$this->prod_fld = $this->config->prop("prod_fld");
-		$this->prod_tree_root = isset($arr["request"]["ptf"]) ? $arr["request"]["ptf"] : $this->config->prop("prod_fld");
+		$this->prod_tree_root = isset($arr["request"]["ptf"]) ? $arr["request"]["ptf"] : (isset($arr["request"]["pgtf"])? null : $this->config->prop("prod_fld"));
 
 		$this->pkt_fld = $this->config->prop("pkt_fld");
 		$this->pkt_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $this->config->prop("pkt_fld");
