@@ -179,8 +179,8 @@ class room_price extends class_base
 			"class_id" => CL_ROOM,
 			"reltype" => "RELTYPE_ROOM_PRICE",
 		));
-		$c = reset($cs);
-		return $this->can("view", $c->from()->id())?$c->from():"";
+		$c = count($cs)?reset($cs):false;
+		return $this->can("view", ($c?$c->from()->id():false))?$c->from():"";
 	}
 
 	private function get_currencys($oid)
@@ -323,6 +323,141 @@ class room_price extends class_base
 		}
 		$o = obj($oid);
 		return $o->meta("prices");
+	}
+
+	/**
+		@attrib api=1 params=name
+		@param oids type=array required
+			Room_price oid's to use. Be careful with the order of this oids, first ones have higher priority.
+			Array(oid_1, oid_2, oid_3, ..)
+		@param prices type=array optional
+			Prices to use in the price calculation. These prices are per hour!!
+			Array(
+				room_price_oid_1 => price,
+				room_price_oid_2 => price,
+				...
+			)
+			This separate array is used instead of room's price connected to room_price, because not all places use room's price. Some complicated locations use room_price for times, and provide their own price data.
+		@param start type=int required
+			The time to start calculating from (reservation start for example)
+		@param end type=int required
+			The time to calculate the price to (reservation end for example)
+		@returns
+			If param prices is set, the total price, otherwise an array:
+			Array(
+				room_price_oid => total_seconds_for_given_room_price_object,
+				...
+			)
+		@examples
+			for example i have an array of room_price oids and prices + reservation start and end times.
+			$a = Array(
+				room_price_oid_1(sat, sun) => price(200),
+				room_price_oid_2(mon - sun) => price(100),
+			)
+			$start = UNIX_TIMESTAMP;
+			$end = UNIX_TIMESTAMP;
+			$room_price_instance = get_instance(CL_ROOM_PRICE);
+			$final_total_price = $room_price_instance->calculate_room_prices_price(array(
+				"oids" => array_keys($a),
+				"prices" => $a,
+				"start" => $start,
+				"end" => $end,
+			));
+
+			Well, now, when for example room_price_oid_1 is set to be active saturday and sunday, and oid_2 is et to be active from monday till sunday and the reservation lasts also from monday till sunday, then from monday to friday second room_price price is used and saturday/sunday use _oid_1's price.
+			(2 * 24 * 200) + (5 * 24 * 100) = 9600 + 12 000 = 21 600
+			... Or, don't give the prices array and calculate the total price yourself(notice that time for every room_price is given in seconds then).
+
+			
+
+	 **/
+	function calculate_room_prices_price($arr)
+	{
+		if(!$arr["start"] OR !$arr["end"])
+		{
+			return false;
+		}
+		$arr["oids"] = safe_array($arr["oids"]);
+
+		$time_db = array(); // this is going to hold the times that have been already so-called reserved.. 
+		foreach($arr["oids"] as $oid)
+		{
+			$obj = obj($oid);
+			$list[$obj->id()] = $obj;
+			$df = $obj->prop("date_from");
+			$dt = $obj->prop("date_to");
+			$wd = $obj->prop("weekdays");
+			$tf = $obj->prop("time_from");
+			$tt = $obj->prop("time_to");
+			$tf = mktime($tf["hour"], $tf["minute"], 0, 0, 0, 0);
+			$tt = mktime($tt["hour"], $tt["minute"], 0, 0, 0, 0);
+			if(date("Ymd",$arr["start"]) > date("Ymd", $df) OR date("Ymd", $arr["end"]) < date("Ymd", $dt))
+			{ // mingi osa soovitud ajavahemikust mahub siia ruumi hinda
+				$start = (date("Ymd", $arr["start"]) > date("Ymd", $df))?$arr["start"]:$df;
+				$end = (date("Ymd", $arr["end"]) < date("Ymd", $dt))?$arr["end"]:$dt;
+				for($time = $start; $time < $end; $time += 86400) // loop over each day of that time that matched somewhere in the time we wanted
+				{
+					$day = date("w", $time);
+					if(in_array($day, $wd))  // this day exists in the room price days
+					{
+						// now we have to match time
+						$extra = (date("Hi", $tt) == 0)?true:false; // this helps in situation where i need to replace 00:00 with 24:00
+						if(date("Hi",$arr["start"]) > date("Hi", $tf) OR date("Hi", $arr["end"]) < (($extra)?2400:date("Hi", $tt)))
+						{
+							$time_start = (date("Hi", $arr["start"]) > date("Hi", $tf))?$arr["start"]:$tf;
+							$time_end = (date("Hi", $arr["end"]) < ($extra)?2400:date("Hi", $tt))?$arr["end"]:($extra?($tt + 86400):$tt);
+
+							$to_overlap_start = mktime(date("H", $time_start), date("i", $time_start), date("s", $time_start), date("m", $start), date("d", $start), date("Y", $start));
+							$to_overlap_end = mktime(date("H", $time_end), date("i", $time_end), date("s", $time_end), date("m", $end), date("d", $end), date("Y", $end));
+							if($this->_time_overlap($to_overlap_start, $to_overlap_end, $time_db)) // here we figure out if this time is already being used in this price calculation or not.. , if is but partially, time parameters are changed. if no available time.. false is returned
+							{
+								$tot_time[$obj->id()] += $time_end - $time_start; // well, here we get the hours for the day
+							}
+						}
+					}
+				}
+			}
+		}
+		if(is_array($arr["prices"]) && count($arr["prices"]))
+		{
+			foreach($tot_time as $room_price => $seconds)
+			{
+				$hours = ($seconds / 60) / 60 ;
+				if($arr["prices"][$room_price])
+				{
+					$return += $arr["prices"][$room_price] * $hours;
+				}
+			}
+			return $return;
+		}
+		return $tot_time;
+
+	}
+
+	/** Well, this basically.. dohh, i even better dont describe what it does. It's used internally and just don't touch it unless you know exactly what you are doing.
+	 **/
+	function _time_overlap(&$start, &$end, &$time_db)
+	{
+		foreach($time_db as $db_entry)
+		{
+			if($db_entry["end"] > $start && $db_entry["start"] <= $start) // new time starts before old one has ended (so new gets old's end time as a start time)
+			{
+				$start = $db_entry["end"];
+			}
+			if($db_entry["start"] < $end && $db_entry["end"] >= $end) // new time... dzzhhhh... brain malfunction 
+			{
+				$end = $db_entry["start"];
+			}
+		}
+		if(($end - $start) > 0) // all or at least some time was left to include in the price calculcation -- so add this time to db and return true
+		{
+			$time_db[] = array(
+				"start" => $start,
+				"end" => $end,
+			);
+			return true;
+		}
+		return false; // this time was already used in calculation, so return false and ignore this
 	}
 }
 ?>
