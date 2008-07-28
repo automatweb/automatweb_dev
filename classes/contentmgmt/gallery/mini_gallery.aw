@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.45 2008/05/14 12:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.46 2008/07/28 10:28:18 markop Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -389,7 +389,7 @@ class mini_gallery extends class_base
 				{
 					$r++;
 					$rows++;
-					$c = 0;
+					$c = -1;
 					$this->vars(array(
 						"COL" => $l
 					));
