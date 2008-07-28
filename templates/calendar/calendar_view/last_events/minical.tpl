@@ -7,7 +7,7 @@
 <!-- SUB: WEEK -->
 <tr>
 <!-- SUB: DAY -->
-<td class="{VAR:style}">
+<td class="{VAR:style}_{VAR:hasevent}{VAR:today}{VAR:weekend}">
 {VAR:link}
 </td>
 <!-- END SUB: DAY -->

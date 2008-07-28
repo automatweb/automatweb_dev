@@ -31,13 +31,13 @@
 @caption S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi
 
 @property show_days_with_events type=checkbox ch_value=1
-@caption N&auml;ita ainult s&uuml;ndmustega päevi
+@caption N&auml;ita ainult s&uuml;ndmustega p&auml;evi
 
 @property sort_day_events_before type=checkbox ch_value=1
 @caption Sorteeri &uuml;he p&auml;evased ettepoole
 
 @property show_event_content type=checkbox ch_value=1
-@caption N&auml;ita kalendrivaates kohe sündmuse sisu
+@caption N&auml;ita kalendrivaates kohe s&uuml;ndmuse sisu
 
 @property show_event_days type=checkbox ch_value=1
 @caption N&auml;ita s&uuml;ndmust k&otilde;ikidel p&auml;evadel
@@ -47,6 +47,9 @@
 
 @property fix_links type=checkbox ch_value=1
 @caption "Eelmine"-"J&auml;rgmine" lingid viivad s&uuml;ndmusega p&auml;evale
+
+@property monyear_2in1 type=checkbox ch_value=1
+@caption Kuu ja aasta &uuml;he selecti sees
 
 @groupinfo style caption=Stiilid
 @default group=style
@@ -90,7 +93,7 @@
 @property result_table type=table 
 @caption Tulemuste tabel
 
-@groupinfo show_events caption=Sündmused submit=no
+@groupinfo show_events caption=S&uuml;ndmused submit=no
 @default group=show_events
 
 @property show_events type=calendar no_caption=1
@@ -133,13 +136,13 @@ class calendar_view extends class_base
 		{
 			case "use_template":
 				$data["options"] = array(
-					"intranet1.tpl" => t("Kuuvaade & nädala sündmused"),
+					"intranet1.tpl" => t("Kuuvaade & n&auml;dala s&uuml;ndmused"),
 					"month" => t("Kuukalender"),
-					"futureevents" => t("Algavad sündmused"),
-					"weekview" => t("Nädala vaade"),
-					"last_events" => t("Järgmised sündmused"),
-					"grouped" => t("Grupeeri allika järgi"),
-					"relative" => t("Ülevaade"),
+					"futureevents" => t("Algavad s&uuml;ndmused"),
+					"weekview" => t("N&auml;dala vaade"),
+					"last_events" => t("J&auml;rgmised s&uuml;ndmused"),
+					"grouped" => t("Grupeeri allika j&auml;rgi"),
+					"relative" => t("&Uuml;levaade"),
 				);
 				break;
 
@@ -150,11 +153,11 @@ class calendar_view extends class_base
 			case "default_view":
 				$data["options"] = array(
 					"" => "",
-					"day" => t("päev"),
-					"week" => t("nädal"),
+					"day" => t("p&auml;ev"),
+					"week" => t("n&auml;dal"),
 					"month" => t("kuu"),
-					"last" => t("Järgmised"),
-					"relative" => t("Ülevaade"),
+					"last" => t("J&auml;rgmised"),
+					"relative" => t("&Uuml;levaade"),
 				);
 				break;
 
@@ -219,12 +222,12 @@ class calendar_view extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sep",
-			"caption" => t("Väljade eraldaja"),
+			"caption" => t("V&auml;ljade eraldaja"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "fields",
-			"caption" => t("Lisaväljad"),
+			"caption" => t("Lisav&auml;ljad"),
 		));
 		
 		$oldvals = $o->meta("result_table");
@@ -240,7 +243,7 @@ class calendar_view extends class_base
 		}
 		elseif (!is_oid($use_output))
 		{
-			$arr["prop"]["error"] = t("Väljundvorm on valimata");
+			$arr["prop"]["error"] = t("V&auml;ljundvorm on valimata");
 			return PROP_ERROR;
 		};
 
@@ -1005,7 +1008,7 @@ class calendar_view extends class_base
 		// this cycle creates the "big" calendar, minicalendar is done in the 
 		// get_overview callback
 
-		// ookei .. ma saan template käest küsida kas mul on vaja grupeerida asju?
+		// ookei .. ma saan template k2est kysida kas mul on vaja grupeerida asju?
 		$exp_args = array(
 			"obj_inst" => &$this->obj_inst,
 			"cal_inst" => &$vcal,
@@ -1015,7 +1018,7 @@ class calendar_view extends class_base
 
 		if ("grouped" == $use_template && "day" == $viewtype)
 		{
-			// use_template on see mida kasutatakse ühe konkreetse sündmuse joonistamiseks
+			// use_template on see mida kasutatakse yhe konkreetse syndmuse joonistamiseks
 			$args["container_template"] = "grouped.tpl";
 			//$arr["event_template"] = "groupitem.tpl";
 		};

@@ -67,10 +67,16 @@
 </style>
 
 <div><small><form method="GET" name="mininavigator">
+<!-- SUB: MINIMONYEAR_2IN2 -->
 <select id="minimon" name="minimon">{VAR:mnames}</select>
 <select id="miniyear" name="miniyear">{VAR:years}</select>
+<!-- END SUB: MINIMONYEAR_2IN2 -->
+<!-- SUB: MINIMONYEAR_2IN1 -->
+<select id="minimonyear" name="minimonyear">{VAR:monyears}</select>
+<!-- END SUB: MINIMONYEAR_2IN1 -->
 <input type="hidden" id="mininaviurl" name="mininaviurl" value="{VAR:mininaviurl}">
 <input type="button" value="Ava" onClick="mini_navigate()">
+<!-- SUB: MINIMONYEAR_2IN2_JS -->
 <script type="text/javascript">
 function mini_navigate()
 {
@@ -80,6 +86,17 @@ function mini_navigate()
 	window.location.href = newurl;
 }
 </script>
+<!-- END SUB: MINIMONYEAR_2IN2_JS -->
+<!-- SUB: MINIMONYEAR_2IN1_JS -->
+<script type="text/javascript">
+function mini_navigate()
+{
+	var my = document.getElementById('minimonyear').value;
+	var newurl = document.getElementById('mininaviurl').value + "&date=" + my;
+	window.location.href = newurl;
+}
+</script>
+<!-- END SUB: MINIMONYEAR_2IN1_JS -->
 </form></small></div>
 <div class="minical_table">
 <a href="{VAR:today_url}">T&auml;na: {VAR:today_date}</a> <br>

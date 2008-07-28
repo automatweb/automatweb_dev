@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.104 2008/03/13 13:26:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.105 2008/07/28 15:06:09 instrumental Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -393,8 +393,8 @@ class vcalendar extends aw_template
 
 		// deal with passed recurrence information
 
-		// aga ääki peaks seda üldse recurrence abil tegema? Sest kalendri komponent
-		// ei tea ju midagi kalendripäeva algusest ja lõpust. Ja ei saagi teada
+		// aga 22ki peaks seda yldse recurrence abil tegema? Sest kalendri komponent
+		// ei tea ju midagi kalendrip2eva algusest ja l6pust. Ja ei saagi teada
 
 		// actually, I can pass that information to the component through the configure method
 		// so it is not really a problem
@@ -429,15 +429,15 @@ class vcalendar extends aw_template
 				$use_date = date("Ymd",$i);
 				// but .. I do not need to use those references .. yees?
 				$tmp = $this->evt_list[$this->el_count];
-				// aga siin on mul vaja teada päeva algust
+				// aga siin on mul vaja teada p2eva algust
 				$tmp["item_start"] = mktime($this->day_start["hour"],$this->day_start["minute"],0,1,1,2005);
 				//$tmp["item_start"] = mktime(0,0,0,1,1,2005);
 
 				// siin tuleb kuidagi kindlaks teha .. et kui tegemist on viimase
-				// päevaga, siis näitame ka õiget kellaaega
+				// p2evaga, siis n2itame ka 6iget kellaaega
 				if ($day_counter == $days_between)
 				{
-					//$tmp["time"] = "Lõpeb: " . date("H:i",$arr["item_end"]);
+					//$tmp["time"] = "L&otilde;peb: " . date("H:i",$arr["item_end"]);
 					$tmp["item_end"] =  $arr["item_end"];
 				}
 				else
@@ -815,6 +815,10 @@ class vcalendar extends aw_template
 		for ($i = 2003; $i <= 2010; $i++)
 		{
 			$years[$i] = $i;
+			foreach($mnames as $monyear_key => $monyear_val)
+			{
+				$monyears[$monyear_key."-".$i] = $monyear_val." ".$i;
+			}
 		};
 
 		// I'm trying to get the javascript function inside the template to generate
@@ -937,6 +941,7 @@ class vcalendar extends aw_template
 			"naviurl" => aw_url_change_var("date",""),
 			"mnames" => html::picker((int)$m,$mnames),
 			"years" => html::picker($y,$years),
+			"monyears" => html::picker((int)$m."-".$y, $monyears),
 			"content" => $content,
 			"caption" => $caption,
 			"prevlink" => $prevlink,
@@ -945,6 +950,11 @@ class vcalendar extends aw_template
 			"today_url" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y"))),
 			"today_date" => date("d.m.Y"),
 			"act_day_tm" => $this->range["timestamp"],
+		));
+		$n = is_object($inst) && is_object($inst->obj_inst) && $this->can("view", $inst->obj_inst->id()) && obj($inst->obj_inst->id())->monyear_2in1 ? 1 : 2;
+		$this->vars_safe(array(
+			"MINIMONYEAR_2IN".$n => $this->parse("MINIMONYEAR_2IN".$n),
+			"MINIMONYEAR_2IN".$n."_JS" => $this->parse("MINIMONYEAR_2IN".$n."_JS"),
 		));
 		$awt->stop("gen-calendar-html");
 
@@ -1177,7 +1187,7 @@ class vcalendar extends aw_template
 			));
 			$header = $this->parse("HEADER");
 			$footer = $this->parse("FOOTER");
-			// nüüd on mul vaja iga kuu kohta algust ja lõppu
+			// nyyd on mul vaja iga kuu kohta algust ja l6ppu
 
 			$ms = mktime(0,0,0,$i,1,$y);
 			$me = mktime(23,59,59,$i+1,0,$y);
@@ -1654,6 +1664,9 @@ class vcalendar extends aw_template
 					}
 				}
 				$this->vars_safe(array(
+					"today" => mktime(0, 0, 0, date("m"), date("d"), date("Y")) === $i ? 1 : 0,
+					"hasevent" => strlen($events_str) > 0 ? 1 : 0,
+					"weekend" => date("w", $i) % 6 === 0 ? 1 : 0,
 					"style" => $style,
 					"link" => $link,
 					"link2" => $day_url,
