@@ -95,6 +95,11 @@
                   <clid>CL_SHOP_UNIT_FORMULA</clid>
                   <caption>&amp;amp;Uuml;hikute valem</caption>
             </UNIT_FORMULA>
+            <FOLDER>
+                  <value>5</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kaust</caption>
+            </FOLDER>
       </reltypes>
 </properties>
 

@@ -171,5 +171,10 @@ class shop_sell_order extends class_base
 	{
 		return get_instance(CL_SHOP_PURCHASE_ORDER)->_set_articles($arr);
 	}
+
+	function _set_related_orders($arr)
+	{
+		return get_instance(CL_SHOP_PURCHASE_ORDER)->_set_related_orders($arr);
+	}
 }
 ?>

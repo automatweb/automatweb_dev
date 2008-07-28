@@ -1811,7 +1811,7 @@ class shop_warehouse extends class_base
 	function mk_prodg_tree($arr)
 	{
 		$chk = $this->get_warehouse_configs($arr, "no_prodg_tree");
-		if(count($chk))
+		if(count($chk) && $arr["request"]["group"] != "productgroups")
 		{
 			return PROP_IGNORE;
 		}
@@ -2595,6 +2595,7 @@ class shop_warehouse extends class_base
 					$uo = obj($unit);
 					$data["amount_".$wh."_".$i] = $res["amounts"][$o->id()][$wh][$unit]." ".$uo->prop("unit_code");
 				}
+				$data["saldo_".$wh] = $pi->get_saldo($o, $wh);
 			}
 			$conn = $o->connections_from(array(
 				"type" => "RELTYPE_CATEGORY",
@@ -2693,6 +2694,21 @@ class shop_warehouse extends class_base
 						"align" => "center"
 					));
 				}
+				if(count($arr["warehouses"]) == 1)
+				{
+					$cp = t("Saldo");
+				}
+				else
+				{
+					$who = obj($wh);
+					$cp = sprintf(t("%s saldo"), $who->name());
+				}
+				$t->define_field(array(
+					"sortable" => 1,
+					"name" => "saldo_".$wh,
+					"caption" => $cp,
+					"align" => "center",
+				));
 			}
 		}
 

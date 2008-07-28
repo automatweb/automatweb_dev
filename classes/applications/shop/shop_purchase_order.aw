@@ -349,6 +349,22 @@ class shop_purchase_order extends class_base
 			"name" => "sel",
 		));
 	}
+
+	function _set_related_orders($arr)
+	{
+		if($arr["prop"]["value"] != $arr["obj_inst"]->prop($arr["prop"]["name"]))
+		{
+			foreach($arr["prop"]["value"] as $oid)
+			{
+				$o = obj($oid);
+				$o_val = $o->prop($arr["prop"]["name"]);
+				$o_val[$arr["obj_inst"]->id()] = $arr["obj_inst"]->id();
+				$o->set_prop($arr["prop"]["name"], $o_val);
+				$o->save();
+			}
+		}
+		return PROP_OK;
+	}
 }
 
 ?>

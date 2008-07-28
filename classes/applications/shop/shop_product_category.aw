@@ -33,6 +33,9 @@
 
 @reltype UNIT_FORMULA value=4 clid=CL_SHOP_UNIT_FORMULA
 @caption &Uuml;hikute valem
+
+@reltype FOLDER value=5 clid=CL_MENU
+@caption Kaust
 */
 
 class shop_product_category extends class_base
@@ -69,16 +72,21 @@ class shop_product_category extends class_base
 			"multiple" => 1,
 		));
 		$tb->add_save_button();
+		$tb->add_button(array(
+			"img" => "delete.gif",
+			"tooltip" => t("Eemalda valitud seosed"),
+			"confirm" => t("Oled kindel, et soovid valitud seosed kustutada?"),
+			"action" => "del_folders",
+		));
 	}
 
 	function _get_folders($arr)
 	{
+		if($arr["new"])
+		{
+			return PROP_IGNORE;
+		}
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_field(array(
-			"name" => "delete",
-			"caption" => t("Eemalda"),
-			"align" => "center",
-		));
 		$t->define_field(array(
 			"name" => "display",
 			"caption" => t("Kuvamise kaust"),
@@ -95,20 +103,24 @@ class shop_product_category extends class_base
 			"align" => "center",
 			"width" => "70%",
 		));
-		$df = $arr["obj_inst"]->meta("disp_fld");
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel",
+		));
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_FOLDER",
+		));
 		$def = $arr["obj_inst"]->meta("def_fld");
-		foreach($df as $f)
+		foreach($conn as $c)
 		{
-			$fo = obj($f);
+			$f = $c->prop("to");
+			$fo = $c->to();
 			$t->define_data(array(
-				"delete" => html::checkbox(array(
-					"name" => "del_disp[".$f."]",
-					"value" => 1,
-				)),
 				"display" => html::checkbox(array(
 					"name" => "display[".$f."]",
 					"value" => 1,
 					"checked" => $arr["obj_inst"]->is_connected_to(array(
+						"type" => "RELTYPE_DISPLAY_FOLDER",
 						"to" => $f,
 					)),
 				)),
@@ -118,33 +130,56 @@ class shop_product_category extends class_base
 					"checked" => ($f == $def),
 				)),
 				"name" => $fo->name(),
+				"oid" => $f,
 			));
 		}
 	}
 
-	function _set_folders($arr)
+	/**
+	@attrib name=del_folders
+	**/
+	function del_folders($arr)
 	{
-		$df = $arr["obj_inst"]->meta("disp_fld");
+		$o = obj($arr["id"]);
+		$types = array("RELTYPE_DISPLAY_FOLDER", "RELTYPE_FOLDER");
+		if(is_array($arr["sel"]))
+		{
+			foreach($arr["sel"] as $oid)
+			{
+				foreach($types as $type)
+				{
+					if($o->is_connected_to(array("to" => $oid, "type" => $type)))
+					{
+						$o->disconnect(array(
+							"from" => $oid,
+							"type" => $type,
+						));
+					}
+				}
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	function callback_post_save($arr)
+	{
 		if($fs = $arr["request"]["add_folder"])
 		{
 			$tmp = explode(",", $fs);
 			foreach($tmp as $f)
 			{
-				$df[$f] = $f;
-			}
-		}
-		if(count($arr["request"]["del_disp"]))
-		{
-			foreach($arr["request"]["del_disp"] as $f)
-			{
-				unset($df[$f]);
-				$arr["obj_inst"]->disconnect(array(
-					"from" => $f,
+				$arr["obj_inst"]->connect(array(
+					"type" => "RELTYPE_FOLDER",	
+					"to" => $f,
 				));
 			}
 		}
-		foreach($df as $f)
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_FOLDER",
+		));
+		foreach($conn as $c)
 		{
+			$f = $c->prop("to");
 			if($arr["request"]["display"][$f])
 			{
 				$arr["obj_inst"]->connect(array(
@@ -152,7 +187,7 @@ class shop_product_category extends class_base
 					"type" => "RELTYPE_DISPLAY_FOLDER"
 				));
 			}
-			elseif($arr["obj_inst"]->is_connected_to(array("to" => $f)))
+			elseif($arr["obj_inst"]->is_connected_to(array("to" => $f, "type" => "RELTYPE_DISPLAY_FOLDER")))
 			{
 				$arr["obj_inst"]->disconnect(array(
 					"from" => $f,
@@ -160,7 +195,6 @@ class shop_product_category extends class_base
 			}
 		}
 		$arr["obj_inst"]->set_meta("def_fld", $arr["request"]["def_fld"]);
-		$arr["obj_inst"]->set_meta("disp_fld", $df);
 		$arr["obj_inst"]->save();
 	}
 }
