@@ -1,3 +1,3 @@
 <?php
-$GLOBALS["TRANS"]["T&auml;htajatu"] = "Бессрочный";
+$GLOBALS["TRANS"]["T&auml;htajatu"] = "ąÕááāŪįŨëŲ";
 ?>

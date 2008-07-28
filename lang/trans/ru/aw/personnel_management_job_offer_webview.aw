@@ -1,4 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["T&auml;htaeg"] = "Срок";
-$GLOBALS["TRANS"]["T&ouml;&ouml;pakkumine"] = "Предложение о работе";
+$GLOBALS["TRANS"]["T&auml;htaeg"] = "ÁāŪÚ";
+$GLOBALS["TRANS"]["T&ouml;&ouml;pakkumine"] = "ŋāÕÔÛŪÖÕŨØÕ Ū āĐŅŪâÕ";
 ?>

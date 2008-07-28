@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer_obj.aw:45
 msgid "T&auml;htajatu"
-msgstr ""
+msgstr "ąÕááāŪįŨëŲ"
 
