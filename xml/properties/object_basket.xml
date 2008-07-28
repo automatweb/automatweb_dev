@@ -31,6 +31,16 @@
             <method>serialize</method>
             <caption>Maksimaalne kirjete arv</caption>
       </property>
+      <property>
+            <name>object_basket</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <store>connect</store>
+            <reltype>RELTYPE_OBJECT_BASKET</reltype>
+            <field>object_basket</field>
+            <caption>Objektide korv</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_BASKET</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -45,6 +55,11 @@
                   <value>1</value>
                   <caption>iCal eksport</caption>
             </EXPORT>
+            <OBJECT_BASKET>
+                  <clid>CL_OBJECT_BASKET</clid>
+                  <value>2</value>
+                  <caption>Objektide korv</caption>
+            </OBJECT_BASKET>
       </reltypes>
 </properties>
 

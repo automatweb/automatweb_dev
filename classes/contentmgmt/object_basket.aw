@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.10 2008/07/23 09:38:37 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.11 2008/07/28 06:49:52 tarvo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -16,9 +16,15 @@
 
 	@property max_items type=textbox size=5 field=meta method=serialize
 	@caption Maksimaalne kirjete arv
+
+	@property object_basket type=relpicker store=connect reltype=RELTYPE_OBJECT_BASKET
+	@caption Objektide korv
 	
 @reltype EXPORT clid=CL_ICAL_EXPORT value=1
 @caption iCal eksport
+
+@reltype OBJECT_BASKET clid=CL_OBJECT_BASKET value=2
+@caption Objektide korv
 */
 
 define("OBJ_BASKET_SESSION", 1);
@@ -170,6 +176,15 @@ class object_basket extends class_base
 	**/
 	function get_basket_content($o)
 	{
+		$rel = $o->connections_to(array(
+			"from.class_id" => CL_OBJECT_BASKET,
+			"type" => "RELTYPE_OBJECT_BASKET",
+		));
+		if(count($rel))
+		{
+			$c = reset($rel);
+			$o = $t->from();
+		}
 		$bt = $this->make_keys($o->prop("basket_type"));
 		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
 		{
