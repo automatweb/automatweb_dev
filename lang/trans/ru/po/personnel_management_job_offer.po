@@ -951,7 +951,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:1998
 msgid "T&auml;htajatu"
-msgstr ""
+msgstr "&#1041&#1077&#1089&#1089&#1088&#1086&#1095&#1085&#1099&#1081"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:2182
 msgid "Sisestage salvestatava seadetevormi nimi:"

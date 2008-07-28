@@ -1,5 +1,3 @@
 <?php
-$GLOBALS["TRANS"]["Vaatamisi"] = "<<<<<< personnel_management_job_offer.p";
-$GLOBALS["TRANS"]["Sisestage salvestatava seadetevormi nimi:"] = "=====";
-$GLOBALS["TRANS"]["Sisestage salvestatava seadetevormi nimi:"] = ">>>>>> 1.";
+$GLOBALS["TRANS"]["T&auml;htajatu"] = "&#1041&#1077&#1089&#1089&#1088&#1086&#1095&#1085&#1099&#1081";
 ?>
