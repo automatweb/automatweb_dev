@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.12 2008/06/05 16:38:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.13 2008/07/28 11:28:41 markop Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -195,46 +195,54 @@ class crm_number_series extends class_base
 					"class_id" => $class,					
 					"lang_id" => array(),					
 					"site_id" => array(),					
-					"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",	
 					//"limit" => 1,
 				);
-				if($time)
+				if($class == CL_CRM_BILL)
 				{
-					$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, (int)($row["start"]) , (int)($row["end"]) , "int");
-				}
-				else
-				{
-					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
-				}//arr($filter);
-				$ol = new object_list($filter);
-				if ($ol->count())
-				{
-					$o = $ol->begin();
-					$num = $o->prop("bill_no") + 1;
-				}
-				else
-				{
-					$num = $row["start"];//ma ei tea mis sest kogu eelnevast systeemist kasu on... niikuinii on vaja algusest alustada ju kui ei ole neid
-				}
-
-				//siia teeb nyyd eriti r2ige kirvemeetodi
-				//kui mingil x p6hjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel k2ib v6i maailmal6puni... v6i v2hemalt niikaua kuni leiab numbri mis pole kasutuses v6i tuleb miski muu piirang peale ja on niisama p...
-				//see on siin v2ga halb, kuid t666tab... niiet 
-				while(true)//eisteks kontrollib seda numbrit mille sai, et ega see olemas ole
-				{
-					$ol2 = new object_list(array(
-						"class_id" => $class,
-						"bill_no" => $num,
-						"lang_id" => array(),
-						"site_id" => array(),
-					));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
-					if (!$ol2->count())
+					$filter["sort_by"] = "CAST(aw_crm_bill.aw_bill_no as signed) DESC";
+					if($time)
 					{
-						break;
+						$filter["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, 	(int)($row["start"]) , (int)($row["end"]) , "int");
 					}
-					$num++;
+					else
+					{
+						$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+					}//arr($filter);
 				}
 
+
+				$ol = new object_list($filter);
+
+				if($class == CL_CRM_BILL)
+				{
+					if ($ol->count())
+					{
+						$o = $ol->begin();
+						$num = $o->prop("bill_no") + 1;
+					}
+					else
+					{
+						$num = $row["start"];//ma ei tea mis sest kogu eelnevast systeemist kasu on... niikuinii on vaja algusest alustada ju kui ei ole neid
+					}
+	
+					//siia teeb nyyd eriti r2ige kirvemeetodi
+					//kui mingil x p6hjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel k2ib v6i maailmal6puni... v6i v2hemalt niikaua kuni leiab numbri mis pole kasutuses v6i tuleb miski muu piirang peale ja on niisama p...
+					//see on siin v2ga halb, kuid t666tab... niiet 
+					while(true)//eisteks kontrollib seda numbrit mille sai, et ega see olemas ole
+					{
+						$ol2 = new object_list(array(
+							"class_id" => $class,
+							"bill_no" => $num,
+							"lang_id" => array(),
+							"site_id" => array(),
+						));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
+						if (!$ol2->count())
+						{
+							break;
+						}
+						$num++;
+					}
+				}
 				$nums[$idx] = $num;
 				$series->set_meta("ser_vals", $nums);
 				$series->save();
@@ -260,35 +268,39 @@ class crm_number_series extends class_base
 				return $num;
 			}
 		}
-		
-		// actually, just list all bills and get max number+1 for bills
-		$ol = new object_list(array(
-			"class_id" => $class,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",
-			"limit" => 1,
-			"bill_no" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
-		));
-		if ($ol->count())
+
+
+		if($class == CL_CRM_BILL)
 		{
-			$o = $ol->begin();
-			$num = $o->prop("bill_no") + 1;
-		}
-			
-		//siia teeb nyyd eriti r2ige kirvemeetodi
-		//kui mingil x p6hjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel k2ib v6i maailmal6puni... v6i v2hemalt niikaua kuni leiab numbri mis pole kasutuses v6i tuleb miski muu piirang peale ja on niisama p...
-		while(true)
-		{
-			$ol2 = new object_list(array(
+			// actually, just list all bills and get max number+1 for bills
+			$ol = new object_list(array(
 				"class_id" => $class,
-				"bill_no" => $num,
 				"lang_id" => array(),
 				"site_id" => array(),
-			));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
-			if (!$ol2->count())
+				"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",
+				"limit" => 1,
+				"bill_no" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+			));
+			if ($ol->count())
 			{
-				return $num;
+				$o = $ol->begin();
+				$num = $o->prop("bill_no") + 1;
+			}
+				
+			//siia teeb nyyd eriti r2ige kirvemeetodi
+			//kui mingil x p6hjusel peaks tahtma olemasolevat numbrit anda, siis tsykkel k2ib v6i maailmal6puni... v6i v2hemalt niikaua kuni leiab numbri mis pole kasutuses v6i tuleb miski muu piirang peale ja on niisama p...
+			while(true)
+			{
+				$ol2 = new object_list(array(
+					"class_id" => $class,
+					"bill_no" => $num,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
+				if (!$ol2->count())
+				{
+					return $num;
+				}
 			}
 		}
 		return $num;
