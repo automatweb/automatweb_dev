@@ -903,7 +903,7 @@ abstract class intellectual_property extends class_base
 
 		foreach($this->datafromobj_vars as $prop)
 		{
-			$data[$prop."_value"] = htmlspecialchars($o->prop($prop));
+			$data[$prop."_value"] = htmlspecialchars($o->prop_str($prop));
 		}
 
 		foreach($this->date_vars as $prop)
@@ -1700,7 +1700,7 @@ abstract class intellectual_property extends class_base
 		{
 			if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
 			{
-				$add_fee = $_SESSION["patent"]["industrial_design_variant_count"] * 400;
+				$add_fee = ($_SESSION["patent"]["industrial_design_variant_count"] - 2) * 400;
 			}
 
 			if($this->is_template("ADD_FEE") and $add_fee)
@@ -2140,7 +2140,7 @@ abstract class intellectual_property extends class_base
 			"caption" => t("Nimi"),
 		));
 
-		if ("applicant_ind" === $this->info_levels[0] and count($_SESSION["patent"]["applicants"]) > 1)
+		if ("applicant" != $this->info_levels[0] and count($_SESSION["patent"]["applicants"]) > 1)
 		{
 			$t->define_field(array(
 				"name" => "representer",
@@ -2888,9 +2888,9 @@ abstract class intellectual_property extends class_base
 			$applicant = new object();
 			$applicant->set_parent($patent->id());
 			$applicant->set_class_id(CL_CRM_PERSON);
-			$applicant->set_prop("firstname" , 	$_SESSION["patent"]["authorized_person_firstname"]);
-			$applicant->set_prop("lastname" , 	$_SESSION["patent"]["authorized_person_lastname"]);
-			$applicant->set_prop("personal_id" , 	$_SESSION["patent"]["authorized_person_code"]);
+			$applicant->set_prop("firstname" , $_SESSION["patent"]["authorized_person_firstname"]);
+			$applicant->set_prop("lastname" , $_SESSION["patent"]["authorized_person_lastname"]);
+			$applicant->set_prop("personal_id", $_SESSION["patent"]["authorized_person_code"]);
 			$applicant->set_name($_SESSION["patent"]["authorized_person_firstname"]." ".$_SESSION["patent"]["authorized_person_lastname"]);
 			$applicant->save();
 			$patent->set_prop("authorized_person" , $applicant->id());
@@ -2905,9 +2905,10 @@ abstract class intellectual_property extends class_base
 		{
 			if($_SESSION["patent"][$var])
 			{
-				$patent->set_prop($var,$_SESSION["patent"][$var]);
+				$patent->set_prop($var, $_SESSION["patent"][$var]);
 			}
 		}
+
 		if(is_array($_SESSION["patent"]["payment_date"]) || $_SESSION["patent"]["payment_date"] > 0)
 		{
 			$patent->set_prop("payment_date" , $_SESSION["patent"]["payment_date"]);
@@ -3952,16 +3953,26 @@ abstract class intellectual_property extends class_base
 
 				$appl = $applicant;
 				$addr = "<ADDRESS>";
+				$tel = array();
 
 				if ($appl->class_id() == CL_CRM_PERSON)
 				{
+					if ($appl->prop("phone.name"))
+					{
+						$tel[] = trademark_manager::rere($appl->prop("phone.name"));
+					}
+					if ($appl->prop("fax.name"))
+					{
+						$tel[] = trademark_manager::rere($appl->prop("phone.name"));
+					}
+
 					$xml .= "<NAMEL>".trademark_manager::rere($applicant->prop("firstname"))."</NAMEL>";
 					$xml .= "<NAMEL>".trademark_manager::rere($applicant->prop("lastname"))."</NAMEL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.aadress"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.linn.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.maakond.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("address.postiindeks"))."</ADDRL>";
-					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("phone.name")).",".$appl->prop("fax.name")."</ADDRL>";
+					$addr .= "<ADDRL>" . implode(", ", $tel) . "</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("email.mail"))."</ADDRL>";
 					if ($this->can("view", $appl->prop("address.riik")))
 					{
@@ -3971,12 +3982,21 @@ abstract class intellectual_property extends class_base
 				}
 				else
 				{
+					if ($appl->prop("phone_id.name"))
+					{
+						$tel[] = trademark_manager::rere($appl->prop("phone_id.name"));
+					}
+					if ($appl->prop("telefax_id.name"))
+					{
+						$tel[] = trademark_manager::rere($appl->prop("telefax_id.name"));
+					}
+
 					$xml .= "<NAMEL>".trademark_manager::rere($applicant->name())."</NAMEL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.aadress"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.linn.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.maakond.name"))."</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("contact.postiindeks"))."</ADDRL>";
-					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("phone_id.name")).",".trademark_manager::rere($appl->prop("telefax_id.name"))."</ADDRL>";
+					$addr .= "<ADDRL>" . implode(", ", $tel) . "</ADDRL>";
 					$addr .= "<ADDRL>".trademark_manager::rere($appl->prop("email_id.mail"))."</ADDRL>";
 					if ($this->can("view", $appl->prop("contact.riik")))
 					{

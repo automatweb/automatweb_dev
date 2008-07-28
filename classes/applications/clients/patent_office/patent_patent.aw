@@ -347,7 +347,7 @@ class patent_patent extends intellectual_property
 	{
 		$data = parent::get_vars($arr);
 
-		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
+		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
 
 		if(isset($_SESSION["patent"]["delete_author"]))
 		{
@@ -432,7 +432,7 @@ class patent_patent extends intellectual_property
 		$patent = obj($id);
 		parent::fill_session($id);
 		$author_disallow_disclose = (array) $patent->meta("author_disallow_disclose");
-		$_SESSION["patent"]["fee_copies"] = $o->prop("fee_copies");
+		$_SESSION["patent"]["fee_copies"] = $patent->prop("fee_copies");
 
 		foreach($patent->connections_from(array("type" => "RELTYPE_AUTHOR")) as $key => $c)
 		{

@@ -137,7 +137,7 @@ class euro_patent_et_desc extends intellectual_property
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
-		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
+		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
 		return $data;
 	}
 

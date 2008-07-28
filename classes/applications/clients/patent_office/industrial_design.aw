@@ -211,7 +211,7 @@ class industrial_design extends intellectual_property
 
 		if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
 		{
-			$sum += $_SESSION["patent"]["industrial_design_variant_count"] * 400;
+			$sum += ($_SESSION["patent"]["industrial_design_variant_count"] - 2) * 400;
 		}
 
 		return $sum;
