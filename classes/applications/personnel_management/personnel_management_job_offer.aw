@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.55 2008/07/24 21:32:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.56 2008/07/28 13:19:26 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1991,7 +1991,7 @@ class personnel_management_job_offer extends class_base
 		$cfgform_id = is_oid($ob->offer_cfgform) ? $ob->offer_cfgform : $pm->default_offers_cfgform;
 		
 		$this->vars(array(
-			"name" => @$ob->prop("name"),
+			"name" => htmlentities($ob->trans_get_val("name")),
 			"company" => $ob->prop("company.name"),
 			"sect" => $ob->prop("sect.name"),
 			"location" => $location,
