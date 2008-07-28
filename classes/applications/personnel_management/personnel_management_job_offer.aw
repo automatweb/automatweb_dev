@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.57 2008/07/28 13:21:25 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.58 2008/07/28 13:28:43 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -2007,7 +2007,7 @@ class personnel_management_job_offer extends class_base
 			"tookoormused" => join(",", $ks),
 			"contact_person" => $ob->prop("contact_person"),
 			"job_nr" => $ob->prop("job_nr"),
-			"profession" => $ob->prop("profession.name"),
+			"profession" => htmlentities($ob->prop("profession.name")),
 			"org_description_text" => $ob->prop("company.tegevuse_kirjeldus"),
 			"workinfo" => $ob->prop("workinfo"),
 			"requirements" => $ob->prop("requirements"),
