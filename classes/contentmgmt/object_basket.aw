@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.11 2008/07/28 06:49:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.12 2008/07/28 07:33:24 tarvo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -19,6 +19,9 @@
 
 	@property object_basket type=relpicker store=connect reltype=RELTYPE_OBJECT_BASKET
 	@caption Objektide korv
+
+	@property object_shop_product_show type=checkbox field=meta mothod=serialize default=0 ch_value=1
+	@caption Toote puhul kasuta tootekuva
 	
 @reltype EXPORT clid=CL_ICAL_EXPORT value=1
 @caption iCal eksport
@@ -111,6 +114,16 @@ class object_basket extends class_base
 				{
 					$cal = 1;
 				}
+				// if set in basket and shop_product object appears here, products show is used
+				if($o->class_id() == CL_SHOP_PRODUCT && $basket->prop("object_shop_product_show"))
+				{
+					$inst = get_instance(CL_SHOP_PRODUCT);
+					$tmp = $inst->show_prod(array(
+						"id" => $o->id(),
+					));
+					$ls .= $tmp;
+					continue;
+				}
 				foreach($mt[1] as $var_name)
 				{
 					list($clid, $prop) = explode(".", $var_name, 2);
@@ -182,8 +195,9 @@ class object_basket extends class_base
 		));
 		if(count($rel))
 		{
+			$o_old = $o;
 			$c = reset($rel);
-			$o = $t->from();
+			$o = $c->from();
 		}
 		$bt = $this->make_keys($o->prop("basket_type"));
 		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
@@ -194,7 +208,7 @@ class object_basket extends class_base
 		{
 			$rv = safe_array($_SESSION["object_basket"][$o->id()]["content"]);
 		}
-
+		$o = $o_old?$o_old:$o; // if data comes from another basket, count still has to come from current
 		if ($o->max_items && count($rv) > $o->max_items)
 		{
 			$rv = array_slice($rv, -$o->max_items);

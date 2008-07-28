@@ -41,6 +41,17 @@
             <field>object_basket</field>
             <caption>Objektide korv</caption>
       </property>
+      <property>
+            <name>object_shop_product_show</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <mothod>serialize</mothod>
+            <default>0</default>
+            <ch_value>1</ch_value>
+            <caption>Toote puhul kasuta tootekuva</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_BASKET</syslog_type>
             <relationmgr>yes</relationmgr>
