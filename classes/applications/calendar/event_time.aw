@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.8 2008/07/24 13:57:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_time.aw,v 1.9 2008/07/28 09:40:57 markop Exp $
 // event_time.aw - Toimumisaeg 
 /*
 
@@ -54,7 +54,15 @@ class event_time extends class_base
 		switch($prop["name"])
 		{
 			case "location":
-				if(is_oid($arr["obj_inst"]->id()))
+				if(is_oid($_GET["id"]))
+				{
+					$ao = obj($_GET["id"]);
+				}
+				if(is_object($ao) && $ao->class_id() == CL_CALENDAR_EVENT)
+				{
+					$prop["options"] = array("" => "") + $ao->get_locations();
+				}
+				elseif(is_oid($arr["obj_inst"]->id()))
 				{
 					$prop["options"] = array("" => "") + $arr["obj_inst"]->get_locations();
 				}
