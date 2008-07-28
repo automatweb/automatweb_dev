@@ -119,6 +119,16 @@
             <caption>&amp;quot;Eelmine&amp;quot;-&amp;quot;J&amp;amp;auml;rgmine&amp;quot; lingid viivad s&amp;amp;uuml;ndmusega p&amp;amp;auml;evale</caption>
       </property>
       <property>
+            <name>monyear_2in1</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuu ja aasta &amp;amp;uuml;he selecti sees</caption>
+      </property>
+      <property>
             <name>minical_day_with_events</name>
             <table>objects</table>
             <group>style</group>
