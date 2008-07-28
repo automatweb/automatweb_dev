@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.49 2008/07/24 13:50:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.50 2008/07/28 14:05:20 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1927,14 +1927,32 @@ class rfp extends class_base
 			//$this->vars($room_data);
 			if($package)
 			{
-				if($this->can("view", $mgrid))
+				if($this->can("view", $mgrid)) // tsiisas mthf crist.. i have to calculate the price here????
 				{
 					$mgr = obj($mgrid);
 					$pk_prices = $mgr->meta("pk_prices");
+
 					if(is_array($pk_prices))
 					{
-						$unitprice = $pk_prices[$package_id][$currency];
+						foreach($pk_prices[$package_id]["prices"] as $room_price => $curs)
+						{
+							foreach($curs as $cur => $price)
+							{
+								if($cur == $currency)
+								{
+									$prices_for_calculator[$room_price] = $price;
+								}
+							}
+						}
 					}
+					$room_p = get_instance(CL_ROOM_PRICE);
+					$unitprice = $room_p->calculate_room_prices_price(array(
+						"oids" => array_keys($pk_prices[$package_id]["prices"]),
+						"start" => $start,
+						"end" => $end,
+						"prices" => $prices_for_calculator,
+					));
+					
 				}
 				$price = $unitprice*$people;
 				$room_data["package_data"] = array(
