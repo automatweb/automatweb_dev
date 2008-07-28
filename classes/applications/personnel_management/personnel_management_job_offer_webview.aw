@@ -305,6 +305,11 @@ class personnel_management_job_offer_webview extends class_base
 		$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
 		$this->read_template("show.tpl");
 
+		$this->vars(array(
+			"captions.job_offer" => t("T&ouml;&ouml;pakkumine"),
+			"captions.deadline" => t("T&auml;htaeg"),
+		));
+
 		$ol_prms = array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"parent" => array(),
