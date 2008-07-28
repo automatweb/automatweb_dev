@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.269 2008/07/25 12:03:01 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.270 2008/07/28 13:11:10 instrumental Exp $
 // defs.aw - common functions
 
 /*
@@ -2394,7 +2394,8 @@ if (!defined("DEFS"))
 	// deprecated - use locale::get_lc_date instead
 	function get_lc_date($time=0, $format=3)
 	{
-		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+		$inst = get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
+//		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 		if(!is_object($inst))
 		{
 			$inst = get_instance("core/locale/en/date");
@@ -2409,7 +2410,8 @@ if (!defined("DEFS"))
 		var $lc_date_inst = false;
 		function locale()
 		{
-			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+//			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			$this->lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
 			if(!is_object($this->lc_date_inst))
 			{
 				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
@@ -2434,7 +2436,8 @@ if (!defined("DEFS"))
 		function get_lc_weekday($num, $short = false, $ucfirst = false)
 		{
 			static $lc_date_inst;
-			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			$lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
+//			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 			if(!is_object($lc_date_inst))
 			{
 				$lc_date_inst = get_instance("core/locale/en/date");
@@ -2459,7 +2462,8 @@ if (!defined("DEFS"))
 		function get_lc_month($num)
 		{
 			static $lc_date_inst;
-			$lc_date_inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+//			$lc_date_inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			$lc_date_inst = get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
 			if(!is_object($lc_date_inst))
 			{
 				$lc_date_inst = get_instance("core/locale/en/date");
@@ -2493,7 +2497,8 @@ if (!defined("DEFS"))
 		function get_lc_date($timestamp,$format)
 		{
 			static $lc_date_inst;
-			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+//			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			$lc_date_inst = @get_instance("core/locale/".(aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_lc") : aw_global_get("LC"))."/date", array(), false);
 			if(!is_object($lc_date_inst))
 			{
 				$lc_date_inst = get_instance("core/locale/en/date");
