@@ -129,6 +129,7 @@ class shop_purchase_order extends class_base
 
 	function _get_taxed($arr)
 	{
+		return PROP_IGNORE;
 		$arr["prop"]["options"] = array(0 => "K&auml;ibemaksuta", 1 => "K&auml;ibemaksuga");
 	}
 
@@ -188,20 +189,7 @@ class shop_purchase_order extends class_base
 			$arts = explode(",", $tmp);
 			foreach($arts as $art)
 			{
-				$o = obj();
-				$o->set_class_id(CL_SHOP_ORDER_ROW);
-				$o->set_parent($arr["obj_inst"]->id());
-				$o->set_name(sprintf(t("%s rida"), $arr["obj_inst"]->name()));
-				$o->set_prop("prod", $art);
-				$o->save();
-				$arr["obj_inst"]->connect(array(
-					"to" => $o->id(),
-					"type" => "RELTYPE_ROW",
-				));
-				$arr["obj_inst"]->connect(array(
-					"to" => $art,
-					"type" => "RELTYPE_PRODUCT",
-				));
+				$this->add_art_row($art, $arr);
 			}
 		}
 		$rows = $arr["request"]["rows"];
@@ -209,7 +197,33 @@ class shop_purchase_order extends class_base
 		{
 			foreach($rows as $id => $row)
 			{
-				$ro = obj($id);
+				$ro = null;
+				if(isset($row["prodname"]))
+				{
+					$n = $row["prodname"];
+					$c = $row["prodcode"];
+					$prodid = null;
+					if($this->can("view", $n))
+					{
+						$prodid = $n;
+					}
+					elseif($this->can("view", $c))
+					{
+						$prodid = $c;
+					}
+					if($prodid)
+					{
+						$ro = $this->add_art_row($prodid, $arr);
+					}
+					else
+					{
+						continue;
+					}
+				}
+				else
+				{
+					$ro = obj($id);
+				}
 				foreach($row as $var => $val)
 				{
 					if($ro->is_property($var))
@@ -222,6 +236,25 @@ class shop_purchase_order extends class_base
 		}
 	}
 
+	private function add_art_row($art, $arr)
+	{
+		$o = obj();
+		$o->set_class_id(CL_SHOP_ORDER_ROW);
+		$o->set_parent($arr["obj_inst"]->id());
+		$o->set_name(sprintf(t("%s rida"), $arr["obj_inst"]->name()));
+		$o->set_prop("prod", $art);
+		$o->save();
+		$arr["obj_inst"]->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_ROW",
+		));
+		$arr["obj_inst"]->connect(array(
+			"to" => $art,
+			"type" => "RELTYPE_PRODUCT",
+		));
+		return $o;
+	}
+
 	function _get_articles(&$arr)
 	{
 		$t = $arr["prop"]["vcl_inst"];
@@ -230,6 +263,11 @@ class shop_purchase_order extends class_base
 			"type" => "RELTYPE_ROW",
 		));
 		$units = get_instance(CL_UNIT)->get_unit_list(true);
+		$data["units"] = $units;
+		for($i = 0; $i < 10+$count; $i++)
+		{
+			$t->define_data($this->get_art_row_data($data, $i));
+		}
 		foreach($conn as $c)
 		{
 			$o = $c->to();
@@ -248,43 +286,79 @@ class shop_purchase_order extends class_base
 				)),
 				"url" => $url
 			))." ".$o->prop("tax_rate.name");
-			$t->define_data(array(
-				"oid" => $o->id(),
-				"name" => $this->can("view", $o->prop("prod"))?html::obj_change_url(obj($o->prop("prod")), parse_obj_name($o->prop("prod.name"))):'',
-				"amount" => html::textbox(array(
-					"name" => "rows[".$o->id()."][amount]",
-					"value" => $o->prop("amount"),
-					"size" => 3,
-				)),
-				"required" => html::textbox(array(
-					"name" => "rows[".$o->id()."][required]",
-					"value" => $o->prop("required"),
-					"size" => 3,
-				)),
-				"unit" => html::select(array(
-					"name" => "rows[".$o->id()."][unit]",
-					"options" => $units,
-					"value" => $o->prop("unit"),
-				)),
-				"unit_price" => html::textbox(array(
-					"name" => "rows[".$o->id()."][price]",
-					"value" => $o->prop("price"),
-					"size" => 3,
-				)),
-				"sum" => $sum,
-				"tax_rate" => $tax,
-				"purchaser_art_code" => html::textbox(array(
-					"name" => "rows[".$o->id()."][other_code]",
-					"value" => $o->prop("other_code"),
-					"size" => 5,
-				)),
-				"gotten_amt" => html::textbox(array(
-					"name" => "rows[".$o->id()."][real_amount]",
-					"value" => $o->prop("real_amount"),
-					"size" => 3,
-				)),
-			));
+			$sum = $o->prop("amount") * $o->prop("price");
+			$taxsum = $sum + number_format($sum * $o->prop("tax_rate.tax_amt") / 100, 2);
+			$data["o"] = $o;
+			$data["tax"] = $tax;
+			$data["taxsum"] = $taxsum;
+			$data["sum"] = $sum;
+			$t->define_data($this->get_art_row_data($data, $o->id()));
 		}
+		$t->set_rgroupby(array("add"=>"add"));
+		$t->set_default_sortby("add");
+		$t->set_default_sorder("asc");
+	}
+
+	private function get_art_row_data($data, $id)
+	{
+		extract($data);
+		if($o)
+		{
+			$data["oid"] = $o->id();
+			$data["name"] = $this->can("view", $o->prop("prod"))?html::obj_change_url(obj($o->prop("prod")), parse_obj_name($o->prop("prod.name"))):'';
+			$data["code"] = $o->prop("prod.code");
+		}
+		else
+		{
+			$data["name"] = html::textbox(array(
+				"name" => "rows[".$id."][prodname]",
+				"autocomplete_class_id" => CL_SHOP_PRODUCT,
+				"size" => 10,
+				"option_is_tuple" => 1,
+			));
+			$data["code"] = html::textbox(array(
+				"name" => "rows[".$id."][prodcode]",
+				"size" => 10,
+				"autocomplete_source" => $this->mk_my_orb("articles_add_autocomplete_source", array(), CL_SHOP_DELIVERY_NOTE),
+				"autocomplete_params" => array(),
+				"option_is_tuple" => 1,
+			));
+			$data["add"] = t("Lisa uus");
+		}
+		$data["amount"] = html::textbox(array(
+			"name" => "rows[".$id."][amount]",
+			"value" => $o?$o->prop("amount"):'',
+			"size" => 3,
+		));
+		$data["required"] = html::textbox(array(
+			"name" => "rows[".$id."][required]",
+			"value" => $o?$o->prop("required"):'',
+			"size" => 3,
+		));
+		$data["unit"] = html::select(array(
+			"name" => "rows[".$id."][unit]",
+			"options" => $units,
+			"value" => $o?$o->prop("unit"):'',
+		));
+		$data["unit_price"] = html::textbox(array(
+			"name" => "rows[".$id."][price]",
+			"value" => $o?$o->prop("price"):'',
+			"size" => 3,
+		));
+		$data["sum"] = $sum;
+		$data["taxsum"] = $taxsum;
+		$data["tax_rate"] = $tax;
+		$data["purchaser_art_code"] = html::textbox(array(
+			"name" => "rows[".$id."][other_code]",
+			"value" => $o?$o->prop("other_code"):'',
+			"size" => 5,
+		));
+		$data["gotten_amt"] = html::textbox(array(
+			"name" => "rows[".$id."][real_amount]",
+			"value" => $o?$o->prop("real_amount"):'',
+			"size" => 3,
+		));
+		return $data;
 	}
 
 	private function _init_articles_tbl($t)
@@ -293,56 +367,56 @@ class shop_purchase_order extends class_base
 			"caption" => t("Artikkel"),
 			"align" => "center",
 			"name" => "name",
-			"sortable" => 1
+		));
+		$t->define_field(array(
+			"caption" => t("Kood"),
+			"align" => "center",
+			"name" => "code",
 		));
 		$t->define_field(array(
 			"caption" => t("Vajadus"),
 			"align" => "center",
 			"name" => "required",
-			"sortable" => 1
 		));
 		$t->define_field(array(
 			"caption" => t("Kogus"),
 			"align" => "center",
 			"name" => "amount",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"caption" => t("&Uuml;hik"),
-			"align" => "center",
-			"name" => "unit",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("&Uuml;hiku hind"),
-			"align" => "center",
-			"name" => "unit_price",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Summa"),
-			"align" => "center",
-			"name" => "sum",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Maksum&auml;&auml;r"),
-			"align" => "center",
-			"name" => "tax_rate",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"caption" => t("Hankija artiklikood"),
-			"align" => "center",
-			"name" => "purchaser_art_code",
-			"sortable" => 1
 		));
 		$t->define_field(array(
 			"caption" => t("Saadud kogus"),
 			"align" => "center",
 			"name" => "gotten_amt",
-			"sortable" => 1
+		));
+		$t->define_field(array(
+			"caption" => t("&Uuml;hik"),
+			"align" => "center",
+			"name" => "unit",
+		));
+		$t->define_field(array(
+			"caption" => t("&Uuml;hiku hind"),
+			"align" => "center",
+			"name" => "unit_price",
+		));
+		$t->define_field(array(
+			"caption" => t("Hankija artiklikood"),
+			"align" => "center",
+			"name" => "purchaser_art_code",
+		));
+		$t->define_field(array(
+			"caption" => t("Maksum&auml;&auml;r"),
+			"align" => "center",
+			"name" => "tax_rate",
+		));
+		$t->define_field(array(
+			"caption" => t("Summa"),
+			"align" => "center",
+			"name" => "sum",
+		));
+		$t->define_field(array(
+			"caption" => t("Summa KMga"),
+			"align" => "center",
+			"name" => "taxsum",
 		));
 		$t->define_chooser(array(
 			"field" => "oid",

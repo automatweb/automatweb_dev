@@ -118,6 +118,7 @@ class shop_sell_order extends class_base
 
 	function _get_taxed($arr)
 	{
+		return PROP_IGNORE;
 		$arr["prop"]["options"] = array(0 => "K&auml;ibemaksuta", 1 => "K&auml;ibemaksuga");
 	}
 
