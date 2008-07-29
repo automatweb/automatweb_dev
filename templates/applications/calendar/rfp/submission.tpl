@@ -116,7 +116,7 @@ kehtib: {VAR:offer_expire_date}
 </tr>
 <!-- SUB: PRODUCT -->
 <tr>
-<td>{VAR:prod_from_hour}:{VAR:prod_from_minute} - {VAR:prod_to_hour}:{VAR:prod_to_minute}</td>
+<td>{VAR:prod_from_date} {VAR:prod_from_hour}:{VAR:prod_from_minute} - {VAR:prod_to_date} {VAR:prod_to_hour}:{VAR:prod_to_minute}</td>
 <td>{VAR:prod_event_and_room}</td>
 <td>{VAR:prod_count}</td>
 <td>{VAR:prod_prod}</td>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.51 2008/07/29 05:25:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.52 2008/07/29 05:49:43 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2131,6 +2131,8 @@ class rfp extends class_base
 					$evt_room[] = $room->name();
 				}
 				$this->vars(array(
+					"prod_from_date" => date("d.m.Y", $prod["start1"]),
+					"prod_to_date" => date("d.m.Y", $prod["end"]),
 					"prod_from_hour" => date("H", $prod["start1"]),
 					"prod_from_minute" => date("i", $prod["start1"]),
 					"prod_to_hour" => date("H", $prod["end"]),
