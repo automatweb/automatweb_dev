@@ -2,29 +2,6 @@
 
 class calendar_event_obj extends _int_object
 {
-	function set_prop($name,$value)
-	{
-		if($name == "name")
-		{
-			return parent::set_prop("event_name", $value);
-		}
-		return parent::set_prop($name,$value);
-	}
-
-	function prop($k)
-	{
-		if($k == "name")
-		{
-			return parent::prop("event_name");
-		}
-		return parent::prop($k);
-	}
-
-	function name()
-	{
-		return parent::prop("event_name");
-	}
-
 	function add_event_time($id)
 	{
 		$time = obj($id);

@@ -1,13 +1,10 @@
 <?php
 // calendar_event.aw - Kalendri syndmus
 /*
-@classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo no_name=1
+@classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes maintainer=kristo
 
 @default group=general
 @default table=planner
-
-@property event_name type=textbox field=name table=objects
-@caption Nimi
 
 @property jrk type=textbox size=4 table=objects
 @caption Jrk
