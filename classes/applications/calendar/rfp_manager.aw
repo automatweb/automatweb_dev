@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.28 2008/07/29 12:32:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.29 2008/07/29 13:25:34 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -49,6 +49,8 @@
 
 @groupinfo raports caption="Raportid"
 @default group=raports
+	@property raports_tb type=toolbar no_caption=1 store=no
+
 	@layout raports_hsplit type=hbox group=raports width=25%:75%
 		@layout raports_search type=vbox closeable=1 area_caption="Otsing" parent=raports_hsplit
 			@property raports_search_from_date type=date_select parent=raports_search captionside=top store=no
@@ -408,6 +410,16 @@ class rfp_manager extends class_base
 		return $retval;
 	}
 
+	function _get_raports_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "print",
+			"url" => aw_url_change_var("action", "search_result_print_output"),
+			"img" => "print.gif",
+		));
+	}
+
 	function _get_raports_table($arr)
 	{
 		$from = mktime(0, 0, 0, $arr["request"]["raports_search_from_date"]["month"], $arr["request"]["raports_search_from_date"]["day"], $arr["request"]["raports_search_from_date"]["year"]);
@@ -422,8 +434,7 @@ class rfp_manager extends class_base
 		));
 
 		$filters = false;
-		$set_filters = true;
-		if($set_filters)
+		if($arr["set_filters"])
 		{
 		// set what filters where used
 			$filters = array();
@@ -454,7 +465,7 @@ class rfp_manager extends class_base
 			}
 		}
 
-		$arr["prop"]["value"] = $this->display_search_result($res, ($arr["request"]["raports_search_group"] == 2)?true:false, ($arr["request"]["raports_search_with_products"])?true:false, $filters);
+		$arr["prop"]["value"] = $this->display_search_result($res, ($arr["request"]["raports_search_group"] == 2)?true:false, ($arr["request"]["raports_search_with_products"])?true:false, $filters, $arr["with_header_and_footer"]);
 	}
 
 	/** Returns nicely formatted search result 
@@ -464,7 +475,7 @@ class rfp_manager extends class_base
 		@returns
 			Parsed html
 	 **/
-	public function display_search_result($result, $gr_by_client = false, $with_products = false, $show_used_filters = false)
+	public function display_search_result($result, $gr_by_client = false, $with_products = false, $show_used_filters = false, $with_header_and_footer = false)
 	{
 		$this->read_template("search_result.tpl");
 		if(is_array($result) && count($result))
@@ -610,6 +621,8 @@ class rfp_manager extends class_base
 			"HAS_NO_RESULT" => $no_html,
 			"HAS_RESULT" => $html,
 			"HAS_FILTERS_USED" => $filt,
+			"PRINT_HEADER" => $this->parse("PRINT_HEADER"),
+			"PRINT_FOOTER" => $this->parse("PRINT_FOOTER"),
 		));
 
 		return $this->parse();
@@ -1557,6 +1570,25 @@ class rfp_manager extends class_base
 			$rfp_man->save();
 		}
 		return $arr["post_ru"];
+	}
+
+	/** Used for outputting search results for printing
+		@attrib params=name all_args=1 name=search_result_print_output
+	 **/
+	function search_result_print_output($arr)
+	{
+		foreach($arr as $k => $v)
+		{
+			if(substr($k, 0, 15) == "raports_search_")
+			{
+				$arr["request"][$k] = $v;
+			}
+		}
+		$arr["set_filters"] = true;
+		$arr["with_header_and_footer"] = true;
+		$this->_get_raports_table(&$arr);
+		$print = "<script language=javascript>window.print();</script>";
+		die($arr["prop"]["value"].$print);
 	}
 }
 ?>

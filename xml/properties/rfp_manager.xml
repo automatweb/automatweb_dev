@@ -118,6 +118,15 @@
             <field>rooms_table</field>
       </property>
       <property>
+            <name>raports_tb</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>raports_tb</field>
+      </property>
+      <property>
             <name>raports_search_from_date</name>
             <table>objects</table>
             <group>raports</group>

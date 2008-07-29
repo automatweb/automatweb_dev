@@ -1,3 +1,16 @@
+<!-- SUB: PRINT_HEADER -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="http://tarvo.dev.struktuur.ee/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">
+<style>
+BODY
+{
+	background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+<!-- END SUB: PRINT_HEADER -->
 
 <!-- SUB: HAS_FILTERS_USED -->
 <table>
@@ -86,4 +99,9 @@
 <!-- SUB: HAS_NO_RESULT -->
 no results at all!
 <!-- END SUB: HAS_NO_RESULT -->
+
+<!-- SUB: PRINT_FOOTER -->
+</body>
+</html>
+<!-- END SUB: PRINT_FOOTER -->
 
