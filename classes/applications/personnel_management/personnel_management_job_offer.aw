@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.58 2008/07/28 13:28:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.59 2008/07/29 15:54:06 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
 /*
 
@@ -1833,6 +1833,9 @@ class personnel_management_job_offer extends class_base
 	**/
 	function show($arr)
 	{
+		$ls = aw_ini_get("languages");
+		$this->llist = $ls["list"];
+
 		$tpl = isset($arr["tpl"]) > 0 ? $arr["tpl"] : "show.tpl";
 		$this->read_template($tpl);
 
@@ -1952,9 +1955,9 @@ class personnel_management_job_offer extends class_base
 				$c_email = $c_email_obj->mail;
 			}
 			$this->vars(array(
-				"contact.name" => htmlentities($ob->prop("contact.name")),
-				"contact.firstname" => htmlentities($ob->prop("contact.firstname")),
-				"contact.lastname" => htmlentities($ob->prop("contact.lastname")),
+				"contact.name" => $this->majic($ob, "contact.name"),
+				"contact.firstname" => $this->majic($ob, "contact.firstname"),
+				"contact.lastname" => $this->majic($ob, "contact.lastname"),
 				"contact.phone" => $c_phone,
 				"contact.email" => $c_email,
 			));
@@ -1991,7 +1994,7 @@ class personnel_management_job_offer extends class_base
 		$cfgform_id = is_oid($ob->offer_cfgform) ? $ob->offer_cfgform : $pm->default_offers_cfgform;
 		
 		$this->vars(array(
-			"name" => htmlentities($ob->trans_get_val("name")),
+			"name" => $this->majic($ob, "name", true),
 			"company" => $ob->prop("company.name"),
 			"sect" => $ob->prop("sect.name"),
 			"location" => $location,
@@ -2007,7 +2010,7 @@ class personnel_management_job_offer extends class_base
 			"tookoormused" => join(",", $ks),
 			"contact_person" => $ob->prop("contact_person"),
 			"job_nr" => $ob->prop("job_nr"),
-			"profession" => htmlentities($ob->prop("profession.name")),
+			"profession" => $this->majic($ob, "profession.name"),
 			"org_description_text" => $ob->prop("company.tegevuse_kirjeldus"),
 			"workinfo" => $ob->prop("workinfo"),
 			"requirements" => $ob->prop("requirements"),
@@ -2593,6 +2596,13 @@ class personnel_management_job_offer extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	private function majic($o, $p, $trans_get_val = false)
+	{
+		// Need to iconv() first, cuz htmlentities() doesn't support ISO-8859-4 'n' stuff...
+		$v = iconv($this->llist[$o->prop(substr($p, 0, strrpos($p, ".")).".lang_id")]["charset"], "UTF-8", ($trans_get_val ? $o->trans_get_val($p) : $o->prop($p)));
+		return htmlentities($v, ENT_COMPAT, "UTF-8");
 	}
 }
 ?>
