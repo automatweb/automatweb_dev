@@ -2571,6 +2571,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						case "classificator":
 						case "popup_search":
 						case "crm_participant_search":
+						case "releditor":
 							$new_clid = false;
 
 							$relt_s = $cur_prop["reltype"];
