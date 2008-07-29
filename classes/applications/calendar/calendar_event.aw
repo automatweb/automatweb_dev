@@ -857,7 +857,8 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 					break;
 
 				default:
-					$v = get_instance("alias_parser")->parse_oo_aliases($ob, in_array($p["type"], $oid_props) ? $ob->prop($k.".name") : $ob->$k);
+					$v = in_array($p["type"], $oid_props) ? $ob->prop($k.".name") : $ob->$k;
+					get_instance("alias_parser")->parse_oo_aliases($ob, $v);
 					if($v == 185815){arr($p);}
 					break;
 			}
