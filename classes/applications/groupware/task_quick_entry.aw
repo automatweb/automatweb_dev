@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.42 2008/07/29 13:33:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.43 2008/07/29 14:08:41 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -121,11 +121,15 @@ class task_quick_entry extends class_base
 
 			case "project":
 				$prop["autocomplete_source"] = $this->mk_my_orb("proj_autocomplete_source");
+				$prop["autocomplete_params"] = array("customer_name", "project");
+				if($this->customer_set) 
 				$prop["autocomplete_params"] = array("customer", "project");
 				break;
 
 			case "task":
 				$prop["autocomplete_source"] = $this->mk_my_orb("task_autocomplete_source");
+				$prop["autocomplete_params"] = array("customer_name", "project", "task");
+				if($this->customer_set) 
 				$prop["autocomplete_params"] = array("customer", "project", "task");
 				break;
 			
@@ -135,6 +139,10 @@ class task_quick_entry extends class_base
 				break;
 			
 			case "cust_type":
+				if($this->customer_name_set)
+				{
+					return PROP_IGNORE;
+				}
 				$prop["options"] = array(CL_CRM_COMPANY => t("Organisatsioon"), CL_CRM_PERSON => t("Isik"));
 				$prop["onchange"] = "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0)
 					{
@@ -267,12 +275,16 @@ $start = ((float)$usec + (float)$sec);
 	/**
 		@attrib name=proj_autocomplete_source
 		@param customer optional
+		@param customer_name optional
 		@param project optional
 	**/
 	function proj_autocomplete_source($arr)
 	{
 		$cl_json = get_instance("protocols/data/json");
-
+		if(!$arr["customer"])
+		{
+			$arr["customer"] = $arr["customer_name"];
+		}
 		$errorstring = "";
 		$error = false;
 		$autocomplete_options = array();
@@ -344,13 +356,17 @@ $start = ((float)$usec + (float)$sec);
 	/**
 		@attrib name=task_autocomplete_source
 		@param customer optional
+		@param customer_name optional
 		@param project optional
 		@param task optional
 	**/
 	function task_autocomplete_source($arr)
 	{
 		$cl_json = get_instance("protocols/data/json");
-
+		if(!$arr["customer"])
+		{
+			$arr["customer"] = $arr["customer_name"];
+		}
 		$errorstring = "";
 		$error = false;
 		$autocomplete_options = array();
@@ -665,10 +681,10 @@ $start = ((float)$usec + (float)$sec);
 	{
 		$check_url = $this->mk_my_orb("is_there_customer", array("customer" => " "));
 		$customer_check = "
-			el_value = escape(document.changeform.customer_name.value);
+			el_value = document.changeform.customer_name.value;
 			if(el_value.length > 1)
 			{
-				el=aw_get_url_contents('".$check_url."'+el_value);
+				el=aw_get_url_contents('".$check_url."'+escape(el_value));
 				if(!(el>0))
 				{
 					alert('".t("klient").' '."' + el_value + '".' '.t("puudub andmebaasist!")."');
@@ -695,7 +711,8 @@ $start = ((float)$usec + (float)$sec);
 			}
 			return false;
 		}".
-		"return true;}
+		"return true;}"
+.((!$this->customer_name_set) ? "
 		if (navigator.userAgent.toLowerCase().indexOf('msie')>=0)
 			{d = 'block';}
 		else 
@@ -706,7 +723,7 @@ $start = ((float)$usec + (float)$sec);
 		document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none';
 		document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';
 //		document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
-		";
+		" : "");
 	}
 
 	/**
