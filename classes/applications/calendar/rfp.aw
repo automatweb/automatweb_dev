@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.52 2008/07/29 05:49:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.53 2008/07/29 08:25:28 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1635,6 +1635,7 @@ class rfp extends class_base
 			$ol = new object_list(array(
 				"class_id" => CL_META,
 				"parent" => $o->prop("meta_folder"),
+				"lang_id" => array(),
 			));
 			foreach($ol->arr() as $oid => $obj)
 			{
@@ -1642,14 +1643,6 @@ class rfp extends class_base
 			}
 			return $ret;
 		}
-		/* old solution
-		$types = array(
-			1 => t("&Uuml;hekohaline"),
-			2 => t("Kahekohaline"),
-			3 => t("Sviit"),
-		);
-		return $types;
-		 */
 	}
 
 	private function get_rooms($arr)
@@ -1734,7 +1727,19 @@ class rfp extends class_base
 		$arrival = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
 		$dep = $arr["obj_inst"]->prop("data_gen_departure_date_admin");
 		$date = (date("Ymd", $arrival) == date("Ydm", $dep))?date("dmY",$arrival):date("dmY", $arrival)."-".date("dmY", $dep);
+		$orgname = strtr(htmlentities($arr["obj_inst"]->prop("data_subm_organisation")), array(
+			"&Auml;" => "A",
+			"&auml;" => "a",
+			"&Uuml;" => "U",
+			"&uuml;" => "u",
+			"&Ouml;" => "O",
+			"&ouml;" => "o",
+			"&Otilde;" => "O",
+			"&otilde;" => "o",
+			" " => "_",
+		));
 		$fname = sprintf("%s-%s-%s", ($arr["pdf"] == "offer_pdf")?t("Pakkumine"):t("Kinnitus"), $client_name, $date);
+		$fname = ($arr["pdf"] != "offer_pdf" && strlen($orgname))?$orgname:$fname;
 		$html = $this->_get_submission_data($arr);
 		classload("core/converters/html2pdf");
 		$i = new html2pdf;
@@ -1815,8 +1820,8 @@ class rfp extends class_base
 			"title" => $arr["obj_inst"]->trans_get_val("data_mf_event_type.name"),
 			"data_contact" => $arr["obj_inst"]->prop("data_billing_contact"),
 			"data_street" => $arr["obj_inst"]->prop("data_billing_street"),
-			"data_city" => $arr["obj_inst"]->prop("data_billing_street"),
-			"data_zip" => $arr["obj_inst"]->prop("data_billing_city"),
+			"data_city" => $arr["obj_inst"]->prop("data_billing_city"),
+			"data_zip" => $arr["obj_inst"]->prop("data_billing_zip"),
 			"data_country" => $arr["obj_inst"]->prop("data_billing_country"),
 			"data_name" => $arr["obj_inst"]->prop("data_billing_name"),
 			"data_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
@@ -1927,7 +1932,7 @@ class rfp extends class_base
 			//$this->vars($room_data);
 			if($package)
 			{
-				if($this->can("view", $mgrid)) // tsiisas mthf crist.. i have to calculate the price here????
+				if($this->can("view", $mgrid))
 				{
 					$mgr = obj($mgrid);
 					$pk_prices = $mgr->meta("pk_prices");
@@ -2170,6 +2175,7 @@ class rfp extends class_base
 					"hs_from" => date('d.m.Y', $rooms["datefrom"]),
 					"hs_to" => date('d.m.Y', $rooms["dateto"]),
 					"hs_type" => $types[$rooms["type"]],
+					"hs_type_name" => $types[$rooms["type"]],
 					"hs_rooms" => $rooms["rooms"],
 					"hs_people" => $rooms["people"],
 					"hs_price" => $rooms["price"],
