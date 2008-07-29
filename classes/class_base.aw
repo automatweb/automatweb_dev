@@ -6185,11 +6185,12 @@ class class_base extends aw_template
 	**/
 	function object_name_autocomplete_source($arr)
 	{
+		$cid = $arr["class_ids"];
 		$ac = get_instance("vcl/autocomplete");
 		$arr = $ac->get_ac_params($arr);
 
 		$ol = new object_list(array(
-			"class_id" => $arr["class_ids"],
+			"class_id" => $cid,
 			"name" => $arr[$arr["param"]]."%",
 			"lang_id" => array(),
 			"site_id" => array(),

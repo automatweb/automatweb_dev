@@ -699,6 +699,8 @@ class html extends aw_template
 	/**Simple button
 	@attrib api=1 params=name
 
+	@param name optional type=string
+		button name
 	@param type optional type=string
 		button type
 	@param value optional type=string
@@ -716,13 +718,15 @@ class html extends aw_template
 	function button($args = array())
 	{
 		extract($args);
+
 		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
 		$disabled = !empty($disabled) ? ' disabled="disabled"' : "";
 		$type = empty($type) ? "button" : $type;
+		$name = !empty($name) ? 'name="'.$name.'" ' : "";
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
 		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
 
-		return "<input type='{$type}' value='{$value}'{$onclick}{$class}{$disabled}{$textsize} />\n";
+		return "<input type='{$type}' {$name}value='{$value}'{$onclick}{$class}{$disabled}{$textsize} />\n";
 	}
 
 	/**Time selector
