@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.41 2008/07/29 12:19:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.42 2008/07/29 13:33:59 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -116,6 +116,7 @@ class task_quick_entry extends class_base
 			case "customer":
 				$prop["autocomplete_source"] = $this->mk_my_orb("cust_autocomplete_source");
 				$prop["autocomplete_params"] = array("customer");
+				$this->customer_set = 1;
 				break;
 
 			case "project":
@@ -664,7 +665,7 @@ $start = ((float)$usec + (float)$sec);
 	{
 		$check_url = $this->mk_my_orb("is_there_customer", array("customer" => " "));
 		$customer_check = "
-			el_value = document.changeform.customer_name.value;
+			el_value = escape(document.changeform.customer_name.value);
 			if(el_value.length > 1)
 			{
 				el=aw_get_url_contents('".$check_url."'+el_value);
@@ -681,7 +682,7 @@ $start = ((float)$usec + (float)$sec);
 		(($this->customer_name_set) ? $customer_check : "").
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("check_existing")."';".
-		"url = url + '&c=' + escape(document.changeform.customer.value);".
+		(($this->customer_set) ?"url = url + '&c=' + escape(document.changeform.customer.value);" : "").
 		"url = url + '&p=' + escape(document.changeform.project.value);".
 		"url = url + '&t=' + escape(document.changeform.task.value);".
 		"num= aw_get_url_contents(url);".
