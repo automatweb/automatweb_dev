@@ -36,7 +36,7 @@
 				</arguments>
 			</function>
 		</action>
-
+		
 		<action name="check_existing">
 			<function name="check_existing">
 				<arguments>
@@ -46,6 +46,13 @@
 				</arguments>
 			</function>
 		</action>
-
+		
+		<action name="is_there_customer">
+			<function name="is_there_customer">
+				<arguments>
+					<optional name="customer" />
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

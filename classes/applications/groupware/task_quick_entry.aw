@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.39 2008/07/02 12:23:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.40 2008/07/29 12:12:24 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -22,6 +22,10 @@
 @caption Kliendi t&uuml;&uuml;p
 
 @property customer type=textbox store=no
+@caption Klient
+
+//see selleks, et saaks vaid valida klient, kuid mitte lisada
+@property customer_name type=textbox store=no
 @caption Klient
 
 @property custp_fn type=textbox
@@ -75,12 +79,34 @@ class task_quick_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "customer_name":
+				$prop["autocomplete_class_id"] = array(CL_CRM_PERSON, CL_CRM_COMPANY);
+				$this->customer_name_set = 1;
+				break;
+			case "submit_but":
+				$prop["type"] = "button";
+				$prop["class"] = "sbtbutton";
+				$prop["onclick"] = "
+					if (aw_submit_handler() == false)
+					{
+						document.getElementById('button').disabled=false;
+						return false;
+					}
+					submit_changeform('');";
+				break;
 			case "submit_and_add":
-				$prop["value"] = html::submit(array(
+				$prop["value"] = html::button(array(
 					"name" => "submit_and_add",
 					"value" => t("Salvesta ja lisa uus"),
-					"class" => "aw04formbutton",
-					"onclick" => "document.changeform.button_p.value=1;submit_changeform('');"
+					"class" => "sbtbutton",
+					"onclick" => "
+						ret = aw_submit_handler();
+						if (ret == false)
+						{
+							document.getElementById('button').disabled=false;
+							return false;
+						}
+						document.changeform.button_p.value=1;submit_changeform('');"
 				));
 				break;
 
@@ -160,18 +186,20 @@ class task_quick_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "customer_name":
+				if(($arr["request"]["custp_fn"] || $arr["request"]["custp_ln"] || $arr["request"]["customer"])) return $retval;
 			case "customer":
-				if(($arr["request"]["custp_fn"] || $arr["request"]["custp_ln"])) return $retval;
+				if(($arr["request"]["custp_fn"] || $arr["request"]["custp_ln"] || $arr["request"]["customer_name"])) return $retval;
 			case "custp_fn":
-				if($arr["request"]["customer"]) return $retval;
+				if($arr["request"]["customer"] || $arr["request"]["customer_name"]) return $retval;
 			case "custp_ln":
-				if($arr["request"]["customer"]) return $retval;
+				if($arr["request"]["customer"] || $arr["request"]["customer_name"]) return $retval;
 			case "project":
 			case "content":
 			case "duration":
 				if ($prop["value"] == "")
 				{
-					if(!$this->empty_field_error) $prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
+					if(!$this->empty_field_error) $prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");$prop["error"] = $prop["name"];
 					$this->empty_field_error = 1;
 					return PROP_FATAL_ERROR;
 				}
@@ -409,8 +437,22 @@ $start = ((float)$usec + (float)$sec);
 		));
 
 	if(!(sizeof($rows->ids()) > 0)) {
-
-		if($arr["request"]["customer"])
+		if($arr["request"]["customer_name"])//sellise propi puhul lubab kasutada selle nimelist klienti kuid mitte lisada
+		{
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_COMPANY,CL_CRM_PERSON),
+				"name" => $arr["request"]["customer_name"],
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$c = $ol->begin();
+			if(!is_object($c) || strlen($arr["request"]["customer_name"]) < 2)
+			{
+				return;
+				//MIS SIIS TEHA KUI SELLIST POLE?
+			}
+		}
+		elseif($arr["request"]["customer"])
 		{
 			$ol = new object_list(array(
 				"class_id" => array(CL_CRM_COMPANY),
@@ -605,7 +647,7 @@ $start = ((float)$usec + (float)$sec);
 		$t_id = $row->prop("task");
 	}
 
-		if ($arr["request"]["submit_and_add"] != "")
+		if ($arr["request"]["submit_and_add"] != "" || $arr["request"]["button_p"])
 		{
 			header("Location: ".$arr["request"]["post_ru"]);
 			die();
@@ -620,9 +662,23 @@ $start = ((float)$usec + (float)$sec);
 
 	function callback_generate_scripts($arr)
 	{
+		$check_url = $this->mk_my_orb("is_there_customer", array("customer" => " "));
+		$customer_check = "
+			el_value = document.changeform.customer_name.value;
+			if(el_value.length > 1)
+			{
+				el=aw_get_url_contents('".$check_url."'+el_value);
+				if(!(el>0))
+				{
+					alert('".t("Sellise nimega klienti ei ole andmebaasis.")."')
+					return false;
+				}
+			}
+		";
 		return
 		"function aw_submit_handler() {".
 		"".
+		(($this->customer_name_set) ? $customer_check : "").
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("check_existing")."';".
 		"url = url + '&c=' + escape(document.changeform.customer.value);".
@@ -651,6 +707,25 @@ $start = ((float)$usec + (float)$sec);
 //		document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
 		";
 	}
+
+	/**
+		@attrib name=is_there_customer
+		@param customer optional
+	**/
+	function is_there_customer($arr)
+	{
+		$arr["customer"] = substr($arr["customer"],1);
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $arr["customer"],
+		));
+		$res = sizeof($ol->ids());
+		header("Content-type: text/html; charset=utf-8");
+		exit ($res."");
+	}
+
 
 	/**
 		@attrib name=check_existing
