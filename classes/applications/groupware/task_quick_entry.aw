@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.40 2008/07/29 12:12:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.41 2008/07/29 12:19:57 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -670,7 +670,7 @@ $start = ((float)$usec + (float)$sec);
 				el=aw_get_url_contents('".$check_url."'+el_value);
 				if(!(el>0))
 				{
-					alert('".t("Sellise nimega klienti ei ole andmebaasis.")."')
+					alert('".t("klient").' '."' + el_value + '".' '.t("puudub andmebaasist!")."');
 					return false;
 				}
 			}
