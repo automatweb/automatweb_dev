@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.27 2008/07/17 09:45:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.28 2008/07/29 12:32:35 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -11,6 +11,9 @@
 
 @property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY store=connect
 @caption Vaikevaluuta
+
+@property default_language type=select field=meta mehtod=serialize
+@caption Vaikekeel
 
 @property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
 @caption Edasisuunamisdokument
@@ -84,6 +87,9 @@
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
 @groupinfo rfps_archive caption="Arhiiv" parent=rfps
 @default group=rfps_active,rfps_archive
+
+	@property rfps_tb type=toolbar store=no no_caption=1
+
 	@layout hsplit type=hbox
 		@layout searchbox closeable=1 area_caption=Otsing type=vbox parent=hsplit
 			@property s_name type=textbox parent=searchbox size=15 store=no captionside=top
@@ -167,6 +173,14 @@ class rfp_manager extends class_base
 			3 => "RESOURCES",
 			4 => "CATERING",
 		);
+
+		$this->search_param_covering = array(
+			1 => t("K&otilde;ik"),
+			2 => t("Ruumid"),
+			3 => t("Toitlustus"),
+			4 => t("Majutus"),
+			5 => t("Ressursid"),
+		);
 	}
 
 	function get_property($arr)
@@ -182,15 +196,22 @@ class rfp_manager extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "default_language":
+				$l = get_instance("core/trans/pot_scanner");
+				$tl = $l->get_langs();
+				foreach(aw_ini_get("languages.list") as $ldat)
+				{
+					if(!in_array($ldat["acceptlang"], $tl))
+					{
+						continue;
+					}
+					$opts[$ldat["acceptlang"]] = $ldat["name"];
+				}
+				$prop["options"] = $opts;
+			break;
 			// search
 			case "raports_search_covering":
-				$prop["options"] = array(
-					"1" => t("K&otilde;ik"),
-					"2" => t("Ruumid"),
-					"3" => t("Toitlustus"),
-					"4" => t("Majutus"),
-					"5" => t("Ressursid"),
-				);
+				$prop["options"] = $this->search_param_covering;
 				break;
 			case "raports_search_with_products":
 				$prop["options"] = array(
@@ -311,6 +332,7 @@ class rfp_manager extends class_base
 				));
 				$t->set_default_sortby("created");
 				$t->set_default_sorder("desc");
+				$rrr = get_instance(CL_RFP);
 				$rfps = $this->get_rfps($act);
 				$rfps = $this->do_filter_rfps($rfps, $arr["request"]);
 				$uss = get_instance(CL_USER);
@@ -388,16 +410,51 @@ class rfp_manager extends class_base
 
 	function _get_raports_table($arr)
 	{
+		$from = mktime(0, 0, 0, $arr["request"]["raports_search_from_date"]["month"], $arr["request"]["raports_search_from_date"]["day"], $arr["request"]["raports_search_from_date"]["year"]);
+		$to = mktime(0, 0, 0, $arr["request"]["raports_search_until_date"]["month"], $arr["request"]["raports_search_until_date"]["day"], $arr["request"]["raports_search_until_date"]["year"]);
 		$res = $this->search_rfp_raports(array(
-			"from" => mktime(0, 0, 0, $arr["request"]["raports_search_from_date"]["month"], $arr["request"]["raports_search_from_date"]["day"], $arr["request"]["raports_search_from_date"]["year"]),
-			"to" => mktime(0, 0, 0, $arr["request"]["raports_search_until_date"]["month"], $arr["request"]["raports_search_until_date"]["day"], $arr["request"]["raports_search_until_date"]["year"]),
+			"from" => $from,
+			"to" => $to,
 			"search" => $arr["request"]["raports_search_covering"],
 			"rooms" => (is_array($arr["request"]["raports_search_rooms"]) AND count($arr["request"]["raports_search_rooms"]))?$arr["request"]["raports_search_rooms"]:NULL,
 			"rfp_status" => $arr["request"]["raports_search_rfp_status"],
 			"client" => $arr["request"]["raports_search_rfp_submitter"],
 		));
 
-		$arr["prop"]["value"] = $this->display_search_result($res, ($arr["request"]["raports_search_group"] == 2)?true:false, ($arr["request"]["raports_search_with_products"])?true:false);
+		$filters = false;
+		$set_filters = true;
+		if($set_filters)
+		{
+		// set what filters where used
+			$filters = array();
+			$filters[t("Kuup&auml;evavahemik")] = sprintf("%s kuni %s", date("d.m.Y", $from), date("d.m.Y", $to));
+			unset($arr["request"]["raports_search_covering"][1]);
+			if(count($arr["request"]["raports_search_covering"]))
+			{
+				$cov = array_intersect_key($this->search_param_covering, $arr["request"]["raports_search_covering"]);
+				$filters[t("Mille l&otilde;ikes")] = join(", ", $cov);
+			}
+			if(is_array($arr["request"]["raports_search_rooms"]) and count($arr["request"]["raports_search_rooms"]))
+			{
+				foreach($arr["request"]["raports_search_rooms"] as $room)
+				{
+					$rms[] = obj($room)->name();
+				}
+				$filters[t("Ruumid")] = join(", ", $rms);
+			}
+			if($arr["request"]["raports_search_rfp_status"])
+			{
+				$rfp = get_instance(CL_RFP);
+				$stats = $rfp->get_rfp_statuses();
+				$filters[t("Staatus")] = $stats[$arr["request"]["raports_search_rfp_status"]];
+			}
+			if(strlen($arr["request"]["raports_search_rfp_submitter"]))
+			{
+				$filters[t("Klient")] = $arr["request"]["raports_search_rfp_submitter"];
+			}
+		}
+
+		$arr["prop"]["value"] = $this->display_search_result($res, ($arr["request"]["raports_search_group"] == 2)?true:false, ($arr["request"]["raports_search_with_products"])?true:false, $filters);
 	}
 
 	/** Returns nicely formatted search result 
@@ -407,7 +464,7 @@ class rfp_manager extends class_base
 		@returns
 			Parsed html
 	 **/
-	public function display_search_result($result, $gr_by_client = false, $with_products = false)
+	public function display_search_result($result, $gr_by_client = false, $with_products = false, $show_used_filters = false)
 	{
 		$this->read_template("search_result.tpl");
 		if(is_array($result) && count($result))
@@ -527,12 +584,35 @@ class rfp_manager extends class_base
 				"HEADER" => $this->parse("HEADER"),
 				"ROW" => $row_html,
 			));
-			return $this->parse("HAS_RESULT");
+			$html = $this->parse("HAS_RESULT");
 		}
 		else
 		{
-			return $this->parse("HAS_NO_RESULT");
+			$no_html = $this->parse("HAS_NO_RESULT");
 		}
+
+		if($show_used_filters)
+		{
+			foreach($show_used_filters as $caption => $value)
+			{
+				$this->vars(array(
+					"filter_caption" => $caption,
+					"filter_value" => $value,
+				));
+				$filt_html .= $this->parse("FILTER");
+			}
+			$this->vars(array(
+				"FILTER" => $filt_html,
+			));
+			$filt = $this->parse("HAS_FILTERS_USED");
+		}
+		$this->vars(array(
+			"HAS_NO_RESULT" => $no_html,
+			"HAS_RESULT" => $html,
+			"HAS_FILTERS_USED" => $filt,
+		));
+
+		return $this->parse();
 	}
 
 	function _init_rooms_table(&$arr)
@@ -621,6 +701,12 @@ class rfp_manager extends class_base
 		{
 			$arr["obj_inst"]->set_extra_hours_prices($arr["request"]["rooms_table"]);
 		}
+	}
+
+	function _get_rfps_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_RFP), $arr["obj_inst"]->parent());
 	}
 
 	function _get_default_table($arr)
@@ -790,6 +876,7 @@ class rfp_manager extends class_base
 				$time_to = $room_price->prop("time_to");
 				$_time = date("H:i", mktime($time_from["hour"], $time_from["minute"], 0, 0, 0, 0)). " - ".date("H:i", mktime($time_to["hour"], $time_to["minute"], 0, 0, 0, 0));
 				$weekd = $room_price->prop("weekdays");
+				$_weekd = array();
 				foreach($weekd as $wd)
 				{
 					$_weekd[] = $room_price_inst->weekdays[$wd];
@@ -1288,6 +1375,10 @@ class rfp_manager extends class_base
 			$method = "_search_rfp_".$raport_sub_methods[$submethod]."_raports";
 			if(method_exists($this, $method))
 			{
+				if(is_array($arr["rooms"]) && $raport_sub_methods[$submethod] == "housing") // housing isn't connected to any rooms.. so, no need to search
+				{
+					continue;
+				}
 				$result = array_merge($result, $this->$method($rfp_ol));
 			}
 		}
@@ -1379,7 +1470,7 @@ class rfp_manager extends class_base
 		$resources = array();
 		foreach($ol->arr() as $oid => $obj)
 		{
-			$resources += $obj->get_resources();
+			$resources += safe_array($obj->get_resources());
 		}
 		foreach($resources as $data)
 		{

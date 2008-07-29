@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.53 2008/07/29 08:25:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.54 2008/07/29 12:32:35 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -437,7 +437,7 @@
 @reltype TABLES clid=CL_META value=9
 @caption Laudade paigutus
 
-@reltype CATERING_RESERVATION clid=CL_RESERVATION value=10
+@reltype CATERING_RESERVATION clid=CL_RESERVATION value=12
 @caption Toitlustuse broneering
 
 @reltype DEFAULT_CURRENCY clid=CL_CURRENCY value=11
@@ -619,7 +619,11 @@ class rfp extends class_base
 					"tooltip" => t("Reserveering"),
 				));
 				$rooms = $this->get_rooms($arr);
-				
+				$reltypes = array(
+					"final_catering" => "RELTYPE_CATERING_RESERVATION",
+					"final_prices" => "RELTYPE_RESERVATION",
+					"final_resource" => "RELTYPE_RESERVATION",
+				);
 
 				$data_name = $arr["obj_inst"]->prop("data_subm_name");
 				$data_name = split("[ ]", $data_name);
@@ -633,6 +637,7 @@ class rfp extends class_base
 				$new_reservation_args["end"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_end_date"));
 				$new_reservation_args["return_url"] = get_ru();
 				$new_reservation_args["rfp"] = $arr["obj_inst"]->id();
+				$new_reservation_args["rfp_reltype"] = $reltypes[$arr["request"]["group"]];
 
 				
 				foreach($rooms as $room)
@@ -702,8 +707,13 @@ class rfp extends class_base
 					}
 					
 				}
+				$reltypes = array(
+					"final_catering" => "RELTYPE_CATERING_RESERVATION",
+					"final_prices" => "RELTYPE_RESERVATION",
+					"final_resource" => "RELTYPE_RESERVATION",
+				);
 				$conn = $arr["obj_inst"]->connections_from(array(
-					"type" => "RELTYPE_RESERVATION",
+					"type" => $reltypes[$arr["request"]["group"]],
 				));
 				foreach($conn as $c)
 				{
@@ -1141,6 +1151,7 @@ class rfp extends class_base
 		$t->define_data($data);
 	}
 
+	// well, as far as i can tell, this ins't used any more.. there's a getter method. but i leave it here for a while just in case...
 	function update_products_info($rvid, $obj)
 	{
 		if($this->can("view", $rvid))
@@ -1264,7 +1275,7 @@ class rfp extends class_base
 			"reserv_group" => "reserv_group",
 		));
 		$conn = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_RESERVATION",
+			"type" => "RELTYPE_CATERING_RESERVATION",
 		));
 		$rvi = get_instance(CL_RESERVATION);
 		$prods = $arr["obj_inst"]->meta("prods");
@@ -1275,7 +1286,7 @@ class rfp extends class_base
 				$rv = $c->to();
 				$rvo = obj($c->to());
 				$prod_list = $rvi->get_room_products($rv->prop("resource"));
-				$amount = $rv->meta("amount");
+				$amount = $rv->meta("amount"); // why the hell is this used???
 				$discount = $rvi->get_product_discount($rv->id());
 
 				foreach($prod_list->arr() as $prod)
@@ -1407,14 +1418,10 @@ class rfp extends class_base
 							$bron->set_prop("resource", $data["room"]);
 							$bron->save();
 							$bri = $bron->instance();
-							$params = array(
-								"amount" => array(
-									$tmp2[0] => $data["amount"],
-								),
-								"change_discount" => array(
-									$tmp2[0] => $data["discount"],
-								),
-							);
+							$amount = $bron->meta("amount"); // here we ask only bron amount meta because set_products_info can write only discount info so that old data preserves
+							$params["amount"] = $amount;
+							$params["amount"][$tmp2[0]] = $data["amount"];
+							$params["change_discount"][$tmp2[0]] = $data["discount"];
 							$bri->set_products_info($bron->id(), $params);
 						}
 						$prods[$tmp1]["start1"] = $start1;
@@ -1422,7 +1429,7 @@ class rfp extends class_base
 					}
 				}
 			//}
-			$arr["obj_inst"]->set_meta("prods", $prods);
+			$arr["obj_inst"]->set_meta("prods", $prods); // actually this amount and discount things shouldn't be here at all
 			$arr["obj_inst"]->save();
 		}
 	}

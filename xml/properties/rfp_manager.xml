@@ -11,6 +11,15 @@
             <caption>Vaikevaluuta</caption>
       </property>
       <property>
+            <name>default_language</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <caption>Vaikekeel</caption>
+      </property>
+      <property>
             <name>copy_redirect</name>
             <table>objects</table>
             <group>general</group>
@@ -220,6 +229,18 @@
             <store>no</store>
             <parent>raports_table</parent>
             <field>raports_table</field>
+      </property>
+      <property>
+            <name>rfps_tb</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>rfps_tb</field>
       </property>
       <property>
             <name>s_name</name>

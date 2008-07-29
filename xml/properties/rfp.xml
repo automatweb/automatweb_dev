@@ -1082,7 +1082,7 @@
             </TABLES>
             <CATERING_RESERVATION>
                   <clid>CL_RESERVATION</clid>
-                  <value>10</value>
+                  <value>12</value>
                   <caption>Toitlustuse broneering</caption>
             </CATERING_RESERVATION>
             <DEFAULT_CURRENCY>

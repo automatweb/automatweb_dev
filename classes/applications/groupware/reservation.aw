@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.118 2008/07/24 13:50:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.119 2008/07/29 12:32:45 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -681,6 +681,10 @@ class reservation extends class_base
 		{
 			$arr["rfp"] = $_GET["rfp"];
 		}
+		if($_GET["rfp_reltype"])
+		{
+			$arr["rfp_reltype"] = $_GET["rfp_reltype"];
+		}
 	}
 
 	function callback_post_save($arr)
@@ -704,8 +708,9 @@ class reservation extends class_base
 		if($arr["new"] && is_oid($arr["request"]["rfp"]))
 		{
 			$rfp = obj($arr["request"]["rfp"]);
+			df($arr["request"]);
 			$rfp->connect(array(
-				"type" => "RELTYPE_RESERVATION",
+				"type" => $arr["request"]["rfp_reltype"]?$arr["request"]["rfp_reltype"]:"RELTYPE_RESERVATION",
 				"to" => $arr["obj_inst"]->id(),
 			));
 		}
