@@ -24,7 +24,7 @@ kehtib: {VAR:offer_expire_date}
 <tr bgcolor="#aaaaaa"><th colspan="{VAR:colspan}">{VAR:title}</td></th>
 <tr bgcolor="#dddddd">
 <!-- SUB: HEADERS_PACKAGE -->
-<td>Kuupäev / Kellaaeg</td>
+<td>{VAR:LC_RFP_DATE_TIME}</td>
 <td>Pakett</td>
 <td>Ruum</td>
 <td>Paigutus</td>
@@ -34,7 +34,7 @@ kehtib: {VAR:offer_expire_date}
 <td>M&auml;rkused</td>
 <!-- END SUB: HEADERS_PACKAGE -->
 <!-- SUB: HEADERS_NO_PACKAGE -->
-<td>Kuup&auml;ev / Kellaaeg</td>
+<td>{VAR:LC_RFP_DATE_TIME}</td>
 <td>Ruum</td>
 <td>Paigutus</td>
 <td>In. arv</td>
@@ -81,6 +81,10 @@ kehtib: {VAR:offer_expire_date}
 <td>Hind kokku</td>
 <td>Kommentaar</td>
 </tr>
+<!-- SUB: RESOURCE_RESERVATION -->
+<tr>
+	<td colspan="6">{VAR:reservation_name}</td>
+</tr>
 <!-- SUB: RESOURCE -->
 <tr>
 <td>{VAR:res_from_hour}:{VAR:res_from_minute} - {VAR:res_to_hour}:{VAR:res_to_minute}</td>
@@ -91,6 +95,7 @@ kehtib: {VAR:offer_expire_date}
 <td>{VAR:res_comment}</td>
 </tr>
 <!-- END SUB: RESOURCE -->
+<!-- END SUB: RESOURCE_RESERVATION -->
 <tr><td colspan="4"><div align="right"><strong>Kokku:</strong></div></td>
 <td><strong>{VAR:res_total}</strong>.-</td></tr>
 </table>

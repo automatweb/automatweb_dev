@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.50 2008/07/28 14:05:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.51 2008/07/29 05:25:11 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1999,7 +1999,7 @@ class rfp extends class_base
 						
 						$total = $price*$count;
 						$resources_total += $total;
-						$resources[] = array(
+						$resources[$rv->id()][] = array(
 							"rid" => $rid,
 							"name" => $r->trans_get_val("name"),
 							"price" => $price,
@@ -2010,6 +2010,7 @@ class rfp extends class_base
 							"to_hour" => date("H", $data["end"]),
 							"to_minute" => date("i", $data["end"]),
 							"comment" => $data["comment"],
+							"reservation" => $rv->id(),
 						);
 					}
 				}
@@ -2068,23 +2069,33 @@ class rfp extends class_base
 		if(count($resources))
 		{
 			$res = "";
-			foreach($resources as $r)
+			foreach($resources as $reservation => $real_resources)
 			{
+				$res = "";
+				foreach($real_resources as $r)
+				{
+					$this->vars(array(
+						"res_name" => $r["name"],
+						"res_count" => $r["count"],
+						"res_price" => $r["price"],
+						"res_total" => $r["total"],
+						"res_from_hour" => $r["from_hour"],
+						"res_from_minute" => $r["from_minute"],
+						"res_to_hour" => $r["to_hour"],
+						"res_to_minute" => $r["to_minute"],
+						"res_comment" => $r["comment"],
+					));
+					$res .= $this->parse("RESOURCE");
+				}
+				$rv = obj($reservation);
 				$this->vars(array(
-					"res_name" => $r["name"],
-					"res_count" => $r["count"],
-					"res_price" => $r["price"],
-					"res_total" => $r["total"],
-					"res_from_hour" => $r["from_hour"],
-					"res_from_minute" => $r["from_minute"],
-					"res_to_hour" => $r["to_hour"],
-					"res_to_minute" => $r["to_minute"],
-					"res_comment" => $r["comment"],
+					"reservation_name" => $rv->name(),
+					"RESOURCE" => $res,
 				));
-				$res .= $this->parse("RESOURCE");
+				$final_res .= $this->parse("RESOURCE_RESERVATION");
 			}
 			$this->vars(array(
-				"RESOURCE" => $res,
+				"RESOURCE_RESERVATION" => $final_res,
 				"res_total" => $resources_total,
 			));
 			$res_sub = $this->parse("RESOURCES");
