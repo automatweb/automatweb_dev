@@ -2166,7 +2166,8 @@ class shop_warehouse extends class_base
 					break;
 
 				default:
-					$conditions["class_id"] = $clid;
+					//$conditions["class_id"] = $clid; // i really don't know if it was ment to be like that, but sell_orders will not get included like that, so i'll remove it right now
+					$conditions["class_id"][] = $clid;
 			}
 		}
 
@@ -3610,6 +3611,10 @@ class shop_warehouse extends class_base
 		{
 			$who = obj($whid);
 			$pt = $who->prop("conf.".(($data["prop"]["name"] == "storage_export_toolbar") ? "export_fld" : "reception_fld"));
+			if(!$pt)
+			{
+				continue;
+			}
 			if(count($whs) > 1)
 			{
 				$tb->add_sub_menu(array(
@@ -6177,6 +6182,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 		}
 		$this->_init_purchase_orders_tbl($t, $arr);
 		$ol = $this->_get_orders_ol($arr);
+		$ui = get_instance(CL_USER);
 		foreach($ol->arr() as $o)
 		{
 			$other_rels = $o->prop("related_orders");
@@ -6211,14 +6217,25 @@ $oo = get_instance(CL_SHOP_ORDER);
 			if(($group == "purchase_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_PURCHASE_MANAGER_WORKSPACE) || ($group == "sell_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_SALES_MANAGER_WORKSPACE))
 			{
 				$add_row .= html::strong(t("Kommentaarid:"))."<br />";
-				$comments = $o->meta("comments");
+				$com_conn = $o->connections_from(array(
+					"type" => "RELTYPE_COMMENT",
+				));
+				foreach($com_conn as $cc)
+				{
+					$com = $cc->to();
+					$uo = $ui->get_obj_for_uid($com->createdby());
+					$p = $ui->get_person_for_user($uo);
+					$name = obj($p)->name();
+					$val = $name." @ ".date("d.m.Y H:i", $com->created())." - ".$com->prop("commtext");
+					$comments[$com->id()] = $val;
+				}
 				if(is_array($comments) && count($comments))
 				{
 					$add_row .= implode("<br />", $comments)."<br />";
 				}
 				$add_row .= html::textbox(array(
 					"name" => "orders[".$o->id()."][add_comment]",
-					"size" => 20,
+					"size" => 40,
 				))."<br />";
 				$conn = $o->connections_from(array(
 					"type" => "RELTYPE_ROW",
@@ -6236,6 +6253,10 @@ $oo = get_instance(CL_SHOP_ORDER);
 					));
 					$at->define_field(array(
 						"name" => "type",
+						"align" => "center",
+					));
+					$at->define_field(array(
+						"name" => "comment",
 						"align" => "center",
 					));
 					$at->define_field(array(
@@ -6263,6 +6284,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 								"amount" => $row->prop("amount"),
 								"real_amount" => $row->prop("real_amount"),
 								"type" => $prod->prop("item_type.name"),
+								"comment" => $row->comment(),
 								"required" => $row->prop("required"),
 							);
 						}
@@ -6277,6 +6299,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 						"real_amount" => html::strong(t("Saadud kogus")),
 						"required" => html::strong(t("Vajadus")),
 						"type" => html::strong(t("T&uuml;&uuml;p")),
+						"comment" => html::strong(t("Kommentaar")),
 						"sb" => 1,
 					));
 					$at->set_titlebar_display(false);
@@ -6336,14 +6359,16 @@ $oo = get_instance(CL_SHOP_ORDER);
 					}
 					elseif($prop == "add_comment" && $val)
 					{
-						$c = $o->meta("comments");
-						if(!$c)
-						{
-							$c = array();
-						}
-						$c[] = $val;
-						$o->set_meta("comments", $c);
-						$save = true;
+						$co = obj();
+						$co->set_class_id(CL_COMMENT);
+						$co->set_name(sprintf(t("%s kommentaar"), $o->name()));
+						$co->set_parent($o->id());
+						$co->set_prop("commtext", $val);
+						$co->save();
+						$o->connect(array(
+							"type" => "RELTYPE_COMMENT",
+							"to" => $co->id(),
+						));
 					}
 				}
 				if($save)
