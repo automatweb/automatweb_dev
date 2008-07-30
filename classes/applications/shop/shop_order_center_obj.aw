@@ -41,12 +41,12 @@ class shop_order_center_obj extends _int_object
 		if ($type == "prod")
 		{
 			$rv = array();
-
 			$odl = new object_data_list(
 				array(
 					"lang_id" => array(),
 					"site_id" => array(),
-					"class_id" => CL_SHOP_PRODUCT
+					"class_id" => CL_SHOP_PRODUCT,
+					"price" => new obj_predicate_not(-1)//see ainult selleks, et toodete tabeli sisse loeks
 				),
 				array(
 					CL_SHOP_PRODUCT => array(new obj_sql_func(OBJ_SQL_UNIQUE, "value", $field_name))
