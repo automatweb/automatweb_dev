@@ -2166,7 +2166,8 @@ class shop_warehouse extends class_base
 					break;
 
 				default:
-					$conditions["class_id"] = $clid;
+					//$conditions["class_id"] = $clid; // not sure that was ment so..
+					$conditions["class_id"][] = $clid;
 			}
 		}
 
