@@ -134,12 +134,14 @@ class crm_bill_obj extends _int_object
 		$p-> set_parent($this->id());
 		$p-> set_name($this->name() . " " . t("laekumine"));
 		$p-> set_class_id(CL_CRM_BILL_PAYMENT);
+		$p-> set_prop("date", $tm);
 		$p->save();
+/*
 		$this->connect(array(
 			"to" => $p->id(),
 			"type" => "RELTYPE_PAYMENT"
 		));
-		$p-> set_prop("date", $tm);
+
 		$p-> set_prop("sum", $sum);//see koht sureb miskiprast
 		$curr = $i->get_bill_currency_id($this);
 		if($curr)
@@ -158,11 +160,29 @@ class crm_bill_obj extends _int_object
 			}
 			$p -> set_prop("currency_rate", $rate);
 		}
-		$p-> save();
-
+		$p-> save();*/
+		$p->add_bill(array(
+			"sum" => $sum,
+			"o" => $this,
+		));
 		return $p->id();
 	}
 
+	function get_bill_payments_data()
+	{
+		$data = array();
+		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+		{
+			$p = $conn->to();
+			$data[$p->id()]["currency"] = $p->get_currency_name();
+			$bill_sums = $p->meta("sum_for_bill");
+			$data[$p->id()]["sum"] = $bill_sums[$this->id()];
+			$data[$p->id()]["total_sum"] = $p->prop("sum");
+			$data[$p->id()]["date"] = $p->prop("date");
+		}
+
+		return $data;
+	}
 }
 
 ?>

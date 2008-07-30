@@ -85,7 +85,7 @@ class crm_bill_payment extends class_base
 				$prop["type"] = "text";
 				if(!$arr["new"])
 				{
-					$prop["value"] = number_format($arr["obj_inst"]->get_connected_bills_sum() , 2);
+					$prop["value"] = number_format($arr["obj_inst"]->prop("sum") , 2);//number_format($arr["obj_inst"]->get_connected_bills_sum() , 2);
 				}
 				break;
 		}
@@ -496,7 +496,7 @@ class crm_bill_payment extends class_base
 				"type" => $o->prop("type") ? t("Sularahas") : t("&Uuml;lekandega"),
 				"currency" => $o->prop("currency.name"),
 				"currency_rate" => $o->prop("currency_rate"),
-				"sum" => $o->prop("sum"),
+				"sum" => $o->prop("sum"),//$o->get_connected_bills_sum(),//$o->prop("sum"),
 				"cust" => $cust_name,
 				"bills_list" => $bills_list,
 			));

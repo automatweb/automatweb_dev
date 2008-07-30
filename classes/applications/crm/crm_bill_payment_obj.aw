@@ -9,7 +9,7 @@ class crm_bill_payment_obj extends _int_object
 			parent::set_prop($name,$value);
 			if(!$this->id())
 			{
-				$this->save();//kui id'd pole , siis läheb lolliks 
+				$this->save();//kui id'd pole , siis l2heb lolliks 
 			}
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_BILL,
@@ -138,6 +138,8 @@ class crm_bill_payment_obj extends _int_object
 		}
 		$bill_sums[$bill] = $sum;
 		$this->set_meta("sum_for_bill" , $bill_sums);
+		//uuendab kogusumma ka 2ra
+		$this->set_prop("sum" , array_sum($bill_sums));
 		$this->save();
 	}
 
@@ -173,8 +175,8 @@ class crm_bill_payment_obj extends _int_object
 		}
 		$bi = get_instance("applications/crm/crm_bill");
 
-		//mõned asjad mis võivad saada operatsiooni takistuseks
-		//seda esimest pole vaja tõenäoliselt, sest summa laekumisel on tegelikult selline sõltuv suurus
+		//m6ned asjad mis v6ivad saada operatsiooni takistuseks
+		//seda esimest pole vaja t6en2oliselt, sest summa laekumisel on tegelikult selline s6ltuv suurus
 //		if(!$this->get_free_sum())
 //		{
 //			return t("Laekumisel juba piisava summa eest areveid");
@@ -194,7 +196,7 @@ class crm_bill_payment_obj extends _int_object
 			return t("laekumine ei saa olla erinevate klientidega arvetele");
 		}
 
-		//vigu pole, siis teeb ära
+		//vigu pole, siis teeb 2ra
 		$o->connect(array(
 			"to" => $this->id(),
 			"type" => "RELTYPE_PAYMENT"
