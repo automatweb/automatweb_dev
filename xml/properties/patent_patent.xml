@@ -621,6 +621,15 @@
             <caption>Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&amp;amp;otilde;endav dokument</caption>
       </property>
       <property>
+            <name>add_fee</name>
+            <table>objects</table>
+            <group>fee</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Rohkem kui 10 n&amp;amp;otilde;udluspunkti</caption>
+      </property>
+      <property>
             <name>fee_copies</name>
             <table>objects</table>
             <group>fee</group>

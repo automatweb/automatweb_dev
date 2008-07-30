@@ -154,7 +154,7 @@ class utility_model extends intellectual_property
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplication_nr","attachment_demand_points"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
-		$this->select_vars = array_merge($this->select_vars, array("applicant_reg"));
+		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
 		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "attachment_invention_description", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans", "applicant_reg"));
 	}
 

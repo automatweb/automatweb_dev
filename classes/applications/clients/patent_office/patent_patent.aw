@@ -131,6 +131,9 @@
 	@caption Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&otilde;endav dokument
 
 @default group=fee
+ 	@property add_fee type=text
+	@caption Rohkem kui 10 n&otilde;udluspunkti
+
  	@property fee_copies type=checkbox ch_value=1
 	@caption Patendidokumentide v&otilde;i muude tr&uuml;kiste koopiate v&auml;ljastamise l&otilde;iv
 
@@ -207,8 +210,8 @@ class patent_patent extends intellectual_property
 		$this->text_area_vars = array_merge($this->text_area_vars, array("other_datapub_data"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name_et","invention_name_en","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplicationadd_nr","prio_prevapplication_nr","other_first_application_data_country","other_first_application_data_nr","other_bio_nr","other_bio_inst", "attachment_demand_points"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose", "fee_copies"));
-		$this->select_vars = array_merge($this->select_vars, array("applicant_reg"));
-		$this->save_fee_vars = array_merge($this->save_fee_vars, array("fee_copies"));
+		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
+		$this->save_fee_vars = array_merge($this->save_fee_vars, array("fee_copies", "add_fee"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value","correspond_city_value", "name", "applicant_reg");
@@ -288,6 +291,7 @@ class patent_patent extends intellectual_property
 	{
 		parent::save_fee($patent);
 		$patent->set_prop("fee_copies" , $_SESSION["patent"]["fee_copies"]);
+		$patent->set_prop("add_fee" , $_SESSION["patent"]["add_fee"]);
 		$patent->save();
 	}
 
@@ -311,16 +315,11 @@ class patent_patent extends intellectual_property
 
 	protected function get_payment_sum()
 	{
-		$sum = $this->get_request_fee();
+		$sum = $this->get_request_fee() + $this->get_add_fee();
 
 		if (!empty($_SESSION["patent"]["fee_copies"]))
 		{
 			$sum += 150;
-		}
-
-		if(!empty($_SESSION["patent"]["attachment_demand_points"]) and 10 < $_SESSION["patent"]["attachment_demand_points"])
-		{
-			$sum += ($_SESSION["patent"]["attachment_demand_points"] - 10) * 200;
 		}
 
 		return $sum;
@@ -343,11 +342,22 @@ class patent_patent extends intellectual_property
 		return $sum;
 	}
 
+	private function get_add_fee()
+	{
+		$sum = 0;
+		if(!empty($_SESSION["patent"]["attachment_demand_points"]) and 10 < $_SESSION["patent"]["attachment_demand_points"])
+		{
+			$sum = ($_SESSION["patent"]["attachment_demand_points"] - 10) * 200;
+		}
+		return $sum;
+	}
+
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
 
-		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
+		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
+		$_SESSION["patent"]["add_fee"]= $this->get_add_fee();
 
 		if(isset($_SESSION["patent"]["delete_author"]))
 		{
@@ -401,7 +411,7 @@ class patent_patent extends intellectual_property
 				if (is_uploaded_file($file_data["tmp_name"]))
 				{
 					$fp = fopen($file_data["tmp_name"], "r");
-					flock($fp, LOCK_SH);
+					// flock($fp, LOCK_SH);
 					$sig = fread($fp, 4);
 					fclose($fp);
 					if("%PDF" !== $sig)

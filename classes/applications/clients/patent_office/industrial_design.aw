@@ -62,6 +62,9 @@
 	@property doc_description type=fileupload reltype=RELTYPE_DOC_DESCRIPTION form=+emb
 	@caption T&ouml;&ouml;stusdisainilahenduse kirjeldus
 
+@default group=fee
+ 	@property add_fee type=text
+	@caption Variandid (alates 3-dast)
 
 // RELTYPES
 @reltype AUTHOR value=17 clid=CL_CRM_PERSON
@@ -116,7 +119,9 @@ class industrial_design extends intellectual_property
 		$this->multifile_upload_vars = array_merge($this->multifile_upload_vars, array("doc_repro"));
 		$this->text_vars = array_merge($this->text_vars, array("industrial_design_name", "prio_convention_country", "prio_convention_nr"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
-		$this->select_vars = array_merge($this->select_vars, array("industrial_design_variant", "industrial_design_variant_count", "process_postpone","applicant_reg"));
+		$this->select_vars = array_merge($this->select_vars, array("industrial_design_variant", "industrial_design_variant_count", "process_postpone"));
+		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
+		$this->save_fee_vars = array_merge($this->save_fee_vars, array("add_fee"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value", "correspond_city_value", "name", "applicant_reg");
@@ -173,6 +178,13 @@ class industrial_design extends intellectual_property
 		$this->final_save($patent);
 	}
 
+	public function save_fee($patent)
+	{
+		parent::save_fee($patent);
+		$patent->set_prop("add_fee" , $_SESSION["patent"]["add_fee"]);
+		$patent->save();
+	}
+
 	protected function save_industrial_design($patent)
 	{
 		$patent->set_prop("industrial_design_name" , $_SESSION["patent"]["industrial_design_name"]);
@@ -207,13 +219,7 @@ class industrial_design extends intellectual_property
 
 	protected function get_payment_sum()
 	{
-		$sum = $this->get_request_fee();
-
-		if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
-		{
-			$sum += ($_SESSION["patent"]["industrial_design_variant_count"] - 2) * 400;
-		}
-
+		$sum = $this->get_request_fee() + $this->get_add_fee();
 		return $sum;
 	}
 
@@ -234,11 +240,22 @@ class industrial_design extends intellectual_property
 		return $sum;
 	}
 
+	private function get_add_fee()
+	{
+		$sum = 0;
+		if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
+		{
+			$sum = ($_SESSION["patent"]["industrial_design_variant_count"] - 2) * 400;
+		}
+		return $sum;
+	}
+
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
 
-		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
+		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
+		$_SESSION["patent"]["add_fee"]= $this->get_add_fee();
 
 		if(isset($_SESSION["patent"]["delete_author"]))
 		{

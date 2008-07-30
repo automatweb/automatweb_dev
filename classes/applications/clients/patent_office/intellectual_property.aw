@@ -1533,6 +1533,7 @@ abstract class intellectual_property extends class_base
 
 			$data[$var] = $htmlclient->draw_element(array(
 				"type" => "chooser",
+				"orient" => "vertical",
 				"name" => $var,
 				"value" => $_SESSION["patent"][$var],
 				"options"=> $options
@@ -1634,7 +1635,14 @@ abstract class intellectual_property extends class_base
 		{
 			if(is_array($_SESSION["patent"][$var]))
 			{
-				$_SESSION["patent"][$var] = mktime(0,0,0,$_SESSION["patent"][$var]["month"],$_SESSION["patent"][$var]["day"],$_SESSION["patent"][$var]["year"]);
+				if (in_array("---", $_SESSION["patent"][$var]))
+				{
+					$_SESSION["patent"][$var] = -1;
+				}
+				else
+				{
+					$_SESSION["patent"][$var] = mktime(0,0,0, $_SESSION["patent"][$var]["month"], $_SESSION["patent"][$var]["day"], $_SESSION["patent"][$var]["year"]);
+				}
 			}
 
 			if(!is_array($_SESSION["patent"][$var]) && !($_SESSION["patent"][$var] >1))
@@ -1661,7 +1669,7 @@ abstract class intellectual_property extends class_base
 
 			if($_SESSION["patent"][$var] > 0)
 			{
-				$data[$var."_value"] = date("j.m.Y" ,$_SESSION["patent"][$var]);
+				$data[$var."_value"] = date("j.m.Y", $_SESSION["patent"][$var]);
 			}
 		}
 
@@ -2225,9 +2233,9 @@ abstract class intellectual_property extends class_base
 	{
 		$_SESSION["patent"]["errors"] =  $errs = $this->check_fields();
 
-		foreach($_POST as $data => $val)
+		foreach($_POST as $name => $val)
 		{
-			$_SESSION["patent"][$data] = $val;
+			$_SESSION["patent"][$name] = $val;
 		}
 
 		foreach ($this->checkbox_vars as $name)

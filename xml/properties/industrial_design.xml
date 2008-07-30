@@ -333,6 +333,15 @@
             </form>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;stusdisainilahenduse kirjeldus</caption>
       </property>
+      <property>
+            <name>add_fee</name>
+            <table>objects</table>
+            <group>fee</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Variandid (alates 3-ndast)</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_INDUSTRIAL_DESIGN</syslog_type>
             <relationmgr>yes</relationmgr>
