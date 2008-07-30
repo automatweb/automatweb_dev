@@ -93,6 +93,16 @@ class rfp_obj extends _int_object
 		return $products;
 	}
 
+	/** Sets the catering data (returned by get_catering())
+		@attrib api=1 params=pos
+		@param catering_data required type=array
+			Data to be set
+	 **/
+	public function set_catering($data)
+	{
+		$this->set_meta("prods", $data);;
+	}
+
 	/** Removes given room reservation
 		@attrib api=1 params=pos
 		@param reservation type=oid required
@@ -130,6 +140,31 @@ class rfp_obj extends _int_object
 			return true;
 		}
 		return false;
+	}
+
+	/** Removes product from catering reservation
+		@attrib api=1 params=pos
+		@param reservation required type=oid
+			Reservation object id to remove from
+		@param product required type=oid
+			Product oid to remove
+	 **/
+	public function remove_catering_reservation_product($reservation = false, $product = false)
+	{
+		if(!$this->can("view", $reservation) OR !$this->can("view", $product))
+		{
+			return false;
+		}
+		$reservation = obj($reservation);
+		$rdata = $reservation->get_product_amount();
+		unset($rdata[$product]);
+		$reservation->set_product_amount($rdata, false);
+		$reservation->save();
+		
+		$data = $this->get_catering();
+		unset($data[$product.".".$reservation->id()]);
+		$this->set_catering($data);
+		return true;
 	}
 
 }

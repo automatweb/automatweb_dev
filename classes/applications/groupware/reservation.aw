@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.119 2008/07/29 12:32:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.120 2008/07/30 08:38:11 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -677,6 +677,7 @@ class reservation extends class_base
 		{
 			$arr["resource"] = $_GET["resource"];
 		}
+		// rfp crap
 		if($_GET["rfp"])
 		{
 			$arr["rfp"] = $_GET["rfp"];
@@ -684,6 +685,10 @@ class reservation extends class_base
 		if($_GET["rfp_reltype"])
 		{
 			$arr["rfp_reltype"] = $_GET["rfp_reltype"];
+		}
+		if($_GET["rfp_organisation"])
+		{
+			$arr["rfp_organisation"] = $_GET["rfp_organisation"];
 		}
 	}
 
@@ -705,14 +710,42 @@ class reservation extends class_base
 
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["add_p"], 1 /* RELTYPE_CUSTOMER */);
+
+
 		if($arr["new"] && is_oid($arr["request"]["rfp"]))
 		{
 			$rfp = obj($arr["request"]["rfp"]);
-			df($arr["request"]);
 			$rfp->connect(array(
 				"type" => $arr["request"]["rfp_reltype"]?$arr["request"]["rfp_reltype"]:"RELTYPE_RESERVATION",
 				"to" => $arr["obj_inst"]->id(),
 			));
+
+			if($org_n = $arr["request"]["rfp_organisation"])
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"name" => $org_n,
+				));
+				if($ol->count() > 0)
+				{
+					$org = $ol->begin();
+				}
+				else
+				{
+					$org = obj();
+					$org->set_class_id(CL_CRM_COMPANY);
+					$org->set_name($org_n);
+					$org->set_parent($arr["obj_inst"]->parent());
+					$org->save();
+				}
+				$arr["obj_inst"]->connect(array(
+					"type" => "RELTYPE_CUSTOMER",
+					"to" => $org->id(),
+				));
+				$arr["obj_inst"]->set_prop("customer", $org->id());
+				$arr["obj_inst"]->set_correct_name();
+				$arr["obj_inst"]->save();
+			}
 		}
 		// well, this here makes a new person when rfp class makes a new reservation and personal data is provided also
 		/*

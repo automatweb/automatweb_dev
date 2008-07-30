@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.54 2008/07/29 12:32:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.55 2008/07/30 08:38:06 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -638,6 +638,7 @@ class rfp extends class_base
 				$new_reservation_args["return_url"] = get_ru();
 				$new_reservation_args["rfp"] = $arr["obj_inst"]->id();
 				$new_reservation_args["rfp_reltype"] = $reltypes[$arr["request"]["group"]];
+				$new_reservation_args["rfp_organisation"] = $arr["obj_inst"]->prop("data_subm_organisation");
 
 				
 				foreach($rooms as $room)
@@ -1006,6 +1007,10 @@ class rfp extends class_base
 				"chgbgcolor" => "split",
 			));
 		}
+		$t->define_chooser(array(
+			"name" => "sel_resource",
+			"field" => "resource_id",
+		));
 		$t->define_field(array(
 			"name" => "discount",
 			"caption" => t("Allahindlus %"),
@@ -1091,10 +1096,14 @@ class rfp extends class_base
 					"room_resource" => $k,
 					"amount" => $resources_data[$k]["count"],
 					"resource" => html::obj_change_url($resource),
-					"reservation" => html::obj_change_url($res),
+					"reservation" => html::checkbox(array(
+							"name" => "sel_res[".$res->id()."]",
+							"value" => $res->id(),
+						)).html::obj_change_url($res),
 					"discount" => $resources_data[$k]["discount"],
 					"comment" => $resources_data[$k]["comment"],
 					"time" => date("H:i", $resources_data[$k]["start1"]).t(" - ").date("H:i", $resources_data[$k]["end"]),
+					"resource_id" => $resource->id().".".$res->id(),
 					/*
 					"time" => $this->_gen_time_form(array(
 						"varname" => "time[".$k."]",
@@ -1122,7 +1131,10 @@ class rfp extends class_base
 			// special row for every resevation
 			$data = array(
 				"price" => $resources_price[$k],
-				"reservation" => html::obj_change_url($c->to()),
+				"reservation" => html::checkbox(array(
+					"name" => "sel_res[".$c->to()->id()."]",
+					"value" => $c->to()->id(),
+				)).html::obj_change_url($c->to()),
 				"resource" => t("Kokku"),
 				//"split" => "#CCCCCC",
 				"discount" => $resources_discount,
@@ -1217,6 +1229,10 @@ class rfp extends class_base
 		classload("vcl/table");
 		$t = new aw_table;
 		$t->set_sortable(false);
+		$t->define_chooser(array(
+			"field" => "product",
+			"name" => "prod_sel",
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -1360,7 +1376,11 @@ class rfp extends class_base
 								"name" => "prods[".$prod->id().".".$rv->id()."][bronid]",
 								"value" => strlen($_t = $prods[$prod->id().".".$rv->id()]["bronid"])?$_t:$rv->id(),
 							)),
-							"reserv_group" => html::obj_change_url($rvo),
+							"reserv_group" => html::checkbox(array(
+									"name" => "sel_res[".$rvo->id()."]",
+									"value" => $rvo->id(),
+								)).html::obj_change_url($rvo),
+							"product" => $prod->id().".".$rv->id(),
 						);
 						$t->define_data($data);
 					}
@@ -2746,6 +2766,53 @@ class rfp extends class_base
 				foreach($arr["sel"] as $reservation)
 				{
 					$o->remove_room_reservation($reservation);
+				}
+			
+			}
+		}
+		elseif($arr["group"] == "final_catering")
+		{
+
+			if(is_array($arr["prod_sel"]) and count($arr["prod_sel"]))
+			{
+				foreach($arr["prod_sel"] as $data)
+				{
+					list($d_product, $d_reservation) = split("[.]", $data);
+					$o->remove_catering_reservation_product($d_reservation, $d_product);
+				}
+				$o->save();
+			}
+
+			if(is_array($arr["sel_res"]) and count($arr["sel_res"]))
+			{
+				foreach($arr["sel_res"] as $data)
+				{
+					$rv = obj($data);
+					$rv->delete();
+				}
+			}
+		}
+		elseif($arr["group"] == "final_resource")
+		{
+
+			if(is_array($arr["sel_resource"]) and count($arr["sel_resource"]))
+			{
+				foreach($arr["sel_resource"] as $data)
+				{
+					list($d_resource, $d_reservation) = split("[.]", $data);
+					$d_reservation = obj($d_reservation);
+					$data = $d_reservation->get_resources_data();
+					unset($data[$d_resource]);
+					$d_reservation->set_resources_data($data);
+				}
+				$d_reservation->save();
+			}
+			if(is_array($arr["sel_res"]) and count($arr["sel_res"]))
+			{
+				foreach($arr["sel_res"] as $data)
+				{
+					$rv = obj($data);
+					$rv->delete();
 				}
 			}
 		}

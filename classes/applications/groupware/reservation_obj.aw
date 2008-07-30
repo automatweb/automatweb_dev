@@ -114,6 +114,20 @@ class reservation_obj extends _int_object
 		return $inst->get_resources_data($this->id());
 	}
 
+	/** Sets resources data
+		@attrib api=1 params=pos
+		@param data required type=array
+			Resources data in array (structure is same as the get_resources_data() returns)
+	 **/
+	function set_resources_data($data = array())
+	{
+		$inst = $this->instance();
+		return $inst->set_resources_data(array(
+			"reservation" => $this->id(),
+			"resources_info" => $data,
+		));
+	}
+
 	/** Returns resources special prices
 		@attrib api=1
 	 **/
@@ -426,6 +440,37 @@ class reservation_obj extends _int_object
 		$res_inst = get_instance(CL_RESERVATION);
 		$this->set_name($res_inst->get_correct_name($this));
 		$this->save();
+	}
+
+	/** Returns amount of products reserved for this reservation
+		@attrib api=1
+		@returns
+			array of product id's as key's and amount as value
+	 **/
+	public function get_product_amount()
+	{
+		return $this->meta("amount");
+	}
+
+	/** Sets the amount of products reserved for this reservation.
+		@attrib api=1 params=pos
+		@param amount required type=array
+			Array of product id's as key's and amount as value
+		@param merge optional type=bool default=true
+			If set to true, new data is merged with old (doesn't overwrite)
+	 **/
+	public function set_product_amount($amount, $merge = true)
+	{
+		if($merge)
+		{
+			$old = $this->get_product_amount();
+			foreach($amount as $prod => $c) // damn, can't use array_merge here, this messes up the numeric array key's
+			{
+				$old[$prod] = $c;
+			}
+			$amount = $old;
+		}
+		$this->set_meta("amount", $amount);
 	}
 }
 ?>
