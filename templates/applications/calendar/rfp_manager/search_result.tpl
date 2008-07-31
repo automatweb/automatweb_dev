@@ -74,14 +74,26 @@ BODY
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 <!-- END SUB: ROW_TYPE_CATERING -->
+<!-- SUB: ROW_TYPE_CATERING_HAS_PRODUCTS -->
+<td colspan="8" style="border: 2px solid white;">
+<table border="0" width="100%" cellspacing="1" cellpadding="3" class="awmenuedittabletag">
+<tr>
+	<td class="awmenuedittabletext">Toode</td>
+	<td class="awmenuedittabletext">Aeg</td>
+	<td class="awmenuedittabletext">Inimesi</td>
+	<td class="awmenuedittabletext">Kogus</td>
+	<td class="awmenuedittabletext">Summa</td>
+</tr>
 <!-- SUB: ROW_TYPE_CATERING_PRODUCT -->
-	<td class="awmenuedittabletext" colspan="2">{VAR:product_name}</td>
+	<td class="awmenuedittabletext">{VAR:product_name}</td>
 	<td class="awmenuedittabletext">{VAR:product_from_time} - {VAR:product_to_time}</td>
-	<td class="awmenuedittabletext">{VAR:room_name}</td>
 	<td class="awmenuedittabletext">{VAR:people_count}</td>
 	<td class="awmenuedittabletext">{VAR:amount}</td>
-	<td class="awmenuedittabletext" colspan="2">{VAR:sum}</td>
+	<td class="awmenuedittabletext">{VAR:sum}</td>
 <!-- END SUB: ROW_TYPE_CATERING_PRODUCT -->
+</table>
+</td>
+<!-- END SUB: ROW_TYPE_CATERING_HAS_PRODUCTS -->
 <!-- SUB: ROW_TYPE_HOUSING -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
 	<td class="awmenuedittabletext">{VAR:to_date}</td>
