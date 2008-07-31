@@ -659,19 +659,19 @@ class reval_customer extends class_base
       "countryCode" => $this->_w($arr["CountryCode"]),
       //"isBusinessAddress" => $arr["__undefined__"],
       //"isMailCommunication" => $arr["IsMailCommunication"] == "true",
-      "isEmailCommunication" => $arr["IsEmailCommunication"] == "true",
-      "isSmsCommunication" => $arr["IsSMSCommunication"] == "true",
+      "isEmailCommunication" => $arr["IsEmailCommunication"] == "on",
+      "isSmsCommunication" => $arr["IsSMSCommunication"] == "on",
       "preferredLanguageId" => (int)$this->_w($arr["PreferredLanguage"]),
       //"homepage" => $arr["__undefined__"],
       "smokingPreferenceId" => (int)$this->_w($arr["RoomPreference"]),
       "floorPreferenceId" => (int)$this->_w($arr["FloorPreference"]),
-      "isAllergic" => $arr["IsAllergic"] == "true",
-      "isHandicapped" => $arr["IsHandicapped"] == "true",
+      "isAllergic" => $arr["IsAllergic"] == "on",
+      "isHandicapped" => $arr["IsHandicapped"] == "on",
       "defaultWebCurrencyCode" => $this->_w($arr["PreferredCurrency"])
 		);
 //echo dbg::dump($d);
 //die();
-if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
+if (aw_global_get("uid") == "diamond@hotmail.com")
 {
 	//aw_global_set("soap_debug", 1);
 }
@@ -698,6 +698,14 @@ if (aw_global_get("uid") == "aivi.jarve@revalhotels.com")
 			"subscribedCategoryIds" => $sel_ids
 		), "Customers");
 //echo dbg::dump($rv2);
+
+
+if (aw_global_get("uid") == "diamond@hotmail.com")
+{
+	arr($d); arr($rv); arr($rv2);arr($arr);
+}
+
+
 		return $this->_u($this->mk_my_orb("edit_profile", array("error" => 100, "section" => $arr["section"], "id" => $arr["id"], "reval_customer", false, false, "&", false)));
 	}
 
