@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.4 2008/01/31 13:52:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.5 2008/07/31 12:35:47 markop Exp $
 // site_search_content_grp_multisite.aw - Saidi sisu otsingu grupp mitu saiti 
 /*
 
@@ -53,6 +53,10 @@ class site_search_content_grp_multisite extends class_base
 
         function scs_get_search_results($r)
         {
+		if(!$r["opts"]["limit"])
+		{
+			$r["opts"]["limit"] = $r["obj"]->prop("max_num_results");
+		}
 		$go = obj($r["group"]);
                 $i = get_instance(CL_SITE_SEARCH_CONTENT);
 		$gps = array();
@@ -74,7 +78,8 @@ class site_search_content_grp_multisite extends class_base
                 return $i->fetch_static_search_results(array(
                         "str" => $r["str"],
                         "no_lang_id" => true,
-                        "site_id" => $gps
+                        "site_id" => $gps,
+			"opts" => $r["opts"]
                 ));
         }
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.102 2008/07/24 14:34:12 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.103 2008/07/31 12:35:47 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -805,18 +805,13 @@ class site_search_content extends class_base
 	}
 
 	/** this will get called via scheduler to generate the static content to search from 
-		
-		@attrib name=generate_static params=name nologin="1" 
-		
+		@attrib name=generate_static params=name nologin=1
 		@param id required
-		
 		@returns
-		
-		
+
 		@comment
 		parameters:
 		id - required, id of the search object
-
 	**/
 	function generate_static($arr)
 	{
@@ -1319,7 +1314,7 @@ class site_search_content extends class_base
 		// aga mul on vaja mingeid callbacke, et saaks otsida ka mujalt
 		$ms = $g->get_menus(array("id" => $group));
 		// how do I differentiate here?
-
+		$opts["limit"] = $arr["obj"]->prop("max_num_results");
 		$ret = array();
 		if (1 == $obj->prop("search_static"))
 		{
