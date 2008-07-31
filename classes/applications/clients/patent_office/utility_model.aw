@@ -414,7 +414,7 @@ class utility_model extends intellectual_property
 				//
 				$author_el->appendChild($name);
 				$author_el->appendChild($addr);
-				$author_el->appendChild(new DOMElement("SECRET", (int) (bool) $author_disallow_disclose[$author->id()]));
+				$author_el->appendChild(new DOMElement("SECRET", ((string) (int) (bool) $author_disallow_disclose[$author->id()])));
 			}
 		}
 
@@ -431,7 +431,7 @@ class utility_model extends intellectual_property
 		);
 		$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
 		$applicant_reg = (array) $o->meta("applicant_reg");
-		$applicant_reg = in_array($applicant_reg[$applicant->id()], $types) ? $types[$applicant_reg[$applicant->id()]] : 1;
+		$applicant_reg = isset($types[$applicant_reg[$applicant->id()]]) ? $types[$applicant_reg[$applicant->id()]] : 1;
 		$el = $xml->createElement("TYPMARI", $applicant_reg);
 		$root->insertBefore($el, $despg);
 

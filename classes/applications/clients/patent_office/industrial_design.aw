@@ -125,7 +125,7 @@ class industrial_design extends intellectual_property
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value", "correspond_city_value", "name", "applicant_reg");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("prio_convention_date", "prio_convention_country", "prio_convention_nr", "doc_repro", "doc_warrant", "doc_description", "industrial_design_variant", "industrial_design_variant_count", "process_postpone", "industrial_design_name", "applicant_reg"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("prio_convention_date", "prio_convention_country", "prio_convention_nr", "doc_repro", "doc_warrant", "doc_description", "industrial_design_variant", "industrial_design_variant_count", "process_postpone", "industrial_design_name", "applicant_reg", "add_fee"));
 	}
 
 	public function get_property($arr)
@@ -449,7 +449,7 @@ class industrial_design extends intellectual_property
 				//
 				$author_el->appendChild($name);
 				$author_el->appendChild($addr);
-				$author_el->appendChild(new DOMElement("SECRET", (int) (bool) $author_disallow_disclose[$author->id()]));
+				$author_el->appendChild(new DOMElement("SECRET", ((string) (int) (bool) $author_disallow_disclose[$author->id()])));
 			}
 		}
 

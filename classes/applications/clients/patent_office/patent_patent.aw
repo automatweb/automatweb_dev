@@ -215,7 +215,7 @@ class patent_patent extends intellectual_property
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value","correspond_city_value", "name", "applicant_reg");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "invention_name_en", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplicationadd_date", "prio_prevapplicationadd_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "other_first_application_data_date", "other_first_application_data_country", "other_first_application_data_nr", "other_bio_nr", "other_bio_date", "other_bio_inst", "other_datapub_date", "other_datapub_data", "attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "fee_copies", "applicant_reg"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "invention_name_en", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplicationadd_date", "prio_prevapplicationadd_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "other_first_application_data_date", "other_first_application_data_country", "other_first_application_data_nr", "other_bio_nr", "other_bio_date", "other_bio_inst", "other_datapub_date", "other_datapub_data", "attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "fee_copies", "applicant_reg", "add_fee"));
 	}
 
 	public function get_property($arr)
@@ -319,7 +319,7 @@ class patent_patent extends intellectual_property
 
 		if (!empty($_SESSION["patent"]["fee_copies"]))
 		{
-			$sum += 150;
+			$sum += patent_patent_obj::COPIES_FEE;
 		}
 
 		return $sum;
@@ -522,7 +522,7 @@ class patent_patent extends intellectual_property
 				//
 				$author_el->appendChild($name);
 				$author_el->appendChild($addr);
-				$author_el->appendChild(new DOMElement("SECRET", (int) (bool) $author_disallow_disclose[$author->id()]));
+				$author_el->appendChild(new DOMElement("SECRET", ((string) (int) (bool) $author_disallow_disclose[$author->id()])));
 			}
 		}
 
@@ -540,7 +540,7 @@ class patent_patent extends intellectual_property
 		);
 		$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
 		$applicant_reg = (array) $o->meta("applicant_reg");
-		$applicant_reg = in_array($applicant_reg[$applicant->id()], $types) ? $types[$applicant_reg[$applicant->id()]] : 1;
+		$applicant_reg = isset($types[$applicant_reg[$applicant->id()]]) ? $types[$applicant_reg[$applicant->id()]] : 1;
 		$el = $xml->createElement("TYPMARI", $applicant_reg);
 		$root->insertBefore($el, $despg);
 

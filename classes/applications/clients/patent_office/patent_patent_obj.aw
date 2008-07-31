@@ -6,6 +6,8 @@ class patent_patent_obj extends intellectual_property_obj
 	const APPLICANT_REG_EMPLOYEE = 5;
 	const APPLICANT_REG_OTHER_CONTRACT = 6;
 
+	const COPIES_FEE = 150; // koopiate v2ljastamise l6ivu summa
+
 	public static function get_applicant_reg_options()
 	{
 		return array(

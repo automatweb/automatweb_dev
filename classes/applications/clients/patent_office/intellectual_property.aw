@@ -390,6 +390,14 @@ abstract class intellectual_property extends class_base
 	{
 		$this->read_template($this->show_template);
 
+		if($this->can("view", $_GET["trademark_id"]))
+		{
+			$_SESSION["patent"] = null;
+			$_SESSION["patent"]["id"] = $_GET["trademark_id"];
+			$this->fill_session($_GET["trademark_id"]);
+			// $this->check_and_give_rights($_GET["trademark_id"]);
+		}
+
 		if($this->can("view" , $arr["id"]))
 		{
 			$ob = new object($arr["id"]);
@@ -551,11 +559,13 @@ abstract class intellectual_property extends class_base
 			$this->vars(array("AUTHORIZED_PERSON" => $this->parse("AUTHORIZED_PERSON")));
 		}
 
+		$check_val_props = array("add_fee", "fee_copies");
+
 		foreach($data as $prop => $val)
 		{
 			if(!is_array($val) and strlen(trim($val)) and (substr_count($prop, 'value') || substr_count($prop, 'text')))
 			{
-				if (in_array(str_replace("_value","", $prop), $this->date_vars) and $val < 1)
+				if ((in_array(str_replace("_value","", $prop), $this->date_vars) and $val < 1) or (in_array($prop, $check_val_props) and !$val))
 				{
 					continue;
 				}
@@ -904,6 +914,11 @@ abstract class intellectual_property extends class_base
 		foreach($this->datafromobj_vars as $prop)
 		{
 			$data[$prop."_value"] = htmlspecialchars($o->prop_str($prop));
+
+			if ("fee_copies" === $prop and $o->prop($prop))
+			{
+				$data["fee_copies_value"] = patent_patent_obj::COPIES_FEE;
+			}
 		}
 
 		foreach($this->date_vars as $prop)
@@ -971,6 +986,7 @@ abstract class intellectual_property extends class_base
 			}
 		}
 
+		$data["sum_value"] = $this->get_payment_sum();
 		$data["procurator_text"] = htmlspecialchars($o->prop_str("procurator"));
 		$data["signatures"] = $this->get_signatures($id);
 		return $data;
@@ -1018,6 +1034,7 @@ abstract class intellectual_property extends class_base
 	function fill_session($id)
 	{
 		$_SESSION["patent"] = array();
+		$_SESSION["patent"]["id"] = $id;
 		$patent = obj($id);
 
 		foreach($this->text_vars as $var)
@@ -1065,7 +1082,7 @@ abstract class intellectual_property extends class_base
 
 		foreach($this->multifile_upload_vars as $var)
 		{
-			$ol = new object_list ($o->connections_from(array(
+			$ol = new object_list ($patent->connections_from(array(
 				"type" => "RELTYPE_" . strtoupper($var),
 			)));
 			foreach ($ol->arr() as $o)
@@ -1246,7 +1263,7 @@ abstract class intellectual_property extends class_base
 			return $this->my_patent_list($arr);//$this->mk_my_orb("my_patent_list", array());
 		}
 
-		if($this->can("view" , $_GET["trademark_id"]))
+		if($this->can("view", $_GET["trademark_id"]))
 		{
 			$_SESSION["patent"] = null;
 			$_SESSION["patent"]["id"] = $_GET["trademark_id"];
@@ -1559,7 +1576,14 @@ abstract class intellectual_property extends class_base
 		foreach($_SESSION["patent"] as $key => $val)
 		{
 			$data[$key."_value"] =  $val;
+
+			if ("fee_copies" === $key and $val)
+			{
+				$data["fee_copies_value"] = patent_patent_obj::COPIES_FEE;
+			}
 		}
+
+		$data["sum_value"] = $this->get_payment_sum();
 
 		$file_inst = get_instance(CL_FILE);
 
@@ -2917,10 +2941,16 @@ abstract class intellectual_property extends class_base
 			}
 		}
 
-		if(is_array($_SESSION["patent"]["payment_date"]) || $_SESSION["patent"]["payment_date"] > 0)
+		if($_SESSION["patent"]["payment_date"] > 0)
 		{
 			$patent->set_prop("payment_date" , $_SESSION["patent"]["payment_date"]);
 		}
+		elseif(is_array($_SESSION["patent"]["payment_date"]))
+		{
+			$val = mktime(0,0,0, $_SESSION["patent"]["payment_date"]["month"], $_SESSION["patent"]["payment_date"]["day"], $_SESSION["patent"]["payment_date"]["year"]);
+			$patent->set_prop("payment_date" , $val);
+		}
+
 		$patent->save();
 	}
 
@@ -2933,7 +2963,7 @@ abstract class intellectual_property extends class_base
 	{
 		$uid = aw_global_get("uid");
 
-		if(is_oid($_GET["delete_patent"]) && $this->can("delete" , $_GET["delete_patent"]))
+		if($this->can("delete", $_GET["delete_patent"]))
 		{
 			$d = obj($_GET["delete_patent"]);
 			$d->delete();
@@ -3052,6 +3082,7 @@ abstract class intellectual_property extends class_base
 				$url = aw_url_change_var("trademark_id", $patent->id());
 				$url = aw_url_change_var("data_type", 0 , $url);
 				$url = aw_url_change_var("new_application", null , $url);
+				$url = aw_url_change_var("delete_patent", null , $url);
 
 				try
 				{
@@ -3096,8 +3127,8 @@ abstract class intellectual_property extends class_base
 				$change = $del_url = $send_url= '';
 				if(!($status->prop("nr") || $status->prop("verified")))
 				{
-					$change = '<a href="'.$url.'">Muuda</a>';
 					$del_url = aw_ini_get("baseurl").aw_url_change_var("delete_patent", $patent->id());
+					$change = '<a href="' . $url . '">Muuda</a>';
 				}
 
 				if(($re["status"] == 1))
@@ -3971,7 +4002,7 @@ abstract class intellectual_property extends class_base
 					}
 					if ($appl->prop("fax.name"))
 					{
-						$tel[] = trademark_manager::rere($appl->prop("phone.name"));
+						$tel[] = trademark_manager::rere($appl->prop("fax.name"));
 					}
 
 					$xml .= "<NAMEL>".trademark_manager::rere($applicant->prop("firstname"))."</NAMEL>";

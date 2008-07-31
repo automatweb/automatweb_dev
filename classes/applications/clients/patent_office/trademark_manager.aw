@@ -537,12 +537,15 @@ class trademark_manager extends class_base
 		{
 			$re = $trademark_inst->is_signed($o->id());
 			$status = $trademark_inst->get_status($o);
+
 			if($arr["request"]["p_id"] == "not_verified" && ($status->prop("verified") || (!($re["status"] == 1))))
 			{
 				continue;
 			}
+
 			$procurator = $type = $nr = $applicant_name = $applicant_data = $applicant = "";
 			$procurator = $o->prop_str("procurator");
+
 			if($this->can("view" , $o->prop("warrant")))
 			{
 				$file_inst = get_instance(CL_FILE);
@@ -573,14 +576,8 @@ class trademark_manager extends class_base
 				"onclick" => 'javascript:window.open("'.aw_ini_get("baseurl").'/'.$o->id().'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			));
 
-//			if(!(is_oid($o->prop("applicant")) && ($this->can("view" ,$o->prop("applicant")))))
-//			{
-				$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
-//			}
-//			else
-//			{
-//				$applicant = obj($o->prop("applicant"));
-//			}
+			$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
+
 			if(is_object($applicant))
 			{
 				$applicant_name = $trademark_inst->get_applicants_str($o);//$applicant->name();
@@ -930,7 +927,7 @@ class trademark_manager extends class_base
 
 		// list all intellectual prop objs created yesterday
 		$verified = 1;
-		$age = new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start());
+		$age = new obj_predicate_compare(OBJ_COMP_BETWEEN, (get_day_start()-(24*3600)), get_day_start());
 
 		// parse objs
 		$xml_data = array(); // array of DOMDocuments grouped by aw class id
