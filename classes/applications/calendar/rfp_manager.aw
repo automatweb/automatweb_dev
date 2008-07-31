@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.29 2008/07/29 13:25:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.30 2008/07/31 08:19:10 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -551,6 +551,12 @@ class rfp_manager extends class_base
 
 				if($with_products AND $data["result_type"] == RFP_RAPORT_TYPE_CATERING)
 				{
+					$_row_html = "";
+					$_tmp = "";
+					$this->vars(array(
+						"ROW_TYPE_CATERING_HAS_PRODUCTS" => "",
+						"ROW_TYPE_CATERING_PRODUCT" => "",
+					));
 					foreach($data["products"] as $product => $product_data)
 					{
 						$product_data["room_name"] = obj($product_data["room"])->name();
@@ -560,22 +566,45 @@ class rfp_manager extends class_base
 
 						$this->vars($product_data); // price & stuff maybe also???
 						$prod_type_var = "ROW_TYPE_CATERING_PRODUCT";
+						$prod_type_has_var = "ROW_TYPE_CATERING_HAS_PRODUCTS";
 						$row_type_html = array();
 						if($gr_by_client)
 						{
-							$row_type_html[$prod_type_var] .= $this->parse($prod_type_var);
+							$row_type_html[$prod_type_has_var] .= $this->parse($prod_type_var);
 							$this->vars($row_type_html);
-							$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+							//$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+							$_row_html .= $this->parse("ROW");
 						}
 						else
 						{
-							$row_type_html[$prod_type_var] .= $this->parse($prod_type_var);
+							$row_type_html[$prod_type_has_var] .= $this->parse($prod_type_var);
 							$this->vars($row_type_html);
-							$row_html .= $this->parse("ROW");
+							//$row_html .= $this->parse("ROW");
+							$_row_html .= $this->parse("ROW");
 						}
 						$row_type_html[$prod_type_var] = "";
+						$row_type_html[$prod_type_has_var] = "";
 						$this->vars($row_type_html);
 					}
+					// here we take the rendered product rows and put them inside has_products sub, after what whole table gets the products crap as one single row
+					$this->vars(array(
+						"ROW_TYPE_CATERING_PRODUCT" => $_row_html,
+					));
+					$_tmp = $this->parse("ROW_TYPE_CATERING_HAS_PRODUCTS");
+					$this->vars(array(
+						"ROW_TYPE_CATERING_HAS_PRODUCTS" => $_tmp,
+					));
+					if($gr_by_client)
+					{
+						$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+					}
+					else
+					{
+						$row_html .= $this->parse("ROW");
+					}
+					$row_type_html[$prod_type_var] = "";
+					$row_type_html[$prod_type_has_var] = "";
+					$this->vars($row_type_html);
 				}
 			}
 
@@ -1513,6 +1542,10 @@ class rfp_manager extends class_base
 		{
 			$spl = split("[.]", $prod_and_rv);
 			$product_id = $spl[0];
+			if(!$this->can("view", $spl[1]) OR !$this->can("view", $spl[0])) // sometimes rel's and objects are removed, but data(oids) remain in metadata.. so we better check first
+			{
+				continue;
+			}
 			$reservation = obj($spl[1]);
 			if(is_array($data["from"]))
 			{
