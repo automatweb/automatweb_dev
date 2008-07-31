@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.102 2008/07/02 12:47:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.103 2008/07/31 10:29:45 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -751,7 +751,7 @@ class otto_import extends class_base
 				'name' => 'force_update_product_categories',
 				'value' => 1
 			)),
-			'desc' => t('Uuendatakse toote kategooriaid ja seda, milliste sektsioonide/kataloogide all tooteid n&auml;idatakse. Kui on vaja, et tooted ilmuksid m&otilde;ne uue kausta alla v&otilde;i et kuskilt kausta alt &auml;ra liiguksid, siis tuleb see valik &aumlMra m&auml;rkida.')
+			'desc' => t('Uuendatakse toote kategooriaid ja seda, milliste sektsioonide/kataloogide all tooteid n&auml;idatakse. Kui on vaja, et tooted ilmuksid m&otilde;ne uue kausta alla v&otilde;i et kuskilt kausta alt &auml;ra liiguksid, siis tuleb see valik &auml;ra m&auml;rkida.')
 		));
 		$t->define_data(array(
 			'caption' => t('uuenda seotud tooteid'),
