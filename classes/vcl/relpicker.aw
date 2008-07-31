@@ -641,6 +641,11 @@ class relpicker extends  core
 			"caption" => $arr["prop"]["caption"],
 		);
 		$ri = $arr["obj_inst"]->get_relinfo();
+		if(!is_array($ri) || !sizeof($ri))
+		{
+			$ri = $GLOBALS["relinfo"][$arr["clid"]];
+		}
+
 		$clids = $ri[$arr["prop"]["reltype"]]["clid"];
 
 		if ($this->can("view", $arr["obj_inst"]->prop($arr["prop"]["name"])))
