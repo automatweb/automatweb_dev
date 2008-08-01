@@ -132,14 +132,14 @@
             <packages_search>
                   <type>vbox</type>
                   <parent>packages_frame</parent>
+                  <area_caption>Pakkide&amp;amp;nbsp;otsing</area_caption>
                   <group>packages</group>
-                  <area_caption></area_caption>
             </packages_search>
             <packages_list>
                   <type>vbox</type>
                   <parent>packages_frame</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
                   <group>packages</group>
-                  <area_caption></area_caption>
             </packages_list>
       </layout>
 </properties>

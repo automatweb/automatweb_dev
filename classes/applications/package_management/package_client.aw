@@ -17,7 +17,7 @@
 
 	@layout packages_frame type=hbox width=20%:80%
 
-		@layout packages_search type=vbox parent=packages_frame 
+		@layout packages_search type=vbox parent=packages_frame  area_caption=Pakkide&nbsp;otsing
 
 			@property search_name type=textbox size=20 store=no captionside=top parent=packages_search
 			@caption Nimi
@@ -31,7 +31,7 @@
 			@property search_button type=submit no_caption=1 parent=packages_search
 			@caption Otsi
 
-		@layout packages_list type=vbox parent=packages_frame
+		@layout packages_list type=vbox parent=packages_frame  area_caption=&nbsp;
 
 			@property list type=table no_caption=1 parent=packages_list store=no
 			@caption Pakkide nimekiri

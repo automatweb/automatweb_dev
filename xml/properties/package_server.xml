@@ -197,14 +197,14 @@
             <packages_search>
                   <type>vbox</type>
                   <parent>packages_frame</parent>
+                  <area_caption>Pakkide&amp;amp;nbsp;otsing</area_caption>
                   <group>packages</group>
-                  <area_caption></area_caption>
             </packages_search>
             <packages_list>
                   <type>vbox</type>
                   <parent>packages_frame</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
                   <group>packages</group>
-                  <area_caption></area_caption>
             </packages_list>
             <sites_frame>
                   <type>hbox</type>
@@ -215,14 +215,14 @@
             <sites_search>
                   <type>vbox</type>
                   <parent>sites_frame</parent>
+                  <area_caption>Saitide&amp;amp;nbsp;otsing</area_caption>
                   <group>sites</group>
-                  <area_caption></area_caption>
             </sites_search>
             <sites_list>
                   <type>vbox</type>
                   <parent>sites_frame</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
                   <group>sites</group>
-                  <area_caption></area_caption>
             </sites_list>
       </layout>
 </properties>

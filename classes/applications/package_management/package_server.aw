@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.12 2008/07/04 12:11:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.13 2008/08/01 10:56:52 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -23,7 +23,7 @@
 
 	@layout packages_frame type=hbox width=20%:80%
 
-		@layout packages_search type=vbox parent=packages_frame 
+		@layout packages_search type=vbox parent=packages_frame area_caption=Pakkide&nbsp;otsing
 
 			@property search_name type=textbox size=20 store=no captionside=top parent=packages_search
 			@caption Nimi
@@ -37,7 +37,7 @@
 			@property search_button type=submit no_caption=1 parent=packages_search
 			@caption Otsi
 
-		@layout packages_list type=vbox parent=packages_frame
+		@layout packages_list type=vbox parent=packages_frame area_caption=&nbsp;
 
 			@property list type=table no_caption=1 parent=packages_list
 			@caption Pakkide nimekiri
@@ -47,7 +47,7 @@
 
 	@layout sites_frame type=hbox width=20%:80%
 
-		@layout sites_search type=vbox parent=sites_frame 
+		@layout sites_search type=vbox parent=sites_frame  area_caption=Saitide&nbsp;otsing
 
 			@property sites_search_id type=textbox size=20 store=no captionside=top parent=sites_search
 			@caption Saidi ID
@@ -64,7 +64,7 @@
 			@property sites_search_button type=submit no_caption=1 parent=sites_search
 			@caption Otsi
 
-		@layout sites_list type=vbox parent=sites_frame
+		@layout sites_list type=vbox parent=sites_frame area_caption=&nbsp;
 
 			@property sites_list type=table no_caption=1 parent=sites_list
 			@caption Saitide nimekiri
@@ -215,6 +215,31 @@ class package_server extends class_base
 	{
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
+		$list = $this->get_site_list();
+
+		if(is_oid($_GET["site"]))
+		{
+			$t->set_caption($list[$_GET["site"]]["name"]." ".t("saidil kasutatavad paketid"));
+	
+			$t->define_field(array(
+				'name' => 'id',
+				'caption' => t('ID')
+			));
+			$t->define_field(array(
+				'name' => 'name',
+				'caption' => t('Nimi')
+			));
+
+			foreach($this->get_site_packages($_GET["site"]) as $pid)
+			{
+				$pac = obj($pid);
+				$t->define_data(array(
+					'id' => $pid,
+					'name' => html::obj_change_url($pac->id(),($pac->name()." ".$pac->prop("version")))."<br>\n",
+				));
+			}
+			return PROP_OK;
+		}
 
 		$t->set_caption(t('Saitide nimekiri'));
 
@@ -236,7 +261,6 @@ class package_server extends class_base
 		));
 
 		$sites = $this->get_sites($arr["request"]);
-		$list = $this->get_site_list();
 		foreach ($sites as $sid)
 		{
 			$p = "";
@@ -247,7 +271,7 @@ class package_server extends class_base
 			}
 			$t->define_data(array(
 				'id' => $sid,
-				'name' => $list[$sid]["name"],
+				'name' => html::href(array("url" => aw_url_change_var("site" , $sid),"caption" => ($list[$sid]["name"]?$list[$sid]["name"]:t("(Nimetu)")))),
 				'url' => $list[$sid]["url"],
 				'packages' => $p,
 			));
