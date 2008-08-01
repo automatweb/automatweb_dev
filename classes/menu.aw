@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.242 2008/07/23 07:04:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.243 2008/08/01 08:31:31 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -470,7 +470,7 @@ class menu extends class_base implements main_subtemplate_handler
 		));
 
 		$this->trans_props = array(
-			"name","alias", "link","keywords","description","page_title"
+			"name", "comment","alias", "link","keywords","description","page_title"
 		);
 	}
 
