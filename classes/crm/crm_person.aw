@@ -1973,7 +1973,7 @@ class crm_person extends class_base
 				{
 					$data["options"][$lkey] = $lname;
 				}
-				$data["options"]["other"] = t("Muu keel");
+				$data["options"]["other"] = t("muu keel");
 				$data["onchange"] = "if(this.value == 'other') { $('#other_mlang').parent().parent().show(); } else { $('#other_mlang').parent().parent().hide(); }";
 				break;
 
