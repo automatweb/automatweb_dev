@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.12 2008/07/28 07:33:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.13 2008/08/01 08:23:15 tarvo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property object_shop_product_show type=checkbox field=meta mothod=serialize default=0 ch_value=1
 	@caption Toote puhul kasuta tootekuva
+
+	@property object_shop_product_template type=textbox field=meta method=serialize
+	@caption Kasuta toote kuvamisek
 	
 @reltype EXPORT clid=CL_ICAL_EXPORT value=1
 @caption iCal eksport
@@ -53,6 +56,9 @@ class object_basket extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "object_shop_product_template":
+				$prop["value"] = !strlen($prop["value"])?"prod_single.tpl":$prop["value"];
+				break;
 		};
 		return $retval;
 	}
@@ -117,10 +123,18 @@ class object_basket extends class_base
 				// if set in basket and shop_product object appears here, products show is used
 				if($o->class_id() == CL_SHOP_PRODUCT && $basket->prop("object_shop_product_show"))
 				{
-					$inst = get_instance(CL_SHOP_PRODUCT);
-					$tmp = $inst->show_prod(array(
+
+                                        $inst = get_instance(CL_SHOP_PRODUCT);
+					$args = array(
 						"id" => $o->id(),
-					));
+					);
+					if(strlen($tpl = $basket->prop("object_shop_product_template")))
+					{
+						$args["template"] = $tpl;
+					}
+
+					$inst = get_instance(CL_SHOP_PRODUCT);
+					$tmp = $inst->show_prod($args);
 					$ls .= $tmp;
 					continue;
 				}
@@ -187,7 +201,7 @@ class object_basket extends class_base
 			The basket object with the configuration
 
 	**/
-	function get_basket_content($o)
+	function get_basket_content($o, $all = false)
 	{
 		$rel = $o->connections_to(array(
 			"from.class_id" => CL_OBJECT_BASKET,
@@ -209,7 +223,7 @@ class object_basket extends class_base
 			$rv = safe_array($_SESSION["object_basket"][$o->id()]["content"]);
 		}
 		$o = $o_old?$o_old:$o; // if data comes from another basket, count still has to come from current
-		if ($o->max_items && count($rv) > $o->max_items)
+		if ($o->max_items && count($rv) > $o->max_items && !$all)
 		{
 			$rv = array_slice($rv, -$o->max_items);
 		}
@@ -225,7 +239,7 @@ class object_basket extends class_base
 	function add_object($arr)
 	{
 		$o = obj($arr["basket"]);
-		$ct = $this->get_basket_content($o);
+		$ct = $this->get_basket_content($o, true);
 		$ct[$arr["oid"]]["oid"] = $arr["oid"];
 		$bt = $this->make_keys($o->prop("basket_type"));
 		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
