@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.132 2008/07/04 09:31:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.133 2008/08/03 23:06:49 instrumental Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -51,6 +51,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property no_mails_to_base type=checkbox ch_value=1
 @caption Mitte kirjutada k&otilde;iki maile baasi
+
+@property personnel_management type=relpicker reltype=RELTYPE_PERSONNEL_MANAGEMENT store=connect
+@caption Personalikeskkond
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
@@ -318,7 +321,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 ------------------------------------------------------------------------
 
-@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR,CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -347,6 +350,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @reltype RELTYPE_RD_CONFIG value=10 clid=CL_CFGFORM
 @caption Registri andmete seadete vorm
+
+@reltype PERSONNEL_MANAGEMENT value=12 clid=CL_PERSONNEL_MANAGEMENT
+@caption Personalikeskkond
+
 
 */
 
@@ -2643,6 +2650,34 @@ class ml_list extends class_base
 					"no_return" => $no_return));
 				$cnt = $this->member_count;
 				$already_found = $this->already_found;
+			}
+			elseif($source_obj->class_id() == CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED)
+			{
+				$list = obj($this->list_id);
+				$pm = $list->personnel_management;
+				if($this->can("view", $pm) && is_oid($pm))
+				{
+					$cv_saved_search = $source_obj;
+					$personnel_management = obj($pm);
+					$ol_prms = $personnel_management->instance()->cv_search_filter($personnel_management, $cv_saved_search->meta());
+					$ol = new object_list($ol_prms);
+					foreach($ol->arr() as $o)
+					{
+						$ml = $o->emails()->begin();
+						if(is_object($ml) && strlen($ml->mail))
+						{
+							$ret[] = array(
+								"oid" => $ml->id(),
+								"parent" => $folder_id,
+								"name" => $ml->name(),
+								"mail" => $ml->mail,
+							);
+							$cnt++;
+							if(!$all) $already_found[$ml->prop("mail")] = $ml->prop("mail");
+						}
+					}
+
+				}
 			}
 		}
 		if(!$all)$cnt = sizeof($already_found);

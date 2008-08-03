@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.69 2008/07/24 12:43:39 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.70 2008/08/03 23:06:44 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1231,459 +1231,9 @@ class personnel_management extends class_base
 		$o = $arr["obj_inst"];
 
 		$r = &$arr["request"];
-		//$odl_prms_immutable = array(
-		$odl_prms = array(
-			"class_id" => CL_CRM_PERSON,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"status" => array(),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"parent" => $this->persons_fld,
-					"CL_CRM_PERSON.RELTYPE_PERSONNEL_MANAGEMENT" => $arr["obj_inst"]->id(),
-				)
-			)),
-		);
-		$odl_prms = array();
 
-		if($r["cv_mod_from"] && is_numeric($r["cv_mod_from"]["month"]) && is_numeric($r["cv_mod_from"]["day"]) && is_numeric($r["cv_mod_from"]["year"]))
-		{
-			$t = mktime(0, 0, 0, $r["cv_mod_from"]["month"], $r["cv_mod_from"]["day"], $r["cv_mod_from"]["year"]);
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"modified" => new obj_predicate_compare(
-						OBJ_COMP_GREATER_OR_EQ,
-						$t
-					),
-				),
-			));
-		}
+		$odl_prms = $this->cv_search_filter($o, $r);
 
-		if($r["cv_mod_to"] && is_numeric($r["cv_mod_to"]["month"]) && is_numeric($r["cv_mod_to"]["day"]) && is_numeric($r["cv_mod_to"]["year"]))
-		{
-			$t = mktime(23, 59, 59, $r["cv_mod_to"]["month"], $r["cv_mod_to"]["day"], $r["cv_mod_to"]["year"]);
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"modified" => new obj_predicate_compare(
-						OBJ_COMP_LESS_OR_EQ,
-						$t
-					),
-				),
-			));
-		}
-
-		if($r["cv_age_from"] && $r["cv_age_to"])
-		{
-			// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"birthday" => new obj_predicate_compare(
-						OBJ_COMP_LESS_OR_EQ,
-						((date("Y") - $r["cv_age_from"]).date("-m-d"))
-					),
-				),
-			));
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"birthday" => new obj_predicate_compare(
-						OBJ_COMP_GREATER,
-						((date("Y") - $r["cv_age_to"] - 1).date("-m-d"))
-					),
-				),
-			));
-		}
-		else
-		{
-			if($r["cv_age_from"])
-			{
-				// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
-				$odl_prms["birthday"] = new obj_predicate_compare(
-					OBJ_COMP_LESS_OR_EQ,
-					((date("Y") - $r["cv_age_from"]).date("-m-d"))
-				);
-			}
-			if($r["cv_age_to"])
-			{
-				// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
-				$odl_prms["birthday"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER,
-					((date("Y") - $r["cv_age_to"] - 1).date("-m-d"))
-				);
-			}
-		}
-		if($r["cv_age_from"] || $r["cv_age_to"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"birthday" => new obj_predicate_not(""),
-				)
-			));
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"birthday" => new obj_predicate_not("-1"),
-				)
-			));
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"birthday" => new obj_predicate_not("NULL"),
-				)
-			));
-		}
-
-		if($r["cv_name"])
-		{
-			$odl_prms["name"] = "%".$r["cv_name"]."%";
-		}
-		if($r["cv_tel"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_PHONE.name" => "%".$r["cv_tel"]."%",
-					"CL_CRM_PERSON.RELTYPE_PHONE.clean_number" => "%".preg_replace("/[^0-9]/", "", $r["cv_tel"])."%",
-				)
-			));
-		}
-		if($r["cv_email"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_EMAIL.mail"] = "%".$r["cv_email"]."%";
-		}
-		if($r["cv_addinfo"])
-		{
-			$odl_prms["notes"] = "%".$r["cv_addinfo"]."%";
-		}
-		if(in_array($r["cv_gender"], array(1, 2)))
-		{
-			$odl_prms["gender"] = $r["cv_gender"];
-		}
-		// HARIDUS
-		if($r["cv_edulvl"] && $r["cv_edu_exact"])
-		{
-			$odl_prms["edulevel"] = $r["cv_edulvl"];
-		}
-		elseif($r["cv_edulvl"])
-		{
-			$odl_prms["edulevel"] = new obj_predicate_compare(
-				OBJ_COMP_GREATER_OR_EQ,
-				$r["cv_edulvl"]
-			);
-		}
-		if($r["cv_acdeg"])
-		{
-			$odl_prms["academic_degree"] = $r["cv_acdeg"];
-		}
-		if($r["cv_schl"] && is_oid($o->prop("shools_fld")))
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array(							
-							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.name" => "%".$r["cv_schl"]."%",
-							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("shools_fld"),
-						),
-					)),
-					"CL_CRM_PERSON.RELTYPE_EDUCATION.school2" => "%".$r["cv_schl"]."%",
-				),
-			));
-		}
-		if($r["cv_schl_area"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_FIELD.name"] = "%".$r["cv_schl_area"]."%";
-		}
-		if($r["cv_schl_stat"])
-		{
-			// 1 - Jah
-			// 0 - Ei
-			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.in_progress"] = 2 - $r["cv_schl_stat"];
-		}
-		// SOOVITUD T88
-		if($r["cv_paywish"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay" => new obj_predicate_compare(
-						OBJ_COMP_GREATER_OR_EQ,
-						$r["cv_paywish"]
-					),
-				),
-			));
-		}
-		if($r["cv_paywish2"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay" => new obj_predicate_compare(
-						OBJ_COMP_LESS_OR_EQ,
-						$r["cv_paywish2"]
-					),
-				),
-			));
-		}
-		if($r["cv_job"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.professions" => "%".$r["cv_job"]."%",
-					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_PROFESSION.name" => "%".$r["cv_job"]."%",
-				),
-			));
-		}
-		if($r["cv_field"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_FIELD.name"] = "%".$r["cv_field"]."%";
-		}
-		if($r["cv_type"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_JOB_TYPE.name"] = "%".$r["cv_type"]."%";
-		}
-		if($r["cv_location"])
-		{
-			$cv_locs = explode(",", $r["cv_location"]);
-			foreach($cv_locs as $cv_loc)
-			{
-				$cv_loc = trim($cv_loc);
-				$conditions[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.name" => "%".$cv_loc."%",
-						"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2.name" => "%".$cv_loc."%",
-					),
-				));
-			}
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => $conditions,
-			));
-		}
-		if($r["cv_load"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.load"] = $r["cv_load"];
-		}
-		// OSKUSED
-		if($r["cv_mother_tongue"])
-		{
-			$odl_prms["mlang"] = $r["cv_mother_tongue"];
-		}
-		if($r["cv_lang_exp"])
-		{
-			if(count($r["cv_lang_exp"]) != 1 || $r["cv_lang_exp"][0] != 0)
-				$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.RELTYPE_LANGUAGE"] = $r["cv_lang_exp"];
-		}
-		if($r["cv_lang_exp_lvl"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.talk"] = new obj_predicate_compare(
-				OBJ_COMP_GREATER_OR_EQ,
-				$r["cv_lang_exp_lvl"]
-			);
-			$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.understand"] = new obj_predicate_compare(
-				OBJ_COMP_GREATER_OR_EQ,
-				$r["cv_lang_exp_lvl"]
-			);
-			$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.write"] = new obj_predicate_compare(
-				OBJ_COMP_GREATER_OR_EQ,
-				$r["cv_lang_exp_lvl"]
-			);
-		}
-		if($r["cv_exp"])
-		{
-			foreach($r["cv_exp"] as $id => $data)
-			{
-				//	This is the
-				//		0 => t("--vali--") 
-				//			thing.
-				if($data[0] == 0 && count($data) == 1 || count($data) == 0)
-				{
-					continue;
-				}
-
-				if($this->can("view", $r["cv_exp_lvl"][$id]))
-				{
-					$jrk = obj($r["cv_exp_lvl"][$id])->ord();
-				}
-
-				$skill_ol_prms = array(
-					"class_id" => CL_CRM_SKILL_LEVEL,
-					"parent" => array(),
-					"site_id" => array(),
-					"lang_id" => array(),
-					"CL_CRM_SKILL_LEVEL.skill" => $data,
-				);
-
-				if(!$r["cv_exp_lvl"][$id])
-				{
-					$r["cv_exp_lvl"][$id] = array();
-				}
-				$skill_ol_prms[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_CRM_SKILL_LEVEL.level" => $r["cv_exp_lvl"][$id],
-						"CL_CRM_SKILL_LEVEL.level.ord" => new obj_predicate_compare(
-							OBJ_COMP_GREATER,
-							$jrk
-						),
-					),
-				));
-
-				$skill_ol = new object_list($skill_ol_prms);
-				foreach($skill_ol->arr() as $skill_obj)
-				{
-					$level = obj($skill_obj->level);
-					if($level->ord() <= $jrk && $level->id() != $r["cv_exp_lvl"][$id])
-					{
-						$skill_ol->remove($skill_obj->id());
-					}
-				}
-				if(count($skill_ol->ids()) == 0)
-					return array();
-
-				$_ids = $skill_ol->ids();
-				$odl_prms[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL" => $_ids,
-						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL2" => $_ids,
-						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL3" => $_ids,
-						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL4" => $_ids,
-						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL5" => $_ids
-					)
-				));
-			}
-		}
-		if($r["cv_driving_licence"])
-		{
-			$vals = array();
-			/*
-			foreach($r["cv_driving_licence"] as $c)
-			{
-				$vals[] = "%".strtolower($c)."%";
-			}
-			$odl_prms["drivers_license"] = $vals;
-			*/
-			foreach($r["cv_driving_licence"] as $c)
-			{
-				$vals[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"drivers_license" => "%".strtolower($c)."%",
-					),
-				));
-			}
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => $vals,
-			));
-		}
-		// T88KOGEMUS
-		if($r["cv_previous_rank"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
-					//"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
-				),
-			));
-		}
-		if($r["cv_previous_field"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
-				),
-			));
-		}
-		if($r["cv_company"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
-					// Dunno if keepin' the company's name in the 'name' field of additional education object is the best idea...
-					"CL_CRM_PERSON.RELTYPE_ADD_EDUCATION.name" => "%".$r["cv_company"]."%",
-				),
-			));
-		}
-		if($r["cv_recommenders"])
-		{
-			$odl_prms[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.name" => "%".$r["cv_recommenders"]."%",
-					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_recommenders"]."%",
-					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_recommenders"]."%",
-					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_recommenders"]."%",
-					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_WORK.name" => "%".$r["cv_recommenders"]."%",
-					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_recommenders"]."%",
-				),
-			));
-		}
-		if($r["cv_comments"])
-		{
-			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
-		}
-		/*
-		if(!$_GET["kaarel"])
-		{
-			// Too many tables. MySQL can only use 31 tables in a join
-			// So we'll have to do a hack. :P
-			if(is_array($odl_prms) && count($odl_prms) > 1)
-			{
-				$hack = 0;
-				$odl_prms_tmp = $odl_prms;
-				foreach($odl_prms as $odl_key => $odl_prm)
-				{
-					if($hack % 2 == 0)
-					{
-						unset($odl_prms[$odl_key]);
-					}
-					else
-					{
-						unset($odl_prms_tmp[$odl_key]);
-					}
-					$hack++;
-				}
-				$odl_prms_tmp = $odl_prms_immutable + $odl_prms_tmp;
-				$ol_tmp = new object_list($odl_prms_tmp);
-				$odl_prms = $odl_prms_immutable + $odl_prms;
-				$odl_prms["oid"] = $ol_tmp->ids();
-			}
-			else
-			{
-				$odl_prms = is_array($odl_prms) ? $odl_prms : array();
-				$odl_prms = $odl_prms_immutable + $odl_prms;
-			}
-			// End of hack.
-		}
-		else
-		{
-			$odl_prms = is_array($odl_prms) ? $odl_prms : array();
-			$odl_prms = $odl_prms_immutable + $odl_prms;
-			arr($odl_prms);
-		}
-		if(is_array($odl_prms["oid"]) && count($odl_prms["oid"]) == 0)
-		{
-			return array();
-		}
-		*/
 		$odl = new object_data_list(
 			$odl_prms,
 			array(
@@ -3286,6 +2836,422 @@ class personnel_management extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	/**
+	@attrib name=cv_search_filter
+	**/
+	function cv_search_filter($o, $r)
+	{
+		$odl_prms = array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"status" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"parent" => $o->prop("persons_fld"),
+					"CL_CRM_PERSON.RELTYPE_PERSONNEL_MANAGEMENT" => $o->id(),
+				)
+			)),
+		);		
+
+		if($r["cv_mod_from"] && is_numeric($r["cv_mod_from"]["month"]) && is_numeric($r["cv_mod_from"]["day"]) && is_numeric($r["cv_mod_from"]["year"]))
+		{
+			$t = mktime(0, 0, 0, $r["cv_mod_from"]["month"], $r["cv_mod_from"]["day"], $r["cv_mod_from"]["year"]);
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"modified" => new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$t
+					),
+				),
+			));
+		}
+
+		if($r["cv_mod_to"] && is_numeric($r["cv_mod_to"]["month"]) && is_numeric($r["cv_mod_to"]["day"]) && is_numeric($r["cv_mod_to"]["year"]))
+		{
+			$t = mktime(23, 59, 59, $r["cv_mod_to"]["month"], $r["cv_mod_to"]["day"], $r["cv_mod_to"]["year"]);
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"modified" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						$t
+					),
+				),
+			));
+		}
+
+		if($r["cv_age_from"] && $r["cv_age_to"])
+		{
+			// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						((date("Y") - $r["cv_age_from"]).date("-m-d"))
+					),
+				),
+			));
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_compare(
+						OBJ_COMP_GREATER,
+						((date("Y") - $r["cv_age_to"] - 1).date("-m-d"))
+					),
+				),
+			));
+		}
+		else
+		{
+			if($r["cv_age_from"])
+			{
+				// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
+				$odl_prms["birthday"] = new obj_predicate_compare(
+					OBJ_COMP_LESS_OR_EQ,
+					((date("Y") - $r["cv_age_from"]).date("-m-d"))
+				);
+			}
+			if($r["cv_age_to"])
+			{
+				// Why would you store the birthday in YYYY-MM-DD format in a varchar(20) field?????
+				$odl_prms["birthday"] = new obj_predicate_compare(
+					OBJ_COMP_GREATER,
+					((date("Y") - $r["cv_age_to"] - 1).date("-m-d"))
+				);
+			}
+		}
+		if($r["cv_age_from"] || $r["cv_age_to"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_not(""),
+				)
+			));
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_not("-1"),
+				)
+			));
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"birthday" => new obj_predicate_not("NULL"),
+				)
+			));
+		}
+
+		if($r["cv_name"])
+		{
+			$odl_prms["name"] = "%".$r["cv_name"]."%";
+		}
+		if($r["cv_tel"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_PHONE.name" => "%".$r["cv_tel"]."%",
+					"CL_CRM_PERSON.RELTYPE_PHONE.clean_number" => "%".preg_replace("/[^0-9]/", "", $r["cv_tel"])."%",
+				)
+			));
+		}
+		if($r["cv_email"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_EMAIL.mail"] = "%".$r["cv_email"]."%";
+		}
+		if($r["cv_addinfo"])
+		{
+			$odl_prms["notes"] = "%".$r["cv_addinfo"]."%";
+		}
+		if(in_array($r["cv_gender"], array(1, 2)))
+		{
+			$odl_prms["gender"] = $r["cv_gender"];
+		}
+		// HARIDUS
+		if($r["cv_edulvl"] && $r["cv_edu_exact"])
+		{
+			$odl_prms["edulevel"] = $r["cv_edulvl"];
+		}
+		elseif($r["cv_edulvl"])
+		{
+			$odl_prms["edulevel"] = new obj_predicate_compare(
+				OBJ_COMP_GREATER_OR_EQ,
+				$r["cv_edulvl"]
+			);
+		}
+		if($r["cv_acdeg"])
+		{
+			$odl_prms["academic_degree"] = $r["cv_acdeg"];
+		}
+		if($r["cv_schl"] && is_oid($o->prop("shools_fld")))
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(							
+							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.name" => "%".$r["cv_schl"]."%",
+							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("shools_fld"),
+						),
+					)),
+					"CL_CRM_PERSON.RELTYPE_EDUCATION.school2" => "%".$r["cv_schl"]."%",
+				),
+			));
+		}
+		if($r["cv_schl_area"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_FIELD.name"] = "%".$r["cv_schl_area"]."%";
+		}
+		if($r["cv_schl_stat"])
+		{
+			// 1 - Jah
+			// 0 - Ei
+			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.in_progress"] = 2 - $r["cv_schl_stat"];
+		}
+		// SOOVITUD T88
+		if($r["cv_paywish"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay" => new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$r["cv_paywish"]
+					),
+				),
+			));
+		}
+		if($r["cv_paywish2"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.pay" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						$r["cv_paywish2"]
+					),
+				),
+			));
+		}
+		if($r["cv_job"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.professions" => "%".$r["cv_job"]."%",
+					"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_PROFESSION.name" => "%".$r["cv_job"]."%",
+				),
+			));
+		}
+		if($r["cv_field"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_FIELD.name"] = "%".$r["cv_field"]."%";
+		}
+		if($r["cv_type"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_JOB_TYPE.name"] = "%".$r["cv_type"]."%";
+		}
+		if($r["cv_location"])
+		{
+			$cv_locs = explode(",", $r["cv_location"]);
+			foreach($cv_locs as $cv_loc)
+			{
+				$cv_loc = trim($cv_loc);
+				$conditions[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION.name" => "%".$cv_loc."%",
+						"CL_CRM_PERSON.RELTYPE_WORK_WANTED.RELTYPE_LOCATION2.name" => "%".$cv_loc."%",
+					),
+				));
+			}
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => $conditions,
+			));
+		}
+		if($r["cv_load"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_WORK_WANTED.load"] = $r["cv_load"];
+		}
+		// OSKUSED
+		if($r["cv_mother_tongue"])
+		{
+			$odl_prms["mlang"] = $r["cv_mother_tongue"];
+		}
+		if($r["cv_lang_exp"])
+		{
+			if(count($r["cv_lang_exp"]) != 1 || $r["cv_lang_exp"][0] != 0)
+				$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.RELTYPE_LANGUAGE"] = $r["cv_lang_exp"];
+		}
+		if($r["cv_lang_exp_lvl"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.talk"] = new obj_predicate_compare(
+				OBJ_COMP_GREATER_OR_EQ,
+				$r["cv_lang_exp_lvl"]
+			);
+			$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.understand"] = new obj_predicate_compare(
+				OBJ_COMP_GREATER_OR_EQ,
+				$r["cv_lang_exp_lvl"]
+			);
+			$odl_prms["CL_CRM_PERSON.RELTYPE_LANGUAGE_SKILL.write"] = new obj_predicate_compare(
+				OBJ_COMP_GREATER_OR_EQ,
+				$r["cv_lang_exp_lvl"]
+			);
+		}
+		if($r["cv_exp"])
+		{
+			foreach($r["cv_exp"] as $id => $data)
+			{
+				//	This is the
+				//		0 => t("--vali--") 
+				//			thing.
+				if($data[0] == 0 && count($data) == 1 || count($data) == 0)
+				{
+					continue;
+				}
+
+				if($this->can("view", $r["cv_exp_lvl"][$id]))
+				{
+					$jrk = obj($r["cv_exp_lvl"][$id])->ord();
+				}
+
+				$skill_ol_prms = array(
+					"class_id" => CL_CRM_SKILL_LEVEL,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"CL_CRM_SKILL_LEVEL.skill" => $data,
+				);
+
+				if(!$r["cv_exp_lvl"][$id])
+				{
+					$r["cv_exp_lvl"][$id] = array();
+				}
+				$skill_ol_prms[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_SKILL_LEVEL.level" => $r["cv_exp_lvl"][$id],
+						"CL_CRM_SKILL_LEVEL.level.ord" => new obj_predicate_compare(
+							OBJ_COMP_GREATER,
+							$jrk
+						),
+					),
+				));
+
+				$skill_ol = new object_list($skill_ol_prms);
+				foreach($skill_ol->arr() as $skill_obj)
+				{
+					$level = obj($skill_obj->level);
+					if($level->ord() <= $jrk && $level->id() != $r["cv_exp_lvl"][$id])
+					{
+						$skill_ol->remove($skill_obj->id());
+					}
+				}
+				if(count($skill_ol->ids()) == 0)
+					return array();
+
+				$_ids = $skill_ol->ids();
+				$odl_prms[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL2" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL3" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL4" => $_ids,
+						"CL_CRM_PERSON.RELTYPE_SKILL_LEVEL5" => $_ids
+					)
+				));
+			}
+		}
+		if($r["cv_driving_licence"])
+		{
+			$vals = array();
+			/*
+			foreach($r["cv_driving_licence"] as $c)
+			{
+				$vals[] = "%".strtolower($c)."%";
+			}
+			$odl_prms["drivers_license"] = $vals;
+			*/
+			foreach($r["cv_driving_licence"] as $c)
+			{
+				$vals[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"drivers_license" => "%".strtolower($c)."%",
+					),
+				));
+			}
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => $vals,
+			));
+		}
+		// T88KOGEMUS
+		if($r["cv_previous_rank"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+					//"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+				),
+			));
+		}
+		if($r["cv_previous_field"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
+				),
+			));
+		}
+		if($r["cv_company"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_company"]."%",
+					"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
+					// Dunno if keepin' the company's name in the 'name' field of additional education object is the best idea...
+					"CL_CRM_PERSON.RELTYPE_ADD_EDUCATION.name" => "%".$r["cv_company"]."%",
+				),
+			));
+		}
+		if($r["cv_recommenders"])
+		{
+			$odl_prms[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_WORK.name" => "%".$r["cv_recommenders"]."%",
+					"CL_CRM_PERSON.RELTYPE_RECOMMENDATION.person.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_recommenders"]."%",
+				),
+			));
+		}
+		if($r["cv_comments"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_COMMENT.commtext"] = "%".$r["cv_comments"]."%";
+		}
+
+		return $odl_prms;
 	}
 }
 ?>
