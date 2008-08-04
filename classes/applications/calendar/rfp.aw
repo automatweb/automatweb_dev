@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.58 2008/08/04 20:04:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.59 2008/08/04 21:12:43 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1992,12 +1992,14 @@ class rfp extends class_base
 						}
 					}
 					$room_p = get_instance(CL_ROOM_PRICE);
-					$unitprice = $room_p->calculate_room_prices_price(array(
+					$room_prices = $room_p->calculate_room_prices_price(array(
 						"oids" => array_keys($pk_prices[$package_id]["prices"]),
 						"start" => $start,
-						"end" => $end,
-						"prices" => $prices_for_calculator,
+						"end" => $start + 1, // well, this is here so because we only need to know which room_price is valid at the start of the reservation time.. and we use that price then to calculate the totalprice .. whatever
+						//"prices" => $prices_for_calculator,
 					));
+					$room_price_id = key($room_prices);
+					$unitprice = $prices_for_calculator[$room_price_id];
 					
 				}
 				$price = $unitprice*$people;
