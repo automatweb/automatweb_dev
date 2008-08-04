@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.56 2008/08/04 18:08:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.57 2008/08/04 19:27:49 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -675,6 +675,7 @@ class rfp extends class_base
 				));
 				$o = $ol->begin();
 				$spl = split("[ ]", $arr["obj_inst"]->prop("data_subm_name"));
+				$_st = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
 				$url = $this->mk_my_orb("show_cals_pop", array(
 					//"id" => $o->id(),
 					"class" => "spa_bookings_overview",
@@ -683,8 +684,8 @@ class rfp extends class_base
 						"class_id" => CL_RFP,
 						"action" => "handle_new_reservation" 
 					),
-					"start" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
-					"end" => $arr["obj_inst"]->prop("data_gen_departure_date_admin"),
+					"start" => mktime(0,0,0, date("m", $_st), date("d", $_st), date("Y", $_st)),
+					"end" => $arr["obj_inst"]->prop("data_gen_departure_date_admin") + 86400,
 					"firstname" => $spl[0],
 					"lastname" => join(" ", array_slice($spl, 1)),
 					"company" => $arr["obj_inst"]->prop("data_subm_organisation"),
