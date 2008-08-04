@@ -6219,6 +6219,113 @@ class crm_person extends class_base
 		}
 		// END SUB: CRM_PERSON_EDUCATIONS
 
+		// SUB: CRM_PERSON_EDUCATIONS_2
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_EDUCATION_2",
+		));
+		$options = $edu_inst->degree_options;
+		$CRM_PERSON_EDUCATION_2 = "";
+		$anything_in_progress = $this->anything_in_progress($conns);
+
+		$parse_cpe_2 = 0;
+		$cff_e = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_EDUCATION));
+		if($cff_e)
+		{
+			$proplist_education = $cff_inst->get_cfg_proplist($cff_e);
+		}
+		else
+		{
+			$proplist_education = array();
+		}
+		// NO CFGFORM CONCERNING DATA
+		$proplist_education = array();
+
+		$props = array("degree", "field", "speciality", "main_speciality", "obtain_language", "start", "end", "end_date", "diploma_nr");
+		foreach($props as $prop)
+		{
+			if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
+			//if(true)
+			{
+				$this->vars(array(
+					"CRM_PERSON_EDUCATIONS_2.HEADER.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATIONS_2.HEADER.".strtoupper($prop)),
+				));
+			}
+		}
+		if((array_key_exists("in_progress", $proplist_education) || count($proplist_education) == 0) && $anything_in_progress)
+		//if($anything_in_progress)
+		{
+			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS_2.HEADER.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATIONS_2.HEADER.IN_PROGRESS"),
+			));
+		}
+		if(array_key_exists("school1", $proplist_education) || array_key_exists("school2", $proplist_education) || count($proplist_education) == 0)
+		//if(true)
+		{
+			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS_2.HEADER.SCHOOL" => $this->parse("CRM_PERSON_EDUCATIONS_2.HEADER.SCHOOL"),
+			));
+		}
+
+		foreach($conns as $conn)
+		{
+			//	SUB: CRM_PERSON_EDUCATION_2
+			$to = $conn->to();
+			$this->vars(array(
+				"crm_person_education_2.school" => is_oid($to->prop("school1")) ? $to->prop("school1.name") : $to->prop("school2"),
+				"crm_person_education_2.degree" => $options[$to->prop("degree")],
+				"crm_person_education_2.field" => $to->prop("field.name"),
+				"crm_person_education_2.speciality" => $to->prop("speciality"),
+				"crm_person_education_2.main_speciality" => ($to->prop("main_speciality") == 1) ? t("Jah") : t("Ei"),
+				"crm_person_education_2.in_progress" => ($to->prop("in_progress") == 1) ? t("Jah") : "",
+				"crm_person_education_2.obtain_language" => $to->prop("obtain_language.name"),
+				"crm_person_education_2.start" => $to->prop("start") ? date("Y", $to->prop("start")) : t("M&auml;&auml;ramata"),
+				"crm_person_education_2.end" => $to->prop("end") ? date("Y", $to->prop("end")) : t("M&auml;&auml;ramata"),
+				"crm_person_education_2.end_date" => get_lc_date($to->prop("end_date"), LC_DATE_FORMAT_SHORT_FULLYEAR),
+				"crm_person_education_2.diploma_nr" => $to->prop("diploma_nr"),
+			));
+			foreach($props as $prop)
+			{
+				if(array_key_exists($prop, $proplist_education) || count($proplist_education) == 0)
+				//if(true)
+				{
+					$this->vars(array(
+						"CRM_PERSON_EDUCATION_2.".strtoupper($prop) => $this->parse("CRM_PERSON_EDUCATION_2.".strtoupper($prop)),
+					));
+				}
+			}
+			if((array_key_exists("in_progress", $proplist_education) || count($proplist_education) == 0) && $anything_in_progress)
+			//if($anything_in_progress)
+			{
+				$this->vars(array(
+					"CRM_PERSON_EDUCATION_2.IN_PROGRESS" => $this->parse("CRM_PERSON_EDUCATION_2.IN_PROGRESS"),
+				));
+			}
+			if(array_key_exists("school1", $proplist_education) || array_key_exists("school2", $proplist_education) || count($proplist_education) == 0)
+			//if(true)
+			{
+				$this->vars(array(
+					"CRM_PERSON_EDUCATION_2.SCHOOL" => $this->parse("CRM_PERSON_EDUCATION_2.SCHOOL"),
+				));
+			}
+
+			$CRM_PERSON_EDUCATION_2 .= $this->parse("CRM_PERSON_EDUCATION_2");
+
+			$parse_cpe_2++;
+			//	END SUB: CRM_PERSON_EDUCATION_2
+		}
+
+		if($parse_cpe_2 > 0)
+		{
+			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS_2.HEADER" => $this->parse("CRM_PERSON_EDUCATIONS_2.HEADER"),
+				"CRM_PERSON_EDUCATION_2" => $CRM_PERSON_EDUCATION_2,
+			));
+			$this->vars(array(
+				"CRM_PERSON_EDUCATIONS_2" => $this->parse("CRM_PERSON_EDUCATIONS_2"),
+			));
+		}
+		// END SUB: CRM_PERSON_EDUCATIONS_2
+
 		// SUB: CRM_PERSON_ADD_EDUCATIONS
 		$parse_cpae = 0;
 		$cff_ae = $cff_inst->get_sysdefault(array("clid" => CL_CRM_PERSON_ADD_EDUCATION));
