@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.57 2008/08/04 19:27:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.58 2008/08/04 20:04:59 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2108,6 +2108,7 @@ class rfp extends class_base
 			"total_colspan" => $colspan - 2,
 			"bron_totalprice" => $bron_totalprice,
 		));
+		$totalprice += $bron_totalprice;
 		$res_sub = "";
 
 		// brons
