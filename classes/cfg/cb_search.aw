@@ -25,6 +25,9 @@
 @property show_non_cf_fields type=checkbox ch_value=1
 @caption N&auml;ita ka v&auml;lju, mis ei ole seadete vormis
 
+@property max_results type=textbox
+@caption Tulemuste arv
+
 @groupinfo props caption="V&auml;ljad"
 
 @property choose_fields type=table group=props no_caption=1
@@ -34,6 +37,7 @@
 @default group=mktbl
 
 @property sform_tbl type=table store=no no_caption=1 
+
 
 @groupinfo parents caption="Kataloogid"
 
@@ -123,6 +127,9 @@ class cb_search extends class_base
 		$o = $arr["obj_inst"];
 		switch($prop["name"])
 		{
+			case "max_results":
+				$prop["value"] = strlen($prop["value"])?$prop["value"]:500;
+				break;
 			case "root_class":
 				$this->make_class_list(&$prop);
 				break;
@@ -719,7 +726,7 @@ class cb_search extends class_base
 				// if there are any criteria for search from folder, add them to the filter
 				$this->_add_parent_filter($arr["obj_inst"], $sdata);
 			
-				$sdata["limit"] = 500;
+				$sdata["limit"] = ($_t = $arr["obj_inst"]->prop("max_results"))?$_t:500;
 				$sdata["join_strategy"] = "data";
 				$sdata["site_id"] = array();
 
