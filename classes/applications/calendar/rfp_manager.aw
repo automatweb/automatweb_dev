@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.31 2008/08/04 18:08:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.32 2008/08/04 20:26:49 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1555,7 +1555,8 @@ class rfp_manager extends class_base
 			$reservation = obj($spl[1]);
 			if(is_array($data["from"]))
 			{
-				$from = mktime($data["from"]["hour"], $data["from"]["minute"], 0, date("m"), date("d"), date("Y"));
+				$_from = $reservation->prop("start1");
+				$from = mktime($data["from"]["hour"], $data["from"]["minute"], 0, date("m", $_from), date("d", $_from), date("Y", $_from));
 			}
 			else
 			{
@@ -1563,7 +1564,8 @@ class rfp_manager extends class_base
 			}
 			if(is_array($data["to"]))
 			{
-				$to = mktime($data["to"]["hour"], $data["to"]["minute"], 0, date("m"), date("d"), date("Y"));
+				$_to = $reservation->prop("end");
+				$to = mktime($data["to"]["hour"], $data["to"]["minute"], 0, date("m", $_to), date("d", $_to), date("Y", $_to));
 			}
 			else
 			{
