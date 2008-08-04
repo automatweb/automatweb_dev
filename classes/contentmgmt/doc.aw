@@ -1518,6 +1518,22 @@ class doc extends class_base
 		}
 	}
 
+	/**
+                @attrib name=get_fckstyles_css
+        **/
+        function get_fckstyles_css()
+        {
+                if (aw_ini_get("document.site_fck_styles"))
+                {
+                        die('/css/stiil.css');
+                }
+                else
+                {
+                        die('/automatweb/js/fckeditor/fck_editorarea.css');
+                }
+        }
+
+
 	function do_db_upgrade($t, $f)
 	{
 		switch($f)
