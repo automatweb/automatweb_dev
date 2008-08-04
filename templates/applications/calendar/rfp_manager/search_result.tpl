@@ -1,7 +1,7 @@
 <!-- SUB: PRINT_HEADER -->
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="http://tarvo.dev.struktuur.ee/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">
+<link rel="stylesheet" type="text/css" href="/orb.aw?class=minify_js_and_css&amp;action=get_css&amp;name=aw_admin.css">
 <style>
 BODY
 {
