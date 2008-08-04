@@ -1111,7 +1111,7 @@ class site_template_compiler extends aw_template
 		}
 
 		$ret .= $this->_gi()."\"colour\" => ".$o_name."->prop(\"color\"),\n";
-		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
+		$ret .= $this->_gi()."\"comment\" => ".$o_name."->trans_get_val(\"comment\"),\n";
 		$this->brace_level--;
 		$ret .= $this->_gi().");\n";
 
