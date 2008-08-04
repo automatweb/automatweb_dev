@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.30 2008/07/31 08:19:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.31 2008/08/04 18:08:50 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -14,6 +14,9 @@
 
 @property default_language type=select field=meta mehtod=serialize
 @caption Vaikekeel
+
+@property default_conference_planner type=relpicker reltype=RELTYPE_DEFAULT_WEBFORM field=meta mehtod=serialize
+@caption Vaike tellimuse vorm
 
 @property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
 @caption Edasisuunamisdokument
@@ -145,6 +148,9 @@
 
 @reltype META_OBJECT_FOLDER clid=CL_FOLDER value=7
 @caption Muutujate kaust
+
+@reltype DEFAULT_WEBFORM clid=CL_CONFERENCE_PLANNING value=8
+@caption RFP Veebivorm
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.55 2008/07/30 08:38:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.56 2008/08/04 18:08:50 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -514,6 +514,19 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "conference_planner":
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$obj = obj($rfpm->get_sysdefault());
+				if(!$prop["value"] && $this->can("view", $obj->prop("default_conference_planner")))
+				{
+					$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_WEBFORM",
+						"to" => $obj->prop("default_conference_planner"),
+					));
+					$prop["options"][$obj->prop("default_conference_planner")] = obj($obj->prop("default_conference_planner"))->name();
+					$prop["value"] = $obj->prop("default_conference_planner");
+				}
+				break;
 			case "default_language":
 				$l = get_instance("core/trans/pot_scanner");
 				$tl = $l->get_langs();

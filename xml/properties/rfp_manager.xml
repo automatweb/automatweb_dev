@@ -20,6 +20,16 @@
             <caption>Vaikekeel</caption>
       </property>
       <property>
+            <name>default_conference_planner</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_WEBFORM</reltype>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <caption>Vaike tellimuse vorm</caption>
+      </property>
+      <property>
             <name>copy_redirect</name>
             <table>objects</table>
             <group>general</group>
@@ -452,6 +462,11 @@
                   <value>7</value>
                   <caption>Muutujate kaust</caption>
             </META_OBJECT_FOLDER>
+            <DEFAULT_WEBFORM>
+                  <clid>CL_CONFERENCE_PLANNING</clid>
+                  <value>8</value>
+                  <caption>RFP Veebivorm</caption>
+            </DEFAULT_WEBFORM>
       </reltypes>
       <layout>
             <raports_hsplit>
