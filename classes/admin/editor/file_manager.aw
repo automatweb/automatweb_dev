@@ -161,7 +161,6 @@ class file_manager extends aw_editor_manager_base
 						else
 						{
 							$.get(\"$url\", function(data){
-							alert (data);
 								window.parent.opener.FCKAWFilePlaceholders.Add(FCK, data);
 								window.parent.close();
 							});

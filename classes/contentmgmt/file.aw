@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.13 2008/07/21 10:02:35 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.14 2008/08/04 11:34:32 hannes Exp $
 /*
 
 
@@ -1738,7 +1738,10 @@ class file extends class_base
 		javascript:window.parent.close();
 		</script>";
 		$out = $arr["close"]?$close:$c->id();
-		die($out);
+		if (!$arr["no_die"])
+		{
+			die($out);
+		}
 	}
 	
 	/**
