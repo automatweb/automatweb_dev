@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.36 2008/08/05 16:30:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.37 2008/08/05 16:47:18 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -609,7 +609,10 @@ class rfp_manager extends class_base
 					));
 					foreach($data["products"] as $product => $product_data)
 					{
-						$product_data["room_name"] = obj($product_data["room"])->name();
+						if($this->can("view", $product_data["room"]))
+						{
+							$product_data["room_name"] = obj($product_data["room"])->name();
+						}
 						$product_data["product_name"] = obj($product)->name();
 						$product_data["product_from_time"] = date("H:i", $product_data["start1"]);
 						$product_data["product_to_time"] = date("H:i", $product_data["end"]);
