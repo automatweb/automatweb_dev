@@ -47,6 +47,15 @@
             <method>serialize</method>
             <caption>Ainult avalikud s&amp;amp;uuml;ndmused</caption>
       </property>
+      <property>
+            <name>order_by_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>J&amp;amp;auml;rjestamine aja j&amp;amp;auml;rgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_EVENT_WEBVIEW</syslog_type>
             <relationmgr>yes</relationmgr>

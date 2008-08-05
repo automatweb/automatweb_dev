@@ -21,6 +21,9 @@
 @property published_only type=checkbox ch_value=1 field=meta method=serialize
 @caption Ainult avalikud s&uuml;ndmused
 
+@property order_by_time type=select field=meta method=serialize
+@caption J&auml;rjestamine aja j&auml;rgi
+
 @reltype EVENTS_MANAGER value=1 clid=CL_EVENTS_MANAGER
 @caption S&uuml;ndmuste halduse keskkond
 
@@ -52,6 +55,14 @@ class event_webview extends class_base
 				{
 					$prop["value"] = "event_times";
 				}
+				break;
+
+			case "order_by_time":
+				$prop["options"] = array(
+					"asc" => t("Vanemad eespool"),
+					"desc" => t("Uuemad eespool"),
+				);
+				$prop["value"] = $prop["value"] ? $prop["value"] : "asc";
 				break;
 		}
 
@@ -132,55 +143,92 @@ class event_webview extends class_base
 				);
 			}
 		}
+
+		$ol_args[] = new obj_predicate_sort(array("start1" => ($ob->order_by_time != "desc" ? "asc" : "desc")));
 		$events = new object_list($ol_args);
+
 		$EVENT = "";
+		$event_data = array();
+
 		$oid_props = array("relpicker", "classificator");
 		$props = get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => CL_CALENDAR_EVENT));
-		foreach($events->arr() as $event)
+
+		if($ob->display_by === "event_times" && $ol->count > 0)
 		{
-			foreach($props as $k => $p)
+			foreach($events->arr() as $event)
 			{
-				$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
-				$this->vars(array(
-					"event.".$k => $v
-				));
-			}
-			$this->vars(array(
-				"event.start1" => date("d-m-Y H:i:s", $event->start1),
-				"event.start1.date" => get_lc_date($event->start1, LC_DATE_FORMAT_LONG_FULLYEAR),
-				"event.start1.time" => date("H:i", $event->start1),
-				"event.end" => date("d-m-Y H:i:s", $event->end),
-				"event.end.date" => get_lc_date($event->end, LC_DATE_FORMAT_LONG_FULLYEAR),
-				"event.end.time" => date("H:i", $event->end),
-				"event.AWurl" => obj_link($event->id()),
-			));
-			if($ob->display_by === "event_times")
-			{
-				foreach($event->connections_from(array("type" => "RELTYPE_EVENT_TIMES")) as $conn)
+				$event_data[$event->id()] = array();
+				foreach($props as $k => $p)
 				{
-					$to = $conn->to();
-					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
-					{
-						continue;
-					}
-					$this->vars(array(
-						"event.start1" => date("d-m-Y H:i:s", $to->start),
-						"event.start1.date" => get_lc_date($to->start, LC_DATE_FORMAT_LONG_FULLYEAR),
-						"event.start1.time" => date("H:i", $to->start),
-						"event.end" => date("d-m-Y H:i:s", $to->end),
-						"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
-						"event.end.time" => date("H:i", $to->end),
-						"event.location" => $to->prop("location.name"),
-						"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
-					));
-					$EVENT .= $this->parse("EVENT");
+					$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
+					$event_data[$event->id()]["event.".$k] = $v;
 				}
+				$event_data[$event->id()] += array(
+					"event.start1" => date("d-m-Y H:i:s", $event->start1),
+					"event.start1.date" => get_lc_date($event->start1, LC_DATE_FORMAT_LONG_FULLYEAR),
+					"event.start1.time" => date("H:i", $event->start1),
+					"event.end" => date("d-m-Y H:i:s", $event->end),
+					"event.end.date" => get_lc_date($event->end, LC_DATE_FORMAT_LONG_FULLYEAR),
+					"event.end.time" => date("H:i", $event->end),
+					"event.AWurl" => obj_link($event->id()),
+				);
 			}
-			else
+
+			$event_times = new object_list(array(
+				"class_id" => CL_EVENT_TIME,
+				"parent" => array(),
+				"site_id" => array(),
+				"lang_id" => array(),
+				"status" => array(),
+				"event" => $events->ids(),
+				new obj_predicate_sort(array("start" => ($ob->order_by_time != "desc" ? "asc" : "desc"))),
+			));
+
+			foreach($event_times->arr() as $to)
 			{
+				if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
+				{
+					continue;
+				}
+				$event_data[$conn["from"]] += array(
+					"event.start1" => date("d-m-Y H:i:s", $to->start),
+					"event.start1.date" => get_lc_date($to->start, LC_DATE_FORMAT_LONG_FULLYEAR),
+					"event.start1.time" => date("H:i", $to->start),
+					"event.end" => date("d-m-Y H:i:s", $to->end),
+					"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
+					"event.end.time" => date("H:i", $to->end),
+					"event.location" => $to->prop("location.name"),
+					"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
+				);
+				$this->vars($event_data[$conn["from"]]);
 				$EVENT .= $this->parse("EVENT");
 			}
 		}
+		else
+		{
+			foreach($events->arr() as $event)
+			{
+				$event_data[$event->id()] = array();
+				foreach($props as $k => $p)
+				{
+					$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
+					$this->vars(array(
+						"event.".$k => $v,
+					));
+				}
+				$this->vars(array(
+					"event.start1" => date("d-m-Y H:i:s", $event->start1),
+					"event.start1.date" => get_lc_date($event->start1, LC_DATE_FORMAT_LONG_FULLYEAR),
+					"event.start1.time" => date("H:i", $event->start1),
+					"event.end" => date("d-m-Y H:i:s", $event->end),
+					"event.end.date" => get_lc_date($event->end, LC_DATE_FORMAT_LONG_FULLYEAR),
+					"event.end.time" => date("H:i", $event->end),
+					"event.AWurl" => obj_link($event->id()),
+				));
+			}
+			$EVENT .= $this->parse("EVENT");
+		}
+		
 		$this->vars(array(
 			"EVENT" => $EVENT,
 		));
