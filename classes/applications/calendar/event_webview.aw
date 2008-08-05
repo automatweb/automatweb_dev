@@ -153,7 +153,7 @@ class event_webview extends class_base
 		$oid_props = array("relpicker", "classificator");
 		$props = get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => CL_CALENDAR_EVENT));
 
-		if($ob->display_by === "event_times" && $ol->count > 0)
+		if($ob->display_by === "event_times" && $events->count > 0)
 		{
 			foreach($events->arr() as $event)
 			{
