@@ -161,15 +161,35 @@ class shop_delivery_note extends class_base
 				$rt = $ac_props[$prop["name"]]["reltype"];
 				$val = $prop["value"];
 				$isval = $this->can("view", $val);
-				if(!$arr["new"] && (!$isval || !$arr["obj_inst"]->is_connected_to(array("type" => $rt, "to" => $val))))
+
+				if(!$arr["new"] && ($this->can("view", $arr["obj_inst"]->prop($prop["name"]))  && $arr["obj_inst"]->is_connected_to(array("type" => $rt, "to" => $arr["obj_inst"]->prop($prop["name"])))))
 				{
-					if($arr["obj_inst"]->is_connected_to(array("type" => $rt)))
-					{
-						$arr["obj_inst"]->disconnect(array(
-							"from" => $arr["obj_inst"]->prop($prop["name"]),
-							"type" => $rt,
-						));
-					}
+					$arr["obj_inst"]->disconnect(array(
+						"from" => $arr["obj_inst"]->prop($prop["name"]),
+						"type" => $rt,
+					));
+				}
+				switch($prop["name"])
+				{
+					case "impl":
+						if(!$isval && strlen($val))
+						{
+							$conf = $this->can("view",($_t = $arr["request"]["from_warehouse"]))?obj($_t)->prop("conf"):false;
+							$cur_org = get_current_company()->id();
+							$parent = $this->can("view", $conf)?(($fld = obj($conf)->prop("purchaser_fld"))?$fld:$cur_org):$cur_org;
+							$org = obj();
+							$org->set_class_id(CL_CRM_COMPANY);
+							$org->set_name($val);
+							$org->set_parent($parent);
+							$org->save();
+							$arr["obj_inst"]->connect(array(
+								"to" => $org->id(),
+								"type" => $rt,
+							));
+							$val = $org->id();
+							$isval = $this->can("view", $val);
+						}
+						break;
 				}
 				$arr["obj_inst"]->set_prop($prop["name"], $val);
 				break;
