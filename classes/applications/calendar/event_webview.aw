@@ -184,24 +184,23 @@ class event_webview extends class_base
 
 			if(count($event_time_ids) > 0)
 			{
-				$event_times = new object_data_list(
-					array(
-						"class_id" => CL_EVENT_TIME,
-						"parent" => array(),
-						"site_id" => array(),
-						"lang_id" => array(),
-						"status" => array(),
-						"oid" => $event_time_ids,
-						new obj_predicate_sort(array("start" => ($ob->order_by_time != "desc" ? "asc" : "desc"))),
-					), 	 
-					array 	 
-					( 	 
-						CL_EVENT_TIME => array("oid", "start", "end"),
-					)
-				);
+				$event_times = new object_data_list(array(
+					"class_id" => CL_EVENT_TIME,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+					"oid" => $event_time_ids,
+					new obj_predicate_sort(array("start" => ($ob->order_by_time != "desc" ? "asc" : "desc"))),
+				),
+				array
+				(
+					CL_EVENT_TIME => array("oid", "start", "end"),
+				));
 
-				foreach($event_times->arr() as $to)
+				foreach($event_times->arr() as $time)
 				{
+					$to = obj($time["oid"]);
 					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
 					{
 						continue;
