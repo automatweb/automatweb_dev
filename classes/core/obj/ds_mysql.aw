@@ -1791,6 +1791,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
+				if ($class_name == "obj_predicate_regex")
+				{
+					$v_data = $val->data;
+					$sql[] = " (".$tf." REGEXP '".$v_data."'  ) ";
+				}
+				else
 				if ($class_name == "obj_predicate_compare")
 				{
 					$v_data = $val->data;
