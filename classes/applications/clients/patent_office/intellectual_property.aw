@@ -4000,6 +4000,7 @@ abstract class intellectual_property extends class_base
 					{
 						$tel[] = trademark_manager::rere($appl->prop("phone.name"));
 					}
+
 					if ($appl->prop("fax.name"))
 					{
 						$tel[] = trademark_manager::rere($appl->prop("fax.name"));
@@ -4025,6 +4026,7 @@ abstract class intellectual_property extends class_base
 					{
 						$tel[] = trademark_manager::rere($appl->prop("phone_id.name"));
 					}
+
 					if ($appl->prop("telefax_id.name"))
 					{
 						$tel[] = trademark_manager::rere($appl->prop("telefax_id.name"));

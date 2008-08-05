@@ -451,6 +451,15 @@ class utility_model extends intellectual_property
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplicationsep_date"))));
 			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_prevapplicationsep_nr")));
+			$el->appendChild(new DOMElement("PRITYPE", "3"));
+			$root->insertBefore($el, $despg);
+		}
+
+		if($o->prop("prio_prevapplication_date") > 1 or $o->prop("prio_prevapplication_nr"))
+		{ // Varasema taotluse alusel (seaduse &#0167;10 l&otilde;ige 3)
+			$el = $xml->createElement("PRIGR");
+			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplication_date"))));
+			$el->appendChild(new DOMElement("PRIAPPN", $o->prop("prio_prevapplication_nr")));
 			$el->appendChild(new DOMElement("PRITYPE", "2"));
 			$root->insertBefore($el, $despg);
 		}
