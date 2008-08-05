@@ -149,11 +149,13 @@ class event_webview extends class_base
 
 		$EVENT = "";
 		$event_data = array();
+		$event_time_ids = array();
+		$event_time_match_event = array();
 
 		$oid_props = array("relpicker", "classificator");
 		$props = get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => CL_CALENDAR_EVENT));
 
-		if($ob->display_by === "event_times" && $events->count > 0)
+		if($ob->display_by === "event_times" && $events->count() > 0)
 		{
 			foreach($events->arr() as $event)
 			{
@@ -172,36 +174,45 @@ class event_webview extends class_base
 					"event.end.time" => date("H:i", $event->end),
 					"event.AWurl" => obj_link($event->id()),
 				);
+
+				foreach($event->connections_from(array("type" => "RELTYPE_EVENT_TIMES")) as $conn)
+				{
+					$event_time_ids[] = $conn->prop("to");
+					$event_time_match_event[$conn->prop("to")] = $conn->prop("from");
+				}
 			}
 
-			$event_times = new object_list(array(
-				"class_id" => CL_EVENT_TIME,
-				"parent" => array(),
-				"site_id" => array(),
-				"lang_id" => array(),
-				"status" => array(),
-				"event" => $events->ids(),
-				new obj_predicate_sort(array("start" => ($ob->order_by_time != "desc" ? "asc" : "desc"))),
-			));
-
-			foreach($event_times->arr() as $to)
+			if(count($event_time_ids) > 0)
 			{
-				if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
+				$event_times = new object_list(array(
+					"class_id" => CL_EVENT_TIME,
+					"parent" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+					"status" => array(),
+					"oid" => $event_time_ids,
+					new obj_predicate_sort(array("start" => ($ob->order_by_time != "desc" ? "asc" : "desc"))),
+				));
+
+				foreach($event_times->arr() as $to)
 				{
-					continue;
+					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
+					{
+						continue;
+					}
+					$event_data[$event_time_match_event[$to->id()]] += array(
+						"event.start1" => date("d-m-Y H:i:s", $to->start),
+						"event.start1.date" => get_lc_date($to->start, LC_DATE_FORMAT_LONG_FULLYEAR),
+						"event.start1.time" => date("H:i", $to->start),
+						"event.end" => date("d-m-Y H:i:s", $to->end),
+						"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
+						"event.end.time" => date("H:i", $to->end),
+						"event.location" => $to->prop("location.name"),
+						"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
+					);
+					$this->vars($event_data[$event_time_match_event[$to->id()]]);
+					$EVENT .= $this->parse("EVENT");
 				}
-				$event_data[$conn["from"]] += array(
-					"event.start1" => date("d-m-Y H:i:s", $to->start),
-					"event.start1.date" => get_lc_date($to->start, LC_DATE_FORMAT_LONG_FULLYEAR),
-					"event.start1.time" => date("H:i", $to->start),
-					"event.end" => date("d-m-Y H:i:s", $to->end),
-					"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
-					"event.end.time" => date("H:i", $to->end),
-					"event.location" => $to->prop("location.name"),
-					"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
-				);
-				$this->vars($event_data[$conn["from"]]);
-				$EVENT .= $this->parse("EVENT");
 			}
 		}
 		else
