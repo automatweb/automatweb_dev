@@ -10,6 +10,7 @@ BODY
 </style>
 </head>
 <body>
+{VAR:current_date} {VAR:current_time}
 <!-- END SUB: PRINT_HEADER -->
 
 <!-- SUB: HAS_FILTERS_USED -->
@@ -28,10 +29,12 @@ BODY
 <!-- SUB: HEADER -->
 <tr>
 	<td class="awmenuedittablehead">Alates</td>
-	<td class="awmenuedittablehead">Kuni</td>
 	<td class="awmenuedittablehead">Aeg</td>
+	<td class="awmenuedittablehead">Koostaja</td>
+	<td class="awmenuedittablehead">Tellija</td>
 	<td class="awmenuedittablehead">Ruum</td>
 	<td class="awmenuedittablehead">Inimesi</td>
+	<td class="awmenuedittablehead">{VAR:confirmed_caption}</td>
 	<td class="awmenuedittablehead">T&uuml;&uuml;p</td>
 	<td class="awmenuedittablehead">{VAR:data_subm_name_caption}</td> <!-- any rfp property that starts with 'data_' -->
 	<td class="awmenuedittablehead">{VAR:data_mf_event_type_caption}</td>
@@ -39,55 +42,63 @@ BODY
 <!-- END SUB: HEADER -->
 <!-- SUB: CLIENT_ROW -->
 <tr class="awmenuedittablerow">
-	<td colspan="8" class="awmenuedittabletext">{VAR:data_subm_name} - {VAR:data_subm_organisation}</td>
+	<td colspan="10" class="awmenuedittabletext">{VAR:data_subm_name} - {VAR:data_subm_organisation}</td>
 </tr>
 <!-- END SUB: CLIENT_ROW -->
 <!-- SUB: ROW -->
 <tr class="awmenuedittablerow">
 <!-- SUB: ROW_TYPE_RESOURCES -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
-	<td class="awmenuedittabletext">{VAR:to_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>
+	<td class="awmenuedittabletext">{VAR:rfp_createdby_name}</td>
+	<td class="awmenuedittabletext">{VAR:data_subm_organisation}</td>
 	<td class="awmenuedittabletext">{VAR:room}</td>
 	<td class="awmenuedittabletext">{VAR:people_count}</td>
+	<td class="awmenuedittabletext">{VAR:confirmed_str}</td>
 	<td class="awmenuedittabletext">{VAR:raport_type}</td>
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 <!-- END SUB: ROW_TYPE_RESOURCES -->
 <!-- SUB: ROW_TYPE_ROOMS -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
-	<td class="awmenuedittabletext">{VAR:to_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>
+	<td class="awmenuedittabletext">{VAR:rfp_createdby_name}</td>
+	<td class="awmenuedittabletext">{VAR:data_subm_organisation}</td>
 	<td class="awmenuedittabletext">{VAR:room}</td>
 	<td class="awmenuedittabletext">{VAR:people_count}</td>
+	<td class="awmenuedittabletext">{VAR:confirmed_str}</td>
 	<td class="awmenuedittabletext">{VAR:raport_type}</td>
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 <!-- END SUB: ROW_TYPE_ROOMS -->
 <!-- SUB: ROW_TYPE_CATERING -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
-	<td class="awmenuedittabletext">{VAR:to_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>
+	<td class="awmenuedittabletext">{VAR:rfp_createdby_name}</td>
+	<td class="awmenuedittabletext">{VAR:data_subm_organisation}</td>
 	<td class="awmenuedittabletext">{VAR:room}</td>
 	<td class="awmenuedittabletext">{VAR:people_count}</td>
+	<td class="awmenuedittabletext">{VAR:confirmed_str}</td>
 	<td class="awmenuedittabletext">{VAR:raport_type}</td>
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 <!-- END SUB: ROW_TYPE_CATERING -->
 <!-- SUB: ROW_TYPE_CATERING_HAS_PRODUCTS -->
-<td colspan="8" style="border: 2px solid white;">
+<td colspan="10" style="border: 2px solid white;">
 <table border="0" width="100%" cellspacing="1" cellpadding="3" class="awmenuedittabletag">
 <tr>
 	<td class="awmenuedittabletext">Toode</td>
 	<td class="awmenuedittabletext">Aeg</td>
-	<td class="awmenuedittabletext">Inimesi</td>
+	<td class="awmenuedittabletext">T&uuml;&uuml;p</td>
+	<td class="awmenuedittabletext">Hind</td>
 	<td class="awmenuedittabletext">Kogus</td>
 	<td class="awmenuedittabletext">Summa</td>
 </tr>
 <!-- SUB: ROW_TYPE_CATERING_PRODUCT -->
 	<td class="awmenuedittabletext">{VAR:product_name}</td>
 	<td class="awmenuedittabletext">{VAR:product_from_time} - {VAR:product_to_time}</td>
-	<td class="awmenuedittabletext">{VAR:people_count}</td>
+	<td class="awmenuedittabletext">{VAR:product_event}</td>
+	<td class="awmenuedittabletext">{VAR:price}</td>
 	<td class="awmenuedittabletext">{VAR:amount}</td>
 	<td class="awmenuedittabletext">{VAR:sum}</td>
 <!-- END SUB: ROW_TYPE_CATERING_PRODUCT -->
@@ -96,10 +107,12 @@ BODY
 <!-- END SUB: ROW_TYPE_CATERING_HAS_PRODUCTS -->
 <!-- SUB: ROW_TYPE_HOUSING -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
-	<td class="awmenuedittabletext">{VAR:to_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>
+	<td class="awmenuedittabletext">{VAR:rfp_createdby_name}</td>
+	<td class="awmenuedittabletext">{VAR:data_subm_organisation}</td>
 	<td class="awmenuedittabletext">{VAR:room}</td>
 	<td class="awmenuedittabletext">{VAR:people_count}</td>
+	<td class="awmenuedittabletext">{VAR:confirmed_str}</td>
 	<td class="awmenuedittabletext">{VAR:raport_type}</td>
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>

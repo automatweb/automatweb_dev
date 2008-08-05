@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.35 2008/08/05 14:23:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.36 2008/08/05 16:30:02 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -464,7 +464,14 @@ class rfp_manager extends class_base
 		// set what filters where used
 			$filters = array();
 			$filters[t("Kuup&auml;evavahemik")] = sprintf("%s kuni %s", date("d.m.Y", $from), date("d.m.Y", $to));
-			unset($arr["request"]["raports_search_covering"][1]);
+			if(is_array($arr["request"]["raports_search_covering"]))
+			{
+				unset($arr["request"]["raports_search_covering"][1]);
+			}
+			else
+			{
+				unset($arr["request"]["raports_search_covering"]);
+			}
 			if(count($arr["request"]["raports_search_covering"]))
 			{
 				$cov = array_intersect_key($this->search_param_covering, $arr["request"]["raports_search_covering"]);
@@ -541,10 +548,28 @@ class rfp_manager extends class_base
 								$rfp_prop_values[$prop."_date"] = date("d.m.Y", $pval);
 								$rfp_prop_values[$prop."_time"] = date("H:i", $pval);
 							}
+
 							$rfp_prop_values[$prop] = $pval;
 							$rfp_prop_captions[$prop."_caption"] = $propdata["caption"];
 						}
+
+						if($prop == "confirmed")
+						{
+							$inst = $rfp->instance();
+							$st = $inst->get_rfp_statuses();
+							$rfp_prop_values["confirmed_str"] = $st[$rfp->prop($prop)];
+							$rfp_prop_captions["confirmed_caption"] = $propdata["caption"];
+						}
 					}
+					$ui = get_instance(CL_USER);
+					$cper = $ui->get_person_for_uid($rfp->createdby());
+					$mper = $ui->get_person_for_uid($rfp->modifiedby());
+					$this->vars(array(
+						"rfp_createdby_uid" => $rfp->createdby(),
+						"rfp_modifiedby_uid" => $rfp->modifiedby(),
+						"rfp_createdby_name" => $cper->name(),
+						"rfp_modifiedby_name" => $mper->name(),
+					));
 
 				}
 				$this->vars($row_vars);
@@ -588,6 +613,10 @@ class rfp_manager extends class_base
 						$product_data["product_name"] = obj($product)->name();
 						$product_data["product_from_time"] = date("H:i", $product_data["start1"]);
 						$product_data["product_to_time"] = date("H:i", $product_data["end"]);
+						if($this->can("view", $product_data["var"]))
+						{
+							$product_data["product_event"] = obj($product_data["var"])->name();
+						}
 
 						$this->vars($product_data); // price & stuff maybe also???
 						$prod_type_var = "ROW_TYPE_CATERING_PRODUCT";
@@ -671,6 +700,10 @@ class rfp_manager extends class_base
 			));
 			$filt = $this->parse("HAS_FILTERS_USED");
 		}
+		$this->vars(array(
+			"current_date" => date("d.m.Y"),
+			"current_time" => date("H:i"),
+		));
 		$this->vars(array(
 			"HAS_NO_RESULT" => $no_html,
 			"HAS_RESULT" => $html,
