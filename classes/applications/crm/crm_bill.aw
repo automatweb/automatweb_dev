@@ -342,9 +342,12 @@ class crm_bill extends class_base
 					))."<br>";
 					
 				}
-				foreach($arr["obj_inst"]->get_bill_payments_data() as $dat)
+				if($arr["obj_inst"]->id() > 1)
 				{
-					$prop["value"].= "\n<br>".date("d.m.Y" , $dat["date"])." ".$dat["sum"]." ".$dat["currency"];
+					foreach($arr["obj_inst"]->get_bill_payments_data() as $dat)
+					{
+						$prop["value"].= "\n<br>".date("d.m.Y" , $dat["date"])." ".$dat["sum"]." ".$dat["currency"];
+					}	
 				}
 				break;
 			case "payment_mode":
