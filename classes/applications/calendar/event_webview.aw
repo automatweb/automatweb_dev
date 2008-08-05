@@ -165,7 +165,7 @@ class event_webview extends class_base
 					$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
 					$event_data[$event->id()]["event.".$k] = $v;
 				}
-				$event_data[$event->id()] = array_merge($event_data[$event->id()], array(
+				$event_data[$event->id()] += array(
 					"event.start1" => date("d-m-Y H:i:s", $event->start1),
 					"event.start1.date" => get_lc_date($event->start1, LC_DATE_FORMAT_LONG_FULLYEAR),
 					"event.start1.time" => date("H:i", $event->start1),
@@ -173,7 +173,7 @@ class event_webview extends class_base
 					"event.end.date" => get_lc_date($event->end, LC_DATE_FORMAT_LONG_FULLYEAR),
 					"event.end.time" => date("H:i", $event->end),
 					"event.AWurl" => obj_link($event->id()),
-				));
+				);
 
 				foreach($event->connections_from(array("type" => "RELTYPE_EVENT_TIMES")) as $conn)
 				{
@@ -184,7 +184,7 @@ class event_webview extends class_base
 
 			if(count($event_time_ids) > 0)
 			{
-				$event_times = new object_data_list(array(
+				$event_times = new object_list(array(
 					"class_id" => CL_EVENT_TIME,
 					"parent" => array(),
 					"site_id" => array(),
@@ -192,20 +192,15 @@ class event_webview extends class_base
 					"status" => array(),
 					"oid" => $event_time_ids,
 					new obj_predicate_sort(array("start" => ($ob->order_by_time != "desc" ? "asc" : "desc"))),
-				),
-				array
-				(
-					CL_EVENT_TIME => array("oid", "start", "end"),
 				));
 
-				foreach($event_times->arr() as $time)
+				foreach($event_times->arr() as $to)
 				{
-					$to = obj($time["oid"]);
 					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
 					{
 						continue;
 					}
-					$event_data[$event_time_match_event[$to->id()]] = array_merge($event_data[$event_time_match_event[$to->id()]], array(
+					$event_data[$event_time_match_event[$to->id()]] += array(
 						"event.start1" => date("d-m-Y H:i:s", $to->start),
 						"event.start1.date" => get_lc_date($to->start, LC_DATE_FORMAT_LONG_FULLYEAR),
 						"event.start1.time" => date("H:i", $to->start),
@@ -214,9 +209,8 @@ class event_webview extends class_base
 						"event.end.time" => date("H:i", $to->end),
 						"event.location" => $to->prop("location.name"),
 						"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
-					));
+					);
 					$this->vars($event_data[$event_time_match_event[$to->id()]]);
-					$this->parse_prop_subs(obj($event_time_match_event[$to->id()]), $props);
 					$EVENT .= $this->parse("EVENT");
 				}
 			}
@@ -243,7 +237,6 @@ class event_webview extends class_base
 					"event.AWurl" => obj_link($event->id()),
 				));
 			}
-			$this->parse_prop_subs($event, $props);
 			$EVENT .= $this->parse("EVENT");
 		}
 		
@@ -273,24 +266,6 @@ class event_webview extends class_base
 					"type" => ""
 				));
 				return true;
-		}
-	}
-
-	private function parse_prop_subs($o, $props)
-	{
-		foreach($props as $k => $p)
-		{
-			switch($k)
-			{
-				default:					
-					if(strlen($o->$k) > 0)
-					{
-						$this->vars(array(
-							"EVENT.".strtoupper($k) => $this->parse("EVENT.".strtoupper($k)),
-						));
-					}
-					break;
-			}
 		}
 	}
 }
