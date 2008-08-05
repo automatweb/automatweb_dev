@@ -349,7 +349,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @reltype DOC_CONTENT_TYPE value=27 clid=CL_DOCUMENT_CONTENT_TYPE hidden=1
 @caption Dokumendi sisu t&uuml;&uuml;p
 
-@reltype KEYWORD value=28 clid=CL_KEYWORD hidden=1
+@reltype KEYWORD value=28 clid=CL_KEYWORD
 @caption V&otilde;tmes&otilde;na
 
 */
