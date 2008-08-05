@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.63 2008/08/05 13:09:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.64 2008/08/05 13:20:14 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -235,7 +235,7 @@
 			@property data_billing_country type=textbox
 			@caption Riik
 
-			@property data_billing_name type=textbox
+			@property data_billing_name type=hidden
 			@caption Nimi
 
 			@property data_billing_phone type=textbox

@@ -587,7 +587,7 @@
             <name>data_billing_name</name>
             <table>rfp</table>
             <group>billing</group>
-            <type>textbox</type>
+            <type>hidden</type>
             <field>data_billing_name</field>
             <caption>Nimi</caption>
       </property>
