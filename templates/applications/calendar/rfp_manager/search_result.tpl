@@ -42,7 +42,7 @@ BODY
 <!-- END SUB: HEADER -->
 <!-- SUB: CLIENT_ROW -->
 <tr class="awmenuedittablerow">
-	<td colspan="10" class="awmenuedittabletext">{VAR:data_subm_name} - {VAR:data_subm_organisation}</td>
+	<td colspan="8" class="awmenuedittabletext">{VAR:data_subm_name} - {VAR:data_subm_organisation}</td>
 </tr>
 <!-- END SUB: CLIENT_ROW -->
 <!-- SUB: ROW -->
