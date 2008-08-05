@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.67 2008/08/05 15:21:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.68 2008/08/05 15:33:53 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -517,6 +517,30 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "data_billing_company":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("data_subm_organisation");
+				}
+				break;
+			case "data_billing_contact":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("data_subm_name");
+				}
+				break;
+			case "data_billing_phone":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("data_subm_phone");
+				}
+				break;
+			case "data_billing_email":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("data_subm_email");
+				}
+				break;
 			case "cancel_and_payment_terms":
 			case "accomondation_terms":
 				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
