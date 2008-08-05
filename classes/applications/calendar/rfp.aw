@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.59 2008/08/04 21:12:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.60 2008/08/05 10:15:54 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2280,6 +2280,16 @@ class rfp extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "confirmed":
+				if(in_array($arr["obj_inst"]->prop("confirmed"), array(4,5)) && !in_array($prop["value"], array(4,5)))
+				{
+					$prop["post_append_text"] = t("Ruumidega seotud broneeringud tuleb eraldi kinnitada !");
+				}
+				if(in_array($prop["value"], array(4,5)))
+				{
+					$arr["obj_inst"]->mark_reservations_unverified();
+				}
+				break;
 			case "final_rooms":
 			case "final_catering_rooms":
 				break;

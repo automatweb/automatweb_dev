@@ -167,5 +167,36 @@ class rfp_obj extends _int_object
 		return true;
 	}
 
+
+	/** Marks all reservations, connected to this rfp, unverified
+	 **/
+	public function mark_reservations_unverified()
+	{
+		$rels = $this->connections_from(array(
+			"to.class_id" => CL_RESERVATION,
+		));
+		foreach($rels as $rel)
+		{
+			$rv = $rel->to();
+			$rv->set_prop("verified", 0);
+			$rv->save();
+		}
+	}
+
+	/** Marks all reservations, connected to this rfp, verified
+	 **/
+	public function mark_reservations_verified()
+	{
+		$rels = $this->connections_from(array(
+			"to.class_id" => CL_RESERVATION,
+		));
+		foreach($rels as $rel)
+		{
+			$rv = $rel->to();
+			$rv->set_prop("verified", 1);
+			$rv->save();
+		}
+	}
+
 }
 ?>
