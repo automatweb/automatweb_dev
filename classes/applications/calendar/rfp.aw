@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.65 2008/08/05 14:23:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.66 2008/08/05 14:26:10 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -567,8 +567,6 @@ class rfp extends class_base
 			case "default_language":
 				$l = get_instance("core/trans/pot_scanner");
 				$tl = $l->get_langs();
-				df($tl);
-				df(aw_ini_get("languages.list"));
 				foreach(aw_ini_get("languages.list") as $key => $ldat)
 				{
 					if(!in_array($ldat["acceptlang"], $tl))
