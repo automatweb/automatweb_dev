@@ -856,7 +856,6 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 				default:
 					$v = in_array($p["type"], $oid_props) ? $ob->prop($k.".name") : $ob->$k;
 					get_instance("alias_parser")->parse_oo_aliases($ob, $v);
-					if($v == 185815){arr($p);}
 					break;
 			}
 			$data[$k] = nl2br($v);
@@ -875,6 +874,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		}
 
 		$this->vars($data);
+		$this->parse_prop_subs($ob, $props);
 		return $this->parse();
 	}
 
@@ -1143,6 +1143,24 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 		}
 
 		return false;
+	}
+
+	private function parse_prop_subs($o, $props)
+	{
+		foreach($props as $k => $p)
+		{
+			switch($k)
+			{
+				default:
+					if(strlen($o->prop($k)) > 0)
+					{
+						$this->vars(array(
+							strtoupper($k) => $this->parse(strtoupper($k)),
+						));
+					}
+					break;
+			}
+		}
 	}
 
 
