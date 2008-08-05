@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.60 2008/08/05 10:15:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.61 2008/08/05 12:31:37 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -843,6 +843,7 @@ class rfp extends class_base
 				$inst = get_instance(CL_RESERVATION);
 				$function = "_get_".$arr["prop"]["name"];
 				$inst->$function(&$args);
+				$this->_modify_prices_tbl_after(&$arr, &$args["prop"]["vcl_inst"]);
 				$prop["value"] = $args["prop"]["vcl_inst"]->get_html();
 				break;
 
@@ -2100,12 +2101,19 @@ class rfp extends class_base
 				));
 			}
 			$bron_totalprice += $dat["separate_price"];
+			
 			$brons .= $this->parse("BRON");
 
 
 		}
 
-
+		if($package)
+		{
+			$pck_cprice = $arr["obj_inst"]->get_package_custom_price();
+			$pck_cdiscount = $arr["obj_inst"]->get_package_custom_discount();
+			$bron_totalprice = (is_numeric($pck_cprice) && $pck_cprice >= 0)?$pck_cprice:$bron_totalprice;
+			$bron_totalprice = (is_numeric($pck_cdiscount) && $pck_cdiscount > 0 )?((100 - $pck_cdiscount)/100 * $bron_totalprice):$bron_totalprice;
+		}
 		$this->vars(array(
 			"total_colspan" => $colspan - 2,
 			"bron_totalprice" => $bron_totalprice,
@@ -2353,6 +2361,11 @@ class rfp extends class_base
 						$o = obj($tmp[1]);
 						$o->set_prop("special_sum", $val);	
 						$o->save();
+					}
+
+					if(in_array($var, array("package_custom_price", "package_custom_discount")))
+					{
+						$arr["obj_inst"]->{"set_".$var}($val);
 					}
 				}			
 			break;
@@ -2844,6 +2857,27 @@ class rfp extends class_base
 			}
 		}
 		return $arr["post_ru"];
+	}
+
+	private function _modify_prices_tbl_after($arr, $t)
+	{
+		if($this->can("view", $arr["obj_inst"]->prop("data_gen_package"))) // theres a package selected, we have to add an extra line to table for package discount
+		{
+			$t->define_data(array(
+				"name" => sprintf(t("Pakett '%s'"), obj($arr["obj_inst"]->prop("data_gen_package"))->name()),
+				"custom" => html::textbox(array(
+					"name" => "package_custom_price",
+					"size" => "5",
+					"value" => $arr["obj_inst"]->get_package_custom_price(),
+				)),
+				"discount" => html::textbox(array(
+					"name" => "package_custom_discount",
+					"size" => "5",
+					"value" => $arr["obj_inst"]->get_package_custom_discount(),
+				)),
+			));
+
+		}
 	}
 }
 ?>

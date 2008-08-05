@@ -198,5 +198,39 @@ class rfp_obj extends _int_object
 		}
 	}
 
+	/** Gets RFP package's custom price
+		@attrib api=1
+	 **/
+	public function get_package_custom_price()
+	{
+		return $this->meta("package_custom_price");
+	}
+
+	/** Gets RFP package's custom discount
+		@attrib api=1
+	 **/
+	public function get_package_custom_discount()
+	{
+		return $this->meta("package_custom_discount");
+	}
+
+	/** Set's RFP package's custom price
+		@attrib api=1 params=pos
+		@param price required type=int
+	 **/
+	public function set_package_custom_price($price)
+	{
+		$this->set_meta("package_custom_price", $price);
+	}
+
+	/** Set's RFP package's custom discount
+		@attrib api=1 params=pos
+		@param discount required type=int
+	 **/
+	public function set_package_custom_discount($discount)
+	{
+		$this->set_meta("package_custom_discount", $discount);
+	}
+
 }
 ?>
