@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.66 2008/08/05 14:26:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.67 2008/08/05 15:21:36 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1715,6 +1715,7 @@ class rfp extends class_base
 				"class_id" => CL_META,
 				"parent" => $o->prop("meta_folder"),
 				"lang_id" => array(),
+				"sort_by" => "jrk",
 			));
 			foreach($ol->arr() as $oid => $obj)
 			{
