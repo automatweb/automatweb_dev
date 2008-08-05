@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.64 2008/08/05 13:20:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.65 2008/08/05 14:23:32 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -517,6 +517,10 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "cancel_and_payment_terms":
+			case "accomondation_terms":
+				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
+				break;
 			case "data_mf_table_form":
 				$rfpm = get_instance(CL_RFP_MANAGER);
 				$obj = obj($rfpm->get_sysdefault());
@@ -563,13 +567,15 @@ class rfp extends class_base
 			case "default_language":
 				$l = get_instance("core/trans/pot_scanner");
 				$tl = $l->get_langs();
-				foreach(aw_ini_get("languages.list") as $ldat)
+				df($tl);
+				df(aw_ini_get("languages.list"));
+				foreach(aw_ini_get("languages.list") as $key => $ldat)
 				{
 					if(!in_array($ldat["acceptlang"], $tl))
 					{
 						continue;
 					}
-					$opts[$ldat["acceptlang"]] = $ldat["name"];
+					$opts[$key] = $ldat["name"];
 				}
 				$prop["options"] = $opts;
 				$rfpm = get_instance(CL_RFP_MANAGER);
@@ -1835,9 +1841,9 @@ class rfp extends class_base
 	{
 		$langs = aw_ini_get("languages.list");
 		$lang_f = false;
-		foreach($langs as $lang)
+		foreach($langs as $key => $lang)
 		{
-			if($lang["acceptlang"] == $lang_to)
+			if($key == $lang_to)
 			{
 				$lang_to = $lang;
 				$lang_f = true;

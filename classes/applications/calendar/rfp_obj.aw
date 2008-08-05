@@ -1,6 +1,52 @@
 <?php
 class rfp_obj extends _int_object
 {
+
+	function set_prop($pn, $pv)
+	{
+		switch($pn)
+		{
+			case "cancel_and_payment_terms":
+			case "accomondation_terms":
+				$tt = $this->meta("trans_terms");
+				$tt[$this->prop("default_language")][$pn] = $pv;
+				$this->set_meta("trans_terms", $tt);
+				break;
+		}
+		return parent::set_prop($pn, $pv);
+	}
+
+	function prop($pn)
+	{
+		switch($pn)
+		{
+			case "cancel_and_payment_terms":
+			case "accomondation_terms":
+				$terms = $this->meta("trans_terms");
+				if(strlen($str = $terms[$this->prop("default_language")][$pn]))
+				{
+					return $str;
+				}
+				else
+				{
+					$rfpm = get_instance(CL_RFP_MANAGER);
+					$obj = obj($rfpm->get_sysdefault());
+					$trs = $obj->meta("translations");
+					
+					if (isset($trs[$this->prop("default_language")]) && $obj->meta("trans_".$this->prop("default_language")."_status") == 1)
+					{
+						return $trs[$this->prop("default_language")][$pn];
+					}
+					else
+					{
+						return $obj->prop($pn);
+					}
+				}
+				break;
+		}
+		return parent::prop($pn);
+	}
+
 	/** Returns all reservations for this rfp
 		@attrib api=1
 	 **/

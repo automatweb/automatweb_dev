@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.34 2008/08/05 13:09:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.35 2008/08/05 14:23:32 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -134,6 +134,12 @@
 	@property accomondation_terms type=textarea richtext=1 table=objects field=meta method=serialize
 	@caption Majutuse annuleerimis- ja maksetingimused
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 @reltype REDIR_DOC value=1 clid=CL_DOCUMENT
 @caption Konverentsiplaneerija
 
@@ -178,6 +184,10 @@ class rfp_manager extends class_base
 			"clid" => CL_RFP_MANAGER
 		));
 
+		$this->trans_props = array(
+			"cancel_and_payment_terms", "accomondation_terms"
+		);
+
 		$this->raport_types = array(
 			1 => t("Ruumid"),
 			2 => t("Majutus"),
@@ -216,13 +226,13 @@ class rfp_manager extends class_base
 			case "default_language":
 				$l = get_instance("core/trans/pot_scanner");
 				$tl = $l->get_langs();
-				foreach(aw_ini_get("languages.list") as $ldat)
+				foreach(aw_ini_get("languages.list") as $key => $ldat)
 				{
 					if(!in_array($ldat["acceptlang"], $tl))
 					{
 						continue;
 					}
-					$opts[$ldat["acceptlang"]] = $ldat["name"];
+					$opts[$key] = $ldat["name"];
 				}
 				$prop["options"] = $opts;
 			break;
@@ -989,6 +999,9 @@ class rfp_manager extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	
@@ -1639,6 +1652,11 @@ class rfp_manager extends class_base
 		$this->_get_raports_table(&$arr);
 		$print = "<script language=javascript>window.print();</script>";
 		die($arr["prop"]["value"].$print);
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
