@@ -144,7 +144,7 @@ class event_webview extends class_base
 			}
 		}
 
-		$ol_args[] = new obj_predicate_sort(array("start1" => ($ob->order_by_time != "desc" ? "asc" : "desc")));
+//		$ol_args[] = new obj_predicate_sort(array("start1" => ($ob->order_by_time != "desc" ? "asc" : "desc")));
 		$events = new object_list($ol_args);
 
 		$EVENT = "";
@@ -216,6 +216,7 @@ class event_webview extends class_base
 						"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
 					));
 					$this->vars($event_data[$event_time_match_event[$to->id()]]);
+					$this->parse_prop_subs(obj($event_time_match_event[$to->id()]), $props);
 					$EVENT .= $this->parse("EVENT");
 				}
 			}
@@ -242,6 +243,7 @@ class event_webview extends class_base
 					"event.AWurl" => obj_link($event->id()),
 				));
 			}
+			$this->parse_prop_subs($event, $props);
 			$EVENT .= $this->parse("EVENT");
 		}
 		
@@ -271,6 +273,24 @@ class event_webview extends class_base
 					"type" => ""
 				));
 				return true;
+		}
+	}
+
+	private function parse_prop_subs($o, $props)
+	{
+		foreach($props as $k => $p)
+		{
+			switch($k)
+			{
+				default:					
+					if(strlen($o->$k) > 0)
+					{
+						$this->vars(array(
+							"EVENT.".strtoupper($k) => $this->parse("EVENT.".strtoupper($k)),
+						));
+					}
+					break;
+			}
 		}
 	}
 }
