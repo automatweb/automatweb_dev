@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.32 2008/08/04 20:26:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.33 2008/08/05 12:51:40 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -32,6 +32,9 @@
 
 @property meta_folder type=relpicker reltype=RELTYPE_META_OBJECT_FOLDER store=connect
 @caption Muutujate kaust
+
+@property table_form_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@caption Lauaasetuste kaust
 
 @property default_table type=table no_caption=1 store=no
 
@@ -151,6 +154,9 @@
 
 @reltype DEFAULT_WEBFORM clid=CL_CONFERENCE_PLANNING value=8
 @caption RFP Veebivorm
+
+@reltype FOLDER clid=CL_MENU value=9
+@caption Kaust
 
 */
 

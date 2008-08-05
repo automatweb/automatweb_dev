@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.61 2008/08/05 12:31:37 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.62 2008/08/05 12:51:40 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -514,6 +514,21 @@ class rfp extends class_base
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			case "data_mf_table_form":
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$obj = obj($rfpm->get_sysdefault());
+				if($this->can("view", $obj->prop("table_form_folder")))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_META,
+						"parent" => $obj->prop("table_form_folder")
+					));
+					foreach($ol->arr() as $obj)
+					{
+						$prop["options"][$obj->id()] = $obj->name();
+					} 
+				}
+				break;
 			case "conference_planner":
 				$rfpm = get_instance(CL_RFP_MANAGER);
 				$obj = obj($rfpm->get_sysdefault());

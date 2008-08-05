@@ -82,6 +82,16 @@
             <caption>Muutujate kaust</caption>
       </property>
       <property>
+            <name>table_form_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lauaasetuste kaust</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
@@ -467,6 +477,11 @@
                   <value>8</value>
                   <caption>RFP Veebivorm</caption>
             </DEFAULT_WEBFORM>
+            <FOLDER>
+                  <clid>CL_MENU</clid>
+                  <value>9</value>
+                  <caption>Kaust</caption>
+            </FOLDER>
       </reltypes>
       <layout>
             <raports_hsplit>
