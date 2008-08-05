@@ -689,7 +689,8 @@
             <name>final_theme</name>
             <table>rfp</table>
             <group>final_general</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_THEME</reltype>
             <field>final_theme</field>
             <caption>Teema</caption>
             <comment>Konverentsi valdkond(&amp;amp;uml;ldteema)</comment>
@@ -1090,6 +1091,11 @@
                   <value>11</value>
                   <caption>Arvutuste vaikevaluuta</caption>
             </DEFAULT_CURRENCY>
+            <THEME>
+                  <clid>CL_META</clid>
+                  <value>13</value>
+                  <caption>Konverentsi teema</caption>
+            </THEME>
       </reltypes>
       <layout>
             <prs_hsplit>

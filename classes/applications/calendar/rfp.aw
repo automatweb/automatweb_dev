@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.62 2008/08/05 12:51:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.63 2008/08/05 13:09:06 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -279,7 +279,7 @@
 			@caption Toitlustuse ruumid
 			@comment Toitlustuse jaoks kasutatavad ruumid
 
-			@property final_theme type=textbox
+			@property final_theme type=relpicker reltype=RELTYPE_THEME
 			@caption Teema
 			@comment Konverentsi valdkond(&uml;ldteema)
 
@@ -442,6 +442,9 @@
 
 @reltype DEFAULT_CURRENCY clid=CL_CURRENCY value=11
 @caption Arvutuste vaikevaluuta
+
+@reltype THEME clid=CL_META value=13
+@caption Konverentsi teema
 */
 
 define("RFP_STATUS_SENT", 1);
@@ -522,6 +525,21 @@ class rfp extends class_base
 					$ol = new object_list(array(
 						"class_id" => CL_META,
 						"parent" => $obj->prop("table_form_folder")
+					));
+					foreach($ol->arr() as $obj)
+					{
+						$prop["options"][$obj->id()] = $obj->name();
+					} 
+				}
+				break;
+			case "final_theme":
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$obj = obj($rfpm->get_sysdefault());
+				if($this->can("view", $obj->prop("theme_folder")))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_META,
+						"parent" => $obj->prop("theme_folder")
 					));
 					foreach($ol->arr() as $obj)
 					{
@@ -2641,7 +2659,7 @@ class rfp extends class_base
 			array("accomondation_terms", "text"),
 			array("final_rooms", "text"),
 			array("final_catering_rooms", "text"),
-			array("final_theme", "varchar(255)"),
+			array("final_theme", "int"),
 			array("final_international", "int"),
 			array("final_native_guests", "int"),
 			array("final_foreign_guests", "int"),
