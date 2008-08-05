@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.149 2008/07/21 09:47:07 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.150 2008/08/05 10:32:51 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1949,7 +1949,7 @@ class releditor extends core
 				$defs[$data["emb_tbl_col_num"]] = $tc_name;
 			}
 
-			if ($rel_props[$prop_name]["type"] == "date_select" || $rel_props[$prop_name]["type"] == "datetime_select")
+			if (($rel_props[$prop_name]["type"] == "date_select" || $rel_props[$prop_name]["type"] == "datetime_select") && is_array($prop_data[$prop_name]))
 			{
 				$tc_val = date_edit::get_timestamp($prop_data[$prop_name], $rel_props[$prop_name]);
 			}
@@ -1986,6 +1986,7 @@ class releditor extends core
 			{
 				$i->get_property($args);
 			}
+
 			switch($pv["type"])
 			{
 				case "relpicker":
@@ -2139,7 +2140,7 @@ class releditor extends core
 		$releditor_name = $arr["releditor_name"];
 		$d = unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$releditor_name."_data"]));
 		$idx = $arr["edit_index"];
-		$main_clid = CL_CRM_PERSON;
+		$main_clid = CL_CALENDAR_EVENT;//CL_CRM_PERSON;
 
 		$pd = $this->_get_js_cur_prop($main_clid, $releditor_name);
 		$rel_clid = $this->_get_related_clid($main_clid, $releditor_name);
