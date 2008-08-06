@@ -1609,6 +1609,27 @@ class room extends class_base
 		return $arr["prop"]["value"] = $this->parse();
 	}
 
+	/** updates room calendar table
+		@attrib name=update_calendar_table params=name api=1
+		@param room required type=oid
+			room object id
+		@returns html
+			calendar table html
+	**/
+	function update_calendar_table($arr)
+	{
+		$t = new vcl_table;
+		$prop = array(
+			"vcl_inst" => &$t
+		);
+		$this->_get_calendar_tbl(array(
+			"room" => $arr["room"],
+			"prop" => $prop,
+		));
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		die($t->draw());
+	}
+
 	function _get_calendar_tbl($arr)
 	{
 		enter_function("get_calendar_tbl");

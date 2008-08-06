@@ -37,6 +37,14 @@
 			</function>
 		</action>
 
+		<action name="update_calendar_table">
+			<function name="update_calendar_table">
+				<arguments>
+					<required name="room" type="oid" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_add_reservation" all_args="1">
 			<function name="do_add_reservation">
 				<arguments>
