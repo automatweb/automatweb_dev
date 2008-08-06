@@ -821,8 +821,8 @@ class crm_bill extends class_base
 		if(is_oid($b))
 		{
 			$b = obj($b);
-		}
-		if(!$b->prop("customer_name"))
+		}arr($b->prop("customer_address"));
+		if(!$b->prop("customer_name") || !$b->prop("customer_address"))
 		{
 			if($this->can("view" , $b->prop("customer")))
 			{
@@ -1784,22 +1784,22 @@ class crm_bill extends class_base
 				//$ord_addr = $ct->name()." ".$ct->prop("postiindeks");
 
 				$ct = obj($ord->prop($prop));
-				$ap = array($ct->prop("aadress"));
-				if ($ct->prop("linn"))
-				{
-					$ap[] = $ct->prop_str("linn");
+//				$ap = array($ct->prop("aadress"));
+//				if ($ct->prop("linn"))
+//				{
+//					$ap[] = $ct->prop_str("linn");
 //					$ord_city = $ct->prop_str("linn");
-				}
-				$aps = join(", ", $ap)."<br>";
-				$aps .= $ct->prop_str("maakond");
-				$aps .= " ".$ct->prop("postiindeks");
-				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
-				$ord_country = $ct->prop_str("riik");
-				$ord_index = $this->get_customer_address($b->id(), "index");//$ct->prop("postiindeks");
-				$ord_county = $this->get_customer_address($b->id(), "county");//$ct->prop_str("maakond");
-				$ord_city = $this->get_customer_address($b->id(), "city");
+//				}
+//				$aps = join(", ", $ap)."<br>";
+//				$aps .= $ct->prop_str("maakond");
+//				$aps .= " ".$ct->prop("postiindeks");
+//				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+//				$ord_country = $ct->prop_str("riik");
+//				$ord_index = $this->get_customer_address($b->id(), "index");//$ct->prop("postiindeks");
+//				$ord_county = $this->get_customer_address($b->id(), "county");//$ct->prop_str("maakond");
+//				$ord_city = $this->get_customer_address($b->id(), "city");
 				//$ord_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
-				$ord_street = $this->get_customer_address($b->id(), "street");//$ct->prop("aadress");
+//				$ord_street = $this->get_customer_address($b->id(), "street");//$ct->prop("aadress");
 				//riigi tlge, kui on inglise keeles
 				if($b->prop("language"))
 				{
@@ -1892,10 +1892,10 @@ class crm_bill extends class_base
 				}
 			}
 
-			if(!is_object($riik) ||  $riik->name() != $ord_country)
-			{
-				$ord_addr .= " ".$ord_country;
-			}
+//			if(!is_object($riik) ||  $riik->name() != $ord_country)
+//			{
+//				$ord_addr .= " ".$ord_country;
+//			}
 			if ($this->can("view", $impl->prop("email_id")))
 			{
 				$mail = obj($impl->prop("email_id"));
@@ -1917,10 +1917,10 @@ class crm_bill extends class_base
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $this->get_customer_address($b->id())." ".$ord_index,
 			"orderer_city" => $this->get_customer_address($b->id() , "city"),
-			"orderer_county" => $ord_county,
-			"orderer_index" => $ord_index,
-			"orderer_country" => $ord_country,
-			"orderer_street" => $ord_street,
+			"orderer_county" => $this->get_customer_address($b->id() , "county"),//$ord_county,
+			"orderer_index" => $this->get_customer_address($b->id() , "index"),//$ord_index,
+			"orderer_country" => $this->get_customer_address($b->id() , "country"),//$ord_country,
+			"orderer_street" => $this->get_customer_address($b->id() , "street"),//$ord_street,
 			"impl_street" => $impl_street,
 			"impl_city" => $impl_city,
 			"impl_county" => $impl_county,
