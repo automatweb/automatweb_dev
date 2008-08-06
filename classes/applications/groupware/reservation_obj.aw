@@ -40,7 +40,16 @@ class reservation_obj extends _int_object
 				}
 				break;
 		}
-		return parent::set_prop($pn, $pv);
+		$retval = parent::set_prop($pn, $pv);
+
+		switch($pn)
+		{
+			case "start1":
+			case "end":
+			case "resource":
+				$this->set_correct_name();
+		}
+		return $retval;
 	}
 
 	function get_sum()
