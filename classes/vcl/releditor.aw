@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.150 2008/08/05 10:32:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.151 2008/08/06 10:49:15 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -441,7 +441,8 @@ class releditor extends core
 					"id" : "'.$arr["obj_inst"]->id().'",
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
-					"start_from_index" : "'.$conns_count.'"
+					"start_from_index" : "'.$conns_count.'",
+					"main_clid" : "'.$obj->class_id().'",
 					});
 			</script>',
 			"store" => "no",
@@ -1864,7 +1865,10 @@ class releditor extends core
 		{
 			$defs = array();
 			$this->sort_relp = $rel_props;
-			uasort($cur_prop["table_fields"], array(&$this, "__props_sort"));
+
+//-------------see sortimine siin, ma ei n2e kuda vajalik oleks, seda enam , et ["ord"] muutujaid ei tule m6istlikke kuskil
+//kui tundub ikka vajalik, siis claendat_event'is event_time_edit propertyga peaks ka proovima... seal sordib lihtsalt valeks
+//			uasort($cur_prop["table_fields"], array(&$this, "__props_sort"));
 			foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 			{
 				$data = $rel_props[$prop_name];
@@ -2140,7 +2144,7 @@ class releditor extends core
 		$releditor_name = $arr["releditor_name"];
 		$d = unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$releditor_name."_data"]));
 		$idx = $arr["edit_index"];
-		$main_clid = CL_CALENDAR_EVENT;//CL_CRM_PERSON;
+		$main_clid = $arr["main_clid"];//CL_CALENDAR_EVENT;//CL_CRM_PERSON;
 
 		$pd = $this->_get_js_cur_prop($main_clid, $releditor_name);
 		$rel_clid = $this->_get_related_clid($main_clid, $releditor_name);
