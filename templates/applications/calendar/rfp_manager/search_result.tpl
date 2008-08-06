@@ -42,11 +42,12 @@ BODY
 <!-- END SUB: HEADER -->
 <!-- SUB: CLIENT_ROW -->
 <tr class="awmenuedittablerow">
-	<td colspan="8" class="awmenuedittabletext">{VAR:data_subm_name} - {VAR:data_subm_organisation}</td>
+	<td colspan="10" class="awmenuedittabletext">{VAR:data_subm_name} - {VAR:data_subm_organisation}</td>
 </tr>
 <!-- END SUB: CLIENT_ROW -->
 <!-- SUB: ROW -->
 <tr class="awmenuedittablerow">
+
 <!-- SUB: ROW_TYPE_RESOURCES -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>
@@ -59,6 +60,29 @@ BODY
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 <!-- END SUB: ROW_TYPE_RESOURCES -->
+<!-- SUB: ROW_TYPE_RESOURCES_HAS_PRODUCTS -->
+<td colspan="10" style="border: 2px solid white;">
+<table border="0" width="100%" cellspacing="1" cellpadding="3" class="awmenuedittabletag">
+<tr>
+	<td class="awmenuedittabletext">Ressurss</td>
+	<td class="awmenuedittabletext">Aeg</td>
+	<td class="awmenuedittabletext">Kogus</td>
+	<td class="awmenuedittabletext">Hind</td>
+	<td class="awmenuedittabletext">Kommentaar</td>
+	<td class="awmenuedittabletext">Summa</td>
+</tr>
+<!-- SUB: ROW_TYPE_RESOURCES_PRODUCT -->
+	<td class="awmenuedittabletext">{VAR:resource_name}</td>
+	<td class="awmenuedittabletext">{VAR:resource_from_time} - {VAR:resource_to_time}</td>
+	<td class="awmenuedittabletext">{VAR:count}</td>
+	<td class="awmenuedittabletext">{VAR:price}</td>
+	<td class="awmenuedittabletext">{VAR:comment}</td>
+	<td class="awmenuedittabletext">{VAR:sum}</td>
+<!-- END SUB: ROW_TYPE_RESOURCES_PRODUCT -->
+</table>
+</td>
+<!-- END SUB: ROW_TYPE_RESOURCES_HAS_PRODUCTS -->
+
 <!-- SUB: ROW_TYPE_ROOMS -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>
@@ -71,6 +95,7 @@ BODY
 	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 <!-- END SUB: ROW_TYPE_ROOMS -->
+
 <!-- SUB: ROW_TYPE_CATERING -->
 	<td class="awmenuedittabletext">{VAR:from_date}</td>
 	<td class="awmenuedittabletext">{VAR:from_time} - {VAR:to_time}</td>

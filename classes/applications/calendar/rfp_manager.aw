@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.37 2008/08/05 16:47:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.38 2008/08/06 11:36:37 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -599,69 +599,95 @@ class rfp_manager extends class_base
 				$empty[$row_type_var] = "";
 				$this->vars($empty);
 
-				if($with_products AND $data["result_type"] == RFP_RAPORT_TYPE_CATERING)
+				if($with_products AND ($data["result_type"] == RFP_RAPORT_TYPE_CATERING OR $data["result_type"] ==  RFP_RAPORT_TYPE_RESOURCES))
 				{
-					$_row_html = "";
-					$_tmp = "";
-					$this->vars(array(
-						"ROW_TYPE_CATERING_HAS_PRODUCTS" => "",
-						"ROW_TYPE_CATERING_PRODUCT" => "",
-					));
-					foreach($data["products"] as $product => $product_data)
-					{
-						if($this->can("view", $product_data["room"]))
-						{
-							$product_data["room_name"] = obj($product_data["room"])->name();
-						}
-						$product_data["product_name"] = obj($product)->name();
-						$product_data["product_from_time"] = date("H:i", $product_data["start1"]);
-						$product_data["product_to_time"] = date("H:i", $product_data["end"]);
-						if($this->can("view", $product_data["var"]))
-						{
-							$product_data["product_event"] = obj($product_data["var"])->name();
-						}
+					$type_ext = array(
+						RFP_RAPORT_TYPE_CATERING => "CATERING",
+						RFP_RAPORT_TYPE_RESOURCES => "RESOURCES",
+					);
+					$current_type = $type_ext[$data["result_type"]];
+					$loopdata = ($data["result_type"] == RFP_RAPORT_TYPE_CATERING)?$data["products"]:$data["resources"];
 
-						$this->vars($product_data); // price & stuff maybe also???
-						$prod_type_var = "ROW_TYPE_CATERING_PRODUCT";
-						$prod_type_has_var = "ROW_TYPE_CATERING_HAS_PRODUCTS";
-						$row_type_html = array();
+					if(count($loopdata))
+					{
+						$_row_html = "";
+						$_tmp = "";
+						$this->vars(array(
+							"ROW_TYPE_".$current_type."_HAS_PRODUCTS" => "",
+							"ROW_TYPE_".$current_type."_PRODUCT" => "",
+						));
+						foreach($loopdata as $subrow_key => $subrow_data)
+						{
+							switch($data["result_type"])
+							{
+								case RFP_RAPORT_TYPE_CATERING:
+									if($this->can("view", $subrow_data["room"]))
+									{
+										$subrow_data["room_name"] = obj($subrow_data["room"])->name();
+									}
+									$subrow_data["product_name"] = obj($subrow_key)->name();
+									$subrow_data["product_from_time"] = date("H:i", $subrow_data["start1"]);
+									$subrow_data["product_to_time"] = date("H:i", $subrow_data["end"]);
+									if($this->can("view", $subrow_data["var"]))
+									{
+										$subrow_data["product_event"] = obj($subrow_data["var"])->name();
+									}
+									break;
+								case RFP_RAPORT_TYPE_RESOURCES:
+									$subrow_data["resource_name"] = obj($subrow_data["real_resource"])->name();
+									$subrow_data["resource_from_time"] = date("H:i", $subrow_data["start1"]);
+									$subrow_data["resource_to_time"] = date("H:i", $subrow_data["end"]);
+									if($rfp)
+									{
+										$default_currency = $rfp->prop("default_currency");
+									}
+									$subrow_data["price"] = $subrow_data["prices"][$default_currency];
+									$subrow_data["sum"] = $subrow_data["price"] * $subrow_data["count"];
+									break;
+							}
+							$this->vars($subrow_data);
+
+							$prod_type_var = "ROW_TYPE_".$current_type."_PRODUCT";
+							$prod_type_has_var = "ROW_TYPE_".$current_type."_HAS_PRODUCTS";
+							$row_type_html = array();
+							if($gr_by_client)
+							{
+								$row_type_html[$prod_type_has_var] .= $this->parse($prod_type_var);
+								$this->vars($row_type_html);
+								//$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+								$_row_html .= $this->parse("ROW");
+							}
+							else
+							{
+								$row_type_html[$prod_type_has_var] .= $this->parse($prod_type_var);
+								$this->vars($row_type_html);
+								//$row_html .= $this->parse("ROW");
+								$_row_html .= $this->parse("ROW");
+							}
+							$row_type_html[$prod_type_var] = "";
+							$row_type_html[$prod_type_has_var] = "";
+							$this->vars($row_type_html);
+						}
+						// here we take the rendered product rows and put them inside has_products sub, after what whole table gets the products crap as one single row
+						$this->vars(array(
+							"ROW_TYPE_".$current_type."_PRODUCT" => $_row_html,
+						));
+						$_tmp = $this->parse("ROW_TYPE_".$current_type."_HAS_PRODUCTS");
+						$this->vars(array(
+							"ROW_TYPE_".$current_type."_HAS_PRODUCTS" => $_tmp,
+						));
 						if($gr_by_client)
 						{
-							$row_type_html[$prod_type_has_var] .= $this->parse($prod_type_var);
-							$this->vars($row_type_html);
-							//$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
-							$_row_html .= $this->parse("ROW");
+							$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
 						}
 						else
 						{
-							$row_type_html[$prod_type_has_var] .= $this->parse($prod_type_var);
-							$this->vars($row_type_html);
-							//$row_html .= $this->parse("ROW");
-							$_row_html .= $this->parse("ROW");
+							$row_html .= $this->parse("ROW");
 						}
 						$row_type_html[$prod_type_var] = "";
 						$row_type_html[$prod_type_has_var] = "";
 						$this->vars($row_type_html);
 					}
-					// here we take the rendered product rows and put them inside has_products sub, after what whole table gets the products crap as one single row
-					$this->vars(array(
-						"ROW_TYPE_CATERING_PRODUCT" => $_row_html,
-					));
-					$_tmp = $this->parse("ROW_TYPE_CATERING_HAS_PRODUCTS");
-					$this->vars(array(
-						"ROW_TYPE_CATERING_HAS_PRODUCTS" => $_tmp,
-					));
-					if($gr_by_client)
-					{
-						$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
-					}
-					else
-					{
-						$row_html .= $this->parse("ROW");
-					}
-					$row_type_html[$prod_type_var] = "";
-					$row_type_html[$prod_type_has_var] = "";
-					$this->vars($row_type_html);
 				}
 			}
 

@@ -107,15 +107,13 @@ class rfp_obj extends _int_object
 			{
 				$new["meta_".$meta] = $reservation->meta($meta);
 			}
-			/* he.. this returns every resource itself.. we need resevations here. doooh..
 			foreach($reservation->get_resources_data() as $resource => $resource_data)
 			{
 				$new2 = array(
 					"real_resource" => $resource,
 				);
-				$return[] = $new2 + $new + $resource_data;
+				$new["resources"][] = $new2 + $resource_data;
 			}
-			 */
 			$return[] = $new;
 		}
 		return $return;
