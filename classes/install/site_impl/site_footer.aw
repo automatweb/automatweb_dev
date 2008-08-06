@@ -108,7 +108,7 @@ if ($_GET["TPL"] == 1)
 		"TEMPLATE" => $tmp
 	));
 	aw_global_set("TPL=1", $sf->parse());
-	$str = preg_replace("/^(.*)<body.*>/imsU", "\\0".aw_global_get("TPL=1"), $str);
+	$str = preg_replace("/<body.*>/imsU", "\\0".aw_global_get("TPL=1"), $str);
 }
 
 if (aw_ini_get("content.compress") == 1)
