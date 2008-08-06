@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.133 2008/08/03 23:06:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.134 2008/08/06 13:24:13 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2725,7 +2725,7 @@ class ml_list extends class_base
 				if($langid == $folder_obj -> lang_id())
 				{
 					$this->vars(array(
-						"folder_name" => $folder_obj -> name(),
+						"folder_name" => $folder_obj -> trans_get_val("name"),
 						"folder_id" => $folder_obj -> id(),
 					));
 					$c .= $this->parse("FOLDER");
@@ -2741,7 +2741,8 @@ class ml_list extends class_base
 							if(($langid == $conn_fold_obj->lang_id()) && ($folder_conn->prop("from") == $folder))
 							{
 								$this->vars(array(
-									"folder_name" => $folder_conn->prop("to.name"),
+									"folder_name" => $conn_fold_obj->trans_get_val("name"),
+//									"folder_name" => $folder_conn->prop("to.name"),
 									"folder_id" => $folder_conn->prop("to"),
 								));
 								$c .= $this->parse("FOLDER");
@@ -2774,7 +2775,8 @@ class ml_list extends class_base
 								foreach($conns as $conn)
 								{
 									$this->vars(array(
-									"folder_name" => $conn->prop("to.name"),
+									"folder_name" => $conn_fold_obj->trans_get_val("name"),
+//"folder_name" => $conn->prop("to.name"),
 									"folder_id" => $conn->prop("to"),
 									));
 									$c .= $this->parse("FOLDER");
@@ -2872,7 +2874,7 @@ class ml_list extends class_base
 		{
 			$folder_obj = obj($folder);
 			$this->vars(array(
-				"folder_name" => $folder_obj -> name(),
+				"folder_name" => $folder_obj -> trans_get_val("name"),
 				"folder_id" => $folder_obj -> id(),
 			));
 			$c .= $this->parse("FOLDER");
