@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.38 2008/08/06 11:36:37 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.39 2008/08/06 13:09:21 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -442,6 +442,11 @@ class rfp_manager extends class_base
 			"name" => "print",
 			"url" => aw_url_change_var("action", "search_result_print_output"),
 			"img" => "print.gif",
+		));
+		$tb->add_button(array(
+			"name" => "pdf",
+			"url" => aw_url_change_var("action", "search_result_export_pdf"),
+			"img" => "ftype_pdf.gif",
 		));
 	}
 
@@ -1714,6 +1719,28 @@ class rfp_manager extends class_base
 		$this->_get_raports_table(&$arr);
 		$print = "<script language=javascript>window.print();</script>";
 		die($arr["prop"]["value"].$print);
+	}
+
+	/** Used for exporting search results to pdf
+		@attrib params=name all_args=1 name=search_result_export_pdf
+	 **/
+	function search_result_export_pdf($arr)
+	{
+		foreach($arr as $k => $v)
+		{
+			if(substr($k, 0, 15) == "raports_search_")
+			{
+				$arr["request"][$k] = $v;
+			}
+		}
+		$arr["set_filters"] = true;
+		$arr["with_header_and_footer"] = true;
+		$this->_get_raports_table(&$arr);
+		$pdf_gen = get_instance("core/converters/html2pdf");
+		die($pdf_gen->gen_pdf(array(
+			"filename" => t("Raportid"),
+			"source" => $arr["prop"]["value"],
+		)));
 	}
 
 	function callback_get_transl($arr)
