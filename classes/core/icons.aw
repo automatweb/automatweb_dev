@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.9 2008/01/31 13:52:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.10 2008/08/06 14:20:11 voldemar Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -21,10 +21,11 @@ class icons extends aw_template
 	**/
 	function get_icon_url($arg1,$name = "")
 	{
+		$done = false;
+
 		if (is_object($arg1))
 		{
 			$clid = $arg1->class_id();
-			$done = false;
 			$done = $arg1->flags() & OBJ_IS_DONE;
 		}
 		else
@@ -58,8 +59,6 @@ class icons extends aw_template
 			$sufix = !empty($done) ? "_done" : "";
 			return aw_ini_get("icons.server")."/class_".$clid.$sufix.".gif";
 		}
-
-		return aw_ini_get("baseurl")."/automatweb/images/icon_aw.gif";
 	}
 
 	/**
