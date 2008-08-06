@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.43 2008/07/29 14:08:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.44 2008/08/06 17:57:42 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -407,8 +407,9 @@ $start = ((float)$usec + (float)$sec);
 		// if needed add customer/project/task
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
+		/*
 		$tcust = $arr["request"]["customer"];
-		/*if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
+		if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["customer"]);
 			if ($arr["request"]["customer"] == "")
@@ -530,7 +531,7 @@ $start = ((float)$usec + (float)$sec);
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
 			"name" => $arr["request"]["project"],
-			"CL_PROJECT.RELTYPE_ORDERER.name" => $arr["request"]["customer"]."%",
+			"CL_PROJECT.RELTYPE_ORDERER" => $c->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"state" => new obj_predicate_not(PROJ_DONE)
@@ -555,8 +556,8 @@ $start = ((float)$usec + (float)$sec);
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
 			"name" => $arr["request"]["task"],
-			"CL_TASK.project.name" => $arr["request"]["project"]."%",
-			"CL_TASK.customer.name" => $arr["request"]["customer"]."%",
+			"CL_TASK.project.name" => $p->id(),
+			"CL_TASK.customer" => $c->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"is_done" => new obj_predicate_not(8),
