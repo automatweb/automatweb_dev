@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.40 2008/06/06 10:51:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.41 2008/08/06 15:11:51 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -473,7 +473,16 @@ class persons_webview extends class_base
 					continue;
 
 				case "profession":
-					$res = $a["worker"]->prop("rank.jrk") - $b["worker"]->prop("rank.jrk");
+					$awr = $this->get_relation_profession_ord($a["worker"]);
+					$bwr = $this->get_relation_profession_ord($b["worker"]);
+					if($awr || $bwr)
+					{
+						$res = $awr-$bwr;
+					}
+					else
+					{
+						$res = $a["worker"]->prop("rank.jrk") - $b["worker"]->prop("rank.jrk");
+					}
 					if($res)
 					{
 						if($val["order"] == "ASC")
@@ -496,6 +505,19 @@ class persons_webview extends class_base
 					continue;
 				default:
 					;
+			}
+		}
+		return 0;
+	}
+
+	private function get_relation_profession_ord($o)
+	{
+		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
+		{
+			$rel = $c->to();
+			if($rel->prop("section") == $this->section->id())
+			{
+				return $rel->prop("profession.jrk");
 			}
 		}
 		return 0;
