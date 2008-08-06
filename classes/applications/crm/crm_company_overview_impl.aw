@@ -1534,6 +1534,13 @@ class crm_company_overview_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
+		unset($arr["request"]["act_s_cust"]);
+		unset($arr["request"]["act_s_status"]);
+		unset($arr["request"]["act_s_print_view"]);
+		unset($arr["request"]["act_s_sbt"]);
+		unset($arr["request"]["act_s_is_is"]);
+		unset($arr["request"]["act_s_mail_content"]);
+		unset($arr["request"]["act_s_mail_name"]);
 		$args = array();
 		switch($arr["request"]["group"])
 		{
