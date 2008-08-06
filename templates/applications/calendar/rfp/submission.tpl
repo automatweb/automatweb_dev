@@ -133,7 +133,7 @@ kehtib: {VAR:offer_expire_date}
 <!-- SUB: HOUSING -->
 <br /><br />
 <table border="1" cellspacing="0" cellpadding="5" width="100%" bgcolor="#efefef" bordercolor="#ffffff" style="border-collapse: collapse">
-<tr bgcolor="#aaaaaa"><th colspan="8">Majutus</th></tr>
+<tr bgcolor="#aaaaaa"><th colspan="9">Majutus</th></tr>
 <tr bgcolor="#dddddd">
 <td>Alates</td>
 <td>Kuni</td>
@@ -142,6 +142,7 @@ kehtib: {VAR:offer_expire_date}
 <td>Inimesi</td>
 <td>Hind</td>
 <td>Soodustus</td>
+<td>M&auml;rkus</td>
 <td>Summa</td>
 </tr>
 <!-- SUB: ROOMS -->
@@ -153,6 +154,7 @@ kehtib: {VAR:offer_expire_date}
 <td>{VAR:hs_people}</td>
 <td>{VAR:hs_price}</td>
 <td>{VAR:hs_discount}</td>
+<td>{VAR:hs_comment}</td>
 <td>{VAR:hs_sum}</td>
 </tr>
 <!-- END SUB: ROOMS -->

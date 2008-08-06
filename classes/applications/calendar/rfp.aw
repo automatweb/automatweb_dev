@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.70 2008/08/06 12:32:22 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.71 2008/08/06 12:45:05 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1606,6 +1606,12 @@ class rfp extends class_base
 			"chgbgcolor" => "split",
 		));
 		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("M&auml;rkus"),
+			"align" => "center",
+			"chgbgcolor" => "split",
+		));
+		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Summa"),
 			"align" => "center",
@@ -1735,6 +1741,11 @@ class rfp extends class_base
 				"value" => $room["discount"],
 				"size" => 3,
 			))."%",
+			"comment" =>  html::textbox(array(
+				"name" => "housing[".$id."][comment]",
+				"value" => $room["comment"],
+				"size" => 25,
+			)),
 			"sum" => html::hidden(array(
 				"name" => "housing[".$id."][sum]",
 				"value" => $room["sum"],
@@ -2321,6 +2332,7 @@ class rfp extends class_base
 					"hs_price" => $rooms["price"],
 					"hs_discount" => strlen($rooms["discount"])?sprintf("%s %%", $rooms["discount"]):"-",
 					"hs_sum" => $rooms["sum"],
+					"hs_comment" => $rooms["comment"]
 				));
 				$hss .= $this->parse("ROOMS");
 				$housing_total += $rooms["sum"];
