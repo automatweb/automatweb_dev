@@ -479,9 +479,24 @@ class crm_bill extends class_base
 					}
 					$prop["value"] = $sum;
 				}
+				if(($SUM_WT = $this->get_bill_sum($arr["obj_inst"])) > $prop["value"])
+				{
+					$SUM_WITHOUT = $SUM_WT - $prop["value"];
+					$add_tax = 1;
+				}
+
 				$prop["value"] = number_format($prop["value"], 2);
 				$curn = $arr["obj_inst"]->prop("customer.currency.name");
-				$prop["value"] .= " ".($curn == "" ? "EEK" : $curn);
+				if($arr["obj_inst"]->id() > 0)
+				{
+					$prop["value"] .= " ".$arr["obj_inst"]->get_bill_currency_name();
+				}
+				if($add_tax)
+				{
+					$prop["value"] = t("Summa").": ".$prop["value"];
+					$prop["value"] .= "\n<br>".t("KM").": ".number_format($SUM_WITHOUT, 2)." ".$arr["obj_inst"]->get_bill_currency_name();
+					$prop["value"] .= "\n<br>".t("Kokku").": ".number_format($SUM_WT, 2)." ".$arr["obj_inst"]->get_bill_currency_name();
+				}
 				break;
 
 			case "rows_different_pages":
