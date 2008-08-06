@@ -213,7 +213,7 @@ class event_webview extends class_base
 						"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
 						"event.end.time" => date("H:i", $to->end),
 						"event.location" => $to->prop("location.name"),
-						"event.AWurl" => obj_link($event->id())."?event_time=".$to->id(),
+						"event.AWurl" => obj_link($event_time_match_event[$to->id()])."?event_time=".$to->id(),
 					));
 					$this->vars($event_data[$event_time_match_event[$to->id()]]);
 					$EVENT .= $this->parse("EVENT");
