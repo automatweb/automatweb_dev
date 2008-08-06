@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.36 2008/07/03 14:15:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.37 2008/08/06 14:16:14 hannes Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -223,9 +223,18 @@ class toolbar extends aw_template
 				$init_done = true;
 			};
 			$cdata = '<div id="'.$parent.'" class="menu" onmouseover="menuMouseover(event)">'."\n${menudata}</div>\n";
-			
-			$cache = get_instance("cache");
-			$cache->file_set("aw_toolbars",$cache->file_get("aw_toolbars").$cdata );
+			// we add the toolbar html before </body> only in admin
+			// actually the only toolbar that needs this is the aw object toolbar
+			// because there's just too many elements for browser to handle.
+			if ($_SERVER["PHP_SELF"]=="/automatweb/orb.aw") 
+			{
+				$cache = get_instance("cache");
+				$cache->file_set("aw_toolbars",$cache->file_get("aw_toolbars").$cdata );
+			}
+			else // for site use the old method
+			{
+				$this->custom_data .= $cdata;
+			}
 		};
 	}
 
