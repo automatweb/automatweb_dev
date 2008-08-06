@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.71 2008/07/14 12:49:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.72 2008/08/06 11:47:57 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1139,7 +1139,11 @@ class shop_order extends class_base
 
 		if(!$o->meta("mail_sent"))
 		{
-		
+			aw_disable_acl();
+			$o->set_meta("mail_sent" , 1);
+			$o->save();
+			aw_restore_acl();
+
 			$email_subj = t("Tellimus laost ");
 			$mail_from_addr = "automatweb@automatweb.com";
 			$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
@@ -1331,7 +1335,7 @@ class shop_order extends class_base
 				}
 			}
 			aw_disable_acl();
-			$o->set_meta("mail_sent" , 1);
+//			$o->set_meta("mail_sent" , 1);
 			$o->save();
 			aw_restore_acl();
 		}
