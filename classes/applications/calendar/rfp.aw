@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.69 2008/08/06 09:09:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.70 2008/08/06 12:32:22 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2125,6 +2125,7 @@ class rfp extends class_base
 			$resources_tmp = $rv->meta("resources_info");
 			if(count($resources_tmp))
 			{
+				$resources[$rv->id()]["start1"] = $rv->prop("start1");
 				foreach($resources_tmp as $rid => $data)
 				{
 					$count = $data["count"];
@@ -2135,7 +2136,7 @@ class rfp extends class_base
 						
 						$total = $price*$count;
 						$resources_total += $total;
-						$resources[$rv->id()][] = array(
+						$resources[$rv->id()]["resources"][] = array(
 							"rid" => $rid,
 							"name" => $r->trans_get_val("name"),
 							"price" => $price,
@@ -2216,7 +2217,7 @@ class rfp extends class_base
 			foreach($resources as $reservation => $real_resources)
 			{
 				$res = "";
-				foreach($real_resources as $r)
+				foreach($real_resources["resources"] as $r)
 				{
 					$this->vars(array(
 						"res_name" => $r["name"],
@@ -2361,7 +2362,7 @@ class rfp extends class_base
 
 	private function _sort_submission_resources($a, $b)
 	{
-		return ($a["from_hour"].str_pad($a["from_minute"], 2, "0", STR_PAD_LEFT)) - ($b["from_hour"].str_pad($b["from_minute"], 2, "0", STR_PAD_LEFT));
+		return $a["start1"] - $b["start1"];
 	}
 
 	private function _sort_submission_products($a, $b)
