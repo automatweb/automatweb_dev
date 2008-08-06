@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.68 2008/08/05 15:33:53 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.69 2008/08/06 09:09:19 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -515,8 +515,33 @@ class rfp extends class_base
 		
 		// this here deals with props with values to table
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
+		$props_to_map = array(
+			"data_mf_catering_start_admin" => "data_gen_arrival_date_admin",
+			"data_mf_catering_start" => "data_gen_arrival_date",
+			"data_mf_catering_end_admin" => "data_gen_departure_date_admin",
+			"data_mf_catering_end" => "data_gen_departure_date",
+
+			"data_mf_start_date_admin" => "data_gen_arrival_date_admin",
+			"data_mf_start_date" => "data_gen_arrival_date",
+			"data_mf_end_date_admin" => "data_gen_departure_date_admin",
+			"data_mf_end_date" => "data_gen_departure_date",
+		);
+
 		switch($prop["name"])
 		{
+			case "data_mf_catering_start_admin":
+			case "data_mf_catering_start":
+			case "data_mf_catering_end_admin":
+			case "data_mf_catering_end":
+			case "data_mf_start_date_admin":
+			case "data_mf_start_date":
+			case "data_mf_end_date_admin":
+			case "data_mf_end_date":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop($props_to_map[$prop["name"]]);
+				}
+				break;
 			case "data_billing_company":
 				if(!$prop["value"])
 				{
