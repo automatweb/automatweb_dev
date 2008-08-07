@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.120 2008/07/30 08:38:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.121 2008/08/07 11:46:31 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -410,6 +410,8 @@ class reservation extends class_base
 			case "project":
 				$prop["autocomplete_source"] = $this->mk_my_orb("proj_autocomplete_source");
 				$prop["autocomplete_params"] = array("project");
+				//see selleks, et js lisamise juures saaks aru kas projekti prop on yldse kasutuses, et sealt asju otsida
+				$this->has_project_prop = 1;
 				break;
 		};
 		return $retval;
@@ -452,16 +454,19 @@ class reservation extends class_base
 
 	function callback_generate_scripts($arr)
 	{
-		$check_url = $this->mk_my_orb("is_there_project", array("project" => " "));
-		$script = "function aw_submit_handler() {
-			url = '".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value;
-			el=aw_get_url_contents('".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value);
-			if(!(el>0))
-			{
-				return confirm('".t("Sellise nimega projekti ei ole veel andmebaasis, kas soovite uut lisada?")."')
-			}
-			return false;
-		}";
+		if($this->has_project_prop)
+		{
+			$check_url = $this->mk_my_orb("is_there_project", array("project" => " "));
+				$script = "function aw_submit_handler() {
+				url = '".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value;
+				el=aw_get_url_contents('".$check_url."'+document.changeform.project_awAutoCompleteTextbox.value);
+				if(!(el>0))
+				{
+					return confirm('".t("Sellise nimega projekti ei ole veel andmebaasis, kas soovite uut lisada?")."')
+				}
+				return false;
+			}";
+		}
 		if($arr["request"]["saved"])
 		{
 			$script .= "if (window.opener) {window.opener.location.reload();}";
