@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.121 2008/07/17 13:28:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.122 2008/08/07 08:33:43 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -29,6 +29,9 @@ class aw_table extends aw_template
 	var $final_enum;
 	var $titlebar_repeat_bottom;
 	var $hide_rgroupby;
+	var $non_filtered;
+	var $table_tag_id;
+	var $table_class_id = "awmenuedittabletag";
 
 	function aw_table($data = array())
 	{
@@ -72,15 +75,15 @@ class aw_table extends aw_template
 
 		$this->titlebar_display = true;
 
-		if ($data["prop_name"] != "")
+		if (!empty($data["prop_name"]))
 		{
 			$this->filter_name = $data["prop_name"].$_GET["id"];
 		}
-		else
-		if ($_GET["id"] && $_GET["group"])
+		elseif (!empty($_GET["id"]) && !empty($_GET["group"]))
 		{
 			$this->filter_name = md5($_GET["id"].$_GET["group"]);
 		}
+
 		$this->filter_name.= isset($GLOBALS["__aw_table_count_on_page"]) ? ++$GLOBALS["__aw_table_count_on_page"] : 1;
 		$this->sortable = true;
 		$this->rowdefs_ordered = false;
@@ -106,7 +109,7 @@ class aw_table extends aw_template
 		### set/clear new selected filters
 		$request = aw_global_get ("request");
 
-		if ($selected_filter = $request[$this->filter_name])
+		if (isset($request[$this->filter_name]) and ($selected_filter = $request[$this->filter_name]))
 		{
 			list ($filter_key, $filter_selection, $filter_txtvalue) = explode (",", $selected_filter);
 
@@ -210,42 +213,43 @@ class aw_table extends aw_template
 	{
 		### apply filter
 		if (!$this->non_filtered)
-	{
-		foreach ($this->selected_filters as $filter_key => $filter_array)
 		{
-			extract ($filter_array);
-			$field_name = $this->filter_index[$filter_key];
-
-			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
-			$value = strip_tags($row[$field_name]);
-			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
+			foreach ($this->selected_filters as $filter_key => $filter_array)
 			{
-				if (isset($this->filter_comparators[$field_name]))
+				extract ($filter_array);
+				$field_name = $this->filter_index[$filter_key];
+
+				// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
+				$value = strip_tags($row[$field_name]);
+				if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
 				{
-					$fc = $this->filter_comparators[$field_name];
-					if (is_array($fc))
+					if (isset($this->filter_comparators[$field_name]))
 					{
-						if ($fc[0]->$fc[1]($field_name, $filter_txtvalue, $row) === false)
+						$fc = $this->filter_comparators[$field_name];
+						if (is_array($fc))
 						{
-							return false;
+							if ($fc[0]->$fc[1]($field_name, $filter_txtvalue, $row) === false)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							if ($this->filter_comparators[$field_name]($field_name, $filter_txtvalue, $row) === false)
+							{
+								return false;
+							}
 						}
 					}
 					else
+					if (stristr($value, $filter_txtvalue) === false)
 					{
-						if ($this->filter_comparators[$field_name]($field_name, $filter_txtvalue, $row) === false)
-						{
-							return false;
-						}
+						return false;
 					}
-				}
-				else
-				if (stristr($value, $filter_txtvalue) === false)
-				{
-					return false;
 				}
 			}
 		}
-}
+
 		$this->data[] = $row;
 
 		if(!$this->no_recount)
@@ -955,8 +959,6 @@ class aw_table extends aw_template
 
 		}
 
-
-
 		// moodustame v&auml;limise raami alguse
 		/*
 		if (is_array($this->frameattribs))
@@ -983,7 +985,7 @@ class aw_table extends aw_template
 		{
 			$tmp = $this->tableattribs;
 			$tmp["name"] = "table";
-			$tmp["classid"] = $this->table_class_id ? $this->table_class_id : "awmenuedittabletag";
+			$tmp["classid"] = $this->table_class_id;
 			if ($this->table_tag_id)
 			{
 				$tmp["domid"] = $this->table_tag_id;
@@ -1114,7 +1116,7 @@ class aw_table extends aw_template
 						continue;
 					}
 					// hides a the rgroupby column if told so
-					if(in_array($v1["name"], $this->hide_rgroupby))
+					if(is_array($this->hide_rgroupby) and in_array($v1["name"], $this->hide_rgroupby))
 					{
 						continue;
 					}
@@ -1358,7 +1360,7 @@ class aw_table extends aw_template
 				{
 					aw_session_set("table_enum", $enum);
 				}
-				if($v["add_row"])
+				if(!empty($v["add_row"]))
 				{
 					$add_rows = array();
 					if(is_array($v["add_row"]))
@@ -2433,7 +2435,7 @@ class aw_table extends aw_template
 				continue;
 			}
 			// hides a the rgroupby column if told so
-			if(in_array($v["name"], $this->hide_rgroupby))
+			if(is_array($this->hide_rgroupby) and in_array($v["name"], $this->hide_rgroupby))
 			{
 				continue;
 			}
@@ -2488,7 +2490,7 @@ class aw_table extends aw_template
 					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
 				}
 				else
-				if (!empty($_GET["sort_order"]) && $_GET["sortby"] == $v["name"])
+				if (!empty($_GET["sort_order"]) && $_GET["sort_order"] == $v["name"])
 				{
 					$sufix = $_GET["sort_order"] == "desc" ? $this->up_arr : $this->dn_arr;
 					$so = $_GET["sort_order"] == "desc" ? "asc" : "desc";
