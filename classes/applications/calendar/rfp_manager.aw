@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.39 2008/08/06 13:09:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.40 2008/08/07 07:34:36 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -38,6 +38,9 @@
 
 @property theme_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Teemade kaust
+
+@property event_type_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@caption &Uuml;rituse t&uuml;&uuml;pide kaust
 
 @property default_table type=table no_caption=1 store=no
 
