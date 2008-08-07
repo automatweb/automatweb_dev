@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.74 2008/08/07 10:53:16 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.75 2008/08/07 11:59:39 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -803,13 +803,21 @@ class rfp extends class_base
 					"rooms" => "0",
 
 				));
+				
 				$tb->add_button(array(
 					"name" => "cal",
 					"tooltip" => t("Kalender"),
 					"img" => "icon_cal_today.gif",
 					"url" => "#",
-					"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('room_sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};if (vals != '') {aw_popup_scroll('$url'+vals,'mulcal',700,500);} else { alert('".t("Valige palun v&auml;hemalt &uuml;ks ruum!")."');} return false;",
+					"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('room_sel') != -1 && f[i].checked || f[i].name=='selected_room_oid') {vals += ','+f[i].value;}};if (vals != '') {aw_popup_scroll('$url'+vals,'mulcal',700,500);} else { alert('".t("Valige palun ruum!")."');} return false;",
 				));
+				if($this->can("view", $arr["request"]["room_oid"]))
+				{
+					$tb->add_cdata(html::hidden(array(
+						"name" => "selected_room_oid",
+						"value" => $arr["request"]["room_oid"],
+					)));
+				}
 				break;
 			case "products_tree":
 			case "resources_tree":
@@ -1346,6 +1354,7 @@ class rfp extends class_base
 				"class_id" => CL_ROOM,
 				"parent" => $rf,
 			));
+			
 			foreach($ol->arr() as $o)
 			{
 				$rooms[$o->id()] = $o->name();
@@ -1422,6 +1431,11 @@ class rfp extends class_base
 		$prods = $arr["obj_inst"]->meta("prods");
 		foreach($conn as $c)
 		{
+			if($this->can("view", $arr["request"]["room_oid"]) && $c->to()->prop("resource") != $arr["request"]["room_oid"])
+			{
+				// a room is selected from tree and we filter out reservations for that room because connection search can't do that :S
+				continue;
+			}
 			if($this->can("view", $c->prop("to")) && in_array($c->prop("to.parent"), $arr["obj_inst"]->prop("final_catering_rooms"))) // that parent & catering is fishy
 			{
 				$rv = $c->to();
