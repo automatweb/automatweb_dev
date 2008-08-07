@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.11 2008/06/18 08:10:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.12 2008/08/07 12:51:30 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -12,15 +12,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 @default group=general
 
 	@property root type=relpicker reltype=RELTYPE_ROOT field=meta method=serialize 
-	@caption Juurkaust/-grupp
+	@caption Vaikimise grupp
+	@comment Hallata saab selle objekti all olevaid gruppe ja kasutajaid
+
+	@property all_roots type=relpicker reltype=RELTYPE_ROOT multiple=1 store=connect
+	@caption Juurkaustad/-grupid
 	@comment Hallata saab selle objekti all olevaid gruppe ja kasutajaid
 
 	@property default_loginmenu type=select field=meta method=serialize
 	@caption Vaikimisi loginmen&uuml;&uuml; uutel gruppidel
 	@comment Seos Loginmen&uuml;&uuml;de juurkaust peab olema loodud
-	
-	@property inactive_period type=select field=meta method=serialize
-	@caption Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks
 
 @groupinfo users caption=Kasutajad 
 @default group=users
@@ -38,31 +39,65 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 				@property groups_tree type=treeview no_caption=1 store=no parent=vbox_users_tree
 				@caption Puu
 
-			@layout vbox_users_search type=vbox parent=left_bit closeable=1 area_caption=Otsing
-		
-				@property search_txt type=textbox store=no parent=vbox_users_search size=20 captionside=top
-				@caption Grupi nimi
+			@layout vbox_users_search type=vbox parent=left_bit closeable=1 area_caption=Kasutajate&nbsp;otsing
+
+				@property search_user type=textbox size=20 store=no parent=vbox_users_search captionside=top
+				@caption Kasutajanimi
+
+				@property search_person type=textbox size=20 store=no parent=vbox_users_search captionside=top
+				@caption Isiku nimi
+
+				@property search_groups type=textbox size=20 store=no parent=vbox_users_search captionside=top
+				@caption Grupid (komandega eraldatult)
+
+				@property search_active_time type=textbox size=4 store=no parent=vbox_users_search captionside=top
+				@caption Viimati aktiivne (p&auml;eva tagasi)
+
+				@property search_blocked type=chooser store=no parent=vbox_users_search captionside=top
+				@caption Kasutaja blokeering
 
 				@property search_sbt type=submit store=no parent=vbox_users_search size=20 captionside=top no_caption=1
 				@caption Otsi
 
-
 	@layout vbox_users_content type=vbox parent=hbox_data
-
-		@property table_selected_groups type=table store=no no_caption=1 parent=vbox_users_content
-		@caption Grupid 
-
-		@property table_groups type=table store=no no_caption=1 parent=vbox_users_content
-		@caption Grupid 
 
 		@property table_users type=table store=no no_caption=1 parent=vbox_users_content
 		@caption Kasutajad 
 
-@groupinfo inactive_users caption="Mitteaktiivsed kasutajad"
-@default group=inactive_users
+@groupinfo usergroups caption=Kasutajagrupid
+@default group=usergroups
 
-	@property inactive_tb type=toolbar store=no no_caption=1 editonly=1 parent=hbox_toolbar 
-	@property table_inactive type=table store=no no_caption=1
+	@property usergroups_tb type=toolbar store=no no_caption=1
+
+	@layout ug_hbox_data type=hbox width=20%:80%
+
+		@layout ug_left_bit type=vbox parent=ug_hbox_data
+
+			@layout vbox_ug_tree type=vbox parent=ug_left_bit closeable=1 area_caption=Kasutajagruppide&nbsp;puu
+
+				@property usergroups_tree type=treeview no_caption=1 store=no parent=vbox_ug_tree
+
+			@layout vbox_ug_search type=vbox parent=ug_left_bit closeable=1 area_caption=Kasutajagruppide&nbsp;tsing
+		
+				@layout vbox_ug_search_name type=vbox parent=vbox_ug_search
+
+					@property ug_search_txt type=textbox store=no parent=vbox_ug_search_name size=20 captionside=top
+					@caption Grupi nimi
+
+				@layout vbox_ug_search_u type=vbox_sub parent=vbox_ug_search closeable=1 area_caption=Otsi&nbsp;kasutajate&nbsp;gruppe no_padding=1
+
+					@property search_users_usergroups type=chooser store=no parent=vbox_ug_search_u no_caption=1 orient=vertical
+
+				@layout vbox_ug_search_g type=vbox_sub parent=vbox_ug_search closeable=1 area_caption=Otsi&nbsp;kasutajagruppe no_padding=1
+
+					@property search_usergroups store=no type=chooser parent=vbox_ug_search_g no_caption=1 orient=vertical
+
+				@property ug_search_sbt type=submit store=no parent=vbox_ug_search size=20 captionside=top no_caption=1
+				@caption Otsi
+
+	@layout vbox_ug_content type=vbox parent=ug_hbox_data
+
+		@property table_usergroups type=table store=no no_caption=1 parent=vbox_ug_content
 
 @reltype ROOT value=1 clid=CL_GROUP,CL_MENU
 @caption Juurkaust/-grupp
@@ -120,37 +155,73 @@ class user_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case "search_blocked":
+				$prop["options"] = array(
+					"0" => t("K&otilde;ik"),
+					"1" => t("Blokeeritud"),
+					"2" => t("Blokeerimata"),
+				);
+			case "search_users_usergroups":
+			case "search_usergroups":
+				$prop["options"] = array(
+					0 => t("Mitte kuskilt"),
+					1 => t("T&ouml;&ouml;laua seest"),
+					2 => t("Kogu s&uuml;steemist"),
+				);
+			case "ug_search_txt":
+				$srch_data = $arr["obj_inst"]->meta("ug_search_by_".aw_global_get("uid"));
+				$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 0;
+				break;
+
+			case "search_active_time":
+			case "search_user":
+			case "search_person":
+			case "search_groups":
+				$srch_data = $arr["obj_inst"]->meta("search_by_".aw_global_get("uid"));
+				$prop["value"] = $srch_data[$prop["name"]];
+				break;
+
+			case "ug_search_sbt":
+			case "search_sbt":
+				$prop["onclick"] = "aw_get_el('search_button_pressed').value = 1;";
+				break;
+
 			case 'inactive_tb':
 				$this->parent = null;
+			case "usergroups_tb":
 			case 'users_tb':
 				$this->do_users_toolbar(&$prop['toolbar'], $arr);
 			break;
 			case 'table_selected_groups':
 				$this->do_table_selected_groups($prop['vcl_inst'], $arr);
 			break;
-			case 'table_groups':
+			case 'table_usergroups':
 				$this->do_table_groups($prop['vcl_inst'], $arr);
 			break;
 			case 'table_users':
 				$arr['type'] = 'grouprelated';
 			case 'table_inactive':
 				$arr['type'] = $arr['type'] ? $arr['type'] : 'inactive';
+				if($arr["request"]["search_button_pressed"])
+				{
+					$arr['type'] = "search";
+				}
 				$this->do_table_users($prop['vcl_inst'], $arr);
 			break;
-			case 'groups_tree':
-				$parent = $arr['obj_inst']->prop('root');
-				if (!$parent)
-				{
-					$prop['error'] = t("Juurkaust/-grupp valimata");
-					return PROP_ERROR;
-				}
+			case "usergroups_tree":
 				$prop['vcl_inst']->start_tree(array(
-					'type' => TREE_DHTML,
-					'root_name' => t("Grupid"),
-					'root_url' => aw_url_change_var("parent", 0),
+					'root_name' => $this->parent != "root" ? t("Juurkaustad/-grupid") : "<b>".t("Juurkaustad/-grupid")."</b>",
+					'root_url' => aw_url_change_var(array("parent" => "root", "search_button_pressed" => 0)),
 					'has_root' => true,
 				));
+			case 'groups_tree':
+				$default = $arr['obj_inst']->prop('root');
+				$parent = $arr['obj_inst']->prop('all_roots');
+				if (!$parent)
+				{
+					$prop['error'] = t("Juurkaustad/-grupid valimata");
+					return PROP_ERROR;
+				}
 				$this->do_groups_tree($prop['vcl_inst'], $parent, 0);
 			break;
 			case 'default_loginmenu':
@@ -208,8 +279,34 @@ class user_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
+			case "search_sbt":
+				$srch_prps = array("search_blocked", "search_active_time", "search_user", "search_person", "search_groups");
+				$srch_data = array();
+				foreach($srch_prps as $srch_prp)
+				{
+					if(isset($arr["request"][$srch_prp]))
+					{
+						$srch_data[$srch_prp] = $arr["request"][$srch_prp];
+					}
+				}
+				$arr["obj_inst"]->set_meta("search_by_".aw_global_get("uid"), $srch_data);
+				break;
+
+			case "ug_search_sbt":
+				$srch_prps = array("search_users_usergroups", "search_usergroups", "ug_search_txt");
+				$srch_data = array();
+				foreach($srch_prps as $srch_prp)
+				{
+					if(isset($arr["request"][$srch_prp]))
+					{
+						$srch_data[$srch_prp] = $arr["request"][$srch_prp];
+					}
+				}
+				$arr["obj_inst"]->set_meta("ug_search_by_".aw_global_get("uid"), $srch_data);
+				break;
+
 			case 'table_groups':
+			case "table_usergroups":
 				// Save priority values
 				if (isset($arr['request']['priority']) && is_array($arr['request']['priority']))
 				{
@@ -220,8 +317,10 @@ class user_manager extends class_base
 							&& $o->prop('priority') != $value)
 						{
 							$o->set_prop('priority', $value);
-							$o->save();
 						}
+						$o->set_prop("status", isset($arr["request"]["status"][$oid]) && $arr["request"]["status"][$oid] == object::STAT_ACTIVE ? object::STAT_ACTIVE : object::STAT_NOTACTIVE);
+						$o->set_prop('type', $arr["request"]["type"][$oid]);
+						$o->save();
 					}
 				}
 
@@ -250,6 +349,20 @@ class user_manager extends class_base
 				}
 			break;
 
+			case "table_users":
+				foreach($arr["request"]["table_users"] as $oid => $data)
+				{
+					$o = obj($oid);
+					if(!isset($data["blocked"]) && $data["old_blocked"] == 1 || $data["blocked"] == 1 && $data["old_blocked"] == 0)
+					{
+						$o->set_prop('blocked', !$o->prop("blocked"));
+					}
+					$o->set_prop('rte_disabled', !$data["allow_rte"]);
+					$o->set_prop('ui_language', $data["set_ui_lang"]);
+					$o->save();
+				}
+				break;
+
 		}
 		return $retval;
 	}	
@@ -264,29 +377,36 @@ class user_manager extends class_base
 			$arr[$var] = "0";
 		}
 		$arr["post_ru"] = post_ru();
+		$arr["search_button_pressed"] = 0;
 	}
 
 	// Unset parent if searching
 	function callback_pre_edit($arr)
 	{
 		$this->parent = $this->find_parent($arr['obj_inst']);
-		if (isset($arr['request']['search_txt']))
-		{
-			$this->parent = 0;
-		}
 	}
 
-	// Carry over search_txt and parent variables
 	function callback_mod_retval ($arr)
 	{
-		if (!empty($arr['request']['search_txt']))
+		$vars = array(
+			"ug_search_txt" => "ug_search_txt",
+			"search_users_usergroups" => "search_users_usergroups",
+			"search_usergroups" => "search_usergroups",
+			"search_blocked" => "search_blocked",
+			"search_active_time" => "search_active_time",
+			"search_user" => "search_user",
+			"search_person" => "search_person",
+			"search_groups" => "search_groups",
+			"parent" => "last_parent",
+			"search_button_pressed" => "search_button_pressed",
+		);
+		foreach($vars as $arg => $req)
 		{
-			$arr['args']['search_txt'] = $arr['request']['search_txt'];
-		}	
-		if (!empty($arr['request']['last_parent']))
-		{
-			$arr['args']['parent'] = $arr['request']['last_parent'];
-		}	
+			if(!empty($arr["request"][$req]))
+			{
+				$arr["args"][$arg] = $arr["request"][$req];
+			}
+		}
 	}
 
 	// Adds content to users toolbar
@@ -297,6 +417,18 @@ class user_manager extends class_base
 			$tb->add_new_button(array(CL_USER, CL_GROUP), $this->parent);
 			$tb->add_separator();
 		}
+		if(!$arr["request"]["search_button_pressed"])
+		{
+			$arr["request"]["search_button_pressed"] = 0;
+		}
+
+		$tb->add_button(array(
+            "name" => "save",
+            "img" => "save.gif",
+            "action" => "",
+            "tooltip" => t("Salvesta"),
+			"onClick" => "aw_get_el('search_button_pressed').value = ".$arr["request"]["search_button_pressed"].";",
+        ));
 
 
 		// Copypaste buttons
@@ -313,8 +445,6 @@ class user_manager extends class_base
 			'img' => 'delete.gif',
 			"url" => "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){submit_changeform('delete')};",
 		));	
-
-		$tb->add_save_button();	
 
 	}
 	
@@ -337,18 +467,26 @@ class user_manager extends class_base
 			'tooltip' => t("L&otilde;ika"),
 			'img' => 'cut.gif',
 			'action' => $cut_action, 
-		));	
+		));
 		$tb->add_button(array(
 			'name' => 'copy',
 			'tooltip' => t("Kopeeri"),
 			'img' => 'copy.gif',
 			'action' => $copy_action,
-		));	
+		));
 		
 		$tooltip = "Ei saa asetada";
 		$disabled = true;
-		$cut_objects = safe_array(aw_global_get('cut_objects'));
-		$copy_objects = safe_array(aw_global_get('copied_objects'));
+		if($arr["request"]["group"] == "users")
+		{
+			$cut_objects = safe_array(aw_global_get('user_management_cut_users'));
+			$copy_objects = safe_array(aw_global_get('user_management_copied_users'));
+		}
+		else
+		{
+			$cut_objects = safe_array(aw_global_get('cut_objects'));
+			$copy_objects = safe_array(aw_global_get('user_management_copied_groups'));
+		}
 		if (isset($this->parent) && (count($cut_objects) || count($copy_objects)) && $this->can('view', $this->parent))
 		{
 			$tooltip = "";
@@ -399,11 +537,10 @@ class user_manager extends class_base
 	**/
 	function delete($arr)
 	{
-		$selected = safe_array(ifset($arr,'sel_g')) + safe_array(ifset($arr,'sel_u'));
-		if (count($selected))
+		$selected = safe_array(ifset($arr,'sel_u')) + safe_array(ifset($arr,'sel_g'));
+		foreach($selected as $oid)
 		{
-			$o = get_instance("admin/if");
-			$o->if_delete(array('sel' => $selected));
+			obj($oid)->delete();
 		}
 		return $arr['post_ru'];
 	}		
@@ -414,19 +551,30 @@ class user_manager extends class_base
 		@param sel_u optional
 		@param sel_g optional
 		@param post_ru optional
+		@parem parent optional
 
 	**/
 	function ob_cut($arr)
 	{
-		$selected = safe_array(ifset($arr,'sel_g')) + safe_array(ifset($arr,'sel_u'));
+		$selected = safe_array(ifset($arr,'sel_u')) + safe_array(aw_global_get('user_management_cut_users'));
 		if (count($selected))
 		{
-			aw_session_del('copied_objects');
-			aw_session_del('cut_objects');
-		
+			aw_session_del('user_management_copied_users');
+			aw_session_set("user_management_users_cut_from_group", aw_global_get("user_management_last_parent"));
+			aw_session_set('user_management_cut_users', $selected);
+		}
+
+		$selected = safe_array(ifset($arr,'sel_g'));// + safe_array(aw_global_get('user_management_cut_groups'));
+		if (count($selected))
+		{
+//			aw_session_del('user_management_copied_groups');
+//			aw_session_set("user_management_groups_cut_from_group", aw_global_get("user_management_last_parent"));
+//			aw_session_set('user_management_cut_groups', $selected);
+			
 			$o = get_instance("admin/admin_if");
 			return $o->if_cut(array('sel' => $selected, 'return_url' => $arr['post_ru']));
 		}
+		return $arr["post_ru"];
 	}		
 
 	/** copies objects. wrapper.
@@ -440,14 +588,19 @@ class user_manager extends class_base
 	**/
 	function ob_copy($arr)
 	{
-		$selected = safe_array(ifset($arr,'sel_g')) + safe_array(ifset($arr,'sel_u'));
+		$selected = safe_array(ifset($arr,'sel_u')) + safe_array(aw_global_get('user_management_copied_users'));
 		if (count($selected))
 		{
-			aw_session_del('cut_objects');
-		
-			$o = get_instance("admin/admin_if");
-			return $o->if_copy(array('sel' => $selected, 'return_url' => $arr['post_ru']));
+			aw_session_del('user_management_cut_users');
+			aw_session_set('user_management_copied_users', $selected);
 		}
+
+		$selected = safe_array(ifset($arr,'sel_g')) + safe_array(aw_global_get('user_management_copied_groups'));
+		if (count($selected))
+		{
+			aw_session_set('user_management_copied_groups', $selected);
+		}
+		return $arr["post_ru"];
 	}
 	
 	/** pastes the cut/copied objects. wrapper.
@@ -457,12 +610,41 @@ class user_manager extends class_base
 	**/
 	function ob_paste($arr)
 	{
+		$gi = get_instance(CL_GROUP);
+		$parent = obj($arr["last_parent"]);
+		$previous_parent = obj(aw_global_get("user_management_users_cut_from_group"));
 		if(!is_oid(ifset($arr,'last_parent')))
 		{
-			return;
+			return $arr["post_ru"];
 		}
-		$o = get_instance("admin/admin_if");
-		return $o->if_paste(array('parent' => $arr['last_parent'], 'return_url' => $arr['post_ru']));
+		
+		foreach(safe_array(aw_global_get("user_management_cut_users")) as $oid)
+		{
+			$gi->remove_user_from_group(obj($oid), $previous_parent);
+			$gi->add_user_to_group(obj($oid), $parent);
+		}
+		aw_session_del("user_management_cut_users");
+
+		foreach(safe_array(aw_global_get("user_management_copied_users")) as $oid => $xml)
+		{
+			$gi->add_user_to_group(obj($oid), $parent);
+		}
+		aw_session_del("user_management_copied_users");
+
+		foreach(safe_array(aw_global_get("user_management_copied_groups")) as $oid => $xml)
+		{
+			$o = obj($oid);
+			$o->create_brother($arr["last_parent"]);
+		}
+		aw_session_del("user_management_copied_groups");
+
+		if(is_oid(ifset($arr,'last_parent')))
+		{
+			$o = get_instance("admin/admin_if");
+			return $o->if_paste(array('parent' => $arr['last_parent'], 'return_url' => $arr['post_ru']));
+		}
+
+		return $arr["post_ru"];
 	}
 	
 	/** blocks/unblocks a user 
@@ -482,55 +664,45 @@ class user_manager extends class_base
 	}
 	
 	// Recursively populates groups tree
-	function do_groups_tree(&$tree, $parent, $treeroot = 1)
+	function do_groups_tree(&$tree, $parents, $treeroot = 1)
 	{
-	/*	$ol = new object_list(array(
-			'parent' => $parent,
-			'class_id' => CL_GROUP,
-		));
-		
-		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			$name = $o->name();
-			$tree->add_item($treeroot ? $parent : 0,array(
-				'id' => $o->id(),
-				'name' => strlen($name) ? $name : '('.t("nimetu").' '.$o->id().')' ,
-				'url' => aw_url_change_var('parent', $o->id(), aw_url_change_var('search_txt','')),
-			));
-			// make kids
-			$this->do_groups_tree(&$tree, $o->id());
-		}
-		*/
+		$ic = get_instance("core/icons");
 
-		$treedata = new object_tree(array(
-			'parent' => $parent,
-			'class_id' => CL_GROUP,
-		));
-		$tmptree = $tree->tree_from_objects(array(
-			'ot' => $treedata,
-			'root_item' => obj($parent),
-			'var' => 'parent',
-			'no_root_item' => true,
-			'target_url' => aw_url_change_var('search_txt', ''),
-		));
-		$tree->items = $tmptree->items;
+		foreach($parents as $parent)
+		{
+			$parent_obj = obj($parent);
+			$treedata = new object_tree(array(
+				'parent' => $parent,
+				'class_id' => CL_GROUP,
+			));
+			$treenames = $treedata->to_list()->names();
+			foreach($treedata->tree as $pt => $items)
+			{
+				foreach($items as $item)
+				{
+					$name = $this->parent == $item ? "<b>".parse_obj_name($treenames[$item])."</b>" : parse_obj_name($treenames[$item]);
+					$tree->add_item($pt, array(
+						"id" => $item,
+						"name" => $name." (".count($treedata->tree[$item]).")".html::obj_change_url($item, t(" (M)")),
+						"url" => aw_url_change_var(array("parent" => $item, "search_button_pressed" => 0)),
+						"iconurl" => $ic->get_icon_url(CL_GROUP,""),
+					));
+				}
+			}
+			$name = $this->parent == $parent ? "<b>".parse_obj_name($parent_obj->name())."</b>" : parse_obj_name($parent_obj->name());
+			$tree->add_item(0, array(
+				"id" => $parent,
+				"name" => $name." (".count($treedata->tree[$parent]).")".html::obj_change_url($parent, t(" (M)")),
+				"url" => aw_url_change_var(array("parent" => $parent, "search_button_pressed" => 0)),
+				"iconurl" => $ic->get_icon_url($parent_obj->class_id(),""),
+			));
+		}
 	}
 
 	// Search functionality is in here, too
 	function do_table_selected_groups (&$table, $arr)
 	{
-		if (is_oid($this->parent))
-		{
-			$parent = obj($this->parent);
-			if ($parent->class_id() != CL_GROUP)
-			{
-				return;
-			}
-			$arr['groups_list'] = array($this->parent);
-			$arr['title'] = t("Grupp '%s'");
-			return $this->do_table_groups($table, $arr);
-		}
-		else if (isset($arr['request']['search_txt'])) // This deals with searching
+		if (isset($arr['request']["search_blocked"]) || isset($arr['request']["search_active_time"]) || isset($arr['request']["search_user"]) || isset($arr['request']["search_person"]) || isset($arr['request']["search_groups"])) // This deals with searching
 		{
 			if (!is_oid($arr['obj_inst']->prop('root')))
 			{
@@ -579,6 +751,17 @@ class user_manager extends class_base
 			}
 			return $this->do_table_groups($table, $arr);
 		}
+		else if (is_oid($this->parent))
+		{
+			$parent = obj($this->parent);
+			if ($parent->class_id() != CL_GROUP)
+			{
+				return;
+			}
+			$arr['groups_list'] = array($this->parent);
+			$arr['title'] = t("Grupp '%s'");
+			return $this->do_table_groups($table, $arr);
+		}
 	}
 
 	// Defines and populates users table
@@ -590,12 +773,6 @@ class user_manager extends class_base
 		}
 		print '<script src="/automatweb/js/popup_menu.js" type="text/javascript"></script>';
 		$fields = array(
-			array(
-				'name' => 'action',
-				'caption' => t("Tegevus"),
-				'sortable' => false,
-				'align' => 'center',
-			),
 			array(
 				'name' => 'username',
 				'caption' => t("Kasutajanimi"),
@@ -618,8 +795,17 @@ class user_manager extends class_base
 			),
 			array(
 				'name' => 'block',
-				'caption' => t("Blokeeritud"),
+				'caption' => t("B?"),
 				'tooltip' => t("Kasutaja blokeerimine s&uuml;steemist"),
+			),
+			array(
+				'name' => 'if_lang',
+				'caption' => t("Liidese keel"),
+			),
+			array(
+				'name' => 'allow_rte',
+				'caption' => t("RTE"),
+				'tooltip' => t("Kas RTE on lubatud?"),
 			),
 			array(
 				'name' => 'groups',
@@ -646,7 +832,8 @@ class user_manager extends class_base
 		switch ($arr['type'])
 		{
 			case 'grouprelated':
-				$table->set_header("ja kasutajad".$link);	
+				$parent_obj = obj($this->parent);
+				$table->set_caption("Grupi '$parent_obj->name' kasutajad".$link);	
 				$g = obj($this->parent);
 				$conns = $g->connections_from(array(
 					'type' => 'RELTYPE_MEMBER',
@@ -675,6 +862,50 @@ class user_manager extends class_base
 				$users = $ol->list;
 				
 			break;
+			case "search":
+				$parent_obj = obj($this->parent);
+				$table->set_caption("Otsingutulemused");
+				$r = $arr["request"];
+				$ol_args = array(
+					"class_id" => CL_USER,
+					"parent" => array(),
+					"status" => array(),
+					"lang_id" => array(),
+					"site_id" => array(),
+				);
+				if($r["search_blocked"] == 1)
+				{
+					$ol_args["CL_USER.blocked"] = 1;
+				}
+				elseif($r["search_blocked"] == 2)
+				{
+					$ol_args["CL_USER.blocked"] = new obj_predicate_not(1);
+				}
+				if($r["search_active_time"])
+				{
+					$ol_args["CL_USER.lastaction"] = new obj_predicate_compare(OBJ_COMP_LESS, time() - (int)$r["search_active_time"]*24*3600);
+				}
+				if($r["search_user"])
+				{
+					$ol_args["CL_USER.name"] = "%".$r["search_user"]."%";
+				}
+				if($r["search_person"])
+				{
+					$ol_args["CL_USER.RELTYPE_PERSON.name"] = "%".$r["search_person"]."%";
+				}
+				if($r["search_groups"])
+				{
+					$conditions = array();
+					$grps = explode(",", $r["search_groups"]);
+					foreach($grps as $grp)
+					{
+						$conditions[] = "%".trim($grp)."%";
+					}
+					$ol_args["CL_USER.RELTYPE_GRP.name"] = $conditions;
+				}
+				$ol = new object_list($ol_args);
+				$users = $ol->ids();
+				break;
 		}
 		if (!count($users))
 		{
@@ -703,7 +934,7 @@ class user_manager extends class_base
 				$from = $c->from();
 				$groups[ html::href(array(
 					'caption' => $c->prop('from.name'),
-					'url' => aw_url_change_var('parent', $c->prop('from')),
+					'url' => aw_url_change_var(array("parent" => $c->prop('from'), "search_button_pressed" => 0)),
 				)) ] = $from->prop('priority');;
 			}
 			arsort($groups); // Sort groups by priority
@@ -749,8 +980,13 @@ class user_manager extends class_base
 					), CL_USER) => t("Vaata statistikat"),
 			);
 
+			$popup_menu = $this->get_user_popupmenu($o->id());
+			$i = get_instance("core/trans/pot_scanner");
+
 			$row = array(
-				'username' => $o->prop('uid'),
+				'username' => $popup_menu->get_menu(array(
+					"text" => parse_obj_name($o->prop('uid')),
+				)),
 				'name' => html::href(array(
 					'caption' => strlen($o->prop('real_name')) ? $o->prop('real_name') : '('.t("nimetu").')',
 					'url' => $this->mk_my_orb("change", array(
@@ -760,8 +996,25 @@ class user_manager extends class_base
 				)),
 				'company' => join(', ', $companies),
 				'mail' => $o->prop('email'),
-				'last_active' => date($df[2], $o->prop('lastaction')),
-				'block' => $o->prop('blocked') ? t("Jah") : t("Ei"),
+				'last_active' => $o->prop('lastaction') ? date($df[2], $o->prop('lastaction')) : t("Pole kunagi sisse loginud"),
+				"block" => html::hidden(array(
+					"name" => "table_users[".$o->id()."][old_blocked]",
+					"value" => $o->prop('blocked'),
+				)).html::checkbox(array(
+					"name" => "table_users[".$o->id()."][blocked]",
+					"value" => 1,
+					"checked" => $o->prop('blocked'),
+				)),
+				"if_lang" => html::select(array(
+					"name" => "table_users[".$o->id()."][set_ui_lang]",
+					"options" => array("" => "") + $i->get_langs(),
+					"value" => $o->prop('ui_language'),
+				)),
+				"allow_rte" => html::checkbox(array(
+					"name" => "table_users[".$o->id()."][allow_rte]",
+					"value" => 1,
+					"checked" => !$o->prop('rte_disabled'),
+				)),
 				'groups' => join(', ', $groups),
 				'action' => $this->_get_menu(array(
 					'id' => $o->id(),
@@ -789,12 +1042,14 @@ class user_manager extends class_base
 			$users = get_instance("users");
 		}
 		$fields = array(
+			/*
 			array(
 				'name' => 'action',
 				'caption' => t("Tegevus"),
 				'sortable' => false,
 				'align' => 'center',
 			),
+			*/
 			array(
 				'name' => 'gid',
 				'caption' => t("Grupi ID"),
@@ -809,12 +1064,8 @@ class user_manager extends class_base
 				'caption' => t("Prioriteet"),
 			),
 			array(
-				'name' => 'modified',
-				'caption' => t("Muutmise aeg"),
-			),
-			array(
-				'name' => 'modified_by',
-				'caption' => t("Muutja"),
+				'name' => 'type',
+				'caption' => t("T&uuml;&uuml;p"),
 			),
 			array(
 				'name' => 'aw',
@@ -824,6 +1075,14 @@ class user_manager extends class_base
 			array(
 				'name' => 'status',
 				'caption' => t("Aktiivne"),
+			),
+			array(
+				'name' => 'modified',
+				'caption' => t("Muutmise aeg"),
+			),
+			array(
+				'name' => 'modified_by',
+				'caption' => t("Muutja"),
 			),
 			array(
 				'name' => 'members',
@@ -853,9 +1112,12 @@ class user_manager extends class_base
 			'chgbgcolor' => 'cutcopied',
 		));
 
-		$g = obj($this->parent);
-		$title = isset($arr['title']) ? $arr['title'] : t("'%s' alamgrupid");
-		$table->set_caption(sprintf($title, $g->name() ? $g->name() : '('.t("nimetu").' '.$g->id().')'));
+		if($this->can("view", $this->parent) && is_oid($this->parent))
+		{
+			$g = obj($this->parent);
+			$title = isset($arr['title']) ? $arr['title'] : t("Grupi '%s' alamgrupid");
+			$table->set_caption(sprintf($title, $g->name() ? $g->name() : '('.t("nimetu").' '.$g->id().')'));
+		}
 		$df = aw_ini_get('config.dateformats');
 
 
@@ -866,6 +1128,89 @@ class user_manager extends class_base
 			foreach ($arr['groups_list'] as $g)
 			{
 				$target[$g] = obj($g);
+			}
+		}
+		elseif($this->parent == "root")
+		{
+			foreach($arr["obj_inst"]->all_roots as $oid)
+			{
+				$target[] = obj($oid);
+			}
+			$table->set_caption("Juurkaustad/-grupid");
+		}
+		elseif($arr["request"]["search_button_pressed"])
+		{
+			$table->set_caption("Otsingutulemused");
+			$r = $arr["request"];
+
+			$ids = array();
+			foreach($arr["obj_inst"]->all_roots as $oid)
+			{
+				$ot = new object_tree(array(
+					'parent' => $oid,
+					'class_id' => CL_GROUP,
+				));
+				$ids[] = $oid;
+				$ids += $ot->ids();
+			}
+			if(!$r["search_usergroups"] && !$r["search_users_usergroups"] || !count($ids))
+			{
+				$target = array();
+			}
+			else
+			{
+				$ol_args = array(
+					'class_id' => CL_GROUP,
+				);
+
+				if($r["ug_search_txt"])
+				{
+					$ol_args["name"] = "%".$r["ug_search_txt"]."%";
+				}
+				$mcond = array();
+				if($r["search_users_usergroups"] == 2 || $r["search_users_usergroups"] == 1 & count($ids))
+				{
+					$cond = array(
+						"oid" => $ids,
+						"type" => GRP_DEFAULT,
+					);
+					if($r["search_users_usergroups"] == 2)
+					{
+						unset($cond["oid"]);
+					}
+					$mcond[] = new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => $cond,
+					));
+				}
+				if($r["search_usergroups"] == 2 || $r["search_usergroups"] == 1 & count($ids))
+				{
+					$cond = array(
+						"oid" => $ids,
+						"type" => new obj_predicate_not(GRP_DEFAULT),
+					);
+					if($r["search_usergroups"] == 2)
+					{
+						unset($cond["oid"]);
+					}
+					$mcond[] = new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => $cond,
+					));
+				}
+				if(count($mcond))
+				{
+					$ol_args[] = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => $mcond,
+					));
+					$ol = new object_list($ol_args);
+					$target = $ol->arr();
+				}
+				else
+				{
+					$target = array();
+				}
 			}
 		}
 		else
@@ -993,13 +1338,22 @@ class user_manager extends class_base
 				'gid' => $o->prop('gid'),
 				'name' => html::href(array(
 					'caption' => strlen($o->name()) ? $o->name() : '('.t("nimetu").' '.$o->id().')',
-					'url' => aw_url_change_var('parent', $o->id(), aw_url_change_var('search_txt','')),
+					'url' => aw_url_change_var(array("parent" => $o->id(), "search_button_pressed" => 0)),
 				)),
 				'priority' => html::textbox(array(
 					'name' => 'priority['.$o->id().']', 
 					'size' => 6, 
 					'value' => $o->prop('priority'), 
 					'disabled' => $this->can('edit', $o->id()) ? false : true 
+				)),
+				"type" => html::select(array(
+					"name" => "type[".$o->id()."]",
+					"options" => array(
+						GRP_REGULAR => t('Tavaline'),
+						GRP_DYNAMIC => t("D&uuml;naamiline"),
+						GRP_DEFAULT => t("Kasutaja")
+					),
+					"value" => $o->type,
 				)),
 				'modified' => date($df[2], $o->prop('modified')),
 				'modified_by' => $o->modifiedby(),
@@ -1011,7 +1365,11 @@ class user_manager extends class_base
 					"name" => "old_can_admin_interface[".$o->id()."]",
 					"value" => "0".$o->prop('can_admin_interface')
 				)),
-				'status' => $o->prop('status') == STAT_ACTIVE ? t("Jah") : t("Ei"),
+				'status' => html::checkbox(array(
+					"name" => "status[".$o->id()."]",
+					"value" => object::STAT_ACTIVE,
+					"checked" => $o->prop('status') == object::STAT_ACTIVE,
+				)),
 				'members' => $members, 
 				'rootfolders' => join(', ', $rootfolders),
 				'action' => $this->_get_menu(array(
@@ -1040,16 +1398,33 @@ class user_manager extends class_base
 		if (isset($_GET['parent']) && is_oid($_GET['parent']) && $this->can('view', $_GET['parent']) 
 			&& ($p = obj($_GET['parent'])) && in_array($p->class_id(), array(CL_MENU,CL_GROUP)) )
 		{
-			foreach ($p->path() as $i => $ancestor)
+			if(in_array($_GET["parent"], $manager->prop("all_roots")))
 			{
-				if ($ancestor->id() == $parent)
+				$parent = $_GET['parent'];
+			}
+			else
+			{
+				foreach ($p->path() as $i => $ancestor)
 				{
-					$parent = $_GET['parent'];
-					break;
+					if (in_array($ancestor->id(), $manager->prop("all_roots")))
+					{
+						$parent = $_GET['parent'];
+						break;
+					}
 				}
 			}
 		}
-	
+
+		if($_GET["parent"] == "root")
+		{
+			$parent = "root";
+		}
+		if($_GET["search_button_pressed"])
+		{
+			$parent = "search";
+		}
+
+		aw_session_set("user_management_last_parent", $parent);	
 		return $parent;
 	}
 
@@ -1308,6 +1683,50 @@ class user_manager extends class_base
 			$conf->save();
 			return;
 		}	
+	}
+
+	function get_user_popupmenu($oid)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu($oid);
+		$gl = aw_global_get("gidlist_oid");
+		foreach($gl as $g_oid)
+		{
+			$o = obj($g_oid);
+
+			if ($o->prop("type") == 1 || $o->prop("type") == 3)
+			{
+				continue;
+			}
+			if ($o->prop("priority") > $can_adm_max && $o->prop("if_acls_set"))
+			{
+				// all settings except can use admin depend on if_acls_set being true
+				$dyc = $o->prop("editable_settings");
+				$can_adm_max = $o->prop("priority");
+			}
+		}
+
+		$u = obj($oid);
+		$u->set_class_id(CL_USER);
+		$gl = $u->get_group_list();
+
+		foreach($gl as $gn => $d)
+		{
+			if ($gn == "userdef")
+			{
+				continue;
+			}
+			if ($dyc && !$dyc[$gn])
+			{
+				continue;
+			}
+			$pm->add_item(array(
+				"text" => $d["caption"],
+				"link" => html::get_change_url($u->id(), array("group" => $gn, "return_url" => get_ru()))
+			));
+		}
+
+		return $pm;
 	}
 }
 ?>

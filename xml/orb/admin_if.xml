@@ -39,6 +39,7 @@
 					<optional name="parent" />
 					<optional name="period" />
 					<optional name="sel" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>

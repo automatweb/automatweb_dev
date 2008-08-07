@@ -8,7 +8,19 @@
             <reltype>RELTYPE_ROOT</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Juurkaust/-grupp</caption>
+            <caption>Vaikimise grupp</caption>
+            <comment>Hallata saab selle objekti all olevaid gruppe ja kasutajaid</comment>
+      </property>
+      <property>
+            <name>all_roots</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOT</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>all_roots</field>
+            <caption>Juurkaustad/-grupid</caption>
             <comment>Hallata saab selle objekti all olevaid gruppe ja kasutajaid</comment>
       </property>
       <property>
@@ -20,15 +32,6 @@
             <method>serialize</method>
             <caption>Vaikimisi loginmen&amp;amp;uuml;&amp;amp;uuml; uutel gruppidel</caption>
             <comment>Seos Loginmen&amp;amp;uuml;&amp;amp;uuml;de juurkaust peab olema loodud</comment>
-      </property>
-      <property>
-            <name>inactive_period</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks</caption>
       </property>
       <property>
             <name>users_tb</name>
@@ -53,16 +56,63 @@
             <caption>Puu</caption>
       </property>
       <property>
-            <name>search_txt</name>
+            <name>search_user</name>
             <table>objects</table>
             <group>users</group>
             <type>textbox</type>
+            <size>20</size>
             <store>no</store>
             <parent>vbox_users_search</parent>
-            <size>20</size>
             <captionside>top</captionside>
-            <field>search_txt</field>
-            <caption>Grupi nimi</caption>
+            <field>search_user</field>
+            <caption>Kasutajanimi</caption>
+      </property>
+      <property>
+            <name>search_person</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <parent>vbox_users_search</parent>
+            <captionside>top</captionside>
+            <field>search_person</field>
+            <caption>Isiku nimi</caption>
+      </property>
+      <property>
+            <name>search_groups</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <parent>vbox_users_search</parent>
+            <captionside>top</captionside>
+            <field>search_groups</field>
+            <caption>Grupid (komandega eraldatult)</caption>
+      </property>
+      <property>
+            <name>search_active_time</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>textbox</type>
+            <size>4</size>
+            <store>no</store>
+            <parent>vbox_users_search</parent>
+            <captionside>top</captionside>
+            <field>search_active_time</field>
+            <caption>Viimati aktiivne (p&amp;amp;auml;eva tagasi)</caption>
+      </property>
+      <property>
+            <name>search_blocked</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>vbox_users_search</parent>
+            <captionside>top</captionside>
+            <field>search_blocked</field>
+            <caption>Kasutaja blokeering</caption>
       </property>
       <property>
             <name>search_sbt</name>
@@ -78,28 +128,6 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>table_selected_groups</name>
-            <table>objects</table>
-            <group>users</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>vbox_users_content</parent>
-            <field>table_selected_groups</field>
-            <caption>Grupid </caption>
-      </property>
-      <property>
-            <name>table_groups</name>
-            <table>objects</table>
-            <group>users</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>vbox_users_content</parent>
-            <field>table_groups</field>
-            <caption>Grupid </caption>
-      </property>
-      <property>
             <name>table_users</name>
             <table>objects</table>
             <group>users</group>
@@ -111,24 +139,80 @@
             <caption>Kasutajad </caption>
       </property>
       <property>
-            <name>inactive_tb</name>
+            <name>usergroups_tb</name>
             <table>objects</table>
-            <group>inactive_users</group>
+            <group>usergroups</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <editonly>1</editonly>
-            <parent>hbox_toolbar</parent>
-            <field>inactive_tb</field>
+            <field>usergroups_tb</field>
       </property>
       <property>
-            <name>table_inactive</name>
+            <name>usergroups_tree</name>
             <table>objects</table>
-            <group>inactive_users</group>
+            <group>usergroups</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>vbox_ug_tree</parent>
+            <field>usergroups_tree</field>
+      </property>
+      <property>
+            <name>ug_search_txt</name>
+            <table>objects</table>
+            <group>usergroups</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>vbox_ug_search_name</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <field>ug_search_txt</field>
+            <caption>Grupi nimi</caption>
+      </property>
+      <property>
+            <name>search_users_usergroups</name>
+            <table>objects</table>
+            <group>usergroups</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>vbox_ug_search_u</parent>
+            <no_caption>1</no_caption>
+            <orient>vertical</orient>
+            <field>search_users_usergroups</field>
+      </property>
+      <property>
+            <name>search_usergroups</name>
+            <table>objects</table>
+            <group>usergroups</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>vbox_ug_search_g</parent>
+            <no_caption>1</no_caption>
+            <orient>vertical</orient>
+            <field>search_usergroups</field>
+      </property>
+      <property>
+            <name>ug_search_sbt</name>
+            <table>objects</table>
+            <group>usergroups</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>vbox_ug_search</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>ug_search_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>table_usergroups</name>
+            <table>objects</table>
+            <group>usergroups</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>table_inactive</field>
+            <parent>vbox_ug_content</parent>
+            <field>table_usergroups</field>
       </property>
       <classinfo>
             <syslog_type>ST_USER_MANAGER</syslog_type>
@@ -141,9 +225,9 @@
             <users>
                   <caption>Kasutajad</caption>
             </users>
-            <inactive_users>
-                  <caption>Mitteaktiivsed kasutajad</caption>
-            </inactive_users>
+            <usergroups>
+                  <caption>Kasutajagrupid</caption>
+            </usergroups>
       </groupinfo>
       <reltypes>
             <ROOT>
@@ -194,7 +278,7 @@
                   <type>vbox</type>
                   <parent>left_bit</parent>
                   <closeable>1</closeable>
-                  <area_caption>Otsing</area_caption>
+                  <area_caption>Kasutajate&amp;amp;nbsp;otsing</area_caption>
                   <group>users</group>
             </vbox_users_search>
             <vbox_users_content>
@@ -203,6 +287,60 @@
                   <group>users</group>
                   <area_caption></area_caption>
             </vbox_users_content>
+            <ug_hbox_data>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>usergroups</group>
+                  <area_caption></area_caption>
+            </ug_hbox_data>
+            <ug_left_bit>
+                  <type>vbox</type>
+                  <parent>ug_hbox_data</parent>
+                  <group>usergroups</group>
+                  <area_caption></area_caption>
+            </ug_left_bit>
+            <vbox_ug_tree>
+                  <type>vbox</type>
+                  <parent>ug_left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kasutajagruppide&amp;amp;nbsp;puu</area_caption>
+                  <group>usergroups</group>
+            </vbox_ug_tree>
+            <vbox_ug_search>
+                  <type>vbox</type>
+                  <parent>ug_left_bit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kasutajagruppide&amp;amp;nbsp;tsing</area_caption>
+                  <group>usergroups</group>
+            </vbox_ug_search>
+            <vbox_ug_search_name>
+                  <type>vbox</type>
+                  <parent>vbox_ug_search</parent>
+                  <group>usergroups</group>
+                  <area_caption></area_caption>
+            </vbox_ug_search_name>
+            <vbox_ug_search_u>
+                  <type>vbox_sub</type>
+                  <parent>vbox_ug_search</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsi&amp;amp;nbsp;kasutajate&amp;amp;nbsp;gruppe</area_caption>
+                  <no_padding>1</no_padding>
+                  <group>usergroups</group>
+            </vbox_ug_search_u>
+            <vbox_ug_search_g>
+                  <type>vbox_sub</type>
+                  <parent>vbox_ug_search</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsi&amp;amp;nbsp;kasutajagruppe</area_caption>
+                  <no_padding>1</no_padding>
+                  <group>usergroups</group>
+            </vbox_ug_search_g>
+            <vbox_ug_content>
+                  <type>vbox</type>
+                  <parent>ug_hbox_data</parent>
+                  <group>usergroups</group>
+                  <area_caption></area_caption>
+            </vbox_ug_content>
       </layout>
 </properties>
 

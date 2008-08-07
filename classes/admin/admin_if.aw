@@ -1033,7 +1033,7 @@ class admin_if extends class_base
 	function if_copy($arr)
 	{
 		extract($arr);
-		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
+		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url));
 	}
 
 	/**  
@@ -1043,6 +1043,7 @@ class admin_if extends class_base
 		@param parent optional
 		@param period optional
 		@param sel optional
+		@param return_url
 		
 		@returns
 		
@@ -1106,6 +1107,7 @@ class admin_if extends class_base
 				"period" => $period,
 				"sel" => $sel,
 				"orb_class" => "admin_if",
+				"return_url" => $return_url,
 			),
 		));
 
@@ -1147,7 +1149,7 @@ class admin_if extends class_base
 			}
 		}
 		aw_session_set("copied_objects", $copied_objects);
-		return self::get_link_for_obj($parent,$period);
+		return !empty($return_url) ? $return_url : self::get_link_for_obj($parent,$period);
 	}
 
 	/** pastes the cut objects 

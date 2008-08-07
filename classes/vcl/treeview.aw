@@ -1485,8 +1485,9 @@ class treeview extends class_base
 			{
 				$icon = $arr["icon"];
 			}
+			$num_child = 0;
 			$tv->add_item($parent,array(
-				"name" => $oname,
+				"name" => $oname.($show_num_child ? " (".$num_child.")" : "").($add_change_url ? html::obj_change_url($oid, t(" (M)")) : ""),
 				"id" => $oid,
 				"url" => $url,
 				"iconurl" => $icon,
