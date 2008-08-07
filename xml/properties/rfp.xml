@@ -76,6 +76,23 @@
             <caption>Kontakteerumise eelistus</caption>
       </property>
       <property>
+            <name>data_gen_package</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGE</reltype>
+            <field>data_gen_package</field>
+            <caption>Pakett</caption>
+      </property>
+      <property>
+            <name>data_gen_package_price</name>
+            <table>rfp</table>
+            <group>general_function_info</group>
+            <type>select</type>
+            <field>data_gen_package_price</field>
+            <caption>Paketi hind</caption>
+      </property>
+      <property>
             <name>data_gen_function_name</name>
             <table>rfp</table>
             <group>general_function_info</group>
@@ -316,15 +333,6 @@
             <type>hidden</type>
             <field>data_gen_alternative_dates</field>
             <caption>Alternatiivsed kuup&amp;amp;auml;evad</caption>
-      </property>
-      <property>
-            <name>data_gen_package</name>
-            <table>rfp</table>
-            <group>general_function_info</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PACKAGE</reltype>
-            <field>data_gen_package</field>
-            <caption>Pakett</caption>
       </property>
       <property>
             <name>data_mf_table</name>

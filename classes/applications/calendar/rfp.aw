@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.71 2008/08/06 12:45:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.72 2008/08/07 08:27:38 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -48,6 +48,12 @@
 
 		@groupinfo general_function_info caption="&Uuml;ldine &uuml;rituse info" parent=data
 		@default group=general_function_info
+
+			@property data_gen_package type=relpicker reltype=RELTYPE_PACKAGE
+			@caption Pakett
+
+			@property data_gen_package_price type=select
+			@caption Paketi hind
 
 			@property data_gen_function_name type=textbox
 			@caption &Uuml;rituse nimi
@@ -132,9 +138,6 @@
 
 			@property data_gen_alternative_dates type=hidden
 			@caption Alternatiivsed kuup&auml;evad
-
-			@property data_gen_package type=relpicker reltype=RELTYPE_PACKAGE
-			@caption Pakett
 
 		@groupinfo main_fun caption="P&otilde;hi&uuml;ritus" parent=data
 		@default group=main_fun
@@ -529,6 +532,22 @@ class rfp extends class_base
 
 		switch($prop["name"])
 		{
+			case "data_gen_package_price":
+				if(!$arr["obj_inst"]->prop("data_gen_package"))
+				{
+					return PROP_IGNORE;
+				}
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$rfpm = obj($rfpm->get_sysdefault());
+				$prc = $rfpm->get_packages();
+				$dc = obj($rfpm->prop("default_currency"));
+				$prop["options"][] = t("-- Vali --");
+				foreach($prc[$arr["obj_inst"]->prop("data_gen_package")]["prices"] as $rp => $prices)
+				{
+					$rp = obj($rp);
+					$prop["options"][$rp->id()] = $rp->name()." (".$prices[$dc->id()]." ".$dc->name().")";
+				}
+				break;
 			case "data_mf_catering_start_admin":
 			case "data_mf_catering_start":
 			case "data_mf_catering_end_admin":
@@ -2091,14 +2110,17 @@ class rfp extends class_base
 						}
 					}
 					$room_p = get_instance(CL_ROOM_PRICE);
-					$room_prices = $room_p->calculate_room_prices_price(array(
-						"oids" => array_keys($pk_prices[$package_id]["prices"]),
-						"start" => $start,
-						"end" => $start + 1, // well, this is here so because we only need to know which room_price is valid at the start of the reservation time.. and we use that price then to calculate the totalprice .. whatever
-						//"prices" => $prices_for_calculator,
-					));
-					$room_price_id = key($room_prices);
-					$unitprice = $prices_for_calculator[$room_price_id];
+					if(!$this->can("view", ($room_price_oid = $arr["obj_inst"]->prop("data_gen_package_price"))))
+					{
+						$room_prices = $room_p->calculate_room_prices_price(array(
+							"oids" => array_keys($pk_prices[$package_id]["prices"]),
+							"start" => $start,
+							"end" => $start + 1, // well, this is here so because we only need to know which room_price is valid at the start of the reservation time.. and we use that price then to calculate the totalprice .. whatever
+							//"prices" => $prices_for_calculator,
+						));
+						$room_price_oid = key($room_prices);
+					}
+					$unitprice = $prices_for_calculator[$room_price_oid];
 					
 				}
 				$price = $unitprice*$people;
@@ -2711,6 +2733,7 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("data_gen_package_price", "int"),
 			array("default_language", "varchar(3)"),
 			array("offer_price_comment", "text"),
 			array("offer_expire_date", "int"),
