@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.75 2008/08/07 11:59:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.76 2008/08/07 12:42:21 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1442,12 +1442,13 @@ class rfp extends class_base
 				$rvo = obj($c->to());
 				$prod_list = $rvi->get_room_products($rv->prop("resource"));
 				$amount = $rv->meta("amount"); // why the hell is this used???
+				$rv_amount = $rvo->get_product_amount();
 				$discount = $rvi->get_product_discount($rv->id());
 
 				foreach($prod_list->arr() as $prod)
 				{
-					if($count = $amount[$prod->id()])
-					{
+					//if($count = $amount[$prod->id()])
+					//{
 						$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
 						$price = $rvi->_get_admin_price_view($prod,$prod_price);
 						$disc = $discount[$prod->id()];
@@ -1477,8 +1478,8 @@ class rfp extends class_base
 							)).$price,
 							"amount" => html::hidden(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][amount]",
-								"value" => $count,
-							)).$count,
+								"value" => $count?$count:$rv_amount[$prod->id()],
+							)).($count?$count:$rv_amount[$prod->id()]),
 							"discount" => html::hidden(array(
 								"name" =>  "prods[".$prod->id().".".$rv->id()."][discount]",
 								"value" => $disc,
@@ -1522,7 +1523,7 @@ class rfp extends class_base
 							"product" => $prod->id().".".$rv->id(),
 						);
 						$t->define_data($data);
-					}
+					//}
 				}
 			}
 		}
@@ -2436,6 +2437,11 @@ class rfp extends class_base
 			$pds = "";
 			foreach($prods as $oids=>$prod)
 			{
+				if($prod["amount"] <= 0)
+				{
+					continue;
+				}
+				$prodcountcheck++;
 				$tmp = explode(".", $oids);
 				$po = obj($tmp[0]);
 				$varname = "";
@@ -2475,12 +2481,15 @@ class rfp extends class_base
 				$pds .= $this->parse("PRODUCT");
 				$prod_total += round($this->_format_price($prod["sum"]));
 			}
-			$this->vars(array(
-				"PRODUCT" => $pds,
-				"prod_total" => $prod_total,
-			));
-			$pd_sub = $this->parse("PRODUCTS");
-			$totalprice += $prod_total;
+			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
+			{
+				$this->vars(array(
+					"PRODUCT" => $pds,
+					"prod_total" => $prod_total,
+				));
+				$pd_sub = $this->parse("PRODUCTS");
+				$totalprice += $prod_total;
+			}
 		}
 		$housing = $arr["obj_inst"]->meta("housing");
 		$hs_sub = "";

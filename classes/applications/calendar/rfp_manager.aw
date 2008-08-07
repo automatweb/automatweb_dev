@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.42 2008/08/07 10:53:16 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.43 2008/08/07 12:42:21 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1643,6 +1643,10 @@ class rfp_manager extends class_base
 		}
 		foreach($prods as $prod_and_rv => $data)
 		{
+			if($data["amount"] <= 0)
+			{
+				continue;
+			}
 			$spl = split("[.]", $prod_and_rv);
 			$product_id = $spl[0];
 			if(!$this->can("view", $spl[1]) OR !$this->can("view", $spl[0])) // sometimes rel's and objects are removed, but data(oids) remain in metadata.. so we better check first
