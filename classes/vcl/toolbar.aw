@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.37 2008/08/06 14:16:14 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.38 2008/08/07 08:23:09 voldemar Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -35,7 +35,7 @@ class toolbar extends aw_template
 	}
 	/**
 		@attrib params=name api=1
-		
+
 		@param name required type=string
 			Name for the button
 		@param img optional type=string
@@ -112,36 +112,37 @@ class toolbar extends aw_template
 	{
 		global $mc_counter;
 		$mc_counter++;
-		if (!empty($arr["onClick"]))
-		{
-			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
-		};
+
+		$id = empty($arr["href_id"]) ? "" : " id=\"{$arr[href_id]}\"";
+		$onclick = empty($arr["onClick"]) ? "" : " onclick=\"{$arr["onClick"]}\"";
 
 		if (!empty($arr["link"]))
 		{
 			$arr["url"] = $arr["link"];
-		};
+		}
 
 		if (isset($arr["action"]))
 		{
 			$arr["url"] = "javascript:submit_changeform('$arr[action]');";
-		};
-
-		$id = "";
-		if (!empty($arr["href_id"]))
-		{
-			$id = "id='$arr[href_id]'";
 		}
 
 		if (empty($arr["disabled"]))
 		{
-			$rv ='<a '.$id.' class="menuItem" href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
+			$rv = "<a class=\"menuItem\" href=\"{$arr["url"]}\"{$id}{$onclick}>{$arr["text"]}</a>\n";
 		}
 		else
 		{
-			$rv = '<a '.$id.' class="menuItem" href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+			$rv = "<a class=\"menuItem\" href=\"\" title=\"{$arr["title"]}\"{$id} onclick=\"return false;\" style=\"color:gray\">{$arr["text"]}</a>\n";
 		}
-		$this->menus[$arr["parent"]] .= $rv;
+
+		if (isset($this->menus[$arr["parent"]]))
+		{
+			$this->menus[$arr["parent"]] .= $rv;
+		}
+		else
+		{
+			$this->menus[$arr["parent"]] = $rv;
+		}
 	}
 
 	/**
@@ -204,14 +205,22 @@ class toolbar extends aw_template
 	{
 		$arr["sub_menu_id"] = $arr["name"];
 		$baseurl = $this->cfg["baseurl"];
-		$rv = '<a class="menuItem menuItem_sub" href="'.$arr["link"].'" '.($arr["link"] ? "" : 'onclick="return false;"').'
+		$link = isset($arr["link"]) ? $arr["link"] : "";
+		$rv = '<a class="menuItem menuItem_sub" href="'.$link.'" '.($link ? "" : 'onclick="return false;"').'
 			        onmouseover="menuItemMouseover(event, \''.$arr["sub_menu_id"].'\');">
 				<span class="menuItemText">'.$arr["text"].'</span>
 				</a>';
 
-		$this->menus[$arr["parent"]] .= $rv;
+		if (isset($this->menus[$arr["parent"]]))
+		{
+			$this->menus[$arr["parent"]] .= $rv;
+		}
+		else
+		{
+			$this->menus[$arr["parent"]] = $rv;
+		}
 	}
-	
+
 	function build_menus()
 	{
 		static $init_done = false;
@@ -391,19 +400,24 @@ class toolbar extends aw_template
 					{
 						$val["target"] = isset($args["target"]) ? $args["target"] : (isset($val["target"]) ? $val["target"] : null);
 					}
+
 					if (empty($val["onClick"]))
 					{
 						$val["onClick"] = "";
 					};
+
 					if (empty($val["tooltip"]))
 					{
 						$val["tooltip"] = "";
-					};
-
+					}
 
 					$val["url_q"] = str_replace("'", "\\'", $val["url"]);
 					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
-					$val["img_url"] = substr($val["img"], 0, 4) == "http" ? $val["img"] : $this->imgbase."/".$val["img"];
+
+					if (!empty($val["img"]))
+					{
+						$val["img_url"] = substr($val["img"], 0, 4) == "http" ? $val["img"] : $this->imgbase."/".$val["img"];
+					}
 
 					if (!empty($val["load_on_demand_url"]))
 					{
@@ -520,10 +534,10 @@ class toolbar extends aw_template
 		@attrib api=1 params=pos
 
 		@param clids required type=array
-			Array of class_id's that can be added via the button	
+			Array of class_id's that can be added via the button
 
 		@param pt required type=oid
-			Parent where to add the objects to 
+			Parent where to add the objects to
 
 		@param rt optional type=int
 			The relation type to connect the new object with. currently myst be integer :(
@@ -585,7 +599,7 @@ class toolbar extends aw_template
 			"tooltip" => t("Kustuta valitud objektid"),
 			"confirm" => t("Oled kindel et soovit valitud objektid kustutada?")
 		));
-		
+
 	}
 
 	/** Adds a delete relations button to the toolbar
@@ -601,7 +615,7 @@ class toolbar extends aw_template
 			"confirm" => t("Oled kindel et soovid valitud seosed kustutada?")
 		));
 	}
-	
+
 	/** Adds the save button to the toolbar
 		@attrib api=1
 	**/
@@ -678,14 +692,16 @@ class toolbar extends aw_template
 
 	function callback_mod_reforb($arr)
 	{
-		if ($GLOBALS["tb"]["_add_var"])
+		if (!empty($GLOBALS["tb"]["_add_var"]))
 		{
 			$arr["tb_cut_var"] = $GLOBALS["tb"]["_add_var"];
 		}
-		if ($GLOBALS["tb"]["_paste_var"])
+
+		if (!empty($GLOBALS["tb"]["_paste_var"]))
 		{
 			$arr["tb_paste_var"] = $GLOBALS["tb"]["_paste_var"];
 		}
 	}
-};
+}
+
 ?>
