@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.13 2008/08/07 13:29:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.14 2008/08/07 13:45:19 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -171,9 +171,17 @@ class user_manager extends class_base
 				$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 0;
 				break;
 
+			case "search_users_from":
+				$prop["options"] = array(
+					1 => t("T&ouml;&ouml;laua seest"),
+					2 => t("Kogu s&uuml;steemist"),
+				);
+				$srch_data = $arr["obj_inst"]->meta("search_by_".aw_global_get("uid"));
+				$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 1;
+				break;
+
 			case "search_users_usergroups":
 			case "search_usergroups":
-			case "search_users_from":
 				$prop["options"] = array(
 					0 => t("Mitte kuskilt"),
 					1 => t("T&ouml;&ouml;laua seest"),
@@ -182,11 +190,6 @@ class user_manager extends class_base
 			case "ug_search_txt":
 				$srch_data = $arr["obj_inst"]->meta("ug_search_by_".aw_global_get("uid"));
 				$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 0;
-				if($prop["name"] == "search_users_from")
-				{
-					unset($prop["options"][0]);
-					$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 1;
-				}
 				break;
 
 			case "search_active_time":
@@ -300,7 +303,7 @@ class user_manager extends class_base
 				$srch_data = array();
 				foreach($srch_prps as $srch_prp)
 				{
-					if(isset($arr["request"][$srch_prp]))
+					if(!empty($arr["request"][$srch_prp]))
 					{
 						$srch_data[$srch_prp] = $arr["request"][$srch_prp];
 					}
