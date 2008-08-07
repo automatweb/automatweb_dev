@@ -463,7 +463,7 @@ class crm_company_people_impl extends class_base
 				}
 			}
 
-			if(is_oid($arr['request']['cat']) || is_oid($arr['request']['unit']))
+			if(is_oid($arr['request']['cat']) || is_oid($arr['request']['unit']) || (!$pdat["rank"] && $person->rank))
 			{
 				/*
 				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
