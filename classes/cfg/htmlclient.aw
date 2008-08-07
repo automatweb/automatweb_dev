@@ -1508,6 +1508,80 @@ class htmlclient extends aw_template
 				$html .= $this->parse("GRID_VBOX_OUTER");
 			}
 		}
+		elseif ("vbox_sub" == $ldata["type"])
+		{
+			$content = "";
+			foreach($layout_items as $cell_nr => $layout_item)
+			{
+				$this->vars_safe(array(
+					"item" => $layout_item,
+				));
+				$content .= $this->parse("GRID_VBOX_SUB_ITEM");
+			};
+
+			$this->vars_safe(array(
+				"GRID_VBOX_SUB_ITEM" => $content,
+			));
+
+			$closer = $ghc = $gce = "";
+			if (!empty($ldata["area_caption"]))
+			{
+				$u = get_instance(CL_USER);
+				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
+
+				if (!empty($ldata["closeable"]))
+				{
+					$this->vars_safe(array(
+						"grid_name" => $layout_name,
+						"close_text" => t("Kinni"),
+						"open_text" => t("Lahti"),
+						"start_text" => $state ? t("Kinni") : t("Lahti"),
+						"open_layer_url" => $this->mk_my_orb("open_layer", array(
+							"u_class" => $_GET["class"],
+							"u_group" => $_GET["group"],
+							"u_layout" => $layout_name
+						), "user"),
+						"close_layer_url" => $this->mk_my_orb("close_layer", array(
+							"u_class" => $_GET["class"],
+							"u_group" => $_GET["group"],
+							"u_layout" => $layout_name
+						), "user"),
+						"closer_state" => $state ? "up" : "down"
+					));
+					$closer = $this->parse("VSGRID_HAS_CLOSER");
+				}
+
+				$this->vars_safe(array(
+					"grid_name" => $layout_name,
+					"area_caption" => $ldata["area_caption"],
+					"display" => $state ? "block" : "none",
+					"VSGRID_HAS_CLOSER" => $closer,
+					"VSGRID_HAS_PADDING" => !empty($ldata["no_padding"]) ? "" : $this->parse("VSGRID_HAS_PADDING"),
+					"VSGRID_NO_PADDING" => !empty($ldata["no_padding"]) ? $this->parse("VSGRID_NO_PADDING") : "",
+				));
+				$ghc = $this->parse("VSGRID_HAS_CAPTION");
+				$gce = $this->parse("VSGRID_HAS_CAPTION_END");
+			}
+
+			$this->vars_safe(array(
+				"VSGRID_HAS_CAPTION" => $ghc,
+				"VSGRID_HAS_CAPTION_END" => $gce
+			));
+
+			$_t = $this->parse("GRID_VBOX_SUB");
+			if($this->view_layout && $this->view_layout == $layout_name && !$this->view_outer)
+			{
+				$html .= $_t;
+			}
+			else
+			{
+				$this->vars_safe(array(
+					"GRID_VBOX_SUB" => $_t,
+					"grid_outer_name" => $layout_name."_outer",
+				));
+				$html .= $this->parse("GRID_VBOX_SUB_OUTER");
+			}
+		}
 
 		return $html;
 	}

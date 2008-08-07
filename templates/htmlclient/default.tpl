@@ -185,6 +185,46 @@ this.disabled=true;self.disabled=true;
 		</div>
 		<!-- END SUB: GRID_VBOX_OUTER -->
 
+
+		<!-- SUB: GRID_VBOX_SUB_OUTER -->
+		<div id="{VAR:grid_outer_name}">
+			<!-- SUB: GRID_VBOX_SUB -->
+			<!-- SUB: VSGRID_NO_CAPTION -->
+			<div id="{VAR:grid_name}">
+			<!-- END SUB: VSGRID_NO_CAPTION -->
+			<!-- SUB: VSGRID_HAS_CAPTION -->
+			<div id="vbox_sub">
+				<div class="pais">
+					<div class="caption">{VAR:area_caption}</div>
+					<!-- SUB: VSGRID_HAS_CLOSER -->
+					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_2_up.gif"; im.alt=im.title="{VAR:close_text}"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_2_down.gif"; im.alt=im.title="{VAR:open_text}"; aw_get_url_contents("{VAR:close_layer_url}");} return false;' tabindex="10"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_2_{VAR:closer_state}.gif" title="{VAR:start_text}" alt="{VAR:start_text}" width="20" height="15" border="0" class="btn"  id="{VAR:grid_name}_closer_img"/></a></div>
+					<!-- END SUB: VSGRID_HAS_CLOSER -->
+				</div>
+				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
+				<!-- SUB: VSGRID_HAS_PADDING -->
+				<div class="sisu2">
+				<!-- END SUB: VSGRID_HAS_PADDING -->
+
+				<!-- SUB: VSGRID_NO_PADDING -->
+				<div class="sisu2nop">
+				<!-- END SUB: VSGRID_NO_PADDING -->
+			<!-- END SUB: VSGRID_HAS_CAPTION -->
+
+					<!-- SUB: GRID_VBOX_SUB_ITEM -->
+					<div class="sisu3">{VAR:item}</div>
+					<!-- END SUB: GRID_VBOX_SUB_ITEM -->
+				<!-- SUB: VSGRID_HAS_CAPTION_END -->
+				</div>
+				</div>
+			</div>
+				<!-- END SUB: VSGRID_HAS_CAPTION_END -->
+				<!-- SUB: VSGRID_NO_CAPTION_END -->
+				</div>
+				<!-- END SUB: VSGRID_NO_CAPTION_END -->
+			<!-- END SUB: GRID_VBOX_SUB -->
+		</div>
+		<!-- END SUB: GRID_VBOX_SUB_OUTER -->
+
 		<!-- SUB: GRID_TABLEBOX -->
 		<div id="tablebox">
 		    <div class="pais">
