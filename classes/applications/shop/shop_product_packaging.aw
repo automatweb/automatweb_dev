@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.37 2008/07/17 10:38:36 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.38 2008/08/07 11:39:40 markop Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -676,7 +676,7 @@ class shop_product_packaging extends class_base
 	function get_amount_limits($arr)
 	{
 		$o = obj($arr["id"]);
-		if($this->can("view", $o->inherit_aml_from))
+		if($this->can("view", $o->inherit_aml_from) && $arr["id"] != $o->inherit_aml_from)
 		{
 			$arr["id"] = $o->inherit_aml_from;
 			return $this->get_amount_limits($arr);
