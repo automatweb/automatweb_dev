@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.12 2008/08/07 12:51:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.13 2008/08/07 13:29:46 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -41,20 +41,26 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 			@layout vbox_users_search type=vbox parent=left_bit closeable=1 area_caption=Kasutajate&nbsp;otsing
 
-				@property search_user type=textbox size=20 store=no parent=vbox_users_search captionside=top
-				@caption Kasutajanimi
+				@layout vbox_users_search_s1 type=vbox parent=vbox_users_search
 
-				@property search_person type=textbox size=20 store=no parent=vbox_users_search captionside=top
-				@caption Isiku nimi
+					@property search_user type=textbox size=20 store=no parent=vbox_users_search_s1 captionside=top
+					@caption Kasutajanimi
 
-				@property search_groups type=textbox size=20 store=no parent=vbox_users_search captionside=top
-				@caption Grupid (komandega eraldatult)
+					@property search_person type=textbox size=20 store=no parent=vbox_users_search_s1 captionside=top
+					@caption Isiku nimi
 
-				@property search_active_time type=textbox size=4 store=no parent=vbox_users_search captionside=top
-				@caption Viimati aktiivne (p&auml;eva tagasi)
+					@property search_groups type=textbox size=20 store=no parent=vbox_users_search_s1 captionside=top
+					@caption Grupid (komandega eraldatult)
 
-				@property search_blocked type=chooser store=no parent=vbox_users_search captionside=top
-				@caption Kasutaja blokeering
+					@property search_active_time type=textbox size=4 store=no parent=vbox_users_search_s1 captionside=top
+					@caption Viimati aktiivne (p&auml;eva tagasi)
+
+					@property search_blocked type=chooser store=no parent=vbox_users_search_s1 captionside=top
+					@caption Kasutaja blokeering
+
+				@layout vbox_users_search_s2 type=vbox_sub no_padding=1 parent=vbox_users_search closeable=1 area_caption=Otsingu&nbsp;asukoht
+
+					@property search_users_from type=chooser store=no parent=vbox_users_search_s2 captionside=top no_caption=1 orient=vertical
 
 				@property search_sbt type=submit store=no parent=vbox_users_search size=20 captionside=top no_caption=1
 				@caption Otsi
@@ -161,8 +167,13 @@ class user_manager extends class_base
 					"1" => t("Blokeeritud"),
 					"2" => t("Blokeerimata"),
 				);
+				$srch_data = $arr["obj_inst"]->meta("ug_search_by_".aw_global_get("uid"));
+				$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 0;
+				break;
+
 			case "search_users_usergroups":
 			case "search_usergroups":
+			case "search_users_from":
 				$prop["options"] = array(
 					0 => t("Mitte kuskilt"),
 					1 => t("T&ouml;&ouml;laua seest"),
@@ -171,6 +182,11 @@ class user_manager extends class_base
 			case "ug_search_txt":
 				$srch_data = $arr["obj_inst"]->meta("ug_search_by_".aw_global_get("uid"));
 				$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 0;
+				if($prop["name"] == "search_users_from")
+				{
+					unset($prop["options"][0]);
+					$prop["value"] = $srch_data[$prop["name"]] ? $srch_data[$prop["name"]] : 1;
+				}
 				break;
 
 			case "search_active_time":
@@ -280,7 +296,7 @@ class user_manager extends class_base
 		switch($prop["name"])
 		{
 			case "search_sbt":
-				$srch_prps = array("search_blocked", "search_active_time", "search_user", "search_person", "search_groups");
+				$srch_prps = array("search_blocked", "search_active_time", "search_user", "search_person", "search_groups", "search_users_from");
 				$srch_data = array();
 				foreach($srch_prps as $srch_prp)
 				{
@@ -391,6 +407,7 @@ class user_manager extends class_base
 		$vars = array(
 			"ug_search_txt" => "ug_search_txt",
 			"search_users_usergroups" => "search_users_usergroups",
+			"search_users_from" => "search_users_from",
 			"search_usergroups" => "search_usergroups",
 			"search_blocked" => "search_blocked",
 			"search_active_time" => "search_active_time",
@@ -863,7 +880,6 @@ class user_manager extends class_base
 				
 			break;
 			case "search":
-				$parent_obj = obj($this->parent);
 				$table->set_caption("Otsingutulemused");
 				$r = $arr["request"];
 				$ol_args = array(
@@ -902,6 +918,19 @@ class user_manager extends class_base
 						$conditions[] = "%".trim($grp)."%";
 					}
 					$ol_args["CL_USER.RELTYPE_GRP.name"] = $conditions;
+				}
+				if($r["search_users_from"] == 1)
+				{
+					foreach($arr["obj_inst"]->all_roots as $oid)
+					{
+						$ot = new object_tree(array(
+							'parent' => $oid,
+							'class_id' => CL_GROUP,
+						));
+						$ids[] = $oid;
+						$ids += $ot->ids();
+					}
+					$ol_args["CL_USER.RELTYPE_GRP"] = $ids;
 				}
 				$ol = new object_list($ol_args);
 				$users = $ol->ids();

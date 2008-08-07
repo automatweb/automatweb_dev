@@ -62,7 +62,7 @@
             <type>textbox</type>
             <size>20</size>
             <store>no</store>
-            <parent>vbox_users_search</parent>
+            <parent>vbox_users_search_s1</parent>
             <captionside>top</captionside>
             <field>search_user</field>
             <caption>Kasutajanimi</caption>
@@ -74,7 +74,7 @@
             <type>textbox</type>
             <size>20</size>
             <store>no</store>
-            <parent>vbox_users_search</parent>
+            <parent>vbox_users_search_s1</parent>
             <captionside>top</captionside>
             <field>search_person</field>
             <caption>Isiku nimi</caption>
@@ -86,7 +86,7 @@
             <type>textbox</type>
             <size>20</size>
             <store>no</store>
-            <parent>vbox_users_search</parent>
+            <parent>vbox_users_search_s1</parent>
             <captionside>top</captionside>
             <field>search_groups</field>
             <caption>Grupid (komandega eraldatult)</caption>
@@ -98,7 +98,7 @@
             <type>textbox</type>
             <size>4</size>
             <store>no</store>
-            <parent>vbox_users_search</parent>
+            <parent>vbox_users_search_s1</parent>
             <captionside>top</captionside>
             <field>search_active_time</field>
             <caption>Viimati aktiivne (p&amp;amp;auml;eva tagasi)</caption>
@@ -109,10 +109,22 @@
             <group>users</group>
             <type>chooser</type>
             <store>no</store>
-            <parent>vbox_users_search</parent>
+            <parent>vbox_users_search_s1</parent>
             <captionside>top</captionside>
             <field>search_blocked</field>
             <caption>Kasutaja blokeering</caption>
+      </property>
+      <property>
+            <name>search_users_from</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>vbox_users_search_s2</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <orient>vertical</orient>
+            <field>search_users_from</field>
       </property>
       <property>
             <name>search_sbt</name>
@@ -281,6 +293,20 @@
                   <area_caption>Kasutajate&amp;amp;nbsp;otsing</area_caption>
                   <group>users</group>
             </vbox_users_search>
+            <vbox_users_search_s1>
+                  <type>vbox</type>
+                  <parent>vbox_users_search</parent>
+                  <group>users</group>
+                  <area_caption></area_caption>
+            </vbox_users_search_s1>
+            <vbox_users_search_s2>
+                  <type>vbox_sub</type>
+                  <no_padding>1</no_padding>
+                  <parent>vbox_users_search</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsingu&amp;amp;nbsp;asukoht</area_caption>
+                  <group>users</group>
+            </vbox_users_search_s2>
             <vbox_users_content>
                   <type>vbox</type>
                   <parent>hbox_data</parent>
