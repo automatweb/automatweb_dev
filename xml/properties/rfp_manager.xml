@@ -102,6 +102,16 @@
             <caption>Teemade kaust</caption>
       </property>
       <property>
+            <name>event_type_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Uuml;rituse t&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
@@ -436,7 +446,7 @@
                   <caption>Raportid</caption>
             </raports>
             <rfps>
-                  <caption>Pakkumise saamis palved</caption>
+                  <caption>Tellimused</caption>
             </rfps>
             <rfps_active>
                   <caption>Aktiivsed</caption>

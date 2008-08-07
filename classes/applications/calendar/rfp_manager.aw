@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.40 2008/08/07 07:34:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.41 2008/08/07 07:40:29 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -97,7 +97,7 @@
 			@property raports_table type=text no_caption=1 store=no parent=raports_table
 
 
-@groupinfo rfps caption="Pakkumise saamis palved"
+@groupinfo rfps caption="Tellimused"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
 @groupinfo rfps_archive caption="Arhiiv" parent=rfps
 @default group=rfps_active,rfps_archive
