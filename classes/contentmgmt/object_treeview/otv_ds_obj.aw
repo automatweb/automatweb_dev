@@ -797,7 +797,7 @@ class otv_ds_obj extends class_base
 				"mod_date" => $t->modified(),
 				"adder" => $t->createdby(),
 				"modder" => $t->modifiedby(),
-				"icon" => image::make_img_tag(icons::get_icon_url($clid, $t->trans_get_val("name"))),
+				"object_icon" => image::make_img_tag(icons::get_icon_url($clid, $t->trans_get_val("name"))),
 				"fileSizeBytes" => $fileSizeBytes,
 				"fileSizeKBytes" => $fileSizeKBytes,
 				"fileSizeMBytes" => $fileSizeMBytes,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.120 2008/07/08 07:06:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.121 2008/08/07 21:48:11 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1777,7 +1777,7 @@ class object_treeview_v2 extends class_base
 			"modified" => date("d.m.Y H:i", $mod_date),
 			"createdby" => $adder,
 			"modifiedby" => $modder,
-			"icon" => $icon,
+			"icon" => $object_icon,
 			"act" => $act,
 			"delete" => $delete,
 			"bgcolor" => $bgcolor,
