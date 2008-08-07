@@ -659,7 +659,7 @@
             <reltype>RELTYPE_DEFAULT_CURRENCY</reltype>
             <store>connect</store>
             <field>default_currency</field>
-            <caption>Vaikevaluuta</caption>
+            <caption>Valuuta</caption>
       </property>
       <property>
             <name>default_language</name>
@@ -667,7 +667,7 @@
             <group>final_general</group>
             <type>select</type>
             <field>default_language</field>
-            <caption>Vaikekeel</caption>
+            <caption>Keel</caption>
       </property>
       <property>
             <name>final_rooms</name>

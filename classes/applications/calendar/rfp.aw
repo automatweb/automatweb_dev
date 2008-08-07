@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.72 2008/08/07 08:27:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.73 2008/08/07 08:31:03 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -269,10 +269,10 @@
 		@default group=final_general
 
 			@property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY store=connect
-			@caption Vaikevaluuta
+			@caption Valuuta
 
 			@property default_language type=select table=rfp field=default_language
-			@caption Vaikekeel
+			@caption Keel
 
 			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect
 			@caption Ruumid
