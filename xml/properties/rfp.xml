@@ -873,6 +873,15 @@
             <caption>Majutuse lisainfo</caption>
       </property>
       <property>
+            <name>additional_services_tbl</name>
+            <table>rfp</table>
+            <group>additional_services</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>additional_services_tbl</field>
+      </property>
+      <property>
             <name>offer_pdf</name>
             <table>rfp</table>
             <group>final_offer</group>
@@ -1022,6 +1031,10 @@
                   <caption>Majutus</caption>
                   <parent>final_info</parent>
             </final_housing>
+            <additional_services>
+                  <caption>Lisateenused</caption>
+                  <parent>final_info</parent>
+            </additional_services>
             <final_offer>
                   <caption>Pakkumine</caption>
                   <parent>final_info</parent>

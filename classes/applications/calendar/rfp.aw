@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.73 2008/08/07 08:31:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.74 2008/08/07 10:53:16 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -371,6 +371,11 @@
 				@property additional_housing_information type=textarea parent=add_inf_housing rows=20
 				@caption Majutuse lisainfo
 
+
+                @groupinfo additional_services caption="Lisateenused" parent=final_info
+                @default group=additional_services
+
+                        @property additional_services_tbl type=table store=no no_caption=1
 
 
 		@groupinfo final_offer caption="Pakkumine" parent=final_info
@@ -1773,6 +1778,135 @@ class rfp extends class_base
 		return $data;
 	}
 
+
+	function _init_additional_services_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+		));
+		$t->define_field(array(
+			"name" => "service",
+			"caption" => t("Teenus"),
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("M&auml;rkus"),
+		));
+	}
+
+	function _get_additional_services_tbl_row($key, $data)
+	{
+		$return = array(
+			"date" => html::date_select(array(
+				"name" => "add_srv[".$key."][date]",
+				"value" => array(
+					"day" => date("d", $data["time"]),
+					"month" => date("m", $data["time"]),
+					"year" => date("Y", $data["time"]),
+				),
+			)),
+			"time" => html::time_select(array(
+				"name" => "add_srv[".$key."][time]",
+				"value" => array(
+					"hour" => date("h", $data["time"]),
+					"minute" => date("i", $data["time"]),
+				),
+			)),
+			"service" => html::textbox(array(
+				"name" => "add_srv[".$key."][service]",
+				"value" => $data["service"],
+				"size" => "20",
+			)),
+			"price" => html::textbox(array(
+				"name" => "add_srv[".$key."][price]",
+				"value" => $data["price"],
+				"size" => "4",
+			)),
+			"amount" => html::textbox(array(
+				"name" => "add_srv[".$key."][amount]",
+				"value" => $data["amount"],
+				"size" => "4",
+			)),
+			"sum" => html::textbox(array(
+				"name" => "add_srv[".$key."][sum]",
+				"value" => $data["sum"],
+				"size" => "4",
+			)),
+			"comment" => html::textbox(array(
+				"name" => "add_srv[".$key."][comment]",
+				"value" => $data["comment"],
+				"size" => "25",
+			)),
+		);
+		return $return;
+	}
+
+	function _get_additional_services_tbl($arr)
+	{
+		$this->_init_additional_services_tbl(&$arr);
+		$t =& $arr["prop"]["vcl_inst"];
+		$data = array_reverse($arr["obj_inst"]->get_additional_services());
+
+		//newline
+		$t->define_data($this->_get_additional_services_tbl_row("new", array(
+			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+		)));
+			
+		foreach(safe_array($data) as $k => $row)
+		{
+		
+			$t->define_data($this->_get_additional_services_tbl_row($k, $row));
+		}
+	}
+
+	function _set_additional_services_tbl($arr)
+	{
+		$new = $arr["request"]["add_srv"]["new"];
+		unset($arr["request"]["add_srv"]["new"]);
+		foreach($arr["request"]["add_srv"] as $k => $v)
+		{
+			$metadata[$k] = array(
+				"time" => mktime($v["time"]["hour"], $v["time"]["minute"], 0, $v["date"]["month"], $v["date"]["day"], $v["date"]["year"]),
+				"service" => $v["service"],
+				"price" => $v["price"],
+				"amount" => $v["amount"],
+				"sum" => $v["sum"],
+				"comment" => $v["comment"],
+			);
+		}
+		if($new["service"] || $new["price"] || $new["amount"] || $new["sum"] || $new["comment"])
+		{
+			$metadata[] = array(
+				"time" => mktime($new["time"]["hour"], $new["time"]["minute"], 0, $new["date"]["month"], $new["date"]["day"], $new["date"]["year"]),
+				"service" => $new["service"],
+				"price" => $new["price"],
+				"amount" => $new["amount"],
+				"sum" => $new["sum"],
+				"comment" => $new["comment"],
+			);
+		}
+		$arr["obj_inst"]->set_additional_services($metadata);
+	}
+
+
 	function _get_room_types()
 	{
 		$rfp_admin = get_instance(CL_RFP_MANAGER);
@@ -2366,6 +2500,32 @@ class rfp extends class_base
 			$hs_sub = $this->parse("HOUSING");
 			$totalprice += $housing_total;
 		}
+		
+		// additional sevices
+		$add_srv = $arr["obj_inst"]->get_additional_services();
+		$as_sub = "";
+		uasort($add_srv, array($this, "_sort_submission_additional_services"));
+		if(count($add_srv))
+		{
+			$as_total = 0;
+			foreach($add_srv as $srv)
+			{
+				$this->vars(array(
+					"as_date" => date("d.m.Y", $srv["time"]),
+					"as_time" => date("H:i", $srv["time"]),
+				));
+				$this->vars($srv);
+				$as_row .= $this->parse("SERVICE");
+				$as_total += $srv["sum"];
+			}
+			$this->vars(array(
+				"SERVICE" => $as_row,
+				"as_total" => $as_total,
+			));
+			$as_sub = $this->parse("ADDITIONAL_SERVICES");
+			$totalprice += $as_total;
+		}
+
 		$totalprice = round($totalprice, -1);
 		$this->vars(array(
 			"cancel_and_payment_terms" => $arr["obj_inst"]->prop("cancel_and_payment_terms"),
@@ -2374,6 +2534,7 @@ class rfp extends class_base
 			"RESOURCES" => $res_sub,
 			"PRODUCTS" => $pd_sub,
 			"HOUSING" => $hs_sub,
+			"ADDITIONAL_SERVICES" => $as_sub,
 			"totalprice" => $totalprice,
 			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
 		));
@@ -2402,6 +2563,11 @@ class rfp extends class_base
 	private function _sort_submission_products($a, $b)
 	{
 		return ($a["from"]["hour"].str_pad($a["from"]["minute"], 2, "0", STR_PAD_LEFT)) - ($b["from"]["hour"].str_pad($b["from"]["minute"], 2, "0", STR_PAD_LEFT));
+	}
+
+	private function _sort_submission_additional_services($a, $b)
+	{
+		return $a["time"] - $b["time"];
 	}
 
 	function set_property($arr = array())

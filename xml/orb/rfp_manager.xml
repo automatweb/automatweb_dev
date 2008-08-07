@@ -65,5 +65,12 @@
 			</function>
 		</action>
 
+		<action name="search_result_export_pdf" all_args="1">
+			<function name="search_result_export_pdf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

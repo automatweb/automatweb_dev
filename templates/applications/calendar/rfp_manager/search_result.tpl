@@ -140,6 +140,18 @@ BODY
 	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
 	<td class="awmenuedittabletext">{VAR:rfp_createdby_name}</td>
 <!-- END SUB: ROW_TYPE_HOUSING -->
+<!-- SUB: ROW_TYPE_ADDITIONAL_SERVICES -->
+	<td class="awmenuedittabletext">{VAR:from_date}</td>
+	<td class="awmenuedittabletext">{VAR:from_time}</td>
+	<td class="awmenuedittabletext">{VAR:data_subm_organisation}</td>
+	<td class="awmenuedittabletext">{VAR:data_subm_name}</td>
+	<td class="awmenuedittabletext">-</td>
+	<td class="awmenuedittabletext">-</td>
+	<td class="awmenuedittabletext">{VAR:confirmed_str}</td>
+	<td class="awmenuedittabletext">{VAR:raport_type}</td>
+	<td class="awmenuedittabletext">{VAR:data_mf_event_type}</td>
+	<td class="awmenuedittabletext">{VAR:rfp_createdby_name}</td>
+<!-- END SUB: ROW_TYPE_HOUSING -->
 </tr>
 <!-- END SUB: ROW -->
 </table>

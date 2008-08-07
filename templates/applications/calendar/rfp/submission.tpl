@@ -163,6 +163,35 @@ kehtib: {VAR:offer_expire_date}
 </table>
 <!-- END SUB: HOUSING -->
 
+<!-- SUB: ADDITIONAL_SERVICES -->
+<br /><br />
+<table border="1" cellspacing="0" cellpadding="5" width="100%" bgcolor="#efefef" bordercolor="#ffffff" style="border-collapse: collapse">
+<tr bgcolor="#aaaaaa"><th colspan="6">Lisateenused</th></tr>
+<tr bgcolor="#dddddd">
+<td>Aeg</td>
+<td>Teenus</td>
+<td>Hind</td>
+<td>Kogus</td>
+<td>Summa</td>
+<td>M&auml;rkus</td>
+</tr>
+<!-- SUB: SERVICE -->
+<tr>
+<td>{VAR:as_date} {VAR:as_time}</td>
+<td>{VAR:service}</td>
+<td>{VAR:price}</td>
+<td>{VAR:amount}</td>
+<td>{VAR:sum}</td>
+<td>{VAR:comment}</td>
+</tr>
+<!-- END SUB: SERVICE -->
+<tr><td colspan="5"><div align="right"><strong>Kokku:</strong></div></td>
+<td><strong>{VAR:as_total}</strong>.-</td></tr>
+</table>
+<!-- END SUB: ADDITIONAL_SERVICES -->
+
+
+
 <br />
 Tekst suunaviitadele: <strong>{VAR:pointer_text}</strong>
 <br /><br />

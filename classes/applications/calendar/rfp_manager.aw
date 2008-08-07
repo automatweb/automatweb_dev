@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.41 2008/08/07 07:40:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.42 2008/08/07 10:53:16 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -177,6 +177,7 @@ define("RFP_RAPORT_TYPE_ROOMS", 1);
 define("RFP_RAPORT_TYPE_HOUSING", 2);
 define("RFP_RAPORT_TYPE_RESOURCES", 3);
 define("RFP_RAPORT_TYPE_CATERING", 4);
+define("RFP_RAPORT_TYPE_ADDITIONAL_SERVICES", 5);
 
 class rfp_manager extends class_base
 {
@@ -196,12 +197,14 @@ class rfp_manager extends class_base
 			2 => t("Majutus"),
 			3 => t("Ressursid"),
 			4 => t("Toitlustus"),
+			5 => t("Lisateenused"),
 		);
 		$this->tpl_subs = array(
 			1 => "ROOMS",
 			2 => "HOUSING",
 			3 => "RESOURCES",
 			4 => "CATERING",
+			5 => "ADDITIONAL_SERVICES",
 		);
 
 		$this->search_param_covering = array(
@@ -210,6 +213,7 @@ class rfp_manager extends class_base
 			3 => t("Toitlustus"),
 			4 => t("Majutus"),
 			5 => t("Ressursid"),
+			6 => t("Lisateenused"),
 		);
 	}
 
@@ -1495,6 +1499,7 @@ class rfp_manager extends class_base
 			3 => "catering",
 			4 => "housing",
 			5 => "resources",
+			6 => "additional_services",
 		);
 
 		if($arr["rfp_status"])
@@ -1680,6 +1685,27 @@ class rfp_manager extends class_base
 		}
 		return $return;
 	}
+	
+	private function _search_rfp_additional_services_raports($ol = array())
+	{
+		$as = array();
+		foreach($ol->arr() as $oid => $obj)
+		{
+			$tmp = safe_array($obj->get_additional_services());
+			foreach($tmp as $k =>  $v)
+			{
+				$as[] = $v + array(
+					"start1" => $v["time"],
+					"end" => $v["time"],
+					"result_type" => RFP_RAPORT_TYPE_ADDITIONAL_SERVICES,
+					"rfp" => $oid,
+				);
+			}
+		}
+		return $as;
+	}
+
+
 
 	/** For internal use, removes prices from packages
 		@attrib name=remove_prices params=name all_args=1

@@ -276,5 +276,34 @@ class rfp_obj extends _int_object
 		$this->set_meta("package_custom_discount", $discount);
 	}
 
+
+	/** Gets additinal services info
+		@attrib api=1
+		@returns
+			Array of additional services for current rfp
+			array(
+				time => unix_timestamp,
+				service => service_name(string),
+				price => price (string),
+				amount => amount (string),
+				sum => sum (string),
+				comment => comment (string),
+			)
+	 **/
+	public function get_additional_services()
+	{
+		return $this->meta("additional_services");
+	}
+
+	/** Sets additinal services info
+		@attrib api=1 params=pos
+		@param data type=array required
+			Array in same structure that get_additional_servives() returns
+	 **/
+	public function set_additional_services($data = array())
+	{
+		return $this->set_meta("additional_services", $data);
+	}
+
 }
 ?>
