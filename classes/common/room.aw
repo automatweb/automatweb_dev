@@ -2149,7 +2149,7 @@ class room extends class_base
 									"room" => $arr["obj_inst"],
 									"bron" => $last_bron,
 								));
-								if ($buf > 0)
+								if ($buf > 0 && ($last_bron->prop("start1") > $start_step))
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
 									$d[$x] = "<div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
