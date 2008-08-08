@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.43 2008/08/07 12:42:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.44 2008/08/08 08:06:24 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1062,7 +1062,17 @@ class rfp_manager extends class_base
 		{
 			$first = $ol->begin();
 			$active = $first->id();
-		};
+		}
+		else
+		{
+			$rfpm = obj();
+			$rfpm->set_class_id(CL_RFP_MANAGER);
+			$rfpm->set_name(t("RFP halduskeskkond"));
+			$rfpm->set_parent(aw_ini_get("document.default_cfgform"));
+			$rfpm->set_status(STAT_ACTIVE);
+			$rfpm->save();
+			$active = $rfpm->id();
+		}
 		return $active;
 	}
 
