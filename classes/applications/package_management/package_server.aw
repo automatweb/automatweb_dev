@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.13 2008/08/01 10:56:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.14 2008/08/08 11:03:50 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -439,6 +439,25 @@ class package_server extends class_base
 	}
 
 	/** 
+		@attrib name=download_package_properties nologin=1 is_public=1 all_args=1
+
+ 	**/
+	function download_package_properties($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PACKAGE_SERVER,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		if($this->can("view" ,$arr["id"]))
+		{
+			$o = obj($arr["id"]);
+		}
+		return $o->properties();
+		die();
+	}
+
+	/** 
 		@attrib name=download_package_files nologin=1 is_public=1 all_args=1
 
  	**/
@@ -504,6 +523,39 @@ class package_server extends class_base
 		$arr = array();
 		$arr["sel"] = $files->ids();
 		$file_manager->compress_submit($arr);
+	}
+	
+	/** 
+		@attrib name=upload_package nologin=1 is_public=1 all_args=1
+ 	**/
+	function upload_package($arr)
+	{
+		$sites = $this->get_site_list();
+		$client = $sites[$arr["id"]]["url"];
+		$url = $client."/orb.aw?class=package_server&action=download_package_file&id=".$arr["id"]."&site_id=".$this->site_id();
+
+		$contents = file_get_contents($url);
+		$fn = aw_ini_get("server.tmpdir")."/".gen_uniq_id().".zip";
+		$fp = fopen($fn, 'w');
+		fwrite($fp, $contents);
+		fclose($fp);
+		//nyyd on fail olemas, kuid sellest on vaja teha ka paketiobjekt
+
+		$inst = $this->instance();
+
+		$data = $inst->do_orb_method_call(array(
+			"class" => "package_server",
+			"action" => "download_package_properties",
+			"method" => "xmlrpc",
+			"server" => $client,
+			"no_errors" => true,
+			"params" => array(
+				'id' => $arr["id"],
+			),
+		));
+
+		//data alt peaks tulema igast propertite v22rtused ja fail ise on $fn alt k2tte saadav
+
 	}
 
 	/** 

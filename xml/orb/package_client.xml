@@ -11,5 +11,15 @@
 			</function>
 		</action>
 
+		<action name="upload_package">
+			<function name="upload_package">
+				<arguments>
+					<required name="client_id" type="oid" />
+					<required name="package_id" type="oid" />
+					<required name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

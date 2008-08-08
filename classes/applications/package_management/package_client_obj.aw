@@ -39,6 +39,34 @@ class package_client_obj extends _int_object
 		return $packages;
 	}
 
+	function get_made_packages()
+	{
+		$filter = array(
+			'class_id' => CL_PACKAGE,
+			'parent' => $this->prop('packages_folder_aw'),
+			'site_id' => array(),
+			'lang_id' => array(),
+		);
+
+		$ol = new object_list($filter);
+
+		$server_packages = $this->get_packages();
+//see j22b aeglaseks varsti, a kyll siis ymber teeb
+		foreach($ol->arr() as $o)
+		{
+			foreach($server_packages as $p)
+			{
+				if($o->name() == $p["name"] && $o->prop("version") == $p["version"])
+				{
+			//		$ol->remove($o->id());
+					continue;
+				}
+			}
+		}
+		
+		return $ol;
+	}
+
 	function download_package($id)
 	{
 		if($this->prop("packages_server"))
@@ -89,6 +117,18 @@ class package_client_obj extends _int_object
 				}
 			}
 		}
+	}
+
+	function upload_package($id)
+	{
+		$url = $this->prop("packages_server")."/orb.aw?class=package_server&action=upload_package&id=".$id."&site_id=".$this->site_id();
+		$this->do_nothing();
+	}
+
+	function do_nothing()
+	{
+		sleep(5);
+		return ;
 	}
 
 	function curl_get_file_contents($URL)

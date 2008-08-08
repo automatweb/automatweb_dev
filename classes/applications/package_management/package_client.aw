@@ -45,6 +45,23 @@
 	@property my_list type=table no_caption=1 store=no
 	@caption Pakkide nimekiri
 
+@groupinfo made_packages caption="Tehtud paketid" no_submit=1
+@default group=made_packages
+
+	@property made_toolbar type=toolbar no_caption=1
+	@caption T&ouml;&ouml;riistariba
+
+	@layout made_packages_frame type=hbox width=20%:80%
+
+		@layout made_packages_list type=vbox parent=made_packages_frame area_caption=&nbsp;
+
+			@property made_list type=table no_caption=1 parent=packages_list store=no
+			@caption Pakkide nimekiri
+
+			@property made_files_list type=text no_caption=1 parent=packages_list store=no
+			@caption Failide nimekiri
+
+
 */
 
 class package_client extends class_base
@@ -158,6 +175,22 @@ class package_client extends class_base
 		return $arr["return_url"];
 	}
 
+	/**
+	@attrib name=upload_package api=1 params=name
+		@param client_id required type=oid
+			packaging client
+		@param package_id required type=oid
+			package file id in server
+		@param return_url required type=string
+			Url to return
+	**/
+	function upload_package($arr)
+	{
+		$client = obj($arr["client_id"]);
+		$client->upload_package($arr["package_id"]);
+		return $arr["return_url"];
+	}
+
 	function _get_list($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -268,6 +301,64 @@ class package_client extends class_base
 			));
 		}
 		return PROP_OK;
+	}
+
+	function _get_made_list($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->set_caption(t('Tehtud pakettide nimekiri'));
+
+		$t->define_chooser(array(
+			'name' => 'selected_ids',
+			'field' => 'select',
+			'width' => '5%'
+		));
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi')
+		));
+		$t->define_field(array(
+			'name' => 'version',
+			'caption' => t('Versioon'),
+			'width' => '5%'
+		));
+		$t->define_field(array(
+			'name' => 'description',
+			'caption' => t('Kirjeldus')
+		));
+
+		$t->define_field(array(
+			'name' => 'dep',
+			'caption' => t('S&otilde;ltuvused'),
+		));
+
+		$t->define_field(array(
+			'name' => 'up',
+			'caption' => t('x'),
+		));
+
+		$packages = $arr["obj_inst"]->get_made_packages();
+
+		foreach ($packages->arr() as $package)
+		{
+			$up_url = $this->mk_my_orb("upload_package", array(
+				"client_id" => $arr["obj_inst"]->id(),
+				"package_id" =>  $package->id(),
+				"return_url" => get_ru(),
+			));
+			$t->define_data(array(
+				'select' => $package->id(),
+				'name' => html::href(array("caption"=> $package->name() , "url" => aw_url_change_var("show_files" , $package->id()))),
+				'version' => $package->prop("version"),
+				'up' => html::href(array("caption"=> t("Upload") , "url" => $up_url)),
+			));
+		}
+		return PROP_OK;
+
+
 	}
 
 }

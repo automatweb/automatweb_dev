@@ -97,6 +97,38 @@
             <field>my_list</field>
             <caption>Pakkide nimekiri</caption>
       </property>
+      <property>
+            <name>made_toolbar</name>
+            <table>aw_package_client</table>
+            <group>made_packages</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>made_toolbar</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>made_list</name>
+            <table>aw_package_client</table>
+            <group>made_packages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>packages_list</parent>
+            <store>no</store>
+            <field>made_list</field>
+            <caption>Pakkide nimekiri</caption>
+      </property>
+      <property>
+            <name>made_files_list</name>
+            <table>aw_package_client</table>
+            <group>made_packages</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>packages_list</parent>
+            <store>no</store>
+            <field>made_files_list</field>
+            <caption>Failide nimekiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE_CLIENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -114,6 +146,10 @@
                   <caption>Minu pakid</caption>
                   <no_submit>1</no_submit>
             </my_packages>
+            <made_packages>
+                  <caption>Tehtud paketid</caption>
+                  <no_submit>1</no_submit>
+            </made_packages>
       </groupinfo>
       <tableinfo>
             <aw_package_client>
@@ -141,6 +177,18 @@
                   <area_caption>&amp;amp;nbsp;</area_caption>
                   <group>packages</group>
             </packages_list>
+            <made_packages_frame>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>made_packages</group>
+                  <area_caption></area_caption>
+            </made_packages_frame>
+            <made_packages_list>
+                  <type>vbox</type>
+                  <parent>made_packages_frame</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
+                  <group>made_packages</group>
+            </made_packages_list>
       </layout>
 </properties>
 
