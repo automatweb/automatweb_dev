@@ -282,6 +282,11 @@
                   <clid>CL_CRM_COMPANY_STATUS</clid>
                   <caption>Kliendikategooria</caption>
             </STATUS>
+            <COMMENT_TO_COMPANY>
+                  <value>75</value>
+                  <clid>CL_COMMENT</clid>
+                  <caption>Kommentaar organisatsioonile</caption>
+            </COMMENT_TO_COMPANY>
       </reltypes>
 </properties>
 

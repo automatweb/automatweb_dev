@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.14 2008/01/02 11:57:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.15 2008/08/08 09:45:06 instrumental Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -124,6 +124,9 @@ default method=serialize
 
 @reltype STATUS value=69 clid=CL_CRM_COMPANY_STATUS
 @caption Kliendikategooria
+
+@reltype COMMENT_TO_COMPANY value=75 clid=CL_COMMENT
+@caption Kommentaar organisatsioonile
 
 */
 
