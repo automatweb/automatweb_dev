@@ -110,13 +110,13 @@ class crm_phone_obj extends _int_object
 		// New
 		if(!is_oid($oid))
 		{
-			return parent::save();
+			return $this->parent_save();
 		}
 
 		// If no connections remain with the old phone obj, there's no point in keeping it. So we'll just change the current one.
 		if(count($this->conns_remain_unchanged($conn_ids)) == 0)
 		{
-			return parent::save();
+			return $this->parent_save();
 		}
 
 		// Getting the current name..
@@ -125,8 +125,10 @@ class crm_phone_obj extends _int_object
 		
 		$nname = parent::prop("name");
 		$cname = $r[$oid]["name"];
+
+		$old_obj = obj($oid);
 		
-		if($nname !== $oname)
+		if($nname !== $cname)
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_PHONE,
@@ -141,7 +143,7 @@ class crm_phone_obj extends _int_object
 			}
 			else
 			{
-				$pho = obj($this->save_new());
+				$pho = obj(parent::save_new());
 				$pho->name = $nname;
 				$pho->save();
 			}
@@ -168,9 +170,7 @@ class crm_phone_obj extends _int_object
 					}
 				}
 			}
-
-			// To prevent the original object's name from changing
-			parent::set_prop("name", $cname);
+			return $pho->id();
 		}
 		return parent::save();
 	}
@@ -193,6 +193,26 @@ class crm_phone_obj extends _int_object
 			}
 		}
 		return $r;
+	}
+
+	private function parent_save()
+	{		
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PHONE,
+			"name" => parent::prop("name"),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 1,
+		));
+		if($ol->count() > 0)
+		{
+			parent::load(reset($ol->ids()));
+			return reset($ol->ids());
+		}
+		else
+		{
+			return parent::save();
+		}
 	}
 }
 

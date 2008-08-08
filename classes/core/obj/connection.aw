@@ -608,11 +608,14 @@ class connection
 		));
 		if(count($ext_conns) > 0)
 		{
-			foreach($ext_conns as $ext_conn)
+			$ext_conn = reset($ext_conns);
+			// Problem occurred when I tried to change a connection and there already existed a connection with those ends and reltype.
+			// So I'll just delete the connection I'm trying to change.
+			if($this->conn["id"] && $this->conn["id"] != $ext_conn["id"])
 			{
-				$this->_int_load($ext_conn["id"]);
-				break;
+				$this->delete();
 			}
+			$this->_int_load($ext_conn["id"]);
 		}
 
 		// check if this is a new connection
