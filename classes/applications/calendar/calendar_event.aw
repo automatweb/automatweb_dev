@@ -263,6 +263,8 @@ class calendar_event extends class_base
 		$this->trans_props = array(
 			"name", "title",  "short_description", "description"
 		);
+
+		lc_site_load("document", &$this);
 	}
 
 	/**
