@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.77 2008/07/03 10:55:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.78 2008/08/08 16:55:57 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -362,7 +362,7 @@ class shop_order_cart extends class_base
 
 	**/
 	function submit_add_cart($arr)
-	{
+	{if(aw_global_get("uid") == "markop"){ arr($arr); die();}
 		extract($arr);
 		$section = aw_global_get("section");
 		$oc = obj($oc);
@@ -959,6 +959,22 @@ class shop_order_cart extends class_base
 			}
 			$i = obj($iid);
 			$inst = $i->instance();
+
+
+//porno------------
+//see miski loll systeem, et site.aw'st toodete hindade jms k2ki muutmise funktsioon k2iku lasta... juhul kui on mikski erandv2rk
+			if (function_exists("__get_site_instance"))
+			{
+				$si =&__get_site_instance();
+				if (is_object($si))
+				{
+					if (method_exists($si, "handle_product_display"))
+					{
+						$si->handle_product_display($i);
+					}
+				}
+			}
+//------------porno
 			$price = $inst->get_calc_price($i);
 			$quantx = new aw_array($quantx);
 			foreach($quantx->get() as $x => $quant)
