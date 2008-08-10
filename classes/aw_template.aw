@@ -1100,8 +1100,8 @@ class aw_template extends core
 	private function _validate_pathname($path)
 	{
 		$pt = str_replace("\\", "/", realpath($path));
-		$sd = realpath(aw_ini_get("site_basedir"));
-		$bd = realpath(aw_ini_get("basedir"));
+		$sd = str_replace("\\", "/", realpath(aw_ini_get("site_basedir")));
+		$bd = str_replace("\\", "/", realpath(aw_ini_get("basedir")));
 
 		if (substr($pt, 0, strlen($sd)) == $sd || substr($pt, 0, strlen($bd)) == $bd)
 		{
