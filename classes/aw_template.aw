@@ -944,7 +944,7 @@ class aw_template extends core
 		{
 			// this will add link to documentation
 			$pos = strpos($this->template_filename, aw_ini_get("tpldir"));
-			$tpl_doc_link = ($pos === false) ? str_replace($this->cfg['basedir']."/templates", "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename) : 
+			$tpl_doc_link = ($pos === false) ? str_replace($this->cfg['basedir']."/templates", "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename) :
 			str_replace(aw_ini_get("tpldir"), "http://dev.struktuur.ee/wiki/index.php/Templates", $this->template_filename);
 			aw_global_set("TPL=1", aw_global_get("TPL=1").'$_aw_tpl_equals_1["'.$this->template_filename.'"]=array("link"=>"'.$tpl_doc_link.'");$_aw_tpl_equals_1_counter[]="'.$this->template_filename.'";');
 		};
@@ -1099,9 +1099,10 @@ class aw_template extends core
 
 	private function _validate_pathname($path)
 	{
-		$pt = realpath($path);
+		$pt = str_replace("\\", "/", realpath($path));
 		$sd = realpath(aw_ini_get("site_basedir"));
 		$bd = realpath(aw_ini_get("basedir"));
+
 		if (substr($pt, 0, strlen($sd)) == $sd || substr($pt, 0, strlen($bd)) == $bd)
 		{
 			return true;
