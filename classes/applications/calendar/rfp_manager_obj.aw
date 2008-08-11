@@ -89,5 +89,26 @@ class rfp_manager_obj extends _int_object
 	{
 		$this->set_meta("pk_prices", $data);
 	}
+
+	/** Returns event types for this manager
+		@attrib api=1
+		@returns
+			array of meta objects
+			array(
+				oid => obj
+			);
+	 **/
+	public function event_types()
+	{
+		if($this->can("view", $this->prop("event_type_folder")))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_META,
+				"parent" => $this->prop("event_type_folder"),
+			));
+			return $ol->arr();
+		}
+		return array();
+	}
 }
 ?>

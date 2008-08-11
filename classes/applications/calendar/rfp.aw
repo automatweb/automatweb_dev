@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.77 2008/08/11 07:12:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.78 2008/08/11 07:43:23 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -986,10 +986,18 @@ class rfp extends class_base
 			case "data_mf_event_type":
 				// wtff???
 				$prop["selected"] = $prop["value"];
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$def = obj($rfpm->get_sysdefault());
+				$types = $def->event_types();
+				foreach($types as $type)
+				{
+					$prop ["options"][$type->id()] = $type->name();
+				}
 				//$prop["value"] = aw_unserialize($prop["value"]);
 			/*case "data_mf_catering_type":
 				$prop["value"] = ($prop["value"]["radio"] == 1)?$this->_gen_prop_autom_value($prop["value"]["select"]):$prop["value"]["text"];
 				break;*/
+				break;
 
 			case "data_mf_catering":
 				if(substr($arr["request"]["group"], 0, 5) == "final")

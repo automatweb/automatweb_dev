@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.45 2008/08/11 07:13:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.46 2008/08/11 07:43:23 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -167,7 +167,7 @@
 @reltype DEFAULT_WEBFORM clid=CL_CONFERENCE_PLANNING value=8
 @caption RFP Veebivorm
 
-@reltype FOLDER clid=CL_MENU value=9
+@reltype FOLDER clid=CL_MENU,CL_META value=9
 @caption Kaust
 
 */
