@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.79 2008/08/11 08:00:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.80 2008/08/11 15:08:43 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -537,6 +537,17 @@ class rfp extends class_base
 
 		switch($prop["name"])
 		{
+			case "data_gen_package":
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$rfpm = obj($rfpm->get_sysdefault());
+				$prc = $rfpm->get_packages();
+				foreach($prc as $rp => $prices)
+				{
+					$rp = obj($rp);
+					$prop["options"][$rp->id()] = $rp->name();
+				}
+				break;
+
 			case "data_gen_package_price":
 				if(!$arr["obj_inst"]->prop("data_gen_package"))
 				{
