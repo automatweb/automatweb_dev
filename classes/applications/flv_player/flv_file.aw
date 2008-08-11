@@ -14,6 +14,12 @@
 	
 	@property fileupload type=fileupload store=no
 	@caption Fail
+
+	@property width type=textbox field=meta method=serialize
+	@caption Laius (px)
+
+	@property height type=textbox field=meta method=serialize
+	@caption K&otilde;rgus (px)
 	
 @groupinfo meta caption=Meta
 @default group=meta
@@ -261,7 +267,7 @@ class flv_file extends class_base
 
 	function show($arr)
 	{
-		$o = new object($arr["id"]);
+		$o = obj($arr["id"]);
 		
 		$s_url = $this->mk_my_orb("flv_file", array(
 			"id" => $o->id(),
@@ -277,8 +283,8 @@ class flv_file extends class_base
 			"id" => "aw_flvplayer_".$o->id(),
 			"name" => $o->prop("name"),
 			"file" => $s_url,
-			"width" => 300,
-			"height" => 250,
+			"width" => $o->prop("width")?$o->prop("width"):300,
+			"height" => $o->prop("height")?$o->prop("height"):250,
 		));
 		return $this->parse();
 	}
