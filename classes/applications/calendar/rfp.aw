@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.78 2008/08/11 07:43:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.79 2008/08/11 08:00:52 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1581,8 +1581,16 @@ class rfp extends class_base
 						elseif($this->can("view", $data["bronid"]))
 						{
 							$bron = obj($data["bronid"]);
-							$bron->set_prop("start1", $start1);
-							$bron->set_prop("end", $end);
+							if(!$bron->prop("start1"))
+							{
+								$bron->set_prop("start1", $start1);
+							}
+							$start1 = $bron->prop("start1");
+							if(!$bron->prop("end"))
+							{
+								$bron->set_prop("end", $end);
+							}
+							$end = $bron->prop("end");
 							$bron->set_prop("resource", $data["room"]);
 							$bron->save();
 							$bri = $bron->instance();
