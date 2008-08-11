@@ -304,7 +304,7 @@
       <property>
             <name>discount_products_file</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -314,7 +314,7 @@
       <property>
             <name>discount_products_parents</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -324,7 +324,7 @@
       <property>
             <name>discount_products_count</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -334,7 +334,7 @@
       <property>
             <name>import_discount_products</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -344,7 +344,7 @@
       <property>
             <name>clear_discount_products</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -354,7 +354,7 @@
       <property>
             <name>discount_title</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -363,7 +363,7 @@
       <property>
             <name>discount_season_parent</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -372,7 +372,7 @@
       <property>
             <name>discount_date_from</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -381,7 +381,7 @@
       <property>
             <name>discount_date_to</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -390,7 +390,7 @@
       <property>
             <name>discount_season_sum</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -399,11 +399,21 @@
       <property>
             <name>discount_season_amount</name>
             <table>objects</table>
-            <group>discount_products</group>
+            <group>discount_products_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <caption>Kui palju allahindlust tehake</caption>
+      </property>
+      <property>
+            <name>discount_products_list</name>
+            <table>objects</table>
+            <group>discount_products_list</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>categories</name>
@@ -654,6 +664,14 @@
             <discount_products>
                   <caption>Soodustooted</caption>
             </discount_products>
+            <discount_products_general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>discount_products</parent>
+            </discount_products_general>
+            <discount_products_list>
+                  <caption>Nimekiri</caption>
+                  <parent>discount_products</parent>
+            </discount_products_list>
             <foldersa>
                   <caption>Kataloogid / Kategooriad</caption>
             </foldersa>
