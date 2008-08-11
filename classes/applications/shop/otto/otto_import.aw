@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.103 2008/07/31 10:29:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.104 2008/08/11 09:55:48 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -123,38 +123,44 @@
 
 @groupinfo discount_products caption="Soodustooted"
 
-	@property discount_products_file type=textbox size=60 group=discount_products field=meta method=serialize
-	@caption Soodustoodete faili asukoht
-		
-	@property discount_products_parents type=textbox size=60 group=discount_products field=meta method=serialize
-	@caption Kausta id, kus all soodustooted asuvad
+	@groupinfo discount_products_general caption="&Uuml;ldine" parent=discount_products
 
-	@property discount_products_count type=text store=no group=discount_products
-	@caption Ridu tabelis
+		@property discount_products_file type=textbox size=60 group=discount_products_general field=meta method=serialize
+		@caption Soodustoodete faili asukoht
+			
+		@property discount_products_parents type=textbox size=60 group=discount_products_general field=meta method=serialize
+		@caption Kausta id, kus all soodustooted asuvad
 
-	@property import_discount_products type=text store=no group=discount_products
-	@caption &nbsp;
+		@property discount_products_count type=text store=no group=discount_products_general
+		@caption Ridu tabelis
 
-	@property clear_discount_products type=text store=no group=discount_products
-	@caption &nbsp;
+		@property import_discount_products type=text store=no group=discount_products_general
+		@caption &nbsp;
 
-	@property discount_title type=textbox group=discount_products field=meta method=serialize
-	@caption Hooajalise allahindluse nimetus
+		@property clear_discount_products type=text store=no group=discount_products_general
+		@caption &nbsp;
 
-	@property discount_season_parent type=textbox group=discount_products field=meta method=serialize
-	@caption Hooajalise allahindluse toodete asukoht
+		@property discount_title type=textbox group=discount_products_general field=meta method=serialize
+		@caption Hooajalise allahindluse nimetus
 
-	@property discount_date_from type=date_select group=discount_products field=meta method=serialize
-	@caption Alates
+		@property discount_season_parent type=textbox group=discount_products_general field=meta method=serialize
+		@caption Hooajalise allahindluse toodete asukoht
 
-	@property discount_date_to type=date_select group=discount_products field=meta method=serialize
-	@caption Kuni
+		@property discount_date_from type=date_select group=discount_products_general field=meta method=serialize
+		@caption Alates
 
-	@property discount_season_sum type=textbox group=discount_products field=meta method=serialize
-	@caption Summa, alates millest soodust kehtib
+		@property discount_date_to type=date_select group=discount_products_general field=meta method=serialize
+		@caption Kuni
 
-	@property discount_season_amount type=textbox group=discount_products field=meta method=serialize
-	@caption Kui palju allahindlust tehake
+		@property discount_season_sum type=textbox group=discount_products_general field=meta method=serialize
+		@caption Summa, alates millest soodust kehtib
+
+		@property discount_season_amount type=textbox group=discount_products_general field=meta method=serialize
+		@caption Kui palju allahindlust tehake
+
+	@groupinfo discount_products_list caption="Nimekiri" parent=discount_products
+
+		@property discount_products_list type=table no_caption=1 group=discount_products_list
 
 @groupinfo foldersa caption="Kataloogid / Kategooriad"
 
@@ -1564,6 +1570,73 @@ class otto_import extends class_base
 	{
 		asort($arr['request']['sites_order']);
 		$arr['obj_inst']->set_meta("files_import_sites_order", $arr['request']['sites_order']);
+		return PROP_OK;
+	}
+
+	function _get_discount_products_list($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+		$table->set_sortable(false);
+
+		$table->define_field(array(
+			'name' => 'id',
+			'caption' => t('OID'),
+			'align' => 'center',
+			'width' => '10%'
+		));
+		$table->define_field(array(
+			'name' => 'product',
+			'caption' => t('Toode'),
+		));
+		$table->define_field(array(
+			'name' => 'product_codes',
+			'caption' => t('Toote koodid'),
+		));
+		$table->define_field(array(
+			'name' => 'product_page',
+			'caption' => t('Fail/leht'),
+		));
+		$sql = "
+			select
+				bp_discount_products.name as disc_prod_name,
+				bp_discount_products.product_code as disc_prod_code,
+				bp_discount_products.prod_oid as prod_oid,
+				aw_shop_products.aw_oid as aw_oid,
+				aw_shop_products.user3 as images,
+				aw_shop_products.user6 as codes,
+				aw_shop_products.user18 as page,
+				objects.name as prod_name
+			from 
+				bp_discount_products
+				left join aw_shop_products on (bp_discount_products.prod_oid = aw_shop_products.aw_oid)	
+				left join objects on (bp_discount_products.prod_oid = objects.oid)
+			where
+				bp_discount_products.lang_id = ".aw_global_get('lang_id')." and
+				aw_shop_products.aw_oid is not null and
+				aw_shop_products.user3 = \"\"
+		";
+
+		$prods = $this->db_fetch_array($sql);
+
+		foreach ($prods as $prod)
+		{
+			$table->define_data(array(
+				'id' => $prod['prod_oid'],
+				'product' => html::href(array(
+					'caption' => $prod['prod_name'].' ('.$prod['disc_prod_name'].')',
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $arr['obj_inst']->id(),
+						'group' => 'products_manager',
+						'products_manager_prod_id' => $prod['prod_oid'],
+						'return_url' => post_ru()
+					), CL_OTTO_IMPORT),
+				)),
+				'product_codes' => $prod['codes'],
+				'product_page' => $prod['page']
+			));
+		}
+
+
 		return PROP_OK;
 	}
 
