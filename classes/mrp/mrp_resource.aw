@@ -187,10 +187,10 @@ class mrp_resource extends class_base
 
 			case "category":
 				$resources_folder_id = $this->workspace->prop ("resources_folder");
-				$parent_folder_id = $this_object->parent ();
+				$parent_folder_id = $this_object->parent();
 				$parents = "";
 
-				while ($resources_folder_id and ($parent_folder_id != $resources_folder_id))
+				while ($resources_folder_id and $parent_folder_id and ($parent_folder_id != $resources_folder_id))
 				{
 					$parent = obj ($parent_folder_id);
 					$parents = "/" . $parent->name () . $parents;
