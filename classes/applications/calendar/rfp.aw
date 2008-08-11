@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.76 2008/08/07 12:42:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.77 2008/08/11 07:12:59 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -344,7 +344,7 @@
 
 
 
-		@groupinfo final_resource caption="Ressursid" parent=final_info
+		@groupinfo final_resource caption="Tehnilised vahendid" parent=final_info
 		@default group=final_resource
 
 			@layout res_hsplit type=hbox width=30%:70%
@@ -352,13 +352,13 @@
 				@layout res_left parent=res_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
 					@property resources_tree parent=res_left type=treeview store=no no_caption=1
 
-				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Ressursid
+				@layout res_right parent=res_hsplit type=vbox closeable=1 area_caption=Tehnilised&nbsp;vahendid
 					@property resources_tbl parent=res_right type=table store=no no_caption=1
 
 			@layout add_inf_resource type=vbox closeable=1 area_caption="Lisainfo"
 				
 				@property additional_resource_information type=textarea parent=add_inf_resource rows=20
-				@caption Ressursside lisainfo
+				@caption Tehniliste vahendite lisainfo
 					
 
                 @groupinfo final_housing caption="Majutus" parent=final_info
@@ -1125,7 +1125,7 @@ class rfp extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "resource",
-			"caption" => t("Ressurss"),
+			"caption" => t("Tehniline vahend"),
 			"chgbgcolor" => "split",
 		));
 		

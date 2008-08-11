@@ -64,7 +64,7 @@ BODY
 <td colspan="10" style="border: 2px solid white;">
 <table border="0" width="100%" cellspacing="1" cellpadding="3" class="awmenuedittabletag">
 <tr>
-	<th class="awmenuedittabletext">Ressurss</th>
+	<th class="awmenuedittabletext">Tehniline vahend</th>
 	<th class="awmenuedittabletext">Aeg</th>
 	<th class="awmenuedittabletext">Kogus</th>
 	<th class="awmenuedittabletext">Hind</th>

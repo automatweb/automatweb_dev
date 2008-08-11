@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.44 2008/08/08 08:06:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.45 2008/08/11 07:13:00 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -195,7 +195,7 @@ class rfp_manager extends class_base
 		$this->raport_types = array(
 			1 => t("Ruumid"),
 			2 => t("Majutus"),
-			3 => t("Ressursid"),
+			3 => t("Tehnilised vahendid"),
 			4 => t("Toitlustus"),
 			5 => t("Lisateenused"),
 		);
@@ -212,7 +212,7 @@ class rfp_manager extends class_base
 			2 => t("Ruumid"),
 			3 => t("Toitlustus"),
 			4 => t("Majutus"),
-			5 => t("Ressursid"),
+			5 => t("Tehnilised vahendid"),
 			6 => t("Lisateenused"),
 		);
 	}
