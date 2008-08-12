@@ -15,6 +15,20 @@
 			</function>
 		</action>
 
+		<action name="handle_calendar_show_reservation" all_args="1">
+			<function name="handle_calendar_show_reservation">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="connect_reservation" all_args="1">
+			<function name="connect_reservation">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_objects" all_args="1">
 			<function name="delete_objects">
 				<arguments>

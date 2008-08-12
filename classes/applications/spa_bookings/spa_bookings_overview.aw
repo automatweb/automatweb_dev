@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.66 2008/07/22 07:48:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.67 2008/08/12 08:40:41 tarvo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1608,6 +1608,22 @@ class spa_bookings_overview extends class_base
 			array(
 				reservation => reservation_obj,
 			)
+		@param alter_reservation_name optional type=array
+			Array(
+				class_id => CL_WHATEVER,
+				method => "some_method",
+				another_param => value,
+			)
+			When drawing reservations calendar table, and a reservation is going to be drawn, this callback function is called to alter the name which is shown in the calendar. Rervation id and other userful data is added to params list for the callback function.
+			array(
+				reservation => reservation_obj,
+				bron_name => &current_bron_name,
+				name_elements => array(
+					customer => bron_name_component,
+					phone => bron_name_component,
+					codes => bron_name_component,
+				)
+			)
 		@param firstname optional type=string
 			Firstname for reservation object.
 		@param lastname optional type=string
@@ -1733,6 +1749,9 @@ class spa_bookings_overview extends class_base
 			$ri->_get_calendar_tbl(array(
 				"room" => $room_id,
 				"prop" => $prop,
+				"request" => array(
+					"alter_reservation_name" => $arr["alter_reservation_name"],
+				),
 			));
 			$room2tbl[] = array(
 				"t" => $t,

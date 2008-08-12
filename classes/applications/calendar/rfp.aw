@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.80 2008/08/11 15:08:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.81 2008/08/12 08:40:33 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -804,6 +804,11 @@ class rfp extends class_base
 						"rfp_oid" => $arr["obj_inst"]->id(),
 						"class_id" => CL_RFP,
 						"action" => "handle_new_reservation" 
+					),
+					"alter_reservation_name" => array(
+						"rfp_oid" => $arr["obj_inst"]->id(),
+						"class_id" => CL_RFP,
+						"action" => "handle_calendar_show_reservation",
 					),
 					"start" => mktime(0,0,0, date("m", $_st), date("d", $_st), date("Y", $_st)),
 					"end" => $arr["obj_inst"]->prop("data_gen_departure_date_admin") + 86400,
@@ -3109,10 +3114,10 @@ class rfp extends class_base
 		return $this->rfp_status;
 	}
 
-	/**
+	/** Callback function. Called when reservation is added through calendar
 		@attrib name=handle_new_reservation all_args=1 params=name
 	 **/
-	public function handle_new_reservation($arr)
+	function handle_new_reservation($arr)
 	{
 		$rfp = obj($arr["rfp_oid"]);
 		$rfp->connect(array(
@@ -3121,6 +3126,47 @@ class rfp extends class_base
 		));
 	}
 
+	/** Callback function to alter reservation name in calendar. Called when reservation calendar is shown and a reservation is found. 
+		@attrib name=handle_calendar_show_reservation all_args=1 params=name
+	 **/
+	function handle_calendar_show_reservation(&$arr)
+	{
+		if($this->can("view", $arr["reservation"]->id()) && $this->can("view", $arr["rfp_oid"]))
+		{
+			$rels = $arr["reservation"]->connections_to(array(
+				"type" => "RELTYPE_RESERVATION",
+				"from.class_id" => CL_RFP,
+			));
+			if(!count($rels))
+			{
+				$url = $this->mk_my_orb("connect_reservation", array(
+					"return_url" => get_ru(),
+					"rfp" => $arr["rfp_oid"],
+					"reservation" => $arr["reservation"]->id(),
+				));
+				$arr["bron_name"] .= html::href(array(
+					"url" => "javascript:void();",
+					"onClick" => "aw_get_url_contents(\"".$url."\");window.location.reload();",
+					"caption" => t("( Seo RFP'ga )"),
+				));
+			}
+		}
+	}
+
+	/** Callback function for bron calendar rfp::handle_calendar_show_reservation() uses this function to connect reservations to rfp.
+		@attrib name=connect_reservation params=name all_args=1
+	 **/
+	function connect_reservation($arr)
+	{
+		if($this->can("view", $arr["rfp"]) and $this->can("view", $arr["reservation"]))
+		{
+			$rfp = obj($arr["rfp"]);
+			$rfp->connect(array(
+				"to" => $arr["reservation"],
+				"type" => "RELTYPE_RESERVATION",
+			));
+		}
+	}
 
 	/**
 		@attrib name=delete_objects all_args=1

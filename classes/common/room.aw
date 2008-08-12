@@ -1986,8 +1986,25 @@ class room extends class_base
 									}
 								}
 							}
+							$bron_name = $cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",");
+							if(is_array(($_t = $arr["request"]["alter_reservation_name"])) and is_array(aw_ini_get("classes.".$_t["class_id"])))
+							{
+
+								$cb_inst = get_instance($_t["class_id"]);
+								if(is_callable(array($cb_inst, $_t["action"])))
+								{
+									$_t["name_elements"] = array(
+										"customer" => $cus,
+										"phone" => $phone,
+										"codes" => $codes,
+									);
+									$_t["bron_name"] = &$bron_name;
+									$_t["reservation"] = $last_bron;
+									$cb_inst->$_t["action"]($_t);
+								}
+							}
 							$dx_p = array(
-								"caption" => "<span><font color=#26466D><u>".$cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",")."</FONT></span>",
+								"caption" => "<span><font color=#26466D><u>".$bron_name."</FONT></span>",
 								"title" => $title,
 							);
 							if ($settings->prop("cal_show_prods"))
