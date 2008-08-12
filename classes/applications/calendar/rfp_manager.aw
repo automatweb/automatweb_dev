@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.48 2008/08/12 13:19:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.49 2008/08/12 13:42:23 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1625,7 +1625,7 @@ class rfp_manager extends class_base
 		$resources = array();
 		foreach($ol->arr() as $oid => $obj)
 		{
-			$resources += safe_array($obj->get_resources());
+			$resources = array_merge($resources, safe_array($obj->get_resources()));
 		}
 		foreach($resources as $data)
 		{
@@ -1636,7 +1636,6 @@ class rfp_manager extends class_base
 			unset($data["resource"]);
 			$return[] = $new + $data;
 		}
-		d($return);
 		return $return;
 	}
 

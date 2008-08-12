@@ -98,6 +98,7 @@ class rfp_obj extends _int_object
 
 			$new = array(
 				"rfp" => $this->id(),
+				"reservation" => $reservation->id(),
 			);
 			foreach($gather_res_props as $prop)
 			{
