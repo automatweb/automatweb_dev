@@ -1984,7 +1984,7 @@ class event_search extends class_base
 		}
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"class_id" => array(CL_PROJECT, CL_PLANNER),
+			"class_id" => array(CL_PROJECT, CL_PLANNER, CL_MENU),
 			"sort_by" => "objects.jrk",
 			"site_id" => array(),
 			"lang_id" => array()
