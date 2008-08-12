@@ -79,7 +79,7 @@
             <reltype>RELTYPE_META_OBJECT_FOLDER</reltype>
             <store>connect</store>
             <field>meta_folder</field>
-            <caption>Muutujate kaust</caption>
+            <caption>Toat&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
       </property>
       <property>
             <name>table_form_folder</name>
