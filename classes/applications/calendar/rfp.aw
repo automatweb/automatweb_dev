@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.81 2008/08/12 08:40:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.82 2008/08/12 09:02:07 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -809,6 +809,7 @@ class rfp extends class_base
 						"rfp_oid" => $arr["obj_inst"]->id(),
 						"class_id" => CL_RFP,
 						"action" => "handle_calendar_show_reservation",
+						"reltype" => $reltypes[$arr["request"]["group"]],
 					),
 					"start" => mktime(0,0,0, date("m", $_st), date("d", $_st), date("Y", $_st)),
 					"end" => $arr["obj_inst"]->prop("data_gen_departure_date_admin") + 86400,
@@ -3134,7 +3135,9 @@ class rfp extends class_base
 		if($this->can("view", $arr["reservation"]->id()) && $this->can("view", $arr["rfp_oid"]))
 		{
 			$rels = $arr["reservation"]->connections_to(array(
-				"type" => "RELTYPE_RESERVATION",
+				"type" => array(
+					3,12
+				),
 				"from.class_id" => CL_RFP,
 			));
 			if(!count($rels))
@@ -3143,6 +3146,7 @@ class rfp extends class_base
 					"return_url" => get_ru(),
 					"rfp" => $arr["rfp_oid"],
 					"reservation" => $arr["reservation"]->id(),
+					"reltype" => $arr["reltype"],
 				));
 				$arr["bron_name"] .= html::href(array(
 					"url" => "javascript:void();",
@@ -3163,7 +3167,7 @@ class rfp extends class_base
 			$rfp = obj($arr["rfp"]);
 			$rfp->connect(array(
 				"to" => $arr["reservation"],
-				"type" => "RELTYPE_RESERVATION",
+				"type" => $arr["reltype"]?$arr["reltype"]:"RELTYPE_RESERVATION",
 			));
 		}
 	}
