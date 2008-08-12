@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.47 2008/08/12 13:17:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.48 2008/08/12 13:19:36 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -28,7 +28,7 @@
 @caption Toitlustuse ruumide kaust
 
 @property prod_vars_folder type=relpicker reltype=RELTYPE_PROD_VARS_FOLDER field=meta method=serialize
-@caption Konverentsimen&uuml;&uuml;
+@caption Tootepakettide asukoht
 
 @property meta_folder type=relpicker reltype=RELTYPE_META_OBJECT_FOLDER store=connect
 @caption Toat&uuml;&uuml;pide kaust
