@@ -5306,13 +5306,29 @@ class room extends class_base
 		{
 			return;
 		}
+		if ($arr["request"]["group"]=="calendar")
+		{
+			$out = '
+			$.timer(60000, function (timer){
+				$.ajax({
+					type: "POST",
+					url: "/orb.aw?class=room&action=update_calendar_table&room="+$.gup("id"),
+					data: "",
+					success: function(msg){
+						$(".sisu").html(msg);
+					}
+				});
+			});
+
+			';
+		}
 		$set = $this->get_settings_for_room($arr["obj_inst"]);
 		$tm = 600000;
 		if ($set->prop("cal_refresh_time") > 0)
 		{
 			$tm = $set->prop("cal_refresh_time") * 60000;
 		}
-		return 'doLoad('.$tm.');
+		return $out . 'doLoad('.$tm.');
 			var sURL = unescape(window.location.href);
 			function doLoad()
 			{
