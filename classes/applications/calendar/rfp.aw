@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.83 2008/08/12 10:48:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.84 2008/08/12 12:10:39 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -254,15 +254,6 @@
 			@property files_tbl type=table store=no no_caption=1
 
 
-	@groupinfo terms caption="Tingimused"
-	@default group=terms
-
-		@property cancel_and_payment_terms type=textarea richtext=1
-		@caption Konvererntside annuleerimis- ja maksetingimused
-
-		@property accomondation_terms type=textarea richtext=1
-		@caption Majutuse annuleerimis- ja maksetingimused
-
 	@groupinfo final_info caption="Tellimuskirjeldus"
 		
 		@groupinfo final_general caption="&Uuml;ldine" parent=final_info
@@ -376,6 +367,16 @@
                 @default group=additional_services
 
                         @property additional_services_tbl type=table store=no no_caption=1
+
+
+		@groupinfo terms caption="Tingimused" parent=final_info
+		@default group=terms
+
+			@property cancel_and_payment_terms type=textarea richtext=1
+			@caption Konvererntside annuleerimis- ja maksetingimused
+
+			@property accomondation_terms type=textarea richtext=1
+			@caption Majutuse annuleerimis- ja maksetingimused
 
 
 		@groupinfo final_offer caption="Pakkumine" parent=final_info

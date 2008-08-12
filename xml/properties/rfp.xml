@@ -634,24 +634,6 @@
             <field>files_tbl</field>
       </property>
       <property>
-            <name>cancel_and_payment_terms</name>
-            <table>rfp</table>
-            <group>terms</group>
-            <type>textarea</type>
-            <richtext>1</richtext>
-            <field>cancel_and_payment_terms</field>
-            <caption>Konvererntside annuleerimis- ja maksetingimused</caption>
-      </property>
-      <property>
-            <name>accomondation_terms</name>
-            <table>rfp</table>
-            <group>terms</group>
-            <type>textarea</type>
-            <richtext>1</richtext>
-            <field>accomondation_terms</field>
-            <caption>Majutuse annuleerimis- ja maksetingimused</caption>
-      </property>
-      <property>
             <name>default_currency</name>
             <table>rfp</table>
             <group>final_general</group>
@@ -882,6 +864,24 @@
             <field>additional_services_tbl</field>
       </property>
       <property>
+            <name>cancel_and_payment_terms</name>
+            <table>rfp</table>
+            <group>terms</group>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <field>cancel_and_payment_terms</field>
+            <caption>Konvererntside annuleerimis- ja maksetingimused</caption>
+      </property>
+      <property>
+            <name>accomondation_terms</name>
+            <table>rfp</table>
+            <group>terms</group>
+            <type>textarea</type>
+            <richtext>1</richtext>
+            <field>accomondation_terms</field>
+            <caption>Majutuse annuleerimis- ja maksetingimused</caption>
+      </property>
+      <property>
             <name>offer_pdf</name>
             <table>rfp</table>
             <group>final_offer</group>
@@ -1005,9 +1005,6 @@
                   <caption>Failid</caption>
                   <parent>data</parent>
             </files>
-            <terms>
-                  <caption>Tingimused</caption>
-            </terms>
             <final_info>
                   <caption>Tellimuskirjeldus</caption>
             </final_info>
@@ -1035,6 +1032,10 @@
                   <caption>Lisateenused</caption>
                   <parent>final_info</parent>
             </additional_services>
+            <terms>
+                  <caption>Tingimused</caption>
+                  <parent>final_info</parent>
+            </terms>
             <final_offer>
                   <caption>Pakkumine</caption>
                   <parent>final_info</parent>
