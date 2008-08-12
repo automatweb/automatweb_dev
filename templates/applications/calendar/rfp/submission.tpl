@@ -101,7 +101,7 @@ kehtib: {VAR:offer_expire_date}
 </table>
 <!-- END SUB: RESOURCES -->
 
-<!-- SUB: PRODUCTS -->
+<!-- SUB: PRODUCTS_NO_PACKAGE -->
 <br /><br />
 <table border="1" cellspacing="0" cellpadding="5" width="100%" bgcolor="#efefef" bordercolor="#ffffff" style="border-collapse: collapse">
 <tr bgcolor="#aaaaaa"><th colspan="7">Toitlustus</th></tr>
@@ -114,7 +114,7 @@ kehtib: {VAR:offer_expire_date}
 <td>Hind kokku</td>
 <td>Kommentaar</td>
 </tr>
-<!-- SUB: PRODUCT -->
+<!-- SUB: PRODUCT_NO_PACKAGE -->
 <tr>
 <td>{VAR:prod_from_date} {VAR:prod_from_hour}:{VAR:prod_from_minute} - {VAR:prod_to_date} {VAR:prod_to_hour}:{VAR:prod_to_minute}</td>
 <td>{VAR:prod_event_and_room}</td>
@@ -124,11 +124,34 @@ kehtib: {VAR:offer_expire_date}
 <td>{VAR:prod_sum}</td>
 <td>{VAR:prod_comment}</td>
 </tr>
-<!-- END SUB: PRODUCT -->
+<!-- END SUB: PRODUCT_NO_PACKAGE -->
 <tr><td colspan="5"><div align="right"><strong>Kokku:</strong></div></td>
 <td><strong>{VAR:prod_total}</strong>.-</td></tr>
 </table>
-<!-- END SUB: PRODUCTS -->
+<!-- END SUB: PRODUCTS_NO_PACKAGE -->
+
+<!-- SUB: PRODUCTS_PACKAGE -->
+<br /><br />
+<table border="1" cellspacing="0" cellpadding="5" width="100%" bgcolor="#efefef" bordercolor="#ffffff" style="border-collapse: collapse">
+<tr bgcolor="#aaaaaa"><th colspan="5">Toitlustus</th></tr>
+<tr bgcolor="#dddddd">
+<td>Aeg</td>
+<td>S&uuml;ndmus</td>
+<td>Arv</td>
+<td>Toit</td>
+<td>Kommentaar</td>
+</tr>
+<!-- SUB: PRODUCT_PACKAGE -->
+<tr>
+<td>{VAR:prod_from_date} {VAR:prod_from_hour}:{VAR:prod_from_minute} - {VAR:prod_to_date} {VAR:prod_to_hour}:{VAR:prod_to_minute}</td>
+<td>{VAR:prod_event_and_room}</td>
+<td>{VAR:prod_count}</td>
+<td>{VAR:prod_prod}</td>
+<td>{VAR:prod_comment}</td>
+</tr>
+<!-- END SUB: PRODUCT_PACKAGE -->
+</table>
+<!-- END SUB: PRODUCTS_PACKAGE -->
 
 <!-- SUB: HOUSING -->
 <br /><br />

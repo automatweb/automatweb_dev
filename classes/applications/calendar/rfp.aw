@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.82 2008/08/12 09:02:07 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.83 2008/08/12 10:48:27 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2511,17 +2511,20 @@ class rfp extends class_base
 					"prod_event_and_room" => join(", ",$evt_room),
 					"prod_room_name" => $room->trans_get_val("name"),
 				));
-				$pds .= $this->parse("PRODUCT");
+				$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
 				$prod_total += round($this->_format_price($prod["sum"]));
 			}
 			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
 			{
 				$this->vars(array(
-					"PRODUCT" => $pds,
+					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
 					"prod_total" => $prod_total,
 				));
-				$pd_sub = $this->parse("PRODUCTS");
-				$totalprice += $prod_total;
+				$pd_sub = $this->parse("PRODUCTS_".($package?"":"NO_")."PACKAGE");
+				if(!$package)
+				{
+					$totalprice += $prod_total;
+				}
 			}
 		}
 		$housing = $arr["obj_inst"]->meta("housing");
@@ -2588,7 +2591,7 @@ class rfp extends class_base
 			"accomondation_terms" => $arr["obj_inst"]->prop("accomondation_terms"),
 			"BRON" => $brons,
 			"RESOURCES" => $res_sub,
-			"PRODUCTS" => $pd_sub,
+			"PRODUCTS_".($package?"NO_":"")."PACKAGE" => $pd_sub,
 			"HOUSING" => $hs_sub,
 			"ADDITIONAL_SERVICES" => $as_sub,
 			"totalprice" => $totalprice,
