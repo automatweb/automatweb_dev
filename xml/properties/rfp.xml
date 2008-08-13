@@ -833,7 +833,7 @@
             <parent>add_inf_resource</parent>
             <rows>20</rows>
             <field>additional_resource_information</field>
-            <caption>Tehniliste vahendite lisainfo</caption>
+            <caption>Ressursid lisainfo</caption>
       </property>
       <property>
             <name>housing_tbl</name>
@@ -1021,7 +1021,7 @@
                   <parent>final_info</parent>
             </final_catering>
             <final_resource>
-                  <caption>Tehnilised vahendid</caption>
+                  <caption>Ressursid</caption>
                   <parent>final_info</parent>
             </final_resource>
             <final_housing>
@@ -1189,7 +1189,7 @@
                   <parent>res_hsplit</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Tehnilised&amp;amp;nbsp;vahendid</area_caption>
+                  <area_caption>Ressursid</area_caption>
                   <group>final_resource</group>
             </res_right>
             <add_inf_resource>
