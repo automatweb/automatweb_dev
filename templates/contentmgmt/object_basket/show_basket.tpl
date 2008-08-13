@@ -6,6 +6,7 @@
 </td>
     <td style="padding-bottom: 30px;" align="right" valign="middle"><a href="{VAR:ical_url}">[ anna iCal ]</a><a href="{VAR:remove_all_url}" target="_self">[ eemalda kõik ]</a><a href="{VAR:print_url}" target="_blank">[ prindi kõik ]</a></td>
   </tr>
+<!-- SUB: HAS_LINES -->
   <!-- SUB: LINE -->
   <tr>
     <td colspan="2" bgcolor="#000000"><img src="/img/pix.gif" height="1" width="630"></td>
@@ -26,6 +27,9 @@ echo date('d.m.Y, H:i',$d);
     <td style="padding-left: 0px; padding-right: 0px; padding-top: 1px; padding-bottom: 1px;" valign="top" align="right"><a href="{VAR:remove_single_url}" target="_self"><img src="/img/est.butt.eemalda.gif" border="0" alt="[eemalda märkmikust]"></a></td>
   </tr>
   <!-- END SUB: LINE -->
+<!-- END SUB: HAS_LINES -->
+<!-- SUB: NO_LINES -->
+<!-- END SUB: NO_LINES -->
 
 </table>
 

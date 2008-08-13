@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.13 2008/08/01 08:23:15 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.14 2008/08/13 13:11:20 tarvo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -176,7 +176,18 @@ class object_basket extends class_base
 				$pgs .= $this->parse("PAGE");
 			}
 		}
-
+		if(count($objs))
+		{
+			$this->vars_safe(array(
+				"LINE" => $ls,
+			));
+			$lines["HAS_LINES"] = $this->parse("HAS_LINES");
+		}
+		else
+		{
+			$lines["NO_LINES"] = $this->parse("NO_LINES");
+		}
+		$this->vars_safe($lines);
 		$this->vars_safe(array(
 			"PAGE" => $pgs,
 			"SEL_PAGE" => "",
