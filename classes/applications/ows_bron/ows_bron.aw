@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.44 2008/08/13 13:59:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.45 2008/08/13 15:06:48 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -44,7 +44,6 @@
 @groupinfo promo_settings caption="Promokoodi seaded"
 @default group=promo_settings
 	@property promo_settings type=table store=no no_caption=1
-
 
 @reltype BANK_PAYMENT value=1 clid=CL_BANK_PAYMENT
 @caption Pangamakse
@@ -334,7 +333,7 @@ class ows_bron extends class_base
 		$parameters["numberOfRooms"] = $rooms;
 		$parameters["numberOfAdultsPerRoom"] = (int)$arr["i_adults"];
 		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_children"];
-		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
+		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", ($promo?$promo:$_SESSION["ows_customer"]["promo"]));
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = reval_customer::get_cust_id();
 		$parameters["ow_bron"] = $arr["ow_bron"];
@@ -701,7 +700,7 @@ class ows_bron extends class_base
 		$parameters["numberOfRooms"] = $rooms;
 		$parameters["numberOfAdultsPerRoom"] = (int)$arr["i_adults"];
 		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_children"];
-		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
+		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", ($promo?$promo:$_SESSION["ows_customer"]["promo"]));
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = reval_customer::get_cust_id();
 		if($currency)
@@ -798,7 +797,7 @@ class ows_bron extends class_base
 		$o->set_prop("num_rooms", $rooms);
 		$o->set_prop("adults_per_room", (int)$arr["i_adults"]);
 		$o->set_prop("child_per_room", (int)$arr["i_children"]);
-		$o->set_prop("promo_code", $promo);
+		$o->set_prop("promo_code", ($promo?$promo:$_SESSION["ows_customer"]["promo"]));
 		$o->set_prop("currency", $currency);
 		$o->set_prop("guest_title", "");
 		$o->set_prop("guest_firstname", $arr["ct"]["firstname"]);
@@ -1113,7 +1112,7 @@ class ows_bron extends class_base
       	"numberOfRooms" => $arr["i_rooms"],
       	"numberOfAdultsPerRoom" => $arr["i_adults"],
       	"numberOfChildrenPerRoom" => $arr["i_children"],
-      	"promotionCode" => $arr["i_promo"]." ",
+      	"promotionCode" => ($arr["i_promo"]?$arr["i_promo"]:$_SESSION["ows_customer"]["promo"])." ",
       /*<partnerWebsiteGuid>string</partnerWebsiteGuid>
       <partnerWebsiteDomain>string</partnerWebsiteDomain>
       <corporateCode>string</corporateCode>
@@ -1629,6 +1628,21 @@ class ows_bron extends class_base
 	**/
 	function show_available_rooms($arr)
 	{
+		$_SESSION["ows_customer"]["country"] = $this->detect_country();
+		if($this->can("view" , $arr["ow_bron"]))
+		{
+			$owb = obj($arr["ow_bron"]);
+			$pr = $owb-> meta("pro");
+			foreach($pr as $dat)
+			{
+				if($dat["country"] == $_SESSION["ows_customer"]["country"])
+				{
+					$_SESSION["ows_customer"]["promo"] = $dat["pro"];
+				}
+
+			}
+		}
+
 		if (!$arr["r_url"])
 		{
 			$arr["r_url"] = obj_link($arr["section"]);
@@ -1933,7 +1947,7 @@ if ($_GET["DH"] == 1)
 		$parameters["numberOfRooms"] = $rooms;
 		$parameters["numberOfAdultsPerRoom"] = $adultcount[1];
 		$parameters["numberOfChildrenPerRoom"] = $childcount[1];
-		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
+		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", ($promo?$promo:$_SESSION["ows_customer"]["promo"]));
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = reval_customer::get_cust_id();
 		$parameters["ow_bron"] = $arr["ow_bron"];
@@ -2465,7 +2479,7 @@ die(dbg::dump($return));
 		$parameters["numberOfRooms"] = (int)$rooms;
 		$parameters["numberOfAdultsPerRoom"] = (int)$i_adult;
 		$parameters["numberOfChildrenPerRoom"] = (int)$i_child;
-		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
+		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", ($promo?$promo:$_SESSION["ows_customer"]["promo"]));
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = reval_customer::get_cust_id();
 		if($currency)
@@ -2597,7 +2611,7 @@ die(dbg::dump($return));
 		$parameters["numberOfRooms"] = $rooms;
 		$parameters["numberOfAdultsPerRoom"] = (int)$arr["i_adults"];
 		$parameters["numberOfChildrenPerRoom"] = (int)$arr["i_children"];
-		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $promo);
+		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", ($promo?$promo:$_SESSION["ows_customer"]["promo"]));
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = reval_customer::get_cust_id();
 		if($currency)
@@ -3012,7 +3026,7 @@ echo dbg::dump($return);
 		$parameters["numberOfRooms"] = $arr["i_rooms"];
 		$parameters["numberOfAdultsPerRoom"] = $arr["i_adult1"];
 		$parameters["numberOfChildrenPerRoom"] = $arr["i_child1"];
-		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", $arr["i_promo"]);
+		$parameters["promotionCode"] = iconv(aw_global_get("charset"), "utf-8", ($arr["i_promo"]?$arr["i_promo"]:$_SESSION["ows_customer"]["promo"]));
 		$parameters["webLanguageId"] = $lang;
 		$parameters["customerId"] = reval_customer::get_cust_id();
 		$parameters["rateIDs"] = explode(",", $arr["rate_ids"]);
@@ -3075,6 +3089,11 @@ echo dbg::dump($return);
 		}
 	}
 
+	function _set_mail_templates($arr)
+	{
+		$arr["obj_inst"]->set_meta($arr["request"]["group"], $arr["request"]["mail_templates"]);
+	}
+
 	function _get_promo_settings($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -3120,11 +3139,6 @@ echo dbg::dump($return);
 			}
 		}
 		$arr["obj_inst"]->set_meta("pro", $arr["request"]["pro"]);
-	}
-
-	function _set_mail_templates($arr)
-	{
-		$arr["obj_inst"]->set_meta($arr["request"]["group"], $arr["request"]["mail_templates"]);
 	}
 
 	function _init_bank_settings_t(&$t)
