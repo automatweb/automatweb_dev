@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.48 2008/08/13 07:06:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.49 2008/08/13 12:00:53 tarvo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -439,17 +439,19 @@ class mini_gallery extends class_base
 			while ($zip_entry = zip_read($zip)) 
 			{
 				zip_entry_open($zip, $zip_entry, "r");
-				if(trim(strtolower(zip_entry_name($zip_entry)), "/\\") == "__macos") // mac puts a stupid __macos file along to the zip
-				{
-					continue;
-				}
 				$fn = $folder."/".basename(zip_entry_name($zip_entry));
-				$files[] = basename($fn);
 				$fc = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
 				$this->put_file(array(
 					"file" => $fn,
 					"content" => $fc
 				));
+				$inf = @getimagesize($fn);
+				if(!in_array($inf[2], array(IMAGETYPE_JPEG, IMGETYPE_PNG, IMAGETYPE_GIF)))
+				{
+					@unlink($fn);
+					continue;
+				}
+				$files[] = basename($fn);
 			}
 		}
 		else
