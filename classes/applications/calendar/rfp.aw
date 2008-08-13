@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.85 2008/08/13 12:07:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.86 2008/08/13 12:54:08 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1475,6 +1475,7 @@ class rfp extends class_base
 				{
 					//if($count = $amount[$prod->id()])
 					//{
+						$count = $amount[$prod->id()];
 						$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
 						$price = $rvi->_get_admin_price_view($prod,$prod_price);
 						$disc = $discount[$prod->id()];
@@ -1502,10 +1503,11 @@ class rfp extends class_base
 								"name" => "prods[".$prod->id().".".$rv->id()."][price]",
 								"value" => $price,
 							)).$price,
-							"amount" => html::hidden(array(
+							"amount" => html::textbox(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][amount]",
 								"value" => $count?$count:$rv_amount[$prod->id()],
-							)).($count?$count:$rv_amount[$prod->id()]),
+								"size" => 5,
+							)),//.($count?$count:$rv_amount[$prod->id()]),
 							"discount" => html::hidden(array(
 								"name" =>  "prods[".$prod->id().".".$rv->id()."][discount]",
 								"value" => $disc,
@@ -2474,6 +2476,14 @@ class rfp extends class_base
 				if($prod["amount"] <= 0)
 				{
 					continue;
+				}
+				if($prod["sum"] == 0)
+				{
+					$prod["sum"] = ($prod["price"] * $prod["amount"]);
+					if($prod["discount"] > 0)
+					{
+						$prod["sum"] = $prod["sum"] * ((100 - $prod["discount"]) / 100);
+					}
 				}
 				$prodcountcheck++;
 				$tmp = explode(".", $oids);
