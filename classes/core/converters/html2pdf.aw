@@ -2,11 +2,17 @@
 /*
 @classinfo  maintainer=kristo
 */
+
+
+define("HTML2PDF_HTMLDOC", 1);
+define("HTML2PDF_DOMPDF", 2);
+
 class html2pdf extends class_base
 {
 	function html2pdf()
 	{
 		$this->init();
+		$this->converter = ($_t = aw_ini_get("html2pdf.use_converter"))?$_t:HTML2PDF_DOMPDF;
 	}
 
 	/**
@@ -18,9 +24,23 @@ class html2pdf extends class_base
 	**/
 	function can_convert()
 	{
-		if (is_file(aw_ini_get("html2pdf.htmldoc_path")))
+		switch($this->converter)
 		{
-			return true;
+			case HTML2PDF_HTMLDOC:
+				if (is_file(aw_ini_get("html2pdf.htmldoc_path")))
+				{
+					return true;
+				}
+				break;
+			case HTML2PDF_DOMPDF:
+				if(is_dir(aw_ini_get("html2pdf.dompdf_path")) && is_array(aw_ini_get("classes.".CL_DOMPDF)))
+				{
+					return true;
+				}
+				break;
+			default:
+				return false;
+				break;
 		}
 		return false;
 	}
@@ -48,14 +68,26 @@ class html2pdf extends class_base
 	{
 		// right, figure out which converter we got
 		// first, try htmldoc
-		$hd = aw_ini_get("html2pdf.htmldoc_path");
-		if (file_exists($hd) && is_executable($hd))
+		switch($this->converter)
 		{
-			return $this->_convert_using_htmldoc($arr);
-		}
-		else
-		{
-			throw new awex_html2pdf("No available converters found!");
+			case HTML2PDF_HTMLDOC:
+				$hd = aw_ini_get("html2pdf.htmldoc_path");
+				if (file_exists($hd) && is_executable($hd))
+				{
+					return $this->_convert_using_htmldoc($arr);
+				}
+				else
+				{
+					throw new awex_html2pdf("Selected converter not found!");
+				}
+				break;
+			case HTML2PDF_DOMPDF:
+				$dompdf = get_instance(CL_DOMPDF);
+				return $dompdf->convert($arr);
+				break;
+			default:
+				throw new awex_html2pdf("No converter selected!");
+				break;
 		}
 	}
 
