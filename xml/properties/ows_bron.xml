@@ -68,6 +68,15 @@
             <no_caption>1</no_caption>
             <field>mail_bank_bcc</field>
       </property>
+      <property>
+            <name>promo_settings</name>
+            <table>objects</table>
+            <group>promo_settings</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>promo_settings</field>
+      </property>
       <classinfo>
             <syslog_type>ST_OWS_BRON</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -99,6 +108,9 @@
             <bank_settings>
                   <caption>Panga seaded</caption>
             </bank_settings>
+            <promo_settings>
+                  <caption>Promokoodi seaded</caption>
+            </promo_settings>
       </groupinfo>
       <reltypes>
             <BANK_PAYMENT>

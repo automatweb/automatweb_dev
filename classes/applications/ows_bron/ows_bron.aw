@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.43 2008/07/17 14:51:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.44 2008/08/13 13:59:37 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -41,6 +41,11 @@
 
 @groupinfo bank_settings caption="Panga seaded"
 	
+@groupinfo promo_settings caption="Promokoodi seaded"
+@default group=promo_settings
+	@property promo_settings type=table store=no no_caption=1
+
+
 @reltype BANK_PAYMENT value=1 clid=CL_BANK_PAYMENT
 @caption Pangamakse
 
@@ -3068,6 +3073,53 @@ echo dbg::dump($return);
 				))
 			));
 		}
+	}
+
+	function _get_promo_settings($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array("name" => "pro", "caption" => t("Promokood")));
+		$t->define_field(array("name" => "country", "caption" => t("Riigikood")));
+
+		$h = $arr["obj_inst"]->meta("pro");
+		$cnt = 0;
+		foreach($h as $pro)
+		{
+			$t->define_data(array(
+				"pro" => html::textbox(array(
+					"name" => "pro[$cnt][pro]",
+					"value" => $pro["pro"],
+				)),
+				"country" => html::textbox(array(
+					"name" => "pro[$cnt][country]",
+					"value" => $pro["country"],
+				))
+			));
+			$cnt++;
+		}
+		$t->set_sortable(false);
+		$t->define_data(array(
+			"pro" => html::textbox(array(
+				"name" => "pro[$cnt][pro]",
+				"value" => "",
+			)),
+			"country" => html::textbox(array(
+				"name" => "pro[$cnt][country]",
+				"value" => "",
+			))
+		));
+	}
+
+	function _set_promo_settings($arr)
+	{
+		foreach($arr["request"]["pro"] as $key => $val)
+		{
+			if(!$val["pro"] && !$val["country"])
+			{
+				unset($arr["request"]["pro"][$key]);
+			}
+		}
+		$arr["obj_inst"]->set_meta("pro", $arr["request"]["pro"]);
 	}
 
 	function _set_mail_templates($arr)
