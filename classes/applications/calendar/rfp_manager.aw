@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.50 2008/08/13 13:00:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.51 2008/08/14 14:41:19 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -767,6 +767,7 @@ class rfp_manager extends class_base
 			"name" => "min_hours",
 			"caption" => t("Min. tunde"),
 		));
+		/*
 		$t->define_field(array(
 			"name" => "min_add_price",
 			"caption" => t("Lisahind"),
@@ -779,13 +780,14 @@ class rfp_manager extends class_base
 				"parent" => "min_add_price",
 			));
 		}
+		 */
 		$t->define_field(array(
 			"name" => "max_hours",
 			"caption" => t("Max. tunde"),
 		));
 		$t->define_field(array(
 			"name" => "max_add_price",
-			"caption" => t("Lisahind"),
+			"caption" => t("Lisahind &uuml;letunnile"),
 		));
 		foreach($this->rfp_currencies() as $oid => $obj)
 		{
@@ -820,11 +822,13 @@ class rfp_manager extends class_base
 
 			foreach($this->rfp_currencies() as $oid => $obj)
 			{
+				/*
 				$data["min_price[".$oid."]"] = html::textbox(array(
 					"value" => $extra_data[$room->id()]["min_prices"][$oid],
 					"name" => "rooms_table[".$room_oid."][min_prices][".$oid."]",
 					"size" => 10,
 				));
+				 */
 				$data["max_price[".$oid."]"] = html::textbox(array(
 					"value" => $extra_data[$room->id()]["max_prices"][$oid],
 					"name" => "rooms_table[".$room_oid."][max_prices][".$oid."]",

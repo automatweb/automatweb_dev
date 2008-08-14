@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.89 2008/08/14 11:39:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.90 2008/08/14 14:41:19 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -998,6 +998,17 @@ class rfp extends class_base
 					$args["request"]["extra_rooms_for_separators"] = $rooms;
 					$args["ids"] = $ids;
 				}
+
+				// we have to figure out if the reservation is too short/long (considering min & max hours)
+				$args["request"]["use_rfp_minmax_hours_pricecalc"] = true;
+				$args["request"]["rfp_oid"] = $arr["obj_inst"]->id();
+				
+				
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$rfpm = obj($rfpm->get_sysdefault());
+				$extra = $rfpm->get_extra_hours_prices();
+
+
 				$inst = get_instance(CL_RESERVATION);
 				$function = "_get_".$arr["prop"]["name"];
 				$inst->$function(&$args);
@@ -2287,26 +2298,24 @@ class rfp extends class_base
 			{
 				$ro = obj($roomid);
 				$room = $ro->name();
+				
+				
+				// lets check for min hours and its extra prices
+				$new_times = $this->alter_reservation_time_include_extra_min_hours($rv, $mgro);
+
 				$room_instance = get_instance(CL_ROOM);
 				$sum = $room_instance->cal_room_price(array(
 					"room" => $roomid,
-					"start" => $start,
-					"end" => $end,
+					"start" => $new_times["start1"],
+					"end" => $new_times["end"], // well, this has one setback actually, we need to calculate the minimum hours, but maybe these are already reservated ??? .. what then??
 					"people" => $people,
 					"products" => $rv->meta("amount"),
 					"bron" => $rv,
 				));
+
+				// lets check for max hours and its extra prices
+				$sum = $this->alter_reservation_price_include_extra_max_hours($rv, $mgro, $sum);
 				$price = $sum[$currency];
-				// lets check for min & max hours and their extra prices
-				if($tot_time < $extra_bron_prices[$roomid]["min_hours"] && $price < $extra_bron_prices[$roomid]["min_prices"][$currency])
-				{
-					$price = $extra_bron_prices[$roomid]["min_prices"][$currency];
-				}
-				if($tot_time > $extra_bron_prices[$roomid]["max_hours"])
-				{
-					$over = floor($tot_time - $extra_bron_prices[$roomid]["max_hours"]);
-					$price += $extra_bron_prices[$roomid]["max_prices"][$currency] * $over;
-				}
 			}
 			$comment = $rv->trans_get_val("comment");
 			$room_data = array(
@@ -3331,6 +3340,40 @@ class rfp extends class_base
 			));
 
 		}
+	}
+
+	function alter_reservation_time_include_extra_min_hours($rv, $rfpm)
+	{
+		$start = $rv->prop("start1");
+		$end = $rv->prop("end");
+		$tot_hours = ($end - $start) / 3600;
+		$extra = $rfpm->get_extra_hours_prices();
+		$secs_less = 0;
+		if($tot_hours < $extra[$rv->prop("resource")]["min_hours"])
+		{
+			$secs_less = ($extra[$rv->prop("resource")]["min_hours"] - $tot_hours) * 3600;
+		}
+		return array(
+			"start1" => $start,
+			"end" => ($end + $secs_less),
+		);
+	}
+
+	function alter_reservation_price_include_extra_max_hours($rv, $rfpm, $current_sum)
+	{
+		$start = $rv->prop("start1");
+		$end = $rv->prop("end");
+		$tot_time = ($end - $start) / 3600;
+		$extra = $rfpm->get_extra_hours_prices();
+		foreach($current_sum as $cur => $price)
+		{
+			if($tot_time > $extra[$rv->prop("resource")]["max_hours"])
+			{
+				$over = floor($tot_time - $extra[$rv->prop("resource")]["max_hours"]);
+				$current_sum[$cur] += ($extra[$rv->prop("resource")]["max_prices"][$cur] * $over);
+			}
+		}
+		return $current_sum;
 	}
 }
 ?>

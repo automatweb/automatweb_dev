@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.121 2008/08/07 11:46:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.122 2008/08/14 14:41:25 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1396,19 +1396,39 @@ class reservation extends class_base
 		$t->set_sortable(false);
 		$setcur = array();
 		$totals = 0;
+		if($arr["request"]["use_rfp_minmax_hours_pricecalc"])
+		{
+			$rfpi = get_instance(CL_RFP);
+			$rfpmo = get_instance(CL_RFP_MANAGER);
+			$rfpmo = obj($rfpmo->get_sysdefault());
+		}
 		foreach($rvs as $o)
 		{
 			$d = array();
 			$room_instance = get_instance(CL_ROOM);
+			$times = array(
+				"start1" => $o->prop("start1"),
+				"end" => $o->prop("end"),
+			);
+			if($arr["request"]["use_rfp_minmax_hours_pricecalc"])
+			{
+				$times = $rfpi->alter_reservation_time_include_extra_min_hours($o, $rfpmo);
+			}
 			$sum = $room_instance->cal_room_price(array(
 				"room" => $o->prop("resource"),
-				"start" => $o->prop("start1"),
-				"end" => $o->prop("end"),
+				"start" => $times["start1"],
+				"end" => $times["end"],
 				"people" => $o->prop("people_count"),
 				"products" => $o->meta("amount"),
 				"bron" => $o,
 				"detailed_info" => true
 			));
+			if($arr["request"]["use_rfp_minmax_hours_pricecalc"])
+			{
+				$sum["room_price"] = $rfpi->alter_reservation_price_include_extra_max_hours($o, $rfpmo, $sum["room_price"]);
+			}
+
+
 			$total = 0;
 			foreach($sum["room_price"] as $cur => $price)
 			{
