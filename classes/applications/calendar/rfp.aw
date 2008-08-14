@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.87 2008/08/13 13:00:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.88 2008/08/14 09:50:57 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -25,40 +25,40 @@
 
 		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
 		@default group=submitter_info
-			@property data_subm_name type=textbox
+			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info
 			@caption Ankeedi t&auml;itja
 
 			@property data_subm_country type=textbox
 			@caption Ankeedi t&auml;itja asukoht
 
-			@property data_subm_organisation type=textbox
-			@caption Organisatioon
+			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info
+			@caption Organisatsioon
 
-			@property data_subm_organizer type=textbox
+			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info
 			@caption Organisaator
 			
-			@property data_subm_email type=textbox
+			@property data_subm_email type=textbox group=submitter_info,final_client parent=client_info
 			@caption E-mail
 			
-			@property data_subm_phone type=textbox
-			@caption Phone
+			@property data_subm_phone type=textbox group=submitter_info,final_client parent=client_info
+			@caption Telefon
 
-			@property data_subm_contact_preference type=relpicker reltype=RELTYPE_PREFERENCE
+			@property data_subm_contact_preference type=relpicker reltype=RELTYPE_PREFERENCE group=submitter_info,final_client parent=client_info
 			@caption Kontakteerumise eelistus
 
 		@groupinfo general_function_info caption="&Uuml;ldine &uuml;rituse info" parent=data
 		@default group=general_function_info
 
-			@property data_gen_package type=relpicker reltype=RELTYPE_PACKAGE
+			@property data_gen_package type=relpicker reltype=RELTYPE_PACKAGE group=general_function_info,final_general
 			@caption Pakett
 
-			@property data_gen_package_price type=select
+			@property data_gen_package_price type=select group=general_function_info,final_general
 			@caption Paketi hind
 
-			@property data_gen_function_name type=textbox
+			@property data_gen_function_name type=textbox group=general_function_info,final_general
 			@caption &Uuml;rituse nimi
 
-			@property data_gen_attendees_no type=textbox
+			@property data_gen_attendees_no type=textbox group=general_function_info,final_general
 			@caption Osalejate arv kokku
 
 			@property data_gen_response_date type=hidden table=objects field=meta method=serialize
@@ -79,10 +79,10 @@
 			@property data_gen_departure_date type=hidden table=objects field=meta method=serialize
 			@caption Lahkumise aeg
 
-			@property data_gen_arrival_date_admin type=datetime_select
+			@property data_gen_arrival_date_admin type=datetime_select group=general_function_info,final_general
 			@caption Saabumise aeg
 
-			@property data_gen_departure_date_admin type=datetime_select
+			@property data_gen_departure_date_admin type=datetime_select group=general_function_info,final_general
 			@caption Lahkumise aeg
 
 			@property data_gen_open_for_alternative_dates type=checkbox ch_value=1 default=0
@@ -145,10 +145,10 @@
 			@property data_mf_table type=textbox
 			@caption Pea&uuml;ritus
 
-			@property data_mf_event_type type=relpicker reltype=RELTYPE_EVENT_TYPE store=connect
+			@property data_mf_event_type type=relpicker reltype=RELTYPE_EVENT_TYPE store=connect group=main_fun,final_general
 			@caption &Uuml;rituse t&uuml;&uuml;p
 
-			@property data_mf_table_form type=relpicker reltype=RELTYPE_TABLES
+			@property data_mf_table_form type=relpicker reltype=RELTYPE_TABLES group=main_fun,final_general
 			@caption Laudade asetus
 
 			@property data_mf_tech type=textbox
@@ -218,33 +218,33 @@
 			@caption Pea&uuml;rituse toitlustuse l&otilde;puaeg
 
 		@groupinfo billing caption="Arve info" parent=data
-		@default group=billing
+		@default group=billing,final_client
 			
-			@property data_billing_company type=textbox
+			@property data_billing_company type=textbox parent=billing_info
 			@caption Organisatsioon
 
-			@property data_billing_contact type=textbox
+			@property data_billing_contact type=textbox parent=billing_info
 			@caption Kontaktisik
 
-			@property data_billing_street type=textbox
+			@property data_billing_street type=textbox parent=billing_info
 			@caption T&auml;nav
 
-			@property data_billing_city type=textbox
+			@property data_billing_city type=textbox parent=billing_info
 			@caption Linn
 
-			@property data_billing_zip type=textbox
+			@property data_billing_zip type=textbox parent=billing_info
 			@caption Indeks
 
-			@property data_billing_country type=textbox
+			@property data_billing_country type=textbox parent=billing_info
 			@caption Riik
 
-			@property data_billing_name type=hidden
+			@property data_billing_name type=hidden parent=billing_info
 			@caption Nimi
 
-			@property data_billing_phone type=textbox
+			@property data_billing_phone type=textbox parent=billing_info
 			@caption Telefoninumber
 
-			@property data_billing_email type=textbox
+			@property data_billing_email type=textbox parent=billing_info
 			@caption E-mail
 
 		@groupinfo files caption="Failid" parent=data
@@ -294,6 +294,14 @@
 
 			@property additional_admin_information type=textarea rows=20
 			@caption Administraatori lisainfo
+
+		@groupinfo final_client caption="Klient" parent=final_info
+		@default group=final_client
+			@layout client_hsplit type=hbox width=50%:50%
+
+				@layout client_info type=vbox closeable=1 area_caption=Klient parent=client_hsplit
+		
+				@layout billing_info type=vbox closeable=1 area_caption=Arve&nbsp;info parent=client_hsplit
 
 		@groupinfo final_prices caption="Ruumid" parent=final_info
 		@default group=final_prices
@@ -525,6 +533,11 @@ class rfp extends class_base
 		// this here deals with props with values to table
 		$prop["name"] = (strstr($prop["name"], "ign_") && !strstr($prop["name"], "foreign"))?substr($prop["name"], 4):$prop["name"];
 		$props_to_map = array(
+			"data_gen_arrival_date_admin" => "data_gen_acc_start_admin",
+			"data_gen_departure_date_admin" => "data_gen_acc_end_admin",
+			"data_gen_arrival_date" => "data_gen_acc_start",
+			"data_gen_departure_date" => "data_gen_acc_end",
+
 			"data_mf_catering_start_admin" => "data_gen_arrival_date_admin",
 			"data_mf_catering_start" => "data_gen_arrival_date",
 			"data_mf_catering_end_admin" => "data_gen_departure_date_admin",
@@ -565,6 +578,10 @@ class rfp extends class_base
 					$prop["options"][$rp->id()] = $rp->name()." (".$prices[$dc->id()]." ".$dc->name().")";
 				}
 				break;
+			case "data_gen_arrival_date_admin":
+			case "data_gen_departure_date_admin":
+			case "data_gen_arrival_date":
+			case "data_gen_departure_date":
 			case "data_mf_catering_start_admin":
 			case "data_mf_catering_start":
 			case "data_mf_catering_end_admin":
@@ -578,6 +595,8 @@ class rfp extends class_base
 					$prop["value"] = $arr["obj_inst"]->prop($props_to_map[$prop["name"]]);
 				}
 				break;
+			
+			
 			case "data_billing_company":
 				if(!$prop["value"])
 				{
@@ -602,6 +621,9 @@ class rfp extends class_base
 					$prop["value"] = $arr["obj_inst"]->prop("data_subm_email");
 				}
 				break;
+
+
+
 			case "cancel_and_payment_terms":
 			case "accomondation_terms":
 				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
@@ -1692,8 +1714,24 @@ class rfp extends class_base
 			"align" => "center",
 			"chgbgcolor" => "split",
 		));
+		$t->set_sortable(false);
 		
-		$rooms = array_reverse($arr["obj_inst"]->meta("housing"));
+		$rooms = $arr["obj_inst"]->meta("housing");
+
+		if(is_array($rooms))
+		{
+			foreach($rooms as $id => $room)
+			{
+				$t->define_data($this->_get_housing_row($t, $room, $id));
+			}
+		}
+
+		$t->define_data($this->_get_housing_row($t, array(), "new_1", $arr["obj_inst"]));
+		$t->define_data($this->_get_housing_row($t, array(), "new_2", $arr["obj_inst"]));
+		$t->define_data($this->_get_housing_row($t, array(), "new_3", $arr["obj_inst"]));
+		$t->define_data($this->_get_housing_row($t, array(), "new_4", $arr["obj_inst"]));
+		$t->define_data($this->_get_housing_row($t, array(), "new_5", $arr["obj_inst"]));
+
 		if(is_array($rooms))
 		{
 			$totalsum = 0;
@@ -1702,20 +1740,12 @@ class rfp extends class_base
 				$totalsum += $room["sum"];
 			}
 			$t->define_data(array(
+				"split" => "#CCCCCC",
+			));
+			$t->define_data(array(
 				"discount" => "<strong>".t("Kokku:")."</strong>",
 				"sum" => $totalsum,
 			));
-			$t->define_data(array(
-				"split" => "#CCCCCC",
-			));
-		}
-		$t->define_data($this->_get_housing_row($t, array(), "new", $arr["obj_inst"]));
-		if(is_array($rooms))
-		{
-			foreach($rooms as $id => $room)
-			{
-				$t->define_data($this->_get_housing_row($t, $room, $id));
-			}
 		}
 	}
 
@@ -1728,7 +1758,7 @@ class rfp extends class_base
 			foreach($housing as $id => $row)
 			{
 				$key = $id;
-				if($id == "new")
+				if(substr($id. 0, 3) == "new")
 				{
 					$key = count($housing) + 1;
 				}
@@ -1781,13 +1811,13 @@ class rfp extends class_base
 		$data = array(
 			"datefrom" => html::date_select(array(
 				"name" => "housing[".$id."][datefrom]",
-				"value" => ($id === "new")?$start:$room["datefrom"],
+				"value" => (substr($id,0,3) === "new")?$start:$room["datefrom"],
 				"size" => 12,
 				"month_as_numbers" => true,
 			)),
 			"dateto" => html::date_select(array(
 				"name" => "housing[".$id."][dateto]",
-				"value" => ($id === "new")?$end:$room["dateto"],
+				"value" => (substr($id, 0, 3) === "new")?$end:$room["dateto"],
 				"size" => 12,
 				"month_as_numbers" => true,
 			)),
@@ -1914,24 +1944,40 @@ class rfp extends class_base
 	{
 		$this->_init_additional_services_tbl(&$arr);
 		$t =& $arr["prop"]["vcl_inst"];
-		$data = array_reverse($arr["obj_inst"]->get_additional_services());
+		$t->set_sortable(false);
+		$data = $arr["obj_inst"]->get_additional_services();
 
-		//newline
-		$t->define_data($this->_get_additional_services_tbl_row("new", array(
-			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
-		)));
 			
 		foreach(safe_array($data) as $k => $row)
 		{
-		
 			$t->define_data($this->_get_additional_services_tbl_row($k, $row));
 		}
+
+		//newline
+		$t->define_data($this->_get_additional_services_tbl_row("new_1", array(
+			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+		)));
+		$t->define_data($this->_get_additional_services_tbl_row("new_2", array(
+			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+		)));
+		$t->define_data($this->_get_additional_services_tbl_row("new_3", array(
+			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+		)));
+		$t->define_data($this->_get_additional_services_tbl_row("new_4", array(
+			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+		)));
+		$t->define_data($this->_get_additional_services_tbl_row("new_5", array(
+			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+		)));
 	}
 
 	function _set_additional_services_tbl($arr)
 	{
-		$new = $arr["request"]["add_srv"]["new"];
-		unset($arr["request"]["add_srv"]["new"]);
+		for($i = 1; $i <= 5; $i++)
+		{
+			$new_rows[$i] = $arr["request"]["add_srv"]["new_".$i];
+			unset($arr["request"]["add_srv"]["new_".$i]);
+		}
 		foreach($arr["request"]["add_srv"] as $k => $v)
 		{
 			$metadata[$k] = array(
@@ -1943,16 +1989,19 @@ class rfp extends class_base
 				"comment" => $v["comment"],
 			);
 		}
-		if($new["service"] || $new["price"] || $new["amount"] || $new["sum"] || $new["comment"])
+		foreach($new_rows as $new)
 		{
-			$metadata[] = array(
-				"time" => mktime($new["time"]["hour"], $new["time"]["minute"], 0, $new["date"]["month"], $new["date"]["day"], $new["date"]["year"]),
-				"service" => $new["service"],
-				"price" => $new["price"],
-				"amount" => $new["amount"],
-				"sum" => $new["sum"],
-				"comment" => $new["comment"],
-			);
+			if($new["service"] || $new["price"] || $new["amount"] || $new["sum"] || $new["comment"])
+			{
+				$metadata[] = array(
+					"time" => mktime($new["time"]["hour"], $new["time"]["minute"], 0, $new["date"]["month"], $new["date"]["day"], $new["date"]["year"]),
+					"service" => $new["service"],
+					"price" => $new["price"],
+					"amount" => $new["amount"],
+					"sum" => $new["sum"],
+					"comment" => $new["comment"],
+				);
+			}
 		}
 		$arr["obj_inst"]->set_additional_services($metadata);
 	}

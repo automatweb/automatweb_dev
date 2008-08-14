@@ -21,8 +21,12 @@
       <property>
             <name>data_subm_name</name>
             <table>rfp</table>
-            <group>submitter_info</group>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>client_info</parent>
             <field>data_subm_name</field>
             <caption>Ankeedi t&amp;amp;auml;itja</caption>
       </property>
@@ -37,48 +41,71 @@
       <property>
             <name>data_subm_organisation</name>
             <table>rfp</table>
-            <group>submitter_info</group>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>client_info</parent>
             <field>data_subm_organisation</field>
-            <caption>Organisatioon</caption>
+            <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>data_subm_organizer</name>
             <table>rfp</table>
-            <group>submitter_info</group>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>client_info</parent>
             <field>data_subm_organizer</field>
             <caption>Organisaator</caption>
       </property>
       <property>
             <name>data_subm_email</name>
             <table>rfp</table>
-            <group>submitter_info</group>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>client_info</parent>
             <field>data_subm_email</field>
             <caption>E-mail</caption>
       </property>
       <property>
             <name>data_subm_phone</name>
             <table>rfp</table>
-            <group>submitter_info</group>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>client_info</parent>
             <field>data_subm_phone</field>
-            <caption>Phone</caption>
+            <caption>Telefon</caption>
       </property>
       <property>
             <name>data_subm_contact_preference</name>
             <table>rfp</table>
-            <group>submitter_info</group>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>relpicker</type>
             <reltype>RELTYPE_PREFERENCE</reltype>
+            <parent>client_info</parent>
             <field>data_subm_contact_preference</field>
             <caption>Kontakteerumise eelistus</caption>
       </property>
       <property>
             <name>data_gen_package</name>
             <table>rfp</table>
-            <group>general_function_info</group>
+            <group>
+                  <num_0>general_function_info</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>relpicker</type>
             <reltype>RELTYPE_PACKAGE</reltype>
             <field>data_gen_package</field>
@@ -87,7 +114,10 @@
       <property>
             <name>data_gen_package_price</name>
             <table>rfp</table>
-            <group>general_function_info</group>
+            <group>
+                  <num_0>general_function_info</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>select</type>
             <field>data_gen_package_price</field>
             <caption>Paketi hind</caption>
@@ -95,7 +125,10 @@
       <property>
             <name>data_gen_function_name</name>
             <table>rfp</table>
-            <group>general_function_info</group>
+            <group>
+                  <num_0>general_function_info</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>textbox</type>
             <field>data_gen_function_name</field>
             <caption>&amp;amp;Uuml;rituse nimi</caption>
@@ -103,7 +136,10 @@
       <property>
             <name>data_gen_attendees_no</name>
             <table>rfp</table>
-            <group>general_function_info</group>
+            <group>
+                  <num_0>general_function_info</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>textbox</type>
             <field>data_gen_attendees_no</field>
             <caption>Osalejate arv kokku</caption>
@@ -163,7 +199,10 @@
       <property>
             <name>data_gen_arrival_date_admin</name>
             <table>rfp</table>
-            <group>general_function_info</group>
+            <group>
+                  <num_0>general_function_info</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>datetime_select</type>
             <field>data_gen_arrival_date_admin</field>
             <caption>Saabumise aeg</caption>
@@ -171,7 +210,10 @@
       <property>
             <name>data_gen_departure_date_admin</name>
             <table>rfp</table>
-            <group>general_function_info</group>
+            <group>
+                  <num_0>general_function_info</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>datetime_select</type>
             <field>data_gen_departure_date_admin</field>
             <caption>Lahkumise aeg</caption>
@@ -345,7 +387,10 @@
       <property>
             <name>data_mf_event_type</name>
             <table>rfp</table>
-            <group>main_fun</group>
+            <group>
+                  <num_0>main_fun</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_TYPE</reltype>
             <store>connect</store>
@@ -355,7 +400,10 @@
       <property>
             <name>data_mf_table_form</name>
             <table>rfp</table>
-            <group>main_fun</group>
+            <group>
+                  <num_0>main_fun</num_0>
+                  <num_1>final_general</num_1>
+            </group>
             <type>relpicker</type>
             <reltype>RELTYPE_TABLES</reltype>
             <field>data_mf_table_form</field>
@@ -546,72 +594,108 @@
       <property>
             <name>data_billing_company</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_company</field>
             <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>data_billing_contact</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_contact</field>
             <caption>Kontaktisik</caption>
       </property>
       <property>
             <name>data_billing_street</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_street</field>
             <caption>T&amp;amp;auml;nav</caption>
       </property>
       <property>
             <name>data_billing_city</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_city</field>
             <caption>Linn</caption>
       </property>
       <property>
             <name>data_billing_zip</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_zip</field>
             <caption>Indeks</caption>
       </property>
       <property>
             <name>data_billing_country</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_country</field>
             <caption>Riik</caption>
       </property>
       <property>
             <name>data_billing_name</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>hidden</type>
+            <parent>billing_info</parent>
             <field>data_billing_name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>data_billing_phone</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_phone</field>
             <caption>Telefoninumber</caption>
       </property>
       <property>
             <name>data_billing_email</name>
             <table>rfp</table>
-            <group>billing</group>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
             <type>textbox</type>
+            <parent>billing_info</parent>
             <field>data_billing_email</field>
             <caption>E-mail</caption>
       </property>
@@ -1012,6 +1096,10 @@
                   <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>final_info</parent>
             </final_general>
+            <final_client>
+                  <caption>Klient</caption>
+                  <parent>final_info</parent>
+            </final_client>
             <final_prices>
                   <caption>Ruumid</caption>
                   <parent>final_info</parent>
@@ -1120,6 +1208,26 @@
             </THEME>
       </reltypes>
       <layout>
+            <client_hsplit>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>final_client</group>
+                  <area_caption></area_caption>
+            </client_hsplit>
+            <client_info>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klient</area_caption>
+                  <parent>client_hsplit</parent>
+                  <group>final_client</group>
+            </client_info>
+            <billing_info>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Arve&amp;amp;nbsp;info</area_caption>
+                  <parent>client_hsplit</parent>
+                  <group>final_client</group>
+            </billing_info>
             <prs_hsplit>
                   <type>hbox</type>
                   <width>30%:70%</width>
