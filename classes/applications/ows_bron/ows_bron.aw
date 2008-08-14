@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.45 2008/08/13 15:06:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.46 2008/08/14 09:41:14 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -587,6 +587,8 @@ class ows_bron extends class_base
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
 				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
+			"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+			"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
 
@@ -985,6 +987,8 @@ class ows_bron extends class_base
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
 				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			)),
+			"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+			"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			"step1_url" => obj_link(aw_ini_get("frontpage"))
 		));
 		if ($_GET["error"] > 0)
@@ -1018,6 +1022,8 @@ class ows_bron extends class_base
 				"aw_rvs_id" => $o->id(),
 				"r_url" => get_ru(),
 				"ow_bron" => $arr["ow_bron"],
+				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
+				"partnerWebsiteDomain" => $arr["partnerWebsiteDomain"],
 			))
 		));
 
