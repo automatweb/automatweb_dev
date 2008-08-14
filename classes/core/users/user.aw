@@ -2308,7 +2308,7 @@ class user extends class_base
 			}
 			else
 			{
-				throw awex_no_group(sprintf(t("could not find the group oid for gid %s"), $aug));
+				throw new awex_no_group(sprintf(t("could not find the group oid for gid %s"), $aug));
 			}
 			aw_restore_acl();
 		}
