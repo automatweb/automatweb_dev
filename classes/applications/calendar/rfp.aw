@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.88 2008/08/14 09:50:57 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.89 2008/08/14 11:39:36 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -406,7 +406,7 @@
 		@default group=final_submission
 
 			@property data_contactperson type=textbox table=objects field=meta method=serialize
-			@caption Kontaktisik
+			@caption Meie kontaktisik
 
 			@property data_send_date type=date_select table=objects field=meta method=serialize
 			@caption Saatmise kuup&auml;ev

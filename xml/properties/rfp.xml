@@ -1009,7 +1009,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kontaktisik</caption>
+            <caption>Meie kontaktisik</caption>
       </property>
       <property>
             <name>data_send_date</name>
