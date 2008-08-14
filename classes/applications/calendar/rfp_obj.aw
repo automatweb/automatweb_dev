@@ -22,20 +22,22 @@ class rfp_obj extends _int_object
 		{
 			case "cancel_and_payment_terms":
 			case "accomondation_terms":
+				
+				$rfpm = get_instance(CL_RFP_MANAGER);
+				$obj = obj($rfpm->get_sysdefault());
 				$terms = $this->meta("trans_terms");
+				$def_language = ($_thisl = $this->prop("default_language"))?$_thisl:$obj->prop("default_language");
 				if(strlen($str = $terms[$this->prop("default_language")][$pn]))
 				{
 					return $str;
 				}
 				else
 				{
-					$rfpm = get_instance(CL_RFP_MANAGER);
-					$obj = obj($rfpm->get_sysdefault());
 					$trs = $obj->meta("translations");
 					
-					if (isset($trs[$this->prop("default_language")]) && $obj->meta("trans_".$this->prop("default_language")."_status") == 1)
+					if (isset($trs[$def_language]) && $obj->meta("trans_".$def_language."_status") == 1)
 					{
-						return $trs[$this->prop("default_language")][$pn];
+						return $trs[$def_language][$pn];
 					}
 					else
 					{
