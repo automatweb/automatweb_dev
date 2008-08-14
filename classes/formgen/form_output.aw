@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.20 2008/01/31 13:54:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.21 2008/08/14 13:04:44 tarvo Exp $
 classload("formgen/form_base");
 /*
 @classinfo  maintainer=kristo
@@ -19,7 +19,7 @@ class form_output extends form_base
 		$this->style_instance = get_instance(CL_STYLE);
 	}
 
-	/** Kuvab vormi, kust saab valida väljundi tüüpide vahel 
+	/** Kuvab vormi, kust saab valida v2ljundi tyypide vahel 
 		
 		@attrib name=new params=name default="0"
 		
@@ -36,7 +36,7 @@ class form_output extends form_base
 	{
 		extract($args);
 		$this->read_template("output_category.tpl");
-		$this->mk_path($parent,"Vali väljundi tüüp");
+		$this->mk_path($parent,"Vali v&auml;ljundi t&uuml;&uuml;p");
 	
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("choose_output_type",array("parent" => $parent)),
@@ -44,7 +44,7 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
-	/** Soltuvalt eelnevast vormist valitud tüübile teeb redirecti oigesse kohta 
+	/** Soltuvalt eelnevast vormist valitud tyybile teeb redirecti oigesse kohta 
 		
 		@attrib name=choose_output_type params=name default="0"
 		
@@ -98,7 +98,7 @@ class form_output extends form_base
 	{
 		extract($args);
 		$this->read_template("add_xml_output.tpl");
-		$this->mk_path($id,"Koosta XML väljund");
+		$this->mk_path($id,"Koosta XML v&auml;ljund");
 		if ($id)
 		{
 			$odata = obj($id);
@@ -169,7 +169,7 @@ class form_output extends form_base
 	**/
 	function xml_op($args = array())
 	{
-		$this->mk_path($id,"Koosta XML väljund");
+		$this->mk_path($id,"Koosta XML v&auml;ljund");
 		$this->read_template("xml_output.tpl");
 		extract($args);
 		$odata = obj($id);
@@ -210,7 +210,7 @@ class form_output extends form_base
 									else
 									{
 										// tagi nime leidmiseks stripime koigepealt 
-										// nimest tühikud
+										// nimest thikud
 										$tag = strtolower(str_replace(" ","",$val["name"]));
 										if (preg_match("/(^\w*)/",$tag,$matches))
 										{
@@ -284,7 +284,7 @@ class form_output extends form_base
 		return $this->mk_my_orb("xml_op",array("id" => $id));
 	}
 
-	/** Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid. 
+	/** Kuvab vormi, kust saab valida HTML v2ljundi jaoks vajalikud atribuudid. 
 		
 		@attrib name=add_html params=name default="0"
 		
@@ -315,7 +315,7 @@ class form_output extends form_base
 		return $this->parse();
 	}
 
-	/** Kuvab vormi, kust saab valida HTML väljundi jaoks vajalikud atribuudid. ja nyyd ka juba valitud alusformide j2rjekorda 
+	/** Kuvab vormi, kust saab valida HTML v2ljundi jaoks vajalikud atribuudid. ja nyyd ka juba valitud alusformide j2rjekorda 
 		
 		@attrib name=add_html_step2 params=name all_args="1" default="0"
 		
@@ -1361,7 +1361,7 @@ class form_output extends form_base
 		else
 		{
 			global $HTTP_POST_VARS;
-			extract($HTTP_POST_VARS);
+			extract($_POST);
 
 			if ($type == "add")
 			{

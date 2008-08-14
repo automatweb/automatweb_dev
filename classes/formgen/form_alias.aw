@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.12 2008/01/31 13:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.13 2008/08/14 13:04:44 tarvo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -65,7 +65,7 @@ class form_alias extends form_base
 			$f->process_entry(array(
 				"id" => $sf,
 				"entry_id" => $entry_id,
-				"values" => $HTTP_GET_VARS
+				"values" => $_GET
 			));
 
 			$entry_id = $f->entry_id;
@@ -189,7 +189,7 @@ class form_alias extends form_base
 	}
 
 	///
-	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina
+	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse v2lja callbackina
 	function parse_alias($args = array())
 	{
 		extract($args);

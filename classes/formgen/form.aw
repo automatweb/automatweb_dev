@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.131 2008/06/03 09:25:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.132 2008/08/14 13:04:44 tarvo Exp $
 // form.aw - Class for creating forms
 /*
 @classinfo  maintainer=kristo
@@ -889,8 +889,8 @@ class form extends form_base
 		global $HTTP_POST_VARS;
 		$cdelete = array();
 		$rdelete = array();
-		reset($HTTP_POST_VARS);
-		while (list($k,$v) = each($HTTP_POST_VARS))
+		reset($_POST);
+		while (list($k,$v) = each($_POST))
 		{
 			if (substr($k,0,3) == 'dc_' && $v==1)
 				$cdelete[substr($k,3)] = substr($k,3);
@@ -1793,8 +1793,8 @@ class form extends form_base
 		if (!$no_post_vars)
 		{
 			// .. if that is not the case, then we just import all the POST variables.
-			global $HTTP_POST_VARS, $HTTP_GET_VARS;
-			$this->post_vars = $HTTP_POST_VARS + $HTTP_GET_VARS;
+			//global $HTTP_POST_VARS, $HTTP_GET_VARS;
+			$this->post_vars = safe_array($_POST) + safe_array($_GET);
 		};
 
 		// if this is set to true, then a variable in the session will be set to the created/loaded entry id, so that
@@ -1825,7 +1825,7 @@ class form extends form_base
 		$this->entry_id = $entry_id;
 		aw_global_set("form_last_proc_entry_id", $entry_id);
 
-		// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
+		// ff_folder on vormi konfist mratud folderi id, mille alla entry peaks
 		// minema. parent argument overraidib selle
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 
@@ -2017,8 +2017,8 @@ class form extends form_base
 			));
 		
 			$this->is_new_entry = true;
-			// see logimine on omal kohal ainult siis, kui täitmine toimub
-			// läbi veebi.
+			// see logimine on omal kohal ainult siis, kui titmine toimub
+			// lbi veebi.
 			$this->_log(ST_FORM_ENTRY, SA_ADD,"Lisas formi $this->name ($this->id) kaudu uue sisestuse $this->entry_name ($this->entry_id) ", $this->entry_id);
 		}
 		else
@@ -2980,7 +2980,7 @@ class form extends form_base
 		extract($arr);
 
 		// $this->arr["search_chain"] on selle chaini id, mille kalendreid ma arvestama pean
-		// samas kuulub seal iga kalender konkreetse pärja elementvormi külge, so I have
+		// samas kuulub seal iga kalender konkreetse prja elementvormi klge, so I have
 		// to figure out which one it is, to find the calendars I required
 
 		if ($search_form)
@@ -3332,7 +3332,7 @@ class form extends form_base
 			return $this->new_search(array("entry_id" => $entry_id));
 		}
 
-		// laeb täidetud vormi andmed sisse
+		// laeb tidetud vormi andmed sisse
 		if ($search_el != "" && $search_val != "")
 		{
 			$this->entry = array();
@@ -5269,7 +5269,7 @@ class form extends form_base
 		return $this->do_menu_return();
 	}
 
-	/** Salvestab vormi settingutes määratud folderite asukohad. 
+	/** Salvestab vormi settingutes mratud folderite asukohad. 
 		
 		@attrib name=save_folders params=name default="0"
 		
@@ -6447,19 +6447,19 @@ class form extends form_base
 		return $this->mk_orb("sel_filter_search", array("id" => $id,"page" => $page));
 	}
 
-	//Output määratakse niikuinii filtri poolt.
+	//Output mratakse niikuinii filtri poolt.
 	function do_filter_search($entry_id, $output_id,$arr)
 	{
 		if (!$this->arr["search_filter"])
 		{
-			return "Kasutatav filter formile $this->id on määramata";
+			return "Kasutatav filter formile $this->id on m&auml;&auml;ramata";
 		};
 		$sf = get_instance("formgen/search_filter");
 		$sf->id=$this->arr["search_filter"];
 
 		$sf->__load_filter();
 		$this->load_entry($entry_id);
-		//Nüüd tuleb filtri osad käigu pealt mälus ära muuta ja 
+		//Nd tuleb filtri osad kigu pealt mlus ra muuta ja 
 		// panna asemele see kamm, mille kasutaja sisestas
 		
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
@@ -6471,7 +6471,7 @@ class form extends form_base
 				{
 					if ($el->arr["part"]!="" && $el->arr["part"]!=-1)
 					{
-						//Nii. siin tuleb nüüd vaadata et kui filtri osa tüüp on 2 (date)
+						//Nii. siin tuleb nd vaadata et kui filtri osa tp on 2 (date)
 						if ($sf->filter["p".(int)$el->arr["part"]]["type"]==2)
 						{
 							$valx=$el->get_val();
@@ -6491,7 +6491,7 @@ class form extends form_base
 			}
 		}
 
-		if ($GLOBALS["dbg_ft"]) {echo("üle kantud filter=<pre>");print_r($sf->filter);echo("</pre>");};
+		if ($GLOBALS["dbg_ft"]) {echo("&uuml;le kantud filter=<pre>");print_r($sf->filter);echo("</pre>");};
 
 		$arr["no_menu"]=1;
 		$arr["dont_load_filter"]=1;
@@ -6553,7 +6553,7 @@ class form extends form_base
 	function gen_calendar($args = array())
 	{
 		extract($args);
-		$this->if_init($id,"calendar.tpl", "Kalendrisätungid");
+		$this->if_init($id,"calendar.tpl", "Kalendris&auml;tungid");
 	
 		$_els = $this->get_all_elements(array("type" => 1));
 
@@ -6802,7 +6802,7 @@ class form extends form_base
 	function edit_cal_rel($args = array())
 	{
 		extract($args);
-		$this->if_init($form_id,"calendar_relation.tpl", "Kalendrisätungid");
+		$this->if_init($form_id,"calendar_relation.tpl", "Kalendris&auml;tungid");
 		
 		$els = $this->get_all_elements(array("type" => 1));
 

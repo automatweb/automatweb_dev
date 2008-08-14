@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.88 2008/03/12 21:24:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.89 2008/08/14 13:04:44 tarvo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -3313,7 +3313,7 @@ if ($_GET["HJ"] == 1)
 					{
 						$f->post_vars["ft_row_".$entryd."_form_".$form_id."_".$_eid] = $_eval;
 					}
-					foreach($GLOBALS["HTTP_POST_VARS"] as $vn => $vv)
+					foreach($_POST as $vn => $vv)
 					{
 						if (substr($vn, 0, strlen("ft_row_".$entryd."_form_".$form_id)) == "ft_row_".$entryd."_form_".$form_id)
 						{
