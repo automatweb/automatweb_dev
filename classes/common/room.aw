@@ -2160,6 +2160,19 @@ class room extends class_base
 								}
 							}
 
+							if($this->is_before_buffer)
+							{
+								$d[$x] = ""; 
+								if($col_buffer)
+								{
+									$col[$x] = "#".$col_buffer;
+								}
+								else
+								{
+									"#EE6363";
+								}
+							}
+
 							if ($col_buffer != "")
 							{
 								$buf = $this->get_before_buffer(array(
@@ -4913,7 +4926,7 @@ class room extends class_base
 				return $ret;
 			}
 			if($val["end"] > $arr["start"])
-			{//if($key == 1169301600){arr(date("h:i" , arr($key))); arr(date("h:i", $arr["end"]));}
+			{//arr(date("h:i" , arr($key))); arr(date("h:i", $arr["end"]));arr($val);
 				if($key < $arr["end"])
 				{
 					$this->last_bron_id = $val["id"];
@@ -4926,13 +4939,21 @@ class room extends class_base
 					{
 						$this->is_after_buffer = 0;
 					}
+					if($val["real_start"] >= $arr["end"])
+					{
+						$this->is_before_buffer = 1;
+					}
+					else
+					{
+						$this->is_before_buffer = 0;
+					}
 					if($calc_number)
 					{
 						$ret = $ret - $val["people"];
 					}
 					else
 					{
-						if($val["verified"] && !$this->is_after_buffer) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
+						if($val["verified"] && !$this->is_after_buffer && !$this->is_before_buffer) // juhul kui pole j2relpuhver ja on kinnitatud, siis pole vaja enam edasi otsida
 						{
 							return false;
 						}
