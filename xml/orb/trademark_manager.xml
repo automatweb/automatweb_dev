@@ -18,6 +18,8 @@
 		<action name="nightly_export" nologin="1">
 			<function name="nightly_export">
 				<arguments>
+					<optional name="from" type="int" />
+					<optional name="to" type="int" />
 				</arguments>
 			</function>
 		</action>

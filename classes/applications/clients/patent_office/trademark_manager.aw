@@ -905,6 +905,10 @@ class trademark_manager extends class_base
 
 	/**
 		@attrib name=nightly_export nologin="1"
+		@param from optional int
+			Unix timestamp. Time of modification from when to include objects. Default previous day start.
+		@param to optional int
+			Unix timestamp. Time of modification until to include objects. Default current day start
 	**/
 	function nightly_export($arr)
 	{
@@ -925,9 +929,17 @@ class trademark_manager extends class_base
 			CL_EURO_PATENT_ET_DESC => "CL_EURO_PATENT_ET_DESC"
 		);
 
+		$from = !empty($arr["from"]) ? (int) $arr["from"] : (get_day_start()-(24*3600));
+		$to = !empty($arr["to"]) ? (int) $arr["to"] : get_day_start();
+
+		if ($from >= $to)
+		{
+			throw new awex_po("Invalid arguments. Timespan end less than start.");
+		}
+
 		// list all intellectual prop objs created yesterday
 		$verified = 1;
-		$age = new obj_predicate_compare(OBJ_COMP_BETWEEN, (get_day_start()-(24*3600)), get_day_start());
+		$age = new obj_predicate_compare(OBJ_COMP_BETWEEN, $from, $to);
 
 		// parse objs
 		$xml_data = array(); // array of DOMDocuments grouped by aw class id
@@ -969,7 +981,7 @@ class trademark_manager extends class_base
 		foreach ($xml_data as $clid => $data)
 		{
 			// xml header and contents
-			$xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-4\"?>\n";
+			$xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
 			$xml .= '<ENOTIF BIRTHCOUNT="'.$data["count"].'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">' . "\n";
 			$xml .= $data["data"];
 			$xml .= "</ENOTIF>\n";
@@ -978,9 +990,23 @@ class trademark_manager extends class_base
 			$cl = $clidx[$clid];// file name prefix
 			$fn = aw_ini_get("site_basedir")."/patent_xml/" . $cl . date("Ymd") . ".xml";
 			$f = fopen($fn, "w");
-			fwrite($f, iconv("UTF-8", "ISO-8859-4", $xml));
+
+			if (!is_resource($f))
+			{
+				echo "couldn't open {$fn}\n";
+			}
+
+			$b = fwrite($f, iconv("UTF-8", "ISO-8859-1", $xml));
 			fclose($f);
-			echo "wrote {$fn}\n";
+
+			if (false === $b)
+			{
+				echo "error writing to {$fn}\n";
+			}
+			else
+			{
+				echo "wrote {$fn}\n";
+			}
 		}
 
 		exit("Done.");
@@ -995,7 +1021,7 @@ class trademark_manager extends class_base
 		$string = str_replace("%" , "&#37;" , $string);
 		$string = str_replace('"' , " &quot;" , $string);
 		$string = str_replace("'" , "&apos;" , $string);
-		$string = iconv("iso-8859-4", "UTF-8", $string);
+		$string = iconv("iso-8859-1", "UTF-8", $string);
 		return $string;
 	}
 }

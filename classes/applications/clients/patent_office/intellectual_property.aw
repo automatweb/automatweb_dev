@@ -1087,7 +1087,7 @@ abstract class intellectual_property extends class_base
 			)));
 			foreach ($ol->arr() as $o)
 			{
-				if ($var === $file->meta("po_prop_name"))
+				if ($var === $o->meta("po_prop_name"))
 				{
 					$_SESSION["patent"][$var][] = $o->id();
 				}

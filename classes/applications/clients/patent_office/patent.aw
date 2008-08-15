@@ -821,7 +821,7 @@ class patent extends intellectual_property
 		$el2 = $xml->createElement("MARDESEN");
 		if ($o->prop("trademark_character"))
 		{
-			$cdata = $xml->createCDATASection(iconv("ISO-8859-4", "UTF-8", trademark_manager::rere($o->prop("element_translation"))));
+			$cdata = $xml->createCDATASection(iconv("ISO-8859-1", "UTF-8", trademark_manager::rere($o->prop("trademark_character"))));
 			$el2->appendChild($cdata);
 		}
 		$el->appendChild($el2);
@@ -832,7 +832,7 @@ class patent extends intellectual_property
 		$el2 = $xml->createElement("DISCLAIMEREN");
 		if ($o->prop("undefended_parts"))
 		{
-			$cdata = $xml->createCDATASection(iconv("ISO-8859-4", "UTF-8", $o->prop("undefended_parts")));
+			$cdata = $xml->createCDATASection(iconv("ISO-8859-1", "UTF-8", $o->prop("undefended_parts")));
 			$el2->appendChild($cdata);
 		}
 		$el->appendChild($el2);
@@ -857,7 +857,7 @@ class patent extends intellectual_property
 		$el2 = $xml->createElement("COLCLAEN");
 		if ($o->prop("colors"))
 		{
-			$cdata = $xml->createCDATASection(iconv("ISO-8859-4", "UTF-8", $o->prop("colors")));
+			$cdata = $xml->createCDATASection(iconv("ISO-8859-1", "UTF-8", $o->prop("colors")));
 			$el2->appendChild($cdata);
 		}
 		$el->appendChild($el2);
@@ -872,7 +872,7 @@ class patent extends intellectual_property
 			$el2 = $xml->createElement("GSGR");
 			$el2->setAttribute("NICCLAI", trademark_manager::rere($k));
 			$el3 = $xml->createElement("GSTERMEN");
-			$cdata = $xml->createCDATASection(strtolower(str_replace("\r" , "", str_replace("\n",", ", iconv("ISO-8859-4", "UTF-8", $v)))));
+			$cdata = $xml->createCDATASection(strtolower(str_replace("\r" , "", str_replace("\n",", ", iconv("ISO-8859-1", "UTF-8", $v)))));
 			$el3->appendChild($cdata);
 			$el2->appendChild($el3);
 			$el->appendChild($el2);
