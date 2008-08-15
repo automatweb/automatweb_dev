@@ -92,6 +92,8 @@
 
 class trademark_manager extends class_base
 {
+	const XML_OUT_ENCODING = "ISO-8859-1";
+
 	function trademark_manager()
 	{
 		$this->init(array(
@@ -996,7 +998,7 @@ class trademark_manager extends class_base
 				echo "couldn't open {$fn}\n";
 			}
 
-			$b = fwrite($f, iconv("UTF-8", "ISO-8859-1", $xml));
+			$b = fwrite($f, iconv("UTF-8", trademark_manager::XML_OUT_ENCODING, $xml));
 			fclose($f);
 
 			if (false === $b)
@@ -1021,7 +1023,7 @@ class trademark_manager extends class_base
 		$string = str_replace("%" , "&#37;" , $string);
 		$string = str_replace('"' , " &quot;" , $string);
 		$string = str_replace("'" , "&apos;" , $string);
-		$string = iconv("iso-8859-1", "UTF-8", $string);
+		$string = iconv(trademark_manager::XML_OUT_ENCODING, "UTF-8", $string);
 		return $string;
 	}
 }
