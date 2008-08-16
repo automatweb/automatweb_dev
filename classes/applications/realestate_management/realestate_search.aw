@@ -107,6 +107,9 @@
 	@property searchparam_address5 type=select multiple=1
 	@caption Asula
 
+	@property searchparam_address_street type=textbox
+	@caption T&auml;nav
+
 	// @property search_address_text type=textbox
 	// @caption Aadress vabatekstina
 
@@ -410,6 +413,10 @@ class realestate_search extends class_base
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a5"];
 				break;
 
+			case "searchparam_address_street":
+				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["as"];
+				break;
+
 			case "searchparam_fromdate":
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : isset ($_GET["realestate_search"]["fd"]) ? mktime (0, 0, 0, (int) $_GET["realestate_search"]["fd"]["month"], (int) $_GET["realestate_search"]["fd"]["day"], (int) $_GET["realestate_search"]["fd"]["year"]) : (time () - 60*86400);
 				break;
@@ -577,6 +584,7 @@ class realestate_search extends class_base
 					"searchparam_address3",
 					"searchparam_address4",
 					"searchparam_address5",
+					"searchparam_address_street",
 					"search_condition",
 					"searchparam_fromdate",
 					"search_usage_purpose",
@@ -744,6 +752,7 @@ exit_function("jigaboo");
 				"a3" => $this_object->prop ("searchparam_address3"),
 				"a4" => $this_object->prop ("searchparam_address4"),
 				"a5" => $this_object->prop ("searchparam_address5"),
+				"as" => $this_object->prop ("searchparam_address_street"),
 				"at" => $this_object->prop ("searchparam_addresstext"),
 				"fd" => $this_object->prop ("searchparam_fromdate"),
 				"up" => $this_object->prop ("search_usage_purpose"),
@@ -775,6 +784,7 @@ exit_function("jigaboo");
 				"a3" => $_GET["realestate_a3"],
 				"a4" => $_GET["realestate_a4"],
 				"a5" => $_GET["realestate_a5"],
+				"as" => $_GET["realestate_as"],
 				"at" => $_GET["realestate_at"],
 				"fd" => $_GET["realestate_fd"],
 				"up" => $_GET["realestate_up"],
@@ -1048,6 +1058,17 @@ exit_function("jigaboo");
 					"size" => $select_size,
 					"options" => $options,
 					"value" => ($saved_search and is_array ($search["a5"])) ? NULL : $search["a5"],
+				));
+			}
+
+			if (in_array ("searchparam_address_street", $visible_formelements))
+			{
+				$form_elements["as"]["caption"] = $properties["searchparam_address_street"]["caption"];
+				$form_elements["as"]["element"] = html::textbox(array(
+					"name" => "realestate_as",
+					"value" => $search["as"],
+					"size" => "16",
+					// "textsize" => "11px",
 				));
 			}
 
@@ -1916,6 +1937,7 @@ exit_function("jigaboo");
 				}
 			}
 */
+			$search_as = addcslashes(str_pad ($arr["as"], 200));
 			$search_at = str_pad ($arr["at"], 200);
 			$search_fd = mktime (0, 0, 0, (int) $arr["fd"]["month"], (int) $arr["fd"]["day"], (int) $arr["fd"]["year"]);
 
@@ -2006,6 +2028,7 @@ exit_function("jigaboo");
 			"a3" => $search_a3,
 			"a4" => $search_a4,
 			"a5" => $search_a5,
+			"as" => $search_as,
 			"at" => $search_at,
 			"fd" => $search_fd,
 			"up" => $search_up,
@@ -2043,6 +2066,7 @@ exit_function("jigaboo");
 		$search_a3 = $arr["search"]["a3"];
 		$search_a4 = $arr["search"]["a4"];
 		$search_a5 = $arr["search"]["a5"];
+		$search_as = $arr["search"]["as"];
 		$search_at = $arr["search"]["at"];
 		$search_owp = $arr["search"]["owp"];
 		$search_imf = $arr["search"]["imf"];
@@ -2393,6 +2417,55 @@ exit_function("jigaboo");
 		if($_GET["per_page"]) $this->result_table_recordsperpage = (int) ($_GET["per_page"]);
 
 		### search by address
+		if (strlen($search_as) > 1 and $result_list->count())
+		{ // by street
+			$search_as = addcslashes($search_as);
+			$streets = new object_list(array(
+				"class_id" => CL_ADDRESS_STREET,
+				"name" => "%{$search_as}%",
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+
+			if ($streets->count())
+			{
+				if (false === $search_admin_units)
+				{ // search from all streets found
+					$search_admin_units = $streets->ids();
+				}
+				else
+				{ // only from streets under other specified admin units
+					if (1 == $streets->count())
+					{ // only one street, discard other units
+						$street = $streets->begin();
+						$search_admin_units = array($street->id());
+					}
+					else
+					{ // filter streets not under specified admin units
+						$streets = $streets->arr();
+						foreach ($streets as $street)
+						{
+							$found_parent_unit = false;
+							do
+							{
+								$sp = $street->parent();
+								if (in_array($sp, $search_admin_units))
+								{
+									$found_parent_unit = $sp;
+								}
+							}
+							while ($sp and !$found_parent_unit);
+
+							if ($found_parent_unit)
+							{
+								$search_admin_units[reset(array_keys($search_admin_units, $found_parent_unit))] = $street->id();
+							}
+						}
+					}
+				}
+			}
+		}
+
 		if ($search_admin_units !== false and $result_list->count())
 		{
 			$prop_ids = $result_list->ids ();

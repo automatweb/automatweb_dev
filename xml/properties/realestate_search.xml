@@ -302,6 +302,15 @@
             <caption>Asula</caption>
       </property>
       <property>
+            <name>searchparam_address_street</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>T&amp;amp;auml;nav</caption>
+      </property>
+      <property>
             <name>search_condition</name>
             <table>objects</table>
             <group>grp_search</group>
