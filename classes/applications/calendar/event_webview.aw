@@ -95,6 +95,14 @@ class event_webview extends class_base
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
+		// ?date=28.05.2008
+		if(!empty($_GET["date"]) && preg_match("/^[0-9]{2}.[0-9]{2}.[0-9]{4}$/", $_GET["date"]))
+		{
+			list($dd, $dm, $dy) = explode(".", $_GET["date"]);
+			$date_s = mktime(0, 0, 0, $dm, $dd, $dy);
+			$date_e = $date_s + 24*3600 - 1;
+		}
+
 		if(!$this->can("view", $ob->events_manager))
 		{
 			return $this->parse();
@@ -110,38 +118,61 @@ class event_webview extends class_base
 		{
 			$ol_args["published"] = 1;
 		}
-		if($ob->date_start)
+
+		if(!empty($date_s) && !empty($date_e))
 		{
 			if($ob->display_by === "event_times")
 			{
 				$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.start"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER_OR_EQ,
-					$ob->date_start
+					OBJ_COMP_BETWEEN_INCLUDING,
+					$date_s,
+					$date_e
 				);
 			}
 			else
 			{
 				$ol_args["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(
-					OBJ_COMP_GREATER_OR_EQ,
-					$ob->date_start
+					OBJ_COMP_BETWEEN_INCLUDING,
+					$date_s,
+					$date_e
 				);
 			}
 		}
-		if($ob->date_end)
+		else
 		{
-			if($ob->display_by === "event_times")
+			if($ob->date_start)
 			{
-				$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.end"] = new obj_predicate_compare(
-					OBJ_COMP_LESS,
-					($ob->date_end + 24 * 3600)
-				);
+				if($ob->display_by === "event_times")
+				{
+					$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.start"] = new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$ob->date_start
+					);
+				}
+				else
+				{
+					$ol_args["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$ob->date_start
+					);
+				}
 			}
-			else
+			if($ob->date_end)
 			{
-				$ol_args["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(
-					OBJ_COMP_LESS,
-					($ob->date_end + 24 * 3600)
-				);
+				if($ob->display_by === "event_times")
+				{
+					$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.end"] = new obj_predicate_compare(
+						OBJ_COMP_LESS,
+						($ob->date_end + 24 * 3600)
+					);
+				}
+				else
+				{
+					$ol_args["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(
+						OBJ_COMP_LESS,
+						($ob->date_end + 24 * 3600)
+					);
+				}
 			}
 		}
 
