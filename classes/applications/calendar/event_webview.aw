@@ -233,6 +233,12 @@ class event_webview extends class_base
 				foreach($event_times->arr() as $time)
 				{
 					$to = obj($time["oid"]);
+					// The url parameter
+					if(!empty($date_s) && !empty($date_e) && ($date_s > $to->start || $date_e < $to->start))
+					{
+						continue;
+					}
+					// Settings
 					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
 					{
 						continue;
