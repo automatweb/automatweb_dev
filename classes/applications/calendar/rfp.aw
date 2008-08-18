@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.96 2008/08/18 09:58:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.97 2008/08/18 10:42:27 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -26,7 +26,7 @@
 		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
 		@default group=submitter_info
 			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info
-			@caption Ankeedi t&auml;itja
+			@caption Tellija kontaktisik
 
 			@property data_subm_country type=textbox
 			@caption Ankeedi t&auml;itja asukoht
@@ -1550,10 +1550,11 @@ class rfp extends class_base
 								"value" => $count?$count:$rv_amount[$prod->id()],
 								"size" => 5,
 							)),//.($count?$count:$rv_amount[$prod->id()]),
-							"discount" => html::hidden(array(
+							"discount" => html::textbox(array(
 								"name" =>  "prods[".$prod->id().".".$rv->id()."][discount]",
 								"value" => $disc,
-							)).$disc."%",
+								"size" => 5,
+							))."%",//.$disc."%",
 							"sum" => html::hidden(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][sum]",
 								"value" => $prod_sum,
@@ -1883,6 +1884,16 @@ class rfp extends class_base
 			"name" => "time",
 			"caption" => t("Aeg"),
 		));
+			$t->define_field(array(
+				"name" => "time_from",
+				"caption" => t("Alates"),
+				"parent" => "time",
+			));
+			$t->define_field(array(
+				"name" => "time_to",
+				"caption" => t("Kuni"),
+				"parent" => "time",
+			));
 		$t->define_field(array(
 			"name" => "service",
 			"caption" => t("Teenus"),
@@ -1916,11 +1927,18 @@ class rfp extends class_base
 					"year" => date("Y", $data["time"]),
 				),
 			)),
-			"time" => html::time_select(array(
+			"time_from" => html::time_select(array(
 				"name" => "add_srv[".$key."][time]",
 				"value" => array(
-					"hour" => date("h", $data["time"]),
+					"hour" => date("H", $data["time"]),
 					"minute" => date("i", $data["time"]),
+				),
+			)),
+			"time_to" => html::time_select(array(
+				"name" => "add_srv[".$key."][time_to]",
+				"value" => array(
+					"hour" => date("H", $data["time_to"]),
+					"minute" => date("i", $data["time_to"]),
 				),
 			)),
 			"service" => html::textbox(array(
@@ -1968,18 +1986,23 @@ class rfp extends class_base
 		//newline
 		$t->define_data($this->_get_additional_services_tbl_row("new_1", array(
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+			"time_to" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 		)));
 		$t->define_data($this->_get_additional_services_tbl_row("new_2", array(
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+			"time_to" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 		)));
 		$t->define_data($this->_get_additional_services_tbl_row("new_3", array(
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+			"time_to" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 		)));
 		$t->define_data($this->_get_additional_services_tbl_row("new_4", array(
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+			"time_to" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 		)));
 		$t->define_data($this->_get_additional_services_tbl_row("new_5", array(
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
+			"time_to" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 		)));
 	}
 
@@ -1994,6 +2017,7 @@ class rfp extends class_base
 		{
 			$metadata[$k] = array(
 				"time" => mktime($v["time"]["hour"], $v["time"]["minute"], 0, $v["date"]["month"], $v["date"]["day"], $v["date"]["year"]),
+				"time_to" => mktime($v["time_to"]["hour"], $v["time_to"]["minute"], 0, $v["date"]["month"], $v["date"]["day"], $v["date"]["year"]),
 				"service" => $v["service"],
 				"price" => $v["price"],
 				"amount" => $v["amount"],
@@ -2007,6 +2031,7 @@ class rfp extends class_base
 			{
 				$metadata[] = array(
 					"time" => mktime($new["time"]["hour"], $new["time"]["minute"], 0, $new["date"]["month"], $new["date"]["day"], $new["date"]["year"]),
+					"time_to" => mktime($new["time_to"]["hour"], $new["time_to"]["minute"], 0, $new["date"]["month"], $new["date"]["day"], $new["date"]["year"]),
 					"service" => $new["service"],
 					"price" => $new["price"],
 					"amount" => $new["amount"],

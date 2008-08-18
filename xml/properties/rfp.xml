@@ -28,7 +28,7 @@
             <type>textbox</type>
             <parent>client_info</parent>
             <field>data_subm_name</field>
-            <caption>Ankeedi t&amp;amp;auml;itja</caption>
+            <caption>Tellija kontaktisik</caption>
       </property>
       <property>
             <name>data_subm_country</name>
