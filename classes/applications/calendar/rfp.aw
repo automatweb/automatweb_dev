@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.95 2008/08/18 09:45:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.96 2008/08/18 09:58:38 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2143,8 +2143,7 @@ class rfp extends class_base
 			"&otilde;" => "o",
 			" " => "_",
 		));
-		$fname = sprintf("%s-%s-%s", ($arr["pdf"] == "offer_pdf")?t("Pakkumine"):t("Kinnitus"), $client_name, $date);
-		$fname = ($arr["pdf"] != "offer_pdf" && strlen($orgname))?$orgname:$fname;
+		$fname = sprintf("%s-%s-%s", ($arr["pdf"] == "offer_pdf")?t("Pakkumine"):t("Kinnitus"), ($orgname?$orgname:$client_name), $date);
 		$html = $this->_get_submission_data($arr);
 		classload("core/converters/html2pdf");
 		$i = new html2pdf;
