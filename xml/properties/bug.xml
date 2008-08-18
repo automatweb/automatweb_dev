@@ -189,6 +189,16 @@
             <caption>Tegelik Live kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>finance_type</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>chooser</type>
+            <captionside>top</captionside>
+            <parent>settings_col3</parent>
+            <field>aw_finance_type</field>
+            <caption>Kulud kaetakse</caption>
+      </property>
+      <property>
             <name>vb_d1</name>
             <group>general</group>
             <table>aw_bugs</table>

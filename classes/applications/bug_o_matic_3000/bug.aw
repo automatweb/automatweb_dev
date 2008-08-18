@@ -76,6 +76,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property actual_live_date type=date_select captionside=top parent=settings_col3 field=meta method=serialize table=objects
 		@caption Tegelik Live kuup&auml;ev
 
+		@property finance_type type=chooser captionside=top parent=settings_col3 table=aw_bugs field=aw_finance_type
+		@caption Kulud kaetakse
+
 	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
 
 @layout url type=vbox closeable=1 area_caption=URL
@@ -871,6 +874,14 @@ class bug extends class_base
 
 			case "comments_table":
 				return $this->_comments_table($arr);
+
+			case "finance_type":
+				$prop["options"] = array(
+					1 => t("T&ouml;&ouml; l&otilde;ppedes"),
+					2 => t("Projekti l&otilde;ppedes"),
+					3 => t("Arendus")
+				);
+				break;
 		};
 		return $retval;
 	}
@@ -881,6 +892,14 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "finance_type":
+				if ($arr["new"] && !$arr["prop"]["value"])
+				{
+					$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
+					return PROP_FATAL_ERROR;
+				}
+				break;
+
 			case "name":
 				if (!$this->can("view", $arr["request"]["who"]))
 				{
@@ -2208,6 +2227,7 @@ die($email);
 			case "bug_type":
 			case "skill_used":
 			case "aw_spec":
+			case "aw_finance_type":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
