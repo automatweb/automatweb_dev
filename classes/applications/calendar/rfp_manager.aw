@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.52 2008/08/18 08:15:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.53 2008/08/18 08:17:08 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -648,6 +648,7 @@ class rfp_manager extends class_base
 											$subrow_data["sum"] = $subrow_data["sum"] * ((100 - $subrow_data["discount"]) / 100);
 										}
 									}
+									$subrow_data["sum"] = number_format($subrow_data["sum"], 2);
 									if($this->can("view", $subrow_data["var"]))
 									{
 										$subrow_data["product_event"] = obj($subrow_data["var"])->name();
