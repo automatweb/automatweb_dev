@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.125 2008/08/18 13:22:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.126 2008/08/18 13:31:35 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1514,7 +1514,7 @@ class reservation extends class_base
 				));
 			}
 		}
-		if(count($rvs) > 1)
+		if(count($rvs) > 0)
 		{
 			$t->define_data(array(
 				"split" => "#CCCCCC",
