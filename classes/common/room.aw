@@ -353,6 +353,12 @@ class room extends class_base
 			3600 => t("Tundi"),
 			86400 => t("P&auml;eva"),
 		);
+
+		$this->time_unit_types = array(
+			1 => t("minutitites"),
+			2 => t("tundides"),
+			3 => t("p&auml;evades"),
+		);
 		$this->weekdays = array(
 			t("Sunday") , t("Monday") , t("Tuesday"), t("Wednesday") , t("Thursday") , t("Friday"), t("Saturday")
 		);
@@ -446,11 +452,8 @@ class room extends class_base
 				break;
 			
 			case "time_unit":
-				$prop["options"] = array(
-					1 => t("minutitites"),
-					2 => t("tundides"),
-					3 => t("p&auml;evades"),
-				);
+				
+				$prop["options"] = $this->get_time_units();
 				break;
 			case "concurrent_type":
 				$prop["options"] = array(
@@ -6188,6 +6191,19 @@ class room extends class_base
 		{
 			return false;
 		}
+	}
+
+	/** Returns array of time units
+		@attrib api=1
+		@comment
+			Returns array of time units used by room.
+			Array(
+				identifier => caption,
+			)
+	 **/
+	public function get_time_units()
+	{
+		return $this->time_unit_types;
 	}
 }
 ?>
