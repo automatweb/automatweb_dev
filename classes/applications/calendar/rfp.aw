@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.90 2008/08/14 14:41:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.91 2008/08/18 08:03:35 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1799,22 +1799,14 @@ class rfp extends class_base
 	{
 		if($obj)
 		{
-			$start = $obj->prop("data_gen_acc_start");
-			if(is_array($start = split("[.]", $start["date"])))
-			{
-				$start = mktime(0,0,0, $start[1], $start[0], $start[2]);
-			}
-			else
+			$start = $obj->prop("data_gen_acc_start_admin");
+			if($start < 1)
 			{
 				$start = $obj->prop("data_gen_arrival_date_admin");
 			}
 
-			$end = $obj->prop("data_gen_acc_end");
-			if(is_array($end = split("[.]", $end["date"])))
-			{
-				$end = mktime(0,0,0, $end[1], $end[0], $end[2]);
-			}
-			else
+			$end = $obj->prop("data_gen_acc_end_admin");
+			if($end < 1)
 			{
 				$end = $obj->prop("data_gen_departure_date_admin");
 			}
