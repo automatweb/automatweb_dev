@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.122 2008/08/14 14:41:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.123 2008/08/18 07:54:13 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -894,6 +894,7 @@ class reservation extends class_base
 		$currency = $room?$room->prop("currency"):array();
 
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
 
 		$t->define_header($arr["obj_inst"]->name());
 		$t->define_field(array(
@@ -945,38 +946,6 @@ class reservation extends class_base
 			"chgbgcolor" => "split",
 			"align" => "center",
 		));
-		// so, so lets set the total price/discount thingies
-		$res_discount = $this->get_resources_discount($arr["obj_inst"]->id());
-		$t->define_data(array(
-			"name" => t("Kogusoodus (%)"),
-			"discount" => html::textbox(array(
-				"name" => "resources_total_discount",
-				"value" => $res_discount,
-				"size" => 5,
-			)),
-		));
-		$sum_data = array(
-			"name" => t("Kogusumma"),
-		);
-
-		$res_price_data = $this->get_resources_price($arr["obj_inst"]->id());
-		foreach($currency as $cur)
-		{
-			if(!$this->can("view", $cur))
-			{
-				continue;
-			}
-			$sum_data["price_".$cur] = html::textbox(array(
-				"name" => "resources_total_price[".$cur."]",
-				"value" => $res_price_data[$cur],
-				"size" => 5,
-			));
-		}
-		$t->define_data($sum_data);
-		$t->define_data(array(
-			"split" => "#CCCCCC",
-		));
-
 		$room = obj($arr["obj_inst"]->prop("resource"));
 		$room_inst = $room->instance();
 		$rdata = $this->get_resources_data($arr["obj_inst"]->id());
@@ -1025,6 +994,42 @@ class reservation extends class_base
 			}
 			$t->define_data($data);
 		}
+		// so, so lets set the total price/discount thingies
+
+		$t->define_data(array(
+			"split" => "#CCCCCC",
+		));
+
+		$sum_data = array(
+			"name" => t("Kogusumma"),
+		);
+
+		$res_price_data = $this->get_resources_price($arr["obj_inst"]->id());
+		foreach($currency as $cur)
+		{
+			if(!$this->can("view", $cur))
+			{
+				continue;
+			}
+			$sum_data["price_".$cur] = html::textbox(array(
+				"name" => "resources_total_price[".$cur."]",
+				"value" => $res_price_data[$cur],
+				"size" => 5,
+			));
+		}
+		$t->define_data($sum_data);
+
+		$res_discount = $this->get_resources_discount($arr["obj_inst"]->id());
+		$t->define_data(array(
+			"name" => t("Kogusoodus (%)"),
+			"discount" => html::textbox(array(
+				"name" => "resources_total_discount",
+				"value" => $res_discount,
+				"size" => 5,
+			)),
+		));
+
+
 	}
 
 
