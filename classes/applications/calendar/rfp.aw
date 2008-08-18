@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.97 2008/08/18 10:42:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.98 2008/08/18 13:22:39 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -265,7 +265,7 @@
 			@property default_language type=select table=rfp field=default_language
 			@caption Keel
 
-			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect
+			@property final_rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM table=objects field=meta method=serialize
 			@caption Ruumid
 			@comment Konverentsi jaoks kasutatavad ruumid
 
@@ -1021,7 +1021,7 @@ class rfp extends class_base
 				$inst = get_instance(CL_RESERVATION);
 				$function = "_get_".$arr["prop"]["name"];
 				$inst->$function(&$args);
-				$this->_modify_prices_tbl_after(&$arr, &$args["prop"]["vcl_inst"]);
+				$this->_modify_prices_tbl_after(&$arr, &$args["prop"]["vcl_inst"], $inst->prices_tbl_sum_row);
 				$prop["value"] = $args["prop"]["vcl_inst"]->get_html();
 				break;
 
@@ -2115,6 +2115,12 @@ class rfp extends class_base
 		}
 		 */
 		$rooms = $arr["obj_inst"]->prop($prop);
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"oid" => $rooms,
+			"sort_by" => "jrk, name ASC",
+		));
+		$rooms = $this->make_keys($ol->ids());
 		// wtf is this here for??
 
 		/*
@@ -2824,7 +2830,7 @@ class rfp extends class_base
 					{
 						$arr["obj_inst"]->{"set_".$var}($val);
 					}
-				}			
+				}
 			break;
 	
 			// tsiisas, these date thingies are really shitty
@@ -3361,7 +3367,7 @@ class rfp extends class_base
 		return $arr["post_ru"];
 	}
 
-	private function _modify_prices_tbl_after($arr, $t)
+	private function _modify_prices_tbl_after($arr, $t, $tbl_sum_row = false)
 	{
 		if($this->can("view", $arr["obj_inst"]->prop("data_gen_package"))) // theres a package selected, we have to add an extra line to table for package discount
 		{
@@ -3378,6 +3384,65 @@ class rfp extends class_base
 					"value" => $arr["obj_inst"]->get_package_custom_discount(),
 				)),
 			));
+
+			if($tbl_sum_row)
+			{
+				if(!($totprice = $arr["obj_inst"]->get_package_custom_price()))
+				{
+					$room_price = $this->can("view", ($_t = $arr["obj_inst"]->prop("data_gen_package_price")))?$_t:false;
+					$conns = $arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_RESERVATION",
+					));
+
+					$mgr = get_instance(CL_RFP_MANAGER);
+					$mgr = obj($mgr->get_sysdefault());
+					$pk_prices = $mgr->meta("pk_prices");
+					$room_p = get_instance(CL_ROOM_PRICE);
+
+					$currency = $arr["obj_inst"]->prop("default_currency");
+					if(is_array($pk_prices))
+					{
+						foreach($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"] as $loop_room_price => $curs)
+						{
+							foreach($curs as $cur => $price)
+							{
+								if($cur == $currency)
+								{
+									$prices_for_calculator[$loop_room_price] = $price;
+								}
+							}
+						}
+					}
+					$totprice = 0;
+					foreach($conns as $conn)
+					{
+						$rv = $conn->to();
+						if(!$room_price)
+						{
+							$room_prices = $room_p->calculate_room_prices_price(array(
+								"oids" => array_keys($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"]),
+								"start" => $rv->prop("start1"),
+								"end" => $rv->prop("start1") + 1,
+							));
+							$room_price_oid = key($room_prices);
+						}
+						else
+						{
+							$room_price_oid = $room_price;
+						}
+						$totprice += ($prices_for_calculator[$room_price_oid] * $rv->prop("people_count"));
+					}
+				}
+				else
+				{
+					$totprice = ($_t = $arr["obj_inst"]->get_package_custom_discount())?(((100-$_t) /100 )* $totprice):$totprice;
+				}
+				
+				$t->set_data($tbl_sum_row, array(
+					"total" => number_format($totprice, 2),
+					"custom" => html::strong(t("Kokku:")),
+				));
+			}
 
 		}
 	}

@@ -737,13 +737,13 @@
       </property>
       <property>
             <name>final_rooms</name>
-            <table>rfp</table>
+            <table>objects</table>
             <group>final_general</group>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_ROOM</reltype>
-            <store>connect</store>
-            <field>final_rooms</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Ruumid</caption>
             <comment>Konverentsi jaoks kasutatavad ruumid</comment>
       </property>
