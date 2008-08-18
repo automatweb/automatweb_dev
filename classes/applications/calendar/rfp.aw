@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.93 2008/08/18 08:29:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.94 2008/08/18 09:43:21 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -790,12 +790,21 @@ class rfp extends class_base
 				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
 				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
 				$new_reservation_args["people_count_rfp"] = $arr["obj_inst"]->prop("data_gen_attendees_no");
-				$new_reservation_args["start1"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_start_date"));
-				$new_reservation_args["end"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_end_date"));
 				$new_reservation_args["return_url"] = get_ru();
 				$new_reservation_args["rfp"] = $arr["obj_inst"]->id();
 				$new_reservation_args["rfp_reltype"] = $reltypes[$arr["request"]["group"]];
 				$new_reservation_args["rfp_organisation"] = $arr["obj_inst"]->prop("data_subm_organisation");
+				// set reservation default time. this depends on a particular tab currently active
+				if($arr["request"]["group"] == "final_catering")
+				{
+					$new_reservation_args["start1"] = (($_t = $arr["obj_inst"]->prop("data_mf_catering_start_admin")) > 1)?$_t:$arr["obj_inst"]->prop("data_gen_arrival_date_admin");
+					$new_reservation_args["end"] = (($_t = $arr["obj_inst"]->prop("data_mf_catering_end_admin")) > 1)?$_t:$arr["obj_inst"]->prop("data_gen_departure_date_admin");
+				}
+				else
+				{
+					$new_reservation_args["start1"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_start_date"));
+					$new_reservation_args["end"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_end_date"));
+				}
 
 				
 				foreach($rooms as $room)
@@ -2558,7 +2567,7 @@ class rfp extends class_base
 				if(is_oid($varid))
 				{
 					$var = obj($varid);
-					$varname = $var->name();
+					$varname = $var->trans_get_val("name");
 				}
 				$room = obj($prod["room"]);
 				//gen nice event/room combo
@@ -2580,7 +2589,7 @@ class rfp extends class_base
 					"prod_to_minute" => date("i", $prod["end"]),
 					"prod_event" => $varname,
 					"prod_count" => $prod["amount"],
-					"prod_prod" => $po->trans_get_val("name"),
+					"prod_prod" => d($po->trans_get_val("name")),
 					"prod_price" => $this->_format_price($prod["price"]),
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
