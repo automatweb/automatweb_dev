@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.92 2008/08/18 08:23:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.93 2008/08/18 08:29:20 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2237,9 +2237,15 @@ class rfp extends class_base
 		);
 		foreach($info_props as $prop)
 		{
-			$this->vars(array(
-				$prop => $this->parse("HAS_".strtoupper($prop)),
-			));
+			if(strlen($arr["obj_inst"]->prop($prop)))
+			{
+				$this->vars(array(
+					$prop => $arr["obj_inst"]->prop($prop),
+				));
+				$this->vars(array(
+					"HAS_".strtoupper($prop) => $this->parse("HAS_".strtoupper($prop)),
+				));
+			}
 		}
 		$package_id = $arr["obj_inst"]->trans_get_val("data_gen_package");
 		if($this->can("view", $package_id))
