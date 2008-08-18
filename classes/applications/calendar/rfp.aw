@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.91 2008/08/18 08:03:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.92 2008/08/18 08:23:46 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2222,16 +2222,25 @@ class rfp extends class_base
 			"data_name" => $arr["obj_inst"]->prop("data_billing_name"),
 			"data_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_billing_email"),
-			"additional_information" => $arr["obj_inst"]->trans_get_val("additional_information"),
-			"additional_admin_information" => $arr["obj_inst"]->trans_get_val("additional_admin_information"),
-			"additional_room_information" => $arr["obj_inst"]->trans_get_val("additional_room_information"),
-			"additional_catering_information" => $arr["obj_inst"]->trans_get_val("additional_catering_information"),
-			"additional_resource_information" => $arr["obj_inst"]->trans_get_val("additional_resource_information"),
-			"additional_housing_information" => $arr["obj_inst"]->trans_get_val("additional_housing_information"),
 			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("Y.m.d", $arr["obj_inst"]->prop("offer_expire_date")),
 		));
+
+		$info_props = array(
+			"additional_information",
+			"additional_admin_information",
+			"additional_room_information",
+			"additional_catering_information",
+			"additional_resource_information",
+			"additional_housing_information",
+		);
+		foreach($info_props as $prop)
+		{
+			$this->vars(array(
+				$prop => $this->parse("HAS_".strtoupper($prop)),
+			));
+		}
 		$package_id = $arr["obj_inst"]->trans_get_val("data_gen_package");
 		if($this->can("view", $package_id))
 		{
