@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.58 2008/08/19 11:45:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.59 2008/08/19 11:50:30 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1707,8 +1707,12 @@ class rfp_manager extends class_base
 				$prod_list = $res_inst->get_room_products($rv->prop("resource"));
 				foreach($prod_list->arr() as $prod_oid => $prod)
 				{
-					$prod_price = $res_inst->get_product_price(array("product" => $prod_oid, "reservation" => $rv->id()));
 					$amount = $rv->get_product_amount();
+					if(!$amount[$prod_id])
+					{
+						continue;
+					}
+					$prod_price = $res_inst->get_product_price(array("product" => $prod_oid, "reservation" => $rv->id()));
 					$discount = $res_inst->get_product_discount($rv->id());//meta("discount");
 					$sum = ($prod_price * $amount[$prod_oid]);
 					$sum = ($discount[$prod_oid] > 0 and $discount[$prod_oid])?(((100 - $discount[$prod_oid]) / 100 )* $sum):$sum;
