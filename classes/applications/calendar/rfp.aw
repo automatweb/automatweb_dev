@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.99 2008/08/19 07:58:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.100 2008/08/19 08:09:25 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -375,6 +375,11 @@
                 @default group=additional_services
 
                         @property additional_services_tbl type=table store=no no_caption=1
+
+			@layout add_inf_services type=vbox closeable=1 area_caption="Lisainfo"
+				
+				@property additional_services_information type=textarea parent=add_inf_services rows=20
+				@caption Lisateenuste lisainfo
 
 
 		@groupinfo terms caption="Tingimused" parent=final_info
@@ -2286,6 +2291,7 @@ class rfp extends class_base
 			"additional_catering_information",
 			"additional_resource_information",
 			"additional_housing_information",
+			"additional_services_information",
 		);
 		foreach($info_props as $prop)
 		{
@@ -3098,6 +3104,7 @@ class rfp extends class_base
 			array("additional_catering_information", "text"),
 			array("additional_resource_information", "text"),
 			array("additional_housing_information", "text"),
+			array("additional_services_information", "text"),
 			array("confirmed", "int"),
 			array("cancel_and_payment_terms", "text"),
 			array("accomondation_terms", "text"),

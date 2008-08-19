@@ -948,6 +948,16 @@
             <field>additional_services_tbl</field>
       </property>
       <property>
+            <name>additional_services_information</name>
+            <table>rfp</table>
+            <group>additional_services</group>
+            <type>textarea</type>
+            <parent>add_inf_services</parent>
+            <rows>20</rows>
+            <field>additional_services_information</field>
+            <caption>Lisateenuste lisainfo</caption>
+      </property>
+      <property>
             <name>cancel_and_payment_terms</name>
             <table>rfp</table>
             <group>terms</group>
@@ -1312,6 +1322,12 @@
                   <area_caption>Lisainfo</area_caption>
                   <group>final_housing</group>
             </add_inf_housing>
+            <add_inf_services>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Lisainfo</area_caption>
+                  <group>additional_services</group>
+            </add_inf_services>
       </layout>
 </properties>
 
