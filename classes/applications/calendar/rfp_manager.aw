@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.60 2008/08/19 12:02:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.61 2008/08/19 12:07:46 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -569,12 +569,12 @@ class rfp_manager extends class_base
 							{
 								$rfp_prop_values[$prop."_date"] = date("d.m.Y", $pval);
 								$rfp_prop_values[$prop."_time"] = date("H:i", $pval);
-								$rfp_prop_empty[$prop."_date"] = "";
-								$rfp_prop_empty[$prop."_time"] = "";
 							}
 
 							$rfp_prop_values[$prop] = $pval;
 							$rfp_prop_captions[$prop."_caption"] = $propdata["caption"];
+							$rfp_prop_empty[$prop."_date"] = "";
+							$rfp_prop_empty[$prop."_time"] = "";
 						}
 
 						if($prop == "confirmed")
