@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.56 2008/08/19 10:33:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.57 2008/08/19 11:38:24 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1660,7 +1660,18 @@ class rfp_manager extends class_base
 				{
 					continue;
 				}
-				$result = array_merge($result, $this->$method($rfp_ol));
+				if($arr["from"])
+				{
+					$time = array(
+						"start1" => $arr["from"],
+						"end" => $arr["to"],
+					);
+				}
+				else
+				{
+					$time = false;
+				}
+				$result = array_merge($result, $this->$method($rfp_ol, $time));
 			}
 		}
 		$res_inst = get_instance(CL_RESERVATION);
@@ -1725,7 +1736,7 @@ class rfp_manager extends class_base
 		return (($t = $a["start1"] - $b["start1"]) == 0)?$a["end"] - $b["end"]:$t;
 	}
 
-	private function _search_rfp_rooms_raports($ol = array())
+	private function _search_rfp_rooms_raports($ol = array(), $time = false)
 	{
 		$reservations = array();
 		foreach($ol->arr() as $oid => $obj)
@@ -1745,7 +1756,7 @@ class rfp_manager extends class_base
 		return $return;
 	}
 
-	private function _search_rfp_housing_raports($ol = array())
+	private function _search_rfp_housing_raports($ol = array(), $time = false)
 	{
 		$housing = array();
 		foreach($ol->arr() as $oid => $obj)
@@ -1773,7 +1784,7 @@ class rfp_manager extends class_base
 		return $return;
 	}
 
-	private function _search_rfp_resources_raports($ol = array())
+	private function _search_rfp_resources_raports($ol = array(), $time = false)
 	{
 		$resources = array();
 		foreach($ol->arr() as $oid => $obj)
@@ -1792,7 +1803,7 @@ class rfp_manager extends class_base
 		return $return;
 	}
 
-	private function _search_rfp_catering_raports($ol = array())
+	private function _search_rfp_catering_raports($ol = array(), $time = false)
 	{
 		$prods = array();
 		foreach($ol->arr() as $oid => $obj)
@@ -1851,10 +1862,16 @@ class rfp_manager extends class_base
 			}
 			$return[$reservation->id()]["products"][$product_id] = $data;
 		}
-		$list = new object_list(array(
+		$args = array(
 			"class_id" => CL_RESERVATION,
 			"oid" => new obj_predicate_not($already_used_rvs),
-		));
+		);
+		if($time["start1"] and $time["end"])
+		{
+			$args["start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $time["start1"], $time["end"], "int"); 
+			$args["end"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $time["start1"], $time["end"], "int");
+		}
+		$list = new object_list($args);
 		foreach($list->arr() as $oid => $obj)
 		{
 			$return[$oid] = array(
@@ -1873,7 +1890,7 @@ class rfp_manager extends class_base
 		return $return;
 	}
 	
-	private function _search_rfp_additional_services_raports($ol = array())
+	private function _search_rfp_additional_services_raports($ol = array(), $time = false)
 	{
 		$as = array();
 		foreach($ol->arr() as $oid => $obj)
