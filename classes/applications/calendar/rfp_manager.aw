@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.59 2008/08/19 11:50:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.60 2008/08/19 12:02:36 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -224,6 +224,7 @@ class rfp_manager extends class_base
 			5 => t("Ressursid"),
 			6 => t("Lisateenused"),
 		);
+		$this->rfpm = obj($this->get_sysdefault());
 	}
 
 	function get_property($arr)
@@ -1866,9 +1867,16 @@ class rfp_manager extends class_base
 			}
 			$return[$reservation->id()]["products"][$product_id] = $data;
 		}
+		
+		$tmplist = new object_list(array(
+			"class_id" => CL_ROOM,
+			"parent" => $this->rfpm->prop("catering_room_folder"),
+		));
+		// little silly ugly hack
 		$args = array(
 			"class_id" => CL_RESERVATION,
 			"oid" => new obj_predicate_not($already_used_rvs),
+			"resource" => $tmplist->ids(),
 		);
 		if($time["start1"] and $time["end"])
 		{
