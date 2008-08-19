@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.126 2008/08/18 13:31:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.127 2008/08/19 07:58:34 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -986,9 +986,14 @@ class reservation extends class_base
 			{
 				if($this->can("view", $cur))
 				{
+					$price  = $rdata[$res]["prices"][$cur];
+					if((!$price or $price <= 0) and is_array($arr["request"]["resource_default_prices"]))
+					{
+						$price = $arr["request"]["resource_default_prices"][$arr["obj_inst"]->prop("resource")][$res][$cur];
+					}
 					$data["price_".$cur] = html::textbox(array(
 						"name" => "resources_info[".$res."][prices][".$cur."]",
-						"value" => $rdata[$res]["prices"][$cur],
+						"value" => $price, //$rdata[$res]["prices"][$cur],
 						"size" => 5,
 					));
 				}

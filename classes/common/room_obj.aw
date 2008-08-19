@@ -378,6 +378,20 @@ class room_obj extends _int_object
 		return $room_inst->check_if_available($arr);
 	}
 
+	/** Returns room's resouces
+		@attrib api=1
+		@returns
+			Array of room's resources.
+			array(
+				resource_oid => resource_obj
+			)
+	 **/
+	function get_resources()
+	{
+		$i = $this->instance();
+		return $i->get_room_resources($this->id());
+	}
+
 }
 
 ?>

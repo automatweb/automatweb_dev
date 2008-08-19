@@ -112,6 +112,17 @@
             <caption>&amp;amp;Uuml;rituse t&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
       </property>
       <property>
+            <name>resources_price_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_RESOURCE_ROOMS</reltype>
+            <method>serialize</method>
+            <field>resources_price_rooms</field>
+            <caption>Tellimuste ruumid</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
@@ -156,6 +167,15 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>rooms_table</field>
+      </property>
+      <property>
+            <name>resources_table</name>
+            <table>objects</table>
+            <group>resources</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>resources_table</field>
       </property>
       <property>
             <name>raports_tb</name>
@@ -442,6 +462,10 @@
                   <caption>Ruumid</caption>
                   <parent>settings</parent>
             </rooms>
+            <resources>
+                  <caption>Ressursid</caption>
+                  <parent>settings</parent>
+            </resources>
             <raports>
                   <caption>Raportid</caption>
             </raports>

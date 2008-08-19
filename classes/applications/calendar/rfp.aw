@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.98 2008/08/18 13:22:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.99 2008/08/19 07:58:26 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -486,6 +486,8 @@ class rfp extends class_base
 			4 => t("Tagasi l&uuml;katud"),
 			5 => t("T&uuml;histatud"),
 		);
+		$rfpm = get_instance(CL_RFP_MANAGER);
+		$this->rfpm = obj($rfpm->get_sysdefault());
 	}
 
 	private function date_to_stamp($date)
@@ -925,6 +927,7 @@ class rfp extends class_base
 							"class" => "reservation",
 							"action" => "change",
 							"id" => $bron,
+							"resource_default_prices" => $this->rfpm->get_resource_default_prices(),
 						),
 						"obj_inst" => $obj,
 						"groupinfo" => array(),
@@ -1277,6 +1280,9 @@ class rfp extends class_base
 		));
 
 		$currencys_in_use = $this->gather_reservation_currencys($arr["obj_inst"]);
+		$rfpm = get_instance(CL_RFP_MANAGER);
+		$rfpm = obj($rfpm->get_sysdefault($rfpm));
+		//$resource_default_prices = $rfpm->get_resource_default_prices();
 		foreach($conns as $c)
 		{
 			$res = $c->to();
@@ -1317,6 +1323,13 @@ class rfp extends class_base
 
 				foreach($resources_data[$k]["prices"] as $oid => $price)
 				{
+					/*
+					if($price <= 0 or !$price)
+					{
+						$price = $resource_default_prices[$res->prop("resource")][$k][$oid];
+					}
+					*/
+
 					$cur_reservation_price_from_resources[$oid] += $price;
 					$data["price[".$oid."]"] = $price;
 				}

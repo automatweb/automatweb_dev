@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.53 2008/08/18 08:17:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.54 2008/08/19 07:58:26 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -42,6 +42,9 @@
 @property event_type_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption &Uuml;rituse t&uuml;&uuml;pide kaust
 
+@property resources_price_rooms type=relpicker multiple=1 reltype=RELTYPE_RESOURCE_ROOMS field_meta method=serialize
+@caption Tellimuste ruumid
+
 @property default_table type=table no_caption=1 store=no
 
 @groupinfo settings caption="Seaded"
@@ -58,6 +61,9 @@
 	
 	@groupinfo rooms caption="Ruumid" parent=settings
 		@property rooms_table type=table store=no no_caption=1 group=rooms
+
+	@groupinfo resources caption="Ressursid" parent=settings
+		@property resources_table type=table store=no no_caption=1 group=resources
 
 @groupinfo raports caption="Raportid"
 @default group=raports
@@ -856,6 +862,66 @@ class rfp_manager extends class_base
 			$arr["obj_inst"]->set_extra_hours_prices($arr["request"]["rooms_table"]);
 		}
 	}
+
+	function _init_resources_table(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+		));
+		foreach($this->rfp_currencies() as $currency_oid => $currency)
+		{
+			$t->define_field(array(
+				"name" => "price_".$currency_oid,
+				"caption" => $currency->trans_get_val("name"),
+				"parent" => "price",
+				"align" => "center",
+			));
+		}
+
+		$t->set_rgroupby(array(
+			"room" => "room"
+		));
+	}
+
+	function _get_resources_table($arr)
+	{
+		$this->_init_resources_table($arr);
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$prices = $arr["obj_inst"]->get_resource_default_prices();
+		foreach($arr["obj_inst"]->get_rooms_from_room_folder("room_fld")->arr() as $room_oid => $room)
+		{
+			foreach($room->get_resources() as $resource_oid => $resource)
+			{
+				$d = array(
+					"room" => html::obj_change_url($room),
+					"resource" => html::obj_change_url($resource),
+				);
+
+				foreach($this->rfp_currencies() as $currency_oid => $currency)
+				{
+					$d["price_".$currency_oid] = html::textbox(array(
+						"name" => sprintf("resource_prices[%s][%s][%s]", $room_oid, $resource_oid, $currency_oid),
+						"value" => $prices[$room_oid][$resource_oid][$currency_oid],
+						"size" => 10,
+					));
+				}
+				$t->define_data($d);
+			}
+		}
+	}
+
+	function _set_resources_table($arr)
+	{
+		$arr["obj_inst"]->set_resource_default_prices($arr["request"]["resource_prices"]);
+	}
+
 
 	function _get_rfps_tb($arr)
 	{

@@ -110,5 +110,41 @@ class rfp_manager_obj extends _int_object
 		}
 		return array();
 	}
+
+	/** Get's resources default prices
+		@attrib api=1
+		@returns
+			Resources prices in array.
+			Array(
+				room_oid => array(
+					resource_oid => array(
+						currency_oid => [price]
+					),
+				)
+			)
+
+	 **/
+	public function get_resource_default_prices()
+	{
+		return $this->meta("resource_default_prices");
+	}
+
+	/** Set's resources default prices
+		@attrib api=1 params=pos
+		@param data required type=array
+			Resources prices in array.
+			Array(
+				room_oid => array(
+					resource_oid => array(
+						currency_oid => [price]
+					),
+				)
+			)
+
+	 **/
+	public function set_resource_default_prices($data = array())
+	{
+		$this->set_meta("resource_default_prices", $data);
+	}
 }
 ?>
