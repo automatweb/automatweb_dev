@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.57 2008/08/19 11:38:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.58 2008/08/19 11:45:41 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1692,7 +1692,7 @@ class rfp_manager extends class_base
 				unset($result[$k]);
 				continue;
 			}
-			if(strlen($arr["client"])) // the smartest thing would be to take those props away from meta and use the filter on the rfp obj list..
+			if(strlen($arr["client"]) and $this->can("view", $data["rfp"])) // the smartest thing would be to take those props away from meta and use the filter on the rfp obj list..
 			{
 				$rfp = obj($data["rfp"]);
 				if(!strstr($rfp->prop("data_subm_name"), trim($arr["client"])) AND !strstr($rfp->prop("data_subm_organisation"), trim($arr["client"])))
