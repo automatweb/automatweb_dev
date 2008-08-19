@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.55 2008/08/19 08:36:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.56 2008/08/19 10:33:04 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -550,7 +550,7 @@ class rfp_manager extends class_base
 					"to_time" => date("H:i", $data["end"]),
 					"room" => $room?$room->name():t("-"),
 					"people_count" => $data["people_count"],
-					"raport_type" => $this->raport_types[$data["result_type"]],
+					"raport_type" => ($data["result_type"] and !$data["empty_result_type"])?$this->raport_types[$data["result_type"]]:t("-"),
 				);
 				if($rfp)
 				{
@@ -568,6 +568,8 @@ class rfp_manager extends class_base
 							{
 								$rfp_prop_values[$prop."_date"] = date("d.m.Y", $pval);
 								$rfp_prop_values[$prop."_time"] = date("H:i", $pval);
+								$rfp_prop_empty[$prop."_date"] = "";
+								$rfp_prop_empty[$prop."_time"] = "";
 							}
 
 							$rfp_prop_values[$prop] = $pval;
@@ -580,6 +582,8 @@ class rfp_manager extends class_base
 							$st = $inst->get_rfp_statuses();
 							$rfp_prop_values["confirmed_str"] = $st[$rfp->prop($prop)];
 							$rfp_prop_captions["confirmed_caption"] = $propdata["caption"];
+							$rfp_prop_empty["confirmed_str"] = "";
+							$rfp_prop_empty["confirmed_caption"] = "";
 						}
 					}
 					$ui = get_instance(CL_USER);
@@ -592,13 +596,52 @@ class rfp_manager extends class_base
 						"rfp_modifiedby_name" => $mper->name(),
 					));
 
+					$this->vars($rfp_prop_values);
+					$this->vars($rfp_prop_captions);
+				}
+				else
+				{
+					$rv = obj($data["reservation"]);
+					$ui = get_instance(CL_USER);
+					$cper = $ui->get_person_for_uid($rv->createdby());
+					$mper = $ui->get_person_for_uid($rv->modifiedby());
+
+					$d_name = $d_org = "";
+					foreach($rv->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$o = $c->to();
+						if($o->class_id() == CL_CRM_PERSON)
+						{
+							$d_name = $o->name();
+						}
+						elseif($o->class_id() == CL_CRM_COMPANY)
+						{
+							$d_org = $o->name();
+						}
+					}
+					$rfp_prop_empty = array(  // ugly hack for no-rfp cases
+						"rfp_createdby_uid" => $rv->createdby(),
+						"rfp_modifiedby_uid" => $rv->modifiedby(),
+						"rfp_createdby_name" => $cper->name(),
+						"rfp_modifiedby_name" => $mper->name(),
+						"data_subm_organisation" => $d_org,
+						"data_subm_name" => $d_name,
+					);
+					$rfp_prop_empty["confirmed_caption"] = t("Staatus");
+					if($rv->prop("verified"))
+					{
+						$rfp_prop_empty["confirmed_str"] = t("Kinnitatud");
+					}
+					else
+					{
+						$rfp_prop_empty["confirmed_str"] = t("T&auml;psustamisel");
+					}
+					$this->vars($rfp_prop_empty);
 				}
 				$this->vars($row_vars);
-				$this->vars($rfp_prop_values);
-				$this->vars($rfp_prop_captions);
 				
 				$row_type_var = "ROW_TYPE_".$this->tpl_subs[$data["result_type"]];
-				if($gr_by_client)
+				if($gr_by_client && $rfp)
 				{
 					$clients[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] = array(
 						"data_subm_name" => $rfp->prop("data_subm_name"),
@@ -658,6 +701,7 @@ class rfp_manager extends class_base
 										}
 									}
 									$subrow_data["sum"] = number_format($subrow_data["sum"], 2);
+									$subrow_data["product_event"] = $subrow_data["product_event"]?$subrow_data["product_event"]:t("Toitlustus");
 									if($this->can("view", $subrow_data["var"]))
 									{
 										$subrow_data["product_event"] = obj($subrow_data["var"])->name();
@@ -1619,6 +1663,7 @@ class rfp_manager extends class_base
 				$result = array_merge($result, $this->$method($rfp_ol));
 			}
 		}
+		$res_inst = get_instance(CL_RESERVATION);
 		foreach($result as $k => $data)
 		{
 			if($arr["from"] && $data["start1"] < $arr["from"])
@@ -1644,6 +1689,32 @@ class rfp_manager extends class_base
 					unset($result[$k]);
 					continue;
 				}
+			}
+			if(!$this->can("view", $data["rfp"])) // this is a separate reservation object, came from catering search function. these need to be handled differenctly. here we set the products for them
+			{
+				$rv = obj($data["reservation"]);
+				$prod_list = $res_inst->get_room_products($rv->prop("resource"));
+				foreach($prod_list->arr() as $prod_oid => $prod)
+				{
+					$prod_price = $res_inst->get_product_price(array("product" => $prod_oid, "reservation" => $rv->id()));
+					$amount = $rv->get_product_amount();
+					$discount = $res_inst->get_product_discount($rv->id());//meta("discount");
+					$sum = ($prod_price * $amount[$prod_oid]);
+					$sum = ($discount[$prod_oid] > 0 and $discount[$prod_oid])?(((100 - $discount[$prod_oid]) / 100 )* $sum):$sum;
+
+					$result[$k]["products"][$prod_oid] = array(
+						"price" => $prod_price,
+						"amount" => $amount[$prod_oid],
+						"discount" => $discount[$prod_oid],
+						"sum" => $sum,
+						"room" => $rv->prop("resource"),
+						"bronid" => $rv->id(),
+						"start1" => $data["start1"],
+						"end" => $data["end"],
+						"rfp" => false,
+					);
+				}
+
 			}
 		}
 		uasort($result, array($this, "_sort_raport_search_result"));
@@ -1746,6 +1817,7 @@ class rfp_manager extends class_base
 				continue;
 			}
 			$reservation = obj($spl[1]);
+			$already_used_rvs[] = $reservation->id();
 			if(is_array($data["from"]))
 			{
 				$_from = $reservation->prop("start1");
@@ -1779,6 +1851,25 @@ class rfp_manager extends class_base
 			}
 			$return[$reservation->id()]["products"][$product_id] = $data;
 		}
+		$list = new object_list(array(
+			"class_id" => CL_RESERVATION,
+			"oid" => new obj_predicate_not($already_used_rvs),
+		));
+		foreach($list->arr() as $oid => $obj)
+		{
+			$return[$oid] = array(
+				"start1" => $obj->prop("start1"),
+				"end" => $obj->prop("end"),
+				"room" => $obj->prop("resource"),
+				"people_count" => $obj->prop("people_count"),
+				"reservation" => $obj->id(),
+				"result_type" => RFP_RAPORT_TYPE_CATERING,
+				"empty_result_type" => true,
+				"rfp" => false,
+			);
+			// i dont put the products here right now, most of the reservations get probably filtered out anyway..
+		}
+
 		return $return;
 	}
 	
