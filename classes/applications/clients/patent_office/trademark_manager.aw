@@ -24,11 +24,20 @@
 	@property utility_model_add type=relpicker reltype=RELTYPE_ADD
 	@caption Kasuliku mudeli taotluste lisamine
 
+	@property industrial_design_add type=relpicker reltype=RELTYPE_ADD
+	@caption T&ouml;&ouml;stusdisaini taotluste lisamine
+
+	@property euro_patent_et_desc_add type=relpicker reltype=RELTYPE_ADD
+	@caption EP patendi taotluste lisamine
+
 	@property trademark_add type=relpicker reltype=RELTYPE_ADD
 	@caption Kaubam&auml;rgitaotluste lisamine
 
 	@property admins type=relpicker reltype=RELTYPE_ADMIN multiple=1
 	@caption Halduskeskkonna administraatorid
+
+	@property procurators_folder type=relpicker reltype=RELTYPE_PROCURATORS_FOLDER
+	@caption Volinike kaust
 
 
 #TAOTLUSED
@@ -71,6 +80,15 @@
 	@property exp_link type=text
 	@caption Ekspordi
 
+#VOLINIKUD
+@groupinfo name=procurators caption=Volinikud
+@default group=procurators
+	@property procurators_toolbar type=toolbar no_caption=1
+	@caption Volinike t&ouml;&ouml;riistariba
+
+	@property procurators_table type=table no_caption=1
+	@caption Volinike tabel
+
 #RELTYPES
 
 	@reltype NOT_VERIFIED_MENU clid=CL_MENU value=1
@@ -78,6 +96,9 @@
 
 	@reltype VERIFIED_MENU clid=CL_MENU value=2
 	@caption Kinnitatud taotluste kaust
+
+	@reltype PROCURATORS_FOLDER clid=CL_MENU value=6
+	@caption Volinike kaust
 
 	@reltype SERIES clid=CL_CRM_NUMBER_SERIES value=3
 	@caption Numbriseeria
@@ -94,12 +115,29 @@ class trademark_manager extends class_base
 {
 	const XML_OUT_ENCODING = "ISO-8859-1";
 
+	public $ip_classes = array(); // intellectual property classes. class_id => human readable name
+	private $ip_index = array( // intellectual property class_id => folder prop name
+			CL_PATENT => "trademark_add",
+			CL_PATENT_PATENT => "patent_add",
+			CL_UTILITY_MODEL => "utility_model_add",
+			CL_INDUSTRIAL_DESIGN => "industrial_design_add",
+			CL_EURO_PATENT_ET_DESC => "euro_patent_et_desc_add"
+		);
+
 	function trademark_manager()
 	{
 		$this->init(array(
 			"tpldir" => "applications/patent",
 			"clid" => CL_TRADEMARK_MANAGER
 		));
+
+		$this->ip_classes = array(
+			CL_PATENT => t("Kaubam&auml;rk"),
+			CL_PATENT_PATENT => t("Patent"),
+			CL_UTILITY_MODEL => t("Kasulik mudel"),
+			CL_INDUSTRIAL_DESIGN => t("T&ouml;&ouml;stusdisain"),
+			CL_EURO_PATENT_ET_DESC => t("EP patent")
+		);
 	}
 
 	function get_property($arr)
@@ -150,12 +188,218 @@ class trademark_manager extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	public function callback_on_load($arr)
+	{
+		if (isset($arr["request"]["group"]) and $arr["request"]["group"] === "procurators" and $this->can("view", $arr["request"]["id"]))
+		{
+			$o = new object($arr["request"]["id"]);
+			$folder = $o->prop("procurators_folder");
+
+			foreach ($this->ip_index as $clid => $value)
+			{
+				try
+				{
+					$brother_folder = $this->get_procurator_folder_oid($o, $clid);
+
+					if ($folder === $brother_folder)
+					{
+						exit(t("Main procurators' folder can't be same as procurators' folder for specific application type"));
+					}
+				}
+				catch (Exception $e)
+				{
+				}
+			}
+		}
+	}
+
+	public function _get_procurators_toolbar($arr)
+	{
+		$return = PROP_OK;
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$procurators_folder = $arr["obj_inst"]->prop("procurators_folder");
+		if ($this->can("view", $procurators_folder))
+		{
+			$add_procurator_url = $this->mk_my_orb("new",array(
+				"parent" => $procurators_folder,
+				"return_url" => get_ru()
+			), "crm_person");
+			$tb->add_button(array(
+				'name' => 'add',
+				'img' => 'new.gif',
+				'tooltip' => t('Lisa volinik'),
+				'url' => $add_procurator_url
+			));
+		}
+
+		$tb->add_button(array(
+			'name' => 'save',
+			'action' => 'submit',
+			'img' => 'save.gif',
+			'tooltip' => t('Salvesta')
+		));
+
+		$tb->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			'action' => 'delete_procurators',
+			'confirm' => t("Kas oled kindel, et soovid valitud volinikud s&uuml;steemist kustudada?")
+		));
+		return $return;
+	}
+
+	public function _get_procurators_table($arr)
+	{
+		$return = PROP_OK;
+		$procurators_folder = $arr["obj_inst"]->prop("procurators_folder");
+
+		if (!$this->can("view", $procurators_folder))
+		{
+			$arr["prop"]["error"] = t("Volinike kaust m&auml;&auml;ramata v&otilde;i puudub &otilde;igus seda vaadata");
+			$return = PROP_ERROR;
+			return $return;
+		}
+
+		$t = $arr["prop"]["vcl_inst"];
+		$this->init_procurators_table($t);
+
+		$procurators = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"parent" => $procurators_folder,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+
+		$procurators_data = array();
+		$folders = array();
+
+		foreach ($this->ip_classes as $clid => $name)
+		{
+			try
+			{
+				$folders[$clid] = $this->get_procurator_folder_oid($arr["obj_inst"], $clid);
+
+				// get procurators for this ip type
+				$procurators_data[$clid] = array();
+				$procurators_tmp = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"parent" => $folders[$clid],
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$procurators_tmp = $procurators_tmp->arr();
+				foreach ($procurators_tmp as $oid => $o)
+				{
+					$procurators_data[$clid][] = $o->brother_of();
+				}
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+
+		// fill table
+		foreach ($procurators->arr() as $oid => $procurator)
+		{
+			$args = array(
+				"name" => $procurator->name(),
+				"oid" => $oid
+			);
+
+			foreach ($this->ip_classes as $clid => $name)
+			{ // checkboxes for all ip types
+				$is_applicable = in_array($oid, $procurators_data[$clid]);
+
+				if ($folders[$clid])
+				{
+					$args["class" . $clid] = html::checkbox(array(
+						"name" => "pat_procurator_{$clid}[" . $oid . "]",
+						"value" => 1,
+						"checked" => $is_applicable,
+					));
+				}
+			}
+
+			$t->define_data($args);
+		}
+		return $return;
+	}
+
+	private function init_procurators_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Volinik"),
+			"sortable" => 1
+		));
+
+		foreach ($this->ip_classes as $clid => $name)
+		{
+			$t->define_field(array(
+				"name" => "class" . $clid,
+				"caption" => "<a href='javascript:selall(\"pat_procurator_{$clid}\")'>{$name}</a>",
+				"align" => "center"
+			));
+		}
+
+		$t->define_chooser(array(
+			"caption" => t("Vali"),
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	public function _set_procurators_table($arr)
+	{
+		$return = PROP_OK;
+
+		foreach ($this->ip_classes as $clid => $cl_name)
+		{
+			try
+			{
+				$folder = $this->get_procurator_folder_oid($arr["obj_inst"], $clid);
+				$procurator_brothers = new object_list(array(
+					"class_id" => $clid,
+					"parent" => $folder,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$procurator_brothers = $procurator_brothers->arr();
+
+				// remove procurator from this ip type
+				foreach ($procurator_brothers as $procurator_brother_oid => $procurator_brother)
+				{
+					$procurator = $procurator_brother->get_original();
+					if (!array_key_exists($procurator->id(), $arr["request"]["pat_procurator_{$clid}"]))
+					{
+						$procurator_brother->delete();
+					}
+				}
+
+				// add
+				foreach ($arr["request"]["pat_procurator_{$clid}"] as $procurator_oid => $value)
+				{
+					if ($this->can("view", $procurator_oid))
+					{
+						$procurator = new object($procurator_oid);
+						$procurator->create_brother($folder);
+					}
+				}
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+
+		return $return;
+	}
+
 /*
 - vasakus puus: Kinnitamata taotlused, Kinnitatud taotlused
 
 */
-
-
 	function _get_trademark_tr($arr)
 	{
 		classload("core/icons");
@@ -575,7 +819,7 @@ class trademark_manager extends class_base
 			$nr = html::href(array(
 				"caption" => $nr_str,
 				"url" => "#",//html::get_change_url($o->id(), array("return_url" => $arr["post_ru"])),
-				"onclick" => 'javascript:window.open("'.aw_ini_get("baseurl").'/'.$o->id().'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+				"onclick" => 'javascript:window.open("'.aw_ini_get("baseurl").'/'.$o->id(). '?print=1","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			));
 
 			$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
@@ -840,6 +1084,15 @@ class trademark_manager extends class_base
 	}
 
 	/**
+		@attrib name=delete_procurators
+	**/
+	function delete_procurators($arr)
+	{
+		object_list::iterate_list($arr["sel"], "delete");
+		return $arr["post_ru"];
+	}
+
+	/**
 		@attrib name=delete_applications
 	**/
 	function delete_applications($arr)
@@ -1015,7 +1268,7 @@ class trademark_manager extends class_base
 	}
 
 	//replace reserved characters
-	function rere($string)
+	public static function rere($string)
 	{
 		$string = str_replace("&" , "&amp;" , $string);
 		$string = str_replace("<" , "&lt;" , $string);
@@ -1025,6 +1278,38 @@ class trademark_manager extends class_base
 		$string = str_replace("'" , "&apos;" , $string);
 		$string = iconv(trademark_manager::XML_OUT_ENCODING, "UTF-8", $string);
 		return $string;
+	}
+
+	public function get_procurator_folder_oid($o, $clid)
+	{
+		// find procurator parent folder for this ip type
+		$tmp = $o->prop($this->ip_index[$clid]);
+
+		if (!$this->can("view", $tmp))
+		{
+			throw new aw_exception("No add document defined");
+		}
+
+		$tmp = new object($tmp);
+		$tmp = $tmp->connections_from(array(
+			"class_id" => constant("CL_" . strtoupper($this->ip_index[$clid]))
+		));
+
+		if (!count($tmp))
+		{
+			throw new aw_exception("No add object defined");
+		}
+
+		$tmp = reset($tmp);
+		$tmp = $tmp->to();
+		$folder = $tmp->prop("procurator_menu");
+
+		if (!is_oid($folder))
+		{
+			throw new aw_exception("No folder defined");
+		}
+
+		return $folder;
 	}
 }
 ?>

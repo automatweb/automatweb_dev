@@ -51,6 +51,26 @@
             <caption>Kasuliku mudeli taotluste lisamine</caption>
       </property>
       <property>
+            <name>industrial_design_add</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADD</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;stusdisaini taotluste lisamine</caption>
+      </property>
+      <property>
+            <name>euro_patent_et_desc_add</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADD</reltype>
+            <caption>EP patendi taotluste lisamine</caption>
+      </property>
+      <property>
             <name>trademark_add</name>
             <table>objects</table>
             <group>general</group>
@@ -70,6 +90,16 @@
             <reltype>RELTYPE_ADMIN</reltype>
             <multiple>1</multiple>
             <caption>Halduskeskkonna administraatorid</caption>
+      </property>
+      <property>
+            <name>procurators_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROCURATORS_FOLDER</reltype>
+            <caption>Volinike kaust</caption>
       </property>
       <property>
             <name>objects_tb</name>
@@ -184,6 +214,28 @@
             <type>text</type>
             <caption>Ekspordi</caption>
       </property>
+      <property>
+            <name>procurators_toolbar</name>
+            <table>objects</table>
+            <group>procurators</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Volinike t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>procurators_table</name>
+            <table>objects</table>
+            <group>procurators</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Volinike tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TRADEMARK_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -199,6 +251,9 @@
             <export>
                   <caption>Eksport</caption>
             </export>
+            <procurators>
+                  <caption>Volinikud</caption>
+            </procurators>
       </groupinfo>
       <reltypes>
             <NOT_VERIFIED_MENU>
@@ -211,6 +266,11 @@
                   <value>2</value>
                   <caption>Kinnitatud taotluste kaust</caption>
             </VERIFIED_MENU>
+            <PROCURATORS_FOLDER>
+                  <clid>CL_MENU</clid>
+                  <value>6</value>
+                  <caption>Volinike kaust</caption>
+            </PROCURATORS_FOLDER>
             <SERIES>
                   <clid>CL_CRM_NUMBER_SERIES</clid>
                   <value>3</value>

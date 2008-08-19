@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="delete_procurators">
+			<function name="delete_procurators">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="verify" all_args="1">
 			<function name="verify">
 				<arguments>

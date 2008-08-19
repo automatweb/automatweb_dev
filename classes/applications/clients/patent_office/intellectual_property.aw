@@ -471,7 +471,7 @@ abstract class intellectual_property extends class_base
 			$data["print"] = "<script language='javascript'>
 				window.print();
 				setTimeout('window.location.href=\"".$ref_url."\"',5000);
-			</script>;";
+			</script>";
 		}
 		else
 		{
