@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.54 2008/08/19 07:58:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.55 2008/08/19 08:36:13 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -44,6 +44,9 @@
 
 @property resources_price_rooms type=relpicker multiple=1 reltype=RELTYPE_RESOURCE_ROOMS field_meta method=serialize
 @caption Tellimuste ruumid
+
+@property contact_preference_folder type=relpicker multiple=1 reltype=RELTYPE_FOLDER field=meta method=serialize
+@caption Kontakteerumise eelistuste kaust
 
 @property default_table type=table no_caption=1 store=no
 

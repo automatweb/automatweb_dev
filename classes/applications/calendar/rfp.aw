@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.100 2008/08/19 08:09:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.101 2008/08/19 08:36:13 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -558,10 +558,14 @@ class rfp extends class_base
 
 		switch($prop["name"])
 		{
+			case "data_subm_contact_preference":
+				foreach($this->rfpm->get_contact_preferences() as $oid => $obj)
+				{
+					$prop["options"][$oid] = $obj->trans_get_val("name");
+				}
+				break;
 			case "data_gen_package":
-				$rfpm = get_instance(CL_RFP_MANAGER);
-				$rfpm = obj($rfpm->get_sysdefault());
-				$prc = $rfpm->get_packages();
+				$prc = $this->rfpm->get_packages();
 				foreach($prc as $rp => $prices)
 				{
 					$rp = obj($rp);
@@ -574,9 +578,7 @@ class rfp extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$rfpm = get_instance(CL_RFP_MANAGER);
-				$rfpm = obj($rfpm->get_sysdefault());
-				$prc = $rfpm->get_packages();
+				$prc = $this->rfpm->get_packages();
 				$dc = obj($rfpm->prop("default_currency"));
 				$prop["options"][] = t("-- Vali --");
 				foreach($prc[$arr["obj_inst"]->prop("data_gen_package")]["prices"] as $rp => $prices)

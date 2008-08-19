@@ -146,5 +146,22 @@ class rfp_manager_obj extends _int_object
 	{
 		$this->set_meta("resource_default_prices", $data);
 	}
+
+	/** Get contact preferences from their folder
+		@attrib api=1
+		@returns
+			Array of CL_META objects
+			array(
+				oid => obj
+			)
+	 **/
+	public function get_contact_preferences()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_META,
+			"parent" => $this->prop("contact_preference_folder"),
+		));
+		return $ol->arr();
+	}
 }
 ?>

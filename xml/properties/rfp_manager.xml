@@ -123,6 +123,17 @@
             <caption>Tellimuste ruumid</caption>
       </property>
       <property>
+            <name>contact_preference_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontakteerumise eelistuste kaust</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
