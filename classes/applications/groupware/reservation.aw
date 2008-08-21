@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.127 2008/08/19 07:58:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.128 2008/08/21 09:02:27 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1753,7 +1753,7 @@ class reservation extends class_base
 
 			for($i = $room->prop("time_from"); $i <= $room->prop("time_to"); $i += $room->prop("time_step"))
 			{
-				$arr["prop"]["options"][$i] = $i;
+				$arr["prop"]["options"][(string)$i] = $i;
 			}
 			$arr["prop"]["post_append_text"] = $rts[$room->prop("time_unit")].$arr["prop"]["post_append_text"];
 			$arr["prop"]["options"][0] = t("--vali--");
