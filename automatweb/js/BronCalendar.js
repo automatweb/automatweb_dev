@@ -30,7 +30,7 @@ function doBronExec(
 	{
 		cancel_bron_popup_dialog();
 
-		if (intRoomReservationLength===false)
+		if (typeof(intRoomReservationLength)=="undefined")
 		{
 			sel = document.getElementById("room_reservation_length");
 			intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
@@ -67,8 +67,8 @@ function doBronExec(
 function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProduct)
 {
 	isClicked = intCalendarIntervall;
-	
-	if (intRoomReservationLength===false)
+
+	if (typeof(intRoomReservationLength)=="undefined")
 	{
 		sel = document.getElementById("room_reservation_length");
 		intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
@@ -304,4 +304,4 @@ function cancel_bron_popup_dialog(el)
     {
 	current_popup.style.display = 'none';
     }
-}
+} 
