@@ -31,6 +31,14 @@
             <caption>CSV Faili tulpade eraldaja</caption>
       </property>
       <property>
+            <name>separator_legend</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>text</type>
+      </property>
+      <property>
             <name>mktbl</name>
             <table>objects</table>
             <field>meta</field>

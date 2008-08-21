@@ -16,6 +16,8 @@
 	@property csv_separator type=textbox size=1
 	@caption CSV Faili tulpade eraldaja
 
+	@property separator_legend type=text
+
 @default group=mktbl
 
 	@property mktbl type=table store=no no_caption=1
@@ -63,6 +65,10 @@ class object_export extends class_base
 				{
 					$prop["value"] = ",";
 				}
+				break;
+
+			case "separator_legend":
+				$prop["value"] = t("/t - tab");
 				break;
 
 			case "mktbl":
@@ -384,11 +390,12 @@ class object_export extends class_base
 			}
 			$t->define_data($dat);
 		}
+		
 		if ($arr["request"]["do_exp"] == 1)
 		{
 			header("Content-type: application/csv; charset=UTF-8");
 			header("Content-disposition: inline; filename=eksport.csv;");
-			die($t->get_csv_file($sep == "" ? "," : $sep));
+			die($t->get_csv_file($this->_get_sep($sep)));
 		}
 		elseif($arr["request"]["xls"] == 1)
 		{
@@ -396,6 +403,23 @@ class object_export extends class_base
 			header("Content-disposition: inline; filename=eksport.xls;");
 			die($t->draw());
 		}
+	}
+
+	function _get_sep($sep)
+	{
+		switch($sep)
+		{
+			case "":
+				$ret = ",";
+				break;
+			case "/t":
+				$ret = "	";
+				break;
+			default:
+				$ret = $sep;
+				break;
+		}
+		return $ret;
 	}
 }
 ?>
