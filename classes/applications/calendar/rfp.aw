@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.103 2008/08/21 08:04:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.104 2008/08/21 08:16:07 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2191,7 +2191,7 @@ class rfp extends class_base
 		$client_name = strtr($arr["obj_inst"]->prop("data_subm_name"), " ", "_");
 		$arrival = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
 		$dep = $arr["obj_inst"]->prop("data_gen_departure_date_admin");
-		$date = (date("Ymd", $arrival) == date("Ydm", $dep))?date("dmY",$arrival):date("dmY", $arrival)."-".date("dmY", $dep);
+		$date = (date("Ymd", $arrival) == date("Ymd", $dep))?date("dmY",$arrival):date("dmY", $arrival)."-".date("dmY", $dep);
 		$orgname = strtr(htmlentities($arr["obj_inst"]->prop("data_subm_organisation")), array(
 			"&Auml;" => "A",
 			"&auml;" => "a",
