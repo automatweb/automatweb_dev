@@ -257,6 +257,7 @@ class relationmgr extends aw_template
 		$this->read_template("rel_search.tpl");
 		$req = safe_array($arr["request"]);
 		unset($req["action"]);
+		unset($req["return_url"]);
 		$reforb = $this->mk_reforb("change", array("no_reforb" => 1, "search" => 1) + $req, $req["class"]);
 		$defcs = array(CL_IMAGE => "image.default_folder", CL_FILE => "file.default_folder", CL_EXTLINK => "links.default_folder");
 		$def_str = "";
@@ -725,7 +726,11 @@ class relationmgr extends aw_template
 				))
 			);
 			$tb->add_cdata('<select NAME="aselect" style="width:200px"><script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT></select>');
-			$ru_var = urlencode(get_ru());
+			$ru_var = get_ru();
+			if($arr["request"]["searched"] == 1)
+			{
+				$ru_var = urlencode($arr["request"]["return_url"]);
+			}
 			$tb->add_cdata('<input TYPE="hidden" VALUE="'.$ru_var.'" NAME="return_url" />');
 			$tb->add_button(array(
 				"name" => "new",
