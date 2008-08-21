@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.63 2008/08/21 12:39:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.64 2008/08/21 13:24:02 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -50,10 +50,10 @@
 @property contact_preference_folder type=relpicker multiple=1 reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Kontakteerumise eelistuste kaust
 
-@property city_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
+@property city_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Linnade kaust
 
-@property hotels_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
+@property hotels_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Hotellide kaust
 
 @property default_table type=table no_caption=1 store=no
@@ -1750,7 +1750,7 @@ class rfp_manager extends class_base
 				foreach($prod_list->arr() as $prod_oid => $prod)
 				{
 					$amount = $rv->get_product_amount();
-					if(!$amount[$prod_id])
+					if(!$amount[$prod_oid])
 					{
 						continue;
 					}
