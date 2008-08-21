@@ -134,6 +134,26 @@
             <caption>Kontakteerumise eelistuste kaust</caption>
       </property>
       <property>
+            <name>city_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Linnade kaust</caption>
+      </property>
+      <property>
+            <name>hotels_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Hotellide kaust</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
@@ -288,6 +308,28 @@
             <store>no</store>
             <field>raports_search_rfp_submitter</field>
             <caption>Klient</caption>
+      </property>
+      <property>
+            <name>raports_search_rfp_city</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>select</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rfp_city</field>
+            <caption>Linn</caption>
+      </property>
+      <property>
+            <name>raports_search_rfp_hotel</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>select</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rfp_hotel</field>
+            <caption>Hotell</caption>
       </property>
       <property>
             <name>raports_search_submit</name>
@@ -498,6 +540,13 @@
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
+      <tableinfo>
+            <aw_rfp_manager>
+                  <index>aw_oid</index>
+                  <master_index>oid</master_index>
+                  <master_table>objects</master_table>
+            </aw_rfp_manager>
+      </tableinfo>
       <reltypes>
             <REDIR_DOC>
                   <value>1</value>

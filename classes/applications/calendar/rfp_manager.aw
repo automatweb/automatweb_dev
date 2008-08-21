@@ -1,10 +1,12 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.62 2008/08/21 07:22:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.63 2008/08/21 12:39:52 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
 @classinfo syslog_type=ST_RFP_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo allow_rte=2
+
+@tableinfo aw_rfp_manager index=aw_oid master_index=oid master_table=objects
 
 @default table=objects
 @default group=general
@@ -47,6 +49,12 @@
 
 @property contact_preference_folder type=relpicker multiple=1 reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Kontakteerumise eelistuste kaust
+
+@property city_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
+@caption Linnade kaust
+
+@property hotels_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
+@caption Hotellide kaust
 
 @property default_table type=table no_caption=1 store=no
 
@@ -97,6 +105,12 @@
 
 			@property raports_search_rfp_submitter type=textbox parent=raports_search captionside=top store=no
 			@caption Klient
+
+			@property raports_search_rfp_city type=select parent=raports_search captionside=top store=no
+			@caption Linn
+
+			@property raports_search_rfp_hotel type=select parent=raports_search captionside=top store=no
+			@caption Hotell
 
 			@property raports_search_submit type=submit parent=raports_search store=no no_caption=1
 			@caption Otsi
@@ -282,6 +296,28 @@ class rfp_manager extends class_base
 					"0" => t("K&otilde;ik"),
 				);
 				$prop["options"] += $rfp->get_rfp_statuses();
+				break;
+			case "raports_search_rfp_city":
+				$ol = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $this->rfpm->prop("city_folder"),
+				));
+				$prop["options"][0] = t("-- K&otilde;ik --");
+				foreach($ol->arr() as $obj)
+				{
+					$prop["options"][$obj->id()] = $obj->name();
+				}
+				break;
+			case "raports_search_rfp_hotel":
+				$ol = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $this->rfpm->prop("hotels_folder"),
+				));
+				$prop["options"][0] = t("-- K&otilde;ik --");
+				foreach($ol->arr() as $obj)
+				{
+					$prop["options"][$obj->id()] = $obj->name();
+				}
 				break;
 
 			// search end
@@ -478,6 +514,8 @@ class rfp_manager extends class_base
 			"rooms" => (is_array($arr["request"]["raports_search_rooms"]) AND count($arr["request"]["raports_search_rooms"]))?$arr["request"]["raports_search_rooms"]:NULL,
 			"rfp_status" => $arr["request"]["raports_search_rfp_status"],
 			"client" => $arr["request"]["raports_search_rfp_submitter"],
+			"rfp_city" => $arr["request"]["raports_search_rfp_city"],
+			"rfp_hotel" => $arr["request"]["raports_search_rfp_hotel"],
 		));
 
 		$filters = false;
@@ -1232,7 +1270,7 @@ class rfp_manager extends class_base
 		}
 
 		// raports search 
-		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter");
+		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel");
 		foreach($todo as $do)
 		{
 			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
@@ -1644,6 +1682,8 @@ class rfp_manager extends class_base
 		{
 			$rfps["confirmed"] = $arr["rfp_status"];
 		}
+		$rfps["CL_RFP.data_gen_city"] = $arr["rfp_city"]?$arr["rfp_city"]:array();
+		$rfps["CL_RFP.data_gen_hotel"] = $arr["rfp_hotel"]?$arr["rfp_hotel"]:array();
 
 		$rfp_ol = new object_list($rfps);
 			
@@ -1991,6 +2031,31 @@ class rfp_manager extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function do_db_upgrade($t, $f, $err, $sql)
+	{
+		$fields = array(
+			"city_folder" => "int",
+			"hotels_folder" => "int",
+		);
+		
+		if($t == "aw_rfp_manager" && !$f)
+		{
+			$this->db_query("CREATE TABLE aw_rfp_manager (`aw_oid` int primary key)");
+			return true;
+		}
+		if($t and $f)
+		{
+			foreach($fields as $field => $type)
+			{
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => $type
+				));
+				return true;
+			}
+		}
 	}
 }
 ?>

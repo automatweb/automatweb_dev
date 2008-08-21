@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.104 2008/08/21 08:16:07 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.105 2008/08/21 12:39:52 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -124,10 +124,10 @@
 			@property data_gen_date_comments type=textbox
 			@caption Kuup&auml;evade kommentaar
 
-			@property data_gen_city type=relpicker reltype=RELTYPE_TOWN
+			@property data_gen_city type=relpicker field=data_gen_city reltype=RELTYPE_TOWN
 			@caption Soovitud linn
 
-			@property data_gen_hotel type=relpicker reltype=RELTYPE_LOCATION
+			@property data_gen_hotel type=relpicker field=data_gen_city reltype=RELTYPE_LOCATION
 			@caption Soovitud hotell
 
 			@property archived type=checkbox ch_value=1 default=0
@@ -558,6 +558,26 @@ class rfp extends class_base
 
 		switch($prop["name"])
 		{
+			case "data_gen_city":
+				$list = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $this->rfpm->prop("city_folder"),
+				));
+				foreach($list->arr() as $obj)
+				{
+					$prop["options"][$obj->id()] = $obj->name();
+				}
+				break;
+			case "data_gen_hotel":
+				$list = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $this->rfpm->prop("hotels_folder"),
+				));
+				foreach($list->arr() as $obj)
+				{
+					$prop["options"][$obj->id()] = $obj->name();
+				}
+				break;
 			case "data_subm_contact_preference":
 				foreach($this->rfpm->get_contact_preferences() as $oid => $obj)
 				{
