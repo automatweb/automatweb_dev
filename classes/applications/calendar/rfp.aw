@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.102 2008/08/21 06:36:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.103 2008/08/21 08:04:20 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2064,7 +2064,7 @@ class rfp extends class_base
 	}
 
 
-	function _get_room_types()
+	function _get_room_types($lang = false)
 	{
 		$rfp_admin = get_instance(CL_RFP_MANAGER);
 		$s = $rfp_admin->get_sysdefault();
@@ -2089,7 +2089,16 @@ class rfp extends class_base
 			));
 			foreach($ol->arr() as $oid => $obj)
 			{
-				$ret[$oid] = $obj->name();
+				if($lang)
+				{
+					$obj_trans = $obj->meta("translations");
+					$trans_name = $obj_trans[$lang]["name"];
+				}
+				else
+				{
+					$trans_name = false;
+				}
+				$ret[$oid] = $trans_name?$trans_name:$obj->trans_get_val("name");
 			}
 			return $ret;
 		}
@@ -2311,9 +2320,16 @@ class rfp extends class_base
 		if($this->can("view", $package_id))
 		{
 			$package_o = obj($package_id);
-			$package = $package_o->name();
+			$pack_trans = $package_o->meta("translations");
+			$package = ($_t = $pack_trans[$default_lang]["name"])?$_t:$package_o->trans_get_val("name");
 		}
-		$tables = $arr["obj_inst"]->trans_get_val("data_mf_table_form.name");
+		$tables = $arr["obj_inst"]->prop("data_mf_table_form");
+		if($this->can("view", $tables))
+		{
+			$tables = obj($tables);
+			$tab_trans = $tables->meta("translations");
+			$tables = ($_t = $tab_trans[$default_lang]["name"])?$_t:$tables->trans_get_val("name");
+		}
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_RESERVATION",
 		));
@@ -2364,7 +2380,8 @@ class rfp extends class_base
 			if($roomid = $rv->prop("resource"))
 			{
 				$ro = obj($roomid);
-				$room = $ro->name();
+				$ro_trans = $ro->meta("translations");
+				$room = ($_t = $ro_trans[$default_lang]["name"])?$_t:$ro->trans_get_val("name");
 				
 				
 				// lets check for min hours and its extra prices
@@ -2618,7 +2635,8 @@ class rfp extends class_base
 				if(is_oid($varid))
 				{
 					$var = obj($varid);
-					$varname = $var->trans_get_val("name");
+					$var_trans = $var->meta("translations");
+					$varname = ($_t = $var_trans[$default_lang]["name"])?$_t:$var->trans_get_val("name");
 				}
 				$room = obj($prod["room"]);
 				//gen nice event/room combo
@@ -2631,6 +2649,8 @@ class rfp extends class_base
 				{
 					$evt_room[] = $room->name();
 				}
+				$product_trans = $po->meta("translations");
+				$room_trans = $room->meta("translations");
 				$this->vars(array(
 					"prod_from_date" => date("d.m.Y", $prod["start1"]),
 					"prod_to_date" => date("d.m.Y", $prod["end"]),
@@ -2640,12 +2660,12 @@ class rfp extends class_base
 					"prod_to_minute" => date("i", $prod["end"]),
 					"prod_event" => $varname,
 					"prod_count" => $prod["amount"],
-					"prod_prod" => $po->trans_get_val("name"),
+					"prod_prod" => ($_t = $product_trans[$default_lang]["name"])?$_t:$po->trans_get_val("name"),
 					"prod_price" => $this->_format_price($prod["price"]),
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
 					"prod_event_and_room" => join(", ",$evt_room),
-					"prod_room_name" => $room->trans_get_val("name"),
+					"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
 				));
 				$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
 				$prod_total += round($this->_format_price($prod["sum"]));
@@ -2670,7 +2690,7 @@ class rfp extends class_base
 		{
 			$housing_total = 0;
 			$hss = "";
-			$types = $this->_get_room_types();
+			$types = $this->_get_room_types($default_lang);
 			foreach($housing as $rooms)
 			{
 				$this->vars(array(
