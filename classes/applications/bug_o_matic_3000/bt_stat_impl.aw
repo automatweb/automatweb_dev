@@ -638,7 +638,30 @@ class bt_stat_impl extends core
 	function _get_proj_gantt($arr)
 	{
 		$proj_list = $this->_proj_gantt_proj_list();
+
+		$rv = $this->_get_my_bug_list_with_times($arr["obj_inst"]);
+		foreach($rv as $item)
+		{
+			if ($this->can("view", $item["b"]->project) && !isset($proj_list[$item["b"]->project]))
+			{
+				$proj_list[$item["b"]->project] = obj($item["b"]->project);
+			}
+		}
 		$this->_proj_gantt_draw($arr, $proj_list);
+	}
+
+	private function _get_display_person()
+	{
+		if ($this->can("view", $_GET["filt_p"]))
+		{
+			$p = obj($_GET["filt_p"]);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+		}
+		return $p;
 	}
 
 	private function _proj_gantt_draw($arr, $project_list)
@@ -651,15 +674,7 @@ class bt_stat_impl extends core
 
 		$col_length = $gt_days_in_col*24*60*60;
 
-		if ($this->can("view", $arr["request"]["filt_p"]))
-		{
-			$p = obj($arr["request"]["filt_p"]);
-		}
-		else
-		{
-			$u = get_instance(CL_USER);
-			$p = obj($u->get_current_person());
-		}
+		$p = $this->_get_display_person();
 
 		$subdivisions = 1;
 
@@ -719,15 +734,21 @@ class bt_stat_impl extends core
 
 	private function _proj_gantt_proj_list()
 	{
+		$p = $this->_get_display_person();
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"CL_PROJECT.RELTYPE_PARTICIPANT" => get_current_person()->id(),
+			"CL_PROJECT.RELTYPE_PARTICIPANT" => $p->id(),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
 			"state" => 1
 		));
-		return $ol->arr();
+		$rv = array();
+		foreach($ol->arr() as $p)
+		{
+			$rv[$p->id] = $p;
+		}
+		return $rv;
 	}
 
 	private function _proj_gantt_get_limits($project_list)
@@ -756,7 +777,17 @@ class bt_stat_impl extends core
 
 	private function _proj_bug_gantt_draw($arr, $project_list)
 	{
+		$rv = $this->_get_my_bug_list_with_times($arr["obj_inst"]);
+		foreach($rv as $item)
+		{
+			if ($this->can("view", $item["b"]->project) && !isset($project_list[$item["b"]->project]))
+			{
+				$project_list[$item["b"]->project] = obj($item["b"]->project);
+			}
+		}
 		list($range_start, $range_end) = $this->_proj_gantt_get_limits($project_list);
+		$range_end = min($range_end, time() + 3 * 30 * 24 * 3600);
+
 		$chart = get_instance ("vcl/gantt_chart");
 
 		$columns = 7;
@@ -764,15 +795,7 @@ class bt_stat_impl extends core
 
 		$col_length = $gt_days_in_col*24*60*60;
 
-		if ($this->can("view", $arr["request"]["filt_p"]))
-		{
-			$p = obj($arr["request"]["filt_p"]);
-		}
-		else
-		{
-			$u = get_instance(CL_USER);
-			$p = obj($u->get_current_person());
-		}
+		$p = $this->_get_display_person();
 
 		$subdivisions = 1;
 
@@ -795,13 +818,25 @@ class bt_stat_impl extends core
 
 		foreach($project_list as $p)
 		{
+			$title = parse_obj_name($p->name())."<br>( ".date("d.m.Y H:i", $p->start)." - ".date("d.m.Y H:i", $p->end)." ) ";
+			$bar = array (
+				"id" => $p->id (),
+				"row" => $p->id (),
+				"start" => $p->start,
+				"length" => $p->end - $p->start,
+				"title" => $title,
+				"colour" => "#ff0000",
+			);
+			$chart->add_bar ($bar);
+
 			foreach(safe_array($proj2bug[$p->id]) as $b)
 			{
+				$time_data = $rv[$b->id];
 				$bar = array (
 					"id" => $b->id (),
 					"row" => $p->id (),
-					"start" => $b->deadline,
-					"length" => max(($b->num_hrs_guess > 0 ? ($b->num_hrs_guess*3600): 3600*2), $onepixeltime*2),
+					"start" => $time_data["start"],
+					"length" => max($onepixeltime*2, $time_data["end"] - $time_data["start"]),
 					"title" => parse_obj_name($b->name()),
 					"colour" => "#00ff00",
 				);
@@ -848,7 +883,7 @@ class bt_stat_impl extends core
 		$bug_list = new object_list(array(
 			"class_id" => CL_BUG,
 			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS,BUG_FATALERROR,BUG_TESTING,BUG_VIEWING),
-			"CL_BUG.who.name" => get_current_person()->name(),
+			"CL_BUG.who.name" => $this->_get_display_person()->name(),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"project" => $p_ids
@@ -859,6 +894,103 @@ class bt_stat_impl extends core
 			$rv[$b->project][] = $b;
 		}
 		return $rv;
+	}
+
+	private function _get_my_bug_list_with_times($obj_inst)
+	{
+		classload("core/date/date_calc");
+		$rv = array();
+
+		$p = $this->_get_display_person();
+
+		$i = get_instance(CL_BUG_TRACKER);
+		if (is_object($obj_inst))
+		{
+			$i->combined_priority_formula = $obj_inst->prop("combined_priority_formula"); // required by get_undone_bugs_by_p(), __gantt_sort()
+		}
+
+
+		$range_start = get_day_start();
+
+		$gt_list = $i->get_undone_bugs_by_p($p);
+		$bi = get_instance(CL_BUG);
+
+		$i->day2wh = $i->get_person_whs($p);
+
+		$i->gt_start = $i->get_next_avail_time_from(time(), $i->day2wh);
+		$i->gt_days_in_col = 1;
+		
+		$sect = $i->get_sect();
+		$curday = 0;
+		$i->job_count = count($gt_list);
+		foreach ($gt_list as $gt)
+		{
+			$i->gt_start = $i->get_next_avail_time_from($i->gt_start, $i->day2wh);
+			if ($gt->prop("num_hrs_guess") > 0)
+			{
+				$length = $gt->prop("num_hrs_guess") * 3600 - ($gt->prop("num_hrs_real") * 3600);
+				if ($length < 0)
+				{
+					$length = 3600;
+				}
+			}
+			else
+			{
+				$length = 7200;
+			}
+			$i->job_hrs += $length;
+			$i->check_sect($sect, $curday);
+			$cdata = $i->get_gantt_bug_colors($gt);
+			$color = $cdata["color"];
+			if ($length > $sect[$curday]["len"])
+			{
+				// split into parts
+				$tot_len = $length;
+				$length = $sect[$curday]["len"];
+				$remaining_len = $tot_len - $length;
+				$title = parse_obj_name($gt->name())."<br>( ".date("d.m.Y H:i", $i->gt_start)." - ".date("d.m.Y H:i", $i->gt_start + $length)." ) ";
+				$this->_add_rv($rv, $gt, $i->gt_start, $length);
+				$i->gt_start += $length;
+				$curday++;
+
+				while($remaining_len > 0)
+				{
+					$i->check_sect($sect, $curday);
+					$length = min($remaining_len, $sect[$curday]["len"]);
+					$remaining_len -= $length;
+					$i->gt_start = $i->get_next_avail_time_from($i->gt_start, $i->day2wh);
+
+					$this->_add_rv($rv, $gt, $i->gt_start, $length);
+
+					$i->gt_start += $length;
+					$sect[$curday]["len"] -= $length;
+				}
+			}
+			else
+			{
+				$sect[$curday]["len"] -= $length;
+				$this->_add_rv($rv, $gt, $i->gt_start, $length);
+
+				$i->gt_start += $length;
+			}
+		}
+		return $rv;
+	}
+
+	private function _add_rv(&$rv, $gt, $start, $len)
+	{
+		if (!isset($rv[$gt->id]))
+		{
+			$rv[$gt->id] = array(
+				"start" => $start,
+				"end" => $start + $len,
+				"b" => $gt
+			);
+		}
+		else
+		{
+			$rv[$gt->id]["end"] = $start + $len;
+		}
 	}
 }
 

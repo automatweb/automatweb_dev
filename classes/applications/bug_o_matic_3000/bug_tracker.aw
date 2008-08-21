@@ -159,7 +159,7 @@ define("BUG_STATUS_CLOSED", 5);
 @default group=charts
 @default group=gantt_chart
 
-	@property gantt_p type=text store=no
+	@property gantt_p type=text store=no group=gantt_chart,proj_gantt
 	@caption Kelle buge n&auml;idata
 
 	@property gantt_end type=date_select store=no
@@ -391,9 +391,6 @@ define("BUG_STATUS_CLOSED", 5);
 	@property stat_proj_detail_b type=table store=no no_caption=1
 
 @default group=proj_gantt
-
-	@property proj_gantt_p type=text store=no
-	@caption Kelle buge n&auml;idata
 
 	@property proj_gantt_end type=date_select store=no
 	@caption Ajavahemiku l&otilde;pp

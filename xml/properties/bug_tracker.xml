@@ -424,7 +424,10 @@
       <property>
             <name>gantt_p</name>
             <table>objects</table>
-            <group>gantt_chart</group>
+            <group>
+                  <num_0>gantt_chart</num_0>
+                  <num_1>proj_gantt</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <field>gantt_p</field>
@@ -1047,15 +1050,6 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>stat_proj_detail_b</field>
-      </property>
-      <property>
-            <name>proj_gantt_p</name>
-            <table>objects</table>
-            <group>proj_gantt</group>
-            <type>text</type>
-            <store>no</store>
-            <field>proj_gantt_p</field>
-            <caption>Kelle buge n&amp;amp;auml;idata</caption>
       </property>
       <property>
             <name>proj_gantt_end</name>
