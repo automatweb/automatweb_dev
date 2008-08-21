@@ -634,4 +634,231 @@ class bt_stat_impl extends core
 		$arr["prop"]["options"] = $arr["obj_inst"]->instance()->get_people_list($arr["obj_inst"]);
 		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 	}
+
+	function _get_proj_gantt($arr)
+	{
+		$proj_list = $this->_proj_gantt_proj_list();
+		$this->_proj_gantt_draw($arr, $proj_list);
+	}
+
+	private function _proj_gantt_draw($arr, $project_list)
+	{
+		list($range_start, $range_end) = $this->_proj_gantt_get_limits($project_list);
+		$chart = get_instance ("vcl/gantt_chart");
+
+		$columns = 7;
+		$gt_days_in_col = ceil(($range_end - $range_start) / 7) / (24*3600);
+
+		$col_length = $gt_days_in_col*24*60*60;
+
+		if ($this->can("view", $arr["request"]["filt_p"]))
+		{
+			$p = obj($arr["request"]["filt_p"]);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+		}
+
+		$subdivisions = 1;
+
+		foreach($project_list as $p)
+		{
+			$chart->add_row (array (
+				"name" => $p->id(),
+				"title" => parse_obj_name($p->name()),
+				"uri" => html::get_change_url(
+					$p->id(),
+					array("return_url" => get_ru())
+				),
+			));
+		}
+
+		foreach($project_list as $p)
+		{
+			$title = parse_obj_name($p->name())."<br>( ".date("d.m.Y H:i", $p->start)." - ".date("d.m.Y H:i", $p->end)." ) ";
+			$bar = array (
+				"id" => $p->id (),
+				"row" => $p->id (),
+				"start" => $p->start,
+				"length" => $p->end - $p->start,
+				"title" => $title,
+				"colour" => "#ff0000",
+			);
+			$chart->add_bar ($bar);
+		}
+		$chart->configure_chart (array (
+			"chart_id" => "bt_gantt_proj",
+			"style" => "aw",
+			"start" => $range_start,
+			"end" => $range_end,
+			"columns" => $columns,
+			"subdivisions" => $subdivisions,
+			"timespans" => $subdivisions,
+			"width" => 1000,
+			"row_height" => 10,
+			"column_length" => $col_length,
+			"timespan_range" => $col_length,
+		));
+
+		### define columns
+		for($i = 0; $i < $columns; $i++)
+		{
+			$t = $range_start + ($i * $col_length);
+			$t2 = $range_start + (($i+1) * $col_length);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => date("d.m.Y", $t)."<br>".date("d.m.Y", $t2),
+				"uri" => "#",
+			));
+		}
+
+		$arr["prop"]["value"] = $chart->draw_chart ();
+	}
+
+	private function _proj_gantt_proj_list()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_PROJECT.RELTYPE_PARTICIPANT" => get_current_person()->id(),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+			"state" => 1
+		));
+		return $ol->arr();
+	}
+
+	private function _proj_gantt_get_limits($project_list)
+	{
+		$min = null;
+		$max = null;
+		foreach($project_list as $p)
+		{
+			if ($p->start > 100 && ($min === null || $p->start < $min))
+			{
+				$min = $p->start;
+			}
+			if ($p->end > 100 && ($max === null || $p->end > $max))
+			{
+				$max = $p->end;
+			}
+		}
+		return array(max($min, time()), $max);
+	}
+
+	function _get_proj_bug_gantt($arr)
+	{
+		$proj_list = $this->_proj_gantt_proj_list();
+		$this->_proj_bug_gantt_draw($arr, $proj_list);
+	}
+
+	private function _proj_bug_gantt_draw($arr, $project_list)
+	{
+		list($range_start, $range_end) = $this->_proj_gantt_get_limits($project_list);
+		$chart = get_instance ("vcl/gantt_chart");
+
+		$columns = 7;
+		$gt_days_in_col = ceil(($range_end - $range_start) / 7) / (24*3600);
+
+		$col_length = $gt_days_in_col*24*60*60;
+
+		if ($this->can("view", $arr["request"]["filt_p"]))
+		{
+			$p = obj($arr["request"]["filt_p"]);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+		}
+
+		$subdivisions = 1;
+
+		foreach($project_list as $p)
+		{
+			$chart->add_row (array (
+				"name" => $p->id(),
+				"title" => parse_obj_name($p->name()),
+				"uri" => html::get_change_url(
+					$p->id(),
+					array("return_url" => get_ru())
+				),
+			));
+		}
+
+		// list all open bugs for me for all the given projects
+		$proj2bug = $this->_get_proj2bug_list($project_list);
+
+		$onepixeltime = ($range_end - $range_start) / 1000;
+
+		foreach($project_list as $p)
+		{
+			foreach(safe_array($proj2bug[$p->id]) as $b)
+			{
+				$bar = array (
+					"id" => $b->id (),
+					"row" => $p->id (),
+					"start" => $b->deadline,
+					"length" => max(($b->num_hrs_guess > 0 ? ($b->num_hrs_guess*3600): 3600*2), $onepixeltime*2),
+					"title" => parse_obj_name($b->name()),
+					"colour" => "#00ff00",
+				);
+				$chart->add_bar ($bar);
+			}
+		}
+		$chart->configure_chart (array (
+			"chart_id" => "bt_gantt_proj",
+			"style" => "aw",
+			"start" => $range_start,
+			"end" => $range_end,
+			"columns" => $columns,
+			"subdivisions" => $subdivisions,
+			"timespans" => $subdivisions,
+			"width" => 1000,
+			"row_height" => 10,
+			"column_length" => $col_length,
+			"timespan_range" => $col_length,
+		));
+
+		### define columns
+		for($i = 0; $i < $columns; $i++)
+		{
+			$t = $range_start + ($i * $col_length);
+			$t2 = $range_start + (($i+1) * $col_length);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => date("d.m.Y", $t)."<br>".date("d.m.Y", $t2),
+				"uri" => "#",
+			));
+		}
+
+		$arr["prop"]["value"] = $chart->draw_chart ();
+	}
+
+	private function _get_proj2bug_list($p_list)
+	{
+		$p_ids = array();
+		foreach($project_list as $p)
+		{
+			$p_ids[$p->id] = $p->id;
+		}
+		
+		$bug_list = new object_list(array(
+			"class_id" => CL_BUG,
+			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS,BUG_FATALERROR,BUG_TESTING,BUG_VIEWING),
+			"CL_BUG.who.name" => get_current_person()->name(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"project" => $p_ids
+		));
+		$rv = array();
+		foreach($bug_list->arr() as $b)
+		{
+			$rv[$b->project][] = $b;
+		}
+		return $rv;
+	}
 }
+

@@ -390,6 +390,17 @@ define("BUG_STATUS_CLOSED", 5);
 	@property stat_proj_detail type=table store=no no_caption=1
 	@property stat_proj_detail_b type=table store=no no_caption=1
 
+@default group=proj_gantt
+
+	@property proj_gantt_p type=text store=no
+	@caption Kelle buge n&auml;idata
+
+	@property proj_gantt_end type=date_select store=no
+	@caption Ajavahemiku l&otilde;pp
+
+	@property proj_gantt type=text store=no no_caption=1
+	@property proj_bug_gantt type=text store=no no_caption=1
+
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo settings_people caption="Isikud" submit=no parent=general
 @groupinfo settings_g caption="Muud seaded" parent=general
@@ -436,6 +447,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
 	@groupinfo stat_hrs_overview caption="T&ouml;&ouml;aja &uuml;levaade" parent=charts
 	@groupinfo stat_proj_overview caption="Projektide &uuml;levaade" parent=charts
+	@groupinfo proj_gantt caption="Projektide gantt" parent=charts
 
 
 
@@ -693,6 +705,8 @@ class bug_tracker extends class_base
 			case "stat_proj_detail":
 			case "stat_proj_detail_b":
 			case "stat_proj_ppl":
+			case "proj_gantt":
+			case "proj_bug_gantt":
 				static $st_i;
 				if (!$st_i)
 				{

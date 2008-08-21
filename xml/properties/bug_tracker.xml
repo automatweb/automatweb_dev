@@ -1048,6 +1048,42 @@
             <no_caption>1</no_caption>
             <field>stat_proj_detail_b</field>
       </property>
+      <property>
+            <name>proj_gantt_p</name>
+            <table>objects</table>
+            <group>proj_gantt</group>
+            <type>text</type>
+            <store>no</store>
+            <field>proj_gantt_p</field>
+            <caption>Kelle buge n&amp;amp;auml;idata</caption>
+      </property>
+      <property>
+            <name>proj_gantt_end</name>
+            <table>objects</table>
+            <group>proj_gantt</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>proj_gantt_end</field>
+            <caption>Ajavahemiku l&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>proj_gantt</name>
+            <table>objects</table>
+            <group>proj_gantt</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>proj_gantt</field>
+      </property>
+      <property>
+            <name>proj_bug_gantt</name>
+            <table>objects</table>
+            <group>proj_gantt</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>proj_bug_gantt</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -1225,6 +1261,10 @@
                   <caption>Projektide &amp;amp;uuml;levaade</caption>
                   <parent>charts</parent>
             </stat_proj_overview>
+            <proj_gantt>
+                  <caption>Projektide gantt</caption>
+                  <parent>charts</parent>
+            </proj_gantt>
       </groupinfo>
       <reltypes>
             <MONITOR>
