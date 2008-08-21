@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.61 2008/08/19 12:07:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.62 2008/08/21 07:22:42 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -686,6 +686,7 @@ class rfp_manager extends class_base
 							switch($data["result_type"])
 							{
 								case RFP_RAPORT_TYPE_CATERING:
+									$subrow_data["price"] = (double)$subrow_data["price"];
 									if($this->can("view", $subrow_data["room"]))
 									{
 										$subrow_data["room_name"] = obj($subrow_data["room"])->name();
@@ -701,7 +702,7 @@ class rfp_manager extends class_base
 											$subrow_data["sum"] = $subrow_data["sum"] * ((100 - $subrow_data["discount"]) / 100);
 										}
 									}
-									$subrow_data["sum"] = number_format($subrow_data["sum"], 2);
+									$subrow_data["sum"] = (strstr($subrow_data["sum"], ","))?$subrow_data["sum"]:number_format($subrow_data["sum"], 2);
 									$subrow_data["product_event"] = $subrow_data["product_event"]?$subrow_data["product_event"]:t("Toitlustus");
 									if($this->can("view", $subrow_data["var"]))
 									{
@@ -1898,7 +1899,6 @@ class rfp_manager extends class_base
 			);
 			// i dont put the products here right now, most of the reservations get probably filtered out anyway..
 		}
-
 		return $return;
 	}
 	
