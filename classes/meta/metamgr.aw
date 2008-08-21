@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.18 2008/05/29 10:44:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.19 2008/08/21 09:20:25 robert Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -151,10 +151,10 @@ class metamgr extends class_base
 		));
 		$transyes = $arr["obj_inst"]->prop("transyes");
 		$langdata = array();
+		$lg = get_instance("languages");
 		if($transyes == 1)
 		{
 			aw_global_set("output_charset", "utf-8");
-			$lg = get_instance("languages");
 			$langdata = $lg->get_list();
 
 			foreach($langdata as $id => $lang)
