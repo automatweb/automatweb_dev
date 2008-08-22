@@ -410,6 +410,34 @@
             <caption>Kontaktisik</caption>
       </property>
       <property>
+            <name>s_city</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>select</type>
+            <parent>searchbox</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_city</field>
+            <caption>Linn</caption>
+      </property>
+      <property>
+            <name>s_hotel</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>select</type>
+            <parent>searchbox</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_hotel</field>
+            <caption>Hotell</caption>
+      </property>
+      <property>
             <name>s_time_from</name>
             <table>objects</table>
             <group>

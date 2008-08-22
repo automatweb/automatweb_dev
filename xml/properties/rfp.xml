@@ -344,7 +344,7 @@
             <table>rfp</table>
             <group>general_function_info</group>
             <type>relpicker</type>
-            <field>data_gen_city</field>
+            <field>data_gen_hotel</field>
             <reltype>RELTYPE_LOCATION</reltype>
             <caption>Soovitud hotell</caption>
       </property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.106 2008/08/21 12:43:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.107 2008/08/22 08:33:59 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -127,7 +127,7 @@
 			@property data_gen_city type=relpicker field=data_gen_city reltype=RELTYPE_TOWN
 			@caption Soovitud linn
 
-			@property data_gen_hotel type=relpicker field=data_gen_city reltype=RELTYPE_LOCATION
+			@property data_gen_hotel type=relpicker field=data_gen_hotel reltype=RELTYPE_LOCATION
 			@caption Soovitud hotell
 
 			@property archived type=checkbox ch_value=1 default=0

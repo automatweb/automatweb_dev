@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.64 2008/08/21 13:24:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.65 2008/08/22 08:33:59 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -137,6 +137,12 @@
 
 			@property s_contact type=textbox parent=searchbox size=15 store=no captionside=top
 			@caption Kontaktisik
+
+			@property s_city type=select parent=searchbox store=no captionside=top
+			@caption Linn
+
+			@property s_hotel type=select parent=searchbox store=no captionside=top
+			@caption Hotell
 
 			@property s_time_from type=date_select parent=searchbox store=no captionside=top
 			@caption Alates
@@ -297,6 +303,8 @@ class rfp_manager extends class_base
 				);
 				$prop["options"] += $rfp->get_rfp_statuses();
 				break;
+			case "s_city":
+				$prop["selected"] = $arr["request"]["s_city"];
 			case "raports_search_rfp_city":
 				$ol = new object_list(array(
 					"class_id" => CL_META,
@@ -308,6 +316,8 @@ class rfp_manager extends class_base
 					$prop["options"][$obj->id()] = $obj->name();
 				}
 				break;
+			case "s_hotel":
+				$prop["selected"] = $arr["request"]["s_hotel"];
 			case "raports_search_rfp_hotel":
 				$ol = new object_list(array(
 					"class_id" => CL_META,
@@ -1263,7 +1273,7 @@ class rfp_manager extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		$todo = array("s_name", "s_org", "s_contact", "s_time_from", "s_time_to");
+		$todo = array("s_name", "s_org", "s_contact", "s_time_from", "s_time_to", "s_city", "s_hotel");
 		foreach($todo as $do)
 		{
 			$arr["args"][$do] = $arr["request"][$do];
@@ -1517,6 +1527,14 @@ class rfp_manager extends class_base
 				{
 					unset($rfps[$oid]);
 				}
+			}
+			if($this->can("view", $request["s_city"]) and $obj->prop("data_gen_city") != $request["s_city"])
+			{
+				unset($rfps[$oid]);
+			}
+			if($this->can("view", $request["s_hotel"]) and $obj->prop("data_gen_hotel") != $request["s_hotel"])
+			{
+				unset($rfps[$oid]);
 			}
 		}
 
