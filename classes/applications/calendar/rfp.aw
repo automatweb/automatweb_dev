@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.107 2008/08/22 08:33:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.108 2008/08/22 10:00:07 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -25,16 +25,16 @@
 
 		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
 		@default group=submitter_info
-			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info
+			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Tellija kontaktisik
 
 			@property data_subm_country type=textbox
 			@caption Ankeedi t&auml;itja asukoht
 
-			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info
+			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=129 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Organisatsioon
 
-			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info
+			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145,129 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Organisaator
 			
 			@property data_subm_email type=textbox group=submitter_info,final_client parent=client_info
@@ -220,10 +220,10 @@
 		@groupinfo billing caption="Arve info" parent=data
 		@default group=billing,final_client
 			
-			@property data_billing_company type=textbox parent=billing_info
+			@property data_billing_company type=textbox parent=billing_info autocomplete_class_id=129 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Organisatsioon
 
-			@property data_billing_contact type=textbox parent=billing_info
+			@property data_billing_contact type=textbox parent=billing_info autocomplete_class_id=145 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Kontaktisik
 
 			@property data_billing_street type=textbox parent=billing_info
@@ -467,6 +467,22 @@
 
 @reltype THEME clid=CL_META value=13
 @caption Konverentsi teema
+
+@reltype DATA_SUBM_NAME clid=CL_CRM_PERSON value=14
+@caption Tellija kontaktisik
+
+@reltype DATA_SUBM_ORGANISATION clid=CL_CRM_COMPANY value=15
+@caption Organisatsioon
+
+@reltype DATA_SUBM_ORGANIZER clid=CL_CRM_PERSON,CL_CRM_COMPANY value=16
+@caption Organisaator
+
+@reltype DATA_BILLING_COMPANY clid=CL_CRM_COMPANY value=17
+@caption Arve saaja organisatsioon
+
+@reltype DATA_BILLING_CONTACT clid=CL_CRM_PERSON value=18
+@caption Arve saaja kontaktisik
+
 */
 
 define("RFP_STATUS_SENT", 1);
@@ -493,6 +509,14 @@ class rfp extends class_base
 		);
 		$rfpm = get_instance(CL_RFP_MANAGER);
 		$this->rfpm = obj($rfpm->get_sysdefault());
+
+		$this->prop_to_relclid = array(
+			"data_subm_name" => CL_CRM_PERSON,
+			"data_subm_organisation" => CL_CRM_COMPANY,
+			"data_subm_organizer" =>  CL_CRM_PERSON,
+			"data_billing_company" =>  CL_CRM_COMPANY,
+			"data_billing_contact" =>  CL_CRM_PERSON,
+		);
 	}
 
 	private function date_to_stamp($date)
@@ -558,6 +582,15 @@ class rfp extends class_base
 
 		switch($prop["name"])
 		{
+			case "data_subm_name":
+			case "data_subm_organisation":
+			case "data_subm_organizer":
+			case "data_billing_company":
+			case "data_billing_contact":
+				$prop["selected"] = array(
+					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
+				);
+				break;
 			case "data_gen_city":
 				if($this->can("view", ($_t = $this->rfpm->prop("city_folder"))))
 				{
@@ -3547,6 +3580,65 @@ class rfp extends class_base
 			}
 		}
 		return $current_sum;
+	}
+
+	/**
+		@attrib name=_get_ac_data_subm_name params=name all_args=1
+	 **/
+	function _get_ac_data_subm_name($arr)
+	{
+		$this->_gen_and_output_ac_data(CL_CRM_PERSON, $arr["data_subm_name"]);
+	}
+
+	/**
+		@attrib name=_get_ac_data_subm_organisation params=name all_args=1
+	 **/
+	function _get_ac_data_subm_organisation($arr)
+	{
+		$this->_gen_and_output_ac_data(CL_CRM_COMPANY, $arr["data_subm_organisation"]);
+	}
+
+	/**
+		@attrib name=_get_ac_data_subm_organizer params=name all_args=1
+	 **/
+	function _get_ac_data_subm_organizer($arr)
+	{
+		$this->_gen_and_output_ac_data(array(
+			CL_CRM_PERSON,
+			CL_CRM_COMPANY,
+		), $arr["data_subm_organizer"]);
+	}
+
+	/**
+		@attrib name=_get_ac_data_billing_company params=name all_args=1
+	 **/
+	function _get_ac_data_billing_company($arr)
+	{
+		$this->_gen_and_output_ac_data(CL_CRM_COMPANY, $arr["data_billing_company"]);
+	}
+
+	/**
+		@attrib name=_get_ac_data_billing_contact params=name all_args=1
+	 **/
+	function _get_ac_data_billing_contact($arr)
+	{
+		$this->_gen_and_output_ac_data(CL_CRM_PERSON, $arr["data_billing_contact"]);
+	}
+
+
+	function _gen_and_output_ac_data($class_id, $value)
+	{
+
+		$l = new object_list(array(
+			"class_id" => $class_id,
+			"name" => "%".$value."%",
+		));
+		foreach($l->arr() as $obj)
+		{
+			$res[$obj->id()] = $obj->name();
+		}
+		$j = get_instance("protocols/data/json");
+		die($j->encode($res));
 	}
 }
 ?>

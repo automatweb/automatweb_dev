@@ -6,6 +6,50 @@ class rfp_obj extends _int_object
 	{
 		switch($pn)
 		{
+			case "data_subm_name":
+			case "data_subm_organisation":
+			case "data_subm_organizer":
+			case "data_billing_company":
+			case "data_billing_contact":
+			
+				$cs = $this->connections_from(array(
+					"type" => "RELTYPE_".strtoupper($pn),
+				));
+				foreach($cs as $c)
+				{
+					$c->delete();
+				}
+				if(strlen($pv))
+				{
+					$inst = $this->instance();
+					if(!$inst->can("view", $pv))
+					{
+						$inst = $this->instance();
+						$list = new object_list(array(
+							"class_id" => $inst->prop_to_relclid[$pn],
+							"name" => $pv,
+						));
+						if(!$list->count())
+						{
+							$obj = obj();
+							$obj->set_class_id($inst->prop_to_relclid[$pn]);
+							$obj->set_parent($this->parent());
+							$obj->set_name($pv);
+							$obj->save();
+						}
+						else
+						{
+							$obj = $list->begin();
+						}
+						$pv = $obj->id();
+					}
+					$this->connect(array(
+						"to" => $pv,
+						"type" => "RELTYPE_".strtoupper($pn),
+					));
+				}
+				break;
+
 			case "cancel_and_payment_terms":
 			case "accomondation_terms":
 				$tt = $this->meta("trans_terms");

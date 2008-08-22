@@ -27,6 +27,9 @@
             </group>
             <type>textbox</type>
             <parent>client_info</parent>
+            <autocomplete_class_id>145</autocomplete_class_id>
+            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
+            <option_is_tuple>1</option_is_tuple>
             <field>data_subm_name</field>
             <caption>Tellija kontaktisik</caption>
       </property>
@@ -47,6 +50,9 @@
             </group>
             <type>textbox</type>
             <parent>client_info</parent>
+            <autocomplete_class_id>129</autocomplete_class_id>
+            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
+            <option_is_tuple>1</option_is_tuple>
             <field>data_subm_organisation</field>
             <caption>Organisatsioon</caption>
       </property>
@@ -59,6 +65,12 @@
             </group>
             <type>textbox</type>
             <parent>client_info</parent>
+            <autocomplete_class_id>
+                  <num_0>145</num_0>
+                  <num_1>129</num_1>
+            </autocomplete_class_id>
+            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
+            <option_is_tuple>1</option_is_tuple>
             <field>data_subm_organizer</field>
             <caption>Organisaator</caption>
       </property>
@@ -600,6 +612,9 @@
             </group>
             <type>textbox</type>
             <parent>billing_info</parent>
+            <autocomplete_class_id>129</autocomplete_class_id>
+            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
+            <option_is_tuple>1</option_is_tuple>
             <field>data_billing_company</field>
             <caption>Organisatsioon</caption>
       </property>
@@ -612,6 +627,9 @@
             </group>
             <type>textbox</type>
             <parent>billing_info</parent>
+            <autocomplete_class_id>145</autocomplete_class_id>
+            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
+            <option_is_tuple>1</option_is_tuple>
             <field>data_billing_contact</field>
             <caption>Kontaktisik</caption>
       </property>
@@ -1216,6 +1234,34 @@
                   <value>13</value>
                   <caption>Konverentsi teema</caption>
             </THEME>
+            <DATA_SUBM_NAME>
+                  <clid>CL_CRM_PERSON</clid>
+                  <value>14</value>
+                  <caption>Tellija kontaktisik</caption>
+            </DATA_SUBM_NAME>
+            <DATA_SUBM_ORGANISATION>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <value>15</value>
+                  <caption>Organisatsioon</caption>
+            </DATA_SUBM_ORGANISATION>
+            <DATA_SUBM_ORGANIZER>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
+                  <value>16</value>
+                  <caption>Organisaator</caption>
+            </DATA_SUBM_ORGANIZER>
+            <DATA_BILLING_COMPANY>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <value>17</value>
+                  <caption>Arve saaja organisatsioon</caption>
+            </DATA_BILLING_COMPANY>
+            <DATA_BILLING_CONTACT>
+                  <clid>CL_CRM_PERSON</clid>
+                  <value>18</value>
+                  <caption>Arve saaja kontaktisik</caption>
+            </DATA_BILLING_CONTACT>
       </reltypes>
       <layout>
             <client_hsplit>
