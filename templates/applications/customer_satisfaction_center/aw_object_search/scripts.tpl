@@ -33,3 +33,20 @@ function check_delete()
 		submit_changeform("delete_bms")
 	}
 }
+
+function select_reltypes(el)
+{
+	if (el.selectedIndex)
+	{
+		clid = el.options[el.selectedIndex].value;
+
+		$.ajax({
+			type: "POST",
+			url: "orb.aw?class=aw_object_search&action=get_relation_types",
+			data: "s_clid="+clid,
+			success: function(msg){
+				$("#s_rel_type1").html(msg);
+			}
+		});
+	}
+}

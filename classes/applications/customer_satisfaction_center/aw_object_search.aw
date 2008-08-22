@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.22 2008/07/09 13:43:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.23 2008/08/22 09:28:47 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -81,28 +81,124 @@
 				@property s_kws type=textbox parent=keywords 
 				@caption M&auml;rks&otilde;nad
 
-			@layout l_timing type=vbox closeable=1 area_caption=Ajaline&nbsp;aktiivsus parent=right_side
-
-				@property s_tmg_activate_from type=datetime_select parent=l_timing default=-1
-				@caption Aktiveeri alates
-			
-				@property s_tmg_activate_to type=datetime_select parent=l_timing default=-1
-				@caption Aktiveeri kuni
-			
-				@property s_tmg_deactivate_from type=datetime_select parent=l_timing default=-1
-				@caption Deaktiveeri alates
-			
-				@property s_tmg_deactivate_to type=datetime_select parent=l_timing default=-1
-				@caption Deaktiveeri kuni
-			
-
 
 	@property s_sbt type=submit 
 	@caption Otsi
 
 	@property s_res type=table no_caption=1
 
+
+@default group=srch_complex
+@default store=no
+
+	@property s_tb1 type=toolbar no_caption=1 
+
+	@layout ver_split1 type=hbox 
+
+		@layout left_side1 type=vbox parent=ver_split1 
+
+			@layout left_side_top type=vbox parent=left_side1 closeable=1 area_caption=&Uuml;ldine
+
+				@property s_name1 type=textbox  size=50 parent=left_side_top
+				@caption Nimi
+
+				@property s_comment1 type=textbox  size=50 parent=left_side_top
+				@caption Kommentaar
+
+				@property s_clid1 type=select multiple=1 size=10 parent=left_side_top
+				@caption T&uuml;&uuml;p
+
+				@property s_oid1 type=textbox  size=50 parent=left_side_top
+				@caption OID
+
+				@property s_parent_search1 type=text parent=left_side_top
+				@caption Asukoht
+
+				@property s_status1 type=chooser parent=left_side_top
+				@caption Aktiivsus
+
+				@property s_alias1 type=textbox  size=50 parent=left_side_top
+				@caption Alias
+
+				@property s_language1 type=chooser parent=left_side_top
+				@caption Keel
+
+				@property s_period1 type=select parent=left_side_top
+				@caption Periood
+
+				@property s_site_id1 type=select parent=left_side_top
+				@caption Saidi ID
+
+				@property s_find_bros1 type=checkbox ch_value=1 parent=left_side_top
+				@caption Leia vendi
+
+			@layout left_side_bottom type=vbox parent=left_side1 closeable=1 area_caption=Seosed
+
+				@property s_rel_type1 type=select parent=left_side_bottom
+				@caption Seose t&uuml;&uuml;p
+
+				@property s_rel_obj_oid1 type=textbox size=6 parent=left_side_bottom
+				@caption Seotud objekti id
+
+				@property s_rel_obj_name1 type=textbox size=20 parent=left_side_bottom
+				@caption Seotud objekti nimi
+
+		@layout right_side1 type=vbox parent=ver_split1
+
+			@layout creamod1 type=vbox closeable=1 area_caption=Muutmine&nbsp;ja&nbsp;lisamine parent=right_side1
+	
+				@property s_creator1 type=textbox  size=20 parent=creamod1
+				@caption Looja
+
+				@property s_creator_from1 type=chooser parent=creamod1 default=0 orient=vertical
+				@caption Otsida loojat
+		
+				@property s_crea_from1 type=datetime_select parent=creamod1 default=-1
+				@caption Lisatud alates
+			
+				@property s_crea_to1 type=datetime_select parent=creamod1 default=-1
+				@caption Lisatud kuni
+			
+				@property s_modifier1 type=textbox  size=20 parent=creamod1
+				@caption Muutja
+
+				@property s_modifier_from1 type=chooser parent=creamod1 default=0 orient=vertical
+				@caption Otsida muutjat
+
+				@property s_mod_from1 type=datetime_select parent=creamod1 default=-1
+				@caption Muudetud alates
+			
+				@property s_mod_to1 type=datetime_select parent=creamod1 default=-1
+				@caption Muudetud kuni
+
+			@layout keywords1 type=vbox closeable=1 area_caption=M&auml;rks&otilde;nad parent=right_side1
+
+				@property s_kws1 type=textbox parent=keywords1
+				@caption M&auml;rks&otilde;nad
+
+			@layout l_timing1 type=vbox closeable=1 area_caption=Ajaline&nbsp;aktiivsus parent=right_side1
+
+				@property s_tmg_activate_from1 type=datetime_select parent=l_timing1 default=-1
+				@caption Aktiveeri alates
+			
+				@property s_tmg_activate_to1 type=datetime_select parent=l_timing1 default=-1
+				@caption Aktiveeri kuni
+			
+				@property s_tmg_deactivate_from1 type=datetime_select parent=l_timing1 default=-1
+				@caption Deaktiveeri alates
+			
+				@property s_tmg_deactivate_to1 type=datetime_select parent=l_timing1 default=-1
+				@caption Deaktiveeri kuni
+			
+
+
+	@property s_sbt1 type=submit 
+	@caption Otsi
+
+	@property s_res1 type=table no_caption=1
+
 @groupinfo srch caption="Otsing" submit_method=get save=no
+@groupinfo srch_complex caption="Detailne otsing" submit_method=get save=no
 */
 
 class aw_object_search extends class_base
@@ -120,7 +216,12 @@ class aw_object_search extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$prop["value"] = $arr["request"][$prop["name"]];
-		switch($prop["name"])
+		$nm = $prop["name"];
+		if (substr($nm, -1) == "1")
+		{
+			$nm = substr($nm, 0, -1);
+		}
+		switch($nm)
 		{
 			case "s_parent_search":
 				$v = html::textbox(array(
@@ -158,10 +259,10 @@ class aw_object_search extends class_base
 			case "s_crea_to":
 			case "s_mod_from":
 			case "s_mod_to":
-			case "s_tmg_activate_from":
-			case "s_tmg_activate_to":
-			case "s_tmg_deactivate_from":
-			case "s_tmg_deactivate_to":
+			case "s_tmg_activate_from1":
+			case "s_tmg_activate_to1":
+			case "s_tmg_deactivate_from1":
+			case "s_tmg_deactivate_to1":
 				if ($prop["value"] < 10)
 				{
 					$prop["value"] = -1;
@@ -189,6 +290,10 @@ class aw_object_search extends class_base
 				}
 				natsort($cls);
 				$prop["options"] = $cls;
+				if ($prop["name"] == "s_clid1")
+				{
+					$prop["onchange"] = "select_reltypes(this);";
+				}
 				break;
 
 			case "s_status":
@@ -257,6 +362,13 @@ class aw_object_search extends class_base
 
 			case "s_tb":
 				$this->_s_tb($arr);
+				break;
+
+			case "s_rel_type":
+				if (is_array($arr["request"]["s_clid1"]))
+				{
+					$prop["options"] = $this->_get_relation_type_options(reset($arr["request"]["s_clid1"]));
+				}
 				break;
 		};
 		return $retval;
@@ -424,6 +536,13 @@ class aw_object_search extends class_base
 
 	function get_s_filt($arr)
 	{
+		foreach($arr["request"] as $k => $v)
+		{
+			if (substr($k, -1) == "1")
+			{
+				$arr["request"][substr($k, 0, -1)] = $v;
+			}
+		}
 		$filt = array("limit" => 2000, "lang_id" => array(), "site_id" => array());
 		$arrprops = array("s_name", "s_parent");
 		foreach($arrprops as $arrprop)
@@ -527,6 +646,24 @@ class aw_object_search extends class_base
 			}
 		}
 
+		if ($arr["request"]["s_rel_type"] != "" && ($arr["request"]["s_rel_obj_oid"] != "" || $arr["request"]["s_rel_obj_name"] != "") && is_array($arr["request"]["s_clid"]))
+		{
+			$clid = reset($arr["request"]["s_clid"]);
+			$clss = aw_ini_get("classes");
+			$cl_const = $clss[$clid]["def"];
+
+			$filt_name = $cl_const.".".$arr["request"]["s_rel_type"];
+			if ($arr["request"]["s_rel_obj_oid"])
+			{
+				$filt[$filt_name] = explode(",", $arr["request"]["s_rel_obj_oid"]);
+			}
+			else
+			if ($arr["request"]["s_rel_obj_name"] != "")
+			{
+				$filt[$filt_name.".name"] = map("%%%s%%", explode(",", $arr["request"]["s_rel_obj_name"]));
+			}
+		}
+
 		$c_from = date_edit::get_timestamp($arr["request"]["s_crea_from"]);
 		$c_to = date_edit::get_timestamp($arr["request"]["s_crea_to"]);
 		$m_from = date_edit::get_timestamp($arr["request"]["s_mod_from"]);
@@ -567,7 +704,7 @@ class aw_object_search extends class_base
 			$filt["CL_DOCUMENT.RELTYPE_KEYWORD.name"] = "%".$arr["request"]["s_kws"]."%";
 		}
 
-		$c_from = date_edit::get_timestamp($arr["request"]["s_tmg_activate_from"]);
+		/*$c_from = date_edit::get_timestamp($arr["request"]["s_tmg_activate_from"]);
 		$c_to = date_edit::get_timestamp($arr["request"]["s_tmg_activate_to"]);
 		$m_from = date_edit::get_timestamp($arr["request"]["s_tmg_deactivate_from"]);
 		$m_to = date_edit::get_timestamp($arr["request"]["s_tmg_deactivate_to"]);
@@ -600,7 +737,7 @@ class aw_object_search extends class_base
 		if ($m_to > 1)
 		{
 			$filt["CL_DOCUMENT.RELTYPE_TIMING.deactivate"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $m_to);
-		}
+		}*/
 
 		return $filt;
 	}
@@ -623,7 +760,7 @@ class aw_object_search extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] != "srch")
+		if ($arr["id"] != "srch" && $arr["id"] != "srch_complex")
 		{
 			return false;
 		}
@@ -700,6 +837,33 @@ class aw_object_search extends class_base
 		$i = get_instance(CL_ADMIN_IF);
 		return $i->if_copy($_GET);
 		die("<script>window.back();</script>");
+	}
+
+	/**
+		@attrib name=get_relation_types
+		@param s_clid required
+	**/
+	function get_relation_types($arr)
+	{
+		$rv = $this->_get_relation_type_options($arr["s_clid"]);
+		die($this->picker("", $rv));
+	}
+
+	private function _get_relation_type_options($clid)
+	{
+		$tmp = obj();
+		$tmp->set_class_id($clid);
+		
+		$rv = array("" => t("--vali--"));
+		foreach($tmp->get_relinfo() as $d => $inf)
+		{
+			if (substr($d, 0, strlen("RELTYPE")) == "RELTYPE")
+			{
+				$rv[$d] = $inf["caption"];
+			}
+		}
+
+		return $rv;
 	}
 }
 ?>

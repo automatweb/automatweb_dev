@@ -33,5 +33,13 @@
 			</function>
 		</action>
 
+		<action name="get_relation_types">
+			<function name="get_relation_types">
+				<arguments>
+					<required name="s_clid" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

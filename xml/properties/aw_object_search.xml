@@ -227,50 +227,6 @@
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
       <property>
-            <name>s_tmg_activate_from</name>
-            <table>objects</table>
-            <group>srch</group>
-            <store>no</store>
-            <type>datetime_select</type>
-            <parent>l_timing</parent>
-            <default>-1</default>
-            <field>s_tmg_activate_from</field>
-            <caption>Aktiveeri alates</caption>
-      </property>
-      <property>
-            <name>s_tmg_activate_to</name>
-            <table>objects</table>
-            <group>srch</group>
-            <store>no</store>
-            <type>datetime_select</type>
-            <parent>l_timing</parent>
-            <default>-1</default>
-            <field>s_tmg_activate_to</field>
-            <caption>Aktiveeri kuni</caption>
-      </property>
-      <property>
-            <name>s_tmg_deactivate_from</name>
-            <table>objects</table>
-            <group>srch</group>
-            <store>no</store>
-            <type>datetime_select</type>
-            <parent>l_timing</parent>
-            <default>-1</default>
-            <field>s_tmg_deactivate_from</field>
-            <caption>Deaktiveeri alates</caption>
-      </property>
-      <property>
-            <name>s_tmg_deactivate_to</name>
-            <table>objects</table>
-            <group>srch</group>
-            <store>no</store>
-            <type>datetime_select</type>
-            <parent>l_timing</parent>
-            <default>-1</default>
-            <field>s_tmg_deactivate_to</field>
-            <caption>Deaktiveeri kuni</caption>
-      </property>
-      <property>
             <name>s_sbt</name>
             <table>objects</table>
             <group>srch</group>
@@ -288,6 +244,326 @@
             <no_caption>1</no_caption>
             <field>s_res</field>
       </property>
+      <property>
+            <name>s_tb1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <field>s_tb1</field>
+      </property>
+      <property>
+            <name>s_name1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>50</size>
+            <parent>left_side_top</parent>
+            <field>s_name1</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>s_comment1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>50</size>
+            <parent>left_side_top</parent>
+            <field>s_comment1</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>s_clid1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>10</size>
+            <parent>left_side_top</parent>
+            <field>s_clid1</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>s_oid1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>50</size>
+            <parent>left_side_top</parent>
+            <field>s_oid1</field>
+            <caption>OID</caption>
+      </property>
+      <property>
+            <name>s_parent_search1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>text</type>
+            <parent>left_side_top</parent>
+            <field>s_parent_search1</field>
+            <caption>Asukoht</caption>
+      </property>
+      <property>
+            <name>s_status1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>left_side_top</parent>
+            <field>s_status1</field>
+            <caption>Aktiivsus</caption>
+      </property>
+      <property>
+            <name>s_alias1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>50</size>
+            <parent>left_side_top</parent>
+            <field>s_alias1</field>
+            <caption>Alias</caption>
+      </property>
+      <property>
+            <name>s_language1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>left_side_top</parent>
+            <field>s_language1</field>
+            <caption>Keel</caption>
+      </property>
+      <property>
+            <name>s_period1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>select</type>
+            <parent>left_side_top</parent>
+            <field>s_period1</field>
+            <caption>Periood</caption>
+      </property>
+      <property>
+            <name>s_site_id1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>select</type>
+            <parent>left_side_top</parent>
+            <field>s_site_id1</field>
+            <caption>Saidi ID</caption>
+      </property>
+      <property>
+            <name>s_find_bros1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>left_side_top</parent>
+            <field>s_find_bros1</field>
+            <caption>Leia vendi</caption>
+      </property>
+      <property>
+            <name>s_rel_type1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>select</type>
+            <parent>left_side_bottom</parent>
+            <field>s_rel_type1</field>
+            <caption>Seose t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>s_rel_obj_oid1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>6</size>
+            <parent>left_side_bottom</parent>
+            <field>s_rel_obj_oid1</field>
+            <caption>Seotud objekti id</caption>
+      </property>
+      <property>
+            <name>s_rel_obj_name1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>20</size>
+            <parent>left_side_bottom</parent>
+            <field>s_rel_obj_name1</field>
+            <caption>Seotud objekti nimi</caption>
+      </property>
+      <property>
+            <name>s_creator1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>20</size>
+            <parent>creamod1</parent>
+            <field>s_creator1</field>
+            <caption>Looja</caption>
+      </property>
+      <property>
+            <name>s_creator_from1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>creamod1</parent>
+            <default>0</default>
+            <orient>vertical</orient>
+            <field>s_creator_from1</field>
+            <caption>Otsida loojat</caption>
+      </property>
+      <property>
+            <name>s_crea_from1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>creamod1</parent>
+            <default>-1</default>
+            <field>s_crea_from1</field>
+            <caption>Lisatud alates</caption>
+      </property>
+      <property>
+            <name>s_crea_to1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>creamod1</parent>
+            <default>-1</default>
+            <field>s_crea_to1</field>
+            <caption>Lisatud kuni</caption>
+      </property>
+      <property>
+            <name>s_modifier1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <size>20</size>
+            <parent>creamod1</parent>
+            <field>s_modifier1</field>
+            <caption>Muutja</caption>
+      </property>
+      <property>
+            <name>s_modifier_from1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>chooser</type>
+            <parent>creamod1</parent>
+            <default>0</default>
+            <orient>vertical</orient>
+            <field>s_modifier_from1</field>
+            <caption>Otsida muutjat</caption>
+      </property>
+      <property>
+            <name>s_mod_from1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>creamod1</parent>
+            <default>-1</default>
+            <field>s_mod_from1</field>
+            <caption>Muudetud alates</caption>
+      </property>
+      <property>
+            <name>s_mod_to1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>creamod1</parent>
+            <default>-1</default>
+            <field>s_mod_to1</field>
+            <caption>Muudetud kuni</caption>
+      </property>
+      <property>
+            <name>s_kws1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>textbox</type>
+            <parent>keywords1</parent>
+            <field>s_kws1</field>
+            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
+            <name>s_tmg_activate_from1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>l_timing1</parent>
+            <default>-1</default>
+            <field>s_tmg_activate_from1</field>
+            <caption>Aktiveeri alates</caption>
+      </property>
+      <property>
+            <name>s_tmg_activate_to1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>l_timing1</parent>
+            <default>-1</default>
+            <field>s_tmg_activate_to1</field>
+            <caption>Aktiveeri kuni</caption>
+      </property>
+      <property>
+            <name>s_tmg_deactivate_from1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>l_timing1</parent>
+            <default>-1</default>
+            <field>s_tmg_deactivate_from1</field>
+            <caption>Deaktiveeri alates</caption>
+      </property>
+      <property>
+            <name>s_tmg_deactivate_to1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>datetime_select</type>
+            <parent>l_timing1</parent>
+            <default>-1</default>
+            <field>s_tmg_deactivate_to1</field>
+            <caption>Deaktiveeri kuni</caption>
+      </property>
+      <property>
+            <name>s_sbt1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>submit</type>
+            <field>s_sbt1</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>s_res1</name>
+            <table>objects</table>
+            <group>srch_complex</group>
+            <store>no</store>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <field>s_res1</field>
+      </property>
       <classinfo>
             <syslog_type>ST_AW_OBJECT_SEARCH</syslog_type>
             <no_comment>1</no_comment>
@@ -301,6 +577,11 @@
                   <submit_method>get</submit_method>
                   <save>no</save>
             </srch>
+            <srch_complex>
+                  <caption>Detailne otsing</caption>
+                  <submit_method>get</submit_method>
+                  <save>no</save>
+            </srch_complex>
       </groupinfo>
       <layout>
             <ver_split>
@@ -335,13 +616,58 @@
                   <parent>right_side</parent>
                   <group>srch</group>
             </keywords>
-            <l_timing>
+            <ver_split1>
+                  <type>hbox</type>
+                  <group>srch_complex</group>
+                  <area_caption></area_caption>
+            </ver_split1>
+            <left_side1>
+                  <type>vbox</type>
+                  <parent>ver_split1</parent>
+                  <group>srch_complex</group>
+                  <area_caption></area_caption>
+            </left_side1>
+            <left_side_top>
+                  <type>vbox</type>
+                  <parent>left_side1</parent>
+                  <closeable>1</closeable>
+                  <area_caption>&amp;amp;Uuml;ldine</area_caption>
+                  <group>srch_complex</group>
+            </left_side_top>
+            <left_side_bottom>
+                  <type>vbox</type>
+                  <parent>left_side1</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Seosed</area_caption>
+                  <group>srch_complex</group>
+            </left_side_bottom>
+            <right_side1>
+                  <type>vbox</type>
+                  <parent>ver_split1</parent>
+                  <group>srch_complex</group>
+                  <area_caption></area_caption>
+            </right_side1>
+            <creamod1>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Muutmine&amp;amp;nbsp;ja&amp;amp;nbsp;lisamine</area_caption>
+                  <parent>right_side1</parent>
+                  <group>srch_complex</group>
+            </creamod1>
+            <keywords1>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</area_caption>
+                  <parent>right_side1</parent>
+                  <group>srch_complex</group>
+            </keywords1>
+            <l_timing1>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Ajaline&amp;amp;nbsp;aktiivsus</area_caption>
-                  <parent>right_side</parent>
-                  <group>srch</group>
-            </l_timing>
+                  <parent>right_side1</parent>
+                  <group>srch_complex</group>
+            </l_timing1>
       </layout>
 </properties>
 
