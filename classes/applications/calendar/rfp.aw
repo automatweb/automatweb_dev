@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.109 2008/08/22 10:13:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.110 2008/08/22 10:15:16 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2256,7 +2256,13 @@ class rfp extends class_base
 		$arrival = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
 		$dep = $arr["obj_inst"]->prop("data_gen_departure_date_admin");
 		$date = (date("Ymd", $arrival) == date("Ymd", $dep))?date("dmY",$arrival):date("dmY", $arrival)."-".date("dmY", $dep);
-		$orgname = strtr(htmlentities($arr["obj_inst"]->prop("data_subm_organisation")), array(
+		$orgname = $arr["obj_inst"]->prop("data_subm_organisation");
+		if($this->can("view", $orgname))
+		{
+			$o = obj($orgname);
+			$orgname = $o->name();
+		}
+		$orgname = strtr(htmlentities($orgname), array(
 			"&Auml;" => "A",
 			"&auml;" => "a",
 			"&Uuml;" => "U",
@@ -2267,11 +2273,6 @@ class rfp extends class_base
 			"&otilde;" => "o",
 			" " => "_",
 		));
-		if($this->can("view", $orgname))
-		{
-			$o = obj($orgname);
-			$orgname = $o->name();
-		}
 		$fname = sprintf("%s-%s-%s", ($arr["pdf"] == "offer_pdf")?t("Pakkumine"):t("Kinnitus"), ($orgname?$orgname:$client_name), $date);
 		$html = $this->_get_submission_data($arr);
 		classload("core/converters/html2pdf");
