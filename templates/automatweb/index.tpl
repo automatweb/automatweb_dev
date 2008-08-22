@@ -138,6 +138,6 @@ $("#aw_object_quickadd").aw_object_quickadd(items, options);
 
 <!-- SUB: POPUP_MENUS -->
 <!-- END SUB: POPUP_MENUS -->
-
+	{VAR:javascript_bottom}
 </body>
 </html>

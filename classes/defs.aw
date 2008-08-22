@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.270 2008/07/28 13:11:10 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.271 2008/08/22 10:17:37 dragut Exp $
 // defs.aw - common functions
 
 /*
@@ -2917,11 +2917,26 @@ if (!defined("DEFS"))
 		return $res;
 	}
 
-	function load_javascript($file)
+	/** Loads javascript file 
+		@attrib api=1 params=pos
+
+		@param file required type=string
+			Javascript filename/path to include. The root directory for the files is "$automatweb_code/automatweb/js/".
+
+		@param position optional type=string default="head"
+			Specifies the position, where the javascript file will be linked in page. Possible values are "head" (default) and "bottom". If the position is "head", then the file will be linked in bbetween page head tags. If it is set to "bottom", the it will be linked in at the bottom of the page.
+
+		@comment
+			The function allows you to load javascript file from code. It will be linked in between head tags, or at the bottom of the page, as specified
+		@examples
+			load_javascript("my/dir/my_javascriptfile.js"); // the file will be included between head tags
+			load_javascript("my_custom_javascript_file.js", "bottom"); // the file will be included at the bottom of the page
+	**/
+	function load_javascript($file, $pos = 'head')
 	{
 		$js = aw_global_get("__aw_javascript");
 		$file = aw_ini_get("baseurl")."/automatweb/js/".$file;
-		$js[$file] = $file;
+		$js[$pos][$file] = $file;
 		aw_global_set("__aw_javascript", $js);
 	}
 

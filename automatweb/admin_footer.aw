@@ -253,9 +253,9 @@ if ($sf->is_template("aw_styles"))
 	$styles_done = true;
 }
 
-// include those javascript files to header which are loaded in application classes
+// include javascript files which are loaded from code:
 $sf->vars(array("javascript" => $apd->get_javascript()));
-
+$sf->vars(array("javascript_bottom" => $apd->get_javascript("bottom")));
 
 //if (!empty($output_charset))
 //{
