@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.128 2008/08/21 09:02:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.129 2008/08/25 14:02:14 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1379,6 +1379,25 @@ class reservation extends class_base
 			{
 				$rvs[] = obj($id);
 			}
+			$t->define_field(array(
+				"name" => "tables",
+				"caption" => t("Laudade asetus"),
+				"chgbgcolor" => "split",
+			));
+			$rfpm = get_instance(CL_RFP_MANAGER);
+			$rmobj = obj($rfpm->get_sysdefault());
+			if($this->can("view", $rmobj->prop("table_form_folder")))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $rmobj->prop("table_form_folder")
+				));
+				$tableoptions = array(0=>t("--vali--"));
+				foreach($ol->arr() as $obj)
+				{
+					$tableoptions[$obj->id()] = $obj->name();
+				} 
+			}
 		}
 		if($arr["request"]["do_room_separators"])
 		{
@@ -1489,6 +1508,11 @@ class reservation extends class_base
 				"name" => "custom_".$o->id(),
 				"value" => $o->prop("special_sum"),
 				"size" => 5
+			));
+			$d["tables"] = html::select(array(
+				"name" => "tables_".$o->id(),
+				"options" => $tableoptions,
+				"value" => $o->meta("tables"),
 			));
 			if($arr["request"]["define_chooser"])
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.111 2008/08/25 13:10:09 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.112 2008/08/25 14:02:11 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2394,12 +2394,6 @@ class rfp extends class_base
 			$package = ($_t = $pack_trans[$default_lang]["name"])?$_t:$package_o->trans_get_val("name");
 		}
 		$tables = $arr["obj_inst"]->prop("data_mf_table_form");
-		if($this->can("view", $tables))
-		{
-			$tables = obj($tables);
-			$tab_trans = $tables->meta("translations");
-			$tables = ($_t = $tab_trans[$default_lang]["name"])?$_t:$tables->trans_get_val("name");
-		}
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_RESERVATION",
 		));
@@ -2472,13 +2466,20 @@ class rfp extends class_base
 				$price = $sum[$currency];
 			}
 			$comment = $rv->trans_get_val("comment");
+			$tables_rv = ($rvt = $rv->meta("tables"))?$rvt:$tables;
+			if($this->can("view", $tables_rv))
+			{
+				$tables_o = obj($tables_rv);
+				$tab_trans = $tables_o->meta("translations");
+				$tables_rv = ($_t = $tab_trans[$default_lang]["name"])?$_t:$tables_o->trans_get_val("name");
+			}
 			$room_data = array(
 				"datefrom" => $datefrom,
 				"timefrom" => $timefrom,
 				"timeto" => $timeto,
 				"dateto" => $dateto,
 				"room" => $room,
-				"tables" => $tables,
+				"tables" => $tables_rv,
 				"people" => $people,
 				"comments" => $comment,
 				"colspan" => $colspan,
@@ -2936,7 +2937,12 @@ class rfp extends class_base
 						$o->set_prop("special_sum", $val);	
 						$o->save();
 					}
-
+					elseif($tmp[0] == "tables")
+					{
+						$o = obj($tmp[1]);
+						$o->set_meta("tables", $val);
+						$o->save();
+					}
 					if(in_array($var, array("package_custom_price", "package_custom_discount")))
 					{
 						$arr["obj_inst"]->{"set_".$var}($val);
