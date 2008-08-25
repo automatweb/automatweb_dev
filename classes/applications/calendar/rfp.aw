@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.110 2008/08/22 10:15:16 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.111 2008/08/25 13:10:09 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -917,10 +917,10 @@ class rfp extends class_base
 					"lastname" => join(" ", array_slice($spl, 1)),
 					"company" => $arr["obj_inst"]->prop("data_subm_organisation"),
 					"phone" => $arr["obj_inst"]->prop("data_subm_phone"),
+					"people_count" => $arr["obj_inst"]->prop("data_gen_attendees_no"),
 					"rooms" => "0",
 
 				));
-				
 				$tb->add_button(array(
 					"name" => "cal",
 					"tooltip" => t("Kalender"),

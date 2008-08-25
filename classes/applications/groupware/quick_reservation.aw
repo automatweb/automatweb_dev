@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.3 2008/07/22 07:48:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.4 2008/08/25 13:10:47 robert Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -130,6 +130,7 @@ class quick_reservation extends class_base
 	function callback_mod_reforb($arr, $request)
 	{
 		$arr["post_msg_after_reservation"] = $request["post_msg_after_reservation"];
+		$arr["bron[people_count]"] = $request["people_count"];
 	}
 }
 ?>

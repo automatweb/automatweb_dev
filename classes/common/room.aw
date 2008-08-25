@@ -1177,6 +1177,7 @@ class room extends class_base
 				$si = get_instance(CL_ROOM_SETTINGS);
 				$sts = $this->get_settings_for_room(obj($resource));
 				$bron->set_prop("start1", $start1);
+				$bron->set_prop("people_count", $people_count);
 				$bron->set_prop("end" ,$end);
 				$bron->set_prop("content" , $comment);
 				$bron->set_prop("verified" , $si->get_verified_default_for_group($this->get_settings_for_room(obj($resource))));
@@ -1317,6 +1318,7 @@ class room extends class_base
 				"lastname" => $lastname,
 				"company" => $company,
 				"phone" => $phone,
+				"people_count" => $people_count,
 				"comment" => $comment,
 				"people" => $people,
 				"parent" => $parent,
@@ -2848,6 +2850,7 @@ class room extends class_base
 				"lastname" => $arr["lastname"],
 				"company" => $arr["company"],
 				"phone" => $arr["phone"],
+				"people_count" => $arr["people_count"],
                         ));
 			$w = 500;
 			$h = 400;

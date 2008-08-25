@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.67 2008/08/12 08:40:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.68 2008/08/25 13:10:14 robert Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1632,6 +1632,8 @@ class spa_bookings_overview extends class_base
 			Company for reservation object.
 		@param phone optional type=string
 			Phone number for reservation object.
+		@param people_count optional type=string
+			People count for reservation object
 	**/
 	function show_cals_pop($arr)
 	{
@@ -1723,6 +1725,7 @@ class spa_bookings_overview extends class_base
 				$reforb["lastname"] = $arr["lastname"];
 				$reforb["company"] = $arr["company"];
 				$reforb["phone"] = $arr["phone"];
+				$reforb["people_count"] = $arr["people_count"];
 
 				$this->vars(array(
 					"toolbar" => $toolbar->get_toolbar(),

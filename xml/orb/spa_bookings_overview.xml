@@ -22,6 +22,7 @@
 					<optional name="lastname" type="string" />
 					<optional name="company" type="string" />
 					<optional name="phone" type="string" />
+					<optional name="people_count" type="string" />
 				</arguments>
 			</function>
 		</action>
