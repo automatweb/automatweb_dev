@@ -192,6 +192,17 @@
             <comment>Formaat: alguskuup&amp;amp;auml;ev.kuu, tund:minut - l&amp;amp;otilde;ppkuup&amp;amp;auml;ev.kuu, tund:minut; alguskuup&amp;amp;auml;ev.kuu, ...</comment>
             <caption>Kinnised p&amp;amp;auml;evad (Formaat: &amp;lt;span style=&amp;quot;white-space: nowrap;&amp;quot;&amp;gt;p.k, h:m - p.k, h:m;&amp;lt;/span&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;span style=&amp;quot;white-space: nowrap;&amp;quot;&amp;gt;p.k, h:m - p.k, h:m;&amp;lt;/span&amp;gt;&amp;lt;br /&amp;gt; ...)</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -224,6 +235,9 @@
                   <caption>Kinnised ajad</caption>
                   <parent>grp_resource_unavailable</parent>
             </grp_resource_unavailable_una>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <MRP_SCHEDULE>

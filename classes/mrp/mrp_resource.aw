@@ -77,6 +77,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@comment Formaat: alguskuup&auml;ev.kuu, tund:minut - l&otilde;ppkuup&auml;ev.kuu, tund:minut; alguskuup&auml;ev.kuu, ...
 	@caption Kinnised p&auml;evad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
+
 // --------------- RELATION TYPES ---------------------
 
 @reltype MRP_SCHEDULE value=2 clid=CL_PLANNER
@@ -129,6 +136,12 @@ class mrp_resource extends class_base
 			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
 			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
 			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
+		);
+
+		
+
+		$this->trans_props = array(
+			"name", "comment"
 		);
 
 		$this->init(array(
@@ -494,6 +507,10 @@ class mrp_resource extends class_base
 						}
 						break;
 				}
+				break;
+			
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
 				break;
 		}
 
@@ -1444,6 +1461,22 @@ class mrp_resource extends class_base
 				'link' => $url
 			));
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		$trc = aw_ini_get("user_interface.trans_classes");
+		
+		if ($arr["id"] == "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 
