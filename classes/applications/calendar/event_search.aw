@@ -1127,7 +1127,7 @@ class event_search extends class_base
 			{
 				$all_projects1_filter = array(
 					"parent" => $p_rn1,
-					"class_id" => array(CL_PROJECT, CL_PLANNER),
+					"class_id" => array(CL_PROJECT, CL_PLANNER, CL_MENU),
 				);
 				if ($ob->prop('dont_search_from_all_languages') != 1)
 				{
@@ -1142,7 +1142,7 @@ class event_search extends class_base
 
 				$all_projects2_filter  =array(
 					"parent" => $p_rn2,
-					"class_id" => array(CL_PROJECT, CL_PLANNER),
+					"class_id" => array(CL_PROJECT, CL_PLANNER, CL_MENU),
 				);
 				if ($ob->prop('dont_search_from_all_languages') != 1)
 				{
