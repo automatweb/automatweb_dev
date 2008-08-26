@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.153 2008/08/26 10:42:09 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.154 2008/08/26 11:34:55 robert Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -193,6 +193,7 @@ class releditor extends core
 			"align" => "center"
 		));
 		$awt->set_sortable(true);
+		$awt->set_numeric_field("_sort_jrk");
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
 		$awt->set_sortable(false);
@@ -442,7 +443,7 @@ class releditor extends core
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
 					"start_from_index" : "'.$conns_count.'",
-					"main_clid" : "'.$obj->class_id().'"
+					"main_clid" : "'.$obj->class_id().'",
 					});
 			</script>',
 			"store" => "no",
@@ -2144,7 +2145,6 @@ class releditor extends core
 	{
 		$releditor_name = $arr["releditor_name"];
 		$d = unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$releditor_name."_data"]));
-
 		$idx = $arr["edit_index"];
 		$main_clid = $arr["main_clid"];//CL_CALENDAR_EVENT;//CL_CRM_PERSON;
 
@@ -2155,15 +2155,6 @@ class releditor extends core
 		$r = array();
 		foreach($pd["props"] as $rel_prop_name)
 		{
-			if ($rel_props[$rel_prop_name]["type"] == "datetime_select")
-			{
-				if (is_array($d[$idx][$rel_prop_name]))
-				{
-					$d[$idx][$rel_prop_name] = mktime($d[$idx][$rel_prop_name]["hour"], $d[$idx][$rel_prop_name]["minute"], $d[$idx][$rel_prop_name]["second"], $d[$idx][$rel_prop_name]["month"], $d[$idx][$rel_prop_name]["day"], $d[$idx][$rel_prop_name]["year"]);
-				}
-				$r[] = "'[$rel_prop_name]': {'day': '".date("d", $d[$idx][$rel_prop_name])."', 'month': '".date("m", $d[$idx][$rel_prop_name])."', 'year': '".date("Y", $d[$idx][$rel_prop_name])."', 'hour':'".date("H", $d[$idx][$rel_prop_name])."', 'minute': '".date("i", $d[$idx][$rel_prop_name])."' }";
-			}
-			else
 			if (is_array($d[$idx][$rel_prop_name]))
 			{
 				$d2 = array();
