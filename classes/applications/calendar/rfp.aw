@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.112 2008/08/25 14:02:11 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.113 2008/08/26 13:33:28 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1752,11 +1752,6 @@ class rfp extends class_base
 		}
 	}
 
-	function on_save_reservation($arr)
-	{
-		die(arr($arr));
-	}
-
 	function _get_housing_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -2489,7 +2484,8 @@ class rfp extends class_base
 			//$this->vars($room_data);
 			if($package)
 			{
-				if($this->can("view", $mgrid))
+				$price_set = false;
+				if($this->can("view", $mgrid) && !$rv->prop("special_sum"))
 				{
 					$mgr = obj($mgrid);
 					$pk_prices = $mgr->meta("pk_prices");
@@ -2521,7 +2517,15 @@ class rfp extends class_base
 					$unitprice = $prices_for_calculator[$room_price_oid];
 					
 				}
-				$price = $unitprice*$people;
+				elseif($sp = $rv->prop("special_sum"))
+				{
+					$price = $sp;
+					$price_set = true;
+				}
+				if(!$price_set)
+				{
+					$price = $unitprice*$people;
+				}
 				$room_data["package_data"] = array(
 					"unitprice" => $unitprice,
 					"package" => $package,
@@ -3535,20 +3539,29 @@ class rfp extends class_base
 					foreach($conns as $conn)
 					{
 						$rv = $conn->to();
-						if(!$room_price)
+						unset($tot_add);
+						if($sp = $rv->prop("special_sum"))
 						{
-							$room_prices = $room_p->calculate_room_prices_price(array(
-								"oids" => array_keys($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"]),
-								"start" => $rv->prop("start1"),
-								"end" => $rv->prop("start1") + 1,
-							));
-							$room_price_oid = key($room_prices);
+							$tot_add = $sp;
 						}
-						else
+						if(!isset($tot_add))
 						{
-							$room_price_oid = $room_price;
+							if(!$room_price)
+							{
+								$room_prices = $room_p->calculate_room_prices_price(array(
+									"oids" => array_keys($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"]),
+									"start" => $rv->prop("start1"),
+									"end" => $rv->prop("start1") + 1,
+								));
+								$room_price_oid = key($room_prices);
+							}
+							else
+							{
+								$room_price_oid = $room_price;
+							}
+							$tot_add = ($prices_for_calculator[$room_price_oid] * $rv->prop("people_count"));
 						}
-						$totprice += ($prices_for_calculator[$room_price_oid] * $rv->prop("people_count"));
+						$totprice += $tot_add;
 					}
 				}
 				else
