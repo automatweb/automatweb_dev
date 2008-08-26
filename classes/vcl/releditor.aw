@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.154 2008/08/26 11:34:55 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.155 2008/08/26 11:39:33 robert Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -2155,6 +2155,15 @@ class releditor extends core
 		$r = array();
 		foreach($pd["props"] as $rel_prop_name)
 		{
+			if ($rel_props[$rel_prop_name]["type"] == "datetime_select")
+			{
+				if (is_array($d[$idx][$rel_prop_name]))
+				{
+					$d[$idx][$rel_prop_name] = mktime($d[$idx][$rel_prop_name]["hour"], $d[$idx][$rel_prop_name]["minute"], $d[$idx][$rel_prop_name]["second"], $d[$idx][$rel_prop_name]["month"], $d[$idx][$rel_prop_name]["day"], $d[$idx][$rel_prop_name]["year"]);
+				}
+				$r[] = "'[$rel_prop_name]': {'day': '".date("d", $d[$idx][$rel_prop_name])."', 'month': '".date("m", $d[$idx][$rel_prop_name])."', 'year': '".date("Y", $d[$idx][$rel_prop_name])."', 'hour':'".date("H", $d[$idx][$rel_prop_name])."', 'minute': '".date("i", $d[$idx][$rel_prop_name])."' }";
+			}
+			else
 			if (is_array($d[$idx][$rel_prop_name]))
 			{
 				$d2 = array();
