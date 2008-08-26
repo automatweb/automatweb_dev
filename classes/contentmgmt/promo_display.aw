@@ -310,6 +310,7 @@ if ($_GET["PROMO_DBG"] == 1)
 				$d_cnt = 0;
 				$d_total = count($docid);
 				aw_global_set("in_promo_display", $o->id());
+				$set_tpl_filename = $tpl_filename;
 				enter_function("mainc-contentmgmt/promo-show-docs");
 
 				foreach($docid as $d)
@@ -327,12 +328,19 @@ if ($_GET["PROMO_DBG"] == 1)
 				{
 					echo "doc2 $d <br>";
 				}
+					$add_2 = false;
 					if (($d_cnt % 2)  == 1)
 					{
 						if (file_exists($tpldir."/automatweb/documents/".$tpl_filename."2"))
 						{
 							$tpl_filename .= "2";
+							$add_2 = true;
 						}
+					}
+					
+					if(!$add_2)
+					{
+						$tpl_filename = $set_tpl_filename;
 					}
 
 					if ($d_cnt >= $o->prop("tpl_lead_last_count") && $o->prop("tpl_lead_last"))
