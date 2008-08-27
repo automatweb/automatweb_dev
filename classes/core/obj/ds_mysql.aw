@@ -2653,7 +2653,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function _get_joins($params)
 	{
 		// check if join strategy is present in args and do joins based on that
-		if (!empty($params["join_strategy"]))
+		if (false && !empty($params["join_strategy"]))
 		{
 			$join_strategy = $params["join_strategy"];
 		}
@@ -3645,6 +3645,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	private function _optimize_joins($j, $used)
 	{
+//echo dbg::dump($j);
 enter_function("ds_mysql::optimize_joins");
 		$j = trim(substr($j, strlen("objects")));
 		$js = explode("\n", str_replace("LEFT JOIN", "\nLEFT JOIN", $j));
