@@ -101,6 +101,37 @@ class bt_stat_impl extends core
 			}
 		}
 
+		if($arr["request"]["stat_hr_tasks"] || !$arr["request"]["stat_hrs_end"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_TASK_ROW,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"done" => 1,
+				"date" => $time_constraint,
+			));
+			foreach($ol->arr() as $o)
+			{
+				if(!$o->prop("time_real"))
+				{
+					continue;
+				}
+				$tp = $type["types"];
+				$impl = $o->prop("impl");
+				foreach($impl as $pid)
+				{
+					$pi = get_instance(CL_CRM_PERSON);
+					$po = obj($pid);
+					$u = $pi->has_user($po);
+					if($u !== false)
+					{
+						$uname = $u->name();
+						$stat_hrs[$uname][] = $o;
+					}
+				}
+			}
+		}
+
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_hrs_ov_t($t);
 		foreach($stat_hrs as $uid => $coms)
@@ -118,10 +149,15 @@ class bt_stat_impl extends core
 				elseif($com->class_id() == CL_TASK)
 				{
 					$dmz[date("Y", $com->prop("start1"))]["m".date("m",$com->prop("start1"))] += $com->prop("num_hrs_real");
+					
 				}
 				elseif($com->class_id() == CL_CRM_MEETING || $com->class_id() == CL_CRM_CALL)
 				{
 					$dmz[date("Y", $com->prop("start1"))]["m".date("m",$com->prop("start1"))] += $com->prop("time_real");
+				}
+				elseif($com->class_id() == CL_TASK_ROW)
+				{
+					$dmz[date("Y", $com->prop("date"))]["m".date("m", $com->prop("date"))] += $com->prop("time_real");
 				}
 			}
 
@@ -283,7 +319,33 @@ class bt_stat_impl extends core
 				}
 			}
 		}
-
+		if($arr["request"]["stat_hr_tasks"] || !$arr["request"]["stat_hrs_end"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_TASK_ROW,
+				"impl" => $p->id(),
+				"site_id" => array(),
+				"lang_id" => array(),
+				"date" => $fancy_filter,
+			));
+			foreach($ol->arr() as $o)
+			{
+				$conn = $o->connections_to(array(
+					"from.class_id" => CL_TASK,
+					"type" => "RELTYPE_ROW",
+					"to.oid" => $o->id(),
+				));
+				foreach($conn as $c)
+				{
+					$oid = $c->prop("from");
+					break;
+				}
+				$bugs[$oid]["hrs"] += $o->prop("time_real");
+				$dt = $o->prop("date");
+				$olddt = $bugs[$oid]["lastdate"];
+				$bugs[$oid]["lastdate"] = ($olddt < $dt) ? $dt : $olddt;
+			}
+		}
 		foreach($bugs as $bug => $data)
 		{
 			$o = obj($bug);
