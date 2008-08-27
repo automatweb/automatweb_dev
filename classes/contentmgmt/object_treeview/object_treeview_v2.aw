@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.121 2008/08/07 21:48:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.122 2008/08/27 08:54:08 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -725,7 +725,7 @@ class object_treeview_v2 extends class_base
 		// make yah -- top parent in tree to current selection
 		$yah = t("");
 
-		if (is_oid($_GET["tv_sel"]) and array_key_exists($_GET["tv_sel"], $fld))
+		if ($this->can("view", $_GET["tv_sel"]) and array_key_exists($_GET["tv_sel"], $fld))
 		{
 			$yah_data = array();
 			$current = obj($_GET["tv_sel"]);
@@ -733,7 +733,14 @@ class object_treeview_v2 extends class_base
 			do
 			{
 				$yah_data[] = $current->name();
-				$current = obj($current->parent());
+				if ($this->can("view", $current->parent()))
+				{
+					$current = obj($current->parent());
+				}
+				else
+				{
+					$current = obj();
+				}
 			}
 			while (array_key_exists($current->id(), $fld));
 

@@ -141,7 +141,6 @@ class site_show extends class_base
 
 		$awt->stop("xshow2");
 		$apd->on_shutdown_get_styles($rv);
-
 		return $rv;
 	}
 
@@ -257,6 +256,14 @@ class site_show extends class_base
 					$im = $obj->meta("menu_images");
 					for($imn = 0; $imn < $ni; $imn++)
 					{
+						if (!is_array($this->properties["images"]))
+						{
+							$this->properties["images"] = array();
+						}
+						if (!is_array($im[$imn]))
+						{
+							$im[$imn] = array();
+						}
 						if (!isset($this->properties["images"][$imn]) && is_oid($im[$imn]["image_id"]))
 						{
 							$this->properties["images"][$imn] = $im[$imn]["image_id"];
@@ -2689,7 +2696,6 @@ class site_show extends class_base
 					"obj" => (!empty($pobject) ? $pobject : false),
 					"pgroup" =>  (!empty($pgroup) ? $pgroup : false),
 				));
-
 				// check acl
 				if ($_act == "new" && !$this->can("add", $meth["values"]["parent"]))
 				{

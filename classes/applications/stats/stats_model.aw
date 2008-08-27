@@ -439,6 +439,7 @@ echo "cmd2 = $cmd <br>";
 	**/
 	function nightly_move()
 	{
+die();
 		$inp = $this->get_cval("night_moves_in_progress");
 		if ((time() - $inp) < 3600*10)
 		{

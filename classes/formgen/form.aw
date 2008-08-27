@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.132 2008/08/14 13:04:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.133 2008/08/27 08:54:12 kristo Exp $
 // form.aw - Class for creating forms
 /*
 @classinfo  maintainer=kristo
@@ -1793,10 +1793,9 @@ class form extends form_base
 		if (!$no_post_vars)
 		{
 			// .. if that is not the case, then we just import all the POST variables.
-			//global $HTTP_POST_VARS, $HTTP_GET_VARS;
 			$this->post_vars = safe_array($_POST) + safe_array($_GET);
 		};
-
+		
 		// if this is set to true, then a variable in the session will be set to the created/loaded entry id, so that
 		// the next time the form is viewed in the current session, this entry id will be used if not specified in the url
 		$this->set_use_eid_once = false;

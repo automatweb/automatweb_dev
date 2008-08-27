@@ -447,11 +447,10 @@ class core extends acl_base
                 {
                         $send_mail = false;
                 }
-
 		if ($err_type == 110 && strpos($msg, "http:") !== false)
 		{
-			die("silly robot");
-			$send_mail = false;
+			//die("silly robot");
+			//$send_mail = false;
 		}
 
 		$tmp = $_REQUEST;

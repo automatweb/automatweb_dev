@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.30 2008/07/24 12:18:14 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.31 2008/08/27 08:54:03 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -201,7 +201,7 @@ class image extends class_base
 				/*
 				if (aw_ini_get("image.imgbaseurl") == "")
 				{
-				 	$row["url"] .= "/".$row["name"];
+				 	//$row["url"] .= "/".$row["name"];
 				}
 				 */
 				// if the image is from another site, then make the url point to that
@@ -309,7 +309,7 @@ class image extends class_base
 		$tmp = aw_ini_get("site_basedir")."/files/".substr($tmp, $slp)."/".basename($path);
 		return $tmp;
 	}
-
+	
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse v&auml;lja callbackina
 	//  force_comments - shows comment count and links to comment window even if not set in images prop
@@ -2101,6 +2101,8 @@ class image extends class_base
 	function do_resize_file_in_fs($file, $conf, $prefix)
 	{
 		$img = get_instance("core/converters/image_convert");
+		$img->set_error_reporting(false);
+
 		$img->load_from_file($file);
 
 		// get image size
@@ -2261,7 +2263,8 @@ class image extends class_base
 		}
 
 		$that = new image;
-		$size = getimagesize(self::_get_fs_path($o->prop("file2")));
+
+		$size = @getimagesize(self::_get_fs_path($o->prop("file2")));
 		$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
 		return  "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
 	}

@@ -2289,7 +2289,7 @@ class user extends class_base
 	{
 		$c = get_instance("config");
 		$aug_oid = $c->get_simple_config("all_users_grp_oid");
-		if (!$aug_oid)
+		if (!$c->can("view", $aug_oid))
 		{
 			$aug = aw_ini_get("groups.all_users_grp");
 			// convert to oid and store that
@@ -2315,4 +2315,5 @@ class user extends class_base
 		return $aug_oid;
 	}
 }
+
 ?>

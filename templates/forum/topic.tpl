@@ -23,7 +23,7 @@
 
 <table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
-	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div>
+	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:author_name}</div>
 <!-- SUB: AVATAR -->
 <img src="{VAR:avatar}" /><br />
 <!-- END SUB: AVATAR -->

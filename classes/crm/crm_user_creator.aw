@@ -64,6 +64,7 @@ class crm_user_creator extends core
 	{
 		$p = obj($p_id);
 		$wc = $p->prop("work_contact");
+
 		if (is_oid($wc) && $this->can("view", $wc))
 		{
 			return obj($wc);
@@ -317,7 +318,7 @@ class crm_user_creator extends core
 		if (count($invalid_chars))
 		{
 			$invalid_chars = join(",", $invalid_chars);
-			$errors[] = sprintf(t("Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."), $invalid_chars);
+			$errors[] = sprintf(t("Nimes sisaldunud t&auml;hem&auml;rgid [%s] pole kasutajanimedes lubatud."), $invalid_chars);
 		}
 
 		if ($replace_faulty_chars)

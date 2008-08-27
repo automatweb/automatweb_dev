@@ -1216,7 +1216,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			// if the topics sort order is not set at all, then by default we sort it by creation time:
 			$topics_list_params['sort_by'] = 'objects.created DESC';
 		}
-
+		
 		$topics_ol = new object_list($topics_list_params);
 		if (!$is_sorted)
 		{

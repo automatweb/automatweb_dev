@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.89 2008/08/14 13:04:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.90 2008/08/27 08:54:12 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -1171,10 +1171,10 @@ class form_table extends form_base
 			{
 				$title = $_sc_d;
 			}
-
+			$title = str_replace("&", "&amp;", htmlentities($title, ENT_COMPAT, aw_global_get("charset")));
 			if ((!$cc["no_show_empty"] || $this->table_not_empty_cols[$col]) && !$cc["not_active"])
 			{
-				$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
+				$xml.="\n<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
 				if ($cc["sortable"])
 				{
 					$xml.=" sortable=\"1\" ";

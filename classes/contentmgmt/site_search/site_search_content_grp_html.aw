@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.15 2008/04/21 10:25:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.16 2008/08/27 08:54:10 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -320,6 +320,7 @@ echo "baseurl = ".$this->baseurl." <br>";
 
 		$h_id = md5($page->get_url());
 		$fc = $page->get_text_content($o);
+
 		$modified = $page->get_last_modified();
 		$title = $page->get_title($o);
 		$url = $page->get_url();

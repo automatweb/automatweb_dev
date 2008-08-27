@@ -5056,6 +5056,22 @@ class room extends class_base
 	**/
 	function check_if_available($arr)
 	{
+
+/*if(aw_global_get("uid") == "struktuur")
+{
+
+	$ol = new object_list(array("class_id" => CL_RESERVATION, 
+		"created" => new obj_predicate_compare(OBJ_COMP_LESS, (time() - (4*3600*24))),
+		//"oid" => new obj_predicate_compare(OBJ_COMP_LESS, 1400),
+		"resource" => 965,
+	));
+	foreach($ol->arr() as $o)
+	{arr($o->id());
+		//$o->delete();
+	}
+}
+*/
+
 		if(is_array($this->res_table))
 		{
 			return $this->check_from_table($arr);
@@ -6062,7 +6078,8 @@ class room extends class_base
 
 		return $t->draw().$submit; 
 	}
-	
+
+
 	function get_people_table($arr)
 	{
 		$working_days = $arr["obj_inst"]->meta("working_days");

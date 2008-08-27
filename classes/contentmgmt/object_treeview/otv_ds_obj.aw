@@ -679,7 +679,7 @@ class otv_ds_obj extends class_base
 				}
 
 				$_ft[] = new object_list_filter(array(
-					"logic" => $params["predicate"] ? $params["predicate"] : "OR",
+					"logic" => $params["predicate"] ? $params["predicate"] : "AND",
 					"conditions" => $cur_filt
 				));
 			}
@@ -706,6 +706,10 @@ class otv_ds_obj extends class_base
 		}
 		exit_function("otv_ds_obj::get_objects::make_filter");
 		enter_function("otv_ds_obj::get_objects::list");
+/*if ($_GET["otvdbg"])
+{
+	die(dbg::dump($_ft));
+}*/
 		$ol = new object_list($_ft);
 		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 		exit_function("otv_ds_obj::get_objects::list");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.122 2008/08/07 08:33:43 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.123 2008/08/27 08:54:14 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -1969,6 +1969,7 @@ class aw_table extends aw_template
 		xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
 		if (!xml_parse($xml_parser,$xml_data))
 		{
+echo dbg::short_backtrace();
 			echo(sprintf("XML error: %s at line %d",
 			xml_error_string(xml_get_error_code($xml_parser)),
 			xml_get_current_line_number($xml_parser)));

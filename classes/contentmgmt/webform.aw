@@ -2028,7 +2028,7 @@ class webform extends class_base
 		$rd->cfgform_id = $cfgform->id();
 		$rd->load_defaults();
 		$els = $rd->parse_properties(array(
-			"properties" => $els,
+			"properties" => &$els,
 			"obj_inst" => $dummy,
 		));
 		$def_caption_style = $arr["obj_inst"]->prop("def_caption_style");
@@ -2292,6 +2292,10 @@ class webform extends class_base
 			if ($pd["type"] == "text" && $pd["subtitle"] == 1 && trim(strip_tags($pd["value"])) == "")
 			{
 				$pd["value"] = $pd["caption"];
+			}
+			if ($pd["type"] == "hidden" && isset($arr["reforb"][$pn]))
+			{
+				$arr["reforb"][$pn] = $pd["value"];
 			}
 			$htmlc->add_property($pd);
 		}

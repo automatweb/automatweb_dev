@@ -516,6 +516,8 @@ class menuedit extends aw_template implements request_startup
 	**/
 	function do_error_redir($section)
 	{
+//echo dbg::short_backtrace()." <br>";
+//die(dbg::dump($section));
 		// check site config
 		$pl = new object_list(array(
 			"class_id" => CL_CONFIG_OLD_REDIRECT,

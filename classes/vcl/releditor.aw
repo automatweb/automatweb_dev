@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.156 2008/08/27 07:56:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.157 2008/08/27 08:54:14 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1308,7 +1308,7 @@ class releditor extends core
 		{
 			$awt->table_header = '<input type="hidden" name="releditor_clones" id="releditor_clones" value="0" />';
 		}
-
+		$awt->set_numeric_field("_sort_jrk");
 		$awt->set_sortable(true);
 		$awt->set_numeric_field("_sort_jrk");
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));

@@ -940,7 +940,7 @@ class aw_template extends core
 	// !$arr - template content, array of lines of text
 	function read_tpl($arr)
 	{
-		if ($this->debug_mode != 0 && isset($_GET["TPL"]) && $_GET["TPL"] == 1)
+		if ($_GET["TPL"] == 1)
 		{
 			// this will add link to documentation
 			$pos = strpos($this->template_filename, aw_ini_get("tpldir"));

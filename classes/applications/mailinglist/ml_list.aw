@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.134 2008/08/06 13:24:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.135 2008/08/27 08:53:59 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -944,6 +944,27 @@ class ml_list extends class_base
 				break;
 			case "message":
 				$msg_obj = $this->_get_mail_message_object($arr);
+/*		if(aw_global_get("uid") == "struktuur")
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_MESSAGE,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			foreach($ol-> arr() as $o)
+			{$md = $o->meta("mail_data");$qid = $md["qid"];
+	if($qid){			
+	$row = $this->db_fetch_row("SELECT * FROM ml_sent_mails WHERE qid = ".$qid);
+				if(!$o->prop("message"))
+				{
+					$o->set_prop("message" , $row["message"]);
+					$o -> save();
+				}
+				arr($row);
+}
+			}
+		}*/
+//arr($msg_obj->properties());
 				$prop["value"] = $msg_obj->prop("message");
 				$prop["richtext"] = $arr["obj_inst"]->prop("no_fck")? 0 : $arr["obj_inst"]->prop("classinfo_allow_rte");
 				//allow_rte
