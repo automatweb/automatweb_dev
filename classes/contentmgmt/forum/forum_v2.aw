@@ -208,6 +208,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@caption Viimane autor
 		@comment Teemade nimekirjas viimase lisajana n&auml;idata, kes lisas teema v&otilde;i vastuse
 
+		@property link_max_len type=textbox
+		@caption Lingi maksimaalne pikkus
+		@comment Linkide kuvamisel maksimaalne lingi teksti pikkus
+
 		@property show_last_posts_count type=textbox default=3 type=int
 		@caption Viimaseid postitusi kuva
 		@comment Mitut n&auml;idata viimaste postituste vaates
@@ -353,6 +357,8 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			TOPICS_LAST_TOPIC_AUTHOR => t("teema")
 		);
 
+		$this->link_def_max_len = 50;
+
 		lc_site_load("forum",&$this);
 
 		$this->comment_fields = array(
@@ -455,6 +461,9 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				break;
 			case "mail_vars":
 				$data["value"] = "Link teemale: [link]<br /> Teema nimi: [name]<br />Teema autor: [author]";
+				break;
+			case "link_max_len":
+				$data["value"] = ($val = $data["value"])? $val: $this->link_def_max_len;
 				break;
 			default:
 				$tmp = explode("_", $data["name"]);
@@ -1455,6 +1464,8 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		$this->_add_style("style_comment_time");
 		$this->_add_style("style_comment_text");
 		$this->vars($this->style_data);
+
+		$this->link_max_len = ($ml = $args["obj_inst"]->prop("link_max_len")) ? $ml : $this->link_def_max_len;
 
 		$comments_on_page = $args["obj_inst"]->prop("comments_on_page");
 		if (empty($comments_on_page))
@@ -3494,7 +3505,18 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			$text = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$text);
 		};
 
-		$text = create_links($text);
+		if(!$this->link_max_len)
+		{
+			$text = create_links($text);
+		}
+		else
+		{
+			$text = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))([^\s\)]+)/ime", "'\\2<a href=\"http\\5://\\6\\7\" target=\"_blank\">'.substr('\\4\\6\\7', 0, \$this->link_max_len).((strlen('\\4\\6\\7')>\$this->link_max_len)?'...':'').'</a>'", $text);
+			if (!aw_ini_get("menuedit.protect_emails"))
+			{
+				$text = preg_replace("/([\w*|\.|\-]*?)@([\w*|\.]*?)/imsU","<a href='mailto:$1@$2'>$1@$2</a>",$text);
+			}
+		}
 		$text = preg_replace("/\r([^<])/m","<br />\n\$1",$text);
 		//$text = nl2br($text);
 		return $text;
