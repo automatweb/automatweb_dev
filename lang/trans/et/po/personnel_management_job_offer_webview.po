@@ -283,17 +283,22 @@ msgid "Ameti nimi"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:201
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:310
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:358
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:309
+msgid "T&ouml;&ouml;pakkumine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:363
 msgid "Piirkonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:359
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:364
 msgid "Maakonnad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:360
+#: classes/applications/personnel_management/personnel_management_job_offer_webview.aw:365
 msgid "Linnad"
 msgstr ""

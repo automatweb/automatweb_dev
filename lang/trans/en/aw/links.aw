@@ -46,5 +46,4 @@ $GLOBALS["TRANS"]["T&ouml;&ouml;riistariba"] = "Toolbar";
 $GLOBALS["TRANS"]["Aadressi riba"] = "Address bar";
 $GLOBALS["TRANS"]["Men&uuml;&uuml;d"] = "Menus";
 $GLOBALS["TRANS"]["Kerimisriba"] = "Scrollbars";
-$GLOBALS["TRANS"]["Saidi sisene link"] = "Inner-site link";
 ?>

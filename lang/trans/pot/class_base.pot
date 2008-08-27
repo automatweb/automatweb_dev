@@ -114,63 +114,63 @@ msgstr ""
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3484
+#: classes/class_base.aw:3494
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3493
+#: classes/class_base.aw:3503
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4294
+#: classes/class_base.aw:4304
 msgid "ACL error saidil %s: CAN_%s denied for oid %s"
 msgstr ""
 
-#: classes/class_base.aw:4602 classes/class_base.aw:5064 classes/class_base.aw:5076
+#: classes/class_base.aw:4612 classes/class_base.aw:5074 classes/class_base.aw:5086
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:4943
+#: classes/class_base.aw:4953
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5511
+#: classes/class_base.aw:5521
 msgid "(l&auml;htetekst)"
 msgstr ""
 
-#: classes/class_base.aw:5518
+#: classes/class_base.aw:5528
 msgid "(t&otilde;lge)"
 msgstr ""
 
-#: classes/class_base.aw:5526 classes/class_base.aw:5580 classes/class_base.aw:5613
+#: classes/class_base.aw:5536 classes/class_base.aw:5590 classes/class_base.aw:5623
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5535 classes/class_base.aw:5588 classes/class_base.aw:5621
+#: classes/class_base.aw:5545 classes/class_base.aw:5598 classes/class_base.aw:5631
 msgid "Salvesta"
 msgstr ""
 
-#: classes/class_base.aw:5786 classes/class_base.aw:5823
+#: classes/class_base.aw:5796 classes/class_base.aw:5833
 msgid "aliase number oli juba olemas, seega uuendas"
 msgstr ""
 
-#: classes/class_base.aw:5790
+#: classes/class_base.aw:5800
 msgid "Seoste l&otilde;ikamisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr ""
 
-#: classes/class_base.aw:5830
+#: classes/class_base.aw:5840
 msgid "Seoste kopeerilisel tekkis j&auml;rgmine t&otilde;rge: objekt id'ga %s oli juba seosega #%s# seega objekt nimega %s seoseks sai #%s#"
 msgstr ""
 
-#: classes/class_base.aw:5860
+#: classes/class_base.aw:5870
 msgid "Kliki siia j&auml;tkamiseks"
 msgstr ""
 
-#: classes/class_base.aw:6290
+#: classes/class_base.aw:6300
 msgid "User %s has added/changed the following file %s. Please click the link below to view the document \n %s"
 msgstr ""
 
-#: classes/class_base.aw:6309
+#: classes/class_base.aw:6319
 msgid "Teavitus muutunud dokumendist"
 msgstr ""
 

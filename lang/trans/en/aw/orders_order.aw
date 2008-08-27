@@ -17,5 +17,4 @@ $GLOBALS["TRANS"]["Toode"] = "Product";
 $GLOBALS["TRANS"]["Kogus"] = "Amount";
 $GLOBALS["TRANS"]["Tellimiseks peate n&ouml;ustuma tellimistingimustega!"] = "To order you must accept the ordering conditions!";
 $GLOBALS["TRANS"]["Tellimiseks peate n&otilde;ustuma tellimistingimustega"] = "To order you must accept the ordering conditions";
-$GLOBALS["TRANS"]["Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"] = "Unfortunately, your mail reader can not display HTML e-mails";
 ?>

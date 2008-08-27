@@ -217,6 +217,18 @@ msgstr ""
 msgid "Omaduse N&auml;ita puus faile ja dokumente (show_files_and_docs_in_tree) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg
+msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg_comment
+msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_billable_only_by_mrg_help
+msgid "Omaduse Saata arve saab m&auml;&auml;rata toimetusele vaid kliendihaldur (billable_only_by_mrg) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_org_link_menu
 msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) caption"
 msgstr ""
@@ -230,15 +242,15 @@ msgid "Omaduse Organisatsioonide linkide kataloog (org_link_menu) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_insurance_link_menu
-msgid "Omaduse Kindlustuse tüüpide kataloog (insurance_link_menu) caption"
+msgid "Omaduse Kindlustuse t&uuml;&uuml;pide kataloog (insurance_link_menu) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_insurance_link_menu_comment
-msgid "Omaduse Kindlustuse tüüpide kataloog (insurance_link_menu) kommentaar"
+msgid "Omaduse Kindlustuse t&uuml;&uuml;pide kataloog (insurance_link_menu) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_insurance_link_menu_help
-msgid "Omaduse Kindlustuse tüüpide kataloog (insurance_link_menu) help"
+msgid "Omaduse Kindlustuse t&uuml;&uuml;pide kataloog (insurance_link_menu) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_default_my_company_tab
@@ -469,83 +481,83 @@ msgstr "Controller"
 msgid "Seose Kataloog (RELTYPE_MENU) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:255
+#: classes/applications/crm/crm_settings.aw:258
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_settings.aw:256
+#: classes/applications/crm/crm_settings.aw:259
 msgid "Ei"
 msgstr "No"
 
-#: classes/applications/crm/crm_settings.aw:257
+#: classes/applications/crm/crm_settings.aw:260
 msgid "Arvel"
 msgstr "On invoice"
 
-#: classes/applications/crm/crm_settings.aw:258
+#: classes/applications/crm/crm_settings.aw:261
 msgid "Arveta"
 msgstr "No Invoice"
 
-#: classes/applications/crm/crm_settings.aw:271
+#: classes/applications/crm/crm_settings.aw:274
 msgid "Tabelvaade"
 msgstr "Table view"
 
-#: classes/applications/crm/crm_settings.aw:272
+#: classes/applications/crm/crm_settings.aw:275
 msgid "Kalendervaade"
 msgstr "Calendar view"
 
-#: classes/applications/crm/crm_settings.aw:308
+#: classes/applications/crm/crm_settings.aw:311
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:329
+#: classes/applications/crm/crm_settings.aw:332
 msgid "Grupid kellele piirang ei m&otilde;ju"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:416
+#: classes/applications/crm/crm_settings.aw:419
 msgid "Salvesta tabeli seaded"
 msgstr "Save table settings"
 
-#: classes/applications/crm/crm_settings.aw:437
+#: classes/applications/crm/crm_settings.aw:440
 msgid "Taasta algseaded"
 msgstr "Restore defaults"
 
-#: classes/applications/crm/crm_settings.aw:438
+#: classes/applications/crm/crm_settings.aw:441
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas j&auml;tkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:451
+#: classes/applications/crm/crm_settings.aw:454
 msgid "Minu t&ouml;&ouml;koht"
 msgstr "My workplace"
 
-#: classes/applications/crm/crm_settings.aw:458
+#: classes/applications/crm/crm_settings.aw:461
 msgid "Klient"
 msgstr "Client"
 
-#: classes/applications/crm/crm_settings.aw:465
+#: classes/applications/crm/crm_settings.aw:468
 msgid "Eraisikust klient"
 msgstr "Private person client"
 
-#: classes/applications/crm/crm_settings.aw:472
+#: classes/applications/crm/crm_settings.aw:475
 msgid "T&ouml;&ouml;kaaslane"
 msgstr "Workmate"
 
-#: classes/applications/crm/crm_settings.aw:479
+#: classes/applications/crm/crm_settings.aw:482
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr "Clients worker"
 
-#: classes/applications/crm/crm_settings.aw:529
+#: classes/applications/crm/crm_settings.aw:532
 msgid "Veeru nimi"
 msgstr "Column name"
 
-#: classes/applications/crm/crm_settings.aw:533
+#: classes/applications/crm/crm_settings.aw:536
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:537
+#: classes/applications/crm/crm_settings.aw:540
 msgid "Kasutusel"
 msgstr "Used"
 
-#: classes/applications/crm/crm_settings.aw:541
+#: classes/applications/crm/crm_settings.aw:544
 msgid "Pealkiri"
 msgstr "Title"
 

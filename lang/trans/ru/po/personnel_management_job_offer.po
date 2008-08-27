@@ -800,8 +800,13 @@ msgstr ""
 msgid "Kandideerin"
 msgstr ""
 
+<<<<<<< personnel_management_job_offer.po
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:502
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:2006
+=======
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:502
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:2002
+>>>>>>> 1.11
 msgid "Niipea kui v&otilde;imalik"
 msgstr ""
 
@@ -949,14 +954,26 @@ msgstr ""
 msgid "Vaatamisi"
 msgstr ""
 
+<<<<<<< personnel_management_job_offer.po
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:2002
+msgid "T&auml;htajatu"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:2186
+=======
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:1998
 msgid "T&auml;htajatu"
 msgstr "&#1041&#1077&#1089&#1089&#1088&#1086&#1095&#1085&#1099&#1081"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:2182
+>>>>>>> 1.11
 msgid "Sisestage salvestatava seadetevormi nimi:"
 msgstr ""
 
+<<<<<<< personnel_management_job_offer.po
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:2483
+=======
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:2479
+>>>>>>> 1.11
 msgid "S&otilde;num saadetud!"
 msgstr ""

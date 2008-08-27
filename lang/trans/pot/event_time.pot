@@ -70,3 +70,23 @@ msgstr ""
 msgid "Seose Toimumiskoht (RELTYPE_EVENT) tekst"
 msgstr ""
 
+#: classes/applications/calendar/event_time.aw:66
+msgid "Otsi toimumiskohti"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:177 classes/applications/calendar/event_time.aw:197
+msgid "Toimumiskoht"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:182 classes/applications/calendar/event_time.aw:183
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:224
+msgid "Vali see"
+msgstr ""
+
+#: classes/applications/calendar/event_time.aw:245 classes/applications/calendar/event_time.aw:246
+msgid "Vali"
+msgstr ""
+

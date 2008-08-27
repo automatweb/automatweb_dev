@@ -890,42 +890,6 @@ msgstr ""
 msgid "Omaduse  (files_tbl) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_cancel_and_payment_terms
-msgid "Omaduse Konvererntside annuleerimis- ja maksetingimused (cancel_and_payment_terms) caption"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_cancel_and_payment_terms_comment
-msgid "Omaduse Konvererntside annuleerimis- ja maksetingimused (cancel_and_payment_terms) kommentaar"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_cancel_and_payment_terms_help
-msgid "Omaduse Konvererntside annuleerimis- ja maksetingimused (cancel_and_payment_terms) help"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_accomondation_terms
-msgid "Omaduse Majutuse annuleerimis- ja maksetingimused (accomondation_terms) caption"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_accomondation_terms_comment
-msgid "Omaduse Majutuse annuleerimis- ja maksetingimused (accomondation_terms) kommentaar"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_accomondation_terms_help
-msgid "Omaduse Majutuse annuleerimis- ja maksetingimused (accomondation_terms) help"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_default_currency
-msgid "Omaduse Vaikevaluuta (default_currency) caption"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_default_currency_comment
-msgid "Omaduse Vaikevaluuta (default_currency) kommentaar"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_default_currency_help
-msgid "Omaduse Vaikevaluuta (default_currency) help"
-msgstr ""
-
 #: classes/applications/calendar/rfp.aw:prop_final_rooms
 msgid "Omaduse Ruumid (final_rooms) caption"
 msgstr ""
@@ -1214,14 +1178,6 @@ msgstr ""
 msgid "Grupi Failid (files) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:group_terms
-msgid "Grupi Tingimused (terms) pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:group_terms_help
-msgid "Grupi Tingimused (terms) help"
-msgstr ""
-
 #: classes/applications/calendar/rfp.aw:group_final_info
 msgid "Grupi Tellimuskirjeldus (final_info) pealkiri"
 msgstr ""
@@ -1322,10 +1278,6 @@ msgstr ""
 msgid "Seose Toitlustuse broneering (RELTYPE_CATERING_RESERVATION) tekst"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:rel_RELTYPE_DEFAULT_CURRENCY
-msgid "Seose Arvutuste vaikevaluuta (RELTYPE_DEFAULT_CURRENCY) tekst"
-msgstr ""
-
 #: classes/applications/calendar/rfp.aw:layout_prs_left
 msgid "Kujundusosa Ruumid&nbsp;ja&nbsp;reserveeringud (prs_left) pealkiri"
 msgstr ""
@@ -1350,195 +1302,223 @@ msgstr ""
 msgid "Kujundusosa Ressursid (res_right) pealkiri"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:531
+#: classes/applications/calendar/rfp.aw:443
+msgid "Saadetud"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:444
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:445
+msgid "T&auml;psustamisel"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:446
+msgid "Tagasi l&uuml;katud"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:447
+msgid "T&uuml;histatud"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:580
 msgid "Reserveering"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:558
+#: classes/applications/calendar/rfp.aw:607
 msgid "Ruumi '%s'"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:638
+#: classes/applications/calendar/rfp.aw:634
+msgid "Kalender"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:636
+msgid "Valige palun v&auml;hemalt &uuml;ks ruum!"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:713
 msgid "Palun valige reserveering"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:789 classes/applications/calendar/rfp.aw:2087
+#: classes/applications/calendar/rfp.aw:866 classes/applications/calendar/rfp.aw:2280
 msgid "Yes"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:789 classes/applications/calendar/rfp.aw:2087
+#: classes/applications/calendar/rfp.aw:866 classes/applications/calendar/rfp.aw:2280
 msgid "No"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:803 classes/applications/calendar/rfp.aw:1997 classes/applications/calendar/rfp.aw:2020
+#: classes/applications/calendar/rfp.aw:880 classes/applications/calendar/rfp.aw:2190 classes/applications/calendar/rfp.aw:2213
 msgid "Type"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:807
+#: classes/applications/calendar/rfp.aw:884
 msgid "Start_time"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:811
+#: classes/applications/calendar/rfp.aw:888
 msgid "End time"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:815
+#: classes/applications/calendar/rfp.aw:892
 msgid "Number of attendees"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:841
+#: classes/applications/calendar/rfp.aw:918
 msgid "Fail"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:853
+#: classes/applications/calendar/rfp.aw:930
 msgid "Ressurss"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:870
+#: classes/applications/calendar/rfp.aw:947
 msgid "Allahindlus %"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:875 classes/applications/calendar/rfp.aw:1088
+#: classes/applications/calendar/rfp.aw:952 classes/applications/calendar/rfp.aw:1169
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:880 classes/applications/calendar/rfp.aw:1124
+#: classes/applications/calendar/rfp.aw:957 classes/applications/calendar/rfp.aw:1205
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:885 classes/applications/calendar/rfp.aw:1106
+#: classes/applications/calendar/rfp.aw:962 classes/applications/calendar/rfp.aw:1187
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:952
+#: classes/applications/calendar/rfp.aw:1033
 msgid "-"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:981
+#: classes/applications/calendar/rfp.aw:1062
 msgid "Kokku"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1000 classes/applications/calendar/rfp.aw:1361
+#: classes/applications/calendar/rfp.aw:1081 classes/applications/calendar/rfp.aw:1442
 msgid "Kokku:"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1076
+#: classes/applications/calendar/rfp.aw:1157
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1082 classes/applications/calendar/rfp.aw:1335
+#: classes/applications/calendar/rfp.aw:1163 classes/applications/calendar/rfp.aw:1416
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1094 classes/applications/calendar/rfp.aw:1341
+#: classes/applications/calendar/rfp.aw:1175 classes/applications/calendar/rfp.aw:1422
 msgid "Soodus"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1100 classes/applications/calendar/rfp.aw:1347
+#: classes/applications/calendar/rfp.aw:1181 classes/applications/calendar/rfp.aw:1428
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1112
+#: classes/applications/calendar/rfp.aw:1193
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1118
+#: classes/applications/calendar/rfp.aw:1199
 msgid "Ruum"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1306
+#: classes/applications/calendar/rfp.aw:1387
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1311
+#: classes/applications/calendar/rfp.aw:1392
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1317
+#: classes/applications/calendar/rfp.aw:1398
 msgid "Toat&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1323
+#: classes/applications/calendar/rfp.aw:1404
 msgid "Tubade arv"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1329
+#: classes/applications/calendar/rfp.aw:1410
 msgid "Inimeste arv"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1464
+#: classes/applications/calendar/rfp.aw:1545
 msgid "&Uuml;hekohaline"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1465
+#: classes/applications/calendar/rfp.aw:1546
 msgid "Kahekohaline"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1466
+#: classes/applications/calendar/rfp.aw:1547
 msgid "Sviit"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:1561
+#: classes/applications/calendar/rfp.aw:1642
 msgid "Serveris puudub htmldoc. PDF-i ei saa genereerida"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2001 classes/applications/calendar/rfp.aw:2048
+#: classes/applications/calendar/rfp.aw:2194 classes/applications/calendar/rfp.aw:2241
 msgid "Arrival date"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2005 classes/applications/calendar/rfp.aw:2052
+#: classes/applications/calendar/rfp.aw:2198 classes/applications/calendar/rfp.aw:2245
 msgid "Departure date"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2024
+#: classes/applications/calendar/rfp.aw:2217
 msgid "No. of delegates"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2028
+#: classes/applications/calendar/rfp.aw:2221
 msgid "Table form"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2032
+#: classes/applications/calendar/rfp.aw:2225
 msgid "Tech. equipment"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2036
+#: classes/applications/calendar/rfp.aw:2229
 msgid "Door sign"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2040
+#: classes/applications/calendar/rfp.aw:2233
 msgid "No. of persons"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2044
+#: classes/applications/calendar/rfp.aw:2237
 msgid "24h Hold"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2056
+#: classes/applications/calendar/rfp.aw:2249
 msgid "Catering type"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2060
+#: classes/applications/calendar/rfp.aw:2253
 msgid "Catering start"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2064
+#: classes/applications/calendar/rfp.aw:2257
 msgid "Catering end"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2077
+#: classes/applications/calendar/rfp.aw:2270
 msgid "Location"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2081
+#: classes/applications/calendar/rfp.aw:2274
 msgid "Selected by user"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2109
+#: classes/applications/calendar/rfp.aw:2302
 msgid "Tellimuskirjeldus"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:2281
+#: classes/applications/calendar/rfp.aw:2481
 msgid "kuni"
 msgstr ""
 

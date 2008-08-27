@@ -583,54 +583,57 @@ msgstr "orderer"
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr "configuration manager"
 
-#: classes/applications/orders/orders_order.aw:331
-#: classes/applications/orders/orders_order.aw:369
+#: classes/applications/orders/orders_order.aw:334
+#: classes/applications/orders/orders_order.aw:372
 msgid "Tarnimata kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:339
+#: classes/applications/orders/orders_order.aw:342
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:344
+#: classes/applications/orders/orders_order.aw:347
 msgid "Toode"
 msgstr "Product"
 
-#: classes/applications/orders/orders_order.aw:349
+#: classes/applications/orders/orders_order.aw:352
 msgid "Kogus"
 msgstr "Amount"
 
-#: classes/applications/orders/orders_order.aw:354
+#: classes/applications/orders/orders_order.aw:357
 msgid "Tellitav_kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:359
+#: classes/applications/orders/orders_order.aw:362
 msgid "Soovitav tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:364
+#: classes/applications/orders/orders_order.aw:367
 msgid "Tarne t&auml;itmine/arve nr"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:374
+#: classes/applications/orders/orders_order.aw:377
 msgid "V&auml;rvikaart"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:379
+#: classes/applications/orders/orders_order.aw:382
 msgid "Erihind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:662
+#: classes/applications/orders/orders_order.aw:665
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr "To order you must accept the ordering conditions!"
 
-#: classes/applications/orders/orders_order.aw:664
+#: classes/applications/orders/orders_order.aw:667
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr "To order you must accept the ordering conditions"
 
-#: classes/applications/orders/orders_order.aw:770
-msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
-msgstr "Unfortunately, your mail reader can not display HTML e-mails"
+#: classes/applications/orders/orders_order.aw:773
+msgid "Kahjuks sinu meililugeja ei oska nidata HTML formaadis kirju"
+msgstr ""
+
+#~ msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
+#~ msgstr "Unfortunately, your mail reader can not display HTML e-mails"
 
 # classes/applications/orders/orders_order.aw:group_orderinfo
 #~ msgid "Grupi Tellimuse andmed (orderinfo) pealkiri"

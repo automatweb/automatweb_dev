@@ -118,7 +118,7 @@ msgstr ""
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_if.aw:114 classes/admin/admin_if.aw:868 classes/admin/admin_if.aw:1097
+#: classes/admin/admin_if.aw:114 classes/admin/admin_if.aw:868 classes/admin/admin_if.aw:1100
 msgid "Kopeeri"
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Uuenda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:147 classes/admin/admin_if.aw:1614 classes/admin/admin_if.aw:1631
+#: classes/admin/admin_if.aw:147 classes/admin/admin_if.aw:1617 classes/admin/admin_if.aw:1634
 msgid "Impordi"
 msgstr ""
 
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Valitud periood: %s"
 msgstr ""
 
-#: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1908
+#: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1911
 msgid "(A)"
 msgstr ""
 
@@ -214,99 +214,99 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1053
+#: classes/admin/admin_if.aw:1056
 msgid "Vali kuidas objekte kopeerida"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1060
+#: classes/admin/admin_if.aw:1063
 msgid "Objekti kopeerimine"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1067
+#: classes/admin/admin_if.aw:1070
 msgid "Objektid"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1074
+#: classes/admin/admin_if.aw:1077
 msgid "Kopeeri alamobjektid"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1075
+#: classes/admin/admin_if.aw:1078
 msgid "Kopeeri alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1076
+#: classes/admin/admin_if.aw:1079
 msgid "Kopeeri dokumendid"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1083
+#: classes/admin/admin_if.aw:1086
 msgid "Seosed"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1090
+#: classes/admin/admin_if.aw:1093
 msgid "Seosta samade objektidega"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1091
+#: classes/admin/admin_if.aw:1094
 msgid "Loo uued seotud objektid"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1243
+#: classes/admin/admin_if.aw:1246
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1274
+#: classes/admin/admin_if.aw:1277
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1275
+#: classes/admin/admin_if.aw:1278
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1276
+#: classes/admin/admin_if.aw:1279
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1277
+#: classes/admin/admin_if.aw:1280
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1278
+#: classes/admin/admin_if.aw:1281
 msgid "Seaded"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1345 classes/admin/admin_if.aw:1397
+#: classes/admin/admin_if.aw:1348 classes/admin/admin_if.aw:1400
 msgid "Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1593
+#: classes/admin/admin_if.aw:1596
 msgid "Impordi men&uuml;&uuml;sid"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1600
+#: classes/admin/admin_if.aw:1603
 msgid "Vali fail"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1605
+#: classes/admin/admin_if.aw:1608
 msgid "Vali faili t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1607
+#: classes/admin/admin_if.aw:1610
 msgid "Eksporditud AW'st"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1608
+#: classes/admin/admin_if.aw:1611
 msgid "Tekstifail"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1755
+#: classes/admin/admin_if.aw:1758
 msgid "Menyyde importimisel tekkis viga real %s"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1772
+#: classes/admin/admin_if.aw:1775
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1916
+#: classes/admin/admin_if.aw:1919
 msgid "Mitteperioodilised"
 msgstr ""
 

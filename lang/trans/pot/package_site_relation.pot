@@ -14,15 +14,15 @@ msgstr ""
 msgid "Klassi Paketi Saidi seos help"
 msgstr ""
 
-#: classes/applications/package_management/package_site_relation.aw:prop_site_id
-msgid "Omaduse Saidi id (site_id) caption"
+#: classes/applications/package_management/package_site_relation.aw:prop_site
+msgid "Omaduse Saidi id (site) caption"
 msgstr ""
 
-#: classes/applications/package_management/package_site_relation.aw:prop_site_id_comment
-msgid "Omaduse Saidi id (site_id) kommentaar"
+#: classes/applications/package_management/package_site_relation.aw:prop_site_comment
+msgid "Omaduse Saidi id (site) kommentaar"
 msgstr ""
 
-#: classes/applications/package_management/package_site_relation.aw:prop_site_id_help
-msgid "Omaduse Saidi id (site_id) help"
+#: classes/applications/package_management/package_site_relation.aw:prop_site_help
+msgid "Omaduse Saidi id (site) help"
 msgstr ""
 

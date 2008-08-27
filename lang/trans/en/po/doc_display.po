@@ -33,78 +33,78 @@ msgstr "Cut"
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/contentmgmt/doc_display.aw:1375
+#: classes/contentmgmt/doc_display.aw:1370
 msgid "jaanuar"
 msgstr "january"
 
-#: classes/contentmgmt/doc_display.aw:1376
+#: classes/contentmgmt/doc_display.aw:1371
 msgid "veebruar"
 msgstr "february"
 
-#: classes/contentmgmt/doc_display.aw:1377
+#: classes/contentmgmt/doc_display.aw:1372
 msgid "m&auml;rts"
 msgstr "march"
 
-#: classes/contentmgmt/doc_display.aw:1378
+#: classes/contentmgmt/doc_display.aw:1373
 msgid "aprill"
 msgstr "april"
 
-#: classes/contentmgmt/doc_display.aw:1379
+#: classes/contentmgmt/doc_display.aw:1374
 msgid "mai"
 msgstr "may"
 
-#: classes/contentmgmt/doc_display.aw:1380
+#: classes/contentmgmt/doc_display.aw:1375
 msgid "juuni"
 msgstr "june"
 
-#: classes/contentmgmt/doc_display.aw:1381
+#: classes/contentmgmt/doc_display.aw:1376
 msgid "juuli"
 msgstr "july"
 
-#: classes/contentmgmt/doc_display.aw:1382
+#: classes/contentmgmt/doc_display.aw:1377
 msgid "august"
 msgstr "august"
 
-#: classes/contentmgmt/doc_display.aw:1383
+#: classes/contentmgmt/doc_display.aw:1378
 msgid "september"
 msgstr "september"
 
-#: classes/contentmgmt/doc_display.aw:1384
+#: classes/contentmgmt/doc_display.aw:1379
 msgid "oktoober"
 msgstr "october"
 
-#: classes/contentmgmt/doc_display.aw:1385
+#: classes/contentmgmt/doc_display.aw:1380
 msgid "november"
 msgstr "november"
 
-#: classes/contentmgmt/doc_display.aw:1386
+#: classes/contentmgmt/doc_display.aw:1381
 msgid "detsember"
 msgstr "december"
 
-#: classes/contentmgmt/doc_display.aw:1393
+#: classes/contentmgmt/doc_display.aw:1388
 msgid "Just postitatud"
 msgstr "just posted"
 
-#: classes/contentmgmt/doc_display.aw:1400
+#: classes/contentmgmt/doc_display.aw:1395
 msgid "%s minut tagasi"
 msgstr "%s minute ago"
 
-#: classes/contentmgmt/doc_display.aw:1404
+#: classes/contentmgmt/doc_display.aw:1399
 msgid "%s minutit tagasi"
 msgstr "%s minutes ago"
 
-#: classes/contentmgmt/doc_display.aw:1412
+#: classes/contentmgmt/doc_display.aw:1407
 msgid "%s tund tagasi"
 msgstr "%s hour ago"
 
-#: classes/contentmgmt/doc_display.aw:1416
+#: classes/contentmgmt/doc_display.aw:1411
 msgid "%s tundi tagasi"
 msgstr "%s hours ago"
 
-#: classes/contentmgmt/doc_display.aw:1424
+#: classes/contentmgmt/doc_display.aw:1419
 msgid "%s p&auml;ev tagasi"
 msgstr "%s day ago"
 
-#: classes/contentmgmt/doc_display.aw:1428
+#: classes/contentmgmt/doc_display.aw:1423
 msgid "%s p&auml;eva tagasi"
 msgstr "%s days ago"

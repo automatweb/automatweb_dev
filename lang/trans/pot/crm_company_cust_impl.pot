@@ -342,23 +342,23 @@ msgstr ""
 msgid "kliendid:"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2117
+#: classes/applications/crm/crm_company_cust_impl.aw:2116
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2121
+#: classes/applications/crm/crm_company_cust_impl.aw:2120
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2127
+#: classes/applications/crm/crm_company_cust_impl.aw:2126
 msgid "Eemalda kliendigrupist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2146
+#: classes/applications/crm/crm_company_cust_impl.aw:2145
 msgid "Kontaktid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2163
+#: classes/applications/crm/crm_company_cust_impl.aw:2162
 msgid "N/A"
 msgstr ""
 

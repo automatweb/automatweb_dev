@@ -359,49 +359,56 @@ msgstr "Keywords"
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:135 classes/contentmgmt/links.aw:183
+#: classes/contentmgmt/links.aw:132 classes/contentmgmt/links.aw:180
 msgid "Vali see"
 msgstr "Select this"
 
-#: classes/contentmgmt/links.aw:139
+#: classes/contentmgmt/links.aw:136
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/contentmgmt/links.aw:144
+#: classes/contentmgmt/links.aw:141
 msgid "Asukoht"
 msgstr "Location"
 
-#: classes/contentmgmt/links.aw:149
+#: classes/contentmgmt/links.aw:146
 msgid "Looja"
 msgstr "Createdby"
 
-#: classes/contentmgmt/links.aw:154
+#: classes/contentmgmt/links.aw:151
 msgid "Viimati muudetud"
 msgstr "Last modified"
 
-#: classes/contentmgmt/links.aw:283
+#: classes/contentmgmt/links.aw:280
 msgid "T&ouml;&ouml;riistariba"
 msgstr "Toolbar"
 
-#: classes/contentmgmt/links.aw:284
+#: classes/contentmgmt/links.aw:281
 msgid "Aadressi riba"
 msgstr "Address bar"
 
-#: classes/contentmgmt/links.aw:285
+#: classes/contentmgmt/links.aw:282
 msgid "Men&uuml;&uuml;d"
 msgstr "Menus"
 
-#: classes/contentmgmt/links.aw:286
+#: classes/contentmgmt/links.aw:283
 msgid "Kerimisriba"
 msgstr "Scrollbars"
 
-#: classes/contentmgmt/links.aw:318
-msgid "Saidi sisene link"
-msgstr "Inner-site link"
+#: classes/contentmgmt/links.aw:317
+msgid "Valitud objekt: %s /"
+msgstr ""
 
-#: classes/contentmgmt/links.aw:480
+#: classes/contentmgmt/links.aw:323
+msgid "Otsi uus objekt:"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:479
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
+
+#~ msgid "Saidi sisene link"
+#~ msgstr "Inner-site link"
 
 # classes/contentmgmt/links.aw:prop_comment
 #~ msgid "Omaduse Kommentaar lingikogusse (comment) caption"

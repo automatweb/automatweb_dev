@@ -905,7 +905,7 @@ msgstr ""
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:365 classes/crm/crm_meeting.aw:1484
+#: classes/crm/crm_meeting.aw:365 classes/crm/crm_meeting.aw:1493
 msgid "Tehtud"
 msgstr ""
 
@@ -917,7 +917,7 @@ msgstr ""
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:368 classes/crm/crm_meeting.aw:1491
+#: classes/crm/crm_meeting.aw:368 classes/crm/crm_meeting.aw:1500
 msgid "Arvele"
 msgstr ""
 
@@ -945,46 +945,46 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1179
+#: classes/crm/crm_meeting.aw:1188
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1184
+#: classes/crm/crm_meeting.aw:1193
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1189
+#: classes/crm/crm_meeting.aw:1198
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1194
+#: classes/crm/crm_meeting.aw:1203
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1199
+#: classes/crm/crm_meeting.aw:1208
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1233
+#: classes/crm/crm_meeting.aw:1242
 msgid "Loo uus arve"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1356
+#: classes/crm/crm_meeting.aw:1365
 msgid "Nimi, osaleja ja projekt peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1467
+#: classes/crm/crm_meeting.aw:1476
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1472
+#: classes/crm/crm_meeting.aw:1481
 msgid "Osaleja"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1478
+#: classes/crm/crm_meeting.aw:1487
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1496
+#: classes/crm/crm_meeting.aw:1505
 msgid "Kirjeldus"
 msgstr ""

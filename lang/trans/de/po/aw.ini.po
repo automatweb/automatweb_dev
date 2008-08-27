@@ -2757,6 +2757,10 @@ msgstr ""
 msgid "Klassi AW Spetisifikatsiooni kasutuslugu (1471) nimi"
 msgstr ""
 
+#: aw.ini:class_1475
+msgid "Klassi S&uuml;ndmused veebis (1475) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -5567,6 +5571,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1471
 msgid "syslog.type.ST_AW_SPEC_USE_CASE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1475
+msgid "syslog.type.ST_EVENT_WEBVIEW"
 msgstr ""
 
 #: aw.ini:syslogactions_1

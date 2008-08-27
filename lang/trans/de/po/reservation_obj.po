@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/groupware/reservation_obj.aw:381
+#: classes/applications/groupware/reservation_obj.aw:383
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/applications/groupware/reservation_obj.aw:381
+#: classes/applications/groupware/reservation_obj.aw:383
 msgid "Kinnitamata"
 msgstr ""
-

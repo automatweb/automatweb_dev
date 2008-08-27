@@ -422,19 +422,19 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:1057 classes/applications/calendar/event_search.aw:1064 classes/applications/calendar/event_search.aw:1080 classes/applications/calendar/event_search.aw:1086
+#: classes/applications/calendar/event_search.aw:1067 classes/applications/calendar/event_search.aw:1074 classes/applications/calendar/event_search.aw:1090 classes/applications/calendar/event_search.aw:1096
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:1063
+#: classes/applications/calendar/event_search.aw:1073
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:1094
+#: classes/applications/calendar/event_search.aw:1104
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:1447
+#: classes/applications/calendar/event_search.aw:1457
 msgid "Kustuta"
 msgstr ""
 

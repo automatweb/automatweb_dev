@@ -1070,6 +1070,18 @@ msgstr ""
 msgid "Omaduse T&auml;htaeg kuni (os_dl_to) help"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:prop_os_endless
+msgid "Omaduse Otsi ka t&auml;htajatuid (os_endless) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_os_endless_comment
+msgid "Omaduse Otsi ka t&auml;htajatuid (os_endless) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_os_endless_help
+msgid "Omaduse Otsi ka t&auml;htajatuid (os_endless) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:prop_os_status
 msgid "Omaduse Staatus (os_status) caption"
 msgstr ""
@@ -1342,215 +1354,215 @@ msgstr ""
 msgid "Kujundusosa T&ouml;&ouml;pakkumiste&nbsp;otsing (offers_search) pealkiri"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:515
+#: classes/applications/personnel_management/personnel_management.aw:518
 msgid "Vaatamine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:516
+#: classes/applications/personnel_management/personnel_management.aw:519
 msgid "Muutmine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:517
+#: classes/applications/personnel_management/personnel_management.aw:520
 msgid "Lisamine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:518
+#: classes/applications/personnel_management/personnel_management.aw:521
 msgid "Kustutamine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:519
+#: classes/applications/personnel_management/personnel_management.aw:522
 msgid "Admin"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:526
+#: classes/applications/personnel_management/personnel_management.aw:529
 msgid "Piirkond"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:527
+#: classes/applications/personnel_management/personnel_management.aw:530
 msgid "Maakond"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:528
+#: classes/applications/personnel_management/personnel_management.aw:531
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:534
+#: classes/applications/personnel_management/personnel_management.aw:537
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:535
+#: classes/applications/personnel_management/personnel_management.aw:538
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:536
+#: classes/applications/personnel_management/personnel_management.aw:539
 msgid "N&auml;ita vormis"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:537
+#: classes/applications/personnel_management/personnel_management.aw:540
 msgid "Kohustuslik"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:538
+#: classes/applications/personnel_management/personnel_management.aw:541
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:555 classes/applications/personnel_management/personnel_management.aw:591 classes/applications/personnel_management/personnel_management.aw:674 classes/applications/personnel_management/personnel_management.aw:760 classes/applications/personnel_management/personnel_management.aw:790 classes/applications/personnel_management/personnel_management.aw:1500
+#: classes/applications/personnel_management/personnel_management.aw:558 classes/applications/personnel_management/personnel_management.aw:594 classes/applications/personnel_management/personnel_management.aw:679 classes/applications/personnel_management/personnel_management.aw:765 classes/applications/personnel_management/personnel_management.aw:795 classes/applications/personnel_management/personnel_management.aw:1505
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:564
+#: classes/applications/personnel_management/personnel_management.aw:567
 msgid "Palun sisestage salvestatava otsingu nimi:"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:606 classes/applications/personnel_management/personnel_management.aw:703 classes/applications/personnel_management/personnel_management.aw:731
+#: classes/applications/personnel_management/personnel_management.aw:609 classes/applications/personnel_management/personnel_management.aw:708 classes/applications/personnel_management/personnel_management.aw:736
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:607
+#: classes/applications/personnel_management/personnel_management.aw:610
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:608
+#: classes/applications/personnel_management/personnel_management.aw:611
 msgid "Naine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:704
+#: classes/applications/personnel_management/personnel_management.aw:709
 msgid "Omandamisel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:705
+#: classes/applications/personnel_management/personnel_management.aw:710
 msgid "L&otilde;petanud"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:732
+#: classes/applications/personnel_management/personnel_management.aw:737
 msgid "Aktiivsed"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:733
+#: classes/applications/personnel_management/personnel_management.aw:738
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:787 classes/applications/personnel_management/personnel_management.aw:791
+#: classes/applications/personnel_management/personnel_management.aw:792 classes/applications/personnel_management/personnel_management.aw:796
 msgid "Tase"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:812
+#: classes/applications/personnel_management/personnel_management.aw:817
 msgid "Keel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:817
+#: classes/applications/personnel_management/personnel_management.aw:822
 msgid "Kasuta keelt personalikeskkonnas"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:822
+#: classes/applications/personnel_management/personnel_management.aw:827
 msgid "Kasuta keelt soovitajaga kontakteerumiseks"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:923 classes/applications/personnel_management/personnel_management.aw:923 classes/applications/personnel_management/personnel_management.aw:1912 classes/applications/personnel_management/personnel_management.aw:1912 classes/applications/personnel_management/personnel_management.aw:2027 classes/applications/personnel_management/personnel_management.aw:2027 classes/applications/personnel_management/personnel_management.aw:2421
+#: classes/applications/personnel_management/personnel_management.aw:928 classes/applications/personnel_management/personnel_management.aw:928 classes/applications/personnel_management/personnel_management.aw:1917 classes/applications/personnel_management/personnel_management.aw:1917 classes/applications/personnel_management/personnel_management.aw:2032 classes/applications/personnel_management/personnel_management.aw:2032 classes/applications/personnel_management/personnel_management.aw:2424
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1078
+#: classes/applications/personnel_management/personnel_management.aw:1083
 msgid "Lisa listi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1154 classes/applications/personnel_management/personnel_management.aw:1218 classes/applications/personnel_management/personnel_management.aw:2336 classes/applications/personnel_management/personnel_management.aw:2396
+#: classes/applications/personnel_management/personnel_management.aw:1159 classes/applications/personnel_management/personnel_management.aw:1223 classes/applications/personnel_management/personnel_management.aw:2339 classes/applications/personnel_management/personnel_management.aw:2399
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1703
+#: classes/applications/personnel_management/personnel_management.aw:1708
 msgid "Tabel"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1716
+#: classes/applications/personnel_management/personnel_management.aw:1721
 msgid "Kandideerijate otsingu tulemused"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1717
+#: classes/applications/personnel_management/personnel_management.aw:1722
 msgid "T&ouml;&ouml;otsijate otsingu tulemused"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1744
+#: classes/applications/personnel_management/personnel_management.aw:1749
 msgid "Element"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:1824 classes/applications/personnel_management/personnel_management.aw:1824
+#: classes/applications/personnel_management/personnel_management.aw:1829 classes/applications/personnel_management/personnel_management.aw:1829
 msgid "Aktiivsed t&ouml;&ouml;pakkumised"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2038 classes/applications/personnel_management/personnel_management.aw:2048
+#: classes/applications/personnel_management/personnel_management.aw:2043 classes/applications/personnel_management/personnel_management.aw:2053
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2060
+#: classes/applications/personnel_management/personnel_management.aw:2065
 msgid "Kustuta kandidaadid"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2070
+#: classes/applications/personnel_management/personnel_management.aw:2075
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2077 classes/applications/personnel_management/personnel_management.aw:2131
+#: classes/applications/personnel_management/personnel_management.aw:2080 classes/applications/personnel_management/personnel_management.aw:2134
 msgid "T&ouml;&ouml;pakkumine"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2087
+#: classes/applications/personnel_management/personnel_management.aw:2090
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2092
+#: classes/applications/personnel_management/personnel_management.aw:2095
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2100
+#: classes/applications/personnel_management/personnel_management.aw:2103
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2107 classes/applications/personnel_management/personnel_management.aw:2108
+#: classes/applications/personnel_management/personnel_management.aw:2110 classes/applications/personnel_management/personnel_management.aw:2111
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2115
+#: classes/applications/personnel_management/personnel_management.aw:2118
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2115
+#: classes/applications/personnel_management/personnel_management.aw:2118
 msgid "Dearhiveeri"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2116
+#: classes/applications/personnel_management/personnel_management.aw:2119
 msgid "Arhiveeri t&ouml;&ouml;pakkumised"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2116
+#: classes/applications/personnel_management/personnel_management.aw:2119
 msgid "Dearhiveeri t&ouml;&ouml;pakkumised"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2127 classes/applications/personnel_management/personnel_management.aw:2166 classes/applications/personnel_management/personnel_management.aw:2406
+#: classes/applications/personnel_management/personnel_management.aw:2130 classes/applications/personnel_management/personnel_management.aw:2169 classes/applications/personnel_management/personnel_management.aw:2409
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2411
+#: classes/applications/personnel_management/personnel_management.aw:2414
 msgid "Ametikoht"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2416
+#: classes/applications/personnel_management/personnel_management.aw:2419
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2426
+#: classes/applications/personnel_management/personnel_management.aw:2429
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2431
+#: classes/applications/personnel_management/personnel_management.aw:2434
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2550
-msgid "M&auml;&auml;ramata"
+#: classes/applications/personnel_management/personnel_management.aw:2563 classes/applications/personnel_management/personnel_management.aw:2623
+msgid "T&auml;htajatu"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management.aw:2614
-msgid "m&auml;&auml;ramata"
+#: classes/applications/personnel_management/personnel_management.aw:2563 classes/applications/personnel_management/personnel_management.aw:2632
+msgid "M&auml;&auml;ramata"
 msgstr ""
 

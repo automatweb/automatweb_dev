@@ -226,6 +226,14 @@ msgstr ""
 msgid "Teaduste kandidaat"
 msgstr ""
 
+#: classes/applications/crm/crm_person_education.aw:123
+msgid "Algus ei saa olla suurem kui l&otilde;pp!"
+msgstr ""
+
+#: classes/applications/crm/crm_person_education.aw:133
+msgid "L&otilde;pp ei saa olla v&auml;iksem kui algus!"
+msgstr ""
+
 #: classes/applications/crm/crm_person_education.aw:138 classes/applications/crm/crm_person_education.aw:146
 msgid "Jah"
 msgstr ""

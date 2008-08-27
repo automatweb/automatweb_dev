@@ -143,6 +143,18 @@ msgstr ""
 msgid "Omaduse Tulemuste andmete n&auml;itamise kontroller (s_tbl_ctr) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_search.aw:prop_s_tbl_ctr2
+msgid "Omaduse Tulemuste tabeli kontroller (s_tbl_ctr2) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_s_tbl_ctr2_comment
+msgid "Omaduse Tulemuste tabeli kontroller (s_tbl_ctr2) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_search.aw:prop_s_tbl_ctr2_help
+msgid "Omaduse Tulemuste tabeli kontroller (s_tbl_ctr2) help"
+msgstr ""
+
 # classes/applications/shop/shop_product_search.aw:prop_search_form
 #: classes/applications/shop/shop_product_search.aw:prop_search_form
 msgid "Omaduse  (search_form) caption"
@@ -252,53 +264,53 @@ msgstr ""
 msgid "Seose Otsingu kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:227
+#: classes/applications/shop/shop_product_search.aw:230
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:233
+#: classes/applications/shop/shop_product_search.aw:236
 msgid "Ka alamkaustad"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:280
-#: classes/applications/shop/shop_product_search.aw:417
+#: classes/applications/shop/shop_product_search.aw:283
+#: classes/applications/shop/shop_product_search.aw:420
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:286
-#: classes/applications/shop/shop_product_search.aw:423
+#: classes/applications/shop/shop_product_search.aw:289
+#: classes/applications/shop/shop_product_search.aw:426
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:292
+#: classes/applications/shop/shop_product_search.aw:295
 msgid "Vormis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:298
-#: classes/applications/shop/shop_product_search.aw:435
+#: classes/applications/shop/shop_product_search.aw:301
+#: classes/applications/shop/shop_product_search.aw:438
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:304
+#: classes/applications/shop/shop_product_search.aw:307
 msgid "Tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:429
+#: classes/applications/shop/shop_product_search.aw:432
 msgid "Tabelis?"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:441
+#: classes/applications/shop/shop_product_search.aw:444
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:446
+#: classes/applications/shop/shop_product_search.aw:449
 msgid "Muundaja"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:459
+#: classes/applications/shop/shop_product_search.aw:462
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_product_search.aw:587
+#: classes/applications/shop/shop_product_search.aw:590
 msgid "Vali"
 msgstr ""

@@ -118,7 +118,7 @@ msgid "L&otilde;ika"
 msgstr "Cut"
 
 #: classes/admin/admin_if.aw:114 classes/admin/admin_if.aw:868
-#: classes/admin/admin_if.aw:1097
+#: classes/admin/admin_if.aw:1100
 msgid "Kopeeri"
 msgstr "Copy"
 
@@ -138,8 +138,8 @@ msgstr "Delete selected objects, are You sure?"
 msgid "Uuenda"
 msgstr "Refresh"
 
-#: classes/admin/admin_if.aw:147 classes/admin/admin_if.aw:1614
-#: classes/admin/admin_if.aw:1631
+#: classes/admin/admin_if.aw:147 classes/admin/admin_if.aw:1617
+#: classes/admin/admin_if.aw:1634
 msgid "Impordi"
 msgstr "Import"
 
@@ -165,7 +165,7 @@ msgstr "Select period"
 msgid "Valitud periood: %s"
 msgstr "Selected period: %s"
 
-#: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1908
+#: classes/admin/admin_if.aw:195 classes/admin/admin_if.aw:1911
 msgid "(A)"
 msgstr "(A)"
 
@@ -217,99 +217,99 @@ msgstr "Open"
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/admin/admin_if.aw:1053
+#: classes/admin/admin_if.aw:1056
 msgid "Vali kuidas objekte kopeerida"
 msgstr "Select how objects are copied"
 
-#: classes/admin/admin_if.aw:1060
+#: classes/admin/admin_if.aw:1063
 msgid "Objekti kopeerimine"
 msgstr "Object copying"
 
-#: classes/admin/admin_if.aw:1067
+#: classes/admin/admin_if.aw:1070
 msgid "Objektid"
 msgstr "Objects"
 
-#: classes/admin/admin_if.aw:1074
+#: classes/admin/admin_if.aw:1077
 msgid "Kopeeri alamobjektid"
 msgstr "Copy sub-objects"
 
-#: classes/admin/admin_if.aw:1075
+#: classes/admin/admin_if.aw:1078
 msgid "Kopeeri alammen&uuml;&uuml;d"
 msgstr "Copy sub-menus"
 
-#: classes/admin/admin_if.aw:1076
+#: classes/admin/admin_if.aw:1079
 msgid "Kopeeri dokumendid"
 msgstr "Copy documents"
 
-#: classes/admin/admin_if.aw:1083
+#: classes/admin/admin_if.aw:1086
 msgid "Seosed"
 msgstr "Relations"
 
-#: classes/admin/admin_if.aw:1090
+#: classes/admin/admin_if.aw:1093
 msgid "Seosta samade objektidega"
 msgstr "Create relations with same objects"
 
-#: classes/admin/admin_if.aw:1091
+#: classes/admin/admin_if.aw:1094
 msgid "Loo uued seotud objektid"
 msgstr "Create relations to new objects"
 
-#: classes/admin/admin_if.aw:1243
+#: classes/admin/admin_if.aw:1246
 msgid "Administreerimisliides"
 msgstr "Administrative interface"
 
-#: classes/admin/admin_if.aw:1274
+#: classes/admin/admin_if.aw:1277
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/admin/admin_if.aw:1275
+#: classes/admin/admin_if.aw:1278
 msgid "Asukoht:"
 msgstr "You are here:"
 
-#: classes/admin/admin_if.aw:1276
+#: classes/admin/admin_if.aw:1279
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-%s."
 msgstr "AutomatWeb® is the registered trademark of Struktuur Meedia. All rights reserved, © 1999-%s."
 
-#: classes/admin/admin_if.aw:1277
+#: classes/admin/admin_if.aw:1280
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr "Please visit our websites"
 
-#: classes/admin/admin_if.aw:1278
+#: classes/admin/admin_if.aw:1281
 msgid "Seaded"
 msgstr "Settings"
 
-#: classes/admin/admin_if.aw:1345 classes/admin/admin_if.aw:1397
+#: classes/admin/admin_if.aw:1348 classes/admin/admin_if.aw:1400
 msgid "Leidsin faili %s, l&otilde;in AW objekti %s<br>\n"
 msgstr "File %s found and saved<br />\n"
 
-#: classes/admin/admin_if.aw:1593
+#: classes/admin/admin_if.aw:1596
 msgid "Impordi men&uuml;&uuml;sid"
 msgstr "Import menus"
 
-#: classes/admin/admin_if.aw:1600
+#: classes/admin/admin_if.aw:1603
 msgid "Vali fail"
 msgstr "Choose file"
 
-#: classes/admin/admin_if.aw:1605
+#: classes/admin/admin_if.aw:1608
 msgid "Vali faili t&uuml;&uuml;p"
 msgstr "Choose file type"
 
-#: classes/admin/admin_if.aw:1607
+#: classes/admin/admin_if.aw:1610
 msgid "Eksporditud AW'st"
 msgstr "Exported from AW"
 
-#: classes/admin/admin_if.aw:1608
+#: classes/admin/admin_if.aw:1611
 msgid "Tekstifail"
 msgstr "Textfile"
 
-#: classes/admin/admin_if.aw:1755
+#: classes/admin/admin_if.aw:1758
 msgid "Menyyde importimisel tekkis viga real %s"
 msgstr "Menu import failed on line %s"
 
-#: classes/admin/admin_if.aw:1772
+#: classes/admin/admin_if.aw:1775
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s"
 msgstr "Parent menu not found on line %s in menu import file"
 
-#: classes/admin/admin_if.aw:1916
+#: classes/admin/admin_if.aw:1919
 msgid "Mitteperioodilised"
 msgstr "Non-periodic"
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/forum/forum_comment.aw:class_208_help
 msgid "Klassi Kommentaar help"
 msgstr ""
@@ -102,3 +101,18 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_comment.aw:79
+msgid "--vali--"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:80
+msgid "Positiivne"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:81
+msgid "Neutraalne"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:82
+msgid "Negatiivne"
+msgstr ""

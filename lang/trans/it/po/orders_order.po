@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/orders/orders_order.aw:class_839_help
 msgid "Klassi Tellimus 2 help"
 msgstr ""
@@ -482,51 +481,51 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:331 classes/applications/orders/orders_order.aw:369
+#: classes/applications/orders/orders_order.aw:334
+#: classes/applications/orders/orders_order.aw:372
 msgid "Tarnimata kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:339
+#: classes/applications/orders/orders_order.aw:342
 msgid "Artikli kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:344
+#: classes/applications/orders/orders_order.aw:347
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:349
+#: classes/applications/orders/orders_order.aw:352
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:354
+#: classes/applications/orders/orders_order.aw:357
 msgid "Tellitav_kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:359
+#: classes/applications/orders/orders_order.aw:362
 msgid "Soovitav tarne t&auml;itmine"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:364
+#: classes/applications/orders/orders_order.aw:367
 msgid "Tarne t&auml;itmine/arve nr"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:374
+#: classes/applications/orders/orders_order.aw:377
 msgid "V&auml;rvikaart"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:379
+#: classes/applications/orders/orders_order.aw:382
 msgid "Erihind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:662
+#: classes/applications/orders/orders_order.aw:665
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:664
+#: classes/applications/orders/orders_order.aw:667
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:770
-msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
+#: classes/applications/orders/orders_order.aw:773
+msgid "Kahjuks sinu meililugeja ei oska nidata HTML formaadis kirju"
 msgstr ""
-

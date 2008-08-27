@@ -48,7 +48,7 @@ msgid "Pealkiri"
 msgstr "Name"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:493
-#: classes/applications/crm/crm_company_overview_impl.aw:2188
+#: classes/applications/crm/crm_company_overview_impl.aw:2195
 msgid "Aeg"
 msgstr "Time"
 
@@ -132,51 +132,51 @@ msgstr "Import e-mails"
 msgid "M&auml;&auml;ra projekt"
 msgstr "Apply project"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2019
+#: classes/applications/crm/crm_company_overview_impl.aw:2026
 msgid "%s dokumendid"
 msgstr "%s documents"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2025
+#: classes/applications/crm/crm_company_overview_impl.aw:2032
 msgid ", milles on %s osaline"
 msgstr ", where %s is as participant"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2033
+#: classes/applications/crm/crm_company_overview_impl.aw:2040
 msgid "%s dokumendid, milles on %s osaline"
 msgstr "%s documents, where %s is as participant"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2173
+#: classes/applications/crm/crm_company_overview_impl.aw:2180
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2178
+#: classes/applications/crm/crm_company_overview_impl.aw:2185
 msgid "Teostaja"
 msgstr "Implementor"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2183
+#: classes/applications/crm/crm_company_overview_impl.aw:2190
 msgid "Millal"
 msgstr "When"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2193
+#: classes/applications/crm/crm_company_overview_impl.aw:2200
 msgid "Tehtud?"
 msgstr "Done?"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2221
+#: classes/applications/crm/crm_company_overview_impl.aw:2228
 msgid "Toimetuse rida"
 msgstr "Task row"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2224
+#: classes/applications/crm/crm_company_overview_impl.aw:2231
 msgid "Stopper"
 msgstr "Timer"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2231
+#: classes/applications/crm/crm_company_overview_impl.aw:2238
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2231
+#: classes/applications/crm/crm_company_overview_impl.aw:2238
 msgid "Ei"
 msgstr "No"
 
-#: classes/applications/crm/crm_company_overview_impl.aw:2236
+#: classes/applications/crm/crm_company_overview_impl.aw:2243
 msgid "Kokku:"
 msgstr "Total:"
 

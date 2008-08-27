@@ -14,23 +14,3 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/protocols/file/http.aw:prop_
-msgid "Omaduse  () caption"
-msgstr ""
-
-#: classes/protocols/file/http.aw:prop__comment
-msgid "Omaduse  () kommentaar"
-msgstr ""
-
-#: classes/protocols/file/http.aw:prop__help
-msgid "Omaduse  () help"
-msgstr ""
-
-#: classes/protocols/file/http.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-#: classes/protocols/file/http.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-

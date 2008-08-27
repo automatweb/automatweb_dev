@@ -362,23 +362,23 @@ msgstr "%s clients: %s"
 msgid "kliendid:"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2117
+#: classes/applications/crm/crm_company_cust_impl.aw:2116
 msgid "Vaata"
 msgstr "View"
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2121
+#: classes/applications/crm/crm_company_cust_impl.aw:2120
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2127
+#: classes/applications/crm/crm_company_cust_impl.aw:2126
 msgid "Eemalda kliendigrupist"
 msgstr "Remove from group"
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2146
+#: classes/applications/crm/crm_company_cust_impl.aw:2145
 msgid "Kontaktid"
 msgstr "Contacts"
 
-#: classes/applications/crm/crm_company_cust_impl.aw:2163
+#: classes/applications/crm/crm_company_cust_impl.aw:2162
 msgid "N/A"
 msgstr ""
 

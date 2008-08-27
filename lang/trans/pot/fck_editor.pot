@@ -22,11 +22,11 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
-#: classes/vcl/fck_editor.aw:100
+#: classes/vcl/fck_editor.aw:107
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/vcl/fck_editor.aw:101
+#: classes/vcl/fck_editor.aw:108
 msgid "Andmete salvestamine kahjuks ei &otilde;nnestunud"
 msgstr ""
 

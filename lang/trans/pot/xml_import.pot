@@ -51,6 +51,6 @@ msgid "Omaduse Käivita import (run_import) help"
 msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:53
-msgid "Käivita import"
+msgid "K&auml;ivita import"
 msgstr ""
 

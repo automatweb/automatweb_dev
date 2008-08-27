@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/ut/xml_import/xml_import.aw:class_97_help
 msgid "Klassi XML import help"
 msgstr ""
@@ -51,6 +50,5 @@ msgid "Omaduse Käivita import (run_import) help"
 msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:53
-msgid "Käivita import"
+msgid "K&auml;ivita import"
 msgstr ""
-
