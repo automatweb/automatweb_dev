@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.130 2008/08/25 14:16:59 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.131 2008/08/27 12:52:59 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -286,7 +286,7 @@ class reservation extends class_base
 					$prop["onclick"] = "document.changeform.reason.value=prompt(\"Sisestage t&uuml;histuse p&otilde;hjus\");if (document.changeform.reason.value == \"\") {document.changeform.verified.checked=true; } else {submit_changeform(\"unverify\");}";
 				}
 				break;
-			/*case "special_sum":
+			case "special_sum":
 				$curr = $arr["obj_inst"]->prop("resource.currency");
 				if(!(is_array($curr) && sizeof($curr) > 1))
 				{
@@ -298,7 +298,7 @@ class reservation extends class_base
 				{
 					$prop["value"] = null;
 				}
-				break;*/
+				break;
 				
 			case "sum":
 				$prop["value"] = $this->_format_sum($arr["obj_inst"]);
@@ -1773,19 +1773,50 @@ class reservation extends class_base
 		$rts = $room_i->get_time_units();
 		if ($this->can("view", $arr["obj_inst"]->prop("resource")))
 		{
+			$arr["prop"]["options"][0] = t("--vali--");
 			$room = obj($arr["obj_inst"]->prop("resource"));
-
-			for($i = $room->prop("time_from"); $i <= $room->prop("time_to"); $i += $room->prop("time_step"))
+			$tf = $room->prop("time_from");
+			$tt = $room->prop("time_to");
+			$ts = $room->prop("time_step");
+			$stf = $room->prop("selectbox_time_from");
+			$stt = $room->prop("selectbox_time_to");
+			$sts = $room->prop("selectbox_time_step");
+			if($stf && $stt && $sts)
+			{
+				$tf = $stf;
+				$tt = $stt;
+				$ts = $sts;
+			}
+			for($i = $tf; $i <= $tt; $i += $ts)
 			{
 				$arr["prop"]["options"][(string)$i] = $i;
 			}
+			$i -= $ts;
+			switch($room->prop("time_unit"))
+			{
+				case 2:
+					$max = 24;
+					break;
+				case 3:
+					$max = 30;
+					break;
+				default:
+					$max = 60;
+					break;
+			}
+			if($i < $max)
+			{
+				for(;$i<=$max;$i++)
+				{
+					$arr["prop"]["options"][(string)$i] = $i;
+				}
+			}
 			$arr["prop"]["post_append_text"] = $rts[$room->prop("time_unit")].$arr["prop"]["post_append_text"];
-			$arr["prop"]["options"][0] = t("--vali--");
 			return;
 		}
-		$arr["prop"]["options"] = $this->make_keys(range(0, 20));
-		$arr["prop"]["post_append_text"] = t("Tundi").$arr["prop"]["post_append_text"];
 		$arr["prop"]["options"][0] = t("--vali--");
+		$arr["prop"]["options"] = array_merge($arr["prop"]["options"], $this->make_keys(range(1, 20)));
+		$arr["prop"]["post_append_text"] = t("Tundi").$arr["prop"]["post_append_text"];
 	}
 
 	function _get_cp_fn($arr)
