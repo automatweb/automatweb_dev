@@ -52,6 +52,15 @@
             <ch_value>1</ch_value>
             <caption>Toote puhul kasuta tootekuva</caption>
       </property>
+      <property>
+            <name>object_shop_product_template</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasuta toote kuvamisek</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_BASKET</syslog_type>
             <relationmgr>yes</relationmgr>

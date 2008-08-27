@@ -47,7 +47,7 @@ jQuery.aw_releditor = function(arr) {
 		
 		$.ajax({
 			type: "POST",
-			url: "/orb.aw?class=releditor&action=js_change_data&releditor_name="+arr["releditor_name"]+"&edit_index="+i_releditor_edit_index,
+			url: "/orb.aw?class=releditor&action=js_change_data&releditor_name="+arr["releditor_name"]+"&edit_index="+i_releditor_edit_index+"&main_clid="+arr["main_clid"],
 			data: data,
 			success: function(msg){
 				eval(msg);

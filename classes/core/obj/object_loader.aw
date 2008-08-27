@@ -446,7 +446,6 @@ class _int_object_loader extends core
 		{
 			return 0;
 		}
-
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
@@ -710,6 +709,7 @@ class _int_object_loader extends core
 		fflush($f);
 		if ($url != "")
 		{
+			aw_global_set("__from_raise_error", 1);
 			$this->do_orb_method_call(array(
 				"server" => $url,
 				"method" => "xmlrpc",
@@ -720,6 +720,7 @@ class _int_object_loader extends core
 				),
 				"no_errors" => 1	// sites may not respond or be password protected or whatever and the user does not need to see that
 			));
+			aw_global_set("__from_raise_error", 0);
 		}
 	}
 

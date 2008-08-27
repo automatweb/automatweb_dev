@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.13 2008/08/14 13:04:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.14 2008/08/27 07:56:15 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -224,7 +224,7 @@ class form_alias extends form_base
 		}
 		if (aw_global_get("section") != $args["oid"])
 		{
-			$replacement = str_replace(aw_global_get("section"),$args["oid"], $replacement);
+			//$replacement = str_replace(aw_global_get("section"),$args["oid"], $replacement);
 		}
 		return $replacement;
 	}

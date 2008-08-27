@@ -84,5 +84,57 @@
 			</function>
 		</action>
 
+		<action name="register_as_customer" nologin="1">
+			<function name="register_as_customer">
+				<arguments>
+					<optional name="card_number" />
+					<optional name="bd" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_register_as_customer" nologin="1">
+			<function name="submit_register_as_customer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="register_as_customer_median" nologin="1">
+			<function name="register_as_customer_median">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="validate" nologin="1">
+			<function name="validate">
+				<arguments>
+					<required name="hash" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="final_validate_customer" nologin="1">
+			<function name="final_validate_customer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="forgot_password" nologin="1">
+			<function name="forgot_password">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_forgot_password">
+			<function name="submit_forgot_password">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

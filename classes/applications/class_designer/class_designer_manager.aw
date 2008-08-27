@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.13 2008/07/23 12:26:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.14 2008/08/27 07:55:54 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -826,7 +826,9 @@ class class_designer_manager extends class_base
 		{
 			//$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
 			//$this->_del_ini_file_value($inif2, "classfolders[$fld_id]");
-			$this->_del_ini_file_value($inif3, "classfolders[$fld_id]");
+			
+			//$this->_del_ini_file_value($inif3, "classfolders[$fld_id]");
+			$this->_set_ini_file_value($inif3, "classfolders[$fld_id]", "__delete");
 		}
 
 		//$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
@@ -836,7 +838,9 @@ class class_designer_manager extends class_base
 		{
 			//$this->_del_ini_file_value($inif1, "classes[$fld_id]");
 			//$this->_del_ini_file_value($inif2, "classes[$fld_id]");
-			$this->_del_ini_file_value($inif3, "classes[$fld_id]");
+
+			//$this->_del_ini_file_value($inif3, "classes[$fld_id]");
+			$this->_set_ini_file_value($inif3, "classes[$fld_id]", "__delete");
 		}
 		return $arr["post_ru"];
 	}

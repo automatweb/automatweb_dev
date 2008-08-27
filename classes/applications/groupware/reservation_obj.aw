@@ -54,6 +54,7 @@ class reservation_obj extends _int_object
 
 	function get_sum()
 	{
+		enter_function("sbo::_get_sum");
 		$sum = $this->meta("final_saved_sum"); 
 		//kui on salvestatud summa ja mneski valuutas omab vrtust, ning see on salvestatud ndal peale aja lbi saamist, siis lheb salvestatud variant loosi ja ei hakka uuesti le arvutama
 		if(is_array($sum) && (!$this->prop("end") || ($this->prop("end") + 3600*24*7) < $this->meta("sum_saved_time")))
@@ -61,6 +62,7 @@ class reservation_obj extends _int_object
 			exit_function("sbo::_get_sum");
 			return $sum;
 		}
+//		arr($sum); arr($this->prop("end"));arr($this->meta("sum_saved_time"));
 
 		$special_sum = $this->meta("special_sum");
 		if(is_array($special_sum) && array_sum($special_sum))

@@ -25,6 +25,7 @@ class site_list_updater extends aw_template
 		{
 			return;
 		}
+
 		// check if there has been an update in the last 24 hours
 		// if so, do nothing
 		if ($this->_get_last_update_time() > (time() - (3600*24)))

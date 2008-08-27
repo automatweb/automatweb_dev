@@ -3,4 +3,3 @@
 	<class name="shortcut" folder="admin/shortcut_manager" extends="class_base">
 	</class>
 </orb>
-		

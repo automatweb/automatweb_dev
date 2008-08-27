@@ -12,7 +12,7 @@
 			<function name="add_task_row_to_bill_row">
 				<arguments>
 					<optional name="row" type="oid" />
-					<optional name="task_row" type="oid" />
+					<optional name="task_row" />
 					<optional name="content" type="string" />
 					<optional name="task" type="string" />
 					<optional name="project" type="string" />

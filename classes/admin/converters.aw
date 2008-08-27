@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.87 2008/06/04 12:29:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.88 2008/08/27 07:55:50 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -1855,6 +1855,15 @@ echo "mod ".$con["to.name"]."<br>";
 			));
 
 			$file = $o->prop("file");
+			if (!file_exists($file))
+			{
+				$file = basename($file);
+				$file = aw_ini_get("site_basedir")."/files/".$file[0]."/".$file;
+				if (!file_exists($file))
+				{
+					die("file ".$o->prop("file")." / $file not found!");
+				}
+			}
 
 			rename($file, $fn);
 			echo "$file => $fn <br>\n";

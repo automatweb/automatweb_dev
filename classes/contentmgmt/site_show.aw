@@ -1890,6 +1890,7 @@ class site_show extends class_base
 		}
 		$langs = get_instance("languages");
 		$lar = $langs->listall();
+
 		$l = array();
 		$uid = aw_global_get("uid");
 		if (count($lar) < 2)
@@ -1905,13 +1906,13 @@ class site_show extends class_base
 			return "";
 		}
 		$num = 0;
+
 		foreach($lar as $row)
 		{
 			if (is_oid($row["oid"]) && !$this->can("view", $row["oid"]))
 			{
 				continue;
 			}
-
 			$num++;
 			$grp = isset($row["meta"]["lang_group"]) ? $row["meta"]["lang_group"] : null;
 			$grp_spec = $grp;
@@ -1987,6 +1988,7 @@ class site_show extends class_base
 			{
 				$l[$grp] = "";
 			}
+
 			if ($row["id"] == $lang_id)
 			{
 				if ($num == count($lar) && $this->is_template("SEL_LANG".$grp_spec."_END"))

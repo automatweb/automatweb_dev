@@ -486,7 +486,10 @@ class aw_spec extends class_base
 
 	private function _get_ovr_spec_editor($o, $val)
 	{
-		return nl2br($o->meta($val[1]));
+		$content = nl2br($o->meta($val[1]));
+		get_instance("alias_parser")->parse_oo_aliases($o->id(), $content);
+		return $content;
+//		return nl2br($o->meta($val[1]));
 	}
 
 	private function _get_ovr_class_list($o, $val, $prnt_num)

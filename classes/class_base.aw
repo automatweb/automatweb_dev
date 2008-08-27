@@ -558,6 +558,7 @@ class class_base extends aw_template
 		// aga mis siis, kui see on sama aken?
 		$cbtrans = get_instance("applications/cb_trans/cb_translate");
 		$trans_default_id = $cbtrans->get_sysdefault();
+		/*
 		$translate_url = html::href(array(
 			"caption" => t("T&otilde;lgi"),
 			"url" => $this->mk_my_orb("change",array(
@@ -569,6 +570,7 @@ class class_base extends aw_template
 			),
 			"cb_translate"),
 		));
+		*/
 		
 
 		$add_txt = "";

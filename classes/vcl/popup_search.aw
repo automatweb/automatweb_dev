@@ -120,7 +120,6 @@ class popup_search extends aw_template
 		}
 
 		if ($arr["property"]["style"] == "autocomplete")
-		if ($arr["property"]["style"] == "autocomplete")
 		{
 			$selstr = "";
 			if ($this->can("view", $sel))

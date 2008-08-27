@@ -2451,7 +2451,7 @@ class _int_object
 		{
 			$this->_int_load_property_values();
 		}
-
+//if($this->id() == 3479){arr($this->obj["properties"][$prop]);arr($prop);}
 		// if this is a complex thingie, then loopdaloop
 		if (strpos($prop, ".") !== false)
 		{
@@ -2592,7 +2592,7 @@ class _int_object
 			{
 				$this->_int_sync_from_objfield_to_prop($key, false);
 			}
-		}
+		}//if($this->id() == 3479)arr($this->obj["properties"]);
 		$this->props_loaded = true;
 	}
 

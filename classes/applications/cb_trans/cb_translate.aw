@@ -155,21 +155,10 @@ class cb_translate extends class_base
 	 **/
 	public function get_sysdefault()
 	{
-		$args = array(
+		$pl = new object_list(array(
 			"class_id" => CL_CB_TRANSLATE,
 			"status" => STAT_ACTIVE,
-		);
-		$pl = new object_list($args);
-		if($pl->count() == 0)
-		{
-			$new = new object();
-			$new->set_class_id(CL_CB_TRANSLATE);
-			$new->set_name("T&otilde;lkekeskkond");
-			$new->set_parent(aw_ini_get("users.root_folder"));
-			$new->set_status(STAT_ACTIVE);
-			$new->save_new();
-			$pl = new object_list($args);
-		}
+		));
 		return $pl->begin();
 	}
 
@@ -570,7 +559,6 @@ class cb_translate extends class_base
 		
 		// load cls & clsfld info
 		$cls = aw_ini_get("classes");
-
 		$clsfld = aw_ini_get("classfolders");
 		// cfgutils for loading props/layouts etc
 		$cfgu = get_instance("cfg/cfgutils");
@@ -1238,7 +1226,7 @@ class cb_translate extends class_base
 		else
 		{
 			
-			$clsfld = aw_ini_get("untrans_classfolders"); //$clsfld["classfolders"];
+			$clsfld = aw_ini_get("classfolders"); //$clsfld["classfolders"];
 		}
 		$langs_info = aw_ini_get("languages.list");
 		foreach($langs_info as $lang_info)
@@ -1247,7 +1235,7 @@ class cb_translate extends class_base
 		}
 				
 		// gen title
-		$cls = aw_ini_get("untrans_classes");
+		$cls = aw_ini_get("classes");
 
 		if(strlen($arr["clid"]))
 		{
@@ -1272,7 +1260,6 @@ class cb_translate extends class_base
 				$ini_po_file = $pot_scanner->parse_po_file($ini_po_loc);
 				foreach($ini_po_file as $po)
 				{
-					//$cls_start = "Klassi ".$cls[$arr["clid"]]["name"]." (".$arr["clid"].") ";
 					$cls_start = "Klassi ".$cls[$arr["clid"]]["name"]." (".$arr["clid"].") ";
 					// class
 					if($cls_start."nimi" == $po["msgid"] && $obj_is_folder == false)
@@ -1388,7 +1375,6 @@ class cb_translate extends class_base
 		));
 		$groups = $cfgu->get_groupinfo();
 		$cls = aw_ini_get("classes");
-
 		$aw_location = $cls[trim($arr["clid"])]["file"];
 		$po = split("[/]",$aw_location);
 		$po_file = $po[count($po)-1];
@@ -2103,7 +2089,7 @@ class cb_translate extends class_base
 							if($comp == iconv($charset_to, "utf-8", $entry["msgid"]))
 							{
 								$var_already_set[$varname] = $var;
-								if(html_entity_decode(iconv($charset_to, "utf-8", $entry["msgstr"]), ENT_COMPAT, "utf-8") != trim($var))
+								if(iconv($charset_to, "utf-8", $entry["msgstr"]) != trim($var))
 								{
 									$change_log[] = array(
 										"entry_no" => $entry_no,
@@ -2112,7 +2098,7 @@ class cb_translate extends class_base
 										"msgid" => $entry["msgid"],
 										"lang" => $lang,
 										"var" => $varname,
-										"contents" => htmlentities(iconv("utf-8", $charset_to, $var)),
+										"contents" => iconv("utf-8", $charset_to, $var),
 										"prev_contents" => $entry["msgstr"],
 										"file_exists" => 1,
 										"var_exists" => 1,
@@ -2133,7 +2119,7 @@ class cb_translate extends class_base
 									"file" => $file,
 									"var" => $varname,
 									"file_exists" => 1,
-									"contents" => htmlentities(iconv("utf-8", $charset_to, $var)),
+									"contents" => iconv("utf-8", $charset_to, $var),
 									"var_exists" => 0,
 								);
 							}
@@ -2151,7 +2137,7 @@ class cb_translate extends class_base
 								"file" => $file,
 								"var" => $varname,
 								"file_exists" => 0,
-								"contents" => htmlentities(iconv("utf-8", $charset_to, $var)),
+								"contents" => iconv("utf-8", $charset_to, $var),
 							);
 						}
 					}
@@ -2173,7 +2159,7 @@ class cb_translate extends class_base
 							if(iconv($charset_to, "utf-8", $entry["msgid"]) == $comp)
 							{
 								$var_already_set[$varname] = $var;
-								if(html_entity_decode(iconv($charset_to, "utf-8", $entry["msgstr"]), ENT_COMPAT, "utf-8") != $var)
+								if(iconv($charset_to, "utf-8", $entry["msgstr"]) != $var)
 								{
 									$change_log[] = array(
 										"entry_no" => $entry_no,
@@ -2182,7 +2168,7 @@ class cb_translate extends class_base
 										"msgid" => $entry["msgid"],
 										"lang" => $lang,
 										"var" => $varname,
-										"contents" => htmlentities(iconv("utf-8", $charset_to, $var)),
+										"contents" => iconv("utf-8", $charset_to, $var),
 										"prev_contents" => $entry["msgstr"],
 										"file_exists" => 1,
 										"var_exists" => 1,
@@ -2203,7 +2189,7 @@ class cb_translate extends class_base
 									"file" => $file,
 									"var" => $varname,
 									"file_exists" => 1,
-									"contents" => htmlentities(iconv("utf-8", $charset_to, $var)),
+									"contents" => iconv("utf-8", $charset_to, $var),
 									"var_exists" => 0,
 								);
 							}
@@ -2247,7 +2233,7 @@ class cb_translate extends class_base
 							{
 								$var_exists = 1;
 								// checks if msgstr has been changed
-								if(html_entity_decode(iconv($charset_to, "utf-8", $entry["msgstr"]), ENT_COMPAT, "utf-8") != trim($msgstr))
+								if(iconv($charset_to, "utf-8", $entry["msgstr"]) != trim($msgstr))
 								{
 									$change_log[] = array(
 										"entry_no" => $entry_no,
@@ -2256,7 +2242,7 @@ class cb_translate extends class_base
 										"msgid" => $msgid,
 										"lang" => $lang,
 										"var" => $msgid,
-										"contents" => htmlentities(iconv("utf-8", $charset_to, $msgstr)),
+										"contents" => iconv("utf-8", $charset_to, $msgstr),
 										"prev_contents" => $entry["msgstr"],
 										"file_exists" => 1,
 										"var_exists" => 1,
@@ -2276,7 +2262,7 @@ class cb_translate extends class_base
 									"msgid" => $msgid,
 									"var" => $msgid,
 									"file_exists" => 1,
-									"contents" => htmlentities(iconv("utf-8", $charset_to, $msgstr)),
+									"contents" => iconv("utf-8", $charset_to, $msgstr),
 									"var_exists" => 0,
 								);
 							}
@@ -2297,7 +2283,7 @@ class cb_translate extends class_base
 								"lang" => $lang,
 								"msgid" => $msgid,
 								"var" => $msgid,
-								"contents" => htmlentities(iconv("utf-8", $charset_to, $msgstr)),
+								"contents" => iconv("utf-8", $charset_to, $msgstr),
 								"var_exists" => 0,
 							);
 						}

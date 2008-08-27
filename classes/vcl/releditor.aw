@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.155 2008/08/26 11:39:33 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.156 2008/08/27 07:56:17 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -2249,7 +2249,7 @@ class releditor extends core
 				$idx2oid[$idx++] = $c->prop("to");
 			}
 		}
-
+//$this->site_log("id = $arr[id] del idx = ".$arr[$propn."_delete_index"]." idx2 = ".dbg::dump($idx2oid)."\n\n");
 		if (is_oid($arr["id"]) && is_oid($idx2oid[$arr[$propn."_delete_index"]]))
 		{
 			$o->disconnect(array(

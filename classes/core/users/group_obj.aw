@@ -15,6 +15,21 @@ class group_obj extends _int_object
 		return $rv;
 	}
 
+	function set_prop($k, $v)
+	{
+		if ($k == "name")
+		{
+			$this->set_name($v);
+		}
+		return parent::set_prop($k, $v);
+	}
+
+	function set_name($v)
+	{
+		parent::set_prop("name", $v);
+		return parent::set_name($v);
+	}
+
 	function get_member_count()
 	{
 		if (!is_oid($this->id()))

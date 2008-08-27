@@ -596,6 +596,7 @@ class htmlclient extends aw_template
 			}
 		}
 
+
 		if ($this->submit_done || $this->view_mode == 1)
 		{
 
@@ -645,7 +646,6 @@ class htmlclient extends aw_template
 		);
 
 		$xxx = $this->parse_layouts("_main");
-
 		$property_help = "";
 		if (sizeof($this->proplist) > 0)
 		{

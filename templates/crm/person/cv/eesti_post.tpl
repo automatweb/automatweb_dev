@@ -1,3 +1,6 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
+</head>
 <style type="text/css">
 <!--
 body {

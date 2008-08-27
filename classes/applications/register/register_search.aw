@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.52 2008/06/06 08:07:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.53 2008/08/27 07:56:00 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -851,7 +851,7 @@ class register_search extends class_base
 		$tmp = obj();
 		$tmp->set_class_id(CL_REGISTER_DATA);
 		$real_props = $tmp->get_property_list();
-
+//arr($real_props);arr($fdata);
 		enter_function("register_search::show::dsrt::gsr::loop");
 		foreach($props as $pn => $pd)
 		{
@@ -879,7 +879,14 @@ class register_search extends class_base
 			{
 				if ($fdata[$pn]["is_chooser"])
 				{
-					$filter["CL_REGISTER_DATA.".$real_props[$pn]["reltype"].".name"] = $request["rsf"][$pn];
+					if (!empty($real_props[$pn]["reltype"]))
+					{
+						$filter["CL_REGISTER_DATA.".$real_props[$pn]["reltype"].".name"] = $request["rsf"][$pn];
+					}
+					else
+					{
+						$filter[$pn] = $request["rsf"][$pn];
+					}
 				}
 				else
 				if ($fdata[$pn]["is_num"] == 1)
@@ -979,7 +986,10 @@ class register_search extends class_base
 		{
 			$si->refine_register_search_filter($o, $filter);
 		}
-
+if ($_GET["RD"] == 1)
+{
+die(dbg::dump($filter));
+}
 		if ((!empty($request["search_butt"]) || !empty($request["MAX_FILE_SIZE"])) || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);

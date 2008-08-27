@@ -19,6 +19,19 @@ include_once(dirname(__FILE__)."/const.aw");
 // Retuns null unless exists $arr[$key1][$key2][...][$keyN] (then returns the value)
 // $a = array_isset($arr,$key1,$key2,$keyN)
 //         instead of $a=isset($arr[$key1]) && isset($arr[$key2) .... ? $arr[$key1][$key2] : null
+
+function df($thing)
+{
+
+        $h = fopen("/www/intranet.automatweb.com/files/deebug.txt", "a+");
+	foreach(split("[\n]", print_r($thing, true)) as $line)
+	{
+		fwrite($h, "[".date("H:i:s")."]".$line."\n");
+	}
+	fwrite($h, "---\n");
+	fclose($h);
+}
+
 function ifset(&$item_orig)
 {
 	// enter_function("ifset");
@@ -132,6 +145,10 @@ function parse_config($file, $return = false)
 			{ // process regular variable
 				$var = str_replace(array('["','"]',"['","']","[","]"), array(".","",".", "",".", ""), trim($data[0]));//!!! should be deprecated and only '.' notation used. kept here for back compatibility.
 				$value = trim($data[1]);
+				if($value == "__delete")
+				{
+					continue;
+				}
 
 				// now, replace all variables in varvalue
 				$value = preg_replace('/\$\{(.*)\}/e', "aw_ini_get(\"\\1\")",$value);

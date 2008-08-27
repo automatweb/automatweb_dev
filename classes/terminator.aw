@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.4 2008/06/06 09:13:38 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.5 2008/08/27 07:55:50 kristo Exp $
 // terminator.aw - The Terminator 
 /*
 
@@ -22,6 +22,8 @@ class terminator extends class_base
 
 	function get_property($arr)
 	{
+		if(aw_global_get("uid") == "post"){arr(aw_ini_get("tpldir"));}
+		if(aw_global_get("uid") == "post"){arr(aw_ini_get("cache.page_cache"));}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])

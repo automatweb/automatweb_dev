@@ -1557,7 +1557,7 @@ class room extends class_base
                 while($x<20)
                 {//arr(date("d-m-Y h:i",($weekstart + 8000)));
                         $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
-                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul yle tunni ka m6juks
+                        $options[$url] = date("W" , ($weekstart + 3600)) . ". " .date("d.m.Y", ($weekstart + 3600)) . " - " . date("d.m.Y", ($weekstart+604800));//see +4k on selleks, et kellakeeramise jama puhul yle tunni ka mojuks
                         if($arr["request"]["start"] == $weekstart) $selected = $url;
                         $weekstart = $weekstart + 604800;
                         $x++;
@@ -1640,7 +1640,7 @@ class room extends class_base
 		enter_function("get_calendar_tbl");
 		//kkui asi tuleb veebist
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
-		{	
+		{
 			$arr["obj_inst"] = obj($arr["room"]);
 			if($_GET["start"])
 			{
@@ -2044,27 +2044,6 @@ class room extends class_base
 									"title" => t("Saata arve")
 								))." ".$d[$x];
 							}
-							$rfpc = $last_bron->connections_to(array(
-								"from.class_id" => CL_RFP,
-								"type" => "RELTYPE_CATERING_RESERVATION",
-							));
-							if(count($rfpc))
-							{
-								foreach($rfpc as $co)
-								{
-									$rfp = $co->from();
-								}
-								
-								$d[$x] = html::href(array(
-									"url" => $this->mk_my_orb("change", array("id" => $rfp->id(), "group" =>"final_catering"), CL_RFP),
-									"caption" => html::img(array(
-										"url" => aw_ini_get("baseurl")."/automatweb/images/icons/create_bill.jpg",
-										"border" => 0
-									)),
-									"target" => "_blank",
-									"title" => t("Vaata tellimuskinnitust")
-								))." ".$d[$x];
-							}
 							$d[$x] .= " ";
 							if ($last_bron->prop("client_arrived") == 1)
 							{
@@ -2269,7 +2248,6 @@ class room extends class_base
 		{
 			$t->define_data($this->get_sum_row($arr["obj_inst"]));
 		}
-
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
 		$arr["settings"] = $settings;
@@ -5365,7 +5343,7 @@ class room extends class_base
 			{
 				window.location.reload();
 			}
-
+	
 			function confirm_delete(field,url,change_var)
 			{
 				fRet=confirm("'.t("Olete kindel et kustutada ").":".'" + document.getElementById(field).options[document.getElementById(field).selectedIndex].text);

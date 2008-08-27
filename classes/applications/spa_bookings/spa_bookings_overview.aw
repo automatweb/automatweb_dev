@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.68 2008/08/25 13:10:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.69 2008/08/27 07:56:03 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -2022,6 +2022,17 @@ class spa_bookings_overview extends class_base
 
 	function _add_day_subs(&$tb, $pt, $grp)
 	{
+/*		$link = $this->mk_my_orb("room_booking_printer", array(
+			"from" => $this->start,
+			"to" => $this->to,
+			"group" => $grp
+		));
+		$tb->add_menu_item(array(
+			"parent" => $pt,
+			"text" => t("Valitud"),
+			"onClick" => "vals='&rooms=';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};aw_popup_scroll('$link'+vals,'mulcal',700,500);return false;",
+		));
+*/
 		$link = $this->mk_my_orb("room_booking_printer", array(
 			"from" => get_day_start()-24*3600,
 			"to" => get_day_start(),
@@ -2116,10 +2127,11 @@ class spa_bookings_overview extends class_base
 		$from = date_edit::get_timestamp($arr["request"]["stats_rs_booking_from"]);
 		$to = date_edit::get_timestamp($arr["request"]["stats_rs_booking_to"]);
 		$srch = !empty($arr["request"]["stats_rs_name"]) || !empty($arr["request"]["stats_rs_booker_name"]) || $from > 1 || $to > 1 || !empty($arr["request"]["stats_rs_package"]);	
-		if (!$srch)
+		/*if (!$srch)
 		{
 			return;
 		}
+*/
 
 
 		$f = array(

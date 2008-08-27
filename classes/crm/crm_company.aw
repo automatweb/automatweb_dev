@@ -5368,6 +5368,7 @@ class crm_company extends class_base
 				$to = mktime(0, 0, 1, date('m', $time) + 1, date('t', mktime(0, 0, 1, date('m', $time)+1, 1, date('Y', $time))), date('Y', $time));
 				$params[] = new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to));
 			}
+			$params["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
 			$params["site_id"] = array();
 			$params["lang_id"] = array();
 			$params["oid"] = $oids;

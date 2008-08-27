@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.72 2008/08/06 11:47:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.73 2008/08/27 07:56:01 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -126,7 +126,7 @@ class shop_order extends class_base
 			case "items_orderer":
 				// use the ordering form for the cart 
 				//$this->_disp_order_data($arr);
-				return PROP_OK;
+//				return PROP_OK;
 				$data["value"] = "";
 				if ($arr["obj_inst"]->prop("orderer_person"))
 				{
@@ -308,10 +308,14 @@ class shop_order extends class_base
 //			"caption" => t("Artikli kood"),
 //			"chgbgcolor" => "color",
 //		));
-		
-		
-		
-		
+		$pd_data = $pd_data->get();
+		foreach($arr["obj_inst"]->meta("ord_item_data") as $key => $val)
+		{
+			$pd_data[$key] = $val;
+
+		}
+		$item_data = $arr["obj_inst"]->meta("ord_item_data");
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Toode"),
@@ -333,7 +337,7 @@ class shop_order extends class_base
 			}
 			$matchers[$row["name"]] = $row["name"];
 		}
-		
+
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
@@ -344,7 +348,7 @@ class shop_order extends class_base
 		$conf = $arr["obj_inst"]->prop("confirmed") == 1;
 		//$arr["obj_inst"]->set_prop("confirmed" , 0);$arr["obj_inst"]->save();
 		$arrz = array("name", "comment", "status", "item_count", "item_type", "price", "must_order_num", "brother_of", "parent", "class_id", "lang_id" ,"period", "created", "modified", "periodic");
-		foreach($pd_data->get() as $id => $prod)
+		foreach($pd_data as $id => $prod)
 		{
 			if(!is_oid($id) || !$this->can("view", $id))
 			{
@@ -428,8 +432,10 @@ class shop_order extends class_base
 					$vals[$key] = html::textbox(array(
 						"name" => "prod_data[$id][$x][$key]",
 						"size" => 10,
+						"value" => $item_data[$id][$x][$key],
 					));
 				}
+
 				if ($conf)
 				{
 					$cnt = $val["items"];
@@ -515,8 +521,11 @@ class shop_order extends class_base
 				if($this->can("view", $id))
 				{
 					$rowo = obj($id);
-					$rowo->set_prop("items", $row["items"]);
-					$rowo->save();
+					if($rowo->is_property("items"))
+					{
+						$rowo->set_prop("items", $row["items"]);
+						$rowo->save();
+					}
 				}
 				foreach($row as $key => $val)
 				{
@@ -1368,7 +1377,9 @@ class shop_order extends class_base
 		$o = obj($arr["id"]);
 		$tp = $o->meta("ord_content");
 		$ord_item_data = new aw_array($o->meta('ord_item_data'));
+		
 
+	
 		// we need to sort the damn products based on their page values. if they are set of course. blech.
 		// so go over prods, make sure all have page numbers and then sort by page numbers
 		$prods = array();

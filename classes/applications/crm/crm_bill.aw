@@ -452,7 +452,9 @@ class crm_bill extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$i = get_instance(CL_CRM_COMPANY);
+				$prop["autocomplete_class_id"] = array(CRM_PERSON,CRM_COMPANY);
+
+/*				$i = get_instance(CL_CRM_COMPANY);
 				$p_i = get_instance(CL_CRM_PERSON);
 				$cust = $i->get_my_customers();
 				if (count($cust))
@@ -465,7 +467,7 @@ class crm_bill extends class_base
 						$prop["options"][$prop["value"]] = $tmp->name();
 					}
 				}
-				asort($prop["options"]);
+				asort($prop["options"]);*/
 				break;
 
 			case "sum":
