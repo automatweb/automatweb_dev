@@ -1577,7 +1577,7 @@ class site_show extends class_base
 				$sius[$nr] = $dat["url"];
 			}
 		}
-		$smn = $this->sel_section_obj->name();
+		$smn = $this->sel_section_obj->trans_get_val("name");
 		$smc = $this->sel_section_obj->comment();
 		if (aw_ini_get("menuedit.strip_tags"))
 		{
