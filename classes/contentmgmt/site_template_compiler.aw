@@ -2027,7 +2027,7 @@ class site_template_compiler extends aw_template
 			if ($arr["in_parent_tpl"])
 			{
 				$parent_o_name = "\$o_".$arr["a_parent"]."_".($arr["level"]-1);
-				$ret .= $this->_gi()."if(!".$fun_parent_name_cb.")\$parent_obj = ".$parent_o_name.";\n";
+				$ret .= $this->_gi()."if(empty(".$parent_is_from_obj_name."[\$parent_obj->id()]) &&  !".$fun_parent_name_cb.")\$parent_obj = ".$parent_o_name.";\n";
 			}
 			else
 			{
@@ -2160,6 +2160,7 @@ class site_template_compiler extends aw_template
 		$fun_name = $dat["fun_name"];
 		$cache_name = $dat["cache_name"];
 		$p_v_name = "\$os_".$arr["a_parent"]."_".$arr["level"];
+		$prev_o_name = "\$o_".$arr["a_parent"]."_".($arr["level"]-1);
 		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"]."[\$parent_obj->id()]";
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 		$parent_is_from_obj_start_level = $dat["parent_is_from_obj_start_level"];
@@ -2210,7 +2211,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."else\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi().$list_name." = \$o_obj_from->get_folders_as_object_list(\$tmp,".$arr["level"]." - ".$parent_is_from_obj_start_level.",\$parent_obj);\n";
+		$ret .= $this->_gi().$list_name." = \$o_obj_from->get_folders_as_object_list(\$tmp,".$arr["level"]." - ".$parent_is_from_obj_start_level.",".$prev_o_name.");\n"; //\$parent_obj);\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n\n";
 
