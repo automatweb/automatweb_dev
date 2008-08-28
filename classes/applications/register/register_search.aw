@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.53 2008/08/27 07:56:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.54 2008/08/28 11:00:02 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -1125,7 +1125,6 @@ die(dbg::dump($filter));
 					}
 				}
 			}			
-
 			$t->define_data($data);
 		}
 

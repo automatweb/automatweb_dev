@@ -1504,6 +1504,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			if ("sort_by" == (string)($key))
 			{
+				// add to list of used tables
+				$bits = explode(",", $val);
+				foreach($bits as $bit)
+				{
+					list($bit_tbl, $bit_field) = explode(".", $bit);
+					if ($bit_tbl != "")
+					{
+						$this->_add_s($bit_tbl);
+					}	
+				}
 				$this->sby = " ORDER BY $val ";
 				continue;
 			}

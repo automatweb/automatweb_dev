@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.271 2008/08/22 10:17:37 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.272 2008/08/28 10:59:59 kristo Exp $
 // defs.aw - common functions
 
 /*
@@ -136,9 +136,10 @@ if (!defined("DEFS"))
 			parse_str($query["query"], &$result);
 			// Some use url parameter instead of return_url
 			$return_url = isset($result["return_url"]) ? $result["return_url"] : $result["url"];
+
 			$query_ru = parse_url($return_url);
 			parse_str($query_ru["query"], &$result_ru);
-			if($result["class"] == $result_ru["class"] && $result["action"] == $result_ru["action"] && $result["id"] == $result_ru["id"])
+			if($return_url !== null && $result["class"] == $result_ru["class"] && $result["action"] == $result_ru["action"] && $result["id"] == $result_ru["id"])
 			{
 				return $return_url;
 			}
