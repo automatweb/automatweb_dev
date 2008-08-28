@@ -221,6 +221,9 @@
 		{
 			if ($_REQUEST['local_copy'] == 1)
 			{
+				header("Content-type: video/mpeg");
+				#header('Content-Length: 1500');
+				echo "1";
 				$local = 1;
 				// kas soovitakse ka baasi koopiat
 				if (!isset($_REQUEST['sql']))
@@ -239,6 +242,9 @@
 			else
 			{
 				$split = 1;
+				header("Content-type: video/mpeg");
+				#header('Content-Length: 1500');
+				echo "1";
 			}
 		}
 		else

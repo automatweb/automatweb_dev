@@ -63,7 +63,7 @@ class http
 			//echo "data = $data <br>";
 			$ipd .= $data;
 
-			if (preg_match("/Content-Length: (\d+)/imsU", $data, $mt))
+			if (preg_match("/Content-Length: (\d+)/ims", $data, $mt))
 			{
 				$max_len = $mt[1];
 			}
