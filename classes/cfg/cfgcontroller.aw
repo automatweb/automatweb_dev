@@ -1,13 +1,13 @@
 <?php
 /*
-@classinfo syslog_type=ST_CFGCONTROLLER relationmgr=yes maintainer=kristo
+@classinfo syslog_type=ST_CFGCONTROLLER relationmgr=yes maintainer=kristo allow_rte=3
 
 @default table=objects
 @default group=general
 @default field=meta
 @default method=serialize
 
-@property formula type=textarea rows=20 cols=80
+@property formula richtext=1 type=textarea rows=20 cols=80
 @caption Valem
 
 @property errmsg type=textbox

@@ -699,6 +699,17 @@ class htmlclient extends aw_template
 					$data["cb_nobreaks[${rte}]"] = 1;
 				}
 			}
+			elseif($this->rte_type == 3)
+			{
+				$rte = get_instance("vcl/codepress");
+				$res .= $rte->draw_editor(array(
+					"props" => $this->rtes,
+				));
+				foreach($this->rtes as $rte)
+				{
+					$data["cb_nobreaks[${rte}]"] = 1;
+				}
+			}
 			else
 			{
 				// make a list of of all RTE-s

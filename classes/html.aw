@@ -409,6 +409,15 @@ class html extends aw_template
 			{
 				$retval .= "<textarea id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$textsize}{$onkeyup}{$onchange}>{$value}</textarea>\n";
 			}
+			elseif($rte_type == 3)
+			{
+				$hval = $value;
+				if(strpos($value, "\"") !== false)
+				{
+					$hval = htmlspecialchars($hval);
+				}
+				$retval = "<textarea class=\"codepress php\" id=\"{$name}_codepress\" name=\"{$name}_codepress\" cols=\"{$cols}\" rows=\"{$rows}\" wrap=\"off\" >{$value}</textarea> <input type=\"hidden\" value=\"{$hval}\" name=\"{$name}\" id=\"{$name}\" />\n";
+			}
 			else
 			{
 				$args["type"] = "richtext";

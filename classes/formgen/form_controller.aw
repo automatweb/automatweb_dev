@@ -168,7 +168,11 @@ class form_controller extends form_base
 				$vl.=$this->parse("VAR_LINE");
 			}
 		}
-
+		load_javascript("codepress/codepress.js");
+		if(strpos($co["meta"]["eq"], "\"") !== false || strpos($co["meta"]["eq"], "<") !== false)
+		{
+			$co["meta"]["eq"] = htmlspecialchars($co["meta"]["eq"]);
+		}
 		$this->vars(array(
 			"VAR_LINE" => $vl,
 			"add_var" => $this->mk_my_orb("add_var", array("id" => $id)),

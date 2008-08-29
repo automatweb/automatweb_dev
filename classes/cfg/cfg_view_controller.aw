@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo syslog_type=ST_CFG_VIEW_CONTROLLER relationmgr=yes maintainer=kristo
+@classinfo syslog_type=ST_CFG_VIEW_CONTROLLER relationmgr=yes maintainer=kristo allow_rte=3
 
 @default table=objects
 @default group=general
@@ -9,7 +9,7 @@
 
 @property help type=text store=no no_caption=1
 
-@property formula type=textarea rows=20 cols=80
+@property formula type=textarea rows=20 cols=80 richtext=1
 @caption Valem
 
 */

@@ -17,6 +17,7 @@
 	@groupinfo layout caption=Layout
 		@groupinfo layout_props caption=Omadused parent=layout
 		@groupinfo layout_layouts caption=Layoudid parent=layout
+		@groupinfo layout_tables caption=Tabelid parent=layout
 
 	@groupinfo avail caption="K&otilde;ik omadused"
 	@groupinfo controllers caption="Kontrollerid"
@@ -120,6 +121,13 @@
 
 		@property layouts_table type=table store=no no_caption=1 editonly=1
 		@caption Layoudid
+
+	@default group=layout_tables
+		@property tables_toolbar type=toolbar store=no no_caption=1 editonly=1
+		@caption Toolbar
+
+		@property tables_table type=table store=no no_caption=1 editonly=1
+		@caption V&auml;ljad
 
 
 	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
@@ -430,6 +438,7 @@ class cfgform extends class_base
 					0 => t("Ei kuva"),
 					1 => t("AW RTE"),
 					2 => t("FCKeditor"),
+					3 => t("CodePress"),
 				);
 				$data["type"] = "select";
 				break;
@@ -490,6 +499,14 @@ class cfgform extends class_base
 
 			case "layouts_table":
 				$this->_layout_tbl($arr);
+				break;
+
+			case "tables_toolbar":
+				$this->_tables_tb($arr);
+				break;
+
+			case "tables_table":
+				$this->_tables_tbl($arr);
 				break;
 
 			case "trans_tbl":
@@ -1291,6 +1308,10 @@ class cfgform extends class_base
 			case "props_list":
 				$this->save_show_to_groups($arr);
 				break;
+
+			case "tables_table":
+				$this->save_tables_conf($arr);
+				break;
 		}
 		return $retval;
 	}
@@ -1370,6 +1391,7 @@ class cfgform extends class_base
 
 	function callback_mod_reforb($arr, $request)
 	{
+		$arr["post_ru"] = get_ru();
 		$arr["cfgform_add_grp"] = $request["cfgform_add_grp"];
 	}
 
@@ -1386,6 +1408,11 @@ class cfgform extends class_base
 			{
 				$arr["args"]["cfgform_add_grp"] = $arr["request"]["cfgform_add_grp"];
 			}
+		}
+		
+		if ($arr["request"]["chtbl"])
+		{
+			$arr["args"]["chtbl"] = $arr["request"]["chtbl"];
 		}
 	}
 
@@ -1557,6 +1584,286 @@ class cfgform extends class_base
 		{
 			$o->set_meta("cfg_layout", $this->cfg_layout);
 		}
+	}
+
+	private function _tables_tb(&$arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tables = $this->get_tbl_list();
+		if(count($tables))
+		{
+			$tables = array_merge(array(0=>t("--vali--")), $tables);
+			$tb->add_cdata(t("Tabel:").html::select(array(
+				"name" => "chtbl",
+				"options" => $tables,
+				"value" => ($s = $arr["request"]["chtbl"])? $s : 0,
+			)));
+			$tb->add_save_button();
+			if($arr["request"]["chtbl"])
+			{
+				$tb->add_button(array(
+					"action" => "remove_tbl_field",
+					"img" => "delete.gif",
+					"tooltip" => t("Eemalda valitud v&auml;ljad"),
+				));
+			}
+		}
+		else
+		{
+			$tb->add_cdata(t("Klass ei sisalda konfigureeritavaid tabeleid."));
+		}
+	}
+
+	/**
+	@attrib name=remove_tbl_field
+	**/
+	function remove_tbl_field($arr)
+	{
+		$o = obj($arr["id"]);
+		$cfg = $o->meta("tbl_config");
+		foreach($arr["sel"] as $fieldid)
+		{
+			unset($cfg[$arr["chtbl"]]["fields"][$fieldid]);
+		}
+		$o->set_meta("tbl_config", $cfg);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	private function get_tbl_list()
+	{
+		$tables = array();
+		foreach($this->cfg_proplist as $property)
+		{
+			if($property["type"] == "table" && $property["configurable"])
+			{
+				$tables[$property["name"]] = $property["caption"] ? $property["caption"] : $property["name"];
+			}
+		}
+		return $tables;
+	}
+
+	private function _tables_tbl(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_caption(t("V&auml;ljad"));
+
+	//$arr["obj_inst"]->set_meta("tbl_config", null);$arr["obj_inst"]->save();
+
+		if($tbl = $arr["request"]["chtbl"])
+		{
+			$property = $this->cfg_proplist[$tbl];
+			if(!$property["type"] == "table" || !$property["configurable"])
+			{
+				return;
+			}
+			$this->_init_tables_tbl($t);
+			$conf = $arr["obj_inst"]->meta("tbl_config");
+			if(is_array($conf[$tbl]["fields"]))
+			{
+				if($conf[$tbl]["chooser"])
+				{
+					$t->define_data($this->get_tables_tbl_data(array(
+						"field" => array(
+							"name" => "add",
+						),
+						"tbl" => $tbl,
+						"add" => 1,
+						"conf" => $conf,
+					)));
+					$t->set_rgroupby(array("add" => "add"));
+					$t->set_default_sortby("add");
+					$t->set_default_sorder("asc");
+					$t->sort_by();
+					$t->define_chooser(array(
+						"field" => "id",
+						"name" => "sel",
+					));
+				}
+				foreach($conf[$tbl]["fields"] as $field)
+				{
+					$order = $field["order"]?$field["order"]:$i/10;
+					$t->define_data($this->get_tables_tbl_data(array(
+						"field" => $field,
+						"tbl" => $tbl,
+					)));
+				}
+			}
+			else
+			{
+				$arr["prop"]["value"] = sprintf(t("Tabelit %s pole n&auml;idatud."), $tbl);
+			}
+		}
+	}
+
+	private function get_tables_tbl_data($arr)
+	{
+		extract($arr);
+		if($add)
+		{
+			$n = "userdef";
+			$i = 1;
+			while(true)
+			{
+				$fname = $n.$i;
+				if($conf[$tbl]["fields"][$fname])
+				{
+					$i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			$name = html::hidden(array(
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][newname]",
+				"value" => $fname,
+			)).$fname;
+		}
+		else
+		{
+			$name = $field["name"];
+		}
+		$data = array(
+			"caption" => html::textbox(array(
+				"value" => $field["caption"],
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][caption]",
+				"size" => 20,
+			)),
+			"name" => $name,
+			"hide" => html::checkbox(array(
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][hide]",
+				"value" => 1,
+				"checked" => $field["hide"],
+			)),
+			"ord" => html::textbox(array(
+				"value" => $field["order"],
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][order]",
+				"size" => 3,
+			)),
+			"filter" => html::select(array(
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][filter_type]",
+				"options" => array(
+					0 => t("--vali--"),
+					"text" => t("Tekstikast"),
+					"automatic" => t("Valik"),
+				),
+				"value" => $field["filter_type"],
+			)),
+			"userprop" => ($field["userdef"] || $add)?html::textbox(array(
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][userprop]",
+				"size" => 9,
+				"value" => $field["userprop"],
+			)):'',
+			"align" => html::select(array(
+				"name" => "tbl_conf[".$tbl."][fields][".$field["name"]."][align]",
+				"options" => array(
+					0 => t("--vali--"),
+					"left" => t("Vasakul"),
+					"center" => t("Keskel"),
+					"right" => t("Paremal"),
+				),
+				"value" => $field["align"],
+			)),
+			"add" => $add?t("Lisa uus") : ($field["userdef"] ? " ".t("Kasutaja defineeritud") : ""),
+			"id" => $field["userdef"]?$field["name"]:null,
+		);
+		return $data;
+	}
+
+	function save_tables_conf($arr)
+	{
+		$conf = $arr["obj_inst"]->meta("tbl_config");
+		foreach($arr["request"]["tbl_conf"] as $tbl => $data)
+		{
+			foreach($data["fields"] as $name => $field)
+			{
+				if($name == "add")
+				{
+					foreach($field as $var => $val)
+					{
+						if($val && $var != "newname")
+						{
+							$new = 1;
+						}
+						elseif(!$val)
+						{
+							unset($field[$var]);
+						}
+					}
+					if($new)
+					{
+						$field["userdef"] = 1;
+						$field["name"] = $field["newname"];
+						if($field["filter_type"])
+						{
+							$field["filter"] = $field["filter_type"];
+						}
+						unset($field["newname"]);
+						$conf[$tbl]["fields"][$field["name"]] = $field;
+					}
+					continue;
+				}
+				foreach($field as $var => $val)
+				{
+					$conf[$tbl]["fields"][$name][$var] = $val;
+					if(empty($val))
+					{
+						unset($conf[$tbl]["fields"][$name][$var]);
+					}
+				}
+				if($field["filter_type"])
+				{
+					$conf[$tbl]["fields"][$name]["filter"] = $field["filter_type"];
+				}
+				else
+				{
+					unset($conf[$tbl]["fields"][$name]["filter"]);
+				}
+				$conf[$tbl]["fields"][$name]["hide"] = $field["hide"];
+			}
+		}//die(arr($conf));
+		$arr["obj_inst"]->set_meta("tbl_config", $conf);
+		$arr["obj_inst"]->save();
+	}
+
+	private function _init_tables_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Pealkiri"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "userprop",
+			"caption" => t("V&auml;&auml;rtus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "align",
+			"caption" => t("Joondus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "filter",
+			"caption" => t("Filter"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "hide",
+			"caption" => t("Peida"),
+			"align" => "center",
+		));
 	}
 
 	private function _init_layout_tbl(&$t)
@@ -2221,6 +2528,15 @@ class cfgform extends class_base
 								));
 								$property["cfgform_additional_options"] = $this->parse("layout_options");
 								$this->vars(array("layout_options" => ""));
+								break;
+							case "table":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"configurable_caption" => t("Konfigureeritav"),
+									"configurable_checked" => $property["configurable"] ? " checked=\"1\"" : "",
+								));
+								$property["cfgform_additional_options"] = $this->parse("table_options");
+								$this->vars(array("table_options" => ""));
 								break;
 
 							default:

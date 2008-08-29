@@ -40,7 +40,7 @@
 <!-- END SUB: CHANGE -->
 <tr>
 	<td class="fform">Valem:</td>
-	<td class="fform"><textarea cols="80" rows="50" NAME='eq'>{VAR:eq}</textarea></td>
+	<td class="fform"><textarea class="codepress php" id="eq_codepress" name="eq_codepress" cols="80" rows="50" >{VAR:eq}</textarea> <input type="hidden" value="{VAR:eq}" name="eq" id="eq" /></td>
 </tr>
 <!-- SUB: LANG -->
 <tr>
