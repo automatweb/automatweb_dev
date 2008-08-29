@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.16 2008/05/09 10:45:58 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.17 2008/08/29 07:12:23 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -1040,8 +1040,10 @@ die();*/
 			$this->data["defines"][] = array(
 				"key" => $this->strip_quotes($def_str[1]),
 				"value" => $this->strip_quotes($dv),
-				"line" => $this->get_line()
+				"line" => $this->get_line(),
+				"comment" => $this->_filter_doc_comment($this->last_comment)
 			);
+			unset($this->last_comment);
 		}
 		return $depd;
 	}
@@ -1142,12 +1144,15 @@ die();*/
 
 			// class variable definition
 			$_nm = "\$this->".substr($v_tok[1],1);
+
 			$this->data["classes"][$this->current_class]["member_var_defs"][$_nm] = array(
 				"name" => $_nm,
 				"line" => $this->get_line(),
-				"access" => $this->faccess_lut[$this->function_access]
+				"access" => $this->faccess_lut[$this->function_access],
+				"comment" => $this->_filter_doc_comment($this->last_comment)
 			);
 			unset($this->function_access);
+			unset($this->last_comment);
 			return;
 		}
 
@@ -1742,6 +1747,15 @@ echo "ding<br>";*/
 		{
 			$this->function_access = $id;
 		}
+	}
+
+	private function _filter_doc_comment($comm)
+	{	
+		if (substr(trim($comm), 0, 3) == "/**")
+		{
+			$comm = substr(trim($comm), 3, -3);
+		}
+		return $comm;
 	}
 }
 ?>

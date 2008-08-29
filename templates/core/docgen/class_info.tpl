@@ -120,38 +120,6 @@
 		<!-- END SUB: PRIVATE_FUNCTION -->
 		<br>
 		<!-- END SUB: HAS_PRIVATE -->
-		<br><br>
-		<b>Member variables:</b><br>
-
-		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
-		<tr>
-			<th>Access</th>
-			<th>Name</th>
-			<th>Defined</th>
-			<th>Used</th>
-			<th>Type</th>
-		</tr>
-		<!-- SUB: DEFINED_MEMBER_VAR -->
-		<tr>
-			<td>{VAR:memv_access}</td>
-			<td>{VAR:memv_name}</td>
-			<td>{VAR:memv_defined}</td>
-			<td>{VAR:memv_used}</td>
-			<td>{VAR:memv_type}</td>
-		</tr>
-		<!-- END SUB: DEFINED_MEMBER_VAR -->
-
-		<!-- SUB: UNDEFINED_MEMBER_VAR -->
-		<tr>
-			<td>&nbsp;</td>
-			<td>{VAR:memv_name}</td>
-			<td>UNDEFINED!</td>
-			<td>{VAR:memv_used}</td>
-			<td>{VAR:memv_type}</td>
-		</tr>
-		<!-- END SUB: UNDEFINED_MEMBER_VAR -->
-		</table>
-
 
 	</td>
 	<td class="text" valign="top" colspan="4">
@@ -218,10 +186,12 @@
 		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
 			<th>Name</th>
 			<th>Value</th>
+			<th>Comment</th>
 		<!-- SUB: DEFINES -->
 		<tr>
 			<td>{VAR:name}</td>
 			<td>{VAR:value}</td>
+			<td>{VAR:comment}</td>
 		</tr>
 		<!-- END SUB: DEFINES -->
 		</table>
@@ -243,6 +213,42 @@
 
 </tr>
 </table>
+
+		<br><br>
+		<b>Member variables:</b><br>
+
+		<table border="0" cellpadding="1" cellspacing="0" width="100%" class="class_info">
+		<tr>
+			<th>Access</th>
+			<th>Name</th>
+			<th>Defined</th>
+			<th>Used</th>
+			<th>Type</th>
+			<th>Comment</th>
+		</tr>
+		<!-- SUB: DEFINED_MEMBER_VAR -->
+		<tr>
+			<td>{VAR:memv_access}</td>
+			<td>{VAR:memv_name}</td>
+			<td>{VAR:memv_defined}</td>
+			<td>{VAR:memv_used}</td>
+			<td>{VAR:memv_type}</td>
+			<td>{VAR:memv_comment}</td>
+		</tr>
+		<!-- END SUB: DEFINED_MEMBER_VAR -->
+
+		<!-- SUB: UNDEFINED_MEMBER_VAR -->
+		<tr>
+			<td>&nbsp;</td>
+			<td>{VAR:memv_name}</td>
+			<td>UNDEFINED!</td>
+			<td>{VAR:memv_used}</td>
+			<td>{VAR:memv_type}</td>
+			<td>{VAR:memv_comment}</td>
+		</tr>
+		<!-- END SUB: UNDEFINED_MEMBER_VAR -->
+		</table>
+
 
 <br><br><br>
 <table border="0" width="100%" cellpadding="2" cellspacing="0">

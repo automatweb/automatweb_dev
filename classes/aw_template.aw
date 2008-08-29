@@ -7,15 +7,18 @@
 
 class aw_template extends core
 {
+	/** the main template folder **/
 	public $template_dir;
 	public $adm_template_dir;
 	public $site_template_dir;
+	/** template variable values **/
 	public $vars;
 	public $sub_merge;
 	public $template_filename;
 	public $v2_name_map;
 
 	private $debug_mode;
+	/** whether to use eval() or preg_replace to render templates **/
 	private $use_eval;
 	public $v2_templates;
 	private $v2_arr;

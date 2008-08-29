@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.27 2008/06/06 13:54:14 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.28 2008/08/29 07:12:27 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -731,6 +731,7 @@ class docgen_viewer extends class_base
 		}
 		$str = "";
 		$str2 = "";
+
 		foreach($tmp as $var_name => $var_data)
 		{
 			$used = array();
@@ -745,7 +746,8 @@ class docgen_viewer extends class_base
 			$this->vars(array(
 				"memv_name" => $var_name,
 				"memv_used" => join(", ",array_unique($used)),
-				"memv_type" => $var_data["class"]
+				"memv_type" => $var_data["class"],
+				"memv_comment" => $data["member_var_defs"][$var_name]["comment"],
 			));
 			if ($def)
 			{
@@ -1868,7 +1870,8 @@ class docgen_viewer extends class_base
 		{
 			$this->vars(array(
 				"name" => $def["key"],
-				"value" => $def["value"]
+				"value" => $def["value"],
+				"comment" => $def["comment"],
 			));
 			$s .= $this->parse("DEFINES");
 		}
