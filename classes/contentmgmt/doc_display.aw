@@ -511,6 +511,7 @@ class doc_display extends aw_template
 		{
 			$this->parse_wiki(& $text, $doc);
 		}
+		$this->_parse_youtube_links(& $text);
 		
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
@@ -537,6 +538,7 @@ class doc_display extends aw_template
 		{
 			$this->parse_wiki(& $text, $doc);
 		}
+		$this->_parse_youtube_links(& $text);
 		
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
