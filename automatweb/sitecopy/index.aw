@@ -87,7 +87,7 @@
 			$reciver .= "," . $_REQUEST['mailto'];
 		}
 
-		$aw_dir = realpath("./../../");;
+		$aw_dir = realpath("./../../");
 		if (!file_exists('../const.aw'))
 		{
 			report_status($reciver, "Ei leitud AW const.aw faili.");
