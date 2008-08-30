@@ -140,6 +140,7 @@
 		if (!file_exists($site_dir.'/files/sitecopy'))
 		{
 			report_status($reciver, "Koopia tegemiseks vajalikku kausta ($site_dir/files/sitecopy) polnud v6imalik luua.");
+			die();
 		}
 		else
 		{
@@ -185,7 +186,7 @@
 			$pk = "j";
 			@shell_exec('rm -f '.$site_dir.'/pagecache/index.tar.bz2');
 		}
-		$tar = "tar -c".$pk."f";
+		$tar = "tar -ch".$pk."f";
 		
 		//mysqldump check
 		$dbuser = aw_ini_get('db.user');
@@ -265,7 +266,7 @@
 			$tar_site_exclude = $copy_dir."/site_exclude";
 			//k6igepealt teeme nimekirja failidest ja kaustadest, mida me ei paki
 			@shell_exec("echo './files/sitecopy\n./pagecache' > $tar_site_exclude");
-			@shell_exec("cd $site_dir; find . -type l -iname 'automatweb' -o -type f -iname '*.sql*' -o -type f -iname '*.tar*'>> $tar_site_exclude");
+			@shell_exec("cd $site_dir; find . -type l -iname 'automatweb' -o -type l -iname 'vvfiles' -o -type l -iname 'vv_files' -o -type f -iname '*.sql*' -o -type f -iname '*.tar*'>> $tar_site_exclude");
 			//koopia saidist
 			$site_file = "$copy_dir/site.tar$tar_ext";
 			@shell_exec("cd $site_dir; $tar $site_file -X $tar_site_exclude .");
