@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.113 2008/08/26 13:33:28 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.114 2008/09/01 10:27:15 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2357,7 +2357,7 @@ class rfp extends class_base
 			"data_email" => $arr["obj_inst"]->prop("data_billing_email"),
 			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
-			"offer_expire_date" => date("Y.m.d", $arr["obj_inst"]->prop("offer_expire_date")),
+			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),
 		));
 
 		$info_props = array(
