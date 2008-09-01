@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.157 2008/08/27 08:54:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.158 2008/09/01 10:09:10 robert Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -831,7 +831,7 @@ class releditor extends core
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => $this->elname,
-			"obj_inst" => $arr["obj_inst"],
+			"obj_inst" => ($obj_inst && is_oid($obj_inst->id())) ? $obj_inst : $arr["obj_inst"],
 		));
 
 		// add this after parse, otherwise the name will be in form propname[elname], and I do not
