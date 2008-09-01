@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.132 2008/09/01 08:53:38 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.133 2008/09/01 13:21:45 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1125,8 +1125,30 @@ class reservation extends class_base
 	function set_products_info($oid, $arr)
 	{
 		if($this->can("view", $oid))
-		{
+ 		{
 			$o = obj($oid);
+			$conn = $o->connections_to(array(
+				"from.class_id" => CL_RFP,
+				"type" => "RELTYPE_CATERING_RESERVATION",
+			));
+			if(count($conn))
+			{
+				foreach($conn as $c)
+				{
+					$rfpo = $c->from();
+					$prods = $rfpo->meta("prods");
+					foreach($arr["amount"] as $id => $amt)
+					{
+						$prods[$id.".".$arr["id"]]["amount"] = $amt;
+						$prods[$id.".".$arr["id"]]["discount"] = $arr["change_discount"][$id];
+						$prods[$id.".".$arr["id"]]["sum"] = number_format($prods[$id.".".$arr["id"]]["price"] * $amt * ((100 - $arr["change_discount"][$id]) / 100), 2);
+						$prods[$id.".".$arr["id"]]["start1"] = $o->prop("start1");
+						$prods[$id.".".$arr["id"]]["end"] = $o->prop("end");
+					}
+					$rfpo->set_meta("prods", $prods);
+					$rfpo->save();
+				}
+			}
 			foreach($arr["change_price"] as $key => $val)
 			{
 				$this->set_product_price(array(
