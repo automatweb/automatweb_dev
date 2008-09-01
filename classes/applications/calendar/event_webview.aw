@@ -95,8 +95,8 @@ class event_webview extends class_base
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
-		// ?date=28.05.2008
-		if(!empty($_GET["date"]) && preg_match("/^[0-9]{2}.[0-9]{2}.[0-9]{4}$/", $_GET["date"]) && $_GET["viewtype"] == "day")
+		// ?date=22-05-2008
+		if(!empty($_GET["date"]) && preg_match("/^[0-9]{2}-[0-9]{2}-[0-9]{4}$/", $_GET["date"]) && $_GET["viewtype"] == "day")
 		{
 			list($dd, $dm, $dy) = explode("-", $_GET["date"]);
 			$date_s = mktime(0, 0, 0, $dm, $dd, $dy);
@@ -238,8 +238,8 @@ class event_webview extends class_base
 					{
 						continue;
 					}
-					// Settings
-					if($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start)
+					// Settings (considered only id the url parameter is not given)
+					if(($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start) && empty($date_s) || empty($date_e))
 					{
 						continue;
 					}
