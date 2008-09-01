@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.116 2008/09/01 10:41:03 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.117 2008/09/01 11:56:42 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2497,6 +2497,11 @@ class rfp extends class_base
 						{
 							foreach($curs as $cur => $price)
 							{
+								$pk_discount = $arr["obj_inst"]->get_package_custom_discount();
+								if($pk_discount)
+								{
+									$price *= (100 - $pk_discount ) / 100;
+								}
 								if($cur == $currency)
 								{
 									$prices_for_calculator[$room_price] = $price;
@@ -2634,9 +2639,7 @@ class rfp extends class_base
 		if($package)
 		{
 			$pck_cprice = $arr["obj_inst"]->get_package_custom_price();
-			$pck_cdiscount = $arr["obj_inst"]->get_package_custom_discount();
 			$bron_totalprice = (is_numeric($pck_cprice) && $pck_cprice >= 0)?$pck_cprice:$bron_totalprice;
-			$bron_totalprice = (is_numeric($pck_cdiscount) && $pck_cdiscount > 0 )?((100 - $pck_cdiscount)/100 * $bron_totalprice):$bron_totalprice;
 		}
 		$this->vars(array(
 			"total_colspan" => $colspan - 2,
@@ -3507,67 +3510,103 @@ class rfp extends class_base
 					"value" => $arr["obj_inst"]->get_package_custom_discount(),
 				)),
 			));
-
 			if($tbl_sum_row)
 			{
-				if(!($totprice = $arr["obj_inst"]->get_package_custom_price()))
+				$total_discount = $arr["obj_inst"]->get_package_custom_discount();
+				
+				$room_price = $this->can("view", ($_t = $arr["obj_inst"]->prop("data_gen_package_price")))?$_t:false;
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_RESERVATION",
+				));
+
+				$mgr = get_instance(CL_RFP_MANAGER);
+				$mgr = obj($mgr->get_sysdefault());
+				$pk_prices = $mgr->meta("pk_prices");
+				$room_p = get_instance(CL_ROOM_PRICE);
+
+				$currency = $arr["obj_inst"]->prop("default_currency");
+				if(is_array($pk_prices))
 				{
-					$room_price = $this->can("view", ($_t = $arr["obj_inst"]->prop("data_gen_package_price")))?$_t:false;
-					$conns = $arr["obj_inst"]->connections_from(array(
-						"type" => "RELTYPE_RESERVATION",
-					));
-
-					$mgr = get_instance(CL_RFP_MANAGER);
-					$mgr = obj($mgr->get_sysdefault());
-					$pk_prices = $mgr->meta("pk_prices");
-					$room_p = get_instance(CL_ROOM_PRICE);
-
-					$currency = $arr["obj_inst"]->prop("default_currency");
-					if(is_array($pk_prices))
+					foreach($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"] as $loop_room_price => $curs)
 					{
-						foreach($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"] as $loop_room_price => $curs)
+						foreach($curs as $cur => $price)
 						{
-							foreach($curs as $cur => $price)
-							{
-								if($cur == $currency)
-								{
-									$prices_for_calculator[$loop_room_price] = $price;
-								}
-							}
+							$prices_for_calculator[$loop_room_price][$cur] = $price;
 						}
 					}
-					$totprice = 0;
-					foreach($conns as $conn)
+				}
+				$totprice = 0;
+				foreach($conns as $conn)
+				{
+					$rv = $conn->to();
+					unset($tot_add);
+					if($sp = $rv->prop("special_sum"))
 					{
-						$rv = $conn->to();
-						unset($tot_add);
-						if($sp = $rv->prop("special_sum"))
+						$tot_add = $sp;
+						$rv_prices[$rv->id()]["special"] = $tot_add;
+					}
+					if(!isset($tot_add))
+					{
+						if(!$room_price)
 						{
-							$tot_add = $sp;
+							$room_prices = $room_p->calculate_room_prices_price(array(
+								"oids" => array_keys($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"]),
+								"start" => $rv->prop("start1"),
+								"end" => $rv->prop("start1") + 1,
+							));
+							$room_price_oid = key($room_prices);
 						}
-						if(!isset($tot_add))
+						else
 						{
-							if(!$room_price)
+							$room_price_oid = $room_price;
+						}
+						$tot_add = ($prices_for_calculator[$room_price_oid][$currency] * $rv->prop("people_count"));
+						if($total_discount)
+						{
+							$tot_add *= (100 - $total_discount) / 100;
+						}
+						foreach($prices_for_calculator[$room_price_oid] as $cur => $price)
+						{
+							$currencies[$cur] = $cur;
+							$rv_prices[$rv->id()][$cur] = $price * $rv->prop("people_count");
+						}
+					}
+					$totprice += $tot_add;
+				}
+				$data = $t->get_data();
+				foreach($data as $key => $values)
+				{
+					if($rvid = $values["reservation"])
+					{
+						$tprice = 0;
+						foreach($currencies as $cur)
+						{
+							if($pr = $rv_prices[$rvid]["special"])
 							{
-								$room_prices = $room_p->calculate_room_prices_price(array(
-									"oids" => array_keys($pk_prices[$arr["obj_inst"]->prop("data_gen_package")]["prices"]),
-									"start" => $rv->prop("start1"),
-									"end" => $rv->prop("start1") + 1,
-								));
-								$room_price_oid = key($room_prices);
+								$price = $tprice = $pr;
 							}
 							else
 							{
-								$room_price_oid = $room_price;
+								$price = $rv_prices[$rvid][$cur];
+								if($total_discount)
+								{
+									$price = ((100 - $total_discount) / 100) * $price;
+								}
+								if($cur == $currency)
+								{
+									$tprice = $price;
+								}
 							}
-							$tot_add = ($prices_for_calculator[$room_price_oid] * $rv->prop("people_count"));
+							$values["price".$cur] = number_format($price, 2);
 						}
-						$totprice += $tot_add;
+						$values["total"] = number_format($tprice, 2);
+						$t->set_data($key, $values);
 					}
 				}
-				else
+				if($custom = $arr["obj_inst"]->get_package_custom_price())
 				{
-					$totprice = ($_t = $arr["obj_inst"]->get_package_custom_discount())?(((100-$_t) /100 )* $totprice):$totprice;
+					$totprice = $custom;
+					$totprice = ($_t = $total_discount)?(((100-$_t) /100 )* $totprice):$totprice;
 				}
 				
 				$t->set_data($tbl_sum_row, array(
@@ -3575,7 +3614,6 @@ class rfp extends class_base
 					"custom" => html::strong(t("Kokku:")),
 				));
 			}
-
 		}
 	}
 
