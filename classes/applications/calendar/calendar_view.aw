@@ -450,6 +450,10 @@ class calendar_view extends class_base
 				{					
 					foreach(connection::find(array("from" => $event["id"], "from.class_id" => CL_CALENDAR_EVENT, "type" => "RELTYPE_EVENT_TIMES")) as $et_conn)
 					{
+						if (!empty($item["url"]))
+						{
+							$item["url"] = aw_url_change_var("date",date("d-m-Y",$event_time_obj->start), $item["url"]);
+						};
 						$event_time_obj = obj($et_conn["to"]);
 						$tmp = $item;
 						$tmp["start"] = $tmp["timestamp"] = get_day_start($event_time_obj->start);
