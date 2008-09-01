@@ -18,14 +18,16 @@ require_once PEAR_PATH.'XML/Unserializer.php';
  */
 
 //define('DD_WSDL', 'https://www.sk.ee:8090/?wsdl');
-//define('DD_WSDL', 'https://www.sk.ee:8097/?wsdl');
+#define('DD_WSDL', 'https://www.sk.ee:8097/?wsdl');
 
+# see on 6ige!
 define('DD_WSDL', 'https://digidocservice.sk.ee/?wsdl'); // some sort of a new service?????
 
 //define('DD_WSDL', 'https://linux.test.sk.sise:8092/?wsdl');
-//define('DD_WSDL', 'https://www.openxades.org:8090/?wsdl');
+//define('DD_WSDL', 'http://www.openxades.org/cgi-bin/ocsp.cgi');
 //define('DD_WSDL', 'https://www.openxades.org/cgi-bin/ocsp.cgi');
 //define('DD_WSDL', 'http://linux.test.sk.sise:8098/?wsdl');
+//define('DD_WSDL', 'https://www.openxades.org:8443/?wsdl');
 
 //define('DD_SERVER_CA_FILE', aw_ini_get("basedir").'/classes/common/digidoc/service_certs.pem');
 
