@@ -9242,5 +9242,21 @@ class crm_person extends class_base
 
 		return $post_ru;
 	}
+
+	/**
+		@attrib name=cut_docs
+	**/
+	function cut_docs($arr)
+	{
+		return get_instance(CL_CRM_COMPANY)->cut_docs($arr);
+	}
+
+	/**
+		@attrib name=submit_paste_docs
+	**/
+	function submit_paste_docs($arr)
+	{
+		return get_instance(CL_CRM_COMPANY)->submit_paste_docs($arr);
+	}
 }
 ?>
