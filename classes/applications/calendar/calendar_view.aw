@@ -121,7 +121,7 @@
 @caption S&uuml;ndmuste n&auml;itamise kontroller
 
 # Feel free to add class_id's here!
-@reltype DEFAULT_URLOBJ value=6 clid=CL_DOCUMENT
+@reltype DEFAULT_URLOBJ value=6 clid=CL_DOCUMENT,CL_MENU
 @caption Default lingi objekt
 */
 

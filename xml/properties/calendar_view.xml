@@ -334,7 +334,10 @@
             </EVENT_VALIDATOR>
             <DEFAULT_URLOBJ>
                   <value>6</value>
-                  <clid>CL_DOCUMENT</clid>
+                  <clid>
+                        <num_0>CL_DOCUMENT</num_0>
+                        <num_1>CL_MENU</num_1>
+                  </clid>
                   <caption>Default lingi objekt</caption>
             </DEFAULT_URLOBJ>
       </reltypes>
