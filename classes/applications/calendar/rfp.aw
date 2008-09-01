@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.115 2008/09/01 10:34:29 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.116 2008/09/01 10:41:03 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2050,7 +2050,6 @@ class rfp extends class_base
 		$totalsum = 0;
 		foreach(safe_array($data) as $k => $row)
 		{
-			$row["sum"] = $row["price"] * $row["amount"];
 			$totalsum += $row["sum"];
 			$t->define_data($this->_get_additional_services_tbl_row($k, $row));
 		}
@@ -2097,7 +2096,7 @@ class rfp extends class_base
 				"service" => $v["service"],
 				"price" => $v["price"],
 				"amount" => $v["amount"],
-				"sum" => $v["sum"],
+				"sum" => $v["price"] * $v["amount"],
 				"comment" => $v["comment"],
 			);
 		}
@@ -2111,7 +2110,7 @@ class rfp extends class_base
 					"service" => $new["service"],
 					"price" => $new["price"],
 					"amount" => $new["amount"],
-					"sum" => $new["sum"],
+					"sum" => $new["price"] * $new["amount"],
 					"comment" => $new["comment"],
 				);
 			}
