@@ -108,15 +108,12 @@ FCK.ContextMenu.RegisterListener( {
 var FCKAWImagePlaceholders = new Object() ;
 
 // Add a new placeholder at the actual selection.
-FCKAWImagePlaceholders.Add = function( oEditor, name )
-{
-	oEditor.InsertHtml( '#' + name + '#'  )
-	FCKAWImagePlaceholders.Redraw();
-}
-
-// Add a new placeholder at the actual selection.
 FCKAWImagePlaceholders.Add = function( oEditor, name, float2 )
 {
+	if (!float2)
+	{
+		float2 = "";
+	}
 	name = name.match(/pict[0-9]/ig);
 	// otherwise we insert the new alias into placeholder span
 	if (FCKBrowserInfo.IsIE)
