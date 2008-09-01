@@ -96,9 +96,9 @@ class event_webview extends class_base
 		$this->read_template("show.tpl");
 
 		// ?date=28.05.2008
-		if(!empty($_GET["date"]) && preg_match("/^[0-9]{2}.[0-9]{2}.[0-9]{4}$/", $_GET["date"]))
+		if(!empty($_GET["date"]) && preg_match("/^[0-9]{2}.[0-9]{2}.[0-9]{4}$/", $_GET["date"]) && $_GET["viewtype"] == "day")
 		{
-			list($dd, $dm, $dy) = explode(".", $_GET["date"]);
+			list($dd, $dm, $dy) = explode("-", $_GET["date"]);
 			$date_s = mktime(0, 0, 0, $dm, $dd, $dy);
 			$date_e = $date_s + 24*3600 - 1;
 		}

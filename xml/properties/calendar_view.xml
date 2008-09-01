@@ -59,6 +59,16 @@
             <caption>S&amp;amp;uuml;ndmuse n&amp;amp;auml;dala kujundusp&amp;amp;otilde;hi</caption>
       </property>
       <property>
+            <name>use_event_time_objs</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_valeu>1</ch_valeu>
+            <caption>Kasuta toimumisaja objekte</caption>
+      </property>
+      <property>
             <name>show_days_with_events</name>
             <table>objects</table>
             <group>general</group>
@@ -66,7 +76,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;ita ainult s&amp;amp;uuml;ndmustega p&amp;auml;evi</caption>
+            <caption>N&amp;amp;auml;ita ainult s&amp;amp;uuml;ndmustega p&amp;amp;auml;evi</caption>
       </property>
       <property>
             <name>sort_day_events_before</name>
@@ -86,7 +96,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;ita kalendrivaates kohe s&amp;uuml;ndmuse sisu</caption>
+            <caption>N&amp;amp;auml;ita kalendrivaates kohe s&amp;amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
             <name>show_event_days</name>
@@ -274,7 +284,7 @@
                   <caption>Tulemuste seadistamine</caption>
             </ftresults>
             <show_events>
-                  <caption>S&amp;uuml;ndmused</caption>
+                  <caption>S&amp;amp;uuml;ndmused</caption>
                   <submit>no</submit>
             </show_events>
       </groupinfo>

@@ -30,6 +30,9 @@
 @property week_event_template type=textbox size=5
 @caption S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi
 
+@property use_event_time_objs type=checkbox ch_valeu=1
+@caption Kasuta toimumisaja objekte
+
 @property show_days_with_events type=checkbox ch_value=1
 @caption N&auml;ita ainult s&uuml;ndmustega p&auml;evi
 
@@ -431,16 +434,42 @@ class calendar_view extends class_base
 				{
 					$item["url"] = aw_url_change_var("date",date("d-m-Y",$event["start"]),$item["url"]);
 				};
-				$rv[$event["start"]] = $item;
-				if ($event["end"] > $event["start"] && date("dmY", $event["start"]) != date("dmY", $event["end"]))
-				{
-					$item["timestamp"] = get_day_start($item["timestamp"]) + 86400;
-					for ($i = $item["timestamp"]; $i <= $event["end"]; $i = $i + 86400)
+				if($this->obj_inst->use_event_time_objs)
+				{					
+					foreach(connection::find(array("from" => $event["id"], "from.class_id" => CL_CALENDAR_EVENT, "type" => "RELTYPE_EVENT_TIMES")) as $et_conn)
 					{
+						$event_time_obj = obj($et_conn["to"]);
 						$tmp = $item;
-						$tmp["start"] = $tmp["timestamp"] = $i;
-						$rv[$i] = $tmp; 
+						$tmp["start"] = $tmp["timestamp"] = get_day_start($event_time_obj->start);
+						$tmp["end"] = $event_time_obj->end;
+						$rv[$tmp["start"]] = $tmp;
+
+						// Event time can also be on several days.
+						if ($event_time_obj->end > $event_time_obj->start && date("dmY", $event_time_obj->start) != date("dmY", $event_time_obj->end))
+						{
+							for ($i = $tmp["timestamp"] + 86400; $i <= $event_time_obj->end; $i = $i + 86400)
+							{
+								$tmp = $item;
+								$tmp["start"] = $tmp["timestamp"] = $i;
+								$tmp["end"] = $event_time_obj->end;
+								$rv[$i] = $tmp; 
+							}
+						}	
 					}
+				}
+				else
+				{
+					$rv[$event["start"]] = $item;
+					if ($event["end"] > $event["start"] && date("dmY", $event["start"]) != date("dmY", $event["end"]))
+					{
+						$item["timestamp"] = get_day_start($item["timestamp"]) + 86400;
+						for ($i = $item["timestamp"]; $i <= $event["end"]; $i = $i + 86400)
+						{
+							$tmp = $item;
+							$tmp["start"] = $tmp["timestamp"] = $i;
+							$rv[$i] = $tmp; 
+						}
+					}	
 				}
 			};
 		};
