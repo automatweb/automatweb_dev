@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.117 2008/09/01 11:56:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.118 2008/09/01 12:17:30 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1513,6 +1513,7 @@ class rfp extends class_base
 		$t->define_chooser(array(
 			"field" => "product",
 			"name" => "prod_sel",
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			"name" => "name",
@@ -1671,6 +1672,7 @@ class rfp extends class_base
 									"value" => $rvo->id(),
 								)).html::obj_change_url($rvo),
 							"product" => $prod->id().".".$rv->id(),
+							"color" => ($count?$count:$rv_amount[$prod->id()])? "#F0F0F0": "",
 						);
 						$t->define_data($data);
 					//}
