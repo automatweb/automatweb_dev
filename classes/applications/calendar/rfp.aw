@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.114 2008/09/01 10:27:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.115 2008/09/01 10:34:29 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2030,11 +2030,7 @@ class rfp extends class_base
 				"value" => $data["amount"],
 				"size" => "4",
 			)),
-			"sum" => html::textbox(array(
-				"name" => "add_srv[".$key."][sum]",
-				"value" => $data["sum"],
-				"size" => "4",
-			)),
+			"sum" => $data["sum"],
 			"comment" => html::textbox(array(
 				"name" => "add_srv[".$key."][comment]",
 				"value" => $data["comment"],
@@ -2051,12 +2047,13 @@ class rfp extends class_base
 		$t->set_sortable(false);
 		$data = $arr["obj_inst"]->get_additional_services();
 
-			
+		$totalsum = 0;
 		foreach(safe_array($data) as $k => $row)
 		{
+			$row["sum"] = $row["price"] * $row["amount"];
+			$totalsum += $row["sum"];
 			$t->define_data($this->_get_additional_services_tbl_row($k, $row));
 		}
-
 		//newline
 		$t->define_data($this->_get_additional_services_tbl_row("new_1", array(
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
@@ -2078,6 +2075,11 @@ class rfp extends class_base
 			"time" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 			"time_to" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 		)));
+		
+		$t->define_data(array(
+			"amount" => html::strong(t("Kokku:")),
+			"sum" => $totalsum,
+		));
 	}
 
 	function _set_additional_services_tbl($arr)
