@@ -30,6 +30,9 @@
 @property week_event_template type=textbox size=5
 @caption S&uuml;ndmuse n&auml;dala kujundusp&otilde;hi
 
+@property default_urlobj type=relpicker reltype=RELTYPE_DEFAULT_URLOBJ store=connect
+@caption Default lingi objekt
+
 @property use_event_time_objs type=checkbox ch_valeu=1
 @caption Kasuta toimumisaja objekte
 
@@ -116,6 +119,10 @@
 
 @reltype EVENT_VALIDATOR value=5 clid=CL_FORM_CONTROLLER
 @caption S&uuml;ndmuste n&auml;itamise kontroller
+
+# Feel free to add class_id's here!
+@reltype DEFAULT_URLOBJ value=6 clid=CL_DOCUMENT
+@caption Default lingi objekt
 */
 
 
@@ -427,6 +434,11 @@ class calendar_view extends class_base
 			};
 			foreach($overview as $event)
 			{
+				if($this->can("view", $this->obj_inst->default_urlobj))
+				{
+					$url_data = parse_url(urldecode($this->vars["current_url"]));
+					$item["url"] = aw_url_change_var(array("viewtype" => "day"), false, obj_link($this->obj_inst->default_urlobj)."?".$url_data["query"]);
+				}
 				$item["timestamp"] = $event["start"];
 				$item["event_oid"] = $event["id"];
 				//$item["url"] = $event["url"];

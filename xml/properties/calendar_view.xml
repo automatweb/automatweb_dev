@@ -59,6 +59,17 @@
             <caption>S&amp;amp;uuml;ndmuse n&amp;amp;auml;dala kujundusp&amp;amp;otilde;hi</caption>
       </property>
       <property>
+            <name>default_urlobj</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_URLOBJ</reltype>
+            <store>connect</store>
+            <caption>Default lingi objekt</caption>
+      </property>
+      <property>
             <name>use_event_time_objs</name>
             <table>objects</table>
             <group>general</group>
@@ -321,6 +332,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>S&amp;amp;uuml;ndmuste n&amp;amp;auml;itamise kontroller</caption>
             </EVENT_VALIDATOR>
+            <DEFAULT_URLOBJ>
+                  <value>6</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Default lingi objekt</caption>
+            </DEFAULT_URLOBJ>
       </reltypes>
 </properties>
 
