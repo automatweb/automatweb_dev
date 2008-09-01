@@ -239,7 +239,7 @@ class event_webview extends class_base
 						continue;
 					}
 					// Settings (considered only id the url parameter is not given)
-					if(($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start) && empty($date_s) || empty($date_e))
+					if(($ob->date_start && $ob->date_start > $to->end || $ob->date_end && $ob->date_end < $to->start) && (empty($date_s) || empty($date_e)))
 					{
 						continue;
 					}
