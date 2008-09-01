@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.131 2008/08/27 12:52:59 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.132 2008/09/01 08:53:38 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -286,7 +286,7 @@ class reservation extends class_base
 					$prop["onclick"] = "document.changeform.reason.value=prompt(\"Sisestage t&uuml;histuse p&otilde;hjus\");if (document.changeform.reason.value == \"\") {document.changeform.verified.checked=true; } else {submit_changeform(\"unverify\");}";
 				}
 				break;
-			case "special_sum":
+			/*case "special_sum":
 				$curr = $arr["obj_inst"]->prop("resource.currency");
 				if(!(is_array($curr) && sizeof($curr) > 1))
 				{
@@ -298,7 +298,7 @@ class reservation extends class_base
 				{
 					$prop["value"] = null;
 				}
-				break;
+				break;*/
 				
 			case "sum":
 				$prop["value"] = $this->_format_sum($arr["obj_inst"]);
