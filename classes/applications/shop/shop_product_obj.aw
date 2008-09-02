@@ -36,4 +36,26 @@ class shop_product_obj extends _int_object
 		$curp = safe_array($this->meta("cur_prices"));
 		return (double)$curp[$currency->id()];
 	}
+
+	function set_prop($k, $v)
+	{
+		if($k == "price" || $k == "purchase_price")
+		{
+			$tzeros = strrpos($v, ".") !== false ? strlen($v) - strrpos($v, ".") - 1 : 0;
+			parent::set_meta($k."_trailing_zeros", $tzeros);
+		}
+		return parent::set_prop($k, $v);
+	}
+
+	function prop($k)
+	{
+		if($k == "price" || $k == "purchase_price")
+		{
+			if(parent::meta($k."_trailing_zeros") > 0)
+			{
+				return sprintf("%.".parent::meta($k."_trailing_zeros")."f", parent::prop($k));
+			}			
+		}
+		return parent::prop($k);
+	}
 }
