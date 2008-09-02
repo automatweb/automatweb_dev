@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.41 2008/08/06 15:11:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.42 2008/09/02 15:29:02 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -487,8 +487,10 @@ class persons_webview extends class_base
 					{
 						if($val["order"] == "ASC")
 						{
+							$this->set_proffession_principe_order("ASC");
 							return $res;
 						}
+						$this->set_proffession_principe_order("DESC");
 						return -$res;
 					}
 					continue;
@@ -510,17 +512,30 @@ class persons_webview extends class_base
 		return 0;
 	}
 
+	//hiljem v2ljatrykil j2rjekorra m22ramiseks vaja
+	private function set_proffession_principe_order($ord)
+	{
+		if(!$this->proffession_principe_order)
+		{
+			$this->proffession_principe_order = $ord;
+		}
+	}
+
 	private function get_relation_profession_ord($o)
 	{
+		$ret = 0;
 		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
 		{
 			$rel = $c->to();
 			if($rel->prop("section") == $this->section->id())
 			{
-				return $rel->prop("profession.jrk");
+				if($rel->prop("profession.jrk") > $ret)
+				{
+					$ret = $rel->prop("profession.jrk");
+				}
 			}
 		}
-		return 0;
+		return $ret;
 	}
 
 	function person_sort($workers)
@@ -871,6 +886,35 @@ class persons_webview extends class_base
 		return $sections;
 	}
 	
+	private function get_person_section_proffessions($o)
+	{
+		$pro_array = array();
+		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
+		{
+			$rel = $c->to();
+			if($rel->prop("section") == $this->section->id() && $this->can("view" , $rel->prop("profession")))
+			{
+				if($pro_array[$rel->prop("profession.jrk")])
+				{
+					$pro_array[] = obj($rel->prop("profession"));
+				}
+				else
+				{
+					$pro_array[$rel->prop("profession")] = obj($rel->prop("profession"));
+				}
+			}
+		}
+		if($this->proffession_principe_order == "DESC")
+		{
+			krsort($pro_array);
+		}
+		else
+		{
+			ksort($pro_array);
+		}
+		return $pro_array;
+	}
+
 	function parse_profession($worker)
 	{
 		$profession = $directive = "";
@@ -924,6 +968,18 @@ class persons_webview extends class_base
 		{
 			$profession_with_directive = '<a href ="'.$directive_link.'"  target=_new> '. $profession.' </a>';
 		}
+
+
+		//asi suht l2buks yle l2inud, ja tegelikult peaks kogu selle osa ymber muutma, a noh, praegu vaja vaid ametinimetused komadega hakkida, siis teeb selle yle
+		//v6tab t88suhtest vajaliku osakonna ametinimetused ja paneb isikute sorteerimis funkstioonis leitud printsiibi j2rgi j2rjekorda, ning siis hakkab alles andmeid laduma templeiti
+		$pro_objects = $this->get_person_section_proffessions($worker);
+		$new_prof_names = array();
+		foreach($pro_objects as $pro_object)
+		{
+			$new_prof_names[] = $pro_object->name();
+		}
+		$professions = join (", " , $new_prof_names);
+
 		$this->vars_safe(array(
 			"profession" => $profession,
 			"professions" => $professions,
