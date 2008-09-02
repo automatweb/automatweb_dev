@@ -34,6 +34,30 @@ function check_delete()
 	}
 }
 
+
+// remove input elements from search if not set
+if ($.browser.msie)
+{
+	$("form select").each(function(){
+		if( !$(this).attr("selectedIndex") )
+		{
+			$(this).attr( "name_tmp", $(this).attr("name") ); 
+			$(this).attr( "name", "");
+		}
+		
+	})
+	
+	$("form select").change(function(){
+		new_name = $(this).attr( "name_tmp")
+		$(this).attr( "name", new_name); 
+	})
+}
+
+
+//function check_generic_loader ()
+//{
+//}
+
 function select_reltypes(el)
 {
 	if (el.selectedIndex)
