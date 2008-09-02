@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.98 2008/09/02 05:56:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.99 2008/09/02 05:58:19 instrumental Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -1568,8 +1568,6 @@ class crm_meeting extends class_base
 					personnel_management_job_offer (oid, $field)
 				VALUES
 					('$oid', '$value')
-				ON DUPLICATE KEY UPDATE
-					$field = '$value'
 			");
 		}
 	}
