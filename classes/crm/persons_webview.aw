@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.42 2008/09/02 15:29:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.43 2008/09/02 15:31:28 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -886,7 +886,7 @@ class persons_webview extends class_base
 		return $sections;
 	}
 	
-	private function get_person_section_proffessions($o)
+	private function get_person_section_professions($o)
 	{
 		$pro_array = array();
 		foreach($o->connections_from(array("clid" => "CL_CRM_PERSON_WORK_RELATION")) as $c)
@@ -972,7 +972,7 @@ class persons_webview extends class_base
 
 		//asi suht l2buks yle l2inud, ja tegelikult peaks kogu selle osa ymber muutma, a noh, praegu vaja vaid ametinimetused komadega hakkida, siis teeb selle yle
 		//v6tab t88suhtest vajaliku osakonna ametinimetused ja paneb isikute sorteerimis funkstioonis leitud printsiibi j2rgi j2rjekorda, ning siis hakkab alles andmeid laduma templeiti
-		$pro_objects = $this->get_person_section_proffessions($worker);
+		$pro_objects = $this->get_person_section_professions($worker);
 		$new_prof_names = array();
 		foreach($pro_objects as $pro_object)
 		{
