@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.69 2008/08/27 07:56:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.70 2008/09/02 14:15:17 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -205,6 +205,7 @@ class spa_bookings_overview extends class_base
 			"r_ra_booking_from",
 			"r_ra_booking_to",
 			"r_ra_only_done",
+			"r_ra_only_done2",//seda m6nes kontrolleris saab kasutada, ei osanud mujale panna
 			"r_ra_only_paid",
 			"r_ra_res_type",
 			"r_ra_seller",
@@ -439,7 +440,10 @@ class spa_bookings_overview extends class_base
 		{
 			$arr["args"][$prop] = $arr["request"][$prop];
 		}
-
+		if($arr["request"]["r_ra_only_done2"])
+		{
+			$arr["args"]["r_ra_only_done"] = $arr["request"]["r_ra_only_done2"];//porno, a ei osanud mujale
+		}
 		$arr["args"]["r_rs_name"] = $arr["request"]["r_rs_name"];
 		$arr["args"]["r_rs_booker_name"] = $arr["request"]["r_rs_booker_name"];
 		$arr["args"]["r_rs_booking_from"] = $arr["request"]["r_rs_booking_from"];
@@ -1110,6 +1114,10 @@ class spa_bookings_overview extends class_base
 		if($r_ra_only_done == 2)
 		{
 			$filter["client_arrived"] = 0;
+		}
+		if($r_ra_only_done > 2)
+		{
+			$filter["client_arrived"] = $r_ra_only_done;
 		}
 
 		//maksmise j"rgi
