@@ -171,7 +171,7 @@ class languages extends aw_template implements request_startup
 
 		$this->quote(&$id);
 		$id = (int)$id;
-		$q = "SELECT acceptlang FROM languages WHERE id = '$id'";
+		$q = "SELECT acceptlang,charset FROM languages WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
 		if ($row)
@@ -180,6 +180,7 @@ class languages extends aw_template implements request_startup
 			aw_global_set("LC",$row["acceptlang"]);
 			aw_session_set("ct_lang_lc",$row["acceptlang"]);
 			aw_global_set("ct_lang_lc",$row["acceptlang"]);
+			aw_global_set("charset",$row["charset"]);
 		}
 		$uid = aw_global_get("uid");
 		if (!empty($uid))
