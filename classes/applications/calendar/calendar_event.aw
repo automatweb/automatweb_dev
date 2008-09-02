@@ -856,7 +856,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 					break;
 
 				default:
-					$v = in_array($p["type"], $oid_props) ? $ob->prop($k.".name") : $ob->$k;
+					$v = in_array($p["type"], $oid_props) ? $ob->trans_get_val($k.".name") : $ob->trans_get_val($k);
 					get_instance("alias_parser")->parse_oo_aliases($ob, $v);
 					break;
 			}
@@ -872,7 +872,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 			$data["end"] = date("d-m-Y H:i:s", $time->end);
 			$data["end.date"] = get_lc_date($time->end, LC_DATE_FORMAT_LONG_FULLYEAR);
 			$data["end.time"] = date("H:i", $time->end);
-			$data["location"] = $time->prop("location.name");
+			$data["location"] = $time->trans_get_val("location.name");
 		}
 
 		$this->vars($data);
