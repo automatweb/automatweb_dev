@@ -230,13 +230,12 @@
       </property>
       <property>
             <name>udefch1</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udefch1</field>
             <caption>User-defined checkbox 1</caption>
       </property>
       <property>
@@ -251,132 +250,119 @@
       </property>
       <property>
             <name>udeftb1</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb1</field>
             <caption>User-defined textbox 1</caption>
       </property>
       <property>
             <name>udeftb2</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb2</field>
             <caption>User-defined textbox 2</caption>
       </property>
       <property>
             <name>udeftb3</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb3</field>
             <caption>User-defined textbox 3</caption>
       </property>
       <property>
             <name>udeftb4</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb4</field>
             <caption>User-defined textbox 4</caption>
       </property>
       <property>
             <name>udeftb5</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb5</field>
             <caption>User-defined textbox 5 </caption>
       </property>
       <property>
             <name>udeftb6</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb6</field>
             <caption>User-defined textbox 6 </caption>
       </property>
       <property>
             <name>udeftb7</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb7</field>
             <caption>User-defined textbox 7</caption>
       </property>
       <property>
             <name>udeftb8</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb8</field>
             <caption>User-defined textbox 8 </caption>
       </property>
       <property>
             <name>udeftb9</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb9</field>
             <caption>User-defined textbox 9 </caption>
       </property>
       <property>
             <name>udeftb10</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textbox</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udeftb10</field>
             <caption>User-defined textbox 10 </caption>
       </property>
       <property>
             <name>udefta1</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textarea</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udefta1</field>
             <caption>User-defined textarea 1</caption>
       </property>
       <property>
             <name>udefta2</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textarea</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udefta2</field>
             <caption>User-defined textarea 2</caption>
       </property>
       <property>
             <name>udefta3</name>
-            <table>objects</table>
+            <table>kliendibaas_kohtumine</table>
             <group>general</group>
             <type>textarea</type>
             <user>1</user>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>udefta3</field>
             <caption>User-defined textarea 3</caption>
       </property>
       <property>
@@ -717,6 +703,11 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </planner>
+            <kliendibaas_kohtumine>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </kliendibaas_kohtumine>
       </tableinfo>
       <reltypes>
             <RECURRENCE>

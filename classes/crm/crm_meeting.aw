@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.97 2008/07/14 14:01:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.98 2008/09/02 05:56:49 instrumental Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -103,49 +103,49 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve p&auml;eva
 
-@property udefch1 type=checkbox ch_value=1 user=1 field=meta method=serialize
+@property udefch1 type=checkbox ch_value=1 user=1 table=kliendibaas_kohtumine
 @caption User-defined checkbox 1
 
 @property udeflb1 type=classificator reltype=RELTYPE_UDEFLB1 store=connect
 @caption Kasutajdefineeritud muutuja 1
 
-@property udeftb1 type=textbox user=1 field=meta method=serialize
+@property udeftb1 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 1
 
-@property udeftb2 type=textbox user=1 field=meta method=serialize
+@property udeftb2 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 2
 
-@property udeftb3 type=textbox user=1 field=meta method=serialize
+@property udeftb3 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 3
 
-@property udeftb4 type=textbox user=1 field=meta method=serialize
+@property udeftb4 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 4
 
-@property udeftb5 type=textbox user=1 field=meta method=serialize
+@property udeftb5 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 5 
 
-@property udeftb6 type=textbox user=1 field=meta method=serialize
+@property udeftb6 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 6 
 
-@property udeftb7 type=textbox user=1 field=meta method=serialize
+@property udeftb7 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 7
  
-@property udeftb8 type=textbox user=1 field=meta method=serialize
+@property udeftb8 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 8 
 
-@property udeftb9 type=textbox user=1 field=meta method=serialize
+@property udeftb9 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 9 
 
-@property udeftb10 type=textbox user=1 field=meta method=serialize
+@property udeftb10 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 10 
 
-@property udefta1 type=textarea user=1 field=meta method=serialize
+@property udefta1 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 1
 
-@property udefta2 type=textarea user=1 field=meta method=serialize
+@property udefta2 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 2
 
-@property udefta3 type=textarea user=1 field=meta method=serialize
+@property udefta3 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 3
 
 @property userfile1 type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=meta method=serialize
@@ -250,6 +250,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
+@tableinfo kliendibaas_kohtumine index=id master_table=objects master_index=brother_of
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
@@ -1506,6 +1507,71 @@ class crm_meeting extends class_base
 			),
 		);
 		return $props;
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "kliendibaas_kohtumine" && $field == "")
+		{
+			$this->db_query("create table kliendibaas_kohtumine (id int primary key)");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "udefch1":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int",
+				));
+				$this->do_db_upgrade_copy_data($field);
+				return true;
+
+			case "udeftb1":
+			case "udeftb2":
+			case "udeftb3":
+			case "udeftb4":
+			case "udeftb5":
+			case "udeftb6":
+			case "udeftb7":
+			case "udeftb8":
+			case "udeftb9":
+			case "udeftb10":
+			case "udefta1":
+			case "udefta2":
+			case "udefta3":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				$this->do_db_upgrade_copy_data($field);
+				return true;
+		}
+		return false;
+	}
+
+	private function do_db_upgrade_copy_data($field)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_MEETING,
+			"parent" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"status" => array(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			$value = $o->meta($field);
+			$oid = $o->id();
+			$this->db_query("
+				INSERT INTO
+					personnel_management_job_offer (oid, $field)
+				VALUES
+					('$oid', '$value')
+				ON DUPLICATE KEY UPDATE
+					$field = '$value'
+			");
+		}
 	}
 
 }
