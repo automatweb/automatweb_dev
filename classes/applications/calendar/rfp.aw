@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.121 2008/09/02 10:28:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.122 2008/09/02 10:47:26 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1601,6 +1601,7 @@ class rfp extends class_base
 					$o->set_prop("start1", date_edit::get_timestamp($add["start1"]));
 					$o->set_prop("end", date_edit::get_timestamp($add["end"]));
 					$o->set_meta("rfp_catering_var", $add["prod_var"]);
+					$o->set_prop("customer", $arr["obj_inst"]->prop("data_subm_organisation"));
 					$o->set_name(date('d.m.Y H:i', date_edit::get_timestamp($add["start1"]))." - ".date('d.m.Y H:i', date_edit::get_timestamp($add["end"])));
 					$o->save();
 					$arr["obj_inst"]->connect(array(
