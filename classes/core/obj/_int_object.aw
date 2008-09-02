@@ -1533,6 +1533,19 @@ class _int_object
 
 	function trans_get_val($prop)
 	{
+		// I wanna use object::trans_get_val("foo.name");
+		if(strpos($prop, "."))
+		{
+			$i = strrpos($prop, ".");
+			$foo = substr($prop, 0, $i);
+			$foo_prop = substr($prop, $i + 1);
+			if($this->can("view", $this->prop($foo)))
+			{
+				$foo_obj = obj($this->prop($foo));
+				return $foo_obj->trans_get_val($foo_prop);
+			}
+		}
+
 		if (isset($this->obj["oid"]) and $this->obj["oid"] != $this->obj["brother_of"])
 		{
 			$tmp = $this->get_original();
