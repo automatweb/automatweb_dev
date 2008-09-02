@@ -1125,35 +1125,9 @@ class event_search extends class_base
 			$par2 = array();
 			if($search_p1 || $search_p2)
 			{
-				$all_projects1_filter = array(
-					"parent" => $p_rn1,
-					"class_id" => array(CL_PROJECT, CL_PLANNER, CL_MENU),
-				);
-				if ($ob->prop('dont_search_from_all_languages') != 1)
-				{
-					$all_projects1_filter['lang_id'] = array();
-				}
-				if ($ob->prop('dont_search_from_all_sites') != 1)
-				{
-					$all_projects1_filter['site_id'] = array();
-				}
-				$all_projects1 = new object_list($all_projects1_filter);
-				$par1 = $all_projects1->ids();
+				$par1 = $this->get_parn($ob, $p_rn1);
 
-				$all_projects2_filter  =array(
-					"parent" => $p_rn2,
-					"class_id" => array(CL_PROJECT, CL_PLANNER, CL_MENU),
-				);
-				if ($ob->prop('dont_search_from_all_languages') != 1)
-				{
-					$all_projects2_filter['lang_id'] = array();
-				}
-				if ($ob->prop('dont_search_from_all_sites') != 1)
-				{
-					$all_projects2_filter['site_id'] = array();
-				}
-				$all_projects2 = new object_list($all_projects2_filter);
-				$par2 = $all_projects2->ids();
+				$par2 = $this->get_parn($ob, $p_rn2);
 
 				if (is_oid($arr["project1"]))
 				{
@@ -2116,6 +2090,43 @@ class event_search extends class_base
 		print "all done<br>";
 
 
+	}
+
+	private function get_parn($ob, $p_rn)
+	{
+		$all_projects_filter = array(
+			"parent" => $p_rn,
+			"class_id" => array(CL_PROJECT, CL_PLANNER, CL_MENU),
+		);
+		if ($ob->prop('dont_search_from_all_languages') != 1)
+		{
+			$all_projects_filter['lang_id'] = array();
+		}
+		if ($ob->prop('dont_search_from_all_sites') != 1)
+		{
+			$all_projects_filter['site_id'] = array();
+		}
+		$all_projects = new object_list($all_projects_filter);
+		$ids = $all_projects->ids();
+
+		// Don't we need the "major" parent itself also? I think we do.
+		//															-kaarel
+		$ids[] = $p_rn;
+		
+		// Planner's events can be in any folder. Have to get it from it's property.
+		$planners = new object_list(array(
+			"class_id" => CL_PLANNER,
+			"oid" => $ids,
+		));
+		foreach($planners->arr() as $planner)
+		{
+			if($this->can("view", $planner->event_folder))
+			{
+				$ids[] = $planner->event_folder;
+			}			
+		}
+
+		return $ids;
 	}
 }
 ?>
