@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.65 2008/08/22 08:33:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.66 2008/09/02 09:38:28 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -480,12 +480,12 @@ class rfp_manager extends class_base
 								"return_url" => get_ru(),
 							),CL_RFP),
 						)),
-						"org" => $obj->prop("data_subm_organisation"),
+						"org" => is_oid($obj->prop("data_subm_organisation")) ? $obj->prop("data_subm_organisation.name") : $obj->prop("data_subm_organisation"),
 						"response_date" => (($rd = $obj->prop("data_gen_response_date_admin"))>1)?date('d.m.Y, H:i', $rd):"-",
 						"date_period" => $date_period,
 						"acc_need" => ($obj->prop("data_gen_accommodation_requirements") == 1)?t("Jah"):t("Ei"),
 						"delegates" => $obj->prop("data_gen_attendees_no"),
-						"contact_pers" => $obj->prop("data_billing_contact"),
+						"contact_pers" => is_oid($obj->prop("data_billing_contact")) ? $obj->prop("data_billing_contact.name") : $obj->prop("data_billing_contact"),
 						"contacts" => join(", ", $contacts),
 						"created" => $obj->created(),
 						"popup" => $this->gen_popup($oid),
