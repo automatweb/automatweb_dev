@@ -888,6 +888,37 @@
             <field>products_tree</field>
       </property>
       <property>
+            <name>add_catering_bron</name>
+            <table>rfp</table>
+            <group>final_catering</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>cat_left2</parent>
+            <no_caption>1</no_caption>
+            <field>add_catering_bron</field>
+      </property>
+      <property>
+            <name>add_catering_sbt</name>
+            <table>rfp</table>
+            <group>final_catering</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>cat_left2</parent>
+            <no_caption>1</no_caption>
+            <field>add_catering_sbt</field>
+            <caption>Lisa</caption>
+      </property>
+      <property>
+            <name>products_add_bron_tbl</name>
+            <table>rfp</table>
+            <group>final_catering</group>
+            <parent>cat_right_top</parent>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>products_add_bron_tbl</field>
+      </property>
+      <property>
             <name>products_tbl</name>
             <table>rfp</table>
             <group>final_catering</group>
@@ -1312,19 +1343,45 @@
             </add_inf_room>
             <cat_hsplit>
                   <type>hbox</type>
-                  <width>30%:70%</width>
+                  <width>35%:65%</width>
                   <group>final_catering</group>
                   <area_caption></area_caption>
             </cat_hsplit>
-            <cat_left>
+            <cat_leftsplit>
                   <parent>cat_hsplit</parent>
+                  <type>vbox</type>
+                  <group>final_catering</group>
+                  <area_caption></area_caption>
+            </cat_leftsplit>
+            <cat_left>
+                  <parent>cat_leftsplit</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Ruumid&amp;amp;nbsp;ja&amp;amp;nbsp;reserveeringud</area_caption>
                   <group>final_catering</group>
             </cat_left>
-            <cat_right>
+            <cat_left2>
+                  <parent>cat_leftsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Reserveeringute&amp;amp;nbsp;lisamine</area_caption>
+                  <group>final_catering</group>
+            </cat_left2>
+            <cat_rightsplit>
                   <parent>cat_hsplit</parent>
+                  <type>vbox</type>
+                  <group>final_catering</group>
+                  <area_caption></area_caption>
+            </cat_rightsplit>
+            <cat_right_top>
+                  <parent>cat_rightsplit</parent>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Reserveeringute&amp;amp;nbsp;lisamine</area_caption>
+                  <group>final_catering</group>
+            </cat_right_top>
+            <cat_right>
+                  <parent>cat_rightsplit</parent>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Tooted</area_caption>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.119 2008/09/01 14:02:36 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.120 2008/09/02 09:29:53 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -326,14 +326,29 @@
 		@groupinfo final_catering caption="Toitlustus" parent=final_info
 		@default group=final_catering
 
-			@layout cat_hsplit type=hbox width=30%:70%
+			@layout cat_hsplit type=hbox width=35%:65%
 
-				@layout cat_left parent=cat_hsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
-					@property products_tree parent=cat_left type=treeview store=no no_caption=1
+				@layout cat_leftsplit parent=cat_hsplit type=vbox
 
-				@layout cat_right parent=cat_hsplit type=vbox closeable=1 area_caption=Tooted
-					
-					@property products_tbl parent=cat_right type=text store=no no_caption=1
+					@layout cat_left parent=cat_leftsplit type=vbox closeable=1 area_caption=Ruumid&nbsp;ja&nbsp;reserveeringud
+						@property products_tree parent=cat_left type=treeview store=no no_caption=1
+
+					@layout cat_left2 parent=cat_leftsplit type=vbox closeable=1 area_caption=Reserveeringute&nbsp;lisamine
+
+						@property add_catering_bron type=text store=no parent=cat_left2 no_caption=1
+
+						@property add_catering_sbt type=submit store=no parent=cat_left2 no_caption=1
+						@caption Lisa
+
+				@layout cat_rightsplit parent=cat_hsplit type=vbox
+
+					@layout cat_right_top parent=cat_rightsplit type=vbox closeable=1 area_caption=Reserveeringute&nbsp;lisamine
+	
+						@property products_add_bron_tbl parent=cat_right_top type=table store=no no_caption=1
+
+					@layout cat_right parent=cat_rightsplit type=vbox closeable=1 area_caption=Tooted
+	
+						@property products_tbl parent=cat_right type=text store=no no_caption=1
 		
 			@layout add_inf_catering type=vbox closeable=1 area_caption="Lisainfo"
 				
@@ -1475,17 +1490,172 @@ class rfp extends class_base
 		}
 	}
 
-	function get_products_tbl($arr)
+	function _get_add_catering_bron($arr)
+	{
+		$val = array();
+		$rooms = $this->get_rooms($arr);
+		$prodvars = $this->get_product_vars(true);
+		foreach($rooms as $room)
+		{
+			$ro = obj($room);
+			$val[] = $ro->name().":<br />\n".
+				html::date_select(array(
+					"name" => "add_bron[{$room}][date]",
+					"value" => -1,
+					"month_as_numbers" => 1,
+				))."<br />\n".
+				html::select(array(
+					"name" => "add_bron[{$room}][count]",
+					"value" => -1,
+					"options" => range(0, 9),
+				)).
+				html::select(array(
+					"name" => "add_bron[{$room}][var]",
+					"value" => -1,
+					"options" => $prodvars,
+				));
+		}
+		$arr["prop"]["value"] = implode("<br /><br />\n", $val);
+	}
+
+	function _set_add_catering_bron($arr)
+	{
+		$add_brons = aw_global_get("rfp_add_brons");
+		foreach($arr["request"]["add_bron"] as $room => $add)
+		{
+			if($add["count"])
+			{
+				$add["room"] = $room;
+				$add_brons[] = $add;
+			}
+		}
+		aw_session_set("rfp_add_brons", $add_brons);
+	}
+
+	function _get_products_add_bron_tbl($arr)
+	{
+		$add_brons = aw_global_get("rfp_add_brons");
+		if(is_array($add_brons) && count($add_brons))
+		{
+			$t = &$arr["prop"]["vcl_inst"];
+			$this->_init_prod_add_bron_tbl($t);
+			$count = 0;
+			$rooms = $this->get_rooms($arr);
+			foreach($rooms as $rid)
+			{
+				$roomnames[$rid] = obj($rid)->name();
+			}
+			$prod_vars = $this->get_product_vars(true);
+			foreach($add_brons as $add)
+			{
+				for($i = 0; $i < $add["count"]; $i++)
+				{
+					$count++;
+					$time = date_edit::get_timestamp($add["date"]);
+					$t->define_data(array(
+						"del" => html::checkbox(array(
+							"name" => "add_bron_tbl[{$count}][del]",
+							"ch_value" => 1,
+						)),
+						"time" => html::datetime_select(array(
+							"name" => "add_bron_tbl[{$count}][start1]",
+							"value" => $time,
+							"month_as_numbers" => 1,
+						))."<br />\n ".t("kuni")."<br />\n".html::datetime_select(array(
+							"name" => "add_bron_tbl[{$count}][end]",
+							"value" => $time,
+							"month_as_numbers" => 1,
+						)),
+						"room" => html::select(array(
+							"name" => "add_bron_tbl[{$count}][resource]",
+							"options" => $roomnames,
+							"value" => $add["room"],
+						)),
+						"var" => html::select(array(
+							"name" => "add_bron_tbl[{$count}][prod_var]",
+							"options" => $prod_vars,
+							"value" => $add["var"],
+						)),
+					));
+				}
+			}
+		}
+		else
+		{
+			return PROP_IGNORE;
+		}
+	}
+
+	function _set_products_add_bron_tbl($arr)
+	{
+		if($arr["request"]["rfp_add_bron_tbl_ok"])
+		{
+			foreach($arr["request"]["add_bron_tbl"] as $i => $add)
+			{
+				if(!$add["del"])
+				{
+					$o = obj();
+					$o->set_class_id(CL_RESERVATION);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_prop("resource", $add["resource"]);
+					$o->set_prop("start1", date_edit::get_timestamp($add["start1"]));
+					$o->set_prop("end", date_edit::get_timestamp($add["end"]));
+					$o->set_meta("rfp_catering_var", $add["prod_var"]);
+					$o->set_name(date('d.m.Y H:i', date_edit::get_timestamp($add["start1"]))." - ".date('d.m.Y H:i', date_edit::get_timestamp($add["end"])));
+					$o->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $o->id(),
+						"type" => "RELTYPE_CATERING_RESERVATION",
+					));
+				}
+			}
+			aw_session_del("rfp_add_brons");
+		}
+	}
+
+	function _init_prod_add_bron_tbl(&$t)
+	{
+		$t->set_header(html::hidden(array(
+			"name" => "rfp_add_bron_tbl_ok",
+			"value" => 1,
+		)));
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => t("Eemalda"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "room",
+			"caption" => t("Ruum"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "var",
+			"caption" => t("Nimetus"),
+			"align" => "center",
+		));
+	}
+
+	function get_product_vars($chooser = false)
 	{
 		$rm = get_instance(CL_RFP_MANAGER);
 		$def = $rm->get_sysdefault();
+		$prodvars = array();
+		if($chooser)
+		{
+			$prodvars = array(0 => t("--vali--"));
+		}
 		if($def)
 		{
 			$defo = obj($def);
 			$rfs = $defo->prop("prod_vars_folder");
 			if($this->can("view", $rfs))
 			{
-				$prodvars = array(0=>" ");
 				$ol = new object_list(array(
 					"class_id" => CL_META,
 					"parent" => $rfs,
@@ -1495,6 +1665,17 @@ class rfp extends class_base
 					$prodvars[$o->id()] = $o->name();
 				}
 			}
+		}
+		return $prodvars;
+	}
+
+	function get_products_tbl($arr)
+	{
+		$rm = get_instance(CL_RFP_MANAGER);
+		$def = $rm->get_sysdefault();
+		if($def)
+		{
+			$defo = obj($def);
 			$rf = $defo->prop("catering_room_folder");
 			$rooms = array(0=>" ");
 			$ol = new object_list(array(
@@ -1507,6 +1688,7 @@ class rfp extends class_base
 				$rooms[$o->id()] = $o->name();
 			}
 		}
+		$prodvars = $this->get_product_vars(true);
 		classload("vcl/table");
 		$t = new aw_table;
 		$t->set_sortable(false);
@@ -1584,7 +1766,7 @@ class rfp extends class_base
 				// a room is selected from tree and we filter out reservations for that room because connection search can't do that :S
 				continue;
 			}
-			if($this->can("view", $c->prop("to")) && in_array($c->prop("to.parent"), $arr["obj_inst"]->prop("final_catering_rooms"))) // that parent & catering is fishy
+			if($this->can("view", $c->prop("to"))) // that parent & catering is fishy
 			{
 				$rv = $c->to();
 				$rvo = obj($c->to());
@@ -1592,6 +1774,7 @@ class rfp extends class_base
 				$amount = $rv->meta("amount"); // why the hell is this used???
 				$rv_amount = $rvo->get_product_amount();
 				$discount = $rvi->get_product_discount($rv->id());
+				$def_var = $rv->meta("rfp_catering_var");
 
 				foreach($prod_list->arr() as $prod)
 				{
@@ -1655,7 +1838,7 @@ class rfp extends class_base
 							"var" => html::select(array(
 								"name" => "prods[".$prod->id().".".$rv->id()."][var]",
 								"width" => 70,
-								"value" => $prods[$prod->id().".".$rv->id()]["var"],
+								"value" => ($set = $prods[$prod->id().".".$rv->id()]["var"]) ? $set : ($def_var ? $def_var : 0),
 								"options" => $prodvars,
 							)),
 							"comment" => html::textarea(array(
