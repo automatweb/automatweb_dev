@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.120 2008/09/02 09:29:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.121 2008/09/02 10:28:57 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -269,7 +269,7 @@
 			@caption Ruumid
 			@comment Konverentsi jaoks kasutatavad ruumid
 
-			@property final_catering_rooms type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM store=connect
+			@property final_catering_rooms type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM table=objects field=meta method=serialize
 			@caption Toitlustuse ruumid
 			@comment Toitlustuse jaoks kasutatavad ruumid
 

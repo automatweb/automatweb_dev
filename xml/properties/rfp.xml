@@ -767,13 +767,13 @@
       </property>
       <property>
             <name>final_catering_rooms</name>
-            <table>rfp</table>
+            <table>objects</table>
             <group>final_general</group>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_CATERING_ROOM</reltype>
-            <store>connect</store>
-            <field>final_catering_rooms</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Toitlustuse ruumid</caption>
             <comment>Toitlustuse jaoks kasutatavad ruumid</comment>
       </property>

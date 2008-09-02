@@ -88,6 +88,20 @@ class rfp_obj extends _int_object
 						return $obj->prop($pn);
 					}
 				}
+			case "final_catering_rooms":
+				$val = parent::prop($pn);
+				if(!is_array($val))
+				{
+					$conn = parent::connections_from(array(
+						"type" => "RELTYPE_CATERING_ROOM",
+					));
+					$val = array();
+					foreach($conn as $c)
+					{
+						$val[$c->prop("to")] = $c->prop("to");
+					}
+					return $val;
+				}
 				break;
 		}
 		return parent::prop($pn);
