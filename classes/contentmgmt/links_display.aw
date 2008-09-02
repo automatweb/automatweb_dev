@@ -26,7 +26,12 @@ class links_display
 		$caption = $htmlentities?htmlentities($caption):$caption;
 		$alt = $this->cur_link->trans_get_val("alt");
 		$url = str_replace("'", "\"", $url);
+		$before_link = $this->cur_link->trans_get_val("before_link");
+		$after_link = $this->cur_link->trans_get_val("after_link");
+		$style_class = strlen($this->cur_link->trans_get_val("style_class")) ? "class=\"".$this->cur_link->trans_get_val("style_class")."\"" : "";
+		$caption = $before_link.$caption.$after_link;
 		$vars = array(
+			"style_class" => $style_class,
 			"url" => $url,
 			"caption" => $caption,
 			"target" => $target,
@@ -44,11 +49,11 @@ class links_display
 			if ($this->img)
 			{
 
-				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s'></a>",$url,$target,$alt,$this->img,$alt);
+				$replacement = sprintf("<a href='%s' %s title='%s' %s><img src='%s' alt='%s'></a>",$url,$target,$alt,$style_class,$this->img,$alt);
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s' %s title='%s'>%s</a>",$url,$target,$alt,$caption);
+				$replacement = sprintf("<a href='%s' %s title='%s' %s>%s</a>",$url,$target,$alt,$style_class,$caption);
 			}
 		};
 		$this->img = "";

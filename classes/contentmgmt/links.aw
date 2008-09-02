@@ -29,15 +29,15 @@
 	@property ord type=textbox size=3 table=objects field=jrk
 	@caption J&auml;rjekord
 
-@groupinfo Javascript caption=Javascript table=extlinks
+@groupinfo Javascript caption=N&auml;itamine table=extlinks
 
 	@property use_javascript type=checkbox ch_value=1 search=1 group=Javascript table=objects field=meta method=serialize
 	@caption Kasuta javascripti
 
-	@property newwinwidth type=textbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@property newwinwidth type=textbox group=Javascript table=objects field=meta method=serialize
 	@caption Uue akna laius
 
-	@property newwinheight type=textbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@property newwinheight type=textbox group=Javascript table=objects field=meta method=serialize
 	@caption Uue akna k&otilde;rgus
 
 	@property js_attributes type=chooser multiple=1 store=no group=Javascript
@@ -54,6 +54,15 @@
 
 	@property newwinscroll type=checkbox ch_value=1 group=Javascript table=objects field=meta method=serialize
 	@caption Skrollbarid
+
+	@property style_class type=textbox group=Javascript table=objects field=meta method=serialize
+	@caption Stiiliklass
+
+	@property before_link type=textbox group=Javascript table=objects field=meta method=serialize
+	@caption Enne lingi teksti
+
+	@property after_link type=textbox group=Javascript table=objects field=meta method=serialize
+	@caption P&auml;rast lingi teksti
 
 @groupinfo Pilt caption=Pilt
 

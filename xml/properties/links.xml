@@ -87,7 +87,6 @@
             <name>newwinwidth</name>
             <group>Javascript</group>
             <type>textbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -97,7 +96,6 @@
             <name>newwinheight</name>
             <group>Javascript</group>
             <type>textbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -151,6 +149,33 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Skrollbarid</caption>
+      </property>
+      <property>
+            <name>style_class</name>
+            <group>Javascript</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Stiiliklass</caption>
+      </property>
+      <property>
+            <name>before_link</name>
+            <group>Javascript</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Enne lingi teksti</caption>
+      </property>
+      <property>
+            <name>after_link</name>
+            <group>Javascript</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>P&amp;amp;auml;rast lingi teksti</caption>
       </property>
       <property>
             <name>link_image</name>
@@ -211,7 +236,7 @@
       </classinfo>
       <groupinfo>
             <Javascript>
-                  <caption>Javascript</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
                   <table>extlinks</table>
             </Javascript>
             <Pilt>
