@@ -2109,9 +2109,9 @@ class event_search extends class_base
 		$all_projects = new object_list($all_projects_filter);
 		$ids = $all_projects->ids();
 
-		// Don't we need the "major" parent itself also? I think we do.
+		// Don't we need the "major" parents itself also? I think we do.
 		//															-kaarel
-		$ids[] = $p_rn;
+		$ids = array_merge($ids,$p_rn);
 		
 		// Planner's events can be in any folder. Have to get it from it's property.
 		$planners = new object_list(array(
