@@ -142,7 +142,7 @@
 	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
 
 	@property dont_ask_close_reason type=checkbox ch_value=1
-	@caption Ei k&uuml;si sulgemise p&otuilde;hjust
+	@caption Ei k&uuml;si sulgemise p&otilde;hjust
 
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad

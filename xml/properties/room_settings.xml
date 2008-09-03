@@ -399,7 +399,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ei k&amp;amp;uuml;si sulgemise p&amp;amp;otuilde;hjust</caption>
+            <caption>Ei k&amp;amp;uuml;si sulgemise p&amp;amp;otilde;hjust</caption>
       </property>
       <property>
             <name>bron_required_fields</name>
