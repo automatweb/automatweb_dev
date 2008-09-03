@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.31 2008/08/27 08:54:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.32 2008/09/03 09:33:28 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -1604,7 +1604,7 @@ class image extends class_base
 				
 				if (eSelected)
 				{
-					if (eSelected.tagName == 'SPAN' && eSelected._awimageplaceholder  )
+					if (eSelected.tagName == 'TABLE' && eSelected._awimageplaceholder  )
 					{
 						$.get(\"$url\", function(data){
 							window.parent.opener.FCKAWImagePlaceholders.Add(FCK, data);

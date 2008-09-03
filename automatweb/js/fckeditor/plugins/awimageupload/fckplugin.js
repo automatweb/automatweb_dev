@@ -2,11 +2,13 @@ var _aw_fck_selected_image_oid = false;
 var _aw_fck_selected_image_alias = false;
 
 
+
 var InsertAWImageCommand=function(){};
 InsertAWImageCommand.Name='ImageUpload';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
+alert (FCKConfig.Baseurl);
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
 			'InsertAWImageCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
@@ -85,7 +87,7 @@ FCK.ContextMenu.RegisterListener( {
 				menu.AddItem( "awimagechange_old", "Pildi atribuudid vana", 37 ) ;
 			}
 		}
-		if ( tagName == 'SPAN')
+		if ( tagName == 'TABLE')
 		{
 			if (tag._awimageplaceholder)
 			{
@@ -186,6 +188,45 @@ FCKAWImagePlaceholders.GetImageFloat = function( image_name )
 	else
 	{
 		return false;
+	}
+}
+
+FCKAWImagePlaceholders.SetupTable = function( table, name )
+{
+	doc_id = FCKAWImagePlaceholders.GUP("id");
+	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
+	eval(tmp);
+	table.className = "Fck_image";
+	table.style.display = "block";
+	table.width = connection_details_for_doc["#"+name+"#"]["width"]+"px ! important";
+	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
+	table.alias = "#"+name+"#";
+	if (img_float == "left" || img_float == "right")
+	{
+		table.setAttribute("style","float:"+img_float);
+		table.style.styleFloat = img_float;
+	}
+	else if (img_float == "center")
+	{
+		table.style.textAlign = "center";
+		table.style.width= "100%";
+	}
+	table.innerHTML = "<img _awimageplaceholder=\""+name+"\" alias=\"#"+name+"#\" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
+			"<br />"+
+			"<b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>";
+
+	if ( FCKBrowserInfo.IsGecko )
+		table.style.cursor = 'default' ;
+
+	table._awimageplaceholder = name ;
+	table._oid = connection_details_for_doc["#"+name+"#"]["id"]
+	table.contentEditable = false ;
+
+	// To avoid it to be resized.
+	table.onresizestart = function()
+	{
+		FCK.EditorWindow.event.returnValue = false ;
+		return false ;
 	}
 }
 
@@ -418,10 +459,10 @@ else
 					{
 						var sName = aPieces[i].match( /#\s*([^#]*?)\s*#/ )[1] ;
 
-						var oSpan = FCK.EditorDocument.createElement( 'span' ) ;
-						FCKAWImagePlaceholders.SetupSpan( oSpan, sName ) ;
+						var oTable = FCK.EditorDocument.createElement( 'table' ) ;
+						FCKAWImagePlaceholders.SetupTable( oTable, sName ) ;
 
-						aNodes[n].parentNode.insertBefore( oSpan, aNodes[n] ) ;
+						aNodes[n].parentNode.insertBefore( oTable, aNodes[n] ) ;
 					}
 					else
 						aNodes[n].parentNode.insertBefore( FCK.EditorDocument.createTextNode( aPieces[i] ) , aNodes[n] ) ;
@@ -447,7 +488,7 @@ else
 FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKAWImagePlaceholders.Redraw ) ;
 
 // We must process the SPAN tags to replace then with the real resulting value of the placeholder.
-FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
+FCKXHtml.TagProcessors['table'] = function( node, htmlNode )
 {
 	if ( htmlNode._awimageplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
