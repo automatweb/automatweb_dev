@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.8 2008/03/13 13:26:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.9 2008/09/03 10:11:39 markop Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -173,7 +173,7 @@ class ip_locator extends class_base
 	function search($ip)
 	{
 		// check tix list
-		$fc = file("http://tix.estpak.ee/networks.txt");
+/*		$fc = file("http://tix.estpak.ee/networks.txt");
 		foreach($fc as $line)
 		{
 			list(, $ip_range) = explode(" ", $line);
@@ -190,7 +190,7 @@ class ip_locator extends class_base
 				);
 			}
 		}
-		return false;
+*/		//		return false;
 		$ip_number = ip2long($ip);
 		if ($ip_number != -1)
 		{
@@ -198,7 +198,24 @@ class ip_locator extends class_base
 			$data = $this->db_fetch_row($sql);
 			if (empty($data))
 			{
-				return false;
+				// check tix list
+				$fc = file("http://tix.estpak.ee/networks.txt");
+				foreach($fc as $line)
+				{
+				list(, $ip_range) = explode(" ", $line);
+				list($range_adr, $range_len) = explode("/", $ip_range);
+				$int_range_adr = ip2long($range_adr);
+				$int_ip = ip2long($ip);
+				
+				// chop off the given number of bits and compare
+				$mask = pow(2, ($range_len+1))-1;
+				if (($int_range_adr | $mask) == ($int_ip | $mask))
+				{
+				return array(
+				"country_code3" => "EST"
+				);
+				}
+				}return false;
 			}
 			else
 			{
@@ -224,10 +241,11 @@ class ip_locator extends class_base
 		// peaks supportima zip-ist lahti pakkimsit - v6i mis iagnes formaadist seda scv-d saab
 	
 		// samuti v6iks toetada seda, et annan selle zip-i urli ette ja siis ta t6mbab selle ise alla ja 
-		// ja uuendab baasi tabeli ära
+		// ja uuendab baasi tabeli 2ra
 		
 	//	$file = '/www/dev/dragut/site/files/ip-to-country.csv';
-		if (false && $this->can('view', $arr['id']))
+//$file = 'http://marko.struktuur.ee/soomeipd.csv';
+if ($this->can('view', $arr['id']))
 		{
 			$obj_inst = new object($arr['id']);
 			$file = $obj_inst->prop('csv_file_location');
@@ -262,7 +280,8 @@ class ip_locator extends class_base
 			$line = str_replace('"', '', $line);
 			$fields = explode(',', $line);
 
-			$sql = "insert into ".$this->db_table_name." (
+//arr($fields);
+/*			$sql = "insert into ".$this->db_table_name." (
 					ip_from, 
 					ip_to, 
 					country_code2, 
@@ -274,8 +293,21 @@ class ip_locator extends class_base
 					'".addslashes($fields[4])."', 
 					'".addslashes($fields[5])."', 
 					'".addslashes($fields[6])."'
-			)";
-
+			)";*/
+			$sql = "insert into ".$this->db_table_name."(
+			ip_from,
+			ip_to,
+			country_code2,
+			country_code3,
+			country_name
+			) values (
+			". ip2long($fields[0]).",
+					". ip2long($fields[1]).",
+			'".$fields[2]."',
+			'".$fields[3]."',
+			'".$fields[4]."'
+				)";
+//arr($sql);
 			$this->db_query($sql);
 
 			if ($debug){
