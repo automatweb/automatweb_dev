@@ -124,7 +124,7 @@ if ($_GET["PROMO_DBG"] == 1)
 
 			$section_include_submenus = $o->meta("section_include_submenus");
 
-			if ($o->meta("all_menus"))
+			if ($o->meta("all_menus") && ($o->site_id() == aw_ini_get("site_id") || aw_ini_get("promo.show_all_works")))
 			{
 				$show_promo = true;
 			}
