@@ -1706,11 +1706,10 @@ class task extends class_base
 				{
 					$project = obj($arr["obj_inst"]->prop("project"));
 					$different_customers = 1;
-					$orderers = $project->prop("orderer");
-					if(!is_array($orderers)) $orderers = array($orderers);
-					foreach($orderers as $orderer)
+					foreach($project->connections_from(array("type" => 9)) as $c)
 					{
-						if($orderer == $arr["obj_inst"]->prop("customer")) $different_customers = 0;
+						$orderer = $c->to();
+						if($orderer->id() == $arr["obj_inst"]->prop("customer")) $different_customers = 0;
 					}
 				}
 				//if($different_customers) $prop["error"]arr("asdasd");
