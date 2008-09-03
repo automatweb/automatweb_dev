@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.133 2008/08/27 08:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.134 2008/09/03 09:05:57 kristo Exp $
 // form.aw - Class for creating forms
 /*
 @classinfo  maintainer=kristo
@@ -7,7 +7,6 @@
 
 /*
 
-HANDLE_MESSAGE(MSG_LANGUAGE_ADD, on_language_add)
 
 */
 
