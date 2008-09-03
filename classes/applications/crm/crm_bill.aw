@@ -1825,6 +1825,10 @@ class crm_bill extends class_base
 //					$country_obj = obj($ct->prop("riik"));
 					if($lc == "en") $ord_country = $this->get_customer_address($b->id(), "country_en");//$country_obj->prop("name_en");
 				}
+				else
+				{
+					$ord_country = $this->get_customer_address($b->id() , "country");
+				}
 			}
 
 			if ($b->prop("ctp_text") != "")
@@ -1926,6 +1930,10 @@ class crm_bill extends class_base
 		{
 			$bpct = $impl->prop("bill_penalty_pct");
 		}
+
+		//need enne vaja 2ra leida, sest hiljem subide jaoks ka vaja
+		$ord_county = $this->get_customer_address($b->id() , "county");
+
 		$this->vars(array(
 			"orderer_name" => $this->get_customer_name($b->id()),
 			"orderer_code" => $this->get_customer_code($b->id()),
@@ -1934,9 +1942,9 @@ class crm_bill extends class_base
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $this->get_customer_address($b->id())." ".$ord_index,
 			"orderer_city" => $this->get_customer_address($b->id() , "city"),
-			"orderer_county" => $this->get_customer_address($b->id() , "county"),//$ord_county,
+			"orderer_county" => $ord_county,
 			"orderer_index" => $this->get_customer_address($b->id() , "index"),//$ord_index,
-			"orderer_country" => $this->get_customer_address($b->id() , "country"),//$ord_country,
+			"orderer_country" => $ord_country,
 			"orderer_street" => $this->get_customer_address($b->id() , "street"),//$ord_street,
 			"impl_street" => $impl_street,
 			"impl_city" => $impl_city,
@@ -2184,7 +2192,7 @@ class crm_bill extends class_base
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
 				"desc" => $name,
-				"date" => "(".$row["date"].")",
+				"date" => $row["date"] ? "(".$row["date"].")" : "",
 			));
 	
 			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"] , "id" => $grp_row["id"],);
