@@ -175,27 +175,27 @@ class room_obj extends _int_object
 				{
 					foreach($p[date("N" , $start)] as $data)
 					{
-/*						$res = $this->add_reservation(array(
-							"start" => 
-							"end" => 
+						$res = $this->add_reservation(array(
+							"start" => mktime($data["start"]["hour"] , $data["start"]["minute"],$data["start"]["second"],date("m" , $start) , date("d" , $start), date("Y" , $start)),
+							"end" => mktime($data["end"]["hour"] , $data["end"]["minute"],$data["end"]["second"],date("m" , $start) , date("d" , $start), date("Y" , $start)),
 						));
 
 
 						if(is_oid($res))
 						{
 							$reservation = obj($res);
-							$reservation->set_prop() /// siia inimene kylge panna
-							$reservation->save()
+							$reservation->set_prop("people", $person);
+							$reservation->save();
 						}
 
-*/
-						print "broneering ".date("d.m.Y" , $start)." kell: ".$data["start"]["hour"].":".$data["start"]["minute"].":".$data["start"]["second"]." kuni ".$data["end"]["hour"].":".$data["end"]["minute"].":".$data["end"]["second"]."<br>";
+
+					//	print "broneering ".date("d.m.Y" , $start)." kell: ".$data["start"]["hour"].":".$data["start"]["minute"].":".$data["start"]["second"]." kuni ".$data["end"]["hour"].":".$data["end"]["minute"].":".$data["end"]["second"]."<br>";
 					}
 				}
 				$start = $start + 24*3600;
 			}
 		}
-		die();
+//		die();
 	}
 
 	/** returns room last reservation oid
