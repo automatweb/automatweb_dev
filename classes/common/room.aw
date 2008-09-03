@@ -688,17 +688,17 @@ class room extends class_base
 			else
 			if ($arr["request"]["set_view_dates"] == 2)
 			{
-				 $arr["args"]["end"] = $arr["args"]["start"] + 24*3600;
+				 $arr["args"]["end"] = $arr["args"]["start"] + 24*3600 - 1;
 			}
 			else
 			if ($arr["request"]["set_view_dates"] == 3)
 			{
-				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*7;
+				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*7 - 1;
 			}
 			else
 			if ($arr["request"]["set_view_dates"] == 4)
 			{
-				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*31;
+				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*31 - 1;
 			}
 		}
 //		if($arr["request"]["submit_scenario"])
