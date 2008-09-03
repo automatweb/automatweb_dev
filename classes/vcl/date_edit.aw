@@ -165,6 +165,26 @@ class date_edit
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
+// sorting principle:
+// range1: 1950 range2: 2000	1950, 1951, 1952 ... 2000
+// range1: 2008 range2: 2020	2008, 2009, 2010 ... 2020
+
+// range1: 2000 range2: 1950    1950, 1951, 1952 ... 2000
+// range1: 2020 range2: 2008    2008, 2009, 2010 ... 2020
+					$min_range = min($range1, $range2);
+					$max_range = max($range1, $range2);
+					// if future
+					if ($max_range >= date("Y"))
+					{
+						$range2 = $min_range;
+						$range1 = $max_range;
+					}
+					else
+					{
+						$range1 = $min_range;
+						$range2 = $max_range;
+					}
+
 					if ($range1 > $range2)
 					{
 						for ($i = $range1; $i >= $range2; $i--)
@@ -174,7 +194,7 @@ class date_edit
 					}
 					else
 					{
-						for ($i = $range2; $i >= $range1; $i--)
+						for ($i = $range1; $i < $range2; $i++)
 						{
 							$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $year),$i);
 						};
