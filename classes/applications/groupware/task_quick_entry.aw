@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.45 2008/08/27 07:55:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.46 2008/09/03 13:56:09 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -556,7 +556,7 @@ $start = ((float)$usec + (float)$sec);
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
 			"name" => $arr["request"]["task"],
-			"CL_TASK.project.name" => $p->id(),
+			"CL_TASK.project" => $p->id(),
 			"CL_TASK.customer" => $c->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
