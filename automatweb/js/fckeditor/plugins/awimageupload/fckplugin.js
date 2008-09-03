@@ -8,7 +8,6 @@ InsertAWImageCommand.Name='ImageUpload';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
-alert (FCKConfig.Baseurl);
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
 			'InsertAWImageCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
@@ -492,7 +491,14 @@ FCKXHtml.TagProcessors['table'] = function( node, htmlNode )
 {
 	if ( htmlNode._awimageplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
-	else if ( htmlNode._awfileplaceholder )
+		
+	return node ;
+}
+
+// We must process the SPAN tags to replace then with the real resulting value of the placeholder.
+FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
+{
+	if ( htmlNode._awfileplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
 	else
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
