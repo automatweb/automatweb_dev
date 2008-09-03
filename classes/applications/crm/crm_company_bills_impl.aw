@@ -1040,9 +1040,9 @@ exit_function("bills_impl::_get_bill_task_list");
 		{
 			$cust = "";
 			$cm = "";
-			if (is_oid($bill->prop("customer")) && $this->can("view", $bill->prop("customer")))
+			if (is_oid($customer_id = $bill->get_bill_customer()))
 			{
-				$tmp = obj($bill->prop("customer"));
+				$tmp = obj($customer_id);
 				$cust = html::get_change_url($tmp->id(), array("return_url" => get_ru()), $bill_i->get_customer_name($bill->id()));
 				$cm = html::obj_change_url($tmp->prop("client_manager"));
 			}

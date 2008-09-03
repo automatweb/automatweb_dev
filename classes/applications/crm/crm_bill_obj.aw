@@ -183,6 +183,28 @@ class crm_bill_obj extends _int_object
 
 		return $data;
 	}
+
+	/** Returns bill customer id
+		@attrib api=1
+		@returns
+			oid of the customer
+	**/
+	function get_bill_customer()
+	{
+		$bi = get_instance("applications/crm/crm_bill");
+		if (is_oid($this->prop("customer")) && $bi->can("view", $this->prop("customer")))
+		{
+			return $this->prop("customer");
+		}
+		else
+		{
+			foreach($this->connections_from(array("type" => "RELTYPE_TASK")) as $conn)
+			{
+				$p = $conn->to();
+				return $p->prop("customer");
+			}
+		}
+	}
 }
 
 ?>
