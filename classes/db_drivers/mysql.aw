@@ -745,13 +745,20 @@ class mysql
 		{
 			if (!preg_match("/Unknown column '(.*)\.(.*)'/imsU" , $errstr, $mt))
 			{
-				preg_match("/Unknown column '(.*)' in 'field list'/imsU" , $errstr, $mt);
-				if (!preg_match("/UPDATE (.*) SET/imsU", $q, $mt_a))
+				if (preg_match("/Unknown column '(.*)' in 'order clause'/imsU" , $errstr, $mt))
 				{
-					preg_match("/INSERT INTO (.+) \(/imsU", $q, $mt_a);
+					$mt = array(1 => "", 2 => $mt[1]);
 				}
-				$mt[2] = $mt[1];
-				$mt[1] = $mt_a[1];
+				else
+				if (!preg_match("/Unknown column '(.*)' in 'field list'/imsU" , $errstr, $mt))
+				{
+					if (!preg_match("/UPDATE (.*) SET/imsU", $q, $mt_a))
+					{
+						preg_match("/INSERT INTO (.+) \(/imsU", $q, $mt_a);
+					}
+					$mt[2] = $mt[1];
+					$mt[1] = $mt_a[1];
+				}
 			}
 
 			if ($this->db_proc_error_last_fn == $mt[2])
@@ -763,6 +770,25 @@ class mysql
 			// find the table from property list. oh this is gonna be slooooooow
 			$clss = aw_ini_get("classes");
 			$upgrade_result = null;
+
+			if ($mt[1] == "" && $mt[2] != "")
+			{
+				// find property with field given and table in the error query
+				foreach($clss as $clid => $inf)
+				{
+					$o = obj();
+					$o->set_class_id($clid);
+					$pl = $o->get_property_list();
+					foreach($pl as $prop_item)
+					{
+						if ($prop_item["field"] == $mt[2] && strpos($q, $prop_item["table"]) !== false)
+						{
+							$mt[1] = $prop_item["table"];
+							break;
+						}
+					}
+				}
+			}
 
 			foreach($clss as $clid => $inf)
 			{
