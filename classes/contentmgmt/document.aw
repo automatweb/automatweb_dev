@@ -1221,6 +1221,7 @@ class document extends aw_template
 			"sel_lang_img_url" => $sel_lang_img_url,
 			"doc_modified" => $_date,
 			"doc_mod" => $doc["doc_modified"],
+			"doc_created" => $doc["created"],
 			"date_est" => $date_est,
 			"date_est_n" => $date_est_n,
 			"print_date_est" => $date_est_print,
