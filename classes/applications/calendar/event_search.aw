@@ -1411,8 +1411,8 @@ class event_search extends class_base
 					$orig_id = $res->id();
 					$origs[] = $orig_id;
 					// Event can last for more than one day.
-					$s_ts = $res->prop("start1") % (24 * 3600);
-					$e_ts = $res->prop("end") % (24 * 3600);
+					$s_ts = $res->prop("start1");
+					$e_ts = $res->prop("end");
 					for($i = $s_ts; $i <= $e_ts; $i += 24*3600)
 					{
 						$edata[$orig_id][] = array_merge(array(
@@ -1420,7 +1420,7 @@ class event_search extends class_base
 							"event" => $res->name(),
 							"project_selector" => "n/a",
 							"date" => date("d-m-Y", $i),
-						), $res->properties());
+						), $res->properties(), array("start1" => $i));
 						$ecount[$orig_id]++;
 					}
 				}
