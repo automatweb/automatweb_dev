@@ -1415,6 +1415,10 @@ class event_search extends class_base
 					$e_ts = $res->prop("end");
 					for($i = $s_ts; strcmp(date("Ymd", $i), date("Ymd", $e_ts)) <= 0; $i += 24*3600)
 					{
+						if($i < $start_tm || $i > $end_tm + (24*3600 - 1))
+						{
+							continue;
+						}
 						$edata[] = array_merge(array(
 							"event_id" => $res->id(),
 							"event" => $res->name(),
