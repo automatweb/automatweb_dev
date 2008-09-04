@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.32 2008/09/03 09:33:28 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.33 2008/09/04 08:28:42 hannes Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -2424,6 +2424,7 @@ class image extends class_base
 	**/
 	function get_connection_details_for_doc($arr)
 	{
+		header("Content-type: application/javascript; charset=utf-8");
 		if ($arr["use_br"])
 		{
 			$sufix = "\n";
@@ -2439,10 +2440,11 @@ class image extends class_base
 			{
 				$o = obj($obj_id);
 				$size = @getimagesize($this->_get_fs_path($o->prop("file")));
-				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.', "comment" : "'.utf8_encode($o->prop("comment")).'", "url" : "'.$this->get_url_by_id($obj_id).'", "width" : '.$size[0].', "height" : '.$size[1].'};'.$sufix;
+				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.', "comment" : "'.$o->prop("comment").'", "url" : "'.$this->get_url_by_id($obj_id).'", "width" : '.$size[0].', "height" : '.$size[1].'};'.$sufix;
 				$out .= 'connection_details_for_doc["#'.$arr["alias_name"].'#"] = item;'.$sufix;
 			}
 		}
+		$out = iconv(aw_global_get("charset"), "utf-8", $out);
 		die($out);
 	}
 

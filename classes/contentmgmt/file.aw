@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.14 2008/08/04 11:34:32 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.15 2008/09/04 08:28:42 hannes Exp $
 /*
 
 
@@ -1752,6 +1752,7 @@ class file extends class_base
 	**/
 	function get_connection_details_for_doc($arr)
 	{
+		header("Content-type: application/javascript; charset=utf-8");
 		if ($arr["use_br"])
 		{
 			$sufix = "\n";
@@ -1764,17 +1765,12 @@ class file extends class_base
 		{
 			if ("#".$arr["alias_name"]."#" == $alias_string)
 			{
-				//$o = obj($obj_id);
-				//$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
-				//$out .= 'connection_details_for_doc["'.$alias_string.'"] = item;'.$sufix;
-				
-				
-				
 				$o = obj($obj_id);
 				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
 				$out .= 'connection_details_for_doc["#'.$arr["alias_name"].'#"] = item;'.$sufix;
 			}
 		}
+		$out = iconv(aw_global_get("charset"), "utf-8", $out);
 		die($out);
 	}
 
