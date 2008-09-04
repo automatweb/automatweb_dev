@@ -727,6 +727,7 @@ class class_base extends aw_template
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
 			"awcb_display_mode" => $this->awcb_display_mode,
+			"all_trans_status" => 0,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
 
 		if(!empty($this->reltype))
@@ -837,16 +838,17 @@ class class_base extends aw_template
 			$cli->set_form_target(aw_global_get("changeform_target"));
 		}
 
-		$scripts = "";
+		$gen_scripts_args = array(
+			"request" => isset($this->request) ? $this->request : "",
+			"obj_inst" => &$this->obj_inst,
+			"groupinfo" => &$this->groupinfo,
+			"new" => $this->new,
+			"view" => $this->view,
+		);
+		$scripts = $this->callback_generate_scripts_from_class_base($gen_scripts_args);
 		if (method_exists($this, "callback_generate_scripts"))
 		{
-			$scripts = $this->callback_generate_scripts(array(
-				"request" => isset($this->request) ? $this->request : "",
-				"obj_inst" => &$this->obj_inst,
-				"groupinfo" => &$this->groupinfo,
-				"new" => $this->new,
-				"view" => $this->view,
-			));
+			$scripts .= $this->callback_generate_scripts($gen_scripts_args);
 		}
 		$awt->start("final-bit");
 
@@ -6096,12 +6098,7 @@ class class_base extends aw_template
 		}
 	}
 
-	function callback_mod_reforb($arr)
-	{
-		$arr["all_trans_status"] = 0;
-	}
-
-	function callback_generate_scripts($arr)
+	function callback_generate_scripts_from_class_base($arr)
 	{
 		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && @$arr["request"]["group"] != "relationmgr")
 		{
