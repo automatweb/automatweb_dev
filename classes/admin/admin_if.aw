@@ -988,10 +988,17 @@ class admin_if extends class_base
 							}
 							if($all_trans_status != 0 && $column == "status")
 							{
+								$langs = aw_ini_get("languages");
+								foreach(array_keys($langs["list"]) as $lid)
+								{
+									$o->set_meta("trans_".$lid."_status", ($val - 1));
+								}
+								/*
 								foreach($o->meta("translations") as $lid => $ldata)
 								{
 									$o->set_meta("trans_".$lid."_status", ($val - 1));
 								}
+								*/
 							}
 							$o->save();
 						}
