@@ -1554,6 +1554,7 @@ class event_search extends class_base
 			$aliasmrg = get_instance("alias_parser");
 			foreach($groups as $gkey => $edata)
 			{
+				uasort($edata, array($this, "__sort_props_by_date"));
 				if(count($groups) > 1)
 				{
 					$this->vars(array(
@@ -1565,7 +1566,7 @@ class event_search extends class_base
 						uasort($edata, array($this, "__sort_props_by_proj"));
 					}
 				}
-				foreach($edata as $ekey => $evals)
+				foreach($edata as $eval)
 				{
 					$id = $eval["event_id"];
 					$obj = obj($id);
@@ -1976,6 +1977,11 @@ class event_search extends class_base
 	function __sort_props_by_ord($el1, $el2)
 	{
 		return (int)($el1["ord"] - $el2["ord"]);
+	}
+
+	function __sort_props_by_date($a, $b)
+	{
+		return (int)$a["start1"] - (int)$b["start1"];
 	}
 
 	function __sort_props_by_proj($el1, $el2)
