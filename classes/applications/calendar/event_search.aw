@@ -1410,14 +1410,19 @@ class event_search extends class_base
 				{
 					$orig_id = $res->id();
 					$origs[] = $orig_id;
-					$edata[$orig_id] = array(
-						"event_id" => $res->id(),
-						"event" => $res->name(),
-						"project_selector" => "n/a",
-						"date" => date("d-m-Y", $res->prop("start1")),
-					);
-					$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
-					$ecount[$orig_id]++;
+					// Event can last for more than one day.
+					$s_ts = $res->prop("start1") % (24 * 3600);
+					$e_ts = $res->prop("end") % (24 * 3600);
+					for($i = $s_ts; $i <= $e_ts; $i += 24*3600)
+					{
+						$edata[$orig_id][] = array_merge(array(
+							"event_id" => $res->id(),
+							"event" => $res->name(),
+							"project_selector" => "n/a",
+							"date" => date("d-m-Y", $i),
+						), $res->properties());
+						$ecount[$orig_id]++;
+					}
 				}
 				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
 				$tabledef = $ob->meta("result_table");
@@ -1559,225 +1564,240 @@ class event_search extends class_base
 						uasort($edata, array($this, "__sort_props_by_proj"));
 					}
 				}
-				foreach($edata as $ekey => $eval)
+				foreach($edata as $ekey => $evals)
 				{
-					$id = $eval["event_id"];
-					$obj = obj($id);
-					$cdat = "";
-					foreach($tabledef as $sname => $propdef)
+					// Hacking begins. -kaarel
+					// Cuz one event can last longer than 1 day and I wanna see that in the results.
+					$eval_ord = $evals["ord"];
+					$eval_proj = $evals["proj"];
+					$eval_project_selector = $evals["project_selector"];
+					unset($evals["ord"]);
+					unset($evals["proj"]);
+					unset($evals["project_selector"]);
+					foreach($evals as $eval)
 					{
-						if($sname == "content" || $sname == "delete_link")
+						$eval["ord"] = $eval_ord;
+						$eval["proj"] = $eval_proj;
+						$eval["project_selector"] = $eval_project_selector;
+						// End of hacking.
+						$id = $eval["event_id"];
+						$obj = obj($id);
+						$cdat = "";
+						foreach($tabledef as $sname => $propdef)
 						{
-							continue;
-						}
-						if($search["oid"] && !$propdef["fullview"])
-						{
-							continue;
-						}
-						if($search["oid"] && (empty($eval[$sname]) || $eval[$sname] == -1))
-						{
-						//	continue;
-						}
-						elseif(!$propdef["active"] && !$search["oid"])
-						{
-							continue;
-						}
-						$names = array_merge((array)$sname, safe_array($tabledef[$sname]["fields"]));
-						$names = $this->make_keys($names);
-						$val = array();
-						$skip = false;
-						foreach($names as $nms)
-						{
-							if(empty($nms))
+							if($sname == "content" || $sname == "delete_link")
 							{
 								continue;
 							}
-							$v = create_links(isset($eval[$nms]) ? $eval[$nms] : $eval["meta"][$nms]);
-							if ($has_proc)
+							if($search["oid"] && !$propdef["fullview"])
 							{
-								$v = $si->handle_parse_event_field($nms, $v);
-							}
-
-							if($search["oid"] && (empty($v) || $v == -1))
-							{
-								$skip = true;
 								continue;
 							}
-							$value = $tabledef[$nms]["props"];
-							// if there is something in the controller field set, then lets see what it is
-							if (!empty($value))
+							if($search["oid"] && (empty($eval[$sname]) || $eval[$sname] == -1))
 							{
-								// if there is some php code
-								if (strpos($value, "#php#") !== false)
+							//	continue;
+							}
+							elseif(!$propdef["active"] && !$search["oid"])
+							{
+								continue;
+							}
+							$names = array_merge((array)$sname, safe_array($tabledef[$sname]["fields"]));
+							$names = $this->make_keys($names);
+							$val = array();
+							$skip = false;
+							foreach($names as $nms)
+							{
+								if(empty($nms))
 								{
-									// remove the php code indicators
-									$value = str_replace("#php#", "", $value);
-									$value = str_replace("#/php#", "", $value);
-									// and execute the code
-									eval($value);
+									continue;
+								}
+								$v = create_links(isset($eval[$nms]) ? $eval[$nms] : $eval["meta"][$nms]);
+								if ($has_proc)
+								{
+									$v = $si->handle_parse_event_field($nms, $v);
+								}
+
+								if($search["oid"] && (empty($v) || $v == -1))
+								{
+									$skip = true;
+									continue;
+								}
+								$value = $tabledef[$nms]["props"];
+								// if there is something in the controller field set, then lets see what it is
+								if (!empty($value))
+								{
+									// if there is some php code
+									if (strpos($value, "#php#") !== false)
+									{
+										// remove the php code indicators
+										$value = str_replace("#php#", "", $value);
+										$value = str_replace("#/php#", "", $value);
+										// and execute the code
+										eval($value);
+									}
+									else
+									{
+										// if it isn't a php code, then it might be a date conf string:
+										if ($nms == "start1" || $nms == "end")
+										{
+											$v = date($value, $v);
+										}
+										else
+										{
+											// and if it isn't the date case, then maybe i should
+											// just give it the value which is in controller?
+											// would it make any sense?
+											// not so sure about that, so commenting it out now:
+
+										//	$v = $value;
+										}
+									}
 								}
 								else
 								{
-									// if it isn't a php code, then it might be a date conf string:
+									if(strpos($nms, "image") !== false)
+									{
+										if(is_oid($v) && $this->can("view", $v))
+										{
+											$image_inst = get_instance(CL_IMAGE);
+											$v = html::img(array(
+												'url' => $image_inst->get_url_by_id($v)
+											));
+										}
+									}
 									if ($nms == "start1" || $nms == "end")
 									{
-										$v = date($value, $v);
+										if($skip)
+										{
+											continue;
+										}
+										// if there is no controller set for date:
+										$v = date("d-m-Y", $v);
 									}
-									else
+									if($nms == "name")
 									{
-										// and if it isn't the date case, then maybe i should
-										// just give it the value which is in controller?
-										// would it make any sense?
-										// not so sure about that, so commenting it out now:
-
-									//	$v = $value;
+										if($obj->prop("udeftb1") != "")
+										{
+											$v = html::popup(array(
+												"url" => $obj->prop("udeftb1"),
+												"caption" => $v,
+												"target" => "_blank",
+												"toolbar" => 1,
+												"directories" => 1,
+												"status" => 1,
+												"location" => 1,
+												"resizable" => 1,
+												"scrollbars" => 1,
+												"menubar" => 1,
+											));
+										}
 									}
-								}
-							}
-							else
-							{
-								if(strpos($nms, "image") !== false)
-								{
-									if(is_oid($v) && $this->can("view", $v))
+									if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
 									{
-										$image_inst = get_instance(CL_IMAGE);
-										$v = html::img(array(
-											'url' => $image_inst->get_url_by_id($v)
-										));
-									}
-								}
-								if ($nms == "start1" || $nms == "end")
-								{
-									if($skip)
-									{
-										continue;
-									}
-									// if there is no controller set for date:
-									$v = date("d-m-Y", $v);
-								}
-								if($nms == "name")
-								{
-									if($obj->prop("udeftb1") != "")
-									{
-										$v = html::popup(array(
-											"url" => $obj->prop("udeftb1"),
+										if($ob-> prop("preview_object"))
+										{
+											$parse_url = aw_ini_get("baseurl")."/".$ob-> prop("preview_object")."?evt_id=".$id;
+										}
+										else
+										{
+											$parse_url = aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id));
+										}
+										$v = html::href(array(
+											"url" => $parse_url,
 											"caption" => $v,
-											"target" => "_blank",
-											"toolbar" => 1,
-											"directories" => 1,
-											"status" => 1,
-											"location" => 1,
-											"resizable" => 1,
-											"scrollbars" => 1,
-											"menubar" => 1,
 										));
 									}
-								}
-								if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
-								{
-									if($ob-> prop("preview_object"))
+									if($tabledef[$nms]["brs"] == 1)
 									{
-										$parse_url = aw_ini_get("baseurl")."/".$ob-> prop("preview_object")."?evt_id=".$id;
+										$v = nl2br($v);
 									}
-									else
+
+									// this seems to be the right place to execute controller (props)
+
+
+									if(strpos($v, "#") !== false)
 									{
-										$parse_url = aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id));
+										$aliasmrg->parse_oo_aliases($ekey, $v);
 									}
-									$v = html::href(array(
-										"url" => $parse_url,
-										"caption" => $v,
-									));
 								}
-								if($tabledef[$nms]["brs"] == 1)
-								{
-									$v = nl2br($v);
-								}
+								$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
 
-								// this seems to be the right place to execute controller (props)
-
-
-								if(strpos($v, "#") !== false)
-								{
-									$aliasmrg->parse_oo_aliases($ekey, $v);
-								}
 							}
-							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
 
+							if (!$skip)
+							{
+								$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
+								$this->vars(array(
+									"cell" => $val,
+									"colcaption" => $propdef["caption"],
+								));
+								$cdat .= $this->parse("CELL");
+								$this->vars(array(
+									"CELL" => $cdat,
+									$sname => $val
+								));
+							}
 						}
-
-						if (!$skip)
+						$nmx = "content";
+						$use = false;
+						if($search["oid"] && $tabledef["content"]["fullview"])
 						{
-							$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
-							$this->vars(array(
-								"cell" => $val,
-								"colcaption" => $propdef["caption"],
-							));
-							$cdat .= $this->parse("CELL");
-							$this->vars(array(
-								"CELL" => $cdat,
-								$sname => $val
-							));
+							$use = true;
 						}
-					}
-					$nmx = "content";
-					$use = false;
-					if($search["oid"] && $tabledef["content"]["fullview"])
-					{
-						$use = true;
-					}
-					elseif($tabledef["content"]["active"] && !($search["oid"]))
-					{
-						$use = true;
-					}
-					$content = "";
-					if($use)
-					{
-						if(!empty($eval["content"]))
+						elseif($tabledef["content"]["active"] && !($search["oid"]))
 						{
-							$content = nl2br($eval["content"]);
+							$use = true;
 						}
-						elseif(!empty($eval["utextarea1"]))
+						$content = "";
+						if($use)
 						{
-							$content = nl2br($eval["utextarea1"]);
+							if(!empty($eval["content"]))
+							{
+								$content = nl2br($eval["content"]);
+							}
+							elseif(!empty($eval["utextarea1"]))
+							{
+								$content = nl2br($eval["utextarea1"]);
+							}
+							if(strpos($content, "#") !== false)
+							{
+								$aliasmrg->parse_oo_aliases($ekey, $content);
+							}
 						}
-						if(strpos($content, "#") !== false)
-						{
-							$aliasmrg->parse_oo_aliases($ekey, $content);
-						}
-					}
-					$i++;
-					$this->vars(array(
-						"num" => $i % 2 ? 1 : 2,
-					));
-					if($use && !empty($content))
-					{
+						$i++;
 						$this->vars(array(
-							"fulltext_name" => $tabledef[$nmx]["caption"],
-							"fulltext" => $content,
+							"num" => $i % 2 ? 1 : 2,
 						));
-						$fulltext = $this->parse("FULLTEXT");
-					}
-					else
-					{
-						$fulltext = "";
-					}
+						if($use && !empty($content))
+						{
+							$this->vars(array(
+								"fulltext_name" => $tabledef[$nmx]["caption"],
+								"fulltext" => $content,
+							));
+							$fulltext = $this->parse("FULLTEXT");
+						}
+						else
+						{
+							$fulltext = "";
+						}
 
-					if ($this->is_template('DELETE_EVENT_LINK'))
-					{
+						if ($this->is_template('DELETE_EVENT_LINK'))
+						{
+							$this->vars(array(
+								'delete_url' => $this->mk_my_orb("delete_event", array(
+									'event_id' => $id,
+									'return_url' => get_ru()
+								), CL_EVENT_SEARCH),
+							));
+							$delete_url_str = $this->parse('DELETE_EVENT_LINK');
+
+						}
 						$this->vars(array(
-							'delete_url' => $this->mk_my_orb("delete_event", array(
-								'event_id' => $id,
-								'return_url' => get_ru()
-							), CL_EVENT_SEARCH),
+							"FULLTEXT" => $fulltext,
+							"DELETE_EVENT_LINK" => $delete_url_str
 						));
-						$delete_url_str = $this->parse('DELETE_EVENT_LINK');
-
+						$res .= $this->parse("EVENT");
 					}
-					$this->vars(array(
-						"FULLTEXT" => $fulltext,
-						"DELETE_EVENT_LINK" => $delete_url_str
-					));
-					$res .= $this->parse("EVENT");
 				}
 			}
 			//Navigation bar
