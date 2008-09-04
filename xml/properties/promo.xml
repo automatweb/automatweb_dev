@@ -347,6 +347,26 @@
             <caption>Sisu ei cacheta</caption>
       </property>
       <property>
+            <name>separate_pages</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>menus_sub</group>
+            <caption>Jaota lehtedeks</caption>
+      </property>
+      <property>
+            <name>docs_per_page</name>
+            <type>textbox</type>
+            <size>5</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>menus_sub</group>
+            <caption>Dokumente lehel</caption>
+      </property>
+      <property>
             <name>kw_tb</name>
             <type>toolbar</type>
             <store>no</store>

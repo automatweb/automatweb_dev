@@ -382,6 +382,51 @@ if ($_GET["PROMO_DBG"] == 1)
 					$this->do_prev_next_links($docid, $inst);
 				}
 
+				if ($o->prop("separate_pages"))
+				{
+					$o->set_prop("separate_pages", false);
+					$all_docs = $inst->get_default_document(array(
+						"obj" => $o,
+					));
+					$total_docs = count($all_docs);
+					$per_page = $o->prop("docs_per_page");
+					$pages = $total_docs / $per_page;
+					$var_name = "promo_".$o->id()."_page";
+					$cur_page = (int)$_GET["promo_".$obj->id()."_page"];
+
+					$ps = array();
+					for($i = 0; $i < $pages; $i++)
+					{
+						$this->vars(array(
+							"page_url" => aw_url_change_var($var_name, $i),
+							"page_number" => $i+1
+						));
+						if ($cur_page == $i)
+						{
+							$ps[] = $inst->parse("PROMO_CUR_PAGE");
+						}
+						else
+						{
+							$ps[] = $inst->parse("PROMO_PAGE");
+						}
+						if ($i == ($cur_page-1))
+						{
+							$prev_page = $inst->parse("PROMO_PREV_PAGE");
+						}
+						if ($i == ($cur_page+1))
+						{
+							$next_page = $inst->parse("PROMO_NEXT_PAGE");
+						}
+					}
+					$inst->vars(array(
+						"PROMO_PAGE" => join($inst->parse("PROMO_PAGE_SEP"), $ps),
+						"PROMO_CUR_PAGE" => "",
+						"PROMO_PAGE_SEP" => "",
+						"PROMO_PREV_PAGE" => $prev_page,
+						"PROMO_NEXT_PAGE" => $next_page
+					));
+				}
+
 				$image = "";
 				$image_url = "";
 				if ($o->prop("image"))

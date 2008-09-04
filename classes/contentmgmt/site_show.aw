@@ -711,6 +711,13 @@ class site_show extends class_base
 
 		$no_in_promo = false;
 
+		if ($obj->class_id() == CL_PROMO && $obj->prop("separate_pages"))
+		{
+			$cur_page = (int)$_GET["promo_".$obj->id()."_page"];
+			$obj->set_prop("ndocs", ($cur_page+1) * $obj->prop("docs_per_page"));
+			$obj->set_prop("start_ndocs", $cur_page * $obj->prop("docs_per_page"));
+		}
+
 		$filt_lang_id = aw_global_get("lang_id");
 		$filter = array();
 		// no default, show list

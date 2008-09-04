@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.111 2008/04/28 13:59:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.112 2008/09/04 09:30:09 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -153,6 +153,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 		@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize group=menus_sub
 		@caption Sisu ei cacheta
+
+		@property separate_pages type=checkbox ch_value=1 table=objects field=meta method=serialize group=menus_sub
+		@caption Jaota lehtedeks
+
+		@property docs_per_page type=textbox size=5 table=objects field=meta method=serialize group=menus_sub
+		@caption Dokumente lehel
 
 	@groupinfo kws parent=menus caption="M&auml;rks&otilde;nad"
 
@@ -540,7 +546,7 @@ class promo extends class_base implements main_subtemplate_handler
 		if (is_array($check1) || is_array($check2))
 		{
 			$convert_url = $this->mk_my_orb("promo_convert",array(),"converters");
-			print "See objekt on vanas formaadis. Enne kui seda muuta saab, tuleb kõik süsteemis olevad promokastis uude formaati konvertida. <a href='$convert_url'>Kliki siia</a> konversiooni alustamiseks";
+			print "See objekt on vanas formaadis. Enne kui seda muuta saab, tuleb k&otilde;ik s&uuml;steemis olevad promokastid uude formaati konvertida. <a href='$convert_url'>Kliki siia</a> konversiooni alustamiseks";
 			exit;
 		};
 		
