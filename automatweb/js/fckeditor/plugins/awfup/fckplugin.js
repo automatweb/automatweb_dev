@@ -106,6 +106,8 @@ FCKAWFilePlaceholders.SetupSpan = function( span, name )
 
 	if ( FCKBrowserInfo.IsGecko )
 		span.style.cursor = 'default' ;
+	span.style.color = "0000EE";
+	span.style.textDecoration = "underline";
 
 	span._awfileplaceholder = name ;
 	span._oid = connection_details_for_doc["#"+name+"#"]["id"]
