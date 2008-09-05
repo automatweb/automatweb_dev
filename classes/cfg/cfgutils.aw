@@ -502,7 +502,7 @@ class cfgutils extends aw_template
 			{
 				$_name = "RELTYPE_" . $key;
 				$relx = $val;
-				if (!is_array($relx["clid"]))
+				if (!is_array($relx["clid"]) && strlen(trim($relx["clid"])))
 				{
 					$relx["clid"] = array($relx["clid"]);
 				};
