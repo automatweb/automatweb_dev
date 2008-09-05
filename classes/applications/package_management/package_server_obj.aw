@@ -8,7 +8,46 @@ class package_server_obj extends _int_object
 {
 	function add_package($params)
 	{
+		$o = new object();
+		$o->set_class_id(CL_PACKAGE);
+		$o->set_parent($this->prop('packages_folder_aw'));
+		$o->set_name($params["name"] ? $params["name"] : t("Nimetu pakett"));
+
+		$o->set_prop("version" , $params["version"]);
+		$o->set_prop("description" , $data["description"]);
+
+		$o->save();
+
+		$file = new object();
+		$file->set_class_id(CL_FILE);
+		$file->set_parent($o->id());
+		$file->set_name($o->name());
+		$file->save();
+
+		$o->connect(array(
+			"to" => $file->id(),
+			"reltype" => "RELTYPE_FILE",
+		));
+
+		if(file_exists($params["file"]))
+		{
+			$handle = fopen($params["file"], "r");
+			$contents = fread($handle, filesize($params["file"]));
+			$type = "zip";
 		
+			fclose($handle);
+		
+			$data["id"] = $file->id();
+			$data["return"] = "id";
+			$data["file"] = array(
+				"content" => $contents,
+				"name" => $o->name(),
+				"type" => $type,
+			);
+			$t = get_instance(CL_FILE);
+			$rv = $t->submit($data);
+		}
+		return $o->id();
 	}
 
 	function remove_packages($ids)

@@ -121,7 +121,9 @@ class package_client_obj extends _int_object
 
 	function upload_package($id)
 	{
-		$url = $this->prop("packages_server")."/orb.aw?class=package_server&action=upload_package&id=".$id."&site_id=".$this->site_id();
+		$url = $this->prop("packages_server")."/orb.aw?class=package_server&action=upload_package&id=".$id."&site_id=".$this->site_id()."&return_url=".html::get_change_url($val["oid"]);
+		header("Location: ".$url);
+		die();
 		$this->do_nothing();
 	}
 

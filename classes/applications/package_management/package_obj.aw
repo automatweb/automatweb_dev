@@ -121,6 +121,10 @@ class package_obj extends _int_object
 		$file_objects = $this->get_files();
 		foreach($file_objects->arr() as $file_object)
 		{
+			if(!$file_object->prop("file"))
+			{
+				continue;
+			}
 			$data = $file_object->get_file();
 			$zip = new ZipArchive;
 			$zip->open($data["properties"]["file"]);
@@ -131,6 +135,10 @@ class package_obj extends _int_object
 					$files[] = $dat["name"];
 				}
 			}
+		}
+		if(!sizeof($files))
+		{
+			$files[] = t("failiobjekt ei sisalda &uuml;htegi faili");
 		}
 		return $files;
 	}

@@ -86,6 +86,8 @@ class package_client extends class_base
 			case 'search_file':
 				$prop['value'] = $arr['request'][$prop['name']];
 				break;
+			case 'made_toolbar':
+				$arr["prop"]["vcl_inst"]->add_new_button(array(CL_PACKAGE),$arr["obj_inst"]->id());
 		}
 
 		return $retval;

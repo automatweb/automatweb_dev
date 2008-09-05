@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.14 2008/08/08 11:03:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.15 2008/09/05 12:02:03 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -531,8 +531,8 @@ class package_server extends class_base
 	function upload_package($arr)
 	{
 		$sites = $this->get_site_list();
-		$client = $sites[$arr["id"]]["url"];
-		$url = $client."/orb.aw?class=package_server&action=download_package_file&id=".$arr["id"]."&site_id=".$this->site_id();
+		$client = $sites[$arr["site_id"]]["url"];
+		$url = $client."/orb.aw?class=package_server&action=download_package_file&id=".$arr["id"]."&site_id=".$arr["site_id"];
 
 		$contents = file_get_contents($url);
 		$fn = aw_ini_get("server.tmpdir")."/".gen_uniq_id().".zip";
@@ -540,10 +540,7 @@ class package_server extends class_base
 		fwrite($fp, $contents);
 		fclose($fp);
 		//nyyd on fail olemas, kuid sellest on vaja teha ka paketiobjekt
-
-		$inst = $this->instance();
-
-		$data = $inst->do_orb_method_call(array(
+		$data = $this->do_orb_method_call(array(
 			"class" => "package_server",
 			"action" => "download_package_properties",
 			"method" => "xmlrpc",
@@ -552,10 +549,35 @@ class package_server extends class_base
 			"params" => array(
 				'id' => $arr["id"],
 			),
+		));		
+
+		$server = &$this->get_package_server();
+		$server->add_package(array(
+			"name" => $data["name"],
+			"version" => $data["version"],
+			"description" => $data["description"],
+			"file" => $fn,
 		));
 
+		header("Location: ".$arr["return_url"]);
+		die();
 		//data alt peaks tulema igast propertite v22rtused ja fail ise on $fn alt k2tte saadav
 
+	}
+
+	private function get_package_server()
+	{
+		if($this->package_server_object)
+		{
+			return $this->package_server_object;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_PACKAGE_SERVER,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$this->package_server_object = reset($ol->arr());
+		return $this->package_server_object;
 	}
 
 	/** 
