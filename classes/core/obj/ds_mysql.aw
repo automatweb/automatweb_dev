@@ -2395,6 +2395,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						$__fld = "class_id";
 					}
+					if ($join["prop"] == "parent")
+					{
+						$__fld = "parent";
+					}
 					$ret = array(
 						$prev_t,
 						$__fld,
