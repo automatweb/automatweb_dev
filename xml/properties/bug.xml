@@ -226,11 +226,35 @@
             <type>textarea</type>
             <rows>23</rows>
             <cols>60</cols>
-            <parent>bc</parent>
+            <parent>bc_lay1</parent>
             <captionside>top</captionside>
             <no_caption>1</no_caption>
             <field>bug_content</field>
             <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>bug_add_real</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>bug_add_times</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>bug_add_real</field>
+            <caption>Kulunud aeg</caption>
+      </property>
+      <property>
+            <name>bug_add_guess</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>bug_add_times</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>bug_add_guess</field>
+            <caption>Prognoosile lisanduv aeg</caption>
       </property>
       <property>
             <name>bug_content_comm</name>
@@ -239,7 +263,7 @@
             <type>textarea</type>
             <rows>18</rows>
             <cols>60</cols>
-            <parent>bc</parent>
+            <parent>bc_lay2</parent>
             <store>no</store>
             <editonly>1</editonly>
             <captionside>top</captionside>
@@ -261,8 +285,7 @@
             <name>num_hrs_real</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <type>textbox</type>
-            <size>5</size>
+            <type>text</type>
             <parent>data_time</parent>
             <captionside>top</captionside>
             <field>num_hrs_real</field>
@@ -726,6 +749,25 @@
                   <area_caption>Sisu</area_caption>
                   <group>general</group>
             </bc>
+            <bc_lay1>
+                  <parent>bc</parent>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </bc_lay1>
+            <bug_add_times>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <parent>bc</parent>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </bug_add_times>
+            <bc_lay2>
+                  <parent>bc</parent>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <area_caption></area_caption>
+            </bc_lay2>
             <content_right>
                   <type>vbox</type>
                   <parent>content</parent>

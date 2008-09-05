@@ -27,6 +27,15 @@
             <caption>Uus staatus</caption>
       </property>
       <property>
+            <name>add_wh_guess</name>
+            <table>aw_bug_comments</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_add_wh_guess</field>
+            <caption>Lisandunud prognoositunnid</caption>
+      </property>
+      <property>
             <name>add_wh</name>
             <table>aw_bug_comments</table>
             <group>general</group>

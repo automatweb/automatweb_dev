@@ -90,11 +90,23 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout bc type=vbox parent=content closeable=1 area_caption=Sisu
 
-		@property bug_content type=textarea rows=23 cols=60 parent=bc captionside=top no_caption=1
+		@layout bc_lay1 parent=bc type=hbox
+
+		@property bug_content type=textarea rows=23 cols=60 parent=bc_lay1 captionside=top no_caption=1
 		@caption Sisu
 
-		@property bug_content_comm type=textarea rows=18 cols=60 parent=bc store=no editonly=1 captionside=top
-		@caption Lisa kommentaar
+		@layout bug_add_times type=hbox width=50%:50% parent=bc
+
+			@property bug_add_real type=textbox size=5 parent=bug_add_times captionside=top store=no
+			@caption Kulunud aeg
+
+			@property bug_add_guess type=textbox size=5 parent=bug_add_times captionside=top store=no
+			@caption Prognoosile lisanduv aeg
+
+		@layout bc_lay2 parent=bc type=hbox
+
+			@property bug_content_comm type=textarea rows=18 cols=60 parent=bc_lay2 store=no editonly=1 captionside=top
+			@caption Lisa kommentaar
 
 	@layout content_right type=vbox parent=content
 
@@ -105,7 +117,7 @@ define("BUG_STATUS_CLOSED", 5);
 				@property num_hrs_guess type=textbox size=5 parent=data_time captionside=top
 				@caption Prognoositav
 
-				@property num_hrs_real type=textbox size=5 parent=data_time captionside=top
+				@property num_hrs_real type=text parent=data_time captionside=top
 				@caption Tegelik
 
 				@property num_hrs_to_cust type=textbox size=5 parent=data_time captionside=top
@@ -845,7 +857,14 @@ class bug extends class_base
 					"source_id" => $arr["obj_inst"]->id(),
 					"name" => $arr["obj_inst"]->name()
 				), CL_TASK);
-				$prop["post_append_text"] = " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",800,600)'>".t("Stopper")."</a>";
+				$prop["value"] = "<span style=\"font-size: 14px;\">".$prop["value"]."</span> <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",800,600)'>".t("Stopper")."</a><br />\n".(($arr["request"]["action"] == "new") ? "" : $this->get_person_times($arr));
+				break;
+
+			case "num_hrs_guess":
+				if($arr["request"]["action"] != "new")
+				{
+					$prop["post_append_text"] = "<br />\n".$this->get_person_times($arr);
+				}
 				break;
 
 			case "bug_url":
@@ -881,6 +900,14 @@ class bug extends class_base
 					2 => t("Projekti l&otilde;ppedes"),
 					3 => t("Arendus")
 				);
+				break;
+
+			case "bug_add_real":
+			case "bug_add_guess":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				break;
 		};
 		return $retval;
@@ -1066,7 +1093,7 @@ class bug extends class_base
 				}
 				break;
 
-			case "num_hrs_real":
+			/*case "num_hrs_real":
 				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
@@ -1074,7 +1101,7 @@ class bug extends class_base
 					$this->add_comments[] = $com;
 					$this->_acc_add_wh = $prop["value"] - $old;
 				}
-				break;
+				break;*/
 
 			case "num_hrs_guess":
 				$prop["value"] = str_replace(",", ".", $prop["value"]);
@@ -1175,6 +1202,56 @@ class bug extends class_base
 				}
 				$arr["obj_inst"]->set_prop("num_hrs_real", $total);
 				$arr["obj_inst"]->save();
+				break;
+
+			case "bug_add_real":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = str_replace(",", ".", $prop["value"]);
+				$old = $arr["obj_inst"]->prop("num_hrs_real");
+				$new = $old + $prop["value"];
+				$arr["obj_inst"]->set_prop("num_hrs_real", $new);
+				if ($prop["value"])
+				{
+					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $new);
+					$this->add_comments[] = $com;
+					$this->_acc_add_wh = $prop["value"];
+				}
+				break;
+
+			case "bug_add_guess":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = str_replace(",", ".", $prop["value"]);
+				$conn = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_COMMENT",
+				));
+				$old = 0;
+				$old_real = 0;
+				foreach($conn as $c)
+				{
+					$cmo = $c->to();
+					if($cmo->createdby() == aw_global_get("uid"))
+					{
+						$old += $cmo->prop("add_wh_guess");
+						$old_real += $cmo->prop("add_wh");
+					}
+					$this->_acc_old_wh_guess = $old;
+					$this->_acc_old_wh = $old_real;
+					
+				}
+				$cp = get_current_person();
+				$p = $cp->id();
+				if ($prop["value"])
+				{
+					$com = sprintf(t("Isiku prognoositud tundide arv muudeti %s => %s"), $old, $old + $prop["value"]);
+					$this->add_comments[] = $com;
+					$this->_acc_add_wh_guess = $prop["value"];
+				}
 				break;
 		}
 		return $retval;
@@ -1600,7 +1677,7 @@ class bug extends class_base
 		return $comt;
 	}
 
-	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null, $notify = true, $add_wh_cust = null)
+	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null, $notify = true, $add_wh_cust = null, $add_wh_guess = null)
 	{
 		if (!is_oid($bug->id()))
 		{
@@ -1620,11 +1697,26 @@ class bug extends class_base
 		$o->set_prop("new_state", $new_state);
 		$o->set_prop("add_wh", $add_wh);
 		$o->set_prop("add_wh_cust", $add_wh_cust);
+		$o->set_prop("add_wh_guess", $add_wh_guess);
 		$o->save();
 		$bug->connect(array(
 			"to" => $o->id(),
 			"type" => "RELTYPE_COMMENT"
 		));
+		$p = get_current_person()->id();
+		if($add_wh_guess)
+		{
+			$gbp = $bug->meta("guess_by_p");
+			$gbp[$p] = $this->_acc_old_wh_guess + $add_wh_guess;
+			$bug->set_meta("guess_by_p", $gbp);
+		}
+		$rbp = $bug->meta("real_by_p");
+		if($add_wh && (isset($this->_acc_old_wh) || $rbp[$p]))
+		{
+			$rbp[$p] = ($this->_acc_old_wh ? $this->_acc_old_wh : $rbp[$p]) + $add_wh;
+			$bug->set_meta("real_by_p", $rbp);
+		}
+		$bug->save();
 	}
 
 	function _comments_table($arr)
@@ -1752,7 +1844,7 @@ class bug extends class_base
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
 		{
-			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, true, $this->_acc_add_wh_cust);
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, true, $this->_acc_add_wh_cust, $this->_acc_add_wh_guess);
 		}
 
 		if ($arr["new"])
@@ -2730,12 +2822,8 @@ die($email);
 				}
 				else if(!pause)
 				{
-					if (old_time===false)
-					{
-						old_time = $("#num_hrs_real").val()*(1.0);
-					}
-					tmp = old_time+time.toFixed(2)*1.0
-					$("#num_hrs_real").val(r2(tmp));
+					tmp = time.toFixed(2)*1.0
+					$("#bug_add_real").val(r2(tmp));
 					pause = true
 				}
 			}
@@ -2859,9 +2947,9 @@ EOF;
 			}';
 		}
 		
-		if ($arr["request"]["group"] == "general")
+		if ($arr["request"]["group"] == "general" || $arr["request"]["group"] == "")
 		{
-			return <<<EOF
+			$hide_fb = <<<EOF
 				if ($("#bug_status").val() != 10)
 				{
 					$("#bug_feedback_p").parent().parent().css("display", "none");
@@ -2871,7 +2959,7 @@ EOF;
 
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
 		{
-			return $maintainers.$s_bug_stopper_watch_v2;
+			return $hide_fb.$maintainers.$s_bug_stopper_watch_v2;
 		}
 		
 		if (!$arr["new"])
@@ -2942,6 +3030,35 @@ EOF;
 			die("0");
 		}
 		die("1");
+	}
+
+	function get_person_times($arr)
+	{
+		$conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		$ppltimes = array();
+		foreach($conn as $c)
+		{
+			$cmo = $c->to();
+			$ppltimes[$cmo->createdby()] += $cmo->prop(($arr["prop"]["name"] == "num_hrs_real") ? "add_wh" : "add_wh_guess");
+		}
+		$ui = get_instance(CL_USER);
+		$total = 0;
+		foreach($ppltimes as $u => $time)
+		{
+			if($time)
+			{
+				$person = obj($ui->get_person_for_user($ui->get_obj_for_uid($u)));
+				$values[] = $person->name().": ".$time;
+				$total += $time;
+			}
+		}
+		if($arr["prop"]["name"] == "num_hrs_guess" && count($values) > 1)
+		{
+			$values[] = t("Kokku:")." ".$total;
+		}
+		return implode("<br />\n", $values);
 	}
 }
 ?>

@@ -3202,9 +3202,29 @@ class bug_tracker extends class_base
 		foreach ($gt_list as $gt)
 		{
 			$this->gt_start = $this->get_next_avail_time_from($this->gt_start, $this->day2wh);
-			if ($gt->prop("num_hrs_guess") > 0)
+			$rbp = $gt->meta("real_by_p");
+			if(isset($rbp[$p->id()]))
 			{
-				$length = $gt->prop("num_hrs_guess") * 3600 - ($gt->prop("num_hrs_real") * 3600);
+				$real_hrs = $rbp[$p->id()];
+				$hrs_by_p = true;
+			}
+			else
+			{
+				$real_hrs = $gt->prop("num_hrs_real");
+				$hrs_by_p = false;
+			}
+			$gbp = $gt->meta("guess_by_p");
+			if($gbp[$p->id()] > 0 && $hrs_by_p)
+			{
+				$guess_hrs = $gbp[$p->id()];
+			}
+			elseif($gt->prop("num_hrs_guess") > 0)
+			{
+				$guess_hrs = $gt->prop("num_hrs_guess");
+			}
+			if ($guess_hrs > 0)
+			{
+				$length = $guess_hrs * 3600 - ($real_hrs * 3600);
 				if ($length < 0)
 				{
 					$length = 3600;
@@ -3965,24 +3985,29 @@ class bug_tracker extends class_base
 		$bugs = $this->get_undone_bugs_by_p($p);
 		$cnt = 0;
 		$nag_about = array();
+		$user = $p->instance()->has_user($p);
 		foreach($bugs as $bug)
 		{
 			if ($cnt > 9)
 			{
 				break;
 			}
-
 			if ($bug->prop("num_hrs_guess") == 0)
 			{
-				$cnt++;
-				$nag_about[] = $bug;
+				$gbp = $bug->meta("guess_by_p");
+				$p = get_current_person()->id();
+				if(!$gbp[$p])
+				{
+					$cnt++;
+					$nag_about[] = $bug;
+				}
 			}
 		}
 
 		return $nag_about;
 	}
 
-	function _init_unestimated_table(&$t)
+	function _init_unestimated_table(&$t, $p)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -3990,21 +4015,29 @@ class bug_tracker extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
-			"name" => "time",
-			"caption" => t("Prognoositud aeg"),
+			"name" => "time_bug",
+			"caption" => t("Prognoos"),
 			"align" => "center"
 		));
+		if($p->id() == obj(aw_global_get("uid_oid"))->get_first_obj_by_reltype("RELTYPE_PERSON")->id())
+		{
+			$t->define_field(array(
+				"name" => "time_p",
+				"caption" => t("Isiklik prognoos"),
+				"align" => "center"
+			));
+		}
 	}
 
 	function _unestimated_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_unestimated_table($t);
 		$p = get_current_person();
 		if ($arr["request"]["filt_p"])
 		{
 			$p = obj($arr["request"]["filt_p"]);
 		}
+		$this->_init_unestimated_table($t, $p);
 
 		$this->combined_priority_formula = $arr["obj_inst"]->prop("combined_priority_formula"); // required by get_unestimated_bugs_by_p()
 
@@ -4012,11 +4045,16 @@ class bug_tracker extends class_base
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($bug),
-				"time" => html::textbox(array(
-					"name" => "bugs[".$bug->id()."]",
+				"time_bug" => html::textbox(array(
+					"name" => "bugs[".$bug->id()."][bug]",
 					"value" => $bug->prop("num_hrs_guess"),
 					"size" => 5
-				))
+				)),
+				"time_p" => html::textbox(array(
+					"name" => "bugs[".$bug->id()."][p]",
+					"value" => 0,
+					"size" => 5
+				)),
 			));
 		}
 		$t->set_caption(t("Esimesed 10 ennustamata bugi"));
@@ -4025,11 +4063,33 @@ class bug_tracker extends class_base
 
 	function _save_estimates($arr)
 	{
-		foreach(safe_array($arr["request"]["bugs"]) as $bid => $est)
+		$cp = get_current_person();
+		$p = $cp->id();
+		foreach(safe_array($arr["request"]["bugs"]) as $bid => $data)
 		{
 			$bo = obj($bid);
-			$bo->set_prop("num_hrs_guess", $est);
-			$bo->save();
+			if($est = $data["bug"])
+			{
+				$bo->set_prop("num_hrs_guess", $est);
+				$bo->save();
+			}
+			if($est = $data["p"])
+			{
+				$o = obj();
+				$o->set_class_id(CL_BUG_COMMENT);
+				$o->set_parent($bid);
+				$o->set_prop("add_wh_guess", $est);
+				$o->set_comment(sprintf(t("Isiku prognoositud tundide arv muudeti %s => %s"), 0, $est));
+				$o->save();
+				$bo->connect(array(
+					"to" => $o->id(),
+					"type" => "RELTYPE_COMMENT"
+				));
+				$gbp = $bo->meta("guess_by_p");
+				$gbp[$p] = $est;
+				$bo->set_meta("guess_by_p", $gbp);
+				$bo->save();
+			}
 		}
 	}
 

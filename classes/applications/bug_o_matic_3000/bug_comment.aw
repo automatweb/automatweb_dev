@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.6 2008/06/17 12:56:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.7 2008/09/05 11:16:55 robert Exp $
 // bug_comment.aw - Bugi kommentaar 
 /*
 
@@ -18,6 +18,9 @@
 
 @property new_state type=select table=aw_bug_comments field=aw_new_state
 @caption Uus staatus
+
+@property add_wh_guess type=textbox size=5 table=aw_bug_comments field=aw_add_wh_guess
+@caption Lisandunud prognoositunnid
 
 @property add_wh type=textbox size=5 table=aw_bug_comments field=aw_add_wh
 @caption Lisandunud t&ouml;&ouml;tunnid
@@ -89,7 +92,12 @@ class bug_comment extends class_base
 					"type" => "double"
 				));
 				return true;
-
+			case "aw_add_wh_guess":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+				return true;
 			case "aw_send_bill":
 			case "aw_activity_stats_type":
 				$this->db_add_col($t, array(
