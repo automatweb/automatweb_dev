@@ -4182,9 +4182,9 @@ class class_base extends aw_template
 				// this is after the new connection has been made
 				if ($target_prop != "" && ($conn_count == 1 || !$bt[$target_prop]["multiple"] ))
 				{
-					$_to->set_prop($target_prop,$this->obj_inst->id());
 					if (!($alias_to_prop || $rawdata["alias_to_prop"])) // avoid double save
 					{
+						$_to->set_prop($target_prop,$this->obj_inst->id());
 						$_to->save();
 					}
 				}
