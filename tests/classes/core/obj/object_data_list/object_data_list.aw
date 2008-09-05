@@ -295,7 +295,7 @@ class object_data_list_test extends UnitTestCase
 		}
 		$row = $this->db->db_fetch_row("SELECT COUNT(oid) as oid_cnt FROM objects WHERE oid IN (".$ids.") AND class_id NOT IN ('".CL_MENU."', '".CL_CRM_PERSON."')");
 		$this->assertFalse($row["oid_cnt"] > 0);
-	}	*/
+	}
 
 	function test_props_multiple_clids_props_asked_for()
 	{
@@ -371,7 +371,7 @@ class object_data_list_test extends UnitTestCase
 			}
 		}
 		$this->assertTrue($ok);
-	}
+	}	*/
 
 	function _get_temp_o($arr = array())
 	{
