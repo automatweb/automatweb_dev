@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>conn_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>conn_id</field>
+      </property>
+      <property>
             <name>name</name>
             <table>ml_users</table>
             <group>general</group>

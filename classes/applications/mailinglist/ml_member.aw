@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.26 2008/06/19 06:31:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.27 2008/09/05 07:58:26 instrumental Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -10,6 +10,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 @classinfo maintainer=markop
 	@default table=objects
 	@default group=general
+
+	@property conn_id type=hidden
 
 	@property name type=textbox table=ml_users
 	@caption Nimi
