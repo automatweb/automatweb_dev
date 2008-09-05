@@ -314,7 +314,7 @@ class bt_stat_impl extends core
 					if($o->prop("is_work") && $o->prop("start1") > $startd && $o->prop("start1")<$endd)
 					{
 						$bugs[$item["to"]]["hrs"] += $o->prop($type["timevar"]);
-						$bugs[$item["to"]]["lastdate"] = $o->modified();
+						$bugs[$item["to"]]["lastdate"] = ($o->class_id() == CL_BUG) ? $o->modified() : $o->prop("start1");
 					}
 				}
 			}
