@@ -1,10 +1,9 @@
 <!-- SUB: START -->
-<ul>
+<div style="padding-left: 30px;">
 <!-- END SUB: START -->
 <!-- SUB: ITEM -->
-<li><a href="{VAR:url}">{VAR:name}</a>
+<span class="sitemap{VAR:level}" style="display: block"><a href="{VAR:url}">{VAR:name}</a></span>
 <!-- END SUB: ITEM -->
 <!-- SUB: END -->
-</ul>
+</div>
 <!-- END SUB: END -->
-
