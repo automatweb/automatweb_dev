@@ -64,6 +64,123 @@ class ml_member_obj extends _int_object
 
 		return $ret;
 	}
+
+	function save()
+	{
+		$oid = parent::id();
+
+		$conn_id = parent::prop("conn_id");
+		// This is not supposed to be saved.
+		parent::set_prop("conn_id", NULL);
+		$conn_ids = isset($conn_id) ? (is_array($conn_id) ? $conn_id : array($conn_id)) : array();
+
+		// New
+		if(!is_oid($oid))
+		{
+			return $this->parent_save();
+		}
+
+		// If no connections remain with the old e-mail obj, there's no point in keeping it. So we'll just change the current one.
+		if(count($this->conns_remain_unchanged($conn_ids)) == 0)
+		{
+			return $this->parent_save();
+		}
+
+		// Getting the current name..
+		$q = oql::compile_query("SELECT mail FROM CL_ML_MEMBER WHERE CL_ML_MEMBER.oid = %u");
+		$r = oql::execute_query($q, $oid);
+		
+		$nmail = parent::prop("mail");
+		$cmail = $r[$oid]["mail"];
+
+		$old_obj = obj($oid);
+		
+		if($nmail !== $cmail)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_ML_MEMBER,
+				"mail" => $nmail,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"limit" => 1,
+			));
+			if($ol->count() > 0)
+			{
+				$emo = $ol->begin();
+			}
+			else
+			{
+				$emo = obj(parent::save_new());
+				$emo->mail = $nmail;
+				$emo->save();
+			}
+
+			if(count($conn_ids) > 0)
+			{
+				foreach($conn_ids as $conn_id)
+				{
+					if(!is_numeric($conn_id))
+					{
+						continue;
+					}
+					try
+					{
+						$c = new connection();
+						$c->load($conn_id);
+						$c->change(array(
+							"from" => $c->prop("from") == $oid ? $emo->id() : $c->prop("from"),
+							"to" => $c->prop("to") == $oid ? $emo->id() : $c->prop("to"),
+						));
+					}
+					catch (Exception $e)
+					{
+					}
+				}
+			}
+			return $emo->id();
+		}
+		return parent::save();
+	}
+
+	private function conns_remain_unchanged($conns)
+	{
+		$r = array();
+		foreach(parent::connections_from(array()) as $c)
+		{
+			if(!in_array($c->id(), $conns))
+			{
+				$r[] = $c;
+			}
+		}
+		foreach(parent::connections_to(array()) as $c)
+		{
+			if(!in_array($c->id(), $conns))
+			{
+				$r[] = $c;
+			}
+		}
+		return $r;
+	}
+
+	private function parent_save()
+	{		
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"mail" => parent::prop("mail"),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 1,
+		));
+		if($ol->count() > 0)
+		{
+			parent::load(reset($ol->ids()));
+			return reset($ol->ids());
+		}
+		else
+		{
+			return parent::save();
+		}
+	}
 }
 
 ?>
