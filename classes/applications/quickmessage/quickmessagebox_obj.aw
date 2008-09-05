@@ -6,19 +6,22 @@
 
 class quickmessagebox_obj extends _int_object
 {
-	const APPROVED_SENDERS_ANYONE = 1;
-	const APPROVED_SENDERS_CONTACTS = 2;
-	const APPROVED_SENDERS_NONE = 3;
+	// approved_senders property value options
+	const APPROVED_SENDERS_ANYONE = 1; // all messages are received
+	const APPROVED_SENDERS_CONTACTS = 2; // only messages from users in contact list are received
+	const APPROVED_SENDERS_NONE = 3; // no messages are received
 
-	const ADDRESSEES_EVERYONE = 1;
-	const ADDRESSEES_CONTACTS = 2;
+	// addressees property options
+	const ADDRESSEES_EVERYONE = 1; // can send to anyone
+	const ADDRESSEES_CONTACTS = 2; // can send only to users in contact list
 
+	// message statuses
 	const STATUS_READ = 1;
 	const STATUS_UNREAD = 2;
 
-	const COUNTER_FILE = "/files/qmsg_msg_counter.aw";
+	const COUNTER_FILE = "/files/qmsg_msg_counter.aw"; // users' messages counter data file relative location
 
-	private $counter_file;
+	private $counter_file; // contains counter data file absolute path at runtime
 
 	public function __construct($param)
 	{
@@ -457,15 +460,28 @@ class quickmessagebox_obj extends _int_object
 	}
 }
 
+/* Generic quickmessaging error condition indicator */
 class awex_qmsg extends awex_obj
 {
 	public $qmsg_affected_msgs = array(); // array of quickmessage object id-s as index and exception or errorstring as element
 }
+
+/* Indicates invalid method parameter value */
 class awex_qmsg_param extends awex_qmsg {}
+
+/* Indicates that recipient user has in some way configured to not receive messages from that sender */
 class awex_qmsg_unwanted_msg extends awex_qmsg {}
+
+/* Generic messagebox error condition indicator */
 class awex_qmsg_box extends awex_qmsg {}
+
+/* Indicates that user has no quickmessagebox defined */
 class awex_qmsg_no_box extends awex_qmsg_box {}
+
+/* Configuration errors */
 class awex_qmsg_cfg extends awex_qmsg_box {}
+
+/* Indicates unexpected message counter behaviours */
 class awex_qmsg_counter extends awex_qmsg_box {}
 
 
