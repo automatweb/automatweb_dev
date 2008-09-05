@@ -258,6 +258,7 @@ class crm_company_cedit_impl extends core
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
+			$obj->conn_id = $conn->id();
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
 				"value" => $obj->id(),
@@ -274,6 +275,9 @@ class crm_company_cedit_impl extends core
 						"name" => "cedit_fax[".$obj->id()."][name]",
 						"value" => $obj->name(),
 						"size" => 15
+					)).html::hidden(array(
+						"name" => "cedit_phone[".$obj->id()."][conn_id]",
+						"value" => $conn->id(),
 					)),
 					"change" => html::href(array(
 						"caption" => t("Muuda"),
@@ -412,6 +416,7 @@ class crm_company_cedit_impl extends core
 			{
 				$o = obj($id);
 				$o->set_name($data["name"]);
+				$o->conn_id = $data["conn_id"];
 				$o->save();
 			}
 			else
@@ -652,6 +657,7 @@ class crm_company_cedit_impl extends core
 		foreach($conns as $conn)
 		{
 			$obj = $conn->to();
+			$obj->conn_id = $conn->id();
 			$chooser = html::radiobutton(array(
 				"name" => "cedit[".$arr["prop"]["name"]."]",
 				"value" => $obj->id(),
@@ -668,6 +674,9 @@ class crm_company_cedit_impl extends core
 						"name" => "cedit_email[".$obj->id()."][email]",
 						"value" => $obj->prop("mail"),
 						"size" => 15
+					)).html::hidden(array(
+						"name" => "cedit_email[".$obj->id()."][conn_id]",
+						"value" => $conn->id(),
 					)),
 					"change" => html::href(array(
 						"caption" => t("Muuda"),
@@ -857,6 +866,8 @@ class crm_company_cedit_impl extends core
 				$o = obj($id);
 				$o->set_name($data["email"]);
 				$o->set_prop("mail",$data["email"]);
+				mail("kaareln@gmail.com", time(), "datamail - ".$data["email"]);
+				$o->conn_id = $data["conn_id"];
 				$o->save();
 			}
 			else
