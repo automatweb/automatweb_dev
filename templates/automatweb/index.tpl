@@ -4,14 +4,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:html_title} {VAR:title_action}</title>
 <link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shorcuts_from_xml&{VAR:random}"></script>
-{VAR:javascript}
+
 <!-- SUB: MINIFY_JS_AND_CSS -->
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/jquery_aw_object_quickadd.css" rel="stylesheet" type="text/css" />
-
 
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_timer.js"></script>
@@ -37,7 +35,8 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
 <!-- END SUB: MINIFY_JS_AND_CSS -->
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_releditor_krahl.js"></script>
+{VAR:javascript}
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_objects&{VAR:random}"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects"></script>
 
 <script type="text/javascript">
@@ -59,7 +58,6 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 
 </script>
 
-
 <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/css/iefix.css" />
 <![endif]-->
@@ -69,9 +67,7 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 <body onLoad="check_generic_loader();">
 
 <div id="aw_object_quickadd" style="display: none;">
-<!--	<div class="icon"><img src="http://register.automatweb.com/automatweb/images/icons/class_1.gif" width="40" alt="" /></div>-->
-	<!--<div class="icon"><img src="http://register.automatweb.com/automatweb/images/icons/class_129.gif" width="40" alt="" /></div>-->
-	<div class="icon"><img src="http://register.automatweb.com/automatweb/images/aw06/blank.gif" width="40" alt="" /></div>
+	<div class="icon"><img src="{VAR:baseurl}/automatweb/images/aw06/blank.gif" width="40" alt="" /></div>
 	<div class="selected_object_name"></div>
 	<input type="text" id="aw_object_quickadd_input" class="text" /></div>
 <div id="aw_object_quickadd_results" style="display: none;" ></div>
@@ -85,6 +81,7 @@ var options = {
 };
 $("#aw_object_quickadd").aw_object_quickadd(items, options);
 </script>
+
 
 <!-- päis -->
 		<!-- SUB: YAH -->
@@ -138,6 +135,8 @@ $("#aw_object_quickadd").aw_object_quickadd(items, options);
 
 <!-- SUB: POPUP_MENUS -->
 <!-- END SUB: POPUP_MENUS -->
-	{VAR:javascript_bottom}
+
+{VAR:javascript_bottom}
+
 </body>
 </html>
