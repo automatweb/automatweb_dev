@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<title>Pärnu Kolledz</title>
+	<title>Firmanimi</title>
 	<meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}">
 	<link rel=stylesheet href="{VAR:baseurl}/automatweb/css/print.css" type="text/css">
 </head>
