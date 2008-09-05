@@ -47,6 +47,12 @@ class quickmessage extends class_base
 		return PROP_OK;
 	}
 
+	function _get_msg_display($arr)
+	{
+		$arr["prop"]["value"] = htmlspecialchars($arr["prop"]["value"]);
+		return PROP_OK;
+	}
+
 	function _get_box($arr)
 	{
 		$status = PROP_OK;

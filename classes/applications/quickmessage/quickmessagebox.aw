@@ -85,7 +85,7 @@ class quickmessagebox extends class_base
 			$t->define_data(array(
 				"oid" => $msg->id(),
 				"from" => $from->name(),
-				"msg" => $msg->prop("msg"),
+				"msg" => htmlspecialchars($msg->prop("msg")),
 				"sent" => $msg->created(),
 				// "colour" => self::COLOUR_READ,
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
@@ -100,7 +100,7 @@ class quickmessagebox extends class_base
 			$t->define_data(array(
 				"oid" => $msg->id(),
 				"from" => $from->name(),
-				"msg" => $msg->prop("msg"),
+				"msg" => htmlspecialchars($msg->prop("msg")),
 				"sent" => $msg->created(),
 				"colour" => self::COLOUR_UNREAD,
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
@@ -132,7 +132,7 @@ class quickmessagebox extends class_base
 			$t->define_data(array(
 				"oid" => $msg->id(),
 				"to" => $to,
-				"msg" => $msg->prop("msg"),
+				"msg" => htmlspecialchars($msg->prop("msg")),
 				"sent" => $msg->created(),
 				"i" => str_pad(++$i, 6, "0", STR_PAD_LEFT)
 			));
