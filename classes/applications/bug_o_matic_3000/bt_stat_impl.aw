@@ -328,22 +328,10 @@ class bt_stat_impl extends core
 				"lang_id" => array(),
 				"date" => $fancy_filter,
 			));
-			foreach($ol->arr() as $o)
+			foreach($ol->arr() as $oid => $o)
 			{
-				$conn = $o->connections_to(array(
-					"from.class_id" => CL_TASK,
-					"type" => "RELTYPE_ROW",
-					"to.oid" => $o->id(),
-				));
-				foreach($conn as $c)
-				{
-					$oid = $c->prop("from");
-					break;
-				}
 				$bugs[$oid]["hrs"] += $o->prop("time_real");
-				$dt = $o->prop("date");
-				$olddt = $bugs[$oid]["lastdate"];
-				$bugs[$oid]["lastdate"] = ($olddt < $dt) ? $dt : $olddt;
+				$bugs[$oid]["lastdate"] = $o->prop("date");
 			}
 		}
 		foreach($bugs as $bug => $data)
@@ -352,10 +340,37 @@ class bt_stat_impl extends core
 			classload("core/icons");
 			if ($data["hrs"] > 0)
 			{
+				if($o->class_id() == CL_TASK_ROW)
+				{
+					$conn = $o->connections_to(array(
+						"type" => "RELTYPE_ROW",
+						"from.class_id" => CL_TASK,
+					));
+					$tname = null;
+					foreach($conn as $c)
+					{
+						$tname = $c->prop("from.name");
+					}
+					if(!$tname)
+					{
+						$tname = $o->name();
+					}
+					else
+					{
+						$tname .= t(" rida");
+					}
+					$name = html::obj_change_url($bug, parse_obj_name($tname));
+					$iconurl = icons::get_icon_url(CL_TASK);
+				}
+				else
+				{
+					$name = html::obj_change_url($bug);
+					$iconurl = icons::get_icon_url($o->class_id());
+				}
 				$t->define_data(array(
-					"icon" => html::img(array("url" =>icons::get_icon_url($o->class_id()))),
+					"icon" => html::img(array("url" => $iconurl)),
 					"time" => $data["lastdate"],
-					"bug" => html::obj_change_url($bug),
+					"bug" => $name,
 					"wh" => $data["hrs"]
 				));
 			}
