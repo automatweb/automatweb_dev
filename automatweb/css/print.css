@@ -10,3 +10,12 @@ div#mast img {vertical-align: bottom;}
 
 a:link, a:visited { color: #520; background: transparent; font-weight: bold; text-decoration: underline;  }
 span.url {font-size: 90% ! important;}
+
+.image { display: block; }
+.image p { font-weight: bold; font-size: 0.9em; text-align: left; display: block; margin: 0 auto;}
+.image_ p { width: 100% ! important; }
+.image_right { padding: 10px 0 10px 10px; float: right; }
+.image_left { padding: 10px 10px 10px 0; float: left; }
+.image_center { padding: 10px 0 10px 0;text-align: center; width: 100%; }
+
+.break {clear: both;}
