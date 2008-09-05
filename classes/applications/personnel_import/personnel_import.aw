@@ -92,11 +92,10 @@ class personnel_import extends class_base
 	{
 		aw_set_exec_time(AW_LONG_PROCESS);
 		ini_set("memory_limit", "800M");
-		/*
-		$cache = get_instance("cache");
-		$cache->full_flush();
-		exit;
-		/**/
+
+		// NO CACHE
+		aw_global_set("no_cache_flush", 1);
+		obj_set_opt("no_cache", 1);
 
 		$o = new object($arr["id"]);
 
@@ -586,7 +585,6 @@ class personnel_import extends class_base
 					$c->delete(true);
 					unset($doomed_conns[$conn_id]);
 					print " Deleted.<br>";
-
 				}
 			}
 
@@ -1015,11 +1013,13 @@ class personnel_import extends class_base
 
 			foreach($doomed_conns as $conn_id => $val)
 			{
-				if($val == 0)
+				if($val == 0 && $conn_id > 0)
 				{
+					print "Connection ID - ".$conn_id.".";
 					$c = new connection($conn_id);
 					$c->delete(true);
 					unset($doomed_conns[$conn_id]);
+					print " Deleted.<br>";
 				}
 			}
 
