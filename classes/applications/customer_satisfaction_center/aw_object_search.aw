@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.23 2008/08/22 09:28:47 kristo Exp $
-// aw_object_search.aw - AW Objektide otsing 
+
+// aw_object_search.aw - AW Objektide otsing
 /*
 
 @classinfo syslog_type=ST_AW_OBJECT_SEARCH no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -9,9 +9,9 @@
 @default group=srch
 @default store=no
 
-	@property s_tb type=toolbar no_caption=1 
+	@property s_tb type=toolbar no_caption=1
 
-	@layout ver_split type=hbox 
+	@layout ver_split type=hbox
 
 		@layout left_side type=vbox parent=ver_split closeable=1 area_caption=&Uuml;ldandmed
 
@@ -51,19 +51,19 @@
 		@layout right_side type=vbox parent=ver_split
 
 			@layout creamod type=vbox closeable=1 area_caption=Muutmine&nbsp;ja&nbsp;lisamine parent=right_side
-	
+
 				@property s_creator type=textbox  size=20 parent=creamod
 				@caption Looja
 
 				@property s_creator_from type=chooser parent=creamod default=0 orient=vertical
 				@caption Otsida loojat
-		
+
 				@property s_crea_from type=datetime_select parent=creamod default=-1
 				@caption Lisatud alates
-			
+
 				@property s_crea_to type=datetime_select parent=creamod default=-1
 				@caption Lisatud kuni
-			
+
 				@property s_modifier type=textbox  size=20 parent=creamod
 				@caption Muutja
 
@@ -72,17 +72,17 @@
 
 				@property s_mod_from type=datetime_select parent=creamod default=-1
 				@caption Muudetud alates
-			
+
 				@property s_mod_to type=datetime_select parent=creamod default=-1
 				@caption Muudetud kuni
 
 			@layout keywords type=vbox closeable=1 area_caption=M&auml;rks&otilde;nad parent=right_side
 
-				@property s_kws type=textbox parent=keywords 
+				@property s_kws type=textbox parent=keywords
 				@caption M&auml;rks&otilde;nad
 
 
-	@property s_sbt type=submit 
+	@property s_sbt type=submit
 	@caption Otsi
 
 	@property s_res type=table no_caption=1
@@ -91,11 +91,11 @@
 @default group=srch_complex
 @default store=no
 
-	@property s_tb1 type=toolbar no_caption=1 
+	@property s_tb1 type=toolbar no_caption=1
 
-	@layout ver_split1 type=hbox 
+	@layout ver_split1 type=hbox
 
-		@layout left_side1 type=vbox parent=ver_split1 
+		@layout left_side1 type=vbox parent=ver_split1
 
 			@layout left_side_top type=vbox parent=left_side1 closeable=1 area_caption=&Uuml;ldine
 
@@ -146,19 +146,19 @@
 		@layout right_side1 type=vbox parent=ver_split1
 
 			@layout creamod1 type=vbox closeable=1 area_caption=Muutmine&nbsp;ja&nbsp;lisamine parent=right_side1
-	
+
 				@property s_creator1 type=textbox  size=20 parent=creamod1
 				@caption Looja
 
 				@property s_creator_from1 type=chooser parent=creamod1 default=0 orient=vertical
 				@caption Otsida loojat
-		
+
 				@property s_crea_from1 type=datetime_select parent=creamod1 default=-1
 				@caption Lisatud alates
-			
+
 				@property s_crea_to1 type=datetime_select parent=creamod1 default=-1
 				@caption Lisatud kuni
-			
+
 				@property s_modifier1 type=textbox  size=20 parent=creamod1
 				@caption Muutja
 
@@ -167,7 +167,7 @@
 
 				@property s_mod_from1 type=datetime_select parent=creamod1 default=-1
 				@caption Muudetud alates
-			
+
 				@property s_mod_to1 type=datetime_select parent=creamod1 default=-1
 				@caption Muudetud kuni
 
@@ -180,19 +180,19 @@
 
 				@property s_tmg_activate_from1 type=datetime_select parent=l_timing1 default=-1
 				@caption Aktiveeri alates
-			
+
 				@property s_tmg_activate_to1 type=datetime_select parent=l_timing1 default=-1
 				@caption Aktiveeri kuni
-			
+
 				@property s_tmg_deactivate_from1 type=datetime_select parent=l_timing1 default=-1
 				@caption Deaktiveeri alates
-			
+
 				@property s_tmg_deactivate_to1 type=datetime_select parent=l_timing1 default=-1
 				@caption Deaktiveeri kuni
-			
 
 
-	@property s_sbt1 type=submit 
+
+	@property s_sbt1 type=submit
 	@caption Otsi
 
 	@property s_res1 type=table no_caption=1
@@ -203,6 +203,8 @@
 
 class aw_object_search extends class_base
 {
+	private $u_oids = array();
+
 	function aw_object_search()
 	{
 		$this->init(array(
@@ -339,7 +341,7 @@ class aw_object_search extends class_base
 						}
 						else
 						{
-							
+
 							$sites[$nsid] = $sl->get_url_for_site($nsid);
 						}
 					}
@@ -586,9 +588,9 @@ class aw_object_search extends class_base
 			$filt["parent"] = $arr["request"]["s_parent"];
 		}
 		$props = array(
-			"s_name" => "name", 
-			"s_comment" => "comment", 
-			"s_clid" => "class_id", 
+			"s_name" => "name",
+			"s_comment" => "comment",
+			"s_clid" => "class_id",
 			"s_creator" => "createdby",
 			"s_modifier" => "modifiedby",
 			"s_alias" => "alias",
@@ -750,7 +752,7 @@ class aw_object_search extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -785,7 +787,7 @@ class aw_object_search extends class_base
 			"class_id" => CL_AW_OBJECT_SEARCH,
 			"lang_id" => array(),
 			"site_id" => array(),
-		));	
+		));
 		if ($ol->count())
 		{
 			return $ol->begin();
@@ -811,14 +813,14 @@ class aw_object_search extends class_base
 		return html::get_change_url($so->id(), array("group" => "srch", "return_url" => $arr["url"], "s_name" => $arr["s_name"], "s_clid" => $arr["s_clid"], "MAX_FILE_SIZE" => $arr["MAX_FILE_SIZE"]));
 	}
 
-	/** cuts the selected objects 
-		
+	/** cuts the selected objects
+
 		@attrib name=cut params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -829,7 +831,7 @@ class aw_object_search extends class_base
 		die("<script>window.back();</script>");
 	}
 
-	/** copies the selected objects 
+	/** copies the selected objects
 		@attrib name=copy params=name default="0"
 	**/
 	function copy($arr)
@@ -853,7 +855,7 @@ class aw_object_search extends class_base
 	{
 		$tmp = obj();
 		$tmp->set_class_id($clid);
-		
+
 		$rv = array("" => t("--vali--"));
 		foreach($tmp->get_relinfo() as $d => $inf)
 		{
