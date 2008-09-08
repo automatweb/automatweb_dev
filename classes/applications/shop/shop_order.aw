@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.73 2008/08/27 07:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.74 2008/09/08 13:10:45 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -921,7 +921,8 @@ class shop_order extends class_base
 				if (is_email($val))
 				{
 					$html = $this->show(array(
-						"id" => $oi->id()
+						"id" => $oi->id(),
+						"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : null
 					));
 	//echo "send to $val , from = $mail_from_addr , content = $html <br>";
 					foreach(explode(",", $val) as $_to)
@@ -969,6 +970,7 @@ class shop_order extends class_base
 							$_html = $this->show(array(
 								"id" => $oi->id(),
 								"show_only_prods_with_val" => $eml,
+								"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : null
 							));
 							foreach($emails as $c)
 							{
@@ -980,7 +982,8 @@ class shop_order extends class_base
 						{
 							$_html = $this->show(array(
 								"id" => $oi->id(),
-								"show_only_prods_with_val" => $eml
+								"show_only_prods_with_val" => $eml,
+								"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : null
 							));
 							$eml_o = obj($eml);
 							$to_send[$eml_o->comment()] = array($_html, $eml);
@@ -1031,7 +1034,8 @@ class shop_order extends class_base
 					if ($html == "")
 					{
 						$html = $this->show(array(
-							"id" => $oi->id()
+							"id" => $oi->id(),
+							"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : null
 						));
 					}
 				

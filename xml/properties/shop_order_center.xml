@@ -95,6 +95,15 @@
             <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
       </property>
       <property>
+            <name>mail_template</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>E-maili template</caption>
+      </property>
+      <property>
             <name>integration_class</name>
             <group>general</group>
             <table>objects</table>

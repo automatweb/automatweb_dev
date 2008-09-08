@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.65 2008/07/03 10:55:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.66 2008/09/08 13:10:45 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -42,6 +42,9 @@
 
 @property chart_final_template type=select
 @caption Ostukorvi l&ouml;ppvaate template
+
+@property mail_template type=select
+@caption E-maili template
 
 @property integration_class type=select
 @caption Integratsiooni klass
@@ -283,6 +286,7 @@ class shop_order_center extends class_base
 				
 			case "chart_show_template":
 			case "chart_final_template":
+			case "mail_template":
 				
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
