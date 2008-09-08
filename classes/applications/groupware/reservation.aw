@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.134 2008/09/01 13:47:31 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.135 2008/09/08 15:27:40 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -209,6 +209,8 @@ class reservation extends class_base
 			"tpldir" => "applications/groupware/reservation",
 			"clid" => CL_RESERVATION
 		));
+		$this->get_from_parent_props = array("deadline", "verified", "paid", "unverify_reason", "customer", "project", "send_bill", "comment", "content", "people_count", "start1", "length", "end", "client_arrived", "inbetweener", "people");
+
 	}
 
 	function reason_list()

@@ -13,6 +13,21 @@ class reservation_obj extends _int_object
 
 	function set_prop($pn, $pv)
 	{
+		//teatud propide puhul uuendab alambroneeringute andmeid ka
+		if($this->meta("has_other_brons"))
+		{
+			$inst = get_instance(CL_RESERVATION);
+			if(in_array($pn , $inst->get_from_parent_props))
+			{
+				$other_brons = $this->get_other_brons();
+				foreach($other_brons->arr() as $ob)
+				{
+					$ob->set_prop($pn, $pv);
+					$ob->save();
+				}
+			}
+		}
+
 		switch($pn)
 		{
 			case "start1":
@@ -483,5 +498,47 @@ class reservation_obj extends _int_object
 		}
 		$this->set_meta("amount", $amount);
 	}
+
+	/** Makes reservations for other rooms
+		@attrib api=1 params=pos
+		@param slaves required type=array
+			Array of other rooms ids
+	 **/
+	public function make_slave_brons($slaves)
+	{
+		$inst = get_instance(CL_RESERVATION);
+		foreach($slaves as $slave)
+		{
+			$b = new object();
+			$b->set_parent($this->id());
+			$b->set_name($this->name());
+			$b->set_class_id(CL_RESERVATION);
+			$b->set_prop("resource" , $slave);
+			foreach($inst->get_from_parent_props as $prop)
+			{
+				$b->set_prop($prop , $this->prop($prop));
+			}
+			$b->save();
+			$this->set_meta("has_other_brons" , 1);
+			$this->save();
+		}
+		return 1;
+	}
+
+	/** Returns other reservations connected to this
+		@attrib api=1 params=pos
+		@return object list
+	 **/
+	public function get_other_brons()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_RESERVATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $this->id(),
+		));
+		return $ol;
+	}
+
 }
 ?>

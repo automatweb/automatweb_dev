@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.4 2008/08/25 13:10:47 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.5 2008/09/08 15:27:40 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -27,11 +27,14 @@
 	@property phone type=textbox store=no
 	@caption Telefon
 
-	@property comment type=textarea store=no
+	@property comment type=textarea store=no rows=20
 	@caption M&auml;rkused
 
 	@property people type=select store=no
 	@caption Meie esindaja
+
+	@property other_rooms type=select multiple=1 store=no
+	@caption Broneeri lisaks ruumid
 
 	@property id type=hidden store=no
 	@caption ID
@@ -75,7 +78,7 @@ class quick_reservation extends class_base
 				return PROP_IGNORE;
 				$prop["type"] = "text";
 				$prop["value"] = $arr["request"]["error"];
-			break;
+				break;
 			case "bron[people]":
 				$room = obj($arr["request"]["resource"]);
 				$professions = $room->prop("professions");
@@ -89,12 +92,22 @@ class quick_reservation extends class_base
 					$people_opts = array("") + $ol->names();
 				}
 				$prop["options"] = $people_opts;
-			break;
+				break;
+			case "bron[other_rooms]":
+				if(is_oid($arr["request"]["resource"]) && $this->can("view" , $arr["request"]["resource"]))
+				{
+					$room = obj($arr["request"]["resource"]);
+					$prop["options"] = $room->get_other_rooms_selection();
+					$prop["value"] = array_keys($prop["options"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		};
 		return $retval;
 	}
-
-
 
 	function set_property($arr = array())
 	{
@@ -108,8 +121,9 @@ class quick_reservation extends class_base
 			"resource" => $arr["request"]["bron"]["resource"],
 			"product" => $arr["request"]["bron"]["product"],
 			"post_msg_after_reservation" => $arr["request"]["post_msg_after_reservation"],
+			"other_rooms" => $arr["request"]["bron"]["other_rooms"],
 		));
-
+		
 		die("<script type='text/javascript'>
 			window.location.href='".$url."';
 		</script>

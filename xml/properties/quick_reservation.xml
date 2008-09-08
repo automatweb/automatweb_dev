@@ -61,6 +61,7 @@
             <type>textarea</type>
             <store>no</store>
             <field>comment</field>
+	    <rows>20</rows>
             <caption>M&amp;amp;auml;rkused</caption>
       </property>
       <property>
@@ -71,6 +72,16 @@
             <store>no</store>
             <field>people</field>
             <caption>Meie esindaja</caption>
+      </property>
+      <property>
+	      <name>other_rooms</name>
+	      <table>objects</table>
+	      <group>general</group>
+	      <type>select</type>
+	      <store>no</store>
+	      <field>other_rooms</field>
+	      <multiple>1</multiple>
+	      <caption>Broneeri lisaks ruumid</caption>
       </property>
       <property>
             <name>id</name>
