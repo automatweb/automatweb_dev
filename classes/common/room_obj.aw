@@ -224,6 +224,8 @@ class room_obj extends _int_object
 			end timestamp
 		@param worker optional
 			person id
+		@param active optional type=bool
+			shows only verified or just made reservations
 		@returns object list
 	**/
 	function get_reservations($arr = array())
@@ -249,6 +251,10 @@ class room_obj extends _int_object
 		{
 			$filter["people"] = $arr["worker"];
 		}
+		if($arr["active"])
+		{
+			$filter["verified"] = 1;
+		}
 		$ol = new object_list($filter);
 		return $ol;
 	}
@@ -257,13 +263,28 @@ class room_obj extends _int_object
 		@attrib api=1 params=pos
 		@param time optional type=int
 			timestamp
+		@param end optional type=int
+			timestamp
+		@param active optional type=bool
+			shows only verified reservations
 		@returns object list
 	**/
-	function get_day_reservations($time)
+	function get_day_reservations($time, $end=null,  $act = 0)
 	{
 		$arr = array();
-		$arr["start"] = mktime(0, 0, 0, date("m" , $time), date("d" , $time), date("Y" , $time));
-		$arr["end"] = mktime(0, 0, 0, date("m" , $time), (date("d" , $time)+1), date("Y" , $time));
+		$arr["start"] = mktime(date("h" , $time), date("i" , $time), 0, date("m" , $time), date("d" , $time), date("Y" , $time));
+		if(!$end)
+		{
+			$arr["end"] = mktime(0, 0, 0, date("m" , $time), (date("d" , $time)+1), date("Y" , $time));
+		}
+		else
+		{
+			$arr["end"] = mktime(date("h" , $end), date("i" , $end), 0, date("m" , $end), date("d" , $end), date("Y" , $end));
+		}
+		if($act)
+		{
+			$arr["active"] =1;
+		}
 		return $this->get_reservations($arr);
 	}
 
@@ -375,7 +396,9 @@ class room_obj extends _int_object
 		}
 		$arr["room"] = $this->id();
 		$room_inst = get_instance(CL_ROOM);
-		return $room_inst->check_if_available($arr);
+		$ret = $room_inst->check_if_available($arr);
+		//$GLOBALS["last_bron_id"] = $room_inst->last_bron_id;
+		return $ret;
 	}
 
 	/** Returns room's resouces
@@ -392,6 +415,175 @@ class room_obj extends _int_object
 		return $i->get_room_resources($this->id());
 	}
 
+	//leiab p2eva reserveeringud massiivi...sorteeritult jne
+	private function get_day_res_data($time,$to)
+	{
+		if($this->day_reservations[get_day_start($time)])
+		{
+			return $this->day_reservations[get_day_start($time)];
+		}
+		$reservations = $this->get_day_reservations($time, $to, 1);
+		$data = array();
+		foreach($reservations->arr() as $key =>  $res)
+		{
+			if(!$res->prop("time_closed"))
+			{
+				$data[$res->id()] = array("start" => $res->prop("start1") , "end" => $res->prop("end") , "id" => $res->id());
+			}
+		}
+		uasort($data, array(&$this, "do_res_sort"));
+		$max = 0;
+
+		$this->day_reservations[get_day_start($time)] = $data;//j2tab selle krpi meelde, et hiljem kasutada
+
+		return $this->day_reservations[get_day_start($time)];
+	}
+
+	private function do_res_sort($a, $b)
+	{
+		return $b["start"] - $a["start"];
+	}
+
+	/** Returns number of teservations at the same time
+		@attrib api=1
+		@param start required type=int
+			start time
+		@param end optional type=int
+			end time
+		@returns int
+			max reservations at the same time
+	 **/
+	function get_max_reservations_atst($time,$to)
+	{
+		$data = $this->get_day_res_data($time,$to);
+
+		//teeb massiivi mille elemendil on kirjas aeg ja see kas on l6pp v6i algus
+		//sorteerib aja j2rgi 2ra ja liidab alguseid ja lahutab l6ppe, mis iganes maksimum summa tuleb ongi tulemus
+
+		$d = array();
+		foreach($data as $dat)
+		{
+			$d[] = array(
+				"start" => 1,
+				"time" =>  $dat["start"],
+			);
+			$d[] = array(
+				"start" => 0,
+				"time" =>  $dat["end"],
+			);
+		}
+
+		uasort($d, array(&$this, "max_brons_atst_sort"));
+
+		$count = 0;
+		$max = 0;
+		foreach($d as $element)
+		{
+			if($element["start"])
+			{
+				$count++;
+			}
+			else
+			{
+				$count--;
+			}
+			if($count > $max)
+			{
+				$max = $count;
+			}
+		}
+	
+		return $max;
+
+/*
+		foreach($data as $key => $dat)
+		{
+			$this_max = 1;
+			foreach($data as $key2 => $c_data)
+			{
+				if($key != $key2 && $dat["start"] < $c_data["end"] && $dat["end"]  > $c_data["start"])
+				{
+					$this_max++;
+				}
+			}
+			if($this_max > $max)
+			{
+				$max = $this_max;
+			}
+		}
+		return $max;*/
+	}
+	
+	private function max_brons_atst_sort($a, $b)
+	{
+		if($a["time"] == $b["time"])
+		{
+			return $a["start"] - $b["start"];//l6puajad j2rjekorras tahapoole
+		}
+		return $a["time"] - $b["time"];
+	}
+
+	//kaustamata tulba leidmiseks
+	private function get_unused_column()
+	{
+		$x = 0;
+		while($x < 100)//yle selle vast ei l2he, ehh
+		{
+			if(!$this->used_columns[$x])
+			{
+				$this->used_columns[$x] = 1;
+				return $x;
+			}
+			$x++;
+		}
+	}
+
+	function get_time_reservations($start, $end)
+	{
+		$data = $this->get_day_res_data($start, $end);
+		$res = array();
+		//suht keeruline osa nyyd see, et aru saaks mitmendasse tulpa on ta enne l2inud
+		//korjab need variandid kokku, kuhu juba on m6ni m2rgitud
+		$this->used_columns = array();
+		foreach($data as $dat)
+		{
+			if($dat["end"] > $start && $end > $dat["start"])
+			{
+				$this->used_columns[$dat["col"]] = 1;
+			}
+		}
+
+		foreach($data as $dat)
+		{
+			if($dat["end"] > $start && $end > $dat["start"])
+			{
+				if(!isset($this->day_reservations[get_day_start($start)][$dat["id"]]["col"]))
+				{
+					$dat["col"] = $this->day_reservations[get_day_start($start)][$dat["id"]]["col"] = $this->get_unused_column();
+				}
+				$res[] = $dat;
+			}
+		}
+		return $res;
+	}
+
+	/**
+		@attrib api=1
+		@returns array
+	 **/
+	function get_other_rooms_selection()
+	{
+		$st = $this->get_settings();
+		$res = array();
+		
+		foreach($st->connections_from(array(
+			"type" => "RELTYPE_RELATED_ROOMS",
+		)) as $c)
+		{
+			$res[$c->prop("to")] = $c->prop("to.name");
+		}
+		return $res;
+	}
 }
 
 ?>

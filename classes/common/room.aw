@@ -1116,6 +1116,7 @@ class room extends class_base
 			chosen product
 		@param return_url optional type=string
 			url for opener window
+		@param bron_data optional type=array
 	**/
 	function admin_add_bron_popup($arr)
 	{
@@ -1147,11 +1148,11 @@ class room extends class_base
 				$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
 			}
 			
-			if(!$room_inst->check_if_available(array(
+			if(!($room_inst->check_if_available(array(
 				"room" => $resource,
 				"start" => $start1,
 				"end" => $end,
-			)) && $room_inst->last_bron_id !=$id)
+			)) ||$room->prop("allow_multiple") ) && $room_inst->last_bron_id !=$id)
 			{
 				$err = t("Sellisele ajale pole broneerida v&otilde;imalik ".date("d.m.Y H:i:s", $start1)." - ".date("d.m.Y H:i:s", $end));
 				die($err);
@@ -1292,6 +1293,12 @@ class room extends class_base
 					$inst->$arr["post_msg_after_reservation"]["action"]($arr["post_msg_after_reservation"]);
 				}
 				$id = $bron->id();
+
+				if(is_array($other_rooms) || sizeof($other_rooms))
+				{
+					$bron->make_slave_brons($other_rooms);
+				}
+
 				die("<script type='text/javascript'>
 					if (window.opener)
 					window.opener.location.href='".$arr['return_url']."';
@@ -1642,6 +1649,10 @@ class room extends class_base
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
 		{
 			$arr["obj_inst"] = obj($arr["room"]);
+			if(!$this->id)
+			{
+				$this->id = $arr["room"];
+			}
 			if($_GET["start"])
 			{
 				$arr["request"]["start"] = $_GET["start"];
@@ -1756,6 +1767,8 @@ class room extends class_base
 		$this->len = $len;
 		enter_function("get_calendar_tbl::3::genres");
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len , $settings->prop("show_unverified"));
+		$this->multi = $arr["obj_inst"]->prop("allow_multiple");
+
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
 
@@ -1771,7 +1784,6 @@ class room extends class_base
 				$b_parent = $cal_obj->id();
 			}
 		}
-
 	
 		$num_rows = 0;
 		$time_step = $arr["obj_inst"]->prop("time_step");
@@ -1787,6 +1799,11 @@ class room extends class_base
 		while($step < $day_end/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
+			if($this->multi)//kui mitu bronni v6ib olla, siis lisa v2ljad
+			{
+				$extra_d = array();
+				$extra_col = array();
+			}
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $time_step;
 			$end_step = $start_step + $step_length * $time_step;
@@ -1811,12 +1828,13 @@ class room extends class_base
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
+//					if($this->check_if_available(array(
 					if($this->check_if_available(array(
 						"room" => $room_id,
 						"start" => $start_step,
 						"end" => $end_step,
 						
-					)))
+					)) || ($this->multi &&  (!is_oid($this->last_bron_id) || (is_object($last_bron = obj($this->last_bron_id))  && $last_bron->prop("time_closed") != 1))))
 					{
 						if ($this->is_paused($start_step,$end_step))
 						{
@@ -1901,9 +1919,189 @@ class room extends class_base
 						if(is_oid($this->last_bron_id) && !$arr["web"])
 						{
 							$last_bron = obj($this->last_bron_id);
-							$cus = $settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON");
-							if($last_bron->prop("time_closed") && $settings->prop("closed_time_string"))
+						$d[$x] = $this->get_bron_cell_html($last_bron, $settings, $start_step);
+						$col[$x] = $this->get_bron_cell_color($last_bron , $settings,$start_step);
+
+						//seda praega ei kasuta, kuid 2kki l2heb vaja
+/*							if(($last_bron->prop("end") - $start_step) / ($step_length * $time_step) >= 1)
 							{
+								$rowspan[$x] = (int)((
+									$last_bron->prop("end")
+									+ $this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron))
+									 - $start_step)
+									 / ($step_length * $time_step)) ;
+								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $time_step)))
+								{
+									$rowspan[$x]++;
+								}
+							}
+*/
+							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
+
+
+						}
+						else
+						if($this->is_buffer && !$arr["web"])
+						{
+							if($col_buffer)
+							{
+								$col[$x] = "#".$col_buffer;
+							}
+							else
+							{
+								"#EE6363";
+							}
+							$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";	//	if (aw_global_get("uid") == "struktuur") {arr($buffer_time_string);}
+						}
+						else
+						{
+							$col[$x] = "#EE6363";
+					 		$d[$x] ="<span><font color=#26466D>".$settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON")."</FONT></span>";
+						}
+						$onclick[$x] = "";
+					}
+				}
+				else
+				{
+					$d[$x] = "<span>".$settings->prop("closed__time_string")?$settings->prop("closed__time_string") :t("Suletud")."</span>";
+				}
+				//$ids[$x] = $arr["room"]."_".$start_step;
+				$ids[$x] = $room_id."_".$start_step;
+
+				//kui mitu lubatud, hakkab siia lisaks veel panema asju....
+				if($this->multi)
+				{
+	//				arr(date("d.m.Y h:i" , $start_step));
+					$time_reservations = $arr["obj_inst"]->get_time_reservations($start_step , $end_step);
+					foreach($time_reservations as $key => $time_reservation)
+					{
+						//yritab aru saada millisesse tulpa l2heb asi... ei ikka eelneva alla
+						if(isset($time_reservation["col"]))
+						{
+							$col = $time_reservation["col"];
+						}
+						else
+						{
+							$col = $key;
+						}
+						$extra_d[$x."_".$col] = $this->get_bron_cell_html(obj($time_reservation["id"]), $settings,$start_step);
+						$extra_col[$x."_".$col] = $this->get_bron_cell_color(obj($time_reservation["id"]), $settings,$start_step);
+					}
+				}
+
+				$x++;
+				$start_step += 86400;
+				$end_step += 86400;
+//				$today_start += 86400;
+			}
+			if($visible)
+			{
+				$tmp_row_data = array(
+					"time" => date("G:i" , $today_start+ $step*$step_length*$time_step),
+					"time_col" => "#BADBAD"
+				);
+				for($i = 0; $i < $len; $i++)
+				{
+					$tmp_row_data["d".$i] = $d[$i];
+					$tmp_row_data["id".$i] = $ids[$i];
+					$tmp_row_data["onclick".$i] = $onclick[$i];
+					$tmp_row_data["col".$i] = $col[$i];
+			//		$tmp_row_data["rowspan".$i] = $rowspan[$i];
+
+				}
+
+				if($this->multi)
+				{
+					foreach($extra_d as $key => $val)
+					{
+						$tmp_row_data["d".$key] = $val;
+						$tmp_row_data["col".$key] = $extra_col[$key];
+					}
+				}
+
+				$t->define_data($tmp_row_data);
+				$num_rows++;
+			}
+			$step = $step + 1;
+		}
+		if ($num_rows > 5)
+		{
+			$t->set_lower_titlebar_display(true);
+		}
+		
+		if(!$arr["web"] && $settings->prop("show_workers_in_calander"))
+		{
+			$t->define_data($this->get_day_workers_row($arr["obj_inst"]));
+		}
+		if(!$arr["web"] && !$settings->prop("dont_show_day_sum_in_calander"))
+		{
+			$t->define_data($this->get_sum_row($arr["obj_inst"]));
+		}
+		exit_function("get_calendar_tbl::3");
+		//$t->set_rgroupby(array("group" => "d2"));
+		$arr["settings"] = $settings;
+
+		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
+		$this->popup_menu_str = $popup_menu;
+		$t->set_caption(t("Broneerimine").$popup_menu);
+	}
+	
+	private function get_bron_cell_color($last_bron , $settings,$start_step)
+	{
+		$col = array();
+		$x = 1;
+		if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
+		{
+			$col[$x] = "#".$settings->prop("col_recent"); 
+			}
+							else
+							if ($last_bron->prop("time_closed") == 1)
+							{
+								$col[$x] = "#".$settings->prop("col_closed");
+								$d[$x] .= " ".$last_bron->prop("closed_info");
+							}
+							else
+							if($last_bron->prop("verified"))
+							{
+								$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
+							}
+							else
+							{
+								$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
+							}
+							if($this->is_after_buffer)
+							{
+								if($col_buffer)
+								{
+									$col[$x] = "#".$col_buffer;
+								}
+								else
+								{
+									"#EE6363";
+								}
+							}
+							if($this->is_after_buffer)
+							{
+								if($col_buffer)
+								{
+									$col[$x] = "#".$col_buffer;
+								}
+								else
+								{
+									"#EE6363";
+								}
+							}
+		return $col[$x];
+	}
+
+	private function get_bron_cell_html($last_bron, $settings,$start_step)
+	{
+		$d = array();
+		$x = 1;
+		$cus = $settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON");
+		if($last_bron->prop("time_closed") && $settings->prop("closed_time_string"))
+			{
 								$cus = $settings->prop("closed_time_string");
 							}
 							$title = $phone = "";
@@ -2019,7 +2217,7 @@ class room extends class_base
 
 							if ($settings->prop("bron_no_popups"))
 							{
-								$dx_p["url"] = html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),));
+								$dx_p["url"] = html::get_change_url($last_bron->id(),array("return_url" => get_ru(),));
 
 								$d[$x] = html::href($dx_p);
 							}
@@ -2029,7 +2227,7 @@ class room extends class_base
 								$dx_p["height"] = 600;
 								$dx_p["scrollbars"] = 1;
 								$dx_p["href"] = "#";
-								$dx_p["url"] = $this->mk_my_orb("change", array("id" => $this->last_bron_id, "return_url" => get_ru()), "reservation");
+								$dx_p["url"] = $this->mk_my_orb("change", array("id" => $last_bron->id(), "return_url" => get_ru()), "reservation");
 								$d[$x] = html::popup($dx_p);
 							}
 
@@ -2070,27 +2268,15 @@ class room extends class_base
 								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
 								$d[$x] .= " ".$buf_tm;
 							}
-					
-							if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
+
+						if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 							{
-								$col[$x] = "#".$settings->prop("col_recent"); 
 							}
 							else
 							if ($last_bron->prop("time_closed") == 1)
 							{
-								$col[$x] = "#".$settings->prop("col_closed");
 								$d[$x] .= " ".$last_bron->prop("closed_info");
 							}
-							else
-							if($last_bron->prop("verified"))
-							{
-								$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
-							}
-							else
-							{
-								$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
-							}
-
 							if ($last_bron->prop("content") != "" || $last_bron->comment() != "")
 							{
 								$d[$x] .= html::href(array(
@@ -2104,29 +2290,13 @@ class room extends class_base
 							{
 								$d[$x] .= "<br>".$imgstr;
 							}
-							if(($last_bron->prop("end") - $start_step) / ($step_length * $time_step) >= 1)
+							if($this->is_after_buffer)
 							{
-								$rowspan[$x] = (int)((
-									$last_bron->prop("end")
-									+ $this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron))
-									 - $start_step)
-									 / ($step_length * $time_step)) ;
-								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $time_step)))
-								{
-									$rowspan[$x]++;
-								}
+								$d[$x] = ""; 
 							}
 							if($this->is_after_buffer)
 							{
 								$d[$x] = ""; 
-								if($col_buffer)
-								{
-									$col[$x] = "#".$col_buffer;
-								}
-								else
-								{
-									"#EE6363";
-								}
 							}
 							elseif($last_bron->prop("start1") < $start_step)
 							{
@@ -2143,7 +2313,6 @@ class room extends class_base
 									$d[$x] = html::popup($dx_p);
 								}
 							}
-
 							if($this->is_before_buffer)
 							{
 								$d[$x] = ""; 
@@ -2179,84 +2348,9 @@ class room extends class_base
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 								}
 							}
-							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
-
-
-						}
-						else
-						if($this->is_buffer && !$arr["web"])
-						{
-							if($col_buffer)
-							{
-								$col[$x] = "#".$col_buffer;
-							}
-							else
-							{
-								"#EE6363";
-							}
-							$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";	//	if (aw_global_get("uid") == "struktuur") {arr($buffer_time_string);}
-						}
-						else
-						{
-							$col[$x] = "#EE6363";
-					 		$d[$x] ="<span><font color=#26466D>".$settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON")."</FONT></span>";
-						}
-						$onclick[$x] = "";
-					}
-				}
-				else
-				{
-					$d[$x] = "<span>".$settings->prop("closed__time_string")?$settings->prop("closed__time_string") :t("Suletud")."</span>";
-				}
-				//$ids[$x] = $arr["room"]."_".$start_step;
-				$ids[$x] = $room_id."_".$start_step;
-				$x++;
-				$start_step += 86400;
-				$end_step += 86400;
-//				$today_start += 86400;
-			}
-			if($visible)
-			{
-				$tmp_row_data = array(
-					"time" => date("G:i" , $today_start+ $step*$step_length*$time_step),
-					"time_col" => "#BADBAD"
-				);
-				for($i = 0; $i < $len; $i++)
-				{
-					$tmp_row_data["d".$i] = $d[$i];
-					$tmp_row_data["id".$i] = $ids[$i];
-					$tmp_row_data["onclick".$i] = $onclick[$i];
-					$tmp_row_data["col".$i] = $col[$i];
-			//		$tmp_row_data["rowspan".$i] = $rowspan[$i];
-				}
-				$t->define_data($tmp_row_data);
-				$num_rows++;
-			}
-			$step = $step + 1;
-		}
-		if ($num_rows > 5)
-		{
-			$t->set_lower_titlebar_display(true);
-		}
-		
-		if(!$arr["web"] && $settings->prop("show_workers_in_calander"))
-		{
-			$t->define_data($this->get_day_workers_row($arr["obj_inst"]));
-		}
-		if(!$arr["web"])
-		{
-			$t->define_data($this->get_sum_row($arr["obj_inst"]));
-		}
-		exit_function("get_calendar_tbl::3");
-		//$t->set_rgroupby(array("group" => "d2"));
-		$arr["settings"] = $settings;
-
-		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
-		$this->popup_menu_str = $popup_menu;
-		$t->set_caption(t("Broneerimine").$popup_menu);
+		return $d[$x];
 	}
-	
+
 	function get_day_workers_row($o)
 	{
 		$open_inst = get_instance(CL_OPENHOURS);
@@ -2306,6 +2400,10 @@ class room extends class_base
 				}
 			}
 			$res["d".$x].= $result;
+			if($this->multi)
+			{
+//				$res["colspan".$x] = $this->calendar_colspan[$x];
+			}
 			$time = $time + 24*3600;
 			$x++;
 		}
@@ -2736,7 +2834,28 @@ class room extends class_base
 					"id" => "id".$i,
 					"onclick" => "onclick".$i,
 					"rowspan" => "rowspan".$i,
+	//				"colspan" => "colspan".$i,
 				));
+				if($this->multi && is_oid($this->id))
+				{
+					$room = obj($this->id);
+					$max = $room->get_max_reservations_atst($tm , $tm + 24*3600);
+					//$this->calendar_colspan[$i] = $max + 1;
+					$x = 0;
+					while ($x < $max)
+					{
+						$t->define_field(array(
+							"name" => "d".$i."_".$x,
+//							"caption" => substr(ucwords(locale::get_lc_weekday(date("w",$tm))) , 0 , 1).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
+							"width" => $pct."%",
+							"chgbgcolor" => "col".$i."_".$x,
+							"id" => "id".$i."_".$x,
+//							"onclick" => "onclick".$i,
+//							"rowspan" => "rowspan".$i,
+						));
+						$x++;
+					}
+				}
 			}
 		}
 		
@@ -4485,11 +4604,20 @@ class room extends class_base
 	//array("room" => $room, "people" => $people, "cur" => $currency));	
 	}
 	
-	
+	private function get_user_inst()
+	{
+		if(!$this->user_inst)
+		{
+			$this->user_inst = get_instance(CL_USER);
+		}
+		return $this->user_inst;
+	}
+
 	//annab soodustuse juhul kui see t2pselt kattub hinna ajaga v6i kui yks soodustus l6ppeb kas enne aja l6ppu , v6i algab alles poole pealt
 	//inimliku lolluse vastu kahjuks see funktsioon ei aita, kui kellelgi on tahtmist mitmeid poolikult kattuvaid soodustusi yhele ajale paigutada... palun v2ga, kuid resultaati ei oska ette ennustada
 	function get_bargain($arr)
 	{
+		enter_function("room::get_bargain");
 		extract($arr);
 		$priority = 0;
 		$ret = 0;
@@ -4501,12 +4629,22 @@ class room extends class_base
 		{
 			$grp = $gl[0];
 		}
+
+		$gi = $this->get_user_inst();
 		if (is_object($arr["bron"]))
 		{
-			$gi = get_instance(CL_USER);
 	                $gro = $gi->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
         	        $grp = $gro->id();
+			$user_pri = $gi->get_group_pri_for_user($arr["bron"]->createdby());
 		}
+		else
+		{
+	                $gro = $gi->get_highest_pri_grp_for_user(aw_global_get("uid"), true);
+        	        $grp = $gro->id();
+			$user_pri = $gi->get_group_pri_for_user(aw_global_get("uid"));
+		}
+
+		$used_priority = 0;
 		if(is_object($price) && is_object($room))
 		{
 			$bargains = array();
@@ -4548,20 +4686,41 @@ class room extends class_base
 					)
 				)
 				{
-					$groups = $bargain->prop("apply_groups");
+					$groups = $bargain->prop("apply_groups");//arr(array_intersect($groups, $gl));arr($gl);arr($groups);
 					if (
 						(
 							($bargain->prop("bron_made_from") < 1 || $bron_made > $bargain->prop("bron_made_from")) ||
 						    	($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
 					    	) && 
 						(
-							!is_array($groups) || !count($groups) || in_array($grp, $groups)
+							!is_array($groups) || !count($groups) || (is_array(array_intersect($groups, $gl)) && sizeof(array_intersect($groups, $gl)))//in_array($grp, $groups)
 						)
 					)
 					{
 						if(($priority  > $bargain->prop("priority")))
 						{
 							continue;
+						}
+						
+					//kui on gruppidele m6juv asi, siis vaatab ega eelmiselt ringilt k6rgema prioriteedi asja ei kasutanud juba
+						if(is_array($yhis = array_intersect($groups, $gl)) && sizeof(array_intersect($groups, $gl)))
+						{
+							$use_group_pri = 0;
+							foreach($yhis as $yhisgrp)
+							{
+								if($user_pri[$yhisgrp] > $use_group_pri)
+								{
+									$use_group_pri = $user_pri[$yhisgrp];
+								}
+							}
+							if($use_group_pri > $used_priority)
+							{
+								$used_priority = $use_group_pri;
+							}
+							else
+							{
+								continue;
+							}
 						}
 					
 						$from = $bargain->prop("time_from");
@@ -4588,6 +4747,7 @@ class room extends class_base
 				}
 			}
 		}
+		exit_function("room::get_bargain");
 		return $ret;
 	}
 	
