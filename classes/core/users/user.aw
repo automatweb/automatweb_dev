@@ -1829,7 +1829,7 @@ class user extends class_base
 
 	/**
 
-		@attrib params=pos api=
+		@attrib params=pos api=1
 		@param uid required type=string
 		User id (username, not user object's id)
 		@comment
@@ -1855,6 +1855,28 @@ class user extends class_base
 			);
 		}
 		return $groups_list;
+	}
+
+	/**
+
+		@attrib params=pos api=1
+		@param uid required type=string
+		User id (username, not user object's id)
+		@comment
+		Gets array of group priorities that $uid belongs to
+		@returns
+		Object list
+	**/
+	function get_group_pri_for_user($uid)
+	{
+		$groups_list = $this->get_groups_for_user($uid);
+		$res = array();
+		foreach($groups_list->arr() as $group)
+		{
+			$res[$group->id()] = $group->prop("priority");
+		}
+		asort($res);
+		return $res;
 	}
 
 	/**
