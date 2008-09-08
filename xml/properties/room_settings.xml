@@ -40,6 +40,17 @@
             <caption>Seotud ruumide kaust</caption>
       </property>
       <property>
+            <name>related_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_RELATED_ROOMS</reltype>
+            <caption>Ruumid mida samal ajal broneerida</caption>
+      </property>
+      <property>
             <name>cal_show_prods</name>
             <table>objects</table>
             <group>general</group>
@@ -382,14 +393,14 @@
             <caption>N&amp;amp;auml;ita t&amp;amp;ouml;&amp;amp;ouml;tajaid kalendrivaates</caption>
       </property>
       <property>
-	      <name>dont_show_day_sum_in_calander</name>
-	      <table>objects</table>
-	      <group>settings_gen</group>
-	      <field>meta</field>
-	      <method>serialize</method>
-	      <type>checkbox</type>
-	      <ch_value>1</ch_value>
-	      <caption>&amp;amp;Auml; n&amp;amp;auml;ita paeva summat kalendrivaates</caption>
+            <name>dont_show_day_sum_in_calander</name>
+            <table>objects</table>
+            <group>settings_gen</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita p&amp;amp;auml;eva summat kalendrivaates</caption>
       </property>
       <property>
             <name>show_only_my_graphs</name>
@@ -753,6 +764,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Grupp</caption>
             </MENU>
+            <RELATED_ROOMS>
+                  <value>10</value>
+                  <clid>CL_ROOM</clid>
+                  <caption>Ruumid mida samaaegselt broneerida</caption>
+            </RELATED_ROOMS>
       </reltypes>
 </properties>
 

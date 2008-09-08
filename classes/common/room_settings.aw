@@ -17,6 +17,9 @@
 	@property related_room_folder type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_RELATED_ROOM_FOLDER
 	@caption Seotud ruumide kaust
 
+	@property related_rooms type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_RELATED_ROOMS
+	@caption Ruumid mida samal ajal broneerida
+
 	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Kuva valitud tooteid kalendrivaates
 
@@ -274,6 +277,9 @@ Meili sisu peab saama t6lkida, ilmselt seadetele T6lgi vaade teha lisaks.
 
 @reltype MENU value=9 clid=CL_MENU
 @caption Grupp
+
+@reltype RELATED_ROOMS value=10 clid=CL_ROOM
+@caption Ruumid mida samaaegselt broneerida
 
 */
 
