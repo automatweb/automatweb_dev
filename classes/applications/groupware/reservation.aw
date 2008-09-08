@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.135 2008/09/08 15:27:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.136 2008/09/08 17:05:53 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -42,6 +42,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 
 	@property resource type=relpicker reltype=RELTYPE_RESOURCE table=aw_room_reservations field=aw_resource
 	@caption Ruum
+
+	@property other_rooms type=select multiple=1 store=no
+	@caption Lisaks ruumid
 	
 	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 	@caption Klient
@@ -229,6 +232,22 @@ class reservation extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "other_rooms":
+				if($this->can("view" , $arr["obj_inst"]->prop("resource")))
+				{
+					$room = obj($arr["obj_inst"]->prop("resource"));
+					$prop["options"] = $room->get_other_rooms_selection();
+					$prop["value"] = $arr["obj_inst"]->get_other_bron_rooms();
+					if(!sizeof($prop["options"]))
+					{
+						return PROP_IGNORE;
+					}
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			//-- get_property --//
 			case "bill_no"://if(aw_global_get("uid")== "struktuur"){arr($arr["obj_inst"]->meta());arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["obj_inst"]->id() , "tpl" => $tpl,)));}
 				if(!is_oid($prop["value"]))
@@ -517,6 +536,22 @@ class reservation extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "other_rooms":
+				if($this->can("view" , $arr["obj_inst"]->prop("resource")))
+				{
+					$room = obj($arr["obj_inst"]->prop("resource"));
+					$options = $room->get_other_rooms_selection();
+					if(!(is_array($options) && sizeof($options)))
+					{
+						return PROP_IGNORE;
+					}
+					$arr["obj_inst"]->make_slave_brons($prop["value"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "resources_price":
 			case "resources_discount":
 				$retval =  PROP_IGNORE;

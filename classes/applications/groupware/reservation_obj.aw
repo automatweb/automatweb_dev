@@ -506,6 +506,28 @@ class reservation_obj extends _int_object
 	 **/
 	public function make_slave_brons($slaves)
 	{
+		//vaatab 2kki m6ned juba olemas, ja mis yleliigne, kustutab 2ra
+		$exist2 = $this->get_other_bron_rooms();
+		$exist = array();
+		foreach($exist2 as $key2 => $val2)
+		{
+			$exist[$val2] = $key2;
+		}
+
+		foreach($slaves as $asd => $key)
+		{
+			if(array_key_exists($key,$exist))
+			{
+				unset($slaves[$asd]);
+				unset($exist[$key]);
+			}
+		}
+		foreach($exist as $ex_key => $ex)//neid pole vaja enam, kustutav 2ra
+		{
+			$e = obj($ex);
+			$e->delete();
+		}
+
 		$inst = get_instance(CL_RESERVATION);
 		foreach($slaves as $slave)
 		{
@@ -538,6 +560,26 @@ class reservation_obj extends _int_object
 			"parent" => $this->id(),
 		));
 		return $ol;
+	}
+
+	/** Returns other reservation rooms connected to this
+		@attrib api=1 params=pos
+		@return array
+	 **/
+	public function get_other_bron_rooms()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_RESERVATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $this->id(),
+		));
+		$ret = array();
+		foreach($ol->arr() as $o)
+		{
+			$ret[$o->id()] = $o->prop("resource");
+		}
+		return $ret;
 	}
 
 }
