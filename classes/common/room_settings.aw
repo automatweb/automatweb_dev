@@ -138,6 +138,9 @@
 	@property show_workers_in_calander type=checkbox ch_value=1
 	@caption N&auml;ita t&ouml;&ouml;tajaid kalendrivaates
 
+	@property dont_show_day_sum_in_calander type=checkbox ch_value=1
+	@caption &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates
+
 	@property show_only_my_graphs type=checkbox ch_value=1
 	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
 

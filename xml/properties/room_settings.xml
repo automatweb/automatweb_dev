@@ -382,6 +382,16 @@
             <caption>N&amp;amp;auml;ita t&amp;amp;ouml;&amp;amp;ouml;tajaid kalendrivaates</caption>
       </property>
       <property>
+	      <name>dont_show_day_sum_in_calander</name>
+	      <table>objects</table>
+	      <group>settings_gen</group>
+	      <field>meta</field>
+	      <method>serialize</method>
+	      <type>checkbox</type>
+	      <ch_value>1</ch_value>
+	      <caption>&amp;amp;Auml; n&amp;amp;auml;ita paeva summat kalendrivaates</caption>
+      </property>
+      <property>
             <name>show_only_my_graphs</name>
             <table>objects</table>
             <group>settings_gen</group>
