@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.88 2008/08/27 07:55:50 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 /*
 @classinfo maintainer=kristo
@@ -16,14 +15,14 @@ class converters extends aw_template
 
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=menu_convimages params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -33,7 +32,7 @@ class converters extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			
+
 			$meta = aw_unserialize($row["metadata"]);
 
 			$cnt = 0;
@@ -113,15 +112,15 @@ class converters extends aw_template
 			$this->restore_handle();
 		}
 	}
-	
-	/**  
-		
+
+	/**
+
 		@attrib name=menu_reset_template_sets params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -146,15 +145,15 @@ class converters extends aw_template
 			$this->restore_handle();
 		}
 	}
-	
-	/**  
-		
+
+	/**
+
 		@attrib name=promo_convert params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -305,15 +304,15 @@ class converters extends aw_template
                         $args["obj_inst"]->save();
 
 	}
-	
-	/**  
-		
+
+	/**
+
 		@attrib name=convert_aliases params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -336,18 +335,18 @@ class converters extends aw_template
 				$this->db_query($q);
 				sleep(1);
 			};
-		};			
+		};
 		print "all done!<br />";
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=groups_convert params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -361,7 +360,7 @@ class converters extends aw_template
 			$this->raise_error(ERR_NO_USERS_ROOT,"Kasutajate rootketaloog on m&auml;&auml;ramata!", true);
 		}
 
-			
+
 		aw_global_set("__from_raise_error",1);
 		$this->db_query("ALTER TABLE users add oid int");
 		aw_global_set("__from_raise_error",1);
@@ -374,7 +373,7 @@ class converters extends aw_template
 		{
 			if (!is_numeric($val['oid']) || !is_oid($val["oid"]))
 			{
-				$this->db_query("INSERT INTO 
+				$this->db_query("INSERT INTO
 						objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
 						values('$uroot','$val[uid]','',".CL_USER.",'','2',
 						'','".aw_global_get("uid")."','".time()."','".aw_global_get("uid")."','".time()."')
@@ -435,7 +434,7 @@ class converters extends aw_template
 					$u_objs[$urow["brother_of"]] = $urow["oid"];
 				}
 			}
-	
+
 			// now get oids of group members
 			$g_objs = array();
 			$sql = "SELECT oid FROM users u LEFT JOIN groupmembers m ON m.uid = u.uid WHERE m.gid = $row[gid] AND oid IS NOT NULL AND oid > 0";
@@ -476,7 +475,7 @@ class converters extends aw_template
 			}
 
 			// and also create aliases to all the members of the group in the group
-			
+
 			$sql = "SELECT users.uid, users.oid FROM groupmembers left join users on users.uid = groupmembers.uid WHERE groupmembers.gid = ".$row["gid"];
 			$this->db_query($sql);
 			while ($trow = $this->db_next())
@@ -602,14 +601,14 @@ class converters extends aw_template
 		}
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convert_fg_tables_deleted params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -642,7 +641,7 @@ class converters extends aw_template
 			while($row = $this->db_next())
 			{
 				if ($row["status"] < 1)
-				{					
+				{
 					$this->save_handle();
 					$this->db_query("UPDATE $tbl SET deleted = 1 WHERE id = $row[id]");
 					$this->restore_handle();
@@ -652,14 +651,14 @@ class converters extends aw_template
 		die();
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convert_really_old_aliases params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -675,11 +674,11 @@ class converters extends aw_template
 			$q = "SELECT objects.*,images.*
 				FROM objects
 				LEFT JOIN images ON (objects.oid = images.id)
-				WHERE parent = '$id' AND class_id = '6' AND status = 2  
+				WHERE parent = '$id' AND class_id = '6' AND status = 2
 				ORDER BY idx";
 			$this->db_query($q);
 
-			while($row = $this->db_next()) 
+			while($row = $this->db_next())
 			{
 				$alias = "#p".$row["idx"]."#";
 
@@ -694,7 +693,7 @@ class converters extends aw_template
 						"to" => $row['oid'],
 					));
 					$this->db_query("UPDATE aliases SET idx = '$row[idx]' WHERE source = '$id' AND target = '$row[oid]'");
-					
+
 				}
 				$this->restore_handle();
 			};
@@ -718,14 +717,14 @@ class converters extends aw_template
 		}
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convert_copy_makes_brother params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -742,7 +741,7 @@ class converters extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			
+
 			$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
 			if ($id)
 			{
@@ -760,7 +759,7 @@ class converters extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			
+
 			$id = $this->db_fetch_field("SELECT id FROM menu WHERE id = '$row[oid]'", "id");
 			if ($id)
 			{
@@ -772,14 +771,14 @@ class converters extends aw_template
 		}
 	}
 
-	/** creates the active_documents list for each folder in the system. the shitty part about this is, of course that 
-		
+	/** creates the active_documents list for each folder in the system. the shitty part about this is, of course that
+
 		@attrib name=convert_active_documents_list params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 		all section modifiers will be fucked.
 
@@ -792,7 +791,7 @@ class converters extends aw_template
 		$ol = new object_list(array(
 			"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION)
 		));
-		
+
 		$di = get_instance("doc");
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
@@ -804,15 +803,15 @@ class converters extends aw_template
 		die("all done!");
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convert_doc_templates params=name nologin="1" default="0"
-		
+
 		@param parent required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -831,7 +830,7 @@ class converters extends aw_template
 		{
 			$this->save_handle();
 
-			$this->db_query("INSERT INTO 
+			$this->db_query("INSERT INTO
 					objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
 					values('$parent','$row[name]','',".CL_CONFIG_AW_DOCUMENT_TEMPLATE.",'','2',
 					'','".aw_global_get("uid")."','".time()."','".aw_global_get("uid")."','".time()."')
@@ -844,14 +843,14 @@ class converters extends aw_template
 		}
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convert_menu_images params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -876,7 +875,7 @@ class converters extends aw_template
 			{
 				if ($i["id"])
 				{
-					
+
 					$o->connect(array(
 						"to" => $i["id"],
 						"reltype" => 14
@@ -893,22 +892,22 @@ class converters extends aw_template
 
 		die("all done!");
 	}
-	
-	/**  
-		
+
+	/**
+
 		@attrib name=convert_crm_relations2 nologin="1"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
 	function convert_crm_relations2($arr)
 	{
 		// see annab mulle k6ik aadressiobjektid, millel on seos URL objektiga
-		aw_set_exec_time(AW_LONG_PROCESS);	
+		aw_set_exec_time(AW_LONG_PROCESS);
 		// 21 / 6 / 16 is URL
 		// 219 / 9 / 17 is phone (but really fax)
 		// 219 / 7,8 / 17 , is phone
@@ -935,22 +934,22 @@ class converters extends aw_template
 
 	}
 
-	
-	
-	/**  
-		
+
+
+	/**
+
 		@attrib name=convert_crm_relations nologin="1"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
 	function convert_crm_relations($arr)
 	{
-		aw_set_exec_time(AW_LONG_PROCESS);	
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$q = "SELECT objects.oid,objects.name,aliases.reltype,aliases.target AS target FROM aliases,objects WHERE aliases.source = objects.oid AND aliases.type = 219;";
 		$this->db_query($q);
 		$oids = $targets = array();
@@ -958,7 +957,7 @@ class converters extends aw_template
 		{
 			//print "<pre>";
 			$oids[] = $row["oid"];
-			$targets[$row["oid"]] = $row["target"]; 
+			$targets[$row["oid"]] = $row["target"];
 			//print_r($row);
 			//print "</pre>";
 		};
@@ -1017,7 +1016,7 @@ class converters extends aw_template
 	function convert_person_org_relations($arr)
 	{
 		// list all connections from organizations to persons
-		aw_set_exec_time(AW_LONG_PROCESS);	
+		aw_set_exec_time(AW_LONG_PROCESS);
 		$q = "SELECT aliases.source,aliases.target FROM aliases,objects WHERE type = 145 AND reltype = 8 AND aliases.source = objects.oid AND objects.class_id = 129 AND objects.status != 0";
 		$this->db_query($q);
 		$res = array();
@@ -1047,7 +1046,7 @@ class converters extends aw_template
 		};
 
 		print "persons done<br>";
-		
+
 		$q = "SELECT aliases.source,aliases.target FROM aliases,objects WHERE type = 129 AND reltype = 6 AND aliases.source = objects.oid AND objects.class_id = 145 AND objects.status != 0";
 		$this->db_query($q);
 		$res = array();
@@ -1082,8 +1081,8 @@ class converters extends aw_template
 		print "orgs done<br>";
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=confirm_crm_choices
 
 	*/
@@ -1120,14 +1119,14 @@ class converters extends aw_template
 
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convert_docs_from_menu nologin="1"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1144,7 +1143,7 @@ class converters extends aw_template
 		{
 			echo "object ".$o->id()." name = ".$o->name()." <br>\n";
 			flush();
-			
+
 			$sss = new aw_array($o->meta("sss"));
 			foreach($sss->get() as $mnid)
 			{
@@ -1174,7 +1173,7 @@ class converters extends aw_template
 	function convert_crm_links($arr)
 	{
 		// first I need to create records in ml_users.mail table for each
-		// 
+		//
 		// extlinks.url should become ml_users.mail
 
 		// and I should also remove shit from extlinks table
@@ -1213,7 +1212,7 @@ class converters extends aw_template
 
 
 	}
-	
+
 
 	/** converts acl entries to relations
 
@@ -1222,7 +1221,7 @@ class converters extends aw_template
 	**/
 	function convert_acl_rels($arr)
 	{
-		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
+		aw_ini_set("acl.no_check", 1);
 		// get list og groups that are not user groups
 		$gl = array();
 		$this->db_query("select gid FROM groups WHERE type IN (".GRP_REGULAR.",".GRP_DYNAMIC.")");
@@ -1230,7 +1229,7 @@ class converters extends aw_template
 		{
 			$gl[] = $row["gid"];
 		}
-	
+
 		$us = get_instance("users");
 
 		$gs = join(",", $gl);
@@ -1279,7 +1278,7 @@ class converters extends aw_template
 			echo "keel ".$row["name"]." <br>";
 			$oid = $this->db_fetch_field("SELECT max(oid) as oid FROM objects", "oid")+1;
 
-			$this->db_query("INSERT INTO 
+			$this->db_query("INSERT INTO
 				objects(
 					name,				status,			site_id,					lang_id,
 					createdby,			created,		modifiedby, 				modified,
@@ -1300,7 +1299,7 @@ class converters extends aw_template
 
 
 	/** converts files from db to fs
-	
+
 		@attrib name=conv_files_to_fs
 
 	**/
@@ -1330,7 +1329,7 @@ class converters extends aw_template
 
 	/** convert acl to object table
 
-		@attrib name=acl_to_objtbl 
+		@attrib name=acl_to_objtbl
 
 	**/
 	function acl_to_objtbl($arr)
@@ -1344,14 +1343,14 @@ class converters extends aw_template
 		// write those suckers to the objects table acldata field
 		$this->db_query("
 			SELECT
-				objects.createdby as createdby, 
+				objects.createdby as createdby,
 				acl.gid as gid,
 				acl.oid as oid,
 				acl.acl as acl,
 				groups.type as g_type,
 				groups.name as g_name,
 				groups.oid as g_oid
-			FROM 
+			FROM
 				acl
 				LEFT JOIN objects ON objects.oid = acl.oid
 				LEFT JOIN groups ON groups.gid = acl.gid
@@ -1363,7 +1362,7 @@ class converters extends aw_template
 			if (true || !$skip)
 			{
 				echo "row ".join(",", map2("%s => %s", $row))." is real, write to objtbl <br>";
-				// get prev value 
+				// get prev value
 				$this->save_handle();
 
 				$curacl = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = $row[oid]", "acldata")));
@@ -1392,10 +1391,10 @@ class converters extends aw_template
 		{
 			die("all done");
 		}
-	}	
+	}
 
 	/**
-		
+
 		@attrib name=test_acl
 
 	**/
@@ -1577,7 +1576,7 @@ class converters extends aw_template
 					{
 						$inf[$id] = $row;
 					}
-					
+
 					if ($this->can("view", $inf[$id]["prod"]))
 					{
 						$prod = obj($inf[$id]["prod"]);
@@ -1757,7 +1756,7 @@ echo "mod ".$con["to.name"]."<br>";
 						return true;
 				}
 				break;
-			
+
 			case "banner_clicks":
 				switch($f)
 				{
@@ -1874,7 +1873,7 @@ echo "mod ".$con["to.name"]."<br>";
 			flush();
 		}
 		die("all done ");
-		
+
 	}
 
 	/**
@@ -1897,14 +1896,14 @@ echo "mod ".$con["to.name"]."<br>";
 				$target = $this->db_fetch_field("SELECT target FROM aliases WHERE source = $u_oid AND target = $g_oid and reltype=1", "target");
 				if (!$target)
 				{
-					echo "create rel from $u_oid => $g_oid <br>";	
+					echo "create rel from $u_oid => $g_oid <br>";
 					$this->db_query("INSERT INTO aliases (source, target, reltype) values($u_oid, $g_oid, 1)");
 				}
 
 				$target = $this->db_fetch_field("SELECT target FROM aliases WHERE source = $g_oid AND target = $u_oid and reltype=2 ", "target");
 				if (!$target)
 				{
-					echo "create rel from $g_oid => $u_oid <br>";	
+					echo "create rel from $g_oid => $u_oid <br>";
 
 					$this->db_query("INSERT INTO aliases (source, target, reltype) values($g_oid, $u_oid, 2)");
 				}
