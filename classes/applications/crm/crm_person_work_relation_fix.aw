@@ -1,11 +1,6 @@
 <?php
 class crm_person_work_relation_fix extends _int_object
 {
-	function __construct($param)
-	{
-		parent::_int_object($param);
-	}
-	
 	function set_prop($var, $val)
 	{
 		$html_allowed = array();
@@ -17,7 +12,7 @@ class crm_person_work_relation_fix extends _int_object
 		if($var == "org" && is_oid($this->id()))
 		{
 			foreach(parent::connections_from(array("type" => 1)) as $conn)
-			{				
+			{
 				if($conn->prop("to") != $val)
 				{
 					$conn->delete();
