@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.23 2008/01/31 13:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.24 2008/09/08 10:52:34 markop Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -193,7 +193,7 @@ class crm_deal extends class_base
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 50,
-/*´			new object_list_filter(array(
+/*			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					new object_list_filter(array(
@@ -409,20 +409,20 @@ class crm_deal extends class_base
 			$name = basename($fu);
 			$fname = $file_inst->check_file_path($f->prop("file"));
 			$t->define_data(array(
-				"name" => //html::textbox(array("size" => 70,"value" => //html::href(array(
+/*				"name" => //html::textbox(array("size" => 70,"value" => //html::href(array(
 					//"url" => 
 				//	$file_inst->get_url($f->id(), $f->name()),
 				//	"caption" => $f->name(),))
 				//)),
-				$f->name(),
+				$f->name(),*/
 				"oid" => $f->id(),
 				"change" => html::obj_change_url($f->id(),t("Muuda")),
 				"changed" => date("d.m.Y h:i" , $f->prop("modified")),
 				"changer" => $f->modifiedby(),
 				
-				"file" => html::href(array(
+				"name" => html::href(array(
 					"url" => $file_inst->get_url($f->id(), $f->name()),
-					"caption" => "Ava",
+					"caption" => $f->name(),
 					"target" => "_blank",
 	//				"alt" => $fname,
 	//				"title" => $fname
@@ -437,10 +437,10 @@ class crm_deal extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "file",
 			"caption" => t("Fail"),
-		));
+		));*/
 		$t->define_field(array(
 			"name" => "changed",
 			"caption" => t("Muudetud"),
