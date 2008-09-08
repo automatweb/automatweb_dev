@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.17 2008/08/22 10:17:39 dragut Exp $
+
 /*
 @classinfo  maintainer=kristo
 */
@@ -106,12 +106,12 @@ class active_page_data extends class_base
 		return $text;
 	}
 
-	function get_javascript($pos)
+	function get_javascript($pos = "")
 	{
-		$js = aw_global_get("__aw_javascript");
+		$js = (array) aw_global_get("__aw_javascript");
 		$text = "";
 
-		$files = ($pos == 'bottom') ? $js['bottom'] : $js['head'];
+		$files = safe_array(($pos === 'bottom') ? $js['bottom'] : $js['head']);
 
 		foreach ($files as $file)
 		{
