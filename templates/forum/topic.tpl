@@ -1,9 +1,5 @@
-<table border="0" width="100%" cellspacing="0" cellpadding="0">
-<tr>
-<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2">
-<a href="#kommentaar"><img src="{VAR:baseurl}/automatweb/images/forum_add_comment.gif" align="absmiddle" border="0" alt="" />Lisa kommentaar</a>
-</td>
-</tr>
+<div class="forum">
+<table>
 <tr>
 <td class="{VAR:style_forum_yah}">
 <strong>{VAR:path}</strong>
@@ -21,56 +17,50 @@
 </tr>
 </table>
 
-<table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
-<tr>
-	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:author_name}</div>
-<!-- SUB: AVATAR -->
-<img src="{VAR:avatar}" /><br />
-<!-- END SUB: AVATAR -->
-<!-- SUB: AGE -->
-<br />Vanus:<br />{VAR:age}
-<!-- END SUB: AGE -->
-<!-- SUB: LOCATION -->
-<br />Asukoht:<br />{VAR:location}
-<!-- END SUB: LOCATION -->
-{VAR:date}
-<!-- SUB: ADMIN_TOPIC -->
-(admin)
-<!-- END SUB: ADMIN_TOPIC -->
-<!-- SUB: IMAGE -->
-<br />
-<img src="{VAR:image_url}" alt="Administraatori pilt" title="Administraatori pilt">
-<!-- END SUB: IMAGE -->
-
+<table class="thread">
+<tr class="creator_post">
+	<td class="creator {VAR:style_comment_creator}"><div class="user {VAR:style_comment_user}">{VAR:author_name}</div>
+	<!-- SUB: AVATAR -->
+	<img src="{VAR:avatar}" /><br />
+	<!-- END SUB: AVATAR -->
+	<!-- SUB: AGE -->
+	<br />Vanus:<br />{VAR:age}
+	<!-- END SUB: AGE -->
+	<!-- SUB: LOCATION -->
+	<br />Asukoht:<br />{VAR:location}
+	<!-- END SUB: LOCATION -->
+	{VAR:date}
+	<!-- SUB: ADMIN_TOPIC -->
+	(admin)
+	<!-- END SUB: ADMIN_TOPIC -->
+	<!-- SUB: IMAGE -->
+	<br />
+	<img src="{VAR:image_url}" alt="Administraatori pilt" title="Administraatori pilt" />
+	<!-- END SUB: IMAGE -->
 </td>
-	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong>
-		<!-- SUB: CHANGE_LINK -->
-		<a href="{VAR:change_url}">Muuda</a>
-		<!-- END SUB: CHANGE_LINK -->
-<p>{VAR:comment}{VAR:topic_image1}</td>
+	<td class="content {VAR:style_comment_count}"><strong>{VAR:name}</strong><p>{VAR:comment}{VAR:topic_image1}</td>
 </tr>
 <!-- SUB: COMMENT -->
 <tr>
-	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname} -- {VAR:uemail}</div>
-<!-- SUB: CAVATAR -->
-<img src="{VAR:avatar}" />
-<!-- END SUB: CAVATAR -->
-<!-- SUB: CAGE -->
-<br />Vanus:<br />{VAR:age}
-<!-- END SUB: CAGE -->
-<!-- SUB: CLOCATION -->
-<br />Asukoht:<br />{VAR:location}
-<!-- END SUB: CLOCATION -->
-<div class="">{VAR:date}</div>
-<!-- SUB: ADMIN_POST -->
-(admin)
-<!-- END SUB: ADMIN_POST -->
-<!-- SUB: IMAGE -->
-<img src="{VAR:image_url}" alt="Administraatori pilt" title="Administraatori pilt"> 
-<!-- END SUB: IMAGE -->
-
+	<td class="creator {VAR:style_comment_time}"><div class="style_comment_user {VAR:style_comment_user}">{VAR:uname} -- {VAR:uemail}</div>
+	<!-- SUB: CAVATAR -->
+	<img src="{VAR:avatar}" />
+	<!-- END SUB: CAVATAR -->
+	<!-- SUB: CAGE -->
+	<br />Vanus:<br />{VAR:age}
+	<!-- END SUB: CAGE -->
+	<!-- SUB: CLOCATION -->
+	<br />Asukoht:<br />{VAR:location}
+	<!-- END SUB: CLOCATION -->
+	<div class="">{VAR:date}</div>
+	<!-- SUB: ADMIN_POST -->
+	(admin)
+	<!-- END SUB: ADMIN_POST -->
+	<!-- SUB: IMAGE -->
+	<img src="{VAR:image_url}" alt="Administraatori pilt" title="Administraatori pilt" /> 
+	<!-- END SUB: IMAGE -->
 </td>
-	<td valign="top" class="{VAR:style_comment_text}">
+	<td class="content {VAR:style_comment_text}">
 		<!-- SUB: ADMIN_BLOCK -->
 		<div align="right">
 		<strong>IP: {VAR:ip}</strong><br />
@@ -88,7 +78,6 @@
 <!-- END SUB: COMMENT -->
 </table>
 <!-- SUB: DELETE_ACTION -->
-<div align="right" style="background: #FFFFFF;">
-<input type="button" name="delete_comments" value="Kustuta valitud kommentaarid" onClick="if(confirm('Kustutada?')){document.changeform.action.value='delete_comments';document.changeform.submit();};"/>
-</div>
+<input type="button" name="delete_comments" value="Kustuta valitud kommentaarid" onClick="if(confirm('Kustutada?')){document.changeform.action.value='delete_comments';document.changeform.submit();}" />
 <!-- END SUB: DELETE_ACTION -->
+</div>
