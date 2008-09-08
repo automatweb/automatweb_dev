@@ -69,7 +69,7 @@ class file_manager extends aw_editor_manager_base
 	}
 
 	/**
-		@attrib name=topf 
+		@attrib name=topf
 		@param doc required
 	**/
 	function topf($arr)
@@ -110,7 +110,7 @@ class file_manager extends aw_editor_manager_base
 			"createdby" => ($_GET["s"]["my"])?aw_global_get("uid"):"%",
 			"sort_by" => "objects.created DESC",
 		));
-		
+
 		//kui lisada tahaks maili, siis parem attatchmentina
 		if(is_oid($arr["docid"]) && $this->can("view" , $arr["docid"]))
 		{
@@ -129,7 +129,7 @@ class file_manager extends aw_editor_manager_base
 			$image_url = $ii->get_url($o->id(), $o->name());
 			$link_name = $o->name();
 			$location = $this->gen_location_for_obj($o);
-			
+
 			$name = html::href(array(
 				"caption" => parse_obj_name($o->name()),
 				"url" => $this->mk_my_orb("change", array(
@@ -175,7 +175,7 @@ class file_manager extends aw_editor_manager_base
 	}
 
 	/**
-		@attrib name=attach_to_message 
+		@attrib name=attach_to_message
 		@param message optional
 		@param file optional
 	**/
@@ -189,7 +189,7 @@ class file_manager extends aw_editor_manager_base
 				"to" => $file,
 				"type" => "RELTYPE_ATTACHMENT",
 			));
-			
+
 		}
 		$stuff = ".";
 		$stuff.= '<script type="text/javascript">
@@ -203,7 +203,7 @@ class file_manager extends aw_editor_manager_base
 			//br = "\n";
 			//else
 			//br = " "
-			
+
 			//  tmp+=key+br
 			//i++
 			//}
@@ -366,22 +366,25 @@ class file_manager extends aw_editor_manager_base
 		unset($args["tb"]);
 		$args['url'] = "javascript: void(0)";
 		$args["name"] = "zip";
-		
-		if(!$args["img"])
+
+		if(!empty($args["img"]))
 		{
 			$args['img'] = 'archive_small.gif';
 		}
-		if(!$args["tooltip"])
+
+		if(!empty($args["tooltip"]))
 		{
 			$args["tooltip"] = t("Download selected compressed in ZIP file");
 		}
 
 		$url = aw_global_get("baseurl")."/orb.aw?class=file_manager&action=compress_submit";
-		if(!$args["field_name"])
+
+		if(!empty($args["field_name"]))
 		{
 			$url.="&files_var=".$args["field_name"];
 		}
-		if(!$args["zip_name"])
+
+		if(!empty($args["zip_name"]))
 		{
 			$url.="&zip_name=".$args["zip_name"];
 		}

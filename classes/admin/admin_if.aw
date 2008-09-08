@@ -13,24 +13,24 @@
 
 			@property o_tree type=treeview no_caption=1 store=no parent=o_bot_left
 
-		@layout o_bot_right type=vbox parent=o_bottom 
+		@layout o_bot_right type=vbox parent=o_bottom
 
 			@property o_tbl type=table no_caption=1 store=no parent=o_bot_right
 
 
 @default group=fu
 
-	@property info_text type=text store=no 
+	@property info_text type=text store=no
 	@caption Info
 
-	@property zip_upload type=fileupload 
+	@property zip_upload type=fileupload
 	@caption Laadi ZIP fail
 
 	@property uploader type=text store=no
-	@caption Lae faile	
+	@caption Lae faile
 
 @groupinfo o caption="Objektid" save=no submit=no
-@groupinfo fu caption="Failide &uuml;leslaadimine" 
+@groupinfo fu caption="Failide &uuml;leslaadimine"
 */
 
 class admin_if extends class_base
@@ -68,7 +68,11 @@ class admin_if extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["parent"] = $_GET["parent"];
+
+		if (isset($_GET["parent"]))
+		{
+			$arr["parent"] = $_GET["parent"];
+		}
 	}
 
 	function callback_mod_retval($arr)
@@ -89,8 +93,8 @@ class admin_if extends class_base
 				"name" => "new",
 				"tooltip" => t("Lisa"),
 			));
-			
-			$this->generate_new($tb, $parent, $arr["request"]["period"]);
+
+			$this->generate_new($tb, $parent, (isset($arr["request"]["period"]) ? $arr["request"]["period"] : null));
 		}
 
 		$tb->add_button(array(
@@ -146,7 +150,7 @@ class admin_if extends class_base
 			"name" => "import",
 			"tooltip" => t("Impordi"),
 			"img" => "import.gif"
-		));	
+		));
 
 		if ($can_add)
 		{
@@ -226,7 +230,7 @@ class admin_if extends class_base
 			$admrm = reset($admrm);
 		}
 		$this->curl = isset($arr["request"]["curl"]) ? $arr["request"]["curl"] : get_ru();
-		$this->selp = isset($arr["request"]["selp"]) ? $arr["request"]["selp"] : $arr["request"]["parent"];
+		$this->selp = isset($arr["request"]["selp"]) ? $arr["request"]["selp"] : (isset($arr["request"]["parent"]) ? $arr["request"]["parent"] : null);
 
 		$tree->start_tree(array(
 			"type" => TREE_DHTML,
@@ -262,7 +266,7 @@ class admin_if extends class_base
 		else
 		{
 			if (is_array($rn))
-			{	
+			{
 				$rn = reset($rn);
 			}
 		}
@@ -292,7 +296,7 @@ class admin_if extends class_base
 			}
 			$rs = $this->resolve_item_new($menu);
 			if ($rs !== false)
-			{	
+			{
 				$tree->add_item($rs["parent"], $rs);
 				$has_items[$menu->id()] = 1;
 				// also, gather all id's of objects that were inserted in the tree, so that
@@ -325,7 +329,7 @@ class admin_if extends class_base
 				}
 				$rs = $this->resolve_item_new($menu);
 				if ($rs !== false)
-				{	
+				{
 					$tree->add_item($rs["parent"], $rs);
 					$has_items[$menu->id()] = 1;
 				}
@@ -416,7 +420,7 @@ class admin_if extends class_base
 		{
 			$arr["url"] = aw_url_change_var("parent", $arr["id"], $this->curl);
 		};
-	
+
 		if (empty($arr["url"]))
 		{
 			$arr["url"] = "about:blank";
@@ -426,14 +430,14 @@ class admin_if extends class_base
 		{
 			$arr["name"] = "<b>".$arr["name"]."</b>";
 		}
-				
+
 		// tshekime et kas menyyl on submenyysid
 		// kui on, siis n2itame alati
 		// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
 		// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
 		// kui pole perioodiline siis ei n2ita
 		$rv = true;
-		
+
 		/*if ($this->period > 0)
 		{
 			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
@@ -480,7 +484,7 @@ class admin_if extends class_base
 		{
 			$rs = $this->resolve_item_new($menu);
 			if ($rs !== false)
-			{	
+			{
 				$this->tree->add_item($rs["parent"], $rs);
 			}
 		}
@@ -511,7 +515,7 @@ class admin_if extends class_base
 		{
 			$rs = $this->resolve_item_new($menu);
 			if ($rs !== false)
-			{	
+			{
 				$rs["id"] .= "ad";
 				$rs["parent"] = $rn;
 				$this->tree->add_item($rs["parent"], $rs);
@@ -537,7 +541,7 @@ class admin_if extends class_base
 			"chgbgcolor" => "cutcopied",
 			"caption" => t("Nimi")
 		));
-		
+
 		$t->define_field(array(
 			"name" => "jrk",
 			"align" => "center",
@@ -548,7 +552,7 @@ class admin_if extends class_base
 			"numeric" => "yea",
 			"sortable" => 1,
 		));
-		
+
 		$t->define_field(array(
 			"name" => "status",
 			"caption" => t("Aktiivne"),
@@ -558,7 +562,7 @@ class admin_if extends class_base
 			"chgbgcolor" => "cutcopied",
 			"sortable" => 1,
 		));
-		
+
 		$t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => t("Muutja"),
@@ -581,7 +585,7 @@ class admin_if extends class_base
 			"numeric" => 1,
 			"chgbgcolor" => "cutcopied",
 		));
-		
+
 		$t->define_field(array(
 			"name" => "class_id",
 			"caption" => t("T&uuml;&uuml;p"),
@@ -743,18 +747,14 @@ class admin_if extends class_base
 
 	private function _do_o_tbl_sorting(&$t, $parent)
 	{
-		$sortby = $_GET["sortby"];
-		if($sortby == "status")
-		{
-			$sortby = "status_val";	
-		}
-		
-		if (empty($sortby))
-		{
-			$sortby = "hidden_jrk";
-		};
+		$sortby = empty($_GET["sortby"]) ? "hidden_jrk" : $_GET["sortby"];
 
-		if (isset($sortby) && $sortby == "jrk")
+		if($sortby === "status")
+		{
+			$sortby = "status_val";
+		}
+
+		if (isset($sortby) && $sortby === "jrk")
 		{
 			$sortby = "hidden_jrk";
 		};
@@ -766,7 +766,6 @@ class admin_if extends class_base
 
 		$t->set_default_sortby(array("is_menu", "name"));
 		$t->set_default_sorder("desc");
-		
 		$t->set_numeric_field("hidden_jrk");
 
 		if($sortby == "name")
@@ -784,22 +783,22 @@ class admin_if extends class_base
 			{
 				$a_sort_fields = new aw_array($menu_obj->meta("sort_fields"));
 				$a_sort_order = new aw_array($menu_obj->meta("sort_order"));
-				
+
 				$a_fields = array("is_menu");
 				foreach($a_sort_fields->get() as $key => $val)
 				{
 					$a_field = split  ( "\.", $val);
 					$a_fields[] = $a_field[1];
 				}
-				
+
 				$a_sorder = array("is_menu" => "desc");
 				$i=1;
 				foreach($a_sort_order->get() as $key => $val)
 				{
 					$a_sorder[$a_fields[$i]] = strtolower($val);
-					$i++;	
+					$i++;
 				}
-				
+
 				$t->sort_by(array(
 					"field" => $a_fields,
 					"sorder" => $a_sorder
@@ -842,7 +841,7 @@ class admin_if extends class_base
 		{
 			$pm->add_item(array(
 				"link" => $this->mk_my_orb("change", array(
-					"id" => $id, 
+					"id" => $id,
 					"parent" => $parent,
 					"period" => $period,
 					"return_url" => get_ru(),
@@ -853,8 +852,8 @@ class admin_if extends class_base
 
 			$pm->add_item(array(
 				"link" => $this->mk_my_orb("if_cut", array(
-					"reforb" => 1, 
-					"id" => $id, 
+					"reforb" => 1,
+					"id" => $id,
 					"parent" => $parent,
 					"sel[$id]" => "1",
 					"return_url" => get_ru()
@@ -881,11 +880,11 @@ class admin_if extends class_base
 
 		return $pm->get_menu();
 	}
-	
+
 	private function generate_new($tb, $i_parent, $period)
 	{
 		$atc = get_instance(CL_ADD_TREE_CONF);
-		
+
 		// although fast enough allready .. caching makes it 3 times as fast
 		$c = get_instance("cache");
 		if(aw_ini_get("admin_if.cache_toolbar_new"))
@@ -905,19 +904,19 @@ class admin_if extends class_base
 			));
 			$c->file_set("newbtn_tree_cache_".aw_global_get("uid"), serialize($tree));
 		}
-		
+
 		foreach($tree as $item_id => $item_collection)
 		{
 			foreach($item_collection as $el_id => $el_data)
 			{
 				$parnt = $item_id == "root" ? "new" : $item_id;
-				
-				if ($el_data["clid"])
+
+				if (!empty($el_data["clid"]))
 				{
 					$url = $this->mk_my_orb("new",array("parent" => $i_parent),$el_data["clid"]);
 					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $url);
 					$tb->add_menu_item(array(
-						"name" => $el_data["id"],
+						"name" => (empty($el_data["id"]) ? $el_id : $el_data["id"]),
 						"parent" => $parnt,
 						"text" => $el_data["name"],
 						//"url" => str_replace (aw_ini_get("baseurl"), "", $this->mk_my_orb("new",array("parent" => "--pt--"),$el_data["clid"])),
@@ -925,14 +924,14 @@ class admin_if extends class_base
 					));
 				}
 				else
-				if ($el_data["link"])
+				if (!empty($el_data["link"]))
 				{
 					$url = str_replace(aw_ini_get("baseurl")."/automatweb/orb.aw", "", $el_data["link"]);
 					//$url = str_replace("--pt--", $arr["parent"], $el_data["link"]);
 					$url =  str_replace("--pt--", $i_parent, str_replace("--pr--", $period, $url));
 					// docs menu has links ..
 					$tb->add_menu_item(array(
-						"name" => $el_data["id"],
+						"name" => (empty($el_data["id"]) ? $el_id : $el_data["id"]),
 						"parent" => $parnt,
 						"text" => $el_data["name"],
 						"url" => $url,
@@ -941,21 +940,22 @@ class admin_if extends class_base
 				else
 				{
 					$tb->add_sub_menu(array(
-						"name" => $el_data["id"],
+						"name" => (empty($el_data["id"]) ? $el_id : $el_data["id"]),
 						"parent" => $parnt,
 						"text" => $el_data["name"],
 					));
-					};
-				if ($el_data["separator"])
+				}
+
+				if (!empty($el_data["separator"]))
 				{
 					$tb->add_menu_separator(array(
 						"parent" => $parnt,
 					));
 				}
-			};
-		};
+			}
+		}
 	}
-	
+
 	/**
 		@attrib name=save_if
 	**/
@@ -1043,18 +1043,18 @@ class admin_if extends class_base
 		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel, "return_url" => $return_url));
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=copy_feedback params=name default="0"
-		
+
 		@param parent optional
 		@param period optional
 		@param sel optional
 		@param return_url
 		
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1125,14 +1125,14 @@ class admin_if extends class_base
 		return $props;
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=submit_copy_feedback params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1159,7 +1159,7 @@ class admin_if extends class_base
 		return !empty($return_url) ? $return_url : self::get_link_for_obj($parent,$period);
 	}
 
-	/** pastes the cut objects 
+	/** pastes the cut objects
 		@attrib name=if_paste params=name default="0" all_args=1
 	**/
 	function if_paste($arr)
@@ -1187,7 +1187,7 @@ class admin_if extends class_base
 		return $arr["post_ru"];
 	}
 
-	/**  
+	/**
 		@attrib name=if_delete params=name default="0" all_args=1
 	**/
 	function if_delete($arr)
@@ -1264,11 +1264,11 @@ class admin_if extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["request"]["integrated"] == 1 && $arr["id"] == "o")
+		if (isset($arr["request"]["integrated"]) && $arr["request"]["integrated"] == 1 && $arr["id"] == "o")
 		{
 			return false;
 		}
-		if ($arr["request"]["group"] == "fu" && $arr["id"] == "fu")
+		if (isset($arr["request"]["group"]) && $arr["request"]["group"] == "fu" && $arr["id"] == "fu")
 		{
 			return true;
 		}
@@ -1303,7 +1303,7 @@ class admin_if extends class_base
 				mkdir($folder, 0777);
 				$tn = $folder;
 				$zip = zip_open($zip);
-				while ($zip_entry = zip_read($zip)) 
+				while ($zip_entry = zip_read($zip))
 				{
 					zip_entry_open($zip, $zip_entry, "r");
 					$fn = $folder."/".zip_entry_name($zip_entry);
@@ -1326,15 +1326,15 @@ class admin_if extends class_base
 
 
 				$files = array();
-				if ($dir = @opendir($tn)) 
+				if ($dir = @opendir($tn))
 				{
-					while (($file = readdir($dir)) !== false) 
+					while (($file = readdir($dir)) !== false)
 					{
 						if (!($file == "." || $file == ".."))
 						{
 							$files[] = $tn."/".$file;
 						}
-					}  
+					}
 					closedir($dir);
 				}
 			}
@@ -1440,9 +1440,9 @@ class admin_if extends class_base
 				"new_parent" => $parent
 			));
 		}
-		
+
 		// if site id changes after parent change, then update sub-objects as well
-		$old_site_id = $o->site_id();			
+		$old_site_id = $o->site_id();
 		$o->set_parent($parent);
 		if ($old_site_id != $o->site_id())
 		{
@@ -1456,7 +1456,7 @@ class admin_if extends class_base
 				"save" => true
 			));
 		}
-		
+
 		if ($period)
 		{
 			$o->set_period($period);
@@ -1536,7 +1536,7 @@ class admin_if extends class_base
 			}
 			// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
 			// this fucks shit up. basically, a periodic menu can have non-periodic submenus
-			// in that case there really is no way of seeing them 
+			// in that case there really is no way of seeing them
 			else
 			{
 				$filter[] = new object_list_filter(array(
@@ -1594,9 +1594,9 @@ class admin_if extends class_base
 		return html::get_change_url(self::find_admin_if_id(), array("group" => "o", "parent" => $parent, "period" => $period));
 	}
 
-	/** shows menus importing form 
+	/** shows menus importing form
 		@attrib name=import params=name default="0"
-		
+
 		@param parent required
 	**/
 	function import($arr)
@@ -1642,22 +1642,22 @@ class admin_if extends class_base
 			"active" => true,
 			"caption" => t("Impordi"),
 			"link" => get_ru(),
-		));		
+		));
 
 		return $tp->get_tabpanel(array(
 			"content" => $html
 		));
 	}
 
-	/** does the actual menu importing bit 
-		
+	/** does the actual menu importing bit
+
 		@attrib name=submit_import params=name default="0"
-		
+
 		@param parent required
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -1706,7 +1706,7 @@ class admin_if extends class_base
 		while (list(,$v) = each($menus[$i_p]))
 		{
 			$db = $v["db"];
-	
+
 			$icon_id = 0;
 			if (is_array($v["icon"]))
 			{
@@ -1790,7 +1790,7 @@ class admin_if extends class_base
 					$mopts = array("click" => 1);
 					if ($opts != "")
 					{
-						// whee. do a preg_match for every option. 
+						// whee. do a preg_match for every option.
 						$mopts["act"] = preg_match("/\+act/",$opts);
 						if (preg_match("/\+comment=\"(.*)\"/",$opts,$mmt))
 						{
@@ -1828,7 +1828,7 @@ class admin_if extends class_base
 						{
 							$mopts["metas"] = $mmt[1];
 						}
-						
+
 					}
 
 					// now create the damn thing.
