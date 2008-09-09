@@ -4626,7 +4626,7 @@ echo "<div style='font-size: 10px;'>";
 	public function _get_s_finance_type($arr)
 	{
 		$arr["prop"]["options"] = array(
-			0 => t("--vali--"),
+			"" => t("--vali--"),
 			1 => t("T&ouml;&ouml; l&otilde;ppedes"),
 			2 => t("Projekti l&otilde;ppedes"),
 			3 => t("Arendus")
