@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.33 2008/07/29 13:49:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.34 2008/09/09 12:50:09 kristo Exp $
 // menu_tree.aw - men&uuml;&uuml;puu
 
 /*
@@ -596,6 +596,10 @@ class menu_tree extends class_base
 		while(list($k,$v) = each($slice))
 		{
 			$url = "";
+			$this->vars(array(
+				"level" => $this->rec_level
+			));
+
 			$slicecounter++;
 			$id = $v->id();
 			$spacer = str_repeat($this->spacer,$this->level * $this->sq);
