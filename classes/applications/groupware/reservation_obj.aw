@@ -70,7 +70,7 @@ class reservation_obj extends _int_object
 	function get_sum()
 	{
 		enter_function("sbo::_get_sum");
-		if($arr["obj_inst"]->is_lower_bron())//kui on miski alambronn , siis on suht hindamatu
+		if($this->is_lower_bron())//kui on miski alambronn , siis on suht hindamatu
 		{
 			exit_function("sbo::_get_sum");
 			return array();
