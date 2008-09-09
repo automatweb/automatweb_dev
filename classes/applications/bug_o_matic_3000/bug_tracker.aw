@@ -123,6 +123,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property s_bug_severity type=select store=no parent=s_status_lay captionside=top
 		@caption T&otilde;sidus
 
+		@property s_finance_type type=select store=no parent=s_status_lay captionside=top
+		@caption Kulud kaetakse
+
 	@layout s_who_l type=vbox closeable=1 area_caption=Osalejad parent=s_bott
 
 		@layout s_who_empty_l type=hbox parent=s_who_l
@@ -2709,7 +2712,7 @@ class bug_tracker extends class_base
 			}
 		}
 
-		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority");
+		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority", "finance_type");
 		foreach($sf as $field)
 		{
 			if (trim($r["s_".$field]) != "")
@@ -4618,6 +4621,17 @@ echo "<div style='font-size: 10px;'>";
 			$person_ol->arr();
 		}
 		return $u2p;
+	}
+
+	public function _get_s_finance_type($arr)
+	{
+		$arr["prop"]["options"] = array(
+			0 => t("--vali--"),
+			1 => t("T&ouml;&ouml; l&otilde;ppedes"),
+			2 => t("Projekti l&otilde;ppedes"),
+			3 => t("Arendus")
+		);
+		$arr["prop"]["value"] = $arr["request"]["s_finance_type"];
 	}
 }
 ?>

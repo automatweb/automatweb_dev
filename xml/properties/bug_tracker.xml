@@ -325,6 +325,17 @@
             <caption>T&amp;amp;otilde;sidus</caption>
       </property>
       <property>
+            <name>s_finance_type</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>s_status_lay</parent>
+            <captionside>top</captionside>
+            <field>s_finance_type</field>
+            <caption>Kulud kaetakse</caption>
+      </property>
+      <property>
             <name>s_who</name>
             <table>objects</table>
             <group>search</group>
