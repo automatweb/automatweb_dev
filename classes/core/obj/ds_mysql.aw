@@ -1975,6 +1975,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$this->used_tables[$pd["table"]] = $pd["table"];
 						}
 						$tmp[] = $pd["table"].".`".$pd["field"]."` ".($sl_item["direction"] == "desc" ? "DESC" : "ASC")." ";
+						$this->_add_s($pd["table"]);
 					}
 					$this->sby .= join(", ", $tmp);
 				}
