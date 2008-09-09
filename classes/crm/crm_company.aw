@@ -9205,6 +9205,24 @@ Bank accounts: yksteise all
 		return $arr["post_ru"];
 	}
 
+	/**
+		@attrib name=add_payment all_args=1
+	**/
+	function add_payment($arr)
+	{
+		foreach($arr["sel"] as $bill_id)
+		{
+			if($this->can("view" , $bill_id))
+			{
+				$bill = obj($bill_id);
+				$payment = $bill->add_payment();
+				$url = html::get_change_url($payment, array("return_url" => $arr["post_ru"]));
+				return $url;
+			}
+		}
+		return $arr["post_ru"];
+	}
+
 	function callback_get_default_group($arr)
 	{
 		$seti = get_instance(CL_CRM_SETTINGS);

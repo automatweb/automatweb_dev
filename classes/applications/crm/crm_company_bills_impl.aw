@@ -1338,8 +1338,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			"name" => "add_payment",
 			"img" => "create_bill.jpg",
 			"tooltip" => t("Lisa laekumine"),
-	//		"action" => "search_bill"
-	//		"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("search_bill", array("openprintdialog" => 1,))."','Otsing',550,500)",
+			"action" => "add_payment"
 		));
 	}
 

@@ -530,6 +530,13 @@
 			</function>
 		</action>
 
+		<action name="add_payment" all_args="1">
+			<function name="add_payment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="company_data" all_args="1">
 			<function name="company_data">
 				<arguments>
