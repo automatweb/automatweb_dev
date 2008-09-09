@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.122 2008/09/02 10:47:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.123 2008/09/09 14:15:53 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -326,7 +326,7 @@
 		@groupinfo final_catering caption="Toitlustus" parent=final_info
 		@default group=final_catering
 
-			@layout cat_hsplit type=hbox width=35%:65%
+			@layout cat_hsplit type=hbox width=25%:75%
 
 				@layout cat_leftsplit parent=cat_hsplit type=vbox
 
@@ -1534,13 +1534,72 @@ class rfp extends class_base
 
 	function _get_products_add_bron_tbl($arr)
 	{
-		$add_brons = aw_global_get("rfp_add_brons");
+		if(aw_global_get("rfp_add_brons"))
+		{
+			$add_brons = aw_global_get("rfp_add_brons");
+		}
+		elseif(!$arr["obj_inst"]->meta("pk_catering_set") && ($pkid = $arr["obj_inst"]->prop("data_gen_package")) && $this->rfpm)
+		{
+			$pk_prods = $this->rfpm->meta("pk_prods");
+			$pk_data = $pk_prods[$pkid];
+			$add_brons = array();
+			$s = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
+			$e = $arr["obj_inst"]->prop("data_gen_departure_date_admin");
+			$start = mktime(date('H', $s), 0, 0, date('m', $s), date('d', $s), date('Y', $s));
+			$end = mktime(date('H', $s), 0, 0, date('m', $e), date('d', $e), date('Y', $e));
+			if(($end - $start) < 1)
+			{
+				$end = $start + 1;
+			}
+			for($i = $start; $i <= $end; $i += 24 * 60 * 60)
+			{
+				foreach($pk_data as $pkid => $data)
+				{
+					$add_brons[] = array(
+						"date"  => $i,
+						"room" => $data["room"],
+						"prod" => $data["prod"],
+						"var" => $data["var"],
+						"count" => 1,
+					);
+					$prods = 1;
+				}
+			}
+			$prod_f = $this->rfpm->prop("pk_products_folder");
+			if($this->can("view", $prod_f))
+			{
+				$ol = new object_list(array(
+					"parent" => $prod_f,
+					"class_id" => CL_MENU,
+				));
+				$choose_set = false;
+				foreach($ol->arr() as $o)
+				{
+					$p_ol = new object_list(array(
+						"parent" => $o->id(),
+						"class_id" => CL_SHOP_PRODUCT,
+					));
+					if(!$choose_set)
+					{
+						$choose_set = true;
+					}
+					$flds[$o->id()] = $o->name();
+					foreach($p_ol->arr() as $o2)
+					{
+						$prod[$o->id()][$o2->id()] = $o2->name();
+					}
+				}
+				$prodopts["optgnames"] = $flds;
+				$prodopts["optgroup"] = $prod;
+			}
+		}
 		if(is_array($add_brons) && count($add_brons))
 		{
 			$t = &$arr["prop"]["vcl_inst"];
-			$this->_init_prod_add_bron_tbl($t);
+			$this->_init_prod_add_bron_tbl($t, $prods);
 			$count = 0;
 			$rooms = $this->get_rooms($arr);
+			$roomnames[0] = t("--vali--");
 			foreach($rooms as $rid)
 			{
 				$roomnames[$rid] = obj($rid)->name();
@@ -1551,20 +1610,33 @@ class rfp extends class_base
 				for($i = 0; $i < $add["count"]; $i++)
 				{
 					$count++;
-					$time = date_edit::get_timestamp($add["date"]);
+					if($prod)
+					{
+						$prodhtml = html::select(array(
+							"name" => "add_bron_tbl[{$count}][prod]",
+							"options" => array(t("--vali--")),
+							"optgroup" => $prodopts["optgroup"],
+							"optgnames" => $prodopts["optgnames"],
+							"size" => 5,
+							"value" => $add["prod"],
+							"width" => 200,
+							"multiple" => 1,
+						));
+					}
+					$time = is_numeric($add["date"]) ? $add["date"] : date_edit::get_timestamp($add["date"]);
 					$t->define_data(array(
 						"del" => html::checkbox(array(
 							"name" => "add_bron_tbl[{$count}][del]",
 							"ch_value" => 1,
 						)),
-						"time" => html::datetime_select(array(
+						"time" => html::date_select(array(
 							"name" => "add_bron_tbl[{$count}][start1]",
 							"value" => $time,
 							"month_as_numbers" => 1,
-						))."<br />\n ".t("kuni")."<br />\n".html::datetime_select(array(
-							"name" => "add_bron_tbl[{$count}][end]",
-							"value" => $time,
-							"month_as_numbers" => 1,
+						))."<br />\n ".t("Aeg:")."<br />\n".$this->gen_time_form(array(
+							"varname" => "add_bron_tbl[{$count}][time]",
+							"start1" => $time,
+							"end" => $time,
 						)),
 						"room" => html::select(array(
 							"name" => "add_bron_tbl[{$count}][resource]",
@@ -1576,9 +1648,13 @@ class rfp extends class_base
 							"options" => $prod_vars,
 							"value" => $add["var"],
 						)),
+						"prod" => $prodhtml,
+						"hidden_time" => $time,
+						"hidden_var" => $add["var"],
 					));
 				}
 			}
+			$t->set_default_sortby(array("hidden_time" => "hidden_time", "hidden_var" => "hidden_var",));
 		}
 		else
 		{
@@ -1590,31 +1666,63 @@ class rfp extends class_base
 	{
 		if($arr["request"]["rfp_add_bron_tbl_ok"])
 		{
+			$oi_prods = $arr["obj_inst"]->meta("prods");
+			$rvi = get_instance(CL_RESERVATION);
 			foreach($arr["request"]["add_bron_tbl"] as $i => $add)
 			{
 				if(!$add["del"])
 				{
+					$add["start"] = mktime($add["time"]["from"]["hour"], $add["time"]["from"]["minute"], 0, $add["start1"]["month"], $add["start1"]["day"], $add["start1"]["year"]);
+					$add["end"] = mktime($add["time"]["to"]["hour"], $add["time"]["to"]["minute"], 0, $add["start1"]["month"], $add["start1"]["day"], $add["start1"]["year"]);
+					$add["start1"] = $add["start"];
 					$o = obj();
 					$o->set_class_id(CL_RESERVATION);
 					$o->set_parent($arr["obj_inst"]->id());
 					$o->set_prop("resource", $add["resource"]);
-					$o->set_prop("start1", date_edit::get_timestamp($add["start1"]));
-					$o->set_prop("end", date_edit::get_timestamp($add["end"]));
+					$o->set_prop("start1", $add["start1"]);
+					$o->set_prop("end", $add["end"]);
 					$o->set_meta("rfp_catering_var", $add["prod_var"]);
 					$o->set_prop("customer", $arr["obj_inst"]->prop("data_subm_organisation"));
-					$o->set_name(date('d.m.Y H:i', date_edit::get_timestamp($add["start1"]))." - ".date('d.m.Y H:i', date_edit::get_timestamp($add["end"])));
+					$o->set_name(date('d.m.Y H:i', $add["start1"])." - ".date('d.m.Y H:i', $add["end"]));
 					$o->save();
+					if(is_array($add["prod"]))
+					{
+						foreach($add["prod"] as $prodid)
+						{
+							$prod_price = $rvi->get_product_price(array("product" => $prodid, "reservation" => $rv));
+							$price = $rvi->_get_admin_price_view(obj($prodid), $prod_price);
+							$amt = $arr["obj_inst"]->prop("data_gen_attendees_no");
+							$oi_prods[$prodid.".".$o->id()] = array(
+								"amount" => $amt,
+								"bronid" => $o->id(),
+								"room" => $add["room"],
+								"var" => $add["var"],
+								"start1" => $add["start1"],
+								"end" => $add["end"],
+								"price" => number_format($price, 2),
+								"sum" => number_format($price * $amt, 2),
+							);
+							$amount = $o->meta("amount");
+							$params["amount"] = $amount;
+							$params["amount"][$prodid] = $amt;
+							$params["change_discount"][$prodid] = 0;
+							$rvi->set_products_info($o->id(), $params);
+						}
+					}
 					$arr["obj_inst"]->connect(array(
 						"to" => $o->id(),
 						"type" => "RELTYPE_CATERING_RESERVATION",
 					));
 				}
 			}
+			$arr["obj_inst"]->set_meta("prods", $oi_prods);
+			$arr["obj_inst"]->set_meta("pk_catering_set", 1);
+			$arr["obj_inst"]->save();
 			aw_session_del("rfp_add_brons");
 		}
 	}
 
-	function _init_prod_add_bron_tbl(&$t)
+	function _init_prod_add_bron_tbl(&$t, $prods)
 	{
 		$t->set_header(html::hidden(array(
 			"name" => "rfp_add_bron_tbl_ok",
@@ -1640,6 +1748,14 @@ class rfp extends class_base
 			"caption" => t("Nimetus"),
 			"align" => "center",
 		));
+		if($prods)
+		{
+			$t->define_field(array(
+				"name" => "prod",
+				"caption" => t("Tooted"),
+				"align" => "center",
+			));
+		}
 	}
 
 	function get_product_vars($chooser = false)
@@ -1703,6 +1819,7 @@ class rfp extends class_base
 			"caption" => t("Nimi"),
 			"align" => "center",
 			"chgbgcolor" => "color",
+			"colspan" => "span",
 		));
 		$t->define_field(array(
 			"name" => "price",
@@ -1767,100 +1884,116 @@ class rfp extends class_base
 				// a room is selected from tree and we filter out reservations for that room because connection search can't do that :S
 				continue;
 			}
-			if($this->can("view", $c->prop("to"))) // that parent & catering is fishy
+			$rv = $c->to();
+			$rvo = obj($c->to());
+			$prod_list = $rvi->get_room_products($rv->prop("resource"));
+			$amount = $rv->meta("amount"); // why the hell is this used???
+			$rv_amount = $rvo->get_product_amount();
+			$discount = $rvi->get_product_discount($rv->id());
+			$def_var = $rv->meta("rfp_catering_var");
+			$prod_count = 0;
+			$prod_skip = false;
+			$rv_group = html::checkbox(array(
+				"name" => "sel_res[".$rvo->id()."]",
+				"value" => $rvo->id(),
+			)).html::obj_change_url($rvo)." (".html::href(array(
+				"url" => aw_url_change_var("show_all_prods[".$rvo->id()."]", $arr["request"]["show_all_prods"][$rvo->id()] ? 0 : 1),
+				"caption" => $arr["request"]["show_all_prods"][$rvo->id()] ? t("N&auml;ita ainult valituid") : t("N&auml;ita k&otilde;iki"),
+			)).")";
+			foreach($prod_list->arr() as $prod)
 			{
-				$rv = $c->to();
-				$rvo = obj($c->to());
-				$prod_list = $rvi->get_room_products($rv->prop("resource"));
-				$amount = $rv->meta("amount"); // why the hell is this used???
-				$rv_amount = $rvo->get_product_amount();
-				$discount = $rvi->get_product_discount($rv->id());
-				$def_var = $rv->meta("rfp_catering_var");
+				//if($count = $amount[$prod->id()])
+				//{
+					$count = $amount[$prod->id()];
+					if(!$arr["request"]["show_all_prods"][$rv->id()] && !$count)
+					{
+						$prod_skip = true;
+						continue;
+					}
+					$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
+					$price = $rvi->_get_admin_price_view($prod,$prod_price);
+					$disc = $discount[$prod->id()];
+					$prod_sum = $price * $count;
+					$prod_sum = number_format($prod_sum - ($prod_sum * $disc)/100,2);
+					$prvid = $prods[$prod->id().".".$rv->id()]["bronid"];
+					$times = array();
+					if($this->can("view", $prvid))
+					{
+						$take_times = $prvid;
+					}
+					else
+					{
+						$take_times = $rv;
+					}
+					$prv = obj($take_times);
+					$elem_id = $prod->id().".".$rv->id();
+					$res_start = $prods[$elem_id]["start1"]?$prods[$elem_id]["start1"]:$prv->prop("start1");
+					$res_end = $prods[$elem_id]["end"]?$prods[$elem_id]["end"]:$prv->prop("end");
 
-				foreach($prod_list->arr() as $prod)
-				{
-					//if($count = $amount[$prod->id()])
-					//{
-						$count = $amount[$prod->id()];
-						$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
-						$price = $rvi->_get_admin_price_view($prod,$prod_price);
-						$disc = $discount[$prod->id()];
-						$prod_sum = $price * $count;
-						$prod_sum = number_format($prod_sum - ($prod_sum * $disc)/100,2);
-						$prvid = $prods[$prod->id().".".$rv->id()]["bronid"];
-						$times = array();
-						if($this->can("view", $prvid))
-						{
-							$take_times = $prvid;
-						}
-						else
-						{
-							$take_times = $rv;
-						}
-						$prv = obj($take_times);
-						$elem_id = $prod->id().".".$rv->id();
-						$res_start = $prods[$elem_id]["start1"]?$prods[$elem_id]["start1"]:$prv->prop("start1");
-						$res_end = $prods[$elem_id]["end"]?$prods[$elem_id]["end"]:$prv->prop("end");
-
-						$room = $prv->prop("resource");
-						$data = array(
-							"name" => $prod->name(),
-							"price" => html::hidden(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][price]",
-								"value" => $price,
-							)).$price,
-							"amount" => html::textbox(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][amount]",
-								"value" => $count?$count:$rv_amount[$prod->id()],
-								"size" => 5,
-							)),//.($count?$count:$rv_amount[$prod->id()]),
-							"discount" => html::textbox(array(
-								"name" =>  "prods[".$prod->id().".".$rv->id()."][discount]",
-								"value" => $disc,
-								"size" => 5,
-							))."%",//.$disc."%",
-							"sum" => html::hidden(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][sum]",
-								"value" => $prod_sum,
-							)).$prod_sum,
-							"time" => $this->gen_time_form(array(
-								"varname" => "prods[".$elem_id."]",
-								"start1" => $res_start,
-								"end" => $res_end,
-							)),
-							"room" => html::select(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][room]",
-								"width" => 70,
-								//"value" => $room,
-								//"selected" => $room,
-								"options" => $rooms,
-								"selected" => ($_t = $prods[$prod->id().".".$rv->id()]["room"])?$_t:$room,
-							)),
-							"var" => html::select(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][var]",
-								"width" => 70,
-								"value" => ($set = $prods[$prod->id().".".$rv->id()]["var"]) ? $set : ($def_var ? $def_var : 0),
-								"options" => $prodvars,
-							)),
-							"comment" => html::textarea(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][comment]",
-								"value" => $prods[$prod->id().".".$rv->id()]["comment"],
-								"cols" => 12,
-								"rows" => 2,
-							)).html::hidden(array(
-								"name" => "prods[".$prod->id().".".$rv->id()."][bronid]",
-								"value" => strlen($_t = $prods[$prod->id().".".$rv->id()]["bronid"])?$_t:$rv->id(),
-							)),
-							"reserv_group" => html::checkbox(array(
-									"name" => "sel_res[".$rvo->id()."]",
-									"value" => $rvo->id(),
-								)).html::obj_change_url($rvo),
-							"product" => $prod->id().".".$rv->id(),
-							"color" => ($count?$count:$rv_amount[$prod->id()])? "#F0F0F0": "",
-						);
-						$t->define_data($data);
-					//}
-				}
+					$room = $prv->prop("resource");
+					$data = array(
+						"name" => $prod->name(),
+						"price" => html::hidden(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][price]",
+							"value" => $price,
+						)).$price,
+						"amount" => html::textbox(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][amount]",
+							"value" => $count?$count:$rv_amount[$prod->id()],
+							"size" => 5,
+						)),//.($count?$count:$rv_amount[$prod->id()]),
+						"discount" => html::textbox(array(
+							"name" =>  "prods[".$prod->id().".".$rv->id()."][discount]",
+							"value" => $disc,
+							"size" => 5,
+						))."%",//.$disc."%",
+						"sum" => html::hidden(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][sum]",
+							"value" => $prod_sum,
+						)).$prod_sum,
+						"time" => $this->gen_time_form(array(
+							"varname" => "prods[".$elem_id."]",
+							"start1" => $res_start,
+							"end" => $res_end,
+						)),
+						"room" => html::select(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][room]",
+							"width" => 70,
+							//"value" => $room,
+							//"selected" => $room,
+							"options" => $rooms,
+							"selected" => ($_t = $prods[$prod->id().".".$rv->id()]["room"])?$_t:$room,
+						)),
+						"var" => html::select(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][var]",
+							"width" => 70,
+							"value" => ($set = $prods[$prod->id().".".$rv->id()]["var"]) ? $set : ($def_var ? $def_var : 0),
+							"options" => $prodvars,
+						)),
+						"comment" => html::textarea(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][comment]",
+							"value" => $prods[$prod->id().".".$rv->id()]["comment"],
+							"cols" => 12,
+							"rows" => 2,
+						)).html::hidden(array(
+							"name" => "prods[".$prod->id().".".$rv->id()."][bronid]",
+							"value" => strlen($_t = $prods[$prod->id().".".$rv->id()]["bronid"])?$_t:$rv->id(),
+						)),
+						"reserv_group" => $rv_group,
+						"product" => $prod->id().".".$rv->id(),
+						"color" => ($count?$count:$rv_amount[$prod->id()])? "#F0F0F0": "",
+					);
+					$t->define_data($data);
+				//}
+				$prod_count++;
+			}
+			if(!$prod_count && $prod_skip)
+			{
+				$t->define_data(array(
+					"name" => t("Valitud tooted puuduvad"),
+					"reserv_group" => $rv_group,
+					"span" => 3,
+				));
 			}
 		}
 		return $t->draw();

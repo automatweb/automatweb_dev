@@ -1343,7 +1343,7 @@
             </add_inf_room>
             <cat_hsplit>
                   <type>hbox</type>
-                  <width>35%:65%</width>
+                  <width>25%:75%</width>
                   <group>final_catering</group>
                   <area_caption></area_caption>
             </cat_hsplit>

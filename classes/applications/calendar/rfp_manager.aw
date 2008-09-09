@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.66 2008/09/02 09:38:28 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.67 2008/09/09 14:15:53 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -70,6 +70,14 @@
 
 		@property packages_tbl type=table store=no no_caption=1
 	
+	@groupinfo packages_products caption="Pakettide toitlustus" parent=settings
+		@default group=packages_products
+
+		@property pk_products_folder type=relpicker reltype=RELTYPE_PACKAGE_PRODUCT_FOLDER field=meta method=serialize
+		@caption Toodete kaust
+
+		@property pk_products_table type=table store=no no_caption=1
+
 	@groupinfo rooms caption="Ruumid" parent=settings
 		@property rooms_table type=table store=no no_caption=1 group=rooms
 
@@ -199,6 +207,8 @@
 @reltype FOLDER clid=CL_MENU,CL_META value=9
 @caption Kaust
 
+@reltype PACKAGE_PRODUCT_FOLDER clid=CL_MENU value=10
+@caption Toodete kaust
 */
 
 
@@ -496,6 +506,143 @@ class rfp_manager extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function _init_pk_products_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "var",
+			"caption" => t("Nimetus"),
+		));
+		$t->define_field(array(
+			"name" => "room",
+			"caption" => t("Ruum"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Toode"),
+			"align" => "center",
+		));
+	}
+
+	function _get_pk_products_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_pk_products_table($t);
+		$rfs = $arr["obj_inst"]->prop("prod_vars_folder");
+		if($this->can("view", $rfs))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_META,
+				"parent" => $rfs,
+			));
+			foreach($ol->arr() as $o)
+			{
+				$prodvars[$o->id()] = $o->name();
+			}
+		}
+		$cat_rf = $arr["obj_inst"]->prop("catering_room_folder");
+		$rooms = array(0 => t("--vali--"));
+		if(is_array($cat_rf) && count($cat_rf))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_ROOM,
+				"parent" => $cat_rf,
+			));
+			foreach($ol->arr() as $o)
+			{
+				$rooms[$o->id()] = $o->name();
+			}
+		}
+		$prod_f = $arr["obj_inst"]->prop("pk_products_folder");
+		if($this->can("view", $prod_f))
+		{
+			$ol = new object_list(array(
+				"parent" => $prod_f,
+				"class_id" => CL_MENU,
+			));
+			$choose_set = false;
+			foreach($ol->arr() as $o)
+			{
+				$p_ol = new object_list(array(
+					"parent" => $o->id(),
+					"class_id" => CL_SHOP_PRODUCT,
+				));
+				if(!$choose_set)
+				{
+					$choose_set = true;
+				}
+				$flds[$o->id()] = $o->name();
+				foreach($p_ol->arr() as $o2)
+				{
+					$prod[$o->id()][$o2->id()] = $o2->name();
+				}
+			}
+			$prods["optgnames"] = $flds;
+			$prods["optgroup"] = $prod;
+		}
+		$pk_prods = $arr["obj_inst"]->meta("pk_prods");
+		$ol = new object_list(array(
+			"class_id" => CL_META,
+			"parent" => $arr["obj_inst"]->prop("packages_folder"),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$pk_counts = $arr["obj_inst"]->meta("pk_counts");
+		foreach($ol->arr() as $pkid => $pko)
+		{
+			$rowc = 0;
+			$name = html::textbox(array(
+				"name" => "pk_counts[".$pkid."]",
+				"value" => $pk_counts[$pkid],
+				"size" => 2,
+			)).html::obj_change_url($pko->id(), parse_obj_name($pko->name()));
+			for($i = 0; $i < $pk_counts[$pkid]; $i++)
+			{
+				$rowc++;
+				$t->define_data(array(
+					"name" => $name,
+					"var" => html::select(array(
+						"name" => "pk_prods[".$pko->id()."][".$i."][var]",
+						"options" => $prodvars,
+						"value" => $pk_prods[$pko->id()][$i]["var"],
+					)),
+					"room" => html::select(array(
+						"name" => "pk_prods[".$pko->id()."][".$i."][room]",
+						"options" => $rooms,
+						"value" => $pk_prods[$pko->id()][$i]["room"],
+					)),
+					"prod" => html::select(array(
+						"name" => "pk_prods[".$pko->id()."][".$i."][prod]",
+						"options" => array(t("--vali--")),
+						"optgroup" => $prods["optgroup"],
+						"optgnames" => $prods["optgnames"],
+						"size" => 5,
+						"value" => $pk_prods[$pko->id()][$i]["prod"],
+						"multiple" => 1,
+					)),
+				));
+			}
+			if(!$rowc)
+			{
+				$t->define_data(array(
+					"name" => $name,
+					"var" => t("(Toitlustuskordade arv on sisestamata)"),
+				));
+			}
+		}
+		$t->set_rgroupby(array("name" => "name"));
+	}
+
+	function _set_pk_products_table($arr)
+	{
+		$arr["obj_inst"]->set_meta("pk_counts", $arr["request"]["pk_counts"]);
+		if(is_array($arr["request"]["pk_prods"]))
+		{
+			$arr["obj_inst"]->set_meta("pk_prods", $arr["request"]["pk_prods"]);
+		}
+		$arr["obj_inst"]->save();
 	}
 
 	function _get_raports_tb($arr)

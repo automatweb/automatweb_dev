@@ -191,6 +191,25 @@
             <field>packages_tbl</field>
       </property>
       <property>
+            <name>pk_products_folder</name>
+            <table>objects</table>
+            <group>packages_products</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PACKAGE_PRODUCT_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete kaust</caption>
+      </property>
+      <property>
+            <name>pk_products_table</name>
+            <table>objects</table>
+            <group>packages_products</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>pk_products_table</field>
+      </property>
+      <property>
             <name>rooms_table</name>
             <table>objects</table>
             <group>rooms</group>
@@ -539,6 +558,10 @@
                   <caption>Paketid</caption>
                   <parent>settings</parent>
             </packages>
+            <packages_products>
+                  <caption>Pakettide toitlustus</caption>
+                  <parent>settings</parent>
+            </packages_products>
             <rooms>
                   <caption>Ruumid</caption>
                   <parent>settings</parent>
@@ -630,6 +653,11 @@
                   <value>9</value>
                   <caption>Kaust</caption>
             </FOLDER>
+            <PACKAGE_PRODUCT_FOLDER>
+                  <clid>CL_MENU</clid>
+                  <value>10</value>
+                  <caption>Toodete kaust</caption>
+            </PACKAGE_PRODUCT_FOLDER>
       </reltypes>
       <layout>
             <raports_hsplit>

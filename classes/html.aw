@@ -47,7 +47,7 @@ class html extends aw_template
 		// style attributes
 		if (!empty($width))
 		{
-			$width = " width: {$width}px;";
+			$w = " width: {$width}px;";
 		}
 
 		if (!empty($textsize))
@@ -124,7 +124,7 @@ class html extends aw_template
 			$onc = " onchange=\"{$onchange}\"";
 		}
 
-		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$textsize}{$ti}{$wid}>\n{$optstr}</select>{$post_append_text}\n";
+		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$textsize}{$ti}{$wid}{$style}>\n{$optstr}</select>{$post_append_text}\n";
 	}
 
 	/**
