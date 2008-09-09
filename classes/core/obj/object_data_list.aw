@@ -21,6 +21,9 @@ class object_data_list
 
 		@returns
 			object_data_list object.
+	
+		@comment
+			You can not rename the following fields in the fetch part: oid, parent, name, brother_of, status, class_id
 
 		@examples
 			$odl = new object_data_list(
@@ -51,6 +54,26 @@ class object_data_list
 				"id" => "ERR_PARAM",
 				"msg" => t("object_data_list::object_data_list($param): parameter must be array!")
 			));
+		}
+
+		error::raise_if(!is_array($props) || count($props) == 0, array(
+			"id" => "ERR_EMPTY_ARRAY",
+			"msg" => t("The fetch parameter can not be empty!")
+		));
+
+		// make sure that internal props are not renamed
+		foreach($props as $clid => $dat)
+		{
+			foreach($dat as $k => $v)
+			{
+				if (!is_numeric($k) && ($k == "oid" || $k == "parent" || $k == "name" || $k == "brother_of" || $k == "status" || $k == "class_id") && $v != $k)
+				{
+					error::raise(array(
+						"id" => "ERR_INVALID_RENAME",
+						"msg" => sprintf(t("The fields oid,parent,name,brother_of,status,class_id can not be renamed in fetches. Current rename is %s => %s"), $k, $v)
+					));
+				}
+			}
 		}
 
 		$this->_int_load($param, $props);
