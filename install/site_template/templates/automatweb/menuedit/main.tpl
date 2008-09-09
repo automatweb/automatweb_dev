@@ -69,3 +69,111 @@ EOF;
 </div><!-- footer -->
 
 </div><!-- wrapper -->
+
+
+
+<!--- temp fix; needed menus -->
+
+<!-- SUB: MENU_YLEMINE_L1_ITEM_BEGIN -->
+ <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_2_left.gif" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a href='{VAR:link}' {VAR:target}>
+		<!-- SUB: HAS_IMAGE -->
+		<img src='{VAR:menu_image_0_url}' border='0' alt='{VAR:text}'>
+		<!-- END SUB: HAS_IMAGE -->
+
+		<!-- SUB: NO_IMAGE -->
+		<span class="black">{VAR:text}</span>
+		<!-- END SUB: NO_IMAGE -->
+	</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_2_right.gif" HEIGHT="24" BORDER="0" ALT=""></td>
+<!-- END SUB: MENU_YLEMINE_L1_ITEM_BEGIN -->
+
+<!-- SUB: MENU_YLEMINE_L1_ITEM -->
+ <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_2_left.gif" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a href='{VAR:link}' {VAR:target}>
+		<!-- SUB: HAS_IMAGE -->
+		<img src='{VAR:menu_image_0_url}' border='0' alt='{VAR:text}'>
+		<!-- END SUB: HAS_IMAGE -->
+
+		<!-- SUB: NO_IMAGE -->
+		<span class="black">{VAR:text}</span>
+		<!-- END SUB: NO_IMAGE -->
+	</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_2_right.gif" HEIGHT="24" BORDER="0" ALT=""></td>
+<!-- END SUB: MENU_YLEMINE_L1_ITEM -->
+
+
+<!-- SUB: MENU_YLEMINE_L1_ITEM_END -->
+ <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_2_left.gif" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a href='{VAR:link}' {VAR:target}>
+		<!-- SUB: HAS_IMAGE -->
+		<img src='{VAR:menu_image_0_url}' border='0' alt='{VAR:text}'>
+		<!-- END SUB: HAS_IMAGE -->
+
+		<!-- SUB: NO_IMAGE -->
+		<span class="black">{VAR:text}</span>
+		<!-- END SUB: NO_IMAGE -->
+	</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_2_right.gif" HEIGHT="24" BORDER="0" ALT=""></td>
+<!-- END SUB: MENU_YLEMINE_L1_ITEM_END -->
+
+			
+<!-- SUB: MENU_QUICK_L1_ITEM -->
+ <option value="{VAR:link}">{VAR:text}</option>
+<!-- END SUB: MENU_QUICK_L1_ITEM -->
+
+<!-- SUB: MENU_QUICK_L1_ITEM_SEL -->
+ <option selected>{VAR:text}</option>
+<!-- END SUB: MENU_QUICK_L1_ITEM_SEL -->
+									
+									
+									
+									
+									
+									 <!-- SUB: MENU_P6HI_L1_ITEM_BEGIN -->
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a {VAR:target} href="{VAR:link}">{VAR:text}</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+ <!-- END SUB: MENU_P6HI_L1_ITEM_BEGIN -->
+
+ <!-- SUB: MENU_P6HI_L1_ITEM -->
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a {VAR:target} href="{VAR:link}">{VAR:text}</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+ <!-- END SUB: MENU_P6HI_L1_ITEM -->
+
+  <!-- SUB: MENU_P6HI_L1_ITEM_END -->
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2content" background="{VAR:baseurl}/automatweb/images/aw04/tab2_back.gif"><a {VAR:target} href="{VAR:link}">{VAR:text}</a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+ <!-- END SUB: MENU_P6HI_L1_ITEM_END -->
+
+  <!-- SUB: MENU_P6HI_L2_ITEM_BEGIN_SEL -->
+  <td nowrap><IMG SRC="{VAR:baseurl}/img/tab2_sel2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2selcontent" background="{VAR:baseurl}/img/tab2_sel2_back.gif"><a {VAR:target} href="{VAR:link}"><font color="#FFFFFF">{VAR:text}</font></a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/img/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <!-- END SUB: MENU_P6HI_L1_ITEM_BEGIN_SEL -->
+
+  <!-- SUB: MENU_P6HI_L1_ITEM_SEL -->
+  <td nowrap><IMG SRC="{VAR:baseurl}/img/tab2_sel2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2selcontent" background="{VAR:baseurl}/img/tab2_sel2_back.gif"><a {VAR:target} href="{VAR:link}"><font color="#FFFFFF">{VAR:text}</font></a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/img/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <!-- END SUB: MENU_P6HI_L1_ITEM_SEL -->
+
+    <!-- SUB: MENU_P6HI_L1_ITEM_END_SEL -->
+  <td nowrap><IMG SRC="{VAR:baseurl}/img/tab2_sel2_left.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <td nowrap class="aw04tab2selcontent" background="{VAR:baseurl}/img/tab2_sel2_back.gif"><a {VAR:target} href="{VAR:link}"><font color="#FFFFFF">{VAR:text}</font></a></td>
+  <td nowrap><IMG SRC="{VAR:baseurl}/img/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
+  <!-- END SUB: MENU_P6HI_L1_ITEM_END_SEL -->
+  
+  
+  
+  
+  
+<!-- SUB: YAH_LINK -->
+<a href="{VAR:link}">{VAR:text}</a> &gt; 
+<!-- END SUB: YAH_LINK -->
+
+<!-- SUB: YAH_LINK_END -->
+<a href="{VAR:link}">{VAR:text}</a> 
+<!-- END SUB: YAH_LINK_END -->
