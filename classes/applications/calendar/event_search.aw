@@ -2159,7 +2159,7 @@ class event_search extends class_base
 
 	function find_edata_key($edata, $key)
 	{
-		$i = array();
+		$r = array();
 		foreach($edata as $i => $data)
 		{
 			if($data["event_id"] == $key)
@@ -2167,7 +2167,7 @@ class event_search extends class_base
 				$r[] = $i;
 			}
 		}
-		return $i;
+		return $r;
 	}
 }
 ?>
