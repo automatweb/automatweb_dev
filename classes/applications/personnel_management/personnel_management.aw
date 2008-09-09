@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.70 2008/08/03 23:06:44 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.71 2008/09/09 12:25:50 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -543,7 +543,7 @@ class personnel_management extends class_base
 				break;
 
 			case "drivers_license":
-				$prop["options"] = get_instance(CL_CRM_PERSON)->drivers_licence_original_categories;
+				$prop["options"] = get_instance(CL_CRM_PERSON)->get_drivers_licence_original_categories();
 				break;
 
 			case "search_save":
