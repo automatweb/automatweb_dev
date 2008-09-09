@@ -1040,6 +1040,7 @@ exit_function("bills_impl::_get_bill_task_list");
 		{
 			$cust = "";
 			$cm = "";
+			$payments_total = 0;
 			if (is_oid($customer_id = $bill->get_bill_customer()))
 			{
 				$tmp = obj($customer_id);
@@ -1098,7 +1099,10 @@ exit_function("bills_impl::_get_bill_task_list");
 				"oncl" => "onClick='window.open(\"".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL)."\",\"billprintadd\",\"width=100,height=100\");'"
 			));
 			$partial = "";
-			if($bill->prop("state") == 3 && $bill->prop("partial_recieved") && $bill->prop("partial_recieved") < $cursum) $partial = '<br>'.t("osaliselt");
+			if($bill->prop("state") == 3 && $bill->prop("partial_recieved") && $bill->prop("partial_recieved") < $cursum)
+			{
+				$partial = '<br>'.t("osaliselt");
+			}
 			$bill_data = array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
 				"create_new" => html::href(array(
@@ -1118,6 +1122,25 @@ exit_function("bills_impl::_get_bill_task_list");
 				"oid" => $bill->id(),
 				"print" => $pop->get_menu(),
 			);
+
+			//laekunud summa
+			if($sum = $bill->get_payments_sum())
+			{
+				$bill_data["paid"] = number_format($sum,2);
+			}
+
+			//hilinenud
+			if(($bill->prop("state") == 1 || $bill->prop("state") == 6 || $bill->prop("state") == -6) && $bill->prop("bill_due_date") < time())
+			{
+				$bill_data["late"] = (int)((time() - $bill->prop("bill_due_date")) / (3600*24));
+			}
+			
+			//laekumiskuup2ev
+			if($payment_date = $bill->get_last_payment_date())
+			{
+				$bill_data["payment_date"] = $payment_date;
+			}
+			
 			if($arr["request"]["show_bill_balance"])
 			{
 				$curr_balance = $bill->get_bill_needs_payment();
@@ -1309,6 +1332,14 @@ exit_function("bills_impl::_get_bill_task_list");
 			"text" => t("Hansa raama (koondatud)"),
 			'link' => "#",
 			"onClick" => "v=prompt('" . t("Sisesta arve number?") . "','$last_bno'); if (v != null) { window.location='".aw_url_change_var("export_hr", 2)."&exp_bno='+v;} else { return false; }"
+		));
+
+		$tb->add_button(array(
+			"name" => "add_payment",
+			"img" => "create_bill.jpg",
+			"tooltip" => t("Lisa laekumine"),
+	//		"action" => "search_bill"
+	//		"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("search_bill", array("openprintdialog" => 1,))."','Otsing',550,500)",
 		));
 	}
 

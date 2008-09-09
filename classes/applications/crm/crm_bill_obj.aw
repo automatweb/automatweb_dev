@@ -184,6 +184,33 @@ class crm_bill_obj extends _int_object
 		return $data;
 	}
 
+	function get_payments_sum()
+	{
+		$sum = 0;
+		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+		{
+			$p = $conn->to();
+			$data[$p->id()]["currency"] = $p->get_currency_name();
+			$bill_sums = $p->meta("sum_for_bill");
+			$sum = $sum + $bill_sums[$this->id()];
+		}
+		return $sum;
+	}
+
+	function get_last_payment_date()
+	{
+		$date = 0;
+		foreach($this->connections_from(array("type" => "RELTYPE_PAYMENT")) as $conn)
+		{
+			$p = $conn->to();
+			if($p->prop("date") > $date)
+			{
+				$date = $p->prop("date");
+			}
+		}
+		return $date;
+	}
+
 	/** Returns bill customer id
 		@attrib api=1
 		@returns
