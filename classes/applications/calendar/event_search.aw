@@ -37,6 +37,9 @@
 	@property items_per_page type=textbox size=5 field=meta method=serialize
 	@caption Mitu s&uuml;ndmust lehel
 
+	@property every_event_just_once type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kuva iga s&uuml;ndmust ainult 1 kord (oluline mitmep&auml;evaste s&uuml;ndmuste puhul)
+
 	@property preview_object type=relpicker reltype=RELTYPE_DOCUMENT
 	@caption Eelvaate objekt
 
@@ -1415,6 +1418,12 @@ class event_search extends class_base
 					$e_ts = $res->prop("end");
 					for($i = $s_ts; strcmp(date("Ymd", $i), date("Ymd", $e_ts)) <= 0; $i += 24*3600)
 					{
+						if(false && $ecount[$orig_id] && ($_GET["evt_id"] || $ob->prop("every_event_just_once")))
+						{
+							// Kui syndmust p2ritakse OID j2rgi, siis kuvame teda ainult 1 kord.
+							// V6i kui syndmust ei taheta rohkem kui 1 kord kuvada.
+							break;
+						}
 						if($i < $start_tm || $i > $end_tm + (24*3600 - 1))
 						{
 							continue;
