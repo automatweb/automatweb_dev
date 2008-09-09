@@ -378,8 +378,6 @@ class room_obj extends _int_object
 	//selle funktsionaalsuse peaks kunagi siia sisse t6stma
 	/** checks if the room is available 
 		@attrib params=name api=1
-		@param room required type=oid
-			room id
 		@param start required type=int
 		@param end required type=int
 		@param ignore_booking optional type=int

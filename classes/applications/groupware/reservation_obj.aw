@@ -70,6 +70,12 @@ class reservation_obj extends _int_object
 	function get_sum()
 	{
 		enter_function("sbo::_get_sum");
+		if($arr["obj_inst"]->is_lower_bron())//kui on miski alambronn , siis on suht hindamatu
+		{
+			exit_function("sbo::_get_sum");
+			return array();
+		}
+
 		$sum = $this->meta("final_saved_sum"); 
 		//kui on salvestatud summa ja mneski valuutas omab vrtust, ning see on salvestatud ndal peale aja lbi saamist, siis lheb salvestatud variant loosi ja ei hakka uuesti le arvutama
 		if(is_array($sum) && (!$this->prop("end") || ($this->prop("end") + 3600*24*7) < $this->meta("sum_saved_time")))
@@ -582,5 +588,25 @@ class reservation_obj extends _int_object
 		return $ret;
 	}
 
+	/** checks if bron has a parent bron
+		@attrib api=1
+		@return boolean
+			if has parent reservation, returns parent id, else 0
+	 **/
+	public function is_lower_bron()
+	{
+		if(!isset($this->is_lower_bron))
+		{
+			if($this->prop("parent.class_id") == CL_RESERVATION)
+			{
+				$this->is_lower_bron = $this->parent();
+			}
+			else
+			{
+				$this->is_lower_bron = 0;
+			}
+		}
+		return $this->is_lower_bron;
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.136 2008/09/08 17:05:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.137 2008/09/09 12:03:19 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -213,7 +213,6 @@ class reservation extends class_base
 			"clid" => CL_RESERVATION
 		));
 		$this->get_from_parent_props = array("deadline", "verified", "paid", "unverify_reason", "customer", "project", "send_bill", "comment", "content", "people_count", "start1", "length", "end", "client_arrived", "inbetweener", "people");
-
 	}
 
 	function reason_list()
@@ -230,9 +229,15 @@ class reservation extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if($is_lower_bron = $arr["obj_inst"]->is_lower_bron())
+		{
+			$master_bron = obj($is_lower_bron);
+		}
+		
 		switch($prop["name"])
 		{
 			case "other_rooms":
+				if($is_lower_bron) return PROP_IGNORE;
 				if($this->can("view" , $arr["obj_inst"]->prop("resource")))
 				{
 					$room = obj($arr["obj_inst"]->prop("resource"));
@@ -248,8 +253,12 @@ class reservation extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-			//-- get_property --//
-			case "bill_no"://if(aw_global_get("uid")== "struktuur"){arr($arr["obj_inst"]->meta());arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["obj_inst"]->id() , "tpl" => $tpl,)));}
+			case "bill_no":
+				if($is_lower_bron)
+				{
+					$prop["value"] = $master_bron->prop[$prop["name"]];
+				}
+				//if(aw_global_get("uid")== "struktuur"){arr($arr["obj_inst"]->meta());arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["obj_inst"]->id() , "tpl" => $tpl,)));}
 				if(!is_oid($prop["value"]))
 				{
 					return PROP_IGNORE;
@@ -288,8 +297,20 @@ class reservation extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$prop["value"]] = $tmp->name();
 				}
+				$prop["options"] = $this->get_resource_options($arr["obj_inst"]);
+				if($arr["new"] && $arr["request"][$prop["name"]])
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
 			case "start1":
 			case "end":
+				if($is_lower_bron)
+				{
+					$prop["type"] = "text";
+					$prop["value"] = date("d.m.Y H:i" , $prop["value"]);
+					return PROP_OK;
+				}
 				$prop["options"] = $this->get_resource_options($arr["obj_inst"]);
 				if($arr["new"] && $arr["request"][$prop["name"]])
 				{
@@ -297,10 +318,12 @@ class reservation extends class_base
 				}
 				break;
 			case "products_tbl":
+				if($is_lower_bron) return PROP_IGNORE;
 				$this->get_products_tbl;
 				break;
 
 			case "verified":
+				if($is_lower_bron) $prop["disabled"] = 1;
 				if($arr["request"]["ver"])$prop["value"] = 1;
 				if ($prop["value"] == 1)
 				{
@@ -322,6 +345,7 @@ class reservation extends class_base
 				break;*/
 				
 			case "sum":
+				if($is_lower_bron) return PROP_IGNORE;
 				$prop["value"] = $this->_format_sum($arr["obj_inst"]);
 				break;
 
@@ -334,6 +358,11 @@ class reservation extends class_base
 				{
 					$prop["value"] = time() + 15*60;
 				}
+				if($is_lower_bron)
+				{
+					$prop["type"] = "text";
+					$prop["value"] = $prop["value"] = date("d.m.Y H:i" , $prop["value"]);
+				}
 				break;
 			case "client_arrived":
 				$prop["options"] = array(0 => t("M&auml;rkimata"), 2 => t("Ei") , 1 => t("Jah"));
@@ -341,9 +370,19 @@ class reservation extends class_base
 //				{
 //					$prop["value"] = 0;
 //				}
+				if($is_lower_bron)
+				{
+					$prop["type"] = "text";
+					if(!$prop["value"])
+					{
+						return PROP_IGNORE;
+					}
+					$prop["value"] = $prop["value"] == 1 ? t("Jah") : t("Ei");
+				}
 				break;
 				
 			case "products_text":
+				if($is_lower_bron) return PROP_IGNORE;
 				$prop["value"] = $this->get_products_text($arr["obj_inst"]);
 				break;	
 
@@ -375,6 +414,7 @@ class reservation extends class_base
 				}
 				break;
 			case "inbetweener":
+				if($is_lower_bron) return PROP_IGNORE;
 				if(is_oid($arr["obj_inst"]->prop("resource")))
 				{
 					$room = obj($arr["obj_inst"]->prop("resource"));
@@ -413,6 +453,10 @@ class reservation extends class_base
 				}
 				$prop["value"] = $this->get_correct_name($arr["obj_inst"]);
 				$prop["type"] = "text";
+				if($is_lower_bron)
+				{
+					$prop["value"].= "\n<br>".t("P&otilde;hibronn").": ".html::get_change_url($master_bron->id(),array() , $arr["obj_inst"]->prop("parent.name"));
+				}
 				break;
 
 // 			case "products_discount":
@@ -421,6 +465,16 @@ class reservation extends class_base
 
 
 			case "customer":
+				if($is_lower_bron)
+				{
+					if($this->can("view" , $prop["value"]))
+					{
+						$prop["type"] = "text";
+						$prop["value"] = html::get_change_url($prop["value"],array() , $arr["obj_inst"]->prop("customer.name"));
+						return PROP_OK;
+					}
+					return PROP_IGNORE;
+				}
 				if ($arr["request"]["set_cust"])
 				{
 					$prop["value"] = $arr["request"]["set_cust"];
@@ -429,10 +483,40 @@ class reservation extends class_base
 				$prop["onchange"] = "window.location.href='".aw_url_change_var("set_cust", null)."&set_cust='+this.options[this.selectedIndex].value";
 				break;
 			case "project":
+				if($is_lower_bron)
+				{
+					if($this->can("view" , $prop["value"]))
+					{
+						$prop["type"] = "text";
+						$prop["value"] = html::get_change_url($prop["value"], array() , $arr["obj_inst"]->prop("project.name"));
+						return PROP_OK;
+					}
+					return PROP_IGNORE;
+				}
 				$prop["autocomplete_source"] = $this->mk_my_orb("proj_autocomplete_source");
 				$prop["autocomplete_params"] = array("project");
 				//see selleks, et js lisamise juures saaks aru kas projekti prop on yldse kasutuses, et sealt asju otsida
 				$this->has_project_prop = 1;
+				break;
+			case "paid":
+			case "send_bill":
+			case "time_closed":
+				if($is_lower_bron) $prop["disabled"] = 1;
+				break;
+			case "closed_info":
+				if($is_lower_bron)
+				{
+					if(!$prop["value"])
+					{
+						return PROP_IGNORE;
+					}
+					$prop["type"] = "text";
+				}
+				break;
+			case "special_discount":
+			case "special_sum":
+			case "length":
+				if($is_lower_bron)return PROP_IGNORE;
 				break;
 		};
 		return $retval;
@@ -537,6 +621,36 @@ class reservation extends class_base
 		switch($prop["name"])
 		{
 			case "other_rooms":
+				$rooms = $arr["obj_inst"]->get_other_bron_rooms();//ruumid mis on hetkel lisaks broneeritud
+				$r = array();
+				$error_rooms = array();
+				foreach($rooms as $bron => $room)
+				{
+					$r[$room] = $bron;
+				}
+				$start = mktime($arr["request"]["start1"]["hour"], $arr["request"]["start1"]["minute"], 0, $arr["request"]["start1"]["month"], $arr["request"]["start1"]["day"], $arr["request"]["start1"]["year"]);
+				$end = mktime($arr["request"]["end"]["hour"], $arr["request"]["end"]["minute"], 0, $arr["request"]["end"]["month"], $arr["request"]["end"]["day"], $arr["request"]["end"]["year"]);
+
+				foreach($prop["value"] as $room)
+				{
+					if($this->can("view" , $room))
+					{
+						$oro = obj($room);
+						if(!$oro->is_available(array(
+							"start" => $start,
+							"end" => $end,
+							"ignore_booking" => $r[$room] ? $r[$room] : null,
+						)))
+						{
+							$error_rooms[] = $oro->name();
+						}
+					}
+				}
+				if(sizeof($error_rooms))
+				{
+					$prop["error"] = t("Sellisele ajale ei saa broneerida ruume:")." ".join("," , $error_rooms);
+					return PROP_FATAL_ERROR;
+				}
 				if($this->can("view" , $arr["obj_inst"]->prop("resource")))
 				{
 					$room = obj($arr["obj_inst"]->prop("resource"));
@@ -1826,6 +1940,10 @@ class reservation extends class_base
 
 	function _get_length($arr)
 	{
+		if($arr["obj_inst"]->is_lower_bron())
+		{
+			return PROP_IGNORE;
+		}
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
 		if ($len > 3600)
 		{
@@ -1980,6 +2098,10 @@ class reservation extends class_base
 	
 	function _get_people_count($arr)
         {
+		if($arr["obj_inst"]->is_lower_bron())
+		{
+			$arr["prop"]["type"] = "text";
+		}
 		if($arr["request"]["people_count_rfp"])
 		{
 			$arr["prop"]["value"] = $arr["request"]["people_count_rfp"];
