@@ -2100,6 +2100,19 @@ class site_show extends class_base
 		return $this->path_ids[$pos+($level-1)];
 	}
 
+	function _helper_get_act_count($ol)
+	{
+		$cnt = 0;
+		foreach($ol->arr() as $item)
+		{
+			if ($item->status() == STAT_ACTIVE)
+			{
+				$cnt++;
+			}
+		}
+		return $cnt;	
+	}
+
 	function _helper_is_in_path($oid)
 	{
 		return array_search($oid, $this->path_ids) !== false;

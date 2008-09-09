@@ -1402,10 +1402,12 @@ class site_template_compiler extends aw_template
 		$loop_counter_name = $dat["loop_counter_name"];
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 		$this_is_from_obj_name = "\$p_is_o_".$arr["a_parent"]."_".$arr["level"];
+		$act_count_name = "\$o_act_count_".$arr["a_parent"]."_".$arr["level"];
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
 		$ret .= $this->_gi()."\$mmi_cnt = 0; if(empty(\$cnt_menus))\$cnt_menus = 0;\n";
+		$ret .= $this->_gi().$act_count_name." = \$this->_helper_get_act_count(".$list_name.");\n";
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." = ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)?(\$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus))  : (null)),".$loop_counter_name." = 0, ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? ((".$fun_name."_cb)? \$tmp_vars_array = " . $inst_name . "->make_menu_item_from_tabs(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus):\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this,\$cnt_menus)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." = ".$list_name."->next())), ".$loop_counter_name."++\n)\n";
 		$ret .= $this->_gi()."{\nif(".$fun_name."_cb)\$cnt_menus++;";
 		$this->brace_level++;
@@ -1571,6 +1573,8 @@ class site_template_compiler extends aw_template
 		$o_name = $dat["o_name"];
 		$loop_counter_name = $dat["loop_counter_name"];
 		$list_name = $dat["list_name"];
+		$act_count_name = "\$o_act_count_".$arr["a_parent"]."_".$arr["level"];
+
 		if(!$arr)$ret = "(false)";
 		if ($arr["prop"] == "level_selected")
 		{
@@ -1588,7 +1592,8 @@ class site_template_compiler extends aw_template
 		{
 			if ($arr["value"] == "list_end")
 			{
-				$ret = "((empty(\$mmi_cnt) && (".$loop_counter_name." == (".$list_name."->count()-1))) ||  (\$mmi_cnt && \$tmp_vars_array['is_end'])) && ";
+				//$ret = "((empty(\$mmi_cnt) && (".$loop_counter_name." == (".$list_name."->count()-1))) ||  (\$mmi_cnt && \$tmp_vars_array['is_end'])) && ";
+				$ret = "((empty(\$mmi_cnt) && (".$loop_counter_name." == (".$act_count_name."-1))) ||  (\$mmi_cnt && \$tmp_vars_array['is_end'])) && ";
 			}
 			else
 			{
