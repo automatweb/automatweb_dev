@@ -80,6 +80,16 @@
             <comment>Gruppideks v&amp;amp;otilde;ivad olla n&amp;amp;auml;iteks Projektid</comment>
       </property>
       <property>
+            <name>every_event_just_once</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva iga s&amp;amp;uuml;ndmust ainult 1 kord</caption>
+      </property>
+      <property>
             <name>items_per_page</name>
             <table>objects</table>
             <group>general</group>

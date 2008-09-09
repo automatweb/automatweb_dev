@@ -34,11 +34,11 @@
 	@caption Sorteeri gruppide j&auml;rgi
 	@comment Gruppideks v&otilde;ivad olla n&auml;iteks Projektid
 
+	@property every_event_just_once type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kuva iga s&uuml;ndmust ainult 1 kord
+
 	@property items_per_page type=textbox size=5 field=meta method=serialize
 	@caption Mitu s&uuml;ndmust lehel
-
-	@property every_event_just_once type=checkbox ch_value=1 field=meta method=serialize
-	@caption Kuva iga s&uuml;ndmust ainult 1 kord (oluline mitmep&auml;evaste s&uuml;ndmuste puhul)
 
 	@property preview_object type=relpicker reltype=RELTYPE_DOCUMENT
 	@caption Eelvaate objekt
@@ -1516,9 +1516,12 @@ class event_search extends class_base
 				$valz = $val;
 				sort($valz);
 
-				$i = $this->find_edata_key(&$edata, $key);
-				$edata[$i]["projs"] = array_keys($val);
-				$edata[$i]["project_selector"] = implode(", ", $valz);
+				$i_arr = $this->find_edata_key(&$edata, $key);
+				foreach($i_arr as $i)
+				{
+					$edata[$i]["projs"] = array_keys($val);
+					$edata[$i]["project_selector"] = implode(", ", $valz);
+				}				
 			}
 			if(count($prj_ch1) > 1)
 			{
@@ -2156,14 +2159,15 @@ class event_search extends class_base
 
 	function find_edata_key($edata, $key)
 	{
+		$i = array();
 		foreach($edata as $i => $data)
 		{
 			if($data["event_id"] == $key)
 			{
-				return $i;
+				$r[] = $i;
 			}
 		}
-		return false;
+		return $i;
 	}
 }
 ?>
