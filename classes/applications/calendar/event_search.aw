@@ -1418,7 +1418,7 @@ class event_search extends class_base
 					$e_ts = $res->prop("end");
 					for($i = $s_ts; strcmp(date("Ymd", $i), date("Ymd", $e_ts)) <= 0; $i += 24*3600)
 					{
-						if(false && $ecount[$orig_id] && ($_GET["evt_id"] || $ob->prop("every_event_just_once")))
+						if($ecount[$orig_id] && ($_GET["evt_id"] || $ob->prop("every_event_just_once")))
 						{
 							// Kui syndmust p2ritakse OID j2rgi, siis kuvame teda ainult 1 kord.
 							// V6i kui syndmust ei taheta rohkem kui 1 kord kuvada.
