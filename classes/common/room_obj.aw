@@ -573,12 +573,14 @@ class room_obj extends _int_object
 	{
 		$st = $this->get_settings();
 		$res = array();
-		
-		foreach($st->connections_from(array(
-			"type" => "RELTYPE_RELATED_ROOMS",
-		)) as $c)
+		if($st)
 		{
-			$res[$c->prop("to")] = $c->prop("to.name");
+			foreach($st->connections_from(array(
+				"type" => "RELTYPE_RELATED_ROOMS",
+			)) as $c)
+			{
+				$res[$c->prop("to")] = $c->prop("to.name");
+			}
 		}
 		return $res;
 	}
