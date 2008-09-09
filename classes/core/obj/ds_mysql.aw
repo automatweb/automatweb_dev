@@ -2159,9 +2159,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function _do_proc_complex_param($arr)
 	{
 		extract($arr);
-
 		$filt = explode(".", $key);
 		$clid = constant($filt[0]);
+
+		if (substr($filt[0], 0, 3) != "CL_" && (is_array($params["class_id"]) || is_class_id($params["class_id"])))
+		{
+			$clss = aw_ini_get("classes");
+			if (is_array($params["class_id"]))
+			{
+				$m_clid = reset($params["class_id"]);
+			}
+			else
+			{
+				$m_clid = $params["class_id"];
+			}
+			$key = $clss[$m_clid]["def"].".".$key;
+			$filt = explode(".", $key);
+			$clid = constant($filt[0]);
+		}
 
 		if (!is_class_id($clid))
 		{
@@ -2229,6 +2244,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->foo = array();
 		$this->join_data = array();
 		$this->_req_do_pcp($filt, 1, $clid, $arr);
+
 //		$this->joins = array();
 		// join all other tables from the starting class except the objects table
 		$tmp = $GLOBALS["tableinfo"][$clid];
