@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.124 2008/09/10 08:27:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.125 2008/09/10 08:44:45 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -25,17 +25,27 @@
 
 		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
 		@default group=submitter_info
-			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 autocomplete_match_anywhere=1 option_is_tuple=1
-			@caption Tellija kontaktisik
-
-			@property data_subm_country type=textbox
-			@caption Ankeedi t&auml;itja asukoht
 
 			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=129 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Organisatsioon
 
+			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 autocomplete_match_anywhere=1 option_is_tuple=1
+			@caption Tellija kontaktisik
+
 			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145,129 autocomplete_match_anywhere=1 option_is_tuple=1
 			@caption Organisaator
+
+			@property data_subm_street type=textbox group=submitter_info,final_client parent=client_info
+			@caption T&auml;nav
+
+			@property data_subm_city type=textbox group=submitter_info,final_client parent=client_info
+			@caption Linn
+
+			@property data_subm_zip type=textbox group=submitter_info,final_client parent=client_info
+			@caption Indeks
+
+			@property data_subm_country type=textbox group=submitter_info,final_client parent=client_info
+			@caption Riik
 			
 			@property data_subm_email type=textbox group=submitter_info,final_client parent=client_info
 			@caption E-mail
@@ -238,7 +248,7 @@
 			@property data_billing_country type=textbox parent=billing_info
 			@caption Riik
 
-			@property data_billing_name type=hidden parent=billing_info
+			@property data_billing_name type=hidden parent=billing_info group=billing
 			@caption Nimi
 
 			@property data_billing_phone type=textbox parent=billing_info
@@ -299,7 +309,7 @@
 		@default group=final_client
 			@layout client_hsplit type=hbox width=50%:50%
 
-				@layout client_info type=vbox closeable=1 area_caption=Klient parent=client_hsplit
+				@layout client_info type=vbox closeable=1 area_caption=Tellija&nbsp;kontaktandmed parent=client_hsplit
 		
 				@layout billing_info type=vbox closeable=1 area_caption=Arve&nbsp;info parent=client_hsplit
 
@@ -2668,14 +2678,23 @@ class rfp extends class_base
 			"payment_method" => $arr["obj_inst"]->prop("data_payment_method"),
 			"pointer_text" => $arr["obj_inst"]->prop("data_pointer_text"),
 			"title" => $arr["obj_inst"]->trans_get_val("data_mf_event_type.name"),
-			"data_contact" => $arr["obj_inst"]->prop("data_billing_contact"),
-			"data_street" => $arr["obj_inst"]->prop("data_billing_street"),
-			"data_city" => $arr["obj_inst"]->prop("data_billing_city"),
-			"data_zip" => $arr["obj_inst"]->prop("data_billing_zip"),
-			"data_country" => $arr["obj_inst"]->prop("data_billing_country"),
-			"data_name" => $arr["obj_inst"]->prop("data_billing_name"),
-			"data_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
-			"data_email" => $arr["obj_inst"]->prop("data_billing_email"),
+			"data_billing_contact" => $arr["obj_inst"]->prop("data_billing_contact"),
+			"data_billing_street" => $arr["obj_inst"]->prop("data_billing_street"),
+			"data_billing_city" => $arr["obj_inst"]->prop("data_billing_city"),
+			"data_billing_zip" => $arr["obj_inst"]->prop("data_billing_zip"),
+			"data_billing_country" => $arr["obj_inst"]->prop("data_billing_country"),
+			"data_billing_name" => $arr["obj_inst"]->prop("data_billing_name"),
+			"data_billing_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
+			"data_billing_email" => $arr["obj_inst"]->prop("data_billing_email"),
+			"data_billing_company" => $arr["obj_inst"]->prop("data_billing_company"),
+			"data_contact" => $arr["obj_inst"]->prop("data_subm_name.name"),
+			"data_company" => $arr["obj_inst"]->prop("data_subm_organisation.name"),
+			"data_street" => $arr["obj_inst"]->prop("data_subm_street"),
+			"data_city" => $arr["obj_inst"]->prop("data_subm_city"),
+			"data_zip" => $arr["obj_inst"]->prop("data_subm_zip"),
+			"data_country" => $arr["obj_inst"]->prop("data_subm_country"),
+			"data_phone" => $arr["obj_inst"]->prop("data_subm_phone"),
+			"data_email" => $arr["obj_inst"]->prop("data_subm_email"),
 			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),

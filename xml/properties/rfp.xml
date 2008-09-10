@@ -19,29 +19,6 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>data_subm_name</name>
-            <table>rfp</table>
-            <group>
-                  <num_0>submitter_info</num_0>
-                  <num_1>final_client</num_1>
-            </group>
-            <type>textbox</type>
-            <parent>client_info</parent>
-            <autocomplete_class_id>145</autocomplete_class_id>
-            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
-            <option_is_tuple>1</option_is_tuple>
-            <field>data_subm_name</field>
-            <caption>Tellija kontaktisik</caption>
-      </property>
-      <property>
-            <name>data_subm_country</name>
-            <table>rfp</table>
-            <group>submitter_info</group>
-            <type>textbox</type>
-            <field>data_subm_country</field>
-            <caption>Ankeedi t&amp;amp;auml;itja asukoht</caption>
-      </property>
-      <property>
             <name>data_subm_organisation</name>
             <table>rfp</table>
             <group>
@@ -55,6 +32,21 @@
             <option_is_tuple>1</option_is_tuple>
             <field>data_subm_organisation</field>
             <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>data_subm_name</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <autocomplete_class_id>145</autocomplete_class_id>
+            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
+            <option_is_tuple>1</option_is_tuple>
+            <field>data_subm_name</field>
+            <caption>Tellija kontaktisik</caption>
       </property>
       <property>
             <name>data_subm_organizer</name>
@@ -73,6 +65,54 @@
             <option_is_tuple>1</option_is_tuple>
             <field>data_subm_organizer</field>
             <caption>Organisaator</caption>
+      </property>
+      <property>
+            <name>data_subm_street</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_street</field>
+            <caption>T&amp;amp;auml;nav</caption>
+      </property>
+      <property>
+            <name>data_subm_city</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_city</field>
+            <caption>Linn</caption>
+      </property>
+      <property>
+            <name>data_subm_zip</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_zip</field>
+            <caption>Indeks</caption>
+      </property>
+      <property>
+            <name>data_subm_country</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_country</field>
+            <caption>Riik</caption>
       </property>
       <property>
             <name>data_subm_email</name>
@@ -684,10 +724,7 @@
       <property>
             <name>data_billing_name</name>
             <table>rfp</table>
-            <group>
-                  <num_0>billing</num_0>
-                  <num_1>final_client</num_1>
-            </group>
+            <group>billing</group>
             <type>hidden</type>
             <parent>billing_info</parent>
             <field>data_billing_name</field>
@@ -1304,7 +1341,7 @@
             <client_info>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Klient</area_caption>
+                  <area_caption>Tellija&amp;amp;nbsp;kontaktandmed</area_caption>
                   <parent>client_hsplit</parent>
                   <group>final_client</group>
             </client_info>
