@@ -2643,60 +2643,63 @@ class document extends aw_template
 			"no_strip_lead" => 1
 		));
 
-		preg_match_all("/\<a.*href=\"{1}(.*)\"{1}.*>(.*)\<\/a>/imsU", $str, $a_link_matches);
-		foreach ($a_link_matches[0] as $key => $var)
+		if (aw_ini_get("document.printview_expand_links") == 1 )
 		{
-			if (	strpos($a_link_matches[1][$key], "mailto") === false &&
-					strpos($a_link_matches[1][$key], "http") === false &&
-					 strpos($a_link_matches[1][$key], "https") === false
-					 )
+			preg_match_all("/\<a.*href=\"{1}(.*)\"{1}.*>(.*)\<\/a>/imsU", $str, $a_link_matches);
+			foreach ($a_link_matches[0] as $key => $var)
 			{
-				$a_print_link_find = array(
-					"/href\s*=\s*[\"']{1}(\/.*)[\"']{1}(.*)>(.*)</U",
-					"/href\s*=\s*[\"']{1}([^h][^t][^t][^p][^:].*)[\"']{1}(.*)>(.*)<|href\s*=\s*[\"']{1}([^h][^t][^t][^p][^s][^:].*)[\"']{1}(.*)>(.*)</U",
-				);
-
-				$a_print_link_replace = array(
-					"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."\\1)</span><",
-					"href=\"".aw_ini_get("baseurl")."/\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."/\\1)</span><",
-				);
-				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
-				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
-			}
-			else if (strpos($a_link_matches[1][$key], "mailto") === false)
-			{
-				$a_print_link_find = array(
-					"/href\s*=\s*[\"']{1}(http.*)[\"']{1}(.*)>(.*)</U",
-				);
-
-				if (strpos($a_link_matches[1][$key], "http") === false)
+				if (	strpos($a_link_matches[1][$key], "mailto") === false &&
+						strpos($a_link_matches[1][$key], "http") === false &&
+						 strpos($a_link_matches[1][$key], "https") === false
+						 )
 				{
-					$a_print_link_replace = array(
-						"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
+					$a_print_link_find = array(
+						"/href\s*=\s*[\"']{1}(\/.*)[\"']{1}(.*)>(.*)</U",
+						"/href\s*=\s*[\"']{1}([^h][^t][^t][^p][^:].*)[\"']{1}(.*)>(.*)<|href\s*=\s*[\"']{1}([^h][^t][^t][^p][^s][^:].*)[\"']{1}(.*)>(.*)</U",
 					);
+		
+					$a_print_link_replace = array(
+						"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."\\1)</span><",
+						"href=\"".aw_ini_get("baseurl")."/\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."/\\1)</span><",
+					);
+					$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+					$str = str_replace($a_link_matches[0][$key], $tmp, $str);
 				}
-				else
+				else if (strpos($a_link_matches[1][$key], "mailto") === false)
 				{
-					$a_print_link_replace = array(
-						"href=\"\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
+					$a_print_link_find = array(
+						"/href\s*=\s*[\"']{1}(http.*)[\"']{1}(.*)>(.*)</U",
 					);
+		
+					if (strpos($a_link_matches[1][$key], "http") === false)
+					{
+						$a_print_link_replace = array(
+							"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
+						);
+					}
+					else
+					{
+						$a_print_link_replace = array(
+							"href=\"\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
+						);
+					}
+					
+					$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+					$str = str_replace($a_link_matches[0][$key], $tmp, $str);
 				}
-				
-				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
-				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
-			}
-			else if (strpos($a_link_matches[1][$key], "mailto") !== false)
-			{
-				$a_print_link_find = array(
-					"/<a.*href\s*=\s*[\"']{1}\mailto:(.*)[\"']{1}.*a>/U",
-				);
-
-				$a_print_link_replace = array(
-					"\\1",
-				);
-				$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
-				$str = str_replace($a_link_matches[0][$key], $tmp, $str);
-
+				else if (strpos($a_link_matches[1][$key], "mailto") !== false)
+				{
+					$a_print_link_find = array(
+						"/<a.*href\s*=\s*[\"']{1}\mailto:(.*)[\"']{1}.*a>/U",
+					);
+		
+					$a_print_link_replace = array(
+						"\\1",
+					);
+					$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
+					$str = str_replace($a_link_matches[0][$key], $tmp, $str);
+		
+				}
 			}
 		}
 		echo $str;
