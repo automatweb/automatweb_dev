@@ -196,13 +196,25 @@
 	@caption Parameetrid vaatamisele (view)
 	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
 
+	@property cfgview_view_params_from_controller type=relpicker reltype=PARAMS_CONTROLLER field=meta method=serialize
+	@caption Parameetrid kontrollerist
+	@comment Parameetreid antakse edasi muutujas $params
+
 	@property cfgview_change_params type=textbox field=meta method=serialize
 	@caption Parameetrid muutmisele (change)
 	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
 
+	@property cfgview_change_params_from_controller type=relpicker reltype=PARAMS_CONTROLLER field=meta method=serialize
+	@caption Parameetrid kontrollerist
+	@comment Parameetreid antakse edasi muutujas $params
+
 	@property cfgview_new_params type=textbox field=meta method=serialize
 	@caption Parameetrid lisamisele (new)
 	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
+
+	@property cfgview_new_params_from_controller type=relpicker reltype=PARAMS_CONTROLLER field=meta method=serialize
+	@caption Parameetrid kontrollerist
+	@comment Parameetreid antakse edasi muutujas $params
 
 	@property cfgview_grps type=select multiple=1 size=10 field=meta method=serialize
 	@caption N&auml;idatavad tabid
@@ -252,6 +264,9 @@
 
 	@reltype VIEW_DFN_GRP value=6 clid=CL_GROUP
 	@caption Kasutajagrupp omaduste lubamiseks/keelamiseks
+
+	@reltype PARAMS_CONTROLLER value=7 clid=CL_CFG_VIEW_CONTROLLER
+	@caption Parameetrid kontrollerist
 
 
 	// so, how da fuck do I implement the grid layout thingie?
@@ -537,6 +552,11 @@ class cfgform extends class_base
 				break;
 
 			case "cfgview_view_params":
+				if($this->can("view", $arr["obj_inst"]->prop("cfgview_view_params_from_controller")))
+				{
+					$retval = PROP_IGNORE;
+				}
+			case "cfgview_view_params_from_controller":
 				$applicable_methods = array("view", "cfgview_view_new");
 				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
 				{
@@ -545,6 +565,11 @@ class cfgform extends class_base
 				break;
 
 			case "cfgview_change_params":
+				if($this->can("view", $arr["obj_inst"]->prop("cfgview_change_params_from_controller")))
+				{
+					$retval = PROP_IGNORE;
+				}
+			case "cfgview_change_params_from_controller":
 				$applicable_methods = array("change", "cfgview_change_new");
 				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
 				{
@@ -553,6 +578,11 @@ class cfgform extends class_base
 				break;
 
 			case "cfgview_new_params":
+				if($this->can("view", $arr["obj_inst"]->prop("cfgview_new_params_from_controller")))
+				{
+					$retval = PROP_IGNORE;
+				}
+			case "cfgview_new_params_from_controller":
 				$applicable_methods = array("new", "cfgview_view_new", "cfgview_change_new");
 				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
 				{
@@ -4741,7 +4771,16 @@ class cfgform extends class_base
 
 		if (!$this->$prop_name_indic)
 		{
-			$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
+			if($this->can("view", $this_o->prop("cfgview_" . $action . "_params_from_controller")))
+			{
+				$params = array();
+				$controller_inst = obj($this_o->prop("cfgview_" . $action . "_params_from_controller"));
+				eval($controller_inst->prop("formula"));
+			}
+			else
+			{
+				$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
+			}
 
 			foreach ($params as $param)
 			{

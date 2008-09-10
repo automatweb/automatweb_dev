@@ -201,6 +201,30 @@
             <caption>Layoudid</caption>
       </property>
       <property>
+            <name>tables_toolbar</name>
+            <table>objects</table>
+            <group>layout_tables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <editonly>1</editonly>
+            <caption>Toolbar</caption>
+      </property>
+      <property>
+            <name>tables_table</name>
+            <table>objects</table>
+            <group>layout_tables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <editonly>1</editonly>
+            <caption>V&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
             <name>availtoolbar</name>
             <table>objects</table>
             <group>avail</group>
@@ -499,6 +523,17 @@
             <comment>Lisatakse iga kord p&amp;amp;auml;ringu url-ile. Formaat: param_nimi=param_v&amp;amp;auml;&amp;amp;auml;rtus&amp;amp;...</comment>
       </property>
       <property>
+            <name>cfgview_view_params_from_controller</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>PARAMS_CONTROLLER</reltype>
+            <caption>Parameetrid kontrollerist</caption>
+            <comment>Parameetreid antakse edasi muutujas $params</comment>
+      </property>
+      <property>
             <name>cfgview_change_params</name>
             <table>objects</table>
             <group>cfgview_settings</group>
@@ -509,6 +544,17 @@
             <comment>Lisatakse iga kord p&amp;amp;auml;ringu url-ile. Formaat: param_nimi=param_v&amp;amp;auml;&amp;amp;auml;rtus&amp;amp;...</comment>
       </property>
       <property>
+            <name>cfgview_change_params_from_controller</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>PARAMS_CONTROLLER</reltype>
+            <caption>Parameetrid kontrollerist</caption>
+            <comment>Parameetreid antakse edasi muutujas $params</comment>
+      </property>
+      <property>
             <name>cfgview_new_params</name>
             <table>objects</table>
             <group>cfgview_settings</group>
@@ -517,6 +563,17 @@
             <type>textbox</type>
             <caption>Parameetrid lisamisele (new)</caption>
             <comment>Lisatakse iga kord p&amp;amp;auml;ringu url-ile. Formaat: param_nimi=param_v&amp;amp;auml;&amp;amp;auml;rtus&amp;amp;...</comment>
+      </property>
+      <property>
+            <name>cfgview_new_params_from_controller</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>PARAMS_CONTROLLER</reltype>
+            <caption>Parameetrid kontrollerist</caption>
+            <comment>Parameetreid antakse edasi muutujas $params</comment>
       </property>
       <property>
             <name>cfgview_grps</name>
@@ -639,6 +696,10 @@
                   <caption>Layoudid</caption>
                   <parent>layout</parent>
             </layout_layouts>
+            <layout_tables>
+                  <caption>Tabelid</caption>
+                  <parent>layout</parent>
+            </layout_tables>
             <avail>
                   <caption>K&amp;amp;otilde;ik omadused</caption>
             </avail>
@@ -760,6 +821,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>Kasutajagrupp omaduste lubamiseks/keelamiseks</caption>
             </VIEW_DFN_GRP>
+            <PARAMS_CONTROLLER>
+                  <value>7</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>Parameetrid kontrollerist</caption>
+            </PARAMS_CONTROLLER>
       </reltypes>
       <layout>
             <add_grp>
