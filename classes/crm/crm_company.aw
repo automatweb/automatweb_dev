@@ -5638,6 +5638,7 @@ class crm_company extends class_base
 		foreach(safe_array($arr["sel"]) as $task)
 		{
 			$to = obj($task);
+			$class_id = $to->class_id();
 
 			//kokkuleppehinna toimetuselt arvele pookimine
 			if($to->class_id() == CL_TASK && ($to->prop("deal_unit") || $to->prop("deal_price") || $to->prop("deal_amount")))
@@ -5724,6 +5725,7 @@ class crm_company extends class_base
 				$br->set_parent($bill->id());
 				$br->set_prop("comment", $expense->name());
 				$br->set_prop("amt", 1);
+				$br->set_prop("people", $expense->prop("who"));
 				$br->set_prop("price", str_replace(",", ".", $sum = $this->convert_to_company_currency(array(
 					"sum" => $expense->prop("cost"),
 					"o" => $expense,
@@ -5786,9 +5788,19 @@ class crm_company extends class_base
 					}
 					$row->save();
 				}
-
 			}
+
 			$task_o->save();
+
+			if($class_id == CL_TASK)
+			{
+				//kokkuleppehinna puhul tahaks nyyd ka muudele kuludele arve kylge
+				$task_o->set_billable_oe_bill_id($bill->id());
+			}
+			elseif($class_id == CL_CRM_EXPENSE)//all pole vaja enam muu kulu rida kirjutama hakata
+			{
+				continue;
+			}
 
 			// now, get all rows from task and convert to bill rows
 			$task_i = get_instance(CL_TASK);

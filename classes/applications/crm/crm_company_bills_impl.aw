@@ -1124,9 +1124,9 @@ exit_function("bills_impl::_get_bill_task_list");
 			);
 
 			//laekunud summa
-			if($sum = $bill->get_payments_sum())
+			if($payments_sum = $bill->get_payments_sum())
 			{
-				$bill_data["paid"] = number_format($sum,2);
+				$bill_data["paid"] = number_format($payments_sum,2);
 			}
 
 			//hilinenud

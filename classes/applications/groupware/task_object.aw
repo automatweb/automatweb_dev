@@ -140,6 +140,49 @@ class task_object extends _int_object
 		return $ret;
 	}
 
+	/** returns all billable expenses
+		@attrib api=1
+		@returns object list
+	**/
+	function get_billable_expenses()
+	{
+		$ret = new object_list();
+		$conns = $this->connections_from(array(
+			"type" => "RELTYPE_EXPENSE",
+		));
+		$ti = get_instance(CL_TASK);
+		foreach($conns as $con)
+		{
+			$o = $con->to();
+			if(!$ti->can("view" , $o->prop("bill_id")))
+			{
+				$ret->add($o->id());
+			}
+		}
+		return $ret;
+	}
+
+	/** sets bill_id prop to all billable expenses
+		@attrib api=1
+		@param bill_id required type=oid
+		@returns boolean
+			1 if successful, else 0
+	**/
+	function set_billable_oe_bill_id($bill_id)
+	{
+		if(!is_oid($bill_id))
+		{
+			return 0;
+		}
+		$billable_oe = $this->get_billable_expenses();
+		foreach($billable_oe->arr() as $boe)
+		{
+			$boe->set_prop("bill_id" , $bill_id);
+			$boe->save();
+		}
+		return 1;
+	}
+
 	/** returns task client manager oid
 		@attrib api=1
 		@returns oid	
