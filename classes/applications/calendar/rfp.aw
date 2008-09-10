@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.128 2008/09/10 10:03:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.129 2008/09/10 10:24:05 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -251,11 +251,11 @@
 			@property data_billing_name type=hidden parent=billing_info group=billing
 			@caption Nimi
 
-			@property data_billing_phone type=textbox parent=billing_info
-			@caption Telefoninumber
-
 			@property data_billing_email type=textbox parent=billing_info
 			@caption E-mail
+
+			@property data_billing_phone type=textbox parent=billing_info
+			@caption Telefon
 
 		@groupinfo files caption="Failid" parent=data
 		@default group=files

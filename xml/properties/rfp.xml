@@ -731,18 +731,6 @@
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>data_billing_phone</name>
-            <table>rfp</table>
-            <group>
-                  <num_0>billing</num_0>
-                  <num_1>final_client</num_1>
-            </group>
-            <type>textbox</type>
-            <parent>billing_info</parent>
-            <field>data_billing_phone</field>
-            <caption>Telefoninumber</caption>
-      </property>
-      <property>
             <name>data_billing_email</name>
             <table>rfp</table>
             <group>
@@ -753,6 +741,18 @@
             <parent>billing_info</parent>
             <field>data_billing_email</field>
             <caption>E-mail</caption>
+      </property>
+      <property>
+            <name>data_billing_phone</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>billing_info</parent>
+            <field>data_billing_phone</field>
+            <caption>Telefon</caption>
       </property>
       <property>
             <name>files_tb</name>
