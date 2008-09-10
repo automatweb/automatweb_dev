@@ -344,7 +344,7 @@
             <name>data_gen_acc_start_admin</name>
             <table>rfp</table>
             <group>general_function_info</group>
-            <type>date_select</type>
+            <type>datetime_select</type>
             <field>data_gen_acc_start_admin</field>
             <caption>Majutuse algusaeg</caption>
       </property>
@@ -352,7 +352,7 @@
             <name>data_gen_acc_end_admin</name>
             <table>rfp</table>
             <group>general_function_info</group>
-            <type>date_select</type>
+            <type>datetime_select</type>
             <field>data_gen_acc_end_admin</field>
             <caption>Majutuse l&amp;amp;otilde;puaeg</caption>
       </property>
@@ -1006,6 +1006,15 @@
             <caption>Ressursid lisainfo</caption>
       </property>
       <property>
+            <name>housing_tb</name>
+            <table>rfp</table>
+            <group>final_housing</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>housing_tb</field>
+      </property>
+      <property>
             <name>housing_tbl</name>
             <table>rfp</table>
             <group>final_housing</group>
@@ -1023,6 +1032,15 @@
             <rows>20</rows>
             <field>additional_housing_information</field>
             <caption>Majutuse lisainfo</caption>
+      </property>
+      <property>
+            <name>services_tb</name>
+            <table>rfp</table>
+            <group>additional_services</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>services_tb</field>
       </property>
       <property>
             <name>additional_services_tbl</name>
@@ -1166,7 +1184,7 @@
                   <caption>Andmed</caption>
             </data>
             <submitter_info>
-                  <caption>Ankeedi t&amp;amp;auml;itja</caption>
+                  <caption>Tellija kontaktandmed</caption>
                   <parent>data</parent>
             </submitter_info>
             <general_function_info>

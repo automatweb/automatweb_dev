@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.126 2008/09/10 09:09:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.127 2008/09/10 09:37:04 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -23,7 +23,7 @@
 
 	@groupinfo data caption="Andmed"
 
-		@groupinfo submitter_info caption="Ankeedi t&auml;itja" parent=data
+		@groupinfo submitter_info caption="Tellija kontaktandmed" parent=data
 		@default group=submitter_info
 
 			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=129 autocomplete_match_anywhere=1 option_is_tuple=1
@@ -119,10 +119,10 @@
 			@property data_gen_acc_end type=hidden table=objects field=meta method=serialize
 			@caption Majutuse l&otilde;puaeg
 
-			@property data_gen_acc_start_admin type=date_select
+			@property data_gen_acc_start_admin type=datetime_select
 			@caption Majutuse algusaeg
 
-			@property data_gen_acc_end_admin type=date_select
+			@property data_gen_acc_end_admin type=datetime_select
 			@caption Majutuse l&otilde;puaeg
 
 			@property data_gen_dates_are_flexible type=checkbox ch_value=1 default=0
@@ -388,6 +388,8 @@
                 @groupinfo final_housing caption="Majutus" parent=final_info
                 @default group=final_housing
 
+			@property housing_tb type=toolbar store=no no_caption=1
+
                         @property housing_tbl type=table store=no no_caption=1
 
 			@layout add_inf_housing type=vbox closeable=1 area_caption="Lisainfo"
@@ -398,6 +400,8 @@
 
                 @groupinfo additional_services caption="Lisateenused" parent=final_info
                 @default group=additional_services
+
+			@property services_tb type=toolbar store=no no_caption=1
 
                         @property additional_services_tbl type=table store=no no_caption=1
 
@@ -1204,6 +1208,12 @@ class rfp extends class_base
 				$prop["value"] = $t->draw();
 				break;
 			
+			case "housing_tb":
+			case "services_tb":
+				$tb = &$arr["prop"]["vcl_inst"];
+				$tb->add_save_button();
+				break;
+
 			//-- get_property --//
 			case "submitter":
 				if(!$prop["value"])
@@ -1714,8 +1724,8 @@ class rfp extends class_base
 								"var" => $add["var"],
 								"start1" => $add["start1"],
 								"end" => $add["end"],
-								"price" => number_format($price, 2),
-								"sum" => number_format($price * $amt, 2),
+								"price" => round($price, 2),
+								"sum" => round($price * $amt, 2),
 							);
 							$amount = $o->meta("amount");
 							$params["amount"] = $amount;
@@ -2174,7 +2184,7 @@ class rfp extends class_base
 			));
 			$t->define_data(array(
 				"discount" => "<strong>".t("Kokku:")."</strong>",
-				"sum" => $totalsum,
+				"sum" => number_format($totalsum, 2),
 			));
 		}
 	}
@@ -2203,7 +2213,7 @@ class rfp extends class_base
 				$sum = $sum*$days;
 				if($dc = $row["discount"])
 				{
-					$sum = round($sum - ($sum*$dc)/100);
+					$sum = round($sum - ($sum*$dc)/100, 2);
 				}
 				$row["datefrom"] = $start;
 				$row["dateto"] = $end;
@@ -2276,7 +2286,7 @@ class rfp extends class_base
 			"sum" => html::hidden(array(
 				"name" => "housing[".$id."][sum]",
 				"value" => $room["sum"],
-			)).$room["sum"],
+			)).number_format($room["sum"], 2),
 		);
 		return $data;
 	}
