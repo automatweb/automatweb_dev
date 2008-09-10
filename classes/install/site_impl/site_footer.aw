@@ -63,6 +63,13 @@ if (aw_ini_get("ga_id"))
 	$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_code."</body>\n</html>" , $str);
 }
 
+// search for swfobject from html
+if (strpos($str, "var aw_flash_"))
+{
+	$s_swfobject = '<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/swfobject.js"></script>';
+	$str = str_replace ( "</head>" , $s_swfobject."\n</head>", $str);
+}
+
 if ($_GET["TPL"] == 1)
 {
 	// fix for logged out users - dint show templates after page refresh
