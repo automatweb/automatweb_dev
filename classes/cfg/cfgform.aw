@@ -4776,17 +4776,18 @@ class cfgform extends class_base
 				$params = array();
 				$controller_inst = obj($this_o->prop("cfgview_" . $action . "_params_from_controller"));
 				eval($controller_inst->prop("formula"));
+				$this->cfgview_vars = array_merge($this->cfgview_vars, $params);
+				$_GET = array_merge($_GET, $params);
 			}
 			else
 			{
 				$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
-			}
-
-			foreach ($params as $param)
-			{
-				$param = explode("=", $param, 2);
-				$this->cfgview_vars[$param[0]] = $param[1];
-				$_GET[$param[0]] = $param[1];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
+				foreach ($params as $param)
+				{
+					$param = explode("=", $param, 2);
+					$this->cfgview_vars[$param[0]] = $param[1];
+					$_GET[$param[0]] = $param[1];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
+				}
 			}
 
 			$this->$prop_name_indic = true;
