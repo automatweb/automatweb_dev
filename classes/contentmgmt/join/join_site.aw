@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.72 2008/09/10 08:46:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.73 2008/09/10 09:13:43 instrumental Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1414,16 +1414,29 @@ class join_site extends class_base
 
 		$sessd = aw_global_get("site_join_status");
 
-		$person = obj();
-		$person->set_class_id(CL_CRM_PERSON);
-		$person->set_parent($obj->prop("obj_folder"));
-		$person->set_name($sessd["typo_".CL_CRM_PERSON]["firstname"]." ".$sessd["typo_".CL_CRM_PERSON]["lastname"]);
-		$p_id = $person->save();
+		if(is_oid($obj->prop("obj_folder")) && $this->can("add", $obj->prop("obj_folder")))
+		{
+			$p_id = get_instance(CL_USER)->get_person_for_user($u_o);
+			if(is_oid($p_id) && $this->can("change", $p_id))
+			{
+				$person = obj($p_id);
+				$person->set_parent($obj->prop("obj_folder"));
+				$person->save();
+			}
+			else
+			{
+				$person = obj();
+				$person->set_class_id(CL_CRM_PERSON);
+				$person->set_parent($obj->prop("obj_folder"));
+				$person->set_name($sessd["typo_".CL_CRM_PERSON]["firstname"]." ".$sessd["typo_".CL_CRM_PERSON]["lastname"]);
+				$p_id = $person->save();
 
-		$u_o->connect(array(
-			"to" => $p_id,
-			"reltype" => "RELTYPE_PERSON" // from core/users/user
-		));
+				$u_o->connect(array(
+					"to" => $p_id,
+					"reltype" => "RELTYPE_PERSON" // from core/users/user
+				));
+			}
+		}
 
 
 		$com = obj();
