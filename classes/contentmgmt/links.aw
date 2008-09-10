@@ -464,7 +464,7 @@ class links extends class_base
 				if (eSelected)
 				{
 					eSelected.href=\"".$link_url."\";
-					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\";
+					eSelected.innerHTML=\"".addslashes($arr["obj_inst"]->prop("name"))."\";
 					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ;
 				}
 				else
