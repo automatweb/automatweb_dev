@@ -196,7 +196,7 @@
 	@caption Parameetrid vaatamisele (view)
 	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
 
-	@property cfgview_view_params_from_controller type=relpicker reltype=PARAMS_CONTROLLER field=meta method=serialize
+	@property cfgview_view_params_from_controller type=relpicker reltype=RELTYPE_PARAMS_CONTROLLER field=meta method=serialize
 	@caption Parameetrid kontrollerist
 	@comment Parameetreid antakse edasi muutujas $params
 
@@ -204,7 +204,7 @@
 	@caption Parameetrid muutmisele (change)
 	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
 
-	@property cfgview_change_params_from_controller type=relpicker reltype=PARAMS_CONTROLLER field=meta method=serialize
+	@property cfgview_change_params_from_controller type=relpicker reltype=RELTYPE_PARAMS_CONTROLLER field=meta method=serialize
 	@caption Parameetrid kontrollerist
 	@comment Parameetreid antakse edasi muutujas $params
 
@@ -212,7 +212,7 @@
 	@caption Parameetrid lisamisele (new)
 	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
 
-	@property cfgview_new_params_from_controller type=relpicker reltype=PARAMS_CONTROLLER field=meta method=serialize
+	@property cfgview_new_params_from_controller type=relpicker reltype=RELTYPE_PARAMS_CONTROLLER field=meta method=serialize
 	@caption Parameetrid kontrollerist
 	@comment Parameetreid antakse edasi muutujas $params
 
