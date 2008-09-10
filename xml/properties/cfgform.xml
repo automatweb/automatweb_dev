@@ -529,7 +529,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>PARAMS_CONTROLLER</reltype>
+            <reltype>RELTYPE_PARAMS_CONTROLLER</reltype>
             <caption>Parameetrid kontrollerist</caption>
             <comment>Parameetreid antakse edasi muutujas $params</comment>
       </property>
@@ -550,7 +550,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>PARAMS_CONTROLLER</reltype>
+            <reltype>RELTYPE_PARAMS_CONTROLLER</reltype>
             <caption>Parameetrid kontrollerist</caption>
             <comment>Parameetreid antakse edasi muutujas $params</comment>
       </property>
@@ -571,7 +571,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>PARAMS_CONTROLLER</reltype>
+            <reltype>RELTYPE_PARAMS_CONTROLLER</reltype>
             <caption>Parameetrid kontrollerist</caption>
             <comment>Parameetreid antakse edasi muutujas $params</comment>
       </property>
