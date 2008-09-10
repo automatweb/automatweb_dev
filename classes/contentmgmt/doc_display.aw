@@ -194,7 +194,11 @@ class doc_display extends aw_template
 		$uinst = get_instance(CL_USER);
 		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
 		$this->vars($al->get_vars());
-
+		
+		$lang_id = aw_global_get("lang_id");
+		$l = get_instance("languages");
+		$sel_lang = $l->fetch($lang_id);
+		
 		$title = $doc->trans_get_val("title");
 		$tmp = $arr;
 		$tmp["leadonly"] = -1;
@@ -255,7 +259,8 @@ class doc_display extends aw_template
 			"lead" => $lead,
 			"content" => $content,
 			"alias" => $doc->trans_get_val("alias"),
-			"last_error_message" => $_SESSION["aw_session_track"]["aw"]["last_error_message"]
+			"last_error_message" => $_SESSION["aw_session_track"]["aw"]["last_error_message"],
+			"lang_code" => $sel_lang["acceptlang"]
 		));
 
 		$ablock = "";
@@ -285,7 +290,6 @@ class doc_display extends aw_template
 			$cs = aw_global_get("charset");
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
-				$l = get_instance("languages");
 				$ld = $l->fetch(aw_global_get("ct_lang_id"));
 				$cs = $ld["charset"];
 			}
