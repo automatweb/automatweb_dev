@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.127 2008/09/10 09:37:04 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.128 2008/09/10 10:03:14 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -885,10 +885,9 @@ class rfp extends class_base
 				);
 
 				$data_name = $arr["obj_inst"]->prop("data_subm_name");
-				$data_name = split("[ ]", $data_name);
-				$new_reservation_args["person_rfp_fname"] = $data_name[0];
-				unset($data_name[0]);
-				$new_reservation_args["person_rfp_lname"] = count($data_name)?join(" ", $data_name):"";
+				$p = obj($data_name);
+				$new_reservation_args["person_rfp_fname"] = $p->prop("firstname");
+				$new_reservation_args["person_rfp_lname"] = $p->prop("lastname");
 				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
 				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
 				$new_reservation_args["people_count_rfp"] = $arr["obj_inst"]->prop("data_gen_attendees_no");
@@ -1076,6 +1075,7 @@ class rfp extends class_base
 						"no_caption" => "1",
 						"vcl_inst" => new vcl_table(),
 					),
+					"rfpo_inst" => $arr["obj_inst"],
 				);
 				if($this->can("view", $arr["request"]["reservation_oid"]))
 				{
@@ -2882,6 +2882,7 @@ class rfp extends class_base
 				{
 					$price = $sp;
 					$price_set = true;
+					$unitprice = "-";
 				}
 				if(!$price_set)
 				{

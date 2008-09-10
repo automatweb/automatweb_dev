@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.137 2008/09/09 12:03:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.138 2008/09/10 10:03:17 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -265,6 +265,11 @@ class reservation extends class_base
 				}
 				break;
 			case "people_count":
+				if($is_lower_bron)
+				{
+					$prop["type"] = "text";
+					$prop["value"] = $master_bron->prop[$prop["name"]];
+				}
 				if(!($prop["value"] > 0))
 				{
 					$prop["value"] = 1;
@@ -308,7 +313,7 @@ class reservation extends class_base
 				if($is_lower_bron)
 				{
 					$prop["type"] = "text";
-					$prop["value"] = date("d.m.Y H:i" , $prop["value"]);
+					$prop["value"] = date("d.m.Y h:i" , $prop["value"]);
 					return PROP_OK;
 				}
 				$prop["options"] = $this->get_resource_options($arr["obj_inst"]);
@@ -323,7 +328,7 @@ class reservation extends class_base
 				break;
 
 			case "verified":
-				if($is_lower_bron) $prop["disabled"] = 1;
+				if($is_lower_bron) return $prop["disabled"] = 1;
 				if($arr["request"]["ver"])$prop["value"] = 1;
 				if ($prop["value"] == 1)
 				{
@@ -361,7 +366,7 @@ class reservation extends class_base
 				if($is_lower_bron)
 				{
 					$prop["type"] = "text";
-					$prop["value"] = $prop["value"] = date("d.m.Y H:i" , $prop["value"]);
+					$prop["value"] = $prop["value"] = date("d.m.Y h:i" , $prop["value"]);
 				}
 				break;
 			case "client_arrived":
@@ -453,10 +458,6 @@ class reservation extends class_base
 				}
 				$prop["value"] = $this->get_correct_name($arr["obj_inst"]);
 				$prop["type"] = "text";
-				if($is_lower_bron)
-				{
-					$prop["value"].= "\n<br>".t("P&otilde;hibronn").": ".html::get_change_url($master_bron->id(),array() , $arr["obj_inst"]->prop("parent.name"));
-				}
 				break;
 
 // 			case "products_discount":
@@ -497,26 +498,6 @@ class reservation extends class_base
 				$prop["autocomplete_params"] = array("project");
 				//see selleks, et js lisamise juures saaks aru kas projekti prop on yldse kasutuses, et sealt asju otsida
 				$this->has_project_prop = 1;
-				break;
-			case "paid":
-			case "send_bill":
-			case "time_closed":
-				if($is_lower_bron) $prop["disabled"] = 1;
-				break;
-			case "closed_info":
-				if($is_lower_bron)
-				{
-					if(!$prop["value"])
-					{
-						return PROP_IGNORE;
-					}
-					$prop["type"] = "text";
-				}
-				break;
-			case "special_discount":
-			case "special_sum":
-			case "length":
-				if($is_lower_bron)return PROP_IGNORE;
 				break;
 		};
 		return $retval;
@@ -876,24 +857,9 @@ class reservation extends class_base
 				"to" => $arr["obj_inst"]->id(),
 			));
 
-			if($org_n = $arr["request"]["rfp_organisation"])
+			if($org = $arr["request"]["rfp_organisation"])
 			{
-				$ol = new object_list(array(
-					"class_id" => CL_CRM_COMPANY,
-					"name" => $org_n,
-				));
-				if($ol->count() > 0)
-				{
-					$org = $ol->begin();
-				}
-				else
-				{
-					$org = obj();
-					$org->set_class_id(CL_CRM_COMPANY);
-					$org->set_name($org_n);
-					$org->set_parent($arr["obj_inst"]->parent());
-					$org->save();
-				}
+				$org = obj($org);
 				$arr["obj_inst"]->connect(array(
 					"type" => "RELTYPE_CUSTOMER",
 					"to" => $org->id(),
@@ -1647,7 +1613,7 @@ class reservation extends class_base
 			$total = 0;
 			foreach($sum["room_price"] as $cur => $price)
 			{
-				if(!$setcur[$cur])
+				if(!$setcur[$cur] && (!count($arr["ids"]) || ($arr["rfpo_inst"] && $arr["rfpo_inst"]->prop("default_currency") == $cur)))
 				{
 					$co = obj($cur);
 					$t->define_field(array(
@@ -1940,10 +1906,6 @@ class reservation extends class_base
 
 	function _get_length($arr)
 	{
-		if($arr["obj_inst"]->is_lower_bron())
-		{
-			return PROP_IGNORE;
-		}
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
 		if ($len > 3600)
 		{
@@ -2098,10 +2060,6 @@ class reservation extends class_base
 	
 	function _get_people_count($arr)
         {
-		if($arr["obj_inst"]->is_lower_bron())
-		{
-			$arr["prop"]["type"] = "text";
-		}
 		if($arr["request"]["people_count_rfp"])
 		{
 			$arr["prop"]["value"] = $arr["request"]["people_count_rfp"];
