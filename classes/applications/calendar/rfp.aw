@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.125 2008/09/10 08:44:45 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.126 2008/09/10 09:09:57 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -715,7 +715,12 @@ class rfp extends class_base
 				}
 				break;
 
-
+			case "data_contactperson":
+				if(!$prop["value"])
+				{
+					$prop["value"] = obj(aw_global_get("uid_oid"))->get_first_obj_by_reltype("RELTYPE_PERSON")->name();
+				}
+				break;
 
 			case "cancel_and_payment_terms":
 			case "accomondation_terms":
@@ -2698,6 +2703,7 @@ class rfp extends class_base
 			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),
+			"data_currency" => $arr["obj_inst"]->prop("default_currency.name"),
 		));
 
 		$info_props = array(
@@ -3576,6 +3582,9 @@ class rfp extends class_base
 			array("data_subm_organizer", "varchar(255)"),
 			array("data_subm_email", "varchar(255)"),
 			array("data_subm_phone", "varchar(255)"),
+			array("data_subm_city", "varchar(255)"),
+			array("data_subm_street", "varchar(255)"),
+			array("data_subm_zip", "varchar(255)"),
 			array("data_subm_contact_preference", "varchar(255)"),
 			array("data_gen_function_name", "varchar(255)"),
 			array("data_gen_attendees_no", "int"),
