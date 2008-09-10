@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.123 2008/09/09 14:15:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.124 2008/09/10 08:27:26 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1715,6 +1715,7 @@ class rfp extends class_base
 					));
 				}
 			}
+			aw_global_set("rfp_prods_set", 1);
 			$arr["obj_inst"]->set_meta("prods", $oi_prods);
 			$arr["obj_inst"]->set_meta("pk_catering_set", 1);
 			$arr["obj_inst"]->save();
@@ -2002,7 +2003,7 @@ class rfp extends class_base
 	function set_products_tbl($arr)
 	{
 		$prods = $arr["request"]["prods"];
-		if(count($prods))
+		if(count($prods) && !aw_global_get("rfp_prods_set"))
 		{
 			$date = $arr["obj_inst"]->prop("data_gen_arrival_date_admin");
 			//if($date > 1)
