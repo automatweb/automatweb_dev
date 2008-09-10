@@ -2102,6 +2102,7 @@ class site_show extends class_base
 
 	function _helper_get_act_count($ol)
 	{
+		return $ol->count();
 		$cnt = 0;
 		foreach($ol->arr() as $item)
 		{
