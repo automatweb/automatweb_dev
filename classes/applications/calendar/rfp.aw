@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.129 2008/09/10 10:24:05 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.130 2008/09/10 10:43:51 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1563,7 +1563,7 @@ class rfp extends class_base
 		{
 			$add_brons = aw_global_get("rfp_add_brons");
 		}
-		elseif(!$arr["obj_inst"]->meta("pk_catering_set") && ($pkid = $arr["obj_inst"]->prop("data_gen_package")) && $this->rfpm)
+		elseif($arr["obj_inst"]->meta("pk_catering_set") != $arr["obj_inst"]->prop("data_gen_package") && ($pkid = $arr["obj_inst"]->prop("data_gen_package")) && $this->rfpm)
 		{
 			$pk_prods = $this->rfpm->meta("pk_prods");
 			$pk_data = $pk_prods[$pkid];
@@ -1742,7 +1742,7 @@ class rfp extends class_base
 			}
 			aw_global_set("rfp_prods_set", 1);
 			$arr["obj_inst"]->set_meta("prods", $oi_prods);
-			$arr["obj_inst"]->set_meta("pk_catering_set", 1);
+			$arr["obj_inst"]->set_meta("pk_catering_set", $arr["obj_inst"]->prop("data_gen_package"));
 			$arr["obj_inst"]->save();
 			aw_session_del("rfp_add_brons");
 		}
