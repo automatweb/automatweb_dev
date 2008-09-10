@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.138 2008/09/10 10:03:17 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.139 2008/09/10 11:26:24 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -233,7 +233,6 @@ class reservation extends class_base
 		{
 			$master_bron = obj($is_lower_bron);
 		}
-		
 		switch($prop["name"])
 		{
 			case "other_rooms":
@@ -458,6 +457,10 @@ class reservation extends class_base
 				}
 				$prop["value"] = $this->get_correct_name($arr["obj_inst"]);
 				$prop["type"] = "text";
+				if($is_lower_bron)
+				{
+					$prop["value"].= "\n<br>".t("P&otilde;hibronn").": ".html::get_change_url($master_bron->id(),array() , $arr["obj_inst"]->prop("parent.name"));
+				}
 				break;
 
 // 			case "products_discount":
@@ -498,6 +501,26 @@ class reservation extends class_base
 				$prop["autocomplete_params"] = array("project");
 				//see selleks, et js lisamise juures saaks aru kas projekti prop on yldse kasutuses, et sealt asju otsida
 				$this->has_project_prop = 1;
+				break;
+			case "paid":
+			case "send_bill":
+			case "time_closed":
+				if($is_lower_bron) $prop["disabled"] = 1;
+				break;
+			case "closed_info":
+				if($is_lower_bron)
+				{
+					if(!$prop["value"])
+					{
+						return PROP_IGNORE;
+					}
+					$prop["type"] = "text";
+				}
+				break;
+			case "special_discount":
+			case "special_sum":
+			case "length":
+				if($is_lower_bron)return PROP_IGNORE;
 				break;
 		};
 		return $retval;
@@ -612,7 +635,7 @@ class reservation extends class_base
 				$start = mktime($arr["request"]["start1"]["hour"], $arr["request"]["start1"]["minute"], 0, $arr["request"]["start1"]["month"], $arr["request"]["start1"]["day"], $arr["request"]["start1"]["year"]);
 				$end = mktime($arr["request"]["end"]["hour"], $arr["request"]["end"]["minute"], 0, $arr["request"]["end"]["month"], $arr["request"]["end"]["day"], $arr["request"]["end"]["year"]);
 
-				foreach($prop["value"] as $room)
+				foreach($prop["value"] as $key => $room)
 				{
 					if($this->can("view" , $room))
 					{
@@ -624,6 +647,7 @@ class reservation extends class_base
 						)))
 						{
 							$error_rooms[] = $oro->name();
+							unset($prop["value"][$key]);
 						}
 					}
 				}

@@ -49,6 +49,7 @@
             <method>serialize</method>
             <reltype>RELTYPE_RELATED_ROOMS</reltype>
             <caption>Ruumid mida samal ajal broneerida</caption>
+	    <store>connect</store>
       </property>
       <property>
             <name>cal_show_prods</name>
@@ -255,6 +256,15 @@
             <method>serialize</method>
             <type>colorpicker</type>
             <caption>Hiljuti muudetud reserveeringud</caption>
+      </property>
+      <property>
+	      <name>col_slave</name>
+	      <table>objects</table>
+	      <group>colours</group>
+	      <field>meta</field>
+	      <method>serialize</method>
+	      <type>colorpicker</type>
+	      <caption>Alam-reserveeringu v&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>bron_props</name>

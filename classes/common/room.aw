@@ -2051,47 +2051,41 @@ class room extends class_base
 	{
 		$col = array();
 		$x = 1;
+		if($last_bron->is_lower_bron() && $settings->prop("col_slave") != "")
+		{
+			$col[$x] = "#".$settings->prop("col_slave"); 
+		}
+		else
 		if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 		{
 			$col[$x] = "#".$settings->prop("col_recent"); 
+		}
+		else
+		if ($last_bron->prop("time_closed") == 1)
+		{
+			$col[$x] = "#".$settings->prop("col_closed");
+			$d[$x] .= " ".$last_bron->prop("closed_info");
+		}
+		else
+		if($last_bron->prop("verified"))
+		{
+			$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
+		}
+		else
+		{
+			$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
+		}
+		if($this->is_after_buffer)
+		{
+			if($col_buffer)
+			{
+				$col[$x] = "#".$col_buffer;
 			}
-							else
-							if ($last_bron->prop("time_closed") == 1)
-							{
-								$col[$x] = "#".$settings->prop("col_closed");
-								$d[$x] .= " ".$last_bron->prop("closed_info");
-							}
-							else
-							if($last_bron->prop("verified"))
-							{
-								$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
-							}
-							else
-							{
-								$col[$x] = $settings->prop("col_web_halfling") != "" ? "#".$settings->prop("col_web_halfling") : "#FFE4B5";
-							}
-							if($this->is_after_buffer)
-							{
-								if($col_buffer)
-								{
-									$col[$x] = "#".$col_buffer;
-								}
-								else
-								{
-									"#EE6363";
-								}
-							}
-							if($this->is_after_buffer)
-							{
-								if($col_buffer)
-								{
-									$col[$x] = "#".$col_buffer;
-								}
-								else
-								{
-									"#EE6363";
-								}
-							}
+			else
+			{
+				"#EE6363";
+			}
+		}
 		return $col[$x];
 	}
 
@@ -2101,129 +2095,126 @@ class room extends class_base
 		$x = 1;
 		$cus = $settings->prop("reserved_time_string")?$settings->prop("reserved_time_string") :t("BRON");
 		if($last_bron->prop("time_closed") && $settings->prop("closed_time_string"))
+		{
+			$cus = $settings->prop("closed_time_string");
+		}
+		$title = $phone = "";
+		$imgstr = "";
+		$codes = array();
+		if (!$_GET["no_det_info"])
+		{
+			$last_cust = $last_bron->prop("customer");
+			if ($this->can("view", $last_cust))
 			{
-								$cus = $settings->prop("closed_time_string");
-							}
-							$title = $phone = "";
-							$imgstr = "";
-							$codes = array();
-							if (!$_GET["no_det_info"])
+				$customer = obj($last_cust);
+				$cus = array();
+				foreach($last_bron->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+				{
+					$cus[] = $c->prop("to.name")." ";
+				}
+				$cus = join(", ", $cus);
+				//$cus = $customer->name();
+				$phone = $customer->prop("phone.name");
+				$phones = array();
+				if(!$phone)
+				{
+					$conns = $customer->connections_from(array(
+						"type" => "RELTYPE_PHONE",
+					));//arr($customer);
+					foreach($conns as $conn)
+					{
+						$phones[] = $conn->prop("to.name");
+					};
+					$phone = join (", " , $phones);
+				}
+				$products = $last_bron->meta("amount");
+				$title = $last_bron->prop("content");
+				if($last_bron->prop("comment"))
+				{
+					if(!$settings->prop("comment_pos"))
+					{
+						$title.=", ".$last_bron->prop("comment");
+					}
+					if($settings->prop("comment_pos") == 1)
+					{
+						$cus = join(", ", array($cus," /".$last_bron->prop("comment"). "/"));
+					}
+				}
+				foreach($products as $prod => $val)
+				{
+					if($val)
+					{
+						if($this->can("view" , $prod))
+						{
+							$product = obj($prod);
+							if($product->prop("code"))
 							{
-								$last_cust = $last_bron->prop("customer");
-								if ($this->can("view", $last_cust))
+								$codes[] = $product->prop("code");
+							}
+							$title .= " ".$product->name();
+							if ($settings->prop("cal_show_prod_img"))
+							{
+								// if this is a packaging, then get the product for it
+								if ($product->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 								{
-									$customer = obj($last_cust);
-									$cus = array();
-									foreach($last_bron->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+									$_conns = $product->connections_to(array("from.class_id" => CL_SHOP_PRODUCT));
+									if (count($_conns))
 									{
-										$cus[] = $c->prop("to.name")." ";
+										$_con = reset($_conns);
+										$product = $_con->from();
 									}
-									$cus = join(", ", $cus);
-									//$cus = $customer->name();
-									$phone = $customer->prop("phone.name");
-									$phones = array();
-									if(!$phone)
+								}
+								$cons = $product->connections_from(array(
+									"type" => "RELTYPE_IMAGE",
+									"to.jrk" => $settings->prop("cal_show_prod_img_ord")
+								));
+								if (count($cons))
+								{
+									$con = reset($cons);
+									if ($con)
 									{
-										$conns = $customer->connections_from(array(
-											"type" => "RELTYPE_PHONE",
-										));//arr($customer);
-										foreach($conns as $conn)
-										{
-											$phones[] = $conn->prop("to.name");
-										};
-										$phone = join (", " , $phones);
-									}
-									$products = $last_bron->meta("amount");
-									$title = $last_bron->prop("content");
-									if($last_bron->prop("comment"))
-									{
-										if(!$settings->prop("comment_pos"))
-										{
-											$title.=", ".$last_bron->prop("comment");
-										}
-										if($settings->prop("comment_pos") == 1)
-										{
-											$cus = join(", ", array($cus," /".$last_bron->prop("comment"). "/"));
-										}
-									}
-									foreach($products as $prod => $val)
-									{
-										if($val)
-										{
-											if($this->can("view" , $prod))
-											{
-												$product = obj($prod);
-												if($product->prop("code"))
-												{
-													$codes[] = $product->prop("code");
-												}
-												$title .= " ".$product->name();
-												if ($settings->prop("cal_show_prod_img"))
-												{
-													// if this is a packaging, then get the product for it
-													if ($product->class_id() == CL_SHOP_PRODUCT_PACKAGING)
-													{
-														$_conns = $product->connections_to(array("from.class_id" => CL_SHOP_PRODUCT));
-														if (count($_conns))
-														{
-															$_con = reset($_conns);
-															$product = $_con->from();
-														}
-													}
-													$cons = $product->connections_from(array(
-														"type" => "RELTYPE_IMAGE",
-														"to.jrk" => $settings->prop("cal_show_prod_img_ord")
-													));
-													if (count($cons))
-													{
-														$con = reset($cons);
-														if ($con)
-														{
-															$ii = get_instance(CL_IMAGE);
-															$imgstr .= $ii->make_img_tag_wl($con->prop("to"));
-														}
-													}
-												}
-											}
-										}
+										$ii = get_instance(CL_IMAGE);
+										$imgstr .= $ii->make_img_tag_wl($con->prop("to"));
 									}
 								}
 							}
-							$bron_name = $cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",");
-							if(is_array(($_t = $arr["request"]["alter_reservation_name"])) and is_array(aw_ini_get("classes.".$_t["class_id"])))
-							{
-
-								$cb_inst = get_instance($_t["class_id"]);
-								if(is_callable(array($cb_inst, $_t["action"])))
-								{
-									$_t["name_elements"] = array(
-										"customer" => $cus,
-										"phone" => $phone,
-										"codes" => $codes,
-									);
-									$_t["bron_name"] = &$bron_name;
-									$_t["reservation"] = $last_bron;
-									$cb_inst->$_t["action"]($_t);
-								}
-							}
-							$dx_p = array(
-								"caption" => "<span><font color=#26466D><u>".$bron_name."</FONT></span>",
-								"title" => $title,
-							);
-							if ($settings->prop("cal_show_prods"))
-							{
-								$dx_p["caption"] .= " <b>".$title."</b>";
-							}
-
-							if ($settings->prop("bron_no_popups"))
-							{
-								$dx_p["url"] = html::get_change_url($last_bron->id(),array("return_url" => get_ru(),));
-
-								$d[$x] = html::href($dx_p);
-							}
-							else
-							{
-								$dx_p["width"] = 800;
+						}
+					}
+				}
+			}
+		}
+		$bron_name = $cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",");
+		if(is_array(($_t = $arr["request"]["alter_reservation_name"])) and is_array(aw_ini_get("classes.".$_t["class_id"])))
+		{
+				$cb_inst = get_instance($_t["class_id"]);
+			if(is_callable(array($cb_inst, $_t["action"])))
+			{
+				$_t["name_elements"] = array(
+					"customer" => $cus,
+					"phone" => $phone,
+					"codes" => $codes,
+				);
+				$_t["bron_name"] = &$bron_name;
+				$_t["reservation"] = $last_bron;
+				$cb_inst->$_t["action"]($_t);
+			}
+		}
+		$dx_p = array(
+			"caption" => "<span><font color=#26466D><u>".$bron_name."</FONT></span>",
+			"title" => $title,
+		);
+		if ($settings->prop("cal_show_prods"))
+		{
+			$dx_p["caption"] .= " <b>".$title."</b>";
+		}
+		if ($settings->prop("bron_no_popups"))
+		{
+			$dx_p["url"] = html::get_change_url($last_bron->id(),array("return_url" => get_ru(),));
+			$d[$x] = html::href($dx_p);
+		}
+		else
+		{
+			$dx_p["width"] = 800;
 								$dx_p["height"] = 600;
 								$dx_p["scrollbars"] = 1;
 								$dx_p["href"] = "#";

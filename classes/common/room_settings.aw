@@ -17,7 +17,7 @@
 	@property related_room_folder type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_RELATED_ROOM_FOLDER
 	@caption Seotud ruumide kaust
 
-	@property related_rooms type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_RELATED_ROOMS
+	@property related_rooms type=relpicker multiple=1 field=meta method=serialize store=connect reltype=RELTYPE_RELATED_ROOMS
 	@caption Ruumid mida samal ajal broneerida
 
 	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
@@ -87,6 +87,9 @@
 
 	@property col_recent type=colorpicker 
 	@caption Hiljuti muudetud reserveeringud
+
+	@property col_slave type=colorpicker 
+	@caption Alam-reserveeringu v&auml;rv
 
 @groupinfo calendar_view caption="Kalendrivaade"
 @default group=calendar_view

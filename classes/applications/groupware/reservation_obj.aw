@@ -512,14 +512,31 @@ class reservation_obj extends _int_object
 	 **/
 	public function make_slave_brons($slaves)
 	{
-		//vaatab 2kki m6ned juba olemas, ja mis yleliigne, kustutab 2ra
+
 		$exist2 = $this->get_other_bron_rooms();
+
+
 		$exist = array();
 		foreach($exist2 as $key2 => $val2)
 		{
 			$exist[$val2] = $key2;
 		}
 
+		//ei lase lisada kinnistele aegadele
+		foreach($slaves as $asd => $key)
+		{
+			$room = obj($key);
+			if(!$room->is_available(array(
+				"start" => $this->prop("start1"),
+				"end" => $this->prop("end"),
+				"ignore_booking" => $exist[$key] ? $exist[$key] : null,
+			)))
+			{
+				unset($slaves[$asd]);
+			}
+		}
+
+		//vaatab 2kki m6ned juba olemas, ja mis yleliigne, kustutab 2ra
 		foreach($slaves as $asd => $key)
 		{
 			if(array_key_exists($key,$exist))

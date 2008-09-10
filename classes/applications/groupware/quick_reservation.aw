@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.5 2008/09/08 15:27:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/quick_reservation.aw,v 1.6 2008/09/10 11:26:24 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -98,11 +98,50 @@ class quick_reservation extends class_base
 				{
 					$room = obj($arr["request"]["resource"]);
 					$prop["options"] = $room->get_other_rooms_selection();
-					$prop["value"] = array_keys($prop["options"]);
+					if(!sizeof($prop["options"]))
+					{
+						return PROP_IGNORE;
+					}
+					$error_rooms = array();
+					foreach($prop["options"] as $room => $val)
+					{
+						if($this->can("view" , $room))
+						{
+							$oro = obj($room);
+							$end = $arr["request"]["end"];
+							if($end == $arr["request"]["start1"])
+							{
+								$end = $end + 3600;
+							}
+							if(!$oro->is_available(array(
+								"start" => $arr["request"]["start1"],
+								"end" => $end,
+							)))
+							{
+								$error_rooms[] = $oro->name();
+							}
+							else
+							{
+								$prop["value"][] = $room;
+							}
+						}
+
+					}
+					if(sizeof($error_rooms))
+					{
+						$prop["error"] = t("Sellisele ajale ei saa broneerida ruume:")." ".join("," , $error_rooms);
+						return PROP_OK;
+					}
 				}
 				else
 				{
 					return PROP_IGNORE;
+				}
+				break;
+			case "bron[end]":
+				if($prop["value"] == $arr["request"]["start1"]);
+				{
+					$prop["value"] = $prop["value"] + 3600;
 				}
 				break;
 		};
@@ -135,7 +174,6 @@ class quick_reservation extends class_base
 		{
 			case "resources_price":
 			case "resources_discount":
-	
 				break;
 		}
 		return $retval;
