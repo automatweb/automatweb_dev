@@ -2712,7 +2712,7 @@ class bug_tracker extends class_base
 			}
 		}
 
-		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority", "finance_type");
+		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority");
 		foreach($sf as $field)
 		{
 			if (trim($r["s_".$field]) != "")
@@ -2729,6 +2729,24 @@ class bug_tracker extends class_base
 		if (trim($r["s_feedback_p"]) != "")
 		{
 			$res["CL_BUG.RELTYPE_FEEDBACK_P.name"] = $this->_get_string_filt($r["s_feedback_p"]);
+		}
+
+		if ($r["s_finance_type"] != 0)
+		{
+			if ($r["s_finance_type"] == -1)
+			{
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						new object_list_filter(array("logic" => "OR", "conditions" => array("CL_BUG.finance_type" => new obj_predicate_compare(OBJ_COMP_LESS, 1)))),
+						new object_list_filter(array("logic" => "OR", "conditions" => array("CL_BUG.finance_type" => new obj_predicate_compare(OBJ_COMP_NULL))))
+					)
+				));
+			}
+			else
+			{
+				$res["CL_BUG.finance_type"] = $r["s_finance_type"];
+			}
 		}
 
 		$cplx = array("who", "bug_type", "customer", "project");
@@ -4627,6 +4645,7 @@ echo "<div style='font-size: 10px;'>";
 	{
 		$arr["prop"]["options"] = array(
 			"" => t("--vali--"),
+			-1 => t("Valimata"),
 			1 => t("T&ouml;&ouml; l&otilde;ppedes"),
 			2 => t("Projekti l&otilde;ppedes"),
 			3 => t("Arendus")
