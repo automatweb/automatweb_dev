@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.71 2008/05/29 10:44:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.72 2008/09/10 08:46:30 instrumental Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -46,6 +46,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 @property join_properties type=table store=no group=sel_props
 @caption Liitumisel k&uuml;sitavad v&auml;ljad
+
+@property generate_password type=checkbox field=meta method=serialize ch_value=1 group=sel_props
+@caption Genereeri parool
 
 @property join_sep_pages type=checkbox field=meta method=serialize ch_value=1 group=sel_props
 @caption Eraldi lehtedel
@@ -1193,6 +1196,13 @@ class join_site extends class_base
 		// check if all required fields are filled
 		$req = $obj->meta("required");
 		$sessd = $_SESSION["site_join_status"];
+
+		if($obj->prop("generate_password"))
+		{
+			unset($req[CL_USER]["passwd"]);
+			unset($req[CL_USER]["passwd_again"]);
+			$sessd["typo_".CL_USER]["passwd"] = $sessd["typo_".CL_USER]["passwd_again"] = get_instance("user_object")->generate_password();
+		}
 
 		$filled = true;
 		$nf = array();

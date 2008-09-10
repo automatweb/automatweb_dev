@@ -145,6 +145,25 @@ class user_object extends _int_object
 	{
 		return $b->prop("priority") - $a->prop("priority");
 	}
+
+	/**
+	@attrib name=generate_password params=pos api=1
+
+	@param lenght optional type=int
+		Default value 8.
+
+	**/
+	function generate_password($lenght = 8)
+	{
+		$chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy";
+		$p = "";
+		for($i = 0; $i < $lenght; $i++)
+		{
+			$rand = rand(0, strlen($chars) - 1);
+			$p .= $chars[$rand];
+		}
+		return $p;
+	}
 }
 
 ?>

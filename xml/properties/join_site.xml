@@ -77,6 +77,16 @@
             <caption>Liitumisel k&amp;amp;uuml;sitavad v&amp;amp;auml;ljad</caption>
       </property>
       <property>
+            <name>generate_password</name>
+            <table>objects</table>
+            <group>sel_props</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <ch_value>1</ch_value>
+            <caption>Genereeri parool</caption>
+      </property>
+      <property>
             <name>join_sep_pages</name>
             <table>objects</table>
             <group>sel_props</group>
