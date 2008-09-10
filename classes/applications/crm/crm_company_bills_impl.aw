@@ -893,7 +893,16 @@ exit_function("bills_impl::_get_bill_task_list");
 			"format" => "d.m.Y",
 			"numeric" => 1,
 			"sortable" => 1
-		));
+		));/*
+		$t->define_field(array(
+			"name" => "payment_date",
+			"caption" => t("Laekumiskuup&auml;ev"),
+			"type" => "time",
+			"format" => "d.m.Y",
+			"numeric" => 1,
+			"sortable" => 1
+		)); 
+*/
 		$t->define_field(array(
 			"name" => "customer",
 			"caption" => t("Klient"),
@@ -912,7 +921,23 @@ exit_function("bills_impl::_get_bill_task_list");
 			"numeric" => 1,
 			"align" => "right"
 		));
+/*
+		$t->define_field(array(
+			"name" => "paid",
+			"caption" => t("Laekunud"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"align" => "right"
+		));
 
+		$t->define_field(array(
+			"name" => "late",
+			"caption" => t("Hilinenud p&auml;evi"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"align" => "right"
+		));
+*/
 		if ($r["group"] != "bills_monthly")
 		{
 			$t->define_field(array(
@@ -935,6 +960,12 @@ exit_function("bills_impl::_get_bill_task_list");
 	function _get_bills_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		if($_GET["get_all_customers_without_client_relation"])
+		{
+			$t = $arr["obj_inst"]->get_all_customers_without_client_relation();
+			return 1;
+		}
+
 		$this->_init_bills_list_t($t, $arr["request"]);
 
 		if($arr["request"]["bill_s_with_tax"] == 0)
@@ -1122,7 +1153,7 @@ exit_function("bills_impl::_get_bill_task_list");
 				"oid" => $bill->id(),
 				"print" => $pop->get_menu(),
 			);
-
+/*
 			//laekunud summa
 			if($payments_sum = $bill->get_payments_sum())
 			{
@@ -1140,7 +1171,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			{
 				$bill_data["payment_date"] = $payment_date;
 			}
-			
+*/			
 			if($arr["request"]["show_bill_balance"])
 			{
 				$curr_balance = $bill->get_bill_needs_payment();
@@ -1333,13 +1364,13 @@ exit_function("bills_impl::_get_bill_task_list");
 			'link' => "#",
 			"onClick" => "v=prompt('" . t("Sisesta arve number?") . "','$last_bno'); if (v != null) { window.location='".aw_url_change_var("export_hr", 2)."&exp_bno='+v;} else { return false; }"
 		));
-
+/*
 		$tb->add_button(array(
 			"name" => "add_payment",
 			"img" => "create_bill.jpg",
 			"tooltip" => t("Lisa laekumine"),
 			"action" => "add_payment"
-		));
+		));*/
 	}
 
 	function _get_bills_mon_tb($arr)
