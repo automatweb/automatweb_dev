@@ -24,6 +24,8 @@ class _int_object
 	private static $global_save_count = 0;
 	private static $cache_off = false;
 
+	private $constructor_parameter;
+
 	/**
 		This defines, after how many object saves cache will automatically be turned off for the rest of the request.
 		It's here so that the cache will not be cleared a million times pointlessly when you are creating a million objects in one request.
@@ -33,8 +35,15 @@ class _int_object
 	///////////////////////////////////////////
 	// public functions
 
-	function _int_object($param = NULL)
+	function _int_object($param = NULL, $ignore = true)
 	{
+		if ($ignore)
+		{
+			$this->_init_empty();
+			return;
+		}
+		$this->constructor_parameter = $param;
+
 		if ($param != NULL)
 		{
 			$this->load($param);
@@ -1881,7 +1890,7 @@ class _int_object
 		if (!empty($cld["object_override"]))
 		{
 			$cln = basename($cld["object_override"]);
-			$i = new $cln();
+			$i = new $cln($this->constructor_parameter, true);
 			// copy props
 			$i->obj = $this->obj;
 			$i->implicit_save = $this->implicit_save;

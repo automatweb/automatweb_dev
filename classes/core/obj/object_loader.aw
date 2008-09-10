@@ -241,7 +241,7 @@ class _int_object_loader extends core
 			$cnt++;
 			$str = "new_object_temp_id_".$cnt;
 		}
-		$GLOBALS["objects"][$str] =& new _int_object($param);
+		$GLOBALS["objects"][$str] =& new _int_object($param, false);
 		return $str;
 	}
 
@@ -262,7 +262,7 @@ class _int_object_loader extends core
 		}
 		if (!isset($ob) || !is_object($ob))
 		{
-			$ref = &new _int_object($oid);
+			$ref = &new _int_object($oid, false);
 			if ($ref->id() === NULL)
 			{
 				error::raise(array(
