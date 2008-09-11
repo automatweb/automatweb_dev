@@ -84,12 +84,12 @@ class crm_company_qv_impl extends class_base
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
-				"orderer" => $arr["obj_inst"]->id(),
+				"CL_PROJECT.orderer" => $arr["obj_inst"]->id(),
 				"lang_id" => array(),
 				"site_id" => array(),
 				"sort_by" => "aw_deadline desc",
 				"state" => "%",
-				"limit" => 5
+//				"limit" => 5
 			));
 			$pd = "<b>" . t("Projektid (5 v&auml;rskemat)") . "</b>";
 		}
@@ -99,8 +99,13 @@ class crm_company_qv_impl extends class_base
 		$r = array();
 		$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
 		$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
+		$ount = 0;
 		foreach($ol->arr() as $o)
 		{
+			if($count > 5)
+			{
+				break;
+			}
 			$parts = array();
 			foreach((array)$o->prop("participants") as $_p)
 			{
@@ -137,8 +142,10 @@ class crm_company_qv_impl extends class_base
 				"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $pd,
 				"grp_num" => 1,
-				"state" => $pi->states[$o->prop("state")]
+				"state" => $pi->states[$o->prop("state")],
+				"icon" => icons::get_icon($o)
 			));
+			$count++;
 		}
 		if ($ol->count() == 0)
 		{
@@ -205,28 +212,14 @@ class crm_company_qv_impl extends class_base
 				"site_id" => array(),
 				"sort_by" => "deadline desc",
 				"deadline" => "%",
-				"limit" => 10
+	//			"limit" => 10
 			));
 			$grpd = "<b>" . t("Tegevused (10 v&auml;rskemat)") . "</b>";
 		}
 		classload("core/icons");
+		$count = 0;
 		foreach($ol->arr() as $o)
 		{
-			$parts = array();
-			if ($o->class_id() == CL_CRM_MEETING)
-			{
-				foreach($o->connections_to(array("from.class_id" => CL_CRM_PERSON)) as $c)
-				{
-					$parts[] =  html::obj_change_url($c->from());
-				}
-			}
-			else
-			{
-				foreach((array)$o->prop("participants") as $_p)
-				{
-					$parts[] = html::obj_change_url($_p);
-				}
-			}
 			$sum = 0;
 			$hrs = 0;
 			foreach($t_i->get_task_bill_rows($o, false) as $row)
@@ -248,6 +241,31 @@ class crm_company_qv_impl extends class_base
 				$this->sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
 				$sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
 			}
+			if($count > 9)
+			{
+				continue;
+			}
+
+			$parts = array();
+			$pol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"site_id" => array(),
+				"lang_id" => array(),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_PERSON.RELTYPE_PERSON_MEETING" => $o->id(),
+						"CL_CRM_PERSON.RELTYPE_PERSON_CALL" => $o->id(),
+						"CL_CRM_PERSON.RELTYPE_PERSON_TASK" => $o->id(),
+					)
+				)),
+			));
+	
+			foreach($pol->arr() as $person)
+			{
+				$parts[] = html::obj_change_url($person->id());
+			}
+
 			$end = "";
 			if ($o->prop("end") > $o->prop("start1"))
 			{
@@ -265,6 +283,7 @@ class crm_company_qv_impl extends class_base
 				"state" => ($o->flags() & 8)  == 8 ? t("Tehtud") : t("T&ouml;&ouml;s"),
 				"sb" => $o->prop("start1")
 			));
+			$count++;
 		}
 		if ($ol->count() == 0)
 		{
@@ -277,7 +296,71 @@ class crm_company_qv_impl extends class_base
 			));
 		}
 
+		// bugs
+		$bug_count = 0;
+		$bi = get_instance(CL_BUG);
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"customer" => $arr["obj_inst"]->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.created desc",
+			"who" => "%",
+//			"limit" => 10
+		));
+		$bd = "<span style='font-size: 0px;'>y</span><b>" . t("Bugid (10 v&auml;rskemat)") . "</b>";
+		foreach($ol->arr() as $o)
+		{
+			
+			$this->hrs_total += $o->prop("num_hrs_real");
+			
+			if($bug_count > 10)
+			{
+				continue;
+			}
+
+//			$parts = array();
+//			foreach((array)$o->prop("participants") as $_p)
+//			{
+//				$parts[] = html::obj_change_url($_p);
+//			}
+
+			$parts = "";
+			if($this->can("view" , $o->prop("who")))
+			{
+				$parts = html::obj_change_url($o->prop("who"));
+			}
+
+			foreach($rows as $row)
+			{
+				$hrs += str_replace(",", ".",$row["amt"]);
+			}
+			$t->define_data(array(
+				"date" => $o->prop("actual_live_date") > 100 ? date("d.m.Y", $o->prop("actual_live_date")) : "",
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), ($o->name()?$o->name():t("Nimetu"))),
+				"parts" => $parts,
+				"hrs" => number_format($o->prop("num_hrs_real"), 2, ',', ''),
+	//			"sum" => number_format($sum, 2, ',', ''),
+				"grp_desc" => $bd,
+				"grp_num" => 3,
+				"state" => $bi->bug_statuses[$o->prop("bug_status")],
+				"icon" => icons::get_icon($o)
+			));
+			$bug_count++;
+		}
+		if ($ol->count() == 0)
+		{
+			$t->define_data(array(
+				"date" => "",
+				"name" => t("Valitud ajavahemikus ei ole &uuml;htegi bugi!"),
+				"parts" => "",
+				"grp_desc" => $bd,
+				"grp_num" => 3,
+			));
+		}
+
 		// bills
+		$count = 0;
 		if (isset($arr["tasks"]))
 		{
 			$f = array(
@@ -301,17 +384,12 @@ class crm_company_qv_impl extends class_base
 				"site_id" => array(),
 				"sort_by" => "aw_crm_bill.aw_due_date desc",
 				"bill_no" => "%",
-				"limit" => 10
+//				"limit" => 10
 			));
 			$bd = "<span style='font-size: 0px;'>y</span><b>" . t("Arved (10 v&auml;rskemat)") . "</b>";
 		}
 		foreach($ol->arr() as $o)
 		{
-			$parts = array();
-			foreach((array)$o->prop("participants") as $_p)
-			{
-				$parts[] = html::obj_change_url($_p);
-			}
 			$bi = $o->instance();
 			$sum = $bi->get_sum($o);
 			$rows = $bi->get_bill_rows($o);
@@ -320,22 +398,38 @@ class crm_company_qv_impl extends class_base
 			{
 				$hrs += str_replace(",", ".",$row["amt"]);
 			}
-			$t->define_data(array(
-				"date" => $o->prop("bill_date") > 100 ? date("d.m.Y", $o->prop("bill_date")) : "",
-				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), ($o->name()?$o->name():t("Nimetu"))),
-				"parts" => "",
-				"hrs" => number_format($hrs, 3, ',', ''),
-				"sum" => number_format($sum, 2, ',', ''),
-				"grp_desc" => $bd,
-				"grp_num" => 3,
-				"state" => $bi->states[$o->prop("state")]
-			));
+
 			$this->bills_sum += str_replace(",", "", $sum);
 			$this->hrs_on_bill += $hrs;
 			if ($o->prop("state") == 2)
 			{
 				$this->bills_paid_sum += $sum;
 			}
+
+			if($count > 9)
+			{
+				continue;
+			}
+
+			$parts = array();
+			foreach((array)$o->prop("impl") as $_p)
+			{
+				$parts[] = html::obj_change_url($_p);
+			}
+
+			$t->define_data(array(
+				"date" => $o->prop("bill_date") > 100 ? date("d.m.Y", $o->prop("bill_date")) : "",
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), ($o->name()?$o->name():t("Nimetu"))),
+				"parts" => join(", " , $parts),
+				"hrs" => number_format($hrs, 3, ',', ''),
+				"sum" => number_format($sum, 2, ',', ''),
+				"grp_desc" => $bd,
+				"grp_num" => 3,
+				"state" => $bi->states[$o->prop("state")],
+				"icon" => icons::get_icon($o)
+			));
+
+			$count++; 
 		}
 		if ($ol->count() == 0)
 		{
@@ -443,11 +537,11 @@ class crm_company_qv_impl extends class_base
 			"cust_contract_creator" => html::obj_change_url($o->prop("cust_contract_creator")),
 			"referal_type" => $o->prop_str("referal_type"),
 			"client_manager" => $o->prop_str("client_manager"),
-			"address" => $o->prop_str("contact"),
-			"phone" => $o->prop_str("phone_id"),
-			"fax" => $o->prop_str("telefax_id"),
-			"email" => $o->prop_str("email_id"),
-			"web" => $o->prop_str("url_id"),
+			"address" => $o->prop_str("contact.name"),
+			"phone" => $o->prop_str("phone_id.name"),
+			"fax" => $o->prop_str("telefax_id.name"),
+			"email" => $o->prop_str("email_id.mail"),
+			"web" => $o->prop_str("url_id.name"),
 			"contact_p" => $cp,
 			"bills_in_sum" => number_format($this->bills_sum, 2, ',', ''),
 			"done_sum" => number_format($this->sum, 2, ',', ''),
