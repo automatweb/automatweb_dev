@@ -798,6 +798,34 @@ class doc extends class_base
 				}
 			}
 		}
+		
+		if(!$args["request"]["no_rte"])
+		{
+			$props = $this->get_property_group($args);
+			foreach($props as $prop)
+			{
+				if($prop["type"] == "textarea" && $prop["richtext"])
+				{
+					$val = $args["obj_inst"]->prop($prop["name"]);
+					$setval = false;
+					if(substr($val, -6, 6) == "<br>".chr(13).chr(10))
+					{
+						$val = substr($val, 0, -6);
+						$setval = true;
+					}
+					elseif(substr($val, -2, 2) == chr(13).chr(10))
+					{
+						$val = substr($val, 0, -2);
+						$setval = true;
+					}
+					if($setval)
+					{
+						$args["obj_inst"]->set_prop($prop["name"], $val);
+						$args["obj_inst"]->save();	
+					}
+				}
+			}
+		}
 	}
 
 	private function _doc_strip_tags($arg)
