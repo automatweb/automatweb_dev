@@ -49,9 +49,13 @@ class reservation_obj extends _int_object
 				}
 				break;
 			case "verified":
-				if($this->get_room_setting("send_verify_mail"))
+				if($pv && !$this->prop("verified"))
 				{
-					$this->send_affirmation_mail();
+					$this->verified = 1;
+					if($this->get_room_setting("send_verify_mail"))
+					{
+						$this->send_affirmation_mail();
+					}
 				}
 				break;
 		}
@@ -424,7 +428,7 @@ class reservation_obj extends _int_object
 		$ret["comment_value"] = $this->prop("content");
 		$ret["min_sum_left"] = join("/" , $data["min_sum_left"]);
 
-		$ret["status"] = ($this->prop("verified") ? t("Kinnitatud") : t("Kinnitamata"));
+		$ret["status"] = (($this->prop("verified") || $this->verified) ? t("Kinnitatud") : t("Kinnitamata"));
 		$ret["bank_value"] = $this->meta("bank_name");
 		foreach ($this->meta("amount") as $prod => $amount)
 		{
