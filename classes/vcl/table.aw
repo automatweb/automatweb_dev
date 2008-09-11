@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.123 2008/08/27 08:54:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.124 2008/09/11 14:15:46 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -2129,7 +2129,7 @@ echo dbg::short_backtrace();
 				$links = false;
 				$_a = $v[$rgel];
 			}
-			if ($this->lgrpvals[$rgel] != $_a)
+			if (strtolower(strip_tags($this->lgrpvals[$rgel])) != strtolower(strip_tags($v[$rgel])))
 			{
 				//$this->rgroupby
 				// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
