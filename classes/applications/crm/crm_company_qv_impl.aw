@@ -251,14 +251,15 @@ class crm_company_qv_impl extends class_base
 				"class_id" => CL_CRM_PERSON,
 				"site_id" => array(),
 				"lang_id" => array(),
-				new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"CL_CRM_PERSON.RELTYPE_PERSON_MEETING" => $o->id(),
-						"CL_CRM_PERSON.RELTYPE_PERSON_CALL" => $o->id(),
-						"CL_CRM_PERSON.RELTYPE_PERSON_TASK" => $o->id(),
-					)
-				)),
+				"CL_CRM_PERSON.RELTYPE_PERSON_TASK" => $o->id(),//kui k6ik panen, jookseb miskit kokku
+//				new object_list_filter(array(
+//					"logic" => "OR",
+//					"conditions" => array(
+//						"CL_CRM_PERSON.RELTYPE_PERSON_MEETING" => $o->id(),
+//						"CL_CRM_PERSON.RELTYPE_PERSON_CALL" => $o->id(),
+//						"CL_CRM_PERSON.RELTYPE_PERSON_TASK" => $o->id(),
+//					)
+//				)),
 			));
 	
 			foreach($pol->arr() as $person)
