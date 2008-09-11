@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.74 2008/09/08 13:10:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.75 2008/09/11 10:24:06 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1377,7 +1377,7 @@ class shop_order extends class_base
 			$arr["template"] = "show.tpl";
 		}
 		$this->read_any_template($arr["template"]);
-		
+		lc_site_load("shop_order_cart", &$this);
 		$o = obj($arr["id"]);
 		$tp = $o->meta("ord_content");
 		$ord_item_data = new aw_array($o->meta('ord_item_data'));
