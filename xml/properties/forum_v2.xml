@@ -526,6 +526,16 @@
             <comment>Teemade nimekirjas viimase lisajana n&amp;amp;auml;idata, kes lisas teema v&amp;amp;otilde;i vastuse</comment>
       </property>
       <property>
+            <name>link_max_len</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Lingi maksimaalne pikkus</caption>
+            <comment>Linkide kuvamisel maksimaalne lingi teksti pikkus</comment>
+      </property>
+      <property>
             <name>show_last_posts_count</name>
             <table>objects</table>
             <group>topic_selector</group>
@@ -599,6 +609,15 @@
             <reltype>RELTYPE_IMAGE_VERIFICATION</reltype>
             <rel_id>first</rel_id>
             <caption>Kontrollpilt</caption>
+      </property>
+      <property>
+            <name>verification_image_oid</name>
+            <table>objects</table>
+            <group>image_verification</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Kontrollpildi ID</caption>
       </property>
       <property>
             <name>import_xml_file</name>
