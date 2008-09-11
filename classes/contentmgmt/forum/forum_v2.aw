@@ -2818,21 +2818,9 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 	**/
 	function add_topic($arr)
 	{
-		//$this->read_template("add_topic.tpl");
 		$this->obj_inst = new object($arr["id"]);
-		//$this->_add_style("style_form_caption");
-		//$this->_add_style("style_form_text");
-		//$this->_add_style("style_form_element");
-		// see raip ntx tuleks viia class_base peale
-		//$this->vars($this->style_data);
-		//$this->vars(array(
-		//	"reforb" => $this->mk_reforb("submit_topic",array(
-		//		"id" => $arr["id"],
-		//		"section" => aw_global_get("section"),
-		//		"folder" => $arr["folder"],
-		//	)),
-		//));
-		//return $this->parse();
+		$arr['obj_inst'] = $this->obj_inst;
+
 		if ($this->read_site_template('add_topic.tpl', 1))
 		{
 			$htmlc = get_instance("cfg/htmlclient",array("tpldir" => "forum", "template" => "add_topic.tpl"));
@@ -2841,7 +2829,12 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		{
 			$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		}
+
 		$htmlc->start_output();
+
+		$htmlc->vars(array(
+			"path" => implode(" &gt; ",$this->_get_yah_path($arr)),
+		));
 
 		$htmlc->add_property(array(
 			"name" => "caption",
@@ -2855,7 +2848,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			"clid" => CL_MSGBOARD_TOPIC,
 		));
 
-//		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
 		$use_props = $this->obj_inst->prop('topic_form_fields');
 		// if there is no topic fields selected, then assume that all should be displayed, it should maintain backward compatibility and in my opinion is sensible anyway --dragut@08.07.2008
 		if (empty($use_props))
@@ -2936,22 +2928,16 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 						'name' => 'ver_code',
 						'size' => 20
 					)),
-					'error' => ($cb_values['image_verification'])? $cb_values['image_verification']['error']:''
+					'error' => ($cb_values['image_verification']) ? $cb_values['image_verification']['error'] : ''
 				));
 			}
 		}
-		/*
-		$htmlc->add_property($props["author_name"]);
-		$htmlc->add_property($props["name"]);
-		$htmlc->add_property($props["author_email"]);
-		$htmlc->add_property($props["comment"]);
-		*/
 
-                $htmlc->add_property(array(
-                        "name" => "sbt",
-                        "caption" => t("Lisa"),
-                        "type" => "submit",
-                ));
+		$htmlc->add_property(array(
+			"name" => "sbt",
+			"caption" => t("Lisa"),
+			"type" => "submit",
+		));
 
 		$class = aw_global_get("class");
 		// XXX: are we embedded? I know, this sucks :(
@@ -2971,32 +2957,11 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			),
 			"form_handler" => $form_handler,
                 ));
-
-                $html = $htmlc->get_result(array(
-                        "form_only" => 1
-                ));
-
-                return $html;
-
-		/*
-		$uid = aw_global_get("uid");
-		$add = "";
-		if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
-		{
-			$user = obj(aw_global_get("uid_oid"));
-			$this->vars(array(
-				"author" => $uid,
-				"email" => $user->prop("email"),
-			));
-			$add = "_logged";
-		}
-		$this->vars(array(
-			"a_name" => $this->parse("a_name".$add),
-			"a_email" => $this->parse("a_email".$add),
+		$html = $htmlc->get_result(array(
+			"form_only" => 1
 		));
 
-		return $this->parse();
-		*/
+                return $html;
 	}
 
 	/**
@@ -3778,6 +3743,60 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			));
 		}
 		return $this->parse();
+	}
+
+	function _get_yah_path($args)
+	{
+		$path = array();
+		$path[] = $this->_get_fp_link(array(
+			"id" => $oid,
+			"group" => $args["request"]["group"],
+			"name" => $args["obj_inst"]->name(),
+		));
+
+		$stop = false;
+		foreach($obj_chain as $o)
+		{
+			if ($stop)
+			{
+				continue;
+			};
+			if ($o->id() == $topic_obj->id())
+			{
+				// this creates the link back to the front page
+				// of the topic and stops processing
+				$name = html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $oid,
+						"group" => $args["request"]["group"],
+						"section" => $this->rel_id,
+						"folder" => $o->id(),
+						"_alias" => get_class($this),
+					)),
+					"caption" => $o->name(),
+				));
+				$stop = true;
+			}
+			else
+			{
+				// this is used for all other levels
+				$name = html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $oid,
+						"c" => $key,
+						"group" => $args["request"]["group"],
+						"section" => $this->rel_id,
+						"_alias" => get_class($this),
+					)),
+					"caption" => $o->name(),
+				));
+
+
+			}
+			$path[] = $name;
+		}
+
+		return $path;
 	}
 
 }
