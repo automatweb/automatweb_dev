@@ -237,6 +237,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property verification_image type=releditor use_form=emb reltype=RELTYPE_IMAGE_VERIFICATION rel_id=first
 		@caption Kontrollpilt
 
+		@property verification_image_oid type=text
+		@caption Kontrollpildi ID
+
 	@groupinfo import caption=Import parent=settings
 	@default group=import
 
@@ -464,6 +467,10 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				break;
 			case "link_max_len":
 				$data["value"] = ($val = $data["value"])? $val: $this->link_def_max_len;
+				break;
+			case "verification_image_oid":
+				$img_verification_obj = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_IMAGE_VERIFICATION");
+				$data['value'] = $img_verification_obj->id();
 				break;
 			default:
 				$tmp = explode("_", $data["name"]);
