@@ -277,5 +277,22 @@ class project_obj extends _int_object
 
 		return $cache[$uid];
 	}
+
+	/** Returns orderer id
+		@attrib api=1
+		@returns oid
+			Orderer object id
+	**/
+	public function get_orderer()
+	{
+		$orderers = $this->get_customer_ids();
+		$orderer = reset($this->get_customer_ids());
+		if($orderer && $this->prop("orderer") != $orderer)
+		{
+			$this->set_prop("orderer" , $orderer);
+			$this->save();
+		}
+		return $orderer;
+	}
 }
 ?>

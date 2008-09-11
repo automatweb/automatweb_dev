@@ -221,8 +221,7 @@ class crm_company_bills_impl extends class_base
 				continue;
 			}
 			$po = obj($p);
-			$ord = $po->prop("orderer");
-			$ord = is_array($ord) ? reset($ord) : $ord;
+			$ord = $po->get_orderer();
 			$ord_name = "";
 			if($this->can("view" , $ord))
 			{
