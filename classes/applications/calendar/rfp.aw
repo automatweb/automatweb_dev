@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.130 2008/09/10 10:43:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.131 2008/09/11 10:05:06 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -329,7 +329,7 @@
 
 			@layout add_inf_room type=vbox closeable=1 area_caption="Lisainfo"
 				
-				@property additional_room_information type=textarea parent=add_inf_room rows=20
+				@property additional_room_information type=textarea parent=add_inf_room rows=7 cols=100 no_caption=1
 				@caption Ruumide lisainfo
 
 
@@ -362,7 +362,7 @@
 		
 			@layout add_inf_catering type=vbox closeable=1 area_caption="Lisainfo"
 				
-				@property additional_catering_information type=textarea parent=add_inf_catering rows=20
+				@property additional_catering_information type=textarea parent=add_inf_catering rows=7 cols=100 no_caption=1
 				@caption Toitlustuse lisainfo
 
 
@@ -381,7 +381,7 @@
 
 			@layout add_inf_resource type=vbox closeable=1 area_caption="Lisainfo"
 				
-				@property additional_resource_information type=textarea parent=add_inf_resource rows=20
+				@property additional_resource_information type=textarea parent=add_inf_resource rows=7 cols=100 no_caption=1
 				@caption Ressursid lisainfo
 					
 
@@ -394,7 +394,7 @@
 
 			@layout add_inf_housing type=vbox closeable=1 area_caption="Lisainfo"
 				
-				@property additional_housing_information type=textarea parent=add_inf_housing rows=20
+				@property additional_housing_information type=textarea parent=add_inf_housing rows=7 cols=100 no_caption=1
 				@caption Majutuse lisainfo
 
 
@@ -407,7 +407,7 @@
 
 			@layout add_inf_services type=vbox closeable=1 area_caption="Lisainfo"
 				
-				@property additional_services_information type=textarea parent=add_inf_services rows=20
+				@property additional_services_information type=textarea parent=add_inf_services rows=7 cols=100 no_caption=1
 				@caption Lisateenuste lisainfo
 
 
@@ -883,11 +883,21 @@ class rfp extends class_base
 					"final_prices" => "RELTYPE_RESERVATION",
 					"final_resource" => "RELTYPE_RESERVATION",
 				);
-
+				
 				$data_name = $arr["obj_inst"]->prop("data_subm_name");
-				$p = obj($data_name);
-				$new_reservation_args["person_rfp_fname"] = $p->prop("firstname");
-				$new_reservation_args["person_rfp_lname"] = $p->prop("lastname");
+				if($this->can("view", $data_name))
+				{
+					$p = obj($data_name);
+					$new_reservation_args["person_rfp_fname"] = $p->prop("firstname");
+					$new_reservation_args["person_rfp_lname"] = $p->prop("lastname");
+				}
+				else
+				{
+					$data_name = split("[ ]", $data_name); 
+					$new_reservation_args["person_rfp_fname"] = $data_name[0];
+					unset($data_name[0]);
+	                                $new_reservation_args["person_rfp_lname"] = count($data_name)?join(" ", $data_name):"";
+				}
 				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
 				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
 				$new_reservation_args["people_count_rfp"] = $arr["obj_inst"]->prop("data_gen_attendees_no");
@@ -1834,7 +1844,6 @@ class rfp extends class_base
 		$prodvars = $this->get_product_vars(true);
 		classload("vcl/table");
 		$t = new aw_table;
-		$t->set_sortable(false);
 		$t->define_chooser(array(
 			"field" => "product",
 			"name" => "prod_sel",
@@ -1897,6 +1906,7 @@ class rfp extends class_base
 		));
 		$t->set_rgroupby(array(
 			"reserv_group" => "reserv_group",
+			"prod_parent" => "prod_parent",
 		));
 		$conn = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_CATERING_RESERVATION",
@@ -1930,7 +1940,7 @@ class rfp extends class_base
 			{
 				//if($count = $amount[$prod->id()])
 				//{
-					$count = $amount[$prod->id()];
+					$count = $rv_amount[$prod->id()];
 					if(!$arr["request"]["show_all_prods"][$rv->id()] && !$count)
 					{
 						$prod_skip = true;
@@ -2008,6 +2018,8 @@ class rfp extends class_base
 						"reserv_group" => $rv_group,
 						"product" => $prod->id().".".$rv->id(),
 						"color" => ($count?$count:$rv_amount[$prod->id()])? "#F0F0F0": "",
+						"prod_parent" => $arr["request"]["show_all_prods"][$rv->id()] ? $prod->prop("parent.name") : '',
+						"prod_ord" => $prod->ord(),
 					);
 					$t->define_data($data);
 				//}
@@ -2022,6 +2034,13 @@ class rfp extends class_base
 				));
 			}
 		}
+		$t->set_numeric_field("prod_ord");
+		/*$t->set_default_sortby("prod_ord");
+		$t->set_default_sorder("asc");*/
+		/*$t->sort_by(array(
+			"field" => "prod_ord",
+			"sorder" => "asc",
+		));*/
 		return $t->draw();
 	}
 

@@ -910,7 +910,9 @@
             <group>final_prices</group>
             <type>textarea</type>
             <parent>add_inf_room</parent>
-            <rows>20</rows>
+            <rows>7</rows>
+            <cols>100</cols>
+            <no_caption>1</no_caption>
             <field>additional_room_information</field>
             <caption>Ruumide lisainfo</caption>
       </property>
@@ -971,7 +973,9 @@
             <group>final_catering</group>
             <type>textarea</type>
             <parent>add_inf_catering</parent>
-            <rows>20</rows>
+            <rows>7</rows>
+            <cols>100</cols>
+            <no_caption>1</no_caption>
             <field>additional_catering_information</field>
             <caption>Toitlustuse lisainfo</caption>
       </property>
@@ -1001,7 +1005,9 @@
             <group>final_resource</group>
             <type>textarea</type>
             <parent>add_inf_resource</parent>
-            <rows>20</rows>
+            <rows>7</rows>
+            <cols>100</cols>
+            <no_caption>1</no_caption>
             <field>additional_resource_information</field>
             <caption>Ressursid lisainfo</caption>
       </property>
@@ -1029,7 +1035,9 @@
             <group>final_housing</group>
             <type>textarea</type>
             <parent>add_inf_housing</parent>
-            <rows>20</rows>
+            <rows>7</rows>
+            <cols>100</cols>
+            <no_caption>1</no_caption>
             <field>additional_housing_information</field>
             <caption>Majutuse lisainfo</caption>
       </property>
@@ -1057,7 +1065,9 @@
             <group>additional_services</group>
             <type>textarea</type>
             <parent>add_inf_services</parent>
-            <rows>20</rows>
+            <rows>7</rows>
+            <cols>100</cols>
+            <no_caption>1</no_caption>
             <field>additional_services_information</field>
             <caption>Lisateenuste lisainfo</caption>
       </property>
