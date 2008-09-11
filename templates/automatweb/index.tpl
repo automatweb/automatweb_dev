@@ -10,7 +10,7 @@
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/jquery_aw_object_quickadd.css" rel="stylesheet" type="text/css" />
-
+<!-- END SUB: MINIFY_JS_AND_CSS -->
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_timer.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dump.js"></script>
@@ -34,8 +34,9 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
-<!-- END SUB: MINIFY_JS_AND_CSS -->
+
 {VAR:javascript}
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml&{VAR:random}"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_objects&{VAR:random}"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects"></script>
 

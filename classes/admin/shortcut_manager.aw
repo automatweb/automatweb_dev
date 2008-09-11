@@ -5,6 +5,12 @@
 @default table=objects
 @default group=general
 
+@property shortcut_sets type=chooser field=meta method=serialize
+@caption Aktiivne set
+
+@property shortcuts type=table
+@caption Shortcutid
+
 */
 
 class shortcut_manager extends class_base
@@ -17,10 +23,40 @@ class shortcut_manager extends class_base
 		));
 	}
 	
+	function _get_shortcuts($arr)
+	{
+		$o = & $arr["obj_inst"];
+		
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Kirjeldus"),
+		));
+		$t->define_field(array(
+			"name" => "keycombo",
+			"caption" => t("Shortcut"),
+		));
+		
+		$o_shortcut_set = obj($o->prop("shortcut_sets"));
+		$connections = $o_shortcut_set->connections_from(array(
+			"type" => "RELTYPE_SHORTCUT",
+			"class_id" => CL_SHORTCUT
+		));
+		foreach ($connections as $connection)
+		{
+			$o_shortcut = $connection->to ();
+			
+			$t->define_data(array(
+				"name" =>  $o_shortcut->prop("name"),
+				"keycombo" =>  $o_shortcut->prop("keycombo"),
+			));
+		}
+	}
+	
 	/**
-		@attrib name=parse_shorcuts_from_xml
+		@attrib name=parse_shortcuts_from_xml
 	**/
-	function parse_shorcuts_from_xml($arr)
+	function parse_shortcuts_from_xml($arr)
 	{
 		$file = core::get_file(array("file"=>aw_ini_get("basedir")."/xml/shortcuts.xml"));
 
@@ -58,7 +94,21 @@ class shortcut_manager extends class_base
 		header ("Content-type: text/javascript; charset: UTF-8");
 		die($out);
 	}
-
+	
+	/**
+		@attrib name=parse_shortcuts_from_objects
+	**/
+	function parse_shortcuts_from_objects($arr)
+	{
+		
+		//$ol = new object_list(array(
+			//"class_id" => CL_SHORTCUT_SET,
+		//));
+	
+		$out = "";
+		die($out);
+	}
+	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -66,6 +116,26 @@ class shortcut_manager extends class_base
 
 		switch($prop["name"])
 		{
+			case "shortcut_sets":
+				$ol = new object_list(array(
+					"class_id" => CL_SHORTCUT_SET,
+				));
+				
+				$a_shortcuts = Array();
+				$i=0;
+				for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+				{
+					$a_shortcuts[$o->id()] = html::href(array(
+						"url" => $this->mk_my_orb("change", array(
+							"id" => $o->id(),
+							"return_url" => get_ru(),
+							), CL_SHORTCUT_SET),
+						"caption" => $o->prop("name"),
+						));
+				}
+				
+				$prop["options"] = $a_shortcuts;
+			break;
 		}
 
 		return $retval;

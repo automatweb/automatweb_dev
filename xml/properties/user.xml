@@ -318,7 +318,7 @@
       <property>
             <name>lg_hdh</name>
             <table>users</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
@@ -328,7 +328,7 @@
       <property>
             <name>history_size</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -338,7 +338,7 @@
       <property>
             <name>history_has_folders</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -348,7 +348,7 @@
       <property>
             <name>lg_hdl</name>
             <table>users</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
@@ -358,7 +358,7 @@
       <property>
             <name>set_ui_lang</name>
             <table>users</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>select</type>
             <store>no</store>
             <field>set_ui_lang</field>
@@ -367,7 +367,7 @@
       <property>
             <name>ui_language</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
@@ -375,7 +375,7 @@
       <property>
             <name>lg_hd</name>
             <table>users</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
@@ -385,7 +385,7 @@
       <property>
             <name>base_lang</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
@@ -394,7 +394,7 @@
       <property>
             <name>target_lang</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
@@ -404,7 +404,7 @@
       <property>
             <name>rd_hd</name>
             <table>users</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
@@ -414,7 +414,7 @@
       <property>
             <name>after_login_redir</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -423,7 +423,7 @@
       <property>
             <name>rte_hd</name>
             <table>users</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
@@ -433,7 +433,7 @@
       <property>
             <name>rte_disabled</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -443,11 +443,20 @@
       <property>
             <name>stoppers</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_general</group>
             <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
             <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>settings_shortcuts_shortcut_sets</name>
+            <table>objects</table>
+            <group>settings_shortcuts</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Aktiivne set</caption>
       </property>
       <classinfo>
             <syslog_type>ST_USERS</syslog_type>
@@ -465,6 +474,14 @@
             <settings>
                   <caption>Seaded</caption>
             </settings>
+            <settings_general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>settings</parent>
+            </settings_general>
+            <settings_shortcuts>
+                  <caption>Shortcutid</caption>
+                  <parent>settings</parent>
+            </settings_shortcuts>
             <jdata>
                   <caption>Liitumise info</caption>
             </jdata>

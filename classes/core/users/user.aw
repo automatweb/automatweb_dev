@@ -23,6 +23,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @groupinfo chpwd caption="Salas&otilde;na muutmine"
 @groupinfo groups caption=Kasutajagrupid
 @groupinfo settings caption=Seaded
+@groupinfo settings_general caption=&Uuml;ldine parent=settings
+@groupinfo settings_shortcuts caption=Shortcutid parent=settings
 
 @groupinfo jdata caption="Liitumise info"
 @groupinfo stat caption=Statistika
@@ -141,7 +143,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 	@property join_form_entry type=hidden table=users field=join_form_entry
 
-@default group=settings
+@default group=settings_general
 
 	@property lg_hdh type=text subtitle=1 store=no
 	@caption Ajaloo seaded
@@ -183,6 +185,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
+	@default group=settings_shortcuts
+	property Shortcutid
+		
+		@property settings_shortcuts_shortcut_sets type=chooser field=meta method=serialize table=objects
+		@caption Aktiivne set
+		
+		property settings_shortcuts_settings_shortcuts type=table
+		caption Shortcutid
+		
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
 
@@ -342,6 +353,10 @@ class user extends class_base
 			case "history_has_folders":
 				$_SESSION["user_history_has_folders"] = $arr["obj_inst"]->prop("history_has_folders");
 				break;
+			
+			case "settings_shortcuts_shortcut_sets":
+				$prop['value'] = $this->_get_settings_shortcuts_shortcut_sets($arr);
+				break;
 		}
 		return PROP_OK;
 	}
@@ -461,6 +476,70 @@ class user extends class_base
 		return PROP_OK;
 	}
 
+	function _get_settings_shortcuts_shortcut_sets($arr)
+	{
+		$prop = & $arr["prop"];
+		$ou = obj(197);
+		$p = get_current_person();
+		
+		$ol = new object_list(array(
+			"class_id" => CL_SHORTCUT_SET,
+		));
+		
+		$a_shortcut_sets = array();
+		$i = 0;
+		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
+		{
+			if ($prop["value"]=="" && $i==0)
+			{
+				$ou->set_prop("settings_shortcuts_shortcut_sets", $o->id());
+				$ou->save();
+			}
+			
+			$a_shortcut_sets[$o->id()] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $o->id(),
+					"return_url" => get_ru(),
+				), CL_SHORTCUT_SET),
+				"caption" => $o->prop("name"),
+				));
+			$i++;
+		}
+		
+		$prop["options"] = $a_shortcut_sets;
+		/*
+		
+		//arr ($p, true);
+		
+		$o = & $arr["obj_inst"];
+		
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Kirjeldus"),
+		));
+		$t->define_field(array(
+			"name" => "keycombo",
+			"caption" => t("Shortcut"),
+		));
+		
+		$o_shortcut_set = obj($o->prop("shortcut_sets"));
+		$connections = $o_shortcut_set->connections_from(array(
+			"type" => "RELTYPE_SHORTCUT",
+			"class_id" => CL_SHORTCUT
+		));
+		foreach ($connections as $connection)
+		{
+			$o_shortcut = $connection->to ();
+			
+			$t->define_data(array(
+				"name" =>  $o_shortcut->prop("name"),
+				"keycombo" =>  $o_shortcut->prop("keycombo"),
+			));
+		}
+		*/
+	}
+	
 	function _get_group_membership($o, $id)
 	{
 		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
