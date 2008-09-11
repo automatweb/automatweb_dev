@@ -401,7 +401,7 @@ class crm_working_time_scenario extends class_base
 			$t->define_data($data);
 		}
 	
-		print html::form(array(
+		$form =  html::form(array(
 			"method" => "POST",
 			"content" => $ret.$t->draw().
 				html::hidden(array(
@@ -415,6 +415,21 @@ class crm_working_time_scenario extends class_base
 					"value" => t("Moodusta eelbroneeringud"),
 				)),
 		));
+
+		$sf = new aw_template;
+		$sf->db_init();
+		$sf->tpl_init("automatweb");
+		$sf->read_template("index.tpl");
+		
+		$sf->vars(array(
+			"content" => $form,
+			"uid" => aw_global_get("uid"),
+			"charset" => aw_global_get("charset"),
+			"MINIFY_JS_AND_CSS" => $sf->parse("MINIFY_JS_AND_CSS")
+		));
+
+		die($sf->parse());
+
 	}
 
 }
