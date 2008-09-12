@@ -126,7 +126,19 @@ class site_list_updater extends aw_template
 			"site_basedir" => aw_ini_get("site_basedir"),
 			"code" => aw_ini_get("basedir"),
 			"uid" => aw_global_get("uid"),
+			"used_class_list" => $this->_get_used_class_list()
 		);
+	}
+
+	function _get_used_class_list()
+	{
+		$this->db_query("SELECT distinct(class_id) as c FROM objects WHERE site_id = ".aw_ini_get("site_id")." AND status > 0");
+		$rv = array();
+		while ($row = $this->db_next())
+		{
+			$rv[] = $row["c"];
+		}
+		return join(",", $rv);
 	}
 
 	function _encrypt($data, $key)
