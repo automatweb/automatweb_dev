@@ -113,11 +113,17 @@ elseif($_GET["test"])
 }
 else
 {
-	print "N2ita tabelis ";
-	print html::href(array("caption" => "10" , "url" => "?show=10"));
-	print " , " ;
-	print html::href(array("caption" => "25" , "url" => "?show=25"));
-	print " tulemust" ;
+	$autotest_content.=  "Show ";
+	$asd = 2;
+	$asds = array();
+	while($asd < 2000001)
+	{
+		$asds[] = html::href(array("caption" => $asd , "url" => "?show=".$asd));
+		$asd *= 2;
+	}
+	$autotest_content.= join (", " , $asds);
+
+	$autotest_content.=  " results" ;
 	classload("vcl/table");
 //	get_instance("vcl/table");
 	$t = new vcl_table(array(
@@ -130,12 +136,12 @@ else
 
 	$t->define_field(array(
 		"name" => "file",
-		"caption" => t("Failid (kommititud)"),
+		"caption" => t("Files"),
 	));
 
 	$t->define_field(array(
 		"name" => "email",
-		"caption" => t("Kommittija e-mail"),
+		"caption" => t("e-mail"),
 	));
 
 	$t->define_field(array(
@@ -184,7 +190,9 @@ else
 		}
 		$show++;	
 	}
-	print $t->draw();
+	$autotest_content.= $t->draw().'<br>';
+
+
 
 	$myFile = "/www/dev/autotest/test_list.txt";
 	if(!filesize($myFile))
@@ -203,6 +211,7 @@ else
 			$t = new vcl_table(array(
 				"layout" => "generic",
 			));
+			$t->set_header("Waiting....");
 			$t->define_field(array(
 				"name" => "time",
 				"caption" => t("Time"),
@@ -210,51 +219,32 @@ else
 		
 			$t->define_field(array(
 				"name" => "file",
-				"caption" => t("Failid (kommititud)"),
+				"caption" => t("Files"),
 			));
 		
 			$t->define_field(array(
 				"name" => "email",
-				"caption" => t("Kommittija e-mail"),
+				"caption" => t("e-mail"),
 			));
 		
-			$t->define_field(array(
-				"name" => "run",
-				"caption" => t("Cases run"),
-			));
-			$t->define_field(array(
-				"name" => "pass",
-				"caption" => t("Passes"),
-			));
-			$t->define_field(array(
-				"name" => "fail",
-				"caption" => t("Failures"),
-			));
-			$t->define_field(array(
-				"name" => "exc",
-				"caption" => t("Exceptions"),
-			));
-
-
 			$files = array();
 			foreach($log_array as $id => $log)
 			{
-				foreach($log_array as $log)
+				if(is_array(unserialize($log)))
 				{
-					if(is_array(unserialize($log)))
-					{
-						$val = unserialize($log);
-						$color = "white";
-						$t->define_data(array(
-							"email" => "<font color=".$color.">".$val["email"]."</br>",
-							"file" => "<font color=".$color.">".$val["file"]."</br>",
-							"time" => "<a href='?test=".$val["time"]."'><font color=".$color.">".date("d.m.Y H:i" , $val["time"])."</br></a>",
-						));
-					}
+					$val = unserialize($log);
+					$color = "black";
+					$t->define_data(array(
+						"email" => "<font color=".$color.">".$val["email"]."</br>",
+						"file" => "<font color=".$color.">".$val["file"]."</br>",
+						"time" => "<font color=".$color.">".date("d.m.Y H:i" , $val["time"])."</br>",
+					));
 				}
 			}
 		}
-	print $t->draw();
+		
+		$autotest_content.= $t->draw();
+//	print $t->draw();
 	}
 }
 
