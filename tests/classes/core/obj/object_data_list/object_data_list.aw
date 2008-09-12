@@ -22,7 +22,6 @@ class object_data_list_test extends UnitTestCase
 		}
 		aw_restore_acl();
 	}
-/*
 	function test_construct_aliases()
 	{
 
@@ -32,20 +31,20 @@ class object_data_list_test extends UnitTestCase
 				"limit" => 1
 			),
 			array(
-				CL_MENU => array("name" => "oid"),		// I'm trying to confuse it. :P
+				CL_MENU => array("comment" => "foo"),		// I'm trying to confuse it. :P
 			)
 		);
 		foreach($odl->list_data as $oid => $odata)
 		{
-			$row = $this->db->db_fetch_row("SELECT name FROM objects WHERE oid = ".$oid." LIMIT 1");
+			$row = $this->db->db_fetch_row("SELECT oid, comment FROM objects WHERE oid = ".$oid." LIMIT 1");
 			break;
 		}
-		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $row["name"]);
+		$this->assertTrue($odl->list_data[$row["oid"]]["foo"] == $row["comment"]);
 	}
 	
 	function test_arr_aliases()
 	{
-		$row = $this->db->db_fetch_row("SELECT oid, class_id, name FROM objects WHERE status > 0 LIMIT 1");
+		$row = $this->db->db_fetch_row("SELECT oid, class_id, comment FROM objects WHERE status > 0 LIMIT 1");
 		$odl = new object_data_list(
 			array(
 				"class_id" => $row["class_id"],
@@ -53,11 +52,11 @@ class object_data_list_test extends UnitTestCase
 				"lang_id" => array(),
 			),
 			array(
-				$row["class_id"] => array("name" => "oid"),		// I'm trying to confuse it. :P
+				$row["class_id"] => array("comment" => "foo"),		// I'm trying to confuse it. :P
 			)
 		);
 		$odl_arr = $odl->arr();
-		$this->assertTrue($row["name"] == $odl_arr[$row["id"]]["oid"]);
+		$this->assertTrue($row["comment"] == $odl_arr[$row["id"]]["foo"]);
 	}
 
 	function test_arr_no_aliases()
@@ -90,10 +89,10 @@ class object_data_list_test extends UnitTestCase
 		);
 		foreach($odl->list_data as $oid => $odata)
 		{
-			$row = $this->db->db_fetch_row("SELECT name FROM objects WHERE oid = ".$oid." LIMIT 1");
+			$row = $this->db->db_fetch_row("SELECT oid, name FROM objects WHERE oid = ".$oid." LIMIT 1");
 			break;
 		}
-		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $row["name"]);
+		$this->assertTrue($odl->list_data[$row["oid"]]["name"] == $row["name"]);
 	}
 
 /*	function test_filter_props_props()
