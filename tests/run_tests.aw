@@ -242,7 +242,6 @@ else
 				}
 			}
 		}
-		
 		$autotest_content.= $t->draw();
 //	print $t->draw();
 	}
