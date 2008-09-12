@@ -163,14 +163,14 @@ class event_webview extends class_base
 				{
 					$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.end"] = new obj_predicate_compare(
 						OBJ_COMP_LESS,
-						($ob->date_end + 24 * 3600)
+						($ob->date_end)
 					);
 				}
 				else
 				{
 					$ol_args["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(
 						OBJ_COMP_LESS,
-						($ob->date_end + 24 * 3600)
+						($ob->date_end)
 					);
 				}
 			}
