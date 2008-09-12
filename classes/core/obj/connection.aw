@@ -493,11 +493,7 @@ class connection
 	{
 		if (!$this->conn["id"])
 		{
-			error::raise(array(
-				"id" => ERR_CONNECTION,
-				"msg" => t("connection::to(): no current connection!")
-			));
-			return;
+			return NULL;
 		}
 		return obj($this->conn["to"]);
 	}
