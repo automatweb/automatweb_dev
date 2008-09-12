@@ -113,7 +113,7 @@ elseif($_GET["test"])
 }
 else
 {
-	print "Näita tabelis ";
+	print "N2ita tabelis ";
 	print html::href(array("caption" => "10" , "url" => "?show=10"));
 	print " , " ;
 	print html::href(array("caption" => "25" , "url" => "?show=25"));
@@ -185,6 +185,77 @@ else
 		$show++;	
 	}
 	print $t->draw();
+
+	$myFile = "/www/dev/autotest/test_list.txt";
+	if(!filesize($myFile))
+	{
+		echo "\n<br>Test_list file empty\n<br>";
+	}
+	else
+	{
+		$fh = fopen($myFile, 'r');
+		$theData = fread($fh, filesize($myFile));
+		fclose($fh);
+		$log_array = explode("\n" , $theData);
+		if(is_array($log_array) && sizeof($log_array))
+		{
+		
+			$t = new vcl_table(array(
+				"layout" => "generic",
+			));
+			$t->define_field(array(
+				"name" => "time",
+				"caption" => t("Time"),
+			));
+		
+			$t->define_field(array(
+				"name" => "file",
+				"caption" => t("Failid (kommititud)"),
+			));
+		
+			$t->define_field(array(
+				"name" => "email",
+				"caption" => t("Kommittija e-mail"),
+			));
+		
+			$t->define_field(array(
+				"name" => "run",
+				"caption" => t("Cases run"),
+			));
+			$t->define_field(array(
+				"name" => "pass",
+				"caption" => t("Passes"),
+			));
+			$t->define_field(array(
+				"name" => "fail",
+				"caption" => t("Failures"),
+			));
+			$t->define_field(array(
+				"name" => "exc",
+				"caption" => t("Exceptions"),
+			));
+
+
+			$files = array();
+			foreach($log_array as $id => $log)
+			{
+				foreach($log_array as $log)
+				{
+					if(is_array(unserialize($log)))
+					{
+						$val = unserialize($log);
+						$color = "white";
+						$t->define_data(array(
+							"email" => "<font color=".$color.">".$val["email"]."</br>",
+							"file" => "<font color=".$color.">".$val["file"]."</br>",
+							"time" => "<a href='?test=".$val["time"]."'><font color=".$color.">".date("d.m.Y H:i" , $val["time"])."</br></a>",
+						));
+					}
+				}
+			}
+		}
+	print $t->draw();
+	}
 }
 
 
