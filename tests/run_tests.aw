@@ -22,13 +22,11 @@ init_config(array(
 	"cache_file" => $site_dir."/pagecache/ini.cache",
  	"ini_files" => array($aw_dir."/aw.ini",$site_dir."/aw.ini")
  ));
-
 chdir("classes");
 //echo getcwd() . "\n<br>";
 classload("defs");
 classload("aw_template","core/util/timer");
 classload("core/obj/object", "core/error");
-
 if($do_test || !$autotest)
 {
 	require_once('simpletest/unit_tester.php');
@@ -75,7 +73,6 @@ if($do_test || !$autotest)
 //	$log["data"] = str_replace("\n" , "" , ob_get_contents());
 	echo "\n<br><br>";
 }
-
 elseif($_GET["test"])
 {
 	$log_array = _get_log($site_dir);
@@ -200,7 +197,7 @@ else
 	$myFile = "/www/dev/autotest/test_list.txt";
 	if(!filesize($myFile))
 	{
-		echo "\n<br>Test_list file empty\n<br>";
+		$autotest_content.= "\n<br>test_list.txt file empty\n<br>";
 	}
 	else
 	{
@@ -250,6 +247,7 @@ else
 //	print $t->draw();
 	}
 }
+
 
 function __disable_err()
 {
