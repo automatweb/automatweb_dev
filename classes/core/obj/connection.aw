@@ -479,7 +479,7 @@ class connection
 		@attrib api=1
 
 		@errors
-			error is thrown, if no current connection exists
+			none
 
 		@returns
 			object instance of the object that the connection points to
@@ -502,7 +502,7 @@ class connection
 		@attrib api=1
 
 		@errors
-			error is thrown, if no current connection exists
+			none
 
 		@returns
 			object instance of the object that the connection starts from
@@ -516,11 +516,7 @@ class connection
 	{
 		if (!$this->conn["id"])
 		{
-			error::raise(array(
-				"id" => ERR_CONNECTION,
-				"msg" => t("connection::to(): no current connection!")
-			));
-			return;
+			return NULL;
 		}
 		return obj($this->conn["from"]);
 	}
