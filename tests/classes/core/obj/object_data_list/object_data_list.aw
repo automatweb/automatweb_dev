@@ -25,6 +25,7 @@ class object_data_list_test extends UnitTestCase
 
 	function test_construct_aliases()
 	{
+/*
 		$odl = new object_data_list(
 			array(
 				"class_id" => CL_MENU,
@@ -39,7 +40,7 @@ class object_data_list_test extends UnitTestCase
 			$row = $this->db->db_fetch_row("SELECT name FROM objects WHERE oid = ".$oid." LIMIT 1");
 			break;
 		}
-		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $row["name"]);
+		$this->assertTrue($odl->list_data[$row["id"]]["name"] == $row["name"]);*/
 	}
 	
 	function test_arr_aliases()
