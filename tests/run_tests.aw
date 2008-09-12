@@ -11,6 +11,7 @@ if(!$autotest)
 	chdir("..");
 	$nl = "\n";
 }
+
 $site_dir = str_replace("/aw.ini", "", $argv[1]);
 $aw_dir = getcwd();//"/www/dev/autotest/automatweb_dev";
 $basedir =$aw_dir;// realpath("..")."/automatweb_dev";
