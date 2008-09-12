@@ -278,6 +278,38 @@ class project_obj extends _int_object
 		return $cache[$uid];
 	}
 
+	/** returns time spent with bugs
+		@attrib api=1
+		@returns double
+			spent time in hours
+	**/
+	function get_bugs_time()
+	{
+		$sum = 0;
+		$ol = $this->get_project_bugs();
+		foreach($ol->arr() as $o)
+		{
+			$sum += $o->prop("num_hrs_real");
+		}
+		return $sum;
+	}
+
+	/** returns all bugs related to current project
+		@attrib api=1
+		@returns object list
+	**/
+	function get_project_bugs()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"project" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.created desc",
+		));
+		return $ol;
+	}
+
 	/** Returns orderer id
 		@attrib api=1
 		@returns oid
@@ -294,5 +326,6 @@ class project_obj extends _int_object
 		}
 		return $orderer;
 	}
+
 }
 ?>

@@ -107,9 +107,12 @@ class crm_company_qv_impl extends class_base
 				break;
 			}
 			$parts = array();
-			foreach((array)$o->prop("participants") as $_p)
+
+			foreach($o->connections_from(array(
+				"type" => "RELTYPE_PARTICIPANT",
+			)) as $c)
 			{
-				$parts[] = html::obj_change_url($_p);
+				$parts[] = html::obj_change_url($c->to());
 			}
 
 			$sum = 0;
@@ -122,6 +125,7 @@ class crm_company_qv_impl extends class_base
 				"project" => $o->id(),
 				"brother_of" => new obj_predicate_prop("id")
 			));
+
 			foreach($t_ol->arr() as $task)
 			{
 				foreach($t_i->get_task_bill_rows($task, false) as $row)
@@ -134,6 +138,9 @@ class crm_company_qv_impl extends class_base
 					$hrs += $row["amt"];
 				}
 			}
+
+			$hrs += $o->get_bugs_time();
+
 			$t->define_data(array(
 				"date" => date("d.m.Y", $o->prop("start")).($o->prop("end") > 100 ? " - ".date("d.m.Y", $o->prop("end")) : ""),
 				"name" => html::obj_change_url($o),
