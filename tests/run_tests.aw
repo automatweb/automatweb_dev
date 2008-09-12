@@ -248,7 +248,6 @@ else
 	}
 }
 
-
 function __disable_err()
 {
 	aw_global_set("__from_raise_error", 1);
