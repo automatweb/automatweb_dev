@@ -82,8 +82,8 @@ elseif($_GET["test"])
 			$val = unserialize($log);
 			if($val["time"] == $_GET["test"])
 			{
-				print "Tested : ".date("d.m.Y H:i" , $val["time"]);
-				print "<br>result : <br>";
+				$autotest_content.= "Tested : ".date("d.m.Y H:i" , $val["time"]);
+				$autotest_content.= "<br>result : <br>";
 				
 					classload("vcl/table");
 				//	get_instance("vcl/table");
@@ -92,7 +92,7 @@ elseif($_GET["test"])
 				));
 				$t->define_field(array(
 					"name" => "case",
-					"caption" => t(""),
+					"caption" => t("Test name"),
 				));
 				$t->define_field(array(
 					"name" => "result",
@@ -102,14 +102,13 @@ elseif($_GET["test"])
 				{
 				  $t->define_data(array("case" => $key , "result" => $val));
 				}
-				print $t->draw();
-				print $stuff["conc"];
+				$autotest_content.= $t->draw();
+				$autotest_content.= $stuff["conc"]."<br>";
 //				print $val["data"];
-				print "<br><br>";
 			}
 		}
 	}
-	print html::href(array("caption" => "Tagasi statistikasse" , "url" => $GLOBALS["_SERVER"]["SCRIPT_URI"]));
+	$autotest_content.= html::href(array("caption" => "<<<<<<<<<<<<<" , "url" => $GLOBALS["_SERVER"]["SCRIPT_URI"]))."<br>";
 }
 else
 {
