@@ -317,7 +317,7 @@ class connection_test extends UnitTestCase
 		$c = new connection();
 		__disable_err();
 		$to = $c->to();
-		$this->assertTrue(__is_err());
+		$this->assertFalse(__is_err());
 	}
 
 	function test_connection_from()
@@ -334,7 +334,7 @@ class connection_test extends UnitTestCase
 		$c = new connection();
 		__disable_err();
 		$from = $c->from();
-		$this->assertTrue(__is_err());
+		$this->assertFalse(__is_err());
 	}
 
 	function test_prop_reltype()
@@ -350,7 +350,7 @@ class connection_test extends UnitTestCase
 		$c = new connection();
 		__disable_err();
 		$to = $c->prop("to");
-		$this->assertTrue(__is_err());
+		$this->assertFalse(__is_err());
 	}
 
 	function test_prop_from_name()
