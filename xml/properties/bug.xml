@@ -233,18 +233,6 @@
             <caption>Sisu</caption>
       </property>
       <property>
-            <name>bug_add_real</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>textbox</type>
-            <size>5</size>
-            <parent>bug_add_times</parent>
-            <captionside>top</captionside>
-            <store>no</store>
-            <field>bug_add_real</field>
-            <caption>Kulunud aeg</caption>
-      </property>
-      <property>
             <name>bug_add_guess</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -255,6 +243,18 @@
             <store>no</store>
             <field>bug_add_guess</field>
             <caption>Prognoosile lisanduv aeg</caption>
+      </property>
+      <property>
+            <name>bug_add_real</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>bug_add_times</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>bug_add_real</field>
+            <caption>Kulunud aeg</caption>
       </property>
       <property>
             <name>bug_content_comm</name>

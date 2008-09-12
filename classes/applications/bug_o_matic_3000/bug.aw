@@ -97,11 +97,11 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@layout bug_add_times type=hbox width=50%:50% parent=bc
 
-			@property bug_add_real type=textbox size=5 parent=bug_add_times captionside=top store=no
-			@caption Kulunud aeg
-
 			@property bug_add_guess type=textbox size=5 parent=bug_add_times captionside=top store=no
 			@caption Prognoosile lisanduv aeg
+
+			@property bug_add_real type=textbox size=5 parent=bug_add_times captionside=top store=no
+			@caption Kulunud aeg
 
 		@layout bc_lay2 parent=bc type=hbox
 
@@ -903,11 +903,12 @@ class bug extends class_base
 				break;
 
 			case "bug_add_real":
+				$prop["post_append_text"] = html::span(array(
+					"id" => "bug_stopper_pause_link",
+					"content" => "<a href=''>".t("Paus")."</a>",
+				));
 			case "bug_add_guess":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
+				$prop["value"] == "";
 				break;
 		};
 		return $retval;
@@ -1205,10 +1206,6 @@ class bug extends class_base
 				break;
 
 			case "bug_add_real":
-				if($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
 				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				$old = $arr["obj_inst"]->prop("num_hrs_real");
 				$new = $old + $prop["value"];
@@ -1222,28 +1219,31 @@ class bug extends class_base
 				break;
 
 			case "bug_add_guess":
+				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if($arr["new"])
 				{
-					return PROP_IGNORE;
+					$old = 0;
+					$old_real = 0;
 				}
-				$prop["value"] = str_replace(",", ".", $prop["value"]);
-				$conn = $arr["obj_inst"]->connections_from(array(
-					"type" => "RELTYPE_COMMENT",
-				));
-				$old = 0;
-				$old_real = 0;
-				foreach($conn as $c)
+				else
 				{
-					$cmo = $c->to();
-					if($cmo->createdby() == aw_global_get("uid"))
+					$conn = $arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_COMMENT",
+					));
+					$old = 0;
+					$old_real = 0;
+					foreach($conn as $c)
 					{
-						$old += $cmo->prop("add_wh_guess");
-						$old_real += $cmo->prop("add_wh");
+						$cmo = $c->to();
+						if($cmo->createdby() == aw_global_get("uid"))
+						{
+							$old += $cmo->prop("add_wh_guess");
+							$old_real += $cmo->prop("add_wh");
+						}
 					}
-					$this->_acc_old_wh_guess = $old;
-					$this->_acc_old_wh = $old_real;
-					
 				}
+				$this->_acc_old_wh_guess = $old;
+				$this->_acc_old_wh = $old_real;
 				$cp = get_current_person();
 				$p = $cp->id();
 				if ($prop["value"])
@@ -2789,6 +2789,18 @@ die($email);
 					_toggle_stopper();
 					return false;
 				});
+				$("#bug_stopper_pause_link").click(function () { 
+					_toggle_stopper();
+					return false;
+				});
+				$("#bug_add_real").focus(function () { 
+					_toggle_stopper();
+					return false;
+				});
+				$("#bug_add_real").blur(function () { 
+					_toggle_stopper();
+					return false;
+				});
 			}
 			
 			function _start_stopper()
@@ -2808,6 +2820,8 @@ die($email);
 					time = (time_before_pause+tmp).toFixed(4)*1.0;
 					object.children().html("<a href=''>"+_return_normal_clock(seconds_start)+" ("+time+")</a>")
 					seconds_start++;
+					tmp = time.toFixed(2)*1.0
+					$("#bug_add_real").val(r2(tmp));
 				})
 			}
 			
@@ -3041,16 +3055,20 @@ EOF;
 		foreach($conn as $c)
 		{
 			$cmo = $c->to();
-			$ppltimes[$cmo->createdby()] += $cmo->prop(($arr["prop"]["name"] == "num_hrs_real") ? "add_wh" : "add_wh_guess");
+			$ppl_r_times[$cmo->createdby()] += $cmo->prop("add_wh");
+			$ppl_g_times[$cmo->createdby()] += $cmo->prop("add_wh_guess");
 		}
 		$ui = get_instance(CL_USER);
 		$total = 0;
-		foreach($ppltimes as $u => $time)
+		foreach((($arr["prop"]["name"] == "num_hrs_real") ? $ppl_r_times : $ppl_g_times) as $u => $time)
 		{
 			if($time)
 			{
 				$person = obj($ui->get_person_for_user($ui->get_obj_for_uid($u)));
-				$values[] = $person->name().": ".$time;
+				$values[] = $person->name().": ".html::span(array(
+					"content" => $time,
+					"color" => ($arr["prop"]["name"] == "num_hrs_real" && $time > $ppl_g_times[$u]) ? "#FF0000" : "",
+				));
 				$total += $time;
 			}
 		}
