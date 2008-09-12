@@ -72,6 +72,7 @@ if($do_test || !$autotest)
 //	$log["data"] = str_replace("\n" , "" , ob_get_contents());
 	echo "\n<br><br>";
 }
+
 elseif($_GET["test"])
 {
 	$log_array = _get_log($site_dir);
