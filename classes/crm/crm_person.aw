@@ -1024,6 +1024,33 @@ class crm_person extends class_base
 			2 => t("Magister"),
 			3 => t("Doktor"),
 		);
+		$this->drivers_licence_categories = array(
+			"a" => t("A"),
+			"a1" => t("A1"),
+			"a2" => t("A2"),
+			"b" => t("B"),
+			"b1" => t("B1"),
+			"c" => t("C"),
+			"c1" => t("C1"),
+			"d" => t("D"),
+			"d1" => t("D1"),
+			"e" => t("E"),
+			"f" => t("T&otilde;stuk"),
+		);
+		$this->drivers_licence_original_categories = $this->drivers_licence_categories;
+		$pm = new object(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		$pm_dl = $pm->prop("drivers_license");
+		$data["options"] = $this->drivers_licence_categories;
+		if(is_array($pm_dl))
+		{
+			foreach($data["options"] as $i => $v)
+			{
+				if(!in_array($i, $pm_dl))
+				{
+					unset($this->drivers_licence_categories[$i]);
+				}
+			}
+		}
 	}
 
 
@@ -1951,7 +1978,7 @@ class crm_person extends class_base
 				break;
 
 			case "drivers_license":
-				$data["options"] = $this->get_drivers_licence_categories();
+				$data["options"] = $this->drivers_licence_categories;
 				$data["value"] = explode(",", $data["value"]);
 				break;
 
@@ -4923,6 +4950,10 @@ class crm_person extends class_base
 	**/
 	function has_user($o)
 	{
+		if(!is_oid($o->id()))//mingite uute objektidega tuleb siit miski tuhandeid p2ringuid jne
+		{
+			return false;
+		}
 		$c = new connection();
 		$res = $c->find(array(
 			"to" => $o->id(),
@@ -6549,7 +6580,7 @@ class crm_person extends class_base
 		// SUB: CRM_PERSON.DRIVERS_LICENSE
 		if(strlen($o->prop("drivers_license")) > 0 && (array_key_exists("drivers_license", $proplist) || count($proplist) == 0))
 		{
-			$options = $this->get_drivers_licence_categories();
+			$options = $this->drivers_licence_categories;
 			$dl = explode("," ,trim($o->prop("drivers_license"), ","));
 			foreach($dl as $s)
 			{
@@ -9214,61 +9245,6 @@ class crm_person extends class_base
 		));
 
 		return $post_ru;
-	}
-
-	/**
-		@attrib name=cut_docs
-	**/
-	function cut_docs($arr)
-	{
-		return get_instance(CL_CRM_COMPANY)->cut_docs($arr);
-	}
-
-	/**
-		@attrib name=submit_paste_docs
-	**/
-	function submit_paste_docs($arr)
-	{
-		return get_instance(CL_CRM_COMPANY)->submit_paste_docs($arr);
-	}
-
-	public function get_drivers_licence_original_categories()
-	{
-		return array(
-			"a" => t("A"),
-			"a1" => t("A1"),
-			"a2" => t("A2"),
-			"b" => t("B"),
-			"b1" => t("B1"),
-			"c" => t("C"),
-			"c1" => t("C1"),
-			"d" => t("D"),
-			"d1" => t("D1"),
-			"e" => t("E"),
-			"f" => t("T&otilde;stuk"),
-		);
-	}
-
-	public function get_drivers_licence_categories()
-	{
-		$this->drivers_licence_categories = $this->get_drivers_licence_original_categories();
-		$this->drivers_licence_original_categories = $this->drivers_licence_categories;
-
-		$pm = new object(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
-		$pm_dl = $pm->prop("drivers_license");
-		$data = array();
-		$data["options"] = $this->drivers_licence_categories;
-		if(is_array($pm_dl))
-		{
-			foreach($data["options"] as $i => $v)
-			{
-				if(!in_array($i, $pm_dl))
-				{
-					unset($this->drivers_licence_categories[$i]);
-				}
-			}
-		}
-		return $this->drivers_licence_categories;
 	}
 }
 ?>
