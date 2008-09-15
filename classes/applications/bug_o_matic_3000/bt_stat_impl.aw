@@ -270,7 +270,7 @@ class bt_stat_impl extends core
 		$fancy_filter = new obj_predicate_compare(
 			OBJ_COMP_BETWEEN_INCLUDING,
 			mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"]),
-			mktime(0,0,0, $endmonth, $endday, $arr["request"]["det_year"])
+			mktime(23,59,59, $endmonth, $endday, $arr["request"]["det_year"])
 		);
 
 		if($arr["request"]["stat_hr_bugs"] || !$arr["request"]["stat_hrs_end"])
@@ -295,8 +295,8 @@ class bt_stat_impl extends core
 		
 		$ui = get_instance(CL_USER);
 		$p = $ui->get_person_for_uid($arr["request"]["det_uid"]);
-		$startd = mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]);
-		$endd = mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"]);
+		$startd = mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"]);
+		$endd = mktime(23,59,59, $arr["request"]["det_mon"]+1, $endday, $arr["request"]["det_year"]);
 		foreach($types as $type)
 		{
 			if($arr["request"]["stat_hr_".$type["rname"]] || !$arr["request"]["stat_hrs_end"])
