@@ -569,6 +569,12 @@ class room_settings extends class_base
 			"caption" => t("Broneeringud vaikimisi kinnitatud"),
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "no_time_check",
+			"caption" => t("Ajakontrollita"),
+			"align" => "center"
+		));
 	}
 
 	function _get_grp_settings($arr)
@@ -633,6 +639,11 @@ class room_settings extends class_base
 					"name" => "e[".$o->id()."][confirmed_default]",
 					"value" => 1,
 					"checked" => $settings[$o->id()]["confirmed_default"]
+				)),
+				"no_time_check" => html::checkbox(array(
+					"name" => "e[".$o->id()."][no_time_check]",
+					"value" => 1,
+					"checked" => $settings[$o->id()]["no_time_check"]
 				)),
 			));
 		}

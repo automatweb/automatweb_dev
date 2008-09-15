@@ -69,6 +69,50 @@ class room_obj extends _int_object
 		return $this->settings->prop($setting);
 	}
 
+	/** Returns a setting from the current active room settings
+		@attrib api=1 params=pos
+
+		@param setting required type=string
+			A setting property name from the room_settings class
+
+		@returns
+			The value for the setting in the currently active settings or "" if no settings are active
+	**/
+	function get_group_setting($setting)
+	{
+		if(!$this->load_settings())
+		{
+			return "";
+		}
+		$grp_settings = $this->settings->meta("grp_settings");
+		$gl = aw_global_get("gidlist_pri_oid");
+		asort($gl);
+		$gl = array_keys($gl);
+		$grp = $gl[1];
+		if (count($gl) == 1)
+		{
+			$grp = $gl[0];
+		}
+		if (is_array($grp_settings) && $grp_settings[$grp][$setting])
+		{
+			return $grp_settings[$grp][$setting];
+		}
+		return "";
+	}
+
+	private function load_settings()
+	{
+		if(!is_object($this->settings))
+		{
+			$this->settings = $this->get_settings();
+		}
+		if(!is_object($this->settings))
+		{
+			return "";
+		}
+		return 1;
+	}
+
 	/** Returns the current workers for the room
 		@attrib api=1 
 		@returns

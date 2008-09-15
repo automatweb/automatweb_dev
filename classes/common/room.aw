@@ -726,6 +726,18 @@ class room extends class_base
 		$arr["extend"] = " ";
 		$arr["set_ps"] = " ";
 		$arr["add_scenario"] = " ";
+		if($this->can("view" , $arr["id"]))
+		{
+			$room = obj($arr["id"]);
+			if($room->get_group_setting("no_time_check"))
+			{
+				$arr["bron_can_exceed_limit"] = 1;
+			}
+			else
+			{
+				$arr["bron_can_exceed_limit"] = 0;
+			}
+		}
 	}
 
 	/**
@@ -1659,7 +1671,6 @@ class room extends class_base
 			}
 		}
 		$t = &$arr["prop"]["vcl_inst"];
-
 		$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
 		$this->openhours = $this->get_current_openhours_for_room($arr["obj_inst"]);
 		$this->pauses = $this->get_current_pauses_for_room($arr["obj_inst"]);
