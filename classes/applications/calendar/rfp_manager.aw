@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.67 2008/09/09 14:15:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.68 2008/09/15 12:14:57 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -902,6 +902,10 @@ class rfp_manager extends class_base
 									if($this->can("view", $subrow_data["var"]))
 									{
 										$subrow_data["product_event"] = obj($subrow_data["var"])->name();
+									}
+									if($this->can("view", $subrow_data["rfp"]))
+									{
+										$subrow_data["comment"] = obj($subrow_data["rfp"])->prop("additional_catering_information");
 									}
 									break;
 								case RFP_RAPORT_TYPE_RESOURCES:
