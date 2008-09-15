@@ -628,6 +628,98 @@ class room_obj extends _int_object
 		}
 		return $res;
 	}
+
+	/**
+		@attrib api=1 params=pos
+		@param start optional type=int
+			start time
+		@param end optional type=int
+			end time
+		@returns array
+			array(start => .. , end =>)
+	 **/
+	function get_calendar_visible_time($start = null , $end = null)
+	{
+		$s = 3600*48;
+		$e = 0;	
+		if($ohs = $this->get_current_openhours($start , $end))
+		{
+			foreach($ohs as $oh)
+			{
+				foreach($oh->meta("openhours") as $data)
+				{
+					if($data["h1"]*3600 + $data["m1"]*60 < $s)
+					{
+						$s = $data["h1"]*3600 + $data["m1"]*60;
+					}
+					if($data["h2"]*3600 + $data["m2"] > $e)
+					{
+						$e = $data["h2"]*3600 + $data["m2"]*60;
+					}
+					if(($data["h1"]*3600 + $data["m1"]*60) > ($data["h2"]*3600 + $data["m2"]*60) && (($data["h2"]+24)*3600 + $data["m2"]*60) > $e)
+					{
+						$e = ($data["h2"]+24)*3600 + $data["m2"]*60;
+					}
+				}
+			}
+		}
+		else
+		{
+			$s = 0;
+			$e = 24*3600;
+		}
+		return array(
+			"start" => $s,
+			"end" =>  $e,
+		);
+	}
+
+	/** Returns the openhours object for the current user, or null if none applies
+		@attrib api=1 params=pos
+		@param start optional type=int default=time()
+			start time
+		@param end optional type=int default=time()
+			end time
+		@returns Array
+	**/
+	function get_current_openhours($start = 0 , $end = 0)
+	{
+		$rv = array();
+		$gl = aw_global_get("gidlist_oid");
+		if(is_oid($this->prop("inherit_oh_from")) && $this->can("view" , $this->prop("inherit_oh_from")))
+		{
+			$room = obj($room->prop("inherit_oh_from"));
+		}
+		else
+		{
+			$room = $this;
+		}
+		if(!$start)
+		{
+			$start = time();
+		}
+		if(!$end)
+		{
+			$start = time();
+		}
+		foreach($room->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
+		{
+			$oh = $c->to();
+			if ($oh->prop("date_from") > 100 && $end < $oh->prop("date_from"))
+			{
+				continue;
+			}
+			if ($oh->prop("date_to") > 100 && $start > $oh->prop("date_to"))
+			{
+				continue;
+			}
+			if (!is_array($oh->prop("apply_group")) || !count($oh->prop("apply_group")) || count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
+			{
+				$rv[] = $oh;
+			}
+		}
+		return count($rv) ? $rv : null;
+	}
 }
 
 ?>

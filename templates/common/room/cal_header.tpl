@@ -21,5 +21,14 @@
 	<tr>
 		<td>{VAR:without_detail_information}</td>
 		<td colspan="2"><input type="checkbox" value="1" name="no_det_info" {VAR:no_det_info}></td>
-	</tr>
+		
+	<tr>
+		<td></td>
+		<td></td>
+<!-- SUB: ANCHOR_LINKS -->
+<a href="{VAR:alink}">{VAR:acapt}</a> 
+<!-- END SUB: ANCHOR_LINKS -->
+</td>
+	</tr>			
+		
 </table>

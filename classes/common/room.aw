@@ -1573,6 +1573,7 @@ class room extends class_base
                 $options = array();
                 $week = date("W" , time());
                 $weekstart = get_week_start();
+		$day_start = get_day_start();
                 while($x<20)
                 {//arr(date("d-m-Y h:i",($weekstart + 8000)));
                         $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
@@ -1591,6 +1592,22 @@ class room extends class_base
                 ));
 
 		$this->read_template("cal_header.tpl");
+
+		
+		$anc = "";
+		$opened = $arr["obj_inst"]->get_calendar_visible_time($_GET["start"] , $_GET["end"]);
+		$x = $opened["start"];
+		while($x < $opened["end"])
+		{
+			$this->vars(array(
+				"alink" => "#time_".date("H" ,  $day_start + $x),
+				"acapt" => date("H" ,  $day_start + $x),
+			));
+			
+			$anc.= $this->parse("ANCHOR_LINKS");
+			$x += 3600;
+		}
+
 		$this->vars(array(
 			"pop" => $ret,
 			"week_select_caption" => t("Vali n&auml;dal"),
@@ -1620,7 +1637,8 @@ class room extends class_base
 	                        "onclick" => "document.changeform.set_view_dates.value=1;submit_changeform();",
         	                "value" => t("N&auml;ita vahemikku")
                 	)),
-			"no_det_info" => $_GET["no_det_info"] ? "checked" : ""
+			"no_det_info" => $_GET["no_det_info"] ? "checked" : "",
+			"ANCHOR_LINKS" => $anc,
 		));
 		
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
@@ -2009,7 +2027,7 @@ class room extends class_base
 			if($visible)
 			{
 				$tmp_row_data = array(
-					"time" => date("G:i" , $today_start+ $step*$step_length*$time_step),
+					"time" => '<a name="time_'.date("G" , $today_start+ $step*$step_length*$time_step).'"></a>'.date("G:i" , $today_start+ $step*$step_length*$time_step),
 					"time_col" => "#BADBAD"
 				);
 				for($i = 0; $i < $len; $i++)
@@ -2355,7 +2373,6 @@ class room extends class_base
 
 	function get_day_workers_row($o)
 	{
-		$open_inst = get_instance(CL_OPENHOURS);
 		$res = array();
 		$x = 0;
 		$time = $this->start;
