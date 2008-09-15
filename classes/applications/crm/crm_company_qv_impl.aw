@@ -61,6 +61,7 @@ class crm_company_qv_impl extends class_base
 
 		$this->hrs_total = 0;
 		$this->hrs_on_bill = 0;
+		$this->hrs_cl = 0;
 		$this->sum = 0;
 		$this->bills_sum = 0;
 		$this->done_sum = 0;
@@ -146,7 +147,7 @@ class crm_company_qv_impl extends class_base
 				"name" => html::obj_change_url($o),
 				"parts" => join(", ",array_unique($parts)),
 				"hrs" => $stat->hours_format($hrs),//number_format($hrs, 3, ',', ''),
-				"sum" => number_format($sum, 2, ',', ''),
+				"sum" => number_format($o->prop("proj_price"), 2, ',', ''),
 				"grp_desc" => $pd,
 				"grp_num" => 1,
 				"state" => $pi->states[$o->prop("state")],
@@ -237,14 +238,16 @@ class crm_company_qv_impl extends class_base
 				}
 				$sum += str_replace(",", "",$row["sum"]);
 				$hrs += $row["amt"];
-				$this->hrs_total += $row["amt"];
+				$this->hrs_total += $row["amt_real"];
+				$this->hrs_cl += $row["amt"];
 				$this->sum += $row["sum"];
 				$this->done_sum += $row["sum"];
 			}
 			if ($o->class_id() != CL_TASK)
 			{
 				$hrs += $o->prop("time_real");
-				$this->hrs_total += $row["amt"];
+				$this->hrs_total += $o->prop("time_real");
+				$this->hrs_cl += $o->prop("time_to_cust");
 				$this->sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
 				$sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
 			}
@@ -316,12 +319,15 @@ class crm_company_qv_impl extends class_base
 			"who" => "%",
 //			"limit" => 10
 		));
+		$ol->sort_by_cb(array($this, "__bug_sorter"));
+
 		$bd = "<span style='font-size: 0px;'>y</span><b>" . t("Bugid (10 v&auml;rskemat)") . "</b>";
+
 		foreach($ol->arr() as $o)
 		{
 			
 			$this->hrs_total += $o->prop("num_hrs_real");
-			
+			$this->hrs_cl += $o->prop("num_hrs_to_cust");
 			if($bug_count > 10)
 			{
 				continue;
@@ -343,16 +349,20 @@ class crm_company_qv_impl extends class_base
 			{
 				$hrs += str_replace(",", ".",$row["amt"]);
 			}
+			
+			$c_time = $o->get_last_comment_time();
+			
 			$t->define_data(array(
-				"date" => $o->prop("actual_live_date") > 100 ? date("d.m.Y", $o->prop("actual_live_date")) : "",
+				"date" => $c_time > 100 ? date("d.m.Y", $c_time) : "",
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), ($o->name()?$o->name():t("Nimetu"))),
 				"parts" => $parts,
 				"hrs" => number_format($o->prop("num_hrs_real"), 2, ',', ''),
 	//			"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $bd,
-				"grp_num" => 3,
+				"grp_num" => 4,
 				"state" => $bi->bug_statuses[$o->prop("bug_status")],
-				"icon" => icons::get_icon($o)
+				"icon" => icons::get_icon($o),
+				"sb" => $c_time
 			));
 			$bug_count++;
 		}
@@ -363,7 +373,7 @@ class crm_company_qv_impl extends class_base
 				"name" => t("Valitud ajavahemikus ei ole &uuml;htegi bugi!"),
 				"parts" => "",
 				"grp_desc" => $bd,
-				"grp_num" => 3,
+				"grp_num" => 4,
 			));
 		}
 
@@ -376,7 +386,7 @@ class crm_company_qv_impl extends class_base
 				"customer" => $arr["obj_inst"]->id(),
 				"lang_id" => array(),
 				"site_id" => array(),
-				"sort_by" => "aw_crm_bill.aw_due_date desc",
+				"sort_by" => "aw_crm_bill.aw_date desc",
 				"bill_no" => "%",
 				"CL_CRM_BILL.RELTYPE_TASK" => $ol->ids() // only from the task list for this co
 			);
@@ -390,7 +400,7 @@ class crm_company_qv_impl extends class_base
 				"customer" => $arr["obj_inst"]->id(),
 				"lang_id" => array(),
 				"site_id" => array(),
-				"sort_by" => "aw_crm_bill.aw_due_date desc",
+				"sort_by" => "aw_crm_bill.aw_date desc",
 				"bill_no" => "%",
 //				"limit" => 10
 			));
@@ -434,7 +444,8 @@ class crm_company_qv_impl extends class_base
 				"grp_desc" => $bd,
 				"grp_num" => 3,
 				"state" => $bi->states[$o->prop("state")],
-				"icon" => icons::get_icon($o)
+				"icon" => icons::get_icon($o),
+				"sb" => $o->prop("bill_date"),
 			));
 
 			$count++; 
@@ -456,6 +467,13 @@ class crm_company_qv_impl extends class_base
 			"field" => array("sb", "grp_num")
 		));
 		$t->set_sortable(false);
+	}
+
+	function __bug_sorter($a , $b)
+	{
+		$timea = $a->get_last_comment_time();
+		$timeb = $b->get_last_comment_time();
+		return $timea - $timeb;
 	}
 
 	function _get_qv_cust_inf($arr)
@@ -555,6 +573,7 @@ class crm_company_qv_impl extends class_base
 			"done_sum" => number_format($this->sum, 2, ',', ''),
 			"hrs_on_bill" =>  number_format($this->hrs_on_bill, 3, ',', ''),
 			"total_work_hrs" =>  number_format($this->hrs_total, 3, ',', ''),
+			"hrs_to_cust" => number_format($this->hrs_cl, 3, ',', ''),
 			"timespan" => $ts
 		));
 		return $arr["prop"]["value"] = $this->parse();
@@ -587,7 +606,8 @@ class crm_company_qv_impl extends class_base
 			"twh_str" => t("T&ouml;&ouml;tunde kokku"),
 			"hob_str" => t("Arvele l&auml;inud t&ouml;&ouml;tunde"),
 			"d_str" => t("Tehtud t&ouml;id summas"),
-			"pb_str" => t("Esitatud arveid summas")
+			"pb_str" => t("Esitatud arveid summas"),
+			"hcust_str" => t("T&ouml;&ouml;tunde kliendile"),
 		));
 	}
 }

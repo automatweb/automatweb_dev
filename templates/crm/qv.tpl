@@ -26,26 +26,28 @@
 		<td class='awmenuedittablerow'>{VAR:reg_code}</td>
 		<td class='awmenuedittablerow'>{VAR:ref_str}</td>
 		<td class='awmenuedittablerow'>{VAR:referal_type}</td>
-		<td class='awmenuedittablerow'>{VAR:hob_str}</td>
-		<td class='awmenuedittablerow'>{VAR:hrs_on_bill}</td>
+		<td class='awmenuedittablerow'>{VAR:hcust_str}</td>
+		<td class='awmenuedittablerow'>{VAR:hrs_to_cust}</td>
 	</tr>
 	<tr>
 		<td class='awmenuedittablerow'>{VAR:kmk_str}</td>
 		<td class='awmenuedittablerow'>{VAR:kmk_nr}</td>
 		<td class='awmenuedittablerow'>{VAR:cm_str}</td>
 		<td class='awmenuedittablerow'>{VAR:client_manager}</td>
-		<td class='awmenuedittablerow'>{VAR:d_str}</td>
-		<td class='awmenuedittablerow'>{VAR:done_sum}</td>
+		<td class='awmenuedittablerow'>{VAR:hob_str}</td>
+		<td class='awmenuedittablerow'>{VAR:hrs_on_bill}</td>
 	</tr>
 	<tr>
 		<td class='awmenuedittablerow'>{VAR:desc_str}</td>
 		<td colspan="3" class='awmenuedittablerow'>{VAR:desc}</td>
-		<td class='awmenuedittablerow'>{VAR:pb_str}</td>
-		<td class='awmenuedittablerow'>{VAR:bills_in_sum}</td>
+		<td class='awmenuedittablerow'>{VAR:d_str}</td>
+		<td class='awmenuedittablerow'>{VAR:done_sum}</td>
 	</tr>
 	<tr>
 		<td class='awmenuedittablerow'>{VAR:trm_str}</td>
 		<td colspan="3" class='awmenuedittablerow'>{VAR:trademarks}</td>
+		<td class='awmenuedittablerow'>{VAR:pb_str}</td>
+		<td class='awmenuedittablerow'>{VAR:bills_in_sum}</td>
 	</tr>
 
 	<tr>

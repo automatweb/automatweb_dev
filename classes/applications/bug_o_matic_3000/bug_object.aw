@@ -120,4 +120,53 @@ class bug_object extends _int_object
 		
 		return $s_out;
 	}
+
+	/** returns last comment
+		@attrib api=1
+		@returns object
+	**/
+	public function get_last_comment()
+	{
+		$comments = $this->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		if(!sizeof($comments))
+		{
+			return "";
+		}
+		$comments = array_values($comments);
+		$connection = $comments[sizeof($comments) - 1];
+		$obj = $connection->to();
+		return $obj;
+	}
+
+	/** returns last bug comment time
+		@attrib api=1
+		@returns timestamp
+			bug comment time, if no comments, then bug created time
+	**/
+	public function get_last_comment_time()
+	{
+		$comment = $this->get_last_comment();
+		if(!$comment)
+		{
+			return $this->created();
+		}
+		return $comment->created();
+	}
+
+	/** returns all bug comments
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_bug_comments()
+	{
+		$ol = new object_list();
+		$comments = $this->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		
+		$ol->add($comments);
+		return $ol;
+	}
 }
