@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.79 2008/08/21 12:26:37 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.80 2008/09/15 13:47:54 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -213,6 +213,11 @@ class shop_order_cart extends class_base
 				}
 				$str .= $this->parse("PROD");
 			}
+		}
+
+		if ($str == "" && $this->is_template("NO_SHOW_EMPTY"))
+		{
+			return $this->parse("NO_SHOW_EMPTY");
 		}
 
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
