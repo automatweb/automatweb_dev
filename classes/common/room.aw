@@ -2027,7 +2027,7 @@ class room extends class_base
 			if($visible)
 			{
 				$tmp_row_data = array(
-					"time" => '<a name="time_'.date("G" , $today_start+ $step*$step_length*$time_step).'"></a>'.date("G:i" , $today_start+ $step*$step_length*$time_step),
+					"time" => '<a name="time_'.date("H" , $today_start+ $step*$step_length*$time_step).'"></a>'.date("G:i" , $today_start+ $step*$step_length*$time_step),
 					"time_col" => "#BADBAD"
 				);
 				for($i = 0; $i < $len; $i++)
