@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.131 2008/09/11 10:05:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.132 2008/09/15 10:52:42 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2021,6 +2021,7 @@ class rfp extends class_base
 						"prod_parent" => $arr["request"]["show_all_prods"][$rv->id()] ? $prod->prop("parent.name") : '',
 						"prod_ord" => $prod->ord(),
 					);
+			
 					$t->define_data($data);
 				//}
 				$prod_count++;
@@ -2037,10 +2038,15 @@ class rfp extends class_base
 		$t->set_numeric_field("prod_ord");
 		/*$t->set_default_sortby("prod_ord");
 		$t->set_default_sorder("asc");*/
-		/*$t->sort_by(array(
+		$t->sort_by(array(
 			"field" => "prod_ord",
 			"sorder" => "asc",
-		));*/
+			"rgroupby" => array(
+				"reserv_group" => "reserv_group",
+				"prod_parent" => "prod_parent"
+			)
+		));
+		$t->set_sortable(false);
 		return $t->draw();
 	}
 
