@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.66 2008/09/08 13:10:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.67 2008/09/15 09:39:34 robert Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -61,7 +61,7 @@
 	@property mail_from_addr type=textbox
 	@caption Meili From aadress
 
-	@property mail_from_name type=textbox 
+	@property mail_from_name type=textbox
 	@caption Meili From nimi
 
 	@property mail_cust_content type=textarea rows=10 cols=80
@@ -72,7 +72,7 @@
 	@property mail_to_seller_in_el type=select
 	@caption Saada meil aadressile, mis on elemendis
 
-	@property mail_group_by type=select 
+	@property mail_group_by type=select
 	@caption Toodete grupeerimine meilis
 
 	@property mails_sep_by_el type=checkbox ch_value=1
@@ -123,6 +123,9 @@
 	@property disp_cart_in_web type=checkbox ch_value=1
 	@caption Kuva korvi toodete all
 
+	@property show_delivery type=checkbox ch_value=1
+	@caption Kuva kohaletoimetamise valikut
+
 	@property no_change_button type=checkbox ch_value=1
 	@caption &Auml;ra kuva tellimiskeskkonnas toote k&otilde;rvale "Muuda" nuppu
 
@@ -154,12 +157,12 @@
 
 @default group=psfieldmap
 
-	@property psfieldmap type=table store=no 
+	@property psfieldmap type=table store=no
 	@caption Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele
- 
+
 @default group=orgfieldmap
 
-	@property orgfieldmap type=table store=no 
+	@property orgfieldmap type=table store=no
 	@caption Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele
 
 @default group=payment_settings
@@ -185,7 +188,7 @@
 	@caption Filtrid integratsiooniklassist
 
 	@property filter_fields_props type=table store=no no_caption=1
-	@caption Filtrid toote omadustest	
+	@caption Filtrid toote omadustest
 
 @default group=filter_select
 
@@ -197,11 +200,19 @@
 	@property filter_sel_for_folders type=table store=no no_caption=1
 
 
+@default group=delivery_cfg
+	@property delivery_show_controller type=relpicker reltype=RELTYPE_DELIVERY_SHOW_CONTROLLER
+	@caption N&auml;itamise kontroller
+
+	@property delivery_save_controller type=relpicker reltype=RELTYPE_DELIVERY_SAVE_CONTROLLER
+	@caption Salvestamise kontroller
+
+
 
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
 	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
- 
+
 @groupinfo payment caption="Maksmine"
 	@groupinfo payment1 caption="Seaded" parent=payment
 	@groupinfo payment_settings caption="Pangamakse seaded" parent=payment
@@ -215,11 +226,12 @@
 	@groupinfo data_settings caption="Seaded" parent=data
 	@groupinfo psfieldmap caption="Isukuandmete kaart" parent=data
 	@groupinfo orgfieldmap caption="Firma andmete kaart" parent=data
+	@groupinfo delivery_cfg caption="Kohaletoimetamise seaded" parent=data
 
 @groupinfo filter caption="Filtreerimine"
 	@groupinfo filter_settings caption="Seaded" parent=filter
 	@groupinfo filter_select caption="Koosta filter" parent=filter submit=no
-	@groupinfo filter_set_folders caption="Vali kehtivad filtrid" parent=filter 
+	@groupinfo filter_set_folders caption="Vali kehtivad filtrid" parent=filter
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -239,6 +251,12 @@
 @reltype CONTROLLER value=6 clid=CL_FORM_CONTROLLER
 @caption n&auml;itamise kontroller
 
+@reltype DELIVERY_SHOW_CONTROLLER value=14 clid=CL_FORM_CONTROLLER
+@caption kohaletoimetamise n&auml;itamise kontroller
+
+@reltype DELIVERY_SAVE_CONTROLLER value=15 clid=CL_FORM_CONTROLLER
+@caption kohaletoimetamise salvestamise kontroller
+
 @reltype ORDER_NAME_CTR value=7 clid=CL_FORM_CONTROLLER
 @caption tellimuse nime kontroller
 
@@ -257,6 +275,14 @@ class shop_order_center extends class_base
 			"tpldir" => "applications/shop/shop_order_center",
 			"clid" => CL_SHOP_ORDER_CENTER
 		));
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["group"] === "delivery_cfg" and !$arr["obj_inst"]->prop("show_delivery"))
+		{
+			return false;
+		}
 	}
 
 	function get_property($arr)
@@ -283,17 +309,16 @@ class shop_order_center extends class_base
 					1 => t("Kasutajap&otilde;hine"),
 				);
 				break;
-				
+
 			case "chart_show_template":
 			case "chart_final_template":
 			case "mail_template":
-				
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
 					"folder" => "applications/shop/shop_order_cart/"
 				));
-				break;	
-				
+				break;
+
 			case "rent_prop":
 				$df = $arr["obj_inst"]->prop("data_form");
 				$opts = array();
@@ -331,14 +356,14 @@ class shop_order_center extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				break;			
+				break;
 
 			case "controller_tbl":
 				if (!$arr["obj_inst"]->prop("use_controller"))
 				{
 					return PROP_IGNORE;
 				}
-				break;			
+				break;
 
 			case "data_form_person":
 			case "data_form_company":
@@ -346,7 +371,7 @@ class shop_order_center extends class_base
 			case "mail_to_el":
 			case "mail_to_seller_in_el":
 				if (!$arr["obj_inst"]->prop("data_form"))
-				{	
+				{
 					return PROP_IGNORE;
 				}
 				$opts = array("" => "");
@@ -373,7 +398,7 @@ class shop_order_center extends class_base
 				foreach($ps as $pn => $pd)
 				{
 					$v[$pn] = $pd["caption"];
-				}	
+				}
 				$prop["options"] = $v;
 				break;
 		};
@@ -406,7 +431,7 @@ class shop_order_center extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function do_save_layoutbl(&$arr)
 	{
@@ -579,7 +604,7 @@ class shop_order_center extends class_base
 			$elements[$pn] = $pd["caption"];
 		}
 		$elements["jrk"] = t("J&auml;rjekord");
-		
+
 
 		$maxi = 0;
 		$is = new aw_array($arr["obj_inst"]->meta("itemsorts"));
@@ -642,12 +667,12 @@ class shop_order_center extends class_base
 			return new object_list();
 		}
 		$conf = obj($wh->prop("conf"));
-		
+
 		if (!$conf->prop("pkt_fld"))
 		{
 			return new object_list();
 		}
-		
+
 		if ($level > 0)
 		{
 			$ol = new object_list(array(
@@ -708,9 +733,9 @@ class shop_order_center extends class_base
 		@attrib name=show_items nologin="1"
 
 		@param id required type=int acl=view
-		@param f optional 
+		@param f optional
 		@param show_prod optional
-		@param section required 
+		@param section required
 
 	**/
 	function show_items($arr)
@@ -737,7 +762,7 @@ class shop_order_center extends class_base
 				}
 			}
 			exit_function("shop_order_center::show_items::path");
-			
+
 			if (is_oid($ctr) && $this->can("view", $ctr))
 			{
 				enter_function("shop_order_center::show_items::controller");
@@ -747,7 +772,7 @@ class shop_order_center extends class_base
 				));
 				exit_function("shop_order_center::show_items::controller");
 				exit_function("shop_order_center::show_items");
-				return $html; 
+				return $html;
 			}
 		}
 
@@ -760,7 +785,7 @@ class shop_order_center extends class_base
 		$tmp = array();
 		$ss->_init_path_vars($tmp);
 		$html = $ss->show_documents($tmp);
-		
+
 		$so = obj(aw_global_get("section"));
 		if ($so->class_id() == CL_SHOP_PRODUCT)
 		{
@@ -790,17 +815,17 @@ class shop_order_center extends class_base
 		}
 
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
-	
+
 		$section = aw_global_get("section");
 		// get the template for products for this folder
 		$layout = $this->get_prod_layout_for_folder($soc, $section);
 
 		// get the table layout for this folder
 		$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
-		
+
 		$html .= $this->do_draw_prods_with_layout(array(
-			"t_layout" => $t_layout, 
-			"layout" => $layout, 
+			"t_layout" => $t_layout,
+			"layout" => $layout,
 			"pl" =>  $pl,
 			"soc" => $soc
 		));
@@ -849,7 +874,7 @@ class shop_order_center extends class_base
 	/** returns the html for the products given
 
 		@comment
-			
+
 			params:
 				$t_layout - table layout to use
 				$layout - product layout to use
@@ -925,6 +950,7 @@ class shop_order_center extends class_base
 			"is_err" => $soce[$oid]["is_err"],
 			"prod_link_cb" => $prod_link_cb,
 			"last_product_menu" => $this->last_menu,
+			"soce" => $soce,
 		)));
 		$this->xi++;
 		$this->last_menu =  $o->parent();
@@ -965,7 +991,7 @@ class shop_order_center extends class_base
 	function my_orders($arr)
 	{
 		extract($arr);
-		
+
 		// get current person and get the orders from that
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
@@ -1041,7 +1067,7 @@ class shop_order_center extends class_base
 			));
 			$l .= $this->parse("LINE2");
 		}
-		
+
 
 		$this->vars_safe(array(
 			"LINE" => $l,
@@ -1051,9 +1077,9 @@ class shop_order_center extends class_base
 		return $this->parse();
 	}
 
-	/** 
+	/**
 
-		@attrib name=submit_my_orders 
+		@attrib name=submit_my_orders
 
 	**/
 	function submit_my_orders($arr)
@@ -1197,11 +1223,11 @@ class shop_order_center extends class_base
 			return $ret;
 		}
 		$class_i = get_instance($class_id == CL_DOCUMENT ? "doc" : $class_id);
- 
+
 		$cf_ps = $class_i->load_from_storage(array(
 			"id" => $cff->id()
 		));
-		
+
 		$v_ctrs = safe_array($cff->meta("view_controllers"));
 
 		// get all props
@@ -1485,7 +1511,7 @@ class shop_order_center extends class_base
 			return;
 		}
 		$conf = obj($wh->prop("conf"));
-		
+
 		if (!$conf->prop("pkt_fld"))
 		{
 			return;
@@ -1657,7 +1683,7 @@ class shop_order_center extends class_base
 		$this->_get_folder_ot_from_o($o);
 
 		$ol = new object_list($o->connections_from(array("type" => "RELTYPE_FILTER")));
-		$this->filter_sel = array("" => t("--vali--")) + $ol->names();	
+		$this->filter_sel = array("" => t("--vali--")) + $ol->names();
 		$this->selected_filters = $o->meta("filter_by_folder");
 
 		$this->_oinst = &$o;
@@ -1760,7 +1786,7 @@ interface shop_order_center_integrator
 {
 	/** Returns a list of fields that can be used for filtering
 		@attrib api=1
-		
+
 		@returns
 			array { filter_field => filter field caption, ... }
 	**/
@@ -1771,7 +1797,7 @@ interface shop_order_center_integrator
 
 		@param filter_name required type=string
 			The name of the filter field to return values for
-		
+
 		@returns
 			array { filter_value => filter_value_caption, ... }
 	**/
