@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.132 2008/09/15 10:52:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.133 2008/09/15 12:46:56 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -26,13 +26,13 @@
 		@groupinfo submitter_info caption="Tellija kontaktandmed" parent=data
 		@default group=submitter_info
 
-			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=129 autocomplete_match_anywhere=1 option_is_tuple=1
+			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=129 option_is_tuple=1
 			@caption Organisatsioon
 
-			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 autocomplete_match_anywhere=1 option_is_tuple=1
+			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 aoption_is_tuple=1
 			@caption Tellija kontaktisik
 
-			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145,129 autocomplete_match_anywhere=1 option_is_tuple=1
+			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145,129 option_is_tuple=1
 			@caption Organisaator
 
 			@property data_subm_street type=textbox group=submitter_info,final_client parent=client_info
@@ -47,11 +47,15 @@
 			@property data_subm_country type=textbox group=submitter_info,final_client parent=client_info
 			@caption Riik
 			
+			@property data_subm_phone type=textbox group=submitter_info,final_client parent=client_info
+			@caption Telefon
+
+			@property data_subm_fax type=textbox group=submitter_info,final_client parent=client_info
+			@caption Faks
+
 			@property data_subm_email type=textbox group=submitter_info,final_client parent=client_info
 			@caption E-mail
 			
-			@property data_subm_phone type=textbox group=submitter_info,final_client parent=client_info
-			@caption Telefon
 
 			@property data_subm_contact_preference type=relpicker reltype=RELTYPE_PREFERENCE group=submitter_info,final_client parent=client_info
 			@caption Kontakteerumise eelistus
@@ -230,10 +234,10 @@
 		@groupinfo billing caption="Arve info" parent=data
 		@default group=billing,final_client
 			
-			@property data_billing_company type=textbox parent=billing_info autocomplete_class_id=129 autocomplete_match_anywhere=1 option_is_tuple=1
+			@property data_billing_company type=textbox parent=billing_info autocomplete_class_id=129 option_is_tuple=1
 			@caption Organisatsioon
 
-			@property data_billing_contact type=textbox parent=billing_info autocomplete_class_id=145 autocomplete_match_anywhere=1 option_is_tuple=1
+			@property data_billing_contact type=textbox parent=billing_info autocomplete_class_id=145 option_is_tuple=1
 			@caption Kontaktisik
 
 			@property data_billing_street type=textbox parent=billing_info
@@ -251,11 +255,17 @@
 			@property data_billing_name type=hidden parent=billing_info group=billing
 			@caption Nimi
 
+			@property data_billing_phone type=textbox parent=billing_info
+			@caption Telefon
+
+			@property data_billing_fax type=textbox parent=billing_info
+			@caption Faks
+
 			@property data_billing_email type=textbox parent=billing_info
 			@caption E-mail
 
-			@property data_billing_phone type=textbox parent=billing_info
-			@caption Telefon
+			@property data_billing_comment type=textarea rows=4 parent=billing_info
+			@caption Kommentaar
 
 		@groupinfo files caption="Failid" parent=data
 		@default group=files
@@ -446,7 +456,7 @@
 			@caption Saatmise kuup&auml;ev
 
 			@property data_pointer_text type=textbox table=objects field=meta method=serialize
-			@caption Tekst suunaviitadele
+			@caption Suunaviidad
 
 			@property data_payment_method type=textbox table=objects field=meta method=serialize
 			@caption Maksmisviis
@@ -2727,6 +2737,8 @@ class rfp extends class_base
 			"data_billing_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
 			"data_billing_email" => $arr["obj_inst"]->prop("data_billing_email"),
 			"data_billing_company" => $arr["obj_inst"]->prop("data_billing_company"),
+			"data_billing_fax" => $arr["obj_inst"]->prop("data_billing_fax"),
+			"data_billing_comment" => $arr["obj_inst"]->prop("data_billing_comment"),
 			"data_contact" => $arr["obj_inst"]->prop("data_subm_name.name"),
 			"data_company" => $arr["obj_inst"]->prop("data_subm_organisation.name"),
 			"data_street" => $arr["obj_inst"]->prop("data_subm_street"),
@@ -2735,6 +2747,7 @@ class rfp extends class_base
 			"data_country" => $arr["obj_inst"]->prop("data_subm_country"),
 			"data_phone" => $arr["obj_inst"]->prop("data_subm_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_subm_email"),
+			"data_fax" => $arr["obj_inst"]->prop("data_subm_fax"),
 			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),
@@ -3118,7 +3131,7 @@ class rfp extends class_base
 				}
 				if(strlen($room->name()))
 				{
-					$evt_room[] = $room->name();
+					$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
 				}
 				$product_trans = $po->meta("translations");
 				$room_trans = $room->meta("translations");
@@ -3135,6 +3148,7 @@ class rfp extends class_base
 					"prod_price" => $this->_format_price($prod["price"]),
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
+					"prod_description" => $po->prop("description"),
 					"prod_event_and_room" => join(", ",$evt_room),
 					"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
 				));
@@ -3618,6 +3632,7 @@ class rfp extends class_base
 			array("data_subm_organizer", "varchar(255)"),
 			array("data_subm_email", "varchar(255)"),
 			array("data_subm_phone", "varchar(255)"),
+			array("data_subm_fax", "varchar(255)"),
 			array("data_subm_city", "varchar(255)"),
 			array("data_subm_street", "varchar(255)"),
 			array("data_subm_zip", "varchar(255)"),
@@ -3675,6 +3690,8 @@ class rfp extends class_base
 			array("data_billing_name", "varchar(255)"),
 			array("data_billing_phone", "varchar(255)"),
 			array("data_billing_email", "varchar(255)"),
+			array("data_billing_fax", "varchar(255)"),
+			array("data_billing_comment", "varchar(255)"),
 		);
 		if(strlen($field))
 		{

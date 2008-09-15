@@ -112,18 +112,6 @@
             <caption>Riik</caption>
       </property>
       <property>
-            <name>data_subm_email</name>
-            <table>rfp</table>
-            <group>
-                  <num_0>submitter_info</num_0>
-                  <num_1>final_client</num_1>
-            </group>
-            <type>textbox</type>
-            <parent>client_info</parent>
-            <field>data_subm_email</field>
-            <caption>E-mail</caption>
-      </property>
-      <property>
             <name>data_subm_phone</name>
             <table>rfp</table>
             <group>
@@ -134,6 +122,30 @@
             <parent>client_info</parent>
             <field>data_subm_phone</field>
             <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>data_subm_fax</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_fax</field>
+            <caption>Faks</caption>
+      </property>
+      <property>
+            <name>data_subm_email</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_email</field>
+            <caption>E-mail</caption>
       </property>
       <property>
             <name>data_subm_contact_preference</name>
@@ -726,6 +738,30 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>data_billing_phone</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>billing_info</parent>
+            <field>data_billing_phone</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>data_billing_fax</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>billing_info</parent>
+            <field>data_billing_fax</field>
+            <caption>Faks</caption>
+      </property>
+      <property>
             <name>data_billing_email</name>
             <table>rfp</table>
             <group>
@@ -738,16 +774,17 @@
             <caption>E-mail</caption>
       </property>
       <property>
-            <name>data_billing_phone</name>
+            <name>data_billing_comment</name>
             <table>rfp</table>
             <group>
                   <num_0>billing</num_0>
                   <num_1>final_client</num_1>
             </group>
-            <type>textbox</type>
+            <type>textarea</type>
+            <rows>4</rows>
             <parent>billing_info</parent>
-            <field>data_billing_phone</field>
-            <caption>Telefon</caption>
+            <field>data_billing_comment</field>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>files_tb</name>
