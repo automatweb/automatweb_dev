@@ -978,6 +978,10 @@ class crm_company_overview_impl extends class_base
 
 	function _get_tasks_search_filt($r, $tasks, $clid)
 	{
+		if (!in_array(CL_BUG, $clid))//ilma annab errorit...suht iga filtri peale otsib bugist ka.
+		{
+			$clid[] = CL_BUG;
+		}
 		$res = array(
 			"class_id" => $clid,
 			"brother_of" => new obj_predicate_prop("id")
