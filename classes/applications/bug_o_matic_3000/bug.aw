@@ -385,7 +385,7 @@ class bug extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		if($arr["new"] && !empty($this->parent_data[$prop["name"]]))
+		if($arr["new"] && !empty($this->parent_data[$prop["name"]]) && !$prop["value"])
 		{
 			$prop["value"] = $this->parent_data[$prop["name"]];
 		}
