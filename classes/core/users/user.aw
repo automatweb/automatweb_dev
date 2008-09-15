@@ -1660,6 +1660,8 @@ class user extends class_base
 		Users password
 		@param real_name optional type=string
 		Users name
+		@param person optional type=oid
+		The OID of person object.
 		@comment
 		Creates new user object
 		@returns
@@ -1691,6 +1693,13 @@ class user extends class_base
 		$o->set_prop("home_folder", $this->users->hfid);
 		$o->set_password($password);
 		$o->save();
+		if(is_oid($person) && $this->can("view", $person))
+		{
+			$o->connect(array(
+				"to" => $person,
+				"type" => "RELTYPE_PERSON",
+			));
+		}
 
 		// add user to all users grp if we are not under that
 		$aug_oid = user::get_all_users_group();
