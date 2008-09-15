@@ -2786,19 +2786,15 @@ die($email);
 			function _handlers()
 			{
 				object.children().click(function () { 
-					_toggle_stopper();
+					_toggle_stopper(false);
 					return false;
 				});
 				$("#bug_stopper_pause_link").click(function () { 
-					_toggle_stopper();
+					_toggle_stopper(false);
 					return false;
 				});
 				$("#bug_add_real").focus(function () { 
-					_toggle_stopper();
-					return false;
-				});
-				$("#bug_add_real").blur(function () { 
-					_toggle_stopper();
+					_toggle_stopper(true);
 					return false;
 				});
 			}
@@ -2825,9 +2821,9 @@ die($email);
 				})
 			}
 			
-			function _toggle_stopper()
+			function _toggle_stopper(force_pause)
 			{
-				if (pause)
+				if (pause && !force_pause)
 				{
 					pause = false;
 					thisdate = new Date();
