@@ -28,7 +28,6 @@
             <type>textbox</type>
             <parent>client_info</parent>
             <autocomplete_class_id>129</autocomplete_class_id>
-            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
             <option_is_tuple>1</option_is_tuple>
             <field>data_subm_organisation</field>
             <caption>Organisatsioon</caption>
@@ -43,8 +42,7 @@
             <type>textbox</type>
             <parent>client_info</parent>
             <autocomplete_class_id>145</autocomplete_class_id>
-            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
-            <option_is_tuple>1</option_is_tuple>
+            <aoption_is_tuple>1</aoption_is_tuple>
             <field>data_subm_name</field>
             <caption>Tellija kontaktisik</caption>
       </property>
@@ -61,7 +59,6 @@
                   <num_0>145</num_0>
                   <num_1>129</num_1>
             </autocomplete_class_id>
-            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
             <option_is_tuple>1</option_is_tuple>
             <field>data_subm_organizer</field>
             <caption>Organisaator</caption>
@@ -653,7 +650,6 @@
             <type>textbox</type>
             <parent>billing_info</parent>
             <autocomplete_class_id>129</autocomplete_class_id>
-            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
             <option_is_tuple>1</option_is_tuple>
             <field>data_billing_company</field>
             <caption>Organisatsioon</caption>
@@ -668,7 +664,6 @@
             <type>textbox</type>
             <parent>billing_info</parent>
             <autocomplete_class_id>145</autocomplete_class_id>
-            <autocomplete_match_anywhere>1</autocomplete_match_anywhere>
             <option_is_tuple>1</option_is_tuple>
             <field>data_billing_contact</field>
             <caption>Kontaktisik</caption>
@@ -1151,7 +1146,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Tekst suunaviitadele</caption>
+            <caption>Suunaviidad</caption>
       </property>
       <property>
             <name>data_payment_method</name>
