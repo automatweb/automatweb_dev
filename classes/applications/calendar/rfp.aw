@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.133 2008/09/15 12:46:56 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.134 2008/09/15 14:00:29 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -455,7 +455,7 @@
 			@property data_send_date type=date_select table=objects field=meta method=serialize
 			@caption Saatmise kuup&auml;ev
 
-			@property data_pointer_text type=textbox table=objects field=meta method=serialize
+			@property data_pointer_text type=textarea rows=3 table=objects field=meta method=serialize
 			@caption Suunaviidad
 
 			@property data_payment_method type=textbox table=objects field=meta method=serialize
@@ -2726,7 +2726,7 @@ class rfp extends class_base
 			"send_date" => date('d.m.Y', $arr["obj_inst"]->prop("data_send_date")),
 			"contactperson" => $arr["obj_inst"]->prop("data_contactperson"),
 			"payment_method" => $arr["obj_inst"]->prop("data_payment_method"),
-			"pointer_text" => $arr["obj_inst"]->prop("data_pointer_text"),
+			"pointer_text" => nl2br($arr["obj_inst"]->prop("data_pointer_text")),
 			"title" => $arr["obj_inst"]->trans_get_val("data_mf_event_type.name"),
 			"data_billing_contact" => $arr["obj_inst"]->prop("data_billing_contact"),
 			"data_billing_street" => $arr["obj_inst"]->prop("data_billing_street"),
@@ -3129,12 +3129,26 @@ class rfp extends class_base
 				{
 					$evt_room[] = $varname;
 				}
+				$product_trans = $po->meta("translations");
+				$room_trans = $room->meta("translations");
 				if(strlen($room->name()))
 				{
 					$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
 				}
-				$product_trans = $po->meta("translations");
-				$room_trans = $room->meta("translations");
+				$ta_subs = array();
+				for($i = 1; $i <= 10; $i++)
+				{
+					if(($val = ($product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i))) && $this->is_template("PROD_USERTA".$i))
+					{
+						$this->vars(array(
+							"prod_userta".$i => nl2br($val),
+						));
+						$sub = $this->parse("PROD_USERTA".$i);
+						$this->vars(array(
+							"PROD_USERTA".$i => $sub,
+						));
+					}
+				}
 				$this->vars(array(
 					"prod_from_date" => date("d.m.Y", $prod["start1"]),
 					"prod_to_date" => date("d.m.Y", $prod["end"]),

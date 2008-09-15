@@ -1180,7 +1180,8 @@
             <name>data_pointer_text</name>
             <table>objects</table>
             <group>final_submission</group>
-            <type>textbox</type>
+            <type>textarea</type>
+            <rows>3</rows>
             <field>meta</field>
             <method>serialize</method>
             <caption>Suunaviidad</caption>
