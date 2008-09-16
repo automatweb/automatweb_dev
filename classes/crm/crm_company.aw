@@ -6682,23 +6682,25 @@ class crm_company extends class_base
 		}
 
 		$seller = $conn->to();
-
 		// add customer relation object if it does not exist already
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
-			"buyer" => $buyer->id(),
-			"seller" => $seller->id()
-		));
-
-		if (!$ol->count())
+		if($_POST["co_is_cust"])
 		{
-			$o = obj();
-			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
-			$o->set_name(t("Kliendisuhe ").$buyer->name()." => ".$seller->name());
-			$o->set_parent($buyer->id());
-			$o->set_prop("seller", $buyer->id()); // yes this is correct, cause I'm a lazy iduit
-			$o->set_prop("buyer", $seller->id());
-			$o->save();
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"buyer" => $buyer->id(),
+				"seller" => $seller->id()
+			));
+	
+			if (!$ol->count())
+			{
+				$o = obj();
+				$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+				$o->set_name(t("Kliendisuhe ").$buyer->name()." => ".$seller->name());
+				$o->set_parent($buyer->id());
+				$o->set_prop("seller", $buyer->id()); // yes this is correct, cause I'm a lazy iduit
+				$o->set_prop("buyer", $seller->id());
+				$o->save();
+			}
 		}
 	}
 
