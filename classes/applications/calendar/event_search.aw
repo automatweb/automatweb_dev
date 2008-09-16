@@ -374,6 +374,14 @@ class event_search extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "every_event_just_once":
+				$meta = $arr["obj_inst"]->meta();
+				if(!isset($meta["every_event_just_once"]))
+				{
+					$prop["value"] = 1;
+				}
+				break;
+
 			case "navigator_range":
 				$prop["options"] = array(
 					0 => t("Kuu navigaator"),
@@ -697,6 +705,15 @@ class event_search extends class_base
 	{
 		enter_function("event_search::show");
 		$ob = new object($arr["id"]);
+		$every_event_just_once = $ob->prop("every_event_just_once");
+		if(!$ob->prop("every_event_just_once"))
+		{
+			$meta = $ob->meta();
+			if(!isset($meta["every_event_just_once"]))
+			{ // Default value is 1
+				$every_event_just_once = 1;
+			}
+		}
 //arr($arr);
 		$event_cfgform = $ob->prop('event_cfgform');
 		if ($this->can('view', ($event_cfgform)))
@@ -1418,7 +1435,7 @@ class event_search extends class_base
 					$e_ts = $res->prop("end");
 					for($i = $s_ts; strcmp(date("Ymd", $i), date("Ymd", $e_ts)) <= 0; $i += 24*3600)
 					{
-						if($ecount[$orig_id] && ($_GET["evt_id"] || $ob->prop("every_event_just_once")))
+						if($ecount[$orig_id] && ($_GET["evt_id"] || $every_event_just_once))
 						{
 							// Kui syndmust p2ritakse OID j2rgi, siis kuvame teda ainult 1 kord.
 							// V6i kui syndmust ei taheta rohkem kui 1 kord kuvada.
