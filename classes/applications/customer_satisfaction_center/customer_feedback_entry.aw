@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.9 2008/07/25 09:42:40 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.10 2008/09/16 10:54:56 robert Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -521,7 +521,7 @@ class customer_feedback_entry extends class_base
 		$awm->create_message(array(
 			"froma" => $o->prop("fb_email"),
 			"subject" => "Tagasiside saidilt ".aw_ini_get("baseurl"),
-			"To" => "furamo@gmail.com",
+			"To" => "support@automatweb.com",
 			"body" => $ct,
 		));
 		$mimeregistry = get_instance("core/aw_mime_types");
