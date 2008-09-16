@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.124 2008/09/11 14:15:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.125 2008/09/16 11:22:31 robert Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -211,6 +211,8 @@ class aw_table extends aw_template
 	**/
 	function define_data($row)
 	{
+		$this->check_userfields($row);
+
 		### apply filter
 		if (!$this->non_filtered)
 		{
@@ -862,6 +864,28 @@ class aw_table extends aw_template
 		{
 			print "Don't know what to do";
 			return;
+		}
+
+		if($this->cfgform)
+		{
+			if($this->use_chooser && !$this->cfg_data["chooser"])
+			{
+				$this->cfg_data["chooser"] = 1;
+				$this->cfg_update = 1;
+			}
+
+			if($this->cfg_update)
+			{
+				$cur = $this->cfgform->meta("tbl_config");
+				$cur[$this->property["name"]] = $this->cfg_data;
+				$this->cfgform->set_meta("tbl_config", $cur);
+				$this->cfgform->save();
+			}
+			
+			if($this->use_chooser)
+			{
+				$this->check_userfields();
+			}
 		}
 
 		if ($this->rowdefs_ordered)
@@ -1804,6 +1828,17 @@ class aw_table extends aw_template
 	**/
 	function define_field($args = array())
 	{
+		if($this->cfgform && ($def = $this->cfg_data["fields"][$args["name"]]))
+		{
+			if($def["hide"])
+			{
+				return count($this->rowdefs)-1;
+			}
+			else
+			{
+				$args = $def;
+			}
+		}
 		if (!$this->filters_updated)
 		{
 			if ($this->filter_name == "")
@@ -1886,6 +1921,11 @@ class aw_table extends aw_template
 					}
 				}
 			}
+		}
+		if($this->cfgform && !$this->cfg_data["fields"][$args["name"]])
+		{
+			$this->cfg_data["fields"][$args["name"]] = $args;
+			$this->cfg_update = 1;
 		}
 		return count($this->rowdefs)-1;
 	}
@@ -2668,7 +2708,11 @@ echo dbg::short_backtrace();
 
 		foreach ($this->data as $row)
 		{
-			$filter[] = $row[$field_name];
+			$data = strip_tags($row[$field_name]);
+			if(!empty($data))
+			{
+				$filter[] = $data;
+			}
 		}
 
 		$filter = array_unique ($filter);
@@ -2708,6 +2752,32 @@ echo dbg::short_backtrace();
 			$filter[$k] = substr($v, 0, 20);
 		}
 		return $filter;
+	}
+
+	function check_userfields(&$row = null)
+	{
+		foreach($this->cfg_data["fields"] as $field => $data)
+		{
+			if($data["userdef"] && !$data["hide"])
+			{
+				if(!$this->userfields_defined)
+				{
+					$this->define_field($data);
+				}
+				if(is_array($row))
+				{
+					$oid = $row[$this->chooser_config["field"]];
+					if($oid && $this->can("view", $oid))
+					{
+						$o = obj($oid);
+						$prop = $data["userprop"];
+						$getprop = false;
+						$row[$data["name"]] = $o->prop($prop);
+					}
+				}
+			}
+		}
+		$this->userfields_defined = 1;
 	}
 
 	/** Sets whether to display the titlebar at the bottom of the table as well
@@ -2760,6 +2830,27 @@ class vcl_table extends aw_table
 					));
 				};
 			};
+			$form_oid = $arr["obj_inst"]->instance()->get_cfgform_for_object(array(
+				"obj_inst" => $arr["obj_inst"],
+				"args" => $arr["request"],
+			));
+			if($form_oid)
+			{
+				$form = obj($form_oid);
+				$fi = $form->instance();
+				$props = $fi->get_cfg_proplist($form_oid);
+				if($props[$pr["name"]]["configurable"])
+				{
+					$this->cfgform = $form;
+					$this->property = $pr;
+					$fo = obj($form_oid);
+					$tbl_conf = $fo->meta("tbl_config");
+					if($cur_data = $tbl_conf[$pr["name"]])
+					{
+						$this->cfg_data = $cur_data;
+					}
+				}
+			}
 			$pr["vcl_inst"] = $this;
 		};
 		return array($pr["name"] => $pr);
