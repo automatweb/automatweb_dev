@@ -7,7 +7,28 @@ class task_object extends _int_object
 	{
 		parent::_int_object();
 	}
-      
+
+	//millegi p2rast m6nes olukorras on vendade kustutamisega probleeme ja annab errorit... seega teeb selle enne 2ra
+	function delete($arr = array())
+	{
+		list($tmp) = $GLOBALS["object_loader"]->ds->search(array(
+			"brother_of" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$todelete = array_keys($tmp);
+		$inst = get_instance(CL_TASK);
+		foreach($todelete as $id)
+		{
+			if($id != $this->id() && $inst->can("delete" , $id))
+			{
+				$brother = obj($id);
+				$brother->delete();
+			}
+		}
+		parent::delete();
+	}
+
 	function name()
 	{
 		if ($this->_no_display)
