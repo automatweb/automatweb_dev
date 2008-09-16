@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.47 2008/07/08 19:15:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.48 2008/09/16 07:25:44 instrumental Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -61,14 +61,143 @@
 		@property xml_structure_file type=textbox
 		@caption Struktuuri&uuml;ksuste XML fail
 
-	@groupinfo tags caption="Tagid" parent=settings
-	@default group=tags
+@groupinfo tags caption="Tagid XMLs"
+@default group=tags
+
+	@groupinfo tags_workers caption="T&ouml;&ouml;tajad" parent=tags
+	@default group=tags_workers
 	
-		@property worker_tag type=textbox default=tootaja
-		@caption T&ouml;&ouml;taja tag XMLis
+		@property tootajad_tag type=textbox
+		@caption T&ouml;&ouml;tajad
 	
-		@property workers_tag type=textbox default=tootajad
-		@caption T&ouml;&ouml;tajate tag XMLis
+		@property tootaja_tag type=textbox
+		@caption T&ouml;&ouml;taja
+	
+		@property tootaja_id_tag type=textbox
+		@caption T&ouml;&ouml;taja ID
+	
+		@property eesnimi_tag type=textbox
+		@caption Eesnimi
+	
+		@property perekonnanimi_tag type=textbox
+		@caption Perekonnanimi
+	
+		@property synniaeg_tag type=textbox
+		@caption S&uuml;nniaeg
+	
+		@property haridustase_tag type=textbox
+		@caption Haridustase
+	
+		@property telefon_tag type=textbox
+		@caption Telefon
+	
+		@property mobiiltelefon_tag type=textbox
+		@caption Mobiiltelefon
+	
+		@property lyhinumber_tag type=textbox
+		@caption L&uuml;hinumber
+	
+		@property e_post_tag type=textbox
+		@caption E-posti aadress
+	
+		@property ametikoht_nimetus_tag type=textbox
+		@caption Ametinimetus
+	
+		@property ametikirjeldus_viit_tag type=textbox
+		@caption Ametijuhendi link
+	
+		@property ruum_tag type=textbox
+		@caption Ruum
+	
+		@property asutus_tag type=textbox
+		@caption Asutus
+	
+		@property allasutus_tag type=textbox
+		@caption Allasutus
+	
+		@property yksus_tag type=textbox
+		@caption &Uuml;ksus
+	
+		@property yksus_id_tag type=textbox
+		@caption &Uuml;ksuse ID
+	
+		@property prioriteet_tag type=textbox
+		@caption Prioriteet
+	
+		@property on_peatumine_tag type=textbox
+		@caption T&ouml;&ouml;suhe on peatatud
+	
+		@property peatumine_pohjus_tag type=textbox
+		@caption T&ouml;&ouml;suhte peatamise p&otilde;hjus
+	
+		@property asutusse_tulek_tag type=textbox
+		@caption Asutusse tuleku aeg
+	
+		@property on_asendaja_tag type=textbox
+		@caption On asendaja
+	
+		@property asendamine_tookoht_tag type=textbox
+		@caption Asendatav t&ouml;&ouml;koht
+
+	@groupinfo tags_educations caption="Haridusk&auml;igud" parent=tags
+	@default group=tags_educations
+	
+		@property hariduskaigud_tag type=textbox
+		@caption Haridusk&auml;igud
+	
+		@property hariduskaik_tag type=textbox
+		@caption Haridusk&auml;ik
+	
+		@property edu_tootaja_id_tag type=textbox
+		@caption T&ouml;&ouml;taja ID
+	
+		@property oppeasutus_tag type=textbox
+		@caption &Otilde;ppeasutus
+	
+		@property on_opilane_tag type=textbox
+		@caption On &otilde;pilane
+	
+		@property eriala_tag type=textbox
+		@caption Eriala
+	
+		@property on_pohieriala_tag type=textbox
+		@caption On p&otilde;hieriala
+	
+		@property diplom_number_tag type=textbox
+		@caption Diplomi number
+	
+		@property akadeemiline_kraad_tag type=textbox
+		@caption Akadeemiline kraad
+	
+		@property keel_tag type=textbox
+		@caption Omandamise keel
+	
+		@property diplom_kuupaev_tag type=textbox
+		@caption Diplomi kuup&auml;ev
+
+	@groupinfo tags_end_wr caption="T&ouml;&ouml;suhte peatumised" parent=tags
+	@default group=tags_end_wr
+	
+		@property toosuhte_peatumised_tag type=textbox
+		@caption T&ouml;&ouml;suhte peatumised
+	
+		@property toosuhte_peatumine_tag type=textbox
+		@caption T&ouml;&ouml;suhte peatumine
+	
+		@property ewr_tootaja_id_tag type=textbox
+		@caption Tootaja ID
+	
+		@property alguskuupaev_tag type=textbox
+		@caption Alguskuup&auml;ev
+	
+		@property loppkuupaev_tag type=textbox
+		@caption L&otilde;ppkuup&auml;ev
+	
+		@property peatumise_liik_tag type=textbox
+		@caption Peatumise liik
+	
+		@property asendaja_id_tag type=textbox
+		@caption Asendaja ID
 
 @groupinfo autoimport caption="Automaatne import"
 
@@ -112,6 +241,55 @@ class persona_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			// T88tajad
+			case "tootajad_tag":
+			case "tootaja_tag":
+			case "tootaja_id_tag":
+			case "eesnimi_tag":
+			case "perekonnanimi_tag":
+			case "synniaeg_tag":
+			case "haridustase_tag":
+			case "telefon_tag":
+			case "mobiiltelefon_tag":
+			case "lyhinumber_tag":
+			case "e_post_tag":
+			case "ametikoht_nimetus_tag":
+			case "ametikirjeldus_viit_tag":
+			case "ruum_tag":
+			case "asutus_tag":
+			case "allasutus_tag":
+			case "yksus_tag":
+			case "yksus_id_tag":
+			case "prioriteet_tag":
+			case "on_peatumine_tag":
+			case "peatumine_pohjus_tag":
+			case "asutusse_tulek_tag":
+			case "on_asendaja_tag":
+			case "asendamine_tookoht_tag":
+			// Haridusk2igud
+			case "hariduskaigud_tag":
+			case "hariduskaik_tag":
+			case "edu_tootaja_id_tag":
+			case "oppeasutus_tag":
+			case "on_opilane_tag":
+			case "eriala_tag":
+			case "on_pohieriala_tag":
+			case "diplom_number_tag":
+			case "akadeemiline_kraad_tag":
+			case "keel_tag":
+			case "diplom_kuupaev_tag":
+			// T88suhte peatumised
+			case "toosuhte_peatumised_tag":
+			case "toosuhte_peatumine_tag":
+			case "ewr_tootaja_id_tag":
+			case "alguskuupaev_tag":
+			case "loppkuupaev_tag":
+			case "peatumise_liik_tag":
+			case "asendaja_id_tag":
+				$tags = $this->get_tags($arr["obj_inst"]);
+				$prop["value"] = $tags[$prop["name"]];
+				break;
+
 			case "last_import":
 				$prop["value"] = locale::get_lc_date($prop["value"],6) . date(" H:i",$prop["value"]);
 				break;
@@ -402,10 +580,10 @@ class persona_import extends class_base
 		$obj->save();
 		aw_restore_acl();
 
-		$worker_tag = strlen($obj->prop("worker_tag")) > 0 ? strtoupper($obj->prop("worker_tag")) : "TOOTAJA";
-		$workers_tag = strlen($obj->prop("workers_tag")) > 0 ? strtoupper($obj->prop("workers_tag")) : "TOOTAJAD";
+		$tags = $this->get_tags($obj);
+		extract($tags);
 
-		$interesting_containers = array($workers_tag,"PEATUMISED","PUHKUSED","YKSUSED","HARIDUSKAIGUD","TOOSUHTE_PEATUMISED");
+		$interesting_containers = array($tootajad_tag,"PEATUMISED","PUHKUSED","YKSUSED",$hariduskaigud_tag,$toosuhte_peatumised_tag);
 
 		$w_open = false;
 		$tmp = array();
@@ -444,7 +622,7 @@ class persona_import extends class_base
 			};
 
 
-			if ($target && ($worker_tag == $val["tag"] || "HARIDUSKAIK" == $val["tag"] || "TOOSUHTE_PEATUMINE" == $val["tag"]))
+			if ($target && ($tootaja_tag == $val["tag"] || $hariduskaik_tag == $val["tag"] || $toosuhte_peatumine_tag == $val["tag"]))
 			{
 				if ("open" == $val["type"])
 				{
@@ -484,9 +662,9 @@ class persona_import extends class_base
 		{
 			// fill the array with pairs of ext_id => person_done pairs
 			// at the start everyone gets flagged with 0
-			foreach($data[$workers_tag] as $worker)
+			foreach($data[$tootajad_tag] as $worker)
 			{
-				$ext_id = $worker["TOOTAJA_ID"];
+				$ext_id = $worker[$tootaja_id_tag];
 				$persona_to_process[$ext_id] = 0;
 			};
 		
@@ -621,14 +799,14 @@ class persona_import extends class_base
 		//$person_match = array();
 
 		$phone_type = array(
-			"TELEFON" => "work",
-			"MOBIILTELEFON" => "mobile",
-			"LYHINUMBER" => "short",
+			$telefon_tag => "work",
+			$mobiiltelefon_tag => "mobile",
+			$lyhinumber_tag => "short",
 		);
 
 		$simple_attribs = array(
 			/*
-			"HARIDUSTASE" => array(
+			$haridustase_tag => array(
 				"reltype" => 23, // RELTYPE_EDUCATION
 				"prop" => "education",
 				"clid" => CL_CRM_PERSON_EDUCATION,
@@ -640,7 +818,7 @@ class persona_import extends class_base
 				"clid" => CL_CRM_ADDRESS,
 			),
 			/*
-			"AMETIKOHT_NIMETUS" => array(
+			$ametikoht_nimetus_tag => array(
 				"reltype" => 7, // RELTYPE_PROFESSION
 				"prop" => "rank",
 				"clid" => CL_CRM_PROFESSION,
@@ -742,7 +920,7 @@ class persona_import extends class_base
 			//arr($yksus);
 
 			$name = iconv("UTF-8", "ISO-8859-4",$yksus["NIMETUS"]);
-			$ext_id = $yksus["YKSUS_ID"];
+			$ext_id = $yksus[$yksus_id_tag];
 			$ylem = $yksus["YLEMYKSUS_ID"];
 
 
@@ -857,13 +1035,13 @@ class persona_import extends class_base
 		$time_limit = 90;
 
 		$aw_timer->start("personimport");
-		foreach($data[$workers_tag] as $worker)
+		foreach($data[$tootajad_tag] as $worker)
 		{
-			$ext_id = $worker["TOOTAJA_ID"];
-			$worker["EESNIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["EESNIMI"]);
-			$worker["PEREKONNANIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["PEREKONNANIMI"]);
+			$ext_id = $worker[$tootaja_id_tag];
+			$worker[$eesnimi_tag] = iconv("UTF-8", "ISO-8859-4",$worker[$eesnimi_tag]);
+			$worker[$perekonnanimi_tag] = iconv("UTF-8", "ISO-8859-4",$worker[$perekonnanimi_tag]);
 
-			$person_name = $worker["EESNIMI"]." ".$worker["PEREKONNANIMI"];
+			$person_name = $worker[$eesnimi_tag]." ".$worker[$perekonnanimi_tag];
 			if ($persona_to_process[$ext_id] == 1)
 			{
 				print "$person_name has already been imported in this import, skipping<br>";
@@ -885,14 +1063,14 @@ class persona_import extends class_base
 				print t("updating existing person object<br>");
 			};	
 
-			print "SA = " . $worker["SYNNIAEG"];
-//			$bd_parts = explode(".",$worker["SYNNIAEG"]);
-//			$bd_parts = unpack("a2day/a2mon/a4year",$worker["SYNNIAEG"]);
+			print "SA = " . $worker[$synniaeg_tag];
+//			$bd_parts = explode(".",$worker[$synniaeg_tag]);
+//			$bd_parts = unpack("a2day/a2mon/a4year",$worker[$synniaeg_tag]);
 //			$bday = mktime(0,0,0,$bd_parts[1],$bd_parts[0],$bd_parts[2]);
-			$bd_parts = unpack("a4year/a2mon/a2day",$worker["SYNNIAEG"]);
+			$bd_parts = unpack("a4year/a2mon/a2day",$worker[$synniaeg_tag]);
 			$bday = mktime(0,0,0,$bd_parts["mon"],$bd_parts["day"],$bd_parts["year"]);
 			
-			$wrds_parts = unpack("a4year/a2mon/a2day",$worker["ASUTUSSE_TULEK"]);
+			$wrds_parts = unpack("a4year/a2mon/a2day",$worker[$asutusse_tulek_tag]);
 			$work_relation_date_start = mktime(0, 0, 0, $wrds_parts["mon"], $wrds_parts["day"], $wrds_parts["year"]);
 
 			print "tm = " . $bday . "<br>";
@@ -905,12 +1083,12 @@ class persona_import extends class_base
 			));
 			print "<br>";
 			$person_obj->set_name($person_name);
-			$person_obj->set_prop("firstname",$worker["EESNIMI"]);
-			$person_obj->set_prop("lastname",$worker["PEREKONNANIMI"]);
+			$person_obj->set_prop("firstname",$worker[$eesnimi_tag]);
+			$person_obj->set_prop("lastname",$worker[$perekonnanimi_tag]);
 			$person_obj->set_prop("ext_id",$ext_id);
-			$person_obj->set_prop("ext_id_alphanumeric", $worker["TOOTAJA_ID"]);
+			$person_obj->set_prop("ext_id_alphanumeric", $worker[$tootaja_id_tag]);
 			$person_obj->set_prop("birthday",date("Y-m-d", $bday));
-			$person_obj->set_ord($worker["PRIORITEET"]);
+			$person_obj->set_ord($worker[$prioriteet_tag]);
 			$person_obj->set_status(STAT_ACTIVE);
 
 			if (!in_array($worker["AADRESS"],$addr))
@@ -924,7 +1102,7 @@ class persona_import extends class_base
 			// ametikoht_nimetus
 			// eriala - aga see k&auml;ib vist haridusega kokku?
 
- 			if (!empty($worker["E_POST"]))
+ 			if (!empty($worker[$e_post_tag]))
 			{
 				// I need to replace e-mail address, not create a new one
 
@@ -939,15 +1117,15 @@ class persona_import extends class_base
 				else
 				{
 					print "creating e-mail object<br>";
-					print $worker["E_POST"];
+					print $worker[$e_post_tag];
 					print "<br>";
 					$ml = new object();
 					$ml->set_parent($dir_default);
 					$ml->set_class_id(CL_ML_MEMBER);
 				};
 	
-				$ml->set_name($worker["E_POST"]);
-				$ml->set_prop("mail",$worker["E_POST"]);
+				$ml->set_name($worker[$e_post_tag]);
+				$ml->set_prop("mail",$worker[$e_post_tag]);
 				aw_disable_acl();
 				$ml->save();
 				aw_restore_acl();
@@ -1099,9 +1277,9 @@ class persona_import extends class_base
 			}
 			/**/
 
-			if(!empty($worker["HARIDUSTASE"]))
+			if(!empty($worker[$haridustase_tag]))
 			{
-				$haridustase = iconv("UTF-8", "ISO-8859-4", $worker["HARIDUSTASE"]);
+				$haridustase = iconv("UTF-8", "ISO-8859-4", $worker[$haridustase_tag]);
 				// Whatta hack!
 				$person_obj->set_prop("edulevel", str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $haridustase)));
 				aw_disable_acl();
@@ -1110,12 +1288,12 @@ class persona_import extends class_base
 				print "Setting education level to ".$haridustase.".<br>";
 				flush();
 			}
-			if(!empty($worker["AMETIKOHT_NIMETUS"]))
+			if(!empty($worker[$ametikoht_nimetus_tag]))
 			{
-				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKOHT_NIMETUS"]);
-				$asutus =  iconv("UTF-8", "ISO-8859-4", $worker["ASUTUS"]);
+				$ametikoht_nimetus = iconv("UTF-8", "ISO-8859-4", $worker[$ametikoht_nimetus_tag]);
+				$asutus =  iconv("UTF-8", "ISO-8859-4", $worker[$asutus_tag]);
 				if(empty($asutus))
-					$asutus = $worker["ASUTUS"];
+					$asutus = $worker[$asutus_tag];
 				$prevjob_done = false;
 
 				if(!empty($asutus))
@@ -1137,9 +1315,9 @@ class persona_import extends class_base
 						aw_restore_acl();
 					}
 					/*
-					print "connecting section ".iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"])." to company object ".$asutus."<br>";
+					print "connecting section ".iconv("UTF-8", "ISO-8859-4", $worker[$yksus_tag])." to company object ".$asutus."<br>";
 					$company_obj->connect(array(
-						"to" => $sections[$worker["YKSUS_ID"]],
+						"to" => $sections[$worker[$yksus_id_tag]],
 						"reltype" => "RELTYPE_SECTION",
 					));
 					/**/
@@ -1151,9 +1329,9 @@ class persona_import extends class_base
 				foreach($person_obj->connections_from(array("type" => 7)) as $conn)
 				{
 					$rank = $conn->to();
-//					print $rank->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
+//					print $rank->meta("external_id")." == ".$worker[$tootaja_id_tag]."<br>";
 //					print $rank->name()." == ".$ametikoht_nimetus."<br>";
-					if($rank->meta("external_id") == $worker["TOOTAJA_ID"] && $rank->name() == $ametikoht_nimetus)
+					if($rank->meta("external_id") == $worker[$tootaja_id_tag] && $rank->name() == $ametikoht_nimetus)
 					{
 						$profession_id = $rank->id();
 						$person_obj->set_prop("rank", $profession_id);
@@ -1172,7 +1350,7 @@ class persona_import extends class_base
 					$rank->set_parent($dir_default);
 					$rank->set_status(STAT_ACTIVE);
 					$rank->set_prop("name", $ametikoht_nimetus);
-					$rank->set_meta("external_id", $worker["TOOTAJA_ID"]);
+					$rank->set_meta("external_id", $worker[$tootaja_id_tag]);
 					aw_disable_acl();
 					$rank->save();
 					aw_restore_acl();
@@ -1254,17 +1432,17 @@ class persona_import extends class_base
 			}
 
 //echo __FILE__."::".__LINE__." <br>\n";flush();
-			if($worker["ON_ASENDAJA"] == 1 && !empty($worker["ASENDAMINE_TOOKOHT"]))
+			if($worker[$on_asendaja_tag] == 1 && !empty($worker[$asendamine_tookoht_tag]))
 			{
-				$asendamine_tookoht = iconv("UTF-8", "ISO-8859-4", $worker["ASENDAMINE_TOOKOHT"]);
+				$asendamine_tookoht = iconv("UTF-8", "ISO-8859-4", $worker[$asendamine_tookoht_tag]);
 				$subst_done = false;
 
 				foreach($prevjob->connections_from(array("type" => "RELTYPE_SUBSTITUTE")) as $conn)
 				{
 					$substitute_obj = $conn->to();
 //					print $substitute_obj->name()." == ".$asendamine_tookoht."<br>";
-//					print $substitute_obj->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
-					if($substitute_obj->name() == $asendamine_tookoht && $substitute_obj->meta("external_id") == $worker["TOOTAJA_ID"])
+//					print $substitute_obj->meta("external_id")." == ".$worker[$tootaja_id_tag]."<br>";
+					if($substitute_obj->name() == $asendamine_tookoht && $substitute_obj->meta("external_id") == $worker[$tootaja_id_tag])
 					{
 						print "connected to existing profession object ".$asendamine_tookoht."<br>";
 						flush();
@@ -1284,9 +1462,9 @@ class persona_import extends class_base
 
 					foreach($subst_ol_arr as $subst_obj)
 					{
-//						print $subst_obj->meta("external_id")." == ".$worker["TOOTAJA_ID"]."<br>";
+//						print $subst_obj->meta("external_id")." == ".$worker[$tootaja_id_tag]."<br>";
 //						print $subst_obj->name()." == ".$asendamine_tookoht."<br>";
-						if($subst_obj->meta("external_id") == $worker["TOOTAJA_ID"] && $subst_obj->name() == $asendamine_tookoht)
+						if($subst_obj->meta("external_id") == $worker[$tootaja_id_tag] && $subst_obj->name() == $asendamine_tookoht)
 						{
 							$substitute_id = $subst_obj->id();
 							break;
@@ -1300,7 +1478,7 @@ class persona_import extends class_base
 						$subst->set_parent($dir_default);
 						$subst->set_status(STAT_ACTIVE);
 						$subst->set_prop("name", $asendamine_tookoht);
-						$subst->set_meta("external_id", $worker["TOOTAJA_ID"]);
+						$subst->set_meta("external_id", $worker[$tootaja_id_tag]);
 						aw_disable_acl();
 						$subst->save();
 						aw_restore_acl();
@@ -1317,95 +1495,95 @@ class persona_import extends class_base
 			}
 
 			unset($ylem_ykid);
-			if(!empty($worker["ALLASUTUS"]))
+			if(!empty($worker[$allasutus_tag]))
 			{
-				$worker["ALLASUTUS"] = iconv("UTF-8", "ISO-8859-4", $worker["ALLASUTUS"]);
+				$worker[$allasutus_tag] = iconv("UTF-8", "ISO-8859-4", $worker[$allasutus_tag]);
 
-				if(is_oid($sections_byname[$worker["ALLASUTUS"]]))
+				if(is_oid($sections_byname[$worker[$allasutus_tag]]))
 				{
-					print "using existing section ".$worker["ALLASUTUS"]."<br>";
-					$ylem_yksus = new object($sections_byname[$worker["ALLASUTUS"]]);
-					$ylem_ykid = $sections_byname[$worker["ALLASUTUS"]];
+					print "using existing section ".$worker[$allasutus_tag]."<br>";
+					$ylem_yksus = new object($sections_byname[$worker[$allasutus_tag]]);
+					$ylem_ykid = $sections_byname[$worker[$allasutus_tag]];
 				}
 				else
 				{
-					print "creating new section ".$worker["ALLASUTUS"]."<br>";
+					print "creating new section ".$worker[$allasutus_tag]."<br>";
 					$ylem_yksus = new object;
 					$ylem_yksus->set_class_id(CL_CRM_SECTION);
 					$ylem_yksus->set_parent($dir_default);
-					$ylem_yksus->set_name($worker["ALLASUTUS"]);
+					$ylem_yksus->set_name($worker[$allasutus_tag]);
 					aw_disable_acl();
 					$ylem_yksus->save();
 					aw_restore_acl();
 					$ylem_ykid = $ylem_yksus->id();
-					$sections_byname[$worker["ALLASUTUS"]] = $ylem_ykid;
+					$sections_byname[$worker[$allasutus_tag]] = $ylem_ykid;
 				}
 				$company_obj->connect(array(
 					"to" => $ylem_ykid,
 					"reltype" => 28, //RELTYPE_SECTION,
 				));
-				print "connected section ".$worker["ALLASUTUS"]." to company ".$worker["ASUTUS"]."<br>";
+				print "connected section ".$worker[$allasutus_tag]." to company ".$worker[$asutus_tag]."<br>";
 				
 				/*
-				if($worker["ALLASUTUS"] == iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"]))
+				if($worker[$allasutus_tag] == iconv("UTF-8", "ISO-8859-4", $worker[$yksus_tag]))
 				{
-					$ylem_yksus->set_prop("ext_id", $worker["YKSUS_ID"]);
-					$ylem_yksus->set_subclass($worker["YKSUS_ID"]);
+					$ylem_yksus->set_prop("ext_id", $worker[$yksus_id_tag]);
+					$ylem_yksus->set_subclass($worker[$yksus_id_tag]);
 					$ylem_yksus->save();
-					$sections[$worker["YKSUS_ID"]] = $ylem_ykid;
+					$sections[$worker[$yksus_id_tag]] = $ylem_ykid;
 				}
 				/**/
 			}
 
-//			if (!empty($worker["YKSUS_ID"]) || !empty($worker["YKSUS"]))
-			if (!empty($worker["YKSUS"]))
+//			if (!empty($worker[$yksus_id_tag]) || !empty($worker[$yksus_tag]))
+			if (!empty($worker[$yksus_tag]))
 			{
-				$worker["YKSUS"] = iconv("UTF-8", "ISO-8859-4", $worker["YKSUS"]);
+				$worker[$yksus_tag] = iconv("UTF-8", "ISO-8859-4", $worker[$yksus_tag]);
 
 				/*
-				if(is_oid($sections[$worker["YKSUS_ID"]]))
+				if(is_oid($sections[$worker[$yksus_id_tag]]))
 				{
-					print "connecting to section ".$worker["YKSUS"]." (using ID) - ".$sections[$worker["YKSUS_ID"]]."<br>";
+					print "connecting to section ".$worker[$yksus_tag]." (using ID) - ".$sections[$worker[$yksus_id_tag]]."<br>";
 					$person_obj->connect(array(
-						"to" => $sections[$worker["YKSUS_ID"]],
+						"to" => $sections[$worker[$yksus_id_tag]],
 						"reltype" => 21, //RELTYPE_SECTION,
 					));
 
-					$person_obj->set_prop("org_section",$sections[$worker["YKSUS_ID"]]);
+					$person_obj->set_prop("org_section",$sections[$worker[$yksus_id_tag]]);
 					print "sect connect done<br>";
 				}
 				else
 				/**/	
-				if(is_oid($sections_byname[$worker["YKSUS"]]))
+				if(is_oid($sections_byname[$worker[$yksus_tag]]))
 				{
-					print "connecting to section ".$worker["YKSUS"]." (using name) - ".$sections_byname[$worker["YKSUS"]]."<br>";
+					print "connecting to section ".$worker[$yksus_tag]." (using name) - ".$sections_byname[$worker[$yksus_tag]]."<br>";
 					$person_obj->connect(array(
-						"to" => $sections_byname[$worker["YKSUS"]],
+						"to" => $sections_byname[$worker[$yksus_tag]],
 						"reltype" => 21, //RELTYPE_SECTION,
 					));
 
-					$person_obj->set_prop("org_section", array($sections_byname[$worker["YKSUS"]]));
+					$person_obj->set_prop("org_section", array($sections_byname[$worker[$yksus_tag]]));
 					print "sect connect done<br>";
 				}
 				else
 				{					
 					// create yksus
-					print "creating new section ".$worker["YKSUS"]."<br>";
+					print "creating new section ".$worker[$yksus_tag]."<br>";
 					$yk = new object();
 					$yk->set_parent($dir_default);
 					$yk->set_class_id(CL_CRM_SECTION);
-					$yk->set_prop("ext_id", $worker["YKSUS_ID"]);
-					$yk->set_subclass($worker["YKSUS_ID"]);
-					$yk->set_name($worker["YKSUS"]);
+					$yk->set_prop("ext_id", $worker[$yksus_id_tag]);
+					$yk->set_subclass($worker[$yksus_id_tag]);
+					$yk->set_name($worker[$yksus_tag]);
 					aw_disable_acl();
 					$yk->save();
 					aw_restore_acl();
 
 					$ykid = $yk->id();
-					$sections[$worker["YKSUS_ID"]] = $ykid;
-					$sections_byname[$worker["YKSUS"]] = $ykid;
+					$sections[$worker[$yksus_id_tag]] = $ykid;
+					$sections_byname[$worker[$yksus_tag]] = $ykid;
 
-					print "connectiong to section ".$worker["YKSUS"]."<br>";
+					print "connectiong to section ".$worker[$yksus_tag]."<br>";
 					$person_obj->connect(array(
 						"to" => $ykid,
 						"reltype" => 21, //RELTYPE_SECTION,
@@ -1419,21 +1597,21 @@ class persona_import extends class_base
 					$person_obj->set_prop("work_contact", $company_id);
 					print "company connect done<br>";
 				}
-				if($worker["YKSUS"] != iconv("UTF-8", "ISO-8859-4", $worker["ALLASUTUS"]) && isset($ylem_ykid) && !empty($worker["YKSUS_ID"]) && $ylem_yksus->id() != $sections[$worker["YKSUS_ID"]])
+				if($worker[$yksus_tag] != iconv("UTF-8", "ISO-8859-4", $worker[$allasutus_tag]) && isset($ylem_ykid) && !empty($worker[$yksus_id_tag]) && $ylem_yksus->id() != $sections[$worker[$yksus_id_tag]])
 				{
-					if($this->can("view", $sections[$worker["YKSUS_ID"]]))
+					if($this->can("view", $sections[$worker[$yksus_id_tag]]))
 					{
 						$ylem_yksus->connect(array(
-							"to" => $sections[$worker["YKSUS_ID"]],
+							"to" => $sections[$worker[$yksus_id_tag]],
 							"reltype" => 1,		//RELTYPE_SECTION
 						));
 					}
 					else
 					/*
-					if($this->can("view", $sections_byname[$worker["YKSUS"]]) && $ylem_yksus->id() != $sections_byname[$worker["YKSUS"]])
+					if($this->can("view", $sections_byname[$worker[$yksus_tag]]) && $ylem_yksus->id() != $sections_byname[$worker[$yksus_tag]])
 					{
 						$ylem_yksus->connect(array(
-							"to" => $sections_byname[$worker["YKSUS"]],
+							"to" => $sections_byname[$worker[$yksus_tag]],
 							"reltype" => 1,		//RELTYPE_SECTION
 						));
 					}
@@ -1455,16 +1633,16 @@ class persona_import extends class_base
 					foreach($doomed_conns as $doomed_conn)
 					{
 						$doomed_conn_to = $doomed_conn->to();
-						if($doomed_conn_to->id() == $sections[$worker["YKSUS_ID"]] || $doomed_conn_to->id() == $sections_byname[$worker["YKSUS"]])
+						if($doomed_conn_to->id() == $sections[$worker[$yksus_id_tag]] || $doomed_conn_to->id() == $sections_byname[$worker[$yksus_tag]])
 						{
 							$doomed_conn->delete(true);						
 						}
 					}
-					print "section ".$worker["YKSUS"]." connected to parent section ".$worker["ALLASUTUS"]."<br>";
+					print "section ".$worker[$yksus_tag]." connected to parent section ".$worker[$allasutus_tag]."<br>";
 				}
 			}
 
-			$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker["AMETIKIRJELDUS_VIIT"]);
+			$ametikirjeldus_viit = iconv("UTF-8", "ISO-8859-4", $worker[$ametikirjeldus_viit_tag]);
 			print "setting 'Viit ametijuhendile' property for crm_profession object ".$ametikoht_nimetus." ID - ".$rank->id()."<br>";
 			print $ametikirjeldus_viit."<br>";
 			$rank->set_prop("directive_link", $ametikirjeldus_viit);
@@ -1576,19 +1754,19 @@ class persona_import extends class_base
 		// add_or_update_vacation
 		// add_or_update_contract_stop
 
-		foreach($data["TOOSUHTE_PEATUMISED"] as $peatumine)
+		foreach($data[$toosuhte_peatumised_tag] as $peatumine)
 		{
-			$peatumise_liik = iconv("UTF-8", "ISO-8859-4", $peatumine["PEATUMISE_LIIK"]);
+			$peatumise_liik = iconv("UTF-8", "ISO-8859-4", $peatumine[$peatumise_liik_tag]);
 
-			$a = $this->timestamp_from_xml($peatumine["ALGUSKUUPAEV"]);
-			$b = $this->timestamp_from_xml($peatumine["LOPPKUUPAEV"]);
-			if(!is_oid($persons[$peatumine["TOOTAJA_ID"]]))
+			$a = $this->timestamp_from_xml($peatumine[$alguskuupaev_tag]);
+			$b = $this->timestamp_from_xml($peatumine[$loppkuupaev_tag]);
+			if(!is_oid($persons[$peatumine[$ewr_tootaja_id_tag]]))
 			{
-				print "<br>No worker with ID ".$persons[$peatumine["TOOTAJA_ID"]].", original ID ".$peatumine["TOOTAJA_ID"].". Ignoring contract stop.<br>";
+				print "<br>No worker with ID ".$persons[$peatumine[$ewr_tootaja_id_tag]].", original ID ".$peatumine[$ewr_tootaja_id_tag].". Ignoring contract stop.<br>";
 				flush();
 				continue;
 			}
-			$t = new object($persons[$peatumine["TOOTAJA_ID"]]);
+			$t = new object($persons[$peatumine[$ewr_tootaja_id_tag]]);
 
 			print "<br><b>Person: ".$t->name()."</b><br>";
 			
@@ -1696,21 +1874,21 @@ class persona_import extends class_base
 				print "from $a to $b<br>";
 			}
 
-			if(!empty($peatumine["ASENDAJA_ID"]))
+			if(!empty($peatumine[$asendaja_id_tag]))
 			{
 				print "Setting substitute...<br>";
-				if(!is_oid($persons[$peatumine["ASENDAJA_ID"]]))
+				if(!is_oid($persons[$peatumine[$asendaja_id_tag]]))
 				{
-					print "No person with ID ".$persons[$peatumine["ASENDAJA_ID"]].", original ID ".$peatumine["ASENDAJA_ID"].". Ignoring.<br>";
+					print "No person with ID ".$persons[$peatumine[$asendaja_id_tag]].", original ID ".$peatumine[$asendaja_id_tag].". Ignoring.<br>";
 					flush();
 				}
 				else
 				{
-					$subst_pers = new object($persons[$peatumine["ASENDAJA_ID"]]);
+					$subst_pers = new object($persons[$peatumine[$asendaja_id_tag]]);
 					print "name = ".$subst_pers->name()."<br>";
 
 					$stop->connect(array(
-						"to" => $persons[$peatumine["ASENDAJA_ID"]],
+						"to" => $persons[$peatumine[$asendaja_id_tag]],
 						"reltype" => 2,		//RELTYPE_SUBSTITUTE
 					));
 					print "Connected.<br>";
@@ -1742,26 +1920,26 @@ class persona_import extends class_base
 		);
 		$degree = array_flip($degree);
 	
-		foreach($data["HARIDUSKAIGUD"] as $hariduskaik)
+		foreach($data[$hariduskaigud_tag] as $hariduskaik)
 		{
-			$hariduskaik["AKADEEMILINE_KRAAD"] = iconv("UTF-8", "ISO-8859-4", $hariduskaik["AKADEEMILINE_KRAAD"]);
-			$oppeasutus = iconv("UTF-8", "ISO-8859-4", $hariduskaik["OPPEASUTUS"]);
+			$hariduskaik[$akadeemiline_kraad_tag] = iconv("UTF-8", "ISO-8859-4", $hariduskaik[$akadeemiline_kraad_tag]);
+			$oppeasutus = iconv("UTF-8", "ISO-8859-4", $hariduskaik[$oppeasutus_tag]);
 			if(empty($oppeasutus))
-				$oppeasutus = $hariduskaik["OPPEASUTUS"];
+				$oppeasutus = $hariduskaik[$oppeasutus_tag];
 //			arr($hariduskaik);
-			if(empty($hariduskaik["TOOTAJA_ID"]))
+			if(empty($hariduskaik[$edu_tootaja_id_tag]))
 			{
 				print "No person ID specified. Ignoring.<br>";
 				flush();
 				continue;
 			}
-			if(!is_oid($persons[$hariduskaik["TOOTAJA_ID"]]))
+			if(!is_oid($persons[$hariduskaik[$edu_tootaja_id_tag]]))
 			{
-				print "No person with ID ".$persons[$hariduskaik["TOOTAJA_ID"]].", original ID ".$hariduskaik["TOOTAJA_ID"].". Ignoring.<br>";
+				print "No person with ID ".$persons[$hariduskaik[$edu_tootaja_id_tag]].", original ID ".$hariduskaik[$edu_tootaja_id_tag].". Ignoring.<br>";
 				flush();
 				continue;
 			}
-			$t = new object($persons[$hariduskaik["TOOTAJA_ID"]]);
+			$t = new object($persons[$hariduskaik[$edu_tootaja_id_tag]]);
 			print "<b>Person: ".$t->name()."</b><br>";
 
 			$edu_done = false;
@@ -1774,30 +1952,30 @@ class persona_import extends class_base
 				$education = $edu_conn->to();
 				$end_date = $education->prop("end_date");
 				
-				if($education->prop("name") == $oppeasutus && ($t->prop("edulevel") == "keskharidus" || $education->prop("speciality") == iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"])) && (empty($end_date) || //$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
-				$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"])))
+				if($education->prop("name") == $oppeasutus && ($t->prop("edulevel") == "keskharidus" || $education->prop("speciality") == iconv("UTF-8", "ISO-8859-4", $hariduskaik[$eriala_tag])) && (empty($end_date) || //$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1)))
+				$education->prop("end_date") == $this->timestamp_from_xml($hariduskaik[$diplom_kuupaev_tag])))
 				{
 					$haridus_conns[$t->id()][$edu_conn->id()] = 2;
 					print "connected to existing education object ".$education->name()."<br>";
 					if($t->prop("edulevel") != "keskharidus")
 					{
-						$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]));
+						$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik[$eriala_tag]));
 					}
 					else
 					{
 						$education->set_prop("speciality", "");
 					}
-					$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);					
-					$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
-					$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
+					$education->set_prop("main_speciality", $hariduskaik[$on_pohieriala_tag]);					
+					$education->set_prop("in_progress", $hariduskaik[$on_opilane_tag]);
+					$education->set_prop("diploma_nr", $hariduskaik[$diplom_number_tag]);
 					// P&otilde;hiharidus might cause some drama. We wanna avoid that.
-					$education->set_prop("degree", $degree[str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $hariduskaik["AKADEEMILINE_KRAAD"]))]);
-					$education->set_prop("obtain_language", $hariduskaik["KEEL"]);
+					$education->set_prop("degree", $degree[str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $hariduskaik[$akadeemiline_kraad_tag]))]);
+					$education->set_prop("obtain_language", $hariduskaik[$keel_tag]);
 //					if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
-					if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
+					if(!empty($hariduskaik[$diplom_kuupaev_tag]))
 					{
 //						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
-						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"]));
+						$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik[$diplom_kuupaev_tag]));
 						// Do ya think I should import the same value here as well?
 //						$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
 					}
@@ -1819,19 +1997,19 @@ class persona_import extends class_base
 				$education->set_prop("name", $oppeasutus);
 				if($t->prop("edulevel") != "keskharidus")
 				{
-					$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik["ERIALA"]));
+					$education->set_prop("speciality", iconv("UTF-8", "ISO-8859-4", $hariduskaik[$eriala_tag]));
 				}
-				$education->set_prop("main_speciality", $hariduskaik["ON_POHIERIALA"]);
-				$education->set_prop("in_progress", $hariduskaik["ON_OPILANE"]);
-				$education->set_prop("diploma_nr", $hariduskaik["DIPLOM_NUMBER"]);
+				$education->set_prop("main_speciality", $hariduskaik[$on_pohieriala_tag]);
+				$education->set_prop("in_progress", $hariduskaik[$on_opilane_tag]);
+				$education->set_prop("diploma_nr", $hariduskaik[$diplom_number_tag]);
 				// P&otilde;hiharidus might cause some drama. We wanna avoid that.
-				$education->set_prop("degree", $degree[str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $hariduskaik["AKADEEMILINE_KRAAD"]))]);
-				$education->set_prop("obtain_language", iconv("UTF-8", "ISO-8859-4", $hariduskaik["KEEL"]));
+				$education->set_prop("degree", $degree[str_replace("koorg", "korg", preg_replace("/[^a-zA-Z]/", "o", $hariduskaik[$akadeemiline_kraad_tag]))]);
+				$education->set_prop("obtain_language", iconv("UTF-8", "ISO-8859-4", $hariduskaik[$keel_tag]));
 //				if(!empty($hariduskaik["DIPLOM_KP_LOPETAMINE"]))
-				if(!empty($hariduskaik["DIPLOM_KUUPAEV"]))
+				if(!empty($hariduskaik[$diplom_kuupaev_tag]))
 				{
 //					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
-					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik["DIPLOM_KUUPAEV"]));
+					$education->set_prop("end_date", $this->timestamp_from_xml($hariduskaik[$diplom_kuupaev_tag]));
 					// Do ya think I should import the same value here as well?
 //					$education->set_prop("end", $this->timestamp_from_xml($hariduskaik["DIPLOM_KP_LOPETAMINE"], 1));
 				}
@@ -2368,6 +2546,65 @@ class persona_import extends class_base
 				"rep_id" => $rep_id,
 			));
 		};
+	}
+
+	function get_tags($o)
+	{
+		$arr = array(
+			// T88taja
+			"tootajad_tag" => "TOOTAJAD",
+			"tootaja_tag" => "TOOTAJA",
+			"tootaja_id_tag" => "TOOTAJA_ID",
+			"eesnimi_tag" => "EESNIMI",
+			"perekonnanimi_tag" => "PEREKONNANIMI",
+			"synniaeg_tag" => "SYNNIAEG",
+			"haridustase_tag" => "HARIDUSTASE",
+			"telefon_tag" => "TELEFON",
+			"mobiiltelefon_tag" => "MOBIILTELEFON",
+			"lyhinumber_tag" => "LYHINUMBER",
+			"e_post_tag" => "E_POST",
+			"ametikoht_nimetus_tag" => "AMETIKOHT_NIMETUS",
+			"ametikirjeldus_viit_tag" => "AMETIKIRJELDUS_VIIT",
+			"ruum_tag" => "RUUM",
+			"asutus_tag" => "ASUTUS",
+			"allasutus_tag" => "ALLASUTUS",
+			"yksus_tag" => "YKSUS",
+			"yksus_id_tag" => "YKSUS_ID",
+			"prioriteet_tag" => "PRIORITEET",
+			"on_peatumine_tag" => "ON_PEATUMINE",
+			"peatumine_pohjus_tag" => "PEATUMINE_POHJUS",
+			"asutusse_tulek_tag" => "ASUTUSSE_TULEK",
+			"on_asendaja_tag" => "ON_ASENDAJA",
+			"asendamine_tookoht_tag" => "ASENDAMINE_TOOKOHT",
+			// Haridusk2igud
+			"hariduskaigud_tag" => "HARIDUSKAIGUD",
+			"hariduskaik_tag" => "HARIDUSKAIK",
+			"edu_tootaja_id_tag" => "TOOTAJA_ID",
+			"oppeasutus_tag" => "OPPEASUTUS",
+			"on_opilane_tag" => "ON_OPILANE",
+			"eriala_tag" => "ERIALA",
+			"on_pohieriala_tag" => "ON_POHIERIALA",
+			"diplom_number_tag" => "DIPLOM_NUMBER",
+			"akadeemiline_kraad_tag" => "AKADEEMILINE_KRAAD",
+			"keel_tag" => "KEEL",
+			"diplom_kuupaev_tag" => "DIPLOM_KUUPAEV",
+			// T88suhte peatumised
+			"toosuhte_peatumised_tag" => "TOOSUHTE_PEATUMISED",
+			"toosuhte_peatumine_tag" => "TOOSUHTE_PEATUMINE",
+			"ewr_tootaja_id_tag" => "TOOTAJA_ID",
+			"alguskuupaev_tag" => "ALGUSKUUPAEV",
+			"loppkuupaev_tag" => "LOPPKUUPAEV",
+			"peatumise_liik_tag" => "PEATUMISE_LIIK",
+			"asendaja_id_tag" => "ASENDAJA_ID",
+		);
+		foreach($arr as $key => $val)
+		{
+			if(strlen($o->prop($key)) > 0)
+			{
+				$arr[$key] = strtoupper($o->prop($key));
+			}
+		}
+		return $arr;
 	}
 
 }
