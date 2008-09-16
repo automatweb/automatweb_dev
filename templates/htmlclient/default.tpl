@@ -289,9 +289,13 @@ body {
 <script language="javascript">
 
 changed = 0;
+var disable_set_changed;
 function set_changed()
 {
-	changed = 1;
+	if(!disable_set_changed)
+	{
+		changed = 1;
+	}
 }
 
 function generic_loader2()
