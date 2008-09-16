@@ -1389,6 +1389,16 @@ class user extends class_base
 	{
 		$o = obj($arr["oid"]);
 
+		$pid = $o->meta("person");
+		if(is_oid($pid) && $this->can("view", $pid))
+		{
+			$o->connect(array(
+				"to" => $pid,
+				"reltype" => "RELTYPE_PERSON",
+			));
+			$o->set_meta("person", "");
+		}
+
 		// create email object
 		$umail = $o->prop("email");
 		$uname = $o->prop("real_name");
@@ -1692,14 +1702,11 @@ class user extends class_base
 		$o->set_prop("join_grp" , $arr["join_grp"]);
 		$o->set_prop("home_folder", $this->users->hfid);
 		$o->set_password($password);
-		$o->save();
 		if(is_oid($person) && $this->can("view", $person))
 		{
-			$o->connect(array(
-				"to" => $person,
-				"type" => "RELTYPE_PERSON",
-			));
+			$o->set_meta("person", $person);
 		}
+		$o->save();
 
 		// add user to all users grp if we are not under that
 		$aug_oid = user::get_all_users_group();
