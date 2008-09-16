@@ -172,6 +172,29 @@ class crm_company_obj extends _int_object
 		return $ol;
 	}
 
+	/** Adds new eployee
+		@attrib api=1 params=name
+		@param name optional type=string
+			person name
+		@return oid
+			person object id
+	**/
+	function add_employees($data = array())
+	{
+		$o = new object();
+		$o->set_name($data["name"] ? $data["name"] : t("(Nimetu)"));
+		$o->set_class_id(CL_CRM_PERSON);
+		$o->set_parent($this->id());
+		$o->save();
+
+		$this->connect(array(
+			"type" => "RELTYPE_WORKERS",
+			"to" => $o->id()
+			)
+		);
+		return $o->id();
+	}
+
 	function get_root_sections()
 	{
 		$r = new object_list();

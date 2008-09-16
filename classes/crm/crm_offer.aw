@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.60 2008/03/12 21:23:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.61 2008/09/16 11:08:12 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -12,8 +12,21 @@
 
 @default group=general
 
-	@property orderer type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER
+	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete  table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER
 	@caption Tellija
+
+	@property orderer_contact_person type=relpicker clid=CL_CRM_PERSON mode=autocomplete table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER_CONTACT_PERSON field=orderer_contact_person table=aw_crm_offer
+	@caption Tellija kontaktisik
+
+	@property cp_phone type=textbox store=no
+	@caption Telefon
+
+	@property cp_fax type=textbox store=no
+	@caption Faks
+
+	@property cp_mail type=textbox store=no
+	@caption E-post
+
 
 	@property project type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_PROJECT
 	@caption Projekt
@@ -22,13 +35,13 @@
 	@caption Algus
 
 	@property accept_deadline type=date_select field=accept_deadline table=aw_crm_offer
-	@caption Aktsepteerimistähtaeg
+	@caption Aktsepteerimist&auml;htaeg
 
 	@property shipment_deadline type=date_select field=shipment_deadline table=aw_crm_offer
 	@caption Tarne t&auml;htaeg
 
 	@property preformer type=relpicker reltype=RELTYPE_PREFORMER table=aw_crm_offer 
-	@caption Täitja
+	@caption T&auml;itja
 
 	@property salesman type=select table=aw_crm_offer datatype=int
 	@caption Pakkumise koostaja
@@ -129,7 +142,7 @@
 @caption Tellija
 
 @reltype PREFORMER value=3 clid=CL_CRM_COMPANY
-@caption Täitja
+@caption T&auml;itja
 
 @reltype SALESMAN value=4 clid=CL_CRM_PERSON
 @caption Pakkumise koostaja
@@ -183,8 +196,8 @@ class crm_offer extends class_base
 			t("Koostamisel"), 
 			t("Saadetud"), 
 			t("Esitletud"), 
-			t("Tagasilükatud"), 
-			t("Positiivelt lõppenud")
+			t("Tagasil&uuml;katud"), 
+			t("Positiivelt l&otilde;ppenud")
 		);		
 
 		$this->addable = array(
@@ -204,6 +217,52 @@ class crm_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "orderer_contact_person":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer"))  || $arr["obj_inst"]->prop("orderer.class_id") == CL_CRM_PERSON)
+				{
+					return PROP_IGNORE;
+				}
+				$o = obj($arr["obj_inst"]->prop("orderer"));
+				$emp = $o->get_employees();
+				$prop["options"] = $emp->names();
+				if(array_key_exists($arr["obj_inst"]->prop("orderer_contact_person") , $prop["options"]))
+				{
+					$prop["options"] = $prop["options"] + array("" => $arr["obj_inst"]->prop("orderer_contact_person.name"));
+				}
+				else
+				{
+					$prop["options"] = $prop["options"] + array("" => "");
+				}
+				$prop["value"] = $arr["obj_inst"]->prop("orderer_contact_person");
+
+//				$prop["autocomplete_source"] = $this->mk_my_orb("customer_contact_person_options_autocomplete_source");
+//				$prop["autocomplete_params"] = array("orderer" , "orderer_contact_person");
+				break;
+			case "cp_mail":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$this->can("view" , $arr["obj_inst"]->prop("orderer_contact_person")))
+				{
+					return PROP_IGNORE;
+				}
+				$person = obj($arr["obj_inst"]->prop("orderer_contact_person"));
+				$prop["value"] = $person->prop("fake_email");
+				break;
+			case "cp_phone":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$this->can("view" , $arr["obj_inst"]->prop("orderer_contact_person")))
+				{
+					return PROP_IGNORE;
+				}
+				$person = obj($arr["obj_inst"]->prop("orderer_contact_person"));
+				$prop["value"] = $person->prop("fake_phone");
+				break;
+			case "cp_fax":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$this->can("view" , $arr["obj_inst"]->prop("orderer_contact_person")))
+				{
+					return PROP_IGNORE;
+				}
+				$person = obj($arr["obj_inst"]->prop("orderer_contact_person"));
+				$prop["value"] = $person->prop("fax");
+				break;
+
 			case "files":
 				$this->_get_files($arr);
 				break;
@@ -398,6 +457,21 @@ class crm_offer extends class_base
 				break;
 			
 			case "orderer":
+				$data["value"] = $arr["request"]["orderer_awAutoCompleteTextbox"];
+				if($data["value"] && !$this->can("view" , $data["value"]))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_COMPANY,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"name" => $data["value"],
+					));
+					$data["value"] = reset($ol->ids());
+				}
+				if(!$data["value"])
+				{
+					return PROP_IGNORE;
+				}
 				if($data["value"])
 				{
 					$arr["obj_inst"]->connect(array(
@@ -405,6 +479,64 @@ class crm_offer extends class_base
 						"reltype" => "RELTYPE_ORDERER",
 					));
 				}
+				if($arr["obj_inst"]->prop("orderer") && $arr["obj_inst"]->prop("orderer") != $data["value"])
+				{
+					$this->c_changed = 1;
+				}
+				$arr["obj_inst"]->set_prop("orderer" , $data["value"]);
+				$arr["obj_inst"]->save();
+				return PROP_IGNORE;
+				break;
+			case "orderer_contact_person":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$data["value"] || $arr["obj_inst"]->prop("orderer.class_id") == CL_CRM_PERSON || $this->c_changed)
+				{
+					return PROP_IGNORE;
+				}
+				$o = obj($arr["obj_inst"]->prop("orderer"));
+				$emp = $o->get_employees();
+				$options = $emp->names();
+				if(in_array($data["value"] , $options))
+				{
+					$data["value"] = array_search($data["value"], $options);
+				}
+				else
+				{
+					$data["value"] = $o->add_employees(array(
+						"name" => $data["value"],
+					));
+				}
+				if($arr["obj_inst"]->prop("orderer_contact_person") && $arr["obj_inst"]->prop("orderer_contact_person") != $data["value"])
+				{
+					$this->cp_changed = 1;
+				}
+				$arr["obj_inst"]->set_prop("orderer_contact_person" , $data["value"]);
+				$arr["obj_inst"]->save();
+				return PROP_IGNORE;
+				break;
+			case "cp_mail":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$this->can("view" , $arr["obj_inst"]->prop("orderer_contact_person")) || $this->cp_changed || $this->c_changed)
+				{
+					return PROP_IGNORE;
+				}
+				$person = obj($arr["obj_inst"]->prop("orderer_contact_person"));
+				$person->set_prop("fake_email" , $data["value"]);
+				break;
+			case "cp_phone":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$this->can("view" , $arr["obj_inst"]->prop("orderer_contact_person")) || $this->cp_changed || $this->c_changed)
+				{
+					return PROP_IGNORE;
+				}
+				$person = obj($arr["obj_inst"]->prop("orderer_contact_person"));
+				$person->set_prop("fake_phone" , $data["value"]);
+				break;
+			case "cp_fax":
+				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer")) || !$this->can("view" , $arr["obj_inst"]->prop("orderer_contact_person")) || $this->cp_changed || $this->c_changed)
+				{
+					return PROP_IGNORE;
+				}
+				$person = obj($arr["obj_inst"]->prop("orderer_contact_person"));
+				$person->set_prop("fax" , $data["value"]);
+				$person->save();
 				break;
 		};
 		return $retval;
@@ -595,7 +727,7 @@ class crm_offer extends class_base
 		
 		$table->define_field(array(
 			"name" => "next",
-			"caption" => t("Lõppstaatus"),
+			"caption" => t("L&otilde;ppstaatus"),
 			"sortable" => "1",
 		));
 		
@@ -1436,6 +1568,7 @@ class crm_offer extends class_base
 		{
 			case 'accept_deadline':
 			case 'shipment_deadline':
+			case 'orderer_contact_person':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
@@ -1444,6 +1577,30 @@ class crm_offer extends class_base
                 }
 
 		return false;
+	}
+
+	//see peab hakkama orderer muutujast tulevaid t88tajaid v6tma
+	/**
+		@attrib name=customer_contact_person_options_autocomplete_source all_args=1
+	**/
+	function customer_contact_person_options_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => "%".$arr["orderer"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		$emp = new object_list();
+		foreach($ol->arr() as $o)
+		{
+			$emp->add($o->get_employees());
+		}
+		return $ac->finish_ac($arr);
 	}
 
 }
