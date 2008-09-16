@@ -9297,6 +9297,10 @@ Bank accounts: yksteise all
 
 		foreach ($comments as $t)
 		{
+			if(!is_array($t) || !sizeof($t))
+			{
+				continue;
+			}
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_SETTINGS,
 				"CL_CRM_SETTINGS.RELTYPE_USER" => get_instance(CL_USER)->get_obj_for_uid($t["user"])->id(),
