@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.43 2008/09/02 15:31:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.44 2008/09/16 15:25:12 instrumental Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -681,6 +681,11 @@ class persons_webview extends class_base
 			if($section_obj->class_id() == CL_CRM_PERSON)
 			{
 				$template = $this->view["template"];
+				if(!strlen($template))
+				{
+					// Default
+					$template = "persons_webview.tpl";
+				}
 				lc_site_load("persons_web_view",$this);
 				$this->read_template($template);
 				$this->parse_worker($section_obj);
