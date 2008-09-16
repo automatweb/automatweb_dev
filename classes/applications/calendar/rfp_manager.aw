@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.68 2008/09/15 12:14:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.69 2008/09/16 12:03:30 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -500,6 +500,7 @@ class rfp_manager extends class_base
 						"created" => $obj->created(),
 						"popup" => $this->gen_popup($oid),
 						"urgent_col" => $urgent_col,
+						"oid" => $oid,
 					));
 				}
 				$t->sort_by();

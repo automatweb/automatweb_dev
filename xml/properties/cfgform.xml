@@ -225,6 +225,18 @@
             <caption>V&amp;amp;auml;ljad</caption>
       </property>
       <property>
+            <name>tables_controller</name>
+            <table>objects</table>
+            <group>layout_tables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TABLE_CONTROLLER</reltype>
+            <store>no</store>
+            <multiple>1</multiple>
+            <caption>N&amp;amp;auml;itamise kontroller</caption>
+      </property>
+      <property>
             <name>availtoolbar</name>
             <table>objects</table>
             <group>avail</group>
@@ -826,6 +838,11 @@
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
                   <caption>Parameetrid kontrollerist</caption>
             </PARAMS_CONTROLLER>
+            <TABLE_CONTROLLER>
+                  <value>8</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>Tabeli kontroller</caption>
+            </TABLE_CONTROLLER>
       </reltypes>
       <layout>
             <add_grp>

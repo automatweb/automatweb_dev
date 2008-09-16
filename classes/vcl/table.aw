@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.125 2008/09/16 11:22:31 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.126 2008/09/16 12:03:29 robert Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -570,7 +570,6 @@ class aw_table extends aw_template
 		$old_loc = setlocale(LC_COLLATE,0);
 		setlocale(LC_COLLATE, 'et_EE');
 
-
 		// sort the data
 		usort($this->data,array($this,"sorter"));
 
@@ -885,6 +884,16 @@ class aw_table extends aw_template
 			if($this->use_chooser)
 			{
 				$this->check_userfields();
+			}
+			
+			$ctrls = $this->cfg_data["controllers"];
+			if(is_array($ctrls))
+			{
+				$ctrli = get_instance(CL_CFG_VIEW_CONTROLLER);
+				foreach($ctrls as $ctrl)
+				{
+					$ctrli->check_property($this, $ctrl, &$arr);
+				}
 			}
 		}
 

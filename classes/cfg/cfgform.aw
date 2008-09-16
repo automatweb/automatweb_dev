@@ -129,6 +129,8 @@
 		@property tables_table type=table store=no no_caption=1 editonly=1
 		@caption V&auml;ljad
 
+		@property tables_controller type=relpicker reltype=RELTYPE_TABLE_CONTROLLER store=no multiple=1
+		@caption N&auml;itamise kontroller
 
 	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
 	@caption Av. Toolbar
@@ -268,6 +270,8 @@
 	@reltype PARAMS_CONTROLLER value=7 clid=CL_CFG_VIEW_CONTROLLER
 	@caption Parameetrid kontrollerist
 
+	@reltype TABLE_CONTROLLER value=8 clid=CL_CFG_VIEW_CONTROLLER
+	@caption Tabeli kontroller
 
 	// so, how da fuck do I implement the grid layout thingie?
 	// add_item (item, row, col)
@@ -522,6 +526,24 @@ class cfgform extends class_base
 
 			case "tables_table":
 				$this->_tables_tbl($arr);
+				break;
+
+			case "tables_controller":
+				if($tbl = $arr["request"]["chtbl"])
+				{
+					$conf = $arr["obj_inst"]->meta("tbl_config");
+					$tbl_conf = $conf[$tbl];
+					$ctrls = $tbl_conf["controllers"];
+					foreach($ctrls as $ctrl)
+					{
+						$data["options"][$ctrl] = obj($ctrl)->name();
+						$data["value"][$ctrl] = $ctrl;	
+					}
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
 				break;
 
 			case "trans_tbl":
@@ -1341,6 +1363,19 @@ class cfgform extends class_base
 
 			case "tables_table":
 				$this->save_tables_conf($arr);
+				break;
+
+			case "tables_controller":
+				if($tbl = $arr["request"]["chtbl"])
+				{
+					$conf = $arr["obj_inst"]->meta("tbl_config");
+					$conf[$tbl]["controllers"] = $arr["request"]["tables_controller"];
+					$arr["obj_inst"]->set_meta("tbl_config", $conf);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
 				break;
 		}
 		return $retval;
