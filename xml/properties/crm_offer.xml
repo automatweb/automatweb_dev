@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>order_type</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <datatype>int</datatype>
+            <reltype>RELTYPE_TYPE</reltype>
+            <field>order_type</field>
+            <caption>Pakkumise t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>orderer</name>
             <table>aw_crm_offer</table>
             <group>general</group>
@@ -392,6 +402,11 @@
                   <clid>CL_FILE</clid>
                   <caption>File</caption>
             </FILE>
+            <TYPE>
+                  <value>11</value>
+                  <clid>CL_CRM_OFFER_TYPE</clid>
+                  <caption>Pakkumise t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </TYPE>
       </reltypes>
       <layout>
             <vbox_others>

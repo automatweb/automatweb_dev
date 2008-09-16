@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.61 2008/09/16 11:08:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.62 2008/09/16 11:55:59 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -12,7 +12,10 @@
 
 @default group=general
 
-	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete  table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER
+	@property order_type type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_TYPE field=order_type table=aw_crm_offer
+	@caption Pakkumise t&uuml;&uuml;p
+
+	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER
 	@caption Tellija
 
 	@property orderer_contact_person type=relpicker clid=CL_CRM_PERSON mode=autocomplete table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER_CONTACT_PERSON field=orderer_contact_person table=aw_crm_offer
@@ -161,6 +164,9 @@
 
 @reltype FILE value=10 clid=CL_FILE
 @caption File
+
+@reltype TYPE value=11 clid=CL_CRM_OFFER_TYPE
+@caption Pakkumise t&uuml;&uuml;p
 */
 
 /*
@@ -217,6 +223,14 @@ class crm_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "order_type":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_OFFER_TYPE,
+					"site_id" => array(),
+					"lang_id" => array(),
+				));
+				$prop["options"] = $prop["options"] + $ol->names();
+				break;
 			case "orderer_contact_person":
 				if(!$this->can("view" , $arr["obj_inst"]->prop("orderer"))  || $arr["obj_inst"]->prop("orderer.class_id") == CL_CRM_PERSON)
 				{
@@ -1569,6 +1583,7 @@ class crm_offer extends class_base
 			case 'accept_deadline':
 			case 'shipment_deadline':
 			case 'orderer_contact_person':
+			case 'order_type':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
