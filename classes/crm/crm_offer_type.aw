@@ -6,6 +6,44 @@
 @default table=aw_crm_offer_type
 @default group=general
 
+	@property offer_template type=select table=aw_crm_offer_type field=order_type 
+	@caption Pakkumise kujundusp&otilde&hi
+
+	@property warehouse type=relpicker table=aw_crm_offer_type datatype=int reltype=RELTYPE_WAREHOUSE field=warehouse
+	@caption Ladu
+
+	@property products type=table no_caption=1
+	@caption Pakkumises sisalduvad tootekategooriad/kaustad
+
+- pakkumises sisalduvad tootekategooriad/kaustad, mis v6imaldab defineerida, millistest kaustadest tooteid yldse otsitakse pakkumise koostamisel
+
+	@property obligatory_products type=table no_caption=1
+	@caption Kohustuslikud tootekategooriad ja nende j&auml;rjekord
+
+- kohustuslikud tootekategooriad ja nende j2rjekord. Saan valida, millised tootekategooriad kuvatakse pakkumise vormi koos tekstiv2ljadega (autocomplete), mis pakuvad antud kategooria tooteid.
+
+	@property free_products type=table no_caption=1
+	@caption Vabad tootekategooriad
+
+- vabad tootekategooriad, ehk kategooriad, millest saan j2rjest autocomplete abil tooteid lisada ja iga lisamise j2rel tekib uus rida, uue toote lisamiseks. Toodetele saab m22rata ka koguse, kuvatakse toote vaikimisi hind (saab muuta) ja summa (arvutatakse)
+
+	@property resource_manager type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_RESOURCE_MANAGER field=resource_manager
+	@caption Ressursihalduskeskkond
+
+- ressursihalduskeskkond, mille ressursse saab paigutada pakkumisse (nii kogus tundides, kui tunnihind on sisestatavad, kuid summa arvutatakse alguses automaatselt ressursi juures oleva tunnihinna alusel)
+
+	@property uservars type=table no_caption=1
+	@caption Hulk vabalt defineeritavaid tekstiv&auml;lju
+
+- hulk vabalt defineeritavaid tekstiv2lju, tekstialasid, valikv2lju, millele saab lisaks ehitada v6imaluse, et need on tekstikastid, kuid pakutakse sama muutuja kohal autocomplet'ina. Seda, kas on vaja sellist asja, 8eldakse Pakkumise liigis.
+
+
+@reltype RELTYPE_WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
+@caption File
+
+@reltype RELTYPE_RESOURCE_MANAGER value=2 clid=
+@caption Ressursihalduskeskkond
+
 */
 
 class crm_offer_type extends class_base
