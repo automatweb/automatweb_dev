@@ -3844,10 +3844,11 @@ class task extends class_base
 	function callback_generate_scripts($arr)
 	{
 		$url = $this->mk_my_orb("get_proj_for_cust");
-		return '
+		$sc = !$arr["new"] ? "set_changed();" : "";
+		return ($arr["new"] ? "disable_set_changed=1;":"").'
 			function upd_proj_list()
 			{
-				set_changed();
+				'.$sc.'
 				aw_do_xmlhttprequest("'.$url.'&cust="+document.changeform.customer.options[document.changeform.customer.selectedIndex].value, proj_fetch_callb);
 			}
 
