@@ -1831,15 +1831,17 @@ class crm_bill extends class_base
 				}
 			}
 
-			if ($b->prop("ctp_text") != "")
-			{
-				$ord_ct = $b->prop("ctp_text");
-			}
 			if ($this->can("view", $ord->prop("currency")))
 			{
 				$ord_cur = obj($ord->prop("currency"));
 			}
 	}
+
+		if ($b->prop("ctp_text") != "")
+		{
+			$ord_ct = $b->prop("ctp_text");
+		}
+
 		$logo = "";
 		$impl = obj();
 		if ($this->can("view", $b->prop("impl")))
