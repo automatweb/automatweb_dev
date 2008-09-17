@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.158 2008/09/01 10:09:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.159 2008/09/17 14:51:33 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -23,7 +23,7 @@ class releditor extends core
 		$awt = new vcl_table(array(
 			"layout" => "generic",
 		));
-
+		$property = $arr["prop"];
 		if(!is_object($arr["obj_inst"]))
 		{
 			$arr["obj_inst"] = obj($arr["request"]["id"]);
@@ -34,13 +34,13 @@ class releditor extends core
                         $tmp = aw_unserialize($arr["cb_values"]["edit_data"]);
                         if (is_array($tmp))
                         {
-				$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $arr["prop"]["name"]);
+				$this->_init_js_rv_table($awt, $arr["obj_inst"]->class_id(), $property["name"]);
 				foreach($tmp  as $idx => $dat_row)
 				{
-					$this->_insert_js_data_to_table($awt, $arr["prop"], $dat_row, $arr["obj_inst"]->class_id(), $idx);
+					$this->_insert_js_data_to_table($awt, $property, $dat_row, $arr["obj_inst"]->class_id(), $idx);
 				}
 				return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw()."</div>".html::hidden(array(
-					"name" => $arr["prop"]["name"]."_data",
+					"name" => $property["name"]."_data",
 					"value" => $arr["cb_values"]["edit_data"] 
 				));
                         }
@@ -55,15 +55,32 @@ class releditor extends core
 
 		$parent_inst = get_instance($arr["obj_inst"]->class_id());
 		$parent_property_list = $arr["obj_inst"]->get_property_list();
-		$arr["prop"] = $parent_property_list[$arr["prop"]["name"]];
-		$tb_fields = $arr["prop"]["table_fields"];
+		// HACK!
+
+//		if(aw_global_get("section") != 383544)
+//		{
+		$property = $parent_property_list[$property["name"]];
+//		}
+		// END OF HACK!
+/*
+		if (!is_array($parent_inst->relinfo))
+		{
+			$parent_inst->load_defaults();
+		}		
+		$target_reltype = $arr["prop"]["reltype"];
+		$arr["prop"]["reltype"] = $parent_inst->relinfo[$target_reltype]["value"];
+		$arr["prop"]["clid"] = $parent_inst->relinfo[$target_reltype]["clid"];
+*/
+
+		$tb_fields = $property["table_fields"];
 
 		$data = array();
 
 		if(!$arr["new"] && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
+
 			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => $arr["prop"]["reltype"],
+				"type" => $property["reltype"],
 			));
 			if (count($conns) == 0)
 			{
@@ -147,17 +164,27 @@ class releditor extends core
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
 					};
-					if($arr["prop"]["filt_edit_fields"] == 1)
+					if($prop["filt_edit_fields"] == 1)
 					{
 						if($prop["value"] != "" && $prop["type"] == "textbox")
 						{
 							$ed_fields[$_pn] = $_pn;
 						}
 					}
+					$get_prop_arr = array();
+					foreach($arr as $key => $val)
+					{
+						$get_prop_arr[$key] = $val;
+					}
 
-					$get_prop_arr = $arr;
+//					$get_prop_arr = $arr;
 					$get_prop_arr["called_from"] = "releditor_table";
+					// HACK!
+//					if(aw_global_get("section") != 383544)
+//					{
 					$get_prop_arr["prop"] = $prop;
+//					}
+					// END OF HACK!
 					$get_prop_arr["prop"]["name"] = $this->elname."[".$get_prop_arr["prop"]["name"]."]";
 					$parent_inst->get_property($get_prop_arr);
 					$prop = $get_prop_arr["prop"];
@@ -197,8 +224,7 @@ class releditor extends core
 		$awt->set_default_sortby(array("_sort_jrk"=>"_sort_jrk", "_sort_name"=>"_sort_name"));
 		$awt->sort_by();
 		$awt->set_sortable(false);
-
-		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => serialize($data)))."</div>";
+		return '<div id="releditor_'.$this->elname.'_table_wrapper">'.$awt->draw().html::hidden(array("name" => $this->elname."_data", "value" => serialize($data))).'</div>';
 	}
 
 
