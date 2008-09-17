@@ -2064,30 +2064,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <order>
-                  <caption>Tellimused</caption>
-            </order>
-            <order_unconfirmed>
-                  <parent>order</parent>
-                  <caption>Kinnitamata</caption>
-            </order_unconfirmed>
-            <order_confirmed>
-                  <parent>order</parent>
-                  <caption>Kinnitatud</caption>
-            </order_confirmed>
-            <order_undone>
-                  <parent>order</parent>
-                  <caption>T&amp;amp;auml;itmata tellimused</caption>
-            </order_undone>
-            <order_orderer_cos>
-                  <parent>order</parent>
-                  <caption>Tellijad</caption>
-            </order_orderer_cos>
-            <order_search>
-                  <parent>order</parent>
-                  <caption>Otsing</caption>
-                  <submit_method>get</submit_method>
-            </order_search>
             <search>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
@@ -2164,7 +2140,7 @@
                   <parent>status</parent>
             </status_inventories>
             <purchases>
-                  <caption>Tellimused</caption>
+                  <caption>Laotellimused</caption>
             </purchases>
             <purchase_orders>
                   <caption>Ostutellimused</caption>
@@ -2174,6 +2150,30 @@
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;gitellimused</caption>
                   <parent>purchases</parent>
             </sell_orders>
+            <order>
+                  <caption>Tellimused</caption>
+            </order>
+            <order_unconfirmed>
+                  <parent>order</parent>
+                  <caption>Kinnitamata</caption>
+            </order_unconfirmed>
+            <order_confirmed>
+                  <parent>order</parent>
+                  <caption>Kinnitatud</caption>
+            </order_confirmed>
+            <order_undone>
+                  <parent>order</parent>
+                  <caption>T&amp;amp;auml;itmata tellimused</caption>
+            </order_undone>
+            <order_orderer_cos>
+                  <parent>order</parent>
+                  <caption>Tellijad</caption>
+            </order_orderer_cos>
+            <order_search>
+                  <parent>order</parent>
+                  <caption>Otsing</caption>
+                  <submit_method>get</submit_method>
+            </order_search>
       </groupinfo>
       <tableinfo>
             <aw_shop_warehouses>
