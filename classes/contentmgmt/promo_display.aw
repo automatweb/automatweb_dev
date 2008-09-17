@@ -392,12 +392,12 @@ if ($_GET["PROMO_DBG"] == 1)
 					$per_page = $o->prop("docs_per_page");
 					$pages = $total_docs / $per_page;
 					$var_name = "promo_".$o->id()."_page";
-					$cur_page = (int)$_GET["promo_".$obj->id()."_page"];
+					$cur_page = (int)$_GET["promo_".$o->id()."_page"];
 
 					$ps = array();
 					for($i = 0; $i < $pages; $i++)
 					{
-						$this->vars(array(
+						$inst->vars(array(
 							"page_url" => aw_url_change_var($var_name, $i),
 							"page_number" => $i+1
 						));

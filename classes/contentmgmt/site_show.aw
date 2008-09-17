@@ -711,11 +711,14 @@ class site_show extends class_base
 
 		$no_in_promo = false;
 
+		$ndocs = $obj->prop("ndocs");
+		$start_ndocs = $obj->prop("start_ndocs");
+
 		if ($obj->class_id() == CL_PROMO && $obj->prop("separate_pages"))
 		{
 			$cur_page = (int)$_GET["promo_".$obj->id()."_page"];
-			$obj->set_prop("ndocs", ($cur_page+1) * $obj->prop("docs_per_page"));
-			$obj->set_prop("start_ndocs", $cur_page * $obj->prop("docs_per_page"));
+			$ndocs = ($cur_page+1) * $obj->prop("docs_per_page");
+			$start_ndocs = $cur_page * $obj->prop("docs_per_page");
 		}
 
 		$filt_lang_id = aw_global_get("lang_id");
@@ -753,7 +756,7 @@ class site_show extends class_base
 				{
 					$get_inact = true;
 				}
-				$skipfirst = $obj->prop("start_ndocs");
+				$skipfirst = $start_ndocs;
 				$lm = $obj->meta("last_menus");
 
 				$lm = array();
@@ -917,11 +920,11 @@ class site_show extends class_base
 			{
 				$filter["parent"] = $obj->id();
 			};
-			if ($obj->prop("ndocs") > 0)
+			if ($ndocs > 0)
 			{
-				$filter["limit"] = $obj->prop("ndocs");
+				$filter["limit"] = $ndocs;
 			}
-			if ($obj->prop("ndocs") == -1)
+			if ($ndocs == -1)
 			{
 				$filter["oid"] = -1;
 			}
@@ -1105,7 +1108,7 @@ class site_show extends class_base
 			{
 				unset($filter["limit"]);
 				$documents = new object_list($filter);
-				$nd = $obj->prop("ndocs");
+				$nd = $ndocs;
 				// filter the list for both-inactive docs
 				$doc_ol = new object_list();
 				$_tmp_cnt = 0;
