@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.3 2008/01/31 13:52:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.4 2008/09/17 08:54:40 kristo Exp $
 // login_box.aw - Sisselogimiskast 
 /*
 
@@ -56,6 +56,10 @@ class login_box extends class_base
 
 	function show($arr)
 	{
+		if (aw_global_get("uid") != "")
+		{
+			return "";
+		}
 		if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
 		{
 			if (!$_SERVER["HTTPS"])
