@@ -347,9 +347,13 @@ class personnel_management_job_offer_webview extends class_base
 		}
 
 		$ol = new object_list($ol_prms);
-		$objs = $ol->arr();
-		$ord_info = $this->order_ord_info($o->meta("ord_tbl"));
-		$jos = $this->order_job_offers(&$objs, &$ord_info);
+		$jos = $ol->arr();
+
+		$this->ord_info = $this->order_ord_info($o->meta("ord_tbl"));
+		$this->ordi = 0;
+		uasort($jos, array($this, "decide_ord"));
+		
+		$this->ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
 
 		switch ($o->grp_rule)
 		{
@@ -364,33 +368,47 @@ class personnel_management_job_offer_webview extends class_base
 					"county" => t("Maakonnad"),
 					"city" => t("Linnad"),
 				);
-				$GROUP_LVL1 = "";
+				$GROUP_LVL1 = "";				
+				$ol_prms = array(
+					"parent" => array(),
+					"status" => array(),
+					"site_id" => array(),
+					"lang_id" => array(),
+				);
+				$olf_conds = array();
 				foreach($clids as $opr => $clid)
 				{
 					if(!$o->prop("grp_rule_loc_".$opr))
 					{
 						continue;
 					}
-					$ol_prms = array(
-						"class_id" => $clid,
-						"parent" => array(),
-						"status" => array(),
-						"site_id" => array(),
-						"lang_id" => array(),
-					);
-					if(is_array($o->areas) && count($o->areas) > 0)
+					$conditions = array("class_id" => $clid);
+					// area => areas, county => counties. Pft! -kaarel
+					$prop_val = $o->prop(str_replace("y", "ie", $opr)."s");
+					if(is_array($prop_val) && count($prop_val) > 0)
 					{
-						$ol_prms["oid"] = $o->areas;
+						$conditions["oid"] = $prop_val;
 					}
+					$olf_conds[] = new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => $conditions,
+					));
+				}
+				$ol_prms[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => $olf_conds,
+				));
+				if(count($ol_prms) > 4)
+				{
 					$ol = new object_list($ol_prms);
+					$ol_arr = $ol->arr();
+
 					$denied = $this->denied_jos(&$o, $opr, &$jos);
 					$GROUP_LVL1 = "";
-					$ol_arr = $ol->arr();
-					$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
-					$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
-					for($i = 0; $i < count($ol_arr_ordered); $i++)
+					uasort($ol_arr, array($this, "decide_ord"));
+					
+					foreach($ol_arr as $loc)
 					{
-						$loc = $ol_arr_ordered[$i];
 						$loc_jos = $loc->get_job_offers()->ids();
 						$JOB_OFFER = $this->job_offer(&$jos, &$props, &$loc_jos, &$denied);
 						if(empty($JOB_OFFER))
@@ -432,13 +450,13 @@ class personnel_management_job_offer_webview extends class_base
 					$ol_prms["oid"] = $o->org;
 				}
 				$ol = new object_list($ol_prms);
-				$GROUP_LVL1 = "";
 				$ol_arr = $ol->arr();
-				$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
-				$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
-				for($i = 0; $i < count($ol_arr_ordered); $i++)
+
+				$GROUP_LVL1 = "";
+				uasort($ol_arr, array($this, "decide_ord"));
+
+				foreach($ol_arr as $comp)
 				{
-					$comp = $ol_arr_ordered[$i];
 					$org_jos = $comp->get_job_offers()->ids();
 					$JOB_OFFER = $this->job_offer(&$jos, &$props, &$org_jos);
 					if(empty($JOB_OFFER))
@@ -473,13 +491,13 @@ class personnel_management_job_offer_webview extends class_base
 					$ol_prms["oid"] = $o->secs;
 				}
 				$ol = new object_list($ol_prms);
-				$GROUP_LVL1 = "";
 				$ol_arr = $ol->arr();
-				$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
-				$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
-				for($i = 0; $i < count($ol_arr_ordered); $i++)
+
+				$GROUP_LVL1 = "";
+				uasort($ol_arr, array($this, "decide_ord"));
+
+				foreach($ol_arr as $sec)
 				{
-					$sec = $ol_arr_ordered[$i];
 					$sec_jos = $sec->get_job_offers()->ids();
 					$JOB_OFFER = $this->job_offer(&$jos, &$props, &$sec_jos);
 					if(empty($JOB_OFFER))
@@ -514,14 +532,14 @@ class personnel_management_job_offer_webview extends class_base
 					$ol_prms["oid"] = $o->org;
 				}
 				$ol = new object_list($ol_prms);
-				$GROUP_LVL1 = "";
 				$ol_arr = $ol->arr();
-				$grp_ord_info = $this->order_ord_info($o->meta("grp_ord_tbl"));
-				$ol_arr_ordered = $this->order_groups($ol_arr, $grp_ord_info);
-				for($i = 0; $i < count($ol_arr_ordered); $i++)
+
+				$GROUP_LVL1 = "";
+				uasort($ol_arr, array($this, "decide_ord"));
+
+				foreach($ol_arr as $comp)
 				{
-					$comp = $ol_arr_ordered[$i];
-					$secs = get_instance(CL_CRM_COMPANY)->get_all_org_sections($org);
+					$secs = get_instance(CL_CRM_COMPANY)->get_all_org_sections($comp);
 					$GROUP_LVL2 = "";
 					foreach($secs as $sec_id)
 					{
@@ -618,19 +636,19 @@ class personnel_management_job_offer_webview extends class_base
 	private function job_offer($jos, $props, $allowed = NULL, $denied = array())
 	{		
 		$JOB_OFFER = "";
-		for($i = 0; $i < count($jos); $i++)
+		foreach($jos as $jo)
 		{
-			if(in_array($jos[$i]->id(), $denied) || !in_array($jos[$i]->id(), $allowed) && is_array($allowed))
+			if(in_array($jo->id(), $denied) || !in_array($jo->id(), $allowed) && is_array($allowed))
 			{
 				continue;
 			}
 			$this->vars(array(
-				"job_offer.href" => obj_link($jos[$i]->id()),
+				"job_offer.href" => obj_link($jo->id()),
 			));
 			foreach($props as $prop)
 			{
 				$this->vars(array(
-					"job_offer.".$prop => $this->proc_prop(&$prop, &$jos[$i]),
+					"job_offer.".$prop => $this->proc_prop(&$prop, &$jo),
 				));
 				$this->vars(array(
 					"JOB_OFFER.".strtoupper($prop) => $this->parse("JOB_OFFER.".strtoupper($prop)),
@@ -674,50 +692,23 @@ class personnel_management_job_offer_webview extends class_base
 		return $r;
 	}
 
-	private function order_groups($objs, $ord_info)
+	private function decide_ord($o, $o2)
 	{
-		// We can use the same function as we do for job offers.
-		return $this->order_job_offers(&$objs, &$ord_info);
-	}
-
-	private function order_job_offers($objs, $ord_info)
-	{
-		$r = array();
-		foreach($objs as $o)
+		if($this->ordi > count($this->ord_info))
 		{
-			$i = 0;
-			foreach($objs as $o2)
-			{
-				if($o->id() == $o2->id())
-				{
-					continue;
-				}
-				for($j = 0; $j < count($ord_info); $j++)
-				{
-					if($this->decide_ord($o, $o2, $ord_info[$j], &$i))
-					{
-						break;
-					}
-				}
-			}
-			while(isset($r[$i]))
-			{
-				$i++;
-			}
-			$r[$i] = $o;
+			$this->ordi = 0;
+			return 0;
 		}
-		return $r;
-	}
+		$ord_info = $this->ord_info[$this->ordi];
 
-	private function decide_ord($o, $o2, $ord_info, $i)
-	{		
 		$ord_decided = false;
 		if($ord_info["property"] == "ord")
 		{
 			$ord_decided = $o->ord() != $o2->ord();
 			if(($o->ord() > $o2->ord() && $ord_info["order"] == "ASC") || ($o->ord() < $o2->ord() && $ord_info["order"] == "DESC"))
 			{
-				$i++;
+				$this->ordi = 0;
+				return 1;
 			}
 		}
 		else
@@ -729,7 +720,8 @@ class personnel_management_job_offer_webview extends class_base
 			$ord_decided = $o_->ord() != $o2_->ord();
 			if(($o_->ord() > $o2_->ord() && $ord_info["order"] == "ASC") || ($o_->ord() < $o2_->ord() && $ord_info["order"] == "DESC"))
 			{
-				$i++;
+				$this->ordi = 0;
+				return 1;
 			}
 		}
 		else
@@ -738,15 +730,21 @@ class personnel_management_job_offer_webview extends class_base
 			$ord_decided = $o->prop($ord_info["property"]) != $o2->prop($ord_info["property"]);
 			if(($o->prop($ord_info["property"]) > $o2->prop($ord_info["property"]) && $ord_info["order"] == "ASC") || ($o->prop($ord_info["property"]) < $o2->prop($ord_info["property"]) && $ord_info["order"] == "DESC"))
 			{
-				$i++;
+				$this->ordi = 0;
+				return 1;
 			}
 		}
 		else
 		if((strcasecmp($o->prop($ord_info["property"]), $o2->prop($ord_info["property"])) > 0 && $ord_info["order"] == "ASC") || (strcasecmp($o->prop($ord_info["property"]), $o2->prop($ord_info["property"])) < 0 && $ord_info["order"] == "DESC"))
 		{
-			$i++;
+			$this->ordi = 0;
+			return 1;
 		}
-		return (strcasecmp($o->prop($ord_info["property"]), $o2->prop($ord_info["property"])) != 0 || $ord_decided);
+		if(strcasecmp($o->prop($ord_info["property"]), $o2->prop($ord_info["property"])) == 0 && !$ord_decided)
+		{
+			$this->ordi++;
+			return $this->decide_ord($o, $o2);
+		}
 	}
 
 	function _get_tutorial($arr)
