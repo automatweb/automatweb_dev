@@ -149,6 +149,7 @@ class shop_delivery_note extends class_base
 						$err = aw_global_get("dn_err");
 						$prop["error"] = $err;
 						$retval = PROP_FATAL_ERROR;
+						aw_session_del("dn_err");
 					}
 				}
 				break;
@@ -542,6 +543,11 @@ class shop_delivery_note extends class_base
 					"name" => "rows[".$row->id()."][serial_no]",
 					"size" => 5,
 					"value" => $row->prop("serial_no"),
+					"autocomplete_source" => $this->mk_my_orb("articles_serial_no_autocomplete_source"),
+					"autocomplete_params" => array("rows[".$row->id()."][prodid2]"),
+				)).html::hidden(array(
+					"name" => "rows[".$row->id()."][prodid2]",
+					"value" => $id,
 				)):'',
 				"set_no" => $prod->prop("order_based")?html::textbox(array(
 					"name" => "rows[".$row->id()."][set_no]",
@@ -562,6 +568,19 @@ class shop_delivery_note extends class_base
 			);
 			$name = "rows[".$row->id()."]";
 			$vals["wh"] = ($wh = $row->prop("warehouse")) ? $wh : $warehouse;
+			if(!$price)
+			{
+				$mv_ol = new object_list(array(
+					"class_id" => CL_SHOP_WAREHOUSE_MOVEMENT,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"product" => $id,
+					"limit" => 1,
+					"sort_by" => "created desc",
+				));
+				$mv_o = $mv_ol->begin();
+				$price = $mv_o->prop("price");
+			}
 			$vals["price"] = $price;
 			$vals["unit"] = $row->prop("unit");
 			$vals["amount"] = $amounts[$row->id()];
@@ -771,6 +790,49 @@ class shop_delivery_note extends class_base
 		$res = array();
 		foreach($ol->arr() as $o)
 		{
+			$res[$o->id()] = $o->prop("code");
+		}
+		return $ac->finish_ac($res);
+	}
+
+	/**
+	@attrib name=articles_serial_no_autocomplete_source all_args=1
+	**/
+	function articles_serial_no_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		$prodid = substr($_SERVER['QUERY_STRING'], strpos($_SERVER['QUERY_STRING'], "]=")+2);
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_SINGLE,
+			"product" => $prodid,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200,
+			"type" => 2,
+		));
+		$res = array();
+		$pi = get_instance(CL_SHOP_PRODUCT);
+		foreach($ol->arr() as $oid => $o)
+		{
+			$amt = $pi->get_amount(array(
+				"single" => $oid,
+			));
+			$cont = true;
+			if($amt)
+			{
+				foreach($amt->arr() as $ao)
+				{
+					if($ao->prop("amount") != 0)
+					{
+						$cont = false;
+					}
+				}
+			}
+			if($cont)
+			{
+				continue;
+			}
 			$res[$o->id()] = $o->prop("code");
 		}
 		return $ac->finish_ac($res);
