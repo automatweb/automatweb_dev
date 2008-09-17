@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.135 2008/08/27 08:53:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.136 2008/09/17 10:39:15 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1358,7 +1358,7 @@ class ml_list extends class_base
 				{
 					foreach($_SESSION["submembers_source_prop_value"] as $key)
 					{
-						if(is_oid($key))
+						if($this->can("view" , $key))
 						{
 							$menu = obj($key);
 							$menu->set_meta("req_members",$_POST["req_members"][$key]);
