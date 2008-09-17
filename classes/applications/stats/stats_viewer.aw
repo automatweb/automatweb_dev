@@ -484,7 +484,7 @@ class stats_viewer extends class_base
 		if (is_a($this->obj_inst, "object"))
 		{
 			// old objects upgrade
-			if (!$this->obj_inst->meta("stats_viewer_version")) // version 1 has changes in filter parameter format for root obj, user and group
+			if (!$this->obj_inst->meta("stats_viewer_version") && is_oid($this->obj_inst->id())) // version 1 has changes in filter parameter format for root obj, user and group
 			{
 				foreach($this->obj_inst->connections_from(array("type" => array("RELTYPE_OBJ", "RELTYPE_USER", "RELTYPE_GROUP"))) as $c)
 				{
