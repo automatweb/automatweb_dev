@@ -408,10 +408,3 @@ function aw_timer(timer)
 	}
 }
 
-if(typeof check_generic_loader != "function")
-{
-	function check_generic_loader()
-	{
-		//alert ("F");
-	}
-}
