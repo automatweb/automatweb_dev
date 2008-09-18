@@ -1213,7 +1213,7 @@ class relationmgr extends aw_template
 				));
 			}
 		}
-		if($arr["request"]["link"] || $arr["request"]["cache"])
+		if(true || $arr["request"]["link"] || $arr["request"]["cache"])
 		{
 			$arr["obj_inst"]->set_meta("aliaslinks", $arr["request"]["link"]);
 			$arr["obj_inst"]->save();
