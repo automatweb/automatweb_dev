@@ -1,4 +1,3 @@
-<link rel="Stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css" type="text/css">
 <table border='0' width='100%' cellspacing='1' cellpadding='3'>
 	<tr>
 		<td class='awmenuedittablehead' colspan='2'><b>{VAR:cust_gen_data}</b></td>
