@@ -311,8 +311,9 @@ class planner_model extends core
 			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
 				FROM planner
 				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
+				INNER JOIN objects o2 ON (".$this->db_fn("o2.oid")." = ".$this->db_fn("objects.brother_of").")
 				WHERE NOT (".$this->db_fn("planner.start")." >= '${_end}' OR
-				".$this->db_fn("planner.end")." <= '${_start}') AND ". $this->db_fn("objects.status")." ";
+				".$this->db_fn("planner.end")." <= '${_start}') AND ". $this->db_fn("objects.status")." AND ". $this->db_fn("o2.status").">0 ";
 
 		/*	$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
 				FROM planner
