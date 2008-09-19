@@ -159,9 +159,13 @@ class core extends acl_base
 
 			if (!$this->db_query($q,false))
 			{
-				echo dbg::process_backtrace(debug_backtrace());
 				echo "q = $q <br>";
-				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
+				echo ("cannot write to syslog: " . $this->db_last_error["error_string"]);
+				send_mail(
+					"vead@struktuur.ee", 
+					"Syslog katki ".aw_ini_get("baseurl"), 
+					"q = $q / ".$this->db_last_error["error_string"]." \n".dbg::process_backtrace(debug_backtrace())
+				);
 			};
 		}
 	}
