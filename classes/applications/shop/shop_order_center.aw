@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.68 2008/09/17 08:58:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.69 2008/09/19 18:14:18 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -672,7 +672,7 @@ class shop_order_center extends class_base
 		{
 			return new object_list();
 		}
-
+		
 		if ($level > 0 && $parent)
 		{
 			$ol = new object_list(array(
