@@ -24,7 +24,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;amp;uml;&amp;amp;uml;p</caption>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>url</name>

@@ -1,5 +1,23 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>shortcut_sets</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Aktiivne set</caption>
+      </property>
+      <property>
+            <name>shortcuts</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <field>shortcuts</field>
+            <caption>Shortcutid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHORTCUT_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
