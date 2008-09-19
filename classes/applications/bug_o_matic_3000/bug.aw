@@ -1161,7 +1161,7 @@ class bug extends class_base
 					return PROP_IGNORE;
 				}
 
-				if ($this->_set_feedback)
+				if ($this->_set_feedback && !$arr["obj_inst"]->prop($prop["name"]))
 				{
 					$prop["value"] = $this->_set_feedback;
 				}
