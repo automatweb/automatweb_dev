@@ -9,7 +9,7 @@
 @property packages_server type=textbox table=aw_package_client field=packages_server
 @caption Pakiserveri url
 
-@groupinfo packages caption="Pakid" no_submit=1
+@groupinfo packages caption="Saadaval paketid" no_submit=1
 @default group=packages
 
 	@property toolbar type=toolbar no_caption=1
@@ -39,13 +39,13 @@
 			@property files_list type=text no_caption=1 parent=packages_list store=no
 			@caption Failide nimekiri
 
-@groupinfo my_packages caption="Minu pakid" no_submit=1
+@groupinfo my_packages caption="Kasutusel paketid" no_submit=1
 @default group=my_packages
 
 	@property my_list type=table no_caption=1 store=no
 	@caption Pakkide nimekiri
 
-@groupinfo made_packages caption="Tehtud paketid" no_submit=1
+@groupinfo made_packages caption="Loodud paketid" no_submit=1
 @default group=made_packages
 
 	@property made_toolbar type=toolbar no_caption=1
