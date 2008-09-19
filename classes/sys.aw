@@ -1,5 +1,8 @@
 <?php
-//@classinfo  maintainer=kristo
+
+/*
+@classinfo  maintainer=kristo
+*/
 
 /** various system management methods **/
 class sys extends aw_template
@@ -74,7 +77,7 @@ class sys extends aw_template
 
 
 	/** Generates SQL statements that create a correct aw database structure
-		@attrib name=gen_create_tbl params=name nologin="1" 
+		@attrib name=gen_create_tbl params=name nologin="1"
 	**/
 	function gen_create_tbl($args = array())
 	{
@@ -95,7 +98,7 @@ class sys extends aw_template
 	}
 
 	/** Lets the user select the site to sync databases with
-		@attrib name=dbsync params=name 
+		@attrib name=dbsync params=name
 	**/
 	function db_compare_choose_donor($args = array())
 	{
@@ -143,7 +146,7 @@ class sys extends aw_template
 	}
 
 	/** Compares database structures created by gen_db_struct and lets the user merge them
-		@attrib name=db_compare_dbs params=name 
+		@attrib name=db_compare_dbs params=name
 
 		@comment
 			On the left, the external definition and on the right the local database, the checkboxes are chechked where the local database needs to be added to.
@@ -176,8 +179,8 @@ class sys extends aw_template
 	/** Is called from _db_compare_db-s for each invidual table **/
 	private function _db_compare_tables($name,$arg1,$arg2)
 	{
-		// koigepealt leiame siis molema tabelidefinitsiooni väljade nimed, ning
-		// moodustame neist ühise array
+		// koigepealt leiame siis molema tabelidefinitsiooni v2ljade nimed, ning
+		// moodustame neist yhise array
 		if (is_array($arg1) && is_array($arg2))
 		{
 			$all_keys = array_merge(array_flip(array_keys($arg1)),array_flip(array_keys($arg2)));
@@ -214,7 +217,7 @@ class sys extends aw_template
 			}
 			else
 			{
-				// ehk siis, kui doonoris vastav väli olemas on, siis teeme selle operatsiooni.
+				// ehk siis, kui doonoris vastav v2li olemas on, siis teeme selle operatsiooni.
 				if ($arg1[$key]["type"])
 				{
 					$check = "checked";
@@ -1129,9 +1132,16 @@ ENDCLASSFORM;
 	}
 }
 
+/* Generic sys class exception */
 class awex_sys extends aw_exception {}
+
+/* Configuration parser errors */
 class awex_sys_ini extends awex_sys {}
+
+/* Maintenance request from www while it is not turned on in configuration settings */
 class awex_sys_webmaintenance extends awex_sys {}
+
+/* Error generating property definitions for class */
 class awex_sys_mkprop_cl extends awex_sys
 {
 	public $failed_classes = array();

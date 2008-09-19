@@ -192,7 +192,10 @@ class aw_uri
 	}
 }
 
+/* Generic aw_uri class exception */
 class awex_uri extends aw_exception {}
+
+/* Generic condition when invalid argument given as method parameter */
 class awex_uri_arg extends awex_uri {}
 
 ?>

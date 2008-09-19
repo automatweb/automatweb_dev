@@ -534,23 +534,27 @@ class class_index
 	}
 }
 
+/* generic class index error condition */
 class awex_clidx extends aw_exception
 {
 	public $clidx_cl_name;
 }
 
+/* exceptional condition in file system operation */
 class awex_clidx_filesys extends awex_clidx
 {
 	public $clidx_file;
 	public $clidx_op;
 }
 
+/* class with same name is defined in more than one location */
 class awex_clidx_double_dfn extends awex_clidx
 {
 	public $clidx_path1;
 	public $clidx_path2;
 }
 
+/* definition container couldn't be locked for modification */
 class awex_clidx_lock extends aw_exception {}
 
 ?>

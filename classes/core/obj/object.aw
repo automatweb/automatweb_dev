@@ -2055,14 +2055,20 @@ function dump_obj_table($pre = "")
 	flush();
 }
 
+/* Generic AW object exception */
 class awex_obj extends aw_exception
 {
 	//!!! siia, et automaatselt laetaks obj id ja meetod, milles ex tehti. viimane throw?
 	public $awobj_id;
 }
 
+/* Requested method not defined for current object */
 class awex_obj_method extends awex_obj {}
+
+/* No access rights to perform requested operation */
 class awex_obj_acl extends awex_obj {}
+
+/* Generic type mismatch condition */
 class awex_obj_type extends awex_obj {}
 
 ?>
