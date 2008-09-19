@@ -12,7 +12,7 @@
 @caption Klahvikombinatsioon
 
 @property type type=select field=meta method=serialize
-@caption T&uml;&uml;p
+@caption T&uuml;&uuml;p
 
 @property url type=textbox field=meta method=serialize
 @caption URL
@@ -24,7 +24,7 @@ class shortcut extends class_base
 	function shortcut()
 	{
 		$this->init(array(
-			"tpldir" => "admin/shortcut_manager/shortcut",
+			"tpldir" => "admin/shortcut_manager",
 			"clid" => CL_SHORTCUT
 		));
 	}
@@ -38,8 +38,9 @@ class shortcut extends class_base
 		{
 			case "type":
 					$prop["options"] = array(
-						"" => t("Vali t&uml;&uml;"),
-						"go_to_url" => t("Mine URL'ile")
+						"" => t("Vali t&uuml;&uuml;p"),
+						"go_to_url" => t("Mine URL'ile"),
+						"custom" => t("Kasutaja skript"),
 					);
 				break;
 			case "url":
@@ -48,6 +49,10 @@ class shortcut extends class_base
 				{
 					$retval = PROP_IGNORE;
 				}
+			break;
+			case "keycombo":
+				$prop["value"] = str_replace  ("alt+ctrl", "ctrl+alt", $prop["value"]);
+				$prop["value"] = strtoupper($prop["value"]);
 			break;
 		}
 
@@ -61,9 +66,45 @@ class shortcut extends class_base
 
 		switch($prop["name"])
 		{
+			case "keycombo":
+				$prop["value"] = trim(strtolower($prop["value"]),"+");
+				$prop["value"] = str_replace  ("ctrl+alt", "alt+ctrl",  $prop["value"]);
+			break;
 		}
 
 		return $retval;
+	}
+	
+	/**
+		@attrib name=get_action params=id
+	**/
+	function get_action($arr)
+	{
+		$o = obj($_GET["id"]);
+		
+		$this->read_template("shortcut.tpl");
+		
+		if ($o->prop("type")=="go_to_url")
+		{
+			$this->vars(array(
+				"url" =>$o->prop("url"),
+			));
+			
+			$tmp = $this->parse("GO_TO_URL");
+			
+			$this->vars(array(
+				"GO_TO_URL" => $tmp,
+			));
+		}
+		else if ($o->prop("type")=="custom")
+		{
+			
+		}
+		echo $this->parse();
+		
+		//ob_start ("ob_gzhandler");
+		header ("Content-type: text/javascript; charset: UTF-8");
+		die();
 	}
 	
 	function callback_generate_scripts($arr)

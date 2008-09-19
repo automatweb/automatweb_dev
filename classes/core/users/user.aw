@@ -191,8 +191,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 		@property settings_shortcuts_shortcut_sets type=chooser field=meta method=serialize table=objects
 		@caption Aktiivne set
 		
-		property settings_shortcuts_settings_shortcuts type=table
-		caption Shortcutid
+		@property settings_shortcuts_settings_shortcuts type=table
+		@caption Shortcutid
 		
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
@@ -355,7 +355,10 @@ class user extends class_base
 				break;
 			
 			case "settings_shortcuts_shortcut_sets":
-				$prop['value'] = $this->_get_settings_shortcuts_shortcut_sets($arr);
+				$this->_get_settings_shortcuts_shortcut_sets($arr);
+				break;
+			case "settings_shortcuts_settings_shortcuts":
+				$this->_get_settings_shortcuts_settings_shortcuts($arr);
 				break;
 		}
 		return PROP_OK;
@@ -479,7 +482,7 @@ class user extends class_base
 	function _get_settings_shortcuts_shortcut_sets($arr)
 	{
 		$prop = & $arr["prop"];
-		$ou = obj(197);
+		$ou = obj(197); // temp
 		$p = get_current_person();
 		
 		$ol = new object_list(array(
@@ -507,37 +510,59 @@ class user extends class_base
 		}
 		
 		$prop["options"] = $a_shortcut_sets;
-		/*
+	}
+	
+	function _get_settings_shortcuts_settings_shortcuts($arr)
+	{
+		$prop = & $arr["prop"];
+		$t =& $this->_start_shortcuts_table();
+		$o = $arr["obj_inst"];
 		
-		//arr ($p, true);
+		$o_shortcut_set = obj($o->prop("settings_shortcuts_shortcut_sets"));
 		
-		$o = & $arr["obj_inst"];
+		$conns = $o_shortcut_set->connections_from();
+		foreach($conns as $con)
+		{
+			$data = array();
+			$o_shortcut = obj($con->prop("to"));
+			$data["name"] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $o_shortcut->id(),
+					"return_url" => get_ru(),
+				), CL_SHORTCUT),
+				"caption" => $o_shortcut->prop("name"),
+				));
+			$o_shortcut->name();
+			$data["keycombo"] = $o_shortcut->prop("keycombo");
+			$t->define_data($data);
+		}
 		
-		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_default_sortby("keycombo");
+		$t->sort_by();
+		
+		$prop["value"] = $t->draw();
+	}
+	
+	
+	
+	function &_start_shortcuts_table()
+	{
+		load_vcl("table");
+		$t = new aw_table(array("layout" => "generic","prefix" => "uglist"));
+
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Kirjeldus"),
+			"caption" => t("Nimi"),
+			"sortable" => 1,
 		));
+		
 		$t->define_field(array(
 			"name" => "keycombo",
 			"caption" => t("Shortcut"),
+			"sortable" => 1,
 		));
-		
-		$o_shortcut_set = obj($o->prop("shortcut_sets"));
-		$connections = $o_shortcut_set->connections_from(array(
-			"type" => "RELTYPE_SHORTCUT",
-			"class_id" => CL_SHORTCUT
-		));
-		foreach ($connections as $connection)
-		{
-			$o_shortcut = $connection->to ();
-			
-			$t->define_data(array(
-				"name" =>  $o_shortcut->prop("name"),
-				"keycombo" =>  $o_shortcut->prop("keycombo"),
-			));
-		}
-		*/
+
+		return $t;
 	}
 	
 	function _get_group_membership($o, $id)

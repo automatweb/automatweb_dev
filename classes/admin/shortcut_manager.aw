@@ -67,7 +67,7 @@ class shortcut_manager extends class_base
 		$j=0;
 		
 		$out = "aw_shortcut_db = new Array();\n";
-		$out .= "//// start xml/shortcuts.xml\n";
+		$out .= "/* start xml/shortcuts.xml */ \n";
 		foreach( $o_items as $class )
 		{
 			//$classes = $item->getElementsByTagName( "shortcut" );
@@ -89,7 +89,7 @@ class shortcut_manager extends class_base
 				}
 			}
 		}
-		$out .= "\n//// end xml/shortcuts.xml\n";
+		$out .= "\n/* end xml/shortcuts.xml */\n";
 		ob_start ("ob_gzhandler");
 		header ("Content-type: text/javascript; charset: UTF-8");
 		die($out);
@@ -106,6 +106,70 @@ class shortcut_manager extends class_base
 		//));
 	
 		$out = "";
+		die($out);
+	}
+	
+	/**
+		@attrib name=parse_shortcuts
+	**/
+	function parse_shortcuts($arr)
+	{
+		$file = core::get_file(array("file"=>aw_ini_get("basedir")."/xml/shortcuts.xml"));
+
+		$doc = new DOMDocument();
+		$doc->loadXML( $file );
+		
+		$o_items = $doc->getElementsByTagName( "class" );
+		$j=0;
+		
+		$out = "aw_shortcut_db = new Array();\n";
+		$out .= "/* start xml/shortcuts.xml */ \n";
+		foreach( $o_items as $class )
+		{
+			//$classes = $item->getElementsByTagName( "shortcut" );
+			$s_class = $class->getAttribute("name");
+			$out .= 'aw_shortcut_db["'.$s_class.'"] = new Array();';
+			foreach($class->getElementsByTagName( "shortcut" ) as $shortcut)
+			{
+				foreach($shortcut->getElementsByTagName( "function" ) as $function)
+				{
+					$s_function = $function->getAttribute("name");
+					foreach($function->getElementsByTagName( "arguments" ) as $arguments)
+					{
+						foreach($arguments->getElementsByTagName( "required" ) as $required)
+						{
+							$s_shortcut = $required->getAttribute("value");
+							$out .= 'aw_shortcut_db["'.$s_class.'"]["'.$s_function.'"] = "'.$s_shortcut.'";';
+						}
+					}
+				}
+			}
+		}
+		$out .= "\n/* end xml/shortcuts.xml */\n";
+		
+		$o_user = obj(aw_global_get("uid_oid"));
+		$o_shortcut_set = obj($o_user->prop("settings_shortcuts_shortcut_sets"));
+		
+		$conns = $o_shortcut_set->connections_from();
+		$i=0;
+		foreach($conns as $con)
+		{
+			$data = array();
+			$o_shortcut = obj($con->prop("to"));
+			$shortcut_type = $o_shortcut->prop("type");
+			switch ($shortcut_type) {
+				case "go_to_url":
+					$out .= 'function aw_shortcut_manager_get_action_'.$i.'(){
+						$.shortcut_manager.get_action('.$o_shortcut->id().');
+					}';
+					$out .= "$.hotkeys.add('".$o_shortcut->prop("keycombo")."', aw_shortcut_manager_get_action_".$i.");";
+				break;
+			}
+			$i++;
+		}
+		
+		//ob_start ("ob_gzhandler");
+		//header ("Content-type: text/javascript; charset: UTF-8");
 		die($out);
 	}
 	
