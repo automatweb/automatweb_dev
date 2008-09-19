@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.28 2008/08/29 07:12:27 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.29 2008/09/19 07:43:12 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -754,6 +754,9 @@ class docgen_viewer extends class_base
 				$this->vars(array(
 					"memv_access" => $def["access"],
 					"memv_defined" => $def["line"],
+					"memv_readonly" => $def["read_only"] ? t("Yes") : t("No"),
+					"memv_defined_type" => $def["declared_type"],
+					"memv_default_value" => $def["default_value"]
 				));
 				$str .= $this->parse("DEFINED_MEMBER_VAR");
 			}

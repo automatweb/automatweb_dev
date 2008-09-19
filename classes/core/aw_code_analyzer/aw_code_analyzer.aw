@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.17 2008/08/29 07:12:23 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.18 2008/09/19 07:43:06 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -1145,11 +1145,15 @@ die();*/
 			// class variable definition
 			$_nm = "\$this->".substr($v_tok[1],1);
 
+			$docc_data = $this->_parse_var_doc_comment($this->last_comment);
 			$this->data["classes"][$this->current_class]["member_var_defs"][$_nm] = array(
 				"name" => $_nm,
 				"line" => $this->get_line(),
 				"access" => $this->faccess_lut[$this->function_access],
-				"comment" => $this->_filter_doc_comment($this->last_comment)
+				"comment" => $this->_filter_doc_comment($this->last_comment),
+				"read_only" => $docc_data["read-only"],
+				"declared_type" => $docc_data["type"],
+				"default_value" => $docc_data["default"]
 			);
 			unset($this->function_access);
 			unset($this->last_comment);
@@ -1755,7 +1759,22 @@ echo "ding<br>";*/
 		{
 			$comm = substr(trim($comm), 3, -3);
 		}
-		return $comm;
+		return preg_replace("/\@attrib (.*)/", "", $comm);
+	}
+
+	private function _parse_var_doc_comment($d)
+	{
+		$rv = array();
+		if (preg_match("/\@attrib (.*)/", $d, $mt))
+		{
+			$bits = explode(" ", $mt[1]);
+			foreach($bits as $bit)
+			{
+				list($k, $v) = explode("=", trim($bit));
+				$rv[$k] = $v;
+			}
+		}
+		return $rv;
 	}
 }
 ?>

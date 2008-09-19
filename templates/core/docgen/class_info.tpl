@@ -224,6 +224,9 @@
 			<th>Defined</th>
 			<th>Used</th>
 			<th>Type</th>
+			<th>RO</th>
+			<th>Declared type</th>
+			<th>Default value</th>
 			<th>Comment</th>
 		</tr>
 		<!-- SUB: DEFINED_MEMBER_VAR -->
@@ -233,7 +236,10 @@
 			<td>{VAR:memv_defined}</td>
 			<td>{VAR:memv_used}</td>
 			<td>{VAR:memv_type}</td>
-			<td>{VAR:memv_comment}</td>
+			<td>{VAR:memv_readonly}&nbsp;</td>
+			<td>{VAR:memv_defined_type}&nbsp;</td>
+			<td>{VAR:memv_default_value}&nbsp;</td>
+			<td>{VAR:memv_comment}&nbsp;</td>
 		</tr>
 		<!-- END SUB: DEFINED_MEMBER_VAR -->
 
@@ -244,6 +250,9 @@
 			<td>UNDEFINED!</td>
 			<td>{VAR:memv_used}</td>
 			<td>{VAR:memv_type}</td>
+			<td>{VAR:memv_readonly}&nbsp;</td>
+			<td>{VAR:memv_defined_type}&nbsp;</td>
+			<td>{VAR:memv_default_value}&nbsp;</td>
 			<td>{VAR:memv_comment}</td>
 		</tr>
 		<!-- END SUB: UNDEFINED_MEMBER_VAR -->
