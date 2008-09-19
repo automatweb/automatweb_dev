@@ -1339,6 +1339,7 @@ class bug extends class_base
 			$msgtxt .= t("Summary") . ": " . $name . "\n";
 			$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
 			$msgtxt .= t("Status"). ": " . $this->bug_statuses[$bug->prop("bug_status")] . "\n";
+			$msgtxt .= ($bug->prop("bug_status") == BUG_FEEDBACK) ? t("Feedback from"). ": " . $bug->prop("bug_feedback_p.name") . "\n" : "";
 			$msgtxt .= t("Priority"). ": " . $bug->prop("bug_priority") . "\n";
 			$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
 			$msgtxt .= strip_tags($comment)."\n";
