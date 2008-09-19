@@ -1712,7 +1712,7 @@ class bug extends class_base
 			$bug->set_meta("guess_by_p", $gbp);
 		}
 		$rbp = $bug->meta("real_by_p");
-		if($add_wh && (isset($this->_acc_old_wh) || $rbp[$p]))
+		if(isset($this->_acc_old_wh) || $rbp[$p])
 		{
 			$rbp[$p] = ($this->_acc_old_wh ? $this->_acc_old_wh : $rbp[$p]) + $add_wh;
 			$bug->set_meta("real_by_p", $rbp);
