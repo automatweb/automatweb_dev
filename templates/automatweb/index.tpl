@@ -25,6 +25,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_thickbox-compressed.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_autocomplete.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_hotkeys_0.0.3.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_shortcut_manager.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -35,11 +36,14 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/shortcuts.js"></script>
 <!-- END SUB: MINIFY_JS_AND_CSS -->
 
 {VAR:javascript}
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml&{VAR:random}"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts"></script>
+<!--<script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_xml&{VAR:random}"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts_from_objects&{VAR:random}"></script>
+-->
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=aw_object_quickadd&action=get_objects"></script>
 
 <script type="text/javascript">
