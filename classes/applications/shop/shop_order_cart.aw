@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.82 2008/09/20 13:36:08 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.83 2008/09/20 14:01:23 instrumental Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -367,12 +367,10 @@ class shop_order_cart extends class_base
 
 	**/
 	function submit_add_cart($arr)
-	{if(aw_global_get("uid") == "markop"){ arr($arr); die();}
+	{
 		extract($arr);
 		$section = aw_global_get("section");
 		$oc = obj($oc);
-		//$this->clear_cart($oc);
-		//die();
 		$cart = $this->get_cart($oc);
 		aw_session_set("order.accept_cond", $arr["order_cond_ok"]);
 
@@ -393,7 +391,6 @@ class shop_order_cart extends class_base
 			);
 		}
 		$awa = new aw_array($arr["add_to_cart"]);
-		//arr($arr);arr($cart);
 		$si = __get_site_instance();
 		$has_cb = method_exists($si, "check_submit_add_to_cart");
 		foreach($awa->get() as $iid => $quantx)
@@ -409,6 +406,8 @@ class shop_order_cart extends class_base
 			$uid = aw_global_get("uid");
 			$group = strlen($uid) > 0 ? get_instance(CL_USER)->get_groups_for_user($uid)->ids() : get_instance(CL_GROUP)->get_non_logged_in_group();
 			$am_limits = $i_i->get_amount_limits(array("id" => $iid, "group" => $group));
+			// initialize $am_limit
+			$am_limit = array();
 			foreach($am_limits as $limits)
 			{
 				// Determine the lowest minimum for current user
@@ -1828,9 +1827,7 @@ class shop_order_cart extends class_base
 		{
 			$expl.= " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka naha jaaks
 		}
-		
-//		if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]);arr($expl); die();}
-		
+
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $real_sum,
