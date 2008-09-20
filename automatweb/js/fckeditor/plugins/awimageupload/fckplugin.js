@@ -73,6 +73,9 @@ FCK.ContextMenu.RegisterListener( {
 			if (tag._awimageplaceholder)
 			{
 				menu.AddSeparator();
+				menu.AddItem( "awimagechange_float_left", "Joonda vasakule", 37 ) ;
+				menu.AddItem( "awimagechange_float_right", "Joonda paremale", 37 ) ;
+				menu.AddSeparator();
 				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
 			} // probably IE
 			else if (tag.parentNode._awimageplaceholder)
@@ -502,6 +505,8 @@ FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
 {
 	if ( htmlNode._awfileplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
+	else if (FCKBrowserInfo.IsIE && htmlNode._awimageplaceholder)
+		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
 	else
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
 		
