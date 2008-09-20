@@ -72,9 +72,9 @@ FCK.ContextMenu.RegisterListener( {
 		{
 			if (tag._awimageplaceholder)
 			{
-				menu.AddSeparator();
-				menu.AddItem( "awimagechange_float_left", "Joonda vasakule", 37 ) ;
-				menu.AddItem( "awimagechange_float_right", "Joonda paremale", 37 ) ;
+				//menu.AddSeparator();
+				//menu.AddItem( "awimagechange_float_left", "Joonda vasakule", 37 ) ;
+				//menu.AddItem( "awimagechange_float_right", "Joonda paremale", 37 ) ;
 				menu.AddSeparator();
 				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
 			} // probably IE
