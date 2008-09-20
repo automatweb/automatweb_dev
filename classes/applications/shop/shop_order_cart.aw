@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.81 2008/09/20 13:27:03 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.82 2008/09/20 13:36:08 instrumental Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -463,7 +463,7 @@ class shop_order_cart extends class_base
 							$soce = array();
 						}
 						$soce[$iid] = array(
-							"msg" => sprintf(t("%s maksimaalne tellimiskogus on %s, hetkel korvis %s."), $i_o->name(), $am_limit["max"], $cc),
+							"msg" => sprintf(t("%s maksimaalne tellimiskogus on %s, hetkel korvis %s."), $i_o->trans_get_val("name"), $am_limit["max"], $cc),
 							"prod_name" => $i_o->name(),
 							"prod_id" => $i_o->id(),
 							"amount_limit_max" => $am_limit["max"],
