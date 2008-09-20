@@ -22,6 +22,12 @@ function doBronExec(
 		    intNoPopup
 )
 {
+	if (typeof(intRoomReservationLength)=="undefined" || intRoomReservationLength==null)
+	{
+		sel = document.getElementById("room_reservation_length");
+		intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
+	}
+
 	if (!doBron(strId, intCalendarIntervall, intRoomReservationLength, intProduct))
 	{
 		return false;
@@ -29,12 +35,6 @@ function doBronExec(
 	if (strUrl)
 	{
 		cancel_bron_popup_dialog();
-
-		if (typeof(intRoomReservationLength)=="undefined")
-		{
-			sel = document.getElementById("room_reservation_length");
-			intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
-		}
 
 		strUrl += '&start1='+current_timestamp+'&end='+(current_timestamp+intRoomReservationLength);
 		if (intNoPopup)

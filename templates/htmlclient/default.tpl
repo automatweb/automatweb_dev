@@ -261,7 +261,7 @@ this.disabled=true;self.disabled=true;
 			{
 				if (aw_submit_handler() == false)
 				{
-					document.getElementById('button').disabled=false;
+					this.disabled=false;
 					return false;
 				}
 			}
