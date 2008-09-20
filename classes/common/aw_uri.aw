@@ -53,6 +53,16 @@ class aw_uri
 
 	/**
 	@attrib api=1
+	@returns string
+		Returns uri as string with xml reserved characters converted to entities
+	**/
+	public function get_xml()
+	{
+		return str_replace("&", "&amp;", $this->get());
+	}
+
+	/**
+	@attrib api=1
 	@param uri required type=string
 		URI to load
 	@returns void
