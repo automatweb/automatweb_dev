@@ -895,11 +895,7 @@ class bug extends class_base
 				return $this->_comments_table($arr);
 
 			case "finance_type":
-				$prop["options"] = array(
-					1 => t("T&ouml;&ouml; l&otilde;ppedes"),
-					2 => t("Projekti l&otilde;ppedes"),
-					3 => t("Arendus")
-				);
+				$prop["options"] = $this->get_finance_types();
 				break;
 
 			case "bug_add_real":
@@ -3074,6 +3070,15 @@ EOF;
 			$values[] = t("Kokku:")." ".$total;
 		}
 		return implode("<br />\n", $values);
+	}
+
+	function get_finance_types()
+	{
+		return array(
+			1 => t("T&ouml;&ouml; l&otilde;ppedes"),
+			2 => t("Projekti l&otilde;ppedes"),
+			3 => t("Arendus")
+		);
 	}
 }
 ?>

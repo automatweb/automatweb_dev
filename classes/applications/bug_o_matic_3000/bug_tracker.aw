@@ -3193,9 +3193,28 @@ class bug_tracker extends class_base
 		foreach($gt_list as $gt)
 		{
 			$cdata = $this->get_gantt_bug_colors($gt);
+
+			$nm = parse_obj_name($gt->name());
+			if ($gt->customer)
+			{
+				if ($gt->prop("customer.short_name") != "")
+				{
+					$nm .= " / ".$gt->prop("customer.short_name");
+				}
+				else
+				{
+					$nm .= " / ".$gt->prop("customer.name");
+				}
+			}
+			if ($gt->finance_type)
+			{
+				$ft = get_instance(CL_BUG)->get_finance_types();
+				$nm .= " / ".$ft[$gt->finance_type];
+			}
+
 			$chart->add_row (array (
 				"name" => $gt->id(),
-				"title" => parse_obj_name($gt->name()), //." (".$bi->get_sort_priority($gt).") ",
+				"title" => $nm,
 				"uri" => html::get_change_url(
 					$gt->id(),
 					array("return_url" => get_ru())
