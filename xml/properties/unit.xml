@@ -18,6 +18,17 @@
             <type>select</type>
             <caption>&amp;amp;Uuml;hiku liik</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>seralize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_UNIT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -26,5 +37,10 @@
             <prop_cb>1</prop_cb>
             <maintainer>markop</maintainer>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
 </properties>
 

@@ -1126,7 +1126,11 @@ class crm_bill extends class_base
 				"caption" => t("Lisa toimetuse rida"),
 				"title" => t("Otsi")
 			));
-
+			if($this->can("view", $t_inf["unit"]))
+			{
+				$unit_oid = $t_inf["unit"];
+			}
+			$unit_name = $this->get_unit_name($t_inf["unit"], $arr["obj_inst"]);
 			$t->define_data(array(
 			"name" => html::textbox(array(
 					"name" => "rows[$id][jrk]",
@@ -1153,8 +1157,11 @@ class crm_bill extends class_base
 				)),
 				"unit" => html::textbox(array(
 					"name" => "rows[$id][unit]",
-					"value" => $t_inf["unit"],
-					"size" => 3,
+					"selected" => $unit_oid?array($unit_oid => $unit_name):'',
+					"size" => 5,
+					"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
+					"option_is_tuple" => 1,
+					"content" => $unit_name,
 				)),
 				"price" => html::textbox(array(
 					"name" => "rows[$id][price]",
@@ -1256,6 +1263,7 @@ class crm_bill extends class_base
 							"size" => 3,
 							"autocomplete_source" => $this->mk_my_orb("unit_options_autocomplete_source"),
 							"autocomplete_params" => array("agreement_price[".$x."][unit]"),
+							"option_is_tuple" => 1,
 						)),
 						"price" => html::textbox(array(
 							"name" => "agreement_price[".$x."][price]",
@@ -1546,13 +1554,10 @@ class crm_bill extends class_base
 	**/
 	function unit_options_autocomplete_source($arr)
 	{
-		die(arr($arr));
 		$ac = get_instance("vcl/autocomplete");
 		$arr = $ac->get_ac_params($arr);
-
 		$ol = new object_list(array(
 			"class_id" => CL_UNIT,
-			"mail" => $arr["search_mail_email"]."%",
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 200
@@ -1560,7 +1565,7 @@ class crm_bill extends class_base
 		$res = array();
 		foreach($ol->arr() as $o)
 		{
-			$res[$o->id()] = $o->prop("mail");
+			$res[$o->id()] = $o->prop("unit_code");
 		}
 
 		return $ac->finish_ac($res);
@@ -2140,7 +2145,7 @@ class crm_bill extends class_base
 //					}
 //				}
 				$this->vars(array(
-					"unit" => $grp_row["unit"],
+					"unit" => $this->get_unit_name($grp_row["unit"], $b),
 					"amt" => $grp_row["tot_amt"],
 					"price" => number_format(($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),2,".", " "),
 					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
@@ -2189,7 +2194,7 @@ class crm_bill extends class_base
 			$name = $row["comment"];
 			$tax_rows["$tax_rate"] += $cur_tax;
 			$this->vars(array(
-				"unit" => $row["unit"],
+				"unit" => $this->get_unit_name($row["unit"], $b),
 				"amt" => $row["amt"],
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
@@ -2559,7 +2564,7 @@ class crm_bill extends class_base
 			else
 			{
 				$this->vars(array(
-					"unit" => $row["unit"],
+					"unit" => $this->get_unit_name($row["unit"], $b),
 					"amt" => number_format($row["amt"],3), 
 					"price" => number_format($row["price"], 2,".", " "),
 					"sum" => number_format($cur_sum, 2,"."),
@@ -2600,7 +2605,7 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 			$this->vars(array(
-				"unit" => $row["unit"],
+				"unit" => $this->get_unit_name($row["unit"], $b),
 				"amt" => number_format($row["amt"],3),
 				"price" => number_format($cur_pr, 2,".", " "),
 				"sum" => number_format($cur_sum, 2, ".", " "),
@@ -2809,11 +2814,24 @@ class crm_bill extends class_base
 			{
 				$o = obj($oid);
 			}
+			if(!$this->can("view", $row["unit"]))
+			{
+				$uo = obj();
+				$uo->set_class_id(CL_UNIT);
+				$uo->set_name($row["unit"]);
+				$uo->set_prop("unit_code", $row["unit"]);
+				$uo->set_parent(get_current_company()->id());
+				$uo->save();
+				$unit = $uo->id();
+			}
+			else
+			{
+				$unit = $row["unit"];
+			}
 			$o->set_prop("name", $row["name"]);
 			$o->set_prop("comment", $row["comment"]);
-
 			$o->set_prop("date", $row["date"]);
-			$o->set_prop("unit", $row["unit"]);
+			$o->set_prop("unit", $unit);
 			$o->set_meta("jrk", $row["jrk"]);
 			$o->set_prop("price", str_replace(",", ".", $row["price"]));
 			$o->set_prop("amt", str_replace(",", ".", $row["amt"]));
@@ -3350,6 +3368,25 @@ class crm_bill extends class_base
 			return min($free_sum , $needed_wtp);
 		}
 		return $this->posValue($bill_sum - $needed);
+	}
+
+	function get_unit_name($unit, $o)
+	{
+		if($this->can("view", $unit))
+		{
+			$uo = obj($unit);
+			$u_trans = $uo->meta("translations");
+			$unit_name = $u_trans[obj($o->prop("language"))->prop("db_lang_id")]["unit_code"];
+			if(!$unit_name)
+			{
+				$unit_name = $uo->prop("unit_code");
+			}
+		}
+		else
+		{
+			$unit_name = $unit;
+		}
+		return $unit_name;
 	}
 
 	function posValue($nr)

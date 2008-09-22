@@ -12,6 +12,12 @@
 
 @property unit_sort type=select
 @caption &Uuml;hiku liik
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 */
 
 class unit extends class_base
@@ -22,6 +28,9 @@ class unit extends class_base
 			"tpldir" => "common//unit",
 			"clid" => CL_UNIT
 		));
+		$this->trans_props = array(
+			"name", "unit_code"
+		);
 	}
 
 	function get_property($arr)
@@ -43,10 +52,28 @@ class unit extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	
+
+	function callback_mod_tab($arr)
+	{
+		$trc = aw_ini_get("user_interface.trans_classes");
+		
+		if ($arr["id"] == "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 
 	function callback_mod_reforb($arr)
 	{
