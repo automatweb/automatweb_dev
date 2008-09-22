@@ -148,24 +148,27 @@ class shortcut_manager extends class_base
 		$out .= "\n/* end xml/shortcuts.xml */\n";
 		
 		$o_user = obj(aw_global_get("uid_oid"));
-		$o_shortcut_set = obj($o_user->prop("settings_shortcuts_shortcut_sets"));
-		
-		$conns = $o_shortcut_set->connections_from();
-		$i=0;
-		foreach($conns as $con)
+		if ($o_user->prop("settings_shortcuts_shortcut_sets"))
 		{
-			$data = array();
-			$o_shortcut = obj($con->prop("to"));
-			$shortcut_type = $o_shortcut->prop("type");
-			switch ($shortcut_type) {
-				case "go_to_url":
-					$out .= 'function aw_shortcut_manager_get_action_'.$i.'(){
-						$.shortcut_manager.get_action('.$o_shortcut->id().');
-					}';
-					$out .= "$.hotkeys.add('".$o_shortcut->prop("keycombo")."', aw_shortcut_manager_get_action_".$i.");";
-				break;
+			$o_shortcut_set = obj($o_user->prop("settings_shortcuts_shortcut_sets"));
+			
+			$conns = $o_shortcut_set->connections_from();
+			$i=0;
+			foreach($conns as $con)
+			{
+				$data = array();
+				$o_shortcut = obj($con->prop("to"));
+				$shortcut_type = $o_shortcut->prop("type");
+				switch ($shortcut_type) {
+					case "go_to_url":
+						$out .= 'function aw_shortcut_manager_get_action_'.$i.'(){
+							$.shortcut_manager.get_action('.$o_shortcut->id().');
+						}';
+						$out .= "$.hotkeys.add('".$o_shortcut->prop("keycombo")."', aw_shortcut_manager_get_action_".$i.");";
+					break;
+				}
+				$i++;
 			}
-			$i++;
 		}
 		
 		//ob_start ("ob_gzhandler");

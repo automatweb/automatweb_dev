@@ -482,7 +482,7 @@ class user extends class_base
 	function _get_settings_shortcuts_shortcut_sets($arr)
 	{
 		$prop = & $arr["prop"];
-		$ou = obj(197); // temp
+		$ou = obj(aw_global_get("uid_oid")); // temp
 		$p = get_current_person();
 		
 		$ol = new object_list(array(
