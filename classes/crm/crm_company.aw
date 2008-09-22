@@ -781,8 +781,23 @@ default group=org_objects
 
 	@property bill_tb type=toolbar store=no no_caption=1
 
-	@property bill_proj_list type=table store=no no_caption=1
-	@property bill_task_list type=table store=no no_caption=1
+	@layout billable type=hbox width=30%:70%
+
+		@layout billable_search type=vbox parent=billable closeable=1 area_caption=Arvele&nbsp;minevate&nbsp;ridade&nbsp;Otsing
+
+			@property billable_start type=date_select store=no default=-1 parent=billable_search
+			@caption Alates
+
+			@property billable_end type=date_select store=no default=-1 parent=billable_search
+			@caption Kuni
+
+			@property billable_search_button type=submit store=no parent=billable_search captionside=top no_caption=1
+			@caption Otsi
+
+	@layout billable_table type=vbox parent=billable closeable=1
+		@property bill_proj_list type=table store=no no_caption=1 parent=billable_table
+		@property bill_task_list type=table store=no no_caption=1 parent=billable_table
+
 
 @default group=bills_monthly
 
@@ -2767,6 +2782,8 @@ class crm_company extends class_base
 			case "bill_s_client_mgr":
 			case "bill_s_status":
 			case "bill_s_with_tax":
+			case "billable_start":
+			case "billable_end":
 			case "bs_tb":
 				static $bills_impl;
 				if (!$bills_impl)
@@ -4154,6 +4171,12 @@ class crm_company extends class_base
 			$arr["args"]["customer_search_print_view"] = $arr["request"]["customer_search_print_view"];
 			$arr["args"]["customer_search_keywords"] = $arr["request"]["customer_search_keywords"];
 			$arr["args"]["customer_search_classif1"] = $arr["request"]["customer_search_classif1"];
+		}
+
+		if($arr["request"]["billable_search_button"])
+		{
+			$arr['args']['billable_start'] = ($arr['request']['billable_start']);
+			$arr['args']['billable_end'] = ($arr['request']['billable_end']);
 		}
 
 		if ($arr["request"]["proj_search_sbt"])

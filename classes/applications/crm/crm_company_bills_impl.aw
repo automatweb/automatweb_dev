@@ -211,6 +211,36 @@ class crm_company_bills_impl extends class_base
 		//	$projs[$row->prop("project")] = $row->prop("project");
 		//	$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
+		
+		//bugidest projektid
+		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
+		if($stats_inst->there_are_bugs())
+		{
+			if(!$arr["request"]["billable_start"])
+			{
+				$arr["request"]["billable_start"] = mktime(0,0,0, (date("m" , time()) - 1),1 ,date("Y" , time()));
+			}
+			else
+			{
+				$arr["request"]["billable_start"] = date_edit::get_timestamp($arr["request"]["billable_start"]);
+			}
+			if(!$arr["request"]["billable_end"])
+			{
+				$arr["request"]["billable_end"] = mktime(-1,0,0, date("m" , time()),1 ,date("Y" , time()));
+			}
+			else
+			{
+				$arr["request"]["billable_end"] = date_edit::get_timestamp($arr["request"]["billable_end"] );
+			}
+			
+			$bugs = $this->get_billable_bugs($arr["request"]);
+			foreach($bugs->arr() as $bug)
+			{
+				$projs[$bug->prop("project")] = $bug->prop("project");
+				$sum2proj[$bug->prop("project")] +=($bug->prop("num_hrs_to_cust") * 100);
+			}
+		}
+
 		exit_function("bills_impl::_get_bill_proj_list2");
 		enter_function("bills_impl::_get_bill_proj_list3");
 		$custs = array();
@@ -641,6 +671,35 @@ class crm_company_bills_impl extends class_base
 		$t->set_default_sortby("set_date");
 		$t->sort_by();
 		exit_function("bills_impl::_get_bill_task_list4");
+
+
+enter_function("bills_impl::_get_bill_task_list5");
+		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
+		if($stats_inst->there_are_bugs() && $this->can("view" , $arr["request"]["proj"]))
+		{
+			$hr_price = 100;//niisama testimiseks
+			$project = obj($arr["request"]["proj"]);
+			if($project->class_id() == CL_PROJECT)
+			{
+				$project_bugs = $project->get_bugs();
+				foreach($project_bugs->ids() as $id)
+				{
+					if (isset($this->bug_comments[$id]))
+					{
+						$bug = obj($id);
+						$t->define_data(array(
+							"name" => html::obj_change_url($bug)." ".html::href(array("caption" => t("(kommentaarid)") , "url" => "http")),
+							"oid" => $bug->id(),
+							"hrs" =>  $bug->prop("num_hrs_real"),
+							"hr_price" => $hr_price,
+							"sum" => number_format(($bug->prop("num_hrs_to_cust") * $hr_price), 2)
+						));
+					}
+				}
+			}
+		}
+
+exit_function("bills_impl::_get_bill_task_list5");
 
 exit_function("bills_impl::_get_bill_task_list");
 		return;
@@ -1316,6 +1375,24 @@ exit_function("bills_impl::_get_bill_task_list");
 		}
 	}
 
+	function _get_billable_start($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["billable_start"];
+		if(!$arr["prop"]["value"])
+		{
+			$arr["prop"]["value"] = mktime(0,0,0, (date("m" , time()) - 1),1 ,date("Y" , time()));
+		}
+	}
+
+	function _get_billable_end($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"]["billable_end"];
+		if(!$arr["prop"]["value"])
+		{
+			$arr["prop"]["value"] = mktime(-1,0,0, date("m" , time()),1 ,date("Y" , time()));
+		}
+	}
+
 	function _get_bills_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -1863,6 +1940,86 @@ exit_function("bills_impl::_get_bill_task_list");
 		}
 		return $s;
 	}
+
+	function get_billable_bugs($r)
+	{
+		$filt = array(
+			"class_id" => CL_BUG,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
+		);
+		
+		$r["stats_s_from"] = $r["billable_start"];
+		$r["stats_s_to"] = $r["billable_end"];
+
+		if($r["stats_s_from"] == -1)
+		{
+			$r["stats_s_from"] = 0;//et aegade algusest
+		}
+		if($r["stats_s_to"] == -1)
+		{
+			 $r["stats_s_to"] = 991154552400;//suht suva suur number
+		}
+
+		$bc_filt = array(
+			"class_id" => CL_BUG_COMMENT,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+		if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
+		{
+			$bc_filt[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]),
+					"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, ($r["stats_s_from"] - 1), ($r["stats_s_to"] + 86399))
+				)
+			));
+		}
+		else
+		if ($r["stats_s_from"] > 1)
+		{
+			$bc_filt[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"created" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]-1),
+					"created" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"])
+				)	
+			));
+		}
+		else
+		if ($r["stats_s_to"] > 1)
+		{
+			$bc_filt[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"created" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($r["stats_s_to"]+ 86399)),
+					"created" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($r["stats_s_to"]+86399))
+				)
+			));
+		}
+
+		$bc_ol = new object_list($bc_filt);
+		$this->bug_comments = array();
+		foreach($bc_ol->arr() as $bc)
+		{
+			$this->bug_comments[$bc->parent()][] = $bc;
+		}
+		$this->start_filt = $filt["start1"];
+		
+		$ol = new object_list($filt);
+		// filter the list by the comment list
+		foreach($ol->ids() as $id)
+		{
+			if (!isset($this->bug_comments[$id]))
+			{
+				$ol->remove($id);
+			}
+		}
+		return $ol;
+	}
+
 
 	function split_by_word($str, $len = 50)
 	{
