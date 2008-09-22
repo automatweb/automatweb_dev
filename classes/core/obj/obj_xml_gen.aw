@@ -182,6 +182,14 @@ class obj_xml_gen
 
 		if (is_string($v))
 		{
+			$len = strlen($v);
+			for($i = 0; $i < $len; $i++)
+			{
+				if (ord($v[$i]) < 32 || ord($v[$i]) > 127)
+				{
+					$v[$i] = " ";
+				}
+			}
 			return "<![CDATA[\n".$v."\n]]>";
 		}
 	}
