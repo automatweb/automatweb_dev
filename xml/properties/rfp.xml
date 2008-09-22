@@ -42,7 +42,7 @@
             <type>textbox</type>
             <parent>client_info</parent>
             <autocomplete_class_id>145</autocomplete_class_id>
-            <aoption_is_tuple>1</aoption_is_tuple>
+            <option_is_tuple>1</option_is_tuple>
             <field>data_subm_name</field>
             <caption>Tellija kontaktisik</caption>
       </property>

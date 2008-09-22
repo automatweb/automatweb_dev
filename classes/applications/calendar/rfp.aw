@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.134 2008/09/15 14:00:29 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.135 2008/09/22 13:30:54 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -29,7 +29,7 @@
 			@property data_subm_organisation type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=129 option_is_tuple=1
 			@caption Organisatsioon
 
-			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 aoption_is_tuple=1
+			@property data_subm_name type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145 option_is_tuple=1
 			@caption Tellija kontaktisik
 
 			@property data_subm_organizer type=textbox group=submitter_info,final_client parent=client_info autocomplete_class_id=145,129 option_is_tuple=1
@@ -1923,6 +1923,10 @@ class rfp extends class_base
 		));
 		$rvi = get_instance(CL_RESERVATION);
 		$prods = $arr["obj_inst"]->meta("prods");
+		if(!is_array($prods))
+		{
+			$prods = array();
+		}
 		foreach($conn as $c)
 		{
 			if($this->can("view", $arr["request"]["room_oid"]) && $c->to()->prop("resource") != $arr["request"]["room_oid"])
@@ -2728,7 +2732,7 @@ class rfp extends class_base
 			"payment_method" => $arr["obj_inst"]->prop("data_payment_method"),
 			"pointer_text" => nl2br($arr["obj_inst"]->prop("data_pointer_text")),
 			"title" => $arr["obj_inst"]->trans_get_val("data_mf_event_type.name"),
-			"data_billing_contact" => $arr["obj_inst"]->prop("data_billing_contact"),
+			"data_billing_contact" => $arr["obj_inst"]->prop("data_billing_contact.name"),
 			"data_billing_street" => $arr["obj_inst"]->prop("data_billing_street"),
 			"data_billing_city" => $arr["obj_inst"]->prop("data_billing_city"),
 			"data_billing_zip" => $arr["obj_inst"]->prop("data_billing_zip"),
@@ -2736,7 +2740,7 @@ class rfp extends class_base
 			"data_billing_name" => $arr["obj_inst"]->prop("data_billing_name"),
 			"data_billing_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
 			"data_billing_email" => $arr["obj_inst"]->prop("data_billing_email"),
-			"data_billing_company" => $arr["obj_inst"]->prop("data_billing_company"),
+			"data_billing_company" => $arr["obj_inst"]->prop("data_billing_company.name"),
 			"data_billing_fax" => $arr["obj_inst"]->prop("data_billing_fax"),
 			"data_billing_comment" => $arr["obj_inst"]->prop("data_billing_comment"),
 			"data_contact" => $arr["obj_inst"]->prop("data_subm_name.name"),
@@ -2791,14 +2795,14 @@ class rfp extends class_base
 		//$currency = 745;
 		$currency = $arr["obj_inst"]->prop("default_currency");
 		$resources_total = 0;
-		$colspan = 6;
+		$colspan = 7;
 		if($package)
 		{
 			$ph = $this->parse("HEADERS_PACKAGE");
 			$this->vars(array(
 				"HEADERS_PACKAGE" => $ph,
 			));
-			$colspan += 2;
+			$colspan += 1;
 		}
 		else
 		{
@@ -2849,10 +2853,18 @@ class rfp extends class_base
 					"products" => $rv->meta("amount"),
 					"bron" => $rv,
 				));
-
 				// lets check for max hours and its extra prices
 				$sum = $this->alter_reservation_price_include_extra_max_hours($rv, $mgro, $sum);
 				$price = $sum[$currency];
+				$len = ($end - $start) / (60 * 60);
+				if($len >= 1 && $len <= 6)
+				{
+					$unitprice = round($price / $len);
+				}
+				else
+				{
+					$unitprice = "-";
+				}
 			}
 			$comment = $rv->trans_get_val("comment");
 			$tables_rv = ($rvt = $rv->meta("tables"))?$rvt:$tables;
@@ -2874,6 +2886,7 @@ class rfp extends class_base
 				"colspan" => $colspan,
 				"separate_price" => $price,
 				"price" => $price,
+				"unitprice" => $unitprice,
 			);
 			//$this->vars($room_data);
 			if($package)
