@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.83 2008/09/20 14:01:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.84 2008/09/22 07:38:40 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -557,64 +557,6 @@ class shop_order_cart extends class_base
 			}
 		}
 
-		if (!$order_ok)
-		{
-			$awa = new aw_array($arr["add_to_cart"]);
-			$soce = aw_global_get("soc_err");
-			foreach($awa->get() as $iid => $quant)
-			{
-				if (isset($soce[$iid]))
-				{
-					continue;
-				}
-				$soce[$iid] = array(
-					"is_err" => false,
-					"ordered_num_enter" => $quant
-				);
-			}
-			aw_session_set("soc_err", $soce);
-			aw_session_set("no_cache", 1);
-
-			if (!$arr["return_url"])
-			{
-				if ($arr["from"] == "pre")
-				{
-					header("Location: ".$this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
-				}
-				else
-				{
-					header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
-				}
-			}
-			else
-			{
-				header("Location: ".$arr["return_url"]);
-			}
-			die();
-		}
-		
-		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
-		{
-			aw_session_set("order_cond_fail", 1);
-			aw_session_set("no_cache", 1);
-			if (!$arr["return_url"])
-			{
-				if ($arr["from"] == "pre")
-				{
-					header("Location: ".$this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
-				}
-				else
-				{
-					header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
-				}
-			}
-			else
-			{
-				header("Location: ".$arr["return_url"]);
-			}
-			die();
-		}
-		
 		// i'm quite sure that you don't want to know, whatta hell is going on in here
 		// neighter do i... -- ahz
 		$awa = new aw_array($arr["add_to_cart"]);
@@ -686,6 +628,89 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
+
+		foreach(safe_array($to_remove) as $xid => $rm)
+		{
+			$rm = new aw_array($rm);
+			foreach($rm->get() as $key => $val)
+			{
+				if($val == 1)
+				{
+					unset($cart["items"][$xid][$key]);
+				}
+			}
+		}
+		foreach(safe_array($cart["items"]) as $iid => $val)
+		{
+			if(count($val) <= 0)
+			{
+				unset($cart["items"][$iid]);
+			}
+		}
+		//arr($cart);
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
+
+		if (!$order_ok)
+		{
+			$awa = new aw_array($arr["add_to_cart"]);
+			$soce = aw_global_get("soc_err");
+			foreach($awa->get() as $iid => $quant)
+			{
+				if (isset($soce[$iid]))
+				{
+					continue;
+				}
+				$soce[$iid] = array(
+					"is_err" => false,
+					"ordered_num_enter" => $quant
+				);
+			}
+			aw_session_set("soc_err", $soce);
+			aw_session_set("no_cache", 1);
+
+			if (!$arr["return_url"])
+			{
+				if ($arr["from"] == "pre")
+				{
+					header("Location: ".$this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
+				}
+				else
+				{
+					header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
+				}
+			}
+			else
+			{
+				header("Location: ".$arr["return_url"]);
+			}
+			die();
+		}
+		
+		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
+		{
+			aw_session_set("order_cond_fail", 1);
+			aw_session_set("no_cache", 1);
+			if (!$arr["return_url"])
+			{
+				if ($arr["from"] == "pre")
+				{
+					header("Location: ".$this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
+				}
+				else
+				{
+					header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
+				}
+			}
+			else
+			{
+				header("Location: ".$arr["return_url"]);
+			}
+			die();
+		}
+		
 		
 		if($arr["from"] != "confirm")
 		{
@@ -1397,7 +1422,7 @@ class shop_order_cart extends class_base
 						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 					))
 				));
-				$total += ($quant["items"] * $price);
+				$total += ($quant["items"] * $this->_format_calc_price($price));
 				$str .= $this->parse("PROD");
 			}
 		}
@@ -1525,6 +1550,11 @@ class shop_order_cart extends class_base
 
 		$cart_total = $this->get_cart_value();
                 $cart_discount = $cart_total * ($oc->prop("web_discount")/100);
+
+		if ($cart_o->prop("postal_price") > 0)
+		{
+			$total += $cart_o->prop("postal_price");
+		}
 			
 		$this->vars(array(
 			"cart_total" => number_format($cart_total, 2),
@@ -1966,6 +1996,11 @@ class shop_order_cart extends class_base
 			"cart" => $cart,
 		));
 		die();
+	}
+
+	private function _format_calc_price($p)
+	{
+		return (double)str_replace(",", "", $p);
 	}
 }
 ?>
