@@ -195,6 +195,36 @@ class shop_product_category extends class_base
 			}
 		}
 		$arr["obj_inst"]->set_meta("def_fld", $arr["request"]["def_fld"]);
+		if($arr["new"])
+		{
+			$po = obj($arr["obj_inst"]->parent());
+			if($po->class_id() == CL_SHOP_PRODUCT_CATEGORY)
+			{
+				if(!$arr["request"]["def_fld"])
+				{
+					$arr["obj_inst"]->set_meta("def_fld", $po->meta("def_fld"));
+					$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_FOLDER",
+						"to" => $po->meta("def_fld"),
+					));
+				}
+				foreach($po->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
+				{
+					$arr["obj_inst"]->connect(array(
+						"to" => $c->prop("to"),
+						"type" => "RELTYPE_FOLDER",
+					));
+					if($po->is_connected_to(array("type" => "RELTYPE_DISPLAY_FOLDER", "to" => $c->prop("to"))))
+					{
+						$arr["obj_inst"]->connect(array(
+							"to" => $c->prop("to"),
+							"type" => "RELTYPE_DISPLAY_FOLDER",
+						));
+					}
+				}
+				$arr["obj_inst"]->set_meta("units", $po->meta("units"));
+			}
+		}
 		$arr["obj_inst"]->save();
 	}
 }
