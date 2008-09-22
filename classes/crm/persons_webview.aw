@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.44 2008/09/16 15:25:12 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.45 2008/09/22 13:38:38 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -1148,6 +1148,7 @@ class persons_webview extends class_base
 			"ta4" => $worker->prop("udef_ta4"),
 			"ta5" => $worker->prop("udef_ta5"),
 			"comment" => $worker->prop("comment"),
+			"reception" => $worker->prop("work_hrs"),
 		);
 
 		//pilt
