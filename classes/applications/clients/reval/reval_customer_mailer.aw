@@ -236,6 +236,7 @@ $html = <<<EOT
 </head>
 
 <body bgcolor="#f3f3f3" style="background: #f3f3f3; padding: 0;" marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
+If this doesn't display correctly, please visit: http://www.revalhotels.com/en/184345
 <div align="center" style="background: #f3f3f3; padding: 20px;">
         <table width="550" cellspacing="0" cellpadding="0">
                 <tr>
