@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.84 2008/09/22 07:38:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.85 2008/09/22 10:08:08 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -406,8 +406,9 @@ class shop_order_cart extends class_base
 			$uid = aw_global_get("uid");
 			$group = strlen($uid) > 0 ? get_instance(CL_USER)->get_groups_for_user($uid)->ids() : get_instance(CL_GROUP)->get_non_logged_in_group();
 			$am_limits = $i_i->get_amount_limits(array("id" => $iid, "group" => $group));
-			// initialize $am_limit
-			$am_limit = array();
+			// initialize $am_limit - markop
+			// oh no you don't! - terryf. check :436
+			//$am_limit = array();
 			foreach($am_limits as $limits)
 			{
 				// Determine the lowest minimum for current user
