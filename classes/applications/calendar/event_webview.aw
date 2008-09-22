@@ -194,7 +194,7 @@ class event_webview extends class_base
 				$event_data[$event->id()] = array();
 				foreach($props as $k => $p)
 				{
-					$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
+					$v = in_array($p["type"], $oid_props) ? $event->trans_get_val($k.".name") : $event->trans_get_val($k);
 					$event_data[$event->id()]["event.".$k] = $v;
 				}
 				$event_data[$event->id()] = array_merge($event_data[$event->id()], array(
@@ -250,7 +250,7 @@ class event_webview extends class_base
 						"event.end" => date("d-m-Y H:i:s", $to->end),
 						"event.end.date" => get_lc_date($to->end, LC_DATE_FORMAT_LONG_FULLYEAR),
 						"event.end.time" => date("H:i", $to->end),
-						"event.location" => $to->prop("location.name"),
+						"event.location" => $to->trans_get_val("location.name"),
 						"event.AWurl" => obj_link($event_time_match_event[$to->id()])."?event_time=".$to->id(),
 					));
 					$this->vars($event_data[$event_time_match_event[$to->id()]]);
@@ -265,7 +265,7 @@ class event_webview extends class_base
 				$event_data[$event->id()] = array();
 				foreach($props as $k => $p)
 				{
-					$v = in_array($p["type"], $oid_props) ? $event->prop($k.".name") : $event->$k;
+					$v = in_array($p["type"], $oid_props) ? $event->trans_get_val($k.".name") : $event->trans_get_val($k);
 					$this->vars(array(
 						"event.".$k => $v,
 					));
