@@ -11,7 +11,15 @@ class user_object extends _int_object
 		{
 			return "";
 		}
-		return parent::prop($k);
+		$rv = parent::prop($k);
+		if($k == "history_size")
+		{
+			if(!($rv > "-1"))
+			{
+				return 25;
+			}
+		}
+		return $rv;
 	}
 
 	function set_prop($k, $v)
