@@ -167,6 +167,27 @@ class room_obj extends _int_object
 		return $ol2->names();
 	}
 
+	/** removes reservations without customer
+		@attrib api=1 params=name
+		@param start required
+			person id
+		@param end required
+			person id
+		@returns boolean
+	**/
+	function remove_reservations_without_customer($arr)
+	{
+		$res = $this->get_reservations($arr);
+		foreach($res->arr() as $object)
+		{
+			if(!$object->prop("customer"))
+			{
+				$object->delete();
+			}
+		}
+		return 1;
+	}
+
 	/** extends person current work graph
 		@attrib api=1 params=name
 		@param person required type=oid
@@ -181,10 +202,15 @@ class room_obj extends _int_object
 	function extend_work_graph($arr)
 	{
 		$start = date_edit::get_timestamp($arr["start"]);
-		$end = date_edit::get_timestamp($arr["end"]);
+		$end = date_edit::get_timestamp($arr["end"]) + 3600 * 24;//kaasaarvatud viimane p2ev
 		$person = $arr["person"];
 
-		$last_reservation = $this->get_last_reservation();
+		$this->remove_reservations_without_customer(array(
+			"start" => $start,
+			"end" => $end,
+		));
+
+		$last_reservation = $this->get_last_reservation($start);
 		if(is_oid($last_reservation))
 		{
 			$r = obj($last_reservation);
@@ -244,18 +270,24 @@ class room_obj extends _int_object
 
 	/** returns room last reservation oid
 		@attrib api=1
+		@param time optional type=int
 		@returns oid
 	**/
-	function get_last_reservation()
+	function get_last_reservation($time = null)
 	{
-		$ol = new object_list(array(
+		$filter = array(
 			"class_id" => CL_RESERVATION,
 			"lang_id" => array(),
 			"resource" => $this->id(),
 			"limit" => 1,
 			"sort_by" => "planner.end DESC",
-			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
-		));
+//			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+		if($time)
+		{
+			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, $time);
+		}
+		$ol = new object_list($filter);
 		
 		return reset($ol->ids());
 	}
@@ -399,7 +431,6 @@ class room_obj extends _int_object
 			$cal_obj = $this->get_first_obj_by_reltype("RELTYPE_CALENDAR");
 			$cal = $cal_obj->id();
 			$parent = $cal_obj->prop("event_folder");
-			$step = $room->prop("time_step");
 			if (!$parent)
 			{
 				$parent = $cal_obj->id();
@@ -415,6 +446,8 @@ class room_obj extends _int_object
 		$reservation->set_parent($parent);
 		$reservation->set_prop("deadline", (time() + 15*60));
 		$reservation->set_prop("resource" , $this->id());
+		$reservation->set_prop("start1" , $start);
+		$reservation->set_prop("end" , $end);
 		$reservation->save();
 		return $reservation->id();
 	}
