@@ -120,8 +120,6 @@ class ml_member_obj extends _int_object
 				$emo->mail = $nmail;
 				$emo->save();
 			}
-			arr($emo);
-			exit;
 
 			if(count($conn_ids) > 0)
 			{
