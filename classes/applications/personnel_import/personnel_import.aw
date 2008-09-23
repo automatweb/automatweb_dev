@@ -85,11 +85,15 @@ class personnel_import extends class_base
 	}	
 
 	/**
-		@attrib name=invoke
+		@attrib name=invoke nologin=1
 		@param id required type=int
 	**/
 	function invoke($arr)
 	{
+		// NO CACHE
+		obj_set_opt("no_cache", 1);
+		aw_global_set("no_cache_flush", 1);
+
 		aw_set_exec_time(AW_LONG_PROCESS);
 		ini_set("memory_limit", "800M");
 
@@ -179,7 +183,9 @@ class personnel_import extends class_base
 				print "SKIPPED! We already have an object (".$professions[$lde["name"]].") with name (".$lde["name"]."). Why do we have this here? -> ".$lde["oid"]." Delete, of course!<br>";
 				flush();
 				$doomed_profession_obj = obj($lde["oid"]);
+				aw_disable_acl();
 				$doomed_profession_obj->delete();
+				aw_restore_acl();
 				continue;
 			}
 			$professions[$lde["name"]] = $lde["oid"];
@@ -211,7 +217,9 @@ class personnel_import extends class_base
 				print "SKIPPED! We already have an object (".$sections[$lde["ext_id"]].") with external ID (".$lde["ext_id"]."). Why do we have this here? -> ".$lde["oid"]."<br>";
 				flush();
 //				$doomed_section_obj = obj($lde["oid"]);
+				aw_disable_acl();
 //				$doomed_section_obj->delete();
+				aw_restore_acl();
 				continue;
 			}
 			$sections[$lde["ext_id"]] = $lde["oid"];
@@ -246,7 +254,9 @@ class personnel_import extends class_base
 				print "SKIPPED! We already have an object (".$persons[$lde["pid"]].") with personal ID (".$lde["pid"]."). Why do we have this here? -> ".$lde["oid"]."<br>";
 				flush();
 //				$doomed_person_obj = obj($lde["oid"]);
+				aw_disable_acl();
 //				$doomed_person_obj->delete();
+				aw_restore_acl();
 				continue;
 			}
 			$persons[$lde["pid"]] = $lde["oid"];
@@ -319,7 +329,9 @@ class personnel_import extends class_base
 			}
 			$so->set_name($organization["NAME"]);
 			$so->set_subclass($ext_id);
+			aw_disable_acl();
 			$so->save();
+			aw_restore_acl();
 			$soid = $so->id();
 			$organizations[$ext_id] = $soid;
 
@@ -378,7 +390,9 @@ class personnel_import extends class_base
 			$so->set_prop("code", $section["CODE"]);
 			$so->set_prop("jrk", $section["QUEUE_NR"]);
 			$so->set_subclass($ext_id);
+			aw_disable_acl();
 			$so->save();
+			aw_restore_acl();
 			$soid = $so->id();
 			$sections[$ext_id] = $soid;
 			if(is_oid($organizations[$section["PARENT_ORG"]]))
@@ -431,7 +445,9 @@ class personnel_import extends class_base
 					$addr->set_parent($folder_address);
 					$addr->set_comment($section["ADDRESS"]);
 					$addr->set_name($section["ADDRESS"]);
+					aw_disable_acl();
 					$addr->save();
+					aw_restore_acl();
 
 					$c = new connection();
 					$c->change(array(
@@ -472,7 +488,9 @@ class personnel_import extends class_base
 					$ml->set_parent($soid);
 					$ml->set_name($email);
 					$ml->set_prop("mail", $email);
+					aw_disable_acl();
 					$ml->save();
+					aw_restore_acl();
 
 					$c = new connection();
 					$c->change(array(
@@ -512,7 +530,9 @@ class personnel_import extends class_base
 					$url->set_class_id(CL_EXTLINK);
 					$url->set_parent($soid);
 					$url->set_name($url_e);
+					aw_disable_acl();
 					$url->save();
+					aw_restore_acl();
 
 					$c = new connection();
 					$c->change(array(
@@ -559,7 +579,9 @@ class personnel_import extends class_base
 						$ph->set_parent($dir_default);
 						$ph->set_name($phone);
 						$ph->set_prop("type", strtolower($ph_type));
+						aw_disable_acl();
 						$ph->save();
+						aw_restore_acl();
 						$c = new connection();
 						$c->change(array(
 							"from" => $soid,
@@ -582,7 +604,9 @@ class personnel_import extends class_base
 				{
 					print "Connection ID - ".$conn_id.".";
 					$c = new connection($conn_id);
+					aw_disable_acl();
 					$c->delete(true);
+					aw_restore_acl();
 					unset($doomed_conns[$conn_id]);
 					print " Deleted.<br>";
 				}
@@ -617,7 +641,9 @@ class personnel_import extends class_base
 		foreach($doomed_sections as $doomed_section_id => $val)
 		{
 			$doomed_section = new object($doomed_section_id);
+			aw_disable_acl();
 			$doomed_section->delete(true);
+			aw_restore_acl();
 		}
 
 		foreach($r["PERSONS"] as $ext_id => $person)
@@ -667,12 +693,14 @@ class personnel_import extends class_base
 			$so->set_prop("birthday_hidden", (1 - $person["SHOW"]["DOB"]));
 //			$so->set_prop("", $person[""]);
 			$so->set_subclass($ext_id);
+			aw_disable_acl();
 			$so->save();
+			aw_restore_acl();
 			$soid = $so->id();
 			$persons[$person["PID"]] = $soid;
 
 			$pers_to_sec = array();
-			foreach($so->connections_from(array("type" => 11)) as $conn)
+			foreach($so->connections_from(array("type" => "RELTYPE_SECTION")) as $conn)
 			{
 				if(!isset($doomed_conns[$conn->id()]))
 				{
@@ -708,7 +736,9 @@ class personnel_import extends class_base
 					$ml->set_parent($soid);
 					$ml->set_name($email);
 					$ml->set_prop("mail", $email);
+					aw_disable_acl();
 					$ml->save();
+					aw_restore_acl();
 
 					$c = new connection();
 					$c->change(array(
@@ -750,7 +780,9 @@ class personnel_import extends class_base
 						$ph->set_parent($dir_default);
 						$ph->set_name($phone);
 						$ph->set_prop("type", strtolower($ph_type));
+						aw_disable_acl();
 						$ph->save();
+						aw_restore_acl();
 
 						$c = new connection();
 						$c->change(array(
@@ -797,10 +829,13 @@ class personnel_import extends class_base
 					{
 						print "Using existing CL_CRM_PERSON_WORK_RELATION object. ID - ".$prof->id().".<br>";
 
+						$prof->set_prop("org", $organizations[$profession["ORGANIZATION"]]);
 						$prof->set_comment($profession["COMMENT"]);
 						$prof->set_prop("room", $profession["ROOM"]);
 						$prof->set_prop("load", $profession["LOAD"]);
+						aw_disable_acl();
 						$prof->save();
+						aw_restore_acl();
 						$prof_id = $prof->id();
 
 						$prof_rank_done = false;
@@ -811,7 +846,9 @@ class personnel_import extends class_base
 							{
 								print "Using existing CL_CRM_PROFESSION object. ID - ".$prof_rank->id().".<br>";
 								$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
+								aw_disable_acl();
 								$prof_rank->save();
+								aw_restore_acl();
 
 								foreach($prof->connections_from(array("type" => 6)) as $conn2)
 								{
@@ -847,7 +884,9 @@ class personnel_import extends class_base
 								$prof_rank->set_parent($dir_default);
 								$prof_rank->set_name($profession["NAME"]);
 								$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
+								aw_disable_acl();
 								$prof_rank->save();
+								aw_restore_acl();
 								$prof_rank_id = $prof_rank->id();
 								$professions[$profession["NAME"]] = $prof_rank_id;
 							}
@@ -859,7 +898,9 @@ class personnel_import extends class_base
 								"reltype" => 3,		//RELTYPE_PROFESSION
 							));
 							$prof->set_prop("profession", $prof_rank_id);
+							aw_disable_acl();
 							$prof->save();
+							aw_restore_acl();
 							$doomed_conns[$c->prop("id")] = 1;
 							print "Connected CL_CRM_PROFESSION object to CL_CRM_WORK_RELATION object.<br>";
 						}
@@ -871,7 +912,9 @@ class personnel_import extends class_base
 							$contract_stop->set_class_id(CL_CRM_CONTRACT_STOP);
 							$contract_stop->set_parent($dir_default);
 							$contract_stop->set_name($profession["NAME"]);
+							aw_disable_acl();
 							$contract_stop->save();
+							aw_restore_acl();
 							$prof->connect(array(
 								"to" => $contract_stop->id(),
 								"reltype" => 6,		// RELTYPE_CONTRACT_STOP
@@ -899,7 +942,9 @@ class personnel_import extends class_base
 						$prof_rank->set_parent($dir_default);
 						$prof_rank->set_name($profession["NAME"]);
 						$prof_rank->set_prop("jrk", $profession["QUEUE_NR"]);
+						aw_disable_acl();
 						$prof_rank->save();
+						aw_restore_acl();
 						$prof_rank_id = $prof_rank->id();
 						$professions[$profession["NAME"]] = $prof_rank_id;
 					}
@@ -908,10 +953,13 @@ class personnel_import extends class_base
 					$prof = new object;
 					$prof->set_class_id(CL_CRM_PERSON_WORK_RELATION);
 					$prof->set_parent($dir_default);
+					$prof->set_comment($profession["COMMENT"]);
 					$prof->set_name($profession["NAME"]);
 					$prof->set_prop("room", $profession["ROOM"]);
 					$prof->set_prop("load", $profession["LOAD"]);
+					aw_disable_acl();
 					$prof->save();
+					aw_restore_acl();
 					$prof_id = $prof->id();
 
 					$c = new connection();
@@ -952,7 +1000,9 @@ class personnel_import extends class_base
 						$contract_stop->set_class_id(CL_CRM_CONTRACT_STOP);
 						$contract_stop->set_parent($dir_default);
 						$contract_stop->set_name($profession["NAME"]);
+						aw_disable_acl();
 						$contract_stop->save();
+						aw_restore_acl();
 						$contract_stop_id = $contract_stop->id();
 
 						$prof->connect(array(
@@ -965,8 +1015,11 @@ class personnel_import extends class_base
 					}
 					
 					$prof->set_prop("section", $sections[$profession["SECTION"]]);
+					$prof->set_prop("org", $organizations[$profession["ORGANIZATION"]]);
 					$prof->set_prop("profession", $prof_rank_id);
+					aw_disable_acl();
 					$prof->save();
+					aw_restore_acl();
 				}
 			}
 
@@ -995,7 +1048,9 @@ class personnel_import extends class_base
 				$deg->set_parent($dir_default);
 				$deg->set_name($person["DEGREE"]["NAME"]);
 				$deg->set_prop("subject", $person["DEGREE"]["SUBJECT"]);
+				aw_disable_acl();
 				$deg->save();
+				aw_restore_acl();
 				
 				$c = new connection();
 				$c->change(array(
@@ -1017,7 +1072,9 @@ class personnel_import extends class_base
 				{
 					print "Connection ID - ".$conn_id.".";
 					$c = new connection($conn_id);
+					aw_disable_acl();
 					$c->delete(true);
+					aw_restore_acl();
 					unset($doomed_conns[$conn_id]);
 					print " Deleted.<br>";
 				}
@@ -1038,7 +1095,9 @@ class personnel_import extends class_base
 		foreach($doomed_persons as $doomed_person_id => $val)
 		{
 			$doomed_person = new object($doomed_person_id);
+			aw_disable_acl();
 			$doomed_person->delete(true);
+			aw_restore_acl();
 		}
 
 		print "<h1>ALL DONE!</h1>";
