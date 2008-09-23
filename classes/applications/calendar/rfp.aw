@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.136 2008/09/23 12:41:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.137 2008/09/23 12:58:51 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -618,14 +618,11 @@ class rfp extends class_base
 			"data_mf_end_date_admin" => "data_gen_departure_date_admin",
 			"data_mf_end_date" => "data_gen_departure_date",
 		);
-
 		switch($prop["name"])
 		{
 			case "data_subm_name":
 			case "data_subm_organisation":
 			case "data_subm_organizer":
-			case "data_billing_company":
-			case "data_billing_contact":
 				$prop["selected"] = array(
 					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
 				);
@@ -709,23 +706,29 @@ class rfp extends class_base
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("data_subm_organisation");
 				}
+				$prop["selected"] = array(
+					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
+				);
 				break;
 			case "data_billing_contact":
 				if(!$prop["value"])
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("data_subm_name");
 				}
+				$prop["selected"] = array(
+					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
+				);
 				break;
 			case "data_billing_phone":
-				if(!$prop["value"])
-				{
-					$prop["value"] = $arr["obj_inst"]->prop("data_subm_phone");
-				}
-				break;
 			case "data_billing_email":
+			case "data_billing_street":
+			case "data_billing_city":
+			case "data_billing_country":
+			case "data_billing_fax":
+			case "data_billing_zip":
 				if(!$prop["value"])
 				{
-					$prop["value"] = $arr["obj_inst"]->prop("data_subm_email");
+					$prop["value"] = $arr["obj_inst"]->prop("data_subm".substr($prop["name"], 12));
 				}
 				break;
 
