@@ -77,7 +77,7 @@ class dompdf extends class_base
 		//$lds .= " -b ".aw_ini_get("site_basedir")."/public";
 		$lds .= " -f ".$this->tmptofile;
 		$lds .= " ".$this->tmpfile;
-
+		$lds .= " -o ".$this->orientation;
 		$hd = aw_ini_get("html2pdf.dompdf_path");
 		$cmdl = "php ".$hd."/dompdf.php ".$lds;
 		$cmdl2 = "php ".$hd."/dompdf.php ".$lds2;

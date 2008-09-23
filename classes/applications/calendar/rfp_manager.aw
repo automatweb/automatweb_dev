@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.69 2008/09/16 12:03:30 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.70 2008/09/23 10:12:58 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -2195,6 +2195,7 @@ class rfp_manager extends class_base
 		die($pdf_gen->gen_pdf(array(
 			"filename" => t("Raportid"),
 			"source" => $arr["prop"]["value"],
+			"landscape" => true,
 		)));
 	}
 
