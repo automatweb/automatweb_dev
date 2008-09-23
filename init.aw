@@ -1407,6 +1407,23 @@ function __autoload($class_name)
 		return;
 	}
 
+	// see if we can find a site class
+	if (function_exists("clid_for_name"))
+	{
+		$t_clid = clid_for_name($class_name);
+		if ($t_clid)
+		{
+			$clss = aw_ini_get("classes");
+			$class_data = $clss[$t_clid];
+			if ($class_data["site_class"] == 1)
+			{
+				$fn = aw_ini_get("site_basedir")."/classes/".basename($class_name).".".aw_ini_get("ext");
+				include_once($fn);
+				return;
+			}
+		}
+	}
+
 	try
 	{
 		$class_file = class_index::get_file_by_name($class_name);
