@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.135 2008/09/22 13:30:54 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.136 2008/09/23 12:41:42 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2727,6 +2727,9 @@ class rfp extends class_base
 
 		$this->read_template("submission.tpl");
 		$this->vars(array(
+			"data_gen_function_name" => $arr["obj_inst"]->prop("data_gen_function_name"),
+			"data_gen_arrival_date" => date("d.m.Y", $arr["obj_inst"]->prop("data_gen_arrival_date_admin")),
+			"data_gen_departure_date" => date("d.m.Y", $arr["obj_inst"]->prop("data_gen_departure_date_admin")),
 			"send_date" => date('d.m.Y', $arr["obj_inst"]->prop("data_send_date")),
 			"contactperson" => $arr["obj_inst"]->prop("data_contactperson"),
 			"payment_method" => $arr["obj_inst"]->prop("data_payment_method"),
@@ -2758,27 +2761,6 @@ class rfp extends class_base
 			"data_currency" => $arr["obj_inst"]->prop("default_currency.name"),
 		));
 
-		$info_props = array(
-			"additional_information",
-			"additional_admin_information",
-			"additional_room_information",
-			"additional_catering_information",
-			"additional_resource_information",
-			"additional_housing_information",
-			"additional_services_information",
-		);
-		foreach($info_props as $prop)
-		{
-			if(strlen($arr["obj_inst"]->prop($prop)))
-			{
-				$this->vars(array(
-					$prop => $arr["obj_inst"]->prop($prop),
-				));
-				$this->vars(array(
-					"HAS_".strtoupper($prop) => $this->parse("HAS_".strtoupper($prop)),
-				));
-			}
-		}
 		$package_id = $arr["obj_inst"]->trans_get_val("data_gen_package");
 		if($this->can("view", $package_id))
 		{
@@ -2865,6 +2847,11 @@ class rfp extends class_base
 				{
 					$unitprice = "-";
 				}
+			}
+			if($ssum = $rv->prop("special_sum"))
+			{
+				$price = $ssum;
+				$unitprice = "-";
 			}
 			$comment = $rv->trans_get_val("comment");
 			$tables_rv = ($rvt = $rv->meta("tables"))?$rvt:$tables;
@@ -3050,8 +3037,6 @@ class rfp extends class_base
 			$bron_totalprice += $dat["separate_price"];
 			
 			$brons .= $this->parse("BRON");
-
-
 		}
 
 		if($package)
@@ -3062,6 +3047,7 @@ class rfp extends class_base
 		$this->vars(array(
 			"total_colspan" => $colspan - 2,
 			"bron_totalprice" => $bron_totalprice,
+			"bron_colspan" => $colspan,
 		));
 		$totalprice += $bron_totalprice;
 		$res_sub = "";
@@ -3252,7 +3238,27 @@ class rfp extends class_base
 			$as_sub = $this->parse("ADDITIONAL_SERVICES");
 			$totalprice += $as_total;
 		}
-
+		$info_props = array(
+			"additional_information",
+			"additional_admin_information",
+			"additional_room_information",
+			"additional_catering_information",
+			"additional_resource_information",
+			"additional_housing_information",
+			"additional_services_information",
+		);
+		foreach($info_props as $prop)
+		{
+			if(strlen($arr["obj_inst"]->prop($prop)))
+			{
+				$this->vars(array(
+					$prop => $arr["obj_inst"]->prop($prop),
+				));
+				$this->vars(array(
+					"HAS_".strtoupper($prop) => $this->parse("HAS_".strtoupper($prop)),
+				));
+			}
+		}
 		$totalprice = round($totalprice, -1);
 		$this->vars(array(
 			"cancel_and_payment_terms" => $arr["obj_inst"]->prop("cancel_and_payment_terms"),
@@ -3815,7 +3821,7 @@ class rfp extends class_base
 		@attrib name=handle_calendar_show_reservation all_args=1 params=name
 	 **/
 	function handle_calendar_show_reservation(&$arr)
-	{
+ 	{
 		if($this->can("view", $arr["reservation"]->id()) && $this->can("view", $arr["rfp_oid"]))
 		{
 			$rels = $arr["reservation"]->connections_to(array(
