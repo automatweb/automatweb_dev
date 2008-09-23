@@ -54,14 +54,13 @@ class crm_company_relation extends class_base
 				break;
 
 			case "org":
-				if(!$prop["value"])
+				$prop["post_append_text"] = "";
+				$prop["type"] = "textbox";
+				$prop["option_is_tuple"] = true;
+				// $prop["autocomplete_class_id"] = CL_CRM_COMPANY;
+				if(is_oid($prop["value"]) && $this->can("view", $prop["value"]))
 				{
-					$prop["post_append_text"] = "";
-					$prop["type"] = "textbox";
-					/*
-					$prop["autocomplete_source"] = $this->mk_my_orb("org_ac");
-					$prop["autocomplete_params"] = array();
-					*/
+					$prop["content"] = obj($prop["value"])->name();
 				}
 				break;
 		}

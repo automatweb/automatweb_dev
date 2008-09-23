@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.27 2008/06/27 08:16:42 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.28 2008/09/23 14:13:47 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -153,6 +153,10 @@ class crm_person_work_relation extends class_base
 
 			case "section2":
 				$data["value"] = $arr["obj_inst"]->prop("section");
+			case "section":
+			case "org":
+			case "profession":
+				$data["option_is_tuple"] = true;
 				break;
 		}
 		return $retval;
