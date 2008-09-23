@@ -1,60 +1,58 @@
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript">
 
 var feeding_node;
 
-var show_one_active = {VAR:only_one_level_opened};
-var active_level = 1;
-var level = {VAR:level};
-load_auto = {VAR:load_auto};
-open_nodes = new Array({VAR:open_nodes});
-tree_id = '{VAR:tree_id}';
-from_click = false;
+var show_one_active_{VAR:tree_num} = {VAR:only_one_level_opened};
+var active_level_{VAR:tree_num} = 1;
+var level_{VAR:tree_num} = {VAR:level};
+load_auto_{VAR:tree_num} = {VAR:load_auto};
+open_nodes_{VAR:tree_num} = new Array({VAR:open_nodes});
+tree_id_{VAR:tree_num} = '{VAR:tree_id}';
+from_click_{VAR:tree_num} = false;
 
 function generic_loader()
 {
 	// on page load
-	if(/*window.onload &&*/ load_auto && level < open_nodes.length)
+	if(/*window.onload &&*/ load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
 	{
-		load_tree_state();
+		load_tree_state_{VAR:tree_num}();
 	}
 }
-function load_beneath()
+function load_beneath_{VAR:tree_num}()
 {
 	// on iframe load
-	if(load_auto && level < open_nodes.length)
+	if(load_auto_{VAR:tree_num} && level_{VAR:tree_num} < open_nodes_{VAR:tree_num}.length)
 	{
-		load_tree_state();
+		load_tree_state_{VAR:tree_num}();
 	}
 }
-function load_tree_state()
+function load_tree_state_{VAR:tree_num}()
 {
 	node = false;
-	if((level-1) == open_nodes.length)
+	if((level_{VAR:tree_num}-1) == open_nodes_{VAR:tree_num}.length)
 	{
-		load_auto = false;
+		load_auto_{VAR:tree_num} = false;
 	}
-	for(i=level;i < open_nodes.length;i++)
+	for(i=level_{VAR:tree_num};i < open_nodes_{VAR:tree_num}.length;i++)
 	{
 		data = false;
-		thisElem = document.getElementById(open_nodes[i]);
+		thisElem = document.getElementById(open_nodes_{VAR:tree_num}[i]);
 		if(thisElem)
 		{
 			data = thisElem.getAttribute("data_loaded");
 		}
 		if(data == 'true' && thisElem)
 		{
-			node = open_nodes[i];
-			level = i + 1;
+			node = open_nodes_{VAR:tree_num}[i];
+			level_{VAR:tree_num} = i + 1;
 			continue;
 		}
-		node = open_nodes[i];
-		level = i + 1;
-		set_cookie(tree_id + "_level", level);
+		node = open_nodes_{VAR:tree_num}[i];
+		level_{VAR:tree_num} = i + 1;
+		set_cookie(tree_id_{VAR:tree_num} + "_level_{VAR:tree_num}", level_{VAR:tree_num});
 		if(node)
 		{
-			toggle_children(node,1);
+			toggle_children_{VAR:tree_num}(node,1);
 		}
 		break;
 	}
@@ -79,10 +77,10 @@ function in_array(needle, haystack) {
     return false;
 }
 
-function toggle_children(objref,menu_level) {
+function toggle_children_{VAR:tree_num}(objref,menu_level) {
 	if(objref == 'javascript:void();')
 	{
-		from_click = true;
+		from_click_{VAR:tree_num} = true;
 		elemID = objref.getAttribute("attachedsection");
 	}
 	else
@@ -101,12 +99,12 @@ function toggle_children(objref,menu_level) {
 	iconfld = document.getElementById("iconfld-"+elemID);
 	if (thisDisp == 'none')
 	{
-		if (get_branch_func != "" && data_loaded == "false" && has_data == "0")
+		if (get_branch_func_{VAR:tree_num} != "" && data_loaded == "false" && has_data == "0")
 		{
 			thisElem.innerHTML = '<span style="color: #CCC; margin-left: 20px;">loading....</span>';
 			// fire treeloader
 			feeding_node = elemID;
-			fetch_node(elemID);
+			fetch_node_{VAR:tree_num}(elemID);
 		};
 		
 		thisElem.style.display = 'block';
@@ -116,16 +114,16 @@ function toggle_children(objref,menu_level) {
 		if (iconfld.src == tree_closed_fld_icon)
 			iconfld.src = tree_open_fld_icon;
 
-		if (persist_state)
+		if (persist_state_{VAR:tree_num})
 		{
-			if (!aw_in_array(elemID,open_nodes))
+			if (!aw_in_array(elemID,open_nodes_{VAR:tree_num}))
 			{	
-				open_nodes.push(elemID);
-				set_cookie(tree_id,open_nodes.join('^'));
+				open_nodes_{VAR:tree_num}.push(elemID);
+				set_cookie(tree_id_{VAR:tree_num},open_nodes_{VAR:tree_num}.join('^'));
 			};
 		};
 		
-		if(show_one_active && menu_level==active_level)
+		if(show_one_active_{VAR:tree_num} && menu_level==active_level_{VAR:tree_num})
 		{
 			close_all_nodes(1,objref);
 		}
@@ -138,12 +136,12 @@ function toggle_children(objref,menu_level) {
 		if (iconfld.src == tree_open_fld_icon)
 			iconfld.src = tree_closed_fld_icon;
 
-		if (persist_state)
+		if (persist_state_{VAR:tree_num})
 		{
-			if (aw_in_array(elemID,open_nodes))
+			if (aw_in_array(elemID,open_nodes_{VAR:tree_num}))
 				{
-					open_nodes = aw_remove_arr_el(elemID,open_nodes);
-					set_cookie(tree_id,open_nodes.join('^'));
+					open_nodes_{VAR:tree_num} = aw_remove_arr_el(elemID,open_nodes_{VAR:tree_num});
+					set_cookie(tree_id_{VAR:tree_num},open_nodes_{VAR:tree_num}.join('^'));
 				}
 		}
 	}
@@ -159,14 +157,14 @@ function onload_handler(arg)
 	document.getElementById(el).innerHTML = document.getElementById("f"+el).contentWindow.document.body.innerHTML;
 	document.getElementById(el).setAttribute("data_loaded",true);
 	// if not from nodeclick checks if any nodes need to be auto opened
-	if(!from_click)
-		load_beneath();
-	from_click = false;
+	if(!from_click_{VAR:tree_num})
+		load_beneath_{VAR:tree_num}();
+	from_click_{VAR:tree_num} = false;
 }
 
-function fetch_node(node)
+function fetch_node_{VAR:tree_num}(node)
 {
-	uri = get_branch_func + node + '&called_by_js=true&load_auto=' + load_auto;
+	uri = get_branch_func_{VAR:tree_num} + node + '&tree_num={VAR:tree_num}&called_by_js=true&load_auto_{VAR:tree_num}=' + load_auto_{VAR:tree_num};
 	var frame = document.createElement("iframe");
         frame.setAttribute("width",0);
         frame.setAttribute("height",1);
@@ -181,19 +179,19 @@ function fetch_node(node)
 
 }
 
-   var attached_sections = Array();
+   var attached_sections_{VAR:tree_num} = Array();
 
    function close_all_nodes(level, skip)
    {
       var i;
-      for(i in attached_sections[level])
+      for(i in attached_sections_{VAR:tree_num}[level])
       {		
-         elem = document.getElementById(attached_sections[level][i]+"treenode");
+         elem = document.getElementById(attached_sections_{VAR:tree_num}[level][i]+"treenode");
 			elemId = elem.getAttribute('attachedsection');
          //if(document.getElementById(elemId).style.display'block')
 			if(elem!=skip && document.getElementById(elemId).style.display!="none")
          {
-            toggle_children(elem);
+            toggle_children_{VAR:tree_num}(elem);
          }
       }
    }
@@ -221,10 +219,10 @@ tree_collapseMeHTML = '<img src="{VAR:baseurl}/automatweb/images/minusnode.gif" 
 tree_closed_fld_icon = "{VAR:baseurl}/automatweb/images/closed_folder.gif";
 tree_open_fld_icon = "{VAR:baseurl}/automatweb/images/open_folder.gif";
 
-get_branch_func = '{VAR:get_branch_func}';
-persist_state = '{VAR:persist_state}';
-open_nodes = new Array({VAR:open_nodes});
-tree_id = '{VAR:tree_id}';
+get_branch_func_{VAR:tree_num} = '{VAR:get_branch_func}';
+persist_state_{VAR:tree_num} = '{VAR:persist_state}';
+open_nodes_{VAR:tree_num} = new Array({VAR:open_nodes});
+tree_id_{VAR:tree_num} = '{VAR:tree_id}';
 
 </script>
 <style>
@@ -260,18 +258,18 @@ tree_id = '{VAR:tree_id}';
 <!-- hästi tore oleks, kui ma saaks need folderite ikoonid kuidagi automaatselt lisada -->
 <!-- SUB: TREE_NODE -->
 <script language="text/javascript">
-if(attached_sections[{VAR:menu_level}]==undefined)
+if(attached_sections_{VAR:tree_num}[{VAR:menu_level}]==undefined)
 {
-	attached_sections[{VAR:menu_level}] = new Array();
+	attached_sections_{VAR:tree_num}[{VAR:menu_level}] = new Array();
 }
 tmp = '{VAR:id}';
 if(is_numeric(tmp))
 {
-	attached_sections[{VAR:menu_level}][tmp] = tmp;
+	attached_sections_{VAR:tree_num}[{VAR:menu_level}][tmp] = tmp;
 }
 </script>
 <div style="width: 250px">
-<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();" alt="{VAR:alt}" title="{VAR:alt}"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}" {VAR:onClick} alt="{VAR:alt}" title="{VAR:alt}">{VAR:name}</a>
+<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children_{VAR:tree_num}(this,{VAR:menu_level});return false;" href="javascript:void();" alt="{VAR:alt}" title="{VAR:alt}"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}" {VAR:onClick} alt="{VAR:alt}" title="{VAR:alt}">{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
 <div id="{VAR:id}" has_data="{VAR:has_data}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">
 <!-- SUB: SINGLE_NODE -->

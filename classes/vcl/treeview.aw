@@ -656,13 +656,14 @@ class treeview extends class_base
 			}
 			$this->auto_open = "''".$this->auto_open_tmp;
 		}
-
+		aw_global_set("dhtml_tree_count", ($_GET["tree_num"] ? $_GET["tree_num"] : aw_global_get("dhtml_tree_count") + 1));
 		$this->vars(array(
 			"target" => isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null,
 			"open_nodes" => $this->auto_open,
 			"level" => !strlen($level)?1:$level,
 			"load_auto" => isset($_REQUEST["load_auto"])?$_REQUEST["load_auto"]:"true",
 			"tree_id" => $this->tree_id,
+			"tree_num" => aw_global_get("dhtml_tree_count"),
 			"charset" => $t->get_charset()
 		));
 
@@ -1413,7 +1414,6 @@ class treeview extends class_base
 		}
 
 		$ic = get_instance("core/icons");
-
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
