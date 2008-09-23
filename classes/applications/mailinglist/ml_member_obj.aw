@@ -148,6 +148,28 @@ class ml_member_obj extends _int_object
 		return parent::save();
 	}
 
+	function delete()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"mail" => $this->prop("mail"),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"brother_of" => $this->id(),
+		));
+		$ol->remove($this->id());
+		if(sizeof($ol->ids()))
+		{
+			$id = reset(sizeof($ol->ids()));
+			foreach($ol->arr() as $o)
+			{
+				$o -> set_prop("brother_of" , $id);
+				$o->save();
+			}
+		}
+		return parent::delete();
+	}
+
 	private function conns_remain_unchanged($conns)
 	{
 		$r = array();
