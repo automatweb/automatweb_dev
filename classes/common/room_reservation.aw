@@ -1415,12 +1415,22 @@ class room_reservation extends class_base
 			web room reservation object
 	**/
 	function pay_reservation($arr)
-	{
-		if( $_SESSION["room_reservation"]["room_id"])
+	{//if(aw_global_get("uid") == "struktuur"){ arr($arr);arr($_POST);arr($_GET);die();}
+		if($_SESSION["room_reservation"]["room_id"])
 		{
 			$arr["room"] =  $_SESSION["room_reservation"]["room_id"];
 		}
 		extract($arr);
+		
+		//et ei saaks mingi valemiga maksma minna seda mille eest on juba makstud
+		if($this->can("view" , $bron_id))
+		{
+			$bron_object = obj($bron_id);
+			if($bron_object->prop("paid"))
+			{
+				return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $bron_id));
+			}
+		}
 
 // 		$lang = aw_global_get("lang_id");
 
@@ -1437,6 +1447,8 @@ class room_reservation extends class_base
 			$res_obj = obj($res);
 			$tpl = $res_obj->prop("ver_mail_template");
 		}
+
+//j2rgnev 6nnetu tsykkel tuleks ringi teha, ... v2hemalt siis kui peaks veebist mitme ruumi broneerimine k2iku minema
 		foreach($room as $r)
 		{
 			$r = obj($r);
@@ -1446,7 +1458,6 @@ class room_reservation extends class_base
 				continue;
 			}
 
-			$bron_id;
 			if(!$bron_id)
 			{
 				$bron_id = $_SESSION["room_reservation"][$r->id()]["bron_id"];
@@ -1483,6 +1494,10 @@ class room_reservation extends class_base
 			$lang = $_SESSION["room_reservation"][$r->id()]["lang"];
 			$_SESSION["room_reservation"][$r->id()] = null;
 		}
+
+		//peab ikka k6ik igaks juhuks 2ra kustutama, nii on lollikindlam
+		unset($_SESSION["room_reservation"]);
+
 		if(!is_oid($r->prop("location")))
 		{
 			return;
@@ -1494,19 +1509,11 @@ class room_reservation extends class_base
 		//if(aw_global_get("uid") == "struktuur"){arr($lang); die();}
 		$_SESSION["bank_payment"]["url"] = null;
 		
-		
 		if(is_oid($res))
 		{
 			$expl_res = " (".$res.")"; //et broneerimise objekt ka n2ha j22ks
 		}
 		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => reset($bron_ids)));
-
-		//peab sessioonist 2ra kaotama id nyyd, et ei saaks yle kirjutada seda broneeringut enam
-		//2kki on m6ni parem lahendus. Sessiooni tyhjaks ei saa t2itsa teha, sest parse alias kasutab seda. parse alias ymber ehitada oleks p2ris suur t88, sest broneerimise ajal on tundvalt lihtsam seal sessiooni muutujaid kasutada
-		//make_reservation ruumis ymber teha, et ta kinnitatud broneeringu puhul ei laseks enam muuta, on ka ohtlik, sest m6ni admin v6ib seda kasutama hakata
-		//see asi peaks t6en2oliselt aitama, sest sessioonis id'd parse alias ei kasuta, kuid make_reservationis tekitab uue broneeringu kui seda pole
-		unset($_SESSION["room_reservation"][$room->id()]["bron_id"]);
-
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $total_sum,
