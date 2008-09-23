@@ -11,11 +11,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 @tableinfo mrp_case_schedule index=oid master_table=objects master_index=oid
 
-@groupinfo grp_general caption="Üldine" parent=general
+@groupinfo grp_general caption="&Uuml;ldine" parent=general
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
 groupinfo grp_case_material caption="Kasutatav materjal"
-@groupinfo grp_case_workflow caption="Ressursid ja töövoog"
-@groupinfo grp_case_view caption="Vaatleja töölaud" submit=no
+@groupinfo grp_case_workflow caption="Ressursid ja t&ouml;&ouml;voog"
+@groupinfo grp_case_view caption="Vaatleja t&ouml;&ouml;laud" submit=no
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
@@ -39,7 +39,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Alustamisaeg (materjalide saabumine)
 
 	@property due_date type=datetime_select
-	@caption Valmimistähtaeg
+	@caption Valmimist&auml;htaeg
 
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
@@ -59,7 +59,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 @default table=mrp_case
 	@property finished type=text editonly=1
-	@caption Lõpetatud
+	@caption L&otilde;petatud
 
 	@property archived type=text editonly=1
 	@caption Arhiveeritud
@@ -68,7 +68,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @default field=meta
 @default method=serialize
 	@property sales_priority type=textbox size=5
-	@caption Prioriteedihinnang müügimehelt
+	@caption Prioriteedihinnang m&uuml;&uuml;gimehelt
 
 
 
@@ -83,19 +83,19 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Kaane lk arv
 
 	@property sisu_varvid type=textbox
-	@caption Sisu värvid
+	@caption Sisu v&auml;rvid
 
 	@property sisu_varvid_notes type=textbox
-	@caption Sisu värvid Notes
+	@caption Sisu v&auml;rvid Notes
 
 	@property sisu_lakk_muu type=textbox
 	@caption Sisu lakk/muu
 
 	@property kaane_varvid type=textbox
-	@caption Kaane värvid
+	@caption Kaane v&auml;rvid
 
 	@property kaane_varvid_notes type=textbox
-	@caption Kaane värvid Notes
+	@caption Kaane v&auml;rvid Notes
 
 	@property kaane_lakk_muu type=textbox
 	@caption Kaane lakk/muu
@@ -107,10 +107,10 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Kaane paber
 
 	@property trykiarv type=textbox
-	@caption Trükiarv
+	@caption Tr&uuml;kiarv
 
 	@property trykise_ehitus type=textbox
-	@caption Trükise ehitus
+	@caption Tr&uuml;kise ehitus
 
 	@property kromaliin type=textbox
 	@caption Kromalin
@@ -119,7 +119,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Makett
 
 	@property naidis type=textbox
-	@caption Näidis
+	@caption N&auml;idis
 
 	@property plaate type=textbox
 	@caption Plaate
@@ -131,7 +131,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Soodustus
 
 	@property markused type=textbox
-	@caption Märkused
+	@caption M&auml;rkused
 
 	@property allahindlus type=textbox
 	@caption Allahindlus
@@ -142,7 +142,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 	// @property myygi_hind type=textbox
 	@property myygi_hind type=hidden
-	@caption Müügi hind
+	@caption M&uuml;&uuml;gi hind
 
 
 default group=grp_case_material
@@ -153,7 +153,7 @@ default group=grp_case_material
 @default group=grp_case_comments
 
 	@property user_comments type=comments
-	@caption Kommentaarid juhtumi ja tööde kohta
+	@caption Kommentaarid juhtumi ja t&ouml;&ouml;de kohta
 
 
 @default group=grp_case_workflow
@@ -181,13 +181,13 @@ default group=grp_case_material
 // --------------- RELATION TYPES ---------------------
 
 @reltype MRP_MANAGER value=1 clid=CL_USER
-@caption Müügimees/Projektijuht
+@caption M&uuml;&uuml;gimees/Projektijuht
 
 @reltype MRP_CUSTOMER value=2 clid=CL_CRM_COMPANY
 @caption Klient
 
 @reltype MRP_PROJECT_JOB value=3 clid=CL_MRP_JOB
-@caption Töö
+@caption T&ouml;&ouml;
 
 @reltype MRP_USED_RESOURCE value=4 clid=CL_MRP_RESOURCE
 @caption Kasutatav ressurss
@@ -236,13 +236,13 @@ class mrp_case extends class_base
 		$this->states = array (
 			MRP_STATUS_NEW => t("Uus"),
 			MRP_STATUS_PLANNED => t("Planeeritud"),
-			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_INPROGRESS => t("T&ouml;&ouml;s"),
 			MRP_STATUS_ABORTED => t("Katkestatud"),
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
-			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
 		);
 
@@ -271,20 +271,20 @@ class mrp_case extends class_base
 			{
 				$this->workspace = obj ($arr["request"]["mrp_workspace"]);
 			}
-			else
+			/*else
 			{
 				$this->mrp_error .= t("Uut projekti saab luua vaid ressursihalduskeskkonnast. ");
-			}
+			}*/
 		}
 		else
 		{
-			$this_object = obj ($arr["request"]["id"]);
+			$this_object = obj($arr["request"]["id"]);
 			$this->workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
-			if (!$this->workspace)
+			/*if (!$this->workspace)
 			{
 				$this->mrp_error .= t("Projektil puudub ressursihalduskeskkond. ");
-			}
+			}*/
 		}
 
 		if ($this->mrp_error)
@@ -332,14 +332,14 @@ class mrp_case extends class_base
 
 					if (!empty ($errors))
 					{
-						$prop["value"] = ' <div style="color: #DF0D12; margin: 5px;">' . t('Esinenud tõrked: ') . implode (". ", $errors) . '.</div>';
+						$prop["value"] = ' <div style="color: #DF0D12; margin: 5px;">' . t('Esinenud t&otilde;rked: ') . implode (". ", $errors) . '.</div>';
 						unset ($arr["request"]["errors"]);
 					}
 				}
 				break;
 
 			case "state":
-				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "Määramata";
+				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "M&auml;&auml;ramata";
 				break;
 
 			case "planned_date":
@@ -362,7 +362,7 @@ class mrp_case extends class_base
 				break;
 
 			case "finished":
-				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Pole veel lõpetatud");
+				$prop["value"] = ($this_object->prop ("state") == MRP_STATUS_DONE) ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Pole veel l&otilde;petatud");
 				break;
 
 			case "archived":
@@ -378,9 +378,17 @@ class mrp_case extends class_base
 
 				if (in_array ($this_object->prop ("state"), $applicable_states))
 				{
-					### update schedule
-					$schedule = get_instance (CL_MRP_SCHEDULE);
-					$schedule->create (array("mrp_workspace" => $this->workspace->id()));
+					if ($this->workspace)
+					{
+						### update schedule
+						$schedule = get_instance (CL_MRP_SCHEDULE);
+						$schedule->create (array("mrp_workspace" => $this->workspace->id()));
+					}
+					else
+					{
+						$prop["value"] = t("T&ouml;&ouml; pole loodud ressursihalduskeskkonna kaudu, planeerimine pole v&otilde;imalik!");
+						return;
+					}
 				}
 
 				### project states for showing its schedule chart
@@ -423,9 +431,17 @@ class mrp_case extends class_base
 
 				if (in_array ($this_object->prop ("state"), $applicable_states))
 				{
-					### update schedule
-					$schedule = get_instance (CL_MRP_SCHEDULE);
-					$schedule->create (array("mrp_workspace" => $this->workspace->id()));
+					if ($this->workspace)
+					{
+						### update schedule
+						$schedule = get_instance (CL_MRP_SCHEDULE);
+						$schedule->create (array("mrp_workspace" => $this->workspace->id()));
+					}
+					else
+					{
+						$prop["value"] = t("T&ouml;&ouml; pole loodud ressursihalduskeskkonna kaudu, planeerimine pole v&otilde;imalik!");
+						return;
+					}
 				}
 
 				$this->create_workflow_table ($arr);
@@ -469,7 +485,7 @@ class mrp_case extends class_base
 			case "due_date":
 			case "project_priority":
 			case "starttime":
-				if ( in_array ($this_object->prop ("state"), $applicable_planning_states) and ($this_object->prop ($prop["name"]) != $prop["value"]) )
+				if ($this->workspace &&  in_array ($this_object->prop ("state"), $applicable_planning_states) and ($this_object->prop ($prop["name"]) != $prop["value"]) )
 				{
 					$this->workspace->set_prop("rescheduling_needed", 1);
 				}
@@ -547,7 +563,10 @@ class mrp_case extends class_base
 	function callback_post_save ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
-		$this->workspace->save ();
+		if($this->workspace)
+		{
+			$this->workspace->save ();
+		}
 
 		if ($arr["new"])
 		{
@@ -568,7 +587,7 @@ class mrp_case extends class_base
 			}
 			else
 			{
-				echo t("Ressursihalduskeskkond defineerimata või katkine");
+				echo t("Ressursihalduskeskkond defineerimata v&otilde;i katkine");
 			}
 		}
 
@@ -862,7 +881,7 @@ class mrp_case extends class_base
 				"layer" => 0,
 				"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res:" . $resource->id () . " töö:" . $job["oid"] . " proj:" . $project->id () . "]"
+/* dbg */ . " [res:" . $resource->id () . " t&ouml;&ouml;:" . $job["oid"] . " proj:" . $project->id () . "]"
 			);
 
 			$chart->add_bar ($bar);
@@ -962,7 +981,8 @@ class mrp_case extends class_base
 		$resource_tree = new object_tree (array (
 			"parent" => $resources_folder,
 			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
-			"state" => new obj_predicate_not(MRP_STATUS_RESOURCE_INACTIVE),
+// how did this work, the state is in metadata?!?!
+//			"state" => new obj_predicate_not(MRP_STATUS_RESOURCE_INACTIVE),
 			"sort_by" => "objects.jrk",
 		));
 
@@ -1011,8 +1031,8 @@ class mrp_case extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => t("Kustuta valitud töö(d)"),
-			"confirm" => t("Kustutada kõik valitud tööd?"),
+			"tooltip" => t("Kustuta valitud t&ouml;&ouml;(d)"),
+			"confirm" => t("Kustutada k&otilde;ik valitud t&ouml;&ouml;d?"),
 			"action" => "delete",
 			"disabled" => $disabled,
 		));
@@ -1116,7 +1136,7 @@ class mrp_case extends class_base
 			// "img" => "finish.gif",
 			"tooltip" => t("Valmis"),
 			"action" => "finish",
-			"confirm" => t("Projekt on töös. Olete kindel, et soovite määrata projekti staatuseks 'valmis' ?"),
+			"confirm" => t("Projekt on t&ouml;&ouml;s. Olete kindel, et soovite m&auml;&auml;rata projekti staatuseks 'valmis' ?"),
 			"disabled" => $disabled,
 		));
 
@@ -1155,7 +1175,7 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "prerequisites",
-			"caption" => t("Eel&shy;dus&shy;tööd"),
+			"caption" => t("Eel&shy;dus&shy;t&ouml;&ouml;d"),
 		));
 		$table->define_field(array(
 			"name" => "name",
@@ -1174,7 +1194,7 @@ class mrp_case extends class_base
 		$table->define_field(array(
 			"name" => "post_buffer",
 			"caption" => t("JP"),
-			"tooltip" => t("Järel&shy;puh&shy;ver (h)"),
+			"tooltip" => t("J&auml;rel&shy;puh&shy;ver (h)"),
 		));
 		$table->define_field(array(
 			"name" => "comment",
@@ -1192,7 +1212,7 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "starttime",
-			"caption" => t("Töösse"),
+			"caption" => t("T&ouml;&ouml;sse"),
 		));
 
 		if (!$arr["no_edit"])
@@ -1252,7 +1272,7 @@ class mrp_case extends class_base
 				else
 				{
 					error::raise(array(
-						"msg" => sprintf (t("Eeldustöö pole objekti id või puudub sellele objektile vaatamisõigus, mis siin peaks kindlasti olemas olema (oid: %s, prerequisites: %s)."), $oid, $job->prop ("prerequisites")),
+						"msg" => sprintf (t("Eeldust&ouml;&ouml; pole objekti id v&otilde;i puudub sellele objektile vaatamis&otilde;igus, mis siin peaks kindlasti olemas olema (oid: %s, prerequisites: %s)."), $oid, $job->prop ("prerequisites")),
 						"fatal" => false,
 						"show" => false,
 					));
@@ -1427,7 +1447,7 @@ class mrp_case extends class_base
 				}
 				else
 				{
-					$errors .= t("Töö objekti-id katkine");
+					$errors .= t("T&ouml;&ouml; objekti-id katkine");
 				}
 			}
 		}
@@ -1523,7 +1543,7 @@ class mrp_case extends class_base
 		}
 		elseif (count ($workflow) != count ($connections))
 		{
-			return t("Töövoog ei sisalda kõiki projekti töid");
+			return t("T&ouml;&ouml;voog ei sisalda k&otilde;iki projekti t&ouml;id");
 		}
 
 		foreach ($workflow as $job_id => $prerequisites)
@@ -1559,7 +1579,7 @@ class mrp_case extends class_base
 			{
 				if ($degree > count ($workflow))
 				{
-					return t("Töövoog sisaldab tsüklit");
+					return t("T&ouml;&ouml;voog sisaldab ts&uuml;klit");
 				}
 
 				$current_nodes = $nodes;
@@ -1742,9 +1762,7 @@ class mrp_case extends class_base
 
 	function mrp_log($proj, $job, $msg, $comment = '')
 	{
-		$this->db_query("
-			INSERT INTO
-				mrp_log(
+		$this->db_query("INSERT INTO mrp_log (
 					project_id,job_id,uid,tm,message,comment
 				)
 				values(
@@ -1997,7 +2015,7 @@ class mrp_case extends class_base
 
 		if ($done_jobs != $all_jobs)
 		{
-			$errors[] = t("Projekti ei saa lõpetada. Kõik projekti tööd pole valmis");
+			$errors[] = t("Projekti ei saa l&otilde;petada. K&otilde;ik projekti t&ouml;&ouml;d pole valmis");
 		}
 
 		### states for finishing a project
@@ -2007,7 +2025,7 @@ class mrp_case extends class_base
 
 		if (!in_array ($project->prop ("state"), $applicable_states))
 		{
-			$errors[] = t("Projekt pole töös");
+			$errors[] = t("Projekt pole t&ouml;&ouml;s");
 		}
 
 		### ...
@@ -2069,7 +2087,7 @@ class mrp_case extends class_base
 
 		if (!in_array ($project->prop ("state"), $applicable_states))
 		{
-			$errors[] = t("Projekt pole töös");
+			$errors[] = t("Projekt pole t&ouml;&ouml;s");
 		}
 
 		### if no errors, abort project
@@ -2320,7 +2338,7 @@ class mrp_case extends class_base
 			$ws->mrp_log(
 				$project->id(),
 				NULL,
-				"Projekt võeti planeerimisest välja"
+				"Projekt v&otilde;eti planeerimisest v&auml;lja"
 			);
 
 			return $return_url;

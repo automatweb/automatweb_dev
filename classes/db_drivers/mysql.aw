@@ -750,7 +750,7 @@ class mysql
 					$mt = array(1 => "", 2 => $mt[1]);
 				}
 				else
-				if (!preg_match("/Unknown column '(.*)' in 'field list'/imsU" , $errstr, $mt))
+				if (preg_match("/Unknown column '(.*)' in 'field list'/imsU" , $errstr, $mt))
 				{
 					if (!preg_match("/UPDATE (.*) SET/imsU", $q, $mt_a))
 					{
@@ -761,7 +761,7 @@ class mysql
 				}
 			}
 
-			if ($this->db_proc_error_last_fn == $mt[2])
+			if ($this->db_proc_error_last_fn == $mt[2] && $this->db_proc_error_last_fn)
 			{
 				return false; // if we get the same error as last time, the upgrader did not create the correct field, so error out
 			}
@@ -801,6 +801,7 @@ class mysql
 					if ($mt[1] == $tn)
 					{
 						// got our class
+						classload($inf["file"]);
 						$i = $o->instance();
 						if (method_exists($i, "do_db_upgrade"))
 						{
@@ -840,6 +841,7 @@ class mysql
 				{
 					if ($mt[2] == $tn)
 					{
+						classload($inf["file"]);
 						// got our class
 						$i = $o->instance();
 						if (method_exists($i, "do_db_upgrade"))

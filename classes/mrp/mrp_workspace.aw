@@ -478,6 +478,7 @@ class mrp_workspace extends class_base
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+
 			$this->projects_planned_count = $list->count();
 
 			$list = new object_list (array (
@@ -2509,8 +2510,8 @@ class mrp_workspace extends class_base
 				"o_cust.name like '%{$arr["request"]["chart_customer"]}%' AND " .
 				"o.status > 0 AND " .
 				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
-				"((!(job.started < {$range_start})) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > {$range_start}) OR (job.state != " . MRP_STATUS_DONE . " AND {$time} > {$range_start}))) AND " .
-				"job.started < {$range_end} AND " .
+				"((!(job.started < ".$range_start.")) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > ".$range_start.") OR (job.state != " . MRP_STATUS_DONE . " AND ".$time." > ".$range_start."))) AND " .
+				"job.started < ".$range_end." AND " .
 				"job.project > 0 AND " .
 				"job.length > 0 AND " .
 				"job.resource > 0 " .
@@ -2553,8 +2554,8 @@ class mrp_workspace extends class_base
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 				"o.status > 0 AND " .
 				"o.parent = '" . $this_object->prop ("jobs_folder") . "' AND " .
-				"((!(job.started < {$range_start})) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > {$range_start}) OR (job.state != " . MRP_STATUS_DONE . " AND {$time} > {$range_start}))) AND " .
-				"job.started < {$range_end} AND " .
+				"((!(job.started < ".$range_start.")) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > ".$range_start.") OR (job.state != " . MRP_STATUS_DONE . " AND ".$time." > ".$range_start."))) AND " .
+				"job.started < ".$range_end." AND " .
 				"job.project > 0 AND " .
 				"job.length > 0 AND " .
 				"job.resource > 0 " .
@@ -2590,12 +2591,12 @@ class mrp_workspace extends class_base
 				"LEFT JOIN objects o_cust ON o_cust.oid = a_case.target " .
 			"WHERE " .
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
-				"o_cust.name like '%{$arr["request"]["chart_customer"]}%' AND " .
+				"o_cust.name like '%".$arr["request"]["chart_customer"]."%' AND " .
 				"o.status > 0 AND " .
 				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
-				"schedule.starttime < {$range_end} AND " .
-				"schedule.starttime > {$time} AND " .
-				"((!(schedule.starttime < {$range_start})) OR ((schedule.starttime + schedule.planned_length) > {$range_start})) AND " .
+				"schedule.starttime < ".$range_end." AND " .
+				"schedule.starttime > ".$time." AND " .
+				"((!(schedule.starttime < ".$range_start.")) OR ((schedule.starttime + schedule.planned_length) > ".$range_start.")) AND " .
 				"job.project > 0 AND " .
 				"job.length > 0 AND " .
 				"job.resource > 0 " .
@@ -2657,9 +2658,9 @@ class mrp_workspace extends class_base
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 				"o.status > 0 AND " .
 				"o.parent = '" . $this_object->prop ("jobs_folder") . "' AND " .
-				"schedule.starttime < {$range_end} AND " .
-				"schedule.starttime > {$time} AND " .
-				"((!(schedule.starttime < {$range_start})) OR ((schedule.starttime + schedule.planned_length) > {$range_start})) AND " .
+				"schedule.starttime < ".$range_end." AND " .
+				"schedule.starttime > ".$time." AND " .
+				"((!(schedule.starttime < ".$range_start.")) OR ((schedule.starttime + schedule.planned_length) > ".$range_start.")) AND " .
 				"job.project > 0 AND " .
 				"job.length > 0 AND " .
 				"job.resource > 0 " .
@@ -3898,25 +3899,25 @@ class mrp_workspace extends class_base
 
 			case "grp_printer":
 			case "grp_printer_current":
-				$default_sortby = "mrp_schedule_826.starttime";
+				$default_sortby = "mrp_schedule.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_in_progress":
-				$default_sortby = "mrp_schedule_826.starttime";
+				$default_sortby = "mrp_schedule.starttime";
 				$states = array(MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_startable":
-				$default_sortby = "mrp_schedule_826.starttime";
+				$default_sortby = "mrp_schedule.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
 				break;
 
 			case "grp_printer_notstartable":
-				$default_sortby = "mrp_schedule_826.starttime";
+				$default_sortby = "mrp_schedule.starttime";
                                 $states = array(MRP_STATUS_PLANNED,MRP_STATUS_PAUSED);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
@@ -3938,7 +3939,7 @@ class mrp_workspace extends class_base
 					break;
 
 				case "tm":
-					$sby = "mrp_schedule_826.starttime";
+					$sby = "mrp_schedule.starttime";
 					break;
 
 				case "length":
@@ -4459,8 +4460,9 @@ class mrp_workspace extends class_base
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
+			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, -1),
 //!!!
-			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_schedule_826.starttime",
+			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_schedule.starttime",
 //!!!
 		);
 
@@ -4763,9 +4765,7 @@ class mrp_workspace extends class_base
 	function mrp_log($proj, $job, $msg, $comment = '')
 	{
 		$this->quote(&$comment);
-		$this->db_query("
-			INSERT INTO
-				mrp_log(
+		$this->db_query("INSERT INTO mrp_log (
 					project_id,job_id,uid,tm,message,comment
 				)
 				values(
@@ -5166,10 +5166,7 @@ class mrp_workspace extends class_base
 					"url" => 'javascript:ss("'.str_replace("'", "&#39;", $o->name()).'")',
 					"caption" => t("Vali see")
 				));
-				$row["name"] = html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $o->id())),
-					"caption" => $o->name()
-				));
+				$row["name"] = html::obj_change_url($o); 
 				$t->define_data($row);
 
 			}
