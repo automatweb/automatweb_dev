@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.137 2008/09/23 12:58:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.138 2008/09/23 13:08:29 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2817,6 +2817,7 @@ class rfp extends class_base
 			$datefrom = date('d.m.Y', $start);
 			$dateto = date('d.m.Y', $end);
 			$tot_time = ($end - $start) / 3600;
+			$len = ($end - $start) / (60 * 60);
 
 			$people = $rv->prop("people_count");
 			if($roomid = $rv->prop("resource"))
@@ -2841,7 +2842,6 @@ class rfp extends class_base
 				// lets check for max hours and its extra prices
 				$sum = $this->alter_reservation_price_include_extra_max_hours($rv, $mgro, $sum);
 				$price = $sum[$currency];
-				$len = ($end - $start) / (60 * 60);
 				if($len >= 1 && $len <= 6)
 				{
 					$unitprice = round($price / $len);
@@ -2854,7 +2854,7 @@ class rfp extends class_base
 			if($ssum = $rv->prop("special_sum"))
 			{
 				$price = $ssum;
-				$unitprice = "-";
+				$unitprice = round($price / $len);
 			}
 			$comment = $rv->trans_get_val("comment");
 			$tables_rv = ($rvt = $rv->meta("tables"))?$rvt:$tables;
@@ -3089,6 +3089,16 @@ class rfp extends class_base
 				"RESOURCE_RESERVATION" => $final_res,
 				"res_total" => $resources_total,
 			));
+			$aip = "additional_resource_information";
+			if(strlen($arr["obj_inst"]->prop($aip)))
+			{
+				$this->vars(array(
+					$aip => $arr["obj_inst"]->prop($aip),
+				));
+				$this->vars(array(
+					"HAS_".strtoupper($aip) => $this->parse("HAS_".strtoupper($aip)),
+				));
+			}
 			$res_sub = $this->parse("RESOURCES");
 			$totalprice += $resources_total;
 		}
@@ -3173,6 +3183,16 @@ class rfp extends class_base
 			}
 			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
 			{
+				$aip = "additional_catering_information";
+				if(strlen($arr["obj_inst"]->prop($aip)))
+				{
+					$this->vars(array(
+						$aip => $arr["obj_inst"]->prop($aip),
+					));
+					$this->vars(array(
+						"HAS_".strtoupper($aip) => $this->parse("HAS_".strtoupper($aip)),
+					));
+				}
 				$this->vars(array(
 					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
 					"prod_total" => $prod_total,
@@ -3245,8 +3265,6 @@ class rfp extends class_base
 			"additional_information",
 			"additional_admin_information",
 			"additional_room_information",
-			"additional_catering_information",
-			"additional_resource_information",
 			"additional_housing_information",
 			"additional_services_information",
 		);
