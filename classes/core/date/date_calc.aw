@@ -1,7 +1,4 @@
 <?php
-// date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.5 2008/03/07 12:18:48 kristo Exp $
-
 /*
 @classinfo  maintainer=kristo
 */
@@ -57,6 +54,18 @@ function get_date_range($args = array())
 	if ($date)
 	{
 		list($d,$m,$y) = split("-",$date);
+		if ($d && $m && !$y)    // 09-2009 format
+		{
+			$y = $m;
+			$m = $d;
+			$d = 1;
+		}
+		else
+		if (!$y)
+		{
+			list($d,$m,$y) = explode(".",$date);
+		}
+
 		// deal with 2 part url-s
 		if (empty($y))
 		{
@@ -147,8 +156,8 @@ function get_date_range($args = array())
 
 			
 			// siin on next ja prev-i arvutamine monevorra special
-			// kui päev on suurem, kui järgmises kuus päevi kokku
-			// järgmise kuu viimase päeva. Sama kehtib eelmise kohta
+			// kui p2ev on suurem, kui j2rgmises kuus p2evi kokku
+			// j2rgmise kuu viimase p2eva. Sama kehtib eelmise kohta
 			$next_mon = date("d",mktime(0,0,0,$m+2,0,$y));
 			$prev_mon = date("d",mktime(0,0,0,$m,0,$y));
 	
@@ -189,7 +198,7 @@ function get_date_range($args = array())
 			$next = mktime(0,0,0,$m,$d+7,$y);
 			$prev = mktime(0,0,0,$m,$d-7,$y);
 			$daycode = convert_wday(date("w",$timestamp));
-			// aga meil siin algab nädal siiski esmaspäevast
+			// aga meil siin algab n2dal siiski esmasp2evast
 			$monday = $d - $daycode + 1;
 			$start_ts = mktime(0,0,0,$m,$monday,$y);
 			$end_ts = mktime(23,59,59,$m,$monday+6,$y);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.105 2008/07/28 15:06:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.106 2008/09/23 07:30:55 kristo Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -1503,6 +1503,18 @@ class vcalendar extends aw_template
 			$active_day = date("d-m-Y");
 		};
 		list($d,$m,$y) = explode("-",$active_day);
+		if ($d && $m && !$y)
+		{
+			$y = $m;
+			$m = $d;
+			$d = 1;
+		}
+		else
+		if (!$y)
+		{
+			list($d, $m, $y) = explode(".", $active_day);
+		}
+
 		// perhaps the date was in dd-mm-YYYY form?
 		if (empty($y))
 		{
