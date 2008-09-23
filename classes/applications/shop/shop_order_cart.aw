@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.85 2008/09/22 10:08:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.86 2008/09/23 07:24:54 instrumental Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -408,7 +408,8 @@ class shop_order_cart extends class_base
 			$am_limits = $i_i->get_amount_limits(array("id" => $iid, "group" => $group));
 			// initialize $am_limit - markop
 			// oh no you don't! - terryf. check :436
-			//$am_limit = array();
+			// OK. Now, I do. Cuz otherwise it memorizes limits from previous products. -kaarel (fixed :437, :439 and :459)
+			$am_limit = array();
 			foreach($am_limits as $limits)
 			{
 				// Determine the lowest minimum for current user
@@ -433,9 +434,9 @@ class shop_order_cart extends class_base
 				{
 					$cc = (int)$cart["items"][$iid][$x]["items"] + $quant;
 				}
-				if(is_array($am_limit))
+				if(is_array($am_limit) && count($am_limit) > 0)
 				{
-					if($am_limit["min"] > $cc)
+					if(isset($am_limit["min"]) && $am_limit["min"] > $cc)
 					{
 						$soce = aw_global_get("soc_err");
 						if (!is_array($soce))
@@ -455,7 +456,7 @@ class shop_order_cart extends class_base
 						$order_ok = false;
 					}
 					else
-					if($am_limit["max"] < $cc)
+					if(isset($am_limit["max"]) && $am_limit["max"] < $cc)
 					{
 						$soce = aw_global_get("soc_err");
 						if (!is_array($soce))
