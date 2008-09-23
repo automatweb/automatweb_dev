@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.33 2008/05/05 17:12:50 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.34 2008/09/23 17:02:10 instrumental Exp $
 // event_import.aw - S&uuml;ndmuste import 
 /*
 
@@ -47,8 +47,12 @@
 	@property import_events_all type=checkbox ch_value=1 field=meta mehtod=serialize
 	@caption Impordi s&uuml;ndmused algusest
 
+	@property past_length type=textbox field=meta mehtod=serialize size=5
+	@caption Imporditavate p&auml;evade arv (tagasi)
+	@comment Mitu p&auml;eva alates t&auml;nasest tagasi imporditakse
+
 	@property future_length type=textbox field=meta mehtod=serialize size=5
-	@caption Imporditavate p&auml;evade arv
+	@caption Imporditavate p&auml;evade arv (edasi)
 	@comment Mitu p&auml;eva alates t&auml;nasest edasi imporditakse
 
 	@property import_events type=text store=no
@@ -936,7 +940,14 @@ class event_import extends class_base
 		
 		// Start timestamp
 		$url_params .= (!empty($start_timestamp) && !empty($arr["UD_start_timestamp"])) ? $start_timestamp . "=" . $arr["UD_start_timestamp"] . "&" : "";
-		$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . $arr["UD_start_timestamp_unix"] . "&" : "";
+		if($arr["UD_past_length"] > 0)
+		{
+			$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . (time() - $arr["UD_past_length"] * 24 * 3600) . "&" : "";
+		}
+		else
+		{
+			$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . $arr["UD_start_timestamp_unix"] . "&" : "";
+		}
 //		$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . mktime(15, 0, 0, 12, 14, 2007) . "&" : "";
 		
 		// End timestamp
@@ -1373,6 +1384,7 @@ class event_import extends class_base
 			"UD_start_timestamp" => "".date("YmdHis", $o->meta("last_import")),
 			"UD_start_timestamp_unix" => $o->meta("last_import"),
 			"UD_future_length" => $o->prop("future_length"),
+			"UD_past_length" => $o->prop("past_length"),
 		);
 
 		$load_xml_content_params["UD_lang_param"] = $param_lang;

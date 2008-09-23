@@ -107,6 +107,17 @@
             <caption>Impordi s&amp;amp;uuml;ndmused algusest</caption>
       </property>
       <property>
+            <name>past_length</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <size>5</size>
+            <caption>Imporditavate p&amp;amp;auml;evade arv (tagasi)</caption>
+            <comment>Mitu p&amp;amp;auml;eva alates t&amp;amp;auml;nasest tagasi imporditakse</comment>
+      </property>
+      <property>
             <name>future_length</name>
             <table>objects</table>
             <group>general</group>
@@ -114,7 +125,7 @@
             <field>meta</field>
             <mehtod>serialize</mehtod>
             <size>5</size>
-            <caption>Imporditavate p&amp;amp;auml;evade arv</caption>
+            <caption>Imporditavate p&amp;amp;auml;evade arv (edasi)</caption>
             <comment>Mitu p&amp;amp;auml;eva alates t&amp;amp;auml;nasest edasi imporditakse</comment>
       </property>
       <property>
