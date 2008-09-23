@@ -107,6 +107,12 @@ class ml_member_obj extends _int_object
 			if($ol->count() > 0)
 			{
 				$emo = $ol->begin();
+				// What if I wanna save the e-mail object under different parent?
+				if($emo->parent() != parent::parent())
+				{
+					$emo_bro_id = $emo->create_brother(parent::parent());
+					$emo = obj($emo_bro_id);
+				}
 			}
 			else
 			{
@@ -114,6 +120,8 @@ class ml_member_obj extends _int_object
 				$emo->mail = $nmail;
 				$emo->save();
 			}
+			arr($emo);
+			exit;
 
 			if(count($conn_ids) > 0)
 			{
@@ -163,23 +171,44 @@ class ml_member_obj extends _int_object
 	}
 
 	private function parent_save()
-	{		
+	{
+		// Check if we already have an e-mail address with the same parent and mail property.
+		// If so, return this instead of creating new one (or changing the current one).
 		$ol = new object_list(array(
 			"class_id" => CL_ML_MEMBER,
 			"mail" => parent::prop("mail"),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 1,
+			"parent" => parent::parent(),
 		));
 		if($ol->count() > 0)
 		{
-			parent::load(reset($ol->ids()));
-			return reset($ol->ids());
+			$oid = reset($ol->ids());
+			parent::load($oid);
+			return $oid;
 		}
+		// If not, check if we have an e-mail address with same mail property and ANY parent.
+		// If so, create brother under the requested parent and return the original instead of creating a new one  (or changing the current one).
 		else
 		{
-			return parent::save();
+			$ol = new object_list(array(
+				"class_id" => CL_ML_MEMBER,
+				"mail" => parent::prop("mail"),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"limit" => 1,
+				"parent" => array(),
+			));
+			if($ol->count > 0)
+			{
+				$oid = $o->create_brother(parent::parent());
+				parent::load($oid);
+				return $oid;
+			}
 		}
+		// If there ain't any e-mail addresses with the same mail property, create new one (or change the current one).
+		return parent::save();
 	}
 }
 
