@@ -1500,6 +1500,13 @@ class room_reservation extends class_base
 			$expl_res = " (".$res.")"; //et broneerimise objekt ka n2ha j22ks
 		}
 		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => reset($bron_ids)));
+
+		//peab sessioonist 2ra kaotama id nyyd, et ei saaks yle kirjutada seda broneeringut enam
+		//2kki on m6ni parem lahendus. Sessiooni tyhjaks ei saa t2itsa teha, sest parse alias kasutab seda. parse alias ymber ehitada oleks p2ris suur t88, sest broneerimise ajal on tundvalt lihtsam seal sessiooni muutujaid kasutada
+		//make_reservation ruumis ymber teha, et ta kinnitatud broneeringu puhul ei laseks enam muuta, on ka ohtlik, sest m6ni admin v6ib seda kasutama hakata
+		//see asi peaks t6en2oliselt aitama, sest sessioonis id'd parse alias ei kasuta, kuid make_reservationis tekitab uue broneeringu kui seda pole
+		unset($_SESSION["room_reservation"][$room->id()]["bron_id"]);
+
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $total_sum,
