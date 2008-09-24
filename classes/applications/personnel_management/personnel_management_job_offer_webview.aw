@@ -648,7 +648,8 @@ class personnel_management_job_offer_webview extends class_base
 				continue;
 			}
 			// Maybe I don't wanna see untranslated job offers!??!
-			if($this->skip_untrans && !$jo->meta("trans_".aw_global_get("lang_id")."_status") && $jo->lang_id() != aw_global_get("lang_id"))
+			$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+			if($this->skip_untrans && !$jo->meta("trans_".$langid."_status") && $jo->lang_id() != $langid)
 			{
 				continue;
 			}
