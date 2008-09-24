@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.126 2008/09/16 12:03:29 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.127 2008/09/24 10:04:33 robert Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -65,6 +65,7 @@ class aw_table extends aw_template
 		$this->rowdefs = array();
 		$this->rowdefs_key_index = array();
 		$this->data = array();
+		$this->all_data = array();
 		$this->actions = array();
 		$this->col_styles = array();
 		$this->nfields = array();
@@ -214,6 +215,7 @@ class aw_table extends aw_template
 		$this->check_userfields($row);
 
 		### apply filter
+		$add_data = true;
 		if (!$this->non_filtered)
 		{
 			foreach ($this->selected_filters as $filter_key => $filter_array)
@@ -232,27 +234,31 @@ class aw_table extends aw_template
 						{
 							if ($fc[0]->$fc[1]($field_name, $filter_txtvalue, $row) === false)
 							{
-								return false;
+								$add_data = false;
 							}
 						}
 						else
 						{
 							if ($this->filter_comparators[$field_name]($field_name, $filter_txtvalue, $row) === false)
 							{
-								return false;
+								$add_data = false;
 							}
 						}
 					}
 					else
 					if (stristr($value, $filter_txtvalue) === false)
 					{
-						return false;
+						$add_data = false;
 					}
 				}
 			}
 		}
 
-		$this->data[] = $row;
+		if($add_data)
+		{
+			$this->data[] = $row;
+		}
+		$this->all_data[] = $row;
 
 		if(!$this->no_recount)
 		{
@@ -2658,6 +2664,7 @@ echo dbg::short_backtrace();
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
+						"value" => $this->selected_filters[$filter_key]["filter_selection"],
 						"class" => "filterSelect",
 						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text"
 					);
@@ -2715,7 +2722,7 @@ echo dbg::short_backtrace();
 	{
 		$filter = array ();
 
-		foreach ($this->data as $row)
+		foreach ($this->all_data as $row)
 		{
 			$data = strip_tags($row[$field_name]);
 			if(!empty($data))
@@ -2740,16 +2747,16 @@ echo dbg::short_backtrace();
 		{
 			$filter = $this->filters[$field_name]["filter"];
 		}
+		natsort($filter);
 
 		### add "All" selection
 		$filter = array_merge (array (0 => t("K&otilde;ik")), $filter);
-
 		foreach ($this->selected_filters as $selected_filter_key => $filter_array)
 		{
 			extract ($filter_array);
 			if ($selected_filter_key == $this->filters[$field_name]["key"])
 			{ ### add selected item to first position
-				$filter = array_merge (array ("_" => $filter_txtvalue), $filter);
+				//$filter = array_merge (array ("_" => $filter_txtvalue), $filter);
 				$this->filters[$field_name]["active"] = true;
 				break;
 			}
