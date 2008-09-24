@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.71 2008/09/09 12:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.72 2008/09/24 13:04:44 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -55,6 +55,9 @@
 
 	@groupinfo search_conf caption="Otsingu seaded" parent=general
 	@default group=search_conf
+
+		@property perpage type=textbox size=4
+		@caption Mitu tulemust lehel kuvada
 
 		@property search_conf_tbl type=table
 		@caption Tulemuste tabeli v&auml;ljad
@@ -1192,6 +1195,17 @@ class personnel_management extends class_base
 				$arr["request"] += $sso->meta();
 			}
 			$res = $this->search_employee($arr);
+			$perpage = $arr["obj_inst"]->prop("perpage");
+			if(count($res) > $perpage)
+			{
+				$t->define_pageselector(array(
+					"type" => "lbtxt",
+					"records_per_page" => $perpage,
+					"d_row_cnt" => count($res),
+					"no_recount" => true,
+				));
+				$res = array_slice($res, $_GET["ft_page"] * $perpage, $perpage);
+			}
 			$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
 			foreach($res as $person)
 			{
@@ -1246,7 +1260,7 @@ class personnel_management extends class_base
 				),
 			)
 		);
-		return $odl->list_data;
+		return $odl->arr();
 	}
 
 	function _get_search_conf_tbl($arr)
@@ -1851,6 +1865,14 @@ class personnel_management extends class_base
 			}
 			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employee;
 			$res = $this->search_employee($arr);
+			$perpage = $arr["obj_inst"]->prop("perpage");
+			if(count($res) > $perpage)
+			{
+				$t->define_pageselector(array(
+					"type" => "lbtxt",
+					"records_per_page" => $perpage,
+				));
+			}
 			foreach($res as $person)
 			{
 				$acl_ok = true;
@@ -2855,6 +2877,7 @@ class personnel_management extends class_base
 					"CL_CRM_PERSON.RELTYPE_PERSONNEL_MANAGEMENT" => $o->id(),
 				)
 			)),
+			new obj_predicate_sort(array("name" => "asc")),
 		);		
 
 		if($r["cv_mod_from"] && is_numeric($r["cv_mod_from"]["month"]) && is_numeric($r["cv_mod_from"]["day"]) && is_numeric($r["cv_mod_from"]["year"]))

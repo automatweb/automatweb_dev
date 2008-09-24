@@ -130,6 +130,16 @@
             <caption>Meilikast</caption>
       </property>
       <property>
+            <name>perpage</name>
+            <group>search_conf</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <caption>Mitu tulemust lehel kuvada</caption>
+      </property>
+      <property>
             <name>search_conf_tbl</name>
             <group>search_conf</group>
             <table>objects</table>
