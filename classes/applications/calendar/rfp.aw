@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.138 2008/09/23 13:08:29 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.139 2008/09/24 10:59:05 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -919,16 +919,8 @@ class rfp extends class_base
 				$new_reservation_args["rfp_reltype"] = $reltypes[$arr["request"]["group"]];
 				$new_reservation_args["rfp_organisation"] = $arr["obj_inst"]->prop("data_subm_organisation");
 				// set reservation default time. this depends on a particular tab currently active
-				if($arr["request"]["group"] == "final_catering")
-				{
-					$new_reservation_args["start1"] = (($_t = $arr["obj_inst"]->prop("data_mf_catering_start_admin")) > 1)?$_t:$arr["obj_inst"]->prop("data_gen_arrival_date_admin");
-					$new_reservation_args["end"] = (($_t = $arr["obj_inst"]->prop("data_mf_catering_end_admin")) > 1)?$_t:$arr["obj_inst"]->prop("data_gen_departure_date_admin");
-				}
-				else
-				{
-					$new_reservation_args["start1"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_start_date"));
-					$new_reservation_args["end"] = $this->date_to_stamp($arr["obj_inst"]->prop("data_mf_end_date"));
-				}
+				$new_reservation_args["start1"] = (($_t = $arr["obj_inst"]->prop("data_mf_catering_start_admin")) > 1)?$_t:$arr["obj_inst"]->prop("data_gen_arrival_date_admin");
+				$new_reservation_args["end"] = (($_t = $arr["obj_inst"]->prop("data_mf_catering_end_admin")) > 1)?$_t:$arr["obj_inst"]->prop("data_gen_departure_date_admin");
 
 				
 				foreach($rooms as $room)
@@ -1967,7 +1959,7 @@ class rfp extends class_base
 					$price = $rvi->_get_admin_price_view($prod,$prod_price);
 					$disc = $discount[$prod->id()];
 					$prod_sum = $price * $count;
-					$prod_sum = number_format($prod_sum - ($prod_sum * $disc)/100,2);
+					$prod_sum = $prod_sum - ($prod_sum * $disc)/100;
 					$prvid = $prods[$prod->id().".".$rv->id()]["bronid"];
 					$times = array();
 					if($this->can("view", $prvid))
@@ -2003,7 +1995,7 @@ class rfp extends class_base
 						"sum" => html::hidden(array(
 							"name" => "prods[".$prod->id().".".$rv->id()."][sum]",
 							"value" => $prod_sum,
-						)).$prod_sum,
+						)).number_format($prod_sum, 2),
 						"time" => $this->gen_time_form(array(
 							"varname" => "prods[".$elem_id."]",
 							"start1" => $res_start,
@@ -2764,6 +2756,15 @@ class rfp extends class_base
 			"data_currency" => $arr["obj_inst"]->prop("default_currency.name"),
 		));
 
+		$cur_p = obj(aw_global_get("uid_oid"))->get_first_obj_by_reltype("RELTYPE_PERSON");
+		$mail = $cur_p->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		if($mail)
+		{
+			$this->vars(array(
+				"current_email" => $mail->prop("mail"),
+			));
+		}
+
 		$package_id = $arr["obj_inst"]->trans_get_val("data_gen_package");
 		if($this->can("view", $package_id))
 		{
@@ -3115,13 +3116,13 @@ class rfp extends class_base
 				{
 					continue;
 				}
-				if($prod["sum"] == 0)
+				if($prod["sum"] == 0 || !is_numeric($prod["sum"]))
 				{
 					$prod["sum"] = ($prod["price"] * $prod["amount"]);
-					if($prod["discount"] > 0)
-					{
-						$prod["sum"] = $prod["sum"] * ((100 - $prod["discount"]) / 100);
-					}
+				}
+				if($prod["discount"] > 0)
+				{
+					$prod["sum"] = $prod["sum"] * ((100 - $prod["discount"]) / 100);
 				}
 				$prodcountcheck++;
 				$tmp = explode(".", $oids);
@@ -3175,6 +3176,7 @@ class rfp extends class_base
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
 					"prod_description" => $po->prop("description"),
+					"prod_discount" => (int)$prod["discount"],
 					"prod_event_and_room" => join(", ",$evt_room),
 					"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
 				));
@@ -3229,6 +3231,16 @@ class rfp extends class_base
 				$hss .= $this->parse("ROOMS");
 				$housing_total += $rooms["sum"];
 			}
+			$aip = "additional_housing_information";
+			if(strlen($arr["obj_inst"]->prop($aip)))
+			{
+				$this->vars(array(
+					$aip => $arr["obj_inst"]->prop($aip),
+				));
+				$this->vars(array(
+					"HAS_".strtoupper($aip) => $this->parse("HAS_".strtoupper($aip)),
+				));
+			}
 			$this->vars(array(
 				"ROOMS" => $hss,
 				"hs_total" => $housing_total,
@@ -3254,6 +3266,16 @@ class rfp extends class_base
 				$as_row .= $this->parse("SERVICE");
 				$as_total += $srv["sum"];
 			}
+			$aip = "additional_services_information";
+			if(strlen($arr["obj_inst"]->prop($aip)))
+			{
+				$this->vars(array(
+					$aip => $arr["obj_inst"]->prop($aip),
+				));
+				$this->vars(array(
+					"HAS_".strtoupper($aip) => $this->parse("HAS_".strtoupper($aip)),
+				));
+			}
 			$this->vars(array(
 				"SERVICE" => $as_row,
 				"as_total" => $as_total,
@@ -3265,8 +3287,6 @@ class rfp extends class_base
 			"additional_information",
 			"additional_admin_information",
 			"additional_room_information",
-			"additional_housing_information",
-			"additional_services_information",
 		);
 		foreach($info_props as $prop)
 		{
