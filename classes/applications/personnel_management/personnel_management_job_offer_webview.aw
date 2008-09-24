@@ -320,6 +320,8 @@ class personnel_management_job_offer_webview extends class_base
 			"status" => object::STAT_ACTIVE,
 			"site_id" => array(),
 			"lang_id" => array(),
+			);
+			/*
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -348,7 +350,7 @@ class personnel_management_job_offer_webview extends class_base
 		if(is_array($o->cities) && count($o->cities) > 0)
 		{
 			$ol_prms["CL_PERSONNEL_MANAGEMENT_JOB_OFFER.loc_city"] = $o->cities;
-		}
+		}*/
 
 		$ol = new object_list($ol_prms);
 		$jos = $ol->arr();
@@ -397,6 +399,7 @@ class personnel_management_job_offer_webview extends class_base
 						"logic" => "AND",
 						"conditions" => $conditions,
 					));
+					$denied_by_clid[$clid] = $this->denied_jos(&$o, $opr, &$jos);
 				}
 				$ol_prms[] = new object_list_filter(array(
 					"logic" => "OR",
@@ -407,12 +410,12 @@ class personnel_management_job_offer_webview extends class_base
 					$ol = new object_list($ol_prms);
 					$ol_arr = $ol->arr();
 
-					$denied = $this->denied_jos(&$o, $opr, &$jos);
 					$GROUP_LVL1 = "";
 					uasort($ol_arr, array($this, "decide_ord"));
 					
 					foreach($ol_arr as $loc)
 					{
+						$denied = $denied_by_clid[$loc->class_id()];
 						$loc_jos = $loc->get_job_offers()->ids();
 						$JOB_OFFER = $this->job_offer(&$jos, &$props, &$loc_jos, &$denied);
 						if(empty($JOB_OFFER))
