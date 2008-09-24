@@ -545,7 +545,7 @@
 		</action>
 
 		<action name="del_comment">
-			<function name="del_comment">
+			<function name="create_bill_bug_popup">
 				<arguments>
 					<required name="id" type="oid" acl="delete" />
 					<required name="post_ru" type="string" />

@@ -798,7 +798,6 @@ default group=org_objects
 		@property bill_proj_list type=table store=no no_caption=1 parent=billable_table
 		@property bill_task_list type=table store=no no_caption=1 parent=billable_table
 
-
 @default group=bills_monthly
 
 	@property bills_mon_tb type=toolbar no_caption=1 store=no
@@ -9424,6 +9423,17 @@ Bank accounts: yksteise all
 		$o = obj($arr["id"]);
 		$o->delete();
 		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=del_comment api=1 params=name
+		@param id required type=oid acl=delete
+		@param post_ru required type=string
+	**/
+	function create_bill_bug_popup($arr)
+	{
+		$i = get_instance("applications/crm/crb_bill_inst");
+		return $i->create_bill_bug_popup($arr);
 	}
 }
 
