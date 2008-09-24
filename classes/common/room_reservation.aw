@@ -340,7 +340,7 @@ class room_reservation extends class_base
 		// k6igepealt vaatab, kui on 1 ruum, siis kui on mitu, v6tab sessioonist ruumi id, kui see on olemas
 		// kui pole, siis esimese ruumidest
 		//seda jama dubleerib toodete vaates... sest vahepeal v6ib kalendris teine ruum valitud olla
-		if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms")) == 1)
+		if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms")) == 1 && $this->can("view", reset($targ->prop("rooms"))))
 		{
 			$room = obj(reset($targ->prop("rooms")));
 		}
@@ -352,7 +352,7 @@ class room_reservation extends class_base
 		{
 			$room =  obj(reset($_SESSION["room_reservation"]["room_id"]));
 		}
-		elseif(is_array($targ->prop("rooms")))
+		elseif(is_array($targ->prop("rooms")) && $this->can("view", reset($targ->prop("rooms"))))
 		{
 			$room = obj(reset($targ->prop("rooms")));
 		}
@@ -752,10 +752,12 @@ class room_reservation extends class_base
 			"name" => "phone",
 		));
 
-		$loc = obj($room->prop("location"));
-		$bank_inst = get_instance(CL_BANK_PAYMENT);
-		$bank_payment = $loc->prop("bank_payment");
-
+		if($this->can("view" , $room->prop("location")))
+		{
+			$loc = obj($room->prop("location"));
+			$bank_inst = get_instance(CL_BANK_PAYMENT);
+			$bank_payment = $loc->prop("bank_payment");
+		}
 		if(is_oid($bank_payment))
 		{
 
