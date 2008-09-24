@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.10 2008/07/17 13:58:07 tarvo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.11 2008/09/24 10:27:53 markop Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -959,6 +959,8 @@ die();
 				{
 					$o = obj($oid);
 					aw_session_set("user_adm_ui_lc", $o->prop("ui_language"));
+                                     $_SESSION["user_history_count"] = $o->prop("history_size") ? $o->prop("history_size") : 25;
+                                     $_SESSION["user_history_has_folders"] = $o->prop("history_has_folders");
 				}
 				$this->request_startup();
 
