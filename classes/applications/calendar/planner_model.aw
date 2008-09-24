@@ -218,6 +218,14 @@ class planner_model extends core
 		$folders = $this->get_event_folders(array("id" => $obj->id()));
 
 		classload("core/date/date_calc");
+		if(!isset($arr["start"]) && isset($arr["range"]["start"]))
+		{
+			$arr["start"] = $arr["range"]["start"];
+		}
+		if(!isset($arr["end"]) && isset($arr["range"]["end"]))
+		{
+			$arr["end"] = $arr["range"]["end"];
+		}
 		if (empty($arr["start"]))
 		{
 			$di = get_date_range(array(
