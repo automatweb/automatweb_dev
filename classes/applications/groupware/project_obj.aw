@@ -327,5 +327,14 @@ class project_obj extends _int_object
 		return $orderer;
 	}
 
+	public function get_customer_ids()
+	{
+		$ret = array();
+		foreach($this->connections_from(array("type" => "RELTYPE_ORDERER")) as $c)
+		{
+			$ret[$c->prop("to")] = $c->prop("to");
+		}
+		return $ret;
+	}
 }
 ?>
