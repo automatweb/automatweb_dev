@@ -320,8 +320,6 @@ class personnel_management_job_offer_webview extends class_base
 			"status" => object::STAT_ACTIVE,
 			"site_id" => array(),
 			"lang_id" => array(),
-			);
-			/*
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -350,7 +348,7 @@ class personnel_management_job_offer_webview extends class_base
 		if(is_array($o->cities) && count($o->cities) > 0)
 		{
 			$ol_prms["CL_PERSONNEL_MANAGEMENT_JOB_OFFER.loc_city"] = $o->cities;
-		}*/
+		}
 
 		$ol = new object_list($ol_prms);
 		$jos = $ol->arr();
