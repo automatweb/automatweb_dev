@@ -459,7 +459,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @groupinfo work caption="T&ouml;&ouml;"
 
-@groupinfo experiences caption="T&ouml;&ouml;kogemus" parent=work submit=no
+@groupinfo experiences caption="T&ouml;&ouml;kogemus" parent=work
 @default group=experiences
 
 	#@property previous_jobs_tb type=toolbar no_caption=1 store=no
@@ -9251,7 +9251,7 @@ class crm_person extends class_base
 		);
 	}
 
-	public function get_drivers_licence_categories()
+	public function drivers_licence_categories()
 	{
 		$this->drivers_licence_categories = $this->get_drivers_licence_original_categories();
 		$this->drivers_licence_original_categories = $this->drivers_licence_categories;
