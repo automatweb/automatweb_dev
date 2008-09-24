@@ -169,4 +169,13 @@ class bug_object extends _int_object
 		$ol->add($comments);
 		return $ol;
 	}
+
+	/** returns bug orderer
+		@attrib api=1
+		@returns oid
+	**/
+	public function get_orderer()
+	{
+		return $this->prop("orderer");
+	}
 }
