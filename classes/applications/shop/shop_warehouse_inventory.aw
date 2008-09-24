@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_inventory.aw,v 1.4 2008/07/23 10:18:30 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_inventory.aw,v 1.5 2008/09/24 09:22:51 robert Exp $
 // shop_warehouse_inventory.aw - Inventuur 
 /*
 
@@ -84,6 +84,28 @@ class shop_warehouse_inventory extends class_base
 	function _get_toolbar($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
+		$t->add_menu_button(array(
+			"name" => "add",
+			"tooltip" => t("Lisa saateleht"),
+			"img" => "new.gif",
+		));
+		foreach($arr["obj_inst"]->prop("warehouse") as $whid)
+		{
+			$who = obj($whid);
+			$pt = $who->prop("conf.".(($var == "_export") ? "export_fld" : "reception_fld"));
+			if(!$pt)
+			{
+				$pt = $arr["obj_inst"]->id();
+			}
+			$t->add_menu_item(array(
+				"parent" => "add",
+				"text" => sprintf(t("Saateleht: %s"), $who->name()),
+				"link" => $this->mk_my_orb("new", array(
+					"parent" => $pt,
+					"return_url" => get_ru()
+				), CL_SHOP_DELIVERY_NOTE)
+			));
+		}
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -270,7 +292,12 @@ class shop_warehouse_inventory extends class_base
 			{
 				if(isset($wh_amts[$whid][$prodid]))
 				{
-					$data["warehouse_amount".$whid] = $wh_amts[$whid][$prodid];
+					$data["warehouse_amount".$whid] = html::href(array(
+						"caption" => $wh_amts[$whid][$prodid],
+						"url" => "#",
+						"title" => t("Tegelik kogus"),
+						"onclick" => "ra = aw_get_el(\"r_amounts[".$whid."][".$prodid."]\"); ra.value = \"".$wh_amts[$whid][$prodid]."\";",
+					));
 					if($clid != CL_SHOP_PRODUCT || (!$prod->prop("serial_number_based") && !$prod->prop("order_based")))
 					{
 						$data["real_amount".$whid] = html::textbox(array(
