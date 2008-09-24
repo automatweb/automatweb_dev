@@ -31,6 +31,9 @@
 	@property jo2link type=checkbox
 	@caption T&ouml;&ouml;pakkumisel klikkides p&auml;&auml;seb selle detailvaatesse
 
+	@property only_translated_jos type=checkbox
+	@caption Kuva ainult aktiivse t&otilde;lkega t&ouml;&ouml;pakkumisi
+
 	@property ord_tbl type=table
 	@caption J&auml;rjestamisprintsiibid
 
@@ -302,6 +305,7 @@ class personnel_management_job_offer_webview extends class_base
 	{
 		$arr["id"] = 679;
 		$o = obj($arr["id"]);
+		$this->skip_untrans = $o->prop("only_translated_jos");
 		$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
 		$this->read_template("show.tpl");
 
@@ -316,6 +320,8 @@ class personnel_management_job_offer_webview extends class_base
 			"status" => object::STAT_ACTIVE,
 			"site_id" => array(),
 			"lang_id" => array(),
+			);
+			/*
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -344,7 +350,7 @@ class personnel_management_job_offer_webview extends class_base
 		if(is_array($o->cities) && count($o->cities) > 0)
 		{
 			$ol_prms["CL_PERSONNEL_MANAGEMENT_JOB_OFFER.loc_city"] = $o->cities;
-		}
+		}*/
 
 		$ol = new object_list($ol_prms);
 		$jos = $ol->arr();
@@ -634,11 +640,16 @@ class personnel_management_job_offer_webview extends class_base
 	}
 
 	private function job_offer($jos, $props, $allowed = NULL, $denied = array())
-	{		
+	{
 		$JOB_OFFER = "";
 		foreach($jos as $jo)
 		{
 			if(in_array($jo->id(), $denied) || !in_array($jo->id(), $allowed) && is_array($allowed))
+			{
+				continue;
+			}
+			// Maybe I don't wanna see untranslated job offers!??!
+			if($this->skip_untrans && !$jo->meta("trans_".aw_global_get("lang_id")."_status") && $jo->lang_id() != aw_global_get("lang_id"))
 			{
 				continue;
 			}

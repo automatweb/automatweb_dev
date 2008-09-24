@@ -74,6 +74,15 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumisel klikkides p&amp;amp;auml;&amp;amp;auml;seb selle detailvaatesse</caption>
       </property>
       <property>
+            <name>only_translated_jos</name>
+            <table>objects</table>
+            <group>display</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Kuva ainult aktiivse t&amp;amp;otilde;lkega t&amp;amp;ouml;&amp;amp;ouml;pakkumisi</caption>
+      </property>
+      <property>
             <name>ord_tbl</name>
             <table>objects</table>
             <group>display</group>
