@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.159 2008/09/17 14:51:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.160 2008/09/24 08:40:16 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -469,7 +469,7 @@ class releditor extends core
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
 					"start_from_index" : "'.$conns_count.'",
-					"main_clid" : "'.$obj->class_id().'",
+					"main_clid" : "'.$obj->class_id().'"
 					});
 			</script>',
 			"store" => "no",
@@ -1780,7 +1780,7 @@ class releditor extends core
 
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
-
+		
 		$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["cfgform"]);
 		$cfgcontroller_inst = get_instance(CL_CFGCONTROLLER);
 
@@ -1966,7 +1966,7 @@ class releditor extends core
 		$o->set_class_id($rel_clid);
 		$i = $o->instance();
 		$defs = array();
-
+		
 		foreach(safe_array($cur_prop["table_fields"]) as $prop_name)
 		{
 			$tc_name = $prop_name;
@@ -1989,7 +1989,6 @@ class releditor extends core
 			{
 				$tc_val = $prop_data[$prop_name];
 			}
-
 			$pv = $rel_props[$prop_name];
 			$pv["value"] = $tc_val;
 
@@ -2018,7 +2017,6 @@ class releditor extends core
 			{
 				$i->get_property($args);
 			}
-
 			switch($pv["type"])
 			{
 				case "relpicker":
@@ -2070,9 +2068,15 @@ class releditor extends core
 						$tc_val = join(", ", $tmp);
 					}
 					else
+					if (is_array($pv["options"]) && isset($pv["options"][$pv["value"]]))
 					{
 						$tc_val = $pv["options"][$pv["value"]];
 					}
+					else
+					{
+						$tc_val = $pv["value"];
+					}
+					
 					break;
 
 				case "checkbox":
@@ -2275,7 +2279,6 @@ class releditor extends core
 				$idx2oid[$idx++] = $c->prop("to");
 			}
 		}
-//$this->site_log("id = $arr[id] del idx = ".$arr[$propn."_delete_index"]." idx2 = ".dbg::dump($idx2oid)."\n\n");
 		if (is_oid($arr["id"]) && is_oid($idx2oid[$arr[$propn."_delete_index"]]))
 		{
 			$o->disconnect(array(
