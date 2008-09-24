@@ -170,6 +170,37 @@ class bug_object extends _int_object
 		return $ol;
 	}
 
+	//see testimiseks praegu annab k6ik kommentaarid.. pole veel arvega yhendamist tehtud
+	/** returns bug comments without bill 
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_billable_comments($arr)
+	{
+		$ol = new object_list();
+		$comments = $this->connections_from(array(
+			"type" => "RELTYPE_COMMENT",
+		));
+		$inst = get_instance(CL_BUG);
+		foreach($comments as $c)
+		{
+			$comment = $c->to();
+//selle asemele peaks miski ilus filter olema hoopis
+			if(
+				($arr["start"] && $arr["start"] > $comment->created()) || 
+				($arr["end"] && $arr["end"] < $comment->created())
+			)
+			{
+				continue;
+			}
+			if(!$inst->can("view" , $comment->prop("bill")))
+			{
+				$ol->add($comment->id());
+			}
+		}
+		return $ol;
+	}
+
 	/** returns bug orderer
 		@attrib api=1
 		@returns oid

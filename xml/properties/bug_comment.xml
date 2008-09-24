@@ -70,6 +70,15 @@
             <field>aw_activity_stats_type</field>
             <caption>Statistika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
+      <property>
+            <name>bill</name>
+            <table>aw_bug_comments</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BILL</reltype>
+            <field>aw_bill</field>
+            <caption>Arve</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_COMMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -84,5 +93,12 @@
                   <master_table>objects</master_table>
             </aw_bug_comments>
       </tableinfo>
+      <reltypes>
+            <BILL>
+                  <value>1</value>
+                  <clid>CL_CRM_BILL</clid>
+                  <caption>Arve</caption>
+            </BILL>
+      </reltypes>
 </properties>
 

@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="create_bill_bug_popup" all_args="1">
+			<function name="create_bill_bug_popup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

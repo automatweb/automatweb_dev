@@ -216,23 +216,7 @@ class crm_company_bills_impl extends class_base
 		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
 		if($stats_inst->there_are_bugs())
 		{
-			if(!$arr["request"]["billable_start"])
-			{
-				$arr["request"]["billable_start"] = mktime(0,0,0, (date("m" , time()) - 1),1 ,date("Y" , time()));
-			}
-			else
-			{
-				$arr["request"]["billable_start"] = date_edit::get_timestamp($arr["request"]["billable_start"]);
-			}
-			if(!$arr["request"]["billable_end"])
-			{
-				$arr["request"]["billable_end"] = mktime(-1,0,0, date("m" , time()),1 ,date("Y" , time()));
-			}
-			else
-			{
-				$arr["request"]["billable_end"] = date_edit::get_timestamp($arr["request"]["billable_end"] );
-			}
-			
+			$this->get_time_between($arr["request"]);
 			$bugs = $this->get_billable_bugs($arr["request"]);
 			foreach($bugs->arr() as $bug)
 			{
@@ -688,7 +672,13 @@ enter_function("bills_impl::_get_bill_task_list5");
 					{
 						$bug = obj($id);
 						$t->define_data(array(
-							"name" => html::obj_change_url($bug)." ".html::href(array("caption" => t("(kommentaarid)") , "url" => "http")),
+							"name" => html::obj_change_url($bug)." ".html::href(array("caption" => t("(kommentaarid)") , "url" => 'javascript:aw_popup_scroll("'.$this->mk_my_orb(
+								"create_bill_bug_popup", array(
+									"openprintdialog" => 1,
+									"id" => $bug->id(),
+									"start" => $this->search_start,
+									"end" => $this->search_end,
+							)).'","'.t("Bugide kommentaarid").'",550,500)')),
 							"oid" => $bug->id(),
 							"hrs" =>  $bug->prop("num_hrs_real"),
 							"hr_price" => $hr_price,
@@ -1943,80 +1933,39 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	function get_billable_bugs($r)
 	{
-		$filt = array(
-			"class_id" => CL_BUG,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"brother_of" => new obj_predicate_prop("id"),
-		);
-		
-		$r["stats_s_from"] = $r["billable_start"];
-		$r["stats_s_to"] = $r["billable_end"];
-
-		if($r["stats_s_from"] == -1)
-		{
-			$r["stats_s_from"] = 0;//et aegade algusest
-		}
-		if($r["stats_s_to"] == -1)
-		{
-			 $r["stats_s_to"] = 991154552400;//suht suva suur number
-		}
+		$ol = new object_list();
 
 		$bc_filt = array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array()
 		);
-		if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
+
+		if ($this->search_start && $this->search_end)
 		{
-			$bc_filt[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]),
-					"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, ($r["stats_s_from"] - 1), ($r["stats_s_to"] + 86399))
-				)
-			));
+			$bc_filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $this->search_start, $this->search_end);
 		}
-		else
-		if ($r["stats_s_from"] > 1)
+		elseif($this->search_start)
 		{
-			$bc_filt[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"created" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]-1),
-					"created" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"])
-				)	
-			));
+			$bc_filt["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $this->search_start);
 		}
-		else
-		if ($r["stats_s_to"] > 1)
+		elseif ($this->search_end)
 		{
-			$bc_filt[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"created" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($r["stats_s_to"]+ 86399)),
-					"created" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($r["stats_s_to"]+86399))
-				)
-			));
+			$bc_filt["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $this->search_end);
 		}
 
 		$bc_ol = new object_list($bc_filt);
 		$this->bug_comments = array();
+
 		foreach($bc_ol->arr() as $bc)
 		{
-			$this->bug_comments[$bc->parent()][] = $bc;
-		}
-		$this->start_filt = $filt["start1"];
-		
-		$ol = new object_list($filt);
-		// filter the list by the comment list
-		foreach($ol->ids() as $id)
-		{
-			if (!isset($this->bug_comments[$id]))
+			if(!$this->can("view" , $bc->prop("bill")))
 			{
-				$ol->remove($id);
+				$this->bug_comments[$bc->parent()][] = $bc;
 			}
 		}
+
+		$ol->add(array_keys($this->bug_comments));
 		return $ol;
 	}
 
@@ -2031,5 +1980,146 @@ exit_function("bills_impl::_get_bill_task_list");
 		} while ($str != "");
 		return $ret;
 	}
+
+	private function add_bill_comments_to_session($sel)
+	{
+		if(!$_SESSION["ccbc_bug_comments"]) $_SESSION["ccbc_bug_comments"] = array();
+		//siia vaja kontrolli, et kui klient tuleb erinev, siis nulliks 2ra massiivi
+		$_SESSION["ccbc_bug_comments"] = $_SESSION["ccbc_bug_comments"] + $sel;
+
+	}
+
+	/**
+		@attrib name=create_bill_bug_popup api=1 params=name all_args=1
+	**/
+	function create_bill_bug_popup($arr)
+	{
+		if(is_array($arr["sel"]))
+		{
+			$this->add_bill_comments_to_session($arr["sel"]);
+
+			$ret = 	"<script type='text/javascript'>window.close();</script>";
+			die($ret);
+		}
+	
+		if(!$this->can("view" , $arr["id"]))
+		{
+			die(t("Bugi id puudu..."));
+		}
+
+		$bug = obj($arr["id"]);
+
+		$comments = $bug->get_billable_comments(array(
+				"end" => $arr["end"],
+				"start" => $arr["start"],
+		));
+		if(!sizeof($comments->ids()))
+		{
+			die(t("Valitud bugil pole arvele minevaid kommentaare..."));
+		}
+
+		get_instance("vcl/table");
+		$t = new vcl_table();
+
+
+//Tulpadeks: esimesed 300 m2rki igast kommentaarist (klikitav), kommentaarile kulunud aeg ning nende taga on m2rkeruut kommentaari valimiseks (vaikimisi tsekitud).
+
+
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+		));
+
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Kulunud aeg"),
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+		
+		foreach($comments->arr() as $comment)
+		{
+			$t->define_data(array(
+				"comment" => html::href(array(
+						"caption" => substr($comment->prop("comment"), 0 , 300) , 
+						"url" => html::obj_change_url($comment , array()))),
+				"time" => $comment->prop("add_wh"),
+				"oid" => $comment->id(),
+			));
+		}
+		
+		$h = get_instance("cfg/htmlclient");
+		$h->start_output();
+
+		$table_prop = array("type" => "text" , "no_caption" => "1" , "value" =>$t->draw());
+
+		$h->add_property($table_prop);
+
+		$h->put_submit(array());
+		$h->finish_output(array(
+			"method" => "GET",
+			"action" => "create_bill_bug_popup",
+			"data" => array(
+				"orb_class" => "crm_company_bills_impl",
+				"id" => $_GET["id"]
+			),
+			"sbt_caption" => t("Arvele")
+		));
+		$html = $h->get_result();
+/*
+		$content = $this->_get_pop_s_res_t($arr);
+		$content .= html::submit(array(
+			"value" => t("Vali")
+		));
+		$content .= $this->mk_reforb("save_pop_s_res", array("id" => $_GET["id"]));
+
+
+		$html .= html::form(array(
+			"method" => "POST",
+			"action" => "orb.aw",
+			"content" => $content
+		));
+*/
+		return $html;
+
+	}
+
+	private function get_time_between($r)
+	{
+		if(!$r["billable_start"])
+		{
+			$r["billable_start"] = mktime(0,0,0, (date("m" , time()) - 1),1 ,date("Y" , time()));
+		}
+		else
+		{
+			$r["billable_start"] = date_edit::get_timestamp($r["billable_start"]);
+		}
+
+		if(!$r["billable_end"])
+		{
+			$r["billable_end"] = mktime(-1,0,0, date("m" , time()),1 ,date("Y" , time()));
+		}
+		else
+		{
+			$r["billable_end"] = date_edit::get_timestamp($r["billable_end"] );
+		}
+
+		if($r["billable_start"] == -1)
+		{
+			$r["billable_start"] = 0;//et aegade algusest
+		}
+		if($r["billable_end"] == -1)
+		{
+			 $r["billable_end"] = 991154552400;//suht suva suur number
+		}
+		$this->search_start = $r["billable_start"];
+		$this->search_end = $r["billable_end"];
+		return;
+	}
+
+
 }
 ?>

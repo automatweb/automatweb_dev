@@ -686,6 +686,11 @@
                   <clid>CL_AW_SPEC</clid>
                   <caption>Spetsifikatsioon</caption>
             </AW_SPEC>
+            <BILL>
+                  <value>19</value>
+                  <clid>CL_CRM_BILL</clid>
+                  <caption>Arve</caption>
+            </BILL>
       </reltypes>
       <layout>
             <name>

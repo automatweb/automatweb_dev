@@ -9424,17 +9424,6 @@ Bank accounts: yksteise all
 		$o->delete();
 		return $arr["post_ru"];
 	}
-
-	/**
-		@attrib name=del_comment api=1 params=name
-		@param id required type=oid acl=delete
-		@param post_ru required type=string
-	**/
-	function create_bill_bug_popup($arr)
-	{
-		$i = get_instance("applications/crm/crb_bill_inst");
-		return $i->create_bill_bug_popup($arr);
-	}
 }
 
 ?>

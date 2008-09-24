@@ -284,6 +284,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype AW_SPEC value=18 clid=CL_AW_SPEC
 @caption Spetsifikatsioon
+
+@reltype BILL value=19 clid=CL_CRM_BILL
+@caption Arve
 */
 
 define("BUG_OPEN", 1);

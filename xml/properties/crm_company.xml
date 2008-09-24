@@ -2298,12 +2298,47 @@
             <field>bill_tb</field>
       </property>
       <property>
+            <name>billable_start</name>
+            <table>objects</table>
+            <group>bills_create</group>
+            <type>date_select</type>
+            <store>no</store>
+            <default>-1</default>
+            <parent>billable_search</parent>
+            <field>billable_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>billable_end</name>
+            <table>objects</table>
+            <group>bills_create</group>
+            <type>date_select</type>
+            <store>no</store>
+            <default>-1</default>
+            <parent>billable_search</parent>
+            <field>billable_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>billable_search_button</name>
+            <table>objects</table>
+            <group>bills_create</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>billable_search</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>billable_search_button</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>bill_proj_list</name>
             <table>objects</table>
             <group>bills_create</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>billable_table</parent>
             <field>bill_proj_list</field>
       </property>
       <property>
@@ -2313,6 +2348,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>billable_table</parent>
             <field>bill_task_list</field>
       </property>
       <property>
@@ -4759,6 +4795,26 @@
                   <area_caption>Otsing</area_caption>
                   <group>documents_news</group>
             </docs_news_left>
+            <billable>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>bills_create</group>
+                  <area_caption></area_caption>
+            </billable>
+            <billable_search>
+                  <type>vbox</type>
+                  <parent>billable</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Arvele&amp;amp;nbsp;minevate&amp;amp;nbsp;ridade&amp;amp;nbsp;Otsing</area_caption>
+                  <group>bills_create</group>
+            </billable_search>
+            <billable_table>
+                  <type>vbox</type>
+                  <parent>billable</parent>
+                  <closeable>1</closeable>
+                  <group>bills_create</group>
+                  <area_caption></area_caption>
+            </billable_table>
             <bills_payments_box>
                   <type>hbox</type>
                   <width>20%:80%</width>
