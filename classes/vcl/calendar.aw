@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.106 2008/09/23 07:30:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.107 2008/09/24 09:21:01 instrumental Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -1223,6 +1223,12 @@ class vcalendar extends aw_template
 			// XX: add optional skip_empty argument
 			if (!$this->skip_empty || $ev_count > 0)
 			{
+				$this->vars(array(
+					"DAY" => $this->parse("DAY"),
+				));
+				$this->vars(array(
+					"WEEK" => $this->parse("WEEK"),
+				));
 				$this->vars(array(
 					"HEADER" => $header,
 					"EVENT" => $et,
