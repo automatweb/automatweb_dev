@@ -255,6 +255,27 @@
             <caption>Lao tellijate kataloog</caption>
       </property>
       <property>
+            <name>purchase_order_mail</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>right</parent>
+            <caption>Ostutellimuse meil</caption>
+      </property>
+      <property>
+            <name>purchase_order_mail_ctrl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PO_MAIL_CONTROLLER</reltype>
+            <parent>right</parent>
+            <caption>Ostutellimuse meili kontroller</caption>
+      </property>
+      <property>
             <name>units_table</name>
             <table>objects</table>
             <group>units</group>
@@ -327,6 +348,11 @@
                   <clid>CL_CURRENCY</clid>
                   <caption>Valuuta</caption>
             </DEF_CURRENCY>
+            <PO_MAIL_CONTROLLER>
+                  <value>7</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>Ostutellimuse meili kontroller</caption>
+            </PO_MAIL_CONTROLLER>
       </reltypes>
       <layout>
             <split>

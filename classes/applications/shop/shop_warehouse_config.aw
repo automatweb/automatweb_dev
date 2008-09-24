@@ -86,6 +86,12 @@
 			@property buyers_fld type=relpicker reltype=RELTYPE_FOLDER parent=right
 			@caption Lao tellijate kataloog
 
+			@property purchase_order_mail type=chooser parent=right
+			@caption Ostutellimuse meil
+
+			@property purchase_order_mail_ctrl type=relpicker reltype=RELTYPE_PO_MAIL_CONTROLLER parent=right
+			@caption Ostutellimuse meili kontroller
+
 @default group=units
 
 	@property units_table type=table store=no no_caption=1
@@ -121,7 +127,12 @@
 @reltype DEF_CURRENCY value=6 clid=CL_CURRENCY
 @caption Valuuta
 
+@reltype PO_MAIL_CONTROLLER value=7 clid=CL_CFG_VIEW_CONTROLLER
+@caption Ostutellimuse meili kontroller
 */
+
+define("SEND_AW_MAIL", 1);
+define("SEND_CTRL_MAIL", 2);
 
 class shop_warehouse_config extends class_base
 {
@@ -157,6 +168,12 @@ class shop_warehouse_config extends class_base
 				{
 					$data["value"] = 0;
 				}
+				break;
+			case "purchase_order_mail":
+				$data["options"] = array(
+					SEND_AW_MAIL => t("AW meil"),
+					SEND_CTRL_MAIL => t("Kontrolleriga defineeritud"),
+				);
 				break;
 		};
 		return $retval;

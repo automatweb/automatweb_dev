@@ -6,6 +6,11 @@
 @default table=aw_shop_purcahse_orders
 @default group=general
 
+@property gen_tb type=toolbar no_caption=1 store=no
+
+@property name type=textbox table=objects field=name
+@caption Nimi
+
 @property number type=textbox field=aw_number
 @caption Number
 
@@ -97,6 +102,9 @@
 
 @reltype JOB value=10 clid=CL_MRP_CASE
 @caption T&ouml;&ouml;
+
+@reltype COMMENT value=11 clid=CL_COMMENT
+@caption Kommentaar
 */
 
 class shop_purchase_order extends class_base
@@ -125,6 +133,42 @@ class shop_purchase_order extends class_base
 			$o = $c->to();
 			$arr["rows"][$o->id()]["tax_rate"] = $o->prop("tax_rate");
 		}
+	}
+
+	function _get_gen_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		if($this->can("view", $arr["obj_inst"]->prop("warehouse")))
+		{
+			$cfgid = obj($arr["obj_inst"]->prop("warehouse"))->prop("conf");
+			if($this->can("view", $cfgid))
+			{
+				$cfg = obj($cfgid);
+			}
+		}
+		if(!$cfg)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_WAREHOUSE_CONFIG,
+				"lang_id" => array(),
+			));
+			$cfg = $ol->begin();
+		}
+		$ml_type = $cfg->prop("purchase_order_mail");
+		$cfgi = get_instance(CL_SHOP_WAREHOUSE_CONFIG);
+		if($ml_type == SEND_AW_MAIL)
+		{
+			$mail_url = get_instance(CL_MESSAGE)->mk_my_orb("new", array("parent" => $arr["obj_inst"]->id(), "return_url" => get_ru()));
+		}
+		else
+		{
+			get_instance(CL_CFG_VIEW_CONTROLLER)->check_property(&$mail_url, $cfg->prop("purchase_order_mail_ctrl"), $arr);
+		}
+		$tb->add_button(array(
+			"img" => "mail_send.gif",
+			"url" => $mail_url,
+			"name" => "send_mail",
+		));
 	}
 
 	function _get_taxed($arr)
@@ -348,6 +392,11 @@ class shop_purchase_order extends class_base
 		$data["sum"] = $sum;
 		$data["taxsum"] = $taxsum;
 		$data["tax_rate"] = $tax;
+		$data["comment"] = html::textbox(array(
+			"name" => "rows[".$id."][comment]",
+			"value" => $o?$o->prop("comment"):'',
+			"size" => 10,
+		));
 		$data["purchaser_art_code"] = html::textbox(array(
 			"name" => "rows[".$id."][other_code]",
 			"value" => $o?$o->prop("other_code"):'',
@@ -407,6 +456,11 @@ class shop_purchase_order extends class_base
 			"caption" => t("Maksum&auml;&auml;r"),
 			"align" => "center",
 			"name" => "tax_rate",
+		));
+		$t->define_field(array(
+			"caption" => t("Kommentaar"),
+			"align" => "center",
+			"name" => "comment",
 		));
 		$t->define_field(array(
 			"caption" => t("Summa"),
