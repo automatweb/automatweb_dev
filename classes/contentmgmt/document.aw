@@ -1039,6 +1039,26 @@ class document extends aw_template
 			$forum = get_instance(CL_FORUM);
 			$fr = $forum->add_comment(array("board" => $docid,"section" => $_sect));
 
+			if ($this->is_template('FORUM_RECENT_COMMENTS'))
+			{
+				$forum->_query_comments(array(
+					'board' => $docid,
+					'limit' => '5'
+				));
+				while ($row = $this->db_next())
+				{
+					$this->vars($row);
+					arr($row);
+					$comms .= $this->parse('FORUM_RECENT_COMMENT');
+				}
+				$this->vars(array(
+					'FORUM_RECENT_COMMENT' => $comms
+				));
+				$this->vars(array(
+					'FORUM_RECENT_COMMENTS' => $this->parse('FORUM_RECENT_COMMENTS')
+				));
+			}
+
 			if ($num_comments > 0)
 			{
 				$this->vars(array("FORUM_ADD_SUB" => $this->parse("FORUM_ADD_SUB")));
@@ -1049,6 +1069,7 @@ class document extends aw_template
 		{
 			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => ""));
 			$this->vars(array("FORUM_ADD_SUB" => ""));
+			$this->vars(array("FORUM_RECENT_COMMENTS" => ""));
 		}
 
 		$langs = "";

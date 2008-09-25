@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.23 2008/06/03 09:31:15 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.24 2008/09/25 10:46:11 dragut Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -813,7 +813,6 @@ topic");
 			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search"),"threadedcomments");
 			$tpl = "messages_threaded.tpl";
 		};
-
 		$tpl = ($args["template"]) ? $args["template"] : $tpl;
 
 		$this->read_template($tpl);
@@ -2152,9 +2151,13 @@ topic");
 	// !Performs a query to get comments matching a certain criteria
 	function _query_comments($args = array())
 	{
+		$limit = '';
+		if (!empty($args['limit'])){
+			$limit = 'LIMIT '.$args['limit'];
+		}
 		if (isset($args["board"]))
 		{
-			$q = "SELECT * FROM comments WHERE board_id = '$args[board]' ORDER BY time";
+			$q = "SELECT * FROM comments WHERE board_id = '$args[board]' ORDER BY time ".$limit;
 			$this->db_query($q);
 		}
 	}
