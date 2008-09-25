@@ -136,6 +136,17 @@
             <caption>City24 Importimine</caption>
       </property>
       <property>
+            <name>city24_deactivate</name>
+            <table>objects</table>
+            <group>grp_city24_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <editonly>1</editonly>
+            <comment>URL millele p&amp;amp;amp;auml;ringut tehes deaktiveeritakse mitteaktiivsed objektid</comment>
+            <caption>Mitte aktiivseks</caption>
+      </property>
+      <property>
             <name>last_city24import</name>
             <table>objects</table>
             <group>grp_city24_log</group>

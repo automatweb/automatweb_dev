@@ -53,6 +53,10 @@
 	@comment URL millele p&auml;ringut tehes imporditakse objektid City24 s&uuml;steemist AW'i
 	@caption City24 Importimine
 
+	@property city24_deactivate type=text editonly=1
+	@comment URL millele p&amp;auml;ringut tehes deaktiveeritakse mitteaktiivsed objektid
+	@caption Mitte aktiivseks
+
 @default group=grp_city24_log
 	@property last_city24import type=hidden
 	@property city24_log_table type=callback callback=callback_city24_log no_caption=1 store=no
@@ -152,7 +156,17 @@ class realestate_import extends class_base
 					"caption" => t("Impordi")
 				));
 				break;
-
+			case "city24_deactivate":
+				$url = $this->mk_my_orb ("city24deactivate", array (
+					"id" => $this_object->id(),
+					"company" => $this_object->prop ("company"),
+				));
+				$prop["value"] = html::href(array(
+					"url" => $url,
+					"target" => "_blank",
+					"caption" => t("Tee mitteaktiivseteks")
+				));
+				break;
 			case "company":
 				if (is_oid ($this_object->prop("realestate_mgr")))
 				{
@@ -227,6 +241,206 @@ class realestate_import extends class_base
 
 		return $prop;
 	}
+
+
+/**
+	@attrib name=city24deactivate nologin=1
+	@param id required type=int
+	@param company required type=int
+	@param import_all optional type=int
+	@param import_city24id optional type=int
+	@param charset_from optional
+	@param charset_to optional
+	@param quiet optional type=int
+**/
+	function city24deactivate ($arr)
+	{
+		$this_object = obj ($arr["id"]);
+
+		$ignore_user_abort_prev_val = ini_get("ignore_user_abort");
+		$max_execution_time_prev_val = ini_get("max_execution_time");
+		$max_mem_prev_val = ini_get("memory_limit");
+		$memory_limit = $this_object->prop("city24_import_memlimit");
+		$memory_limit = (empty($memory_limit) ? "1024" : $memory_limit) . "M";
+		ini_set("memory_limit", $memory_limit);
+		ini_set ("max_execution_time", "3600");
+		ini_set ("ignore_user_abort", "1");
+		aw_global_set ("no_cache_flush", 1);
+		obj_set_opt ("no_cache", 1);
+
+
+		if (1 != $quiet) { echo t("Import CITY24 xml allikast:") . REALESTATE_NEWLINE; }
+
+		if (!empty ($arr["charset_from"]))
+		{
+			define ("REALESTATE_IMPORT_CHARSET_FROM", $arr["charset_from"]);
+		}
+		else
+		{
+			define ("REALESTATE_IMPORT_CHARSET_FROM", "UTF-8");
+		}
+
+		if (!empty ($arr["charset_to"]))
+		{
+			define ("REALESTATE_IMPORT_CHARSET_TO", $arr["charset_to"]);
+		}
+		else
+		{
+			define ("REALESTATE_IMPORT_CHARSET_TO", "ISO-8859-4");
+		}
+
+
+		$import_time = time();
+		$last_import = $this_object->prop ("last_city24import");
+
+		if (1 < $last_import and REALESTATE_MIN_REQUEST_INTERVAL > ($import_time - $last_import))
+		{
+			if (1 != $quiet) { echo t("Viimasest impordist v2hem kui " . REALESTATE_MIN_REQUEST_INTERVAL . "s. Katkestatud.") . REALESTATE_NEWLINE; }
+			return;
+		}
+
+		$this_object->set_prop ("last_city24import", $import_time);
+
+		if (!is_oid ($this_object->prop ("realestate_mgr")))
+		{
+			if (1 != $quiet) { echo t("Viga: halduskeskond defineerimata.") . REALESTATE_NEWLINE; }
+			return REALESTATE_IMPORT_ERR1;
+		}
+		else
+		{
+			$manager = obj ($this_object->prop ("realestate_mgr"));
+		}
+
+		$import_url = $this_object->prop ("city24_import_url")."0";
+arr($import_url);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $import_url);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
+		$xml = curl_exec($ch);
+		curl_close($ch);
+
+		$parser = xml_parser_create(REALESTATE_IMPORT_CHARSET_FROM);
+		xml_parse_into_struct($parser, $xml, $xml_data, $xml_index);
+
+		$imported_properties = array();
+
+
+		#### index of already imported properties' city24 id-s
+		$realestate_classes = array (
+			CL_REALESTATE_HOUSE,
+			CL_REALESTATE_ROWHOUSE,
+			CL_REALESTATE_COTTAGE,
+			CL_REALESTATE_HOUSEPART,
+			CL_REALESTATE_APARTMENT,
+			CL_REALESTATE_COMMERCIAL,
+			CL_REALESTATE_GARAGE,
+			CL_REALESTATE_LAND,
+		);
+		$realestate_folders = array (
+			$manager->prop ("houses_folder"),
+			$manager->prop ("rowhouses_folder"),
+			$manager->prop ("cottages_folder"),
+			$manager->prop ("houseparts_folder"),
+			$manager->prop ("apartments_folder"),
+			$manager->prop ("commercial_properties_folder"),
+			$manager->prop ("garages_folder"),
+			$manager->prop ("land_estates_folder"),
+		);
+		$realestate_folders = array_unique($realestate_folders);
+
+		$this->end_property_import = false;
+
+		$imported_object_ids = array ();
+		$duplicates = array ();
+		$list = new object_list (array (
+			"class_id" => $realestate_classes,
+			"parent" => $realestate_folders,
+			"city24_object_id" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			"is_archived" => 0,
+			"is_visible" => 1,
+			"lang_id" => array(),
+			"site_id" => array()
+		));arr("objekte :".sizeof($list->ids()));
+
+	 	$property = $list->begin();
+		$city_id = (int) $property->prop ("city24_object_id");
+		$imported_object_ids[$city_id] = $property->id();
+		while ($property = $list->next())
+		{
+			$city_id = (int) $property->prop ("city24_object_id");
+			$imported_object_ids[$city_id] = $property->id();
+		}
+
+		### process data
+//arr($xml_data);
+		foreach ($xml_data as $key => $data)
+		{
+			if ("ID" == $data["tag"])
+			{
+				$city24_id = (int) $data["value"];
+				if($imported_object_ids[$city24_id])
+				{
+					$imported_properties[] = $imported_object_ids[$city24_id];
+				}
+			}
+		}
+arr("imporditimiseks objekte :".sizeof($imported_properties));flush();
+
+		### set is_visible to false for objects not found in city24 xml
+		if (count($imported_properties))
+		{
+			$company_id = $this_object->prop("company");
+			$all_persons = array();
+
+			if(is_oid($company_id))
+			{
+				$company = obj($company_id);
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->get_all_workers_for_company($company, $all_persons);
+			}
+
+			// $all_persons = array_keys($all_persons);
+
+			$realestate_objects = new object_list (array (
+				"oid" => new obj_predicate_not ($imported_properties),
+				"class_id" => $realestate_classes,
+				"parent" => $realestate_folders,
+				"city24_object_id" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+
+				// "modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
+				"is_archived" => 0,
+				"is_visible" => 1,
+				"site_id" => array (),
+				"lang_id" => array (),
+			));
+arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
+
+//			arr($realestate_objects);
+
+			foreach($realestate_objects->arr() as $realestate_object)// et siis muudaks n2htamatuks vaid need objektid, mille maaklerid t88tavad selles ettev6ttes, mis on impordiobjekti juurde seostatud
+			{
+				print $realestate_object->prop("city24_object_id")." \n<br>";flush();
+				if(!is_oid($realestate_object->prop("realestate_agent1")) and !is_oid($realestate_object->prop("realestate_agent2"))) $realestate_object->set_prop ("is_visible", 0);
+				if(array_key_exists($realestate_object->prop("realestate_agent1") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
+				if(array_key_exists($realestate_object->prop("realestate_agent2") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
+			}
+
+//			$realestate_objects->set_prop ("is_visible", 0);
+			aw_disable_acl();
+			$realestate_objects->save ();
+			aw_restore_acl();
+		}
+		die("K6ik on kadunud...");
+	}
+
+
 
 /**
 	@attrib name=city24import nologin=1
