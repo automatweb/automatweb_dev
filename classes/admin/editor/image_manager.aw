@@ -43,14 +43,15 @@ class image_manager extends aw_editor_manager_base
 			$image_list = new object_list();
 		}
 
-                if ($arr["doc"] == "http:")
-                {
-                        parse_str(urldecode($_SERVER["QUERY_STRING"]), $params);
-                }
-                else
-                {
-                        parse_str($arr["doc"], $params);
-                }
+		if ($arr["doc"] == "http:")
+		{
+			parse_str(urldecode($_SERVER["QUERY_STRING"]), $params);
+		}
+		else
+		{
+			parse_str($arr["doc"], $params);
+		}
+		
 		if (!$this->can("view", $params["id"]))
 		{
 			// use parent from url as doc
