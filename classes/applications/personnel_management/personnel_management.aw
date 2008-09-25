@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.74 2008/09/25 14:12:57 instrumental Exp $
-// personnel_management.aw - Personalikeskkond 
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.75 2008/09/25 14:42:00 instrumental Exp $
+// personnel_management.aw - Personalikeskkond
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
@@ -25,8 +25,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property notify_subject type=textbox
 		@caption CV sisestamisest teavitava kirja pealkiri
 
-		@property notify_from type=textbox
+		@property notify_from type=relpicker reltype=RELTYPE_NOTIFY_FROM
 		@caption CV sisestamisest teavitava kirja saatja-aadress
+
+		@property notify_candidates type=checkbox ch_value=1
+		@caption Teavita ka kandideerivatest uutest CV
 
 		@property persons_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Isikute kaust
@@ -78,7 +81,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 		@property skill_manager type=relpicker reltype=RELTYPE_SKILL_MANAGER
 		@caption Oskuste haldur
-		
+
 		@property skills_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Oskuste kaust
 
@@ -359,7 +362,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 				@layout offers_tree type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumised
 
 					@property offers_tree type=treeview no_caption=1 parent=offers_tree
-				
+
 				@layout offers_search type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumiste&nbsp;otsing
 
 					@layout os_top type=vbox parent=offers_search
@@ -451,6 +454,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 @reltype NOTIFICATION_TPL value=14 clid=CL_MESSAGE_TEMPLATE
 @caption Kandidatuurist teavitamise kiri
 
+@reltype NOTIFY_FROM value=15 clid=CL_ML_MEMBER
+@caption CV sisestamisest teavitaja
+
 */
 
 class personnel_management extends class_base
@@ -461,7 +467,7 @@ class personnel_management extends class_base
 			"clid" => CL_PERSONNEL_MANAGEMENT,
 			"tpldir" => "applications/personnel_management/personnel_management",
 		));
-		
+
 		$this->search_vars = array(
 			"name" => "Nimi",
 			"age" => "Vanus",
@@ -509,7 +515,7 @@ class personnel_management extends class_base
 			}
 		}
 	}
-	
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -666,7 +672,7 @@ class personnel_management extends class_base
 					$prop["value"] = $arr['request'][$prop["name"]];
 				}
 				break;
-				
+
 			case "os_dl_to":
 				// Default is 1 month forward.
 				$prop["value"] = mktime(0, 0, 0, date("m") + 1, date("d"), date("Y"));
@@ -1641,7 +1647,7 @@ class personnel_management extends class_base
 			"action" => "delete_cands",
 		));
 	}
-	
+
 	function _get_offers_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
@@ -1721,7 +1727,7 @@ class personnel_management extends class_base
 				"offer" => html::obj_change_url($offer)
 			));
 		}
-		
+
 	}
 
 	function candidate_table_flds($arr)
@@ -1744,7 +1750,7 @@ class personnel_management extends class_base
 				"caption" => t("Nimi"),
 				"align" => "left",
 			));
-			
+
 			$oid = is_oid($arr["request"]["county_id"]) ? $arr["request"]["county_id"] : (is_oid($arr["request"]["city_id"]) ? $arr["request"]["city_id"] : $arr["request"]["area_id"]);
 
 			if(is_oid($oid))
@@ -2141,7 +2147,7 @@ class personnel_management extends class_base
 			{
 				$loc .= ", ";
 			}
-			$loc .= $obj->prop("loc_city.name"); 
+			$loc .= $obj->prop("loc_city.name");
 
 			$end = $obj->endless ? t("T&auml;htajatu") : ($obj->prop("end") ? get_lc_date($obj->prop("end")) : t("M&auml;&auml;ramata"));
 			$t->define_data(array(
@@ -2179,7 +2185,7 @@ class personnel_management extends class_base
 
 		if(!is_oid($oid))
 		{
-			$fld_id = $this->can("view", $arr["request"]["fld_id"]) ? $arr["request"]["fld_id"] : $this->offers_fld; 
+			$fld_id = $this->can("view", $arr["request"]["fld_id"]) ? $arr["request"]["fld_id"] : $this->offers_fld;
 
 			$objs = new object_list(array(
 				"lang_id" => array(),
@@ -2214,7 +2220,7 @@ class personnel_management extends class_base
         	{
         		$end = t("M&auml;&auml;ramata");
         	}
-			
+
 			// Location
 			$loc = $obj->prop("loc_area.name");
 			if(strlen($loc) > 0 && strlen($obj->prop("loc_county.name")) > 0)
@@ -2250,7 +2256,7 @@ class personnel_management extends class_base
 		$t->set_default_sorder("desc");
 		$t->sort_by();
 	}
-	
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -2309,9 +2315,9 @@ class personnel_management extends class_base
 				$this->save_offers($arr["request"]);
 				break;
 		}
-		
+
 		return $retval;
-	}	
+	}
 
 	function _set_add_empolyee($arr)
 	{
@@ -2716,7 +2722,7 @@ class personnel_management extends class_base
 			$this->add_skill_options(&$skills, &$options, &$disabled_options, $sid, $lvl + 1);
 		}
 	}
-	
+
 	/**
 		@attrib name=archive params=name
 	**/
@@ -2730,7 +2736,7 @@ class personnel_management extends class_base
 		}
 		return $arr["post_ru"];
 	}
-	
+
 	/**
 		@attrib name=cmp_function api=1
 	**/
@@ -2808,7 +2814,7 @@ class personnel_management extends class_base
 					$ok = $ok || $this->check_special_acl_for_cat($o->prop("loc_".$loc), $clid);
 				}
 				return $ok;
-			
+
 			case CL_CRM_PERSON:
 				$ok = false;
 				$check_cnt = 0;
@@ -2850,7 +2856,7 @@ class personnel_management extends class_base
 				// If there's no reason to show it and no reason not to show it, we'l show it.
 				$ok = $check_cnt == 0 || $ok;
 				return $ok;
-			
+
 			case CL_PERSONNEL_MANAGEMENT_CANDIDATE:
 				return false;
 		}
@@ -2889,7 +2895,7 @@ class personnel_management extends class_base
 				)
 			)),
 			new obj_predicate_sort(array("name" => "asc")),
-		);		
+		);
 
 		if($r["cv_mod_from"] && is_numeric($r["cv_mod_from"]["month"]) && is_numeric($r["cv_mod_from"]["day"]) && is_numeric($r["cv_mod_from"]["year"]))
 		{
@@ -3031,7 +3037,7 @@ class personnel_management extends class_base
 				"conditions" => array(
 					new object_list_filter(array(
 						"logic" => "AND",
-						"conditions" => array(							
+						"conditions" => array(
 							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.name" => "%".$r["cv_schl"]."%",
 							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("shools_fld"),
 						),
@@ -3146,7 +3152,7 @@ class personnel_management extends class_base
 			foreach($r["cv_exp"] as $id => $data)
 			{
 				//	This is the
-				//		0 => t("--vali--") 
+				//		0 => t("--vali--")
 				//			thing.
 				if($data[0] == 0 && count($data) == 1 || count($data) == 0)
 				{

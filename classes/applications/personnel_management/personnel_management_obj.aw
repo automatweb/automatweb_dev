@@ -32,13 +32,13 @@ class personnel_management_obj extends _int_object
 		$msg = obj();
 		$msg->set_class_id(CL_MESSAGE);
 		$msg->set_parent($person_obj->id());
-		$msg->name = !is_object($pm_obj) ? $pm->prop("notify_subject") : t("Uus CV on lisatud");
+		$msg->name = is_object($pm_obj) ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud");
 		$msg->html_mail = 1;
 		$msg->mto = $to;
 		$msg->message = $content;
 		if(is_object($pm_obj))
 		{
-//			$msg->from = $pm_obj->prop("notify_from");
+			$msg->mfrom = $pm_obj->prop("notify_from");
 		}
 		// I need to save it somewhere in order to be able to send it.
 		aw_disable_acl();
@@ -63,7 +63,7 @@ class personnel_management_obj extends _int_object
 	{
 		$o = obj($arr["oid"]);
 		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
-		if($pm->persons_fld == $o->parent() && strlen(trim($pm->notify_mail)) > 0)
+		if($pm->persons_fld == $o->parent() && strlen(trim($pm->notify_mail)) > 0 && ($pm->notify_candidates || !is_oid(aw_global_get("job_offer_obj_id_for_candidate"))))
 		{
 			$this->notify_of_new_cv(array(
 				"person_obj" => $o,

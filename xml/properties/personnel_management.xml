@@ -18,6 +18,35 @@
             <caption>E-postiaadress, kuhu saata sisestatud CV</caption>
       </property>
       <property>
+            <name>notify_subject</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>CV sisestamisest teavitava kirja pealkiri</caption>
+      </property>
+      <property>
+            <name>notify_from</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_NOTIFY_FROM</reltype>
+            <caption>CV sisestamisest teavitava kirja saatja-aadress</caption>
+      </property>
+      <property>
+            <name>notify_candidates</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teavita ka kandideerivatest uutest CV</caption>
+      </property>
+      <property>
             <name>persons_fld</name>
             <group>general2</group>
             <table>objects</table>
@@ -1409,6 +1438,11 @@
                   <clid>CL_MESSAGE_TEMPLATE</clid>
                   <caption>Kandidatuurist teavitamise kiri</caption>
             </NOTIFICATION_TPL>
+            <NOTIFY_FROM>
+                  <value>15</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>CV sisestamisest teavitaja</caption>
+            </NOTIFY_FROM>
       </reltypes>
       <layout>
             <employee>
