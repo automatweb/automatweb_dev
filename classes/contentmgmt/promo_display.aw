@@ -299,6 +299,13 @@ if ($_GET["PROMO_DBG"] == 1)
 				}
 				if (!is_array($docid))
 				{
+					if ($inst->can("view", $docid))
+					{
+						$do = obj($docid);
+						$inst->vars(array(
+							"page_name" => $do->trans_get_val("title")
+						));
+					}
 					$docid = array($docid);
 				}
 
