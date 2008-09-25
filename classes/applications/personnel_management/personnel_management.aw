@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.73 2008/09/25 10:43:12 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.74 2008/09/25 14:12:57 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -21,6 +21,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 		@property notify_mail type=textbox
 		@caption E-postiaadress, kuhu saata sisestatud CV
+
+		@property notify_subject type=textbox
+		@caption CV sisestamisest teavitava kirja pealkiri
+
+		@property notify_from type=textbox
+		@caption CV sisestamisest teavitava kirja saatja-aadress
 
 		@property persons_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Isikute kaust

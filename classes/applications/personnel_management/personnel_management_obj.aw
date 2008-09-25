@@ -32,15 +32,25 @@ class personnel_management_obj extends _int_object
 		$msg = obj();
 		$msg->set_class_id(CL_MESSAGE);
 		$msg->set_parent($person_obj->id());
-		$msg->name = t("Uus CV on lisatud");
+		$msg->name = !is_object($pm_obj) ? $pm->prop("notify_subject") : t("Uus CV on lisatud");
 		$msg->html_mail = 1;
 		$msg->mto = $to;
 		$msg->message = $content;
+		if(is_object($pm_obj))
+		{
+//			$msg->from = $pm_obj->prop("notify_from");
+		}
+		// I need to save it somewhere in order to be able to send it.
+		aw_disable_acl();
 		$msg->save();
+		aw_restore_acl();
 		get_instance(CL_MESSAGE)->send_message(array(
 			"id" => $msg->id(),
 		));
+		// Don't need that anymore.
+		aw_disable_acl();
 		$msg->delete();
+		aw_restore_acl();
 	}
 
 	function on_add_person($arr)
