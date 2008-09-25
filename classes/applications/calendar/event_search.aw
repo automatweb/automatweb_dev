@@ -1073,7 +1073,6 @@ class event_search extends class_base
 				}
 			}
 		}
-
 		if($search_p1 && $formconfig["project1"]["active"] && $show_search_form)
 		{
 			$vars = array(
@@ -1161,7 +1160,7 @@ class event_search extends class_base
 				{
 					$parx2[] = $arr["project2"];
 				}
-				elseif($search_p2)
+				elseif($search_p2 || !empty($par2))
 				{
 					$parx2 = $par2;
 				}
@@ -1375,7 +1374,8 @@ class event_search extends class_base
 				{
 					$ol = new object_list($search);
 					$oris = $ol->brother_ofs();
-					if($arr["project2"])
+
+					if($arr["project2"] || !empty($parx2))
 					{
 						$search2 = $search;
 						$search2["parent"] = $parx2;
