@@ -43,15 +43,46 @@ class project_obj extends _int_object
 		}
 		return $rv;
 	}
-		
-	function get_tasks()
+
+	/** Returns project tasks
+		@attrib api=1 params=name
+		@param from optional type=int
+			Filter date from
+		@param to optional type=int
+			Filter date to
+		@returns
+			object_list 
+	**/
+	function get_tasks($arr)
 	{
 		$filter = array(
 			"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_TASK,
 			"project" => $this->id(),
+			"brother_of" => new obj_predicate_prop("id"),
 		);
+
+		if ($arr["from"] > 1 && $arr["to"])
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $arr["from"], $arr["to"]);
+		}
+		else
+		if ($arr["from"] > 1)
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["from"]);
+		}
+		else
+		if ($arr["to"] > 1)
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $arr["to"]);
+		}
+
+		if($time_filt)
+		{
+			$filter["CL_TASK.RELTYPE_ROW.date"] = $time_filt;
+		}
+
 		$ol = new object_list($filter);
 		return $ol;
 	}

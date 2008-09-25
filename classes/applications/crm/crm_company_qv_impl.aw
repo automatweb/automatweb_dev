@@ -67,6 +67,24 @@ class crm_company_qv_impl extends class_base
 		$this->done_sum = 0;
 		$this->bills_paid_sum = 0;
 
+		$r = array();
+		$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
+		$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
+		if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]);
+		}
+		else
+		if ($r["stats_s_from"] > 1)
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]);
+		}
+		else
+		if ($r["stats_s_to"] > 1)
+		{
+			$time_filt = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["stats_s_to"]);
+		}
+
 		// projs
 		if (!empty($arr["proj"]))
 		{
@@ -97,9 +115,7 @@ class crm_company_qv_impl extends class_base
 		$pi = get_instance(CL_PROJECT);
 		$t_i = get_instance(CL_TASK);
 		$stat = get_instance("applications/crm/crm_company_stats_impl");
-		$r = array();
-		$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
-		$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
+
 		$ount = 0;
 		foreach($ol->arr() as $o)
 		{
@@ -118,15 +134,23 @@ class crm_company_qv_impl extends class_base
 
 			$sum = 0;
 			$hrs = 0;
+
 			// get all tasks for that project and calc sum and hrs
+			$t_ol = $o->get_tasks(array(
+				"from" => $r["stats_s_from"],
+				"to" => $r["stats_s_to"],
+			));
+
+/*
 			$t_ol = new object_list(array(
 				"class_id" => CL_TASK,
 				"lang_id" => array(),
 				"site_id" => array(),
 				"project" => $o->id(),
-				"brother_of" => new obj_predicate_prop("id")
+				"brother_of" => new obj_predicate_prop("id"),
+				
 			));
-
+*/
 			foreach($t_ol->arr() as $task)
 			{
 				foreach($t_i->get_task_bill_rows($task, false) as $row)
@@ -191,21 +215,8 @@ class crm_company_qv_impl extends class_base
 			$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
 			$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
 
-			if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
-			{
-				$filt["start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]);
-			}
-			else
-			if ($r["stats_s_from"] > 1)
-			{
-				$filt["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]);
-			}
-			else
-			if ($r["stats_s_to"] > 1)
-			{
-				$filt["start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["stats_s_to"]);
-			}
 
+			$filt["start1"] = $time_filt;
 			$ol2 = new object_list($filt);
 			$ol->add($ol2);
 
@@ -315,9 +326,10 @@ class crm_company_qv_impl extends class_base
 			"customer" => $arr["obj_inst"]->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
-			"sort_by" => "objects.created desc",
+//			"sort_by" => "objects.created desc",
 			"who" => "%",
 //			"limit" => 10
+			"CL_BUG.created" => $time_filt,
 		));
 		$ol->sort_by_cb(array($this, "__bug_sorter"));
 
@@ -473,7 +485,7 @@ class crm_company_qv_impl extends class_base
 	{
 		$timea = $a->get_last_comment_time();
 		$timeb = $b->get_last_comment_time();
-		return $timea - $timeb;
+		return $timeb - $timea;
 	}
 
 	function _get_qv_cust_inf($arr)
@@ -523,7 +535,6 @@ class crm_company_qv_impl extends class_base
 		$this->_get_qv_t(array(
 			"prop" => array(
 				"vcl_inst" => new vcl_table(),
-
 			),
 			"proj" => $arr["proj"],
 			"obj_inst" => $arr["obj_inst"],
