@@ -5579,7 +5579,7 @@ class crm_person extends class_base
 		}
 		$cur_comp = get_current_company();
 
-		$logo = $cur_comp->prop("logo");
+		$logo = is_object($cur_comp) ? $cur_comp->prop("logo") : 0;
 		foreach($this->get_work_project_tasks($ob->id()) as $project => $data)
 		{
 			if(!$data["selected"])
