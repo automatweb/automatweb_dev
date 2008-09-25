@@ -27,6 +27,9 @@ chdir("classes");
 classload("defs");
 classload("aw_template","core/util/timer");
 classload("core/obj/object", "core/error");
+ 
+manage_failed_data($_GET);
+
 if($do_test || !$autotest)
 {
 	require_once('simpletest/unit_tester.php');
