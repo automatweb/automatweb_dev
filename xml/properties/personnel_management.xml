@@ -9,6 +9,15 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>notify_mail</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>E-postiaadress, kuhu saata sisestatud CV</caption>
+      </property>
+      <property>
             <name>persons_fld</name>
             <group>general2</group>
             <table>objects</table>

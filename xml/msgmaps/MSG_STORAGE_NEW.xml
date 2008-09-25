@@ -51,28 +51,33 @@
       <param>CL_REALESTATE_GARAGE</param>
 </num_9>
 <num_10>
-      <class>crm/crm_company</class>
-      <func>on_save_address</func>
-      <param>CL_CRM_ADDRESS</param>
+      <class>applications/personnel_management/personnel_management</class>
+      <func>on_add_person</func>
+      <param>CL_CRM_PERSON</param>
 </num_10>
 <num_11>
       <class>crm/crm_company</class>
-      <func>on_create_company</func>
-      <param>CL_CRM_COMPANY</param>
+      <func>on_save_address</func>
+      <param>CL_CRM_ADDRESS</param>
 </num_11>
 <num_12>
+      <class>crm/crm_company</class>
+      <func>on_create_company</func>
+      <param>CL_CRM_COMPANY</param>
+</num_12>
+<num_13>
       <class>core/users/user_manager</class>
       <func>on_create_group</func>
       <param>CL_GROUP</param>
-</num_12>
-<num_13>
+</num_13>
+<num_14>
       <class>mrp/mrp_resource</class>
       <func>on_create_resource</func>
       <param>CL_MRP_RESOURCE</param>
-</num_13>
-<num_14>
+</num_14>
+<num_15>
       <class>mrp/mrp_case</class>
       <func>on_new_case</func>
       <param>CL_MRP_CASE</param>
-</num_14>
+</num_15>
 </xml>

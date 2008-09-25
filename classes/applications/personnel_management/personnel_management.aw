@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.72 2008/09/24 13:04:44 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.73 2008/09/25 10:43:12 instrumental Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 @classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes r2=yes no_status=1 no_comment=1 prop_cb=1 maintainer=instrumental
 
@@ -16,6 +18,9 @@
 
 @default field=meta
 @default method=serialize
+
+		@property notify_mail type=textbox
+		@caption E-postiaadress, kuhu saata sisestatud CV
 
 		@property persons_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Isikute kaust
@@ -3275,6 +3280,14 @@ class personnel_management extends class_base
 		}
 
 		return $odl_prms;
+	}
+
+	/** If person is added to personnel management, send notification mail.
+	@attrib name=on_add_person
+	**/
+	function on_add_person($arr)
+	{
+		get_instance("personnel_management_obj")->on_add_person($arr);
 	}
 }
 ?>

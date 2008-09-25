@@ -84,5 +84,19 @@
 			</function>
 		</action>
 
+		<action name="cv_search_filter">
+			<function name="cv_search_filter">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="on_add_person">
+			<function name="on_add_person">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
