@@ -1,8 +1,8 @@
 
-$o0 = obj { class_id=CL_MENU, parent=${parent}, name="Testobject 0", status=STAT_ACTIVE, ord=3, comment="testcomment2" }
-$o1 = obj { class_id=CL_MENU, parent=${parent}, name="Testobject 1", status=STAT_INACTIVE, ord=1 }
-$o2 = obj { class_id=CL_MENU, parent=${o2}, name="Testobject 2", status=STAT_ACTIVE, comment="testcomment", ord=2 }
-$o3 = obj { class_id=CL_MENU, parent=${o2}, name="Testobject 3", status=STAT_INACTIVE, change_pri=0.8, ord=2 }
+$o0 = obj { class_id=CL_MENU, parent=${parent}, name="Testobject 0", status=STAT_ACTIVE, jrk=3, comment="testcomment2" }
+$o1 = obj { class_id=CL_MENU, parent=${parent}, name="Testobject 1", status=STAT_INACTIVE, jrk=1 }
+$o2 = obj { class_id=CL_MENU, parent=${o1}, name="Testobject 2", status=STAT_ACTIVE, comment="testcomment", jrk=2 }
+$o3 = obj { class_id=CL_MENU, parent=${o2}, name="Testobject 3", status=STAT_INACTIVE, change_pri=0.8, jrk=2 }
 $o4 = obj { class_id=CL_DOCUMENT, parent=${o2}, name="Testobject 4", status=STAT_INACTIVE, title="82djnslsamz.b[;dcwvkw# ksadfkoefefe28fa;gj92E@$aDdDAFakeufa" }
 $o5 = obj { class_id=CL_IMAGE, parent=${o3}, name="Testobject 5", status=STAT_INACTIVE }
 $o6 = obj { class_id=CL_DOCUMENT, parent=${o3}, name="Testobject 6", status=STAT_INACTIVE, subtitle="testsubtitle" }

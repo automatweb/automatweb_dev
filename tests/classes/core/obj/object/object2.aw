@@ -93,7 +93,6 @@ class object_test2 extends UnitTestCase
 		$o1 = $this->_get_temp_o();
 		$o1->set_name("o1");
 		$o1->save();
-
 		$o2 = $this->_get_temp_o();
 		$o2->set_parent($o1->id());
 		$o2->set_name("o2");
@@ -102,11 +101,12 @@ class object_test2 extends UnitTestCase
 		$o3 = $this->_get_temp_o();
 		$o3->set_parent($o2->id());
 		$o3->set_name("o3");
+		$o3->save();
+
 
 		$str = $o3->path_str(array(
 			"max_len" => 2
 		));
-
 		$this->assertEqual($str, "o2 / o3");
 
 		$o1->delete(true);
@@ -442,7 +442,7 @@ class object_test2 extends UnitTestCase
 		$o->delete(true);
 	}
 
-	/*function test_createdby()
+	function test_createdby()
 	{
 		$uid = $this->db->db_fetch_field("SELECT uid FROM users LIMIT 0,1", "uid");
 		aw_switch_user(array("uid"=>$uid));
@@ -464,7 +464,7 @@ class object_test2 extends UnitTestCase
 		$id = $o->id();
 		$this->assertEqual($uid, $this->db->db_fetch_field("SELECT modifiedby FROM objects WHERE oid= $id", "modifiedby"));
 		$o->delete(true);
-	}*/
+	}
 
 	function test_created()
 	{

@@ -107,19 +107,19 @@ class object_test extends UnitTestCase
 
 	function test_implicit_save()
 	{
-		$o = obj($this->obj_id);
+		$o = $this->_get_temp_o();
 		$oldn = $o->name();
 		$o->set_implicit_save(true);
 		$this->assertTrue($o->get_implicit_save());
 		aw_disable_acl();
 		$o->set_name($oldn+1);
-		$this->assertEqual($oldn+1, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$this->obj_id, "name"));
+		$this->assertEqual($oldn+1, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
 		$o->set_implicit_save(false);
 		$this->assertFalse($o->get_implicit_save());
 		$o->set_name($oldn);
-		$this->assertFalse($oldn == $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$this->obj_id, "name"));
+		$this->assertFalse($oldn == $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
 		$o->save();
-		$this->assertEqual($oldn, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$this->obj_id, "name"));
+		$this->assertEqual($oldn, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
 		aw_restore_acl();
 	}
 
@@ -360,17 +360,17 @@ class object_test extends UnitTestCase
 	{
 		$o = $this->_get_temp_o();
 		$rm = obj(aw_ini_get("site_rootmenu"));
-	
 		aw_disable_acl();
 		$o->connect(array(
 			"to" => $rm,
-			"type" => "RELTYPE_SEEALSO"
+//			"type" => "RELTYPE_SEEALSO"	only no-reltype-connections get indexes
 		));
 
 		$cf = $o->connections_from(array(
 			"idx" => 1
 		));
 		$this->assertEqual(1, count($cf));
+
 		if (count($cf))
 		{
 			$r = reset($cf);
@@ -419,7 +419,7 @@ class object_test extends UnitTestCase
 			"type" => "RELTYPE_SEEALSO",
 			"class" => CL_MENU,
 			"to" => $rm,
-			"idx" => 1,
+//			"idx" => 1, connections with reltype do not get indexes
 			"to.name" => $rm->name(),
 			"to.created" => $rm->created()
 		));
@@ -548,7 +548,7 @@ class object_test extends UnitTestCase
 		aw_disable_acl();
 		$rm->connect(array(
 			"to" => $o,
-			"type" => "RELTYPE_SEEALSO"
+//			"type" => "RELTYPE_SEEALSO"	with reltype do not get indexes
 		));
 
 		$cf = $o->connections_to(array(
@@ -604,7 +604,7 @@ class object_test extends UnitTestCase
 			"type" => "RELTYPE_SEEALSO",
 			"class" => CL_MENU,
 			"from" => $rm,
-			"idx" => 1,
+//			"idx" => 1,	no index for with reltype
 			"from.name" => $rm->name(),
 			"from.created" => $rm->created(),
 			"from.class_id" => CL_MENU

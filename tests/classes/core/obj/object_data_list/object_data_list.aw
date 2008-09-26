@@ -67,13 +67,15 @@ class object_data_list_test extends UnitTestCase
 				"class_id" => $row["class_id"],
 				"oid" => $row["oid"],
 				"lang_id" => array(),
+				"site_id" => array()
 			),
 			array(
 				$row["class_id"] => array("name"),
 			)
 		);
 		$odl_arr = $odl->arr();
-		$this->assertTrue($row["name"] == $odl_arr[$row["id"]]["name"]);
+		$this->assertTrue($row["name"] == $odl_arr[$row["oid"]]["name"]);
+
 	}
 
 	function test_construct_no_aliases()
@@ -95,8 +97,9 @@ class object_data_list_test extends UnitTestCase
 		$this->assertTrue($odl->list_data[$row["oid"]]["name"] == $row["name"]);
 	}
 
-/*	function test_filter_props_props()
+	function test_filter_props_props()
 	{
+		return;
 		$o1 = obj();
 		$o1->set_parent(aw_ini_get("site_rootmenu"));
 		$o1->set_class_id(CL_CRM_PERSON);
@@ -139,6 +142,7 @@ class object_data_list_test extends UnitTestCase
 
 	function test_filter_props_n_reltypes()
 	{
+return;
 		$o1 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo_Fighters"));
 		$o2 = $this->_get_temp_o();
 
@@ -182,6 +186,7 @@ class object_data_list_test extends UnitTestCase
 
 	function test_filter_reltypes_props()
 	{
+return;
 		$o1 = $this->_get_temp_o();
 		$o2 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo_Fighters"));
 		$o1->connect(array(
@@ -216,8 +221,9 @@ class object_data_list_test extends UnitTestCase
 
 	function test_props_props_parent_name()
 	{
-		$o1 = $this->get_temp_o(array("name" => "This_is_very_unique_name_Foo_Fighters"));
-		$o2 = $this->get_temp_o(array("parent" => $o1->id()));
+		return;
+		$o1 = $this->_get_temp_o(array("name" => "This_is_very_unique_name_Foo_Fighters"));
+		$o2 = $this->_get_temp_o(array("parent" => $o1->id()));
 
 		$odl = new object_data_list(
 			array(
@@ -235,8 +241,9 @@ class object_data_list_test extends UnitTestCase
 
 	function test_props_props_foo_ord()
 	{
-		$o1 = $this->get_temp_o(array("ord" => 865));
-		$o2 = $this->get_temp_o(array("parent" => $o1->id()));
+return;
+		$o1 = $this->_get_temp_o(array("ord" => 865));
+		$o2 = $this->_get_temp_o(array("parent" => $o1->id()));
 
 		$odl = new object_data_list(
 			array(
@@ -254,11 +261,12 @@ class object_data_list_test extends UnitTestCase
 
 	function test_props_props_foo_foo()
 	{
-		$o1 = $this->get_temp_o(array("class_id" => CL_CRM_PERSON));
+return;
+		$o1 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
 		$o1->personal_id = 37806292799;
 		$o1->save();
 
-		$o2 = $this->get_temp_o(array("class_id" => CL_CRM_PERSON));
+		$o2 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
 		$o2->client_manager = $o1->id();
 		$o2->save();
 
@@ -278,6 +286,7 @@ class object_data_list_test extends UnitTestCase
 
 	function test_filter_multiple_clids()
 	{
+return;
 		$odl = new object_data_list(
 			array(
 				"class_id" => array(CL_MENU, CL_CRM_PERSON),
@@ -299,6 +308,7 @@ class object_data_list_test extends UnitTestCase
 
 	function test_props_multiple_clids_props_asked_for()
 	{
+return;
 		$o1 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
 		$o1->personal_id = 37806292799;
 		$o1->save();
@@ -337,6 +347,7 @@ class object_data_list_test extends UnitTestCase
 
 	function test_props_multiple_clids_values()
 	{
+return;
 		$o1 = $this->_get_temp_o(array("class_id" => CL_CRM_PERSON));
 		$o1->personal_id = 37806292799;
 		$o1->save();
@@ -371,7 +382,7 @@ class object_data_list_test extends UnitTestCase
 			}
 		}
 		$this->assertTrue($ok);
-	}	*/
+	}	
 
 	function _get_temp_o($arr = array())
 	{

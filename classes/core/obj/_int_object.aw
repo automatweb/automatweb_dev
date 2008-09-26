@@ -2209,20 +2209,18 @@ class _int_object
 			$rootmenu = array($GLOBALS["cfg"]["rootmenu"]);
 			$add = true;
 		}
-
+if ($GLOBALS["gdg"] == 1)
+echo "int path enter ".dbg::dump($param)." parent = $parent root = ".dbg::dump($rootmenu)." <br>\n";
 		while ($parent && !in_array($parent, $rootmenu))
 		{
+if ($GLOBALS["gdg"] == 1)
+echo "loop with $parent <br>\n";
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
 			{
 				unset($t);
 				$__from_raise_error = aw_global_get("__from_raise_error");
 				aw_global_set("__from_raise_error", 1);
 				$t = new object($parent);
-				if (!empty($GLOBALS["aw_is_error"]))
-				{
-					$parent = 0;
-					break;
-				}
 				aw_global_set("__from_raise_error", $__from_raise_error);
 
 				if (is_oid($param["to"]) && $t->id() == $param["to"])
@@ -2253,7 +2251,8 @@ class _int_object
 				return;
 			}
 		}
-
+if ($GLOBALS["gdg"] == 1)
+echo "int path return ".dbg::dump($ret)." <br>\n";
 		if ($add && !aw_global_get("__is_install"))
 		{
 			$rm = reset($rootmenu);

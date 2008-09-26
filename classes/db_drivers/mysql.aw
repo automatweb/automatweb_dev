@@ -69,7 +69,7 @@ class mysql
 		{
 			print '<pre>';
 			print_r(preg_replace("/\t/","",$qtext));
-			print '</pre>';
+			print '</pre>\n';
 			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
 		};
@@ -79,7 +79,7 @@ class mysql
 			print '<pre>';
 			print $path."\n";
 			print_r(preg_replace("/\t/","",$qtext));
-			print '</pre>';
+			print '</pre>\n';
 			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
 		}

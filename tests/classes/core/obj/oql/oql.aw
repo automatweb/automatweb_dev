@@ -6,8 +6,8 @@ class oql_test extends UnitTestCase
 	{
 		 $this->UnitTestCase($name);
 	}
-/*
-	function setUp()
+
+/*	function setUp()
 	{
 		$this->db = get_instance("class_base");
 		aw_disable_acl();
@@ -25,6 +25,7 @@ class oql_test extends UnitTestCase
 
 	function test_execute_query_clid_without_where_clause()
 	{
+		return;
 		$rv = oql::compile_query("
 		SELECT
 			name
@@ -43,9 +44,9 @@ class oql_test extends UnitTestCase
 		}
 		$this->assertTrue($ok);
 	}
-*/
+
 	// I'm using "WHERE true" cause the darn thing won't work without WHERE clause.
-/*	function test_execute_query_clid_with_where_clause()
+	function test_execute_query_clid_with_where_clause()
 	{
 		$rv = oql::compile_query("
 		SELECT

@@ -28,7 +28,7 @@ classload("defs");
 classload("aw_template","core/util/timer");
 classload("core/obj/object", "core/error");
  
-manage_failed_data($_GET);
+//manage_failed_data($_GET);
 
 if($do_test || !$autotest)
 {
