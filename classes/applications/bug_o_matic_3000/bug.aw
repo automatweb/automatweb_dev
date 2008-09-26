@@ -597,7 +597,7 @@ class bug extends class_base
 				break;
 
 			case "bug_status":
-				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') }";
+				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') } else { $('#settings_col1_outer .sisu3:eq(1)').css('display', 'none'); }";
 				$prop["options"] = $this->bug_statuses;
 				break;
 
