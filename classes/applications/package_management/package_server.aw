@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.15 2008/09/05 12:02:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.16 2008/09/26 10:51:38 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -533,7 +533,7 @@ class package_server extends class_base
 		$sites = $this->get_site_list();
 		$client = $sites[$arr["site_id"]]["url"];
 		$url = $client."/orb.aw?class=package_server&action=download_package_file&id=".$arr["id"]."&site_id=".$arr["site_id"];
-
+ 
 		$contents = file_get_contents($url);
 		$fn = aw_ini_get("server.tmpdir")."/".gen_uniq_id().".zip";
 		$fp = fopen($fn, 'w');
