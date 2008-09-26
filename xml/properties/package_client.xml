@@ -98,6 +98,17 @@
             <caption>Pakkide nimekiri</caption>
       </property>
       <property>
+            <name>my_files_list</name>
+            <table>aw_package_client</table>
+            <group>my_packages</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>packages_list</parent>
+            <store>no</store>
+            <field>my_files_list</field>
+            <caption>Minu Failide nimekiri</caption>
+      </property>
+      <property>
             <name>made_toolbar</name>
             <table>aw_package_client</table>
             <group>made_packages</group>

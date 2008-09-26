@@ -45,6 +45,9 @@
 	@property my_list type=table no_caption=1 store=no
 	@caption Pakkide nimekiri
 
+	@property my_files_list type=text no_caption=1 parent=packages_list store=no
+	@caption Minu Failide nimekiri
+
 @groupinfo made_packages caption="Loodud paketid" no_submit=1
 @default group=made_packages
 
@@ -88,6 +91,18 @@ class package_client extends class_base
 				break;
 			case 'made_toolbar':
 				$arr["prop"]["vcl_inst"]->add_new_button(array(CL_PACKAGE),$arr["obj_inst"]->id());
+				$arr["prop"]["vcl_inst"]->add_delete_button();
+				break;
+			case 'my_files_list':
+				$this->_get_files_list($arr);
+				break;
+			case 'made_files_list':
+				if($this->can("view" , $arr["request"]["show_files"]))
+				{
+					$pac = obj($arr["request"]["show_files"]);
+					$prop["value"] =  join("<br>" , $pac->get_package_file_names());
+				}
+				break;
 		}
 
 		return $retval;
@@ -203,31 +218,37 @@ class package_client extends class_base
 		$t->define_chooser(array(
 			'name' => 'selected_ids',
 			'field' => 'select',
-			'width' => '5%'
+			'width' => '5%',
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => t('Nimi')
+			'caption' => t('Nimi'),
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			'name' => 'version',
 			'caption' => t('Versioon'),
-			'width' => '5%'
+			'width' => '5%',
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			'name' => 'description',
-			'caption' => t('Kirjeldus')
+			'caption' => t('Kirjeldus'),
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'dep',
 			'caption' => t('S&otilde;ltuvused'),
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'down',
 			'caption' => t('x'),
+			"chgbgcolor" => "color",
 		));
 
 		$filter = array(
@@ -245,6 +266,7 @@ class package_client extends class_base
 				"return_url" => get_ru(),
 			));
 			$t->define_data(array(
+				'color' => $_GET["show_files"] == $data["id"] ? "grey":"" ,
 				'select' => $data["id"],
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
 				'version' => $data["version"],
@@ -264,31 +286,37 @@ class package_client extends class_base
 		$t->define_chooser(array(
 			'name' => 'selected_ids',
 			'field' => 'select',
-			'width' => '5%'
+			'width' => '5%',
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => t('Nimi')
+			'caption' => t('Nimi'),
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			'name' => 'version',
 			'caption' => t('Versioon'),
-			'width' => '5%'
+			'width' => '5%',
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			'name' => 'description',
-			'caption' => t('Kirjeldus')
+			'caption' => t('Kirjeldus'),
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'dep',
 			'caption' => t('S&otilde;ltuvused'),
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'down',
 			'caption' => t('Uuemad  versioonid'),
+			"chgbgcolor" => "color",
 		));
 
 		$packages = $arr["obj_inst"]->get_my_packages();
@@ -297,6 +325,7 @@ class package_client extends class_base
 		{
 			$t->define_data(array(
 				'select' => $data["id"],
+				'color' => $_GET["show_files"] == $data["id"] ? "grey":"" ,
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
 				'version' => $data["version"],
 				//'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
@@ -313,56 +342,79 @@ class package_client extends class_base
 		$t->set_caption(t('Tehtud pakettide nimekiri'));
 
 		$t->define_chooser(array(
-			'name' => 'selected_ids',
-			'field' => 'select',
-			'width' => '5%'
+			'name' => 'sel',
+			'field' => 'oid',
+			'width' => '5%',
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => t('Nimi')
+			'caption' => t('Nimi'),
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			'name' => 'version',
 			'caption' => t('Versioon'),
-			'width' => '5%'
+			'width' => '5%',
+			"chgbgcolor" => "color",
 		));
 		$t->define_field(array(
 			'name' => 'description',
-			'caption' => t('Kirjeldus')
+			'caption' => t('Kirjeldus'),
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'dep',
 			'caption' => t('S&otilde;ltuvused'),
+			"chgbgcolor" => "color",
 		));
 
 		$t->define_field(array(
 			'name' => 'up',
 			'caption' => t('x'),
+			"chgbgcolor" => "color",
 		));
 
 		$packages = $arr["obj_inst"]->get_made_packages();
 
 		foreach ($packages->arr() as $package)
 		{
+			$dep = $package->get_dependencies();
+			$dd = array();
+			foreach($dep->arr() as $d)
+			{
+				$change_url = $this->mk_my_orb("change", array(
+					"id" =>  $d->id(),
+					"group" => "change",
+					"return_url" => get_ru(),
+				) , CL_PACKAGE);
+				$dd[] = html::href(array("caption"=> $d->name()." ".$d->prop("version") , "url" => $change_url));
+			}
 			$up_url = $this->mk_my_orb("upload_package", array(
 				"client_id" => $arr["obj_inst"]->id(),
 				"package_id" =>  $package->id(),
 				"return_url" => get_ru(),
 			));
+			$change_url = $this->mk_my_orb("change", array(
+				"id" =>  $package->id(),
+				"group" => "change",
+				"return_url" => get_ru(),
+			) , CL_PACKAGE);
 			$t->define_data(array(
+				'dep' => join ("<br>" , $dd),
+				'oid' => $package->id(),
+				'color' => $_GET["show_files"] == $package->id() ? "grey":"" ,
 				'select' => $package->id(),
 				'name' => html::href(array("caption"=> $package->name() , "url" => aw_url_change_var("show_files" , $package->id()))),
 				'version' => $package->prop("version"),
-				'up' => html::href(array("caption"=> t("Upload") , "url" => $up_url)),
+				'description' => $package->prop("description"),
+				'up' => html::href(array("caption"=> t("Muuda") , "url" => $change_url))." , ".html::href(array("caption"=> t("Upload") , "url" => $up_url)),
 			));
 		}
 		return PROP_OK;
-
-
 	}
-
 }
 
 ?>
