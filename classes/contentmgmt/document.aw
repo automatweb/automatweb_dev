@@ -1048,7 +1048,6 @@ class document extends aw_template
 				while ($row = $this->db_next())
 				{
 					$this->vars($row);
-					arr($row);
 					$comms .= $this->parse('FORUM_RECENT_COMMENT');
 				}
 				$this->vars(array(
