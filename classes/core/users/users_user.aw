@@ -11,7 +11,7 @@ define("GROUP_LEVEL_PRIORITY", 100000);
 define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.2 2008/04/22 12:17:38 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.3 2008/09/26 09:59:52 dragut Exp $
 @classinfo maintainer=kristo
 EMIT_MESSAGE(MSG_USER_LOGIN);
 EMIT_MESSAGE(MSG_USER_LOGOUT);
@@ -73,7 +73,7 @@ class users_user extends aw_template
 			$this->_handle_failed_login($params, $msg);
 		};
 
-		//If user logs on first time and there is setting in .ini file then he/she must chane password before login is compleated
+		//If user logs on first time and there is setting in .ini file then he/she must change password before login is completed
 		aw_disable_acl();
 		$u_oid = users::get_oid_for_uid($uid);
 		if (!$u_oid)
