@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.10 2008/09/16 10:54:56 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.11 2008/09/26 11:29:19 robert Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -473,7 +473,7 @@ class customer_feedback_entry extends class_base
 		if ($arr["new"])
 		{
 			$this->_send_support_mail($arr["obj_inst"]);
-		}$this->_send_support_mail($arr["obj_inst"]);
+		}
 	}
 
 	function _send_support_mail($o)
