@@ -1061,6 +1061,7 @@ class bug extends class_base
 					// save comment
 					//$this->_add_comment($arr["obj_inst"], $prop["value"]);
 					$this->add_comments[] = $prop["value"];
+					$this->notify_monitors = true;
 				}
 				break;
 
@@ -1081,6 +1082,7 @@ class bug extends class_base
 				{
 					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$old], $this->bug_statuses[$prop["value"]]);
 					$this->add_comments[] = $com;
+					$this->notify_monitors = true;
 				}
 				break;
 
@@ -1090,6 +1092,7 @@ class bug extends class_base
 					$com = sprintf(t("Prioriteet muudeti %s => %s"), $old, $prop["value"]);
 					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
+					$this->notify_monitors = true;
 				}
 				break;
 
@@ -1135,6 +1138,7 @@ class bug extends class_base
 					$com = sprintf(t("Kellele muudeti %s => %s"), $old, $nv);
 					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
+					$this->notify_monitors = true;
 				}
 				if($this->who_set)
 				{
@@ -1176,6 +1180,7 @@ class bug extends class_base
 				{
 					$com = sprintf(t("Tagasiside kellelt muudeti %s => %s"), $old, $nv);
 					$this->add_comments[] = $com;
+					$this->notify_monitors = true;
 				}
 				break;
 			case "deadline":
@@ -1209,7 +1214,7 @@ class bug extends class_base
 				$old = $arr["obj_inst"]->prop("num_hrs_real");
 				$new = $old + $prop["value"];
 				$arr["obj_inst"]->set_prop("num_hrs_real", $new);
-				if ($prop["value"])
+				if ((int)$prop["value"])
 				{
 					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $new);
 					$this->add_comments[] = $com;
@@ -1844,7 +1849,7 @@ class bug extends class_base
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
 		{
-			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, true, $this->_acc_add_wh_cust, $this->_acc_add_wh_guess);
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh, $this->notify_monitors, $this->_acc_add_wh_cust, $this->_acc_add_wh_guess);
 		}
 
 		if ($arr["new"])
@@ -2829,12 +2834,14 @@ die($email);
 					thisdate = new Date();
 					timestamp_start = thisdate.getTime();
 					_start_stopper();
+					$("#bug_stopper_pause_link").children().html("Paus")
 				}
 				else if(!pause)
 				{
 					tmp = time.toFixed(2)*1.0
 					$("#bug_add_real").val(r2(tmp));
 					pause = true
+					$("#bug_stopper_pause_link").children().html("J&auml;tka")
 				}
 			}
 			
