@@ -28,10 +28,13 @@ classload("defs");
 classload("aw_template","core/util/timer");
 classload("core/obj/object", "core/error");
  
-//manage_failed_data($_GET);
-
 if($do_test || !$autotest)
 {
+	if($autotest) //automaatse testi puhul peaks inimesi sp2mmima hakkama
+	{
+		manage_failed_data($_GET);
+	}
+
 	require_once('simpletest/unit_tester.php');
 	require_once('simpletest/reporter.php');
 
