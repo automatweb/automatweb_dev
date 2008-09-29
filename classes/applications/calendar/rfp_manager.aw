@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.70 2008/09/23 10:12:58 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.71 2008/09/29 09:46:49 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -55,6 +55,9 @@
 
 @property hotels_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Hotellide kaust
+
+@property rv_cfgmanager type=relpicker reltype=RELTYPE_RV_CFGMANAGER field=meta method=serialize
+@caption Reserveeringute seadete haldur
 
 @property default_table type=table no_caption=1 store=no
 
@@ -209,6 +212,9 @@
 
 @reltype PACKAGE_PRODUCT_FOLDER clid=CL_MENU value=10
 @caption Toodete kaust
+
+@reltype RV_CFGMANAGER clid=CL_CFGMANAGER value=11
+@caption Reserveeringute seadete haldur
 */
 
 

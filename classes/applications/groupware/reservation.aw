@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.140 2008/09/29 07:48:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.141 2008/09/29 09:47:06 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -581,6 +581,38 @@ class reservation extends class_base
 			$script .= "if (window.opener) {window.opener.location.reload();}";
 		}
 		return $script;
+	}
+
+	function callback_get_cfgmanager($arr)
+	{
+		if ($arr["request"]["action"] == "change")
+		{
+			$o = obj($arr["request"]["id"]);
+			$conn = $o->connections_to(array(
+				"from.class_id" => CL_RFP,
+			));
+			if(count($conn))
+			{
+				$rfp = 1;
+			}
+		}
+		elseif($this->can("view", $arr["request"]["rfp"]))
+		{
+			$rfp = 1;
+		}
+		if($rfp)
+		{
+			$rfpm = get_instance(CL_RFP_MANAGER);
+			$rfpmid = $rfpm->get_sysdefault();
+			if($this->can("view", $rfpmid))
+			{
+				$rfpmo = obj($rfpmid);
+				if($rfpmo->prop("rv_cfgmanager"))
+				{
+					return $rfpmo->prop("rv_cfgmanager");
+				}	
+			}
+		}
 	}
 
 	/**
@@ -2084,6 +2116,10 @@ class reservation extends class_base
 	
 	function _get_people_count($arr)
         {
+		if($arr["obj_inst"]->is_lower_bron())
+		{ 	 
+			$arr["prop"]["type"] = "text";
+		}
 		if($arr["request"]["people_count_rfp"])
 		{
 			$arr["prop"]["value"] = $arr["request"]["people_count_rfp"];

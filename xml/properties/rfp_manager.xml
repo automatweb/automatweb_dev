@@ -154,6 +154,16 @@
             <caption>Hotellide kaust</caption>
       </property>
       <property>
+            <name>rv_cfgmanager</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RV_CFGMANAGER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Reserveeringute seadete haldur</caption>
+      </property>
+      <property>
             <name>default_table</name>
             <table>objects</table>
             <group>general</group>
@@ -658,6 +668,11 @@
                   <value>10</value>
                   <caption>Toodete kaust</caption>
             </PACKAGE_PRODUCT_FOLDER>
+            <RV_CFGMANAGER>
+                  <clid>CL_CFGMANAGER</clid>
+                  <value>11</value>
+                  <caption>Reserveeringute seadete haldur</caption>
+            </RV_CFGMANAGER>
       </reltypes>
       <layout>
             <raports_hsplit>
