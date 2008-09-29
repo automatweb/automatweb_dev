@@ -29,13 +29,18 @@ class personnel_management_obj extends _int_object
 			"id" => $person_obj->id(),
 			"cv" => "cv/".basename($pm_obj->prop("cv_tpl")),
 		));
+		$real_lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+		$lang_id = aw_global_get("lang_id");
+		aw_session_set("lang_id", $real_lang_id);
 		// Don't ask me what the next 15 lines do, copy-paste from ml_queue.aw -kaarel
+		$subject = is_object($pm_obj) ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud");
+		$subject = $msg["subject"]="=?".aw_global_get("charset")."?B?".base64_encode($subject)."?=\n";
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->set_header("Content-Type","text/plain; charset=\"".aw_global_get("charset")."\"");
 		$awm->create_message(array(
 			"froma" => $pm_obj->prop("notify_froma"),
 			"fromn" => $pm_obj->prop("notify_fromn"),
-			"subject" => is_object($pm_obj) ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud"),
+			"subject" => $subject,
 			"To" => $to,
 		));
 		$message = str_replace("<br />", "<br />\n" ,$message);
@@ -45,6 +50,7 @@ class personnel_management_obj extends _int_object
 			"data" => $message,
 		));
 		$awm->gen_mail();
+		aw_session_set("lang_id", $lang_id);
 		/*
 		$msg = obj();
 		$msg->set_class_id(CL_MESSAGE);
