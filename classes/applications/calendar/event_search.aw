@@ -1769,7 +1769,7 @@ class event_search extends class_base
 						$fulltext = "";
 					}
 
-					if ($this->is_template('DELETE_EVENT_LINK'))
+					if ($this->is_template('DELETE_EVENT_LINK') && $this->can("delete", $id))
 					{
 						$this->vars(array(
 							'delete_url' => $this->mk_my_orb("delete_event", array(
