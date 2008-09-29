@@ -51,6 +51,9 @@
 @property utextbox10 type=textbox
 @caption
 
+@property utextarea1 type=textarea
+@caption
+
 @property utextarea2 type=textarea
 @caption
 
