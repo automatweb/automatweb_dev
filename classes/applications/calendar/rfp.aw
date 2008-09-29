@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.139 2008/09/24 10:59:05 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.140 2008/09/29 11:07:58 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -440,10 +440,10 @@
 			@property offer_expire_date type=date_select
 			@caption Pakkumise aegumist&auml;htaeg
 
-			@property offer_price_comment type=textarea cols=70 rows=20
+			@property offer_price_comment type=textarea cols=70 rows=5
 			@caption Hinna kommentaar
 
-			@property offer_preface type=textarea cols=70 rows=20
+			@property offer_preface type=textarea cols=70 rows=5
 			@caption Pakkumise eess&otilde;na
 			
 		@groupinfo final_submission caption="Kinnitamine" parent=final_info

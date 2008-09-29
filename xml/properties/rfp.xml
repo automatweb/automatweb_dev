@@ -1144,7 +1144,7 @@
             <group>final_offer</group>
             <type>textarea</type>
             <cols>70</cols>
-            <rows>20</rows>
+            <rows>5</rows>
             <field>offer_price_comment</field>
             <caption>Hinna kommentaar</caption>
       </property>
@@ -1154,7 +1154,7 @@
             <group>final_offer</group>
             <type>textarea</type>
             <cols>70</cols>
-            <rows>20</rows>
+            <rows>5</rows>
             <field>offer_preface</field>
             <caption>Pakkumise eess&amp;amp;otilde;na</caption>
       </property>
