@@ -3356,5 +3356,38 @@ class document extends aw_template
 		}
 	}
 
+	/**
+		@attrib name=get_comment_stats params=pos nologin="1"
+		@param start required type=int
+			stats start timestamp
+		@returns array()
+			array(year => array(month => comments))
+		@comment
+	**/
+	function get_comment_stats($start)
+	{
+		$docs = array();
+		$q = "SELECT oid FROM objects WHERE class_id='".CL_DOCUMENT."' AND created > '".$start."' AND status>0";
+		$this->db_query($q);
+		while($crow = $this->db_next())
+		{
+			$docs[$crow["oid"]] = $crow["id"];
+		}
+		
+		$result = array(); 
+		$months = array();
+		$q = "SELECT time,board_id FROM comments  WHERE time > '".$start."'";
+		$this->db_query($q);
+		while($crow = $this->db_next())
+		{
+			if(array_key_exists($crow["board_id"] , $docs))
+			{
+			$cnt++;
+			$result[date("Y" , $crow["time"])][date("m" , $crow["time"])]++; 
+			}
+		}
+		return $result;
+	}
+
 };
 ?>
