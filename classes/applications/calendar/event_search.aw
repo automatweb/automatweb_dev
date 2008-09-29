@@ -1457,42 +1457,9 @@ class event_search extends class_base
 				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
 				$tabledef = $ob->meta("result_table");
 				uasort($tabledef, array($this, "__sort_props_by_ord"));
-				$cdat = "";
-				$col_count = 0;
-				$clickable = false;
-				if ($this->is_template('DELETE_EVENT_LINK'))
-				{
-					$tabledef['delete_link'] = array(
-						'caption' => t('Kustuta'),
-						'active' => true
-					);
-				}
-				foreach($tabledef as $key => $propdef)
-				{
-					if(!$propdef["active"])
-					{
-						continue;
-					}
-					if($key == "content")
-					{
-						continue;
-					}
-					if($propdef["clickable"])
-					{
-						$clickable = true;
-					}
-
-					$this->vars(array(
-						"colcaption" => $propdef["caption"],
-					));
-					$cdat .= $this->parse("COLHEADER");
-					$col_count++;
-
-					$this->vars(array(
-						"COLHEADER" => $cdat,
-						"col_count" => $col_count,
-					));
-				}
+				// We have to parse the table header after the data, cuz we don't know if we need to add the "Delete" column.
+				$parse_table_header = true;
+				$add_delete_column = false;
 			}
 			$blist = array();
 			if(!empty($origs))
@@ -1538,7 +1505,7 @@ class event_search extends class_base
 				{
 					$edata[$i]["projs"] = array_keys($val);
 					$edata[$i]["project_selector"] = implode(", ", $valz);
-				}				
+				}
 			}
 			if(count($prj_ch1) > 1)
 			{
@@ -1811,13 +1778,52 @@ class event_search extends class_base
 							), CL_EVENT_SEARCH),
 						));
 						$delete_url_str = $this->parse('DELETE_EVENT_LINK');
-
+						$add_delete_column = true;
 					}
 					$this->vars(array(
 						"FULLTEXT" => $fulltext,
 						"DELETE_EVENT_LINK" => $delete_url_str
 					));
 					$res .= $this->parse("EVENT");
+				}
+			}
+			if($parse_table_header)
+			{
+				$cdat = "";
+				$col_count = 0;
+				$clickable = false;
+				if ($this->is_template('DELETE_EVENT_LINK') && $add_delete_column)
+				{
+					$tabledef['delete_link'] = array(
+						'caption' => t('Kustuta'),
+						'active' => true
+					);
+				}
+				foreach($tabledef as $key => $propdef)
+				{
+					if(!$propdef["active"])
+					{
+						continue;
+					}
+					if($key == "content")
+					{
+						continue;
+					}
+					if($propdef["clickable"])
+					{
+						$clickable = true;
+					}
+
+					$this->vars(array(
+						"colcaption" => $propdef["caption"],
+					));
+					$cdat .= $this->parse("COLHEADER");
+					$col_count++;
+
+					$this->vars(array(
+						"COLHEADER" => $cdat,
+						"col_count" => $col_count,
+					));
 				}
 			}
 			//Navigation bar
@@ -2157,7 +2163,7 @@ class event_search extends class_base
 		// Don't we need the "major" parents itself also? I think we do.
 		//															-kaarel
 		$ids = array_merge($ids,$p_rn);
-		
+
 		// Planner's events can be in any folder. Have to get it from it's property.
 		$planners = new object_list(array(
 			"class_id" => CL_PLANNER,
@@ -2168,7 +2174,7 @@ class event_search extends class_base
 			if($this->can("view", $planner->event_folder))
 			{
 				$ids[] = $planner->event_folder;
-			}			
+			}
 		}
 
 		return $ids;
