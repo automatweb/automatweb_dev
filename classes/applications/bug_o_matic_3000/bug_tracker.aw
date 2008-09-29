@@ -729,7 +729,7 @@ class bug_tracker extends class_base
 			case "stat_proj_hrs_start":
 				if (empty($arr["request"][$prop["name"]]))
 				{
-					$prop["value"] = mktime(0, 0, 1, 1, 1, date("Y"));
+					$prop["value"] = mktime(0, 0, 1, date("m"), 1, date("Y"));
 				}
 				else
 				{

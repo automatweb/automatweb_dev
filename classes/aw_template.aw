@@ -4,7 +4,6 @@
 @comment
 	The aw template engine
 */
-
 class aw_template extends core
 {
 	/** the main template folder **/

@@ -39,7 +39,6 @@
 	@forminfo edit onload=load_storage_object
 
 */
-
 // some contants for internal use
 
 // possible return values for set_property
@@ -558,19 +557,22 @@ class class_base extends aw_template
 		// aga mis siis, kui see on sama aken?
 		$cbtrans = get_instance("applications/cb_trans/cb_translate");
 		$trans_default_id = $cbtrans->get_sysdefault();
-		/*
-		$translate_url = html::href(array(
-			"caption" => t("T&otilde;lgi"),
-			"url" => $this->mk_my_orb("change",array(
-				"clid" => $this->clid,
-				"group" => "translation_sub",
+	
+		if ($trans_default_id)
+		{	
+			$translate_url = html::href(array(
+				"caption" => t("T&otilde;lgi"),
+				"url" => $this->mk_my_orb("change",array(
+					"clid" => $this->clid,
+					"group" => "translation_sub",
 				"grpid" => @$args["group"],
 				"id" => $trans_default_id->id(),
 				"area" => "groupedit",
 			),
 			"cb_translate"),
 		));
-		*/
+	}
+		
 		
 
 		$add_txt = "";

@@ -522,7 +522,7 @@ class bt_stat_impl extends core
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_proj_det($t);
-		$req_start = empty($arr["request"]["stat_proj_hrs_start"]) ? mktime(0, 0, 1, 1, 1, date("Y")) : mktime(0, 0, 0, $arr["request"]["stat_proj_hrs_start"]["month"], $arr["request"]["stat_proj_hrs_start"]["day"], $arr["request"]["stat_proj_hrs_start"]["year"], 1);
+		$req_start = empty($arr["request"]["stat_proj_hrs_start"]) ? mktime(0, 0, 1, date("m"), 1, date("Y")) : mktime(0, 0, 0, $arr["request"]["stat_proj_hrs_start"]["month"], $arr["request"]["stat_proj_hrs_start"]["day"], $arr["request"]["stat_proj_hrs_start"]["year"], 1);
 		$req_end = empty($arr["request"]["stat_proj_hrs_end"]) ? time() + 86400 : mktime(23, 59, 59, $arr["request"]["stat_proj_hrs_end"]["month"], $arr["request"]["stat_proj_hrs_end"]["day"], $arr["request"]["stat_proj_hrs_end"]["year"], 1);
 		$time_constraint = null;
 
