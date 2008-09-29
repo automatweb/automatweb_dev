@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.10 2007/11/23 07:18:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.11 2008/09/29 15:02:15 markop Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -343,7 +343,7 @@ var $pangad = array(
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
 		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse eba6nnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -384,7 +384,7 @@ var $pangad = array(
 
 		$VK_SERVICE = "1002";
 		$VK_VERSION	= "008";
-		$VK_SND_ID	= "expost"; 					//	15	Päringu koostaja ID (Kaupluse ID)
+		$VK_SND_ID	= "expost"; 					//	15	P2ringu koostaja ID (Kaupluse ID)
 		$VK_STAMP	= $row["arvenr"];
 		$VK_AMOUNT	= $row["summa"];
 		$VK_CURR		= "EEK";
@@ -407,7 +407,7 @@ var $pangad = array(
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
 		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse eba6nnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -472,7 +472,7 @@ var $pangad = array(
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
 		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse eba6nnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -606,7 +606,7 @@ var $pangad = array(
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
 		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse eba6nnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -775,7 +775,10 @@ var $pangad = array(
 	}
 	function maksaTanud() {
 		global $lc_expp;
-
+if($_POST["VK_SND_ID"] == "SAMPOPANK" && $_POST["VK_SERVICE"] == 1901)
+{
+	return aw_ini_get("baseurl")."/tellimine/";
+}
 		$this->read_template("expp_tanud.tpl");
 		$_aid = $this->cp->getPid( 2 );
 		$myURL = $this->cp->addYah( array(
