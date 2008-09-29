@@ -247,6 +247,17 @@
             <field>raports_tb</field>
       </property>
       <property>
+            <name>raports_search_rfp_name</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>textbox</type>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rfp_name</field>
+            <caption>&amp;amp;Uuml;rituse nimi</caption>
+      </property>
+      <property>
             <name>raports_search_from_date</name>
             <table>objects</table>
             <group>raports</group>
@@ -317,6 +328,18 @@
             <caption>Ruumid</caption>
       </property>
       <property>
+            <name>raports_search_rfp_catering_type</name>
+            <table>objects</table>
+            <group>raports</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <parent>raports_search</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <field>raports_search_rfp_catering_type</field>
+            <caption>Toitlustuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>raports_search_rfp_status</name>
             <table>objects</table>
             <group>raports</group>
@@ -336,7 +359,7 @@
             <captionside>top</captionside>
             <store>no</store>
             <field>raports_search_rfp_submitter</field>
-            <caption>Klient</caption>
+            <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>raports_search_rfp_city</name>

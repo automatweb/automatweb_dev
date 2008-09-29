@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.71 2008/09/29 09:46:49 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.72 2008/09/29 11:04:43 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -93,6 +93,9 @@
 
 	@layout raports_hsplit type=hbox group=raports width=25%:75%
 		@layout raports_search type=vbox closeable=1 area_caption="Otsing" parent=raports_hsplit
+			@property raports_search_rfp_name type=textbox parent=raports_search captionside=top store=no
+			@caption &Uuml;rituse nimi
+
 			@property raports_search_from_date type=date_select parent=raports_search captionside=top store=no
 			@caption Alates
 
@@ -111,11 +114,14 @@
 			@property raports_search_rooms type=select multiple=1 parent=raports_search captionside=top store=no
 			@caption Ruumid
 
+			@property raports_search_rfp_catering_type type=select multiple=1 parent=raports_search captionside=top store=no
+			@caption Toitlustuse t&uuml;&uuml;p
+
 			@property raports_search_rfp_status type=select parent=raports_search captionside=top store=no
 			@caption Staatus
 
 			@property raports_search_rfp_submitter type=textbox parent=raports_search captionside=top store=no
-			@caption Klient
+			@caption Organisatsioon
 
 			@property raports_search_rfp_city type=select parent=raports_search captionside=top store=no
 			@caption Linn
@@ -272,7 +278,6 @@ class rfp_manager extends class_base
 		{
 			$prop["value"] = $arr["request"][$prop["name"]];
 		}
-
 		switch($prop["name"])
 		{
 			//-- get_property --//
@@ -343,6 +348,17 @@ class rfp_manager extends class_base
 				foreach($ol->arr() as $obj)
 				{
 					$prop["options"][$obj->id()] = $obj->name();
+				}
+				break;
+
+			case "raports_search_rfp_catering_type":
+				$ol = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $this->rfpm->prop("prod_vars_folder"),
+				));
+				foreach($ol->arr() as $oid => $o)
+				{
+					$prop["options"][$oid] = $o->name();
 				}
 				break;
 
@@ -680,6 +696,8 @@ class rfp_manager extends class_base
 			"client" => $arr["request"]["raports_search_rfp_submitter"],
 			"rfp_city" => $arr["request"]["raports_search_rfp_city"],
 			"rfp_hotel" => $arr["request"]["raports_search_rfp_hotel"],
+			"rfp_name" => $arr["request"]["raports_search_rfp_name"],
+			"rfp_catering_type" => $arr["request"]["raports_search_rfp_catering_type"],
 		));
 
 		$filters = false;
@@ -874,8 +892,25 @@ class rfp_manager extends class_base
 					);
 					$current_type = $type_ext[$data["result_type"]];
 					$loopdata = ($data["result_type"] == RFP_RAPORT_TYPE_CATERING)?$data["products"]:$data["resources"];
-
-					if(count($loopdata))
+					$cont = false;
+					if($data["result_type"] == RFP_RAPORT_TYPE_CATERING)
+					{
+						if($filt = $_GET["raports_search_rfp_catering_type"])
+						{
+							$cont = true;
+							foreach($filt as $f)
+							{
+								foreach($loopdata as $subrow_data)
+								{
+									if($f == $subrow_data["var"])
+									{
+										$cont = false;
+									}
+								}
+							}
+						}
+					}
+					if(count($loopdata) && !$cont)
 					{
 						$_row_html = "";
 						$_tmp = "";
@@ -1438,7 +1473,7 @@ class rfp_manager extends class_base
 		}
 
 		// raports search 
-		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel");
+		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel", "rfp_name", "rfp_catering_type");
 		foreach($todo as $do)
 		{
 			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
@@ -1858,11 +1893,25 @@ class rfp_manager extends class_base
 		{
 			$rfps["confirmed"] = $arr["rfp_status"];
 		}
+		if($arr["client"])
+		{
+			$cl_ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"name" => "%".$arr["client"]."%",
+			));
+			if($cl_ol->count())
+			{
+				$clients = $cl_ol->ids();
+			}
+			else
+			{
+				$clients = array(-1);
+			}
+		}
 		$rfps["CL_RFP.data_gen_city"] = $arr["rfp_city"]?$arr["rfp_city"]:array();
 		$rfps["CL_RFP.data_gen_hotel"] = $arr["rfp_hotel"]?$arr["rfp_hotel"]:array();
-
+		$rfps["CL_RFP.data_gen_function_name"] = $arr["rfp_name"]?"%".$arr["rfp_name"]."%":array();
 		$rfp_ol = new object_list($rfps);
-			
 		if(!is_array($arr["search"]) OR in_array(1, $arr["search"]))
 		{
 			$arr["search"] = array_keys($raport_sub_methods);
@@ -1910,10 +1959,13 @@ class rfp_manager extends class_base
 				unset($result[$k]);
 				continue;
 			}
-			if(strlen($arr["client"]) and $this->can("view", $data["rfp"])) // the smartest thing would be to take those props away from meta and use the filter on the rfp obj list..
+			if(strlen($arr["client"])) // the smartest thing would be to take those props away from meta and use the filter on the rfp obj list..
 			{
-				$rfp = obj($data["rfp"]);
-				if(!strstr($rfp->prop("data_subm_name"), trim($arr["client"])) AND !strstr($rfp->prop("data_subm_organisation"), trim($arr["client"])))
+				if($this->can("view", $data["rfp"]))
+				{
+					$rfp = obj($data["rfp"]);
+				}
+				if(!$this->can("view", $data["rfp"]) || ((array_search($rfp->prop("data_subm_name"), $clients) === false) AND (array_search($rfp->prop("data_subm_organisation"), $clients) === false)))
 				{
 					unset($result[$k]);
 					continue;
@@ -1934,7 +1986,6 @@ class rfp_manager extends class_base
 					$discount = $res_inst->get_product_discount($rv->id());//meta("discount");
 					$sum = ($prod_price * $amount[$prod_oid]);
 					$sum = ($discount[$prod_oid] > 0 and $discount[$prod_oid])?(((100 - $discount[$prod_oid]) / 100 )* $sum):$sum;
-
 					$result[$k]["products"][$prod_oid] = array(
 						"price" => $prod_price,
 						"amount" => $amount[$prod_oid],
@@ -2077,6 +2128,7 @@ class rfp_manager extends class_base
 				"reservation" => $reservation->id(),
 				"result_type" => RFP_RAPORT_TYPE_CATERING,
 				"rfp" => $data["rfp"],
+				"var" => $data["var"],
 			);
 			if(!is_array($return[$reservation->id()]))
 			{
