@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.53 2008/09/29 10:20:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.54 2008/09/29 13:20:53 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -262,6 +262,23 @@ class crm_company_webview extends class_base
 		{
 			$crm_field = $webview->prop('field'); // contains applicable CRM_FIELD_ class ID
 		}
+
+		$do_link = $this->can('edit', $c->id());
+		$this->vars(array(
+			'company_name' => $do_link ? html::href(array(
+					'url' => $url . $c->id() . '&l='.$arr['id'],
+					'caption' => $c->name()))
+					: $c->name(),
+			'company_name_url' => $url . $c->id() . '&l=' .$arr['id'],
+			'company_name_text' => $c->name(),
+			'company_changeurl' => $this->can('edit', $c->id()) ? html::href(array(
+					'caption' => '('.t("Muuda").')',
+					'url' => $this->mk_my_orb('change',array(
+							'id' => $c->id(),
+						),CL_CRM_COMPANY, true),
+					))
+					: '',		
+		));
 
 		// All possible line_* values are defined here
 		$datafields = array(
@@ -922,7 +939,6 @@ class crm_company_webview extends class_base
 					}
 				break;
 			}
-			
 			$key = ifset($fieldnames, $item);
 			if (is_array($value) && !$value_array_into_separate_vars)
 			{
@@ -1792,7 +1808,7 @@ class crm_company_webview extends class_base
 		@param org required		
 	**/
 	function show_co($arr)
-	{	
+	{
 		$this->sub_merge = 1;
 
 		$o = obj($arr['wv']);
