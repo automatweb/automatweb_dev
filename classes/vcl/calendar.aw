@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.107 2008/09/24 09:21:01 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.108 2008/09/29 10:11:44 instrumental Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -1907,6 +1907,7 @@ class vcalendar extends aw_template
 			"name" => $evt["name"],
 			"id" => $evt["id"],
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
+			"calendar_view_link" => aw_url_change_var("event_id", $evt["id"]),
 			"modifiedby" => $evt["modifiedby"],
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
