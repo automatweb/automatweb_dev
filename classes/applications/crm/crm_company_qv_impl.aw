@@ -90,7 +90,7 @@ class crm_company_qv_impl extends class_base
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
-				"orderer" => $arr["obj_inst"]->id(),
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id(),
 				"lang_id" => array(),
 				"site_id" => array(),
 				"sort_by" => "aw_deadline desc",
@@ -103,7 +103,7 @@ class crm_company_qv_impl extends class_base
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
-				"CL_PROJECT.orderer" => $arr["obj_inst"]->id(),
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id(),
 				"lang_id" => array(),
 				"site_id" => array(),
 				"sort_by" => "aw_deadline desc",
@@ -164,10 +164,10 @@ class crm_company_qv_impl extends class_base
 				}
 			}
 
-			$hrs += $o->get_bugs_time();
-
+			$hrs += $o->get_bugs_time($r["stats_s_from"],$r["stats_s_to"]);
+			$date = !($o->prop("start") || $o->prop("end")) ? date("d.m.Y", $o->created()): date("d.m.Y", $o->prop("start")).($o->prop("end") > 100 ? " - ".date("d.m.Y", $o->prop("end")) : "");
 			$t->define_data(array(
-				"date" => date("d.m.Y", $o->prop("start")).($o->prop("end") > 100 ? " - ".date("d.m.Y", $o->prop("end")) : ""),
+				"date" => $date,
 				"name" => html::obj_change_url($o),
 				"parts" => join(", ",array_unique($parts)),
 				"hrs" => $stat->hours_format($hrs),//number_format($hrs, 3, ',', ''),
@@ -193,33 +193,39 @@ class crm_company_qv_impl extends class_base
 		// tasks
 		if (isset($arr["tasks"]))
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_TASK,
-				"customer" => $arr["obj_inst"]->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"sort_by" => "deadline desc",
-				"deadline" => "%",
-				"oid" => $arr["tasks"]->ids(),
-				"brother_of" => new obj_predicate_prop("id")
-			));
-
-			// also add call/meeting/offer by range
-			$filt = array(
-				"class_id" => array(CL_CRM_MEETING, CL_CRM_CALL, CL_CRM_OFFER),
-				"customer" => $arr["obj_inst"]->id(),
-				"brother_of" => new obj_predicate_prop("id")
-			);
-
-			$r = array();
-			$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
-			$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
-
-
-			$filt["start1"] = $time_filt;
-			$ol2 = new object_list($filt);
-			$ol->add($ol2);
-
+			if(!sizeof($arr["tasks"]->ids()))
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_TASK,
+					"customer" => $arr["obj_inst"]->id(),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"sort_by" => "deadline desc",
+					"deadline" => "%",
+					"oid" => $arr["tasks"]->ids(),
+					"brother_of" => new obj_predicate_prop("id")
+				));
+	
+				// also add call/meeting/offer by range
+				$filt = array(
+					"class_id" => array(CL_CRM_MEETING, CL_CRM_CALL, CL_CRM_OFFER),
+					"customer" => $arr["obj_inst"]->id(),
+					"brother_of" => new obj_predicate_prop("id")
+				);
+	
+				$r = array();
+				$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
+				$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
+	
+	
+				$filt["start1"] = $time_filt;
+				$ol2 = new object_list($filt);
+				$ol->add($ol2);
+			}
 			$grpd = "<b>" . t("Tegevused") . "</b>";
 		}
 		else
@@ -329,7 +335,7 @@ class crm_company_qv_impl extends class_base
 //			"sort_by" => "objects.created desc",
 			"who" => "%",
 //			"limit" => 10
-			"CL_BUG.created" => $time_filt,
+			"CL_BUG.RELTYPE_COMMENT.created" => $time_filt,
 		));
 		$ol->sort_by_cb(array($this, "__bug_sorter"));
 
@@ -337,8 +343,8 @@ class crm_company_qv_impl extends class_base
 
 		foreach($ol->arr() as $o)
 		{
-			
-			$this->hrs_total += $o->prop("num_hrs_real");
+			$real_time = $o->get_bug_comments_time($r["stats_s_from"],$r["stats_s_to"]);
+			$this->hrs_total += $real_time;
 			$this->hrs_cl += $o->prop("num_hrs_to_cust");
 			if($bug_count > 10)
 			{
@@ -368,7 +374,7 @@ class crm_company_qv_impl extends class_base
 				"date" => $c_time > 100 ? date("d.m.Y", $c_time) : "",
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), ($o->name()?$o->name():t("Nimetu"))),
 				"parts" => $parts,
-				"hrs" => number_format($o->prop("num_hrs_real"), 2, ',', ''),
+				"hrs" => number_format($real_time, 2, ',', ''),
 	//			"sum" => number_format($sum, 2, ',', ''),
 				"grp_desc" => $bd,
 				"grp_num" => 4,

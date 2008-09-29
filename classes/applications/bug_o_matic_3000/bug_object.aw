@@ -170,6 +170,48 @@ class bug_object extends _int_object
 		return $ol;
 	}
 
+	/** 
+		@attrib api=1 params=pos
+		@param start
+		@param end
+		@returns double
+	**/
+	public function get_bug_comments_time($start = null, $end = null)
+	{
+		$sum = 0;
+		$filter = array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_BUG_COMMENT,
+			"parent" => $this->id(),
+			"sort_by" => "objects.created desc",
+		);
+
+		if ($start && $end)
+		{
+			$filter["CL_BUG_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($start - 1), ($end+ 1));
+		}
+		else
+		if ($start)
+		{
+			$filter["CL_BUG_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
+		}
+		else
+		if ($end)
+		{
+			$filt["CL_BUG_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end);
+		}
+
+		$ol = new object_list($filter);
+
+		foreach($ol->arr() as $o)
+		{
+			$sum+= (double)$o->prop("add_wh");
+		}
+
+		return $sum;
+	}
+
 	//see testimiseks praegu annab k6ik kommentaarid.. pole veel arvega yhendamist tehtud
 	/** returns bug comments without bill 
 		@attrib api=1

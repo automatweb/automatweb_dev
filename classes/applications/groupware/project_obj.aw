@@ -87,15 +87,41 @@ class project_obj extends _int_object
 		return $ol;
 	}
 
-	function get_bugs()
+	/** returns all bugs related to current project
+		@attrib api=1 params=pos
+		@param start optional
+			time between start
+		@param end optional
+			time between end
+		@returns object list
+	**/
+	function get_bugs($start = null, $end=null)
 	{
 		$filter = array(
 			"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_BUG,
 			"project" => $this->id(),
+			"sort_by" => "objects.created desc",
 		);
+
+		if ($start && $end)
+		{
+			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_OR_EQ, $start, $end);
+		}
+		else
+		if ($start)
+		{
+			$filter["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
+		}
+		else
+		if ($end)
+		{
+			$filt["CL_BUG.RELTYPE_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end);
+		}
+
 		$ol = new object_list($filter);
+
 		return $ol;
 	}
 
@@ -114,6 +140,10 @@ class project_obj extends _int_object
 	function get_bug_comments($date_from = null, $date_to = null)
 	{
 		$bug_ol = $this->get_bugs();
+		if(!sizeof($bug_ol->ids()))
+		{
+			return new object_list();
+		}
 		$filt = array(
 			"class_id" => CL_BUG_COMMENT,
 			"parent" => $bug_ol->ids(),
@@ -122,7 +152,7 @@ class project_obj extends _int_object
 		);
 		if ($date_from !== null && $date_to !== null)
 		{
-			$filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_OR_EQ, $date_from, $date_to);
+			$filt["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($date_from - 1), ($date_to + 1));
 		}
 		else
 		if ($date_from !== null)
@@ -310,35 +340,35 @@ class project_obj extends _int_object
 	}
 
 	/** returns time spent with bugs
-		@attrib api=1
+		@attrib api=1 params=pos
 		@returns double
 			spent time in hours
 	**/
-	function get_bugs_time()
+	function get_bugs_time($start = null, $end = null)
 	{
 		$sum = 0;
-		$ol = $this->get_project_bugs();
-		foreach($ol->arr() as $o)
+		if(!$start && !$end)
 		{
-			$sum += $o->prop("num_hrs_real");
+			$ol = $this->get_bugs();
+			foreach($ol->arr() as $o)
+			{
+				$sum += $o->prop("num_hrs_real");
+			}
+		}
+		else
+		{
+			$comments = $this->get_bug_comments($start , $end);
+			foreach($comments->arr() as $com)
+			{
+				$sum+= (double)$com->prop("add_wh");
+			}
 		}
 		return $sum;
 	}
 
-	/** returns all bugs related to current project
-		@attrib api=1
-		@returns object list
-	**/
+
 	function get_project_bugs()
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_BUG,
-			"project" => $this->id(),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "objects.created desc",
-		));
-		return $ol;
+	{return $this->get_bugs();
 	}
 
 	/** Returns orderer id
