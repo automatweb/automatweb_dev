@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.140 2008/09/29 11:07:58 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.141 2008/09/29 11:11:45 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2845,7 +2845,7 @@ class rfp extends class_base
 				$price = $sum[$currency];
 				if($len >= 1 && $len <= 6)
 				{
-					$unitprice = round($price / $len);
+					$unitprice = round($price / $len, 1);
 				}
 				else
 				{
@@ -2855,7 +2855,7 @@ class rfp extends class_base
 			if($ssum = $rv->prop("special_sum"))
 			{
 				$price = $ssum;
-				$unitprice = round($price / $len);
+				$unitprice = round($price / $len, 1);
 			}
 			$comment = $rv->trans_get_val("comment");
 			$tables_rv = ($rvt = $rv->meta("tables"))?$rvt:$tables;
