@@ -25,10 +25,27 @@ class personnel_management_obj extends _int_object
 	{
 		// $person_oid, $to, $pm_obj
 		extract($arr);
-		$content = get_instance(CL_CRM_PERSON)->show_cv(array(
+		$message = get_instance(CL_CRM_PERSON)->show_cv(array(
 			"id" => $person_obj->id(),
 			"cv" => "cv/".basename($pm_obj->prop("cv_tpl")),
 		));
+		// Don't ask me what the next 15 lines do, copy-paste from ml_queue.aw -kaarel
+		$awm = get_instance("protocols/mail/aw_mail");
+		$awm->set_header("Content-Type","text/plain; charset=\"".aw_global_get("charset")."\"");
+		$awm->create_message(array(
+			"froma" => $pm_obj->prop("notify_froma"),
+			"fromn" => $pm_obj->prop("notify_fromn"),
+			"subject" => is_object($pm_obj) ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud"),
+			"To" => $to,
+		));
+		$message = str_replace("<br />", "<br />\n" ,$message);
+		$message = str_replace("<br>", "<br>\n" ,$message);
+		$message = str_replace("</p>", "</p>\n" ,$message);
+		$awm->htmlbodyattach(array(
+			"data" => $message,
+		));
+		$awm->gen_mail();
+		/*
 		$msg = obj();
 		$msg->set_class_id(CL_MESSAGE);
 		$msg->set_parent($person_obj->id());
@@ -51,6 +68,7 @@ class personnel_management_obj extends _int_object
 		aw_disable_acl();
 		$msg->delete();
 		aw_restore_acl();
+		*/
 	}
 
 	function on_add_person($arr)

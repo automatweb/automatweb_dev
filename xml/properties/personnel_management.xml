@@ -27,14 +27,22 @@
             <caption>CV sisestamisest teavitava kirja pealkiri</caption>
       </property>
       <property>
-            <name>notify_from</name>
+            <name>notify_froma</name>
             <group>general2</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_NOTIFY_FROM</reltype>
+            <type>textbox</type>
             <caption>CV sisestamisest teavitava kirja saatja-aadress</caption>
+      </property>
+      <property>
+            <name>notify_fromn</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>CV sisestamisest teavitava kirja saatja nimi</caption>
       </property>
       <property>
             <name>notify_candidates</name>

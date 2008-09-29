@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.75 2008/09/25 14:42:00 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.76 2008/09/29 17:23:19 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -25,8 +25,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property notify_subject type=textbox
 		@caption CV sisestamisest teavitava kirja pealkiri
 
-		@property notify_from type=relpicker reltype=RELTYPE_NOTIFY_FROM
+		@property notify_froma type=textbox
 		@caption CV sisestamisest teavitava kirja saatja-aadress
+
+		@property notify_fromn type=textbox
+		@caption CV sisestamisest teavitava kirja saatja nimi
 
 		@property notify_candidates type=checkbox ch_value=1
 		@caption Teavita ka kandideerivatest uutest CV
