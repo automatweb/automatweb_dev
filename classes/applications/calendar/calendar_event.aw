@@ -264,7 +264,7 @@ class calendar_event extends class_base
 			3 => "V&auml;lismaal toimuv"
 		);
 		$this->trans_props = array(
-			"name", "title",  "short_description", "description", "utextbox1", "utextbox2", "utextbox3", "utextbox4", "utextbox5", "utextbox6", "utextbox7", "utextbox8", "utextbox9", "utextbox10", "utextarea2", "utextarea3", "utextarea4", "utextarea5"
+			"name", "title",  "short_description", "description", "utextbox1", "utextbox2", "utextbox3", "utextbox4", "utextbox5", "utextbox6", "utextbox7", "utextbox8", "utextbox9", "utextbox10", "utextarea1", "utextarea2", "utextarea3", "utextarea4", "utextarea5"
 		);
 
 		lc_site_load("document", &$this);
