@@ -33,7 +33,15 @@ class rfp_obj extends _int_object
 						{
 							$obj = obj();
 							$obj->set_class_id($inst->prop_to_relclid[$pn]);
-							$obj->set_parent($this->parent());
+							if($inst->rfpm)
+							{
+								$pt = $inst->rfpm->prop("clients_folder");
+							}
+							if(!$pt)
+							{
+								$pt = $this->parent();
+							}
+							$obj->set_parent($pt);
 							$obj->set_name($pv);
 							$obj->save();
 						}

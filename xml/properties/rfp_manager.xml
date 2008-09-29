@@ -144,24 +144,15 @@
             <caption>Kontakteerumise eelistuste kaust</caption>
       </property>
       <property>
-            <name>city_folder</name>
+            <name>hotels</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_LOCATION</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Linnade kaust</caption>
-      </property>
-      <property>
-            <name>hotels_folder</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Hotellide kaust</caption>
+            <caption>Hotellid</caption>
       </property>
       <property>
             <name>rv_cfgmanager</name>
@@ -711,6 +702,11 @@
                   <value>12</value>
                   <caption>Klientide kaust</caption>
             </CLIENTS_FOLDER>
+            <LOCATION>
+                  <clid>CL_LOCATION</clid>
+                  <value>13</value>
+                  <caption>Hotell</caption>
+            </LOCATION>
       </reltypes>
       <layout>
             <raports_hsplit>

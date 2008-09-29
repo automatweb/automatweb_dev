@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.73 2008/09/29 11:45:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.74 2008/09/29 13:12:55 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -53,11 +53,11 @@
 @property contact_preference_folder type=relpicker multiple=1 reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Kontakteerumise eelistuste kaust
 
-@property city_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
-@caption Linnade kaust
+property city_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+caption Linnade kaust
 
-@property hotels_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
-@caption Hotellide kaust
+@property hotels type=relpicker multiple=1 reltype=RELTYPE_LOCATION field=meta method=serialize
+@caption Hotellid
 
 @property rv_cfgmanager type=relpicker reltype=RELTYPE_RV_CFGMANAGER field=meta method=serialize
 @caption Reserveeringute seadete haldur
@@ -227,6 +227,9 @@
 
 @reltype CLIENTS_FOLDER clid=CL_MENU value=12
 @caption Klientide kaust
+
+@reltype LOCATION clid=CL_LOCATION value=13
+@caption Hotell
 */
 
 
@@ -333,27 +336,39 @@ class rfp_manager extends class_base
 			case "s_city":
 				$prop["selected"] = $arr["request"]["s_city"];
 			case "raports_search_rfp_city":
-				$ol = new object_list(array(
-					"class_id" => CL_META,
-					"parent" => $this->rfpm->prop("city_folder"),
-				));
 				$prop["options"][0] = t("-- K&otilde;ik --");
-				foreach($ol->arr() as $obj)
+				$hs = $this->rfpm->prop("hotels");
+				if(is_array($hs) && count($hs))
 				{
-					$prop["options"][$obj->id()] = $obj->name();
+					$ol = new object_list(array(
+						"class_id" => CL_LOCATION,
+						"oid" => $hs,
+					));
+					foreach($ol->arr() as $obj)
+					{
+						$cid = $obj->prop("address.linn");
+						if($this->can("view", $cid))
+						{
+							$prop["options"][$cid] = obj($cid)->name();
+						}
+					}
 				}
 				break;
 			case "s_hotel":
 				$prop["selected"] = $arr["request"]["s_hotel"];
 			case "raports_search_rfp_hotel":
-				$ol = new object_list(array(
-					"class_id" => CL_META,
-					"parent" => $this->rfpm->prop("hotels_folder"),
-				));
 				$prop["options"][0] = t("-- K&otilde;ik --");
-				foreach($ol->arr() as $obj)
+				$hs = $this->rfpm->prop("hotels");
+				if(is_array($hs) && count($hs))
 				{
-					$prop["options"][$obj->id()] = $obj->name();
+					$ol = new object_list(array(
+						"class_id" => CL_LOCATION,
+						"oid" => $hs,
+					));
+					foreach($ol->arr() as $obj)
+					{
+						$prop["options"][$obj->id()] = $obj->name();
+					}
 				}
 				break;
 
@@ -1708,7 +1723,15 @@ class rfp_manager extends class_base
 			}
 
 			// org name
-			if(strlen($request["s_org"]) && !stristr($obj->prop("data_subm_organisation"), $request["s_org"]))
+			if($this->can("view", $obj->prop("data_subm_organisation")))
+			{
+				$orgn = obj($obj->prop("data_subm_organisation"))->name();
+			}
+			else
+			{
+				$orgn = $obj->prop("data_subm_organisation");
+			}
+			if(strlen($request["s_org"]) && !stristr($orgn, $request["s_org"]))
 			{
 				unset($rfps[$oid]);
 			}

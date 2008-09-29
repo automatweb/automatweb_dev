@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.142 2008/09/29 11:45:53 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.143 2008/09/29 13:12:55 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -628,28 +628,38 @@ class rfp extends class_base
 				);
 				break;
 			case "data_gen_city":
-				if($this->can("view", ($_t = $this->rfpm->prop("city_folder"))))
+				if($_t = $this->rfpm->prop("hotels"))
 				{
-					$list = new object_list(array(
-						"class_id" => CL_META,
-						"parent" => $_t,
-					));
-					foreach($list->arr() as $obj)
+					if(is_array($_t) && count($_t))
 					{
-						$prop["options"][$obj->id()] = $obj->name();
+						$list = new object_list(array(
+							"class_id" => CL_LOCATION,
+							"oid" => $_t,
+						));
+						foreach($list->arr() as $obj)
+						{
+							$cid = $obj->prop("address.linn");
+							if($this->can("view", $cid))
+							{
+								$prop["options"][$cid] = obj($cid)->name();
+							}
+						}
 					}
 				}
 				break;
 			case "data_gen_hotel":
-				if($this->can("view", ($_t = $this->rfpm->prop("hotels_folder"))))
+				if($_t = $this->rfpm->prop("hotels"))
 				{
-					$list = new object_list(array(
-						"class_id" => CL_META,
-						"parent" => $_t,
-					));
-					foreach($list->arr() as $obj)
+					if(is_array($_t) && count($_t))
 					{
-						$prop["options"][$obj->id()] = $obj->name();
+						$list = new object_list(array(
+							"class_id" => CL_LOCATION,
+							"oid" => $_t,
+						));
+						foreach($list->arr() as $obj)
+						{
+							$prop["options"][$obj->id()] = $obj->name();
+						}
 					}
 				}
 				break;
