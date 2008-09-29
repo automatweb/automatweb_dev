@@ -51,6 +51,9 @@
 @property actives_only type=checkbox ch_value=1
 @caption N&auml;ita ainult aktiivseid s&uuml;ndmusi
 
+@property show_active_trans type=checkbox ch_value=1
+@caption N&auml;ita mitteaktiivseid s&uuml;ndmusi, mille t&otilde;lge on aktiivne
+
 @property fix_links type=checkbox ch_value=1
 @caption "Eelmine"-"J&auml;rgmine" lingid viivad s&uuml;ndmusega p&auml;evale
 
@@ -560,7 +563,8 @@ class calendar_view extends class_base
 					"range" => $range,
 					"first_image" => $first_image,
 					"project_media" => $project_media,
-					"status" => $arr["status"]
+					"status" => $arr["status"],
+					"show_active_trans" => $arr["show_active_trans"],
 				));
 				foreach($events as $event)
 				{
@@ -663,6 +667,7 @@ class calendar_view extends class_base
 					"date" => date("d-m-Y",$range["timestamp"]),
 					"range" => $range,
 					"status" => $arr["status"],
+					"show_active_trans" => $arr["show_active_trans"],
 				));
 				if ($range["viewtype"] == "last_events")
 				{
@@ -1064,8 +1069,12 @@ class calendar_view extends class_base
 			"obj_inst" => &$this->obj_inst,
 			"cal_inst" => &$vcal,
 			"range" => $range,
-			"status" => $arr["status"],
+			"status" => isset($arr["status"]) ? $arr["status"] : $status,
 		);
+		if($this->obj_inst->prop("show_active_trans"))
+		{
+			$exp_args["show_active_trans"] = true;
+		}
 
 		if ("grouped" == $use_template && "day" == $viewtype)
 		{
