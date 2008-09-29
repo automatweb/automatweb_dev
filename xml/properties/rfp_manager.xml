@@ -62,6 +62,16 @@
             <caption>Toitlustuse ruumide kaust</caption>
       </property>
       <property>
+            <name>clients_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CLIENTS_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klientide kaust</caption>
+      </property>
+      <property>
             <name>prod_vars_folder</name>
             <table>objects</table>
             <group>general</group>
@@ -696,6 +706,11 @@
                   <value>11</value>
                   <caption>Reserveeringute seadete haldur</caption>
             </RV_CFGMANAGER>
+            <CLIENTS_FOLDER>
+                  <clid>CL_MENU</clid>
+                  <value>12</value>
+                  <caption>Klientide kaust</caption>
+            </CLIENTS_FOLDER>
       </reltypes>
       <layout>
             <raports_hsplit>

@@ -1154,7 +1154,7 @@
             <group>final_offer</group>
             <type>textarea</type>
             <cols>70</cols>
-            <rows>5</rows>
+            <rows>20</rows>
             <field>offer_preface</field>
             <caption>Pakkumise eess&amp;amp;otilde;na</caption>
       </property>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.72 2008/09/29 11:04:43 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.73 2008/09/29 11:45:53 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -28,6 +28,9 @@
 
 @property catering_room_folder type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM_FOLDER field=meta method=serialize
 @caption Toitlustuse ruumide kaust
+
+@property clients_folder type=relpicker reltype=RELTYPE_CLIENTS_FOLDER field=meta method=serialize
+@caption Klientide kaust
 
 @property prod_vars_folder type=relpicker reltype=RELTYPE_PROD_VARS_FOLDER field=meta method=serialize
 @caption Tootepakettide asukoht
@@ -221,6 +224,9 @@
 
 @reltype RV_CFGMANAGER clid=CL_CFGMANAGER value=11
 @caption Reserveeringute seadete haldur
+
+@reltype CLIENTS_FOLDER clid=CL_MENU value=12
+@caption Klientide kaust
 */
 
 
