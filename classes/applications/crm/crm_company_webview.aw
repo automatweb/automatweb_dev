@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.52 2008/02/21 15:09:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.53 2008/09/29 10:20:59 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1061,7 +1061,7 @@ class crm_company_webview extends class_base
 		}
 
 		$kw = "";
-		//võtmesõnad
+		//v6tmes6nad
 //		arr($c->prop("keywords2"));
 
 		foreach($c->connections_from(array("type" => "RELTYPE_KEYWORD")) as $conn)
@@ -1572,7 +1572,7 @@ class crm_company_webview extends class_base
 					$to = $cnt;
 					if($after_points) $b_s.= $this->parse("points");
 				}
-				//see vaatab et oleks üle kolmanda lehekülje, ja selectitud oleks rohkem kui 1 lk tagasi
+				//see vaatab et oleks yle kolmanda lehekylje, ja selectitud oleks rohkem kui 1 lk tagasi
 				if(!($n == (int)($cnt/20)) && !($n < 3) && $bord && $page+1 < $n)
 				{
 					$after_points = 1;
@@ -1582,7 +1582,7 @@ class crm_company_webview extends class_base
 				//vaatab et selectitud oleks rohkem kui 1 lk edasi
 				if(!($n == 0) && $bord && $page-1 > $n)
 				{
-					//see paneb punktiiri esimese valiku järele, kui vaja
+					//see paneb punktiiri esimese valiku j2rele, kui vaja
 					if($n == 1) 
 					{
 						$b_s.= $this->parse("points");
@@ -1677,19 +1677,45 @@ class crm_company_webview extends class_base
 
 		if ($level == 0)
 		{
+/*			$flds = new object_tree (array(
+				"parent" => reset($crm_db->prop("dir_tegevusala")),
+				"class_id" => CL_CRM_SECTOR,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+
+			$ret = new object_list(array(
+				"class_id" => CL_CRM_SECTOR,
+				"parent" => $flds->ids(),//$crm_db->prop("dir_tegevusala"),
+				"sort_by" => "objects.jrk,objects.name"
+			));*/
 			$ret = new object_list(array(
 				"class_id" => CL_CRM_SECTOR,
 				"parent" => $crm_db->prop("dir_tegevusala"),
 				"sort_by" => "objects.jrk,objects.name"
 			));
-		}		
+
+		}
+		else
+		if (!$parent_o)
+		{
+			$ret = new object_list();
+		}
 		else
 		{
 			$ret = new object_list(array(
 				"class_id" => CL_CRM_SECTOR,
 				"parent" => $parent_o->id(),
-				"sort_by" => "objects.jrk,objects.name"
+				"sort_by" => "objects.jrk,objects.name",
+//				"limit" => 4,
 			));
+		}
+
+		$si = __get_site_instance();
+//		arr(method_exists($si,'get_company_webview_folders'));
+		if(method_exists($si,'get_company_webview_folders'))
+		{
+			return $si->get_company_webview_folders($ret);
 		}
 		return $ret;
 	}
@@ -1723,7 +1749,7 @@ class crm_company_webview extends class_base
 	**/
 	function show_sect($arr)
 	{
-		//see aitab otsingus jne võtta miski default väärtuse
+		//see aitab otsingus jne v6tta miski default v22rtuse
 		$_SESSION["active_section"] = $arr["section"];
 		$this->sub_merge = 1;
 
