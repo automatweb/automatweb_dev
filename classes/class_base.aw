@@ -2311,7 +2311,7 @@ class class_base extends aw_template
 					}
 				}
 				else
-				if ($val["value"] == -1)
+				if ($val["value"] == -1 || $val["value"] === "")
 				{
 					$val["value"] = "";
 				}
