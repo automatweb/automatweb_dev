@@ -1705,7 +1705,7 @@ class event_search extends class_base
 
 								if(strpos($v, "#") !== false)
 								{
-									$aliasmrg->parse_oo_aliases($ekey, $v);
+									$aliasmrg->parse_oo_aliases($id, $v);
 								}
 							}
 							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
@@ -1749,7 +1749,7 @@ class event_search extends class_base
 						}
 						if(strpos($content, "#") !== false)
 						{
-							$aliasmrg->parse_oo_aliases($ekey, $content);
+							$aliasmrg->parse_oo_aliases($id, $content);
 						}
 					}
 					$i++;
