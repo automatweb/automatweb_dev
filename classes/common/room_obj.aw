@@ -125,6 +125,11 @@ class room_obj extends _int_object
 		{
 			$pro = $this->prop("professions");
 		}
+		
+		if(!sizeof($pro))
+		{
+			return new object_list();
+		}
 
 		$ol2 = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
