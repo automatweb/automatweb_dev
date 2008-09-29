@@ -554,6 +554,7 @@ class calendar_view extends class_base
 
 			$event_validator = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EVENT_VALIDATOR");
 			$done_oids = array();
+			$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
@@ -577,8 +578,19 @@ class calendar_view extends class_base
 					$done_oids[$evt_obj->brother_of()] = 1;
 
 				//	$data = $evt_obj->properties() + $data;
-					$data = $data + $evt_obj->properties();
-					$data["name"] = $evt_obj->name();
+				//	$data = $data + $evt_obj->properties();
+					if($evt_obj->lang_id() != $langid)
+					{
+						foreach(array_keys($evt_obj->properties()) as $p)
+						{
+							$data[$p] = $evt_obj->trans_get_val($p);
+						}
+					}
+					else
+					{
+						$data = $data + $evt_obj->properties();
+					}
+					$data["name"] = $evt_obj->trans_get_val("name");
 					$data["icon"] = "event_icon_url";
 					$varx = array(
 						"item_start" => $event["start"],
