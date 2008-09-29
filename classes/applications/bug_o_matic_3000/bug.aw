@@ -284,9 +284,6 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype AW_SPEC value=18 clid=CL_AW_SPEC
 @caption Spetsifikatsioon
-
-@reltype BILL value=19 clid=CL_CRM_BILL
-@caption Arve
 */
 
 define("BUG_OPEN", 1);
@@ -597,7 +594,7 @@ class bug extends class_base
 				break;
 
 			case "bug_status":
-				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') } else { $('#settings_col1_outer .sisu3:eq(1)').css('display', 'none'); }";
+				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') }";
 				$prop["options"] = $this->bug_statuses;
 				break;
 
@@ -1214,7 +1211,7 @@ class bug extends class_base
 				$old = $arr["obj_inst"]->prop("num_hrs_real");
 				$new = $old + $prop["value"];
 				$arr["obj_inst"]->set_prop("num_hrs_real", $new);
-				if ((int)$prop["value"])
+				if ($prop["value"] > 0)
 				{
 					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $new);
 					$this->add_comments[] = $com;
