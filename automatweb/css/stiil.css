@@ -871,3 +871,18 @@ text-decoration:underline;
 .deadline4 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -125px ! important; padding-left: 16px ! important;}
 .deadline5 {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -150px ! important; padding-left: 16px ! important;}
 .feedback {background: #EEEEEE url(/automatweb/images/gantt_chart.gif) no-repeat 0 -175px ! important; padding-left: 16px ! important;}
+
+
+/*
+*------------------------
+*   jQuery Impromptu
+*------------------------
+*/
+.jqiwarning .jqiblue{ background-color: #acb4c4; }
+.jqifade{ position: absolute; background-color: #fff; }
+div.jqi{ position: absolute; background-color: #ffffff; width: 400px; font-size: 14px; text-align: left; border: solid 1px #0387C9; }
+div.jqi .jqicontainer{ background-color: #fff;  background: url('http://hannes.dev.struktuur.ee/automatweb/images/aw06/layout_t.gif') repeat-x 0 -5px; padding: 1px; font-weight: bold; }
+div.jqi .jqiclose{ float: right; width: 16px; height: 16px; cursor: default; background: url(http://klient.struktuur.ee/automatweb/intranet/07/img/aw06/aw_close_2.gif) no-repeat; color: transparent; margin: 4px 4px 0 0;}
+div.jqi .jqimessage{ padding: 30px 10px 10px 10px; line-height: 20px; font-size: 11px; color: #333333; }
+div.jqi .jqibuttons{ text-align: right; padding: 4px 0 4px 0; border: solid 1px #eeeeee; background-color: #fff; }
+div.jqi button{background-color:#05A6E9;border-color:#FFFFFF #0373AC #0373AC #FFFFFF;border-style:solid;border-width:1px;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;padding-bottom:2px;padding-top:3px; margin: 0 5px 0 0;}

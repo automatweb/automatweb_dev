@@ -131,6 +131,10 @@ $sf->vars(array(
 	)),
 	"parent" => $parent,
 	"random" => rand(100000,1000000),
+	"session_end_msg" => t("Teie AutomatWeb'i sessioon aegub 5 minuti p&auml;rast!"),
+	"btn_session_end_continue" => html_entity_decode(t("J&auml;tkan")),
+	"btn_session_end_cancel" => html_entity_decode(t("L&otilde;petan")),
+	"session_length" => ini_get("session.gc_maxlifetime")*1000,
 ));
 
 if ($sf->prog_acl("view", "disp_person"))

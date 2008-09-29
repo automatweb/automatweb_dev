@@ -26,6 +26,8 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_autocomplete.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_hotkeys_0.0.3.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_shortcut_manager.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery-impromptu.1.5.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_init_session_modal.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -81,12 +83,21 @@ jQuery.hotkeys.add('Ctrl+Shift+e', function(){
 
 
 <script type="text/javascript">
+// aw object quickadd. use ctrl+alt+u to use
 var options = {
 	maxresults : 8,
 	baseurl    : "{VAR:baseurl}",
 	parent     : "{VAR:parent}"
 };
 $("#aw_object_quickadd").aw_object_quickadd(items, options);
+
+// init session modal which pops up 5 minutes before session end
+$.init_session_modal({
+	session_end_msg			: "{VAR:session_end_msg}",
+	btn_session_end_continue	: "{VAR:btn_session_end_continue}",
+	btn_session_end_cancel		: "{VAR:btn_session_end_cancel}",
+	session_length			: {VAR:session_length}
+});
 </script>
 
 
