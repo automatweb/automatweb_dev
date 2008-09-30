@@ -922,8 +922,19 @@ class bug extends class_base
 			case "finance_type":
 				if ($arr["new"] && !$arr["prop"]["value"])
 				{
-					$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
-					return PROP_FATAL_ERROR;
+					$path = obj($arr["request"]["parent"])->path();
+					foreach($path as $po)
+					{
+						if($po->class_id() == CL_BUG_TRACKER)
+						{
+							$bt = $po;
+						}
+					}
+					if($bt && $bt->prop("finance_required"))
+					{
+						$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
+						return PROP_FATAL_ERROR;
+					}
 				}
 				break;
 
@@ -2198,7 +2209,6 @@ class bug extends class_base
 		{
 			$email = $this->get_cvs_user_email($who);
 		}
-die($email);
 		if($email)
 		{
 			$text= "Class ".$file." changed\n\n".$this->hexbin($msg);

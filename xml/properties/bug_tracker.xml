@@ -603,6 +603,16 @@
             <caption>Tagasiside bugide kaust</caption>
       </property>
       <property>
+            <name>finance_required</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kulude katmine tuleb m&amp;amp;auml;&amp;amp;auml;rata</caption>
+      </property>
+      <property>
             <name>def_notify_list</name>
             <table>objects</table>
             <group>settings_g</group>
