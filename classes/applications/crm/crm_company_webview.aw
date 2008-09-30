@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.54 2008/09/29 13:20:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.55 2008/09/30 09:54:03 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1738,6 +1738,12 @@ class crm_company_webview extends class_base
 
 	function make_menu_link($sect_obj, $ref = NULL)
 	{
+		//selle jaoks kui miski viimane menyy on vaid selleks et rohkem 2ra ei mahu
+		if($sect_obj->name() == "..." && is_object($this->_menu_parent_object) && $this->_webview)
+		{
+			return $this->mk_my_orb("show_sect", array("section" => $this->_menu_parent_object->id(), "wv" => $this->_webview->id()));
+		}
+
 		if ($sect_obj->prop("link") != "")
 		{
 			return $sect_obj->prop("link");
