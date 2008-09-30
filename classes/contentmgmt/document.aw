@@ -1043,11 +1043,22 @@ class document extends aw_template
 			{
 				$forum->_query_comments(array(
 					'board' => $docid,
-					'limit' => '5'
+					'limit' => '5',
+					'order' => 'desc'
 				));
 				while ($row = $this->db_next())
 				{
-					$this->vars($row);
+					$this->vars(array(
+						'id' => $row['id'],
+						'board_id' => $row['board_id'],
+						'name' => $row['name'],
+						'email' => $row['email'],
+						'subject' => $row['subj'],
+						'comment' => nl2br(htmlspecialchars(stripslashes($row['comment']))), 
+						'time' => date('d.m.Y / H:i', $row['time']),
+						'site_id' => $row['site_id'],
+						'ip' => $row['ip']
+					));
 					$comms .= $this->parse('FORUM_RECENT_COMMENT');
 				}
 				$this->vars(array(

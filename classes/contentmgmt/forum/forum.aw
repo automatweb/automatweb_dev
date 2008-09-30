@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.24 2008/09/25 10:46:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.25 2008/09/30 22:22:10 dragut Exp $
 // forum.aw - forums/messageboards
 /*
 @classinfo  maintainer=dragut
@@ -2155,9 +2155,14 @@ topic");
 		if (!empty($args['limit'])){
 			$limit = 'LIMIT '.$args['limit'];
 		}
+		$order = 'asc';
+		if (!empty($args['order']))
+		{
+			$order = $args['order'];
+		}
 		if (isset($args["board"]))
 		{
-			$q = "SELECT * FROM comments WHERE board_id = '$args[board]' ORDER BY time ".$limit;
+			$q = "SELECT * FROM comments WHERE board_id = '$args[board]' ORDER BY time $order ".$limit;
 			$this->db_query($q);
 		}
 	}
