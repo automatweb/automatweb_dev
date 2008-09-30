@@ -25,7 +25,7 @@ class personnel_management_obj extends _int_object
 	{
 		// $person_oid, $to, $pm_obj
 		extract($arr);
-		$cv_lang = is_object($pm_obj) && is_oid($pm_obj->prop("notify_lang")) ? $pm_obj->prop("notify_lang.lang_sel_lang") : 1;
+		$cv_lang = is_object($pm_obj) && is_oid($pm_obj->prop("notify_lang")) ? $pm_obj->prop("notify_lang.lang_acceptlang") : "et";
 		aw_ini_set("user_interface.default_language", $cv_lang);
 		$message = get_instance(CL_CRM_PERSON)->show_cv(array(
 			"id" => $person_obj->id(),
