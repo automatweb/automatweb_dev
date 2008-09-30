@@ -237,7 +237,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo problems caption="Probleemid"
 @groupinfo comments caption="Kommentaarid"
 
-@property to_bill_date type=hidden table=aw_bugs field=to_bill_date
+@property to_bill_date type=hidden table=aw_bugs field=aw_to_bill_date
 @caption Arvele m&auml;&auml;ramise kuup&auml;ev
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
