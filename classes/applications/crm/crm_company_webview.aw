@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.55 2008/09/30 09:54:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.56 2008/09/30 14:55:04 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -277,7 +277,8 @@ class crm_company_webview extends class_base
 							'id' => $c->id(),
 						),CL_CRM_COMPANY, true),
 					))
-					: '',		
+					: '',
+			'address' => $c->prop("contact.name"),
 		));
 
 		// All possible line_* values are defined here
@@ -1407,7 +1408,12 @@ class crm_company_webview extends class_base
 								'id' => $o->id(),
 							),CL_CRM_COMPANY, true),
 						))
-						: '',		
+						: '',
+
+				'address' => $o->prop("contact.name"),
+				'mails' => join(", " , $o->get_mails()),
+				'fax' => join(", " , $o->get_faxes()),
+				'phones' => join(", " , $o->get_phones()),
 			));
 
 			foreach ($datalist as $item => $mapped)
@@ -1689,6 +1695,7 @@ class crm_company_webview extends class_base
 	function get_folders_as_object_list($object, $level, $parent_o)
 	{
 		$this->_webview = $object;
+		$this->_menu_parent_object = $parent_o;
 		$crm_db = obj($object->prop("crm_db"));
 
 		if ($level == 0)
