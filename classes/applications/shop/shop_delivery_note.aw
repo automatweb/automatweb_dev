@@ -579,7 +579,10 @@ class shop_delivery_note extends class_base
 					"sort_by" => "created desc",
 				));
 				$mv_o = $mv_ol->begin();
-				$price = $mv_o->prop("price");
+				if($mv_o)
+				{
+					$price = $mv_o->prop("price");
+				}
 			}
 			$vals["price"] = $price;
 			$vals["unit"] = $row->prop("unit");
