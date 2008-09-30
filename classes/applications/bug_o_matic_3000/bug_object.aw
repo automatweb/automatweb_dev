@@ -8,11 +8,21 @@ class bug_object extends _int_object
 	function save()
 	{
 		// before saving, set default props if they are not set yet
-		//if (!is_oid($this->id()))
-		//{
+		if (!is_oid($this->id()))
+		{
 			$this->_set_default_bug_props();
-		//}
+		}
 		return parent::save();
+	}
+
+	function set_prop($name,$value)
+	{
+		if($name == "send_bill" && !$this->prop("send_bill"))
+		{
+			$this->set_prop("to_bill_date" , time());
+		}
+
+		parent::set_prop($name,$value);
 	}
 
 	function _set_default_bug_props()
@@ -22,10 +32,10 @@ class bug_object extends _int_object
 			$c = get_current_company();
 			if($c)
 			{
-				parent::set_prop("orderer", $c->id());
+				$this->set_prop("orderer", $c->id());
 			}
 		}
-		if (!$this->prop("orderer_unit"))
+		if (!$this->prop("orderer_unt"))
 		{
 			$p = get_current_person();
 			if($p)
@@ -36,14 +46,14 @@ class bug_object extends _int_object
 			{
 				$sets = reset($sets);
 			}
-			parent::set_prop("orderer_unit", $sets);
+			$this->set_prop("orderer_unit", $sets);
 		}
 		if (!$this->prop("orderer_person"))
 		{
 			$p = get_current_person();
 			if($p)
 			{
-				parent::set_prop("orderer_person", $p->id());
+				$this->set_prop("orderer_person", $p->id());
 			}
 		}
 	}
@@ -251,4 +261,16 @@ class bug_object extends _int_object
 	{
 		return $this->prop("orderer");
 	}
+
+	/** returns bug hour_price
+		@attrib api=1
+		@returns oid
+	**/
+	public function get_hour_price()
+	{
+		return $this->prop("hr_price");
+	}
+
+
+
 }

@@ -221,7 +221,13 @@ class crm_company_bills_impl extends class_base
 			foreach($bugs->arr() as $bug)
 			{
 				$projs[$bug->prop("project")] = $bug->prop("project");
-				$sum2proj[$bug->prop("project")] +=($bug->prop("num_hrs_to_cust") * 100);
+				$bt = 0;
+				foreach($this->bug_comments[$bug->id()] as $comment)
+				{
+					$bt+= $comment->prop("add_wh");
+				}
+				$this->bug_hours[$bug->id()] = $bt;
+				$sum2proj[$bug->prop("project")] += $bt * $bug->prop("hr_price");
 			}
 		}
 
@@ -661,16 +667,17 @@ enter_function("bills_impl::_get_bill_task_list5");
 		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
 		if($stats_inst->there_are_bugs() && $this->can("view" , $arr["request"]["proj"]))
 		{
-			$hr_price = 100;//niisama testimiseks
 			$project = obj($arr["request"]["proj"]);
 			if($project->class_id() == CL_PROJECT)
 			{
-				$project_bugs = $project->get_bugs();
+				$project_bugs = $project->get_billable_bugs();//vast ei l2he paljuks
 				foreach($project_bugs->ids() as $id)
 				{
 					if (isset($this->bug_comments[$id]))
 					{
+						$bt = $this->bug_hours[$id];
 						$bug = obj($id);
+						$hr_price = $bug->get_hour_price();
 						$t->define_data(array(
 							"name" => html::obj_change_url($bug)." ".html::href(array("caption" => t("(kommentaarid)") , "url" => 'javascript:aw_popup_scroll("'.$this->mk_my_orb(
 								"create_bill_bug_popup", array(
@@ -678,11 +685,11 @@ enter_function("bills_impl::_get_bill_task_list5");
 									"id" => $bug->id(),
 									"start" => $this->search_start,
 									"end" => $this->search_end,
-							)).'","'.t("Bugide kommentaarid").'",550,500)')),
+							)).'","'.t("Bugide kommentaarid").'",800,600)')),
 							"oid" => $bug->id(),
-							"hrs" =>  $bug->prop("num_hrs_real"),
+							"hrs" =>  $bt,
 							"hr_price" => $hr_price,
-							"sum" => number_format(($bug->prop("num_hrs_to_cust") * $hr_price), 2)
+							"sum" => number_format(($bt * $hr_price), 2)
 						));
 					}
 				}
@@ -1966,7 +1973,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		foreach($bc_ol->arr() as $bc)
 		{
-			if(!$this->can("view" , $bc->prop("bill")))//selle v6ib 2ra kaotada kui filtri t88le saab
+			if($bc->prop("parent.send_bill") && !$this->can("view" , $bc->prop("bill")))//selle v6ib 2ra kaotada kui filtri t88le saab
 			{
 				$this->bug_comments[$bc->parent()][] = $bc;
 			}
@@ -1990,8 +1997,25 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	private function add_bill_comments_to_session($sel)
 	{
-		if(!$_SESSION["ccbc_bug_comments"]) $_SESSION["ccbc_bug_comments"] = array();
-		//siia vaja kontrolli, et kui klient tuleb erinev, siis nulliks 2ra massiivi
+		if(!$_SESSION["ccbc_bug_comments"])
+		{
+			$_SESSION["ccbc_bug_comments"] = array();
+		}
+		elseif(sizeof($_SESSION["ccbc_bug_comments"]))
+		{
+			$sess_bug = obj(reset($_SESSION["ccbc_bug_comments"]));
+			$sess_cust = $sess_bug->prop("parent.customer");
+			$new_bug = obj(reset($sel));
+			if($new_bug->class_id() == CL_BUG_COMMENT && $new_bug->prop("parent.class_id") == CL_BUG)
+			{
+				$new_cust = $new_bug->prop("parent.customer");
+				if($new_cust != $sess_cust)
+				{
+					$_SESSION["ccbc_bug_comments"] = array();
+				}
+			}
+		}
+
 		$_SESSION["ccbc_bug_comments"] = $_SESSION["ccbc_bug_comments"] + $sel;
 
 	}

@@ -125,6 +125,25 @@ class project_obj extends _int_object
 		return $ol;
 	}
 
+	/** returns all billable bugs related to current project
+		@attrib api=1 params=pos
+		@returns object list
+	**/
+	function get_billable_bugs()
+	{
+		$ol = new object_list();
+		$all_bugs = new object_list(array(
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_BUG,
+			"project" => $this->id(),
+			"sort_by" => "objects.created desc",
+			"send_bill" => 1,
+		));
+
+		return $all_bugs;
+	}
+
 	/** Returns an object_list with all bug comments for the project
 		@attrib api=1 params=pos
 

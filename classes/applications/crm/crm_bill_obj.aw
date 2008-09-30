@@ -298,7 +298,6 @@ class crm_bill_obj extends _int_object
 				$people[$person->id()] = $person->id();
 			}
 			$amt+= $comment->prop("add_wh");
-			//$price = ??
 			if($err = $this->connect_bug_comment($comment->id()) || $err2 = $row->connect_bug_comment($comment->id()))
 			{
 				arr($err);
@@ -316,6 +315,10 @@ class crm_bill_obj extends _int_object
 
 		if(is_object($comment))
 		{
+			if($comment->prop("parent.class_id") == CL_BUG)
+			{
+				$row->set_prop("price", $comment->prop("parent.hr_price"));
+			}
 			$row->set_prop("date", date("d.m.Y", $comment->created()));
 			$row->set_name($comment->prop("parent.name"));
 		}
