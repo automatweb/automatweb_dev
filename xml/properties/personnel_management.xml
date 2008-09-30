@@ -55,6 +55,17 @@
             <caption>Teavita ka kandideerivatest uutest CV</caption>
       </property>
       <property>
+            <name>notify_lang</name>
+            <group>general2</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <automatic>1</automatic>
+            <caption>Teavitamise keel</caption>
+      </property>
+      <property>
             <name>persons_fld</name>
             <group>general2</group>
             <table>objects</table>
@@ -1451,6 +1462,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>CV sisestamisest teavitaja</caption>
             </NOTIFY_FROM>
+            <LANGUAGE>
+                  <value>16</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Teavitamise keel</caption>
+            </LANGUAGE>
       </reltypes>
       <layout>
             <employee>
