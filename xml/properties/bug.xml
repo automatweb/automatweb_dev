@@ -216,6 +216,7 @@
             <ch_value>1</ch_value>
             <parent>settings_col3</parent>
             <field>aw_send_bill</field>
+            <no_caption>1</no_caption>
             <caption>Arvele</caption>
       </property>
       <property>

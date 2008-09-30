@@ -82,7 +82,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property hr_price type=textbox captionside=top parent=settings_col3 table=aw_bugs field=aw_hr_price
 		@caption Tunnihind
 
-		@property send_bill type=checkbox ch_value=1 parent=settings_col3 table=aw_bugs field=aw_send_bill
+		@property send_bill type=checkbox ch_value=1 parent=settings_col3 table=aw_bugs field=aw_send_bill no_caption=1
 		@caption Arvele
 
 	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
@@ -928,19 +928,8 @@ class bug extends class_base
 			case "finance_type":
 				if ($arr["new"] && !$arr["prop"]["value"])
 				{
-					$path = obj($arr["request"]["parent"])->path();
-					foreach($path as $po)
-					{
-						if($po->class_id() == CL_BUG_TRACKER)
-						{
-							$bt = $po;
-						}
-					}
-					if($bt && $bt->prop("finance_required"))
-					{
-						$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
-						return PROP_FATAL_ERROR;
-					}
+					$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
+					return PROP_FATAL_ERROR;
 				}
 				break;
 
@@ -1326,7 +1315,7 @@ class bug extends class_base
 				continue;
 			}
 			$email = $person_obj->prop("email");
-			if ($this->can("view", $email))
+			if (is_oid($email))
 			{
 				$email_obj = new object($email);
 				$addr = $email_obj->prop("mail");
@@ -2215,6 +2204,7 @@ class bug extends class_base
 		{
 			$email = $this->get_cvs_user_email($who);
 		}
+die($email);
 		if($email)
 		{
 			$text= "Class ".$file." changed\n\n".$this->hexbin($msg);
@@ -2618,17 +2608,10 @@ class bug extends class_base
 		$co_i = $co->instance();
 		$sects = $co_i->get_all_org_sections($co);
 		$prop["options"] = array("" => t("--vali--"));
-		if($prop["value"])
-		{
-			$prop["options"][$prop["value"]] = obj($prop["value"])->name();
-		}
 		if (count($sects))
 		{
 			$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
-			foreach($ol->arr() as $oid => $o)
-			{
-				$prop["options"][$oid] = $o->name();
-			}
+			$prop["options"] += $ol->names();
 		}
 		$p = get_current_person();
 		if ($arr["new"])
@@ -2667,11 +2650,7 @@ class bug extends class_base
 			// get all ppl for the section
 			$sect = get_instance(CL_CRM_SECTION);
 			$work_ol = $sect->get_section_workers($unit, true);
-			$arr["prop"]["options"] = array("" => t("--vali--"));
-			foreach($work_ol->arr() as $oid => $o)
-			{
-				$arr["prop"]["options"][$oid] =  $o->name();
-			}
+			$arr["prop"]["options"] = array("" => t("--vali--")) + $work_ol->names();
 		}
 		else
 		if ($this->can("view", $cust))
