@@ -607,6 +607,11 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>L&amp;amp;auml;hetusaadress</caption>
             </ADDRESS>
+            <BUG>
+                  <value>16</value>
+                  <clid>CL_BUG</clid>
+                  <caption>Bugi</caption>
+            </BUG>
       </reltypes>
       <layout>
             <main_split>

@@ -150,6 +150,11 @@
                   <clid>CL_CRM_EXPENSE</clid>
                   <caption>Muu kulu</caption>
             </EXPENSE>
+            <BUG>
+                  <value>6</value>
+                  <clid>CL_BUG</clid>
+                  <caption>Bugi</caption>
+            </BUG>
       </reltypes>
 </properties>
 
