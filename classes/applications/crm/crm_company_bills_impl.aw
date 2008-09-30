@@ -1938,7 +1938,14 @@ exit_function("bills_impl::_get_bill_task_list");
 		$bc_filt = array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+/*			 new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_EQUAL, null),
+				),
+			))*///no ei t88ta see.....
 		);
 
 		if ($this->search_start && $this->search_end)
@@ -1959,7 +1966,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		foreach($bc_ol->arr() as $bc)
 		{
-			if(!$this->can("view" , $bc->prop("bill")))
+			if(!$this->can("view" , $bc->prop("bill")))//selle v6ib 2ra kaotada kui filtri t88le saab
 			{
 				$this->bug_comments[$bc->parent()][] = $bc;
 			}
@@ -2007,6 +2014,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			die(t("Bugi id puudu..."));
 		}
 
+		$stats = get_instance("applications/crm/crm_company_stats_impl");
 		$bug = obj($arr["id"]);
 
 		$comments = $bug->get_billable_comments(array(
@@ -2046,7 +2054,7 @@ exit_function("bills_impl::_get_bill_task_list");
 				"comment" => html::href(array(
 						"caption" => substr($comment->prop("comment"), 0 , 300) , 
 						"url" => html::obj_change_url($comment , array()))),
-				"time" => $comment->prop("add_wh"),
+				"time" => $stats->hours_format($comment->prop("add_wh")),
 				"oid" => $comment->id(),
 			));
 		}

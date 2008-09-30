@@ -5539,7 +5539,7 @@ class crm_company extends class_base
 		}
 
 		//kui t88d erinevatele klientidele
-		if($this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"])))
+		if($this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"] , "bugc" => $_SESSION["ccbc_bug_comments"])))
 		{
 			return aw_url_change_var("different_customers", "1", $arr["post_ru"]);
 		}
@@ -5577,51 +5577,17 @@ class crm_company extends class_base
 				$bill->set_prop("impl", $impl);
 			}
 		}
-		if (is_oid($arr["cust"]))
-		{
-			$cust = obj($arr["cust"]);
-			$u = get_instance(CL_USER);
-			$bill->set_prop("impl", $u->get_current_company());
-		}
 
-		if ($cust)
-		{
-			$bill->set_prop("customer", $cust->id());
-		}
-
-		if (!$bill->prop("customer") && $arr["sel"])
-		{
-			$c_r_t = $arr["sel"];
-			if (is_array($c_r_t))
-			{
-				$c_r_t = reset($c_r_t);
-			}
-			$c_r_t_o = obj($c_r_t);
-			if (($c_r_t_o->class_id() == CL_TASK_ROW) || ($c_r_t_o->class_id() == CL_CRM_EXPENSE))
-			{
-				$t_conns = $c_r_t_o->connections_to(array("from.class_id" => CL_TASK));
-				$t_conn = reset($t_conns);
-				if ($t_conn)
-				{
-					$c_r_t_o = $t_conn->from();
-				}
-			}
-			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
-			if(!$c_r_t_o->prop("customer"))
-			{
-				$cust = $c_r_t_o->get_first_obj_by_reltype("RELTYPE_CUSTOMER");
-				if(is_object($cust))
-				{
-					$bill->set_prop("customer", $cust->id());
-				}
-			}
-		}
-		if (!$bill->prop("impl"))
-		{
-			$u = get_instance(CL_USER);
-			$bill->set_prop("impl", $u->get_current_company());
-		}
+		$bill->set_impl();
 		$bill->set_prop("bill_date", time());
+		if(!$this->can("view" ,$bill->prop("customer")))
+		{
+			$bill->set_customer(array(
+				"cust" => $arr["cust"],
+				"tasks" => $arr["sel"],
+				"bugs" => $_SESSION["ccbc_bug_comments"],
+			));
+		}
 
 		// if the bill has an impl and customer, then check if they have a customer relation
 		// and if so, then get the due days from that
@@ -5876,6 +5842,11 @@ class crm_company extends class_base
 
 			}
 		}
+
+		//teeb bugide lisamise eraldi
+		$bill->add_bug_comments($_SESSION["ccbc_bug_comments"]);
+		unset($_SESSION["ccbc_bug_comments"]);
+
 		if($_SESSION["create_bill_ru"])
 		{
 			$create_bill_ru = $_SESSION["create_bill_ru"];

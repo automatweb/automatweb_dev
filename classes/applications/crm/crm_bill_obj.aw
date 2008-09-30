@@ -232,6 +232,237 @@ class crm_bill_obj extends _int_object
 			}
 		}
 	}
+
+	/** Adds bug comments to bill
+		@attrib api=1 params=pos
+		@param bugcomments required type=array
+			array(bug comment id, bug comment 2 id , ...)
+		@returns
+			bill oid
+	**/
+	public function add_bug_comments($bugcomments)
+	{
+		$data = array();
+		foreach($bugcomments as $comment)
+		{
+			if(!$this->can("view" , $comment))
+			{
+				continue;
+			}
+			$o = obj($comment);
+			$data[mktime(0,0,0,date("m",$o->created()),date("d",$o->created()),date("Y",$o->created()))][$o->parent()][] = $o;
+		}
+		
+		ksort($data);
+		
+		foreach($data as $day => $day_array)
+		{
+			foreach($day_array as $bug => $bug_comments)
+			{
+				$b = obj($bug);
+				if(!$this->check_if_has_other_customers($b->prop("customer")))
+				{
+					$this->add_bug_row($bug_comments);
+				}
+			}
+		}
+
+		return $this->id();
+	}
+
+	/** Adds bug comments to bill row
+		@attrib api=1 params=pos
+		@param bugcomments required type=array
+			array(bug comment id, bug comment 2 id , ...)
+		@returns
+			bill row id
+	**/
+	public function add_bug_row($bugcomments)
+	{
+		$row = new object();
+		$row->set_class_id(CL_CRM_BILL_ROW);
+		$row->set_name(t("Arve rida"));
+		$row->set_parent($this->id());
+		$row->save();
+
+		$people = array();
+		$amt = $price = "";
+		$u = get_instance(CL_USER);
+
+		foreach($bugcomments as $c)
+		{
+			$comment = obj($c);
+			$person = $u->get_person_for_uid($comment->createdby());
+			if(is_object($person))
+			{
+				$people[$person->id()] = $person->id();
+			}
+			$amt+= $comment->prop("add_wh");
+			//$price = ??
+			if($err = $this->connect_bug_comment($comment->id()) || $err2 = $row->connect_bug_comment($comment->id()))
+			{
+				arr($err);
+				arr($err2);
+			}
+		}
+
+		$amt = ((int)(($amt * 4)+1)) / 4;//ymardab yles 0.25listeni
+		$row->set_prop("amt", $amt);
+		$row->set_prop("price", $price);
+		$row->set_prop("unit", "h");
+		$row->set_prop("people", $people);
+
+//		$br->set_prop("has_tax", $row["has_tax"]); ?????????????
+
+		if(is_object($comment))
+		{
+			$row->set_prop("date", date("d.m.Y", $comment->created()));
+			$row->set_name($comment->prop("parent.name"));
+		}
+		else
+		{
+			$row->set_prop("date", date("d.m.Y", time()));
+		}
+		$row->save();
+		$this->connect(array(
+			"to" => $row->id(),
+			"type" => "RELTYPE_ROW"
+		));
+
+		return $row->id();
+	}
+
+	/** checks if bill has other customers...
+		@attrib api=1
+		@param customer type=oid
+		@returns string/int
+			error, if true, if not, then 0
+	**/
+	function check_if_has_other_customers($customer)
+	{
+		if(!is_oid($customer))
+		{
+			return 0;
+		}
+		if(!$this->prop("customer"))
+		{
+			return 0;
+		}
+		if($customer != $this->prop("customer"))
+		{
+			return "on teised kliendid...";
+		}
+		return 0;
+	}
+
+
+	/** connects bill to a bug comment
+		@attrib api=1
+		@returns 
+			error string if unsuccessful
+	**/
+	public function connect_bug_comment($c)
+	{
+		if(!is_oid($c))
+		{
+			return t("Pole piisavalt p&auml;dev id");
+		}
+		$obj = obj($c);
+		$bug = obj($obj->parent());
+		if($bug->class_id() != CL_BUG)
+		{
+			return t("Kommentaaril pole bugi");
+		}
+		$error = $this->check_if_has_other_customers($bug->prop("customer"));
+		if($error)
+		{
+			return $error;
+		}
+
+		$this->connect(array("to"=> $bug->id(), "type" => "RELTYPE_BUG"));
+		$bug->connect(array("to"=> $this->id(), "type" => "RELTYPE_BILL"));
+
+
+		
+		$obj ->set_prop("bill" , $this->id());
+		$obj->save();
+		return 0;
+	}
+
+	public function set_impl()
+	{
+		if(!$this->prop("impl"))
+		{
+			$u = get_instance(CL_USER);
+			$this->set_prop("impl", $u->get_current_company());
+			$this->save();
+		}
+	}
+
+	/** sets customer
+		@attrib api=1
+		@param cust optional type=oid
+			customer object id
+		@param tasks optional type=array
+			tasks or task rows of other expenses, array(id, id2, ..)
+		@param bugs optional type=array
+			bug comments , array(id, id2, ..)
+		@returns string/int
+			error, if true, if not, then 0
+	**/
+	public function set_customer($arr)
+	{
+		$bi = get_instance("applications/crm/crm_bill");
+		if ($bi->can("view" , $arr["cust"]))
+		{
+			$cust = obj();
+			$this->set_prop("customer", $arr["cust"]);
+		}
+		elseif(is_array($arr["tasks"]) && sizeof(is_array($arr["tasks"])))
+		{
+			$c_r_t = $arr["tasks"];
+			if (is_array($c_r_t))
+			{
+				$c_r_t = reset($c_r_t);
+			}
+			$c_r_t_o = obj($c_r_t);
+			if (($c_r_t_o->class_id() == CL_TASK_ROW) || ($c_r_t_o->class_id() == CL_CRM_EXPENSE))
+			{
+				$t_conns = $c_r_t_o->connections_to(array("from.class_id" => CL_TASK));
+				$t_conn = reset($t_conns);
+				if ($t_conn)
+				{
+					$c_r_t_o = $t_conn->from();
+				}
+			}
+			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
+			if(!$c_r_t_o->prop("customer"))
+			{
+				$cust = $c_r_t_o->get_first_obj_by_reltype("RELTYPE_CUSTOMER");
+				if(is_object($cust))
+				{
+					$bill->set_prop("customer", $cust->id());
+				}
+			}
+		}
+		
+		//kui eelmiseid ei olnud v6i nad ei m6junud
+		if((!(is_array($arr["tasks"]) || $bi->can("view" , $arr["cust"])) || (!$bi->can("view" , $this->prop("customer")))) && is_array($arr["bugs"]) && sizeof($arr["bugs"]))
+		{
+			foreach($arr["bugs"] as $bugc)
+			{
+				$c = obj($bugc);
+				if($c->class_id() == CL_BUG_COMMENT && $bi->can("view" , $c->prop("parent.customer")))
+				{
+					$this->set_prop("customer" , $c->prop("parent.customer"));
+					break;
+				}
+			}
+		}
+		
+		$this->save();
+		return $this->prop("customer");
+	}
 }
 
 ?>

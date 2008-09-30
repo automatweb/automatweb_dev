@@ -123,5 +123,36 @@ class crm_bill_row_object extends _int_object
 		$row_obj->save();
 		return 0;
 	}
+
+	/** connects bill row to a bug comment
+		@attrib api=1 params=pos
+		@param id required type=oid
+			bug comment object id
+		@returns 
+	**/
+	function connect_bug_comment($id)
+	{
+		if(!is_oid($id))
+		{
+			return t("Pole piisavalt p&auml;dev klassi id");
+		}
+		$obj = obj($id);
+		$bug = obj($obj->parent());
+		if($bug->class_id() != CL_BUG)
+		{
+			return t("Kommentaaril pole bugi");
+		}
+		$error = $this->check_if_has_other_customers($bug->prop("customer"));
+		if($error)
+		{
+			return $error;
+		}
+		$this->connect(array("to"=> $bug->id(), "type" => "RELTYPE_BUG"));
+
+		return 0;
+		//tegelt ma ei teagi kas on yldse m6tet rida ka siduma hakata
+
+	}
+
 }
 ?>
