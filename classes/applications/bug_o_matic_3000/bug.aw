@@ -237,6 +237,9 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo problems caption="Probleemid"
 @groupinfo comments caption="Kommentaarid"
 
+@property to_bill_date type=hidden table=aw_bugs field=to_bill_date
+@caption Arvele m&auml;&auml;ramise kuup&auml;ev
+
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption J&auml;lgija
 
@@ -2332,6 +2335,7 @@ die($email);
 			case "aw_spec":
 			case "aw_finance_type":
 			case "aw_send_bill":
+			case "aw_to_bill_date":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",

@@ -590,6 +590,14 @@
             <store>no</store>
             <field>comments_table</field>
       </property>
+      <property>
+            <name>to_bill_date</name>
+            <group>comments</group>
+            <table>aw_bugs</table>
+            <type>hidden</type>
+            <field>aw_to_bill_date</field>
+            <caption>Arvele m&amp;amp;auml;&amp;amp;auml;ramise kuup&amp;amp;auml;ev</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
             <relationmgr>yes</relationmgr>
