@@ -241,6 +241,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @reltype ADDRESS value=15 clid=CL_CRM_ADDRESS
 @caption L&auml;hetusaadress
+
+@reltype BUG value=16 clid=CL_BUG
+@caption Bugi
 */
 
 define("BILL_SUM", 1);
