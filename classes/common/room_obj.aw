@@ -128,7 +128,7 @@ class room_obj extends _int_object
 		
 		if(!sizeof($pro))
 		{
-			return new object_list();
+			return array();
 		}
 
 		$ol2 = new object_list(array(
@@ -156,6 +156,10 @@ class room_obj extends _int_object
 		if(is_array($this->prop("seller_professions")))
 		{
 			$pro = $this->prop("seller_professions");
+		}
+		if(!sizeof($pro))
+		{
+			return array();
 		}
 
 		$ol2 = new object_list(array(
