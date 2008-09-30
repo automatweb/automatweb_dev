@@ -199,6 +199,26 @@
             <caption>Kulud kaetakse</caption>
       </property>
       <property>
+            <name>hr_price</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <captionside>top</captionside>
+            <parent>settings_col3</parent>
+            <field>aw_hr_price</field>
+            <caption>Tunnihind</caption>
+      </property>
+      <property>
+            <name>send_bill</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>settings_col3</parent>
+            <field>aw_send_bill</field>
+            <caption>Arvele</caption>
+      </property>
+      <property>
             <name>vb_d1</name>
             <group>general</group>
             <table>aw_bugs</table>

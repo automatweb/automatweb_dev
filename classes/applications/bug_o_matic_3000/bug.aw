@@ -79,6 +79,12 @@ define("BUG_STATUS_CLOSED", 5);
 		@property finance_type type=chooser captionside=top parent=settings_col3 table=aw_bugs field=aw_finance_type
 		@caption Kulud kaetakse
 
+		@property hr_price type=textbox captionside=top parent=settings_col3 table=aw_bugs field=aw_hr_price
+		@caption Tunnihind
+
+		@property send_bill type=checkbox ch_value=1 parent=settings_col3 table=aw_bugs field=aw_send_bill
+		@caption Arvele
+
 	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
 
 @layout url type=vbox closeable=1 area_caption=URL
@@ -2335,6 +2341,7 @@ class bug extends class_base
 			case "skill_used":
 			case "aw_spec":
 			case "aw_finance_type":
+			case "aw_send_bill":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
@@ -2348,7 +2355,7 @@ class bug extends class_base
 					"type" => "text",
 				));
 				return true;
-
+			case "aw_hr_price":
 			case "aw_cust_budget":
 			case "num_hrs_guess":
 			case "num_hrs_real":
