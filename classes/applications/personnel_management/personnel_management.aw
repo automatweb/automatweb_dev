@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.76 2008/09/29 17:23:19 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.77 2008/09/30 10:11:39 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -33,6 +33,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 		@property notify_candidates type=checkbox ch_value=1
 		@caption Teavita ka kandideerivatest uutest CV
+
+		@property notify_lang type=relpicker reltype=RELTYPE_LANGUAGE automatic=1
+		@caption Teavitamise keel
 
 		@property persons_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Isikute kaust
@@ -459,6 +462,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 @reltype NOTIFY_FROM value=15 clid=CL_ML_MEMBER
 @caption CV sisestamisest teavitaja
+
+@reltype LANGUAGE value=16 clid=CL_LANGUAGE
+@caption Teavitamise keel
 
 */
 
