@@ -8,10 +8,10 @@ class bug_object extends _int_object
 	function save()
 	{
 		// before saving, set default props if they are not set yet
-		if (!is_oid($this->id()))
-		{
+		//if (!is_oid($this->id()))
+		//{
 			$this->_set_default_bug_props();
-		}
+		//}
 		return parent::save();
 	}
 
@@ -22,10 +22,10 @@ class bug_object extends _int_object
 			$c = get_current_company();
 			if($c)
 			{
-				$this->set_prop("orderer", $c->id());
+				parent::set_prop("orderer", $c->id());
 			}
 		}
-		if (!$this->prop("orderer_unt"))
+		if (!$this->prop("orderer_unit"))
 		{
 			$p = get_current_person();
 			if($p)
@@ -36,14 +36,14 @@ class bug_object extends _int_object
 			{
 				$sets = reset($sets);
 			}
-			$this->set_prop("orderer_unit", $sets);
+			parent::set_prop("orderer_unit", $sets);
 		}
 		if (!$this->prop("orderer_person"))
 		{
 			$p = get_current_person();
 			if($p)
 			{
-				$this->set_prop("orderer_person", $p->id());
+				parent::set_prop("orderer_person", $p->id());
 			}
 		}
 	}

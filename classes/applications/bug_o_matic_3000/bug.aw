@@ -1320,7 +1320,7 @@ class bug extends class_base
 				continue;
 			}
 			$email = $person_obj->prop("email");
-			if (is_oid($email))
+			if ($this->can("view", $email))
 			{
 				$email_obj = new object($email);
 				$addr = $email_obj->prop("mail");
@@ -2611,10 +2611,17 @@ class bug extends class_base
 		$co_i = $co->instance();
 		$sects = $co_i->get_all_org_sections($co);
 		$prop["options"] = array("" => t("--vali--"));
+		if($prop["value"])
+		{
+			$prop["options"][$prop["value"]] = obj($prop["value"])->name();
+		}
 		if (count($sects))
 		{
 			$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
-			$prop["options"] += $ol->names();
+			foreach($ol->arr() as $oid => $o)
+			{
+				$prop["options"][$oid] = $o->name();
+			}
 		}
 		$p = get_current_person();
 		if ($arr["new"])
@@ -2653,7 +2660,11 @@ class bug extends class_base
 			// get all ppl for the section
 			$sect = get_instance(CL_CRM_SECTION);
 			$work_ol = $sect->get_section_workers($unit, true);
-			$arr["prop"]["options"] = array("" => t("--vali--")) + $work_ol->names();
+			$arr["prop"]["options"] = array("" => t("--vali--"));
+			foreach($work_ol->arr() as $oid => $o)
+			{
+				$arr["prop"]["options"][$oid] =  $o->name();
+			}
 		}
 		else
 		if ($this->can("view", $cust))
