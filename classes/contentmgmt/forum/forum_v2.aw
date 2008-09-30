@@ -3674,6 +3674,32 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		$params["site_id"] = array();
 		$params["lang_id"] = array();
 		$ol = new object_list($params);
+		$grpcfg = $obj->meta("grpcfg");
+		$sorder = $grpcfg["sorder"][$group];
+		$i = get_instance(CL_SITE_SEARCH_CONTENT);
+		switch($sorder)
+		{
+			case S_ORD_TIME:
+				$sb = array(
+					"prop" => "created",
+					"order" => "desc",
+				);
+				break;
+			case S_ORD_TIME_ASC:
+				$sb = array(
+					"prop" => "created",
+					"order" => "asc",
+				);
+				break;
+			default:
+				$sb = array(
+					"prop" => "name",
+					"order" => "asc",
+				);
+				break;
+		}
+		$ol->sort_by($sb);
+
 		foreach($ol->arr() as $o)
 		{
 			if($o->class_id() == CL_COMMENT)
@@ -3717,13 +3743,12 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		}
 		if(count($arr["results"]))
 		{
-			$ol = new object_list(array(
-				"oid" => $arr["results"],
-			));
 			$tmp = "";
-			foreach($ol->arr() as $o)
+			foreach($arr["results"] as $oid)
 			{
+				$o = obj($oid);
 				$add = "";
+				$tp = null;
 				if($o->class_id() == CL_COMMENT)
 				{
 					$tp = obj($o->parent());
