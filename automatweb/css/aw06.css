@@ -513,3 +513,14 @@ font-size: 10px;
 .clear {
 	clear: both
 }
+
+.aw04toolbarbutton {
+        float: left;
+		height: 14px;
+        padding: 4px;
+		font-size: 11px;
+		text-align: center;
+		border-style: solid;
+        border-width: 1px;
+        border-color: #E1E1E1;
+}
