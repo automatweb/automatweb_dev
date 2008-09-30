@@ -5440,6 +5440,23 @@ class crm_company extends class_base
 				}
 			}
 		}
+
+		foreach($arr["bugs"] as $bug)
+		{
+			if($this->can("view" , $bug))
+			{
+				$c = obj($bug);
+				if($c->class_id() == CL_BUG_COMMENT && $c->prop("parent.class_id") == CL_BUG)
+				{
+					$c = obj($c->prop("parent"));
+					if($this->can("view" ,  $c->prop("customer")))
+					{
+						$customers[$c->prop("customer")] = $c->prop("customer");
+					}
+				}
+			}
+		}
+
 		if(is_object($arr["bill"])) $customers[$arr["bill"]->prop("customer")] = $arr["bill"]->prop("customer");
 		if(sizeof($customers) > 1) return 1;
 		else return false;

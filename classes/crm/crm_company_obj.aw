@@ -253,6 +253,39 @@ class crm_company_obj extends _int_object
 		}
 		return $ol;
 	}
+
+	function get_mails()
+	{
+		$ret = array();
+		$conns = $this->connections_from(array("type" => "RELTYPE_EMAIL"));
+		foreach($conns as $conn)
+		{
+			$ret[]= $conn->prop("to.name");
+		}
+		return $ret;
+	}
+
+	function get_faxes()
+	{
+		$ret = array();
+		$conns = $this->connections_from(array("type" => "RELTYPE_TELEFAX"));
+		foreach($conns as $conn)
+		{
+			$ret[]= $conn->prop("to.name");
+		}
+		return $ret;
+	}
+
+	function get_phones()
+	{
+		$ret = array();
+		$conns = $this->connections_from(array("type" => "RELTYPE_PHONE"));
+		foreach($conns as $conn)
+		{
+			$ret[]= $conn->prop("to.name");
+		}
+		return $ret;
+	}
 }
 
 ?>
