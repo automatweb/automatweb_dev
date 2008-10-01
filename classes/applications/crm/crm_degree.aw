@@ -3,7 +3,7 @@
 /*
  
 @classinfo syslog_type=ST_CRM_DEGREE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
-
+ 
 @default table=objects
 @default group=general
 
