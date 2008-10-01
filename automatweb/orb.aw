@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.29 2008/05/07 10:50:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.30 2008/10/01 12:10:58 markop Exp $
 	function get_time() 
 	{
 		list($micro,$sec) = explode(" ",microtime());
@@ -60,6 +60,9 @@ if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]
 {
 	$vars = $_SESSION["auth_redir_post"];
 	$_POST = $_SESSION["auth_redir_post"];
+	//peale logimist muidu annab errorit kui salvestada asju
+	$_SERVER["REQUEST_METHOD"] = "POST";
+
 	$HTTP_GET_VARS = $_SESSION["auth_redir_post"];
 	extract($_POST);
 	$class = $vars["class"];
@@ -97,8 +100,8 @@ exit_function("orb::process_request");
 $content = $orb->get_data();
 
 
-// et kui orb_data on link, siis teeme ümbersuunamise
-// see ei ole muidugi parem lahendus. In fact, see pole üleüldse
+// et kui orb_data on link, siis teeme ymbersuunamise
+// see ei ole muidugi parem lahendus. In fact, see pole yleyldse
 // mingi lahendus
 if ((substr($content,0,5) == "http:" || (substr($content,0,6) == "https:") || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
 {
@@ -106,7 +109,7 @@ if ((substr($content,0,5) == "http:" || (substr($content,0,6) == "https:") || (i
 	{
 		print html::href(array(
 			"url" => $content,
-			"caption" => t("Kliki siia jätkamiseks"),
+			"caption" => t("Kliki siia j&auml;tkamiseks"),
 		));		
 	}
 	else
