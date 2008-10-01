@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name></name>
+            <table>taket_orders</table>
+            <field></field>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <taket_orders>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </taket_orders>
+      </tableinfo>
+</properties>
+
