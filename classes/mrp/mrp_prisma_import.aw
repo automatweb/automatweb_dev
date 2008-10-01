@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.24 2008/01/31 13:54:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.25 2008/10/01 08:28:58 kristo Exp $
 // mrp_prisma_import.aw - Prisma import
 /*
 
@@ -333,7 +333,7 @@ class mrp_prisma_import extends class_base
 		$o->set_prop("reg_nr", $dat["Kood"]);
 		$o->set_comment($dat["Info"]);
 
-		$o->set_prop("priority", $dat["KliendiPrioriteet"]);
+		$o->set_prop("cust_priority", $dat["KliendiPrioriteet"]);
 	}
 
 	function _set_rel_prop($o, $prop, $rel_clid, $rel_name)
@@ -470,6 +470,43 @@ class mrp_prisma_import extends class_base
 				"reltype" => "RELTYPE_CUSTOMER"
 			));
 			echo "project ".$o->name()." (".$o->id().") added! <br>\n";
+
+			// create purchase orders for paper
+			$warehouse = obj(aw_ini_get("prisma.warehouse"));
+			$spo = obj();
+			$spo->set_class_id(CL_SHOP_PURCHASE_ORDER);
+			$spo->set_parent($warehouse->prop("RELTYPE_CONFIG.order_fld"));
+			$spo->set_name(sprintf(t("Ostutellimus Sisu paber: %s"), $id));
+			$spo->number = $id;
+			$spo->job = $o->id();
+			$spo->date = time();
+			$spo->deal_date = $o->prop("starttime");
+			$spo->planned_date = $o->prop("starttime");
+			$spo->currency = currency::find_by_symbol("EEK")->id();
+			$spo->warehouse = $warehouse->id();
+			$spo->save();
+			echo "created purchase order ".html::obj_change_url($spo)." <br>\n";
+			$spo->add_article(array(
+				"name" => $o->sisu_paber
+			));
+
+			$spo = obj();
+			$spo->set_class_id(CL_SHOP_PURCHASE_ORDER);
+			$spo->set_parent($warehouse->prop("RELTYPE_CONFIG.order_fld"));
+			$spo->set_name(sprintf(t("Ostutellimus Kaane paber: %s"), $id));
+			$spo->number = $id;
+			$spo->job = $o->id();
+			$spo->date = time();
+			$spo->deal_date = $o->prop("starttime");
+			$spo->planned_date = $o->prop("starttime");
+			$spo->currency = currency::find_by_symbol("EEK")->id();
+			$spo->warehouse = $warehouse->id();
+			$spo->save();
+			echo "created purchase order ".html::obj_change_url($spo)." <br>\n";
+			$spo->add_article(array(
+				"name" => $o->kaane_paber
+			));
+
 			flush();
 		}
 	}
