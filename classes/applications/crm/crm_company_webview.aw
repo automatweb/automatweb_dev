@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.56 2008/09/30 14:55:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.57 2008/10/01 10:22:17 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1388,6 +1388,7 @@ class crm_company_webview extends class_base
 			$tmp_ad?array_push($tmp_city, $tmp_ad->prop("linn.name")):"";
 			$city_cap = $name.(count($tmp_city)?" (".join(", ", $tmp_city).")":"");
 			$this->vars(array(
+				'company_id' => $o->id(),
 				'company_name' => $do_link ? html::href(array(
 						'url' => $url . $o->id() . '&l='.$arr['id'],
 						'caption' => $name))
