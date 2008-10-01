@@ -1079,9 +1079,32 @@ class bug extends class_base
 				}
 				break;
 
+			case "cust_status":
+				$bt = $this->_get_bt($arr["obj_inst"]);
+				if($bt)
+				{
+					$bcs = $bt->meta("bug_cust_status_conns");
+					if($bcs[$prop["value"]])
+					{
+						$change_bug_status = 1;
+					}
+				}
+				if($change_bug_status && $prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
+				{
+					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
+					$this->_ac_new_state = $prop["value"];
+					$arr["obj_inst"]->set_prop("bug_status", $prop["value"]);
+				}
+				else
+				{
+					break;
+				}
 			case "bug_status":
-				$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
-				$this->_ac_new_state = $prop["value"];
+				if(!$this->_ac_old_state || !$this->_ac_new_state)
+				{
+					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
+					$this->_ac_new_state = $prop["value"];
+				}
 				if (!$arr["new"])
 				{
 					$retval = $this->_handle_status_change(
@@ -1091,10 +1114,9 @@ class bug extends class_base
 						$prop
 					);
 				}
-
-				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
+				if ($this->_ac_old_state != $prop["value"] && !$arr["new"])
 				{
-					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$old], $this->bug_statuses[$prop["value"]]);
+					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$this->_ac_old_state], $this->bug_statuses[$prop["value"]]);
 					$this->add_comments[] = $com;
 					$this->notify_monitors = true;
 				}

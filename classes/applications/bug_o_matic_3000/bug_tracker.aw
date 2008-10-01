@@ -221,9 +221,6 @@ define("BUG_STATUS_CLOSED", 5);
 	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
 	@caption Tagasiside bugide kaust
 
-	@property finance_required type=checkbox ch_value=1 field=meta method=serialize
-	@caption Kulude katmine tuleb m&auml;&auml;rata
-
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
 
@@ -4189,10 +4186,16 @@ class bug_tracker extends class_base
 			"align" => "center",
 			"caption" => t("Bugi kliendil kuvamine"),
 		));
+		$t->define_field(array(
+			"name" => "cust_bugst",
+			"align" => "center",
+			"caption" => t("Kliendistaatus => P&otilde;histaatus"),
+		));
 		$t->set_caption(t("Bugi staatused"));
 		$bi = get_instance(CL_BUG);
 		$sdb = $arr["obj_inst"]->meta("status_disp_bug");
 		$sdc = $arr["obj_inst"]->meta("status_disp_cust");
+		$bcs = $arr["obj_inst"]->meta("bug_cust_status_conns");
 		foreach($bi->bug_statuses as $stid => $status)
 		{
 			$t->define_data(array(
@@ -4206,6 +4209,11 @@ class bug_tracker extends class_base
 					"ch_value" => 1,
 					"name" => "sdc[".$stid."]",
 					"checked" => ($sdc[$stid] == "no")?0:1,
+				)),
+				"cust_bugst" => html::select(array(
+					"options" => array_merge(array(0 => t("--Ei muutu--")), $bi->bug_statuses),
+					"value" => $bcs[$stid],
+					"name" => "bcs[".$stid."]",
 				)),
 			));
 		}
@@ -4236,6 +4244,7 @@ class bug_tracker extends class_base
 		$arr["obj_inst"]->set_meta("status_disp_bug", $sdb);
 		$arr["obj_inst"]->set_meta("status_disp_cust", $sdc);
 		$arr["obj_inst"]->set_meta("status_disp_devo", $sdd);
+		$arr["obj_inst"]->set_meta("bug_cust_status_conns", $arr["request"]["bcs"]);
 		$arr["obj_inst"]->save();
 	}
 
