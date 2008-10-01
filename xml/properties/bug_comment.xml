@@ -79,6 +79,15 @@
             <field>aw_bill</field>
             <caption>Arve</caption>
       </property>
+      <property>
+	      <name>bug</name>
+	      <table>aw_bug_comments</table>
+	      <group>general</group>
+	      <type>relpicker</type>
+	      <reltype>RELTYPE_BUG</reltype>
+	      <field>aw_bug</field>
+	      <caption>Bugi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_COMMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -99,6 +108,11 @@
                   <clid>CL_CRM_BILL</clid>
                   <caption>Arve</caption>
             </BILL>
+	    <BUG>
+		    <value>2</value>
+		    <clid>CL_BUG</clid>
+		    <caption>Arve</caption>
+            </BUG>
       </reltypes>
 </properties>
 

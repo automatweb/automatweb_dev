@@ -131,7 +131,6 @@ class project_obj extends _int_object
 	**/
 	function get_billable_bugs()
 	{
-		$ol = new object_list();
 		$all_bugs = new object_list(array(
 			"lang_id" => array(),
 			"site_id" => array(),

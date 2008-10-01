@@ -1940,19 +1940,34 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	function get_billable_bugs($r)
 	{
-		$ol = new object_list();
 
+/*
+		//viimase 2 kuu bugid muudab 2ra
+		$ol = new object_list(array(
+			"class_id" => CL_BUG_COMMENT, 
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, (time() - 3600*24*60)),
+		));
+		arr(sizeof($ol->ids()));
+		foreach($ol->arr() as $o)
+		{
+			$o->save();
+		}
+*/
+
+		$ol = new object_list();
 		$bc_filt = array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-/*			 new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
-					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_EQUAL, null),
-				),
-			))*///no ei t88ta see.....
+//			 new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+//					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_EQUAL, null),
+//				),
+//			)),//no ei t88ta see.....
+			"CL_BUG_COMMENT.bug.send_bill" => 1,
+
 		);
 
 		if ($this->search_start && $this->search_end)
@@ -1973,7 +1988,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		foreach($bc_ol->arr() as $bc)
 		{
-			if($bc->prop("parent.send_bill") && !$this->can("view" , $bc->prop("bill")))//selle v6ib 2ra kaotada kui filtri t88le saab
+			if(!$this->can("view" , $bc->prop("bill")))//selle v6ib 2ra kaotada kui filtri t88le saab
 			{
 				$this->bug_comments[$bc->parent()][] = $bc;
 			}
