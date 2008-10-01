@@ -2,6 +2,7 @@
 
 class crm_area_obj extends _int_object
 {
+
 	/** Returns object list of personnel_management_job_offer objects that are connected to the area.
 
 		@attrib name=get_job_offers params=name api=1

@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.8 2008/06/11 19:09:30 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.9 2008/10/01 11:34:46 markop Exp $
 // crm_area.aw - Piirkond 
 /*
+
 
 @classinfo syslog_type=ST_CRM_AREA relationmgr=yes no_status=1 prop_cb=1 maintainer=markop
 
