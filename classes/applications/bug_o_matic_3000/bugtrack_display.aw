@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.10 2007/12/28 11:55:55 robert Exp $
-// bugtrack_display.aw - Ülesannete kuvamine 
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.11 2008/10/01 11:37:54 robert Exp $
+// bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
 @classinfo syslog_type=ST_BUGTRACK_DISPLAY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
@@ -50,19 +50,26 @@
 			@property table_settings_tb type=toolbar store=no no_caption=1 group=task_settings,solved_settings
 			@property table_settings_table type=table store=no no_caption=1 group=task_settings,solved_settings
 		
+			@property table_settings_sort_task type=chooser field=meta method=serialize group=task_settings
+			@caption Tabeli sorteerimine
+		
+			@property table_settings_sort_solved type=chooser field=meta method=serialize group=solved_settings
+			@caption Tabeli sorteerimine
+
 		@groupinfo solved_settings caption=Lahendatud parent=tables
 
 	@groupinfo tasks caption=&Uuml;lesanded submit=no
 		
-		@property tasks_table type=table no_caption=1 store=no group=tasks,solved
+		@property tasks_table type=table no_caption=1 store=no group=tasks,solved,closed
 
 	@groupinfo devos caption="Koosk&otilde;lastamisel" submit=no
 		
 		@property devo_confirm_needed type=table no_caption=1 store=no group=devos
-		@property table_filter type=select store=no group=devos,tasks,solved
+		@property table_filter type=select store=no group=devos,tasks,solved,closed
 		@caption Filtreeri
 
 	@groupinfo solved caption=Lahendatud submit=no
+	@groupinfo closed caption=Suletud submit=no
 
 	
 	
@@ -76,7 +83,7 @@
 @caption Tellimuse dokument
 
 @reltype BT_TYPE_VAR value=5 clid=CL_META
-@caption Bugi tüübi muutuja
+@caption Bugi t&uuml;&uuml;bi muutuja
 
 @reltype ORDER_FORM value=6 clid=CL_CFGFORM
 @caption Tellimuse vorm
@@ -100,7 +107,7 @@ class bugtrack_display extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 	}
 
-	function _define_table_from_settings($data, &$t)
+	function _define_table_from_settings($data, &$t, $arr)
 	{
 		foreach($data as $id=>$field)
 		{
@@ -132,13 +139,30 @@ class bugtrack_display extends class_base
 		{
 			$t->set_default_sortby("f".$data["default_sort"]);
 		}
+		if($arr["request"]["group"] == "tasks" || $arr["request"]["group"] == "devos")
+		{
+			$sort_prop = "table_settings_sort_task";
+		}
+		else
+		{
+			$sort_prop = "table_settings_sort_solved";
+		}
+		if(!($so = $arr["obj_inst"]->prop($sort_prop)))
+		{
+			$so = "asc";
+		}
+		$t->set_default_sorder($so);
 	}
 
 	function _insert_data_to_table_from_settings($data, &$t, $ol, $arr)
 	{
 		foreach($ol->arr() as $oid => $obj)
 		{
-			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=5 && $obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9))
+			if($arr["request"]["group"] == "solved" && ($obj->prop("bug_status")!=3 && $obj->prop("bug_status")!=9))
+			{
+				continue;
+			}
+			if($arr["request"]["group"] == "closed" && $obj->prop("bug_status")!=5)
 			{
 				continue;
 			}
@@ -175,7 +199,7 @@ class bugtrack_display extends class_base
 			{
 				if($field["in_table"] && $id>0)
 				{
-					if($obj->class_id()==CL_BUG)
+					if($obj->class_id() == CL_BUG)
 					{
 						$value = $obj->prop($field["bugprop"]);
 						if($field["bugprop"] == "bug_status")
@@ -201,7 +225,7 @@ class bugtrack_display extends class_base
 						}
 						elseif($field["bugprop"] == "type")
 						{
-							$value = "Ülesanne";
+							$value = t("&Uuml;lesanne");
 						}
 					}
 					else
@@ -230,7 +254,7 @@ class bugtrack_display extends class_base
 						}
 						elseif($field["orderprop"] == "type")
 						{
-							$value = "Arendustellimus";
+							$value = t("Arendustellimus");
 						}
 					}
 					if($field["orderprop"]=="bug_type")
@@ -272,7 +296,7 @@ class bugtrack_display extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_caption(t("&Uuml;lesanded"));
-		if($arr["request"]["group"] == "solved")
+		if($arr["request"]["group"] == "solved" || $arr["request"]["group"] == "closed")
 		{
 			$data = $arr["obj_inst"]->meta("solved_settings");
 		}
@@ -281,7 +305,7 @@ class bugtrack_display extends class_base
 			$data = $arr["obj_inst"]->meta("task_settings");
 		}
 
-		$this->_define_table_from_settings($data, $t);		
+		$this->_define_table_from_settings($data, $t, $arr);		
 
 		$u = get_instance(CL_USER);
 		$cur_p = get_current_person();
@@ -461,10 +485,11 @@ class bugtrack_display extends class_base
 			}
 			$cff = get_instance(CL_CFGFORM);
 			$o_props = array(
-				"type" => "T&uuml;&uuml;p",
-				"created" => "Loomise kuup&auml;ev",
-				"createdby" => "Looja",
-				"modifiedby" => "Muutja"
+				"oid" => t("Id"),
+				"type" => t("T&uuml;&uuml;p"),
+				"created" => t("Loomise kuup&auml;ev"),
+				"createdby" => t("Looja"),
+				"modifiedby" => t("Muutja"),
 			);
 			$bug_props = $o_props;
 			foreach($cff->get_cfg_proplist($bug_form) as $pn => $pd)
@@ -569,7 +594,13 @@ class bugtrack_display extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case "table_settings_sort_solved":
+			case "table_settings_sort_task":
+				$prop["options"] = array(
+					"asc" => t("Kasvav"),
+					"desc" => t("Kahanev"),
+				);
+				break;
 		};
 		return $retval;
 	}
@@ -619,7 +650,7 @@ class bugtrack_display extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$data = $arr["obj_inst"]->meta("task_settings");
-		$this->_define_table_from_settings($data, $t);
+		$this->_define_table_from_settings($data, $t, $arr);
 
 		$cur_p = get_current_person();
 		$cur = array($cur_p->id() => $cur_p->id());

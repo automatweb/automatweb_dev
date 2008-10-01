@@ -119,11 +119,30 @@
             <field>table_settings_table</field>
       </property>
       <property>
+            <name>table_settings_sort_task</name>
+            <table>objects</table>
+            <group>task_settings</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tabeli sorteerimine</caption>
+      </property>
+      <property>
+            <name>table_settings_sort_solved</name>
+            <table>objects</table>
+            <group>solved_settings</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tabeli sorteerimine</caption>
+      </property>
+      <property>
             <name>tasks_table</name>
             <table>objects</table>
             <group>
                   <num_0>tasks</num_0>
                   <num_1>solved</num_1>
+                  <num_2>closed</num_2>
             </group>
             <type>table</type>
             <no_caption>1</no_caption>
@@ -146,6 +165,7 @@
                   <num_0>devos</num_0>
                   <num_1>tasks</num_1>
                   <num_2>solved</num_2>
+                  <num_3>closed</num_3>
             </group>
             <type>select</type>
             <store>no</store>
@@ -198,6 +218,10 @@
                   <caption>Lahendatud</caption>
                   <submit>no</submit>
             </solved>
+            <closed>
+                  <caption>Suletud</caption>
+                  <submit>no</submit>
+            </closed>
       </groupinfo>
       <reltypes>
             <BUGTRACK>
@@ -218,7 +242,7 @@
             <BT_TYPE_VAR>
                   <value>5</value>
                   <clid>CL_META</clid>
-                  <caption>Bugi t&amp;uuml;&amp;uuml;bi muutuja</caption>
+                  <caption>Bugi t&amp;amp;uuml;&amp;amp;uuml;bi muutuja</caption>
             </BT_TYPE_VAR>
             <ORDER_FORM>
                   <value>6</value>

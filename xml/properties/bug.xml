@@ -167,6 +167,17 @@
             <caption>J&amp;amp;auml;lgijad</caption>
       </property>
       <property>
+            <name>prognosis</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>date_select</type>
+            <default>-1</default>
+            <parent>settings_col3</parent>
+            <captionside>top</captionside>
+            <field>prognosis</field>
+            <caption>Prognoositav kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>deadline</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -595,7 +606,7 @@
             <group>comments</group>
             <table>aw_bugs</table>
             <type>hidden</type>
-            <field>to_bill_date</field>
+            <field>aw_to_bill_date</field>
             <caption>Arvele m&amp;amp;auml;&amp;amp;auml;ramise kuup&amp;amp;auml;ev</caption>
       </property>
       <classinfo>

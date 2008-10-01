@@ -70,6 +70,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect parent=settings_col3 captionside=top
 		@caption J&auml;lgijad
 
+		@property prognosis type=date_select default=-1 parent=settings_col3 captionside=top
+		@caption Prognoositav kuup&auml;ev
+
 		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
 		@caption T&auml;htaeg
 
@@ -1838,7 +1841,7 @@ class bug extends class_base
 			}
 		}
 
-		if($arr["request"]["bug_type"] && $bt_display)
+		if($arr["request"]["bug_type"] && $bt_display && !$arr["request"]["who"])
 		{
 			$user = $bt_display->meta("type".$arr["request"]["bug_type"]);
 			if($user)
@@ -2334,6 +2337,7 @@ die($email);
 			case "skill_used":
 			case "aw_spec":
 			case "aw_finance_type":
+			case "prognosis":
 			case "aw_send_bill":
 			case "aw_to_bill_date":
 				$this->db_add_col($tbl, array(
