@@ -1902,7 +1902,7 @@ class bug extends class_base
 		$o->set_name($arr["obj_inst"]->name());
 		$o->set_class_id(CL_DEVELOPMENT_ORDER);
 		$o->set_prop("bug_type",$arr["obj_inst"]->prop("bug_type"));
-		$o->set_prop("bug_status", $arr["obj_inst"]->prop("bug_status"));
+		$o->set_prop("bug_status", 1);
 		$o->set_prop("bug_priority", $arr["obj_inst"]->prop("bug_priority"));
 		$o->set_prop("bug_app", $arr["obj_inst"]->prop("bug_app"));
 		$o->set_prop("deadline", $arr["obj_inst"]->prop("deadline"));
@@ -1921,7 +1921,7 @@ class bug extends class_base
 		));
 		foreach($sections as $s)
 		{
-			$sc = obj($s->conn["to"]);
+			$sc = $s->to();
 			$profs = $sc->connections_from(array(
 				"class_id" => CL_CRM_PROFESSION,
 				"type" => "RELTYPE_PROFESSIONS"
@@ -1938,6 +1938,13 @@ class bug extends class_base
 				{
 					$highest = $prof;
 				}
+			}
+		}
+		if($highest->prop("jrk") < 1)
+		{
+			foreach($sections as $s)
+			{
+				$highest = $this->_find_highest_prof_recur($s->to());
 			}
 		}
 		$c = new connection();
@@ -1975,6 +1982,42 @@ class bug extends class_base
 		}
 	}
 
+	function _find_highest_prof_recur($s)
+	{
+		$sections = $s->connections_to(array(
+			"type" => "RELTYPE_SECTION",
+			"from.class_id" => CL_CRM_SECTION,
+		));
+		foreach($sections as $sct)
+		{
+			$sc = $sct->from();
+			$profs = $sc->connections_from(array(
+				"class_id" => CL_CRM_PROFESSION,
+				"type" => "RELTYPE_PROFESSIONS"
+			));
+			foreach($profs as $p)
+			{
+				$prof = $p->to();
+				if(!$highest)
+				{
+					$highest = $prof;
+				}
+				$jrk = $prof->prop("jrk");
+				if($highest->prop("jrk")<$jrk)
+				{
+					$highest = $prof;
+				}
+			}
+		}
+		if($highest->prop("jrk") < 1)
+		{
+			foreach($sections as $sct)
+			{
+				$highest = $this->_find_highest_prof_recur($sct->to());
+			}
+		}
+		return $highest;
+	}
 
 	function parse_commited_msg($msg)
 	{
