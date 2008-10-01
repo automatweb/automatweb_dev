@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.17 2008/03/12 21:22:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.18 2008/10/01 13:27:44 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -49,10 +49,10 @@
 		@caption J&auml;lgijad
 
 		@property wish_live_date type=date_select field=meta method=serialize table=objects parent=settings_col3 captionside=top
-		@caption Soovitav Live kuupäev
+		@caption Soovitav Live kuup&auml;ev
 
 		@property actual_live_date type=date_select field=meta method=serialize captionside=top table=objects parent=settings_col3
-		@caption Tegelik Live kuupäev	
+		@caption Tegelik Live kuup&auml;ev	
 
 	@layout h_split type=hbox width=50%:50%
 	@layout comments type=vbox parent=h_split closeable=1 area_caption=Sisu
@@ -387,7 +387,7 @@ class development_order extends class_base
 				break;
 
 			case "bug_status":
-				$prop["options"] = $this->get_status_list();
+				$prop["options"] = get_instance(CL_BUG)->filter_bug_statuses($this->get_status_list(), $arr);
 				break;
 
 			case "bug_app":
@@ -756,19 +756,19 @@ class development_order extends class_base
 	function get_status_list()
 	{
 		$statuses = array(
-			1 => "Kooskõlastamisel",
-			13 => "Ülevaatamisel",
-			2 => "Tellitud",
-			3 => "Valmis",
-			12 => "Testimisel",
-			4 => "Testitud",
-			5 => "Suletud",
-			6 => "Vale teade",
-			7 => "Kordamatu",
-			8 => "Parandamatu",
-			9 => "Ei paranda",
-			10 => "Vajab tagasisidet",
-			11 => "Fatal error"
+			1 => t("Koosk&otilde;lastamisel"),
+			13 => t("&Uuml;levaatamisel"),
+			2 => t("Tellitud"),
+			3 => t("Valmis"),
+			12 => t("Testimisel"),
+			4 => t("Testitud"),
+			5 => t("Suletud"),
+			6 => t("Vale teade"),
+			7 => t("Kordamatu"),
+			8 => t("Parandamatu"),
+			9 => t("Ei paranda"),
+			10 => t("Vajab tagasisidet"),
+			11 => t("Fatal error"),
 		);
 		return $statuses;
 	}

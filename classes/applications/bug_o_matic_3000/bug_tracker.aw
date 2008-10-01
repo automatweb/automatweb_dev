@@ -244,6 +244,11 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Prioriteedivalem
 	@comment Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN => 100,BUG_INPROGRESS => 110,BUG_DONE => 70,BUG_TESTED => 60,BUG_CLOSED => 50,BUG_INCORRECT => 40,BUG_NOTREPEATABLE => 40,BUG_NOTFIXABLE => 40,BUG_FATALERROR => 200,BUG_FEEDBACK => 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bl - ylesande prognoositud tunde, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;
 
+@default group=settings_statuses
+	
+	@property statuses_bug_tbl type=table store=no no_caption=1
+	@property statuses_devo_tbl type=table store=no no_caption=1
+
 @default group=reqs
 
 	@property reqs_tb type=toolbar store=no no_caption=1
@@ -411,6 +416,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo reminders caption="Teavitused" parent=general
 @groupinfo mail_settings caption="Meiliseaded" parent=general
 @groupinfo bug_apps caption="Rakendused" parent=general submit=no
+@groupinfo settings_statuses caption="Staatused" parent=general
 
 @groupinfo reqs_main caption="N&otilde;uded"
 
@@ -4134,6 +4140,103 @@ class bug_tracker extends class_base
 				$bo->save();
 			}
 		}
+	}
+
+	function _get_statuses_devo_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "status",
+			"align" => "center",
+			"caption" => t("Staatus"),
+		));
+		$t->define_field(array(
+			"name" => "disp_devo",
+			"align" => "center",
+			"caption" => t("Kuvamine"),
+		));
+		$t->set_caption(t("Arendustellimuse staatused"));
+		$doi = get_instance(CL_DEVELOPMENT_ORDER);
+		$sdd = $arr["obj_inst"]->meta("status_disp_devo");
+		foreach($doi->get_status_list() as $stid => $status)
+		{
+			$t->define_data(array(
+				"status" => $status,
+				"disp_devo" => html::checkbox(array(
+					"ch_value" => 1,
+					"name" => "sdd[".$stid."]",
+					"checked" => ($sdd[$stid] == "no")?0:1,
+				)),
+			));
+		}
+	}
+
+	function _get_statuses_bug_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "status",
+			"align" => "center",
+			"caption" => t("Staatus"),
+		));
+		$t->define_field(array(
+			"name" => "disp_bug",
+			"align" => "center",
+			"caption" => t("Bugil kuvamine"),
+		));
+		$t->define_field(array(
+			"name" => "disp_cust",
+			"align" => "center",
+			"caption" => t("Bugi kliendil kuvamine"),
+		));
+		$t->set_caption(t("Bugi staatused"));
+		$bi = get_instance(CL_BUG);
+		$sdb = $arr["obj_inst"]->meta("status_disp_bug");
+		$sdc = $arr["obj_inst"]->meta("status_disp_cust");
+		foreach($bi->bug_statuses as $stid => $status)
+		{
+			$t->define_data(array(
+				"status" => $status,
+				"disp_bug" => html::checkbox(array(
+					"ch_value" => 1,
+					"name" => "sdb[".$stid."]",
+					"checked" => ($sdb[$stid] == "no")?0:1,
+				)),
+				"disp_cust" => html::checkbox(array(
+					"ch_value" => 1,
+					"name" => "sdc[".$stid."]",
+					"checked" => ($sdc[$stid] == "no")?0:1,
+				)),
+			));
+		}
+	}
+
+	function _set_statuses_bug_tbl($arr)
+	{
+		$bi = get_instance(CL_BUG);
+		foreach($bi->bug_statuses as $stid => $status)
+		{
+			if(!$arr["request"]["sdb"][$stid])
+			{
+				$sdb[$stid] = "no";
+			}
+			if(!$arr["request"]["sdc"][$stid])
+			{
+				$sdc[$stid] = "no";
+			}
+		}
+		$doi = get_instance(CL_DEVELOPMENT_ORDER);
+		foreach($doi->get_status_list() as $stid => $status)
+		{
+			if(!$arr["request"]["sdd"][$stid])
+			{
+				$sdd[$stid] = "no";
+			}
+		}
+		$arr["obj_inst"]->set_meta("status_disp_bug", $sdb);
+		$arr["obj_inst"]->set_meta("status_disp_cust", $sdc);
+		$arr["obj_inst"]->set_meta("status_disp_devo", $sdd);
+		$arr["obj_inst"]->save();
 	}
 
 	/**

@@ -676,6 +676,24 @@
             <comment>Valem mida kasutatakse kombineeritud prioriteedi arvutamiseks. Formaat: php, tagastatav prioriteet muutujas $p. Muutujad: $sp_lut - staatustele vastavad prioriteedid (default array(BUG_OPEN =&amp;gt; 100,BUG_INPROGRESS =&amp;gt; 110,BUG_DONE =&amp;gt; 70,BUG_TESTED =&amp;gt; 60,BUG_CLOSED =&amp;gt; 50,BUG_INCORRECT =&amp;gt; 40,BUG_NOTREPEATABLE =&amp;gt; 40,BUG_NOTFIXABLE =&amp;gt; 40,BUG_FATALERROR =&amp;gt; 200,BUG_FEEDBACK =&amp;gt; 130)), $bs - ylesande staatus, $cp - kliendi prioriteet, $pp - projekti prioriteet, $bp - ylesande prioriteet, $bl - ylesande prognoositud tunde, $bi - ylesande t6sidus, $dd - t2htaeg. N2ide: $p = $cp + $pp + $bp;</comment>
       </property>
       <property>
+            <name>statuses_bug_tbl</name>
+            <table>objects</table>
+            <group>settings_statuses</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>statuses_bug_tbl</field>
+      </property>
+      <property>
+            <name>statuses_devo_tbl</name>
+            <table>objects</table>
+            <group>settings_statuses</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>statuses_devo_tbl</field>
+      </property>
+      <property>
             <name>reqs_tb</name>
             <table>objects</table>
             <group>reqs</group>
@@ -1138,6 +1156,10 @@
                   <parent>general</parent>
                   <submit>no</submit>
             </bug_apps>
+            <settings_statuses>
+                  <caption>Staatused</caption>
+                  <parent>general</parent>
+            </settings_statuses>
             <reqs_main>
                   <caption>N&amp;amp;otilde;uded</caption>
             </reqs_main>

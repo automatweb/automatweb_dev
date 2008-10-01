@@ -523,7 +523,7 @@ class bug extends class_base
 				break;
 
 			case "cust_status":
-				$prop["options"] = $this->bug_statuses;
+				$prop["options"] = $this->filter_bug_statuses($this->bug_statuses, $arr);
 				break;
 
 			case "cust_responsible":
@@ -610,7 +610,9 @@ class bug extends class_base
 
 			case "bug_status":
 				$prop["onchange"] = "if(this.value==10){ $('#settings_col1_outer .sisu3:eq(1)').css('display', 'block') }";
-				$prop["options"] = $this->bug_statuses;
+				$statuses = $this->bug_statuses;
+				$this->filter_bug_statuses(&$statuses, $arr);
+				$prop["options"] = $statuses;
 				break;
 
 			case "bug_app":
@@ -3147,6 +3149,51 @@ EOF;
 			2 => t("Projekti l&otilde;ppedes"),
 			3 => t("Arendus")
 		);
+	}
+
+	function filter_bug_statuses($statuses, $arr)
+	{
+		$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+		$pt = $po->path();
+		$bt = null;
+		foreach($pt as $pi)
+		{
+			if ($pi->class_id() == CL_BUG_TRACKER)
+			{
+				$bt = $pi;
+			}
+		}
+		if($bt)
+		{
+			if($arr["prop"]["name"] == "bug_status")
+			{
+				if($arr["obj_inst"]->class_id() == CL_BUG)
+				{
+					$btst_prop = "status_disp_bug";
+				}
+				else
+				{
+					$btst_prop = "status_disp_devo";
+				}
+			}
+			else
+			{
+				$btst_prop = "status_disp_cust";
+			}
+			$filter = $bt->meta($btst_prop);
+			if(!is_array($filter))
+			{
+				$filter = array();
+			}
+			foreach($statuses as $stid => $status)
+			{
+				if($filter[$stid] == "no")
+				{
+					unset($statuses[$stid]);
+				}
+			}
+		}
+		return $statuses;
 	}
 }
 ?>
