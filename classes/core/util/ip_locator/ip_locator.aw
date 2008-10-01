@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.9 2008/09/03 10:11:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.10 2008/10/01 13:41:54 markop Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -202,20 +202,22 @@ class ip_locator extends class_base
 				$fc = file("http://tix.estpak.ee/networks.txt");
 				foreach($fc as $line)
 				{
-				list(, $ip_range) = explode(" ", $line);
-				list($range_adr, $range_len) = explode("/", $ip_range);
-				$int_range_adr = ip2long($range_adr);
-				$int_ip = ip2long($ip);
-				
-				// chop off the given number of bits and compare
-				$mask = pow(2, ($range_len+1))-1;
-				if (($int_range_adr | $mask) == ($int_ip | $mask))
-				{
-				return array(
-				"country_code3" => "EST"
-				);
+					list(, $ip_range) = explode(" ", $line);
+					list($range_adr, $range_len) = explode("/", $ip_range);
+					$int_range_adr = ip2long($range_adr);
+					$int_ip = ip2long($ip);
+					
+					// chop off the given number of bits and compare
+					$mask = pow(2, ($range_len+1))-1;
+					if (($int_range_adr | $mask) == ($int_ip | $mask))
+					{
+						return array(
+							"country_code2" => "EE",
+							"country_code3" => "EST"
+						);
+					}
 				}
-				}return false;
+				return false;
 			}
 			else
 			{

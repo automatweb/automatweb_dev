@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.46 2008/08/14 09:41:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.47 2008/10/01 13:41:57 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -2988,7 +2988,7 @@ echo dbg::dump($return);
 			$domain = strtoupper(substr($adr, strrpos($adr, ".")));
 			return $domain;
 		}
-		return $v["country_code3"];
+		return $v["country_code2"];
 	}
 
 	function __sort_rt($code1, $code2)
