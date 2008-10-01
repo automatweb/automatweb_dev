@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.1 2008/10/01 14:17:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.2 2008/10/01 14:47:07 markop Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)
@@ -36,7 +36,9 @@ class taket_users_import extends class_base
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-
+	/**
+		@attrib name=import_users api=1
+	**/
 	function import_users($arr)
 	{
 		if(!$this->can('add',aw_ini_get('taket.users_parent')))
