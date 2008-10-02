@@ -70,7 +70,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@property search_tb type=toolbar store=no no_caption=1
 	@caption Otsingu toolbar
 
-@layout s_top_v type=hbox
+@layout s_top_v type=hbox width=50%:50%
 
 	@layout s_name_lay type=vbox closeable=1 area_caption=Sisu parent=s_top_v
 
@@ -82,6 +82,27 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property s_find_parens type=checkbox ch_value=1 store=no parent=s_name_lay no_caption=1 captionside=top
 		@caption Leia ka buge, millel on alambuge
+
+	@layout s_date_lay type=vbox closeable=1 area_caption=Aeg parent=s_top_v
+		
+		@layout s_date_lay_top type=vbox parent=s_date_lay
+	
+			@property s_date_type type=chooser store=no parent=s_date_lay_top captionside=top
+			@caption Mille j&auml;rgi
+	
+			@property s_date_from type=datetime_select store=no parent=s_date_lay_top captionside=top default=-1
+			@caption Alates
+	
+			@property s_date_to type=datetime_select store=no parent=s_date_lay_top captionside=top default=-1
+			@caption Kuni
+
+		@layout s_date_lay_bot width=30%:70% type=hbox parent=s_date_lay
+
+			@property s_date_time_from type=textbox size=4 store=no parent=s_date_lay_bot captionside=top
+			@caption Kulunud aeg alates (h)
+
+			@property s_date_time_to type=textbox size=4 store=no parent=s_date_lay_bot captionside=top
+			@caption Kulunud aeg kuni (h)
 
 @layout s_top type=hbox width=50%:50%
 
@@ -111,19 +132,26 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout s_status_lay type=vbox closeable=1 area_caption=Staatus parent=s_bott
 
-		@property s_bug_status type=select store=no multiple=1 parent=s_status_lay size=3 captionside=top
-		@caption Staatus
+		@layout s_status_lay_top type=hbox width=30%:70% parent=s_status_lay
 
-		@property s_feedback_p type=textbox size=15 store=no parent=s_status_lay captionside=top
+			@property s_bug_status type=select store=no multiple=1 parent=s_status_lay_top size=3 captionside=top
+			@caption Staatus
+	
+			@property s_cust_status type=select store=no multiple=1 parent=s_status_lay_top size=3 captionside=top
+			@caption Kliendi staatus
+
+		@layout s_status_lay_bot type=vbox parent=s_status_lay
+
+		@property s_feedback_p type=textbox size=15 store=no parent=s_status_lay_bot captionside=top
 		@caption Tagasiside kellelt
 
-		@property s_bug_priority type=select store=no parent=s_status_lay captionside=top
+		@property s_bug_priority type=select store=no parent=s_status_lay_bot captionside=top
 		@caption Prioriteet
 
-		@property s_bug_severity type=select store=no parent=s_status_lay captionside=top
+		@property s_bug_severity type=select store=no parent=s_status_lay_bot captionside=top
 		@caption T&otilde;sidus
 
-		@property s_finance_type type=select store=no parent=s_status_lay captionside=top
+		@property s_finance_type type=select store=no parent=s_status_lay_bot captionside=top
 		@caption Kulud kaetakse
 
 	@layout s_who_l type=vbox closeable=1 area_caption=Osalejad parent=s_bott
@@ -607,6 +635,22 @@ class bug_tracker extends class_base
 				$this->_search_res($arr);
 				break;
 
+			case "s_date_type":
+				$prop["options"] = array(
+					1 => t("Loomise j&auml;rgi"),
+					2 => t("Muutmise j&auml;rgi"),
+					3 => t("Viimane kommentaar"),
+				);
+				break;
+
+			case "s_date_from":
+			case "s_date_to":
+				if(!$prop["value"])
+				{
+					$prop["value"] = -1;
+				}
+				break;
+
 			case "s_bug_priority":
 			case "s_bug_severity":
 				$i = get_instance(CL_BUG);
@@ -614,6 +658,7 @@ class bug_tracker extends class_base
 				break;
 
 			case "s_bug_status":
+			case "s_cust_status":
 				$i = get_instance(CL_BUG);
 				$prop["options"] = array("" => "") + $i->get_status_list();
 				break;
@@ -2410,7 +2455,7 @@ class bug_tracker extends class_base
 		}
 	}
 
-	function populate_bug_list_table_from_list(&$t, $ol, $params = array())
+	function populate_bug_list_table_from_list(&$t, $ol, $params = array(), $s = array())
 	{
 		classload("core/icons");
 		$u = get_instance(CL_USER);
@@ -2435,24 +2480,41 @@ class bug_tracker extends class_base
 				"parent" => $ol->ids(),
 				"class_id" => CL_BUG_COMMENT,
 				"lang_id" => array(),
-				"site_id" => array()
+				"site_id" => array(),
+				"sort_by" => "created asc",
 			));
 		}
 		$comments_by_bug = array();
+		$date_from = date_edit::get_timestamp($s["s_date_from"]);
+		$date_to = date_edit::get_timestamp($s["s_date_to"]);
 		foreach($comment_ol->arr() as $comm)
 		{
 			$comments_by_bug[$comm->parent()]++;
+			$latest_com_by_bug[$comm->parent()] = $comm->created();
+			if(($date_from > 1 && $comm->created() < $date_from)  ||($date_to > 1 && $comm->created() > $date_to))
+			{
+				continue;
+			}
+			$times_by_bug[$comm->parent()] += $comm->prop("add_wh");
 		}
-
 		if ($_GET["action"] == "list_only_fetch")
 		{
 			$t->set_request_uri($this->mk_my_orb("change", array("id" => $params["bt"]->id(), "group" => "by_default", "b_id" => $_GET["b_id"]), "bug_tracker"));
 		}
 
 		$formula = $params["bt"]->prop("combined_priority_formula");
-
+		$bug_count = 0;
 		foreach($bug_list as $bug)
 		{
+			if(($s["s_date_time_from"] && $times_by_bug[$bug->id()] < $s["s_date_time_from"]) || ($s["s_date_time_to"] && $times_by_bug[$bug->id()] > $s["s_date_time_to"]))
+			{
+				continue;
+			}
+			if($s["s_date_type"] == 3 && ($latest_com_by_bug[$bug->id()] < $date_from || $latest_com_by_bug[$bug->id()] > $date_to))
+			{
+				continue;
+			}
+			$bug_count++;
 			$crea = $bug->createdby();
 			$p = obj($u2p[$crea]);
 
@@ -2514,6 +2576,10 @@ class bug_tracker extends class_base
 				"comment" => (int)$comments_by_bug[$bug->id()],
 				"col" => $col
 			));
+		}
+		if($params["add_bug_count"])
+		{
+			$t->set_caption(sprintf(t("Leiti %s bugi"), $bug_count));
 		}
 		$t->set_numeric_field("sort_priority");
 		$t->set_default_sortby("sort_priority");
@@ -2677,7 +2743,7 @@ class bug_tracker extends class_base
 
 		$search_filt = $this->_get_bug_search_filt($arr["request"]);
 		$ol = new object_list($search_filt);
-
+		
 		if ($arr["request"]["s_find_parens"] != 1)
 		{
 			$bugs = $ol->arr();
@@ -2697,8 +2763,9 @@ class bug_tracker extends class_base
 		}
 		$this->populate_bug_list_table_from_list($t, $ol, array(
 			"path" => true,
-			"bt" => $arr["obj_inst"]
-		));
+			"bt" => $arr["obj_inst"],
+			"add_bug_count" => true,
+		), $arr["request"]);
 	}
 
 	function _get_bug_search_filt($r)
@@ -2718,12 +2785,43 @@ class bug_tracker extends class_base
 			}
 		}
 
-		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority");
+		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority", "cust_status");
 		foreach($sf as $field)
 		{
 			if (trim($r["s_".$field]) != "")
 			{
 				$res[$field] = $r["s_".$field];
+			}
+		}
+
+		if($dt = $r["s_date_type"])
+		{
+			switch($dt)
+			{
+				case 1:
+					$prop = "created";
+					break;
+
+				case 2:
+					$prop = "modified";
+					break;
+			}
+			if($prop)
+			{
+				$from = date_edit::get_timestamp($r["s_date_from"]);
+				$to = date_edit::get_timestamp($r["s_date_to"]);
+				if($from > 1 && $to > 1)
+				{
+					$res[$prop] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
+				}
+				elseif($from > 1)
+				{
+					$res[$prop] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
+				}
+				elseif($to > 1)
+				{
+					$res[$prop] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+				}
 			}
 		}
 
