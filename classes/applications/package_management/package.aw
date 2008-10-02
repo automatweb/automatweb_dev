@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.8 2008/10/02 13:19:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.9 2008/10/02 14:56:55 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -85,10 +85,25 @@ class package extends class_base
 
 	function get_property($arr)
 	{
+		$i = $arr["obj_inst"]->prop("installed");
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "name":
+			case "version":
+			case "description":
+				if($i)
+				{
+					$prop["type"] = "text";
+				}
+				break;
+			case "dep_toolbar":
+				if($i)
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "package_tb":
 				$arr["prop"]["vcl_inst"]->add_button(array(
 					"name" => "add_image",
@@ -245,10 +260,13 @@ class package extends class_base
 			"caption" => t("Nimi"),
 			"align" => "center",
 		));
-		$t->define_chooser(array(
-			"name" => "sel2",
-			"field" => "id",
-		));
+		if(!$arr["obj_inst"]->prop("installed"))
+		{
+			$t->define_chooser(array(
+				"name" => "sel2",
+				"field" => "id",
+			));
+		}
 		$files = $arr["obj_inst"]->meta("package_contents");
 		foreach($files as $id=>$file)
 		{
@@ -308,7 +326,10 @@ class package extends class_base
 
 	function _get_dep_toolbar($arr)
 	{
-	
+		if($arr["obj_inst"]->prop("installed"))
+		{
+			return PROP_IGNORE;
+		}
 		$t = &$arr['prop']['vcl_inst'];
 		
 		$t->add_button(array(
@@ -383,11 +404,14 @@ class package extends class_base
 			'name' => 'description',
 			'caption' => t('Kirjeldus')
 		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid",
-			"width" => "20px",
-		));
+		if(!$arr["obj_inst"]->prop("installed"))
+		{
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "oid",
+				"width" => "20px",
+			));
+		}
 		$dep_list = $arr["obj_inst"]->get_dependencies();
 		foreach($dep_list->arr() as $dep)
 		{
@@ -401,13 +425,26 @@ class package extends class_base
 		return PROP_OK;
 	}
 
+	function callback_mod_tab($arr)
+	{
+		if (($arr["id"] == "package_contents" || $arr["id"] == "relationmgr") && $arr["obj_inst"]->prop("installed"))
+		{
+			return false;
+		}
+		return true;
+	}
+
 	function set_property($arr = array())
 	{
+		$i = $arr["obj_inst"]->prop("installed");
+		if($i)
+		{
+			return PROP_IGNORE;
+		}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 		}
 		return $retval;
 	}	
