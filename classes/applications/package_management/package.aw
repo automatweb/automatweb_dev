@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.7 2008/07/18 11:38:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.8 2008/10/02 13:19:17 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property file_names type=text rows=10 cols=40 table=aw_packages field=file_names
 	@caption Failid
+
+	@property installed type=hidden table=aw_packages field=installed
+	@caption installitud
 
 @groupinfo package_contents caption="Paki sisu"
 @default group=package_contents
@@ -471,6 +474,12 @@ class package extends class_base
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'text'
+				));
+                                return true;
+			case 'installed':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
 				));
                                 return true;
                 }

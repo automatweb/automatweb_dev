@@ -46,6 +46,14 @@
             <caption>Failid</caption>
       </property>
       <property>
+            <name>installed</name>
+            <table>aw_packages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>installed</field>
+            <caption>installitud</caption>
+      </property>
+      <property>
             <name>contents_tb</name>
             <table>objects</table>
             <group>package_contents</group>

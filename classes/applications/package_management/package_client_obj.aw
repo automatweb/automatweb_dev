@@ -116,8 +116,71 @@ class package_client_obj extends _int_object
 					print aw_ini_get("basedir").$dat["name"]." <br>\n";	
 				}
 			}
+
+			$data = $this->do_orb_method_call(array(
+				"class" => "package_server",
+				"action" => "download_package_properties",
+				"method" => "xmlrpc",
+				"server" => $this->prop("packages_server"),
+				"no_errors" => true,
+				"params" => array(
+					'id' => $id,
+				),
+			));		
+	
+			$this->add_package(array(
+				"name" => $data["name"],
+				"version" => $data["version"],
+				"description" => $data["description"],
+				"file" => $fn,
+			));
 		}
 	}
+
+	function add_package($params)
+	{
+		$o = new object();
+		$o->set_class_id(CL_PACKAGE);
+		$o->set_parent($this->id());
+		$o->set_name($params["name"] ? $params["name"] : t("Nimetu pakett"));
+
+		$o->set_prop("version" , $params["version"]);
+		$o->set_prop("description" , $data["description"]);
+		$o->set_prop("installed" , 1);
+		$o->save();
+
+		$file = new object();
+		$file->set_class_id(CL_FILE);
+		$file->set_parent($o->id());
+		$file->set_name($o->name());
+		$file->save();
+
+		$o->connect(array(
+			"to" => $file->id(),
+			"reltype" => "RELTYPE_FILE",
+		));
+
+		if(file_exists($params["file"]))
+		{
+			$handle = fopen($params["file"], "r");
+			$contents = fread($handle, filesize($params["file"]));
+			$type = "zip";
+		
+			fclose($handle);
+		
+			$data["id"] = $file->id();
+			$data["return"] = "id";
+			$data["file"] = array(
+				"content" => $contents,
+				"name" => $o->name(),
+				"type" => $type,
+			);
+			$t = get_instance(CL_FILE);
+			$rv = $t->submit($data);
+		}
+		return $o->id();
+	}
+
 
 	function upload_package($id)
 	{
