@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.146 2008/10/02 11:40:51 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.147 2008/10/02 11:50:12 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2888,7 +2888,7 @@ class rfp extends class_base
 				"separate_price" => $price,
 				"price" => $price,
 				"unitprice" => $unitprice,
-				"discount" => (int)$rv->prop("special_discount"),
+				"discount" => $rv->prop("special_discount")?sprintf("%s %%", $rv->prop("special_discount")):"-",
 			);
 			//$this->vars($room_data);
 			if($package)
@@ -3083,7 +3083,7 @@ class rfp extends class_base
 						"res_count" => $r["count"],
 						"res_price" => $r["price"],
 						"res_total" => $r["total"],
-						"res_discount" => $r["discount"],
+						"res_discount" => strlen($r["discount"])?sprintf("%s %%", $r["discount"]):"-",
 						"res_from_hour" => $r["from_hour"],
 						"res_from_minute" => $r["from_minute"],
 						"res_to_hour" => $r["to_hour"],
@@ -3189,7 +3189,7 @@ class rfp extends class_base
 					"prod_sum" => round($this->_format_price($prod["sum"])),
 					"prod_comment" => $prod["comment"],
 					"prod_description" => $po->prop("description"),
-					"prod_discount" => (int)$prod["discount"],
+					"prod_discount" => $prod["discount"]?sprintf("%s %%", $prod["discount"]):"-",
 					"prod_event_and_room" => join(", ",$evt_room),
 					"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
 				));
@@ -3237,7 +3237,7 @@ class rfp extends class_base
 					"hs_rooms" => $rooms["rooms"],
 					"hs_people" => $rooms["people"],
 					"hs_price" => $rooms["price"],
-					"hs_discount" => strlen($rooms["discount"])?sprintf("%s %%", $rooms["discount"]):"-",
+					"hs_discount" => $rooms["discount"]?sprintf("%s %%", $rooms["discount"]):"-",
 					"hs_sum" => $rooms["sum"],
 					"hs_comment" => $rooms["comment"]
 				));
