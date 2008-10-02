@@ -5734,6 +5734,7 @@ class crm_company extends class_base
 				$br->set_prop("price", str_replace(",", ".", $sum = $this->convert_to_company_currency(array(
 					"sum" => $expense->prop("cost"),
 					"o" => $expense,
+					"company_curr" => $bill->prop("customer.currency"),
 				))));
 				$br->set_prop("is_oe", 1);
 				$date = $expense->prop("date");
