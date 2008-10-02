@@ -1,6 +1,6 @@
 <!-- SUB: SHOW_CHANGEFORM -->
-<form style="margin-top: 0px;" action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
-<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
+<form action="{VAR:handler}.{VAR:ext}" method="{VAR:method}" enctype="multipart/form-data" name="changeform" id="changeform" style="margin-top: 0px;" {VAR:form_target}>
+<input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
 
 <!-- END SUB: SHOW_CHANGEFORM -->
 <table id="{VAR:contenttbl_id}" width="100%" border="0" cellspacing="0" cellpadding="0"> <!-- aw06contenttable -->
@@ -272,9 +272,9 @@ this.disabled=true;self.disabled=true;
 			document.changeform.submit();
 		}
 		</script>
-	</form>
 	<!-- END SUB: SHOW_CHANGEFORM2 -->
 </table>
+</form>
 
 <!-- SUB: iframe_body_style -->
 body {

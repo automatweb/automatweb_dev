@@ -1,7 +1,5 @@
+<form action="{VAR:form_handler}" name="changeform" id="changeform" method="{VAR:method}" enctype="multipart/form-data" {VAR:form_target}>
 <table class="{VAR:webform_form}">
-<form action="{VAR:form_handler}" method="{VAR:method}" name="changeform" {VAR:form_target} enctype='multipart/form-data'>
-<!--<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>-->
-
 {VAR:content}
 
 <!-- SUB: ERROR -->
@@ -187,5 +185,5 @@ function submit_changeform()
 	document.changeform.submit();
 }
 </script>
-</form>
 </table>
+</form>

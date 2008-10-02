@@ -1,7 +1,5 @@
+<form action="{VAR:form_handler}" method="{VAR:method}" enctype="multipart/form-data" name="changeform" id="changeform" {VAR:form_target}>
 <table class="webform_form" border="0" cellspacing="0" cellpadding="0">
-<form enctype="multipart/form-data" action='{VAR:form_handler}' method='{VAR:method}' name='changeform' {VAR:form_target}>
-<!--<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>-->
-
 {VAR:content}
 
 <!-- SUB: ERROR -->
@@ -56,7 +54,7 @@
 	<td class='webform_content'>
 	</td>
 	<td class="webfrom_submit_cell">
-		<input class='webform_submit' type='submit' name='{VAR:name}' value='{VAR:sbt_caption}'>
+		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="webform_submit" />
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
@@ -87,6 +85,5 @@ function submit_changeform(action)
 	document.changeform.submit();
 }
 </script>
-</form>
 </table>
-
+</form>
