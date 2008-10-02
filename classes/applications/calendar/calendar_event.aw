@@ -440,7 +440,7 @@ class calendar_event extends class_base
 		{
 			case "title":
 			case "description":
-				$prop["value"] = nl2br($prop["value"]);
+			//	$prop["value"] = nl2br($prop["value"]);
 				break;
 			//case "multifile_upload": return PROP_IGNORE;
 			case "level":
@@ -808,7 +808,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 
 			if (!empty($value))
 			{
-				$value = nl2br(create_links($value));
+				$value = create_links($value);//nl2br(create_links($value));
 				if(strpos($value, "#") !== false)
 				{
 					$aliasmgr->parse_oo_aliases($arr["id"], $value);
@@ -863,7 +863,7 @@ cal.select(changeform.event_time_new__end_,\'anchornew\',\'dd.MM.yyyy HH:mm\'); 
 					get_instance("alias_parser")->parse_oo_aliases($ob, $v);
 					break;
 			}
-			$data[$k] = nl2br($v);
+			$data[$k] = $v;//nl2br($v);
 		}
 
 		if($this->can("view", $_GET["event_time"]))
