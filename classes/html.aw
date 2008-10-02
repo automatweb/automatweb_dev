@@ -700,7 +700,7 @@ class html extends aw_template
 		extract($args);
 		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
-		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "";
+		$onclick = !empty($onclick) ? " onclick=\"{$onclick}; return false;\"" : "";
 
 		return "<input id=\"cbsubmit\" type=\"submit\" name=\"{$name}\" value='{$value}'{$class}{$onclick}{$textsize} />\n";
 	}
