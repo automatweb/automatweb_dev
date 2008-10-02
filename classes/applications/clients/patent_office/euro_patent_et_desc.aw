@@ -46,6 +46,10 @@
  	@property epat_desc_trans type=fileupload reltype=RELTYPE_INVENTION_DESCRIPTION_TRANS form=+emb
 	@caption Patendikirjelduse t&otilde;lge
 
+@default group=fee
+ 	@property add_fee type=textbox size=4
+	@caption T&auml;iendav l&otilde;iv
+
 
 // RELTYPES
 @reltype INVENTION_DESCRIPTION_TRANS value=100 clid=CL_FILE
@@ -73,18 +77,18 @@ class euro_patent_et_desc extends intellectual_property
 			0 => "owner",
 			12 => "invention_epat",
 			4 => "fee_epat",
-			5 => "check"
+			5 => "check_epat"
 		);
 		$this->pdf_file_name = "EuroopaPatendiT6lkeTaotlus";
 		$this->show_template = "show_epat.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("epat_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("epat_desc_trans"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name_et", "epat_nr"));
-		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
+		$this->save_fee_vars = array_merge($this->save_fee_vars, array("add_fee"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_city_value","correspond_county_value", "name");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "epat_date", "epat_desc_trans", "epat_nr"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "epat_date", "epat_desc_trans", "epat_nr", "add_fee"));
 	}
 
 	protected function save_forms($patent)
@@ -122,13 +126,13 @@ class euro_patent_et_desc extends intellectual_property
 		return $patent;
 	}
 
-	protected function get_payment_sum()
+	public function get_payment_sum()
 	{
 		$sum = $this->get_request_fee();
 		return $sum;
 	}
 
-	private function get_request_fee()
+	public function get_request_fee()
 	{
 		$sum = 700;
 		return $sum;
@@ -137,7 +141,12 @@ class euro_patent_et_desc extends intellectual_property
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
-		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
+
+		if(sizeof($_SESSION["patent"]["applicants"]) == 1)
+		{
+			$_SESSION["patent"]["representer"] = reset(array_keys($_SESSION["patent"]["applicants"]));
+		}
+
 		return $data;
 	}
 
@@ -145,7 +154,7 @@ class euro_patent_et_desc extends intellectual_property
 	{
 		$err = parent::check_fields();
 
-		if(((int) $_POST["data_type"]) === 12)
+		if($_POST["data_type"] === "12")
 		{
 			foreach ($_FILES as $var => $file_data)
 			{
@@ -184,6 +193,8 @@ class euro_patent_et_desc extends intellectual_property
 	function fill_session($id)
 	{
 		parent::fill_session($id);
+		$patent = obj($id);
+		$_SESSION["patent"]["representer"] = $patent->prop("applicant");
 	}
 
 	/**

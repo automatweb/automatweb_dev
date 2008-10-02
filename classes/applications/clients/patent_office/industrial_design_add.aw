@@ -82,7 +82,7 @@ class industrial_design_add extends class_base
 			{
 				foreach($links as $link)
 				{
-					if($this->can("view" , $link))
+					if($this->can("view", $link))
 					{
 						$ol->add($link);
 					}
@@ -90,61 +90,61 @@ class industrial_design_add extends class_base
 				}
 			}
 
-			if(!(is_array($links) && sizeof($links) == 8))
+			if(!is_array($links) or count($links) !== 8 or $ol->count() != 8)
 			{
 				$ol = new object_list();
 				$o1 = new object();
 				$o1->set_name("Taotleja andmed");
-				$o1->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o1->set_class_id(CL_MENU);
 				$o1->set_parent($o->id());
 				$o1->save();
 				$ol->add($o1);
 
 				$o2 = new object();
-				$o2->set_name("Autor");
-				$o2->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o2->set_name("Autori andmed");
+				$o2->set_class_id(CL_MENU);
 				$o2->set_parent($o->id());
 				$o2->save();
 				$ol->add($o2);
 
 				$o3 = new object();
-				$o3->set_name("'T&ouml;&ouml;stusdisainilahendus");
-				$o3->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o3->set_name("T&ouml;&ouml;stusdisainilahendus");
+				$o3->set_class_id(CL_MENU);
 				$o3->set_parent($o->id());
 				$o3->save();
 				$ol->add($o3);
 
 				$o4 = new object();
 				$o4->set_name("Prioriteedin".chr(245)."ue");
-				$o4->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o4->set_class_id(CL_MENU);
 				$o4->set_parent($o->id());
 				$o4->save();
 				$ol->add($o4);
 
 				$o41 = new object();
 				$o41->set_name("Menetluse peatamise n".chr(245)."ue");
-				$o41->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o41->set_class_id(CL_MENU);
 				$o41->set_parent($o->id());
 				$o41->save();
 				$ol->add($o41);
 
 				$o5 = new object();
 				$o5->set_name("Riigil".chr(245)."iv");
-				$o5->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o5->set_class_id(CL_MENU);
 				$o5->set_parent($o->id());
 				$o5->save();
 				$ol->add($o5);
 
 				$o51 = new object();
 				$o51->set_name("Dokumentide loetelu");
-				$o51->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o51->set_class_id(CL_MENU);
 				$o51->set_parent($o->id());
 				$o51->save();
 				$ol->add($o51);
 
 				$o6 = new object();
 				$o6->set_name("Andmete kontroll/edastamine");
-				$o6->set_class_id(CL_INDUSTRIAL_DESIGN_ADD);
+				$o6->set_class_id(CL_MENU);
 				$o6->set_parent($o->id());
 				$o6->save();
 				$ol->add($o6);

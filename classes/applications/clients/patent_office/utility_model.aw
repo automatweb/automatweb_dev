@@ -140,12 +140,12 @@ class utility_model extends intellectual_property
 		));
 		$this->info_levels = array(
 			0 => "applicant_um",
-			11 => "author",
+			11 => "author_um",
 			12 => "invention_um",
 			3 => "priority_um",
 			14 => "attachments_um",
 			4 => "fee_um",
-			5 => "check"
+			5 => "check_um"
 		);
 		$this->pdf_file_name = "KasulikuMudeliTaotlus";
 		$this->show_template = "show_um.tpl";
@@ -228,7 +228,13 @@ class utility_model extends intellectual_property
 		return $patent;
 	}
 
-	protected function get_payment_sum()
+	public function get_payment_sum()
+	{
+		$sum = $this->get_request_fee();
+		return $sum;
+	}
+
+	public function get_request_fee()
 	{
 		$sum = 0;
 		$is_corporate = false;
@@ -249,8 +255,6 @@ class utility_model extends intellectual_property
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
-
-		$_SESSION["patent"]["request_fee"]= $this->get_payment_sum();
 
 		if(isset($_SESSION["patent"]["delete_author"]))
 		{
@@ -305,9 +309,24 @@ class utility_model extends intellectual_property
 				{
 					$fp = fopen($file_data["tmp_name"], "r");
 					flock($fp, LOCK_SH);
-					$sig = fread($fp, 4);
+					$sig = fread($fp, 11);
 					fclose($fp);
-					if("%PDF" !== $sig)
+
+					$sig1 = substr($sig, 0, 6);
+					$sig2 = substr($sig, 0, 4);
+					$sig3 = substr($sig, 6, 5);
+					$jpg_sig1 = chr(255) . chr(216) . chr(255) . chr(225);
+					$jpg_sig2 = "EXIF" . chr(0);
+					$jpg_sig4 = chr(255) . chr(216) . chr(255) . chr(224);
+					$jpg_sig3 = "JFIF" . chr(0);
+
+					if (
+						"GIF87a" !== $sig1 and
+						"GIF89a" !== $sig1 and
+						($sig2 !== $jpg_sig1 and $sig3 !== $jpg_sig2 or $sig2 === $jpg_sig1 xor $sig3 === $jpg_sig2) and
+						($sig2 !== $jpg_sig4 and $sig3 !== $jpg_sig3 or $sig2 === $jpg_sig4 xor $sig3 === $jpg_sig3) and
+						"%PDF" !== $sig2
+					)
 					{
 						unset($_FILES[$var]["tmp_name"]);
 						$err.= t("Ainult pdf formaadis failid lubatud")."\n<br>";
@@ -401,14 +420,14 @@ class utility_model extends intellectual_property
 				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
 
 				// author address
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
 
 				if ($this->can("view", $author->prop("address.riik")))
 				{
-					$author_el->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
+					$addr->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
 				}
 
 				//
@@ -436,7 +455,7 @@ class utility_model extends intellectual_property
 		$root->insertBefore($el, $despg);
 
 		// priority
-		if($o->prop("prio_convention_date") > 1 or $o->prop("prio_convention_nr"))
+		if($o->prop("prio_convention_date") !== "-1" or $o->prop("prio_convention_nr"))
 		{ // Pariisi konventsiooni vm. kokkuleppe taotluse alusel
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRICP", $o->prop("prio_convention_country")));
@@ -446,7 +465,7 @@ class utility_model extends intellectual_property
 			$root->insertBefore($el, $despg);
 		}
 
-		if($o->prop("prio_prevapplicationsep_date") > 1 or $o->prop("prio_prevapplicationsep_nr"))
+		if($o->prop("prio_prevapplicationsep_date") !== "-1" or $o->prop("prio_prevapplicationsep_nr"))
 		{ // Esitatud patenditaotluse p&otilde;hjal
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplicationsep_date"))));
@@ -455,7 +474,7 @@ class utility_model extends intellectual_property
 			$root->insertBefore($el, $despg);
 		}
 
-		if($o->prop("prio_prevapplication_date") > 1 or $o->prop("prio_prevapplication_nr"))
+		if($o->prop("prio_prevapplication_date") !== "-1" or $o->prop("prio_prevapplication_nr"))
 		{ // Varasema taotluse alusel (seaduse &#0167;10 l&otilde;ige 3)
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplication_date"))));

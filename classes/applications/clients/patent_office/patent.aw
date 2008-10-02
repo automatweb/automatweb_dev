@@ -106,12 +106,12 @@ class patent extends intellectual_property
 			"clid" => CL_PATENT
 		));
 		$this->info_levels = array(
-			0 => "applicant",
+			0 => "applicant_tm",
 			1 => "trademark",
 			2 => "products_and_services",
 			3 => "priority_tm",
 			4 => "fee_tm",
-			5 => "check"
+			5 => "check_tm"
 		);
 		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
 		$this->types_disp = array(t("(541) S&otilde;nam&auml;rk"),t("(546) Kujutism&auml;rk"),t("(546) Kombineeritud m&auml;rk"),t("(554) Ruumiline m&auml;rk"));
@@ -278,9 +278,13 @@ class patent extends intellectual_property
 	function get_vars($arr)
 	{
 		$data = parent::get_vars($arr);
+		$_SESSION["patent"]["classes_fee_info"] = $this->get_classes_fee();
+		$data["classes_fee_info"] = $_SESSION["patent"]["classes_fee_info"];
 
-		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
-		$_SESSION["patent"]["classes_fee"]= $this->get_classes_fee();
+		if(sizeof($_SESSION["patent"]["applicants"]) == 1)
+		{
+			$_SESSION["patent"]["representer"] = reset(array_keys($_SESSION["patent"]["applicants"]));
+		}
 
 		$data["type_text"] = $this->types_disp[$_SESSION["patent"]["type"]];
 		//$data["products_value"] = $this->_get_products_and_services_tbl();
@@ -586,19 +590,18 @@ class patent extends intellectual_property
 		return $patent;
 	}
 
-	protected function get_payment_sum()
+	public function get_payment_sum()
 	{
 		$sum = 0;
 		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
 		{
 			$classes_fee = $this->get_classes_fee();
 			$sum = $this->get_request_fee() + $classes_fee;
-			$_SESSION["patent"]["classes_fee"] = $classes_fee;
 		}
 		return $sum;
 	}
 
-	private function get_request_fee()
+	public function get_request_fee()
 	{
 		$sum = 0;
 		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
@@ -615,7 +618,7 @@ class patent extends intellectual_property
 		return $sum;
 	}
 
-	private function get_classes_fee()
+	public function get_classes_fee()
 	{
 		$sum = 0;
 		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
@@ -641,6 +644,7 @@ class patent extends intellectual_property
 		}
 
 		$_SESSION["patent"]["products"] = $patent->meta("products");
+		$_SESSION["patent"]["representer"] = $patent->prop("applicant");
 	}
 
 	function get_data_from_object($id)
@@ -821,7 +825,8 @@ class patent extends intellectual_property
 		$el2 = $xml->createElement("MARDESEN");
 		if ($o->prop("trademark_character"))
 		{
-			$cdata = $xml->createCDATASection(iconv(trademark_manager::XML_OUT_ENCODING, "UTF-8", trademark_manager::rere($o->prop("trademark_character"))));
+			$cdata = $xml->createCDATASection(iconv(trademark_manager::XML_IN_ENCODING, "UTF-8", $o->prop("trademark_character")));
+			// $cdata = $xml->createCDATASection(trademark_manager::rere($o->prop("trademark_character")));
 			$el2->appendChild($cdata);
 		}
 		$el->appendChild($el2);
@@ -832,7 +837,8 @@ class patent extends intellectual_property
 		$el2 = $xml->createElement("DISCLAIMEREN");
 		if ($o->prop("undefended_parts"))
 		{
-			$cdata = $xml->createCDATASection(iconv(trademark_manager::XML_OUT_ENCODING, "UTF-8", $o->prop("undefended_parts")));
+			$cdata = $xml->createCDATASection(iconv(trademark_manager::XML_IN_ENCODING, "UTF-8", $o->prop("undefended_parts")));
+			// $cdata = $xml->createCDATASection($o->prop("undefended_parts"));
 			$el2->appendChild($cdata);
 		}
 		$el->appendChild($el2);
@@ -857,7 +863,8 @@ class patent extends intellectual_property
 		$el2 = $xml->createElement("COLCLAEN");
 		if ($o->prop("colors"))
 		{
-			$cdata = $xml->createCDATASection(iconv(trademark_manager::XML_OUT_ENCODING, "UTF-8", $o->prop("colors")));
+			$cdata = $xml->createCDATASection(iconv(trademark_manager::XML_IN_ENCODING, "UTF-8", $o->prop("colors")));
+			// $cdata = $xml->createCDATASection($o->prop("colors"));
 			$el2->appendChild($cdata);
 		}
 		$el->appendChild($el2);
@@ -890,12 +897,12 @@ class patent extends intellectual_property
 
 		// priority
 		$pri_co = $pri_date = $pri_name = "";
-		if($o->prop("convention_date") > 1)
+		if($o->prop("convention_date") !== "-1")
 		{
 			$pri_date = date("Ymd",$o->prop("convention_date"));
 		}
 
-		if($o->prop("exhibition_date") > 1)
+		if($o->prop("exhibition_date") !== "-1")
 		{
 			$pri_date = date("Ymd",$o->prop("exhibition_date"));
 		}
@@ -910,7 +917,7 @@ class patent extends intellectual_property
 			$pri_name = $o->prop("exhibition_name");
 		}
 
-		if($o->prop("convention_nr") || $o->prop("exhibition_name"))
+		if($o->prop("convention_nr") or $o->prop("exhibition_name"))
 		{
 			$pri_co = ($o->prop("convention_country")) ? $o->prop("convention_country") : $o->prop("exhibition_country");
 		}
@@ -918,7 +925,7 @@ class patent extends intellectual_property
 		$el = $xml->createElement("PRIGR");
 		$el->appendChild(new DOMElement("PRICP", $pri_co));
 
-		if ($o->prop("convention_date") > 1|| $o->prop("exhibition_date") > 1)
+		if ($o->prop("convention_date") !== "-1" or $o->prop("exhibition_date") !== "-1")
 		{
 			$el->appendChild(new DOMElement("PRIAPPD", $pri_date));
 		}

@@ -56,8 +56,11 @@
 
 @groupinfo fee caption="Riigil&otilde;iv"
 @default group=fee
-	@property request_fee type=text
+	@property request_fee type=textbox size=4
 	@caption Taotlusl&otilde;iv
+
+	@property fee_sum type=textbox size=4
+	@caption Kokku
 
 	@property payer type=textbox
 	@caption Maksja nimi
@@ -113,7 +116,7 @@ abstract class intellectual_property extends class_base
 	function __construct()
 	{
 		parent::__construct();
-		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"county" ,"index", "country_code" , "phone" , "email" , "fax", "authorized_codes", "request_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code", "correspond_firstname", "correspond_lastname", "correspond_job", "correspond_phone", "correspond_email", "correspond_street", "correspond_city","correspond_county","correspond_index","correspond_country_code", "job");
+		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"county" ,"index", "country_code" , "phone" , "email" , "fax", "authorized_codes", "request_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code", "correspond_firstname", "correspond_lastname", "correspond_job", "correspond_phone", "correspond_email", "correspond_street", "correspond_city","correspond_county","correspond_index","correspond_country_code", "job", "fee_sum");
 		$this->text_area_vars = array("additional_info");
 		$this->file_upload_vars = array("warrant" , "payment_order");
 		$this->multifile_upload_vars = array(); // property names must be same as reltype names
@@ -122,10 +125,10 @@ abstract class intellectual_property extends class_base
 		$this->chooser_vars = array();
 		$this->select_vars = array();
 		$this->country_popup_link_vars = array("convention_country", "exhibition_country", "country_code");
-		$this->save_fee_vars = array("payer" , "doc_nr", "request_fee");
+		$this->save_fee_vars = array("request_fee", "fee_sum");
 		$this->author_vars = array("name", "firstname", "lastname", "street", "city", "county", "index", "country_code", "author_disallow_disclose");
 		$this->applicant_vars = array("firstname", "lastname", "street", "city", "county", "index", "country_code", "name" , "code" , "phone" , "email" , "fax", "correspond_firstname", "correspond_lastname", "correspond_job", "correspond_phone", "correspond_email", "correspond_street","correspond_city", "correspond_county", "correspond_index","correspond_country_code", "applicant_type", "job", "country", "applicant_reg");
-		$this->datafromobj_vars = array("authorized_codes" , "job" , "request_fee" , "doc_nr", "payer");
+		$this->datafromobj_vars = array("authorized_codes" , "job" , "request_fee" , "fee_sum", "doc_nr", "payer");
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" , "street_value" ,"index_value" ,"country_code_value","city_value", "county_value", "correspond_firstname_value", "correspond_lastname_value", "correspond_job_value", "correspond_phone_value", "correspond_email_value", "correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value" , "correspond_city_value", "name", "applicant_reg");
@@ -154,7 +157,7 @@ abstract class intellectual_property extends class_base
 						$add_sig = html::href(array(
 							"url" => "#",
 							"caption" => t("Lisa allkiri"),
-							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
+							"onclick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
 						));
 						$ddoc_link = html::href(array(
 							"url" => $this->mk_my_orb("change", array(
@@ -467,7 +470,7 @@ abstract class intellectual_property extends class_base
 
 		if($_POST["print"] && !$_POST["send"])
 		{
-			$ref_url = get_ru();
+			$ref_url = aw_global_get("REQUEST_URI");
 			$data["print"] = "<script language='javascript'>
 				window.print();
 				setTimeout('window.location.href=\"".$ref_url."\"',5000);
@@ -486,10 +489,10 @@ abstract class intellectual_property extends class_base
 					$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"]));
 				}
 				$pdfurl = str_replace("https" , "http" , $pdfurl);
-				$data["pdf"] = "<input type='button' value='Salvesta pdf' class='nupp'  onclick='javascript:window.location.href=\"".$pdfurl."\";'><br>";
+				$data["pdf"] = "<input type='button' value='Salvesta pdf' class='nupp'  onclick='javascript:window.location.href=\"".$pdfurl."\";'><br />";
 			}
 
-			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onClick='javascript:document.changeform.submit();'>";
+			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onclick='javascript:document.changeform.submit();'>";
 		}
 
 		if($this->can("view" , $arr["id"]))
@@ -512,12 +515,12 @@ abstract class intellectual_property extends class_base
 					"other_oid" =>$arr["id"],
 				));
 			}
-			$data["sign"] = "<input type='button' value='".t("Allkirjasta")."' class='nupp' onClick='javascript:window.open(\"".$url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>";
+			$data["sign"] = "<input type='button' value='".t("Allkirjasta")."' class='nupp' onclick='javascript:window.open(\"".$url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>";
 		}
 
 		if($status["status"] > 0 && !$stat_obj->prop("nr") && !$_POST["print"])
 		{
-			$data["send"] = '<input type="submit" value="'.t("Saadan taotluse").'" class="nupp" onClick="javascript:document.getElementById(\'send\').value=\'1\';
+			$data["send"] = '<input type="submit" value="'.t("Saadan taotluse").'" class="nupp" onclick="javascript:document.getElementById(\'send\').value=\'1\';
 			document.changeform.submit();
 			">';
 		}
@@ -544,7 +547,13 @@ abstract class intellectual_property extends class_base
 			$url = $ddoc_inst->sign_url(array(
 				"other_oid" =>$arr["id"],
 			));
-			$data["sign"] = "<input type='button' value='".t("Allkirjasta")."' class='nupp' onClick='javascript:window.open(\"".$url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>";
+			$data["sign"] = "<input type='button' value='".t("Allkirjasta")."' class='nupp' onclick='javascript:window.open(\"".$url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>";
+		}
+
+		if (isset($data["industrial_design_variant_value"]))
+		{
+			$options = industrial_design_obj::get_industrial_design_variant_options();
+			$data["industrial_design_variant_value"] = $options[$data["industrial_design_variant_value"]];
 		}
 
 		$this->vars($data);
@@ -572,6 +581,26 @@ abstract class intellectual_property extends class_base
 				$str = strtoupper(str_replace("_value","",str_replace("_text","",$prop)));
 				$this->vars(array($str => $this->parse($str)));
 			}
+		}
+
+		// FEE
+		if(
+			!empty($data["request_fee_value"]) or
+			!empty($data["add_fee_value"]) or
+			!empty($data["fee_sum_value"]) or
+			!empty($data["fee_copies_value"]) or
+			!empty($data["payer_value"]) or
+			!empty($data["doc_nr_value"]) or
+			!empty($data["payment_date_value"]) or
+			!empty($data["payment_order_value"]) or
+			!empty($data["request_fee_value"])
+		)
+		{
+			$this->vars(array("FEE" => $this->parse("FEE")));
+		}
+		else
+		{
+			$this->vars(array("FEE" => ""));
 		}
 
 		// patent, ind. design and utility_model common
@@ -915,17 +944,19 @@ abstract class intellectual_property extends class_base
 		{
 			$data[$prop."_value"] = htmlspecialchars($o->prop_str($prop));
 
-			if ("fee_copies" === $prop and $o->prop($prop))
+			if ("fee_copies_info" === $prop and $o->prop($prop))
 			{
-				$data["fee_copies_value"] = patent_patent_obj::COPIES_FEE;
+				$data["fee_copies_info_value"] = patent_patent_obj::COPIES_FEE;
 			}
 		}
 
 		foreach($this->date_vars as $prop)
 		{
-			if($o->prop($prop) > 0)
+			$val = $o->prop($prop);
+
+			if(((int) $val) !== -1 and "" !== $val)
 			{
-				$data[$prop."_value"] = date("j.m.Y" , (int) $o->prop($prop));
+				$data[$prop."_value"] = date("j.m.Y" , (int) $val);
 			}
 			else
 			{
@@ -986,7 +1017,14 @@ abstract class intellectual_property extends class_base
 			}
 		}
 
-		$data["sum_value"] = $this->get_payment_sum();
+		$data["fee_sum_info_value"] = $this->get_payment_sum();
+		$data["request_fee_info_value"] = $this->get_request_fee();
+
+		if (method_exists($this, "get_add_fee"))
+		{
+			$data["add_fee_info_value"] = $this->get_add_fee();
+		}
+
 		$data["procurator_text"] = htmlspecialchars($o->prop_str("procurator"));
 		$data["signatures"] = $this->get_signatures($id);
 		return $data;
@@ -1096,7 +1134,6 @@ abstract class intellectual_property extends class_base
 
 		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$_SESSION["patent"]["procurator"] = $patent->prop("procurator");
-		$_SESSION["patent"]["representer"] = $patent->prop("applicant");
 		$applicant_reg = (array) $patent->meta("applicant_reg");
 
 		foreach($patent->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
@@ -1149,11 +1186,11 @@ abstract class intellectual_property extends class_base
 				$_SESSION["patent"]["applicants"][$key]["country_code"] = $address_inst->get_country_code($address_obj->prop("riik"));
 				if($_SESSION["patent"]["applicants"][$key]["country_code"] == "EE")
 				{
-					$_SESSION["patent"]["applicants"][$key]["country"] = 0;
+					$_SESSION["patent"]["applicants"][$key]["country"] = "0";
 				}
 				else
 				{
-					$_SESSION["patent"]["applicants"][$key]["country"] = 1;
+					$_SESSION["patent"]["applicants"][$key]["country"] = "1";
 				}
 			}
 
@@ -1216,7 +1253,7 @@ abstract class intellectual_property extends class_base
 
 		if(!$_SESSION["patent"]["data_type"])
 		{
-			$_SESSION["patent"]["data_type"] = 0;
+			$_SESSION["patent"]["data_type"] = "0";
 		}
 
 		if (!empty($_GET["new_application"]))
@@ -1235,7 +1272,7 @@ abstract class intellectual_property extends class_base
 		}
 
 		/// remove vars for author view
-		if($arr["data_type"] == 11)
+		if($arr["data_type"] === "11")
 		{
 			foreach ($this->author_vars as $var)
 			{
@@ -1250,13 +1287,13 @@ abstract class intellectual_property extends class_base
 			}
 		}
 
-		if($arr["data_type"] == 6)
+		if($arr["data_type"] === "6")
 		{
 			exit_function("patent::parse_alias");
 			return $this->my_patent_list($arr);//$this->mk_my_orb("my_patent_list", array());
 		}
 
-		if($arr["data_type"] == 7)
+		if($arr["data_type"] === "7")
 		{
 			$arr["unsigned"] = 1;
 			exit_function("patent::parse_alias");
@@ -1293,19 +1330,21 @@ abstract class intellectual_property extends class_base
 		lc_site_load("patent", &$this);
 		$this->vars($this->web_data($arr));
 
+		// $this->vars(array("form_handler" => $_SERVER["SCRIPT_URI"]));
+
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
 				"data_type"	=> $arr["data_type"],
-				"return_url" 	=> get_ru(),
+				"return_url" 	=> post_ru(),
 				"add_obj" 	=> $arr["alias"]["to"],
 			)),
 		));
 
 		//l6petab ja salvestab
-		if($arr["data_type"] == 5)
+		if($arr["data_type"] === "5")
 		{
 			$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
 					"save" => 1,
-					"return_url" 	=> get_ru(),
+					"return_url" 	=> post_ru(),
 					"add_obj" 	=> $arr["alias"]["to"],
 				)),
 			));
@@ -1366,7 +1405,11 @@ abstract class intellectual_property extends class_base
 			}
 			else
 			{
-				$js.='document.getElementById("reg_code").style.display = "none";
+				if ("industrial_design" === get_class($this))
+				{
+					$js .= 'document.getElementById("reg_code").style.display = "none";';
+				}
+				$js.='
 				document.getElementById("name_row").style.display = "none";
 				document.getElementById("co_adr").style.display="none";
 				document.getElementById("co_livingplace_type").style.display="none";
@@ -1381,7 +1424,7 @@ abstract class intellectual_property extends class_base
 	**/
 	function error_popup($arr)
 	{
-		die($arr["error"]."\n<br>"."<input type=button value='OK' onClick='javascript:window.close();'>");
+		die($arr["error"]."\n<br />"."<input type=button value='OK' onclick='javascript:window.close();'>");
 	}
 
 	function get_applicant_sub()
@@ -1469,10 +1512,14 @@ abstract class intellectual_property extends class_base
 				}
 				$this->vars(array("a_{$var}_value" => $_SESSION["patent"]["authors"][$key][$var]));
 
+				$str = "A_" . strtoupper($var);
 				if($_SESSION["patent"]["authors"][$key][$var])
 				{
-					$str = "A_" . strtoupper($var);
 					$this->vars(array($str => $this->parse($str)));
+				}
+				else
+				{
+					$this->vars(array($str => null));
 				}
 			}
 
@@ -1511,7 +1558,16 @@ abstract class intellectual_property extends class_base
 			$data[$var] = html::textbox(array(
 				"name" => $var,
 				"value" => $_SESSION["patent"][$var],
-				"size" => 40,
+				"size" => 40
+			));
+		}
+
+		foreach ($this->save_fee_vars as $var)
+		{
+			$data[$var] = html::textbox(array(
+				"name" => $var,
+				"value" => $_SESSION["patent"][$var],
+				"size" => 4
 			));
 		}
 
@@ -1565,11 +1621,6 @@ abstract class intellectual_property extends class_base
 				"checked" => $_SESSION["patent"][$var]
 			);
 
-			if ("fee_copies" === $var)
-			{
-				$el_cfg["onclick"] = "addCopyFee();";
-			}
-
 			$data[$var] = html::checkbox($el_cfg);
 		}
 
@@ -1577,9 +1628,9 @@ abstract class intellectual_property extends class_base
 		{
 			$data[$key."_value"] =  $val;
 
-			if ("fee_copies" === $key and $val)
+			if ("fee_copies_info" === $key and $val)
 			{
-				$data["fee_copies_value"] = patent_patent_obj::COPIES_FEE;
+				$data["fee_copies_info_value"] = patent_patent_obj::COPIES_FEE;
 			}
 		}
 
@@ -1669,20 +1720,21 @@ abstract class intellectual_property extends class_base
 				}
 			}
 
-			if(!is_array($_SESSION["patent"][$var]) && !($_SESSION["patent"][$var] >1))
-			{
-				$_SESSION["patent"][$var] = -1;
-			}
-
 			$args = array(
 				"name" => $var,
-				"value" => $_SESSION["patent"][$var] ,
+				"value" => $_SESSION["patent"][$var],
+				"default" => -1,
 				"buttons" => 1
 			);
 
 			if ("epat_date" === $var)
 			{
 				$args["year_from"] = 2002;
+			}
+			elseif ("payment_date" === $var)
+			{
+				$args["year_from"] = date("Y", (time() - 93*86400));
+				$args["year_to"] = date("Y");
 			}
 			else
 			{
@@ -1691,7 +1743,7 @@ abstract class intellectual_property extends class_base
 
 			$data[$var] = html::date_select($args);
 
-			if($_SESSION["patent"][$var] > 0)
+			if(((int)$_SESSION["patent"][$var]) !== -1)
 			{
 				$data[$var."_value"] = date("j.m.Y", $_SESSION["patent"][$var]);
 			}
@@ -1703,44 +1755,11 @@ abstract class intellectual_property extends class_base
 			$data["payment_date_value"] = null;
 		}
 
-		$data["request_fee"] = $_SESSION["patent"]["request_fee"];
-
 		if (CL_PATENT === $this->clid)
 		{
 			if($_SESSION["patent"]["reproduction"])
 			{
 				$data["image_set"] = 1;
-			}
-			$data["classes_fee"] = $_SESSION["patent"]["classes_fee"];
-		}
-		elseif (CL_PATENT_PATENT === $this->clid)
-		{
-			if(!empty($_SESSION["patent"]["attachment_demand_points"]) and 10 < $_SESSION["patent"]["attachment_demand_points"])
-			{
-				$add_fee = ($_SESSION["patent"]["attachment_demand_points"] - 10) * 200;
-			}
-
-			if($this->is_template("ADD_FEE") and $add_fee)
-			{
-				$this->vars(array(
-					"add_fee" => $add_fee
-				));
-				$data["ADD_FEE"] = $this->parse("ADD_FEE");
-			}
-		}
-		elseif (CL_INDUSTRIAL_DESIGN === $this->clid)
-		{
-			if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
-			{
-				$add_fee = ($_SESSION["patent"]["industrial_design_variant_count"] - 2) * 400;
-			}
-
-			if($this->is_template("ADD_FEE") and $add_fee)
-			{
-				$this->vars(array(
-					"add_fee" => $add_fee
-				));
-				$data["ADD_FEE"] = $this->parse("ADD_FEE");
 			}
 		}
 
@@ -1773,7 +1792,7 @@ abstract class intellectual_property extends class_base
 		{
 			$sig_nice[] = sprintf(t("%s, %s  - %s"), $sig["signer_ln"], $sig["signer_fn"], date("H:i d/m/Y", $sig["signing_time"]));
 		}
-		$prop["value"] = join("<br/>", $sig_nice);
+		$prop["value"] = join("<br />", $sig_nice);
 		return $prop["value"];
 	}
 
@@ -1806,13 +1825,12 @@ abstract class intellectual_property extends class_base
 		$data = array();
 
 		////////////// applicants //////////////
-		if(isset($_SESSION["patent"]["delete_applicant"]))
+		if(!empty($_SESSION["patent"]["delete_applicant"]))
 		{
 			unset($_SESSION["patent"]["applicants"][$_SESSION["patent"]["delete_applicant"]]);
 			unset($_SESSION["patent"]["delete_applicant"]);
 		}
-
-		if($_SESSION["patent"]["add_new_applicant"])
+		elseif($_SESSION["patent"]["add_new_applicant"])
 		{
 			$_SESSION["patent"]["add_new_applicant"] = null;
 			$_SESSION["patent"]["change_applicant"] = null;
@@ -1829,37 +1847,40 @@ abstract class intellectual_property extends class_base
 		{
 			$data["applicant_no"] = sizeof($_SESSION["patent"]["applicants"]) + 1;
 		}
+		unset($_SESSION["patent"]["delete_applicant"]);
 		//nendesse ka siis see tingumus, et muuta ei saa
 
-		if(sizeof($_SESSION["patent"]["applicants"]) == 1)
-		{
-			$_SESSION["patent"]["representer"] = reset(array_keys($_SESSION["patent"]["applicants"]));
-		}
-
+/*
 		if(!$_SESSION["patent"]["payer"])
 		{
-			if($_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["applicant_type"]== "1")
+			if (isset($_SESSION["patent"]["representer"]))
 			{
-				$data["payer"] = $_SESSION["patent"]["payer"] = $_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["name"];
+				if($_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["applicant_type"] == "1")
+				{
+					$data["payer"] = $_SESSION["patent"]["payer"] = $_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["name"];
+				}
+				else
+				{
+					$data["payer"] =  $_SESSION["patent"]["payer"] = $_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["firstname"]." ".$_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["lastname"];
+				}
 			}
 			else
 			{
-				$data["payer"] =  $_SESSION["patent"]["payer"] = $_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["firstname"]." ".$_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["lastname"];
+				$payer = reset($_SESSION["patent"]["applicants"]);
+				$data["payer"] = $payer["name"];
 			}
 		}
-
-		$data["country"] = t(" Eesti ").html::radiobutton(array(
-			"value" => 0,
+*/
+		$data["country"] = t("Eesti ").html::radiobutton(array(
+			"value" => "0",
 			"checked" => (!$_SESSION["patent"]["country"] && isset($_SESSION["patent"]["country"])) ? 1 : 0,
 			"name" => "country",
-			"onclick" => 'document.getElementById("contact_popup_link").style.display="none";
-					document.getElementById("country_code").value = "EE";',
-		)).t("&nbsp;&nbsp;&nbsp;&nbsp; V&auml;lismaa ").html::radiobutton(array(
-			"value" => 1,
+			"onclick" => 'document.getElementById("contactPopupLink").style.display="none"; document.getElementById("country_code").value = "EE";',
+		)).t("&nbsp;&nbsp;&nbsp;&nbsp;V&auml;lismaa ").html::radiobutton(array(
+			"value" => "1",
 			"checked" => $_SESSION["patent"]["country"],
 			"name" => "country",
-			"onclick" => 'document.getElementById("contact_popup_link").style.display="";
-					document.getElementById("country_code").value = "";',
+			"onclick" => 'document.getElementById("contactPopupLink").style.display=""; document.getElementById("country_code").value = "";',
 		));
 
 		$data["applicant_type"] = t("F&uuml;&uuml;siline isik ").html::radiobutton(array(
@@ -1871,7 +1892,7 @@ abstract class intellectual_property extends class_base
 			document.getElementById("name_row").style.display = "none";
 			document.getElementById("name").value = "";
 			document.getElementById("code").value = "";
-			document.getElementById("reg_code").style.display="none";
+			' . ("industrial_design" === get_class($this) ? 'document.getElementById("reg_code").style.display="none";' : '') . '
 			document.getElementById("p_adr").style.display="";
 			document.getElementById("co_adr").style.display="none";
 			document.getElementById("co_livingplace_type").style.display="none";
@@ -1884,8 +1905,7 @@ abstract class intellectual_property extends class_base
 			"onclick" => 'document.getElementById("firstname_row").style.display = "none"; document.getElementById("lastname_row").style.display = "none"; document.getElementById("name_row").style.display = "";
 			document.getElementById("firstname").value = "";
 			document.getElementById("lastname").value = "";
-
-			document.getElementById("reg_code").style.display="";
+			' . ("industrial_design" === get_class($this) ? 'document.getElementById("reg_code").style.display="";' : '') . '
 			document.getElementById("p_adr").style.display="none";
 			document.getElementById("co_adr").style.display="";
 			document.getElementById("livingplace_type").style.display="none";
@@ -1967,13 +1987,16 @@ abstract class intellectual_property extends class_base
 			$data["banks"] = $bank_inst->bank_forms(array("id" => $dummy->prop("bank_payment") , "amount" => $this->get_payment_sum()));
 		}
 
-		$data["payer_popup_link"] = html::href(array(
+/* 		$data["payer_popup_link"] = html::href(array(
 			"caption" => t("Vali") ,
 			"url"=> "javascript:void(0);",
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("payer_popup", array("print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
-
 		));
-		$data["sum"] = $this->get_payment_sum();
+ */
+		$_SESSION["patent"]["fee_sum_info"] = $this->get_payment_sum();
+		$data["fee_sum_info"] = $_SESSION["patent"]["fee_sum_info"];
+		$_SESSION["patent"]["request_fee_info"] = $this->get_request_fee();
+		$data["request_fee_info"]= $_SESSION["patent"]["request_fee_info"];
 
 		$data["show_link"] = "javascript:window.open('".$this->mk_my_orb("show", array("print" => 1 , "id" => $_SESSION["patent"]["trademark_id"], "add_obj" => $arr["alias"]["to"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=800')";
 
@@ -2011,15 +2034,32 @@ abstract class intellectual_property extends class_base
 				$data["UNSIGNED"] = $this->parse("UNSIGNED");
 			}
 
-			if($_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["applicant_type"]== "1" && !is_oid($_SESSION["patent"]["procurator"]))
+			if(!is_oid($_SESSION["patent"]["procurator"]))
 			{
-				$job = " " .t("Allkirjastaja ametinimetus"). " " . html::textbox(array(
-					"name" => "job",
-					"size" => 10,
-					"value" => $_SESSION["patent"]["job"]
-				));
+				$job_show = false;
+				foreach ($_SESSION["patent"]["applicants"] as $applicant_data)
+				{
+					if ("1" == $applicant_data["applicant_type"])
+					{
+						$job_show = true;
+					}
+				}
+
+				if (isset($_SESSION["patent"]["representer"]) and !($_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["applicant_type"] == "1"))
+				{
+					$job_show = false;
+				}
+
+				if ($job_show)
+				{
+					$job = " " .t("Allkirjastaja ametinimetus"). " " . html::textbox(array(
+						"name" => "job",
+						"size" => 10,
+						"value" => $_SESSION["patent"]["job"]
+					));
+				}
 			}
-			$data["sign_button"] = '<input type="button" value="3. Allkirjasta taotlus" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">'.$job.'<br>';
+			$data["sign_button"] = '<input type="button" value="3. Allkirjasta taotlus" class="nupp" onclick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">'.$job.'<br />';
 		}
 		else
 		{
@@ -2048,7 +2088,8 @@ abstract class intellectual_property extends class_base
 		exit;
 	}
 
-	protected abstract function get_payment_sum();
+	public abstract function get_payment_sum();
+	public abstract function get_request_fee();
 
 	/**
 		@attrib name=procurator_popup
@@ -2084,12 +2125,12 @@ abstract class intellectual_property extends class_base
 			));
 			$c .= $this->parse("PROCURATOR");
 
-			$ret .= '<a href="javascript:void(0);" onClick=\'javascript:
+			$ret .= '<a href="javascript:void(0);" onclick=\'javascript:
 				window.opener.document.getElementById("procurator").value= "'.$val->id().'";
 				window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
 				window.opener.document.getElementById("warrant_row").style.display = "";
 				window.opener.document.getElementById("remove_procurator").style.display = "";
-				window.close()\'>'.$val->name().' </a><br>';
+				window.close()\'>'.$val->name().' </a><br />';
 		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
 		}
 
@@ -2129,8 +2170,8 @@ abstract class intellectual_property extends class_base
 				"code" => $key,
 			));
 			$c .= $this->parse("COUNTRY");
-			$ret .= "<a href='javascript:void(0);' onClick='javascript:window.opener.document.changeform.".$arr["var"].".value=\"".$key."\";window.close()'><span class=\"text\">".$val."</span></a><br>";
-		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
+			$ret .= "<a href='javascript:void(0);' onclick='javascript:window.opener.document.changeform.".$arr["var"].".value=\"".$key."\";window.close()'><span class=\"text\">".$val."</span></a><br />";
+		//	$ret .= "<a href='javascript:void(0)' onclick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
 		}
 		if($is_tpl)
 		{
@@ -2152,8 +2193,8 @@ abstract class intellectual_property extends class_base
 		foreach($_SESSION["patent"]["applicants"] as $applicant)
 		{
 			$ret = " ";
-			$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.document.changeform.payer.value=\"".$applicant["firstname"]." " . $applicant["lastname"]."\";window.close()'>".$applicant["firstname"]." " . $applicant["lastname"]."</a><br>";
-		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
+			$ret .= "<a href='javascript:void(0)' onclick='javascript:window.opener.document.changeform.payer.value=\"".$applicant["firstname"]." " . $applicant["lastname"]."\";window.close()'>".$applicant["firstname"]." " . $applicant["lastname"]."</a><br />";
+		//	$ret .= "<a href='javascript:void(0)' onclick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
 		}
 		return $ret;
 	}
@@ -2172,7 +2213,7 @@ abstract class intellectual_property extends class_base
 			"caption" => t("Nimi"),
 		));
 
-		if ("applicant" != $this->info_levels[0] and count($_SESSION["patent"]["applicants"]) > 1)
+		if ("applicant" != $this->info_levels[0] and count($_SESSION["patent"]["applicants"]) > 1 and get_class($this) !== "patent_patent" and get_class($this) !== "utility_model")
 		{
 			$t->define_field(array(
 				"name" => "representer",
@@ -2255,19 +2296,14 @@ abstract class intellectual_property extends class_base
 	**/
 	function submit_data($arr)
 	{
-		$_SESSION["patent"]["errors"] =  $errs = $this->check_fields();
+		$_SESSION["patent"]["errors"] = $errs = $this->check_fields();
 
 		foreach($_POST as $name => $val)
 		{
 			$_SESSION["patent"][$name] = $val;
 		}
 
-		foreach ($this->checkbox_vars as $name)
-		{
-			$_SESSION["patent"][$name] = $_POST[$name];
-		}
-
-		if($arr["data_type"] == 1)
+		if($arr["data_type"] === "1")
 		{
 			$_SESSION["patent"]["co_trademark"] = $_POST["co_trademark"];
 			$_SESSION["patent"]["guaranty_trademark"] = $_POST["guaranty_trademark"];
@@ -2286,7 +2322,7 @@ abstract class intellectual_property extends class_base
 					$_SESSION["patent"]["applicant_id"] = $n;
 				}
 			}
-			elseif ($_POST["data_type"] == 11)
+			elseif ($_POST["data_type"] === "11")
 			{
 				$n = $this->submit_author();
 				if($errs || $_POST["stay"])
@@ -2306,8 +2342,15 @@ abstract class intellectual_property extends class_base
 		{
 			$object_id = $this->save_data();
 		}
+		else
+		{
+			foreach ($this->checkbox_vars as $name)
+			{
+				$_SESSION["patent"][$name] = (int)(bool) $_POST[$name];
+			}
+		}
 
-		if($_POST["data_type"] != 11 and ($_POST["add_new_applicant"] || $_POST["applicant_id"] != ""))
+		if($_POST["data_type"] !== "11" and ($_POST["add_new_applicant"] || !empty($_POST["applicant_id"])))
 		{
 			if($_POST["add_new_applicant"])
 			{
@@ -2315,7 +2358,7 @@ abstract class intellectual_property extends class_base
 			}
 			return aw_url_change_var("new_application" , null , post_ru());
 		}
-		elseif($_POST["data_type"] == 11 and ($_POST["add_new_author"] || $_POST["author_id"] != ""))
+		elseif($_POST["data_type"] === "11" and ($_POST["add_new_author"] || !empty($_POST["author_id"])))
 		{
 			if($_POST["add_new_author"])
 			{
@@ -2335,7 +2378,7 @@ abstract class intellectual_property extends class_base
 		{
 			if($_POST["save"])
 			{
-				if($_SESSION["patent"]["id"] && $_SESSION["patent"]["authorized_person_code"] && $_GET["data_type"]==5)
+				if($_SESSION["patent"]["id"] && $_SESSION["patent"]["authorized_person_code"] && $_GET["data_type"] === "5")
 				{
 					$status = $this->is_signed($key);
 					if($status["status"] > 0)
@@ -2349,7 +2392,12 @@ abstract class intellectual_property extends class_base
 						}
 					}
 				}
-				$this->set_sent($arr);//muudab staatuse... v6i noh, tegelt poogib numbrti kylge
+
+				if ($_POST["send_patent"])
+				{
+					$this->set_sent(array("add_obj" => (int) $_POST["add_obj"]));
+				}
+
 				$_SESSION["patent"] = null;
 			}
 
@@ -2361,7 +2409,7 @@ abstract class intellectual_property extends class_base
 					$next_level = $key;
 					break;
 				}
-				if ((int) $arr["data_type"] === $key)
+				if (((int) $arr["data_type"]) === $key)
 				{
 					$next_level = true;
 				}
@@ -2386,11 +2434,55 @@ abstract class intellectual_property extends class_base
 		{
 			return null;
 		}
-		$object = obj($arr["add_obj"]);
-		$num_ser = $object->prop("series");
-		$ser = get_instance(CL_CRM_NUMBER_SERIES);
+
 		$o = obj($_SESSION["patent"]["id"]);
-		$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
+
+		$ol = new object_list(array(
+			"class_id" => CL_TRADEMARK_MANAGER,
+			"status" => object::STAT_ACTIVE
+		));
+		$trademark_manager = $ol->begin();
+
+		if (is_object($trademark_manager))
+		{// temporarily. no connection between application objects and trademark_manager where settings are defined.
+			$cl = basename(aw_ini_get("classes." . $o->class_id() . ".file"));
+
+			if ("patent" === $cl)
+			{
+				$propname = "trademark_add";
+			}
+			elseif ("patent_patent" === $cl)
+			{
+				$propname = "patent_add";
+			}
+			else
+			{
+				$propname = $cl . "_add";
+			}
+
+			if (!$this->can("view", $trademark_manager->prop($propname)))
+			{
+				return null;
+			}
+
+			$tmp = obj($trademark_manager->prop($propname));
+			$tmp = $tmp->connections_from(array(
+				"class_id" => constant("CL_" . strtoupper($cl))
+			));
+			$tmp = reset($tmp);
+			$tmp = $tmp->to();
+			$num_ser = $tmp->prop("series");
+			$ser = get_instance(CL_CRM_NUMBER_SERIES);
+			$tno = $ser->find_series_and_get_next(CL_PATENT, $num_ser);
+		}
+		else
+		{
+			$object = obj($arr["add_obj"]);
+			$num_ser = $object->prop("series");
+			$ser = get_instance(CL_CRM_NUMBER_SERIES);
+			$tno = $ser->find_series_and_get_next(CL_PATENT, $num_ser);
+		}
+
 		$status = $this->get_status($o);
 		$status->set_prop("nr" , $tno);
 		$status->set_prop("sent_date" , time());
@@ -2405,22 +2497,23 @@ abstract class intellectual_property extends class_base
 	{
 		$err = "";
 
-		if($_POST["data_type"] != 11 and ($_POST["code"] || $_POST["name"] || $_POST["firstname"] || $_POST["lastname"]))
+		if($_POST["data_type"] !== "11" and ($_POST["code"] || $_POST["name"] || $_POST["firstname"] || $_POST["lastname"]))
 		{
 			if(!isset($_POST["country"]) and "euro_patent_et_desc" !== get_class($this))
 			{
-				$err.= t("Kodumaine v&otilde;i v&auml;lismaine peab olema valitud")."\n<br>";
+				$err.= t("P&auml;ritolumaa peab olema valitud")."\n<br />";
 			}
+
 			if(!isset($_POST["applicant_type"]))
 			{
-				$err.= t("F&uuml;&uuml;siline v&otilde;i juriidiline isik peab olema valitud")."\n<br>";
+				$err.= t("F&uuml;&uuml;siline v&otilde;i juriidiline isik peab olema valitud")."\n<br />";
 			}
 
 			if($_POST["applicant_type"])
 			{
 				if(!$_POST["name"])
 				{
-					$err.= t("Nimi on kohustuslik")."\n<br>";
+					$err.= t("Nimi on kohustuslik")."\n<br />";
 				}
 
 			}
@@ -2428,37 +2521,37 @@ abstract class intellectual_property extends class_base
 			{
 				if(!$_POST["firstname"])
 				{
-					$err.= t("Eesnimi on kohustuslik")."\n<br>";
+					$err.= t("Eesnimi on kohustuslik")."\n<br />";
 				}
 				if(!$_POST["lastname"])
 				{
-					$err.= t("Perekonnanimi on kohustuslik")."\n<br>";
+					$err.= t("Perekonnanimi on kohustuslik")."\n<br />";
 				}
 			}
 
 			if(!$_POST["city"])
 			{
-				$err.= t("Linn on kohustuslik")."\n<br>";
+				$err.= t("Linn on kohustuslik")."\n<br />";
 			}
 
 			if(!$_POST["county"])
 			{
-				$err.= t("Maakond on kohustuslik")."\n<br>";
+				$err.= t("Maakond on kohustuslik")."\n<br />";
 			}
 
 			if(!$_POST["street"])
 			{
-				$err.= t("T&auml;nav on kohustuslik")."\n<br>";
+				$err.= t("T&auml;nav on kohustuslik")."\n<br />";
 			}
 
 			if(!$_POST["country_code"])
 			{
-				$err.= t("Riik on kohustuslik")."\n<br>";
+				$err.= t("Riik on kohustuslik")."\n<br />";
 			}
 
 			if(!$_POST["index"])
 			{
-				$err.= t("Postiindeks on kohustuslik")."\n<br>";
+				$err.= t("Postiindeks on kohustuslik")."\n<br />";
 			}
 
 			if(empty($err))
@@ -2499,6 +2592,12 @@ abstract class intellectual_property extends class_base
 			$_SESSION["patent"]["applicants"][$n][$var] = $_SESSION["patent"][$var];
 			$_SESSION["patent"][$var] = null;
 		}
+
+		if (isset($_SESSION["patent"]["applicants"][$n]["name"]) and 1 != $_SESSION["patent"]["applicants"][$n]["applicant_type"])
+		{
+			$_SESSION["patent"]["applicants"][$n]["name"] = $_SESSION["patent"]["applicants"][$n]["firstname"] . " " . $_SESSION["patent"]["applicants"][$n]["lastname"];
+		}
+
 		return $n;
 	}
 
@@ -2614,7 +2713,7 @@ abstract class intellectual_property extends class_base
 		}
 		foreach($_SESSION["patent"]["applicants"] as $key => $val)
 		{
-			if(!$_SESSION["patent"]["representer"])
+			if(!$_SESSION["patent"]["representer"] and get_class($this) !== "patent_patent" and get_class($this) !== "utility_model")
 			{
 				$_SESSION["patent"]["representer"] = $key;
 			}
@@ -2808,6 +2907,7 @@ abstract class intellectual_property extends class_base
 
 	function save_authors($patent)
 	{
+		$author_disallow_disclose = (array) $patent->meta("author_disallow_disclose");
 		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$conns = $patent->connections_from(array(
 			"type" => "RELTYPE_AUTHOR",
@@ -2870,15 +2970,10 @@ abstract class intellectual_property extends class_base
 			$author->save();
 
 			$patent->connect(array("to" => $author->id(), "type" => "RELTYPE_AUTHOR"));
-
-			if ($key === "author_disallow_disclose")
-			{
-				$tmp = (array) $patent->meta("author_disallow_disclose");
-				$tmp[] = $author->id();
-				$patent->set_meta("author_disallow_disclose", $tmp);
-			}
+			$author_disallow_disclose[$author->id()] = $val["author_disallow_disclose"];
 		}
 
+		$patent->set_meta("author_disallow_disclose", $author_disallow_disclose);
 		$patent->save();
 	}
 
@@ -2933,6 +3028,9 @@ abstract class intellectual_property extends class_base
 
 	function save_fee($patent)
 	{
+		$patent->set_prop("payer", $_SESSION["patent"]["payer"]);
+		$patent->set_prop("doc_nr", $_SESSION["patent"]["doc_nr"]);
+
 		foreach($this->save_fee_vars as $var)
 		{
 			if($_SESSION["patent"][$var])
@@ -2949,6 +3047,11 @@ abstract class intellectual_property extends class_base
 		{
 			$val = mktime(0,0,0, $_SESSION["patent"]["payment_date"]["month"], $_SESSION["patent"]["payment_date"]["day"], $_SESSION["patent"]["payment_date"]["year"]);
 			$patent->set_prop("payment_date" , $val);
+		}
+
+		if (get_class($this) === "patent_patent")
+		{
+			$patent->set_prop("fee_copies_info", $_SESSION["patent"]["fee_copies_info"]);
 		}
 
 		$patent->save();
@@ -3109,7 +3212,7 @@ abstract class intellectual_property extends class_base
 							"other_oid" =>$patent->id(),
 						));
 			          }
-			          $sign = "<a href='javascript:void(0);' onClick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
+			          $sign = "<a href='javascript:void(0);' onclick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
 				}
 				else
 				{
@@ -3297,7 +3400,7 @@ abstract class intellectual_property extends class_base
 							"other_oid" =>$patent->id(),
 						));
 			                }
-			                $sign = "<a href='javascript:void(0);' onClick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
+			                $sign = "<a href='javascript:void(0);' onclick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
 				}
 				else
 				{
@@ -3487,7 +3590,7 @@ abstract class intellectual_property extends class_base
 							"other_oid" =>$patent->id(),
 						));
 			                }
-			                $sign = "<a href='javascript:void(0);' onClick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
+			                $sign = "<a href='javascript:void(0);' onclick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
 				}
 				else
 				{
@@ -3676,7 +3779,7 @@ abstract class intellectual_property extends class_base
 							"other_oid" =>$patent->id(),
 						));
 			          }
-			          $sign = "<a href='javascript:void(0);' onClick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
+			          $sign = "<a href='javascript:void(0);' onclick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
 				}
 				else
 				{
@@ -3865,7 +3968,7 @@ abstract class intellectual_property extends class_base
 							"other_oid" =>$patent->id(),
 						));
 			          }
-			          $sign = "<a href='javascript:void(0);' onClick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
+			          $sign = "<a href='javascript:void(0);' onclick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
 				}
 				else
 				{
@@ -4080,6 +4183,7 @@ abstract class intellectual_property extends class_base
 		}
 
 		$xml_doc->formatOutput = true;
+		$xml_doc->encoding = trademark_manager::XML_OUT_ENCODING;
 
 		return $xml_doc;
 	}

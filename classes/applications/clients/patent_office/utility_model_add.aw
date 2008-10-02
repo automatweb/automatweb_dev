@@ -90,54 +90,54 @@ class utility_model_add extends class_base
 				}
 			}
 
-			if(!(is_array($links) && sizeof($links) == 7))
+			if(!is_array($links) or count($links) !== 7 or $ol->count() != 7)
 			{
 				$ol = new object_list();
 				$o1 = new object();
 				$o1->set_name("Taotleja andmed");
-				$o1->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o1->set_class_id(CL_MENU);
 				$o1->set_parent($o->id());
 				$o1->save();
 				$ol->add($o1);
 
 				$o2 = new object();
-				$o2->set_name("Autor");
-				$o2->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o2->set_name("Autori andmed");
+				$o2->set_class_id(CL_MENU);
 				$o2->set_parent($o->id());
 				$o2->save();
 				$ol->add($o2);
 
 				$o3 = new object();
 				$o3->set_name("Leiutise nimetus");
-				$o3->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o3->set_class_id(CL_MENU);
 				$o3->set_parent($o->id());
 				$o3->save();
 				$ol->add($o3);
 
 				$o4 = new object();
 				$o4->set_name("Prioriteet");
-				$o4->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o4->set_class_id(CL_MENU);
 				$o4->set_parent($o->id());
 				$o4->save();
 				$ol->add($o4);
 
 				$o41 = new object();
 				$o41->set_name("Lisad");
-				$o41->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o41->set_class_id(CL_MENU);
 				$o41->set_parent($o->id());
 				$o41->save();
 				$ol->add($o41);
 
 				$o5 = new object();
 				$o5->set_name("Riigil".chr(245)."iv");
-				$o5->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o5->set_class_id(CL_MENU);
 				$o5->set_parent($o->id());
 				$o5->save();
 				$ol->add($o5);
 
 				$o6 = new object();
 				$o6->set_name("Andmete kontroll/edastamine");
-				$o6->set_class_id(CL_UTILITY_MODEL_ADD);
+				$o6->set_class_id(CL_MENU);
 				$o6->set_parent($o->id());
 				$o6->save();
 				$ol->add($o6);

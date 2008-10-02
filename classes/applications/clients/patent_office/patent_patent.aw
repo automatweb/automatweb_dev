@@ -131,11 +131,14 @@
 	@caption Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&otilde;endav dokument
 
 @default group=fee
- 	@property add_fee type=text
+ 	@property add_fee type=textbox size=4
 	@caption Rohkem kui 10 n&otilde;udluspunkti
 
- 	@property fee_copies type=checkbox ch_value=1
-	@caption Patendidokumentide v&otilde;i muude tr&uuml;kiste koopiate v&auml;ljastamise l&otilde;iv
+ 	@property fee_copies type=textbox size=4
+	@caption Koopiate v&auml;ljastamise l&otilde;iv
+
+ 	@property fee_copies_info type=checkbox ch_value=1
+	@caption Koopiate v&auml;ljastamise l&otilde;iv
 
 // RELTYPES
 @reltype AUTHOR value=17 clid=CL_CRM_PERSON
@@ -195,13 +198,13 @@ class patent_patent extends intellectual_property
 		));
 		$this->info_levels = array(
 			0 => "applicant_pat",
-			11 => "author",
+			11 => "author_pat",
 			12 => "invention_pat",
 			3 => "priority_pat",
 			13 => "other_data",
 			14 => "attachments_pat",
 			4 => "fee_pat",
-			5 => "check"
+			5 => "check_pat"
 		);
 		$this->pdf_file_name = "Patenditaotlus";
 		$this->show_template = "show_pat.tpl";
@@ -209,13 +212,13 @@ class patent_patent extends intellectual_property
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio"));
 		$this->text_area_vars = array_merge($this->text_area_vars, array("other_datapub_data"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name_et","invention_name_en","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplicationadd_nr","prio_prevapplication_nr","other_first_application_data_country","other_first_application_data_nr","other_bio_nr","other_bio_inst", "attachment_demand_points"));
-		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose", "fee_copies"));
+		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose", "fee_copies_info"));
 		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
 		$this->save_fee_vars = array_merge($this->save_fee_vars, array("fee_copies", "add_fee"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value","correspond_city_value", "name", "applicant_reg");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "invention_name_en", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplicationadd_date", "prio_prevapplicationadd_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "other_first_application_data_date", "other_first_application_data_country", "other_first_application_data_nr", "other_bio_nr", "other_bio_date", "other_bio_inst", "other_datapub_date", "other_datapub_data", "attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "fee_copies", "applicant_reg", "add_fee"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "invention_name_en", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplicationadd_date", "prio_prevapplicationadd_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "other_first_application_data_date", "other_first_application_data_country", "other_first_application_data_nr", "other_bio_nr", "other_bio_date", "other_bio_inst", "other_datapub_date", "other_datapub_data", "attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "fee_copies", "applicant_reg", "add_fee", "fee_copies_info"));
 	}
 
 	public function get_property($arr)
@@ -287,14 +290,6 @@ class patent_patent extends intellectual_property
 		$patent->save();
 	}
 
-	public function save_fee($patent)
-	{
-		parent::save_fee($patent);
-		$patent->set_prop("fee_copies" , $_SESSION["patent"]["fee_copies"]);
-		$patent->set_prop("add_fee" , $_SESSION["patent"]["add_fee"]);
-		$patent->save();
-	}
-
 	protected function get_object()
 	{
 		if(is_oid($_SESSION["patent"]["id"]))
@@ -313,11 +308,11 @@ class patent_patent extends intellectual_property
 		return $patent;
 	}
 
-	protected function get_payment_sum()
+	public function get_payment_sum()
 	{
 		$sum = $this->get_request_fee() + $this->get_add_fee();
 
-		if (!empty($_SESSION["patent"]["fee_copies"]))
+		if (!empty($_SESSION["patent"]["fee_copies_info"]))
 		{
 			$sum += patent_patent_obj::COPIES_FEE;
 		}
@@ -325,7 +320,7 @@ class patent_patent extends intellectual_property
 		return $sum;
 	}
 
-	private function get_request_fee()
+	public function get_request_fee()
 	{
 		$is_corporate = false;
 
@@ -342,7 +337,7 @@ class patent_patent extends intellectual_property
 		return $sum;
 	}
 
-	private function get_add_fee()
+	public function get_add_fee()
 	{
 		$sum = 0;
 		if(!empty($_SESSION["patent"]["attachment_demand_points"]) and 10 < $_SESSION["patent"]["attachment_demand_points"])
@@ -356,8 +351,8 @@ class patent_patent extends intellectual_property
 	{
 		$data = parent::get_vars($arr);
 
-		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
-		$_SESSION["patent"]["add_fee"]= $this->get_add_fee();
+		$_SESSION["patent"]["add_fee_info"] = $this->get_add_fee();
+		$data["add_fee_info"] = $_SESSION["patent"]["add_fee_info"];
 
 		if(isset($_SESSION["patent"]["delete_author"]))
 		{
@@ -382,7 +377,6 @@ class patent_patent extends intellectual_property
 		{
 			$data["author_no"] = sizeof($_SESSION["patent"]["authors"]) + 1;
 		}
-		//nendesse ka siis see tingumus, et muuta ei saa
 
 		$data["P_ADDRESS"] = $this->parse("P_ADDRESS");
 
@@ -404,20 +398,35 @@ class patent_patent extends intellectual_property
 	{
 		$err = parent::check_fields();
 
-		if(((int) $_POST["data_type"]) === 14)
+		if(($_POST["data_type"]) === "14")
 		{
 			foreach ($_FILES as $var => $file_data)
 			{
 				if (is_uploaded_file($file_data["tmp_name"]))
 				{
 					$fp = fopen($file_data["tmp_name"], "r");
-					// flock($fp, LOCK_SH);
-					$sig = fread($fp, 4);
+					flock($fp, LOCK_SH);
+					$sig = fread($fp, 11);
 					fclose($fp);
-					if("%PDF" !== $sig)
+
+					$sig1 = substr($sig, 0, 6);
+					$sig2 = substr($sig, 0, 4);
+					$sig3 = substr($sig, 6, 5);
+					$jpg_sig1 = chr(255) . chr(216) . chr(255) . chr(225);
+					$jpg_sig2 = "EXIF" . chr(0);
+					$jpg_sig4 = chr(255) . chr(216) . chr(255) . chr(224);
+					$jpg_sig3 = "JFIF" . chr(0);
+
+					if (
+						"GIF87a" !== $sig1 and
+						"GIF89a" !== $sig1 and
+						($sig2 !== $jpg_sig1 and $sig3 !== $jpg_sig2 or $sig2 === $jpg_sig1 xor $sig3 === $jpg_sig2) and
+						($sig2 !== $jpg_sig4 and $sig3 !== $jpg_sig3 or $sig2 === $jpg_sig4 xor $sig3 === $jpg_sig3) and
+						"%PDF" !== $sig2
+					)
 					{
 						unset($_FILES[$var]["tmp_name"]);
-						$err.= t("Ainult pdf formaadis failid lubatud")."\n<br>";
+						$err.= t("Ainult pdf, gif ja jpeg formaadis failid lubatud")."\n<br>";
 					}
 				}
 			}
@@ -436,13 +445,25 @@ class patent_patent extends intellectual_property
 		return $err;
 	}
 
+	function web_data($arr)
+	{
+		$data = parent::web_data($arr);
+		$el_cfg = array(
+			"value" => 1,
+			"name" => "fee_copies_info",
+			"onclick" => "addCopyFee();",
+			"checked" => $_SESSION["patent"]["fee_copies_info"]
+		);
+		$data["fee_copies_info"] = html::checkbox($el_cfg);
+		return $data;
+	}
+
 	function fill_session($id)
 	{
 		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$patent = obj($id);
 		parent::fill_session($id);
 		$author_disallow_disclose = (array) $patent->meta("author_disallow_disclose");
-		$_SESSION["patent"]["fee_copies"] = $patent->prop("fee_copies");
 
 		foreach($patent->connections_from(array("type" => "RELTYPE_AUTHOR")) as $key => $c)
 		{
@@ -509,14 +530,14 @@ class patent_patent extends intellectual_property
 				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
 
 				// author address
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
 
 				if ($this->can("view", $author->prop("address.riik")))
 				{
-					$author_el->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
+					$addr->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
 				}
 
 				//
@@ -545,7 +566,7 @@ class patent_patent extends intellectual_property
 		$root->insertBefore($el, $despg);
 
 		// priority
-		if($o->prop("prio_convention_date") > 1 or $o->prop("prio_convention_nr"))
+		if($o->prop("prio_convention_date") !== "-1" or $o->prop("prio_convention_nr"))
 		{ // Pariisi konventsiooni vm. kokkuleppe taotluse alusel
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRICP", $o->prop("prio_convention_country")));
@@ -555,7 +576,7 @@ class patent_patent extends intellectual_property
 			$root->insertBefore($el, $despg);
 		}
 
-		if($o->prop("prio_prevapplicationsep_date") > 1 or $o->prop("prio_prevapplicationsep_nr"))
+		if($o->prop("prio_prevapplicationsep_date") !== "-1" or $o->prop("prio_prevapplicationsep_nr"))
 		{ // Varasema patenditaotluse alusel sellest eraldatud patenditaotluse puhul
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplicationsep_date"))));
@@ -564,7 +585,7 @@ class patent_patent extends intellectual_property
 			$root->insertBefore($el, $despg);
 		}
 
-		if($o->prop("prio_prevapplicationadd_date") > 1 or $o->prop("prio_prevapplicationadd_nr"))
+		if($o->prop("prio_prevapplicationadd_date") !== "-1" or $o->prop("prio_prevapplicationadd_nr"))
 		{ // Varasema patenditaotluse paranduste ja t&auml;ienduste alusel
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplicationadd_date"))));
@@ -573,7 +594,7 @@ class patent_patent extends intellectual_property
 			$root->insertBefore($el, $despg);
 		}
 
-		if($o->prop("prio_prevapplication_date") > 1 or $o->prop("prio_prevapplication_nr"))
+		if($o->prop("prio_prevapplication_date") !== "-1" or $o->prop("prio_prevapplication_nr"))
 		{ // Varasema taotluse alusel
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRIAPPD", date("Ymd",$o->prop("prio_prevapplication_date"))));
@@ -585,20 +606,20 @@ class patent_patent extends intellectual_property
 		//
 		$el = $xml->createElement("BASED");
 		$el->appendChild(new DOMElement("BASCP", $o->prop("other_first_application_data_country")));
-		$el->appendChild(new DOMElement("BASAPPD", date("Ymd",$o->prop("other_first_application_data_date"))));
+		$el->appendChild(new DOMElement("BASAPPD", "-1" === $o->prop("other_first_application_data_date") ? "" : date("Ymd",$o->prop("other_first_application_data_date"))));
 		$el->appendChild(new DOMElement("BASAPPN", $o->prop("other_first_application_data_nr")));
 		$root->insertBefore($el, $despg);
 
 		//
 		$el = $xml->createElement("MICRO");
 		$el->appendChild(new DOMElement("MICCN", $o->prop("other_bio_nr")));
-		$el->appendChild(new DOMElement("MICAPPD", date("Ymd",$o->prop("other_bio_date"))));
+		$el->appendChild(new DOMElement("MICAPPD", "-1" === $o->prop("other_bio_date") ? "" : date("Ymd",$o->prop("other_bio_date"))));
 		$el->appendChild(new DOMElement("MICAPPN", $o->prop("other_bio_inst")));
 		$root->insertBefore($el, $despg);
 
 		//
 		$el = $xml->createElement("ADVERT");
-		$el->appendChild(new DOMElement("ADVCP", date("Ymd",$o->prop("other_datapub_date"))));
+		$el->appendChild(new DOMElement("ADVCP", "-1" === $o->prop("other_datapub_date") ? "" : date("Ymd",$o->prop("other_datapub_date"))));
 		$root->insertBefore($el, $despg);
 
 		//

@@ -21,16 +21,6 @@
             <caption>Kinnitatud taotluste kaust</caption>
       </property>
       <property>
-            <name>series</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SERIES</reltype>
-            <caption>Numbriseeria</caption>
-      </property>
-      <property>
             <name>patent_add</name>
             <table>objects</table>
             <group>general</group>
@@ -271,11 +261,6 @@
                   <value>6</value>
                   <caption>Volinike kaust</caption>
             </PROCURATORS_FOLDER>
-            <SERIES>
-                  <clid>CL_CRM_NUMBER_SERIES</clid>
-                  <value>3</value>
-                  <caption>Numbriseeria</caption>
-            </SERIES>
             <ADD>
                   <clid>CL_DOCUMENT</clid>
                   <value>4</value>

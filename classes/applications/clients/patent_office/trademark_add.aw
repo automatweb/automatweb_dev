@@ -90,47 +90,47 @@ class trademark_add extends class_base
 				}
 			}
 
-			if(!(is_array($links) && sizeof($links) == 6))
+			if(!is_array($links) or count($links) !== 6 or $ol->count() != 6)
 			{
 				$ol = new object_list();
 				$o1 = new object();
 				$o1->set_name("Taotleja andmed");
-				$o1->set_class_id(CL_TRADEMARK_ADD);
+				$o1->set_class_id(CL_MENU);
 				$o1->set_parent($o->id());
 				$o1->save();
 				$ol->add($o1);
 
 				$o2 = new object();
 				$o2->set_name("Kaubam".chr(228)."rk");
-				$o2->set_class_id(CL_TRADEMARK_ADD);
+				$o2->set_class_id(CL_MENU);
 				$o2->set_parent($o->id());
 				$o2->save();
 				$ol->add($o2);
 
 				$o3 = new object();
 				$o3->set_name("Kaupade ja teenuste loetelu");
-				$o3->set_class_id(CL_TRADEMARK_ADD);
+				$o3->set_class_id(CL_MENU);
 				$o3->set_parent($o->id());
 				$o3->save();
 				$ol->add($o3);
 
 				$o4 = new object();
 				$o4->set_name("Prioriteet");
-				$o4->set_class_id(CL_TRADEMARK_ADD);
+				$o4->set_class_id(CL_MENU);
 				$o4->set_parent($o->id());
 				$o4->save();
 				$ol->add($o4);
 
 				$o5 = new object();
 				$o5->set_name("Riigil".chr(245)."iv");
-				$o5->set_class_id(CL_TRADEMARK_ADD);
+				$o5->set_class_id(CL_MENU);
 				$o5->set_parent($o->id());
 				$o5->save();
 				$ol->add($o5);
 
 				$o6 = new object();
 				$o6->set_name("Andmete kontroll/edastamine");
-				$o6->set_class_id(CL_TRADEMARK_ADD);
+				$o6->set_class_id(CL_MENU);
 				$o6->set_parent($o->id());
 				$o6->save();
 				$ol->add($o6);
@@ -144,7 +144,14 @@ class trademark_add extends class_base
 
 	function make_menu_link($o, $ref = NULL)
 	{
-		if($this->can("view" , $_SESSION["patent"]["id"]))
+		/* epa hack. parent object given before menu level child objects. occurs only with trademark submenu. distinguishable by whether $ref defined */
+		if (is_object($ref))
+		{
+			return;
+		}
+		/* end epa hack */
+
+		if($this->can("view", $_SESSION["patent"]["id"]))
 		{
 			$tr_inst = get_instance(CL_PATENT);
 			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);

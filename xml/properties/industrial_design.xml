@@ -138,8 +138,19 @@
             <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Taotlusl&amp;amp;otilde;iv</caption>
+      </property>
+      <property>
+            <name>fee_sum</name>
+            <table>objects</table>
+            <group>fee</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <caption>Kokku</caption>
       </property>
       <property>
             <name>payer</name>
@@ -339,7 +350,8 @@
             <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Variandid (alates 3-ndast)</caption>
       </property>
       <classinfo>

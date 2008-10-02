@@ -90,33 +90,33 @@ class euro_patent_et_desc_add extends class_base
 				}
 			}
 
-			if(!(is_array($links) && sizeof($links) == 4))
+			if(!is_array($links) or count($links) !== 4 or $ol->count() != 4)
 			{
 				$ol = new object_list();
 				$o1 = new object();
 				$o1->set_name("Patendiomaniku andmed");
-				$o1->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o1->set_class_id(CL_MENU);
 				$o1->set_parent($o->id());
 				$o1->save();
 				$ol->add($o1);
 
 				$o3 = new object();
 				$o3->set_name("Leiutis");
-				$o3->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o3->set_class_id(CL_MENU);
 				$o3->set_parent($o->id());
 				$o3->save();
 				$ol->add($o3);
 
 				$o5 = new object();
 				$o5->set_name("Riigil".chr(245)."iv");
-				$o5->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o5->set_class_id(CL_MENU);
 				$o5->set_parent($o->id());
 				$o5->save();
 				$ol->add($o5);
 
 				$o6 = new object();
 				$o6->set_name("Andmete kontroll/edastamine");
-				$o6->set_class_id(CL_EURO_PATENT_ET_DESC_ADD);
+				$o6->set_class_id(CL_MENU);
 				$o6->set_parent($o->id());
 				$o6->save();
 				$ol->add($o6);

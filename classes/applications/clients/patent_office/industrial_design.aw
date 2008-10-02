@@ -63,7 +63,7 @@
 	@caption T&ouml;&ouml;stusdisainilahenduse kirjeldus
 
 @default group=fee
- 	@property add_fee type=text
+ 	@property add_fee type=textbox size=4
 	@caption Variandid (alates 3-dast)
 
 // RELTYPES
@@ -104,13 +104,13 @@ class industrial_design extends intellectual_property
 		));
 		$this->info_levels = array(
 			0 => "applicant_ind",
-			11 => "author",
+			11 => "author_ind",
 			16 => "industrial_design",
 			3 => "priority_ind",
 			17 => "process_postpone",
 			4 => "fee_ind",
 			18 => "docs",
-			5 => "check"
+			5 => "check_ind"
 		);
 		$this->pdf_file_name = "ToostusdisainiLahenduseTaotlus";
 		$this->show_template = "show_ind.tpl";
@@ -178,13 +178,6 @@ class industrial_design extends intellectual_property
 		$this->final_save($patent);
 	}
 
-	public function save_fee($patent)
-	{
-		parent::save_fee($patent);
-		$patent->set_prop("add_fee" , $_SESSION["patent"]["add_fee"]);
-		$patent->save();
-	}
-
 	protected function save_industrial_design($patent)
 	{
 		$patent->set_prop("industrial_design_name" , $_SESSION["patent"]["industrial_design_name"]);
@@ -217,13 +210,13 @@ class industrial_design extends intellectual_property
 		return $patent;
 	}
 
-	protected function get_payment_sum()
+	public function get_payment_sum()
 	{
 		$sum = $this->get_request_fee() + $this->get_add_fee();
 		return $sum;
 	}
 
-	private function get_request_fee()
+	public function get_request_fee()
 	{
 		$is_corporate = false;
 
@@ -240,7 +233,7 @@ class industrial_design extends intellectual_property
 		return $sum;
 	}
 
-	private function get_add_fee()
+	public function get_add_fee()
 	{
 		$sum = 0;
 		if(!empty($_SESSION["patent"]["industrial_design_variant_count"]) and 2 < $_SESSION["patent"]["industrial_design_variant_count"])
@@ -254,8 +247,13 @@ class industrial_design extends intellectual_property
 	{
 		$data = parent::get_vars($arr);
 
-		$_SESSION["patent"]["request_fee"]= $this->get_request_fee();
-		$_SESSION["patent"]["add_fee"]= $this->get_add_fee();
+		$_SESSION["patent"]["add_fee_info"] = $this->get_add_fee();
+		$data["add_fee_info"]= $_SESSION["patent"]["add_fee_info"];
+
+		if(sizeof($_SESSION["patent"]["applicants"]) == 1)
+		{
+			$_SESSION["patent"]["representer"] = reset(array_keys($_SESSION["patent"]["applicants"]));
+		}
 
 		if(isset($_SESSION["patent"]["delete_author"]))
 		{
@@ -302,7 +300,7 @@ class industrial_design extends intellectual_property
 	{
 		$err = parent::check_fields();
 
-		if(((int) $_POST["data_type"]) === 18)
+		if($_POST["data_type"] === "18")
 		{
 			foreach ($_FILES as $var => $file_data)
 			{
@@ -370,6 +368,7 @@ class industrial_design extends intellectual_property
 		$patent = obj($id);
 		parent::fill_session($id);
 		$author_disallow_disclose = (array) $patent->meta("author_disallow_disclose");
+		$_SESSION["patent"]["representer"] = $patent->prop("applicant");
 
 		foreach($patent->connections_from(array("type" => "RELTYPE_AUTHOR")) as $key => $c)
 		{
@@ -436,14 +435,14 @@ class industrial_design extends intellectual_property
 				$name->appendChild(new DOMElement("NAMEL", trademark_manager::rere($author->prop("lastname"))));
 
 				// author address
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
-				$name->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.aadress"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.linn.name"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.maakond.name"))));
+				$addr->appendChild(new DOMElement("ADDRL", trademark_manager::rere($author->prop("address.postiindeks"))));
 
 				if ($this->can("view", $author->prop("address.riik")))
 				{
-					$author_el->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
+					$addr->appendChild(new DOMElement("COUNTRY", trademark_manager::rere($adr_i->get_country_code(obj($author->prop("address.riik"))))));
 				}
 
 				//
@@ -468,7 +467,7 @@ class industrial_design extends intellectual_property
 		$root->insertBefore($el, $despg);
 
 		// priority
-		if($o->prop("prio_convention_date") > 1 or $o->prop("prio_convention_nr"))
+		if($o->prop("prio_convention_date") !== "-1" or $o->prop("prio_convention_nr"))
 		{
 			$el = $xml->createElement("PRIGR");
 			$el->appendChild(new DOMElement("PRICP", $o->prop("prio_convention_country")));
