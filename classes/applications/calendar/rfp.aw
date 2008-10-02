@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.144 2008/09/30 13:57:36 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.145 2008/10/02 11:30:05 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2791,7 +2791,7 @@ class rfp extends class_base
 		//$currency = 745;
 		$currency = $arr["obj_inst"]->prop("default_currency");
 		$resources_total = 0;
-		$colspan = 7;
+		$colspan = 8;
 		if($package)
 		{
 			$ph = $this->parse("HEADERS_PACKAGE");
@@ -2888,6 +2888,7 @@ class rfp extends class_base
 				"separate_price" => $price,
 				"price" => $price,
 				"unitprice" => $unitprice,
+				"discount" => $rv->prop("discount"),
 			);
 			//$this->vars($room_data);
 			if($package)
@@ -3008,6 +3009,7 @@ class rfp extends class_base
 							"to_minute" => date("i", $data["end"]),
 							"comment" => $data["comment"],
 							"reservation" => $rv->id(),
+							"discount" => (int)$data["discount"],
 						);
 					}
 				}
@@ -3081,6 +3083,7 @@ class rfp extends class_base
 						"res_count" => $r["count"],
 						"res_price" => $r["price"],
 						"res_total" => $r["total"],
+						"res_discount" => $r["discount"],
 						"res_from_hour" => $r["from_hour"],
 						"res_from_minute" => $r["from_minute"],
 						"res_to_hour" => $r["to_hour"],
