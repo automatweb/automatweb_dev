@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.145 2008/10/02 11:30:05 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.146 2008/10/02 11:40:51 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2888,7 +2888,7 @@ class rfp extends class_base
 				"separate_price" => $price,
 				"price" => $price,
 				"unitprice" => $unitprice,
-				"discount" => $rv->prop("discount"),
+				"discount" => (int)$rv->prop("special_discount"),
 			);
 			//$this->vars($room_data);
 			if($package)
