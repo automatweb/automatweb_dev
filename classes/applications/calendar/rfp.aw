@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.149 2008/10/02 12:59:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.150 2008/10/02 13:33:51 markop Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3324,6 +3324,7 @@ class rfp extends class_base
 			"ADDITIONAL_SERVICES" => $as_sub,
 			"totalprice" => $totalprice,
 			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
+			$pdf."_ONLY_2" => $this->parse($pdf."_ONLY_2"),
 		));
 
 		// set back the language thingie
