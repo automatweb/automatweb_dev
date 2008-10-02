@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.147 2008/10/02 11:50:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.148 2008/10/02 12:30:57 markop Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2760,7 +2760,7 @@ class rfp extends class_base
 			"data_phone" => $arr["obj_inst"]->prop("data_subm_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_subm_email"),
 			"data_fax" => $arr["obj_inst"]->prop("data_subm_fax"),
-			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
+			"offer_preface" => nl2br($arr["obj_inst"]->trans_get_val("offer_preface")),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),
 			"data_currency" => $arr["obj_inst"]->prop("default_currency.name"),
@@ -3083,7 +3083,7 @@ class rfp extends class_base
 						"res_count" => $r["count"],
 						"res_price" => $r["price"],
 						"res_total" => $r["total"],
-						"res_discount" => strlen($r["discount"])?sprintf("%s %%", $r["discount"]):"-",
+						"res_discount" => $r["discount"]?sprintf("%s %%", $r["discount"]):"-",
 						"res_from_hour" => $r["from_hour"],
 						"res_from_minute" => $r["from_minute"],
 						"res_to_hour" => $r["to_hour"],
