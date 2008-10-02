@@ -48,6 +48,57 @@ class crm_bill_row_object extends _int_object
 		return 0;
 	}
 
+	/** Returns task row or bug connected to this bill row
+		@attrib api=1
+		@returns oid
+			bug or task row id
+	**/
+	public function get_task_row_or_bug_id()
+	{
+		foreach($this->connections_from(array("type" => "RELTYPE_TASK_ROW"))as $c)
+		{
+			return $c->prop("to");
+		}
+		foreach($this->connections_from(array("type" => "RELTYPE_BUG"))as $c)
+		{
+			return $c->prop("to");
+		}
+		return "";
+	}
+
+	/** Returns task row or bug orderer person name
+		@attrib api=1
+		@returns string
+			Person name
+	**/
+	public function get_orderer_person_name()
+	{
+		$problem = $this->get_task_row_or_bug_id();
+		if($problem)
+		{
+			$problem = obj($problem);
+		}
+		else
+		{
+			return "";
+		}
+		if($problem->class_id() == CL_BUG)
+		{
+			if($ret = $problem->prop("customer_person.name"))
+			{
+				return $ret;
+			}
+		}
+		if($problem->class_id() == CL_TASK_ROW)
+		{
+			if($ret = $problem->prop("task.customer.name"))
+			{
+				return $ret;
+			}
+		}
+		return "";
+	}
+
 	/** returns bill row bill id
 		@attrib api=1
 		@returns oid

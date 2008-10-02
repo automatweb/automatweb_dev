@@ -2342,6 +2342,10 @@ class crm_bill extends class_base
 				"persons" => $ppl,
 				"has_task_row" => $row->has_task_row(),
 			);
+
+			$rd["orderer"] = $row->get_orderer_person_name();
+			$rd["task_row_id"] = $row->get_task_row_or_bug_id();
+
 			$inf[] = $rd;
 		}
 		usort($inf, array(&$this, "__br_sort"));
@@ -2541,6 +2545,9 @@ class crm_bill extends class_base
 		$sum = 0;
 		foreach($bill_rows as $key => $row)
 		{
+			$row_data = array();
+			$row_data["task_row_id"] = $row["task_row_id"];
+			$row_data["orderer"] = $row["orderer"];
 			if ($row["is_oe"])
 			{
 				continue;
@@ -2566,16 +2573,18 @@ class crm_bill extends class_base
 			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1]));
 			else
 			{
+				$this->vars($row_data);
 				$this->vars(array(
 					"unit" => $this->get_unit_name($row["unit"], $b),
 					"amt" => number_format($row["amt"],3), 
 					"price" => number_format($row["price"], 2,".", " "),
-					"sum" => number_format($cur_sum, 2,"."),
+					"sum" => number_format($cur_sum, 2,"." , " "),
 					"desc" => $row["name"],
 					"date" => $row["date"] 
 				));
 				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
 			}
+
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
