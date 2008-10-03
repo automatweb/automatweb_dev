@@ -1629,7 +1629,7 @@ class bug extends class_base
 		{
 			$this->_add_comment($bug, $inf["desc"], null, null, $inf["hours"]);
 		}
-	} 
+	}  
 
 	function _get_comment_list($o, $so = "asc", $nl2br = true, $base_com = 1)
 	{
