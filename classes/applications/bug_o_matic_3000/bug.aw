@@ -2060,8 +2060,9 @@ class bug extends class_base
 		$result["by"] = substr($row[1], $by1, $by2-$by1 );
 	//	arr($row[1]);
 	//	arr($result);
+$diff = explode("*" , $result["diff"]);
 
-		$msg = $result["bug"]." ".$result["diff"]."\n".t("Failid: ").$result["files"];
+		$msg = $result["bug"]." ".join(" " , $diff)."\n".t("Failid: ").$result["files"];
 		if($result["time"]) $msg.="\n".t("Aeg:").$result["time"];
 		$n = 10;
 		while($row[$n])
@@ -2180,7 +2181,7 @@ class bug extends class_base
 					if ($map_cvs_uid == $cvs_uid)
 					{
 						$_SESSION["uid_oid"] = $u_inst->get_oid_for_uid($map_aw_uid);
-						//aw_switch_user(array("uid" => trim($map_aw_uid)));
+						aw_switch_user(array("uid" => trim($map_aw_uid)));
 					}
 				}
 			}
