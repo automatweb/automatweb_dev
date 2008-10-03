@@ -167,5 +167,12 @@
 			</function>
 		</action>
 
+		<action name="consolidate_template_logs">
+			<function name="consolidate_template_logs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

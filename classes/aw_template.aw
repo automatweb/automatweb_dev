@@ -330,6 +330,7 @@ class aw_template extends core
 			}
 			else
 			{
+				$this->_record_template_load($this->template_filename);
 				$retval = $this->read_tpl(file($this->template_filename));
 			}
 		}
@@ -1110,6 +1111,13 @@ class aw_template extends core
 			return true;
 		}
 		return false;
+	}
+
+	private function _record_template_load($fn)
+	{
+		$f = fopen(aw_ini_get("site_basedir")."/files/template_log_".date("Y_m").".log", "a");
+		fwrite($f, time()."|".get_ru()."|".$fn."\n");
+		fclose($f);
 	}
 };
 

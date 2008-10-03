@@ -1130,6 +1130,67 @@ ENDCLASSFORM;
 		include(aw_ini_get("basedir") . "/scripts/mk_class/mk_class.aw");
 		echo "</pre>";
 	}
+
+	/**
+		@attrib name=consolidate_template_logs
+	**/
+	public function consolidate_template_logs($arr)
+	{
+		// make a list of all files available
+		// analyze and remove all past months logs
+		foreach(glob(aw_ini_get("site_basedir")."/files/template_log_*") as $fn)
+		{
+			echo "fn = $fn <br>";
+			list(,,$y, $m) = explode("_", basename($fn, ".log"));
+			echo "y = $y , m = $m <br>";
+			if (($y == date("Y") && $m < date("m")) || $y < date("Y"))
+			{
+				$this->_process_single_template_log($fn, (int)$y, (int)$m);
+			}
+		}
+		die("all done");
+	}
+
+	private function _process_single_template_log($fn, $y, $m)
+	{
+		$data = array();
+		foreach(file($fn) as $line)
+		{
+			list($tm, $url, $tpl) = explode("|", trim($line));
+			$data[$tpl][$url]++;
+		}
+
+		// sort the template list so that for each template we get the url it is most referenced in
+		$s_data = array();
+		foreach($data as $tpl => $d)
+		{
+			arsort($d);
+			reset($d);
+			if (strpos($tpl, aw_ini_get("site_basedir")) !== false)
+			{
+				$tpl = str_replace(aw_ini_get("site_basedir"), "", realpath($tpl));
+				$s_data[$tpl] = key($d);
+			}
+		}
+
+		// now send it to register and remove the log file
+		$rv = $this->do_orb_method_call(array(
+			"class" => "template_logger",
+			"action" => "recieve_log_data",
+			"method" => "xmlrpc",
+			"server" => "http://register.automatweb.com",
+			"params" => array(
+				"site_id" => aw_ini_get("site_id"),
+				"data" => $s_data,
+				"y" => $y, 
+				"m" => $m
+			),
+		));
+		if ($rv == 1)
+		{
+			unlink($fn);
+		}
+	}
 }
 
 /* Generic sys class exception */
