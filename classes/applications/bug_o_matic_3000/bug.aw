@@ -2185,7 +2185,7 @@ $diff = explode("*" , $result["diff"]);
 					}
 				}
 			}
-		} 
+		}
 
 		if ($save)
 		{
