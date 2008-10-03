@@ -36,10 +36,12 @@ class propcollector extends aw_template
 			"caption" => TAG_VALUE,
 			"comment" => TAG_VALUE,
 		);
+
+		$this->set_tagdata();
 	}
 
 	private function req_dir($args = array())
-    {
+	{
 		$path = $args["path"];
 		$paths = is_array($path) ? $path : array($path);
 		foreach($paths as $path)
@@ -274,6 +276,12 @@ class propcollector extends aw_template
 			list($fname,$fvalue) = explode("=",$field);
 			if ($fname && strlen($fvalue))
 			{
+				$this->validate_fields(array(
+					"type" => "property", 
+					"name" => $name,
+					"field" => $fname,
+					"value" => $fvalue,
+				));
 				// try to split fvalue
 				$_split = explode(",",$fvalue);
 				if (sizeof($_split) > 1)
@@ -330,6 +338,11 @@ class propcollector extends aw_template
 	private function add_reltype($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
+		$this->validate_fields(array(
+			"type" => "reltype", 
+			"name" => $name,
+			"fields" => $fields,
+		));
 		$this->reltypes[$name] = $fields;
 		$this->name = $name;
 		$this->last_element = "relation";
@@ -339,6 +352,11 @@ class propcollector extends aw_template
 	private function add_layout($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
+		$this->validate_fields(array(
+			"type" => "layout", 
+			"name" => $name,
+			"fields" => $fields,
+		));
 		if (empty($fields["group"]) && !empty($this->defaults["group"]))
 		{
 			$fields["group"] = $this->defaults["group"];
@@ -352,6 +370,11 @@ class propcollector extends aw_template
 	private function add_forminfo($name,$data)
 	{
 		$this->forminfo[$name] = $this->_parse_attribs($data);
+		$this->validate_fields(array(
+			"type" => "forminfo", 
+			"name" => $name,
+			"fields" => $this->forminfo[$name],
+		));
 	}
 
 	private function set_groupinfo($id,$data)
@@ -374,6 +397,12 @@ class propcollector extends aw_template
 						{
 							$_value = htmlentities($_value);
 						}
+						$this->validate_fields(array(
+							"type" => "groupinfo", 
+							"name" => $id,
+							"field" => $_name,
+							"value" => $_value
+						));
 						$this->groupinfo[$id][$_name] = $_value;
 						$tmp = "";
 					};
@@ -399,6 +428,12 @@ class propcollector extends aw_template
 						{
 							$_value = htmlentities($_value);
 						}
+						$this->validate_fields(array(
+							"type" => "groupinfo", 
+							"name" => $id,
+							"field" => $_name,
+							"value" => $_value
+						));
 						$this->groupinfo[$id][$_name] = $_value;
 						$tmp = "";
 					};
@@ -416,6 +451,11 @@ class propcollector extends aw_template
 	private function set_tableinfo($id,$data)
 	{
 		$attr = $this->_parse_attribs($data);
+		$this->validate_fields(array(
+			"type" => "tableinfo", 
+			"name" => $id,
+			"fields" => $fields,
+		));
 		if (empty($attr["master_index"]) && $attr["master_table"] == "objects")
 		{
 			$attr["master_index"] = "brother_of";
@@ -714,6 +754,254 @@ class propcollector extends aw_template
 					break;
 			}
 		}
+	}
+
+	private function validate_fields($arr)
+	{
+		if(!is_array($arr["fields"]) && $arr["field"] && $arr["value"])
+		{
+			$fields = array(
+				$arr["field"] => $arr["value"],
+			);
+		}
+		elseif(is_array($arr["fields"]))
+		{
+			$fields = $arr["fields"];
+		}
+		else
+		{
+			$fields = array();
+		}
+		foreach($fields as $f => $val)
+		{
+			if(!isset($this->tagdata[$arr["type"]][$f]))
+			{
+				print "Unknown field $f in {$arr["type"]} {$arr["name"]}\n";
+			}
+			else
+			{
+				$value = $this->tagdata[$arr["type"]][$f];
+				if(!is_array($value))
+				{
+					switch($value)
+					{
+						case "clid":
+							if(strpos($val, ","))
+							{
+								$val = explode(",", $val);
+							}
+							if(!is_array($val))
+							{
+								$val = array($val);
+							}
+							foreach($val as $v)
+							{
+								if(!defined($v))
+								{
+									print "Unknown clid $v in {$arr["type"]} {$arr["name"]}\n";
+								}
+							}
+							break;
+					}
+				}
+			}
+		}
+	}
+
+	private function set_tagdata()
+	{
+		$this->tagdata = array(
+			"classinfo" => array(
+				"syslog_type" => array(),
+				"maintainer" => array(),
+				"relationmgr" => array(),
+				"no_status" => array(),
+				"no_comment" => array(),
+				"prop_cb" => array(),
+				"trans" => array(),
+				"confirm_save_data" => array(),
+				"r2" => array(),
+				"layout" => array(),
+				"no_caption" => array(),
+				"no_name" => array(),
+				"allow_rte" => array(),
+				"hide_tabs" => array(),
+				"versioned" => array(),
+				"status" => array(),
+			),
+			"groupinfo" => array(
+				"caption" => array(),
+				"submit" => array(
+					"no",
+					"yes",
+				),
+				"parent" => array(),
+				"submit_method" => array(),
+				"save" => array(),
+				"encoding" => array(),
+				"tabgroup" => array(),
+				"no_submit" => array(),
+				"name" => array(),
+				"submit_action" => array(),
+				"default" => array(),
+				"icon" => array(),
+				"focus" => array(),
+				"table" => array(),
+			),
+			"tableinfo" => array(
+				"index" => array(),
+				"master_index" => array(),
+				"master_table" => array(),
+			),
+			"forminfo" => array(
+				"onload" => array(),
+				"onsubmit" => array(),
+				"method" => array(),
+			),
+			"layout" => array(
+				"type" => array(),
+				"width" => array(),
+				"closeable" => array(),
+				"area_caption" => array(),
+				"parent" => array(),
+				"group" => array(),
+				"no_caption" => array(),
+				"no_padding" => array(),
+			),
+			"reltype" => array(
+				"value" => array(),
+				"clid" => "clid",
+				"hidden" => array(),
+			),
+			"property" => array(
+				"type" => array(
+					"checkbox",
+					"toolbar",
+					"fileupload",
+					"hidden",
+					"textbox",
+					"table",
+					"relpicker",
+					"select",
+					"text",
+					"releditor",
+					"textarea",
+					"chooser",
+					"submit",
+					"callback",
+					"comments",
+					"classificator",
+					"treeview",
+					"date_select",
+					"reset",
+					"button",
+					"aliasmgr",
+					"popup_search",
+					"datetime_select",
+					"calendar_selector",
+					"multi_calendar",
+					"project_selector",
+					"reminder",
+					"participant_selector",
+					"status",
+					"multifile_upload",
+					"translator",
+					"password",
+					"server_folder_selector",
+					"calendar",
+					"form",
+					"objpicker",
+					"time_select",
+					"colorpicker",
+				),
+				"action" => array(),
+				"add_empty" => array(),
+				"all_projects" => array(),
+				"allow_rte" => array(),
+				"autocomplete_class_id" => array(),
+				"automatic" => array(),
+				"background_color" => array(),
+				"callback" => array(),
+				"caption" => array(),
+				"captionside" => array(),
+				"ch_value" => array(),
+				"chooser" => array(),
+				"clid" => "clid",
+				"clone_link" => array(),
+				"cols" => array(),
+				"datatype" => array(),
+				"default" => array(),
+				"delete_button" => array(),
+				"delete_relations" => array(),
+				"delete_rels_button" => array(),
+				"delete_rels_popup_button" => array(),
+				"direct_links" => array(),
+				"display" => array(),
+				"editonly" => array(),
+				"field" => array(),
+				"filt_edit_fields" => array(),
+				"font_size" => array(),
+				"form" => array(),
+				"format" => array(),
+				"generator" => array(),
+				"group" => array(),
+				"height" => array(),
+				"image" => array(),
+				"maxlength" => array(),
+				"method" => array(),
+				"mode" => array(),
+				"multiple" => array(),
+				"name" => array(),
+				"new_items" => array(),
+				"newonly" => array(),
+				"no_caption" => array(),
+				"no_comment" => array(),
+				"no_edit" => array(),
+				"no_rte_button" => array(),
+				"no_sel" => array(),
+				"option_is_tuple" => array(),
+				"orient" => array(),
+				"override_parent" => array(),
+				"parent" => array(),
+				"prop_cb" => array(),
+				"props" => array(),
+				"quicksearch" => array(),
+				"recursive" => array(),
+				"rel" => array(),
+				"rel_id" => array(),
+				"reltype" => array(),
+				"richtext" => array(),
+				"rows" => array(),
+				"save" => array(),
+				"save_format" => array(),
+				"sclass" => array(),
+				"search" => array(),
+				"search_button" => array(),
+				"sform" => array(),
+				"side" => array(),
+				"size" => array(),
+				"sort_callback" => array(),
+				"store" => array(),
+				"style" => array(),
+				"subtitle" => array(),
+				"submit" => array(),
+				"submit_method" => array(),
+				"table" => array(),
+				"table_fields" => array(),
+				"table_edit_fields" => array(),
+				"text_color" => array(),
+				"trans" => array(),
+				"use_form" => array(),
+				"user" => array(),
+				"value" => array(),
+				"view_element" => array(),
+				"viewtype" => array(),
+				"width" => array(),
+				"wrapchildren" => array(),
+				"year_from" => array(),
+				"year_to" => array(),
+			),
+		);
 	}
 }
 
