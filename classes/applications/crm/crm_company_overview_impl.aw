@@ -1759,9 +1759,10 @@ class crm_company_overview_impl extends class_base
 					$tasks = $this->make_keys($ol->ids());
 				break;
 
-			default:
+			default: 
 				enter_function("_get_task_list:2:1");
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				$clid2 = array("CL_TASK","CL_CRM_MEETING","CL_CRM_CALL");
 				$cali = get_instance(CL_PLANNER);
 				$calid = $cali->get_calendar_for_user();
 				exit_function("_get_task_list:2:1");
@@ -1805,17 +1806,29 @@ class crm_company_overview_impl extends class_base
 					$ol = new object_list($arr["obj_inst"]->connections_from(array(
 						"type" => array("RELTYPE_KOHTUMINE", "RELTYPE_CALL", "RELTYPE_TASK", "RELTYPE_DEAL", "RELTYPE_OFFER")
 					)));
+					$filtor = array();
+					foreach($clid2 as $cl)
+					{
+						$filtor[$cl.".RELTYPE_CUSTOMER"] = $arr["obj_inst"]->id();
+					}
+					$filtor["CL_CRM_OFFER.RELTYPE_ORDERER"] = $arr["obj_inst"]->id();
 
 					$ol2 = new object_list(array(
+						0 => new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => $filtor,
+						)),
 						"class_id" => $clid,
-						"customer" => $arr["obj_inst"]->id()
+//						"customer" => $arr["obj_inst"]->id(),
+						"lang_id" => array(),
+						"site_id" => array(),
 					));
 					$ol->add($ol2);
 					$tasks = $this->make_keys($ol->ids());
 					if (!count($tasks))
 					{
 						$tasks = array(-1);
-					}
+					}if(aw_global_get("uid") == "marko") arr($tasks);
 					exit_function("_get_task_list:2:3");
 				}
 				break;
