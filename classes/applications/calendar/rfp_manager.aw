@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.74 2008/09/29 13:12:55 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.75 2008/10/06 12:28:38 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -538,7 +538,7 @@ class rfp_manager extends class_base
 						"date_period" => $date_period,
 						"acc_need" => ($obj->prop("data_gen_accommodation_requirements") == 1)?t("Jah"):t("Ei"),
 						"delegates" => $obj->prop("data_gen_attendees_no"),
-						"contact_pers" => is_oid($obj->prop("data_billing_contact")) ? $obj->prop("data_billing_contact.name") : $obj->prop("data_billing_contact"),
+						"contact_pers" => is_oid($obj->prop("data_subm_name")) ? $obj->prop("data_subm_name.name") : $obj->prop("data_subm_name"),
 						"contacts" => join(", ", $contacts),
 						"created" => $obj->created(),
 						"popup" => $this->gen_popup($oid),
@@ -1707,10 +1707,15 @@ class rfp_manager extends class_base
 			// time
 			if($_tmp_from["year"] > 0 && $_tmp_to["year"] > 0)
 			{
-				$comp = $obj->created();
+				$comp = $obj->prop("data_gen_arrival_date_admin");
 				$s_f = mktime(0,0,0, $_tmp_from["month"], $_tmp_from["day"], $_tmp_from["year"]);
-				$s_t = mktime(0,0,0, $_tmp_to["month"], $_tmp_to["day"], $_tmp_to["year"]);
-				if(($s_f != -1 && $s_t <= $comp) || ($s_t != -1 && $s_f >= $comp) || ($s_f != -1 && $s_t == -1))
+				$s_t = mktime(23,59,59, $_tmp_to["month"], $_tmp_to["day"], $_tmp_to["year"]);
+				if(($s_f != -1 && $s_f >= $comp) || ($s_t != -1 && $s_t <= $comp))
+				{
+					unset($rfps[$oid]);
+				}
+				$comp = $obj->prop("data_gen_departure_date_admin");
+				if(($s_f != -1 && $s_f >= $comp) || ($s_t != -1 && $s_t <= $comp))
 				{
 					unset($rfps[$oid]);
 				}
@@ -1740,10 +1745,14 @@ class rfp_manager extends class_base
 			if(strlen($request["s_contact"]))
 			{
 				$is = false;
-				$name = $obj->prop("data_billing_contact");
+				$name = $obj->prop("data_subm_name");
 				foreach(split(" ", $request["s_contact"]) as $part)
 				{
 					$is = stristr($name, $part)?true:$is;
+				}
+				if($this->can("view", ($name)))
+				{
+					$is = (stristr(obj($name)->name(), $request["s_contact"]) !== false)?true:$is;
 				}
 				if(!$is)
 				{
