@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.17 2008/09/19 16:57:08 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.18 2008/10/06 14:01:51 hannes Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -252,13 +252,16 @@ class flash extends class_base
 			$url = aw_url_change_var("clickTAG", $ob->trans_get_val("click_tag"), $url);
 			$url = str_ireplace("&clickTAG=", "&amp;clickTAG=", $url);
 		}
-
-
+		if (aw_global_get("class") == "flash")
+		{
+			$tmp = $this->parse("IN_ADMIN");
+		}
 		$this->vars(array(
 			"id" => "aw_flash_".$ob->id(),
 			"url" => $url,
 			"width" => $ob->prop("width"),
 			"height" => $ob->prop("height"),
+			"IN_ADMIN" => $tmp,
 		));
 
 		return $this->parse();
