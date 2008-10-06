@@ -6207,12 +6207,14 @@ $oo = get_instance(CL_SHOP_ORDER);
 				$dealnow = 1;
 			}
 			$add_row = null;
+			$sum = 0;
 			if(($group == "purchase_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_PURCHASE_MANAGER_WORKSPACE) || ($group == "sell_orders" && $arr["obj_inst"]->class_id() == CL_SHOP_SALES_MANAGER_WORKSPACE))
 			{
 				$add_row .= html::strong(t("Kommentaarid:"))."<br />";
 				$com_conn = $o->connections_from(array(
 					"type" => "RELTYPE_COMMENT",
 				));
+				$comments = array();
 				foreach($com_conn as $cc)
 				{
 					$com = $cc->to();
@@ -6284,6 +6286,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 						$at->set_default_sortby("sb");
 						$at->set_default_sorder("desc");
 						$at->define_data($data);
+						$sum += $row->prop("amount") * $row->prop("price");
 					}
 					$at->define_data(array(
 						"name" => html::strong(t("Nimi")),
@@ -6305,7 +6308,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 				"purchaser" => html::obj_change_url($o->prop("purchaser")),
 				"date" => $o->prop("date"),
 				"rels" => implode(", ", $rel_arr),
-				"sum" => 0,
+				"sum" => $sum,
 				"status" => $o->prop("confirmed")?t("Kinnitatud"):t("Kinnitamata"),
 				"oid" => $o->id(),
 				"start_date" => html::textbox(array(
