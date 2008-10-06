@@ -98,6 +98,13 @@ class shop_delivery_note extends class_base
 
 		switch($prop["name"])
 		{
+			case "approved":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "gen_submit":
 				$prop["class"] = "sbtbutton";
 				$prop["onclick"] = "dn_submit()";
