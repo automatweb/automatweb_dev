@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.150 2008/10/02 13:33:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.151 2008/10/06 13:14:15 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1523,8 +1523,7 @@ class rfp extends class_base
 			{
 				if($count = $amount[$prod->id()])
 				{
-					$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
-					$price = $rvi->_get_admin_price_view($prod,$prod_price);
+					$price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
 					$disc = $discount[$prod->id()];
 					$prod_sum = $price * $count;
 					$prod_sum = number_format($prod_sum - ($prod_sum * $disc)/100,2);
@@ -1739,7 +1738,11 @@ class rfp extends class_base
 					{
 						foreach($add["prod"] as $prodid)
 						{
-							$prod_price = $rvi->get_product_price(array("product" => $prodid, "reservation" => $rv));
+							$prod_price = $rvi->get_product_price(array(
+								"product" => $prodid,
+								"reservation" => $rv,
+								"curr" => $arr["obj_inst"]->prop("default_currency"),
+							));
 							$price = $rvi->_get_admin_price_view(obj($prodid), $prod_price);
 							$amt = $arr["obj_inst"]->prop("data_gen_attendees_no");
 							$oi_prods[$prodid.".".$o->id()] = array(
@@ -1928,6 +1931,7 @@ class rfp extends class_base
 		));
 		$rvi = get_instance(CL_RESERVATION);
 		$prods = $arr["obj_inst"]->meta("prods");
+		$currency = $arr["obj_inst"]->prop("default_currency");
 		if(!is_array($prods))
 		{
 			$prods = array();
@@ -1965,8 +1969,8 @@ class rfp extends class_base
 						$prod_skip = true;
 						continue;
 					}
-					$prod_price = $rvi->get_product_price(array("product" => $prod->id(), "reservation" => $rv));
-					$price = $rvi->_get_admin_price_view($prod,$prod_price);
+					$prices = $prod->meta("cur_prices");
+					$price = $prices[$currency];
 					$disc = $discount[$prod->id()];
 					$prod_sum = $price * $count;
 					$prod_sum = $prod_sum - ($prod_sum * $disc)/100;
@@ -2760,8 +2764,8 @@ class rfp extends class_base
 			"data_phone" => $arr["obj_inst"]->prop("data_subm_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_subm_email"),
 			"data_fax" => $arr["obj_inst"]->prop("data_subm_fax"),
-			"offer_preface" => nl2br($arr["obj_inst"]->trans_get_val("offer_preface")),
-			"offer_price_comment" => nl2br($arr["obj_inst"]->trans_get_val("offer_price_comment")),
+			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
+			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),
 			"data_currency" => $arr["obj_inst"]->prop("default_currency.name"),
 		));
@@ -3125,21 +3129,20 @@ class rfp extends class_base
 			$pds = "";
 			foreach($prods as $oids=>$prod)
 			{
+				$tmp = explode(".", $oids);
+				$po = obj($tmp[0]);
 				if($prod["amount"] <= 0)
 				{
 					continue;
 				}
-				if($prod["sum"] == 0 || !is_numeric($prod["sum"]))
-				{
-					$prod["sum"] = ($prod["price"] * $prod["amount"]);
-				}
+				$prodprices = $po->meta("cur_prices");
+				$prod["price"] = $prodprices[$currency];
+				$prod["sum"] = ($prod["price"] * $prod["amount"]);
 				if($prod["discount"] > 0)
 				{
-					$prod["sum"] = $prod["sum"] * ((100 - $prod["discount"]) / 100);
+					$prod["sum"] = $prod["sum"] - ($prod["sum"] * $prod["discount"] / 100);
 				}
 				$prodcountcheck++;
-				$tmp = explode(".", $oids);
-				$po = obj($tmp[0]);
 				$varname = "";
 				$varid = $prod["var"];
 				if(is_oid($varid))
@@ -3164,8 +3167,9 @@ class rfp extends class_base
 				$ta_subs = array();
 				for($i = 1; $i <= 10; $i++)
 				{
-					if(($val = ($product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i))) && $this->is_template("PROD_USERTA".$i))
+					if($this->is_template("PROD_USERTA".$i))
 					{
+						$val = $product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i);
 						$this->vars(array(
 							"prod_userta".$i => nl2br($val),
 						));
@@ -3324,7 +3328,6 @@ class rfp extends class_base
 			"ADDITIONAL_SERVICES" => $as_sub,
 			"totalprice" => $totalprice,
 			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
-			$pdf."_ONLY_2" => $this->parse($pdf."_ONLY_2"),
 		));
 
 		// set back the language thingie
