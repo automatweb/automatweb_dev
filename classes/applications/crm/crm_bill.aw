@@ -3388,7 +3388,10 @@ class crm_bill extends class_base
 		{
 			$uo = obj($unit);
 			$u_trans = $uo->meta("translations");
-			$unit_name = $u_trans[obj($o->prop("language"))->prop("db_lang_id")]["unit_code"];
+			if($this->can("view", $o->prop("language")))
+			{
+				$unit_name = $u_trans[obj($o->prop("language"))->prop("db_lang_id")]["unit_code"];
+			}
 			if(!$unit_name)
 			{
 				$unit_name = $uo->prop("unit_code");
