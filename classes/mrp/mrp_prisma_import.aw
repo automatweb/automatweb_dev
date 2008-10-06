@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.25 2008/10/01 08:28:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.26 2008/10/06 11:30:43 kristo Exp $
 // mrp_prisma_import.aw - Prisma import
 /*
 
@@ -47,7 +47,9 @@ class mrp_prisma_import extends class_base
 			"allahindlus" => "Allahindlus",
 			"vahendustasu" => "Vahendustasu",
 			"myygi_hind" => "Muugi hind",
-			"sales_priority" => "prioriteet"
+			"sales_priority" => "prioriteet",
+			"tmp1" => "PaperOrderInfo2",
+			"tmp2" => "PaperOrderInfo"
 		);
 
 	}
@@ -484,6 +486,7 @@ class mrp_prisma_import extends class_base
 			$spo->planned_date = $o->prop("starttime");
 			$spo->currency = currency::find_by_symbol("EEK")->id();
 			$spo->warehouse = $warehouse->id();
+			$spo->comment = "Paberi poogen\n".$o->meta("tmp2")."\n\nPaberi rull\n".$o->meta("tmp1");
 			$spo->save();
 			echo "created purchase order ".html::obj_change_url($spo)." <br>\n";
 			$spo->add_article(array(
@@ -501,6 +504,7 @@ class mrp_prisma_import extends class_base
 			$spo->planned_date = $o->prop("starttime");
 			$spo->currency = currency::find_by_symbol("EEK")->id();
 			$spo->warehouse = $warehouse->id();
+			$spo->comment = "Paberi poogen\n".$o->meta("tmp2")."\n\nPaberi rull\n".$o->meta("tmp1");
 			$spo->save();
 			echo "created purchase order ".html::obj_change_url($spo)." <br>\n";
 			$spo->add_article(array(
@@ -520,6 +524,11 @@ class mrp_prisma_import extends class_base
 			if ($p == "comment")
 			{
 				$o->set_comment($dat[$f]);
+			}
+			else
+			if ($p == "tmp1" || $p == "tmp2")
+			{
+				$o->set_meta($p, $dat[$f]);
 			}
 			else
 			{

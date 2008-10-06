@@ -47,14 +47,20 @@
 	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@property customers_toolbar type=toolbar store=no no_caption=1
-	@property customers_tree type=treeview store=no no_caption=1 parent=vsplitbox
+
+	@property customers_tree type=treeview store=no no_caption=1 parent=vspltbox
+
 	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
 	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_projects
 	@property projects_toolbar type=toolbar store=no no_caption=1
-	@property projects_tree type=text store=no no_caption=1 parent=vsplitbox
+
+	
+	@layout projtree_box type=vbox closeable=1 area_caption=Kliendid parent=vsplitbox
+
+	@property projects_tree type=text store=no no_caption=1 parent=projtree_box
 	@property projects_list type=table store=no no_caption=1 parent=vsplitbox
 
 	@property legend type=text store=no no_caption=1
@@ -378,9 +384,6 @@
 @reltype MRP_FOLDER value=1 clid=CL_MENU
 @caption Kaust
 
-@reltype MRP_CONFIGURATION clid=CL_MRP_CONFIGURATION value=3
-@caption Ressursihalduse seaded
-
 @reltype MRP_WORKSPACE_CFGMGR clid=CL_CFGMANAGER value=2
 @caption Keskkonna seaded
 
@@ -450,6 +453,18 @@ class mrp_workspace extends class_base
 		));
 
 		$this->import = get_instance(CL_MRP_PRISMA_IMPORT);
+	}
+
+	/**
+
+		@attrib name=save_pj_comment
+
+	**/
+	function save_pj_comment($arr)
+	{
+		$job = get_instance(CL_MRP_JOB);
+		$job->add_comment($arr["pj_job"], $arr["pj_change_comment"]);
+		return $arr["post_ru"];
 	}
 
 	function callback_pre_edit ($arr)
@@ -1162,7 +1177,7 @@ class mrp_workspace extends class_base
 				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
 				$prop["value"] .= "<a href='#' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
 				$prop["value"] .= "</td><td align=right>";
-				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select onChange='submit_changeform(\"\");' name=pj_use_resource>";
+				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select onChange='xchanged=1;submit_changeform(\"\");' name=pj_use_resource>";
 				$resids = $this->get_cur_printer_resources(array(
 					"ws" => $arr["obj_inst"],
 					"ign_glob" => true
@@ -1218,6 +1233,22 @@ class mrp_workspace extends class_base
 					"ws" => $arr["obj_inst"],
 					"ign_glob" => true
 				));
+				if (count($resids) == 1)
+				{	
+					$resid = reset($resids);
+					if ($resid)
+					{
+						aw_session_set("mrp_operator_use_resource", $resid);
+					}
+					else
+					{
+						aw_session_del("mrp_operator_use_resource");
+					}
+					// aaaand redirect
+					header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "grp_printer_current")));
+					die();
+				}
+				else
 				if (count($resids))
 				{
 					$ol = new object_list(array("oid" => $resids));
@@ -1303,7 +1334,10 @@ class mrp_workspace extends class_base
 		switch ($prop["name"])
 		{
 			case "printer_legend":
-				$_SESSION["mrp_operator_use_resource"] = $arr["request"]["pj_use_resource"];
+				if ($arr["request"]["pj_use_resource"])
+				{
+					$_SESSION["mrp_operator_use_resource"] = $arr["request"]["pj_use_resource"];
+				}
 				break;
 
 			case "projects_list":
@@ -1780,7 +1814,7 @@ class mrp_workspace extends class_base
 			"root_name" => t("K&otilde;ik projektid") . " (" . $this->projects_all_count . ")",
 			"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
 				"id" => $this_object->id(),
-				"url" => urlencode(aw_global_get("REQUEST_URI")),
+				"url" => aw_global_get("REQUEST_URI"),
 				// "url" => aw_global_get("REQUEST_URI"),
 				// "parent" => "",
 			)) . "&parent=",//!!! ilmselt ajutine muudatus prisma serveri jaoks -- mkmyorb on seal arvatavasti vana vms.
@@ -3158,7 +3192,7 @@ class mrp_workspace extends class_base
 	function submit_delete_relations($arr)
 	{
 		$this->_delegate_co($arr, "submit_delete_relations");
-		return urldecode($arr["return_url"]);
+		return $arr["return_url"];
 	}
 
 	function callback_mod_reforb(&$arr)
@@ -3175,12 +3209,6 @@ class mrp_workspace extends class_base
 		$arr['pj_job'] = $_GET["pj_job"];
 		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
 		aw_register_header_text_cb(array(&$this, "make_aw_header"));
-
-		// if no back link is set, make the yah empty
-		if (!$_GET["return_url"])
-		{
-			aw_global_set("hide_yah", true);
-		}
 
 		if ($_GET["group"] != "grp_worksheet")
 		{
@@ -3383,8 +3411,6 @@ class mrp_workspace extends class_base
 	**/
 	function submit_user_mgr_save($arr)
 	{
-		$arr["return_url"] = urldecode($arr["return_url"]);
-
 		if (!$this->can("view", $arr["unit"]))
 		{
 			return $arr["return_url"];
@@ -3587,13 +3613,12 @@ class mrp_workspace extends class_base
 
 		foreach($co->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 		{
-			$to = $c->to();
 			$nm = $c->prop("to.name");
 			$t->add_item($co->id(), array(
 				"id" => $c->prop("to"),
 				"name" => ($_GET["cust"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
 				"url" => aw_url_change_var("cust", $c->prop("to")),
-				"iconurl" => icons::get_icon_url($to->class_id())
+				"iconurl" => icons::get_icon_url($c->prop("to.class_id"))
 			));
 		}
 	}
@@ -3739,6 +3764,7 @@ class mrp_workspace extends class_base
 				));
 			}
 			$t->set_default_sortby("name");
+			$t->set_caption(sprintf(t("Kliendi %s t&ouml;&ouml;d"), obj($arr["request"]["cust"])->name));
 			$t->sort_by();
 			return PROP_OK;
 		}
@@ -3770,7 +3796,7 @@ class mrp_workspace extends class_base
 				"caption" => t("L&otilde;pp"),
 				"type" => "time",
 				"align" => "center",
-				"format" => "d.m.Y H:i",
+				"format" => "d.m.y H:i",
 				"numeric" => 1,
 				"chgbgcolor" => "bgcol",
 			));
@@ -3782,10 +3808,11 @@ class mrp_workspace extends class_base
 				"caption" => t("Algus"),
 				"type" => "time",
 				"align" => "center",
-				"format" => "d.m.Y H:i",
+				"format" => "d.m.y H:i",
 				"numeric" => 1,
 				"chgbgcolor" => "bgcol",
-				"sortable" => 1
+				"sortable" => 1,
+				"nowrap" => 1
 			));
 		}
 
@@ -3987,7 +4014,7 @@ class mrp_workspace extends class_base
 			// so, list the jobs
 			// but first we need the oid of the project
 			$proj2oid = new object_list(array("name" => $_SESSION["mrp"]["do_pv_proj_s"], "class_id" => CL_MRP_CASE));
-			if ($proj2oid->count())
+			if ($proj2oid->count() && count($res))
 			{
 				$s_proj = $proj2oid->begin();
 
@@ -4790,7 +4817,7 @@ class mrp_workspace extends class_base
 	function cut_resources($arr)
 	{
 		$_SESSION["mrp_workspace"]["cut_resources"] = safe_array($arr["selection"]);
-		return urldecode($arr["return_url"]);
+		return $arr["return_url"];
 	}
 
 	/**
@@ -4801,7 +4828,7 @@ class mrp_workspace extends class_base
 	function copy_resources($arr)
 	{
 		$_SESSION["mrp_workspace"]["copied_resources"] = safe_array($arr["selection"]);
-		return urldecode($arr["return_url"]);
+		return $arr["return_url"];
 	}
 
 	/**
@@ -4833,7 +4860,7 @@ class mrp_workspace extends class_base
 		}
 		unset($_SESSION["mrp_workspace"]["copied_resources"]);
 
-		return urldecode($arr["return_url"]);
+		return $arr["return_url"];
 	}
 
 	function callback_on_load($arr)
@@ -4842,6 +4869,15 @@ class mrp_workspace extends class_base
 		if ($this->can("view", $o->prop("workspace_configmanager")))
 		{
 			$this->cfgmanager = $o->prop("workspace_configmanager");
+		}
+	}
+
+	function callback_get_cfgmanager($arr)
+	{
+		$o = obj($arr["request"]["id"]);
+		if ($this->can("view", $o->prop("workspace_configmanager")))
+		{
+			return $o->prop("workspace_configmanager");
 		}
 	}
 
@@ -5189,18 +5225,6 @@ class mrp_workspace extends class_base
 		return $this->parse();
 	}
 
-	/**
-
-		@attrib name=save_pj_comment
-
-	**/
-	function save_pj_comment($arr)
-	{
-		$job = get_instance(CL_MRP_JOB);
-		$job->add_comment($arr["pj_job"], $arr["pj_change_comment"]);
-		return $arr["post_ru"];
-	}
-
 	function pj_project_field_callback($row)
 	{
 		if ($this->can("edit", $row["project_id"]))
@@ -5347,7 +5371,6 @@ END ajutine
 	{
 		if (strstr($arr["parent"], "archived"))
 		{
-			// $url = urldecode($arr["url"]);
 			$url = $arr["url"];
 			$period_data = explode("_", $arr["parent"]);
 			$bottom_level = isset($period_data[1]);

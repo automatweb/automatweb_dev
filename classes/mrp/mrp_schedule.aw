@@ -639,6 +639,7 @@ class mrp_schedule extends class_base
 						### (re)schedule job next in line
 						list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job["length"]);
 						$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length, $job["state"]);
+
 					}
 					elseif (in_array ($job["state"], $applicable_timereserve_states) and in_array ($job["resource"], $this->schedulable_resources))
 					{
@@ -763,6 +764,7 @@ class mrp_schedule extends class_base
 		}
 
 // /* timing */ timing ();
+//die("all done");
 	}
 
 	function compute_due_date ()
@@ -1106,7 +1108,9 @@ class mrp_schedule extends class_base
 		while ($threads--)
 		{
 			$resource_tag = $resource_id . "-" . $threads;
-			$available_times[$resource_tag] = $this->get_available_time ($resource_tag, $start, $length);
+			$tmp = $this->get_available_time ($resource_tag, $start, $length);
+			$available_times[$resource_tag] = $tmp;
+
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 // /* dbg */ if ($this->mrpdbg){
@@ -1163,7 +1167,8 @@ class mrp_schedule extends class_base
 		{
 			echo sprintf (t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job) . MRP_NEWLINE;
 		}
-		elseif (isset ($this->reserved_times[$selected_resource_tag][$reserved_time_range][$reserved_time]))
+		// isn't the last index here not the index but in_array?
+		elseif (false && isset ($this->reserved_times[$selected_resource_tag][$reserved_time_range][$reserved_time]))
 		{
 			echo sprintf (t("Leitud algusajale on juba t88 reserveeritud! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job) . MRP_NEWLINE;
 		}
@@ -1414,7 +1419,6 @@ class mrp_schedule extends class_base
 
 					$reserved_time = ($start1 >= $start) ? $start1 : $start;
 					list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
-
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 // /* dbg */ if ($this->mrpdbg){ echo "A -- suitable slot found in start range nr {$time_range}. at range beginning." . MRP_NEWLINE; }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------

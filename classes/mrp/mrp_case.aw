@@ -47,7 +47,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
 	@caption Staatus
 
-	@property customer type=popup_search reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
+	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
 	@caption Klient
 
 	@property progress type=hidden
@@ -1639,7 +1639,7 @@ class mrp_case extends class_base
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["oid"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -1745,7 +1745,7 @@ class mrp_case extends class_base
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case"); //echo $return_url;
@@ -1919,7 +1919,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -1978,7 +1978,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2064,7 +2064,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2136,7 +2136,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2198,7 +2198,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2277,7 +2277,7 @@ class mrp_case extends class_base
 		$errors = array();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode($arr["return_url"]),
+			"return_url" => $arr["return_url"],
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
