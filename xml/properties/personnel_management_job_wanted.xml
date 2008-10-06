@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>person</name>
+            <table>personnel_management_job_wanted</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <store>connect</store>
+            <field>person</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
             <name>field</name>
             <table>personnel_management_job_wanted</table>
             <group>general</group>
@@ -70,7 +80,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>work_by_schedule</field>
-            <caption>Olen n&amp;amp;otilde;us t&amp;amp;ouml;&amp;amp;ouml;tama graafiku alusel 	 </caption>
+            <caption>Olen n&amp;amp;otilde;us t&amp;amp;ouml;&amp;amp;ouml;tama graafiku alusel</caption>
       </property>
       <property>
             <name>work_at_night</name>
@@ -79,7 +89,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>work_at_night</field>
-            <caption>Olen n&amp;amp;otilde;us t&amp;amp;ouml;&amp;amp;ouml;tama &amp;amp;ouml;&amp;amp;ouml;sel 	 </caption>
+            <caption>Olen n&amp;amp;otilde;us t&amp;amp;ouml;&amp;amp;ouml;tama &amp;amp;ouml;&amp;amp;ouml;sel</caption>
       </property>
       <property>
             <name>ready_for_errand</name>
@@ -101,7 +111,7 @@
             <reltype>RELTYPE_LOCATION</reltype>
             <field>location</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml; asukoht</caption>
-            <comment>Esimene valik 	 </comment>
+            <comment>Esimene valik</comment>
       </property>
       <property>
             <name>location_2</name>
@@ -113,8 +123,8 @@
             <store>connect</store>
             <reltype>RELTYPE_LOCATION2</reltype>
             <field>location_2</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; asukoht 	 </caption>
-            <comment>Teine valik 	 </comment>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; asukoht</caption>
+            <comment>Teine valik</comment>
       </property>
       <property>
             <name>location_text</name>
@@ -122,8 +132,8 @@
             <group>general</group>
             <type>textbox</type>
             <field>location_text</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; asukoht 	 </caption>
-            <comment>Vajadusel t&amp;amp;auml;psusta 	 </comment>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; asukoht</caption>
+            <comment>Vajadusel t&amp;amp;auml;psusta</comment>
       </property>
       <property>
             <name>start_working</name>
@@ -131,7 +141,7 @@
             <group>general</group>
             <type>select</type>
             <field>start_working</field>
-            <caption>Soovitud t&amp;amp;ouml;&amp;amp;ouml;le asumise aeg 	 </caption>
+            <caption>Soovitud t&amp;amp;ouml;&amp;amp;ouml;le asumise aeg</caption>
       </property>
       <property>
             <name>additional_skills</name>
@@ -139,8 +149,8 @@
             <group>general</group>
             <type>textarea</type>
             <field>additional_skills</field>
-            <caption>T&amp;amp;auml;iendavad oskused 	 </caption>
-            <comment>Kas Teil on t&amp;amp;auml;iendavaid oskusi, mida te peate vajalikuks &amp;amp;auml;ra m&amp;amp;auml;rkida? 	 </comment>
+            <caption>T&amp;amp;auml;iendavad oskused</caption>
+            <comment>Kas Teil on t&amp;amp;auml;iendavaid oskusi, mida te peate vajalikuks &amp;amp;auml;ra m&amp;amp;auml;rkida?</comment>
       </property>
       <property>
             <name>handicaps</name>
@@ -148,7 +158,7 @@
             <group>general</group>
             <type>textarea</type>
             <field>handicaps</field>
-            <caption>Tegurid, mis ei v&amp;amp;otilde;imalda m&amp;amp;otilde;nda t&amp;amp;ouml;&amp;amp;ouml;&amp;amp;uuml;lesannet t&amp;amp;auml;ita 	 </caption>
+            <caption>Tegurid, mis ei v&amp;amp;otilde;imalda m&amp;amp;otilde;nda t&amp;amp;ouml;&amp;amp;ouml;&amp;amp;uuml;lesannet t&amp;amp;auml;ita</caption>
       </property>
       <property>
             <name>hobbies_vs_work</name>

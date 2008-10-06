@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.17 2008/06/11 09:41:40 instrumental Exp $
-// personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.18 2008/10/06 12:52:46 instrumental Exp $
+// personnel_management_job_wanted.aw - T&ouml;&ouml; soov
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_job_wanted)
@@ -12,6 +12,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @default table=personnel_management_job_wanted
 @default group=general
+
+@property person type=relpicker reltype=RELTYPE_PERSON store=connect
+@caption Isik
 
 @property field type=classificator multiple=1 reltype=RELTYPE_FIELD orient=vertical store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 @caption Tegevusala
@@ -34,38 +37,38 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 #@property pay2 type=textbox size=5 datatype=int field=palgasoov2
 #@caption Palgasoov kuni
 
-@property work_by_schedule type=checkbox ch_value=1 	 
-@caption Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel 	 
- 
-@property work_at_night type=checkbox ch_value=1 	 
-@caption Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel 	 
- 
-@property ready_for_errand type=checkbox ch_value=1 	 
+@property work_by_schedule type=checkbox ch_value=1
+@caption Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel
+
+@property work_at_night type=checkbox ch_value=1
+@caption Olen n&otilde;us t&ouml;&ouml;tama &ouml;&ouml;sel
+
+@property ready_for_errand type=checkbox ch_value=1
 @caption Olen valmis t&ouml;&ouml;l&auml;hetusteks
 
 @property location type=relpicker multiple=1 orient=vertical store=connect reltype=RELTYPE_LOCATION
 @caption T&ouml;&ouml; asukoht
-@comment Esimene valik 	 
-	  	 
-@property location_2 type=relpicker multiple=1 orient=vertical store=connect reltype=RELTYPE_LOCATION2 	 
-@caption T&ouml;&ouml; asukoht 	 
-@comment Teine valik 	 
- 
-@property location_text type=textbox 	 
-@caption T&ouml;&ouml; asukoht 	 
-@comment Vajadusel t&auml;psusta 	 
- 
-@property start_working type=select 	 
-@caption Soovitud t&ouml;&ouml;le asumise aeg 	 
- 
-@property additional_skills type=textarea 	 
-@caption T&auml;iendavad oskused 	 
-@comment Kas Teil on t&auml;iendavaid oskusi, mida te peate vajalikuks &auml;ra m&auml;rkida? 	 
- 
-@property handicaps type=textarea 	 
-@caption Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita 	 
- 
-@property hobbies_vs_work type=textbox 	 
+@comment Esimene valik
+
+@property location_2 type=relpicker multiple=1 orient=vertical store=connect reltype=RELTYPE_LOCATION2
+@caption T&ouml;&ouml; asukoht
+@comment Teine valik
+
+@property location_text type=textbox
+@caption T&ouml;&ouml; asukoht
+@comment Vajadusel t&auml;psusta
+
+@property start_working type=select
+@caption Soovitud t&ouml;&ouml;le asumise aeg
+
+@property additional_skills type=textarea
+@caption T&auml;iendavad oskused
+@comment Kas Teil on t&auml;iendavaid oskusi, mida te peate vajalikuks &auml;ra m&auml;rkida?
+
+@property handicaps type=textarea
+@caption Tegurid, mis ei v&otilde;imalda m&otilde;nda t&ouml;&ouml;&uuml;lesannet t&auml;ita
+
+@property hobbies_vs_work type=textbox
 @caption Hobid, mille t&otilde;ttu on vajalik t&ouml;&ouml;lt eemal viibida
 
 @property addinfo type=textarea field=lisainfo
@@ -89,7 +92,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @reltype PROFESSION value=6 clid=CL_CRM_PROFESSION
 @caption Ametinimetus
 
-@reltype LOCATION2 value=7 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA 	 
+@reltype LOCATION2 value=7 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA
 @caption Asukoht (teine valik)
 
 */
@@ -98,21 +101,21 @@ class personnel_management_job_wanted extends class_base
 {
 	function personnel_management_job_wanted()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"clid" => CL_PERSONNEL_MANAGEMENT_JOB_WANTED
 		));
-	  	 
-		$this->start_working_options = array( 	 
-			 0 => t("--vali--"), 	 
-			 1 => t("Kohe"), 	 
-			 2 => t("1 kuu jooksul"), 	 
-			 3 => t("2 kuu jooksul"), 	 
-			 4 => t("Kokkuleppel"), 	 
+
+		$this->start_working_options = array(
+			 0 => t("--vali--"),
+			 1 => t("Kohe"),
+			 2 => t("1 kuu jooksul"),
+			 3 => t("2 kuu jooksul"),
+			 4 => t("Kokkuleppel"),
 		);
 	}
-	
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -149,15 +152,15 @@ class personnel_management_job_wanted extends class_base
 				}
 				break;
 
-			case "start_working": 	 
-				$prop["options"] = $this->start_working_options; 	 
+			case "start_working":
+				$prop["options"] = $this->start_working_options;
 				break;
 
 			case "professions_rels":
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				$pm_id = $pm_inst->get_sysdefault();
 				if(is_oid($pm_id))
-				{	
+				{
 					$pm_obj = obj($pm_id);
 					if(is_oid($pm_obj->prop("professions_fld")))
 					{
@@ -238,9 +241,9 @@ class personnel_management_job_wanted extends class_base
 		{
 			case "ametinimetus":
 			case "lisainfo":
-			case "location_text": 	 
-			case "hobbies_vs_work": 	 
-			case "handicaps": 	 
+			case "location_text":
+			case "hobbies_vs_work":
+			case "handicaps":
 			case "additional_skills":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
@@ -251,9 +254,9 @@ class personnel_management_job_wanted extends class_base
 			case "koormus":
 			case "palgasoov":
 			case "palgasoov2":
-			case "work_by_schedule": 	 
-			case "work_at_night": 	 
-			case "ready_for_errand": 	 
+			case "work_by_schedule":
+			case "work_at_night":
+			case "ready_for_errand":
 			case "start_working":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
