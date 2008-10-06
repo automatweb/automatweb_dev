@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.151 2008/10/06 13:14:15 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.152 2008/10/06 13:32:57 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -839,6 +839,14 @@ class rfp extends class_base
 						$cur->id() => $cur->name(),
 					);
 					$prop["selected"] = $cur->id();
+				}
+				$ol = new object_list(array(
+					"class_id" => CL_CURRENCY,
+					"lang_id" => array(),
+				));
+				foreach($ol->arr() as $oid => $o)
+				{
+					$prop["options"][$oid] = $o->name();
 				}
 			break;
 			case "final_rooms":
