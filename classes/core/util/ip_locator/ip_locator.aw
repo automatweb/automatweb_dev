@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.10 2008/10/01 13:41:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.11 2008/10/06 14:23:16 markop Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -246,15 +246,16 @@ class ip_locator extends class_base
 		// ja uuendab baasi tabeli 2ra
 		
 	//	$file = '/www/dev/dragut/site/files/ip-to-country.csv';
-//$file = 'http://marko.struktuur.ee/soomeipd.csv';
-if ($this->can('view', $arr['id']))
+//$file = 'http://marko.struktuur.ee/ip-to-country.csv';
+		$n = 0;
+		if ($this->can('view', $arr['id']))
 		{
 			$obj_inst = new object($arr['id']);
 			$file = $obj_inst->prop('csv_file_location');
 		}
 		else
-		{
-			$file = aw_ini_get("classdir")."/core/util/ip_locator/ip-to-country.csv";
+		{$n = 2;
+			$file = aw_ini_get("classdir")."/core/util/ip_locator/IpToCountry.csv";
 		}
 		$db_table_name = 'ip2country';
 		
@@ -281,8 +282,11 @@ if ($this->can('view', $arr['id']))
 			}
 			$line = str_replace('"', '', $line);
 			$fields = explode(',', $line);
+			if(!strlen(ip2long($fields[0])) || !strlen(ip2long($fields[1])))
+			{
+				continue;
+			}
 
-//arr($fields);
 /*			$sql = "insert into ".$this->db_table_name." (
 					ip_from, 
 					ip_to, 
@@ -305,9 +309,9 @@ if ($this->can('view', $arr['id']))
 			) values (
 			". ip2long($fields[0]).",
 					". ip2long($fields[1]).",
-			'".$fields[2]."',
-			'".$fields[3]."',
-			'".$fields[4]."'
+			'".$fields[2+$n]."',
+			'".$fields[3+$n]."',
+			'".addslashes($fields[4+$n])."'
 				)";
 //arr($sql);
 			$this->db_query($sql);
