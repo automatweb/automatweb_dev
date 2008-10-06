@@ -2632,6 +2632,17 @@ class bug_tracker extends class_base
 		$arr["b_id"] = $_GET["b_id"];
 		$arr["save_search_name"] = "";
 		$arr["post_ru"] = aw_url_change_var("post_ru", null, post_ru());
+		if($arr["group"] == "settings_statuses")
+		{
+			foreach(get_instance(CL_BUG)->bug_statuses as $stid => $stat)
+			{
+				$arr["add_mail_group_bug"][$stid] = 0;
+			}
+			foreach(get_instance(CL_DEVELOPMENT_ORDER)->get_status_list() as $stid => $stat)
+			{
+				$arr["add_mail_group_devo"][$stid] = 0;
+			}
+		}
 	}
 
 	/**
@@ -4250,11 +4261,54 @@ class bug_tracker extends class_base
 			"align" => "center",
 			"caption" => t("Kuvamine"),
 		));
+		$t->define_field(array(
+			"name" => "mail_groups",
+			"align" => "center",
+			"caption" => t("Meilide saatmine"),
+		));
 		$t->set_caption(t("Arendustellimuse staatused"));
 		$doi = get_instance(CL_DEVELOPMENT_ORDER);
 		$sdd = $arr["obj_inst"]->meta("status_disp_devo");
+		$mg = $arr["obj_inst"]->meta("st_mail_groups_devo");
+		if($rmb = $arr["request"]["rm_mail_group_devo"])
+		{
+			$dat = explode(",", $rmb);
+			unset($mg[$dat[0]][$dat[1]]);
+			$arr["obj_inst"]->set_meta("st_mail_groups_devo", $mg);
+			$arr["obj_inst"]->save();
+		}
 		foreach($doi->get_status_list() as $stid => $status)
 		{
+			$url = $this->mk_my_orb("do_search", array(
+				"pn" => "add_mail_group_devo[".$stid."]",
+				"clid" => array(CL_GROUP),
+				"multiple" => 0,
+			),"popup_search");
+			$url = "javascript:aw_popup_scroll(\"".$url."\",\"".t("Otsi")."\",550,500)";
+			$mailgroups = html::href(array(
+				"caption" => html::img(array(
+					"url" => "images/icons/search.gif",
+					"border" => 0,
+				)),
+				"url" => $url
+			));
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu("add_mail_group_devo_menu_".$stid);
+			$count = 0;
+			foreach($mg[$stid] as $gid)
+			{
+				$pm->add_item(array(
+					"text" => obj($gid)->name(),
+					"link" => aw_url_change_var("rm_mail_group_devo", $stid.",".$gid),
+				));
+				$count++;
+			}
+			if($count)
+			{
+				$mailgroups .= $pm->get_menu(array(
+					"icon" => "delete.gif",
+				));
+			}
 			$t->define_data(array(
 				"status" => $status,
 				"disp_devo" => html::checkbox(array(
@@ -4262,6 +4316,7 @@ class bug_tracker extends class_base
 					"name" => "sdd[".$stid."]",
 					"checked" => ($sdd[$stid] == "no")?0:1,
 				)),
+				"mail_groups" => $mailgroups,
 			));
 		}
 	}
@@ -4289,13 +4344,56 @@ class bug_tracker extends class_base
 			"align" => "center",
 			"caption" => t("Kliendistaatus => P&otilde;histaatus"),
 		));
+		$t->define_field(array(
+			"name" => "mail_groups",
+			"align" => "center",
+			"caption" => t("Meilide saatmine"),
+		));
 		$t->set_caption(t("Bugi staatused"));
 		$bi = get_instance(CL_BUG);
 		$sdb = $arr["obj_inst"]->meta("status_disp_bug");
 		$sdc = $arr["obj_inst"]->meta("status_disp_cust");
 		$bcs = $arr["obj_inst"]->meta("bug_cust_status_conns");
+		$mg = $arr["obj_inst"]->meta("st_mail_groups_bug");
+		if($rmb = $arr["request"]["rm_mail_group_bug"])
+		{
+			$dat = explode(",", $rmb);
+			unset($mg[$dat[0]][$dat[1]]);
+			$arr["obj_inst"]->set_meta("st_mail_groups_bug", $mg);
+			$arr["obj_inst"]->save();
+		}
 		foreach($bi->bug_statuses as $stid => $status)
 		{
+			$url = $this->mk_my_orb("do_search", array(
+				"pn" => "add_mail_group_bug[".$stid."]",
+				"clid" => array(CL_GROUP),
+				"multiple" => 0,
+			),"popup_search");
+			$url = "javascript:aw_popup_scroll(\"".$url."\",\"".t("Otsi")."\",550,500)";
+			$mailgroups = html::href(array(
+				"caption" => html::img(array(
+					"url" => "images/icons/search.gif",
+					"border" => 0,
+				)),
+				"url" => $url
+			));
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu("add_mail_group_bug_menu_".$stid);
+			$count = 0;
+			foreach($mg[$stid] as $gid)
+			{
+				$pm->add_item(array(
+					"text" => obj($gid)->name(),
+					"link" => aw_url_change_var("rm_mail_group_bug", $stid.",".$gid),
+				));
+				$count++;
+			}
+			if($count)
+			{
+				$mailgroups .= $pm->get_menu(array(
+					"icon" => "delete.gif",
+				));
+			}
 			$t->define_data(array(
 				"status" => $status,
 				"disp_bug" => html::checkbox(array(
@@ -4313,6 +4411,7 @@ class bug_tracker extends class_base
 					"value" => $bcs[$stid],
 					"name" => "bcs[".$stid."]",
 				)),
+				"mail_groups" => $mailgroups,
 			));
 		}
 	}
@@ -4339,6 +4438,24 @@ class bug_tracker extends class_base
 				$sdd[$stid] = "no";
 			}
 		}
+		$mgb = $arr["obj_inst"]->meta("st_mail_groups_bug");
+		foreach($arr["request"]["add_mail_group_bug"] as $stid => $gid)
+		{
+			if($gid)
+			{
+				$mgb[$stid][$gid] = $gid;
+			}
+		}
+		$mgd = $arr["obj_inst"]->meta("st_mail_groups_devo");
+		foreach($arr["request"]["add_mail_group_devo"] as $stid => $gid)
+		{
+			if($gid)
+			{
+				$mgd[$stid][$gid] = $gid;
+			}
+		}
+		$arr["obj_inst"]->set_meta("st_mail_groups_bug", $mgb);
+		$arr["obj_inst"]->set_meta("st_mail_groups_devo", $mgd);
 		$arr["obj_inst"]->set_meta("status_disp_bug", $sdb);
 		$arr["obj_inst"]->set_meta("status_disp_cust", $sdc);
 		$arr["obj_inst"]->set_meta("status_disp_devo", $sdd);

@@ -1300,7 +1300,6 @@ class bug extends class_base
 	function notify_monitors($bug, $comment)
 	{
 		$monitors = $bug->prop("monitors");
-
 		// if the status is right, then add the creator of the bug to the list
 		$states = array(
 			BUG_TESTED,
@@ -1332,6 +1331,20 @@ class bug extends class_base
 		{
 			$notify_addresses[] = $bt->prop("def_notify_list");
 		}
+		//development order sends mails from here too, and we need to get the right config from bugtrack
+		if($bug->class_id() == CL_BUG)
+		{
+			$mails_var = "st_mail_groups_bug";
+		}
+		elseif($bug->class_id() == CL_DEVELOPMENT_ORDER)
+		{
+			$mails_var = "st_mail_groups_devo";
+		}
+		if($bt)
+		{
+			$mg = $bt->meta($mails_var);
+		}
+		$pi = get_instance(CL_CRM_PERSON);
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
@@ -1344,6 +1357,37 @@ class bug extends class_base
 			{
 				continue;
 			}
+			//if person is in a group that should only recieve mails on certain status changes, then continue
+			if($mg && $uo = $pi->has_user($person_obj))
+			{
+				$conn = $uo->connections_from(array(
+					"type" => "RELTYPE_GRP",
+				));
+				$pgids = array();
+				foreach($conn as $c)
+				{
+					$gid = $c->prop("to");
+					$pgids[$gid] = $gid;
+				}
+				$send_mail_statuses = array();
+				foreach($mg as $stid => $groups)
+				{
+					foreach($groups as $gid)
+					{
+						foreach($pgids as $pgid)
+						{
+							if($gid == $pgid)
+							{
+								$send_mail_statuses[] = $stid;
+							}
+						}
+					}
+				}
+				if(count($send_mail_statuses) && (!$this->_ac_old_state || $this->_ac_old_state == $this->_ac_new_state || array_search($this->_ac_new_state, $send_mail_statuses) === false))
+				{
+					continue;
+				}
+			}
 			$email = $person_obj->prop("email");
 			if (is_oid($email))
 			{
@@ -1355,7 +1399,6 @@ class bug extends class_base
 				};
 			};
 		};
-
 		$addrs = explode(",",$bug->prop("bug_mail"));
 		foreach($addrs as $addr)
 		{
