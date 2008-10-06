@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.29 2008/04/23 11:30:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.30 2008/10/06 15:29:58 markop Exp $
 // recycle_bin.aw - Pr&uuml;gikast 
 /*
 
@@ -413,8 +413,13 @@ class recycle_bin extends class_base
 		if($status < 1)
 		{
 			$fo = $this->get_restore_folder($ob);
+			if(!$fo)
+			{
+				return 0;
+			}
 			$this->db_query("UPDATE objects SET parent='".$fo->id()."' WHERE oid='".$oid."'");
 		}
+		return 1;
 	}
 
 	function check_subs($oid)
@@ -467,9 +472,13 @@ class recycle_bin extends class_base
 		{
 			foreach($arr["mark"] as $oid)
 			{
+				if(!$this->check_parent($oid, $ob))
+				{
+					continue;
+				}
+
 				$query = "UPDATE objects SET status=1 WHERE oid=$oid";
 				$this->db_query($query);
-				$this->check_parent($oid, $ob);
 				if($arr["subs"])
 				{
 					$this->check_subs($oid);
