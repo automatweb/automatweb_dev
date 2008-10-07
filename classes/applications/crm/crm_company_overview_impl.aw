@@ -1828,7 +1828,7 @@ class crm_company_overview_impl extends class_base
 					if (!count($tasks))
 					{
 						$tasks = array(-1);
-					}if(aw_global_get("uid") == "marko") arr($tasks);
+					}
 					exit_function("_get_task_list:2:3");
 				}
 				break;
