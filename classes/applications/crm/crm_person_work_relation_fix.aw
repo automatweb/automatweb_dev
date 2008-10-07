@@ -41,9 +41,18 @@ class crm_person_work_relation_fix extends _int_object
 		}
 		if($var == "section2")
 		{
-			parent::set_prop("section", $val);
+			return $this->set_prop("section", $val);
 		}
 		return parent::set_prop($var, $val);
+	}
+
+	function prop($v)
+	{
+		if($v == "section2")
+		{
+			return parent::prop("section");
+		}
+		return parent::prop($v);
 	}
 }
 ?>

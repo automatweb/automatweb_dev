@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.28 2008/09/23 14:13:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.29 2008/10/07 18:22:38 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -14,17 +14,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @default table=objects
 @default group=general
 
-@property org type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete
+@property org type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete option_is_tuple=1
 @caption Organisatsioon
 
 #@property section type=relpicker reltype=RELTYPE_SECTION
-@property section type=hidden reltype=RELTYPE_SECTION store=connect mode=autocomplete 
+@property section type=hidden reltype=RELTYPE_SECTION store=connect
 @caption &Uuml;ksus
 
-@property section2 type=relpicker reltype=RELTYPE_SECTION store=connect mode=autocomplete
+@property section2 type=relpicker reltype=RELTYPE_SECTION store=connect mode=autocomplete option_is_tuple=1
 @caption &Uuml;ksus
 
-@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete
+@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete option_is_tuple=1
 @caption Amet
 
 @property field type=classificator reltype=RELTYPE_FIELD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
@@ -152,11 +152,77 @@ class crm_person_work_relation extends class_base
 				break;
 
 			case "section2":
-				$data["value"] = $arr["obj_inst"]->prop("section");
-			case "section":
 			case "org":
 			case "profession":
 				$data["option_is_tuple"] = true;
+				if($data["option_is_tuple"] && $this->can("view", $data["value"]))
+				{
+					$data["content"] = obj($data["value"])->name();
+				}
+				else
+				{
+					$data["content"] = $data["value"];
+				}
+				break;
+		}
+		return $retval;
+	}
+
+	function set_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "section":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "org":
+			case "section2":
+			case "profession":
+				$clids = array(
+					"org" => CL_CRM_COMPANY,
+					"section2" => CL_CRM_SECTION,
+					"profession" => CL_CRM_PROFESSION,
+				);
+				if(empty($prop["value"]))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				if(!is_oid($prop["value"]))
+				{
+					// option_is_tuple
+					$name = $prop["value"];
+					$ol = new object_list(array(
+						"class_id" => $clids[$prop["name"]],
+						"name" => "%".$name."%",
+						"lang_id" => array(),
+						"site_id" => array(),
+						"limit" => 1,
+					));
+					if($ol->count() > 0)
+					{
+						$prop["value"] = reset($ol->ids());
+					}
+					else
+					{
+						$o = obj();
+						$o->set_class_id($clids[$prop["name"]]);
+						$o->set_parent($arr["obj_inst"]->parent());
+						$o->set_name($name);
+						$o->save();
+						$prop["value"] = $o->id();
+					}
+					$arr["obj_inst"]->set_prop($prop["name"], $prop["value"]);
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					$arr["obj_inst"]->set_prop($prop["name"], $prop["value"]);
+					$retval = PROP_IGNORE;
+				}
 				break;
 		}
 		return $retval;

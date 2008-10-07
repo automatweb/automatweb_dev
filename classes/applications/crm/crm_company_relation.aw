@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property org type=relpicker reltype=RELTYPE_COMPANY store=connect
+@property org type=relpicker reltype=RELTYPE_COMPANY store=connect mode=autocomplete option_is_tuple=1
 @caption Organisatsioon
 
 #@property start type=date_select year_from=1950 save_format=iso8601 field=rel_start table=kliendibaas_organisatoorne_kuuluvus
@@ -54,10 +54,7 @@ class crm_company_relation extends class_base
 				break;
 
 			case "org":
-				$prop["post_append_text"] = "";
-				$prop["type"] = "textbox";
 				$prop["option_is_tuple"] = true;
-				// $prop["autocomplete_class_id"] = CL_CRM_COMPANY;
 				if(is_oid($prop["value"]) && $this->can("view", $prop["value"]))
 				{
 					$prop["content"] = obj($prop["value"])->name();

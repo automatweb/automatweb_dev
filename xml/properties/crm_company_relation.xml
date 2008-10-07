@@ -7,6 +7,8 @@
             <type>relpicker</type>
             <reltype>RELTYPE_COMPANY</reltype>
             <store>connect</store>
+            <mode>autocomplete</mode>
+            <option_is_tuple>1</option_is_tuple>
             <field>org</field>
             <caption>Organisatsioon</caption>
       </property>

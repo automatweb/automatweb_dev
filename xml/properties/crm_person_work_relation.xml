@@ -8,6 +8,7 @@
             <reltype>RELTYPE_ORG</reltype>
             <store>connect</store>
             <mode>autocomplete</mode>
+            <option_is_tuple>1</option_is_tuple>
             <field>org</field>
             <caption>Organisatsioon</caption>
       </property>
@@ -18,7 +19,6 @@
             <type>hidden</type>
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
-            <mode>autocomplete</mode>
             <field>section</field>
             <caption>&amp;amp;Uuml;ksus</caption>
       </property>
@@ -30,6 +30,7 @@
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
             <mode>autocomplete</mode>
+            <option_is_tuple>1</option_is_tuple>
             <field>section2</field>
             <caption>&amp;amp;Uuml;ksus</caption>
       </property>
@@ -41,6 +42,7 @@
             <reltype>RELTYPE_PROFESSION</reltype>
             <store>connect</store>
             <mode>autocomplete</mode>
+            <option_is_tuple>1</option_is_tuple>
             <field>profession</field>
             <caption>Amet</caption>
       </property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.160 2008/09/24 08:40:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.161 2008/10/07 18:22:40 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -113,7 +113,7 @@ class releditor extends core
 				{
 					$data[$idx-1][$_pn] = $target->prop($_pn);
 
-					if (!in_array($_pn,$tb_fields))
+					if (!in_array($_pn,$tb_fields) || $_pd["show_in_emb_tbl"] != 1)
 					{
 						continue;
 					};
@@ -468,6 +468,7 @@ class releditor extends core
 					"id" : "'.$arr["obj_inst"]->id().'",
 					"reltype" : "'.$arr["prop"]["reltype"].'",
 					"clid" : "'.$arr["prop"]["clid"].'",
+					"use_clid" : "'.$use_clid.'",
 					"start_from_index" : "'.$conns_count.'",
 					"main_clid" : "'.$obj->class_id().'"
 					});
@@ -1783,7 +1784,6 @@ class releditor extends core
 		
 		$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["cfgform"]);
 		$cfgcontroller_inst = get_instance(CL_CFGCONTROLLER);
-
 		$prev_dat = safe_array(unserialize(iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr[$propn."_data"])));
 		foreach($arr[$propn][$num] as $k => $v)
 		{
@@ -1791,11 +1791,69 @@ class releditor extends core
 			{
 				$arr[$propn][$num][$k] = iconv("utf-8", aw_global_get("charset")."//IGNORE", $v);
 			}
-			/*
-			$tmp = array("value" => &$arr[$propn][$num][$k]);
-			$cfgcontroller_inst->check_property($cfg_cntrl_id, $arr["id"], $tmp, $_GET, array(), obj($arr["id"]));
-			*/
 		}
+
+		if(is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]))
+		{
+			$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["cfgform"]);
+			$cfgcontroller_inst = get_instance(CL_CFGCONTROLLER);
+			$cfgform_o = obj($cfgproplist[$propn]["cfgform_id"]);
+			if(is_oid($cfgproplist[$propn]["cfgform_id"]) && $this->can("view", $cfgproplist[$propn]["cfgform_id"]))
+			{
+				$cfgproplist_ = get_instance(CL_CFGFORM)->get_cfg_proplist($cfgproplist[$propn]["cfgform_id"]);
+			}
+			else
+			{
+				$cfgproplist_ = get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => $arr["use_clid"]));
+			}
+
+			$cfg_cntrl = (array) $cfgform_o->meta("controllers");
+
+			$retval = PROP_OK;
+			$err = array();
+			foreach($cfg_cntrl as $cntrl_prop => $cntrl_ids)
+			{
+				if (count($cntrl_ids))
+				{
+					$controller_inst = get_instance(CL_CFGCONTROLLER);
+					foreach ($cntrl_ids as $cfg_cntrl_id)
+					{
+						if (is_oid($cfg_cntrl_id))
+						{
+							$tmp = array("value" => &$arr[$propn][$num][$cntrl_prop]);
+							$retval_ = $controller_inst->check_property($cfg_cntrl_id, $arr["id"], &$tmp, &$request, NULL, obj($arr["id"]));
+							$retval = $retval_ != PROP_OK ? $retval_ : $retval;
+							if($retval_ != PROP_OK)
+							{
+								$err[$cntrl_prop][] = htmlentities(str_replace("%caption", $cfgproplist_[$cntrl_prop]["caption"], obj($cfg_cntrl_id)->errmsg));
+							}
+						}
+					}
+				}
+			}
+			if($retval != PROP_OK)
+			{
+				// Return the errors instead of HTML.
+				$js_arr = "var error = {";
+				$count = 0;
+				foreach($err as $err_prop => $msgs)
+				{
+					$js_arr .= $count > 0 ? "," : "";
+					$msg_str = "";
+					foreach($msgs as $msg)
+					{
+						$msg_str .= strlen($msg_str) > 0 ? "<br />" : "";
+						$msg_str .= $msg;
+					}
+					$js_arr .= $propn."_".$arr["start_from_index"]."__".$err_prop."_:\"".$msg."\"";
+					$count++;
+				}
+				$js_arr .= "};";
+				header("Content-type: text/html; charset=".aw_global_get("charset"));
+				die($js_arr);
+			}
+		}
+
 		$prev_dat[$num] = $arr[$propn][$num];
 		$cur_prop = $this->_get_js_cur_prop($clid, $propn);
 
@@ -1827,7 +1885,7 @@ class releditor extends core
 
 		foreach($prev_dat  as $idx => $dat_row)
 		{
-			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx, $arr["cfgform"]);
+			$this->_insert_js_data_to_table($t, $cur_prop, $dat_row, $clid, $idx, $arr["cfgform"], $err);
 		}
 
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
@@ -2202,6 +2260,13 @@ class releditor extends core
 					$d2[] = " '$k' : '$v' ";
 				}
 				$r[] = "'[$rel_prop_name][]': { ".join(", ", $d2)." } ";
+			}
+			else
+			if($rel_props[$rel_prop_name]["option_is_tuple"])
+			{
+				$value = is_oid($d[$idx][$rel_prop_name]) ? obj($d[$idx][$rel_prop_name])->name() : $d[$idx][$rel_prop_name];
+				$r[] = "'[".$rel_prop_name."]_awAutoCompleteTextbox': '".$value."'";
+				$r[] = "'[$rel_prop_name]': '".$d[$idx][$rel_prop_name]."'";
 			}
 			else
 			{
