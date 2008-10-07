@@ -234,6 +234,7 @@ class crm_person_obj extends _int_object
 
 	function get_applications($arr = array())
 	{
+		enter_function("crm_person_obj::get_applications");
 		$this->prms(&$arr);
 
 		/*
@@ -267,7 +268,7 @@ class crm_person_obj extends _int_object
 			"from.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"type" => "RELTYPE_CANDIDATE"
 		));
-		
+
 		$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
 		foreach($conns as $conn)
 		{
@@ -277,10 +278,11 @@ class crm_person_obj extends _int_object
 				$ret->add($conn["from"]);
 			}
 		}
+		exit_function("crm_person_obj::get_applications");
 
 		return $ret;
 	}
-	
+
 	function prms($arr)
 	{
 		$arr["parent"] = !isset($arr["parent"]) ? array() : $arr["parent"];
@@ -350,7 +352,7 @@ class crm_person_obj extends _int_object
 			$ids[] = $cn->prop("to");
 		}
 		if(count($ids) > 0)
-		{			
+		{
 			$prms = array("from" => $ids, "type" => "RELTYPE_PHONE", "from.class_id" => CL_CRM_PERSON_WORK_RELATION);
 			// You wish! -kaarel
 			/*if(isset($type))
@@ -470,7 +472,7 @@ class crm_person_obj extends _int_object
 		}
 		return 0;
 	}
-	
+
 	function has_ovrv_offers()
 	{
 		$filt = array(
@@ -479,7 +481,7 @@ class crm_person_obj extends _int_object
 			"lang_id" => array(),
 			"actor" => $this->id(),
 		);
-		
+
 		$ol = new object_list($filt);
 		if(sizeof($ol->ids()))
 		{
@@ -553,7 +555,7 @@ class crm_person_obj extends _int_object
 
 		$eo->set_prop("mail", $mail);
 		$eo->save();
-		
+
 		if ($n)
 		{
 			$this->set_prop("email", $eo->id());
@@ -583,7 +585,7 @@ class crm_person_obj extends _int_object
 
 		$eo->set_name($phone);
 		$eo->save();
-		
+
 		if ($n)
 		{
 			$this->set_prop("phone", $eo->id());
@@ -634,7 +636,7 @@ class crm_person_obj extends _int_object
 		}
 
 		$eo->save();
-		
+
 		if ($n)
 		{
 			$this->set_prop("address", $eo->id());
