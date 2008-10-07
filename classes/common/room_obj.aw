@@ -730,7 +730,7 @@ class room_obj extends _int_object
 		$gl = aw_global_get("gidlist_oid");
 		if(is_oid($this->prop("inherit_oh_from")) && $this->can("view" , $this->prop("inherit_oh_from")))
 		{
-			$room = obj($room->prop("inherit_oh_from"));
+			$room = obj($this->prop("inherit_oh_from"));
 		}
 		else
 		{
