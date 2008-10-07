@@ -1,7 +1,7 @@
 // reset form
-$.fn.reset = function()
+$.fn.reset = function(arr)
 {
-	return this.each(function()
+	return this.each(function(arr)
 	{
 		var type = this.type, tag = this.tagName.toLowerCase();
 		if (tag == 'form')
@@ -15,6 +15,8 @@ $.fn.reset = function()
 			this.checked = false;
 		}
 		else if (tag == 'select')
-            this.selectedIndex = -1;
+		{
+            //this.selectedIndex = -1;
+		}
         });
 };

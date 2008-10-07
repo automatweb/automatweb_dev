@@ -73,7 +73,9 @@ jQuery.aw_releditor = function(arr) {
 		}
 		form = $("form [name^="+arr["releditor_name"]+"\["+current_index+"][type!=submit]").not("a");
 		form.each(function(){
-			$(this).reset();
+			$(this).reset({
+				skip_select : true
+			});
 			s_prop_name = _get_prop_name($(this).attr("name"));
 			if ($(this).attr("multiple"))
 			{
@@ -167,45 +169,66 @@ jQuery.aw_releditor = function(arr) {
 		data = s_form_extension_class_info.length>0 ? data+"&"+s_form_extension_class_info : data;
 		data = s_form_cfgform.length>0 ? data+"&"+s_form_cfgform : data;
 		data += "&id="+arr["id"];
+		data += "&use_clid="+arr["use_clid"];
+		data += "&start_from_index="+arr["start_from_index"];
 		$.ajax({
 			type: "POST",
 			url: "/orb.aw?class=releditor&action=handle_js_submit",
 			data: data,
 			success: function(msg){
-				$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
-				handle_change_links();
-				handle_delete_links();
-				location.href="#"+arr["releditor_name"];
+				try {
+					eval(msg);
+					if (error)
+					{
+						$(".jquery_aw_releditor_error").remove();
+						_handle_errors(error);
+					}
+				} catch(e) {
+					$(".jquery_aw_releditor_error").remove();
+					$("#releditor_"+arr["releditor_name"]+"_table_wrapper").html(msg);
+					handle_change_links();
+					handle_delete_links();
+					location.href="#"+arr["releditor_name"];
+					
+					if (is_edit_mode)
+					{
+						i_releditor_form_index = tmp_index;
+					}
+					
+					form.each(function()
+					{
+						s_prop_name = _get_prop_name($(this).attr("name"));
+						if (is_edit_mode)
+						{
+							next_index = i_releditor_form_index;
+						}
+						else
+						{
+							next_index = i_releditor_form_index*1.0+1;
+						}
+						$(this).attr("name", arr["releditor_name"]+"["+next_index+"]"+s_prop_name);
+						$(this).reset();
+					});
+					
+					if (is_edit_mode)
+					{
+						is_edit_mode = false;	
+					}
+					else
+					{
+						i_releditor_form_index++
+					}
+
+				}
 			}
 		});
-		
-		if (is_edit_mode)
+	}
+	
+	function _handle_errors(error)
+	{
+		for ( key in error )
 		{
-			i_releditor_form_index = tmp_index;
-		}
-		
-		form.each(function()
-		{
-			s_prop_name = _get_prop_name($(this).attr("name"));
-			if (is_edit_mode)
-			{
-				next_index = i_releditor_form_index;
-			}
-			else
-			{
-				next_index = i_releditor_form_index*1.0+1;
-			}
-			$(this).attr("name", arr["releditor_name"]+"["+next_index+"]"+s_prop_name);
-			$(this).reset();
-		});
-		
-		if (is_edit_mode)
-		{
-			is_edit_mode = false;	
-		}
-		else
-		{
-			i_releditor_form_index++
+			$("#"+key).after(" <span class='jquery_aw_releditor_error' style='color: red'>"+error[key]+"</span>");
 		}
 	}
 	
