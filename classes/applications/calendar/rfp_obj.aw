@@ -237,10 +237,19 @@ class rfp_obj extends _int_object
 	{
 		if($this->can("view", $reservation))
 		{
+			$res_obj = obj($reservation);
+			$others = $res_obj->get_other_brons();
 			$this->disconnect(array(
 				"from" => $reservation,
 				"type" => 3,
 			));
+			foreach($others->arr() as $other)
+			{
+				$this->disconnect(array(
+					"from" => $other->id(),
+					"type" => 3,
+				));
+			}
 			return true;
 		}
 		return false;
@@ -259,9 +268,19 @@ class rfp_obj extends _int_object
 				"CL_RESERVATION.resource" => $room,
 				"type" => 3,
 			));
+			$others = new object_list();
 			foreach($conns as $conn)
 			{
+				$res = $conn->to();
+				$others->add($res->get_other_brons());
 				$conn->delete();
+			}
+			foreach($others->arr() as $other)
+			{
+				$this->disconnect(array(
+					"from" => $other->id(),
+					"type" => 3,
+				));
 			}
 			return true;
 		}

@@ -11,6 +11,13 @@ class reservation_obj extends _int_object
 		parent::_int_object();
 	}
 
+	function delete()
+	{
+		$ol = $this->get_other_brons();
+		$ol->delete();
+		parent::delete();
+	}
+
 	function set_prop($pn, $pv)
 	{
 		//teatud propide puhul uuendab alambroneeringute andmeid ka
