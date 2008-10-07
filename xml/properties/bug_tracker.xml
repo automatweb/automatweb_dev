@@ -1428,6 +1428,11 @@
                   </clid>
                   <caption>Tagasiside bugide kaust</caption>
             </FB_FOLDER>
+            <OWNER>
+                  <value>12</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Omanik</caption>
+            </OWNER>
       </reltypes>
       <layout>
             <bug>

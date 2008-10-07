@@ -45,6 +45,13 @@ class bt_stat_impl extends core
 		$req_end = empty($arr["request"]["stat_hrs_end"]) ? time() + 86400 : mktime(23, 59, 59, $arr["request"]["stat_hrs_end"]["month"], $arr["request"]["stat_hrs_end"]["day"], $arr["request"]["stat_hrs_end"]["year"], 1);
 		$time_constraint = null;
 
+		$co_conn = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_OWNER",
+		));
+		foreach($co_conn as $c)
+		{
+			$cos[$c->prop("to")] = $c->prop("to");
+		}
 		if (2 < $req_start and $req_start < $req_end)
 		{
 			$time_constraint = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $req_start, $req_end);
@@ -138,6 +145,10 @@ class bt_stat_impl extends core
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($uid);
+			if(is_array($cos) && count($cos) && !$cos[$p->prop("work_contact")])
+			{
+				continue;
+			}
 			$dmz = array();
 
 			foreach($coms as $com)

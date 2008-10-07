@@ -517,6 +517,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype FB_FOLDER value=11 clid=CL_MENU,CL_BUG,CL_BUG_TRACKER
 @caption Tagasiside bugide kaust
+
+@reltype OWNER value=12 clid=CL_CRM_COMPANY
+@caption Omanik
 */
 
 classload("applications/bug_o_matic_3000/bug");
