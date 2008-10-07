@@ -85,7 +85,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property hr_price type=textbox captionside=top parent=settings_col3 table=aw_bugs field=aw_hr_price
 		@caption Tunnihind
 
-		@property send_bill type=checkbox ch_value=1 parent=settings_col3 table=aw_bugs field=aw_send_bill no_caption=1
+		@property send_bill type=checkbox ch_value=1 parent=settings_col3 table=aw_bugs field=aw_send_bill
 		@caption Arvele
 
 	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
@@ -1772,7 +1772,7 @@ class bug extends class_base
 		{
 			$this->notify_monitors($bug, $comment);
 		}
-
+//print "kasutaja: ".aw_global_get("uid");
 		$o = obj();
 		$o->set_parent($bug->id());
 		$o->set_class_id(CL_BUG_COMMENT);
@@ -1836,7 +1836,7 @@ class bug extends class_base
 		));
 		foreach($comments as $c)
 		{
-			$comm = obj($c->prop("to"));
+			$comm = obj($c->prop("to"));arr($comm->comment());
 			$t->define_data(array(
 				"comment" => html::textarea(array(
 					"value" => $comm->comment(),

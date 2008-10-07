@@ -1143,6 +1143,24 @@ class bug_tracker extends class_base
 			'width' => '10%',
 			'align' => 'center'
 		));
+		$t->define_field(array(
+			'name' => 'working_hours_1',
+			'caption' => t('T&ouml;&ouml;'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'working_hours_2',
+			'caption' => t('Projekt'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'working_hours_3',
+			'caption' => t('Arendus'),
+			'width' => '10%',
+			'align' => 'center'
+		));
 		if($st = $arr["request"]["my_bugs_stat_start"])
 		{
 			$start = mktime(0, 0, 1, $st["month"], $st["day"], $st["year"]);
@@ -1219,10 +1237,14 @@ class bug_tracker extends class_base
 				)),
 				'bug_lifespan' => $bug->get_lifespan(),
 				'comment_count' => count($comments),
-				'working_hours' => $working_hours
+				'working_hours' => $working_hours,
+				'working_hours_1' => $bug->finance_type == 1 ? $working_hours : 0,
+				'working_hours_2' => $bug->finance_type == 2 ? $working_hours : 0,
+				'working_hours_3' => $bug->finance_type == 3 ? $working_hours : 0
 			));
 			$sum += $working_hours;
 			$cnt += count($comments);
+			$sums[$bug->finance_type] += $working_hours;
 			$i_total_lifespan += $bug->get_lifespan(array(
 				"without_string_prefix"=>true,
 				"only_days"=>true,
@@ -1235,7 +1257,10 @@ class bug_tracker extends class_base
 			"name" => html::strong(t("Summa")),
 			"bug_lifespan" => html::strong($i_total_lifespan),
 			"working_hours" => html::strong($sum),
-			"comment_count" => html::strong($cnt)
+			"comment_count" => html::strong($cnt),
+			"working_hours_1" => html::strong(number_format($sums[1], 2)),
+			"working_hours_2" => html::strong(number_format($sums[2], 2)),
+			"working_hours_3" => html::strong(number_format($sums[3], 2)),
 		));
 		$i_bug_count = count($bugs);
 		$t->define_data(array(

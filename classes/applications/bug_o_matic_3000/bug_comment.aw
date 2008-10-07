@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.8 2008/09/24 14:33:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.9 2008/10/07 13:40:07 kristo Exp $
 // bug_comment.aw - Bugi kommentaar 
 /*
 
@@ -37,8 +37,14 @@
 @property bill type=relpicker reltype=RELTYPE_BILL table=aw_bug_comments field=aw_bill
 @caption Arve
 
+@property bug type=relpicker reltype=RELTYPE_BUG table=aw_bug_comments field=aw_bug
+@caption Arve
+
 @reltype BILL value=1 clid=CL_CRM_BILL
 @caption Arve
+
+@reltype BUG value=2 clid=CL_BUG
+@caption Bugi
 */
 
 class bug_comment extends class_base
@@ -107,6 +113,7 @@ class bug_comment extends class_base
 			case "aw_send_bill":
 			case "aw_activity_stats_type":
 			case "aw_bill":
+			case "aw_bug":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
