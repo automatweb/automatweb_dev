@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.11 2008/01/31 22:28:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.12 2008/10/07 10:21:25 markop Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP maintainer=kristo
@@ -20,7 +20,7 @@
 	@caption Laius
 
 	@property height type=textbox size=4 maxlength=4
-	@caption Kõrgus
+	@caption K&otilde;rgus
 	
 	@property scrollbars type=checkbox ch_value=1 default=0
 	@caption Kerimisribad
@@ -29,7 +29,7 @@
 	@caption Ainult &uuml;he korra sessiooni jooksul
 	
 	@property menus type=text callback=callback_get_menus method=serialize
-	@caption Menüüd
+	@caption Men&uuml;&uuml;d
 
 	@reltype OBJ value=2 clid=CL_DOCUMENT,CL_FILE,CL_IMAGE
 	@caption sisu objekt
@@ -91,7 +91,7 @@ class html_popup extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "check",
-			"caption" => t("k.a. alammenüüd"),
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -153,6 +153,21 @@ class html_popup extends class_base
 		$obj->save();
 	}
 
+	function callback_on_addalias($args = array())
+	{
+		$obj =&obj($args["id"]);
+		$data = $obj->meta("menus");
+
+		$obj_list = explode(",",$args["alias"]);
+		foreach($obj_list as $val)
+		{
+			$data[$val] = $val;
+		};
+
+		$obj->set_meta("menus",$data);
+		$obj->save();
+	}
+
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
@@ -204,10 +219,46 @@ class html_popup extends class_base
 				$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "print" => 1), "objects");
 			}
 
-			$rv .= sprintf("<script type='text/javascript'>window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=%s,width=%s,height=%s');</script>", $url, (int)$o->prop("scrollbars"), (int)$o->prop("width"), (int)$o->prop("height"));
+		$url = $this->mk_my_orb("show", array("id" => $o->id(), "print" => 1));
+
+
+			$rv .= sprintf("<script type='text/javascript'>window.open('%s','htpopup','margin=0,padding=0,top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=%s,width=%s,height=%s');</script>", $url, (int)$o->prop("scrollbars"), (int)$o->prop("width"), (int)$o->prop("height"));
 
 		};
 		return $rv;
+	}
+
+	/**
+		@attrib name=show params=name nologin="1" 
+		@param id required type=oid
+	**/
+	function show($arr)
+	{
+		$id = $arr["id"];
+		$o = obj($id);
+		$show_obj = new object($o->prop("show_obj"));
+		if (CL_DOCUMENT == $show_obj->class_id())
+		{
+			$t = get_instance(CL_DOCUMENT);
+			$content = $t->gen_preview(array(
+				"docid" => $show_obj->id(),
+				"tpl_auto" => 1,
+				"no_strip_lead" => 1,
+			));
+		
+		}
+		if (CL_IMAGE == $show_obj->class_id())
+		{
+			$instance = get_instance(CL_IMAGE);
+			$content = $instance->make_img_tag_wl($show_obj->id());
+		}
+
+		$this->read_template("dhtml_popup.tpl");
+		$this->vars(array(
+			"content" => $content,
+		));
+		return $this->parse();
+
 	}
 }
 ?>
