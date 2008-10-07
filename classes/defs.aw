@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.273 2008/10/07 07:00:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.274 2008/10/07 14:59:53 instrumental Exp $
 // defs.aw - common functions
 
 /*
@@ -2805,22 +2805,15 @@ if (!defined("DEFS"))
 		@param var required type=mixed
 			The value to check for array-ness
 
-		@param return_as_array required type=bool
-			If set and first parameter is not an array, array with one element - the first parameter - is returned.
-
 		@examples
 			foreach(safe_array($request["yeah"]) as $k => $v)
 			...
 	**/
-	function safe_array($var, $raa = false)
+	function safe_array($var)
 	{
 		if (is_array($var))
 		{
 			return $var;
-		}
-		elseif($raa)
-		{
-			return array($var);
 		}
 		return array();
 	}

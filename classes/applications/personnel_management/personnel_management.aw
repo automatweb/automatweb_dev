@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.78 2008/10/07 06:19:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.79 2008/10/07 14:59:52 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -1310,7 +1310,7 @@ class personnel_management extends class_base
 		);
 		foreach($odl->arr() as $o)
 		{
-			$locs = array_merge(safe_array($o["location"], true), safe_array($o["location_2"], true));
+			$locs = array_merge((array)$o["location"], (array)$o["location_2"]);
 			foreach($locs as $loc)
 			{
 				$res[$loc][$o["person"]] = 1;
@@ -1346,7 +1346,7 @@ class personnel_management extends class_base
 		// Get all the locations by job wishes.
 		foreach($odl_jobwishes->arr() as $jw)
 		{
-			$asd[$jw["person"]] = array_merge(safe_array($asd[$jw["person"]], true), safe_array($jw["location"], true), safe_array($jw["location_2"], true));
+			$asd[$jw["person"]] = array_merge((array)$asd[$jw["person"]], (array)$jw["location"], (array)$jw["location_2"]);
 		}
 		// Make a list of locations by job offers
 		$odl_joboffers = new object_data_list(
@@ -1378,7 +1378,7 @@ class personnel_management extends class_base
 		);
 		foreach($odl_candidates as $cd)
 		{
-			$asd[$cd["person"]] = array_merge(safe_array($asd[$cd["person"]], true), safe_array($jo_locs[$cd["job_offer"]], true));
+			$asd[$cd["person"]] = array_merge((array)$asd[$cd["person"]], (array)$jo_locs[$cd["job_offer"]]);
 		}
 		// Finally run through the person => locations array and sort out the ones we're not supposed to show.
 		$loc_bool = array();
