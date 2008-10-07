@@ -592,7 +592,7 @@ class crm_company_overview_impl extends class_base
 
 		enter_function("get_my_tasks:1.5");
 		classload("core/icons");
-		$ol = $this->_get_task_list($arr);//if(aw_global_get("uid") == "marko"){ arr($ol);arr($arr);}
+		$ol = $this->_get_task_list($arr);
 		exit_function("get_my_tasks:1.5");
 
 		enter_function("get_my_tasks:2");
@@ -2270,12 +2270,18 @@ class crm_company_overview_impl extends class_base
 		$custs = array();
 		foreach($tasks as $task_o)
 		{
-			$custs[$task_o->prop("customer")] = 1;
+			if($task_o->prop("customer"))
+			{
+				$custs[$task_o->prop("customer")] = 1;
+			}
 		}
 		$projs = array();
 		foreach($tasks as $task_o)
 		{
-			$projs[$task_o->prop("project")] = 1;
+			if($task_o->prop("project"))
+			{
+				$projs[$task_o->prop("project")] = 1;
+			}
 		}
 
 		if (count($custs))
