@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.152 2008/10/06 13:32:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.153 2008/10/07 11:04:10 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2997,6 +2997,7 @@ class rfp extends class_base
 						$price = $data["prices"][$currency];
 						
 						$total = $price*$count;
+						$total = round($total - ($data["discount"]/100)*$total); 
 						$resources_total += $total;
 						$trans_status = $r->meta("trans_".$default_lang."_status");
 						$name = null;
