@@ -78,7 +78,7 @@ class personnel_management_job_offer_obj extends _int_object
 		}
 	}
 	
-	function get_candidates()
+	function get_candidates($arr = array())
 	{
 		$ret = new object_list();
 
