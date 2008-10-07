@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.73 2008/09/10 09:13:43 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.74 2008/10/07 12:19:05 robert Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -227,7 +227,7 @@ class join_site extends class_base
 				break;
 
 			case "mf_mail_legend":
-				$data["value"] = t("#edit_link# - link kasutajale");
+				$data["value"] = t("#edit_link# - link kasutajale")."<br />".t("#user_data# - kasutaja andmed");
 				break;
 
 			case "confirm_mail_legend":
@@ -1349,11 +1349,77 @@ class join_site extends class_base
 						{
 							$tom = $to->prop("name")." <$tom>";
 						}
+						$content = $obj->prop("mf_mail");
+						if(strpos($content, "#user_data#") !== false)
+						{
+							$els = $this->get_elements_from_obj($obj);
+							$jmc = "";
+							foreach($els as $eln => $eld)
+							{
+								list($clid, $propn) = explode("[", $eln);
+								$propn = substr($propn, 0, -1);
+				
+								if ($eld["subtitle"] == 1)
+								{
+									$jmc .= $eld["value"]."<br>";
+								}
+								else
+								{
+									if (is_array($_POST[$clid]))
+									{
+										$val = $_POST[$clid][$propn];
+									}
+									else
+									{
+										$val = $_POST[$eln];
+									}
+									if (is_array($val))
+									{
+										if ($eld["type"] == "date_select")
+										{
+											if ($val["day"] == "---" || $val["month"] == "---" || $val["year"] == "---")
+											{
+												$val = "";
+											}
+											else
+											{
+												$val = sprintf("%02d-%02d-%04d", $val["day"], $val["month"], $val["year"]);
+											}
+										}
+										else
+										{
+											$tmp = array();
+											foreach($val as $oid)
+											{
+												if ($this->can("view", $oid))
+												{
+													$val_obj = obj($oid);
+													$tmp[] = $val_obj->name();
+												}
+											}
+											$val = join(", ", $tmp);
+										}
+									}
+									else
+									if ($eld["type"] != "textbox" && $eld["type"] != "password")
+									{
+										if ($this->can("view", $val))
+										{
+											$tmp = obj($val);
+											$val = $tmp->name();
+										}
+									}
+				
+									$jmc .= $eld["caption"].": ".$val."<br>";
+								}
+							}
+							$content = str_replace("#user_data#", strip_tags(str_replace("<br>", "\n", $jmc)), $content);
+						}
 						$link = $this->mk_my_orb("change", array("id" => $u_oid->id()), $u_oid->class_id(), true);
 						send_mail(
 							$tom, 
 							$obj->prop("mf_mail_subj"),
-							str_replace("#edit_link#", $link, $obj->prop("mf_mail")),
+							str_replace("#edit_link#", $link, $content),
 							"From: ".$from."\n"
 						);
 					}
