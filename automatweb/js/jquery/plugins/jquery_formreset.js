@@ -1,7 +1,7 @@
 // reset form
-$.fn.reset = function(arr)
+$.fn.reset = function()
 {
-	return this.each(function(arr)
+	return this.each(function()
 	{
 		var type = this.type, tag = this.tagName.toLowerCase();
 		if (tag == 'form')
