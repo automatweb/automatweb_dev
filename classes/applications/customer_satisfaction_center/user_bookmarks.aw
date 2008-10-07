@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.22 2008/05/23 11:13:33 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.23 2008/10/07 12:35:21 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad
 /*
 
@@ -923,6 +923,8 @@ class user_bookmarks extends class_base
 		{
 			$params["oid"] = $oids;
 		}
+		$params["lang_id"] = array();
+		$params["site_id"] = array();
 		$params["sort_by"] = "objects.jrk ASC";
 		$list = new object_list($params);
 		$mt = $bm->meta("grp_sets");
