@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.69 2008/09/19 18:14:18 kristo Exp $
-// shop_order_center.aw - Tellimiskeskkond 
+
+// shop_order_center.aw - Tellimiskeskkond
 /*
 
 @tableinfo aw_shop_order_center index=aw_id master_table=objects master_index=brother_of
@@ -207,6 +207,11 @@
 	@property delivery_save_controller type=relpicker reltype=RELTYPE_DELIVERY_SAVE_CONTROLLER
 	@caption Salvestamise kontroller
 
+	@property delivery_exec_controller type=relpicker reltype=RELTYPE_DELIVERY_EXEC_CONTROLLER
+	@caption Teostamiselesaatmise kontroller
+
+	@property cart_value_controller type=relpicker reltype=RELTYPE_CART_VALUE_CONTROLLER
+	@caption Korvi hinna kontroller
 
 
 @groupinfo mail_settings caption="Meiliseaded"
@@ -256,6 +261,12 @@
 
 @reltype DELIVERY_SAVE_CONTROLLER value=15 clid=CL_FORM_CONTROLLER
 @caption kohaletoimetamise salvestamise kontroller
+
+@reltype DELIVERY_EXEC_CONTROLLER value=16 clid=CL_FORM_CONTROLLER
+@caption kohaletoimetamise teostamiselesaatmise kontroller
+
+@reltype CART_VALUE_CONTROLLER value=17 clid=CL_FORM_CONTROLLER
+@caption Korvi hinna kontroller
 
 @reltype ORDER_NAME_CTR value=7 clid=CL_FORM_CONTROLLER
 @caption tellimuse nime kontroller
@@ -672,7 +683,7 @@ class shop_order_center extends class_base
 		{
 			return new object_list();
 		}
-		
+
 		if ($level > 0 && $parent)
 		{
 			$ol = new object_list(array(
@@ -1238,6 +1249,7 @@ class shop_order_center extends class_base
 		$tmp_obj = obj();
 		$tmp_obj->set_class_id($class_id);
 
+		$class_i->cfgform_id = $cff->id();
 		$all_ps = $class_i->parse_properties(array(
 			"properties" => &$all_ps,
 			"obj_inst" => $tmp_obj

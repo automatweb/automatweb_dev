@@ -314,6 +314,16 @@
             <caption>Kuva korvi toodete all</caption>
       </property>
       <property>
+            <name>show_delivery</name>
+            <group>appear_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva kohaletoimetamise valikut</caption>
+      </property>
+      <property>
             <name>no_change_button</name>
             <group>appear_settings</group>
             <table>objects</table>
@@ -470,7 +480,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Filtrid toote omadustest	</caption>
+            <caption>Filtrid toote omadustest</caption>
       </property>
       <property>
             <name>filter_settings_tb</name>
@@ -501,6 +511,46 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>delivery_show_controller</name>
+            <group>delivery_cfg</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DELIVERY_SHOW_CONTROLLER</reltype>
+            <caption>N&amp;amp;auml;itamise kontroller</caption>
+      </property>
+      <property>
+            <name>delivery_save_controller</name>
+            <group>delivery_cfg</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DELIVERY_SAVE_CONTROLLER</reltype>
+            <caption>Salvestamise kontroller</caption>
+      </property>
+      <property>
+            <name>delivery_exec_controller</name>
+            <group>delivery_cfg</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DELIVERY_EXEC_CONTROLLER</reltype>
+            <caption>Teostamiselesaatmise kontroller</caption>
+      </property>
+      <property>
+            <name>cart_value_controller</name>
+            <group>delivery_cfg</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CART_VALUE_CONTROLLER</reltype>
+            <caption>Korvi hinna kontroller</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
@@ -563,6 +613,10 @@
                   <caption>Firma andmete kaart</caption>
                   <parent>data</parent>
             </orgfieldmap>
+            <delivery_cfg>
+                  <caption>Kohaletoimetamise seaded</caption>
+                  <parent>data</parent>
+            </delivery_cfg>
             <filter>
                   <caption>Filtreerimine</caption>
             </filter>
@@ -618,6 +672,26 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>n&amp;amp;auml;itamise kontroller</caption>
             </CONTROLLER>
+            <DELIVERY_SHOW_CONTROLLER>
+                  <value>14</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kohaletoimetamise n&amp;amp;auml;itamise kontroller</caption>
+            </DELIVERY_SHOW_CONTROLLER>
+            <DELIVERY_SAVE_CONTROLLER>
+                  <value>15</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kohaletoimetamise salvestamise kontroller</caption>
+            </DELIVERY_SAVE_CONTROLLER>
+            <DELIVERY_EXEC_CONTROLLER>
+                  <value>16</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kohaletoimetamise teostamiselesaatmise kontroller</caption>
+            </DELIVERY_EXEC_CONTROLLER>
+            <CART_VALUE_CONTROLLER>
+                  <value>17</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Hinna kontroller</caption>
+            </CART_VALUE_CONTROLLER>
             <ORDER_NAME_CTR>
                   <value>7</value>
                   <clid>CL_FORM_CONTROLLER</clid>

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.86 2008/09/23 07:24:54 instrumental Exp $
-// shop_order_cart.aw - Poe ostukorv 
+
+// shop_order_cart.aw - Poe ostukorv
 /*
 
 @classinfo syslog_type=ST_SHOP_ORDER_CART relationmgr=yes no_status=1 maintainer=kristo
@@ -67,7 +67,7 @@ class shop_order_cart extends class_base
 		return $retval;
 	}
 	*/
-	
+
 	function get_cart($oc)
 	{
 		if($oc && $oc->prop("cart_type") == 1 && aw_global_get("uid") != "")
@@ -82,7 +82,7 @@ class shop_order_cart extends class_base
 			return $_SESSION["cart"];
 		}
 	}
-	
+
 	function set_cart($arr)
 	{
 		extract($arr);
@@ -101,16 +101,16 @@ class shop_order_cart extends class_base
 	}
 
 	/** shows the cart to user
-		
+
 		@attrib name=show_cart nologin="1"
 
 		@param oc optional type=int
-		@param section optional 
+		@param section optional
 	**/
 	function show($arr)
 	{
 		extract($arr);
-		
+
 		$oc = obj($oc);
 		if($oc->prop("chart_show_template"))
 		{
@@ -159,7 +159,7 @@ class shop_order_cart extends class_base
 		{
 			$cart_o = obj($oc->prop("cart"));
 		}
-		
+
 		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
 			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
@@ -183,7 +183,7 @@ class shop_order_cart extends class_base
 			$i = obj($iid);
 			$inst = $i->instance();
 			$price = $inst->get_price($i);
-			
+
 			foreach($quantx->get() as $x => $quant)
 			{
 				if($quant["items"] < 1)
@@ -231,7 +231,7 @@ class shop_order_cart extends class_base
 		));
 
 		$els = $this->do_insert_user_data_errors($els);
-	
+
 
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
@@ -257,7 +257,7 @@ class shop_order_cart extends class_base
 			foreach($objs as $prefix => $obj)
 			{
 				$ops = $obj->properties();
-				
+
 				foreach($ops as $opk => $opv)
 				{
 					$vars[$prefix.$opk] = $opv;
@@ -271,7 +271,18 @@ class shop_order_cart extends class_base
 		$cart_total = $this->get_cart_value();
 		$cart_discount = $cart_total * ($oc->prop("web_discount")/100);
 
-		$this->vars(array(
+		if ($oc->prop("show_delivery") and $this->can("view", $oc->prop("delivery_show_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$arr["cart_val_w_disc"] = $cart_total - $cart_discount;
+			$delivery_vars = $ctrl->eval_controller($oc->prop("delivery_show_controller"), $oc, $cart, $arr);
+		}
+		else
+		{
+			$delivery_vars = array();
+		}
+
+		$this->vars($delivery_vars + array(
 			"cart_total" => number_format($cart_total, 2),
 			"cart_discount" => number_format($cart_discount, 2),
 			"cart_val_w_disc" => number_format($cart_total - $cart_discount, 2),
@@ -283,7 +294,7 @@ class shop_order_cart extends class_base
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
 		));
 
-		if ($cart_o->prop("postal_price") > 0)
+		if ($cart_o->prop("postal_price") > 0 or !empty($delivery_vars["postal_price"]))
 		{
 			$this->vars(array(
 				"HAS_POSTAGE_FEE" => $this->parse("HAS_POSTAGE_FEE")
@@ -363,7 +374,7 @@ class shop_order_cart extends class_base
 		@param oc required type=int acl=view
 		@param add_to_cart optional
 		@param is_update optional type=int
-		@param order_data optional 
+		@param order_data optional
 
 	**/
 	function submit_add_cart($arr)
@@ -509,7 +520,7 @@ class shop_order_cart extends class_base
 
 						}
 						$soce[$iid] = array(
-							"msg" => $rv["msg"], 
+							"msg" => $rv["msg"],
 							"prod_name" => $i_o->name(),
 							"prod_id" => $i_o->id(),
 							"must_order_num" => $mon,
@@ -523,6 +534,13 @@ class shop_order_cart extends class_base
 					}
 				}
 			}
+		}
+
+		// process delivery
+		if ($oc->prop("show_delivery") and $this->can("view", $oc->prop("delivery_save_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$ctrl->eval_controller($oc->prop("delivery_save_controller"), $oc, &$cart);
 		}
 
 		if (($arr["from"] != "confirm" && $arr["from"] != "") || (is_array($_REQUEST["user_data"]) && count($_REQUEST["user_data"])))
@@ -574,7 +592,7 @@ class shop_order_cart extends class_base
 			{
 				$quantx = new aw_array($quantx);
 			}
-			
+
 			foreach($quantx->get() as $x => $quant)
 			{
 				if ($arr["update"] == 1)
@@ -690,7 +708,7 @@ class shop_order_cart extends class_base
 			}
 			die();
 		}
-		
+
 		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
 		{
 			aw_session_set("order_cond_fail", 1);
@@ -712,8 +730,8 @@ class shop_order_cart extends class_base
 			}
 			die();
 		}
-		
-		
+
+
 		if($arr["from"] != "confirm")
 		{
 			if (is_array($order_data["all_items"]))
@@ -818,7 +836,7 @@ class shop_order_cart extends class_base
 		{
 			return $arr["go_to_after"];
 		}
-		
+
 		if (!empty($arr["pre_confirm_order"]))
 		{
 			// go to separate page with order non modifiable and user data form below
@@ -901,7 +919,7 @@ class shop_order_cart extends class_base
 		$this->update_user_data_from_order($oc, $warehouse, $params);
 
 		$so->start_order(obj($warehouse), $oc);
-		
+
 		$params["cart"] = $cart;
 		$params[""] = $cart;
 
@@ -914,7 +932,7 @@ class shop_order_cart extends class_base
 				$so->add_item(array("iid" => $iid, "item_data" => $cart["items"][$iid][$key], "it" => $key));
 			}
 		}
-		
+
 		//kui pank ise teeb paringu tagasi, siis votab miski muu keeele milles maili saata, et jargnev siis selle vastu
 		if($oc->meta("lang_id"))
 		{
@@ -931,7 +949,7 @@ class shop_order_cart extends class_base
 		extract($arr);
 		$prod_data = safe_array($prod_data);
 		$cart = $this->get_cart($oc);
-		
+
 		$multi = $oc->prop("multi_items");
 		$cart["items"][$iid] = safe_array($cart["items"][$iid]);
 		foreach($cart["items"][$iid] as $iid => $qx)
@@ -1124,15 +1142,15 @@ class shop_order_cart extends class_base
 		));
 		$layout = obj($cart_o->prop("prod_layout"));
 		$layout->set_prop("template", "prod_pre_confirm.tpl");
-		
+
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
 
 		$total = 0;
 		$prod_total = 0;
-		
+
 		$cart = $this->get_cart($oc);
-		
+
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quantx)
 		{
@@ -1176,7 +1194,7 @@ class shop_order_cart extends class_base
 					$prod_total = $total;
 				}
 				*/
-	
+
 				$str .= $this->parse("PROD");
 			}
 		}
@@ -1209,9 +1227,9 @@ class shop_order_cart extends class_base
 			}
 			else
 			{
-				$do = false;	
+				$do = false;
 			}
-	
+
 			$this->vars(array(
 				"cod_selected" => checked($cart["payment_method"] == "cod" || !$do || $cart["payment_method"] == ""),
 				"rent_selected" => checked($cart["payment_method"] == "rent"),
@@ -1264,7 +1282,7 @@ class shop_order_cart extends class_base
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
-		
+
 		$rd = get_instance(CL_REGISTER_DATA);
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
@@ -1307,7 +1325,7 @@ class shop_order_cart extends class_base
 			foreach($objs as $prefix => $obj)
 			{
 				$ops = $obj->properties();
-				
+
 				foreach($ops as $opk => $opv)
 				{
 					$vars[$prefix.$opk] = $opv;
@@ -1362,7 +1380,7 @@ class shop_order_cart extends class_base
 	function final_finish_order($arr)
 	{
 		extract($arr);
-		
+
 		$oc = obj($oc);
 		if($oc->prop("chart_final_template"))
 		{
@@ -1396,7 +1414,7 @@ class shop_order_cart extends class_base
 		$layout->set_prop("template", "prod_pre_confirm.tpl");
 
 		$total = 0;
-		
+
 		$cart = $this->get_cart($oc);
 
 		$awa = new aw_array($cart["items"]);
@@ -1431,7 +1449,7 @@ class shop_order_cart extends class_base
 
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
 		$wh_o = obj($oc->prop("warehouse"));
-		
+
 		// fake user data
 		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
 		$els = $swh->callback_get_order_current_form(array(
@@ -1473,7 +1491,7 @@ class shop_order_cart extends class_base
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
-		// since this view should be confirm view, then show the previously entered data. 
+		// since this view should be confirm view, then show the previously entered data.
 		// if this nees to be different, we need some sort of config switch for it
 		$ud = safe_array($cart["user_data"]);
 		foreach($els as $pn => $pd)
@@ -1541,7 +1559,7 @@ class shop_order_cart extends class_base
 			foreach($objs as $prefix => $obj)
 			{
 				$ops = $obj->properties();
-				
+
 				foreach($ops as $opk => $opv)
 				{
 					$vars[$prefix.$opk] = $opv;
@@ -1551,17 +1569,28 @@ class shop_order_cart extends class_base
 		}
 
 		$cart_total = $this->get_cart_value();
-                $cart_discount = $cart_total * ($oc->prop("web_discount")/100);
+		$cart_discount = $cart_total * ($oc->prop("web_discount")/100);
 
 		if ($cart_o->prop("postal_price") > 0)
 		{
 			$total += $cart_o->prop("postal_price");
 		}
-			
-		$this->vars(array(
+
+		if ($oc->prop("show_delivery") and $this->can("view", $oc->prop("delivery_show_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$arr["cart_val_w_disc"] = $cart_total - $cart_discount;
+			$delivery_vars = $ctrl->eval_controller($oc->prop("delivery_show_controller"), $oc, &$cart, $arr);
+		}
+		else
+		{
+			$delivery_vars = array();
+		}
+
+		$this->vars($delivery_vars + array(
 			"cart_total" => number_format($cart_total, 2),
-	                "cart_discount" => number_format($cart_discount, 2),
-        	        "cart_val_w_disc" => number_format($cart_total - $cart_discount, 2),
+			"cart_discount" => number_format($cart_discount, 2),
+			"cart_val_w_disc" => number_format($cart_total - $cart_discount, 2),
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
@@ -1632,7 +1661,7 @@ class shop_order_cart extends class_base
 							"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 						))
 					));
-	
+
 					if (get_class($inst) == "shop_product_packaging")
 					{
 						$pr_price = ($quant["items"] * $calc_price);
@@ -1641,7 +1670,7 @@ class shop_order_cart extends class_base
 					{
 						$pr_price = ($quant["items"] * $price);
 					}
-	
+
 					if ( $cl_pgs[$parent] || (!$ft_pgs[$parent] && !$ls_pgs[$parent]))
 					{
 						$cl_total += $pr_price;
@@ -1817,6 +1846,14 @@ class shop_order_cart extends class_base
 
 		$soc = get_instance(CL_SHOP_ORDER_CART);
 		$cart = $soc->get_cart(obj($oc));
+
+		// process delivery
+		if ($oc->prop("show_delivery") and $this->can("view", $oc->prop("cart_value_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$ctrl->eval_controller($oc->prop("cart_value_controller"), $oc, &$cart, &$real_sum);
+		}
+
 		$user_data = $cart["user_data"];
 		$bank = $user_data["user9"];
 		if($oc->prop("bank_id"))
@@ -1832,12 +1869,12 @@ class shop_order_cart extends class_base
 		//if(aw_global_get(uid) == "struktuur"){arr($_SESSION);arr($user_data);arr($GLOBALS);die();}
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
-	
+
 		$order_id = shop_order_cart::do_create_order_from_cart($oc, NULL,array("no_mail" => 1));
 		$bank_return = $this->mk_my_orb("bank_return", array("id" =>$order_id), "shop_order");
 		$_SESSION["bank_payment"]["url"] = $bank_return;
 		$order_obj = obj($order_id);
-		
+
 		$lang = aw_global_get("lang_id");
 		$order_obj->set_meta("lang" , $lang);
 		$l = get_instance("languages");
@@ -1848,13 +1885,13 @@ class shop_order_cart extends class_base
 		$order_obj->save();
 		aw_restore_acl();
 //		arr($cart);
-		
+
 		$expl = $order_id;
 		if(is_object($oc) && $oc->prop("show_prod_and_package"))
 		{
 			$expl = substr($expl.$this->get_prod_expl($cart), 0, 69);
 		}
-		
+
 		if(is_oid($arr["oc"]) && strlen($expl." (".$arr["oc"].")") < 70)
 		{
 			$expl.= " (".$arr["oc"].")"; //et tellimiskeskkonna objekt ka naha jaaks
@@ -1870,7 +1907,7 @@ class shop_order_cart extends class_base
 		));
 		return $ret;
 	}
-	
+
 	function get_prod_expl($cart)
 	{
 		$str = "";
@@ -1900,7 +1937,7 @@ class shop_order_cart extends class_base
 		}
 		return $str;
 	}
-	
+
 	/**
 		@attrib name=bank_return nologin=1
 		@param id required type=int acl=view
@@ -1921,7 +1958,7 @@ class shop_order_cart extends class_base
 		$cart = $this->get_cart($oc);
 
 		$ud = is_array($_POST["user_data"]) ? $_POST["user_data"] : safe_array($cart["user_data"]);
-		
+
 		$ps_pmap = safe_array($oc->meta("ps_pmap"));
 		$org_pmap = safe_array($oc->meta("org_pmap"));
 
@@ -1959,21 +1996,21 @@ class shop_order_cart extends class_base
 			aw_disable_acl();
 			$cur_p->save();
 			aw_restore_acl();
-		}		
+		}
 
 		if ($c_m)
 		{
 			aw_disable_acl();
 			$cur_co->save();
 			aw_restore_acl();
-		}		
+		}
 	}
-	
-	/** 
+
+	/**
 		@attrib name=add_prod_to_cart nologin="1"
 		@param oc required type=int acl=view
 		@param add_to_cart optional
-	**/		
+	**/
 	function add_prod_to_cart($arr)
 	{
 		extract($arr);

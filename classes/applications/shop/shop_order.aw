@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.75 2008/09/11 10:24:06 markop Exp $
-// shop_order.aw - Tellimus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.76 2008/10/07 12:48:02 voldemar Exp $
+// shop_order.aw - Tellimus
 /*
 
 @classinfo syslog_type=ST_SHOP_ORDER relationmgr=yes no_status=1 maintainer=kristo
@@ -8,13 +8,13 @@
 @default table=objects
 @default group=general
 
-@property confirmed type=checkbox ch_value=1 table=aw_shop_orders field=confirmed 
+@property confirmed type=checkbox ch_value=1 table=aw_shop_orders field=confirmed
 @caption Kinnitatud
 
-@property orderer_person type=relpicker reltype=RELTYPE_PERSON table=aw_shop_orders field=aw_orderer_person 
+@property orderer_person type=relpicker reltype=RELTYPE_PERSON table=aw_shop_orders field=aw_orderer_person
 @caption Tellija esindaja
 
-@property orderer_company type=relpicker reltype=RELTYPE_ORG table=aw_shop_orders field=aw_orderer_company 
+@property orderer_company type=relpicker reltype=RELTYPE_ORG table=aw_shop_orders field=aw_orderer_company
 @caption Tellija
 
 @property seller_person type=relpicker reltype=RELTYPE_PERSON table=objects field=meta method=serialize
@@ -23,10 +23,10 @@
 @property seller_company type=relpicker reltype=RELTYPE_ORG table=objects field=meta method=serialize
 @caption M&uuml;&uuml;ja
 
-@property oc type=relpicker reltype=RELTYPE_ORDER_CENTER table=aw_shop_orders field=aw_oc_id 
+@property oc type=relpicker reltype=RELTYPE_ORDER_CENTER table=aw_shop_orders field=aw_oc_id
 @caption Tellimiskeskkond
 
-@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=aw_shop_orders field=aw_warehouse_id 
+@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=aw_shop_orders field=aw_warehouse_id
 @caption Ladu
 
 @tableinfo aw_shop_orders index=aw_oid master_table=objects master_index=brother_of
@@ -45,7 +45,7 @@
 @property sum type=textbox table=aw_shop_orders field=aw_sum group=items
 @caption Summa
 
-@property pickup type=text store=no 
+@property pickup type=text store=no
 @caption Klient tuleb j&auml;rele
 
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT,CL_SHOP_PACKET
@@ -99,7 +99,7 @@ class shop_order extends class_base
 			case "items":
 				$this->do_ord_table($arr);
 				break;
-				
+
 			case "items_toolbar":
 				$t = &$arr["prop"]["vcl_inst"];
 				$t->add_button(array(
@@ -110,7 +110,7 @@ class shop_order extends class_base
 					"img" => "delete.gif",
 				));
 				break;
-				
+
 			case "confirmed":
 				if ($arr["obj_inst"]->prop("confirmed") == 1)
 				{
@@ -122,9 +122,9 @@ class shop_order extends class_base
 			case "sum":
 				$data["value"] = $this->get_price($arr["obj_inst"]);
 				break;
-		
+
 			case "items_orderer":
-				// use the ordering form for the cart 
+				// use the ordering form for the cart
 				//$this->_disp_order_data($arr);
 //				return PROP_OK;
 				$data["value"] = "";
@@ -160,10 +160,10 @@ class shop_order extends class_base
 				$data['value'] .= sprintf(t("Telefon t&ouml;&ouml;l: <b>%s</b><br />"), $user_data['user18']);
 				$data['value'] .= sprintf(t("Mobiil: <b>%s</b><br />"), $user_data['user19']);
 				$data['value'] .= sprintf(t("Isikukood: <b>%s</b><br />"), $user_data['user20']);
-				
+
 				$data['value'] .= sprintf(t("Tellimuse kuup&auml;ev: <b>%s</b><br />"), date("d.m.Y H:i" , $arr["obj_inst"]->modified()));
 				$data['value'] .= sprintf(t("Tellimuse number: <b>%s</b><br />"), $arr["obj_inst"]->id());
-			
+
 				break;
 		};
 		return $retval;
@@ -192,7 +192,7 @@ class shop_order extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_post_save($arr)
 	{
@@ -389,7 +389,7 @@ class shop_order extends class_base
 				}
 			}
 			$name = $to->name();
-			
+
 			if($this->can("edit", $id))
 			{
 				$name = html::get_change_url($id, array(), $name);
@@ -464,7 +464,7 @@ class shop_order extends class_base
 				{
 					$vals["color"] = "#FFCCCC";
 				}
-				
+
 				$t->define_data(array(
 					"name" => $name,
 					"count" => $cnt,
@@ -484,19 +484,19 @@ class shop_order extends class_base
 				"chgbgcolor" => "color",
 			));
 		}
-		
+
 		//teeb miski sorteerimise ka oma aranagemise jargi
 		//	Kood, Toode (praegune Nimi), Uhik, Pakend (praegune Kogus), Tellitav kogus (senine Mitu - vaadata ka ule, kas ikka kuvatakse selle vaartust), Soovitav tarne taitmine (praegune Tarne taitmistahtaeg), Tarne taitmine/arve nr, Osaline tarne taitmine/tarnitud (praegune Tarne taitmine osaliselt), Osaline tarne taitmine/tarnimata (praegune Saatmata kogus), Eritoon, Varvikaart, Erihind (uus vali, nagu varvikaart, kuid mida kuvatakse ainult adminnis)
 		$order = array("user2" , "name" , "uservar1" , "user1" , "count" , "duedate" , "bill" , "pduedate" , "unsent" , "special" , "colorcard" , "special_price");
 
 		$tmp_defs = array();
-		
+
 		foreach($t->rowdefs as  $def)
 		{
-			$tmp_defs[$def["name"]] = $def; 
+			$tmp_defs[$def["name"]] = $def;
 		}
 		unset($t->rowdefs);
-		
+
 		foreach($order as $ord)
 		{
 			if($tmp_defs[$ord])
@@ -534,10 +534,10 @@ class shop_order extends class_base
 			}
 		}
 		$arr["obj_inst"]->set_meta("ord_item_data",$meta);
-		
+
 //		arr($meta);arr($arr["request"]["prod_data"]);
 //		arr(array_merge_recursive($meta , $arr["request"]["prod_data"]));
-		
+
 		//$arr["obj_inst"]->set_meta("ord_content", $arr["request"]["pd"]);
 	}
 
@@ -557,7 +557,7 @@ class shop_order extends class_base
 		$parent = 0;
 
 		$warehouse = obj($o->prop("warehouse"));
-			
+
 		$conf = obj($warehouse->prop("conf"));
 
 		$parent = $conf->prop("export_fld");
@@ -659,7 +659,7 @@ class shop_order extends class_base
 		}
 	}
 
-	/** returns order id 
+	/** returns order id
 	**/
 	function finish_order($params = array())
 	{
@@ -677,7 +677,7 @@ class shop_order extends class_base
 		$oi->set_name(sprintf(t("Tellimus laost %s"), $this->order_warehouse->name()));
 		$oi->set_class_id(CL_SHOP_ORDER);
 		$oi->set_prop("warehouse", $this->order_warehouse->id());
-		
+
 		if ($params["user_data"])
 		{
 			$oi->set_meta("user_data", $params["user_data"]);
@@ -724,8 +724,8 @@ class shop_order extends class_base
 			));
 		}
 
-		
-		
+
+
 		// connect to current person/company
 		if (!$pers_id)
 		{
@@ -778,9 +778,9 @@ class shop_order extends class_base
 					"reltype" => 4 // RELTYPE_ORG
 				));
 				$oi->set_prop("seller_company", $c_com_id);
-				
+
 				$c_per_id = $us->get_current_person();
-				
+
 				$oi->connect(array(
 					"to" => $c_per_id,
 					"reltype" => 3 // RELTYPE_PERSON
@@ -788,7 +788,7 @@ class shop_order extends class_base
 				$oi->set_prop("seller_person", $c_per_id);
 			}
 		}
-		
+
 
 		// now, products
 		$mp = array();
@@ -865,9 +865,27 @@ class shop_order extends class_base
 		$email_subj = sprintf(t("Tellimus laost %s"), $this->order_warehouse->name());
 		$mail_from_addr = "automatweb@automatweb.com";
 		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
-		
+
 		$oc_id = $this->order_warehouse->prop("order_center");
-		if (is_oid($oc_id) && $this->can("view", $oc_id))
+
+		// process delivery
+		if ($this->can("view", $oc_id))
+		{
+			$oc = obj($oc_id);
+		}
+		else
+		{
+			$oc = $this->order_center;
+		}
+
+		if (is_object($oc) and $oc->prop("show_delivery") and $this->can("view", $oc->prop("delivery_exec_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$delivery_vars = $ctrl->eval_controller($oc->prop("delivery_exec_controller"), $oc, &$params);
+		}
+
+		//
+		if ($this->can("view", $oc_id))
 		{
 			$order_center = obj($oc_id);
 			if (is_oid($order_center->prop("cart")) && $this->can("view", $order_center->prop("cart")))
@@ -901,12 +919,12 @@ class shop_order extends class_base
 			$awm = get_instance("protocols/mail/aw_mail");
 
 			$ud = $oi->meta("user_data");
-	
+
 			// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
 			$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
 			//echo "emails = ".dbg::dump($emails)." <br>";
 			$at = $this->order_center->prop("send_attach");
-	
+
 	//echo "hier <br>";
 			$html = "";
 			if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
@@ -960,7 +978,7 @@ class shop_order extends class_base
 						$_po = obj($iid);
 						$eml2prod[$_po->prop($__fld)][] = $iid;
 					}
-	
+
 					$to_send = array();
 					foreach($eml2prod as $eml => $_prods)
 					{
@@ -989,7 +1007,7 @@ class shop_order extends class_base
 							$to_send[$eml_o->comment()] = array($_html, $eml);
 						}
 					}
-	
+
 					foreach($to_send as $eml => $html)
 					{
 						$awm->clean();
@@ -1038,8 +1056,8 @@ class shop_order extends class_base
 							"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : null
 						));
 					}
-				
-	
+
+
 					foreach($emails as $c)
 					{
 						$eml = $c->to();
@@ -1081,6 +1099,45 @@ class shop_order extends class_base
 				}
 			}
 
+			if (isset($delivery_vars["add_emails"]))
+			{
+				foreach ($delivery_vars["add_emails"] as $email)
+				{
+					$awm->clean();
+					$awm->create_message(array(
+						"froma" => $mail_from_addr,
+						"fromn" => $mail_from_name,
+						"subject" => $email_subj,
+						"to" => $email,
+						"body" => "see on html kiri",
+					));
+					$awm->htmlbodyattach(array(
+						"data" => $this->_eval_buffer($html),
+					));
+					if($at == 1)
+					{
+						$vars = array(
+							"id" => $oi->id(),
+						);
+						if(file_exists($this->site_template_dir."/show_attach.tpl"))
+						{
+							$vars["template"] = "show_attach.tpl";
+						}
+						$org = obj($c_com_id);
+						$htmla = $this->show($vars);
+						$awm->fattach(array(
+							"contenttype" => "application/vnd.ms-excel",
+							"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+							"content" => $htmla,
+						));
+					}
+					if (!$params["no_mail"])
+					{
+						$awm->gen_mail();
+					}
+				}
+			}
+
 			// if the order center has an e-mail element selected, send the order to that one as well
 			// but using a different template
 			//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
@@ -1099,14 +1156,14 @@ class shop_order extends class_base
 						"template" => $this->order_center->prop("mail_template") != "" ?  $this->order_center->prop("mail_template") : "show_cust.tpl"
 					));
 				}
-	
+
 				//echo "sent to $_send_to content = $html <br>";
 				if ($_send_to == "" && aw_global_get("uid") != "")
 				{
 					$uo = obj(aw_global_get("uid_oid"));
 					$_send_to = $uo->prop("email");
 				}
-				
+
 				$awm->create_message(array(
 					"froma" => $mail_from_addr,
 					"fromn" => $mail_from_name,
@@ -1150,6 +1207,15 @@ class shop_order extends class_base
 		$o->save();
 		aw_restore_acl();
 
+		// process delivery
+		if (is_object($order_center) and $order_center->prop("show_delivery") and $this->can("view", $order_center->prop("delivery_exec_controller")))
+		{
+			$arr["user_data"] = $o->meta("user_data");
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$delivery_vars = $ctrl->eval_controller($order_center->prop("delivery_exec_controller"), $order_center, $arr);
+		}
+
+		// send mail
 		if(!$o->meta("mail_sent"))
 		{
 			aw_disable_acl();
@@ -1160,8 +1226,8 @@ class shop_order extends class_base
 			$email_subj = t("Tellimus laost ");
 			$mail_from_addr = "automatweb@automatweb.com";
 			$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
-			
-			
+
+
 			if (is_oid($order_center->prop("cart")) && $this->can("view", $order_center->prop("cart")))
 			{
 				$cart_o = obj($order_center->prop("cart"));
@@ -1183,7 +1249,7 @@ class shop_order extends class_base
 			{
 				$mail_from_name = $order_center->prop("mail_from_name");
 			}
-			
+
 			if($o->meta("user_data"))
 			{
 				$uta = $o->meta("user_data");
@@ -1198,7 +1264,7 @@ class shop_order extends class_base
 					$_send_to = $mo->prop("mail");
 				}
 			}
-	
+
 			$awm = get_instance("protocols/mail/aw_mail");
 	//		$awm->dbg = 1;
 			$html = $this->show(array("id" => $o->id(), "template" => $order_center->prop("mail_template")));
@@ -1214,8 +1280,8 @@ class shop_order extends class_base
 				"data" => $html
 			));
 			$awm->gen_mail();
-	
-	
+
+
 			// also, if the warehouse has emails set, then send those
 			$warehouse = $order_center->prop("warehouse");
 			$wo = obj($warehouse);
@@ -1262,7 +1328,7 @@ class shop_order extends class_base
 							$to_send[$eml_o->comment()] = array($_html, $eml);
 						}
 					}
-	
+
 					foreach($to_send as $eml => $html)
 					{
 						$awm->clean();
@@ -1308,7 +1374,7 @@ class shop_order extends class_base
 							"id" => $oi->id()
 						));
 					}
-	
+
 					foreach($emails as $c)
 					{
 						$eml = $c->to();
@@ -1347,6 +1413,44 @@ class shop_order extends class_base
 					}
 				}
 			}
+
+			if (isset($delivery_vars["add_emails"]))
+			{
+				foreach ($delivery_vars["add_emails"] as $email)
+				{
+					$awm->clean();
+					$awm->create_message(array(
+						"froma" => $mail_from_addr,
+						"fromn" => $mail_from_name,
+						"subject" => $email_subj,
+						"to" => $email,
+						"body" => "see on html kiri",
+					));
+					$awm->htmlbodyattach(array(
+						"data" => $html,
+					));
+					if($at == 1)
+					{
+						$vars = array(
+							"id" => $oi->id(),
+						);
+						$i = get_instance(CL_SHOP_ORDER);
+						if(file_exists($i->site_template_dir."/show_attach.tpl"))
+						{
+							$vars["template"] = "show_attach.tpl";
+						}
+						$org = obj($c_com_id);
+						$htmla = $i->show($vars);
+						$awm->fattach(array(
+							"contenttype" => "application/vnd.ms-excel",
+							"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+							"content" => $htmla,
+						));
+					}
+					$awm->gen_mail();
+				}
+			}
+
 			aw_disable_acl();
 //			$o->set_meta("mail_sent" , 1);
 			$o->save();
@@ -1381,9 +1485,9 @@ class shop_order extends class_base
 		$o = obj($arr["id"]);
 		$tp = $o->meta("ord_content");
 		$ord_item_data = new aw_array($o->meta('ord_item_data'));
-		
 
-	
+
+
 		// we need to sort the damn products based on their page values. if they are set of course. blech.
 		// so go over prods, make sure all have page numbers and then sort by page numbers
 		$prods = array();
@@ -1409,7 +1513,7 @@ class shop_order extends class_base
 			if (isset($arr["show_only_prods_with_val"]))
 			{
 				$__tmp = $arr["show_only_prods_with_val"];
-				$ord_it_d = array(); 
+				$ord_it_d = array();
 				foreach($ord_item_data->get() as $k => $v)
 				{
 					$a = obj($k);
@@ -1527,7 +1631,7 @@ class shop_order extends class_base
 					"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged"))
 				));
 				$total += ($pr * $val["items"]);
-	
+
 				$p .= $this->parse("PROD");
 			}
 		}
@@ -1604,7 +1708,7 @@ class shop_order extends class_base
 						$ob = obj($opv);
 						$vars[$prefix."address_value"] = $ob->trans_get_val("name");
 					}
-					
+
 					$vars[$prefix.$opk] = $opv;
 				}
 			}
@@ -1673,7 +1777,7 @@ class shop_order extends class_base
 					)),
 					"PAGE_BREAK" => $pb
 				));
-				
+
 				$pl .= $this->parse("PROD_LONG");
 				$prev_page = $pages[$prod->id()];
 			}
@@ -1704,7 +1808,19 @@ class shop_order extends class_base
 
 		$total_incl_disc = ($total - ($total * ($o->meta("discount") / 100.0)));
 
-		$this->vars(array(
+		if ($oc->prop("show_delivery") and $this->can("view", $oc->prop("delivery_show_controller")))
+		{
+			$ctrl = get_instance(CL_FORM_CONTROLLER);
+			$arr["total_incl_disc"] = $total_incl_disc;
+			$cart = array("user_data" => $o->meta("user_data"));
+			$delivery_vars = $ctrl->eval_controller($oc->prop("delivery_show_controller"), $oc, $cart, $arr);
+		}
+		else
+		{
+			$delivery_vars = array();
+		}
+
+		$this->vars($delivery_vars + array(
 			"HAS_SELLER" => $hs,
 			"NO_SELLER" => "",
 			"PROD" => $p,
@@ -2003,11 +2119,11 @@ class shop_order extends class_base
 		}
 		return ($a_pg > $b_pg ? -1 : 1);
 	}
-	
-	
+
+
 	/**
 		@attrib name=remove_items
-		
+
 		@param id required type=int acl=view
 		@param group optional
 		@param return_url optional
