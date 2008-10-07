@@ -1820,7 +1820,7 @@ class task extends class_base
 				"to" => $_POST["orderer_h"],
 				"type" => "RELTYPE_CUSTOMER"
 			));
-			$arr["obj_inst"]->set_prop("orderer" , $_POST["orderer_h"]);
+			$arr["obj_inst"]->set_prop("customer" , $_POST["orderer_h"]);
 			$arr["obj_inst"]->save();
 		}
 		if ($_POST["project_h"] > 0)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.68 2008/10/06 11:40:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.69 2008/10/07 10:39:50 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -631,7 +631,7 @@ class crm_call extends class_base
 				"to" => $_POST["orderer_h"],
 				"type" => "RELTYPE_CUSTOMER"
 			));
-			$arr["obj_inst"]->set_prop("orderer" , $_POST["orderer_h"]);
+			$arr["obj_inst"]->set_prop("customer" , $_POST["orderer_h"]);
 			$arr["obj_inst"]->save();
 		}
 		if ($_POST["project_h"] > 0)
