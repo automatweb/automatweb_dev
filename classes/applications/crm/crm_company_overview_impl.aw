@@ -1019,7 +1019,7 @@ class crm_company_overview_impl extends class_base
 					"logic" => "OR",
 					"conditions" => array(
 						"CL_BUG.customer(CL_CRM_COMPANY).name" => $str_filt,
-						$def.".customer(CL_CRM_COMPANY).name" => $str_filt
+						$def.".RELTYPE_CUSTOMER.name" => $str_filt
 					)
 				));
 			}
