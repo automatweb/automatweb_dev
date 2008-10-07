@@ -1,3 +1,4 @@
+<!-- SUB: login -->
 <form action="{VAR:baseurl}/reforb.{VAR:ext}" method="POST">
 	<table>
 		<tr>
@@ -14,3 +15,5 @@
 	</table>
 {VAR:reforb}
 </form>
+<!-- END SUB: login -->
+
