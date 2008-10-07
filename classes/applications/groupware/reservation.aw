@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.142 2008/10/03 09:54:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.143 2008/10/07 11:02:30 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -21,65 +21,63 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 @layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
 
 	@layout general_up_up parent=general_up type=vbox
-	
-@default parent=general_up_up
 
-	@property b_tb type=toolbar store=no no_caption=1
+	@property b_tb type=toolbar store=no no_caption=1 parent=general_up_up
 
-	@property name type=textbox field=name method=none size=20
+	@property name type=textbox field=name method=none size=20 parent=general_up_up
 	@caption Nimi
 	
-	@property deadline type=datetime_select table=planner field=deadline
+	@property deadline type=datetime_select table=planner field=deadline parent=general_up_up
 	@caption Maksmist&auml;htaeg
 			
-	@property verified type=checkbox ch_value=1 table=aw_room_reservations field=aw_verified no_caption=1 default=1
+	@property verified type=checkbox ch_value=1 table=aw_room_reservations field=aw_verified no_caption=1 default=1 parent=general_up_up
 	@caption Kinnitatud
 
-	@property paid type=checkbox ch_value=1 table=aw_room_reservations field=aw_paid no_caption=1
+	@property paid type=checkbox ch_value=1 table=aw_room_reservations field=aw_paid no_caption=1 parent=general_up_up
 	@caption Makstud
 
-	@property unverify_reason type=text store=no no_caption=1
+	@property unverify_reason type=text store=no no_caption=1 parent=general_up_up
 
-	@property resource type=relpicker reltype=RELTYPE_RESOURCE table=aw_room_reservations field=aw_resource
+	@property resource type=relpicker reltype=RELTYPE_RESOURCE table=aw_room_reservations field=aw_resource parent=general_up_up
 	@caption Ruum
 
-	@property other_rooms type=select multiple=1 store=no
+	@property other_rooms type=select multiple=1 store=no parent=general_up_up
 	@caption Lisaks ruumid
 	
-	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
+	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=general_up_up
 	@caption Klient
 
-	@property cp_fn type=textbox store=no size=20
+	@property cp_fn type=textbox store=no size=20 parent=general_up_up
 	@caption Eesnimi
 
-	@property cp_ln type=textbox store=no size=20
+	@property cp_ln type=textbox store=no size=20 parent=general_up_up
 	@caption Perenimi
 	
-	@property cp_phone type=textbox store=no size=12
+	@property cp_phone type=textbox store=no size=12 parent=general_up_up
 	@caption Telefon
 	
-	@property cp_email type=textbox store=no size=20
+	@property cp_email type=textbox store=no size=20 parent=general_up_up
 	@caption E-mail
 	
-	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT type=popup_search style=autocomplete
+	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT type=popup_search style=autocomplete parent=general_up_up
 	@caption Projekt
 	
-	@property send_bill type=checkbox ch_value=1 table=planner field=send_bill no_caption=1
+	@property send_bill type=checkbox ch_value=1 table=planner field=send_bill no_caption=1 parent=general_up_up
 	@caption Saata arve
 	
-	@property bill_no type=hidden table=planner 
+	@property bill_no type=hidden table=planner  parent=general_up_up
 	@caption Arve number
 	
-	@property comment type=textarea cols=40 rows=1
+	@property comment type=textarea cols=40 rows=1 parent=general_up_up
 	@caption Kommentaar
 	
-	@property content type=textarea cols=40 rows=5 field=description table=planner
+	@property content type=textarea cols=40 rows=5 field=description table=planner parent=general_up_up
 	@caption Sisu
 	
-	@property time_closed type=checkbox ch_value=1 table=aw_room_reservations field=aw_time_closed
+	@property time_closed type=checkbox ch_value=1 table=aw_room_reservations field=aw_time_closed parent=general_up_up
 	@caption Suletud
 
-	@property closed_info type=textbox table=aw_room_reservations field=aw_closed_info  size=30
+	@property closed_info type=textbox table=aw_room_reservations field=aw_closed_info size=30 parent=general_up_up
 	@caption Sulgemise p&otilde;hjus
 
 	@layout sbt_layout type=hbox parent=general_up
@@ -91,48 +89,47 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@caption Salvesta ja sulge
 	
 @layout general_down type=vbox closeable=1 area_caption=Aeg&#44;&nbsp;ja&nbsp;hind parent=general_split
-@default parent=general_down
 	
-	@property people_count type=textbox size=3 table=aw_room_reservations field=aw_people_count
+	@property people_count type=textbox size=3 table=aw_room_reservations field=aw_people_count parent=general_down
 	@caption Inimesi
 		
-	@property start1 type=datetime_select field=start table=planner
+	@property start1 type=datetime_select field=start table=planner parent=general_down
 	@caption Algus
 
-	@property length type=select store=no 
+	@property length type=select store=no parent=general_down
 	@caption Pikkus
 
-	@property end type=datetime_select table=planner
+	@property end type=datetime_select table=planner parent=general_down
 	@caption L&otilde;peb
 
-	@property special_discount type=textbox size=5 table=aw_room_reservations field=aw_special_discount
+	@property special_discount type=textbox size=5 table=aw_room_reservations field=aw_special_discount parent=general_down
 	@caption Spetsiaal allahindlus
 
-	@property special_sum type=textbox size=5 table=aw_room_reservations field=aw_special_sum
+	@property special_sum type=textbox size=5 table=aw_room_reservations field=aw_special_sum parent=general_down
 	@caption Spetsiaal hind
 	
-	@property products_discount type=hidden size=5 table=aw_room_reservations field=aw_products_discount no_caption=1
+	@property products_discount type=hidden size=5 table=aw_room_reservations field=aw_products_discount no_caption=1 parent=general_down
 	@caption Toodete allahindlus
 	
-	property code type=hidden size=5 table=planner field=code
+	property code type=hidden size=5 table=planner field=code parent=general_down
 	caption Kood
 
-	@property client_arrived type=chooser table=aw_room_reservations field=aw_client_arrived
+	@property client_arrived type=chooser table=aw_room_reservations field=aw_client_arrived parent=general_down
 	@caption Klient saabus
 
-	@property inbetweener type=select table=aw_room_reservations field=aw_inbetweener
+	@property inbetweener type=select table=aw_room_reservations field=aw_inbetweener parent=general_down
 	@caption Vahendaja
 
-	@property people type=select table=aw_room_reservations field=aw_people
+	@property people type=select table=aw_room_reservations field=aw_people parent=general_down
 	@caption Org. esindajad
 
-	@property products_text type=text submit=no
+	@property products_text type=text submit=no parent=general_down
 	@caption Toode
 
-	@property sum type=text table=aw_room_reservations field=aw_sum  no_caption=1
+	@property sum type=text table=aw_room_reservations field=aw_sum  no_caption=1 parent=general_down
 	@caption Summa
 
-	@property modder type=text store=no no_caption=1
+	@property modder type=text store=no no_caption=1 parent=general_down
 	
 property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 caption Kokkuv&otilde;te
@@ -247,6 +244,16 @@ class reservation extends class_base
 						return PROP_IGNORE;
 					}
 				}
+				elseif(!is_oid($arr["obj_inst"]->id()) && $arr["request"]["resource"])
+				{
+					$room = obj($arr["request"]["resource"]);
+					$prop["options"] = $room->get_other_rooms_selection();
+					$prop["value"] = array_keys($prop["options"]);
+					if(!sizeof($prop["options"]))
+					{
+						return PROP_IGNORE;
+					}
+				}
 				else
 				{
 					return PROP_IGNORE;
@@ -274,12 +281,14 @@ class reservation extends class_base
 					$prop["value"] = 1;
 				}
 				break;
+
 /*			case "sbt":
 				$prop["type"] = "submit";
 				$prop["value"] = t("Salvesta!");
 				$prop["onclick"] = "javascript:submit_changeform();";
 				$prop["class"] = "sbtbutton";
 				break;*/
+
 			case "sbt_close":
 				$prop["type"] = "text";
 				$prop["value"] = "<input id='cbsubmit' type='submit' name='sbt_close' value='Salvesta ja sulge' class='sbtbutton' onclick=''  />";
@@ -1319,6 +1328,10 @@ class reservation extends class_base
 					$prods = $rfpo->meta("prods");
 					foreach($arr["amount"] as $id => $amt)
 					{
+						if(!$this->can("view", $id))
+						{
+							continue;
+						}
 						$prods[$id.".".$arr["id"]]["amount"] = $amt;
 						$prods[$id.".".$arr["id"]]["discount"] = $arr["change_discount"][$id];
 						if(!$prods[$id.".".$arr["id"]]["price"])
