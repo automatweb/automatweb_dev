@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.14 2007/12/06 14:33:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.15 2008/10/07 15:19:03 markop Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -155,16 +155,17 @@ class crm_document extends class_base
 		if($arr["new"]==1 && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
 		{
 			$arr["obj_inst"]->set_prop("project" , $arr["request"]["project"]);
+			$arr["obj_inst"]->save();
 		}
 	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		if(!$arr["id"])
-		{
-			$arr["project"] = $_GET["project"];
-		}
+//		if(!$arr["id"])
+//		{
+//			$arr["project"] = $_GET["project"];
+//		}
 	}
 
 	function callback_mod_retval($arr)
@@ -378,7 +379,7 @@ class crm_document extends class_base
 			send_mail(
 				$email,
 				t("Teavitus muutunud dokumendist"),
-				sprintf(t("Uuendati dokumenti \"%s\". Palun kliki siia:\n%s\net dokumenti näha!"), $o->name(), html::get_change_url($o->id())),
+				sprintf(t("Uuendati dokumenti \"%s\". Palun kliki siia:\n%s\net dokumenti n&auml;ha!"), $o->name(), html::get_change_url($o->id())),
 				"From: ".aw_ini_get("baseurl")
 			);
 		}
