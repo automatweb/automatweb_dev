@@ -32,6 +32,8 @@ class html extends aw_template
 		if true, multiple selection abled
 	@param size optional type=int
 		the size of the selection visible
+	@param onBlur optional type=string
+		If set, then onBlur=$onBlur.
 
 	@returns string / html select
 
@@ -123,8 +125,9 @@ class html extends aw_template
 		{
 			$onc = " onchange=\"{$onchange}\"";
 		}
+		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
-		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$textsize}{$ti}{$wid}{$style}>\n{$optstr}</select>{$post_append_text}\n";
+		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$textsize}{$onBlur}{$ti}{$wid}{$style}>\n{$optstr}</select>{$post_append_text}\n";
 	}
 
 	/**
@@ -633,7 +636,9 @@ class html extends aw_template
 		{
 			$onc = " onclick='{$onclick}'";
 		}
-		$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
+		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
+
+		$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
 		return $rv;
 	}
 
@@ -804,6 +809,10 @@ class html extends aw_template
 		If set, the datetime selector is disabled
 	@param textsize optional type=string
 		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled
+	@param year_from optional type=int default=current year - 5
+		the number where year counting starts
+	@param year_to optional type=int default=current year + 5
+		the number where year counting ends
 
 	@returns string/html datetime selector
 
@@ -872,7 +881,12 @@ class html extends aw_template
 			$name = $args["name"];
 		}
 
-		return $selector->gen_edit_form($name, $val, 2003, 2010, true);
+		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
+		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
+
+		$add_empty = in_array($args["add_empty"], array("false", "no", "0")) ? false : true;
+
+		return $selector->gen_edit_form($name, $val, $year_from, $year_to, $add_empty);
 	}
 
 	/**Date selector
