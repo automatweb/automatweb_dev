@@ -516,6 +516,9 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 					@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left_top captionside=top
 					@caption Kliendihaldur
 
+					@property customer_rel_creator type=text size=25 store=no parent=vbox_customers_left_top captionside=top
+					@caption Kliendisuhte looja
+
 					@property customer_search_cust_grp type=select store=no parent=vbox_customers_left_top captionside=top
 					@caption Kliendigrupp
 
@@ -2283,6 +2286,7 @@ class crm_company extends class_base
 
 			/// CUSTOMER tab
 			case "my_projects":
+			case "customer_rel_creator":
 			case "customer_search_cust_mgr":
 			case "customer_search_is_co":
 			case "my_customers_toolbar":
@@ -4159,6 +4163,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_worker'] = ($arr['request']['customer_search_worker']);
 			$arr['args']['customer_search_ev'] = ($arr['request']['customer_search_ev']);
 			$arr['args']['customer_search_cust_mgr'] = ($arr['request']['customer_search_cust_mgr']);
+			$arr['args']['customer_rel_creator'] = ($arr['request']['customer_rel_creator']);
 			$arr['args']['customer_search_cust_grp'] = ($arr['request']['customer_search_cust_grp']);
 			$arr['args']['customer_search_insurance_exp'] = ($arr['request']['customer_search_insurance_exp']);
 			$arr['args']['customer_search_reg'] = ($arr['request']['customer_search_reg']);

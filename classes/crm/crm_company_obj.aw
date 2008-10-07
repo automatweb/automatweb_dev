@@ -286,6 +286,80 @@ class crm_company_obj extends _int_object
 		}
 		return $ret;
 	}
+
+	/** returns customer relation creator
+		@attrib api=1
+		@returns string
+	**/	
+	public function get_cust_rel_creator_name()
+	{
+		$o = $this->get_customer_relation();
+		if(is_object($o))
+		{
+			return $o->prop("cust_contract_creator.name");
+		}
+		return "";
+	}
+
+	/** returns customer relation object
+		@attrib api=1 params=pos
+		@param crea_if_not_exists optional
+			if no customer relation object, makes one
+		@param my_co optional
+		@returns object
+	**/	
+	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
+	{
+		if ($my_co === null)
+		{
+			$my_co = get_current_company();
+		}
+
+		if (!is_object($my_co) || !is_oid($my_co->id()))
+		{
+			return;
+		}
+
+		if ($this->id() == $my_co)
+		{
+			return false;
+		}
+
+		static $gcr_cache;
+		if (!is_array($gcr_cache))
+		{
+			$gcr_cache = array();
+		}
+		if (isset($gcr_cache[$this->id()][$crea_if_not_exists][$my_co->id()]))
+		{
+			return $gcr_cache[$this->id()][$crea_if_not_exists][$my_co->id()];
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $this->id(),
+			"seller" => $my_co
+		));
+		if ($ol->count())
+		{
+			$gcr_cache[$this->id()][$crea_if_not_exists][$my_co->id()] = $ol->begin();
+			return $ol->begin();
+		}
+		else
+		if ($crea_if_not_exists)
+		{
+			$my_co = obj($my_co);
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name(t("Kliendisuhe ").$my_co->name()." => ".$this->name());
+			$o->set_parent($my_co->id());
+			$o->set_prop("seller", $my_co->id());
+			$o->set_prop("buyer", $this->id());
+			$o->save();
+			$gcr_cache[$this->id()][$crea_if_not_exists][$this->id()] = $o;
+			return $o;
+		}
+	}
 }
 
 ?>

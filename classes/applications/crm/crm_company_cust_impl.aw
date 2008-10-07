@@ -497,6 +497,12 @@ class crm_company_cust_impl extends class_base
 		));
 
 		$tf->define_field(array(
+			"name" => "customer_rel_creator",
+			"caption" => t("Kliendisuhte looja"),
+			"sortable" => 1,
+		));
+
+		$tf->define_field(array(
 			"name" => "pop",
 			"caption" => t("&nbsp;")
 		));
@@ -1641,6 +1647,17 @@ class crm_company_cust_impl extends class_base
 		return PROP_OK;
 	}
 
+	function _get_customer_rel_creator($arr)
+	{
+		$v = $arr["request"]["customer_rel_creator"];
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "customer_rel_creator",
+			"value" => $v,
+			"size" => 30
+		));
+		return PROP_OK;
+	}
+
 	function _get_customer_search_filter($r, $within = false, $oids)
 	{
 		$ret = array(
@@ -1819,6 +1836,31 @@ class crm_company_cust_impl extends class_base
 				$ret["CL_CRM_COMPANY.RELTYPE_METAMGR"] = $oids;
 				$has_params = true;
 			}
+		}
+
+		if($r["customer_rel_creator"])
+		{
+			$u = get_instance(CL_USER);
+			$co = obj($u->get_current_company());
+
+			$options = $co->get_employees();
+			$persons = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"name" => "%".$r["customer_rel_creator"]."%",
+				"oid" => $options->ids(),
+			));
+				
+			$cos = array();
+			$crel = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"cust_contract_creator" => $persons->ids(),
+				"seller" => $co->id(),
+			));
+			foreach($crel->arr() as $c)
+			{
+				 $cos[$c->prop("buyer")] = $c->prop("buyer");
+			}
+			$ret["oid"] = $cos;
 		}
 
 		if (!$has_params)
@@ -2105,6 +2147,7 @@ enter_function("company::_finish_org_tbl_7");
 			{
 				$client_manager = html::obj_change_url($o->prop("client_manager"));
 			}
+
 exit_function("company::_finish_org_tbl_7");
 enter_function("company::_finish_org_tbl_8");
 			# pop
@@ -2167,6 +2210,7 @@ exit_function("company::_finish_org_tbl_9");
 				"id" => $o->id(),
 				"name" => $name.$namp,
 				"classif1" => $classif1,
+				"customer_rel_creator" => $o->get_cust_rel_creator_name(),
 				"reg_nr" => $o->prop("reg_nr"),
 				// "pohitegevus" => $o->prop_str("pohitegevus"),
 				// "corpform" => $vorm,
