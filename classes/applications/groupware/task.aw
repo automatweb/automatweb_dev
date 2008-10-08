@@ -1823,6 +1823,7 @@ class task extends class_base
 			$arr["obj_inst"]->set_prop("customer" , $_POST["orderer_h"]);
 			$arr["obj_inst"]->save();
 		}
+
 		if ($_POST["project_h"] > 0)
 		{
 			foreach(explode(",", $_POST["project_h"]) as $proj)
@@ -3779,7 +3780,7 @@ class task extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
 		$arr["orderer_h"] = 0;
-		$arr["project_h"] = 0;
+		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
 		{

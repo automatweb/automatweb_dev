@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.101 2008/10/07 09:51:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.102 2008/10/08 10:11:05 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -1125,7 +1125,7 @@ class crm_meeting extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
 		$arr["orderer_h"] = 0;
-		$arr["project_h"] = 0;
+		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
 		{

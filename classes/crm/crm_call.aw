@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.69 2008/10/07 10:39:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.70 2008/10/08 10:11:05 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -882,7 +882,7 @@ class crm_call extends class_base
 		$arr["participants"] = 0;
 		$arr["participants_h"] = 0;
 		$arr["orderer_h"] = 0;
-		$arr["project_h"] = 0;
+		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
 		{
