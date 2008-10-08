@@ -4420,12 +4420,22 @@ class task extends class_base
 		{
 			$customers[] = $c->prop("to");
 		}
-		$ol = new object_list(array(
+
+		$filter = array(
 			"class_id" => CL_PROJECT,
 			"lang_id" => array(),
 			"CL_PROJECT.RELTYPE_ORDERER.id" => $customers,
 			"site_id" => array(),
-		));
+		);
+	
+		if($arr["request"]["class"] == "crm_meeting")
+		{
+			$user = get_instance(CL_USER);
+			$person = $user->get_current_person();	
+			$filter["CL_PROJECT.RELTYPE_PARTICIPANT"] = $person;
+		}
+
+		$ol = new object_list($filter);
 
 		foreach($ol->arr() as $project)
 		{
