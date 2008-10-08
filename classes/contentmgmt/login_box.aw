@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.4 2008/09/17 08:54:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/login_box.aw,v 1.5 2008/10/08 08:05:44 kristo Exp $
 // login_box.aw - Sisselogimiskast 
 /*
 
@@ -82,6 +82,18 @@ class login_box extends class_base
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("login", $args, "users")
 		));
+		if (aw_global_get("uid") == "")
+		{
+			$this->vars(array(
+				"login" => $this->parse("login")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"logged" => $this->parse("logged")
+			));
+		}
 		return $this->parse();
 	}
 }
