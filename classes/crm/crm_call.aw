@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.70 2008/10/08 10:11:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.71 2008/10/08 10:42:53 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -558,19 +558,34 @@ class crm_call extends class_base
 				if ($v > time())
 				{
 					// create a new call from the current one
-					$i = get_instance(CL_CRM_CALL);
-					$dat = array(
-						"class" => "crm_call",
-						"action" => "new",
-						"parent" => $arr["obj_inst"]->parent(),
-					);
+					$o = new object();
+					$o->set_class_id(CL_CRM_CALL);
+					$o->set_parent($arr["obj_inst"]->parent());
 					foreach($arr["obj_inst"]->properties() as $pn => $pv)
 					{
-						$dat[$pn] = $pv;
+						if($o->is_property($pn))
+						{
+							$o->set_prop($pn , $pv);
+						}
 					}
 					$dat["start1"] = $v;
 					$dat["is_done"] = 0;
-					$i->submit($dat);
+					$o->save();
+					foreach($arr["obj_inst"]->connections_from(array()) as $c)
+					{
+						$o->connect(array(
+							'reltype' => $c->prop("reltype"),
+							'to' => $c->prop("to"),
+						));
+					}
+					foreach($arr["obj_inst"]->connections_to(array()) as $c)
+					{
+						$from = obj($c->prop("from"));
+						$from->connect(array(
+							'reltype' => $c->prop("reltype"),
+							'to' => $o->id(),
+						));
+					}
 				}
 				else
 				if ($v > 300)
@@ -881,7 +896,7 @@ class crm_call extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["participants"] = 0;
 		$arr["participants_h"] = 0;
-		$arr["orderer_h"] = 0;
+		$arr["orderer_h"] = $_GET["alias_to_org"] ? $_GET["alias_to_org"] : 0;
 		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")

@@ -3780,6 +3780,7 @@ class task extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
 		$arr["orderer_h"] = 0;
+		$arr["orderer_h"] = $_GET["alias_to_org"] ? $_GET["alias_to_org"] : 0;
 		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
