@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.62 2008/09/16 11:55:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.63 2008/10/08 15:54:55 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -229,6 +229,10 @@ class crm_offer extends class_base
 					"site_id" => array(),
 					"lang_id" => array(),
 				));
+				if(!is_array($prop["options"]))
+				{
+					$prop["options"] = array();
+				}
 				$prop["options"] = $prop["options"] + $ol->names();
 				break;
 			case "orderer_contact_person":

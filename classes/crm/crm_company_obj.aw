@@ -172,26 +172,126 @@ class crm_company_obj extends _int_object
 		return $ol;
 	}
 
+	/** Returns company work relations
+		@attrib api=1 params=name
+		@param active optional type=bool
+			if set, returns only active workers
+		@param profession optional type=oid
+			worker profession in company
+		@param section optional type=oid
+			worker section in company
+		@return object list
+			person work relations object list
+	**/
+	public function get_work_relations($arr = array())
+	{
+		$filter = array(
+			"class_id" => CL_CRM_PERSON_WORK_RELATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"org" => $this->id(),
+		);
+		if($arr["active"])
+		{
+			$filter["start"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
+			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time());
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"end" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+					"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time()),
+				)
+			));
+		}
+		if($arr["profession"])
+		{
+			$filter["profession"] = $arr["profession"];
+		}
+		if($arr["section"])
+		{
+			$filter["section"] = $arr["section"];
+		}
+		$ol = new object_list($filter);
+		return $ol;
+	}
+
+	/** Returns company workers
+		@attrib api=1 params=name
+		@param active optional type=bool
+			if set, returns only active workers
+		@param profession optional type=oid
+			worker profession in company
+		@param section optional type=oid
+			worker section in company
+		@return object list
+			person object list
+	**/
+	public function get_real_workers($arr = array())
+	{
+		$rels = $this->get_work_relations($arr);
+		if(!sizeof($rels->ids()))
+		{
+			return new object_list();
+		}
+		$filter = array(
+			//"class_id" => CL_CRM_PERSON_WORK_RELATION,
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_ORG_RELATION" => $rels->ids(),
+					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB" => $rels->ids(),
+					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rels->ids(),
+				)
+			)),
+		);
+		$ol = new object_list($filter);//foreach($ol->arr() as $o){$r = $o->get_first_obj_by_reltype("RELTYPE_ORG_RELATION"); if($r)arr($r->id());}
+
+/*		$ol2 = $this->get_employees();
+		foreach($ol2->arr() as $o)
+		{
+			if(!in_array($o->id() , $ol->ids()))
+			{
+				arr($o->name());
+			}
+		}
+*/
+		return $ol;
+
+	}
+
+
 	/** Adds new eployee
 		@attrib api=1 params=name
 		@param name optional type=string
 			person name
+		@param id optional
 		@return oid
 			person object id
 	**/
 	function add_employees($data = array())
 	{
-		$o = new object();
-		$o->set_name($data["name"] ? $data["name"] : t("(Nimetu)"));
-		$o->set_class_id(CL_CRM_PERSON);
-		$o->set_parent($this->id());
-		$o->save();
+		if(is_oid($data["id"]))
+		{
+			$o = obj($data["id"]);
+		}
+		else
+		{
+			$o = new object();
+			$o->set_name($data["name"] ? $data["name"] : t("(Nimetu)"));
+			$o->set_class_id(CL_CRM_PERSON);
+			$o->set_parent($this->id());
+			$o->save();
+		}
 
 		$this->connect(array(
 			"type" => "RELTYPE_WORKERS",
 			"to" => $o->id()
 			)
 		);
+		$o->add_work_relation(array("org" => $this->id()));
 		return $o->id();
 	}
 

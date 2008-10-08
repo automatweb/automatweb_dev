@@ -3071,7 +3071,6 @@ class crm_person extends class_base
 		$relpicker = get_instance("vcl/relpicker");
 		foreach($arr["obj_inst"]->connections_from(array("type" => 67)) as $conn)
 		{
-			//arr($conn);
 			$wr = $conn->to();
 			$orgid = $wr->prop("org");
 			$secid = $wr->prop("section");

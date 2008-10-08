@@ -5331,7 +5331,7 @@ class crm_company extends class_base
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => array("RELTYPE_PERSON_TASK", "RELTYPE_PERSON_MEETING", "RELTYPE_PERSON_CALL"),
 		));
-		
+
 		$oids = array();
 		foreach($cs as $c)
 		{
@@ -9224,13 +9224,14 @@ Bank accounts: yksteise all
 		$company = obj($arr["id"]);
 		foreach($arr["sel"] as $pid)
 		{
-			if(!$company->is_connected_to(array("to" => $pid, "type" => RELTYPE_WORKERS)))
-			{
+//			if(!$company->is_connected_to(array("to" => $pid, "type" => RELTYPE_WORKERS)))
+//			{
 				$company->connect(array(
 					"to" => $pid,
 					"type" => RELTYPE_WORKERS
 				));
-			}
+				$company->add_employees(array("id" => $pid));
+//			}
 		}
 		return $arr["post_ru"];
 	}

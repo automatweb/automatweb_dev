@@ -698,6 +698,253 @@ class crm_person_obj extends _int_object
 		}
 		return $ol;
 	}
+
+	/** returns person image tag
+		@attrib api=1
+	**/
+	public function get_image_tag()
+	{
+		$imgo = $this->get_first_obj_by_reltype("RELTYPE_PICTURE");
+		$img = "";
+		if ($imgo)
+		{
+			$img_i = $imgo->instance();
+			$img = $img_i->make_img_tag_wl($imgo->id(),"","",array("width" => 60));
+		}
+		return $img;
+	}
+
+	/** returns one phone number
+		@attrib api=1
+	**/
+	public function get_phone($co = null , $sect = null)
+	{
+		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		{
+			$current_job = $cn->to();
+			if($co && $current_job->prop("org") != $co)
+			{
+				continue;
+			}
+
+			if($sect && $current_job->prop("section") != $sect)
+			{
+				continue;
+			}
+
+			$phone = $current_job->get_first_obj_by_reltype("RELTYPE_PHONE");
+			if(is_object($phone))
+			{
+				return $phone->name();
+			}
+		}
+
+		foreach(parent::connections_from(array("type" => "RELTYPE_PHONE")) as $cn)
+		{
+			return $cn->prop("to.name");
+		}
+		return "";
+	}
+
+	/** returns one e-mail address
+		@attrib api=1
+	**/
+	public function get_mail($co = null , $sect = null)
+	{
+		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		{
+			$current_job = $cn->to();
+			if($co && $current_job->prop("org") != $co)
+			{
+				continue;
+			}
+
+			if($sect && $current_job->prop("section") != $sect)
+			{
+				continue;
+			}
+
+			$mail = $current_job->get_first_obj_by_reltype("RELTYPE_MAIL");
+			if(is_object($mail))
+			{
+				return $mail->prop("mail");
+			}
+		}
+
+		foreach(parent::connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
+		{
+			$mail = $cn->to();
+			return $mail->prop("mail");
+		}
+		return "";
+	}
+
+	/** returns one e-mail address link
+		@attrib api=1
+	**/
+	public function get_mail_tag($co = null , $sect = null)
+	{
+		$mail = $this->get_mail($co , $sect);
+		if(is_email($mail))
+		{
+			return html::href(array(
+					"url" => "mailto:" . $mail,
+					"caption" => $mail
+				));
+		}
+		return "";
+	}
+
+	/** returns all e-mail address links
+		@attrib api=1
+	**/
+	public function get_all_mail_tags($co = null , $sect = null)
+	{
+		$mails = $this->emails();
+		$ret = array();
+		foreach($mails->arr() as $mail)
+		{
+			if(is_email($mail->prop("mail")))
+			{
+				$ret[]= html::href(array(
+					"url" => "mailto:" . $mail->prop("mail"),
+					"caption" => $mail->prop("mail")
+				));
+			}
+		}
+		return $ret;
+	}
+
+	/** return all current work relation orgs
+		@attrib api=1
+		@return object list
+	**/
+	public function get_all_orgs()
+	{
+		$ol = new object_list();
+		$this->set_current_jobs();
+		foreach($this->current_jobs->arr() as $conn)
+		{
+			if($conn->prop("org"))
+			{
+				$ol->add($conn->prop("org"));
+			}
+		}
+		return $ol;
+	}
+
+	
+
+	/** returns all current job relations
+		@attrib api=1
+	**/
+	public function set_current_jobs()
+	{
+		if(!$this->current_jobs)
+		{
+			$this->current_jobs = new object_list();
+			foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+			{
+				$this->current_jobs->add($cn->prop("to"));
+			}
+		}
+	}
+
+	/** returns person section names
+		@attrib api=1
+		@param co optional type=oid
+			company id
+		@return array
+			section names
+	**/
+	public function get_section_names($co)
+	{
+		$this->set_current_jobs();
+		$sections = array();
+		foreach($this->current_jobs->arr() as $o)
+		{
+			if((!$co || $co == $o->prop("org")) && $o->prop("section.name"))
+			{
+				$sections[] = $o->prop("section.name");
+			}
+		}
+		return $sections;
+	}
+
+	/** returns person profession names
+		@attrib api=1
+		@param co optional type=oid
+			company id
+		@return array
+			profession names
+	**/
+	public function get_profession_names($co)
+	{
+		$this->set_current_jobs();
+		$sections = array();
+		foreach($this->current_jobs->arr() as $o)
+		{
+			if((!$co || $co == $o->prop("org")) && $o->prop("profession.name"))
+			{
+				$sections[] = $o->prop("profession.name");
+			}
+		}
+		return $sections;
+	}
+
+	/** adds new work relation
+		@attrib api=1 params=name
+		@param org optional type=oid default=current company id
+			Company id
+		@param section optional type=oid
+			Section id
+		@param profession optional type=oid
+			Profession id
+		@param room optional type=oid
+		@param start optional type=int default=time()
+			Work relation start timestamp
+		@param end optional type=int
+			Work relation start timestamp
+		@param tasks optional type=sting
+			Work tasks
+		@param salary optional type=int
+			Work salary per month
+		@param salary_currency optional type=int
+			Work salary currency
+		@return oid
+			Work relation object id
+	**/
+	public function add_work_relation($arr = array())
+	{
+		$wr = new object();
+		$wr->set_parent($this->id());
+		$wr->set_name($this->name() . " ".t("work relation"));
+		$wr->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+		if(!$arr["org"])
+		{
+			$company = get_current_company();
+			$arr["org"] = $company->id();
+		}
+		if(!$arr["start"])
+		{
+			$arr["start"] = time();
+		}
+		foreach($arr as $key => $val)
+		{
+			if($wr->is_property($key))
+			{
+				$wr->set_prop($key , $val);
+			}
+		}
+		$wr->save();
+
+		$this->connect(array(
+			"to" => $wr->id(),
+			"reltype" => "RELTYPE_CURRENT_JOB",
+		));
+
+		return $wr->id();
+	}
 }
 
 ?>

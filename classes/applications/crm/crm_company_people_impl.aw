@@ -305,29 +305,49 @@ class crm_company_people_impl extends class_base
 		$persons = array();
 		$professions = array();
 		//if section present, i'll get all the professions
+
+
+
+//-----unit
 		if(is_oid($arr['request']['unit']))
 		{
-			$tmp_obj = new object($arr['request']['unit']);
+			$worker_ol = $arr["obj_inst"]->get_real_workers(array("section" => $arr['request']['unit']));
+			$persons = $worker_ol->ids();
+/*			$tmp_obj = new object($arr['request']['unit']);
 			$conns = $tmp_obj->connections_from(array(
 				"type" => "RELTYPE_PROFESSIONS"
 			));
 			foreach($conns as $conn)
 			{
 				$professions[$conn->prop('to')] = $conn->prop('to.name');
-			}
+			}*/
 		}
-
+//-----cat
 		if(is_oid($arr['request']['cat']) && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
 		{
+			$worker_ol = $arr["obj_inst"]->get_real_workers(array("profession" => $arr['request']['cat']));
+			$persons = $worker_ol->ids();
+/*
 			$professions = array();
 			$tmp_obj = new object($arr['request']['cat']);
-			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');
+			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');*/
 		}
 
+//-------koik
 		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT)
 		{
+			$worker_ol = $arr["obj_inst"]->get_real_workers();
+//			foreach($worker_ol->arr() as $worker_o)
+//			{
+//					$professions[$work_relation->prop("profession")] = $work_relation->prop("profession");
+//					$persons[$work_relation->prop("person")] = $work_relation->prop("person");
+//					arr($work_relation->prop("person"));
+//				}
+//			}
+			$persons = $worker_ol->ids();
+
 			// get all units and all professions from those
-			$units = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECTION")));
+/*			$units = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECTION")));
 			$c = new connection();
 			$p_conns = $c->find(array(
 				"from.class_id" => CL_CRM_SECTION,
@@ -338,9 +358,9 @@ class crm_company_people_impl extends class_base
 			foreach($p_conns as $p_con)
 			{
 				$professions[$p_con["to"]] = $p_con["to.name"];
-			}
+			}*/
 		}
-
+/*
 		//if listing from a specific unit, then the reltype is different
 		if((int)$arr['request']['unit'])
 		{
@@ -434,15 +454,16 @@ class crm_company_people_impl extends class_base
 		{
 			$p2s[$r_con["from"]][$r_con["to"]] = $r_con["to.name"];
 		}
-
+*/
 		// get calendars for persons
 		$pers2cal = $this->_get_calendars_for_persons($persons);
 		exit_function("ghr::ll");
 		enter_function("ghr::loop");
 		foreach($persons as $person)
 		{
+			$tdata = array();
 			$person = new object($person);
-			if (!empty($arr["request"]["filt_p"]))
+/*			if (!empty($arr["request"]["filt_p"]))
 			{
 				$nm = $person->name();
 				if ($nm[0] != $arr["request"]["filt_p"])
@@ -465,10 +486,6 @@ class crm_company_people_impl extends class_base
 
 			if(is_oid($arr['request']['cat']) || is_oid($arr['request']['unit']) || (!$pdat["rank"] && $person->rank))
 			{
-				/*
-				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
-				$pdat["rank"] = html::obj_change_url($ol->ids());
-				*/
 				$pdat["rank"] = html::obj_change_url($person->rank);
 			}
 
@@ -490,13 +507,13 @@ class crm_company_people_impl extends class_base
 
 			//kui amet kuulub $pdat['sections_arr'] olevasse sektsiooni ja persoon on seotud
 			//selle ametiga, siis seda n&auml;idata kujul
-
-			$ccp = (isset($_SESSION["crm_copy_p"][$person->id()]) || isset($_SESSION["crm_cut_p"][$person->id()]) ? "#E2E2DB" : "");
-			$cal = "";
+*/
+			$tdata["cutcopied"] = (isset($_SESSION["crm_copy_p"][$person->id()]) || isset($_SESSION["crm_cut_p"][$person->id()]) ? "#E2E2DB" : "");	
+			$tdata["cal"] = "";
 			if ($pers2cal[$person->id()])
 			{
 				$calo = obj($pers2cal[$person->id()]);
-				$cal = html::href(array(
+				$tdata["cal"] = html::href(array(
 					"url" => html::get_change_url($calo->id(), array("return_url" => get_ru(), "group" => "views", "viewtype" => "week"))."#today",
 					"caption" => html::img(array(
 						"url" => icons::get_icon_url(CL_PLANNER),
@@ -504,7 +521,7 @@ class crm_company_people_impl extends class_base
 					))
 				));
 			}
-
+/*
 			$econns = $person->connections_from(array(
 				"type" => 11,
 			));
@@ -527,19 +544,21 @@ class crm_company_people_impl extends class_base
 			};
 			$pdat["phone"] = join(", ", $phs);
 
+*/
 
-			$imgo = $person->get_first_obj_by_reltype("RELTYPE_PICTURE");
+
+/*			$imgo = $person->get_first_obj_by_reltype("RELTYPE_PICTURE");
 			$img = "";
 			if ($imgo)
 			{
 				$img_i = $imgo->instance();
 				$img = $img_i->make_img_tag_wl($imgo->id(),"","",array("width" => 60));
 			}
-
+/*
 			// This will cause huge problems when there are spaces in first or last name.
 //			list($fn, $ln) = explode(" ", $person->prop('name'));
 			$fn = $person->prop("firstname");
-			$ln = $person->prop("lastname");
+			$ln = $person->prop("lastname");*/
 			$aol = new object_list(array(
 				"class_id" => CL_CRM_AUTHORIZATION,
 				"lang_id" => array(),
@@ -561,40 +580,32 @@ class crm_company_people_impl extends class_base
 					));
 			}
 			$authoirization = join(", " , $a_links);
-			$tdata = array(
-				"firstname" => $fn,
-				"lastname" => $ln,
-				"name" => $ln." ".$fn,
-				"image" => $img,
-				"cal" => $cal,
-				"id" => $person->id(),
-				"phone" => $pdat["phone"],
-				"rank" => $pdat["rank"],
-				'section' => $section,
-				"email" => empty($pdat["email"]) ? "" : html::href(array(
-					"url" => "mailto:" . $pdat["email"],
-					"caption" => $pdat["email"]
-				)),
-				"cutcopied" => $ccp,
-				"authorized" => html::checkbox(array(
-						"name" => "authorized[".$person->id()."]",
-						"value" => 1,
-						"checked" => 0,
-//						"onclick" => 'Javascript:window.open("'.$this->mk_my_orb("authorization", array("id" => $person->id())).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
-						"onclick" => 'Javascript:window.open("'.html::get_new_url(
-							CL_CRM_AUTHORIZATION,
-							$person->id(),
-							array(
-								"return_url" => get_ru(),
-								"person" => $person->id(),
-								"our_company" => $u->get_current_company(),
-								"customer_company" => $arr["obj_inst"]->id(),
-								"return_after_save" => 1,
-							)
-						)
-						.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
-					))." " .$authoirization,
-			);
+			$tdata["authorized"] = html::checkbox(array(
+				"name" => "authorized[".$person->id()."]",
+				"value" => 1,
+				"checked" => 0,
+				"onclick" => 'Javascript:window.open("'.html::get_new_url(
+					CL_CRM_AUTHORIZATION,
+					$person->id(),
+					array(
+						"return_url" => get_ru(),
+						"person" => $person->id(),
+						"our_company" => $u->get_current_company(),
+						"customer_company" => $arr["obj_inst"]->id(),
+						"return_after_save" => 1,
+					)
+				)
+				.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
+			))." " .$authoirization;
+			$tdata["id"] = $person->id();
+			$tdata["phone"] = $person->get_phone($arr["obj_inst"]->id() , $section);
+			$tdata["rank"] = join("\n" , $person->get_profession_names($arr["obj_inst"]->id()));
+			$tdata["section"] = join("\n" , $person->get_section_names($arr["obj_inst"]->id()));
+			$tdata["email"] = $person->get_mail_tag($arr["obj_inst"]->id() , $section);
+			$tdata["firstname"] = $person->prop("firstname");
+			$tdata["lastname"] = $person->prop("lastname");
+			$tdata["name"] = $person->name();
+			$tdata["image"] = $person->get_image_tag();
 			$t->define_data($tdata);
 		};
 	}
@@ -677,12 +688,17 @@ class crm_company_people_impl extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'section',
-			'caption' => t('&Uuml;ksus'),
+			'caption' => t('&Uuml;ksused'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
 			'name' => 'rank',
-			'caption' => t('Ametinimetus'),
+			'caption' => t('Ametinimetused'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'orgs',
+			'caption' => t('Organisatsioonid'),
 			'sortable' => '1',
 		));
 		/*$t->define_chooser(array(
@@ -740,23 +756,30 @@ class crm_company_people_impl extends class_base
 
 		foreach($ol->arr() as $o)
 		{
-			$person_data = $person->fetch_person_by_id(array(
-				'id' => $o->id(),
-				'cal_id' => $calid
-			));
+//			$person_data = $person->fetch_person_by_id(array(
+//				'id' => $o->id(),
+//				'cal_id' => $calid
+//			));
+			$phones = $o->phones();
+			$person_data['phone'] = join(",", $phones->names());
+			$cos = array();
+			$orgs = $o->get_all_orgs();
+			foreach($orgs->arr() as $orgid)
+			{
+				$cos[] = html::href(array("url" => html::get_change_url($orgid->id()), "caption" => $orgid->name()));
+			}
+
 			$t->define_data(array(
 				"firstname" => $o->prop("firstname"),
 				"lastname" => $o->prop("lastname"),
 				"name" => $o->prop('name'),
 				"id" => $o->id(),
 				"phone" => $person_data['phone'],
-				"rank" => $person_data["rank"],
-				'section' => $person_data['section'],
+				"rank" => join(", ", $o->get_profession_names()),//$person_data["rank"],
+				'section' => join(", ", $o->get_section_names()),
+				'orgs' => join(", ", $cos),
 				"oid" => $o->id(),
-				"email" => empty($person_data['email']) ? "" : html::href(array(
-					"url" => "mailto:" . $person_data['email'],
-					"caption" => $person_data['email']
-				)),
+				"email" => join(", ", $o->get_all_mail_tags()),
 			));
 		}
 	}
