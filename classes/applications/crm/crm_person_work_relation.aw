@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.29 2008/10/07 18:22:38 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.30 2008/10/08 14:24:17 instrumental Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -197,7 +197,7 @@ class crm_person_work_relation extends class_base
 					$name = $prop["value"];
 					$ol = new object_list(array(
 						"class_id" => $clids[$prop["name"]],
-						"name" => "%".$name."%",
+						"name" => $name,
 						"lang_id" => array(),
 						"site_id" => array(),
 						"limit" => 1,
