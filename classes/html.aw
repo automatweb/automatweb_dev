@@ -326,33 +326,35 @@ class html extends aw_template
 		{
 			$onkeypress = "";
 			$ac_off = " autocomplete=\"off\"";
+		}
 
-			if ($option_is_tuple)
+		if ($option_is_tuple)
+		{
+			$hidden_value = "";
+
+			if (is_array($selected))
 			{
-				$hidden_value = "";
+				$content = "";
 
-				if (is_array($selected))
+				if (is_array($autocomplete_delimiters))
 				{
-					$content = "";
-
-					if (is_array($autocomplete_delimiters))
-					{
-						$delimiter = reset($autocomplete_delimiters);
-						$content = implode($delimiter, $selected);
-						$hidden_value = implode($delimiter, array_keys($selected));
-					}
-					else
-					{
-						$content = reset($selected);
-						$hidden_value = key($selected);
-					}
+					$delimiter = reset($autocomplete_delimiters);
+					$content = implode($delimiter, $selected);
+					$hidden_value = implode($delimiter, array_keys($selected));
 				}
-
-				$value_elem = "<input type=\"hidden\" id=\"{$id}\" name=\"{$name}\" value=\"{$hidden_value}\">\n";
-				$id .= "AWAutoCompleteTextbox";
-				$name .= "_awAutoCompleteTextbox";
-				$value = $content;
+				else
+				{
+					$content = reset($selected);
+					$hidden_value = key($selected);
+				}
 			}
+
+			$onkeyup = $autocomplete ? $onkeyup : "onkeyup=\"$('#{$id}').val(this.value); ".$args["onkeyup"]."\"";
+
+			$value_elem = "<input type=\"hidden\" id=\"{$id}\" name=\"{$name}\" value=\"{$hidden_value}\">\n";
+			$id .= "AWAutoCompleteTextbox";
+			$name .= "_awAutoCompleteTextbox";
+			$value = $content;
 		}
 
 		return "<input type=\"text\" id=\"{$id}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$style}{$onkeypress}{$onkeyup}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti}{$ac_off}{$onchange} />{$post_append_text}\n{$value_elem}{$autocomplete}";
