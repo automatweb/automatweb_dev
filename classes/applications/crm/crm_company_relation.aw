@@ -94,7 +94,12 @@ class crm_company_relation extends class_base
 						$new_p->save();
 						$arr["obj_inst"]->set_prop("org", $new_p->id());
 					}
-					return PROP_IGNORE;
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					$arr["obj_inst"]->set_prop($prop["name"], $prop["value"]);
+					$retval = PROP_IGNORE;
 				}
 				break;
 		}
