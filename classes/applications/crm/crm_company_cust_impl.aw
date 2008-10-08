@@ -2231,7 +2231,7 @@ exit_function("company::_finish_org_tbl_9");
 		$tf->d_row_cnt = $this->result_count;
 		if($tf->d_row_cnt > $perpage)
 		{
-			$pageselector = $tf->draw_lb_pageselector(array(
+			$pageselector = $tf->draw_text_pageselector(array(
 				"records_per_page" => $perpage
 			));
 			$tf->table_header = $pageselector;
