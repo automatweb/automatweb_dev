@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.161 2008/10/07 18:22:40 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.162 2008/10/08 14:44:02 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1779,6 +1779,7 @@ class releditor extends core
 
 		$num = reset(array_keys($arr[$propn]));
 
+		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 		
@@ -2328,6 +2329,7 @@ class releditor extends core
 			die("error, no property data! given: ".dbg::dump($arr));
 		}
 
+		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 
