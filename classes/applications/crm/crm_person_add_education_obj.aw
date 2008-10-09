@@ -17,7 +17,7 @@ class crm_person_add_education_obj extends _int_object
 	function set_prop($k, $v)
 	{
 		$html_allowed = array();
-		if(!in_array($k, $html_allowed))
+		if(!in_array($k, $html_allowed) && !is_array($v))
 		{
 			$v = htmlspecialchars($v);
 		}

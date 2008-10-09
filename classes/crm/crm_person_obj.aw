@@ -64,7 +64,7 @@ class crm_person_obj extends _int_object
 	function set_prop($k, $v)
 	{
 		$html_allowed = array();
-		if(!in_array($k, $html_allowed))
+		if(!in_array($k, $html_allowed) && !is_array($v))
 		{
 			$v = htmlspecialchars($v);
 		}
@@ -234,6 +234,7 @@ class crm_person_obj extends _int_object
 
 	function get_applications($arr = array())
 	{
+		enter_function("crm_person_obj::get_application");
 		$this->prms(&$arr);
 
 		/*
@@ -259,6 +260,7 @@ class crm_person_obj extends _int_object
 
 		if(count($ids) == 0)
 		{
+			exit_function("crm_person_obj::get_application");
 			return $ret;
 		}
 
@@ -278,6 +280,7 @@ class crm_person_obj extends _int_object
 			}
 		}
 
+		exit_function("crm_person_obj::get_application");
 		return $ret;
 	}
 	

@@ -4,7 +4,7 @@ class crm_person_work_relation_fix extends _int_object
 	function set_prop($var, $val)
 	{
 		$html_allowed = array();
-		if(!in_array($var, $html_allowed))
+		if(!in_array($var, $html_allowed) && !is_array($val))
 		{
 			$val = htmlspecialchars($val);
 		}
