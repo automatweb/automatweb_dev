@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.144 2008/10/08 08:15:04 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.145 2008/10/09 11:59:08 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -123,6 +123,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property people type=select table=aw_room_reservations field=aw_people parent=general_down
 	@caption Org. esindajad
 
+	@property type type=select table=aw_room_reservations field=aw_type parent=general_down
+	@caption Broneeringu t&uuml;&uuml;p
+
 	@property products_text type=text submit=no parent=general_down
 	@caption Toode
 
@@ -210,6 +213,10 @@ class reservation extends class_base
 			"clid" => CL_RESERVATION
 		));
 		$this->get_from_parent_props = array("deadline", "verified", "paid", "unverify_reason", "customer", "project", "send_bill", "comment", "content", "people_count", "start1", "length", "end", "client_arrived", "inbetweener", "people");
+		$this->bron_types = array(
+			"" => "",
+			"food" => t("Toitlustuse broneering"),
+		);
 	}
 
 	function reason_list()
@@ -2670,6 +2677,7 @@ flush();
 					));
 					break;
 				case "resources_discount":
+				case "aw_type":
 					$this->db_add_col($t, array(
 						"name" => $f,
 						"type" => "varchar(13)"

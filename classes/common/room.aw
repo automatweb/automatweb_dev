@@ -1797,6 +1797,7 @@ class room extends class_base
 		enter_function("get_calendar_tbl::3::genres");
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len , $settings->prop("show_unverified"));
 		$this->multi = $arr["obj_inst"]->prop("allow_multiple");
+		$this->extra_row = $arr["obj_inst"]->has_extra_row($this->start, $this->start + 24*3600*$len);
 
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
@@ -1825,6 +1826,7 @@ class room extends class_base
 		$use_product_times = $arr["obj_inst"]->prop("use_product_times");
 		$real_day_start = get_day_start($today_start);
 		$base_add = $today_start - $real_day_start;
+
 		while($step < $day_end/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -2019,6 +2021,17 @@ class room extends class_base
 					}
 				}
 
+				//kole asi, kuid siia tuleb lisaks toitlustuse ja muud tyypi broneeringud
+				if($this->extra_row)
+				{
+					$xtr = $arr["obj_inst"]->get_extra_res($start_step , $end_step);
+					if($xtr)
+					{
+						$extra_d[$x."_0"] = $this->get_bron_cell_html(obj($xtr), $settings,$start_step);
+						$extra_col[$x."_0"] = $this->get_bron_cell_color(obj($xtr), $settings,$start_step);
+					}
+				}
+
 				$x++;
 				$start_step += 86400;
 				$end_step += 86400;
@@ -2040,7 +2053,7 @@ class room extends class_base
 
 				}
 
-				if($this->multi)
+				if($this->multi || $this->extra_row)
 				{
 					foreach($extra_d as $key => $val)
 					{
@@ -2873,6 +2886,18 @@ class room extends class_base
 //							"rowspan" => "rowspan".$i,
 						));
 						$x++;
+					}
+				}
+				elseif($this->extra_row)
+				{
+					if($room->has_extra_row($tm , $tm + 24*3600))
+					{
+						$t->define_field(array(
+							"name" => "d".$i."_0",
+							"width" => $pct."%",
+							"chgbgcolor" => "col".$i."_0",
+							"id" => "id".$i."_0",
+						));
 					}
 				}
 			}
@@ -5182,6 +5207,10 @@ class room extends class_base
 		$customers = array();
 		foreach($reservations->arr() as $res)
 		{
+			if($res->prop("type"))//miskid eri tyypi bronnide ajad j2tab vabaks
+			{
+				continue;
+			}
 			if($use_prod_times)
 			{
 				list($before_buf, $after_buf) = $this->get_products_buffer(array("bron" => $res, "time" => "both"));
@@ -5229,6 +5258,8 @@ class room extends class_base
 		@param end required type=int
 		@param ignore_booking optional type=int
 			If given, the booking with this id will be ignored in the checking - this can be used for changing booking times for instance
+		@param type optional type=string
+			reservation type (ignores other types)
 		@return boolean
 			true if available
 			false if not available
@@ -5297,6 +5328,11 @@ class room extends class_base
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($end+$buffer_end)),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($start-$buffer_start)),
 		);
+
+		if(!empty($arr["type"]) && strlen($arr["type"]))
+		{
+			$filt["type"] = $arr["type"];
+		}
 
 		if (!empty($arr["ignore_booking"]))
 		{

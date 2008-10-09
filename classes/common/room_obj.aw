@@ -301,6 +301,28 @@ class room_obj extends _int_object
 		return reset($ol->ids());
 	}
 
+	/** returns extra reservation / other type
+		@attrib api=1 params=pos
+		@param start required type=int
+			start timestamp
+		@param end required type=int
+			end timestamp
+	**/
+	public function get_extra_res($start , $end)
+	{
+		$filter = array(
+			"class_id" => CL_RESERVATION,
+			"lang_id" => array(),
+			"resource" => $this->id(),
+			"limit" => 1,	
+		);
+		$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, $start);
+		$filter["start1"] = new obj_predicate_compare(OBJ_COMP_LESS, $end);
+		$ol = new object_list($filter);
+		return reset($ol->arr());
+
+	}
+
 	/** returns reservation list
 		@attrib api=1
 		@param start optional type=int
@@ -311,6 +333,8 @@ class room_obj extends _int_object
 			person id
 		@param active optional type=bool
 			shows only verified or just made reservations
+		@param type optional type=string
+			reservation type
 		@returns object list
 	**/
 	function get_reservations($arr = array())
@@ -335,6 +359,10 @@ class room_obj extends _int_object
 		if($arr["worker"])
 		{
 			$filter["people"] = $arr["worker"];
+		}
+		if($arr["type"])
+		{
+			$filter["type"] = $arr["type"];
 		}
 		if($arr["active"])
 		{
@@ -472,7 +500,7 @@ class room_obj extends _int_object
 			true if available
 			false if not available
 	**/
-	function is_available($arr)
+	public function is_available($arr)
 	{
 		if($this->prop("allow_multiple"))
 		{
@@ -483,6 +511,25 @@ class room_obj extends _int_object
 		$ret = $room_inst->check_if_available($arr);
 		//$GLOBALS["last_bron_id"] = $room_inst->last_bron_id;
 		return $ret;
+	}
+
+	public function has_extra_row($start , $end)
+	{
+		$filter = array(
+			"class_id" => CL_RESERVATION,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"type" => "food",
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
+			"limit" => 1,
+		);
+		$ol = new object_list($filter);
+		if(sizeof($ol->ids()))
+		{
+			return 1;
+		}
+		return 0;
 	}
 
 	/** Returns room's resouces

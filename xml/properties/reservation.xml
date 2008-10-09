@@ -4,103 +4,104 @@
             <name>b_tb</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>general_up_up</parent>
             <field>b_tb</field>
       </property>
       <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textbox</type>
             <field>name</field>
             <method>none</method>
             <size>20</size>
+            <parent>general_up_up</parent>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>deadline</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>datetime_select</type>
             <field>deadline</field>
+            <parent>general_up_up</parent>
             <caption>Maksmist&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>verified</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_verified</field>
             <no_caption>1</no_caption>
             <default>1</default>
+            <parent>general_up_up</parent>
             <caption>Kinnitatud</caption>
       </property>
       <property>
             <name>paid</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_paid</field>
             <no_caption>1</no_caption>
+            <parent>general_up_up</parent>
             <caption>Makstud</caption>
       </property>
       <property>
             <name>unverify_reason</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>general_up_up</parent>
             <field>unverify_reason</field>
       </property>
       <property>
             <name>resource</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>relpicker</type>
             <reltype>RELTYPE_RESOURCE</reltype>
             <field>aw_resource</field>
+            <parent>general_up_up</parent>
             <caption>Ruum</caption>
       </property>
       <property>
-	      <name>other_rooms</name>
-	      <table>objects</table>
-	      <group>general</group>
-	      <type>select</type>
-	      <store>no</store>
-	      <field>other_rooms</field>
-	      <multiple>1</multiple>
-	      <caption>Lisaks ruumid</caption>
+            <name>other_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <parent>general_up_up</parent>
+            <field>other_rooms</field>
+            <caption>Lisaks ruumid</caption>
       </property>
       <property>
             <name>customer</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
+            <parent>general_up_up</parent>
             <caption>Klient</caption>
       </property>
       <property>
             <name>cp_fn</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>20</size>
+            <parent>general_up_up</parent>
             <field>cp_fn</field>
             <caption>Eesnimi</caption>
       </property>
@@ -108,10 +109,10 @@
             <name>cp_ln</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>20</size>
+            <parent>general_up_up</parent>
             <field>cp_ln</field>
             <caption>Perenimi</caption>
       </property>
@@ -119,10 +120,10 @@
             <name>cp_phone</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>12</size>
+            <parent>general_up_up</parent>
             <field>cp_phone</field>
             <caption>Telefon</caption>
       </property>
@@ -130,10 +131,10 @@
             <name>cp_email</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>20</size>
+            <parent>general_up_up</parent>
             <field>cp_email</field>
             <caption>E-mail</caption>
       </property>
@@ -141,30 +142,30 @@
             <name>project</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>popup_search</type>
             <field>project</field>
             <reltype>RELTYPE_PROJECT</reltype>
             <style>autocomplete</style>
+            <parent>general_up_up</parent>
             <caption>Projekt</caption>
       </property>
       <property>
             <name>send_bill</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>send_bill</field>
             <no_caption>1</no_caption>
+            <parent>general_up_up</parent>
             <caption>Saata arve</caption>
       </property>
       <property>
             <name>bill_no</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>hidden</type>
+            <parent>general_up_up</parent>
             <field>bill_no</field>
             <caption>Arve number</caption>
       </property>
@@ -172,10 +173,10 @@
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textarea</type>
             <cols>40</cols>
             <rows>1</rows>
+            <parent>general_up_up</parent>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
@@ -183,40 +184,40 @@
             <name>content</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textarea</type>
             <cols>40</cols>
             <rows>5</rows>
             <field>description</field>
+            <parent>general_up_up</parent>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>time_closed</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_time_closed</field>
+            <parent>general_up_up</parent>
             <caption>Suletud</caption>
       </property>
       <property>
             <name>closed_info</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_up_up</parent>
             <type>textbox</type>
             <field>aw_closed_info</field>
             <size>30</size>
+            <parent>general_up_up</parent>
             <caption>Sulgemise p&amp;amp;otilde;hjus</caption>
       </property>
       <property>
             <name>sbt</name>
             <table>objects</table>
             <group>general</group>
-            <parent>sbt_layout</parent>
             <type>submit</type>
             <no_caption>1</no_caption>
+            <parent>sbt_layout</parent>
             <store>no</store>
             <field>sbt</field>
             <caption>Salvesta</caption>
@@ -225,9 +226,9 @@
             <name>sbt_close</name>
             <table>objects</table>
             <group>general</group>
-            <parent>sbt_layout</parent>
             <type>submit</type>
             <no_caption>1</no_caption>
+            <parent>sbt_layout</parent>
             <store>no</store>
             <field>sbt_close</field>
             <caption>Salvesta ja sulge</caption>
@@ -236,28 +237,28 @@
             <name>people_count</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>textbox</type>
             <size>3</size>
             <field>aw_people_count</field>
+            <parent>general_down</parent>
             <caption>Inimesi</caption>
       </property>
       <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>datetime_select</type>
             <field>start</field>
+            <parent>general_down</parent>
             <caption>Algus</caption>
       </property>
       <property>
             <name>length</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>select</type>
             <store>no</store>
+            <parent>general_down</parent>
             <field>length</field>
             <caption>Pikkus</caption>
       </property>
@@ -265,8 +266,8 @@
             <name>end</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>datetime_select</type>
+            <parent>general_down</parent>
             <field>end</field>
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
@@ -274,67 +275,76 @@
             <name>special_discount</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>textbox</type>
             <size>5</size>
             <field>aw_special_discount</field>
+            <parent>general_down</parent>
             <caption>Spetsiaal allahindlus</caption>
       </property>
       <property>
             <name>special_sum</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>textbox</type>
             <size>5</size>
             <field>aw_special_sum</field>
+            <parent>general_down</parent>
             <caption>Spetsiaal hind</caption>
       </property>
       <property>
             <name>products_discount</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>hidden</type>
             <size>5</size>
             <field>aw_products_discount</field>
             <no_caption>1</no_caption>
+            <parent>general_down</parent>
             <caption>Toodete allahindlus</caption>
       </property>
       <property>
             <name>client_arrived</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>chooser</type>
             <field>aw_client_arrived</field>
+            <parent>general_down</parent>
             <caption>Klient saabus</caption>
       </property>
       <property>
             <name>inbetweener</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>select</type>
             <field>aw_inbetweener</field>
+            <parent>general_down</parent>
             <caption>Vahendaja</caption>
       </property>
       <property>
             <name>people</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>select</type>
             <field>aw_people</field>
+            <parent>general_down</parent>
             <caption>Org. esindajad</caption>
+      </property>
+      <property>
+	      <name>type</name>
+	      <table>aw_room_reservations</table>
+	      <group>general</group>
+	      <type>select</type>
+	      <field>aw_type</field>
+	      <parent>general_down</parent>
+	      <caption>Broneeringu tyyp</caption>
       </property>
       <property>
             <name>products_text</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>text</type>
             <submit>no</submit>
+            <parent>general_down</parent>
             <field>products_text</field>
             <caption>Toode</caption>
       </property>
@@ -342,27 +352,26 @@
             <name>sum</name>
             <table>aw_room_reservations</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>text</type>
             <field>aw_sum</field>
             <no_caption>1</no_caption>
+            <parent>general_down</parent>
             <caption>Summa</caption>
       </property>
       <property>
             <name>modder</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_down</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>general_down</parent>
             <field>modder</field>
       </property>
       <property>
             <name>resources_tbl</name>
             <table>objects</table>
             <group>reserved_resources</group>
-            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -372,7 +381,6 @@
             <name>resources_price</name>
             <table>aw_room_reservations</table>
             <group>reserved_resources</group>
-            <parent>general_down</parent>
             <type>hidden</type>
             <field>resources_price</field>
             <no_caption>1</no_caption>
@@ -382,7 +390,6 @@
             <name>resources_discount</name>
             <table>aw_room_reservations</table>
             <group>reserved_resources</group>
-            <parent>general_down</parent>
             <type>hidden</type>
             <field>resources_discount</field>
             <no_caption>1</no_caption>
@@ -392,7 +399,6 @@
             <name>products_tbl</name>
             <table>objects</table>
             <group>products</group>
-            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -402,7 +408,6 @@
             <name>prices_tbl</name>
             <table>objects</table>
             <group>prices</group>
-            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -412,7 +417,6 @@
             <name>ppl_tb</name>
             <table>objects</table>
             <group>ppl</group>
-            <parent>general_down</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -422,7 +426,6 @@
             <name>ppl</name>
             <table>objects</table>
             <group>ppl</group>
-            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -432,7 +435,6 @@
             <name>recur_tb</name>
             <table>objects</table>
             <group>recur_entry</group>
-            <parent>general_down</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -442,7 +444,6 @@
             <name>recur_t</name>
             <table>objects</table>
             <group>recur_entry</group>
-            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -452,7 +453,6 @@
             <name>recur_manage_tb</name>
             <table>objects</table>
             <group>recur_manage</group>
-            <parent>general_down</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -462,7 +462,6 @@
             <name>recur_manage_t</name>
             <table>objects</table>
             <group>recur_manage</group>
-            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
