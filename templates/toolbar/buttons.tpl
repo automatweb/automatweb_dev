@@ -1,4 +1,10 @@
 <!-- SUB: start -->
+<script type="text/javascript">
+if ( typeof jQuery == "undefined" )
+{
+        document.write("<script src=\"{VAR:baseurl}/automatweb/js/jquery/jquery-1.2.3.min.js\" type=\"text/javascript\"><\/script>");
+}
+</script>
 <div id="toimingud">
 	<div class="v">
 <!-- END SUB: start -->
