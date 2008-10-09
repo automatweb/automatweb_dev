@@ -23,7 +23,7 @@ class personnel_management_obj extends _int_object
 	**/
 	function notify_of_new_cv($arr)
 	{
-		// $person_oid, $to, $pm_obj
+		// $person_obj, $to, $pm_obj
 		extract($arr);
 		$cv_lang = is_object($pm_obj) && is_oid($pm_obj->prop("notify_lang")) ? $pm_obj->prop("notify_lang.lang_acceptlang") : aw_ini_get("user_interface.default_language");
 		aw_ini_set("user_interface.default_language", $cv_lang);
@@ -53,30 +53,6 @@ class personnel_management_obj extends _int_object
 		));
 		$awm->gen_mail();
 		aw_session_set("lang_id", $lang_id);
-		/*
-		$msg = obj();
-		$msg->set_class_id(CL_MESSAGE);
-		$msg->set_parent($person_obj->id());
-		$msg->name = is_object($pm_obj) ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud");
-		$msg->html_mail = 1;
-		$msg->mto = $to;
-		$msg->message = $content;
-		if(is_object($pm_obj))
-		{
-			$msg->mfrom = $pm_obj->prop("notify_from");
-		}
-		// I need to save it somewhere in order to be able to send it.
-		aw_disable_acl();
-		$msg->save();
-		aw_restore_acl();
-		get_instance(CL_MESSAGE)->send_message(array(
-			"id" => $msg->id(),
-		));
-		// Don't need that anymore.
-		aw_disable_acl();
-		$msg->delete();
-		aw_restore_acl();
-		*/
 	}
 
 	function on_add_person($arr)
@@ -89,11 +65,31 @@ class personnel_management_obj extends _int_object
 	{
 		$o = obj($arr["oid"]);
 		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+
+		$notify_by_loc = $pm->meta("notify_loc_tbl");
+
+		$to = $pm->notify_mail;
+		$tos = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_WORK_WANTED")) as $conn)
+		{
+			$jw = $conn->to();
+			foreach(array_merge((array)$jw->location, (array)$jw->location_2) as $loc)
+			{
+				if(isset($notify_by_loc[$loc]) && strlen($notify_by_loc[$loc]) > 0)
+				{
+					// strtolower to make life easier for array_unique()
+					$tos[] = strtolower($notify_by_loc[$loc]);
+				}
+			}
+		}
+		$tos = array_unique($tos);
+		$to = count($tos) > 0 ? implode(",", $tos) : $to;
+
 		if($pm->persons_fld == $o->parent() && strlen(trim($pm->notify_mail)) > 0 && ($pm->notify_candidates || !is_oid(aw_global_get("job_offer_obj_id_for_candidate"))))
 		{
 			$this->notify_of_new_cv(array(
 				"person_obj" => $o,
-				"to" => $pm->notify_mail,
+				"to" => $to,
 				"pm_obj" => $pm,
 			));
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.79 2008/10/07 14:59:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.80 2008/10/09 13:31:14 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -18,24 +18,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 @default field=meta
 @default method=serialize
-
-		@property notify_mail type=textbox
-		@caption E-postiaadress, kuhu saata sisestatud CV
-
-		@property notify_subject type=textbox
-		@caption CV sisestamisest teavitava kirja pealkiri
-
-		@property notify_froma type=textbox
-		@caption CV sisestamisest teavitava kirja saatja-aadress
-
-		@property notify_fromn type=textbox
-		@caption CV sisestamisest teavitava kirja saatja nimi
-
-		@property notify_candidates type=checkbox ch_value=1
-		@caption Teavita ka kandideerivatest uutest CV
-
-		@property notify_lang type=relpicker reltype=RELTYPE_LANGUAGE automatic=1
-		@caption Teavitamise keel
 
 		@property persons_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Isikute kaust
@@ -72,6 +54,38 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 		@property messenger type=relpicker reltype=RELTYPE_MESSENGER
 		@caption Meilikast
+
+	@groupinfo notify caption="Teavitamise seaded" parent=general
+	@default group=notify
+
+		@property notify_mail type=textbox
+		@caption Vaikimisi e-post
+		@comment Vaikimisi e-posti aadress, kuhu saata sisestatud CV
+
+		@property notify_subject type=textbox
+		@caption Pealkiri
+		@comment CV sisestamisest teavitava kirja pealkiri
+
+		@property notify_froma type=textbox
+		@caption Saatja e-post
+		@comment CV sisestamisest teavitava kirja saatja e-posti aadress
+
+		@property notify_fromn type=textbox
+		@caption Saatja nimi
+		@comment CV sisestamisest teavitava kirja saatja nimi
+
+		@property notify_candidates type=checkbox ch_value=1
+		@caption Teavita ka kandideerivatest uutest CVdest
+
+		@property notify_lang type=relpicker reltype=RELTYPE_LANGUAGE automatic=1
+		@caption Teavitamise keel
+
+		@property notify_locations type=relpicker reltype=RELTYPE_NOTIFY_LOCATION multiple=1 store=connect
+		@caption Asukohad
+		@comment Haldus&uuml;ksused, millele on m&auml;&auml;ratud eraldi e-posti aadress, kuhu teavituskiri saata.
+
+		@property notify_loc_tbl type=table store=no
+		@caption
 
 	@groupinfo search_conf caption="Otsingu seaded" parent=general
 	@default group=search_conf
@@ -466,6 +480,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 @reltype LANGUAGE value=16 clid=CL_LANGUAGE
 @caption Teavitamise keel
 
+@reltype NOTIFY_LOCATION value=17 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA
+@caption Teavitamise haldus&uuml;ksus
+
 */
 
 class personnel_management extends class_base
@@ -770,6 +787,40 @@ class personnel_management extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function _get_notify_loc_tbl($arr)
+	{
+		$conns = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_NOTIFY_LOCATION"));
+		if(count($conns) == 0)
+		{
+			return PROP_IGNORE;
+		}
+
+		$mls = $arr["obj_inst"]->meta("notify_loc_tbl");
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Haldus&uuml;ksus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("E-posti aadress"),
+			"align" => "center",
+		));
+		$t->set_default_sortby("location");
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_NOTIFY_LOCATION")) as $conn)
+		{
+			$t->define_data(array(
+				"location" => $conn->prop("to.name"),
+				"email" => html::textbox(array(
+					"name" => "notify_loc_tbl[".$conn->prop("to")."]",
+					"value" => $mls[$conn->prop("to")],
+				)),
+			));
+		}
 	}
 
 	function _get_pdf_tpl($arr)
@@ -2421,6 +2472,10 @@ class personnel_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "notify_loc_tbl":
+				$arr["obj_inst"]->set_meta("notify_loc_tbl", $prop["value"]);
+				break;
+
 			case "cv_search_button_save_search":
 			case "cv_search_button_save":
 				if(strlen($arr["request"]["cv_search_saved_name"]) > 0)

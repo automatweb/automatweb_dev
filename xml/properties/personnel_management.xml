@@ -9,63 +9,6 @@
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>notify_mail</name>
-            <group>general2</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>E-postiaadress, kuhu saata sisestatud CV</caption>
-      </property>
-      <property>
-            <name>notify_subject</name>
-            <group>general2</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>CV sisestamisest teavitava kirja pealkiri</caption>
-      </property>
-      <property>
-            <name>notify_froma</name>
-            <group>general2</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>CV sisestamisest teavitava kirja saatja-aadress</caption>
-      </property>
-      <property>
-            <name>notify_fromn</name>
-            <group>general2</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>CV sisestamisest teavitava kirja saatja nimi</caption>
-      </property>
-      <property>
-            <name>notify_candidates</name>
-            <group>general2</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Teavita ka kandideerivatest uutest CV</caption>
-      </property>
-      <property>
-            <name>notify_lang</name>
-            <group>general2</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_LANGUAGE</reltype>
-            <automatic>1</automatic>
-            <caption>Teavitamise keel</caption>
-      </property>
-      <property>
             <name>persons_fld</name>
             <group>general2</group>
             <table>objects</table>
@@ -185,6 +128,89 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MESSENGER</reltype>
             <caption>Meilikast</caption>
+      </property>
+      <property>
+            <name>notify_mail</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Vaikimisi e-post</caption>
+            <comment>Vaikimisi e-posti aadress, kuhu saata sisestatud CV</comment>
+      </property>
+      <property>
+            <name>notify_subject</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Pealkiri</caption>
+            <comment>CV sisestamisest teavitava kirja pealkiri</comment>
+      </property>
+      <property>
+            <name>notify_froma</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Saatja e-post</caption>
+            <comment>CV sisestamisest teavitava kirja saatja e-posti aadress</comment>
+      </property>
+      <property>
+            <name>notify_fromn</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Saatja nimi</caption>
+            <comment>CV sisestamisest teavitava kirja saatja nimi</comment>
+      </property>
+      <property>
+            <name>notify_candidates</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teavita ka kandideerivatest uutest CVdest</caption>
+      </property>
+      <property>
+            <name>notify_lang</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <automatic>1</automatic>
+            <caption>Teavitamise keel</caption>
+      </property>
+      <property>
+            <name>notify_locations</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_NOTIFY_LOCATION</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <caption>Asukohad</caption>
+            <comment>Haldus&amp;amp;uuml;ksused, millele on m&amp;amp;auml;&amp;amp;auml;ratud eraldi e-posti aadress, kuhu teavituskiri saata.</comment>
+      </property>
+      <property>
+            <name>notify_loc_tbl</name>
+            <group>notify</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
       </property>
       <property>
             <name>perpage</name>
@@ -1327,6 +1353,10 @@
                   <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general2>
+            <notify>
+                  <caption>Teavitamise seaded</caption>
+                  <parent>general</parent>
+            </notify>
             <search_conf>
                   <caption>Otsingu seaded</caption>
                   <parent>general</parent>
@@ -1467,6 +1497,16 @@
                   <clid>CL_LANGUAGE</clid>
                   <caption>Teavitamise keel</caption>
             </LANGUAGE>
+            <NOTIFY_LOCATION>
+                  <value>17</value>
+                  <clid>
+                        <num_0>CL_CRM_CITY</num_0>
+                        <num_1>CL_CRM_COUNTY</num_1>
+                        <num_2>CL_CRM_COUNTRY</num_2>
+                        <num_3>CL_CRM_AREA</num_3>
+                  </clid>
+                  <caption>Teavitamise haldus&amp;amp;uuml;ksus</caption>
+            </NOTIFY_LOCATION>
       </reltypes>
       <layout>
             <employee>
