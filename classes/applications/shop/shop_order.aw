@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.76 2008/10/07 12:48:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.77 2008/10/09 08:39:40 voldemar Exp $
 // shop_order.aw - Tellimus
 /*
 
@@ -1211,6 +1211,7 @@ class shop_order extends class_base
 		if (is_object($order_center) and $order_center->prop("show_delivery") and $this->can("view", $order_center->prop("delivery_exec_controller")))
 		{
 			$arr["user_data"] = $o->meta("user_data");
+			$arr["mail_sent"] = $o->meta("mail_sent");
 			$ctrl = get_instance(CL_FORM_CONTROLLER);
 			$delivery_vars = $ctrl->eval_controller($order_center->prop("delivery_exec_controller"), $order_center, $arr);
 		}
