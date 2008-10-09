@@ -129,12 +129,15 @@ class crm_section_obj extends _int_object
 	function get_sections()
 	{
 		$ol = new object_list();
+		$ol->add($this->id());
 		foreach($this->connections_from(array(
 			"type" => "RELTYPE_SECTION",
 			"sort_by_num" => "to.jrk"
 		)) as $conn)
 		{
 			$ol->add($conn->prop("to"));
+			$parent = $conn->to();
+			$ol->add($parent->get_sections());
 		}
 		return $ol;
 	}

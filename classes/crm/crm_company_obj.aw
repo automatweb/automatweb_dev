@@ -144,6 +144,7 @@ class crm_company_obj extends _int_object
 		return $r;
 	}
 
+	//vana versioon.... ei soovita kasutada
 	function get_employees()
 	{
 		$ol = new object_list();
@@ -226,7 +227,7 @@ class crm_company_obj extends _int_object
 		@return object list
 			person object list
 	**/
-	public function get_real_workers($arr = array())
+	public function get_workers($arr = array())
 	{
 		$rels = $this->get_work_relations($arr);
 		if(!sizeof($rels->ids()))
@@ -309,20 +310,13 @@ class crm_company_obj extends _int_object
 		return $r;
 	}
 
-	function get_sub_sections($parents)
+	function get_sections()
 	{
-		$r = array();
-		foreach($parents as $parent_id)
+		$r = new object_list();
+		foreach($this->connections_from(array("type" => "RELTYPE_SECTION")) as $conn)
 		{
-			if(!is_oid($parent_id))
-			{
-				$parent = obj($parent_id);
-				foreach($this->connections_from(array("type" => "RELTYPE_SECTION")) as $conn)
-				{
-					$r->add($conn->prop("to"));
-				}
-			}
-			$r->add($conn->prop("to"));
+			$parent = $conn->to();
+			$r->add($parent->get_sections());
 		}
 		return $r;
 	}

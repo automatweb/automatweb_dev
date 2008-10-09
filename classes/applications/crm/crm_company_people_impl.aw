@@ -304,47 +304,61 @@ class crm_company_people_impl extends class_base
 		// task : rel=10 : clid=CL_TASK
 		$persons = array();
 		$professions = array();
+		$sections = array();
 		//if section present, i'll get all the professions
 
 
 
-//-----unit
+//-------------------osakonna inimesed-------------
 		if(is_oid($arr['request']['unit']))
 		{
-			$worker_ol = $arr["obj_inst"]->get_real_workers(array("section" => $arr['request']['unit']));
-			$persons = $worker_ol->ids();
-/*			$tmp_obj = new object($arr['request']['unit']);
-			$conns = $tmp_obj->connections_from(array(
-				"type" => "RELTYPE_PROFESSIONS"
-			));
-			foreach($conns as $conn)
+			$tmp_obj = new object($arr['request']['unit']);
+			$sections[] = $arr['request']['unit'];
+			if(!is_oid($arr['request']['cat'])) //kui miski amet v6i nii, siis leiab isikud hiljem
 			{
-				$professions[$conn->prop('to')] = $conn->prop('to.name');
-			}*/
+				$worker_ol = $tmp_obj->get_workers();
+				$persons = $worker_ol->ids();
+	
+				$persons_tmp = $tmp_obj->get_employees();//vana variandi toimimiseks
+				$persons_tmp->add($persons);
+				$persons = $persons_tmp->ids();
+	
+	/*			$conns = $tmp_obj->connections_from(array(
+					"type" => "RELTYPE_PROFESSIONS"
+				));
+				foreach($conns as $conn)
+				{
+					$professions[$conn->prop('to')] = $conn->prop('to.name');
+				}*/
+			}
 		}
-//-----cat
+//----------------------- teatud ameti inimesed--------------------------------
 		if(is_oid($arr['request']['cat']) && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
 		{
-			$worker_ol = $arr["obj_inst"]->get_real_workers(array("profession" => $arr['request']['cat']));
-			$persons = $worker_ol->ids();
-/*
-			$professions = array();
 			$tmp_obj = new object($arr['request']['cat']);
+			$worker_ol = $tmp_obj->get_workers_for_section($arr['request']['unit']);
+			$persons = $worker_ol->ids();
+
+/*			$persons_tmp = $tmp_obj->get_workers();//vana variandi toimimiseks
+			$persons_tmp->add($persons);
+			$persons = $persons_tmp->ids();
+*/
+			$professions = array($arr['request']['cat']);
+/*			$professions = array();
 			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');*/
 		}
 
-//-------koik
+//---------------------- k6ik asutuse inimesed-----------------------------------
 		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT)
 		{
-			$worker_ol = $arr["obj_inst"]->get_real_workers();
-//			foreach($worker_ol->arr() as $worker_o)
-//			{
-//					$professions[$work_relation->prop("profession")] = $work_relation->prop("profession");
-//					$persons[$work_relation->prop("person")] = $work_relation->prop("person");
-//					arr($work_relation->prop("person"));
-//				}
-//			}
+			$worker_ol = $arr["obj_inst"]->get_workers();
 			$persons = $worker_ol->ids();
+			$section_ol = $arr["obj_inst"]->get_sections();
+			$sections = $section_ol->ids();
+
+			$persons_tmp = $arr["obj_inst"]->get_employees();//vana variandi toimimiseks
+			$persons_tmp->add($persons);
+			$persons = $persons_tmp->ids();
 
 			// get all units and all professions from those
 /*			$units = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECTION")));
@@ -360,9 +374,23 @@ class crm_company_people_impl extends class_base
 				$professions[$p_con["to"]] = $p_con["to.name"];
 			}*/
 		}
-/*
+
+//------------------------- ainult olulisteks m2rgitud inimesed-------------------
+		if(!$arr['request']['cat'] && !$arr['request']['unit'])
+		{
+			$section_ol = $arr["obj_inst"]->get_sections();
+			$sections = $section_ol->ids();
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			if(is_oid($p->id()))
+			{
+				$worker_ol = $p->get_important_persons($arr["obj_inst"]->id());
+				$persons = $worker_ol->ids();
+			}
+		}
+
 		//if listing from a specific unit, then the reltype is different
-		if((int)$arr['request']['unit'])
+/*		if((int)$arr['request']['unit'])
 		{
 			$obj = new object((int)$arr['request']['unit']);
 			$conns = $obj->connections_from(array(
@@ -456,9 +484,11 @@ class crm_company_people_impl extends class_base
 		}
 */
 		// get calendars for persons
+
 		$pers2cal = $this->_get_calendars_for_persons($persons);
 		exit_function("ghr::ll");
 		enter_function("ghr::loop");
+
 		foreach($persons as $person)
 		{
 			$tdata = array();
@@ -599,8 +629,8 @@ class crm_company_people_impl extends class_base
 			))." " .$authoirization;
 			$tdata["id"] = $person->id();
 			$tdata["phone"] = $person->get_phone($arr["obj_inst"]->id() , $section);
-			$tdata["rank"] = join("\n" , $person->get_profession_names($arr["obj_inst"]->id()));
-			$tdata["section"] = join("\n" , $person->get_section_names($arr["obj_inst"]->id()));
+			$tdata["rank"] = join(", " , $person->get_profession_names($arr["obj_inst"]->id() , $professions));
+			$tdata["section"] = join(", " , $person->get_section_names($arr["obj_inst"]->id() , $sections));
 			$tdata["email"] = $person->get_mail_tag($arr["obj_inst"]->id() , $section);
 			$tdata["firstname"] = $person->prop("firstname");
 			$tdata["lastname"] = $person->prop("lastname");

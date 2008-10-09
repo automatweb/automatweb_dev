@@ -234,7 +234,6 @@ class crm_person_obj extends _int_object
 
 	function get_applications($arr = array())
 	{
-		enter_function("crm_person_obj::get_applications");
 		$this->prms(&$arr);
 
 		/*
@@ -268,7 +267,7 @@ class crm_person_obj extends _int_object
 			"from.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"type" => "RELTYPE_CANDIDATE"
 		));
-
+		
 		$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
 		foreach($conns as $conn)
 		{
@@ -278,11 +277,10 @@ class crm_person_obj extends _int_object
 				$ret->add($conn["from"]);
 			}
 		}
-		exit_function("crm_person_obj::get_applications");
 
 		return $ret;
 	}
-
+	
 	function prms($arr)
 	{
 		$arr["parent"] = !isset($arr["parent"]) ? array() : $arr["parent"];
@@ -352,7 +350,7 @@ class crm_person_obj extends _int_object
 			$ids[] = $cn->prop("to");
 		}
 		if(count($ids) > 0)
-		{
+		{			
 			$prms = array("from" => $ids, "type" => "RELTYPE_PHONE", "from.class_id" => CL_CRM_PERSON_WORK_RELATION);
 			// You wish! -kaarel
 			/*if(isset($type))
@@ -472,7 +470,7 @@ class crm_person_obj extends _int_object
 		}
 		return 0;
 	}
-
+	
 	function has_ovrv_offers()
 	{
 		$filt = array(
@@ -481,7 +479,7 @@ class crm_person_obj extends _int_object
 			"lang_id" => array(),
 			"actor" => $this->id(),
 		);
-
+		
 		$ol = new object_list($filt);
 		if(sizeof($ol->ids()))
 		{
@@ -555,7 +553,7 @@ class crm_person_obj extends _int_object
 
 		$eo->set_prop("mail", $mail);
 		$eo->save();
-
+		
 		if ($n)
 		{
 			$this->set_prop("email", $eo->id());
@@ -585,7 +583,7 @@ class crm_person_obj extends _int_object
 
 		$eo->set_name($phone);
 		$eo->save();
-
+		
 		if ($n)
 		{
 			$this->set_prop("phone", $eo->id());
@@ -636,7 +634,7 @@ class crm_person_obj extends _int_object
 		}
 
 		$eo->save();
-
+		
 		if ($n)
 		{
 			$this->set_prop("address", $eo->id());
@@ -851,23 +849,46 @@ class crm_person_obj extends _int_object
 	}
 
 	/** returns person section names
-		@attrib api=1
+		@attrib api=1 params=pos
 		@param co optional type=oid
 			company id
+		@param optional type=array
+			section object ids
 		@return array
 			section names
 	**/
-	public function get_section_names($co)
+	public function get_section_names($co = null, $sec = array())
 	{
 		$this->set_current_jobs();
 		$sections = array();
 		foreach($this->current_jobs->arr() as $o)
 		{
+			if(sizeof($sec) && !in_array($o->prop("section") , $sec))//kui pole ette antud yksustes j2tab vahele
+			{
+				continue;
+			}
 			if((!$co || $co == $o->prop("org")) && $o->prop("section.name"))
 			{
 				$sections[] = $o->prop("section.name");
 			}
 		}
+
+//vana versiooni toimimiseks
+		if(!sizeof($sections))
+		{
+			$filter = array(
+				"class_id" => CL_CRM_SECTION,
+				"CL_CRM_SECTION.RELTYPE_WORKERS" => $this->id(),
+			);
+			if(sizeof($sec))
+			{
+				$filter["oid"] = $sec;
+			}
+			$secs = new object_list($filter);
+			$sections = $secs->names();
+
+		}
+
 		return $sections;
 	}
 
@@ -875,20 +896,40 @@ class crm_person_obj extends _int_object
 		@attrib api=1
 		@param co optional type=oid
 			company id
+		@param proffessions optional type=array
+			profession object ids
 		@return array
 			profession names
 	**/
-	public function get_profession_names($co)
+	public function get_profession_names($co, $professions = array())
 	{
 		$this->set_current_jobs();
 		$sections = array();
 		foreach($this->current_jobs->arr() as $o)
 		{
+			if(sizeof($professions) && !in_array($o->prop("profession") , $professions))//kui pole ette antud yksustes j2tab vahele
+			{
+				continue;
+			}
 			if((!$co || $co == $o->prop("org")) && $o->prop("profession.name"))
 			{
 				$sections[] = $o->prop("profession.name");
 			}
 		}
+
+//vana versiooni toimimiseks
+		if(!sizeof($sections))
+		{
+			foreach($this->connections_from(array("type" => "RELTYPE_RANK")) as $c)
+			{
+				if(sizeof($professions) && !in_array($c->prop("to") , $professions))//kui pole ette antud yksustes j2tab vahele
+				{
+					continue;
+				}
+				$sections[] = $c->prop("to.name");
+			}
+		}
+
 		return $sections;
 	}
 
@@ -944,6 +985,35 @@ class crm_person_obj extends _int_object
 		));
 
 		return $wr->id();
+	}
+
+	/** Gets all persons marked as important
+		@attrib api=1 params=pos
+		@param company optional type=oid
+			Company id
+		@return object list
+	**/
+	public function get_important_persons($company = null)
+	{
+		$ol = new object_list();
+		if(is_oid($company))
+		{
+			$co = obj($company);
+			$persons = $co->get_workers();
+			$p2 = $co->get_employees();
+			$persons->add($p2);
+			$ps = $persons->ids();
+		}
+		foreach($this->connections_from(array("type" => "RELTYPE_IMPORTANT_PERSON")) as $c)
+		{
+			if(is_array($ps) && !in_array($c->prop("to"), $ps))
+			{
+				continue;
+			}
+			$ol->add($c->prop("to"));
+		}
+
+		return $ol;
 	}
 }
 
