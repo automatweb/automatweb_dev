@@ -1064,7 +1064,7 @@ class crm_person_obj extends _int_object
 	{
 		$type = $o->class_id() == CL_TASK ? t("toimetuse") : t("kohtumise");
 
-		$subject = sprintf(t("Teid on lisatud ".$type." '%s' osaliseks"), $o->name());
+		$subject = sprintf(t("Teid on lisatud ".$type." '%s' osalejaks"), $o->name());
 
 		$msg = t("Link: ").get_instance($o->class_id())->mk_my_orb("change", array("id" => $o->id()))."\n\n";
 
