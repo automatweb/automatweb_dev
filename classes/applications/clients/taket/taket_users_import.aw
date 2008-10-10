@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.2 2008/10/01 14:47:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.3 2008/10/10 12:24:27 markop Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)
@@ -43,7 +43,8 @@ class taket_users_import extends class_base
 	{
 		if(!$this->can('add',aw_ini_get('taket.users_parent')))
 		{
-			$this->acl_error();
+			print "ei saa lisada:". aw_ini_get('taket.users_parent');
+		//	$this->acl_error();
 			die();
 		}
 		include('IXR_Library.inc.php');
@@ -67,10 +68,19 @@ class taket_users_import extends class_base
 		$hosts = aw_ini_get('taket.xmlrpchost');
 		$path = aw_ini_get("taket.xmlrpcpath");
 		$port = aw_ini_get("taket.xmlrpcport");
-		$client = new IXR_Client($hosts[0], $path[0], $port[0]);
+		if(!$hosts || !$path || !$port)
+		{
+			print "ini failis host voi path voi port m&auml;&auml;ramata<br>";
+			print "n&auml;ide:<br>
+			taket.xmlrpchost[0] = 88.196.208.74<br>
+taket.xmlrpcpath[0] = /xmlrpc/index.php<br>
+taket.xmlrpcport[0] = 8888<br>";
+			die();
+		}
+		$client = new IXR_Client($hosts[1], $path[1], $port[1]);
 		$client->query('server.getUsers',array());
 		$data=$client->getResponse();
-
+arr($data); arr($hosts);arr($port);arr($path[1]);flush();
 		foreach($data as $value)
 		{
 			$value['kasutajanimi']=$value['number'];
