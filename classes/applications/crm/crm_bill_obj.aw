@@ -41,18 +41,31 @@ class crm_bill_obj extends _int_object
 		));
 		return $pop->get_menu();
 	}
-  
+
+	/** returns bill currency id
+		@attrib api=1
+		@returns oid
+	**/
 	function get_bill_currency_id()
 	{
 		if($this->prop("customer.currency"))
 		{
 			return $this->prop("customer.currency");
 		}
+		if($cust = $this->get_bill_customer())
+		{
+			$customer = obj($cust);
+			return $customer->prop("currency");
+		}
 		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
 		$company_curr = $co_stat_inst->get_company_currency();
 		return $company_curr;
 	}
 
+	/** returns bill currency name
+		@attrib api=1
+		@returns string
+	**/
 	function get_bill_currency_name()
 	{
 		if($this->prop("customer.currency"))
@@ -61,8 +74,16 @@ class crm_bill_obj extends _int_object
 		}
 		else
 		{
-			$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
-			$company_curr = $co_stat_inst->get_company_currency();
+			if($cust = $this->get_bill_customer())
+			{
+				$customer = obj($cust);
+				$company_curr = $customer->prop("currency");
+			}
+			else
+			{
+				$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+				$company_curr = $co_stat_inst->get_company_currency();
+			}
 		}
 		if(is_oid($company_curr) && $this->can("view" , $company_curr))
 		{
@@ -218,6 +239,7 @@ class crm_bill_obj extends _int_object
 	**/
 	function get_bill_customer()
 	{
+		$id = "";
 		$bi = get_instance("applications/crm/crm_bill");
 		if (is_oid($this->prop("customer")) && $bi->can("view", $this->prop("customer")))
 		{
@@ -225,12 +247,27 @@ class crm_bill_obj extends _int_object
 		}
 		else
 		{
+			foreach($this->connections_from(array("type" => "RELTYPE_CUST")) as $conn)
+			{
+				$id = $conn->prop("to");
+			}
+		}
+		
+		if(!$id)
+		{
 			foreach($this->connections_from(array("type" => "RELTYPE_TASK")) as $conn)
 			{
 				$p = $conn->to();
-				return $p->prop("customer");
+				$id = $p->prop("customer");
 			}
 		}
+
+		if($id)
+		{
+			$this->set_prop("customer" , $id);
+			$this->save();
+		}
+		return $id;
 	}
 
 	/** Adds bug comments to bill
