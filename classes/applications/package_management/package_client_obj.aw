@@ -84,38 +84,6 @@ class package_client_obj extends _int_object
 					'id' => $id,
 				),
 			));
-//
-//			$handle = fopen($url, "r");//arr($handle);
-//			$contents = fread($handle, $fs);arr($contents);
-//$contents = $this->curl_get_file_contents($url);arr($contents);
-			$contents = file_get_contents($url);
-			$fn = aw_ini_get("server.tmpdir")."/".gen_uniq_id().".zip";
-			$fp = fopen($fn, 'w');
-			fwrite($fp, $contents);
-			fclose($fp);
-
-			$zip = new ZipArchive;
-			$zip->open($fn);
-//			arr($zip->numFiles);
-			for ($i=0; $i<$zip->numFiles;$i++) {
-				$dat =  $zip->statIndex($i);
-				if($dat["comp_method"])
-				{
-					if($dat["index"] == 2) $dir = $dat["name"];
-					$files[] = $dat["name"];//arr($dat);
-					$path = substr($dat["name"] , strpos($dat["name"],"/", 1)+1);
-					if(!strpos($path,"/", 1))
-					{
-						continue;
-					}
-					$path = substr($path , strpos($path,"/", 1)+1);
-					print aw_ini_get("basedir").'/'.$path ." ... ";
-	//selle peab paremini t88le saama... p2rast ei jaksa keegi seda jama kustutada muidu
-	//				$res = $zip->extractTo(aw_ini_get("basedir") , array($dat["index"]));
-					print ($res? "6nnestus" : "ei 6nnestunud")." <br>\n";	
-					print aw_ini_get("basedir").$dat["name"]." <br>\n";	
-				}
-			}
 
 			$data = $this->do_orb_method_call(array(
 				"class" => "package_server",
@@ -126,14 +94,89 @@ class package_client_obj extends _int_object
 				"params" => array(
 					'id' => $id,
 				),
-			));		
-	
+			));	
+//
+//			$handle = fopen($url, "r");//arr($handle);
+//			$contents = fread($handle, $fs);arr($contents);
+//$contents = $this->curl_get_file_contents($url);arr($contents);
+			$contents = file_get_contents($url);
+			$fn = aw_ini_get("server.tmpdir")."/".gen_uniq_id().".zip";
+			$fp = fopen($fn, 'w');
+			fwrite($fp, $contents);
+			fclose($fp);
+
+			$this->install_package($data + array("file_name" => $fn));
+
 			$this->add_package(array(
 				"name" => $data["name"],
 				"version" => $data["version"],
 				"description" => $data["description"],
 				"file" => $fn,
 			));
+		}
+	}
+
+	private function install_package($data)
+	{
+		$zip = new ZipArchive;
+		$zip->open($data["file_name"]);
+//		arr($zip->numFiles);
+		if ($this->db_table_exists("site_file_index") === false)
+		{
+			$this->db_query('create table site_file_index (
+				id int not null primary key auto_increment,
+				file_name varchar(255),
+				file_version varchar(31),
+				file_location varchar(31),
+				package_name varchar(255),
+				package_version varchar(31),
+				used int,
+				installed_date int,
+				dependences varchar(255),
+			)');//see viimane on niisama, 2kki leiab hea lahenduse selleks
+		}
+
+		for ($i=0; $i<$zip->numFiles;$i++) {
+			$dat =  $zip->statIndex($i);
+			if($dat["comp_method"])
+			{
+				if($dat["index"] == 2) $dir = $dat["name"];
+				$files[] = $dat["name"];//arr($dat);
+				$path = substr($dat["name"] , strpos($dat["name"],"/", 1)+1);
+				if(!strpos($path,"/", 1))
+				{
+					continue;
+				}
+
+				$sql = "insert into ".$this->db_table_name."(
+					file_name,
+					file_version,
+					file_location,
+					package_name,
+					package_version,
+					used,
+					installed_date,
+					dependences,
+				) values (
+					".$dat["name"].",
+					"."123".",
+					'"."123"."',
+					'".$data["name"]."',
+					'".$data["version"]."',
+					'1',
+					'".time()."',
+					'"."123"."',
+				)";
+arr($sql);	
+//				$this->db_query($sql);
+
+				$path = substr($path , strpos($path,"/", 1)+1);
+				print aw_ini_get("basedir").'/'.$path ." ... ";
+	//selle peab paremini t88le saama... p2rast ei jaksa keegi seda jama kustutada muidu
+	//			$res = $zip->extractTo(aw_ini_get("basedir") , array($dat["index"]));
+				print ($res? "6nnestus" : "ei 6nnestunud")." <br>\n";	
+				print aw_ini_get("basedir").$dat["name"]." <br>\n";	
+			}
 		}
 	}
 
