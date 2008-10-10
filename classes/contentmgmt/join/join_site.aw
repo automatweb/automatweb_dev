@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.74 2008/10/07 12:19:05 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.75 2008/10/10 11:59:49 instrumental Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -183,7 +183,7 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 @reltype RULE_GRP value=4 clid=CL_GROUP
 @caption reegli grupp
 
-@reltype REL_OBJ value=5 clid=CL_CRM_USER,CL_USER,CL_CRM_COMPANY
+@reltype REL_OBJ value=5 clid=CL_USER,CL_CRM_COMPANY
 @caption default seoste objektid
 
 @reltype MAILADDR value=6 clid=CL_ML_MEMBER

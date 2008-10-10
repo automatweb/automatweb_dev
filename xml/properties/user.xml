@@ -441,6 +441,36 @@
             <caption>Keela RTE</caption>
       </property>
       <property>
+            <name>nfy_hd</name>
+            <table>users</table>
+            <group>settings_general</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>nfy_hd</field>
+            <caption>Teavituste seaded</caption>
+      </property>
+      <property>
+            <name>nfy_meeting</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saada e-kiri, kui mind lisatakse kohtumise osalejaks</caption>
+      </property>
+      <property>
+            <name>nfy_task</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saada e-kiri, kui mind lisatakse toimetuse osalejaks</caption>
+      </property>
+      <property>
             <name>stoppers</name>
             <table>objects</table>
             <group>settings_general</group>
@@ -457,6 +487,15 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Aktiivne set</caption>
+      </property>
+      <property>
+            <name>settings_shortcuts_settings_shortcuts</name>
+            <table>users</table>
+            <group>settings_shortcuts</group>
+            <type>table</type>
+            <store>no</store>
+            <field>settings_shortcuts_settings_shortcuts</field>
+            <caption>Shortcutid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_USERS</syslog_type>

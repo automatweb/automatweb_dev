@@ -493,9 +493,8 @@
             <REL_OBJ>
                   <value>5</value>
                   <clid>
-                        <num_0>CL_CRM_USER</num_0>
-                        <num_1>CL_USER</num_1>
-                        <num_2>CL_CRM_COMPANY</num_2>
+                        <num_0>CL_USER</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
                   </clid>
                   <caption>default seoste objektid</caption>
             </REL_OBJ>

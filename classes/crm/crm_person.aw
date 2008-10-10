@@ -2,6 +2,9 @@
 
 /*
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_MEETING, on_connect_to_meeting)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_TASK, on_connect_to_task)
+
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_SECTION, on_connect_section_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONNEL_MANAGEMENT_JOB_WANTED, on_connect_job_wanted_to_person)
@@ -9286,6 +9289,22 @@ class crm_person extends class_base
 			}
 		}
 		return $this->drivers_licence_categories;
+	}
+
+	/**
+	@attrib name=on_connect_to_meeting
+	**/
+	public function on_connect_to_meeting($arr)
+	{
+		return get_instance("crm_person_obj")->on_connect_to_meeting($arr);
+	}
+
+	/**
+	@attrib name=on_connect_to_meeting
+	**/
+	public function on_connect_to_task($arr)
+	{
+		return get_instance("crm_person_obj")->on_connect_to_task($arr);
 	}
 }
 ?>

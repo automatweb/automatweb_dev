@@ -260,7 +260,7 @@ caption Seostehaldur
 @reltype ROW value=7 clid=CL_TASK_ROW
 @caption Rida
 
-@reltype ATTACH value=8 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CRM_OFFER
+@reltype ATTACH value=8 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CL_CRM_OFFER
 @caption Manus
 
 @reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL

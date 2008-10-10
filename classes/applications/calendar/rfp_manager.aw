@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.76 2008/10/08 08:05:07 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.77 2008/10/10 11:59:59 instrumental Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -14,10 +14,10 @@
 @property default_currency type=relpicker reltype=RELTYPE_DEFAULT_CURRENCY store=connect
 @caption Vaikevaluuta
 
-@property default_language type=select field=meta mehtod=serialize
+@property default_language type=select field=meta method=serialize
 @caption Vaikekeel
 
-@property default_conference_planner type=relpicker reltype=RELTYPE_DEFAULT_WEBFORM field=meta mehtod=serialize
+@property default_conference_planner type=relpicker reltype=RELTYPE_DEFAULT_WEBFORM field=meta method=serialize
 @caption Vaike tellimuse vorm
 
 @property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
@@ -210,7 +210,7 @@ caption Linnade kaust
 @reltype DEFAULT_CURRENCY clid=CL_CURRENCY value=6
 @caption RFP vaikevaluuta
 
-@reltype META_OBJECT_FOLDER clid=CL_FOLDER value=7
+@reltype META_OBJECT_FOLDER clid=CL_MENU value=7
 @caption Muutujate kaust
 
 @reltype DEFAULT_WEBFORM clid=CL_CONFERENCE_PLANNING value=8

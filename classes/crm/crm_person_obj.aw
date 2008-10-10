@@ -1018,6 +1018,64 @@ class crm_person_obj extends _int_object
 
 		return $ol;
 	}
+
+	public function on_connect_to_meeting($arr)
+	{
+		$conn = $arr["connection"];
+		if($conn->prop("from.class_id") == CL_CRM_PERSON && $conn->prop("reltype") == 8)	// RELTYPE_PERSON_MEETING
+		{
+			return $this->event_notifications($arr, "meeting");
+		}
+	}
+
+	public function on_connect_to_task($arr)
+	{
+		$conn = $arr["connection"];
+		if($conn->prop("from.class_id") == CL_CRM_PERSON && $conn->prop("reltype") == 10)	// RELTYPE_PERSON_TASK
+		{
+			return $this->event_notifications($arr, "task");
+		}
+	}
+
+	private function event_notifications($arr, $type)
+	{
+		$conn = $arr["connection"];
+		$person = $conn->from();
+		$user = $person->instance()->has_user($person);
+		if($user !== false)
+		{
+			if($user->prop("nfy_".$type))
+			{
+				$email = $person->email;
+				if (is_oid($email))
+				{
+					$email_obj = new object($email);
+					$addr = $email_obj->prop("mail");
+					if (is_email($addr))
+					{
+						$this->send_nfy_mail($addr, $conn->to());
+					};
+				};
+			};
+		};
+	}
+
+	public function send_nfy_mail($addr, $o)
+	{
+		$type = $o->class_id() == CL_TASK ? t("toimetuse") : t("kohtumise");
+
+		$subject = sprintf(t("Teid on lisatud ".$type." '%s' osaliseks"), $o->name());
+
+		$msg = t("Link: ").get_instance($o->class_id())->mk_my_orb("change", array("id" => $o->id()))."\n\n";
+
+		$msg .= t("Pealkiri: ").parse_obj_name($o->name())."\n";
+		$msg .= t("Algus: ").get_lc_date($o->start1, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i", $o->start1)."\n";
+		$msg .= t("Lpp: ").get_lc_date($o->start1, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i", $o->end)."\n";
+		$msg .= strlen(trim($o->comment)) > 0 ? t("Kommentaar: ").$o->comment."\n" : "";
+		$msg .= strlen(trim($o->content)) > 0 ? t("Sisu: ").$o->content."\n" : "";
+
+		send_mail($addr, $subject, $msg, "From: notifications@".str_replace(array("http://", "http://www."), "", aw_ini_get("baseurl")));
+	}
 }
 
 ?>

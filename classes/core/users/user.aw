@@ -183,6 +183,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property rte_disabled type=checkbox ch_value=1 field=meta method=serialize table=objects
 	@caption Keela RTE
 
+	@property nfy_hd type=text subtitle=1 store=no
+	@caption Teavituste seaded
+
+	@property nfy_meeting type=checkbox ch_value=1 field=meta method=serialize table=objects
+	@caption Saada e-kiri, kui mind lisatakse kohtumise osalejaks
+
+	@property nfy_task type=checkbox ch_value=1 field=meta method=serialize table=objects
+	@caption Saada e-kiri, kui mind lisatakse toimetuse osalejaks
+
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
 	@default group=settings_shortcuts
