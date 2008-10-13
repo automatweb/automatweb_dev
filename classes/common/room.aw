@@ -2890,6 +2890,7 @@ class room extends class_base
 				}
 				elseif($this->extra_row)
 				{
+					$room = obj($this->id);
 					if($room->has_extra_row($tm , $tm + 24*3600))
 					{
 						$t->define_field(array(
