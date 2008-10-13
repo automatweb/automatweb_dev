@@ -470,7 +470,10 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				break;
 			case "verification_image_oid":
 				$img_verification_obj = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_IMAGE_VERIFICATION");
-				$data['value'] = $img_verification_obj->id();
+				if (empty($image_verification_obj))
+				{
+					$data['value'] = $img_verification_obj->id();
+				}
 				break;
 			default:
 				$tmp = explode("_", $data["name"]);
