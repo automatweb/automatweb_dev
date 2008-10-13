@@ -841,7 +841,7 @@ class crm_bill extends class_base
 		if(is_oid($b))
 		{
 			$b = obj($b);
-		}arr($b->prop("customer_address"));
+		}
 		if(!$b->prop("customer_name") || !$b->prop("customer_address"))
 		{
 			if($this->can("view" , $b->prop("customer")))
@@ -1667,7 +1667,11 @@ class crm_bill extends class_base
 
 	function _preview($arr)
 	{
-		$arr["prop"]["value"] = $this->show(array("id" => $arr["obj_inst"]->id(), "all_rows" => $arr["all_rows"]));
+		$arr["prop"]["value"] = $this->show(array(
+			"id" => $arr["obj_inst"]->id(),
+			"all_rows" => $arr["all_rows"],
+			"pdf" => $arr["pdf"],
+		));
 	}
 
 	function _preview_add($arr)
@@ -1682,7 +1686,10 @@ class crm_bill extends class_base
 				"id" => $arr["obj_inst"]->id(),
 			));
 		}
-		if($page == 0) $arr["prop"]["value"] = die($this->show_add(array("id" => $arr["obj_inst"]->id())));
+		if($page == 0) $arr["prop"]["value"] = die($this->show_add(array(
+			"id" => $arr["obj_inst"]->id(),
+			"pdf" => $arr["pdf"]
+		)));
 	}
 
 	/**
@@ -2268,6 +2275,19 @@ class crm_bill extends class_base
 			return $res;
 		}
 
+		if($_GET["pdf"])
+		{
+			$conv = get_instance("core/converters/html2pdf");
+			$conv->converter = 2;
+			//header("Content-type: application/pdf");
+			//arr($res);
+			$res = $conv->convert(array(
+				"source" => $res,
+				"filename" => $b->name().".pdf",
+			));
+			//die($res);
+		}
+
 		if ($_GET["openprintdialog"] == 1)
 		{
 			$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
@@ -2677,7 +2697,7 @@ class crm_bill extends class_base
 			"tot_amt" => number_format($tot_amt, 3,".", " "),
 			"page_no" => $page_no,
 		));
-
+ 
 		$res =  $this->parse();
 		if (false && !$_GET["gen_print"])
 		{
@@ -2697,6 +2717,18 @@ class crm_bill extends class_base
 		{
 			$url = aw_url_change_var("group", "preview", aw_url_change_var("openprintdialog", 1));
 			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
+		}
+
+		if($arr["pdf"])
+		{
+			$conv = get_instance("core/converters/html2pdf");
+			$conv->converter = 1;
+			header("Content-type: application/pdf");
+			$res = $conv->convert(array(
+				"source" => $res,
+				"filename" => $b->name().".pdf",
+			));
+			die($res);
 		}
 		return $res;
 		die($res);
@@ -3101,17 +3133,41 @@ class crm_bill extends class_base
 		));
 		
 		$onclick = "";
-		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		if(!$has_val)
+		{
+			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		}
 		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
-		if(!$has_val) $onclick.= "}else;";
-		
+		if(!$has_val)
+		{
+			$onclick.= "}else;";
+		}
+
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
 			"onClick" => $onclick,
 			"text" => t("Prindi arve")
 		));
+/*
+		$onclick = "";
+		if(!$has_val)
+		{
+			$onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		}
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');";
+		if(!$has_val)
+		{
+			$onclick.= "}else;";
+		}
 
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Prindi arve pdf")
+		));
+*/
 		$onclick = "";
 		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
@@ -3124,7 +3180,20 @@ class crm_bill extends class_base
 			"onClick" => $onclick,
 			"text" => t("Prindi arve lisa")
 		));
+/*
+		$onclick = "";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		$onclick.= "win = window.open('".$this->mk_my_orb("change", array("pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+		if(!$has_val) $onclick.= "}else {;}";
+		
 
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Prindi arve lisa pdf")
+		));
+*/
 		$onclick = "";
 		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
 		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
@@ -3136,7 +3205,19 @@ class crm_bill extends class_base
 			"onClick" => $onclick,
 			"text" => t("Prindi arve koos lisaga")
 		));
+/*
+		$onclick = "";
+		if(!$has_val) $onclick.= "fRet = confirm('".t("Arvel on ridu, mille v&auml;&auml;rtus on 0 krooni")."');	if(fRet){";
+		$onclick.= "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"pdf" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');";
+		if(!$has_val) $onclick.= "}else;";
 
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => $onclick,
+			"text" => t("Prindi arve koos lisaga pdf")
+		));
+*/
 		$tb->add_button(array(
 			"name" => "reconcile",
 			"tooltip" => t("Koonda read"),
