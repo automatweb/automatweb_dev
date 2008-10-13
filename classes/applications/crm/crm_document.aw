@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.15 2008/10/07 15:19:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.16 2008/10/13 11:26:44 markop Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -35,7 +35,7 @@
 	@property make_date type=date_select table=aw_crm_document field=aw_make_date
 	@caption Koostamise kuup&auml;ev
 
-	@property reg_nr type=date_select table=aw_crm_document field=aw_reg_nr
+	@property reg_nr type=textbox table=aw_crm_document field=aw_reg_nr
 	@caption Registreerimisnumber
 
 	@property comment type=textarea rows=5 cols=50 table=objects field=comment
@@ -43,7 +43,7 @@
 
 @default group=files
 
-	@property files type=releditor reltype=RELTYPE_FILE field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow table_fields=name 
+	@property files type=releditor reltype=RELTYPE_FILE field=meta method=serialize mode=manager props=filename table_fields=filename 
 	@caption Failid
 
 @default group=parts

@@ -73,7 +73,7 @@
             <name>reg_nr</name>
             <table>aw_crm_document</table>
             <group>general</group>
-            <type>date_select</type>
+            <type>textbox</type>
             <field>aw_reg_nr</field>
             <caption>Registreerimisnumber</caption>
       </property>
@@ -97,14 +97,11 @@
             <method>serialize</method>
             <mode>manager</mode>
             <props>
-                  <num_0>name</num_0>
-                  <num_1>file</num_1>
-                  <num_2>type</num_2>
-                  <num_3>comment</num_3>
-                  <num_4>file_url</num_4>
-                  <num_5>newwindow</num_5>
+		  <num_0>filename</num_0>
             </props>
-            <table_fields>name</table_fields>
+	    <table_fields>
+		    <num_0>filename</num_0>
+		</table_fields>
             <caption>Failid</caption>
       </property>
       <property>
