@@ -120,7 +120,8 @@ class config extends aw_template
 			"class_id" => CL_GROUP,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"type" => new obj_predicate_not(1) 
+			"type" => new obj_predicate_not(1),
+		       	"join_strategy" => "data"	
 		));
 		foreach($ol->arr() as $o)
 		{
