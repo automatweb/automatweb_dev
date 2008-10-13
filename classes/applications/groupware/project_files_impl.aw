@@ -132,7 +132,6 @@ class project_files_impl extends class_base
 		$pt = $this->_get_files_pt($arr);
 		classload("core/icons");
 		$parent_folders = $this->_get_parent_folders($arr["obj_inst"]);
-		
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML, 
@@ -195,7 +194,7 @@ class project_files_impl extends class_base
 				$filter["project"] = $pr;
 			}
 			
-			if(in_array($clid ,array(CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+			if(in_array($clid ,array(CL_FILE,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
 			{
 				$filter["parent"] = $parent_folders;
 			}
@@ -210,12 +209,11 @@ class project_files_impl extends class_base
 				"name" => $nm,
 				"url" => aw_url_change_var("tf", $clid),
 			));
-		}	
-		
+		}
 	}
 
 	function _init_files_tbl(&$t)
-	{	
+	{
 		$t->define_field(array(
 			"caption" => t(""),
 			"name" => "icon",
@@ -320,7 +318,7 @@ class project_files_impl extends class_base
 			$filter[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-	//				"CL_FILE.project" => $pr, // enne oli rõõmsalt ka fail sees, kuid ei ole seni faili kuidagi projektiga seostatud.
+	//				"CL_FILE.project" => $pr, // enne oli r36msalt ka fail sees, kuid ei ole seni faili kuidagi projektiga seostatud.
 					"CL_CRM_DOCUMENT.project" => $pr,
 					"CL_CRM_DEAL.project" => $pr,
 					"CL_CRM_MEMO.project" => $pr,
@@ -339,12 +337,14 @@ class project_files_impl extends class_base
 				{
 					$filter["project"] = $pr;
 				}
-				if(in_array($clid ,array(CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+				if(in_array($arr["request"]["tf"] ,array(CL_FILE,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
 				{
+					$parent_folders = $this->_get_parent_folders($arr["obj_inst"]);
 					$filter["parent"] = $parent_folders;
-				}	
+				}
 			}
 		}
+
 		$ol = new object_list($filter);
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
