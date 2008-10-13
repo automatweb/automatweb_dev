@@ -519,7 +519,7 @@ class room_obj extends _int_object
 			"class_id" => CL_RESERVATION,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"type" => "food",
+			"type" => "%food%",
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
 			"limit" => 1,

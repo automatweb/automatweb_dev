@@ -1830,7 +1830,7 @@ class room extends class_base
 		while($step < $day_end/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
-			if($this->multi)//kui mitu bronni v6ib olla, siis lisa v2ljad
+			if($this->multi || $this->extra_row)//kui mitu bronni v6ib olla, siis lisa v2ljad
 			{
 				$extra_d = array();
 				$extra_col = array();
