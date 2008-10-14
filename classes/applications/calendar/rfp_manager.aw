@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.78 2008/10/14 10:33:39 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.79 2008/10/14 11:13:02 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -429,6 +429,11 @@ class rfp_manager extends class_base
 				$act = ($arr["request"]["group"] == "rfps_active" || $arr["request"]["group"] == "rfps")?true:false;
 				$t = &$prop["vcl_inst"];
 				$t->define_field(array(
+					"name" => "get_pdf",
+					"caption" => t("PDF"),
+					"chgbgcolor" => "urgent_col",
+				));
+				$t->define_field(array(
 					"name" => "function",
 					"caption" => t("&Uuml;ritus"),
 					"chgbgcolor" => "urgent_col",
@@ -530,6 +535,16 @@ class rfp_manager extends class_base
 						$date_period .= " - ".date('d.m.Y, H:i', $ed);
 					}
 					$t->define_data(array(
+						"get_pdf" => html::href(array(
+							"url" => $this->mk_my_orb("get_pdf_file", array(
+								"id" => $obj->id(),
+								"pdf" => "offer_pdf",
+							), CL_RFP),
+							"caption" => html::img(array(
+								"border" => 0,
+								"url" => "images/icons/ftype_pdf.gif",
+							)),
+						)),
 						"function" => html::href(array(
 							"caption" => ($_t = $obj->prop("data_gen_function_name"))?$_t:(($_n = $obj->name())?$_n:t('(Nimetu)')),
 							/*"url" => "#",
