@@ -348,8 +348,22 @@ class crm_company_people_impl extends class_base
 			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');*/
 		}
 
-//---------------------- k6ik asutuse inimesed-----------------------------------
-		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT)
+//------------------------- ainult olulisteks m2rgitud inimesed-------------------
+		if(!$arr['request']['cat'] && !$arr['request']['unit'])
+		{
+			$section_ol = $arr["obj_inst"]->get_sections();
+			$sections = $section_ol->ids();
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			if(is_oid($p->id()))
+			{
+				$worker_ol = $p->get_important_persons($arr["obj_inst"]->id());
+				$persons = $worker_ol->ids();
+			}
+		}
+
+//---------------------- k6ik asutuse inimesed------------------kas siis kui tahetud k6iki v6i siis kui ei saanud yhtgi tulemust ja on m22ratud et sellisel juhul l2hevad k6ik
+		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT || ($arr["request"]["all_if_empty"] || !($worker_ol && $worker_ol->count())))
 		{
 			$worker_ol = $arr["obj_inst"]->get_workers();
 			$persons = $worker_ol->ids();
@@ -373,20 +387,6 @@ class crm_company_people_impl extends class_base
 			{
 				$professions[$p_con["to"]] = $p_con["to.name"];
 			}*/
-		}
-
-//------------------------- ainult olulisteks m2rgitud inimesed-------------------
-		if(!$arr['request']['cat'] && !$arr['request']['unit'])
-		{
-			$section_ol = $arr["obj_inst"]->get_sections();
-			$sections = $section_ol->ids();
-			$u = get_instance(CL_USER);
-			$p = obj($u->get_current_person());
-			if(is_oid($p->id()))
-			{
-				$worker_ol = $p->get_important_persons($arr["obj_inst"]->id());
-				$persons = $worker_ol->ids();
-			}
 		}
 
 		//if listing from a specific unit, then the reltype is different
