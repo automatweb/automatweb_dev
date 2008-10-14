@@ -344,7 +344,7 @@ class crm_company_people_impl extends class_base
 		}
 
 //---------------------- k6ik asutuse inimesed------------------kas siis kui tahetud k6iki v6i siis kui ei saanud yhtgi tulemust ja on m22ratud et sellisel juhul l2hevad k6ik
-		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT || ($arr["request"]["all_if_empty"] || !($worker_ol && $worker_ol->count())))
+		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT || ($arr["request"]["all_if_empty"] && !($worker_ol && $worker_ol->count())))
 		{
 			$worker_ol = $arr["obj_inst"]->get_workers();
 			$persons = $worker_ol->ids();
