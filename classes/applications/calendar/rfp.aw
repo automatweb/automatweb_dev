@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.156 2008/10/14 11:06:19 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.157 2008/10/14 11:15:40 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2846,7 +2846,7 @@ class rfp extends class_base
 			$datefrom = date('d.m.Y', $start);
 			$dateto = date('d.m.Y', $end);
 			$tot_time = ($end - $start) / 3600;
-			$len = ($end - $start) / (60 * 60);
+			$len = round(($end - $start) / (60 * 60));
 
 			$people = $rv->prop("people_count");
 			if($roomid = $rv->prop("resource"))
