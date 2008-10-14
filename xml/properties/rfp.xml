@@ -1104,13 +1104,33 @@
             <caption>Lisateenuste lisainfo</caption>
       </property>
       <property>
+            <name>show_payment_terms</name>
+            <table>rfp</table>
+            <group>terms</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <field>show_payment_terms</field>
+            <caption>Kuva konverentside tingimusi</caption>
+      </property>
+      <property>
             <name>cancel_and_payment_terms</name>
             <table>rfp</table>
             <group>terms</group>
             <type>textarea</type>
             <richtext>1</richtext>
             <field>cancel_and_payment_terms</field>
-            <caption>Konvererntside annuleerimis- ja maksetingimused</caption>
+            <caption>Konverentside annuleerimis- ja maksetingimused</caption>
+      </property>
+      <property>
+            <name>show_acommondation_terms</name>
+            <table>rfp</table>
+            <group>terms</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <field>show_acommondation_terms</field>
+            <caption>Kuva majutuse tingimusi</caption>
       </property>
       <property>
             <name>accomondation_terms</name>

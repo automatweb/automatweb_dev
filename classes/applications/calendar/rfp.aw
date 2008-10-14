@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.153 2008/10/07 11:04:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.154 2008/10/14 10:35:06 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -423,9 +423,15 @@
 
 		@groupinfo terms caption="Tingimused" parent=final_info
 		@default group=terms
+'
+			@property show_payment_terms type=checkbox ch_value=1 default=1
+			@caption Kuva konverentside tingimusi
 
 			@property cancel_and_payment_terms type=textarea richtext=1
-			@caption Konvererntside annuleerimis- ja maksetingimused
+			@caption Konverentside annuleerimis- ja maksetingimused
+
+			@property show_acommondation_terms type=checkbox ch_value=1 default=1
+			@caption Kuva majutuse tingimusi
 
 			@property accomondation_terms type=textarea richtext=1
 			@caption Majutuse annuleerimis- ja maksetingimused
@@ -3328,8 +3334,8 @@ class rfp extends class_base
 		}
 		$totalprice = round($totalprice);
 		$this->vars(array(
-			"cancel_and_payment_terms" => $arr["obj_inst"]->prop("cancel_and_payment_terms"),
-			"accomondation_terms" => $arr["obj_inst"]->prop("accomondation_terms"),
+			"cancel_and_payment_terms" => $arr["obj_inst"]->prop("show_payment_terms") ? $arr["obj_inst"]->prop("cancel_and_payment_terms") : "",
+			"accomondation_terms" => $arr["obj_inst"]->prop("show_acommondation_terms") ? $arr["obj_inst"]->prop("accomondation_terms") : "",
 			"BRON" => $brons,
 			"RESOURCES" => $res_sub,
 			"PRODUCTS_".($package?"NO_":"")."PACKAGE" => $pd_sub,
@@ -3705,6 +3711,8 @@ class rfp extends class_base
 	{
 
 		$fields = array(
+			array("show_acommondation_terms", "int"),
+			array("show_payment_terms", "int"),
 			array("data_gen_package_price", "int"),
 			array("default_language", "varchar(3)"),
 			array("offer_price_comment", "text"),
