@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.243 2008/08/01 08:31:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.244 2008/10/14 10:51:10 robert Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -503,7 +503,9 @@ class menu extends class_base implements main_subtemplate_handler
 
 			case "stats_disp":
 				$m = get_instance("applications/stats/stats_model");
-				$data["value"] = $m->get_simple_count_for_obj($arr["obj_inst"]->id(), $arr["obj_inst"]->prop("stats_from"), $arr["obj_inst"]->prop("stats_to"));
+				$from = ($f = $arr["obj_inst"]->prop("stats_from")) ? $f : -1;
+				$to = ($t = $arr["obj_inst"]->prop("stats_to")) ? $t : -1;
+				$data["value"] = $m->get_simple_count_for_obj($arr["obj_inst"]->id(), $from, $to);
 				break;
 
 			case "sss_tb":
