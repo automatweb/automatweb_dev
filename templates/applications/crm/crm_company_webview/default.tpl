@@ -1,3 +1,6 @@
+{VAR:res_count_row}
+
+
 <!-- SUB: company_list -->
 <ul>
 <!-- SUB: company_list_item -->
