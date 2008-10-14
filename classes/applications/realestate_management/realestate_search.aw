@@ -467,10 +467,7 @@ class realestate_search extends class_base
 						if (is_oid ($section_oid))
 						{
 							$section = obj ($section_oid);
-							$employees = new object_list ($section->connections_from(array(
-								"type" => "RELTYPE_WORKERS",
-								"class_id" => CL_CRM_PERSON,
-							)));
+							$employees = $section->get_workers();
 							$options += $employees->names ();
 						}
 					}

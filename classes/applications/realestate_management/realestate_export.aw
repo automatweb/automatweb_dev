@@ -133,19 +133,16 @@ class realestate_export extends class_base
 
 			$table->define_field(array(
 				"name" => "city24user",
-				"caption" => t("Kasutajanimi City24 süsteemis"),
+				"caption" => t("Kasutajanimi City24 s&uuml;steemis"),
 			));
 
 			$table->set_default_sortby ("name");
 			$table->set_default_sorder ("asc");
 
-			$conns = $unit->connections_from(array(
-				"type" => "RELTYPE_WORKERS",
-			));
+			$workers = $unit->get_workers();
 
-			foreach($conns as $conn)
+			foreach($workers->arr() as $person)
 			{
-				$person = new object ($conn->prop('to'));
 				$tdata = array(
 					"name" => $person->prop ('name'),
 					"city24user" => html::textbox(array(

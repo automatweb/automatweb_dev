@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.63 2008/10/08 15:54:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.64 2008/10/14 16:08:42 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -398,13 +398,9 @@ class crm_offer extends class_base
 			case "salesman":
 				$my_company = $this->u_i->get_current_company();
 				$org = &obj($my_company);
-				$workers = $org->connections_from(array("type" => "RELTYPE_WORKERS"));
+				$workers = $org->get_workers();
 				
-				foreach ($workers as $worker)
-				{
-					$options[$worker->prop("to")] = $worker->prop("to.name");
-				}
-				$prop["options"] = $options;
+				$prop["options"] = $workers->names();
 				
 				if(!$prop["value"])
 				{

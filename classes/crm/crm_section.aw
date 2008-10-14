@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.35 2008/05/22 13:39:27 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.36 2008/10/14 16:08:42 markop Exp $
 // crm_section.aw - &Uuml;ksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -302,15 +302,11 @@ class crm_section extends class_base
 		$section = &obj($section_id);
 		if(!$retval)
 		{
-			$retval = new object_list($section->connections_from(array(
-				"type" => "RELTYPE_WORKERS"
-			)));
+			$retval = $section->get_workers();
 		}
 		else
 		{
-			$retval->add(new object_list($section->connections_from(array(
-				"type" => "RELTYPE_WORKERS",
-			))));
+			$retval->add($section->get_workers());
 		}
 		if($recrusive)
 		{
@@ -322,9 +318,7 @@ class crm_section extends class_base
 		else
 		{
 		//fuck this, im too lazy to lazy to think and do it corretly
-			$retval = new object_list($section->connections_from(array(
-				"type" => "RELTYPE_WORKERS"
-			)));
+			$retval = $section->get_workers();
 		}
 		return $retval;
 	}

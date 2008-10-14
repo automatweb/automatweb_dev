@@ -248,17 +248,14 @@ class crm_company_obj extends _int_object
 				)
 			)),
 		);
-		$ol = new object_list($filter);//foreach($ol->arr() as $o){$r = $o->get_first_obj_by_reltype("RELTYPE_ORG_RELATION"); if($r)arr($r->id());}
-
-/*		$ol2 = $this->get_employees();
-		foreach($ol2->arr() as $o)
+		$ol = new object_list($filter);
+		
+		//vana versioon peab j22ma ka toimima siiski, kui tahetakse k6iki t88tajaid
+		if(!sizeof($arr))
 		{
-			if(!in_array($o->id() , $ol->ids()))
-			{
-				arr($o->name());
-			}
+			$ol->add($this->get_employees());
 		}
-*/
+
 		return $ol;
 
 	}

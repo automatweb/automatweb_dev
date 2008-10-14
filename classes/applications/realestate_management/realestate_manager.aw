@@ -10,15 +10,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @groupinfo grp_users_tree caption="Kasutajad" parent=general
 @groupinfo grp_users_mgr caption="Rollid" parent=general
 @groupinfo grp_realestate_properties caption="Objektid"
-	@groupinfo grp_realestate_properties_all caption="Kõik objektid" parent=grp_realestate_properties
+	@groupinfo grp_realestate_properties_all caption="K&otilde;ik objektid" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_houses caption="Majad" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_rowhouses caption="Ridaelamud" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_cottages caption="Suvilad" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_houseparts caption="Majaosad" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_apartments caption="Korterid" parent=grp_realestate_properties
-	@groupinfo grp_realestate_properties_commercial_properties caption="Äripinnad" parent=grp_realestate_properties
+	@groupinfo grp_realestate_properties_commercial_properties caption="&Auml;ripinnad" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_garages caption="Garaazid" parent=grp_realestate_properties
-	@groupinfo grp_realestate_properties_land_estates caption="Maatükid" parent=grp_realestate_properties
+	@groupinfo grp_realestate_properties_land_estates caption="Maat&uuml;kid" parent=grp_realestate_properties
 	@groupinfo grp_realestate_properties_search caption="Otsing" parent=grp_realestate_properties
 @groupinfo grp_clients caption="Kliendid"
 	@groupinfo grp_client_list caption="Klientide nimekiri" parent=grp_clients
@@ -44,7 +44,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @default group=grp_realestate_properties_houses,grp_realestate_properties_rowhouses,grp_realestate_properties_cottages,grp_realestate_properties_houseparts,grp_realestate_properties_apartments,grp_realestate_properties_commercial_properties,grp_realestate_properties_garages,grp_realestate_properties_land_estates,grp_realestate_properties_all
 
 	@property title2 type=text store=no subtitle=1
-	@caption Näita ainult objekte millel on:
+	@caption N&auml;ita ainult objekte millel on:
 		@property proplist_filter_modifiedafter type=date_select store=no
 		@caption muutmisaeg peale
 
@@ -58,7 +58,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@caption lisamisaeg enne
 
 		@property proplist_filter_pricemin type=textbox store=no
-		@caption hind üle
+		@caption hind &uuml;le
 
 		@property proplist_filter_pricemax type=textbox store=no
 		@caption hind alla
@@ -70,13 +70,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@caption kvaliteediklass
 
 		@property proplist_filter_closedafter type=date_select store=no
-		@caption tehingu sõlmimise aeg peale
+		@caption tehingu s&otilde;lmimise aeg peale
 
 		@property proplist_filter_closedbefore type=date_select store=no
-		@caption tehingu sõlmimise aeg enne
+		@caption tehingu s&otilde;lmimise aeg enne
 
 		@property proplist_filter_transaction_closed type=checkbox ch_value=1 store=no
-		@caption tehing sõlmitud
+		@caption tehing s&otilde;lmitud
 
 		@property button1 type=submit store=no
 		@caption Otsi
@@ -103,23 +103,23 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@layout tbox type=vbox parent=vsplitbox
 
 	@property user_mgr_show_all_objects type=checkbox ch_value=1 store=no parent=tbox
-	@comment Näita selle ametinimetusega kasutajatele teiste ametinimetusega kasutajate kinnisvaraobjekte
-	@caption Näeb teiste objekte
+	@comment N&auml;ita selle ametinimetusega kasutajatele teiste ametinimetusega kasutajate kinnisvaraobjekte
+	@caption N&auml;eb teiste objekte
 
 	@property title1 type=text store=no subtitle=1 parent=tbox
-	@caption Ametile antud õigused objektitüüpide järgi
+	@caption Ametile antud &otilde;igused objektit&uuml;&uuml;pide j&auml;rgi
 
 	@property user_mgr_division_rights type=table store=no no_caption=1 parent=tbox
 
 	@property title12 type=text store=no subtitle=1 parent=tbox
-	@caption &Otilde;igused objekti aadressi järgi
+	@caption &Otilde;igused objekti aadressi j&auml;rgi
 
 	@property rights_administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1 parent=tbox store=no
-	@comment Haldusjaotus, mille kohta õigusi määratakse.
+	@comment Haldusjaotus, mille kohta &otilde;igusi m&auml;&auml;ratakse.
 	@caption Haldusjaotus
 
 	@property rights_admindivision type=select parent=tbox store=no
-	@comment Aadressitase, mille kohta õigusi määratakse. Aadressitaseme muutmisel jäävad teiste aadressitasemete seaded samaks! Et neid muuta tuleb valida uuesti sama aadressitase.
+	@comment Aadressitase, mille kohta &otilde;igusi m&auml;&auml;ratakse. Aadressitaseme muutmisel j&auml;&auml;vad teiste aadressitasemete seaded samaks! Et neid muuta tuleb valida uuesti sama aadressitase.
 	@caption Aadressitase
 
 	@property rights_admindivision_current type=hidden store=no
@@ -134,7 +134,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property clients_list type=table store=no no_caption=1
 
 	@property title4 type=text store=no subtitle=1
-	@caption Näita ainult kliente kellel:
+	@caption N&auml;ita ainult kliente kellel:
 		@property clientlist_filter_name type=textbox store=no
 		@caption nimi
 
@@ -142,13 +142,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@caption aadress
 
 		@property clientlist_filter_appreciationafter type=date_select store=no
-		@caption tänukirja kuupäev peale
+		@caption t&auml;nukirja kuup&auml;ev peale
 
 		@property clientlist_filter_appreciationbefore type=date_select store=no
-		@caption tänukirja kuupäev enne
+		@caption t&auml;nukirja kuup&auml;ev enne
 
 		@property clientlist_filter_appreciationtype type=chooser multiple=1 store=no
-		@caption tänukirja tüüp
+		@caption t&auml;nukirja t&uuml;&uuml;p
 
 		@property clientlist_filter_agent type=select multiple=1 store=no size=3
 		@caption maakler
@@ -171,7 +171,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 @default group=grp_settings
 	@property almightyuser type=textbox
-	@caption "Kõik lubatud" kasutaja uid
+	@caption "K&otilde;ik lubatud" kasutaja uid
 
 	@property houses_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
 	@caption Majade kaust
@@ -222,7 +222,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@caption Vaikimisi korteri pilt
 
 	@property default_commercial_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE6 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
-	@caption Vaikimisi äripinna pilt
+	@caption Vaikimisi &auml;ripinna pilt
 
 	@property default_garage_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE7 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
 	@caption Vaikimisi garaazi pilt
@@ -231,21 +231,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@caption Vaikimisi maa pilt
 
 	@property default_date_format type=textbox default=jmYHi
-	@caption Kuupäevaformaat
+	@caption Kuup&auml;evaformaat
 
 	@property properties_list_perpage type=textbox default=25
 	@comment Objektide arv lehel kinnisvarahalduskeskkonna objektide vaates
 	@caption Objekte lehel
 
 	@property map_server_url type=textbox size=100
-	@comment Võimalikud muutujad urlis: address_parsed - objekti aadress, mis antakse argumendina kaasa, save_url - url millele pärigut tehes tagastatakse kaardi andmed argumentidena
+	@comment V&otilde;imalikud muutujad urlis: address_parsed - objekti aadress, mis antakse argumendina kaasa, save_url - url millele p&auml;rigut tehes tagastatakse kaardi andmed argumentidena
 	@caption Kaardiserveri url
 
 	@property realestatemgr_cfgmgr type=relpicker reltype=RELTYPE_REALESTATEMGR_CFGMGR clid=CL_CFGMANAGER
 	@caption Keskkonna seadetehaldur
 
 	// @property print_properties_house type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	// @comment On/pole tüüpi elemendid kuvatakse prindivaates "lisainfo" all, ülejäänud kahes tulbas enne lisaandmeid. Seejuures kasutatakse ekspordi objekti vaates "Koosta tabel" leiduvat "Tulba pealkiri" väärtust elemendi suffiksi kuvamiseks (näiteks üldpinna puhul mõõtühik m2).
+	// @comment On/pole t&uuml;&uuml;pi elemendid kuvatakse prindivaates "lisainfo" all, &uuml;lej&auml;&auml;nud kahes tulbas enne lisaandmeid. Seejuures kasutatakse ekspordi objekti vaates "Koosta tabel" leiduvat "Tulba pealkiri" v&auml;&auml;rtust elemendi suffiksi kuvamiseks (n&auml;iteks &uuml;ldpinna puhul m&otilde;&otilde;t&uuml;hik m2).
 	// @caption Prinditavad elemendid (Maja)
 
 	@property available_variables_names type=text store=no
@@ -254,11 +254,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property title5 type=text store=no subtitle=1
 	@caption Aadressid
 		@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1 editonly=1
-		@comment Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad
+		@comment Riigi haldusjaotus, milles s&uuml;steemis hallatavad kinnisvaraobjektid asuvad
 		@caption Haldusjaotus
 
 		@property address_equivalent_1 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
-		@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
+		@comment Haldusjaotis aadressis&uuml;steemis, mis vastab maakonnale
 		@caption Maakond haldusjaotuses
 
 		@property address_equivalent_2 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
@@ -325,28 +325,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @caption Haldusjaotuse vaste 5
 
 @reltype RELTYPE_DEFAULT_PICTURE1 value=26 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE2 value=19 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE3 value=20 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE4 value=21 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE5 value=22 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE6 value=23 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE7 value=24 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 @reltype RELTYPE_DEFAULT_PICTURE8 value=25 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 */
 
 define ("RE_USERMGR_SHOWALLOBJ_VAR_NAME", "realestate_showallobj");
@@ -374,9 +374,9 @@ class realestate_manager extends class_base
 			"can_cottages" => t("Suvilad"),
 			"can_houseparts" => t("Majaosad"),
 			"can_apartments" => t("Korterid"),
-			"can_commercial_properties" => t("Äripinnad"),
+			"can_commercial_properties" => t("&Auml;ripinnad"),
 			"can_garages" => t("Garaazid"),
-			"can_land_estates" => t("Maatükid"),
+			"can_land_estates" => t("Maat&uuml;kid"),
 		);
 	}
 
@@ -400,7 +400,7 @@ class realestate_manager extends class_base
 
 			if (!is_object ($this->administrative_structure))
 			{
-				echo t("Haldusjaotus määramata või puudub juurdepääs!");
+				echo t("Haldusjaotus m&auml;&auml;ramata v&otilde;i puudub juurdep&auml;&auml;s!");
 			}
 
 			aw_session_set ("realsestate_usr_mgr_company", $arr["request"]["company"]);
@@ -423,7 +423,7 @@ class realestate_manager extends class_base
 
 			if (!is_object ($this->usr_mgr_profession_group))
 			{
-				echo t("Kasutajagrupp ameti jaoks määramata.");
+				echo t("Kasutajagrupp ameti jaoks m&auml;&auml;ramata.");
 			}
 		}
 
@@ -511,12 +511,12 @@ class realestate_manager extends class_base
 			### settings tab
 			case "available_variables_names":
 				$prop["value"] = t("
-					Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
-					Ostja, müüja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url, rank).  <br />
+					K&otilde;ik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
+					Ostja, m&uuml;&uuml;ja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url, rank).  <br />
 					Pildid kujul <i>picture</i><b>n</b><i>_url</i> ning <i>picture</i><b>n</b><i>_city24_id</i> (n on 1 .. piltide arv). <br />
 					Piltide arv: picture_count<br />
 					Lisaks: <br />
-					link_return_url -  tagasilink, kui on määratud <br />
+					link_return_url -  tagasilink, kui on m&auml;&auml;ratud <br />
 					link_open - objekti veebis avamise url <br />
 					class_name - kasutajale arusaadav klassi nimi <br />
 				");
@@ -575,10 +575,7 @@ class realestate_manager extends class_base
 				foreach ($connections as $connection)
 				{
 					$company = $connection->to ();
-					$employees = new object_list($company->connections_from(array(
-						"type" => "RELTYPE_WORKERS",
-						"class_id" => CL_CRM_PERSON,
-					)));
+					$employees = $company->get_workers();
 					$agents_filter = $agents_filter + $employees->names ();
 				}
 
@@ -676,7 +673,7 @@ class realestate_manager extends class_base
 			case "title1":
 				if (!is_oid ($arr["request"]["cat"]))
 				{
-					$prop["caption"] = t("Vali amet, mille õigusi muuta");
+					$prop["caption"] = t("Vali amet, mille &otilde;igusi muuta");
 				}
 				break;
 
@@ -689,7 +686,7 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile m&auml;&auml;ramata. "));
 					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
@@ -706,7 +703,7 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession))
 				{
-					$prop["error"] .= sprintf (t("Amet määramata. "));
+					$prop["error"] .= sprintf (t("Amet m&auml;&auml;ramata. "));
 					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
@@ -724,7 +721,7 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile m&auml;&auml;ramata. "));
 					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
@@ -771,7 +768,7 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile m&auml;&auml;ramata. "));
 					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
@@ -803,7 +800,7 @@ class realestate_manager extends class_base
 							if (!is_oid ($connection->prop ("from")))
 							{
 								continue;
-								// $prop["error"] .= t("Ameti kasutajagrupiga seostatud haldusüksus on katkine objekt. ");
+								// $prop["error"] .= t("Ameti kasutajagrupiga seostatud haldus&uuml;ksus on katkine objekt. ");
 								// return PROP_ERROR;
 							}
 
@@ -850,7 +847,7 @@ class realestate_manager extends class_base
 			case "administrative_structure":
 				if (!is_oid ($prop["value"]))
 				{
-					$prop["error"] = t("Kohustuslik väli");
+					$prop["error"] = t("Kohustuslik v&auml;li");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -933,7 +930,7 @@ class realestate_manager extends class_base
 				### proceed only if a profession is selected
 				if (!is_object ($this->usr_mgr_profession))
 				{
-					$prop["error"] .= sprintf (t("Amet määramata. "));
+					$prop["error"] .= sprintf (t("Amet m&auml;&auml;ramata. "));
 					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
@@ -945,7 +942,7 @@ class realestate_manager extends class_base
 			case "rights_adminunit":
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile m&auml;&auml;ramata. "));
 					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
@@ -968,13 +965,13 @@ class realestate_manager extends class_base
 							if (!is_oid ($connection->prop ("from")))
 							{
 								continue;
-								// $prop["error"] .= t("Ameti kasutajagrupiga seostatud haldusüksus on katkine objekt. ");
+								// $prop["error"] .= t("Ameti kasutajagrupiga seostatud haldus&uuml;ksus on katkine objekt. ");
 								// return PROP_ERROR;
 							}
 
 							if (!$this->can ("admin", $connection->prop ("from")))
 							{
-								$prop["error"] .= sprintf (t("Kasutajal puudub luba seostatud haldusüksuse õigusi määrata. "));
+								$prop["error"] .= sprintf (t("Kasutajal puudub luba seostatud haldus&uuml;ksuse &otilde;igusi m&auml;&auml;rata. "));
 								$retval = PROP_ERROR;
 								continue;
 							}
@@ -1017,7 +1014,7 @@ class realestate_manager extends class_base
 						{ ### grant rights to new admin units chosen
 							if (!$this->can ("admin", $chosen_admin_unit_id))
 							{
-								$prop["error"] .= sprintf (t("Kasutajal puudub luba valitud haldusüksuse õigusi määrata. "));
+								$prop["error"] .= sprintf (t("Kasutajal puudub luba valitud haldus&uuml;ksuse &otilde;igusi m&auml;&auml;rata. "));
 								$retval = PROP_ERROR;
 								continue;
 							}
@@ -1099,13 +1096,13 @@ class realestate_manager extends class_base
 
 				if (!is_oid ($this_object->prop ($folder_name)))
 				{
-					echo sprintf (t("Seda tüüpi kinnisvaraobjektide kataloog määramata. "));
+					echo sprintf (t("Seda t&uuml;&uuml;pi kinnisvaraobjektide kataloog m&auml;&auml;ramata. "));
 					continue;
 				}
 
 				if (!$this->can ("admin", $this_object->prop ($folder_name)))
 				{
-					echo sprintf (t("Kasutajal puudub luba selle kinnisvaraobjekti tüübi õigusi määrata. "));
+					echo sprintf (t("Kasutajal puudub luba selle kinnisvaraobjekti t&uuml;&uuml;bi &otilde;igusi m&auml;&auml;rata. "));
 					continue;
 				}
 
@@ -1399,14 +1396,14 @@ class realestate_manager extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Objekti tüüp"),
+			"caption" => t("Objekti t&uuml;&uuml;p"),
 		));
 
 		$t->define_field(array(
 			"name" => "view",
 			"caption" => t("<a href='javascript:selall(\"re_usermgr_viewrights\")'>Vaatamine</a>"),
 			// "caption" => t("Vaatamine"),
-			"tooltip" => t("Vali kõik/kaota valik"),
+			"tooltip" => t("Vali k&otilde;ik/kaota valik"),
 			"align" => "center"
 		));
 
@@ -1414,7 +1411,7 @@ class realestate_manager extends class_base
 			"name" => "add",
 			"caption" => t("<a href='javascript:selall(\"re_usermgr_addrights\")'>Lisamine</a>"),
 			// "caption" => t("Lisamine"),
-			"tooltip" => t("Vali kõik/kaota valik"),
+			"tooltip" => t("Vali k&otilde;ik/kaota valik"),
 			"align" => "center"
 		));
 
@@ -1422,7 +1419,7 @@ class realestate_manager extends class_base
 			"name" => "edit",
 			"caption" => t("<a href='javascript:selall(\"re_usermgr_editrights\")'>Muutmine</a>"),
 			// "caption" => t("Muutmine"),
-			"tooltip" => t("Vali kõik/kaota valik"),
+			"tooltip" => t("Vali k&otilde;ik/kaota valik"),
 			"align" => "center"
 		));
 
@@ -1430,7 +1427,7 @@ class realestate_manager extends class_base
 			"name" => "delete",
 			"caption" => t("<a href='javascript:selall(\"re_usermgr_deleterights\")'>Kustutamine</a>"),
 			// "caption" => t("Kustutamine"),
-			"tooltip" => t("Vali kõik/kaota valik"),
+			"tooltip" => t("Vali k&otilde;ik/kaota valik"),
 			"align" => "center"
 		));
 	}
@@ -1449,7 +1446,7 @@ class realestate_manager extends class_base
 
 		if (!is_object ($this->usr_mgr_profession_group))
 		{
-			$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+			$prop["error"] .= sprintf (t("Kasutajagrupp ametile m&auml;&auml;ramata. "));
 			return PROP_ERROR;
 			// return PROP_IGNORE;
 		}
@@ -1497,7 +1494,7 @@ class realestate_manager extends class_base
 			else
 			{
 				$t->define_data(array(
-					"name" => sprintf (t("Kataloog määramata kinnisvaraobjektide tüübile %s."), $caption),
+					"name" => sprintf (t("Kataloog m&auml;&auml;ramata kinnisvaraobjektide t&uuml;&uuml;bile %s."), $caption),
 				));
 			}
 		}
@@ -2118,7 +2115,7 @@ class realestate_manager extends class_base
 		// {
 			$table->define_field(array(
 				"name" => "class",
-				"caption" => t("Tüüp"),
+				"caption" => t("T&uuml;&uuml;p"),
 				"sortable" => 1,
 			));
 		// }
@@ -2133,10 +2130,7 @@ class realestate_manager extends class_base
 		foreach ($connections as $connection)
 		{
 			$company = $connection->to ();
-			$employees = new object_list($company->connections_from(array(
-				"type" => "RELTYPE_WORKERS",
-				"class_id" => CL_CRM_PERSON,
-			)));
+			$employees = $company->get_workers();
 			$agents_filter += $employees->names ();
 		}
 
@@ -2211,9 +2205,9 @@ class realestate_manager extends class_base
 			"caption" => t("Tehing"),
 			"sortable" => 1,
 			"filter" => array (
-				t("Müük"),
+				t("M&uuml;&uuml;k"),
 				t("Ost"),
-				t("Üürile anda"),
+				t("&Uuml;&uuml;rile anda"),
 			),
 		));
 
@@ -2241,7 +2235,7 @@ class realestate_manager extends class_base
 
 		$table->define_field(array(
 			"name" => "seller",
-			"caption" => t("Müüja"),
+			"caption" => t("M&uuml;&uuml;ja"),
 			"sortable" => 1
 		));
 
@@ -2296,7 +2290,7 @@ class realestate_manager extends class_base
 				"name" => "total_floor_area",
 				// "caption" => t("m<sup><small>2</small></sup>"),
 				"caption" => t("m<sup>2</sup>"),
-				"tooltip" => t("Üldpind"),
+				"tooltip" => t("&Uuml;ldpind"),
 				"sortable" => 1
 			));
 			$table->define_field(array(
@@ -2308,9 +2302,9 @@ class realestate_manager extends class_base
 
 		$table->define_field(array(
 			"name" => "visible",
-			// "caption" => t("Näh&shy;tav"),
+			// "caption" => t("N&auml;h&shy;tav"),
 			"caption" => t("<a href='javascript:selall(\"realestatemgr-is_visible\")'>N</a>"),
-			"tooltip" => t("Nähtav. Vali/kaota valik kõgil ridadel"),
+			"tooltip" => t("N&auml;htav. Vali/kaota valik k&otilde;gil ridadel"),
 		));
 
 		$table->define_field(array(
@@ -2467,7 +2461,7 @@ class realestate_manager extends class_base
 			{
 				$toolbar->add_menu_item(array(
 					"parent" => "add",
-					"text" => t("Äripind"),
+					"text" => t("&Auml;ripind"),
 					"link" => $add_commercial_url,
 				));
 			}
@@ -2485,7 +2479,7 @@ class realestate_manager extends class_base
 			{
 				$toolbar->add_menu_item(array(
 					"parent" => "add",
-					"text" => t("Maatükk"),
+					"text" => t("Maat&uuml;kk"),
 					"link" => $add_land_url,
 				));
 			}
@@ -2546,7 +2540,7 @@ class realestate_manager extends class_base
 			$toolbar->add_button(array(
 				"name" => "add",
 				"img" => "new.gif",
-				"tooltip" => t("Lisa uus äripind"),
+				"tooltip" => t("Lisa uus &auml;ripind"),
 				"url" => $add_commercial_url,
 			));
 		}
@@ -2566,7 +2560,7 @@ class realestate_manager extends class_base
 			$toolbar->add_button(array(
 				"name" => "add",
 				"img" => "new.gif",
-				"tooltip" => t("Lisa uus maatükk"),
+				"tooltip" => t("Lisa uus maat&uuml;kk"),
 				"url" => $add_land_url,
 			));
 		}
@@ -2643,7 +2637,7 @@ class realestate_manager extends class_base
 				"name" => "save_client_selection",
 				"url" => "javascript:aw_popup_s('{$url}','client_selection_form',400,100);",
 				"img" => "save.gif",
-				"tooltip" => t("Salvesta päring kliendivalimina"),
+				"tooltip" => t("Salvesta p&auml;ring kliendivalimina"),
 			));
 		}
 
@@ -2784,7 +2778,7 @@ class realestate_manager extends class_base
 			}
 			else
 			{
-				echo t('"Kõik lubatud" kasutaja keskkonna seadetes määramata');
+				echo t('"K&otilde;ik lubatud" kasutaja keskkonna seadetes m&auml;&auml;ramata');
 				return;
 			}
 
@@ -2984,7 +2978,7 @@ class realestate_manager extends class_base
 		$table->define_field(array(
 			"name" => "properties",
 			"caption" => t("Obj."),
-			"tooltip" => t("Kliendiga seotud kinnisvaraobjektid (ostjana/müüjana)"),
+			"tooltip" => t("Kliendiga seotud kinnisvaraobjektid (ostjana/m&uuml;&uuml;jana)"),
 		));
 		$table->define_field(array(
 			"name" => "pid",
@@ -3004,14 +2998,14 @@ class realestate_manager extends class_base
 		));
 		$table->define_field(array(
 			"name" => "appreciation_note_date",
-			"caption" => t("Tänukirja kuupäev"),
+			"caption" => t("T&auml;nukirja kuup&auml;ev"),
 			"type" => "time",
 			"format" => $this->default_date_format,
 			"sortable" => 1,
 		));
 		$table->define_field(array(
 			"name" => "appreciation_note_type",
-			"caption" => t("Tänukirja liik"),
+			"caption" => t("T&auml;nukirja liik"),
 			"filter" => $appreciation_note_type_filter,
 		));
 		$table->define_field(array(
@@ -3404,7 +3398,7 @@ class realestate_manager extends class_base
 
 			if (!$this->can ("view", $this_object->prop ("clients_folder")))
 			{
-				echo t("Klientide kaust kinnisvarahalduskeskkonnas määramata. Uut objekti ei loodud. ");
+				echo t("Klientide kaust kinnisvarahalduskeskkonnas m&auml;&auml;ramata. Uut objekti ei loodud. ");
 				return;
 			}
 
@@ -3416,7 +3410,7 @@ class realestate_manager extends class_base
 
 			if (!is_oid ($parent))
 			{
-				echo t("Kinnisvaraobjekti kaust määramata. Objekt pannakse kinnisvarahalduskeskkonnaga samasse kausta. ");
+				echo t("Kinnisvaraobjekti kaust m&auml;&auml;ramata. Objekt pannakse kinnisvarahalduskeskkonnaga samasse kausta. ");
 				$parent = $this_object->parent ();
 			}
 
@@ -3466,7 +3460,7 @@ class realestate_manager extends class_base
 				}
 				else
 				{
-					echo t("Organisatsiooni üksus määramata. ");
+					echo t("Organisatsiooni &uuml;ksus m&auml;&auml;ramata. ");
 				}
 			}
 
@@ -3548,7 +3542,7 @@ class realestate_manager extends class_base
 		else
 		{
 			error::raise(array(
-				"msg" => t("Parameeter pole oid või puudub kasutajal õigus objekti arhiveerida. Arhiveerimiseks antakse haldurist juba kontrollitud parameetrid."),
+				"msg" => t("Parameeter pole oid v&otilde;i puudub kasutajal &otilde;igus objekti arhiveerida. Arhiveerimiseks antakse haldurist juba kontrollitud parameetrid."),
 				"fatal" => false,
 				"show" => true,
 			));

@@ -570,10 +570,7 @@ class realestate_property extends class_base
 
 				if (is_object ($this->company))
 				{
-					$employees = new object_list($this->company->connections_from(array(
-						"type" => "RELTYPE_WORKERS",
-						"class_id" => CL_CRM_PERSON,
-					)));
+					$employees = $this->company->get_workers();
 					$prop["options"] = array (0 => t("--vali--")) + $employees->names ();
 				}
 
@@ -591,10 +588,7 @@ class realestate_property extends class_base
 				foreach ($connections as $connection)
 				{
 					$company = $connection->to ();
-					$employees = new object_list($company->connections_from(array(
-						"type" => "RELTYPE_WORKERS",
-						"class_id" => CL_CRM_PERSON,
-					)));
+					$employees = $company->get_workers();
 					$agents = $agents + $employees->names ();
 				}
 

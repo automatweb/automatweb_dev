@@ -1334,10 +1334,11 @@ class crm_person extends class_base
 				}
 				else
 				{
-					$org->connect(array(
+					$org->add_employees(array("id" => $arr["obj_inst"]->id()));
+/*					$org->connect(array(
 						"to" => $arr["obj_inst"]->id(),
 						"reltype" => 8,		// RELTYPE_WORKERS
-					));
+					));*/
 					unset($doomed_conns[$data["org"]]);
 				}
 			}
@@ -1350,7 +1351,7 @@ class crm_person extends class_base
 						"to" => $data["pro"],
 						"reltype" => 3,		// RELTYPE_PROFESSIONS
 					));
-				}
+				}//------------------------------------------------halb--------- oleks vaja t66suhte j2rgi
 				$sec->connect(array(
 					"to" => $arr["obj_inst"]->id(),
 					"reltype" => 2,		// RELTYPE_WORKERS
@@ -3970,10 +3971,11 @@ class crm_person extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
-			$target_obj->connect(array(
-			  "to" => $conn->prop("from"),
-			  "reltype" => "RELTYPE_WORK",
-			));
+//			$target_obj->connect(array(
+//			  "to" => $conn->prop("from"),
+//			  "reltype" => "RELTYPE_WORK",
+//			));
+			$target_obj->add_work_relation(array("org" => $conn->prop("from")));
 		};
 	}
 

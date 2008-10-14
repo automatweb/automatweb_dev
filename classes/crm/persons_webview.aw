@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.45 2008/09/22 13:38:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.46 2008/10/14 16:08:42 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -839,9 +839,7 @@ class persons_webview extends class_base
 	function get_workers($section)
 	{
 		enter_function("person_webview::get_workers");
-		$workers_list = new object_list($section->connections_from (array (
-			"type" => "RELTYPE_WORKERS",
-		)));
+		$workers_list = $section->get_workers();
 		//------------------------sorteerib k6vemad vennad ette;
 		foreach($workers_list->arr() as $worker)
 		{

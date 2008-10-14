@@ -318,18 +318,6 @@ class crm_company_people_impl extends class_base
 			{
 				$worker_ol = $tmp_obj->get_workers();
 				$persons = $worker_ol->ids();
-	
-				$persons_tmp = $tmp_obj->get_employees();//vana variandi toimimiseks
-				$persons_tmp->add($persons);
-				$persons = $persons_tmp->ids();
-	
-	/*			$conns = $tmp_obj->connections_from(array(
-					"type" => "RELTYPE_PROFESSIONS"
-				));
-				foreach($conns as $conn)
-				{
-					$professions[$conn->prop('to')] = $conn->prop('to.name');
-				}*/
 			}
 		}
 //----------------------- teatud ameti inimesed--------------------------------
@@ -338,14 +326,7 @@ class crm_company_people_impl extends class_base
 			$tmp_obj = new object($arr['request']['cat']);
 			$worker_ol = $tmp_obj->get_workers_for_section($arr['request']['unit']);
 			$persons = $worker_ol->ids();
-
-/*			$persons_tmp = $tmp_obj->get_workers();//vana variandi toimimiseks
-			$persons_tmp->add($persons);
-			$persons = $persons_tmp->ids();
-*/
 			$professions = array($arr['request']['cat']);
-/*			$professions = array();
-			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');*/
 		}
 
 //------------------------- ainult olulisteks m2rgitud inimesed-------------------
@@ -370,23 +351,6 @@ class crm_company_people_impl extends class_base
 			$section_ol = $arr["obj_inst"]->get_sections();
 			$sections = $section_ol->ids();
 
-			$persons_tmp = $arr["obj_inst"]->get_employees();//vana variandi toimimiseks
-			$persons_tmp->add($persons);
-			$persons = $persons_tmp->ids();
-
-			// get all units and all professions from those
-/*			$units = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECTION")));
-			$c = new connection();
-			$p_conns = $c->find(array(
-				"from.class_id" => CL_CRM_SECTION,
-				"from" => $units->ids(),
-				"type" => "RELTYPE_PROFESSIONS",
-			));
-			$professions = array();
-			foreach($p_conns as $p_con)
-			{
-				$professions[$p_con["to"]] = $p_con["to.name"];
-			}*/
 		}
 
 		//if listing from a specific unit, then the reltype is different

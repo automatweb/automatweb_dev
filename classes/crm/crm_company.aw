@@ -3305,15 +3305,16 @@ class crm_company extends class_base
 					"reltype" => "RELTYPE_SELLER",
 				));
 			}
-			else if($conn->prop('reltype') == 6) //crm_person.reltype_WORK
+			else if($conn->prop('reltype') == 6) //crm_person.reltype_WORK ------ vaja t88suhtepeale
 			{
-				$target_obj->connect(array(
-					"to" => $conn->prop("from"),
-					"reltype" => "RELTYPE_WORKERS",
-				));
+				$target_obj->add_employees(array("id" => $conn->prop("from")));
+//				$target_obj->connect(array(
+//					"to" => $conn->prop("from"),
+//					"reltype" => "RELTYPE_WORKERS",
+//				));
 			}
 		}
-		else if($target_obj->class_id() == CL_CRM_SECTION)
+		else if($target_obj->class_id() == CL_CRM_SECTION)//-------------------------t88suhte peale
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
@@ -3329,7 +3330,7 @@ class crm_company extends class_base
 	{
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
-		if ($target_obj->class_id() == CL_CRM_SECTION)
+		if ($target_obj->class_id() == CL_CRM_SECTION)//-------------------------t88suhte peale
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
@@ -3338,6 +3339,7 @@ class crm_company extends class_base
 		}
 	}
 
+//-------------------------t88suhte peale
 	// Invoked when a connection from person to organization is removed
 	// .. this will then remove the opposite connection as well
 	function on_disconnect_person_from_org($arr)
@@ -3490,6 +3492,7 @@ class crm_company extends class_base
 		die();
 	}
 
+//-------------------------t88suhte peale
 	// If an event is added to a person, then this method
 	// makes that event appear in any organization
 	// calendars that the person has a "workplace" connection
@@ -9226,10 +9229,6 @@ Bank accounts: yksteise all
 		{
 //			if(!$company->is_connected_to(array("to" => $pid, "type" => RELTYPE_WORKERS)))
 //			{
-				$company->connect(array(
-					"to" => $pid,
-					"type" => RELTYPE_WORKERS
-				));
 				$company->add_employees(array("id" => $pid));
 //			}
 		}

@@ -89,40 +89,16 @@ class crm_section_obj extends _int_object
 
 		if(sizeof($rel_list->ids()))
 		{
-			$person_list = new object_list(array(
+			$ol = new object_list(array(
 				"class_id" => CL_CRM_PERSON,
 				"site_id" => array(),
 				"class_id" => array(),
 				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rel_list->ids(),
 			));
-			return $person_list;
 		}
-		else
-		{
-			return $ol;
-		}
-//		foreach($rel_list->arr() as $rel)
-//		{
-//			arr($rel->prop(""))
-//		}
-//arr($rel_list);
-/*		foreach($rel_list->arr() as $rel)
-		{arr($rel);
-			$person = $rel->get_first_obj_by_reltype(array("type" => "RELTYPE_PERSON"));
-			if($person)
-			{
-				$ol->add($person);
-			}
-		}
-*/
 
-//		foreach($this->connections_from(array(
-//			"type" => "RELTYPE_WORKERS",
-//			"sort_by_num" => "to.jrk"
-//		)) as $conn)
-//		{
-//			$ol->add($conn->prop("to"));
-//		}
+		//vana asja toimiseks
+		$ol->add($this->get_employees());
 		return $ol;
 	}
 
@@ -159,7 +135,36 @@ class crm_section_obj extends _int_object
 		{
 			return 1;
 		}
+		
+		$rels = $this->get_work_relations(array("limit" => 1));
+		if(sizeof($rels->ids()))
+		{
+			return 1;
+		}
+
 		return 0;
+	}
+
+	/** Returns company work relations
+		@attrib api=1 params=name
+		@param limit optional type=int
+		@return object list
+			section work relations object list
+	**/
+	public function get_work_relations($arr = array())
+	{
+		$filter = array(
+			"class_id" => CL_CRM_PERSON_WORK_RELATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"section" => $this->id(),
+		);
+		if($arr["limit"])
+		{
+			$filter["limit"] = 1;
+		}
+		$ol = new object_list($filter);
+		return $ol;
 	}
 
 	function get_professions()
