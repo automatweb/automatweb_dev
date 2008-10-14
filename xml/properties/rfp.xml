@@ -401,15 +401,6 @@
             <caption>Soovitud linn</caption>
       </property>
       <property>
-            <name>data_gen_hotel</name>
-            <table>rfp</table>
-            <group>general_function_info</group>
-            <type>relpicker</type>
-            <field>data_gen_hotel</field>
-            <reltype>RELTYPE_LOCATION</reltype>
-            <caption>Soovitud hotell</caption>
-      </property>
-      <property>
             <name>archived</name>
             <table>rfp</table>
             <group>general_function_info</group>
@@ -845,6 +836,15 @@
             <method>serialize</method>
             <caption>Toitlustuse ruumid</caption>
             <comment>Toitlustuse jaoks kasutatavad ruumid</comment>
+      </property>
+      <property>
+            <name>data_gen_hotel</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>relpicker</type>
+            <field>data_gen_hotel</field>
+            <reltype>RELTYPE_LOCATION</reltype>
+            <caption>Soovitud hotell</caption>
       </property>
       <property>
             <name>final_theme</name>

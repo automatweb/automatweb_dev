@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.154 2008/10/14 10:35:06 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.155 2008/10/14 11:03:19 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -140,9 +140,6 @@
 
 			@property data_gen_city type=relpicker field=data_gen_city reltype=RELTYPE_TOWN
 			@caption Soovitud linn
-
-			@property data_gen_hotel type=relpicker field=data_gen_hotel reltype=RELTYPE_LOCATION
-			@caption Soovitud hotell
 
 			@property archived type=checkbox ch_value=1 default=0
 			@caption Arhiveeritud
@@ -292,6 +289,9 @@
 			@property final_catering_rooms type=relpicker multiple=1 reltype=RELTYPE_CATERING_ROOM table=objects field=meta method=serialize
 			@caption Toitlustuse ruumid
 			@comment Toitlustuse jaoks kasutatavad ruumid
+
+			@property data_gen_hotel type=relpicker field=data_gen_hotel reltype=RELTYPE_LOCATION
+			@caption Soovitud hotell
 
 			@property final_theme type=relpicker reltype=RELTYPE_THEME
 			@caption Teema
@@ -1564,7 +1564,7 @@ class rfp extends class_base
 			$val[] = $ro->name().":<br />\n".
 				html::date_select(array(
 					"name" => "add_bron[{$room}][date]",
-					"value" => -1,
+					"value" => $arr["obj_inst"]->prop("data_gen_arrival_date_admin"),
 					"month_as_numbers" => 1,
 				))."<br />\n".
 				html::select(array(
