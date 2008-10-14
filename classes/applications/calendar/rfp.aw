@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.157 2008/10/14 11:15:40 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.158 2008/10/14 11:25:25 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1738,6 +1738,14 @@ class rfp extends class_base
 					$add["start"] = mktime($add["time"]["from"]["hour"], $add["time"]["from"]["minute"], 0, $add["start1"]["month"], $add["start1"]["day"], $add["start1"]["year"]);
 					$add["end"] = mktime($add["time"]["to"]["hour"], $add["time"]["to"]["minute"], 0, $add["start1"]["month"], $add["start1"]["day"], $add["start1"]["year"]);
 					$add["start1"] = $add["start"];
+					if(!obj($add["resource"])->is_available(array(
+						"start" => $add["start1"],
+						"end" => $add["end"],
+						"type" => "food",
+					)))
+					{
+						continue;
+					}
 					$o = obj();
 					$o->set_class_id(CL_RESERVATION);
 					$o->set_parent($arr["obj_inst"]->id());
@@ -1746,7 +1754,7 @@ class rfp extends class_base
 					$o->set_prop("end", $add["end"]);
 					$o->set_meta("rfp_catering_var", $add["prod_var"]);
 					$o->set_prop("customer", $arr["obj_inst"]->prop("data_subm_organisation"));
-					$o->set_name(date('d.m.Y H:i', $add["start1"])." - ".date('d.m.Y H:i', $add["end"]));
+					$o->set_prop("type", "food");
 					$o->save();
 					if(is_array($add["prod"]))
 					{
