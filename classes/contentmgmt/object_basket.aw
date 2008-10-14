@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.14 2008/08/13 13:11:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.15 2008/10/14 13:19:48 markop Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -96,7 +96,7 @@ class object_basket extends class_base
 		$basket = obj($arr["id"]);
 		$objs = $this->get_basket_content($basket);
 		$this->read_template("show_basket.tpl");
-
+		lc_site_load("show_basket", $this);
 		// parse vars from sub
 		$sub_ct = $this->get_template_string("LINE");
 		preg_match_all("/\{VAR\:(.*)\}/imsU", $sub_ct, $mt, PREG_PATTERN_ORDER);
