@@ -1,6 +1,5 @@
 <?php
-
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.77 2008/10/10 11:59:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.78 2008/10/14 10:33:39 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -324,6 +323,16 @@ class rfp_manager extends class_base
 				foreach($ol->arr() as $oid => $obj)
 				{
 					$prop["options"][$oid] = $obj->name(); 
+				}
+				break;
+			case "raports_search_rfp_tables":
+				$ol = new object_list(array(
+					"parent" => $arr["obj_inst"]->prop("table_form_folder"),
+					"class_id" => CL_META,
+				));
+				foreach($ol->arr() as $oid => $o)
+				{
+					$prop["options"][$oid] = $o->name();
 				}
 				break;
 			case "raports_search_rfp_status":
@@ -715,6 +724,7 @@ class rfp_manager extends class_base
 			"rooms" => (is_array($arr["request"]["raports_search_rooms"]) AND count($arr["request"]["raports_search_rooms"]))?$arr["request"]["raports_search_rooms"]:NULL,
 			"rfp_status" => $arr["request"]["raports_search_rfp_status"],
 			"client" => $arr["request"]["raports_search_rfp_submitter"],
+			"tables" => $arr["request"]["raports_search_rfp_tables"],
 			"rfp_city" => $arr["request"]["raports_search_rfp_city"],
 			"rfp_hotel" => $arr["request"]["raports_search_rfp_hotel"],
 			"rfp_name" => $arr["request"]["raports_search_rfp_name"],
@@ -781,6 +791,10 @@ class rfp_manager extends class_base
 			));
 			$min_time = mktime(0,0,0,0,0, 2000);
 			$cur_time = time();
+			if($gr_by_client)
+			{
+				$row_html = array();
+			}
 			foreach($result as $data)
 			{
 				$rfp = $data["rfp"]?obj($data["rfp"]):false;
@@ -812,7 +826,7 @@ class rfp_manager extends class_base
 								$rfp_prop_values[$prop."_time"] = date("H:i", $pval);
 							}
 
-							$rfp_prop_values[$prop] = $pval;
+							$rfp_prop_values[$prop] = ($prop == "data_subm_organisation") ? html::obj_change_url($rfp, $pval ? $pval : t("-")) : $pval;
 							$rfp_prop_captions[$prop."_caption"] = $propdata["caption"];
 							$rfp_prop_empty[$prop."_date"] = "";
 							$rfp_prop_empty[$prop."_time"] = "";
@@ -836,6 +850,7 @@ class rfp_manager extends class_base
 						"rfp_modifiedby_uid" => $rfp->modifiedby(),
 						"rfp_createdby_name" => $cper->name(),
 						"rfp_modifiedby_name" => $mper->name(),
+						"tables" => $rfp->prop("data_mf_table_form.name"),
 					));
 
 					$this->vars($rfp_prop_values);
@@ -866,8 +881,9 @@ class rfp_manager extends class_base
 						"rfp_modifiedby_uid" => $rv->modifiedby(),
 						"rfp_createdby_name" => $cper->name(),
 						"rfp_modifiedby_name" => $mper->name(),
-						"data_subm_organisation" => $d_org,
+						"data_subm_organisation" => html::obj_change_url($rv, $d_org?$d_org:t("-")),
 						"data_subm_name" => $d_name,
+						"tables" => t("-"),
 					);
 					$rfp_prop_empty["confirmed_caption"] = t("Staatus");
 					if($rv->prop("verified"))
@@ -883,16 +899,25 @@ class rfp_manager extends class_base
 				$this->vars($row_vars);
 				
 				$row_type_var = "ROW_TYPE_".$this->tpl_subs[$data["result_type"]];
-				if($gr_by_client && $rfp)
+				if($gr_by_client)
 				{
-					$clients[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] = array(
-						"data_subm_name" => $rfp->prop("data_subm_name"),
-						"data_subm_organisation" => $rfp->prop("data_subm_organisation"),
-					);
+					if($rfp)
+					{
+						$clients[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] = array(
+							"data_subm_name" => $rfp->prop("data_subm_name"),
+							"data_subm_organisation" => $rfp->prop("data_subm_organisation"),
+						);
+						$key = $rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation");
+					}
+					else
+					{
+						$key = "unknown";
+					}
 					$row_type_html = array();
 					$row_type_html[$row_type_var] = $this->parse($row_type_var);
 					$this->vars($row_type_html);
-					$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+					$row_html[$key] .= $this->parse("ROW");
+					//$row_html .= $this->parse("ROW");
 				}
 				else
 				{
@@ -931,6 +956,17 @@ class rfp_manager extends class_base
 							}
 						}
 					}
+					if($data["result_type"] == RFP_RAPORT_TYPE_RESOURCES)
+					{
+						$cont = true;
+						foreach($loopdata as $subrow_data)
+						{
+							if($subrow_data["count"])
+							{
+								$cont = false;
+							}
+						}
+					}
 					if(count($loopdata) && !$cont)
 					{
 						$_row_html = "";
@@ -941,6 +977,10 @@ class rfp_manager extends class_base
 						));
 						foreach($loopdata as $subrow_key => $subrow_data)
 						{
+							if($data["result_type"] == RFP_RAPORT_TYPE_RESOURCES && !$subrow_data["count"])
+							{
+								continue;
+							}
 							switch($data["result_type"])
 							{
 								case RFP_RAPORT_TYPE_CATERING:
@@ -969,7 +1009,9 @@ class rfp_manager extends class_base
 									if($this->can("view", $subrow_data["rfp"]))
 									{
 										$subrow_data["comments"] = obj($subrow_data["rfp"])->prop("additional_catering_information");
+										$subrow_data["currency"] = obj($subrow_data["rfp"])->prop("default_currency.name");
 									}
+									$subrow_data["discount"] = $subrow_data["discount"]?sprintf("%s %", $subrow_data["discount"]) : "-";
 									break;
 								case RFP_RAPORT_TYPE_RESOURCES:
 									$subrow_data["resource_name"] = obj($subrow_data["real_resource"])->name();
@@ -1016,7 +1058,7 @@ class rfp_manager extends class_base
 						));
 						if($gr_by_client)
 						{
-							$row_html[$rfp->prop("data_subm_name").".".$rfp->prop("data_subm_organisation")] .= $this->parse("ROW");
+							$row_html[$key] .= $this->parse("ROW");
 						}
 						else
 						{
@@ -1494,7 +1536,7 @@ class rfp_manager extends class_base
 		}
 
 		// raports search 
-		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel", "rfp_name", "rfp_catering_type");
+		$todo = array("from_date", "until_date","with_products", "group", "covering", "rooms", "rfp_status", "rfp_submitter", "rfp_city", "rfp_hotel", "rfp_name", "rfp_catering_type", "rfp_tables");
 		foreach($todo as $do)
 		{
 			$arr["args"]["raports_search_".$do] = $arr["request"]["raports_search_".$do];
@@ -1929,7 +1971,7 @@ class rfp_manager extends class_base
 
 		if($arr["rfp_status"])
 		{
-			$rfps["confirmed"] = $arr["rfp_status"];
+			$rfps["CL_RFP.confirmed"] = $arr["rfp_status"];
 		}
 		if($arr["client"])
 		{
@@ -1946,9 +1988,43 @@ class rfp_manager extends class_base
 				$clients = array(-1);
 			}
 		}
+		$f = $arr["from"];
+		$t = mktime(23, 59, 59, date('m', $arr["to"]), date('d', $arr["to"]), date('Y', $arr["to"]));
+		if($f > 1 && $t > 1)
+		{
+			$rfps[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic"=> "AND",
+						"conditions" => array(
+							"CL_RFP.data_gen_arrival_date_admin" => new obj_predicate_compare(OBJ_COMP_GREATER, $f),
+							"CL_RFP.data_gen_departure_date_admin" => new obj_predicate_compare(OBJ_COMP_LESS, $t)
+						),
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"CL_RFP.data_gen_arrival_date_admin" => new obj_predicate_compare(OBJ_COMP_LESS, mktime(23, 59, 59, date('m', $f), date('d', $f), date('Y', $f))),
+							"CL_RFP.data_gen_departure_date_admin" => new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0, 0, 0, date('m', $t), date('d', $t), date('Y', $t))),
+						),
+					)),
+				),
+			));
+					
+		}
+		elseif($f > 1)
+		{
+			$rfps["CL_RFP.data_gen_arrival_date_admin"] = new obj_predicate_compare(OBJ_COMP_GREATER, $f);
+		}
+		elseif($t > 1)
+		{
+			$rfps["CL_RFP.data_gen_departure_date_admin"] = new obj_predicate_compare(OBJ_COMP_LESS, $t);
+		}
 		$rfps["CL_RFP.data_gen_city"] = $arr["rfp_city"]?$arr["rfp_city"]:array();
 		$rfps["CL_RFP.data_gen_hotel"] = $arr["rfp_hotel"]?$arr["rfp_hotel"]:array();
 		$rfps["CL_RFP.data_gen_function_name"] = $arr["rfp_name"]?"%".$arr["rfp_name"]."%":array();
+		$rfps["CL_RFP.data_mf_table_form"] = $arr["tables"]?$arr["tables"]:array();
 		$rfp_ol = new object_list($rfps);
 		if(!is_array($arr["search"]) OR in_array(1, $arr["search"]))
 		{
@@ -1968,7 +2044,7 @@ class rfp_manager extends class_base
 				if($arr["from"])
 				{
 					$time = array(
-						"start1" => $arr["from"],
+						"start1" => $f,
 						"end" => $arr["to"],
 					);
 				}
@@ -1982,12 +2058,22 @@ class rfp_manager extends class_base
 		$res_inst = get_instance(CL_RESERVATION);
 		foreach($result as $k => $data)
 		{
+			$rfp = null;
 			if($arr["from"] && $data["start1"] < $arr["from"])
 			{
 				unset($result[$k]);
 				continue;
 			}
-			if($arr["to"] && $data["end"] > $arr["to"])
+			if($arr["to"] && $data["end"] > $t)
+			{
+				unset($result[$k]);
+				continue;
+			}
+			if($this->can("view", $data["rfp"]))
+			{
+				$rfp = obj($data["rfp"]);
+			}
+			if(!$rfp && ($arr["rfp_status"] || $arr["tables"] || $arr["rfp_city"] || $arr["rfp_hotel"] || $arr["rfp_name"]))
 			{
 				unset($result[$k]);
 				continue;
@@ -1999,10 +2085,6 @@ class rfp_manager extends class_base
 			}
 			if(strlen($arr["client"])) // the smartest thing would be to take those props away from meta and use the filter on the rfp obj list..
 			{
-				if($this->can("view", $data["rfp"]))
-				{
-					$rfp = obj($data["rfp"]);
-				}
 				if(!$this->can("view", $data["rfp"]) || ((array_search($rfp->prop("data_subm_name"), $clients) === false) AND (array_search($rfp->prop("data_subm_organisation"), $clients) === false)))
 				{
 					unset($result[$k]);
@@ -2080,6 +2162,7 @@ class rfp_manager extends class_base
 			}
 		}
 		// remapping time params
+		$return = array();
 		foreach($housing as $k => $data)
 		{
 			$new = array(
@@ -2102,6 +2185,7 @@ class rfp_manager extends class_base
 		{
 			$resources = array_merge($resources, safe_array($obj->get_resources()));
 		}
+		$return = array();
 		foreach($resources as $data)
 		{
 			$new = array(
@@ -2126,6 +2210,7 @@ class rfp_manager extends class_base
 				$prods[$k] = $v;
 			}
 		}
+		$return = array();
 		foreach($prods as $prod_and_rv => $data)
 		{
 			if($data["amount"] <= 0)
@@ -2175,7 +2260,7 @@ class rfp_manager extends class_base
 			$return[$reservation->id()]["products"][$product_id] = $data;
 		}
 		
-		$tmplist = new object_list(array(
+		/*$tmplist = new object_list(array(
 			"class_id" => CL_ROOM,
 			"parent" => $this->rfpm->prop("catering_room_folder"),
 		));
@@ -2204,7 +2289,7 @@ class rfp_manager extends class_base
 				"rfp" => false,
 			);
 			// i dont put the products here right now, most of the reservations get probably filtered out anyway..
-		}
+		}*/
 		return $return;
 	}
 	
