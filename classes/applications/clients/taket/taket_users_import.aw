@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.4 2008/10/13 09:22:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.5 2008/10/14 12:06:48 markop Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -76,10 +76,37 @@ taket.xmlrpcpath[0] = /xmlrpc/index.php<br>
 taket.xmlrpcport[0] = 8888<br>";
 			die();
 		}
-		$client = new IXR_Client($hosts[1], $path[1], $port[1]);
+
+		$client = new IXR_Client($hosts[0], $path[0],$port[0]);
+
 		$client->query('server.getUsers',array());
+		$dat123 = explode("</struct></value>
+<value><struct>" , $client->message->message);
+
+		$datx = array();
+		foreach($dat123 as $d)
+		{
+			$rowdata = array();
+			foreach(explode("\n" , $d) as $row)
+			{
+				$pos1 = strpos($row, '<name>');
+				$pos2 = strpos($row, '</name>');
+				$pos3 = strpos($row, '<string>');
+				$pos4 = strpos($row, '</string>');
+				$rowdata[substr($row , ($pos1 + 6) , $pos2 - $pos1 - 6)] = substr($row , ($pos3 + 8) , $pos4 - $pos3 - 8);
+			}
+
+			$datx[] = $rowdata;
+		}
+
 		$data=$client->getResponse();
-arr($data); arr($hosts);arr($port);arr($path[1]);flush();
+
+		//kuna get_response ei anna antud juhul midagi, siis tegi "k2sitsi" 2ra asja
+		$data = $datx;
+
+		$us = get_instance(CL_USER);
+		$gr = get_instance(CL_GROUP);
+
 		foreach($data as $value)
 		{
 			$value['kasutajanimi']=$value['number'];
@@ -88,7 +115,8 @@ arr($data); arr($hosts);arr($port);arr($path[1]);flush();
 			//delete weirdass old juusers
 			if(strlen($value['kasutajanimi'])<3 || strlen($value['password'])<3)
 			{
-				$inst->do_delete_user($value['kasutajanimi']);
+//see ei funka uues koodis
+			//	$inst->do_delete_user($value['kasutajanimi']);
 			}
 			
 			if(strlen($value['kasutajanimi'])==1)
@@ -110,19 +138,27 @@ arr($data); arr($hosts);arr($port);arr($path[1]);flush();
 			}
 			
 				
-			$row = $this->db_fetch_row('SELECT uid, password FROM users WHERE uid= \''
-													.$value['kasutajanimi'].'\'');
-
+			$row = $this->db_fetch_row('SELECT uid, password FROM users WHERE uid= \''.$value['kasutajanimi'].'\'');
 
 			//	$inst->add_users_to_group_rec(9, array($value['kasutajanimi']));
 			if(!is_array($row))
 			{
-				$inst->add(array(
+/*				$inst->add(array(
 						'uid' => $value['kasutajanimi'],
 						'password' => $value['password'],
 						'email' => $value['email'],
 				));
-				$inst->add_users_to_group_rec(9, array($value['kasutajanimi']));
+*/
+	
+				$user_o = $us->add_user(array(
+					"uid" => $value['kasutajanimi'],
+					"password" => $value['password'],
+//					"all_users_grp" => $aug->prop("gid"),
+					'email' => $value['email'],
+				));
+
+				$gr->add_user_to_group($user_o, obj(9));
+//				$inst->add_users_to_group_rec(9, array($value['kasutajanimi']));
 				$value['password']=md5($value['password']);
 			}
 			else
