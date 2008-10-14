@@ -1950,8 +1950,8 @@ class room extends class_base
 						if(is_oid($this->last_bron_id) && !$arr["web"])
 						{
 							$last_bron = obj($this->last_bron_id);
-						$d[$x] = $this->get_bron_cell_html($last_bron, $settings, $start_step);
-						$col[$x] = $this->get_bron_cell_color($last_bron , $settings,$start_step);
+							$d[$x] = $this->get_bron_cell_html($last_bron, $settings, $start_step);
+							$col[$x] = $this->get_bron_cell_color($last_bron , $settings,$start_step);
 
 						//seda praega ei kasuta, kuid 2kki l2heb vaja
 /*							if(($last_bron->prop("end") - $start_step) / ($step_length * $time_step) >= 1)
@@ -2027,6 +2027,7 @@ class room extends class_base
 					$xtr = $arr["obj_inst"]->get_extra_res($start_step , $end_step);
 					if($xtr)
 					{
+						$this->is_after_buffer = 0;
 						$extra_d[$x."_0"] = $this->get_bron_cell_html(obj($xtr), $settings,$start_step);
 						$extra_col[$x."_0"] = $this->get_bron_cell_color(obj($xtr), $settings,$start_step);
 					}
@@ -2322,10 +2323,6 @@ class room extends class_base
 							if ($imgstr != "")
 							{
 								$d[$x] .= "<br>".$imgstr;
-							}
-							if($this->is_after_buffer)
-							{
-								$d[$x] = ""; 
 							}
 							if($this->is_after_buffer)
 							{

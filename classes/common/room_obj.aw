@@ -314,7 +314,8 @@ class room_obj extends _int_object
 			"class_id" => CL_RESERVATION,
 			"lang_id" => array(),
 			"resource" => $this->id(),
-			"limit" => 1,	
+			"limit" => 1,
+			"type" => "%food%",
 		);
 		$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, $start);
 		$filter["start1"] = new obj_predicate_compare(OBJ_COMP_LESS, $end);
