@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.5 2008/10/14 12:06:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.6 2008/10/14 12:24:11 markop Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
+HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
 
 @default table=objects
@@ -56,10 +57,19 @@ class taket_users_import extends class_base
 		{
 			foreach($arr['password'] as $key=>$value)
 			{
-				if(strlen($value)>=3)
+				if(strlen($value)>=3 && $arr['username'][$key])
 				{
-					//let's update the users password
-					$inst->save(array('uid'=>$arr['username'][$key], 'password'=>$value));
+					$row = $this->db_fetch_row('SELECT oid, uid, password FROM users WHERE uid= \''.$arr['username'][$key].'\'');
+					if(is_array($row))
+					{
+						$o = obj($row["oid"]);
+						$o->set_prop("password" , $value);
+						$o->save();
+						$row = $this->db_fetch_row('UPDATE users SET password='.$value.' WHERE uid= \''.$arr['username'][$key].'\'');
+						//let's update the users password
+						//
+						//	$inst->save(array('uid'=>$arr['username'][$key], 'password'=>$value));
+					}
 				}
 			}
 		}
@@ -115,6 +125,7 @@ taket.xmlrpcport[0] = 8888<br>";
 			//delete weirdass old juusers
 			if(strlen($value['kasutajanimi'])<3 || strlen($value['password'])<3)
 			{
+				continue;
 //see ei funka uues koodis
 			//	$inst->do_delete_user($value['kasutajanimi']);
 			}
