@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="id" type="oid" />
 					<optional name="return_url" type="string" />
+					<optional name="verbose" type="bool" />
 				</arguments>
 			</function>
 		</action>
