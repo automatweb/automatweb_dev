@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.70 2008/09/02 14:15:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.71 2008/10/15 12:34:35 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -2260,14 +2260,14 @@ class spa_bookings_overview extends class_base
 		{
 			// get person for user and from person get co 
 			$p = $pi->get_person_for_uid($uid);
-			$c = new connection();
-			$conns = $c->find(array(
-				"from.class_id" => CL_CRM_COMPANY,
-				"type" => "RELTYPE_WORKERS",
-				"to" => $p->id()
-			));
-			$c = reset($conns);
-			$co = obj($c["from"]);
+//			$c = new connection();
+//			$conns = $c->find(array(
+//				"from.class_id" => CL_CRM_COMPANY,
+//				"type" => "RELTYPE_WORKERS",
+//				"to" => $p->id()
+//			));
+//			$c = reset($conns);
+			$co = $p->company();
 
 			$r = array(
 				"tb" => $co->name()

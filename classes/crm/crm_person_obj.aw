@@ -816,6 +816,115 @@ class crm_person_obj extends _int_object
 		return $ret;
 	}
 
+	/** returns all organisations
+		@attrib api=1
+		@param active optional type=bool
+			if set, returns only active work relation organisations
+		@return array
+			array(id => name , ...)
+	**/
+	public function get_org_selection($arr = array())
+	{
+		$sel = array();
+		if($arr["active"])
+		{
+			$this->set_current_jobs();
+			foreach($this->current_jobs->arr() as $job)
+			{
+				if($job->prop("org"))
+				{
+					$opts[$job->prop("org")] = $job->prop("org.name");
+				}
+			}
+			return $opts;
+		}
+		
+		$this->set_all_jobs();
+		foreach($this->all_jobs->arr() as $job)
+		{
+			if($job->prop("org"))
+			{
+				$opts[$job->prop("org")] = $job->prop("org.name");
+			}
+		}
+
+	//vana versioon peab ka m6nda aega t88le j22ma
+		$conns = $ci->find(array(
+			"from.class_id" => CL_CRM_COMPANY,
+			"type" => "RELTYPE_WORKERS",
+			"to" => $this->id()
+		));
+		foreach($conns as $con)
+		{
+			$opts[$con["from"]] = $con["from.name"];
+		}
+		return $sel;
+	}
+
+
+	/** returns one company
+		@attrib api=1
+		@return object
+			company object
+	**/
+	public function company()
+	{
+		$co_id = $this->company_id();
+		if(is_oid($co_id))
+		{
+			return obj($co_id);
+		}
+		return null;
+	}
+
+	/** returns one company id
+		@attrib api=1
+		@return oid
+			company id
+	**/
+	public function company_id()
+	{
+		//vaatab siis k6igepealt praegust t88kohta, siis yldse t88suhet, siis vanas systeemis asja ja viimaseks endist t88kohta
+		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		{
+			$rel = $cn->to();
+			if(is_oid($rel->prop("org")))
+			{
+				return $rel->prop("org");
+			}
+		}
+		foreach(parent::connections_from(array("type" => "RELTYPE_ORG_RELATION")) as $cn)
+		{
+			$rel = $cn->to();
+			if(is_oid($rel->prop("org")))
+			{
+				return $rel->prop("org");
+			}
+		}
+
+//-----vana systeeem
+		$conns = $ci->find(array(
+			"from.class_id" => CL_CRM_COMPANY,
+			"type" => "RELTYPE_WORKERS",
+			"to" => $this->id()
+		));
+		foreach($conns as $con)
+		{
+			return $con["from"];
+		}
+//------------
+		foreach(parent::connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $cn)
+		{
+			$rel = $cn->to();
+			if(is_oid($rel->prop("org")))
+			{
+				return $rel->prop("org");
+			}
+		}
+
+		return null;
+	}
+
 	/** return all current work relation orgs
 		@attrib api=1
 		@return object list
@@ -834,8 +943,6 @@ class crm_person_obj extends _int_object
 		return $ol;
 	}
 
-	
-
 	/** returns all current job relations
 		@attrib api=1
 	**/
@@ -846,7 +953,39 @@ class crm_person_obj extends _int_object
 			$this->current_jobs = new object_list();
 			foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
 			{
+				$q = $cn -> to();
+				if($q->prop("start") && $q->prop("start") > time())//t88suhe pole veel alanud
+				{
+					continue;
+				}
+				if($q->prop("end") && $q->prop("end") < time())//t88suhe l6ppenud
+				{
+					continue;
+				}
 				$this->current_jobs->add($cn->prop("to"));
+			}
+		}
+	}
+
+	/**
+		@attrib api=1
+	**/
+	public function set_all_jobs()
+	{
+		if(!$this->all_jobs)
+		{
+			$this->all_jobs = new object_list();
+			foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+			{
+				$this->all_jobs->add($cn->prop("to"));
+			}
+			foreach(parent::connections_from(array("type" => "RELTYPE_ORG_RELATION")) as $cn)
+			{
+				$this->all_jobs->add($cn->prop("to"));
+			}
+			foreach(parent::connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $cn)
+			{
+				$this->all_jobs->add($cn->prop("to"));
 			}
 		}
 	}

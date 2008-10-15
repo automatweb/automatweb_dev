@@ -3201,7 +3201,7 @@ class realestate_manager extends class_base
 
 	function _get_co_for_person($person)
 	{
-		$conns = $person->connections_to(array(
+/*		$conns = $person->connections_to(array(
 			"type" => 8, //RELTYPE_WORKERS
 			"from.class_id" => CL_CRM_COMPANY,
 		));
@@ -3211,7 +3211,8 @@ class realestate_manager extends class_base
 			$company = $conn->from();
 			break;
 		}
-
+*/
+		$company = $person->company();
 		if (!is_object($company))
 		{
 			$parent = obj($person->parent());
