@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.23 2008/10/07 12:35:21 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.24 2008/10/15 11:33:10 robert Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad
 /*
 
@@ -248,6 +248,8 @@ class user_bookmarks extends class_base
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_EXTLINK),
 			"parent" => $parent,
+			"lang_id" => array(),
+			"site_id" => array(),
 		));
 		foreach($ol->arr() as $ob)
 		{
