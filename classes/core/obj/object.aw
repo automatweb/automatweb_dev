@@ -1278,6 +1278,28 @@ class object
 		return $GLOBALS["objects"][$this->oid]->is_brother();
 	}
 
+	/** Returns the OID of brother (with specified parent), if no brother is found returns false
+		@attrib api=1 params=pos
+
+		@param parent optional type=oid acl=view
+			the OID of parent, to look the brother from.
+
+		@errors
+			none
+
+		@returns
+			the OID of brother (with specified parent), false if no brother is found, NULL if no object is loaded
+
+		@examples
+			$o = obj(89);
+			$bro_oid = $o->has_brother(127);
+			
+	**/
+	function has_brother($parent = NULL)
+	{
+		return $GLOBALS["objects"][$this->oid]->has_brother($parent);
+	}
+
 	/** returns the object that the current object is brother to, or the same object if it is the original
 		@attrib api=1
 
@@ -1960,9 +1982,9 @@ class object
 		return $GLOBALS["objects"][$this->oid]->originalize();
 	}
 
-	function trans_get_val($prop)
+	function trans_get_val($prop, $lang_id = false)
 	{
-		return $GLOBALS["objects"][$this->oid]->trans_get_val($prop);
+		return $GLOBALS["objects"][$this->oid]->trans_get_val($prop, $lang_id);
 	}
 
 	function trans_get_val_str($prop)

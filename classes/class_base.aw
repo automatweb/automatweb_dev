@@ -5653,13 +5653,13 @@ class class_base extends aw_template
 		return $ret;
 	}
 
-	function trans_get_val($obj, $prop)
+	function trans_get_val($obj, $prop, $lang_id = false)
 	{
 		if ($obj->is_brother())
 		{
 			$obj = $obj->get_original();
 		}
-		return $obj->trans_get_val($prop);
+		return $obj->trans_get_val($prop, $lang_id);
 	}
 
 	function trans_get_val_str($obj, $prop)

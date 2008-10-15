@@ -914,6 +914,26 @@ class _int_object
 		return ($this->obj["oid"] != $this->obj["brother_of"]);
 	}
 
+	function has_brother($parent)
+	{
+		if (!isset($this->obj["oid"]))
+		{
+			return NULL;
+		}
+		$args = array(
+			"class_id" => $this->obj["class_id"],
+			"brother_of" => $this->obj["brother_of"],
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		if(is_array($parent) || is_oid($parent))
+		{
+			$args["parent"] = $parent;
+		}
+		$ol = new object_list($args);
+		return reset($ol->ids());
+	}
+
 	function get_original()
 	{
 		$ib = $this->is_brother();
@@ -1540,7 +1560,7 @@ class _int_object
 		$GLOBALS["object_loader"]->handle_cache_update($this->id(), $this->site_id(), "originalize");
 	}
 
-	function trans_get_val($prop)
+	function trans_get_val($prop, $lang_id = false)
 	{
 		// I wanna use object::trans_get_val("foo.name");
 		if(strpos($prop, "."))
@@ -1551,7 +1571,7 @@ class _int_object
 			if($this->can("view", $this->prop($foo)))
 			{
 				$foo_obj = obj($this->prop($foo));
-				return $foo_obj->trans_get_val($foo_prop);
+				return $foo_obj->trans_get_val($foo_prop, $lang_id);
 			}
 		}
 
@@ -1560,7 +1580,7 @@ class _int_object
 			$tmp = $this->get_original();
 			if ($tmp->id() != $this->obj["oid"]) // if no view access for original, bro can return the same object
 			{
-				return $tmp->trans_get_val($prop);
+				return $tmp->trans_get_val($prop, $lang_id);
 			}
 		}
 
@@ -1598,6 +1618,13 @@ class _int_object
 		{
 			$trans = true;
 			$cur_lid = $cl;
+		}
+
+		// If the language id is given, ignore the stuff above.
+		if($lang_id !== false && $lang_id != $this->lang_id())
+		{
+			$trans = true;
+			$cur_lid = $lang_id;
 		}
 
 		if ($trans and isset($this->obj["meta"]["translations"]))
@@ -2472,7 +2499,6 @@ echo "int path return ".dbg::dump($ret)." <br>\n";
 		{
 			$this->_int_load_property_values();
 		}
-//if($this->id() == 3479){arr($this->obj["properties"][$prop]);arr($prop);}
 		// if this is a complex thingie, then loopdaloop
 		if (strpos($prop, ".") !== false)
 		{
