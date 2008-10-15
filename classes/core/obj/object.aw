@@ -1982,9 +1982,30 @@ class object
 		return $GLOBALS["objects"][$this->oid]->originalize();
 	}
 
-	function trans_get_val($prop, $lang_id = false)
+	/** Return the translation of the property
+		@attrib name=trans_get_val api=1 params=pos
+
+		@param property required type=string
+			The name of the property the translation is asked for
+
+		@param language_id optional type=boolean
+			The language id the translation is asked for, default is current language id
+
+		@param ignore_status optional type=boolean default=false
+			If true, the status of the translation is ignored.
+
+		@errors
+			none
+
+		@returns
+			The translation of the property.
+
+		@examples
+
+	**/
+	function trans_get_val($prop, $lang_id = false, $ignore_status = false)
 	{
-		return $GLOBALS["objects"][$this->oid]->trans_get_val($prop, $lang_id);
+		return $GLOBALS["objects"][$this->oid]->trans_get_val($prop, $lang_id, $ignore_status);
 	}
 
 	function trans_get_val_str($prop)

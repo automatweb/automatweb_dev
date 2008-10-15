@@ -1560,7 +1560,7 @@ class _int_object
 		$GLOBALS["object_loader"]->handle_cache_update($this->id(), $this->site_id(), "originalize");
 	}
 
-	function trans_get_val($prop, $lang_id = false)
+	function trans_get_val($prop, $lang_id = false, $ignore_status = false)
 	{
 		// I wanna use object::trans_get_val("foo.name");
 		if(strpos($prop, "."))
@@ -1634,7 +1634,7 @@ class _int_object
 			{
 				return $this->obj["meta"]["trans_".$cur_lid."_status"] == 1 ? STAT_ACTIVE : STAT_NOTACTIVE;
 			}
-			if (isset($trs[$cur_lid]) && $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			if (isset($trs[$cur_lid]) && ($this->obj["meta"]["trans_".$cur_lid."_status"] == 1 || $ignore_status))
 			{
 				if ($trs[$cur_lid][$prop] == "")
 				{
