@@ -82,7 +82,7 @@ FCKConfig.ToolbarSets["aw"] = [
 		['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 		['Subscript','Superscript'],
 		['awlup','Unlink','Anchor'],
-		['awfup','awimageupload','AWRelationManager','Table','Rule','SpecialChar'],
+		['awfup','awimageupload','Table','Rule','SpecialChar'],
 		//['Templates'],
 		['Style','FontFormat'],
 		['FitWindow','ShowBlocks']		// No comma for the last row.
