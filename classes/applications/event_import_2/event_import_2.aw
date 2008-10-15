@@ -23,6 +23,10 @@
 		@caption Keel
 		@comment Objektide keel
 
+		@property translations type=checkbox ch_value=1
+		@caption T&otilde;lked
+		@comment Andmed salvestatakse objekti t&otilde;lgetena, mitte omaduste v&auml;&auml;rtustena
+
 		@property last_import type=text
 		@caption Viimane import
 		@comment Viimase impordi l&otilde;pu kellaaeg
@@ -513,7 +517,7 @@ class event_import_2 extends class_base
 			$fn_to_call = "process_".$itype."s";
 			$this->$fn_to_call($o, $data, $new);
 
-			$o->set_meta("orig_content", $oc);
+			$o->set_meta("orig_content_".$this->conf["lang_id"], $oc);
 			$this->save_obj($o);
 
 			$this->print_log("ext_id - ".$id, 2);
@@ -531,7 +535,12 @@ class event_import_2 extends class_base
 
 	private function process_sectors(&$o, $data, $new)
 	{
-		$oc = $new ? array() : $o->meta("orig_content");
+		$oc = $new ? array() : $o->meta("orig_content_".$this->conf["lang_id"]);
+		if($this->conf["translations"])
+		{
+			$translations = $o->meta("translations");
+			$trans = &$translations[$this->conf["lang_id"]];
+		}
 		foreach($data as $k => $v)
 		{
 			// We'll update the content if it differs from original and it's not prohibited to do that.
@@ -547,18 +556,34 @@ class event_import_2 extends class_base
 
 					case "tegevusala":
 						$this->print_log($k." => ".$v, 4);
-						$o->set_prop($k, $v);
+						if($this->conf["translations"])
+						{
+							$trans[$k] = $v;
+						}
+						else
+						{
+							$o->set_prop($k, $v);
+						}
 						break;
 				}
 			}
 			// We need to save the original content. Otherwise we can't tell if the content has been changed in AW or the source.
 			$oc[$k] = $v;
 		}
+		if($this->conf["translations"])
+		{
+			$o->set_meta("translations", $translations);
+		}
 	}
 
 	private function process_locations(&$o, $data, $new)
 	{
-		$oc = $new ? array() : $o->meta("orig_content");
+		$oc = $new ? array() : $o->meta("orig_content_".$this->conf["lang_id"]);
+		if($this->conf["translations"])
+		{
+			$translations = $o->meta("translations");
+			$trans = &$translations[$this->conf["lang_id"]];
+		}
 		foreach($data as $k => $v)
 		{
 			// We'll update the content if it differs from original and it's not prohibited to do that.
@@ -576,6 +601,7 @@ class event_import_2 extends class_base
 					case "email":
 					case "phone":
 					case "organizer":
+					case "tegevusala":
 						// Values passed, but nothing to do with 'em.
 						break;
 
@@ -589,20 +615,34 @@ class event_import_2 extends class_base
 
 					case "name":
 					case "comment":
-					case "tegevusala":
-						$this->print_log($k." => ".$v, 4);
-						$o->set_prop($k, $v);
+						if($this->conf["translations"])
+						{
+							$trans[$k] = $v;
+						}
+						else
+						{
+							$o->set_prop($k, $v);
+						}
 						break;
 				}
 			}
 			// We need to save the original content. Otherwise we can't tell if the content has been changed in AW or the source.
 			$oc[$k] = $v;
 		}
+		if($this->conf["translations"])
+		{
+			$o->set_meta("translations", $translations);
+		}
 	}
 
 	private function process_organizers(&$o, $data, $new)
 	{
-		$oc = $new ? array() : $o->meta("orig_content");
+		$oc = $new ? array() : $o->meta("orig_content_".$this->conf["lang_id"]);
+		if($this->conf["translations"])
+		{
+			$translations = $o->meta("translations");
+			$trans = &$translations[$this->conf["lang_id"]];
+		}
 		foreach($data as $k => $v)
 		{
 			// We'll update the content if it differs from original and it's not prohibited to do that.
@@ -634,19 +674,34 @@ class event_import_2 extends class_base
 					case "name":
 					case "comment":
 						$this->print_log($k." => ".$v, 4);
-						$o->set_prop($k, $v);
+						if($this->conf["translations"])
+						{
+							$trans[$k] = $v;
+						}
+						else
+						{
+							$o->set_prop($k, $v);
+						}
 						break;
 				}
 			}
 			// We need to save the original content. Otherwise we can't tell if the content has been changed in AW or the source.
 			$oc[$k] = $v;
 		}
+		if($this->conf["translations"])
+		{
+			$o->set_meta("translations", $translations);
+		}
 	}
 
 	private function process_events(&$o, $data, $new)
 	{
-		$this->print_log("prodessing event");
-		$oc = $new ? array() : $o->meta("orig_content");
+		$oc = $new ? array() : $o->meta("orig_content_".$this->conf["lang_id"]);
+		if($this->conf["translations"])
+		{
+			$translations = $o->meta("translations");
+			$trans = &$translations[$this->conf["lang_id"]];
+		}
 		foreach($data as $k => $v)
 		{
 			// We'll update the content if it differs from original and it's not prohibited to do that.
@@ -658,7 +713,14 @@ class event_import_2 extends class_base
 					case "name":
 					case "description":
 						$this->print_log($k." => ".$v, 4);
-						$o->set_prop($k, $v);
+						if($this->conf["translations"])
+						{
+							$trans[$k] = $v;
+						}
+						else
+						{
+							$o->set_prop($k, $v);
+						}
 						break;
 
 					case "sector":
@@ -718,6 +780,10 @@ class event_import_2 extends class_base
 			}
 			// We need to save the original content. Otherwise we can't tell if the content has been changed in AW or the source.
 			$oc[$k] = $v;
+		}
+		if($this->conf["translations"])
+		{
+			$o->set_meta("translations", $translations);
 		}
 		if($this->conf["event_times_as_events"])
 		{
@@ -880,6 +946,9 @@ class event_import_2 extends class_base
 
 		$c["event_times_as_events"] = $o->prop("event_times_as_events");
 
+		$c["lang_id"] = $o->prop("language.lang_id");
+		$c["translations"] = $o->prop("translations");
+
 		return $c;
 	}
 
@@ -918,7 +987,7 @@ class event_import_2 extends class_base
 			return true;
 		}
 
-		$p = ($k == "jrk") ? $o->ord() : $o->prop($k);
+		$p = ($k == "jrk") ? $o->ord() : ($this->conf["translations"] ? $o->trans_get_val($k, $this->conf["lang_id"], true) : $o->prop($k));
 		if($oc[$k] !== $p)
 		{
 			return !in_array($k, $this->conf["do_not_update"][$type]);
@@ -1088,7 +1157,7 @@ class event_import_2 extends class_base
 				$t->set_class_id(CL_EVENT_TIME);
 				$t->set_parent($o->id());
 			}
-			$oc = $new_et ? array() : $o->meta("orig_content");
+			$oc = $new_et ? array() : $o->meta("orig_content_".$this->conf["lang_id"]);
 			foreach($time as $k => $v)
 			{
 				$update = $this->permission_to_update(&$t, &$k, &$oc, "event_time");
