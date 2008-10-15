@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.59 2008/07/29 15:54:06 instrumental Exp $
-// personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine 
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.60 2008/10/15 07:49:34 instrumental Exp $
+// personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONNEL_MANAGEMENT_CANDIDATE, on_connect_candidate_to_job_offer)
@@ -122,7 +122,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property candidate_table type=table no_caption=1
 
 @groupinfo custom_cfgform caption=CV&nbsp;v&auml;ljad no_submit=1
-@default group=custom_cfgform 
+@default group=custom_cfgform
 
 	@property offer_cfgform type=relpicker reltype=RELTYPE_CFGFORM
 	@caption CV seadete vorm
@@ -140,7 +140,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @default group=send_email_sms
 
 	@layout send_email_sms type=hbox width=20%80%
-	
+
 		@layout send_email_sms_left type=vbox area_caption=Saajad parent=send_email_sms
 
 			@property receivers type=select multiple=1 store=no parent=send_email_sms_left
@@ -154,9 +154,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 			@property typical_select type=relpicker no_edit=1 store=no parent=send_email_sms_right
 			@caption T&uuml;&uuml;ps&otilde;num
 
-			@property from type=textbox store=no parent=send_email_sms_right size=20 
+			@property from type=textbox store=no parent=send_email_sms_right size=20
 			@caption Saatja
-			
+
 			@property add_receivers type=textbox store=no parent=send_email_sms_right size=20
 			@caption Lisa saajaid
 
@@ -180,7 +180,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @groupinfo sent_feedback caption="Saadetud tagasiside"
 @default group=sent_feedback
-	
+
 	@groupinfo sent_fb_sms caption="SMS" submit=no parent=sent_feedback
 	@default group=sent_fb_sms
 
@@ -188,9 +188,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 	@groupinfo sent_fb_email caption="E-post" submit=no parent=sent_feedback
 	@default group=sent_fb_email
-	
+
 		@property sent_fb_email_tbl type=table store=no no_caption=1
-		
+
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
 
@@ -280,8 +280,8 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "notify_me": 	 
-				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]); 	 
+			case "notify_me":
+				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
 				break;
 
 			case "sect":
@@ -542,7 +542,7 @@ class personnel_management_job_offer extends class_base
 					{
 						$pm = obj($arr["request"]["personnel_management_id"]);
 						if($this->can("view", $pm->prop("default_offers_cfgform")))
-						{						
+						{
 							$cfgform = obj($pm->prop("default_offers_cfgform"));
 							$prop["value"] = $pm->prop("default_offers_cfgform");
 							//$prop["options"] = array($cfgform->id() => $cfgform->name());
@@ -551,7 +551,7 @@ class personnel_management_job_offer extends class_base
 				}
 				$prop["onchange"] = "if(this.value != '".$prop["value"]."') { aw_get_el('offer_cfgform_changed').value = 1; } else { aw_get_el('offer_cfgform_changed').value = 0; }";
 				break;
-			
+
 			case "contact":
 				if(!is_oid($prop["value"]))
 				{
@@ -587,7 +587,7 @@ class personnel_management_job_offer extends class_base
 					$prop["autocomplete_params"] = array($prop["name"]);
 				}
 				break;
-				
+
 			case "location":
 				$objs = new object_list(array(
 					"class_id" => CL_CRM_COUNTY,
@@ -642,7 +642,7 @@ class personnel_management_job_offer extends class_base
 			$to = $conn->to();
 			$ml = obj();
 			$ml->set_class_id(CL_ML_MEMBER);
-			
+
 			if(!$this->can("view", $to->mto_relpicker))
 			{
 				$this->parse_name_and_email($to->mto, &$data_person, &$data_ml);
@@ -754,7 +754,7 @@ class personnel_management_job_offer extends class_base
 		{
 			return PROP_IGNORE;
 		}
-		
+
 		$file_inst = get_instance(CL_FILE);
 		$arr["prop"]["value"] = html::img(array(
 				"url" => icons::get_icon_url(CL_FILE),
@@ -864,7 +864,7 @@ class personnel_management_job_offer extends class_base
 			"tooltip" => t("Saada e-kiri"),
 			"img" => "",
 			"action" => "send_email",
-			
+
 		));
 		$t->add_button(array(
 			"name" => "send_sms",
@@ -908,11 +908,11 @@ class personnel_management_job_offer extends class_base
 			));
 		}
 	}
-	
+
 	function _get_candidate_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-				
+
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Kandideerija nimi"),
@@ -965,7 +965,7 @@ class personnel_management_job_offer extends class_base
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
-		));			
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
@@ -1059,7 +1059,7 @@ class personnel_management_job_offer extends class_base
 			));
 		}
 	}
-	
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -1585,7 +1585,7 @@ class personnel_management_job_offer extends class_base
 			}
 			$mobi = get_instance(CL_MOBI_HANDLER);
 			$mobi_handler = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->prop("mobi_handler");
-			
+
 			$sms = obj();
 			$sms->set_class_id(CL_SMS);
 			$sms->set_parent($mobi_handler);
@@ -1762,7 +1762,7 @@ class personnel_management_job_offer extends class_base
 		}
 		$arr["obj_inst"]->set_prop("offer_cfgform", $new_cfgform_id);
 	}
-	
+
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
@@ -1770,7 +1770,7 @@ class personnel_management_job_offer extends class_base
 
 	function do_stats_table(&$arr)
 	{
-	
+
 		$table=&$arr["prop"]["vcl_inst"];
 
 		$table->define_field(array(
@@ -1778,20 +1778,20 @@ class personnel_management_job_offer extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
-				
+
 		$table->define_field(array(
 			"name" => "views",
 			"caption" => t("Vaatamisi"),
 			"sortable" => 1,
 		));
-		
+
 		$query_str = "SELECT *, count(uid) as vaatamisi FROM cv_hits WHERE oid=".$arr['obj_inst']->id()." GROUP by uid";
-		
+
 		$this->db_query($query_str);
 		$results = array();
 		$results = $this->db_fetch_array();
-		
-		
+
+
 		foreach($results as $row)
 		{
 			$user = obj(users::get_oid_for_uid($row["uid"]));
@@ -1799,15 +1799,15 @@ class personnel_management_job_offer extends class_base
 			{
 				continue;
 			}
-			
+
 			$person = current($user->connections_from(array("type" => "RELTYPE_PERSON")));
 			$person = $person->to();
 			if(!is_object($person))
 			{
 				continue;
 			}
-			
-			
+
+
 			if($person->prop("default_cv"))
 			{
 				$person_link = html::href(array(
@@ -1825,7 +1825,7 @@ class personnel_management_job_offer extends class_base
 			));
 		}
 	}
-	
+
 	/**
 		@attrib name=show nologin=1
 		@param id required type=int
@@ -1845,11 +1845,11 @@ class personnel_management_job_offer extends class_base
 		}
 
 		$job_parse_props["company_name"]["publicview"] = true;
-		
+
 		$job_parse_props["org_description"]["view"] = true;
 		$job_parse_props["phone"]["view"] = true;
 		$job_parse_props["email"]["view"] = true;
-		
+
 		//T88pakkumise objekt
 		$ob = new object($arr["id"]);
 
@@ -1863,13 +1863,13 @@ class personnel_management_job_offer extends class_base
 		$this->vars(array(
 			"apply.caption" => strlen($cfgprops["apply"]["value"]) > 0 ? $cfgprops["apply"]["value"] : $cfgprops["apply"]["caption"],
 		));
-		
+
 		//Kui t88pakkumist vaatas t88otsija , siis lisame yhe HITI.
 		if($this->my_profile["group"]=="employee")
 		{
 			$this->add_view(array("id" => $ob->id()));
 		}
-		
+
 		$company = $ob->get_first_obj_by_reltype("RELTYPE_ORG");
 		if($company)
 		{
@@ -1878,10 +1878,10 @@ class personnel_management_job_offer extends class_base
 			$location = " - ";
 			if ($ob->prop("asukoht"))
 			{
-				$location = &obj($ob->prop("asukoht")); 
+				$location = &obj($ob->prop("asukoht"));
 				$location = $location->name();
-			}			
-			
+			}
+
 			//ORGANISATION DESCRIPTION SUB
 			if($job_parse_props["org_description"]["view"] == true && $company->prop("tegevuse_kirjeldus"))
 			{
@@ -1889,13 +1889,13 @@ class personnel_management_job_offer extends class_base
 					"org_description" => $company->prop("tegevuse_kirjeldus"),
 				));
 				$org_description = $this->parse("org_description_sub");
-				
+
 				$this->vars(array(
 					"org_description" => $org_description,
 				));
 			}
 		}
-		
+
 		//PHONE NR SUB
 		if($job_parse_props["phone"]["view"] == true)
 		{
@@ -1911,14 +1911,14 @@ class personnel_management_job_offer extends class_base
 				));
 			}
 		}
-		
+
 		//EMAIL SUB
 		if($job_parse_props["email"]["view"] == true)
 		{
 			if($ob->prop("email"))
 			{
 				$email = &obj($ob->prop("email"));
-				
+
 				$this->vars(array(
 					"email" => $email->prop("name"),
 				));
@@ -1929,7 +1929,7 @@ class personnel_management_job_offer extends class_base
 				));
 			}
 		}
-		
+
 		$ks = array();
 		if (is_array($ob->prop("tookoormused")))
 		{
@@ -1971,13 +1971,13 @@ class personnel_management_job_offer extends class_base
 			foreach($tmpo->get_property_list() as $prop => $pdata)
 			{
 				if($pdata["type"] == "relpicker")
-				{					
+				{
 					$this->vars(array(
 						"sect.contact.".$prop => $sect->prop("contact.".$prop.".name"),
 					));
 				}
 				else
-				{					
+				{
 					$this->vars(array(
 						"sect.contact.".$prop => $sect->prop("contact.".$prop),
 					));
@@ -1992,7 +1992,7 @@ class personnel_management_job_offer extends class_base
 
 		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
 		$cfgform_id = is_oid($ob->offer_cfgform) ? $ob->offer_cfgform : $pm->default_offers_cfgform;
-		
+
 		$this->vars(array(
 			"name" => $this->majic($ob, "name", true),
 			"company" => $ob->prop("company.name"),
@@ -2019,7 +2019,7 @@ class personnel_management_job_offer extends class_base
 			"keywords" => $ob->keywords,
 			"suplementary" => $ob->suplementary,
 		));
-		
+
 		$info = $ob->autoinfo ? $this->parse("AUTOINFO") : $ob->info;
 		$this->vars(array(
 			"info" => $info,
@@ -2034,7 +2034,7 @@ class personnel_management_job_offer extends class_base
 			$ok["info"] = 1;
 		}
 
-		// 
+		//
 		foreach($props as $prop)
 		{
 			switch ($prop)
@@ -2061,11 +2061,11 @@ class personnel_management_job_offer extends class_base
 				));
 			}
 		}
-		
+
 		return $this->parse();
 	}
-	
-	
+
+
 	//This funcition will be called by scheduler every day and sets jobs where deadline is over unactive.
 	/**
 		@attrib name=job_to_not_act
@@ -2082,7 +2082,7 @@ class personnel_management_job_offer extends class_base
 			$ob->save();
 		}
 	}
-	
+
 	/**
 		@attrib name=gen_job_pdf nologin=1
 		@param id required type=int
@@ -2099,12 +2099,12 @@ class personnel_management_job_offer extends class_base
 			))
 		)));
 	}
-	
-	
+
+
 	function add_view($arr)
 	{
 		if(!$_SESSION["job_view".$arr["id"]])
-		{ 
+		{
 			$this->add_hit($arr["id"]);
 			$oid = $arr["id"];
 			$uid = aw_global_get("uid");
@@ -2155,7 +2155,7 @@ class personnel_management_job_offer extends class_base
 			));
 		}
 	}
-	
+
 	function on_disconnect_candidate_from_job_offer($arr)
 	{
 		$conn = $arr["connection"];
@@ -2167,7 +2167,7 @@ class personnel_management_job_offer extends class_base
 			));
 		};
 	}
-	
+
 	function callback_generate_scripts($arr)
 	{
 		$f = '
@@ -2245,7 +2245,7 @@ class personnel_management_job_offer extends class_base
 			$this->db_query("create table personnel_management_job_offer (oid int primary key)");
 			return true;
 		}
-		
+
 		$props = array(
 			"jo_start" => "start",
 			"jo_end" => "end",
@@ -2397,7 +2397,7 @@ class personnel_management_job_offer extends class_base
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
-	
+
 	/**
 		@attrib name=autocomp all_args=1
 	**/
@@ -2466,7 +2466,7 @@ class personnel_management_job_offer extends class_base
 				$ol_prms["oid"] = $ids;
 			}
 		}
-		
+
 		$ol = new object_list($ol_prms);
 		$autocomplete_options = $ol->names();
 		foreach($autocomplete_options as $k => $v)
@@ -2560,7 +2560,7 @@ class personnel_management_job_offer extends class_base
 	}
 
 	private function parse_name_and_email($from, $from_nm, $from_adr)
-	{		
+	{
 		$from_arr = explode(" ", $from);
 		foreach($from_arr as $from_pc)
 		{
@@ -2574,7 +2574,7 @@ class personnel_management_job_offer extends class_base
 		$from_nm = str_replace(array("<", ">", "&gt;", "&lt;", $from_adr), "", $from);
 		$from_nm = trim($from_nm);
 	}
-	
+
 	/**
 		@attrib name=typical_data params=name all_args=1
 	**/
@@ -2592,7 +2592,7 @@ class personnel_management_job_offer extends class_base
 			exit(json_encode(array("subject" => iconv($charset, "UTF-8", $o->prop("subject")), "message" => iconv($charset, "UTF-8", $o->prop("content")))));
 		}
 	}
-	
+
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
