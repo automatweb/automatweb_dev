@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.18 2008/10/01 13:27:44 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.19 2008/10/15 11:21:29 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -77,13 +77,13 @@
 		@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project parent=data
 		@caption Projekt
 
-		@property orderer type=relpicker reltype=ORDERER field=aw_orderer parent=data multiple=1 size=3 store=connect
+		@property orderer type=relpicker reltype=RELTYPE_ORDERER field=aw_orderer parent=data multiple=1 size=3 store=connect
 		@caption Tellija
 
-		@property orderer_co type=relpicker reltype=ORDERER_CO field=aw_orderer_co parent=data
+		@property orderer_co type=relpicker reltype=RELTYPE_ORDERER_CO field=aw_orderer_co parent=data
 		@caption Tellija organisatsioon
 	
-		@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit parent=data
+		@property orderer_unit type=relpicker reltype=RELTYPE_UNIT field=aw_orderer_unit parent=data
 		@caption Tellija &uuml;ksus
 	
 		@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data captionside=top store=no
@@ -361,6 +361,7 @@ class development_order extends class_base
 				}
 				
 				$prop["options"] += $ppl;
+				get_instance(CL_BUG)->_sort_bug_ppl(&$arr);
 				break;
 
 			case "prognosis":
@@ -419,6 +420,10 @@ class development_order extends class_base
 				else
 				{
 					$co = get_current_company();
+					if($prop["value"])
+					{
+						$prop["options"][$prop["value"]] = obj($prop["value"])->name();
+					}
 					$prop["options"][$co->id()] = $co->name();
 				}
 				break;
@@ -428,10 +433,17 @@ class development_order extends class_base
 				$co_i = $co->instance();
 				$sects = $co_i->get_all_org_sections($co);
 				$prop["options"] = array("" => t("--vali--"));
+				if($prop["value"])
+				{
+					$prop["options"][$prop["value"]] = obj($prop["value"])->name();
+				}
 				if (count($sects))
 				{
 					$ol = new object_list(array("oid" => $sects));
-					$prop["options"] += $ol->names();
+					foreach($ol->arr() as $oid => $o)
+					{
+						$prop["options"][$oid] = $o->name();
+					}
 				}
 				$p = get_current_person();
 				if ($arr["new"])

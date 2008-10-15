@@ -73,7 +73,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property prognosis type=date_select default=-1 parent=settings_col3 captionside=top
 		@caption Prognoositav kuup&auml;ev
 
-		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
+		@property deadline type=date_select parent=settings_col3 captionside=top
 		@caption T&auml;htaeg
 
 		@property actual_live_date type=date_select captionside=top parent=settings_col3 field=meta method=serialize table=objects
@@ -314,6 +314,7 @@ define("BUG_FEEDBACK", 10);
 define("BUG_FATALERROR", 11);
 define("BUG_TESTING", 12);
 define("BUG_VIEWING", 13);
+define("BUG_DEVORDER", 14);
 
 class bug extends class_base
 {
@@ -338,6 +339,7 @@ class bug extends class_base
 			BUG_WONTFIX => t("Ei paranda"),
 			BUG_FEEDBACK => t("Vajab tagasisidet"),
 			BUG_FATALERROR => t("Fatal error"),
+			BUG_DEVORDER => t("Arendustellimus"),
 		);
 
 		$this->occurrences = array(
@@ -452,10 +454,17 @@ class bug extends class_base
 				$co_i = $co->instance();
 				$sects = $co_i->get_all_org_sections($co);
 				$prop["options"] = array("" => t("--vali--"));
+				if($prop["value"])
+				{
+					$prop["options"][$prop["value"]] = obj($prop["value"])->name();
+				}
 				if (count($sects))
 				{
 					$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
-					$prop["options"] += $ol->names();
+					foreach($ol->arr() as $oid => $o)
+					{
+						$prop["options"][$oid] = $o->name();
+					}
 				}
 				$p = get_current_person();
 				if ($arr["new"])
@@ -484,6 +493,13 @@ class bug extends class_base
 			case "orderer_person":
 				return $this->_get_orderer_person($arr);
 
+			case "actual_live_date":
+				if($arr["new"])
+				{
+					$prop["value"] = -1;
+				}
+				break;
+
 			case "deadline":
 				if ($arr["request"]["from_req"])
 				{
@@ -492,7 +508,16 @@ class bug extends class_base
 				}
 				if($arr["new"] && is_oid($arr["request"]["parent"]))
 				{
-					$bt = obj($arr["request"]["parent"]);
+					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+					$pt = $po->path();
+					$bt_obj = null;
+					foreach($pt as $pi)
+					{
+						if ($pi->class_id() == CL_BUG_TRACKER)
+						{
+							$bt = $pi;
+						}
+					}
 					$bdd = $bt->prop("bug_def_deadline");
 					if($bdd>0)
 					{
@@ -644,7 +669,7 @@ class bug extends class_base
 			case "who":
 			case "monitors":
 				if ($arr["new"] || true)
-				{
+				{ 
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
 					{
 						$key_o = obj($key);
@@ -740,6 +765,7 @@ class bug extends class_base
 					}
 					$prop["options"] += $ppl;
 				}
+				$this->_sort_bug_ppl(&$arr);
 				break;
 
 			case "bug_class":
@@ -936,8 +962,19 @@ class bug extends class_base
 			case "finance_type":
 				if ($arr["new"] && !$arr["prop"]["value"])
 				{
-					$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
-					return PROP_FATAL_ERROR;
+					$path = obj($arr["request"]["parent"])->path();
+					foreach($path as $po)
+					{ 	 
+						if($po->class_id() == CL_BUG_TRACKER)
+						{
+							$bt = $po;
+						}
+					}
+					if($bt && $bt->prop("finance_required"))
+					{
+						$arr["prop"]["error"] = t("Kulude katmise aeg valimata!");
+						return PROP_FATAL_ERROR;
+					}
 				}
 				break;
 
@@ -1100,6 +1137,16 @@ class bug extends class_base
 					break;
 				}
 			case "bug_status":
+				if($arr["request"]["is_order"])
+				{
+					$c = $arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_DEV_ORDER"
+					));
+					if(!count($c))
+					{
+						$prop["value"] = BUG_DEVORDER;
+					}
+				}
 				if(!$this->_ac_old_state || !$this->_ac_new_state)
 				{
 					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
@@ -1220,7 +1267,16 @@ class bug extends class_base
 				}
 				break;
 			case "deadline":
-				$bt = $this->_get_bt($arr["obj_inst"]);
+				$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+				$pt = $po->path();
+				$bt_obj = null;
+				foreach($pt as $pi)
+				{
+					if ($pi->class_id() == CL_BUG_TRACKER)
+					{
+						$bt = $pi;
+					}
+				}
 				if($bt)
 				{
 					$bdd = $bt->prop("bug_def_deadline");
@@ -1295,6 +1351,47 @@ class bug extends class_base
 				break;
 		}
 		return $retval;
+	}
+
+	function _sort_bug_ppl($arr)
+	{
+		$prop = &$arr["prop"];
+		uksort($prop["options"], array($this, "__sort_ppl"));
+		$options = array();
+		if(!is_array($prop["value"]))
+		{
+			$vals = array($prop["value"]);
+		}
+		elseif($prop["value"])
+		{
+			$vals = $prop["value"];
+		}
+		else
+		{
+			$vals = array();
+		}
+		$options[""] = $prop["options"][""];
+		foreach($vals as $value)
+		{
+			$options[$value] = $prop["options"][$value];
+		}
+		$creator_u = $arr["obj_inst"]->createdby();
+		$p = get_instance(CL_USER)->get_person_for_uid($creator_u);
+		$options[$p->id()] = $p->name();
+		$cur = get_current_person();
+		$options[$cur->id()] = $cur->name();
+		foreach($prop["options"] as $val => $name)
+		{
+			$options[$val] = $name;
+		}
+		$prop["options"] = $options;
+	}
+
+	function __sort_ppl($a, $b)
+	{
+		$o1 = obj($a);
+		$o2 = obj($b);
+		return strcasecmp($o1->prop("lastname"), $o2->prop("lastname"));
 	}
 
 	function notify_monitors($bug, $comment)
@@ -1389,7 +1486,7 @@ class bug extends class_base
 				}
 			}
 			$email = $person_obj->prop("email");
-			if (is_oid($email))
+			if ($this->can("view", $email))
 			{
 				$email_obj = new object($email);
 				$addr = $email_obj->prop("mail");
@@ -1689,9 +1786,8 @@ class bug extends class_base
 		$u = get_instance(CL_USER);
 		foreach($ol->arr() as $com)
 		{
-			$comt = create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars($com->comment())));
+			$comt = create_links(preg_replace("/(\&amp\;#([0-9]{4});)/", "&#\\2", htmlspecialchars(html_entity_decode($com->comment()))));
 			$comt = preg_replace("/(>http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", ">Diff", $comt);
-
 			if ($nl2br)
 			{
 				$comt = nl2br($comt);
@@ -1836,7 +1932,7 @@ class bug extends class_base
 		));
 		foreach($comments as $c)
 		{
-			$comm = obj($c->prop("to"));arr($comm->comment());
+			$comm = obj($c->prop("to"));
 			$t->define_data(array(
 				"comment" => html::textarea(array(
 					"value" => $comm->comment(),
@@ -1975,9 +2071,6 @@ class bug extends class_base
 		$o->set_prop("deadline", $arr["obj_inst"]->prop("deadline"));
 		$o->set_prop("prognosis", time());
 
-		$arr["obj_inst"]->set_prop("bug_status", 5);
-		$arr["obj_inst"]->save();
-
 		$u = get_instance(CL_USER);
 		$cur = obj($u->get_person_for_uid($arr["obj_inst"]->createdby()));
 		$o->set_prop("contactperson", $cur->id());
@@ -2027,6 +2120,16 @@ class bug extends class_base
 		if ($person)
 		{
 			$o->set_prop("orderer", array($person->id()=>$person->id()));
+			$o->set_prop("orderer_co", $person->prop("work_contact"));
+			$conn = $highest->connections_to(array(
+				"type" => "RELTYPE_PROFESSIONS",
+				"from.class_id" => CL_CRM_SECTION,
+			));
+			foreach($conn as $c)
+			{
+				$sect = $c->prop("from");
+			}
+			$o->set_prop("orderer_unit", $sect);
 		}
 		$o->save();
 		$o->connect(array(
@@ -2039,7 +2142,7 @@ class bug extends class_base
 		));
 		$conn = $arr["obj_inst"]->connections_from(array(
 				"type"=>"RELTYPE_FILE"
-								));
+		));
 		foreach($conn as $c)
 		{
 			$o->connect(array(
@@ -2047,6 +2150,7 @@ class bug extends class_base
 				"type" => "RELTYPE_FILE"
 			));
 		}
+		die("<script> window.location = '".$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER)."' </script>");
 	}
 
 	function _find_highest_prof_recur($s)
@@ -2080,7 +2184,7 @@ class bug extends class_base
 		{
 			foreach($sections as $sct)
 			{
-				$highest = $this->_find_highest_prof_recur($sct->to());
+				$highest = $this->_find_highest_prof_recur($sct->from());
 			}
 		}
 		return $highest;
@@ -2727,10 +2831,17 @@ die($email);
 		$co_i = $co->instance();
 		$sects = $co_i->get_all_org_sections($co);
 		$prop["options"] = array("" => t("--vali--"));
+		if($prop["value"])
+		{
+			$prop["options"][$prop["value"]] = obj($prop["value"])->name();
+		}
 		if (count($sects))
 		{
 			$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
-			$prop["options"] += $ol->names();
+			foreach($ol->arr() as $oid => $o)
+			{
+				$prop["options"][$oid] = $o->name();
+			}
 		}
 		$p = get_current_person();
 		if ($arr["new"])
@@ -2769,7 +2880,11 @@ die($email);
 			// get all ppl for the section
 			$sect = get_instance(CL_CRM_SECTION);
 			$work_ol = $sect->get_section_workers($unit, true);
-			$arr["prop"]["options"] = array("" => t("--vali--")) + $work_ol->names();
+			$arr["prop"]["options"] = array("" => t("--vali"));
+			foreach($work_ol->arr() as $oid => $o)
+			{
+				$arr["prop"]["options"][$oid] =  $o->name();
+			}
 		}
 		else
 		if ($this->can("view", $cust))

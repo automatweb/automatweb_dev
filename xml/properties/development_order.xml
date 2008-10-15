@@ -121,7 +121,7 @@
             <method>serialize</method>
             <parent>settings_col3</parent>
             <captionside>top</captionside>
-            <caption>Soovitav Live kuup&amp;auml;ev</caption>
+            <caption>Soovitav Live kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>actual_live_date</name>
@@ -132,7 +132,7 @@
             <method>serialize</method>
             <captionside>top</captionside>
             <parent>settings_col3</parent>
-            <caption>Tegelik Live kuup&amp;auml;ev	</caption>
+            <caption>Tegelik Live kuup&amp;amp;auml;ev	</caption>
       </property>
       <property>
             <name>reason</name>
@@ -208,7 +208,7 @@
             <table>aw_dev_orders</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>ORDERER</reltype>
+            <reltype>RELTYPE_ORDERER</reltype>
             <field>aw_orderer</field>
             <parent>data</parent>
             <multiple>1</multiple>
@@ -221,7 +221,7 @@
             <table>aw_dev_orders</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>ORDERER_CO</reltype>
+            <reltype>RELTYPE_ORDERER_CO</reltype>
             <field>aw_orderer_co</field>
             <parent>data</parent>
             <caption>Tellija organisatsioon</caption>
@@ -231,7 +231,7 @@
             <table>aw_dev_orders</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>UNIT</reltype>
+            <reltype>RELTYPE_UNIT</reltype>
             <field>aw_orderer_unit</field>
             <parent>data</parent>
             <caption>Tellija &amp;amp;uuml;ksus</caption>

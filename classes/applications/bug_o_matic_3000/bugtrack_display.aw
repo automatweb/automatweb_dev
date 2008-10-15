@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.11 2008/10/01 11:37:54 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.12 2008/10/15 11:21:29 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -311,7 +311,7 @@ class bugtrack_display extends class_base
 		$cur_p = get_current_person();
 		$uo = obj($u->get_current_user());
 		$cur_u = $uo->name();
-		$cur = array($cur_p->id() => $cur_p->id());
+		$cur = $cur_p->id();
 		if($arr["request"]["sect_filter"]!="me")
 		{
 			$filt = array(
@@ -741,16 +741,20 @@ class bugtrack_display extends class_base
 		$p = get_current_person();
 		$sects = array(aw_url_change_var("sect_filter", null, get_ru()) => t("K&otilde;ik"),
 			aw_url_change_var("sect_filter", "me", get_ru()) => t("Minu lisatud"));
-		foreach(safe_array($p->prop("org_section")) as $sect_id)
+		$sect_id = $p->prop("org_section");
+		if (!$this->can("view", $sect_id))
 		{
-			if (!$this->can("view", $sect_id))
-			{
-				continue;
-			}
-			$this->_recur_sect_list($sects, obj($sect_id));
+			continue;
 		}
+		$this->_recur_sect_list($sects, obj($sect_id));
 		$arr["prop"]["options"] = $sects;
-		$arr["prop"]["value"] = get_ru();
+		foreach($sects as $url => $tmp)
+		{
+			if(strpos($url, "sect_filter=".$arr["request"]["sect_filter"]))
+			{
+				$arr["prop"]["value"] = $url;
+			}
+		}
 		$arr["prop"]["onchange"] = "window.location.href=this.options[this.selectedIndex].value";
 	}
 
