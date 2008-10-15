@@ -127,6 +127,26 @@
             <caption>Salvesta vastamised</caption>
       </property>
       <property>
+            <name>str_answerer</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Salvesta vastaja andmed</caption>
+      </property>
+      <property>
+            <name>str_answerer_cfgform</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ASWERER_DATA_CFGFORM</reltype>
+            <store>connect</store>
+            <field>str_answerer_cfgform</field>
+            <caption>Vastaja salvestamise seadete vorm</caption>
+      </property>
+      <property>
             <name>p_correct</name>
             <table>objects</table>
             <group>pics</group>
@@ -154,6 +174,24 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>&amp;amp;Otilde;igete vastuste protsent</caption>
+      </property>
+      <property>
+            <name>rd_fraction</name>
+            <table>objects</table>
+            <group>dsply_rslts</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Otilde;igeid vastuseid hariliku murruna</caption>
+      </property>
+      <property>
+            <name>rd_results</name>
+            <table>objects</table>
+            <group>dsply_rslts</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva &amp;amp;otilde;igesti/valesti vastatud k&amp;amp;uuml;simusi</caption>
       </property>
       <property>
             <name>rd_text</name>
@@ -200,6 +238,15 @@
             <field>acnt</field>
             <caption>Vastajate arv</caption>
       </property>
+      <property>
+            <name>atbl</name>
+            <table>objects</table>
+            <group>answerers</group>
+            <type>table</type>
+            <store>no</store>
+            <field>atbl</field>
+            <caption>Vastajad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_QUESTIONNAIRE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -245,6 +292,11 @@
                   <clid>CL_QUESTIONNAIRE_ANSWERER</clid>
                   <caption>Vastaja</caption>
             </ANSWERER>
+            <ASWERER_DATA_CFGFORM>
+                  <value>4</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Vastaja salvestamise seadete vorm</caption>
+            </ASWERER_DATA_CFGFORM>
       </reltypes>
 </properties>
 

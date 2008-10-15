@@ -224,9 +224,13 @@
 	@property cfgview_ru type=textbox field=meta method=serialize
 	@caption Aadress kuhu suunata
 
+	@property cfgview_ru_id_param type=textbox field=meta method=serialize
+	@caption OID parameeter
+	@comment Parameeter, millega suunatavale aadressile lisatakse loodud/muudetud objekti OID
+
 
 @default group=orb_settings
-	@property orb_settings type=table store=no no_capton=12
+	@property orb_settings type=table store=no no_caption=12
 
 
 @default group=view_settings

@@ -1,5 +1,5 @@
 <?php
-// questionnaire_question.aw - Dünaamilise küsimustiku küsimus
+// questionnaire_question.aw - D&uuml;naamilise k&uuml;simustiku k&uuml;simus
 /*
 
 @classinfo syslog_type=ST_QUESTIONNAIRE_QUESTION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -11,7 +11,7 @@
 	@default group=conf
 
 		@property name type=textbox field=name
-		@caption Küsimus
+		@caption K&uuml;simus
 
 		@property jrk type=textbox size=4 field=jrk
 		@caption J&auml;rjekord
@@ -19,12 +19,12 @@
 		@property ans_type type=chooser field=meta method=serialize
 		@caption Vastuse t&uuml;&uuml;p
 
-		@property comm type=textbox field=comment
+		@property comm type=textarea field=comment
 		@caption Kommentaar
 
 		@property dsply_acomment type=chooser field=meta method=serialize
 		@caption Kuva vastuse kommentaari
-		@comment Kuvatakse ka siis, kui küsimustiku seadetes pole seda lubatud.
+		@comment Kuvatakse ka siis, kui k&uuml;simustiku seadetes pole seda lubatud.
 
 	@groupinfo pics parent=general caption=Pildid
 	@default group=pics

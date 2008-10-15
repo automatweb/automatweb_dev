@@ -1162,6 +1162,10 @@ class class_base extends aw_template
 				if (!is_admin() and $cfgform_o->prop("cfgview_ru") != "")
 				{
 					$retval = $cfgform_o->prop("cfgview_ru");
+					if($cfgform_o->prop("cfgview_ru_id_param") != "")
+					{
+						$retval = aw_url_change_var($cfgform_o->prop("cfgview_ru_id_param"), $this->obj_inst->id(), $retval);
+					}
 				}
 
 				// call mod retval controller(s) from cfgform object if defined

@@ -1,5 +1,5 @@
 <?php
-// questionnaire.aw - Dünaamiline küsimustik
+// questionnaire.aw - D&uuml;naamiline k&uuml;simustik
 /*
 
 @classinfo syslog_type=ST_QUESTIONNAIRE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -60,6 +60,12 @@
 		@property str_rslts type=checkbox ch_value=1 field=meta method=serialize
 		@caption Salvesta vastamised
 
+		@property str_answerer type=checkbox ch_value=1 field=meta method=serialize
+		@caption Salvesta vastaja andmed
+
+		@property str_answerer_cfgform type=relpicker reltype=RELTYPE_ASWERER_DATA_CFGFORM store=connect
+		@caption Vastaja salvestamise seadete vorm
+
 	@groupinfo pics parent=general caption=Pildid
 	@default group=pics
 
@@ -74,6 +80,12 @@
 
 		@property rd_percent type=checkbox field=meta method=serialize
 		@caption &Otilde;igete vastuste protsent
+
+		@property rd_fraction type=checkbox field=meta method=serialize
+		@caption &Otilde;igeid vastuseid hariliku murruna
+
+		@property rd_results type=checkbox field=meta method=serialize
+		@caption Kuva &otilde;igesti/valesti vastatud k&uuml;simusi
 
 		@property rd_text type=textarea field=meta method=serialize
 		@caption Tekst
@@ -94,6 +106,9 @@
 	@property acnt type=text store=no
 	@caption Vastajate arv
 
+	@property atbl type=table store=no
+	@caption Vastajad
+
 @reltype QUESTION value=1 clid=CL_QUESTIONNAIRE_QUESTION
 @caption K&uuml;simus
 
@@ -102,6 +117,9 @@
 
 @reltype ANSWERER value=3 clid=CL_QUESTIONNAIRE_ANSWERER
 @caption Vastaja
+
+@reltype ASWERER_DATA_CFGFORM value=4 clid=CL_CFGFORM
+@caption Vastaja salvestamise seadete vorm
 
 */
 
@@ -163,11 +181,105 @@ class questionnaire extends class_base
 				if(!$arr["obj_inst"]->prop("str_rslts"))
 					$prop["value"] = t("Vastajaid ei salvestata!");
 				else
-					$prop["value"] = count($arr["obj_inst"]->connections_from(array("type" => 3)));
+					$prop["value"] = count($arr["obj_inst"]->connections_to(array("from.class_id" => CL_QUESTIONNAIRE_ANSWERER, "type" => "RELTYPE_QUESTIONNAIRE")));
 				break;
 		}
 
 		return $retval;
+	}
+
+	function _get_atbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_QUESTION")));
+		$ids = $ol->ids();
+		$ol = new object_list(array(
+			"class_id" => CL_QUESTIONNAIRE_QUESTION,
+			"oid" => $ids,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"sort_by" => "objects.jrk ASC",
+		));
+		$cnt = 1;
+		foreach($ol->names() as $oid => $name)
+		{
+			$t->define_field(array(
+				"name" => "q_".$oid,
+				"caption" => sprintf(t("%u."), $cnt),
+				"chgbgcolor" => "bgcolor_".$oid,
+				"align" => "center",
+			));
+			$cnt++;
+		}
+		$t->define_field(array(
+			"name" => "result",
+			"caption" => t("Tulemus"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Vastamise aeg"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$as = new object_data_list(
+			array(
+				"class_id" => CL_QUESTIONNAIRE_ANSWERER,
+				"CL_QUESTIONNAIRE_ANSWERER.RELTYPE_QUESTIONNAIRE" => $arr["obj_inst"]->id(),
+				"siet_id" => array(),
+				"lang_id" => array(),
+			), 
+			array(
+				CL_QUESTIONNAIRE_ANSWERER => array("oid", "person", "correct_ans", "wrong_ans", "created"),
+			)
+		);
+		foreach($as->arr() as $a)
+		{
+			// This crap cuz #251240 is undone.
+			$correct_conns = obj($a["oid"])->connections_from(array("type" => "RELTYPE_CORRECT"));
+			$wrong_conns = obj($a["oid"])->connections_from(array("type" => "RELTYPE_WRONG"));
+			$row = array(
+				"person" => is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "",
+				"time" => date("d.m.Y H:i:s", $a["created"]),
+				"result" => count($correct_conns).t("/").(count($correct_conns)+count($wrong_conns)),
+			);
+			foreach($correct_conns as $conn)
+			{
+//				$row["q_".$conn->prop("to")] = t("+");
+				$row["bgcolor_".$conn->prop("to")] = t("#0000CC");
+			}
+			foreach($wrong_conns as $conn)
+			{
+//				$row["q_".$conn->prop("to")] = t("-");
+				$row["bgcolor_".$conn->prop("to")] = t("#FF0000");
+			}
+			// Waiting for bug #251240
+			/*
+			$row = array(
+				"person" => is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "",
+				"time" => date("d.m.Y H:i:s", $a["created"]),
+				"result" => count((array)$a["correct_ans"]).t("/").(count((array)$a["correct_ans"]) + count((array)$a["wrong_ans"])),
+			);
+			foreach((array)$a["correct_ans"] as $c_ans)
+			{
+//				$row["q_".$c_ans] = t("+");
+				$row["bgcolor_".$conn->prop("to")] = t("#0000CC");
+			}
+			foreach((array)$a["wrong_ans"] as $w_ans)
+			{
+//				$row["q_".$w_ans] = t("-");
+				$row["bgcolor_".$conn->prop("to")] = t("#FF0000");
+			}
+			*/
+			$t->define_data($row);
+		}
 	}
 
 	function _get_rd_percent_text($arr)
@@ -332,35 +444,203 @@ class questionnaire extends class_base
 		foreach($a as $v)
 		{
 			if($v == 2)
+			{
 				$ccnt++;
+			}
 		}
 		return round($ccnt*100/count($a), 0);
+	}
+
+	function correct_fraction($a)
+	{
+		$ccnt = 0;
+		foreach($a as $v)
+		{
+			if($v == 2)
+			{
+				$ccnt++;
+			}
+		}
+		return $ccnt."/".count($a);
 	}
 
 	function show($arr)
 	{
 		$_qs = aw_unserialize(aw_global_get("questions_".$arr["id"]));
+		$_myas = aw_unserialize(aw_global_get("my_answers_".$arr["id"]));
 		$set_qs = !is_array($_qs);
 		if(aw_global_get("questions_".$arr["id"]) == "end")
+		{
 			$set_qs = true;
+		}
 		if($set_qs)
+		{
 			$_qs = array();
+		}
 		/* $_qs values:
 		0 - undone
 		1 - done, wrong
 		2 - done, correct
+
+		arr($_qs);
+
+		Array
+		(
+			[276979] => 1
+			[276983] => 0
+		)
+
 		*/
 
 		$o = new object($arr["id"]);
 		$i = get_instance(CL_IMAGE);
 		$this->read_template("show.tpl");
 
+		if($_GET["qid"] == "data")
+		{
+			if($this->can("view", $o->prop("str_answerer_cfgform")) && $o->prop("str_answerer"))
+			{
+				// Set the redirect for the cfgform
+				$c = obj($o->prop("str_answerer_cfgform"));
+				$cfgview_ru = aw_ini_get("baseurl").aw_url_change_var("qid", "end");
+				$c->set_prop("cfgview_ru", $cfgview_ru);
+				aw_disable_acl();
+				$c->save();
+				aw_restore_acl();
+
+
+				$this->vars(array(
+					"insertion_form" => $c->instance()->parse_alias(array(
+						"alias" => array("target" => $c->id()),
+					)),
+				));
+				$this->vars(array(
+					"PERSON_DATA_INSERTION" => $this->parse("PERSON_DATA_INSERTION"),
+				));
+				return $this->parse();
+			}
+			else
+			{
+				// Save the data
+				$a = obj();
+				$a->set_class_id(CL_QUESTIONNAIRE_ANSWERER);
+				$a->set_parent($o->id());
+				$a->set_name(sprintf(t("Vastus d&uuml;naamilisele k&uuml;simustikule %s"), $o->name()));
+				aw_disable_acl();
+				$a->save();
+				aw_restore_acl();
+				$a->connect(array(
+					"to" => $o->id(),
+					"reltype" => "RELTYPE_QUESTIONNAIRE",
+				));
+				foreach($_qs as $qid => $v)
+				{
+					if($v == 1 || $v == 2)
+					{
+						$a->connect(array(
+							"to" => $qid,
+							"type" => $v == 1 ? "RELTYPE_WRONG" : "RELTYPE_CORRECT",
+						));
+					}
+				}
+				// And move on show the results.
+				$_GET["qid"] = "end";
+			}
+		}
 		if($_GET["qid"] == "end")
 		{
+			// If a person is created, store the answers and connect 'em to that person
+			if($this->can("view", $_GET["pid"]))
+			{
+				// Save the data
+				$a = obj();
+				$a->set_class_id(CL_QUESTIONNAIRE_ANSWERER);
+				$a->set_parent($o->id());
+				$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($_GET["pid"])->name(), $o->name()));
+				aw_disable_acl();
+				$a->save();
+				aw_restore_acl();
+				$a->connect(array(
+					"to" => $_GET["pid"],
+					"reltype" => "RELTYPE_PERSON",
+				));
+				$a->connect(array(
+					"to" => $o->id(),
+					"reltype" => "RELTYPE_QUESTIONNAIRE",
+				));
+				foreach($_qs as $qid => $v)
+				{
+					if($v == 1 || $v == 2)
+					{
+						$a->connect(array(
+							"to" => $qid,
+							"type" => $v == 1 ? "RELTYPE_WRONG" : "RELTYPE_CORRECT",
+						));
+					}
+				}
+			}
 			if($o->prop("rd_percent"))
 			{
 				$this->vars(array(
-					"results_percent" => t("&Otilde;igeid vastuseid")." ".$this->correct_percent($_qs).t("%."),
+					"results_percent" => $this->correct_percent($_qs),
+				));
+			}
+			if($o->prop("rd_fraction"))
+			{
+				$this->vars(array(
+					"results_fraction" => $this->correct_fraction($_qs),
+				));
+			}
+			if($o->prop("rd_results"))
+			{
+				$RESULTS_ANSWERED = "";
+				$ol = new object_list($o->connections_from(array("type" => "RELTYPE_QUESTION")));
+				$ids = $ol->ids();
+				$ol = new object_list(array(
+					"class_id" => CL_QUESTIONNAIRE_QUESTION,
+					"oid" => $ids,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"sort_by" => "objects.jrk ASC",
+				));
+				foreach($ol->arr() as $qo)
+				{
+					$this->vars(array(
+						"results_question" => $qo->trans_get_val("name"),
+						"results_my_answer" => obj($_myas[$qo->id()])->trans_get_val("name"),
+					));
+
+					$ol2 = new object_list($qo->connections_from(array("type" => "RELTYPE_ANSWER")));
+					$ids2 = $ol2->ids();
+					$ol2 = new object_list(array(
+						"class_id" => CL_QUESTIONNAIRE_ANSWER,
+						"oid" => $ids2,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"correct" => 1,
+						"sort_by" => "objects.jrk ASC",
+					));
+
+					$RESULTS_CORRECT_ANSWER = "";
+					foreach($ol2->arr() as $ao)
+					{
+						$this->vars(array(
+							"results_correct_answer" => $ao->trans_get_val("name"),
+						));
+						$RESULTS_CORRECT_ANSWER .= $this->parse("RESULTS_CORRECT_ANSWER");
+					}
+					$this->vars(array(
+						"RESULTS_CORRECT_ANSWER" => $RESULTS_CORRECT_ANSWER,
+					));
+					$RESULTS_ANSWERED .= $this->parse($_qs[$qo->id()] == 2 ? "RESULTS_CORRECTLY_ANSWERED" : "RESULTS_WRONGLY_ANSWERED");
+				}
+				$this->vars(array(
+					"RESULTS_ANSWERED" => $RESULTS_ANSWERED,
+					"RESULTS_CORRECTLY_ANSWERED" => "",
+					"RESULTS_WRONGLY_ANSWERED" => "",
+				));
+				$this->vars(array(
+					"RESULTS_ANSWERS" => $this->parse("RESULTS_ANSWERS"),
 				));
 			}
 			if($o->prop("rd_text"))
@@ -394,7 +674,10 @@ class questionnaire extends class_base
 		foreach($conns as $conn)
 		{
 			if($set_qs)
+			{
+				arr("ads");
 				$_qs[$conn->conn["to"]] = 0;
+			}
 
 			$qs[$conn->conn["to"]]["oid"] = $conn->conn["to"];
 			$qs[$conn->conn["to"]]["caption"] = $conn->conn["to.name"];
@@ -406,7 +689,9 @@ class questionnaire extends class_base
 		}
 		array_multisort($jrk, SORT_ASC, $qs);
 		if(count($qs) == 0)
+		{
 			return false;
+		}
 
 		$qs_id = $this->array_search_by_column($_GET["qid"], $qs, "oid");
 		$q = $qs[$qs_id];
@@ -460,6 +745,11 @@ class questionnaire extends class_base
 			$next_caption = t("J&auml;rgmine");
 			$next_url = aw_url_change_var("qid", $qs[$qs_id + 1]["oid"]);
 		}
+		elseif($o->prop("str_rslts"))
+		{
+			$next_caption = t("L&otilde;peta!");
+			$next_url = aw_url_change_var("qid", "data");
+		}
 		else
 		{
 			$next_caption = t("L&otilde;peta");
@@ -485,7 +775,9 @@ class questionnaire extends class_base
 
 		// If this is set for the question, we override the settings set in the questionnaire conf
 		if($q_obj->prop("dsply_acomment"))
+		{
 			$dsply_acomment = $q_obj->prop("dsply_acomment");
+		}
 
 		if($_POST["qid"] && $_POST["answer"])
 		{
@@ -505,6 +797,7 @@ class questionnaire extends class_base
 					}
 				}
 				if($correct)
+				{
 					switch($dsply_acomment)
 					{
 						case 1:
@@ -512,13 +805,18 @@ class questionnaire extends class_base
 							break;
 						case 2:
 							if($correct)
+							{
 								$acomment = $a_obj->prop("comm");
+							}
 							break;
 						case 3:
 							if(!$correct)
+							{
 								$acomment = $a_obj->prop("comm");
+							}
 							break;
 					}
+				}
 			}
 			else
 			{
@@ -531,11 +829,15 @@ class questionnaire extends class_base
 						break;
 					case 2:
 						if($correct)
+						{
 							$acomment = $a_obj->prop("comm");
+						}
 						break;
 					case 3:
 						if(!$correct)
+						{
 							$acomment = $a_obj->prop("comm");
+						}
 						break;
 				}
 			}
@@ -552,22 +854,31 @@ class questionnaire extends class_base
 					break;
 				case 2:
 					if($correct)
+					{
 						$qcomment .= $q_obj->prop("comm");
+					}
 					break;
 				case 3:
 					if(!$correct)
+					{
 						$qcomment .= $q_obj->prop("comm");
+					}
 					break;
 			}
 			$_qs[$_POST["qid"]] = $correct ? 2 : 1;
+			$_myas[$_POST["qid"]] = $_POST["answer"];
 
 			// If picture for correct answer is set in the question object, we'll override whatever is in the questionnaire object.
 			if($q_obj->prop("p_correct"))
+			{
 				$o->set_prop("p_correct", $q_obj->prop("p_correct"));
+			}
 
 			// If picture for wrong answer is set in the question object, we'll override whatever is in the questionnaire object.
 			if($q_obj->prop("p_false"))
+			{
 				$o->set_prop("p_false", $q_obj->prop("p_false"));
+			}
 
 			if($o->prop("p_correct") && $correct)
 			{
@@ -634,7 +945,9 @@ class questionnaire extends class_base
 		else
 		{
 			if($dsply_qcomment == 1)
+			{
 				$qcomment = $q_obj->prop("comm");
+			}
 		}
 
 		if($_qs[$q["oid"]] != 1 && $_qs[$q["oid"]] != 2)
@@ -663,6 +976,7 @@ class questionnaire extends class_base
 		));
 
 		aw_session_set("questions_".$arr["id"], aw_serialize($_qs));
+		aw_session_set("my_answers_".$arr["id"], aw_serialize($_myas));
 		return $this->parse();
 	}
 }

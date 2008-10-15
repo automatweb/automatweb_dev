@@ -1,5 +1,47 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>person</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <store>connect</store>
+            <field>person</field>
+            <caption>Vastaja isik</caption>
+      </property>
+      <property>
+            <name>questionnaire</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_QUESTIONNAIRE</reltype>
+            <store>connect</store>
+            <field>questionnaire</field>
+            <caption>Vastatud k&amp;amp;uuml;simustik</caption>
+      </property>
+      <property>
+            <name>correct_ans</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CORRECT</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>correct_ans</field>
+            <caption>&amp;amp;Otilde;igesti vastatud k&amp;amp;uuml;simused</caption>
+      </property>
+      <property>
+            <name>wrong_ans</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WRONG</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>wrong_ans</field>
+            <caption>Valesti vastatud k&amp;amp;uuml;simused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_QUESTIONNAIRE_ANSWERER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +49,27 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <CORRECT>
+                  <value>1</value>
+                  <clid>CL_QUESTIONNAIRE_QUESTION</clid>
+                  <caption>&amp;amp;Otilde;igesti vastatud k&amp;amp;uuml;simus</caption>
+            </CORRECT>
+            <WRONG>
+                  <value>2</value>
+                  <clid>CL_QUESTIONNAIRE_QUESTION</clid>
+                  <caption>Valesti vastatud k&amp;amp;uuml;simused</caption>
+            </WRONG>
+            <PERSON>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Vastaja isik</caption>
+            </PERSON>
+            <QUESTIONNAIRE>
+                  <value>4</value>
+                  <clid>CL_QUESTIONNAIRE</clid>
+                  <caption>Vastatud d&amp;amp;uuml;naamiline k&amp;amp;uuml;simustik</caption>
+            </QUESTIONNAIRE>
+      </reltypes>
 </properties>
 

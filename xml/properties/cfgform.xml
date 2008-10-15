@@ -608,6 +608,16 @@
             <caption>Aadress kuhu suunata</caption>
       </property>
       <property>
+            <name>cfgview_ru_id_param</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>OID parameeter</caption>
+            <comment>Parameeter, millega suunatavale aadressile lisatakse loodud/muudetud objekti OID</comment>
+      </property>
+      <property>
             <name>orb_settings</name>
             <table>objects</table>
             <group>orb_settings</group>
@@ -615,7 +625,7 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <no_capton>12</no_capton>
+            <no_caption>12</no_caption>
       </property>
       <property>
             <name>classinfo_fixed_toolbar</name>

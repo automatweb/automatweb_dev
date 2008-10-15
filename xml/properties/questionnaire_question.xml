@@ -30,7 +30,7 @@
             <name>comm</name>
             <table>objects</table>
             <group>conf</group>
-            <type>textbox</type>
+            <type>textarea</type>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>

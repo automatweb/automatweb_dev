@@ -1,11 +1,37 @@
 <?php
-// questionnaire_answerer.aw - Dünaamilise küsimustiku vastaja
+// questionnaire_answerer.aw - D&uuml;naamilise k&uuml;simustiku vastaja
 /*
 
 @classinfo syslog_type=ST_QUESTIONNAIRE_ANSWERER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
+
+@property person type=relpicker reltype=RELTYPE_PERSON store=connect
+@caption Vastaja isik
+
+@property questionnaire type=relpicker reltype=RELTYPE_QUESTIONNAIRE store=connect
+@caption Vastatud k&uuml;simustik
+
+@property correct_ans type=relpicker reltype=RELTYPE_CORRECT multiple=1 store=connect
+@caption &Otilde;igesti vastatud k&uuml;simused
+
+@property wrong_ans type=relpicker reltype=RELTYPE_WRONG multiple=1 store=connect
+@caption Valesti vastatud k&uuml;simused
+
+# RELTYPES
+
+@reltype CORRECT value=1 clid=CL_QUESTIONNAIRE_QUESTION
+@caption &Otilde;igesti vastatud k&uuml;simus
+
+@reltype WRONG value=2 clid=CL_QUESTIONNAIRE_QUESTION
+@caption Valesti vastatud k&uuml;simused
+
+@reltype PERSON value=3 clid=CL_CRM_PERSON
+@caption Vastaja isik
+
+@reltype QUESTIONNAIRE value=4 clid=CL_QUESTIONNAIRE
+@caption Vastatud d&uuml;naamiline k&uuml;simustik
 
 */
 
