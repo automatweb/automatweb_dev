@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.79 2008/10/14 11:13:02 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.80 2008/10/15 09:17:12 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -538,7 +538,7 @@ class rfp_manager extends class_base
 						"get_pdf" => html::href(array(
 							"url" => $this->mk_my_orb("get_pdf_file", array(
 								"id" => $obj->id(),
-								"pdf" => "offer_pdf",
+								"pdf" => "pdf",
 							), CL_RFP),
 							"caption" => html::img(array(
 								"border" => 0,
