@@ -210,7 +210,6 @@ class shop_order_cart extends class_base
 						
 					foreach($quantx->get() as $x => $quant)
 					{
-	
 						$this->vars(array(
 							"prod_html" => $inst->do_draw_product(array(
 								"layout" => $layout,
@@ -241,10 +240,20 @@ class shop_order_cart extends class_base
 					"PROD" =>  $prod_str,
 					"cart_total" => $cart_total,
 					"cart_name" => $cart_name,
+					"cart_confirm_checkbox" => html::checkbox(array(
+						"name" => "cart_confirm[".$cart_name."]",
+						"value" => 1,
+					)),
+					"cart_confirm_chooser" => html::radiobutton(array(
+						"name" => "cart_confirm",
+						"value" => $cart_name,
+					)),
 				));
 				$str.= $this->parse("CART");
 			}
-			$this->vars(array("CART" =>  $str));
+			$this->vars(array(
+				"CART" =>  $str,
+			));
 			$str = " ";
 		}
 		else
@@ -447,6 +456,55 @@ class shop_order_cart extends class_base
 		return $this->parse();
 	}
 
+	function set_confirm_carts($cc)
+	{
+		$this->confirm_carts = array();
+		if(is_array($cc))
+		{
+			foreach($cc as $key => $val)
+			{
+				$this->confirm_carts[$key] = $key;
+			}
+		}
+		else
+		{
+			$this->confirm_carts[$cc] = $cc;
+		}
+	}
+
+	function check_confirm_carts($cart)
+	{
+		if(!$this->confirm_carts)
+		{
+			return 1;
+		}
+		if(!$cart)
+		{
+			if(!is_array($this->confirm_carts))
+			{
+				return 1;
+			}
+			foreach($this->confirm_carts as $c)
+			{
+				if(!$c)
+				{
+					return 1;
+				}
+			}
+		}
+		else
+		{
+			foreach($this->confirm_carts as $c)
+			{
+				if($c == $cart)
+				{
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+
 	/** order submit page, must add items to cart
 
 		@attrib name=submit_add_cart nologin="1"
@@ -460,6 +518,13 @@ class shop_order_cart extends class_base
 	function submit_add_cart($arr)
 	{
 		extract($arr);
+
+		//kui on mitu ostukorvi, siis hiljem kontrollib ykshaaval tooteid sealt
+		if($cart_confirm)
+		{
+			$this->set_confirm_carts($cart_confirm);
+		}
+
 		$section = aw_global_get("section");
 		$oc = obj($oc);
 		$cart = $this->get_cart($oc);
@@ -1473,8 +1538,6 @@ class shop_order_cart extends class_base
 
 		lc_site_load("shop_order_cart", &$this);
 
-
-
 		// get cart to user from oc
 		if ($arr["id"])
 		{
@@ -1510,6 +1573,10 @@ class shop_order_cart extends class_base
 			foreach($quantx as $quant)
 			{
 				if($quant["items"] < 1)
+				{
+					continue;
+				}
+				if($quant["cart"] && !$this->check_confirm_carts($quant["cart"]))
 				{
 					continue;
 				}
@@ -1729,6 +1796,10 @@ class shop_order_cart extends class_base
 				foreach($quantx as $quant)
 				{
 					if($quant["items"] < 1)
+					{
+						continue;
+					}
+					if($quant["cart"] && !$this->check_confirm_carts($quant["cart"]))
 					{
 						continue;
 					}
