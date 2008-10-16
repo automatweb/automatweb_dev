@@ -8,7 +8,6 @@ InsertAWImageCommand.Name='ImageUpload';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
-	alert ("F");
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
 			'InsertAWImageCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
@@ -26,8 +25,6 @@ InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
 	oid =  _aw_fck_selected_image_oid;
-	//alert (_aw_fck_selected_image_alias);
-	alert ("F2");
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+oid,
 		'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
