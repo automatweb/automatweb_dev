@@ -37,7 +37,7 @@
  * @version 0.5.1
  */
 
-/* $Id: cellmap.cls.php,v 1.1 2008/08/13 10:38:48 tarvo Exp $ */
+/* $Id: cellmap.cls.php,v 1.2 2008/10/16 11:11:55 markop Exp $ */
 
 /**
  * Maps table cells to the table grid.
@@ -221,7 +221,7 @@ class Cellmap {
     $key = $frame->get_id();
 
     if ( !isset($this->_frames[$key]) ) {
-      throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
+//      throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
     }
       
     return $this->_frames[$key];
@@ -230,11 +230,12 @@ class Cellmap {
 
   function get_frame_position($frame) {
     global $_dompdf_warnings;
-    
+
     $key = $frame->get_id();
 
     if ( !isset($this->_frames[$key]) ) {
-      throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
+return array(0, 0, "x" => 0, "y" => 0);
+ //     throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
     }
 
     $col = $this->_frames[$key]["columns"][0];
@@ -258,8 +259,8 @@ class Cellmap {
   function get_frame_width($frame) {
     $key = $frame->get_id();
 
-    if ( !isset($this->_frames[$key]) ) {
-      throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
+    if ( !isset($this->_frames[$key]) ) {return 0;
+ //    throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
     }
 
     $cols = $this->_frames[$key]["columns"];
@@ -274,8 +275,8 @@ class Cellmap {
   function get_frame_height($frame) {
     $key = $frame->get_id();
 
-    if ( !isset($this->_frames[$key]) ) 
-      throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
+    if ( !isset($this->_frames[$key]) ) return 0;
+      //throw new DOMPDF_Internal_Exception("Frame not found in cellmap");
 
     $rows = $this->_frames[$key]["rows"];
     $h = 0;
