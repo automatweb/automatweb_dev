@@ -8,6 +8,7 @@ InsertAWImageCommand.Name='ImageUpload';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
+	alert ("F");
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
 			'InsertAWImageCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
@@ -26,6 +27,7 @@ InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
 	oid =  _aw_fck_selected_image_oid;
 	//alert (_aw_fck_selected_image_alias);
+	alert ("F2");
 	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&in_popup=1&image_id="+oid,
 		'InsertAWImageCommand', 'width=800,height=500,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
@@ -52,6 +54,19 @@ FloatImage2RightCommand.Execute=function() {
 }
 FCKCommands.RegisterCommand('awimagechange_float_right', FloatImage2RightCommand ); 
 
+// remove foat
+var FloatImageRemove=function(){};
+FloatImageRemove.Name='RemoveFloat';
+FloatImageRemove.prototype.Execute=function(){}
+FloatImageRemove.GetState=function() { return FCK_TRISTATE_OFF; }
+FloatImageRemove.Execute=function() {
+	FCKAWImagePlaceholders.Add(FCK, _aw_fck_selected_image_alias )
+}
+FCKCommands.RegisterCommand('awimagechange_float_remove', FloatImageRemove ); 
+
+
+
+
 /** backward compability 
  *
  */
@@ -72,34 +87,17 @@ FCK.ContextMenu.RegisterListener( {
 		{
 			if (tag._awimageplaceholder)
 			{
-				//menu.AddSeparator();
-				//menu.AddItem( "awimagechange_float_left", "Joonda vasakule", 37 ) ;
-				//menu.AddItem( "awimagechange_float_right", "Joonda paremale", 37 ) ;
 				menu.AddSeparator();
-				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
-			} // probably IE
-			else if (tag.parentNode._awimageplaceholder)
-			{
-				menu.AddSeparator();
-				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
-			}
-			else
-			{
-				menu.AddSeparator();
-				menu.AddItem( "awimagechange_old", "Pildi atribuudid vana", 37 ) ;
-			}
-		}
-		if ( tagName == 'TABLE')
-		{
-			if (tag._awimageplaceholder)
-			{
-				menu.AddSeparator();
+				menu.AddItem( "awimagechange_float_remove", "Eemalda joondus", 37 ) ;
 				menu.AddItem( "awimagechange_float_left", "Joonda vasakule", 37 ) ;
 				menu.AddItem( "awimagechange_float_right", "Joonda paremale", 37 ) ;
 				menu.AddSeparator();
 				menu.AddItem( "awimagechange", "Pildi atribuudid", 37 ) ;
 			}
-			
+			else
+			{
+				alert ( "if ( tagName == 'IMG' .... } else ... ");
+			}
 		}
 	}}
 );
@@ -119,11 +117,7 @@ FCKAWImagePlaceholders.Add = function( oEditor, name, float2 )
 		float2 = "";
 	}
 	name = name.match(/pict[0-9]/ig);
-	// otherwise we insert the new alias into placeholder span
-	if (FCKBrowserInfo.IsIE)
-	{
-		//FCKSelection.SelectNode( FCK.Selection.GetSelectedElement().parentNode ) ;
-	}
+
 	oEditor.InsertHtml( '#' + name + float2 +'#'  )
 	FCKAWImagePlaceholders.Redraw();
 }
@@ -193,6 +187,7 @@ FCKAWImagePlaceholders.GetImageFloat = function( image_name )
 	}
 }
 
+/*
 FCKAWImagePlaceholders.SetupTable = function( table, name )
 {
 	doc_id = FCKAWImagePlaceholders.GUP("id");
@@ -214,8 +209,7 @@ FCKAWImagePlaceholders.SetupTable = function( table, name )
 		table.style.width= "100%";
 	}
 	table.innerHTML = "<img _awimageplaceholder=\""+name+"\" alias=\"#"+name+"#\" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
-			"<br />"+
-			"<b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>";
+			"<br />";
 
 	if ( FCKBrowserInfo.IsGecko )
 		table.style.cursor = 'default' ;
@@ -231,6 +225,30 @@ FCKAWImagePlaceholders.SetupTable = function( table, name )
 		return false ;
 	}
 }
+*/
+FCKAWImagePlaceholders.SetupImg = function( img, name )
+{
+	doc_id = FCKAWImagePlaceholders.GUP("id");
+	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
+	eval(tmp);
+	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
+	img.alias = "#"+name+"#";
+	img._awimageplaceholder = name;
+	img.src= connection_details_for_doc["#"+name+"#"]["url"];
+	img.width = connection_details_for_doc["#"+name+"#"]["width"];
+	img._oid = connection_details_for_doc["#"+name+"#"]["id"]
+	if (img_float == "left" || img_float == "right")
+	{
+		img.setAttribute("style","float:"+img_float);
+		img.style.styleFloat = img_float;
+	}
+	else if (img_float == "center")
+	{
+		img.style.textAlign = "center";
+		img.style.width= "100%";
+	}
+}
+
 
 FCKAWImagePlaceholders.SetupSpan = function( span, name )
 {
@@ -239,7 +257,8 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 	eval(tmp);
 	span.className = "Fck_image";
 	span.style.display = "block";
-	span.style.width = connection_details_for_doc["#"+name+"#"]["width"]+"px ! important";
+	span.style.border = 0;
+	span.style.width = connection_details_for_doc["#"+name+"#"]["width"]+"px";
 	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
 	span.alias = "#"+name+"#";
 	if (img_float == "left" || img_float == "right")
@@ -253,8 +272,7 @@ FCKAWImagePlaceholders.SetupSpan = function( span, name )
 		span.style.width= "100%";
 	}
 	span.innerHTML = "<img _awimageplaceholder=\""+name+"\" alias=\"#"+name+"#\" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
-			"<br />"+
-			"<b>"+connection_details_for_doc["#"+name+"#"]["comment"]+"</b>";
+			"<br />";
 
 	if ( FCKBrowserInfo.IsGecko )
 		span.style.cursor = 'default' ;
@@ -311,22 +329,12 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 	FCKAWImagePlaceholders._ClickListener = function( e )
 	{
 		if (!e) {var e = FCK.EditorWindow.event ; e.target = e.srcElement}
-		if ( e.target.tagName == 'SPAN' )
+		if ( e.target.tagName == 'IMG')
 		{
 			if (e.target._awimageplaceholder )
 			{
 				_aw_fck_selected_image_oid = e.target._oid;
 				_aw_fck_selected_image_alias = e.target._awimageplaceholder;
-				FCKSelection.SelectNode( e.target ) ;
-			}
-		}
-		if ( e.target.tagName == 'IMG')
-		{
-			if (e.target.parentNode._awimageplaceholder )
-			{
-				_aw_fck_selected_image_oid = e.target.parentNode._oid;
-				_aw_fck_selected_image_alias = e.target.parentNode._awimageplaceholder;
-				FCKSelection.SelectNode( e.target.parentNode ) ;
 			}
 		}
 	}
@@ -336,15 +344,7 @@ FCKAWImagePlaceholders._SetupClickListener = function()
 		var e = FCK.EditorWindow.event ;
 		e.target = e.srcElement
 
-		if ( e.target.parentNode.tagName == 'SPAN' && e.target.parentNode._awimageplaceholder )
-		{
-			setTimeout(function() {
-				_aw_fck_selected_image_oid = e.target._oid;
-				_aw_fck_selected_image_alias = e.target._awimageplaceholder;
-				//FCKSelection.SelectNode( e.target ) ;
-			}, 1); // 1ms should be enough
-		}
-		if ( e.target.tagName == 'IMG' && e.target.parentNode._awimageplaceholder )
+		if ( e.target.tagName == 'IMG' && e.target._awimageplaceholder )
 		{
 			setTimeout(function() {
 				_aw_fck_selected_image_oid = e.target._oid;
@@ -425,9 +425,7 @@ if ( FCKBrowserInfo.IsIE )
 						img_align = "style=\"text-align: center\"";
 					}
 				}
-				oRange.pasteHTML('<span class="Fck_image" '+img_align+' width='+connection_details_for_doc["#"+name+"#"]["width"]+' _awimageplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + 
-					"<img width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' _awimageplaceholder="+name+" _oid="+connection_details_for_doc["#"+name+"#"]["id"]+" />"+
-				  	'</span>');
+				oRange.pasteHTML( "<img "+img_align+" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' _awimageplaceholder="+name+" _oid="+connection_details_for_doc["#"+name+"#"]["id"]+" />");
 			}
 		}
 		FCKAWImagePlaceholders._SetupClickListener() ;
@@ -461,10 +459,10 @@ else
 					{
 						var sName = aPieces[i].match( /#\s*([^#]*?)\s*#/ )[1] ;
 
-						var oTable = FCK.EditorDocument.createElement( 'table' ) ;
-						FCKAWImagePlaceholders.SetupTable( oTable, sName ) ;
+						var oImg = FCK.EditorDocument.createElement( 'img' ) ;
+						FCKAWImagePlaceholders.SetupImg( oImg, sName ) ;
 
-						aNodes[n].parentNode.insertBefore( oTable, aNodes[n] ) ;
+						aNodes[n].parentNode.insertBefore( oImg, aNodes[n] ) ;
 					}
 					else
 						aNodes[n].parentNode.insertBefore( FCK.EditorDocument.createTextNode( aPieces[i] ) , aNodes[n] ) ;
@@ -490,7 +488,7 @@ else
 FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKAWImagePlaceholders.Redraw ) ;
 
 // We must process the SPAN tags to replace then with the real resulting value of the placeholder.
-FCKXHtml.TagProcessors['table'] = function( node, htmlNode )
+FCKXHtml.TagProcessors['img'] = function( node, htmlNode )
 {
 	if ( htmlNode._awimageplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
@@ -505,8 +503,6 @@ FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
 {
 	if ( htmlNode._awfileplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
-	else if (FCKBrowserInfo.IsIE && htmlNode._awimageplaceholder)
-		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
 	else
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
 		
