@@ -2940,6 +2940,16 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 					)),
 					'error' => ($cb_values['image_verification']) ? $cb_values['image_verification']['error'] : ''
 				));
+				// if the template doesn't have the ability to display htmlclients properties
+				// then lets add there the variable to be able to show image verification directly --dragut@16.10.2008
+				$htmlc->vars(array(
+					'image_verification_url' => aw_ini_get('baseurl').'/'.$image_verification->id(),
+					'image_verification_width' => $image_verification->prop('width'),
+					'image_verification_height' => $image_verification->prop('height')
+				));
+				$htmlc->vars(array(
+					'IMAGE_VERIFICATION' => $htmlc->parse('IMAGE_VERIFICATION')
+				));
 			}
 		}
 
@@ -2970,7 +2980,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
-
                 return $html;
 	}
 
