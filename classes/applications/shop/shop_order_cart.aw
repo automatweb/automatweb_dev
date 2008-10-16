@@ -173,47 +173,127 @@ class shop_order_cart extends class_base
 		$show_info_page = true;
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
-		foreach($awa->get() as $iid => $quantx)
-		{
-			if(!is_oid($iid) || !$this->can("view", $iid))
-			{
-				continue;
-			}
-			$quantx = new aw_array($quantx);
-			$i = obj($iid);
-			$inst = $i->instance();
-			$price = $inst->get_price($i);
 
-			foreach($quantx->get() as $x => $quant)
+		if($this->is_template("CART"))
+		{
+			$carts = array();
+			foreach($awa->get() as $iid => $quantx)
 			{
-				if($quant["items"] < 1)
+				if(!is_oid($iid) || !$this->can("view", $iid))
+				{
+					continue;
+				}	
+
+				$quantx = new aw_array($quantx);
+				
+				foreach($quantx->get() as $x => $quant)
+				{
+					if($quant["items"] < 1)
+					{
+						continue;
+					}
+					$carts[$quant["cart"]][$iid][$x] = $quant;
+				}
+			}
+
+			$cart_str = "";
+			foreach($carts as $cart_name => $cart_arr)
+			{
+				$prod_str = "";
+				$cart_total = 0;
+				foreach($cart_arr as $iid => $quantx)
+				{
+					$quantx = new aw_array($quantx);
+					$i = obj($iid);
+					$inst = $i->instance();
+					$price = $inst->get_price($i);
+						
+					foreach($quantx->get() as $x => $quant)
+					{
+	
+						$this->vars(array(
+							"prod_html" => $inst->do_draw_product(array(
+								"layout" => $layout,
+								"cart" => $quant["cart"],
+								"prod" => $i,
+								"it" => $x,
+								"l_inst" => $l_inst,
+								"quantity" => $quant["items"],
+								"oc_obj" => $oc,
+								"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+							))
+						));
+						$show_info_page = false;
+						$total += ($quant["items"] * $price);
+						$cart_total += ($quant["items"] * $price);
+						if (get_class($inst) == "shop_product_packaging")
+						{
+							$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
+						}
+						else
+						{
+							$prod_total = $total;
+						}
+						$prod_str .= $this->parse("PROD");
+					}
+				}
+				$this->vars(array(
+					"PROD" =>  $prod_str,
+					"cart_total" => $cart_total,
+					"cart_name" => $cart_name,
+				));
+				$str.= $this->parse("CART");
+			}
+			$this->vars(array("CART" =>  $str));
+			$str = " ";
+		}
+		else
+		{
+			foreach($awa->get() as $iid => $quantx)
+			{
+				if(!is_oid($iid) || !$this->can("view", $iid))
 				{
 					continue;
 				}
-				$this->vars(array(
-					"prod_html" => $inst->do_draw_product(array(
-						"layout" => $layout,
-						"prod" => $i,
-						"it" => $x,
-						"l_inst" => $l_inst,
-						"quantity" => $quant["items"],
-						"oc_obj" => $oc,
-						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
-					))
-				));
-				$show_info_page = false;
-				$total += ($quant["items"] * $price);
-				if (get_class($inst) == "shop_product_packaging")
+				$quantx = new aw_array($quantx);
+				$i = obj($iid);
+				$inst = $i->instance();
+				$price = $inst->get_price($i);
+				
+				foreach($quantx->get() as $x => $quant)
 				{
-					$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
+					if($quant["items"] < 1)
+					{
+						continue;
+					}
+	
+					$this->vars(array(
+						"prod_html" => $inst->do_draw_product(array(
+							"layout" => $layout,
+							"cart" => $quant["cart"],
+							"prod" => $i,
+							"it" => $x,
+							"l_inst" => $l_inst,
+							"quantity" => $quant["items"],
+							"oc_obj" => $oc,
+							"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+						))
+					));
+					$show_info_page = false;
+					$total += ($quant["items"] * $price);
+					if (get_class($inst) == "shop_product_packaging")
+					{
+						$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
+					}
+					else
+					{
+						$prod_total = $total;
+					}
+					$str .= $this->parse("PROD");
 				}
-				else
-				{
-					$prod_total = $total;
-				}
-				$str .= $this->parse("PROD");
 			}
 		}
+
 
 		if ($str == "" && $this->is_template("NO_SHOW_EMPTY"))
 		{
