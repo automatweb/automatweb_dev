@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.6 2007/12/06 14:34:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.7 2008/10/16 15:08:16 markop Exp $
 // rostering_work_entry.aw - T&ouml;&ouml;aegade sisestus 
 /*
 
@@ -203,10 +203,11 @@ class rostering_work_entry extends class_base
 			foreach($units as $unit)
 			{
 				$u = obj($unit);
-				foreach($u->connections_from(array("type" => "RELTYPE_WORKERS")) as $c)
-				{
-					$ppl[$c->prop("to")] = $c->prop("to.name");
-				}
+				$ppl = $ppl + $u->get_worker_selection();
+//				foreach($u->connections_from(array("type" => "RELTYPE_WORKERS")) as $c)
+//				{
+//					$ppl[$c->prop("to")] = $c->prop("to.name");
+//				}
 			}
 		}
 		else

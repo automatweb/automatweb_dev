@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.7 2007/12/27 14:47:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.8 2008/10/16 15:08:16 markop Exp $
 // rostering_schedule.aw - Rostering graafik 
 /*
 
@@ -561,7 +561,7 @@ class rostering_schedule extends class_base
 			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away (5*$columns, $start))),
 		));
 
-		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
+		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;P&auml;evi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
 
 		if (is_oid ($arr["request"]["rostering_hilight"]))
 		{
@@ -1044,10 +1044,9 @@ class rostering_schedule extends class_base
 			));
 
 			// get all employees for this
-			foreach($section_obj->connections_from(array("type" => "RELTYPE_WORKERS")) as $w_c)
+			$workers = $section_obj->get_workers();
+			foreach($workers->arr() as $emplo)
 			{
-				$emplo = $w_c->to();
-
 				$d = array(
 					"empl" => str_repeat("&nbsp;", ($level+1)*3).html::obj_change_url($emplo)
 				);
