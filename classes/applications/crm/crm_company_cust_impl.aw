@@ -1690,7 +1690,38 @@ class crm_company_cust_impl extends class_base
 
 		if ($r["customer_search_worker"] != "")
 		{
-			$ret["CL_CRM_COMPANY.RELTYPE_WORKERS.name"] = "%".$r["customer_search_worker"]."%";
+			$persons = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => "%".$r["customer_search_worker"]."%",
+			));
+			$rels = array();
+			foreach($persons->arr() as $person)
+			{
+				foreach($person->connections_from(array(
+					"to.class_id" => CL_CRM_PERSON_WORK_RELATION,
+				)) as $c)
+				{
+					$to = $c->to();
+					$ids[] = $to->prop("org");
+				}
+			}
+			
+			if(sizeof($rels))
+			{
+				$ret[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_COMPANY.RELTYPE_WORKERS.name" => "%".$r["customer_search_worker"]."%",
+						"oid" => $ids,
+					)
+				));
+			}
+			else
+			{
+				$ret["CL_CRM_COMPANY.RELTYPE_WORKERS.name"] = "%".$r["customer_search_worker"]."%";
+			}
 			$has_params = true;
 		}
 

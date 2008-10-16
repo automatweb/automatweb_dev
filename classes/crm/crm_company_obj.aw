@@ -216,6 +216,22 @@ class crm_company_obj extends _int_object
 		return $ol;
 	}
 
+//2kki optimeerib... seep2rast selline lisa funktsioon
+	/** Returns company worker selection
+		@attrib api=1 params=name
+		@param active optional type=bool
+			if set, returns only active workers
+		@return object list
+			person object list
+	**/
+	public function get_worker_selection($arr = array())
+	{
+		$workers = $this->get_workers($arr);
+
+		return $workers->names();
+
+	}
+
 	/** Returns company workers
 		@attrib api=1 params=name
 		@param active optional type=bool
@@ -232,29 +248,31 @@ class crm_company_obj extends _int_object
 		$rels = $this->get_work_relations($arr);
 		if(!sizeof($rels->ids()))
 		{
-			return new object_list();
+			$ol =  new object_list();
 		}
-		$filter = array(
-			//"class_id" => CL_CRM_PERSON_WORK_RELATION,
-			"class_id" => CL_CRM_PERSON,
-			"lang_id" => array(),
-			"site_id" => array(),
-			$filter[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_ORG_RELATION" => $rels->ids(),
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB" => $rels->ids(),
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rels->ids(),
-				)
-			)),
-		);
-		$ol = new object_list($filter);
-		
-		//vana versioon peab j22ma ka toimima siiski, kui tahetakse k6iki t88tajaid
-		if(!sizeof($arr))
+		else
 		{
-			$ol->add($this->get_employees());
+			$filter = array(
+				//"class_id" => CL_CRM_PERSON_WORK_RELATION,
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_PERSON.RELTYPE_ORG_RELATION" => $rels->ids(),
+						"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB" => $rels->ids(),
+						"CL_CRM_PERSON.RELTYPE_CURRENT_JOB" => $rels->ids(),
+					)
+				)),
+			);
+			$ol = new object_list($filter);
 		}
+		//vana versioon peab j22ma ka toimima siiski, kui tahetakse k6iki t88tajaid
+//		if(!sizeof($arr))
+//		{
+			$ol->add($this->get_employees());
+//		}
 
 		return $ol;
 

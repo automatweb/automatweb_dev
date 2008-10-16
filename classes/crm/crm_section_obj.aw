@@ -76,7 +76,7 @@ class crm_section_obj extends _int_object
 		return $ret;
 	}
 
-	function get_workers()
+	function get_workers($arr = array())
 	{
 		$ol = new object_list();
 
@@ -100,6 +100,22 @@ class crm_section_obj extends _int_object
 		//vana asja toimiseks
 		$ol->add($this->get_employees());
 		return $ol;
+	}
+
+//2kki optimeerib... seep2rast selline lisa funktsioon
+	/** Returns company worker selection
+		@attrib api=1 params=name
+		@param active optional type=bool
+			if set, returns only active workers
+		@return object list
+			person object list
+	**/
+	public function get_worker_selection($arr = array())
+	{
+		$workers = $this->get_workers($arr);
+
+		return $workers->names();
+
 	}
 
 	function get_sections()
