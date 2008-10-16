@@ -4,6 +4,10 @@ class crm_expense_obj extends _int_object
 {
 	function set_prop($name,$value)
 	{
+		if ($name == "cost")
+		{
+			$value = str_replace(",",".",$value);
+		}
 		parent::set_prop($name,$value);
 	}
 

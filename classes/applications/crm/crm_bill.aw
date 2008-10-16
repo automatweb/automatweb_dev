@@ -2036,6 +2036,7 @@ class crm_bill extends class_base
 		if($agreement["price"] && $agreement["name"]) $agreement = array($agreement); // kui on vanast ajast jnud
 		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on tidetud, siis rohkem ridu ei ole nha
 		{
+			$this->show_agreement_rows = 1;
 			$bill_rows = $agreement;
 //			$agreement_price_data = $this->get_agreement_row($agreement);
 //			extract($agreement_price_data);
@@ -2217,7 +2218,11 @@ class crm_bill extends class_base
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
 		}
-			
+
+		if(!$this->show_agreement_rows)
+		{
+			usort($rs, array(&$this, "__br_sort"));
+		}
 		usort($rs, array(&$this, "__br_sort"));
 		foreach($rs as $idx => $ida)
 		{
