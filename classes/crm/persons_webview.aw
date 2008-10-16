@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.46 2008/10/14 16:08:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.47 2008/10/16 08:50:00 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -881,7 +881,10 @@ class persons_webview extends class_base
 		$section_arr = $this->sort_sections($section_list->arr());
 		foreach($section_arr as $sec)
 		{
-			if(in_array(($jrk + 1) , $this->levels) && (sizeof($this->levels) > 0))$sections[] = $sec;
+			if(in_array(($jrk + 1) , $this->levels) && (sizeof($this->levels) > 0) && !$this->jrks[$sec->id()])
+			{
+				$sections[] = $sec;
+			}
 			$sections = array_merge($sections , $this->get_sections(array("section" => $sec, "jrk" => ($jrk+1))));
 			$this->jrks[$sec->id()] = $jrk + 1;
 		}
