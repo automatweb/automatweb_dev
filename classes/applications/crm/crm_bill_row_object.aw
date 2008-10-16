@@ -18,7 +18,7 @@ class crm_bill_row_object extends _int_object
 		{
 			$this->set_prop("desc", $v);
 		}
-		if ($p == "cost")
+		if ($p == "price")
 		{
 			$value = str_replace(",",".",$value);
 		}
