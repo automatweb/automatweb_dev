@@ -5,7 +5,9 @@ class object_list_test extends UnitTestCase
 	private $oltst_test_data = array(); // test object id-s
 	private $oltst_read_tests_performed = 0; // See 'oltst_num_of_read_tests'
 	private $oltst_num_of_read_tests = 0; // Needed to perform setUp and cleanup only once for read tests. Automatically set by counting methods with prefix 'test_read_'
-/*
+	private $oltst_write_tests_performed = 0;
+	private $oltst_num_of_write_tests = 0;
+
 	public function __construct($name)
 	{
 		$this->UnitTestCase($name);
@@ -18,12 +20,16 @@ class object_list_test extends UnitTestCase
 			{
 				++$this->oltst_num_of_read_tests;
 			}
+			elseif (0 === strpos($name, "test_write_"))
+			{
+				++$this->oltst_num_of_write_tests;
+			}
 		}
 	}
 
 	public function setUp()
 	{
-		if (0 === $this->oltst_read_tests_performed)
+		if (0 === $this->oltst_read_tests_performed and 0 === $this->oltst_write_tests_performed)
 		{
 			// create test objects
 			// 3 classes, 2-deep connections, 10? objs,
@@ -39,7 +45,7 @@ class object_list_test extends UnitTestCase
 
 	public function tearDown()
 	{
-		if ($this->oltst_num_of_read_tests === $this->oltst_read_tests_performed)
+		if ($this->oltst_num_of_read_tests === $this->oltst_read_tests_performed and $this->oltst_num_of_write_tests === $this->oltst_write_tests_performed)
 		{
 			// full delete test objects
 			foreach ($this->oltst_test_data as $oid)
@@ -538,7 +544,43 @@ class object_list_test extends UnitTestCase
 		$this->assertIdentical($ol->count(), 1);
 		$this->assertTrue(in_array($this->oltst_test_data[1], $ids));
 	}
-*/
+
+	public function test_write_objfield()
+	{
+		++$this->oltst_write_tests_performed;
+		$oids = array($this->oltst_test_data[10], $this->oltst_test_data[11]);
+		$ol = new object_list(array(
+			"oid" => $oids
+		));
+		$ol->set_name("newnamewritten");
+		$ol->save();
+		$ol = new object_list(array(
+			"oid" => $oids
+		));
+		foreach ($ol->arr() as $o)
+		{
+			$this->assertIdentical($o->name(), "newnamewritten");
+		}
+	}
+
+	public function test_write_prop()
+	{
+		++$this->oltst_write_tests_performed;
+		$oids = array($this->oltst_test_data[10], $this->oltst_test_data[11]);
+		$ol = new object_list(array(
+			"oid" => $oids
+		));
+		$ol->set_prop("link", "newpropvalue");
+		$ol->save();
+		$ol = new object_list(array(
+			"oid" => $oids
+		));
+		foreach ($ol->arr() as $o)
+		{
+			$this->assertIdentical($o->prop("link"), "newpropvalue");
+		}
+	}
+
 	/* helper methods used by tests */
 	public function tmp_sorter($a, $b)
 	{

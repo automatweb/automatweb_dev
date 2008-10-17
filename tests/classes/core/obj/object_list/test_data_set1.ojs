@@ -17,5 +17,5 @@ rel { from=${o3}, to=${o9}, reltype=14 }
 
 $o10 = obj { class_id=CL_MENU, parent=${parent}, name="Writetestobject 0", status=STAT_ACTIVE }
 $o11 = obj { class_id=CL_MENU, parent=${parent}, name="Writetestobject 1", status=STAT_INACTIVE }
-$o12 = obj { class_id=CL_MENU, parent=${wo2}, name="Writetestobject 2", status=STAT_ACTIVE, comment="writetestcomment" }
-$o13 = obj { class_id=CL_MENU, parent=${wo2}, name="Writetestobject 3", status=STAT_INACTIVE }
+$o12 = obj { class_id=CL_MENU, parent=${o11}, name="Writetestobject 2", status=STAT_ACTIVE, comment="writetestcomment" }
+$o13 = obj { class_id=CL_MENU, parent=${o12}, name="Writetestobject 3", status=STAT_INACTIVE }
