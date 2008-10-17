@@ -2,7 +2,12 @@
 
 class package_client_obj extends _int_object
 {
-	function get_packages($filter)
+	/** Returns server package list
+		@attrib api=1 params=name
+		@param filter optional type=array
+		@return array
+	**/
+	public function get_packages($filter)
 	{
 		$inst = $this->instance();
 		$packages = array();
@@ -20,7 +25,11 @@ class package_client_obj extends _int_object
 		return $packages;
 	}
 
-	function get_my_packages()
+	/** Returns downloaded package list
+		@attrib api=1
+		@return array
+	**/
+	public function get_my_packages()
 	{
 		$filter = array("site_id" => $this->site_id());
 		$inst = $this->instance();
@@ -39,7 +48,12 @@ class package_client_obj extends _int_object
 		return $packages;
 	}
 
-	function get_made_packages()
+	/** Returns made packages
+		@attrib api=1
+		@return object list
+			package object list
+	**/
+	public function get_made_packages()
 	{
 		$filter = array(
 			'class_id' => CL_PACKAGE,
@@ -67,7 +81,12 @@ class package_client_obj extends _int_object
 		return $ol;
 	}
 
-	function download_package($id)
+	/** Download and install package
+		@attrib api=1 params=pos
+		@param id required type=oid
+			package object id in package server
+	**/
+	public function download_package($id)
 	{
 		if($this->prop("packages_server"))
 		{
@@ -85,7 +104,7 @@ class package_client_obj extends _int_object
 				),
 			));
 
-			$data = $this->do_orb_method_call(array(
+			$data = $inst->do_orb_method_call(array(
 				"class" => "package_server",
 				"action" => "download_package_properties",
 				"method" => "xmlrpc",
@@ -118,12 +137,15 @@ class package_client_obj extends _int_object
 
 	private function install_package($data)
 	{
+		$this->db_table_name = "site_file_index";
+		$inst = $this->instance();
+
 		$zip = new ZipArchive;
 		$zip->open($data["file_name"]);
 //		arr($zip->numFiles);
-		if ($this->db_table_exists("site_file_index") === false)
+		if ($inst->db_table_exists($this->db_table_name) === false)
 		{
-			$this->db_query('create table site_file_index (
+			$inst->db_query('create table '.$this->db_table_name.' (
 				id int not null primary key auto_increment,
 				file_name varchar(255),
 				file_version varchar(31),
@@ -132,21 +154,39 @@ class package_client_obj extends _int_object
 				package_version varchar(31),
 				used int,
 				installed_date int,
-				dependences varchar(255),
+				dependences varchar(255)
 			)');//see viimane on niisama, 2kki leiab hea lahenduse selleks
 		}
 
-		for ($i=0; $i<$zip->numFiles;$i++) {
+		$res = $zip->extractTo(aw_ini_get("site_basedir").'/files/');
+
+		for ($i=0; $i<$zip->numFiles;$i++)
+		{
 			$dat =  $zip->statIndex($i);
 			if($dat["comp_method"])
 			{
-				if($dat["index"] == 2) $dir = $dat["name"];
-				$files[] = $dat["name"];//arr($dat);
-				$path = substr($dat["name"] , strpos($dat["name"],"/", 1)+1);
-				if(!strpos($path,"/", 1))
+				$temp_path = aw_ini_get("site_basedir").'/files/'.$dat["name"];
+
+				if($dat["name"] == "script.php")
 				{
+					include $temp_path;
+					print t("Installi skript k2ivitus")."<br>\n";
 					continue;
 				}
+				$path = aw_ini_get("basedir").'/'.$dat["name"];
+//		if($dat["index"] == 2) $dir = $dat["name"];
+//		$files[] = $dat["name"];//arr($dat);
+//		$path = substr($dat["name"] , strpos($dat["name"],"/", -1));
+//		if(!strpos($path,"/", 1))
+//		{
+//			continue;
+//		}
+
+//testiks
+$file_version = "1.0";
+
+				$file_name = basename($path);
+				$location =  dirname($dat["name"]);
 
 				$sql = "insert into ".$this->db_table_name."(
 					file_name,
@@ -158,28 +198,63 @@ class package_client_obj extends _int_object
 					installed_date,
 					dependences,
 				) values (
-					".$dat["name"].",
+					".$file_name.",
 					"."123".",
-					'"."123"."',
+					'".$location."',
 					'".$data["name"]."',
 					'".$data["version"]."',
 					'1',
 					'".time()."',
 					'"."123"."',
 				)";
-arr($sql);	
+arr($sql);
 //				$this->db_query($sql);
 
-				$path = substr($path , strpos($path,"/", 1)+1);
-				print aw_ini_get("basedir").'/'.$path ." ... ";
-	//selle peab paremini t88le saama... p2rast ei jaksa keegi seda jama kustutada muidu
-	//			$res = $zip->extractTo(aw_ini_get("basedir") , array($dat["index"]));
-				print ($res? "6nnestus" : "ei 6nnestunud")." <br>\n";	
-				print aw_ini_get("basedir").$dat["name"]." <br>\n";	
+//$path = substr($path , strpos($path,"/", 1)+1);
+//selle peab paremini t88le saama... p2rast ei jaksa keegi seda jama kustutada muidu
+//arr($res);arr($dat);arr($temp_path);
+//$lines = file($temp_path);
+//arr($lines);
+//$path = str_replace($data["name"]."-".$data["version"] , "" , $path);
+//$path = str_replace($data["name"] , "" , $path);
+//$path = str_replace($data["name"] , "" , $path);
+//arr($path);
+			
+
+				$newfile_arr = explode("." , $file_name);
+				if(sizeof($newfile_arr) > 1)
+				{
+					$ext = end($newfile_arr);
+					unset($newfile_arr[sizeof($newfile_arr) - 1]);
+					$fs = join("." , $newfile_arr);
+				}
+				else
+				{
+					$ext = "";
+					$fs = $file_name;
+				}
+				$newfile = $location."/".$fs."_".$file_version.".".$ext;
+
+//				$success = copy($temp_path, $newfile)
+				print ($success? "6nnestus" : "ei 6nnestunud")." <br>\n";	
+				print $newfile." <br>\n";	
 			}
 		}
 	}
 
+	/** Adds installed package object to the system
+		@attrib api=1 params=name
+		@param name optional type=string
+			package object name
+		@param version optional type=string
+			package version
+		@param description optional type=string
+			package description
+		@param file optional type=string
+			package zip file path
+		@return oid
+			new package object id
+	**/
 	function add_package($params)
 	{
 		$o = new object();
@@ -188,7 +263,7 @@ arr($sql);
 		$o->set_name($params["name"] ? $params["name"] : t("Nimetu pakett"));
 
 		$o->set_prop("version" , $params["version"]);
-		$o->set_prop("description" , $data["description"]);
+		$o->set_prop("description" , $params["description"]);
 		$o->set_prop("installed" , 1);
 		$o->save();
 
@@ -224,15 +299,18 @@ arr($sql);
 		return $o->id();
 	}
 
-
-	function upload_package($id)
+	/** Uploads package to server
+		@attrib api=1 params=pos
+		@param id optional type=oid
+	**/
+	public function upload_package($id)
 	{
 		$client = $this->instance();
 		$url = $this->prop("packages_server")."/orb.aw?class=package_server&action=upload_package&id=".$id."&site_id=".$this->site_id()."&return_url=".urlencode($client->mk_my_orb("change", array(
-					"id" => $this->id(),
-					"clid" => CL_PACKAGE_CLIENT,
-					"group" => "packages",
-				)));
+			"id" => $this->id(),
+			"clid" => CL_PACKAGE_CLIENT,
+			"group" => "packages",
+		)));
 		header("Location: ".$url);
 		die();
 		$this->do_nothing();
@@ -252,11 +330,23 @@ arr($sql);
 		$contents = curl_exec($c);
 		curl_close($c);
 	
-		if ($contents) return $contents;
-		else return FALSE;
+		if ($contents)
+		{
+			return $contents;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
-	function get_files_list($id)
+	/** Returns package files list from server
+		@attrib api=1 params=pos
+		@param id required type=oid
+			package object id
+		@returns array
+	**/
+	public function get_files_list($id)
 	{
 		$files = array();
 		if($this->prop("packages_server"))

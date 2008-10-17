@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.17 2008/09/26 11:10:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.18 2008/10/17 11:34:37 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -280,7 +280,7 @@ class package_server extends class_base
 		return PROP_OK;
 	}
 
-	function get_sites($filter)
+	private function get_sites($filter)
 	{
 		$list = $this->get_site_list();	
 		$result = array_keys($list);
@@ -333,7 +333,7 @@ class package_server extends class_base
 		return $result;
 	}
 
-	function get_site_packages($sid)
+	private function get_site_packages($sid)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_PACKAGE,
@@ -343,7 +343,7 @@ class package_server extends class_base
 		return $ol->ids();
 	}
 
-	function get_site_packages_names($sid)
+	private function get_site_packages_names($sid)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_PACKAGE,
@@ -408,10 +408,12 @@ class package_server extends class_base
 	}
 
 	/** 
-		@attrib name=download_package_list nologin=1 is_public=1 all_args=1
-
+		@attrib name=download_package_list nologin=1 is_public=1 all_args=1 params=pos api=1
+		@param filter required type=array
+			package object list filter
+		@return array
  	**/
-	function download_package_list($arr)
+	public function download_package_list($filter)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_PACKAGE_SERVER,
@@ -419,7 +421,7 @@ class package_server extends class_base
 			"site_id" => array(),
 		));
 		$o = reset($ol->arr());
-		$packages = $o->packages_list(array("filter" => $arr));
+		$packages = $o->packages_list(array("filter" => $filter));
 		
 		$pa = array();
 
@@ -438,11 +440,16 @@ class package_server extends class_base
 		die();
 	}
 
-	/** 
-		@attrib name=download_package_properties nologin=1 is_public=1 all_args=1
 
+
+	/** 
+		@attrib name=download_package_properties nologin=1 is_public=1 all_args=1 params=name api=1
+		@param id required type=oid
+			package object id
+		@return array
+			package object property values
  	**/
-	function download_package_properties($arr)
+	public function download_package_properties($arr)
 	{
 		$ol = new object_list(array(
 			"class_id" => CL_PACKAGE_SERVER,
@@ -458,10 +465,13 @@ class package_server extends class_base
 	}
 
 	/** 
-		@attrib name=download_package_files nologin=1 is_public=1 all_args=1
-
+		@attrib name=download_package_files nologin=1 is_public=1 all_args=1 api=1
+		@param id required type=oid
+			package object id
+		@return array
+			package file names
  	**/
-	function download_package_files($arr)
+	public function download_package_files($arr)
 	{
 		extract($arr);
 		if(!$this->can("view" , $id))
@@ -474,8 +484,9 @@ class package_server extends class_base
 		return $files;
 	}
 
+//-------------neid vist ei kasutata veel... siis parandab kui kasutada vaja
 	/** 
-		@attrib name=download_package_dependences_list nologin=1 is_public=1 all_args=1
+		@attrib name=download_package_dependences_list nologin=1 is_public=1 all_args=1 api=1
 
  	**/
 	function download_package_dependences($arr)
@@ -494,7 +505,7 @@ class package_server extends class_base
 	}
 
 	/** 
-		@attrib name=download_package_description_list nologin=1 is_public=1 all_args=1
+		@attrib name=download_package_description_list nologin=1 is_public=1 all_args=1 api=1
 
  	**/
 	function download_package_description($arr)
@@ -510,11 +521,14 @@ class package_server extends class_base
 		die();
 	}
 
-	/** 
-		@attrib name=download_package nologin=1 is_public=1 all_args=1
+//------------------------------
 
+	/** 
+		@attrib name=download_package nologin=1 is_public=1 all_args=1 params=name api=1
+		@param pid required type=oid
+			package object id
  	**/
-	function download_package($arr)
+	public function download_package($arr)
 	{
 		extract($arr);
 		$file_manager = get_instance("admin/file_manager");
@@ -525,10 +539,16 @@ class package_server extends class_base
 		$file_manager->compress_submit($arr);
 	}
 	
-	/** 
-		@attrib name=upload_package nologin=1 is_public=1 all_args=1
+	/** uploads package object
+		@attrib name=upload_package nologin=1 is_public=1 all_args=1 params=name api=1
+		@param id required type=oid
+			package object id
+		@param site_id required type=int
+			site id
+		@return array
+			package object property values
  	**/
-	function upload_package($arr)
+	public function upload_package($arr)
 	{
 		$sites = $this->get_site_list();
 		$client = $sites[$arr["site_id"]]["url"];
@@ -565,6 +585,11 @@ class package_server extends class_base
 
 	}
 
+	/** returns default package server object
+		@attrib name=get_package_server api=1
+		@return object
+			package server object
+ 	**/
 	private function get_package_server()
 	{
 		if($this->package_server_object)
@@ -581,7 +606,11 @@ class package_server extends class_base
 	}
 
 	/** 
-		@attrib name=download_package_file nologin=1 is_public=1 all_args=1
+		@attrib name=download_package_file nologin=1 is_public=1 all_args=1 params=name api=1
+		@param id required type=oid
+			package object id
+		@param site_id required type=int
+			site id
  	**/
 	function download_package_file($arr)
 	{
@@ -592,7 +621,7 @@ class package_server extends class_base
 	}
 
 	/** 
-		@attrib name=get_package_file_size nologin=1 is_public=1 all_args=1
+		@attrib name=get_package_file_size nologin=1 is_public=1 all_args=1 params=name api=1
 		@param id required type=oid
 			package id
  	**/ 
@@ -603,7 +632,7 @@ class package_server extends class_base
 		return $package->get_package_file_size();
 	}
 
-	function get_site_list()
+	private function get_site_list()
 	{
 		if(!$this->site_list)
 		{

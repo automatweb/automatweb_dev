@@ -185,7 +185,7 @@ class package_client extends class_base
 		@param return_url required type=string
 			Url to return
 	**/
-	function download_package($arr)
+	public function download_package($arr)
 	{
 		$client = obj($arr["client_id"]);
 		$client->download_package($arr["package_id"]);
@@ -201,7 +201,7 @@ class package_client extends class_base
 		@param return_url required type=string
 			Url to return
 	**/
-	function upload_package($arr)
+	public function upload_package($arr)
 	{
 		$client = obj($arr["client_id"]);
 		$client->upload_package($arr["package_id"]);
