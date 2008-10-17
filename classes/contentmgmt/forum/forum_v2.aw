@@ -2980,7 +2980,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
-                return $html;
+		return $html;
 	}
 
 	/**
