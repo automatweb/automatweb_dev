@@ -2406,6 +2406,7 @@ class crm_bill extends class_base
 
 	function show_add($arr)
 	{
+		$stats = get_instance("applications/crm/crm_company_stats_impl");
 		$b = obj($arr["id"]);
 		$bill_rows = $this->get_bill_rows($b);
 		//lkkab mned read kokku ja liidab summa , ning koguse.vibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha kki
@@ -2601,7 +2602,7 @@ class crm_bill extends class_base
 				$this->vars($row_data);
 				$this->vars(array(
 					"unit" => $this->get_unit_name($row["unit"], $b),
-					"amt" => number_format($row["amt"],3), 
+					"amt" => $stats->hours_format($row["amt"]),
 					"price" => number_format($row["price"], 2,".", " "),
 					"sum" => number_format($cur_sum, 2,"." , " "),
 					"desc" => $row["name"],
@@ -2643,7 +2644,7 @@ class crm_bill extends class_base
 			}
 			$this->vars(array(
 				"unit" => $this->get_unit_name($row["unit"], $b),
-				"amt" => number_format($row["amt"],3),
+				"amt" => $stats->hours_format($row["amt"]),
 				"price" => number_format($cur_pr, 2,".", " "),
 				"sum" => number_format($cur_sum, 2, ".", " "),
 				"desc" => $row["name"],
@@ -2678,7 +2679,7 @@ class crm_bill extends class_base
 
 		if(!$arr["not_last_page"])
 		{
-			$this->vars(array("tot_amt" => number_format($tot_amt, 3,".", " ")));
+			$this->vars(array("tot_amt" => $stats->hours_format($tot_amt)));
 			$total_ = $this->parse("TOTAL");
 		}
 		$page_no = $arr["page"] + 1;
@@ -2699,7 +2700,7 @@ class crm_bill extends class_base
 			"tax" => number_format($tax, 2,"." , " "),
 			"total" => number_format($sum, 2,".", " "),
 			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc),
-			"tot_amt" => number_format($tot_amt, 3,".", " "),
+			"tot_amt" => $stats->hours_format($tot_amt),
 			"page_no" => $page_no,
 		));
  
@@ -3289,6 +3290,7 @@ class crm_bill extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bill_task_list($t);
+		$stats = get_instance("applications/crm/crm_company_stats_impl");
 
 		$ol = new object_list(array(
 			"class_id" => CL_TASK,
@@ -3309,13 +3311,12 @@ class crm_bill extends class_base
 			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($task),
-				"hrs" => number_format($hrs, 3), 
+				"hrs" => $stats->hours_format($hrs),
 				"price" => number_format($price, 2,".", " "),
 				"oid" => $task->id()
 			));
 		}
 	}
-
 	function _billt_tb($arr)
 	{
 		
