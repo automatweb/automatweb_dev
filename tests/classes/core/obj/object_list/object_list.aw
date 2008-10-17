@@ -1,7 +1,7 @@
 <?php
 
 class object_list_test extends UnitTestCase
-{
+{/*
 	private $oltst_test_data = array(); // test object id-s
 	private $oltst_read_tests_performed = 0; // See 'oltst_num_of_read_tests'
 	private $oltst_num_of_read_tests = 0; // Needed to perform setUp and cleanup only once for read tests. Automatically set by counting methods with prefix 'test_read_'
