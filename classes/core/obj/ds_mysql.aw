@@ -836,16 +836,25 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		$ot_sets = join(" , ", $ot_sets);
 
-		$q = "UPDATE objects SET
+		if ($ot_sets != "")
+		{
+			$ot_sets = " , ".$ot_sets;
+		}
+
+		$obj_q = "UPDATE objects SET
+			mod_cnt = mod_cnt + 1
 			$ot_sets
 			WHERE oid = '".$objdata["oid"]."'
 		";
 
 //		echo "q = <pre>". htmlentities($q)."</pre> <br />";
-		$this->db_query($q);
+//		$this->db_query($q);
 
 		// now save all properties
 
+
+		$data_qs = array();
+		$used_tables = array("objects" => "objects");
 
 		// divide all properties into tables
 		$tbls = array();
@@ -976,8 +985,37 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
-				$this->db_query($q);
+				$used_tables[$tbl] = $tbl;
+				$data_qs[] = $q;
 			}
+		}
+
+		// check exclusivity
+		if ($arr["exclusive_save"])
+		{
+			// lock tables and check mod count
+			$this->db_query("LOCK TABLES ".join(" , ", map(" %s WRITE ", $used_tables)));
+			$db_mod_cnt = $this->db_fetch_field("SELECT mod_cnt FROM objects WHERE oid = '".$objdata["oid"]."'", "mod_cnt");
+			if ($db_mod_cnt != $arr["current_mod_count"])
+			{
+				// unlock tables and except
+				$this->db_query("UNLOCK TABLES");
+				throw new awex_obj_modified_by_others(sprintf(t("Mod count difference, new %s , old %s!"), $db_mod_cnt, $arr["current_mod_count"]));
+				return;
+			}
+			// not modified, go save
+		}
+
+		$this->db_query($obj_q);
+		foreach($data_qs as $q)
+		{
+			$this->db_query($q);
+		}
+
+		if ($arr["exclusive_save"])
+		{
+			// un lock tables
+			$this->db_query("UNLOCK TABLES");
 		}
 
 		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]);

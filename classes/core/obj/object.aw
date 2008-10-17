@@ -202,6 +202,49 @@ class object
 		return $this->oid = $GLOBALS["object_loader"]->save($this->oid);
 	}
 
+	/** Saves the currently loaded object or creates a new one if the currently loaded object is not yet saved and all the necessary properties are set; returns the id of the object created or saved.
+		@attrib api=1
+
+		@comment
+			Checks modified count from the database to make sure that it has not been modified in between. 
+			The properties that must be set in order for an object to be saved, are:
+				- parent
+				- class_id
+			If these properties are not set when save() is called, then script execution will be aborted with an error message.
+
+		@param state_id optional type=int
+			defaults to the one in memory. The state id of the object to compare when saving.
+
+		@errors
+			- if modified count is different than then one given or in memory, exception awex_obj_modified_by_others is thrown
+			- If all necessary properties are not set that are needed to save or create the object, error is thrown.
+			- If the user has no access to the object, error is thrown.
+
+		@returns
+			Id of the object that was saved or created.
+
+		@examples
+			$o = obj();
+			$o->set_parent(555);
+			$o->set_class_id(CL_FOO);
+			$o->save();
+	**/
+	function save_check_state($state_id = null)
+	{
+		return $this->oid = $GLOBALS["object_loader"]->save($this->oid, true, $state_id);
+	}
+
+	/** Returns the current state id for the object from memory. 
+		@attrib api=1
+
+		@returns
+			State id of the object
+	**/
+	function get_state_id()
+	{
+		return $GLOBALS["objects"][$this->oid]->get_state_id();
+	}
+
 	/** creates a new object from the currently loaded object, if all needed properties are set,returns the id of the object created
 		@attrib api=1
 
@@ -2114,4 +2157,6 @@ class awex_obj_acl extends awex_obj {}
 /* Generic type mismatch condition */
 class awex_obj_type extends awex_obj {}
 
+/** When in exclusive save and the object has been modified, this is thrown **/
+class awex_obj_modified_by_others extends awex_obj {}
 ?>

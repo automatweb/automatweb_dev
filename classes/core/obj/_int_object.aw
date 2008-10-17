@@ -66,7 +66,7 @@ class _int_object
 		}
 	}
 
-	function save()
+	function save($exclusive = false, $previous_state = null)
 	{
 		if (!$this->_int_can_save())
 		{
@@ -76,7 +76,7 @@ class _int_object
 			));
 			return;
 		}
-		return $this->_int_do_save();
+		return $this->_int_do_save($exclusive, $previous_state);
 	}
 
 	function save_new()
@@ -1835,6 +1835,11 @@ class _int_object
 		return new object($oid);
 	}
 
+	public function get_state_id()
+	{
+		return $this->obj["mod_cnt"];	
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 
@@ -2008,8 +2013,13 @@ class _int_object
 		}
 	}
 
-	function _int_do_save()
+	function _int_do_save($exclusive, $previous_state)
 	{
+		if ($previous_state === null)
+		{
+			$previous_state = $this->get_state_id();
+		}
+
 		// first, update modifier fields
 
 		if (!$this->no_modify)
@@ -2032,6 +2042,7 @@ class _int_object
 
 			$this->_int_do_inherit_new_props();
 
+			// no exclusive when creating
 			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(
 				"objdata" => &$this->obj,
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
@@ -2068,7 +2079,9 @@ class _int_object
 				"propvalues" => $this->obj["properties"],
 				"ot_modified" => $this->ot_modified,
 				"props_modified" => $this->props_modified,
-				"create_new_version" => $this->_create_new_version
+				"create_new_version" => $this->_create_new_version,
+				"exclusive_save" => $exclusive,
+				"current_mod_count" => $previous_state
 			));
 			$GLOBALS["object_loader"]->handle_cache_update($this->brother_of(), $this->site_id(), "save_properties");
 

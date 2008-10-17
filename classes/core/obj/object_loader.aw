@@ -289,7 +289,7 @@ class _int_object_loader extends core
 		return $GLOBALS["objects"][$oid]->id();
 	}
 
-	function save($oid)
+	function save($oid, $exclusive = false, $previous_state = null)
 	{
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
@@ -300,7 +300,7 @@ class _int_object_loader extends core
 			return;
 		}
 
-		$t_oid = $GLOBALS["objects"][$oid]->save();
+		$t_oid = $GLOBALS["objects"][$oid]->save($exclusive, $previous_state);
 		if ($t_oid != $oid)
 		{
 			// relocate the object in the global list
