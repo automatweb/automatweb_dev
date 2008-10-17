@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.6 2008/10/14 12:24:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.7 2008/10/17 08:38:11 markop Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
-HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
 
 @default table=objects
