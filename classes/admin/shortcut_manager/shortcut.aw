@@ -17,6 +17,10 @@
 @property url type=textbox field=meta method=serialize
 @caption URL
 
+@property custom type=textarea field=meta method=serialize
+@caption Skript
+
+
 */
 
 class shortcut extends class_base
@@ -46,6 +50,13 @@ class shortcut extends class_base
 			case "url":
 				$o = $arr["obj_inst"];
 				if ($o->prop("type") != "go_to_url")
+				{
+					$retval = PROP_IGNORE;
+				}
+			break;
+			case "custom":
+				$o = $arr["obj_inst"];
+				if ($o->prop("type") != "custom")
 				{
 					$retval = PROP_IGNORE;
 				}
@@ -98,7 +109,15 @@ class shortcut extends class_base
 		}
 		else if ($o->prop("type")=="custom")
 		{
+			$this->vars(array(
+				"custom" =>$o->prop("custom"),
+			));
 			
+			$tmp = $this->parse("CUSTOM_JS");
+			
+			$this->vars(array(
+				"CUSTOM_JS" => $tmp,
+			));
 		}
 		echo $this->parse();
 		

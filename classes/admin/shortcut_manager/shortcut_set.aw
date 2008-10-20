@@ -8,6 +8,9 @@
 @property name type=textbox field=name
 @caption Nimi
 
+@reltype SHORTCUT value=1 clid=CL_SHORTCUT
+@caption Shortcut
+
 */
 
 class shortcut_set extends class_base

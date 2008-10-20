@@ -486,6 +486,8 @@
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
+            <parent>settings_shortcuts_top_left</parent>
+            <no_caption>1</no_caption>
             <caption>Aktiivne set</caption>
       </property>
       <property>
@@ -493,6 +495,8 @@
             <table>users</table>
             <group>settings_shortcuts</group>
             <type>table</type>
+            <parent>settings_shortcuts_bot_left</parent>
+            <no_caption>1</no_caption>
             <store>no</store>
             <field>settings_shortcuts_settings_shortcuts</field>
             <caption>Shortcutid</caption>
@@ -573,5 +577,33 @@
                   <caption>liitumise andmed</caption>
             </JOIN_SITE>
       </reltypes>
+      <layout>
+            <settings_shortcuts_top>
+                  <type>hbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>&amp;amp;Uuml;ldine</area_caption>
+                  <width>100%</width>
+                  <group>settings_shortcuts</group>
+            </settings_shortcuts_top>
+            <settings_shortcuts_top_left>
+                  <type>vbox</type>
+                  <parent>settings_shortcuts_top</parent>
+                  <group>settings_shortcuts</group>
+                  <area_caption></area_caption>
+            </settings_shortcuts_top_left>
+            <settings_shortcuts_bot>
+                  <area_caption>Aktiivsed&amp;amp;nbsp;shortcutid</area_caption>
+                  <closeable>1</closeable>
+                  <type>hbox</type>
+                  <width>100%</width>
+                  <group>settings_shortcuts</group>
+            </settings_shortcuts_bot>
+            <settings_shortcuts_bot_left>
+                  <type>vbox</type>
+                  <parent>settings_shortcuts_bot</parent>
+                  <group>settings_shortcuts</group>
+                  <area_caption></area_caption>
+            </settings_shortcuts_bot_left>
+      </layout>
 </properties>
 

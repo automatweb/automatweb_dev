@@ -196,12 +196,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 	@default group=settings_shortcuts
 	property Shortcutid
-		
-		@property settings_shortcuts_shortcut_sets type=chooser field=meta method=serialize table=objects
-		@caption Aktiivne set
-		
-		@property settings_shortcuts_settings_shortcuts type=table
-		@caption Shortcutid
+
+		@layout settings_shortcuts_top type=hbox closeable=1 area_caption=&Uuml;ldine width=100%
+
+			@layout settings_shortcuts_top_left type=vbox parent=settings_shortcuts_top
+
+				@property settings_shortcuts_shortcut_sets type=chooser field=meta method=serialize table=objects parent=settings_shortcuts_top_left no_caption=1
+				@caption Aktiivne set
+
+	@layout settings_shortcuts_bot area_caption=Aktiivsed&nbsp;shortcutid closeable=1 type=hbox width=100%
+
+		@layout settings_shortcuts_bot_left type=vbox parent=settings_shortcuts_bot
+
+			@property settings_shortcuts_settings_shortcuts type=table parent=settings_shortcuts_bot_left no_caption=1
+			@caption Shortcutid
 		
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp

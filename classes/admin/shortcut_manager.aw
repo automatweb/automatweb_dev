@@ -161,9 +161,14 @@ class shortcut_manager extends class_base
 				$shortcut_type = $o_shortcut->prop("type");
 				switch ($shortcut_type) {
 					case "go_to_url":
-						$out .= 'function aw_shortcut_manager_get_action_'.$i.'(){
+						$out .= 'function aw_shortcut_manager_get_action_'.$i.'(){'."\n".'
+							$.shortcut_manager.get_action('.$o_shortcut->id().')'."\n".';
+						};';
+						$out .= "$.hotkeys.add('".$o_shortcut->prop("keycombo")."', aw_shortcut_manager_get_action_".$i.");";
+					case "custom":
+						$out .= 'function aw_shortcut_manager_get_action_'.$i.'(){'."\n".'
 							$.shortcut_manager.get_action('.$o_shortcut->id().');
-						}';
+						};';
 						$out .= "$.hotkeys.add('".$o_shortcut->prop("keycombo")."', aw_shortcut_manager_get_action_".$i.");";
 					break;
 				}

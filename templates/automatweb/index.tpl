@@ -38,7 +38,6 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/shortcuts.js"></script>
 <!-- END SUB: MINIFY_JS_AND_CSS -->
 
 {VAR:javascript}
