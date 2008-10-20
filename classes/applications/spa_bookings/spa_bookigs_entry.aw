@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.82 2008/10/15 12:34:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.83 2008/10/20 14:44:28 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2216,6 +2216,7 @@ class spa_bookigs_entry extends class_base
 						{
 							foreach($user->connections_from(array("type" => "RELTYPE_PERSON")) as $c)
 							{
+								$person = $c->to();
 								$co_list = $person ->get_org_selection();
 /*								$ci = new connection();
 								$conns = $ci->find(array(

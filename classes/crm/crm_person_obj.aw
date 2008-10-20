@@ -849,6 +849,7 @@ class crm_person_obj extends _int_object
 		}
 
 	//vana versioon peab ka m6nda aega t88le j22ma
+		$ci = new connection();
 		$conns = $ci->find(array(
 			"from.class_id" => CL_CRM_COMPANY,
 			"type" => "RELTYPE_WORKERS",
