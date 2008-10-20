@@ -249,6 +249,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
 	@caption Tagasiside bugide kaust
 
+	@property finance_required type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kulude katmine tuleb m&auml;&auml;rata
+
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
 

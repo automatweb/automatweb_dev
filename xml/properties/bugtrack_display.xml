@@ -100,6 +100,8 @@
             <group>
                   <num_0>task_settings</num_0>
                   <num_1>solved_settings</num_1>
+                  <num_2>devo_settings</num_2>
+                  <num_3>closed_settings</num_3>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -112,6 +114,8 @@
             <group>
                   <num_0>task_settings</num_0>
                   <num_1>solved_settings</num_1>
+                  <num_2>devo_settings</num_2>
+                  <num_3>closed_settings</num_3>
             </group>
             <type>table</type>
             <store>no</store>
@@ -119,18 +123,14 @@
             <field>table_settings_table</field>
       </property>
       <property>
-            <name>table_settings_sort_task</name>
+            <name>table_settings_sort</name>
             <table>objects</table>
-            <group>task_settings</group>
-            <type>chooser</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tabeli sorteerimine</caption>
-      </property>
-      <property>
-            <name>table_settings_sort_solved</name>
-            <table>objects</table>
-            <group>solved_settings</group>
+            <group>
+                  <num_0>task_settings</num_0>
+                  <num_1>solved_settings</num_1>
+                  <num_2>devo_settings</num_2>
+                  <num_3>closed_settings</num_3>
+            </group>
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
@@ -202,10 +202,18 @@
                   <caption>&amp;amp;Uuml;lesanded</caption>
                   <parent>tables</parent>
             </task_settings>
+            <devo_settings>
+                  <caption>Arendustellimused</caption>
+                  <parent>tables</parent>
+            </devo_settings>
             <solved_settings>
                   <caption>Lahendatud</caption>
                   <parent>tables</parent>
             </solved_settings>
+            <closed_settings>
+                  <caption>Suletud</caption>
+                  <parent>tables</parent>
+            </closed_settings>
             <tasks>
                   <caption>&amp;amp;Uuml;lesanded</caption>
                   <submit>no</submit>
