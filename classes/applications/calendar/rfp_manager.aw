@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.80 2008/10/15 09:17:12 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.81 2008/10/20 09:40:45 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -2020,8 +2020,8 @@ class rfp_manager extends class_base
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array(
-							"CL_RFP.data_gen_arrival_date_admin" => new obj_predicate_compare(OBJ_COMP_LESS, mktime(23, 59, 59, date('m', $f), date('d', $f), date('Y', $f))),
-							"CL_RFP.data_gen_departure_date_admin" => new obj_predicate_compare(OBJ_COMP_GREATER, mktime(0, 0, 0, date('m', $t), date('d', $t), date('Y', $t))),
+							"CL_RFP.data_gen_arrival_date_admin" => new obj_predicate_compare(OBJ_COMP_LESS, mktime(0, 0, 0, date('m', $f), date('d', $f)+1, date('Y', $f))),
+							"CL_RFP.data_gen_departure_date_admin" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, mktime(0, 0, 0, date('m', $f), date('d', $f), date('Y', $f))),
 						),
 					)),
 				),
