@@ -16,5 +16,12 @@
             <prop_cb>1</prop_cb>
             <maintainer>hannes</maintainer>
       </classinfo>
+      <reltypes>
+            <SHORTCUT>
+                  <value>1</value>
+                  <clid>CL_SHORTCUT</clid>
+                  <caption>Shortcut</caption>
+            </SHORTCUT>
+      </reltypes>
 </properties>
 
