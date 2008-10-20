@@ -100,6 +100,18 @@
             <caption>Indeks</caption>
       </property>
       <property>
+            <name>data_subm_state</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>submitter_info</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>client_info</parent>
+            <field>data_subm_state</field>
+            <caption>Maakond</caption>
+      </property>
+      <property>
             <name>data_subm_country</name>
             <table>rfp</table>
             <group>
@@ -706,6 +718,18 @@
             <parent>billing_info</parent>
             <field>data_billing_zip</field>
             <caption>Indeks</caption>
+      </property>
+      <property>
+            <name>data_billing_state</name>
+            <table>rfp</table>
+            <group>
+                  <num_0>billing</num_0>
+                  <num_1>final_client</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>billing_info</parent>
+            <field>data_billing_state</field>
+            <caption>Maakond</caption>
       </property>
       <property>
             <name>data_billing_country</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.158 2008/10/14 11:25:25 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.159 2008/10/20 09:52:23 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -43,6 +43,9 @@
 
 			@property data_subm_zip type=textbox group=submitter_info,final_client parent=client_info
 			@caption Indeks
+
+			@property data_subm_state type=textbox group=submitter_info,final_client parent=client_info
+			@caption Maakond
 
 			@property data_subm_country type=textbox group=submitter_info,final_client parent=client_info
 			@caption Riik
@@ -245,6 +248,9 @@
 
 			@property data_billing_zip type=textbox parent=billing_info
 			@caption Indeks
+
+			@property data_billing_state type=textbox parent=billing_info
+			@caption Maakond
 
 			@property data_billing_country type=textbox parent=billing_info
 			@caption Riik
@@ -741,6 +747,7 @@ class rfp extends class_base
 			case "data_billing_city":
 			case "data_billing_country":
 			case "data_billing_fax":
+			case "data_billing_state":
 			case "data_billing_zip":
 				if(!$prop["value"])
 				{
@@ -2771,6 +2778,7 @@ class rfp extends class_base
 			"data_billing_city" => $arr["obj_inst"]->prop("data_billing_city"),
 			"data_billing_zip" => $arr["obj_inst"]->prop("data_billing_zip"),
 			"data_billing_country" => $arr["obj_inst"]->prop("data_billing_country"),
+			"data_billing_state" => $arr["obj_inst"]->prop("data_billing_state"),
 			"data_billing_name" => $arr["obj_inst"]->prop("data_billing_name"),
 			"data_billing_phone" => $arr["obj_inst"]->prop("data_billing_phone"),
 			"data_billing_email" => $arr["obj_inst"]->prop("data_billing_email"),
@@ -2783,6 +2791,7 @@ class rfp extends class_base
 			"data_city" => $arr["obj_inst"]->prop("data_subm_city"),
 			"data_zip" => $arr["obj_inst"]->prop("data_subm_zip"),
 			"data_country" => $arr["obj_inst"]->prop("data_subm_country"),
+			"data_state" => $arr["obj_inst"]->prop("data_subm_state"),
 			"data_phone" => $arr["obj_inst"]->prop("data_subm_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_subm_email"),
 			"data_fax" => $arr["obj_inst"]->prop("data_subm_fax"),
@@ -3744,6 +3753,7 @@ class rfp extends class_base
 			array("final_foreign_guests", "int"),
 			array("data_subm_name", "varchar(255)"),
 			array("data_subm_country", "varchar(255)"),
+			array("data_subm_state", "varchar(255)"),
 			array("data_subm_organisation", "varchar(255)"),
 			array("data_subm_organizer", "varchar(255)"),
 			array("data_subm_email", "varchar(255)"),
@@ -3803,6 +3813,7 @@ class rfp extends class_base
 			array("data_billing_city", "varchar(255)"),
 			array("data_billing_zip", "varchar(255)"),
 			array("data_billing_country", "varchar(255)"),
+			array("data_billing_state", "varchar(255)"),
 			array("data_billing_name", "varchar(255)"),
 			array("data_billing_phone", "varchar(255)"),
 			array("data_billing_email", "varchar(255)"),
