@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.12 2008/10/15 11:21:29 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.13 2008/10/20 11:06:46 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -47,16 +47,17 @@
 		
 		@groupinfo task_settings caption=&Uuml;lesanded parent=tables
 			
-			@property table_settings_tb type=toolbar store=no no_caption=1 group=task_settings,solved_settings
-			@property table_settings_table type=table store=no no_caption=1 group=task_settings,solved_settings
+			@property table_settings_tb type=toolbar store=no no_caption=1 group=task_settings,solved_settings,devo_settings,closed_settings
+			@property table_settings_table type=table store=no no_caption=1 group=task_settings,solved_settings,devo_settings,closed_settings
 		
-			@property table_settings_sort_task type=chooser field=meta method=serialize group=task_settings
-			@caption Tabeli sorteerimine
-		
-			@property table_settings_sort_solved type=chooser field=meta method=serialize group=solved_settings
+			@property table_settings_sort type=chooser field=meta method=serialize group=task_settings,solved_settings,devo_settings,closed_settings
 			@caption Tabeli sorteerimine
 
+		@groupinfo devo_settings caption=Arendustellimused parent=tables
+
 		@groupinfo solved_settings caption=Lahendatud parent=tables
+
+		@groupinfo closed_settings caption=Suletud parent=tables
 
 	@groupinfo tasks caption=&Uuml;lesanded submit=no
 		
@@ -139,15 +140,21 @@ class bugtrack_display extends class_base
 		{
 			$t->set_default_sortby("f".$data["default_sort"]);
 		}
-		if($arr["request"]["group"] == "tasks" || $arr["request"]["group"] == "devos")
+		switch($arr["request"]["group"])
 		{
-			$sort_prop = "table_settings_sort_task";
+			case "closed":
+				$sort_prop = "table_settings_sort_closed";
+				break;
+			case "solved":
+				$sort_prop = "table_settings_sort_solved";
+				break;
+			case "devos":
+				$sort_prop = "table_settings_sort_devo";
+				break;
+			default:
+				$sort_prop = "table_settings_sort_task";
 		}
-		else
-		{
-			$sort_prop = "table_settings_sort_solved";
-		}
-		if(!($so = $arr["obj_inst"]->prop($sort_prop)))
+		if(!($so = $arr["obj_inst"]->meta($sort_prop)))
 		{
 			$so = "asc";
 		}
@@ -296,13 +303,19 @@ class bugtrack_display extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_caption(t("&Uuml;lesanded"));
-		if($arr["request"]["group"] == "solved" || $arr["request"]["group"] == "closed")
+		switch($arr["request"]["group"])
 		{
-			$data = $arr["obj_inst"]->meta("solved_settings");
-		}
-		else
-		{
-			$data = $arr["obj_inst"]->meta("task_settings");
+			case "closed":
+				$data = $arr["obj_inst"]->meta("closed_settings");
+				break;
+			case "solved":
+				$data = $arr["obj_inst"]->meta("solved_settings");
+				break;
+			case "devos":
+				$data = $arr["obj_inst"]->meta("devo_settings");
+				break;
+			default:
+				$data = $arr["obj_inst"]->meta("task_settings");
 		}
 
 		$this->_define_table_from_settings($data, $t, $arr);		
@@ -475,13 +488,19 @@ class bugtrack_display extends class_base
 		$order_form = $arr["obj_inst"]->prop("order_cfgform");
 		if($order_form && $bug_form)
 		{
-			if($arr["request"]["group"] == "solved_settings")
+			switch($arr["request"]["group"])
 			{
-				$data = $arr["obj_inst"]->meta("solved_settings");
-			}
-			else
-			{
-				$data = $arr["obj_inst"]->meta("task_settings");
+				case "closed_settings":
+					$data = $arr["obj_inst"]->meta("closed_settings");
+					break;
+				case "solved_settings":
+					$data = $arr["obj_inst"]->meta("solved_settings");
+					break;
+				case "devo_settings":
+					$data = $arr["obj_inst"]->meta("devo_settings");
+					break;
+				default:
+					$data = $arr["obj_inst"]->meta("task_settings");
 			}
 			$cff = get_instance(CL_CFGFORM);
 			$o_props = array(
@@ -578,13 +597,19 @@ class bugtrack_display extends class_base
 			}
 		}
 		$savedata["default_sort"] = $data["default_sort"];
-		if($arr["request"]["group"] == "solved_settings")
+		switch($arr["request"]["group"])
 		{
-			$arr["obj_inst"]->set_meta("solved_settings", $savedata);
-		}
-		else
-		{
-			$arr["obj_inst"]->set_meta("task_settings", $savedata);
+			case "closed_settings":
+				$arr["obj_inst"]->set_meta("closed_settings", $savedata);
+				break;
+			case "solved_settings":
+				$arr["obj_inst"]->set_meta("solved_settings", $savedata);
+				break;
+			case "devo_settings":
+				$arr["obj_inst"]->set_meta("devo_settings", $savedata);
+				break;
+			default:
+				$arr["obj_inst"]->set_meta("task_settings", $savedata);
 		}
 	}
 
@@ -594,12 +619,26 @@ class bugtrack_display extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "table_settings_sort_solved":
-			case "table_settings_sort_task":
+			case "table_settings_sort":
 				$prop["options"] = array(
 					"asc" => t("Kasvav"),
 					"desc" => t("Kahanev"),
 				);
+				switch($arr["request"]["group"])
+				{
+					case "closed_settings":
+						$sort_prop = "table_settings_sort_closed";
+						break;
+					case "solved_settings":
+						$sort_prop = "table_settings_sort_solved";
+						break;
+					case "devo_settings":
+						$sort_prop = "table_settings_sort_devo";
+						break;
+					default:
+						$sort_prop = "table_settings_sort_task";
+				}
+				$prop["value"] = $arr["obj_inst"]->meta($sort_prop);
 				break;
 		};
 		return $retval;
@@ -611,7 +650,24 @@ class bugtrack_display extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
+			case "table_settings_sort":
+				switch($arr["request"]["group"])
+				{
+					case "closed_settings":
+						$sort_prop = "table_settings_sort_closed";
+						break;
+					case "solved_settings":
+						$sort_prop = "table_settings_sort_solved";
+						break;
+					case "devo_settings":
+						$sort_prop = "table_settings_sort_devo";
+						break;
+					default:
+						$sort_prop = "table_settings_sort_task";
+				}
+				$arr["obj_inst"]->set_meta($sort_prop, $prop["value"]);
+				$arr["obj_inst"]->save();
+				return PROP_IGNORE;
 		}
 		return $retval;
 	}	
@@ -649,7 +705,7 @@ class bugtrack_display extends class_base
 	function _get_devo_confirm_needed($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$data = $arr["obj_inst"]->meta("task_settings");
+		$data = $arr["obj_inst"]->meta("devo_settings");
 		$this->_define_table_from_settings($data, $t, $arr);
 
 		$cur_p = get_current_person();
