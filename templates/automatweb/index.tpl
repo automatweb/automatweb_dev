@@ -95,7 +95,7 @@ $.init_session_modal({
 	session_end_msg			: "{VAR:session_end_msg}",
 	btn_session_end_continue	: "{VAR:btn_session_end_continue}",
 	btn_session_end_cancel		: "{VAR:btn_session_end_cancel}",
-	session_length			: "{VAR:session_length}"
+	session_length			: {VAR:session_length}
 });
 </script>
 
