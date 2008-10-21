@@ -82,6 +82,8 @@ class crm_company_bills_impl extends class_base
 
 	enter_function("bills_impl::_get_bill_proj_list1");
 		$t =& $arr["prop"]["vcl_inst"];
+		$this->get_time_between($arr["request"]);
+
 		$format = t('%s maksmata t&ouml;&ouml;d');
 		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 		//k6ik arvele minevad taskid
@@ -93,14 +95,18 @@ class crm_company_bills_impl extends class_base
 			"brother_of" => new obj_predicate_prop("id"),
 		));
 
+
 		// list all task rows that are not billed yet
-		$rows = new object_list(array(
+		$rows_filter = array(
 			"class_id" => CL_TASK_ROW,
 			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 			"on_bill" => 1,
 			"done" => 1,
 			"task" => $all_tasks->ids(),
-		));
+			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $this->search_start, $this->search_end),
+		);
+
+		$rows = new object_list($rows_filter);
 
 		$projs = array();
 		$tasks = new object_list();
@@ -216,7 +222,6 @@ class crm_company_bills_impl extends class_base
 		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
 		if($stats_inst->there_are_bugs())
 		{
-			$this->get_time_between($arr["request"]);
 			$bugs = $this->get_billable_bugs($arr["request"]);
 			foreach($bugs->arr() as $bug)
 			{
@@ -488,12 +493,12 @@ class crm_company_bills_impl extends class_base
 			if((strlen($row->prop("deal_price")) > 0) && ($row->prop("send_bill")))
 			{
 				$t->define_data(array(
-						"oid" => $row->id(),
-						"name" => $row->name(),
-//						"hrs" => number_format(str_replace(",", ".", $row->prop("time_to_cust")), 2),
-//						"hr_price" => number_format($row->prop("hr_price"),2),
-						"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
-						"set_date" => $row->prop("to_bill_date"),
+					"oid" => $row->id(),
+					"name" => $row->name(),
+//					"hrs" => number_format(str_replace(",", ".", $row->prop("time_to_cust")), 2),
+//					"hr_price" => number_format($row->prop("hr_price"),2),
+					"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
+					"set_date" => $row->prop("to_bill_date"),
 				));
 //				$deal_tasks[] = $row->id();
 				$sum2task[$row->id()] += str_replace(",", ".", $row->prop("deal_price"));
@@ -509,6 +514,7 @@ class crm_company_bills_impl extends class_base
 				"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 				"on_bill" => 1,
 				"done" => 1,
+				"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $this->search_start, $this->search_end),
 	//			"oid" => $possible_task_rows
 				"task" => $all_tasks->ids(),
 	//			"CL_TASK_ROW.task.send_bill" => 1,
@@ -564,9 +570,17 @@ class crm_company_bills_impl extends class_base
 			));
 			foreach($t2row as $conn)
 			{
-				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
-				if(is_oid($row->prop("bill_id")) && $this->can("view" , $row->prop("bill_id"))) continue;
+				if($this->can("view" , $row->prop("bill_id")))
+				{
+					 continue;
+				}
+				if($row->prop("date") < $this->search_start || $row->prop("date") > $this->search_end)
+				{
+					continue;
+				}
+				
+				$task = obj($conn["from"]);
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
 					if(!in_array($task->id(), $this->deal_tasks))
