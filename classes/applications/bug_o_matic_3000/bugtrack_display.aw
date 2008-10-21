@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.13 2008/10/20 11:06:46 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.14 2008/10/21 08:57:57 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -798,11 +798,10 @@ class bugtrack_display extends class_base
 		$sects = array(aw_url_change_var("sect_filter", null, get_ru()) => t("K&otilde;ik"),
 			aw_url_change_var("sect_filter", "me", get_ru()) => t("Minu lisatud"));
 		$sect_id = $p->prop("org_section");
-		if (!$this->can("view", $sect_id))
+		if ($this->can("view", $sect_id))
 		{
-			continue;
+			$this->_recur_sect_list($sects, obj($sect_id));
 		}
-		$this->_recur_sect_list($sects, obj($sect_id));
 		$arr["prop"]["options"] = $sects;
 		foreach($sects as $url => $tmp)
 		{
