@@ -6,14 +6,26 @@ var InsertAWFupCommand=function(){};
 InsertAWFupCommand.prototype.Execute=function(){}
 InsertAWFupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWFupCommand.Execute=function() {
-  window.open('/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href), 
-					'InsertAWFupCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
+	if ( _fck_awdoc_exists() )
+	{
+		w = window.open('/automatweb/orb.aw?class=file_manager&doc='+escape(window.parent.location.href), 
+				'InsertAWFupCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
+	}
+	else
+	{
+		alert (FCKLang.ErrorNotSaved);
+	}
 }
 FCKCommands.RegisterCommand('awfup', InsertAWFupCommand ); 
 var oawfupItem = new FCKToolbarButton('awfup', FCKLang.AWFileUpload);
-oawfupItem.IconPath = FCKPlugins.Items['awfup'].Path + 'image.gif' ;
-
-
+if ( _fck_awdoc_exists() )
+{
+	oawfupItem.IconPath = FCKPlugins.Items['awfup'].Path + 'image.gif' ;
+}
+else
+{
+	oawfupItem.IconPath = FCKPlugins.Items['awfup'].Path + 'button_disabled.gif' ;
+}
 FCKToolbarItems.RegisterItem( 'awfup', oawfupItem ) ;
 
 
@@ -50,10 +62,10 @@ FCK.ContextMenu.RegisterListener( {
 var FCKAWFilePlaceholders = new Object() ;
 
 // Add a new placeholder at the actual selection.
-FCKAWFilePlaceholders.Add = function( name )
+FCKAWFilePlaceholders.Add = function( oEditor, name )
 {
-	var oSpan = FCK.InsertElement( 'span' ) ;
-	this.SetupSpan( oSpan, name ) ;
+	oEditor.InsertHtml( '#' + name +'#'  )
+	FCKAWFilePlaceholders.Redraw();
 }
 
 FCKAWFilePlaceholders.GUP = function(param)
@@ -99,15 +111,19 @@ FCKAWFilePlaceholders.SetupSpan = function( span, name )
 	doc_id = FCKAWFilePlaceholders.GUP("id");
 	tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 	eval(tmp);
-	span.innerHTML = '<img src="http://register.automatweb.com/automatweb/images/icons/class_5.gif" />' + connection_details_for_doc["#"+name+"#"]["name"];
-	
-	//span.style.backgroundColor = '#ffff00' ;
-	//span.style.color = '#000000' ;
+	span.innerHTML = connection_details_for_doc["#"+name+"#"]["comment"].length>0 ? connection_details_for_doc["#"+name+"#"]["comment"] : connection_details_for_doc["#"+name+"#"]["name"];
 
+	span.style.backgroundColor = '#ffff00' ;
+	span.style.color = '#000000' ;
+	
 	if ( FCKBrowserInfo.IsGecko )
 		span.style.cursor = 'default' ;
+
 	span.style.color = "0000EE";
 	span.style.textDecoration = "underline";
+	span.style.display = "inline";
+	span.style.padding = "1px 0 1px 18px";
+	span.style.background = "url('/automatweb/images/icon_aw.gif') no-repeat 0 0";
 
 	span._awfileplaceholder = name ;
 	span._oid = connection_details_for_doc["#"+name+"#"]["id"]
@@ -178,8 +194,8 @@ if ( FCKBrowserInfo.IsIE )
 				doc_id = FCKAWFilePlaceholders.GUP("id");
 				tmp = FCKAWFilePlaceholders.GetUrlContents("/automatweb/orb.aw?class=file&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
 				eval(tmp);
-
-				oRange.pasteHTML('<span contenteditable="false" _awfileplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'"><img src="http://register.automatweb.com/automatweb/images/icons/class_5.gif" />' + connection_details_for_doc["#"+name+"#"]["name"]) + '</span>';
+				s_name = connection_details_for_doc["#"+name+"#"]["comment"].length>0 ? connection_details_for_doc["#"+name+"#"]["comment"] : connection_details_for_doc["#"+name+"#"]["name"];
+				oRange.pasteHTML('<span style="color: #0000EE; text-decoration: underline; padding: 1px 0 1px 18px; background: url(\'/automatweb/images/icon_aw.gif\') no-repeat 0 0;" contenteditable="false" _awfileplaceholder="'+ name +'" _oid="'+ connection_details_for_doc["#"+name+"#"]["id"] +'">' + s_name + '</span>');
 			}
 		}
 	}
@@ -241,5 +257,12 @@ else
 FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKAWFilePlaceholders.Redraw ) ;
 
 // We must process the SPAN tags to replace then with the real resulting value of the placeholder.
-// FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
-// But we do it from awimageupload
+FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
+{
+	if ( htmlNode._awfileplaceholder )
+		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
+	else
+		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
+
+	return node ;
+}

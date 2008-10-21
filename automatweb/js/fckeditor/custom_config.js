@@ -28,8 +28,8 @@ FCKConfig.PluginsPath = '/automatweb/js/fckeditor/plugins/' ;
 FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ; 
-FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
-FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
+//FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
+//FCKConfig.Plugins.Add( 'awrelationmgr', 'en,et' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
@@ -314,3 +314,35 @@ FCKConfig.SmileyWindowHeight	= 210 ;
 
 FCKConfig.BackgroundBlockerColor = '#ffffff' ;
 FCKConfig.BackgroundBlockerOpacity = 0.50 ;
+
+// global custom functions
+
+// check if document is new or saved
+_fck_awdoc_exists = function()
+{
+	var doc_id = _fck_gup("id");
+	if ( doc_id == "" )
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+_fck_gup = function(param)
+{
+	param = param.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	var regexS = "[\\?&]"+param+"=([^&#]*)";
+	var regex = new RegExp( regexS );
+	var results = regex.exec( window.parent.location.href );
+	if( results == null )
+	{
+		return "";
+	}
+	else
+	{
+		return results[1];
+	}
+}

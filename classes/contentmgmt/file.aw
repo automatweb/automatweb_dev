@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.15 2008/09/04 08:28:42 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.16 2008/10/21 14:40:59 hannes Exp $
 /*
 
 
@@ -647,7 +647,7 @@ class file extends class_base
 					if (eSelected.tagName == 'SPAN' && eSelected._awfileplaceholder  )
 					{
 						$.get(\"$url\", function(data){
-							window.parent.opener.FCKAWFilePlaceholders.Add(data);
+							window.parent.opener.FCKAWFilePlaceholders.Add(FCK, data);
 							window.parent.close();
 						});
 					}
@@ -655,7 +655,7 @@ class file extends class_base
 				else
 				{
 					$.get(\"$url\", function(data){
-						window.parent.opener.FCKAWFilePlaceholders.Add(data);
+						window.parent.opener.FCKAWFilePlaceholders.Add(FCK, data);
 						window.parent.close();
 					});
 				}
@@ -1766,7 +1766,7 @@ class file extends class_base
 			if ("#".$arr["alias_name"]."#" == $alias_string)
 			{
 				$o = obj($obj_id);
-				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.'};'.$sufix;
+				$out .= 'var item = {"name" : "'.$o->name().'", "id" : '.$obj_id.', "comment" : "'.$o->prop("comment").'"};'.$sufix;
 				$out .= 'connection_details_for_doc["#'.$arr["alias_name"].'#"] = item;'.$sufix;
 			}
 		}
@@ -1797,6 +1797,40 @@ class file extends class_base
 		{
 		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
 
+		$rv .= '
+		var selection = "";
+		var not_span = false;
+		FCK=window.parent.opener.FCK;
+		if(FCK.EditorDocument.selection != null)
+		{
+			selection = FCK.EditorDocument.selection.createRange().text;
+			eSelected = FCK.EditorDocument.selection;
+		}
+		else
+		{
+			selection = FCK.EditorWindow.getSelection(); // after this, wont be a string
+			selection = "" + selection; // now a string again
+    	}
+		
+		eSelected = FCK.Selection.GetSelectedElement(); 
+		if (eSelected)
+		{
+			if (eSelected.tagName != "SPAN" && !eSelected._awfileplaceholder )
+			{
+				not_span = true;
+			}
+		}
+		else
+		{
+			not_span = true;
+		}
+		
+		if (not_span && selection.length>0)
+		{
+			$("#comment").val(selection);
+		}
+		';
+		
 		return $rv;
 	}
 

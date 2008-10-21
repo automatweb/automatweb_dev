@@ -1,19 +1,31 @@
 var _aw_fck_selected_image_oid = false;
 var _aw_fck_selected_image_alias = false;
 
-
-
 var InsertAWImageCommand=function(){};
 InsertAWImageCommand.Name='ImageUpload';
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Execute=function() {
-	window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
+	if ( _fck_awdoc_exists() )
+	{
+		window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
 			'InsertAWImageCommand', 'width=800,height=600,scrollbars=no,scrolling=no,location=no,toolbar=no');
+	}
+	else
+	{
+		alert (FCKLang.ErrorNotSaved);
+	}
 }
 FCKCommands.RegisterCommand('awimageupload', InsertAWImageCommand ); 
 var oawimageuploadItem = new FCKToolbarButton('awimageupload', FCKLang.AWUploadImage);
-oawimageuploadItem.IconPath = FCKPlugins.Items['awimageupload'].Path + 'image.gif' ;
+if ( _fck_awdoc_exists() )
+{
+	oawimageuploadItem.IconPath = FCKPlugins.Items['awimageupload'].Path + 'image.gif' ;
+}
+else
+{
+	oawimageuploadItem.IconPath = FCKPlugins.Items['awimageupload'].Path + 'button_disabled.gif' ;
+}
 
 FCKToolbarItems.RegisterItem( 'awimageupload', oawimageuploadItem ) ;
 
@@ -184,45 +196,6 @@ FCKAWImagePlaceholders.GetImageFloat = function( image_name )
 	}
 }
 
-/*
-FCKAWImagePlaceholders.SetupTable = function( table, name )
-{
-	doc_id = FCKAWImagePlaceholders.GUP("id");
-	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
-	eval(tmp);
-	table.className = "Fck_image";
-	table.style.display = "block";
-	table.width = connection_details_for_doc["#"+name+"#"]["width"]+"px ! important";
-	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
-	table.alias = "#"+name+"#";
-	if (img_float == "left" || img_float == "right")
-	{
-		table.setAttribute("style","float:"+img_float);
-		table.style.styleFloat = img_float;
-	}
-	else if (img_float == "center")
-	{
-		table.style.textAlign = "center";
-		table.style.width= "100%";
-	}
-	table.innerHTML = "<img _awimageplaceholder=\""+name+"\" alias=\"#"+name+"#\" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
-			"<br />";
-
-	if ( FCKBrowserInfo.IsGecko )
-		table.style.cursor = 'default' ;
-
-	table._awimageplaceholder = name ;
-	table._oid = connection_details_for_doc["#"+name+"#"]["id"]
-	table.contentEditable = false ;
-
-	// To avoid it to be resized.
-	table.onresizestart = function()
-	{
-		FCK.EditorWindow.event.returnValue = false ;
-		return false ;
-	}
-}
-*/
 FCKAWImagePlaceholders.SetupImg = function( img, name )
 {
 	doc_id = FCKAWImagePlaceholders.GUP("id");
@@ -243,46 +216,6 @@ FCKAWImagePlaceholders.SetupImg = function( img, name )
 	{
 		img.style.textAlign = "center";
 		img.style.width= "100%";
-	}
-}
-
-
-FCKAWImagePlaceholders.SetupSpan = function( span, name )
-{
-	doc_id = FCKAWImagePlaceholders.GUP("id");
-	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
-	eval(tmp);
-	span.className = "Fck_image";
-	span.style.display = "block";
-	span.style.border = 0;
-	span.style.width = connection_details_for_doc["#"+name+"#"]["width"]+"px";
-	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
-	span.alias = "#"+name+"#";
-	if (img_float == "left" || img_float == "right")
-	{
-		span.setAttribute("style","float:"+img_float);
-		span.style.styleFloat = img_float;
-	}
-	else if (img_float == "center")
-	{
-		span.style.textAlign = "center";
-		span.style.width= "100%";
-	}
-	span.innerHTML = "<img _awimageplaceholder=\""+name+"\" alias=\"#"+name+"#\" width="+connection_details_for_doc["#"+name+"#"]["width"]+" src='"+connection_details_for_doc["#"+name+"#"]["url"]+"' />"+
-			"<br />";
-
-	if ( FCKBrowserInfo.IsGecko )
-		span.style.cursor = 'default' ;
-
-	span._awimageplaceholder = name ;
-	span._oid = connection_details_for_doc["#"+name+"#"]["id"]
-	span.contentEditable = false ;
-
-	// To avoid it to be resized.
-	span.onresizestart = function()
-	{
-		FCK.EditorWindow.event.returnValue = false ;
-		return false ;
 	}
 }
 
@@ -489,17 +422,6 @@ FCKXHtml.TagProcessors['img'] = function( node, htmlNode )
 {
 	if ( htmlNode._awimageplaceholder )
 		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awimageplaceholder + '#' ) ;
-	else
-		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
-		
-	return node ;
-}
-
-// We must process the SPAN tags to replace then with the real resulting value of the placeholder.
-FCKXHtml.TagProcessors['span'] = function( node, htmlNode )
-{
-	if ( htmlNode._awfileplaceholder )
-		node = FCKXHtml.XML.createTextNode( '#' + htmlNode._awfileplaceholder + '#' ) ;
 	else
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
 		

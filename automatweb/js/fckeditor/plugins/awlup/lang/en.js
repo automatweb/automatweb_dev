@@ -23,3 +23,4 @@ FCKLang.PlaceholderErrNoName	= 'Please type the placeholder name' ;
 FCKLang.PlaceholderErrNameInUse	= 'The specified name is already in use' ;
 
 FCKLang.AWLinkUpload		= "Create link";
+FCKLang.ErrorNotSaved = 'Dokument salvestamata!';
