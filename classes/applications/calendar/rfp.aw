@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.159 2008/10/20 09:52:23 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.160 2008/10/21 12:04:39 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3158,79 +3158,91 @@ class rfp extends class_base
 		if(count($prods))
 		{
 			$prod_total = 0;
-			$pds = "";
-			foreach($prods as $oids=>$prod)
+			$pdr = "";
+			foreach($prods as $oids => $prod)
 			{
-				$tmp = explode(".", $oids);
-				$po = obj($tmp[0]);
-				if($prod["amount"] <= 0)
+				$sorted_prods[date("d.m.Y", $prod["start1"])][$oids] = $prod;
+			}
+			foreach($sorted_prods as $rvid => $proddata)
+			{
+				$pds = "";
+				foreach($proddata as $prodid => $prod)
 				{
-					continue;
-				}
-				$prodprices = $po->meta("cur_prices");
-				$prod["price"] = $prodprices[$currency];
-				$prod["sum"] = ($prod["price"] * $prod["amount"]);
-				if($prod["discount"] > 0)
-				{
-					$prod["sum"] = $prod["sum"] - ($prod["sum"] * $prod["discount"] / 100);
-				}
-				$prodcountcheck++;
-				$varname = "";
-				$varid = $prod["var"];
-				if(is_oid($varid))
-				{
-					$var = obj($varid);
-					$var_trans = $var->meta("translations");
-					$varname = ($_t = $var_trans[$default_lang]["name"])?$_t:$var->trans_get_val("name");
-				}
-				$room = obj($prod["room"]);
-				//gen nice event/room combo
-				$evt_room = array();
-				if(strlen($varname))
-				{
-					$evt_room[] = $varname;
-				}
-				$product_trans = $po->meta("translations");
-				$room_trans = $room->meta("translations");
-				if(strlen($room->name()))
-				{
-					$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
-				}
-				$ta_subs = array();
-				for($i = 1; $i <= 10; $i++)
-				{
-					if($this->is_template("PROD_USERTA".$i))
+					$po = obj($prodid);
+					if($prod["amount"] <= 0)
 					{
-						$val = $product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i);
-						$this->vars(array(
-							"prod_userta".$i => nl2br($val),
-						));
-						$sub = $this->parse("PROD_USERTA".$i);
-						$this->vars(array(
-							"PROD_USERTA".$i => $sub,
-						));
+						continue;
 					}
+					$prodprices = $po->meta("cur_prices");
+					$prod["price"] = $prodprices[$currency];
+					$prod["sum"] = ($prod["price"] * $prod["amount"]);
+					if($prod["discount"] > 0)
+					{
+						$prod["sum"] = $prod["sum"] - ($prod["sum"] * $prod["discount"] / 100);
+					}
+					$prodcountcheck++;
+					$varname = "";
+					$varid = $prod["var"];
+					if(is_oid($varid))
+					{
+						$var = obj($varid);
+						$var_trans = $var->meta("translations");
+						$varname = ($_t = $var_trans[$default_lang]["name"])?$_t:$var->trans_get_val("name");
+					}
+					$room = obj($prod["room"]);
+					//gen nice event/room combo
+					$evt_room = array();
+					if(strlen($varname))
+					{
+						$evt_room[] = $varname;
+					}
+					$product_trans = $po->meta("translations");
+					$room_trans = $room->meta("translations");
+					if(strlen($room->name()))
+					{
+						$evt_room[] = ($_t = $room_trans[$default_lang]["name"])?$_t:$room->name();
+					}
+					$ta_subs = array();
+					for($i = 1; $i <= 10; $i++)
+					{
+						if($this->is_template("PROD_USERTA".$i))
+						{
+							$val = $product_trans[$default_lang]["userta".$i] ? $product_trans[$default_lang]["userta".$i] : $po->trans_get_val("userta".$i);
+							$this->vars(array(
+								"prod_userta".$i => nl2br($val),
+							));
+							$sub = $this->parse("PROD_USERTA".$i);
+							$this->vars(array(
+								"PROD_USERTA".$i => $sub,
+							));
+						}
+					}
+					$this->vars(array(
+						"prod_from_date" => date("d.m.Y", $prod["start1"]),
+						"prod_to_date" => date("d.m.Y", $prod["end"]),
+						"prod_from_hour" => date("H", $prod["start1"]),
+						"prod_from_minute" => date("i", $prod["start1"]),
+						"prod_to_hour" => date("H", $prod["end"]),
+						"prod_to_minute" => date("i", $prod["end"]),
+						"prod_event" => $varname,
+						"prod_count" => $prod["amount"],
+						"prod_prod" => ($_t = $product_trans[$default_lang]["name"])?$_t:$po->trans_get_val("name"),
+						"prod_price" => $this->_format_price($prod["price"]),
+						"prod_sum" => round($this->_format_price($prod["sum"])),
+						"prod_comment" => $prod["comment"],
+						"prod_description" => $po->prop("description"),
+						"prod_discount" => $prod["discount"]?sprintf("%s %%", $prod["discount"]):"-",
+						"prod_event_and_room" => join(", ",$evt_room),
+						"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
+					));
+					$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
+					$prod_total += round($this->_format_price($prod["sum"]));
 				}
 				$this->vars(array(
-					"prod_from_date" => date("d.m.Y", $prod["start1"]),
-					"prod_to_date" => date("d.m.Y", $prod["end"]),
-					"prod_from_hour" => date("H", $prod["start1"]),
-					"prod_from_minute" => date("i", $prod["start1"]),
-					"prod_to_hour" => date("H", $prod["end"]),
-					"prod_to_minute" => date("i", $prod["end"]),
-					"prod_event" => $varname,
-					"prod_count" => $prod["amount"],
-					"prod_prod" => ($_t = $product_trans[$default_lang]["name"])?$_t:$po->trans_get_val("name"),
-					"prod_price" => $this->_format_price($prod["price"]),
-					"prod_sum" => round($this->_format_price($prod["sum"])),
-					"prod_comment" => $prod["comment"],
-					"prod_description" => $po->prop("description"),
-					"prod_discount" => $prod["discount"]?sprintf("%s %%", $prod["discount"]):"-",
-					"prod_event_and_room" => join(", ",$evt_room),
-					"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
+					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
+					"reservation_name" => $rvid,
 				));
-				$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
-				$prod_total += round($this->_format_price($prod["sum"]));
+				$pdr .= $this->parse("PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE"));
 			}
 			if($prodcountcheck) // there might be a chance that some row's were skipped(maybe all), and then we don't need that table at all
 			{
@@ -3245,7 +3257,7 @@ class rfp extends class_base
 					));
 				}
 				$this->vars(array(
-					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
+					"PRODUCTS_RESERVATION".($package?"":"_NO_PACKAGE") => $pdr,
 					"prod_total" => $prod_total,
 				));
 				$pd_sub = $this->parse("PRODUCTS_".($package?"":"NO_")."PACKAGE");
@@ -3361,6 +3373,14 @@ class rfp extends class_base
 			"totalprice" => $totalprice,
 			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
 		));
+		
+		if(count($bronnings))
+		{
+			$tmp = $this->parse("RESERVATIONS");
+			$this->vars(array(
+				"RESERVATIONS" => $tmp,
+			));
+		}
 
 		// set back the language thingie
 		$this->_reload_lang_trans(aw_ini_get("user_interface.default_language"));
