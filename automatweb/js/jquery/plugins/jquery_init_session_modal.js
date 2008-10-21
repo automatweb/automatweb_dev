@@ -6,9 +6,11 @@
 (function($){
     $.extend({
         init_session_modal: function(arr){
+		return true;
             return new $.init_session_modal(arr);
         },
         init_session_modal: function(arr){
+			 return true;
 			// display 5 mins before session end
 			session_minus_5_mins = (arr["session_length"]-5*60)*1000;
 			$.timer(session_minus_5_mins, function (timer) {
