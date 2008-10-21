@@ -6,8 +6,6 @@
 <link rel="shortcut icon" href="{VAR:baseurl}/automatweb/images/aw06/favicon.ico" />
 
 <!-- SUB: MINIFY_JS_AND_CSS -->
-<!-- END SUB: MINIFY_JS_AND_CSS -->
-
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
@@ -40,6 +38,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/other.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/defs.js"></script>
+<!-- END SUB: MINIFY_JS_AND_CSS -->
 
 {VAR:javascript}
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/orb.aw?class=shortcut_manager&action=parse_shortcuts"></script>
