@@ -180,11 +180,11 @@ class bt_stat_impl extends core
 				{
 					$det_day_start = $det_day_end = null;
 					$mon_num = (int)substr($mon, 1);
-					if($mon_num == $arr["request"]["stat_hrs_start"]["month"])
+					if($mon_num == $arr["request"]["stat_proj_start"]["month"] && $year == $arr["request"]["stat_hrs_start"]["year"])
 					{
 						$det_day_start = $arr["request"]["stat_hrs_start"]["day"];
 					}
-					if($mon_num == $arr["request"]["stat_hrs_end"]["month"])
+					if($mon_num == $arr["request"]["stat_hrs_end"]["month"] && $year == $arr["request"]["stat_hrs_end"]["year"])
 					{
 						$det_day_end = $arr["request"]["stat_hrs_end"]["day"];
 					}
@@ -192,7 +192,7 @@ class bt_stat_impl extends core
 						"url" => aw_url_change_var(array(
 							"det_uid" => $uid,
 							"det_year" => $year,
-							"det_mon" => (int)substr($mon, 1),
+							"det_mon" => $mon_num,
 							"det_day_start" => $det_day_start,
 							"det_day_end" => $det_day_end,
 						)),
@@ -345,7 +345,38 @@ class bt_stat_impl extends core
 				$bugs[$oid]["lastdate"] = $o->prop("date");
 			}
 		}
-		foreach($bugs as $bug => $data)
+		$this->_insert_det_data_from_arr($bugs, &$t);
+
+		$u = get_instance(CL_USER);
+		$p = $u->get_person_for_uid($arr["request"]["det_uid"]);
+		if($dds = $arr["request"]["det_day_start"])
+		{
+			$startday = $dds;
+		}
+		else
+		{
+			$startday = 1;
+		}
+		if($eds = $arr["request"]["det_day_end"])
+		{
+			$endday = $eds;
+			$endmonth = $arr["request"]["det_mon"];
+		}
+		else
+		{
+			$endday = 0;
+			$endmonth = $arr["request"]["det_mon"]+1;
+		}
+		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"),
+			$p->name(),
+			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"])),
+			date("d.m.Y", mktime(0,0,0, $endmonth, $endday, $arr["request"]["det_year"]))
+		));
+	}
+
+	function _insert_det_data_from_arr($arr, $t)
+	{
+		foreach($arr as $bug => $data)
 		{
 			$o = obj($bug);
 			classload("core/icons");
@@ -386,32 +417,6 @@ class bt_stat_impl extends core
 				));
 			}
 		}
-
-		$u = get_instance(CL_USER);
-		$p = $u->get_person_for_uid($arr["request"]["det_uid"]);
-		if($dds = $arr["request"]["det_day_start"])
-		{
-			$startday = $dds;
-		}
-		else
-		{
-			$startday = 1;
-		}
-		if($eds = $arr["request"]["det_day_end"])
-		{
-			$endday = $eds;
-			$endmonth = $arr["request"]["det_mon"];
-		}
-		else
-		{
-			$endday = 0;
-			$endmonth = $arr["request"]["det_mon"]+1;
-		}
-		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"),
-			$p->name(),
-			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"])),
-			date("d.m.Y", mktime(0,0,0, $endmonth, $endday, $arr["request"]["det_year"]))
-		));
 	}
 
 	function get_event_types()
@@ -567,28 +572,128 @@ class bt_stat_impl extends core
 			}
 			$filt["createdby"] = $users;
 		}
-		$ol = new object_list($filt);
-		$stat_hrs = array();
-		$bugids = array();
-		$sum_by_proj = array();
-		foreach($ol->arr() as $o)
+		if($arr["request"]["stat_proj_bugs"] || !$arr["request"]["stat_proj_hrs_end"])
 		{
-			$tm = $o->created();
-			$stat_hrs[$o->createdby()][] = $o;
-			$bugids[$o->parent()] = 1;
+			$ol = new object_list($filt);
+			$stat_hrs = array();
+			$bugids = array();
+			$sum_by_proj = array();
+			foreach($ol->arr() as $o)
+			{
+				$tm = $o->created();
+				$stat_hrs[$o->createdby()][] = $o;
+				$bugids[$o->parent()] = 1;
+			}
+	
+			if(!$bugids)
+			{
+				$bugids = array(-1 => -1);
+			}
+	
+			$bug_ol = new object_list(array(
+				"oid" => array_keys($bugids),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$bug_ol->begin();
+	
+			foreach($ol->arr() as $com)
+			{
+				if($com->prop("add_wh"))
+				{
+					$bug = obj($com->parent());
+					$sum_by_proj[$bug->prop("project")] += $com->prop("add_wh");
+				}
+			}
 		}
-
-		$bug_ol = new object_list(array(
-			"oid" => array_keys($bugids),
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$bug_ol->begin();
-
-		foreach($ol->arr() as $com)
+		$types = $this->get_event_types();
+		foreach($types as $type)
 		{
-			$bug = obj($com->parent());
-			$sum_by_proj[$bug->prop("project")] += $com->prop("add_wh");
+			if($arr["request"]["stat_proj_".$type["rname"]] || !$arr["request"]["stat_proj_hrs_end"])
+			{
+				$ol = new object_list(array(
+					"class_id" => $type["class_id"],
+					"lang_id" => array(),
+					"site_id" => array(),
+					"is_work" => 1,
+					"start1" => $time_constraint,
+					"brother_of" => new obj_predicate_prop("id")
+				));
+				foreach($ol->arr() as $o)
+				{
+					if(!$o->prop($type["timevar"]))
+					{
+						continue;
+					}
+					$projects = array();
+					foreach($o->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+					{
+						$sum_by_proj[$c->prop("to")] += $o->prop($type["timevar"]);
+						$projects[$c->prop("to")] = $c->prop("to");
+					}
+					$tp = $type["types"];
+					foreach($o->connections_to(array("type" => $tp)) as $co)
+					{
+						$pi = get_instance(CL_CRM_PERSON);
+						$po = obj($co->conn["from"]);
+						$u = $pi->has_user($po);
+						if($u !== false)
+						{
+							$uname = $u->name();
+							$stat_hrs[$uname][] = array(
+								"start" => $o->prop("start1"),
+								"projects" => $projects,
+								"time" => $o->prop($type["timevar"])
+							);
+						}
+					}
+				}
+			}
+		}
+		if($arr["request"]["stat_proj_tasks"] || !$arr["request"]["stat_proj_hrs_end"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_TASK_ROW,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"done" => 1,
+				"date" => $time_constraint,
+			));
+			foreach($ol->arr() as $o)
+			{
+				if(!$o->prop("time_real"))
+				{
+					continue;
+				}
+				$tp = $type["types"];
+				$impl = $o->prop("impl");
+				$conn = $o->connections_to(array(
+					"type" => "RELTYPE_ROW",
+					"from.class_id" => CL_TASK,
+				));
+				$c = reset($conn);
+				$task_o = $c->from();
+				foreach($task_o->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+				{
+					$sum_by_proj[$c->prop("to")] += $o->prop("time_real");
+					$projects[$c->prop("to")] = $c->prop("to");
+				}
+				foreach($impl as $pid)
+				{
+					$pi = get_instance(CL_CRM_PERSON);
+					$po = obj($pid);
+					$u = $pi->has_user($po);
+					if($u !== false)
+					{
+						$uname = $u->name();
+						$stat_hrs[$uname][] = array(
+							"start" => $o->prop("date"),
+							"projects" => $projects,
+							"time" => $o->prop("time_real")
+						);
+					}
+				}
+			}
 		}
 		$tot_sum = 0;
 		$p2uid = array();
@@ -599,8 +704,19 @@ class bt_stat_impl extends core
 			$p2uid[$p->id()] = $uid;
 			foreach($coms as $com)
 			{
-				$bug = obj($com->parent());
-				$dmz["y".date("Y", $com->created())][$bug->prop("project")][$p->id()]["m".date("m", $com->created())] += $com->prop("add_wh");
+				if(is_array($com))
+				{
+					$o = $com["object"];
+					foreach($com["projects"] as $proj)
+					{
+						$dmz["y".date("Y", $com["start"])][$proj][$p->id()]["m".date("m", $com["start"])] += $com["time"];
+					}
+				}
+				elseif($com->class_id() == CL_BUG_COMMENT)
+				{
+					$bug = obj($com->parent());
+					$dmz["y".date("Y", $com->created())][$bug->prop("project")][$p->id()]["m".date("m", $com->created())] += $com->prop("add_wh");
+				}
 			}
 		}
 		foreach($dmz as $year=>$projs)
@@ -617,11 +733,30 @@ class bt_stat_impl extends core
 					$row_sum = 0;
 					foreach($mons as $mon => $wh)
 					{
+						if(!$wh)
+						{
+							$mons[$mon] = null;
+							continue;
+						}
+						$det_day_start = $det_day_end = null;
+						$mon_num = (int)substr($mon, 1);
+						$year_num = (int)substr($year, 1);
+						if($mon_num == $arr["request"]["stat_proj_hrs_start"]["month"] && $year == $arr["request"]["stat_proj_hrs_start"]["year"])
+						{
+							$det_day_start = $arr["request"]["stat_proj_hrs_start"]["day"];
+						}
+						if($mon_num == $arr["request"]["stat_proj_hrs_end"]["month"] && $year == $arr["request"]["stat_proj_hrs_end"]["year"])
+						{
+							$det_day_end = $arr["request"]["stat_proj_hrs_end"]["day"];
+						}
 						$mons[$mon] = html::href(array(
 							"url" => aw_url_change_var(array(
 								"det_uid" => $p2uid[$p->id()],
 								"det_proj" => $proj,
-								"det_mon" => (int)substr($mon, 1)
+								"det_mon" => $mon_num,
+								"det_year" => $year_num,
+								"det_day_start" => $det_day_start,
+								"det_day_end" => $det_day_end,
 							)),
 							"caption" => number_format($wh, 2, ".", " ")
 						));
@@ -630,7 +765,7 @@ class bt_stat_impl extends core
 					$mons["p"] = html::obj_change_url($p);
 					$mons["proj"] = html::obj_change_url($proj)." - ".$sum_by_proj[$proj];
 					$mons["year"] = substr($year, 1);
-					if ($wh>0)
+					if ($wh > 0)
 					{
 						$mons["sum"] = number_format($row_sum, 2, ".", " ");
 						$tot_sum += $row_sum;
@@ -660,50 +795,131 @@ class bt_stat_impl extends core
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_det_t($t);
 
-		$req_start = empty($arr["request"]["stat_proj_hrs_start"]) ? mktime(0, 0, 1, 1, 1, date("Y")) : mktime(0, 0, 0, $arr["request"]["stat_proj_hrs_start"]["month"], $arr["request"]["stat_proj_hrs_start"]["day"], $arr["request"]["stat_proj_hrs_start"]["year"], 1);
-		$req_end = empty($arr["request"]["stat_proj_hrs_end"]) ? time() + 86400 : mktime(23, 59, 59, $arr["request"]["stat_proj_hrs_end"]["month"], $arr["request"]["stat_proj_hrs_end"]["day"], $arr["request"]["stat_proj_hrs_end"]["year"], 1);
-		if (!$req_start)
+		if($dds = $arr["request"]["det_day_start"])
 		{
-			$req_start = mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y"));
+			$startday = $dds;
 		}
-		if (!$req_end)
+		else
 		{
-			$req_end = mktime(0,0,0, $arr["request"]["det_mon"]+1, 1, date("Y"));
+			$startday = 1;
 		}
-
-
-		$ol = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"created" => new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING,
-				$req_start,
-				$req_end
-			),
-			"createdby" => $arr["request"]["det_uid"]
-		));
-
-		$bugs = array();
-		foreach($ol->arr() as $com)
+		if($eds = $arr["request"]["det_day_end"])
 		{
-			$bug = obj($com->parent());
-			if ($bug->prop("project") == $arr["request"]["det_proj"])
+			$endday = $eds;
+			$endmonth = $arr["request"]["det_mon"];
+		}
+		else
+		{
+			$endday = 0;
+			$endmonth = $arr["request"]["det_mon"]+1;
+		}
+		$req_start = mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"]);
+		$req_end = mktime(23,59,59, $endmonth, $endday, $arr["request"]["det_year"]);
+
+		$startd = mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"]);
+		$endd = mktime(23,59,59, $arr["request"]["det_mon"]+1, $endday, $arr["request"]["det_year"]);
+
+		$ui = get_instance(CL_USER);
+		$pid = $ui->get_person_for_uid($arr["request"]["det_uid"])->id();
+
+		if($arr["request"]["stat_proj_bugs"] || !$arr["request"]["stat_proj_hrs_end"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BUG_COMMENT,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"created" => new obj_predicate_compare(
+					OBJ_COMP_BETWEEN_INCLUDING,
+					$req_start,
+					$req_end
+				),
+				"createdby" => $arr["request"]["det_uid"]
+			));
+			foreach($ol->arr() as $com)
 			{
-				$bugs[$com->parent()] += $com->prop("add_wh");
+				$bug = obj($com->parent());
+				if ($bug->prop("project") == $arr["request"]["det_proj"])
+				{
+					$bugs[$com->parent()]["hrs"] += $com->prop("add_wh");
+					if(!$bugs[$com->parent()]["lastdate"] || $bugs[$com->parent()]["lastdate"] > $com->created())
+					$bugs[$com->parent()]["lastdate"] = $com->created();
+				}
 			}
 		}
-
-		foreach($bugs as $bug => $wh)
+		$types = $this->get_event_types();
+		foreach($types as $type)
 		{
-			if ($wh > 0)
+			if($arr["request"]["stat_proj_".$type["rname"]] || !$arr["request"]["stat_proj_hrs_end"])
 			{
-				$t->define_data(array(
-					"bug" => html::obj_change_url($bug),
-					"wh" => $wh
+				$c = new connection();
+				$list = $c->find(array(
+					"to.class_id" => $type["class_id"],
+					"from.class_id" => CL_CRM_PERSON,
+					"type" => $type["types"],
+					"from" => $pid,
 				));
+				foreach($list as $item)
+				{
+					$o = obj($item["to"]);
+					$conn = $o->connections_from(array(
+						"type" => "RELTYPE_PROJECT",
+					));
+					$is_proj = false;
+					foreach($conn as $c)
+					{
+						if($c->prop("to") == $arr["request"]["det_proj"])
+						{
+							$is_proj = true;
+						}
+					}
+					if($o->prop("is_work") && $o->prop("start1") > $startd && $o->prop("start1") < $endd && $is_proj)
+					{
+						$bugs[$item["to"]]["hrs"] += $o->prop($type["timevar"]);
+						$bugs[$item["to"]]["lastdate"] = ($o->class_id() == CL_BUG) ? $o->modified() : $o->prop("start1");
+					}
+				}
 			}
 		}
+		if($arr["request"]["stat_proj_tasks"] || !$arr["request"]["stat_proj_hrs_end"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_TASK_ROW,
+				"impl" => $pid,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"date" => new obj_predicate_compare(
+					OBJ_COMP_BETWEEN_INCLUDING,
+					$req_start,
+					$req_end
+				),
+			));
+			foreach($ol->arr() as $oid => $o)
+			{
+				$conn = $o->connections_to(array(
+					"type" => "RELTYPE_ROW",
+					"from.class_id" => CL_TASK,
+				));
+				$c = reset($conn);
+				$task_o = $c->from();
+				$conn2 = $task_o->connections_from(array(
+					"type" => "RELTYPE_PROJECT",
+				));
+				$is_proj = false;
+				foreach($conn2 as $c)
+				{
+					if($c->prop("to") == $arr["request"]["det_proj"])
+					{
+						$is_proj = true;
+					}
+				}
+				if($is_proj)
+				{
+					$bugs[$oid]["hrs"] += $o->prop("time_real");
+					$bugs[$oid]["lastdate"] = $o->prop("date");
+				}
+			}
+		}
+		$this->_insert_det_data_from_arr($bugs, &$t);
 
 		$u = get_instance(CL_USER);
 		$p = $u->get_person_for_uid($arr["request"]["det_uid"]);

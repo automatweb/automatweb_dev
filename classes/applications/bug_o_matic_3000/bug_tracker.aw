@@ -429,6 +429,20 @@ define("BUG_STATUS_CLOSED", 5);
 	@property stat_proj_detail type=table store=no no_caption=1
 	@property stat_proj_detail_b type=table store=no no_caption=1
 
+	@layout stat_hrs_s type=vbox parent=stat_hrs_o
+
+		@property stat_proj_bugs type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption &Uuml;lesanded
+
+		@property stat_proj_meetings type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption Kohtumised
+
+		@property stat_proj_tasks type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption Toimetused
+
+		@property stat_proj_calls type=checkbox store=no ch_value=1 default=1 no_caption=1 parent=stat_hrs_s
+		@caption K&otilde;ned
+
 @default group=proj_gantt
 
 	@property proj_gantt_end type=date_select store=no
@@ -810,6 +824,19 @@ class bug_tracker extends class_base
 			case "stat_hr_bugs":
 			case "stat_hr_meetings":
 				if(empty($arr["request"][$prop["name"]]) && empty($arr["request"]["stat_hrs_end"]))
+				{
+					$prop["value"] = 1;
+				}
+				else
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
+			case "stat_proj_tasks":
+			case "stat_proj_calls":
+			case "stat_proj_bugs":
+			case "stat_proj_meetings":
+				if(empty($arr["request"][$prop["name"]]) && empty($arr["request"]["stat_proj_hrs_end"]))
 				{
 					$prop["value"] = 1;
 				}
@@ -2646,6 +2673,10 @@ class bug_tracker extends class_base
 		$arr["args"]["stat_hr_tasks"] = $arr["request"]["stat_hr_tasks"];
 		$arr["args"]["stat_hr_calls"] = $arr["request"]["stat_hr_calls"];
 		$arr["args"]["stat_hr_meetings"] = $arr["request"]["stat_hr_meetings"];
+		$arr["args"]["stat_proj_bugs"] = $arr["request"]["stat_proj_bugs"];
+		$arr["args"]["stat_proj_tasks"] = $arr["request"]["stat_proj_tasks"];
+		$arr["args"]["stat_proj_calls"] = $arr["request"]["stat_proj_calls"];
+		$arr["args"]["stat_proj_meetings"] = $arr["request"]["stat_proj_meetings"];
 		$arr["args"]["my_bugs_stat_start"] = $arr["request"]["my_bugs_stat_start"];
 		$arr["args"]["my_bugs_stat_end"] = $arr["request"]["my_bugs_stat_end"];
 
