@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.14 2008/10/21 08:57:57 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.15 2008/10/21 12:10:09 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -803,11 +803,15 @@ class bugtrack_display extends class_base
 			$this->_recur_sect_list($sects, obj($sect_id));
 		}
 		$arr["prop"]["options"] = $sects;
-		foreach($sects as $url => $tmp)
+		$arr["prop"]["value"] = aw_url_change_var("sect_filter", null, get_ru());
+		if($arr["request"]["sect_filter"])
 		{
-			if(strpos($url, "sect_filter=".$arr["request"]["sect_filter"]))
+			foreach($sects as $url => $tmp)
 			{
-				$arr["prop"]["value"] = $url;
+				if(strpos($url, "sect_filter=".$arr["request"]["sect_filter"])!==false)
+				{
+					$arr["prop"]["value"] = $url;
+				}
 			}
 		}
 		$arr["prop"]["onchange"] = "window.location.href=this.options[this.selectedIndex].value";
