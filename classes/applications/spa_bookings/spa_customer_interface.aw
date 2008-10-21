@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.39 2008/06/30 12:18:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.40 2008/10/21 11:56:24 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -1073,8 +1073,12 @@ class spa_customer_interface extends class_base
 		}
 
 		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
+
+		$us = get_instance(CL_USER);
+		$this->users_person = $us->get_person_for_uid($b->createdby());
+
 		$this->vars(array(
-			"bureau" => $b->createdby(),
+			"bureau" => $this->users_person->name(),//$b->createdby(),
 			"person" => $b->trans_get_val_str("person"),
 			"package" => $b->trans_get_val_str("package"),
 			"from" => date("d.m.Y", $from),

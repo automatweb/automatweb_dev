@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.71 2008/10/15 12:34:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.72 2008/10/21 11:56:24 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1470,10 +1470,11 @@ class spa_bookings_overview extends class_base
 		$_from = time() + 24*3600*1000;
 		$_to = 0;
 		$rv2r = array();
-		foreach($arr["rvs"] as $b_oid)
+		foreach($arr["rvs"] as $key=> $b_oid)
                 {
 			if (!$this->can("view", $b_oid))
 			{
+				unset($arr["rvs"][$key]);
 				continue;
 			}
                         $rvs = obj($b_oid);
@@ -1506,8 +1507,11 @@ class spa_bookings_overview extends class_base
 			$p = obj($_GET["person"]);
 		}
 		list($y, $m, $d) = explode("-", $p->prop("birthday"));
+
+		$us = get_instance(CL_USER);
+		$this->users_person = $us->get_person_for_uid($b->createdby());
 		$this->vars(array(
-			"bureau" => $b->prop("seller")?$b->prop("seller.name"):$b->createdby(),
+			"bureau" => $b->prop("seller")?$b->prop("seller.name"):$this->users_person->name(),//$b->createdby(),
 			"person" => $p->trans_get_val("name"),
 			"package" => $b->trans_get_val_str("package"),
 			"agency" => $b->trans_get_val_str("seller"),

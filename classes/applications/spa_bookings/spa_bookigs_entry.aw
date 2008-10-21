@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.83 2008/10/20 14:44:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.84 2008/10/21 11:56:24 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1561,8 +1561,12 @@ class spa_bookigs_entry extends class_base
 		lc_site_load("spa_bookigs_entry", &$this);
 
 		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
+
+		$us = get_instance(CL_USER);
+		$this->users_person = $us->get_person_for_uid($b->createdby());
+
 		$this->vars(array(
-			"bureau" => $b->createdby(),
+			"bureau" => $this->users_person->name(),//$b->createdby(),
 			"person" => $b->trans_get_val_str("person"),
 			"package" => $b->trans_get_val_str("package"),
 			"from" => date("d.m.Y", $b->prop("start")),
@@ -1680,8 +1684,12 @@ class spa_bookigs_entry extends class_base
 		lc_site_load("spa_bookigs_entry", &$this);
 
 		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
+
+		$us = get_instance(CL_USER);
+		$this->users_person = $us->get_person_for_uid($b->createdby());
+
 		$this->vars(array(
-			"bureau" => $b->createdby(),
+			"bureau" => $this->users_person->name(),//$b->createdby(),
 			"person" => $b->trans_get_val_str("person"),
 			"package" => $b->trans_get_val_str("package"),
 			"from" => date("d.m.Y", $b->prop("start")),
@@ -2212,12 +2220,13 @@ class spa_bookigs_entry extends class_base
 					foreach(safe_array($o->prop("groups")) as $g_oid)
 					{
 						$gi = get_instance(CL_GROUP);
+						$co_list = array(); 
 						foreach($gi->get_group_members(obj($g_oid)) as $user)
 						{
 							foreach($user->connections_from(array("type" => "RELTYPE_PERSON")) as $c)
 							{
 								$person = $c->to();
-								$co_list = $person ->get_org_selection();
+								$co_list = $co_list + $person ->get_org_selection();
 /*								$ci = new connection();
 								$conns = $ci->find(array(
 									"from.class_id" => CL_CRM_COMPANY,
@@ -2268,6 +2277,17 @@ class spa_bookigs_entry extends class_base
 					date("H:i", $rvo->prop("end"))
 				),
                                 "value" => $rvo->comment()
+                        ));
+
+			//
+			$htmlc->add_property(array(
+                                "name" => "ud[remove][".$rv_id."]",
+                                "type" => "checkbox",
+                                "caption" => sprintf(t("%s %s"),
+					t("Eemalda"),
+					$po->name()
+				),
+                                "value" => 0
                         ));
 		}
 
@@ -2385,6 +2405,15 @@ class spa_bookigs_entry extends class_base
 				$rvo = obj($rvs_id);
 				$rvo->set_comment($arr["ud"]["rv_".$rvs_id]);
 				$rvo->save();
+			}
+		}
+
+		foreach(safe_array($arr["ud"]["remove"]) as $remove_id => $val)
+		{
+			if ($this->can("view", $remove_id))
+			{
+				$rvo = obj($remove_id);arr($rvo);
+	//			$rvo -> delete();
 			}
 		}
 
