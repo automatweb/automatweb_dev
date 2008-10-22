@@ -65,6 +65,13 @@ class reservation_obj extends _int_object
 					}
 				}
 				break;
+			case "type":
+				if($this->prop("type") && !$pv)//ei saa tyypi 2ra kaotada
+				{
+					return;
+				}
+				break;
+			
 		}
 		$retval = parent::set_prop($pn, $pv);
 
