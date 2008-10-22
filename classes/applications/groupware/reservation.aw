@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.146 2008/10/14 14:29:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.147 2008/10/22 13:44:06 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -330,7 +330,7 @@ class reservation extends class_base
 				if($is_lower_bron)
 				{
 					$prop["type"] = "text";
-					$prop["value"] = date("d.m.Y h:i" , $prop["value"]);
+					$prop["value"] = date("d.m.Y H:i" , $prop["value"]);
 					return PROP_OK;
 				}
 				$prop["options"] = $this->get_resource_options($arr["obj_inst"]);
@@ -747,8 +747,9 @@ class reservation extends class_base
 				$s = $arr["request"]["start1"];
 				$e = $arr["request"]["end"];
 				$room_obj = obj($arr["request"]["resource"]);
+
 				$filter = array(
-					"room" => $arr["request"]["resource"],
+//					"room" => $arr["request"]["resource"],
 					"start" => mktime($s["hour"],$s["minute"],0,$s["month"],$s["day"],$s["year"]),
 					"end" => (mktime($e["hour"],$e["minute"],0,$e["month"],$e["day"],$e["year"]) + $room_obj->prop("buffer_after")*$room_obj->prop("buffer_after_unit")),
 					"ignore_booking" => $arr["obj_inst"]->id(),
@@ -757,12 +758,15 @@ class reservation extends class_base
 				{
 					$filter["type"] = $arr["obj_inst"]->prop("type");
 				}
-				if(!$room_obj->prop("allow_multiple") &&  !$room_inst->check_if_available())
+				if(!$room_obj->is_available($filter))
+//				if(!$room_obj->prop("allow_multiple") &&  !$room_inst->check_if_available($filter))
 				{
+					$last_bron = $GLOBALS["last_bron_id"];
+					unset($GLOBALS["last_bron_id"]);
 					$prop["error"] = t("Sellisele ajale ei saa antud ruumi broneerida");
-					if(is_oid($room_inst->last_bron_id) && $this->can("view" , $room_inst->last_bron_id))
+					if($this->can("view" , $last_bron))
 					{
-						$last = obj($room_inst->last_bron_id);
+						$last = obj($last_bron);
 						$prop["error"].= ":<br>".$last->name();//." - ".$last->prop("customer.name")." :".date("H:i" , $last->prop("start1"));
 					}
 					return PROP_FATAL_ERROR;

@@ -319,7 +319,7 @@ class room_obj extends _int_object
 		);
 		$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, $start);
 		$filter["start1"] = new obj_predicate_compare(OBJ_COMP_LESS, $end);
-		$ol = new object_list($filter);
+		$ol = new object_list($filter);arr($filter); arr($ol);
 		return reset($ol->arr());
 
 	}
@@ -510,7 +510,19 @@ class room_obj extends _int_object
 		$arr["room"] = $this->id();
 		$room_inst = get_instance(CL_ROOM);
 		$ret = $room_inst->check_if_available($arr);
-		//$GLOBALS["last_bron_id"] = $room_inst->last_bron_id;
+		//ruumi instantsist saab kinnise aja ka siis kui on peale pandud et n2idata kalendris kinnitamata vaateid
+		//global $this->last_bron_id;
+		//$last_bron_id = $room_inst->last_bron_id;
+		if(!$ret && is_oid($room_inst->last_bron_id))
+		{
+			$bron = obj($room_inst->last_bron_id);
+			if($bron->is_dead())
+			{
+				$ret = 1;
+			}
+		}
+		//arr($this->last_bron_id); arr($room_inst->last_bron_id);
+		$GLOBALS["last_bron_id"] = $room_inst->last_bron_id;
 		return $ret;
 	}
 
@@ -524,6 +536,7 @@ class room_obj extends _int_object
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
 			"limit" => 1,
+			"resource" => $this->id(),
 		);
 		$ol = new object_list($filter);
 		if(sizeof($ol->ids()))

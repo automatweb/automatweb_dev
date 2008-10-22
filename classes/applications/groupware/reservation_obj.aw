@@ -636,5 +636,23 @@ class reservation_obj extends _int_object
 		}
 		return $this->is_lower_bron;
 	}
+
+	/** checks if you can use bron time for other brons
+		@attrib api=1
+		@return boolean
+	 **/
+	public function is_dead()
+	{
+		if($this->prop("verified"))
+		{
+			return 0;
+		}
+		if(time() < $this->prop("deadline"))
+		{
+			return 0;
+		}
+		return 1;
+	}
+
 }
 ?>

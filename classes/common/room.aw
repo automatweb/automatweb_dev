@@ -5115,6 +5115,7 @@ class room extends class_base
 			{//arr(date("h:i" , arr($key))); arr(date("h:i", $arr["end"]));arr($val);
 				if($key < $arr["end"])
 				{
+					//on juba sellele ajale kinnitatud broneeringu leidnud
 					$this->last_bron_id = $val["id"];
 					$this->is_buffer = $val["going_to_be_after_buffer"];	
 					if($val["real_end"] <= $arr["start"])
@@ -5217,13 +5218,40 @@ class room extends class_base
 			}
 			else
 			{
-				$start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
-				$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+				$start = $orig_start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
+				$end = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+				if($this->res_table[$start]["verified"])//kontrollib kas tabelis sama aja peal on juba m6ni kinnitatud broneering... v6ibolla siis pole vaja yldse n2idata
+				{
+					if($this->res_table[$start]["end"] < $end)
+					{
+						$start = $this->res_table[$start]["end"];
+					}
+					else
+					{
+						continue;
+					}
+				}
+				$this->res_table[$start]["end"] = $end;
 				//tekitab eelnevale v6i eelnevatele cellidele n8. broneeringu, mis on lihtsalt broneeritud buffriks
 				if($room->prop("buffer_after"))
 				{
-					$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
-					$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["going_to_be_after_buffer"] = 1;
+					$buff_start = $orig_start-$room->prop("buffer_after")*$room->prop("buffer_after_unit");
+					if($this->res_table[$buff_start]["verified"])
+					{
+						if($this->res_table[$buff_start]["end"] < $start)
+						{
+							$buff_start = $this->res_table[$buff_start]["end"];
+						}
+						else
+						{
+							unset($buff_start);
+						}
+					}
+					if($buff_start)
+					{
+						$this->res_table[$buff_start]["end"] = $start;
+						$this->res_table[$buff_start]["going_to_be_after_buffer"] = 1;
+					}
 				}
 			}
 			if($res->prop("verified"))
@@ -5248,6 +5276,7 @@ class room extends class_base
 		}
 	}
 
+//seda kasutada kalendrivaatel kontrollimiseks kas miskit n2ha on, kui vaja kontrollida, kas saab salvestada teatud ajale, siis kasutada ruumi objekti juurest is_available funktsiooni
 	/** checks if the room is available 
 		@attrib params=name api=1
 		@param room required type=oid
