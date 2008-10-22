@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.147 2008/10/22 13:44:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.148 2008/10/22 15:48:46 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -754,9 +754,9 @@ class reservation extends class_base
 					"end" => (mktime($e["hour"],$e["minute"],0,$e["month"],$e["day"],$e["year"]) + $room_obj->prop("buffer_after")*$room_obj->prop("buffer_after_unit")),
 					"ignore_booking" => $arr["obj_inst"]->id(),
 				);
-				if($arr["obj_inst"]->prop("type"))
+				if($arr["obj_inst"]->prop("type") || $arr["request"]["type"])
 				{
-					$filter["type"] = $arr["obj_inst"]->prop("type");
+					$filter["type"] = $arr["obj_inst"]->prop("type") ? $arr["obj_inst"]->prop("type") :$arr["request"]["type"];
 				}
 				if(!$room_obj->is_available($filter))
 //				if(!$room_obj->prop("allow_multiple") &&  !$room_inst->check_if_available($filter))
@@ -909,6 +909,10 @@ class reservation extends class_base
 		if($_GET["rfp_organisation"])
 		{
 			$arr["rfp_organisation"] = $_GET["rfp_organisation"];
+		}
+		if($_GET["type"])
+		{
+			$arr["type"] = $_GET["type"];
 		}
 	}
 

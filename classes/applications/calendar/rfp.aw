@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.160 2008/10/21 12:04:39 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.161 2008/10/22 15:48:48 markop Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -945,6 +945,10 @@ class rfp extends class_base
 				$new_reservation_args["person_rfp_email"] = $arr["obj_inst"]->prop("data_subm_email");
 				$new_reservation_args["person_rfp_phone"] = $arr["obj_inst"]->prop("data_subm_phone");
 				$new_reservation_args["people_count_rfp"] = $arr["obj_inst"]->prop("data_gen_attendees_no");
+				if($arr["request"]["group"] == "final_catering")
+				{
+					$new_reservation_args["type"] = "food";
+				}
 				$new_reservation_args["return_url"] = get_ru();
 				$new_reservation_args["rfp"] = $arr["obj_inst"]->id();
 				$new_reservation_args["rfp_reltype"] = $reltypes[$arr["request"]["group"]];
@@ -2795,7 +2799,7 @@ class rfp extends class_base
 			"data_phone" => $arr["obj_inst"]->prop("data_subm_phone"),
 			"data_email" => $arr["obj_inst"]->prop("data_subm_email"),
 			"data_fax" => $arr["obj_inst"]->prop("data_subm_fax"),
-			"offer_preface" => $arr["obj_inst"]->trans_get_val("offer_preface"),
+			"offer_preface" => nl2br($arr["obj_inst"]->trans_get_val("offer_preface")),
 			"offer_price_comment" => $arr["obj_inst"]->trans_get_val("offer_price_comment"),
 			"offer_expire_date" => date("d.m.Y", $arr["obj_inst"]->prop("offer_expire_date")),
 			"data_currency" => $arr["obj_inst"]->prop("default_currency.name"),
