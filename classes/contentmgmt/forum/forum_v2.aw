@@ -469,10 +469,10 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				$data["value"] = ($val = $data["value"])? $val: $this->link_def_max_len;
 				break;
 			case "verification_image_oid":
-				$img_verification_obj = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_IMAGE_VERIFICATION");
-				if (empty($image_verification_obj))
+				$image_verification_obj = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_IMAGE_VERIFICATION");
+				if (!empty($image_verification_obj))
 				{
-					$data['value'] = $img_verification_obj->id();
+					$data['value'] = $image_verification_obj->id();
 				}
 				break;
 			default:
