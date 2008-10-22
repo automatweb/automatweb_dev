@@ -125,7 +125,7 @@ FCKAWImagePlaceholders.Add = function( oEditor, name, float2 )
 	{
 		float2 = "";
 	}
-	name = name.match(/pict[0-9]/ig);
+	name = name.match(/pict[0-9]{1,}/ig);
 
 	oEditor.InsertHtml( '#' + name + float2 +'#'  )
 	FCKAWImagePlaceholders.Redraw();
