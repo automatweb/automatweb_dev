@@ -933,6 +933,23 @@ class _int_object
 		return reset($ol->ids());
 	}
 
+	function brothers()
+	{
+		if (!isset($this->obj["oid"]))
+		{
+			return NULL;
+		}
+		$args = array(
+			"class_id" => $this->obj["class_id"],
+			"brother_of" => $this->obj["oid"],
+			"oid" => new obj_predicate_not($this->obj["oid"]),
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		$ol = new object_list($args);
+		return $ol->ids();
+	}
+
 	function get_original()
 	{
 		$ib = $this->is_brother();
@@ -1567,7 +1584,7 @@ class _int_object
 			$i = strrpos($prop, ".");
 			$foo = substr($prop, 0, $i);
 			$foo_prop = substr($prop, $i + 1);
-			if($this->can("view", $this->prop($foo)))
+			if(is_oid($this->prop($foo)) && $this->can("view", $this->prop($foo)))
 			{
 				$foo_obj = obj($this->prop($foo));
 				return $foo_obj->trans_get_val($foo_prop, $lang_id);

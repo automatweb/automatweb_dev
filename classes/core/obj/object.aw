@@ -1343,6 +1343,21 @@ class object
 		return $GLOBALS["objects"][$this->oid]->has_brother($parent);
 	}
 
+	/** Returns all brother OIDs
+		@attrib api=1 
+		@errors
+			none
+		@returns
+			array, NULL if no object is loaded
+		@examples
+			$o = obj(89);
+			$bro_oids = $o->brothers();
+	**/
+	function brothers()
+	{
+		return $GLOBALS["objects"][$this->oid]->brothers();
+	}
+
 	/** returns the object that the current object is brother to, or the same object if it is the original
 		@attrib api=1
 

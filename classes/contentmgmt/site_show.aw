@@ -2119,7 +2119,7 @@ class site_show extends class_base
 
 	function _helper_is_in_path($oid)
 	{
-		return array_search($oid, $this->path_ids) !== false;
+		return (array_search($oid, $this->path_ids) !== false || array_search($oid, $this->path_brothers) !== false);
 	}
 
 //	function _helper_is_in_url($oid)
