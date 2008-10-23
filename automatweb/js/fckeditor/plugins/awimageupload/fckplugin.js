@@ -200,22 +200,31 @@ FCKAWImagePlaceholders.SetupImg = function( img, name )
 {
 	doc_id = FCKAWImagePlaceholders.GUP("id");
 	tmp = FCKAWImagePlaceholders.GetUrlContents("/automatweb/orb.aw?class=image&action=get_connection_details_for_doc&doc_id="+doc_id+"&alias_name="+name);
-	eval(tmp);
-	img_float = FCKAWImagePlaceholders.GetImageFloat(name);
-	img.alias = "#"+name+"#";
-	img._awimageplaceholder = name;
-	img.src= connection_details_for_doc["#"+name+"#"]["url"];
-	img.width = connection_details_for_doc["#"+name+"#"]["width"];
-	img._oid = connection_details_for_doc["#"+name+"#"]["id"]
-	if (img_float == "left" || img_float == "right")
+	eval (tmp);
+	if ( typeof(connection_details_for_doc["#"+name+"#"]) == "object" )
 	{
-		img.setAttribute("style","float:"+img_float);
-		img.style.styleFloat = img_float;
+		//alert ("F");
+		img_float = FCKAWImagePlaceholders.GetImageFloat(name);
+		img.alias = "#"+name+"#";
+		img._awimageplaceholder = name;
+		img.src= connection_details_for_doc["#"+name+"#"]["url"];
+		img.width = connection_details_for_doc["#"+name+"#"]["width"];
+		img._oid = connection_details_for_doc["#"+name+"#"]["id"]
+		if (img_float == "left" || img_float == "right")
+		{
+			img.setAttribute("style","float:"+img_float);
+			img.style.styleFloat = img_float;
+		}
+		else if (img_float == "center")
+		{
+			img.style.textAlign = "center";
+			img.style.width= "100%";
+		}
 	}
-	else if (img_float == "center")
+	else
 	{
-		img.style.textAlign = "center";
-		img.style.width= "100%";
+		img.style.display = "none";
+		alert ( "#"+name+"#" + FCKLang.AliasNotFound );
 	}
 }
 

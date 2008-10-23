@@ -24,3 +24,4 @@ FCKLang.PlaceholderErrNameInUse	= 'The specified name is already in use' ;
 
 FCKLang.AWUploadImage	       = "Image upload";
 FCKLang.ErrorNotSaved = 'Document unsaved!';
+FCKLang.AliasNotFound = ' is not connected to document!';
