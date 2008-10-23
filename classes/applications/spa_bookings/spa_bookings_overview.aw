@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.72 2008/10/21 11:56:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.73 2008/10/23 10:42:46 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -188,6 +188,9 @@
 @caption Kasutajagrupp
 
 */
+
+define("DAY_LENGTH", 3600*24);
+
 classload("vcl/date_edit");
 class spa_bookings_overview extends class_base
 {
@@ -259,7 +262,7 @@ class spa_bookings_overview extends class_base
 				$prop["value"] = $arr["request"][$prop["name"]];
 				if(!$prop["value"])
 				{
-					$prop["value"] = time() - 3600*24*30;
+					$prop["value"] = time() - DAY_LENGTH * 30;
 				}
 				break;
 			case "r_ra_res_type":
@@ -570,7 +573,7 @@ class spa_bookings_overview extends class_base
 	{
 		extract($arr);
 
-		$step = 3600 * 24;
+		$step = DAY_LENGTH;
 		$start = date_edit::get_timestamp($_GET["r_ra_booking_from"]);
 		$end = date_edit::get_timestamp($_GET["r_ra_booking_to"]);
 
@@ -594,7 +597,7 @@ class spa_bookings_overview extends class_base
 		}
 		if(!($start > 1))
 		{
-			$start = ($end - 30*3600*24);
+			$start = ($end - 30 * DAY_LENGTH);
 		}
 
 		$data = array();
@@ -648,7 +651,7 @@ class spa_bookings_overview extends class_base
 			$val["p"] = substr(date("l" , $start) , 0 , 2).date(" d/m/y" , $start);
 			$val["sum"] = $day_sum[date("Ymd" , $start)];
 			$t->define_data($val);
-			$start = $start + 24*3600;
+			$start = $start + DAY_LENGTH;
 		}
 		
 		$proj_sum["p"] = t("Kokku:");
@@ -1103,7 +1106,7 @@ class spa_bookings_overview extends class_base
 		}
 		if ($to > 1)
 		{
-			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, get_day_start($to + 3600*24));
+			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, get_day_start($to + DAY_LENGTH));
 		}
 
 		//saabumise j2rgi
@@ -1128,7 +1131,7 @@ class spa_bookings_overview extends class_base
 		if($r_ra_only_paid == 2)
 		{
 			$filter["paid"] = 0;
-		}
+		} 
 		$ol = new object_list($filter);
 		return $ol;
 	}
@@ -1181,6 +1184,7 @@ class spa_bookings_overview extends class_base
 
 				if ($to > 1)
 				{
+					$to += DAY_LENGTH - 1;//p2eva l6puni ikka
 					$bf["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
 				}
 
@@ -1467,7 +1471,7 @@ class spa_bookings_overview extends class_base
 		$this->read_site_template("booking.tpl");
 		lc_site_load("spa_bookigs_entry", &$this);
 
-		$_from = time() + 24*3600*1000;
+		$_from = time() + DAY_LENGTH*1000;
 		$_to = 0;
 		$rv2r = array();
 		foreach($arr["rvs"] as $key=> $b_oid)
@@ -1675,7 +1679,7 @@ class spa_bookings_overview extends class_base
 		{
 			classload("core/date/date_calc");
 			$start = get_week_start();
-			$end = $start+7*24*3600;
+			$end = $start+7*DAY_LENGTH;
 		}
 		$room2tbl = array();
 		foreach($r_ol->ids() as $room_id)
@@ -1903,22 +1907,22 @@ class spa_bookings_overview extends class_base
 			$start = date_edit::get_timestamp($arr["set_d_from"]);
                         if ($arr["set_view_dates"] == 1)
                         {
-                                $end = date_edit::get_timestamp($arr["set_d_to"])+24*3600;
+                                $end = date_edit::get_timestamp($arr["set_d_to"])+DAY_LENGTH;
                         }
                         else
                         if ($arr["set_view_dates"] == 2)
                         {
-                                 $end = $start + 24*3600;
+                                 $end = $start + DAY_LENGTH;
                         }
                         else
                         if ($arr["set_view_dates"] == 3)
                         {
-                                $end = $start + 24*3600*7;
+                                $end = $start + DAY_LENGTH*7;
                         }
                         else
                         if ($arr["set_view_dates"] == 4)
                         {
-                                $end = $start + 24*3600*31;
+                                $end = $start + DAY_LENGTH*31;
                         }
 			return aw_url_change_var("start",$start,aw_url_change_var("end",$end,aw_url_change_var("no_det_info", $arr["no_det_info"], $arr["post_ru"])));
 		}
@@ -1940,8 +1944,13 @@ class spa_bookings_overview extends class_base
 		$this->read_any_template("booking_printer.tpl");
 
 		// get all the bookings for the given rooms in the given timespan and group if set
+		if($arr["to"])
+		{
+			$arr["to"] = $arr["to"] + DAY_LENGTH - 1;
+		}
 
-		$days = ($arr["to"] - $arr["from"]) / (24 * 3600);
+
+		$days = ($arr["to"] - $arr["from"]) / (DAY_LENGTH);
 
 		if (!is_array($arr["rooms"]))
 		{
@@ -1960,15 +1969,22 @@ class spa_bookings_overview extends class_base
 			$day_str = "";
 			for($day = 0; $day < $days; $day++)
 			{
-				$from = $arr["from"] + ($day * 24*3600);
-				$to = $from+(24*3600);
+				$from = $arr["from"] + ($day * DAY_LENGTH);
+				$to = $from+(DAY_LENGTH);
 				$ft = array(
 					"class_id" => CL_RESERVATION,
 					"lang_id" => array(),
 					"site_id" => array(),
 					"resource" => $room_id,
 					"verified" => 1,
-					new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to),
+							"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from),
+						)
+					))
+			//		new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to)),
 				);			
 				if ($arr["group"])
 				{
@@ -2046,7 +2062,7 @@ class spa_bookings_overview extends class_base
 		));
 */
 		$link = $this->mk_my_orb("room_booking_printer", array(
-			"from" => get_day_start()-24*3600,
+			"from" => get_day_start()-DAY_LENGTH,
 			"to" => get_day_start(),
 			"group" => $grp
 		));
@@ -2058,7 +2074,7 @@ class spa_bookings_overview extends class_base
 
 		$link = $this->mk_my_orb("room_booking_printer", array(
 			"from" => get_day_start(),
-			"to" => get_day_start()+24*3600,
+			"to" => get_day_start()+DAY_LENGTH,
 			"group" => $grp
 		));
 		$tb->add_menu_item(array(
@@ -2068,8 +2084,8 @@ class spa_bookings_overview extends class_base
 		));
 
 		$link = $this->mk_my_orb("room_booking_printer", array(
-			"from" => get_day_start()+24*3600,
-			"to" => get_day_start()+24*3600+24*3600,
+			"from" => get_day_start()+DAY_LENGTH,
+			"to" => get_day_start()+DAY_LENGTH+DAY_LENGTH,
 			"group" => $grp
 		));
 		$tb->add_menu_item(array(

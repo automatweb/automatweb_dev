@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.84 2008/10/21 11:56:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.85 2008/10/23 10:42:46 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2412,7 +2412,7 @@ class spa_bookigs_entry extends class_base
 		{
 			if ($this->can("view", $remove_id))
 			{
-				$rvo = obj($remove_id);arr($rvo);
+				$rvo = obj($remove_id);
 	//			$rvo -> delete();
 			}
 		}
