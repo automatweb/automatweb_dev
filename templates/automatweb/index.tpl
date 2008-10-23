@@ -19,6 +19,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_object_quickadd.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_tabs.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_gup.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_sup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_bgiframe.min.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_dimensions.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_ajaxQueue.js"></script>
