@@ -3685,7 +3685,7 @@ class class_base extends aw_template
 			};
 
 		};
-
+		
 		$errors = $this->validate_data(array(
 			"request" => $args,
 			"cfgform_id" => $args["cfgform"],
@@ -3784,7 +3784,7 @@ class class_base extends aw_template
 				"value" => $property["value"],
 			);
 		}
-
+		
 		$realprops = $tmp;
 
 		// this seems not to be neccessary, because the real checking is done lightyears before -- ahz

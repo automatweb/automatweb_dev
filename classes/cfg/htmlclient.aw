@@ -1129,6 +1129,10 @@ class htmlclient extends aw_template
 			case "checkbox":
 				$arr["checked"] = ($arr["value"] && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) );
 				$arr["value"] = isset($arr["ch_value"]) ? $arr["ch_value"] : "";
+				if (!$arr["no_caption"])
+				{
+					unset($arr["caption"]);
+				}
 				$retval = html::checkbox($arr);
 				/*
 				$retval = html::checkbox(array(

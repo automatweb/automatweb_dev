@@ -208,7 +208,6 @@ class _int_object
 			));
 			return;
 		}
-
 		$oids = $GLOBALS["object_loader"]->param_to_oid_list($param["from"]);
 		foreach($oids as $oid)
 		{

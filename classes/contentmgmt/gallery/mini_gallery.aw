@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.49 2008/08/13 12:00:53 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.50 2008/10/23 08:42:08 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -608,7 +608,6 @@ class mini_gallery extends class_base
 	function _mg_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		
 		$pt = $arr["obj_inst"]->prop("folder");
 		if (is_array($pt))
 		{

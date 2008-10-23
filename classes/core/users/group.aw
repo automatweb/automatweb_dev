@@ -935,12 +935,15 @@ class group extends class_base
 		$user_brothers->delete();
 
 		// delete alias from user to this group
-		if (count($user->connections_from(array("to" => $group->id()))) > 0)
+		$tmp = obj_set_opt("no_cache", 1);
+		if ($group->id() && count($user->connections_from(array("to" => $group->id()))) > 0)
 		{
+			obj_set_opt("no_cache", $tmp);
 			$user->disconnect(array(
 				"from" => $group->id()
 			));
 		}
+		obj_set_opt("no_cache", $tmp);
 
 		// get all subgroups
 		$ot = new object_tree(array(
