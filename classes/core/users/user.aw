@@ -537,7 +537,9 @@ class user extends class_base
 		
 		$o_shortcut_set = obj($o->prop("settings_shortcuts_shortcut_sets"));
 		
-		$conns = $o_shortcut_set->connections_from();
+		$conns = $o_shortcut_set->connections_from(array(
+			"type" => "RELTYPE_SHORTCUT"
+		));
 		foreach($conns as $con)
 		{
 			$data = array();
