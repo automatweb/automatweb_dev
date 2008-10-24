@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.81 2008/10/20 09:40:45 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.82 2008/10/24 08:44:23 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1026,7 +1026,7 @@ class rfp_manager extends class_base
 										$subrow_data["comments"] = obj($subrow_data["rfp"])->prop("additional_catering_information");
 										$subrow_data["currency"] = obj($subrow_data["rfp"])->prop("default_currency.name");
 									}
-									$subrow_data["discount"] = $subrow_data["discount"]?sprintf("%s %", $subrow_data["discount"]) : "-";
+									$subrow_data["discount"] = $subrow_data["discount"] ? $subrow_data["discount"]."%" : "-";
 									break;
 								case RFP_RAPORT_TYPE_RESOURCES:
 									$subrow_data["resource_name"] = obj($subrow_data["real_resource"])->name();
@@ -2014,6 +2014,13 @@ class rfp_manager extends class_base
 						"logic"=> "AND",
 						"conditions" => array(
 							"CL_RFP.data_gen_arrival_date_admin" => new obj_predicate_compare(OBJ_COMP_GREATER, $f),
+							"CL_RFP.data_gen_arrival_date_admin" => new obj_predicate_compare(OBJ_COMP_LESS, $t)
+						),
+					)),
+					new object_list_filter(array(
+						"logic"=> "AND",
+						"conditions" => array(
+							"CL_RFP.data_gen_departure_date_admin" => new obj_predicate_compare(OBJ_COMP_GREATER, $f),
 							"CL_RFP.data_gen_departure_date_admin" => new obj_predicate_compare(OBJ_COMP_LESS, $t)
 						),
 					)),
