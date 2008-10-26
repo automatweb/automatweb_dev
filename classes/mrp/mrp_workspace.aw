@@ -471,12 +471,12 @@ class mrp_workspace extends class_base
 	{
 		$this_object =& $arr["obj_inst"];
 
-		if ("grp_search" == $arr["group"] or "grp_search_proj" == $arr["group"])
+		if ("grp_search" === $arr["group"] or "grp_search_proj" === $arr["group"])
 		{
 			$this->list_request = "search";
 		}
 
-		if ($arr["group"] == "grp_projects")
+		if ($arr["group"] === "grp_projects")
 		{
 			if (isset($arr["list_request"]))
 			{
@@ -558,6 +558,7 @@ class mrp_workspace extends class_base
 			));
 			$this->projects_onhold_count = $list->count();
 
+/* very slow and gives little useful info. disabled for now.
 			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_ARCHIVED,
@@ -565,7 +566,7 @@ class mrp_workspace extends class_base
 				// "createdby" => aw_global_get('uid'),
 			));
 			$this->projects_archived_count = $list->count();
-
+ */
 			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"parent" => $this_object->prop ("projects_folder"),
@@ -608,7 +609,7 @@ class mrp_workspace extends class_base
 					break;
 			}
 
-			$sort_order = ("desc" == $arr["request"]["sort_order"]) ? "desc" : "asc";
+			$sort_order = ("desc" === $arr["request"]["sort_order"]) ? "desc" : "asc";
 			$tmp = NULL;
 
 			switch ($arr["request"]["sortby"])
@@ -1912,7 +1913,7 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Arhiveeritud") . " (" . $this->projects_archived_count . ")",
+			"name" => t("Arhiveeritud"),// . " (" . $this->projects_archived_count . ")",
 			"id" => "archived",
 			"parent" => 0,
 			"url" => "javascript: void(0);",
@@ -1999,7 +2000,7 @@ class mrp_workspace extends class_base
 			case "onhold":
 				$table->define_field (array (
 					"name" => "starttime",
-					"caption" => t("Materjalide saabumine"),
+					"caption" => t("Materjalide<br />saabumine"),
 					"chgbgcolor" => "bgcolour_overdue",
 					"type" => "time",
 					"format" => MRP_DATE_FORMAT,
@@ -2007,7 +2008,7 @@ class mrp_workspace extends class_base
 				));
 				$table->define_field(array(
 					"name" => "planned_date",
-					"caption" => t("Planeeritud valmimine"),
+					"caption" => t("Planeeritud<br />valmimine"),
 					"chgbgcolor" => "bgcolour_overdue",
 					"type" => "time",
 					"format" => MRP_DATE_FORMAT,
@@ -2161,7 +2162,7 @@ class mrp_workspace extends class_base
 				"customer" => (is_object($customer) ? $customer->name () : ""),
 				"priority" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
-				"title" => $project->comment(),
+				"title" => substr(wordwrap($project->comment(), 25, "...", true), 0, 26),
 				"starttime" => $project->prop ("starttime"),
 				"due_date" => $project->prop ("due_date"),
 				"planned_date" => $planned_date,
