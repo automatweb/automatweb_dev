@@ -115,7 +115,7 @@
  	@property attachment_summary_en type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_EN form=+emb
 	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te inglise keeles
 
- 	@property attachment_dwgs type=fileupload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
+ 	@property attachment_dwgs type=multifile_upload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
 	@caption Joonised ja muu illustreeriv materjal
 
  	@property attachment_fee type=fileupload reltype=RELTYPE_ATTACHMENT_FEE form=+emb
@@ -129,6 +129,9 @@
 
  	@property attachment_bio type=fileupload reltype=RELTYPE_ATTACHMENT_BIO form=+emb
 	@caption Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&otilde;endav dokument
+
+ 	@property attachment_other type=fileupload reltype=RELTYPE_ATTACHMENT_OTHER form=+emb
+	@caption Muu
 
 @default group=fee
  	@property add_fee type=textbox size=4
@@ -174,6 +177,9 @@
 @reltype ATTACHMENT_BIO value=109 clid=CL_FILE
 @caption Lisa biol. depon. toend
 
+@reltype ATTACHMENT_OTHER value=110 clid=CL_FILE
+@caption Lisa muu
+
 */
 
 class patent_patent extends intellectual_property
@@ -209,16 +215,17 @@ class patent_patent extends intellectual_property
 		$this->pdf_file_name = "Patenditaotlus";
 		$this->show_template = "show_pat.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("prio_convention_date","prio_prevapplicationsep_date","prio_prevapplicationadd_date","prio_prevapplication_date","other_first_application_data_date","other_bio_date","other_datapub_date"));
-		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio"));
+		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_summary_en", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "attachment_other"));
 		$this->text_area_vars = array_merge($this->text_area_vars, array("other_datapub_data"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name_et","invention_name_en","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplicationadd_nr","prio_prevapplication_nr","other_first_application_data_country","other_first_application_data_nr","other_bio_nr","other_bio_inst", "attachment_demand_points"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose", "fee_copies_info"));
 		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
 		$this->save_fee_vars = array_merge($this->save_fee_vars, array("fee_copies", "add_fee"));
+		$this->multifile_upload_vars = array_merge($this->multifile_upload_vars, array("attachment_dwgs"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
-		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value","correspond_city_value", "name", "applicant_reg");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "invention_name_en", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplicationadd_date", "prio_prevapplicationadd_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "other_first_application_data_date", "other_first_application_data_country", "other_first_application_data_nr", "other_bio_nr", "other_bio_date", "other_bio_inst", "other_datapub_date", "other_datapub_data", "attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "fee_copies", "applicant_reg", "add_fee", "fee_copies_info"));
+		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value","correspond_city_value", "name", "applicant_reg", "author_disallow_disclose");
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "invention_name_en", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplicationadd_date", "prio_prevapplicationadd_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "other_first_application_data_date", "other_first_application_data_country", "other_first_application_data_nr", "other_bio_nr", "other_bio_date", "other_bio_inst", "other_datapub_date", "other_datapub_data", "attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_summary_en", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "fee_copies", "applicant_reg", "add_fee", "fee_copies_info", "attachment_other"));
 	}
 
 	public function get_property($arr)
@@ -259,6 +266,7 @@ class patent_patent extends intellectual_property
 		$this->save_applicants($patent);
 		$this->save_authors($patent);
 		$this->fileupload_save($patent);
+		$this->multifile_upload_save($patent);
 		$this->save_attachments($patent);
 		$this->save_other_data($patent);
 		$this->final_save($patent);
@@ -402,7 +410,7 @@ class patent_patent extends intellectual_property
 		{
 			foreach ($_FILES as $var => $file_data)
 			{
-				if (is_uploaded_file($file_data["tmp_name"]))
+				if (is_uploaded_file($file_data["tmp_name"]) and "attachment_other_upload" !== $var)
 				{
 					$fp = fopen($file_data["tmp_name"], "r");
 					flock($fp, LOCK_SH);

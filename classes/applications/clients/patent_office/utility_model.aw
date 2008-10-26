@@ -67,7 +67,7 @@
  	@property attachment_summary_et type=fileupload reltype=RELTYPE_ATTACHMENT_SUMMARY_ET form=+emb
 	@caption Leiutise olemuse l&uuml;hikokkuv&otilde;te
 
- 	@property attachment_dwgs type=fileupload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
+ 	@property attachment_dwgs type=multifile_upload reltype=RELTYPE_ATTACHMENT_DWGS form=+emb
 	@caption Illustratsioonid
 
  	@property attachment_fee type=fileupload reltype=RELTYPE_ATTACHMENT_FEE form=+emb
@@ -81,6 +81,9 @@
 
  	@property attachment_prio_trans type=fileupload reltype=RELTYPE_ATTACHMENT_PRIO_TRANS form=+emb
 	@caption Prioriteedin&otilde;uet t&otilde;endavate dokumentide t&otilde;lked
+
+ 	@property attachment_other type=fileupload reltype=RELTYPE_ATTACHMENT_OTHER form=+emb
+	@caption Muu
 
 
 // RELTYPES
@@ -117,6 +120,9 @@
 @reltype ATTACHMENT_PRIO_TRANS value=110 clid=CL_FILE
 @caption Lisa prioriteeditoendi tolked
 
+@reltype ATTACHMENT_OTHER value=111 clid=CL_FILE
+@caption Lisa muu
+
 */
 
 class utility_model extends intellectual_property
@@ -151,11 +157,14 @@ class utility_model extends intellectual_property
 		$this->show_template = "show_um.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("prio_convention_date", "prio_prevapplicationsep_date", "prio_prevapplication_date"
 ));
-		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans"));
+		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans", "attachment_other"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name","prio_convention_country","prio_convention_nr","prio_prevapplicationsep_nr","prio_prevapplication_nr","attachment_demand_points"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
 		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "attachment_invention_description", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans", "applicant_reg"));
+		$this->multifile_upload_vars = array_merge($this->multifile_upload_vars, array("attachment_dwgs"));
+
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name", "prio_convention_date", "prio_convention_country", "prio_convention_nr", "prio_prevapplicationsep_date", "prio_prevapplicationsep_nr", "prio_prevapplication_date", "prio_prevapplication_nr", "attachment_invention_description", "attachment_demand", "attachment_demand_points", "attachment_summary_et", "attachment_dwgs", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_prio_trans", "applicant_reg", "attachment_other"));
+		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value","correspond_city_value", "name", "applicant_reg", "author_disallow_disclose");
 	}
 
 	public function get_property($arr)
@@ -194,6 +203,7 @@ class utility_model extends intellectual_property
 		$this->save_applicants($patent);
 		$this->save_authors($patent);
 		$this->fileupload_save($patent);
+		$this->multifile_upload_save($patent);
 		$this->save_attachments($patent);
 		$this->final_save($patent);
 	}
@@ -305,7 +315,7 @@ class utility_model extends intellectual_property
 		{
 			foreach ($_FILES as $var => $file_data)
 			{
-				if (is_uploaded_file($file_data["tmp_name"]))
+				if (is_uploaded_file($file_data["tmp_name"]) and "attachment_other_upload" !== $var)
 				{
 					$fp = fopen($file_data["tmp_name"], "r");
 					flock($fp, LOCK_SH);

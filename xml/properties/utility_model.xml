@@ -391,7 +391,7 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>fileupload</type>
+            <type>multifile_upload</type>
             <reltype>RELTYPE_ATTACHMENT_DWGS</reltype>
             <form>
                   <num_0>add</num_0>
@@ -459,6 +459,21 @@
                   <num_2>emb</num_2>
             </form>
             <caption>Prioriteedin&amp;amp;otilde;uet t&amp;amp;otilde;endavate dokumentide t&amp;amp;otilde;lked</caption>
+      </property>
+      <property>
+            <name>attachment_other</name>
+            <table>objects</table>
+            <group>attachments</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_OTHER</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Muu</caption>
       </property>
       <classinfo>
             <syslog_type>ST_UTILITY_MODEL</syslog_type>
@@ -606,6 +621,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Lisa prioriteeditoendi tolked</caption>
             </ATTACHMENT_PRIO_TRANS>
+            <ATTACHMENT_OTHER>
+                  <value>111</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa muu</caption>
+            </ATTACHMENT_OTHER>
       </reltypes>
 </properties>
 

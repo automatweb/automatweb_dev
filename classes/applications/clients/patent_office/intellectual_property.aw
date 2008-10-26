@@ -278,7 +278,7 @@ abstract class intellectual_property extends class_base
 			$inst = get_instance(CL_DDOC);
 			$tmp = $inst->is_signed($ret);
 			$o = new object($oid);
-
+/*
 			$classes_w_author = array(CL_UTILITY_MODEL, CL_PATENT_PATENT, CL_INDUSTRIAL_DESIGN);
 
 			if (in_array($o->class_id(), $classes_w_author))
@@ -312,7 +312,7 @@ abstract class intellectual_property extends class_base
 					}
 				}
 			}
-
+ */
 			$return["status"] = $tmp?1:0;
 			$return["ddoc"] = $ret;
 		}
@@ -345,6 +345,7 @@ abstract class intellectual_property extends class_base
 			case "attachment_prio_trans":
 			case "attachment_summary_en":
 			case "attachment_bio":
+			case "attachment_other":
 				$image_inst = get_instance(CL_IMAGE);
 				$file_inst = get_instance(CL_FILE);
 				if(array_key_exists($prop["name"] , $_FILES))
@@ -560,7 +561,13 @@ abstract class intellectual_property extends class_base
 
 		if($data["procurator_text"])
 		{
-			$this->vars(array("PROCURATOR_TEXT" => $this->parse("PROCURATOR_TEXT")));
+			$warrant = empty($data["warrant_value"]) ? "" : $this->parse("WARRANT");
+			$this->vars(array(
+				"WARRANT" => $warrant
+			));
+			$this->vars(array(
+				"PROCURATOR_TEXT" => $this->parse("PROCURATOR_TEXT")
+			));
 		}
 
 		if($data["authorized_person_firstname_value"] || $data["authorized_person_lastname_value"] || $data["authorized_person_code_value"])
@@ -654,6 +661,7 @@ abstract class intellectual_property extends class_base
 				$data["attachment_prio_trans_value"] or
 				$data["attachment_seq_value"] or
 				$data["attachment_summary_en_value"] or
+				$data["attachment_other_value"] or
 				$data["attachment_bio_value"]
 			)
 			{
@@ -872,6 +880,8 @@ abstract class intellectual_property extends class_base
 		$a = "";
 		if($this->is_template("AUTHOR"))
 		{
+			$author_disallow_disclose = (array) $o->meta("author_disallow_disclose");
+
 			foreach($o->connections_from(array("type" => "RELTYPE_AUTHOR")) as $c)
 			{
 				foreach($this->datafromobj_del_vars as $del_var)
@@ -882,6 +892,7 @@ abstract class intellectual_property extends class_base
 				$author = $c->to();
 				$this->vars(array(
 					"a_name_value" => htmlspecialchars($author->name()),
+					"a_author_disallow_disclose" => $author_disallow_disclose[$author->id()]
 				));
 				$this->vars(array("A_NAME" => $this->parse("A_NAME")));
 				$address = $author->prop("address");
@@ -992,15 +1003,15 @@ abstract class intellectual_property extends class_base
 			if(is_oid($o->prop($var)))
 			{
 				$file = obj($o->prop($var));
-				if($var == "reproduction")
+				if($var === "reproduction")
 				{
 					$data[$var."_value"] = str_replace("https" , "http" , $this->get_right_size_image($file->id()));
 				}
-				elseif($var == "warrant")
+				elseif($var === "warrant")
 				{
 					$data[$var."_value"] = html::href(array(
  							"caption" =>  htmlspecialchars($file->name()),
-							"target" => "New window",
+							"target" => "_blank",
 							"url" => $this->mk_my_orb("get_file", array(
  							"oid" => $file->id(),
 						)),
@@ -1011,7 +1022,7 @@ abstract class intellectual_property extends class_base
 					$data[$var."_value"] = html::href(array(
 						"url" => str_replace("https" , "http" , $file_inst->get_url($file->id(), $file->name())),
 						"caption" => htmlspecialchars($file->name()),
-						"target" => "New window",
+						"target" => "_blank",
 					));
 				}
 			}
@@ -1685,11 +1696,11 @@ abstract class intellectual_property extends class_base
 				{
 					$data[$var."_value"] = $this->get_right_size_image($_SESSION["patent"][$var]);
 				}
-				elseif($var == "warrant")
+				elseif($var === "warrant")
 				{
 					$data[$var."_value"] = html::href(array(
  							"caption" =>  $file->name(),
-							"target" => "New window",
+							"target" => "_blank",
 							"url" => $this->mk_my_orb("get_file", array(
  							"oid" => $file->id(),
 						)),
@@ -1700,7 +1711,7 @@ abstract class intellectual_property extends class_base
 					$data[$var."_value"] = html::href(array(
 						"url" => $file_inst->get_url($file->id(), $file->name()),
 						"caption" => $file->name(),
-						"target" => "New window",
+						"target" => "_blank",
 					));
 				}
 			}
@@ -2007,6 +2018,36 @@ abstract class intellectual_property extends class_base
 			$data["forward"] = '<input type="submit" value="Edasi"  class="nupp">';
 		}
 
+		// allkirjastaja ametinimetus
+		if(!is_oid($_SESSION["patent"]["procurator"]))
+		{
+			$job_show = false;
+			foreach ($_SESSION["patent"]["applicants"] as $applicant_data)
+			{
+				if ("1" == $applicant_data["applicant_type"])
+				{
+					$job_show = true;
+				}
+			}
+
+			if (isset($_SESSION["patent"]["representer"]) and !($_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["applicant_type"] == "1"))
+			{
+				$job_show = false;
+			}
+
+			if ($job_show)
+			{
+				$job = html::textbox(array(
+					"name" => "job",
+					"size" => 40,
+					"value" => $_SESSION["patent"]["job"]
+				));
+				$this->vars(array("signer_job" => $job));
+				$data["SIGNER_JOB_TITLE"] = $this->parse("SIGNER_JOB_TITLE");
+			}
+		}
+
+		//
 		if(is_oid($_SESSION["patent"]["id"]))
 		{
 			$ddoc_inst = get_instance(CL_DDOC);
@@ -2034,32 +2075,7 @@ abstract class intellectual_property extends class_base
 				$data["UNSIGNED"] = $this->parse("UNSIGNED");
 			}
 
-			if(!is_oid($_SESSION["patent"]["procurator"]))
-			{
-				$job_show = false;
-				foreach ($_SESSION["patent"]["applicants"] as $applicant_data)
-				{
-					if ("1" == $applicant_data["applicant_type"])
-					{
-						$job_show = true;
-					}
-				}
-
-				if (isset($_SESSION["patent"]["representer"]) and !($_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["applicant_type"] == "1"))
-				{
-					$job_show = false;
-				}
-
-				if ($job_show)
-				{
-					$job = " " .t("Allkirjastaja ametinimetus"). " " . html::textbox(array(
-						"name" => "job",
-						"size" => 10,
-						"value" => $_SESSION["patent"]["job"]
-					));
-				}
-			}
-			$data["sign_button"] = '<input type="button" value="3. Allkirjasta taotlus" class="nupp" onclick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">'.$job.'<br />';
+			$data["sign_button"] = '<input type="button" value="3. Allkirjasta taotlus" class="nupp" onclick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);"><br />';
 		}
 		else
 		{
@@ -2534,7 +2550,7 @@ abstract class intellectual_property extends class_base
 				$err.= t("Linn on kohustuslik")."\n<br />";
 			}
 
-			if(!$_POST["county"])
+			if(!$_POST["county"] and "utility_model" !== get_class($this) and "patent_patent" !== get_class($this))
 			{
 				$err.= t("Maakond on kohustuslik")."\n<br />";
 			}

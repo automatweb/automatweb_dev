@@ -562,7 +562,7 @@
             <group>attachments</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>fileupload</type>
+            <type>multifile_upload</type>
             <reltype>RELTYPE_ATTACHMENT_DWGS</reltype>
             <form>
                   <num_0>add</num_0>
@@ -630,6 +630,21 @@
                   <num_2>emb</num_2>
             </form>
             <caption>Bioloogilise aine, sealhulgas mikroorganismi deponeerimist t&amp;amp;otilde;endav dokument</caption>
+      </property>
+      <property>
+            <name>attachment_other</name>
+            <table>objects</table>
+            <group>attachments</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_ATTACHMENT_OTHER</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Muu</caption>
       </property>
       <property>
             <name>add_fee</name>
@@ -810,6 +825,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Lisa biol. depon. toend</caption>
             </ATTACHMENT_BIO>
+            <ATTACHMENT_OTHER>
+                  <value>110</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Lisa muu</caption>
+            </ATTACHMENT_OTHER>
       </reltypes>
 </properties>
 
