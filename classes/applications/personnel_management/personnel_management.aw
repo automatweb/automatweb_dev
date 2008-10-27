@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.82 2008/10/27 10:08:57 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.83 2008/10/27 11:42:06 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -431,7 +431,77 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 @groupinfo clients caption="Kliendid" submit=no
 @default group=clients
 
-@property treeview4 type=text no_caption=1 default=asd
+	@property my_customers_toolbar type=toolbar no_caption=1 store=no
+	@caption "Klientide toolbar"
+
+	@layout my_cust_bot type=hbox width=20%:80%
+
+		@layout tree_search_split type=vbox parent=my_cust_bot
+
+			@property tree_search_split_dummy type=hidden no_caption=1 parent=tree_search_split
+
+			@layout vvoc_customers_tree_left type=vbox parent=tree_search_split closeable=1 area_caption=Kliendigrupid
+				@property customer_listing_tree type=treeview no_caption=1 parent=vvoc_customers_tree_left
+				@caption R&uuml;hmade puu
+
+			@layout vbox_customers_left type=vbox parent=tree_search_split closeable=1 area_caption=Otsing
+				@layout vbox_customers_left_top type=vbox parent=vbox_customers_left
+
+					@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Nimi
+
+					@property customer_search_reg type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Reg nr.
+
+					@property customer_search_worker type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption T&ouml;&ouml;taja
+
+					@property customer_search_address type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Aadress
+
+					@property customer_search_city type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Linn/Vald/Alev
+
+					@property customer_search_county type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Maakond
+
+					@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption &Otilde;iguslik vorm
+
+					@property customer_search_keywords type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption M&auml;rks&otilde;nad
+
+					@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left_top multiple=1 no_caption=1
+					@caption Organisatsioon
+
+					@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left_top captionside=top
+					@caption Kliendihaldur
+
+					@property customer_rel_creator type=text size=25 store=no parent=vbox_customers_left_top captionside=top
+					@caption Kliendisuhte looja
+
+					@property customer_search_cust_grp type=select store=no parent=vbox_customers_left_top captionside=top
+					@caption Kliendigrupp
+
+					@property customer_search_classif1 type=classificator store=no parent=vbox_customers_left_top captionside=top
+					@caption Asutuse omadused
+
+					@property customer_search_insurance_exp type=select store=no parent=vbox_customers_left_top captionside=top
+					@caption Kindlustus aegund
+
+					@property customer_search_print_view type=checkbox parent=vbox_customers_left_top store=no captionside=top ch_value=1 no_caption=1
+					@caption Printvaade
+
+				@layout vbox_customers_left_search_btn type=hbox parent=vbox_customers_left
+
+					@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left_search_btn no_caption=1
+					@caption Otsi
+
+					@property customer_search_submit_and_change type=submit parent=vbox_customers_left_search_btn no_caption=1
+					@caption Otsi ja muuda
+
+		@property my_customers_table type=table store=no no_caption=1 parent=my_cust_bot
+		@caption Kliendid
 
 ---------------RELATION DEFINTIONS-----------------
 
@@ -538,10 +608,6 @@ class personnel_management extends class_base
 			{
 				$arr["link"] = $this->mk_my_orb("change", array("id" => $this->owner_org, "group" => "overview"), CL_CRM_COMPANY);
 			}
-			elseif($arr["id"] == "clients")
-			{
-				$arr["link"] = $this->mk_my_orb("change", array("id" => $this->owner_org, "group" => "relorg"), CL_CRM_COMPANY);
-			}
 		}
 	}
 
@@ -551,6 +617,47 @@ class personnel_management extends class_base
 		$retval = PROP_OK;
 		get_instance("core/icons");
 		$person_language_inst = get_instance(CL_CRM_PERSON_LANGUAGE);
+
+		if($prop["group"] == "clients")
+		{
+			if(is_oid($arr["obj_inst"]->prop("owner_org")))
+			{
+				$obj_inst = $arr["obj_inst"];
+				$request = $arr["request"];
+
+				$arr["obj_inst"] = obj($arr["obj_inst"]->prop("owner_org"));
+				$arr["request"]["id"] = $arr["obj_inst"]->id();
+				$arr["request"]["class"] = "crm_company";
+				$arr["request"]["group"] = "relorg_t";
+			}
+			else
+			{
+				return PROP_IGNORE;
+			}
+
+			$crm_company = get_instance(CL_CRM_COMPANY);
+			if(is_callable(array($crm_company, "_get_".$prop["name"])))
+			{
+				$fn = "_get_".$prop["name"](&$arr);
+
+				$r = $crm_company->$fn;
+				$arr["obj_inst"] = $obj_inst;
+				$arr["request"] = $request;
+
+				return $r;
+			}
+			elseif(is_callable(array($crm_company, "get_property")))
+			{
+				$r = $crm_company->get_property(&$arr);
+				$arr["obj_inst"] = $obj_inst;
+				$arr["request"] = $request;
+				return $r;
+			}
+			else
+			{
+				return PROP_IGNORE;
+			}
+		}
 
 		if($this->can("view", $arr["request"]["search_save"]))
 		{	// If 'Varasem otsing' is selected.
@@ -2686,6 +2793,46 @@ class personnel_management extends class_base
 			$arr["args"]["search_save"] = $arr["request"]["search_save"];
 		}
 
+		if($arr["request"]["customer_search_submit"])
+		{
+			$arr['args']['customer_search_name'] = ($arr['request']['customer_search_name']);
+			$arr['args']['customer_search_worker'] = ($arr['request']['customer_search_worker']);
+			$arr['args']['customer_search_ev'] = ($arr['request']['customer_search_ev']);
+			$arr['args']['customer_search_cust_mgr'] = ($arr['request']['customer_search_cust_mgr']);
+			$arr['args']['customer_rel_creator'] = ($arr['request']['customer_rel_creator']);
+			$arr['args']['customer_search_cust_grp'] = ($arr['request']['customer_search_cust_grp']);
+			$arr['args']['customer_search_insurance_exp'] = ($arr['request']['customer_search_insurance_exp']);
+			$arr['args']['customer_search_reg'] = ($arr['request']['customer_search_reg']);
+			$arr['args']['customer_search_address'] = ($arr['request']['customer_search_address']);
+			$arr['args']['customer_search_city'] = ($arr['request']['customer_search_city']);
+			$arr['args']['customer_search_county'] = ($arr['request']['customer_search_county']);
+			$arr['args']['customer_search_submit'] = $arr['request']['customer_search_submit'];
+			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
+			$arr["args"]["customer_search_print_view"] = $arr["request"]["customer_search_print_view"];
+			$arr["args"]["customer_search_keywords"] = $arr["request"]["customer_search_keywords"];
+			$arr["args"]["customer_search_classif1"] = $arr["request"]["customer_search_classif1"];
+		}
+
+		if($arr["request"]["customer_search_submit_and_change"])
+		{
+			$arr['args']['customer_search_name'] = ($arr['request']['customer_search_name']);
+			$arr['args']['customer_search_cust_grp'] = ($arr['request']['customer_search_cust_grp']);
+			$arr['args']['customer_search_reg'] = ($arr['request']['customer_search_reg']);
+			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
+			$arr['args']['customer_search_submit_and_change'] = $arr['request']['customer_search_submit_and_change'];
+
+			if ( aw_global_get('crm_customers_search_mode') == CRM_CUSTOMERS_SEARCH_DETAIL )
+			{
+				$_SESSION['crm_customers_search_mode'] = CRM_CUSTOMERS_SEARCH_SIMPLE;
+				$this->set_cval( aw_global_get('uid').'_crm_customers_search_mode', CRM_CUSTOMERS_SEARCH_SIMPLE );
+			}
+			else
+			{
+				$_SESSION['crm_customers_search_mode'] = CRM_CUSTOMERS_SEARCH_DETAIL;
+				$this->set_cval( aw_global_get('uid').'_crm_customers_search_mode', CRM_CUSTOMERS_SEARCH_DETAIL );
+			}
+		}
+
 		if($arr["request"]["os_sbt"])
 		{
 			$arr["args"]["os_pr"] = $arr["request"]["os_pr"];
@@ -3531,5 +3678,69 @@ class personnel_management extends class_base
 	{
 		get_instance("personnel_management_obj")->on_add_person($arr);
 	}
+	
+	/**
+		@attrib name=go_to_create_bill
+	**/
+	function go_to_create_bill($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->go_to_create_bill($arr);
+	}
+	
+	/**
+		@attrib name=add_proj_to_co_as_impl
+	**/
+	function add_proj_to_co_as_impl($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->add_proj_to_co_as_impl($arr);
+	}
+	
+	/**
+		@attrib name=add_proj_to_co_as_impl
+	**/
+	function add_proj_to_co_as_ord($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->add_proj_to_co_as_ord($arr);
+	}
+	
+	/**
+		@attrib name=add_task_to_co
+	**/
+	function add_task_to_co($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->add_task_to_co($arr);
+	}
+	
+	/**
+		@attrib name=remove_from_category
+	**/
+	function remove_from_category($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->remove_from_category($arr);
+	}
+	
+	/**
+		@attrib name=remove_cust_relations
+	**/
+	function remove_cust_relations($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->remove_cust_relations($arr);
+	}
+	
+	/**
+		@attrib name=submit_delete_ppl
+	**/
+	function submit_delete_ppl($arr)
+	{
+		$arr["id"] = obj($arr["id"])->owner_org;
+		return get_instance(CL_CRM_COMPANY)->submit_delete_ppl($arr);
+	}
+
 }
 ?>

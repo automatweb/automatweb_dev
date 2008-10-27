@@ -98,5 +98,47 @@
 			</function>
 		</action>
 
+		<action name="go_to_create_bill">
+			<function name="go_to_create_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_proj_to_co_as_impl">
+			<function name="add_proj_to_co_as_ord">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_task_to_co">
+			<function name="add_task_to_co">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_from_category">
+			<function name="remove_from_category">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_cust_relations">
+			<function name="remove_cust_relations">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_delete_ppl">
+			<function name="submit_delete_ppl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
