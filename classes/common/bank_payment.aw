@@ -225,7 +225,7 @@ class bank_payment extends class_base
 		"hansapank" => "VK_REF",
 		"sampopank" => "VK_REF",
 		"credit_card" => "ecuno",
-		"nordeapank" => "SOLOPMT-RETURN-REF",
+		"nordeapank" => "SOLOPMT_RETURN_REF",
 		"snoras" => "VK_REF",
 	);
 		
@@ -234,7 +234,7 @@ class bank_payment extends class_base
 		"hansapank" => "VK_CURR",
 		"sampopank" => "VK_CURR",
 		"credit_card" => "cur",
-		"nordeapank" => "SOLOPMT-CURR",
+		"nordeapank" => "SOLOPMT_CURR",
 		"snoras" => "VK_CURR",
 	);
 
@@ -631,7 +631,7 @@ class bank_payment extends class_base
 				}
 				else
 				{
-					$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
+					$bank_id = $this->merchant_id[$val["SOLOPMT_RETURN_VERSION"]];
 				}
 				if($from > 1 && !($from == $to) && $from > $val["timestamp"])
 				{
@@ -681,7 +681,7 @@ class bank_payment extends class_base
 					{
 						$log_data[$val["timestamp"]]["payer"] = $val["msgdata"];
 					}
-					if($val["VK_SERVICE"] == 1101 || $val["respcode"] == "000" || $val["SOLOPMT-RETURN-REF"])
+					if($val["VK_SERVICE"] == 1101 || $val["respcode"] == "000" || $val["SOLOPMT_RETURN_PAID"])
 					{
 						$log_data[$val["timestamp"]]["ok"] = 1;
 					}
@@ -1931,8 +1931,8 @@ class bank_payment extends class_base
 		}
 		else
 		{
-			$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
-			unset($val["SOLOPMT-RETURN-MAC"]);
+			$bank_id = $this->merchant_id[$val["SOLOPMT_RETURN_VERSION"]];
+			unset($val["SOLOPMT_RETURN_MAC"]);
 		}
 		$ret["bank"] = $this->banks[$bank_id];
 		$ret["bank_id"] = $bank_id;
@@ -1964,7 +1964,7 @@ class bank_payment extends class_base
 		{
 			return $this->check_cc_response();
 		}
-		if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-VERSION"] == "0002")//selliselt tulevad Nordeapangamaksed
+		if($_SESSION["bank_return"]["data"]["SOLOPMT_RETURN_VERSION"] == "0002")//selliselt tulevad Nordeapangamaksed
 		{
 			return $this->check_nordea_response();
 		}
@@ -2050,8 +2050,8 @@ class bank_payment extends class_base
 		$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");
 		$cert = fread($fp, 8192);
 		fclose($fp);
-		$str = $data["SOLOPMT-RETURN-VERSION"]."&".$data["SOLOPMT-RETURN-STAMP"]."&".$data["SOLOPMT-RETURN-REF"]."&".$data["SOLOPMT-RETURN-PAID"]."&".$cert."&";
-		if($data["SOLOPMT-RETURN-MAC"] == strtoupper(md5($str))) $ok = 1;
+		$str = $data["SOLOPMT_RETURN_VERSION"]."&".$data["SOLOPMT_RETURN_STAMP"]."&".$data["SOLOPMT_RETURN_REF"]."&".$data["SOLOPMT_RETURN_PAID"]."&".$cert."&";
+		if($data["SOLOPMT_RETURN_MAC"] == strtoupper(md5($str))) $ok = 1;
 		else $ok = 0;
 		//a seniks returnime ok, nagu oleks koik hasti
 		return $ok;

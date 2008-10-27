@@ -100,9 +100,9 @@ if($_SESSION["bank_return"]["data"]["VK_REF"])
 {
 	$id = substr($_SESSION["bank_return"]["data"]["VK_REF"] ,0 , -1 );
 }
-if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"])
+if($_SESSION["bank_return"]["data"]["SOLOPMT_RETURN_REF"])
 {
-	$id = substr($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"] ,0 , -1 );
+	$id = substr($_SESSION["bank_return"]["data"]["SOLOPMT_RETURN_REF"] ,0 , -1 );
 }
 
 //logimine
@@ -124,7 +124,7 @@ fwrite($fh, serialize($_SESSION["bank_return"]["data"])."\n");
 fclose($fh);
 
 //esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine nordea(yksk6ik milline.. et negatiivne peaks mujale minema)... kolmas krediitkaardikeskuse
-	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || $_GET["SOLOPMT-RETURN-VERSION"] == "0002"||  ($_GET["action"] == "afb" && $_GET["respcode"] == "000")
+	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || $_GET["SOLOPMT_RETURN_PAID"] ||  ($_GET["action"] == "afb" && $_GET["respcode"] == "000")
 	|| ($_SESSION["bank_return"]["data"]["action"] == "afb" && $_SESSION["bank_return"]["data"]["respcode"] == "000")
 	)
 {
