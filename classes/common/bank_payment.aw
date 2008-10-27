@@ -654,10 +654,9 @@ class bank_payment extends class_base
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
 				}
-/*				 if(aw_global_get("uid") == "struktuur"){//arr($val);
+/*				if(aw_global_get("uid") == "markop"){arr($val);
  					$_SESSION["bank_return"]["data"] = $val;
  					arr($val["good"] = $this->check_response($val));
- 					arr($val["VK_MSG"]);
  				}*/
 				if($val["timestamp"])
 				{
@@ -1968,7 +1967,6 @@ class bank_payment extends class_base
 		{
 			return $this->check_nordea_response();
 		}
-		
 		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
 		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
 		.substr("000".strlen($VK_SND_ID),-3).$VK_SND_ID
@@ -1995,18 +1993,20 @@ class bank_payment extends class_base
 			$cntr = $ref_object->meta("bank_cntr");
 			if($cntr)
 			{
-				$VK_SND_ID.= "_".$cntr;
+				$cntr = substr($cntr,0,2);
+				if(file_exists($this->cfg["site_basedir"]."/pank/".$VK_SND_ID."_".$cntr."_pub.pem"))
+				{
+					$VK_SND_ID.= "_".$cntr;
+				}
 			}
 		}
 
 		$fp = fopen($this->cfg["site_basedir"]."/pank/".$VK_SND_ID."_pub.pem", "r");
 		$cert = fread($fp, 8192);
 		fclose($fp);
-		
 		$pubkeyid = openssl_get_publickey($cert);
 		$ok = openssl_verify($data, $signature, $pubkeyid);
 		openssl_free_key($pubkeyid);
-		
 		return $ok;
 		if ($ok == 1)
 		{
