@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.25 2008/06/26 23:40:21 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.26 2008/10/27 09:12:05 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -74,6 +74,7 @@ class crm_person_education extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PERSON_EDUCATION
 		));
+		/*
 		$this->degree_options = array(
 			"pohiharidus" => t("P&otilde;hiharidus"),
 			"keskharidus" => t("Keskharidus"),
@@ -86,6 +87,22 @@ class crm_person_education extends class_base
 			"magister" => t("Magister"),
 			"doktor" => t("Doktor"),
 			"teadustekandidaat" => t("Teaduste kandidaat"),
+		);
+		*/
+		$this->degree_options = array(
+			0 => t("--vali--"),
+			1 => t("P&otilde;hiharidus"),
+			2 => t("Keskharidus"),
+			3 => t("Kutsekeskharidus"),
+			4 => t("Kesk-eriharidus"),
+			5 => t("Kutsek&otilde;rgharidus"),
+			6 => t("Rakendusk&otilde;rgharidus"),
+//			7 => t("K&otilde;rgharidus"),
+			8 => t("K&otilde;rghariduse diplom"),
+			9 => t("Bakalaureus"),
+			10 => t("Magister"),
+			11 => t("Doktor"),
+			12 => t("Teaduste kandidaat"),
 		);
 	}
 

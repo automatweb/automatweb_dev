@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.80 2008/10/09 13:31:14 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.81 2008/10/27 09:11:56 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -257,6 +257,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
 				@property cv_edu_exact type=checkbox ch_value=1 parent=haridus captionside=top store=no no_caption=1
 				@caption T&auml;pne vaste
+
+				@property cv_edulvl_in_eduobj type=checkbox ch_value=1 parent=haridus captionside=top store=no no_caption=1
+				@caption Omandatud/omandamisel haridustasemed
 
 				@property cv_acdeg type=select parent=haridus captionside=top store=no
 				@caption Akadeemiline kraad
@@ -679,6 +682,7 @@ class personnel_management extends class_base
 			case "cv_age_to":
 			case "cv_previous_rank":
 			case "cv_edu_exact":
+			case "cv_edulvl_in_eduobj":
 
 			case "os_pr":
 			case "os_county":
@@ -2730,6 +2734,7 @@ class personnel_management extends class_base
 			$arr["args"]["cv_addinfo"] = $arr["request"]["cv_addinfo"];
 			$arr["args"]["cv_edulvl"] = $arr["request"]["cv_edulvl"];
 			$arr["args"]["cv_edu_exact"] = $arr["request"]["cv_edu_exact"];
+			$arr["args"]["cv_edulvl_in_eduobj"] = $arr["request"]["cv_edulvl_in_eduobj"];
 			$arr["args"]["cv_acdeg"] = $arr["request"]["cv_acdeg"];
 			$arr["args"]["cv_schl"] = $arr["request"]["cv_schl"];
 			$arr["args"]["cv_schl_area"] = $arr["request"]["cv_schl_area"];
@@ -3240,11 +3245,11 @@ class personnel_management extends class_base
 		// HARIDUS
 		if($r["cv_edulvl"] && $r["cv_edu_exact"])
 		{
-			$odl_prms["edulevel"] = $r["cv_edulvl"];
+			$odl_prms[$r["cv_edulvl_in_eduobj"] ? "CL_CRM_PERSON.RELTYPE_EDUCATION.degree" : "edulevel"] = $r["cv_edulvl"];
 		}
 		elseif($r["cv_edulvl"])
 		{
-			$odl_prms["edulevel"] = new obj_predicate_compare(
+			$odl_prms[$r["cv_edulvl_in_eduobj"] ? "CL_CRM_PERSON.RELTYPE_EDUCATION.degree" : "edulevel"] = new obj_predicate_compare(
 				OBJ_COMP_GREATER_OR_EQ,
 				$r["cv_edulvl"]
 			);

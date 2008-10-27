@@ -746,6 +746,23 @@
             <caption>T&amp;amp;auml;pne vaste</caption>
       </property>
       <property>
+            <name>cv_edulvl_in_eduobj</name>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Omandatud/omandamisel haridustasemed</caption>
+      </property>
+      <property>
             <name>cv_acdeg</name>
             <group>
                   <num_0>employee</num_0>
