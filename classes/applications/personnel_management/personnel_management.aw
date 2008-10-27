@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.81 2008/10/27 09:11:56 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.82 2008/10/27 10:08:57 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -3251,7 +3251,9 @@ class personnel_management extends class_base
 		{
 			$odl_prms[$r["cv_edulvl_in_eduobj"] ? "CL_CRM_PERSON.RELTYPE_EDUCATION.degree" : "edulevel"] = new obj_predicate_compare(
 				OBJ_COMP_GREATER_OR_EQ,
-				$r["cv_edulvl"]
+				$r["cv_edulvl"],
+				NULL,
+				"int"
 			);
 		}
 		if($r["cv_acdeg"])
