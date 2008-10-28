@@ -1380,11 +1380,11 @@ class cb_search extends class_base
 			if ($synrow != "")
 			{
 				$synlist = explode(",", $synrow);
-				$words = explode(" ",$v);
+				$words = explode(" ",mb_strtolower($v, aw_global_get("charset")));
 
 				foreach($synlist as $syn)
 				{
-					if (($pos = array_search($syn, $words)) !== false)
+					if (($pos = array_search(mb_strtolower($syn, aw_global_get("charset")), $words)) !== false)
 					{
 						$has_syn = true;
 						$p_syns[$syn] = array("p" => $pos, "l" => $synlist);
