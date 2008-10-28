@@ -2054,7 +2054,7 @@ class site_show extends class_base
 		foreach($l as $_grp => $_l)
 		{
 			$app = ($_grp != "" ? "_".$_grp : "");
-			$this->vars(array(
+			$this->vars_safe(array(
 				"LANG".$app => $_l,
 				"SEL_LANG".$app => "",
 				"SEL_LANG".$app."_BEGIN" => "",
