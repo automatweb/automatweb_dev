@@ -1309,12 +1309,17 @@ class crm_person extends class_base
 		return $retval;
 	}
 
+	//V6tsin k6ik WORKER jne jne seostamise 2ra, salvestamisel ei ole vast vaja vana systeemi toimimist
 	function _save_work_tbl($arr)
 	{
-		foreach($arr["obj_inst"]->connections_from(array("type" => array(6, 21))) as $conn)
-		{
-			$doomed_conns[$conn->prop("to")] = $conn->id();
-		}
+//		foreach($arr["obj_inst"]->connections_from(array("type" => array(6, 21))) as $conn)
+//		{
+//			$doomed_conns[$conn->prop("to")] = $conn->id();
+//		}//arr($doomed_conns); arr($arr["request"]["work_tbl"]);die();
+/*
+		$doomed_wrs = $arr["obj_inst"]->get_active_work_relations();
+		$doomed_wrids = $doomed_wrs->ids();*/
+
 		foreach($arr["request"]["work_tbl"] as $wr_id => $data)
 		{
 			$wr = new object($wr_id);
@@ -1322,6 +1327,7 @@ class crm_person extends class_base
 			$wr->set_prop("section", $data["sec"]);
 			$wr->set_prop("profession", $data["pro"]);
 			$wr->save();
+
 			if($this->can("view", $data["org"]))
 			{
 				$org = obj($data["org"]);
@@ -1332,15 +1338,11 @@ class crm_person extends class_base
 						"reltype" => 28,		// RELTYPE_SECTION
 					));
 				}
-				else
-				{
-					$org->add_employees(array("id" => $arr["obj_inst"]->id()));
-/*					$org->connect(array(
-						"to" => $arr["obj_inst"]->id(),
-						"reltype" => 8,		// RELTYPE_WORKERS
-					));*/
-					unset($doomed_conns[$data["org"]]);
-				}
+//				else
+//				{
+//					$org->add_employees(array("id" => $arr["obj_inst"]->id()));
+//					unset($doomed_conns[$data["org"]]);
+//				}
 			}
 			if($this->can("view", $data["sec"]))
 			{
@@ -1352,18 +1354,18 @@ class crm_person extends class_base
 						"reltype" => 3,		// RELTYPE_PROFESSIONS
 					));
 				}//------------------------------------------------halb--------- oleks vaja t66suhte j2rgi
-				$sec->connect(array(
-					"to" => $arr["obj_inst"]->id(),
-					"reltype" => 2,		// RELTYPE_WORKERS
-				));
-				unset($doomed_conns[$data["sec"]]);
+//				$sec->connect(array(
+//					"to" => $arr["obj_inst"]->id(),
+//					"reltype" => 2,		// RELTYPE_WORKERS
+//				));
+//				unset($doomed_conns[$data["sec"]]);
 			}
 		}
-		foreach($doomed_conns as $doomed_conn)
-		{
-			$doomed_conn = new connection($doomed_conn);
-			$doomed_conn->delete();
-		}
+//		foreach($doomed_conns as $doomed_conn)
+//		{
+//			$doomed_conn = new connection($doomed_conn);
+//			$doomed_conn->delete();
+//		}
 	}
 
 	function _get_sms_tbl($arr)
@@ -3072,10 +3074,14 @@ class crm_person extends class_base
 			"name" => "pro",
 			"caption" => t("Ametinimetus"),
 		));
+		$t->define_chooser(array(
+			"name" => "select",
+			"field" => "sel",
+			"width" => "60",
+		));
 		$relpicker = get_instance("vcl/relpicker");
-		foreach($arr["obj_inst"]->connections_from(array("type" => 67)) as $conn)
+		foreach($arr["obj_inst"]->get_active_work_relations()->arr() as $wr)
 		{
-			$wr = $conn->to();
 			$orgid = $wr->prop("org");
 			$secid = $wr->prop("section");
 			if($orgid !== $org_fixed && $org_fixed !== 0)
@@ -3139,6 +3145,7 @@ class crm_person extends class_base
 					"options" => $pro_options,
 //					"buttonspos" => "bottom",
 				)),
+				"sel" => $wr->id(),
 			));
 		}
 	}
@@ -8112,12 +8119,11 @@ class crm_person extends class_base
 		}
 		$cwrs = array();
 		$cou = 0;
-		foreach($p->connections_from(array("type" => 67)) as $conn)		// RELTYPE_CURRENT_JOB
+		foreach($p->get_active_work_relations()->arr() as $to)		// RELTYPE_CURRENT_JOB
 		{
-			$toid = $conn->conn["to"];
-			$to = obj($toid);
+			$toid = $to->id();
 			$orgid = $to->prop("org");
-			if($orgid != $org_fixed && $org_fixed != 0)
+			if(($orgid != $org_fixed && $org_fixed != 0 ) || !$orgid)
 			{
 				continue;
 			}

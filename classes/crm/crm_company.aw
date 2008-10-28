@@ -6254,7 +6254,11 @@ class crm_company extends class_base
 		{
 			$res = array();
 		}
-		$this->get_all_workers_for_company($co, $res);
+		$workers = $co->get_workers();
+		$res += $workers->ids();
+
+//		$this->get_all_workers_for_company($co, $res);
+
 		if (!count($res))
 		{
 			$cache[$co->id()][$add_empty][$important_only] = $res;

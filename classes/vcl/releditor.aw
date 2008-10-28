@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.162 2008/10/08 14:44:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.163 2008/10/28 11:21:54 markop Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1422,7 +1422,10 @@ class releditor extends core
 			}
 		}
 
-		$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["request"]["cfgform"]);
+		if($arr["request"]["cfgform"])
+		{
+			$cfgproplist = get_instance(CL_CFGFORM)->get_cfg_proplist($arr["request"]["cfgform"]);
+		}
 
 		foreach($dat as $idx => $row)
 		{

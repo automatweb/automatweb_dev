@@ -863,6 +863,17 @@ class crm_person_obj extends _int_object
 	}
 
 
+	/** returns all current work relations
+		@attrib api=1
+		@return object list
+			work relations object list
+	**/
+	public function get_active_work_relations($arr = array())
+	{
+		$this->set_current_jobs();
+		return $this->current_jobs;
+	}
+
 	/** returns one company
 		@attrib api=1
 		@return object
@@ -955,11 +966,11 @@ class crm_person_obj extends _int_object
 			foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
 			{
 				$q = $cn -> to();
-				if($q->prop("start") && $q->prop("start") > time())//t88suhe pole veel alanud
+				if($q->prop("start") > 100 && $q->prop("start") > time())//t88suhe pole veel alanud
 				{
 					continue;
 				}
-				if($q->prop("end") && $q->prop("end") < time())//t88suhe l6ppenud
+				if($q->prop("end") > 100 && $q->prop("end") < time())//t88suhe l6ppenud
 				{
 					continue;
 				}
