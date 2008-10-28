@@ -4344,6 +4344,10 @@ class task extends class_base
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 			{
 				$customer = $c->to();
+				if($customer->class_id() != CL_CRM_COMPANY)
+				{
+					continue;
+				}
 				$cust_workers = $ci->get_employee_picker($customer, false, true);
 				if(!count($cust_workers))
 				{
