@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.16 2008/10/21 14:40:59 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.17 2008/10/28 10:01:42 kristo Exp $
 /*
 
 
@@ -1784,7 +1784,7 @@ class file extends class_base
 			"search_static" => 1
 		));
 		$rv = "";
-		if ($ol->count())
+		if ($ol->count() && is_executable(aw_ini_get("server.catdoc")))
 		{
 			$rv .= "
 				nsbt = document.createElement('input');nsbt.name='save_and_index';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja indekseeri otsingusse")."'; el = document.getElementById('buttons');el.appendChild(nsbt);";
