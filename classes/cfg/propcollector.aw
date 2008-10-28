@@ -75,7 +75,7 @@ class propcollector extends aw_template
 	/** Runs the property collector
 		@attrib api=1 params=name
 
-		@comment writes property files from changed classes. echoes text to the console as it goes about. 
+		@comment writes property files from changed classes. echoes text to the console as it goes about.
 	**/
 	public function run($args = array())
 	{
@@ -299,7 +299,7 @@ class propcollector extends aw_template
 		};
 
 		$this->validate_fields(array(
-			"type" => "property", 
+			"type" => "property",
 			"name" => $name,
 			"fields" => $fields
 		));
@@ -340,7 +340,7 @@ class propcollector extends aw_template
 	{
 		$fields = $this->_parse_attribs($data);
 		$this->validate_fields(array(
-			"type" => "reltype", 
+			"type" => "reltype",
 			"name" => $name,
 			"fields" => $fields,
 		));
@@ -354,7 +354,7 @@ class propcollector extends aw_template
 	{
 		$fields = $this->_parse_attribs($data);
 		$this->validate_fields(array(
-			"type" => "layout", 
+			"type" => "layout",
 			"name" => $name,
 			"fields" => $fields,
 		));
@@ -372,7 +372,7 @@ class propcollector extends aw_template
 	{
 		$this->forminfo[$name] = $this->_parse_attribs($data);
 		$this->validate_fields(array(
-			"type" => "forminfo", 
+			"type" => "forminfo",
 			"name" => $name,
 			"fields" => $this->forminfo[$name],
 		));
@@ -399,7 +399,7 @@ class propcollector extends aw_template
 							$_value = htmlentities($_value);
 						}
 						$this->validate_fields(array(
-							"type" => "groupinfo", 
+							"type" => "groupinfo",
 							"name" => $id,
 							"field" => $_name,
 							"value" => $_value
@@ -430,7 +430,7 @@ class propcollector extends aw_template
 							$_value = htmlentities($_value);
 						}
 						$this->validate_fields(array(
-							"type" => "groupinfo", 
+							"type" => "groupinfo",
 							"name" => $id,
 							"field" => $_name,
 							"value" => $_value
@@ -453,7 +453,7 @@ class propcollector extends aw_template
 	{
 		$attr = $this->_parse_attribs($data);
 		$this->validate_fields(array(
-			"type" => "tableinfo", 
+			"type" => "tableinfo",
 			"name" => $id,
 			"fields" => $fields,
 		));
@@ -585,10 +585,12 @@ class propcollector extends aw_template
 				continue;
 			};
 			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
+			$fname = trim($fname);
+			$fvalue = trim($fvalue);
+			if (strlen($fname) && strlen($fvalue))
 			{
 				// try to split fvalue
-				if(substr($fvalue, 0, 1) ==  "\"" && substr($fvalue, -1, 1) == "\"")
+				if(substr($fvalue, 0, 1) == "\"" && substr($fvalue, -1, 1) == "\"")
 				{
 					$fvalue = substr($fvalue, 1, strlen($fvalue) - 2);
 				}
