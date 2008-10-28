@@ -2157,7 +2157,7 @@ class crm_bill extends class_base
 //				}
 				$this->vars(array(
 					"unit" => $this->get_unit_name($grp_row["unit"], $b),
-					"amt" => $grp_row["tot_amt"],
+					"amt" => $stats->hours_format($grp_row["tot_amt"]),
 					"price" => number_format(($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),2,".", " "),
 					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
 					"desc" => $desc,
@@ -2206,7 +2206,7 @@ class crm_bill extends class_base
 			$tax_rows["$tax_rate"] += $cur_tax;
 			$this->vars(array(
 				"unit" => $this->get_unit_name($row["unit"], $b),
-				"amt" => $row["amt"],
+				"amt" => $stats->hours_format($row["amt"]),
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
 				"desc" => $name,
