@@ -26,7 +26,7 @@
 		<td></td>
 		<td></td>
 <!-- SUB: ANCHOR_LINKS -->
-<a href="{VAR:alink}">{VAR:acapt}</a> 
+<a href="{VAR:alink}"><input type='button' value='{VAR:acapt}'  /></a> 
 <!-- END SUB: ANCHOR_LINKS -->
 </td>
 	</tr>			
