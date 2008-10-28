@@ -145,15 +145,15 @@ class event_webview extends class_base
 				if($ob->display_by === "event_times")
 				{
 					$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.start"] = new obj_predicate_compare(
-						OBJ_COMP_GREATER_OR_EQ,
-						$ob->date_start
+						OBJ_COMP_LESS,
+						$ob->date_end
 					);
 				}
 				else
 				{
 					$ol_args["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(
-						OBJ_COMP_GREATER_OR_EQ,
-						$ob->date_start
+						OBJ_COMP_LESS,
+						$ob->date_end
 					);
 				}
 			}
@@ -162,15 +162,15 @@ class event_webview extends class_base
 				if($ob->display_by === "event_times")
 				{
 					$ol_args["CL_CALENDAR_EVENT.RELTYPE_EVENT_TIMES.end"] = new obj_predicate_compare(
-						OBJ_COMP_LESS,
-						($ob->date_end)
+						OBJ_COMP_GREATER,
+						$ob->date_start
 					);
 				}
 				else
 				{
 					$ol_args["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(
-						OBJ_COMP_LESS,
-						($ob->date_end)
+						OBJ_COMP_GREATER,
+						$ob->date_start
 					);
 				}
 			}
