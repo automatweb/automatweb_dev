@@ -62,12 +62,36 @@
 <table width="100%">
 	<tr>
 		<td align="center" valign="top">
-			{VAR:results_percent}<br>
+			&Otilde;igeid vastuseid {VAR:results_percent}%<br>
+			&Otilde;igeid vastuseid {VAR:results_fraction}<br>
 			{VAR:results_text}<br>
 			<!-- SUB: RESULTS_TEXT_BY_PERCENT -->
 			{VAR:results_text_by_percent}<br>
 			<!-- END SUB: RESULTS_TEXT_BY_PERCENT -->
+			<!-- SUB: RESULTS_ANSWERS -->
+				<!-- RESULTS_ANSWERED on muutuja, kuhu pannakse SUB: RESULTS_CORRECTLY_ANSWERED ja SUB: RESULTS_WRONGLY_ANSWERED 6iges j2rjekorras kokku. -->
+				{VAR:RESULTS_ANSWERED}
+				<!-- SUB: RESULTS_CORRECTLY_ANSWERED -->
+				K&uuml;simus: {VAR:results_question}<br />
+				Sina vastasid: {VAR:results_my_answer}<br /><br />
+				<!-- END SUB: RESULTS_CORRECTLY_ANSWERED -->
+
+				<!-- SUB: RESULTS_WRONGLY_ANSWERED -->
+				K&uuml;simus: {VAR:results_question}<br />
+				Sina vastasid: {VAR:results_my_answer}<br />
+				&Otilde;iged vastused: 
+					<!-- SUB: RESULTS_CORRECT_ANSWER -->
+					{VAR:results_correct_answer}<br />
+					<!-- END SUB: RESULTS_CORRECT_ANSWER -->
+				<br /><br />
+				<!-- END SUB: RESULTS_WRONGLY_ANSWERED -->
+			<!-- END SUB: RESULTS_ANSWERS -->
 		</td>
 	</tr>
 </table>
 <!-- END SUB: RESULTS -->
+<!-- SUB: PERSON_DATA_INSERTION -->
+Palun sisestage oma andmed, et saaksime v&otilde;itjale anda $1,000,000!
+<br /><br /><br />
+{VAR:insertion_form}
+<!-- END SUB: PERSON_DATA_INSERTION -->
