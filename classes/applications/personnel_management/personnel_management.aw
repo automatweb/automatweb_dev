@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.83 2008/10/27 11:42:06 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.84 2008/10/29 19:03:57 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -389,6 +389,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 				@layout offers_search type=vbox parent=offers_tree_n_search closeable=1 area_caption=T&ouml;&ouml;pakkumiste&nbsp;otsing
 
 					@layout os_top type=vbox parent=offers_search
+
+						@property os_type type=classificator parent=os_top captionside=top store=no
+						@caption T&uuml;&uuml;p
 
 						@property os_pr type=textbox parent=os_top captionside=top store=no size=18
 						@caption Ametikoht
@@ -791,6 +794,7 @@ class personnel_management extends class_base
 			case "cv_edu_exact":
 			case "cv_edulvl_in_eduobj":
 
+			case "os_type":
 			case "os_pr":
 			case "os_county":
 			case "os_city":
@@ -2835,6 +2839,7 @@ class personnel_management extends class_base
 
 		if($arr["request"]["os_sbt"])
 		{
+			$arr["args"]["os_type"] = $arr["request"]["os_type"];
 			$arr["args"]["os_pr"] = $arr["request"]["os_pr"];
 			$arr["args"]["os_county"] = $arr["request"]["os_county"];
 			$arr["args"]["os_city"] = $arr["request"]["os_city"];

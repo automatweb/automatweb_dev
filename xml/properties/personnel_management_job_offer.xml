@@ -18,6 +18,16 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>jo_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_TYPE</reltype>
+            <store>connect</store>
+            <field>jo_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>keywords</name>
             <table>personnel_management_job_offer</table>
             <group>general</group>
@@ -513,7 +523,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
-	    <parent>send_email_sms_right</parent>
             <store>no</store>
             <caption>Saada</caption>
       </property>
@@ -563,11 +572,11 @@
             </candidate>
             <custom_cfgform>
                   <caption>CV&amp;amp;nbsp;v&amp;amp;auml;ljad</caption>
-                  <submit>no</submit>
+                  <no_submit>1</no_submit>
             </custom_cfgform>
             <send_email_sms>
                   <caption>Tagasiside&amp;amp;nbsp;kandideerijatele</caption>
-                  <submit>no</submit>
+                  <no_submit>1</no_submit>
             </send_email_sms>
             <sent_feedback>
                   <caption>Saadetud tagasiside</caption>

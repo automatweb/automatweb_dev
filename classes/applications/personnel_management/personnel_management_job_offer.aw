@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.60 2008/10/15 07:49:34 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.61 2008/10/29 19:03:57 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -18,6 +18,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property name type=textbox
 @caption Nimi
+
+@property jo_type type=classificator reltype=RELTYPE_TYPE store=connect
+@caption T&uuml;&uuml;p
 
 @property keywords type=textbox field=keywords table=personnel_management_job_offer
 @caption M&auml;rks&otilde;nad
@@ -280,6 +283,15 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "jo_type":
+				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
+					"clid" => CL_PERSONNEL_MANAGEMENT,
+					"name" => "os_type",
+					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
+				));
+				$prop["options"] = $r[4]["list_names"];
+				break;
+
 			case "notify_me":
 				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
 				break;

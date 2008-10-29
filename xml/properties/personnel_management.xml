@@ -1188,6 +1188,21 @@
             <store>no</store>
       </property>
       <property>
+            <name>os_type</name>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <parent>os_top</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>os_pr</name>
             <group>
                   <num_0>offers_</num_0>
