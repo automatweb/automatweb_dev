@@ -11,7 +11,7 @@ define("GROUP_LEVEL_PRIORITY", 100000);
 define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.3 2008/09/26 09:59:52 dragut Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.4 2008/10/29 14:35:46 markop Exp $
 @classinfo maintainer=kristo
 EMIT_MESSAGE(MSG_USER_LOGIN);
 EMIT_MESSAGE(MSG_USER_LOGOUT);
@@ -50,7 +50,8 @@ class users_user extends aw_template
 			list($success, $msg) = $auth->check_auth($auth_id, array(
 				"uid" => &$uid,
 				"password" => $password,
-				"server" => $server
+				"server" => $server,
+				"server_oid" => $server_oid
 			));
 
 			if ($success && !empty($server))
@@ -144,13 +145,16 @@ class users_user extends aw_template
 			$rv = $this->mk_my_orb("change", array("id" => $user_obj->id(), "group" => "chpwd"), "user", true);
 			return $rv;
 		}
-
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
 		// 1st is the url that was requested before the user was forced to login.
 		// 2nd if the request says go to that url after or if not, group login url
 		// 3nd try to find the language based url and if that fails, then the everyone's url and then just the baseurl.
 		// wow. is this graceful degradation or what!
-		if (aw_global_get("request_uri_before_auth") != "")
+		if($url = $this->find_group_login_redirect($user_obj))
+		{
+			;
+		}
+		elseif (aw_global_get("request_uri_before_auth") != "")
 		{
 			$url = aw_global_get("request_uri_before_auth");
 		}
@@ -159,10 +163,7 @@ class users_user extends aw_template
 		{
 			$url = $params["return"];
 		}
-		else
-		{
-			$url = $this->find_group_login_redirect($user_obj);
-		}
+
 
 		if (!$url)
 		{
@@ -219,7 +220,14 @@ class users_user extends aw_template
 				$msg = $_msg;
 			}
 
-			$redir_url = aw_ini_get("users.redir_on_failed_login");
+			if (!empty($params["failed_url"]))
+			{
+				$redir_url = urldecode($params["failed_url"]);
+			}
+			else
+			{
+				$redir_url = aw_ini_get("users.redir_on_failed_login");
+			}
 			if ($redir_url == "")
 			{
 				$redir_url = $this->cfg["baseurl"]."/login.".$this->cfg["ext"];
