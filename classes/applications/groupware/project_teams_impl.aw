@@ -181,7 +181,7 @@ class project_teams_impl extends class_base
 			$arr["request"]["no_search"] = 1;
 		}
 		$t =& $arr["prop"]["vcl_inst"];
-		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
+		//n2itab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
 		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
 		{
 			$t->set_caption("<b>".t("T&ouml;&ouml;perekonnad")."<b>");
@@ -244,7 +244,7 @@ class project_teams_impl extends class_base
 				}
 				else
 				{
-					$empl = $o->get_first_obj_by_reltype("RELTYPE_WORK");
+					$empl = $o->company();//$o->get_first_obj_by_reltype("RELTYPE_WORK");
 					if ($empl)
 					{
 						$co_s[] = html::obj_change_url($empl);
@@ -301,7 +301,7 @@ class project_teams_impl extends class_base
 		else
 		{
 			$t->set_caption("<b>".t("Otsingu tulemused")."<b>");
-			//võimalikud organisatsioonid
+			//v6imalikud organisatsioonid
 			if(substr_count($arr["request"]["team_search_co"], ',') > 0 )
 			{
 				$arr["request"]["team_search_co"] = explode(',' , $arr["request"]["team_search_co"]);
@@ -332,9 +332,16 @@ class project_teams_impl extends class_base
 					"class_id" => CL_CRM_PERSON,
 					"name" => "%".$arr["request"]["team_search_person"]."%",
 //					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
-					"CL_CRM_PERSON.RELTYPE_WORK.id" => $org_ids,
+//					"CL_CRM_PERSON.RELTYPE_WORK.id" => $org_ids,
 					"lang_id" => array(),
-					"site_id" => array()
+					"site_id" => array(),
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_CRM_PERSON.RELTYPE_WORK" => $org_ids,
+							"CL_CRM_PERSON.CURRENT_JOB.org" => $org_ids,
+						))
+					),
 				));
 			}
 			//juhuks kui otsitakse mitut isikut komaga eraldatud
@@ -346,7 +353,13 @@ class project_teams_impl extends class_base
 					$pl = new object_list(array(
 						"class_id" => CL_CRM_PERSON,
 						"name" => "%".$person."%",
-						"CL_CRM_PERSON.RELTYPE_WORK.id" => $org_ids,
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"CL_CRM_PERSON.RELTYPE_WORK" => $org_ids,
+								"CL_CRM_PERSON.CURRENT_JOB.org" => $org_ids,
+							))
+						),
 						"lang_id" => array(),
 						"site_id" => array()
 					));
@@ -361,7 +374,7 @@ class project_teams_impl extends class_base
 					"rank" => html::obj_change_url($o->prop("rank")),
 					"phone" => $o->prop("phone.name"),
 					"mail" => $o->prop("email.name"),
-					"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
+					"co" => html::obj_change_url($o->company()),
 					"oid" => $o->id(),
 //					"roles" => join("<br>", $rs)."<br>".html::popup(array(
 //						"url" => $role_url,

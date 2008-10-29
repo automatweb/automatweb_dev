@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.29 2008/01/24 15:11:15 dragut Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.29 2008/01/24 15:11:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.30 2008/10/29 15:55:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.30 2008/10/29 15:55:13 markop Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -437,9 +437,12 @@ class orders_form extends class_base
 				}
 			}
 		}
-		if($company = reset($person->connections_from(array("type" => "RELTYPE_WORK"))))
+//		if($company = reset($person->connections_from(array("type" => "RELTYPE_WORK"))))
+//		{
+//			$com = $company->to();
+//
+		if($com = $person->company())
 		{
-			$com = $company->to();
 			foreach($com->properties() as $name => $val)
 			{
 				if($name == "email_id" && is_oid($val) && $this->can("view", $val))
@@ -592,12 +595,12 @@ class orders_form extends class_base
 		{
 			$udef_check1 = true;
 		}
-		
+		//temporary ? heh, n2ha on
 		//XXX: temporary hack
 		if($_SESSION["LC"]=="fi")
 		{
 			$pysiklient = "Kanta-asiakas";	
-			$esmakordselt = "Ensimmäinen OTTO-tilaukseni";
+			$esmakordselt = "Ensimm&auml;inen OTTO-tilaukseni";
 		}
 		else
 		{
@@ -967,7 +970,7 @@ class orders_form extends class_base
 		$this->submerge = 1;
 		foreach ($ol->arr() as $item)
 		{
-			//kui kuskilt porno kohast tahetakse ainult saatmata asju näha
+			//kui kuskilt porno kohast tahetakse ainult saatmata asju n2ha
 			if($_GET["unsent"] && !$item->prop("product_count_undone"))
 			{
 				continue;

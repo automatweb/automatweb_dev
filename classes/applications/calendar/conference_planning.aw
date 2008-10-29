@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.105 2008/04/08 12:40:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.106 2008/10/29 15:55:00 markop Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -3566,11 +3566,13 @@ class conference_planning extends class_base
 			$org->set_parent($person_obj->id());
 			$org->set_name($data["company_assocation"]);
 			$org->save();
-			$person_obj->connect(array(
-				"to" => $org->id(),
-				"type" => "RELTYPE_WORK",
-			));
-			$person_obj->set_prop("work_contact", $org->id());
+			$person_obj->add_work_relation(array("org" => $org->id()));
+
+//			$person_obj->connect(array(
+//				"to" => $org->id(),
+//				"type" => "RELTYPE_WORK",
+//			));
+//			$person_obj->set_prop("work_contact", $org->id());
 		}
 		
 		if($data["phone_number"])

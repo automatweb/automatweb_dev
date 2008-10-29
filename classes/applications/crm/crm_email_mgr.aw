@@ -76,10 +76,10 @@ flush();
 				//$imap_i = get_instance("protocols/mail/imap");//$imap->instance();
 				$cust_id = $cust_mails[$message["froma"]];
 				$cust_obj = obj($cust_id);
-				$co_object = $cust_obj->get_first_obj_by_reltype("RELTYPE_WORK");
-				if(is_object($co_object))
+//				$co_object = $cust_obj->get_first_obj_by_reltype("RELTYPE_WORK");
+				if($cust_obj->class_id() == CL_CRM_PERSON && $cust_obj->company_id())
 				{
-					$cust_id = $co_object->id();
+					$cust_id = $cust_obj->company_id();
 				}
 				echo "import message ".$message["subject"]." to cust $cust_id <br>";
 				

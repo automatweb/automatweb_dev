@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.27 2008/10/14 16:08:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.28 2008/10/29 15:55:03 markop Exp $
 // crm_job_entry.aw - T88 kirje
 /*
 
@@ -416,10 +416,10 @@ class crm_job_entry extends class_base
 				*/
 				$pers->add_work_relation(array("org" => $c->id()));
 
-				$c->connect(array(
-					"to" => $pers->id(),
-					"type" => "RELTYPE_WORKERS"
-				));
+//				$c->connect(array(
+//					"to" => $pers->id(),
+//					"type" => "RELTYPE_WORKERS"
+//				));
 				$c->set_prop("contact_person", $pers->id());
 				$c->save();
 

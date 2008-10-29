@@ -1704,7 +1704,7 @@ class crm_company_cust_impl extends class_base
 				)) as $c)
 				{
 					$to = $c->to();
-					$ids[] = $to->prop("org");
+					$rels[] = $to->prop("org");
 				}
 			}
 			
@@ -1714,7 +1714,7 @@ class crm_company_cust_impl extends class_base
 					"logic" => "OR",
 					"conditions" => array(
 						"CL_CRM_COMPANY.RELTYPE_WORKERS.name" => "%".$r["customer_search_worker"]."%",
-						"oid" => $ids,
+						"oid" => $rels,
 					)
 				));
 			}

@@ -1299,6 +1299,24 @@ class crm_person_obj extends _int_object
 		}
 	}
 
+	/** returns person sections selection
+		@attrib api=1
+		@returns array
+	**/	
+	public function get_section_selection()
+	{
+		$sects = $this->get_sections();
+		$ret = $sects->names();
+		//edasi vana
+		$conns = $this->connections_from(array(
+			'type' => "RELTYPE_SECTION"
+		));
+		foreach($conns as $conn)
+		{
+			$ret[$conn->prop('to')] = $conn->prop('to.name');
+		}
+		return $ret;
+	}
 }
 
 ?>

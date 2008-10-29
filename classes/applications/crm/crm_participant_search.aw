@@ -132,10 +132,17 @@ class crm_participant_search extends popup_search
 		}
 		if ($arr["s"]["search_co"] != "")
 		{
-			$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";')));
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK.name" => map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";'))),
+					"CL_CRM_PERSON.CURRENT_JOB.org.name" => map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";'))),
+				))
+			);
+			//$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";')));
 		}
 
-		if (is_array($arr["s"]["show_vals"]) && !$filter["CL_CRM_PERSON.RELTYPE_WORK.name"])
+		if (is_array($arr["s"]["show_vals"]) && !$arr["s"]["search_co"])
 		{
 			$c = get_instance(CL_CRM_COMPANY);
 			if ($arr["s"]["show_vals"]["cur_co"])

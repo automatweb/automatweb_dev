@@ -2019,10 +2019,10 @@ class shop_warehouse extends class_base
 			{
 				$tb->add_sub_menu(array(
 					"parent" => $tbparent,
-					"name" => "crt_".$o->id(),
+					"name" => "new".$o->id(),
 					"text" => $o->name()
 				));
-				$this->_req_add_itypes($tb, "n".$o->id(), $data);
+				$this->_req_add_itypes($tb, $o->id(), $data);
 			}
 		}
 	}
@@ -4253,10 +4253,12 @@ class shop_warehouse extends class_base
 				foreach($cat->connections_to(array("from.class_id" => CL_CRM_COMPANY)) as $c)
 				{
 					$co = $c->from();
-					foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
-					{
-						$ids[] = $c->prop("to");
-					}
+					$workers = $co->get_workers();
+					$ids+= $workers->ids();
+//					foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
+//					{
+//						$ids[] = $c->prop("to");
+//					}
 				}
 			}
 
@@ -4320,12 +4322,14 @@ class shop_warehouse extends class_base
 
 			$co = obj($co_id);
 			// now all people for that company
-			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
+			
+			foreach($co->get_workers()->arr() as $c)
+//			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
 			{
 				$tv->add_item("nocode_co".$co->id(), array(
-					"name" => $c->prop("to.name"),
-					"id" => "nocode_wk".$c->prop("to"),
-					"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", $c->prop("to"))))
+					"name" => $c->name(),
+					"id" => "nocode_wk".$c->id(),
+					"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", $c->id())))
 				));
 			}
 		}
@@ -4441,12 +4445,13 @@ class shop_warehouse extends class_base
 			unset($this->all_cos_ids[$co->id()]);
 
 			// now all people for that company
-			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
+			foreach($co->get_workers()->arr() as $c)
+//			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
 			{
 				$tv->add_item($code."co".$co->id(), array(
-					"name" => $c->prop("to.name"),
-					"id" => $code."wk".$c->prop("to"),
-					"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", $c->prop("to"))))
+					"name" => $c->name(),
+					"id" => $code."wk".$c->id(),
+					"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", $c->id())))
 				));
 			}
 		}

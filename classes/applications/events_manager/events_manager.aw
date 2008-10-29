@@ -590,11 +590,13 @@ class events_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$gro = $c = $org = $org_c = null;
-			$cons = $o->connections_from(array(
-				"type" => "RELTYPE_WORK"
-			));
-			$org_c = reset($cons);
-			if($org_c) $org = $org_c->prop("to");
+//			$cons = $o->connections_from(array(
+//				"type" => "RELTYPE_WORK"
+//			));
+//			$org_c = reset($cons);
+//			if($org_c) $org = $org_c->prop("to");
+			
+			$org = $o->company_id();
 
 			if($this->can("view" , $org))
 			{

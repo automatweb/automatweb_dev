@@ -3363,14 +3363,15 @@ class crm_person extends class_base
 			$ranks_arr[$conn->prop('to')] = $conn->prop('to.name');
 		};
 
-		$conns = $o->connections_from(array(
-			'type' => "RELTYPE_SECTION"
-		));
-		foreach($conns as $conn)
-		{
-			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
-		}
+// 		$conns = $o->connections_from(array(
+// 			'type' => "RELTYPE_SECTION"
+// 		));
+// 		foreach($conns as $conn)
+// 		{
+// 			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
+// 		}
 
+		$sections_arr = $o->get_section_selection();
 
 		$address = "";
 		$address_d = $o->get_first_obj_by_reltype("RELTYPE_ADDRESS");
@@ -4842,7 +4843,15 @@ class crm_person extends class_base
 			$rtrn[$conn->prop('to')] = $conn->prop('to.name');
 		}
 
-		$conns = $arr['obj_inst']->connections_from(array(
+
+		foreach($arr['obj_inst']->get_section_selection() as $id => $name)
+		{
+			$obj = obj($id);
+			$this->_get_work_contacts($obj,&$rtrn);
+		}
+
+
+/*		$conns = $arr['obj_inst']->connections_from(array(
 			'type' => 'RELTYPE_SECTION'
 		));
 
@@ -4851,7 +4860,7 @@ class crm_person extends class_base
 			$obj = $conn->to();
 			$this->_get_work_contacts($obj,&$rtrn);
 		}
-
+*/
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => array(16, 67),
 		));

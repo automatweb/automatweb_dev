@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.148 2008/06/03 09:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.149 2008/10/29 15:55:00 markop Exp $
 // planner.aw - kalender
 /*
 
@@ -2289,7 +2289,14 @@ class planner extends class_base
 			{
 				$t_filt[] = "%".$bit."%";
 			}
-			$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = $t_filt;
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.RELTYPE_WORK.name" => $t_filt,
+					"CL_CRM_PERSON.CURRENT_JOB.org.name" => $t_filt,
+				))
+			);
+//			$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = $t_filt;
 			$hasf = true;
 		}
 

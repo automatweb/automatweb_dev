@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.16 2008/01/24 15:13:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.17 2008/10/29 15:55:13 markop Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -416,7 +416,7 @@ class orders_manager extends class_base
 
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Kuupäev"),
+			"caption" => t("Kuup&auml;ev"),
 			"sortable" => 1,
 			"type" => "time",
 			"format" => "H:i d-m-y",
@@ -518,7 +518,7 @@ class orders_manager extends class_base
 			if($person = $order->get_first_obj_by_reltype("RELTYPE_PERSON"))
 			{
 				$person_name = $person->prop("firstname")." ".$person->prop("lastname");
-				if($company = $person->get_first_conn_by_reltype("RELTYPE_WORK"))
+				if($company = $person->company())
 				{
 					$person_name .= " / ".$company->prop("to.name");
 				}
