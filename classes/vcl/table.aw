@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.127 2008/09/24 10:04:33 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.128 2008/10/29 14:53:50 instrumental Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -2846,24 +2846,27 @@ class vcl_table extends aw_table
 					));
 				};
 			};
-			$form_oid = $arr["obj_inst"]->instance()->get_cfgform_for_object(array(
-				"obj_inst" => $arr["obj_inst"],
-				"args" => $arr["request"],
-			));
-			if($form_oid)
+			if(is_object($arr["obj_inst"]))
 			{
-				$form = obj($form_oid);
-				$fi = $form->instance();
-				$props = $fi->get_cfg_proplist($form_oid);
-				if($props[$pr["name"]]["configurable"])
+				$form_oid = $arr["obj_inst"]->instance()->get_cfgform_for_object(array(
+					"obj_inst" => $arr["obj_inst"],
+					"args" => $arr["request"],
+				));
+				if($form_oid)
 				{
-					$this->cfgform = $form;
-					$this->property = $pr;
-					$fo = obj($form_oid);
-					$tbl_conf = $fo->meta("tbl_config");
-					if($cur_data = $tbl_conf[$pr["name"]])
+					$form = obj($form_oid);
+					$fi = $form->instance();
+					$props = $fi->get_cfg_proplist($form_oid);
+					if($props[$pr["name"]]["configurable"])
 					{
-						$this->cfg_data = $cur_data;
+						$this->cfgform = $form;
+						$this->property = $pr;
+						$fo = obj($form_oid);
+						$tbl_conf = $fo->meta("tbl_config");
+						if($cur_data = $tbl_conf[$pr["name"]])
+						{
+							$this->cfg_data = $cur_data;
+						}
 					}
 				}
 			}
