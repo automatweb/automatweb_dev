@@ -6183,6 +6183,7 @@ class class_base extends aw_template
 	/**
 		@attrib name=object_name_autocomplete_source all_args=1
 		@param class_ids optional
+		@param parent optional
 		@param param required
 	**/
 	function object_name_autocomplete_source($arr)
@@ -6191,13 +6192,19 @@ class class_base extends aw_template
 		$ac = get_instance("vcl/autocomplete");
 		$arr = $ac->get_ac_params($arr);
 
-		$ol = new object_list(array(
+		$filter = array(
 			"class_id" => $cid,
 			"name" => $arr[$arr["param"]]."%",
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 100
-		));
+		);
+		if($arr["parent"])
+		{
+			$filter["parent"] = $arr["parent"];
+		}
+
+		$ol = new object_list($filter);
 		return $ac->finish_ac($ol->names());
 	}
 

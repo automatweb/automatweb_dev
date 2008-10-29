@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.161 2008/10/22 15:48:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.162 2008/10/29 12:44:25 markop Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -634,6 +634,7 @@ class rfp extends class_base
 		{
 			case "data_subm_name":
 			case "data_subm_organisation":
+				$prop["ac_filter"] = array("parent" => $this->rfpm->prop("clients_folder"));
 			case "data_subm_organizer":
 				$prop["selected"] = array(
 					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
@@ -731,6 +732,7 @@ class rfp extends class_base
 				$prop["selected"] = array(
 					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
 				);
+				$prop["ac_filter"] = array("parent" => $this->rfpm->prop("clients_folder"));
 				break;
 			case "data_billing_contact":
 				if(!$prop["value"])
@@ -740,6 +742,7 @@ class rfp extends class_base
 				$prop["selected"] = array(
 					$prop["value"] => $arr["obj_inst"]->prop($prop["name"].".name"),
 				);
+				$prop["ac_filter"] = array("parent" => $this->rfpm->prop("clients_folder"));
 				break;
 			case "data_billing_phone":
 			case "data_billing_email":
@@ -4219,15 +4222,15 @@ class rfp extends class_base
 	 **/
 	function _get_ac_data_subm_name($arr)
 	{
-		$this->_gen_and_output_ac_data(CL_CRM_PERSON, $arr["data_subm_name"]);
+		$this->_gen_and_output_ac_data(CL_CRM_PERSON, $arr["data_subm_name"] , $this->rfpm->prop("clients_folder"));
 	}
 
 	/**
 		@attrib name=_get_ac_data_subm_organisation params=name all_args=1
 	 **/
 	function _get_ac_data_subm_organisation($arr)
-	{
-		$this->_gen_and_output_ac_data(CL_CRM_COMPANY, $arr["data_subm_organisation"]);
+	{//clients_folder
+		$this->_gen_and_output_ac_data(CL_CRM_COMPANY, $arr["data_subm_organisation"] , $this->rfpm->prop("clients_folder"));
 	}
 
 	/**
@@ -4245,26 +4248,28 @@ class rfp extends class_base
 		@attrib name=_get_ac_data_billing_company params=name all_args=1
 	 **/
 	function _get_ac_data_billing_company($arr)
-	{
-		$this->_gen_and_output_ac_data(CL_CRM_COMPANY, $arr["data_billing_company"]);
+	{//clients_folder
+		$this->_gen_and_output_ac_data(CL_CRM_COMPANY, $arr["data_billing_company"] , $this->rfpm->prop("clients_folder"));
 	}
 
 	/**
 		@attrib name=_get_ac_data_billing_contact params=name all_args=1
 	 **/
 	function _get_ac_data_billing_contact($arr)
-	{
-		$this->_gen_and_output_ac_data(CL_CRM_PERSON, $arr["data_billing_contact"]);
+	{//clients_folder
+		$this->_gen_and_output_ac_data(CL_CRM_PERSON, $arr["data_billing_contact"] , $this->rfpm->prop("clients_folder"));
 	}
 
-
-	function _gen_and_output_ac_data($class_id, $value)
+	function _gen_and_output_ac_data($class_id, $value, $menu = null)
 	{
-
 		$l = new object_list(array(
 			"class_id" => $class_id,
 			"name" => "%".$value."%",
 		));
+		if($menu)
+		{
+			$l["menu"] = $menu;
+		}
 		foreach($l->arr() as $obj)
 		{
 			$res[$obj->id()] = $obj->name();

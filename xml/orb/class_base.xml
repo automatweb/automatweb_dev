@@ -120,6 +120,7 @@
 			<function name="object_name_autocomplete_source">
 				<arguments>
 					<optional name="class_ids" />
+					<optional name="parent" />
 					<required name="param" />
 				</arguments>
 			</function>

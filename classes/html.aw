@@ -183,6 +183,9 @@ class html extends aw_template
 	@param autocomplete_class_id optional type=array
 		Classes to search with autocomlete. If set, no other autocomplete params needed
 
+	@param ac_filter optional type=array
+		Extra params for autocomplete search filter (array("parent" => 123))
+
 	@param options optional type=array
 		Initial autocomplete options. If $option_is_tuple then associative. Default empty.
 
@@ -236,6 +239,10 @@ class html extends aw_template
 				"class_ids" => $autocomplete_class_id,
 				"param" => $name,
 			);
+			if(is_array($ac_filter))
+			{
+				$params+= $ac_filter;
+			}
 			$class = $_GET["class"];
 			if(!$class)
 			{
