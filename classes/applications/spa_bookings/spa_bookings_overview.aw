@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.74 2008/10/29 11:49:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.75 2008/10/29 13:38:25 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -367,6 +367,10 @@ class spa_bookings_overview extends class_base
 				$pro = $pro  + $room->prop("seller_professions");
 			}
 		}
+		if(!sizeof($pro))
+		{
+			return array();
+		}
 		$ol2 = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
 			"lang_id" => array(),
@@ -395,6 +399,10 @@ class spa_bookings_overview extends class_base
 			{
 				$pro = array_merge($pro , $room->prop("professions"));
 			}
+		}
+		if(!sizeof($pro))
+		{
+			return array();
 		}
 		$ol2 = new object_list(array(
 			"class_id" => CL_CRM_PERSON,
@@ -533,11 +541,12 @@ class spa_bookings_overview extends class_base
 		{
 			$fun_name = "get_days_table";
 		}
+		enter_function("spa_bookings_owverview::report_table");
 		$this->$fun_name(array(
 			"brons" => $brons,
 			"t" => &$arr["prop"]["vcl_inst"],
 		));
-
+		exit_function("spa_bookings_owverview::report_table");
 		if ($this->do_print_results == 1)
 		{
 			$i = new aw_template();
@@ -1003,6 +1012,7 @@ class spa_bookings_overview extends class_base
 
 	function get_brons($arr)
 	{
+		enter_function("spa_bookings_owverview::get_brons");
 		extract($arr["request"]);
 		$filter = array(
 			"class_id" => CL_RESERVATION,
@@ -1100,9 +1110,9 @@ class spa_bookings_overview extends class_base
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
 		}
-		else
+		elseif(!$r_ra_booking_from)
 		{
-			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
+			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time());
 		}
 		if ($to > 1)
 		{
@@ -1131,8 +1141,9 @@ class spa_bookings_overview extends class_base
 		if($r_ra_only_paid == 2)
 		{
 			$filter["paid"] = 0;
-		} 
+		}
 		$ol = new object_list($filter);
+		exit_function("spa_bookings_owverview::get_brons");
 		return $ol;
 	}
 
@@ -2276,9 +2287,9 @@ class spa_bookings_overview extends class_base
 		{
 			$f["start"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
 		}
-		else
+		elseif(!$arr["request"]["stats_rs_booking_from"])//default tuleks siis kui pole otsitud veel
 		{
-			$f["start"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
+			$f["start"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time());
 		}
 
 		if ($to > 1)
@@ -2291,7 +2302,7 @@ class spa_bookings_overview extends class_base
 			$f["package"] = $arr["request"]["stats_rs_package"];
 		}
 		$ol = new object_list($f);
-//if(aw_global_get("uid") == "struktuur") arr($f);
+
 		$pks = array();
 		$d = array();
 		enter_function("sbo::_get_stats_r_list");
@@ -2450,7 +2461,7 @@ class spa_bookings_overview extends class_base
 	function _get_r_r_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-
+		enter_function("spa_bookings_owverview::get_rb_objs");
 		$ol = new object_list();
 
 		$from = date_edit::get_timestamp($arr["request"]["r_rs_booking_from"]);
@@ -2475,7 +2486,7 @@ class spa_bookings_overview extends class_base
 				// get all bookings for that person
 				$bf = array(
 					"class_id" => CL_RESERVATION,
-					"verified" => 1,			
+					"verified" => 1,
 					"lang_id" => array(),
 					"site_id" => array(),
 				);
@@ -2487,9 +2498,9 @@ class spa_bookings_overview extends class_base
 				{
 					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
 				}
-				else
+				elseif(!$arr["request"]["r_rs_booking_from"])
 				{
-					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
+					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time());
 				}
 
 				if ($to > 1)
@@ -2538,7 +2549,8 @@ class spa_bookings_overview extends class_base
 				$persons_filter[] = $po->name();
 			}
 		}
-
+		exit_function("spa_bookings_owverview::get_rb_objs");
+		enter_function("spa_bookings_owverview::define_spa_stats_data");
 		$ri = get_instance(CL_RESERVATION);
 		$price_sum = array();
 		if (count($room2booking))
@@ -2625,7 +2637,8 @@ class spa_bookings_overview extends class_base
 
 				foreach($bookings as $booking)
 				{
-					$pr = $ri->get_reservation_price($booking);
+//					$pr = $ri->get_reservation_price($booking);
+					$pr = $booking->get_sum();
 					$price_str = array();
 					foreach($pr as $cur_id => $cur_val)
 					{
@@ -2667,7 +2680,7 @@ class spa_bookings_overview extends class_base
 			"price" => join(" / ", $price_str),
 			"person" => ""
 		));
-
+		exit_function("spa_bookings_owverview::define_spa_stats_data");
 
 		if ($this->do_print_results == 1)
 		{

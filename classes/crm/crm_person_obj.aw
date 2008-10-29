@@ -914,7 +914,8 @@ class crm_person_obj extends _int_object
 			}
 		}
 
-//-----vana systeeem
+//-----vana systeeem 
+		$ci = new connection();
 		$conns = $ci->find(array(
 			"from.class_id" => CL_CRM_COMPANY,
 			"type" => "RELTYPE_WORKERS",
