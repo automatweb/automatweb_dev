@@ -1019,10 +1019,7 @@ class class_base extends aw_template
 	{
 		if ($args["posted_by_js"] == 1)
 		{
-			foreach($args as $k => $v)
-			{
-				$args[$k] = iconv("utf-8", aw_global_get("charset"), $v);
-			}
+			$args = iconv_array("utf-8", aw_global_get("charset"), $args);
 		}
 
 		$form_data = null;
