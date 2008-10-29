@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.8 2008/03/31 04:29:02 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mp3player/mp3player.aw,v 1.9 2008/10/29 15:57:34 hannes Exp $
 // mp3player.aw - MP3 pleier 
 /*
 
@@ -305,6 +305,7 @@ class mp3player extends class_base
 	**/
 	function playlist($arr)
 	{
+		$arr["id"] = reset(explode("?", $arr["id"]));
 		classload("applications/mp3player/mp3");
 		$o = new object($arr["id"]);
 		
