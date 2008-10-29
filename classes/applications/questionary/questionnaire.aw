@@ -675,7 +675,6 @@ class questionnaire extends class_base
 		{
 			if($set_qs)
 			{
-				arr("ads");
 				$_qs[$conn->conn["to"]] = 0;
 			}
 
