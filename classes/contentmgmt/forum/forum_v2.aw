@@ -2953,6 +2953,48 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 			}
 		}
 
+		////
+		// hack some more this topic adding method, so the custom add_topic.tpl would be more supported dragut@29.10.2008
+		$uid = aw_global_get('uid');
+		if(!empty($uid))
+		{
+			$uid_oid = users::get_oid_for_uid($uid);
+			$user_obj = new object($uid_oid);
+			$cl_users = get_instance(CL_USER);
+			$p_oid = $cl_users->get_person_for_user($user_obj);
+
+			if ($this->can("view", $p_oid))
+			{
+				$p_o = obj($p_oid);
+				$pname = $p_o->name();
+			}
+			else
+			{
+				$pname = $uid;
+			}
+			if($this->obj_inst->prop("post_name"))
+			{
+				$htmlc->vars(array("author" => $pname));
+			}
+			else
+			{
+				$htmlc->vars(array("author" => $uid));
+			}
+			$htmlc->vars(array(
+				"author_pname" => $pname,
+				"author_emaili" => $user_obj->prop("email"),
+			));
+		}
+		if ($this->obj_inst->prop("show_logged") == 1)
+		{
+			$add = "_logged";
+		}
+		$htmlc->vars(array(
+			"a_name" => $htmlc->parse("a_name".$add),
+			"a_email" => $htmlc->parse("a_email".$add),
+		));
+		// end hacking for custom add_topic.tpl
+
 		$htmlc->add_property(array(
 			"name" => "sbt",
 			"caption" => t("Lisa"),
