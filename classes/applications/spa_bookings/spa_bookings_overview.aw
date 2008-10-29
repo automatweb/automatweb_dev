@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.73 2008/10/23 10:42:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.74 2008/10/29 11:49:23 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1429,7 +1429,9 @@ class spa_bookings_overview extends class_base
 			"parent" => "print",
 			"name" => "p_all_g",
 			"text" => t("K&otilde;ik"),
-			"link" => "javascript:aw_popup_scroll('".$submenu_link."','mulcal',700,500);",
+//			"link" => "javascript:aw_popup_scroll('".$submenu_link."','mulcal',700,500);",
+			"link" => "javascript:goto_overview_url('');",
+		
 		));
 
 		// add yesterday/today/tomorrow subs
@@ -1454,10 +1456,56 @@ class spa_bookings_overview extends class_base
 				"parent" => "print",
 				"text" => $go->name(),
 				"name" => "g_".$grp_id,
-				"link" => "javascript:aw_popup_scroll('".$submenu_link."','mulcal',700,500);",
+//				"link" => "javascript:aw_popup_scroll('".$submenu_link."','mulcal',700,500);",
+				"link" => "javascript:goto_overview_url('".$grp_id."');",
 			));
 			$this->_add_day_subs($tb, "g_".$grp_id , $grp_id);
 		}
+	}
+
+
+	function callback_generate_scripts($arr)
+	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+
+		return '
+			function goto_overview_url(group)
+			{
+				$.sup("class","spa_bookings_overview");
+				$.sup("rs_name",$("#rs_name").val());
+				$.sup("person",$("#rs_booker_name").val());
+				$.sup("group",group);
+
+				unconfirmed = 0;
+
+				$("#rs_unconfirmed").each(function(){
+					unconfirmed = this.checked;
+					if(unconfirmed)
+					{
+						unconfirmed = 1;
+					}
+					else
+					{
+						unconfirmed = 0;
+					}
+				});
+
+				$.sup("unverified",unconfirmed);
+
+
+				$.sup("rs_booking_from[day]",$("input[name=\'rs_booking_from[day]\']").val());
+				$.sup("rs_booking_from[month]",$("input[name=\'rs_booking_from[month]\']").val());
+				$.sup("rs_booking_from[year]",$("input[name=\'rs_booking_from[year]\']").val());
+				$.sup("rs_booking_to[day]",$("input[name=\'rs_booking_to[day]\']").val());
+				$.sup("rs_booking_to[month]",$("input[name=\'rs_booking_to[month]\']").val());
+				$.sup("rs_booking_to[year]",$("input[name=\'rs_booking_to[year]\']").val());
+
+				aw_popup_scroll($.sup("action","room_booking_printer"),"mulcal",700,500);
+			}
+		';
 	}
 
 	/**
@@ -1932,7 +1980,8 @@ class spa_bookings_overview extends class_base
 
 	/**
 		@attrib name=room_booking_printer
-		@param rooms required
+		@param rooms optional
+		@param rs_name optional
 		@param from optional
 		@param to optional
 		@param group optional
@@ -1941,7 +1990,13 @@ class spa_bookings_overview extends class_base
 	**/
 	function room_booking_printer($arr)
 	{
+		$arr = $_GET;
 		$this->read_any_template("booking_printer.tpl");
+		if(!($arr["to"] > 0 && $arr["from"] > 0))
+		{
+			$arr["from"] = date_edit::get_timestamp($arr["rs_booking_from"]);
+			$arr["to"] = date_edit::get_timestamp($arr["rs_booking_to"]);
+		}
 
 		// get all the bookings for the given rooms in the given timespan and group if set
 		if($arr["to"])
@@ -1951,6 +2006,16 @@ class spa_bookings_overview extends class_base
 
 
 		$days = ($arr["to"] - $arr["from"]) / (DAY_LENGTH);
+
+		if(!$arr["rooms"] || $arr["ra_name"])
+		{
+			$rooms = new object_list(array(
+				"class_id" => CL_ROOM,
+				"lang_id" => array(),
+				"name" => "%".$arr["rs_name"]."%",
+			));
+			$arr["rooms"] = $rooms->ids();
+		}
 
 		if (!is_array($arr["rooms"]))
 		{
@@ -1986,7 +2051,7 @@ class spa_bookings_overview extends class_base
 					))
 			//		new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to)),
 				);			
-				if ($arr["group"])
+				if (is_oid($arr["group"]))
 				{
 					// get group members
 					$g = get_instance(CL_GROUP);
