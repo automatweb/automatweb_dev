@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.82 2008/10/24 08:44:23 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.83 2008/10/30 12:13:55 markop Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -545,18 +545,16 @@ class rfp_manager extends class_base
 								"url" => "images/icons/ftype_pdf.gif",
 							)),
 						)),
-						"function" => html::href(array(
+/*						"function" => html::href(array(
 							"caption" => ($_t = $obj->prop("data_gen_function_name"))?$_t:(($_n = $obj->name())?$_n:t('(Nimetu)')),
-							/*"url" => "#",
-							"onClick" => "aw_popup_scroll(\"".$this->mk_my_orb("show_overview", array(
-								"oid" => $oid
-							))."\",\"hey\",600,600);",
-							*/
 							"url" => $this->mk_my_orb("change", array(
 								"id" => $oid,
 								"return_url" => get_ru(),
 							),CL_RFP),
-						)),
+						)),*/
+						"function" => html::get_change_url($oid, array(
+							"return_url" => get_ru(),
+						) , $obj->name()),
 						"org" => is_oid($obj->prop("data_subm_organisation")) ? $obj->prop("data_subm_organisation.name") : $obj->prop("data_subm_organisation"),
 						"response_date" => (($rd = $obj->prop("data_gen_response_date_admin"))>1)?date('d.m.Y, H:i', $rd):"-",
 						"date_period" => $date_period,
