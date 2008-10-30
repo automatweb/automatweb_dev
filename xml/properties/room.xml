@@ -537,6 +537,18 @@
             <caption>, sammuga</caption>
       </property>
       <property>
+            <name>minmax_prices</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <type>table</type>
+            <parent>min_prices</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Miinimum-Maksimum hinnad</caption>
+      </property>
+      <property>
             <name>min_prices_props</name>
             <table>objects</table>
             <field>meta</field>

@@ -216,7 +216,7 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 					@caption , sammuga
 
 
-			@layout min_prices type=vbox closeable=1 area_caption=Kogu&nbsp;ruumi&nbsp;broneeringu&nbsp;miinimumhind parent=middle_split
+			@layout min_prices type=vbox closeable=1 area_caption=Ruumibroneeringu&nbsp;miinimum-&nbsp;ja&nbsp;maksimumhind
 		
 				@property minmax_prices type=table parent=min_prices no_caption=1
 				@caption Miinimum-Maksimum hinnad
