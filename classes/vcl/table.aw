@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.128 2008/10/29 14:53:50 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.129 2008/10/30 14:53:45 instrumental Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -546,6 +546,18 @@ class aw_table extends aw_template
 					{
 						$this->sorder = "asc";
 					}
+				}
+			}
+		}
+
+		// Why can't we have the rowdef name as the rowdef index? -kaarel
+		if(isset($this->sortby) && !is_array($this->sortby))
+		{
+			foreach($this->rowdefs as $rowdef)
+			{
+				if($this->sortby == $rowdef["name"] && isset($rowdef["sorting_field"]))
+				{
+					$this->sortby = $rowdef["sorting_field"];
 				}
 			}
 		}
@@ -1822,6 +1834,8 @@ class aw_table extends aw_template
 			Field caption
 		@param sortable optional type=bool
 			If set, the table is sortable
+		@param sorting_field optional type=field
+			
 		@param type optional type=string
 			Field type
 		@param format optional type=string
