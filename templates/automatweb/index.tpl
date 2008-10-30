@@ -30,6 +30,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery-impromptu.1.5.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_init_session_modal.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery.selectboxes.min.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/jquery/plugins/jquery_aw_unload_handler.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -156,6 +157,13 @@ $.init_session_modal({
 <!-- END SUB: POPUP_MENUS -->
 
 {VAR:javascript_bottom}
+
+<script type="text/javascript">
+$.aw_unload_handler({
+	msg_unload_leave_notice: "{VAR:msg_unload_leave_notice}",
+	msg_unload_save_error: "{VAR:msg_unload_save_error}"
+});
+</script> 
 
 </body>
 </html>

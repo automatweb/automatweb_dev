@@ -135,6 +135,8 @@ $sf->vars(array(
 	"btn_session_end_continue" => html_entity_decode(t("J&auml;tkan")),
 	"btn_session_end_cancel" => html_entity_decode(t("L&otilde;petan")),
 	"session_length" => ini_get("session.gc_maxlifetime")*1000,
+	"msg_unload_leave_notice" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"),
+	"msg_unload_save_error" => html_entity_decode(t("Andmete salvestamine kahjuks ei &otilde;nnestunud")),
 ));
 
 if ($sf->prog_acl("view", "disp_person"))
