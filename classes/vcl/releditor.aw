@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.163 2008/10/28 11:21:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.164 2008/10/30 20:04:26 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -113,7 +113,7 @@ class releditor extends core
 				{
 					$data[$idx-1][$_pn] = $target->prop($_pn);
 
-					if (!in_array($_pn,$tb_fields) || $_pd["show_in_emb_tbl"] != 1)
+					if (!in_array($_pn,$tb_fields) || $_pd["show_in_emb_tbl"] != 1 && is_oid($arr["prop"]["cfgform_id"]))
 					{
 						continue;
 					};
