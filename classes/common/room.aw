@@ -4409,8 +4409,19 @@ class room extends class_base
 		}
 		
 		$rv["room_price"] = $sum;
-		
-		
+		$max_room_price = $room->meta("max_room_price");
+		if(is_array($max_room_price) && sizeof($max_room_price))
+		{
+			foreach($sum as $curr => $val)
+			{
+				if($max_room_price[$curr] && $max_room_price[$curr] < $val)
+				{
+					$sum[$curr] = $max_room_price[$curr];
+					$rv["room_price"][$curr] = $max_room_price[$curr];
+				}
+			}
+		}
+
 		$warehouse = $room->prop("warehouse");
 		if(is_object($arr["bron"]))
 		{
@@ -4499,20 +4510,6 @@ class room extends class_base
 						$sum[$curr] = $min[$curr];
 						$rv["room_price"][$curr] = $min[$curr];
 					}
-				}
-			}
-		}
-
-		//maksimumhinna kontroll, v6ibolla oleks m6tekkas miinimumiga samasse tsyklisse panna, kuid hetkel tundub, et see on jube v2ike asi ikka
-		$max_room_price = $room->meta("max_room_price");
-		if(is_array($max_room_price) && sizeof($max_room_price))
-		{
-			foreach($sum as $curr => $val)
-			{
-				if($max_room_price[$curr] && $max_room_price[$curr] < $val)
-				{
-					$sum[$curr] = $max_room_price[$curr];
-					$rv["room_price"][$curr] = $max_room_price[$curr];
 				}
 			}
 		}
