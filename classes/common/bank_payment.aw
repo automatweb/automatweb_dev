@@ -632,6 +632,49 @@ class bank_payment extends class_base
 				else
 				{
 					$bank_id = $this->merchant_id[$val["SOLOPMT_RETURN_VERSION"]];
+/*					$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");
+					$priv_key = fread($fp, 8192);
+					fclose($fp);
+				
+					$service = $version = "0001";
+					$stamp = date("YmdHis" , time())."0001";
+					$bank_data = $o->meta("bank");
+					$sender_id = $bank_data["nordeapank"]["sender_id"];
+					$det = "Y";
+					$type = "XML";
+					$alg = "01";
+
+					$SOLOPMT_MAC = '';
+					$VK_message  = $service.'&';
+					$VK_message .= $stamp.'&';
+					$VK_message .= $sender_id.'&';
+					$VK_message .= '3&';
+					$VK_message .= $type.'&';
+					$VK_message .= $val["SOLOPMT_RETURN_STAMP"].'&';
+					$VK_message .= $val["SOLOPMT_RETURN_REF"].'&';
+					$VK_message .= $version.'&';
+					$VK_message .= $alg.'&';
+					$VK_message .= $priv_key.'&';
+					$SOLOPMT_MAC = strtoupper(md5( $VK_message ));
+					//arr($VK_message);
+					$params = array(
+						"SOLOPMT_VERSION"     => $service,
+						"SOLOPMT_TIMESTMP"    => $stamp,
+						"SOLOPMT_RCV_ID"      => $sender_id, 
+						"SOLOPMT_LANGUAGE"    => 3,//$SOLOPMT_MAC,
+						"SOLOPMT_RESPTYPE"    => $type,
+						"SOLOPMT_STAMP"       => $val["SOLOPMT_RETURN_STAMP"],
+						"SOLOPMT_REF"         => $val["SOLOPMT_RETURN_REF"],//$SOLOPMT_MAC,
+						"SOLOPMT_KEYVERS"     => $version,// 17.   Key Version    
+						"SOLOPMT_ALG"         => $alg,
+						"SOLOPMT_MAC"         => $SOLOPMT_MAC,
+					);//arr($params);//die();
+
+					$this->submit_bank_info(array(
+						"params" => $params,
+						"link" => "https://solo3.nordea.fi/cgi-bin/SOLOPM10",
+						//"form" => $form
+					));*/
 				}
 				if($from > 1 && !($from == $to) && $from > $val["timestamp"])
 				{
