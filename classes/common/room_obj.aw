@@ -319,7 +319,7 @@ class room_obj extends _int_object
 		);
 		$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, $start);
 		$filter["start1"] = new obj_predicate_compare(OBJ_COMP_LESS, $end);
-		$ol = new object_list($filter);arr($filter); arr($ol);
+		$ol = new object_list($filter);
 		return reset($ol->arr());
 
 	}
@@ -423,7 +423,6 @@ class room_obj extends _int_object
 		}
 		return $sum;
 	}
-
 
 	function get_person_day_sum($time,$worker)
 	{
@@ -822,6 +821,18 @@ class room_obj extends _int_object
 			}
 		}
 		return count($rv) ? $rv : null;
+	}
+
+	/** Returns available currency object list for the room
+		@attrib api=1
+		@returns object list
+	**/
+	public function get_currency_ol()
+	{
+		$curs = $this->prop("currency");
+		$ol = new object_list();
+		$ol -> add($curs);
+		return $ol;
 	}
 }
 

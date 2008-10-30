@@ -218,6 +218,9 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 			@layout min_prices type=vbox closeable=1 area_caption=Kogu&nbsp;ruumi&nbsp;broneeringu&nbsp;miinimumhind parent=middle_split
 		
+				@property minmax_prices type=table parent=min_prices no_caption=1
+				@caption Miinimum-Maksimum hinnad
+
 				@property min_prices_props type=callback callback=gen_min_prices_props parent=min_prices
 
 				@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
@@ -394,6 +397,9 @@ class room extends class_base
 		switch($prop["name"])
 		{
 			# TAB PRICE
+			case "min_prices_props":
+			case "web_min_prod_price":
+				return PROP_IGNORE;
 			case 'people':
 				$month = $_GET["month"];
 				if(!$month)
@@ -610,7 +616,7 @@ class room extends class_base
 				$prop["value"] = time() + 15*60;
 				break;
 
-			case "web_min_prod_price":
+			case "web_min_prod_price":return PROP_IGNORE;
 				$arr["obj_inst"]->set_meta("web_min_prod_prices", $arr["request"]["wpm_currency"]);
 				break;
 				
@@ -629,7 +635,7 @@ class room extends class_base
 				$arr["obj_inst"]->set_meta("people_prices", $res);
 				break;
 				
-			case "min_prices_props":
+			case "min_prices_props":return PROP_IGNORE;
 				$arr["obj_inst"]->set_meta("web_room_min_price", $arr["request"]["web_room_min_price"]);
 				break;
 				
@@ -1649,6 +1655,66 @@ class room extends class_base
 		}
 
 		return $arr["prop"]["value"] = $this->parse();
+	}
+
+	function _get_minmax_prices($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_header(t("Miinimum ja maksimum"));
+		$t->define_field(array(
+			"caption" => t("Valuuta"),
+			"name" => "currency",
+		));
+		$t->define_field(array(
+			"caption" => t("Kogu ruumi broneeringu miinimumhind"),
+			"name" => "web_room_min_price",
+		));
+		$t->define_field(array(
+			"caption" => t("Toodete miinimumhind"),
+			"name" => "web_min_prod_prices",
+		));
+		$t->define_field(array(
+			"caption" => t("Ruumi broneeringu maksimumhind"),
+			"name" => "max_room_price",
+		));
+		
+		$web_room_min_price = $arr["obj_inst"]->meta("web_room_min_price");
+		$web_min_prod_prices = $arr["obj_inst"]->meta("web_min_prod_prices");
+		$max_room_price =  $arr["obj_inst"]->meta("max_room_price");
+		foreach($arr["obj_inst"]->get_currency_ol()->arr() as $c)
+		{
+			$data = array();
+			$data["currency"] = $c->name();
+			$cur = $c->id();
+			$data["web_room_min_price"] = html::textbox(array(
+				"name" => "web_room_min_price[".$cur."]",
+				"size" => 4,
+				"value" => $web_room_min_price[$cur],
+			));
+			$data["web_min_prod_prices"] = html::textbox(array(
+				"name" => "web_min_prod_prices[".$cur."]",
+				"size" => 4,
+				"value" => $web_min_prod_prices[$cur],
+			));
+			$data["max_room_price"] = html::textbox(array(
+				"name" => "max_room_price[".$cur."]",
+				"size" => 4,
+				"value" => $max_room_price[$cur],
+			));
+			$t->define_data($data);
+		}
+	}
+
+	function _set_minmax_prices($arr)
+	{
+		$minmax_props = array("web_room_min_price" , "web_min_prod_prices" , "max_room_price");
+		foreach($minmax_props as $prop)
+		{
+			if($arr["request"][$prop])
+			{
+				$arr["obj_inst"]->set_meta($prop , $arr["request"][$prop]);
+			}
+		}
 	}
 
 	/** updates room calendar table
@@ -4436,7 +4502,21 @@ class room extends class_base
 				}
 			}
 		}
-		
+
+		//maksimumhinna kontroll, v6ibolla oleks m6tekkas miinimumiga samasse tsyklisse panna, kuid hetkel tundub, et see on jube v2ike asi ikka
+		$max_room_price = $room->meta("max_room_price");
+		if(is_array($max_room_price) && sizeof($max_room_price))
+		{
+			foreach($sum as $curr => $val)
+			{
+				if($max_room_price[$curr] && $max_room_price[$curr] < $val)
+				{
+					$sum[$curr] = $max_room_price[$curr];
+					$rv["room_price"][$curr] = $max_room_price[$curr];
+				}
+			}
+		}
+
 		$rv["room_bargain_value"] = $this->bargain_value;
 		if ($arr["detailed_info"])
 		{
@@ -5200,7 +5280,6 @@ class room extends class_base
 		}
 
 		$use_prod_times = $room->prop("use_product_times");
-		
 		$reservations = new object_list($filt);
 		$this->res_table = array();
 		$customers = array();
@@ -5293,6 +5372,7 @@ class room extends class_base
 	**/
 	function check_if_available($arr)
 	{
+
 
 /*if(aw_global_get("uid") == "struktuur")
 {
@@ -5615,7 +5695,7 @@ class room extends class_base
 	}
 
 	function cb_gen_web_min_prices($arr)
-	{
+	{return PROP_IGNORE;
 		$cur = $arr["obj_inst"]->prop("currency");
 		$prices = $arr["obj_inst"]->meta("web_min_prod_prices");
 		foreach(safe_array($cur) as $cur)
@@ -5697,7 +5777,7 @@ class room extends class_base
         }
 
 	function gen_min_prices_props($arr)
-	{
+	{return PROP_IGNORE;
 		$curs = $arr["obj_inst"]->prop("currency");
 		$prices = $arr["obj_inst"]->meta("web_room_min_price");
 		$retval = array();
