@@ -223,7 +223,7 @@ class shop_order_cart extends class_base
 							))
 						));
 						$show_info_page = false;
-						$total += ($quant["items"] * $price);
+						$total += ($quant["items"] * str_replace(",", "", $price));
 						$cart_total += ($quant["items"] * $price);
 						if (get_class($inst) == "shop_product_packaging")
 						{
