@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.18 2008/10/17 11:34:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.19 2008/10/31 12:08:34 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -460,7 +460,14 @@ class package_server extends class_base
 		{
 			$o = obj($arr["id"]);
 		}
-		return $o->properties();
+		$properties = $o->properties();
+		$deps = $o->get_dep_versions();
+		$properties["file_versions"] = $o->meta("file_versions");
+		if(sizeof($deps))
+		{
+			$properties["dependencies"] = $deps;
+		}
+		return $properties;
 		die();
 	}
 
@@ -570,13 +577,15 @@ class package_server extends class_base
 				'id' => $arr["id"],
 			),
 		));		
-
+//arr($data); die();
 		$server = &$this->get_package_server();
 		$server->add_package(array(
 			"name" => $data["name"],
 			"version" => $data["version"],
 			"description" => $data["description"],
 			"file" => $fn,
+			"file_versions" => $data["file_versions"],
+			"dependencies" => $data["dependencies"],
 		));
 
 		header("Location: ".$arr["return_url"]);

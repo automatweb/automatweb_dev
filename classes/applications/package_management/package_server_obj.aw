@@ -14,8 +14,10 @@ class package_server_obj extends _int_object
 		$o->set_name($params["name"] ? $params["name"] : t("Nimetu pakett"));
 
 		$o->set_prop("version" , $params["version"]);
-		$o->set_prop("description" , $data["description"]);
-
+		$o->set_prop("description" , $params["description"]);
+		$o->set_meta("file_versions" , $params["file_versions"]);
+		$o->set_meta("dependency_packages", $params["dependencies"]);//lisaks peaks tulema mingi jupp, mis reaalsete id-dega yhendab paketi 2ra ja kui selliseid pole, siis mingi lahendus kuda ta need ka soovitaks t6mmata
+		$o->set_prop("available" , 1); //see ka 2ra m2rkida et tegu on serverisse j6udnud kasutusvalmis paketiga
 		$o->save();
 
 		$file = new object();

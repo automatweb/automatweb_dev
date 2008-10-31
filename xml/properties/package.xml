@@ -40,8 +40,6 @@
             <table>aw_packages</table>
             <group>general</group>
             <type>text</type>
-            <rows>10</rows>
-            <cols>40</cols>
             <field>file_names</field>
             <caption>Failid</caption>
       </property>
@@ -52,6 +50,14 @@
             <type>hidden</type>
             <field>installed</field>
             <caption>installitud</caption>
+      </property>
+      <property>
+            <name>available</name>
+            <table>aw_packages</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>available</field>
+            <caption>Valmis alla laadimiseks ja kasutamiseks</caption>
       </property>
       <property>
             <name>contents_tb</name>

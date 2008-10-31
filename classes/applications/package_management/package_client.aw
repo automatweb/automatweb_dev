@@ -323,11 +323,19 @@ class package_client extends class_base
 
 		foreach ($packages as $data)
 		{
+			$server_data = $arr["obj_inst"]->download_package_properties($data["id"]);
+			$deps = array();
+			foreach($server_data["dependencies"] as $file => $version)
+			{
+				$deps[] = $file." - ".$version;
+			}
 			$t->define_data(array(
 				'select' => $data["id"],
 				'color' => $_GET["show_files"] == $data["id"] ? "grey":"" ,
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
-				'version' => $data["version"],
+				'version' => $server_data["version"],
+				'dep' => join("<br>" , $deps),
+				'description' =>  $server_data["description"],
 				//'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
 			));
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.9 2008/10/02 14:56:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package.aw,v 1.10 2008/10/31 12:08:34 markop Exp $
 // package.aw - Pakk 
 /*
 
@@ -20,11 +20,14 @@
 	@property description type=textarea rows=10 cols=40 table=aw_packages field=description
 	@caption Kirjeldus
 
-	@property file_names type=text rows=10 cols=40 table=aw_packages field=file_names
+	@property file_names type=text table=aw_packages field=file_names
 	@caption Failid
 
 	@property installed type=hidden table=aw_packages field=installed
 	@caption installitud
+
+	@property available type=hidden table=aw_packages field=available
+	@caption Valmis alla laadimiseks ja kasutamiseks
 
 @groupinfo package_contents caption="Paki sisu"
 @default group=package_contents
@@ -344,6 +347,11 @@ class package extends class_base
 			), CL_PACKAGE),
 		));
 
+		$t->add_search_button(array(
+			"pn" => "add_dependency",
+			"clid" => CL_PACKAGE,
+		));
+
 		$t->add_button(array(
 			'name' => 'delete',
 			'img' => 'delete.gif',
@@ -451,6 +459,7 @@ class package extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["add_dependence"] = 0;
 		$arr["post_ru"] = post_ru();
 		$arr["tf"] = $_GET["tf"];
 	}
@@ -466,6 +475,11 @@ class package extends class_base
 	function callback_pre_save($arr)
 	{
 		
+	}
+
+	function callback_post_save($arr)
+	{
+		$arr["obj_inst"]->add_dependence($arr["request"]["add_dependence"]);
 	}
 
 	////////////////////////////////////
@@ -514,13 +528,13 @@ class package extends class_base
 				));
                                 return true;
 			case 'installed':
+			case 'available':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
 				));
                                 return true;
                 }
-
 		return false;
 	}
 }

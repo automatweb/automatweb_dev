@@ -240,21 +240,46 @@ class package_obj extends _int_object
 		return $others;
 	}
 
+	function get_file_version($file)
+	{
+		$fn = basename($file);
+		$dir = substr($file,1,(strlen($file) - strlen($fn)-1));
+		$cvs_file = "/www/dev/marko/automatweb_dev/".$dir."CVS/Entries";
+		$handle = fopen($cvs_file, "r");
+		$contents = fread($handle, filesize($cvs_file));
+		fclose($handle);
+		$content_rows = explode("\n",$contents);
+		foreach($content_rows as $row)
+		{
+			$content_data = explode("/",$row);
+			if($content_data[1] ==$fn)
+			{
+				return $content_data[2];
+			}
+		}
+		return "";
+	}
+
 	function create_package_zip($o)
 	{
 		$files = $o->meta("package_contents");
+		//et faili versioone hakkaks 6igest kohast v6tma
+		chdir('..');
+		$versions = array();
+
 		if(!is_array($files) || !count($files))
 		{
 			return;
 		}
 		$i = new file_archive;
 		$fi = get_instance(CL_FILE);
-		$zipname = $o->name().(($v = $o->prop("version"))?"-".$v:"").".zip";
+		$zipname = str_replace(" " , "_" , $o->name()).(($v = $o->prop("version"))?"-".$v:"").".zip";
 		$ftype = "application/zip";
 		$fpath = $fi->generate_file_path(array("file_name" => $zipname, "type" => $ftype));
 		$folders = array();
 		foreach($files as $filepath)
 		{
+			$versions[$filepath] = $this->get_file_version($filepath);
 			$pieces = explode("/", $filepath);
 			$path = "";
 			foreach($pieces as $piece)
@@ -282,10 +307,12 @@ class package_obj extends _int_object
 				}
 			}
 		}
+		$this->set_meta("file_versions" , $versions);
+		$this->save();
 		$i->save_as_file($fpath);
 		$fo = obj();
 		$fo->set_class_id(CL_FILE);
-		$fo->set_name($zipname);
+		$fo->set_name($zipname);arr($fpath);
 		$fo->set_prop("type", $ftype);
 		$fo->set_prop("file", $fpath);
 		$fo->set_parent($o->id());
@@ -295,5 +322,47 @@ class package_obj extends _int_object
 			"type" => "RELTYPE_FILE",
 		));
 	}
+
+	/** Returns package dependency names and versions
+		@attrib api=1
+		@returns array(name => version , ...)
+	**/
+	public function get_dep_versions()
+	{
+		$ret = $this->meta("dependency_packages");
+		if(!is_array($ret))
+		{
+			$ret = array();
+		}
+		$dep_conns = $this->connections_from(array(
+			"type" => "RELTYPE_DEPENDENCY",
+		));
+		foreach($dep_conns as $conn)
+		{
+			$pack = $conn->to();
+			$ret[$pack->name()] = $pack->prop("version");
+		}
+		return $ret;
+	}
+
+	/** Adds dependency
+		@attrib api=1 params=pos
+		@param package required type=oid
+			package object id
+		@returns 1, if success.... else false
+	**/
+	public function add_dependency($package = null)
+	{
+		if(is_oid($package))
+		{
+			$this->connect(array(
+				"to" => $package,
+				"type" => "RELTYPE_DEPENDENCY",
+			));
+			return 1;
+		}
+		else return false;
+	}
+
 }
 ?>

@@ -60,6 +60,8 @@ class package_client_obj extends _int_object
 			'parent' => $this->prop('packages_folder_aw'),
 			'site_id' => array(),
 			'lang_id' => array(),
+			'available' => new obj_predicate_not(1),
+			'installed' => new obj_predicate_not(1),
 		);
 
 		$ol = new object_list($filter);
@@ -113,7 +115,7 @@ class package_client_obj extends _int_object
 				"params" => array(
 					'id' => $id,
 				),
-			));	
+			));
 //
 //			$handle = fopen($url, "r");//arr($handle);
 //			$contents = fread($handle, $fs);arr($contents);
@@ -124,25 +126,52 @@ class package_client_obj extends _int_object
 			fwrite($fp, $contents);
 			fclose($fp);
 
-			$this->install_package($data + array("file_name" => $fn));
-
-			$this->add_package(array(
+			$this->add_installed_package(array(
 				"name" => $data["name"],
 				"version" => $data["version"],
 				"description" => $data["description"],
 				"file" => $fn,
+				"file_versions" => $data["file_versions"],
 			));
+
+			$this->install_package($data + array("file_name" => $fn));
 		}
+	}
+
+	/** 
+		@attrib name=download_package_properties params=pos api=1
+		@param id required type=oid
+			package object id
+		@return array
+			package object property values
+ 	**/
+	public function download_package_properties($id)
+	{
+		$inst = $this->instance();
+		$data = $inst->do_orb_method_call(array(
+			"class" => "package_server",
+			"action" => "download_package_properties",
+			"method" => "xmlrpc",
+			"server" => $this->prop("packages_server"),
+			"no_errors" => true,
+			"params" => array(
+				'id' => $id,
+			),
+		));
+		return $data;
 	}
 
 	private function install_package($data)
 	{
+		$pi = get_instance(CL_PACKAGE);
 		$this->db_table_name = "site_file_index";
 		$inst = $this->instance();
+		$basedir = aw_ini_get("site_basedir").'/files/packages_tmp/';
 
 		$zip = new ZipArchive;
 		$zip->open($data["file_name"]);
 //		arr($zip->numFiles);
+//arr($data["file_name"]);
 		if ($inst->db_table_exists($this->db_table_name) === false)
 		{
 			$inst->db_query('create table '.$this->db_table_name.' (
@@ -158,14 +187,15 @@ class package_client_obj extends _int_object
 			)');//see viimane on niisama, 2kki leiab hea lahenduse selleks
 		}
 
-		$res = $zip->extractTo(aw_ini_get("site_basedir").'/files/');
+//pakib failid failide kataloogi saidi juurde
+		$res = $zip->extractTo($basedir);
 
 		for ($i=0; $i<$zip->numFiles;$i++)
 		{
 			$dat =  $zip->statIndex($i);
 			if($dat["comp_method"])
 			{
-				$temp_path = aw_ini_get("site_basedir").'/files/'.$dat["name"];
+				$temp_path = $basedir.$dat["name"];
 
 				if($dat["name"] == "script.php")
 				{
@@ -183,11 +213,12 @@ class package_client_obj extends _int_object
 //		}
 
 //testiks
-$file_version = "1.0";
-
 				$file_name = basename($path);
 				$location =  dirname($dat["name"]);
+				if($file_version)$file_version = $data["file_versions"][$dat["name"]];
 
+			//andmebaasi kirje sellest installist
+				if(!$file_version)$file_version = $data["file_versions"]['/'.$dat["name"]];
 				$sql = "insert into ".$this->db_table_name."(
 					file_name,
 					file_version,
@@ -196,19 +227,19 @@ $file_version = "1.0";
 					package_version,
 					used,
 					installed_date,
-					dependences,
+					dependences
 				) values (
-					".$file_name.",
-					"."123".",
+					'".$file_name."',
+					'".$file_version."',
 					'".$location."',
 					'".$data["name"]."',
 					'".$data["version"]."',
 					'1',
 					'".time()."',
-					'"."123"."',
+					'"."123"."'
 				)";
-arr($sql);
-//				$this->db_query($sql);
+//arr($sql);
+				$pi->db_query($sql);
 
 //$path = substr($path , strpos($path,"/", 1)+1);
 //selle peab paremini t88le saama... p2rast ei jaksa keegi seda jama kustutada muidu
@@ -220,6 +251,7 @@ arr($sql);
 //$path = str_replace($data["name"] , "" , $path);
 //arr($path);
 			
+			//fail kopeeritakse 6igesse kohta ja kustutatakse temp versioon
 
 				$newfile_arr = explode("." , $file_name);
 				if(sizeof($newfile_arr) > 1)
@@ -233,13 +265,14 @@ arr($sql);
 					$ext = "";
 					$fs = $file_name;
 				}
-				$newfile = $location."/".$fs."_".$file_version.".".$ext;
-
-//				$success = copy($temp_path, $newfile)
-				print ($success? "6nnestus" : "ei 6nnestunud")." <br>\n";	
+				$newfile = aw_ini_get("basedir").'/'.$location."/".$fs."_".$file_version.".".$ext;
+				$success = copy($temp_path, $newfile);
+				unlink($temp_path);
+				print ($success? "success" : "fail")." <br>\n";	
 				print $newfile." <br>\n";	
 			}
 		}
+		die("all done...");
 	}
 
 	/** Adds installed package object to the system
@@ -255,7 +288,7 @@ arr($sql);
 		@return oid
 			new package object id
 	**/
-	function add_package($params)
+	function add_installed_package($params)
 	{
 		$o = new object();
 		$o->set_class_id(CL_PACKAGE);
