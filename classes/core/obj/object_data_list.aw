@@ -77,7 +77,6 @@ class object_data_list
 		}
 
 		$this->_int_load($param, $props);
-		$this->props = $props;
 	}	
 
 	/** Returns an array of all the objects in the list.
@@ -114,33 +113,6 @@ class object_data_list
 	function arr()
 	{
 		return $this->list_data;
-		$arr = array();
-		$p = &$this->props;
-
-		foreach($this->list_data as $oid => $od)
-		{
-			if (!isset($od["class_id"]) || !isset($p[$od["class_id"]]))
-			{
-				$arr[$oid] = $od;
-			}
-			else
-			{
-				$cp = $p[$od["class_id"]];
-				foreach($od as $ode_i => $ode_v)
-				{
-					if(array_key_exists($ode_i, $cp))
-					{
-						$arr[$oid][$cp[$ode_i]] = $ode_v;
-					}
-					else
-					if(in_array($ode_i, $cp) && is_int(array_search($ode_i, $cp)))
-					{
-						$arr[$oid][$ode_i] = $ode_v;
-					}
-				}
-			}
-		}
-		return $arr;
 	}
 
 	////////// private
@@ -210,9 +182,7 @@ class object_data_list
 
 					if ($add)
 					{
-						$this->list[$oid] = $_o;
-						$this->list_names[$oid] = $oname;
-						$this->list_objdata[$oid] = $objdata[$oid];
+						$this->list_data[$oid] = $data[$oid];
 					}
 				}
 			}
@@ -224,10 +194,7 @@ class object_data_list
 			{
 				if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 				{
-					$this->list[$oid] = $oid;
 					$this->list_data[$oid] = $data[$oid];
-					$this->list_names[$oid] = $oname;
-					$this->list_objdata[$oid] = $objdata[$oid];
 				}
 			}
 			exit_function("object_list::acl_check");
@@ -237,9 +204,6 @@ class object_data_list
 
 	function _int_init_empty()
 	{
-		$this->list = array();
-		$this->list_names = array();
-		$this->list_objdata = array();
 		$this->list_data = array();
 	}
 }

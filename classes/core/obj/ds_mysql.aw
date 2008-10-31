@@ -1310,7 +1310,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->search_tables_used = array("objects" => 1);
 
 		$this->has_data_table_filter = false;
-		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func) = $this->_get_search_fetch($to_fetch, $params);
+		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func, $multi_fetch_fields) = $this->_get_search_fetch($to_fetch, $params);
 
 		$where = $this->req_make_sql($params);
 
@@ -1391,6 +1391,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$ret2 = array();
 				while($row = $this->db_next())
 				{
+					if (!$has_sql_func && count($multi_fetch_fields) && isset($ret2[$row["oid"]]))
+					{
+						// add the multi field values as arrays 
+						foreach($multi_fetch_fields as $field)
+						{
+							if (!is_array($ret2[$row["oid"]][$field]))
+							{
+								$ret2[$row["oid"]][$field] = array($ret2[$row["oid"]][$field] => $ret2[$row["oid"]][$field]);
+							}
+							$ret2[$row["oid"]][$field][$row[$field]] = $row[$field];
+						}
+						continue;
+					}
+
 					// process metafields
 					foreach($fetch_metafields as $f_mf => $f_keys)
 					{
@@ -1401,6 +1415,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						}
 						unset($row[$f_mf]);
 					}
+
 					if ($has_sql_func)
 					{
 						$ret2[] = $row;
@@ -1411,12 +1426,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 
 					$ret[$row["oid"]] = $row["name"];
+
 					$parentdata[$row["oid"]] = $row["parent"];
+
 					$objdata[$row["oid"]] = array(
 						"brother_of" => $row["brother_of"],
 						"status" => $row["status"],
 						"class_id" => $row["class_id"]
 					);
+
 					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 					{
 						$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
@@ -2921,11 +2939,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!is_array($to_fetch))
 		{
-			return array(0 => "", 1 => array(), 2 => array(), 3 => false);
+			return array(0 => "", 1 => array(), 2 => array(), 3 => false, 4 => array());
 		}
 		$has_func = false;
 		$ret = array();
 		$serialized_fields = array();
+		$multi_fields = array();
 		foreach($to_fetch as $clid => $props)
 		{
 			$p = $GLOBALS["properties"][$clid];
@@ -3015,6 +3034,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$ret[$pn] = " ".$tbl_name.".target AS $resn ";
 						$this->_add_s($tbl_name);
 					}
+					$multi_fields[$pn] = $pn;
 				}
 				else
 				{
@@ -3056,7 +3076,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		$res =  $fetch_sql.join(",", $ret);
-		return array($res, array_keys($ret), $sf, $has_func);
+		return array($res, array_keys($ret), $sf, $has_func, $multi_fields);
 	}
 
 	function save_properties_new_version($arr)
