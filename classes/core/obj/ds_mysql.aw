@@ -1312,6 +1312,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->has_data_table_filter = false;
 		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func, $multi_fetch_fields) = $this->_get_search_fetch($to_fetch, $params);
 
+		// set fetch sql as member, so that req_make_sql can rewrite 
+		// in it fetch columns that are not known yet from data fetch, that get search fetch puts in it
+		$this->current_fetch_sql = &$fetch_sql;
 		$where = $this->req_make_sql($params);
 
 		if (!$this->stat)
@@ -1384,6 +1387,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$acldata = array();
 			$parentdata = array();
 			$objdata = array();
+
 			$this->db_query($q);
 
 			if ($datafetch)
@@ -1603,6 +1607,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$is_done = false;
 			if (strpos($key, ".") !== false)
 			{
+				$_okey = $key;
 				list($tbl, $fld) = $this->_do_proc_complex_param(array(
 					"key" => &$key,
 					"val" => $val,
@@ -1617,6 +1622,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$is_done = true;
 				}
 				$this->_add_s($tbl);
+				// replace unknown columns in fetch sql
+				$this->current_fetch_sql = str_replace("%%REPLACE($_okey)%%", $tbl.".`".$key."`", $this->current_fetch_sql);
 			}
 
 			if (!$is_done && isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
@@ -3000,6 +3007,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$serialized_fields["objects.metadata"][] = substr($pn, 5);
 				}
 				else
+				if (strpos($pn, ".") !== false)
+				{
+					// over-prop join fetch. we don't know the column name yet, so let it replace it in req_make_sql when we figure it out.
+					if (!isset($filter[$pn]))
+					{
+						$filter[$pn] = new obj_predicate_anything();
+						$ret[$pn] = "%%REPLACE($pn)%% AS $resn"; //aliases___1063_26.target AS $resn ";
+					}
+				}
+				else
 				if (!isset($p[$pn]))
 				{
 					// assume obj table
@@ -3074,7 +3091,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$acld
 			";
 		}
-
 		$res =  $fetch_sql.join(",", $ret);
 		return array($res, array_keys($ret), $sf, $has_func, $multi_fields);
 	}
