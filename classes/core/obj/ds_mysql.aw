@@ -2319,8 +2319,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				$tmp_prev = $this->join_data[$pos-1];
 				$cur_al_name = "aliases_".$tmp_prev["from_class"]."_".$tmp_prev["reltype"]."_".$join["to_class"]."_".$join["reltype"];
-
-				$str  = " LEFT JOIN aliases $cur_al_name ON ".$cur_al_name.".source = ";
+				$rel_from_field = "source";
+				$rel_to_field = "target";
+				if ($join["is_reverse"] == 1)
+				{
+					$rel_from_field = "target";
+					$rel_to_field = "source";
+				}
+				$str  = " LEFT JOIN aliases $cur_al_name ON ".$cur_al_name.".".$rel_from_field." = ";
 				if ($join["from_class"] == $clid)
 				{
 					$str .= " objects.oid ";
@@ -2348,7 +2354,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				$tmp_cur_obj_name = "objects_".$tmp_prev["reltype"]."_".$join["from_class"]."_".$join["to_class"]."_".$join["reltype"];
 
-				$str  = " LEFT JOIN objects $tmp_cur_obj_name  ON ".$cur_al_name.".target = ";
+				$str  = " LEFT JOIN objects $tmp_cur_obj_name  ON ".$cur_al_name.".".$rel_to_field." = ";
 				$str .= " ".$tmp_cur_obj_name.".oid ";
 				$prev_clid = $join["to_class"];
 				$this->_add_s($cur_al_name);
@@ -2395,7 +2401,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$prev_al_name = $cur_al_name;
 				$ret = array(
 					$cur_al_name, //"aliases_".$join["from_class"]."_".$join["reltype"],
-					"target",
+					$rel_to_field,
 				);
 			}
 			else	// via prop
@@ -2534,21 +2540,50 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if (substr($pp, 0, 7) == "RELTYPE")
 		{
 			$this->_do_add_class_id($cur_clid);
-			$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-			error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
-				"id" => ERR_OBJ_NO_RELATION,
-				"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
-			));
 
-			// calc new class id
-			$new_clid = $GLOBALS["relinfo"][$cur_clid][$pp]["clid"][0];
+			// check if this is RELTYPE_FOO(CL_CLID) that means a reverse relation check
+			if (preg_match("/RELTYPE_(.*)\((.*)\)/", $pp, $mt))
+			{
+				$nxt_clid = constant($mt[2]);
+				if ($nxt_clid)
+				{
+					$this->_do_add_class_id($nxt_clid);
+					$reltype_id = $GLOBALS["relinfo"][$nxt_clid]["RELTYPE_".$mt[1]]["value"];
+					error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
+						"id" => ERR_OBJ_NO_RELATION,
+						"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
+					));
 
-			$this->join_data[] = array(
-				"via" => "rel",
-				"reltype" => $reltype_id,
-				"from_class" => $cur_clid,
-				"to_class" => $new_clid
-			);
+					// calc new class id
+					$new_clid = $nxt_clid;
+
+					$this->join_data[] = array(
+						"via" => "rel",
+						"reltype" => $reltype_id,
+						"from_class" => $cur_clid,
+						"to_class" => $nxt_clid,
+						"is_reverse" => 1
+					);
+				}
+			}
+			else
+			{
+				$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
+				error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
+					"id" => ERR_OBJ_NO_RELATION,
+					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
+				));
+
+				// calc new class id
+				$new_clid = $GLOBALS["relinfo"][$cur_clid][$pp]["clid"][0];
+
+				$this->join_data[] = array(
+					"via" => "rel",
+					"reltype" => $reltype_id,
+					"from_class" => $cur_clid,
+					"to_class" => $new_clid
+				);
+			}
 		}
 		else
 		{
