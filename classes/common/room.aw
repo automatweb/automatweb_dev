@@ -1660,7 +1660,7 @@ class room extends class_base
 	function _get_minmax_prices($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$t->set_header(t("Miinimum ja maksimum"));
+//		$t->set_header(t("Miinimum ja maksimum"));
 		$t->define_field(array(
 			"caption" => t("Valuuta"),
 			"name" => "currency",

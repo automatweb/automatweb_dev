@@ -832,6 +832,10 @@ class room_obj extends _int_object
 		$curs = $this->prop("currency");
 		$ol = new object_list();
 		$ol -> add($curs);
+		$ol->sort_by(array(
+			"prop" => "name",
+			"order" => "desc"
+		));
 		return $ol;
 	}
 }
