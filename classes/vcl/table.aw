@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.129 2008/10/30 14:53:45 instrumental Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 /*
@@ -17,7 +16,6 @@ class aw_table extends aw_template
 	var $filter_name = "awTblFlt";
 	var $name = "awTable0";
 
-	var $table_caption = '';
 	var $parsed_pageselector = '';
 	var $no_recount;
 	var $rgroupby;
@@ -33,9 +31,47 @@ class aw_table extends aw_template
 	var $table_tag_id;
 	var $table_class_id = "awmenuedittabletag";
 
+	protected $rowdefs = array();
+	protected $rowdefs_key_index = array();
+	protected $data = array();
+	protected $all_data = array();
+	protected $actions = array();
+	protected $col_styles = array();
+	protected $nfields = array();
+	protected $filters = array();
+	protected $selected_filters = array();
+	protected $filter_index = array();
+	protected $rowspans = array();
+	protected $header_attribs = array();
+
+	protected $sortable = true;
+	protected $rowdefs_ordered = false;
+	protected $first = true;
+	protected $use_chooser = false;
+	protected $chooser_hilight = true;
+	protected $titlebar_display = true;
+
+	protected $imgurl = "";
+	protected $style1 = "#AAAAAA";
+	protected $style2 = "#CCCCCC";
+
+	protected $caption_position = "top";
+	protected $table_caption = "";
+	protected $table_header = "";
+	protected $table_footer = "";
+	protected $header_class_id = "awVclTableHeader";
+	protected $footer_class_id = "awVclTableFooter";
+
+	/* a symbolic name for the table so we can tell it apart from others */
+	protected $prefix = "";
+
+	private $headerextrasize = 0;
+	private $userfields_defined = false;
+
 	function aw_table($data = array())
 	{
 		$this->id = uniqid('table_');
+
 		if (file_exists(aw_ini_get("site_basedir")."/public/img/up.gif"))
 		{
 			$this->imgurl = aw_ini_get("baseurl")."/img";
@@ -44,37 +80,19 @@ class aw_table extends aw_template
 		{
 			$this->imgurl = aw_ini_get("baseurl")."/automatweb/images";
 		}
+
 		$this->init(array(
 			"tpldir" => "table",
 		));
-		$this->up_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/up.gif");
-		$this->dn_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/down.gif");
+
+		$this->up_arr = "<img src='" . $this->imgurl . "/up.gif" . "' border='0' />";
+		$this->dn_arr = "<img src='" . $this->imgurl . "/down.gif" . "' border='0' />";
+
 		// prefix - kasutame sessioonimuutujate registreerimisel
 		$this->prefix = isset($data["prefix"]) ? $data["prefix"] : "";
+
 		// table cell background color
 		$this->tbgcolor = isset($data["tbgcolor"]) ? $data["tbgcolor"] : "";
-
-		$this->header_attribs = array();
-
-		// ridade v&auml;rvid (och siis stiilid) muutuvad
-		// siin defineerime nad
-		$this->style1 = "#AAAAAA";
-		$this->style2 = "#CCCCCC";
-
-		// initsialiseerime muutujad
-		$this->rowdefs = array();
-		$this->rowdefs_key_index = array();
-		$this->data = array();
-		$this->all_data = array();
-		$this->actions = array();
-		$this->col_styles = array();
-		$this->nfields = array();
-		$this->filters = array();
-		$this->selected_filters = array();
-		$this->filter_index = array();
-		$this->rowspans = array();
-
-		$this->titlebar_display = true;
 
 		if (!empty($data["prop_name"]))
 		{
@@ -86,24 +104,17 @@ class aw_table extends aw_template
 		}
 
 		$this->filter_name.= isset($GLOBALS["__aw_table_count_on_page"]) ? ++$GLOBALS["__aw_table_count_on_page"] : 1;
-		$this->sortable = true;
-		$this->rowdefs_ordered = false;
 
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et m&auml;&auml;rata default sort order.
-		$this->first = true;
 		$layout = !empty($data["layout"]) ? $data["layout"] : "generic";
 		$this->set_layout($layout);
 		if (isset($data["xml_def"]))
 		{
 			$this->parse_xml_def($data["xml_def"]);
-		};
-		$this->use_chooser = false;
-		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
-		$this->chooser_hilight = true;
+		}
 
 		### maintain all selected filters
-
 		$saved_filters = aw_global_get ($this->filter_name . "_saved");
 		$this->selected_filters = $saved_filters ? aw_unserialize ($saved_filters) : array ();
 
@@ -178,22 +189,54 @@ class aw_table extends aw_template
 
 	/**
 	@attrib api=1 params=pos
-	@param $arr required type=array
+	@param text required type=string
 		table header
 	@comments
-		some users need to put simple plain text above the
-		table, give them a setter for this
+		by default displayed as is above table, below caption
 	**/
-	function set_header($arr)
+	function set_header($text)
 	{
-		$this->table_header = $arr;
+		$this->table_header = $text;
 	}
 
-	function set_caption($arr)
+	/**
+	@attrib api=1 params=pos
+	@param text required type=string
+		table footer
+	@comments
+		by default displayed as is below table
+	**/
+	function set_footer($text)
 	{
-		$this->table_caption = $arr;
+		$this->table_footer = $text;
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param caption required type=string
+		table caption
+	@param position optional type=string options=top|bottom|both
+		table caption position
+	@comments
+		by default displayed as is above table, on same line as pageselector
+	**/
+	function set_caption($caption, $position = "top")
+	{
+		$this->table_caption = $caption;
+
+		$position_options = array("top","bottom","both");
+		if (!in_array($position, $position_options))
+		{
+			throw new awex_awtbl_cfg("Invalid caption position option");
+		}
+
+		$this->caption_position = $position;
+	}
+
+	/**
+	@attrib api=1 params=pos
+	@returns string table caption
+	**/
 	function get_caption()
 	{
 		return $this->table_caption;
@@ -381,7 +424,7 @@ class aw_table extends aw_template
 	@comments
 		Here you can define additional headers
 	**/
-	function define_header($caption,$links = array())
+	function define_header($caption, $links = array())
 	{
 		$this->headerstring = $caption;
 		$hlinks = array();
@@ -589,7 +632,7 @@ class aw_table extends aw_template
 		setlocale(LC_COLLATE, 'et_EE');
 
 		// sort the data
-		usort($this->data,array($this,"sorter"));
+		usort($this->data, array($this,"sorter"));
 
 		// switch back to estonian
 		setlocale(LC_COLLATE, $old_loc);
@@ -898,12 +941,12 @@ class aw_table extends aw_template
 				$this->cfgform->set_meta("tbl_config", $cur);
 				$this->cfgform->save();
 			}
-			
+
 			if($this->use_chooser)
 			{
 				$this->check_userfields();
 			}
-			
+
 			$ctrls = $this->cfg_data["controllers"];
 			if(is_array($ctrls))
 			{
@@ -950,9 +993,10 @@ class aw_table extends aw_template
 
 		$this->_get_max_level_cnt("");
 		$this->max_sh_count = $this->_max_gml-1;
+
 		if (!empty($this->table_header))
 		{
-			$tbl .= $this->table_header;
+			$tbl .= "<div class={$this->header_class_id}>{$this->table_header}</div>";
 		}
 
 		if (!empty($pageselector))
@@ -986,28 +1030,21 @@ class aw_table extends aw_template
 
 		// parse pageselector
 		$pageselector = "";
-		if (!empty($this->pageselector))
+		$this->d_row_cnt = empty($arr["d_row_cnt"]) ? $this->d_row_cnt : $arr["d_row_cnt"];
+		if (!empty($this->pageselector) and $this->d_row_cnt > $this->records_per_page)
 		{
-			switch($this->pageselector)
+			if ("text" === $this->pageselector)
 			{
-				case "text":
-					$this->parsed_pageselector = $this->draw_text_pageselector(array(
-						"records_per_page" => $this->records_per_page
-					));
-					break;
-				case "buttons":
-					$this->parsed_pageselector = $this->draw_button_pageselector(array(
-						"records_per_page" => $this->records_per_page
-					));
-					break;
-				case "lb":
-				case "lbtxt":
-				default:
-					$this->parsed_pageselector = $this->draw_lb_pageselector(array(
-						"records_per_page" => $this->records_per_page
-					));
+				$this->parsed_pageselector = $this->draw_text_pageselector();
 			}
-
+			elseif ("buttons" === $this->pageselector)
+			{
+				$this->parsed_pageselector = $this->draw_button_pageselector();
+			}
+			elseif ("lb" === $this->pageselector or "lbtxt" === $this->pageselector)
+			{
+				$this->parsed_pageselector = $this->draw_lb_pageselector();
+			}
 		}
 
 		// moodustame v&auml;limise raami alguse
@@ -1046,7 +1083,7 @@ class aw_table extends aw_template
 
 		if (!empty($this->pageselector_string))
 		{
-			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
+			$colspan = sizeof($this->rowdefs) + sizeof($this->actions) - (int) $this->headerextrasize + (int) $this->use_chooser;
 			$tbl .= "<tr>\n";
 			$tbl .= "<td colspan='$colspan' class='" . $this->style1 . "'>";
 			$tbl .= $this->pageselector_string;
@@ -1056,7 +1093,7 @@ class aw_table extends aw_template
 
 		if (!empty($this->headerstring))
 		{
-			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
+			$colspan = sizeof($this->rowdefs) + sizeof($this->actions) - (int) $this->headerextrasize + (int) $this->use_chooser;
 			$tbl .= "<tr>\n";
 			$tbl .= "<td colspan='$colspan' class='" . $this->titlestyle . "'>";
 			$tbl .= "<strong>" . $this->headerstring . ": ". $this->headerlinks . "</strong>";
@@ -1084,7 +1121,7 @@ class aw_table extends aw_template
 		}
 
 		// koostame tabeli sisu
-		if (is_array($this->data))
+		if (count($this->data))
 		{
 			// ts&uuml;kkel &uuml;le data
 			$counter = 0; // kasutame ridadele erineva v&auml;rvi andmiseks
@@ -1135,7 +1172,7 @@ class aw_table extends aw_template
 						$onclick = "";
 						if ($this->chooser_hilight)
 						{
-							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
+							$onclick = " onclick=\"hilight(this,'${rowid}')\" ";
 						};
 						$stl = "";
 						if (!empty($this->chooser_config["chgbgcolor"]) && !empty($v[$this->chooser_config["chgbgcolor"]]))
@@ -1442,8 +1479,8 @@ class aw_table extends aw_template
 						$tbl .= "</td>\n</tr>\n";
 					}
 				}
-			};
-		};
+			}
+		}
 		// sisu joonistamine lopeb
 
 		if ($this->titlebar_repeat_bottom)
@@ -1455,6 +1492,11 @@ class aw_table extends aw_template
 		if (is_array($this->tableattribs))
 		{
 			$tbl .= "</table>\n";
+		}
+
+		if (!empty($this->table_footer))
+		{
+			$tbl .= "<div class={$this->footer_class_id}>{$this->table_footer}</div>";
 		}
 
 		// raam kinni
@@ -1519,7 +1561,7 @@ class aw_table extends aw_template
 		$d[] = $tbl;
 
 		// koostame tabeli sisu
-		if(is_array($this->data))
+		if(count($this->data))
 		{
 			reset($this->data);
 			$cnt = 0;
@@ -2322,7 +2364,7 @@ echo dbg::short_backtrace();
 			$url = new aw_uri(aw_global_get("REQUEST_URI"));
 
 			$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
-			$records_per_page = $arr["records_per_page"];
+			$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
 			$page = (int) $GLOBALS["ft_page"];
 			if ($page*$records_per_page > $_drc)
 			{
@@ -2365,9 +2407,10 @@ echo dbg::short_backtrace();
 		return $this->finish_pageselector($arr);
 	}
 
-	function finish_pageselector($arr)
+	protected function finish_pageselector($arr)
 	{
 		extract($arr);
+		$records_per_page = empty($arr["records_per_page"]) ? $this->records_per_page : $arr["$records_per_page"];
 		$ru = preg_replace("/ft_page=\d*/", "", aw_global_get("REQUEST_URI"));
 		$sep = "&";
 		if (strpos($ru, "?") === false)
@@ -2786,28 +2829,31 @@ echo dbg::short_backtrace();
 
 	function check_userfields(&$row = null)
 	{
-		foreach($this->cfg_data["fields"] as $field => $data)
+		if (is_array($this->cfg_data["fields"]))
 		{
-			if($data["userdef"] && !$data["hide"])
+			foreach($this->cfg_data["fields"] as $field => $data)
 			{
-				if(!$this->userfields_defined)
+				if($data["userdef"] && !$data["hide"])
 				{
-					$this->define_field($data);
-				}
-				if(is_array($row))
-				{
-					$oid = $row[$this->chooser_config["field"]];
-					if($oid && $this->can("view", $oid))
+					if(!$this->userfields_defined)
 					{
-						$o = obj($oid);
-						$prop = $data["userprop"];
-						$getprop = false;
-						$row[$data["name"]] = $o->prop($prop);
+						$this->define_field($data);
+					}
+					if(is_array($row))
+					{
+						$oid = $row[$this->chooser_config["field"]];
+						if($oid && $this->can("view", $oid))
+						{
+							$o = obj($oid);
+							$prop = $data["userprop"];
+							$getprop = false;
+							$row[$data["name"]] = $o->prop($prop);
+						}
 					}
 				}
 			}
 		}
-		$this->userfields_defined = 1;
+		$this->userfields_defined = true;
 	}
 
 	/** Sets whether to display the titlebar at the bottom of the table as well
@@ -2893,15 +2939,18 @@ class vcl_table extends aw_table
 	{
 		$this->sort_by();
 		$rv = $this->draw();
+
 		if (count($this->data) == 0 && count($this->rowdefs) == 0 || $bare)
 		{
 			return $rv;
 		}
 
 		// Let's figure out where we should show the pageselector:
+		// display caption and pageselector only if they're defined
+		// pageselector
 		$pageselector_top = '';
 		$pageselector_bottom = '';
-		if ( !empty($this->parsed_pageselector) )
+		if (!empty($this->parsed_pageselector))
 		{
 			switch ($this->pageselector_position)
 			{
@@ -2916,26 +2965,53 @@ class vcl_table extends aw_table
 					$pageselector_top = $pageselector_bottom = $this->parsed_pageselector;
 
 			}
+
+			$pageselector_top = '
+				<div class="navigaator">
+					'.$pageselector_top.'
+				</div>
+			';
+			$pageselector_bottom = '
+				<div class="navigaator">
+					'.$pageselector_bottom.'
+				</div>
+			';
 		}
+
+		// caption
+		$caption_top = "";
+		$caption_bottom = "";
+		if (!empty($this->table_caption))
+		{
+			$caption = '<div class="caption">'.$this->table_caption.'</div>';
+
+			if ("top" === $this->caption_position)
+			{
+				$caption_top = $caption;
+			}
+			elseif ("bottom" === $this->caption_position)
+			{
+				$caption_top = $caption;
+			}
+			elseif ("both" === $this->caption_position)
+			{
+				$caption_top = $caption_bottom = $caption;
+			}
+		}
+
+		//
+		$header = (empty($caption_top) and empty($pageselector_top)) ? "" : '<div class="pais">' . $caption_top . $pageselector_top . '</div>';
+		$footer = (empty($caption_bottom) and empty($pageselector_bottom)) ? "" : '<div class="jalus">' . $caption_bottom . $pageselector_bottom . '</div>';
 
 		// tagastame selle k2ki
 		return '<div id="tablebox">
-		    <div class="pais">
-			<div class="caption">'.$this->table_caption.'</div>
-			<div class="navigaator">
-				<!-- siia tuleb yhel ilusal p2eval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div j22b tyhjaks -->
-				'.$pageselector_top.'
-
-			</div>
-		    </div>
+			' . $header . '
 		    <div class="sisu">
 		    <!-- SUB: GRID_TABLEBOX_ITEM -->
 			'.$rv.'
 		    <!-- END SUB: GRID_TABLEBOX_ITEM -->
 		    </div>
-		    <div>
-				'.$pageselector_bottom.'
-		    </div>
+			' . $footer . '
 		</div>';
 		return $rv;
 	}
@@ -3100,5 +3176,12 @@ class vcl_table extends aw_table
 		$this->data_from_ol($ol, array("change_col" => "name"));
 	}
 }
+
+/* Generic aw_table exception */
+class awex_awtbl extends aw_exception {}
+
+/* Indicates configuration errors */
+class awex_awtbl_cfg extends awex_awtbl {}
+
 
 ?>
