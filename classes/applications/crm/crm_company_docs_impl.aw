@@ -392,8 +392,8 @@ class crm_company_docs_impl extends class_base
 			$d = array(
 				"id" => $fld_id . "|" . $entry["id"],
 				"name" =>  $entry["name"],
-				"iconurl" => icons::get_icon_url($entry["type"] == "file" ? CL_FILE : CL_MENU, $entry["name"]),
-				"url" => $entry["type"] == "file"
+				"iconurl" => icons::get_icon_url($entry["type"] === "file" ? CL_FILE : CL_MENU, $entry["name"]),
+				"url" => $entry["type"] === "file"
 					?
                                 		$entry["url"]
 					:
@@ -469,7 +469,7 @@ class crm_company_docs_impl extends class_base
 		classload("core/icons");
 		$file_inst = get_instance(CL_FILE);
 		$gbf = $this->mk_my_orb("get_tree_stuff",array(
-			"set_retu" => get_ru(),
+			"set_retu" => aw_url_change_var(),
 			"parent" => " ",
 		));
 		$arr["prop"]["vcl_inst"]->start_tree (array (
