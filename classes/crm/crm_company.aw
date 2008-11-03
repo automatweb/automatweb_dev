@@ -56,7 +56,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top override_parent=this
 			@caption Organisatsiooni logo
 
-			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right
+			@property firmajuht type=relpicker reltype=RELTYPE_FIRMAJUHT table=kliendibaas_firma editonly=1 parent=co_top_right
 			@caption Firmajuht
 
 			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right
@@ -1475,6 +1475,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype COMMENT value=73 clid=CL_COMMENT
 @caption Kommentaar
+
+@reltype FIRMAJUHT value=74 clid=CL_CRM_PERSON
+@caption Firmajuht
 
 
 */

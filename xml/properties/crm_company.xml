@@ -120,7 +120,8 @@
             <name>firmajuht</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FIRMAJUHT</reltype>
             <editonly>1</editonly>
             <parent>co_top_right</parent>
             <field>firmajuht</field>
@@ -4370,6 +4371,11 @@
                   <clid>CL_COMMENT</clid>
                   <caption>Kommentaar</caption>
             </COMMENT>
+            <FIRMAJUHT>
+                  <value>74</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Firmajuht</caption>
+            </FIRMAJUHT>
       </reltypes>
       <layout>
             <co_top>
