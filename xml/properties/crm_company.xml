@@ -587,6 +587,39 @@
             <caption>User-defined TA 5</caption>
       </property>
       <property>
+            <name>userta6</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 6</caption>
+      </property>
+      <property>
+            <name>userta7</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 7</caption>
+      </property>
+      <property>
+            <name>userta8</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 8</caption>
+      </property>
+      <property>
             <name>description_doc</name>
             <table>objects</table>
             <group>add_info</group>
@@ -1458,20 +1491,20 @@
             <caption>Kliendihaldur</caption>
       </property>
       <property>
-	      <name>customer_rel_creator</name>
-	      <table>objects</table>
-	      <group>
-		      <num_0>relorg_s</num_0>
-		      <num_1>relorg_b</num_1>
-		      <num_2>relorg_t</num_2>
-	      </group>
-	      <type>text</type>
-	      <size>25</size>
-	      <store>no</store>
-	      <parent>vbox_customers_left_top</parent>
-	      <captionside>top</captionside>
-	      <field>customer_rel_creator</field>
-	      <caption>Kliendisuhte looja</caption>
+            <name>customer_rel_creator</name>
+            <table>objects</table>
+            <group>
+                  <num_0>relorg_s</num_0>
+                  <num_1>relorg_b</num_1>
+                  <num_2>relorg_t</num_2>
+            </group>
+            <type>text</type>
+            <size>25</size>
+            <store>no</store>
+            <parent>vbox_customers_left_top</parent>
+            <captionside>top</captionside>
+            <field>customer_rel_creator</field>
+            <caption>Kliendisuhte looja</caption>
       </property>
       <property>
             <name>customer_search_cust_grp</name>

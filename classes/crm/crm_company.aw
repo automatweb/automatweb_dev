@@ -216,6 +216,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 5
 
+	@property userta6 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@caption User-defined TA 6
+
+	@property userta7 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@caption User-defined TA 7
+
+	@property userta8 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@caption User-defined TA 8
+
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
