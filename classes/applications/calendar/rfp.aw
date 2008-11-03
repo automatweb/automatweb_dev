@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.162 2008/10/29 12:44:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.163 2008/11/03 15:19:34 markop Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2833,7 +2833,7 @@ class rfp extends class_base
 		//$currency = 745;
 		$currency = $arr["obj_inst"]->prop("default_currency");
 		$resources_total = 0;
-		$colspan = 8;
+		$colspan = 7;
 		if($package)
 		{
 			$ph = $this->parse("HEADERS_PACKAGE");
@@ -3104,7 +3104,7 @@ class rfp extends class_base
 			$bron_totalprice = (is_numeric($pck_cprice) && $pck_cprice >= 0)?$pck_cprice:$bron_totalprice;
 		}
 		$this->vars(array(
-			"total_colspan" => $colspan - 2,
+			"total_colspan" => $colspan - 1,
 			"bron_totalprice" => $bron_totalprice,
 			"bron_colspan" => $colspan,
 		));
