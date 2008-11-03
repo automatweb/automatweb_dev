@@ -475,13 +475,13 @@ class crm_bill_obj extends _int_object
 					$c_r_t_o = $t_conn->from();
 				}
 			}
-			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
+			$this->set_prop("customer", $c_r_t_o->prop("customer"));
 			if(!$c_r_t_o->prop("customer"))
 			{
 				$cust = $c_r_t_o->get_first_obj_by_reltype("RELTYPE_CUSTOMER");
 				if(is_object($cust))
 				{
-					$bill->set_prop("customer", $cust->id());
+					$this->set_prop("customer", $cust->id());
 				}
 			}
 		}
