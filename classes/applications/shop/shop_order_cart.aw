@@ -452,29 +452,60 @@ class shop_order_cart extends class_base
 				));
 			}
 		}
+/*error_reporting(E_ALL);
+ini_set("display_errors", "1");
+header("X-foo: bar");*/
 		$this->vars($data);
 		return $this->parse();
 	}
 
 	function set_confirm_carts($cc)
 	{
-		$this->confirm_carts = array();
+		$this->confirm_carts = $_SESSION["soc"]["confirm_carts"] = array();
 		if(is_array($cc))
 		{
 			foreach($cc as $key => $val)
 			{
-				$this->confirm_carts[$key] = $key;
+				$this->confirm_carts[$key] = $_SESSION["soc"]["confirm_carts"][$key] = $key;
 			}
 		}
 		else
 		{
-			$this->confirm_carts[$cc] = $cc;
+			$this->confirm_carts[$cc] = $_SESSION["soc"]["confirm_carts"][$cc] = $cc;
 		}
 	}
 
 	function check_confirm_carts($cart)
 	{
-		if(!$this->confirm_carts)
+		if(!$_SESSION["soc"]["confirm_carts"])
+		{
+			return 1;
+		}
+		if(!$cart)
+		{
+			if(!is_array($_SESSION["soc"]["confirm_carts"]))
+			{
+				return 1;
+			}
+			foreach($_SESSION["soc"]["confirm_carts"] as $c)
+			{
+				if(!$c)
+				{
+					return 1;
+				}
+			}
+		}
+		else
+		{
+			foreach($_SESSION["soc"]["confirm_carts"] as $c)
+			{
+				if($c == $cart)
+				{
+					return 1;
+				}
+			}
+		}
+/*		if(!$this->confirm_carts)
 		{
 			return 1;
 		}
@@ -501,7 +532,7 @@ class shop_order_cart extends class_base
 					return 1;
 				}
 			}
-		}
+		}*/
 		return 0;
 	}
 
@@ -1027,7 +1058,6 @@ class shop_order_cart extends class_base
 				"payment" => $cart["payment"],
 				"payment_type" => $cart["payment_method"]
 			));
-			$this->clear_cart($oc);
 			return urldecode($this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order"));
 		}
 		else
@@ -1074,6 +1104,10 @@ class shop_order_cart extends class_base
 			$qu = new aw_array($quant);
 			foreach($qu->get() as $key => $val)
 			{
+				if($val["cart"] && !$this->check_confirm_carts($val["cart"]))
+				{
+					continue;
+				}
 				$so->add_item(array("iid" => $iid, "item_data" => $cart["items"][$iid][$key], "it" => $key));
 			}
 		}
@@ -1085,7 +1119,8 @@ class shop_order_cart extends class_base
 			$params["lang_lc"] = $oc->meta("lang_lc");
 		}
 		$rval = $so->finish_order($params);
-		$this->clear_cart($oc);
+		//$this->clear_cart($oc);
+		$this->clear_some_carts($oc);
 		return $rval;
 	}
 
@@ -1227,6 +1262,44 @@ class shop_order_cart extends class_base
 			"oc" => $oc,
 			"cart" => array(),
 		));
+	}
+
+	function clear_some_carts($oc)
+	{
+		$cart = $this->get_cart($oc);
+		if(!$_SESSION["soc"]["confirm_carts"])
+		{
+			$cart = array();
+		}
+		else
+		{
+			foreach($cart["items"] as $iid => $quant)
+			{
+				foreach($quant as $key => $val)
+				{
+					if($val["cart"] && !$this->check_confirm_carts($val["cart"]))
+					{
+						continue;
+					}
+					unset($cart["items"][$iid][$key]);
+					if(!sizeof($cart["items"][$iid]))
+					{
+						unset($cart["items"][$iid]);
+					}
+				}
+			}
+			if(!sizeof($cart["items"]))
+			{
+				$cart = array();
+			}
+			unset($_SESSION["soc"]["confirm_carts"]);
+		}
+
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
+
 	}
 
 	/**
@@ -1563,6 +1636,7 @@ class shop_order_cart extends class_base
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quantx)
 		{
+
 			if (!is_oid($iid) or !$this->can("view", $iid))
 			{
 				continue;
