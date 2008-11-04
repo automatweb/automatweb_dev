@@ -33,6 +33,7 @@ class industrial_design_obj extends _int_object
 	public static function get_industrial_design_variant_count_options()
 	{
 		$r = range(1, 12);
+		$r = array_merge(array("" => ""), $r);
 		return array_combine($r, $r);
 	}
 

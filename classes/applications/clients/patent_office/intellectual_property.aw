@@ -1602,10 +1602,10 @@ abstract class intellectual_property extends class_base
 				"options"=> $options
 			);
 
-			if ("industrial_design_variant" === $var)
-			{
-				$el_cfg["onchange"] = "showVarCountSelect();";
-			}
+			// if ("industrial_design_variant" === $var)
+			// {
+				// $el_cfg["onchange"] = "showVarCountSelect();";
+			// }
 
 			$data[$var] = html::select($el_cfg);
 		}
@@ -1894,6 +1894,12 @@ abstract class intellectual_property extends class_base
 			"onclick" => 'document.getElementById("contactPopupLink").style.display=""; document.getElementById("country_code").value = "";',
 		));
 
+		$show_reg_code = false;
+		if ("patent" === get_class($this))
+		{
+			$show_reg_code = true;
+		}
+
 		$data["applicant_type"] = t("F&uuml;&uuml;siline isik ").html::radiobutton(array(
 			"value" => 0,
 			"checked" => (!$_SESSION["patent"]["applicant_type"]) ? 1 : 0,
@@ -1903,7 +1909,7 @@ abstract class intellectual_property extends class_base
 			document.getElementById("name_row").style.display = "none";
 			document.getElementById("name").value = "";
 			document.getElementById("code").value = "";
-			' . ("industrial_design" === get_class($this) ? 'document.getElementById("reg_code").style.display="none";' : '') . '
+			' . ($show_reg_code ? 'document.getElementById("reg_code").style.display="none";' : '') . '
 			document.getElementById("p_adr").style.display="";
 			document.getElementById("co_adr").style.display="none";
 			document.getElementById("co_livingplace_type").style.display="none";
@@ -1916,7 +1922,7 @@ abstract class intellectual_property extends class_base
 			"onclick" => 'document.getElementById("firstname_row").style.display = "none"; document.getElementById("lastname_row").style.display = "none"; document.getElementById("name_row").style.display = "";
 			document.getElementById("firstname").value = "";
 			document.getElementById("lastname").value = "";
-			' . ("industrial_design" === get_class($this) ? 'document.getElementById("reg_code").style.display="";' : '') . '
+			' . ($show_reg_code ? 'document.getElementById("reg_code").style.display="";' : '') . '
 			document.getElementById("p_adr").style.display="none";
 			document.getElementById("co_adr").style.display="";
 			document.getElementById("livingplace_type").style.display="none";

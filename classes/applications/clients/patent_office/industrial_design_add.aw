@@ -136,7 +136,7 @@ class industrial_design_add extends class_base
 				$ol->add($o5);
 
 				$o51 = new object();
-				$o51->set_name("Dokumentide loetelu");
+				$o51->set_name("Reproduktsioonid");
 				$o51->set_class_id(CL_MENU);
 				$o51->set_parent($o->id());
 				$o51->save();

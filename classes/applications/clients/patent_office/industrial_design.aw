@@ -50,7 +50,7 @@
 	@property process_postpone type=select
 	@caption Taotleja soovib t&ouml;&ouml;stusdisainilahenduse registrisse kandmist edasi l&uuml;kata
 
-@groupinfo docs caption="Dokumentide loetelu"
+@groupinfo docs caption="Reproduktsioonid"
 @default group=docs
 
 	@property doc_repro type=multifile_upload reltype=RELTYPE_DOC_REPRO form=+emb
@@ -119,13 +119,13 @@ class industrial_design extends intellectual_property
 		$this->multifile_upload_vars = array_merge($this->multifile_upload_vars, array("doc_repro"));
 		$this->text_vars = array_merge($this->text_vars, array("industrial_design_name", "prio_convention_country", "prio_convention_nr"));
 		$this->checkbox_vars = array_merge($this->checkbox_vars, array("author_disallow_disclose"));
-		$this->select_vars = array_merge($this->select_vars, array("industrial_design_variant", "industrial_design_variant_count", "process_postpone"));
+		$this->select_vars = array_merge($this->select_vars, array("industrial_design_variant_count", "process_postpone"));
 		$this->chooser_vars = array_merge($this->chooser_vars, array("applicant_reg"));
 		$this->save_fee_vars = array_merge($this->save_fee_vars, array("add_fee"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_county_value", "correspond_city_value", "name", "applicant_reg", "author_disallow_disclose");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("prio_convention_date", "prio_convention_country", "prio_convention_nr", "doc_repro", "doc_warrant", "doc_description", "industrial_design_variant", "industrial_design_variant_count", "process_postpone", "industrial_design_name", "applicant_reg", "add_fee"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("prio_convention_date", "prio_convention_country", "prio_convention_nr", "doc_repro", "doc_warrant", "doc_description", "industrial_design_variant_count", "process_postpone", "industrial_design_name", "applicant_reg", "add_fee"));
 	}
 
 	public function get_property($arr)
@@ -181,7 +181,7 @@ class industrial_design extends intellectual_property
 	protected function save_industrial_design($patent)
 	{
 		$patent->set_prop("industrial_design_name" , $_SESSION["patent"]["industrial_design_name"]);
-		$patent->set_prop("industrial_design_variant" , $_SESSION["patent"]["industrial_design_variant"]);
+		// $patent->set_prop("industrial_design_variant" , $_SESSION["patent"]["industrial_design_variant"]);
 		$patent->set_prop("industrial_design_variant_count" , $_SESSION["patent"]["industrial_design_variant_count"]);
 		$patent->save();
 	}
@@ -458,9 +458,9 @@ class industrial_design extends intellectual_property
 		$root->insertBefore($el, $despg);
 
 		//
-		$type = $o->prop("industrial_design_variant") == industrial_design_obj::VARIANT_COMPLEX ? 2 : 1;
-		$el = $xml->createElement("TYPEVAR", $type);
-		$root->insertBefore($el, $despg);
+		// $type = $o->prop("industrial_design_variant") == industrial_design_obj::VARIANT_COMPLEX ? 2 : 1;
+		// $el = $xml->createElement("TYPEVAR", $type);
+		// $root->insertBefore($el, $despg);
 
 		//
 		$el = $xml->createElement("NBVAR", $o->prop("industrial_design_variant_count"));
