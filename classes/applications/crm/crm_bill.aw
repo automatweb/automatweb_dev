@@ -1768,7 +1768,7 @@ class crm_bill extends class_base
 	function show($arr)
 	{
 		$b = obj($arr["id"]);
-
+		$stats = get_instance("applications/crm/crm_company_stats_impl");
 		$tpl = "show";
 		$lc = "et";
 		if ($this->can("view", $b->prop("language")))
@@ -2233,17 +2233,30 @@ class crm_bill extends class_base
 		$there_is_tax_rate = 0;
 		foreach($tax_rows as $tax_rate => $tax_amt)
 		{
-			if ($tax_rate > 0)
+			if ($tax_rate > 0.005)
 			{
 				$there_is_tax_rate = $tax_rate;
-				$this->vars(array(
-					"tax_rate" => floor($tax_rate*100.0),
-					"tax" => number_format($tax_amt, 2)
-				));
-				$tax_rows_str .= $this->parse("TAX_ROW");
 			}
 		}
-		$tax_rate = $there_is_tax_rate;
+
+
+//arr($tax_rows);
+		if($there_is_tax_rate)
+		{foreach($tax_rows as $tax_rate => $tax_amt)
+			{
+	//			if ($tax_rate > 0)
+	//			{
+	//				$there_is_tax_rate = $tax_rate;
+					$this->vars(array(
+						"tax_rate" => floor($tax_rate*100.0),
+						"tax" => number_format($tax_amt, 2),
+						"tax_sum_from" => number_format($tax_amt/$tax_rate, 2),
+					));
+					$tax_rows_str .= $this->parse("TAX_ROW");
+	//			}
+			}
+//			$tax_rate = $there_is_tax_rate;
+		}
 		$sigs = "";
 		
 		foreach((array)$b->prop("signers") as $signer)
