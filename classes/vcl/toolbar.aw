@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.38 2008/08/07 08:23:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.39 2008/11/04 08:18:16 voldemar Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -235,7 +235,7 @@ class toolbar extends aw_template
 			// we add the toolbar html before </body> only in admin
 			// actually the only toolbar that needs this is the aw object toolbar
 			// because there's just too many elements for browser to handle.
-			if ($_SERVER["PHP_SELF"]=="/automatweb/orb.aw") 
+			if ($_SERVER["PHP_SELF"]=="/automatweb/orb.aw")
 			{
 				$cache = get_instance("cache");
 				$cache->file_set("aw_toolbars",$cache->file_get("aw_toolbars").$cdata );
@@ -307,9 +307,9 @@ class toolbar extends aw_template
 	/**
 		@attrib params=pos api=1
 		@param nm required type=string
-			Item name to be removed from toolbar.
+			Item name/id to be removed from toolbar. Buttons have string names, separators and other items numeric id-s.
 		@comment
-			Removes given item from toolbar
+			Removes given item (button, separator, etc.) from toolbar
 	**/
 	function remove_button($nm)
 	{
