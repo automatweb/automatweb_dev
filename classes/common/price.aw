@@ -22,6 +22,12 @@
 	@property date_to type=date_select table=aw_prices field=aw_date_to
 	@caption Kuni
 
+	@property object type=relpicker reltype=RELTYPE_OBJECT table=aw_prices field=aw_object
+	@caption Objekst millele hind m&otildejub
+
+	@property price_prop type=textbox table=aw_prices field=aw_prop
+	@caption Hinna omadus, (m&otilde;nel klassil v&otilde olla eri liiki hindu)
+
 //idee oleks selles, et kui uuele klassile tahaks hinda kylge panna, siis siia lisada lihtsalt klassi id
 @reltype OBJECT value=1 clid=CL_TRANSPORT_TYPE
 @caption Objekt millele hind m&otilde;jub
@@ -75,6 +81,24 @@ class price extends class_base
 				aw_date_from int,
 				aw_date_to int
 			)");
+			return true;
+		}
+		else
+		{
+			switch($f)
+			{
+				case "aw_object":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "int"
+					));
+					break;
+				case "aw_prop":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "VARCHAR(64)"
+					));
+			}
 			return true;
 		}
 		return false;
