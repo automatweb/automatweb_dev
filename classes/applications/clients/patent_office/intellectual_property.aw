@@ -2025,8 +2025,8 @@ abstract class intellectual_property extends class_base
 		}
 
 		// allkirjastaja ametinimetus
-		if(!is_oid($_SESSION["patent"]["procurator"]))
-		{
+		// if(!is_oid($_SESSION["patent"]["procurator"]))
+		// {
 			$job_show = false;
 			foreach ($_SESSION["patent"]["applicants"] as $applicant_data)
 			{
@@ -2051,7 +2051,7 @@ abstract class intellectual_property extends class_base
 				$this->vars(array("signer_job" => $job));
 				$data["SIGNER_JOB_TITLE"] = $this->parse("SIGNER_JOB_TITLE");
 			}
-		}
+		// }
 
 		//
 		if(is_oid($_SESSION["patent"]["id"]))
