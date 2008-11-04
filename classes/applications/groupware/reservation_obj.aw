@@ -94,6 +94,13 @@ class reservation_obj extends _int_object
 			return array();
 		}
 
+		//see meta versioon tuleb tagantpoolt 2ra koristada kohe kui kindel on, et kuskile pole seni seda salvestatud
+		if($spec_sum = $this->get_special_sum())
+		{
+			return $spec_sum;
+		}
+
+
 		$sum = $this->meta("final_saved_sum"); 
 		//kui on salvestatud summa ja mneski valuutas omab vrtust, ning see on salvestatud ndal peale aja lbi saamist, siis lheb salvestatud variant loosi ja ei hakka uuesti le arvutama
 		if(is_array($sum) && (!$this->prop("end") || ($this->prop("end") + 3600*24*7) < $this->meta("sum_saved_time")))
@@ -126,6 +133,84 @@ class reservation_obj extends _int_object
 		$this->save();
 		exit_function("sbo::_get_sum");
 		return $sum;
+	}
+
+	/** returns reservation special price
+		@attrib api=1
+		@returns array/null
+			array(currency id => sum , ...), or null if no special prices set
+	**/
+	public function get_special_sum()
+	{
+		$ret = array();
+		$prices = new object_list(array(
+			"class_id" => CL_PRICE,
+			"object" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"price_prop" => "special",
+		));
+		foreach($prices->arr() as $price)
+		{
+			if($price->prop("sum") && $price->prop("currency"))
+			{
+				$ret[$price->prop("currency")] = $price->prop("sum");
+			}
+		}
+		if(!sizeof($ret))
+		{
+			return null;
+		}
+		return $ret;
+	}
+
+	/** sets reservation special price
+		@attrib api=1 params=pos
+		@param price_array type=array
+			array(currency object id => sum , ...)
+		@returns 1 if successful
+	**/
+	public function set_special_sum($price_array)
+	{
+		$prices = new object_list(array(
+			"class_id" => CL_PRICE,
+			"object" => $this->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"price_prop" => "special",
+		));
+		foreach($prices->arr() as $price)
+		{
+			if(isset($price_array[$price->prop("currency")]))
+			{
+				$price->set_prop("sum" , $price_array[$price->prop("currency")]);
+				$price->save();
+				unset($price_array[$price->prop("currency")]);
+			}
+		}
+		foreach($price_array  as $curr => $sum)
+		{
+			if($sum)
+			{
+				$this->add_price_object($curr , $sum, "special");
+			}
+		}
+
+		return 1;
+	}
+
+	private function add_price_object($curr , $sum, $prop = "")
+	{
+		$o = new object();
+		$o->set_parent($this->id());
+		$o->set_class_id(CL_PRICE);
+		$o->set_name($this->name()." ".$prop." ".t("hind"));
+		$o->set_prop("price_prop" , $prop);
+		$o->set_prop("object" , $this->id());
+		$o->set_prop("type" , $this->class_id());
+		$o->set_prop("sum", $sum);
+		$o->set_prop("currency", $curr);
+		$o->save();
 	}
 
 	/** returns reservation price in currency
@@ -253,6 +338,21 @@ class reservation_obj extends _int_object
 			"class_id" => CL_CURRENCY,
 		));
 		return $ol->arr();
+	}
+
+	/** Returns room currencies
+		@attrib api=1
+		@returns
+			array(
+				cur_oid => cur_name
+			)
+	 **/
+	function get_room_currencies()
+	{
+		$currency = $this->prop("resource")?$this->prop("resource.currency"):$this->get_currencies_in_use();
+		$ol = new object_list();
+		$ol->add($currency);
+		return $ol->names();
 	}
 
 	/** adds new project to reservation

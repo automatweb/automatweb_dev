@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.148 2008/10/22 15:48:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.149 2008/11/04 20:48:45 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -535,8 +535,21 @@ class reservation extends class_base
 					$prop["type"] = "text";
 				}
 				break;
-			case "special_discount":
 			case "special_sum":
+				$prices = $arr["obj_inst"]->get_special_sum();
+				$prop["type"] = "text";
+				$prop["value"] = "";
+				$cs = $arr["obj_inst"]->get_room_currencies();
+				foreach($cs as $id => $name)
+				{
+					$prop["value"].= $name." ".html::textbox(array(
+						"name" => "special_sum[".$id."]",
+						"value" => $prices[$id],
+						"size" => "4",
+					))."<br>";
+				}
+
+			case "special_discount":
 			case "length":
 				if($is_lower_bron)return PROP_IGNORE;
 				break;
@@ -779,10 +792,11 @@ class reservation extends class_base
 				break;
 				
 			case "special_sum":
-				$this->set_total_price(array(
-					"reservation" => $arr["obj_inst"]->id(),
-					"sum" => $prop["value"],
-				));
+				$arr["obj_inst"]->set_special_sum($prop["value"]);
+//				$this->set_total_price(array(
+//					"reservation" => $arr["obj_inst"]->id(),
+//					"sum" => $prop["value"],
+//				));
 				break;
 			case "project":
 				if(!is_oid($prop["value"]))
@@ -2605,10 +2619,17 @@ class reservation extends class_base
 		$d = array(
 			"desc" => t("Summa")
 		);
-		foreach($sum["room_price"] as $cur => $price)
+		$sum = $o->get_sum();
+/*		foreach($sum["room_price"] as $cur => $price)
 		{
 			$d["price".$cur] = number_format($price + $sum["prod_price"][$cur], 2);
 		}
+*/
+		foreach($sum as $cur => $price)
+		{
+			$d["price".$cur] = number_format($price, 2);
+		}
+
 		$t->define_data($d);
 
 
