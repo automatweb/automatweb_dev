@@ -42,6 +42,23 @@
             <field>aw_date_to</field>
             <caption>Kuni</caption>
       </property>
+      <property>
+            <name>object</name>
+            <table>aw_prices</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT</reltype>
+            <field>aw_object</field>
+            <caption>Objekst millele hind m&amp;amp;otildejub</caption>
+      </property>
+      <property>
+            <name>price_prop</name>
+            <table>aw_prices</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_prop</field>
+            <caption>Hinna omadus, (m&amp;amp;otilde;nel klassil v&amp;amp;otilde olla eri liiki hindu)</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PRICE</syslog_type>
             <relationmgr>yes</relationmgr>
