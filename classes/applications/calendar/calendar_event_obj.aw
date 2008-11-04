@@ -11,8 +11,12 @@ class calendar_event_obj extends _int_object
 		$this->set_start_end();
 	}
 
-	function set_start_end()
+	function set_start_end($do_not_save = 0)
 	{
+		if(!is_oid($this->id()))
+		{
+			return;
+		}
 		$eventstart = 100000000000;
 		$eventend = 1;
 		foreach($this->connections_from(array("type" => "RELTYPE_EVENT_TIME")) as $c)
@@ -30,7 +34,17 @@ class calendar_event_obj extends _int_object
 		{
 			$this->set_prop("start1", $eventstart);
 		}
-		$this->save();
+		if(!$do_not_save)
+		{
+			$this->save();
+		}
+	}
+
+
+	function save()
+	{
+		$this->set_start_end(1);
+		return parent::save();
 	}
 
 	function get_locations()
