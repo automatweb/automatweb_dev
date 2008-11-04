@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.164 2008/10/30 20:04:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.165 2008/11/04 10:19:48 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1782,7 +1782,7 @@ class releditor extends core
 
 		$num = reset(array_keys($arr[$propn]));
 
-		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
+//		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 		
@@ -1928,6 +1928,7 @@ class releditor extends core
 
 			if ($this->can("view", $cur_prop["cfgform_id"]))
 			{
+				$this->loaded_from_cfgform = true;
 				$rel_props = $cf->get_cfg_proplist($cur_prop["cfgform_id"]);
 				foreach($rel_props as $pn => $pd)
 				{
@@ -2332,7 +2333,7 @@ class releditor extends core
 			die("error, no property data! given: ".dbg::dump($arr));
 		}
 
-		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
+//		$this->loaded_from_cfgform = is_oid($arr["cfgform"]) && $this->can("view", $arr["cfgform"]);
 		$t = new aw_table;
 		$this->_init_js_rv_table($t, $clid, $propn, $arr["cfgform"]);
 
