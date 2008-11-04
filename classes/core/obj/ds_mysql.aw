@@ -170,7 +170,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objtblprops = array();
 		foreach($properties as $prop => $data)
 		{
-			if (isset($data["store"]) && $data["store"] == "no")
+			if (isset($data["store"]) && $data["store"] === "no")
 			{
 				continue;
 			}
@@ -180,7 +180,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$data["table"] = "objects";
 			}
 
-			if ($data["table"] != "objects")
+			if ($data["table"] !== "objects")
 			{
 				$tables[$data["table"]] = $data["table"];
 				$tbl2prop[$data["table"]][] = $data;
@@ -191,12 +191,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 		$conn_prop_vals = array();
-                $conn_prop_fetch = array();
+          $conn_prop_fetch = array();
 
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
 		{
-			if ($prop["store"] == "connect")
+			if ($prop["store"] === "connect")
 			{
 				if ($GLOBALS["cfg"]["site_id"] != 139)
 				{
@@ -215,13 +215,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 			else
-			if ($prop["method"] == "serialize")
+			if ($prop["method"] === "serialize")
 			{
 				// metadata is unserialized in read_objprops
 				$ret[$prop["name"]] = isset($objdata[$prop['field']]) && isset($objdata[$prop["field"]][$prop["name"]]) ? $objdata[$prop["field"]][$prop["name"]] : "";
 			}
 			else
-			if ($prop["method"] == "bitmask")
+			if ($prop["method"] === "bitmask")
 			{
 				$ret[$prop["name"]] = ((int)$objdata[$prop["field"]]) & ((int)$prop["ch_value"]);
 			}
@@ -230,7 +230,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$ret[$prop["name"]] = isset($objdata[$prop["field"]]) ? $objdata[$prop["field"]] : null;
 			}
 
-			if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+			if (isset($prop["datatype"]) && $prop["datatype"] === "int" && $ret[$prop["name"]] == "")
 			{
 				$ret[$prop["name"]] = "0";
 			}
@@ -249,12 +249,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$_got_fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
-				if ($prop['field'] == "meta" && $prop["table"] == "objects")
+				if ($prop['field'] === "meta" && $prop["table"] === "objects")
 				{
 					$prop['field'] = "metadata";
 				}
 
-				if ($prop["method"] == "serialize" && $prop["store"] != "connect")
+				if ($prop["method"] === "serialize" && $prop["store"] !== "connect")
 				{
 					if (empty($_got_fields[$prop["field"]]))
 					{
@@ -263,7 +263,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
-				if ($prop["store"] == "connect")
+				if ($prop["store"] === "connect")
 				{
 					if ($GLOBALS["cfg"]["site_id"] != 139)
 					{
@@ -283,7 +283,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 
 				else
-				if ($prop['type'] == 'range')
+				if ($prop['type'] === 'range')
 				{
 					$fields[] = $table.".`".$prop["field"]."_from` AS `".$prop["name"]."_from`";
 					$fields[] = $table.".`".$prop["field"]."_to` AS `".$prop["name"]."_to`";
@@ -294,9 +294,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
 			}
+
 			if (count($fields) > 0)
 			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE `".$tableinfo[$table]["index"]."` = '".$object_id."'";
+				$q = "SELECT ".join(",", $fields)." FROM {$table} WHERE `".$tableinfo[$table]["index"]."` = '".$object_id."'";
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
 					$data = $this->read_properties_data_cache[$object_id];
@@ -313,9 +314,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				foreach($tbl2prop[$table] as $prop)
 				{
-					if ($prop["method"] == "serialize")
+					if ($prop["method"] === "serialize")
 					{
-						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						if ($prop['field'] === "meta" && $prop["table"] === "objects")
 						{
 							$prop['field'] = "metadata";
 						}
@@ -324,12 +325,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$ret[$prop["name"]] = isset($unser[$prop["name"]]) ? $unser[$prop["name"]] : null;
 					}
 
-					if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+					if (isset($prop["datatype"]) && $prop["datatype"] === "int" && $ret[$prop["name"]] == "")
 					{
 						$ret[$prop["name"]] = "0";
 					}
 
-					if ($prop["type"] == "range")
+					if ($prop["type"] === "range")
 					{
 						$ret[$prop['name']] = array(
 							'from' => $ret[$prop['name'].'_from'],
@@ -1050,7 +1051,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function save_connection($data)
 	{
-		if (!$data["type"]) 	 
+		if (!$data["type"])
 		{
 			if (isset($GLOBALS["objects"][$data["to"]]))
 			{
@@ -1058,7 +1059,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else
 			{
-				$data["type"] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '".$data["to"]."'", "class_id"); 	 
+				$data["type"] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '".$data["to"]."'", "class_id");
 			}
 		}
 
@@ -1305,8 +1306,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->done_ot_js = array();
 		$this->joins = array();
 
-		// this contains the full names of all the tables used in any part of the sql ( fetch, join, where) so that we ca use this to leave out unused tables from the resulting query. 
-		// this could of course be done during query construction, but it is much much harder to do it there, so we do it as a post-process step. 
+		// this contains the full names of all the tables used in any part of the sql ( fetch, join, where) so that we ca use this to leave out unused tables from the resulting query.
+		// this could of course be done during query construction, but it is much much harder to do it there, so we do it as a post-process step.
 		$this->search_tables_used = array("objects" => 1);
 
 		$this->has_data_table_filter = false;
@@ -1572,7 +1573,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if ($bit_tbl != "")
 					{
 						$this->_add_s($bit_tbl);
-					}	
+					}
 				}
 				$this->sby = " ORDER BY $val ";
 				continue;
@@ -3806,7 +3807,7 @@ enter_function("ds_mysql::optimize_joins");
 			{
 				$joined_table = $mt[1];
 			}
-		
+
 			if ($joined_table !== null)
 			{
 				if (isset($this->search_tables_used[trim($joined_table)]) || $joined_table == "documents")
