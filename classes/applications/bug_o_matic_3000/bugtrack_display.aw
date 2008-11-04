@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.15 2008/10/21 12:10:09 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.16 2008/11/04 11:07:22 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -380,7 +380,7 @@ class bugtrack_display extends class_base
 				$o = obj($oid);
 				$u = $arr["obj_inst"]->meta("type".$oid);
 				$username = '';
-				if(is_oid($u))
+				if($this->can("view", $u))
 				{
 					$user = obj($u);
 					$username = html::get_change_url($user->id(), array(), $user->name());
