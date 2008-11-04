@@ -172,11 +172,11 @@ class propcollector extends aw_template
 			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_PAIRS)
 			{
 				$attribs = $this->_parse_attribs($m[2]);
-				if ($tagname == "classinfo")
+				if ($tagname === "classinfo")
 				{
 					$this->classinfo = array_merge($this->classinfo,$attribs);
 				};
-				if ($tagname == "default")
+				if ($tagname === "default")
 				{
 					$this->defaults = array_merge($this->defaults,$attribs);
 				};
@@ -188,32 +188,32 @@ class propcollector extends aw_template
 				preg_match("/(\w+?) (.*)/",$tagdata,$m);
 				$aname = $m[1];
 				$attribs = $m[2];
-				if ($tagname == "groupinfo")
+				if ($tagname === "groupinfo")
 				{
 					$this->set_groupinfo($aname,$attribs);
 				}
 				else
-				if ($tagname == "tableinfo")
+				if ($tagname === "tableinfo")
 				{
 					$this->set_tableinfo($aname,$attribs);
 				}
 				else
-				if ($tagname == "property")
+				if ($tagname === "property")
 				{
 					$this->add_property($aname,$attribs);
 				}
 				else
-				if ($tagname == "layout")
+				if ($tagname === "layout")
 				{
 					$this->add_layout($aname,$attribs);
 				}
 				else
-				if ($tagname == "reltype")
+				if ($tagname === "reltype")
 				{
 					$this->add_reltype($aname,$attribs);
 				}
 				else
-				if ($tagname == "forminfo")
+				if ($tagname === "forminfo")
 				{
 					$this->add_forminfo($aname,$attribs);
 				}
@@ -227,11 +227,11 @@ class propcollector extends aw_template
 
 			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_VALUE)
 			{
-				if ($tagname == "caption")
+				if ($tagname === "caption")
 				{
 					$this->add_caption($tagdata);
 				};
-				if ($tagname == "comment")
+				if ($tagname === "comment")
 				{
 					$this->add_comment($tagdata);
 				};
@@ -285,7 +285,7 @@ class propcollector extends aw_template
 				}
 				else
 				{
-					if ($fname == "form" && substr($fvalue,0,1) == "+")
+					if ($fname === "form" && substr($fvalue,0,1) == "+")
 					{
 						$fields[$fname] = array("add","edit",substr($fvalue,1));
 						// add to defaults, otherwise overwrite
@@ -318,7 +318,7 @@ class propcollector extends aw_template
 			$fields["field"] = $fields["name"];
 		};
 
-		if ($fields["store"] == "no")
+		if ($fields["store"] === "no")
 		{
 			//unset($fields["table"]);
 			//unset($fields["method"]);
@@ -389,7 +389,7 @@ class propcollector extends aw_template
 			$chr = $data[$i];
 			if ($open_token)
 			{
-				if ($chr == "\"")
+				if ($chr === "\"")
 				{
 					if (strlen($tmp) > 0)
 					{
@@ -416,7 +416,7 @@ class propcollector extends aw_template
 			}
 			else
 			{
-				if ($chr == "\"")
+				if ($chr === "\"")
 				{
 					$open_token = true;
 				}
@@ -489,7 +489,7 @@ class propcollector extends aw_template
 
 	private function add_comment($comment)
 	{
-		if ($this->last_element == "property")
+		if ($this->last_element === "property")
 		{
 			$this->properties[$this->name]["comment"] = htmlentities($comment);
 		};
@@ -655,7 +655,7 @@ class propcollector extends aw_template
 				$tagname = $m[1];
 				$tagdata = $m[2];
 
-				if ($tagname == "extends")
+				if ($tagname === "extends")
 				{
 					$parent = $this->cfg["basedir"] . "/classes/" . trim ($tagdata) . ".aw";
 
@@ -696,12 +696,12 @@ class propcollector extends aw_template
 				case TAG_PAIRS:
 					$attribs = $this->_parse_attribs($m[2]);
 
-					if ($tagname == "classinfo")
+					if ($tagname === "classinfo")
 					{
 						$this->classinfo = array_merge($this->classinfo,$attribs);
 					}
 
-					if ($tagname == "default")
+					if ($tagname === "default")
 					{
 						$this->defaults = array_merge($this->defaults,$attribs);
 					}
@@ -712,27 +712,27 @@ class propcollector extends aw_template
 					$aname = $m[1];
 					$attribs = $m[2];
 
-					if ($tagname == "groupinfo")
+					if ($tagname === "groupinfo")
 					{
 						$this->set_groupinfo($aname,$attribs);
 					}
-					elseif ($tagname == "tableinfo")
+					elseif ($tagname === "tableinfo")
 					{
 						$this->set_tableinfo($aname,$attribs);
 					}
-					elseif ($tagname == "property")
+					elseif ($tagname === "property")
 					{
 						$this->add_property($aname,$attribs);
 					}
-					elseif ($tagname == "layout")
+					elseif ($tagname === "layout")
 					{
 						$this->add_layout($aname,$attribs);
 					}
-					elseif ($tagname == "reltype")
+					elseif ($tagname === "reltype")
 					{
 						$this->add_reltype($aname,$attribs);
 					}
-					elseif ($tagname == "forminfo")
+					elseif ($tagname === "forminfo")
 					{
 						$this->add_forminfo($aname,$attribs);
 					}
@@ -745,12 +745,12 @@ class propcollector extends aw_template
 					break;
 
 				case TAG_VALUE:
-					if ($tagname == "caption")
+					if ($tagname === "caption")
 					{
 						$this->add_caption ($tagdata);
 					}
 
-					if ($tagname == "comment")
+					if ($tagname === "comment")
 					{
 						$this->add_comment ($tagdata);
 					}
@@ -776,7 +776,7 @@ class propcollector extends aw_template
 			$fields = array();
 		}
 
-		if($arr["type"] == "property" && !$fields["type"])
+		if($arr["type"] === "property" && !$fields["type"])
 		{
 			print "Property \"{$arr["name"]}\" with undefined type\n";
 			return;
@@ -784,7 +784,7 @@ class propcollector extends aw_template
 		$tagfields = $this->tagdata[$arr["type"]];
 		$err_add_text = "";
 		$other = array();
-		if($arr["type"] == "property")
+		if($arr["type"] === "property")
 		{
 			$other = $tagfields["global"]["props"];
 			if(!isset($tagfields[$fields["type"]]))
@@ -798,7 +798,7 @@ class propcollector extends aw_template
 		$tagfields = $tagfields["props"];
 		foreach($fields as $f => $val)
 		{
-			if($arr["type"] == "property" && $f == "name")
+			if($arr["type"] === "property" && $f === "name")
 			{
 				continue;
 			}
