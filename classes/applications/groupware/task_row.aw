@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.12 2008/06/04 12:33:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.13 2008/11/04 18:57:27 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -19,6 +19,9 @@
 
 	@property date type=date_select table=aw_task_rows field=aw_date
 	@caption Kuup&auml;ev
+
+	@property orderer type=relpicker reltype=RELTYPE_ORDERER table=aw_task_rows field=aw_orderer
+	@caption Tellija
 
 	@property impl type=relpicker reltype=RELTYPE_IMPL table=aw_task_rows field=aw_impl store=connect multiple=1
 	@caption Teostaja
@@ -65,6 +68,9 @@
 
 @reltype IMPL value=2 clid=CL_CRM_PERSON
 @caption Teostaja
+
+@reltype ORDERER value=3 clid=CL_CRM_PERSON
+@caption Tellija
 */
 
 class task_row extends class_base
@@ -137,6 +143,7 @@ class task_row extends class_base
 			case "aw_task_ord":
 			case "skill_used":
 			case "aw_task":
+			case "aw_orderer":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

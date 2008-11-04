@@ -11,6 +11,16 @@
             <caption>Aeg</caption>
       </property>
       <property>
+	      <name>orderer</name>
+	      <table>objects</table>
+	      <group>general</group>
+	      <parent>general_up</parent>
+	      <type>textbox</type>
+	      <store>no</store>
+	      <field>orderer</field>
+	      <caption>Tellija</caption>
+      </property>
+      <property>
             <name>cust_type</name>
             <table>objects</table>
             <group>general</group>

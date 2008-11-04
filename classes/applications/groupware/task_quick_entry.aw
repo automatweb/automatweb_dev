@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.46 2008/09/03 13:56:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.47 2008/11/04 18:57:27 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -18,6 +18,9 @@
 @property date type=datetime_select store=no
 @caption Aeg
 
+@property orderer type=textbox store=no
+@caption Tellija
+
 @property cust_type type=select
 @caption Kliendi t&uuml;&uuml;p
 
@@ -26,7 +29,7 @@
 
 //see selleks, et saaks vaid valida klient, kuid mitte lisada
 @property customer_name type=textbox store=no
-@caption Klient
+@caption Klient - vaid olemasolev mitte lisamiseks
 
 @property custp_fn type=textbox
 @caption Eesnimi
@@ -79,6 +82,9 @@ class task_quick_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "orderer":
+				$prop["autocomplete_class_id"] = array(CL_CRM_PERSON);
+				break;
 			case "customer_name":
 				$prop["autocomplete_class_id"] = array(CL_CRM_PERSON, CL_CRM_COMPANY);
 				$this->customer_name_set = 1;
@@ -205,6 +211,7 @@ class task_quick_entry extends class_base
 				if($arr["request"]["customer"] || $arr["request"]["customer_name"]) return $retval;
 			case "project":
 			case "content":
+//			case "orderer":
 			case "duration":
 				if ($prop["value"] == "")
 				{
@@ -419,6 +426,8 @@ $start = ((float)$usec + (float)$sec);
 		}*/
 
 		$tproj = $arr["request"]["project"];
+
+
 		/*if (mb_detect_encoding($arr["request"]["project"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["project"]);
@@ -552,6 +561,26 @@ $start = ((float)$usec + (float)$sec);
 			$p = $ol->begin();
 		}
 
+		// if orderer exists
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_PERSON),
+			"name" => $arr["request"]["orderer"],
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		if (!$ol->count())
+		{
+			$o = obj();
+			$o->set_class_id(CL_CRM_PERSON);
+			$o->set_parent($c->id());
+			$o->set_name($arr["request"]["orderer"]);
+			$o->save();
+		}
+		else
+		{
+			$o = $ol->begin();
+		}
+
 		// if task exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
@@ -598,7 +627,10 @@ $start = ((float)$usec + (float)$sec);
 //			$r->set_class_id(CL_TASK_ROW);
 //			$r->set_parent($t->id());
 			$r = $t->add_row();
-
+			if($arr["request"]["orderer"])
+			{
+				$r->set_prop("orderer", $o->id());
+			}
 			$r->set_prop("content", $arr["request"]["content"]);
 			$r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
 			$r->set_prop("time_guess", $arr["request"]["duration"]);
@@ -634,6 +666,12 @@ $start = ((float)$usec + (float)$sec);
 			$r = $t->add_row();
 //			$r->set_class_id(CL_TASK_ROW);
 //			$r->set_parent($t->id());
+
+			if($arr["request"]["orderer"])
+			{
+				$r->set_prop("orderer", $o->id());
+			}
+			
 
 			$r->set_prop("content", $arr["request"]["content"]);
 			$r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
