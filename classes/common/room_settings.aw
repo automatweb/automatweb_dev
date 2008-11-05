@@ -98,6 +98,9 @@
 	@property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
 	@caption &Auml;ra kuva aja pikkust kalendris
 
+	@property reserved_time_string type=textbox 
+	@caption Broneeritud aja string
+
 	@property bron_props type=table save=no no_caption=1
 	@caption Broneeringu omaduste tabel
 
@@ -152,15 +155,6 @@
 @groupinfo settings caption="Muud seaded"
 	@groupinfo settings_gen caption="Muud seaded" parent=settings
 	
-@default group=settings_gen
-
-
-	@property reserved_time_string type=textbox 
-	@caption Broneeritud aja string
-
-
-
-
 
 @groupinfo email caption="Meiliseaded"
 
@@ -299,6 +293,14 @@ class room_settings extends class_base
 			"tpldir" => "common/room_settings",
 			"clid" => CL_ROOM_SETTINGS
 		));
+		
+		//muutujad mida saab kasutada ruumi kalendri broneeringute v2ljan2gemise konfimiseks
+		//bronni objekti juures get_room_calendar_prop funktsioonis peab neile variandi tegema kui lisada siia
+		$this->extra_calendar_bron_props = array(
+			"product_image" => array("caption" => t("Toote pilt")),
+			"product_code" => array("caption" => t("Toote kood")),
+		);
+
 	}
 
 	function get_property($arr)
@@ -687,12 +689,34 @@ class room_settings extends class_base
 		return $grp_settings[$grp]["confirmed_default"];
 	}
 
+	function _set_bron_props($arr)
+	{
+		$calendar_bron_props = array();
+		foreach($arr["request"]["calendar_bron_props"] as $prop => $data)
+		{
+			if($data["alt"] || $data["text"]) // vaid need mis on m2rgitud vaid kuhugi... l2bu pole vaja
+			{
+				$calendar_bron_props[$prop] = $data;
+			}
+		}
+		$arr["obj_inst"]->set_meta("calendar_bron_props" , $calendar_bron_props);
+	}
+
+
 	function _get_bron_props($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "prop_name",
 			"caption" => t("Omaduse nimi"),
+		));
+		$t->define_field(array(
+			"name" => "text",
+			"caption" => t("Tekstina"),
+		));
+		$t->define_field(array(
+			"name" => "alt",
+			"caption" => t("Alt-tekstina"),
 		));
 		$t->define_field(array(
 			"name" => "before",
@@ -706,25 +730,60 @@ class room_settings extends class_base
 			"name" => "jrk",
 			"caption" => t("Jrk"),
 		));
-		$t->define_field(array(
-			"name" => "text",
-			"caption" => t("Tekstina"),
-		));
-		$t->define_field(array(
-			"name" => "alt",
-			"caption" => t("Alt-tekstina"),
-		));
 
-		$bol = new object_list(array("class_id" => CL_RESERVATION, "lang_id" => array()));
+		$bol = new object_list(array(
+			"class_id" => CL_RESERVATION,
+			"lang_id" => array(),
+			"limit" => 1,
+		));
 		$b = reset($bol->arr());
-		foreach($b->properties() as $prop => $data)
+		$cfgu = $GLOBALS["object_loader"]->cfgu;
+		$no_types = array("toolbar" , "submit" , "table");
+		$calendar_bron_props = $arr["obj_inst"]->meta("calendar_bron_props");
+
+		$props = $cfgu->propdef["property"] + $this->extra_calendar_bron_props;
+
+		foreach($props as $prop => $data)
 		{
+			if(in_array($data["type"] , $no_types))
+			{
+				continue;
+			}
 			$t->define_data(array(
-				"prop_name" => $prop,
-
-
+				"prop_name" =>$data["caption"] ? $data["caption"] : $prop,
+				"prop" =>  $prop,
+				"text" => html::checkbox(array(
+					"name" => "calendar_bron_props[".$prop."][text]",
+					"value" => 1,
+					"checked" => $calendar_bron_props[$prop]["text"],
+				)),
+				"alt" => html::checkbox(array(
+					"name" => "calendar_bron_props[".$prop."][alt]",
+					"value" => 1,
+					"checked" => $calendar_bron_props[$prop]["alt"],
+				)),
+				"before" => html::textbox(array(
+					"name" => "calendar_bron_props[".$prop."][before]",
+					"size" => 3,
+					"value" => $calendar_bron_props[$prop]["before"],
+				)),
+				"after" => html::textbox(array(
+					"name" => "calendar_bron_props[".$prop."][after]",
+					"size" => 3,
+					"value" => $calendar_bron_props[$prop]["after"],
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "calendar_bron_props[".$prop."][jrk]",
+					"size" => 3,
+					"value" => $calendar_bron_props[$prop]["jrk"],
+				)),
+				"ord" => $calendar_bron_props[$prop]["jrk"] ? (1000000000 + $calendar_bron_props[$prop]["jrk"]) : (($calendar_bron_props[$prop]["text"] || $calendar_bron_props[$prop]["alt"]) ? 2000000000 : 2000000001),
 			));
 		}
+		$t->set_default_sortby("ord");
+		$t->set_default_sorder("asc");
+		$t->sort_by();
+//		$t->set_sortable(false);
 	}
 }
 ?>

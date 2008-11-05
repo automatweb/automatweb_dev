@@ -2198,6 +2198,38 @@ class room extends class_base
 		return $col[$x];
 	}
 
+	private function __bp_sort($a, $b)
+	{
+		return $a["jrk"] - $b["jrk"];
+	}
+
+	private function set_calendar_bron_props($settings)
+	{
+		if(!is_array($this->calendar_bron_props))
+		{
+			$this->calendar_bron_props = array();
+			$calendar_bron_props = $settings->meta("calendar_bron_props");
+			uasort($calendar_bron_props, array(&$this, "__bp_sort"));
+			foreach($calendar_bron_props as $prop => $cbp)
+			{
+				if($cbp["text"])
+				{
+					$this->calendar_bron_props["text"][$prop] = array(
+						"before" => $cbp["before"],
+						"after" => $cbp["after"],
+					);
+				}
+				if($cbp["alt"])
+				{
+					$this->calendar_bron_props["alt"][$prop] = array(
+						"before" => $cbp["before"],
+						"after" => $cbp["after"],
+					);
+				}
+			}
+		}
+	}
+
 	private function get_bron_cell_html($last_bron, $settings,$start_step)
 	{
 		$d = array();
@@ -2210,7 +2242,33 @@ class room extends class_base
 		$title = $phone = "";
 		$imgstr = "";
 		$codes = array();
-		if (!$_GET["no_det_info"])
+
+		$this->set_calendar_bron_props($settings);
+		if(!$_GET["no_det_info"] && sizeof($this->calendar_bron_props))//nii on uus systeem
+		{
+			$new_system = 1;
+			$cus = "";
+			$after = "";
+			foreach($this->calendar_bron_props["text"] as $prop => $val)
+			{
+				$rcp = $last_bron->get_room_calendar_prop($prop , &$settings);
+				if($rcp)
+				{
+					$cus.= $after.$rcp.$val["before"];
+					$after= $val["after"];
+				}
+			}
+			foreach($this->calendar_bron_props["alt"] as $prop => $val)
+			{
+				$rcp = $last_bron->get_room_calendar_prop($prop , &$settings);
+				if($rcp)
+				{
+					$title.= $after.$rcp.$val["before"];
+					$after = $val["after"];
+				}
+			}
+		}
+		elseif (!$_GET["no_det_info"])
 		{
 			$last_cust = $last_bron->prop("customer");
 			if ($this->can("view", $last_cust))
@@ -2292,7 +2350,16 @@ class room extends class_base
 				}
 			}
 		}
-		$bron_name = $cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",");
+
+		if($_GET["no_det_info"] || !$new_system)
+		{
+			$bron_name = $cus . ( $phone ? (" , ".$phone):"" )."</u> " . join($codes , ",");
+		}
+		else
+		{
+			$bron_name = $cus;
+		}
+
 		if(is_array(($_t = $_GET["alter_reservation_name"])) and is_array(aw_ini_get("classes.".$_t["class_id"])))
 		{
 			$cb_inst = get_instance($_t["class_id"]);
@@ -2312,7 +2379,7 @@ class room extends class_base
 			"caption" => "<span><font color=#26466D><u>".$bron_name."</FONT></span>",
 			"title" => $title,
 		);
-		if ($settings->prop("cal_show_prods"))
+		if ($settings->prop("cal_show_prods") && !$new_system)
 		{
 			$dx_p["caption"] .= " <b>".$title."</b>";
 		}
@@ -2324,50 +2391,130 @@ class room extends class_base
 		else
 		{
 			$dx_p["width"] = 800;
-								$dx_p["height"] = 600;
-								$dx_p["scrollbars"] = 1;
-								$dx_p["href"] = "#";
-								$dx_p["url"] = $this->mk_my_orb("change", array("id" => $last_bron->id(), "return_url" => get_ru()), "reservation");
-								$d[$x] = html::popup($dx_p);
-							}
+			$dx_p["height"] = 600;
+			$dx_p["scrollbars"] = 1;
+			$dx_p["href"] = "#";
+			$dx_p["url"] = $this->mk_my_orb("change", array("id" => $last_bron->id(), "return_url" => get_ru()), "reservation");
+			$d[$x] = html::popup($dx_p);
+		}
+//if($last_bron->id() == 155366){ arr($dx_p);arr($d); die();}
+		if ($last_bron->prop("send_bill"))
+		{
+			$d[$x] = html::href(array(
+				"url" => "javascript:;",
+				"caption" => html::img(array(
+				"url" => aw_ini_get("baseurl")."/automatweb/images/icons/create_bill.jpg",
+				"border" => 0
+				)),
+				"title" => t("Saata arve")
+			))." ".$d[$x];
+		}
+		$d[$x] .= " ";
+		if ($last_bron->prop("client_arrived") == 1)
+		{
+			$d[$x] .= html::href(array(
+				"caption" => "+",
+				"url" => "#",
+				"title" => t("Klient saabus"),
+				"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 2))."\");"
+			));
+		}
+		else
+		if ($last_bron->prop("client_arrived") == 2)
+		{
+			$d[$x] .= html::href(array(
+				"caption" => "-",
+				"url" => "#",
+				"title" => t("Klient ei saabunud"),
+				"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 1))."\");"
+			));
+		}
+		$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
+			if ($col_buffer != "")
+			{
+				$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
+				$d[$x] .= " ".$buf_tm;
+			}
 
-							if ($last_bron->prop("send_bill"))
-							{
-								$d[$x] = html::href(array(
-									"url" => "javascript:;",
-									"caption" => html::img(array(
-										"url" => aw_ini_get("baseurl")."/automatweb/images/icons/create_bill.jpg",
-										"border" => 0
-									)),
-									"title" => t("Saata arve")
-								))." ".$d[$x];
-							}
-							$d[$x] .= " ";
-							if ($last_bron->prop("client_arrived") == 1)
-							{
-								$d[$x] .= html::href(array(
-									"caption" => "+",
-									"url" => "#",
-									"title" => t("Klient saabus"),
-									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 2))."\");"
-								));
-							}
-							else
-							if ($last_bron->prop("client_arrived") == 2)
-							{
-								$d[$x] .= html::href(array(
-									"caption" => "-",
-									"url" => "#",
-									"title" => t("Klient ei saabunud"),
-									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 1))."\");"
-								));
-							}
-							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
-							if ($col_buffer != "")
-							{
-								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
-								$d[$x] .= " ".$buf_tm;
-							}
+/*
+			if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
+			{
+			}
+			else
+			if ($last_bron->prop("time_closed") == 1)
+			{
+				$d[$x] .= " ".$last_bron->prop("closed_info");
+			}
+			if ($last_bron->prop("content") != "" || $last_bron->comment() != "")
+			{
+				$d[$x] .= html::href(array(
+					"url" => "#",
+					"caption" => "*",
+					"title" => $last_bron->prop("content")." ".$last_bron->comment()
+				));
+			}
+			if ($imgstr != "")
+			{
+				$d[$x] .= "<br>".$imgstr;
+			}
+			if($this->is_after_buffer)
+			{
+				$d[$x] = ""; 
+			}
+			if($this->is_after_buffer)
+			{
+				$d[$x] = ""; 
+			}
+			elseif($last_bron->prop("start1") < $start_step)
+			{
+				if ($settings->prop("bron_no_popups"))
+				{
+					$d[$x] = html::href(array(
+						"url" => $dx_p["url"],
+						"caption" => "--//--"
+					));
+				}
+				else
+				{
+					$dx_p["caption"] = "--//--";
+					$d[$x] = html::popup($dx_p);
+				}
+			}
+			if($this->is_before_buffer)
+			{
+				$d[$x] = ""; 
+				if($col_buffer)
+				{
+					$col[$x] = "#".$col_buffer;
+				}
+				else
+				{
+					"#EE6363";
+				}
+			}
+			if ($col_buffer != "")
+			{
+				$buf = $this->get_before_buffer(array(
+					"room" => $arr["obj_inst"],
+					"bron" => $last_bron,
+				));
+				if ($buf > 0 && ($last_bron->prop("start1") > $start_step))
+				{
+					$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+					$d[$x] = "<div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
+				}
+				$buf = $this->get_after_buffer(array(
+					"room" => $arr["obj_inst"],
+					"bron" => $last_bron,
+				));
+				if ($buf > 0 && ($last_bron->prop("end") < $end_step))
+				{
+					$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+					$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
+				}
+			}
+*/
+
 
 						if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 							{
@@ -2444,6 +2591,7 @@ class room extends class_base
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 								}
 							}
+
 		return $d[$x];
 	}
 

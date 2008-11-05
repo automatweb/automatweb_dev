@@ -761,5 +761,133 @@ class reservation_obj extends _int_object
 		return 1;
 	}
 
+	/** returns all customer names
+		@attrib api=1
+		@return sting
+	 **/
+	public function get_customer_name()
+	{
+		$cus = array();
+		foreach($this->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$cus[] = $c->prop("to.name")." ";
+		}
+		$cus = join(", ", $cus);
+		return $cus;
+	}
+
+	/**
+		@attrib api=1
+		@return boolean
+	 **/
+	public function get_products()
+	{
+		if(!$this->products)
+		{
+			$this->products = new object_list();
+			$products = $this->meta("amount");
+			foreach($products as $prod => $val)
+			{
+				if($val)
+				{
+					$this->products->add($prod);
+				}
+			}
+		}
+	}
+
+	/** returns product codes
+		@attrib api=1
+		@return array
+	 **/
+	public function get_product_codes()
+	{
+		$ret = array();
+		$this->get_products();
+		foreach($this->products->arr() as $prod)
+		{
+			$ret[] = $prod->prop("code");
+		}
+		return $ret;
+	}
+
+	/** returns product image tags
+		@attrib api=1 params=pos
+		@param settings required type=object
+			room settings object
+		@return array()
+	 **/
+	public function get_product_images($settings)
+	{
+		$ret = array();
+		$this->get_products();
+		foreach($this->products->arr() as $product)
+		{
+			if ($product->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+			{
+				$_conns = $product->connections_to(array("from.class_id" => CL_SHOP_PRODUCT));
+				if (count($_conns))
+				{
+					$_con = reset($_conns);
+					$product = $_con->from();
+				}
+			}
+			$cons = $product->connections_from(array(
+				"type" => "RELTYPE_IMAGE",
+				"to.jrk" => $settings->prop("cal_show_prod_img_ord")
+			));
+			if (count($cons))
+			{
+				$con = reset($cons);
+				if ($con)
+				{
+					$ii = get_instance(CL_IMAGE);
+					$ret[] = $ii->make_img_tag_wl($con->prop("to"));
+				}
+			}
+		}
+		return $ret;
+	}
+
+	/** returns formated bron property for room calendar
+		@attrib api=1 params=pos
+		@param prop required type=string
+			property name
+		@param settings required type=object
+			room settings object
+		@return string
+	 **/
+	public function get_room_calendar_prop($prop , &$settings)
+	{
+		$value = "";
+		switch($prop)
+		{
+			case "customer":
+				$value = $this->get_customer_name();
+				break;
+			case "products_text":
+				$this->get_products();
+				$value = join(" ," , $this->products->names());
+				break;
+			case "product_code":
+				$codes = $this->get_product_codes();
+				$value = join(" ," , $codes);
+				break;
+			case "product_image":
+				$image = $this->get_product_images(&$settings);
+				$value = join(" ," , $image);
+				break;
+			case "cp_phone":
+				$value = $this->prop("customer.phone.name");
+				break;
+			default:
+				if($this->is_property($prop))
+				{
+					$value = $this->prop($prop);
+				}
+		}
+		return $value;
+	}
+
 }
 ?>
