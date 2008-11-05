@@ -1017,6 +1017,7 @@ class relationmgr extends aw_template
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
+			"filter" => "automatic",
 		));
 		
 		$tbl->define_chooser(array(
@@ -1024,6 +1025,11 @@ class relationmgr extends aw_template
 			"field" => "id",
 		));
 		
+		$tbl->define_pageselector(array(
+			"type" => "lb",
+			"records_per_page" => 25,
+		));
+
 		$alinks = $arr["obj_inst"]->meta("aliaslinks");
 		
 		$classes = aw_ini_get("classes");
@@ -1164,7 +1170,7 @@ class relationmgr extends aw_template
 			"type" => "text",
 		);
 		*/
-		$tbl->table_header = $this->parse();
+		$tbl->set_header($this->parse());
 		$tbl->set_default_sortby("title");
 		$tbl->sort_by();
 		$pr["rel_toolbar"] = array(
