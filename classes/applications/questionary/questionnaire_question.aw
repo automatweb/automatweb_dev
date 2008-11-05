@@ -185,7 +185,7 @@ class questionnaire_question extends class_base
 		// Figure out the conf		
 		if($ob->prop("dsply_acomment"))
 		{
-			$dsply_acomment = $q_obj->prop("dsply_acomment");
+			$dsply_acomment = $ob->prop("dsply_acomment");
 		}
 		$this->vars(array(
 			"question" => $ob->prop("name"),
