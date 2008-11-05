@@ -486,6 +486,7 @@ class doc extends class_base
 	{
 		$data = &$args["prop"];
 		$retval = PROP_OK;
+		$data["value"] = html_entity_decode($data["value"], ENT_COMPAT, aw_global_get("charset"));
 		switch($data["name"])
 		{
 			case "transl":
