@@ -76,7 +76,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property deadline type=date_select parent=settings_col3 captionside=top
 		@caption T&auml;htaeg
 
-		@property actual_live_date type=date_select captionside=top parent=settings_col3 field=meta method=serialize table=objects
+		@property actual_live_date type=date_select captionside=top parent=settings_col3 field=meta method=serialize table=objects default=-1
 		@caption Tegelik Live kuup&auml;ev
 
 		@property finance_type type=chooser captionside=top parent=settings_col3 table=aw_bugs field=aw_finance_type
@@ -1167,6 +1167,32 @@ class bug extends class_base
 					$this->add_comments[] = $com;
 					$this->notify_monitors = true;
 				}
+				$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+				$pt = $po->path();
+				$bt_obj = null;
+				foreach($pt as $pi)
+				{
+					if ($pi->class_id() == CL_BUG_TRACKER)
+					{
+						$bt = $pi;
+					}
+				}
+				if($bt)
+				{
+					$bcs = $bt->meta("cust_bug_status_conns");
+					if($bcs[$prop["value"]])
+					{
+						$change_bug_status = 1;
+					}
+				}
+				if($change_bug_status && $prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
+				{
+					$arr["obj_inst"]->set_prop("cust_status", $prop["value"]);
+				}
+				else
+				{
+					break;
+				}
 				break;
 
 			case "bug_priority":
@@ -1375,9 +1401,12 @@ class bug extends class_base
 		{
 			$options[$value] = $prop["options"][$value];
 		}
-		$creator_u = $arr["obj_inst"]->createdby();
-		$p = get_instance(CL_USER)->get_person_for_uid($creator_u);
-		$options[$p->id()] = $p->name();
+		if(!$arr["new"])
+		{
+			$creator_u = $arr["obj_inst"]->createdby();
+			$p = get_instance(CL_USER)->get_person_for_uid($creator_u);
+			$options[$p->id()] = $p->name();
+		}
 		$cur = get_current_person();
 		$options[$cur->id()] = $cur->name();
 		foreach($prop["options"] as $val => $name)

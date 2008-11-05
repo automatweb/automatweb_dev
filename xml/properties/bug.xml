@@ -182,7 +182,6 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>date_select</type>
-            <default>-1</default>
             <parent>settings_col3</parent>
             <captionside>top</captionside>
             <field>deadline</field>
@@ -197,6 +196,7 @@
             <parent>settings_col3</parent>
             <field>meta</field>
             <method>serialize</method>
+            <default>-1</default>
             <caption>Tegelik Live kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
@@ -227,7 +227,6 @@
             <ch_value>1</ch_value>
             <parent>settings_col3</parent>
             <field>aw_send_bill</field>
-            <no_caption>1</no_caption>
             <caption>Arvele</caption>
       </property>
       <property>

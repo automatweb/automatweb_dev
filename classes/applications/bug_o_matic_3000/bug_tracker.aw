@@ -4407,6 +4407,11 @@ class bug_tracker extends class_base
 			"caption" => t("Kliendistaatus => P&otilde;histaatus"),
 		));
 		$t->define_field(array(
+			"name" => "bugst_cust",
+			"align" => "center",
+			"caption" => t("P&otilde;histaatus => Kliendistaatus"),
+		));
+		$t->define_field(array(
 			"name" => "mail_groups",
 			"align" => "center",
 			"caption" => t("Meilide saatmine"),
@@ -4416,6 +4421,7 @@ class bug_tracker extends class_base
 		$sdb = $arr["obj_inst"]->meta("status_disp_bug");
 		$sdc = $arr["obj_inst"]->meta("status_disp_cust");
 		$bcs = $arr["obj_inst"]->meta("bug_cust_status_conns");
+		$cbs = $arr["obj_inst"]->meta("cust_bug_status_conns");
 		$mg = $arr["obj_inst"]->meta("st_mail_groups_bug");
 		if($rmb = $arr["request"]["rm_mail_group_bug"])
 		{
@@ -4473,6 +4479,11 @@ class bug_tracker extends class_base
 					"value" => $bcs[$stid],
 					"name" => "bcs[".$stid."]",
 				)),
+				"bugst_cust" => html::select(array(
+					"options" => array_merge(array(0 => t("--Ei muutu--")), $bi->bug_statuses),
+					"value" => $cbs[$stid],
+					"name" => "cbs[".$stid."]",
+				)),
 				"mail_groups" => $mailgroups,
 			));
 		}
@@ -4522,6 +4533,7 @@ class bug_tracker extends class_base
 		$arr["obj_inst"]->set_meta("status_disp_cust", $sdc);
 		$arr["obj_inst"]->set_meta("status_disp_devo", $sdd);
 		$arr["obj_inst"]->set_meta("bug_cust_status_conns", $arr["request"]["bcs"]);
+		$arr["obj_inst"]->set_meta("cust_bug_status_conns", $arr["request"]["cbs"]);
 		$arr["obj_inst"]->save();
 	}
 
