@@ -979,17 +979,17 @@ class bug extends class_base
 				break;
 
 			case "name":
+				$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+				$pt = $po->path();
+				foreach($pt as $pi)
+				{
+					if ($pi->class_id() == CL_BUG_TRACKER)
+					{
+						$bt = $pi;
+					}
+				}
 				if (!$this->can("view", $arr["request"]["who"]))
 				{
-					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
-					$pt = $po->path();
-					foreach($pt as $pi)
-					{
-						if ($pi->class_id() == CL_BUG_TRACKER)
-						{
-							$bt = $pi;
-						}
-					}
 					if($bt)
 					{
 						$conn = $bt->connections_to(array(
@@ -1315,7 +1315,7 @@ class bug extends class_base
 				break;
 			case "comments_table":
 				$total = 0;
-				foreach($arr["request"]["add_wh"] as $oid=>$hrs)
+				foreach($arr["request"]["add_wh"] as $oid => $hrs)
 				{
 					$com = obj($oid);
 					$com->set_prop("add_wh", $hrs);
@@ -1323,6 +1323,7 @@ class bug extends class_base
 					$com->save();
 					$total += $hrs;
 				}
+				$arr["obj_inst"]->set_prop("bug_content", $arr["request"]["comment"]["bug"]);
 				$arr["obj_inst"]->set_prop("num_hrs_real", $total);
 				$arr["obj_inst"]->save();
 				break;
@@ -1382,7 +1383,9 @@ class bug extends class_base
 	function _sort_bug_ppl($arr)
 	{
 		$prop = &$arr["prop"];
-		uksort($prop["options"], array($this, "__sort_ppl"));
+		$tmp_options = $prop["options"];
+		unset($tmp_options[""]);
+		uksort($tmp_options, array($this, "__sort_ppl"));
 		$options = array();
 		if(!is_array($prop["value"]))
 		{
@@ -1956,6 +1959,16 @@ class bug extends class_base
 		));
 		$t->sort_by();
 		$t->set_default_sortby("date");
+		$t->define_data(array(
+			"comment" => html::textarea(array(
+				"value" => $arr["obj_inst"]->prop("bug_content"),
+				"name" => "comment[bug]",
+				"rows" => 3,
+				"cols" => 60,
+			)),
+			"user" => $arr["obj_inst"]->createdby(),
+			"date" => $arr["obj_inst"]->created(),
+		));
 		$comments = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_COMMENT",
 		));
