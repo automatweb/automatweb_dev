@@ -437,12 +437,6 @@ class bank_payment extends class_base
 			"data" => $data,
 		));
 
-		if(!$data["priv_key"] && $payment->prop("private_key"))
-		{
-			$file_inst = get_instance(CL_FILE);
-			$file = $file_inst->get_file_by_id($payment->prop("private_key"));
-			$data["priv_key"] = $file["content"];
-		}
 		if($data["test"] &&  $this->test_link[$data["bank_id"]])
 		{
 			if($payment->prop("test_priv_key"))
@@ -462,6 +456,14 @@ class bank_payment extends class_base
 				}
 			}
 		}
+
+		if(!$data["priv_key"] && $payment->prop("private_key"))
+		{
+			$file_inst = get_instance(CL_FILE);
+			$file = $file_inst->get_file_by_id($payment->prop("private_key"));
+			$data["priv_key"] = $file["content"];
+		}
+
 		if(!$data["return_url"])
 		{
 			//$data["return_url"] = $payment->prop("return_url");
