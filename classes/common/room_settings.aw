@@ -5,29 +5,14 @@
 @default table=objects
 @default group=general
 
-	@property max_times_per_day type=textbox field=meta method=serialize
-	@caption Maksimaalne aegade arv samal p&auml;eval
-
 	@property hold_not_verifyed type=textbox field=meta method=serialize
 	@caption Kinnitamata broneeringut tuleb hoida kinni x minutit
-
-	@property show_unverified type=checkbox ch_value=1 field=meta method=serialize 
-	@caption N&auml;ita kalendris kinnitamata broneeringuid
 
 	@property related_room_folder type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_RELATED_ROOM_FOLDER
 	@caption Seotud ruumide kaust
 
 	@property related_rooms type=relpicker multiple=1 field=meta method=serialize store=connect reltype=RELTYPE_RELATED_ROOMS
 	@caption Ruumid mida samal ajal broneerida
-
-	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
-	@caption Kuva valitud tooteid kalendrivaates
-
-	@property cal_show_prod_img type=checkbox ch_value=1 field=meta method=serialize 
-	@caption Kuva tootepilte kalendrivaates
-
-	@property cal_show_prod_img_ord type=textbox size=5 field=meta method=serialize 
-	@caption Tootepildi j&auml;rjekorranumber, mida kuvada
 
 	@property cal_refresh_time type=textbox size=5 field=meta method=serialize 
 	@caption Mitme minuti tagant kalendrit refreshida
@@ -40,9 +25,82 @@
 
 	@property min_price_to_all type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Miinimumhind m&otilde;jub k&otilde;igile
+
+@groupinfo bron caption="Broneeringuobjekt"
+@default group=bron
+
+	@property no_cust_arrived_pop type=checkbox ch_value=1
+	@caption Kliendi saabumise kinnitust pole vaja k&uuml;sida
+
+	@property use_existing_person type=checkbox ch_value=1
+	@caption Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt
+
+	@property dont_ask_close_reason type=checkbox ch_value=1
+	@caption Ei k&uuml;si sulgemise p&otilde;hjust
+
+	@property bron_required_fields type=table store=no
+	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
+
+@groupinfo calendar_view caption="Kalendrivaade"
+@default group=calendar_view
+
+	@property comment_pos type=select
+	@caption Kuva kommentaar
+
+	@property buffer_time_string type=textbox 
+	@caption Puhveraja string
+
+	@property closed_time_string type=textbox 
+	@caption Pausi string
+
+	@property closed__time_string type=textbox 
+	@caption Suletud aja string
+
+	@property available_time_string type=textbox 
+	@caption Vaba aja string- Broneeritud aja string
+
+	@property bron_popup_detailed type=checkbox ch_value=1
+	@caption Broneerimisaken on detailse sisuga
+
+	@property bron_popup_immediate type=checkbox ch_value=1
+	@caption Broneerimisaken avaneb kohe kui ajale klikkida
+
+	@property bron_no_popups type=checkbox ch_value=1
+	@caption Broneerimiseks ei avata popup aknaid
 	
-@property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
-@caption &Auml;ra kuva aja pikkust kalendris
+	@property cal_from_today type=checkbox ch_value=1
+	@caption Ruumide kalendrid algavad t&auml;nasest, mitte n&auml;dala algusest
+
+	@property show_workers_in_calander type=checkbox ch_value=1
+	@caption N&auml;ita t&ouml;&ouml;tajaid kalendrivaates
+
+	@property dont_show_day_sum_in_calander type=checkbox ch_value=1
+	@caption &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates
+
+	@property show_only_my_graphs type=checkbox ch_value=1
+	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
+
+	@property max_times_per_day type=textbox field=meta method=serialize
+	@caption Maksimaalne aegade arv samal p&auml;eval
+
+	@property show_unverified type=checkbox ch_value=1 field=meta method=serialize 
+	@caption N&auml;ita kalendris kinnitamata broneeringuid
+
+	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kuva valitud tooteid kalendrivaates
+
+	@property cal_show_prod_img type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kuva tootepilte kalendrivaates
+
+	@property cal_show_prod_img_ord type=textbox size=5 field=meta method=serialize 
+	@caption Tootepildi j&auml;rjekorranumber, mida kuvada
+	
+	@property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
+	@caption &Auml;ra kuva aja pikkust kalendris
+
+	@property bron_props type=table save=no no_caption=1
+	@caption Broneeringu omaduste tabel
+
 
 @groupinfo whom caption="Kellele kehtib"
 @default group=whom
@@ -91,70 +149,17 @@
 	@property col_slave type=colorpicker 
 	@caption Alam-reserveeringu v&auml;rv
 
-@groupinfo calendar_view caption="Kalendrivaade"
-@default group=calendar_view
-
-	@property bron_props type=table save=no no_caption=1
-	@caption Broneeringu omaduste tabel
-
 @groupinfo settings caption="Muud seaded"
 	@groupinfo settings_gen caption="Muud seaded" parent=settings
 	
 @default group=settings_gen
 
-	@property comment_pos type=select
-	@caption Kuva kommentaar
-
-	@property buffer_time_string type=textbox 
-	@caption Puhveraja string
-
-	@property closed_time_string type=textbox 
-	@caption Pausi string
-
-	@property closed__time_string type=textbox 
-	@caption Suletud aja string
-
-	@property available_time_string type=textbox 
-	@caption Vaba aja string
 
 	@property reserved_time_string type=textbox 
 	@caption Broneeritud aja string
 
-	property closed_time_string type=textbox 
-	caption Suletud aja string
 
-	@property bron_popup_detailed type=checkbox ch_value=1
-	@caption Broneerimisaken on detailse sisuga
 
-	@property bron_popup_immediate type=checkbox ch_value=1
-	@caption Broneerimisaken avaneb kohe kui ajale klikkida
-
-	@property bron_no_popups type=checkbox ch_value=1
-	@caption Broneerimiseks ei avata popup aknaid
-	
-	@property cal_from_today type=checkbox ch_value=1
-	@caption Ruumide kalendrid algavad t&auml;nasest, mitte n&auml;dala algusest
-
-	@property no_cust_arrived_pop type=checkbox ch_value=1
-	@caption Kliendi saabumise kinnitust pole vaja k&uuml;sida
-	
-	@property use_existing_person type=checkbox ch_value=1
-	@caption Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt
-
-	@property show_workers_in_calander type=checkbox ch_value=1
-	@caption N&auml;ita t&ouml;&ouml;tajaid kalendrivaates
-
-	@property dont_show_day_sum_in_calander type=checkbox ch_value=1
-	@caption &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates
-
-	@property show_only_my_graphs type=checkbox ch_value=1
-	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
-
-	@property dont_ask_close_reason type=checkbox ch_value=1
-	@caption Ei k&uuml;si sulgemise p&otilde;hjust
-
-	@property bron_required_fields type=table store=no
-	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 
 
 @groupinfo email caption="Meiliseaded"
