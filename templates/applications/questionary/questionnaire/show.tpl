@@ -1,5 +1,6 @@
 <!-- SUB: QUESTIONNAIRE -->
-<form method="post">
+<form method="post" action="?qid=end">
+<!-- SUB: QUESTION -->
 <table width="100%">
 	<tr>
 		<td valign="top">
@@ -12,10 +13,10 @@
 				<tr>
 					<td valign="top">
 						<!-- SUB: ANSWER_RADIO -->
-							<input type="radio" value="{VAR:answer_oid}" name="answer" {VAR:answer_checked}> {VAR:answer_caption}<br>
+							<input type="radio" value="{VAR:answer_oid}" name="answer_{VAR:question_id}" {VAR:answer_checked}> {VAR:answer_caption}<br>
 						<!-- END SUB: ANSWER_RADIO -->
 						<!-- SUB: ANSWER_TEXTBOX -->
-							<input type="textbox" name="answer" value="{VAR:answer_value}"><br>
+							<input type="textbox" name="answer_{VAR:question_id}" value="{VAR:answer_value}"><br>
 						<!-- END SUB: ANSWER_TEXTBOX -->
 					</td>
 					<td valign="top">
@@ -55,7 +56,8 @@
 		</td>		
 	</tr>
 </table>
-<input type="hidden" value="{VAR:question_id}" name="qid">
+<!-- END SUB: QUESTION -->
+<input type="submit" value="Saada">
 </form>
 <!-- END SUB: QUESTIONNAIRE -->
 <!-- SUB: RESULTS -->

@@ -176,12 +176,77 @@ class questionnaire_question extends class_base
 
 	function show($arr)
 	{
+		extract($arr["conf"]);
+		// $dsply_acomment, $dsply_qcomment
+
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
+
+		// Figure out the conf		
+		if($ob->prop("dsply_acomment"))
+		{
+			$dsply_acomment = $q_obj->prop("dsply_acomment");
+		}
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"question" => $ob->prop("name"),
+			"question_id" => $ob->id(),
 		));
+		
+		if($ob->prop("ans_type"))
+		{
+			$this->vars(array(
+				"answer_value" => $_POST["answers"][$ob->id()],
+			));
+			$ANSWER_TEXTBOX = $this->parse("ANSWER_TEXTBOX");
+			$this->vars(array("ANSWER_TEXTBOX" => $ANSWER_TEXTBOX));
+		}
+		else
+		{			
+			$ol = new object_list($ob->connections_from(array("type" => "RELTYPE_ANSWER")));
+			$ol_arr = $ol->arr();
+			uasort($ol_arr, array($this, "cmp_function"));
+			foreach($ol_arr as $ans_o)
+			{
+				$answer_checked = ($ans_o->id() == $_POST["answers"][$ob->id()]) ? "checked=\"checked\"" : "";
+				$this->vars(array(
+					"answer_oid" => $ans_o->id(),
+					"answer_caption" => $ans_o->name(),
+					"answer_checked" => $answer_checked,
+				));
+				$ANSWER_RADIO .= $this->parse("ANSWER_RADIO");
+			}
+			$this->vars(array("ANSWER_RADIO" => $ANSWER_RADIO));
+		}		
+
+		foreach($ob->prop("pics") as $pic_id)
+		{
+			if(!is_oid($pic_id))
+			{
+				continue;
+			}
+
+			$this->vars(array(
+				"picture" => $i->make_img_tag_wl($pic_id),
+			));
+			$PICTURE .= $this->parse("PICTURE");
+		}
+		$this->vars(array(
+			"PICTURE" => $PICTURE,
+		));
+		
+		if($dsply_qcomment == 1)
+		{
+			$this->vars(array(
+				"qcomment" => $ob->prop("comm"),
+			));
+		}
+
 		return $this->parse();
+	}
+
+	private function cmp_function($a, $b)
+	{
+		return $a->ord() > $b->ord();
 	}
 }
 

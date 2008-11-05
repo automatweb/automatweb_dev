@@ -17,6 +17,9 @@
 		#@caption K&uuml;simusi korraga
 		#@comment 0 = unlimited
 
+		@property q_by_one type=checkbox ch_value=1 field=meta method=serialize
+		@caption K&uuml;simused &uuml;hekaupa
+
 		@property dsply_qcomment type=chooser field=meta method=serialize
 		@caption Kuva k&uuml;simuse kommentaari
 		@comment Kuvatakse kommentaare, mille pikkus on > 0.
@@ -60,7 +63,7 @@
 		@property str_rslts type=checkbox ch_value=1 field=meta method=serialize
 		@caption Salvesta vastamised
 
-		@property str_answerer type=checkbox ch_value=1 field=meta method=serialize
+		@property str_answerer type=chooser field=meta method=serialize
 		@caption Salvesta vastaja andmed
 
 		@property str_answerer_cfgform type=relpicker reltype=RELTYPE_ASWERER_DATA_CFGFORM store=connect
@@ -140,6 +143,14 @@ class questionnaire extends class_base
 
 		switch($prop["name"])
 		{
+			case "str_answerer":
+				$prop["options"] = array(
+					0 => t("&Auml;ra salvesta"),
+					1 => t("Enne vastamist"),
+					2 => t("P&auml;rast vastamist"),
+				);
+				break;
+
 			case "dsply_qcomment":
 				$prop["options"] = array(
 					"0" => t("Mitte kunagi"),
@@ -245,6 +256,7 @@ class questionnaire extends class_base
 			// This crap cuz #251240 is undone.
 			$correct_conns = obj($a["oid"])->connections_from(array("type" => "RELTYPE_CORRECT"));
 			$wrong_conns = obj($a["oid"])->connections_from(array("type" => "RELTYPE_WRONG"));
+			$a["person"] = is_array($a["person"]) ? reset($a["person"]) : $a["person"];
 			$row = array(
 				"person" => is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "",
 				"time" => date("d.m.Y H:i:s", $a["created"]),
@@ -466,23 +478,29 @@ class questionnaire extends class_base
 
 	function show($arr)
 	{
-		$_qs = aw_unserialize(aw_global_get("questions_".$arr["id"]));
+		$this->_qs = aw_unserialize(aw_global_get("questions_".$arr["id"]));
 		$_myas = aw_unserialize(aw_global_get("my_answers_".$arr["id"]));
-		$set_qs = !is_array($_qs);
+		$set_qs = !is_array($this->_qs);
 		if(aw_global_get("questions_".$arr["id"]) == "end")
 		{
 			$set_qs = true;
 		}
 		if($set_qs)
 		{
-			$_qs = array();
+			$this->_qs = array();
 		}
-		/* $_qs values:
+		if(is_oid($_GET["pid"]))
+		{
+			// So it won't get lost in the process
+			aw_session_set("questionnaire_pid", $_GET["pid"]);
+		}
+		$Q_PID = is_oid($_GET["pid"]) ? $_GET["pid"] : aw_global_get("questionnaire_pid");
+		/* $this->_qs values:
 		0 - undone
 		1 - done, wrong
 		2 - done, correct
 
-		arr($_qs);
+		arr($this->_qs);
 
 		Array
 		(
@@ -492,32 +510,65 @@ class questionnaire extends class_base
 
 		*/
 
-		$o = new object($arr["id"]);
+		$this->o = $o = new object($arr["id"]);
 		$i = get_instance(CL_IMAGE);
 		$this->read_template("show.tpl");
 
+		if(!is_oid($Q_PID) && !isset($_GET["qid"]) && $o->str_answerer == 1 && $this->can("view", $o->prop("str_answerer_cfgform")))
+		{
+			// Set the redirect for the cfgform
+			$c = obj($o->prop("str_answerer_cfgform"));
+			$cfgview_ru = get_ru();
+			$c->set_prop("cfgview_ru", $cfgview_ru);
+			$c->set_prop("cfgview_ru_id_param", "pid");
+			aw_disable_acl();
+			$c->save();
+			aw_restore_acl();
+
+
+			$this->vars(array(
+				"insertion_form" => $c->instance()->parse_alias(array(
+					"alias" => array("target" => $c->id()),
+				)),
+			));
+			$this->vars(array(
+				"PERSON_DATA_INSERTION" => $this->parse("PERSON_DATA_INSERTION"),
+			));
+			return $this->parse();
+		}
+		else
 		if($_GET["qid"] == "data")
 		{
-			if($this->can("view", $o->prop("str_answerer_cfgform")) && $o->prop("str_answerer"))
+			if($this->can("view", $o->prop("str_answerer_cfgform")) && $o->prop("str_answerer") == 2)
 			{
-				// Set the redirect for the cfgform
-				$c = obj($o->prop("str_answerer_cfgform"));
-				$cfgview_ru = aw_ini_get("baseurl").aw_url_change_var("qid", "end");
-				$c->set_prop("cfgview_ru", $cfgview_ru);
-				aw_disable_acl();
-				$c->save();
-				aw_restore_acl();
+				// Avoid entering the answerer's data twice
+				if(is_oid($Q_PID))
+				{					
+					// Move on show the results.
+					$_GET["qid"] = "end";
+				}
+				else
+				{
+					// Set the redirect for the cfgform
+					$c = obj($o->prop("str_answerer_cfgform"));
+					$cfgview_ru = aw_ini_get("baseurl").aw_url_change_var("qid", "end");
+					$c->set_prop("cfgview_ru", $cfgview_ru);
+					$c->set_prop("cfgview_ru_id_param", "pid");
+					aw_disable_acl();
+					$c->save();
+					aw_restore_acl();
 
 
-				$this->vars(array(
-					"insertion_form" => $c->instance()->parse_alias(array(
-						"alias" => array("target" => $c->id()),
-					)),
-				));
-				$this->vars(array(
-					"PERSON_DATA_INSERTION" => $this->parse("PERSON_DATA_INSERTION"),
-				));
-				return $this->parse();
+					$this->vars(array(
+						"insertion_form" => $c->instance()->parse_alias(array(
+							"alias" => array("target" => $c->id()),
+						)),
+					));
+					$this->vars(array(
+						"PERSON_DATA_INSERTION" => $this->parse("PERSON_DATA_INSERTION"),
+					));
+					return $this->parse();
+				}
 			}
 			else
 			{
@@ -533,7 +584,7 @@ class questionnaire extends class_base
 					"to" => $o->id(),
 					"reltype" => "RELTYPE_QUESTIONNAIRE",
 				));
-				foreach($_qs as $qid => $v)
+				foreach($this->_qs as $qid => $v)
 				{
 					if($v == 1 || $v == 2)
 					{
@@ -549,26 +600,31 @@ class questionnaire extends class_base
 		}
 		if($_GET["qid"] == "end")
 		{
-			// If a person is created, store the answers and connect 'em to that person
-			if($this->can("view", $_GET["pid"]))
+			if(isset($_POST["answers"]) && is_array($_POST["answers"]))
 			{
+				$this->handle_answer_submit();
+			}
+			// If a person is created, store the answers and connect 'em to that person
+			if($this->can("view", $Q_PID))
+			{
+				aw_session_del("questionnaire_pid");
 				// Save the data
 				$a = obj();
 				$a->set_class_id(CL_QUESTIONNAIRE_ANSWERER);
 				$a->set_parent($o->id());
-				$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($_GET["pid"])->name(), $o->name()));
+				$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($Q_PID)->name(), $o->name()));
 				aw_disable_acl();
 				$a->save();
 				aw_restore_acl();
 				$a->connect(array(
-					"to" => $_GET["pid"],
+					"to" => $Q_PID,
 					"reltype" => "RELTYPE_PERSON",
 				));
 				$a->connect(array(
 					"to" => $o->id(),
 					"reltype" => "RELTYPE_QUESTIONNAIRE",
 				));
-				foreach($_qs as $qid => $v)
+				foreach($this->_qs as $qid => $v)
 				{
 					if($v == 1 || $v == 2)
 					{
@@ -582,13 +638,13 @@ class questionnaire extends class_base
 			if($o->prop("rd_percent"))
 			{
 				$this->vars(array(
-					"results_percent" => $this->correct_percent($_qs),
+					"results_percent" => $this->correct_percent($this->_qs),
 				));
 			}
 			if($o->prop("rd_fraction"))
 			{
 				$this->vars(array(
-					"results_fraction" => $this->correct_fraction($_qs),
+					"results_fraction" => $this->correct_fraction($this->_qs),
 				));
 			}
 			if($o->prop("rd_results"))
@@ -632,7 +688,7 @@ class questionnaire extends class_base
 					$this->vars(array(
 						"RESULTS_CORRECT_ANSWER" => $RESULTS_CORRECT_ANSWER,
 					));
-					$RESULTS_ANSWERED .= $this->parse($_qs[$qo->id()] == 2 ? "RESULTS_CORRECTLY_ANSWERED" : "RESULTS_WRONGLY_ANSWERED");
+					$RESULTS_ANSWERED .= $this->parse($this->_qs[$qo->id()] == 2 ? "RESULTS_CORRECTLY_ANSWERED" : "RESULTS_WRONGLY_ANSWERED");
 				}
 				$this->vars(array(
 					"RESULTS_ANSWERED" => $RESULTS_ANSWERED,
@@ -651,7 +707,7 @@ class questionnaire extends class_base
 			}
 			foreach($o->meta("rd_percent_text") as $m)
 			{
-				if(($m["from"] <= $this->correct_percent($_qs) || strlen($m["from"]) == 0) && ($m["to"] >= $this->correct_percent($_qs) || strlen($m["to"]) == 0))
+				if(($m["from"] <= $this->correct_percent($this->_qs) || strlen($m["from"]) == 0) && ($m["to"] >= $this->correct_percent($this->_qs) || strlen($m["to"]) == 0))
 				{
 					$this->vars(array(
 						"results_text_by_percent" => $m["text"],
@@ -670,133 +726,159 @@ class questionnaire extends class_base
 			return $this->parse();
 		}
 
-		$conns = $o->connections_from(array("type" => 1));
-		foreach($conns as $conn)
+		if($o->q_by_one)
 		{
-			if($set_qs)
+			$conns = $o->connections_from(array("type" => "RELTYPE_QUESTION"));
+			foreach($conns as $conn)
 			{
-				$_qs[$conn->conn["to"]] = 0;
+				if($set_qs)
+				{
+					$this->_qs[$conn->conn["to"]] = 0;
+				}
+
+				$qs[$conn->conn["to"]]["oid"] = $conn->conn["to"];
+				$qs[$conn->conn["to"]]["caption"] = $conn->conn["to.name"];
+				$qs[$conn->conn["to"]]["jrk"] = $conn->conn["to.jrk"];
+			}
+			foreach ($qs as $k => $r)
+			{
+				$jrk[$k]  = $r["jrk"];
+			}
+			array_multisort($jrk, SORT_ASC, $qs);
+			if(count($qs) == 0)
+			{
+				return false;
 			}
 
-			$qs[$conn->conn["to"]]["oid"] = $conn->conn["to"];
-			$qs[$conn->conn["to"]]["caption"] = $conn->conn["to.name"];
-			$qs[$conn->conn["to"]]["jrk"] = $conn->conn["to.jrk"];
-		}
-		foreach ($qs as $k => $r)
-		{
-			$jrk[$k]  = $r["jrk"];
-		}
-		array_multisort($jrk, SORT_ASC, $qs);
-		if(count($qs) == 0)
-		{
-			return false;
-		}
-
-		$qs_id = $this->array_search_by_column($_GET["qid"], $qs, "oid");
-		$q = $qs[$qs_id];
-		$q_obj = obj($q["oid"]);
-		// If it's the first question and it's not submitted right now, we start over again.
-		if($qs_id == 0 && !$_POST["qid"])
-		{
-			foreach($qs as $q_temp)
+			$qs_id = $this->array_search_by_column($_GET["qid"], $qs, "oid");
+			$q = $qs[$qs_id];
+			$q_obj = obj($q["oid"]);
+			// If it's the first question and it's not submitted right now, we start over again.
+			if($qs_id == 0 && !$_POST["qid"])
 			{
-				$_qs[$q_temp["oid"]] = 0;
+				foreach($qs as $q_temp)
+				{
+					$this->_qs[$q_temp["oid"]] = 0;
+				}
 			}
-		}
-		foreach($q_obj->connections_from(array("type" => 1)) as $conn)
-		{
-			$as[$conn->conn["to"]]["oid"] = $conn->conn["to"];
-			$as[$conn->conn["to"]]["caption"] = $conn->conn["to.name"];
-			$as[$conn->conn["to"]]["jrk"] = $conn->conn["to.jrk"];
-		}
-		unset($jrk);
-		foreach ($as as $k => $r)
-		{
-			$jrk[$k]  = $r["jrk"];
-		}
-		array_multisort($jrk, SORT_ASC, $as);
-
-		if($q_obj->prop("ans_type"))
-		{
-			$this->vars(array(
-				"answer_value" => $_POST["answer"],
-			));
-			$ANSWER_TEXTBOX = $this->parse("ANSWER_TEXTBOX");
-			$this->vars(array("ANSWER_TEXTBOX" => $ANSWER_TEXTBOX));
-		}
-		else
-		{
-			foreach($as as $a)
+			foreach($q_obj->connections_from(array("type" => 1)) as $conn)
 			{
-				$answer_checked = ($a["oid"] == $_POST["answer"]) ? "checked" : "";
-				$this->vars(array(
-					"answer_oid" => $a["oid"],
-					"answer_caption" => $a["caption"],
-					"answer_checked" => $answer_checked,
-				));
-				$ANSWER_RADIO .= $this->parse("ANSWER_RADIO");
+				$as[$conn->conn["to"]]["oid"] = $conn->conn["to"];
+				$as[$conn->conn["to"]]["caption"] = $conn->conn["to.name"];
+				$as[$conn->conn["to"]]["jrk"] = $conn->conn["to.jrk"];
 			}
-			$this->vars(array("ANSWER_RADIO" => $ANSWER_RADIO));
-		}
+			unset($jrk);
+			foreach ($as as $k => $r)
+			{
+				$jrk[$k]  = $r["jrk"];
+			}
+			array_multisort($jrk, SORT_ASC, $as);
 
-		if(array_key_exists(($qs_id + 1), $qs))
-		{
-			$next_caption = t("J&auml;rgmine");
-			$next_url = aw_url_change_var("qid", $qs[$qs_id + 1]["oid"]);
-		}
-		elseif($o->prop("str_rslts"))
-		{
-			$next_caption = t("L&otilde;peta!");
-			$next_url = aw_url_change_var("qid", "data");
-		}
-		else
-		{
-			$next_caption = t("L&otilde;peta");
-			$next_url = aw_url_change_var("qid", "end");
-		}
-
-		foreach($q_obj->prop("pics") as $pic_id)
-		{
-			if(!is_oid($pic_id))
-				continue;
-
-			$this->vars(array(
-				"picture" => $i->make_img_tag_wl($pic_id),
-			));
-			$PICTURE .= $this->parse("PICTURE");
-		}
-		$this->vars(array(
-			"PICTURE" => $PICTURE,
-		));
-
-		$dsply_acomment = $o->prop("dsply_acomment");
-		$dsply_qcomment = $o->prop("dsply_qcomment");
-
-		// If this is set for the question, we override the settings set in the questionnaire conf
-		if($q_obj->prop("dsply_acomment"))
-		{
-			$dsply_acomment = $q_obj->prop("dsply_acomment");
-		}
-
-		if($_POST["qid"] && $_POST["answer"])
-		{
 			if($q_obj->prop("ans_type"))
 			{
-				$correct = false;
+				$this->vars(array(
+					"answer_value" => $_POST["answer"],
+				));
+				$ANSWER_TEXTBOX = $this->parse("ANSWER_TEXTBOX");
+				$this->vars(array("ANSWER_TEXTBOX" => $ANSWER_TEXTBOX));
+			}
+			else
+			{
 				foreach($as as $a)
 				{
-					if($a["caption"] == $_POST["answer"])
+					$answer_checked = ($a["oid"] == $_POST["answer"]) ? "checked" : "";
+					$this->vars(array(
+						"answer_oid" => $a["oid"],
+						"answer_caption" => $a["caption"],
+						"answer_checked" => $answer_checked,
+					));
+					$ANSWER_RADIO .= $this->parse("ANSWER_RADIO");
+				}
+				$this->vars(array("ANSWER_RADIO" => $ANSWER_RADIO));
+			}
+
+			if(array_key_exists(($qs_id + 1), $qs))
+			{
+				$next_caption = t("J&auml;rgmine");
+				$next_url = aw_url_change_var("qid", $qs[$qs_id + 1]["oid"]);
+			}
+			elseif($o->prop("str_rslts"))
+			{
+				$next_caption = t("L&otilde;peta!");
+				$next_url = aw_url_change_var("qid", "data");
+			}
+			else
+			{
+				$next_caption = t("L&otilde;peta");
+				$next_url = aw_url_change_var("qid", "end");
+			}
+
+			foreach($q_obj->prop("pics") as $pic_id)
+			{
+				if(!is_oid($pic_id))
+					continue;
+
+				$this->vars(array(
+					"picture" => $i->make_img_tag_wl($pic_id),
+				));
+				$PICTURE .= $this->parse("PICTURE");
+			}
+			$this->vars(array(
+				"PICTURE" => $PICTURE,
+			));
+
+			$dsply_acomment = $o->prop("dsply_acomment");
+			$dsply_qcomment = $o->prop("dsply_qcomment");
+
+			// If this is set for the question, we override the settings set in the questionnaire conf
+			if($q_obj->prop("dsply_acomment"))
+			{
+				$dsply_acomment = $q_obj->prop("dsply_acomment");
+			}
+
+			if($_POST["qid"] && $_POST["answer"])
+			{
+				if($q_obj->prop("ans_type"))
+				{
+					$correct = false;
+					foreach($as as $a)
 					{
-						$a_obj = obj($a["oid"]);
-						if($a_obj->prop("correct"))
+						if($a["caption"] == $_POST["answer"])
 						{
-							$correct = true;
-							break;
+							$a_obj = obj($a["oid"]);
+							if($a_obj->prop("correct"))
+							{
+								$correct = true;
+								break;
+							}
+						}
+					}
+					if($correct)
+					{
+						switch($dsply_acomment)
+						{
+							case 1:
+								$acomment = $a_obj->prop("comm");
+								break;
+							case 2:
+								if($correct)
+								{
+									$acomment = $a_obj->prop("comm");
+								}
+								break;
+							case 3:
+								if(!$correct)
+								{
+									$acomment = $a_obj->prop("comm");
+								}
+								break;
 						}
 					}
 				}
-				if($correct)
+				else
 				{
+					$a_obj = obj($_POST["answer"]);
+					$correct = $a_obj->prop("correct");
 					switch($dsply_acomment)
 					{
 						case 1:
@@ -816,167 +898,206 @@ class questionnaire extends class_base
 							break;
 					}
 				}
-			}
-			else
-			{
-				$a_obj = obj($_POST["answer"]);
-				$correct = $a_obj->prop("correct");
-				switch($dsply_acomment)
+				$correct_vs_false = $correct ? $o->prop("correct_msg") : $o->prop("false_msg");
+				$this->vars(array(
+					"correct_vs_false" => $correct_vs_false,
+				));
+
+				switch($dsply_qcomment)
 				{
 					case 1:
-						$acomment = $a_obj->prop("comm");
+					case 4:
+						$qcomment .= $q_obj->prop("comm");
 						break;
 					case 2:
 						if($correct)
 						{
-							$acomment = $a_obj->prop("comm");
+							$qcomment .= $q_obj->prop("comm");
 						}
 						break;
 					case 3:
 						if(!$correct)
 						{
-							$acomment = $a_obj->prop("comm");
+							$qcomment .= $q_obj->prop("comm");
 						}
 						break;
 				}
-			}
-			$correct_vs_false = $correct ? $o->prop("correct_msg") : $o->prop("false_msg");
-			$this->vars(array(
-				"correct_vs_false" => $correct_vs_false,
-			));
+				$this->_qs[$_POST["qid"]] = $correct ? 2 : 1;
+				$_myas[$_POST["qid"]] = $_POST["answer"];
 
-			switch($dsply_qcomment)
-			{
-				case 1:
-				case 4:
-					$qcomment .= $q_obj->prop("comm");
-					break;
-				case 2:
-					if($correct)
-					{
-						$qcomment .= $q_obj->prop("comm");
-					}
-					break;
-				case 3:
-					if(!$correct)
-					{
-						$qcomment .= $q_obj->prop("comm");
-					}
-					break;
-			}
-			$_qs[$_POST["qid"]] = $correct ? 2 : 1;
-			$_myas[$_POST["qid"]] = $_POST["answer"];
-
-			// If picture for correct answer is set in the question object, we'll override whatever is in the questionnaire object.
-			if($q_obj->prop("p_correct"))
-			{
-				$o->set_prop("p_correct", $q_obj->prop("p_correct"));
-			}
-
-			// If picture for wrong answer is set in the question object, we'll override whatever is in the questionnaire object.
-			if($q_obj->prop("p_false"))
-			{
-				$o->set_prop("p_false", $q_obj->prop("p_false"));
-			}
-
-			if($o->prop("p_correct") && $correct)
-			{
-				$this->vars(array(
-					"picture" => $i->view(array("id" => $o->prop("p_correct"))),
-				));
-				$ANSWER_PICTURE = $this->parse("ANSWER_PICTURE");
-				$this->vars(array(
-					"ANSWER_PICTURE" => $ANSWER_PICTURE,
-				));
-			}
-			if($o->prop("p_false") && !$correct)
-			{
-				$this->vars(array(
-					"picture" => $i->view(array("id" => $o->prop("p_false"))),
-				));
-				$ANSWER_PICTURE = $this->parse("ANSWER_PICTURE");
-				$this->vars(array(
-					"ANSWER_PICTURE" => $ANSWER_PICTURE,
-				));
-			}
-			if((!$correct && $o->prop("dsply_correct2wrong")) || ($correct && $o->prop("dsply_correct2correct")))
-			{
-				$correct_answer_count = 0;
-				foreach($as as $a)
+				// If picture for correct answer is set in the question object, we'll override whatever is in the questionnaire object.
+				if($q_obj->prop("p_correct"))
 				{
-					$a_obj = obj($a["oid"]);
-					if($a_obj->prop("correct") && $a_obj->prop("name") != $_POST["answer"] && $a["oid"] != $_POST["answer"])
-					{
-						$answer = $a_obj->prop("name");
-						$this->vars(array(
-							"answer" => $answer,
-						));
-						$CORRECT_ANSWER .= $this->parse("CORRECT_ANSWER");
-						$correct_answer_count++;
-					}
+					$o->set_prop("p_correct", $q_obj->prop("p_correct"));
 				}
-				if(!$correct && $o->prop("dsply_correct2wrong"))
+
+				// If picture for wrong answer is set in the question object, we'll override whatever is in the questionnaire object.
+				if($q_obj->prop("p_false"))
 				{
-					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2wrong_caption_single") : $o->prop("dsply_correct2wrong_caption_multiple");
+					$o->set_prop("p_false", $q_obj->prop("p_false"));
 				}
-				else
+
+				if($o->prop("p_correct") && $correct)
 				{
-					$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2correct_caption_single") : $o->prop("dsply_correct2correct_caption_multiple");
-				}
-				$this->vars(array(
-					"correct_answer_caption" => $correct_answer_caption,
-					"CORRECT_ANSWER" => $CORRECT_ANSWER,
-				));
-				$CORRECT_ANSWERS = $this->parse("CORRECT_ANSWERS");
-				if($correct_answer_count)
 					$this->vars(array(
-						"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
+						"picture" => $i->view(array("id" => $o->prop("p_correct"))),
 					));
+					$ANSWER_PICTURE = $this->parse("ANSWER_PICTURE");
+					$this->vars(array(
+						"ANSWER_PICTURE" => $ANSWER_PICTURE,
+					));
+				}
+				if($o->prop("p_false") && !$correct)
+				{
+					$this->vars(array(
+						"picture" => $i->view(array("id" => $o->prop("p_false"))),
+					));
+					$ANSWER_PICTURE = $this->parse("ANSWER_PICTURE");
+					$this->vars(array(
+						"ANSWER_PICTURE" => $ANSWER_PICTURE,
+					));
+				}
+				if((!$correct && $o->prop("dsply_correct2wrong")) || ($correct && $o->prop("dsply_correct2correct")))
+				{
+					$correct_answer_count = 0;
+					foreach($as as $a)
+					{
+						$a_obj = obj($a["oid"]);
+						if($a_obj->prop("correct") && $a_obj->prop("name") != $_POST["answer"] && $a["oid"] != $_POST["answer"])
+						{
+							$answer = $a_obj->prop("name");
+							$this->vars(array(
+								"answer" => $answer,
+							));
+							$CORRECT_ANSWER .= $this->parse("CORRECT_ANSWER");
+							$correct_answer_count++;
+						}
+					}
+					if(!$correct && $o->prop("dsply_correct2wrong"))
+					{
+						$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2wrong_caption_single") : $o->prop("dsply_correct2wrong_caption_multiple");
+					}
+					else
+					{
+						$correct_answer_caption = ($correct_answer_count == 1) ? $o->prop("dsply_correct2correct_caption_single") : $o->prop("dsply_correct2correct_caption_multiple");
+					}
+					$this->vars(array(
+						"correct_answer_caption" => $correct_answer_caption,
+						"CORRECT_ANSWER" => $CORRECT_ANSWER,
+					));
+					$CORRECT_ANSWERS = $this->parse("CORRECT_ANSWERS");
+					if($correct_answer_count)
+						$this->vars(array(
+							"CORRECT_ANSWERS" => $CORRECT_ANSWERS,
+						));
+				}
 			}
-		}
-		elseif($_POST["qid"])
-		{
-			$acomment = $o->prop("comment2nothing");
+			elseif($_POST["qid"])
+			{
+				$acomment = $o->prop("comment2nothing");
+				$this->vars(array(
+					"acomment" => $acomment,
+				));
+			}
+			else
+			{
+				if($dsply_qcomment == 1)
+				{
+					$qcomment = $q_obj->prop("comm");
+				}
+			}
+
+			if($this->_qs[$q["oid"]] != 1 && $this->_qs[$q["oid"]] != 2)
+			{
+				$submit = html::submit(array(
+					"value" => "Vasta",
+				));
+				$this->vars(array(
+					"submit" => $submit,
+				));
+				$next_caption = "";
+			}
+
 			$this->vars(array(
+				"question" => $q["caption"],
+				"next_url" => $next_url,
+				"next_caption" => $next_caption,
+				"question_id" => $q["oid"],
 				"acomment" => $acomment,
+				"qcomment" => $qcomment,
 			));
+
+			$this->vars(array(
+				"QUESTION" => $this->parse("QUESTION"),
+			));
+
+			$QUESTIONNAIRE = $this->parse("QUESTIONNAIRE");
+			$this->vars(array(
+				"QUESTIONNAIRE" => $QUESTIONNAIRE,
+			));
+
+			aw_session_set("questions_".$arr["id"], aw_serialize($this->_qs));
+			aw_session_set("my_answers_".$arr["id"], aw_serialize($_myas));
 		}
 		else
 		{
-			if($dsply_qcomment == 1)
-			{
-				$qcomment = $q_obj->prop("comm");
-			}
+			$this->show_all_questions();
 		}
 
-		if($_qs[$q["oid"]] != 1 && $_qs[$q["oid"]] != 2)
-		{
-			$submit = html::submit(array(
-				"value" => "Vasta",
-			));
-			$this->vars(array(
-				"submit" => $submit,
-			));
-			$next_caption = "";
-		}
-
-		$this->vars(array(
-			"question" => $q["caption"],
-			"next_url" => $next_url,
-			"next_caption" => $next_caption,
-			"question_id" => $q["oid"],
-			"acomment" => $acomment,
-			"qcomment" => $qcomment,
-		));
-
-		$QUESTIONNAIRE = $this->parse("QUESTIONNAIRE");
-		$this->vars(array(
-			"QUESTIONNAIRE" => $QUESTIONNAIRE,
-		));
-
-		aw_session_set("questions_".$arr["id"], aw_serialize($_qs));
-		aw_session_set("my_answers_".$arr["id"], aw_serialize($_myas));
 		return $this->parse();
+	}
+
+	function show_all_questions()
+	{
+		$QUESTION = "";
+		foreach($this->sort_questions() as $q)
+		{
+			$QUESTION .= $q->instance()->show(array("id" => $q->id(), "conf" => array(
+				"dsply_acomment" => $this->o->prop("dsply_acomment"),
+				"dsply_qcomment" => $this->o->prop("dsply_qcomment"),
+			)));
+		}
+		$this->vars(array(
+			"QUESTION" => $QUESTION,
+		));
+
+		$this->vars(array(
+			"QUESTIONNAIRE" => $this->parse("QUESTIONNAIRE"),
+		));
+	}
+
+	private function sort_questions()
+	{
+		$ol = new object_list($this->o->connections_from(array("type" => "RELTYPE_QUESTION")));
+		$ol_arr = $ol->arr();
+		uasort($ol_arr, array($this, "cmp_function"));
+		return $ol_arr;
+	}
+
+	private function handle_answer_submit()
+	{
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_QUESTIONNAIRE_ANSWER,
+				"oid" => $_POST["answers"],
+				"lang_id" => array(),
+				"site_id" => array(),
+			), 
+			array(
+				CL_QUESTIONNAIRE_ANSWER => array("correct"),
+			)
+		);
+		$odl_arr = $odl->arr();
+
+		foreach($_POST["answers"] as $qid => $aid)
+		{
+			$this->_qs[$qid] = $odl_arr[$aid]["correct"] == 1 ? 2 : 1;
+		}
+	}
+
+	private function cmp_function($a, $b)
+	{
+		return $a->ord() > $b->ord();
 	}
 }
 

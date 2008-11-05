@@ -9,6 +9,16 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>q_by_one</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>K&amp;amp;uuml;simused &amp;amp;uuml;hekaupa</caption>
+      </property>
+      <property>
             <name>dsply_qcomment</name>
             <table>objects</table>
             <group>conf</group>
@@ -130,8 +140,7 @@
             <name>str_answerer</name>
             <table>objects</table>
             <group>conf</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Salvesta vastaja andmed</caption>
