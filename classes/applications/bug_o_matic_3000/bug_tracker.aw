@@ -2905,7 +2905,7 @@ class bug_tracker extends class_base
 
 		if (trim($r["s_feedback_p"]) != "")
 		{
-			$res["CL_BUG.RELTYPE_FEEDBACK_P.name"] = $this->_get_string_filt($r["s_feedback_p"]);
+			$res["CL_BUG.bug_feedback_p.name"] = $this->_get_string_filt($r["s_feedback_p"]);
 		}
 
 		if ($r["s_finance_type"] != 0)
