@@ -479,7 +479,7 @@ class questionnaire extends class_base
 	function show($arr)
 	{
 		$this->_qs = aw_unserialize(aw_global_get("questions_".$arr["id"]));
-		$_myas = aw_unserialize(aw_global_get("my_answers_".$arr["id"]));
+		$this->_myas = aw_unserialize(aw_global_get("my_answers_".$arr["id"]));
 		$set_qs = !is_array($this->_qs);
 		if(aw_global_get("questions_".$arr["id"]) == "end")
 		{
@@ -663,7 +663,7 @@ class questionnaire extends class_base
 				{
 					$this->vars(array(
 						"results_question" => $qo->trans_get_val("name"),
-						"results_my_answer" => obj($_myas[$qo->id()])->trans_get_val("name"),
+						"results_my_answer" => obj($this->_myas[$qo->id()])->trans_get_val("name"),
 					));
 
 					$ol2 = new object_list($qo->connections_from(array("type" => "RELTYPE_ANSWER")));
@@ -923,7 +923,7 @@ class questionnaire extends class_base
 						break;
 				}
 				$this->_qs[$_POST["qid"]] = $correct ? 2 : 1;
-				$_myas[$_POST["qid"]] = $_POST["answer"];
+				$this->_myas[$_POST["qid"]] = $_POST["answer"];
 
 				// If picture for correct answer is set in the question object, we'll override whatever is in the questionnaire object.
 				if($q_obj->prop("p_correct"))
@@ -1037,7 +1037,7 @@ class questionnaire extends class_base
 			));
 
 			aw_session_set("questions_".$arr["id"], aw_serialize($this->_qs));
-			aw_session_set("my_answers_".$arr["id"], aw_serialize($_myas));
+			aw_session_set("my_answers_".$arr["id"], aw_serialize($this->_myas));
 		}
 		else
 		{
@@ -1092,6 +1092,7 @@ class questionnaire extends class_base
 		foreach($_POST["answers"] as $qid => $aid)
 		{
 			$this->_qs[$qid] = $odl_arr[$aid]["correct"] == 1 ? 2 : 1;
+			$this->_myas[$qid] = $aid;
 		}
 	}
 
