@@ -4694,7 +4694,7 @@ class task extends class_base
 			$c = $c->from();
 			$name = obj($c);
 			$name = $name->name();
-			$oid = $c->prop("work_contact");
+			$oid = $c->company_id();
 			if($oid)
 			{
 				$obj = obj($oid);

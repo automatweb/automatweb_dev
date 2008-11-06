@@ -1643,15 +1643,13 @@ class user extends class_base
 	{
 		aw_disable_acl();
 		$p_o = obj($person);
-		if ($this->can("view", $p_o->prop("work_contact")))
+		if ($co = $p_o->company_id())
 		{
 			aw_restore_acl();
-			return $p_o->prop("work_contact");
+			return $co;
 		}
-		$cons = $p_o->connections_from(array(
-			"type" => "RELTYPE_WORK",
-		));
-		$org_c = reset($cons);
+
+		$org_c = $p_o->company_id();
 		if (!$org_c)
 		{
 			$uo = obj(aw_global_get("uid_oid"));
@@ -1667,16 +1665,13 @@ class user extends class_base
 			$p_o->save();
 			aw_restore_acl();
 			// now, connect user to person
-			$p_o->connect(array(
-				"to" => $p->id(),
-				"reltype" => "RELTYPE_WORK" // from crm_person
-			));
+			$p_o->add_work_relation(array("org" => $p->id()));
 			aw_restore_acl();
 			return $p->id();
 		}
 
 		aw_restore_acl();
-		return $org_c->prop("to");
+		return $org_c->id();
 	}
 
 	/** returns the CL_CRM_COMPANY that is connected to the current logged in user
@@ -1753,7 +1748,10 @@ class user extends class_base
 		$o->save();
 
 		// add user to all users grp if we are not under that
-		$aug_oid = user::get_all_users_group();
+		if (!$aug_oid)
+		{
+			$aug_oid = user::get_all_users_group();
+		}
 		if ($aug_oid != $o->parent())
 		{
 			$aug_o = obj($aug_oid);
@@ -2085,8 +2083,9 @@ class user extends class_base
 	}
 
 	function on_save_addr($arr)
-	{
+{			//mailinglist annab igatahes errorit siin muidu
 		$ml_m = obj($arr["oid"]);
+			if(!is_oid($ml_m->id()))return;
 		$c = reset($ml_m->connections_to(array("from.class_id" => CL_USER, "type" => 6)));
 
 		if (!$c)

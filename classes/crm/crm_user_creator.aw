@@ -63,13 +63,7 @@ class crm_user_creator extends core
 	function get_co_for_person($p_id)
 	{
 		$p = obj($p_id);
-		$wc = $p->prop("work_contact");
-
-		if (is_oid($wc) && $this->can("view", $wc))
-		{
-			return obj($wc);
-		}
-		return false;
+		return $p->company();
 	}
 
 	function check_co_groups($co)

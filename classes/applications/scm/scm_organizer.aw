@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.10 2007/12/06 14:34:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.11 2008/11/06 18:52:08 markop Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -458,7 +458,7 @@ class scm_organizer extends class_base
 	function get_organizer_company($arr)
 	{
 		$o = obj($this->get_organizer_person($arr));
-		return ($s = $o->prop("work_contact"))?$s:false;
+		return ($s = $o->company_id())?$s:false;
 	}
 
 	/**

@@ -3264,35 +3264,8 @@ class crm_company extends class_base
 
 	function get_all_workers_for_company($obj,&$data,$workers_too=false)
 	{
-		//getting all the workers for the $obj
-		$conns = $obj->connections_from(array(
-			"type" => "RELTYPE_WORKERS",
-		));
-		foreach($conns as $conn)
-		{
-			$data[$conn->prop('to')] = $conn->prop('to');
-		}
-
-		if($workers_too)
-		{
-			$conns = $obj->connections_from(array(
-				'type' => "RELTYPE_WORKERS",
-			));
-			foreach($conns as $conn)
-			{
-				$data[$conn->prop('to')] = $conn->prop('to');
-			}
-		}
-
-		//getting all the sections
-		$conns = $obj->connections_from(array(
-			'type' => "RELTYPE_SECTION",
-		));
-		foreach($conns as $conn)
-		{
-			$tmp_obj = new object($conn->prop('to'));
-			$this->get_all_workers_for_company(&$tmp_obj,&$data);
-		}
+		$workers = $obj->get_workers();
+		$data += $workers->ids();
 	}
 
 	// Invoked when a connection is created from person to organization || section
@@ -3317,38 +3290,40 @@ class crm_company extends class_base
 					"reltype" => "RELTYPE_SELLER",
 				));
 			}
-			else if($conn->prop('reltype') == 6) //crm_person.reltype_WORK ------ vaja t88suhtepeale
-			{
-				$target_obj->add_employees(array("id" => $conn->prop("from")));
+//			else if($conn->prop('reltype') == 6) //crm_person.reltype_WORK ------ vaja t88suhtepeale
+//			{
+//				$target_obj->add_employees(array("id" => $conn->prop("from")));
 //				$target_obj->connect(array(
 //					"to" => $conn->prop("from"),
 //					"reltype" => "RELTYPE_WORKERS",
 //				));
-			}
+//			}
 		}
-		else if($target_obj->class_id() == CL_CRM_SECTION)//-------------------------t88suhte peale
-		{
-			$target_obj->connect(array(
-				"to" => $conn->prop("from"),
-				"reltype" => "RELTYPE_WORKERS",
-			));
-
-		}
+//		else if($target_obj->class_id() == CL_CRM_SECTION)//-------------------------t88suhte peale
+//		{
+//			$target_obj->connect(array(
+//				"to" => $conn->prop("from"),
+//				"reltype" => "RELTYPE_WORKERS",
+//			));
+//
+//		}
 	}
 
 	// Invoked when a connection is created from person to section
 	// .. this will then create the opposite connection.
 	function on_connect_person_to_section($arr)
 	{
-		$conn = $arr["connection"];
-		$target_obj = $conn->to();
-		if ($target_obj->class_id() == CL_CRM_SECTION)//-------------------------t88suhte peale
-		{
-			$target_obj->connect(array(
-				"to" => $conn->prop("from"),
-				"reltype" => "RELTYPE_WORKERS",
-			));
-		}
+		;
+		//personi connectimisel sectioniga ei pea midagi sarnast tegema enam
+//		$conn = $arr["connection"];
+//		$target_obj = $conn->to();
+//		if ($target_obj->class_id() == CL_CRM_SECTION)//-------------------------t88suhte peale
+//		{
+//			$target_obj->connect(array(
+//				"to" => $conn->prop("from"),
+//				"reltype" => "RELTYPE_WORKERS",
+//			));
+//		}
 	}
 
 //-------------------------t88suhte peale
@@ -3360,7 +3335,7 @@ class crm_company extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_COMPANY)
 		{
-			if($conn->prop('reltype') == 6)
+/*			if($conn->prop('reltype') == 6)
 			{
 				if($target_obj->is_connected_to(array(
 						'to' => $conn->prop('from'),
@@ -3372,7 +3347,9 @@ class crm_company extends class_base
 					));
 				}
 			}
-			else if($conn->prop('reltype') == 22) //crm_person.client_im_handling
+			else 
+*/
+			if($conn->prop('reltype') == 22) //crm_person.client_im_handling
 			{
 				if($target_obj->is_connected_to(array(
 						'to' => $conn->prop('from'),
@@ -3526,13 +3503,8 @@ class crm_company extends class_base
 
 		$per_obj = new object($arr["source_id"]);
 
-		$conns = $per_obj->connections_to(array(
-			"type" => 8, //RELTYPE_WORKERS
-		));
-
-		foreach($conns as $conn)
+		foreach($per_obj->get_all_orgs()->arr() as $org_obj)
 		{
-			$org_obj = $conn->from();
 			$org_obj->connect(array(
 				"to" => $arr["event_id"],
 				"reltype" => $reltype,
@@ -4395,8 +4367,10 @@ class crm_company extends class_base
 			));
 
 			$person = new object($value);
-			$person->set_prop('work_contact',$arr['id']);
-			$person->save();
+			$person->add_work_relation(array(
+				"org" => $arr['id'],
+			));
+
 
 			if ($arr["cat"] && $cat != 999999)
 			{
@@ -4583,7 +4557,10 @@ class crm_company extends class_base
 			));
 			list($work_contact,) = each($work_contact);
 		}
-		$person->set_prop('work_contact',$work_contact);
+
+		$person->add_work_relation(array(
+			"org" => $work_contact,
+		));
 
 		$orgs = array();
 		foreach($person->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
@@ -9243,10 +9220,7 @@ Bank accounts: yksteise all
 		$company = obj($arr["id"]);
 		foreach($arr["sel"] as $pid)
 		{
-//			if(!$company->is_connected_to(array("to" => $pid, "type" => RELTYPE_WORKERS)))
-//			{
-				$company->add_employees(array("id" => $pid));
-//			}
+			$company->add_employees(array("id" => $pid));
 		}
 		return $arr["post_ru"];
 	}
@@ -9434,6 +9408,7 @@ Bank accounts: yksteise all
 		$o->delete();
 		return $arr["post_ru"];
 	}
+
 }
 
 ?>

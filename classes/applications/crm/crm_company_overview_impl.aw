@@ -2020,7 +2020,7 @@ class crm_company_overview_impl extends class_base
 			if ($ns != "")
 			{
 				$nso = obj($act->prop("actor"));
-				$work = html::obj_change_url($nso->prop("work_contact"));
+				$work = html::obj_change_url($nso->company_id());
 				$ns .= ($work != "" ? ", ".$work : "");
 			}
 

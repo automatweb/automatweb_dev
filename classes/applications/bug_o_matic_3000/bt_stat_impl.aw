@@ -145,7 +145,7 @@ class bt_stat_impl extends core
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($uid);
-			if(is_array($cos) && count($cos) && !$cos[$p->prop("work_contact")])
+			if(is_array($cos) && count($cos) && !$cos[$p->company_id()])
 			{
 				continue;
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.17 2008/10/28 10:01:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.18 2008/11/06 18:52:21 markop Exp $
 /*
 
 
@@ -290,10 +290,11 @@ class file extends class_base
 			case "name":
 				if ($arr["called_from"] == "releditor")
 				{
+					$data["type"] = "hidden";//arr($arr["obj_inst"]->name());
 					$data["value"] = html::href(array(
 						"caption" => $arr["obj_inst"]->name(),
 						"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name())
-					));
+					));arr($data);
 					return PROP_OK;
 				}
 				$retval = PROP_IGNORE;
@@ -1924,7 +1925,7 @@ class file extends class_base
 			$p = obj($p_id);
 			$t->define_data(array(
 				"name" => html::obj_change_url($p),
-				"co" => html::obj_change_url($p->prop("work_contact")),
+				"co" => html::obj_change_url($p->company_id()),
 				"phone" => $p->prop("phone.name"),
 				"email" => $p->prop("email.mail"),
 				"oid" => $p->id()

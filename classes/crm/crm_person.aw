@@ -1354,10 +1354,7 @@ class crm_person extends class_base
 						"reltype" => 3,		// RELTYPE_PROFESSIONS
 					));
 				}//------------------------------------------------halb--------- oleks vaja t66suhte j2rgi
-//				$sec->connect(array(
-//					"to" => $arr["obj_inst"]->id(),
-//					"reltype" => 2,		// RELTYPE_WORKERS
-//				));
+
 //				unset($doomed_conns[$data["sec"]]);
 			}
 		}
@@ -3171,9 +3168,6 @@ class crm_person extends class_base
 
 		/*
 
-		$alist = array(
-			array('caption' => t('Organisatsioon'),'class' => 'crm_company', 'reltype' => 6), //RELTYPE_WORK
-		);
 
 		$toolbar->add_menu_button(array(
 			"name" => "add_relation",
@@ -3977,12 +3971,8 @@ class crm_person extends class_base
 	{
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
-		if ($target_obj->class_id() == CL_CRM_PERSON && $conn->prop("reltype") == 8) // RELTYPE_WORKERS
+		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
-//			$target_obj->connect(array(
-//			  "to" => $conn->prop("from"),
-//			  "reltype" => "RELTYPE_WORK",
-//			));
 			$target_obj->add_work_relation(array("org" => $conn->prop("from")));
 		};
 	}
@@ -4354,8 +4344,7 @@ class crm_person extends class_base
 
 			if ($this->can("view", $arr["request"]["add_to_co"]))
 			{
-				$arr["obj_inst"]->set_prop("work_contact", $arr["request"]["add_to_co"]);
-				$arr["obj_inst"]->save();
+				$arr["obj_inst"]->add_work_relation(array("org" => $arr["request"]["add_to_co"]));
 			}
 		}
 
@@ -4832,17 +4821,7 @@ class crm_person extends class_base
 	*/
 	function get_work_contacts($arr)
 	{
-		$rtrn = array();
-
-		$conns = $arr['obj_inst']->connections_from(array(
-			'type' => 'RELTYPE_WORK'
-		));
-
-		foreach($conns as $conn)
-		{
-			$rtrn[$conn->prop('to')] = $conn->prop('to.name');
-		}
-
+		$rtrn = $arr['obj_inst']->get_org_selection();
 
 		foreach($arr['obj_inst']->get_section_selection() as $id => $name)
 		{
@@ -4903,33 +4882,6 @@ class crm_person extends class_base
 			$obj = $conn->from();
 			$this->_get_work_contacts(&$obj,&$data);
 		}
-	}
-
-	/** returns a list of company id's that the given person works for
-
-		@param person required
-
-		@comment
-			person - person storage object to find companies for
-
-
-	**/
-	function get_all_employers_for_person($person)
-	{
-		$c = new connection();
-		$list = $c->find(array(
-			"type" => 8, // crm_company.RELTYPE_WORKERS,
-			"from.class_id" => CL_CRM_COMPANY,
-			"to.class_id" => CL_CRM_PERSON,
-			"to" => $person->id()
-		));
-
-		$ret = array();
-		foreach($list as $item)
-		{
-			$ret[$item["from"]] = $item["from"];
-		}
-		return $ret;
 	}
 
 	/** Returns the user object for the given person
@@ -5232,7 +5184,7 @@ class crm_person extends class_base
 		// if this is the current users employer, do nothing
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();
-		if ($co == $arr["obj_inst"]->prop("work_contact"))
+		if ($co == $arr["obj_inst"]->company_id())
 		{
 			$usecase = CRM_PERSON_USECASE_COWORKER;
 		}
@@ -5242,7 +5194,7 @@ class crm_person extends class_base
 			$usecase = CRM_PERSON_USECASE_CLIENT;
 		}
 		else
-		if ($this->can("view", $arr["obj_inst"]->prop("work_contact")))
+		if ($this->can("view", $arr["obj_inst"]->company_id()))
 		{
 			// customer employee
 			$usecase = CRM_PERSON_USECASE_CLIENT_EMPLOYEE;
@@ -5256,7 +5208,7 @@ class crm_person extends class_base
 		// if this is the current users employer, do nothing
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();
-		if ($co == $arr["obj_inst"]->prop("work_contact"))
+		if ($co == $arr["obj_inst"]->company_id())
 		{
 			$s = get_instance(CL_CRM_SETTINGS);
 			if (($o = $s->get_current_settings()))
@@ -5275,7 +5227,7 @@ class crm_person extends class_base
 			}
 		}
 		else
-		if ($this->can("view", $arr["obj_inst"]->prop("work_contact")))
+		if ($this->can("view", $arr["obj_inst"]->company_id()))
 		{
 			// customer employee cfgform
 			$s = get_instance(CL_CRM_SETTINGS);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.14 2008/08/07 13:45:19 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.15 2008/11/06 18:51:59 markop Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -975,17 +975,14 @@ class user_manager extends class_base
 			$companies = array();
 			if ($person = $o->get_first_obj_by_reltype('RELTYPE_PERSON'))
 			{
-				$conns = $person->connections_from(array(
-					'type' => 'RELTYPE_WORK',
-					'class' => CL_CRM_COMPANY,
-				));
+				$comps = $person->get_org_selection();
 				$companies = array();
-				foreach ($conns as $c)
+				foreach ($comps as $c => $nm)
 				{
 					$companies[] = html::href(array(
-						'caption' => $c->prop('to.name'),
+						'caption' => $nm,
 						'url' => $this->mk_my_orb("change", array(
-							'id' => $c->prop('to'),
+							'id' => $c,
 							'return_url' => get_ru()
 						), CL_CRM_COMPANY),
 					));		

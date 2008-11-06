@@ -278,14 +278,15 @@ class crm_document_base extends class_base
 			if ($actor != "")
 			{
 				$aco = obj($act->prop("actor"));
-				
-				if($aco->prop("work_contact.short_name"))
+				$co = $p->company();
+
+				if($co && $co->prop("short_name"))
 				{
-					$actor .= " ".$aco->prop("work_contact.short_name");
+					$actor .= " ".$co->prop("short_name");
 				}
-				else
+				elseif($co)
 				{
-					$actor .= " ".$aco->prop_str("work_contact");arr($actor);
+					$actor .= " ".$co->name();
 				}
 			}
 			$actors = $o_actors;

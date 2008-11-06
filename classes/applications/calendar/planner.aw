@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.149 2008/10/29 15:55:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.150 2008/11/06 18:51:54 markop Exp $
 // planner.aw - kalender
 /*
 
@@ -2296,7 +2296,6 @@ class planner extends class_base
 					"CL_CRM_PERSON.CURRENT_JOB.org.name" => $t_filt,
 				))
 			);
-//			$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = $t_filt;
 			$hasf = true;
 		}
 
@@ -2333,9 +2332,8 @@ class planner extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$org_name = "";
-			if (is_oid($o->prop("work_contact")) && $this->can("view", $o->prop("work_contact")))
+			if ($or = $o->company())
 			{
-				$or = obj($o->prop("work_contact"));
 				$org_name = $or->name();
 			}
 			$phone = "";
@@ -2357,9 +2355,9 @@ class planner extends class_base
 				$rank = $tmp->name();
 			}
 			$_co = "";
-			if (is_oid($o->prop("work_contact")) && $this->can("view",$o->prop("work_contact")))
+			if ($or)
 			{
-				$_co = html::get_change_url($o->prop("work_contact"), array(), $org_name);
+				$_co = html::get_change_url($or->id(), array(), $org_name);
 			}
 			$t->define_data(array(
 				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),

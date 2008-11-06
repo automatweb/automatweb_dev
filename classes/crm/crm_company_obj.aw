@@ -302,11 +302,6 @@ class crm_company_obj extends _int_object
 			$o->save();
 		}
 
-		$this->connect(array(
-			"type" => "RELTYPE_WORKERS",
-			"to" => $o->id()
-			)
-		);
 		$o->add_work_relation(array("org" => $this->id()));
 		return $o->id();
 	}

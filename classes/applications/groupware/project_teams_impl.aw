@@ -233,7 +233,7 @@ class project_teams_impl extends class_base
 					$o = obj($i->get_person_for_user($o));
 				}
 	
-				$co = $p->get_all_employers_for_person($o);
+				$co = $o->get_all_org_ids();
 				$co_s = array();
 				if (count($co))
 				{

@@ -956,6 +956,16 @@ class crm_person_obj extends _int_object
 		return $ol;
 	}
 
+	/** return all current work relation company ids
+		@attrib api=1
+		@return array()
+	**/
+	public function get_all_org_ids()
+	{
+		$ol = get_all_orgs();
+		return $ol->ids();
+	}
+
 	/** returns all current job relations
 		@attrib api=1
 	**/

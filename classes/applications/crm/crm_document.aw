@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.16 2008/10/13 11:26:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.17 2008/11/06 18:52:15 markop Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -237,7 +237,7 @@ class crm_document extends class_base
 			$p = obj($p_id);
 			$t->define_data(array(
 				"name" => html::obj_change_url($p),
-				"co" => html::obj_change_url($p->prop("work_contact")),
+				"co" => html::obj_change_url($p->company_id()),
 				"phone" => $p->prop("phone.name"),
 				"email" => $p->prop("email.name"),
 				"oid" => $p->id()
@@ -260,14 +260,14 @@ class crm_document extends class_base
 			);
 			if ($arr["request"]["sp_p_co"] != "")
 			{
-				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+				$param["CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name"] = "%".$arr["request"]["sp_p_co"]."%";
 			}
 			$ol = new object_list($param);
 			foreach($ol->arr() as $p)
 			{
 				$t->define_data(array(
 					"name" => html::obj_change_url($p),
-					"co" => html::obj_change_url($p->prop("work_contact")),
+					"co" => html::obj_change_url($p->company_id()),
 					"phone" => $p->prop("phone.name"),
 					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
 					"oid" => $p->id()

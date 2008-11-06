@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.76 2008/11/06 13:59:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.77 2008/11/06 18:51:56 markop Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1511,10 +1511,7 @@ class join_site extends class_base
 		$com->set_name($sessd["typo_".CL_CRM_COMPANY]["name"]);
 		$c_id = $com->save();
 
-		$person->connect(array(
-			"to" => $c_id,
-			"reltype" => "RELTYPE_WORK" // from crm/crm_person
-		));
+		$person->add_work_relation(array("org" => $c_id));
 		
 		$a_objs = array();
 		foreach($this->_get_clids($obj) as $clid)
@@ -1698,11 +1695,12 @@ class join_site extends class_base
 					if ($c)
 					{
 						$tmp = $c->to();
-						$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
-						if ($c)
-						{
-							$data_o = $c->to();
-						}
+//						$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
+//						if ($c)
+//						{
+//							$data_o = $c->to();
+//						}
+						$data_o = $tmp->company();
 					}
 				}
 			}
@@ -2127,18 +2125,17 @@ class join_site extends class_base
 					$tmp = $c->to();
 				}
 
-				$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
+				$c = $tmp->company_id();//reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
 				if (!$c)
 				{
 					// create person
 					$data_o = obj();
 					$data_o->set_parent($u_o->id());
 					$data_o->set_class_id(CL_CRM_COMPANY);
-					$data_o->save();
-					$tmp->connect(array(
-						"to" => $data_o->id(),
-						"reltype" => "RELTYPE_WORK"
-					));
+					$data_o->save();	
+				
+					$tmp->add_work_relation(array("org" => $data_o->id()));
+
 				}
 				else
 				{

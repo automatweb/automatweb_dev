@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.61 2008/10/29 19:03:57 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.62 2008/11/06 18:52:18 markop Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -1099,7 +1099,7 @@ class personnel_management_job_offer extends class_base
 					else
 					{
 						$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
-						$org = $cp->work_contact;
+						$org = $cp->company_id();
 					}
 					if($this->can("view", $org))
 					{
@@ -1129,7 +1129,9 @@ class personnel_management_job_offer extends class_base
 						$new_p->firstname = substr($prop["value"], 0, strrpos($prop["value"], " "));
 						if($this->can("view", $org))
 						{
-							$new_p->set_prop("work_contact", $org);
+							$new_p->add_work_relation(array(
+								"org" => $org,
+							));
 						}
 						$new_p->save();
 						$arr["obj_inst"]->set_prop($prop["name"], $new_p->id());
@@ -2246,7 +2248,7 @@ class personnel_management_job_offer extends class_base
 		if (!is_oid($arr["request"]["company"]) && !is_oid($arr["obj_inst"]->company))
 		{
 			$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
-			$arr["obj_inst"]->company = $cp->work_contact;
+			$arr["obj_inst"]->company = $cp->company_id();
 		}
 	}
 
@@ -2469,7 +2471,7 @@ class personnel_management_job_offer extends class_base
 			else
 			{
 				$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
-				$org = $cp->work_contact;
+				$org = $cp->company_id();
 			}
 			$org = obj($org);
 			$ids = $org->get_employees()->ids();

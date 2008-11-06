@@ -4766,14 +4766,13 @@ class shop_warehouse extends class_base
 			return;
 		}
 
-		$ps = get_instance(CL_CRM_PERSON);
-		$cos = $ps->get_all_employers_for_person(obj($cur_person));
+		$p = obj($cur_person);
 
 		$pop = get_instance("vcl/popup_search");
 		$pop->set_options(array(
 			"obj" => $o,
 			"prop" => "order_current_org",
-			"opts" => $cos
+			"opts" => $p->get_all_org_ids(),
 		));
 	}
 

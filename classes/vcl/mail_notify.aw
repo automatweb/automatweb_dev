@@ -269,14 +269,14 @@ class mail_notify extends core
 			);
 			if ($arr["request"]["sp_p_co"] != "")
 			{
-				$param["CL_CRM_PERSON.work_contact.name"] = "%".$search_data["co"]."%";
+				$param["CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name"] = "%".$search_data["co"]."%";
 			}
 			$ol = new object_list($param);
 			foreach($ol->arr() as $p)
 			{
 				$t->define_data(array(
 					"name" => html::obj_change_url($p),
-					"co" => html::obj_change_url($p->prop("work_contact")),
+					"co" => html::obj_change_url($p->company_id()),
 					"phone" => $p->prop("phone.name"),
 					"email" => $p->prop("email.mail") ? html::href(array(
 						"url" => "mailto:".$p->prop("email.mail"),
@@ -334,7 +334,7 @@ class mail_notify extends core
 			$p = obj($p_id);
 			$t->define_data(array(
 				"name" => html::obj_change_url($p),
-				"co" => html::obj_change_url($p->prop("work_contact")),
+				"co" => html::obj_change_url($p->company_id()),
 				"phone" => $p->prop("phone.name"),
 				"email" => $p->prop("email.mail") ? html::href(array(
 						"url" => "mailto:".$p->prop("email.mail"),

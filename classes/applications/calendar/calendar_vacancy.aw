@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.9 2008/05/14 19:49:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.10 2008/11/06 18:51:54 markop Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
@@ -174,9 +174,8 @@ class calendar_vacancy extends class_base
 							'caption' => $obj->name(),
 						));
 						//isiku default firma
-						if(is_oid($obj->prop('work_contact')))
+						if($company = $obj->company())
 						{
-							$company = new object($obj->prop('work_contact'));
 							$prop['value'] .= " ".html::href(array(
 								'url' => html::get_change_url($company->id()),
 								'caption' => $company->name(),

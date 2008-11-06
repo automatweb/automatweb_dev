@@ -65,7 +65,7 @@ class bt_settings_people_impl extends core
 			$p = obj($p_id);
 			$t->define_data(array(
 				"name" => html::obj_change_url($p),
-				"co" => html::obj_change_url($p->prop("work_contact")),
+				"co" => html::obj_change_url($p->company_id()),
 				"phone" => $p->prop("phone.name"),
 				"email" => $p->prop("email.name"),
 				"oid" => $p->id()
@@ -88,7 +88,6 @@ class bt_settings_people_impl extends core
 			);
 			if ($arr["request"]["sp_p_co"] != "")
 			{
-				//$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
 				$param["CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name"] = "%".$arr["request"]["sp_p_co"]."%";
 			}
 			$ol = new object_list($param);
@@ -96,7 +95,7 @@ class bt_settings_people_impl extends core
 			{
 				$t->define_data(array(
 					"name" => html::obj_change_url($p),
-					"co" => html::obj_change_url($p->prop("work_contact")),
+					"co" => html::obj_change_url($p->company_id()),
 					"phone" => $p->prop("phone.name"),
 					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
 					"oid" => $p->id()
