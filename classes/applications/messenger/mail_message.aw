@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.50 2008/06/20 14:16:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.51 2008/11/06 14:34:57 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -752,21 +752,20 @@ class mail_message extends class_base
 				$cur = get_current_company();
 				if(count($ppl))
 				{
-					$conn2 = $c->find(array(
-						"from.class_id" => CL_CRM_PERSON,
-						"to.class_id" => CL_CRM_COMPANY,
-						"type" => "RELTYPE_WORK",
-						"from.oid" => $ppl,
-					));
-					foreach($conn2 as $co)
+					$persons = new object_list();
+					$persons->add($ppl);
+					foreach($persons->arr() as $person)
 					{
-						if($cur->id() == $co["to"])
+						$orgs = $person->get_org_selection();
+						foreach($orgs as $org => $org_name)
 						{
-							continue;
+							if($cur->id() == $org)
+							{
+								continue;
+							}
+							$prop["options"][$org] = $org_name;
+							$prop["value"][$org] = $org;
 						}
-						$comp = obj($co["to"]);
-						$prop["options"][$co["to"]] = $comp->name();
-						$prop["value"][$co["to"]] = $co["to"];
 					}
 				}
 			break;
