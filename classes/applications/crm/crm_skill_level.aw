@@ -3,6 +3,7 @@
 /*
 
 @classinfo syslog_type=ST_CRM_SKILL_LEVEL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@tableinfo crm_skill_level index=aw_oid master_table=objects master_index=oid
 
 @default table=objects
 @default group=general
@@ -15,6 +16,15 @@
 
 @property other type=textbox field=comment
 @caption Muu
+
+@property years_of_practice type=textbox size=4 table=crm_skill_level
+@caption Kogemus aastates
+
+@property year_of_last_usage type=textbox size=4 table=crm_skill_level
+@caption Viimati kasutatud aastal
+
+@property addinfo type=textbox table=crm_skill_level
+@caption Lisainfo
 
 @reltype SKILL value=1 clid=CL_CRM_SKILL
 @caption Oskus
@@ -298,6 +308,29 @@ class crm_skill_level extends class_base
 			}
 		}
 		return $ret;
+	}
+	
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ($tbl == "crm_skill_level" && $field == "")
+		{
+			$this->db_query("create table crm_skill_level (aw_oid int primary key)");
+			return true;
+		}
+
+		switch($field)
+		{
+			case "years_of_practice":
+			case "year_of_last_usage":
+			case "addinfo":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				return true;
+		}
+
+		return false;
 	}
 }
 
