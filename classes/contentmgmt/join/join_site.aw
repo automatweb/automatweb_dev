@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.75 2008/10/10 11:59:49 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.76 2008/11/06 13:59:09 markop Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1662,6 +1662,8 @@ class join_site extends class_base
 		$breaks = $ob->meta("el_breaks");
 		$tp = array();
 		// for each cfgform related
+		$ipl = get_instance("core/util/ip_locator/ip_locator");
+		$v = $ipl->search(get_ip());
 		foreach($this->_get_clids($ob) as $clid)
 		{
 			// get properties for clid
@@ -1741,12 +1743,13 @@ class join_site extends class_base
 						// address has: * Street address: * City: * Zip code: * Country:	
 						$adr_inst = get_instance(CL_CRM_ADDRESS);
 						$opts = $adr_inst->get_country_list();
+						$cntr = array_search($data_o->prop("address.riik.name"), $opts);
 						$tp["p_adr_ctry"] = array(
 							"name" => "p_adr_ctry",
 							"caption" => t("Maa"),
 							"type" => "select",
 							"options" => $opts,
-							"value" => array_search($data_o->prop("address.riik.name"), $opts)
+							"value" => $cntr ? $cntr : $v["country_code2"],
 						);
 						$tp["p_adr_zip"] = array(
 							"name" => "p_adr_zip",
