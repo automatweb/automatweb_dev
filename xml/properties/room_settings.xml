@@ -146,7 +146,7 @@
             <group>calendar_view</group>
             <type>textbox</type>
             <field>available_time_string</field>
-            <caption>Vaba aja string- Broneeritud aja string</caption>
+            <caption>Vaba aja string</caption>
       </property>
       <property>
             <name>bron_popup_detailed</name>
@@ -226,8 +226,7 @@
             <group>calendar_view</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>show_unverified</field>
             <caption>N&amp;amp;auml;ita kalendris kinnitamata broneeringuid</caption>
       </property>
       <property>
@@ -236,8 +235,7 @@
             <group>calendar_view</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>cal_show_prods</field>
             <caption>Kuva valitud tooteid kalendrivaates</caption>
       </property>
       <property>
@@ -246,8 +244,7 @@
             <group>calendar_view</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>cal_show_prod_img</field>
             <caption>Kuva tootepilte kalendrivaates</caption>
       </property>
       <property>
@@ -256,8 +253,7 @@
             <group>calendar_view</group>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>cal_show_prod_img_ord</field>
             <caption>Tootepildi j&amp;amp;auml;rjekorranumber, mida kuvada</caption>
       </property>
       <property>
@@ -266,9 +262,17 @@
             <group>calendar_view</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>disp_bron_len</field>
             <caption>&amp;amp;Auml;ra kuva aja pikkust kalendris</caption>
+      </property>
+      <property>
+            <name>reserved_time_string</name>
+            <table>objects</table>
+            <group>calendar_view</group>
+            <type>textbox</type>
+            <ch_value>1</ch_value>
+            <field>reserved_time_string</field>
+            <caption>Broneeritud aja string</caption>
       </property>
       <property>
             <name>bron_props</name>
@@ -415,15 +419,6 @@
             <method>serialize</method>
             <type>colorpicker</type>
             <caption>Alam-reserveeringu v&amp;amp;auml;rv</caption>
-      </property>
-      <property>
-            <name>reserved_time_string</name>
-            <table>objects</table>
-            <group>settings_gen</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Broneeritud aja string</caption>
       </property>
       <property>
             <name>send_del_mail</name>
