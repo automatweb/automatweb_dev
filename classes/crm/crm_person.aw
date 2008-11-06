@@ -3977,7 +3977,7 @@ class crm_person extends class_base
 	{
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
-		if ($target_obj->class_id() == CL_CRM_PERSON)
+		if ($target_obj->class_id() == CL_CRM_PERSON && $conn->prop("reltype") == 8) // RELTYPE_WORKERS
 		{
 //			$target_obj->connect(array(
 //			  "to" => $conn->prop("from"),
