@@ -149,6 +149,15 @@
             <caption>Vaba aja string</caption>
       </property>
       <property>
+	      <name>reserved_time_string</name>
+	      <table>objects</table>
+	      <group>calendar_view</group>
+	      <type>textbox</type>
+	      <ch_value>1</ch_value>
+	      <field>reserved_time_string</field>
+	      <caption>Broneeritud aja string</caption>
+      </property>
+      <property>
             <name>bron_popup_detailed</name>
             <table>objects</table>
             <group>calendar_view</group>
@@ -264,15 +273,6 @@
             <ch_value>1</ch_value>
             <field>disp_bron_len</field>
             <caption>&amp;amp;Auml;ra kuva aja pikkust kalendris</caption>
-      </property>
-      <property>
-            <name>reserved_time_string</name>
-            <table>objects</table>
-            <group>calendar_view</group>
-            <type>textbox</type>
-            <ch_value>1</ch_value>
-            <field>reserved_time_string</field>
-            <caption>Broneeritud aja string</caption>
       </property>
       <property>
             <name>bron_props</name>

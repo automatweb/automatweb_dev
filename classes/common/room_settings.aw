@@ -59,6 +59,9 @@
 	@property available_time_string type=textbox 
 	@caption Vaba aja string
 
+	@property reserved_time_string type=textbox ch_value=1
+	@caption Broneeritud aja string
+
 	@property bron_popup_detailed type=checkbox ch_value=1
 	@caption Broneerimisaken on detailse sisuga
 
@@ -97,9 +100,6 @@
 	
 	@property disp_bron_len type=checkbox ch_value=1
 	@caption &Auml;ra kuva aja pikkust kalendris
-
-	@property reserved_time_string type=textbox ch_value=1
-	@caption Broneeritud aja string
 
 	@property bron_props type=table save=no no_caption=1
 	@caption Broneeringu omaduste tabel
