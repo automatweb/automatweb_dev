@@ -57,7 +57,7 @@
 	@caption Suletud aja string
 
 	@property available_time_string type=textbox 
-	@caption Vaba aja string- Broneeritud aja string
+	@caption Vaba aja string
 
 	@property bron_popup_detailed type=checkbox ch_value=1
 	@caption Broneerimisaken on detailse sisuga
@@ -83,22 +83,22 @@
 	@property max_times_per_day type=textbox field=meta method=serialize
 	@caption Maksimaalne aegade arv samal p&auml;eval
 
-	@property show_unverified type=checkbox ch_value=1 field=meta method=serialize 
+	@property show_unverified type=checkbox ch_value=1
 	@caption N&auml;ita kalendris kinnitamata broneeringuid
 
-	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
+	@property cal_show_prods type=checkbox ch_value=1
 	@caption Kuva valitud tooteid kalendrivaates
 
-	@property cal_show_prod_img type=checkbox ch_value=1 field=meta method=serialize 
+	@property cal_show_prod_img type=checkbox ch_value=1
 	@caption Kuva tootepilte kalendrivaates
 
-	@property cal_show_prod_img_ord type=textbox size=5 field=meta method=serialize 
+	@property cal_show_prod_img_ord type=textbox size=5
 	@caption Tootepildi j&auml;rjekorranumber, mida kuvada
 	
-	@property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
+	@property disp_bron_len type=checkbox ch_value=1
 	@caption &Auml;ra kuva aja pikkust kalendris
 
-	@property reserved_time_string type=textbox 
+	@property reserved_time_string type=textbox ch_value=1
 	@caption Broneeritud aja string
 
 	@property bron_props type=table save=no no_caption=1
