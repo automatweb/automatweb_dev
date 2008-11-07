@@ -13,6 +13,12 @@
                                 </arguments>
                         </function>
                 </action>
+                <action name="fetch_logs" nologin="1" all_args="1">
+                        <function name="fetch_logs">
+                                <arguments>
+                                </arguments>
+                        </function>
+                </action>
 
 	</class>
 </orb>

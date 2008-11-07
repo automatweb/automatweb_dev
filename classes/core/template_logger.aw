@@ -47,7 +47,9 @@ class template_logger extends core
 			if (trim($c) == "1")
 			{
 				// delete row
+				$this->save_handle();
 				$this->db_query("DELETE FROM template_log_data WHERE id = '$row[id]'");
+				$this->restore_handle();
 				echo "did row $row[id] <br>";
 			}
 			else
@@ -61,4 +63,25 @@ class template_logger extends core
 		}
 		die("all done");
 	}
+
+	/**
+		@attrib name=fetch_logs
+	**/
+	function fetch_logs($arr)
+	{
+		$sl = get_instance("install/site_list");
+		foreach($sl->get_site_list() as $id => $row)
+		{
+			if (!$row["site_used"])
+			{
+				continue;
+			}
+			$url = $row["url"]."/orb.aw?class=sys&action=consolidate_template_logs";
+			echo "site $id fetch url $url <br>\n"; 
+			flush();
+			$ct = file_get_contents($url);
+		}
+		die("all done");
+	}
+
 }

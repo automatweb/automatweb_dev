@@ -167,7 +167,7 @@
 			</function>
 		</action>
 
-		<action name="consolidate_template_logs">
+		<action name="consolidate_template_logs" nologin="1">
 			<function name="consolidate_template_logs">
 				<arguments>
 				</arguments>

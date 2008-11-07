@@ -1132,7 +1132,7 @@ ENDCLASSFORM;
 	}
 
 	/**
-		@attrib name=consolidate_template_logs
+		@attrib name=consolidate_template_logs nologin="1"
 	**/
 	public function consolidate_template_logs($arr)
 	{
