@@ -47,7 +47,7 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="Single Image"/></a>
+<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
 {VAR:imgcaption}
 </div>
 </div>
@@ -61,7 +61,7 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}"/></a>
+<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
 {VAR:imgcaption}
 </div>
 </div>
@@ -75,7 +75,7 @@
 	(FOTO: {VAR:author})
 	<!-- END SUB: HAS_AUTHOR -->
 </span>
-<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="Single Image"/></a>
+<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox"><img src="{VAR:imgref}" alt="{VAR:alt}" /></a>
 {VAR:imgcaption}
 </div>
 </div>
