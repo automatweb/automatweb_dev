@@ -843,7 +843,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		$obj_q = "UPDATE objects SET
-			mod_cnt = mod_cnt + 1
+			mod_cnt = IFNULL(mod_cnt, 0) + 1
 			$ot_sets
 			WHERE oid = '".$objdata["oid"]."'
 		";
@@ -1007,7 +1007,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// not modified, go save
 		}
 
+//echo "obj_q = $obj_q <br>";
 		$this->db_query($obj_q);
+//die("meh");
 		foreach($data_qs as $q)
 		{
 			$this->db_query($q);
