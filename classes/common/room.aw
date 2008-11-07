@@ -1122,12 +1122,12 @@ class room extends class_base
 	
 	/**
 		@attrib name=admin_add_bron_popup params=name all_args=1
-		@param start1 required type=int
-			start
+		@param start1 required
+			start , type - int or array
 		@param parent required type=oid
 			parent
-		@param end required type=int
-			end
+		@param end required
+			end , type - int or array
 		@param resource required type=int
 			room
 		@param product optional
@@ -2514,8 +2514,6 @@ class room extends class_base
 				}
 			}
 */
-
-
 						if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 							{
 							}
@@ -3167,7 +3165,7 @@ class room extends class_base
 			}
 		}
 		$product = $arr["product"];
-		
+
 		if (!$parent)
 		{
 			$parent = $arr["id"];
