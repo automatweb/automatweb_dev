@@ -618,6 +618,7 @@ class propcollector extends aw_template
 	private function _parse_file ($name)
 	{
 		$cname = substr(basename($name),0,-3);
+		$this->currentclass = $cname;
 		$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
 		$outdir = $this->cfg["basedir"] . "/xml/properties/";
 
@@ -778,7 +779,7 @@ class propcollector extends aw_template
 
 		if($arr["type"] === "property" && !$fields["type"])
 		{
-			print "Property \"{$arr["name"]}\" with undefined type\n";
+			print "***WARNING: Property \"{$arr["name"]}\" with undefined type ({$this->currentclass})\n";
 			return;
 		}
 		$tagfields = $this->tagdata[$arr["type"]];
@@ -786,16 +787,15 @@ class propcollector extends aw_template
 		$other = array();
 		if($arr["type"] === "property")
 		{
-			$other = $tagfields["global"]["props"];
+			$other = $tagfields["global"];
 			if(!isset($tagfields[$fields["type"]]))
 			{
-				print "Property \"{$arr["name"]}\" with unknown type \"{$fields["type"]}\"\n";
+				print "***WARNING: Property \"{$arr["name"]}\" with unknown type \"{$fields["type"]}\" ({$this->currentclass})\n";
 				return;
 			}
 			$tagfields = $tagfields[$fields["type"]];
 			$err_add_text = " with type \"".$fields["type"]."\"";
 		}
-		$tagfields = $tagfields["props"];
 		foreach($fields as $f => $val)
 		{
 			if($arr["type"] === "property" && $f === "name")
@@ -804,14 +804,14 @@ class propcollector extends aw_template
 			}
 			if(!isset($tagfields[$f]) && !isset($other[$f]))
 			{
-				print "Unknown field \"$f\" in {$arr["type"]} \"{$arr["name"]}\"{$err_add_text}\n";
+				print "***WARNING: Unknown field \"$f\" in {$arr["type"]} \"{$arr["name"]}\"{$err_add_text} ({$this->currentclass})\n";
 			}
 			else
 			{
-				$value = $tagfields[$f];
-				if(!is_array($value))
+				$type = $tagfields[$f]["type"];
+				if($type)
 				{
-					switch($value)
+					switch($type)
 					{
 						case "clid":
 							if(strpos($val, ","))
@@ -826,7 +826,7 @@ class propcollector extends aw_template
 							{
 								if(!defined($v))
 								{
-									print "Unknown clid $v in {$arr["type"]} {$arr["name"]}\n";
+									print "***WARNING: Unknown clid $v in {$arr["type"]} {$arr["name"]} ({$this->currentclass})\n";
 								}
 							}
 							break;
@@ -839,8 +839,32 @@ class propcollector extends aw_template
 	function set_tagdata()
 	{
 		$xmldir = $this->cfg["basedir"]."/xml/";
-		$data = file_get_contents($xmldir."property_types.xml");
-		$this->tagdata = aw_unserialize($data);
+		$xml = simplexml_load_file($xmldir."property_types.xml");
+		foreach($xml->children() as $k1 => $v1)
+		{
+			foreach($v1->children() as $k2 => $v2)
+			{
+				if($k1 == "property")
+				{
+					if(count($v2->children()))
+					{
+						foreach($v2->children() as $k3 => $v3)
+						{
+							$data[$k1][$k2][$k3] = reset($v3->attributes());
+						}
+					}
+					else
+					{
+						$data[$k1][$k2] = array();
+					}
+				}
+				else
+				{
+					$data[$k1][$k2] = reset($v2->attributes());
+				}
+			}
+		}
+		$this->tagdata = $data;
 	}
 }
 
