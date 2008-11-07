@@ -4,6 +4,7 @@
 
 @default table=objects
 @default group=general
+@default field=meta
 
 	@property hold_not_verifyed type=textbox field=meta method=serialize
 	@caption Kinnitamata broneeringut tuleb hoida kinni x minutit
@@ -29,76 +30,76 @@
 @groupinfo bron caption="Broneeringuobjekt"
 @default group=bron
 
-	@property no_cust_arrived_pop type=checkbox ch_value=1
+	@property no_cust_arrived_pop type=checkbox ch_value=1  method=serialize
 	@caption Kliendi saabumise kinnitust pole vaja k&uuml;sida
 
-	@property use_existing_person type=checkbox ch_value=1
+	@property use_existing_person type=checkbox ch_value=1  method=serialize
 	@caption Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt
 
-	@property dont_ask_close_reason type=checkbox ch_value=1
+	@property dont_ask_close_reason type=checkbox ch_value=1  method=serialize
 	@caption Ei k&uuml;si sulgemise p&otilde;hjust
 
-	@property bron_required_fields type=table store=no
+	@property bron_required_fields type=table store=no  method=serialize
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 
 @groupinfo calendar_view caption="Kalendrivaade"
 @default group=calendar_view
 
-	@property comment_pos type=select
+	@property comment_pos type=select  method=serialize
 	@caption Kuva kommentaar
 
-	@property buffer_time_string type=textbox 
+	@property buffer_time_string type=textbox method=serialize
 	@caption Puhveraja string
 
-	@property closed_time_string type=textbox 
+	@property closed_time_string type=textbox  method=serialize
 	@caption Pausi string
 
-	@property closed__time_string type=textbox 
+	@property closed__time_string type=textbox  method=serialize
 	@caption Suletud aja string
 
-	@property available_time_string type=textbox 
+	@property available_time_string type=textbox  method=serialize
 	@caption Vaba aja string
 
-	@property reserved_time_string type=textbox ch_value=1
+	@property reserved_time_string type=textbox ch_value=1 method=serialize
 	@caption Broneeritud aja string
 
-	@property bron_popup_detailed type=checkbox ch_value=1
+	@property bron_popup_detailed type=checkbox ch_value=1 method=serialize
 	@caption Broneerimisaken on detailse sisuga
 
-	@property bron_popup_immediate type=checkbox ch_value=1
+	@property bron_popup_immediate type=checkbox ch_value=1 method=serialize
 	@caption Broneerimisaken avaneb kohe kui ajale klikkida
 
-	@property bron_no_popups type=checkbox ch_value=1
+	@property bron_no_popups type=checkbox ch_value=1 method=serialize
 	@caption Broneerimiseks ei avata popup aknaid
 	
-	@property cal_from_today type=checkbox ch_value=1
+	@property cal_from_today type=checkbox ch_value=1 method=serialize
 	@caption Ruumide kalendrid algavad t&auml;nasest, mitte n&auml;dala algusest
 
-	@property show_workers_in_calander type=checkbox ch_value=1
+	@property show_workers_in_calander type=checkbox ch_value=1 method=serialize
 	@caption N&auml;ita t&ouml;&ouml;tajaid kalendrivaates
 
-	@property dont_show_day_sum_in_calander type=checkbox ch_value=1
+	@property dont_show_day_sum_in_calander type=checkbox ch_value=1 method=serialize
 	@caption &Auml;ra n&auml;ita p&auml;eva summat kalendrivaates
 
-	@property show_only_my_graphs type=checkbox ch_value=1
+	@property show_only_my_graphs type=checkbox ch_value=1 method=serialize
 	@caption N&auml;ita ainult enda t&ouml;&ouml;graafikuid
 
 	@property max_times_per_day type=textbox field=meta method=serialize
 	@caption Maksimaalne aegade arv samal p&auml;eval
 
-	@property show_unverified type=checkbox ch_value=1
+	@property show_unverified type=checkbox ch_value=1 method=serialize
 	@caption N&auml;ita kalendris kinnitamata broneeringuid
 
-	@property cal_show_prods type=checkbox ch_value=1
+	@property cal_show_prods type=checkbox ch_value=1 method=serialize
 	@caption Kuva valitud tooteid kalendrivaates
 
-	@property cal_show_prod_img type=checkbox ch_value=1
+	@property cal_show_prod_img type=checkbox ch_value=1 method=serialize
 	@caption Kuva tootepilte kalendrivaates
 
-	@property cal_show_prod_img_ord type=textbox size=5
+	@property cal_show_prod_img_ord type=textbox size=5 method=serialize
 	@caption Tootepildi j&auml;rjekorranumber, mida kuvada
 	
-	@property disp_bron_len type=checkbox ch_value=1
+	@property disp_bron_len type=checkbox ch_value=1 method=serialize
 	@caption &Auml;ra kuva aja pikkust kalendris
 
 	@property bron_props type=table save=no no_caption=1
