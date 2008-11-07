@@ -1026,7 +1026,7 @@ class relationmgr extends aw_template
 		));
 		
 		$tbl->define_pageselector(array(
-			"type" => "lb",
+			"type" => "text",
 			"records_per_page" => 25,
 		));
 
