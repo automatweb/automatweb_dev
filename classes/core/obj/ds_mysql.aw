@@ -3014,14 +3014,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					if (!isset($filter[$pn]))
 					{
 						$filter[$pn] = new obj_predicate_anything();
-						$ret[$pn] = "%%REPLACE($pn)%% AS $resn"; //aliases___1063_26.target AS $resn ";
+						$ret[$pn] = "%%REPLACE($pn)%% AS `$resn`"; //aliases___1063_26.target AS $resn ";
 					}
 				}
 				else
 				if (!isset($p[$pn]))
 				{
 					// assume obj table
-					$ret[$pn] = " objects.$pn AS $resn ";
+					$ret[$pn] = " objects.$pn AS `$resn` ";
 				}
 				else
 				if ($p[$pn]["method"] == "serialize")
@@ -3056,7 +3056,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				else
 				{
-					$ret[$pn] = " ".$p[$pn]["table"].".`".$p[$pn]["field"]."` AS $resn ";
+					$ret[$pn] = " ".$p[$pn]["table"].".`".$p[$pn]["field"]."` AS `$resn` ";
 					$this->_add_s($p[$pn]["table"]);
 				}
 			}
