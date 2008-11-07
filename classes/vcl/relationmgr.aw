@@ -1024,14 +1024,14 @@ class relationmgr extends aw_template
 			"name" => "check",
 			"field" => "id",
 		));
-		
+
 		$tbl->define_pageselector(array(
-			"type" => "text",
-			"records_per_page" => 25,
+			"type" => "lb",
+			"records_per_page" => 100,
 		));
 
 		$alinks = $arr["obj_inst"]->meta("aliaslinks");
-		
+
 		$classes = aw_ini_get("classes");
 		if($_SESSION["rel_reverse"][$arr["request"]["id"]])
 		{
@@ -1045,17 +1045,34 @@ class relationmgr extends aw_template
 		}
 		foreach($conn as $alias)
 		{
+			$oid = $alias->prop($cn);
+			$conn_ids[$oid] = $oid;
+			$conns[$oid] = $alias;
+		}
+		if(count($conn_ids))
+		{
+			$loader_ol = new object_list(array(
+				"site_id" => array(),
+				"lang_id" => array(),
+				"oid" => $conn_ids,
+			));
+		}
+		else
+		{
+			$loader_ol = new object_list();
+		}
+		foreach($loader_ol->arr() as $oid => $target_obj)
+		{
+			$alias = $conns[$oid];
 			$adat = array(
-				"createdby" => $alias->prop($cn.".createdby"),
-				"created" => $alias->prop($cn.".created"),
-				"modifiedby" => $alias->prop($cn.".modifiedby"),
-				"modified" => $alias->prop($cn.".modified"),
-				"comment" => $alias->prop($cn.".comment")
+				"createdby" => $target_obj->prop("createdby"),
+				"created" => $target_obj->prop("created"),
+				"modifiedby" => $target_obj->prop("modifiedby"),
+				"modified" => $target_obj->prop("modified"),
+				"comment" => $target_obj->prop("comment")
 			);
-			
-			$target_obj = $alias->to();
 			$adat["lang"] = $target_obj->lang();
-			$aclid = $alias->prop($cn.".class_id");
+			$aclid = $target_obj->prop("class_id");
 			
 			$edfile = $classes[$aclid]["file"];
 			if ($aclid == CL_DOCUMENT)
