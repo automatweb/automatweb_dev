@@ -8,51 +8,48 @@
 
 {VAR:text}
 
+
 <!-- SUB: image -->
-<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
-<tr>
-    <td><img src="{VAR:imgref}" alt="{VAR:alt}" title="VAR:alt}">
-    <br/>
-    <span class="imagecomment">{VAR:imgcaption}
-        <!-- SUB: HAS_AUTHOR -->
-        (Foto: {VAR:author})
-        <!-- END SUB: HAS_AUTHOR -->
-    </span>
-    </td>
-    </tr>
-</table>
+<div style="width: {VAR:width}px;" class="image image_{VAR:alignstr}">
+<div style="width: {VAR:width}px;">
+<span class="author">
+	<!-- SUB: HAS_AUTHOR -->
+	(FOTO: {VAR:author})
+	<!-- END SUB: HAS_AUTHOR -->
+</span>
+<a href="<?php echo strlen('{VAR:bigurl}') > 0 ? '{VAR:bigurl}' : '{VAR:imgref}'; ?>" title="{VAR:imgcaption}" class="thickbox" rel="gallery-aw"><img src="{VAR:imgref}" alt="Single Image"/></a>
+{VAR:imgcaption}
+</div>
+</div>
 <!-- END SUB: image -->
- 
-<!-- SUB: image_has_big -->
-<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
-<tr>
-    <td><a href="JavaScript: void(0)" 
-    onClick="window.open('{VAR:bi_show_link}','popup','width={VAR:big_width},height={VAR:big_height}');">
-    <img src="{VAR:imgref}" alt="{VAR:alt}" title="{VAR:alt}"></a>
-    <br/>
-    <span class="imagecomment">{VAR:imgcaption}
-    <!-- SUB: HAS_AUTHOR -->
-    (Foto: {VAR:author})
-    <!-- END SUB: HAS_AUTHOR -->
-    </span></td>
-    </tr>
-</table>
-<!-- END SUB: image_has_big -->
- 
+
 <!-- SUB: image_linked -->
-<table align="{VAR:alignstr}" class="img img_{VAR:alignstr}" summary="img">
-<tr>
-    <td><a {VAR:target} href="{VAR:plink}">
-    <img src="{VAR:imgref}" alt="{VAR:alt}" title="{VAR:alt}"></a>
-    <br/>
-    <span class="imagecomment">{VAR:imgcaption}
-    <!-- SUB: HAS_AUTHOR -->
-    (Foto: {VAR:author})
-    <!-- END SUB: HAS_AUTHOR -->
-    </span></td>
-    </tr>
-</table>
+<div style="width: {VAR:width}px;" class="image image_{VAR:alignstr}">
+<div style="width: {VAR:width}px;">
+<span class="author">
+	<!-- SUB: HAS_AUTHOR -->
+	(FOTO: {VAR:author})
+	<!-- END SUB: HAS_AUTHOR -->
+</span>
+<a href="{VAR:plink}" title="{VAR:imgcaption}"><img src="{VAR:imgref}" alt="{VAR:alt}"/></a>
+{VAR:imgcaption}
+</div>
+</div>
 <!-- END SUB: image_linked -->
+
+<!-- SUB: image_has_big -->
+<div style="width: {VAR:width}px;" class="image image_{VAR:alignstr}">
+<div style="width: {VAR:width}px;">
+<span class="author">
+	<!-- SUB: HAS_AUTHOR -->
+	(FOTO: {VAR:author})
+	<!-- END SUB: HAS_AUTHOR -->
+</span>
+<a href="{VAR:bigurl}" title="{VAR:imgcaption}" class="thickbox" rel="gallery-aw"><img src="{VAR:imgref}" alt="Single Image"/></a>
+{VAR:imgcaption}
+</div>
+</div>
+<!-- END SUB: image_has_big -->
  
 <!-- SUB: file -->
 <img alt="faili ikoon" title="faili ikoon" src="{VAR:file_icon}">
