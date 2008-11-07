@@ -100,3 +100,4 @@ include ${ini_dir}/otto.ini
 include ${ini_dir}/calendar.ini
 include ${ini_dir}/quickmessaging.ini
 include ${ini_dir}/admin_if.ini
+include ${ini_dir}/plugin.ini

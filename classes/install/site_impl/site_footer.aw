@@ -28,10 +28,28 @@ else
 	$sf->parse("login");
 }
 
-if (aw_ini_get("menuedit.protect_emails") == 1)
+$s_js = "";
+if ( aw_ini_get("plugin.jquery") )
+{
+	$s_js = '<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jquery_latest.aw"></script>';
+
+	if ( aw_ini_get("plugin.thickbox") )
+	{
+		$s_js .= '<link rel="stylesheet" href="'.aw_ini_get("baseurl").'/automatweb/css/thickbox.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jquery/plugins/thickbox.js"></script>';
+	}
+	
+	if ( aw_ini_get("plugin.protect_emails") )
+	{
+		$s_js .= '<script type="text/javascript" src="http://hannes.dev.struktuur.ee/automatweb/js/jquery/plugins/jquery_protect_email.js"></script>';
+	}
+}
+
+if (aw_ini_get("menuedit.protect_emails") == 1 || aw_ini_get("plugin.protect_emails") == 1)
 {
 	$i = get_instance("contentmgmt/mail_protector");
 	$str = $i->protect($sf->parse());
+	$s_js .= '<script type="text/javascript" src="http://hannes.dev.struktuur.ee/automatweb/js/jquery/plugins/jquery_protect_email.js"></script>';
 }
 else
 {
@@ -45,6 +63,9 @@ else if (aw_ini_get("content.doctype") == "xhtml" )
 {
 	$str = str_replace  ( "<br>", "<br />", $str);
 }
+
+// include the javascripts
+$str = preg_replace  ( "/<\/head>/imsU", $s_js."</head>\n" , $str);
 
 // this will add google analytics code to html if id is set in ini
 if (aw_ini_get("ga_id"))
