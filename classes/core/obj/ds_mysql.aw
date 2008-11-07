@@ -2026,7 +2026,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$tmp = array();
 					foreach($val->get_sorter_list() as $sl_item)
 					{
-						if (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]))
+						if (strpos($sl_item["prop"], ".") !== false)
+						{
+							// no support for prop.prop.prop yet, just class definer
+							list(, $sl_item["prop"]) = explode(".", $sl_item["prop"]);
+							$pd = $this->properties[$sl_item["prop"]];
+						}
+						else
+						if (isset($GLOBALS["object_loader"]->all_ot_flds[$sl_item["prop"]]) || $sl_item["prop"] == "oid")
 						{
 							$pd = array("table" => "objects", "field" => $sl_item["prop"]);
 						}
