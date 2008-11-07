@@ -2,7 +2,7 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.34 2008/06/04 12:35:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.35 2008/11/07 10:03:33 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -293,6 +293,15 @@ class orb extends aw_template
 				else
 				if (isset($orb_defs[$class][$action]["defaults"][$key]))
 				{
+					if ($orb_defs[$class][$action]["defaults"][$key] == "true")
+					{
+						$orb_defs[$class][$action]["defaults"][$key] = true;
+					}
+					else
+					if ($orb_defs[$class][$action]["defaults"][$key] == "false")
+					{
+						$orb_defs[$class][$action]["defaults"][$key] = false;
+					}
 					$params[$key] = $orb_defs[$class][$action]["defaults"][$key];
 				}
 			};
