@@ -6375,14 +6375,14 @@ class class_base extends aw_template
 			);
 			if ($arr["request"]["sp_p_co"] != "")
 			{
-				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+				$param["CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name"] = "%".$arr["request"]["sp_p_co"]."%";
 			}
 			$ol = new object_list($param);
 			foreach($ol->arr() as $p)
 			{
 				$t->define_data(array(
 					"name" => html::obj_change_url($p),
-					"co" => html::obj_change_url($p->prop("work_contact")),
+					"co" => html::obj_change_url($p->company()),
 					"phone" => $p->prop("phone.name"),
 					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
 					"oid" => $p->id()
@@ -6393,6 +6393,16 @@ class class_base extends aw_template
 
 //----------------- END mailiga teavitamise komponentide orb funktsuoonid----------
 
+
+	/**
+	@attrib name=gt_change api=1 params=name
+		@param id required type=oid
+		@param return_url optional type=string
+	**/
+	public function gt_change($arr)
+	{
+		return html::get_change_url($arr["id"] , array("return_url" => $arr["return_url"]));
+	}
 
 }
 ?>
