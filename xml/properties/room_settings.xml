@@ -4,8 +4,8 @@
             <name>hold_not_verifyed</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <field>meta</field>
+            <type>textbox</type>
             <method>serialize</method>
             <caption>Kinnitamata broneeringut tuleb hoida kinni x minutit</caption>
       </property>
@@ -13,9 +13,9 @@
             <name>related_room_folder</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_RELATED_ROOM_FOLDER</reltype>
             <caption>Seotud ruumide kaust</caption>
@@ -24,9 +24,9 @@
             <name>related_rooms</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <field>meta</field>
             <method>serialize</method>
             <store>connect</store>
             <reltype>RELTYPE_RELATED_ROOMS</reltype>
@@ -36,9 +36,9 @@
             <name>cal_refresh_time</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Mitme minuti tagant kalendrit refreshida</caption>
       </property>
@@ -46,8 +46,8 @@
             <name>customer_menu</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
             <field>meta</field>
+            <type>relpicker</type>
             <method>serialize</method>
             <reltype>RELTYPE_MENU</reltype>
             <caption>Kataloog kuhu kliendid salvestada</caption>
@@ -56,8 +56,8 @@
             <name>projects_menu</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
             <field>meta</field>
+            <type>relpicker</type>
             <method>serialize</method>
             <reltype>RELTYPE_MENU</reltype>
             <caption>Kataloog kuhu projektid salvestada</caption>
@@ -66,9 +66,9 @@
             <name>min_price_to_all</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Miinimumhind m&amp;amp;otilde;jub k&amp;amp;otilde;igile</caption>
       </property>
@@ -76,156 +76,173 @@
             <name>no_cust_arrived_pop</name>
             <table>objects</table>
             <group>bron</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>no_cust_arrived_pop</field>
+            <method>serialize</method>
             <caption>Kliendi saabumise kinnitust pole vaja k&amp;amp;uuml;sida</caption>
       </property>
       <property>
             <name>use_existing_person</name>
             <table>objects</table>
             <group>bron</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>use_existing_person</field>
+            <method>serialize</method>
             <caption>Samanimeliste isikute puhul v&amp;amp;otilde;etakse aluseks olemasolev isikuobjekt</caption>
       </property>
       <property>
             <name>dont_ask_close_reason</name>
             <table>objects</table>
             <group>bron</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>dont_ask_close_reason</field>
+            <method>serialize</method>
             <caption>Ei k&amp;amp;uuml;si sulgemise p&amp;amp;otilde;hjust</caption>
       </property>
       <property>
             <name>bron_required_fields</name>
             <table>objects</table>
             <group>bron</group>
+            <field>meta</field>
             <type>table</type>
             <store>no</store>
-            <field>bron_required_fields</field>
+            <method>serialize</method>
             <caption>Broneeringuobjekti kohustuslikud v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>comment_pos</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>select</type>
-            <field>comment_pos</field>
+            <method>serialize</method>
             <caption>Kuva kommentaar</caption>
       </property>
       <property>
             <name>buffer_time_string</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>textbox</type>
-            <field>buffer_time_string</field>
+            <method>serialize</method>
             <caption>Puhveraja string</caption>
       </property>
       <property>
             <name>closed_time_string</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>textbox</type>
-            <field>closed_time_string</field>
+            <method>serialize</method>
             <caption>Pausi string</caption>
       </property>
       <property>
             <name>closed__time_string</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>textbox</type>
-            <field>closed__time_string</field>
+            <method>serialize</method>
             <caption>Suletud aja string</caption>
       </property>
       <property>
             <name>available_time_string</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>textbox</type>
-            <field>available_time_string</field>
+            <method>serialize</method>
             <caption>Vaba aja string</caption>
       </property>
       <property>
-	      <name>reserved_time_string</name>
-	      <table>objects</table>
-	      <group>calendar_view</group>
-	      <type>textbox</type>
-	      <ch_value>1</ch_value>
-	      <field>reserved_time_string</field>
-	      <caption>Broneeritud aja string</caption>
+            <name>reserved_time_string</name>
+            <table>objects</table>
+            <group>calendar_view</group>
+            <field>meta</field>
+            <type>textbox</type>
+            <ch_value>1</ch_value>
+            <method>serialize</method>
+            <caption>Broneeritud aja string</caption>
       </property>
       <property>
             <name>bron_popup_detailed</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>bron_popup_detailed</field>
+            <method>serialize</method>
             <caption>Broneerimisaken on detailse sisuga</caption>
       </property>
       <property>
             <name>bron_popup_immediate</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>bron_popup_immediate</field>
+            <method>serialize</method>
             <caption>Broneerimisaken avaneb kohe kui ajale klikkida</caption>
       </property>
       <property>
             <name>bron_no_popups</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>bron_no_popups</field>
+            <method>serialize</method>
             <caption>Broneerimiseks ei avata popup aknaid</caption>
       </property>
       <property>
             <name>cal_from_today</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>cal_from_today</field>
+            <method>serialize</method>
             <caption>Ruumide kalendrid algavad t&amp;amp;auml;nasest, mitte n&amp;amp;auml;dala algusest</caption>
       </property>
       <property>
             <name>show_workers_in_calander</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>show_workers_in_calander</field>
+            <method>serialize</method>
             <caption>N&amp;amp;auml;ita t&amp;amp;ouml;&amp;amp;ouml;tajaid kalendrivaates</caption>
       </property>
       <property>
             <name>dont_show_day_sum_in_calander</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>dont_show_day_sum_in_calander</field>
+            <method>serialize</method>
             <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita p&amp;amp;auml;eva summat kalendrivaates</caption>
       </property>
       <property>
             <name>show_only_my_graphs</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>show_only_my_graphs</field>
+            <method>serialize</method>
             <caption>N&amp;amp;auml;ita ainult enda t&amp;amp;ouml;&amp;amp;ouml;graafikuid</caption>
       </property>
       <property>
             <name>max_times_per_day</name>
             <table>objects</table>
             <group>calendar_view</group>
-            <type>textbox</type>
             <field>meta</field>
+            <type>textbox</type>
             <method>serialize</method>
             <caption>Maksimaalne aegade arv samal p&amp;amp;auml;eval</caption>
       </property>
@@ -233,67 +250,72 @@
             <name>show_unverified</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>show_unverified</field>
+            <method>serialize</method>
             <caption>N&amp;amp;auml;ita kalendris kinnitamata broneeringuid</caption>
       </property>
       <property>
             <name>cal_show_prods</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>cal_show_prods</field>
+            <method>serialize</method>
             <caption>Kuva valitud tooteid kalendrivaates</caption>
       </property>
       <property>
             <name>cal_show_prod_img</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>cal_show_prod_img</field>
+            <method>serialize</method>
             <caption>Kuva tootepilte kalendrivaates</caption>
       </property>
       <property>
             <name>cal_show_prod_img_ord</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>textbox</type>
             <size>5</size>
-            <field>cal_show_prod_img_ord</field>
+            <method>serialize</method>
             <caption>Tootepildi j&amp;amp;auml;rjekorranumber, mida kuvada</caption>
       </property>
       <property>
             <name>disp_bron_len</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>disp_bron_len</field>
+            <method>serialize</method>
             <caption>&amp;amp;Auml;ra kuva aja pikkust kalendris</caption>
       </property>
       <property>
             <name>bron_props</name>
             <table>objects</table>
             <group>calendar_view</group>
+            <field>meta</field>
             <type>table</type>
             <save>no</save>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>bron_props</field>
             <caption>Broneeringu omaduste tabel</caption>
       </property>
       <property>
             <name>users</name>
             <table>objects</table>
             <group>whom</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_USER</reltype>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Kasutajad</caption>
       </property>
@@ -301,11 +323,11 @@
             <name>groups</name>
             <table>objects</table>
             <group>whom</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_GROUP</reltype>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Grupid</caption>
       </property>
@@ -313,11 +335,11 @@
             <name>persons</name>
             <table>objects</table>
             <group>whom</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_PERSON</reltype>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Isikud</caption>
       </property>
@@ -325,11 +347,11 @@
             <name>cos</name>
             <table>objects</table>
             <group>whom</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_COMPANY</reltype>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Organisatsioonid</caption>
       </property>
@@ -337,11 +359,11 @@
             <name>sects</name>
             <table>objects</table>
             <group>whom</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_SECTION</reltype>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Osakonnad</caption>
       </property>
@@ -349,11 +371,11 @@
             <name>profs</name>
             <table>objects</table>
             <group>whom</group>
+            <field>meta</field>
             <type>relpicker</type>
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_PROFESSION</reltype>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Ametinimetused</caption>
       </property>
@@ -361,9 +383,9 @@
             <name>everyone</name>
             <table>objects</table>
             <group>whom</group>
+            <field>flags</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>flags</field>
             <caption>K&amp;amp;otilde;ik</caption>
       </property>
       <property>
