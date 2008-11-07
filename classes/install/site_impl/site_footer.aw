@@ -28,28 +28,35 @@ else
 	$sf->parse("login");
 }
 
-$s_js = "";
+
+$a_plugins = Array();
 if ( aw_ini_get("plugin.jquery") )
 {
-	$s_js = '<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jquery_latest.aw"></script>';
-
-	if ( aw_ini_get("plugin.thickbox") )
-	{
-		$s_js .= '<link rel="stylesheet" href="'.aw_ini_get("baseurl").'/automatweb/css/thickbox.css" type="text/css" media="screen" />
-		<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/jquery/plugins/thickbox.js"></script>';
-	}
-	
-	if ( aw_ini_get("plugin.protect_emails") )
-	{
-		$s_js .= '<script type="text/javascript" src="http://hannes.dev.struktuur.ee/automatweb/js/jquery/plugins/jquery_protect_email.js"></script>';
-	}
+	$a_plugins["/automatweb/js/jquery_latest.aw"] = array("type" => "js");
 }
 
-if (aw_ini_get("menuedit.protect_emails") == 1 || aw_ini_get("plugin.protect_emails") == 1)
+if ( aw_ini_get("plugin.thickbox") )
+{
+	$a_plugins["/automatweb/js/jquery_latest.aw"] = array("type" => "js");
+	$a_plugins["/automatweb/css/thickbox.css"] = array("type" => "css");
+	$a_plugins["/automatweb/js/jquery/plugins/thickbox.js"] = array("type" => "js");
+}
+
+if ( aw_ini_get("plugin.protect_emails") )
+{
+	$a_plugins["/automatweb/js/jquery_latest.aw"] = array("type" => "js");
+	$a_plugins["/automatweb/js/jquery/plugins/jquery_protect_email.js"] = array("type" => "js");
+}
+
+if (aw_ini_get("menuedit.protect_emails") == 1 || aw_ini_get("plugin.protect_emails"))
 {
 	$i = get_instance("contentmgmt/mail_protector");
 	$str = $i->protect($sf->parse());
-	$s_js .= '<script type="text/javascript" src="http://hannes.dev.struktuur.ee/automatweb/js/jquery/plugins/jquery_protect_email.js"></script>';
+	if ( aw_ini_get("plugin.protect_emails") )
+	{
+		$a_plugins["/automatweb/js/jquery_latest.aw"] = array("type" => "js");
+		$a_plugins["/automatweb/js/jquery/plugins/jquery_protect_email.js"] = array("type" => "js");
+	}
 }
 else
 {
@@ -65,7 +72,19 @@ else if (aw_ini_get("content.doctype") == "xhtml" )
 }
 
 // include the javascripts
-$str = preg_replace  ( "/<\/head>/imsU", $s_js."</head>\n" , $str);
+$s_plugins = "";
+foreach( $a_plugins as $key => $var )
+{
+	if ( $var["type"] == "js" )
+	{
+		$s_plugins .= '<script type="text/javascript" src="'.aw_ini_get("baseurl").$key.'"></script>';
+	}
+	else
+	{
+		$s_plugins .= '<link href="'.aw_ini_get("baseurl").$key.'" rel="stylesheet" type="text/css" media="screen" />';
+	}
+}
+$str = preg_replace  ( "/<\/head>/imsU", $s_plugins."</head>\n" , $str);
 
 // this will add google analytics code to html if id is set in ini
 if (aw_ini_get("ga_id"))
@@ -82,6 +101,15 @@ if (aw_ini_get("ga_id"))
 	));
 	$s_code = $sf->parse();
 	$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_code."</body>\n</html>" , $str);
+}
+
+if ( aw_ini_get("menuedit.protect_emails") || aw_ini_get("plugin.protect_emails") )
+{
+	if ( aw_ini_get("plugin.protect_emails") )
+	{
+		$s_protect_emails = '<script type="text/javascript">jQuery.protect_email();</script>';
+		$str = preg_replace  ( "/<\/body>.*<\/html>/imsU", $s_protect_emails."</body>\n</html>" , $str);
+	}
 }
 
 // search for swfobject from html

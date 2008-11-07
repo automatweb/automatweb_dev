@@ -7,7 +7,7 @@ class mail_protector
 {
 	function protect($str)
 	{
-		if ( aw_ini_get("menuedit.protect_emails_v2") == 1 )
+		if ( aw_ini_get("menuedit.protect_emails_v2") == 1 || aw_ini_get("plugin.protect_emails") == 1 )
 		{
 			return $this->protect_v2($str);
 		}
