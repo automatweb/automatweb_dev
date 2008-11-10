@@ -1,6 +1,13 @@
 (function($){
     $.extend({
         aw_unload_handler: function(arr){
+			if (
+					$.gup("class") == "admin_if" ||
+					$.gup("class") == "relationmgr" )
+			{
+				return false;
+			}
+		
 			var aw_form_changed = false;
 			$("form input, form textarea, form select").change( function() {
 				aw_form_changed = true;
