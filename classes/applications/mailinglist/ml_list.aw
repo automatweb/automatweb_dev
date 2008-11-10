@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.136 2008/09/17 10:39:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.137 2008/11/10 10:54:12 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2544,7 +2544,7 @@ class ml_list extends class_base
 					else $from_q = $from - $cnt;
 					if(($to - $from_q - $cnt) < 0) $to_q = 0;
 					else $to_q = $to - $from_q - $cnt;
-					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from_q, $to_q);
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from_q, $to_q);
 					$q_count = sprintf("SELECT COUNT(*) as cnt FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0" , $folder_id);
 					$cnt_all = $this->db_fetch_field($q_count , "cnt");
 				//	if(($cnt_all - $from) < $to){
@@ -2554,7 +2554,7 @@ class ml_list extends class_base
 				}
 				else
 				{
-					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC" , $folder_id);
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid  , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC" , $folder_id);
 				}
 				$this->db_query($q);
 				while($row = $this->db_next())
@@ -3021,9 +3021,9 @@ class ml_list extends class_base
 // 		}
 		
 		$t->d_row_cnt = $cnt;
-		$t->table_header = $t->draw_text_pageselector(array(
+		$t->set_header($t->draw_text_pageselector(array(
 			"records_per_page" => $perpage,
-		));
+		)));
 		$t->sort_by();
 	}
 
@@ -3955,7 +3955,7 @@ arr($msg_obj->prop("message"));
 					$t->define_data($tabledata);
 				}
 			}
-			$t->table_header = $pageselector;
+			$t->set_header($pageselector);
 			$t->sort_by();
 		}
 	}
