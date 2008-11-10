@@ -157,6 +157,48 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 		@caption Pakettide nimekiri 
 
 
+@default group=arrivals
+
+	@property arrivals_tb type=toolbar no_caption=1
+
+	@layout arrival_prod_split type=hbox width=20%:80%
+
+		@layout arrival_prod_left type=vbox parent=arrival_prod_split
+
+			@layout arrival_prod_set_lay type=vbox closeable=1 area_caption=Seaded parent=arrival_prod_left
+		
+				@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 parent=arrival_prod_set_lay captionside=top
+				@caption Organisatsioonide kaust
+
+			@layout arrival_prod_tree_lay type=vbox closeable=1 area_caption=Toodete&nbsp;puu parent=arrival_prod_left
+	
+				@property arrival_prod_tree type=treeview parent=arrival_prod_tree_lay store=no no_caption=1
+
+				@property arrival_prod_cat_tree type=treeview parent=arrival_prod_tree_lay store=no no_caption=1
+
+			@layout arrival_prod_left_search type=vbox parent=arrival_prod_left area_caption=Otsing closeable=1
+
+				@layout arrival_prod_s_top_box type=vbox parent=arrival_prod_left_search
+
+					@property arrival_prod_s_name type=textbox store=no captionside=top size=20 parent=arrival_prod_s_top_box
+					@caption Nimi 
+					
+					@property arrival_prod_s_code type=textbox store=no captionside=top size=20 parent=arrival_prod_s_top_box
+					@caption Kood
+					
+					@property arrival_prod_s_barcode type=textbox store=no captionside=top size=20 parent=arrival_prod_s_top_box
+					@caption Ribakood
+					
+					@property arrival_prod_s_cat type=select store=no captionside=top parent=arrival_prod_s_top_box
+					@caption Kategooria
+	
+				@property arrival_prod_s_sbt type=submit store=no captionside=top  parent=prod_left_search value="Otsi"
+				@caption Otsi
+				
+
+		@property arrival_products_list type=table store=no no_caption=1  parent=arrival_prod_split
+		@caption Toodete nimekiri 
+
 @default group=storage_income
 
 	@property storage_income_toolbar type=toolbar no_caption=1 store=no
@@ -696,6 +738,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 	@groupinfo products caption="Artiklid" submit=no parent=articles
 	@groupinfo packets caption="Paketid" submit=no parent=articles
+	@groupinfo arrivals caption="Tarneajad" submit=no parent=articles
 
 @groupinfo storage caption="Muutused"
 
@@ -762,6 +805,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @reltype INVENTORY value=12 clid=CL_SHOP_WAREHOUSE_INVENTORY
 @caption Inventuur
+
+@reltype ARRIVAL_COMPANY_FOLDER value=13 clid=CL_MENU
+@caption Organisatsioonide kaust
 
 */
 define("QUANT_UNDEFINED", 0);
@@ -870,11 +916,12 @@ class shop_warehouse extends class_base
 			case "storage_list":
 				$this->do_storage_list_tbl($arr);
 				break;
-
+			case "arrival_prod_tree":
 			case "prod_tree":
 				$retval = $this->get_prod_tree($arr);
 				break;
 
+			case "arrival_prod_cat_tree":
 			case "prod_cat_tree":
 				$retval = $this->mk_prodg_tree($arr);
 				break;
@@ -1629,6 +1676,33 @@ class shop_warehouse extends class_base
 				$o->set_ord($ord);
 				$o->save();
 			}
+		}
+	}
+
+	function _get_arrival_products_list($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Artikkel"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Tarneaeg"),
+			"align" => "center",
+		));
+		$res = $this->get_products_list_ol($arr);
+		foreach($res["ol"]->arr() as $o)
+		{
+			$t->define_data(array(
+				"prod" => $o->name(),
+			));
 		}
 	}
 
@@ -2715,8 +2789,10 @@ class shop_warehouse extends class_base
 		{
 			$t->define_field(array(
 				"name" => "ord",
+				"sortable" => 1,
 				"caption" => t("J&auml;rjekord"),
-				"align" => "center"
+				"align" => "center",
+				"sorting_field" => "hidden_ord",
 			));
 		}
 
@@ -6524,7 +6600,7 @@ $oo = get_instance(CL_SHOP_ORDER);
 
 	private function get_search_param_groups()
 	{
-		return array("prod", "storage_income", "storage_export", "storage_status", "storage_movements", "storage_writeoffs", "storage_prognosis", "storage_inventories", "purchase_orders", "sell_orders");
+		return array("prod", "storage_income", "storage_export", "storage_status", "storage_movements", "storage_writeoffs", "storage_prognosis", "storage_inventories", "purchase_orders", "sell_orders", "arrival_prod");
 	}
 
 	private function get_search_group($arr)
@@ -6550,6 +6626,9 @@ $oo = get_instance(CL_SHOP_ORDER);
 				break;
 			case "purchases":
 				$group = "purchase_orders";
+				break;
+			case "arrivals":
+				$group = "arrivals";
 				break;
 			default:
 				$group = $arr["request"]["group"];
