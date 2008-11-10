@@ -45,6 +45,14 @@
             <caption>Eriala</caption>
       </property>
       <property>
+            <name>addspeciality</name>
+            <table>kliendibaas_haridus</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>addspeciality</field>
+            <caption>K&amp;amp;otilde;rvaleriala</caption>
+      </property>
+      <property>
             <name>main_speciality</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>

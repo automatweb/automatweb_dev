@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.26 2008/10/27 09:12:05 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.27 2008/11/10 10:50:51 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -25,6 +25,9 @@
 
 @property speciality type=textbox field=speciality
 @caption Eriala
+
+@property addspeciality type=textbox field=addspeciality
+@caption K&otilde;rvaleriala
 
 @property main_speciality type=chooser field=main_speciality
 @caption P&otilde;hieriala
@@ -210,6 +213,7 @@ class crm_person_education extends class_base
 			"school2" => "school",
 			"degree" => "degree",
 			"speciality" => "speciality",
+			"addspeciality" => "addspeciality",
 			"diploma_nr" => "diploma_nr",
 		);
 
@@ -243,8 +247,6 @@ class crm_person_education extends class_base
 							kliendibaas_haridus (oid, $field)
 						VALUES
 							('$oid', '$value')
-						ON DUPLICATE KEY UPDATE
-							$field = '$value'
 					");
 				}
 				return true;
@@ -252,6 +254,7 @@ class crm_person_education extends class_base
 			case "school_2":
 			case "degree":
 			case "speciality":
+			case "addspeciality":
 			case "diploma_nr":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
@@ -273,8 +276,6 @@ class crm_person_education extends class_base
 							kliendibaas_haridus (oid, $field)
 						VALUES
 							('$oid', '$value')
-						ON DUPLICATE KEY UPDATE
-							$field = '$value'
 					");
 				}
 				return true;
