@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.84 2008/11/10 10:00:04 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.85 2008/11/10 10:03:50 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -404,10 +404,13 @@ class rfp_manager extends class_base
 						"lang_id" => array(),
 					));
 					$cur = reset($ol->arr());
-					$prop["options"] = array(
-						$cur->id() => $cur->name(),
-					);
-					$prop["selected"] = $cur->id();
+					if($cur)
+					{
+						$prop["options"] = array(
+							$cur->id() => $cur->name(),
+						);
+						$prop["selected"] = $cur->id();
+					}
 				}
 				break;
 			case "s_name":
