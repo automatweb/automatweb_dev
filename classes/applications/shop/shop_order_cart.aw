@@ -224,6 +224,7 @@ class shop_order_cart extends class_base
 						));
 						$show_info_page = false;
 						$total += ($quant["items"] * str_replace(",", "", $price));
+
 						$cart_total += ($quant["items"] * $price);
 						if (get_class($inst) == "shop_product_packaging")
 						{
@@ -417,6 +418,14 @@ class shop_order_cart extends class_base
 			"not_logged" => $lln,
 		));
 
+		$this->add_bank_vars($oc, $uta);
+		$this->vars($data);
+		return $this->parse();
+	}
+
+	function add_bank_vars($oc, $uta)
+	{
+		$data = array();
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
 		//et pank saaks alati valitud
@@ -425,7 +434,7 @@ class shop_order_cart extends class_base
 			$soce_arr["bank"] = $_SESSION["cart"]["user_data"]["user9"];
 			if($oc->prop("bank_id"))
 			{
-				$soce_arr["bank"] = $uta[$order_center->prop("bank_id")];
+				$soce_arr["bank"] = $uta[$oc->prop("bank_id")];
 			}
 			if(!$soce_arr["bank"]) $need_to_choose_default_bank = 1;
 		}
@@ -452,11 +461,7 @@ class shop_order_cart extends class_base
 				));
 			}
 		}
-/*error_reporting(E_ALL);
-ini_set("display_errors", "1");
-header("X-foo: bar");*/
 		$this->vars($data);
-		return $this->parse();
 	}
 
 	function set_confirm_carts($cc)
@@ -2083,12 +2088,12 @@ header("X-foo: bar");*/
 		$bank = $user_data["user9"];
 		if($oc->prop("bank_id"))
 		{
-			$bank = $uta[$order_center->prop("bank_id")];
+			$bank = $user_data[$oc->prop("bank_id")];
 		}
 		$bank_lang=$user_data["user10"];
 		if($oc->prop("bank_lang"))
 		{
-			$bank_lang = $uta[$order_center->prop("bank_lang")];
+			$bank_lang = $user_data[$oc->prop("bank_lang")];
 		}
 
 		//if(aw_global_get(uid) == "struktuur"){arr($_SESSION);arr($user_data);arr($GLOBALS);die();}
