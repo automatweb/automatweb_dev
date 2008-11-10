@@ -11,13 +11,15 @@ class rfp_obj extends _int_object
 			case "data_subm_organizer":
 			case "data_billing_company":
 			case "data_billing_contact":
-			
-				$cs = $this->connections_from(array(
-					"type" => "RELTYPE_".strtoupper($pn),
-				));
-				foreach($cs as $c)
+				if(is_oid($this->id()))
 				{
-					$c->delete();
+					$cs = $this->connections_from(array(
+						"type" => "RELTYPE_".strtoupper($pn),
+					));
+					foreach($cs as $c)
+					{
+						$c->delete();
+					}
 				}
 				if(strlen($pv))
 				{
@@ -238,18 +240,11 @@ class rfp_obj extends _int_object
 		if($this->can("view", $reservation))
 		{
 			$res_obj = obj($reservation);
-			$others = $res_obj->get_other_brons();
 			$this->disconnect(array(
 				"from" => $reservation,
 				"type" => 3,
 			));
-			foreach($others->arr() as $other)
-			{
-				$this->disconnect(array(
-					"from" => $other->id(),
-					"type" => 3,
-				));
-			}
+			$res_obj->delete();
 			return true;
 		}
 		return false;
@@ -272,15 +267,8 @@ class rfp_obj extends _int_object
 			foreach($conns as $conn)
 			{
 				$res = $conn->to();
-				$others->add($res->get_other_brons());
 				$conn->delete();
-			}
-			foreach($others->arr() as $other)
-			{
-				$this->disconnect(array(
-					"from" => $other->id(),
-					"type" => 3,
-				));
+				$res->delete();
 			}
 			return true;
 		}

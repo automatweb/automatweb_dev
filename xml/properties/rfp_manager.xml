@@ -519,6 +519,21 @@
             <caption>Kuni</caption>
       </property>
       <property>
+            <name>s_from_planner</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>checkbox</type>
+            <parent>searchbox</parent>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>s_from_planner</field>
+            <caption>Veebist sisestatud</caption>
+      </property>
+      <property>
             <name>s_submit</name>
             <table>objects</table>
             <group>

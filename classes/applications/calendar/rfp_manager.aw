@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.83 2008/10/30 12:13:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.84 2008/11/10 10:00:04 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -169,6 +169,9 @@ caption Linnade kaust
 			@property s_time_to type=date_select parent=searchbox store=no captionside=top
 			@caption Kuni
 
+			@property s_from_planner type=checkbox parent=searchbox ch_value=1 store=no no_caption=1
+			@caption Veebist sisestatud
+	
 			@property s_submit type=submit parent=searchbox store=no no_caption=1
 			@caption Otsi
 
@@ -410,6 +413,7 @@ class rfp_manager extends class_base
 			case "s_name":
 			case "s_org":
 			case "s_contact":
+			case "s_from_planner":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 			case "s_time_to":
@@ -438,26 +442,32 @@ class rfp_manager extends class_base
 					"caption" => t("&Uuml;ritus"),
 					"chgbgcolor" => "urgent_col",
 				));
-				$t->define_field(array(
-					"name" => "org",
-					"caption" => t("Organisatsioon"),
-					"chgbgcolor" => "urgent_col",
-				));
-				$t->define_field(array(
+				if(!$arr["request"]["s_from_planner"])
+				{
+					$t->define_field(array(
+						"name" => "org",
+						"caption" => t("Organisatsioon"),
+						"chgbgcolor" => "urgent_col",
+					));
+				}
+				/*$t->define_field(array(
 					"name" => "response_date",
 					"caption" => t("Tagasiside aeg"),
 					"chgbgcolor" => "urgent_col",
-				));
+				));*/
 				$t->define_field(array(
 					"name" => "date_period",
 					"caption" => t("Ajavahemik"),
 					"chgbgcolor" => "urgent_col",
 				));
-				$t->define_field(array(
-					"name" => "acc_need",
-					"caption" => t("Majutus"),
-					"chgbgcolor" => "urgent_col",
-				));
+				if(!$arr["request"]["s_from_planner"])
+				{
+					$t->define_field(array(
+						"name" => "acc_need",
+						"caption" => t("Majutus"),
+						"chgbgcolor" => "urgent_col",
+					));
+				}
 				$t->define_field(array(
 					"name" => "delegates",
 					"caption" => t("Inimeste arv"),
@@ -473,6 +483,29 @@ class rfp_manager extends class_base
 					"caption" => t("Kontaktandmed"),
 					"chgbgcolor" => "urgent_col",
 				));
+				if($arr["request"]["s_from_planner"])
+				{
+					$t->define_field(array(
+						"name" => "city",
+						"caption" => t("Linn"),
+						"chgbgcolor" => "urgent_col",
+					));
+					$t->define_field(array(
+						"name" => "hotel",
+						"caption" => t("Hotell"),
+						"chgbgcolor" => "urgent_col",
+					));
+					$t->define_field(array(
+						"name" => "evtype",
+						"caption" => t("&Uuml;rituse t&uuml;&uuml;p"),
+						"chgbgcolor" => "urgent_col",
+					));
+					$t->define_field(array(
+						"name" => "rooms",
+						"caption" => t("Hotellitubasid"),
+						"chgbgcolor" => "urgent_col",
+					));
+				}
 				$t->define_field(array(
 					"name" => "created",
 					"caption" => t("Loodud"),
@@ -566,6 +599,10 @@ class rfp_manager extends class_base
 						"popup" => $this->gen_popup($oid),
 						"urgent_col" => $urgent_col,
 						"oid" => $oid,
+						"city" => $obj->prop("data_gen_city.name"),
+						"hotel" => $obj->prop("data_gen_hotel.name"),
+						"evtype" => $obj->prop("data_mf_event_type.name"),
+						"rooms" => $obj->prop("data_gen_single_rooms") + $obj->prop("data_gen_double_rooms") + $obj->prop("data_gen_suites"),
 					));
 				}
 				$t->sort_by();
@@ -1542,7 +1579,7 @@ class rfp_manager extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		$todo = array("s_name", "s_org", "s_contact", "s_time_from", "s_time_to", "s_city", "s_hotel");
+		$todo = array("s_name", "s_org", "s_contact", "s_time_from", "s_time_to", "s_city", "s_hotel", "s_from_planner");
 		foreach($todo as $do)
 		{
 			$arr["args"][$do] = $arr["request"][$do];
@@ -1759,6 +1796,12 @@ class rfp_manager extends class_base
 		$_tmp_to = str_replace("---", 0, $request["s_time_to"]);
 		foreach($rfps as $oid => $obj)
 		{
+			//from conference planner
+			if($request["s_from_planner"] && !$obj->prop("from_planner"))
+			{
+				unset($rfps[$oid]);
+			}
+
 			// time
 			if($_tmp_from["year"] > 0 && $_tmp_to["year"] > 0)
 			{
@@ -1775,7 +1818,7 @@ class rfp_manager extends class_base
 					unset($rfps[$oid]);
 				}
 			}
-
+	
 			// func name
 			if(strlen($request["s_name"]) && !stristr($obj->prop("data_gen_function_name") , $request["s_name"]) && !stristr($obj->name() , $request["s_name"]))
 			{

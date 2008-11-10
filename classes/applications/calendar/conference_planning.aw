@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.106 2008/10/29 15:55:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.107 2008/11/10 10:00:04 robert Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1750,6 +1750,7 @@ class conference_planning extends class_base
 			$obj->set_parent($arr["parent"]);
 			$obj->set_class_id($arr["clid"]);
 			$obj->set_prop("conference_planner", $arr["conference_planner"]);
+			$obj->set_prop("from_planner", 1);
 			// these are here just in case 
 			unset($data["conference_planner"]);
 			unset($data["name"]);

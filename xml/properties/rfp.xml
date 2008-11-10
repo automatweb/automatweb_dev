@@ -19,6 +19,14 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>from_planner</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>data_subm_organisation</name>
             <table>rfp</table>
             <group>

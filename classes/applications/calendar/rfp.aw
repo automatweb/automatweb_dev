@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.163 2008/11/03 15:19:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.164 2008/11/10 10:00:04 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -17,6 +17,8 @@
 
 	@property confirmed type=select table=rfp field=confirmed
 	@caption Staatus
+
+	@property from_planner type=hidden field=meta method=serialize
 
 @default table=rfp
 @default group=general
