@@ -39,6 +39,16 @@
 			</function>
 		</action>
 		
+		<action name="orderer_autocomplete_source">
+			<function name="orderer_autocomplete_source">
+				<arguments>
+					<optional name="customer" />
+					<optional name="customer_name" />
+					<optional name="orderer" />
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="check_existing">
 			<function name="check_existing">
 				<arguments>

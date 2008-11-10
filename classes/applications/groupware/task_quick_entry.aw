@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.47 2008/11/04 18:57:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.48 2008/11/10 14:41:51 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -83,7 +83,8 @@ class task_quick_entry extends class_base
 		switch($prop["name"])
 		{
 			case "orderer":
-				$prop["autocomplete_class_id"] = array(CL_CRM_PERSON);
+				$prop["autocomplete_source"] = $this->mk_my_orb("orderer_autocomplete_source");
+				$prop["autocomplete_params"] = array("customer", "customer_name", "orderer");
 				break;
 			case "customer_name":
 				$prop["autocomplete_class_id"] = array(CL_CRM_PERSON, CL_CRM_COMPANY);
@@ -320,6 +321,58 @@ $start = ((float)$usec + (float)$sec);
 		exit ($cl_json->encode($option_data));
 	}
 
+	/**
+		@attrib name=orderer_autocomplete_source
+		@param customer optional
+		@param customer_name optional
+		@param orderer optional
+	**/
+	function orderer_autocomplete_source($arr)
+	{
+		$cl_json = get_instance("protocols/data/json");
+		if(!$arr["customer"])
+		{
+			$arr["customer"] = $arr["customer_name"];
+		}
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		$customers = new object_list(array(
+			"class_id" => array(CL_CRM_COMPANY),
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 3,
+		));
+		$orderers = new object_list();
+		foreach($customers->arr() as $cust)
+		{
+			$orderers->add($cust->get_workers());
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_PERSON),
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["orderer"])."%",
+			"oid" => $orderers->ids(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$autocomplete_options = $orderers->names();
+
+                foreach($autocomplete_options as $k => $v)
+                {
+                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+                }
+		header("Content-type: text/html; charset=utf-8");
+		exit ($cl_json->encode($option_data));
+	}
 
 
 	/**

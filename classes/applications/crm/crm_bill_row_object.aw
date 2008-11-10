@@ -95,7 +95,11 @@ class crm_bill_row_object extends _int_object
 		}
 		if($problem->class_id() == CL_TASK_ROW)
 		{
-			if($ret = $problem->prop("task.customer.name"))
+			if($ret = $problem->prop("orderer.name"))
+			{
+				return $ret;
+			}
+			if($problem->prop("task.customer.class_id") == CL_CRM_PERSON && $ret = $problem->prop("task.customer.name"))
 			{
 				return $ret;
 			}

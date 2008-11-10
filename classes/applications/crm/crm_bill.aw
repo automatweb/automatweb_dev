@@ -1040,7 +1040,7 @@ class crm_bill extends class_base
 	
 		$t->define_field(array(
 			"name" => "has_tax",
-			"caption" => t("+KM?"),
+			"caption" => "<a href='javascript:selall(\"rows\")'>".t("+KM?")."</a>",
 		));
 
 		$t->define_field(array(
@@ -2050,7 +2050,7 @@ class crm_bill extends class_base
 		$tax_rows = array();
 		$_no_prod_idx = -1;
 		$has_nameless_rows = 0;//miski muutuja , et kui see heks muutub, siis lisab liidab kik read kokku
-	
+
 		foreach($brows as $row)
 		{
 			if ($row["is_oe"])
@@ -2109,6 +2109,7 @@ class crm_bill extends class_base
 			$grp_rows[$row["prod"]][$unp]["tot_cur_sum"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["name"] = $row["name"];
 			$grp_rows[$row["prod"]][$unp]["comment"] = $row["comment"];
+			$grp_rows[$row["prod"]][$unp]["orderer"] = $row["orderer"];
 
 			if (empty($grp_rows[$row["prod"]][$unp]["comment"]))
 			{
@@ -2161,9 +2162,11 @@ class crm_bill extends class_base
 					"price" => number_format(($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),2,".", " "),
 					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
 					"desc" => $desc,
-					"date" => "" 
+					"date" => "",
+					"row_orderer" => $grp_row["orderer"],
 				));
 				$rs[] = array("str" => $this->parse("ROW"), "date" => $grp_row["date"] , "jrk" => $grp_row["jrk"] , "id" => $grp_row["id"],);
+
 			}
 		}
 	
@@ -2386,9 +2389,9 @@ class crm_bill extends class_base
 				"persons" => $ppl,
 				"has_task_row" => $row->has_task_row(),
 			);
-
 			$rd["orderer"] = $row->get_orderer_person_name();
 			$rd["task_row_id"] = $row->get_task_row_or_bug_id();
+
 
 			$inf[] = $rd;
 		}
@@ -2625,7 +2628,8 @@ class crm_bill extends class_base
 					"price" => number_format($row["price"], 2,".", " "),
 					"sum" => number_format($cur_sum, 2,"." , " "),
 					"desc" => $row["name"],
-					"date" => $row["date"] 
+					"date" => $row["date"],
+					"row_orderer" => $row["orderer"],
 				));
 				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
 			}
@@ -2667,7 +2671,8 @@ class crm_bill extends class_base
 				"price" => number_format($cur_pr, 2,".", " "),
 				"sum" => number_format($cur_sum, 2, ".", " "),
 				"desc" => $row["name"],
-				"date" => $row["date"]
+				"date" => $row["date"],
+				"row_orderer" => $row["orderer"],
 			));
 
 			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
@@ -3091,6 +3096,16 @@ class crm_bill extends class_base
 					}
 				}
 			}
+			var chk_status = 1;
+
+			function selall(element)
+			{
+			 $("form input[id^="+element+"]").each(function(){
+			      this.checked = chk_status;
+			    });
+			    chk_status = chk_status ? 0 : 1;
+			    }
+
 		';
 	}
 
