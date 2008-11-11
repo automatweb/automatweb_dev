@@ -65,7 +65,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// check if it is in the cache
 		if (isset($this->contained->read_properties_data_cache[$oid]))
 		{
-			return $this->contained->get_objdata($oid, $param);
+			return $this->contained->get_objdata($oid);
 		}
 
 		if (!empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
@@ -373,33 +373,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "obj_fetch-$query_hash";
 
-		/*$ret = aw_unserialize($this->cache->file_get_pt(
-			"storage_search",
-			$query_hash[0],
-			$c_fn
-		));*/
-
-		if (!is_array($ret))
-		{
-			$ret = $this->contained->fetch_list($param);
-		/*	$this->cache->file_set_pt(
-				"storage_search",
-				$query_hash[0],
-				$c_fn,
-				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);*/
-		}
-		else
-		{
-			foreach($ret[0] as $row)
-			{
-				$this->contained->read_properties_data_cache[$row["oid"]] = $row;
-			}
-			foreach($ret[1] as $row)
-			{
-				$this->contained->read_properties_data_cache_conn[$row["oid"]] = $row;
-			}
-		}
+		$ret = $this->contained->fetch_list($param);
 		return $ret;
 	}
 

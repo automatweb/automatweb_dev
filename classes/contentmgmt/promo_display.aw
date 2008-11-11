@@ -62,7 +62,7 @@ class promo_display implements main_subtemplate_handler
 		$promo_areas = aw_ini_get("promo.areas");
 		foreach($parr as $o)
 		{
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." <br>";
 }
@@ -107,7 +107,7 @@ if ($_GET["PROMO_DBG"] == 1)
 				}
 			}
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." <br>";
 }
@@ -153,7 +153,7 @@ if ($_GET["PROMO_DBG"] == 1)
 				}
 			}
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." <br>";
 }
@@ -180,7 +180,7 @@ if ($_GET["PROMO_DBG"] == 1)
 				}
 			}
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
 }
@@ -188,7 +188,7 @@ if ($_GET["PROMO_DBG"] == 1)
 			{
 				$show_promo = false;
 			};
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo "promo = ".$o->id()." show = ".dbg::dump($show_promo)." <br>";
 }
@@ -197,7 +197,7 @@ if ($_GET["PROMO_DBG"] == 1)
 				$show_promo = false;
 			}
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
 }
@@ -206,7 +206,7 @@ if ($_GET["PROMO_DBG"] == 1)
 				$show_promo = false;
 			}
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
 }
@@ -219,7 +219,7 @@ if ($_GET["PROMO_DBG"] == 1)
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($show_promo)." <br>";
 }
@@ -283,13 +283,13 @@ if ($_GET["PROMO_DBG"] == 1)
 					));
 					exit_function("mainc-contentmgmt/promo-read_docs-old");
 				}
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo "3promo = ".$o->id()." show = ".dbg::dump($docid)." <br>";
 }
 				$awt->stop("def-doc");
 
-if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 {
 	echo __FILE__."::".__LINE__." with promo ".$o->id()." ".$o->name()." show = ".dbg::dump($docid)." <br>";
 }
@@ -309,7 +309,7 @@ if ($_GET["PROMO_DBG"] == 1)
 					$docid = array($docid);
 				}
 
-				if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 				{
 					echo "showing promo ".$o->name()." (".$o->id().")  type = ".$o->meta("type")." docs = ".join(", ", $docid)."<br>";
 				}
@@ -322,7 +322,7 @@ if ($_GET["PROMO_DBG"] == 1)
 
 				foreach($docid as $d)
 				{
-				if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 				{
 					echo "doc $d <br>";
 				}
@@ -331,7 +331,7 @@ if ($_GET["PROMO_DBG"] == 1)
 					{
 						continue;
 					}
-				if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 				{
 					echo "doc2 $d <br>";
 				}
@@ -371,7 +371,7 @@ if ($_GET["PROMO_DBG"] == 1)
 						"vars" => array("doc_ord_num" => $d_cnt+1),
 						"not_last_in_list" => (($d_cnt+1) < $d_total)
 					));
-				if ($_GET["PROMO_DBG"] == 1)
+if (!empty($_GET["PROMO_DBG"]))
 				{
 					echo "doc $d cont = ".htmlentities($cont)." <br>";
 				}

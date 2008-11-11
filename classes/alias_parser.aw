@@ -178,7 +178,7 @@ class alias_parser extends core
 								"matches" => $adata["val"],
 								"alias" => $adata,
 								"tpls" => &$args["templates"],
-								"data" => $args["data"]
+								"data" => isset($args["data"]) ? $args["data"] : null
 							);
 							enter_function("aliasmgr::parse_oo_aliases::loop::do_palias");
 							$repl = $$emb_obj_name->parse_alias($parm);

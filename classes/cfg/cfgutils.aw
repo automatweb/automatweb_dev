@@ -154,12 +154,13 @@ class cfgutils extends aw_template
 	{
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load_class_properties");
+		$clid = null;
 		extract($args);
 
 		if (empty($args['source']) && !$file && !$this->clist_init_done)
 		{
 			$this->_init_clist();
-			$file = $this->clist[$clid];
+			$file = isset($this->clist[$clid]) ? $this->clist[$clid] : "";
 		}
 
 		$system = isset($args["system"]) ? 1 : 0;
@@ -187,7 +188,7 @@ class cfgutils extends aw_template
 			};
 		}
 		$from_cache = false;
-		if (empty($args['source']) && file_exists($cachename) && (filemtime($cachename) > filemtime($fqfn)))
+		if (empty($args['source']) && file_exists($cachename) && file_exists($fqfn) && (filemtime($cachename) > filemtime($fqfn)))
 		{
 			include($cachename);
 			$from_cache = true;
@@ -748,7 +749,11 @@ class cfgutils extends aw_template
 if (empty($clid))
 {debug_print_backtrace();
 }
-		$cldat = $clinf[$clid];
+		$cldat = array();
+		if (isset($clinf[$clid]))
+		{
+			$cldat = $clinf[$clid];
+		}
 
 		if (isset($cldat["generated"]))
 		{

@@ -59,10 +59,12 @@ class doc_display extends aw_template
 		{
 			$text = $this->get_document_text($arr, $doc);
 		}
+		$lead = "";
 		if ($this->template_has_var("lead"))
 		{
 			$lead = $this->_get_lead($arr, $doc);
 		}
+		$content = "";
 		if ($this->template_has_var("content"))
 		{
 			$content = $this->_get_content($arr, $doc);
@@ -259,7 +261,7 @@ class doc_display extends aw_template
 			"lead" => $lead,
 			"content" => $content,
 			"alias" => $doc->trans_get_val("alias"),
-			"last_error_message" => $_SESSION["aw_session_track"]["aw"]["last_error_message"],
+			"last_error_message" => isset($_SESSION["aw_session_track"]["aw"]["last_error_message"]) ? $_SESSION["aw_session_track"]["aw"]["last_error_message"] : "",
 			"lang_code" => $sel_lang["acceptlang"]
 		));
 
@@ -1005,6 +1007,7 @@ class doc_display extends aw_template
 	
 	private function _do_forum($doc)
 	{
+		$fr = "";
 		if ($doc->prop("is_forum") &&
 			($this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS") || $this->is_template("FORUM_ADD"))
 			
@@ -1241,7 +1244,7 @@ class doc_display extends aw_template
 		{
 			$u6s = $this->parse("user10_sub");
 		}
-		$u6s = "";
+		$u11s = "";
 		if ($doc->prop("user11") != "")
 		{
 			$u11s = $this->parse("user11_sub");

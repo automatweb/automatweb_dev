@@ -498,7 +498,7 @@ class acl_base extends db_connector
 
 	////
 	// !checks if the user has the $right for program $progid
-	function prog_acl($right = "",$progid = PRG_MENUEDIT)
+	function prog_acl($right = "",$progid = "can_admin_interface")
 	{
 		if (aw_global_get("uid") == "")
 		{

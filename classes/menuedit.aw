@@ -26,7 +26,7 @@ class menuedit extends aw_template implements request_startup
 		$set_ct_lang_id = isset($_GET["set_ct_lang_id"]) ? $_GET["set_ct_lang_id"] : null;
 		if (aw_ini_get("menuedit.language_in_url"))
 		{
-			if ($section[2] == "%")
+			if (strlen($section) > 2 && $section[2] == "%")
 			{
 				$section = urldecode($section);
 			}
@@ -577,7 +577,7 @@ class menuedit extends aw_template implements request_startup
 				die();
 			}
 		}
-		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(t("&uuml;ritas accessida objekti id-ga '%s'. Kr&auml;kkimiskatse?"),$_SERVER["REQUEST_URI"]), $section);
+		$this->_log("ST_MENUEDIT", "SA_ACL_ERROR",sprintf(t("&uuml;ritas accessida objekti id-ga '%s'. Kr&auml;kkimiskatse?"),$_SERVER["REQUEST_URI"]), $section);
 		// neat :), kui objekti ei leita, siis saadame 404 koodi
 		$r404 = $this->cfg["404redir"];
 		if (is_array($r404))

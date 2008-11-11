@@ -78,7 +78,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							if ($pd["store"] == "connect" && $rts[$pd["reltype"]]["value"] == $d2["reltype"])
 							{
 								$v = $d2["target"];
-								if ($pd["multiple"] == 1)
+								if (!empty($pd["multiple"]))
 								{
 									$td[$pid][] = $v;
 								}
@@ -2132,8 +2132,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]) || !isset($GLOBALS["relinfo"][$clid]))
 			{
+				$clss = aw_ini_get("classes");
+
 				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid], $GLOBALS["relinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
-					"file" => ($clid == CL_DOCUMENT ? "doc" : basename($GLOBALS["cfg"]["classes"][$clid]["file"])),
+					"file" => ($clid == CL_DOCUMENT ? "doc" : basename(isset($clss[$clid]) ? $clss[$clid]["file"] : "")),
 					"clid" => $clid
 				));
 			}

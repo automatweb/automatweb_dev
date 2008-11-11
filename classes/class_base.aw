@@ -82,6 +82,7 @@ class class_base extends aw_template
 	var $translation_lang_var_name = "awcb_347c92e42_trans_lid";
 	var $translation_lang_id;
 	var $transl_grp_name;
+	var $is_translated;
 
 	function class_base($args = array())
 	{

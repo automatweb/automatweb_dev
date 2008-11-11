@@ -1087,7 +1087,7 @@ class site_show extends class_base
 				}
 			}
 
-			if ($arr["periodic_content"] == 1)
+			if (isset($arr["periodic_content"]) && $arr["periodic_content"] == 1)
 			{
 				if (is_array($periods))
 				{
@@ -1145,7 +1145,7 @@ class site_show extends class_base
 			$done_oids = array();
 			foreach($documents->arr() as $o)
 			{
-				if ($done_oids[$o->brother_of()])
+				if (!empty($done_oids[$o->brother_of()]))
 				{
 					continue;
 				}

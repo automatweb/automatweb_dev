@@ -21,8 +21,8 @@ class site_logger extends core
 			return false;
 		};
 		$this->_log(
-			ST_MENUEDIT, 
-			SA_PAGEVIEW, 
+			16 /*ST_MENUEDIT*/, 
+			19 /*SA_PAGEVIEW*/, 
 			$this->get_log_message(),
 			aw_global_get("section")
 		);

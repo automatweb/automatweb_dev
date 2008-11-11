@@ -1935,7 +1935,7 @@ class _int_object
 		$this->_int_load_property_values();
 
 		// now that we know the class id, change the object instance out from beneath us, if it is set so in the ini file
-		$cld = $GLOBALS["cfg"]["classes"][$this->obj["class_id"]];
+		$cld = isset($GLOBALS["cfg"]["classes"][$this->obj["class_id"]]) ? $GLOBALS["cfg"]["classes"][$this->obj["class_id"]] : array();
 		if (!empty($cld["object_override"]))
 		{
 			$cln = basename($cld["object_override"]);

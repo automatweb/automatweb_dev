@@ -699,7 +699,7 @@ class admin_if extends class_base
 				"title" => $title,
 			));
 
-			$row["class_id"] = $clss[$row_o->class_id()]["name"];
+			$row["class_id"] = isset($clss[$row_o->class_id()]) ? $clss[$row_o->class_id()]["name"] : ""; 
 			if ($row["oid"] != $row_o->brother_of())
 			{
 				$row["class_id"] .= " (vend)";
