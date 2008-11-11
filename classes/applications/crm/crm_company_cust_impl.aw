@@ -1986,7 +1986,7 @@ enter_function("company::_finish_org_tbl_5");
 		else
 		{
 			$format = (($tmp = $arr["request"]["group"]) == "relorg_t" || $tmp = "relorg")?$format_t:$format_s;
-			$tf->table_caption = sprintf($format, $org->name(), $arr["obj_inst"]->name());
+			$tf->set_caption(sprintf($format, $org->name(), $arr["obj_inst"]->name()));
 		}
 		$this->_org_table_header(&$tf);
 		$default_cfg = true;
