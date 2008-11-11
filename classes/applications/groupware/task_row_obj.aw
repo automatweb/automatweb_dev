@@ -21,6 +21,11 @@ class task_row_obj extends _int_object
 	function save($arr = array())
 	{
 		//igal salvestamisel v6iks osa infot yle kontrollida toimetuse juurest
+		if($this->prop("primary"))
+		{
+			$this->set_prop("done" , 1);
+		}
+		parent::save();
 		$task = obj($this->prop("task"));
 		if(is_object($task))
 		{
@@ -39,7 +44,7 @@ class task_row_obj extends _int_object
 
 			foreach($task->connections_from(array(
 				"type" => "RELTYPE_PROJECT",
-			)) as $conn)
+			)) as $c)
 			{
 				if (!$this->is_connected_to(array("to" => $c->prop("to"), "type" => "RELTYPE_PROJECT")))
 				{
@@ -50,8 +55,6 @@ class task_row_obj extends _int_object
 				}
 			}
 		}
-
-		parent::save();
 	}
 
 }
