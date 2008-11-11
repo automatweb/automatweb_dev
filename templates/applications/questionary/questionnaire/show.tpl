@@ -1,5 +1,12 @@
 <!-- SUB: QUESTIONNAIRE -->
 <form method="post" action="?qid=end">
+<!-- SUB: PERSON_DATA_INSERTION -->
+Palun sisestage oma andmed, et saaksime v&otilde;itjale anda $1,000,000!
+<br />
+{VAR:insertion_form}
+<!-- K6ik isiku andmete salvestamiseks vajalikud v2ljad peavad olema nimega person[{property_nimi}] -->
+Nimi: <input type="text" name="person[name]">
+<!-- END SUB: PERSON_DATA_INSERTION -->
 <!-- SUB: QUESTION -->
 <table width="100%">
 	<tr>
@@ -92,8 +99,3 @@
 	</tr>
 </table>
 <!-- END SUB: RESULTS -->
-<!-- SUB: PERSON_DATA_INSERTION -->
-Palun sisestage oma andmed, et saaksime v&otilde;itjale anda $1,000,000!
-<br /><br /><br />
-{VAR:insertion_form}
-<!-- END SUB: PERSON_DATA_INSERTION -->

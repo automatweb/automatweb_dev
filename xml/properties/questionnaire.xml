@@ -19,6 +19,16 @@
             <caption>K&amp;amp;uuml;simused &amp;amp;uuml;hekaupa</caption>
       </property>
       <property>
+            <name>str_answerer_with_qs</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vastaja andmed samal lehel k&amp;amp;uuml;simustega</caption>
+            <comment>Toimib ainult siis, kui k&amp;amp;uuml;simused on &amp;amp;uumlhel lehel. Ei saa kasutada seadete vormi.</comment>
+      </property>
+      <property>
             <name>dsply_qcomment</name>
             <table>objects</table>
             <group>conf</group>

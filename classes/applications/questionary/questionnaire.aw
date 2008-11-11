@@ -20,6 +20,10 @@
 		@property q_by_one type=checkbox ch_value=1 field=meta method=serialize
 		@caption K&uuml;simused &uuml;hekaupa
 
+		@property str_answerer_with_qs type=checkbox field=meta method=serialize
+		@caption Vastaja andmed samal lehel k&uuml;simustega
+		@comment Toimib ainult siis, kui k&uuml;simused on &uumlhel lehel. Ei saa kasutada seadete vormi.
+
 		@property dsply_qcomment type=chooser field=meta method=serialize
 		@caption Kuva k&uuml;simuse kommentaari
 		@comment Kuvatakse kommentaare, mille pikkus on > 0.
@@ -500,7 +504,7 @@ class questionnaire extends class_base
 			// So it won't get lost in the process
 			aw_session_set("questionnaire_pid", $_GET["pid"]);
 		}
-		$Q_PID = is_oid($_GET["pid"]) ? $_GET["pid"] : aw_global_get("questionnaire_pid");
+		$this->Q_PID = is_oid($_GET["pid"]) ? $_GET["pid"] : aw_global_get("questionnaire_pid");
 		/* $this->_qs values:
 		0 - undone
 		1 - done, wrong
@@ -520,7 +524,13 @@ class questionnaire extends class_base
 		$i = get_instance(CL_IMAGE);
 		$this->read_template("show.tpl");
 
-		if(!is_oid($Q_PID) && !isset($_GET["qid"]) && $o->str_answerer == 1 && $this->can("view", $o->prop("str_answerer_cfgform")))
+		if(!is_oid($this->Q_PID) && !isset($_GET["qid"]) && $o->str_answerer == 1 && $o->str_answerer_with_qs && !$o->q_by_one)
+		{
+			$this->vars(array(
+				"PERSON_DATA_INSERTION" => $this->parse("PERSON_DATA_INSERTION"),
+			));
+		}
+		elseif(!is_oid($this->Q_PID) && !isset($_GET["qid"]) && $o->str_answerer == 1 && $this->can("view", $o->str_answerer_cfgform))
 		{
 			// Set the redirect for the cfgform
 			$c = obj($o->prop("str_answerer_cfgform"));
@@ -548,7 +558,7 @@ class questionnaire extends class_base
 			if($this->can("view", $o->prop("str_answerer_cfgform")) && $o->prop("str_answerer") == 2)
 			{
 				// Avoid entering the answerer's data twice
-				if(is_oid($Q_PID))
+				if(is_oid($this->Q_PID))
 				{					
 					// Move on show the results.
 					$_GET["qid"] = "end";
@@ -606,24 +616,28 @@ class questionnaire extends class_base
 		}
 		if($_GET["qid"] == "end")
 		{
+			if(!$o->q_by_one && $o->str_answerer_with_qs && isset($_POST["person"]))
+			{
+				$this->set_custom_person_data($o);
+			}
 			if(isset($_POST["answers"]) && is_array($_POST["answers"]))
 			{
 				$this->handle_answer_submit();
 			}
 			// If a person is created, store the answers and connect 'em to that person
-			if($this->can("view", $Q_PID))
+			if($this->can("view", $this->Q_PID))
 			{
 				aw_session_del("questionnaire_pid");
 				// Save the data
 				$a = obj();
 				$a->set_class_id(CL_QUESTIONNAIRE_ANSWERER);
 				$a->set_parent($o->id());
-				$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($Q_PID)->name(), $o->name()));
+				$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($this->Q_PID)->name(), $o->name()));
 				aw_disable_acl();
 				$a->save();
 				aw_restore_acl();
 				$a->connect(array(
-					"to" => $Q_PID,
+					"to" => $this->Q_PID,
 					"reltype" => "RELTYPE_PERSON",
 				));
 				$a->connect(array(
@@ -1105,6 +1119,19 @@ class questionnaire extends class_base
 	private function cmp_function($a, $b)
 	{
 		return $a->ord() > $b->ord();
+	}
+
+	private function set_custom_person_data($o)
+	{
+		$p = obj();
+		$p->set_class_id(CL_CRM_PERSON);
+		$p->set_parent($o->id());
+		foreach($_POST["person"] as $k => $v)
+		{
+			$p->set_prop($k, $v);
+		}
+		$p->save();
+		$this->Q_PID = $p->id();
 	}
 }
 
