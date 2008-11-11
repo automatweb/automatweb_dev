@@ -106,6 +106,9 @@
 @groupinfo answerers submit=no caption=Vastajad
 @default group=answerers
 
+	@property atlb type=toolbar store=no no_caption=1
+	@caption Vastajate toolbar
+
 	@property acnt type=text store=no
 	@caption Vastajate arv
 
@@ -176,7 +179,7 @@ class questionnaire extends class_base
 			case "qtlbr":
 				$t = &$prop["vcl_inst"];
 				$t->add_new_button(array(CL_QUESTIONNAIRE_QUESTION), $arr["obj_inst"]->id(), 1);
-				$t->add_delete_button();
+				$t->add_delete_rels_button();
 				$t->add_save_button();
 				break;
 
@@ -199,9 +202,25 @@ class questionnaire extends class_base
 		return $retval;
 	}
 
+	function _get_atlb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_delete_button();
+		$t->add_button(array(
+			'name' => 'csv',
+			'img' => 'ftype_xls.gif',
+			'tooltip' => 'CSV',
+			"url" => aw_url_change_var("get_csv_file", 1)
+		));
+	}
+
 	function _get_atbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Nimi"),
@@ -253,44 +272,31 @@ class questionnaire extends class_base
 		);
 		foreach($as->arr() as $a)
 		{
-			// This crap cuz #251240 is undone.
-			$correct_conns = obj($a["oid"])->connections_from(array("type" => "RELTYPE_CORRECT"));
-			$wrong_conns = obj($a["oid"])->connections_from(array("type" => "RELTYPE_WRONG"));
 			$a["person"] = is_array($a["person"]) ? reset($a["person"]) : $a["person"];
 			$row = array(
-				"person" => is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "",
-				"time" => date("d.m.Y H:i:s", $a["created"]),
-				"result" => count($correct_conns).t("/").(count($correct_conns)+count($wrong_conns)),
-			);
-			foreach($correct_conns as $conn)
-			{
-//				$row["q_".$conn->prop("to")] = t("+");
-				$row["bgcolor_".$conn->prop("to")] = t("#0000CC");
-			}
-			foreach($wrong_conns as $conn)
-			{
-//				$row["q_".$conn->prop("to")] = t("-");
-				$row["bgcolor_".$conn->prop("to")] = t("#FF0000");
-			}
-			// Waiting for bug #251240
-			/*
-			$row = array(
+				"oid" => $a["oid"],
 				"person" => is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "",
 				"time" => date("d.m.Y H:i:s", $a["created"]),
 				"result" => count((array)$a["correct_ans"]).t("/").(count((array)$a["correct_ans"]) + count((array)$a["wrong_ans"])),
 			);
 			foreach((array)$a["correct_ans"] as $c_ans)
 			{
-//				$row["q_".$c_ans] = t("+");
-				$row["bgcolor_".$conn->prop("to")] = t("#0000CC");
+				$row["q_".$c_ans] = t("+");
+				$row["bgcolor_".$c_ans] = t("#0000CC");
 			}
 			foreach((array)$a["wrong_ans"] as $w_ans)
 			{
-//				$row["q_".$w_ans] = t("-");
-				$row["bgcolor_".$conn->prop("to")] = t("#FF0000");
+				$row["q_".$w_ans] = t("-");
+				$row["bgcolor_".$w_ans] = t("#FF0000");
 			}
-			*/
 			$t->define_data($row);
+		}
+
+		if($_GET["get_csv_file"] == 1)
+		{
+			header('Content-type: application/octet-stream');
+			header('Content-disposition: root_access; filename="csv_output.xls"');
+			die($t->get_csv_file("\t"));
 		}
 	}
 

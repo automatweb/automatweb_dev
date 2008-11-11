@@ -239,6 +239,16 @@
             <field>qtbl</field>
       </property>
       <property>
+            <name>atlb</name>
+            <table>objects</table>
+            <group>answerers</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>atlb</field>
+            <caption>Vastajate toolbar</caption>
+      </property>
+      <property>
             <name>acnt</name>
             <table>objects</table>
             <group>answerers</group>
