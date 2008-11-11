@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.149 2008/11/04 20:48:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.150 2008/11/11 09:36:06 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -2619,16 +2619,18 @@ class reservation extends class_base
 		$d = array(
 			"desc" => t("Summa")
 		);
-		$sum = $o->get_sum();
-/*		foreach($sum["room_price"] as $cur => $price)
+if(is_oid($o->id())){	$sum = $o->get_sum();
+
+                foreach($sum as $cur => $price)	
+		{                 $d["price".$cur] = number_format($price, 2);
+              }
+}
+else{
+		foreach($sum["room_price"] as $cur => $price)
 		{
 			$d["price".$cur] = number_format($price + $sum["prod_price"][$cur], 2);
-		}
-*/
-		foreach($sum as $cur => $price)
-		{
-			$d["price".$cur] = number_format($price, 2);
-		}
+		}}
+			
 
 		$t->define_data($d);
 
