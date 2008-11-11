@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.11 2008/09/24 10:27:53 markop Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.12 2008/11/11 10:21:27 kristo Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -979,6 +979,7 @@ die();
 				{
 					$url = aw_ini_get("baseurl").$url;
 				}
+				post_message("MSG_USER_LOGIN", array("uid" => $arr["uid"]));
 				return $url;
 			}
 		}
