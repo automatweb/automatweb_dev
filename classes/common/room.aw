@@ -3113,7 +3113,7 @@ class room extends class_base
 			}
 		}
 		
-		$t->table_caption = t("Broneerimine");
+		$t->set_caption(t("Broneerimine"));
 		$t->set_sortable(false);
 	}
 
