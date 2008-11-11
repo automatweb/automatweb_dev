@@ -140,6 +140,16 @@ class task_object extends _int_object
 		$new_row->set_class_id(CL_TASK_ROW);
 		$new_row->set_parent($this->id());
 		$new_row->set_prop("task" , $this->id());
+		$time = $this->prop("end");
+		if(!($time > 0))
+		{
+			$time = $this->prop("start1");
+		}
+		if(!($time > 0))
+		{
+			$time =  time();
+		}
+		$new_row->set_prop("date" , $time);
 		$new_row->save();
 		$this->connect(array(
 			"to" => $new_row->id(),
@@ -275,7 +285,9 @@ class task_object extends _int_object
 		{
 			$person = obj($data["person"]);
 			$row = $this->add_row();
-			$row->set_name($this->name()." ".($person->name() ? $person->name() : "")." ".t("tegevus"));
+			$name = $this->name()." ".($person->name() ? $person->name() : "")." ".t("tegevus");
+			$row->set_name($name);
+			$row->set_prop("content" , $name);
 			$row->set_prop("impl" , $data["person"]);
 			$row->set_prop("primary" , 1);
 		}

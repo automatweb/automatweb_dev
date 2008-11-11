@@ -39,6 +39,12 @@
 
 
 @layout center_bit type=hbox
+
+
+	@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit
+	@caption Sisu
+
+
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
 	@layout center_bit_left type=vbox parent=center_bit
@@ -46,33 +52,30 @@
 
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
-		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left_ct width=100%
-		@caption Sisu
 
 
 	@layout center_bit_right type=vbox parent=center_bit
 
 		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
-			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
+			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
 
-			@property co_table type=table no_caption=1 store=no parent=center_bit_right_top
-			@property proj_table type=table no_caption=1 store=no parent=center_bit_right_top
-			@property parts_table type=table no_caption=1 store=no parent=center_bit_right_top
+			@property co_table type=table no_caption=1 store=no parent=center_bit_bottom
+			@property proj_table type=table no_caption=1 store=no parent=center_bit_bottom
+			@property parts_table type=table no_caption=1 store=no parent=center_bit_bottom
 
-
-			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
+			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_bottom
 			@caption Klient
 
-			@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_right_top
+			@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_bottom
 			@caption Projekt
 
 
 		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
-			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
+			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
 
-			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
+			@property files_table type=table no_caption=1 store=no parent=center_bit_bottom
 
 @property ppa type=hidden store=no no_caption=1
 
@@ -1116,6 +1119,7 @@ class task extends class_base
 				break;
 
 			case "content":
+				$data["style"] = "width: 100%";
 				if($this->mail_data)
 				{
 					$data["value"] = sprintf(
@@ -1517,6 +1521,9 @@ class task extends class_base
 					$prop["value"] = $arr["request"]["start1"];
 					$arr["request"]["end"] = $arr["request"]["start1"];
 				}
+				break;
+			case "parts_table":
+				$this->save_parts_table($arr);
 				break;
 			case "add_clauses":
 //				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
@@ -4642,7 +4649,7 @@ class task extends class_base
 		));
 		$t->define_field(array(
 			"name" => "time_guess",
-			"caption" => t("Kulunud tunde"),
+			"caption" => t("Prognoositud tunde"),
 			"sortable" => 1,
 			"width" => "10%"
 		));
@@ -4658,12 +4665,12 @@ class task extends class_base
 			"sortable" => 1,
 			"width" => "10%"
 		));
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "done",
 			"caption" => t("Tehtud"),
 			"sortable" => 1,
 			"width" => "5%"
-		));
+		));*/
 		$t->define_field(array(
 			"name" => "on_bill",
 			"caption" => t("Arvele"),
@@ -4701,8 +4708,20 @@ class task extends class_base
 		$rows = $arr["request"]["rows"];
 		foreach($rows as $key => $row)
 		{
-			$row["person"] = $key;
-			$arr["obj_inst"]->set_primary_row($row);
+			$set = 0;
+			foreach($row as $prop => $val)
+			{
+				if($val)
+				{
+					$set = 1;
+					break;
+				}
+			}
+			if($set)
+			{
+				$row["person"] = $key;
+				$arr["obj_inst"]->set_primary_row($row);
+			}
 		}
 	}
 
@@ -4763,11 +4782,11 @@ class task extends class_base
 				"value" => $row ? $row->prop("time_to_cust") : "",
 				"size" => 3
 			));
-			$data["done"] = html::checkbox(array(
+/*			$data["done"] = html::checkbox(array(
 				"name" => "rows[".$c->id()."][done]",
 				"value" => 1,
 				"checked" => $row ? $row->prop("done") : "",
-			));
+			));*/
 			$data["on_bill"] = $row && $row->prop("bill_id") ? $row->prop("bill_id.bill_no") :
 				html::checkbox(array(
 					"name" => "rows[".$c->id()."][on_bill]",
