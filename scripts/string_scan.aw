@@ -1,9 +1,13 @@
 <?php
+
 $basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
+include($basedir . "/automatweb.aw");
+
+automatweb::start();
+include AW_DIR . "const" . AW_FILE_EXT;
+include(AW_DIR . "classes/defs.aw");
+$awt = new aw_timer();
+aw_global_set("no_db_connection", 1);
 
 $files = array(aw_ini_get("basedir")."/classes/crm/crm_company.aw");
 
@@ -76,7 +80,7 @@ foreach($files as $file)
 					{
 						// end of string
 						$strings[] = array(
-							"start" => $start, 
+							"start" => $start,
 							"end" => $i,
 							"str" => substr($fc, $start, ($i-$start)+1),
 							"line" => $line
@@ -96,7 +100,7 @@ foreach($files as $file)
 					{
 						// end of string
 						$strings[] = array(
-							"start" => $start, 
+							"start" => $start,
 							"end" => $i,
 							"str" => substr($fc, $start, ($i-$start)+1),
 							"line" => $line
@@ -121,11 +125,13 @@ foreach($files as $file)
 		}
 	}
 
-	
+
 	$strings = elim($strings, $fc);
 	disp($strings, $fc);
 	//write($strings, $file, $fc);
 }
+
+automatweb::shutdown();
 
 
 function ct($nst)

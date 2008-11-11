@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.53 2008/06/04 10:35:54 kristo Exp $
 /*
 @classinfo  maintainer=kristo
 */
@@ -103,7 +102,7 @@ class site_cache extends aw_template
 
 		// check cache
 		$cp = $this->get_cache_params($arr);
-		
+
 		$cache = get_instance("cache");
 		$tmp = $cache->get(aw_global_get("raw_section"), $cp, aw_global_get("section"));
 		return $tmp;
@@ -117,9 +116,9 @@ class site_cache extends aw_template
 		}
 
 		// don't cache pages with generated content, they usually change for each request
-		if ($arr["text"] != "")
+		if (!empty($arr["text"]))
 		{
-			if ($arr["force_cache"] != true)
+			if (empty($arr["force_cache"]))
 			{
 				return false;
 			}
@@ -127,7 +126,7 @@ class site_cache extends aw_template
 
 		// check cache
 		$cp = $this->get_cache_params($arr);
-		
+
 		$cache = get_instance("cache");
 		$cache->set(aw_global_get("raw_section"), $cp, $content, true, aw_global_get("section"));
 	}
@@ -162,8 +161,9 @@ class site_cache extends aw_template
 				$cp[] = $k."_".$v;
 			}
 		}
+
 		// here we sould add all the variables that are in the url to the cache parameter list
-		foreach($_GET as $var => $val)
+		foreach(automatweb::$request->get_args() as $var => $val)
 		{
 			// just to make sure that each user does not get it's own copy
 			if ($var != "automatweb" && $var != "set_lang_id")
@@ -180,7 +180,7 @@ class site_cache extends aw_template
 				$cp[] = $var."-".$val;
 			}
 		}
-		
+
 		return $cp;
 	}
 
@@ -205,11 +205,11 @@ class site_cache extends aw_template
 			$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
 		};
 
-		// if the template contains php tags, eval it. 
+		// if the template contains php tags, eval it.
 		if (strpos($res, "<?php") !== false)
 		{
 			ob_start();
-			
+
 			$tres = $res;
 			$res = str_replace("<?xml", "&lt;?xml", $res);
 			$res = str_replace("<?XML", "&lt;?xml", $res);
@@ -229,18 +229,18 @@ class site_cache extends aw_template
 				echo htmlentities($lines[$mt[1]+2])."<br>";
 				echo htmlentities($lines[$mt[1]+3])."<br>";
 				echo htmlentities($lines[$mt[1]+4])."<br>";
-				
+
 				die("syntax error in template");
 			}
 			ob_end_clean();
 		}
 
 		// also clear the no_cache flag from session if present
-		// why? well to let the session continue with cached pages. 
-		// basically, to have error messages on your submit handler you set 
+		// why? well to let the session continue with cached pages.
+		// basically, to have error messages on your submit handler you set
 		// aw_session_set("no_cache", 1);
 		// then redirect to some page. now, the no_cache stays as an aw_global
-		// so on the next pageview it is checked and honored. 
+		// so on the next pageview it is checked and honored.
 		// now, it could be the task of the application to clear this
 		// but then the content would still end up in the cache
 		// because this thing sets the cache content if the page is uncached
@@ -360,7 +360,7 @@ class site_cache extends aw_template
 
 	function ip_access($arr)
 	{
-		if ($this->can("view", $arr["force_sect"]))
+		if (isset($arr["force_sect"]) and $this->can("view", $arr["force_sect"]))
 		{
 			$so = obj($arr["force_sect"]);
 		}

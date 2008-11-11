@@ -1,13 +1,18 @@
 <?php
-$basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
-aw_global_set("no_db_connection", true);
 
+$basedir = realpath(".");
+include($basedir . "/automatweb.aw");
+
+automatweb::start();
+//automatweb::$instance->mode(automatweb::MODE_DBG);
+automatweb::$instance->bc();
+$awt = new aw_timer();
+aw_global_set("no_db_connection", 1);
+aw_ini_set("baseurl", "automatweb");
+include AW_DIR . "const" . AW_FILE_EXT;
 aw_set_exec_time(AW_LONG_PROCESS);
-$anal = get_instance("core/aw_code_analyzer/parser");
+
+$anal = new parser();
 
 // create a copy of the code tree and add enters to that
 $new_name = dirname(aw_ini_get("basedir"))."/".basename(aw_ini_get("basedir"))."_profiled";
@@ -27,8 +32,11 @@ $anal->_get_class_list(&$files, $new_name);
 
 foreach($files as $file)
 {
-echo "process $file \n";
+	echo "process $file \n";
 	$anal->do_parse($file);
 	$anal->add_enter_func($file);
 }
+
+automatweb::shutdown();
+
 ?>

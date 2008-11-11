@@ -71,7 +71,7 @@ class _int_object
 		if (!$this->_int_can_save())
 		{
 			error::raise(array(
-				"id" => ERR_SAVE,
+				"id" => "ERR_SAVE",
 				"msg" => sprintf(t("object::save(): object (%s) cannot be saved, needed properties are not set (parent, class_id)"), $this->obj["oid"])
 			));
 			return;
@@ -112,7 +112,7 @@ class _int_object
 		if (!$this->obj["oid"])
 		{
 			error::raise(array(
-				"id" => ERR_NO_OID,
+				"id" => "ERR_NO_OID",
 				"msg" => t("object::delete(): no current object loaded")
 			));
 			return;
@@ -137,7 +137,7 @@ class _int_object
 		if (!is_array($param))
 		{
 			error::raise(array(
-				"id" => ERR_PARAM,
+				"id" => "ERR_PARAM",
 				"msg" => sprintf(t("object::connect(%s): parameter must be an array of connection parameters!"), $param)
 			));
 			return;
@@ -189,7 +189,7 @@ class _int_object
 				else
 				{
 					error::raise(array(
-						"id" => ERR_ACL,
+						"id" => "ERR_ACL",
 						"msg" => sprintf(t("object::connect(): no view access for both endpoints (%s and %s)!"), $this->obj["brother_of"], $oid)
 					));
 					return;
@@ -203,7 +203,7 @@ class _int_object
 		if (!is_array($param))
 		{
 			error::raise(array(
-				"id" => ERR_PARAM,
+				"id" => "ERR_PARAM",
 				"msg" => sprintf(t("object::disconnect(%s): parameter must be an array!"), $param)
 			));
 			return;
@@ -231,7 +231,7 @@ class _int_object
 				else
 				{
 					error::raise(array(
-						"id" => ERR_CONNECTION,
+						"id" => "ERR_CONNECTION",
 						"msg" => sprintf(t("object::disconnect(): could not find connection to object %s from object %s"), $oid, $this->obj["oid"])
 					));
 					return;
@@ -249,7 +249,7 @@ class _int_object
 		if (!$this->obj["oid"])
 		{
 			error::raise(array(
-				"id" => ERR_NO_OBJ,
+				"id" => "ERR_NO_OBJ",
 				"msg" => t("object::connections_from(): no current object loaded!")
 			));
 			return;
@@ -264,7 +264,7 @@ class _int_object
 			if (!is_array($param))
 			{
 				error::raise(array(
-					"id" => ERR_PARAM,
+					"id" => "ERR_PARAM",
 					"msg" => t("object::connections_from(): if argument is present, then argument must be array of filter parameters!")
 				));
 				return;
@@ -285,6 +285,7 @@ class _int_object
 			{
 				$filter["idx"] = $param["idx"];
 			}
+
 			foreach($param as $k => $v)
 			{
 				if (substr($k, 0, 3) == "to.")
@@ -349,7 +350,7 @@ class _int_object
 		if (!$this->obj["oid"])
 		{
 			error::raise(array(
-				"id" => ERR_NO_OBJ,
+				"id" => "ERR_NO_OBJ",
 				"msg" => t("object::connections_to(): no current object loaded!")
 			));
 			return;
@@ -364,7 +365,7 @@ class _int_object
 			if (!is_array($param))
 			{
 				error::raise(array(
-					"id" => ERR_PARAM,
+					"id" => "ERR_PARAM",
 					"msg" => t("object::connections_to(): if argument is present, then argument must be array of filter parameters!")
 				));
 				return;
@@ -469,7 +470,7 @@ class _int_object
 		if (!$this->obj["oid"])
 		{
 			error::raise(array(
-				"id" => ERR_NO_OBJ,
+				"id" => "ERR_NO_OBJ",
 				"msg" => t("object::path(): no object loaded!")
 			));
 			return;
@@ -478,7 +479,7 @@ class _int_object
 		if ($param !== NULL && !is_array($param))
 		{
 			error::raise(array(
-				"id" => ERR_PARAM,
+				"id" => "ERR_PARAM",
 				"msg" => sprintf(t("object::path(%s): if parameter is specified, it must be an array!"), $param)
 			));
 			return;
@@ -499,7 +500,7 @@ class _int_object
 			if (!is_array($param))
 			{
 				error::raise(array(
-					"id" => ERR_PARAM,
+					"id" => "ERR_PARAM",
 					"msg" => t("object::path_str(): parameter must be an array if present!")
 				));
 				return;
@@ -554,7 +555,7 @@ class _int_object
 		if (empty($this->obj["oid"]))
 		{
 			error::raise(array(
-				"id" => ERR_ACL,
+				"id" => "ERR_ACL",
 				"msg" => sprintf(t("object::can(%s): no current object loaded!"),$param)
 			));
 			return;
@@ -595,7 +596,7 @@ class _int_object
 		if (!$parent)
 		{
 			error::raise(array(
-				"id" => ERR_NO_PARENT,
+				"id" => "ERR_NO_PARENT",
 				"msg" => sprintf(t("object::set_parent(%s): no parent specified!"), $parent)
 			));
 			return;
@@ -657,7 +658,7 @@ class _int_object
 		if (!is_class_id($param))
 		{
 			error::raise(array(
-				"id" => ERR_CLASS_ID,
+				"id" => "ERR_CLASS_ID",
 				"msg" => sprintf(t("object::set_class(%s): specified class id id is not valid!"), $param)
 			));
 			return;
@@ -698,7 +699,7 @@ class _int_object
 
 			default:
 				error::raise(array(
-					"id" => ERR_STATUS,
+					"id" => "ERR_STATUS",
 					"msg" => sprintf(t("object::set_status(%s): incorrect status code!"), $param)
 				));
 				return;
@@ -785,7 +786,7 @@ class _int_object
 		if (!is_numeric($param) && $param != "")
 		{
 			error::raise(array(
-				"id" => ERR_ORD,
+				"id" => "ERR_ORD",
 				"msg" => sprintf(t("object::set_ord(%s): order must be integer!"), $param)
 			));
 			return;
@@ -846,7 +847,7 @@ class _int_object
 		if (!is_numeric($param) && $param != "")
 		{
 			error::raise(array(
-				"id" => ERR_PERIOD,
+				"id" => "ERR_PERIOD",
 				"msg" => sprintf(t("object::set_period(%s): period must be integer!"), $param)
 			));
 			return;
@@ -869,7 +870,7 @@ class _int_object
 		if (!(is_numeric($param) || is_bool($param)) && $param != "")
 		{
 			error::raise(array(
-				"id" => ERR_BOOL,
+				"id" => "ERR_BOOL",
 				"msg" => sprintf(t("object::set_periodic(%s): order must be integer or boolean!"), $param)
 			));
 			return;
@@ -892,7 +893,7 @@ class _int_object
 		if (!is_numeric($param))
 		{
 			error::raise(array(
-				"id" => ERR_SITE_ID,
+				"id" => "ERR_SITE_ID",
 				"msg" => sprintf(t("object::set_site_id(%s): site_id must be integer!"), $param)
 			));
 			return;
@@ -985,7 +986,7 @@ class _int_object
 		if (!is_numeric($param))
 		{
 			error::raise(array(
-				"id" => ERR_SUBCLASS,
+				"id" => "ERR_SUBCLASS",
 				"msg" => sprintf(t("object::set_subclass(%s): subclass must be integer!"), $param)
 			));
 			return;
@@ -1013,7 +1014,7 @@ class _int_object
 		if (!is_numeric($param))
 		{
 			error::raise(array(
-				"id" => ERR_FLAGS,
+				"id" => "ERR_FLAGS",
 				"msg" => sprintf(t("object::set_flags(%s): flags must be integer!"), $param)
 			));
 			return;
@@ -1029,7 +1030,7 @@ class _int_object
 		if (!is_numeric($param))
 		{
 			error::raise(array(
-				"id" => ERR_FLAG,
+				"id" => "ERR_FLAG",
 				"msg" => sprintf(t("object::flag(%s): flag must be integer!"), $param)
 			));
 			return;
@@ -1050,7 +1051,7 @@ class _int_object
 		if (!is_numeric($flag))
 		{
 			error::raise(array(
-				"id" => ERR_FLAG,
+				"id" => "ERR_FLAG",
 				"msg" => sprintf(t("object::set_flag(%s, %s): flag must be integer!"), $flag, $val)
 			));
 			return;
@@ -1058,7 +1059,7 @@ class _int_object
 		if (!(is_numeric($val) || is_bool($val)))
 		{
 			error::raise(array(
-				"id" => ERR_FLAG,
+				"id" => "ERR_FLAG",
 				"msg" => sprintf(t("object::set_flag(%s, %s): value must be integer!"), $flag, $val)
 			));
 			return;
@@ -1311,7 +1312,7 @@ class _int_object
 		if (!$this->_int_is_property($key))
 		{
 			error::raise(array(
-				"id" => ERR_PROP,
+				"id" => "ERR_PROP",
 				"msg" => sprintf(t("object::set_prop(%s, %s): no property %s defined for current object!"), $key, $val, $key)
 			));
 			return;
@@ -1486,7 +1487,7 @@ class _int_object
 		if (!$clid)
 		{
 			error::raise(array(
-				"id" => ERR_OBJ_INSTANCE,
+				"id" => "ERR_OBJ_INSTANCE",
 				"msg" => t("object::instance(): no object loaded or class id not set!")
 			));
 			return;
@@ -1507,7 +1508,7 @@ class _int_object
 		if (!is_oid($parent))
 		{
 			error::raise(array(
-				"id" => ERR_CORE_OID,
+				"id" => "ERR_CORE_OID",
 				"msg" => sprintf(t("object::create_brother(%s): no parent!"), $parent)
 			));
 			return;
@@ -1853,7 +1854,7 @@ class _int_object
 
 	public function get_state_id()
 	{
-		return $this->obj["mod_cnt"];	
+		return $this->obj["mod_cnt"];
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -2265,12 +2266,12 @@ class _int_object
 			$rootmenu = array($GLOBALS["cfg"]["rootmenu"]);
 			$add = true;
 		}
-if ($GLOBALS["gdg"] == 1)
-echo "int path enter ".dbg::dump($param)." parent = $parent root = ".dbg::dump($rootmenu)." <br>\n";
+// /* dbg */ if ($GLOBALS["gdg"] == 1)
+// /* dbg */ echo "int path enter ".dbg::dump($param)." parent = $parent root = ".dbg::dump($rootmenu)." <br>\n";
 		while ($parent && !in_array($parent, $rootmenu))
 		{
-if ($GLOBALS["gdg"] == 1)
-echo "loop with $parent <br>\n";
+// /* dbg */ if ($GLOBALS["gdg"] == 1)
+// /* dbg */ echo "loop with $parent <br>\n";
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
 			{
 				unset($t);
@@ -2301,14 +2302,14 @@ echo "loop with $parent <br>\n";
 			if ($cnt > 100)
 			{
 				error::raise(array(
-					"id" => ERR_HIER,
+					"id" => "ERR_HIER",
 					"msg" => sprintf(t("object::path(%s): error in object hierarchy, infinite loop!"), $this->id())
 				));
 				return;
 			}
 		}
-if ($GLOBALS["gdg"] == 1)
-echo "int path return ".dbg::dump($ret)." <br>\n";
+// /* dbg */ if ($GLOBALS["gdg"] == 1)
+// /* dbg */ echo "int path return ".dbg::dump($ret)." <br>\n";
 		if ($add && !aw_global_get("__is_install"))
 		{
 			$rm = reset($rootmenu);
@@ -2351,7 +2352,7 @@ echo "int path return ".dbg::dump($ret)." <br>\n";
 				else
 				{
 					error::raise(array(
-						"id" => ERR_ACL,
+						"id" => "ERR_ACL",
 						"msg" => sprintf(t("object::save(): no acess to save object %s under %s !"), $this->obj["oid"], $this->obj["parent"])
 					));
 					return;
@@ -2366,7 +2367,7 @@ echo "int path return ".dbg::dump($ret)." <br>\n";
 				else
 				{
 					error::raise(array(
-						"id" => ERR_ACL,
+						"id" => "ERR_ACL",
 						"msg" => sprintf(t("object::save(): no access to add object under folder %s (gidlist = %s)!"), $this->obj["parent"], join(", ", aw_global_get("gidlist")))
 					));
 					return;
@@ -2636,13 +2637,11 @@ echo "int path return ".dbg::dump($ret)." <br>\n";
 		}
 
 		//if($prop["warning"]) and !strlen($prop["warning"]))
-		if(!strlen($prop["warning"]))
+		if(empty($prop["warning"]))
 		{
 			$prop["warning"] = ($prop["type"] == "relpicker")?2:1;
 		}
-		//arr($this->obj["oid"]);
-		//arr($prop);
-		!empty($prop["warning"]) ? warning_prop($prop["warning"], $this->obj["oid"], $prop["name"]) : "";
+
 		return false;
 	}
 

@@ -92,7 +92,6 @@ class site_template_compiler extends aw_template
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
 		enter_function("site_template_compiler::compile");
-		$e = error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
 		$this->tpl_init($path, true);
 		$this->no_use_ma_cache = $no_cache;
 		//echo "compiling \$this->read_template($tpl,true)<br>";
@@ -105,7 +104,6 @@ class site_template_compiler extends aw_template
 		$this->parse_template_parts($mdefs);
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
-		error_reporting($e);
 		exit_function("site_template_compiler::compile");
 		return $code;
 	}

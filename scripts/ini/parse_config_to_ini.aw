@@ -59,19 +59,21 @@ function parse_config_to_ini($file, $include = false)
 					$varvalue = trim(substr($line,$eqpos+3));
 
 					// now, replace all variables in varvalue
-					try {
+					try
+					{
 						$varvalue = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $varvalue);
 						$var = preg_replace('/\$\{(.*)\}/e', 'aw_ini_get("\\1")', $var);
 					}
 					catch(Exception $e)
 					{
-					//	echo "ex for $varvalue / $var \n";
+						// echo "ex for $varvalue / $var \n";
 					}
+
 					if (true || ($dotpos = strpos($var,".")) === false)
 					{
 						$varname = $var;
 						aw_ini_set($varname, $varvalue);
-//						echo "set $varname => $varvalue \n";
+						// echo "set $varname => $varvalue \n";
 					}
 				}
 			}

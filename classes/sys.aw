@@ -861,13 +861,22 @@ class sys extends aw_template
 			throw new awex_sys("Invalid argument");
 		}
 
-		$classes = explode(",", $arr["classes"]);
+		$classes = isset($arr["classes"]) ? explode(",", $arr["classes"]) : array();
 		$this->_make_property_definitions($classes);
 	}
 
 	private function _make_property_definitions($classes = array())
 	{
-		$collector = get_instance("cfg/propcollector");
+		$collector = new propcollector();
+
+		try
+		{
+			$www = ("sys" === automatweb::$request->arg("class"));
+		}
+		catch (Exception $e)
+		{
+			$www = false;
+		}
 
 		if (count($classes))
 		{
@@ -894,9 +903,17 @@ class sys extends aw_template
 		}
 		else
 		{
-			echo "<pre>";
+			if ($www)
+			{
+				echo "<pre>";
+			}
+
 			$collector->run();
-			echo "</pre>";
+
+			if ($www)
+			{
+				echo "</pre>";
+			}
 		}
 	}
 
@@ -1182,7 +1199,7 @@ ENDCLASSFORM;
 			"params" => array(
 				"site_id" => aw_ini_get("site_id"),
 				"data" => $s_data,
-				"y" => $y, 
+				"y" => $y,
 				"m" => $m
 			),
 		));

@@ -60,28 +60,28 @@ class aw_template extends core
 	{
 		if (!isset($this->cfg) || !is_array($this->cfg))
 		{
-			aw_config_init_class(&$this);
+			aw_config_init_class($this);
 		}
 
 		if (substr($basedir,0,1) != "/" && !preg_match("/^[a-z]:/i", substr($basedir,0,2)))
 		{
 			if ($has_top_level_folder)
 			{
-				$this->template_dir = $this->cfg["site_basedir"] . "/$basedir";
-				$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
-				$this->site_template_dir = $this->cfg["site_basedir"]."/".$basedir;
+				$this->template_dir = aw_ini_get("site_basedir") . "/$basedir";
+				$this->adm_template_dir = AW_DIR . "templates/$basedir";
+				$this->site_template_dir = aw_ini_get("site_basedir")."/".$basedir;
 			}
 			else
 			{
 				if (is_admin())
 				{
-					$this->template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+					$this->template_dir = AW_DIR . "templates/$basedir";
 				}
 				else
 				{
 					$this->template_dir = $this->_find_site_template_dir() . "/$basedir";
 				}
-				$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
+				$this->adm_template_dir = AW_DIR . "templates/$basedir";
 				$this->site_template_dir = $this->_find_site_template_dir()."/".$basedir;
 			}
 		}
@@ -115,15 +115,15 @@ class aw_template extends core
 
 		if (!aw_global_get("aw_init_done"))
 		{
-			return $this->cfg["tpldir"];
+			return aw_ini_get("tpldir");
 		}
 
 		$sect = aw_global_get("section");
 		if (!$this->can("view", $sect))
 		{
-			return $this->cfg["tpldir"];
+			return aw_ini_get("tpldir");
 		}
-		$rv = $this->cfg["tpldir"];
+		$rv = aw_ini_get("tpldir");
 		foreach(obj($sect)->path() as $path_item)
 		{
 			if ($path_item->prop("tpl_dir_applies_to_all") && $path_item->prop("tpl_dir"))
@@ -144,8 +144,8 @@ class aw_template extends core
 			"rand" => time(),
 			"current_time" => time(),
 			"status_msg" => aw_global_get("status_msg"),
-			"baseurl" => $this->cfg["baseurl"],
-			"baseurl_ssl" => str_replace("http", "https", $this->cfg["baseurl"]),
+			"baseurl" => aw_ini_get("baseurl"),
+			"baseurl_ssl" => str_replace("http", "https", aw_ini_get("baseurl")),
 			"cur_lang_id" => aw_global_get("lang_id"),
 			"current_url" => urlencode(get_ru())
 		);
@@ -943,7 +943,7 @@ class aw_template extends core
 	// !$arr - template content, array of lines of text
 	function read_tpl($arr)
 	{
-		if ($_GET["TPL"] == 1)
+		if (isset($_GET["TPL"]) and "1" === $_GET["TPL"])
 		{
 			// this will add link to documentation
 			$pos = strpos($this->template_filename, aw_ini_get("tpldir"));
@@ -1119,7 +1119,7 @@ class aw_template extends core
 		fwrite($f, time()."|".get_ru()."|".$fn."\n");
 		fclose($f);
 	}
-};
+}
 
 /** Throw this when you get a file name that is invalid. or should not be read. **/
 class awex_bad_file_path extends aw_exception

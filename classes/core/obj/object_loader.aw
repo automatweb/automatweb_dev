@@ -455,7 +455,7 @@ class _int_object_loader extends core
 				$max_acl = aw_unserialize($str_max_acl);
 			}
 
-			if (!$max_acl)
+			if (!isset($max_acl))
 			{
 				$max_acl = $this->_calc_max_acl($oid);
 				if ($max_acl === false)
@@ -488,6 +488,7 @@ class _int_object_loader extends core
 		// go through the object tree and find the acl that is of highest priority among the current users group
 		$cur_oid = $oid;
 		$do_orig = false;
+		$cnt = 0;
 
 		while ($cur_oid > 0)
 		{
@@ -496,13 +497,11 @@ class _int_object_loader extends core
 			{
 				$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
 			}
-			else
-			if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]) && isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]["acldata"]))
+			elseif (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]) && isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]["acldata"]))
 			{
 				$tmp = $GLOBALS["__obj_sys_objd_memc"][$cur_oid];
 			}
-			else
-			if ($GLOBALS["objects"][$cur_oid])
+			elseif (isset($GLOBALS["objects"][$cur_oid]))
 			{
 				$tmp = $GLOBALS["objects"][$cur_oid]->obj;
 			}
@@ -552,7 +551,7 @@ class _int_object_loader extends core
 				}
 			}
 
-			if (++$cnt > 100)
+			if (++$cnt > 100)//!!! move this limit setting to config?
 			{
 				$this->raise_error(ERR_ACL_EHIER,sprintf(t("object_loader->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid),true);
 			}

@@ -16,6 +16,7 @@ www.com.net/dev/main.aw?foo=foobar
 
 class aw_uri
 {
+	// uri parts
 	private $scheme;
 	private $host;
 	private $port;
@@ -26,7 +27,12 @@ class aw_uri
 	private $fragment;
 	private $args = array();
 	private $string;
-	private $updated = false;
+
+	// uri character classes
+	public $reserved_chars = array(";", "/", "?", ":", "@",  "&", "=", "+", ",", "$");
+
+	// ...
+	protected $updated = false;
 
 	public function __construct($uri = null)
 	{
@@ -78,26 +84,26 @@ class aw_uri
 			throw new awex_uri_arg("Not a URI.");
 		}
 
+		$args = array();
 		if (!empty($tmp["query"]))
 		{
-			$args = array();
 			$tmp2 = explode("&", $tmp["query"]);
 
 			foreach ($tmp2 as $arg)
 			{
 				$tmp3 = explode("=", $arg, 2);
-				$args[$tmp3[0]] = $tmp3[1];
+				$args[$tmp3[0]] = isset($tmp3[1]) ? urldecode($tmp3[1]) : null;
 			}
 		}
 
-		$this->scheme = $tmp["scheme"];
-		$this->host = $tmp["host"];
-		$this->port = $tmp["port"];
-		$this->user = $tmp["user"];
-		$this->pass = $tmp["pass"];
-		$this->path = $tmp["path"];
-		$this->query = $tmp["query"];
-		$this->fragment = $tmp["fragment"];
+		$this->scheme = isset($tmp["scheme"]) ? $tmp["scheme"] : null;
+		$this->host = isset($tmp["host"]) ? $tmp["host"] : null;
+		$this->port = isset($tmp["port"]) ? $tmp["port"] : null;
+		$this->user = isset($tmp["user"]) ? $tmp["user"] : null;
+		$this->pass = isset($tmp["pass"]) ? $tmp["pass"] : null;
+		$this->path = isset($tmp["path"]) ? $tmp["path"] : null;
+		$this->query = isset($tmp["query"]) ? $tmp["query"] : null;
+		$this->fragment = isset($tmp["fragment"]) ? $tmp["fragment"] : null;
 		$this->args = $args;
 		$this->string = $uri;
 		$this->updated = true;
@@ -112,7 +118,7 @@ class aw_uri
 	**/
 	public function arg($name)
 	{
-		return isset($this->args[$name]) ? $this->args[$name] : null;
+		return isset($this->args[$name]) ? (string) $this->args[$name] : null;
 	}
 
 	/**
@@ -127,7 +133,17 @@ class aw_uri
 	**/
 	public function set_arg($name, $val)
 	{
-		$this->args[$name] = $val;
+		if (!is_scalar($val))
+		{
+			throw new awex_uri_type("Tried to assing non-scalar value to URI query argument");
+		}
+
+		if (str_replace($this->reserved_chars, "a", $name) !== $name) // !!! a asemele midagi
+		{
+			throw new awex_uri_type("Reserved character(s) in argument name");
+		}
+
+		$this->args[$name] = (string) $val;
 		$this->updated = false;
 	}
 
@@ -177,12 +193,12 @@ class aw_uri
 			{
 				if ($first)
 				{
-					$uri .= $name . "=" . $value;
+					$uri .= $name . "=" . urlencode($value);
 					$first = false;
 				}
 				else
 				{
-					$uri .= "&" . $name . "=" . $value;
+					$uri .= "&" . $name . "=" . urlencode($value);
 				}
 			}
 		}
@@ -207,5 +223,8 @@ class awex_uri extends aw_exception {}
 
 /* Generic condition when invalid argument given as method parameter */
 class awex_uri_arg extends awex_uri {}
+
+/* Method argument type not what expected */
+class awex_uri_type extends awex_uri {}
 
 ?>

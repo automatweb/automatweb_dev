@@ -109,10 +109,9 @@ class active_page_data extends class_base
 	function get_javascript($pos = "")
 	{
 		$js = (array) aw_global_get("__aw_javascript");
+
 		$text = "";
-
-		$files = safe_array(($pos === 'bottom') ? $js['bottom'] : $js['head']);
-
+		$files = safe_array(($pos === 'bottom') ? (isset($js['bottom']) ? $js['bottom'] : array()) : (isset($js['head']) ? $js['head'] : array()));
 		foreach ($files as $file)
 		{
 			$text .= "<script type=\"text/javascript\" src=\"".$file."\"></script>\n";

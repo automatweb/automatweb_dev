@@ -642,7 +642,7 @@ class treeview extends class_base
 		};
 		$t = get_instance("core/languages");
 
-		$level = !empty($_REQUEST["called_by_js"]) ? $_COOKIE[$this->tree_id."_level"] : 1;
+		$level = (!empty($_REQUEST["called_by_js"]) and isset($_COOKIE[$this->tree_id."_level"])) ? $_COOKIE[$this->tree_id."_level"] : 1;
 		if(!strlen($this->auto_open))
 		{
 			$tri = isset($_COOKIE[$this->tree_id]) ? $_COOKIE[$this->tree_id] : null;
@@ -656,11 +656,11 @@ class treeview extends class_base
 			}
 			$this->auto_open = "''".$this->auto_open_tmp;
 		}
-		aw_global_set("dhtml_tree_count", ($_GET["tree_num"] ? $_GET["tree_num"] : aw_global_get("dhtml_tree_count") + 1));
+		aw_global_set("dhtml_tree_count", (empty($_GET["tree_num"]) ? aw_global_get("dhtml_tree_count") + 1 : $_GET["tree_num"]));
 		$this->vars(array(
 			"target" => isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null,
 			"open_nodes" => $this->auto_open,
-			"level" => !strlen($level)?1:$level,
+			"level" => $level,
 			"load_auto" => isset($_REQUEST["load_auto"])?$_REQUEST["load_auto"]:"true",
 			"tree_id" => $this->tree_id,
 			"tree_num" => aw_global_get("dhtml_tree_count"),

@@ -2,21 +2,23 @@
 /*
 @classinfo  maintainer=kristo
 */
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.35 2008/11/07 10:03:33 kristo Exp $
+
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
 class orb extends aw_template
 {
-	var $data;
-	var $info;
+	private $data;
+	private $info;
+	private $_tmp;
+
 	function orb($args = array())
 	{
 		$this->init();
 		if (!empty($args["class"]))
 		{
 			$this->process_request($args);
-		};
+		}
 	}
 
 	////
@@ -34,12 +36,12 @@ class orb extends aw_template
 		// optional
 		// d) silent. veateateid ei v2ljastata. caller peaks kontrollima return valuet,
 		// kui see on false, siis oli viga.
-		if ($args["class"] == "periods")
+		if (isset($args["class"]) and "periods" === $args["class"])
 		{
 			$args["class"] = "period";
 		}
 
-		if ($this->can("view", $args["vars"]["id"]))
+		if (!empty($args["vars"]["id"]) and $this->can("view", $args["vars"]["id"]))
 		{
 			$o = obj($args["vars"]["id"]);
 			$inst = get_instance("class_base");
@@ -47,40 +49,23 @@ class orb extends aw_template
 				"obj_inst" => $o,
 				"args" => array(
 					"action" => "change",
-					"cfgform" => $args["vars"]["cfgform"]
+					"cfgform" => @$args["vars"]["cfgform"]
 				)
 			));
-
-			if (false && $this->can("view", $cfgform_id))
-			{
-				$cfi = get_instance(CL_CFGFORM);
-				if (!$cfi->check_user_orb_access(array("action" => $args["action"], "cfgform" => $cfgform_id)))
-				{
-					error::raise(array(
-						"id" => "ERR_NO_ACCESS",
-						"msg" => t("Teil pole &otilde;igusi selle lehe vaatamiseks!")
-					));
-					die();
-				}
-			}
 		}
 
-		extract($args);
-		$action = $vars["action"];
+		$action = $args["action"];
+		$class = $args["class"];
+		$vars = $args["vars"];
 
 		$fatal = true;
-
 		$this->data = "";
 		$this->info = array();
 		lc_load("definition");
-
 		$retval = true;
-
 		$silent = 0;
-
 		$this->silent = $silent;
 		$this->fatal = $fatal;
-
 
 		// class defineeritud?
 		if (!isset($class))
@@ -104,14 +89,14 @@ class orb extends aw_template
 		$this->check_login(array("class" => $class,"action" => $action));
 
 		// check access for this class. access is checked by the "add tree conf" object assigned to groups
-		if (!($class == "users"))
+		if (!($class === "users"))
 		{
-			if ($action == "new" || $action == "change" || $action == "delete")
+			if ($action === "new" || $action === "change" || $action === "delete")
 			{
 				$this->check_class_access($class);
 			}
 		}
-		
+
 		// if the action is found in one of the classes defined by
 		// the extends attribute, it should know which class was really
 		// requested.
@@ -134,7 +119,7 @@ class orb extends aw_template
 
 		$fun = $orb_defs[$class][$action];
 		// oh the irony
-                if (!$fun && $action == "view")
+                if (!$fun && $action === "view")
                 {
                         $action = "change";
                 };
@@ -156,7 +141,7 @@ class orb extends aw_template
 			{
 				// only load if definitions for this class are
 				// not yet loaded (master class)
-				if (empty($_orb_defs[$clname]) && $clname != "aw_template")
+				if (empty($_orb_defs[$clname]) && $clname !== "aw_template")
 				{
 					$_orb_defs = $this->try_load_class($clname);
 				};
@@ -178,10 +163,9 @@ class orb extends aw_template
 					// including which class is instantiated, come from the class that was called
 					// and not the class in which the function was found
 					$orb_defs[$class][$action] = $_orb_defs[$clname][$action];
-				};
-			};
-
-		};
+				}
+			}
+		}
 
 		// still not found?
 		if (!$found)
@@ -191,9 +175,10 @@ class orb extends aw_template
 
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
+
+		// handle reforb
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
-			//$t = new $class;
 			$t = $this->orb_class;
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
@@ -207,9 +192,6 @@ class orb extends aw_template
 			}
 			else
 			{
-				// loome 6ige objekti
-				//$t = new $class;
-
 				$t->set_opt("orb_class",&$this->orb_class);
 
 				// reforbi funktsioon peab tagastama aadressi, kuhu edasi minna
@@ -219,7 +201,7 @@ class orb extends aw_template
 			// ja tagasi main programmi
 			$this->data = $url;
 			return;
-		};
+		}
 
 		// loome parameetrite array
 		$params = array();
@@ -252,7 +234,7 @@ class orb extends aw_template
 		}
 		else
 		{
-			if ($_SERVER["REQUEST_METHOD"] == "POST")
+			if ($_SERVER["REQUEST_METHOD"] === "POST")
 			{
 				$params = $_POST;
 			}
@@ -357,8 +339,7 @@ class orb extends aw_template
 		if (isset($t->info) && is_array($t->info))
 		{
 			$this->info = $t->info;
-		};
-		return;
+		}
 	}
 
 	function validate_value($args = array())
@@ -687,39 +668,43 @@ class orb extends aw_template
 		{
 			foreach($act["acl"] as $varname => $varacl)
 			{
-				$varvalue = $vars[$varname];
-				if ($varvalue)
+				if (isset($vars[$varname]))
 				{
-					$aclarr = explode(";", $varacl);
-					foreach($aclarr as $aclid)
+					$varvalue = (int) $vars[$varname];
+					if ($varvalue)
 					{
-						if (strpos($varvalue, "http") !== false)
+						$aclarr = explode(";", $varacl);
+						foreach($aclarr as $aclid)
 						{
-							die("silly robot!");
-						}
-						$varvalue = (int)$varvalue;
-						if (!$this->can($aclid, $varvalue))
-						{
-							$this->raise_error(ERR_ACL, "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!",true, false);
-						}
-						if(isset($act["class_ids"][$varname]) && is_array($act["class_ids"][$varname]))
-						{
-							$true = false;
-							$obj = obj($varvalue);
-							foreach($act["class_ids"][$varname] as $val)
+							if (strpos($varvalue, "http") !== false)
 							{
-								if($obj->class_id() == constant($val))
-								{
-									$true = true;
-									break;
-								}
+								die("silly robot!");
 							}
-							if(!$true)
+
+							if (!$this->can($aclid, $varvalue))
 							{
-								error::raise(array(
-									"id" => "ERR_ORB_WRONG_CLASS",
-									"msg" => $vars["class"]."::".$vars["action"].": class id of argument ".$varname." is not ".implode(" or ", $act["class_ids"][$varname]),
-								));
+								$this->raise_error(ERR_ACL, "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!", true, false);
+							}
+
+							if(isset($act["class_ids"][$varname]) && is_array($act["class_ids"][$varname]))
+							{
+								$true = false;
+								$obj = obj($varvalue);
+								foreach($act["class_ids"][$varname] as $val)
+								{
+									if($obj->class_id() == constant($val))
+									{
+										$true = true;
+										break;
+									}
+								}
+								if(!$true)
+								{
+									error::raise(array(
+										"id" => "ERR_ORB_WRONG_CLASS",
+										"msg" => $vars["class"]."::".$vars["action"].": class id of argument ".$varname." is not ".implode(" or ", $act["class_ids"][$varname]),
+									));
+								}
 							}
 						}
 					}

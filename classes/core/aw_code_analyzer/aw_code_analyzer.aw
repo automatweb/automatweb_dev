@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.18 2008/09/19 07:43:06 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.19 2008/11/11 09:50:35 voldemar Exp $
 
 	@comment
 	analyses aw code
@@ -19,13 +19,33 @@ class aw_code_analyzer extends class_base
 		T_PROTECTED => "protected"
 	);
 
+	private $file_source;
+	private $tokens;
+	private $cur_line;
+	private $cur_file;
+	private $current_class;
+	private $var_track_glob_scope = array();
+	private $var_track_class_scope = array();
+	private $var_track_func_scope = array();
+	private $last_comment = "";
+	private $last_comment_line = "";
+	private $data = array();
+	private $brace_level = 0;
+	private $class_start_level = 0;
+	private $function_start_level = 0;
+	private $bm_cnt = 0;
+	private $bm2_cnt = 0;
+	private $in_function = false;
+	private $in_class = false;
+	private $function_access = T_PUBLIC;
+
 	function aw_code_analyzer()
 	{
 		$this->init("core/aw_code_analyzer");
 	}
 
 	/**
-		@attrib api=1 params=pos 
+		@attrib api=1 params=pos
 
 		@param file required type=string
 			Path to aw classfile.
@@ -33,7 +53,7 @@ class aw_code_analyzer extends class_base
 			If file parameter contains full path to classfile or not.
 		@errors none
 
-		@returns 
+		@returns
 			Associative array with classinfo.
 		@comment
 			If 'file' parameter doesn't contain full path to file, the root is classes folder
@@ -313,7 +333,7 @@ die();*/
 		if (is_array($tok))
 		{
 			list($id, $str) = $tok;
-			if ($id == T_EXTENDS)
+			if ($id === T_EXTENDS)
 			{
 				$extends_t = $this->get();
 				$this->assert($extends_t, T_STRING);
@@ -333,24 +353,23 @@ die();*/
 				}
 			}
 
-			if ($id == T_IMPLEMENTS)
+			if ($id === T_IMPLEMENTS)
 			{
 				$this->handle_t_implements();
 			}
 		}
 
-		if ($tok == "{") // class doesn't extend anything
+		if ($tok === "{") // class doesn't extend anything
 		{
 			$this->handle_brace_begin();
 		}
 
 		// figure out class/interface/exception
-		if ($this->data["classes"][$name]["extends"] == "Exception" || substr($name, 0, 4) == "awex")
+		if ((isset($this->data["classes"][$name]["extends"]) and $this->data["classes"][$name]["extends"] === "Exception") || substr($name, 0, 4) == "awex")
 		{
 			$this->data["classes"][$name]["type"] = "exception";
 		}
-		else
-		if ($tok_type == T_INTERFACE)
+		elseif ($tok_type === T_INTERFACE)
 		{
 			$this->data["classes"][$name]["type"] = "interface";
 		}
@@ -364,7 +383,7 @@ die();*/
 	{
 		$this->data["classes"][$this->current_class]["end_line"] = $this->get_line();
 		$this->data["classes"][$this->current_class]["tracked_vars"] = $this->var_track_class_scope;
-		unset($this->var_track_class_scope);
+		$this->var_track_class_scope = array();
 		$this->in_class = false;
 		$this->current_class = "";
 	}
@@ -416,10 +435,6 @@ die();*/
 		if ($this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment"] != false)
 		{
 			$this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment_str"] = $this->last_comment;
-		}
-		if (!$this->function_access)
-		{
-			$this->function_access = T_PUBLIC;
 		}
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["access"] = $this->faccess_lut[$this->function_access];
 
@@ -488,7 +503,7 @@ die();*/
 			{
 				// default value
 				$defval = $this->get();
-				$df_mul = 1;
+				$defval_mul = 1;
 
 				if (!is_array($defval))
 				{
@@ -570,7 +585,7 @@ die();*/
 	{
 //echo "func end track vars = local =".dbg::dump($this->var_track_func_scope)." class = ".dbg::dump($this->var_track_class_scope)." glob = ".dbg::dump($this->var_track_glob_scope)." <br>";
 		$this->data["classes"][$this->current_class]["functions"][$this->current_function]["tracked_vars"] = $this->var_track_func_scope;
-		unset($this->var_track_func_scope);
+		$this->var_track_func_scope = array();
 		$this->data["classes"][$this->current_class]["functions"][$this->current_function]["end_line"] = $this->get_line();
 		$this->in_function = false;
 		$this->var_track_func_scope = array();
@@ -635,16 +650,16 @@ die();*/
 					die(sprintf(t("error: do_parse_parameters failed for string %s <br>\n"), $_pm));
 				}
 				$data["params"][$pdat["name"]] = $pdat;
+				$data['params'][$pdat['name']]['comment'] = "";
 				while (list(, $line) = each($lines))
 				{
 					$line = trim($line);
-					if ($line{0} == "@")
+					if (strlen($line) and $line{0} === "@")
 					{
 						prev($lines);
 						break;
 					}
-					else
-					if (substr($line, 0, 3) == "**/")
+					elseif (substr($line, 0, 3) == "**/")
 					{
 						break;
 					}
@@ -691,7 +706,7 @@ die();*/
 				while (list(, $line) = each($lines))
 				{
 					$line = trim($line);
-					if ($line{0} == "@")
+					if (strlen($line) and $line{0} == "@")
 					{
 						prev($lines);
 						break;
@@ -735,7 +750,7 @@ die();*/
 					$data["errors"] .= "\n".$line;
 				}
 				$data["errors"] = trim($data["errors"]);
-	
+
 			}
 			else
 			if (substr($line, 0, strlen('@examples')) == '@examples')
@@ -746,7 +761,7 @@ die();*/
 				{
 				// it removes the indenting too :(
 				//	$line = trim($line);
-					// trim() lines only when there are certain substrings present, 
+					// trim() lines only when there are certain substrings present,
 					// can't trim every line here, cause i lose indentation then too :(
 					if ( (strpos($line, '@') !== false) || (strpos($line, '**/') !== false) )
 					{
@@ -762,16 +777,16 @@ die();*/
 							break;
 						}
 					}
-					
+
 					if(strstr($line, '#'))
 					{
 						$line = $this->parse_refs($line, true);
-						$data["examples_links"] = array_merge($data["examples_links"], $line["links"]);	
+						$data["examples_links"] = array_merge(safe_array($data["examples_links"]), $line["links"]);
 						$line = $line["line"];
 					}
 					$data["examples"] .= "\n".$line;
 				}
-			
+
 				$data["examples"] = trim($data["examples"]);
 			}
 		}
@@ -829,7 +844,7 @@ die();*/
 		$in_att_value = false;
 		$att_val_quoted = false;
 		$cur_att_name = "";
-		$cur_att_val = "";
+		$cur_att_value = "";
 
 		$len = strlen($str);
 		for ($i = 0; $i < $len; $i++)
@@ -903,7 +918,10 @@ die();*/
 
 	function _do_parse_parameter($str)
 	{
-		$ret = array();
+		$ret = array(
+			"name" => "",
+			"req" => ""
+		);
 		list($ret["name"], $ret["req"], $extra) = explode(" ", $str, 3);
 
 		// now parse extra params
@@ -1015,9 +1033,9 @@ die();*/
 		{
 			$o_brace = $this->get();
 			$this->assert_str($o_brace, "(");
-			
+
 			$def_str = $this->get();
-			
+
 			$comme = $this->get();
 			$this->assert_str($comme, ",");
 
@@ -1043,7 +1061,7 @@ die();*/
 				"line" => $this->get_line(),
 				"comment" => $this->_filter_doc_comment($this->last_comment)
 			);
-			unset($this->last_comment);
+			$this->last_comment = "";
 		}
 		return $depd;
 	}
@@ -1151,12 +1169,12 @@ die();*/
 				"line" => $this->get_line(),
 				"access" => $this->faccess_lut[$this->function_access],
 				"comment" => $this->_filter_doc_comment($this->last_comment),
-				"read_only" => $docc_data["read-only"],
-				"declared_type" => $docc_data["type"],
-				"default_value" => $docc_data["default"]
+				"read_only" => isset($docc_data["read-only"]) ? $docc_data["read-only"] : null,
+				"declared_type" => isset($docc_data["type"]) ? $docc_data["type"] : null,
+				"default_value" => isset($docc_data["default"]) ? $docc_data["default"] : null
 			);
-			unset($this->function_access);
-			unset($this->last_comment);
+			$this->function_access = T_PUBLIC;
+			$this->last_comment = "";
 			return;
 		}
 
@@ -1287,14 +1305,13 @@ die();*/
 			{
 				echo "read track var $varname => ".dbg::dump($this->var_track_func_scope[$varname])." <br>";
 			}*/
-			return $this->var_track_func_scope[$varname];
+			return isset($this->var_track_func_scope[$varname]) ? $this->var_track_func_scope[$varname] : null;
 		}
-		else
-		if ($this->in_class || strpos($varname, "\$this") !== false)
+		elseif ($this->in_class || strpos($varname, "\$this") !== false)
 		{
-			return $this->var_track_class_scope[$varname];
+			return isset($this->var_track_class_scope[$varname]) ? $this->var_track_class_scope[$varname] : null;
 		}
-		return $this->var_track_glob_scope[$varname];
+		return isset($this->var_track_glob_scope[$varname]) ? $this->var_track_glob_scope[$varname] : null;
 	}
 
 	function add_track_var($varn, $vard)
@@ -1308,8 +1325,7 @@ die();*/
 			}*/
 			$this->var_track_func_scope[$varn] = $vard;
 		}
-		else
-		if ($this->in_class || strpos($varn, "\$this") !== false)
+		elseif ($this->in_class || strpos($varn, "\$this") !== false)
 		{
 			if (strpos($varn, "\$this") === false)
 			{
@@ -1512,7 +1528,7 @@ echo "ding<br>";*/
 			{
 				$vn = $this->get();
 				$obr = $this->get();
-				if ($obr == "(")
+				if ($obr === "(")
 				{
 					// we got assign to variable with value from object. this could ba a funcall that we know the return type of.
 
@@ -1528,7 +1544,7 @@ echo "ding<br>";*/
 							$ret_class = $this->db_fetch_field($q, "ret_class");
 						}
 
-						if ($ret_class != "")
+						if (!empty($ret_class))
 						{
 							/*echo "got string tok $tok[1] on assign in line ".$this->get_line()." <br>";
 							$this->dump_tok($tok,false);
@@ -1547,8 +1563,7 @@ echo "ding<br>";*/
 					}
 				}
 			}
-			else
-			if (!is_array($nxt) && $nxt == ";")
+			elseif ($nxt === ";")
 			{
 				// track the assigned var
 				$assigned = $this->get_track_var($tok[1]);
@@ -1562,11 +1577,10 @@ echo "ding<br>";*/
 					));
 				}
 			}
-//echo "<hr>";
+
 			$this->restore_bm();
 		}
-		else
-		if ($tok[0] == T_CONSTANT_ENCAPSED_STRING || $tok[0] == T_LNUMBER)
+		elseif ($tok[0] == T_CONSTANT_ENCAPSED_STRING || $tok[0] == T_LNUMBER)
 		{
 			$this->add_track_var($var_tok[1],array(
 				"type" => "const",
@@ -1575,8 +1589,7 @@ echo "ding<br>";*/
 				"parameters" => array("value" => $tok[1])
 			));
 		}
-		else
-		if ($tok[0] == T_ARRAY)
+		elseif ($tok[0] == T_ARRAY)
 		{
 			$defval = $this->read_const_array_def();
 			$this->add_track_var($var_tok[1],array(
@@ -1586,8 +1599,7 @@ echo "ding<br>";*/
 				"parameters" => array("value" => $defval)
 			));
 		}
-		else
-		if ($tok[0] == T_STRING)
+		elseif ($tok[0] == T_STRING)
 		{
 			$this->add_track_var($var_tok[1],array(
 				"type" => "const",
@@ -1625,7 +1637,7 @@ echo "ding<br>";*/
 		}
 		else
 		{
-			if (is_array($return) && $return[0] == T_STRING && $return[1] == "obj")
+			if (is_array($return) && $return[0] == T_STRING && $return[1] === "obj")
 			{
 				$this->data["classes"][$this->current_class]["functions"][$this->current_function]["return_var"] = array(
 					"class" => "object"
@@ -1633,7 +1645,7 @@ echo "ding<br>";*/
 				//echo "on line ".$this->get_line()." set return type as object! <br>";
 			}
 			else
-			if (is_array($return) && $return[0] == T_STRING && $return[1] == "get_instance")
+			if (is_array($return) && $return[0] == T_STRING && $return[1] === "get_instance")
 			{
 				$cln = $this->get();
 				$this->assert_str($cln,"(");
@@ -1677,7 +1689,7 @@ echo "ding<br>";*/
 
 			$this->data["classes"][$this->current_class]["implements"][] = $implements;
 		} while(1);
-	}	
+	}
 
 	function parse_maintainer_version()
 	{
@@ -1754,7 +1766,7 @@ echo "ding<br>";*/
 	}
 
 	private function _filter_doc_comment($comm)
-	{	
+	{
 		if (substr(trim($comm), 0, 3) == "/**")
 		{
 			$comm = substr(trim($comm), 3, -3);

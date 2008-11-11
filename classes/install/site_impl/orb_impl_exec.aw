@@ -1,28 +1,14 @@
 <?php
-//$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
-// _GET, _POST and friends were implemented in php 4.1.0
-// right now, heaven is on 4.0.6, so I have to implement an workaround
 
-if (!is_array($_GET) || (sizeof($_GET) == 0))
-{
-	$_GET = $HTTP_GET_VARS;
-}
+$vars = automatweb::$request->get_args();
 
-if (!is_array($_POST))
-{
-	$_POST = $HTTP_POST_VARS;
-}
-//$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
-if (!isset($AW_GET_VARS) || !is_array($AW_GET_VARS))
-{
-	$AW_GET_VARS = array();
-}
-
-$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
-
-if ($vars["class"])
+if (!empty($vars["class"]))
 {
 	$class = $vars["class"];
+}
+else
+{
+	$class = "";
 }
 
 // I'll burn in hell for this
@@ -31,7 +17,7 @@ if (!$class)
 	$class = $vars["alias"];
 }
 
-if ($vars["action"])
+if (!empty($vars["action"]))
 {
 	$action = $vars["action"];
 }
@@ -45,13 +31,14 @@ if (isset($vars['fastcall']) && $vars["fastcall"] == 1)
 	if (!class_exists("class_base"))
 	{
 		classload("class_base");
-	};
+	}
 	// instantseerime
 	classload($class);
 	$inst = new $class;
 	// ja ongi k6ik
 	die($inst->$action($vars));
 }
+
 include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 register_shutdown_function("log_pv", $GLOBALS["awt"]->timers["__global"]["started"]);
 enter_function("orb_impl_exec::process_request");
@@ -82,11 +69,10 @@ if (substr($content,0,5) == "http:" || !empty($vars["reforb"]) || substr($conten
         }
         else
         {
-//error_reporting(E_ALL);
-//ini_set("display_errors", "1");
                 header("Location: $content");
                 print "\n\n";
-        };
+        }
         exit;
-};
+}
+
 ?>

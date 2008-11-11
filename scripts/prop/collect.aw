@@ -1,11 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/prop/collect.aw,v 1.6 2008/04/18 07:36:54 kristo Exp $
-//$basedir = realpath("../../");
+
 $basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
-$collector = get_instance("cfg/propcollector");
+include($basedir . "/automatweb.aw");
+
+automatweb::start();
+automatweb::$instance->bc();
+// automatweb::$instance->mode(automatweb::MODE_DBG);
+aw_global_set("no_db_connection", 1);
+aw_ini_set("baseurl", "automatweb");
+include AW_DIR . "const" . AW_FILE_EXT;
+$collector = new propcollector();
 $collector->run();
+
+automatweb::shutdown();
+
 ?>

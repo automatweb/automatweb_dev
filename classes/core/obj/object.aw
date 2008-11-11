@@ -206,7 +206,7 @@ class object
 		@attrib api=1
 
 		@comment
-			Checks modified count from the database to make sure that it has not been modified in between. 
+			Checks modified count from the database to make sure that it has not been modified in between.
 			The properties that must be set in order for an object to be saved, are:
 				- parent
 				- class_id
@@ -234,7 +234,7 @@ class object
 		return $this->oid = $GLOBALS["object_loader"]->save($this->oid, true, $state_id);
 	}
 
-	/** Returns the current state id for the object from memory. 
+	/** Returns the current state id for the object from memory.
 		@attrib api=1
 
 		@returns
@@ -1336,7 +1336,7 @@ class object
 		@examples
 			$o = obj(89);
 			$bro_oid = $o->has_brother(127);
-			
+
 	**/
 	function has_brother($parent = NULL)
 	{
@@ -1344,7 +1344,7 @@ class object
 	}
 
 	/** Returns all brother OIDs
-		@attrib api=1 
+		@attrib api=1
 		@errors
 			none
 		@returns
@@ -2114,47 +2114,6 @@ class object
 	}
 }
 
-function obj($param = NULL)
-{
-	return new object($param);
-}
-
-/** sets an object system property
-
-@comment
-currently possible options:
-no_cache - 1/0 - if 1, ds_cache is not used even if it is loaded
-**/
-function obj_set_opt($opt, $val)
-{
-//echo "set opt $opt => $val from ".dbg::short_backtrace()." <br>";
-	$tmp = null;
-	if (!isset($GLOBALS['__obj_sys_opts']))
-	{
-		$GLOBALS['__obj_sys_opts'] = array();
-	}
-	if (isset($GLOBALS['__obj_sys_opts'][$opt]))
-	{
-		$tmp = $GLOBALS['__obj_sys_opts'][$opt];
-	}
-	$GLOBALS["__obj_sys_opts"][$opt] = $val;
-	return $tmp;
-}
-
-function obj_get_opt($opt)
-{
-	return $GLOBALS["__obj_sys_opts"][$opt];
-}
-function dump_obj_table($pre = "")
-{
-	echo "---------------------------------------- object table dump: <br />$pre <br />\n";
-	foreach($GLOBALS["objects"] as $oid => $obj)
-	{
-		echo "oid in list $oid , data: {oid => ".$obj->id().", name = ".$obj->name()." parent = ".$obj->parent()." } <br />\n";
-	}
-	echo "++++++++++<br />\n";
-	flush();
-}
 
 /* Generic AW object exception */
 class awex_obj extends aw_exception

@@ -62,7 +62,7 @@ class error
 		$inst = new aw_template;
 		$inst->init();
 
-		if (ERR_UNCAUGHT_EXCEPTION === $arr["id"])
+		if ("ERR_UNCAUGHT_EXCEPTION" === $arr["id"])
 		{
 			$inst->raise_error_exception = $arr["exception"];
 		}
@@ -76,7 +76,7 @@ class error
 		$objn = isset($arr["oid"]) ? $arr["oid"] : t("not specified");
 		$func = isset($arr["func"]) ? $arr["func"] : t("not specified");
 		error::raise(array(
-			"id" => ERR_ACL,
+			"id" => "ERR_ACL",
 			"msg" => sprintf(t("Acl error, access %s was denied for object %s in function %s"), $sct,$objn, $func),
 			"fatal" => true,
 			"show" => true

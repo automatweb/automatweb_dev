@@ -2,6 +2,7 @@
 // siin imporditakse muutujad saidi raami sisse
 // ja v2ljastatakse see
 global $awt;
+$site_title = isset($GLOBALS["site_title"]) ? $GLOBALS["site_title"] : "AutomatWeb";
 $sf->read_template("index.tpl");
 
 $i = get_instance(CL_ADMIN_IF);
@@ -21,7 +22,8 @@ if ($ta != "")
 // it with the style definition .. otherwise it will add them at the bottom of the page
 // as before
 $apd = get_instance("layout/active_page_data");
-$styles = $apd->on_shutdown_get_styles();
+$txt = "";
+$styles = $apd->on_shutdown_get_styles($txt);
 $styles_done = false;
 // check the url for classes and if any of those are in a prod family, then set that
 $pf = "";
@@ -60,9 +62,8 @@ if (!$co)
 	$co = obj();
 }
 aw_restore_acl();
-$clss = aw_ini_get("classes");
 $cur_obj = obj();
-if ($sf->can("view", $_GET["id"]))
+if (!empty($_GET["id"]) and $sf->can("view", $_GET["id"]))
 {
 	$cur_obj = obj($_GET["id"]);
 }
@@ -84,7 +85,7 @@ else
 	$page_charset = $charset = aw_global_get("charset");
 }
 
-if ($pf_url == "")
+if (empty($pf_url))
 {
 	$pf_url = aw_ini_get("baseurl")."/automatweb/";
 }
@@ -93,10 +94,26 @@ $class_names = array(
 	"doc" => t("Dokument"),
 	"config" => t("Seaded"),
 );
-$cur_class = empty($clss[clid_for_name($_GET["class"])]["name"]) ? $class_names[$_GET["class"]] : $clss[clid_for_name($_GET["class"])]["name"];
-$parent = max(1, $_GET["parent"] ? $_GET["parent"] : $cur_obj->parent());
+
+$cur_class = "";
+if (!empty($_GET["class"]))
+{
+	try
+	{
+		$cur_class = aw_ini_get("class_lut.{$_GET["class"]}");
+		$cur_class = aw_ini_get("classes.{$cur_class}.name");
+	}
+	catch (Exception $e)
+	{
+		if (isset($class_names[$_GET["class"]]))
+		{
+			$cur_class = $class_names[$_GET["class"]];
+		}
+	}
+}
+
+$parent = max(1, (empty($_GET["parent"]) ? $cur_obj->parent() : $_GET["parent"]));
 $sf->vars(array(
-	"parent" => $_GET["parent"],
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
 	"cur_p_name" => $p->name(),
@@ -112,8 +129,8 @@ $sf->vars(array(
 		"new" => 1,
 	), CL_TASK),
 	"stop_pop_url_quick_add" => $sf->mk_my_orb("stopper_pop", array(
-		"source" => $_GET["class"],
-		"source_id" => $_GET["id"],
+		"source" => isset($_GET["class"]) ? $_GET["class"] : null,
+		"source_id" => isset($_GET["id"]) ? $_GET["id"] : null,
 		"s_action" => "start",
 		"new" => 1,
 	), CL_TASK),
@@ -185,7 +202,7 @@ $sf->vars(array(
 ));
 
 $tmp = array();
-if ($site_title != "")	// weird, but lots of places rely on the yah line being empty and thus having no height.
+if (!empty($site_title))	// weird, but lots of places rely on the yah line being empty and thus having no height.
 {
 	// do the language selecta
 	$baseurl = aw_ini_get("baseurl");
@@ -271,7 +288,7 @@ $sf->vars(array("javascript_bottom" => $apd->get_javascript("bottom")));
 //{
 $str= $sf->parse();
 classload("core");
-if ($_SESSION["last_cache_clear"] < (time() - 3600))
+if (!isset($_SESSION["last_cache_clear"]) or $_SESSION["last_cache_clear"] < (time() - 3600))
 {
 	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
 	$_SESSION["last_cache_clear"] = time();
@@ -281,7 +298,7 @@ if ($_SESSION["last_cache_clear"] < (time() - 3600))
 if (!$styles_done)
 {
 	$str .= $styles;
-};
+}
 
 if (function_exists("get_time"))
 {
@@ -297,39 +314,52 @@ else
 {
 	if (aw_ini_get("content.compress") == 1)
 	{
-		ob_start( 'ob_gzhandler' );
+		// ob_start( 'ob_gzhandler' );
 	}
-	echo $str;
+	$content = $str;
 }
 if (aw_ini_get("content.compress") != 1)
 {
-	ob_end_flush();
+	// ob_end_flush();
 }
 aw_shutdown();
 
 
-if ($_SESSION["user_history_count"] > 0)
+if (isset($_SESSION["user_history_count"]) and $_SESSION["user_history_count"] > 0)
 {
-	if (!is_array($_SESSION["user_history"]))
+	if (!isset($_SESSION["user_history"]) or !is_array($_SESSION["user_history"]))
 	{
 		$_SESSION["user_history"] = array();
 		$_SESSION["user_history_sets"] = array();
 	}
+
 	$pu = parse_url(get_ru());
-	parse_str($pu["query"], $bits);
-	$st = $site_title;
-	$o = obj();
-	if ($bits["id"])
+	if (isset($pu["query"]))
+	{
+		parse_str($pu["query"], $bits);
+	}
+	else
+	{
+		$bits = array();
+	}
+
+	if (!empty($bits["id"]))
 	{
 		$o = obj($bits["id"]);
 		$st = $o->name();
 	}
+	else
+	{
+		$st = $site_title;
+		$o = obj();
+	}
 
-	if ($bits["group"])
+	if (!empty($bits["group"]))
 	{
 		$gl = $o->get_group_list();
 		$st .= " - ".$gl[$bits["group"]]["caption"];
 	}
+
 	if ($st != "")
 	{
 		if ($_SESSION["user_history_has_folders"])
@@ -363,7 +393,7 @@ if ($_SESSION["user_history_count"] > 0)
 			{
 				$_pu = parse_url($_url);
 				parse_str($_pu["query"], $_bits);
-				if ($_bits["class"] == $bits["class"] && $_bits["id"] == $bits["id"] && $_bits["group"] == $bits["group"])
+				if (@$_bits["class"] == @$bits["class"] && @$_bits["id"] == @$bits["id"] && @$_bits["group"] == @$bits["group"])
 				{
 					$has = true;
 					break;

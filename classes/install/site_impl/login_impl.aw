@@ -1,11 +1,7 @@
 <?php
+
 include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 
-if (($auth_srv = aw_ini_get("auth.central_server")) != "")
-{
-	header("Location: ".$auth_srv."/?sid=".aw_ini_get("site_id"));
-	die();
-}
 if (($port = aw_ini_get("auth.display_over_ssl_port")) > 0)
 {
 	if (!$_SERVER["HTTPS"])
@@ -20,12 +16,13 @@ $te = new aw_template;
 $te->init("");
 $te->read_template("login.tpl");
 lc_site_load("login", $te);
-// if there is an auth config then get the list of servers to add 
+// if there is an auth config then get the list of servers to add
 $ac = get_instance(CL_AUTH_CONFIG);
 
 $te->vars(array(
-	"uid" => $_GET["uid"]
+	"uid" => @$_GET["uid"]
 ));
+
 if (is_oid($ac_id = auth_config::has_config()))
 {
 	$sl = $ac->get_server_ext_list($ac_id);
@@ -45,9 +42,9 @@ if (is_oid($ac_id = auth_config::has_config()))
 $m = get_instance("contentmgmt/site_cache");
 
 $si =&__get_site_instance();
+$tfl = "";
 
-
-if($_SESSION["text_for_login"])
+if(@$_SESSION["text_for_login"])
 {
 	$te->vars(array(
 		"logintext" => $_SESSION["text_for_login"],
@@ -55,14 +52,14 @@ if($_SESSION["text_for_login"])
 	$tfl = $te->parse("TEXT_FOR_LOGIN");
 }
 $te->vars(array(
-	"uid" => $_SESSION["uid_for_login"] ? $_SESSION["uid_for_login"] : $_GET["uid"],
+	"uid" => @$_SESSION["uid_for_login"] ? $_SESSION["uid_for_login"] : @$_GET["uid"],
 	"TEXT_FOR_LOGIN" => $tfl,
 ));
 
 $content = $m->show(array(
 	"vars" => $si->on_page(),
 	"text" => $te->parse(),
-	"no_right_pane" => ($content) ? true : false,
+	"no_right_pane" => (int) !empty($content),
 	"sub_callbacks" => $si->get_sub_callbacks()
 ));
 aw_session_set("text_for_login", "");

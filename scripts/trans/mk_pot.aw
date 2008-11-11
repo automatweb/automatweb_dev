@@ -1,29 +1,31 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/trans/mk_pot.aw,v 1.6 2008/02/03 22:55:12 dragut Exp $
+
 $basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
-aw_global_set("no_db_connection", true);
+include($basedir . "/automatweb.aw");
+
+automatweb::start();
+//automatweb::$instance->mode(automatweb::MODE_DBG);
+automatweb::$instance->bc();
+$awt = new aw_timer();
+aw_global_set("no_db_connection", 1);
+aw_ini_set("baseurl", "automatweb");
+include AW_DIR . "const" . AW_FILE_EXT;
 
 if (in_array("--dbg", $argv))
 {
 	$GLOBALS["mk_dbg"] = 1;
 }
 
-$i = get_instance("core/trans/pot_scanner");
+$i = new pot_scanner();
 if (in_array("--list-untranslated-strings", $argv))
 {
 	$i->list_untrans_strings();
 }
-else
-if (in_array("--warn-only", $argv))
+elseif (in_array("--warn-only", $argv))
 {
 	$i->warning_scan();
 }
-else
-if (in_array("--make-aw", $argv))
+elseif (in_array("--make-aw", $argv))
 {
 	$i->make_aw();
 }
@@ -31,4 +33,7 @@ else
 {
 	$i->full_scan();
 }
+
+automatweb::shutdown();
+
 ?>

@@ -884,7 +884,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				foreach($tbld as $idx => $prop)
 				{
-					if ($arr["props_modified"][$prop["name"]] == 1 || isset($mod_flds[$prop["table"]][$prop["field"]]))
+					if (!empty($arr["props_modified"][$prop["name"]]) || isset($mod_flds[$prop["table"]][$prop["field"]]))
 					{
 						$tmp[$tbl][$idx] = $prop;
 					}
@@ -1315,7 +1315,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->has_data_table_filter = false;
 		list($fetch_sql, $fetch_props, $fetch_metafields, $has_sql_func, $multi_fetch_fields) = $this->_get_search_fetch($to_fetch, $params);
 
-		// set fetch sql as member, so that req_make_sql can rewrite 
+		// set fetch sql as member, so that req_make_sql can rewrite
 		// in it fetch columns that are not known yet from data fetch, that get search fetch puts in it
 		$this->current_fetch_sql = &$fetch_sql;
 		$where = $this->req_make_sql($params);
@@ -1400,7 +1400,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if (!$has_sql_func && count($multi_fetch_fields) && isset($ret2[$row["oid"]]))
 					{
-						// add the multi field values as arrays 
+						// add the multi field values as arrays
 						foreach($multi_fetch_fields as $field)
 						{
 							if (!is_array($ret2[$row["oid"]][$field]))
@@ -2919,7 +2919,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					foreach ($this->properties as $property_name => $property_data)
 					{
-						if ($property_data['type'] == 'range')
+						if (isset($property_data['type']) and $property_data['type'] == 'range')
 						{
 							$row[$property_name] = array(
 								"from" => $row[$property_name."_from"],

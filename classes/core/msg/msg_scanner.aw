@@ -13,7 +13,7 @@ class msg_scanner extends class_base
 		$this->init(array(
 			"no_db" => 1
 		));
-		$this->folder = $this->cfg["basedir"]."/xml/msgmaps";
+		$this->folder = AW_DIR."xml/msgmaps";
 	}
 
 	function scan()
@@ -22,6 +22,7 @@ class msg_scanner extends class_base
 		$parser = get_instance("core/aw_code_analyzer/parser");
 		$files = array();
 		$parser->_get_class_list(&$files, $this->cfg["classdir"]);
+		$files[] = AW_DIR . "lib/defs.aw"; // temporary. until MSG_MAIL_SENT emit declaration moved from defs.aw
 
 		// scan them for all dispatched / recieved messages
 		list($messages, $recievers, $recievers_param) = $this->_scan_files($files);
@@ -40,7 +41,7 @@ class msg_scanner extends class_base
 		$recievers_param = array();
 		foreach($files as $file)
 		{
-			$blen = strlen($this->cfg["basedir"]."/classes")+1;
+			$blen = strlen(AW_DIR."classes")+1;
 			$class = substr($file, $blen, strlen($file) - (strlen(".".$this->cfg["ext"])+$blen));
 
 			$fc = $this->get_file(array("file" => $file));

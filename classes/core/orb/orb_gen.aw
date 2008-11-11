@@ -6,9 +6,9 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: orb_gen.aw,v 1.2 2008/01/31 13:53:39 kristo Exp $
+	@cvs $Id: orb_gen.aw,v 1.3 2008/11/11 09:50:45 voldemar Exp $
 
-	@comment 
+	@comment
 	generates orb defs, based on information from docgen_analyzer
 **/
 
@@ -18,7 +18,7 @@ class orb_gen extends class_base
 	{
 		$this->init("core/docgen");
 	}
-	
+
 	function _get_orb_defs2($data)
 	{
 		$folder = substr(dirname($data["file"]), 1);
@@ -26,10 +26,10 @@ class orb_gen extends class_base
 		foreach($data["functions"] as $f_name => $f_data)
 		{
 			// func is public if name attrib is set
-			$attr = $f_data["doc_comment"]["attribs"];
-			if (($a_name = $attr["name"]) != "")
+			$attr = isset($f_data["doc_comment"]["attribs"]) ? $f_data["doc_comment"]["attribs"] : null;
+			if (!empty($attr["name"]))
 			{
-				$xml .= "\t\t<action name=\"$a_name\"";
+				$a_name = $attr["name"];
 				$x_a = array();
 				if (isset($attr["default"]) && $attr["default"] == 1)
 				{
@@ -56,7 +56,7 @@ class orb_gen extends class_base
 					$x_a["is_content"] = 1;
 				}
 
-				if (isset($attr["caption"]) && $attr["caption"] != "")
+				if (!empty($attr["caption"]))
 				{
 					// php5 compliance
 					$x_a["caption"] = htmlentities($attr["caption"]);
@@ -64,35 +64,35 @@ class orb_gen extends class_base
 				}
 
 				// make parameters
-				$par = new aw_array($f_data["doc_comment"]["params"]);
+				$par = isset($f_data["doc_comment"]["params"]) ? new aw_array($f_data["doc_comment"]["params"]) : new aw_array();
 
-				// 
+				//
 				$arguments = array();
 				foreach($par->get() as $p_name => $p_dat)
 				{
 					$x_p = array();
 					$x_p["req"] = $p_dat["req"];
-					if (isset($p_dat["type"]) && $p_dat["type"] != "")
+					if (!empty($p_dat["type"]))
 					{
 						$x_p["type"] = $p_dat["type"];
 					}
-					
-					if(isset($p_dat["class_id"]) && $p_dat["class_id"] != "")
+
+					if(!empty($p_dat["class_id"]))
 					{
 						$x_p["class_id"] = $p_dat["class_id"];
 					}
 
-					if (isset($p_dat["acl"]) && $p_dat["acl"] != "")
+					if (!empty($p_dat["acl"]))
 					{
 						$x_p["acl"] = $p_dat["acl"];
 					}
 
-					if (isset($p_dat["default"]) && $p_dat["default"] != "")
+					if (!empty($p_dat["default"]))
 					{
 						$x_p["default"] = $p_dat["default"];
 					}
 
-					if (isset($p_dat["value"]) && $p_dat["value"] != "")
+					if (!empty($p_dat["value"]))
 					{
 						$x_p["value"] = $p_dat["value"];
 					}
@@ -140,7 +140,7 @@ class orb_gen extends class_base
 					{
 						$xml .= " $akey=\"$aval\"";
 					};
-					// kuidas ma edastan kas argument on required või optional?
+					// kuidas ma edastan kas argument on required v6i optional?
 
 					$xml .= " />\n";
 			};
@@ -168,8 +168,9 @@ class orb_gen extends class_base
 		{
 			// func is public if name attrib is set
 			$attr = $f_data["doc_comment"]["attribs"];
-			if (($a_name = $attr["name"]) != "")
+			if (!empty($attr["name"]))
 			{
+				$a_name = $attr["name"];
 				$xml .= "\t\t<action name=\"$a_name\"";
 				$x_a = array();
 				if (isset($attr["default"]) && $attr["default"] == 1)
@@ -197,7 +198,7 @@ class orb_gen extends class_base
 					$x_a[] = "is_content=\"1\"";
 				}
 
-				if (isset($attr["caption"]) && $attr["caption"] != "")
+				if (!empty($attr["caption"]))
 				{
 					// php5 compliance
 					$x_a[] = "caption=\"".htmlentities($attr["caption"])."\"";
@@ -208,20 +209,20 @@ class orb_gen extends class_base
 
 				$xml .= "\t\t\t<function name=\"$f_name\">\n";
 				$xml .= "\t\t\t\t<arguments>\n";
-	
+
 				// make parameters
 				$par = new aw_array($f_data["doc_comment"]["params"]);
 
 				foreach($par->get() as $p_name => $p_dat)
 				{
 					$xml .= "\t\t\t\t\t<".$p_dat["req"]." name=\"$p_name\"";
-					
+
 					$x_p = array();
 					if (isset($p_dat["type"]) && $p_dat["type"] != "")
 					{
 						$x_p[] = "type=\"".$p_dat["type"]."\"";
 					}
-					
+
 					if(isset($p_dat["class_id"]) && $d_dat["class_id"] != "")
 					{
 						$x_p[] = "class_id=\"".$p_dat["class_id"]."\"";
@@ -253,12 +254,12 @@ class orb_gen extends class_base
 		$xml .= "</orb>\n";
 		return $xml;
 	}
-	
+
 	function make_orb_defs_from_doc_comments()
 	{
-		$p = get_instance("core/aw_code_analyzer/parser");
+		$p = new parser();
 		$files = array();
-		$p->_get_class_list(&$files, $this->cfg["basedir"]."/classes");
+		$p->_get_class_list(&$files, AW_DIR . "classes");
 
 		foreach($files as $file)
 		{
@@ -271,20 +272,21 @@ class orb_gen extends class_base
 			*/
 			// check if file is modified
 			$clmod = @filemtime($file);
-			$xmlmod = @filemtime($this->cfg["basedir"]."/xml/orb/".basename($file, ".aw").".xml");
+			$xmlmod = @filemtime(AW_DIR . "xml/orb/".basename($file, ".aw").".xml");
 
 			if ($clmod >= $xmlmod)
 			{
-				$da = get_instance("core/aw_code_analyzer/aw_code_analyzer");
+				$da = new aw_code_analyzer();
 				$cld = $da->analyze_file($file, true);
 				// if there are no classes in the file then it gets ignored
 				if (!is_array($cld["classes"]) || count($cld["classes"]) < 1)
 				{
 					continue;
 				}
+
 				foreach($cld["classes"] as $class => $cldat)
 				{
-					if (is_array($cldat["functions"]) && $class != "" && strtolower($class) == strtolower(basename($file, ".aw")))
+					if (is_array($cldat["functions"]) && !empty($class) && strtolower($class) == strtolower(basename($file, ".aw")))
 					{
 						// count orb methods
 						$orb_method_count = 0;
@@ -293,18 +295,18 @@ class orb_gen extends class_base
 						$od = $this->_get_orb_defs2($cldat);
 
 						if (sizeof($od) == 0)
-						{	
+						{
 							// check if parent class has orb actions
-							if ($cldat["extends"] != "")
+							if (!empty($cldat["extends"]))
 							{
-								$orb_i = get_instance("core/orb/orb");
+								$orb_i = new orb();
 								$pr_defs = $orb_i->load_xml_orb_def($cldat["extends"]);
-								$has = false;	
+								$has = false;
 								if (is_array($pr_defs))
 								{
 									foreach($pr_defs[$cldat["extends"]] as $def)
 									{
-										if ($def["function"] != "")
+										if (!empty($def["function"]))
 										{
 											$has = true;
 										}
@@ -328,7 +330,7 @@ class orb_gen extends class_base
 						//$od = str_replace(substr($this->cfg["basedir"]."/classes",1), "", $od);
 
 						$this->put_file(array(
-							"file" => $this->cfg["basedir"]."/xml/orb/".$class.".xml",
+							"file" => AW_DIR . "xml/orb/{$class}.xml",
 							"content" => $xml
 						));
 					}

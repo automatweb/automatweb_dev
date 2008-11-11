@@ -102,9 +102,8 @@ $.init_session_modal({
 });
 </script>
 
-
-<!-- päis -->
-		<!-- SUB: YAH -->
+<!-- p2is -->
+<!-- SUB: YAH -->
 <div id="pais">
 	<div class="logo">
 		<span>{VAR:prod_family}</span>
@@ -133,10 +132,12 @@ $.init_session_modal({
 
 		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">{VAR:logout_text}</a>
 	</div>
-	<div class="olekuriba">{VAR:location_text}
+
+	<div class="olekuriba">
+		{VAR:location_text}
 		{VAR:site_title}
 	</div>
-		<!-- END SUB: YAH -->
+	<!-- END SUB: YAH -->
 
 		<!-- SUB: NO_HEADER -->
 		<div id="pais2">

@@ -233,7 +233,7 @@ class site_show extends class_base
 
 			foreach($this->properties as $key => $val)
 			{
-				if ($key == "ip_allowed")
+				if ($key === "ip_allowed")
 				{
 					$tipa = $obj->meta("ip_allow");
 					if (is_array($tipa) && count($tipa) > 0)
@@ -242,7 +242,7 @@ class site_show extends class_base
 					}
 				}
 				else
-				if ($key == "ip_denied")
+				if ($key === "ip_denied")
 				{
 					$tipa = $obj->meta("ip_deny");
 					if (is_array($tipa) && count($tipa) > 0)
@@ -251,27 +251,27 @@ class site_show extends class_base
 					}
 				}
 				else
-				if ($key == "images")
+				if ($key === "images")
 				{
 					$im = $obj->meta("menu_images");
 					for($imn = 0; $imn < $ni; $imn++)
 					{
-						if (!is_array($this->properties["images"]))
+						if (!isset($this->properties["images"]) or !is_array($this->properties["images"]))
 						{
 							$this->properties["images"] = array();
 						}
-						if (!is_array($im[$imn]))
+						if (!isset($im[$imn]) or !is_array($im[$imn]))
 						{
 							$im[$imn] = array();
 						}
-						if (!isset($this->properties["images"][$imn]) && is_oid($im[$imn]["image_id"]))
+						if (!isset($this->properties["images"][$imn]) and isset($im[$imn]["image_id"]) and is_oid($im[$imn]["image_id"]))
 						{
 							$this->properties["images"][$imn] = $im[$imn]["image_id"];
 						}
 					}
 				}
 				else
-				if ($key == "tpl_view")
+				if ($key === "tpl_view")
 				{
 					if ($i == 0 || !$obj->prop("tpl_view_no_inherit"))
 					{
@@ -279,7 +279,7 @@ class site_show extends class_base
 					}
 				}
 				else
-				if ($key == "tpl_lead")
+				if ($key === "tpl_lead")
 				{
 					if ($i == 0 || !$obj->prop("tpl_lead_no_inherit"))
 					{
@@ -287,7 +287,7 @@ class site_show extends class_base
 					}
 				}
 				else
-				if ($key == "keywords" && !isset($this->properties[$key]) && strlen($_t = $obj->trans_get_val($key)))
+				if ($key === "keywords" && !isset($this->properties[$key]) && strlen($_t = $obj->trans_get_val($key)))
 				{
 					$this->properties[$key] = $_t;
 				}
@@ -1225,7 +1225,7 @@ class site_show extends class_base
 
 	function get_default_document_list()
 	{
-		return $this->default_document_list; 
+		return $this->default_document_list;
 	}
 
 	function _int_show_documents($docid)
@@ -2114,7 +2114,7 @@ class site_show extends class_base
 				$cnt++;
 			}
 		}
-		return $cnt;	
+		return $cnt;
 	}
 
 	function _helper_is_in_path($oid)
@@ -3035,14 +3035,15 @@ class site_show extends class_base
 
 	function _init_path_vars(&$arr)
 	{
-		if ($this->can("view",aw_global_get("section")))
+		if ($this->can("view", aw_global_get("section")))
 		{
 			$this->section_obj = obj(aw_global_get("section"));
 		}
 		else
 		{
 			$this->section_obj = new object();
-		};
+			$this->section_obj->set_class_id("CL_MENU");
+		}
 
 		$clss = aw_ini_get("classes");
 

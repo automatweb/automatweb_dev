@@ -9,7 +9,6 @@ unset($_SESSION["nliug"]);
 if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]))
 {
 	$_POST = $HTTP_POST_VARS = $_SESSION["auth_redir_post"];
-	extract($_POST);
 	$REQUEST_METHOD = "POST";
 }
 
@@ -20,20 +19,12 @@ if (!empty($_GET["set_ui_lang"]))
 }
 
 lc_init();
-classload("core/util/timer");
-classload("aw_template");
-classload("defs");
-classload("core/users/users");
-classload("core/languages");
-classload("core/error", "core/obj/object");
 
 // you cannot aw_startup() here, it _will_ break things
 // reset aw_cache_* function globals
 $GLOBALS["__aw_cache"] = array();
 _aw_global_init();
-
 aw_set_exec_time(AW_SHORT_PROCESS);
-
 check_pagecache_folders();
 
 $u = new users;
@@ -52,8 +43,8 @@ if (!empty($set_ct_lang_id))
 
 $LC = aw_global_get("LC");
 
-@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
-@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
+@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors".AW_FILE_EXT);
+@include(aw_ini_get("basedir")."/lang/" . $LC . "/common".AW_FILE_EXT);
 
 
 $awt = new aw_timer;
@@ -64,15 +55,17 @@ __init_aw_session_track();
 $sf = new aw_template;
 $sf->db_init();
 $sf->tpl_init("automatweb");
-if (!$sf->prog_acl_auth("view", PRG_MENUEDIT))
+if (!$sf->prog_acl_auth("view", "PRG_MENUEDIT"))
 {
 	$sf->auth_error();
 }
-if ($_GET["id"] || $_GET["parent"])
+
+if (!empty($_GET["id"]) || !empty($_GET["parent"]))
 {
 	$sc = get_instance("contentmgmt/site_cache");
-	$sc->ip_access(array("force_sect" => $_GET["parent"] ? $_GET["parent"] : $_GET["id"]));
+	$sc->ip_access(array("force_sect" => !empty($_GET["parent"]) ? $_GET["parent"] : $_GET["id"]));
 }
 
 lc_load("automatweb");
+
 ?>

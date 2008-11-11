@@ -119,7 +119,7 @@ if (strpos($str, "var aw_flash_"))
 	$str = str_replace ( "</head>" , $s_swfobject."\n</head>", $str);
 }
 
-if ($_GET["TPL"] == 1)
+if (isset($_GET["TPL"]) and $_GET["TPL"] === "1")
 {
 	// fix for logged out users - dint show templates after page refresh
 	$cache = get_instance('cache');
@@ -138,7 +138,7 @@ if ($_GET["TPL"] == 1)
 	{
 		$cache->file_set("tpl_equals_1_cache_".aw_global_get("section"), aw_global_get("TPL=1"));
 	}
-	
+
 	$sf->read_template("debug/tpl_equals_1.tpl");
 	eval (aw_global_get("TPL=1"));
 	foreach ($_aw_tpl_equals_1 as $key=>$var)
@@ -151,7 +151,7 @@ if ($_GET["TPL"] == 1)
 				$count++;
 			}
 		}
-	
+
 		$sf->vars(array(
 			"text" => $key,
 			"link" => $var["link"],
@@ -159,7 +159,7 @@ if ($_GET["TPL"] == 1)
 		));
 		$tmp .= $sf->parse("TEMPLATE");
 	}
-	
+
 	$sf->vars(array(
 		"TEMPLATE" => $tmp
 	));
@@ -167,7 +167,7 @@ if ($_GET["TPL"] == 1)
 	$str = preg_replace("/<body.*>/imsU", "\\0".aw_global_get("TPL=1"), $str);
 }
 
-if (aw_ini_get("content.compress") == 1)
+if (aw_ini_get("content.compress") === "1")
 {
 	ob_start( 'ob_gzhandler' );
 	echo $str;

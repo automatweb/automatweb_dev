@@ -66,6 +66,7 @@ class html extends aw_template
 		}
 
 		$ti = isset($tabindex) ? " tabindex=\"{$tabindex}\"" : "";
+
 		if (!empty($size))
 		{
 			$sz = " size=\"{$size}\" ";
@@ -87,6 +88,17 @@ class html extends aw_template
 			$name .= "[]";
 		}
 
+		if (!empty($onchange))
+		{
+			$onc = " onchange=\"{$onchange}\"";
+		}
+
+		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
+
+		// build options
+		$optstr = "";
+		$disabled_options = (!empty($args["disabled_options"]) and is_array($args["disabled_options"])) ? $args["disabled_options"] : array();
+
 		if (isset($selected) && is_array($selected))
 		{
 			$sel_array = $selected;
@@ -98,11 +110,9 @@ class html extends aw_template
 		else
 		{
 			$sel_array = array();
-		};
-		// hmhm. dunno, really. but it was in aw_template->mpicker -- duke
-		$sel_array = @array_flip($sel_array);
+		}
 
-		$optstr = "";
+		$sel_array = @array_flip($sel_array);
 
 		foreach(safe_array($options) as $k => $v)
 		{
@@ -110,24 +120,24 @@ class html extends aw_template
 			$d = in_array($k, $disabled_options) ? " disabled=\"disabled\"" : "";
 			$optstr .= "<option{$selected} value=\"{$k}\"{$d}>{$v}</option>\n";
 		}
-		// implementing a thing called optgroup -- ahz
-		foreach(safe_array($optgroup) as $key => $val)
-		{
-			$optstr .= "<optgroup label=\"{$optgnames[$key]}\">\n";
-			foreach(safe_array($val) as $key2 => $val2)
-			{
-				$selected = isset($sel_array[$key2]) ? " selected=\"selected\" " : "";
-				$optstr .= "<option{$selected} value=\"{$key2}\">{$val2}</option>\n";
-			}
-			$optstr .= "</optgroup>\n";
-		}
-		if (!empty($onchange))
-		{
-			$onc = " onchange=\"{$onchange}\"";
-		}
-		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
-		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$textsize}{$onBlur}{$ti}{$wid}{$style}>\n{$optstr}</select>{$post_append_text}\n";
+		// implementing a thing called optgroup -- ahz
+		if (!empty($optgroup) and is_array($optgroup))
+		{
+			foreach($optgroup as $key => $val)
+			{
+				$optstr .= "<optgroup label=\"{$optgnames[$key]}\">\n";
+				foreach(safe_array($val) as $key2 => $val2)
+				{
+					$selected = isset($sel_array[$key2]) ? " selected=\"selected\" " : "";
+					$optstr .= "<option{$selected} value=\"{$key2}\">{$val2}</option>\n";
+				}
+				$optstr .= "</optgroup>\n";
+			}
+		}
+
+		//
+		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$onBlur}{$ti}{$style}>\n{$optstr}</select>{$post_append_text}\n";
 	}
 
 	/**
@@ -200,7 +210,7 @@ class html extends aw_template
 
 	@param tabindex optional type=string
 		tab index
-		
+
 	@param onkeyup optional type=string
 		if set, onkeyup=$onkeyup.
 
@@ -232,7 +242,7 @@ class html extends aw_template
 		$onkeyup = isset($onkeyup) ? " onkeyup=\"{$onkeyup}\"" : '';
 		$style = isset($style) ? " style=\"{$style}\"":"";
 
-		if($autocomplete_class_id)
+		if(!empty($autocomplete_class_id))
 		{
 			$params = array(
 				"id" => $_GET["id"],
@@ -614,9 +624,9 @@ class html extends aw_template
 		extract($args);
 		$checked = isset($checked) ? checked($checked) : '';
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
-		$span = $span ? "<span>" : "";
-		$span_ = $span ? "</span>" : "";
-		$capt = '';
+		$span = !empty($span) ? "<span>" : "";
+		$span_ = !empty($span) ? "</span>" : "";
+		$capt = $onc = $title = '';
 
 		if (empty($value))
 		{
@@ -633,14 +643,16 @@ class html extends aw_template
 			$capt .= ($nbsp ? "&nbsp;" : " ") . $caption;
 		}
 
-		if ($textsize and $capt)
+		if (!empty($textsize) and !empty($capt))
 		{
 			$capt = '<span style="font-size: ' . $textsize . ';">' . $capt . '</span>';
 		}
+
 		if(isset($title))
 		{
 			$title = " title=\"{$title}\"";
 		}
+
 		if (isset($onclick))
 		{
 			$onc = " onclick='{$onclick}'";
@@ -1149,7 +1161,7 @@ class html extends aw_template
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
 		$rel = isset($rel) ? " rel='$rel'" : "";
-		$style = isset($rel) ? " style='$style'" : "";
+		$style = isset($style) ? " style='$style'" : "";
 
 		if (empty($caption))
 		{

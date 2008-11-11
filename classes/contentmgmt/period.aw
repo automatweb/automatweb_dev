@@ -1,17 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.3 2008/03/13 20:30:34 kristo Exp $
-// period.aw - periods 
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.4 2008/11/11 09:50:32 voldemar Exp $
+// period.aw - periods
 /*
 
 	@default group=general
 	@default table=objects
 
-	@property name type=textbox 
+	@property name type=textbox
 	@caption Nimetus (aasta,kuu)
 
 	@property comment type=textbox
 	@caption Kommentaar (teema)
-	
+
 	@property perimage type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
 	@caption Pilt2
 
@@ -29,11 +29,11 @@
 	@default field=meta
 	@default method=serialize
 
-	/@property image type=relpicker reltype=RELTYPE_IMAGE 
+	/@property image type=relpicker reltype=RELTYPE_IMAGE
 	/@caption Pilt
 
 
-	@property image_link type=textbox 
+	@property image_link type=textbox
 	@caption Pildi link
 
 	@property pyear type=select
@@ -47,7 +47,7 @@
 
 	property activity type=callback callback=callback_get_activity_list group=activity no_caption=1
 	caption Aktiivsus
-	
+
 	@property activity type=table group=activity no_caption=1
 	@caption Aktiivsus
 
@@ -79,7 +79,7 @@ class period extends class_base implements request_startup
 		}
 		lc_load("definition");
 		$this->oid = $this->cfg["per_oid"];
-		$this->lc_load("periods","lc_periods");	
+		$this->lc_load("periods","lc_periods");
 		$this->cf_name = "periods-cache-site_id-".$this->cfg["site_id"]."-period-";
 		$this->cf_ap_name = "active_period-cache-site_id-".$this->cfg["site_id"];
 		$this->cache = get_instance("cache");
@@ -98,7 +98,7 @@ class period extends class_base implements request_startup
 				{
 					$opt[$i] = $i;
 				}
-				$data["options"] = $opt; 
+				$data["options"] = $opt;
 				break;
 
 			case "preview":
@@ -120,7 +120,7 @@ class period extends class_base implements request_startup
 			case "per_oid":
 				$data["value"] = aw_ini_get("per_oid");
 				break;
-				
+
 
 		};
 		return $retval;
@@ -151,8 +151,8 @@ class period extends class_base implements request_startup
 		*/
 		$table = &$arr["prop"]["vcl_inst"];
 		$table->parse_xml_def("periods/list");
-	
-		$active = $this->rec_get_active_period();	
+
+		$active = $this->rec_get_active_period();
 		$this->clist();
 		while($row = $this->db_next())
 		{
@@ -207,7 +207,7 @@ class period extends class_base implements request_startup
 		}
 	}
 
-	function clist($arc_only = -1) 
+	function clist($arc_only = -1)
 	{
 		$this->mk_percache();
 
@@ -222,7 +222,7 @@ class period extends class_base implements request_startup
 			// hm, but we must make sure we go from bottom to top always
 			foreach($ochain as $chaino)
 			{
-				// now, if some periods exist for this object, use that object. 
+				// now, if some periods exist for this object, use that object.
 				if (is_array($this->period_cache[$chaino->id()]))
 				{
 					$valid_period = $chaino->id();
@@ -241,14 +241,14 @@ class period extends class_base implements request_startup
 		$this->db_query($q);
 	}
 
-	function activate_period($id,$oid) 
+	function activate_period($id,$oid)
 	{
 		$q = "UPDATE menu SET active_period = '$id' WHERE id = '$oid'";
 		$this->db_query($q);
 		$this->cache->file_invalidate($this->cf_ap_name);
 		$this->cache->file_clear_pt("html");
 	}
-	
+
 	// see funktsioon tagastab k2igi eksisteerivate perioodide nimekirja
 	// array kujul
 	// $active muutujaga saab ette anda selle, milline periood peaks olema aktiivne
@@ -276,8 +276,8 @@ class period extends class_base implements request_startup
 		};
 		return $elements;
 	}
-	
-	function period_olist($active = 0) 
+
+	function period_olist($active = 0)
 	{
 		return $this->picker($this->active,$this->period_list($active));
 	}
@@ -287,16 +287,16 @@ class period extends class_base implements request_startup
 		return $this->mpicker($this->active,$this->period_list($active));
 	}
 
-	function get_active_period($oid = 0) 
+	function get_active_period($oid = 0)
 	{
-		if (!$oid) 
+		if (!$oid)
 		{
 			$oid = $this->oid;
 		};
 		// ok, here we have problem - $ap could very well be empty and then we will think
 		// that it is not in the cache.
 		// so, to fix that we rewrite 0 to -1 :)
-		// ok, basically when we would normally add a 0 to the cache, now we add -1 
+		// ok, basically when we would normally add a 0 to the cache, now we add -1
 		// and when retrieving it, we act accordingly
 		if (($ap = aw_cache_get("active_period", $oid)))
 		{
@@ -304,7 +304,7 @@ class period extends class_base implements request_startup
 		}
 		else
 		{
-			// the good bit about this is, that active_period is set only through this class, so we can 
+			// the good bit about this is, that active_period is set only through this class, so we can
 			// contain the cache flushing pretty well
 			$q = "SELECT active_period FROM menu WHERE id = '".$oid."'";
 			$ap = $this->db_fetch_field($q,"active_period");
@@ -324,7 +324,7 @@ class period extends class_base implements request_startup
 	}
 
 	// ee, v6ib ju nii olla, et sellel sektsioonil pole aktiivset perioodi m22ratud, aga tema parentil on, niiet tuleb see otsida...
-	function rec_get_active_period($oid = -1) 
+	function rec_get_active_period($oid = -1)
 	{
 		$oid = $oid == -1 ? $this->oid : $oid;
 		do {
@@ -346,10 +346,10 @@ class period extends class_base implements request_startup
 	{
 		return $this->db_fetch_field("select obj_id from periods where id = '$id'", "obj_id");
 	}
-	
+
 	////
 	// !returns period $id
-	function get($id) 
+	function get($id)
 	{
 		$id = (int)$id;
 		if (!$id)
@@ -389,7 +389,7 @@ class period extends class_base implements request_startup
 	{
 		// check if a period number was specified in the url
 		$period = aw_global_get("period");
-		if ($period) 
+		if ($period)
 		{
 			// only let them switch to active periods if not logged in
 			if (aw_global_get("uid") == "")
@@ -400,11 +400,11 @@ class period extends class_base implements request_startup
 					$period = $this->get_active_period();
 				}
 			}
-			// if it was, we should switch 
+			// if it was, we should switch
 			$act_per_id = $period;
 			aw_session_set("act_per_id", $act_per_id);
 
-			// now we check if the newly selected period is the active period - 
+			// now we check if the newly selected period is the active period -
 			// yes, this will take a query, but this will not be done often, only when the user switches periods
 			$r_act_per = $this->get_active_period();
 
@@ -421,15 +421,15 @@ class period extends class_base implements request_startup
 
 
 			aw_session_set("in_archive", $in_archive);
-		} 
-		else 
+		}
+		else
 		{
 			$current_period = $this->get_active_period();
 			aw_session_set("current_period", $current_period);
 			// no period specified in the url
 			if (!aw_global_get("act_per_id"))
 			{
-				// and no period was previously active, pick the default. 
+				// and no period was previously active, pick the default.
 				//$act_per_id = $this->get_active_period();
 				$act_per_id = $current_period;
 				aw_session_set("act_per_id", $act_per_id);
@@ -438,7 +438,7 @@ class period extends class_base implements request_startup
 			}
 			// if a period was previously active we just leave it like that
 		};
-		
+
 		if (aw_global_get("uid") == "")
 		{
 			$pd = $this->get(aw_global_get("act_per_id"));
@@ -455,14 +455,14 @@ class period extends class_base implements request_startup
 		}
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=list params=name nologin="1" is_public="1" caption="List" default="1"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -471,7 +471,7 @@ class period extends class_base implements request_startup
 		$this->read_template("arhiiv.tpl");
 		$this->clist(1);
 		$pyear = 0;
-		while($row = $this->db_next()) 
+		while($row = $this->db_next())
 		{
 			$dat = aw_unserialize($row["metadata"]);
 			if ($pyear != $dat["pyear"])
@@ -479,7 +479,7 @@ class period extends class_base implements request_startup
 				$this->vars(array(
 					"pyear" => $dat["pyear"],
 				));
-				
+
 				$content .= $this->parse("year");
 				$pyear = $dat["pyear"];
 			};
@@ -487,11 +487,11 @@ class period extends class_base implements request_startup
 				"period" => $row["id"],
 				"description" => $row["name"]
 			));
-			if ($row["id"] == aw_global_get("act_per_id")) 
+			if ($row["id"] == aw_global_get("act_per_id"))
 			{
 				$content .= $this->parse("active");
-			} 
-			else 
+			}
+			else
 			{
 				$content .= $this->parse("passive");
 			};
@@ -514,12 +514,12 @@ class period extends class_base implements request_startup
 	////
 	// !import period variables into main.tpl
 	function on_site_show_import_vars($arr)
-	{	
+	{
 		// PERF: the following code should run only if the site has periods
 		$_t = aw_global_get("act_period");
 
 		$imc = get_instance(CL_IMAGE);
-		if (!$this->can("view", $_t["data"]["image"]) && $this->can("view", $_t["data"]["perimage"]))
+		if ((!isset($_t["data"]["image"]) or !$this->can("view", $_t["data"]["image"])) && isset($_t["data"]["perimage"]) && $this->can("view", $_t["data"]["perimage"]))
 		{
 			$imdata = $imc->get_image_by_id($_t["data"]["perimage"]);
 		}
@@ -550,7 +550,7 @@ class period extends class_base implements request_startup
 				"HAS_PERIOD_IMAGE" => $arr["inst"]->parse("HAS_PERIOD_IMAGE")
 			));
 		}
-		
+
 		if ($arr["inst"]->is_template("PERIOD_SWITCH"))
 		{
 			$per_inst = get_instance(CL_PERIOD);
@@ -558,7 +558,7 @@ class period extends class_base implements request_startup
 			$next = false;
 			$prev_per_id = 0;
 			$next_per_id = 0;
-			
+
 			foreach($plist as $pid => $pname)
 			{
 				if ($next)
@@ -567,18 +567,18 @@ class period extends class_base implements request_startup
 					$next_per_name = $pname;
 					break;
 				}
-				
+
 				if ($pid == $_t["id"])
 				{
 					$next = true;
 					$prev_per_id = $prev;
 					$prev_per_name = $prev_name;
 				}
-				
+
 				$prev = $pid;
 				$prev_name = $pname;
 			}
-		
+
 			$arr["inst"]->vars(array(
 				"prev_per_id" => $prev_per_id,
 				"prev_per_name" => $prev_per_name,
@@ -587,17 +587,17 @@ class period extends class_base implements request_startup
 				"next_per_name" => $next_per_name,
 				"next_per_link" => aw_ini_get("baseurl")."/period=".$next_per_id,
 			));
-			
+
 			$arr["inst"]->vars(array(
 				"HAS_PREV_PERIOD" => ($prev_per_id ? $arr["inst"]->parse("HAS_PREV_PERIOD") : ""),
 				"HAS_NEXT_PERIOD" => ($next_per_id ? $arr["inst"]->parse("HAS_NEXT_PERIOD") : ""),
 			));
-			
+
 			$arr["inst"]->vars(array(
 				"PERIOD_SWITCH" => $arr["inst"]->parse("PERIOD_SWITCH")
 			));
 		}
-		
+
 	}
 
 	function parse_alias($arr)
@@ -636,13 +636,13 @@ class period extends class_base implements request_startup
 		{
 			$image = $o->name();
 		}
-		
+
 		$this->vars(array(
 			"name" => $o->name(),
 			"link" => $link,
 			"image" => $image
 		));
-		
+
 		return $this->parse();
 	}
 };

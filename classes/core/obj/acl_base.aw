@@ -348,7 +348,7 @@ class acl_base extends db_connector
 		if ($_t["brother_of"] > 0 && $_t["brother_of"] != $_t["oid"])
 		{
 			$rv = $this->can_aw($access, $_t["brother_of"]);
-			$rv["can_delete"] = $max_acl["can_delete"];
+			$rv["can_delete"] = isset($max_acl["can_delete"]) ? $max_acl["can_delete"] : 0;
 			$max_acl = $rv;
 		}
 
@@ -370,15 +370,16 @@ class acl_base extends db_connector
 			return false;
 		}
 
-		if ($GLOBALS["cfg"]["acl"]["no_check"])
+		if (aw_ini_get("acl.no_check"))
 		{
 			return true;
 		}
 
-		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+		if (aw_ini_get("acl.use_new_acl"))
 		{
 			return $GLOBALS["object_loader"]->can($access, $oid);
 		}
+
 		static $acl_cache;
 		if (!$acl_cache)
 		{
@@ -441,7 +442,7 @@ class acl_base extends db_connector
 				{
 					$this->raise_error(ERR_ACL_NOGRP,LC_NO_DEFAULT_GROUP,true);
 				}
-			};
+			}
 
 			if ($gr)
 			{
@@ -549,7 +550,7 @@ class acl_base extends db_connector
 
 			aw_global_set("acl_base::prog_acl_cache", $can_adm+1);
 			return $can_adm;
-		};
+		}
 	}
 
 	////

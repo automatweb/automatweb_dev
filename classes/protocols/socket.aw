@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/socket.aw,v 1.2 2008/01/31 13:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/socket.aw,v 1.3 2008/11/11 09:50:58 voldemar Exp $
 // socket.aw - low level communications
 // provides functions that can be used by other classes to connect to hosts
 // and read/write information to/from those hosts
 /*
 @classinfo  maintainer=kristo
 */
-class socket 
+class socket
 {
 	var $host;
 	var $port;
@@ -25,7 +25,7 @@ class socket
 	**/
 	function socket($args = array())
 	{
-		if ( ($args["host"]) && ($args["port"]) )
+		if (!empty($args["host"]) && !empty($args["port"]))
 		{
 			$this->socket = $this->open($args);
 		}
@@ -67,7 +67,7 @@ class socket
 			//print "WARNING: No open socket to write to\n";
 			return 0;
 		};
-		
+
 		if (not(fputs($this->sock, $data, strlen($data))))
 		{
 			//print "Write error<br />";
@@ -83,7 +83,7 @@ class socket
 			reads $blocklen bytes(default is 32762) from opened connection
 		@returns
 			returns the data readed or NULL, if no connections opened.
-	**/	
+	**/
 	function read($blocklen = 32762)
 	{
 		if (!$this->sock)

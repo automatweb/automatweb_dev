@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.34 2008/07/10 12:36:20 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -196,7 +195,7 @@ class auth_config extends class_base
 		if ($ol->count())
 		{
 			$tmp = $ol->begin();
-			// also check if there are any servers in it. if not, then it is not valid. 
+			// also check if there are any servers in it. if not, then it is not valid.
 			$servers = self::_get_auth_servers($tmp->id());
 			aw_restore_acl();
 			if (!count($servers))
@@ -285,7 +284,7 @@ class auth_config extends class_base
 		foreach($o->connections_from(array("type" => "RELTYPE_AUTH_SERVER")) as $c)
 		{
 			$to_id = $c->prop("to");
-			if ($s[$to_id]["use"] == 1)
+			if (isset($s[$to_id]["use"]) and $s[$to_id]["use"] == 1)
 			{
 				$ret[$to_id] = $s[$to_id]["jrk"];
 			}
@@ -320,7 +319,7 @@ class auth_config extends class_base
 			"brother_of" => new obj_predicate_prop("id")
 		));
 		$confo = obj($auth_id);
-		
+
 		$has = false;
 		$obo = false;
 		foreach($ol->arr() as $_o)
@@ -412,7 +411,7 @@ class auth_config extends class_base
 		}
 		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("login",array(),'users'),
+			"reforb" => $this->mk_reforb("login",array(),'users')
 		));
 		if (is_oid($ac_id = auth_config::has_config()))
 		{

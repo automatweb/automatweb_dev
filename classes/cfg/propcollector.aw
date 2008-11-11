@@ -6,37 +6,37 @@
 
 class propcollector extends aw_template
 {
+	// there are 3 ways to define a tag
+	// with a context
+	// 	@tag name key1=value1 key2=value2 .. keyN=valueN
+	// without a context, key=value pairs
+	// 	@tag key1=value1 key2=value2 .. keyN=valueN
+	// simple value
+	//	@tag value, always (except for "extends") belongs to some previous tag
+	const TAG_CTX = 1;
+	const TAG_PAIRS = 2;
+	const TAG_VALUE = 3;
+
+	private $tagdata = array();
+	private $tags = array(
+		"extends" => self::TAG_VALUE,
+		"classinfo" => self::TAG_PAIRS,
+		"default" => self::TAG_PAIRS,
+		"groupinfo" => self::TAG_CTX,
+		"tableinfo" => self::TAG_CTX,
+		"property" => self::TAG_CTX,
+		"layout" => self::TAG_CTX,
+		"forminfo" => self::TAG_CTX,
+		"reltype" => self::TAG_CTX,
+		"column" => self::TAG_CTX,
+		"caption" => self::TAG_VALUE,
+		"comment" => self::TAG_VALUE
+	);
+
+
 	function propcollector($args = array())
 	{
 		$this->init(array("no_db" => 1));
-
-		// there are 3 ways to define a tag
-		// with a context
-		// 	@tag name key1=value1 key2=value2 .. keyN=valueN
-		// without a context, key=value pairs
-		// 	@tag key1=value1 key2=value2 .. keyN=valueN
-		// simple value
-		//	@tag value, always (except for "extends") belongs to some previous tag
-
-		define('TAG_CTX',1);
-		define('TAG_PAIRS',2);
-		define('TAG_VALUE',3);
-
-		$this->tags = array(
-			"extends" => TAG_VALUE,
-			"classinfo" => TAG_PAIRS,
-			"default" => TAG_PAIRS,
-			"groupinfo" => TAG_CTX,
-			"tableinfo" => TAG_CTX,
-			"property" => TAG_CTX,
-			"layout" => TAG_CTX,
-			"forminfo" => TAG_CTX,
-			"reltype" => TAG_CTX,
-			"column" => TAG_CTX,
-			"caption" => TAG_VALUE,
-			"comment" => TAG_VALUE,
-		);
-
 		$this->set_tagdata();
 	}
 
@@ -79,8 +79,8 @@ class propcollector extends aw_template
 	**/
 	public function run($args = array())
 	{
-		$cdir = $this->cfg["basedir"] . "/classes";
-		$sdir = $this->cfg["basedir"] . "/scripts";
+		$cdir = AW_DIR . "classes";
+		$sdir = AW_DIR . "scripts";
 		$this->files = array();
 		$this->req_dir (array("path" => array($cdir,$sdir)));
 		$files = $this->files;
@@ -169,7 +169,7 @@ class propcollector extends aw_template
 			$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
 			$tagname = $m[1];
 			$tagdata = $m[2];
-			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_PAIRS)
+			if (isset($tags[$tagname]) && $tags[$tagname] == self::TAG_PAIRS)
 			{
 				$attribs = $this->_parse_attribs($m[2]);
 				if ($tagname === "classinfo")
@@ -183,7 +183,7 @@ class propcollector extends aw_template
 
 			};
 
-			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_CTX)
+			if (isset($tags[$tagname]) && $tags[$tagname] == self::TAG_CTX)
 			{
 				preg_match("/(\w+?) (.*)/",$tagdata,$m);
 				$aname = $m[1];
@@ -225,7 +225,7 @@ class propcollector extends aw_template
 				};
 			};
 
-			if (isset($tags[$tagname]) && $tags[$tagname] == TAG_VALUE)
+			if (isset($tags[$tagname]) && $tags[$tagname] == self::TAG_VALUE)
 			{
 				if ($tagname === "caption")
 				{
@@ -457,7 +457,7 @@ class propcollector extends aw_template
 			"name" => $id,
 			"fields" => $fields,
 		));
-		if (empty($attr["master_index"]) && $attr["master_table"] == "objects")
+		if (empty($attr["master_index"]) && $attr["master_table"] === "objects")
 		{
 			$attr["master_index"] = "brother_of";
 		};
@@ -501,7 +501,7 @@ class propcollector extends aw_template
 	{
 		$sr = get_instance("core/serializers/xml",array("ctag" => ""));
 		$sr->set_child_id("properties","property");
-		$outdir = $this->cfg["basedir"] . "/xml/properties/";
+		$outdir = AW_DIR . "xml/properties/";
 		$success = false;
 
 		if (sizeof($this->properties) > 0 || sizeof($this->classinfo) > 0)
@@ -619,8 +619,8 @@ class propcollector extends aw_template
 	{
 		$cname = substr(basename($name),0,-3);
 		$this->currentclass = $cname;
-		$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
-		$outdir = $this->cfg["basedir"] . "/xml/properties/";
+		$targetfile = AW_DIR . "xml/properties/{$cname}.xml";
+		$outdir = AW_DIR . "xml/properties/";
 
 		### check whether xml file is already up to date
 		if (file_exists($targetfile))
@@ -653,12 +653,12 @@ class propcollector extends aw_template
 			foreach ($lines as $line)
 			{ ### see if current class has a parent
 				$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
-				$tagname = $m[1];
-				$tagdata = $m[2];
+				$tagname = isset($m[1]) ? $m[1] : "";
+				$tagdata = isset($m[2]) ? $m[2] : "";
 
 				if ($tagname === "extends")
 				{
-					$parent = $this->cfg["basedir"] . "/classes/" . trim ($tagdata) . ".aw";
+					$parent = AW_DIR . "classes/" . trim ($tagdata) . AW_FILE_EXT;
 
 					if (file_exists ($parent))
 					{ ### parse parent class data into current class' data. The fact that this recursive call is made here makes multiple inheritance possible. If that should become undesirable this whole if section can be moved outside innermost foreach loop.
@@ -694,7 +694,7 @@ class propcollector extends aw_template
 
 			switch ($this->tags[$tagname])
 			{
-				case TAG_PAIRS:
+				case self::TAG_PAIRS:
 					$attribs = $this->_parse_attribs($m[2]);
 
 					if ($tagname === "classinfo")
@@ -708,7 +708,7 @@ class propcollector extends aw_template
 					}
 					break;
 
-				case TAG_CTX:
+				case self::TAG_CTX:
 					preg_match("/(\w+?) (.*)/",$tagdata,$m);
 					$aname = $m[1];
 					$attribs = $m[2];
@@ -745,7 +745,7 @@ class propcollector extends aw_template
 					}
 					break;
 
-				case TAG_VALUE:
+				case self::TAG_VALUE:
 					if ($tagname === "caption")
 					{
 						$this->add_caption ($tagdata);
@@ -765,7 +765,7 @@ class propcollector extends aw_template
 		if(!is_array($arr["fields"]) && $arr["field"] && $arr["value"])
 		{
 			$fields = array(
-				$arr["field"] => $arr["value"],
+				$arr["field"] => $arr["value"]
 			);
 		}
 		elseif(is_array($arr["fields"]))
@@ -777,11 +777,12 @@ class propcollector extends aw_template
 			$fields = array();
 		}
 
-		if($arr["type"] === "property" && !$fields["type"])
+		if($arr["type"] === "property" && empty($fields["type"]))
 		{
 			print "***WARNING: Property \"{$arr["name"]}\" with undefined type ({$this->currentclass})\n";
 			return;
 		}
+
 		$tagfields = $this->tagdata[$arr["type"]];
 		$err_add_text = "";
 		$other = array();
@@ -796,15 +797,18 @@ class propcollector extends aw_template
 			$tagfields = $tagfields[$fields["type"]];
 			$err_add_text = " with type \"".$fields["type"]."\"";
 		}
+		$tagfields = $tagfields["props"];
+
 		foreach($fields as $f => $val)
 		{
 			if($arr["type"] === "property" && $f === "name")
 			{
 				continue;
 			}
+
 			if(!isset($tagfields[$f]) && !isset($other[$f]))
 			{
-				print "***WARNING: Unknown field \"$f\" in {$arr["type"]} \"{$arr["name"]}\"{$err_add_text} ({$this->currentclass})\n";
+				print "***WARNING: Unknown field \"{$f}\" in {$arr["type"]} \"{$arr["name"]}\"{$err_add_text} ({$this->currentclass})\n";
 			}
 			else
 			{
@@ -826,7 +830,7 @@ class propcollector extends aw_template
 							{
 								if(!defined($v))
 								{
-									print "***WARNING: Unknown clid $v in {$arr["type"]} {$arr["name"]} ({$this->currentclass})\n";
+									print "***WARNING: Unknown clid {$v} in {$arr["type"]} {$arr["name"]} ({$this->currentclass})\n";
 								}
 							}
 							break;
@@ -838,7 +842,7 @@ class propcollector extends aw_template
 
 	function set_tagdata()
 	{
-		$xmldir = $this->cfg["basedir"]."/xml/";
+		$xmldir = AW_DIR . "xml/";
 		$xml = simplexml_load_file($xmldir."property_types.xml");
 		foreach($xml->children() as $k1 => $v1)
 		{

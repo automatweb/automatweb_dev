@@ -108,6 +108,7 @@ class core extends acl_base
 		{
 			return;
 		}
+
 		if (empty($this->dc))
 		{
 			print "SYSLOG: $text\n";
@@ -133,7 +134,7 @@ class core extends acl_base
 				$object_name = $this->db_fetch_field("SELECT name FROM objects where oid = '$oid'", "name");
 			}
 			$this->quote(&$object_name);
-			$mail_id = (int)@$_GET["mlx"];
+			$mail_id = isset($_GET["mlx"]) ? (int) $_GET["mlx"] : 0;
 			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer", "object_name", "session_id", "mail_id");
 			$values = array($t,aw_global_get("uid"),$type,$text,$ip,(int)$oid,$action,$ref,$object_name, $session_id, $mail_id);
 
@@ -162,8 +163,8 @@ class core extends acl_base
 				echo "q = $q <br>";
 				echo ("cannot write to syslog: " . $this->db_last_error["error_string"]);
 				send_mail(
-					"vead@struktuur.ee", 
-					"Syslog katki ".aw_ini_get("baseurl"), 
+					"vead@struktuur.ee",
+					"Syslog katki ".aw_ini_get("baseurl"),
 					"q = $q / ".$this->db_last_error["error_string"]." \n".dbg::process_backtrace(debug_backtrace())
 				);
 			};
@@ -219,7 +220,6 @@ class core extends acl_base
 		$f = fopen($filename, 'a');
 		flock($f, LOCK_EX);
 		fwrite($f, $string."\n");
-		flock($f, LOCK_UN);
 		fclose($f);
 
 		return true;
@@ -287,7 +287,6 @@ class core extends acl_base
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
-		$e = error_reporting(E_PARSE | E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR);
 		if (!function_exists("aw_global_get"))
 		{
 			classload("defs");
@@ -301,7 +300,7 @@ class core extends acl_base
 		$msg = htmlentities($msg);
 		if (aw_global_get("__from_raise_error") > 0)
 		{
-			error_reporting($e);
+			// error_reporting($e);
 			return false;
 		}
 		aw_global_set("__from_raise_error",1);
@@ -312,7 +311,7 @@ class core extends acl_base
 		$is_rpc_call = aw_global_get("__is_rpc_call");
 		$rpc_call_type = aw_global_get("__rpc_call_type");
 
-		$this->_log(ST_CORE, SA_RAISE_ERROR, $msg, $oid);
+		$this->_log("ST_CORE", "SA_RAISE_ERROR", $msg, $oid);
 
 		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<br /><br />\n\n".$msg." </b>";
 
@@ -437,7 +436,7 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
-		if ($err_type == 30 && $_REQUEST["comment"] != "")
+		if ($err_type == 30 && !empty($_REQUEST["comment"]))
 		{
 			$send_mail = false;
 		}
@@ -447,10 +446,11 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
-                if ($err_type == "ERR_ACL" && substr(@$_REQUEST["id"], 0, 4) == "http")
-                {
-                        $send_mail = false;
-                }
+		if ($err_type === "ERR_ACL" && substr(@$_REQUEST["id"], 0, 4) == "http")
+		{
+			$send_mail = false;
+		}
+
 		if ($err_type == 110 && strpos($msg, "http:") !== false)
 		{
 			//die("silly robot");
@@ -477,38 +477,37 @@ class core extends acl_base
 			}
 		}
 
-		if ($_SERVER["REQUEST_METHOD"] == "OPTIONS")
+		if (isset($_SERVER["REQUEST_METHOD"]) and $_SERVER["REQUEST_METHOD"] === "OPTIONS")
 		{
 			$send_mail = false;
 		}
 
-		if ($_SERVER["REDIRECT_REQUEST_METHOD"] == "PROPFIND")
+		if (isset($_SERVER["REDIRECT_REQUEST_METHOD"]) and $_SERVER["REDIRECT_REQUEST_METHOD"] === "PROPFIND")
 		{
 			$send_mail = false;
 		}
 
 		// if error type is class not defined and get and post are empty, the orb.aw url was requested probably, no need ot send error
-		if ($err_type == 30 && count($_GET) == 0 && count($_POST) == 0)
+		if ($err_type === "ERR_ORB_NOCLASS" && count($_GET) === 0 && count($_POST) === 0)
 		{
 			$send_mail = false;
 		}
 
-		if ($err_type == "ERR_IMAGE_FORMAT")
+		if ($err_type === "ERR_IMAGE_FORMAT")
 		{
 			$send_mail = false;
 		}
 
 		$mh = md5($content);
-		if ($_SESSION["last_mail"] == $mh && $_SESSION["last_mail_time"] > (time() - 60))
+		if (isset($_SESSION["last_mail"]) and $_SESSION["last_mail"] === $mh and isset($_SESSION["last_mail_time"]) and $_SESSION["last_mail_time"] > (time() - 60))
 		{
 			$send_mail = false;
 		}
 
-                if ($err_type == 31 && (strpos($GLOBALS["class"], "/") !== false || strpos($GLOBALS["class"], "alert") !== false || strpos($GLOBALS["class"], "&") !== false || strpos($GLOBALS["class"], "\\") !== false || strpos($GLOBALS["class"], "%") !== false || strpos($GLOBALS["class"], "§") !== false || strpos($GLOBALS["class"], "=") !== false))
-                {
-                        die("silly robot");
-                }
-
+		if ($err_type == 31 && (strpos($GLOBALS["class"], "/") !== false || strpos($GLOBALS["class"], "alert") !== false || strpos($GLOBALS["class"], "&") !== false || strpos($GLOBALS["class"], "\\") !== false || strpos($GLOBALS["class"], "%") !== false || strpos($GLOBALS["class"], "§") !== false || strpos($GLOBALS["class"], "=") !== false))
+		{
+			die("silly robot");
+		}
 
 		// kui saidi kaustas on fail spam.txt, siis kontrollitakse enne saatmist kirja sisu failis olevate s6nade vastu; spam.txt sisu on yhes reas kujul: /viagra|v1agra|porn|foo/i
 		if ( file_exists(aw_ini_get("site_basedir") . "/spam.txt") && $send_mail)
@@ -546,8 +545,8 @@ class core extends acl_base
 		// here we replicate the error to the site that logs all errors (usually aw.struktuur.ee)
 		// we replicate by POST request, cause this thing can be too long for a GET request
 
-		$class = $_REQUEST["class"];
-		$action = $_REQUEST["action"];
+		$class = empty($_REQUEST["class"]) ? "" : $_REQUEST["class"];
+		$action = empty($_REQUEST["action"]) ? "" : $_REQUEST["action"];
 
 		//XXX: watchout, on eau the following if block had a "false &&" part in it
 		//i just deleted that, but for further testing i'm writing this comment
@@ -580,7 +579,6 @@ class core extends acl_base
 		if ($silent)
 		{
 			aw_global_set("__from_raise_error",0);
-			error_reporting($e);
 			return;
 		}
 
@@ -641,7 +639,6 @@ class core extends acl_base
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&",$honor_r_orb = true)
 	{
 		// resolve to name
-
 		// kui on numeric, siis ma saan class_lut-ist teada tema nime
 		if (is_numeric($cl_name))
 		{
@@ -650,7 +647,7 @@ class core extends acl_base
 			{
 				$cl_name = $GLOBALS["cfg"]["classes"][$cl_name]["file"];
 			}
-		};
+		}
 
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
@@ -660,7 +657,7 @@ class core extends acl_base
 		if (!empty($arr["section"]))
 		{
 			$this->orb_values["section"] = $arr["section"];
-		};
+		}
 
 		if (isset($arr["_alias"]) && !empty($arr["section"]))
 		{
@@ -670,7 +667,7 @@ class core extends acl_base
 		else
 		{
 			$this->orb_values["class"] = $cl_name;
-		};
+		}
 		$this->orb_values["action"] = $fun;
 
 		// figure out the request method once.
@@ -678,7 +675,7 @@ class core extends acl_base
 		if (!isset($r_use_orb))
 		{
 			$r_use_orb = basename($_SERVER["SCRIPT_NAME"],".aw") == "orb";
-		};
+		}
 
 		if (!$honor_r_orb)
 		{
@@ -705,11 +702,13 @@ class core extends acl_base
 		{
 			$res .= "automatweb/";
 			$use_orb = true;
-		};
+		}
+
 		if ($use_orb || $r_use_orb)
 		{
 			$res .= "orb.aw";
-		};
+		}
+
 		$res .= ($sep == "/") ? "/" : "?";
 		foreach($this->orb_values as $name => $value)
 		{
@@ -944,19 +943,16 @@ class core extends acl_base
 		$retval = "";
 		if (!$arr["file"])
 		{
-			$this->raise_error(ERR_CORE_NOFILE,LC_CORE_GET_FILE_NO_NAME,true);
+			$this->raise_error("ERR_CORE_NOFILE", LC_CORE_GET_FILE_NO_NAME, true);
 		}
 		else if (strpos($arr["file"], "http") === 0)
 		{
 			$url_parsed = parse_url($arr["file"]);
-		    $host = $url_parsed["host"];
-		    $port = $url_parsed["port"];
-		    if ($port==0)
-			{
-		        $port = 80;
-			}
-		    $path = $url_parsed["path"];
-		    if ($url_parsed["query"] != "")
+		    $host = isset($url_parsed["host"]) ? $url_parsed["host"] : "";
+		    $path = isset($url_parsed["path"]) ? $url_parsed["path"] : "";
+		    $port = isset($url_parsed["port"]) ? $url_parsed["port"] : 80;
+
+		    if (!empty($url_parsed["query"]))
 			{
 		        $path .= "?".$url_parsed["query"];
 			}
@@ -1031,7 +1027,7 @@ class core extends acl_base
 	{
 		if (not($arr["file"]))
 		{
-			$this->raise_error(ERR_CORE_NOFILENAME,LC_CORE_PUT_FILE_NO_NAME,true);
+			$this->raise_error("ERR_CORE_NOFILENAME", LC_CORE_PUT_FILE_NO_NAME, true);
 		};
 
 		$file = $arr["file"];
@@ -1044,7 +1040,7 @@ class core extends acl_base
 		// "b" is for os-indepence, winblowsil on huvitav omadus isiklikke reavahetusi kasutada
 		if (not(($fh = fopen($file,"wb"))))
 		{
-			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,sprintf(t("Couldn't open file '%s' for writing"), $file),true);
+			$this->raise_error("ERR_CORE_NOP_OPEN_FILE", sprintf(t("Couldn't open file '%s' for writing"), $file),true);
 		}
 		else
 		{
@@ -1067,19 +1063,31 @@ class core extends acl_base
 	**/
 	function get_directory($args = array())
 	{
-		extract($args);
-		// Directory Handle
 		$files = array();
-		if ($DH = @opendir($dir)) {
-			while (false !== ($file = readdir($DH))) {
+
+		if (empty($args["dir"]))
+		{
+			return $files;
+		}
+		else
+		{
+			$dir = $args["dir"];
+		}
+
+		// Directory Handle
+		if (is_dir($dir) and $DH = opendir($dir))
+		{
+			while (false !== ($file = readdir($DH)))
+			{
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))
 				{
 					$files[$file] = $file;
-				};
+				}
 			}
 			closedir($DH);
 		}
+
 		return $files;
 	}
 
@@ -1147,7 +1155,7 @@ class core extends acl_base
 
 	////
 	// !loads localization constans and imports them to the current class, vars are assumed to be in array $arr_name
-	function lc_load($file,$arr_name,$lang_id = "")
+	function lc_load($file, $arr_name, $lang_id = "")
 	{
 		if (empty($lang_id))
 		{
@@ -1156,16 +1164,21 @@ class core extends acl_base
 		else
 		{
 			$admin_lang_lc = $lang_id;
-		};
+		}
 
 		if (!$admin_lang_lc)
 		{
-			$admin_lang_lc = "et";
+			$admin_lang_lc = "et"; //!!! kust saab defaulti
 		}
 
 		// for better debugging
-		$fullpath = $this->cfg["basedir"]."/lang/" . $admin_lang_lc . "/$file.".$this->cfg["ext"];
-		@include_once($fullpath);
+		$fullpath = AW_DIR."lang/{$admin_lang_lc}/{$file}".AW_FILE_EXT;
+		if (!is_readable($fullpath))
+		{
+			throw new aw_exception("Locale file '{$fullpath}' not readable.");
+		}
+
+		require_once($fullpath);
 
 		if (is_array($GLOBALS[$arr_name]))
 		{
@@ -1199,7 +1212,7 @@ class core extends acl_base
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
 			"parent" => $rootobj,
-			"status" => ($onlyact ? STAT_ACTIVE : array(STAT_NOTACTIVE, STAT_ACTIVE)),
+			"status" => ($onlyact ? object::STAT_ACTIVE : array(object::STAT_NOTACTIVE, object::STAT_ACTIVE)),
 			"sort_by" => "objects.parent",
 			"lang_id" => array(),
 			"site_id" => array(),

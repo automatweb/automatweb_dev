@@ -1,12 +1,17 @@
 <?php
-$basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
-aw_global_set("no_db_connection", true);
 
-$anal = get_instance("core/aw_code_analyzer/aw_code_analyzer");
+$basedir = realpath(".");
+include($basedir . "/automatweb.aw");
+
+automatweb::start();
+//automatweb::$instance->mode(automatweb::MODE_DBG);
+automatweb::$instance->bc();
+$awt = new aw_timer();
+aw_global_set("no_db_connection", 1);
+aw_ini_set("baseurl", "automatweb");
+include AW_DIR . "const" . AW_FILE_EXT;
+
+$anal = new aw_code_analyzer();
 
 $fn_c = <<<EOD
 	function %s(\$args)
@@ -30,19 +35,19 @@ $construct = <<<CONSTRUCT
 	}
 CONSTRUCT;
 
-$orb = get_instance("core/orb/orb");
-
+$orb = new orb();
 $clss = aw_ini_get("classes");
+
 foreach($clss as $clid => $cld)
 {
 	if (($rs = $cld["is_remoted"]) != "")
 	{
 		echo "generating proxy for class $cld[file] \n";
 		// make proxy class
-		$proxy_path = aw_ini_get("basedir")."/classes/core/proxy_classes/".basename($cld["file"]).".aw";
+		$proxy_path = AW_DIR."classes/core/proxy_classes/".basename($cld["file"]).AW_FILE_EXT;
 		$proxy_class = "__aw_proxy_".basename($cld["file"]);
 
-		$real_path = aw_ini_get("basedir")."/classes/".$cld["file"].".aw";
+		$real_path = AW_DIR."classes/".$cld["file"].AW_FILE_EXT;
 		$real_class = basename($cld["file"]);
 
 		$prx = array();
@@ -72,7 +77,7 @@ foreach($clss as $clid => $cld)
 
 			$prx[] = sprintf($fn_c, $fnm, $real_class, $orb_action_name);
 		}
-		
+
 		$prxstr = "<?php\n\nclass $proxy_class extends core\n{\n".join("\n\n", $prx)."\n}\n\n?>";
 
 		$fp = fopen($proxy_path, "w");
@@ -80,4 +85,7 @@ foreach($clss as $clid => $cld)
 		fclose($fp);
 	}
 }
+
+automatweb::shutdown();
+
 ?>

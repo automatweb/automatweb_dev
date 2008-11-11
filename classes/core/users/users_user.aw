@@ -11,7 +11,6 @@ define("GROUP_LEVEL_PRIORITY", 100000);
 define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users_user.aw,v 1.4 2008/10/29 14:35:46 markop Exp $
 @classinfo maintainer=kristo
 EMIT_MESSAGE(MSG_USER_LOGIN);
 EMIT_MESSAGE(MSG_USER_LOGOUT);
@@ -35,16 +34,19 @@ class users_user extends aw_template
 			Password
 
 		@param server optional type=string
-			The authentication server object to use. Not the oid, but the server's internal name set in the auht config. If set, only that server is checked, if not, the normal authentication chain is followed. Defaults to null
+			The authentication server object to use. Not the oid, but the server's internal name set in the auth config. If set, only that server is checked, if not, the normal authentication chain is followed. Defaults to null
 
 		@param remote_auth optional type=int
-			If set to true, the only output is 1 for a successful login and 0 for unsuccessful. 
+			If set to true, the only output is 1 for a successful login and 0 for unsuccessful.
 	**/
 	function login($params = array())
 	{
-		extract($params);
-
+		$uid = $params["uid"];
+		$password = $params["password"];
+		$server = isset($params["server"]) ? $params["server"] : "";
+		$remote_auth = isset($params["remote_auth"]) ? $params["remote_auth"] : false;
 		$auth = get_instance(CL_AUTH_CONFIG);
+
 		if (!empty($uid) && ($auth_id = $auth->has_config()))
 		{
 			list($success, $msg) = $auth->check_auth($auth_id, array(
@@ -72,7 +74,7 @@ class users_user extends aw_template
 		if (!$success)
 		{
 			$this->_handle_failed_login($params, $msg);
-		};
+		}
 
 		//If user logs on first time and there is setting in .ini file then he/she must change password before login is completed
 		aw_disable_acl();
@@ -100,11 +102,6 @@ class users_user extends aw_template
 
 		$this->_log(ST_USERS, SA_LOGIN, $uid);
 
-		if (aw_ini_get("users.tafkap"))	// this can be used to remember the user after he/she has logged out 
-		{
-			setcookie("tafkap",$uid,strtotime("+7 years"));
-		};
-
 		setcookie("nocache",1);
 		$_SESSION["uid"] = $uid;
 		$_SESSION["uid_oid"] = $u_oid;
@@ -118,7 +115,7 @@ class users_user extends aw_template
 
 		if (!empty($params["remote_auth"]))
 		{
-			die(t("1"));
+			die("1");
 		}
 
 		if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]))
@@ -202,23 +199,23 @@ class users_user extends aw_template
 
 	private function _handle_failed_login($params, $msg)
 	{
-			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
+		$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 
-			unset($_SESSION["uid"]);
-			aw_global_set("uid", "");
+		unset($_SESSION["uid"]);
+		aw_global_set("uid", "");
 
-			if ($params["remote_auth"] == 1)
-			{
-				die(t("0"));
-			}
+		if ($params["remote_auth"] == 1)
+		{
+			die("0");
+		}
 
-			$msg = t("Vigane kasutajanimi v&otilde;i parool");
+		$msg = t("Vigane kasutajanimi v&otilde;i parool");
 
-			$_msg = aw_ini_get("users.login_failed_msg");
-			if ($_msg != "")
-			{
-				$msg = $_msg;
-			}
+		$_msg = aw_ini_get("users.login_failed_msg");
+		if ($_msg != "")
+		{
+			$msg = $_msg;
+		}
 
 			if (!empty($params["failed_url"]))
 			{
@@ -228,19 +225,20 @@ class users_user extends aw_template
 			{
 				$redir_url = aw_ini_get("users.redir_on_failed_login");
 			}
+
 			if ($redir_url == "")
 			{
-				$redir_url = $this->cfg["baseurl"]."/login.".$this->cfg["ext"];
+				$redir_url = $this->cfg["baseurl"]."/login" . AW_FILE_EXT;
 			}
 
-			$si = __get_site_instance();
-			if (method_exists($si, "handle_failed_login"))
-			{
-				$si->handle_failed_login($params, $msg, $redir_url);
-			}
-			header("Refresh: 1;url=".$redir_url);
-			print $msg;
-			exit;
+		$si = __get_site_instance();
+		if (method_exists($si, "handle_failed_login"))
+		{
+			$si->handle_failed_login($params, $msg, $redir_url);
+		}
+		header("Refresh: 1;url=".$redir_url);
+		print $msg;
+		exit;
 	}
 
 	/** logs the current user out and destroys the session
@@ -292,7 +290,7 @@ class users_user extends aw_template
 		return false;
 	}
 
-	/** returns the oid for the given uid. but this is deprecated, because you should be using user oid's, not uids. 
+	/** returns the oid for the given uid. but this is deprecated, because you should be using user oid's, not uids.
 	**/
 	function get_oid_for_uid($uid)
 	{

@@ -1,10 +1,16 @@
 <?php
+
 $basedir = realpath(".");
-include("$basedir/init.aw");
-init_config(array("ini_files" => array("$basedir/aw.ini")));
-classload("defs");
-classload("aw_template");
-aw_global_set("no_db_connection", true);
-$scanner = get_instance("core/orb/orb_gen");
-$scanner->make_orb_defs_from_doc_comments();
+require_once $basedir . "/automatweb.aw";
+
+automatweb::start();
+automatweb::$instance->bc();
+//automatweb::$instance->mode(automatweb::MODE_DBG);
+aw_global_set("no_db_connection", 1);
+aw_ini_set("baseurl", "automatweb");
+include AW_DIR . "const" . AW_FILE_EXT;
+$orb_gen = new orb_gen();
+$orb_gen->make_orb_defs_from_doc_comments();
+automatweb::shutdown();
+
 ?>

@@ -1435,6 +1435,10 @@ exit_function("jigaboo");
 		}
 		### output
 		$template = $this_object->prop ("template") . ".tpl";
+		if (!$this->is_template($template))
+		{
+			return "";
+		}
 		$this->read_template($template);
 		lc_site_load("realestate_search",&$this);
 

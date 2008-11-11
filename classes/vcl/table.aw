@@ -31,6 +31,9 @@ class aw_table extends aw_template
 	var $table_tag_id;
 	var $table_class_id = "awmenuedittabletag";
 
+	protected $cfgform;
+
+	protected $cfg_data = array();
 	protected $rowdefs = array();
 	protected $rowdefs_key_index = array();
 	protected $data = array();
@@ -1877,7 +1880,7 @@ class aw_table extends aw_template
 		@param sortable optional type=bool
 			If set, the table is sortable
 		@param sorting_field optional type=field
-			
+
 		@param type optional type=string
 			Field type
 		@param format optional type=string
@@ -1910,6 +1913,7 @@ class aw_table extends aw_template
 				$args = $def;
 			}
 		}
+
 		if (!$this->filters_updated)
 		{
 			if ($this->filter_name == "")
@@ -2829,7 +2833,7 @@ echo dbg::short_backtrace();
 
 	function check_userfields(&$row = null)
 	{
-		if (is_array($this->cfg_data["fields"]))
+		if (!empty($this->cfg_data["fields"]))
 		{
 			foreach($this->cfg_data["fields"] as $field => $data)
 			{

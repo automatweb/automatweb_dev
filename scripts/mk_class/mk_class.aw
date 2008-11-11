@@ -1,5 +1,7 @@
 <?php
 ob_implicit_flush(true);
+$basedir = realpath(".");
+include($basedir . "/automatweb.aw");
 
 function _file_get_contents($name)
 {
@@ -53,19 +55,10 @@ function make_keys($arr)
 
 #chdir("../..");
 
-$basedir = realpath(".");
-include("$basedir/init.aw");
 $args_from_caller = isset($args["mkcl_file"]);
 $stdin = fopen("php://stdin", "r");
 $class = array();
-try
-{
-$aw_basedir = aw_ini_get("basedir");
-}
-catch(Exception $e)
-{
 
-}
 ///////////////////////////////////////////////////////////////////
 // ask the user the needed info
 //////////////////////////////////////////////////////////////////
@@ -78,7 +71,7 @@ while(!$continue)
 {
 	echo "Folder where the class file is (created under AWROOT/classes): " . ($args_from_caller ? $args["mkcl_folder"] : "");
 	$class['folder'] = $args_from_caller ? trim($args["mkcl_folder"]) : trim(fgets($stdin));
-	if (is_dir(($args_from_caller ? $aw_basedir . "/" : "") . "classes/" . $class["folder"]))
+	if (is_dir(($args_from_caller ? AW_DIR : "") . "classes/" . $class["folder"]))
 	{
 		$continue = true;
 	}
@@ -126,23 +119,23 @@ if ($class['is_remoted'])
 // check if a class by this name does not already exist!
 ////////////////////////////////////////////////////////////////////
 
-$clnf = ($class['folder'] == "" ? $class['file'].".aw" : $class['folder']."/".$class['file'].".aw");
-$clnf_oo = ($class['folder'] == "" ? $class['file']."_obj.aw" : $class['folder']."/".$class['file']."_obj.aw");
+$clnf = ($class['folder'] == "" ? $class['file'].AW_FILE_EXT : $class['folder']."/".$class['file'].AW_FILE_EXT);
+$clnf_oo = ($class['folder'] == "" ? $class['file']."_obj".AW_FILE_EXT : $class['folder']."/".$class['file']."_obj".AW_FILE_EXT);
 $tpnf = ($class['folder'] == "" ? $class['file'] : $class['folder']."/".$class['file']);
 
-if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf"))
+if (file_exists(($args_from_caller ? AW_DIR : "") . "classes/{$clnf}"))
 {
 	echo "\nERROR: file classes/$clnf already exists!\n\n";
 	exit(1);
 }
 
-if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf_oo"))
+if (file_exists(($args_from_caller ? AW_DIR : "") . "classes/$clnf_oo"))
 {
 	echo "\nERROR: file classes/$clnf_oo already exists!\n\n";
 	exit(1);
 }
 
-if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "xml/orb/$class.xml"))
+if (file_exists(($args_from_caller ? AW_DIR : "") . "xml/orb/$class.xml"))
 {
 	echo "\nERROR: file xml/orb/$class.xml already exists!\n\n";
 	exit(1);
@@ -156,22 +149,17 @@ if (file_exists(($args_from_caller ? $aw_basedir . "/" : "") . "xml/orb/$class.x
 // write classes.ini
 ////////////////////
 
-// read config/ini/classes.ini and find the largest class number in it
-$clsini = _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/classes.ini');
-/*preg_match_all("/classes\[(\d+)\]\[def\]/",$clsini, $clid_mt);
-$clids = make_keys($clid_mt[1]);
-$new_clid = max($clids)+1;*/
-
 echo "\n\nRequesting new class id...\n";
 
 if (!$args_from_caller)
 {
-//	$basedir = realpath(".");
-//	include("$basedir/init.aw");
-	init_config(array("ini_files" => array("$basedir/aw.ini")));
-	classload("defs");
-	classload("aw_template");
-	aw_global_set("no_db_connection", true);
+	automatweb::start();
+	//automatweb::$instance->mode(automatweb::MODE_DBG);
+	automatweb::$instance->bc();
+	aw_global_set("no_db_connection", 1);
+	aw_ini_set("baseurl", "automatweb");
+	include AW_DIR . "const" . AW_FILE_EXT;
+	automatweb::shutdown();
 }
 
 $classlist = get_instance("core/class_list");
@@ -212,7 +200,7 @@ if ($class['is_remoted'] == 1)
 	$new_clini .= "classes[$new_clid][is_remoted] = ".$class['default_remote_server']."\n";
 }
 
-$fp = fopen(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/classes.ini','a');
+$fp = fopen(($args_from_caller ? AW_DIR : "") . 'config/ini/classes.ini','a');
 fputs($fp, $new_clini);
 fclose($fp);
 
@@ -226,10 +214,7 @@ echo "\n";
 echo "parsing and adding to config/ini/syslog.ini..\n";
 
 // read and find the biggest number
-$sysini = _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/syslog.ini');
-preg_match_all("/syslog\.types\[(\d+)\]\[def\]/",$sysini, $sys_mt);
-$sysids = make_keys($sys_mt[1]);
-//$new_sysid = max($sysids)+1;
+$sysini = _file_get_contents(($args_from_caller ? AW_DIR : "") . 'config/ini/syslog.ini');
 $new_sysid = $new_clid;
 
 $first_match = false;
@@ -276,7 +261,7 @@ foreach($syslines as $sl)
 	$new_sysini[] = $sl;
 }
 
-_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . 'config/ini/syslog.ini',join("\n",$new_sysini));
+_file_put_contents(($args_from_caller ? AW_DIR : "") . 'config/ini/syslog.ini',join("\n",$new_sysini));
 
 echo "\n";
 
@@ -290,11 +275,11 @@ echo "\nmaking class $clnf...\n\n";
 if ($class['folder'] != "")
 {
 	// check if the directory exists
-	if (!is_dir(($args_from_caller ? $aw_basedir . "/" : "") . "classes/".$class['folder']))
+	if (!is_dir(($args_from_caller ? AW_DIR : "") . "classes/".$class['folder']))
 	{
 		// mkdir can only create one level of directories at a time
 		// so if the folders has several levels, we need to create all of them.
-		$dir = $args_from_caller ? $aw_basedir . "/classes" : "classes";
+		$dir = $args_from_caller ? (AW_DIR . "classes") : "classes";
 		$dirs = explode("/", $class['folder']);
 		foreach($dirs as $fld)
 		{
@@ -308,7 +293,7 @@ if ($class['folder'] != "")
 	}
 }
 
-$fc = str_replace("__classdef", $class['def'], _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . "install/class_template/classes/base.aw"));
+$fc = str_replace("__classdef", $class['def'], _file_get_contents(($args_from_caller ? AW_DIR : "") . "install/class_template/classes/base" . AW_FILE_EXT));
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
 $fc = str_replace("__name", $class['name'], $fc);
@@ -316,17 +301,17 @@ $fc = str_replace("__classname", $class['file'], $fc);
 $fc = str_replace("__table_name", "aw_".$class['file'], $fc);
 $fc = str_replace("__maintainer", get_current_user(), $fc);
 
-_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf",$fc);
+_file_put_contents(($args_from_caller ? AW_DIR : "") . "classes/$clnf",$fc);
 echo "created classes/$clnf...\n";
 
-$fc = _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . "install/class_template/classes/class.aw");
+$fc = _file_get_contents(($args_from_caller ? AW_DIR : "") . "install/class_template/classes/class.aw");
 $fc = str_replace("__classname", $class['file'] . "_obj", $fc);
-_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "classes/$clnf_oo",$fc);
+_file_put_contents(($args_from_caller ? AW_DIR : "") . "classes/$clnf_oo",$fc);
 echo "created classes/$clnf_oo...\n";
 
 $folder = $class['folder'] != "" ? "folder=\"".$class['folder']."\"" : "";
-$fc = str_replace("__classname", $class['file'], _file_get_contents(($args_from_caller ? $aw_basedir . "/" : "") . "install/class_template/xml/orb/base.xml"));
-_file_put_contents(($args_from_caller ? $aw_basedir . "/" : "") . "xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
+$fc = str_replace("__classname", $class['file'], _file_get_contents(($args_from_caller ? AW_DIR : "") . "install/class_template/xml/orb/base.xml"));
+_file_put_contents(($args_from_caller ? AW_DIR : "") . "xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
 echo "created xml/orb/".$class['file'].".xml...\n";
 
 
@@ -357,4 +342,10 @@ else
 }
 
 echo "\n\nall done! \n\n";
+
+if (!$args_from_caller)
+{
+	automatweb::shutdown();
+}
+
 ?>
