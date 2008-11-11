@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.13 2008/11/04 18:57:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.14 2008/11/11 14:47:18 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -40,6 +40,9 @@
 
 	@property done type=checkbox ch_value=1 table=aw_task_rows field=aw_done
 	@caption Tehtud
+
+	@property primary type=checkbox ch_value=1 table=aw_task_rows field=aw_primary
+	@caption Esmane rida (isikule aegade jagamiseks)
 
 	@property on_bill type=checkbox ch_value=1 table=aw_task_rows field=aw_on_bill
 	@caption Arvele
@@ -144,6 +147,7 @@ class task_row extends class_base
 			case "skill_used":
 			case "aw_task":
 			case "aw_orderer":
+			case "aw_primary":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

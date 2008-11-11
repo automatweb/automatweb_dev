@@ -4528,19 +4528,19 @@ class task extends class_base
 			"name" => "orderer",
 			"caption" => t("Tellija"),
 			"sortable" => 1,
-			"width" => "40%"
+			"width" => "30%"
 		));
 		$t->define_field(array(
 			"name" => "phone",
 			"caption" => t("Telefon"),
 			"sortable" => 1,
-			"width" => "35%"
+			"width" => "30%"
 		));
 		$t->define_field(array(
 			"name" => "contact",
 			"caption" => t("Kontaktisik"),
 			"sortable" => 1,
-			"width" => "25%"
+			"width" => "40%"
 		));
 	}
 
@@ -4575,13 +4575,13 @@ class task extends class_base
 			"name" => "project",
 			"caption" => t("Projekt"),
 			"sortable" => 1,
-			"width" => "40%"
+			"width" => "30%"
 		));
 		$t->define_field(array(
 			"name" => "status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
-			"width" => "35%"
+			"width" => "30%"
 		));
 		$t->define_field(array(
 			"name" => "deadline",
@@ -4590,7 +4590,7 @@ class task extends class_base
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.Y",
-			"width" => "25%"
+			"width" => "40%"
 		));
 	}
 
@@ -4626,19 +4626,49 @@ class task extends class_base
 			"name" => "part",
 			"caption" => t("Osaleja"),
 			"sortable" => 1,
-			"width" => "40%"
+			"width" => "30%"
 		));
 		$t->define_field(array(
 			"name" => "prof",
 			"caption" => t("Ametinimetus"),
 			"sortable" => 1,
-			"width" => "35%"
+			"width" => "15%"
 		));
 		$t->define_field(array(
 			"name" => "phone",
 			"caption" => t("Telefon"),
 			"sortable" => 1,
-			"width" => "25%"
+			"width" => "15%"
+		));
+		$t->define_field(array(
+			"name" => "time_guess",
+			"caption" => t("Kulunud tunde"),
+			"sortable" => 1,
+			"width" => "10%"
+		));
+		$t->define_field(array(
+			"name" => "time_real",
+			"caption" => t("Kulunud tunde"),
+			"sortable" => 1,
+			"width" => "10%"
+		));
+		$t->define_field(array(
+			"name" => "time_to_cust",
+			"caption" => t("Tunde kliendile"),
+			"sortable" => 1,
+			"width" => "10%"
+		));
+		$t->define_field(array(
+			"name" => "done",
+			"caption" => t("Tehtud"),
+			"sortable" => 1,
+			"width" => "5%"
+		));
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => t("Arvele"),
+			"sortable" => 1,
+			"width" => "5%"
 		));
 	}
 
@@ -4663,6 +4693,16 @@ class task extends class_base
 				));
 			}
 			unset($_SESSION["event"]["participants"]);
+		}
+	}
+
+	function save_parts_table($arr)
+	{
+		$rows = $arr["request"]["rows"];
+		foreach($rows as $key => $row)
+		{
+			$row["person"] = $key;
+			$arr["obj_inst"]->set_primary_row($row);
 		}
 	}
 
@@ -4700,12 +4740,42 @@ class task extends class_base
 				$obj = obj($oid);
 				$name = strlen($tmp = $obj->prop("short_name"))?$name." (".$tmp.")":$name;
 			}
-			$t->define_data(array(
+			$data = array(
 				"oid" => $c->id(),
 				"part" => html::obj_change_url($c, $name),
 				"prof" => html::obj_change_url($c->prop("rank")),
 				"phone" => html::obj_change_url($c->prop("phone"))
+			);
+			
+			$row = $arr["obj_inst"]->get_primary_row_for_person($c->id());
+			$data["time_guess"] = html::textbox(array(
+				"name" => "rows[".$c->id()."][time_guess]",
+				"value" => $row ? $row->prop("time_guess") : "",
+				"size" => 3
 			));
+			$data["time_real"] = html::textbox(array(
+				"name" => "rows[".$c->id()."][time_real]",
+				"value" => $row ? $row->prop("time_real") : "",
+				"size" => 3
+			));
+			$data["time_to_cust"] = html::textbox(array(
+				"name" => "rows[".$c->id()."][time_to_cust]",
+				"value" => $row ? $row->prop("time_to_cust") : "",
+				"size" => 3
+			));
+			$data["done"] = html::checkbox(array(
+				"name" => "rows[".$c->id()."][done]",
+				"value" => 1,
+				"checked" => $row ? $row->prop("done") : "",
+			));
+			$data["on_bill"] = $row && $row->prop("bill_id") ? $row->prop("bill_id.bill_no") :
+				html::checkbox(array(
+					"name" => "rows[".$c->id()."][on_bill]",
+					"value" => 1,
+					"checked" => $row ? $row->prop("on_bill") : "",
+			));
+	
+			$t->define_data($data);
 		}
 	}
 	/**

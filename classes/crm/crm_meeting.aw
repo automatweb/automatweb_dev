@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.103 2008/10/08 10:42:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.104 2008/11/11 14:47:15 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -7,15 +7,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @classinfo syslog_type=ST_CRM_MEETING confirm_save_data=1 maintainer=markop
 
 @default table=objects
-
-@default group=predicates
-
-	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
-	@caption Eeldustegevused
-
-	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal 
-	@caption Verstapost
-
 
 @default group=general
 @layout top_bit type=vbox closeable=1 area_caption=P&otilde;hiandmed
@@ -47,43 +38,38 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @layout center_bit type=hbox 
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
+
+	@property content type=textarea cols=180 rows=30 table=documents parent=center_bit no_caption=1
+	@caption Sisu
+
 	@layout center_bit_left type=vbox parent=center_bit 
 
-
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
-
-			@property content type=textarea cols=80 rows=30 table=documents parent=center_bit_left_ct no_caption=1 width=100%
-			@caption Sisu
 
 	@layout center_bit_right type=vbox parent=center_bit 
 
 		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
-			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
-
-			@property co_table type=table no_caption=1 store=no parent=center_bit_right_top
-			@property proj_table type=table no_caption=1 store=no parent=center_bit_right_top
-			@property parts_table type=table no_caption=1 store=no parent=center_bit_right_top
-
-
-			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
-			@caption Klient
-
-			@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_right_top
-			@caption Projekt
-
-
 		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
-			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
 
-			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
+@layout center_bit_bottom type=vbox closeable=1 area_caption=Osapooled
 
+	@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
 
-@layout center_bit_bottom type=vbox closeable=1 area_caption=Kokkuv&otilde;te
+	@property co_table type=table no_caption=1 store=no parent=center_bit_bottom
+	@property proj_table type=table no_caption=1 store=no parent=center_bit_bottom
+	@property parts_table type=table no_caption=1 store=no parent=center_bit_bottom
 
-	@property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1 parent=center_bit_bottom
-	@caption Kokkuv&otilde;te
+	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_bottom
+	@caption Klient
+
+	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_bottom
+	@caption Projekt
+
+	@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
+	@property files_table type=table no_caption=1 store=no parent=center_bit_bottom
+
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
@@ -105,9 +91,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property udefch1 type=checkbox ch_value=1 user=1 table=kliendibaas_kohtumine
 @caption User-defined checkbox 1
-
-@property udeflb1 type=classificator reltype=RELTYPE_UDEFLB1 store=connect
-@caption Kasutajdefineeritud muutuja 1
 
 @property udeftb1 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 1
@@ -147,15 +130,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property udefta3 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 3
-
-@property userfile1 type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=meta method=serialize
-@caption Failiupload 1
-
-@property userfile2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=meta method=serialize
-@caption Failiupload 2
-
-@property userfile3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=meta method=serialize
-@caption Failiupload 3
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
@@ -230,6 +204,34 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 	@property sel_resources type=table no_caption=1
 
+@default group=other_settings
+
+	
+	@property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
+	@caption Kokkuv&otilde;te
+
+	@property udeflb1 type=classificator reltype=RELTYPE_UDEFLB1 store=connect
+	@caption Kasutajdefineeritud muutuja 1
+
+	@property userfile1 type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=meta method=serialize
+	@caption Failiupload 1
+	
+	@property userfile2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=meta method=serialize
+	@caption Failiupload 2
+	
+	@property userfile3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=meta method=serialize
+	@caption Failiupload 3
+
+
+
+@default group=predicates
+
+	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
+	@caption Eeldustegevused
+
+	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal 
+	@caption Verstapost
+
 @default group=transl
 	
 	@property transl type=callback callback=callback_get_transl
@@ -245,6 +247,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo resources caption="Ressursid" 
+@groupinfo other_settings caption="Muud seaded" 
 @groupinfo transl caption=T&otilde;lgi
 @groupinfo predicates caption="Eeldused" 
 
@@ -263,6 +266,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
 @caption ressurss
+
+@reltype BILL value=6 clid=CL_CRM_BILL
+@caption Arve
+
+@reltype ROW value=7 clid=CL_TASK_ROW
+@caption Rida
 
 @reltype UDEFLB1 value=65 clid=CL_META
 @caption Kasutajadefineritud muutuja 1
@@ -285,7 +294,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 */
 
-class crm_meeting extends class_base
+class crm_meeting extends task
 {
 	var $return_url;
 	
@@ -419,6 +428,7 @@ class crm_meeting extends class_base
 				}
 				break;
 			case "content":
+				$data["style"] = "width: 100%";
 				if($this->mail_data)
 				{
 					$data["value"] = sprintf(
@@ -720,6 +730,9 @@ class crm_meeting extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "parts_table":
+				$this->save_parts_table($arr);
+				break;
 			case "end":
 				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
 				{

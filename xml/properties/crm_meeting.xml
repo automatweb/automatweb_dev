@@ -40,17 +40,6 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
-            <name>add_clauses</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>chooser</type>
-            <store>no</store>
-            <parent>top_2way_left</parent>
-            <multiple>1</multiple>
-            <field>add_clauses</field>
-            <caption>Lisatingimused</caption>
-      </property>
-      <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
@@ -65,6 +54,17 @@
             <type>datetime_select</type>
             <field>end</field>
             <caption>L&amp;amp;otilde;peb</caption>
+      </property>
+      <property>
+	      <name>add_clauses</name>
+	      <table>objects</table>
+	      <group>general</group>
+	      <type>chooser</type>
+	      <store>no</store>
+	      <parent>top_bit</parent>
+	      <multiple>1</multiple>
+	      <field>add_clauses</field>
+	      <caption>Lisatingimused</caption>
       </property>
       <property>
             <name>hrs_table</name>
@@ -91,11 +91,10 @@
             <table>documents</table>
             <group>general</group>
             <type>textarea</type>
-            <cols>80</cols>
+            <cols>180</cols>
             <rows>30</rows>
-            <parent>center_bit_left_ct</parent>
+            <parent>center_bit</parent>
             <no_caption>1</no_caption>
-            <width>100%</width>
             <field>content</field>
             <caption>Sisu</caption>
       </property>
@@ -106,7 +105,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>parts_tb</field>
       </property>
       <property>
@@ -116,7 +115,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>co_table</field>
       </property>
       <property>
@@ -126,7 +125,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>proj_table</field>
       </property>
       <property>
@@ -136,7 +135,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>parts_table</field>
       </property>
       <property>
@@ -146,7 +145,7 @@
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <caption>Klient</caption>
       </property>
       <property>
@@ -156,7 +155,7 @@
             <type>relpicker</type>
             <field>project</field>
             <reltype>RELTYPE_PROJECT</reltype>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <caption>Projekt</caption>
       </property>
       <property>
@@ -166,7 +165,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_bottom</parent>
+            <parent>center_bit_bottom</parent>
             <field>files_tb</field>
       </property>
       <property>
@@ -176,18 +175,8 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_bottom</parent>
+            <parent>center_bit_bottom</parent>
             <field>files_table</field>
-      </property>
-      <property>
-            <name>summary</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>textarea</type>
-            <cols>80</cols>
-            <rows>30</rows>
-            <field>description</field>
-            <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
             <name>is_done</name>
@@ -237,16 +226,6 @@
             <user>1</user>
             <field>udefch1</field>
             <caption>User-defined checkbox 1</caption>
-      </property>
-      <property>
-            <name>udeflb1</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>classificator</type>
-            <reltype>RELTYPE_UDEFLB1</reltype>
-            <store>connect</store>
-            <field>udeflb1</field>
-            <caption>Kasutajdefineeritud muutuja 1</caption>
       </property>
       <property>
             <name>udeftb1</name>
@@ -366,42 +345,6 @@
             <caption>User-defined textarea 3</caption>
       </property>
       <property>
-            <name>userfile1</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE1</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Failiupload 1</caption>
-      </property>
-      <property>
-            <name>userfile2</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE2</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Failiupload 2</caption>
-      </property>
-      <property>
-            <name>userfile3</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE3</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Failiupload 3</caption>
-      </property>
-      <property>
             <name>send_bill</name>
             <table>planner</table>
             <group>general</group>
@@ -467,6 +410,18 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Tunni hind</caption>
+      </property>
+      <property>
+            <name>summary</name>
+            <table>planner</table>
+            <group>other_settings</group>
+            <field>description</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>80</cols>
+            <rows>30</rows>
+            <no_caption>1</no_caption>
+            <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
             <name>controller_disp</name>
@@ -636,6 +591,53 @@
             <store>no</store>
       </property>
       <property>
+            <name>udeflb1</name>
+            <table>objects</table>
+            <group>other_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_UDEFLB1</reltype>
+            <store>connect</store>
+            <caption>Kasutajdefineeritud muutuja 1</caption>
+      </property>
+      <property>
+            <name>userfile1</name>
+            <table>objects</table>
+            <group>other_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE1</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Failiupload 1</caption>
+      </property>
+      <property>
+            <name>userfile2</name>
+            <table>objects</table>
+            <group>other_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE2</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Failiupload 2</caption>
+      </property>
+      <property>
+            <name>userfile3</name>
+            <table>objects</table>
+            <group>other_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE3</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Failiupload 3</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -685,6 +687,9 @@
             <resources>
                   <caption>Ressursid</caption>
             </resources>
+            <other_settings>
+                  <caption>Muud seaded</caption>
+            </other_settings>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -733,6 +738,16 @@
                   <clid>CL_MRP_RESOURCE</clid>
                   <caption>ressurss</caption>
             </RESOURCE>
+            <BILL>
+                  <value>6</value>
+                  <clid>CL_CRM_BILL</clid>
+                  <caption>Arve</caption>
+            </BILL>
+            <ROW>
+                  <value>7</value>
+                  <clid>CL_TASK_ROW</clid>
+                  <caption>Rida</caption>
+            </ROW>
             <UDEFLB1>
                   <value>65</value>
                   <clid>CL_META</clid>
@@ -836,7 +851,7 @@
             <center_bit_bottom>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kokkuv&amp;amp;otilde;te</area_caption>
+                  <area_caption>Osapooled</area_caption>
                   <group>general</group>
             </center_bit_bottom>
       </layout>

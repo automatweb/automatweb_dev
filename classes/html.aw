@@ -392,7 +392,8 @@ class html extends aw_template
 		if true, textarea is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
-
+	@param style optional type=string
+		textarea style
 	@param onFocus optional type=string
 		if set, onFocus=$onFocus.
 	@param onBlur optional type=string
@@ -453,7 +454,7 @@ class html extends aw_template
 		else
 		{
 			$disabled = ($disabled ? ' disabled="disabled"' : "");
-			$retval = "<textarea id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$disabled}{$textsize}{$onkeyup}{$onFocus}{$onBlur}{$onchange}>{$value}</textarea>\n";
+			$retval = "<textarea ".($style ? "style=\"".$style."\"" :"")." id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$disabled}{$textsize}{$onkeyup}{$onFocus}{$onBlur}{$onchange}>{$value}</textarea>\n";
 		}
 
 		return $retval;

@@ -246,5 +246,47 @@ class task_object extends _int_object
 			return true;
 		}
 	}
+
+	/** returns task primary row for person
+		@attrib api=1 params=pos
+		@param person required type=oid
+			person object id
+		@returns object
+			row object
+	**/
+	public function get_primary_row_for_person($person)
+	{
+		if(!is_oid($person)) return null;
+		$ol = new object_list(array(
+			"class_id" =>  CL_TASK_ROW,
+			"lang_id" => array(),
+			"CL_TASK_ROW.RELTYPE_IMPL" => $person,
+			"site_id" => array(),
+			"primary" => 1,
+			"task" => $this->id(),
+		));
+		return reset($ol->arr());
+	}
+
+	public function set_primary_row($data)
+	{
+		$row = $this->get_primary_row_for_person($data["person"]);
+		if(!$row)
+		{
+			$person = obj($data["person"]);
+			$row = $this->add_row();
+			$row->set_name($this->name()." ".($person->name() ? $person->name() : "")." ".t("tegevus"));
+			$row->set_prop("impl" , $data["person"]);
+			$row->set_prop("primary" , 1);
+		}
+		foreach($data as $prop => $value)
+		{
+			if($row->is_property($prop))
+			{
+				$row->set_prop($prop , $value);
+			}
+		}
+		$row->save();
+	}
 }
 ?>
