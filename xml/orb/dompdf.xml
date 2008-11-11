@@ -3,4 +3,3 @@
 	<class name="dompdf" folder="protocols/data" extends="class_base">
 	</class>
 </orb>
-		

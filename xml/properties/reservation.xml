@@ -330,13 +330,13 @@
             <caption>Org. esindajad</caption>
       </property>
       <property>
-	      <name>type</name>
-	      <table>aw_room_reservations</table>
-	      <group>general</group>
-	      <type>select</type>
-	      <field>aw_type</field>
-	      <parent>general_down</parent>
-	      <caption>Broneeringu tyyp</caption>
+            <name>type</name>
+            <table>aw_room_reservations</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_type</field>
+            <parent>general_down</parent>
+            <caption>Broneeringu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>products_text</name>

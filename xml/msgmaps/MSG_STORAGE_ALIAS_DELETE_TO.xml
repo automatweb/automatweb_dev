@@ -16,8 +16,13 @@
       <param>CL_DOCUMENT</param>
 </num_2>
 <num_3>
+      <class>core/users/group_membership</class>
+      <func>on_disconnect_to_group_membership</func>
+      <param>CL_GROUP_MEMBERSHIP</param>
+</num_3>
+<num_4>
       <class>core/users/group</class>
       <func>on_remove_alias_for_group</func>
       <param>CL_GROUP</param>
-</num_3>
+</num_4>
 </xml>

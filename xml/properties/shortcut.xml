@@ -35,6 +35,15 @@
             <method>serialize</method>
             <caption>URL</caption>
       </property>
+      <property>
+            <name>custom</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Skript</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHORTCUT</syslog_type>
             <relationmgr>yes</relationmgr>

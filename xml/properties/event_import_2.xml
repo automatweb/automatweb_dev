@@ -33,6 +33,17 @@
             <comment>Objektide keel</comment>
       </property>
       <property>
+            <name>translations</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>T&amp;amp;otilde;lked</caption>
+            <comment>Andmed salvestatakse objekti t&amp;amp;otilde;lgetena, mitte omaduste v&amp;amp;auml;&amp;amp;auml;rtustena</comment>
+      </property>
+      <property>
             <name>last_import</name>
             <table>objects</table>
             <group>general2</group>
@@ -61,7 +72,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Impordi k&amp;amp;otilde;ik</caption>
-            <comment>Kui see chekkimata j&amp;amp;auml;tta, siis imporditakse objektid, mida on allikas muudetud p&amp;Atilde;&amp;curren;rast viimast importi</comment>
+            <comment>Kui see chekkimata j&amp;amp;auml;tta, siis imporditakse objektid, mida on allikas muudetud p&amp;amp;auml;rast viimast importi</comment>
       </property>
       <property>
             <name>invoke</name>

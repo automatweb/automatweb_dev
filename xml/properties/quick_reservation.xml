@@ -60,8 +60,8 @@
             <group>general</group>
             <type>textarea</type>
             <store>no</store>
+            <rows>20</rows>
             <field>comment</field>
-	    <rows>20</rows>
             <caption>M&amp;amp;auml;rkused</caption>
       </property>
       <property>
@@ -74,14 +74,14 @@
             <caption>Meie esindaja</caption>
       </property>
       <property>
-	      <name>other_rooms</name>
-	      <table>objects</table>
-	      <group>general</group>
-	      <type>select</type>
-	      <store>no</store>
-	      <field>other_rooms</field>
-	      <multiple>1</multiple>
-	      <caption>Broneeri lisaks ruumid</caption>
+            <name>other_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <field>other_rooms</field>
+            <caption>Broneeri lisaks ruumid</caption>
       </property>
       <property>
             <name>id</name>

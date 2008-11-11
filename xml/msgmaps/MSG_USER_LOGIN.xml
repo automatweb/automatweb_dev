@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
 <xml>
-<num_0>
+<num_1>
       <class>applications/messenger/messenger_v2</class>
       <func>on_user_login</func>
-</num_0>
-<num_1>
+</num_1>
+<num_2>
       <class>install/site_list_updater</class>
       <func>on_login</func>
-</num_1>
+</num_2>
 </xml>

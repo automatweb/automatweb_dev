@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="cfgform" folder="cfg" extends="class_base">
+		<action name="remove_tbl_field">
+			<function name="remove_tbl_field">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_grp">
 			<function name="delete_grp">
 				<arguments>

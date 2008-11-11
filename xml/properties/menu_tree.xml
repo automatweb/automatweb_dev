@@ -86,11 +86,26 @@
             <store>no</store>
             <caption>Men&amp;amp;uuml;&amp;amp;uuml; seoste tabel</caption>
       </property>
+      <property>
+            <name>default_table</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>activity</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <trans>1</trans>
             <syslog_type>ST_MENU_TREE</syslog_type>
             <maintainer>kristo</maintainer>
       </classinfo>
+      <groupinfo>
+            <activity>
+                  <caption>Aktiivsus</caption>
+            </activity>
+      </groupinfo>
       <reltypes>
             <ROOT_MENU>
                   <value>1</value>

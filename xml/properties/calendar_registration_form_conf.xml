@@ -180,7 +180,7 @@
             <WEBFORM>
                   <value>5</value>
                   <clid>CL_WEBFORM</clid>
-                  <caption>S&amp;uuml;ndmuse vorm</caption>
+                  <caption>S&amp;amp;uuml;ndmuse vorm</caption>
             </WEBFORM>
       </reltypes>
 </properties>

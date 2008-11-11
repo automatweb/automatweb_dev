@@ -68,7 +68,7 @@
             <table>mrp_case</table>
             <type>datetime_select</type>
             <field>due_date</field>
-            <caption>Valmimist&amp;auml;htaeg</caption>
+            <caption>Valmimist&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>project_priority</name>
@@ -96,7 +96,7 @@
             <name>customer</name>
             <group>grp_general</group>
             <table>mrp_case</table>
-            <type>popup_search</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_MRP_CUSTOMER</reltype>
             <clid>CL_CRM_COMPANY</clid>
             <field>customer</field>
@@ -132,7 +132,7 @@
             <type>text</type>
             <editonly>1</editonly>
             <field>finished</field>
-            <caption>L&amp;otilde;petatud</caption>
+            <caption>L&amp;amp;otilde;petatud</caption>
       </property>
       <property>
             <name>archived</name>
@@ -151,7 +151,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Prioriteedihinnang m&amp;uuml;&amp;uuml;gimehelt</caption>
+            <caption>Prioriteedihinnang m&amp;amp;uuml;&amp;amp;uuml;gimehelt</caption>
       </property>
       <property>
             <name>format</name>
@@ -187,7 +187,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sisu v&amp;auml;rvid</caption>
+            <caption>Sisu v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>sisu_varvid_notes</name>
@@ -196,7 +196,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sisu v&amp;auml;rvid Notes</caption>
+            <caption>Sisu v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>sisu_lakk_muu</name>
@@ -214,7 +214,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kaane v&amp;auml;rvid</caption>
+            <caption>Kaane v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>kaane_varvid_notes</name>
@@ -223,7 +223,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kaane v&amp;auml;rvid Notes</caption>
+            <caption>Kaane v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>kaane_lakk_muu</name>
@@ -259,7 +259,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Tr&amp;uuml;kiarv</caption>
+            <caption>Tr&amp;amp;uuml;kiarv</caption>
       </property>
       <property>
             <name>trykise_ehitus</name>
@@ -268,7 +268,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Tr&amp;uuml;kise ehitus</caption>
+            <caption>Tr&amp;amp;uuml;kise ehitus</caption>
       </property>
       <property>
             <name>kromaliin</name>
@@ -295,7 +295,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>N&amp;auml;idis</caption>
+            <caption>N&amp;amp;auml;idis</caption>
       </property>
       <property>
             <name>plaate</name>
@@ -331,7 +331,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>M&amp;auml;rkused</caption>
+            <caption>M&amp;amp;auml;rkused</caption>
       </property>
       <property>
             <name>allahindlus</name>
@@ -358,7 +358,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
-            <caption>M&amp;uuml;&amp;uuml;gi hind</caption>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi hind</caption>
       </property>
       <property>
             <name>user_comments</name>
@@ -367,7 +367,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>comments</type>
-            <caption>Kommentaarid juhtumi ja t&amp;ouml;&amp;ouml;de kohta</caption>
+            <caption>Kommentaarid juhtumi ja t&amp;amp;ouml;&amp;amp;ouml;de kohta</caption>
       </property>
       <property>
             <name>resource_tree</name>
@@ -450,7 +450,7 @@
       </classinfo>
       <groupinfo>
             <grp_general>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </grp_general>
             <grp_case_data>
@@ -458,10 +458,10 @@
                   <parent>general</parent>
             </grp_case_data>
             <grp_case_workflow>
-                  <caption>Ressursid ja t&amp;ouml;&amp;ouml;voog</caption>
+                  <caption>Ressursid ja t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
             </grp_case_workflow>
             <grp_case_view>
-                  <caption>Vaatleja t&amp;ouml;&amp;ouml;laud</caption>
+                  <caption>Vaatleja t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
                   <submit>no</submit>
             </grp_case_view>
             <grp_case_schedule>
@@ -492,7 +492,7 @@
             <MRP_MANAGER>
                   <value>1</value>
                   <clid>CL_USER</clid>
-                  <caption>M&amp;uuml;&amp;uuml;gimees/Projektijuht</caption>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gimees/Projektijuht</caption>
             </MRP_MANAGER>
             <MRP_CUSTOMER>
                   <value>2</value>
@@ -502,7 +502,7 @@
             <MRP_PROJECT_JOB>
                   <value>3</value>
                   <clid>CL_MRP_JOB</clid>
-                  <caption>T&amp;ouml;&amp;ouml;</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;</caption>
             </MRP_PROJECT_JOB>
             <MRP_USED_RESOURCE>
                   <value>4</value>

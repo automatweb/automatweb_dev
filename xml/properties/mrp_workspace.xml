@@ -52,7 +52,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>vspltbox</parent>
       </property>
       <property>
             <name>customers_list</name>
@@ -95,7 +95,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>projtree_box</parent>
       </property>
       <property>
             <name>projects_list</name>
@@ -1529,11 +1529,6 @@
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </MRP_FOLDER>
-            <MRP_CONFIGURATION>
-                  <clid>CL_MRP_CONFIGURATION</clid>
-                  <value>3</value>
-                  <caption>Ressursihalduse seaded</caption>
-            </MRP_CONFIGURATION>
             <MRP_WORKSPACE_CFGMGR>
                   <clid>CL_CFGMANAGER</clid>
                   <value>2</value>
@@ -1562,6 +1557,13 @@
                   </group>
                   <area_caption></area_caption>
             </vsplitbox>
+            <projtree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kliendid</area_caption>
+                  <parent>vsplitbox</parent>
+                  <group>grp_projects</group>
+            </projtree_box>
             <box1>
                   <type>vbox</type>
                   <group>grp_settings_def</group>

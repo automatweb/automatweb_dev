@@ -81,13 +81,23 @@
       <param>CL_DOCUMENT</param>
 </num_15>
 <num_16>
+      <class>contentmgmt/content_package/content_item</class>
+      <func>on_object_disconnect</func>
+      <param>CL_CONTENT_ITEM</param>
+</num_16>
+<num_17>
       <class>core/users/user</class>
       <func>on_delete_alias</func>
       <param>CL_USER</param>
-</num_16>
-<num_17>
+</num_17>
+<num_18>
+      <class>core/users/group_membership</class>
+      <func>on_disconnect_from_group_membership</func>
+      <param>CL_GROUP_MEMBERSHIP</param>
+</num_18>
+<num_19>
       <class>core/users/group</class>
       <func>on_remove_alias_from_group</func>
       <param>CL_GROUP</param>
-</num_17>
+</num_19>
 </xml>

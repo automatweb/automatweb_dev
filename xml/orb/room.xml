@@ -26,6 +26,7 @@
 					<required name="resource" type="int" />
 					<optional name="product" />
 					<optional name="return_url" type="string" />
+					<optional name="bron_data" type="array" />
 				</arguments>
 			</function>
 		</action>

@@ -102,5 +102,13 @@
 			</function>
 		</action>
 
+		<action name="get_comment_stats" nologin="1">
+			<function name="get_comment_stats">
+				<arguments>
+					<required name="start" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

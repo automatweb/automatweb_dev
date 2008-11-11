@@ -53,7 +53,7 @@
             <type>text</type>
             <store>no</store>
             <field>uploader</field>
-            <caption>Lae faile	</caption>
+            <caption>Lae faile</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ADMIN_IF</syslog_type>
