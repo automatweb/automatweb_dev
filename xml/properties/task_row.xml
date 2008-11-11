@@ -28,6 +28,15 @@
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>orderer</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERER</reltype>
+            <field>aw_orderer</field>
+            <caption>Tellija</caption>
+      </property>
+      <property>
             <name>impl</name>
             <table>aw_task_rows</table>
             <group>general</group>
@@ -83,6 +92,15 @@
             <ch_value>1</ch_value>
             <field>aw_done</field>
             <caption>Tehtud</caption>
+      </property>
+      <property>
+            <name>primary</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_primary</field>
+            <caption>Esmane rida (isikule aegade jagamiseks)</caption>
       </property>
       <property>
             <name>on_bill</name>
@@ -167,6 +185,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Teostaja</caption>
             </IMPL>
+            <ORDERER>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Tellija</caption>
+            </ORDERER>
       </reltypes>
 </properties>
 
