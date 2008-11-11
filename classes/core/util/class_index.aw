@@ -6,9 +6,9 @@
 
 class class_index
 {
-	const INDEX_DIR = "files/class_index/";
-	const CLASS_DIR = "classes/";
-	const LOCAL_CLASS_DIR = "files/classes/";
+	const INDEX_DIR = "/files/class_index/";
+	const CLASS_DIR = "/classes/";
+	const LOCAL_CLASS_DIR = "/files/classes/";
 	const LOCAL_CLASS_PREFIX = "_aw_local_class__"; // local class names in form OBJ_LOCAL_CLASS_PREFIX . $class_obj_id
 	const UPDATE_EXEC_TIMELIMIT = 300;
 	const CL_NAME_MAXLEN = 1024;
@@ -61,7 +61,7 @@ class class_index
 			$class_dir = aw_ini_get("basedir") . self::CLASS_DIR;
 		}
 
-		$index_dir = aw_ini_get("basedir") . self::INDEX_DIR;
+		$index_dir = aw_ini_get("basedir"). self::INDEX_DIR;
 
 		// make index directory if not found
 		if (!is_dir($index_dir))
@@ -70,7 +70,7 @@ class class_index
 
 			if (!$ret)
 			{
-				$e = new awex_clidx_filesys("Failed to create index directory.");
+				$e = new awex_clidx_filesys(sprintf("Failed to create index directory %s.", $index_dir));
 				$e->clidx_file = $index_dir;
 				$e->clidx_op = "mkdir";
 				throw $e;
@@ -90,7 +90,7 @@ class class_index
 
 		if (!is_dir($class_dir))
 		{
-			throw new awex_clidx("Class directory doesn't exist.");
+			throw new awex_clidx(sprintf("Class directory doesn't exist %s.", $class_dir));
 		}
 
 		// scan all files in given class directory for php class definitions
