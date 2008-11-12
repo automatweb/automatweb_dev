@@ -1808,8 +1808,7 @@ class bank_payment extends class_base
 		$SOLOPMT_MAC      = strtoupper(md5( $VK_message ));
 		
 		$http = get_instance("protocols/file/http");
- 		$link = "https://solo3.merita.fi/cgi-bin/SOLOPM01";
- 		$handler = "https://solo3.merita.fi/cgi-bin/SOLOPM01";
+		$link = $this->bank_link["nordeapank"];
 		$params = array(
 			"SOLOPMT_VERSION"     => $service,// 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
 			"SOLOPMT_STAMP"       => $stamp,// 2.    Payment Specifier    SOLOPMT_STAMP  Code specifying the payment   N 20  M 
@@ -2202,6 +2201,10 @@ class bank_payment extends class_base
 			$i = get_instance(CL_CFGCONTROLLER);
 			$desc = $i->check_property($o->prop("alias_desc_ctr"), $o->id(), $arr);
 		}
+
+		//kui peaks tekkima juhuseid, et seda funktsiooni kasutades peaks miskile id'le suunama, siis tuleb j2rgnev rida 2ra muuta
+		$_SESSION["bank_payment"]["url"] = $o->prop("bank_return_url");
+
 		return $this->bank_forms(array(
 			"id" => $o->id(),
 			"reference_nr" => "",
