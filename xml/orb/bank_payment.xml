@@ -48,6 +48,12 @@
 				</arguments>
 			</function>
 		</action>
-
+		
+		<action name="get_nordea_stats" nologin="1" is_public="1" all_args="1">
+			<function name="get_nordea_stats">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

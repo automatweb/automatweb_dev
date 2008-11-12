@@ -634,49 +634,6 @@ class bank_payment extends class_base
 				else
 				{
 					$bank_id = $this->merchant_id[$val["SOLOPMT_RETURN_VERSION"]];
-/*					$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");
-					$priv_key = fread($fp, 8192);
-					fclose($fp);
-				
-					$service = $version = "0001";
-					$stamp = date("YmdHis" , time())."0001";
-					$bank_data = $o->meta("bank");
-					$sender_id = $bank_data["nordeapank"]["sender_id"];
-					$det = "Y";
-					$type = "XML";
-					$alg = "01";
-
-					$SOLOPMT_MAC = '';
-					$VK_message  = $service.'&';
-					$VK_message .= $stamp.'&';
-					$VK_message .= $sender_id.'&';
-					$VK_message .= '3&';
-					$VK_message .= $type.'&';
-					$VK_message .= $val["SOLOPMT_RETURN_STAMP"].'&';
-					$VK_message .= $val["SOLOPMT_RETURN_REF"].'&';
-					$VK_message .= $version.'&';
-					$VK_message .= $alg.'&';
-					$VK_message .= $priv_key.'&';
-					$SOLOPMT_MAC = strtoupper(md5( $VK_message ));
-					//arr($VK_message);
-					$params = array(
-						"SOLOPMT_VERSION"     => $service,
-						"SOLOPMT_TIMESTMP"    => $stamp,
-						"SOLOPMT_RCV_ID"      => $sender_id, 
-						"SOLOPMT_LANGUAGE"    => 3,//$SOLOPMT_MAC,
-						"SOLOPMT_RESPTYPE"    => $type,
-						"SOLOPMT_STAMP"       => $val["SOLOPMT_RETURN_STAMP"],
-						"SOLOPMT_REF"         => $val["SOLOPMT_RETURN_REF"],//$SOLOPMT_MAC,
-						"SOLOPMT_KEYVERS"     => $version,// 17.   Key Version    
-						"SOLOPMT_ALG"         => $alg,
-						"SOLOPMT_MAC"         => $SOLOPMT_MAC,
-					);//arr($params);//die();
-
-					$this->submit_bank_info(array(
-						"params" => $params,
-						"link" => "https://solo3.nordea.fi/cgi-bin/SOLOPM10",
-						//"form" => $form
-					));*/
 				}
 				if($from > 1 && !($from == $to) && $from > $val["timestamp"])
 				{
@@ -733,6 +690,17 @@ class bank_payment extends class_base
 					{
 						$log_data[$val["timestamp"]]["ok"] = 0;
 					}
+
+				//ajutiselt et saaks makse info kohta p2rimise lingi
+					if($bank_id == "nordeapank" && $val["good"])
+					{
+						$pc_url = $this->mk_my_orb("get_nordea_stats", $val + array("id" => $o->id()));
+						$log_data[$val["timestamp"]]["payer"] = html::href(array(
+							"url" => $pc_url,
+							"caption" => t("(Makse info)"),
+						));
+					}	
+
 					$log_data[$val["timestamp"]]["good"] = $val["good"];
 					if($val["actiontext"])
 					{
@@ -1800,6 +1768,81 @@ class bank_payment extends class_base
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	}
 
+	/**
+		@attrib name=get_nordea_stats params=name all_args=1
+	**/
+	public function get_nordea_stats($val)
+	{
+		extract($val);
+		$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");
+		$priv_key = fread($fp, 8192);
+		fclose($fp);
+		 
+		$service = $version = "0001";
+		$stamp = date("YmdHis" , time())."0001";
+		$o = obj($id);
+		$bank_data = $o->meta("bank");
+		$sender_id = $bank_data["nordeapank"]["sender_id"];
+		$det = "Y";
+		$type = "html";
+		$alg = "01";
+		$SOLOPMT_MAC = '';
+		$VK_message  = $service.'&';
+		$VK_message .= $stamp.'&';
+		$VK_message .= $sender_id.'&';
+		$VK_message .= '3&';
+		$VK_message .= $type.'&';
+		$VK_message .= $val["SOLOPMT_RETURN_STAMP"].'&';
+		$VK_message .= $val["SOLOPMT_RETURN_REF"].'&';
+		$VK_message .= $version.'&';
+		$VK_message .= $alg.'&';
+		$VK_message .= $priv_key.'&';
+		$SOLOPMT_MAC = strtoupper(md5( $VK_message ));
+		//arr($VK_message);
+		$params = array(
+			"SOLOPMT_VERSION"     => $service,
+			"SOLOPMT_TIMESTMP"    => $stamp,
+			"SOLOPMT_RCV_ID"      => $sender_id, 
+			"SOLOPMT_LANGUAGE"    => 3,//$SOLOPMT_MAC,
+			"SOLOPMT_RESPTYPE"    => $type,
+			"SOLOPMT_STAMP"       => $val["SOLOPMT_RETURN_STAMP"],
+			"SOLOPMT_REF"         => $val["SOLOPMT_RETURN_REF"],//$SOLOPMT_MAC,
+			"SOLOPMT_KEYVERS"     => $version,// 17.   Key Version    
+			"SOLOPMT_ALG"         => $alg,
+			"SOLOPMT_MAC"         => $SOLOPMT_MAC,
+		);//arr($params);arr($val);die();
+			$link = "https://netbank.nordea.com/pnbepay/query.jsp";
+					$this->submit_bank_info(array(
+						"params" => $params,
+						"link" => "https://netbank.nordea.com/pnbepay/query.jsp",
+						//"form" => $form
+					));
+// 					 $args = array(
+// 					       "http" => array(
+// 					         "method" => "POST",
+//            					 "header"=> "Content-type: application/x-www-form-urlencoded\r\n",
+// 					         "content" => http_build_query($params),
+// 					       )
+// 					     );
+// 					     $context = stream_context_create($args);
+// 					     // I know, it works. No need to send 'em anymore for testing purposes.
+//  		$mobi_answer = file_get_contents($link, false, $context);
+// 		//arr($link);
+// 
+// $headers=array("Content-Type: application/xml");
+// 
+// $curl = curl_init();
+// curl_setopt($curl, CURLOPT_URL, $link);
+// curl_setopt($curl, CURLOPT_HEADER, $headers);
+// curl_setopt($curl, CURLOPT_POST, 1);
+// curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+// $myResponse = curl_exec ($curl);
+// curl_close ($curl);die(); 
+// //die($myResponse);
+// $result = curl_exec ($curl);
+//		die($mobi_answer);
+
+	}
 
 	private function nordea($args)
 	{//arr($args); die();
