@@ -296,6 +296,7 @@ class questionnaire extends class_base
 
 		// KYIMUSED
 		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_QUESTION")));
+		$cnt_qs = $ol->count();
 		$ids = $ol->ids();
 		$ol = new object_list(array(
 			"class_id" => CL_QUESTIONNAIRE_QUESTION,
@@ -359,7 +360,7 @@ class questionnaire extends class_base
 					{
 						case "email":
 						case "fake_email":
-							$v = $p_obj->prop("email.name");
+							$v = $p_obj->prop("email.mail");
 							break;
 
 						case "phone":
@@ -378,22 +379,24 @@ class questionnaire extends class_base
 					$row[$prop] = $v;
 				}
 			}
-			$row = array_merge($row, array(
-				"oid" => $a["oid"],
-				"time" => date("d.m.Y H:i:s", $a["created"]),
-				"tm" => $a["created"],
-				"result" => count((array)$a["correct_ans"]).t("/").(count((array)$a["correct_ans"]) + count((array)$a["wrong_ans"])),
-			));
+			$cnt_correct = 0;
 			foreach((array)$a["correct_ans"] as $c_ans)
 			{
 				$row["q_".$c_ans] = t("+");
 				$row["bgcolor_".$c_ans] = t("#0000CC");
+				$cnt_correct++;
 			}
 			foreach((array)$a["wrong_ans"] as $w_ans)
 			{
 				$row["q_".$w_ans] = t("-");
 				$row["bgcolor_".$w_ans] = t("#FF0000");
 			}
+			$row = array_merge($row, array(
+				"oid" => $a["oid"],
+				"time" => date("d.m.Y H:i:s", $a["created"]),
+				"tm" => $a["created"],
+				"result" => $cnt_correct."/".$cnt_qs,
+			));
 			$t->define_data($row);
 		}
 
