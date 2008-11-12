@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.64 2008/10/14 16:08:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.65 2008/11/12 13:17:05 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -1474,7 +1474,7 @@ class crm_offer extends class_base
 					if ($entry["type"] != CL_FILE)
 					{
 						$o->set_prop("project", $t->id());
-						$o->set_prop("customer", reset($t->prop("orderer")));
+						$o->set_prop("orderer", reset($t->prop("orderer")));
 					}
 					$o->save();
 
