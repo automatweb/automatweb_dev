@@ -763,16 +763,20 @@ class questionnaire extends class_base
 					}
 				}
 			}
+			$this->vars(array(
+				"results_fraction" => $this->correct_fraction($this->_qs),
+				"results_percent" => $this->correct_percent($this->_qs),
+			));
 			if($o->prop("rd_percent"))
 			{
 				$this->vars(array(
-					"results_percent" => $this->correct_percent($this->_qs),
+					"RESULTS_PERCENT" => $this->parse("RESULTS_PERCENT"),
 				));
 			}
 			if($o->prop("rd_fraction"))
 			{
 				$this->vars(array(
-					"results_fraction" => $this->correct_fraction($this->_qs),
+					"RESULTS_FRACTION" => $this->parse("RESULTS_FRACTION"),
 				));
 			}
 			if($o->prop("rd_results"))
