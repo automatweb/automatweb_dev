@@ -332,6 +332,7 @@ class questionnaire extends class_base
 			"caption" => t("Vastamise aeg"),
 			"align" => "center",
 			"sortable" => 1,
+			"sorting_field" => "tm",
 		));
 		$as = new object_data_list(
 			array(
@@ -370,6 +371,7 @@ class questionnaire extends class_base
 			$row = array_merge($row, array(
 				"oid" => $a["oid"],
 				"time" => date("d.m.Y H:i:s", $a["created"]),
+				"tm" => $a["created"],
 				"result" => count((array)$a["correct_ans"]).t("/").(count((array)$a["correct_ans"]) + count((array)$a["wrong_ans"])),
 			));
 			foreach((array)$a["correct_ans"] as $c_ans)
