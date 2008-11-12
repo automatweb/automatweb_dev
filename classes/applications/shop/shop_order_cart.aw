@@ -418,7 +418,7 @@ class shop_order_cart extends class_base
 			"not_logged" => $lln,
 		));
 
-		$this->add_bank_vars($oc, $uta);
+		$this->add_bank_vars($oc, $cart["user_data"]);
 		$this->vars($data);
 		return $this->parse();
 	}
@@ -1812,7 +1812,6 @@ class shop_order_cart extends class_base
 		{
 			$delivery_vars = array();
 		}
-
 		$this->vars($delivery_vars + array(
 			"cart_total" => number_format($cart_total, 2),
 			"cart_discount" => number_format($cart_discount, 2),
