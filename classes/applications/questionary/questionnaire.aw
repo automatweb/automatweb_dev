@@ -357,6 +357,16 @@ class questionnaire extends class_base
 				{
 					switch($prop)
 					{
+						case "email":
+						case "fake_email":
+							$v = $p_obj->prop("email.name");
+							break;
+
+						case "phone":
+						case "fake_phone":
+							$v = $p_obj->prop("phone.name");
+							break;
+
 						case "name":
 							$v = is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "";
 							break;
