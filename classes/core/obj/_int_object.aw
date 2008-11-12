@@ -1299,6 +1299,10 @@ class _int_object
 					$val = join(", ", $vals);
 				}
 				break;
+
+			case "checkbox":
+				$val = $val == $pd["ch_value"] ? t("Jah") : t("Ei");
+				break;
 		}
 		if ($val === "0" || $val === 0)
 		{
