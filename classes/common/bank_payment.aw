@@ -1097,14 +1097,24 @@ class bank_payment extends class_base
 	**/	
 	function do_payment($arr)
 	{
-		if(!$arr["reference_nr"])
-		{
-			$arr["reference_nr"] = time();
-		}
-		//selle nomeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi poorama
 		if(is_oid($arr["payment_id"]))
 		{
 			$payment = obj($arr["payment_id"]);
+		}
+
+		if(!$arr["reference_nr"])
+		{
+			$arr["reference_nr"] = time();
+			if($payment && !$_SESSION["bank_payment"]["url"])
+			{
+				//kui pole viitenumber miski id , ega tagasip88rdumise urli m22ratud, siis v6tab selle ise objekti juurest
+				$_SESSION["bank_payment"]["url"] = $payment->prop("bank_return_url");
+			}
+		}
+
+		//selle nomeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi poorama
+		if(is_oid($arr["payment_id"]))
+		{
 			$bank_data = $payment->meta("bank");
 
 			if($arr["cntr"])
