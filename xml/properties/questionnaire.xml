@@ -231,6 +231,15 @@
             <caption>Tekst &amp;amp;otilde;igete vastuste protsendi j&amp;amp;auml;rgi</caption>
       </property>
       <property>
+            <name>table_cols_conf</name>
+            <table>objects</table>
+            <group>answerers_tab</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>table_cols_conf</field>
+      </property>
+      <property>
             <name>qtlbr</name>
             <table>objects</table>
             <group>questions</group>
@@ -296,6 +305,10 @@
                   <parent>general</parent>
                   <caption>Tulemuste&amp;amp;nbsp;kuvamine</caption>
             </dsply_rslts>
+            <answerers_tab>
+                  <parent>general</parent>
+                  <caption>Vastajate&amp;amp;nbsp;vaade</caption>
+            </answerers_tab>
             <questions>
                   <caption>K&amp;amp;uuml;simused</caption>
                   <submit>no</submit>

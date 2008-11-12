@@ -100,6 +100,11 @@
 		@property rd_percent_text type=table store=no
 		@caption Tekst &otilde;igete vastuste protsendi j&auml;rgi
 
+	@groupinfo answerers_tab parent=general caption=Vastajate&nbsp;vaade
+	@default group=answerers_tab
+
+		@property table_cols_conf type=table store=no no_caption=1
+
 @groupinfo questions caption=K&uuml;simused submit=no
 @default group=questions
 
@@ -206,6 +211,55 @@ class questionnaire extends class_base
 		return $retval;
 	}
 
+	function _get_table_cols_conf($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => t("Omadus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "use_in_tbl",
+			"caption" => t("Kuva tabelis"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Pealkiri"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+		$table_cols_conf = safe_array($arr["obj_inst"]->meta("table_cols_conf"));
+		$props = is_oid($arr["obj_inst"]->str_answerer_cfgform) ? get_instance(CL_CFGFORM)->get_props_from_cfgform(array("id" => $arr["obj_inst"]->str_answerer_cfgform)) : get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => CL_CRM_PERSON));
+		foreach($props as $prop)
+		{
+			$t->define_data(array(
+				"prop" => $prop["name"],
+				"use_in_tbl" => html::checkbox(array(
+					"name" => "table_cols_conf[".$prop["name"]."][use]",
+					"value" => 1,
+					"checked" => $table_cols_conf[$prop["name"]]["use"] == 1,
+				)),
+				"caption" => html::textbox(array(
+					"name" => "table_cols_conf[".$prop["name"]."][caption]",
+					"value" => isset($table_cols_conf[$prop["name"]]["caption"]) ? $table_cols_conf[$prop["name"]]["caption"] : $prop["caption"],
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "table_cols_conf[".$prop["name"]."][jrk]",
+					"value" => (int) $table_cols_conf[$prop["name"]]["jrk"],
+				)),
+				"jrk_" => (int) $table_cols_conf[$prop["name"]]["jrk"],
+			));
+		}
+		$t->set_default_sortby("jrk_");
+	}
+
 	function _get_atlb($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -221,16 +275,26 @@ class questionnaire extends class_base
 	function _get_atbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid",
-		));
-		$t->define_field(array(
-			"name" => "person",
-			"caption" => t("Nimi"),
-			"align" => "center",
-			"sortable" => 1,
-		));
+
+		// VASTAJA ANDMED
+		$props = is_oid($arr["obj_inst"]->str_answerer_cfgform) ? get_instance(CL_CFGFORM)->get_props_from_cfgform(array("id" => $arr["obj_inst"]->str_answerer_cfgform)) : get_instance(CL_CFGFORM)->get_default_proplist(array("clid" => CL_CRM_PERSON));
+		$conf = $arr["obj_inst"]->meta("table_cols_conf");
+		uasort($conf, array($this, "conf_cmp_function"));
+		foreach($conf as $prop => $prop_data)
+		{
+			if($prop_data["use"] != 1)
+			{
+				continue;
+			}
+
+			$t->define_field(array(
+				"name" => $prop,
+				"caption" => strlen(trim($prop_data["caption"])) > 0 ? $prop_data["caption"] : $props[$prop]["caption"],
+				"align" => "center",
+			));
+		}
+
+		// KYIMUSED
 		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_QUESTION")));
 		$ids = $ol->ids();
 		$ol = new object_list(array(
@@ -251,6 +315,12 @@ class questionnaire extends class_base
 			));
 			$cnt++;
 		}
+
+		// DEFAULT V2LJAD
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
 		$t->define_field(array(
 			"name" => "result",
 			"caption" => t("Tulemus"),
@@ -277,12 +347,31 @@ class questionnaire extends class_base
 		foreach($as->arr() as $a)
 		{
 			$a["person"] = is_array($a["person"]) ? reset($a["person"]) : $a["person"];
-			$row = array(
+			$row = array();
+			// Configured properties
+			if(is_oid($a["person"]) && $this->can("view", $a["person"]))
+			{
+				$p_obj = obj($a["person"]);
+				foreach(array_keys($conf) as $prop)
+				{
+					switch($prop)
+					{
+						case "name":
+							$v = is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "";
+							break;
+
+						default:
+							$v = $p_obj->prop_str($prop);
+							break;
+					}
+					$row[$prop] = $v;
+				}
+			}
+			$row = array_merge($row, array(
 				"oid" => $a["oid"],
-				"person" => is_oid($a["person"]) ? html::obj_change_url($a["person"]) : "",
 				"time" => date("d.m.Y H:i:s", $a["created"]),
 				"result" => count((array)$a["correct_ans"]).t("/").(count((array)$a["correct_ans"]) + count((array)$a["wrong_ans"])),
-			);
+			));
 			foreach((array)$a["correct_ans"] as $c_ans)
 			{
 				$row["q_".$c_ans] = t("+");
@@ -415,6 +504,10 @@ class questionnaire extends class_base
 
 		switch($prop["name"])
 		{
+			case "table_cols_conf":
+				$arr["obj_inst"]->set_meta("table_cols_conf", $arr["request"]["table_cols_conf"]);
+				break;
+
 			case "qtbl":
 				foreach($arr["request"]["jrk"] as $i => $v)
 				{
@@ -1126,12 +1219,22 @@ class questionnaire extends class_base
 		$p = obj();
 		$p->set_class_id(CL_CRM_PERSON);
 		$p->set_parent($o->id());
+		aw_disable_acl();
+		$p->save();
+		aw_restore_acl();
 		foreach($_POST["person"] as $k => $v)
 		{
 			$p->set_prop($k, $v);
 		}
+		aw_disable_acl();
 		$p->save();
+		aw_restore_acl();
 		$this->Q_PID = $p->id();
+	}
+
+	private function conf_cmp_function($a, $b)
+	{
+		return $a["jrk"] > $b["jrk"];
 	}
 }
 
