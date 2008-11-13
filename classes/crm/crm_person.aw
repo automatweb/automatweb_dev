@@ -2664,7 +2664,7 @@ class crm_person extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_acct_tbl($t, $arr);
-				$t->table_caption = t("Pangaarved");
+				$t->set_caption(t("Pangaarved"));
 				break;
 			case "cedit_adr_tbl":
 				$i = get_instance("applications/crm/crm_company_cedit_impl");
@@ -2679,7 +2679,7 @@ class crm_person extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_adr_tbl($t, $arr);
-				$t->table_caption = t("Aadressid");
+				$t->set_caption(t("Aadressid"));
 				break;
 			//rel joga
 			case "referal_type":
