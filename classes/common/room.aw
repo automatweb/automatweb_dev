@@ -830,7 +830,7 @@ class room extends class_base
 			"name" => "image_name",
 			"caption" => t("Pilt"),
 		));
-		$t->table_caption = t("Pildid");
+		$t->set_caption(t("Pildid"));
 
 		$imgs = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_IMAGE",

@@ -1981,7 +1981,7 @@ enter_function("company::_finish_org_tbl_5");
 		{
 			$status = obj($arr["st"]);
 			$oname = $org->name();
-			$tf->table_caption = $oname.t(" kliendid: ").$status->name();
+			$tf->set_caption($oname.t(" kliendid: ").$status->name());
 		}
 		else
 		{
