@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.106 2008/11/13 17:52:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.107 2008/11/13 18:26:27 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -53,23 +53,45 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
 
+@layout content_bit type=vbox closeable=1 area_caption=Sisu
+	@property content type=textarea cols=180 rows=30 table=documents parent=content_bit no_caption=1
+	@caption Sisu
+
+
+@layout customer_bit type=vbox closeable=1 area_caption=Tellijad
+#	@property parts_tb type=toolbar no_caption=1 store=no parent=customer_bit
+
+	@property co_tb type=toolbar no_caption=1 store=no parent=customer_bit
+	@property co_table type=table no_caption=1 store=no parent=customer_bit
+
+@layout project_bit type=vbox closeable=1 area_caption=Projektid
+	@property project_tb type=toolbar no_caption=1 store=no parent=project_bit
+	@property proj_table type=table no_caption=1 store=no parent=project_bit
+
+@layout impl_bit type=vbox closeable=1 area_caption=Osalejad
+	@property impl_tb type=toolbar no_caption=1 store=no parent=impl_bit
+	@property parts_table type=table no_caption=1 store=no parent=impl_bit
+
+@layout files_bit type=vbox closeable=1 area_caption=Manused
+	@property files_tb type=toolbar no_caption=1 store=no parent=files_bit
+	@property files_table type=table no_caption=1 store=no parent=files_bit
+
+
+
+
+
 @layout center_bit_bottom type=vbox closeable=1 area_caption=Osapooled
 
-	@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
+#	@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
 
-	@property co_table type=table no_caption=1 store=no parent=center_bit_bottom
-	@property proj_table type=table no_caption=1 store=no parent=center_bit_bottom
-	@property parts_table type=table no_caption=1 store=no parent=center_bit_bottom
+#	@property proj_table type=table no_caption=1 store=no parent=center_bit_bottom
+#	@property parts_table type=table no_caption=1 store=no parent=center_bit_bottom
 
 	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_bottom
 	@caption Klient
 
 	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_bottom
 	@caption Projekt
-
-	@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
-	@property files_table type=table no_caption=1 store=no parent=center_bit_bottom
-
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
@@ -337,6 +359,17 @@ class crm_meeting extends task
 		$i = get_instance(CL_TASK);
 		switch($data['name'])
 		{
+			case "co_tb":
+				$this->_get_co_tb($arr);
+				break;
+	
+			case "project_tb":
+				$this->_get_project_tb($arr);
+				break;
+			case "impl_tb":
+				$this->_get_impl_tb($arr);
+				break;
+
 			case "parts_tb":
 				$i->_parts_tb($arr);
 				break;

@@ -1,27 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>predicates</name>
-            <table>objects</table>
-            <group>predicates</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_PREDICATE</reltype>
-            <store>connect</store>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Eeldustegevused</caption>
-      </property>
-      <property>
-            <name>is_goal</name>
-            <table>planner</table>
-            <group>predicates</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_is_goal</field>
-            <caption>Verstapost</caption>
-      </property>
-      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -40,33 +19,31 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
+            <name>add_clauses</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>top_2way_left</parent>
+            <multiple>1</multiple>
+            <field>add_clauses</field>
+            <caption>Lisatingimused</caption>
+      </property>
+      <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
             <field>start</field>
-	    <parent>top_2way_right</parent>
             <caption>Algab </caption>
       </property>
       <property>
             <name>end</name>
             <table>planner</table>
             <group>general</group>
-	    <type>datetime_select</type>
-	    <parent>top_2way_right</parent>
+            <type>datetime_select</type>
             <field>end</field>
             <caption>L&amp;amp;otilde;peb</caption>
-      </property>
-      <property>
-	      <name>add_clauses</name>
-	      <table>objects</table>
-	      <group>general</group>
-	      <type>chooser</type>
-	      <store>no</store>
-	      <parent>top_bit</parent>
-	      <multiple>1</multiple>
-	      <field>add_clauses</field>
-	      <caption>Lisatingimused</caption>
       </property>
       <property>
             <name>hrs_table</name>
@@ -95,20 +72,20 @@
             <type>textarea</type>
             <cols>180</cols>
             <rows>30</rows>
-            <parent>center_bit</parent>
+            <parent>content_bit</parent>
             <no_caption>1</no_caption>
             <field>content</field>
             <caption>Sisu</caption>
       </property>
       <property>
-            <name>parts_tb</name>
+            <name>co_tb</name>
             <table>objects</table>
             <group>general</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_bottom</parent>
-            <field>parts_tb</field>
+            <parent>customer_bit</parent>
+            <field>co_tb</field>
       </property>
       <property>
             <name>co_table</name>
@@ -117,8 +94,18 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_bottom</parent>
+            <parent>customer_bit</parent>
             <field>co_table</field>
+      </property>
+      <property>
+            <name>project_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>project_bit</parent>
+            <field>project_tb</field>
       </property>
       <property>
             <name>proj_table</name>
@@ -127,8 +114,18 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_bottom</parent>
+            <parent>project_bit</parent>
             <field>proj_table</field>
+      </property>
+      <property>
+            <name>impl_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>impl_bit</parent>
+            <field>impl_tb</field>
       </property>
       <property>
             <name>parts_table</name>
@@ -137,8 +134,28 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_bottom</parent>
+            <parent>impl_bit</parent>
             <field>parts_table</field>
+      </property>
+      <property>
+            <name>files_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>files_bit</parent>
+            <field>files_tb</field>
+      </property>
+      <property>
+            <name>files_table</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>files_bit</parent>
+            <field>files_table</field>
       </property>
       <property>
             <name>customer</name>
@@ -159,26 +176,6 @@
             <reltype>RELTYPE_PROJECT</reltype>
             <parent>center_bit_bottom</parent>
             <caption>Projekt</caption>
-      </property>
-      <property>
-            <name>files_tb</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <parent>center_bit_bottom</parent>
-            <field>files_tb</field>
-      </property>
-      <property>
-            <name>files_table</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <parent>center_bit_bottom</parent>
-            <field>files_table</field>
       </property>
       <property>
             <name>is_done</name>
@@ -640,6 +637,28 @@
             <caption>Failiupload 3</caption>
       </property>
       <property>
+            <name>predicates</name>
+            <table>objects</table>
+            <group>predicates</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_PREDICATE</reltype>
+            <store>connect</store>
+            <caption>Eeldustegevused</caption>
+      </property>
+      <property>
+            <name>is_goal</name>
+            <table>planner</table>
+            <group>predicates</group>
+            <field>aw_is_goal</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Verstapost</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -850,6 +869,36 @@
                   <no_padding>1</no_padding>
                   <group>general</group>
             </center_bit_right_bottom>
+            <content_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Sisu</area_caption>
+                  <group>general</group>
+            </content_bit>
+            <customer_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tellijad</area_caption>
+                  <group>general</group>
+            </customer_bit>
+            <project_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektid</area_caption>
+                  <group>general</group>
+            </project_bit>
+            <impl_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Osalejad</area_caption>
+                  <group>general</group>
+            </impl_bit>
+            <files_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Manused</area_caption>
+                  <group>general</group>
+            </files_bit>
             <center_bit_bottom>
                   <type>vbox</type>
                   <closeable>1</closeable>

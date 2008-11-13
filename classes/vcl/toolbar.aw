@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.40 2008/11/13 10:16:04 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.41 2008/11/13 18:26:20 markop Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -66,11 +66,18 @@ class toolbar extends aw_template
 		$arr["onClick"] = "return buttonClick(event, '${name}');";
 		$arr["class"] = "menuButton";
 		$arr["url"] = "";
+		$arr["type"] = "button";
 		if (empty($arr["img"]))
 		{
-			$arr["img"] = "new.gif";
+			if(!empty($arr["tooltip"]))
+			{
+				$arr["type"] = "text_button";
+			} 
+			else
+			{
+				$arr["img"] = "new.gif";
+			}
 		};
-		$arr["type"] = "button";
 		$arr["ismenu"] = 1;
 		$arr["id"] = $name;
 		$this->matrix[$arr["name"]] = $arr;
@@ -432,7 +439,14 @@ class toolbar extends aw_template
 
 					if (!empty($val["ismenu"]))
 					{
-						$tpl = "menu_button";
+						if($val["type"] == "text_button")
+						{
+							$tpl = "text_menu_button";
+						}
+						else
+						{
+							$tpl = "menu_button";
+						}
 					}
 					if (!empty($val["load_on_demand_url"]))
 					{

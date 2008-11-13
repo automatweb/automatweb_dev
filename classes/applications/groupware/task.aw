@@ -4223,6 +4223,206 @@ class task extends class_base
 		return strcmp($a->name(), $b->name());
 	}
 
+	
+	function _get_co_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "new_cust",
+			"parent" => "cust",
+			"tooltip" => t("Uus Organisatsioon"),
+			"url" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 3 // RELTYPE_CUSTOMER
+			)),
+		));
+		$tb->add_button(array(
+			"name" => "new_cust2",
+			"parent" => "cust2",
+			"tooltip" => t("Uus isik"),
+			"url" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 3 // RELTYPE_CUSTOMER
+			)),
+		));
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "orderer_h", "clid" => array(
+			CL_CRM_PERSON,
+			CL_CRM_COMPANY
+		)), "popup_search");
+		$tb->add_button(array(
+			"parent" => "search",
+			"tooltip" => t("Otsi tellijat"),
+			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
+
+	}
+
+	function _get_project_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "new_cust",
+			"parent" => "cust",
+			"tooltip" => t("Uus projekt"),
+			"link" => html::get_new_url(CL_PROJECT, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 4 // RELTYPE_PROJECT
+			)),
+		));
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1, "s" => $s), "crm_project_search");
+		$tb->add_button(array(
+			"parent" => "search",
+			"tooltip" => t("Otsi projekte"),
+			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
+
+	}
+
+	function _get_impl_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"parent" => "new",
+			"name" => "part",
+			"tooltip" => t("Uus osaleja"),
+		));
+
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$cust = $c->to();
+				$tb->add_menu_item(array(
+					"parent" => "part",
+					"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cust->name()),
+					"link" => html::get_new_url(CL_CRM_PERSON, $cust->id(), array(
+						"return_url" => get_ru(),
+						"add_to_task" => $arr["obj_inst"]->id(),
+						"add_to_co" => $cust->id(),
+					))
+				));
+			}
+		}
+
+		$cur_co = get_current_company();
+		$tb->add_menu_item(array(
+			"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
+			"parent" => "part",
+			"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
+				"return_url" => get_ru(),
+				"add_to_task" => $arr["obj_inst"]->id(),
+				"add_to_co" => $cur_co->id()
+			))
+		));
+
+
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1, "s" => $s), "crm_participant_search");
+		$cur_co = $cur  = get_current_company();
+		$tb->add_button(array(
+			"parent" => "part_search",
+			"tooltip" => t("Otsi"),
+			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+//			"name" => "",
+		));
+
+		$tb->add_menu_button(array(
+//			"parent" => "part_search",
+			"tooltip" => t("Lisa osaleja t&ouml;&ouml;tajate hulgast:"),
+			"name" => "search_part",
+		));
+
+
+		$ci = get_instance(CL_CRM_COMPANY);
+		//otsib enda ja kliendi t88tajate hulgast osalejaid
+		if (is_oid($cur->id()))
+		{
+			$workers = $ci->get_employee_picker($cur, false, true);
+			if(!count($workers))
+			{
+				$workers = $ci->get_employee_picker($cur, false, false);
+			}
+			if(sizeof($workers))
+			{
+			$tb->add_sub_menu(array(
+					"parent" => "search_part",
+					"text" => $cur->name(),
+					"name" => "part_our",
+				));
+				foreach($workers as $oid=>$name)
+				{
+					$worker = obj($oid);
+					$url = $this->mk_my_orb("add_part_popup", array("part" => $worker->id(), "task" => $arr["obj_inst"]->id()), "task");
+					$tb->add_menu_item(array(
+						"parent" => "part_our",
+						"text" => $worker->name(),
+						"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+					));
+				}
+			}
+		}
+
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$customer = $c->to();
+				if($customer->class_id() != CL_CRM_COMPANY)
+				{
+					continue;
+				}
+				$cust_workers = $ci->get_employee_picker($customer, false, true);
+				if(!count($cust_workers))
+				{
+					$cust_workers = $ci->get_employee_picker($customer, false, false);
+				}
+				if(sizeof($cust_workers))
+				{
+					$tb->add_sub_menu(array(
+						"parent" => "search_part",
+						"text" => $customer->name(),
+						"name" => "part_cust_".$customer->id(),
+					));
+					foreach($cust_workers as $c=>$name)
+					{
+						$worker = obj($c);
+						$url = $this->mk_my_orb("add_part_popup", array("part" => $worker->id(), "task" => $arr["obj_inst"]->id()), "task");
+						$tb->add_menu_item(array(
+							"parent" => "part_cust_".$customer->id(),
+							"text" => $worker->name(),
+							"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+						));
+					}
+				}
+			}
+		}
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
+	}
+
 	function _parts_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -4590,6 +4790,10 @@ class task extends class_base
 
 	function _co_table($arr)
 	{
+		if(!sizeof($c_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER"))))
+		{
+			return PROP_IGNORE;
+		}
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
 
@@ -4597,7 +4801,8 @@ class task extends class_base
 		{
 			return;
 		}
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+
+		foreach($c_conn as $c)
 		{
 			$c = $c->to();
 			$t->define_data(array(
@@ -4641,6 +4846,10 @@ class task extends class_base
 	function _proj_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		if(!sizeof($p_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT"))))
+		{
+			return PROP_IGNORE;
+		}
 		$this->_init_proj_table($t);
 
 		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
@@ -4648,7 +4857,7 @@ class task extends class_base
 			return;
 		}
 		$p = get_instance(CL_PROJECT);
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+		foreach($p_conn as $c)
 		{
 			$c = $c->to();
 			$t->define_data(array(
@@ -4850,8 +5059,13 @@ $types = array(
 
 		//syndmuste kiirlisamiseks teeb sellise h2ki
 		$this->fast_add_participants($arr,$types);
+ 
+		if(!sizeof($c_conn = $arr["obj_inst"]->connections_to(array("type" => $types))))
+		{
+			return PROP_IGNORE;
+		}
 
-		foreach($arr["obj_inst"]->connections_to(array("type" => $types)) as $c)
+		foreach($c_conn as $c)
 		{
 			$c = $c->from();
 			$name = obj($c);
@@ -5011,7 +5225,7 @@ $types = array(
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_menu_button(array(
 			"name" => "nemw",
-			"tooltip" => t("Uus"),
+//			"tooltip" => t("Uus"),
 			"load_on_demand_url" => $this->mk_my_orb("new_files_on_demand", array("obj_inst" => $arr["obj_inst"] -> id())),
 		));
 
@@ -5055,7 +5269,8 @@ $types = array(
 		), "multiple" => 1), "task_file_search");
 		$tb->add_button(array(
 			"name" => "search",
-			"img" => "search.gif",
+//			"img" => "search.gif",
+			"tooltip" => t("Otsi"),
 			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
 		));
 		$tb->add_button(array(
