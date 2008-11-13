@@ -71,6 +71,9 @@ class reservation_obj extends _int_object
 					return;
 				}
 				break;
+			case "seller":
+				$pn = "inbetweener";
+				break;
 			
 		}
 		$retval = parent::set_prop($pn, $pv);
