@@ -1039,6 +1039,7 @@ class task extends class_base
 				break;
 
 			case "add_clauses":
+				$has_work_time = $arr["obj_inst"]->has_work_time();
 				$data["options"] = array(
 //					"status" => t("Aktiivne"),
 					"is_done" => t("Tehtud"),
@@ -1047,7 +1048,7 @@ class task extends class_base
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
 					"in_budget" => t("Eelarvesse"),
-					"is_work" => t("T&ouml;&ouml;aeg")
+//					"is_work" => t("T&ouml;&ouml;aeg")
 				);
 				$data["value"] = array(
 //					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
@@ -1057,8 +1058,14 @@ class task extends class_base
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
 					"in_budget" => $arr["obj_inst"]->prop("in_budget") ? 1 : 0,
-					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
+//					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
+
+				if(!$has_work_time)
+				{
+					$data["options"]["is_work"] = t("T&ouml;&ouml;aeg");
+				}
+
 				// read cfgform and check if the props are set in the form
 				$cff = get_instance(CL_CFGFORM);
  $cfgform_id = $this->get_cfgform_for_object(array(
@@ -1533,7 +1540,13 @@ class task extends class_base
 				$arr["obj_inst"]->set_prop("is_goal", $prop["value"]["is_goal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $prop["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("in_budget", $prop["value"]["in_budget"] ? 1 : 0);
-				$arr["obj_inst"]->set_prop("is_work", $prop["value"]["is_work"] ? 1 : 0);
+				//$arr["obj_inst"]->set_prop("is_work", $prop["value"]["is_work"] ? 1 : 0);
+				if($prop["value"]["is_work"])
+				{
+					$rowdata = array("time_real" => $arr["obj_inst"]->prop("num_hrs_real"));
+					$arr["obj_inst"]->set_primary_row($rowdata);
+				}
+
 
 				if(!$prop["value"]["send_bill"] || $arr["obj_inst"]->if_can_set_billable())
 				{

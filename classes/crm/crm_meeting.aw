@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.105 2008/11/13 12:22:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.106 2008/11/13 17:52:08 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -370,13 +370,15 @@ class crm_meeting extends task
 				{
 					return PROIP_IGNORE;
 				}
+
+				$has_work_time = $arr["obj_inst"]->has_work_time();
 				$data["options"] = array(
 					"status" => t("Aktiivne"),
 					"is_done" => t("Tehtud"),
 					"whole_day" => t("Terve p&auml;ev"),
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
-					"is_work" => t("T&ouml;&ouml;aeg"),
+//					"is_work" => t("T&ouml;&ouml;aeg"),
 				);
 				$data["value"] = array(
 					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
@@ -384,8 +386,13 @@ class crm_meeting extends task
 					"whole_day" => $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
-					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
+//					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
+				if(!$has_work_time)
+				{
+					$data["options"]["is_work"] = t("T&ouml;&ouml;aeg");
+				}
+
 				break;
 
 			case "is_done":
@@ -757,7 +764,12 @@ class crm_meeting extends task
 				$arr["obj_inst"]->set_prop("whole_day", $data["value"]["whole_day"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
-				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
+//				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
+				if($data["value"]["is_work"])
+				{
+					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"));
+					$arr["obj_inst"]->set_primary_row($rowdata);
+				}
 				break;
 
 			case "is_done":

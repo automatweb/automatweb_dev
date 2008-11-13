@@ -280,6 +280,11 @@ class task_object extends _int_object
 
 	public function set_primary_row($data)
 	{
+		if(!$data["person"])
+		{
+			$u = get_instance(CL_USER);
+			$data["person"] = $u->get_current_person();
+		}
 		$row = $this->get_primary_row_for_person($data["person"]);
 		if(!$row)
 		{
@@ -300,5 +305,21 @@ class task_object extends _int_object
 		}
 		$row->save();
 	}
+
+	public function has_work_time()
+	{
+		$u = get_instance(CL_USER);
+		if(!is_oid($person = $u->get_current_person()))
+		{
+			return null;
+		}
+		$row = $this->get_primary_row_for_person($person);
+		if(is_object($row) && $row->prop("time_real"))
+		{
+			return 1;
+		}
+		return null;
+	}
+
 }
 ?>

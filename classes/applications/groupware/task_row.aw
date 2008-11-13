@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.14 2008/11/11 14:47:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.15 2008/11/13 17:53:54 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -25,6 +25,12 @@
 
 	@property impl type=relpicker reltype=RELTYPE_IMPL table=aw_task_rows field=aw_impl store=connect multiple=1
 	@caption Teostaja
+
+	@property customer type=relpicker reltype=RELTYPE_CUSTOMER multiple=1 store=connect
+	@caption Klient
+
+	@property project type=relpicker reltype=RELTYPE_PROJECT multiple=1 store=connect
+	@caption Projekt
 
 	@property skill_used style=select table=aw_task_rows field=skill_used parent=settings_col1 captionside=top
 	@caption Kasutatav P&auml;devus
@@ -74,6 +80,13 @@
 
 @reltype ORDERER value=3 clid=CL_CRM_PERSON
 @caption Tellija
+
+@reltype PROJECT value=4 clid=CL_PROJECT
+@caption Projekt
+
+@reltype CUSTOMER value=5 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Klient
+
 */
 
 class task_row extends class_base
