@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.39 2008/11/04 08:18:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.40 2008/11/13 10:16:04 instrumental Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -645,8 +645,18 @@ class toolbar extends aw_template
 	**/
 	function add_search_button($arr)
 	{
+		$url = $this->mk_my_orb("do_search", $arr, "popup_search");
+		$s = t("Otsi");
+		$this->add_button(array(
+			"name" => "search",
+			"img" => "search.gif",
+			"url" => "javascript:aw_popup_scroll('$url','$s',".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
+			"tooltip" => t("Otsi"),
+		));
+		/* We can't use this, cuz the HTML that popup_search::get_popup_search_link provides, differs from the one we get from toolbar::add_button.
 		$i = get_instance("vcl/popup_search");
 		$this->add_cdata($i->get_popup_search_link($arr));
+		*/
 	}
 
 	/** Adds a generic cut button to the toolbar that moves selected objects parents around
