@@ -4427,6 +4427,10 @@ class crm_person extends class_base
 			$p->set_meta("temp_ofr_id", "");
 			$p->save();
 		}
+		if(substr_count($arr["request"]["return_url"] , "action=new") && (substr_count($arr["request"]["return_url"] , "class=crm_task") || substr_count($arr["request"]["return_url"] , "class=crm_call") || substr_count($arr["request"]["return_url"] , "class=crm_meeting")))
+		{
+			$_SESSION["add_to_task"]["impl"] = $arr["obj_inst"]->id();
+		}
 	}
 
 	function gen_code($o)

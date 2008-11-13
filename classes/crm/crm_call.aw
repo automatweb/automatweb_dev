@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.71 2008/10/08 10:42:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.72 2008/11/13 12:22:24 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -669,6 +669,29 @@ class crm_call extends class_base
 					"type" => "RELTYPE_FILE"
 				));
 			}
+		}
+
+		if($_SESSION["add_to_task"])
+		{
+			if(is_oid($_SESSION["add_to_task"]["project"]))
+			{
+				 $arr["obj_inst"]->connect(array(
+					"to" => $_SESSION["add_to_task"]["project"],
+					"type" => "RELTYPE_PROJECT"
+				));
+			}
+			if(is_oid($_SESSION["add_to_task"]["customer"]))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $_SESSION["add_to_task"]["customer"],
+					"type" => "RELTYPE_CUSTOMER"
+				));
+			}
+			if(is_oid($_SESSION["add_to_task"]["impl"]))
+			{
+				$this->add_participant($arr["obj_inst"], obj($_SESSION["add_to_task"]["impl"]));
+			}
+			unset($_SESSION["add_to_task"]);
 		}
 
 	}

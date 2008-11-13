@@ -4298,8 +4298,8 @@ class crm_company extends class_base
 			$arr["args"]["act_s_mail_name"] = $arr["request"]["act_s_mail_name"];
 
 		}
-		if ($arr["request"]["bill_s_search"] != "")
-		{
+//		if ($arr["request"]["bill_s_search"] != "")
+//		{
 			$arr["args"]["bill_s_cust"] = $arr["request"]["bill_s_cust"];
 			$arr["args"]["bill_s_bill_no"] = $arr["request"]["bill_s_bill_no"];
 			$arr["args"]["bill_s_bill_to"] = $arr["request"]["bill_s_bill_to"];
@@ -4312,7 +4312,7 @@ class crm_company extends class_base
 			$arr["args"]["bill_s_status"] = $arr["request"]["bill_s_status"];
 			$arr["args"]["bill_s_search"] = $arr["request"]["bill_s_search"];
 
-		}
+//		}
 		if ($arr["request"]["bill_payments_search"] != "")
 		{
 			$arr["args"]["bill_payments_cust"] = $arr["request"]["bill_payments_cust"];
@@ -6815,6 +6815,10 @@ class crm_company extends class_base
 		}
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["search_tbl"], "RELTYPE_DOCS_FOLDER");
+		if(substr_count($arr["request"]["return_url"] , "action=new") && (substr_count($arr["request"]["return_url"] , "class=crm_task") || substr_count($arr["request"]["return_url"] , "class=crm_call") || substr_count($arr["request"]["return_url"] , "class=crm_meeting")))
+		{
+			$_SESSION["add_to_task"]["customer"] = $arr["obj_inst"]->id();
+		}
 	}
 
 	function callback_mod_layout(&$arr)

@@ -305,7 +305,8 @@ class task extends class_base
 
         function get_partipicants($arr)
         {
-                $p = array();
+
+               $p = array();
                 if ($this->can("view", $arr["request"]["alias_to_org"]))
                 {
                         $ao = obj($arr["request"]["alias_to_org"]);
@@ -1895,6 +1896,29 @@ class task extends class_base
 
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
+
+		if($_SESSION["add_to_task"])
+		{
+			if(is_oid($_SESSION["add_to_task"]["project"]))
+			{
+				 $arr["obj_inst"]->connect(array(
+					"to" => $_SESSION["add_to_task"]["project"],
+					"type" => "RELTYPE_PROJECT"
+				));
+			}
+			if(is_oid($_SESSION["add_to_task"]["customer"]))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $_SESSION["add_to_task"]["customer"],
+					"type" => "RELTYPE_CUSTOMER"
+				));
+			}
+			if(is_oid($_SESSION["add_to_task"]["impl"]))
+			{
+				$this->add_participant($arr["obj_inst"], obj($_SESSION["add_to_task"]["impl"]));
+			}
+			unset($_SESSION["add_to_task"]);
+		}
 	}
 
 	function request_execute($obj)
@@ -4727,6 +4751,72 @@ class task extends class_base
 
 	function _parts_table($arr)
 	{
+
+
+
+//--------------------------------------------- skript mis t88tunnid ridadeks teeb
+if(aw_global_get("uid") == "marko" && false)
+{
+
+
+$types = array(
+			0 => array(
+				"rname" => "tasks",
+				"class_id" => CL_TASK,
+				"timevar" => "num_hrs_real",
+				"types" => array(10,8)
+			),
+			1 => array(
+				"rname" => "calls",
+				"class_id" => CL_CRM_CALL,
+				"timevar" => "time_real",
+				"types" => 9
+			),
+			2 => array(
+				"rname" => "meetings",
+				"class_id" => CL_CRM_MEETING,
+				"timevar" => "time_real",
+				"types" => 8
+			),
+		);
+		foreach($types as $type)
+		{
+			$ol = new object_list(array(
+				"class_id" => $type["class_id"],
+				"lang_id" => array(),
+				"site_id" => array(),
+				"is_work" => 1,
+				"brother_of" => new obj_predicate_prop("id")
+			));
+			foreach($ol->arr() as $o)
+			{
+				foreach($o->connections_to(array("type" => $type["types"])) as $c)
+				{
+					$p = $c->from();
+					//arr($p->name());
+					$data = array(
+						"person" => $p->id(),
+						"time_real" => $o->prop($type["timevar"]),
+//						"time_guess" => $o->prop("time_guess"),
+						"time_to_cust" => $o->prop("time_to_cust"),
+					);
+					//arr($o->class_id());
+
+					//arr($data);
+					$o->set_primary_row($data);
+				}
+			}
+			arr($ol->count());
+		}
+}
+
+//--------------------------------
+
+
+
+
+
+
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_parts_table($t);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.104 2008/11/11 14:47:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.105 2008/11/13 12:22:24 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -899,6 +899,29 @@ class crm_meeting extends task
 
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
+
+		if($_SESSION["add_to_task"])
+		{
+			if(is_oid($_SESSION["add_to_task"]["project"]))
+			{
+				 $arr["obj_inst"]->connect(array(
+					"to" => $_SESSION["add_to_task"]["project"],
+					"type" => "RELTYPE_PROJECT"
+				));
+			}
+			if(is_oid($_SESSION["add_to_task"]["customer"]))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $_SESSION["add_to_task"]["customer"],
+					"type" => "RELTYPE_CUSTOMER"
+				));
+			}
+			if(is_oid($_SESSION["add_to_task"]["impl"]))
+			{
+				$this->add_participant($arr["obj_inst"], obj($_SESSION["add_to_task"]["impl"]));
+			}
+			unset($_SESSION["add_to_task"]);
+		}
 	}
 		
 
