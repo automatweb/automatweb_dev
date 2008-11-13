@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.275 2008/10/29 10:39:51 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.276 2008/11/13 13:59:22 markop Exp $
 // defs.aw - common functions
 
 /*
@@ -153,6 +153,13 @@ if (!defined("DEFS"))
 	**/
 	function post_ru()
 	{
+		$bits = parse_url(aw_ini_get("baseurl"));
+		if (strlen($bits["path"]) > 1 && strpos(aw_global_get("REQUEST_URI"), $bits["path"]) === 0)
+		{
+			return aw_url_change_var("post_ru", NULL, aw_ini_get("baseurl").substr(aw_global_get("REQUEST_URI"), strlen($bits["path"])));
+	//		aw_global_set("REQUEST_URI", $bits["path"].aw_global_get("REQUEST_URI"));
+		}
+
 		return aw_url_change_var("post_ru", NULL, aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
 	}
 
