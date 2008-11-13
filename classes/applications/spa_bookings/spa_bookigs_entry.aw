@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.85 2008/10/23 10:42:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.86 2008/11/13 18:47:51 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2438,7 +2438,7 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 		else
-		if ($arr["ud"]["pk_name"] || date_edit::get_timestamp($arr["ud"]["pk_arrival"]) || date_edit::get_timestamp($arr["ud"]["pk_leave"]))
+		if ($arr["ud"]["pk_tb_name"] || $arr["ud"]["pk_name"] || date_edit::get_timestamp($arr["ud"]["pk_arrival"]) || date_edit::get_timestamp($arr["ud"]["pk_leave"]))
 		{
 			// then we should just change the package set methinks
 			foreach(safe_array($arr["rvs"]) as $rv_id)
