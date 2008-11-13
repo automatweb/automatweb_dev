@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.7 2008/10/17 08:38:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_users_import.aw,v 1.8 2008/11/13 12:55:08 markop Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 @classinfo syslog_type=ST_TAKET_USERS_IMPORT relationmgr=yes
@@ -62,9 +62,10 @@ class taket_users_import extends class_base
 					if(is_array($row))
 					{
 						$o = obj($row["oid"]);
-						$o->set_prop("password" , $value);
+						$o->set_password($value);
 						$o->save();
-						$row = $this->db_fetch_row('UPDATE users SET password='.$value.' WHERE uid= \''.$arr['username'][$key].'\'');
+//						$row = $this->db_fetch_row('UPDATE users SET password="'.$value.'" WHERE uid= \''.$arr['username'][$key].'\'');
+
 						//let's update the users password
 						//
 						//	$inst->save(array('uid'=>$arr['username'][$key], 'password'=>$value));
