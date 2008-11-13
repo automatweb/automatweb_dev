@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.72 2008/11/13 12:22:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.73 2008/11/13 16:16:26 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -280,15 +280,19 @@ class crm_call extends class_base
 					"is_done" => t("Tehtud"),
 					"is_personal" => t("Isiklik"),
 					"send_bill" => t("Arvele"),
-					"is_work" => t("T&ouml;&ouml;aeg"),
+//					"is_work" => t("T&ouml;&ouml;aeg"),
 				);
 				$data["value"] = array(
 					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
 					"is_done" => $arr["obj_inst"]->prop("is_done") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
-					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
+//					"is_work" => $arr["obj_inst"]->prop("is_work") ? 1 : 0,
 				);
+				if(!$has_work_time)
+				{
+					$data["options"]["is_work"] = t("T&ouml;&ouml;aeg");
+				}
 				break;
 
 			case "is_done":
@@ -544,6 +548,11 @@ class crm_call extends class_base
 				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
+				if($data["value"]["is_work"])
+				{
+					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"));
+					$arr["obj_inst"]->set_primary_row($rowdata);
+				}
 				break;
 
 			case "is_done":

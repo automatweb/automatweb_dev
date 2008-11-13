@@ -250,6 +250,12 @@ class crm_company_people_impl extends class_base
 			'sortable' => '1',
 		));
 		$t->define_field(array(
+			'name' => 'work_relation',
+			"chgbgcolor" => "cutcopied",
+			'caption' => t('T&ouml;&ouml;suhe'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
 			'name' => 'authorized',
 			"chgbgcolor" => "cutcopied",
 			'caption' => t('Volitatud'),
@@ -591,6 +597,32 @@ class crm_company_people_impl extends class_base
 				)
 				.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")',
 			))." " .$authoirization;
+
+
+			$rel = $person->get_work_relation_id(array(
+				"company" => $arr["obj_inst"]->id(),
+				"section" => $arr['request']['unit'],
+				"profession" => $arr['request']['cat'] == 999999 ? null : $arr['request']['cat'],
+			));
+			$tdata["work_relation"] = $rel ? html::href(array(
+				"caption" => t("Muuda"),
+				"url" => html::get_change_url($rel, array(
+						"return_url" => get_ru(),
+				))
+			)) : html::href(array(
+				"caption" => t("Lisa"),
+				"url" => html::get_new_url(
+					CL_CRM_PERSON_WORK_RELATION,
+					$person->id(),
+					array(
+						"return_url" => get_ru(),
+						"person" => $person->id(),
+						"company" => $arr["obj_inst"]->id(),
+						'alias_to' => $person->id(),
+						'reltype' => 67,
+					))
+			));
+
 			$tdata["id"] = $person->id();
 			$tdata["phone"] = $person->get_phone($arr["obj_inst"]->id() , $section);
 			$tdata["rank"] = join(", " , $person->get_profession_names($arr["obj_inst"]->id() , $professions));

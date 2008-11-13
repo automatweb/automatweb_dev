@@ -824,6 +824,16 @@
             <caption>Kas isikud on kasutajad</caption>
       </property>
       <property>
+	      <name>use_only_wr_workers</name>
+	      <table>objects</table>
+	      <group>user_settings</group>
+	      <type>checkbox</type>
+	      <ch_value>1</ch_value>
+	      <field>meta</field>
+	      <method>serialize</method>
+	      <caption>Kasuta ainult t&amp;amp;ouml;&amp;amp;ouml;suhet omavaid isikuid</caption>
+      </property>
+      <property>
             <name>server_folder</name>
             <table>objects</table>
             <group>user_settings</group>

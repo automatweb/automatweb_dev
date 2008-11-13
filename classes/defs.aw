@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.276 2008/11/13 13:59:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.277 2008/11/13 16:16:16 markop Exp $
 // defs.aw - common functions
 
 /*
@@ -2946,6 +2946,16 @@ if (!defined("DEFS"))
 		$file = aw_ini_get("baseurl")."/automatweb/js/".$file;
 		$js[$pos][$file] = $file;
 		aw_global_set("__aw_javascript", $js);
+	}
+
+	function get_name($id)
+	{
+		if(is_oid($id))
+		{
+			$obj = obj($id);
+			return $obj->name();
+		}
+		return "";
 	}
 
 	function iconv_array($in_charset, $out_charset, $arr)

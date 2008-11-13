@@ -294,6 +294,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property do_create_users type=checkbox ch_value=1 table=objects field=meta method=serialize group=user_settings
 	@caption Kas isikud on kasutajad
 
+	@property use_only_wr_workers type=checkbox ch_value=1 table=objects field=meta method=serialize group=user_settings
+	@caption Kasuta ainult t&ouml;&ouml;suhet omavaid isikuid
+
 	@property server_folder type=server_folder_selector table=objects field=meta method=serialize group=user_settings
 	@caption Kataloog serveris, kus asuvad failid
 
@@ -1978,7 +1981,7 @@ class crm_company extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_acct_tbl($t, $arr);
-				$t->set_caption(t("Pangaarved"));
+				$t->table_caption = t("Pangaarved");
 				break;
 
 			case "cedit_adr_tbl":
@@ -1994,7 +1997,7 @@ class crm_company extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_adr_tbl($t, $arr);
-				$t->set_caption(t("Aadressid"));
+				$t->table_caption = t("Aadressid");
 				break;
 
 			// END CEDIT tab

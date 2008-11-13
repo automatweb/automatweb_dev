@@ -862,6 +862,35 @@ class crm_person_obj extends _int_object
 		return $sel;
 	}
 
+	/** returns one work relation id
+		@attrib api=1
+		@param company optional type=oid
+		@param section optional type=oid
+		@param profession optional type=oid
+		@return id
+			work relation object id
+	**/
+	public function get_work_relation_id($arr)
+	{
+		$this->set_current_jobs();
+		foreach($this->current_jobs->arr() as $job)
+		{
+			if($arr["section"] && $job->prop("section") != $arr["section"])
+			{
+				continue;
+			}
+			if($arr["profession"] && $job->prop("profession") != $arr["profession"])
+			{
+				continue;
+			}
+			if($arr["company"] && $job->prop("org") != $arr["company"])
+			{
+				continue;
+			}
+			return $job->id();
+		}
+		return null;
+	}
 
 	/** returns all current work relations
 		@attrib api=1

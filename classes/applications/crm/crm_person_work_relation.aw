@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.30 2008/10/08 14:24:17 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_work_relation.aw,v 1.31 2008/11/13 16:16:23 markop Exp $
 // crm_person_work_relation.aw - T&ouml;&ouml;suhe 
 /*
 
@@ -14,17 +14,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_ML_MEMBER, on_discon
 @default table=objects
 @default group=general
 
-@property org type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete option_is_tuple=1
+@property org type=relpicker reltype=RELTYPE_ORG store=connect
+property org type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete option_is_tuple=1
+
 @caption Organisatsioon
 
+#kommenteerisin v2lja need autocompleted j2lle, kui huvi on , siis kommenteerige sisse tagasi, a igasugu new korral tulevad company, section ja profession v22rtused peaks ka lisaks k6igele muule toimima
 #@property section type=relpicker reltype=RELTYPE_SECTION
 @property section type=hidden reltype=RELTYPE_SECTION store=connect
 @caption &Uuml;ksus
 
-@property section2 type=relpicker reltype=RELTYPE_SECTION store=connect mode=autocomplete option_is_tuple=1
+@property section2 type=relpicker reltype=RELTYPE_SECTION store=connect
+property section2 type=relpicker reltype=RELTYPE_SECTION store=connect mode=autocomplete option_is_tuple=1
 @caption &Uuml;ksus
 
-@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete option_is_tuple=1
+@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect
+property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete option_is_tuple=1
 @caption Amet
 
 @property field type=classificator reltype=RELTYPE_FIELD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
@@ -175,12 +180,30 @@ class crm_person_work_relation extends class_base
 		switch($prop["name"])
 		{
 			case "section":
-				$retval = PROP_IGNORE;
+				if($arr["request"]["section"])
+				{
+					$data["value"] = $arr["request"]["section"];
+					$data["options"] = array($data["value"] => get_name($data["value"]));
+				}
 				break;
-
+	
 			case "org":
+				if($arr["request"]["company"])
+				{
+					$data["value"] = $arr["request"]["company"];
+					$data["options"] = array($data["value"] => get_name($data["value"]));
+				}
+				break;
 			case "section2":
 			case "profession":
+
+				if($arr["request"]["profession"])
+				{
+					$data["value"] = $arr["request"]["profession"];
+					$data["options"] = array($data["value"] => get_name($data["value"]));
+				}
+//				$data["option_is_tuple"] = true;
+/*
 				$clids = array(
 					"org" => CL_CRM_COMPANY,
 					"section2" => CL_CRM_SECTION,
@@ -223,9 +246,15 @@ class crm_person_work_relation extends class_base
 					$arr["obj_inst"]->set_prop($prop["name"], $prop["value"]);
 					$retval = PROP_IGNORE;
 				}
+*/
 				break;
 		}
 		return $retval;
+	}
+
+	function callback_post_save($arr)
+	{
+
 	}
 
 	function on_connect_phone_to_work_relation($arr)

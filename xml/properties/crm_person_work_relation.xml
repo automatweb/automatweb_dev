@@ -7,7 +7,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ORG</reltype>
             <store>connect</store>
-            <mode>autocomplete</mode>
             <option_is_tuple>1</option_is_tuple>
             <field>org</field>
             <caption>Organisatsioon</caption>
@@ -29,7 +28,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SECTION</reltype>
             <store>connect</store>
-            <mode>autocomplete</mode>
             <option_is_tuple>1</option_is_tuple>
             <field>section2</field>
             <caption>&amp;amp;Uuml;ksus</caption>
@@ -41,7 +39,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PROFESSION</reltype>
             <store>connect</store>
-            <mode>autocomplete</mode>
             <option_is_tuple>1</option_is_tuple>
             <field>profession</field>
             <caption>Amet</caption>

@@ -268,12 +268,14 @@ class crm_company_obj extends _int_object
 			);
 			$ol = new object_list($filter);
 		}
+		if(!$this->prop("use_only_wr_workers"))
+		{
 		//vana versioon peab j22ma ka toimima siiski, kui tahetakse k6iki t88tajaid
 //		if(!sizeof($arr))
 //		{
 			$ol->add($this->get_employees());
 //		}
-
+		}
 		return $ol;
 
 	}
