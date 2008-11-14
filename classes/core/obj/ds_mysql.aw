@@ -2235,7 +2235,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		extract($arr);
 		$filt = explode(".", $key);
-		$clid = constant($filt[0]);
+		if (!defined($filt[0]))
+		{
+			$clid = $arr["params"]["class_id"];
+			if (is_array($clid))
+			{
+				error::raise(array(
+					"id" => "ERR_OL_PARAM_ERROR",
+					"msg" => sprintf(t("You must specify class id in a complex filter parameter (%s) if searching from multiple classes!"), $key)
+				));
+			}
+		}
+		else
+		{
+			$clid = constant($filt[0]);
+		}
 
 		if (substr($filt[0], 0, 3) != "CL_" && (is_array($params["class_id"]) || is_class_id($params["class_id"])))
 		{
