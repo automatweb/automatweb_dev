@@ -958,7 +958,7 @@ class html extends aw_template
 
 		$set = array();
 
-		if ($args['buttons'])
+		if (isset($args['buttons']) && $args['buttons'])
 		{
 			$buttons = true;
 		}
@@ -1029,16 +1029,16 @@ class html extends aw_template
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
 
-		if ($args["disabled"] or $args["textsize"])
+		if (isset($args["disabled"]) && $args["disabled"] or isset($args["textsize"]) && $args["textsize"])
 		{
 			$name = array ("name" => $args["name"]);
 
-			if ($args["disabled"])
+			if (isset($args["disabled"]) && $args["disabled"])
 			{
 				$name["disabled"] = true;
 			}
 
-			if ($args["textsize"])
+			if (isset($args["textsize"]) && $args["textsize"])
 			{
 				$name["textsize"] = $args["textsize"];
 			}
@@ -1048,8 +1048,12 @@ class html extends aw_template
 			$name = $args["name"];
 		}
 
-		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons, !$buttons, $args["month_as_numbers"]?true:false);
-		$res .= $args["post_append_text"];
+		$months_as_numbers = isset($args["month_as_numbers"]) && $args["month_as_numbers"] ? true : false;
+		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons, !$buttons, $months_as_numbers);
+		if(isset($args["post_append_text"]))
+		{
+			$res .= $args["post_append_text"];
+		}
 		return $res;
 	}
 
