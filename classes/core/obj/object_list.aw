@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.69 2008/04/30 13:30:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.70 2008/11/14 09:52:03 kristo Exp $
 // object_list.aw - with this you can manage object lists
 /*
 @classinfo  maintainer=kristo
@@ -951,9 +951,8 @@ class object_list extends _int_obj_container_base
 		unset($this->_sby_order);
 	}
 
-	function _int_sort_list_default_sort($a, $b)
+	private function _int_sort_list_default_sort_get_val($a, $b, $sb)
 	{
-		$sb = $this->_sby_prop;
 		if ($GLOBALS["object_loader"]->is_object_member_fun($sb))
 		{
 			$val1 = $a->$sb();
@@ -963,6 +962,28 @@ class object_list extends _int_obj_container_base
 		{
 			$val1 = $a->prop($sb);
 			$val2 = $b->prop($sb);
+		}
+		return array($val1, $val2);
+	}
+
+	function _int_sort_list_default_sort($a, $b)
+	{
+		$sb = $this->_sby_prop;
+
+		if (is_array($sb))
+		{
+			foreach($sb as $s_prop_name)
+			{
+				list($val1, $val2) = $this->_int_sort_list_default_sort_get_val($a, $b, $s_prop_name);
+				if ($val1 != $val2)
+				{
+					break;
+				}
+			}
+		}
+		else
+		{
+			list($val1, $val2) = $this->_int_sort_list_default_sort_get_val($a, $b, $sb);
 		}
 
 		if ($val1 == $val2)
