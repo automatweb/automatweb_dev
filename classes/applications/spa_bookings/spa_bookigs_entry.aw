@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.86 2008/11/13 18:47:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.87 2008/11/14 11:36:31 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2416,9 +2416,10 @@ class spa_bookigs_entry extends class_base
 	//			$rvo -> delete();
 			}
 		}
+		$set = $arr["ud"]["pk_tb_name"] || $arr["ud"]["pk_name"] || date_edit::get_timestamp($arr["ud"]["pk_arrival"]) || date_edit::get_timestamp($arr["ud"]["pk_leave"]);
 
 		// if package is set in the submit, then do create spa booking
-		if ($arr["ud"]["pk_name"] && is_array($arr["out_arr"]) && count($arr["out_arr"]))
+		if ($set && is_array($arr["out_arr"]) && count($arr["out_arr"]))
 		{
 			$b = obj();
 			$b->set_class_id(CL_SPA_BOOKING);
@@ -2438,7 +2439,7 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 		else
-		if ($arr["ud"]["pk_tb_name"] || $arr["ud"]["pk_name"] || date_edit::get_timestamp($arr["ud"]["pk_arrival"]) || date_edit::get_timestamp($arr["ud"]["pk_leave"]))
+		if ($set)
 		{
 			// then we should just change the package set methinks
 			foreach(safe_array($arr["rvs"]) as $rv_id)
