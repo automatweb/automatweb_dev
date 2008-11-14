@@ -115,7 +115,8 @@ class html extends aw_template
 
 		$sel_array = @array_flip($sel_array);
 
-		foreach(safe_array($options) as $k => $v)
+		$options = isset($options) ? safe_array($options) : array();
+		foreach($options as $k => $v)
 		{
 			$selected = isset($sel_array[$k]) ? ' selected="selected"' : "";
 			$d = in_array($k, $disabled_options) ? " disabled=\"disabled\"" : "";

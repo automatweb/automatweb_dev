@@ -51,7 +51,7 @@ class classificator extends class_base
 			$this->view = 1;
 		}
 
-		if($prop["recursive"] == 1)
+		if(isset($prop["recursive"]) && $prop["recursive"] == 1)
 		{
 			$this->recursive = 1;
 		}
@@ -62,19 +62,19 @@ class classificator extends class_base
 			"obj_inst" => $arr["obj_inst"],
 		);
 
-		if($arr["sort_by"])
+		if(isset($arr["sort_by"]) && $arr["sort_by"])
 		{
 			$ch_args["sort_by"] = $arr["sort_by"];
 		}
-		if($prop["sort_by"])
+		if(isset($prop["sort_by"]) && $prop["sort_by"])
 		{
 			$ch_args["sort_by"] = $prop["sort_by"];
 		}
-		if($arr["object_type_id"])
+		if(isset($arr["object_type_id"]) && $arr["object_type_id"])
 		{
 			$ch_args["object_type_id"] = $arr["object_type_id"];
 		}
-		if (is_oid($prop["object_type_id"]))
+		if (isset($prop["object_type_id"]) && is_oid($prop["object_type_id"]))
 		{
 			$ch_args["object_type_id"] = $prop["object_type_id"];
 		}

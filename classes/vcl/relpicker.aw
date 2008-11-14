@@ -221,13 +221,14 @@ class relpicker extends  core
 	{
 		$prop = &$arr["property"];
 		$this->obj = $arr["obj_inst"];
-		if ($prop["mode"] == "autocomplete")
+		if (isset($prop["mode"]) && $prop["mode"] == "autocomplete")
 		{
 			return $this->init_autocomplete_relpicker($arr);
 		}
 
 		$val = &$arr["property"];
-		if($prop["no_sel"] == 1)
+		$val["post_append_text"] = isset($val["post_append_text"]) ? $val["post_append_text"] : "";
+		if(isset($prop["no_sel"]) && $prop["no_sel"] == 1)
 		{
 			$options = array();
 		}
@@ -237,7 +238,7 @@ class relpicker extends  core
 		}
 		$reltype = $prop["reltype"];
 		// generate option list
-		if (is_array($prop["options"]))
+		if (isset($prop["options"]) && is_array($prop["options"]))
 		{
 			$val["type"] = "select";
 		}
@@ -315,7 +316,7 @@ class relpicker extends  core
 				}
 			}
 		}
-		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
+		$val["type"] = (isset($val["display"]) && $val["display"] == "radio") ? "chooser" : "select";
 
 		if ($val["type"] == "select" /*&& is_object($this->obj)*/)
 		{
@@ -324,11 +325,11 @@ class relpicker extends  core
 				"id" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->id() : null,
 				"pn" => $arr["property"]["name"],
 				"clid" => $clid,
-				"multiple" => $arr["property"]["multiple"]
+				"multiple" => isset($arr["property"]["multiple"]) && $arr["property"]["multiple"] ? $arr["property"]["multiple"] : NULL
 			), "popup_search", false, true);
 			
 			// I only want the search button. No edit or new buttons!
-			if (/*is_oid($this->obj->id()) &&*/ !$val["no_edit"] || $val["search_button"])
+			if (/*is_oid($this->obj->id()) &&*/ !isset($val["no_edit"]) || !$val["no_edit"] || isset($val["search_button"]) && $val["search_button"])
 			{
 				$val["post_append_text"] .= " ".html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",".popup_search::PS_WIDTH.",".popup_search::PS_HEIGHT.")",
@@ -339,7 +340,7 @@ class relpicker extends  core
 			}
 		}
 
-		if ( $val["type"] == "select" && is_object($this->obj) && ((is_oid($val["value"]) && $this->can("edit", $val["value"])) ||
+		if (isset($val["type"]) && $val["type"] == "select" && is_object($this->obj) && ((isset($val["value"]) && is_oid($val["value"]) && $this->can("edit", $val["value"])) ||
 			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ) && !$val["no_edit"])
 		{
 			$val["post_append_text"] .= " ".html::href(array(
@@ -350,7 +351,12 @@ class relpicker extends  core
 			));
 		}
 		
-		if($val["delete_button"] || $val["delete_rels_button"] || $val["delete_rels_popup_button"])
+		$allow_delete = false;
+		if(
+			isset($val["delete_button"]) && $val["delete_button"] ||
+			isset($val["delete_rels_button"]) && $val["delete_rels_button"] || 
+			isset($val["delete_rels_popup_button"]) && $val["delete_rels_popup_button"]
+		)
 		{
 			$oids = array();
 			$allow_delete = true;

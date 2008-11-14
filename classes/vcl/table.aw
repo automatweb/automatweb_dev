@@ -579,7 +579,7 @@ class aw_table extends aw_template
 		}
 		// now figure out the order of sorting
 		// start with parameters
-		if (!($this->sorder = $params["sorder"]))
+		if (!isset($params["sorder"]) || !($this->sorder = $params["sorder"]))
 		{
 			// if it was not specified as a parameter the next place is the url
 			if (!($this->sorder = aw_global_get("sort_order")))
@@ -588,7 +588,7 @@ class aw_table extends aw_template
 				if (!($this->sorder = $aw_tables[$sess_field_order]))
 				{
 					// and finally we get the default
-					if (!($this->sorder = $this->default_odir))
+					if (!isset($this->default_odir) || !($this->sorder = $this->default_odir))
 					{
 						$this->sorder = "asc";
 					}

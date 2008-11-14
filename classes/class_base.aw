@@ -2326,7 +2326,7 @@ class class_base extends aw_template
 			$val["type"] = "text";
 		}
 
-		if ($val["orig_type"] == "select" && $val["options"][$val["value"]] != "" && $this->view == 1)
+		if (isset($val["orig_type"]) && $val["orig_type"] == "select" && isset($val["value"]) && isset($val["options"][$val["value"]]) && $val["options"][$val["value"]] != "" && $this->view == 1)
 		{
 			$val["value"] = $val["options"][$val["value"]];
 		}
@@ -2485,7 +2485,7 @@ class class_base extends aw_template
 		// current time for datetime_select properties for new objects
 		// XXX: for now this->use_form is empty for add/change forms, this
 		// will probably change in the future
-		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select") && !$property["no_default"] && empty($property["value"]))
+		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select") && (!isset($property["no_default"]) || !$property["no_default"]) && empty($property["value"]))
 		{
 			$property["value"] = time();
 		}
@@ -3109,7 +3109,7 @@ class class_base extends aw_template
 							$resprops[$val["name"]]["otherprops"][$rkey] = $rkey;
 						};
 					};
-					if (is_callable(array($val["vcl_inst"], "callback_mod_reforb")))
+					if (isset($val["vcl_inst"]) && is_callable(array($val["vcl_inst"], "callback_mod_reforb")))
 					{
 						$this->_do_call_vcl_mod_reforbs[] = array($val["vcl_inst"], "callback_mod_reforb");
 					}

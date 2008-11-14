@@ -3975,7 +3975,7 @@ class cfgform extends class_base
 		// also eval all controllers
 		foreach((array)$o->prop("cfg_groups") as $grpn => $grpdat)
 		{
-			if ($this->can("view", $grpdat["grpctl"]))
+			if (isset($grpdat["grpctl"]) && $this->can("view", $grpdat["grpctl"]))
 			{
 				$ctl = obj($grpdat["grpctl"]);
 				$ctl_i = $ctl->instance();

@@ -675,7 +675,7 @@ class htmlclient extends aw_template
 
 				// this is what I was talking about before ...
 				// move submit button _before_ the aliasmgr
-				if (!empty($sbt) && $item["type"] == "aliasmgr")
+				if (!empty($sbt) && isset($item["type"]) && $item["type"] == "aliasmgr")
 				{
 					$res .= $sbt;
 					unset($sbt);

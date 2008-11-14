@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.167 2008/11/14 14:52:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.168 2008/11/14 15:56:41 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -113,12 +113,12 @@ class releditor extends core
 				{
 					$data[$idx-1][$_pn] = $target->prop($_pn);
 
-					if (!in_array($_pn,$tb_fields) || $_pd["show_in_emb_tbl"] != 1 && is_oid($arr["prop"]["cfgform_id"]))
+					if (!in_array($_pn,$tb_fields) || (!isset($_pd["show_in_emb_tbl"]) || $_pd["show_in_emb_tbl"] != 1) && is_oid($arr["prop"]["cfgform_id"]))
 					{
 						continue;
 					};
 
-					if(!$fields_defined)
+					if(!isset($fields_defined) || !$fields_defined)
 					{
 						$awt->define_field(array(
 							"name" => $_pn,
@@ -164,7 +164,7 @@ class releditor extends core
 					{
 						$prop["value"] = $prop["options"][$prop["value"]];
 					};
-					if($prop["filt_edit_fields"] == 1)
+					if(isset($prop["filt_edit_fields"]) && $prop["filt_edit_fields"] == 1)
 					{
 						if($prop["value"] != "" && $prop["type"] == "textbox")
 						{
@@ -298,7 +298,7 @@ class releditor extends core
 		};
 
 		$form_type = $arr["request"][$this->elname];
-		if (($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
+		if (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))
 		{
 			$form_type = "new";
 		}
@@ -397,7 +397,7 @@ class releditor extends core
 		};
 
 		// maybe I can use the property name itself
-		if ($arr["cb_values"])
+		if (isset($arr["cb_values"]) && $arr["cb_values"])
 		{
 			$t->cb_values = $arr["cb_values"];
 		};
