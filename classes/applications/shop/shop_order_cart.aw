@@ -372,6 +372,11 @@ class shop_order_cart extends class_base
 			$delivery_vars = array();
 		}
 
+		if ($cart_o->prop("postal_price") > 0)
+		{
+			$total += $cart_o->prop("postal_price");
+		}
+
 		$this->vars($delivery_vars + array(
 			"cart_total" => number_format($cart_total, 2),
 			"cart_discount" => number_format($cart_discount, 2),
