@@ -734,7 +734,6 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 
 	function callback_pre_edit($arr)
 	{
-		$this->rel_id = $arr["request"]["rel_id"];
 		$this->rel_id = aw_global_get("section");
 	}
 
@@ -2282,11 +2281,11 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 		{
 			$arr["action"] = $this->reforb_action;
 		};
-		if (is_numeric($request["page"]))
+		if (isset($request['page']) && is_numeric($request['page']))
 		{
 			$arr["page"] = $request["page"];
 		};
-		if (is_oid($request["folder"]))
+		if (isset($request['folder']) && is_oid($request['folder']))
 		{
 			$arr["folder"] = $request["folder"];
 		};
