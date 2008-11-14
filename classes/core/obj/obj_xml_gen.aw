@@ -247,7 +247,7 @@ class obj_xml_gen
 		//xml_parse_into_struct($parser,$xml,&$keys,&$values);
 		xml_set_element_handler($parser, array(&$this, "_start_el"), array(&$this, "_end_el"));
 		xml_set_character_data_handler($parser, array(&$this, "_chard"));
-		$res = xml_parse($parser, $xml, true);if(aw_global_get("uid") == "markop") arr($xml);
+		$res = xml_parse($parser, $xml, true);
 		if (!$res)
 		{
 echo xml_error_string  (xml_get_error_code($parser))."<br>";
@@ -318,6 +318,11 @@ echo "<pre>".htmlentities($xml)."</pre>";
 
 	function _crea_obj($data, $parent)
 	{
+		if($data["ot_flds"]["class_id"] == CL_USER && get_instance(CL_USER)->username_is_taken(trim($data["props"]["uid"])))
+		{
+			// Can't have two user objects with same uid!
+			return get_instance(CL_USER)->get_obj_for_uid(trim($data["props"]["uid"]))->create_brother($parent);
+		}
 		$o = obj();
 		$o->set_class_id($data["ot_flds"]["class_id"]);
 		$o->set_parent($parent);
