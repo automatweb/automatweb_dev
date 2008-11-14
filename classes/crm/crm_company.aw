@@ -1981,7 +1981,7 @@ class crm_company extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_acct_tbl($t, $arr);
-				$t->table_caption = t("Pangaarved");
+				$t->set_caption(t("Pangaarved"));
 				break;
 
 			case "cedit_adr_tbl":
@@ -1997,7 +1997,7 @@ class crm_company extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_adr_tbl($t, $arr);
-				$t->table_caption = t("Aadressid");
+				$t->set_caption(t("Aadressid"));
 				break;
 
 			// END CEDIT tab
