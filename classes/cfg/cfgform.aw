@@ -4135,13 +4135,13 @@ class cfgform extends class_base
 					unset($ret[$gn]);
 				}
 			}
-			elseif ("cfg_embed" === $_GET["awcb_display_mode"] and !in_array($gn, $this->cfgview_grps))
+			elseif (isset($_GET["awcb_display_mode"]) && "cfg_embed" === $_GET["awcb_display_mode"] and !in_array($gn, $this->cfgview_grps))
 			{
 				unset($ret[$gn]);
 			}
 		}
 
-		if ("cfg_embed" === $_GET["awcb_display_mode"])
+		if (isset($_GET["awcb_display_mode"]) && "cfg_embed" === $_GET["awcb_display_mode"])
 		{ // set first available grp as default for cfgview group selection
 			reset($ret);
 			$gn = key($ret);

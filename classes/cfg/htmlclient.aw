@@ -190,7 +190,7 @@ class htmlclient extends aw_template
 		// the (possibly bad) side effect is that the first added panel will be used
 		// as the main tab panel. OTOH, the first should always be the one that
 		// is added by class_base, so we should be covered
-		if ($args["type"] == "tabpanel" && !is_object($this->tabpanel))
+		if (isset($args["type"]) && $args["type"] == "tabpanel" && !is_object($this->tabpanel))
 		{
 			$this->tabpanel = &$args["vcl_inst"];
 			return false;
@@ -300,7 +300,7 @@ class htmlclient extends aw_template
 			);
 		};
 
-		if (empty($args["value"]) && is_callable(array($args["vcl_inst"], "get_html")))
+		if (empty($args["value"]) && isset($args["vcl_inst"]) && is_callable(array($args["vcl_inst"], "get_html")))
 		{
 			$args["value"] = $args["vcl_inst"]->get_html(!empty($this->layoutinfo[$args["parent"]]["closeable"]));
 		}
@@ -589,7 +589,7 @@ class htmlclient extends aw_template
 				// track usage of submit button, if one does not exist in class properties
 				// then we add one ourself. This is not a good way to do this, but hey ..
 				// and it gets worse...
-				if ($item["type"] == "submit")
+				if (isset($item["type"]) && $item["type"] == "submit")
 				{
 					$this->submit_done = true;
 				}

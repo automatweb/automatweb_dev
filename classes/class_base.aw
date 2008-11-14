@@ -1444,7 +1444,7 @@ class class_base extends aw_template
 			$orb_class = $this->orb_class;
 		}
 
-		if (is_object($this->orb_class))
+		if (isset($this->orb_class) && is_object($this->orb_class))
 		{
 			$orb_class = get_class($this->orb_class);
 		};
@@ -1506,7 +1506,7 @@ class class_base extends aw_template
 
 		// get an instance of the class that handles this object type
 		// fuck me plenty! .. orb.aw sets $this->orb_class
-		if (is_object($this->orb_class))
+		if (isset($this->orb_class) && is_object($this->orb_class))
 		{
 			$this->inst = $this->orb_class;
 		}
@@ -3066,7 +3066,7 @@ class class_base extends aw_template
 
 				if ($val["type"] == "releditor")
 				{
-					if (!is_object($val["vcl_inst"]))
+					if (!isset($val["vcl_inst"]) || !is_object($val["vcl_inst"]))
 					{
 						classload("vcl/releditor");
 						$val["vcl_inst"] = new releditor();
@@ -3212,11 +3212,11 @@ class class_base extends aw_template
 			}
 		}
 
-		if (!$this->cfgform_id && $this->clid == CL_DOCUMENT)
+		if ((!isset($this->cfgform_id) || !$this->cfgform_id) && $this->clid == CL_DOCUMENT)
 		{
-			$this->cfgform_id =  aw_ini_get("document.default_cfgform");
+			$this->cfgform_id = aw_ini_get("document.default_cfgform");
 		}
-		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
+		if(isset($this->cfgform_id) && $this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
 		{
 			$this->process_view_controllers(&$resprops, $controllers, $argblock);
 		}
@@ -3258,7 +3258,7 @@ class class_base extends aw_template
 			### add prefixes to property names whose values will be parameters for ... (e.g. autocomplete source method)
 			foreach ($tmp as $key => $el)
 			{
-				if (is_array ($el["autocomplete_params"]))
+				if (isset($el["autocomplete_params"]) && is_array($el["autocomplete_params"]))
 				{
 					foreach ($el["autocomplete_params"] as $param_key => $param_name)
 					{

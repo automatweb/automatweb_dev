@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.166 2008/11/13 07:46:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.167 2008/11/14 14:52:26 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -567,13 +567,13 @@ class releditor extends core
 		};
 
 		// now check whether a relation was requested from url
-		$edit_id = $arr["request"][$this->elname];
+		$edit_id = isset($arr["request"][$this->elname]) ? $arr["request"][$this->elname] : false;
 
 		$found = true;
 
 		$cache_inst = get_instance("cache");
 
-		if (!empty($edit_id) && is_oid($edit_id) && is_oid($arr["obj_inst"]->id()))
+		if ($edit_id !== false && !empty($edit_id) && is_oid($edit_id) && is_oid($arr["obj_inst"]->id()))
 		{
 			// check whether this connection exists
 			$found = false;
@@ -651,7 +651,7 @@ class releditor extends core
 		};
 
 		$form_type = $arr["request"][$this->elname];
-		if (($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
+		if (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))
 		{
 			$form_type = "new";
 		}
@@ -848,7 +848,7 @@ class releditor extends core
 		};
 
 		// maybe I can use the property name itself
-		if ($arr["cb_values"])
+		if (isset($arr["cb_values"]) && $arr["cb_values"])
 		{
 			$t->cb_values = $arr["cb_values"];
 		};
@@ -883,7 +883,7 @@ class releditor extends core
 			}
 		}
 
-		if ($prop["parent"] != "")
+		if (isset($prop["parent"]) && $prop["parent"] != "")
 		{
 			$tmp = array();
 			foreach($xprops as $pn => $pd)

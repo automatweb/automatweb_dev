@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.5 2008/08/27 07:55:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/terminator.aw,v 1.6 2008/11/14 14:52:31 instrumental Exp $
 // terminator.aw - The Terminator 
 /*
 
@@ -22,8 +22,11 @@ class terminator extends class_base
 
 	function get_property($arr)
 	{
-		if(aw_global_get("uid") == "post"){arr(aw_ini_get("tpldir"));}
-		if(aw_global_get("uid") == "post"){arr(aw_ini_get("cache.page_cache"));}
+		if(array_key_exists("KAAREL", $_GET) && $_GET["KAAREL"] == 1)
+		{
+			$this->KAAREL($arr);
+			die;
+		}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -62,6 +65,22 @@ class terminator extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function KAAREL($arr)
+	{
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_CRM_PERSON_EDUCATION,
+				"CL_CRM_PERSON_EDUCATION.RELTYPE_EDUCATION(CL_CRM_PERSON)" => 177,
+			),
+			array(
+				CL_CRM_PERSON_EDUCATION => array(
+					"CL_CRM_PERSON_EDUCATION.RELTYPE_EDUCATION(CL_CRM_PERSON)"
+				),
+			)
+		);
+		arr($odl->arr());
 	}
 }
 ?>

@@ -197,7 +197,7 @@ class connection
 	**/
 	function find($param)
 	{
-		if ($GLOBALS["OBJ_TRACE"])
+		if (isset($GLOBALS["OBJ_TRACE"]) && $GLOBALS["OBJ_TRACE"])
 		{
 			echo "connection::find(".join(",", map2('%s => %s', $param)).") <br>";
 		}
@@ -240,15 +240,15 @@ class connection
 
 		$retval =  $GLOBALS["object_loader"]->ds->find_connections($param);
 
-		if ($param["sort_by"] != "")
+		if (isset($param["sort_by"]) && $param["sort_by"] != "")
 		{
 			uasort($retval, create_function('$a,$b', 'return strcasecmp($a["'.$param["sort_by"].'"], $["'.$param["sort_by"].'"]);'));
 		}
-		if ($param["sort_by_num"] != "")
+		if (isset($param["sort_by_num"]) && $param["sort_by_num"] != "")
 		{
 			uasort($retval, create_function('$a,$b', 'return ($a["'.$param["sort_by_num"].'"] == $b["'.$param["sort_by_num"].'"] ? 0 : ($a["'.$param["sort_by_num"].'"] > $b["'.$param["sort_by_num"].'"] ? 1 : -1 ));'));
 		}
-		if($param['sort_dir'] == 'desc')
+		if(isset($param['sort_dir']) && $param['sort_dir'] == 'desc')
 		{
 			$retval = array_reverse($retval);
 		}
