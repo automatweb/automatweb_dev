@@ -872,7 +872,8 @@ class class_base extends aw_template
 			"load_trans" => 0,
 		));
 		$groups = $cfgu->get_groupinfo();
-		$msgid = "Grupi ".$groups[$argblock["group"]]["caption"]." (".$argblock["group"].") comment";
+		$msgid_grp_cpt = isset($groups[$argblock["group"]]["caption"]) ? $groups[$argblock["group"]]["caption"] : "";
+		$msgid = "Grupi ".$msgid_grp_cpt." (".$argblock["group"].") comment";
 		$help = strlen(t2($msgid))?"<div>".t($msgid)."</div>":t("Lisainfo grupi kohta puudub");
 		//
 		$cli->view_layout = !empty($args["view_layout"]) ? $args["view_layout"] : false;
