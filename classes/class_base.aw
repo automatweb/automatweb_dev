@@ -5189,7 +5189,7 @@ class class_base extends aw_template
 				$par_count = 1;
 				$gdat = $this->groupinfo[$vgr];
 
-				while($gdat["parent"])
+				while(isset($gdat["parent"]) && $gdat["parent"])
 				{
 					$par_count++;
 					$gdat = $this->groupinfo[$gdat["parent"]];

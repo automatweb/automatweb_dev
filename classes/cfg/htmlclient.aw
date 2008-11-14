@@ -476,11 +476,11 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"sbt_caption" => $arr["value"] ? $arr["value"] : t("Salvesta"),
 			"name" => $arr["name"] ? $arr["name"] : "",
-			"action" => $arr["action"] ? $arr["action"] : "",
+			"action" => isset($arr["action"]) && $arr["action"] ? $arr["action"] : "",
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
 			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : ""
 		);
-		if($arr["capt_ord"] == "right")
+		if(isset($arr["capt_ord"]) && $arr["capt_ord"] == "right")
 		{
 			 $name .= strtoupper("_".$arr["capt_ord"]);
 		}
@@ -846,7 +846,7 @@ class htmlclient extends aw_template
 		}
 
 		// confirm save/discard on leave page
-		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
+		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || isset($_GET["group"]) && $_GET["group"] == "relationmgr"))
 		{
 			$this->vars_safe(array(
 				"confirm_unchanged_text" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?")
@@ -1033,7 +1033,7 @@ class htmlclient extends aw_template
 		$tmp = new aw_array($args);
 		$arr = $tmp->get();
 
-		if ($args["type"] == "submit")
+		if (isset($args["type"]) && $args["type"] == "submit")
 		{
 			$this->submit_done = true;
 		};
@@ -1051,7 +1051,7 @@ class htmlclient extends aw_template
 				foreach($options->get() as $key => $val)
 				{
 					$caption = $val;
-					if ($args["edit_links"])
+					if (isset($args["edit_links"]) && $args["edit_links"])
 					{
 						$o = new object($key);
 						$caption = html::href(array(
@@ -1059,7 +1059,7 @@ class htmlclient extends aw_template
 							"caption" => $caption,
 						));
 					};
-					if ($arr["multiple"])
+					if (isset($arr["multiple"]) && $arr["multiple"])
 					{
 						$retval .= html::checkbox(array(
 							"label" => $caption,
@@ -1077,11 +1077,11 @@ class htmlclient extends aw_template
 							"name" => $arr["name"],
 							"checked" => isset($arr["value"]) && ($arr["value"] == $key),
 							"value" => $key,
-							"onclick" => $arr["onclick"],
-							"disabled" => $arr["disabled"][$key],
+							"onclick" => isset($arr["onclick"]) && strlen(trim($arr["onclick"])) > 0 ? $arr["onclick"] : "",
+							"disabled" => isset($arr["disabled"][$key]) && $arr["disabled"][$key] ? true : false,
 						));
 					};
-					if ($arr["orient"] == "vertical")
+					if (isset($arr["orient"]) && $arr["orient"] == "vertical")
 					{
 						$retval .= "<br />";
 
@@ -1127,7 +1127,7 @@ class htmlclient extends aw_template
 				break;
 
 			case "checkbox":
-				$arr["checked"] = ($arr["value"] && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) );
+				$arr["checked"] = (isset($arr["value"]) && $arr["value"] && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) );
 				$arr["value"] = isset($arr["ch_value"]) ? $arr["ch_value"] : "";
 				if (!isset($arr["no_caption"]) || !$arr["no_caption"])
 				{
@@ -1240,7 +1240,7 @@ class htmlclient extends aw_template
 			// hidden elements end up in the orb_vars
 			$this->orb_vars[$item["name"]] = $item["value"];
 		}
-		else if ($item["type"] == "submit")
+		else if (isset($item["type"]) && $item["type"] == "submit")
 		{
 			$item["html"] = $this->put_submit($item);
 			$this->submit_done = true;

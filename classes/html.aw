@@ -41,6 +41,7 @@ class html extends aw_template
 	**/
 	function select($args = array())
 	{
+		$post_append_text = "";
 		extract($args);
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$sz = $mz = $onc = $cl = $w = $ts = "";
@@ -583,7 +584,7 @@ class html extends aw_template
 	function fileupload($args = array())
 	{
 		extract($args);
-		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
+		$textsize = isset($textsize) && $textsize ? " style=\"font-size: {$textsize};\"" : "";
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$rv = "";
 		if (!empty($value))
@@ -691,11 +692,11 @@ class html extends aw_template
 		$checked = checked($checked);
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 
-		if ($textsize and $caption)
+		if (isset($textsize) && $textsize and isset($caption) && $caption)
 		{
 			$caption = '<span style="font-size: ' . $textsize . ';">' . $caption . '</span>';
 		}
-		if(!$id)
+		if(!isset($id) || !$id)
 		{
 			$id = $name."_".$value;
 		}
