@@ -138,7 +138,11 @@ function obj_set_opt($opt, $val)
 
 function obj_get_opt($opt)
 {
-	return $GLOBALS["__obj_sys_opts"][$opt];
+	if (isset($GLOBALS['__obj_sys_opts'][$opt]))
+	{
+		return $GLOBALS["__obj_sys_opts"][$opt];
+	}
+	return null;
 }
 
 function dump_obj_table($pre = "")

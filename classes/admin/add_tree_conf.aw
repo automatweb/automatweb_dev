@@ -816,7 +816,7 @@ class add_tree_conf extends class_base
 			$folder_data["id"] = "fld_" . $folder_id;
 			$by_parent[$parent][] = $folder_data;
 
-			if ($folder_data["all_objs"] && $collect_az)
+			if (isset($folder_data["all_objs"]) && $collect_az)
 			{
 				ksort($az_classes);
 				foreach($az_classes as $az_key => $az_val)
@@ -831,7 +831,7 @@ class add_tree_conf extends class_base
 				};
 			};
 
-			if ($arr["docforms"] && $folder_data["docforms"])
+			if (isset($arr["docforms"]) && isset($folder_data["docforms"]))
 			{
 				$d = get_instance("doc");
                         	$docmenu = $d->get_doc_add_menu($arr["parent"],$arr["period"]);
