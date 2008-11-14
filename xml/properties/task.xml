@@ -74,6 +74,18 @@
             <field>hrs_table</field>
       </property>
       <property>
+            <name>content</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textarea</type>
+            <no_caption>1</no_caption>
+            <cols>80</cols>
+            <rows>30</rows>
+            <field>description</field>
+            <parent>center_bit</parent>
+            <caption>Sisu</caption>
+      </property>
+      <property>
             <name>center_bit_vis</name>
             <table>objects</table>
             <group>general</group>
@@ -84,26 +96,13 @@
             <field>center_bit_vis</field>
       </property>
       <property>
-            <name>content</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>textarea</type>
-            <no_caption>1</no_caption>
-            <cols>80</cols>
-            <rows>30</rows>
-            <field>description</field>
-            <parent>center_bit_left_ct</parent>
-            <width>100%</width>
-            <caption>Sisu</caption>
-      </property>
-      <property>
             <name>parts_tb</name>
             <table>objects</table>
             <group>general</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>parts_tb</field>
       </property>
       <property>
@@ -113,7 +112,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>co_table</field>
       </property>
       <property>
@@ -123,7 +122,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>proj_table</field>
       </property>
       <property>
@@ -133,7 +132,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <field>parts_table</field>
       </property>
       <property>
@@ -143,7 +142,7 @@
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <caption>Klient</caption>
       </property>
       <property>
@@ -153,7 +152,7 @@
             <type>relpicker</type>
             <field>project</field>
             <reltype>RELTYPE_PROJECT</reltype>
-            <parent>center_bit_right_top</parent>
+            <parent>center_bit_bottom</parent>
             <caption>Projekt</caption>
       </property>
       <property>
@@ -163,7 +162,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_bottom</parent>
+            <parent>center_bit_bottom</parent>
             <field>files_tb</field>
       </property>
       <property>
@@ -173,7 +172,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit_right_bottom</parent>
+            <parent>center_bit_bottom</parent>
             <field>files_table</field>
       </property>
       <property>
