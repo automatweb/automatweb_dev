@@ -2,9 +2,7 @@
 /*
 
 @classinfo syslog_type=ST_TASK confirm_save_data=1 maintainer=markop
-
 @default table=objects
-
 
 @default group=general
 @layout top_bit type=vbox closeable=1 area_caption=P&otilde;hiandmed
@@ -16,7 +14,7 @@
 			@property name type=textbox table=objects field=name parent=top_2way_left
 			@caption Nimi
 
-@property balance type=hidden table=aw_account_balances field=aw_balance
+			@property balance type=hidden table=aw_account_balances field=aw_balance parent=top_2way_left
 
 			@property comment type=textbox table=objects field=comment parent=top_2way_left
 			@caption Kommentaar
@@ -35,53 +33,43 @@
 			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
 			@caption T&auml;htaeg
 
-	@property hrs_table type=table no_caption=1 store=no parent=top_bit
+
 
 
 @layout center_bit type=hbox
 
-
-	@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit
-	@caption Sisu
-
+	@property hrs_table type=table no_caption=1 store=no parent=center_bit
 
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
-	@layout center_bit_left type=vbox parent=center_bit
+
+@layout content_bit type=vbox closeable=1 area_caption=Sisu
+	@property content type=textarea cols=180 rows=30 table=documents parent=content_bit no_caption=1
+	@caption Sisu
+
+@layout bottom_pit type=vbox
+	@property parts_tb type=toolbar no_caption=1 store=no parent=bottom_pit
+
+	@property co_table type=table no_caption=1 store=no parent=bottom_pit
+	@property proj_table type=table no_caption=1 store=no parent=bottom_pit
+	@property parts_table type=table no_caption=1 store=no parent=bottom_pit
 
 
-		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
-
-
-
-	@layout center_bit_right type=vbox parent=center_bit
-
-		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
-
-			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
-
-			@property co_table type=table no_caption=1 store=no parent=center_bit_bottom
-			@property proj_table type=table no_caption=1 store=no parent=center_bit_bottom
-			@property parts_table type=table no_caption=1 store=no parent=center_bit_bottom
-
-			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_bottom
-			@caption Klient
-
-			@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_bottom
-			@caption Projekt
-
-
-		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
-
-			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
-
-			@property files_table type=table no_caption=1 store=no parent=center_bit_bottom
+@layout files_pit type=vbox
+	@property files_tb type=toolbar no_caption=1 store=no parent=files_pit
+	@property files_table type=table no_caption=1 store=no parent=files_pit
 
 @property ppa type=hidden store=no no_caption=1
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
+@caption Klient
 
+@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
+@caption Projekt
 
 @property is_done type=checkbox field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
+
+
 
 @layout personal type=hbox
 @caption Kestab terve p&auml;eva
@@ -867,7 +855,7 @@ class task extends class_base
 
 	function callback_on_load($arr)
 	{
-		if(($arr["request"]["msgid"]))
+		if(isset($arr["request"]["msgid"]) && $arr["request"]["msgid"])
 		{
 			$mail = get_instance(CL_MESSAGE);
 			$this->mail_data = $mail->fetch_message(Array(
@@ -1128,7 +1116,7 @@ class task extends class_base
 
 			case "content":
 				$data["style"] = "width: 100%";
-				if($this->mail_data)
+				if(isset($this->mail_data))
 				{
 					$data["value"] = sprintf(
 					"From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
@@ -1142,10 +1130,17 @@ class task extends class_base
 				break;
 
 			case "end":
-
+				$daystart = 0;
 	//			$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
-				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
-				if($daystart > $data["value"]) $data["value"] = $daystart;
+				if(isset($arr["request"]["start1"]))
+				{
+					$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
+					if($daystart > $data["value"])
+					{
+						$data["value"] = $daystart;
+					}
+				}
+				
 				$p = get_instance(CL_PLANNER);
 				$cal = $p->get_calendar_for_user();//arr($data["value"]);
 				if ($cal && !($daystart > 0))
@@ -1198,24 +1193,24 @@ class task extends class_base
 				break;
 
 			case "name":
-				if($this->mail_data)
+				if(isset($this->mail_data) && $this->mail_data)
 				{
 					$data["value"] = $this->mail_data["subject"];
-				}
-				if($arr["request"]["title"] && $arr["new"])
-				{
-					$data["value"] = $arr["request"]["title"];
-				}
-				if($arr["request"]["participants"] && $arr["new"])
-				{
-					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
 				}
 				if (is_object($arr["obj_inst"]) && $data["value"] == "")
 				{
 					$data["value"] = $this->_get_default_name($arr["obj_inst"]);
 				}
-				if ($arr["new"])
+				if($arr["new"])
 				{
+					if(isset($arr["request"]["title"]) && $arr["request"]["title"])
+					{
+						$data["value"] = $arr["request"]["title"];
+					}
+					if(isset($arr["request"]["participants"]) && $arr["request"]["participants"])
+					{
+						$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
+					}
 					$data["post_append_text"] = " <a href='#' onClick='document.changeform.ppa.value=1;document.changeform.submit();'>".t("Stopper")."</a>";
 				}
 				else
@@ -1229,7 +1224,7 @@ class task extends class_base
 						"source_id" => $arr["obj_inst"]->id(),
 					));
 					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\", 800,600)'>".t("Stopper")."</a>";
-					if ($arr["request"]["stop_pop"] == 1)
+					if (isset($arr["request"]["stop_pop"]) &&  $arr["request"]["stop_pop"] == 1)
 					{
 						$data["post_append_text"] .= "<script language='javascript'>aw_popup_scroll(\"$url\",\"aw_timers\", 800, 600)</script>";
 					}
@@ -3824,8 +3819,8 @@ class task extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
 		$arr["orderer_h"] = 0;
-		$arr["orderer_h"] = $_GET["alias_to_org"] ? $_GET["alias_to_org"] : 0;
-		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
+		$arr["orderer_h"] = isset($_GET["alias_to_org"]) ? $_GET["alias_to_org"] : 0;
+		$arr["project_h"] = isset($_GET["set_proj"]) ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
 		{
@@ -4019,86 +4014,89 @@ class task extends class_base
 			$has = true;
 			$ps = $cff->get_cfg_proplist($cfgform_id);
 		}
-
-		if (!$has || $ps["priority"])
+		
+		if(isset($ps))
 		{
-			$t->define_field(array(
-				"name" => "priority",
-				"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["num_hrs_guess"])
-		{
-			$t->define_field(array(
-				"name" => "num_hrs_guess",
-				"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["num_hrs_real"])
-		{
-			$t->define_field(array(
-				"name" => "num_hrs_real",
-				"caption" => $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik tundide arv"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["num_hrs_to_cust"])
-		{
-			$t->define_field(array(
-				"name" => "num_hrs_to_cust",
-				"caption" => $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Tundide arv kliendile"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["hr_price"])
-		{
-			$t->define_field(array(
-				"name" => "hr_price",
-				"caption" => $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["deal_price"])
-		{
-			$t->define_field(array(
-				"name" => "deal_price",
-				"caption" => $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["hr_price_currency"])
-		{
-			$t->define_field(array(
-				"name" => "hr_price_currency",
-				"caption" => $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["bill_no"])
-		{
-			$t->define_field(array(
-				"name" => "bill_no",
-				"caption" => $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["code"])
-		{
-			$t->define_field(array(
-				"name" => "code",
-				"caption" => $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
-				"align" => "center"
-			));
-		}
-		if (!$has || $ps["service_type"])
-		{
-			$t->define_field(array(
-				"name" => "service_type",
-				"caption" => $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
-				"align" => "center"
-			));
+			if (!$has || $ps["priority"])
+			{
+				$t->define_field(array(
+					"name" => "priority",
+					"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["num_hrs_guess"])
+			{
+				$t->define_field(array(
+					"name" => "num_hrs_guess",
+					"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["num_hrs_real"])
+			{
+				$t->define_field(array(
+					"name" => "num_hrs_real",
+					"caption" => $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik tundide arv"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["num_hrs_to_cust"])
+			{
+				$t->define_field(array(
+					"name" => "num_hrs_to_cust",
+					"caption" => $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Tundide arv kliendile"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["hr_price"])
+			{
+				$t->define_field(array(
+					"name" => "hr_price",
+					"caption" => $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["deal_price"])
+			{
+				$t->define_field(array(
+					"name" => "deal_price",
+					"caption" => $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["hr_price_currency"])
+			{
+				$t->define_field(array(
+					"name" => "hr_price_currency",
+					"caption" => $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["bill_no"])
+			{
+				$t->define_field(array(
+					"name" => "bill_no",
+					"caption" => $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["code"])
+			{
+				$t->define_field(array(
+					"name" => "code",
+					"caption" => $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
+					"align" => "center"
+				));
+			}
+			if (!$has || $ps["service_type"])
+			{
+				$t->define_field(array(
+					"name" => "service_type",
+					"caption" => $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
+					"align" => "center"
+				));
+			}
 		}
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
@@ -4303,7 +4301,7 @@ class task extends class_base
 		$tb->add_menu_button(array(
 			"parent" => "new",
 			"name" => "part",
-			"tooltip" => t("Uus osaleja"),
+			"text" => t("Uus osaleja"),
 		));
 
 		if (is_oid($arr["obj_inst"]->id()))
@@ -4347,7 +4345,7 @@ class task extends class_base
 
 		$tb->add_menu_button(array(
 //			"parent" => "part_search",
-			"tooltip" => t("Lisa osaleja t&ouml;&ouml;tajate hulgast:"),
+			"text" => t("Lisa osaleja t&ouml;&ouml;tajate hulgast:"),
 			"name" => "search_part",
 		));
 
@@ -4428,7 +4426,7 @@ class task extends class_base
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_menu_button(array(
 			"name" => "new",
-			"tooltip" => t("Uus"),
+			"text" => t("Uus"),
 		));
 
 		$tb->add_sub_menu(array(
@@ -4507,7 +4505,7 @@ class task extends class_base
 
 		$tb->add_menu_button(array(
 			"name" => "search",
-			"tooltip" => t("Otsi"),
+			"text" => t("Otsi"),
 			"img" => "search.gif"
 		));
 
@@ -4522,7 +4520,7 @@ class task extends class_base
 		));
 
 
-		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1, "s" => $s), "crm_project_search");
+		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1), "crm_project_search");
 		$tb->add_sub_menu(array(
 			"parent" => "search",
 			"text" => t("Projekt"),
@@ -4927,7 +4925,7 @@ class task extends class_base
 
 	function fast_add_participants($arr,$types)
 	{
-		if(is_array($_SESSION["event"]["participants"]) && !$arr["new"])
+		if(isset($_SESSION["event"]) && is_array($_SESSION["event"]["participants"]) && !$arr["new"])
 		{
 			foreach($_SESSION["event"]["participants"] as $pa)
 			{

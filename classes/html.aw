@@ -53,6 +53,11 @@ class html extends aw_template
 			$w = " width: {$width}px;";
 		}
 
+		if (!empty($post_append_text))
+		{
+			$post_append_text = "";
+		}
+
 		if (!empty($textsize))
 		{
 			$ts = " font-size: {$textsize};";
@@ -136,6 +141,10 @@ class html extends aw_template
 				}
 				$optstr .= "</optgroup>\n";
 			}
+		}
+		if (!empty($post_append_text))
+		{
+			$post_append_text = "";
 		}
 
 		//
@@ -886,7 +895,7 @@ class html extends aw_template
 			$val = $args['value'];
 		}
 
-		if ($args["disabled"] or $args["textsize"])
+		if (isset($args["disabled"]) or isset($args["textsize"]))
 		{
 			$name = array ("name" => $args["name"]);
 
@@ -908,7 +917,7 @@ class html extends aw_template
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
 
-		$add_empty = in_array($args["add_empty"], array("false", "no", "0")) ? false : true;
+		$add_empty = (isset($args["add_empty"]) && in_array($args["add_empty"], array("false", "no", "0"))) ? false : true;
 
 		return $selector->gen_edit_form($name, $val, $year_from, $year_to, $add_empty);
 	}
@@ -1453,7 +1462,7 @@ class html extends aw_template
 	{
 		$params = array("parent" => $parent) + $params;
 
-		if (is_oid($_GET["section"]) and !isset($params["section"]))
+		if (isset($_GET["section"]) && is_oid($_GET["section"]) and !isset($params["section"]))
 		{
 			$params["section"] = $_GET["section"];
 		}

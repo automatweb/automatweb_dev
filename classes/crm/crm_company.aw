@@ -6266,7 +6266,7 @@ class crm_company extends class_base
 			$tmp = array();
 			foreach($p->connections_from(array("type" => "RELTYPE_IMPORTANT_PERSON")) as $c)
 			{
-				if ($res[$c->prop("to")])
+				if (isset($res[$c->prop("to")]))
 				{
 					$tmp[$c->prop("to")] = $c->prop("to");
 				}

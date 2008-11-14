@@ -1066,8 +1066,8 @@ class htmlclient extends aw_template
 							"name" => $arr["name"] . "[" . $key . "]",
 							"checked" => ($arr["value"][$key]),
 							"value" => $key,
-							"disabled" => $arr["disabled"][$key],
-							"onclick" => $arr["onclick"],
+							"disabled" => isset($arr["disabled"]) ? $arr["disabled"][$key] : "",
+							"onclick" => isset($arr["onclick"]) ? $arr["onclick"] : "",
 						));
 					}
 					else

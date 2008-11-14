@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.107 2008/11/13 18:26:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.108 2008/11/14 16:14:02 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -26,10 +26,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 		@layout top_2way_right type=vbox parent=top_2way
 
-			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
+			@property start1 type=datetime_select field=start parent=top_2way_right table=planner
 			@caption Algus
 
-			@property end type=datetime_select table=planner parent=top_2way_right
+			@property end type=datetime_select  parent=top_2way_right table=planner
 			@caption L&otilde;peb
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
@@ -37,10 +37,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @layout center_bit type=hbox 
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
-
-
-	@property content type=textarea cols=180 rows=30 table=documents parent=center_bit no_caption=1
-	@caption Sisu
 
 	@layout center_bit_left type=vbox parent=center_bit 
 
@@ -333,7 +329,7 @@ class crm_meeting extends task
 	
 	function callback_on_load($arr)
 	{
-		if(($arr["request"]["msgid"]))
+		if(isset($arr["request"]["msgid"]) && $arr["request"]["msgid"])
 		{
 			$mail = get_instance(CL_MESSAGE);
 			$this->mail_data = $mail->fetch_message(Array(
@@ -457,19 +453,19 @@ class crm_meeting extends task
 				break;
 
 			case "name":
-				if($this->mail_data)
+				if(isset($this->mail_data))
 				{
 					$data["value"] = $this->mail_data["subject"];
-				break;
+					break;
 				}
-				if($arr["request"]["title"] && $arr["new"])
+				if($arr["new"] && $arr["request"]["title"])
 				{
 					$data["value"] = $arr["request"]["title"];
 				}
 				break;
 			case "content":
 				$data["style"] = "width: 100%";
-				if($this->mail_data)
+				if(isset($this->mail_data))
 				{
 					$data["value"] = sprintf(
 					"From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
@@ -617,7 +613,7 @@ class crm_meeting extends task
 
 			case "participants":
 			
-				if($arr["request"]["participants"] && $arr["new"])
+				if($arr["new"] && $arr["request"]["participants"])
 				{
 					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
 				}
@@ -1205,8 +1201,8 @@ class crm_meeting extends task
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
-		$arr["orderer_h"] = $_GET["alias_to_org"] ? $_GET["alias_to_org"] : 0;
-		$arr["project_h"] = $_GET["set_proj"] ? $_GET["set_proj"] : 0;
+		$arr["orderer_h"] = isset($_GET["alias_to_org"]) ? $_GET["alias_to_org"] : 0;
+		$arr["project_h"] = isset($_GET["set_proj"]) ? $_GET["set_proj"] : 0;
 		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
 		{

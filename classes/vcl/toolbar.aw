@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.41 2008/11/13 18:26:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.42 2008/11/14 16:14:06 markop Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -69,7 +69,7 @@ class toolbar extends aw_template
 		$arr["type"] = "button";
 		if (empty($arr["img"]))
 		{
-			if(!empty($arr["tooltip"]))
+			if(!empty($arr["text"]))
 			{
 				$arr["type"] = "text_button";
 			} 
