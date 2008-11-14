@@ -52,10 +52,7 @@ while (!empty($ru) && empty($pf))
 			$pf_url = $ru;
 		}
 	}
-	if(isset($vals["return_url"]))
-	{
-		$ru = $vals["return_url"];
-	}
+	$ru = isset($vals["return_url"]) ? $vals["return_url"] : NULL;
 }
 aw_disable_acl();
 $p = get_current_person();
