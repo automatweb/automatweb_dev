@@ -3063,7 +3063,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$ret[$pn] = " ".$tbl_name.".target AS $resn ";
 						$this->_add_s($tbl_name);
 					}
-					$multi_fields[$pn] = $pn;
+					if (!empty($p[$pn]["multiple"]))
+					{
+						$multi_fields[$pn] = $pn;
+					}
 				}
 				else
 				{
