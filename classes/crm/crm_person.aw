@@ -4251,7 +4251,7 @@ class crm_person extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		if($this->can("view", $arr["request"]["job_offer_id"]))
+		if(isset($arr["request"]["job_offer_id"]) && $this->can("view", $arr["request"]["job_offer_id"]))
 		{
 			print $arr["request"]["job_offer_id"];
 			aw_session_set("job_offer_obj_id_for_candidate", $arr["request"]["job_offer_id"]);

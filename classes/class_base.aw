@@ -4756,7 +4756,7 @@ class class_base extends aw_template
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
-			if (!$all_properties[$key] && !$val["force_display"])
+			if (!isset($all_properties[$key]) && !isset($val["force_display"]))
 			{
 				continue;
 			};
@@ -4810,7 +4810,7 @@ class class_base extends aw_template
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
-			if (!$all_properties[$key] && !$val["force_display"])
+			if (!isset($all_properties[$key]) && !isset($val["force_display"]))
 			{
 				continue;
 			};
@@ -5020,16 +5020,16 @@ class class_base extends aw_template
 			foreach($grps as $gkey => $gval)
 			{
 				// use the "submit" setting from the original group
-				if ($this->groupinfo[$gkey]["submit"])
+				if (isset($this->groupinfo[$gkey]["submit"]) && $this->groupinfo[$gkey]["submit"])
 				{
 					$gval["submit"] = $this->groupinfo[$gkey]["submit"];
 				}
 
-				if ($this->groupinfo[$gkey]["tabgroup"])
+				if (isset($this->groupinfo[$gkey]["tabgroup"]) && $this->groupinfo[$gkey]["tabgroup"])
 				{
 					$gval["tabgroup"] = $this->groupinfo[$gkey]["tabgroup"];
 				}
-				if ($this->groupinfo[$gkey]["submit_method"] || $gval["submit_method"])
+				if ((isset($this->groupinfo[$gkey]["submit_method"]) && $this->groupinfo[$gkey]["submit_method"]) || (isset($gval["submit_method"]) && $gval["submit_method"]))
 				{
 					$gval["submit_method"] = $this->groupinfo[$gkey]["submit_method"];
 				}
