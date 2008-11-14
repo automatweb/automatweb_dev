@@ -250,6 +250,8 @@ function load_config ($files = array(), $cache_file = null)
 	}
 
 	$GLOBALS["cfg"]["basedir"] = AW_DIR;
+	$site_basedir = str_replace("\\", "/", realpath($_SERVER["DOCUMENT_ROOT"]."/../"));
+	$GLOBALS["cfg"]["site_basedir"] = $site_basedir;
 
 	// get the modification date on the ini cache
 	if (file_exists($cache_file) and is_array($files))
