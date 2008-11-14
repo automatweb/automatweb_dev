@@ -411,43 +411,6 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
-			case "gchart":
-				$c = &$arr["prop"]["vcl_inst"];
-				$c->set_type(GCHART_BAR_GH);
-				$c->add_data(array(100, 200));
-				$c->add_data(array(300));
-				$c->set_size(array(
-					"width" => 250,
-					"height" => 100,
-				));
-				$c->set_colors(array("333333", "999999", "cccccc"));
-				$c->add_fill(array(
-					"area" => GCHART_FILL_BACKGROUND,
-					"type" => GCHART_FILL_GRADIENT,
-					"colors" => array(
-						array(
-							"color" => "ffffff",
-							"param" => 0.2,
-						),
-						array(
-							"color" => "dddddd",
-							"param" => 1,
-						),
-					),
-				));
-				$c->set_legend(array(
-					"position" => GCHART_POSITION_LEFT,
-					"labels" => array(
-						"wtf",
-						"bla",
-					),
-				));
-				$c->set_bar_sizes(array(
-					"width" => 10,
-					"bar_spacing" => 3,
-					"bar_group_spacing" => 15,
-				));
-				break;
 			case "is_order":
 				if(!$arr["new"])
 				{
