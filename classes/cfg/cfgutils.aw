@@ -521,7 +521,7 @@ class cfgutils extends aw_template
 
 				if (is_array($relinfo))
 				{
-					foreach($relx["clid"] as $clid)
+					foreach(safe_array($relx["clid"]) as $clid)
 					{
 						if (@constant($clid))
 						{
