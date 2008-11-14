@@ -256,7 +256,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if ($prop["method"] === "serialize" && $prop["store"] !== "connect")
 				{
-					if (empty($_got_fields[$prop["field"]]))
+					if (!array_key_exists($prop["field"], $_got_fields))
 					{
 						$fields[] = $table.".`".$prop["field"]."` AS `".$prop["field"]."`";
 						$_got_fields[$prop["field"]] = true;
@@ -477,7 +477,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if ($prop["method"] == "serialize")
 				{
-					if (!$_got_fields[$prop["field"]])
+					if (!array_key_exists($prop["field"], $_got_fields))
 					{
 						$fields[] = $table.".`".$prop["field"]."` AS `".$prop["field"]."`";
 						$_got_fields[$prop["field"]] = true;
@@ -3354,7 +3354,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if ($prop["method"] == "serialize")
 				{
-					if (!$_got_fields[$prop["field"]])
+					if (!array_key_exists($prop["field"], $_got_fields))
 					{
 						$fields[] = $table."_versions.`".$prop["field"]."` AS `".$prop["field"]."`";
 						$_got_fields[$prop["field"]] = true;

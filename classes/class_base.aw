@@ -932,7 +932,7 @@ class class_base extends aw_template
 
 		if($ulev)
 		{
-			foreach(warning_prop() as $oid => $properties)
+			foreach(safe_array(warning_prop()) as $oid => $properties)
 			{
 				if(!$this->can("view", $oid))
 				{
@@ -968,7 +968,7 @@ class class_base extends aw_template
 			}
 
 			$final_warns = array();
-			foreach(warning() as $level => $warns)
+			foreach(safe_array(warning()) as $level => $warns)
 			{
 				if($level < $ulev)
 				{
