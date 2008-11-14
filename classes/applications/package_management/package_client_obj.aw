@@ -423,7 +423,7 @@ class package_client_obj extends _int_object
 		$inst = $this->instance();
 		$this->db_table_name = "site_file_index";
 		$filt = array();
-		if($arr['old_files'])
+		if(isset($arr['old_files']))
 		{
 			$filt[] = "used < 1";
 		}
@@ -431,7 +431,7 @@ class package_client_obj extends _int_object
 		{
 			$filt[] = "used = 1";
 		}
-		if($arr['search_file_name'])
+		if(isset($arr['search_file_name']) && strlen($arr['search_file_name']) > 0)
 		{
 			$filt[] = "file_name LIKE '%".$arr['search_file_name']."%'";
 		}
