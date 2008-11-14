@@ -88,27 +88,6 @@
             <caption>Failide nimekiri</caption>
       </property>
       <property>
-            <name>my_list</name>
-            <table>aw_package_client</table>
-            <group>my_packages</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_list</field>
-            <caption>Pakkide nimekiri</caption>
-      </property>
-      <property>
-            <name>my_files_list</name>
-            <table>aw_package_client</table>
-            <group>my_packages</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <parent>packages_list</parent>
-            <store>no</store>
-            <field>my_files_list</field>
-            <caption>Minu Failide nimekiri</caption>
-      </property>
-      <property>
             <name>made_toolbar</name>
             <table>aw_package_client</table>
             <group>made_packages</group>
@@ -140,6 +119,72 @@
             <field>made_files_list</field>
             <caption>Failide nimekiri</caption>
       </property>
+      <property>
+            <name>my_list</name>
+            <table>aw_package_client</table>
+            <group>my_packages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_list</field>
+            <caption>Pakkide nimekiri</caption>
+      </property>
+      <property>
+            <name>my_files_list</name>
+            <table>aw_package_client</table>
+            <group>my_packages</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>packages_list</parent>
+            <store>no</store>
+            <field>my_files_list</field>
+            <caption>Minu Failide nimekiri</caption>
+      </property>
+      <property>
+            <name>search_file_name</name>
+            <table>aw_package_client</table>
+            <group>my_files</group>
+            <type>textbox</type>
+            <size>20</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>files_search</parent>
+            <field>search_file_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>old_files</name>
+            <table>objects</table>
+            <group>my_files</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>files_search</parent>
+            <field>old_files</field>
+            <caption>Vanad (Mitte t&amp;amp;ouml;&amp;amp;ouml;tavad)</caption>
+      </property>
+      <property>
+            <name>files_search_button</name>
+            <table>aw_package_client</table>
+            <group>my_files</group>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <parent>files_search</parent>
+            <store>no</store>
+            <field>files_search_button</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>my_files</name>
+            <table>aw_package_client</table>
+            <group>my_files</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>files_list</parent>
+            <field>my_files</field>
+            <caption>Failide nimekiri</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PACKAGE_CLIENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -153,14 +198,18 @@
                   <caption>Saadaval paketid</caption>
                   <no_submit>1</no_submit>
             </packages>
-            <my_packages>
-                  <caption>Kasutusel paketid</caption>
-                  <no_submit>1</no_submit>
-            </my_packages>
             <made_packages>
                   <caption>Loodud paketid</caption>
                   <no_submit>1</no_submit>
             </made_packages>
+            <my_packages>
+                  <caption>Kasutusel paketid</caption>
+                  <no_submit>1</no_submit>
+            </my_packages>
+            <my_files>
+                  <caption>Paigaldatud failid</caption>
+                  <no_submit>1</no_submit>
+            </my_files>
       </groupinfo>
       <tableinfo>
             <aw_package_client>
@@ -200,6 +249,24 @@
                   <area_caption>&amp;amp;nbsp;</area_caption>
                   <group>made_packages</group>
             </made_packages_list>
+            <files_frame>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>my_files</group>
+                  <area_caption></area_caption>
+            </files_frame>
+            <files_search>
+                  <type>vbox</type>
+                  <parent>files_frame</parent>
+                  <area_caption>Failide&amp;amp;nbsp;otsing</area_caption>
+                  <group>my_files</group>
+            </files_search>
+            <files_list>
+                  <type>vbox</type>
+                  <parent>files_frame</parent>
+                  <area_caption>&amp;amp;nbsp;</area_caption>
+                  <group>my_files</group>
+            </files_list>
       </layout>
 </properties>
 

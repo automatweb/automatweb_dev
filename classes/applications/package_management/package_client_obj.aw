@@ -133,7 +133,6 @@ class package_client_obj extends _int_object
 				"file" => $fn,
 				"file_versions" => $data["file_versions"],
 			));
-
 			$this->install_package($data + array("file_name" => $fn));
 		}
 	}
@@ -239,6 +238,11 @@ class package_client_obj extends _int_object
 					'"."123"."'
 				)";
 //arr($sql);
+
+				$this->uninstall(array(
+					"name" => $file_name,
+					"location" => $location,
+				));
 				$pi->db_query($sql);
 
 //$path = substr($path , strpos($path,"/", 1)+1);
@@ -273,6 +277,13 @@ class package_client_obj extends _int_object
 			}
 		}
 		die("all done...");
+	}
+
+	private function uninstall($arr)
+	{
+		$pi = get_instance(CL_PACKAGE);
+		$sql = "UPDATE ".$this->db_table_name." SET used=0 where file_name='".$arr["name"]."' AND file_location='".$arr["location"]."'";
+		$pi->db_query($sql);
 	}
 
 	/** Adds installed package object to the system
@@ -398,6 +409,43 @@ class package_client_obj extends _int_object
 		}
 		return $files;
 	}
+
+	/** returns installed files data
+		@attrib api=1 params=name
+		@param old_files optional type=int
+			if set, returns uninstalled files info
+		@param search_file_name optional type=string
+			file name
+		@returns array
+	**/
+	public function get_installed_files_data($arr)
+	{
+		$inst = $this->instance();
+		$this->db_table_name = "site_file_index";
+		$filt = array();
+		if($arr['old_files'])
+		{
+			$filt[] = "used < 1";
+		}
+		else
+		{
+			$filt[] = "used = 1";
+		}
+		if($arr['search_file_name'])
+		{
+			$filt[] = "file_name LIKE '%".$arr['search_file_name']."%'";
+		}
+		$sql = "select * FROM ".$this->db_table_name." WHERE ".join(" AND " , $filt);
+
+		$inst->db_query($sql);
+		$rv = array();
+		while($row = $inst->db_next())
+		{
+			$rv[] = $row;
+		};
+		return $rv;
+	}
+
 }
 
 ?>

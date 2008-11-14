@@ -39,15 +39,6 @@
 			@property files_list type=text no_caption=1 parent=packages_list store=no
 			@caption Failide nimekiri
 
-@groupinfo my_packages caption="Kasutusel paketid" no_submit=1
-@default group=my_packages
-
-	@property my_list type=table no_caption=1 store=no
-	@caption Pakkide nimekiri
-
-	@property my_files_list type=text no_caption=1 parent=packages_list store=no
-	@caption Minu Failide nimekiri
-
 @groupinfo made_packages caption="Loodud paketid" no_submit=1
 @default group=made_packages
 
@@ -64,7 +55,41 @@
 			@property made_files_list type=text no_caption=1 parent=packages_list store=no
 			@caption Failide nimekiri
 
+@groupinfo my_packages caption="Kasutusel paketid" no_submit=1
+@default group=my_packages
 
+	@property my_list type=table no_caption=1 store=no
+	@caption Pakkide nimekiri
+
+	@property my_files_list type=text no_caption=1 parent=packages_list store=no
+	@caption Minu Failide nimekiri
+
+@groupinfo my_files caption="Paigaldatud failid" no_submit=1
+@default group=my_files
+
+	@layout files_frame type=hbox width=20%:80%
+
+		@layout files_search type=vbox parent=files_frame area_caption=Failide&nbsp;otsing
+
+			@property search_file_name type=textbox size=20 store=no captionside=top parent=files_search
+			@caption Nimi
+
+#			@property search_file_version type=textbox size=20 store=no captionside=top parent=files_search
+#			@caption Versioon
+
+#			@property search_file_package type=textbox size=20 store=no captionside=top parent=files_search
+#			@caption Pakett
+
+			@property old_files type=checkbox table=objects store=no captionside=top parent=files_search
+			@caption Vanad (Mitte t&ouml;&ouml;tavad)
+
+			@property files_search_button type=submit no_caption=1 parent=files_search
+			@caption Otsi
+
+		@layout files_list type=vbox parent=files_frame  area_caption=&nbsp;
+
+			@property my_files type=table no_caption=1 store=no parent=files_list
+			@caption Failide nimekiri
 */
 
 class package_client extends class_base
@@ -84,6 +109,10 @@ class package_client extends class_base
 
 		switch($prop["name"])
 		{
+			case 'old_files':
+			case 'search_file_package':
+			case 'search_file_version':
+			case 'search_file_name':
 			case 'search_name':
 			case 'search_version':
 			case 'search_file':
@@ -132,6 +161,13 @@ class package_client extends class_base
 			$arr['args']['search_name'] = $arr['request']['search_name'];
 			$arr['args']['search_version'] = $arr['request']['search_version'];
 			$arr['args']['search_file'] = $arr['request']['search_file'];
+		}
+		if (!empty($arr['request']['files_search_button']))
+		{
+			$arr['args']['search_file_name'] = $arr['request']['search_file_name'];
+			$arr['args']['search_file_version'] = $arr['request']['search_file_version'];
+			$arr['args']['search_file_package'] = $arr['request']['search_file_package'];
+			$arr['args']['old_files'] = $arr['request']['old_files'];
 		}
 	}
 
@@ -276,6 +312,56 @@ class package_client extends class_base
 		return PROP_OK;
 	}
 
+	function _get_my_files($arr)
+	{
+		$data = $arr["obj_inst"]->get_installed_files_data($arr["request"]);
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_caption(t('Paigaldatud failide nimekiri'));
+
+		$t->define_field(array(
+			'name' => 'file',
+			'caption' => t('Fail'),
+			"chgbgcolor" => "color",
+			"sortable" => true,
+		));
+
+		$t->define_field(array(
+			'name' => 'version',
+			'caption' => t('Versioon'),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			'name' => 'package',
+			'caption' => t('Pakett'),
+			"chgbgcolor" => "color",
+			"sortable" => true,
+		));
+
+		$t->define_field(array(
+			'name' => 'package_version',
+			'caption' => t('paketi versioon'),
+			"chgbgcolor" => "color",
+		));
+
+		$t->define_field(array(
+			'name' => 'time',
+			'caption' => t('Paigaldamise aeg'),
+			"chgbgcolor" => "color",
+			"sortable" => true,
+		));
+		foreach ($data as $d)
+		{
+			$t->define_data(array(
+				"file" => $d["file_location"]."/".$d["file_name"],
+				'version' => $d["file_version"] ,
+				'package' => $d["package_name"] ,
+				"package_version" => $d["package_version"],
+				"time" => date("d.m.Y" , $d["installed_date"]),
+			));
+		}
+	}
+
 	function _get_my_list($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -315,15 +401,32 @@ class package_client extends class_base
 
 		$t->define_field(array(
 			'name' => 'down',
-			'caption' => t('Uuemad  versioonid'),
+			'caption' => t('Viimane versioon'),
 			"chgbgcolor" => "color",
 		));
 
-		$packages = $arr["obj_inst"]->get_my_packages();
+		//see tuleks teha optimaalsemaks, praegu loeb k6ik sisse et uuemaid versioone leida
+		$available = $arr["obj_inst"]->get_packages($filter);
 
+		$packages = $arr["obj_inst"]->get_my_packages();
 		foreach ($packages as $data)
 		{
 			$server_data = $arr["obj_inst"]->download_package_properties($data["id"]);
+
+			$last_version = $server_data["version"];
+			foreach($available as $av_package)
+			{
+				if($av_package["name"] == $data["name"])
+				{
+					if($data["version"] > $last_version)
+					{
+						$last_version = $data["version"];
+					}
+				}
+			}
+
+
+
 			$deps = array();
 			foreach($server_data["dependencies"] as $file => $version)
 			{
@@ -331,12 +434,12 @@ class package_client extends class_base
 			}
 			$t->define_data(array(
 				'select' => $data["id"],
-				'color' => $_GET["show_files"] == $data["id"] ? "grey":"" ,
+				'color' => $_GET["show_files"] == $data["id"] ? "grey":($last_version == $data["version"]?  "#CCFFCC" : "") ,
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
 				'version' => $server_data["version"],
 				'dep' => join("<br>" , $deps),
 				'description' =>  $server_data["description"],
-				//'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
+				'down' => $last_version,//'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
 			));
 		}
 		return PROP_OK;
