@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.11 2008/05/14 22:19:39 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.12 2008/11/14 14:56:48 dragut Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -248,17 +248,19 @@ class minify_js_and_css extends class_base
 		if (strlen($cache->file_get($s_salt.$f_cache_filename_js))==0 && 
 			strlen($cache->file_get($s_salt.$f_cache_filename_css))==0 )
 		{
+			$s_js_contents = '';
+			$s_css_contents = '';
 			if (preg_match_all ( "/<script.*src=['\"\s](.*)['\"\s]>/imsU", $str, $matches) )
 			{
-				for ($i=0;$i<count($matches[1]);$i++)
+				for ($i = 0; $i < count($matches[1]); $i++)
 				{
-					$s_js_contents .= core::get_file(array("file"=>$matches[1][$i]));
+					$s_js_contents .= core::get_file(array("file" => $matches[1][$i]));
 				}
 			}
 			
 			if (preg_match_all ( "/<link.*href=['\"\s](.*)['\"\s].*>/imsU", $str, $matches) )
 			{
-				for ($i=0;$i<count($matches[1]);$i++)
+				for ($i = 0; $i < count($matches[1]); $i++)
 				{
 					$s_css_contents .= core::get_file(array ("file" => $matches[1][$i]));
 				}
