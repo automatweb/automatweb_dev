@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.42 2008/11/14 16:14:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.43 2008/11/17 10:38:47 instrumental Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -633,7 +633,7 @@ class toolbar extends aw_template
 	/** Adds the save button to the toolbar
 		@attrib api=1
 	**/
-	function add_save_button($arr)
+	function add_save_button($arr = array())
 	{
 		$this->add_button(array(
 			"name" => "save",
