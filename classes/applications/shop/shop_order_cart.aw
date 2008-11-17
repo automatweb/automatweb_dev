@@ -2074,6 +2074,13 @@ class shop_order_cart extends class_base
 		//return aw_ini_get("baseurl");
 		$cart_total = $this->get_cart_value();
 		$cart_discount = $cart_total * ($oc->prop("web_discount")/100);
+
+		$cart_o = obj($oc->prop("cart"));
+		if ($cart_o->prop("postal_price") > 0)
+		{
+			$cart_total += $cart_o->prop("postal_price");
+		}
+
 		$real_sum = $cart_total - $cart_discount;
 
 //iin siis $real_sum on see, mis maksta tuleb. mis pank on valitud, on:
