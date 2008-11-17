@@ -1049,7 +1049,10 @@ class bug extends class_base
 				}
 
 				$bt_i = get_instance(CL_BUG_TRACKER);
-				$arr["obj_inst"]->set_prop("who", $arr["request"]["who"]);
+				if($arr["request"]["who"])
+				{
+					$arr["obj_inst"]->set_prop("who", $arr["request"]["who"]);
+				}
 				$estend = $bt_i->get_estimated_end_time_for_bug($arr["obj_inst"], $bt);
 				$ovr1 = $bt_i->get_last_estimation_over_deadline_bugs();
 
@@ -1059,7 +1062,10 @@ class bug extends class_base
 				$arr["obj_inst"]->set_prop("deadline", $ev);
 				$arr["obj_inst"]->set_prop("bug_priority", $arr["request"]["bug_priority"]);
 				$arr["obj_inst"]->set_prop("bug_severity", $arr["request"]["bug_severity"]);
-				$arr["obj_inst"]->set_prop("bug_status", $arr["request"]["bug_status"]);
+				if($arr["request"]["bug_status"])
+				{
+					$arr["obj_inst"]->set_prop("bug_status", $arr["request"]["bug_status"]);
+				}
 				$estend = $bt_i->get_estimated_end_time_for_bug($arr["obj_inst"], $bt);
 				$ovr2 = $bt_i->get_last_estimation_over_deadline_bugs();
 
@@ -1219,6 +1225,7 @@ class bug extends class_base
 				break;*/
 
 			case "num_hrs_guess":
+				die("here");
 				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
@@ -3031,7 +3038,7 @@ die($email);
 
 	function callback_get_cfgmanager($arr)
 	{
-		if ($arr["request"]["action"] == "change")
+		if (is_oid($arr["request"]["id"]))
 		{
 			$o = obj($arr["request"]["id"]);
 		}

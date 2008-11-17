@@ -3665,7 +3665,7 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$properties = $this->get_property_group($filter);
+			$properties = $this->get_property_group($filter, $args);
 		};
 
 		if ($this->groupinfo[$group]["save"] == "no")
