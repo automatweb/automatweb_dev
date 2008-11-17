@@ -306,6 +306,41 @@ class task_object extends _int_object
 		$row->save();
 	}
 
+	public function set_party($data)
+	{
+		if(!$data["participant"])
+		{
+			$u = get_instance(CL_USER);
+			$data["participant"] = $u->get_current_person();
+		}
+		$row = $this->get_party_obj($data["participant"]);
+		if(!$row)
+		{
+			$row = $this->add_party($data["participant"]);
+		}
+		foreach($data as $prop => $value)
+		{
+			if($row->is_property($prop))
+			{
+				$row->set_prop($prop , $value);
+			}
+		}
+		$row->save();
+	}
+
+	private function add_party($part)
+	{
+		$p = obj($part);
+		$new_row = new object();
+		$new_row->set_class_id(CL_CRM_PARTY);
+		$new_row->set_parent($this->id());
+		$new_row->set_name($p);
+		$new_row->set_prop("task" , $this->id());
+		$new_row->set_prop("participant" , $part);
+		$new_row->save();
+		return $new_row;
+	}
+
 	public function has_work_time()
 	{
 		$u = get_instance(CL_USER);
@@ -319,6 +354,24 @@ class task_object extends _int_object
 			return 1;
 		}
 		return null;
+	}
+
+	/** returns party object for participant
+		@attrib api=1 params=pos
+		@param part required type=oid
+		@returns object
+	**/
+	public function get_party_obj($part)
+	{
+		if(!is_oid($part)) return null;
+		$ol = new object_list(array(
+			"class_id" =>  CL_CRM_PARTY,
+			"lang_id" => array(),
+			"participant" => $person,
+			"site_id" => array(),
+			"task" => $this->id(),
+		));
+		return reset($ol->arr());
 	}
 
 }

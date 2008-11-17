@@ -6,6 +6,26 @@
 @default table=aw_crm_party
 @default group=general
 
+
+@property participant type=relpicker reltype=RELTYPE_PARTICIPANT
+@caption Osaleja
+
+@property task type=relpicker reltype=RELTYPE_TASK
+@caption Tegevus
+
+@property percentage type=textbox
+@caption Osaluse %
+
+@property hours type=textbox
+@caption Tundides
+
+#RELTYPES
+@reltype PARTICIPANT value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Osaleja
+
+@reltype TASK value=2 clid=CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_BUG
+@caption Tegevus
+
 */
 
 class crm_party extends class_base
@@ -67,10 +87,18 @@ class crm_party extends class_base
 
 		switch($f)
 		{
-			case "":
+			case "participant":
+			case "task":
 				$this->db_add_col($t, array(
 					"name" => $f,
-					"type" => ""
+					"type" => "int"
+				));
+				return true;
+			case "percentage":
+			case "hours":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
 				));
 				return true;
 		}

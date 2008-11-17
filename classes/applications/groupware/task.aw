@@ -4782,7 +4782,19 @@ class task extends class_base
 			"name" => "contact",
 			"caption" => t("Kontaktisik"),
 			"sortable" => 1,
-			"width" => "40%"
+			"width" => "20%"
+		));
+		$t->define_field(array(
+			"name" => "hours",
+			"caption" => t("Osalus tundides"),
+			"sortable" => 1,
+			"width" => "10%"
+		));
+		$t->define_field(array(
+			"name" => "percentage",
+			"caption" => t("Osalus protsentides"),
+			"sortable" => 1,
+			"width" => "10%"
 		));
 	}
 
@@ -4795,15 +4807,50 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
 
+
+
 		foreach($c_conn as $c)
 		{
 			$c = $c->to();
+			$row = $arr["obj_inst"]->get_party_obj($c->id());
 			$t->define_data(array(
 				"oid" => $c->id(),
 				"orderer" => html::obj_change_url($c),
 				"phone" => html::obj_change_url($c->prop("phone_id")),
-				"contact" => html::obj_change_url($c->prop("contact_person"))
+				"contact" => html::obj_change_url($c->prop("contact_person")),
+				"hours" => html::textbox(array(
+					"name" => "orderers[".$c->id()."][hours]",
+					"value" => $row ? $row->prop("hours") : "",
+					"size" => 3
+				)),
+				"percentage" => html::textbox(array(
+					"name" => "orderers[".$c->id()."][percentage]",
+					"value" => $row ? $row->prop("percentage") : "",
+					"size" => 3
+				)),
 			));
+		}
+	}
+
+	function _save_co_table($arr)
+	{
+		$rows = $arr["request"]["orderers"];
+		foreach($rows as $key => $row)
+		{
+			$set = 0;
+			foreach($row as $prop => $val)
+			{
+				if($val)
+				{
+					$set = 1;
+					break;
+				}
+			}
+			if($set)
+			{
+				$row["participant"] = $key;
+				$arr["obj_inst"]->set_party($row);
+			}
 		}
 	}
 

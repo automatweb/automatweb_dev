@@ -459,7 +459,7 @@ class relpicker extends  core
 						"text" => $clss[$_clid]["name"],
 						"link" => html::get_new_url(
 							$_clid,
-							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(),
+							(isset($arr["prop"]["parent"]) && $arr["prop"]["parent"] == "this.parent") ? $this->obj->parent() : $this->obj->id(),
 							array(
 								"alias_to" => $this->obj->id(),
 								"alias_to_prop" => $arr["prop"]["name"],

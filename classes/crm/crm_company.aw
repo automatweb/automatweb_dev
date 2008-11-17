@@ -6290,8 +6290,16 @@ class crm_company extends class_base
 
 	function __person_name_sorter($a, $b)
 	{
-		list($a_fn, $a_ln) = explode(" ", $a);
-		list($b_fn, $b_ln) = explode(" ", $b);
+		if(sizeof(explode(" ", $a)) > 1)list($a_fn, $a_ln) = explode(" ", $a);
+		else
+		{
+			$a_fn = "";$a_ln = $a;
+		}
+		if(sizeof(explode(" ", $a)) > 1)list($b_fn, $b_ln) = explode(" ", $b);
+		else
+		{
+			$b_fn = "";$b_ln = $b;
+		}
 		if ($a_ln == $b_ln)
 		{
 			return strcmp($a_fn, $b_fn);

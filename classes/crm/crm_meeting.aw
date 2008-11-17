@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.108 2008/11/14 16:14:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.109 2008/11/17 13:01:25 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -768,6 +768,9 @@ class crm_meeting extends task
 		{
 			case "parts_table":
 				$this->save_parts_table($arr);
+				break;
+			case "co_table":
+				$this->_save_co_table($arr);
 				break;
 			case "end":
 				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
