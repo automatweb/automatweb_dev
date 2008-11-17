@@ -13,11 +13,17 @@
 @property questionnaire type=relpicker reltype=RELTYPE_QUESTIONNAIRE store=connect
 @caption Vastatud k&uuml;simustik
 
-@property correct_ans type=relpicker reltype=RELTYPE_CORRECT multiple=1 store=connect
-@caption &Otilde;igesti vastatud k&uuml;simused
+#@property correct_ans type=relpicker reltype=RELTYPE_CORRECT multiple=1 store=connect
+#@caption &Otilde;igesti vastatud k&uuml;simused
 
-@property wrong_ans type=relpicker reltype=RELTYPE_WRONG multiple=1 store=connect
-@caption Valesti vastatud k&uuml;simused
+#@property wrong_ans type=relpicker reltype=RELTYPE_WRONG multiple=1 store=connect
+#@caption Valesti vastatud k&uuml;simused
+
+@property answers type=relpicker reltype=RELTYPE_ANSWER multiple=1 store=connect
+@caption Vastused
+
+@property txtanswers type=relpicker reltype=RELTYPE_TXTANSWER multiple=1 store=connect
+@caption Tekstivastused
 
 # RELTYPES
 
@@ -32,6 +38,12 @@
 
 @reltype QUESTIONNAIRE value=4 clid=CL_QUESTIONNAIRE
 @caption Vastatud d&uuml;naamiline k&uuml;simustik
+
+@reltype ANSWER value=5 clid=CL_QUESTIONNAIRE_ANSWER
+@caption Vastus
+
+@reltype TXTANSWER value=6 clid=CL_QUESTIONNAIRE_TXT
+@caption Tekstivastus
 
 */
 

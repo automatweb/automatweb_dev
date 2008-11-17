@@ -6,7 +6,17 @@
             <group>conf</group>
             <type>textbox</type>
             <field>name</field>
-            <caption>K&amp;uuml;simus</caption>
+            <caption>K&amp;amp;uuml;simus</caption>
+      </property>
+      <property>
+            <name>ratable</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Hinnatav</caption>
       </property>
       <property>
             <name>jrk</name>
@@ -42,7 +52,17 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kuva vastuse kommentaari</caption>
-            <comment>Kuvatakse ka siis, kui k&amp;uuml;simustiku seadetes pole seda lubatud.</comment>
+            <comment>Kuvatakse ka siis, kui k&amp;amp;uuml;simustiku seadetes pole seda lubatud.</comment>
+      </property>
+      <property>
+            <name>show_answer_in_results</name>
+            <table>objects</table>
+            <group>conf</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;amp;auml;ita vastust vastajate tabelis</caption>
       </property>
       <property>
             <name>pics</name>
@@ -74,6 +94,17 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Vale vastuse pilt</caption>
+      </property>
+      <property>
+            <name>answers</name>
+            <table>objects</table>
+            <group>answers</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ANSWER</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>answers</field>
+            <caption>Vastused</caption>
       </property>
       <property>
             <name>atlbr</name>

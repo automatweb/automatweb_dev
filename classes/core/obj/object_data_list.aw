@@ -206,5 +206,23 @@ class object_data_list
 	{
 		$this->list_data = array();
 	}
+
+	function count()
+	{
+		return count($this->list_data);
+	}
+
+	function get_element_from_all($col)
+	{
+		$ret = array();
+		foreach($this->arr() as $oid => $o)
+		{
+			if(isset($o[$col]))
+			{
+				$ret[$oid] = $o[$col];
+			}
+		}
+		return $ret;
+	}
 }
 ?>

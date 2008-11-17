@@ -13,6 +13,9 @@
 		@property name type=textbox field=name
 		@caption K&uuml;simus
 
+		@property ratable type=checkbox ch_value=1 field=meta method=serialize
+		@caption Hinnatav
+
 		@property jrk type=textbox size=4 field=jrk
 		@caption J&auml;rjekord
 
@@ -25,6 +28,9 @@
 		@property dsply_acomment type=chooser field=meta method=serialize
 		@caption Kuva vastuse kommentaari
 		@comment Kuvatakse ka siis, kui k&uuml;simustiku seadetes pole seda lubatud.
+
+		@property show_answer_in_results type=checkbox ch_value=1 field=meta method=serialize
+		@caption N&auml;ita vastust vastajate tabelis
 
 	@groupinfo pics parent=general caption=Pildid
 	@default group=pics
@@ -40,6 +46,9 @@
 
 @groupinfo answers submit=no caption=Vastused
 @default group=answers
+
+	@property answers type=relpicker reltype=RELTYPE_ANSWER multiple=1 store=connect
+	@caption Vastused
 
 	@property atlbr type=toolbar no_caption=1 submit=no
 
@@ -70,13 +79,28 @@ class questionnaire_question extends class_base
 
 		switch($prop["name"])
 		{
+			case "answers":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "ratable":
+				if(!isset($prop["value"]))
+				{
+					$prop["value"] = $prop["ch_value"];
+				}
+				break;
+
 			case "ans_type":
 				$prop["options"] = array(
-					"0" => t("Valikvastused"),
+					"0" => t("Valikvastused (valida saab &uuml;he)"),
+					"3" => t("Valikvastused (valida saab mitu)"),
 					"1" => t("Tekstikast"),
+					"2" => t("Tekstiala"),
 				);
-				if(!$prop["value"])
+				if(!isset($prop["value"]))
+				{
 					$prop["value"] = 0;
+				}
 				break;
 
 			case "dsply_acomment":
@@ -86,8 +110,10 @@ class questionnaire_question extends class_base
 					"2" => t("Ainult &otilde;ige vastuse korral"),
 					"3" => t("Ainult vale vastuse korral"),
 				);
-				if(!$prop["value"])
+				if(!isset($prop["value"]))
+				{
 					$prop["value"] = 0;
+				}
 				break;
 
 			case "atlbr":
@@ -192,33 +218,52 @@ class questionnaire_question extends class_base
 			"question_id" => $ob->id(),
 		));
 		
-		if($ob->prop("ans_type"))
+		if($ob->prop("ans_type") == 1)
 		{
 			$this->vars(array(
-				"answer_value" => $_POST["answers"][$ob->id()],
+				"answer_value" => isset($_POST["answers"][$ob->id()]) ? $_POST["answers"][$ob->id()] : "",
 			));
-			$ANSWER_TEXTBOX = $this->parse("ANSWER_TEXTBOX");
-			$this->vars(array("ANSWER_TEXTBOX" => $ANSWER_TEXTBOX));
+			$this->vars(array("ANSWER_TEXTBOX" => $this->parse("ANSWER_TEXTBOX")));
+		}
+		elseif($ob->prop("ans_type") == 2)
+		{
+			$this->vars(array(
+				"answer_value" => isset($_POST["answers"][$ob->id()]) ? $_POST["answers"][$ob->id()] : "",
+			));
+			$this->vars(array("ANSWER_TEXTAREA" => $this->parse("ANSWER_TEXTAREA")));
 		}
 		else
 		{			
 			$ol = new object_list($ob->connections_from(array("type" => "RELTYPE_ANSWER")));
 			$ol_arr = $ol->arr();
 			uasort($ol_arr, array($this, "cmp_function"));
+			$ANSWER_RADIO = "";
+			$ANSWER_CHBOX = "";
 			foreach($ol_arr as $ans_o)
 			{
-				$answer_checked = ($ans_o->id() == $_POST["answers"][$ob->id()]) ? "checked=\"checked\"" : "";
+				$answer_checked = (isset($_POST["answers"][$ob->id()]) && $ans_o->id() == $_POST["answers"][$ob->id()]) ? "checked=\"checked\"" : "";
 				$this->vars(array(
 					"answer_oid" => $ans_o->id(),
 					"answer_caption" => $ans_o->name(),
 					"answer_checked" => $answer_checked,
 				));
-				$ANSWER_RADIO .= $this->parse("ANSWER_RADIO");
+				if($ob->prop("ans_type") == 3)
+				{
+					$ANSWER_CHBOX .= $this->parse("ANSWER_CHBOX");
+				}
+				else
+				{
+					$ANSWER_RADIO .= $this->parse("ANSWER_RADIO");
+				}
 			}
-			$this->vars(array("ANSWER_RADIO" => $ANSWER_RADIO));
+			$this->vars(array(
+				"ANSWER_RADIO" => $ANSWER_RADIO,
+				"ANSWER_CHBOX" => $ANSWER_CHBOX,
+			));
 		}		
 
-		foreach($ob->prop("pics") as $pic_id)
+		$PICTURE = "";
+		foreach(safe_array($ob->prop("pics")) as $pic_id)
 		{
 			if(!is_oid($pic_id))
 			{

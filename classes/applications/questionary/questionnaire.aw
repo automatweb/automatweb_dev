@@ -140,6 +140,11 @@
 
 class questionnaire extends class_base
 {
+	const UNANSWERED = 0;
+	const WRONG = 1;
+	const CORRECT = 2;
+	const NOT_RATABLE = 3;
+
 	function questionnaire()
 	{
 		$this->init(array(
@@ -282,7 +287,7 @@ class questionnaire extends class_base
 		uasort($conf, array($this, "conf_cmp_function"));
 		foreach($conf as $prop => $prop_data)
 		{
-			if($prop_data["use"] != 1)
+			if(!isset($prop_data["use"]) || $prop_data["use"] != 1)
 			{
 				continue;
 			}
@@ -296,18 +301,24 @@ class questionnaire extends class_base
 
 		// KYIMUSED
 		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_QUESTION")));
-		$cnt_qs = $ol->count();
 		$ids = $ol->ids();
-		$ol = new object_list(array(
-			"class_id" => CL_QUESTIONNAIRE_QUESTION,
-			"oid" => $ids,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"sort_by" => "objects.jrk ASC",
-		));
+		$ol = new object_data_list(
+			array(
+				"class_id" => CL_QUESTIONNAIRE_QUESTION,
+				"oid" => $ids,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"sort_by" => "objects.jrk ASC",
+			),
+			array(
+				CL_QUESTIONNAIRE_QUESTION => array("name", "ratable", "answers", "show_answer_in_results"),
+			)
+		);
 		$cnt = 1;
-		foreach($ol->names() as $oid => $name)
+		$questions = $ol->arr();
+		foreach($questions as $oid => $odata)
 		{
+			$name = $odata["name"];
 			$t->define_field(array(
 				"name" => "q_".$oid,
 				"caption" => sprintf(t("%u."), $cnt),
@@ -315,6 +326,42 @@ class questionnaire extends class_base
 				"align" => "center",
 			));
 			$cnt++;
+
+			// object_data_list ei funka
+			if(is_oid($questions["answers"]))
+			{
+				$questions["answers"] = (array)$questions["answers"];
+			}
+			
+			// For the results this 27/68
+			if($odata["ratable"])
+			{
+				$cnt_qs++;
+			}
+		}
+		// Raalime v2lja 6iged vastused, et hiljem saaks vastajaid kontrollida.
+		$as = new object_data_list(
+			array(
+				"class_id" => CL_QUESTIONNAIRE_ANSWER,
+				"CL_QUESTIONNAIRE_ANSWER.RELTYPE_ANSWER(CL_QUESTIONNAIRE_QUESTION)" => array_keys($questions),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"correct" => 1,
+			),
+			array(
+				CL_QUESTIONNAIRE_ANSWER => array("oid", "name"),
+			)
+		);
+		$ans_ids = array_keys($as->arr());
+		$ans_names = $as->get_element_from_all("name");
+		foreach($questions as $qid => $qdata)
+		{
+			$questions[$qid]["correct"] = array_intersect((array)($qdata["answers"]), $ans_ids);
+			$questions[$qid]["correct_names"] = array();
+			foreach($questions[$qid]["correct"] as $aid)
+			{
+				$questions[$qid]["correct_names"][] = $ans_names[$aid];
+			}
 		}
 
 		// DEFAULT V2LJAD
@@ -335,6 +382,8 @@ class questionnaire extends class_base
 			"sortable" => 1,
 			"sorting_field" => "tm",
 		));
+
+		// Vastused
 		$as = new object_data_list(
 			array(
 				"class_id" => CL_QUESTIONNAIRE_ANSWERER,
@@ -343,9 +392,57 @@ class questionnaire extends class_base
 				"lang_id" => array(),
 			), 
 			array(
-				CL_QUESTIONNAIRE_ANSWERER => array("oid", "person", "correct_ans", "wrong_ans", "created"),
+				CL_QUESTIONNAIRE_ANSWERER => array("oid", "person", "answers", "txtanswers", "created"),
 			)
 		);
+		$answers_oids = array();
+		foreach($as->get_element_from_all("answers") as $answers_oid)
+		{
+			// object_data_list ei funka
+			if(is_oid($answers_oid))
+			{
+				$answers_oid = (array)$answers_oid;
+			}
+			$answers_oids = array_merge($answers_oids, safe_array($answers_oid));
+		}
+		if(count($answers_oids) > 0)
+		{
+			$answers_odl = new object_data_list(
+				array(
+					"class_id" => CL_QUESTIONNAIRE_ANSWER,
+					"oid" => $answers_oids,
+				),
+				array(
+					CL_QUESTIONNAIRE_ANSWER => array("name"),
+				)
+			);
+		}
+
+		$txtanswers_oids = array();
+		foreach($as->get_element_from_all("txtanswers") as $txtanswers_oid)
+		{
+			// object_data_list ei funka
+			if(is_oid($txtanswers_oid))
+			{
+				$txtanswers_oid = (array)$txtanswers_oid;
+			}
+			$txtanswers_oids = array_merge($txtanswers_oids, safe_array($txtanswers_oid));
+		}
+		$txtanswers = array();
+		if(count($txtanswers_oids) > 0)
+		{
+			$txtanswers_odl = new object_data_list(
+				array(
+					"class_id" => CL_QUESTIONNAIRE_TXT,
+					"oid" => $txtanswers_oids,
+				),
+				array(
+					CL_QUESTIONNAIRE_TXT => array("name"),
+				)
+			);
+			$txtanswers = $txtanswers_odl->get_element_from_all("name");
+		}
+
 		foreach($as->arr() as $a)
 		{
 			$a["person"] = is_array($a["person"]) ? reset($a["person"]) : $a["person"];
@@ -379,17 +476,48 @@ class questionnaire extends class_base
 					$row[$prop] = $v;
 				}
 			}
-			$cnt_correct = 0;
-			foreach((array)$a["correct_ans"] as $c_ans)
+			$ans_data = array();
+			$ans_data_str = array();
+			foreach(connection::find(array("from.class_id" => CL_QUESTIONNAIRE_ANSWERER, "type" => "RELTYPE_ANSWER", "from" => $a["oid"])) as $conn)
 			{
-				$row["q_".$c_ans] = t("+");
-				$row["bgcolor_".$c_ans] = t("#0000CC");
-				$cnt_correct++;
+				$ans_data[$conn["data"]][] = $conn["to"];
+				$ans_data_str[$conn["data"]][] = $conn["to.name"];
 			}
-			foreach((array)$a["wrong_ans"] as $w_ans)
+			foreach(connection::find(array("from.class_id" => CL_QUESTIONNAIRE_ANSWERER, "type" => "RELTYPE_TXTANSWER", "from" => $a["oid"])) as $conn)
 			{
-				$row["q_".$w_ans] = t("-");
-				$row["bgcolor_".$w_ans] = t("#FF0000");
+				$ans_data[$conn["data"]][] = $conn["to.comment"];
+				$ans_data_str[$conn["data"]][] = $conn["to.comment"];
+			}
+
+			$cnt_correct = 0;
+			foreach($ans_data as $ad_qid => $ad_aids)
+			{
+				if($questions[$ad_qid]["ratable"] == 1)
+				{
+					if(!is_oid(reset($ad_aids)))
+					{
+						$correct = count(array_intersect($ad_aids, $questions[$ad_qid]["correct_names"])) == count($ad_aids);
+					}
+					else
+					{
+						$correct = count(array_intersect($ad_aids, $questions[$ad_qid]["correct"])) == count($ad_aids);
+					}
+					if($correct)
+					{
+						$row["q_".$ad_qid] = t("+");
+						$row["bgcolor_".$ad_qid] = t("#0000CC");
+						$cnt_correct++;
+					}
+					else
+					{
+						$row["q_".$ad_qid] = t("-");
+						$row["bgcolor_".$ad_qid] = t("#FF0000");
+					}
+				}
+				if($questions[$ad_qid]["show_answer_in_results"] == 1)
+				{
+					$row["q_".$ad_qid] = nl2br(implode("\n", $ans_data_str[$ad_qid]));
+				}
 			}
 			$row = array_merge($row, array(
 				"oid" => $a["oid"],
@@ -400,7 +528,7 @@ class questionnaire extends class_base
 			$t->define_data($row);
 		}
 
-		if($_GET["get_csv_file"] == 1)
+		if(isset($_GET["get_csv_file"]) && $_GET["get_csv_file"] == 1)
 		{
 			header('Content-type: application/octet-stream');
 			header('Content-disposition: root_access; filename="csv_output.xls"');
@@ -519,6 +647,11 @@ class questionnaire extends class_base
 
 		switch($prop["name"])
 		{
+			case "q_by_one":
+				// It doesn't work at the moment.
+				$retval = PROP_IGNORE;
+				break;
+
 			case "table_cols_conf":
 				$arr["obj_inst"]->set_meta("table_cols_conf", $arr["request"]["table_cols_conf"]);
 				break;
@@ -570,28 +703,36 @@ class questionnaire extends class_base
 
 	function correct_percent($a)
 	{
-		$ccnt = 0;
+		$ccnt = $acnt = 0;
 		foreach($a as $v)
 		{
-			if($v == 2)
+			if($v != questionnaire::NOT_RATABLE)
+			{
+				$acnt++;
+			}
+			if($v == questionnaire::CORRECT)
 			{
 				$ccnt++;
 			}
 		}
-		return round($ccnt*100/count($a), 0);
+		return round($ccnt*100/$acnt, 0);
 	}
 
 	function correct_fraction($a)
 	{
-		$ccnt = 0;
+		$ccnt = $acnt = 0;
 		foreach($a as $v)
 		{
-			if($v == 2)
+			if($v != questionnaire::NOT_RATABLE)
+			{
+				$acnt++;
+			}
+			if($v == questionnaire::CORRECT)
 			{
 				$ccnt++;
 			}
 		}
-		return $ccnt."/".count($a);
+		return $ccnt."/".$acnt;
 	}
 
 	function show($arr)
@@ -607,12 +748,12 @@ class questionnaire extends class_base
 		{
 			$this->_qs = array();
 		}
-		if(is_oid($_GET["pid"]))
+		if(isset($_GET["pid"]) && is_oid($_GET["pid"]))
 		{
 			// So it won't get lost in the process
 			aw_session_set("questionnaire_pid", $_GET["pid"]);
 		}
-		$this->Q_PID = is_oid($_GET["pid"]) ? $_GET["pid"] : aw_global_get("questionnaire_pid");
+		$this->Q_PID = isset($_GET["pid"]) && is_oid($_GET["pid"]) ? $_GET["pid"] : aw_global_get("questionnaire_pid");
 		/* $this->_qs values:
 		0 - undone
 		1 - done, wrong
@@ -722,7 +863,7 @@ class questionnaire extends class_base
 				$_GET["qid"] = "end";
 			}
 		}
-		if($_GET["qid"] == "end")
+		if(isset($_GET["qid"]) && $_GET["qid"] == "end")
 		{
 			if(!$o->q_by_one && $o->str_answerer_with_qs && isset($_POST["person"]))
 			{
@@ -752,13 +893,36 @@ class questionnaire extends class_base
 					"to" => $o->id(),
 					"reltype" => "RELTYPE_QUESTIONNAIRE",
 				));
-				foreach($this->_qs as $qid => $v)
+				foreach($this->_myas as $qid => $aid)
 				{
-					if($v == 1 || $v == 2)
+					if(is_array($aid) || is_oid($aid))
 					{
-						$a->connect(array(
+						foreach((array)$aid as $aid_)
+						{
+							$a->connect(array(
+								"to" => $aid_,
+								"data" => $qid,
+								"type" => "RELTYPE_ANSWER",
+							));
+						}
+					}
+					else
+					{
+						$a_ = obj();
+						$a_->set_class_id(CL_QUESTIONNAIRE_TXT);
+						$a_->set_parent($a->id());
+						$a_->set_name(sprintf(t("Tekstivastus k&uuml;simusele %s"), $qid));
+						$a_->set_comment($aid);
+						$a_->save();
+						$a_->connect(array(
 							"to" => $qid,
-							"type" => $v == 1 ? "RELTYPE_WRONG" : "RELTYPE_CORRECT",
+							"type" => "RELTYPE_QUESTION",
+						));
+
+						$a->connect(array(
+							"to" => $a_->id(),
+							"data" => $qid,
+							"type" => "RELTYPE_TXTANSWER",
 						));
 					}
 				}
@@ -793,16 +957,37 @@ class questionnaire extends class_base
 				));
 				foreach($ol->arr() as $qo)
 				{
+					// Checkboxes
+					if(is_array($this->_myas[$qo->id()]))
+					{
+						$myans = "";
+						foreach($this->_myas[$qo->id()] as $myans_id)
+						{
+							$myans .= strlen($myans) > 0 ? "<br />" : "";
+							$myans .= obj($myans_id)->trans_get_val("name");
+						}
+					}
+					// Radiobuttons
+					elseif(is_oid($this->_myas[$qo->id()]))
+					{
+						$myans = obj($this->_myas[$qo->id()])->trans_get_val("name");
+					}
+					// Textbox/-area
+					else
+					{
+						$myans = $this->_myas[$qo->id()];
+					}
+
 					$this->vars(array(
 						"results_question" => $qo->trans_get_val("name"),
-						"results_my_answer" => obj($this->_myas[$qo->id()])->trans_get_val("name"),
+						"results_my_answer" => $myans,
 					));
 
 					$ol2 = new object_list($qo->connections_from(array("type" => "RELTYPE_ANSWER")));
 					$ids2 = $ol2->ids();
 					$ol2 = new object_list(array(
 						"class_id" => CL_QUESTIONNAIRE_ANSWER,
-						"oid" => $ids2,
+						"oid" => count($ids2) > 0 ? $ids2 : -1,
 						"site_id" => array(),
 						"lang_id" => array(),
 						"correct" => 1,
@@ -820,7 +1005,7 @@ class questionnaire extends class_base
 					$this->vars(array(
 						"RESULTS_CORRECT_ANSWER" => $RESULTS_CORRECT_ANSWER,
 					));
-					$RESULTS_ANSWERED .= $this->parse($this->_qs[$qo->id()] == 2 ? "RESULTS_CORRECTLY_ANSWERED" : "RESULTS_WRONGLY_ANSWERED");
+					$RESULTS_ANSWERED .= $this->parse($this->_qs[$qo->id()] == questionnaire::CORRECT ? "RESULTS_CORRECTLY_ANSWERED" : "RESULTS_WRONGLY_ANSWERED");
 				}
 				$this->vars(array(
 					"RESULTS_ANSWERED" => $RESULTS_ANSWERED,
@@ -1208,23 +1393,79 @@ class questionnaire extends class_base
 
 	private function handle_answer_submit()
 	{
-		$odl = new object_data_list(
+		$qodl = new object_data_list(
 			array(
-				"class_id" => CL_QUESTIONNAIRE_ANSWER,
-				"oid" => $_POST["answers"],
+				"class_id" => CL_QUESTIONNAIRE_QUESTION,
+				"oid" => array_keys($_POST["answers"]),
 				"lang_id" => array(),
 				"site_id" => array(),
 			), 
 			array(
-				CL_QUESTIONNAIRE_ANSWER => array("correct"),
+				CL_QUESTIONNAIRE_QUESTION => array("ratable", "answers"),
+			)
+		);
+		$qodl_arr = $qodl->arr();
+		// object_data_list ei funka
+		foreach($qodl_arr as $k => $v)
+		{
+			if($k == "answers" && is_oid($v))
+			{
+				$k = (array)$v;
+			}
+		}
+
+		$odl = new object_data_list(
+			array(
+				"class_id" => CL_QUESTIONNAIRE_ANSWER,
+				"CL_QUESTIONNAIRE_ANSWER.RELTYPE_ANSWER(CL_QUESTIONNAIRE_QUESTION)" => array_keys($_POST["answers"]),
+				"lang_id" => array(),
+				"site_id" => array(),
+			), 
+			array(
+				CL_QUESTIONNAIRE_ANSWER => array("name", "correct"),
 			)
 		);
 		$odl_arr = $odl->arr();
-
 		foreach($_POST["answers"] as $qid => $aid)
 		{
-			$this->_qs[$qid] = $odl_arr[$aid]["correct"] == 1 ? 2 : 1;
-			$this->_myas[$qid] = $aid;
+			// Checkboxes
+			if(is_array($aid))
+			{
+				$correct_answers = array();
+				foreach($qodl_arr[$qid]["answers"] as $aid_)
+				{
+					if($odl_arr[$aid_]["correct"] == 1)
+					{
+						$correct_answers[] = $aid_;
+					}
+				}
+				$this->_qs[$qid] = count(array_intersect($correct_answers, $aid)) == count($aid) ? questionnaire::CORRECT : questionnaire::WRONG;
+				$this->_myas[$qid] = $aid;
+			}
+			// Radiobutton
+			elseif(is_oid($aid))
+			{
+				$this->_qs[$qid] = $odl_arr[$aid]["correct"] == 1 ? questionnaire::CORRECT : questionnaire::WRONG;
+				$this->_myas[$qid] = $aid;
+			}
+			// Textbox/-area
+			else
+			{
+				$this->_qs[$qid] = questionnaire::WRONG;
+				foreach(safe_array($qodl_arr[$qid]["answers"]) as $aid_)
+				{
+					if(strcmp($odl_arr[$aid_]["name"], $aid) == 0)
+					{
+						$this->_qs[$qid] = questionnaire::CORRECT;
+						break;
+					}
+				}
+				$this->_myas[$qid] = $aid;
+			}
+			if($qodl_arr[$qid]["ratable"] != 1)
+			{
+				$this->_qs[$qid] = questionnaire::NOT_RATABLE;
+			}
 		}
 	}
 

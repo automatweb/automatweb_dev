@@ -21,26 +21,26 @@
             <caption>Vastatud k&amp;amp;uuml;simustik</caption>
       </property>
       <property>
-            <name>correct_ans</name>
+            <name>answers</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_CORRECT</reltype>
+            <reltype>RELTYPE_ANSWER</reltype>
             <multiple>1</multiple>
             <store>connect</store>
-            <field>correct_ans</field>
-            <caption>&amp;amp;Otilde;igesti vastatud k&amp;amp;uuml;simused</caption>
+            <field>answers</field>
+            <caption>Vastused</caption>
       </property>
       <property>
-            <name>wrong_ans</name>
+            <name>txtanswers</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_WRONG</reltype>
+            <reltype>RELTYPE_TXTANSWER</reltype>
             <multiple>1</multiple>
             <store>connect</store>
-            <field>wrong_ans</field>
-            <caption>Valesti vastatud k&amp;amp;uuml;simused</caption>
+            <field>txtanswers</field>
+            <caption>Tekstivastused</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUESTIONNAIRE_ANSWERER</syslog_type>
@@ -70,6 +70,16 @@
                   <clid>CL_QUESTIONNAIRE</clid>
                   <caption>Vastatud d&amp;amp;uuml;naamiline k&amp;amp;uuml;simustik</caption>
             </QUESTIONNAIRE>
+            <ANSWER>
+                  <value>5</value>
+                  <clid>CL_QUESTIONNAIRE_ANSWER</clid>
+                  <caption>Vastus</caption>
+            </ANSWER>
+            <TXTANSWER>
+                  <value>6</value>
+                  <clid>CL_QUESTIONNAIRE_TXT</clid>
+                  <caption>Tekstivastus</caption>
+            </TXTANSWER>
       </reltypes>
 </properties>
 
