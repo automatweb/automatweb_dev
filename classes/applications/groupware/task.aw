@@ -4788,17 +4788,12 @@ class task extends class_base
 
 	function _co_table($arr)
 	{
-		if(!sizeof($c_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER"))))
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()) || !sizeof($c_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER"))))
 		{
 			return PROP_IGNORE;
 		}
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
-
-		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
-		{
-			return;
-		}
 
 		foreach($c_conn as $c)
 		{
@@ -4843,17 +4838,15 @@ class task extends class_base
 
 	function _proj_table($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
-		if(!sizeof($p_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT"))))
+
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()) || !sizeof($p_conn = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT"))))
 		{
 			return PROP_IGNORE;
 		}
+		$t =& $arr["prop"]["vcl_inst"];
+
 		$this->_init_proj_table($t);
 
-		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
-		{
-			return;
-		}
 		$p = get_instance(CL_PROJECT);
 		foreach($p_conn as $c)
 		{
