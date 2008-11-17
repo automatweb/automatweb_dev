@@ -596,18 +596,6 @@ class aw_table extends aw_template
 			}
 		}
 
-		// Why can't we have the rowdef name as the rowdef index? -kaarel
-		if(isset($this->sortby) && !is_array($this->sortby))
-		{
-			foreach($this->rowdefs as $rowdef)
-			{
-				if($this->sortby == $rowdef["name"] && isset($rowdef["sorting_field"]))
-				{
-					$this->sortby = $rowdef["sorting_field"];
-				}
-			}
-		}
-
 
 		// we should mark this down only when we have clicked on a link and thus changed something from the default
 		// what's the difference? well - if the defaults change and this is written a reload does not change things
@@ -746,7 +734,16 @@ class aw_table extends aw_template
 		{
 			foreach($this->sortby as $_coln => $_eln)
 			{
-				$this->u_sorder = $this->sorder[$_eln];
+				$orig_eln = $_eln;
+				// Why can't we have the rowdef name as the rowdef index? -kaarel
+				foreach($this->rowdefs as $rowdef)
+				{
+					if($_eln == $rowdef["name"] && isset($rowdef["sorting_field"]))
+					{
+						$_eln = $rowdef["sorting_field"];
+					}
+				}
+				$this->u_sorder = $this->sorder[$orig_eln];
 				$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
 				$v1 = $a[$_eln];
 				$v2 = $b[$_eln];
