@@ -5218,6 +5218,10 @@ class crm_person extends class_base
 
 	function callback_get_cfgform($arr)
 	{
+		if(!is_oid($arr["obj_inst"]))
+		{
+			return false;
+		}
 		// if this is the current users employer, do nothing
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();

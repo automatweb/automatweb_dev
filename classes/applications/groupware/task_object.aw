@@ -406,6 +406,7 @@ class task_object extends _int_object
 			$row->set_prop("content" , $name);
 			$row->set_prop("impl" , $data["person"]);
 			$row->set_prop("primary" , 1);
+			$row->set_prop("done" , 1);
 		}
 		foreach($data as $prop => $value)
 		{
@@ -445,7 +446,7 @@ class task_object extends _int_object
 		$new_row = new object();
 		$new_row->set_class_id(CL_CRM_PARTY);
 		$new_row->set_parent($this->id());
-		$new_row->set_name($p);
+		$new_row->set_name($p->name()." ".$this->name()." ".t("osalus"));
 		$new_row->set_prop("task" , $this->id());
 		$new_row->set_prop("participant" , $part);
 		$new_row->save();

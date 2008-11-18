@@ -1543,6 +1543,12 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "parts_table":
+				$this->save_parts_table($arr);
+				break;
+			case "co_table":
+				$this->_save_co_table($arr);
+				break;
 			case "predicates":
 				return PROP_IGNORE;
 			case "end":
@@ -1569,7 +1575,8 @@ class task extends class_base
 				//$arr["obj_inst"]->set_prop("is_work", $prop["value"]["is_work"] ? 1 : 0);
 				if($prop["value"]["is_work"])
 				{
-					$rowdata = array("time_real" => $arr["obj_inst"]->prop("num_hrs_real"));
+					$rowdata = array("time_real" => $arr["obj_inst"]->prop("num_hrs_real"), 
+						"time_to_cust" => $arr["obj_inst"]->prop("num_hrs_to_cust"));
 					$arr["obj_inst"]->set_primary_row($rowdata);
 				}
 
@@ -4102,6 +4109,31 @@ class task extends class_base
 					"caption" => isset($ps) && $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
 					"align" => "center"
 				));
+
+				$t->define_field(array(
+					"name" => "deal_price_price",
+					"caption" => isset($ps) && $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Hind"),
+					"align" => "center",
+					"parent" => "deal_price",
+				));
+				$t->define_field(array(
+					"name" => "deal_price_amount",
+					"caption" => isset($ps) && $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kogus"),
+					"align" => "center",
+					"parent" => "deal_price",
+				));
+				$t->define_field(array(
+					"name" => "deal_price_unit",
+					"caption" => isset($ps) && $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("&Uuml;hik"),
+					"align" => "center",
+					"parent" => "deal_price",
+				));
+				$t->define_field(array(
+					"name" => "deal_price_km",
+					"caption" => isset($ps) && $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("KM"),
+					"align" => "center",
+					"parent" => "deal_price",
+				));
 			}
 			if (!$has || isset($ps["hr_price_currency"]))
 			{
@@ -4220,25 +4252,26 @@ class task extends class_base
 				"value" => $arr["obj_inst"]->prop("hr_price"),
 				"size" => 5
 			)),
-			"deal_price" => 
-				"<table border=0><tr><td>".t("Hind")."</td><td>".t("Kogus")."</td><td>".t("&Uuml;hik")."</td><td>".t("KM")."</td></tr><tr>".
-				"<td>".html::textbox(array(
+			"deal_price_price" => html::textbox(array(
 				"name" => "deal_price",
 				"value" => $arr["obj_inst"]->prop("deal_price"),
 				"size" => 5
-			))."</td><td>".html::textbox(array(
+			)),
+			"deal_price_amount" => html::textbox(array(
 				"name" => "deal_amount",
 				"value" => $arr["obj_inst"]->prop("deal_amount"),
 				"size" => 5
-			))."</td><td>".html::textbox(array(
+			)),
+			"deal_price_unit" => html::textbox(array(
 				"name" => "deal_unit",
 				"value" => $arr["obj_inst"]->prop("deal_unit"),
 				"size" => 5
-			))."</td><td>".html::checkbox(array(
+			)),
+			"deal_price_km" => html::checkbox(array(
 				"name" => "deal_has_tax",
 				"value" => 1,
 				"checked" => $arr["obj_inst"]->prop("deal_has_tax"),
-			))."</td></tr></table>",
+			)),
 			"hr_price_currency" => html::select(array(
 				"name" => "hr_price_currency",
 				"options" => $curs,
@@ -4311,7 +4344,7 @@ class task extends class_base
 			"name" => "new_cust",
 			"parent" => "cust",
 			"tooltip" => t("Uus projekt"),
-			"link" => html::get_new_url(CL_PROJECT, $arr["obj_inst"]->parent(), array(
+			"url" => html::get_new_url(CL_PROJECT, $arr["obj_inst"]->parent(), array(
 				"return_url" => get_ru(),
 				"alias_to" => $arr["obj_inst"]->id(),
 				"reltype" => 4 // RELTYPE_PROJECT

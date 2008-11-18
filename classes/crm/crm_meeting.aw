@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.110 2008/11/18 16:53:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.111 2008/11/18 19:00:41 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -799,7 +799,7 @@ class crm_meeting extends task
 //				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
 				if($data["value"]["is_work"])
 				{
-					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"));
+					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"), "time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
 					$arr["obj_inst"]->set_primary_row($rowdata);
 				}
 				break;
