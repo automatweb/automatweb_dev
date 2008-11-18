@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.17 2008/11/05 09:20:48 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.18 2008/11/18 09:43:42 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -723,6 +723,8 @@ class bugtrack_display extends class_base
 		$cur_p = get_current_person();
 		$cur = array($cur_p->id() => $cur_p->id());
 
+		$co_i = get_instance(CL_CRM_COMPANY);
+
 		// list all ppl on the same level as me and if I have highest pri, then I get to see lots more
 		foreach(safe_array($cur_p->prop("org_section")) as $sect_id)
 		{
@@ -743,7 +745,6 @@ class bugtrack_display extends class_base
 			if ($hi && $hi->id() == $cur_p->prop("rank"))
 			{
 				// I'm the boss in this section, show all ppl from it
-				$co_i = get_instance(CL_CRM_COMPANY);
 				foreach($co_i->get_employee_picker($my_sect) as $_id => $nm)
 				{
 					$cur[$_id] = $_id;
@@ -751,13 +752,30 @@ class bugtrack_display extends class_base
 			}
 		}
 
-		if ($this->can("view", $arr["request"]["_sect_filter"]) && count($cur))
+		if ($this->can("view", $arr["request"]["sect_filter"]) && count($cur))
 		{
 			$cur = array();
 			$co_i = get_instance(CL_CRM_COMPANY);
-			foreach($co_i->get_employee_picker(obj($arr["request"]["_sect_filter"])) as $_id => $nm)
+			foreach($co_i->get_employee_picker(obj($arr["request"]["sect_filter"])) as $_id => $nm)
 			{
 				$cur[$_id] = $_id;
+			}
+		}
+		$cp_ppl = array();
+		if($this->can("view", $arr["request"]["sect_filter"]))
+		{
+			$view_sects = array($arr["request"]["sect_filter"]);
+		}
+		elseif($arr["request"]["sect_filter"] == "all")
+		{
+			$view_sects = $this->get_all_sects();
+		}
+		foreach($view_sects as $sect)
+		{
+			$sect = obj($sect);
+			foreach($co_i->get_employee_picker($sect) as $_id => $nm)
+			{
+				$cp_ppl[$_id] = $_id;
 			}
 		}
 		$cur_u = array();
@@ -793,7 +811,13 @@ class bugtrack_display extends class_base
 								"createdby" => $cur_u,
 							)
 						)),
-						"orderer_unit" => $sects,
+						new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => array(
+								"orderer_unit" => $sects,
+								"contactperson" => $cp_ppl,
+							),
+						)),
 					),
 				)),
 			);
@@ -803,8 +827,13 @@ class bugtrack_display extends class_base
 			$filt = array(
 				"bug_status" => 1,
 				"class_id" => array(CL_DEVELOPMENT_ORDER),
-				"orderer_unit" => $arr["request"]["sect_filter"],
-	
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"orderer_unit" => $arr["request"]["sect_filter"],
+						"contactperson" => $cp_ppl,
+					),
+				)),
 			);
 		}
 		else
@@ -822,9 +851,11 @@ class bugtrack_display extends class_base
 	function _get_table_filter($arr)
 	{
 		$p = get_current_person();
-		$sects = array(aw_url_change_var("sect_filter", "all", get_ru()) => t("K&otilde;ik"),
-			aw_url_change_var("sect_filter", null, get_ru()) => t("Minu lisatud"));
 		$sect_id = $p->prop("org_section");
+		$sects = array(aw_url_change_var("sect_filter", "all", get_ru()) => t("K&otilde;ik"),
+			aw_url_change_var("sect_filter", null, get_ru()) => t("Minu lisatud"),
+			aw_url_change_var("sect_filter", $sect_id, get_ru()) => obj($sect_id)->name(),
+		);
 		if ($this->can("view", $sect_id))
 		{
 			$this->_recur_sect_list($sects, obj($sect_id));
