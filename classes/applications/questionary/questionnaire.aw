@@ -957,6 +957,12 @@ class questionnaire extends class_base
 				));
 				foreach($ol->arr() as $qo)
 				{
+					// Skip the ones that are not ratable
+					if(!$qo->ratable)
+					{
+						continue;
+					}
+
 					// Checkboxes
 					if(is_array($this->_myas[$qo->id()]))
 					{
