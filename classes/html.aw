@@ -85,7 +85,7 @@ class html extends aw_template
 
 		if (empty($id))
 		{
-			$id = $name;
+			$id = str_replace(array("[", "]"), "_", $name);
 		}
 
 		if (!empty($multiple))
@@ -738,7 +738,7 @@ class html extends aw_template
 		extract($args);
 		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
-		$onclick = !empty($onclick) ? " onclick=\"{$onclick}; return false;\"" : "";
+		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "return false;";
 
 		return "<input id=\"cbsubmit\" type=\"submit\" name=\"{$name}\" value='{$value}'{$class}{$onclick}{$textsize} />\n";
 	}
