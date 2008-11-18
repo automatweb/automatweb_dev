@@ -797,8 +797,6 @@ class propcollector extends aw_template
 			$tagfields = $tagfields[$fields["type"]];
 			$err_add_text = " with type \"".$fields["type"]."\"";
 		}
-		$tagfields = $tagfields["props"];
-
 		foreach($fields as $f => $val)
 		{
 			if($arr["type"] === "property" && $f === "name")
