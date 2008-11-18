@@ -36,7 +36,7 @@
 
 
 
-@layout center_bit type=hbox
+@layout center_bit type=vbox parent=top_bit
 
 	@property hrs_table type=table no_caption=1 store=no parent=center_bit
 
@@ -47,17 +47,36 @@
 	@property content type=textarea cols=180 rows=30 table=documents parent=content_bit no_caption=1
 	@caption Sisu
 
-@layout bottom_pit type=vbox
-	@property parts_tb type=toolbar no_caption=1 store=no parent=bottom_pit
 
-	@property co_table type=table no_caption=1 store=no parent=bottom_pit
-	@property proj_table type=table no_caption=1 store=no parent=bottom_pit
-	@property parts_table type=table no_caption=1 store=no parent=bottom_pit
+@layout customer_bit type=vbox closeable=1 area_caption=Tellijad
+#	@property parts_tb type=toolbar no_caption=1 store=no parent=customer_bit
+
+	@property co_tb type=toolbar no_caption=1 store=no parent=customer_bit
+	@property co_table type=table no_caption=1 store=no parent=customer_bit
 
 
-@layout files_pit type=vbox
-	@property files_tb type=toolbar no_caption=1 store=no parent=files_pit
-	@property files_table type=table no_caption=1 store=no parent=files_pit
+#@layout bottom_pit type=vbox
+#	@property parts_tb type=toolbar no_caption=1 store=no parent=bottom_pit
+
+#	@property co_table type=table no_caption=1 store=no parent=bottom_pit
+#	@property proj_table type=table no_caption=1 store=no parent=bottom_pit
+#	@property parts_table type=table no_caption=1 store=no parent=bottom_pit
+
+@layout project_bit type=vbox closeable=1 area_caption=Projektid
+	@property project_tb type=toolbar no_caption=1 store=no parent=project_bit
+	@property proj_table type=table no_caption=1 store=no parent=project_bit
+
+@layout impl_bit type=vbox closeable=1 area_caption=Osalejad
+	@property impl_tb type=toolbar no_caption=1 store=no parent=impl_bit
+	@property parts_table type=table no_caption=1 store=no parent=impl_bit
+
+@layout files_bit type=vbox closeable=1 area_caption=Manused
+	@property files_tb type=toolbar no_caption=1 store=no parent=files_bit
+	@property files_table type=table no_caption=1 store=no parent=files_bit
+
+#@layout files_pit type=vbox
+#	@property files_tb type=toolbar no_caption=1 store=no parent=files_pit
+#	@property files_table type=table no_caption=1 store=no parent=files_pit
 
 @property ppa type=hidden store=no no_caption=1
 @property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
@@ -227,6 +246,7 @@ caption Seostehaldur
 @groupinfo resources caption="Ressursid" parent=other_exp
 @groupinfo predicates caption="Eeldused" parent=other_exp
 
+@tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
@@ -888,6 +908,17 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "co_tb":
+				$this->_get_co_tb($arr);
+				break;
+	
+			case "project_tb":
+				$this->_get_project_tb($arr);
+				break;
+			case "impl_tb":
+				$this->_get_impl_tb($arr);
+				break;
+
 			case "rows_oe":
 				$on_bill_str = $_SESSION["task"]["__bill_filt_comp"][1];
 				unset($_SESSION["task"]["__bill_filt_comp"]);
@@ -4014,90 +4045,97 @@ class task extends class_base
 			$has = true;
 			$ps = $cff->get_cfg_proplist($cfgform_id);
 		}
-		
-		if(isset($ps))
-		{
-			if (!$has || $ps["priority"])
+
+			if (!$has || isset($ps["priority"]))
 			{
 				$t->define_field(array(
 					"name" => "priority",
-					"caption" => $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
-					"align" => "center"
+					"caption" => isset($ps) && $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
+					"align" => "center",
+					"colspan" => 2,
 				));
 			}
-			if (!$has || $ps["num_hrs_guess"])
+			$t->define_field(array(
+				"name" => "hours",
+				"caption" => t("Tunde"),
+				"align" => "center",
+			));
+			if (!$has || isset($ps["num_hrs_guess"]))
 			{
 				$t->define_field(array(
 					"name" => "num_hrs_guess",
-					"caption" => $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav tundide arv"),
-					"align" => "center"
+					"caption" => isset($ps) && $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav"),
+					"align" => "center",
+					"parent" => "hours",
 				));
 			}
-			if (!$has || $ps["num_hrs_real"])
+			if (!$has || isset($ps["num_hrs_real"]))
 			{
 				$t->define_field(array(
 					"name" => "num_hrs_real",
-					"caption" => $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik tundide arv"),
-					"align" => "center"
+					"caption" => isset($ps) && $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik"),
+					"align" => "center",
+					"parent" => "hours",
 				));
 			}
-			if (!$has || $ps["num_hrs_to_cust"])
+			if (!$has || isset($ps["num_hrs_to_cust"]))
 			{
 				$t->define_field(array(
 					"name" => "num_hrs_to_cust",
-					"caption" => $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Tundide arv kliendile"),
-					"align" => "center"
+					"caption" => isset($ps) && $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Kliendile"),
+					"align" => "center",
+					"parent" => "hours",
 				));
 			}
-			if (!$has || $ps["hr_price"])
+			if (!$has || isset($ps["hr_price"]))
 			{
 				$t->define_field(array(
 					"name" => "hr_price",
-					"caption" => $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
+					"caption" => isset($ps) && $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
 					"align" => "center"
 				));
 			}
-			if (!$has || $ps["deal_price"])
+			if (!$has || isset($ps["deal_price"]))
 			{
 				$t->define_field(array(
 					"name" => "deal_price",
-					"caption" => $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
+					"caption" => isset($ps) && $ps["deal_price"]["caption"] != "" ?  $ps["deal_price"]["caption"] : t("Kokkuleppehind"),
 					"align" => "center"
 				));
 			}
-			if (!$has || $ps["hr_price_currency"])
+			if (!$has || isset($ps["hr_price_currency"]))
 			{
 				$t->define_field(array(
 					"name" => "hr_price_currency",
-					"caption" => $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
+					"caption" => isset($ps) && $ps["hr_price_currency"]["caption"] != "" ? $ps["hr_price_currency"]["caption"] : t("Valuuta"),
 					"align" => "center"
 				));
 			}
-			if (!$has || $ps["bill_no"])
+			if (!$has || isset($ps["bill_no"]))
 			{
 				$t->define_field(array(
 					"name" => "bill_no",
-					"caption" => $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
+					"caption" => isset($ps) && $ps["bill_no"]["caption"] != "" ? $ps["bill_no"]["caption"] : t("Arve number"),
 					"align" => "center"
 				));
 			}
-			if (!$has || $ps["code"])
+			if (!$has || isset($ps["code"]))
 			{
 				$t->define_field(array(
 					"name" => "code",
-					"caption" => $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
+					"caption" => isset($ps) && $ps["code"]["caption"] != "" ? $ps["code"]["caption"]  : t("Kood"),
 					"align" => "center"
 				));
 			}
-			if (!$has || $ps["service_type"])
+			if (!$has || isset($ps["service_type"]))
 			{
 				$t->define_field(array(
 					"name" => "service_type",
-					"caption" => $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
+					"caption" => isset($ps) && $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
 					"align" => "center"
 				));
 			}
-		}
+
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
 			"lang_id" => array(),
@@ -4807,8 +4845,6 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
 
-
-
 		foreach($c_conn as $c)
 		{
 			$c = $c->to();
@@ -4879,7 +4915,19 @@ class task extends class_base
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.Y",
-			"width" => "40%"
+			"width" => "20%"
+		));
+		$t->define_field(array(
+			"name" => "hours",
+			"caption" => t("Osalus tundides"),
+			"sortable" => 1,
+			"width" => "10%"
+		));
+		$t->define_field(array(
+			"name" => "percentage",
+			"caption" => t("Osalus protsentides"),
+			"sortable" => 1,
+			"width" => "10%"
 		));
 	}
 
@@ -4898,11 +4946,22 @@ class task extends class_base
 		foreach($p_conn as $c)
 		{
 			$c = $c->to();
+			$row = $arr["obj_inst"]->get_party_obj($c->id());
 			$t->define_data(array(
 				"oid" => $c->id(),
 				"project" => html::obj_change_url($c),
 				"status" => $p->states[$c->prop("state")],
-				"deadline" => $c->prop("deadline")
+				"deadline" => $c->prop("deadline"),
+				"hours" => html::textbox(array(
+					"name" => "orderers[".$c->id()."][hours]",
+					"value" => $row ? $row->prop("hours") : "",
+					"size" => 3
+				)),
+				"percentage" => html::textbox(array(
+					"name" => "orderers[".$c->id()."][percentage]",
+					"value" => $row ? $row->prop("percentage") : "",
+					"size" => 3
+				)),
 			));
 		}
 	}

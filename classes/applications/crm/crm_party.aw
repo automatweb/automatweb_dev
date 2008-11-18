@@ -20,7 +20,7 @@
 @caption Tundides
 
 #RELTYPES
-@reltype PARTICIPANT value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@reltype PARTICIPANT value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON,CL_PROJECT
 @caption Osaleja
 
 @reltype TASK value=2 clid=CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_BUG

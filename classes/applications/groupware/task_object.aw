@@ -8,6 +8,38 @@ class task_object extends _int_object
 		parent::_int_object();
 	}
 
+	function set_prop($pn, $pv)
+	{
+		switch($pn)
+		{
+			case "time_real":
+				if($this->class_id() == CL_TASK)
+				{
+					$pn = "num_hrs_real";
+				}
+			case "num_hrs_real":
+				if($GLOBALS["do_not_change_task_real_time"])
+				{
+					return "";
+				}
+				break;
+			case "time_to_cust":
+				if($this->class_id() == CL_TASK)
+				{
+					$pn = "num_hrs_to_cust";
+				}
+			case "num_hrs_to_cust":
+				if($GLOBALS["do_not_change_task_cust_time"])
+				{
+					return "";
+				}
+				break;
+		}
+
+		$ret =  parent::set_prop($pn, $pv);
+		return $ret;
+	}
+
 	//millegi p2rast m6nes olukorras on vendade kustutamisega probleeme ja annab errorit... seega teeb selle enne 2ra
 	function delete($arr = array())
 	{
@@ -116,7 +148,11 @@ class task_object extends _int_object
 		return 0;
 	}
 
-	function get_all_rows()
+	/** returns all row object ids
+		@attrib api=1
+		@returns array
+	**/
+	public function get_all_rows()
 	{
 		$ret = array();
 		$conns = $this->connections_from(array(
@@ -127,6 +163,81 @@ class task_object extends _int_object
 			$ret[] = $con->prop("to");
 		}
 		return $ret;
+	}
+
+	/** sets task "real time" to rows "real time" sum
+		@attrib api=1
+	**/
+	public function update_hours()
+	{
+		$hours = $this->get_row_hours();
+		$this->set_prop("time_real", $hours);
+		$this->save();
+		$GLOBALS["do_not_change_task_real_time"] = 1;//nii ei saa yle salvestada vana v22rtuse klassi vaates
+	}
+
+	/** sets task "time to customer" to rows "time to customer" sum
+		@attrib api=1
+	**/
+	public function update_cust_hours()
+	{
+		$hours = $this->get_row_cust_hours();
+		$this->set_prop("time_to_cust", $hours);
+		$this->save();
+		$GLOBALS["do_not_change_task_cust_time"] = 1;
+	}
+
+	/** returns all rows time to customer sum
+		@attrib api=1
+		@returns int
+			row hours sum
+	**/
+	public function get_row_cust_hours()
+	{
+		$hours = 0;
+		foreach($this->get_rows_data() as $bcs)
+		{
+			$hours+= $bcs["time_to_cust"];
+		}
+		return $hours;
+	}
+
+	/** returns all rows real time sum
+		@attrib api=1
+		@returns int
+			row hours sum
+	**/
+	public function get_row_hours()
+	{
+		$hours = 0;
+		foreach($this->get_rows_data() as $bcs)
+		{
+			$hours+= $bcs["time_real"];
+		}
+		return $hours;
+	}
+
+	/** returns all rows data
+		@attrib api=1
+		@returns array
+			row object
+	**/
+	public function get_rows_data()
+	{
+		$filter = array(
+			"class_id" => CL_TASK_ROW,
+			"task" => $this->id(),
+			"lang_id" => array(),
+		);
+		$req = array
+		(
+			CL_TASK_ROW => array(
+				 "time_real" => "time_real",
+				"time_to_cust" => "time_to_cust",
+			),
+		);
+		$row_arr = new object_data_list($filter , $req);
+		return $row_arr->list_data;
 	}
 
 	/** makes new task row
@@ -367,9 +478,10 @@ class task_object extends _int_object
 		$ol = new object_list(array(
 			"class_id" =>  CL_CRM_PARTY,
 			"lang_id" => array(),
-			"participant" => $person,
+			"participant" => $part,
 			"site_id" => array(),
 			"task" => $this->id(),
+			"limit" => 1,
 		));
 		return reset($ol->arr());
 	}

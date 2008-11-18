@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.109 2008/11/17 13:01:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.110 2008/11/18 16:53:02 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -29,7 +29,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 			@property start1 type=datetime_select field=start parent=top_2way_right table=planner
 			@caption Algus
 
-			@property end type=datetime_select  parent=top_2way_right table=planner
+			@property end type=datetime_select parent=top_2way_right table=planner
 			@caption L&otilde;peb
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
@@ -1267,19 +1267,27 @@ class crm_meeting extends task
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array(
-			"name" => "time_guess",
-			"caption" => t("Prognoositav tundide arv"),
+			"name" => "time",
+			"caption" => t("Tundide arv"),
 			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "time_guess",
+			"caption" => t("Prognoositav"),
+			"align" => "center",
+			"parent" => "time"
 		));
 		$t->define_field(array(
 			"name" => "time_real",
-			"caption" => t("Tegelik tundide arv"),
-			"align" => "center"
+			"caption" => t("Tegelik"),
+			"align" => "center",
+			"parent" => "time"
 		));
 		$t->define_field(array(
 			"name" => "time_to_cust",
-			"caption" => t("Tundide arv kliendile"),
-			"align" => "center"
+			"caption" => t("Kliendile"),
+			"align" => "center",
+			"parent" => "time"
 		));
 		$t->define_field(array(
 			"name" => "hr_price",

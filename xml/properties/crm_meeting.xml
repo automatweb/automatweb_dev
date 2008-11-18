@@ -35,7 +35,8 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>start</field>
-            <caption>Algab </caption>
+	    <caption>Algab </caption>
+            <parent>top_2way_right</parent>
       </property>
       <property>
             <name>end</name>
@@ -43,7 +44,8 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;amp;otilde;peb</caption>
+	    <caption>L&amp;amp;otilde;peb</caption>
+	    <parent>top_2way_right</parent>
       </property>
       <property>
             <name>hrs_table</name>

@@ -8,14 +8,25 @@ class task_row_obj extends _int_object
 	{
 		switch($pn)
 		{
-			case "time_guess":
 			case "time_real":
+			case "time_guess":
 			case "time_to_cust":
 				$pv = str_replace("," , "." , $pv);
+
+				if($pn == "time_real" && $pv != $this->prop("time_real"))
+				{
+					$this->update_time_real = 1;
+				}
+				if($pn == "time_to_cust" && $pv != $this->prop("time_to_cust"))
+				{
+					$this->update_time_cust = 1;
+				}
 				break;
 		}
 
-		return parent::set_prop($pn, $pv);
+		$ret =  parent::set_prop($pn, $pv);
+
+		return $ret;
 	}
 
 	function save($arr = array())
@@ -29,6 +40,17 @@ class task_row_obj extends _int_object
 		$task = obj($this->prop("task"));
 		if(is_object($task))
 		{
+			if(isset($this->update_time_real))
+			{
+				//if($task->created() > 1227022000)
+					$task->update_hours();
+			}
+			if(isset($this->update_time_cust))
+			{
+				//if($task->created() > 1227022000)
+					$task->update_cust_hours();
+			}
+			
 			foreach($task->connections_from(array(
 				"type" => "RELTYPE_CUSTOMER",
 			)) as $c)

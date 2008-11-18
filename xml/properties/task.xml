@@ -97,14 +97,14 @@
             <caption>Sisu</caption>
       </property>
       <property>
-            <name>parts_tb</name>
+            <name>co_tb</name>
             <table>objects</table>
             <group>general</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>bottom_pit</parent>
-            <field>parts_tb</field>
+            <parent>customer_bit</parent>
+            <field>co_tb</field>
       </property>
       <property>
             <name>co_table</name>
@@ -113,8 +113,18 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>bottom_pit</parent>
+            <parent>customer_bit</parent>
             <field>co_table</field>
+      </property>
+      <property>
+            <name>project_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>project_bit</parent>
+            <field>project_tb</field>
       </property>
       <property>
             <name>proj_table</name>
@@ -123,8 +133,18 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>bottom_pit</parent>
+            <parent>project_bit</parent>
             <field>proj_table</field>
+      </property>
+      <property>
+            <name>impl_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>impl_bit</parent>
+            <field>impl_tb</field>
       </property>
       <property>
             <name>parts_table</name>
@@ -133,7 +153,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>bottom_pit</parent>
+            <parent>impl_bit</parent>
             <field>parts_table</field>
       </property>
       <property>
@@ -143,7 +163,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>files_pit</parent>
+            <parent>files_bit</parent>
             <field>files_tb</field>
       </property>
       <property>
@@ -153,7 +173,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>files_pit</parent>
+            <parent>files_bit</parent>
             <field>files_table</field>
       </property>
       <property>
@@ -696,6 +716,11 @@
             </predicates>
       </groupinfo>
       <tableinfo>
+            <documents>
+                  <index>docid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </documents>
             <planner>
                   <index>id</index>
                   <master_table>objects</master_table>
@@ -801,7 +826,8 @@
                   <area_caption></area_caption>
             </top_2way_right>
             <center_bit>
-                  <type>hbox</type>
+                  <type>vbox</type>
+                  <parent>top_bit</parent>
                   <group>general</group>
                   <area_caption></area_caption>
             </center_bit>
@@ -811,16 +837,30 @@
                   <area_caption>Sisu</area_caption>
                   <group>general</group>
             </content_bit>
-            <bottom_pit>
+            <customer_bit>
                   <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Tellijad</area_caption>
                   <group>general</group>
-                  <area_caption></area_caption>
-            </bottom_pit>
-            <files_pit>
+            </customer_bit>
+            <project_bit>
                   <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektid</area_caption>
                   <group>general</group>
-                  <area_caption></area_caption>
-            </files_pit>
+            </project_bit>
+            <impl_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Osalejad</area_caption>
+                  <group>general</group>
+            </impl_bit>
+            <files_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Manused</area_caption>
+                  <group>general</group>
+            </files_bit>
             <personal>
                   <type>hbox</type>
                   <group>general</group>
