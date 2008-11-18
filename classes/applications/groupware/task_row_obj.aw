@@ -42,12 +42,12 @@ class task_row_obj extends _int_object
 		{
 			if(isset($this->update_time_real))
 			{
-				//if($task->created() > 1227022000)
+				if($task->created() > 1227022000)
 					$task->update_hours();
 			}
 			if(isset($this->update_time_cust))
 			{
-				//if($task->created() > 1227022000)
+				if($task->created() > 1227022000)
 					$task->update_cust_hours();
 			}
 			
