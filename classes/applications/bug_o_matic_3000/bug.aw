@@ -1225,7 +1225,6 @@ class bug extends class_base
 				break;*/
 
 			case "num_hrs_guess":
-				die("here");
 				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
