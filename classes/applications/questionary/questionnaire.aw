@@ -634,10 +634,7 @@ class questionnaire extends class_base
 				"jrk_hidden" => $conn->conn["to.jrk"],
 			));
 		}
-		$t->sort_by(array(
-			"field" => "jrk_hidden",
-			"sorder" => "ASC",
-		));
+		$t->set_default_sortby("jrk_hidden");
 	}
 
 	function set_property($arr = array())
