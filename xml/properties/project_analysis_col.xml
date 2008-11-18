@@ -34,7 +34,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Prioriteed</caption>
+            <caption>Prioriteet</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROJECT_ANALYSIS_COL</syslog_type>

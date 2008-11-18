@@ -9,6 +9,16 @@
             <caption>Hindamise t&amp;amp;auml;htaeg</caption>
       </property>
       <property>
+            <name>eval_req</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Hindamine kohustuslik</caption>
+      </property>
+      <property>
             <name>strat_a</name>
             <table>objects</table>
             <group>eval</group>
@@ -16,6 +26,26 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>strat_a</field>
+      </property>
+      <property>
+            <name>strat_res_p_weight</name>
+            <table>objects</table>
+            <group>strat_res_avg</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>strat_res_p_weight</field>
+            <caption>Hindajate kaal</caption>
+      </property>
+      <property>
+            <name>strat_res_c_weight</name>
+            <table>objects</table>
+            <group>strat_res_avg</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>strat_res_c_weight</field>
+            <caption>Tulpade kaal</caption>
       </property>
       <property>
             <name>strat_res</name>
@@ -31,7 +61,7 @@
             <table>objects</table>
             <group>strat_res_tree</group>
             <type>treeview</type>
-            <parent>srt_hb</parent>
+            <parent>srt_tree</parent>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>srt</field>
@@ -41,10 +71,19 @@
             <table>objects</table>
             <group>strat_res_tree</group>
             <type>table</type>
-            <parent>srt_hb</parent>
+            <parent>srt_table</parent>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>srt_tbl</field>
+      </property>
+      <property>
+            <name>strat_wt_tb</name>
+            <table>objects</table>
+            <group>strat_res_wt</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>strat_wt_tb</field>
       </property>
       <property>
             <name>strat_wt</name>
@@ -86,6 +125,15 @@
             <field>rows_tb</field>
       </property>
       <property>
+            <name>rows_top</name>
+            <table>objects</table>
+            <group>rows</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>rows_top</field>
+      </property>
+      <property>
             <name>rows_table</name>
             <table>objects</table>
             <group>rows</group>
@@ -94,6 +142,40 @@
             <no_comment>1</no_comment>
             <store>no</store>
             <field>rows_table</field>
+      </property>
+      <property>
+            <name>rows_search</name>
+            <table>objects</table>
+            <group>rows</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>rows_search</field>
+      </property>
+      <property>
+            <name>rows_search_what</name>
+            <table>objects</table>
+            <group>rows</group>
+            <type>chooser</type>
+            <field>rows_search_what</field>
+            <caption>Lisa</caption>
+      </property>
+      <property>
+            <name>rows_search_str</name>
+            <table>objects</table>
+            <group>rows</group>
+            <type>textbox</type>
+            <field>rows_search_str</field>
+            <caption>Otsingus&amp;amp;otilde;na</caption>
+      </property>
+      <property>
+            <name>rows_search_tbl</name>
+            <table>objects</table>
+            <group>rows</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>rows_search_tbl</field>
       </property>
       <classinfo>
             <syslog_type>ST_PROJECT_ANALYSIS_WS</syslog_type>
@@ -113,7 +195,6 @@
             </cols>
             <rows>
                   <caption>Read</caption>
-                  <submit>no</submit>
             </rows>
             <eval>
                   <caption>Hindamine</caption>
@@ -129,7 +210,6 @@
             <strat_res_avg>
                   <caption>Keskmised hinded</caption>
                   <parent>strat_res</parent>
-                  <submit>no</submit>
             </strat_res_avg>
       </groupinfo>
       <tableinfo>
@@ -150,13 +230,32 @@
                   <clid>CL_PROJECT_ANALYSIS_ROW</clid>
                   <caption>Rida</caption>
             </ROW>
+            <PARTICIPANT>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Hindaja</caption>
+            </PARTICIPANT>
       </reltypes>
       <layout>
             <srt_hb>
                   <type>hbox</type>
+                  <width>20%:80%</width>
                   <group>strat_res_tree</group>
                   <area_caption></area_caption>
             </srt_hb>
+            <srt_tree>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Hindajad</area_caption>
+                  <parent>srt_hb</parent>
+                  <group>strat_res_tree</group>
+            </srt_tree>
+            <srt_table>
+                  <type>vbox</type>
+                  <parent>srt_hb</parent>
+                  <group>strat_res_tree</group>
+                  <area_caption></area_caption>
+            </srt_table>
       </layout>
 </properties>
 

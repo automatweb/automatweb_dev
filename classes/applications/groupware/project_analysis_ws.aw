@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.4 2007/12/06 14:33:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.5 2008/11/18 10:38:53 robert Exp $
 // project_analysis_ws.aw - Projekti anal&uuml;&uuml;si t&ouml;&ouml;laud 
 /*
 
@@ -14,23 +14,36 @@
 	@property eval_dl type=date_select table=aw_project_analysis_ws field=aw_eval_dl
 	@caption Hindamise t&auml;htaeg
 
+	@property eval_req type=checkbox ch_value=1 field=meta method=serialize
+	@caption Hindamine kohustuslik
+
 @default group=eval
 
 	@property strat_a type=table no_caption=1 store=no
 
 @default group=strat_res_avg
 
+	@property strat_res_p_weight type=checkbox ch_value=1 store=no
+	@caption Hindajate kaal
+
+	@property strat_res_c_weight type=checkbox ch_value=1 store=no
+	@caption Tulpade kaal
+
 	@property strat_res type=table no_caption=1 store=no
 
 @default group=strat_res_tree
 
-	@layout srt_hb type=hbox 
+	@layout srt_hb type=hbox width=20%:80%
 
-		@property srt type=treeview parent=srt_hb store=no no_caption=1
-		@property srt_tbl type=table parent=srt_hb store=no no_caption=1
+		@layout srt_tree type=vbox closeable=1 area_caption=Hindajad parent=srt_hb
+			@property srt type=treeview parent=srt_tree store=no no_caption=1
+
+		@layout srt_table type=vbox parent=srt_hb
+			@property srt_tbl type=table parent=srt_table store=no no_caption=1
 
 @default group=strat_res_wt
 
+	@property strat_wt_tb type=toolbar no_caption=1
 	@property strat_wt type=table no_caption=1 store=no
 
 @default group=cols
@@ -41,17 +54,30 @@
 @default group=rows
 
 	@property rows_tb type=toolbar no_caption=1 no_comment=1
+
+	@property rows_top type=text subtitle=1 store=no
+
 	@property rows_table type=table no_caption=1 no_comment=1
+
+	@property rows_search type=text subtitle=1 store=no
+
+	@property rows_search_what type=chooser
+	@caption Lisa
+
+	@property rows_search_str type=textbox
+	@caption Otsingus&otilde;na
+
+	@property rows_search_tbl type=table no_caption=1
 
 @groupinfo strat_res_wt caption="Hindajad" 
 @groupinfo cols caption="Tulbad" submit=no
-@groupinfo rows caption="Read" submit=no
+@groupinfo rows caption="Read"
 
 
 @groupinfo eval caption="Hindamine"
 @groupinfo strat_res caption="Hindamise tulemused"
 	@groupinfo strat_res_tree caption="Hindajad" parent=strat_res submit=no
-	@groupinfo strat_res_avg caption="Keskmised hinded" parent=strat_res submit=no
+	@groupinfo strat_res_avg caption="Keskmised hinded" parent=strat_res
 
 
 @reltype COL value=1 clid=CL_PROJECT_ANALYSIS_COL
@@ -60,6 +86,8 @@
 @reltype ROW value=2 clid=CL_PROJECT_ANALYSIS_ROW
 @caption Rida
 
+@reltype PARTICIPANT value=3 clid=CL_CRM_PERSON
+@caption Hindaja
 */
 
 class project_analysis_ws extends class_base
@@ -82,6 +110,10 @@ class project_analysis_ws extends class_base
 				$this->_strat_wt($arr);
 				break;
 
+			case "strat_wt_tb":
+				$this->_strat_wt_tb($arr);
+				break;
+
 			case "cols_tb":
 				$this->_cols_tb($arr);
 				break;
@@ -102,10 +134,6 @@ class project_analysis_ws extends class_base
 				$this->_strat_a($arr);
 				break;
 
-			case "strat_a":
-				$this->_save_strat_a($arr);
-				break;
-
 			case "srt":
 				$this->_srt($arr);
 				break;
@@ -116,6 +144,37 @@ class project_analysis_ws extends class_base
 
 			case "strat_res":
 				$this->_strat_res($arr);
+				break;
+
+			case "strat_res_c_weight":
+			case "strat_res_p_weight":
+				$prop["value"] = 1;
+				if(!$arr["request"][$prop["name"]] && $arr["request"]["strat_res_subm"])
+				{
+					$prop["value"] = 0;
+				}
+				break;
+
+			case "rows_top":
+				$prop["value"] = t("Read");
+				break;
+
+			case "rows_search":
+				$prop["value"] = t("Ridade lisamine");
+				break;
+
+			case "rows_search_what":
+				$prop["options"] = array(
+					1 => t("Alamobjekte"),
+					2 => t("Seostest"),
+				);
+				$prop["value"] = 1;
+			case "rows_search_str":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
+			case "rows_search_tbl":
+				$this->_rows_search($arr);
 				break;
 		};
 		return $retval;
@@ -134,6 +193,14 @@ class project_analysis_ws extends class_base
 			case "strat_a":
 				$this->_save_strat_a($arr);
 				break;
+
+			case "rows_table":
+				$this->_save_rows_table($arr);
+				break;
+
+			case "rows_search_tbl":
+				$this->_save_rows_search($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -142,8 +209,42 @@ class project_analysis_ws extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["project"] = $_GET["project"];
+		if($arr["group"] == "strat_res_wt")
+		{
+			$arr["add_p"] = 0;
+		}
+		if($arr["group"] == "rows")
+		{
+			$arr["add_r"] = 0;
+		}
+		if($arr["group"] == "strat_res_avg")
+		{
+			$arr["strat_res_subm"] = 1;
+		}
+		if($sw = $_GET["rows_search_what"])
+		{
+			$arr["rows_search_what"] = $sw;
+		}
 	}
 
+	function callback_mod_retval($arr)
+	{
+		if($arr["request"]["strat_res_subm"])
+		{
+			$arr["args"]["strat_res_subm"] = $arr["request"]["strat_res_subm"];
+			$arr["args"]["strat_res_c_weight"] = $arr["request"]["strat_res_c_weight"];
+			$arr["args"]["strat_res_p_weight"] = $arr["request"]["strat_res_p_weight"];
+		}
+		if(aw_global_get("paws_rem_rows_search"))
+		{
+			aw_session_del("paws_rem_rows_search");
+		}
+		elseif($arr["request"]["group"] == "rows")
+		{
+			$arr["args"]["rows_search_what"] = $arr["request"]["rows_search_what"];
+			$arr["args"]["rows_search_str"] = $arr["request"]["rows_search_str"];
+		}
+	}
 
 	function callback_post_save($arr)
 	{
@@ -152,6 +253,17 @@ class project_analysis_ws extends class_base
 			$project = obj($arr["request"]["project"]);
 			$project->connect(array("to" => $arr["id"], "reltype" => "ANALYSIS_WS"));
 		}
+	}
+
+	function _strat_wt_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		
+		$tb->add_search_button(array(
+			"pn" => "add_p",
+			"multiple" => 1,
+			"clid" => CL_CRM_PERSON,
+		));
 	}
 
 	function _init_strat_wt_t(&$t)
@@ -171,6 +283,21 @@ class project_analysis_ws extends class_base
 			"caption" => t("Hindaja hinde kaal protsentides"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "deadline",
+			"caption" => t("Hindamise t&auml;htaeg"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "required",
+			"caption" => t("Hindamine kohustuslik"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "remind",
+			"caption" => t("Meeldetuletuse aeg (p&auml;eva)"),
+			"align" => "center",
+		));
 	}
 
 	function _strat_wt($arr)
@@ -178,17 +305,15 @@ class project_analysis_ws extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_strat_wt_t($t);
 
-		$pi = get_instance(CL_PROJECT);
-		$conns = $arr["obj_inst"]->connections_to(array("from.class_id" => CL_PROJECT));
-		$c = reset($conns);
-		if(!$c) return;
-		$proj  = $c->from();
-
+		$conns = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 		// get project team
-		$team = new object_list($proj->connections_from(array("type" => "RELTYPE_PARTICIPANT")));
+		$team = new object_list($conns);
 
 		$wts = $arr["obj_inst"]->meta("wts");
 		$evals = $arr["obj_inst"]->meta("evals");
+		$ep = $arr["obj_inst"]->meta("eval_p");
+		$def_d = $arr["obj_inst"]->prop("eval_dl");
+		$def_r = $arr["obj_inst"]->prop("eval_req");
 		foreach($team->arr() as $o)
 		{
 			if ($o->class_id() != CL_CRM_PERSON)
@@ -206,7 +331,21 @@ class project_analysis_ws extends class_base
 					"name" => "is[".$o->id()."]",
 					"value" => 1,
 					"checked" => $evals[$o->id()]
-				))
+				)),
+				"deadline" => html::date_select(array(
+					"name" => "eval_p[".$o->id()."][deadline]",
+					"value" => ($d = $ep[$o->id()]["deadline"]) ? $d : $def_d,
+				)),
+				"required" => html::checkbox(array(
+					"name" => "eval_p[".$o->id()."][required]",
+					"value" => 1,
+					"checked" => (isset($ep[$o->id()])) ? $ep[$o->id()]["required"] : $def_r,
+				)),
+				"remind" => html::textbox(array(
+					"name" => "eval_p[".$o->id()."][remind]",
+					"value" => ($d = $ep[$o->id()]["remind"]) ? $d : 0,
+					"size" => 3
+				)),
 			));
 		}
 	}
@@ -215,6 +354,17 @@ class project_analysis_ws extends class_base
 	{
 		$arr["obj_inst"]->set_meta("wts", $arr["request"]["wts"]);
 		$arr["obj_inst"]->set_meta("evals", $arr["request"]["is"]);
+		$arr["obj_inst"]->set_meta("eval_p", $arr["request"]["eval_p"]);
+		if($ps = $arr["request"]["add_p"])
+		{
+			foreach(explode(",", $ps) as $p)
+			{
+				$arr["obj_inst"]->connect(array(
+					"type" => "RELTYPE_PARTICIPANT",
+					"to" => $p,
+				));
+			}
+		}
 	}
 
 	function do_db_upgrade($t, $f)
@@ -346,6 +496,13 @@ class project_analysis_ws extends class_base
 			"tooltip" => t("Tulp"),
 			"url" => html::get_new_url(CL_PROJECT_ANALYSIS_ROW, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 2))
 		));
+		
+		$t->add_search_button(array(
+			"pn" => "add_r",
+			"multiple" => 1,
+			"clid" => array(),
+		));
+
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -356,6 +513,11 @@ class project_analysis_ws extends class_base
 
 	function _init_rows_table(&$t)
 	{
+		$t->define_field(array(
+			"name" => "show",
+			"align" => "center",
+			"caption" => t("Kasutusel"),
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Rea nimi"),
@@ -393,20 +555,213 @@ class project_analysis_ws extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_rows_table($t);
-
+		$no_use = $arr["obj_inst"]->meta("rows_no_use");
 		$u = get_instance(CL_USER);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$st = $c->to();
 			$p = $u->get_person_for_uid($st->createdby());
+			$no = $st;
+			if($o = $st->get_first_obj_by_reltype("RELTYPE_OBJECT"))
+			{
+				$no = $o;
+			}
 			$t->define_data(array(
-				"name" => html::obj_change_url($c->to()),
+				"show" => html::checkbox(array(
+					"checked" => $no_use[$st->id()] ? 0 : 1,
+					"ch_value" => 1,
+					"name" => "show[".$st->id()."]",
+				)),
+				"name" => html::obj_change_url($st, $no->name()),
 				"createdby" => $p->name(),
 				"created" => $st->created(),
 				"ord" => $st->ord(),
 				"oid" => $c->prop("to"),
 				"grp_name" => $st->comment()
 			));
+		}
+	}
+
+	function _save_rows_table($arr)
+	{
+		$no_use = $arr["obj_inst"]->meta("rows_no_use");
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			if(!$arr["request"]["show"][$c->prop("to")])
+			{
+				$no_use[$c->prop("to")] = 1;
+			}
+			else
+			{
+				unset($no_use[$c->prop("to")]);
+			}
+		}
+		$arr["obj_inst"]->set_meta("rows_no_use", $no_use);
+		$arr["obj_inst"]->save();
+
+		if($oids = $arr["request"]["add_r"])
+		{
+			foreach(explode(",", $oids) as $oid)
+			{
+				$this->_add_row($oid, $arr);
+			}
+		}
+	}
+
+	function _add_row($oid, $arr)
+	{
+		$o = obj($oid);
+		if($o->class_id() != CL_PROJECT_ANALYSIS_ROW)
+		{
+			$c = new connection();
+			$chk = $c->find(array(
+				"from.class_id" => CL_PROJECT_ANALYSIS_ROW,
+				"to" => $oid,
+				"type" => "RELTYPE_OBJECT",
+			));
+			if(!count($chk))
+			{
+				$o = obj();
+				$o->set_class_id(CL_PROJECT_ANALYSIS_ROW);
+				$o->set_parent($arr["obj_inst"]->id());
+				$o->set_name(sprintf(t("%s rida"), $arr["obj_inst"]->name()));
+				$o->save();
+				$o->connect(array(
+					"to" => $oid,
+					"type" => "RELTYPE_OBJECT",
+				));
+			}
+			else
+			{
+				$conn = reset($chk);
+				$o = obj($conn["from"]);
+			}
+		}
+		$arr["obj_inst"]->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_ROW",
+		));
+	}
+
+	function _init_rows_search($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "icon",
+			"align" => "center",
+			"caption" => t("T&uuml;&uuml;p"),
+		));
+		$t->define_field(array(
+			"name" => "id",
+			"align" => "center",
+			"caption" => t("OID"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"align" => "center",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"align" => "center",
+			"caption" => t("Muutja"),
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"align" => "center",
+			"caption" => t("Muudeti"),
+			"type" => "time",
+			"format" => "d.m.Y, H:i",
+		));
+		if($arr["request"]["rows_search_what"] == 2)
+		{
+			$t->define_field(array(
+				"name" => "reltypes",
+				"align" => "center",
+				"caption" => t("Seoset&uuml;&uuml;bid"),
+			));
+		}
+		$t->define_chooser(array(
+			"name" => "s_sel",
+			"field" => "oid",
+		));
+	}
+
+	function _rows_search($arr)
+	{
+		if(!$arr["request"]["rows_search_what"] || !$arr["request"]["rows_search_str"])
+		{
+			return;
+		}
+		$this->_init_rows_search(&$arr);
+		$t = &$arr["prop"]["vcl_inst"];
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"name" => "%".$arr["request"]["rows_search_str"],
+		));
+		foreach($ol->arr() as $o)
+		{
+			$relinfo = $o->get_relinfo();
+			$option = array(0 => t("--vali--"));
+			$options = array();
+			foreach($relinfo as $rt => $data)
+			{
+				$options[$data["value"]] = $data["caption"];
+			}
+			natsort($options);
+			$options = $option + $options;
+			$t->define_data(array(
+				"icon" => html::img(array(
+					"url" => icons::get_icon_url($o),
+				)),
+				"oid" => $o->id(),
+				"name" => $o->name(),
+				"modified" => $o->modified,
+				"modifiedby" => $o->modifiedby(),
+				"reltypes" => html::select(array(
+					"name" => "reltype[".$o->id()."]",
+					"options" => $options,
+				)),
+				"id" => $o->id()
+			));
+		}
+	}
+
+	function _save_rows_search($arr)
+	{
+		if($sw = $arr["request"]["rows_search_what"])
+		{
+			foreach($arr["request"]["s_sel"] as $oid)
+			{
+				if($sw == 1)
+				{
+					$ol = new object_list(array(
+						"parent" => $oid,
+						"site_id" => array(),
+						"lang_id" => array(),
+					));
+					foreach($ol->arr() as $oid2 => $o)
+					{
+						$this->_add_row($oid2, $arr);
+					}
+				}
+				elseif($type = $arr["request"]["reltype"][$oid])
+				{
+					$conn = obj($oid)->connections_from(array(
+						"type" => $type,
+					));
+					foreach($conn as $c)
+					{
+						$this->_add_row($c->prop("to"), $arr);
+					}
+				}
+				$set = 1;
+			}
+		}
+		if($set)
+		{
+			aw_session_set("paws_rem_rows_search", 1);
 		}
 	}
 
@@ -528,11 +883,21 @@ class project_analysis_ws extends class_base
 			$strats[$c->prop("to")] = $c->prop("to");
 		}
 
+		$no_use = $arr["obj_inst"]->meta("rows_no_use");
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW", "sort_by" => "to.jrk")) as $c)
 		{
 			$row = $c->to();
+			if($no_use[$row->id()])
+			{
+				continue;
+			}
+			$no = $row;
+			if($o = $row->get_first_obj_by_reltype("RELTYPE_OBJECT"))
+			{
+				$no = $o;
+			}
 			$ar = array(
-				"task" => html::obj_change_url($row),
+				"task" => html::obj_change_url($no),
 				"task_comm" => $row->comment()
 			);
 			foreach($strats as $strat)
@@ -636,15 +1001,25 @@ class project_analysis_ws extends class_base
 				foreach($d as $strat => $eval)
 				{
 					$so = obj($strat);
-					$data[$evid][$strat] += ($eval * $so->prop("weight") * $so->prop("priority"));
+					$data[$evid][$strat] += ($eval * ($so->prop("weight") ? $so->prop("weight") : 1) * ($so->prop("priority") ? $so->prop("priority") : 1));
 				}
 			}
 		}
+		$no_use = $arr["obj_inst"]->meta("rows_no_use");
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
+			if($no_use[$row->id()])
+			{
+				continue;
+			}
+			$no = $row;
+			if($o = $row->get_first_obj_by_reltype("RELTYPE_OBJECT"))
+			{
+				$no = $o;
+			}
 			$ar = array(
-				"task" => html::obj_change_url($row),
+				"task" => html::obj_change_url($no),
 				"task_comm" => $row->comment()
 			);
 			$sum = 0;
@@ -687,19 +1062,31 @@ class project_analysis_ws extends class_base
 				foreach($d as $strat => $eval)
 				{
 					$so = obj($strat);
-					$wt = !empty($wts[$o->prop("evaluator")]) ? $wts[$o->prop("evaluator")]/100.0 : 1;
-					$data[$evid][$strat] += $eval * $wt * $so->prop("weight") * $so->prop("priority");
+					$wt = (!empty($wts[$o->prop("evaluator")]) && !$arr["request"]["strat_res_p_weight"]) ? $wts[$o->prop("evaluator")]/100.0 : 1;
+					$cwt = ($so->prop("weight") && ($arr["request"]["strat_res_c_weight"] || !$arr["request"]["strat_res_subm"])) ? $so->prop("weight") : 1;
+					$cpt = ($so->prop("priority") && ($arr["request"]["strat_res_c_weight"] || !$arr["request"]["strat_res_subm"])) ? $so->prop("priority") : 1;
+					$data[$evid][$strat] += $eval * $wt * $cwt * $cpt;
 				}
 			}
 		}
 
 		$sbs = array();
 		$sums = array();
+		$no_use = $arr["obj_inst"]->meta("rows_no_use");
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW", "sort_by" => "to.jrk")) as $c)
 		{
 			$row = $c->to();
+			if($no_use[$row->id()])
+			{
+				continue;
+			}
+			$no = $row;
+			if($o = $row->get_first_obj_by_reltype("RELTYPE_OBJECT"))
+			{
+				$no = $o;
+			}
 			$ar = array(
-				"task" => html::obj_change_url($row),
+				"task" => html::obj_change_url($no),
 				"task_comm" => $row->comment()
 			);
 			$sum = 0;

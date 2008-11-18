@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_col.aw,v 1.2 2007/12/06 14:33:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_col.aw,v 1.3 2008/11/18 10:38:53 robert Exp $
 // project_analysis_col.aw - Projekti anal&uuml;&uuml;si tulp 
 /*
 
@@ -18,7 +18,7 @@
 @caption Kaal
 
 @property priority type=textbox field=meta method=serialize
-@caption Prioriteed
+@caption Prioriteet
 
 */
 
