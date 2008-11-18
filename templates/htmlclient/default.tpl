@@ -32,6 +32,14 @@
 	</tr>
 	<!-- END SUB: LINE -->
 
+	<!-- SUB: RADIOBUTTON -->
+<input class="radiobutton" type="radio" name="{VAR:name}" id="{VAR:id}" value="{VAR:value}"{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
+	<!-- END SUB: RADIOBUTTON -->
+
+	<!-- SUB: CHECKBOX -->
+<input class="checkbox" type="checkbox" id="{VAR:name}" name="{VAR:name}" value="{VAR:value}"{VAR:onblur}{VAR:title}{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
+	<!-- END SUB: CHECKBOX -->
+
 	<!-- SUB: HEADER -->
 	<tr>
 	    <td></td>

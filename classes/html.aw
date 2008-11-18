@@ -671,7 +671,25 @@ class html extends aw_template
 		}
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
-		$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
+		$tpl = get_instance("htmlclient");
+		$tpl->read_template("default.tpl");
+		if($tpl->is_template("CHECKBOX"))
+		{
+			$tpl->vars(array(
+				"name" => $name,
+				"value" => $value,
+				"onblur" => $onBlur,
+				"onclick" => $onc,
+				"checked" => $checked,
+				"disabled" => $disabled,
+				"caption" => $capt,
+			));
+			$rv = $tpl->parse("CHECKBOX");
+		}
+		else
+		{
+			$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
+		}
 		return $rv;
 	}
 
@@ -715,7 +733,26 @@ class html extends aw_template
 			$onc = " onclick=\"{$onclick}\"";
 		}
 
-		return "<input class=\"radiobutton\" type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$value}\"{$onc}{$checked}{$disabled} />\n {$caption}";
+		$tpl = get_instance("htmlclient");
+		$tpl->read_template("default.tpl");
+		if($tpl->is_template("RADIOBUTTON"))
+		{
+			$tpl->vars(array(
+				"name" => $name,
+				"id" => $id,
+				"value" => $value,
+				"onclick" => $onc,
+				"checked" => $checked,
+				"disabled" => $disabled,
+				"caption" => $caption,
+			));
+			$rv = $tpl->parse("RADIOBUTTON");
+		}
+		else
+		{
+			$rv = "<input class=\"radiobutton\" type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$value}\"{$onc}{$checked}{$disabled} />\n {$caption}";
+		}
+		return $rv;
 	}
 
 	/**Submit button
@@ -738,7 +775,8 @@ class html extends aw_template
 		extract($args);
 		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
 		$class = !empty($class) ? " class=\"{$class}\"" : "";
-		$onclick = !empty($onclick) ? " onclick=\"{$onclick}\"" : "return false;";
+//		$onclick = !empty($onclick) ? " onclick=\"{$onclick}; return false;\"" : "";
+		$onclick = !empty($onclick) ? " onclick=\"{$onclick}; return this.value;\"" : "";
 
 		return "<input id=\"cbsubmit\" type=\"submit\" name=\"{$name}\" value='{$value}'{$class}{$onclick}{$textsize} />\n";
 	}
