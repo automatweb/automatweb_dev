@@ -1508,6 +1508,10 @@ class bug extends class_base
 					$pgids[$gid] = $gid;
 				}
 				$send_mail_statuses = array();
+				if(count($mg[$this->_ac_old_state]) && $this->_ac_old_state != $this->_ac_new_state)
+				{
+					$send_mail_statuses[] = 0;
+				}
 				foreach($mg as $stid => $groups)
 				{
 					foreach($groups as $gid)
@@ -1545,11 +1549,11 @@ class bug extends class_base
 				$notify_addresses[] = $addr;
 			};
 		};
+
 		if (sizeof($notify_addresses) == 0)
 		{
 			return false;
 		};
-
 		foreach(array_unique($notify_addresses) as $adr)
 		{
 			$oid = $bug->id();
