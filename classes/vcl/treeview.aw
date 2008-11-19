@@ -51,6 +51,7 @@ class treeview extends class_base
 	var $only_one_level_opened = 0;
 	var $level;
 	var $selected_item;
+	var $rootnode;
 
 	function treeview($args = array())
 	{
@@ -860,13 +861,21 @@ class treeview extends class_base
 
 	// figures out the path from an item to the root of the tree
 	function _get_r_path($id)
-	{
-		$item = $this->itemdata[$id];
+	{	
 		$rpath = array();
+		if (!isset($this->itemdata[$id]))
+		{
+			return $rpath;
+		}
+		$item = $this->itemdata[$id];
 		while(!empty($item))
 		{
+			if (!isset($item["parent"]))
+			{
+				$item["parent"] = null;
+			}
 			$rpath[] = $item["id"];
-			$item = in_array($item["parent"],$rpath) ? false : $this->itemdata[$item["parent"]];
+			$item = in_array($item["parent"],$rpath) ? false : (isset($this->itemdata[$item["parent"]]) ? $this->itemdata[$item["parent"]] : null);
 		};
 		return $rpath;
 	}
@@ -930,7 +939,7 @@ class treeview extends class_base
 				"id" => $item["id"],
 				"has_data" => $has_data,
 				"iconurl" => $iconurl,
-				"url" => $item["url"],
+				"url" => isset($item["url"]) ? $item["url"] : "",
 				"onClick" => $oncl,
 				// spacer is only used for purely aesthetic reasons - to make
 				// source of the page look better

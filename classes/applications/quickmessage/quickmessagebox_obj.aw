@@ -23,7 +23,7 @@ class quickmessagebox_obj extends _int_object
 
 	private $counter_file; // contains counter data file absolute path at runtime
 
-	public function __construct($param)
+	public function __construct($param = null)
 	{
 		$this->counter_file = self::get_counter_file();
 		return parent::_int_object($param);

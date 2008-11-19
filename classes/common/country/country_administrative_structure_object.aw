@@ -20,7 +20,7 @@ class country_administrative_structure_object extends _int_object
 	);
 	var $as_structure_array;
 
-	function country_administrative_structure_object ($param)
+	function country_administrative_structure_object ($param = null)
 	{
 		parent::_int_object ($param);
 	}

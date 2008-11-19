@@ -4,7 +4,7 @@
 */
 class meta_obj extends _int_object
 {
-	function __construct($param)
+	function __construct($param = null)
 	{
 		parent::_int_object($param);
 	}

@@ -401,6 +401,14 @@ class cfgutils extends aw_template
 				{
 					$d['name']['text'] = "";
 				}
+				if (!is_array($d["caption"]))
+				{
+					$d["caption"] = array("text" => $d["caption"]);
+				}
+				if (!is_array($d["name"]))
+				{
+					$d["name"] = array("text" => $d["name"]);
+				}
 				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
 				$tmp = t2($t_str);
 				if ($tmp !== NULL)
@@ -568,7 +576,7 @@ class cfgutils extends aw_template
 			foreach($properties as $key => $val)
 			{
 				$_tmp = $val;
-				$name = $_tmp["name"];
+				$name = isset($_tmp["name"]) ? $_tmp["name"] : null;
 				if (empty($_tmp["form"]))
 				{
 					$_tmp["form"] = "";
@@ -746,9 +754,7 @@ class cfgutils extends aw_template
 			"filter" => $filter,
 			"system" => isset($args["system"]) ? $args["system"] : null, //!!! mis on  default?
 		));
-if (empty($clid))
-{debug_print_backtrace();
-}
+
 		$cldat = array();
 		if (isset($clinf[$clid]))
 		{
@@ -769,11 +775,15 @@ if (empty($clid))
 
 			foreach($result["properties"] as $key => $val)
 			{
+				if (!isset($val["name"]))
+				{
+					$val["name"] = "";
+				}
 				$objprops[$val["name"]] = $val;
 			};
 
 			// XXX: wtf?
-			$this->tableinfo = $result["properties"]["tableinfo"];
+			$this->tableinfo = isset($result["properties"]["tableinfo"]) ? $result["properties"]["tableinfo"] : null;
 		}
 		else
 		{

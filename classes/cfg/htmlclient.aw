@@ -1312,7 +1312,7 @@ class htmlclient extends aw_template
 				if (!empty($pval["parent"]))
 				{
 					$gx = $this->lp_chain[$pval["parent"]];
-					while ($this->lp_chain[$gx] != "_main" && isset($this->lp_chain[$gx]))
+					while (isset($this->lp_chain[$gx]) && $this->lp_chain[$gx] != "_main")
 					{
 						$gx = $this->lp_chain[$gx];
 					}

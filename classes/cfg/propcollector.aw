@@ -163,12 +163,16 @@ class propcollector extends aw_template
 
 		$tags = $this->tags;
 
-		$this->cl_start($cname);
+		$this->cl_start("");
 		foreach($lines as $line)
 		{
-			$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
-			$tagname = $m[1];
-			$tagdata = $m[2];
+			$tagname = "";
+			$tagdata = "";
+			if (($taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m)))
+			{
+				$tagname = $m[1];
+				$tagdata = $m[2];
+			}
 			if (isset($tags[$tagname]) && $tags[$tagname] == self::TAG_PAIRS)
 			{
 				$attribs = $this->_parse_attribs($m[2]);
@@ -266,7 +270,7 @@ class propcollector extends aw_template
 		// add defaults first, propery definition can override those.
 		foreach($this->defaults as $key => $val)
 		{
-			if (!$fields[$key])
+			if (empty($fields[$key]))
 			{
 				$fields[$key] = $val;
 			};
@@ -313,7 +317,7 @@ class propcollector extends aw_template
 		}
 
 		// field defaults to the name of the property
-		if (!$fields["field"])
+		if (empty($fields["field"]))
 		{
 			$fields["field"] = $fields["name"];
 		};
@@ -325,7 +329,7 @@ class propcollector extends aw_template
 			//unset($fields["field"]);
 		}
 
-		if ($fields["view"] && !$this->views[$fields["view"]])
+		if (!empty($fields["view"]) && !$this->views[$fields["view"]])
 		{
 			$this->views[$fields["view"]] = 1;
 		};
@@ -362,7 +366,7 @@ class propcollector extends aw_template
 		{
 			$fields["group"] = $this->defaults["group"];
 		};
-		$fields["area_caption"] = htmlentities($fields["area_caption"]);
+		$fields["area_caption"] = empty($fields["area_caption"]) ? "" : htmlentities($fields["area_caption"]);
 		$this->layout[$name] = $fields;
 		$this->name = $name;
 		$this->last_element = "layout";
@@ -384,6 +388,7 @@ class propcollector extends aw_template
 		# so that we get the last token as well
 		$data .= " ";
 		# this could be rewritten to be shorter, of course. Feel free to do it
+		$tmp = "";
 		for ($i = 0; $i < strlen($data); $i++)
 		{
 			$chr = $data[$i];
@@ -549,7 +554,7 @@ class propcollector extends aw_template
 				$arr["properties"]["forminfo"] = $this->forminfo;
 			};
 
-			if (sizeof($this->classdef["column"]) > 0)
+			if (!empty($this->classdef["column"]) && sizeof($this->classdef["column"]) > 0)
 			{
 				$arr["properties"]["columns"] = $this->classdef["column"];
 			};
@@ -762,13 +767,14 @@ class propcollector extends aw_template
 
 	private function validate_fields($arr)
 	{
-		if(!is_array($arr["fields"]) && $arr["field"] && $arr["value"])
+		if(isset($arr["fields"]) && !is_array($arr["fields"]) && $arr["field"] && $arr["value"])
 		{
 			$fields = array(
 				$arr["field"] => $arr["value"]
 			);
 		}
-		elseif(is_array($arr["fields"]))
+		else
+		if(isset($arr["fields"]) && is_array($arr["fields"]))
 		{
 			$fields = $arr["fields"];
 		}
@@ -810,7 +816,7 @@ class propcollector extends aw_template
 			}
 			else
 			{
-				$type = $tagfields[$f]["type"];
+				$type = isset($tagfields[$f]) ? $tagfields[$f]["type"] : "";
 				if($type)
 				{
 					switch($type)

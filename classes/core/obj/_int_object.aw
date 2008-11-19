@@ -20,6 +20,7 @@ class _int_object
 	var $obj;			// actual object data
 	var $implicit_save;
 	var $obj_sys_flags;
+	var $props_loaded;
 
 	private static $global_save_count = 0;
 	private static $cache_off = false;
@@ -2027,7 +2028,7 @@ class _int_object
 		);
 		foreach($GLOBALS["properties"][$cl_id] as $prop)
 		{
-			if ($prop['table'] == "objects" && $prop["field"] != "meta")
+			if (!empty($prop["table"]) && $prop['table'] == "objects" && $prop["field"] != "meta")
 			{
 				$GLOBALS["of2prop"][$cl_id][$prop['name']] = $prop['name'];
 			}
@@ -2237,12 +2238,16 @@ class _int_object
 	function _int_sync_from_objfield_to_prop($ofname, $mod = true)
 	{
 		// object field changed, sync to properties
-		$pn = $GLOBALS["of2prop"][$this->obj["class_id"]][$ofname];
+		$pn = empty($GLOBALS["of2prop"][$this->obj["class_id"]][$ofname]) ? "" : $GLOBALS["of2prop"][$this->obj["class_id"]][$ofname];
 		if ($pn != "")
 		{
 			if ($mod)
 			{
-				$this->_int_set_prop_mod($pn, $this->obj["properties"][$pn], $this->obj[$ofname]);
+				$this->_int_set_prop_mod(
+					$pn, 
+					isset($this->obj["properties"][$pn]) ? $this->obj["properties"][$pn] : null, 
+					isset($this->obj[$ofname]) ? $this->obj[$ofname] : null
+				);
 			}
 			$this->obj["properties"][$pn] = isset($this->obj[$ofname]) ? $this->obj[$ofname] : "";
 		}

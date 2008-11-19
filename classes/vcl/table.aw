@@ -30,6 +30,7 @@ class aw_table extends aw_template
 	var $non_filtered;
 	var $table_tag_id;
 	var $table_class_id = "awmenuedittabletag";
+	var $d_row_cnt;
 
 	protected $cfgform;
 
@@ -567,7 +568,7 @@ class aw_table extends aw_template
 		if (!($this->sortby = (isset($params["field"]) ? $params["field"] : NULL)))
 		{
 			// if it was not specified as a parameter the next place is the url
-			if (!($this->sortby = aw_global_get("sortby")))
+			if (!($this->sortby = $_GET["sortby"]))
 			{
 				// and if it is not in the url either, we will try the session
 				if (!($this->sortby = $aw_tables[$sess_field_key]))
@@ -582,7 +583,7 @@ class aw_table extends aw_template
 		if (!isset($params["sorder"]) || !($this->sorder = $params["sorder"]))
 		{
 			// if it was not specified as a parameter the next place is the url
-			if (!($this->sorder = aw_global_get("sort_order")))
+			if (!($this->sorder = $_GET["sort_order"]))
 			{
 				// and if it is not in the url either, we will try the session
 				if (!($this->sorder = $aw_tables[$sess_field_order]))
