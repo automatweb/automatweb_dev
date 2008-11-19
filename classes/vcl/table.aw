@@ -1328,7 +1328,7 @@ class aw_table extends aw_template
 						}
 						else
 						{
-							$val = $v[$v1["name"]];
+							$val = isset($v[$v1["name"]]) ? $v[$v1["name"]] : "";
 						};
 					};
 
