@@ -332,76 +332,78 @@ class crm_person_obj extends _int_object
 		return ($age < 0) ? false : $age;
 	}
 
-	function phones($type = NULL)
+	function phones($arr = array())
 	{
-		$ol = new object_list;
-		$prms = array("type" => "RELTYPE_PHONE");
-		// You wish! -kaarel
-		/*if(isset($type))
+		if(!is_array($arr))
 		{
-			$prms["to.type"] = $type;
-		}*/
-		foreach(parent::connections_from($prms) as $cn)
-		{
-			$o = $cn->to();
-			$o->conn_id = $cn->id();
-			$ol->add($o);
+			$arr["type"] = $arr;
 		}
-		$ids = array();
-		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
-		{
-			$ids[] = $cn->prop("to");
-		}
-		if(count($ids) > 0)
-		{			
-			$prms = array("from" => $ids, "type" => "RELTYPE_PHONE", "from.class_id" => CL_CRM_PERSON_WORK_RELATION);
-			// You wish! -kaarel
-			/*if(isset($type))
-			{
-				$prms["to.type"] = $type;
-			}*/
-			foreach(connection::find($prms) as $cn)
-			{
-				$o = obj($cn["to"]);
-				$o->conn_id = $cn["id"];
-				$ol->add($o);
-			}
-		}
+		extract($arr);
+		// $type, $id, $return_as_odl
+
+		$prms = array(
+			"class_id" => CL_CRM_PHONE,
+			"status" => array(),
+			"parent" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PHONE.RELTYPE_PHONE(CL_CRM_PERSON)" => isset($id) ? $id : parent::id(),
+					"CL_CRM_PHONE.RELTYPE_PHONE(CL_CRM_PERSON_WORK_RELATION).RELTYPE_CURRENT_JOB(CL_CRM_PERSON)" => isset($id) ? $id : parent::id(),
+				),
+			)),
+		);
 		if(isset($type))
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_PHONE,
-				"oid" => $ol->ids(),
-				"type" => $type,
-				"status" => array(),
-				"parent" => array(),
-				"site_id" => array(),
-				"lang_id" => array(),
+			$prms["CL_CRM_PHONE.type"] = $type;
+		}
+
+		if($return_as_odl === true)
+		{
+			$ret = new object_data_list($prms, array(
+				CL_CRM_PHONE => array("oid", "name", "type"),
 			));
 		}
-		return $ol;
+		else
+		{
+			$ret = new object_list($prms);
+		}
+		return $ret;
 	}
 
-	function emails()
+	function emails($arr = array())
 	{
-		$ol = new object_list;
-		foreach(parent::connections_from(array("type" => "RELTYPE_EMAIL")) as $cn)
+		extract($arr);
+		// $type, $id, $return_as_odl
+
+		$prms = array(
+			"class_id" => CL_ML_MEMBER,
+			"status" => array(),
+			"parent" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_ML_MEMBER.RELTYPE_EMAIL(CL_CRM_PERSON)" => isset($id) ? $id : parent::id(),
+					"CL_ML_MEMBER.RELTYPE_EMAIL(CL_CRM_PERSON_WORK_RELATION).RELTYPE_CURRENT_JOB(CL_CRM_PERSON)" => isset($id) ? $id : parent::id(),
+				),
+			)),
+		);
+
+		if($return_as_odl === true)
 		{
-			$ol->add($cn->prop("to"));
+			$ret = new object_data_list($prms, array(
+				CL_CRM_PHONE => array("oid", "mail"),
+			));
 		}
-		$ids = array();
-		foreach(parent::connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $cn)
+		else
 		{
-			$ids[] = $cn->prop("to");
+			$ret = new object_list($prms);
 		}
-		if(count($ids) > 0)
-		{
-			foreach(connection::find(array("from" => $ids, "type" => "RELTYPE_EMAIL")) as $cn)
-			{
-				$ol->add($cn["to"]);
-			}
-		}
-		return $ol;
+		return $ret;
 	}
 
 	function get_skills()
@@ -1355,6 +1357,32 @@ class crm_person_obj extends _int_object
 			$ret[$conn->prop('to')] = $conn->prop('to.name');
 		}
 		return $ret;
+	}
+
+	/**
+		@attrib name=handle_show_cnt api=1 params=name
+
+		@param action required type=string
+
+		@param id required type=OID
+
+	**/
+	public function handle_show_cnt($arr)
+	{
+		extract($arr);
+
+		$show_cnt_conf = get_instance("personnel_management_obj")->get_show_cnt_conf();
+		$usr = get_instance(CL_USER);
+		$u = $usr->get_current_user();
+		$g = $show_cnt_conf[CL_CRM_PERSON][$action]["groups"];
+		if($usr->is_group_member($u, $g) && is_oid($id))
+		{
+			$o = obj($id);
+			$o->show_cnt = $o->show_cnt + 1;
+			aw_disable_acl();
+			$o->save();
+			aw_restore_acl();
+		}
 	}
 }
 
