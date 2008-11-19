@@ -134,6 +134,34 @@ class crm_company_obj extends _int_object
 		return $ret;
 	}
 
+	function get_educations($arr)
+	{
+		$ids = isset($arr["id"]) ? $arr["id"] : parent::id();
+		$prms = array(
+			"class_id" => CL_CRM_PERSON_EDUCATION,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_PERSON_EDUCATION.RELTYPE_SCHOOL" => $ids
+		);
+		$prms = array_merge($prms, $arr["prms"]);
+		$props = is_array($arr["props"]) ? $arr["props"] : array(
+			CL_CRM_PERSON_EDUCATION => array("oid", "name"),
+		);
+
+		if($arr["return_as_odl"])
+		{
+			$r = new object_data_list(
+				$prms,
+				$props
+			);
+		}
+		else
+		{
+			$r = new object_list($prms);
+		}
+		return $r;
+	}
+
 	function get_job_offers()
 	{
 		$r = new object_list;
@@ -465,6 +493,28 @@ class crm_company_obj extends _int_object
 			$gcr_cache[$this->id()][$crea_if_not_exists][$this->id()] = $o;
 			return $o;
 		}
+	}
+
+	function faculties($arr)
+	{
+		$r = $this->get_sections();
+		if($arr["return_as_odl"])
+		{
+			$ids = $r->count() > 0 ? $r->ids() : -1;
+			$arr["props"] = is_array($arr["props"]) ? $arr["props"] : array(
+				CL_CRM_SECTION => array("oid", "name")
+			);
+			$r = new object_data_list(
+				array(
+					"class_id" => CL_CRM_SECTION,
+					"oid" => $ids,
+					"site_id" => array(),
+					"lang_id" => array(),
+				),
+				$arr["props"]
+			);
+		}
+		return $r;
 	}
 }
 
