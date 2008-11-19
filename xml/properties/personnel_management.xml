@@ -79,7 +79,7 @@
             <caption>Ametinimetuste kaust</caption>
       </property>
       <property>
-            <name>shools_fld</name>
+            <name>schools_fld</name>
             <table>objects</table>
             <group>general2</group>
             <field>meta</field>
@@ -89,14 +89,14 @@
             <caption>Koolide kaust</caption>
       </property>
       <property>
-            <name>faculties_fld</name>
+            <name>locations_fld</name>
             <table>objects</table>
             <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
-            <caption>Teaduskondade kaust</caption>
+            <caption>Riikide kaust</caption>
       </property>
       <property>
             <name>fields</name>
@@ -901,7 +901,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SEARCH_CITY</reltype>
             <multiple>1</multiple>
-            <automatic>1</automatic>
             <no_edit>1</no_edit>
             <parent>isikuandmed</parent>
             <captionside>top</captionside>
@@ -921,7 +920,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SEARCH_COUNTY</reltype>
             <multiple>1</multiple>
-            <automatic>1</automatic>
             <no_edit>1</no_edit>
             <parent>isikuandmed</parent>
             <captionside>top</captionside>
@@ -941,7 +939,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_SEARCH_AREA</reltype>
             <multiple>1</multiple>
-            <automatic>1</automatic>
             <no_edit>1</no_edit>
             <parent>isikuandmed</parent>
             <captionside>top</captionside>
@@ -2146,6 +2143,7 @@
             <syslog_type>ST_PERSONNEL_MANAGEMENT</syslog_type>
             <relationmgr>yes</relationmgr>
             <r2>yes</r2>
+            <no_name>1</no_name>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
             <prop_cb>1</prop_cb>

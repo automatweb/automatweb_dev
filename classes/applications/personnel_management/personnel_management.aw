@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.85 2008/11/19 09:54:12 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.86 2008/11/19 18:36:48 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes r2=yes no_status=1 no_comment=1 prop_cb=1 maintainer=instrumental
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes r2=yes no_name=1 no_status=1 no_comment=1 prop_cb=1 maintainer=instrumental
 @default table=objects
 
 @groupinfo settings caption="Seaded"
@@ -41,11 +41,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 		@property professions_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Ametinimetuste kaust
 
-		@property shools_fld type=relpicker reltype=RELTYPE_MENU
+		@property schools_fld type=relpicker reltype=RELTYPE_MENU
 		@caption Koolide kaust
 
-		@property faculties_fld type=relpicker reltype=RELTYPE_MENU
-		@caption Teaduskondade kaust
+		@property locations_fld type=relpicker reltype=RELTYPE_MENU
+		@caption Riikide kaust
 
 		@property fields type=relpicker reltype=RELTYPE_SECTORS
 		@caption Tegevusvaldkonnad
@@ -317,13 +317,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 				@property cv_email type=textbox size=18 parent=isikuandmed captionside=top store=no
 				@caption E-post
 
-				@property cv_city type=relpicker reltype=RELTYPE_SEARCH_CITY multiple=1 automatic=1 no_edit=1 parent=isikuandmed captionside=top store=no size=4
+				@property cv_city type=relpicker reltype=RELTYPE_SEARCH_CITY multiple=1 no_edit=1 parent=isikuandmed captionside=top store=no size=4
 				@caption Linn
 
-				@property cv_county type=relpicker reltype=RELTYPE_SEARCH_COUNTY multiple=1 automatic=1 no_edit=1 parent=isikuandmed captionside=top store=no size=4
+				@property cv_county type=relpicker reltype=RELTYPE_SEARCH_COUNTY multiple=1 no_edit=1 parent=isikuandmed captionside=top store=no size=4
 				@caption Maakond
 
-				@property cv_area type=relpicker reltype=RELTYPE_SEARCH_AREA multiple=1 automatic=1 no_edit=1 parent=isikuandmed captionside=top store=no size=4
+				@property cv_area type=relpicker reltype=RELTYPE_SEARCH_AREA multiple=1 no_edit=1 parent=isikuandmed captionside=top store=no size=4
 				@caption Piirkond
 
 				@property cv_address type=textbox size=18 parent=isikuandmed captionside=top store=no
@@ -987,6 +987,24 @@ class personnel_management extends class_base
 			case "cv_city":
 			case "cv_county":
 			case "cv_area":
+				$prms = array(
+					"class_id" => constant("CL_CRM".strtoupper(substr($prop["name"], 2))),
+					"lang_id" => array(),
+					"site_id" => array(),
+				);
+				$ot = new object_tree(array(
+					"class_id" => array(CL_CRM_COUNTRY, CL_CRM_AREA, CL_CRM_COUNTY, CL_CRM_CITY),
+					"parent" => $arr["obj_inst"]->locations_fld,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				$ids = $ot->ids();
+				if(count($ids) > 0)
+				{
+					$prms["oid"] = $ids;
+				}
+				$ol = new object_list($prms);
+				$prop["options"] = $ol->names();
 				$prop['value'] = $arr['request'][$prop["name"]];
 				break;
 			
@@ -1275,9 +1293,21 @@ class personnel_management extends class_base
 				$t->add_save_button();
 				break;
 
+			case "school":
+				$pt = is_oid($arr["obj_inst"]->schools_fld) ? $arr["obj_inst"]->schools_fld : $arr["obj_inst"]->id();
+				$t->add_new_button(array(CL_CRM_COMPANY), $pt);
+				$t->add_save_button();
+				break;
+
 			case "faculty":
 				$pt = is_oid($arr["obj_inst"]->faculties_fld) ? $arr["obj_inst"]->faculties_fld : $arr["obj_inst"]->id();
 				$t->add_new_button(array(CL_CRM_SECTION), $pt);
+				$t->add_save_button();
+				break;
+
+			case "location":
+				$pt = is_oid($arr["obj_inst"]->locations_fld) ? $arr["obj_inst"]->locations_fld : $arr["obj_inst"]->id();
+				$t->add_new_button(array(CL_CRM_COUNTRY), $pt);
 				$t->add_save_button();
 				break;
 
@@ -1326,6 +1356,40 @@ class personnel_management extends class_base
 				$t->add_save_button();
 				$t->add_delete_button();
 				break;
+
+			default:
+				if(is_oid($_GET["branch_id"]))
+				{
+					$o = obj($_GET["branch_id"]);
+					switch($o->class_id())
+					{
+						case CL_CRM_COMPANY:
+							$pt = $_GET["branch_id"];
+							$t->add_button(array(
+								"name" => "new",
+								"img" => "new.gif",
+								"url" => html::get_new_url(CL_CRM_SECTION, $pt, array(
+									"alias_to" => $pt,
+									"reltype" => 28,
+									"return_url" => get_ru(),
+								)),
+								"tooltip" => t("Lisa teaduskond"),
+							));
+							break;
+
+						case CL_CRM_COUNTRY:
+						case CL_CRM_AREA:
+						case CL_CRM_COUNTY:
+							$clid = array(
+								CL_CRM_COUNTRY => CL_CRM_AREA,
+								CL_CRM_AREA => CL_CRM_COUNTY,
+								CL_CRM_COUNTY => CL_CRM_CITY,
+							);
+							$t->add_new_button(array($clid[$o->class_id()]), $_GET["branch_id"]);
+							break;
+					}
+				}
+				break;
 		}
 	}
 
@@ -1353,7 +1417,9 @@ class personnel_management extends class_base
 				break;
 
 			case "profession":
+			case "school":
 			case "faculty":
+			case "location":
 			case "legal_form":
 			case "sector":
 				$t->define_chooser();
@@ -1379,6 +1445,28 @@ class personnel_management extends class_base
 					"caption" => t("Nimi"),
 					"sortable" => 1,
 				));
+				break;
+
+			default:
+				if(is_oid($_GET["branch_id"]))
+				{
+					$o = obj($_GET["branch_id"]);
+					switch($o->class_id())
+					{
+						case CL_CRM_COMPANY:
+						case CL_CRM_COUNTRY:
+						case CL_CRM_AREA:
+						case CL_CRM_COUNTY:
+						case CL_CRM_CITY:
+							$t->define_chooser();
+							$t->define_field(array(
+								"name" => "name",
+								"caption" => t("Nimi"),
+								"sortable" => 1,
+							));
+							break;
+					}
+				}
 				break;
 		}
 	}
@@ -1451,6 +1539,16 @@ class personnel_management extends class_base
 				}
 				break;
 
+			case "school":
+				foreach(array_reverse(array_keys($this->get_schools())) as $id)
+				{
+					$t->define_data(array(
+						"oid" => $id,
+						"name" => html::obj_change_url($id),
+					));
+				}
+				break;
+
 			case "faculty":
 				$odl = new object_data_list(
 					array(
@@ -1473,24 +1571,29 @@ class personnel_management extends class_base
 				}
 				break;
 
-			case "sector":
-				$odl = new object_data_list(
-					array(
-						"name" => "%".htmlspecialchars($_GET["vs_name"])."%",
-						"class_id" => CL_CRM_SECTOR,
-						"parent" => $arr["obj_inst"]->sectors_fld,
-						"lang_id" => array(),
-						"site_id" => array(),
-					),
-					array(
-						CL_CRM_SECTOR => array("oid", "name"),
-					)
-				);
-				foreach($odl->arr() as $o)
+			case "location":
+				$ol = new object_list(array(
+					"name" => "%".htmlspecialchars($_GET["vs_name"])."%",
+					"class_id" => CL_CRM_COUNTRY,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"parent" => $arr["obj_inst"]->locations_fld,
+				));
+				foreach($ol->names() as $id => $name)
 				{
 					$t->define_data(array(
-						"oid" => $o["oid"],
-						"name" => html::obj_change_url($o["oid"]),
+						"oid" => $id,
+						"name" => html::obj_change_url($id, parse_obj_name($name)),
+					));
+				}
+				break;
+
+			case "sector":
+				foreach(array_reverse(array_keys($this->get_sectors())) as $id)
+				{
+					$t->define_data(array(
+						"oid" => $id,
+						"name" => html::obj_change_url($id),
 					));
 				}
 				break;
@@ -1583,6 +1686,49 @@ class personnel_management extends class_base
 					));
 				}
 				break;
+
+			default:
+				if(is_oid($_GET["branch_id"]))
+				{
+					$o = obj($_GET["branch_id"]);
+					switch($o->class_id())
+					{
+						case CL_CRM_COMPANY:
+							foreach($o->faculties()->names() as $id => $name)
+							{
+								$t->define_data(array(
+									"oid" => $id,
+									"name" => html::obj_change_url($id, parse_obj_name($name)),
+								));
+							}
+							break;
+
+						case CL_CRM_COUNTRY:
+						case CL_CRM_AREA:
+						case CL_CRM_COUNTY:
+						case CL_CRM_CITY:
+							$clid = array(
+								CL_CRM_COUNTRY => CL_CRM_AREA,
+								CL_CRM_AREA => CL_CRM_COUNTY,
+								CL_CRM_COUNTY => CL_CRM_CITY,
+							);
+							$ol = new object_list(array(
+								"class_id" => $clid[$o->class_id()],
+								"parent" => $o->id(),
+								"lang_id" => array(),
+								"site_id" => array(),
+							));
+							foreach($ol->names() as $id => $name)
+							{
+								$t->define_data(array(
+									"oid" => $id,
+									"name" => html::obj_change_url($id, parse_obj_name($name)),
+								));
+							}
+							break;
+					}
+				}
+				break;
 		}
 	}
 
@@ -1597,7 +1743,9 @@ class personnel_management extends class_base
 		$branches = array(
 			"lang" => t("Keeled"),
 			"profession" => t("Ametinimetused"),
-			"faculty" => t("Teaduskonnad"),
+			"school" => t("Koolid"),
+//			"faculty" => t("Teaduskonnad"),
+			"location" => t("Riigid"),
 			"sector" => t("Tegevusalad"),
 			"job_offer_type" => t("T&ouml;&ouml;pakkumise t&uuml;&uuml;bid"),
 			"load" => t("T&ouml;&ouml;koormused"),
@@ -1615,6 +1763,57 @@ class personnel_management extends class_base
 					"vs_name" => NULL,
 				)),
 			));
+		}
+
+		// Schools
+		foreach($this->get_schools() as $id => $name)
+		{
+			$t->add_item("school", array(
+				"id" => $id,
+				"name" => $name,
+				"url" => aw_url_change_var(array(
+					"branch_id" => $id,
+					"vs_name" => NULL,
+				)),
+			));
+		}
+
+		// Locations
+		if(is_oid($arr["obj_inst"]->locations_fld))
+		{
+			$ot = new object_tree(array(
+				"class_id" => array(CL_CRM_COUNTRY, CL_CRM_COUNTY, CL_CRM_AREA),
+				"parent" => $arr["obj_inst"]->locations_fld,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$ids = $ot->ids();
+			if(count($ids) > 0)
+			{
+				$odl = new object_data_list(
+					array(
+						"class_id" => array(CL_CRM_COUNTRY, CL_CRM_COUNTY, CL_CRM_AREA),
+						"oid" => $ids,
+						"lang_id" => array(),
+						"site_id" => array(),
+					), 
+					array(
+						CL_CRM_COUNTRY => array("oid", "name", "parent", "class_id"),
+					)
+				);
+				foreach($odl->arr() as $o)
+				{
+					$pt = $o["class_id"] == CL_CRM_COUNTRY ? "location" : $o["parent"];
+					$t->add_item($pt, array(
+						"id" => $o["oid"],
+						"name" => $o["name"],
+						"url" => aw_url_change_var(array(
+							"branch_id" => $o["oid"],
+							"vs_name" => NULL,
+						)),
+					));
+				}
+			}
 		}
 	}
 
@@ -2636,7 +2835,7 @@ class personnel_management extends class_base
 		}
 	}
 
-	private function get_candidates_by_job_offer($arr)
+	private function get_candidates_by_job_offer($arr = array())
 	{
 		enter_function("personnel_management::get_candidates_by_job_offer");
 		$res = array();
@@ -2814,6 +3013,7 @@ class personnel_management extends class_base
 		$t->define_field(array(
 			"name" => "table",
 			"caption" => t("Tabel"),
+			"sortable" => 1,
 		));
 		$vars = $this->search_vars;
 		foreach($vars as $name => $caption)
@@ -3470,7 +3670,7 @@ class personnel_management extends class_base
 				$sso = obj($arr["request"]["search_save"]);
 				$arr["request"] += $sso->meta();
 			}
-			$needed_acl = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->needed_acl_employee;
+			$needed_acl = obj($this->get_sysdefault())->needed_acl_employee;
 			$res = $this->search_employee($arr);
 			$perpage = $arr["obj_inst"]->prop("perpage");
 			if(count($res) > $perpage)
@@ -4203,7 +4403,7 @@ class personnel_management extends class_base
 	{
 		if(!is_oid($arr["id"]))
 		{
-			$arr["id"] = personnel_management::get_sysdefault();
+			$arr["id"] = $this->get_sysdefault();
 		}
 		$o = obj($arr["id"]);
 		return $o->meta("lang_tbl");
@@ -4213,7 +4413,7 @@ class personnel_management extends class_base
 	{
 		if(!is_oid($arr["id"]))
 		{
-			$arr["id"] = personnel_management::get_sysdefault();
+			$arr["id"] = $this->get_sysdefault();
 		}
 		$o = obj($arr["id"]);
 		return $o->meta("rec_lang_tbl");
@@ -4228,14 +4428,19 @@ class personnel_management extends class_base
 	**/
 	function get_languages($arr = array())
 	{
-		$ol = new object_list(array(
+		$prms = array(
 			"class_id" => CL_LANGUAGE,
 			"parent" => array(),
 			"status" => array(),
 			"site_id" => array(),
 			"lang_id" => array(),
-			"oid" => array_keys(personnel_management::get_lang_conf($arr)),
-		));
+		);
+		$langs = personnel_management::get_lang_conf($arr);
+		if(is_array($langs) && count($langs) > 0)
+		{
+			$prms["oid"] = array_keys($langs);
+		}
+		$ol = new object_list($prms);
 		$objs = $ol->arr();
 		enter_function("uasort");
 		uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
@@ -4363,7 +4568,7 @@ class personnel_management extends class_base
 		enter_function("personnel_management::check_special_acl_for_cat");
 		if(!is_object($pm))
 		{
-			$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+			$pm = obj($this->get_sysdefault());
 		}
 		if(is_object($oid))
 		{
@@ -4378,7 +4583,7 @@ class personnel_management extends class_base
 		$acl = $pm->prop($acls[$clid]);
 
 		$ok = true;
-		foreach($acl as $a)
+		foreach(safe_array($acl) as $a)
 		{
 			$ok = $ok && $this->can($a, $oid);
 		}
@@ -4399,7 +4604,7 @@ class personnel_management extends class_base
 		enter_function("personnel_management::check_special_acl_for_obj");
 		if(!is_object($pm))
 		{
-			$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+			$pm = obj($this->get_sysdefault());
 		}
 		$clid = $o->class_id();
 		switch($clid)
@@ -4705,7 +4910,7 @@ class personnel_management extends class_base
 		{
 			$odl_prms["academic_degree"] = $r["cv_acdeg"];
 		}
-		if($r["cv_schl"] && is_oid($o->prop("shools_fld")))
+		if($r["cv_schl"] && is_oid($o->prop("schools_fld")))
 		{
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
@@ -4714,7 +4919,7 @@ class personnel_management extends class_base
 						"logic" => "AND",
 						"conditions" => array(
 							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.name" => "%".$r["cv_schl"]."%",
-							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("shools_fld"),
+							"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_SCHOOL.parent" => $o->prop("schools_fld"),
 						),
 					)),
 					"CL_CRM_PERSON.RELTYPE_EDUCATION.school2" => "%".$r["cv_schl"]."%",
@@ -5215,6 +5420,128 @@ class personnel_management extends class_base
 			$ol_arr["contact.name"] = "%".$r["os_contact"]."%";
 		}
 		return $ol;
+	}
+
+	public function get_sectors()
+	{
+		enter_function("personnel_management::get_sectors");
+		$o = obj($this->get_sysdefault());
+
+		$prms = array(
+			"class_id" => CL_CRM_SECTOR,
+			"sort_by" => "objects.name"
+		);
+
+		if(is_oid($o->sectors_fld))
+		{
+			$prms["parent"] = $o->sectors_fld;
+		}
+
+		$ol = new object_list($prms);
+
+		// parentize the list - move all items that have parents in the list
+		// below them, so we can draw them with grouping
+		$list_by_parent = array();
+		foreach($ol->arr() as $o)
+		{
+			if ($ol->get_at($o->parent()))
+			{
+				$list_by_parent[$o->parent()][] = $o;
+			}
+			else
+			{
+				$list_by_parent[null][] = $o;
+			}
+		}
+
+		$items = array();
+		foreach($list_by_parent as $_pt => $litems)
+		{
+			foreach($litems as $o)
+			{
+				$items[$o->id()] = $this->_get_level_in_list($list_by_parent, $o)-1; //*3).$o->name();
+			}
+		}
+
+		// now that we have the levels for items in the list, sort the list correctly as well.
+		// to do that, go over the list, and for each item that has a level of 0, get an object_tree for all subitems
+		// and add that to the list
+		$nitems = array();
+		foreach($items as $id => $level)
+		{
+			if ($level == 0)
+			{
+				$this->_add_0level_item_to_list($nitems, $id);
+			}
+		}
+
+		exit_function("personnel_management::get_sectors");
+		return $nitems;
+	}
+
+	function _add_0level_item_to_list(&$nitems, $id)
+	{
+		$ot = new object_tree(array(
+			"parent" => $id,
+			"class_id" => CL_CRM_SECTOR,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$o = obj($id);
+		$nitems[$o->id()] = $o->name();
+		$this->_req_add_0level_item_to_list($nitems, $ot, $id);
+	}
+
+	function _req_add_0level_item_to_list(&$nitems, $ot, $id)
+	{
+		$this->_level++;
+		foreach($ot->level($id) as $o)
+		{
+			$nitems[$o->id()] = str_repeat("&nbsp;", $this->_level*3).$o->name();
+			$this->_req_add_0level_item_to_list($nitems, $ot, $o->id());
+		}
+		$this->_level--;
+	}
+
+	function _get_level_in_list($list, $item)
+	{
+		$pt = false;
+		foreach($list as $_pt => $items)
+		{
+			foreach($items as $l_item)
+			{
+				if ($l_item->id() == $item->id())
+				{
+					$pt = $_pt;
+				}
+			}
+		}
+
+		if ($pt)
+		{
+			return $this->_get_level_in_list($list, obj($pt))+1;
+		}
+		return 0;
+	}
+
+	function get_schools()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"parent" => obj($this->get_sysdefault())->schools_fld,
+			"lang_id" => array(),
+		));
+		$ops = array();
+		$ol_arr = $ol->arr();
+		enter_function("uasort");
+		uasort($ol_arr, array($this, "cmp_function"));
+		exit_function("uasort");
+		foreach($ol_arr as $o)
+		{
+			$ops[$o->id()] = $o->trans_get_val("name");
+		}
+
+		return $ops;
 	}
 }
 ?>
