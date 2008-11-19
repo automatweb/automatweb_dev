@@ -872,69 +872,73 @@ class questionnaire extends class_base
 		}
 		if(isset($_GET["qid"]) && $_GET["qid"] == "end")
 		{
-			if(!$o->q_by_one && $o->str_answerer_with_qs && isset($_POST["person"]))
+			if(!aw_global_get("questionnaire_done_".$arr["id"]))
 			{
-				$this->set_custom_person_data($o);
-			}
-			if(isset($_POST["answers"]) && is_array($_POST["answers"]))
-			{
-				$this->handle_answer_submit();
-			}
-			// If a person is created, store the answers and connect 'em to that person
-			if($this->can("view", $this->Q_PID))
-			{
-				aw_session_del("questionnaire_pid");
-				// Save the data
-				$a = obj();
-				$a->set_class_id(CL_QUESTIONNAIRE_ANSWERER);
-				$a->set_parent($o->id());
-				$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($this->Q_PID)->name(), $o->name()));
-				aw_disable_acl();
-				$a->save();
-				aw_restore_acl();
-				$a->connect(array(
-					"to" => $this->Q_PID,
-					"reltype" => "RELTYPE_PERSON",
-				));
-				$a->connect(array(
-					"to" => $o->id(),
-					"reltype" => "RELTYPE_QUESTIONNAIRE",
-				));
-				foreach($this->_myas as $qid => $aid)
+				if(!$o->q_by_one && $o->str_answerer_with_qs && isset($_POST["person"]))
 				{
-					if(is_array($aid) || is_oid($aid))
+					$this->set_custom_person_data($o);
+				}
+				if(isset($_POST["answers"]) && is_array($_POST["answers"]))
+				{
+					$this->handle_answer_submit();
+				}
+				// If a person is created, store the answers and connect 'em to that person
+				if($this->can("view", $this->Q_PID))
+				{
+					aw_session_del("questionnaire_pid");
+					// Save the data
+					$a = obj();
+					$a->set_class_id(CL_QUESTIONNAIRE_ANSWERER);
+					$a->set_parent($o->id());
+					$a->set_name(sprintf(t("%s vastus d&uuml;naamilisele k&uuml;simustikule %s"), obj($this->Q_PID)->name(), $o->name()));
+					aw_disable_acl();
+					$a->save();
+					aw_restore_acl();
+					$a->connect(array(
+						"to" => $this->Q_PID,
+						"reltype" => "RELTYPE_PERSON",
+					));
+					$a->connect(array(
+						"to" => $o->id(),
+						"reltype" => "RELTYPE_QUESTIONNAIRE",
+					));
+					foreach($this->_myas as $qid => $aid)
 					{
-						foreach((array)$aid as $aid_)
+						if(is_array($aid) || is_oid($aid))
 						{
+							foreach((array)$aid as $aid_)
+							{
+								$a->connect(array(
+									"to" => $aid_,
+									"data" => $qid,
+									"type" => "RELTYPE_ANSWER",
+								));
+							}
+						}
+						else
+						{
+							$a_ = obj();
+							$a_->set_class_id(CL_QUESTIONNAIRE_TXT);
+							$a_->set_parent($a->id());
+							$a_->set_name(sprintf(t("Tekstivastus k&uuml;simusele %s"), $qid));
+							$a_->set_comment($aid);
+							aw_disable_acl();
+							$a_->save();
+							aw_restore_acl();
+							$a_->connect(array(
+								"to" => $qid,
+								"type" => "RELTYPE_QUESTION",
+							));
+
 							$a->connect(array(
-								"to" => $aid_,
+								"to" => $a_->id(),
 								"data" => $qid,
-								"type" => "RELTYPE_ANSWER",
+								"type" => "RELTYPE_TXTANSWER",
 							));
 						}
 					}
-					else
-					{
-						$a_ = obj();
-						$a_->set_class_id(CL_QUESTIONNAIRE_TXT);
-						$a_->set_parent($a->id());
-						$a_->set_name(sprintf(t("Tekstivastus k&uuml;simusele %s"), $qid));
-						$a_->set_comment($aid);
-						aw_disable_acl();
-						$a_->save();
-						aw_restore_acl();
-						$a_->connect(array(
-							"to" => $qid,
-							"type" => "RELTYPE_QUESTION",
-						));
-
-						$a->connect(array(
-							"to" => $a_->id(),
-							"data" => $qid,
-							"type" => "RELTYPE_TXTANSWER",
-						));
-					}
 				}
+				aw_session_set("questionnaire_done_".$arr["id"], 1);
 			}
 			$this->vars(array(
 				"results_fraction" => $this->correct_fraction($this->_qs),
@@ -1055,11 +1059,15 @@ class questionnaire extends class_base
 			$this->vars(array(
 				"RESULTS" => $RESULTS,
 			));
+
+			aw_session_set("questions_".$arr["id"], aw_serialize($this->_qs));
+			aw_session_set("my_answers_".$arr["id"], aw_serialize($this->_myas));
 			return $this->parse();
 		}
 
 		if($o->q_by_one)
 		{
+			aw_session_del("questionnaire_done_".$arr["id"]);
 			$conns = $o->connections_from(array("type" => "RELTYPE_QUESTION"));
 			foreach($conns as $conn)
 			{
@@ -1374,6 +1382,7 @@ class questionnaire extends class_base
 		else
 		{
 			$this->show_all_questions();
+			aw_session_del("questionnaire_done_".$arr["id"]);
 			aw_session_set("questions_".$arr["id"], aw_serialize($this->_qs));
 		}
 
