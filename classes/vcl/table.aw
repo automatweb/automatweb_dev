@@ -1967,7 +1967,10 @@ class aw_table extends aw_template
 		{
 			### add filter definition
 			$filter = $args["filter"];
-			asort($filter);
+			if(is_array($filter))
+			{
+				asort($filter);
+			}
 			$filter_key = count ($this->filters) + 1;
 			$this->filters[$args["name"]] = array (
 				"key" => $filter_key,
