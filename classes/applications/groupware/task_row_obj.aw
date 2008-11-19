@@ -37,7 +37,10 @@ class task_row_obj extends _int_object
 			$this->set_prop("done" , 1);
 		}
 		parent::save();
-		$task = obj($this->prop("task"));
+		if(is_oid($this->prop("task")))
+		{
+			$task = obj($this->prop("task"));
+		}
 		if(is_object($task))
 		{
 			if(isset($this->update_time_real))

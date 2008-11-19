@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.16 2008/11/19 15:07:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.17 2008/11/19 18:37:03 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -62,8 +62,8 @@
 	@property ord type=text table=aw_task_rows field=aw_task_ord no_caption=1
 	@caption Jrk
 
-	@property task type=relpicker table=aw_task_rows field=aw_task no_caption=1 reltype=RELTYPE_TASK
-	@caption Tegevus
+	@property task type=hidden table=aw_task_rows field=aw_task no_caption=1
+	@caption Toimetus
 
 @default group=comments
 
@@ -86,9 +86,6 @@
 
 @reltype CUSTOMER value=5 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
-
-@reltype TASK value=6 clid=CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_BUG
-@caption Tegevus
 
 */
 
@@ -116,6 +113,12 @@ class task_row extends class_base
 					$prop["options"] = $prop["options"] + $who->get_skill_names();
 				}
 				break;
+			case "task":
+				if($this->can("view" , $prop["value"]))
+				{
+					$o = obj($prop["value"]);
+					$prop["options"] = $prop["options"] + array($prop["value"] => $o->name());
+				}
 		};
 		return $retval;
 	}

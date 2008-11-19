@@ -53,7 +53,7 @@ class crm_company_bills_impl extends class_base
 			return PROP_IGNORE;
 		}
 
-	//konvertimise algoritm
+	//-----------------------konvertimise algoritm
 /*	$cnt = 0;
 
 	if(aw_global_get("uid") == "marko"){
@@ -80,21 +80,116 @@ class crm_company_bills_impl extends class_base
 	}
 */
 
+/*
+		$bc = new object_list(array(
+			"class_id" => CL_BUG_COMMENT,
+	//		"bug" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+	//		"is_done" => 1,
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER,  1204351200),
+			"lang_id" => array(),
+//			"brother_of" => new obj_predicate_prop("id"),
+		));
+*//*
+		$org_arr = new object_data_list(
+		array(
+			"class_id" => CL_BUG_COMMENT,
+	//		"bug" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+	//		"is_done" => 1,
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER,   1199167200),
+			"lang_id" => array(),
+//			"brother_of" => new obj_predicate_prop("id"),
+		),
+			array
+			(
+				CL_BUG_COMMENT => array(
+					"oid" => "oid",
+					"name" => "name",
+					"bug" => "bug",
+				)
+			)
+		);
+
+
+*/
+
+
+//---------------------kokkuleppehinna konvertimise algoritm
+
+/*			$this->db_add_col("planner", array(
+					"name" => "deal_has_tax",
+					"type" => "int"
+				));
+				$this->db_add_col("planner", array(
+					"name" => "deal_unit",
+					"type" => "varchar(31)"
+				));
+				$this->db_add_col("planner", array(
+					"name" => "deal_amount",
+					"type" => "double"
+				));
+				$this->db_add_col("planner", array(
+					"name" => "deal_price",
+					"type" => "double"
+				));*/
+/*		$all_tasks = new object_list(array(
+			"class_id" => array(CL_TASK, CL_CRM_MEETING,CL_CRM_CALL),
+	//		"send_bill" => 1,
+	//		"is_done" => 1,
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
+		));
+		foreach($all_tasks->arr() as $row)
+		{
+			if($row->meta("deal_price"))
+			{
+				$row->set_prop("deal_price" , $row->meta("deal_price"));
+				$row->set_prop("deal_amount" , $row->meta("deal_amount"));
+				$row->set_prop("deal_unit" , $row->meta("deal_unit"));
+				$row->set_prop("deal_unit" , $row->meta("deal_has_tax"));
+			$row->save();
+			}
+		}*/
+
 	enter_function("bills_impl::_get_bill_proj_list1");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->get_time_between($arr["request"]);
 
 		$format = t('%s maksmata t&ouml;&ouml;d');
 		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
-		//k6ik arvele minevad taskid
+		//k6ik arvele minevad taskid - filter ei funka miskip2rast et task.send_bill saaks filterdada
 		$all_tasks = new object_list(array(
-			"class_id" => CL_TASK,
+			"class_id" => array(CL_TASK, CL_CRM_MEETING,CL_CRM_CALL),
 			"send_bill" => 1,
 	//		"is_done" => 1,
 			"lang_id" => array(),
 			"brother_of" => new obj_predicate_prop("id"),
 		));
 
+		$sum2proj = array();
+
+//--------------------------kokkuleppehinnaga taskid
+		$deal_task_ol = new object_list(array(
+			"class_id" => array(CL_TASK),
+			"send_bill" => 1,
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
+			"deal_price" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		));
+		$this->deal_tasks = $deal_task_ol->ids();
+		foreach($deal_task_ol->arr() as $row)
+		{
+			$this->deal_tasks[] = $row->id();
+			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
+		}
+
+		$row_task_ids = $all_tasks->ids();
+		foreach($row_task_ids as $key=>  $id)
+		{
+			if(in_array($id,$this->deal_tasks))
+			{
+				unset($row_task_ids[$key]);
+			}
+		}
 
 		// list all task rows that are not billed yet
 		$rows_filter = array(
@@ -102,78 +197,71 @@ class crm_company_bills_impl extends class_base
 			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 			"on_bill" => 1,
 			"done" => 1,
-			"task" => $all_tasks->ids(),
+			"task" => $row_task_ids,
 			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $this->search_start, $this->search_end),
 		);
-
-		$rows = new object_list($rows_filter);
-
-		$projs = array();
-		$tasks = new object_list();
-		$sum2proj = array();
-		$agreement_tasks = array();
-
-		//kokkuleppehinnaga taskid
-		$this->deal_tasks = array();
-		foreach($all_tasks->arr() as $row)
+		$rowsres = array(
+			CL_TASK_ROW => array(
+				"task" => "task",
+				"project" => "project",
+				"time_to_cust" => "time_to_cust",
+			)
+		);
+		$rows_arr = new object_data_list($rows_filter , $rowsres);
+	//kokkuleppehinnaga toimetused v2lja
+		foreach($rows_arr->list_data as $bcs)
 		{
-			if(strlen($row->prop("deal_price")) > 0)
+			$tasks_sum[$bcs["task"]]+= $bcs["time_to_cust"];
+		}
+
+		$tasks_filter = array(
+			"class_id" => array(CL_TASK),
+			"oid" => array_keys($tasks_sum)
+		);
+		$tasksres = array(
+			CL_TASK => array(
+				"hr_price" => "hr_price",
+				"project" => "project",
+			)
+		);
+		$tasks_arr = new object_data_list($tasks_filter , $tasksres);
+		foreach($tasks_arr->list_data as $bcs)
+		{
+			if(!is_array($bcs["project"]))
 			{
-				$this->deal_tasks[] = $row->id();
-				$projs[$row->prop("project")] = $row->prop("project");
-				$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
+				$bcs["project"] = array($bcs["project"]);
+			}
+			foreach($bcs["project"] as $project)
+			{
+				$sum2proj[$project]+= $tasks_sum[$bcs["oid"]] * $bcs["hr_price"] ;
 			}
 		}
 
-//		if ($rows->count())
-//		{
-//			$c = new connection();
-//			$t2row = $c->find(array(
-//				"from.class_id" => CL_TASK,
-//				"to" => $rows->ids(),
-//				"type" => "RELTYPE_ROW",
-//				"to.bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-//				"to.on_bill" => 1,
-//				"to.done" => 1,
-//				"to.class_id" => CL_TASK_ROW,
-//			));
-			foreach($rows->arr() as $row)
+//arr($tasks_sum);
+//arr($rows_arr);
+//		$rows = new object_list($rows_filter);
+/*
+		foreach($rows->arr() as $row)
+		{
+			$task = obj($row->prop("task"));
+			if(in_array($task->id(), $this->deal_tasks))
 			{
-//				if(!$row->prop("task")) continue;
-//				$project_id = $row->prop("task.project");
-				$task = obj($row->prop("task"));
-				if(in_array($task->id(), $this->deal_tasks))
-				{
-//					$agreement_tasks[] = $task;
-					continue;
-				}
-				if ($task->prop("send_bill"))
-				{
-//					$row = obj($conn["to"]);
-					$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
-					$tasks->add($task->id());
-					$projs[$task->prop("project")] = $task->prop("project");
-				}
+				continue;
 			}
-//		}
+			if ($task->prop("send_bill"))
+			{
+				$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
+				$tasks->add($task->id());
+				$projs[$task->prop("project")] = $task->prop("project");
+			}
+		}*/
 
 		exit_function("bills_impl::_get_bill_proj_list1");
 		enter_function("bills_impl::_get_bill_proj_list2");
-		//siia vaid need kokkuleppehinna taskid, millel on m6ni arvele minev rida ka olemas
-//		foreach($agreement_tasks as $row)
-//		{
-//			$projs[$row->prop("project")] = $row->prop("project");
-//			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
-//		}
 
-
-		// get all projects from the lists
-/*		foreach($tasks->arr() as $row)
-		{
-			$projs[$row->prop("project")] = $row->prop("project");
-		}
-*/
 		// list all meetings that are not billed yet
+
+//----------------------kohtumised---------------
 		$meetings = new object_list(array(
 			"class_id" => CL_CRM_MEETING,
 			"send_bill" => 1,
@@ -182,42 +270,23 @@ class crm_company_bills_impl extends class_base
 		));
 		foreach($meetings->arr() as $row)
 		{
-			$projs[$row->prop("project")] = $row->prop("project");
 			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
 
+//--------------------------muud kulud---------
 		$other_expenses = new object_list(array(
 			"class_id" => CL_CRM_EXPENSE,
 //			"on_bill" => 1,
 			"bill_id" => '',
 			"parent" => $all_tasks->ids(),
 		));
-		
+
 		foreach($other_expenses->arr() as $row)
 		{
-//			$c = new connection();
-//			$t2row = $c->find(array(
-//				"to.class_id" => CL_CRM_EXPENSE,
-//				"to" => $row->id(),
-//				"to.send_bill" => 
-//				"type" => "RELTYPE_EXPENSE"
-//			));
-
-//			foreach($t2row as $conn)
-//			{
-				$task = obj($row->parent());
-//				$row = obj($conn["to"]);
-//				if(!$task->prop("send_bill"))
-//				{
-//					continue;
-//				}//if(aw_global_get("uid") == "Teddi.Rull") {arr($row->properties());}
-				$projs[$task->prop("project")] = $task->prop("project");
-				$sum2proj[$task->prop("project")] += $row->prop("cost");
-//			}
-		//	$projs[$row->prop("project")] = $row->prop("project");
-		//	$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
+			$sum2proj[$row->prop("task.project")] += $row->prop("cost");
 		}
 		
+//------------------------------bugid-----------
 		//bugidest projektid
 		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
 		if($stats_inst->there_are_bugs())
@@ -225,7 +294,7 @@ class crm_company_bills_impl extends class_base
 			$bugs = $this->get_billable_bugs($arr["request"]);
 			foreach($bugs->arr() as $bug)
 			{
-				$projs[$bug->prop("project")] = $bug->prop("project");
+	//			$projs[$bug->prop("project")] = $bug->prop("project");
 				$bt = 0;
 				foreach($this->bug_comments[$bug->id()] as $comment)
 				{
@@ -239,7 +308,7 @@ class crm_company_bills_impl extends class_base
 		exit_function("bills_impl::_get_bill_proj_list2");
 		enter_function("bills_impl::_get_bill_proj_list3");
 		$custs = array();
-		foreach($projs as $p)
+		foreach($sum2proj as $p => $sum)
 		{
 			if (!$this->can("view", $p))
 			{
@@ -501,8 +570,8 @@ class crm_company_bills_impl extends class_base
 					"set_date" => $row->prop("to_bill_date"),
 				));
 //				$deal_tasks[] = $row->id();
-				$sum2task[$row->id()] += str_replace(",", ".", $row->prop("deal_price"));
-				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
+				$sum2task[$row->id()] += $row->prop("deal_price");
+				$hr2task[$row->id()] += $row->prop("deal_amt");
 			}
 		}
 //		if(aw_global_get("uid") == "marko") {arr($arr["request"]["proj"]);arr("taskid:");arr($all_tasks);}
@@ -1064,7 +1133,7 @@ exit_function("bills_impl::_get_bill_task_list");
 		else
 		{
 			$filt = array();
-			if ($arr["request"]["bill_s_search"] == "")
+			if ($arr["request"]["bill_s_from"] == "")
 			{
 				// init default search opts
 				$u = get_instance(CL_USER);
@@ -1349,7 +1418,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	function _get_bill_s_client_mgr($arr)
 	{
-		if ($arr["request"]["bill_s_search"] == "")
+		if ($arr["request"]["bill_s_from"] == "")
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
@@ -1376,7 +1445,7 @@ exit_function("bills_impl::_get_bill_task_list");
 	{
 		$b = get_instance(CL_CRM_BILL);
 		$arr["prop"]["options"] = array("-1" => "") + $b->states + array("-6" => t("Sissen&otilde;udmisel"));
-		if ($arr["request"]["bill_s_search"] == "")
+		if ($arr["request"]["bill_s_from"] == "")
 		{
 			$arr["prop"]["value"] = -1;
 		}

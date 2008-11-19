@@ -334,45 +334,41 @@
       </property>
       <property>
             <name>deal_unit</name>
-            <table>objects</table>
+            <table>planner</table>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
+	    <field>deal_unit</field>
             <parent>hr_price_layout</parent>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
       <property>
             <name>deal_amount</name>
-            <table>objects</table>
+            <table>planner</table>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
+	    <field>deal_amount</field>
             <parent>hr_price_layout</parent>
             <caption>Kogus</caption>
       </property>
       <property>
-            <name>deal_price</name>
-            <table>objects</table>
+	    <name>deal_price</name>
+            <table>planner</table>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
+	    <field>deal_price</field>
             <parent>hr_price_layout</parent>
             <caption>Kokkuleppehind</caption>
       </property>
       <property>
             <name>deal_has_tax</name>
-            <table>objects</table>
+            <table>planner</table>
             <group>general</group>
             <type>checkbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
+	    <field>deal_has_tax</field>
             <parent>hr_price_layout</parent>
             <caption>Sisestati koos k&amp;amp;auml;ibemaksuga</caption>
       </property>

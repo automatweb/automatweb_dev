@@ -133,16 +133,16 @@ caption Tunnihind
 @layout deal_price_layout type=hbox no_caption=1
 caption Kokkuleppehind
 
-	@property deal_unit type=textbox size=5 field=meta method=serialize parent=hr_price_layout
+	@property deal_unit type=textbox size=5 table=planner parent=hr_price_layout
 	@caption &Uuml;hik
 
-	@property deal_amount type=textbox size=5 field=meta method=serialize parent=hr_price_layout
+	@property deal_amount type=textbox size=5 table=planner parent=hr_price_layout
 	@caption Kogus
 
-	@property deal_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout
+	@property deal_price type=textbox size=5 table=planner parent=hr_price_layout
 	@caption Kokkuleppehind
 
-	@property deal_has_tax type=checkbox size=5 field=meta method=serialize parent=hr_price_layout
+	@property deal_has_tax type=checkbox size=5 table=planner method=serialize parent=hr_price_layout
 	@caption Sisestati koos k&auml;ibemaksuga
 
 @property bill_no type=text table=planner
@@ -5754,10 +5754,32 @@ $types = array(
 
 	function do_db_upgrade($t, $f)
 	{
-		if ("aw_account_balances" == $tbl)
+		if ("aw_account_balances" == $t)
 		{
 			$i = get_instance(CL_CRM_CATEGORY);
 			return $i->do_db_upgrade($t, $f);
+		}
+		switch($f)
+		{
+			case "deal_has_tax":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+			case "deal_unit":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(31)"
+				));
+				return true;
+			case "deal_amount":
+			case "deal_price":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
+				));
+			return true;
 		}
 	}
 }
