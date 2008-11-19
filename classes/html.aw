@@ -53,10 +53,12 @@ class html extends aw_template
 			$w = " width: {$width}px;";
 		}
 
+		/*
 		if (!empty($post_append_text))
 		{
 			$post_append_text = "";
 		}
+		*/
 
 		if (!empty($textsize))
 		{
@@ -142,10 +144,12 @@ class html extends aw_template
 				$optstr .= "</optgroup>\n";
 			}
 		}
+		/*
 		if (!empty($post_append_text))
 		{
 			$post_append_text = "";
 		}
+		*/
 
 		//
 		return "<select name=\"{$name}\" id=\"{$id}\"{$cl}{$sz}{$mz}{$onc}{$disabled}{$onBlur}{$ti}{$style}>\n{$optstr}</select>{$post_append_text}\n";
