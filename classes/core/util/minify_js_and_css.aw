@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.12 2008/11/14 14:56:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/minify_js_and_css.aw,v 1.13 2008/11/19 09:59:01 kristo Exp $
 // minify_js_and_css.aw - Paki css ja javascript 
 /*
 @classinfo  maintainer=hannes
@@ -243,6 +243,7 @@ class minify_js_and_css extends class_base
 		$s_salt = "this_is_a_salty_string_";
 		$f_cache_filename_js = 'aw_admin.js';
 		$f_cache_filename_css = 'aw_admin.css';
+		$s_js_contents = "";
 	
 		$cache = get_instance('cache');
 		if (strlen($cache->file_get($s_salt.$f_cache_filename_js))==0 && 

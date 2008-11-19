@@ -685,12 +685,12 @@ class mysql
 			$bt = debug_backtrace();
 			for ($i = count($bt)-1; $i > 0; $i--)
 			{
-				if ($bt[$i+1]["class"] != "")
+				if (!empty($bt[$i+1]["class"]))
 				{
 					$fnm = $bt[$i+1]["class"]."::".$bt[$i+1]["function"];
 				}
 				else
-				if ($bt[$i+1]["function"] != "")
+				if (!empty($bt[$i+1]["function"]))
 				{
 					if ($bt[$i+1]["function"] != "include")
 					{
