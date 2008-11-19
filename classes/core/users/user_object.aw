@@ -172,6 +172,15 @@ class user_object extends _int_object
 		}
 		return $p;
 	}
+
+	public function is_group_member($user, $group)
+	{
+		$user = is_object($user) ? $user : obj($user);
+		$group = is_object($group) ? array($group->id()) : (array) $group;
+
+		$grps = $user->get_groups_for_user();
+		return count(array_intersect($group, array_keys($grps))) > 0;
+	}
 }
 
 ?>

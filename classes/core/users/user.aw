@@ -1653,7 +1653,7 @@ class user extends class_base
 	**/
 	function get_company_for_person($person)
 	{
-		aw_disable_acl();
+	//	aw_disable_acl();
 		$p_o = obj($person);
 		if ($co = $p_o->company_id())
 		{
@@ -2485,6 +2485,18 @@ class user extends class_base
 			aw_restore_acl();
 		}
 		return $aug_oid;
+	}
+
+	/** Returns true if the given user is member of the given usergroup.
+		@attrib api=1 params=pos
+
+		@param user required
+
+		@param group required
+	**/
+	public function is_group_member($user, $group)
+	{
+		return get_instance("user_object")->is_group_member($user, $group);
 	}
 }
 
