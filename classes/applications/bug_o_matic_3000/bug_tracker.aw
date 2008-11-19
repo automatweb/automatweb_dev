@@ -4475,12 +4475,12 @@ class bug_tracker extends class_base
 					"checked" => ($sdc[$stid] == "no")?0:1,
 				)),
 				"cust_bugst" => html::select(array(
-					"options" => array_merge(array(0 => t("--Ei muutu--")), $bi->bug_statuses),
+					"options" => array(0 => t("--Ei muutu--")) + $bi->bug_statuses,
 					"value" => $bcs[$stid],
 					"name" => "bcs[".$stid."]",
 				)),
 				"bugst_cust" => html::select(array(
-					"options" => array_merge(array(0 => t("--Ei muutu--")), $bi->bug_statuses),
+					"options" => array(0 => t("--Ei muutu--")) + $bi->bug_statuses,
 					"value" => $cbs[$stid],
 					"name" => "cbs[".$stid."]",
 				)),

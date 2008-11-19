@@ -1139,7 +1139,7 @@ class bug extends class_base
 				{
 					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
 					$this->_ac_new_state = $prop["value"];
-					$arr["obj_inst"]->set_prop("bug_status", $prop["value"]);
+					$arr["obj_inst"]->set_prop("bug_status", $bcs[$prop["value"]]);
 				}
 				else
 				{
@@ -1196,7 +1196,7 @@ class bug extends class_base
 				}
 				if($change_bug_status && $prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
 				{
-					$arr["obj_inst"]->set_prop("cust_status", $prop["value"]);
+					$arr["obj_inst"]->set_prop("cust_status", $bcs[$prop["value"]]);
 				}
 				else
 				{
