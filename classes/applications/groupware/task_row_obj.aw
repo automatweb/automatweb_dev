@@ -4,8 +4,62 @@
 */
 class task_row_obj extends _int_object
 {
+	function prop($pv)
+	{
+		switch($pn)
+		{
+			case "comment":
+				$pn = "content";
+				break;
+			case "add_wh_guess":
+				$pn = "time_guess";
+				break;
+			case "add_wh":
+				$pn = "time_real";
+				break;
+			case "add_wh_cust":
+				$pn = "time_to_cust";
+				break;
+			case "send_bill":
+				$pn = "on_bill";
+				break;
+			case "bill":
+				$pn = "bill_id";
+				break;
+			case "bug":
+				$pn = "task";
+				break;
+		}
+		return parent::prop($pn);
+	}
+
 	function set_prop($pn, $pv)
 	{
+		switch($pn)
+		{
+			case "comment":
+				$pn = "content";
+				break;
+			case "add_wh_guess":
+				$pn = "time_guess";
+				break;
+			case "add_wh":
+				$pn = "time_real";
+				break;
+			case "add_wh_cust":
+				$pn = "time_to_cust";
+				break;
+			case "send_bill":
+				$pn = "on_bill";
+				break;
+			case "bill":
+				$pn = "bill_id";
+				break;
+			case "bug":
+				$pn = "task";
+				break;
+		}
+
 		switch($pn)
 		{
 			case "time_real":

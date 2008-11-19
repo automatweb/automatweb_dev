@@ -167,7 +167,31 @@
             <field>aw_task</field>
             <no_caption>1</no_caption>
             <reltype>RELTYPE_TASK</reltype>
-            <caption>Tegevus</caption>
+            <caption>Toimetus</caption>
+      </property>
+      <property>
+            <name>prev_state</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_prev_state</field>
+            <caption>Eelmine staatus</caption>
+      </property>
+      <property>
+            <name>new_state</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_new_state</field>
+            <caption>Uus staatus</caption>
+      </property>
+      <property>
+            <name>activity_stats_type</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_activity_stats_type</field>
+            <caption>Statistika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>comments</name>
@@ -231,8 +255,8 @@
                   <clid>
                         <num_0>CL_TASK</num_0>
                         <num_1>CL_CRM_MEETING</num_1>
-                        <num_2>CL_CRM_CALL</num_2>
-                        <num_3>CL_BUG</num_3>
+                        <num_2>CL_BUG</num_2>
+                        <num_3>CL_CRM_CALL</num_3>
                   </clid>
                   <caption>Tegevus</caption>
             </TASK>

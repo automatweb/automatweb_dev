@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.17 2008/11/19 18:37:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.18 2008/11/19 19:12:35 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -62,8 +62,22 @@
 	@property ord type=text table=aw_task_rows field=aw_task_ord no_caption=1
 	@caption Jrk
 
-	@property task type=hidden table=aw_task_rows field=aw_task no_caption=1
+	@property task type=relpicker table=aw_task_rows field=aw_task no_caption=1 reltype=RELTYPE_TASK
 	@caption Toimetus
+
+
+//bugist
+@property prev_state type=select table=aw_task_rows field=aw_prev_state
+@caption Eelmine staatus
+
+@property new_state type=select table=aw_task_rows field=aw_new_state
+@caption Uus staatus
+
+@property activity_stats_type type=hidden table=aw_task_rows field=aw_activity_stats_type
+@caption Statistika t&uuml;&uuml;p
+
+
+
 
 @default group=comments
 
@@ -87,6 +101,8 @@
 @reltype CUSTOMER value=5 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
 
+@reltype TASK value=6 clid=CL_TASK,CL_CRM_MEETING,CL_BUG,CL_CRM_CALL
+@caption Tegevus
 */
 
 class task_row extends class_base
@@ -167,6 +183,9 @@ class task_row extends class_base
 			case "aw_task":
 			case "aw_orderer":
 			case "aw_primary":
+			case "aw_prev_state":
+			case "new_state":
+			case "activity_stats_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
