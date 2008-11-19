@@ -618,9 +618,10 @@ class questionnaire extends class_base
 			"caption" => t("K&uuml;simus"),
 			"align" => "center",
 		));
+		$rows = array();
 		foreach($arr["obj_inst"]->connections_from(array("type" => 1)) as $conn)
 		{
-			$t->define_data(array(
+			$rows[] = array(
 				"oid" => $conn->conn["to"],
 				"question" => html::get_change_url($conn->conn["to"], array("return_url" => get_ru()), $conn->conn["to.name"]),
 				"jrk" => html::hidden(array(
@@ -631,10 +632,19 @@ class questionnaire extends class_base
 					"value" => $conn->conn["to.jrk"],
 					"size" => 4
 				)),
-				"jrk_hidden" => $conn->conn["to.jrk"],
-			));
+				"jrk_hidden" => (int)$conn->conn["to.jrk"],
+			);
 		}
-		$t->set_default_sortby("jrk_hidden");
+		usort($rows, array($this, "q_cmp_fn"));
+		// Stupid hack. Somewhy the table switches the 1st and 2nd row. :S -kaarel
+		$row = $rows[1];
+		$rows[1] = $rows[0];
+		$rows[0] = $row;
+		// End of stupid hack
+		foreach(array_reverse($rows) as $row)
+		{
+			$t->define_data($row);
+		}
 	}
 
 	function set_property($arr = array())
@@ -910,7 +920,9 @@ class questionnaire extends class_base
 						$a_->set_parent($a->id());
 						$a_->set_name(sprintf(t("Tekstivastus k&uuml;simusele %s"), $qid));
 						$a_->set_comment($aid);
+						aw_disable_acl();
 						$a_->save();
+						aw_restore_acl();
 						$a_->connect(array(
 							"to" => $qid,
 							"type" => "RELTYPE_QUESTION",
@@ -1362,6 +1374,7 @@ class questionnaire extends class_base
 		else
 		{
 			$this->show_all_questions();
+			aw_session_set("questions_".$arr["id"], aw_serialize($this->_qs));
 		}
 
 		return $this->parse();
@@ -1372,6 +1385,10 @@ class questionnaire extends class_base
 		$QUESTION = "";
 		foreach($this->sort_questions() as $q)
 		{
+			if(!isset($this->_qs[$q->id()]))
+			{
+				$this->_qs[$q->id()] = questionnaire::UNANSWERED;
+			}
 			$QUESTION .= $q->instance()->show(array("id" => $q->id(), "conf" => array(
 				"dsply_acomment" => $this->o->prop("dsply_acomment"),
 				"dsply_qcomment" => $this->o->prop("dsply_qcomment"),
@@ -1484,12 +1501,10 @@ class questionnaire extends class_base
 		$p->set_parent($o->id());
 		aw_disable_acl();
 		$p->save();
-		aw_restore_acl();
 		foreach($_POST["person"] as $k => $v)
 		{
 			$p->set_prop($k, $v);
 		}
-		aw_disable_acl();
 		$p->save();
 		aw_restore_acl();
 		$this->Q_PID = $p->id();
@@ -1498,6 +1513,11 @@ class questionnaire extends class_base
 	private function conf_cmp_function($a, $b)
 	{
 		return $a["jrk"] > $b["jrk"];
+	}
+
+	private function q_cmp_fn($a, $b)
+	{
+		return $a["jrk_hidden"] > $b["jrk_hidden"];
 	}
 }
 
