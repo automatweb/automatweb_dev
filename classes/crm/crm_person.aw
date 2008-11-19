@@ -23,6 +23,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @groupinfo general2 caption="&Uuml;ldine" parent=general no_submit=1
 @default group=general2
 
+@property show_cnt type=hidden field=show_cnt table=kliendibaas_isik
+@caption Vaatamisi
+
 @property name type=text
 @caption Nimi
 
@@ -103,8 +106,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property crm_settings type=text store=no
 @caption CRM Seaded
 
-@property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
+@property cvactive type=checkbox ch_value=1 table=kliendibaas_isik
 @caption CV aktiivne
+
+@property cvapproved type=checkbox ch_value=1 table=kliendibaas_isik
+@caption CV kinnitatud
 
 @property not_working type=checkbox ch_value=1 table=kliendibaas_isik field=not_working
 @caption Hetkel ei t&ouml;&ouml;ta
@@ -270,7 +276,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property person_tb type=toolbar submit=no no_caption=1
 @caption Isiku toolbar
 
-@property nationality type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_NATIONALITY
+@property nationality type=relpicker reltype=RELTYPE_NATIONALITY store=connect
 @caption Rahvus
 
 @property citizenship_table type=table submit=no editonly=1
@@ -279,7 +285,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property cv_file_url type=text store=no
 @caption CV fail
 
-@property cv_file type=releditor reltype=RELTYPE_CV_FILE rel_id=first props=file table=objects field=meta method=serialize
+@property cv_file type=releditor reltype=RELTYPE_CV_FILE rel_id=first props=file store=connect
 @caption CV failina
 
 @property notes type=textarea cols=60 rows=10
@@ -383,10 +389,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 	#@property education_tbl type=table no_caption=1 store=no
 
-	@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
+	@property education_edit type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION props=school1,school2,faculty,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,faculty,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
 	@caption Haridusk&auml;ik
 
-	@property education_edit_2 type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION_2 props=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
+	@property education_edit_2 type=releditor store=no mode=manager2 reltype=RELTYPE_EDUCATION_2 props=school1,school2,faculty,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr table_fields=school1,school2,faculty,degree,field,speciality,main_speciality,in_progress,dnf,obtain_language,start,end,end_date,diploma_nr
 	@caption Haridusk&auml;ik 2
 
 ------------------------------------------------------------------
@@ -1051,6 +1057,14 @@ class crm_person extends class_base
 		return parent::change($args);
 	}
 
+	function callback_on_load($arr)
+	{
+		get_instance("crm_person_obj")->handle_show_cnt(array(
+			"action" => $arr["request"]["action"],
+			"id" => $arr["request"]["id"],
+		));
+	}
+
 	/**
 
 		@attrib name=change params=name all_args="1" nologin="1"
@@ -1090,6 +1104,11 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "show_cnt":
+				// This property is only set from code.
+				$retval = PROP_IGNORE;
+				break;
+
 			case "comment_text":
 				if(strlen($prop["value"]) > 0)
 				{
@@ -5011,6 +5030,9 @@ class crm_person extends class_base
 			case "academic_degree":
 			case "mlang":
 			case "dl_can_use":
+			case "cvactive":
+			case "cvapproved":
+			case "show_cnt":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int",
@@ -5373,6 +5395,11 @@ class crm_person extends class_base
 	**/
 	function show_cv($arr)
 	{
+		get_instance("crm_person_obj")->handle_show_cnt(array(
+			"action" => "view",
+			"id" => $arr["alias"]["target"],
+		));
+
 		$img_inst = get_instance(CL_IMAGE);
 		$phone_inst = get_instance(CL_CRM_PHONE);
 		$edu_inst = get_instance(CL_CRM_PERSON_EDUCATION);
@@ -9291,6 +9318,22 @@ class crm_person extends class_base
 	public function on_connect_to_task($arr)
 	{
 		return get_instance("crm_person_obj")->on_connect_to_task($arr);
+	}
+
+	/**
+		@attrib name=phones api=1
+	**/
+	public function phones($arr)
+	{
+		return get_instance("crm_person_obj")->phones($arr);
+	}
+
+	/**
+		@attrib name=emails api=1
+	**/
+	public function emails($arr)
+	{
+		return get_instance("crm_person_obj")->emails($arr);
 	}
 }
 ?>
