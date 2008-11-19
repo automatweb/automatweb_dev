@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.108 2008/09/29 10:11:44 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.109 2008/11/19 13:52:22 markop Exp $
 // calendar.aw - VCL calendar
 /*
 @classinfo  maintainer=kristo
@@ -1630,7 +1630,7 @@ class vcalendar extends aw_template
 				};
 				if (!empty($this->overview_urls[$dstamp]))
 				{
-					$day_url = $this->overview_urls[$dstamp];
+					$day_url = $day_url_2 = $this->overview_urls[$dstamp];
 				}
 				else
 				{
@@ -1644,6 +1644,8 @@ class vcalendar extends aw_template
 						// if it is there or not 
 						"sbt" => "",
 					));
+					//miskid n6medad sectionid annab kaasa muidu, m6ni tahab urli sellisena
+					$day_url_2 = "/?viewtype=day&date=".date("d-m-Y",$reals)."&section=".$this->target_section;
 				};
 
 				// cell_empty has class, doesn't have a link, used to show days with no events
@@ -1657,10 +1659,11 @@ class vcalendar extends aw_template
 				if($mode == 0)
 				{
 					$link = "<a href='$day_url'>$caption</a>";
+					$link3 = "<a href='$day_url_2'>$caption</a>";
 				}
 				else
 				{
-					$link = $caption;
+					$link = $link3 = $caption;
 				}
 
 				$events_str = ""; 
@@ -1688,6 +1691,7 @@ class vcalendar extends aw_template
 					"style" => $style,
 					"link" => $link,
 					"link2" => $day_url,
+					"link3" => $link3,
 					"caption" => $caption,
 					"event_title" => "",
 					"event_content" => "",
