@@ -392,9 +392,9 @@ class aw_table extends aw_template
 
 	/**
 	@attrib api=1 params=name
-	@param $name required type=string
+	@param $name required type=string default=sel
 		Checkbox name, the checkbox element name attribute is set $name[value_which is set in define_data() method]
-	@param $field required type=string
+	@param $field required type=string default=oid
 		Field name, via this name you can add value to chooser in define_data() method
 	@param $caption optional type=string default=Vali
 		Caption of the chooser column
@@ -402,8 +402,10 @@ class aw_table extends aw_template
 	@comments
 		Defines a chooser (a column of checkboxes)
 	**/
-	function define_chooser($arr)
+	function define_chooser($arr = array())
 	{
+		$arr["name"] = isset($arr["name"]) ? $arr["name"] : "sel";
+		$arr["field"] = isset($arr["field"]) ? $arr["field"] : "oid";
 		$this->chooser_config = $arr;
 		$this->use_chooser = true;
 	}
