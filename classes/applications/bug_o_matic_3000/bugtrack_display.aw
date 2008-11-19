@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.18 2008/11/18 09:43:42 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.19 2008/11/19 12:38:19 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -350,9 +350,11 @@ class bugtrack_display extends class_base
 		}
 		elseif($arr["request"]["sect_filter"] && array_search($arr["request"]["sect_filter"], $sects) !== false)
 		{
+			$sects = array($arr["request"]["sect_filter"]);
+			$this->_recur_get_all_sects($sects, obj($arr["request"]["sect_filter"]));
 			$filt = array(
 				"class_id" => array(CL_BUG, CL_DEVELOPMENT_ORDER),
-				"orderer_unit" => $arr["request"]["sect_filter"],
+				"orderer_unit" => $sects,
 			);
 		}
 		else
@@ -765,6 +767,7 @@ class bugtrack_display extends class_base
 		if($this->can("view", $arr["request"]["sect_filter"]))
 		{
 			$view_sects = array($arr["request"]["sect_filter"]);
+			$this->_recur_get_all_sects($view_sects, obj($arr["request"]["sect_filter"]));
 		}
 		elseif($arr["request"]["sect_filter"] == "all")
 		{
@@ -824,13 +827,15 @@ class bugtrack_display extends class_base
 		}
 		elseif($arr["request"]["sect_filter"] && array_search($arr["request"]["sect_filter"], $sects) !== false)
 		{
+			$sects = array($arr["request"]["sect_filter"]);
+			$this->_recur_get_all_sects($sects, obj($arr["request"]["sect_filter"]));
 			$filt = array(
 				"bug_status" => 1,
 				"class_id" => array(CL_DEVELOPMENT_ORDER),
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"orderer_unit" => $arr["request"]["sect_filter"],
+						"orderer_unit" =>  $sects,
 						"contactperson" => $cp_ppl,
 					),
 				)),
@@ -905,6 +910,7 @@ class bugtrack_display extends class_base
 			$data[] = $c->prop("to");
 			$this->_recur_get_all_sects($data, $c->to());
 		}
+		return $data;
 	}
 }
 ?>
