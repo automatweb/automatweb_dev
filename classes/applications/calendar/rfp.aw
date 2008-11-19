@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.164 2008/11/10 10:00:04 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.165 2008/11/19 11:20:34 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3381,6 +3381,7 @@ class rfp extends class_base
 			"ADDITIONAL_SERVICES" => $as_sub,
 			"totalprice" => $totalprice,
 			$pdf."_ONLY" => $this->parse($pdf."_ONLY"),
+			$pdf."_ONLY_2" => $this->parse($pdf."_ONLY_2"),
 		));
 		
 		if(count($bronnings))
