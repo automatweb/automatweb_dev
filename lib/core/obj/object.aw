@@ -70,7 +70,7 @@ function aw_disable_acl()
 **/
 function aw_restore_acl()
 {
-	aw_ini_set("acl.no_check", array_pop($GLOBALS["__aw_disable_acl"]));
+	aw_ini_set("acl.no_check", (int)array_pop($GLOBALS["__aw_disable_acl"]));
 }
 
 /** Finds the class id, given the class name
