@@ -1,7 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.27 2008/11/10 10:50:51 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.28 2008/11/19 15:18:02 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_edu)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_edu)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_CRM_PERSON, on_disconnect_edu_from_person)
 
 @classinfo syslog_type=ST_CRM_PERSON_EDUCATION no_name=1 no_comment=1 no_status=1
 @tableinfo kliendibaas_haridus index=oid master_table=objects master_index=oid
@@ -11,11 +15,17 @@
 
 @default table=kliendibaas_haridus
 
+@property person type=relpicker reltype=RELTYPE_PERSON store=connect
+@caption Isik
+
 @property school1 type=relpicker reltype=RELTYPE_SCHOOL field=school_1
 @caption Kool
 
 @property school2 type=textbox field=school_2
 @caption Muu kool
+
+@property faculty type=relpicker reltype=RELTYPE_FACULTY store=connect
+@caption Teaduskond
 
 @property degree type=select field=degree
 @caption Akadeemiline kraad
@@ -67,6 +77,12 @@
 
 @reltype LANGUAGE value=3 clid=CL_LANGUAGE
 @caption Omandamise keel
+
+@reltype PERSON value=4 clid=CL_CRM_PERSON
+@caption Isik
+
+@reltype FACULTY value=5 clid=CL_CRM_SECTION
+@caption Teaduskond
 
 */
 
@@ -282,6 +298,21 @@ class crm_person_education extends class_base
 		}
 
 		return false;
+	}
+
+	public function on_connect_person_to_edu($arr)
+	{
+		return get_instance("crm_person_education_obj")->on_connect_person_to_edu($arr);
+	}
+
+	public function on_disconnect_person_from_edu($arr)
+	{
+		return get_instance("crm_person_education_obj")->on_disconnect_person_from_edu($arr);
+	}
+
+	public function on_disconnect_edu_from_person($arr)
+	{
+		return get_instance("crm_person_education_obj")->on_disconnect_edu_from_person($arr);
 	}
 };
 ?>
