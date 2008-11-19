@@ -48,22 +48,26 @@
             <caption>Teostaja</caption>
       </property>
       <property>
-	      <name>customer</name>
-	      <group>general</group>
-	      <type>relpicker</type>
-	      <reltype>RELTYPE_CUSTOMER</reltype>
-	      <store>connect</store>
-	      <multiple>1</multiple>
-	      <caption>Klient</caption>
+            <name>customer</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>customer</field>
+            <caption>Klient</caption>
       </property>
       <property>
-	      <name>project</name>
-	      <group>general</group>
-	      <type>relpicker</type>
-	      <reltype>RELTYPE_PROJECT</reltype>
-	      <store>connect</store>
-	      <multiple>1</multiple>
-	      <caption>Projekt</caption>
+            <name>project</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>project</field>
+            <caption>Projekt</caption>
       </property>
       <property>
             <name>skill_used</name>
@@ -159,10 +163,11 @@
             <name>task</name>
             <table>aw_task_rows</table>
             <group>general</group>
-            <type>hidden</type>
+            <type>relpicker</type>
             <field>aw_task</field>
             <no_caption>1</no_caption>
-            <caption>Toimetus</caption>
+            <reltype>RELTYPE_TASK</reltype>
+            <caption>Tegevus</caption>
       </property>
       <property>
             <name>comments</name>
@@ -208,19 +213,29 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Tellija</caption>
             </ORDERER>
-	    <PROJECT>
-		    <value>4</value>
-		    <clid>CL_PROJECT</clid>
-		    <caption>Projekt</caption>
+            <PROJECT>
+                  <value>4</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
             </PROJECT>
-	    <CUSTOMER>
-		    <value>5</value>
-		    <clid>
-			    <num_0>CL_CRM_COMPANY</num_0>
-			    <num_1>CL_CRM_PERSON</num_1>
-		    </clid>
-		    <caption>Klient</caption>
-	    </CUSTOMER>
+            <CUSTOMER>
+                  <value>5</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+            <TASK>
+                  <value>6</value>
+                  <clid>
+                        <num_0>CL_TASK</num_0>
+                        <num_1>CL_CRM_MEETING</num_1>
+                        <num_2>CL_CRM_CALL</num_2>
+                        <num_3>CL_BUG</num_3>
+                  </clid>
+                  <caption>Tegevus</caption>
+            </TASK>
       </reltypes>
 </properties>
 
