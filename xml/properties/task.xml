@@ -86,14 +86,14 @@
       </property>
       <property>
             <name>content</name>
-            <table>documents</table>
+            <table>planner</table>
             <group>general</group>
             <type>textarea</type>
             <cols>180</cols>
             <rows>30</rows>
             <parent>content_bit</parent>
             <no_caption>1</no_caption>
-            <field>content</field>
+            <field>description</field>
             <caption>Sisu</caption>
       </property>
       <property>

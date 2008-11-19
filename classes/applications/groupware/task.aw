@@ -44,7 +44,7 @@
 
 
 @layout content_bit type=vbox closeable=1 area_caption=Sisu
-	@property content type=textarea cols=180 rows=30 table=documents parent=content_bit no_caption=1
+	@property content type=textarea cols=180 rows=30 field=description table=planner parent=content_bit no_caption=1
 	@caption Sisu
 
 
@@ -246,7 +246,6 @@ caption Seostehaldur
 @groupinfo resources caption="Ressursid" parent=other_exp
 @groupinfo predicates caption="Eeldused" parent=other_exp
 
-@tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
