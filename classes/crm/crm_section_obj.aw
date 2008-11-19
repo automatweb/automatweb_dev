@@ -195,6 +195,34 @@ class crm_section_obj extends _int_object
 		}
 		return $ol;
 	}
+
+	function get_students($arr)
+	{
+		$ids = isset($arr["id"]) ? $arr["id"] : parent::id();
+		$prms = array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_FACULTY" => $ids
+		);
+		$prms = array_merge($prms, $arr["prms"]);
+		$props = is_array($arr["props"]) ? $arr["props"] : array(
+			CL_CRM_PERSON => array("oid", "name"),
+		);
+
+		if($arr["return_as_odl"])
+		{
+			$r = new object_data_list(
+				$prms,
+				$props
+			);
+		}
+		else
+		{
+			$r = new object_list($prms);
+		}
+		return $r;
+	}
 }
 
 ?>
