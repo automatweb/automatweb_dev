@@ -318,6 +318,7 @@ class personnel_management_job_offer_webview extends class_base
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"parent" => array(),
 			"status" => object::STAT_ACTIVE,
+			"confirmed" => 1,
 			"site_id" => array(),
 			"lang_id" => array(),
 			new object_list_filter(array(
@@ -679,6 +680,16 @@ class personnel_management_job_offer_webview extends class_base
 
 			case "end":
 				return $o->get_end();
+
+			case "company":
+			case "loc_country":
+			case "loc_area":
+			case "loc_county":
+			case "loc_city":
+			case "jo_type":
+			case "profession":
+			case "sect":
+				return htmlentities($o->trans_get_val($p.".name"));
 
 			default:
 				return htmlentities($o->trans_get_val($p));

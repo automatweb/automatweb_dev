@@ -97,6 +97,32 @@ class personnel_management_job_offer_obj extends _int_object
 
 		return $ret;
 	}
+
+	/**
+		@attrib name=handle_show_cnt api=1 params=name
+
+		@param action required type=string
+
+		@param id required type=OID
+
+	**/
+	public function handle_show_cnt($arr)
+	{
+		extract($arr);
+
+		$show_cnt_conf = get_instance("personnel_management_obj")->get_show_cnt_conf();
+		$usr = get_instance(CL_USER);
+		$u = $usr->get_current_user();
+		$g = $show_cnt_conf[CL_PERSONNEL_MANAGEMENT_JOB_OFFER][$action]["groups"];
+		if($usr->is_group_member($u, $g) && is_oid($id))
+		{
+			$o = obj($id);
+			$o->show_cnt = $o->show_cnt + 1;
+			aw_disable_acl();
+			$o->save();
+			aw_restore_acl();
+		}
+	}
 }
 
 ?>

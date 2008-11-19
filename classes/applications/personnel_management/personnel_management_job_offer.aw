@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.62 2008/11/06 18:52:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.63 2008/11/19 09:54:12 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -16,6 +16,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property toolbar type=toolbar no_caption=1
 
+@property show_cnt type=hidden field=show_cnt table=personnel_management_job_offer
+@caption Vaatamisi
+
 @property name type=textbox
 @caption Nimi
 
@@ -27,6 +30,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property status type=status
 @caption Aktiivne
+
+@property confirmed type=checkbox ch_value=1 field=confirmed table=personnel_management_job_offer
+@caption Kinnitatud
 
 @property archive type=checkbox ch_value=1 table=personnel_management_job_offer field=archive default=0
 @caption Arhiveeritud
@@ -111,6 +117,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE
 @caption Hindamise skaala
+
+@property udef_classificator_1 type=classificator reltype=RELTYPE_UDEF_CLASSIFICATOR_1 store=connect
+@caption Kasutajadefineeritud klassifikaator 1
 
 @property notify_me type=checkbox ch_value=1
 @caption Soovin teadet kandideerimisest e-postiga
@@ -259,6 +268,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @reltype NOTIFY_ME value=20 clid=CL_CRM_PERSON
 @caption Teata kandideerimisest
+
+@reltype TYPE value=21 clid=CL_META
+@caption T&uuml;&uuml;p
+
+@reltype UDEF_CLASSIFICATOR_1 value=22 clid=CL_META
+@caption Kasutajadefineeritud klassifikaator 1
 
 */
 
@@ -2271,6 +2286,8 @@ class personnel_management_job_offer extends class_base
 			case "jo_start":
 			case "jo_end":
 			case "archive":
+			case "confirmed":
+			case "show_cnt":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int"
@@ -2293,8 +2310,6 @@ class personnel_management_job_offer extends class_base
 								personnel_management_job_offer (oid, $field)
 							VALUES
 								('$oid', '$value')
-							ON DUPLICATE KEY UPDATE
-								$field = '$value'
 						");
 					}
 				}
@@ -2617,6 +2632,14 @@ class personnel_management_job_offer extends class_base
 		// Need to iconv() first, cuz htmlentities() doesn't support ISO-8859-4 'n' stuff...
 		$v = iconv($this->llist[$o->prop(substr($p, 0, strrpos($p, ".")).".lang_id")]["charset"], "UTF-8", ($trans_get_val ? $o->trans_get_val($p) : $o->prop($p)));
 		return htmlentities($v, ENT_COMPAT, "UTF-8");
+	}
+
+	public function callback_on_load($arr)
+	{
+		get_instance("personnel_management_job_offer_obj")->handle_show_cnt(array(
+			"action" => $arr["request"]["action"],
+			"id" => $arr["request"]["id"],
+		));
 	}
 }
 ?>

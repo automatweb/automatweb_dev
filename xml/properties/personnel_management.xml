@@ -2,16 +2,36 @@
 <properties>
       <property>
             <name>name</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>settings</group>
             <type>textbox</type>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>persons_fld</name>
-            <group>general2</group>
+            <name>languages_fld</name>
             <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Keelte kaust</caption>
+      </property>
+      <property>
+            <name>legal_forms_fld</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>&amp;amp;Otilde;iguslike vormide kaust</caption>
+      </property>
+      <property>
+            <name>persons_fld</name>
+            <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -19,9 +39,29 @@
             <caption>Isikute kaust</caption>
       </property>
       <property>
-            <name>offers_fld</name>
-            <group>general2</group>
+            <name>employers_fld</name>
             <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujate kaust</caption>
+      </property>
+      <property>
+            <name>sectors_fld</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Tegevusalade kaust</caption>
+      </property>
+      <property>
+            <name>offers_fld</name>
+            <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -30,8 +70,8 @@
       </property>
       <property>
             <name>professions_fld</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -40,8 +80,8 @@
       </property>
       <property>
             <name>shools_fld</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -49,9 +89,19 @@
             <caption>Koolide kaust</caption>
       </property>
       <property>
-            <name>fields</name>
-            <group>general2</group>
+            <name>faculties_fld</name>
             <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Teaduskondade kaust</caption>
+      </property>
+      <property>
+            <name>fields</name>
+            <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -60,18 +110,48 @@
       </property>
       <property>
             <name>person_ot</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_PERSON_OT</reltype>
-            <caption>Isikute objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            <reltype>RELTYPE_OBJECT_TYPE</reltype>
+            <caption>Isiku objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>job_offer_ot</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_TYPE</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>jobwish_ot</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_TYPE</reltype>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;soovi objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>personnel_management_ot</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_TYPE</reltype>
+            <caption>Personalikeskkonna objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>crmdb</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -80,8 +160,8 @@
       </property>
       <property>
             <name>owner_org</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -90,8 +170,8 @@
       </property>
       <property>
             <name>sysdefault_pm</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -101,8 +181,8 @@
       </property>
       <property>
             <name>mandatory_controller</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -111,8 +191,8 @@
       </property>
       <property>
             <name>mobi_handler</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -121,8 +201,8 @@
       </property>
       <property>
             <name>messenger</name>
-            <group>general2</group>
             <table>objects</table>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -130,9 +210,29 @@
             <caption>Meilikast</caption>
       </property>
       <property>
-            <name>notify_mail</name>
-            <group>notify</group>
+            <name>auto_archive</name>
             <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Automaatne arhiveerimine</caption>
+      </property>
+      <property>
+            <name>auto_archive_days</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <caption>Mitu p&amp;amp;auml;eva p&amp;amp;auml;rast kandideerimist&amp;amp;auml;htaega t&amp;amp;ouml;&amp;amp;ouml;pakkumine arhiveeritakse</caption>
+      </property>
+      <property>
+            <name>notify_mail</name>
+            <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -141,8 +241,8 @@
       </property>
       <property>
             <name>notify_subject</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -151,8 +251,8 @@
       </property>
       <property>
             <name>notify_froma</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -161,8 +261,8 @@
       </property>
       <property>
             <name>notify_fromn</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -171,8 +271,8 @@
       </property>
       <property>
             <name>notify_candidates</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -181,8 +281,8 @@
       </property>
       <property>
             <name>notify_lang</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -192,8 +292,8 @@
       </property>
       <property>
             <name>notify_locations</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -205,8 +305,8 @@
       </property>
       <property>
             <name>notify_loc_tbl</name>
-            <group>notify</group>
             <table>objects</table>
+            <group>notify</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -214,8 +314,11 @@
       </property>
       <property>
             <name>perpage</name>
-            <group>search_conf</group>
             <table>objects</table>
+            <group>
+                  <num_0>employer_conf</num_0>
+                  <num_1>search_conf</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -223,9 +326,31 @@
             <caption>Mitu tulemust lehel kuvada</caption>
       </property>
       <property>
-            <name>search_conf_tbl</name>
-            <group>search_conf</group>
+            <name>days_to_inactivity</name>
             <table>objects</table>
+            <group>search_conf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <caption>Mitu p&amp;amp;auml;eva CV kehtib</caption>
+      </property>
+      <property>
+            <name>schools_for_faculties</name>
+            <table>objects</table>
+            <group>search_conf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_SCHOOLS_FOR_FACULTIES</reltype>
+            <store>connect</store>
+            <caption>Milliste koolide teaduskondi kuvada kandideerijate/t&amp;amp;ouml;&amp;amp;ouml;otsijate puus</caption>
+      </property>
+      <property>
+            <name>search_conf_tbl</name>
+            <table>objects</table>
+            <group>search_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -234,8 +359,8 @@
       </property>
       <property>
             <name>skill_manager</name>
-            <group>skill_conf</group>
             <table>objects</table>
+            <group>skill_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -244,8 +369,8 @@
       </property>
       <property>
             <name>skills_fld</name>
-            <group>skill_conf</group>
             <table>objects</table>
+            <group>skill_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -254,8 +379,8 @@
       </property>
       <property>
             <name>drivers_license</name>
-            <group>skill_conf</group>
             <table>objects</table>
+            <group>skill_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -264,8 +389,8 @@
       </property>
       <property>
             <name>yob_from</name>
-            <group>skill_conf</group>
             <table>objects</table>
+            <group>skill_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -275,8 +400,8 @@
       </property>
       <property>
             <name>yob_to</name>
-            <group>skill_conf</group>
             <table>objects</table>
+            <group>skill_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -284,29 +409,9 @@
             <caption>S&amp;amp;uuml;nniaasta kuni</caption>
       </property>
       <property>
-            <name>lang_tb</name>
-            <group>lang_conf</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>lang_tbl</name>
-            <group>lang_conf</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>cv_tpl</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -314,8 +419,8 @@
       </property>
       <property>
             <name>pdf_tpl</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -323,8 +428,8 @@
       </property>
       <property>
             <name>job_offer_cv_tbl</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -333,8 +438,8 @@
       </property>
       <property>
             <name>apply_doc</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -343,8 +448,8 @@
       </property>
       <property>
             <name>fb_from_fld</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -353,8 +458,8 @@
       </property>
       <property>
             <name>rate_candidates</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -363,8 +468,8 @@
       </property>
       <property>
             <name>notify_me_tpl</name>
-            <group>job_offer_conf</group>
             <table>objects</table>
+            <group>job_offer_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -373,9 +478,29 @@
             <caption>Kandidatuurist teavitamise kiri</caption>
       </property>
       <property>
-            <name>location_conf</name>
-            <group>job_wanted_conf</group>
+            <name>remove_job_offers_with_employer</name>
             <table>objects</table>
+            <group>employer_conf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kustuta t&amp;amp;ouml;&amp;amp;ouml;pakkuja koos t&amp;amp;ouml;&amp;amp;ouml;pakkumistega</caption>
+      </property>
+      <property>
+            <name>show_all_employers</name>
+            <table>objects</table>
+            <group>employer_conf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujad vaate avamisel kuvatakse k&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;pakkujad</caption>
+      </property>
+      <property>
+            <name>location_conf</name>
+            <table>objects</table>
+            <group>job_wanted_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -384,8 +509,8 @@
       </property>
       <property>
             <name>location_2_conf</name>
-            <group>job_wanted_conf</group>
             <table>objects</table>
+            <group>job_wanted_conf</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -394,8 +519,8 @@
       </property>
       <property>
             <name>default_offers_cfgform</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -404,8 +529,8 @@
       </property>
       <property>
             <name>cff_job_wanted</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -414,8 +539,8 @@
       </property>
       <property>
             <name>cff_recommendation</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -424,8 +549,8 @@
       </property>
       <property>
             <name>cff_company_relation</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -434,8 +559,8 @@
       </property>
       <property>
             <name>cff_education</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -444,8 +569,8 @@
       </property>
       <property>
             <name>cff_add_education</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -454,8 +579,8 @@
       </property>
       <property>
             <name>cff_work_relation</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -464,8 +589,8 @@
       </property>
       <property>
             <name>cff_person_language</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -474,8 +599,8 @@
       </property>
       <property>
             <name>cff_job_offer</name>
-            <group>cfgforms</group>
             <table>objects</table>
+            <group>cfgforms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -484,8 +609,8 @@
       </property>
       <property>
             <name>needed_acl_employee</name>
-            <group>rights</group>
             <table>objects</table>
+            <group>rights</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -494,8 +619,8 @@
       </property>
       <property>
             <name>needed_acl_candidate</name>
-            <group>rights</group>
             <table>objects</table>
+            <group>rights</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -504,8 +629,8 @@
       </property>
       <property>
             <name>needed_acl_job_offer</name>
-            <group>rights</group>
             <table>objects</table>
+            <group>rights</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -513,12 +638,77 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</caption>
       </property>
       <property>
+            <name>show_cnt_person</name>
+            <table>objects</table>
+            <group>show_cnt</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOW_CNT</reltype>
+            <multiple>1</multiple>
+            <caption>Grupid, kelle CV-vaatamisi loendatakse</caption>
+      </property>
+      <property>
+            <name>show_cnt_job_offer</name>
+            <table>objects</table>
+            <group>show_cnt</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOW_CNT</reltype>
+            <multiple>1</multiple>
+            <caption>Grupid, kelle t&amp;amp;ouml;&amp;amp;ouml;pakkumise vaatamisi loendatakse</caption>
+      </property>
+      <property>
+            <name>vars_tlb</name>
+            <table>objects</table>
+            <group>variables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>vars_tree</name>
+            <table>objects</table>
+            <group>variables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>vars_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>vs_name</name>
+            <table>objects</table>
+            <group>variables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>vars_search</parent>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>vars_tbl</name>
+            <table>objects</table>
+            <group>variables</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <parent>vars_right</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>employee_tb</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
@@ -527,11 +717,11 @@
       </property>
       <property>
             <name>add_employee</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
@@ -539,11 +729,11 @@
       </property>
       <property>
             <name>employee_tree</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
@@ -553,11 +743,11 @@
       </property>
       <property>
             <name>search_save</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -570,12 +760,28 @@
             <caption>Varasem otsing</caption>
       </property>
       <property>
-            <name>cv_name</name>
+            <name>cv_oid</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>ID</caption>
+      </property>
+      <property>
+            <name>cv_name</name>
             <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -586,76 +792,46 @@
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>cv_tel</name>
+            <name>cv_bd_from</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <size>18</size>
+            <type>date_select</type>
+            <default>-1</default>
+            <year_from>1930</year_from>
             <parent>isikuandmed</parent>
             <captionside>top</captionside>
             <store>no</store>
-            <caption>Telefon</caption>
+            <caption>S&amp;amp;uuml;nnip&amp;amp;auml;ev alates</caption>
       </property>
       <property>
-            <name>cv_email</name>
+            <name>cv_bd_to</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <size>18</size>
+            <type>date_select</type>
+            <default>-1</default>
+            <year_from>1930</year_from>
             <parent>isikuandmed</parent>
             <captionside>top</captionside>
             <store>no</store>
-            <caption>E-post</caption>
-      </property>
-      <property>
-            <name>cv_addinfo</name>
-            <group>
-                  <num_0>employee</num_0>
-                  <num_1>candidate</num_1>
-            </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>18</size>
-            <parent>isikuandmed</parent>
-            <captionside>top</captionside>
-            <store>no</store>
-            <caption>Lisainfo</caption>
-      </property>
-      <property>
-            <name>cv_gender</name>
-            <group>
-                  <num_0>employee</num_0>
-                  <num_1>candidate</num_1>
-            </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>chooser</type>
-            <size>18</size>
-            <parent>isikuandmed</parent>
-            <captionside>top</captionside>
-            <store>no</store>
-            <caption>Sugu</caption>
+            <caption>S&amp;amp;uuml;nnip&amp;amp;auml;ev kuni</caption>
       </property>
       <property>
             <name>cv_age_from</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -667,11 +843,11 @@
       </property>
       <property>
             <name>cv_age_to</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -682,12 +858,152 @@
             <caption>Vanus kuni</caption>
       </property>
       <property>
-            <name>cv_mod_from</name>
+            <name>cv_tel</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>cv_email</name>
             <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>E-post</caption>
+      </property>
+      <property>
+            <name>cv_city</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_CITY</reltype>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <no_edit>1</no_edit>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <size>4</size>
+            <caption>Linn</caption>
+      </property>
+      <property>
+            <name>cv_county</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_COUNTY</reltype>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <no_edit>1</no_edit>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <size>4</size>
+            <caption>Maakond</caption>
+      </property>
+      <property>
+            <name>cv_area</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_AREA</reltype>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <no_edit>1</no_edit>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <size>4</size>
+            <caption>Piirkond</caption>
+      </property>
+      <property>
+            <name>cv_address</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Aadress vabatekstina</caption>
+      </property>
+      <property>
+            <name>cv_addinfo</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>cv_gender</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <size>18</size>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Sugu</caption>
+      </property>
+      <property>
+            <name>cv_mod_from</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -699,11 +1015,11 @@
       </property>
       <property>
             <name>cv_mod_to</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -714,12 +1030,87 @@
             <caption>CV muudetud kuni</caption>
       </property>
       <property>
-            <name>cv_edulvl</name>
+            <name>cv_status</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Aktiivsus</caption>
+      </property>
+      <property>
+            <name>cv_approved</name>
             <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Kinnitatus</caption>
+      </property>
+      <property>
+            <name>cv_udef_chbox1</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Kasutajadefineeritud CHBOX1</caption>
+      </property>
+      <property>
+            <name>cv_udef_chbox2</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Kasutajadefineeritud CHBOX2</caption>
+      </property>
+      <property>
+            <name>cv_udef_chbox3</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <parent>isikuandmed</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Kasutajadefineeritud CHBOX2</caption>
+      </property>
+      <property>
+            <name>cv_edulvl</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -730,11 +1121,11 @@
       </property>
       <property>
             <name>cv_edu_exact</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -747,11 +1138,11 @@
       </property>
       <property>
             <name>cv_edulvl_in_eduobj</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -764,11 +1155,11 @@
       </property>
       <property>
             <name>cv_acdeg</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -779,11 +1170,11 @@
       </property>
       <property>
             <name>cv_schl</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -795,11 +1186,11 @@
       </property>
       <property>
             <name>cv_schl_area</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -810,12 +1201,44 @@
             <caption>Valdkond</caption>
       </property>
       <property>
-            <name>cv_schl_stat</name>
+            <name>cv_schl_start_from</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>cv_schl_start</parent>
+            <captionside>top</captionside>
+            <size>4</size>
+            <store>no</store>
+            <caption>Sisseastumisaasta alates</caption>
+      </property>
+      <property>
+            <name>cv_schl_start_to</name>
             <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>cv_schl_start</parent>
+            <captionside>top</captionside>
+            <size>4</size>
+            <store>no</store>
+            <caption>Sisseastumisaasta kuni</caption>
+      </property>
+      <property>
+            <name>cv_schl_stat</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
@@ -827,11 +1250,11 @@
       </property>
       <property>
             <name>cv_job</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -843,11 +1266,11 @@
       </property>
       <property>
             <name>cv_paywish</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -859,11 +1282,11 @@
       </property>
       <property>
             <name>cv_paywish2</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -875,17 +1298,15 @@
       </property>
       <property>
             <name>cv_field</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <size>18</size>
-            <multiple>1</multiple>
-            <orient>vertical</orient>
             <parent>soovitud_t88</parent>
             <captionside>top</captionside>
             <store>no</store>
@@ -893,16 +1314,15 @@
       </property>
       <property>
             <name>cv_type</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <size>18</size>
-            <multiple>1</multiple>
             <parent>soovitud_t88</parent>
             <captionside>top</captionside>
             <store>no</store>
@@ -910,17 +1330,15 @@
       </property>
       <property>
             <name>cv_location</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <size>18</size>
-            <multiple>1</multiple>
-            <orient>vertical</orient>
             <parent>soovitud_t88</parent>
             <captionside>top</captionside>
             <store>no</store>
@@ -928,11 +1346,11 @@
       </property>
       <property>
             <name>cv_load</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>classificator</type>
@@ -947,11 +1365,11 @@
       </property>
       <property>
             <name>cv_personality</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -963,11 +1381,11 @@
       </property>
       <property>
             <name>cv_mother_tongue</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -978,11 +1396,11 @@
       </property>
       <property>
             <name>cv_lang_exp</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -994,11 +1412,11 @@
       </property>
       <property>
             <name>cv_lang_exp_lvl</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
@@ -1009,11 +1427,11 @@
       </property>
       <property>
             <name>cv_exps_n_lvls</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -1023,28 +1441,42 @@
       </property>
       <property>
             <name>cv_driving_licence</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <size>5</size>
             <type>text</type>
-            <multiple>1</multiple>
             <parent>oskused</parent>
             <captionside>top</captionside>
             <store>no</store>
             <caption>Juhiload</caption>
       </property>
       <property>
-            <name>cv_previous_rank</name>
+            <name>cv_other_skills</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>oskused</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Muud oskused</caption>
+      </property>
+      <property>
+            <name>cv_previous_rank</name>
             <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1056,11 +1488,11 @@
       </property>
       <property>
             <name>cv_previous_field</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1072,11 +1504,11 @@
       </property>
       <property>
             <name>cv_company</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1088,11 +1520,11 @@
       </property>
       <property>
             <name>cv_recommenders</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1104,11 +1536,11 @@
       </property>
       <property>
             <name>cv_comments</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1119,12 +1551,28 @@
             <caption>Kommentaarid</caption>
       </property>
       <property>
-            <name>cv_search_button</name>
+            <name>cv_wrk_load</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
+      </property>
+      <property>
+            <name>cv_search_button</name>
             <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
@@ -1134,11 +1582,11 @@
       </property>
       <property>
             <name>cv_search_button_save_search</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
@@ -1148,11 +1596,11 @@
       </property>
       <property>
             <name>employee_tbl</name>
+            <table>objects</table>
             <group>
                   <num_0>employee</num_0>
                   <num_1>candidate</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -1162,11 +1610,11 @@
       </property>
       <property>
             <name>offers_toolbar</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
@@ -1175,11 +1623,11 @@
       </property>
       <property>
             <name>offers_tree</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
@@ -1189,11 +1637,11 @@
       </property>
       <property>
             <name>os_type</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>classificator</type>
@@ -1204,11 +1652,11 @@
       </property>
       <property>
             <name>os_pr</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1220,11 +1668,11 @@
       </property>
       <property>
             <name>os_county</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1236,11 +1684,11 @@
       </property>
       <property>
             <name>os_city</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1252,11 +1700,11 @@
       </property>
       <property>
             <name>os_dl_from</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -1272,11 +1720,11 @@
       </property>
       <property>
             <name>os_dl_to</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -1292,11 +1740,11 @@
       </property>
       <property>
             <name>os_endless</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -1309,11 +1757,11 @@
       </property>
       <property>
             <name>os_status</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
@@ -1323,12 +1771,184 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>os_sbt</name>
+            <name>os_confirmed</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
+            <name>os_employer</name>
             <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkuja (komaga eraldatult)</caption>
+      </property>
+      <property>
+            <name>os_salary_from</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Palk alates</caption>
+      </property>
+      <property>
+            <name>os_salary_to</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Palk kuni</caption>
+      </property>
+      <property>
+            <name>os_field</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
+            <name>os_jobtype</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
+      </property>
+      <property>
+            <name>os_load</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>T&amp;amp;ouml&amp;amp;ouml;koormus</caption>
+      </property>
+      <property>
+            <name>os_workinfo</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>T&amp;amp;ouml&amp;amp;ouml; sisu</caption>
+      </property>
+      <property>
+            <name>os_requirements</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>N&amp;amp;otilde;udmised kandidaadile</caption>
+      </property>
+      <property>
+            <name>os_info</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>os_contact</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <store>no</store>
+            <parent>offers_search</parent>
+            <captionside>top</captionside>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>os_sbt</name>
+            <table>objects</table>
+            <group>
+                  <num_0>offers_</num_0>
+                  <num_1>offers_archive</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
@@ -1339,11 +1959,11 @@
       </property>
       <property>
             <name>offers_table</name>
+            <table>objects</table>
             <group>
                   <num_0>offers_</num_0>
                   <num_1>offers_archive</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -1353,8 +1973,8 @@
       </property>
       <property>
             <name>treeview3</name>
-            <group>actions</group>
             <table>objects</table>
+            <group>actions</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -1362,20 +1982,19 @@
             <default>asd</default>
       </property>
       <property>
-            <name>my_customers_toolbar</name>
-            <group>clients</group>
+            <name>employers_tlb</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>&amp;quot;Klientide toolbar&amp;quot;</caption>
       </property>
       <property>
             <name>tree_search_split_dummy</name>
-            <group>clients</group>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
@@ -1383,9 +2002,9 @@
             <parent>tree_search_split</parent>
       </property>
       <property>
-            <name>customer_listing_tree</name>
-            <group>clients</group>
+            <name>employers_tree</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
@@ -1395,9 +2014,9 @@
             <caption>R&amp;amp;uuml;hmade puu</caption>
       </property>
       <property>
-            <name>customer_search_name</name>
-            <group>clients</group>
+            <name>es_name</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1408,9 +2027,9 @@
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>customer_search_reg</name>
-            <group>clients</group>
+            <name>es_sector</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1418,77 +2037,27 @@
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
-            <caption>Reg nr.</caption>
+            <caption>Tegevusvaldkond</caption>
       </property>
       <property>
-            <name>customer_search_worker</name>
-            <group>clients</group>
+            <name>es_legal_form</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_customers_left_top</parent>
-            <captionside>top</captionside>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
-      </property>
-      <property>
-            <name>customer_search_address</name>
-            <group>clients</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_customers_left_top</parent>
-            <captionside>top</captionside>
-            <caption>Aadress</caption>
-      </property>
-      <property>
-            <name>customer_search_city</name>
-            <group>clients</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_customers_left_top</parent>
-            <captionside>top</captionside>
-            <caption>Linn/Vald/Alev</caption>
-      </property>
-      <property>
-            <name>customer_search_county</name>
-            <group>clients</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_customers_left_top</parent>
-            <captionside>top</captionside>
-            <caption>Maakond</caption>
-      </property>
-      <property>
-            <name>customer_search_ev</name>
-            <group>clients</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>30</size>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LEGAL_FORM</reltype>
+            <automatic>1</automatic>
+            <no_edit>1</no_edit>
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <caption>&amp;amp;Otilde;iguslik vorm</caption>
       </property>
       <property>
-            <name>customer_search_keywords</name>
-            <group>clients</group>
+            <name>es_location</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -1496,101 +2065,62 @@
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
-            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            <caption>Asukoht</caption>
       </property>
       <property>
-            <name>customer_search_is_co</name>
-            <group>clients</group>
+            <name>es_contact</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>chooser</type>
-            <store>no</store>
-            <parent>vbox_customers_left_top</parent>
-            <multiple>1</multiple>
-            <no_caption>1</no_caption>
-            <caption>Organisatsioon</caption>
-      </property>
-      <property>
-            <name>customer_search_cust_mgr</name>
-            <group>clients</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <size>25</size>
+            <type>textbox</type>
+            <size>30</size>
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
-            <caption>Kliendihaldur</caption>
+            <caption>Kontaktisik</caption>
       </property>
       <property>
-            <name>customer_rel_creator</name>
-            <group>clients</group>
+            <name>es_created_from</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <size>25</size>
+            <type>date_select</type>
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
-            <caption>Kliendisuhte looja</caption>
+            <caption>Liitunud alates</caption>
       </property>
       <property>
-            <name>customer_search_cust_grp</name>
-            <group>clients</group>
+            <name>es_created_to</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>date_select</type>
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
-            <caption>Kliendigrupp</caption>
+            <caption>Liitunud kuni</caption>
       </property>
       <property>
-            <name>customer_search_classif1</name>
-            <group>clients</group>
+            <name>es_profession</name>
             <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>classificator</type>
+            <type>textbox</type>
+            <size>30</size>
             <store>no</store>
             <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
-            <caption>Asutuse omadused</caption>
+            <caption>T&amp;amp;otilde;&amp;amp;otilde;pakkumise ametinimetus</caption>
       </property>
       <property>
-            <name>customer_search_insurance_exp</name>
-            <group>clients</group>
+            <name>employers_submit</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <store>no</store>
-            <parent>vbox_customers_left_top</parent>
-            <captionside>top</captionside>
-            <caption>Kindlustus aegund</caption>
-      </property>
-      <property>
-            <name>customer_search_print_view</name>
-            <group>clients</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <parent>vbox_customers_left_top</parent>
-            <store>no</store>
-            <captionside>top</captionside>
-            <ch_value>1</ch_value>
-            <no_caption>1</no_caption>
-            <caption>Printvaade</caption>
-      </property>
-      <property>
-            <name>customer_search_submit</name>
-            <group>clients</group>
-            <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
@@ -1601,21 +2131,9 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>customer_search_submit_and_change</name>
-            <group>clients</group>
+            <name>employers_tbl</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>submit</type>
-            <parent>vbox_customers_left_search_btn</parent>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Otsi ja muuda</caption>
-      </property>
-      <property>
-            <name>my_customers_table</name>
-            <group>clients</group>
-            <table>objects</table>
+            <group>employers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -1634,42 +2152,53 @@
             <maintainer>instrumental</maintainer>
       </classinfo>
       <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
             <general2>
                   <caption>&amp;amp;Uuml;ldine</caption>
-                  <parent>general</parent>
+                  <parent>settings</parent>
             </general2>
             <notify>
-                  <caption>Teavitamise seaded</caption>
-                  <parent>general</parent>
+                  <caption>Teavitamine</caption>
+                  <parent>settings</parent>
             </notify>
             <search_conf>
-                  <caption>Otsingu seaded</caption>
-                  <parent>general</parent>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad/kandideerijad</caption>
+                  <parent>settings</parent>
             </search_conf>
             <skill_conf>
-                  <caption>Oskuste seaded</caption>
-                  <parent>general</parent>
+                  <caption>Oskused</caption>
+                  <parent>settings</parent>
             </skill_conf>
-            <lang_conf>
-                  <caption>Keelte seaded</caption>
-                  <parent>general</parent>
-            </lang_conf>
             <job_offer_conf>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumise seaded</caption>
-                  <parent>general</parent>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</caption>
+                  <parent>settings</parent>
             </job_offer_conf>
+            <employer_conf>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujad</caption>
+                  <parent>settings</parent>
+            </employer_conf>
             <job_wanted_conf>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;soovi seaded</caption>
-                  <parent>general</parent>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;soovid</caption>
+                  <parent>settings</parent>
             </job_wanted_conf>
             <cfgforms>
                   <caption>Seadete vormid</caption>
-                  <parent>general</parent>
+                  <parent>settings</parent>
             </cfgforms>
             <rights>
                   <caption>Objektide n&amp;amp;auml;gemiseks vajalikud &amp;amp;otilde;igused</caption>
-                  <parent>general</parent>
+                  <parent>settings</parent>
             </rights>
+            <show_cnt>
+                  <caption>Vaatamiste loendamine</caption>
+                  <parent>settings</parent>
+            </show_cnt>
+            <variables>
+                  <caption>Muutujate haldus</caption>
+                  <parent>settings</parent>
+            </variables>
             <employee>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;otsijad</caption>
                   <submit>no</submit>
@@ -1696,10 +2225,10 @@
                   <caption>Tegevused</caption>
                   <submit>no</submit>
             </actions>
-            <clients>
-                  <caption>Kliendid</caption>
+            <employers>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujad</caption>
                   <submit>no</submit>
-            </clients>
+            </employers>
       </groupinfo>
       <reltypes>
             <MENU>
@@ -1717,11 +2246,11 @@
                   <clid>CL_METAMGR</clid>
                   <caption>Tegevusvaldkonnad</caption>
             </SECTORS>
-            <PERSON_OT>
+            <OBJECT_TYPE>
                   <value>4</value>
                   <clid>CL_OBJECT_TYPE</clid>
                   <caption>Objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
-            </PERSON_OT>
+            </OBJECT_TYPE>
             <OWNER_ORG>
                   <value>5</value>
                   <clid>CL_CRM_COMPANY</clid>
@@ -1792,8 +2321,70 @@
                   </clid>
                   <caption>Teavitamise haldus&amp;amp;uuml;ksus</caption>
             </NOTIFY_LOCATION>
+            <LEGAL_FORM>
+                  <value>19</value>
+                  <clid>CL_CRM_CORPFORM</clid>
+                  <caption>&amp;amp;Otilde;iguslik vorm</caption>
+            </LEGAL_FORM>
+            <SEARCH_CITY>
+                  <value>20</value>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Linn otsingus</caption>
+            </SEARCH_CITY>
+            <SEARCH_COUNTY>
+                  <value>20</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Maakond otsingus</caption>
+            </SEARCH_COUNTY>
+            <SEARCH_AREA>
+                  <value>20</value>
+                  <clid>CL_CRM_AREA</clid>
+                  <caption>Piirkond otsingus</caption>
+            </SEARCH_AREA>
+            <SCHOOLS_FOR_FACULTIES>
+                  <value>21</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Teaduskonnad puusse</caption>
+            </SCHOOLS_FOR_FACULTIES>
+            <SHOW_CNT>
+                  <value>22</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Loendatav grupp</caption>
+            </SHOW_CNT>
       </reltypes>
       <layout>
+            <vars>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>variables</group>
+                  <area_caption></area_caption>
+            </vars>
+            <vars_left>
+                  <type>vbox</type>
+                  <parent>vars</parent>
+                  <group>variables</group>
+                  <area_caption></area_caption>
+            </vars_left>
+            <vars_tree>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>vars_left</parent>
+                  <area_caption>Muutujate&amp;amp;nbsp;puu</area_caption>
+                  <group>variables</group>
+            </vars_tree>
+            <vars_search>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <parent>vars_left</parent>
+                  <area_caption>Muutujate&amp;amp;nbsp;otsing</area_caption>
+                  <group>variables</group>
+            </vars_search>
+            <vars_right>
+                  <type>vbox</type>
+                  <parent>vars</parent>
+                  <group>variables</group>
+                  <area_caption></area_caption>
+            </vars_right>
             <employee>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -1842,7 +2433,8 @@
                   <area_caption></area_caption>
             </employee_search_1>
             <isikuandmed>
-                  <type>vbox</type>
+                  <type>vbox_sub</type>
+                  <no_padding>1</no_padding>
                   <closeable>1</closeable>
                   <parent>employee_search</parent>
                   <area_caption>Isikuandmed</area_caption>
@@ -1861,7 +2453,8 @@
                   <area_caption></area_caption>
             </cv_age>
             <haridus>
-                  <type>vbox</type>
+                  <type>vbox_sub</type>
+                  <no_padding>1</no_padding>
                   <parent>employee_search</parent>
                   <area_caption>Haridus</area_caption>
                   <closeable>1</closeable>
@@ -1870,8 +2463,18 @@
                         <num_1>candidate</num_1>
                   </group>
             </haridus>
+            <cv_schl_start>
+                  <type>hbox</type>
+                  <parent>isikuandmed</parent>
+                  <group>
+                        <num_0>employee</num_0>
+                        <num_1>candidate</num_1>
+                  </group>
+                  <area_caption></area_caption>
+            </cv_schl_start>
             <soovitud_t88>
-                  <type>vbox</type>
+                  <type>vbox_sub</type>
+                  <no_padding>1</no_padding>
                   <parent>employee_search</parent>
                   <closeable>1</closeable>
                   <area_caption>Soovitud&amp;amp;nbsp;t&amp;amp;ouml;&amp;amp;ouml;</area_caption>
@@ -1890,7 +2493,8 @@
                   <area_caption></area_caption>
             </cv_paywish_lt>
             <oskused>
-                  <type>vbox</type>
+                  <type>vbox_sub</type>
+                  <no_padding>1</no_padding>
                   <parent>employee_search</parent>
                   <area_caption>Oskused</area_caption>
                   <closeable>1</closeable>
@@ -1900,7 +2504,8 @@
                   </group>
             </oskused>
             <t88kogemus>
-                  <type>vbox</type>
+                  <type>vbox_sub</type>
+                  <no_padding>1</no_padding>
                   <parent>employee_search</parent>
                   <area_caption>T&amp;amp;ouml;&amp;amp;ouml;kogemus</area_caption>
                   <closeable>1</closeable>
@@ -1949,7 +2554,7 @@
                   <type>vbox</type>
                   <parent>offers_tree_n_search</parent>
                   <closeable>1</closeable>
-                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumised</area_caption>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumiste&amp;amp;nbsp;puu</area_caption>
                   <group>
                         <num_0>offers_</num_0>
                         <num_1>offers_archive</num_1>
@@ -1986,39 +2591,39 @@
             <my_cust_bot>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>clients</group>
+                  <group>employers</group>
                   <area_caption></area_caption>
             </my_cust_bot>
             <tree_search_split>
                   <type>vbox</type>
                   <parent>my_cust_bot</parent>
-                  <group>clients</group>
+                  <group>employers</group>
                   <area_caption></area_caption>
             </tree_search_split>
             <vvoc_customers_tree_left>
                   <type>vbox</type>
                   <parent>tree_search_split</parent>
                   <closeable>1</closeable>
-                  <area_caption>Kliendigrupid</area_caption>
-                  <group>clients</group>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujate&amp;amp;nbsp;puu</area_caption>
+                  <group>employers</group>
             </vvoc_customers_tree_left>
             <vbox_customers_left>
                   <type>vbox</type>
                   <parent>tree_search_split</parent>
                   <closeable>1</closeable>
-                  <area_caption>Otsing</area_caption>
-                  <group>clients</group>
+                  <area_caption>T&amp;amp;ouml;&amp;amp;ouml;pakkujate&amp;amp;nbsp;otsing</area_caption>
+                  <group>employers</group>
             </vbox_customers_left>
             <vbox_customers_left_top>
                   <type>vbox</type>
                   <parent>vbox_customers_left</parent>
-                  <group>clients</group>
+                  <group>employers</group>
                   <area_caption></area_caption>
             </vbox_customers_left_top>
             <vbox_customers_left_search_btn>
                   <type>hbox</type>
                   <parent>vbox_customers_left</parent>
-                  <group>clients</group>
+                  <group>employers</group>
                   <area_caption></area_caption>
             </vbox_customers_left_search_btn>
       </layout>

@@ -98,43 +98,29 @@
 			</function>
 		</action>
 
-		<action name="go_to_create_bill">
-			<function name="go_to_create_bill">
+		<action name="search_employers" all_args="1">
+			<function name="search_employers">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_proj_to_co_as_impl">
-			<function name="add_proj_to_co_as_ord">
+		<action name="delete_employers">
+			<function name="delete_employers">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_task_to_co">
-			<function name="add_task_to_co">
+		<action name="send_email">
+			<function name="send_email">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="remove_from_category">
-			<function name="remove_from_category">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="remove_cust_relations">
-			<function name="remove_cust_relations">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_delete_ppl">
-			<function name="submit_delete_ppl">
+		<action name="get_valid_job_offers">
+			<function name="get_valid_job_offers">
 				<arguments>
 				</arguments>
 			</function>

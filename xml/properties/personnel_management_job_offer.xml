@@ -10,6 +10,14 @@
             <field>toolbar</field>
       </property>
       <property>
+            <name>show_cnt</name>
+            <table>personnel_management_job_offer</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>show_cnt</field>
+            <caption>Vaatamisi</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -42,6 +50,15 @@
             <type>status</type>
             <field>status</field>
             <caption>Aktiivne</caption>
+      </property>
+      <property>
+            <name>confirmed</name>
+            <table>personnel_management_job_offer</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>confirmed</field>
+            <caption>Kinnitatud</caption>
       </property>
       <property>
             <name>archive</name>
@@ -302,6 +319,17 @@
             <type>relpicker</type>
             <reltype>RELTYPE_RATE_SCALE</reltype>
             <caption>Hindamise skaala</caption>
+      </property>
+      <property>
+            <name>udef_classificator_1</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_UDEF_CLASSIFICATOR_1</reltype>
+            <store>connect</store>
+            <caption>Kasutajadefineeritud klassifikaator 1</caption>
       </property>
       <property>
             <name>notify_me</name>
@@ -698,6 +726,16 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Teata kandideerimisest</caption>
             </NOTIFY_ME>
+            <TYPE>
+                  <value>21</value>
+                  <clid>CL_META</clid>
+                  <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </TYPE>
+            <UDEF_CLASSIFICATOR_1>
+                  <value>22</value>
+                  <clid>CL_META</clid>
+                  <caption>Kasutajadefineeritud klassifikaator 1</caption>
+            </UDEF_CLASSIFICATOR_1>
       </reltypes>
       <layout>
             <send_email_sms>

@@ -94,6 +94,87 @@ class personnel_management_obj extends _int_object
 			));
 		}
 	}
+
+	function get_valid_job_offers($arr)
+	{
+		extract($arr);
+		// $parent, $return_as_odl, $childs
+
+		if($childs)
+		{			
+			$children = new object_tree(array(
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $parent,
+				"class_id" => CL_MENU,
+			));
+			$parent = array_merge((array) $parent, $children->to_list()->ids());
+		}
+
+		$prms = array(
+			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $parent,
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, mktime(0, 0, 0, date("m"), date("d"), date("Y")), NULL, "int"),
+		);
+		if($return_as_odl)
+		{
+			$ret = new object_data_list($prms, array(
+				CL_PERSONNEL_MANAGEMENT_JOB_OFFER => array("name"),
+			));
+		}
+		else
+		{
+			$ret = new object_list($prms);
+		}
+		return $ret;
+	}
+
+	function auto_archive()
+	{
+		$aa_last = parent::meta("last_auto_archive");
+		if(time() - $aa_last > 24*3600 && parent::prop("auto_archive"))
+		{
+			// Let's do some auto archiving!
+			$ol = new object_list(array(
+				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+				"lang_id" => array(),
+				"archive" => new obj_predicate_not(1),
+				"end" => new obj_predicate_compare(OBJ_COMP_LESS, time() - parent::prop("auto_archive_days")*24*3600, NULL, "int"),
+			));
+			foreach($ol->arr() as $o)
+			{
+				$o->archive = 1;
+				$o->save();
+			}
+			parent::set_meta("last_auto_archive", time());
+			parent::save();
+		}
+	}
+
+	function get_show_cnt_conf($arr = array())
+	{
+		$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		return array(
+			CL_CRM_PERSON => array(
+				"view" => array(
+					"groups" => $pm->show_cnt_person,
+				),
+				"change" => array(
+					"groups" => $pm->show_cnt_person,
+				),
+			),
+			CL_PERSONNEL_MANAGEMENT_JOB_OFFER => array(
+				"view" => array(
+					"groups" => $pm->show_cnt_job_offer,
+				),
+				"change" => array(
+					"groups" => $pm->show_cnt_job_offer,
+				),
+			),
+		);
+	}
 }
 
 ?>
