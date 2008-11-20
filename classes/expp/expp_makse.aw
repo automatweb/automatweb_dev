@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.11 2008/09/29 15:02:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.12 2008/11/20 15:30:25 markop Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -361,7 +361,7 @@ var $pangad = array(
 			"VK_RETURN"		=> $VK_RETURN,
 			"VK_CANCEL"		=> $VK_CANCEL,
 			"VK_LANG" 		=> $VK_LANG,
-			'image'	=> "/img/hansapank.gif",
+			'image'	=> "/automatweb/images/pank/hansapank_pay.gif",
 			'alt'		=> $lc_expp['LC_EXPP_ALT_HP'],
 			'pank'	=> $lc_expp['LC_EXPP_PANK_HP'],
 			'link'	=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
@@ -805,7 +805,7 @@ if($_POST["VK_SND_ID"] == "SAMPOPANK" && $_POST["VK_SERVICE"] == 1901)
 
 		$this->vars(array(
 			'REF_NO'	=> $ref,
-			'image'	=> "/img/hansapank.gif",
+			'image'	=> "/automatweb/images/pank/hansapank_pay.gif",
 			'alt'		=> $lc_expp['LC_EXPP_ALT_HP'],
 			'pank'	=> $lc_expp['LC_EXPP_PANK_HP'],
 			'link'	=> $this->lingid['hansapank']['okurl'],
