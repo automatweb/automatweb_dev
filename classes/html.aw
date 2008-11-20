@@ -930,7 +930,7 @@ class html extends aw_template
 		$selector->configure($set);
 		if (is_array($args['value']))
 		{
-			$val = mktime($args["value"]["hour"], $args["value"]["minute"], 0, $args["value"]["month"], $args["value"]["day"], $args["value"]["year"]);
+			$val = mktime((int)$args["value"]["hour"], (int)$args["value"]["minute"], 0, (int)$args["value"]["month"], (int)$args["value"]["day"], (int)$args["value"]["year"]);
 		}
 		else
 		{

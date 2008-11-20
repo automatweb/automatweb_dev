@@ -2326,7 +2326,7 @@ class class_base extends aw_template
 			$val["type"] = "text";
 		}
 
-		if (isset($val["orig_type"]) && $val["orig_type"] == "select" && isset($val["value"]) && isset($val["options"][$val["value"]]) && $val["options"][$val["value"]] != "" && $this->view == 1)
+		if (isset($val["orig_type"]) && $val["orig_type"] == "select" && isset($val["value"]) && !is_array($val["value"]) && isset($val["options"][$val["value"]]) && $val["options"][$val["value"]] != "" && $this->view == 1)
 		{
 			$val["value"] = $val["options"][$val["value"]];
 		}
