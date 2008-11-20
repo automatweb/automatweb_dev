@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.43 2008/11/17 10:38:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.44 2008/11/20 12:29:52 instrumental Exp $
 // toolbar.aw - drawing toolbars
 /*
 @classinfo  maintainer=kristo
@@ -566,6 +566,7 @@ class toolbar extends aw_template
 			$params = array();
 		}
 		$params["return_url"] = get_ru();
+		$clss = aw_ini_get("classes");
 
 		if ($rt)
 		{
@@ -579,7 +580,7 @@ class toolbar extends aw_template
 				"name" => "new",
 				"img" => "new.gif",
 				"url" => html::get_new_url($clid, $pt, $params),
-				"tooltip" => t("Lisa")
+				"tooltip" => sprintf(t("Lisa %s"), $clss[$clid]["name"]),
 			));
 		}
 		else
@@ -589,7 +590,6 @@ class toolbar extends aw_template
 				"img" => "new.gif",
 				"tooltip" => t("Lisa")
 			));
-			$clss = aw_ini_get("classes");
 			foreach($clids as $clid)
 			{
 				$this->add_menu_item(array(
