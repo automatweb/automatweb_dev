@@ -114,11 +114,14 @@ class mysql
 		}
 
 		$this->qID = @mysql_query($qtext, $this->dbh);
-		$e_cnt = 0;
-		while (!$this->qID && $this->_proc_error($qtext, $errstr = mysql_error($this->dbh)) && $e_cnt < 200)
+		if ($errors)
 		{
-			$this->qID = @mysql_query($qtext, $this->dbh);
-			$e_cnt++;
+			$e_cnt = 0;
+			while (!$this->qID && $this->_proc_error($qtext, $errstr = mysql_error($this->dbh)) && $e_cnt < 200)
+			{
+				$this->qID = @mysql_query($qtext, $this->dbh);
+				$e_cnt++;
+			}
 		}
 
 		$this->log_query($qtext);
@@ -230,9 +233,9 @@ class mysql
 	# seda voib kasutada, kui on vaja teada saada mingit kindlat v2lja
 	# a 'la cval tabelist config
 	# $cval = db_fetch_field("SELECT cval FROM config WHERE ckey = '$ckey'","cval")
-	function db_fetch_field($qtext,$field)
+	function db_fetch_field($qtext,$field, $errors = true)
 	{
-		$this->db_query($qtext);
+		$this->db_query($qtext, $errors);
 		$row = $this->db_next();
 		return $row[$field];
 	}
@@ -798,7 +801,7 @@ class mysql
 
 				foreach($ti as $tn => $td)
 				{
-					if ($mt[1] == $tn)
+					if (isset($mt[1]) && $mt[1] == $tn)
 					{
 						// got our class
 						classload($inf["file"]);

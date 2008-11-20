@@ -64,12 +64,144 @@
             <parent>rels_hbox</parent>
             <store>no</store>
       </property>
+      <property>
+            <name>toolbar</name>
+            <table>objects</table>
+            <group>classes</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>classes_tree</name>
+            <table>objects</table>
+            <group>classes</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>classes_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>classes_groups</name>
+            <table>objects</table>
+            <group>classes</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>classes_groups</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>classes_list</name>
+            <table>objects</table>
+            <group>classes</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>classes_split</parent>
+      </property>
+      <property>
+            <name>cl_usage_stats_tree</name>
+            <table>objects</table>
+            <group>cl_usage_stats_clids</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>cl_usage_stats_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cl_usage_stats_groups</name>
+            <table>objects</table>
+            <group>cl_usage_stats_clids</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>cl_usage_stats_groups</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cl_usage_stats_list</name>
+            <table>objects</table>
+            <group>cl_usage_stats_clids</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_stats_right_split</parent>
+      </property>
+      <property>
+            <name>site_usage_stats_list</name>
+            <table>objects</table>
+            <group>cl_usage_stats_clids</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_stats_right_split</parent>
+      </property>
+      <property>
+            <name>cl_usage_props_stats_tree</name>
+            <table>objects</table>
+            <group>cl_usage_stats_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>cl_usage_props_stats_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cl_usage_props_stats_groups</name>
+            <table>objects</table>
+            <group>cl_usage_stats_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>cl_usage_props_stats_groups</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cl_usage_props_stats_list</name>
+            <table>objects</table>
+            <group>cl_usage_stats_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_props_stats_right_split</parent>
+      </property>
+      <property>
+            <name>site_usage_props_stats_list</name>
+            <table>objects</table>
+            <group>cl_usage_stats_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>cl_usage_props_stats_right_split</parent>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <maintainer>kristo</maintainer>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <mgr>
@@ -80,6 +212,22 @@
                   <caption>Seosed</caption>
                   <submit>no</submit>
             </rels>
+            <classes>
+                  <caption>Omadused</caption>
+            </classes>
+            <cl_usage_stats>
+                  <caption>Statistika</caption>
+            </cl_usage_stats>
+            <cl_usage_stats_clids>
+                  <caption>Klasside TOP</caption>
+                  <parent>cl_usage_stats</parent>
+                  <submit>no</submit>
+            </cl_usage_stats_clids>
+            <cl_usage_stats_props>
+                  <caption>Omadused</caption>
+                  <parent>cl_usage_stats</parent>
+                  <submit>no</submit>
+            </cl_usage_stats_props>
       </groupinfo>
       <layout>
             <mgr_hbox>
@@ -94,6 +242,107 @@
                   <group>rels</group>
                   <area_caption></area_caption>
             </rels_hbox>
+            <classes_split>
+                  <type>hbox</type>
+                  <group>classes</group>
+                  <area_caption></area_caption>
+            </classes_split>
+            <classes_left>
+                  <type>vbox</type>
+                  <parent>classes_split</parent>
+                  <group>classes</group>
+                  <area_caption></area_caption>
+            </classes_left>
+            <classes_tree>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
+                  <closeable>1</closeable>
+                  <parent>classes_left</parent>
+                  <group>classes</group>
+            </classes_tree>
+            <classes_groups>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>classes_left</parent>
+                  <group>classes</group>
+            </classes_groups>
+            <cl_usage_stats_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>cl_usage_stats_clids</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_split>
+            <cl_usage_stats_left>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_split</parent>
+                  <group>cl_usage_stats_clids</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_left>
+            <cl_usage_stats_tree>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cl_usage_stats_left</parent>
+                  <group>cl_usage_stats_clids</group>
+            </cl_usage_stats_tree>
+            <cl_usage_stats_groups>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cl_usage_stats_left</parent>
+                  <group>cl_usage_stats_clids</group>
+            </cl_usage_stats_groups>
+            <cl_usage_stats_right>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_split</parent>
+                  <group>cl_usage_stats_clids</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_right>
+            <cl_usage_stats_right_split>
+                  <type>hbox</type>
+                  <parent>cl_usage_stats_right</parent>
+                  <group>cl_usage_stats_clids</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_right_split>
+            <cl_usage_props_stats_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>cl_usage_stats_props</group>
+                  <area_caption></area_caption>
+            </cl_usage_props_stats_split>
+            <cl_usage_props_stats_left>
+                  <type>vbox</type>
+                  <parent>cl_usage_props_stats_split</parent>
+                  <group>cl_usage_stats_props</group>
+                  <area_caption></area_caption>
+            </cl_usage_props_stats_left>
+            <cl_usage_props_stats_tree>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cl_usage_props_stats_left</parent>
+                  <group>cl_usage_stats_props</group>
+            </cl_usage_props_stats_tree>
+            <cl_usage_props_stats_groups>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cl_usage_props_stats_left</parent>
+                  <group>cl_usage_stats_props</group>
+            </cl_usage_props_stats_groups>
+            <cl_usage_props_stats_right>
+                  <type>vbox</type>
+                  <parent>cl_usage_props_stats_split</parent>
+                  <group>cl_usage_stats_props</group>
+                  <area_caption></area_caption>
+            </cl_usage_props_stats_right>
+            <cl_usage_props_stats_right_split>
+                  <type>hbox</type>
+                  <parent>cl_usage_props_stats_right</parent>
+                  <group>cl_usage_stats_props</group>
+                  <area_caption></area_caption>
+            </cl_usage_props_stats_right_split>
       </layout>
 </properties>
 

@@ -253,9 +253,9 @@ class db_connector
 		@examples
 			$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
 	**/
-	function db_fetch_field($qtext,$field)
+	function db_fetch_field($qtext,$field, $errors = true)
 	{
-		return $this->dc[$this->default_cid]->db_fetch_field($qtext,$field);
+		return $this->dc[$this->default_cid]->db_fetch_field($qtext,$field, $errors);
 	}
 
 	/** Performs a query and returns all the rows as an array of arrays

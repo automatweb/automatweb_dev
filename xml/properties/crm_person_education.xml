@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>person</name>
+            <table>kliendibaas_haridus</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <store>connect</store>
+            <field>person</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
             <name>school1</name>
             <table>kliendibaas_haridus</table>
             <group>general</group>
@@ -16,6 +26,16 @@
             <type>textbox</type>
             <field>school_2</field>
             <caption>Muu kool</caption>
+      </property>
+      <property>
+            <name>faculty</name>
+            <table>kliendibaas_haridus</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FACULTY</reltype>
+            <store>connect</store>
+            <field>faculty</field>
+            <caption>Teaduskond</caption>
       </property>
       <property>
             <name>degree</name>
@@ -148,6 +168,16 @@
                   <clid>CL_LANGUAGE</clid>
                   <caption>Omandamise keel</caption>
             </LANGUAGE>
+            <PERSON>
+                  <value>4</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik</caption>
+            </PERSON>
+            <FACULTY>
+                  <value>5</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Teaduskond</caption>
+            </FACULTY>
       </reltypes>
 </properties>
 

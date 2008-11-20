@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>show_cnt</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>hidden</type>
+            <field>show_cnt</field>
+            <caption>Vaatamisi</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general2</group>
@@ -247,13 +255,21 @@
       </property>
       <property>
             <name>cvactive</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>general2</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>cvactive</field>
             <caption>CV aktiivne</caption>
+      </property>
+      <property>
+            <name>cvapproved</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>cvapproved</field>
+            <caption>CV kinnitatud</caption>
       </property>
       <property>
             <name>not_working</name>
@@ -615,12 +631,12 @@
       </property>
       <property>
             <name>nationality</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>description</group>
             <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
             <reltype>RELTYPE_NATIONALITY</reltype>
+            <store>connect</store>
+            <field>nationality</field>
             <caption>Rahvus</caption>
       </property>
       <property>
@@ -645,14 +661,14 @@
       </property>
       <property>
             <name>cv_file</name>
-            <table>objects</table>
+            <table>kliendibaas_isik</table>
             <group>description</group>
             <type>releditor</type>
             <reltype>RELTYPE_CV_FILE</reltype>
             <rel_id>first</rel_id>
             <props>file</props>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>connect</store>
+            <field>cv_file</field>
             <caption>CV failina</caption>
       </property>
       <property>
@@ -897,32 +913,34 @@
             <props>
                   <num_0>school1</num_0>
                   <num_1>school2</num_1>
-                  <num_2>degree</num_2>
-                  <num_3>field</num_3>
-                  <num_4>speciality</num_4>
-                  <num_5>main_speciality</num_5>
-                  <num_6>in_progress</num_6>
-                  <num_7>dnf</num_7>
-                  <num_8>obtain_language</num_8>
-                  <num_9>start</num_9>
-                  <num_10>end</num_10>
-                  <num_11>end_date</num_11>
-                  <num_12>diploma_nr</num_12>
+                  <num_2>faculty</num_2>
+                  <num_3>degree</num_3>
+                  <num_4>field</num_4>
+                  <num_5>speciality</num_5>
+                  <num_6>main_speciality</num_6>
+                  <num_7>in_progress</num_7>
+                  <num_8>dnf</num_8>
+                  <num_9>obtain_language</num_9>
+                  <num_10>start</num_10>
+                  <num_11>end</num_11>
+                  <num_12>end_date</num_12>
+                  <num_13>diploma_nr</num_13>
             </props>
             <table_fields>
                   <num_0>school1</num_0>
                   <num_1>school2</num_1>
-                  <num_2>degree</num_2>
-                  <num_3>field</num_3>
-                  <num_4>speciality</num_4>
-                  <num_5>main_speciality</num_5>
-                  <num_6>in_progress</num_6>
-                  <num_7>dnf</num_7>
-                  <num_8>obtain_language</num_8>
-                  <num_9>start</num_9>
-                  <num_10>end</num_10>
-                  <num_11>end_date</num_11>
-                  <num_12>diploma_nr</num_12>
+                  <num_2>faculty</num_2>
+                  <num_3>degree</num_3>
+                  <num_4>field</num_4>
+                  <num_5>speciality</num_5>
+                  <num_6>main_speciality</num_6>
+                  <num_7>in_progress</num_7>
+                  <num_8>dnf</num_8>
+                  <num_9>obtain_language</num_9>
+                  <num_10>start</num_10>
+                  <num_11>end</num_11>
+                  <num_12>end_date</num_12>
+                  <num_13>diploma_nr</num_13>
             </table_fields>
             <field>education_edit</field>
             <caption>Haridusk&amp;amp;auml;ik</caption>
@@ -938,32 +956,34 @@
             <props>
                   <num_0>school1</num_0>
                   <num_1>school2</num_1>
-                  <num_2>degree</num_2>
-                  <num_3>field</num_3>
-                  <num_4>speciality</num_4>
-                  <num_5>main_speciality</num_5>
-                  <num_6>in_progress</num_6>
-                  <num_7>dnf</num_7>
-                  <num_8>obtain_language</num_8>
-                  <num_9>start</num_9>
-                  <num_10>end</num_10>
-                  <num_11>end_date</num_11>
-                  <num_12>diploma_nr</num_12>
+                  <num_2>faculty</num_2>
+                  <num_3>degree</num_3>
+                  <num_4>field</num_4>
+                  <num_5>speciality</num_5>
+                  <num_6>main_speciality</num_6>
+                  <num_7>in_progress</num_7>
+                  <num_8>dnf</num_8>
+                  <num_9>obtain_language</num_9>
+                  <num_10>start</num_10>
+                  <num_11>end</num_11>
+                  <num_12>end_date</num_12>
+                  <num_13>diploma_nr</num_13>
             </props>
             <table_fields>
                   <num_0>school1</num_0>
                   <num_1>school2</num_1>
-                  <num_2>degree</num_2>
-                  <num_3>field</num_3>
-                  <num_4>speciality</num_4>
-                  <num_5>main_speciality</num_5>
-                  <num_6>in_progress</num_6>
-                  <num_7>dnf</num_7>
-                  <num_8>obtain_language</num_8>
-                  <num_9>start</num_9>
-                  <num_10>end</num_10>
-                  <num_11>end_date</num_11>
-                  <num_12>diploma_nr</num_12>
+                  <num_2>faculty</num_2>
+                  <num_3>degree</num_3>
+                  <num_4>field</num_4>
+                  <num_5>speciality</num_5>
+                  <num_6>main_speciality</num_6>
+                  <num_7>in_progress</num_7>
+                  <num_8>dnf</num_8>
+                  <num_9>obtain_language</num_9>
+                  <num_10>start</num_10>
+                  <num_11>end</num_11>
+                  <num_12>end_date</num_12>
+                  <num_13>diploma_nr</num_13>
             </table_fields>
             <field>education_edit_2</field>
             <caption>Haridusk&amp;amp;auml;ik 2</caption>

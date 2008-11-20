@@ -441,6 +441,35 @@
             <caption>Keela RTE</caption>
       </property>
       <property>
+            <name>object_tree_always_visible</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objektipuu alati n&amp;amp;auml;htaval</caption>
+      </property>
+      <property>
+            <name>object_tree_classes_inherit_from</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_USER</reltype>
+            <caption>P&amp;amp;auml;ri puu objektid kasutajalt</caption>
+      </property>
+      <property>
+            <name>object_tree_classes</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objektipuu alati n&amp;amp;auml;htaval klassides</caption>
+      </property>
+      <property>
             <name>nfy_hd</name>
             <table>users</table>
             <group>settings_general</group>
@@ -576,6 +605,11 @@
                   <clid>CL_JOIN_SITE</clid>
                   <caption>liitumise andmed</caption>
             </JOIN_SITE>
+            <USER>
+                  <value>10</value>
+                  <clid>CL_USER</clid>
+                  <caption>Kasutaja</caption>
+            </USER>
       </reltypes>
       <layout>
             <settings_shortcuts_top>
