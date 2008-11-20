@@ -4,7 +4,7 @@
 */
 class task_row_obj extends _int_object
 {
-	function prop($pv)
+	function prop($pn)
 	{
 		switch($pn)
 		{

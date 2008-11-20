@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.18 2008/11/19 19:12:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.19 2008/11/20 17:23:54 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -122,6 +122,7 @@ class task_row extends class_base
 		switch($prop["name"])
 		{
 			case "skill_used":
+				if(!is_oid($arr["obj_inst"]))return PROP_IGNORE;
 				$prop["options"] = array();
 				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")) as $c)
 				{
