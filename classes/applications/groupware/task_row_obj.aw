@@ -90,6 +90,18 @@ class task_row_obj extends _int_object
 		{
 			$this->set_prop("done" , 1);
 		}
+		if(!is_oid($this->id()))
+		{
+			if(!$this->prop("date"))
+			{
+				$this->set_prop("date" , time());
+			}
+			if(!$this->prop("impl"))
+			{
+				$cp = get_current_person();
+				$this->set_prop("impl",$cp->id());
+			}
+		}
 		parent::save();
 		if(is_oid($this->prop("task")))
 		{
