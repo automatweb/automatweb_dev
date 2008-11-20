@@ -1170,7 +1170,7 @@ class aw_table extends aw_template
 				$tbl .= $tmp;
 					if ($this->use_chooser)
 					{
-						$chooser_value = $v[$this->chooser_config["field"]];
+						$chooser_value = isset($v[$this->chooser_config["field"]]) ? $v[$this->chooser_config["field"]] : "";
 						$name = $this->chooser_config["name"] . "[${chooser_value}]";
 						$onclick = "";
 						if ($this->chooser_hilight)

@@ -628,7 +628,7 @@ class treeview extends class_base
 		// ja nagu sellest veel kyllalt poleks .. I can have multiple opened nodes. yees!
 		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
 		{
-			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
+			$opened_nodes = explode("^",isset($_COOKIE[$this->tree_id]) ? $_COOKIE[$this->tree_id] : "");
 			$r_path = array();
 			foreach($opened_nodes as $open_node)
 			{

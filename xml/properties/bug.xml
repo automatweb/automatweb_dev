@@ -36,6 +36,15 @@
             <field>expl_txt</field>
       </property>
       <property>
+            <name>gchart</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>google_chart</type>
+            <store>no</store>
+            <field>gchart</field>
+            <caption>Graafik</caption>
+      </property>
+      <property>
             <name>bug_status</name>
             <group>general</group>
             <table>aw_bugs</table>

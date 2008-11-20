@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>toolbar</name>
+            <table>aw_sm_class_stats_workspace</table>
+            <group>classes</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>toolbar</field>
+      </property>
+      <property>
             <name>classes_tree</name>
             <table>aw_sm_class_stats_workspace</table>
             <group>classes</group>
@@ -9,6 +18,16 @@
             <parent>classes_tree</parent>
             <store>no</store>
             <field>classes_tree</field>
+      </property>
+      <property>
+            <name>classes_groups</name>
+            <table>aw_sm_class_stats_workspace</table>
+            <group>classes</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>classes_groups</parent>
+            <store>no</store>
+            <field>classes_groups</field>
       </property>
       <property>
             <name>classes_list</name>
@@ -46,13 +65,26 @@
                   <group>classes</group>
                   <area_caption></area_caption>
             </classes_split>
+            <classes_left>
+                  <type>vbox</type>
+                  <parent>classes_split</parent>
+                  <group>classes</group>
+                  <area_caption></area_caption>
+            </classes_left>
             <classes_tree>
                   <type>vbox</type>
                   <area_caption>Klasside&amp;amp;nbsp;puu</area_caption>
                   <closeable>1</closeable>
-                  <parent>classes_split</parent>
+                  <parent>classes_left</parent>
                   <group>classes</group>
             </classes_tree>
+            <classes_groups>
+                  <type>vbox</type>
+                  <area_caption>Klasside&amp;amp;nbsp;grupid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>classes_left</parent>
+                  <group>classes</group>
+            </classes_groups>
       </layout>
 </properties>
 
