@@ -5446,7 +5446,7 @@ class crm_company extends class_base
 			if($this->can("view" , $bug))
 			{
 				$c = obj($bug);
-				if($c->class_id() == CL_BUG_COMMENT && $c->prop("parent.class_id") == CL_BUG)
+				if($c->prop("parent.class_id") == CL_BUG)
 				{
 					$c = obj($c->prop("parent"));
 					if($this->can("view" ,  $c->prop("customer")))
