@@ -6,7 +6,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: orb_gen.aw,v 1.3 2008/11/11 09:50:45 voldemar Exp $
+	@cvs $Id: orb_gen.aw,v 1.4 2008/11/21 10:51:58 robert Exp $
 
 	@comment
 	generates orb defs, based on information from docgen_analyzer
@@ -63,6 +63,12 @@ class orb_gen extends class_base
 					//$x_a["caption"] = str_replace("&", "&amp;", $attr["caption"]);
 				}
 
+				$this->validate_fields(array(
+					"data" => $attr,
+					"type" => "attrib",
+					"func" => $f_name,
+				));
+
 				// make parameters
 				$par = isset($f_data["doc_comment"]["params"]) ? new aw_array($f_data["doc_comment"]["params"]) : new aw_array();
 
@@ -96,6 +102,13 @@ class orb_gen extends class_base
 					{
 						$x_p["value"] = $p_dat["value"];
 					}
+					
+					$this->validate_fields(array(
+						"data" => $p_dat,
+						"type" => "param",
+						"func" => $f_name,
+					));
+					
 					$arguments[$p_name] = $x_p;
 				}
 
@@ -291,6 +304,8 @@ class orb_gen extends class_base
 						// count orb methods
 						$orb_method_count = 0;
 
+						$this->currentclass = $class;
+
 						// XXX: figure out what the duke is going on here?
 						$od = $this->_get_orb_defs2($cldat);
 
@@ -339,6 +354,36 @@ class orb_gen extends class_base
 			}
 		}
 		echo ("all done\n");
+	}
+
+	function validate_fields($data)
+	{
+		if(!$this->tagdata)
+		{
+			$this->set_tagdata();
+		}
+		$vals = $this->tagdata[$data["type"]];
+		foreach($data["data"] as $var => $val)
+		{
+			if(!isset($vals[$var]))
+			{
+				print "***WARNING: Unknown field {$var} in {$data["type"]} at {$data["func"]} ({$this->currentclass})\n";
+			}
+		}
+	}
+
+	function set_tagdata()
+	{
+		$xmldir = AW_DIR . "xml/";
+		$xml = simplexml_load_file($xmldir."orb_types.xml");
+		foreach($xml->children() as $k1 => $v1)
+		{
+			foreach($v1->children() as $k2 => $v2)
+			{
+				$data[$k1][$k2] = reset($v2->attributes());
+			}
+		}
+		$this->tagdata = $data;
 	}
 }
 ?>
