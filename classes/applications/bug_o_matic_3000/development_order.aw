@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.19 2008/10/15 11:21:29 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.20 2008/11/21 14:16:17 markop Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -150,7 +150,7 @@
 @reltype CONTACT value=18 clid=CL_CRM_PERSON
 @caption Esindaja
 
-@reltype COMMENT value=19 clid=CL_BUG_COMMENT
+@reltype COMMENT value=19 clid=CL_TASK_ROW
 @caption Kommentaar
 
 @reltype ORDERER value=20 clid=CL_CRM_PERSON
@@ -682,7 +682,7 @@ class development_order extends class_base
 		{
 			$comment_ol = new object_list(array(
 				"parent" => $ol->ids(),
-				"class_id" => CL_BUG_COMMENT,
+				"class_id" => array(CL_BUG_COMMENT,CL_TASK_ROW),
 				"lang_id" => array(),
 				"site_id" => array()
 			));

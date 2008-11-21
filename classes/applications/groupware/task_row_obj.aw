@@ -109,17 +109,19 @@ class task_row_obj extends _int_object
 		}
 		if(is_object($task))
 		{
-			if(isset($this->update_time_real))
+			if($task->class_id() != CL_BUG)
 			{
-				if($task->created() > 1227022000)
-					$task->update_hours();
+				if(isset($this->update_time_real))
+				{
+					if($task->created() > 1227022000)
+						$task->update_hours();
+				}
+				if(isset($this->update_time_cust))
+				{
+					if($task->created() > 1227022000)
+						$task->update_cust_hours();
+				}
 			}
-			if(isset($this->update_time_cust))
-			{
-				if($task->created() > 1227022000)
-					$task->update_cust_hours();
-			}
-			
 			foreach($task->connections_from(array(
 				"type" => "RELTYPE_CUSTOMER",
 			)) as $c)

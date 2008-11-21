@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.19 2008/11/20 17:23:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.20 2008/11/21 14:18:39 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -10,6 +10,9 @@
 @default table=objects
 
 @default group=general
+
+	@property parent type=hidden table=objects field=parent
+	@caption Parent
 
 	@property content type=textarea rows=5 cols=50 table=aw_task_rows field=aw_content
 	@caption Sisu
@@ -121,6 +124,7 @@ class task_row extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "parent": return PROP_IGNORE;
 			case "skill_used":
 				if(!is_oid($arr["obj_inst"]))return PROP_IGNORE;
 				$prop["options"] = array();
@@ -146,6 +150,7 @@ class task_row extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "parent": return PROP_IGNORE;
 		}
 		return $retval;
 	}	

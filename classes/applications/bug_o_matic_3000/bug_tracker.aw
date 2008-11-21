@@ -249,9 +249,6 @@ define("BUG_STATUS_CLOSED", 5);
 	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
 	@caption Tagasiside bugide kaust
 
-	@property finance_required type=checkbox ch_value=1 field=meta method=serialize
-	@caption Kulude katmine tuleb m&auml;&auml;rata
-
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
 
@@ -950,7 +947,7 @@ class bug_tracker extends class_base
 		$this->_init_complete_table($t);
 		$prevm = time()-30*24*60*60;
 		$c_ol = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 			"comment" => "%viewcvs.cgi%",
 			"lang_id" => array(),
 			"site_id" => array(),
@@ -1078,7 +1075,7 @@ class bug_tracker extends class_base
 		{
 			$comment_ol = new object_list(array(
 				"parent" => $oids,
-				"class_id" => CL_BUG_COMMENT,
+				"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
      				"lang_id" => array(),
 				"site_id" => array()
 			));
@@ -1208,7 +1205,7 @@ class bug_tracker extends class_base
 			$end = time();
 		}
 		$bug_comments = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
@@ -1265,7 +1262,7 @@ class bug_tracker extends class_base
 					), CL_BUG),
 					'caption' => $bug->name()
 				)),
-				'bug_lifespan' => $bug->get_lifespan(),
+				'bug_lifespan' => ($bug->class_id() == CL_BUG) ? $bug->get_lifespan() : "",
 				'comment_count' => count($comments),
 				'working_hours' => $working_hours,
 				'working_hours_1' => $bug->finance_type == 1 ? $working_hours : 0,
@@ -1275,7 +1272,7 @@ class bug_tracker extends class_base
 			$sum += $working_hours;
 			$cnt += count($comments);
 			$sums[$bug->finance_type] += $working_hours;
-			$i_total_lifespan += $bug->get_lifespan(array(
+			if($bug->class_id() == CL_BUG) $i_total_lifespan += $bug->get_lifespan(array(
 				"without_string_prefix"=>true,
 				"only_days"=>true,
 			));
@@ -1283,6 +1280,13 @@ class bug_tracker extends class_base
 
 		$t->sort_by();
 		$t->set_sortable(false);
+		$i_bug_count = count($bugs);
+		$t->define_data(array(
+			"name" => html::strong(t("Keskmine")),
+			"bug_lifespan" => html::strong(number_format($i_total_lifespan/$i_bug_count, 2)),
+			"working_hours" => html::strong(number_format($sum/$i_bug_count, 2)),
+			"comment_count" => html::strong(number_format($cnt/$i_bug_count, 2))
+		));
 		$t->define_data(array(
 			"name" => html::strong(t("Summa")),
 			"bug_lifespan" => html::strong($i_total_lifespan),
@@ -1291,13 +1295,6 @@ class bug_tracker extends class_base
 			"working_hours_1" => html::strong(number_format($sums[1], 2)),
 			"working_hours_2" => html::strong(number_format($sums[2], 2)),
 			"working_hours_3" => html::strong(number_format($sums[3], 2)),
-		));
-		$i_bug_count = count($bugs);
-		$t->define_data(array(
-			"name" => html::strong(t("Keskmine")),
-			"bug_lifespan" => html::strong(number_format($i_total_lifespan/$i_bug_count, 2)),
-			"working_hours" => html::strong(number_format($sum/$i_bug_count, 2)),
-			"comment_count" => html::strong(number_format($cnt/$i_bug_count, 2))
 		));
 		return PROP_OK;
 	}
@@ -2536,7 +2533,7 @@ class bug_tracker extends class_base
 		{
 			$comment_ol = new object_list(array(
 				"parent" => $ol->ids(),
-				"class_id" => CL_BUG_COMMENT,
+				"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 				"lang_id" => array(),
 				"site_id" => array(),
 				"sort_by" => "created asc",
@@ -4293,8 +4290,10 @@ class bug_tracker extends class_base
 			if($est = $data["p"])
 			{
 				$o = obj();
-				$o->set_class_id(CL_BUG_COMMENT);
+				$o->set_class_id(CL_TASK_ROW);
 				$o->set_parent($bid);
+				$o->set_prop("done" , 1);
+				$o->set_prop("task" , $bid);
 				$o->set_prop("add_wh_guess", $est);
 				$o->set_comment(sprintf(t("Isiku prognoositud tundide arv muudeti %s => %s"), 0, $est));
 				$o->save();
@@ -4545,7 +4544,7 @@ class bug_tracker extends class_base
 		classload("core/date/date_calc");
 		$tmp = mktime(0,0,0,1,1,2007);
 		$coms = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 			"lang_id" => array(),
 			"site_id" => array(),
 			//"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start()/*-7*3600*24*/),

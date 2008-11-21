@@ -75,7 +75,7 @@ class bug_object extends _int_object
 		if ($this->prop("bug_status") == BUG_CLOSED)
 		{
 			$o_bug_comments = new object_list(array(
-				"class_id" => CL_BUG_COMMENT,
+				"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 				"lang_id" => array(),
 				"site_id" => array(),
 				"parent" => $this->id(),
@@ -192,24 +192,24 @@ class bug_object extends _int_object
 		$filter = array(
 			"lang_id" => array(),
 			"site_id" => array(),
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 			"parent" => $this->id(),
 			"sort_by" => "objects.created desc",
 		);
 
 		if ($start && $end)
 		{
-			$filter["CL_BUG_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($start - 1), ($end+ 1));
+			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($start - 1), ($end+ 1));
 		}
 		else
 		if ($start)
 		{
-			$filter["CL_BUG_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
+			$filter["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
 		}
 		else
 		if ($end)
 		{
-			$filt["CL_BUG_COMMENT.created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end);
+			$filt["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end);
 		}
 
 		$ol = new object_list($filter);

@@ -150,6 +150,45 @@ class crm_company_bills_impl extends class_base
 			}
 		}*/
 
+
+//bugi kommentaaride toimetuse ridadeks konvertimise algoritm
+/*		$all_tasks = new object_list(array(
+			"class_id" => CL_BUG_COMMENT,
+			"lang_id" => array(),
+ 			"limit" => 1,
+		));*/
+/*$all_tasks = new object_list();
+$all_tasks->add(221302);
+
+		foreach($all_tasks->arr() as $bug_comment)
+		{
+	arr($bug_comment);
+			$tr = obj();
+			$tr->set_class_id(1050);arr(CL_TASK_ROW); arr($bug_comment->parent());arr($bug_comment->name());
+			$tr->set_parent(218341);
+			$tr->set_name("sdfsdfsdf");
+			$tr->save();
+
+
+			$tr->set_prop("date" , $bug_comment->created());
+		$asd = array("status" , "name" ,"brother_of" , "parent", "class_id" ,"lang_id", "period", "created", "modified", "periodic", "createdby", "modifiedby");
+			foreach($bug_comment->properties() as $prop => $val)
+			{if(in_array($prop , $asd))continue;
+				$tr->set_prop($prop , $val);
+			}
+
+
+			$bug = obj($bug_comment->parent());
+		if(is_oid($bug->id()))
+			$bug->connect(array(
+				"to" => $tr->id(),
+				"type" => "RELTYPE_COMMENT",
+			));
+			$tr->set_createdby($bug_comment->createdby());
+			$tr->save();arr($tr);
+		}
+*/
+
 	enter_function("bills_impl::_get_bill_proj_list1");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->get_time_between($arr["request"]);
@@ -2021,6 +2060,8 @@ exit_function("bills_impl::_get_bill_task_list");
 		return $s;
 	}
 
+
+	
 	function get_billable_bugs($r)
 	{
 
@@ -2039,18 +2080,23 @@ exit_function("bills_impl::_get_bill_task_list");
 
 		$ol = new object_list();
 		$bc_filt = array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_BUG_COMMENT,CL_TASK_ROW),
 			"lang_id" => array(),
 			"site_id" => array(),
-//			 new object_list_filter(array(
-//				"logic" => "OR",
-//				"conditions" => array(
-//					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
-//					"CL_BUG_COMMENT.bill" => new obj_predicate_compare(OBJ_COMP_EQUAL, null),
-//				),
-//			)),//no ei t88ta see.....
-			"CL_BUG_COMMENT.bug.send_bill" => 1,
-
+			 new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_BUG_COMMENT.bug.send_bill" => 1,
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"CL_TASK_ROW.task.class_id" => CL_BUG,
+							"CL_TASK_ROW.task.on_bill" => 1,
+						),
+					)),
+				),
+			)),//no ei t88ta see.....
+//			"CL_BUG_COMMENT.bug.send_bill" => 1,
 		);
 
 		if ($this->search_start && $this->search_end)
@@ -2104,7 +2150,7 @@ exit_function("bills_impl::_get_bill_task_list");
 			$sess_bug = obj(reset($_SESSION["ccbc_bug_comments"]));
 			$sess_cust = $sess_bug->prop("parent.customer");
 			$new_bug = obj(reset($sel));
-			if($new_bug->class_id() == CL_BUG_COMMENT && $new_bug->prop("parent.class_id") == CL_BUG)
+			if($new_bug->prop("parent.class_id") == CL_BUG)
 			{
 				$new_cust = $new_bug->prop("parent.customer");
 				if($new_cust != $sess_cust)

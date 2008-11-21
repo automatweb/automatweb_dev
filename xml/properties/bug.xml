@@ -671,7 +671,7 @@
             </BUGTYPE>
             <COMMENT>
                   <value>6</value>
-                  <clid>CL_BUG_COMMENT</clid>
+		  <clid>CL_TASK_ROW</clid>
                   <caption>Kommentaar</caption>
             </COMMENT>
             <TEAM>

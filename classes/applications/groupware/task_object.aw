@@ -487,5 +487,72 @@ class task_object extends _int_object
 		return reset($ol->arr());
 	}
 
+	/** returns task lifespan
+		@attrib api=1 params=name
+		@returns int
+	**/
+	public function get_lifespan($arr)
+	{
+		// calculate timestamp
+		$i_created = $this->created();
+		if ($this->prop("bug_status") == BUG_CLOSED)
+		{
+			$o_bug_comments = new object_list(array(
+				"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"parent" => $this->id(),
+				"sort_by" => "objects.created"
+			));
+			
+			$i_lifespan = end($o_bug_comments->arr())->created() - $i_created;
+		}
+		else
+		{
+			$i_lifespan = time() - $i_created;
+		}
+		
+		// format output
+		$i_lifespan_hours = $i_lifespan/3600;
+		if ($i_lifespan_hours<=24)
+		{
+			if ($arr["only_days"])
+			{
+				if ($arr["without_string_prefix"])
+				{
+					$s_out = round($i_lifespan_hours/24);
+				}
+				else
+				{
+					$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("tund") : $i_temp." ".t("tundi");
+				}
+			}
+			else
+			{
+				if ($arr["without_string_prefix"])
+				{
+					$s_out = round($i_lifespan_hours);
+				}
+				else
+				{
+					$s_out = ($i_temp = round($i_lifespan_hours))==1 ? $i_temp." ".t("tund") : $i_temp." ".t("tundi");
+				}
+			}
+		}
+		else
+		{
+			if ($arr["without_string_prefix"])
+			{
+				$s_out = round($i_lifespan_hours/24);
+			}
+			else
+			{
+				$s_out = ($i_temp = round($i_lifespan_hours/24))==1 ? $i_temp." ".t("p&auml;ev") : $i_temp." ".t("p&auml;eva");
+			}
+		}
+		
+		return $s_out;
+	}
+
 }
 ?>

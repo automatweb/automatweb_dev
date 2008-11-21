@@ -261,7 +261,7 @@ define("BUG_STATUS_CLOSED", 5);
 @reltype BUGTYPE value=5 clid=CL_META
 @caption Bugi t&uuml;&uuml;p
 
-@reltype COMMENT value=6 clid=CL_BUG_COMMENT
+@reltype COMMENT value=6 clid=CL_TASK_ROW
 @caption Kommentaar
 
 @reltype TEAM value=7 clid=CL_PROJECT_TEAM
@@ -1821,7 +1821,7 @@ class bug extends class_base
 		$this->read_template("comment_list.tpl");
 
 		$ol = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 			"parent" => $o->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
@@ -1916,7 +1916,9 @@ class bug extends class_base
 //print "kasutaja: ".aw_global_get("uid");
 		$o = obj();
 		$o->set_parent($bug->id());
-		$o->set_class_id(CL_BUG_COMMENT);
+		$o->set_class_id(CL_TASK_ROW);
+		$o->set_prop("done" , 1);
+		$o->set_prop("task" , $bug->id());
 		$o->set_comment(trim($comment));
 		$o->set_prop("prev_state", $old_state);
 		$o->set_prop("new_state", $new_state);

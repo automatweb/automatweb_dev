@@ -420,7 +420,7 @@
             </CONTACT>
             <COMMENT>
                   <value>19</value>
-                  <clid>CL_BUG_COMMENT</clid>
+                  <clid>CL_TASK_ROW</clid>
                   <caption>Kommentaar</caption>
             </COMMENT>
             <ORDERER>

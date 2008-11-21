@@ -323,7 +323,7 @@ class crm_bill_obj extends _int_object
 		$row->save();
 
 		$people = array();
-		$amt = $price = "";
+		$amt = $price = $date = "";
 		$u = get_instance(CL_USER);
 
 		foreach($bugcomments as $c)
@@ -340,12 +340,17 @@ class crm_bill_obj extends _int_object
 				arr($err);
 				arr($err2);
 			}
+			if(!$date || $date < $comment->created())
+			{
+				$date = $comment->created();
+			}
 		}
 
 		$amt = ((int)(($amt * 4)+1)) / 4;//ymardab yles 0.25listeni
+
 		$row->set_prop("amt", $amt);
 		$row->set_prop("price", $price);
-		$row->set_prop("unit", "h");
+		$row->set_prop("unit", t("tund"));
 		$row->set_prop("people", $people);
 
 //		$br->set_prop("has_tax", $row["has_tax"]); ?????????????
@@ -356,7 +361,7 @@ class crm_bill_obj extends _int_object
 			{
 				$row->set_prop("price", $comment->prop("parent.hr_price"));
 			}
-			$row->set_prop("date", date("d.m.Y", $comment->created()));
+			$row->set_prop("date", date("d.m.Y", $date));
 			$row->set_name($comment->prop("parent.name"));
 		}
 		else
@@ -492,7 +497,7 @@ class crm_bill_obj extends _int_object
 			foreach($arr["bugs"] as $bugc)
 			{
 				$c = obj($bugc);
-				if($c->class_id() == CL_BUG_COMMENT && $bi->can("view" , $c->prop("parent.customer")))
+				if(($c->class_id() == CL_BUG_COMMENT || $c->class_id() == CL_TASK_ROW)&& $bi->can("view" , $c->prop("parent.customer")))
 				{
 					$this->set_prop("customer" , $c->prop("parent.customer"));
 					break;

@@ -163,7 +163,7 @@ class project_obj extends _int_object
 			return new object_list();
 		}
 		$filt = array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_BUG_COMMENT,CL_TASK_ROW),
 			"parent" => $bug_ol->ids(),
 			"lang_id" => array(),
 			"site_id" => array(),
@@ -331,7 +331,7 @@ class project_obj extends _int_object
 		$bug_ids = $ol2->ids();
 
 		$bug_comments = new object_list(array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_BUG_COMMENT,CL_TASK_ROW),
 			"parent" => $bug_ids,
 			"lang_id" => array(),
 			"site_id" => array(),

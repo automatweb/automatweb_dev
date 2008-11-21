@@ -73,7 +73,7 @@ class bt_stat_impl extends core
 				$stat_hrs[$o->createdby()][] = $o;
 			}
 		}
-		$types = $this->get_event_types();
+/*		$types = $this->get_event_types();
 		foreach($types as $type)
 		{
 			if($arr["request"]["stat_hr_".$type["rname"]] || !$arr["request"]["stat_hrs_end"])
@@ -107,34 +107,38 @@ class bt_stat_impl extends core
 				}
 			}
 		}
+*/
+		$classes = array();
+		if($arr["request"]["stat_hr_tasks"]) $classes[] = CL_TASK;
+		if($arr["request"]["stat_hr_calls"]) $classes[] = CL_CRM_CALL;
+		if($arr["request"]["stat_hr_meetings"]) $classes[] = CL_CRM_MEETING;
+		if($arr["request"]["stat_hr_bugs"]) $classes[] = CL_BUG;
 
-		if($arr["request"]["stat_hr_tasks"] || !$arr["request"]["stat_hrs_end"])
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"done" => 1,
+			"date" => $time_constraint,
+			"task.class_id" => $classes,//selle tahaks tegelikult et tuleks parent.class_id
+		));
+		foreach($ol->arr() as $o)
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_TASK_ROW,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"done" => 1,
-				"date" => $time_constraint,
-			));
-			foreach($ol->arr() as $o)
+			if(!$o->prop("time_real"))
 			{
-				if(!$o->prop("time_real"))
+				continue;
+			}
+			$tp = $type["types"];
+			$impl = $o->prop("impl");
+			foreach($impl as $pid)
+			{
+				$pi = get_instance(CL_CRM_PERSON);
+				$po = obj($pid);
+				$u = $pi->has_user($po);
+				if($u !== false)
 				{
-					continue;
-				}
-				$tp = $type["types"];
-				$impl = $o->prop("impl");
-				foreach($impl as $pid)
-				{
-					$pi = get_instance(CL_CRM_PERSON);
-					$po = obj($pid);
-					$u = $pi->has_user($po);
-					if($u !== false)
-					{
-						$uname = $u->name();
-						$stat_hrs[$uname][] = $o;
-					}
+					$uname = $u->name();
+					$stat_hrs[$uname][] = $o;
 				}
 			}
 		}
@@ -302,13 +306,13 @@ class bt_stat_impl extends core
 				$bugs[$com->parent()]["lastdate"] = $com->created();
 			}
 		}
-		$types = $this->get_event_types();
+//		$types = $this->get_event_types();
 		
 		$ui = get_instance(CL_USER);
 		$p = $ui->get_person_for_uid($arr["request"]["det_uid"]);
 		$startd = mktime(0,0,0, $arr["request"]["det_mon"], $startday, $arr["request"]["det_year"]);
 		$endd = mktime(23,59,59, $arr["request"]["det_mon"]+1, $endday, $arr["request"]["det_year"]);
-		foreach($types as $type)
+/*		foreach($types as $type)
 		{
 			if($arr["request"]["stat_hr_".$type["rname"]] || !$arr["request"]["stat_hrs_end"])
 			{
@@ -329,22 +333,36 @@ class bt_stat_impl extends core
 					}
 				}
 			}
-		}
-		if($arr["request"]["stat_hr_tasks"] || !$arr["request"]["stat_hrs_end"])
+		}*/
+
+		$classes = array();
+		if($arr["request"]["stat_hr_tasks"]) $classes[] = CL_TASK;
+		if($arr["request"]["stat_hr_calls"]) $classes[] = CL_CRM_CALL;
+		if($arr["request"]["stat_hr_meetings"]) $classes[] = CL_CRM_MEETING;
+		if($arr["request"]["stat_hr_bugs"]) $classes[] = CL_BUG;
+
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"impl" => $p->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"date" => $fancy_filter,
+			"task.class_id" => $classes,
+		));
+		foreach($ol->arr() as $oid => $o)
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_TASK_ROW,
-				"impl" => $p->id(),
-				"site_id" => array(),
-				"lang_id" => array(),
-				"date" => $fancy_filter,
-			));
-			foreach($ol->arr() as $oid => $o)
+			if($o->prop("parent.class_id") != CL_TASK)
+			{
+				$bugs[$o->parent()]["hrs"] += $o->prop("time_real");
+				$bugs[$o->parent()]["lastdate"] = $o->prop("date");
+			}
+			else
 			{
 				$bugs[$oid]["hrs"] += $o->prop("time_real");
 				$bugs[$oid]["lastdate"] = $o->prop("date");
 			}
 		}
+
 		$this->_insert_det_data_from_arr($bugs, &$t);
 
 		$u = get_instance(CL_USER);
@@ -549,7 +567,7 @@ class bt_stat_impl extends core
 		// table year is group, month is col
 		// row is person
 		$filt = array(
-			"class_id" => CL_BUG_COMMENT,
+			"class_id" => array(CL_BUG_COMMENT),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => $time_constraint
@@ -606,7 +624,7 @@ class bt_stat_impl extends core
 				}
 			}
 		}
-		$types = $this->get_event_types();
+/*		$types = $this->get_event_types();
 		foreach($types as $type)
 		{
 			if($arr["request"]["stat_proj_".$type["rname"]] || !$arr["request"]["stat_proj_hrs_end"])
@@ -649,51 +667,55 @@ class bt_stat_impl extends core
 					}
 				}
 			}
-		}
-		if($arr["request"]["stat_proj_tasks"] || !$arr["request"]["stat_proj_hrs_end"])
+		}*/
+
+		$classes = array();
+		if($arr["request"]["stat_hr_tasks"]) $classes[] = CL_TASK;
+		if($arr["request"]["stat_hr_calls"]) $classes[] = CL_CRM_CALL;
+		if($arr["request"]["stat_hr_meetings"]) $classes[] = CL_CRM_MEETING;
+		if($arr["request"]["stat_hr_bugs"]) $classes[] = CL_BUG;
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"done" => 1,
+			"date" => $time_constraint,
+			"task.class_id" => $classes,
+		));
+		foreach($ol->arr() as $o)
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_TASK_ROW,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"done" => 1,
-				"date" => $time_constraint,
-			));
-			foreach($ol->arr() as $o)
+			if(!$o->prop("time_real"))
 			{
-				if(!$o->prop("time_real"))
-				{
-					continue;
-				}
-				$tp = $type["types"];
-				$impl = $o->prop("impl");
-				$conn = $o->connections_to(array(
-					"type" => "RELTYPE_ROW",
-					"from.class_id" => CL_TASK,
-				));
-				$c = reset($conn);
-				$task_o = $c->from();
-				foreach($task_o->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
-				{
-					$sum_by_proj[$c->prop("to")] += $o->prop("time_real");
-					$projects[$c->prop("to")] = $c->prop("to");
-				}
-				foreach($impl as $pid)
-				{
-					$pi = get_instance(CL_CRM_PERSON);
-					$po = obj($pid);
-					$u = $pi->has_user($po);
-					if($u !== false)
-					{
-						$uname = $u->name();
-						$stat_hrs[$uname][] = array(
-							"start" => $o->prop("date"),
-							"projects" => $projects,
-							"time" => $o->prop("time_real")
-						);
-					}
-				}
+				continue;
 			}
+			$tp = $type["types"];
+			$impl = $o->prop("impl");
+			$conn = $o->connections_to(array(
+				"type" => "RELTYPE_ROW",
+				"from.class_id" => CL_TASK,
+			));
+			$c = reset($conn);
+			$task_o = $c->from();
+			foreach($task_o->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+			{
+				$sum_by_proj[$c->prop("to")] += $o->prop("time_real");
+				$projects[$c->prop("to")] = $c->prop("to");
+			}
+			foreach($impl as $pid)
+			{
+				$pi = get_instance(CL_CRM_PERSON);
+				$po = obj($pid);
+				$u = $pi->has_user($po);
+				if($u !== false)
+				{
+					$uname = $u->name();
+					$stat_hrs[$uname][] = array(
+						"start" => $o->prop("date"),
+						"projects" => $projects,
+						"time" => $o->prop("time_real")
+					);
+				}
+				}
 		}
 		$tot_sum = 0;
 		$p2uid = array();
@@ -845,7 +867,7 @@ class bt_stat_impl extends core
 					$bugs[$com->parent()]["lastdate"] = $com->created();
 				}
 			}
-		}
+		}/*
 		$types = $this->get_event_types();
 		foreach($types as $type)
 		{
@@ -879,44 +901,48 @@ class bt_stat_impl extends core
 					}
 				}
 			}
-		}
-		if($arr["request"]["stat_proj_tasks"] || !$arr["request"]["stat_proj_hrs_end"])
+		}*/
+		$classes = array();
+		if($arr["request"]["stat_hr_tasks"]) $classes[] = CL_TASK;
+		if($arr["request"]["stat_hr_calls"]) $classes[] = CL_CRM_CALL;
+		if($arr["request"]["stat_hr_meetings"]) $classes[] = CL_CRM_MEETING;
+		if($arr["request"]["stat_hr_bugs"]) $classes[] = CL_BUG;
+
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"impl" => $pid,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"date" => new obj_predicate_compare(
+				OBJ_COMP_BETWEEN_INCLUDING,
+				$req_start,
+				$req_end
+			),
+			"task.class_id" => $classes,
+		));
+		foreach($ol->arr() as $oid => $o)
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_TASK_ROW,
-				"impl" => $pid,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"date" => new obj_predicate_compare(
-					OBJ_COMP_BETWEEN_INCLUDING,
-					$req_start,
-					$req_end
-				),
+			$conn = $o->connections_to(array(
+				"type" => "RELTYPE_ROW",
+				"from.class_id" => CL_TASK,
 			));
-			foreach($ol->arr() as $oid => $o)
+			$c = reset($conn);
+			$task_o = $c->from();
+			$conn2 = $task_o->connections_from(array(
+				"type" => "RELTYPE_PROJECT",
+			));
+			$is_proj = false;
+			foreach($conn2 as $c)
 			{
-				$conn = $o->connections_to(array(
-					"type" => "RELTYPE_ROW",
-					"from.class_id" => CL_TASK,
-				));
-				$c = reset($conn);
-				$task_o = $c->from();
-				$conn2 = $task_o->connections_from(array(
-					"type" => "RELTYPE_PROJECT",
-				));
-				$is_proj = false;
-				foreach($conn2 as $c)
+				if($c->prop("to") == $arr["request"]["det_proj"])
 				{
-					if($c->prop("to") == $arr["request"]["det_proj"])
-					{
-						$is_proj = true;
-					}
+					$is_proj = true;
 				}
-				if($is_proj)
-				{
-					$bugs[$oid]["hrs"] += $o->prop("time_real");
-					$bugs[$oid]["lastdate"] = $o->prop("date");
-				}
+			}
+			if($is_proj)
+			{
+				$bugs[$oid]["hrs"] += $o->prop("time_real");
+				$bugs[$oid]["lastdate"] = $o->prop("date");
 			}
 		}
 		$this->_insert_det_data_from_arr($bugs, &$t);
