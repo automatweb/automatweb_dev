@@ -4058,7 +4058,6 @@ class task extends class_base
 					"name" => "priority",
 					"caption" => isset($ps) && $ps["priority"]["caption"] != "" ?  $ps["priority"]["caption"]  : t("Prioriteet"),
 					"align" => "center",
-					"colspan" => 2,
 				));
 			}
 			$t->define_field(array(
@@ -4229,22 +4228,22 @@ class task extends class_base
 			"priority" => html::textbox(array(
 				"name" => "priority",
 				"value" => $arr["obj_inst"]->prop("priority"),
-				"size" => 5
+				"size" => 2
 			)),
 			"num_hrs_guess" => html::textbox(array(
 				"name" => "num_hrs_guess",
 				"value" => $arr["obj_inst"]->prop("num_hrs_guess"),
-				"size" => 5
+				"size" => 3
 			)),
 			"num_hrs_real" => html::textbox(array(
 				"name" => "num_hrs_real",
 				"value" => $arr["obj_inst"]->prop("num_hrs_real"),
-				"size" => 5
+				"size" => 3
 			)),
 			"num_hrs_to_cust" => html::textbox(array(
 				"name" => "num_hrs_to_cust",
 				"value" => $arr["obj_inst"]->prop("num_hrs_to_cust"),
-				"size" => 5
+				"size" => 3
 			)),
 			"hr_price" => html::textbox(array(
 				"name" => "hr_price",
@@ -4259,7 +4258,7 @@ class task extends class_base
 			"deal_price_amount" => html::textbox(array(
 				"name" => "deal_amount",
 				"value" => $arr["obj_inst"]->prop("deal_amount"),
-				"size" => 5
+				"size" => 4
 			)),
 			"deal_price_unit" => html::textbox(array(
 				"name" => "deal_unit",

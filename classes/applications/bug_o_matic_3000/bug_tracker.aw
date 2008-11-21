@@ -1259,7 +1259,7 @@ class bug_tracker extends class_base
 					'url' => $this->mk_my_orb('change', array(
 						'id' => $bug_id,
 						'return_url' => get_ru()
-					), CL_BUG),
+					), $bug->class_id()),
 					'caption' => $bug->name()
 				)),
 				'bug_lifespan' => ($bug->class_id() == CL_BUG) ? $bug->get_lifespan() : "",

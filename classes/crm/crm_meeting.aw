@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.111 2008/11/18 19:00:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.112 2008/11/21 15:13:11 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -395,10 +395,10 @@ class crm_meeting extends task
 				break;
 
 			case "add_clauses":
-				if (!is_object($arr["obj_inst"]))
-				{
+//				if (!is_object($arr["obj_inst"]))
+//				{
 					return PROIP_IGNORE;
-				}
+//				}
 
 				$has_work_time = $arr["obj_inst"]->has_work_time();
 				$data["options"] = array(
@@ -411,7 +411,7 @@ class crm_meeting extends task
 				);
 				$data["value"] = array(
 					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
-					"is_done" => $arr["obj_inst"]->prop("is_done") ? 1 : 0,
+					"is_done" => $arr["obj_inst"]->prop("is_done") ? 8 : 0,
 					"whole_day" => $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
 					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
@@ -766,6 +766,9 @@ class crm_meeting extends task
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "hrs_table":
+				$this->save_add_clauses($arr);
+				break;
 			case "parts_table":
 				$this->save_parts_table($arr);
 				break;
@@ -791,17 +794,8 @@ class crm_meeting extends task
 				break;
 		
 			case "add_clauses":
-				$arr["obj_inst"]->set_status($data["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
-				$arr["obj_inst"]->set_prop("is_done", $data["value"]["is_done"] ? 8 : 0);
-				$arr["obj_inst"]->set_prop("whole_day", $data["value"]["whole_day"] ? 1 : 0);
-				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
-				$arr["obj_inst"]->set_prop("send_bill", $data["value"]["send_bill"] ? 1 : 0);
-//				$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
-				if($data["value"]["is_work"])
-				{
-					$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"), "time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
-					$arr["obj_inst"]->set_primary_row($rowdata);
-				}
+				return PROP_IGNORE;
+				$this->save_add_clauses($arr);
 				break;
 
 			case "is_done":
@@ -1217,11 +1211,26 @@ class crm_meeting extends task
 		}
 	}
 
+	function save_add_clauses($arr)
+	{
+		$arr["obj_inst"]->set_status($arr["request"]["add_clauses"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
+		$arr["obj_inst"]->set_prop("is_done", $arr["request"]["add_clauses"]["is_done"] ? 8 : 0);
+		$arr["obj_inst"]->set_prop("whole_day", $arr["request"]["add_clauses"]["whole_day"] ? 1 : 0);
+		$arr["obj_inst"]->set_prop("is_personal", $arr["request"]["add_clauses"]["is_personal"] ? 1 : 0);
+		$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
+//		$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
+		if($arr["request"]["add_clauses"]["is_work"])
+		{
+			$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"), "time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
+			$arr["obj_inst"]->set_primary_row($rowdata);
+		}
+	}
+
 	function callback_pre_save($arr)
 	{
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
 		$hrs = floor($len / 900) / 4;
-		
+
 		// write length to time fields if empty
 		if ($arr["obj_inst"]->prop("time_to_cust") == "")
 		{
@@ -1299,6 +1308,53 @@ class crm_meeting extends task
 			"caption" => t("Arve number"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "add_clauses",
+			"caption" => t("Lisatingimused"),
+			"align" => "center"
+		));
+
+			$t->define_field(array(
+				"name" => "status",
+				"caption" => t("Aktiivne"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			$t->define_field(array(
+				"name" => "is_done",
+				"caption" => t("Tehtud"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			$t->define_field(array(
+				"name" => "whole_day",
+				"caption" => t("Terve p&auml;ev"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			$t->define_field(array(
+				"name" => "is_personal",
+				"caption" => t("Isiklik"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			$t->define_field(array(
+				"name" => "send_bill",
+				"caption" => t("Arvele"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+
+			$has_work_time = $arr["obj_inst"]->has_work_time();
+			if(!$has_work_time)
+			{
+				$t->define_field(array(
+					"name" => "is_work",
+					"caption" => t("Arvele"),
+					"align" => "center",
+					"parent" => "add_clausels",
+				));
+			}
 
 		// small conversion - if set, create a relation instead and clear, so that we can have multiple
 		if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("bill_no") ))
@@ -1356,6 +1412,36 @@ class crm_meeting extends task
 				"size" => 5
 			)),
 			"bill_no" => $bno,
+
+			"status" => html::checkbox(array(
+				"name" => "add_clauses[status]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
+			)),
+			"is_done" => html::checkbox(array(
+				"name" => "add_clauses[is_done]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("is_done") ? 8 : 0,
+			)),
+			"whole_day" => html::checkbox(array(
+				"name" => "add_clauses[whole_day]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
+			)),
+			"is_personal" => html::checkbox(array(
+				"name" => "add_clauses[is_personal]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
+			)),
+			"send_bill" => html::checkbox(array(
+				"name" => "add_clauses[send_bill]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+			)),
+			"is_work" => html::checkbox(array(
+				"name" => "add_clauses[is_work]",
+				"value" => 1,
+			)),
 		));
 	}
 
@@ -1500,7 +1586,7 @@ class crm_meeting extends task
 		$o = obj($arr["oid"]);
 		$o->set_prop("time_real", $o->prop("time_real") + $arr["hours"]);
 		$o->set_prop("time_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
-		$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?1:0);
+		$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?8:0);
 		$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
 		$o->set_prop("content", $arr["data"]["desc"]["value"]);
 		$o->set_prop("end", time());
