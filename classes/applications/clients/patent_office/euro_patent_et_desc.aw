@@ -81,6 +81,7 @@ class euro_patent_et_desc extends intellectual_property
 		);
 		$this->pdf_file_name = "EuroopaPatendiT6lkeTaotlus";
 		$this->show_template = "show_epat.tpl";
+		$this->show_sent_template = "show_sent_epat.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("epat_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("epat_desc_trans"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name_et", "epat_nr"));

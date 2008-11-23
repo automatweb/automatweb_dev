@@ -214,6 +214,7 @@ class patent_patent extends intellectual_property
 		);
 		$this->pdf_file_name = "Patenditaotlus";
 		$this->show_template = "show_pat.tpl";
+		$this->show_sent_template = "show_sent_pat.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("prio_convention_date","prio_prevapplicationsep_date","prio_prevapplicationadd_date","prio_prevapplication_date","other_first_application_data_date","other_bio_date","other_datapub_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("attachment_invention_description", "attachment_seq", "attachment_demand", "attachment_summary_et", "attachment_summary_en", "attachment_fee", "attachment_warrant", "attachment_prio", "attachment_bio", "attachment_other"));
 		$this->text_area_vars = array_merge($this->text_area_vars, array("other_datapub_data"));

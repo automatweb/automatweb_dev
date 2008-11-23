@@ -392,7 +392,8 @@ abstract class intellectual_property extends class_base
 	**/
 	function show($arr)
 	{
-		$this->read_template($this->show_template);
+		$tpl = $_GET["sent_form"] ? $this->show_sent_template : $this->show_template;
+		$this->read_template($tpl);
 
 		if($this->can("view", $_GET["trademark_id"]))
 		{
@@ -464,6 +465,7 @@ abstract class intellectual_property extends class_base
 		}
 
 		$stat_obj = $this->get_status($ob);
+
 		if($_POST["send"])
 		{
 			$this->set_sent(array("add_obj" => $arr["add_obj"], ));
@@ -3177,6 +3179,7 @@ abstract class intellectual_property extends class_base
 			$pat_l = "";
 			foreach($objects_array as $key => $patent)
 			{
+				$sent_form = 0;
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
 
@@ -3201,6 +3204,11 @@ abstract class intellectual_property extends class_base
 					else
 					{
 						$date = date("d.m.Y" , $patent->created());
+					}
+
+					if ($status->prop("verified"))
+					{
+						$sent_form = 1;
 					}
 				}
 
@@ -3244,6 +3252,7 @@ abstract class intellectual_property extends class_base
 
 				$view_url = $this->mk_my_orb("show", array(
 					"print" => 1,
+					"sent_form" => $sent_form,
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign
@@ -3270,7 +3279,7 @@ abstract class intellectual_property extends class_base
 					"date" 		=> $date,
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $applicant_str,
-					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
+					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Esitatud") : ""),
 					"name" 	 	=> $status->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,
@@ -3370,11 +3379,14 @@ abstract class intellectual_property extends class_base
 			{
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
+				$sent_form = 0;
+
 				if($send_patent == $patent->id() && $re["status"] == 1 && !$status->prop("nr"))
 				{
 					$_SESSION["patent"]["id"] = $patent->id();
 					$asd = $this->set_sent(array("add_obj" => $arr["alias"]["to"]));
 				}
+
 				if($arr["unsigned"])
 				{
 					if($status->prop("nr")) continue;
@@ -3390,6 +3402,11 @@ abstract class intellectual_property extends class_base
 					else
 					{
 						$date = date("d.m.Y" , $patent->created());
+					}
+
+					if ($status->prop("verified"))
+					{
+						$sent_form = 1;
 					}
 				}
 
@@ -3432,6 +3449,7 @@ abstract class intellectual_property extends class_base
 
 				$view_url = $this->mk_my_orb("show", array(
 					"print" => 1,
+					"sent_form" => $sent_form,
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign,
@@ -3460,7 +3478,7 @@ abstract class intellectual_property extends class_base
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $applicant_str,
 					"type" 		=> $this->types[$patent->prop("type")],
-					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
+					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Esitatud") : ""),
 					"name" 	 	=> $status->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,
@@ -3560,6 +3578,8 @@ abstract class intellectual_property extends class_base
 			{
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
+				$sent_form = 0;
+
 				if($send_patent == $patent->id() && $re["status"] == 1 && !$status->prop("nr"))
 				{
 					$_SESSION["patent"]["id"] = $patent->id();
@@ -3580,6 +3600,11 @@ abstract class intellectual_property extends class_base
 					else
 					{
 						$date = date("d.m.Y" , $patent->created());
+					}
+
+					if ($status->prop("verified"))
+					{
+						$sent_form = 1;
 					}
 				}
 
@@ -3621,6 +3646,7 @@ abstract class intellectual_property extends class_base
 				}
 				$view_url = $this->mk_my_orb("show", array(
 					"print" => 1,
+					"sent_form" => $sent_form,
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign,
@@ -3648,7 +3674,7 @@ abstract class intellectual_property extends class_base
 					"date" 		=> $date,
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $applicant_str,
-					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
+					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Esitatud") : ""),
 					"name" 	 	=> $status->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,
@@ -3749,11 +3775,14 @@ abstract class intellectual_property extends class_base
 			{
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
+				$sent_form = 0;
+
 				if($send_patent == $patent->id() && $re["status"] == 1 && !$status->prop("nr"))
 				{
 					$_SESSION["patent"]["id"] = $patent->id();
 					$asd = $this->set_sent(array("add_obj" => $arr["alias"]["to"]));
 				}
+
 				if($arr["unsigned"])
 				{
 					if($status->prop("nr")) continue;
@@ -3769,6 +3798,11 @@ abstract class intellectual_property extends class_base
 					else
 					{
 						$date = date("d.m.Y" , $patent->created());
+					}
+
+					if ($status->prop("verified"))
+					{
+						$sent_form = 1;
 					}
 				}
 
@@ -3811,6 +3845,7 @@ abstract class intellectual_property extends class_base
 
 				$view_url = $this->mk_my_orb("show", array(
 					"print" => 1,
+					"sent_form" => $sent_form,
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign
@@ -3837,7 +3872,7 @@ abstract class intellectual_property extends class_base
 					"date" 		=> $date,
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $applicant_str,
-					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
+					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Esitatud") : ""),
 					"name" 	 	=> $status->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,
@@ -3938,11 +3973,14 @@ abstract class intellectual_property extends class_base
 			{
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
+				$sent_form = 0;
+
 				if($send_patent == $patent->id() && $re["status"] == 1 && !$status->prop("nr"))
 				{
 					$_SESSION["patent"]["id"] = $patent->id();
 					$asd = $this->set_sent(array("add_obj" => $arr["alias"]["to"]));
 				}
+
 				if($arr["unsigned"])
 				{
 					if($status->prop("nr")) continue;
@@ -3958,6 +3996,11 @@ abstract class intellectual_property extends class_base
 					else
 					{
 						$date = date("d.m.Y" , $patent->created());
+					}
+
+					if ($status->prop("verified"))
+					{
+						$sent_form = 1;
 					}
 				}
 
@@ -4000,6 +4043,7 @@ abstract class intellectual_property extends class_base
 
 				$view_url = $this->mk_my_orb("show", array(
 					"print" => 1,
+					"sent_form" => $sent_form,
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign
@@ -4026,7 +4070,7 @@ abstract class intellectual_property extends class_base
 					"date" 		=> $date,
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $applicant_str,
-					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
+					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Esitatud") : ""),
 					"name" 	 	=> $status->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,

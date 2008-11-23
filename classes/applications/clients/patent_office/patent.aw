@@ -118,6 +118,7 @@ class patent extends intellectual_property
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
 		$this->pdf_file_name = "Kaubamargitaotlus";
 		$this->show_template = "show_tm.tpl";
+		$this->show_sent_template = "show_sent_tm.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("exhibition_date", "convention_date"));
 		$this->file_upload_vars = array_merge($this->file_upload_vars, array("reproduction" , "g_statues","c_statues"));
 		$this->save_fee_vars = array_merge($this->save_fee_vars, array("classes_fee"));
