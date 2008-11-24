@@ -8,6 +8,35 @@ class task_object extends _int_object
 		parent::_int_object();
 	}
 
+	function get_prop($pn)
+	{
+		switch($pn)
+		{
+			case "time_real":
+				if($this->class_id() == CL_TASK)
+				{
+					$pn = "num_hrs_real";
+				}
+				break;
+			case "time_to_cust":
+				if($this->class_id() == CL_TASK)
+				{
+					$pn = "num_hrs_to_cust";
+				}
+				break;
+			case "time_guess":
+				if($this->class_id() == CL_TASK)
+				{
+					$pn = "num_hrs_guess";
+				}
+				break;
+		}
+
+		$ret =  parent::get_prop($pn);
+		return $ret;
+	}
+
+
 	function set_prop($pn, $pv)
 	{
 		switch($pn)
@@ -22,6 +51,7 @@ class task_object extends _int_object
 				{
 					return "";
 				}
+				$pv = str_replace("," , "." , $pv);
 				break;
 			case "time_to_cust":
 				if($this->class_id() == CL_TASK)
@@ -33,6 +63,24 @@ class task_object extends _int_object
 				{
 					return "";
 				}
+				$pv = str_replace("," , "." , $pv);
+				break;
+			case "time_guess":
+				if($this->class_id() == CL_TASK)
+				{
+					$pn = "num_hrs_guess";
+				}
+			case "num_hrs_guess":
+				if($GLOBALS["do_not_change_task_guess_time"])
+				{
+					return "";
+				}
+				$pv = str_replace("," , "." , $pv);
+				break;
+			case "hr_price":
+			case "deal_amount":
+			case "deal_price":
+				$pv = str_replace("," , "." , $pv);
 				break;
 		}
 

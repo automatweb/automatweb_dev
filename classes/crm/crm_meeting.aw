@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.112 2008/11/21 15:13:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.113 2008/11/24 21:24:42 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -25,15 +25,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 			@caption Lisatingimused
 
 		@layout top_2way_right type=vbox parent=top_2way
-
-			@property start1 type=datetime_select field=start parent=top_2way_right table=planner
+			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
 			@caption Algus
 
-			@property end type=datetime_select parent=top_2way_right table=planner
+			@property end type=datetime_select table=planner parent=top_2way_right
 			@caption L&otilde;peb
 
-	@property hrs_table type=table no_caption=1 store=no parent=top_bit
+			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
+			@caption T&auml;htaeg
 
+
+	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
 @layout center_bit type=hbox 
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
@@ -72,14 +74,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 	@property files_tb type=toolbar no_caption=1 store=no parent=files_bit
 	@property files_table type=table no_caption=1 store=no parent=files_bit
 
-
-
+@layout bills_bit type=vbox closeable=1 area_caption=Arved
+	@property bills_tb type=toolbar no_caption=1 store=no parent=bills_bit
+	@property bills_table type=table no_caption=1 store=no parent=bills_bit
 
 
 @layout center_bit_bottom type=vbox closeable=1 area_caption=Osapooled
 
 #	@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_bottom
-
 #	@property proj_table type=table no_caption=1 store=no parent=center_bit_bottom
 #	@property parts_table type=table no_caption=1 store=no parent=center_bit_bottom
 
@@ -169,6 +171,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property hr_price type=textbox size=5 field=meta method=serialize 
 @caption Tunni hind
+
+@property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
+@caption Eelarvesse
+
+
+@property priority type=textbox size=5 table=planner field=priority
+@caption Prioriteet
+
+@property hr_price_currency type=select field=meta method=serialize
+@caption Valuuta
+
+	@property deal_unit type=textbox size=5 table=planner
+	@caption &Uuml;hik
+
+	@property deal_amount type=textbox size=5 table=planner
+	@caption Kogus
+
+	@property deal_price type=textbox size=5 table=planner
+	@caption Kokkuleppehind
+
+	@property deal_has_tax type=checkbox size=5 table=planner
+	@caption Sisestati koos k&auml;ibemaksuga
 
 @property summary type=textarea cols=80 rows=30 table=planner field=description
 @caption Kokkuv&otilde;te
@@ -355,6 +379,11 @@ class crm_meeting extends task
 		$i = get_instance(CL_TASK);
 		switch($data['name'])
 		{
+			case "comment":
+				$data["type"] = "textarea";
+				$data["rows"] = 2;
+				$data["cols"] = 30;
+				break;
 			case "co_tb":
 				$this->_get_co_tb($arr);
 				break;
@@ -390,6 +419,14 @@ class crm_meeting extends task
 				$i->_files_table($arr);
 				break;
 
+			case "bills_tb":
+				$this->_bills_tb($arr);
+				break;
+
+			case "bills_table":
+				$this->_bills_table($arr);
+				break;
+
 			case "hrs_table":
 				$this->_hrs_table($arr);
 				break;
@@ -397,7 +434,7 @@ class crm_meeting extends task
 			case "add_clauses":
 //				if (!is_object($arr["obj_inst"]))
 //				{
-					return PROIP_IGNORE;
+					return PROP_IGNORE;
 //				}
 
 				$has_work_time = $arr["obj_inst"]->has_work_time();
@@ -423,7 +460,6 @@ class crm_meeting extends task
 				}
 
 				break;
-
 			case "is_done":
 			case "status":
 			case "whole_day":
@@ -435,6 +471,13 @@ class crm_meeting extends task
 			case "hr_price":
 			case "bill_no":
 			case "is_work":
+			case "priority":
+			case "hr_price_currency":
+			case "in_budget":
+			case "deal_unit":
+			case "deal_amount":
+			case "deal_price":
+			case "deal_has_tax":
 				return PROP_IGNORE;
 
 			case "controller_disp":
@@ -878,7 +921,7 @@ class crm_meeting extends task
 		};
 		return $retval;
 	}
-
+/*
 	function callback_post_save($arr)
 	{
 
@@ -962,7 +1005,7 @@ class crm_meeting extends task
 		}
 	}
 		
-
+*/
 	/**
 	@attrib name=submit_delete_participants_from_calendar
 	@param id required type=int acl=view
@@ -1210,22 +1253,7 @@ class crm_meeting extends task
 			$arr["set_resource"] = $_GET["set_resource"];
 		}
 	}
-
-	function save_add_clauses($arr)
-	{
-		$arr["obj_inst"]->set_status($arr["request"]["add_clauses"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
-		$arr["obj_inst"]->set_prop("is_done", $arr["request"]["add_clauses"]["is_done"] ? 8 : 0);
-		$arr["obj_inst"]->set_prop("whole_day", $arr["request"]["add_clauses"]["whole_day"] ? 1 : 0);
-		$arr["obj_inst"]->set_prop("is_personal", $arr["request"]["add_clauses"]["is_personal"] ? 1 : 0);
-		$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
-//		$arr["obj_inst"]->set_prop("is_work", $data["value"]["is_work"] ? 1 : 0);
-		if($arr["request"]["add_clauses"]["is_work"])
-		{
-			$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"), "time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
-			$arr["obj_inst"]->set_primary_row($rowdata);
-		}
-	}
-
+/*
 	function callback_pre_save($arr)
 	{
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
@@ -1265,13 +1293,13 @@ class crm_meeting extends task
 			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
 		}
 	}
-
+*/
 	function callback_generate_scripts($arr)
 	{
 		$task = get_instance(CL_TASK);
 		return $task->callback_generate_scripts($arr);
 	}
-
+/*
 	function _hrs_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -1444,7 +1472,7 @@ class crm_meeting extends task
 			)),
 		));
 	}
-
+*/
 	/**
 		@attrib name=delete_rels
 	**/

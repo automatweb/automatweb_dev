@@ -34,8 +34,6 @@
 			@caption T&auml;htaeg
 
 
-
-
 @layout center_bit type=vbox parent=top_bit
 
 	@property hrs_table type=table no_caption=1 store=no parent=center_bit
@@ -73,6 +71,10 @@
 @layout files_bit type=vbox closeable=1 area_caption=Manused
 	@property files_tb type=toolbar no_caption=1 store=no parent=files_bit
 	@property files_table type=table no_caption=1 store=no parent=files_bit
+
+@layout bills_bit type=vbox closeable=1 area_caption=Arved
+	@property bills_tb type=toolbar no_caption=1 store=no parent=bills_bit
+	@property bills_table type=table no_caption=1 store=no parent=bills_bit
 
 #@layout files_pit type=vbox
 #	@property files_tb type=toolbar no_caption=1 store=no parent=files_pit
@@ -889,6 +891,34 @@ class task extends class_base
 		$this->person = $u->get_current_person();
 	}
 
+	function callback_mod_layout(&$arr)
+	{
+		$type = array(
+			CL_TASK => t("Toimetusele"),	
+			CL_CRM_MEETING => t("Kohtumisele"),	
+			CL_CRM_CALL => t("K&otilde;nele"),	
+		);
+		switch($arr["name"])
+		{
+			case "customer_bit":
+				$arr["area_caption"] = sprintf(t("Tellijad: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
+				break;
+			case "project_bit":
+				$arr["area_caption"] = sprintf(t("Projektid: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
+				break; 
+			case "impl_bit":
+				$arr["area_caption"] = sprintf(t("Osalejad: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
+				break;
+ 			case "files_bit":
+				$arr["area_caption"] = sprintf(t("Manused: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
+				break;
+			case "bills_bit":
+				$arr["area_caption"] = sprintf(t("Arved: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
+				break;
+		}
+		return true;
+	}
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -907,6 +937,11 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "comment":
+				$data["type"] = "textarea";
+				$data["rows"] = 2;
+				$data["cols"] = 30;
+				break;
 			case "co_tb":
 				$this->_get_co_tb($arr);
 				break;
@@ -1056,7 +1091,16 @@ class task extends class_base
 				$this->_files_table($arr);
 				break;
 
+			case "bills_tb":
+				$this->_bills_tb($arr);
+				break;
+
+			case "bills_table":
+				$this->_bills_table($arr);
+				break;
+
 			case "add_clauses":
+				return PROP_IGNORE;
 				$has_work_time = $arr["obj_inst"]->has_work_time();
 				$data["options"] = array(
 //					"status" => t("Aktiivne"),
@@ -1542,6 +1586,9 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "hrs_table":
+				return $this->save_add_clauses($arr);
+				break;
 			case "parts_table":
 				$this->save_parts_table($arr);
 				break;
@@ -1565,8 +1612,12 @@ class task extends class_base
 				$this->save_parts_table($arr);
 				break;
 			case "add_clauses":
+				return PROP_IGNORE;
+				$this->save_add_clauses($arr);
+				break;
+
 //				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
-				$arr["obj_inst"]->set_prop("is_done", $prop["value"]["is_done"] ? 8 : 0);
+	/*			$arr["obj_inst"]->set_prop("is_done", $prop["value"]["is_done"] ? 8 : 0);
 				$arr["obj_inst"]->set_prop("whole_day", $prop["value"]["whole_day"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_goal", $prop["value"]["is_goal"] ? 1 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $prop["value"]["is_personal"] ? 1 : 0);
@@ -1591,7 +1642,7 @@ class task extends class_base
 				}
 
 				break;
-
+*/
 			case "is_done":
 			case "status":
 			case "whole_day":
@@ -1798,7 +1849,14 @@ class task extends class_base
 		{
 			$arr["obj_inst"]->set_name($this->_get_default_name($arr["obj_inst"]));
 		}
+		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
+		$hrs = floor($len / 900) / 4;
 
+		// write length to time fields if empty
+		if ($arr["obj_inst"]->prop("time_to_cust") == "")
+		{
+			$arr["obj_inst"]->set_prop("time_to_cust", $hrs);
+		}
 		if ($arr["request"]["set_resource"] != "")
 		{
 			$arr["obj_inst"]->connect(array(
@@ -1898,7 +1956,10 @@ class task extends class_base
 				));
 			}
 		}
-
+		if ($this->add_to_proj)
+		{
+			$arr["obj_inst"]->create_brother($this->add_to_proj);
+		}
 		if (is_array($this->post_save_add_parts))
 		{
 			foreach(safe_array($this->post_save_add_parts) as $person)
@@ -3495,7 +3556,6 @@ class task extends class_base
 				$this->stop_error[$arr["ident"]] = $rv;
 				// do something !!
 			}
-
 		}
 		else
 		if ($arr["s_action"] == "start")
@@ -4062,14 +4122,14 @@ class task extends class_base
 			}
 			$t->define_field(array(
 				"name" => "hours",
-				"caption" => t("Tunde"),
+				"caption" => t("Tundide kulu"),
 				"align" => "center",
 			));
 			if (!$has || isset($ps["num_hrs_guess"]))
 			{
 				$t->define_field(array(
-					"name" => "num_hrs_guess",
-					"caption" => isset($ps) && $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoositav"),
+					"name" => "time_guess",
+					"caption" => isset($ps) && $ps["num_hrs_guess"]["caption"] != "" ?  $ps["num_hrs_guess"]["caption"] : t("Prognoos"),
 					"align" => "center",
 					"parent" => "hours",
 				));
@@ -4077,7 +4137,7 @@ class task extends class_base
 			if (!$has || isset($ps["num_hrs_real"]))
 			{
 				$t->define_field(array(
-					"name" => "num_hrs_real",
+					"name" => "time_real",
 					"caption" => isset($ps) && $ps["num_hrs_real"]["caption"] != "" ? $ps["num_hrs_real"]["caption"] : t("Tegelik"),
 					"align" => "center",
 					"parent" => "hours",
@@ -4086,7 +4146,7 @@ class task extends class_base
 			if (!$has || isset($ps["num_hrs_to_cust"]))
 			{
 				$t->define_field(array(
-					"name" => "num_hrs_to_cust",
+					"name" => "time_to_cust",
 					"caption" => isset($ps) && $ps["num_hrs_to_cust"]["caption"] != "" ? $ps["num_hrs_to_cust"]["caption"] : t("Kliendile"),
 					"align" => "center",
 					"parent" => "hours",
@@ -4097,7 +4157,8 @@ class task extends class_base
 				$t->define_field(array(
 					"name" => "hr_price",
 					"caption" => isset($ps) && $ps["hr_price"]["caption"] != "" ?  $ps["hr_price"]["caption"] : t("Tunnihind"),
-					"align" => "center"
+					"align" => "center",
+					"parent" => "hours",
 				));
 			}
 			if (!$has || isset($ps["deal_price"]))
@@ -4141,7 +4202,76 @@ class task extends class_base
 					"align" => "center"
 				));
 			}
-			if (!$has || isset($ps["bill_no"]))
+
+		$t->define_field(array(
+			"name" => "add_clauses",
+			"caption" => t("Lisatingimused"),
+			"align" => "center"
+		));
+
+			$t->define_field(array(
+				"name" => "status",
+				"caption" => t("Aktiivne"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			$t->define_field(array(
+				"name" => "is_done",
+				"caption" => t("Tehtud"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			if($arr["obj_inst"]->class_id() != CL_CRM_CALL)
+			{
+					$t->define_field(array(
+					"name" => "whole_day",
+					"caption" => t("Terve p&auml;ev"),
+					"align" => "center",
+					"parent" => "add_clauses",
+				));
+			}
+						
+			if($arr["obj_inst"]->class_id() == CL_TASK)$t->define_field(array(
+				"name" => "is_goal",
+				"caption" =>  t("Verstapost"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+
+			$t->define_field(array(
+				"name" => "is_personal",
+				"caption" => t("Isiklik"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+			$t->define_field(array(
+				"name" => "send_bill",
+				"caption" => t("Arvele"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+
+			if($arr["obj_inst"]->class_id() == CL_TASK)$t->define_field(array(
+				"name" => "in_budget",
+				"caption" =>  t("Eelarvesse"),
+				"align" => "center",
+				"parent" => "add_clauses",
+			));
+
+			$has_work_time = $arr["obj_inst"]->has_work_time();
+
+			if(!$has_work_time)
+			{
+				$t->define_field(array(
+					"name" => "is_work",
+					"caption" => t("T&ouml;&ouml;aeg"),
+					"align" => "center",
+					"parent" => "add_clauses",
+				));
+			}
+
+
+/*			if (!$has || isset($ps["bill_no"]))
 			{
 				$t->define_field(array(
 					"name" => "bill_no",
@@ -4164,7 +4294,7 @@ class task extends class_base
 					"caption" => isset($ps) && $ps["service_type"]["caption"] != "" ?  $ps["service_type"]["caption"] : t("Teenuse liik"),
 					"align" => "center"
 				));
-			}
+			}*/
 
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
@@ -4185,7 +4315,7 @@ class task extends class_base
 
 
 		// small conversion - if set, create a relation instead and clear, so that we can have multiple
-		if ($this->can("view", $arr["obj_inst"]->prop("bill_no") ))
+/*		if ($this->can("view", $arr["obj_inst"]->prop("bill_no") ))
 		{
 			$arr["obj_inst"]->connect(array(
 				"to" => $arr["obj_inst"]->prop("bill_no"),
@@ -4222,38 +4352,39 @@ class task extends class_base
 			"class_id" => CL_CRM_SERVICE_TYPE,
 			"lang_id" => array(),
 			"site_id" => array()
-		));
+		));*/
 		$t->non_filtered = 1;
+
 		$t->define_data(array(
 			"priority" => html::textbox(array(
 				"name" => "priority",
 				"value" => $arr["obj_inst"]->prop("priority"),
 				"size" => 2
 			)),
-			"num_hrs_guess" => html::textbox(array(
-				"name" => "num_hrs_guess",
-				"value" => $arr["obj_inst"]->prop("num_hrs_guess"),
-				"size" => 3
+			"time_guess" => html::textbox(array(
+				"name" => ($arr["obj_inst"]->class_id() != CL_TASK) ? "time_guess" : "num_hrs_guess",
+				"value" => is_object($arr["obj_inst"]) ? ($arr["obj_inst"]->class_id() != CL_TASK ? $arr["obj_inst"]->prop("time_guess") : $arr["obj_inst"]->prop("num_hrs_guess")) : 0,
+				"size" => 5
 			)),
-			"num_hrs_real" => html::textbox(array(
-				"name" => "num_hrs_real",
-				"value" => $arr["obj_inst"]->prop("num_hrs_real"),
-				"size" => 3
+			"time_real" => html::textbox(array(
+				"name" => ($arr["obj_inst"]->class_id() != CL_TASK) ? "time_real" : "num_hrs_real",
+				"value" => is_object($arr["obj_inst"]) ? ($arr["obj_inst"]->class_id() != CL_TASK ? $arr["obj_inst"]->prop("time_real") : $arr["obj_inst"]->prop("num_hrs_real")): 0,
+				"size" => 5
 			)),
-			"num_hrs_to_cust" => html::textbox(array(
-				"name" => "num_hrs_to_cust",
-				"value" => $arr["obj_inst"]->prop("num_hrs_to_cust"),
-				"size" => 3
+			"time_to_cust" => html::textbox(array(
+				"name" => ($arr["obj_inst"]->class_id() != CL_TASK) ? "time_to_cust" :"num_hrs_to_cust",
+				"value" => is_object($arr["obj_inst"]) ? ($arr["obj_inst"]->class_id() != CL_TASK ? $arr["obj_inst"]->prop("time_to_cust") : $arr["obj_inst"]->prop("num_hrs_to_cust")): 0,
+				"size" => 5
 			)),
 			"hr_price" => html::textbox(array(
 				"name" => "hr_price",
 				"value" => $arr["obj_inst"]->prop("hr_price"),
-				"size" => 5
+				"size" => 3
 			)),
 			"deal_price_price" => html::textbox(array(
 				"name" => "deal_price",
 				"value" => $arr["obj_inst"]->prop("deal_price"),
-				"size" => 5
+				"size" => 4
 			)),
 			"deal_price_amount" => html::textbox(array(
 				"name" => "deal_amount",
@@ -4263,7 +4394,7 @@ class task extends class_base
 			"deal_price_unit" => html::textbox(array(
 				"name" => "deal_unit",
 				"value" => $arr["obj_inst"]->prop("deal_unit"),
-				"size" => 5
+				"size" => 4
 			)),
 			"deal_price_km" => html::checkbox(array(
 				"name" => "deal_has_tax",
@@ -4275,14 +4406,87 @@ class task extends class_base
 				"options" => $curs,
 				"value" => $arr["obj_inst"]->prop("hr_price_currency"),
 			)),
-			"bill_no" => $bno,
-			"code" => $arr["obj_inst"]->prop("code"),
-			"service_type" => html::select(array(
+//			"bill_no" => $bno,
+		//	"code" => $arr["obj_inst"]->prop("code"),
+/*			"service_type" => html::select(array(
 				"name" => "service_type",
 				"options" => array("" => "") + $stypes->names(),
 				"value" => $arr["obj_inst"]->prop("service_type")
-			))
+			))*/
+
+			"status" => html::checkbox(array(
+				"name" => "add_clauses[status]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
+			)),
+			"is_done" => html::checkbox(array(
+				"name" => "add_clauses[is_done]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("is_done") ? 8 : 0,
+			)),
+			"whole_day" => html::checkbox(array(
+				"name" => "add_clauses[whole_day]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
+			)),
+			"is_personal" => html::checkbox(array(
+				"name" => "add_clauses[is_personal]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
+			)),
+			"send_bill" => html::checkbox(array(
+				"name" => "add_clauses[send_bill]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+			)),
+			"is_work" => html::checkbox(array(
+				"name" => "add_clauses[is_work]",
+				"value" => 1,
+			)),
+			"in_budget" => html::checkbox(array(
+				"name" => "add_clauses[in_budget]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("in_budget") ? 1 : 0,
+			)),
+			"is_goal" => html::checkbox(array(
+				"name" => "add_clauses[is_goal]",
+				"value" => 1,
+				"checked" => is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("is_goal") ? 1 : 0,
+			)),
 		));
+	}
+
+	function save_add_clauses($arr)
+	{
+		$arr["obj_inst"]->set_status($arr["request"]["add_clauses"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
+		$arr["obj_inst"]->set_prop("is_done", $arr["request"]["add_clauses"]["is_done"] ? 8 : 0);
+		if($arr["obj_inst"]->class_id() != CL_CRM_CALL)
+		{		$arr["obj_inst"]->set_prop("whole_day", $arr["request"]["add_clauses"]["whole_day"] ? 1 : 0);
+		}
+		if($arr["obj_inst"]->class_id() == CL_TASK)
+		{
+			$arr["obj_inst"]->set_prop("is_goal", $arr["request"]["add_clauses"]["is_goal"] ? 1 : 0);
+		}
+		$arr["obj_inst"]->set_prop("is_personal", $arr["request"]["add_clauses"]["is_personal"] ? 1 : 0);
+		$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
+		$arr["obj_inst"]->set_prop("in_budget",$arr["request"]["add_clauses"]["in_budget"] ? 1 : 0);
+		if($arr["request"]["add_clauses"]["is_work"])
+		{
+			$rowdata = array("time_real" => $arr["obj_inst"]->prop("time_real"), "time_to_cust" => $arr["obj_inst"]->prop("time_to_cust"));
+			$arr["obj_inst"]->set_primary_row($rowdata);
+		}
+
+		if(!$arr["request"]["add_clauses"]["send_bill"] || $arr["obj_inst"]->if_can_set_billable())
+		{
+			$arr["obj_inst"]->set_prop("send_bill", $arr["request"]["add_clauses"]["send_bill"] ? 1 : 0);
+		}
+		else
+		{
+			print sprintf(t("Puuduvad &otilde;igused m&auml;&auml;rata tehtud t&ouml;id arvele! P&ouml;&ouml;rduge kliendihaldur %s poole!"), $arr["obj_inst"]->get_client_mgr_name());
+			return PROP_ERROR;
+		}
+		return PROP_OK;
+
 	}
 
 	function __parts_sort($a, $b)
@@ -4839,31 +5043,43 @@ class task extends class_base
 			"name" => "orderer",
 			"caption" => t("Tellija"),
 			"sortable" => 1,
-			"width" => "30%"
+			"width" => "60%"
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"parent" => "orderer",
 		));
 		$t->define_field(array(
 			"name" => "phone",
 			"caption" => t("Telefon"),
 			"sortable" => 1,
-			"width" => "30%"
+			"parent" => "orderer",
 		));
 		$t->define_field(array(
 			"name" => "contact",
 			"caption" => t("Kontaktisik"),
 			"sortable" => 1,
-			"width" => "20%"
+			"parent" => "orderer",
+		));
+		$t->define_field(array(
+			"name" => "party",
+			"caption" => t("Osalus"),
+			"sortable" => 1,
+			"width" => "39%"
 		));
 		$t->define_field(array(
 			"name" => "hours",
-			"caption" => t("Osalus tundides"),
+			"caption" => t("Tundides"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "party",
 		));
 		$t->define_field(array(
 			"name" => "percentage",
-			"caption" => t("Osalus protsentides"),
+			"caption" => t("Protsentides"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "party",
 		));
 	}
 
@@ -4882,7 +5098,7 @@ class task extends class_base
 			$row = $arr["obj_inst"]->get_party_obj($c->id());
 			$t->define_data(array(
 				"oid" => $c->id(),
-				"orderer" => html::obj_change_url($c),
+				"name" => html::obj_change_url($c),
 				"phone" => html::obj_change_url($c->prop("phone_id")),
 				"contact" => html::obj_change_url($c->prop("contact_person")),
 				"hours" => html::textbox(array(
@@ -4931,13 +5147,19 @@ class task extends class_base
 			"name" => "project",
 			"caption" => t("Projekt"),
 			"sortable" => 1,
-			"width" => "30%"
+			"width" => "60%"
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"parent" => "project"
 		));
 		$t->define_field(array(
 			"name" => "status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
-			"width" => "30%"
+			"parent" => "project"
 		));
 		$t->define_field(array(
 			"name" => "deadline",
@@ -4946,19 +5168,25 @@ class task extends class_base
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.Y",
-			"width" => "20%"
+			"parent" => "project"
+		));
+		$t->define_field(array(
+			"name" => "party",
+			"caption" => t("Osalus"),
+			"sortable" => 1,
+			"width" => "39%"
 		));
 		$t->define_field(array(
 			"name" => "hours",
 			"caption" => t("Osalus tundides"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "party"
 		));
 		$t->define_field(array(
 			"name" => "percentage",
 			"caption" => t("Osalus protsentides"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "party"
 		));
 	}
 
@@ -4980,7 +5208,7 @@ class task extends class_base
 			$row = $arr["obj_inst"]->get_party_obj($c->id());
 			$t->define_data(array(
 				"oid" => $c->id(),
-				"project" => html::obj_change_url($c),
+				"name" => html::obj_change_url($c),
 				"status" => $p->states[$c->prop("state")],
 				"deadline" => $c->prop("deadline"),
 				"hours" => html::textbox(array(
@@ -5001,43 +5229,56 @@ class task extends class_base
 	{
 		$t->define_chooser(array(
 			"name" => "sel_part",
-			"field" => "oid"
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "participant",
+			"caption" => t("Osaleja"),
+			"sortable" => 1,
+			"width" => "50%"
 		));
 		$t->define_field(array(
 			"name" => "part",
-			"caption" => t("Osaleja"),
+			"caption" => t("Nimi"),
 			"sortable" => 1,
-			"width" => "30%"
+			"parent" => "participant"
 		));
 		$t->define_field(array(
 			"name" => "prof",
 			"caption" => t("Ametinimetus"),
 			"sortable" => 1,
-			"width" => "15%"
+			"parent" => "participant"
 		));
 		$t->define_field(array(
 			"name" => "phone",
 			"caption" => t("Telefon"),
 			"sortable" => 1,
-			"width" => "15%"
+			"parent" => "participant"
+		));
+
+		$t->define_field(array(
+			"name" => "work",
+			"caption" => t("T&ouml;&ouml;aeg"),
+			"sortable" => 1,
+			"width" => "49%"
 		));
 		$t->define_field(array(
 			"name" => "time_guess",
 			"caption" => t("Prognoositud tunde"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "work"
 		));
 		$t->define_field(array(
 			"name" => "time_real",
 			"caption" => t("Kulunud tunde"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "work"
 		));
 		$t->define_field(array(
 			"name" => "time_to_cust",
 			"caption" => t("Tunde kliendile"),
 			"sortable" => 1,
-			"width" => "10%"
+			"parent" => "work"
 		));
 /*		$t->define_field(array(
 			"name" => "done",
@@ -5049,7 +5290,7 @@ class task extends class_base
 			"name" => "on_bill",
 			"caption" => t("Arvele"),
 			"sortable" => 1,
-			"width" => "5%"
+			"parent" => "work"
 		));
 	}
 
@@ -5523,6 +5764,71 @@ $types = array(
 		$t->set_rgroupby(array("parent_name" => "parent_name"));
 	}
 
+	function _bills_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+	
+		if (!$arr["new"])
+		{
+
+			$tb->add_button(array(
+				"name" => "new_bill",
+				"parent" => "cust",
+				"tooltip" =>t("Loo uus arve"),
+				"url" => $this->mk_my_orb("create_bill_from_task", array("id" => 							$arr["obj_inst"]->id(),"post_ru" => get_ru())),
+			));
+		}
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_objects"
+		));
+	}
+
+	function _init_bills_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "bill",
+			"caption" => t("Arve"),
+			"sortable" => 1,
+			"width" => "90%"
+		));
+	}
+
+	function _bills_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		if (is_oid($arr["obj_inst"]->id()) && sizeof($cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"))))
+		{
+			if (!count($cs))
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list($cs);
+			}
+		}
+		else
+		{
+			return PROP_IGNORE;
+		}
+		
+		$this->_init_bills_table($t);
+
+		foreach($ol->arr() as $c)
+		{
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"bill" => html::obj_change_url($c),
+			));
+		}
+		$t->set_rgroupby(array("parent_name" => "parent_name"));
+	}
 	/**
 		@attrib name=delete_rels
 	**/

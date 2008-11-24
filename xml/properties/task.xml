@@ -91,9 +91,9 @@
             <type>textarea</type>
             <cols>180</cols>
             <rows>30</rows>
+            <field>description</field>
             <parent>content_bit</parent>
             <no_caption>1</no_caption>
-            <field>description</field>
             <caption>Sisu</caption>
       </property>
       <property>
@@ -175,6 +175,26 @@
             <store>no</store>
             <parent>files_bit</parent>
             <field>files_table</field>
+      </property>
+      <property>
+            <name>bills_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>bills_bit</parent>
+            <field>bills_tb</field>
+      </property>
+      <property>
+            <name>bills_table</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>bills_bit</parent>
+            <field>bills_table</field>
       </property>
       <property>
             <name>ppa</name>
@@ -338,8 +358,8 @@
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-	    <field>deal_unit</field>
             <parent>hr_price_layout</parent>
+            <field>deal_unit</field>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
       <property>
@@ -348,18 +368,18 @@
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-	    <field>deal_amount</field>
             <parent>hr_price_layout</parent>
+            <field>deal_amount</field>
             <caption>Kogus</caption>
       </property>
       <property>
-	    <name>deal_price</name>
+            <name>deal_price</name>
             <table>planner</table>
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-	    <field>deal_price</field>
             <parent>hr_price_layout</parent>
+            <field>deal_price</field>
             <caption>Kokkuleppehind</caption>
       </property>
       <property>
@@ -368,8 +388,9 @@
             <group>general</group>
             <type>checkbox</type>
             <size>5</size>
-	    <field>deal_has_tax</field>
+            <method>serialize</method>
             <parent>hr_price_layout</parent>
+            <field>deal_has_tax</field>
             <caption>Sisestati koos k&amp;amp;auml;ibemaksuga</caption>
       </property>
       <property>
@@ -712,11 +733,6 @@
             </predicates>
       </groupinfo>
       <tableinfo>
-            <documents>
-                  <index>docid</index>
-                  <master_table>objects</master_table>
-                  <master_index>brother_of</master_index>
-            </documents>
             <planner>
                   <index>id</index>
                   <master_table>objects</master_table>
@@ -857,6 +873,12 @@
                   <area_caption>Manused</area_caption>
                   <group>general</group>
             </files_bit>
+            <bills_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Arved</area_caption>
+                  <group>general</group>
+            </bills_bit>
             <personal>
                   <type>hbox</type>
                   <group>general</group>

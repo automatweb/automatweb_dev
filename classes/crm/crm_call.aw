@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.74 2008/11/18 19:00:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.75 2008/11/24 21:24:42 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -16,6 +16,7 @@
 	@caption Verstapost
 
 @default group=general
+
 @layout top_bit type=vbox closeable=1 area_caption=P&otilde;hiandmed
 
 	@layout top_2way type=hbox parent=top_bit
@@ -32,15 +33,17 @@
 			@caption Lisatingimused
 
 		@layout top_2way_right type=vbox parent=top_2way
-
 			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
 			@caption Algus
 
 			@property end type=datetime_select table=planner parent=top_2way_right
 			@caption L&otilde;peb
 
-	@property hrs_table type=table no_caption=1 store=no parent=top_bit
+			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
+			@caption T&auml;htaeg
 
+
+	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
 @layout center_bit type=hbox 
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
@@ -49,18 +52,81 @@
 
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
-		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left_ct no_caption=1 width=100%
-		@caption Sisu
-
 	@layout center_bit_right type=vbox parent=center_bit 
 
 		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
-			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
+		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
-			@property co_table type=table no_caption=1 store=no parent=center_bit_right_top
-			@property proj_table type=table no_caption=1 store=no parent=center_bit_right_top
-			@property parts_table type=table no_caption=1 store=no parent=center_bit_right_top
+@layout content_bit type=vbox closeable=1 area_caption=Sisu
+	@property content type=textarea cols=180 rows=30 field=description parent=content_bit no_caption=1 width=100%
+
+@layout customer_bit type=vbox closeable=1 area_caption=Tellijad
+#	@property parts_tb type=toolbar no_caption=1 store=no parent=customer_bit
+
+	@property co_tb type=toolbar no_caption=1 store=no parent=customer_bit
+	@property co_table type=table no_caption=1 store=no parent=customer_bit
+
+@layout project_bit type=vbox closeable=1 area_caption=Projektid
+	@property project_tb type=toolbar no_caption=1 store=no parent=project_bit
+	@property proj_table type=table no_caption=1 store=no parent=project_bit
+
+@layout impl_bit type=vbox closeable=1 area_caption=Osalejad
+	@property impl_tb type=toolbar no_caption=1 store=no parent=impl_bit
+	@property parts_table type=table no_caption=1 store=no parent=impl_bit
+
+@layout files_bit type=vbox closeable=1 area_caption=Manused
+	@property files_tb type=toolbar no_caption=1 store=no parent=files_bit
+	@property files_table type=table no_caption=1 store=no parent=files_bit
+
+@layout bills_bit type=vbox closeable=1 area_caption=Arved
+	@property bills_tb type=toolbar no_caption=1 store=no parent=bills_bit
+	@property bills_table type=table no_caption=1 store=no parent=bills_bit
+
+
+#	@layout top_2way type=hbox parent=top_bit
+
+#		@layout top_2way_left type=vbox parent=top_2way
+
+#			@property name type=textbox table=objects field=name parent=top_2way_left
+#			@caption Nimi
+
+#			@property comment type=textbox table=objects field=comment parent=top_2way_left
+#			@caption Kommentaar
+
+#			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
+#			@caption Lisatingimused
+
+#		@layout top_2way_right type=vbox parent=top_2way
+#
+#			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
+#			@caption Algus
+#
+#			@property end type=datetime_select table=planner parent=top_2way_right
+#			@caption L&otilde;peb
+#
+#	@property hrs_table type=table no_caption=1 store=no parent=top_bit
+#
+
+#@layout center_bit type=hbox 
+#	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
+#
+#	@layout center_bit_left type=vbox parent=center_bit 
+#
+#		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
+#
+#		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left_ct no_caption=1 width=100%
+#		@caption Sisu
+
+#	@layout center_bit_right type=vbox parent=center_bit 
+
+#		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
+
+#			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
+#
+#			@property co_table type=table no_caption=1 store=no parent=center_bit_right_top
+#			@property proj_table type=table no_caption=1 store=no parent=center_bit_right_top
+#			@property parts_table type=table no_caption=1 store=no parent=center_bit_right_top
 
 
 			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
@@ -70,11 +136,15 @@
 			@caption Projekt
 
 
-		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
+#		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
-			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
+#			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
 
-			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
+#			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
+
+
+
+
 
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
@@ -95,20 +165,43 @@
 @property is_work type=checkbox ch_value=1 table=planner field=aw_is_work
 @caption T&ouml;&ouml;aeg
 
-@property bill_no type=text table=planner 
+@property bill_no type=text table=planner field=bill_no
 @caption Arve number
 
-@layout num_hrs type=hbox 
+@property hr_price type=textbox size=5 table=objects field=meta method=serialize 
+@caption Tunni hind
 
-	@property time_guess type=textbox size=5 field=meta method=serialize table=objects
-	@caption Prognoositav tundide arv 	
 
-	@property time_real type=textbox size=5 field=meta method=serialize  table=objects
-	@caption Tegelik tundide arv
+@property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
+@caption Eelarvesse
 
-	@property time_to_cust type=textbox size=5 field=meta method=serialize  table=objects
-	@caption Tundide arv kliendile
+@property time_guess type=textbox size=5 field=meta method=serialize table=objects
+@caption Prognoositav tundide arv 	
 
+@property time_real type=textbox size=5 field=meta method=serialize table=objects
+@caption Tegelik tundide arv
+
+@property time_to_cust type=textbox size=5 field=meta method=serialize table=objects
+@caption Tundide arv kliendile
+
+
+@property priority type=textbox size=5 table=planner field=priority
+@caption Prioriteet
+
+@property hr_price_currency type=select field=meta method=serialize table=objects
+@caption Valuuta
+
+	@property deal_unit type=textbox size=5 table=planner
+	@caption &Uuml;hik
+
+	@property deal_amount type=textbox size=5 table=planner
+	@caption Kogus
+
+	@property deal_price type=textbox size=5 table=planner
+	@caption Kokkuleppehind
+
+	@property deal_has_tax type=checkbox size=5 table=planner
+	@caption Sisestati koos k&auml;ibemaksuga
 
 @default table=objects
 @default field=meta
@@ -170,7 +263,6 @@
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
 
-
 @reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Klient
 
@@ -183,9 +275,11 @@
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
 
+@reltype ROW value=7 clid=CL_TASK_ROW
+@caption Rida
 */
 
-class crm_call extends class_base
+class crm_call extends task
 {
 	function crm_call()
 	{
@@ -246,28 +340,52 @@ class crm_call extends class_base
 		$i = get_instance(CL_TASK);
 		switch($data['name'])
 		{
+			case "comment":
+				$data["type"] = "textarea";
+				$data["rows"] = 2;
+				$data["cols"] = 30;
+				break;
+			case "co_tb":
+				$this->_get_co_tb($arr);
+				break;
+	
+			case "project_tb":
+				$this->_get_project_tb($arr);
+				break;
+			case "impl_tb":
+				$this->_get_impl_tb($arr);
+				break;
+
 			case "parts_tb":
-				$i->_parts_tb($arr);
+				$this->_parts_tb($arr);
 				break;
 
 			case "co_table":
-				$i->_co_table($arr);
+				$this->_co_table($arr);
 				break;
 
 			case "proj_table":
-				$i->_proj_table($arr);
+				$this->_proj_table($arr);
 				break;
 
 			case "parts_table":
-				$i->_parts_table($arr);
+				$this->_parts_table($arr);
 				break;
 
 			case "files_tb":
-				$i->_files_tb($arr);
+				$this->_files_tb($arr);
 				break;
 
 			case "files_table":
-				$i->_files_table($arr);
+				$this->_files_table($arr);
+				break;
+
+			case "bills_tb":
+				$this->_bills_tb($arr);
+				break;
+
+			case "bills_table":
+				$this->_bills_table($arr);
 				break;
 
 			case "hrs_table":
@@ -275,6 +393,8 @@ class crm_call extends class_base
 				break;
 
 			case "add_clauses":
+					return PROP_IGNORE;
+
 				$has_work_time = $arr["obj_inst"]->has_work_time();
 				$data["options"] = array(
 					"status" => t("Aktiivne"),
@@ -304,7 +424,15 @@ class crm_call extends class_base
 			case "time_real":
 			case "time_to_cust":
 			case "bill_no":
+			case "hr_price":
 			case "is_work":
+			case "priority":
+			case "hr_price_currency":
+			case "in_budget":
+			case "deal_unit":
+			case "deal_amount":
+			case "deal_price":
+			case "deal_has_tax":
 				return PROP_IGNORE;
 
 			case "new_call_date":
@@ -330,6 +458,7 @@ class crm_call extends class_base
 				}
 				break;	
 			case "content":
+				$data["style"] = "width: 100%";
 				if($this->mail_data)
 				{
 					$data["value"] = sprintf(
@@ -543,7 +672,12 @@ class crm_call extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "hrs_table":
+				$this->save_add_clauses($arr);
+				break;
 			case "add_clauses":
+					return PROP_IGNORE;
+
 				$arr["obj_inst"]->set_status($data["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
 				$arr["obj_inst"]->set_prop("is_done", $data["value"]["is_done"] ? 8 : 0);
 				$arr["obj_inst"]->set_prop("is_personal", $data["value"]["is_personal"] ? 1 : 0);
@@ -622,7 +756,7 @@ class crm_call extends class_base
 		};
 		return $retval;
 	}
-
+/*
 	function callback_post_save($arr)
 	{	//the person who added the task will be a participant, whether he likes it
 		//or not
@@ -707,7 +841,7 @@ class crm_call extends class_base
 		}
 
 	}
-
+*/
 
 	function stopper_autocomplete($requester, $params)
 	{
@@ -999,7 +1133,7 @@ class crm_call extends class_base
 		}
 		$t->set_default_sortby("when");
 	}
-
+/*
 	function callback_pre_save($arr)
 	{
 		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
@@ -1117,7 +1251,7 @@ class crm_call extends class_base
 			"bill_no" => $bno,
 		));
 	}
-
+*/
 	/**
 		@attrib name=delete_rels
 	**/

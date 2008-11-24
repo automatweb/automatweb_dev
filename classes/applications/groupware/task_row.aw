@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.20 2008/11/21 14:18:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.21 2008/11/24 21:24:45 markop Exp $
+
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -190,8 +191,8 @@ class task_row extends class_base
 			case "aw_orderer":
 			case "aw_primary":
 			case "aw_prev_state":
-			case "new_state":
-			case "activity_stats_type":
+			case "aw_new_state":
+			case "aw_activity_stats_type":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

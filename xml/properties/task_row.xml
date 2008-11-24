@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>parent</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>parent</field>
+            <caption>Parent</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>aw_task_rows</table>
             <group>general</group>

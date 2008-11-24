@@ -35,8 +35,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>start</field>
-	    <caption>Algab </caption>
-            <parent>top_2way_right</parent>
+            <caption>Algab </caption>
       </property>
       <property>
             <name>end</name>
@@ -44,8 +43,16 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-	    <caption>L&amp;amp;otilde;peb</caption>
-	    <parent>top_2way_right</parent>
+            <caption>L&amp;amp;otilde;peb</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>deadline</field>
+            <parent>top_2way_right</parent>
+            <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>hrs_table</name>
@@ -158,6 +165,26 @@
             <store>no</store>
             <parent>files_bit</parent>
             <field>files_table</field>
+      </property>
+      <property>
+            <name>bills_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>bills_bit</parent>
+            <field>bills_tb</field>
+      </property>
+      <property>
+            <name>bills_table</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>bills_bit</parent>
+            <field>bills_table</field>
       </property>
       <property>
             <name>customer</name>
@@ -411,6 +438,69 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Tunni hind</caption>
+      </property>
+      <property>
+            <name>in_budget</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_in_budget</field>
+            <caption>Eelarvesse</caption>
+      </property>
+      <property>
+            <name>priority</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>priority</field>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
+            <name>hr_price_currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
+            <name>deal_unit</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>deal_unit</field>
+            <caption>&amp;amp;Uuml;hik</caption>
+      </property>
+      <property>
+            <name>deal_amount</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>deal_amount</field>
+            <caption>Kogus</caption>
+      </property>
+      <property>
+            <name>deal_price</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>deal_price</field>
+            <caption>Kokkuleppehind</caption>
+      </property>
+      <property>
+            <name>deal_has_tax</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <size>5</size>
+            <field>deal_has_tax</field>
+            <caption>Sisestati koos k&amp;amp;auml;ibemaksuga</caption>
       </property>
       <property>
             <name>summary</name>
@@ -901,6 +991,12 @@
                   <area_caption>Manused</area_caption>
                   <group>general</group>
             </files_bit>
+            <bills_bit>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Arved</area_caption>
+                  <group>general</group>
+            </bills_bit>
             <center_bit_bottom>
                   <type>vbox</type>
                   <closeable>1</closeable>
