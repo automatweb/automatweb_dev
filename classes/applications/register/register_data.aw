@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.47 2007/12/06 14:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.48 2008/11/24 14:08:03 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1 maintainer=kristo
@@ -194,6 +194,24 @@
 
 @property uservar10 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER10 store=connect
 @caption User-defined var 10
+
+@property uservar11 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER81 store=connect
+@caption User-defined var 11
+
+@property uservar12 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER82 store=connect
+@caption User-defined var 12
+
+@property uservar13 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER83 store=connect
+@caption User-defined var 13
+
+@property uservar14 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER84 store=connect
+@caption User-defined var 14
+
+@property uservar15 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER85 store=connect
+@caption User-defined var 15
+
+@property uservar16 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER86 store=connect
+@caption User-defined var 16
 
 @property userdate1 type=date_select field=aw_userdate1 year_from=1970 year_to=2020
 @caption User-defined date select 1
@@ -831,6 +849,21 @@
 @property uservar80 type=classificator reltype=RELTYPE_VARUSER80 store=connect
 @caption User-defined var 80
 
+@property uservar81 type=classificator reltype=RELTYPE_VARUSER86 store=connect
+@caption User-defined var 81
+
+@property uservar82 type=classificator reltype=RELTYPE_VARUSER87 store=connect
+@caption User-defined var 82
+
+@property uservar83 type=classificator reltype=RELTYPE_VARUSER88 store=connect
+@caption User-defined var 83
+
+@property uservar84 type=classificator reltype=RELTYPE_VARUSER89 store=connect
+@caption User-defined var 84
+
+@property uservar85 type=classificator reltype=RELTYPE_VARUSER90 store=connect
+@caption User-defined var 85
+
 ---------------- text ----------------
 
 @groupinfo texts caption="Text"
@@ -1304,6 +1337,37 @@
 @reltype VARUSER80 value=80 clid=CL_META
 @caption kasutajadefineeritud muutuja 80
 
+@reltype VARUSER81 value=81 clid=CL_META
+@caption kasutajadefineeritud muutuja 81
+
+@reltype VARUSER82 value=82 clid=CL_META
+@caption kasutajadefineeritud muutuja 82
+
+@reltype VARUSER83 value=83 clid=CL_META
+@caption kasutajadefineeritud muutuja 83
+
+@reltype VARUSER84 value=84 clid=CL_META
+@caption kasutajadefineeritud muutuja 84
+
+@reltype VARUSER85 value=85 clid=CL_META
+@caption kasutajadefineeritud muutuja 85
+
+@reltype VARUSER86 value=86 clid=CL_META
+@caption kasutajadefineeritud muutuja 86
+
+@reltype VARUSER87 value=87 clid=CL_META
+@caption kasutajadefineeritud muutuja 87
+
+@reltype VARUSER88 value=88 clid=CL_META
+@caption kasutajadefineeritud muutuja 88
+
+@reltype VARUSER89 value=89 clid=CL_META
+@caption kasutajadefineeritud muutuja 89
+
+@reltype VARUSER90 value=90 clid=CL_META
+@caption kasutajadefineeritud muutuja 90
+
+
 @reltype REGISTER value=10 clid=CL_REGISTER
 @caption Seostatud register
 
@@ -1572,7 +1636,6 @@ class register_data extends class_base
 				$mail_addr_from = $register_obj->prop("mail_address_from");
 				if (empty($mail_addr_from))
 				{
-					// v6tab from aadressi sisse loginud kasutaja küljes
 					if (aw_global_get("uid") != "")
 					{
 						$u = obj(aw_global_get("uid_oid"));

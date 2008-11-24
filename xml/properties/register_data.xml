@@ -548,6 +548,72 @@
             <caption>User-defined var 10</caption>
       </property>
       <property>
+            <name>uservar11</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER11</reltype>
+            <store>connect</store>
+            <caption>User-defined var 11</caption>
+      </property>
+      <property>
+            <name>uservar12</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER12</reltype>
+            <store>connect</store>
+            <caption>User-defined var 12</caption>
+      </property>
+      <property>
+            <name>uservar13</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER13</reltype>
+            <store>connect</store>
+            <caption>User-defined var 13</caption>
+      </property>
+      <property>
+            <name>uservar14</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER14</reltype>
+            <store>connect</store>
+            <caption>User-defined var 14</caption>
+      </property>
+      <property>
+            <name>uservar15</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER15</reltype>
+            <store>connect</store>
+            <caption>User-defined var 15</caption>
+      </property>
+      <property>
+            <name>uservar16</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER16</reltype>
+            <store>connect</store>
+            <caption>User-defined var 16</caption>
+      </property>
+      <property>
             <name>userdate1</name>
             <group>data</group>
             <table>aw_register_data</table>
@@ -1624,72 +1690,6 @@
             <caption>User-defined ta 50</caption>
       </property>
       <property>
-            <name>uservar11</name>
-            <group>classificators</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>classificator</type>
-            <reltype>RELTYPE_VARUSER11</reltype>
-            <store>connect</store>
-            <caption>User-defined var 11</caption>
-      </property>
-      <property>
-            <name>uservar12</name>
-            <group>classificators</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>classificator</type>
-            <reltype>RELTYPE_VARUSER12</reltype>
-            <store>connect</store>
-            <caption>User-defined var 12</caption>
-      </property>
-      <property>
-            <name>uservar13</name>
-            <group>classificators</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>classificator</type>
-            <reltype>RELTYPE_VARUSER13</reltype>
-            <store>connect</store>
-            <caption>User-defined var 13</caption>
-      </property>
-      <property>
-            <name>uservar14</name>
-            <group>classificators</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>classificator</type>
-            <reltype>RELTYPE_VARUSER14</reltype>
-            <store>connect</store>
-            <caption>User-defined var 14</caption>
-      </property>
-      <property>
-            <name>uservar15</name>
-            <group>classificators</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>classificator</type>
-            <reltype>RELTYPE_VARUSER15</reltype>
-            <store>connect</store>
-            <caption>User-defined var 15</caption>
-      </property>
-      <property>
-            <name>uservar16</name>
-            <group>classificators</group>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>classificator</type>
-            <reltype>RELTYPE_VARUSER16</reltype>
-            <store>connect</store>
-            <caption>User-defined var 16</caption>
-      </property>
-      <property>
             <name>uservar17</name>
             <group>classificators</group>
             <table>objects</table>
@@ -2392,6 +2392,61 @@
             <reltype>RELTYPE_VARUSER80</reltype>
             <store>connect</store>
             <caption>User-defined var 80</caption>
+      </property>
+      <property>
+            <name>uservar81</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER86</reltype>
+            <store>connect</store>
+            <caption>User-defined var 81</caption>
+      </property>
+      <property>
+            <name>uservar82</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER87</reltype>
+            <store>connect</store>
+            <caption>User-defined var 82</caption>
+      </property>
+      <property>
+            <name>uservar83</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER88</reltype>
+            <store>connect</store>
+            <caption>User-defined var 83</caption>
+      </property>
+      <property>
+            <name>uservar84</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER89</reltype>
+            <store>connect</store>
+            <caption>User-defined var 84</caption>
+      </property>
+      <property>
+            <name>uservar85</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER90</reltype>
+            <store>connect</store>
+            <caption>User-defined var 85</caption>
       </property>
       <property>
             <name>usertext11</name>
@@ -3652,6 +3707,56 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 80</caption>
             </VARUSER80>
+            <VARUSER81>
+                  <value>81</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 81</caption>
+            </VARUSER81>
+            <VARUSER82>
+                  <value>82</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 82</caption>
+            </VARUSER82>
+            <VARUSER83>
+                  <value>83</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 83</caption>
+            </VARUSER83>
+            <VARUSER84>
+                  <value>84</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 84</caption>
+            </VARUSER84>
+            <VARUSER85>
+                  <value>85</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 85</caption>
+            </VARUSER85>
+            <VARUSER86>
+                  <value>86</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 86</caption>
+            </VARUSER86>
+            <VARUSER87>
+                  <value>87</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 87</caption>
+            </VARUSER87>
+            <VARUSER88>
+                  <value>88</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 88</caption>
+            </VARUSER88>
+            <VARUSER89>
+                  <value>89</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 89</caption>
+            </VARUSER89>
+            <VARUSER90>
+                  <value>90</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 90</caption>
+            </VARUSER90>
             <REGISTER>
                   <value>10</value>
                   <clid>CL_REGISTER</clid>
