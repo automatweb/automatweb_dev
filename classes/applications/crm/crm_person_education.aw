@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.28 2008/11/19 15:18:02 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.29 2008/11/25 13:19:17 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -24,7 +24,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_CRM_PERSON, on_disconn
 @property school2 type=textbox field=school_2
 @caption Muu kool
 
-@property faculty type=relpicker reltype=RELTYPE_FACULTY store=connect
+@property faculty type=relpicker automatic=1 reltype=RELTYPE_FACULTY store=connect
 @caption Teaduskond
 
 @property degree type=select field=degree
@@ -191,20 +191,7 @@ class crm_person_education extends class_base
 
 			case "school1":
 			case "school_1":
-				$ol = new object_list(array(
-					"class_id" => CL_CRM_COMPANY,
-					"parent" => obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->shools_fld,
-					"lang_id" => array(),
-				));
-				$ops = array();
-				$ol_arr = $ol->arr();
-				enter_function("uasort");
-				uasort($ol_arr, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
-				exit_function("uasort");
-				foreach($ol_arr as $o)
-				{
-					$ops[$o->id()] = $o->trans_get_val("name");
-				}
+				$ops = get_instance(CL_PERSONNEL_MANAGEMENT)->get_schools();
 				$prop["options"] = array("" => t("--vali--")) + $ops;
 				break;
 		};

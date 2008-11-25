@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.86 2008/11/19 18:36:48 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.87 2008/11/25 13:18:52 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -987,24 +987,7 @@ class personnel_management extends class_base
 			case "cv_city":
 			case "cv_county":
 			case "cv_area":
-				$prms = array(
-					"class_id" => constant("CL_CRM".strtoupper(substr($prop["name"], 2))),
-					"lang_id" => array(),
-					"site_id" => array(),
-				);
-				$ot = new object_tree(array(
-					"class_id" => array(CL_CRM_COUNTRY, CL_CRM_AREA, CL_CRM_COUNTY, CL_CRM_CITY),
-					"parent" => $arr["obj_inst"]->locations_fld,
-					"lang_id" => array(),
-					"site_id" => array(),
-				));
-				$ids = $ot->ids();
-				if(count($ids) > 0)
-				{
-					$prms["oid"] = $ids;
-				}
-				$ol = new object_list($prms);
-				$prop["options"] = $ol->names();
+				$prop["options"] = $this->get_locations(constant("CL_CRM".strtoupper(substr($prop["name"], 2))));
 				$prop['value'] = $arr['request'][$prop["name"]];
 				break;
 			
@@ -1380,12 +1363,48 @@ class personnel_management extends class_base
 						case CL_CRM_COUNTRY:
 						case CL_CRM_AREA:
 						case CL_CRM_COUNTY:
-							$clid = array(
-								CL_CRM_COUNTRY => CL_CRM_AREA,
-								CL_CRM_AREA => CL_CRM_COUNTY,
-								CL_CRM_COUNTY => CL_CRM_CITY,
+							$t->add_menu_button(array(
+								"name" => "new",
+								"img" => "new.gif",
+								"tooltip" => t("Lisa"),
+							));
+							$clids = array(
+								CL_CRM_COUNTRY => 1,
+								CL_CRM_AREA => 2,
+								CL_CRM_COUNTY => 3,
+								CL_CRM_CITY => 4,
 							);
-							$t->add_new_button(array($clid[$o->class_id()]), $_GET["branch_id"]);
+							$classes = aw_ini_get("classes");
+							foreach(array_keys($clids) as $clid)
+							{
+								$pt = $arr["obj_inst"]->locations_fld;
+								if($clid != CL_CRM_COUNTRY)
+								{
+									if($clids[$clid] > $clids[$o->class_id()])
+									{
+										$pt = $o->id();
+									}
+									else
+									{
+										foreach(array_reverse($o->path()) as $p)
+										{
+											if(isset($clids[$p->class_id()]) && $clids[$p->class_id()] < $clids[$clid])
+											{
+												$pt = $p->id();
+												break;
+											}
+										}
+									}
+								}
+								$t->add_menu_item(array(
+									"parent" => "new",
+									"text" => $classes[$clid]["name"],
+									"url" => html::get_new_url($clid, $pt, array(
+										"return_url" => get_ru(),
+									)),
+								));
+							}
+//							$t->add_new_button(array($clid[$o->class_id()]), $_GET["branch_id"]);
 							break;
 					}
 				}
@@ -1454,14 +1473,24 @@ class personnel_management extends class_base
 					switch($o->class_id())
 					{
 						case CL_CRM_COMPANY:
-						case CL_CRM_COUNTRY:
-						case CL_CRM_AREA:
-						case CL_CRM_COUNTY:
-						case CL_CRM_CITY:
 							$t->define_chooser();
 							$t->define_field(array(
 								"name" => "name",
 								"caption" => t("Nimi"),
+								"sortable" => 1,
+							));
+						case CL_CRM_COUNTRY:
+						case CL_CRM_AREA:
+						case CL_CRM_COUNTY:
+							$t->define_chooser();
+							$t->define_field(array(
+								"name" => "name",
+								"caption" => t("Nimi"),
+								"sortable" => 1,
+							));
+							$t->define_field(array(
+								"name" => "type",
+								"caption" => t("T&uuml;p"),
 								"sortable" => 1,
 							));
 							break;
@@ -1707,22 +1736,27 @@ class personnel_management extends class_base
 						case CL_CRM_AREA:
 						case CL_CRM_COUNTY:
 						case CL_CRM_CITY:
-							$clid = array(
-								CL_CRM_COUNTRY => CL_CRM_AREA,
-								CL_CRM_AREA => CL_CRM_COUNTY,
-								CL_CRM_COUNTY => CL_CRM_CITY,
+							
+							$classes = aw_ini_get("classes");
+							$odl = new object_data_list(
+								array(
+									"class_id" => array(CL_CRM_AREA, CL_CRM_COUNTY, CL_CRM_CITY),
+									"parent" => $o->id(),
+									"lang_id" => array(),
+									"site_id" => array(),
+								),
+								array(
+									CL_CRM_AREA => array("oid", "name", "class_id"),
+									CL_CRM_COUNTY => array("oid", "name", "class_id"),
+									CL_CRM_CITY => array("oid", "name", "class_id"),
+								)
 							);
-							$ol = new object_list(array(
-								"class_id" => $clid[$o->class_id()],
-								"parent" => $o->id(),
-								"lang_id" => array(),
-								"site_id" => array(),
-							));
-							foreach($ol->names() as $id => $name)
+							foreach($odl->arr() as $id => $o)
 							{
 								$t->define_data(array(
 									"oid" => $id,
-									"name" => html::obj_change_url($id, parse_obj_name($name)),
+									"name" => html::obj_change_url($id, parse_obj_name($o["name"])),
+									"type" => $classes[$o["class_id"]]["name"],
 								));
 							}
 							break;
@@ -4675,9 +4709,9 @@ class personnel_management extends class_base
 	private function pdf_tpl_options()
 	{
 		$dir = aw_ini_get("tpldir")."/applications/personnel_management/personnel_management_job_offer/";
-		$handle = opendir($dir);
+		$handle = is_dir($dir) ? opendir($dir) : false;
 		$ret = array();
-		while(false !== ($file = readdir($handle)))
+		while(false !== $handle && false !== ($file = readdir($handle)))
 		{
 			if(preg_match("/\\.tpl/", $file))
 			{
@@ -5542,6 +5576,43 @@ class personnel_management extends class_base
 		}
 
 		return $ops;
+	}
+
+	/**
+		@attrib name=get_locations params=pos
+
+		@param class_id required type=class_id
+	**/
+	public function get_locations($clid = array(CL_CRM_COUNTRY, CL_CRM_AREA, CL_CRM_COUNTY, CL_CRM_CITY))
+	{
+		$pm = obj($this->get_sysdefault());
+
+		$prms = array(
+			"class_id" => $clid,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$ot = new object_tree(array(
+			"class_id" => array(CL_CRM_COUNTRY, CL_CRM_AREA, CL_CRM_COUNTY, CL_CRM_CITY),
+			"parent" => $pm->locations_fld,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$ids = $ot->ids();
+		if(count($ids) > 0)
+		{
+			$prms["oid"] = $ids;
+		}
+		$ol = new object_list($prms);
+		$objs = $ol->arr();
+		enter_function("uasort");
+		uasort($objs, array($this, "cmp_function"));
+		exit_function("uasort");
+		foreach($objs as $o)
+		{
+			$names[$o->id()] = $o->trans_get_val("name");
+		}
+		return $names;
 	}
 }
 ?>

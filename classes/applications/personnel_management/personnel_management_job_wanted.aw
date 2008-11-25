@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.18 2008/10/06 12:52:46 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.19 2008/11/25 13:18:52 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov
 /*
 
@@ -17,7 +17,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @caption Isik
 
 @property field type=classificator multiple=1 reltype=RELTYPE_FIELD orient=vertical store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
-@caption Tegevusala
+@caption Tegevusala (muutuja)
+
+@property sector type=relpicker reltype=RELTYPE_SECTOR multiple=1 store=connect
+@caption Tegevusala (tegevusala objekt)
 
 @property job_type type=classificator multiple=1 reltype=RELTYPE_JOB_TYPE store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
 @caption T&ouml;&ouml; liik
@@ -95,6 +98,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @reltype LOCATION2 value=7 clid=CL_CRM_CITY,CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_AREA
 @caption Asukoht (teine valik)
 
+@reltype SECTOR value=8 clid=CL_CRM_SECTOR
+@caption Tegevusvaldkond
+
 */
 
 class personnel_management_job_wanted extends class_base
@@ -122,32 +128,22 @@ class personnel_management_job_wanted extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+			case "sector":
+				$prop["options"] = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sectors();
+				break;
+
 			case "location":
 			case "location_2":
-				$pm_id = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault();
+				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
+				$pm_id = $pm_inst->get_sysdefault();
 				if($this->can("view", $pm_id))
 				{
 					$pm = obj($pm_id);
 					$conf = $pm->prop($prop["name"]."_conf");
 					if(is_array($conf) && count($conf))
 					{
-						$ol = new object_list(array(
-							"class_id" => $conf,
-							"parent" => array(),
-							"sort_by" => "objects.jrk ASC, objects.name ASC",
-							"lang_id" => array(),
-						));
-						//$ops = $ol->names();
-						$ops = array();
-						$objs = $ol->arr();
-						enter_function("uasort");
-						uasort($objs, array(get_instance(CL_PERSONNEL_MANAGEMENT), "cmp_function"));
-						exit_function("uasort");
-						foreach($objs as $o)
-						{
-							$ops[$o->id()] = $o->trans_get_val("name");
-						}
-						$prop["options"] = is_array($prop["options"]) ? ($prop["options"] + $ops) : $ops;
+						$ops = $pm_inst->get_locations($conf);
+						$prop["options"] = array_merge(safe_array($prop["options"]), $ops);
 					}
 				}
 				break;

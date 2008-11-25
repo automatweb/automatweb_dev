@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.63 2008/11/19 09:54:12 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.64 2008/11/25 13:18:52 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -64,16 +64,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 #@property location type=relpicker reltype=RELTYPE_LOCATION store=connect
 #@caption Asukoht
 
-@property loc_country type=relpicker reltype=RELTYPE_COUNTRY store=connect
+@property loc_country type=relpicker reltype=RELTYPE_COUNTRY store=connect mode=autocomplete option_is_tuple=1
 @caption Riik
 
-@property loc_area type=relpicker reltype=RELTYPE_AREA store=connect
+@property loc_area type=relpicker reltype=RELTYPE_AREA store=connect mode=autocomplete option_is_tuple=1
 @caption Piirkond
 
-@property loc_county type=relpicker reltype=RELTYPE_COUNTY store=connect
+@property loc_county type=relpicker reltype=RELTYPE_COUNTY store=connect mode=autocomplete option_is_tuple=1
 @caption Maakond
 
-@property loc_city type=relpicker reltype=RELTYPE_CITY store=connect
+@property loc_city type=relpicker reltype=RELTYPE_CITY store=connect mode=autocomplete option_is_tuple=1
 @caption Linn
 
 @default field=meta
@@ -604,15 +604,8 @@ class personnel_management_job_offer extends class_base
 			case "loc_area":
 			case "loc_county":
 			case "loc_city":
-				if(!is_oid($prop["value"]))
-				{
-					unset($prop["options"]);
-					$prop["post_append_text"] = "";
-					$prop["value"] = "";
-					$prop["type"] = "textbox";
-					$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_".$prop["name"]);
-					$prop["autocomplete_params"] = array($prop["name"]);
-				}
+				$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_".$prop["name"]);
+				$prop["autocomplete_params"] = array($prop["name"]);
 				break;
 
 			case "location":
@@ -1178,173 +1171,6 @@ class personnel_management_job_offer extends class_base
 						if(is_oid($pm->professions_fld))
 						{
 							$new_p->set_parent($pm->professions_fld);
-						}
-						else
-						{
-							// Need to save it before I can set it as parent.
-							$arr["obj_inst"]->save();
-							$new_p->set_parent($arr["obj_inst"]->id());
-						}
-						$new_p->set_name($prop["value"]);
-						$new_p->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $new_p->id());
-					}
-					return PROP_IGNORE;
-				}
-				break;
-
-			case "loc_country":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
-				{
-					$crm_db = obj(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->crmdb);
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_COUNTRY,
-						"lang_id" => array(),
-						"site_id" => array(),
-						"parent" => array(),
-					));
-					$rev_nms = array_flip($ol->names());
-					if(array_key_exists($prop["value"], $rev_nms))
-					{
-						$arr["obj_inst"]->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $rev_nms[$prop["value"]]);
-					}
-					else
-					{
-						$new_p = new object;
-						$new_p->set_class_id(CL_CRM_AREA);
-						if(is_oid($crmdb->dir_riik))
-						{
-							$new_p->set_parent($crmdb->dir_riik);
-						}
-						else
-						{
-							// Need to save it before I can set it as parent.
-							$arr["obj_inst"]->save();
-							$new_p->set_parent($arr["obj_inst"]->id());
-						}
-						$new_p->set_name($prop["value"]);
-						$new_p->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $new_p->id());
-					}
-					return PROP_IGNORE;
-				}
-				break;
-
-			case "loc_area":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
-				{
-					$crm_db = obj(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->crmdb);
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_AREA,
-						"lang_id" => array(),
-						"site_id" => array(),
-						"parent" => array(),
-					));
-					$rev_nms = array_flip($ol->names());
-					if(array_key_exists($prop["value"], $rev_nms))
-					{
-						$arr["obj_inst"]->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $rev_nms[$prop["value"]]);
-					}
-					else
-					{
-						$new_p = new object;
-						$new_p->set_class_id(CL_CRM_AREA);
-						if($this->can("add", $arr["obj_inst"]->loc_country))
-						{
-							$new_p->set_parent($arr["obj_inst"]->loc_country);
-						}
-						else
-						if(is_oid($crmdb->dir_piirkond))
-						{
-							$new_p->set_parent($crmdb->dir_piirkond);
-						}
-						else
-						{
-							// Need to save it before I can set it as parent.
-							$arr["obj_inst"]->save();
-							$new_p->set_parent($arr["obj_inst"]->id());
-						}
-						$new_p->set_name($prop["value"]);
-						$new_p->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $new_p->id());
-					}
-					return PROP_IGNORE;
-				}
-				break;
-
-			case "loc_county":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
-				{
-					$crm_db = obj(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->crmdb);
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_COUNTY,
-						"lang_id" => array(),
-						"site_id" => array(),
-						"parent" => array(),
-					));
-					$rev_nms = array_flip($ol->names());
-					if(array_key_exists($prop["value"], $rev_nms))
-					{
-						$arr["obj_inst"]->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $rev_nms[$prop["value"]]);
-					}
-					else
-					{
-						$new_p = new object;
-						$new_p->set_class_id(CL_CRM_COUNTY);
-						if($this->can("add", $arr["obj_inst"]->loc_area))
-						{
-							$new_p->set_parent($arr["obj_inst"]->loc_area);
-						}
-						else
-						if(is_oid($crmdb->dir_maakond))
-						{
-							$new_p->set_parent($crmdb->dir_maakond);
-						}
-						else
-						{
-							// Need to save it before I can set it as parent.
-							$arr["obj_inst"]->save();
-							$new_p->set_parent($arr["obj_inst"]->id());
-						}
-						$new_p->set_name($prop["value"]);
-						$new_p->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $new_p->id());
-					}
-					return PROP_IGNORE;
-				}
-				break;
-
-			case "loc_city":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0 && $prop["value"] != "0")
-				{
-					$crm_db = obj(obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault())->crmdb);
-					$ol = new object_list(array(
-						"class_id" => CL_CRM_CITY,
-						"lang_id" => array(),
-						"site_id" => array(),
-						"parent" => array(),
-					));
-					$rev_nms = array_flip($ol->names());
-					if(array_key_exists($prop["value"], $rev_nms))
-					{
-						$arr["obj_inst"]->save();
-						$arr["obj_inst"]->set_prop($prop["name"], $rev_nms[$prop["value"]]);
-					}
-					else
-					{
-						$new_p = new object;
-						$new_p->set_class_id(CL_CRM_CITY);
-						if($this->can("add", $arr["obj_inst"]->loc_county))
-						{
-							$new_p->set_parent($arr["obj_inst"]->loc_county);
-						}
-						else
-						if(is_oid($crmdb->dir_linn))
-						{
-							$new_p->set_parent($crmdb->dir_linn);
 						}
 						else
 						{
@@ -2456,48 +2282,55 @@ class personnel_management_job_offer extends class_base
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
 
-		$ol_prms = array(
-			"class_id" => $clids[$prop],
-			"lang_id" => array(),
-			"site_id" => array(),
-			"limit" => 500,
-		);
-
-		if($prop == "from")
+		if(substr($prop, 0, 4) == "loc_")
 		{
-			$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
-			if($this->can("view", $pm->fb_from_fld))
-			{
-				$ol_prms["parent"] = $pm->fb_from_fld;
-			}
+			$autocomplete_options = get_instance(CL_PERSONNEL_MANAGEMENT)->get_locations($clids[$prop]);
 		}
 		else
-		if($prop == "contact")
 		{
-			if(is_oid($arr["company"]))
-			{
-				$org = $arr["company"];
-			}
-			else
-			if(is_oid($arr["id"]) && is_oid(obj($arr["id"])->company))
-			{
-				$org = obj($arr["id"])->company;
-			}
-			else
-			{
-				$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
-				$org = $cp->company_id();
-			}
-			$org = obj($org);
-			$ids = $org->get_employees()->ids();
-			if(count($ids) > 0)
-			{
-				$ol_prms["oid"] = $ids;
-			}
-		}
+			$ol_prms = array(
+				"class_id" => $clids[$prop],
+				"lang_id" => array(),
+				"site_id" => array(),
+				"limit" => 500,
+			);
 
-		$ol = new object_list($ol_prms);
-		$autocomplete_options = $ol->names();
+			if($prop == "from")
+			{
+				$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+				if($this->can("view", $pm->fb_from_fld))
+				{
+					$ol_prms["parent"] = $pm->fb_from_fld;
+				}
+			}
+			else
+			if($prop == "contact")
+			{
+				if(is_oid($arr["company"]))
+				{
+					$org = $arr["company"];
+				}
+				else
+				if(is_oid($arr["id"]) && is_oid(obj($arr["id"])->company))
+				{
+					$org = obj($arr["id"])->company;
+				}
+				else
+				{
+					$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
+					$org = $cp->company_id();
+				}
+				$org = obj($org);
+				$ids = $org->get_employees()->ids();
+				if(count($ids) > 0)
+				{
+					$ol_prms["oid"] = $ids;
+				}
+			}
+
+			$ol = new object_list($ol_prms);
+			$autocomplete_options = $ol->names();
+		}
 		foreach($autocomplete_options as $k => $v)
 		{
 			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));

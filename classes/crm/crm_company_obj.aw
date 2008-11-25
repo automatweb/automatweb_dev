@@ -495,13 +495,13 @@ class crm_company_obj extends _int_object
 		}
 	}
 
-	function faculties($arr)
+	function faculties($arr = array())
 	{
 		$r = $this->get_sections();
-		if($arr["return_as_odl"])
+		if(isset($arr["return_as_odl"]) && $arr["return_as_odl"])
 		{
 			$ids = $r->count() > 0 ? $r->ids() : -1;
-			$arr["props"] = is_array($arr["props"]) ? $arr["props"] : array(
+			$arr["props"] = isset($arr["props"]) && is_array($arr["props"]) ? $arr["props"] : array(
 				CL_CRM_SECTION => array("oid", "name")
 			);
 			$r = new object_data_list(

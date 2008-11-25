@@ -8357,96 +8357,11 @@ class crm_company extends class_base
 
 	function _get_pohitegevus($arr)
 	{
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_SECTOR,
-			"sort_by" => "objects.name"
-		));
-		// parentize the list - move all items that have parents in the list
-		// below them, so we can draw them with grouping
-		$list_by_parent = array();
-		foreach($ol->arr() as $o)
-		{
-			if ($ol->get_at($o->parent()))
-			{
-				$list_by_parent[$o->parent()][] = $o;
-			}
-			else
-			{
-				$list_by_parent[null][] = $o;
-			}
-		}
-
-		$items = array();
-		foreach($list_by_parent as $_pt => $litems)
-		{
-			foreach($litems as $o)
-			{
-				$items[$o->id()] = $this->_get_level_in_list($list_by_parent, $o)-1; //*3).$o->name();
-			}
-		}
-
-		// now that we have the levels for items in the list, sort the list correctly as well.
-		// to do that, go over the list, and for each item that has a level of 0, get an object_tree for all subitems
-		// and add that to the list
-		$nitems = array("" => t("--Vali--"));
-		foreach($items as $id => $level)
-		{
-			if ($level == 0)
-			{
-				$this->_add_0level_item_to_list($nitems, $id);
-			}
-		}
-
-		$arr["prop"]["options"] = $nitems;
+		$arr["prop"]["options"] = array_merge(array("" => t("--Vali--")), get_instance(CL_PERSONNEL_MANAGEMENT)->get_sectors());
 		if ($arr["new"] && $arr["request"]["sector"])
 		{
 			$arr["prop"]["value"] = $arr["request"]["sector"];
 		}
-	}
-
-	function _add_0level_item_to_list(&$nitems, $id)
-	{
-		$ot = new object_tree(array(
-			"parent" => $id,
-			"class_id" => CL_CRM_SECTOR,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$o = obj($id);
-		$nitems[$o->id()] = $o->name();
-		$this->_req_add_0level_item_to_list($nitems, $ot, $id);
-	}
-
-	function _req_add_0level_item_to_list(&$nitems, $ot, $id)
-	{
-		$this->_level++;
-		foreach($ot->level($id) as $o)
-		{
-			$nitems[$o->id()] = str_repeat("&nbsp;", $this->_level*3).$o->name();
-			$this->_req_add_0level_item_to_list($nitems, $ot, $o->id());
-		}
-		$this->_level--;
-	}
-
-	function _get_level_in_list($list, $item)
-	{
-		$pt = false;
-		foreach($list as $_pt => $items)
-		{
-			foreach($items as $l_item)
-			{
-				if ($l_item->id() == $item->id())
-				{
-					$pt = $_pt;
-				}
-			}
-		}
-
-		if ($pt)
-		{
-			return $this->_get_level_in_list($list, obj($pt))+1;
-		}
-		return 0;
 	}
 
 //////////////////////////////////////
