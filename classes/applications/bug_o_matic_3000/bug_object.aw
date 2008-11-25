@@ -239,8 +239,8 @@ class bug_object extends _int_object
 			$comment = $c->to();
 //selle asemele peaks miski ilus filter olema hoopis
 			if(
-				($arr["start"] && $arr["start"] > $comment->created()) || 
-				($arr["end"] && $arr["end"] < $comment->created())
+				($arr["start"] && $arr["start"] > $comment->prop("date")) || 
+				($arr["end"] && $arr["end"] < $comment->prop("date"))
 			)
 			{
 				continue;

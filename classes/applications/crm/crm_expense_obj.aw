@@ -11,6 +11,15 @@ class crm_expense_obj extends _int_object
 		parent::set_prop($name,$value);
 	}
 
+	function save()
+	{
+		if(!$this->prop("task"))
+		{
+			$this->set_prop("task" , $this->parent());
+		}
+		parent::save();
+	}
+
 	function get_task()
 	{
 		$ol = new object_list(array(

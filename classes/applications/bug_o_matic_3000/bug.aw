@@ -1323,12 +1323,13 @@ class bug extends class_base
 				}
 				break;
 			case "comments_table":
-				$total = 0;
+				$total = 0;arr($arr["request"]);
 				foreach($arr["request"]["add_wh"] as $oid => $hrs)
 				{
 					$com = obj($oid);
 					$com->set_prop("add_wh", $hrs);
 					$com->set_comment($arr["request"]["comment"][$oid]);
+					if($com->class_id() == CL_TASK_ROW)$com->set_prop("on_bill", isset($arr["request"]["on_bill"][$oid]) ? 1 : 0);
 					$com->save();
 					$total += $hrs;
 				}
@@ -1968,6 +1969,12 @@ class bug extends class_base
 			"format" => "d.m.Y H:i",
 			"caption" => t("Aeg"),
 		));
+
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>".t("Arvele")."</a>",
+			"align" => "center",
+		));
 		$t->set_sortable(false);
 		$t->define_data(array(
 			"comment" => html::textarea(array(
@@ -1985,6 +1992,21 @@ class bug extends class_base
 		foreach($comments as $c)
 		{
 			$comm = obj($c->prop("to"));
+
+			$onbill = "";
+			if ($comm->prop("bill_id"))
+			{
+				$onbill = sprintf(t("Arve nr %s"), $comm->prop("bill_id.bill_no"));
+			}
+			else
+			{
+				$onbill = html::checkbox(array(
+					"name" => "on_bill[".$comm->id()."]",
+					"value" => 1,
+					"checked" => $comm->prop("on_bill")
+				));
+			}
+
 			$t->define_data(array(
 				"comment" => html::textarea(array(
 					"value" => $comm->comment(),
@@ -1999,6 +2021,7 @@ class bug extends class_base
 					"size" => "4",
 				)),
 				"date" => $comm->created(),
+				"on_bill" => $onbill,
 			));
 		}
 		

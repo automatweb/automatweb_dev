@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.21 2008/11/24 21:24:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.22 2008/11/25 19:13:50 markop Exp $
 
 // task_row.aw - Toimetuse rida 
 /*
@@ -66,7 +66,7 @@
 	@property ord type=text table=aw_task_rows field=aw_task_ord no_caption=1
 	@caption Jrk
 
-	@property task type=relpicker table=aw_task_rows field=aw_task no_caption=1 reltype=RELTYPE_TASK
+	@property task type=relpicker table=aw_task_rows field=aw_task reltype=RELTYPE_TASK
 	@caption Toimetus
 
 
