@@ -915,7 +915,7 @@ class treeview extends class_base
 			};
 
 			$name = $item["name"];
-			if ($item["id"] == $this->selected_item)
+			if ($item["id"] === $this->selected_item)
 			{
 				// XXX: Might want to move this into the template
 				$name = "<strong>$name</strong>";
@@ -932,7 +932,7 @@ class treeview extends class_base
 			$oncl = "";
 			if (!empty($item["onClick"]))
 			{
-				 $oncl="onClick=\"".$item["onClick"]."\"";
+				 $oncl="onclick=\"".$item["onClick"]."\"";
 			}
 			$this->vars(array(
 				"name" => $name,
@@ -1134,7 +1134,7 @@ class treeview extends class_base
 			};
 
 			$name = $item["name"];
-			if ($item["id"] == $this->selected_item)
+			if ($item["id"] === $this->selected_item)
 			{
 				$name = "<strong>$name</strong>";
 			}
