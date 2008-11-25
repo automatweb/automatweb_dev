@@ -79,7 +79,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -138,7 +138,7 @@ class mrp_resource extends class_base
 			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
 
-		
+
 
 		$this->trans_props = array(
 			"name", "comment"
@@ -508,7 +508,7 @@ class mrp_resource extends class_base
 						break;
 				}
 				break;
-			
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -699,6 +699,7 @@ class mrp_resource extends class_base
 					"deadline" => $p->prop("due_date"),
 					"trykiarv" => $p->prop("trykiarv"),
 					"trykiarv_notes" => $p->prop("trykiarv_notes"),
+					"resource" => $job->prop("RELTYPE_MRP_RESOURCE.name")
 				));
 			}
 		}
@@ -1466,7 +1467,7 @@ class mrp_resource extends class_base
 	function callback_mod_tab($arr)
 	{
 		$trc = aw_ini_get("user_interface.trans_classes");
-		
+
 		if ($arr["id"] == "transl" && (aw_ini_get("user_interface.content_trans") != 1 && !$trc[$this->clid]))
 		{
 			return false;
