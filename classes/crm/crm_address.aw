@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.35 2008/06/12 13:22:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.36 2008/11/25 16:15:28 instrumental Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -104,6 +104,23 @@ class crm_address extends class_base
 				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.aadress.value.replace(/[0-9]+/, '')+'&linn='+document.changeform.linn.options[document.changeform.linn.selectedIndex].text+'&x=30&y=6');";
 				$data["post_append_text"] = sprintf(" <a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
 
+				break;
+
+			case "linn":
+			case "maakond":
+			case "piirkond":
+			case "riik":
+				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
+				if(is_oid($pm_inst->get_sysdefault()))
+				{
+					$clid = array(
+						"linn" => CL_CRM_CITY,
+						"maakond" => CL_CRM_COUNTY,
+						"piirkond" => CL_CRM_AREA,
+						"riik" => CL_CRM_COUNTRY,
+					);
+					$data["options"] = array_merge(array(0 => t("--vali--")), $pm_inst->get_locations($clid[$data["name"]]));
+				}
 				break;
 		};
 		return $retval;
