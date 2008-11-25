@@ -2,55 +2,60 @@
 <properties>
       <property>
             <name>org</name>
-            <table>objects</table>
+            <table>aw_crm_person_add_education</table>
             <group>general</group>
             <type>textbox</type>
-            <field>name</field>
+            <field>org</field>
             <caption>Ettev&amp;amp;otilde;te</caption>
       </property>
       <property>
             <name>field</name>
-            <table>objects</table>
+            <table>aw_crm_person_add_education</table>
             <group>general</group>
             <type>textbox</type>
-            <field>comment</field>
+            <field>field</field>
             <caption>Teema</caption>
       </property>
       <property>
             <name>time</name>
-            <table>objects</table>
+            <table>aw_crm_person_add_education</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>date_select</type>
             <year_from>1980</year_from>
+            <field>time</field>
             <caption>Algus</caption>
       </property>
       <property>
-            <name>time_text</name>
-            <table>objects</table>
+            <name>time_end</name>
+            <table>aw_crm_person_add_education</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>date_select</type>
+            <year_from>1980</year_from>
+            <field>time_end</field>
+            <caption>L&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>time_text</name>
+            <table>aw_crm_person_add_education</table>
+            <group>general</group>
             <type>textbox</type>
+            <field>time_text</field>
             <caption>Aeg</caption>
       </property>
       <property>
             <name>length_hrs</name>
-            <table>objects</table>
+            <table>aw_crm_person_add_education</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>length_hrs</field>
             <caption>Kestvus tundides</caption>
       </property>
       <property>
             <name>length</name>
-            <table>objects</table>
+            <table>aw_crm_person_add_education</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>length</field>
             <caption>Kestvus p&amp;amp;auml;evades</caption>
             <comment>&amp;amp;Uuml;le kuuajalise koolituse puhul kestvus kuudes</comment>
       </property>
@@ -60,5 +65,12 @@
             <no_status>1</no_status>
             <maintainer>markop</maintainer>
       </classinfo>
+      <tableinfo>
+            <aw_crm_person_add_education>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_crm_person_add_education>
+      </tableinfo>
 </properties>
 
