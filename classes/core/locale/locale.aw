@@ -181,6 +181,38 @@ class locale
 			return $number;
 		}
 	}
+
+	/** returns genitive case of a proper name
+		@attrib api=1 params=pos
+
+		@param name required type=string
+
+		@param lc optional type=string
+			The locale code, defaults to the current one
+	**/
+	function get_genitive_for_name($name, $lc = NULL)
+	{
+		if (!$lc)
+		{
+			$lc = aw_global_get("LC");
+		}
+
+		static $lc_cases_inst;
+		$lc_cases_inst[$lc] = @get_instance("core/locale/".$lc."/lc_cases", array(), false);
+		if(!is_object($lc_cases_inst[$lc]))
+		{
+			$lc_cases_inst[$lc] = get_instance("core/locale/" .$lc. "/lc_cases");
+		}
+
+		if (method_exists($lc_cases_inst[$lc],"get_genitive_for_name"))
+		{
+			return $lc_cases_inst[$lc]->get_genitive_for_name((string) $name);
+		}
+		else
+		{
+			return $name;
+		}
+	}
 }
 
 ?>
