@@ -58,7 +58,7 @@
             <field>start</field>
             <parent>top_2way_right</parent>
             <caption>Algus</caption>
-      </property>
+      </property> 
       <property>
             <name>end</name>
             <table>planner</table>
