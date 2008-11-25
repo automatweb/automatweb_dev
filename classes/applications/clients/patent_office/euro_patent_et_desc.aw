@@ -43,8 +43,14 @@
 	@property invention_name_et type=textbox
 	@caption Leiutise nimetus (eesti keeles)
 
- 	@property epat_desc_trans type=fileupload reltype=RELTYPE_INVENTION_DESCRIPTION_TRANS form=+emb
+ 	@property epat_desc_trans type=fileupload reltype=RELTYPE_EPAT_DESC_TRANS form=+emb
 	@caption Patendikirjelduse t&otilde;lge
+
+ 	@property epat_desc_trans_appl type=fileupload reltype=RELTYPE_EPAT_DESC_TRANS_APPL form=+emb
+	@caption Patendikirjelduse t&otilde;lke avaldamise sooviavaldus
+
+ 	@property epat_other_file type=fileupload reltype=RELTYPE_EPAT_OTHER_FILE form=+emb
+	@caption Muu
 
 @default group=fee
  	@property add_fee type=textbox size=4
@@ -52,8 +58,14 @@
 
 
 // RELTYPES
-@reltype INVENTION_DESCRIPTION_TRANS value=100 clid=CL_FILE
+@reltype EPAT_DESC_TRANS value=100 clid=CL_FILE
 @caption Patendikirjelduse t6lge
+
+@reltype EPAT_DESC_TRANS_APPL value=201 clid=CL_FILE
+@caption Patendikirjelduse t6lke avaldamise sooviavaldus
+
+@reltype EPAT_OTHER_FILE value=202 clid=CL_FILE
+@caption Muu
 
 */
 
@@ -83,13 +95,13 @@ class euro_patent_et_desc extends intellectual_property
 		$this->show_template = "show_epat.tpl";
 		$this->show_sent_template = "show_sent_epat.tpl";
 		$this->date_vars = array_merge($this->date_vars, array("epat_date"));
-		$this->file_upload_vars = array_merge($this->file_upload_vars, array("epat_desc_trans"));
+		$this->file_upload_vars = array_merge($this->file_upload_vars, array("epat_desc_trans", "epat_desc_trans_appl", "epat_other_file"));
 		$this->text_vars = array_merge($this->text_vars, array("invention_name_et", "epat_nr"));
 		$this->save_fee_vars = array_merge($this->save_fee_vars, array("add_fee"));
 
 		//siia panev miskid muutujad mille iga ringi peal 2ra kustutab... et uuele taotlejale vana info ei j22ks
 		$this->datafromobj_del_vars = array("name_value" , "email_value" , "phone_value" , "fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","county_value","correspond_street_value", "correspond_index_value" , "correspond_country_code_value" , "correspond_city_value","correspond_county_value", "name");
-		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "epat_date", "epat_desc_trans", "epat_nr", "add_fee"));
+		$this->datafromobj_vars = array_merge($this->datafromobj_vars, array("invention_name_et", "epat_date", "epat_desc_trans", "epat_desc_trans_appl", "epat_other_file", "epat_nr", "add_fee"));
 	}
 
 	protected function save_forms($patent)
@@ -161,7 +173,7 @@ class euro_patent_et_desc extends intellectual_property
 			{
 				if (is_uploaded_file($file_data["tmp_name"]))
 				{
-					if ("epat_desc_trans_upload" === $var)
+					if ("epat_desc_trans_upload" === $var or "epat_other_file_upload" === $var or "epat_desc_trans_appl_upload" === $var)
 					{
 						$fp = fopen($file_data["tmp_name"], "r");
 						flock($fp, LOCK_SH);

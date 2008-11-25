@@ -229,13 +229,43 @@
             <field>meta</field>
             <method>serialize</method>
             <type>fileupload</type>
-            <reltype>RELTYPE_INVENTION_DESCRIPTION_TRANS</reltype>
+            <reltype>RELTYPE_EPAT_DESC_TRANS</reltype>
             <form>
                   <num_0>add</num_0>
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
             <caption>Patendikirjelduse t&amp;amp;otilde;lge</caption>
+      </property>
+      <property>
+            <name>epat_desc_trans_appl</name>
+            <table>objects</table>
+            <group>invention</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_EPAT_DESC_TRANS_APPL</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Patendikirjelduse t&amp;amp;otilde;lke avaldamise sooviavaldus</caption>
+      </property>
+      <property>
+            <name>epat_other_file</name>
+            <table>objects</table>
+            <group>invention</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_EPAT_OTHER_FILE</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <caption>Muu</caption>
       </property>
       <property>
             <name>add_fee</name>
@@ -332,11 +362,21 @@
                   <clid>CL_TRADEMARK_STATUS</clid>
                   <caption>Staatus</caption>
             </TRADEMARK_STATUS>
-            <INVENTION_DESCRIPTION_TRANS>
+            <EPAT_DESC_TRANS>
                   <value>100</value>
                   <clid>CL_FILE</clid>
                   <caption>Patendikirjelduse t6lge</caption>
-            </INVENTION_DESCRIPTION_TRANS>
+            </EPAT_DESC_TRANS>
+            <EPAT_DESC_TRANS_APPL>
+                  <value>201</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Patendikirjelduse t6lke avaldamise sooviavaldus</caption>
+            </EPAT_DESC_TRANS_APPL>
+            <EPAT_OTHER_FILE>
+                  <value>202</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Muu</caption>
+            </EPAT_OTHER_FILE>
       </reltypes>
 </properties>
 
