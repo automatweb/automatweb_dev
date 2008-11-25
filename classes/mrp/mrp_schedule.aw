@@ -249,6 +249,7 @@ class mrp_schedule extends class_base
 // /* dbg */ $ts_s = $sec + $micro;
 
 		$workspace_id = (int) $arr["mrp_workspace"];
+		$not_win32 = ("win32" !== aw_ini_get("server.platform"));
 
 		if ($this->can ("view", $workspace_id))
 		{
@@ -263,39 +264,42 @@ class mrp_schedule extends class_base
 			));
 		}
 
-		### get and acquire semaphore for given workspace
-		$sem_id = sem_get($workspace_id, 1, 0666, 1);
-
-		if ($sem_id === false)
+		if ($not_win32)
 		{
-			error::raise(array(
-				"msg" => t("Planeerimisluku k&auml;ivitamine eba&otilde;nnestus! Planeerimist ei toimunud."),
-				"fatal" => true,
-				"show" => true,
-			));
-		}
+			### get and acquire semaphore for given workspace
+			$sem_id = sem_get($workspace_id, 1, 0666, 1);
 
-		if (!sem_acquire($sem_id))
-		{
-			if (!sem_remove($sem_id))
+			if ($sem_id === false)
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
-				// error::raise(array(
-					// "msg" => t("Planeerimisluku lukustamiseta kustutamine eba&otilde;nnestus!"),
-					// "fatal" => false,
-					// "show" => false,
-				// ));
+				error::raise(array(
+					"msg" => t("Planeerimisluku k&auml;ivitamine eba&otilde;nnestus! Planeerimist ei toimunud."),
+					"fatal" => true,
+					"show" => true,
+				));
 			}
 
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
-			// error::raise(array(
-				// "msg" => t("Planeerimiseks lukustamine eba&otilde;nnestus!"),
-				// "fatal" => true,
-				// "show" => true,
-			// ));//!!! vaadata uurida miks ikkagi aegajalt ei saada seda semafori k2tte.
-			echo t("Planeerimiseks lukustamine eba&otilde;nnestus! Planeerimist ei toimunud.") . MRP_NEWLINE;
-			exit_function("mrp_schedule::create");
-			return;
+			if (!sem_acquire($sem_id))
+			{
+				if (!sem_remove($sem_id))
+				{
+					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
+					// error::raise(array(
+						// "msg" => t("Planeerimisluku lukustamiseta kustutamine eba&otilde;nnestus!"),
+						// "fatal" => false,
+						// "show" => false,
+					// ));
+				}
+
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
+				// error::raise(array(
+					// "msg" => t("Planeerimiseks lukustamine eba&otilde;nnestus!"),
+					// "fatal" => true,
+					// "show" => true,
+				// ));//!!! vaadata uurida miks ikkagi aegajalt ei saada seda semafori k2tte.
+				echo t("Planeerimiseks lukustamine eba&otilde;nnestus! Planeerimist ei toimunud.") . MRP_NEWLINE;
+				exit_function("mrp_schedule::create");
+				return;
+			}
 		}
 
 		### start scheduling only if input data has been altered
@@ -307,7 +311,7 @@ class mrp_schedule extends class_base
 			$workspace->save();
 			aw_restore_acl();
 		}
-		else
+		elseif ($not_win32)
 		{
 	  		### Release&remove semaphore. Stop, no rescheduling needed
 			if (!sem_release($sem_id))
@@ -330,6 +334,11 @@ class mrp_schedule extends class_base
 				// ));
 			}
 
+			exit_function("mrp_schedule::create");
+			return;
+		}
+		else
+		{
 			exit_function("mrp_schedule::create");
 			return;
 		}
@@ -731,26 +740,29 @@ class mrp_schedule extends class_base
 
 		$this->save ();
 
-  		### Release&remove semaphore
-		if (!sem_release($sem_id))
+  		if ($not_win32)
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
-			// error::raise(array(
-				// "msg" => t("Planeerimisluku avamine peale planeerimist eba&otilde;nnestus!"),
-				// "fatal" => false,
-				// "show" => false,
-			// ));
-		}
+			### Release&remove semaphore
+			if (!sem_release($sem_id))
+			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
+				// error::raise(array(
+					// "msg" => t("Planeerimisluku avamine peale planeerimist eba&otilde;nnestus!"),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
+			}
 
-		if (!sem_remove($sem_id))
-		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
-			// error::raise(array(
-				// "msg" => t("Planeerimisluku kustutamine peale planeerimist eba&otilde;nnestus!"),
-				// "fatal" => false,
-				// "show" => false,
-			// ));
-			//!!! esineb sageli millegip2rast.
+			if (!sem_remove($sem_id))
+			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
+				// error::raise(array(
+					// "msg" => t("Planeerimisluku kustutamine peale planeerimist eba&otilde;nnestus!"),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
+				//!!! esineb sageli millegip2rast.
+			}
 		}
 
 // /* dbg */ list($micro,$sec) = split(" ",microtime());
