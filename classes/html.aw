@@ -438,7 +438,7 @@ class html extends aw_template
 			$value = htmlspecialchars($value);
 		}
 
-		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
+		$textsize = (empty($textsize) ? "" : " style=\"font-size: {$textsize};\"");
 		// now, the browser detection is best done in javascript
 
 		if (!empty($richtext))
@@ -468,8 +468,8 @@ class html extends aw_template
 		}
 		else
 		{
-			$disabled = ($disabled ? ' disabled="disabled"' : "");
-			$retval = "<textarea ".($style ? "style=\"".$style."\"" :"")." id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$disabled}{$textsize}{$onkeyup}{$onFocus}{$onBlur}{$onchange}>{$value}</textarea>\n";
+			$disabled = (empty($disabled) ? "" : ' disabled="disabled"');
+			$retval = "<textarea ".(empty($style) ? "" : "style=\"".$style."\"")." id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\"{$disabled}{$textsize}{$onkeyup}{$onFocus}{$onBlur}{$onchange}>{$value}</textarea>\n";
 		}
 
 		return $retval;
@@ -555,6 +555,11 @@ class html extends aw_template
 	**/
 	function text($args = array())
 	{
+		if (!isset($args["value"]))
+		{
+			throw new awex_html_param("Required parameter 'value' missing");
+		}
+
 		if (!empty($args["textsize"]))
 		{
 			$element = "<span style=\"font-size: {$args["textsize"]};\">{$args["value"]}</span>";
@@ -898,7 +903,7 @@ class html extends aw_template
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
-		$selector->set("minute_step", ($args["minute_step"] ? $args["minute_step"] : 1));
+		$selector->set("minute_step", (isset($args["minute_step"]) ? $args["minute_step"] : 1));
 		$set = array();
 		if (!empty($args["day"]) && $args["day"] == "text")
 		{
@@ -928,13 +933,20 @@ class html extends aw_template
 		$set["minute"] = 1;
 
 		$selector->configure($set);
-		if (is_array($args['value']))
+		if (isset($args['value']))
 		{
-			$val = mktime((int)$args["value"]["hour"], (int)$args["value"]["minute"], 0, (int)$args["value"]["month"], (int)$args["value"]["day"], (int)$args["value"]["year"]);
+			if (is_array($args['value']))
+			{
+				$val = mktime((int)$args["value"]["hour"], (int)$args["value"]["minute"], 0, (int)$args["value"]["month"], (int)$args["value"]["day"], (int)$args["value"]["year"]);
+			}
+			else
+			{
+				$val = (int) $args['value'];
+			}
 		}
 		else
 		{
-			$val = $args['value'];
+			$val = 0;
 		}
 
 		if (isset($args["disabled"]) or isset($args["textsize"]))
@@ -1524,5 +1536,12 @@ class html extends aw_template
 	{
 		return "<b>".$str."</b>";
 	}
-};
+}
+
+/* Generic html error condition */
+class awex_html extends aw_exception {}
+
+/* Method parameter errors */
+class awex_html_param extends awex_html {}
+
 ?>

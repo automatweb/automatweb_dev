@@ -286,6 +286,7 @@ class relpicker extends  core
 					if (!empty($val["clid"]))
 					{
 						$clids = (array) $val["clid"];
+						$error = false;
 
 						foreach ($clids as $key => $clid)
 						{
@@ -327,7 +328,7 @@ class relpicker extends  core
 				"clid" => $clid,
 				"multiple" => isset($arr["property"]["multiple"]) && $arr["property"]["multiple"] ? $arr["property"]["multiple"] : NULL
 			), "popup_search", false, true);
-			
+
 			// I only want the search button. No edit or new buttons!
 			if (/*is_oid($this->obj->id()) &&*/ !isset($val["no_edit"]) || !$val["no_edit"] || isset($val["search_button"]) && $val["search_button"])
 			{
@@ -340,8 +341,12 @@ class relpicker extends  core
 			}
 		}
 
-		if (isset($val["type"]) && $val["type"] == "select" && is_object($this->obj) && ((isset($val["value"]) && is_oid($val["value"]) && $this->can("edit", $val["value"])) ||
-			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ) && !$val["no_edit"])
+		if (
+			isset($val["type"]) && $val["type"] === "select" &&
+			is_object($this->obj) && ((isset($val["value"]) && is_oid($val["value"]) && $this->can("edit", $val["value"])) ||
+			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ) &&
+			empty($val["no_edit"])
+		)
 		{
 			$val["post_append_text"] .= " ".html::href(array(
 				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
@@ -350,11 +355,11 @@ class relpicker extends  core
 				"tabindex" => "10",
 			));
 		}
-		
+
 		$allow_delete = false;
 		if(
 			isset($val["delete_button"]) && $val["delete_button"] ||
-			isset($val["delete_rels_button"]) && $val["delete_rels_button"] || 
+			isset($val["delete_rels_button"]) && $val["delete_rels_button"] ||
 			isset($val["delete_rels_popup_button"]) && $val["delete_rels_popup_button"]
 		)
 		{
@@ -423,7 +428,7 @@ class relpicker extends  core
 				$awucv["post_ru"] = post_ru();
 				$val["post_append_text"] .= " ".html::href(array(
 					"url" => aw_url_change_var($awucv),
-					//"url" => "javascript:submit_change_form('delete_rels')",					
+					//"url" => "javascript:submit_change_form('delete_rels')",
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 					"title" => t("Kustuta valitud seosed"),
 					"onclick" => "if(!alert('".t("Oled kindel, et soovid valitud seosed kustutada?")."')) { return false; };",
@@ -443,7 +448,8 @@ class relpicker extends  core
 				$val["post_append_text"] .= $button;
 			}
 		}
-		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()) && !$val["no_edit"])
+
+		if ($val["type"] === "select" && is_object($this->obj) && is_oid($this->obj->id()) && empty($val["no_edit"]))
 		{
 			$clid = (array)$arr["relinfo"][$reltype]["clid"];
 			$rel_val = $arr["relinfo"][$reltype]["value"];
@@ -526,7 +532,7 @@ class relpicker extends  core
 		}
 
 		$ol = new object_list();
-		
+
 		$conns = $o->connections_from(array(
 			"type" => $arr["reltype"],
 		));

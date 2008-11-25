@@ -75,7 +75,7 @@ class class_base extends aw_template
 	var $no_rte;
 	var $cb_values;
 	var $layout_mode;
-	var $leftout_layouts;
+	var $leftout_layouts = array();
 	var $_do_call_vcl_mod_reforbs;
 	var $no_mod_view;
 	var $just_saved;
@@ -455,7 +455,7 @@ class class_base extends aw_template
 		{
 			$this->no_rte = 1;
 		}
-		
+
 		// and, if we are in fixed toolbar layout mode, then we should
 		// probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
@@ -558,9 +558,9 @@ class class_base extends aw_template
 		// aga mis siis, kui see on sama aken?
 		$cbtrans = get_instance("applications/cb_trans/cb_translate");
 		$trans_default_id = $cbtrans->get_sysdefault();
-	
+
 		if ($trans_default_id)
-		{	
+		{
 			$translate_url = html::href(array(
 				"caption" => t("T&otilde;lgi"),
 				"url" => $this->mk_my_orb("change",array(
@@ -573,8 +573,8 @@ class class_base extends aw_template
 			"cb_translate"),
 		));
 	}
-		
-		
+
+
 
 		$add_txt = "";
 		if (method_exists($this->inst,"callback_get_add_txt"))
@@ -691,7 +691,7 @@ class class_base extends aw_template
 
 		foreach($resprops as $_k => $val)
 		{
-			if(!in_array(isset($val["parent"]) ? $val["parent"] : null, safe_array($this->leftout_layouts)))
+			if(empty($val["parent"]) or !in_array($val["parent"], $this->leftout_layouts))
 			{
 				$cli->add_property($val);
 			}
@@ -2544,7 +2544,7 @@ class class_base extends aw_template
 				$val = is_array($value) ? $value : array($value);
 				foreach($val as $value)
 				{
-					
+
 					foreach($parse_props as $prop)
 					{
 						// &$properties[$key], $value, $argblock
@@ -3684,7 +3684,7 @@ class class_base extends aw_template
 			};
 
 		};
-		
+
 		$errors = $this->validate_data(array(
 			"request" => $args,
 			"cfgform_id" => $args["cfgform"],
@@ -3783,7 +3783,7 @@ class class_base extends aw_template
 				"value" => $property["value"],
 			);
 		}
-		
+
 		$realprops = $tmp;
 
 		// this seems not to be neccessary, because the real checking is done lightyears before -- ahz
@@ -4839,7 +4839,7 @@ class class_base extends aw_template
 				unset($propdata["default"]);
 			}
 
-			$propgroups = $property_groups[$key];
+			$propgroups = isset($property_groups[$key]) ? $property_groups[$key] : false;
 
 			if (!is_array($propgroups))
 			{
