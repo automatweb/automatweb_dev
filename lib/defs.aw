@@ -2365,6 +2365,16 @@ function eval_buffer($res)
 		aw_global_set("__aw_javascript", $js);
 	}
 
+	function get_name($id)
+	{
+		if(is_oid($id))
+		{
+			$obj = obj($id);
+			return $obj->name();
+		}
+		return "";
+	}
+
 	function iconv_array($in_charset, $out_charset, $arr)
 	{
 		if(is_array($arr))
