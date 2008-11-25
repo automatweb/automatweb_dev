@@ -395,7 +395,7 @@ class class_index
 	@param parent required type=string
 		Parent class name
 	@returns boolean
-	@comment Checks whether class specified by $name extends $parent
+	@comment Checks whether $parent is among class parents
 	**/
 	public static function is_extension_of($name, $parent)
 	{
