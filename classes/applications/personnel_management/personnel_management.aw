@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.88 2008/11/25 15:17:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.89 2008/11/25 16:33:47 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -1479,6 +1479,8 @@ class personnel_management extends class_base
 								"caption" => t("Nimi"),
 								"sortable" => 1,
 							));
+							break;
+
 						case CL_CRM_COUNTRY:
 						case CL_CRM_AREA:
 						case CL_CRM_COUNTY:
@@ -1687,23 +1689,18 @@ class personnel_management extends class_base
 				break;
 
 			case "legal_form":
-				$odl = new object_data_list(
-					array(
-						"name" => "%".htmlspecialchars($_GET["vs_name"])."%",
-						"class_id" => CL_CRM_CORPFORM,
-						"parent" => $arr["obj_inst"]->legal_forms_fld,
-						"lang_id" => array(),
-						"site_id" => array(),
-					),
-					array(
-						CL_CRM_CORPFORM => array("oid", "name"),
-					)
-				);
-				foreach($odl->arr() as $o)
+				$ol = new object_list(array(
+					"name" => "%".htmlspecialchars($_GET["vs_name"])."%",
+					"class_id" => CL_CRM_CORPFORM,
+					"parent" => $arr["obj_inst"]->legal_forms_fld,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				foreach($ol->ids() as $oid)
 				{
 					$t->define_data(array(
-						"oid" => $o["oid"],
-						"name" => html::obj_change_url($o["oid"]),
+						"oid" => $oid,
+						"name" => html::obj_change_url($oid),
 					));
 				}
 				break;
@@ -5683,6 +5680,22 @@ class personnel_management extends class_base
 			$ret = new object_list($prms);
 		}
 		return $ret;
+	}
+
+	public function get_legal_forms()
+	{
+		$prms = array(
+			"class_id" => CL_CRM_CORPFORM,
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		$o = obj($this->get_sysdefault());
+		if(is_oid($o->legal_forms_fld))
+		{
+			$prms["parent"] = $o->legal_forms_fld;
+		}
+		$ol = new object_list($prms);
+		return $ol->names();
 	}
 }
 ?>

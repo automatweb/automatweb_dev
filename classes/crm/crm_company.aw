@@ -1881,6 +1881,14 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			case "ettevotlusvorm":
+				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
+				if(is_oid($pm_inst->get_sysdefault()))
+				{
+					$data["options"] = array_merge(array(0 => t("--vali--")), $pm_inst->get_legal_forms());
+				}
+				break;
+
  			case "language":
  				if(!$data["value"])
  				{
