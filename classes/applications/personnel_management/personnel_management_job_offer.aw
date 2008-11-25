@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.64 2008/11/25 13:18:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.65 2008/11/25 15:17:59 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -37,7 +37,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property archive type=checkbox ch_value=1 table=personnel_management_job_offer field=archive default=0
 @caption Arhiveeritud
 
-@property company type=relpicker reltype=RELTYPE_ORG store=connect
+@property company type=relpicker reltype=RELTYPE_ORG store=connect mode=autocomplete option_is_tuple=1
 @caption Organisatsioon
 
 @property sect type=relpicker reltype=RELTYPE_SECTION store=connect
@@ -55,8 +55,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property endless type=checkbox ch_value=1 table=personnel_management_job_offer field=endless
 @caption T&auml;htajatu
 
-@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect
+@property profession type=relpicker reltype=RELTYPE_PROFESSION store=connect mode=autocomplete option_is_tuple=1
 @caption Ametikoht
+
+@property job_type type=classificator reltype=RELTYPE_JOB_TYPE store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
+@caption Positsioon
+
+@property load type=classificator reltype=RELTYPE_LOAD store=connect sort_callback=CL_PERSONNEL_MANAGEMENT::cmp_function
+@caption T&ouml;&ouml;koormus
 
 @property field type=relpicker reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
@@ -76,31 +82,31 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property loc_city type=relpicker reltype=RELTYPE_CITY store=connect mode=autocomplete option_is_tuple=1
 @caption Linn
 
-@default field=meta
-@default method=serialize
-
-@property workinfo type=textarea rows=15 cols=60
+@property workinfo type=textarea rows=15 cols=60 table=personnel_management_job_offer field=workinfo
 @caption T&ouml;&ouml; sisu
 
-@property requirements type=textarea rows=15 cols=60
+@property requirements type=textarea rows=15 cols=60 table=personnel_management_job_offer field=requirements
 @caption N&otilde;udmised kandidaadile
 
-@property suplementary type=textarea rows=15 cols=60
+@property suplementary type=textarea rows=15 cols=60 table=personnel_management_job_offer field=suplementary
 @caption Kasuks tuleb
 
-@property weoffer type=textarea rows=15 cols=60
+@property weoffer type=textarea rows=15 cols=60 table=personnel_management_job_offer field=weoffer
 @caption Omalt poolt pakume
 
-@property info type=textarea rows=15 cols=60
+@property info type=textarea rows=15 cols=60 table=personnel_management_job_offer field=info
 @caption Lisainfo
 
-@property autoinfo type=checkbox ch_value=1
+@property salary type=textbox table=personnel_management_job_offer field=salary
+@caption Palk
+
+@property autoinfo type=checkbox ch_value=1 table=personnel_management_job_offer field=autoinfo
 @caption Kuva lisainfot automaatselt
 
-@property motivation_letter type=checkbox ch_value=1
+@property motivation_letter type=checkbox ch_value=1 table=personnel_management_job_offer field=motivation_letter
 @caption Vajalik motivatsioonikiri
 
-@property start_working type=chooser
+@property start_working type=chooser table=personnel_management_job_offer field=start_working
 @caption T&ouml;&ouml;leasumise aeg
 
 @property job_offer_file_url type=text store=no
@@ -115,11 +121,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @property apply type=text store=no
 @caption Kandideerin
 
-@property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE
+@property rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE store=connect
 @caption Hindamise skaala
 
 @property udef_classificator_1 type=classificator reltype=RELTYPE_UDEF_CLASSIFICATOR_1 store=connect
 @caption Kasutajadefineeritud klassifikaator 1
+
+@property udef_textbox_1 type=textbox table=personnel_management_job_offer field=udef_textbox_1
+@caption Kasutajadefineeritud tekstikast 1
 
 @property notify_me type=checkbox ch_value=1
 @caption Soovin teadet kandideerimisest e-postiga
@@ -274,6 +283,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 
 @reltype UDEF_CLASSIFICATOR_1 value=22 clid=CL_META
 @caption Kasutajadefineeritud klassifikaator 1
+
+@reltype LOAD value=23 clid=CL_META
+@caption T&ouml;&ouml;koormus
+
+@reltype JOB_TYPE value=24 clid=CL_META
+@caption Positsioon
 
 */
 
@@ -592,6 +607,7 @@ class personnel_management_job_offer extends class_base
 				}
 				break;
 
+			case "company":
 			case "profession":
 				/*
 				if($this->can("view", $this->owner_org))
@@ -606,6 +622,7 @@ class personnel_management_job_offer extends class_base
 			case "loc_city":
 				$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_".$prop["name"]);
 				$prop["autocomplete_params"] = array($prop["name"]);
+				$prop["option_is_tuple"] = true;
 				break;
 
 			case "location":
@@ -2098,16 +2115,42 @@ class personnel_management_job_offer extends class_base
 		if ($tbl == "personnel_management_job_offer" && $field == "")
 		{
 			$this->db_query("create table personnel_management_job_offer (oid int primary key)");
+			$ol = new object_list(array(
+				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+				"parent" => array(),
+				"site_id" => array(),
+				"lang_id" => array(),
+				"status" => array(),
+			));
+			foreach($ol->ids() as $oid)
+			{
+				$this->db_query("
+					INSERT INTO
+						personnel_management_job_offer (oid)
+					VALUES
+						('$oid')
+				");
+			}
 			return true;
 		}
 
 		$props = array(
 			"jo_start" => "start",
 			"jo_end" => "end",
+			"workinfo" => "workinfo",
+			"requirements" => "requirements",
+			"suplementary" => "suplementary",
+			"weoffer" => "weoffer",
+			"info" => "info",
+			"start_working" => "start_working",
+			"autoinfo" => "autoinfo",
+			"motivation_letter" => "motivation_letter",
 		);
 
 		switch($field)
 		{
+			case "autoinfo":
+			case "motivation_letter":
 			case "endless":
 			case "jo_start":
 			case "jo_end":
@@ -2131,21 +2174,40 @@ class personnel_management_job_offer extends class_base
 					{
 						$value = $o->meta($props[$field]);
 						$oid = $o->id();
-						$this->db_query("
-							INSERT INTO
-								personnel_management_job_offer (oid, $field)
-							VALUES
-								('$oid', '$value')
-						");
+						$this->db_query("UPDATE personnel_management_job_offer SET $field = '$value' WHERE oid = '$oid'");
 					}
 				}
 				return true;
 
+			case "workinfo":
+			case "requirements":
+			case "suplementary":
+			case "weoffer":
+			case "info":
+			case "start_working":
 			case "keywords":
+			case "udef_textbox_1":
+			case "salary":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "text"
 				));
+				if(array_key_exists($field, $props))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+						"parent" => array(),
+						"site_id" => array(),
+						"lang_id" => array(),
+						"status" => array(),
+					));
+					foreach($ol->arr() as $o)
+					{
+						$value = $o->meta($props[$field]);
+						$oid = $o->id();
+						$this->db_query("UPDATE personnel_management_job_offer SET $field = '$value' WHERE oid = '$oid'");
+					}
+				}
 				return true;
 		}
 
@@ -2158,6 +2220,14 @@ class personnel_management_job_offer extends class_base
 	public function autocomp_contact($arr)
 	{
 		$this->autocomp($arr, "contact");
+	}
+
+	/**
+		@attrib name=autocomp_company all_args=1
+	**/
+	function autocomp_company($arr)
+	{
+		$this->autocomp($arr, "company");
 	}
 
 	/**
@@ -2285,6 +2355,16 @@ class personnel_management_job_offer extends class_base
 		if(substr($prop, 0, 4) == "loc_")
 		{
 			$autocomplete_options = get_instance(CL_PERSONNEL_MANAGEMENT)->get_locations($clids[$prop]);
+		}
+		elseif($prop == "company")
+		{
+			$autocomplete_options = get_instance(CL_PERSONNEL_MANAGEMENT)->get_employers();
+		}
+		elseif($prop == "profession")
+		{
+			$autocomplete_options = get_instance(CL_PERSONNEL_MANAGEMENT)->get_professions(array(
+				"return_as_names" => true
+			));
 		}
 		else
 		{

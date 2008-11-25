@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.87 2008/11/25 13:18:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.88 2008/11/25 15:17:59 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -1547,18 +1547,10 @@ class personnel_management extends class_base
 				break;
 
 			case "profession":
-				$odl = new object_data_list(
-					array(
-						"name" => "%".htmlspecialchars($_GET["vs_name"])."%",
-						"class_id" => CL_CRM_PROFESSION,
-						"parent" => $arr["obj_inst"]->professions_fld,
-						"lang_id" => array(),
-						"site_id" => array(),
-					),
-					array(
-						CL_CRM_PROFESSION => array("oid", "name"),
-					)
-				);
+				$odl = $this->get_professions(array(
+					"obj_inst" => $arr["obj_inst"],
+					"return_as_odl" => true,
+				));
 				foreach($odl->arr() as $o)
 				{
 					$t->define_data(array(
@@ -1918,6 +1910,10 @@ class personnel_management extends class_base
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"parent" => $arr["obj_inst"]->employers_fld,
 		);
+		if(isset($arr["class_id"]))
+		{
+			$prms["class_id"] = $arr["class_id"];
+		}
 		if(isset($_GET["filt_p"]))
 		{
 			$prms["name"] = $_GET["filt_p"]."%";
@@ -2051,14 +2047,22 @@ class personnel_management extends class_base
 			$sortby => $_GET["sort_order"] == "desc" ? "desc" : "asc",
 		));
 
-		$odl = new object_data_list(
-			$prms,
-			array(
-				CL_CRM_COMPANY => array("oid", "class_id", "name", "created", "contact.name" => "contact", "firmajuht", "firmajuht.name" => "firmajuhi_nimi"),
-				CL_CRM_PERSON => array("oid", "class_id", "name", "created"),
-			)
-		);
-		$odl_arr = $odl->arr();
+		if($arr["return_as_names"])
+		{
+			$ol = new object_list($prms);
+			$odl_arr = $ol->names();
+		}
+		else
+		{
+			$odl = new object_data_list(
+				$prms,
+				array(
+					CL_CRM_COMPANY => array("oid", "class_id", "name", "created", "contact.name" => "contact", "firmajuht", "firmajuht.name" => "firmajuhi_nimi"),
+					CL_CRM_PERSON => array("oid", "class_id", "name", "created"),
+				)
+			);
+			$odl_arr = $odl->arr();
+		}
 
 		exit_function("personnel_management::employers_tbl_data");
 		return $odl_arr;
@@ -3844,6 +3848,21 @@ class personnel_management extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
+			"name" => "salary",
+			"caption" => t("T&ouml;&ouml;tasu"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "job_type",
+			"caption" => t("Positsioon"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "load",
+			"caption" => t("T&ouml;&ouml;koormus"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
 			"name" => "end",
 			"caption" => t("T&auml;htaeg"),
 			"sortable" => 1,
@@ -3968,6 +3987,9 @@ class personnel_management extends class_base
 					)),
 				)),
 				"udef_classificator_1" => $udef_classificator_1[$obj->id()],
+				"salary" => $obj->salary,
+				"load" => $obj->prop("load.name"),
+				"job_type" => $obj->prop("job_type.name"),
 			));
 		}
 		$t->set_default_sortby("created");
@@ -5613,6 +5635,54 @@ class personnel_management extends class_base
 			$names[$o->id()] = $o->trans_get_val("name");
 		}
 		return $names;
+	}
+
+	/**
+		@attrib name=get_employers api=1
+	**/
+	public function get_employers($arr = array())
+	{
+		return $this->employers_tbl_data(array(
+			"class_id" => CL_CRM_COMPANY,
+			"obj_inst" => obj($this->get_sysdefault()),
+			"return_as_names" => true,
+		));
+	}
+
+	/**
+		@attrib name=get_employers api=1
+	**/
+	public function get_professions($arr = array())
+	{
+		if(!isset($arr["obj_inst"]) || !is_object($arr["obj_inst"]))
+		{
+			$arr["obj_inst"] = obj($this->get_sysdefault());
+		}
+		$prms = array(
+			"name" => "%".htmlspecialchars($_GET["vs_name"])."%",
+			"class_id" => CL_CRM_PROFESSION,
+			"parent" => $arr["obj_inst"]->professions_fld,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+
+		if($arr["return_as_odl"])
+		{
+			$props = isset($arr["props"]) && is_array($arr["props"]) ? $arr["props"] : array(
+				CL_CRM_PROFESSION => array("oid", "name"),
+			);
+			$ret = new object_data_list($prms, $props);
+		}
+		elseif($arr["return_as_names"])
+		{
+			$ol = new object_list($prms);
+			$ret = $ol->names();
+		}
+		else
+		{
+			$ret = new object_list($prms);
+		}
+		return $ret;
 	}
 }
 ?>
