@@ -8,32 +8,6 @@
             <type>hidden</type>
       </property>
       <property>
-            <name>test</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>box</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_customers</num_0>
-                  <num_1>grp_projects</num_1>
-                  <num_2>grp_resources</num_2>
-                  <num_3>grp_users_tree</num_3>
-                  <num_4>grp_users_mgr</num_4>
-            </group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>customers_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -52,7 +26,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vspltbox</parent>
+            <parent>customers_tree_box</parent>
       </property>
       <property>
             <name>customers_list</name>
@@ -75,6 +49,102 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>vsplitbox</parent>
+      </property>
+      <property>
+            <name>cs_result</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cs_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>cs_firmajuht</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>cs_contact</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>cs_phone</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>cs_reg_nr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>cs_status</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>textbox</type>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>cs_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>submit</type>
+            <value>Otsi</value>
+            <view_element>1</view_element>
+            <parent>customers_search_box</parent>
+            <store>no</store>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>projects_toolbar</name>
@@ -109,23 +179,26 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
-            <name>legend</name>
+            <name>sp_result</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>grp_projects</group>
-            <type>text</type>
-            <store>no</store>
+            <type>table</type>
             <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+            <store>no</store>
       </property>
       <property>
             <name>sp_name</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
+            <group>grp_projects</group>
             <type>textbox</type>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
             <caption>Number</caption>
       </property>
       <property>
@@ -133,9 +206,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
+            <group>grp_projects</group>
             <type>textbox</type>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
             <caption>Nimetus</caption>
       </property>
       <property>
@@ -143,9 +218,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
+            <group>grp_projects</group>
             <type>datetime_select</type>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
             <caption>Alustamisaeg (materjalide saabumine) alates</caption>
       </property>
       <property>
@@ -153,9 +230,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
+            <group>grp_projects</group>
             <type>datetime_select</type>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
             <caption>T&amp;amp;auml;htaeg alates</caption>
       </property>
       <property>
@@ -163,9 +242,11 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
+            <group>grp_projects</group>
             <type>textbox</type>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
             <caption>Klient</caption>
       </property>
       <property>
@@ -173,10 +254,12 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
+            <group>grp_projects</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
             <caption>Staatus</caption>
       </property>
       <property>
@@ -184,94 +267,13 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_search_proj</group>
-            <type>submit</type>
+            <group>grp_projects</group>
+            <type>button</type>
             <value>Otsi</value>
             <view_element>1</view_element>
+            <parent>projects_search_box</parent>
             <store>no</store>
             <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>sp_result</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_proj</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>cs_name</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <caption>Nimi</caption>
-      </property>
-      <property>
-            <name>cs_firmajuht</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <caption>Kontaktisik</caption>
-      </property>
-      <property>
-            <name>cs_contact</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <caption>Aadress</caption>
-      </property>
-      <property>
-            <name>cs_phone</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>cs_reg_nr</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>textbox</type>
-            <view_element>1</view_element>
-            <caption>Kood</caption>
-      </property>
-      <property>
-            <name>cs_submit</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>submit</type>
-            <value>Otsi</value>
-            <view_element>1</view_element>
-            <store>no</store>
-            <caption>Otsi</caption>
-      </property>
-      <property>
-            <name>cs_result</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_search_cust</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
       </property>
       <property>
             <name>resources_toolbar</name>
@@ -292,7 +294,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>resources_tree_box</parent>
       </property>
       <property>
             <name>resources_list</name>
@@ -302,8 +304,8 @@
             <group>grp_resources</group>
             <type>table</type>
             <store>no</store>
-            <no_caption>1</no_caption>
             <parent>vsplitbox</parent>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>replan</name>
@@ -403,7 +405,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>userlist_tree_box</parent>
       </property>
       <property>
             <name>user_list</name>
@@ -435,7 +437,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vsplitbox</parent>
+            <parent>usermgr_tree_box</parent>
       </property>
       <property>
             <name>user_mgr</name>
@@ -449,6 +451,16 @@
             <parent>vsplitbox</parent>
       </property>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <field>name</field>
+            <method>none</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <parent>left_column</parent>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>owner</name>
             <table>objects</table>
             <field>meta</field>
@@ -457,6 +469,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_OWNER</reltype>
             <clid>CL_CRM_COMPANY</clid>
+            <parent>left_column</parent>
             <caption>Organisatsioon</caption>
       </property>
       <property>
@@ -468,6 +481,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
+            <parent>left_column</parent>
             <caption>Ressursside kaust</caption>
       </property>
       <property>
@@ -479,6 +493,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
+            <parent>left_column</parent>
             <caption>Klientide kaust</caption>
       </property>
       <property>
@@ -490,6 +505,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
+            <parent>left_column</parent>
             <caption>Projektide kaust</caption>
       </property>
       <property>
@@ -501,6 +517,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
+            <parent>left_column</parent>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;de kaust</caption>
       </property>
       <property>
@@ -512,6 +529,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_WORKSPACE_CFGMGR</reltype>
             <clid>CL_CFGMANAGER</clid>
+            <parent>left_column</parent>
             <caption>Keskkonna seadetehaldur</caption>
       </property>
       <property>
@@ -522,6 +540,7 @@
             <group>grp_settings_def</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_HEADER_CONTROLLER</reltype>
+            <parent>left_column</parent>
             <caption>Projekti headeri kontroller</caption>
       </property>
       <property>
@@ -533,6 +552,7 @@
             <type>textbox</type>
             <default>30</default>
             <datatype>int</datatype>
+            <parent>left_column</parent>
             <caption>Operaatori vaates t&amp;amp;ouml;id lehel</caption>
       </property>
       <property>
@@ -544,6 +564,7 @@
             <type>textbox</type>
             <default>30</default>
             <datatype>int</datatype>
+            <parent>left_column</parent>
             <comment>Projektide vaates objekte lehel</comment>
             <caption>Projekte lehel</caption>
       </property>
@@ -555,6 +576,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
+            <parent>left_column</parent>
             <comment>Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettej&amp;amp;otilde;udmise piires.</comment>
             <caption>Allhanke suurim ajanihe (h)</caption>
       </property>
@@ -565,9 +587,10 @@
             <method>serialize</method>
             <group>grp_settings_def</group>
             <type>textbox</type>
-            <no_caption>1</no_caption>
-            <parent>box1</parent>
+            <parent>left_column</parent>
             <datatype>int</datatype>
+            <comment>Kui on m&amp;amp;auml;&amp;amp;auml;ratud (nullist suurem) ajavahemik, arhiveeritakse automaatselt projektid, mille valmissaamisest on m&amp;amp;ouml;&amp;amp;ouml;dunud see ajavahemik. Positiivne t&amp;amp;auml;isarv.</comment>
+            <caption>Automaatne arhiveerimine</caption>
       </property>
       <property>
             <name>automatic_archiving_period_unit</name>
@@ -577,19 +600,8 @@
             <group>grp_settings_def</group>
             <type>text</type>
             <no_caption>1</no_caption>
-            <parent>box1</parent>
+            <parent>left_column</parent>
             <store>no</store>
-      </property>
-      <property>
-            <name>title_sceduler_parameters</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_settings_def</group>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <caption>Planeerija parameetrid</caption>
       </property>
       <property>
             <name>parameter_due_date_overdue_slope</name>
@@ -599,6 +611,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.5</default>
+            <parent>right_column</parent>
             <caption>&amp;amp;Uuml;le t&amp;amp;auml;htaja olevate projektide t&amp;amp;auml;htsuse t&amp;amp;otilde;us t&amp;amp;auml;htaja &amp;amp;uuml;letamise suurenemise suunas</caption>
       </property>
       <property>
@@ -609,6 +622,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>10</default>
+            <parent>right_column</parent>
             <caption>Just t&amp;amp;auml;htaja &amp;amp;uuml;letanud projekti t&amp;amp;auml;htsus</caption>
       </property>
       <property>
@@ -619,6 +633,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.05</default>
+            <parent>right_column</parent>
             <caption>Projekti t&amp;amp;auml;htsuse langus t&amp;amp;auml;htaja kaugenemise suunas</caption>
       </property>
       <property>
@@ -629,6 +644,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.1</default>
+            <parent>right_column</parent>
             <caption>Planeerimise hetkega v&amp;amp;otilde;rdse t&amp;amp;auml;htajaga projekti t&amp;amp;auml;htsus</caption>
       </property>
       <property>
@@ -639,6 +655,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.8</default>
+            <parent>right_column</parent>
             <caption>Kliendi ja projektiprioriteedi suhtelise v&amp;amp;auml;&amp;amp;auml;rtuse t&amp;amp;otilde;us vrd. t&amp;amp;auml;htajaga</caption>
       </property>
       <property>
@@ -650,6 +667,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>right_column</parent>
       </property>
       <property>
             <name>parameter_schedule_length</name>
@@ -659,6 +677,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>2</default>
+            <parent>right_column</parent>
             <caption>Ajaplaani ulatus (a)</caption>
       </property>
       <property>
@@ -669,6 +688,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
+            <parent>right_column</parent>
             <caption>Ajavahemik planeerimise alguse hetkest milles algavaid t&amp;amp;ouml;id ei planeerita (s)</caption>
       </property>
       <property>
@@ -679,6 +699,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
+            <parent>right_column</parent>
             <caption>Ajaplaani alguse vahe planeerimise alguse hetkega (s)</caption>
       </property>
       <property>
@@ -689,6 +710,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
+            <parent>right_column</parent>
             <comment>Positiivne reaalarv v&amp;amp;otilde;i 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset t&amp;amp;ouml;&amp;amp;ouml;d v&amp;amp;otilde;imaldavate ressursside juures t&amp;amp;ouml;&amp;amp;ouml;le kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2</comment>
             <caption>T&amp;amp;ouml;&amp;amp;ouml; algusaja kaal</caption>
       </property>
@@ -700,6 +722,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
+            <parent>right_column</parent>
             <comment>Vt. t&amp;amp;ouml;&amp;amp;ouml; algusaja kaalu selgitust.</comment>
             <caption>T&amp;amp;ouml;&amp;amp;ouml; pikkuse kaal</caption>
       </property>
@@ -710,6 +733,9 @@
             <method>serialize</method>
             <group>grp_settings_def</group>
             <type>textarea</type>
+            <rows>7</rows>
+            <cols>30</cols>
+            <parent>right_column</parent>
             <caption>Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)</caption>
       </property>
       <property>
@@ -719,6 +745,7 @@
             <method>serialize</method>
             <group>grp_settings_def</group>
             <type>select</type>
+            <parent>right_column</parent>
             <caption>Skaala aja&amp;amp;uuml;hik</caption>
       </property>
       <property>
@@ -1431,26 +1458,44 @@
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
+            <general>
+                  <caption>Seaded</caption>
+            </general>
+            <grp_settings_def>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </grp_settings_def>
+            <grp_settings_salesman>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe seaded</caption>
+                  <parent>general</parent>
+            </grp_settings_salesman>
+            <grp_users_tree>
+                  <caption>Kasutajate puu</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </grp_users_tree>
+            <grp_users_mgr>
+                  <caption>Kasutajate rollid</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </grp_users_mgr>
+            <grp_resources>
+                  <caption>Ressursside haldus</caption>
+                  <parent>general</parent>
+            </grp_resources>
+            <grp_worksheet>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;lehed</caption>
+                  <parent>general</parent>
+                  <submit_method>get</submit_method>
+            </grp_worksheet>
             <grp_customers>
                   <caption>Kliendid</caption>
                   <submit>no</submit>
+                  <submit_method>get</submit_method>
             </grp_customers>
             <grp_projects>
                   <caption>Projektid</caption>
             </grp_projects>
-            <grp_search>
-                  <caption>Otsing</caption>
-            </grp_search>
-            <grp_search_proj>
-                  <caption>Otsi projekte</caption>
-                  <submit_method>get</submit_method>
-                  <parent>grp_search</parent>
-            </grp_search_proj>
-            <grp_search_cust>
-                  <caption>Otsi kliente</caption>
-                  <submit_method>get</submit_method>
-                  <parent>grp_search</parent>
-            </grp_search_cust>
             <grp_schedule>
                   <caption>Kalender</caption>
                   <submit>no</submit>
@@ -1489,36 +1534,6 @@
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_notstartable>
-            <grp_settings>
-                  <caption>Seaded</caption>
-            </grp_settings>
-            <grp_settings_def>
-                  <caption>Seaded</caption>
-                  <parent>grp_settings</parent>
-            </grp_settings_def>
-            <grp_settings_salesman>
-                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe seaded</caption>
-                  <parent>grp_settings</parent>
-            </grp_settings_salesman>
-            <grp_users_tree>
-                  <caption>Kasutajate puu</caption>
-                  <parent>grp_settings</parent>
-                  <submit>no</submit>
-            </grp_users_tree>
-            <grp_users_mgr>
-                  <caption>Kasutajate rollid</caption>
-                  <parent>grp_settings</parent>
-                  <submit>no</submit>
-            </grp_users_mgr>
-            <grp_resources>
-                  <caption>Ressursside haldus</caption>
-                  <parent>grp_settings</parent>
-            </grp_resources>
-            <grp_worksheet>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;lehed</caption>
-                  <parent>grp_settings</parent>
-                  <submit_method>get</submit_method>
-            </grp_worksheet>
             <grp_login_select_res>
                   <caption>Vali kasutatav ressurss</caption>
             </grp_login_select_res>
@@ -1554,22 +1569,92 @@
                         <num_2>grp_resources</num_2>
                         <num_3>grp_users_tree</num_3>
                         <num_4>grp_users_mgr</num_4>
+                        <num_5>grp_settings_def</num_5>
                   </group>
+                  <width>20%:80%</width>
                   <area_caption></area_caption>
             </vsplitbox>
-            <projtree_box>
+            <customers_box>
+                  <type>vbox</type>
+                  <parent>vsplitbox</parent>
+                  <group>grp_customers</group>
+                  <area_caption></area_caption>
+            </customers_box>
+            <customers_tree_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Kliendid</area_caption>
+                  <parent>customers_box</parent>
+                  <group>grp_customers</group>
+            </customers_tree_box>
+            <customers_search_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klientide&amp;amp;nbsp;otsing</area_caption>
+                  <parent>customers_box</parent>
+                  <group>grp_customers</group>
+            </customers_search_box>
+            <projects_box>
+                  <type>vbox</type>
                   <parent>vsplitbox</parent>
                   <group>grp_projects</group>
-            </projtree_box>
-            <box1>
+                  <area_caption></area_caption>
+            </projects_box>
+            <projtree_box>
                   <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektid</area_caption>
+                  <parent>projects_box</parent>
+                  <group>grp_projects</group>
+            </projtree_box>
+            <projects_search_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektide&amp;amp;nbsp;otsing</area_caption>
+                  <parent>projects_box</parent>
+                  <group>grp_projects</group>
+            </projects_search_box>
+            <resources_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Ressursid&amp;amp;amp;kategooriad</area_caption>
+                  <parent>vsplitbox</parent>
+                  <group>grp_resources</group>
+            </resources_tree_box>
+            <userlist_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kasutajad</area_caption>
+                  <parent>vsplitbox</parent>
+                  <group>grp_users_tree</group>
+            </userlist_tree_box>
+            <usermgr_tree_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Osakonnad</area_caption>
+                  <parent>vsplitbox</parent>
+                  <group>grp_users_mgr</group>
+            </usermgr_tree_box>
+            <vsplitbox2>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
                   <group>grp_settings_def</group>
                   <area_caption></area_caption>
-                  <caption>Automaatne arhiveerimine</caption>
-            </box1>
+            </vsplitbox2>
+            <left_column>
+                  <type>vbox</type>
+                  <closeable>0</closeable>
+                  <area_caption>P&amp;amp;otilde;hiseaded</area_caption>
+                  <parent>vsplitbox2</parent>
+                  <group>grp_settings_def</group>
+            </left_column>
+            <right_column>
+                  <type>vbox</type>
+                  <closeable>0</closeable>
+                  <area_caption>Planeerija&amp;amp;nbsp;parameetrid</area_caption>
+                  <parent>vsplitbox2</parent>
+                  <group>grp_settings_def</group>
+            </right_column>
             <comment_hbox>
                   <type>hbox</type>
                   <width>40%:60%</width>

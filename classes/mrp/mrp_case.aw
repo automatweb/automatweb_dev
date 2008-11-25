@@ -21,6 +21,8 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
+	@layout vsplitbox type=hbox group=grp_case_workflow width=20%:80%
+
 	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
 	@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data
 
@@ -151,15 +153,13 @@ default group=grp_case_material
 
 
 @default group=grp_case_comments
-
 	@property user_comments type=comments
 	@caption Kommentaarid juhtumi ja t&ouml;&ouml;de kohta
 
 
 @default group=grp_case_workflow
-	@layout manager type=hbox width="20%:80%"
-	@property resource_tree type=text store=no no_caption=1 parent=manager
-	@property workflow_table type=table store=no no_caption=1 parent=manager
+	@property resource_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property workflow_table type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_case_schedule
@@ -514,7 +514,7 @@ class mrp_case extends class_base
 				}
 				if ($ol->count() > 0)
 				{
-					$prop["error"] = t("Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!");
+					$prop["error"] = t("Ei tohi olla rohkem kui &uuml;ks sama numbriga projekt!");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -530,15 +530,14 @@ class mrp_case extends class_base
 				break;
 		}
 
-		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"] && in_array($prop["type"], array("textbox", "datetime_select")))
+		if (!$arr["new"] and $arr["obj_inst"]->prop($prop["name"]) != $prop["value"] && in_array($prop["type"], array("textbox", "datetime_select")))
 		{
-			if ($prop["type"] == "textbox")
+			if ($prop["type"] === "textbox")
 			{
 				$v1 = $arr["obj_inst"]->prop($prop["name"]);
 				$v2 = $prop["value"];
 			}
-			else
-			if ($prop["type"] == "datetime_select")
+			elseif ($prop["type"] === "datetime_select")
 			{
 				$v1 = date("d.m.Y H:i", $arr["obj_inst"]->prop($prop["name"]));
 				$v2 = date("d.m.Y H:i", date_edit::get_timestamp($prop["value"]));
@@ -975,6 +974,7 @@ class mrp_case extends class_base
 
 		if (!is_oid($resources_folder))
 		{
+			$arr["prop"]["value"] = t("Ressursikaust defineerimata");
 			return;
 		}
 
@@ -985,6 +985,12 @@ class mrp_case extends class_base
 //			"state" => new obj_predicate_not(MRP_STATUS_RESOURCE_INACTIVE),
 			"sort_by" => "objects.jrk",
 		));
+
+		if (!count($resource_tree->ids()))
+		{
+			$arr["prop"]["value"] = t("Ressursse pole defineeritud");
+			return;
+		}
 
 		classload ("vcl/treeview");
 		$tree = treeview::tree_from_objects (array (
