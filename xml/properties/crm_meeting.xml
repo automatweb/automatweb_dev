@@ -34,7 +34,8 @@
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
-            <field>start</field>
+	    <field>start</field>
+            <parent>top_2way_right</parent>
             <caption>Algab </caption>
       </property>
       <property>
@@ -42,7 +43,8 @@
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
-            <field>end</field>
+	    <field>end</field>
+            <parent>top_2way_right</parent>
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
