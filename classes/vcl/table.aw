@@ -525,15 +525,15 @@ class aw_table extends aw_template
 		$this->has_pages = true;
 		$this->records_per_page = $arr["records_per_page"];
 		$this->pageselector = $arr["type"];
-		$this->pageselector_position = $arr["position"] ? $arr["position"] : "top";
+		$this->pageselector_position = isset($arr["position"]) ? $arr["position"] : "top";
 
-		if($arr["d_row_cnt"])
+		if(isset($arr["d_row_cnt"]))
 		{
 			$this->d_row_cnt = $arr["d_row_cnt"];
 			$this->no_recount = 1;
 		}
 
-		if($arr["no_recount"])
+		if(!empty($arr["no_recount"]))
 		{
 			$this->no_recount = 1;
 		}
@@ -567,36 +567,54 @@ class aw_table extends aw_template
 
 		// figure out the column by which we must sort
 		// start from the parameters
-		if (!($this->sortby = (isset($params["field"]) ? $params["field"] : NULL)))
+		if (!empty($params["field"]))
+		{
+			$this->sortby = $params["field"];
+		}
+		elseif (!empty($_GET["sortby"]))
 		{
 			// if it was not specified as a parameter the next place is the url
-			if (!($this->sortby = $_GET["sortby"]))
-			{
-				// and if it is not in the url either, we will try the session
-				if (!($this->sortby = $aw_tables[$sess_field_key]))
-				{
-					// and finally we get the default
-					$this->sortby = isset($this->default_order) ? $this->default_order : NULL;
-				}
-			}
+			$this->sortby = $_GET["sortby"];
 		}
+		elseif (!empty($aw_tables[$sess_field_key]))
+		{
+			// and if it is not in the url either, we will try the session
+			$this->sortby = $aw_tables[$sess_field_key];
+		}
+		elseif (!empty($this->default_order))
+		{
+			// and finally we get the default
+			$this->sortby = $this->default_order;
+		}
+		else
+		{
+			$this->sortby = NULL;
+		}
+
 		// now figure out the order of sorting
 		// start with parameters
-		if (!isset($params["sorder"]) || !($this->sorder = $params["sorder"]))
+		if (!empty($params["sorder"]))
+		{
+			$this->sorder = $params["sorder"];
+		}
+		elseif (!empty($_GET["sort_order"]))
 		{
 			// if it was not specified as a parameter the next place is the url
-			if (!($this->sorder = $_GET["sort_order"]))
-			{
-				// and if it is not in the url either, we will try the session
-				if (!($this->sorder = $aw_tables[$sess_field_order]))
-				{
-					// and finally we get the default
-					if (!isset($this->default_odir) || !($this->sorder = $this->default_odir))
-					{
-						$this->sorder = "asc";
-					}
-				}
-			}
+			$this->sorder = $_GET["sort_order"];
+		}
+		elseif (!empty($aw_tables[$sess_field_order]))
+		{
+			// and if it is not in the url either, we will try the session
+			$this->sorder = $aw_tables[$sess_field_order];
+		}
+		elseif (!empty($this->default_odir))
+		{
+			// and finally we get the default
+			$this->sorder = $this->default_odir;
+		}
+		else
+		{
+			$this->sorder = "asc";
 		}
 
 
