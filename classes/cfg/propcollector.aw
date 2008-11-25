@@ -320,19 +320,19 @@ class propcollector extends aw_template
 		if (empty($fields["field"]))
 		{
 			$fields["field"] = $fields["name"];
-		};
-
+		}
+/*
 		if ($fields["store"] === "no")
 		{
 			//unset($fields["table"]);
 			//unset($fields["method"]);
 			//unset($fields["field"]);
 		}
-
+ */
 		if (!empty($fields["view"]) && !$this->views[$fields["view"]])
 		{
 			$this->views[$fields["view"]] = 1;
-		};
+		}
 
 		$this->properties[$name] = $fields;
 		$this->name = $name;
@@ -626,6 +626,7 @@ class propcollector extends aw_template
 		$this->currentclass = $cname;
 		$targetfile = AW_DIR . "xml/properties/{$cname}.xml";
 		$outdir = AW_DIR . "xml/properties/";
+		$parent_modified = false;
 
 		### check whether xml file is already up to date
 		if (file_exists($targetfile))
@@ -694,6 +695,12 @@ class propcollector extends aw_template
 		foreach($lines as $line)
 		{
 			$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
+
+			if (!isset($m[1]) or !isset($this->tags[$m[1]]))
+			{ // skip api doc comments and other irrelevant tags
+				continue;
+			}
+
 			$tagname = $m[1];
 			$tagdata = $m[2];
 
