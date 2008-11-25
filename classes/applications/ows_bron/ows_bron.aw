@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.47 2008/10/01 13:41:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.48 2008/11/25 12:01:22 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -2836,7 +2836,7 @@ die(dbg::dump($return));
 			"num_rooms" => $o->prop("num_rooms"),
 			"num_adults" => $o->prop("adults_per_room"),
 			"room_type" => iconv("utf-8", aw_global_get("charset"), $o->prop("rate_title")),
-			"room_details" => iconv("utf-8", aw_global_get("charset"), $o->prop("rate_long_note")),
+			"room_details" => iconv("utf-8", aw_global_get("charset")."//IGNORE", $o->prop("rate_long_note")),
 			"hotel_name" => iconv("utf-8", aw_global_get("charset"), $hotel["HotelName"]),
 			"hotel_contact" => iconv("utf-8", aw_global_get("charset"), $hotel["AddressLine1"]." ".$hotel["AddressLine1"]." ".$hotel["Phone"]." ".$hotel["Fax"]." ".$hotel["Email"]),
 			"tot_price" => $o->prop("total_charge"),
