@@ -3036,6 +3036,14 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "logo":
+				if(!is_oid($arr["obj_inst"]->id()))
+				{
+					// Save the company object, cuz the picture will set the company object as its parent.
+					$arr["obj_inst"]->save();
+				}
+				break;
+
 			case "phone_id":
 			case "telefax_id":
 			case "url_id":
