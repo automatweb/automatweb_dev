@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.29 2008/11/25 13:19:17 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.30 2008/11/26 15:00:44 instrumental Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -24,7 +24,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_CRM_PERSON, on_disconn
 @property school2 type=textbox field=school_2
 @caption Muu kool
 
-@property faculty type=relpicker automatic=1 reltype=RELTYPE_FACULTY store=connect
+@property faculty type=relpicker reltype=RELTYPE_FACULTY no_edit=1 store=connect
 @caption Teaduskond
 
 @property degree type=select field=degree
@@ -149,6 +149,17 @@ class crm_person_education extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "faculty":
+				if(is_oid($arr["obj_inst"]->school1))
+				{
+					$prop["options"] = obj($arr["obj_inst"]->school1)->faculties();
+				}
+				else
+				{
+					$prop["options"] = array();
+				}
+				break;
+
 			case "start":
 				$ops["---"] = "---";
 				for($i = date("Y") + 1; $i >= 1950; $i--)
@@ -193,6 +204,7 @@ class crm_person_education extends class_base
 			case "school_1":
 				$ops = get_instance(CL_PERSONNEL_MANAGEMENT)->get_schools();
 				$prop["options"] = array("" => t("--vali--")) + $ops;
+				$prop["onchange"] = "var asd = this.name.replace('school1', 'faculty'); var el = aw_get_el(asd); $(el).removeOption(/./); $(el).ajaxAddOption('".$this->mk_my_orb("get_faculties_options")."', {'school1' : this.value});";
 				break;
 		};
 		return $retval;
@@ -300,6 +312,20 @@ class crm_person_education extends class_base
 	public function on_disconnect_edu_from_person($arr)
 	{
 		return get_instance("crm_person_education_obj")->on_disconnect_edu_from_person($arr);
+	}
+
+	/**
+		@attrib name=get_faculties_options nologin=1 all_args=1
+	**/
+	public function get_faculties_options($arr)
+	{
+		$cl_json = get_instance("protocols/data/json");
+		$names = obj($arr["school1"])->faculties()->names();
+		foreach($names as $k => $v)
+		{
+			$names[$k] = iconv(aw_global_get("charset"), "UTF-8", $v);
+		}
+		die($cl_json->encode($names));
 	}
 };
 ?>
