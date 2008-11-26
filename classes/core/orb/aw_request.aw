@@ -67,6 +67,17 @@ class aw_request
 
 	/**
 	@attrib api=1 params=pos
+	@param name required type=string
+		Argument name to find.
+	@returns bool
+	**/
+	public function arg_isset($name)
+	{
+		return isset($this->args[$name]);
+	}
+
+	/**
+	@attrib api=1 params=pos
 	@returns array
 		Request arguments. argument_name => argument_value pairs
 	**/
