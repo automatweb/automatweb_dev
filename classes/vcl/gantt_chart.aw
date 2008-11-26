@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.24 2008/07/04 15:00:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.25 2008/11/26 10:54:02 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -14,9 +14,28 @@
 
 class gantt_chart extends class_base
 {
-	var $data = array ();
-	var $rows = array ();
-	var $navigation = true;
+	protected $data = array ();
+	protected $rows = array ();
+	protected $navigation = "";
+	protected $chart_caption = ""; // caption text (string)
+	protected $chart_footer = ""; // footer text (string)
+	protected $start = 0;
+	protected $end = 0;
+	protected $column_length = 0;
+	protected $columns = array();
+	protected $subdivisions = 1;
+	protected $chart_width = 1000; // pixels
+	protected $row_height = 12; // pixels
+	protected $chart_id = "vcl_gantt_chrart";
+	protected $style = "default";
+	protected $row_dfn = "";
+	protected $timespans = 0;
+	protected $timespan_range = 0;
+	protected $row_anchors = "noanchors";
+	protected $bar_anchors = "noanchors";
+	protected $pixel_length = 1;
+	protected $cell_length = 0;
+	protected $cell_width = 0;
 
 	function gantt_chart ()
 	{
@@ -73,6 +92,15 @@ class gantt_chart extends class_base
 		@param timespans optional type=int
 			Number of time stops at the top.
 
+		@param caption optional type=string
+			Chart caption text.
+
+		@param navigation optional type=string
+			Chart navigation part.
+
+		@param footer optional type=string
+			Chart footer text.
+
 		@errors none
 		@returns none
 
@@ -86,7 +114,7 @@ class gantt_chart extends class_base
 				"width" => 850,
 				"row_height" => 10,
 			));
-			
+
 	**/
 	function configure_chart ($arr)
 	{
@@ -108,6 +136,21 @@ class gantt_chart extends class_base
 		$this->pixel_length = ($this->end - $this->start) / $this->chart_width;
 		$this->cell_length = (int) ($this->column_length / $this->subdivisions);
 		$this->cell_width = ceil ($this->cell_length / $this->pixel_length);
+
+		if (isset($arr["caption"]))
+		{
+			$this->chart_caption = (string) $arr["caption"];
+		}
+
+		if (isset($arr["footer"]))
+		{
+			$this->chart_footer = (string) $arr["footer"];
+		}
+
+		if (isset($arr["navigation"]))
+		{
+			$this->navigation = (string) $arr["navigation"];
+		}
 	}
 
 	/** Configure chart navigation
@@ -237,15 +280,15 @@ class gantt_chart extends class_base
 		@attrib api=1 params=name
 
 		@param row required type=string
-			Row name to which to add new bar. 
+			Row name to which to add new bar.
 
 		@param start required type=timestamp
-			Bar starting place on timeline. 
+			Bar starting place on timeline.
 
 		@param length required type=int
-			Bar length in seconds. 
+			Bar length in seconds.
 
-		@param layer optional type=int 
+		@param layer optional type=int
 			Layer to put the bar on. 0 is default. Layers with larger numbers are shown on top.
 
 		@param title required type=string
@@ -563,7 +606,7 @@ class gantt_chart extends class_base
 					$this->vars (array (
 						"title" => $definition["title"],
 						"column_width" => $this->cell_width,
-						"subdivisions" => $this->subdivisions,
+						"subdivisions" => $this->subdivisions
 					));
 					$header_row .= $this->parse ("column_head");
 				}
@@ -572,35 +615,64 @@ class gantt_chart extends class_base
 			{
 				$this->vars (array (
 					"title" => $nr + 1,
-					"column_width" => $this->cell_width,
+					"column_width" => $this->cell_width
 				));
 				$header_row .= $this->parse ("column_head");
 			}
 		}
 
+		$caption = $navigation = $timespans = "";
+
 		if ($this->timespans)
 		{
 			$timespans = $this->get_timespans();
 		}
-		else
+
+		### caption
+		if (strlen($this->chart_caption))
 		{
-			$timespans = "";
+			$this->vars (array (
+				"caption" => $this->chart_caption
+			));
+			$caption = $this->parse ("chart_caption");
+		}
+
+		### footer
+		if (strlen($this->chart_footer))
+		{
+			$this->vars (array (
+				"footer" => $this->chart_footer
+			));
+			$footer = $this->parse ("chart_footer");
+		}
+
+		### navigation
+		if (strlen($this->navigation))
+		{
+			$this->vars (array (
+				"navigation" => $this->navigation
+			));
+			$navigation = $this->parse ("chart_navigation");
 		}
 
 		### parse table
 		$this->vars (array (
+			"chart_caption" => $caption,
+			"chart_footer" => $footer,
+			"chart_navigation" => $navigation,
 			"chart_id" => $this->chart_id,
+			"chart_width" => $this->chart_width,
 			"row_dfn" => $this->row_dfn,
 			"row_dfn_span" => ($this->timespans ? 2 : 1),
 			"columns" => count ($this->columns) * $this->subdivisions,
 			"subdivision_row" => $timespans,
 			"column_head" => $header_row,
-			"data_row" => $rows,
+			"data_row" => $rows
 		));
 		$table = $this->parse ();
 
 		### cat all & return
-		$chart = $style . $navigation . $table;
+		$chart = $style . $table;
 		return $chart;
 	}
 

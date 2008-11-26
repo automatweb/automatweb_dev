@@ -76,9 +76,10 @@ a.VclGanttHeader
 	margin: 0px;
 }
 
-#VclGanttTable{VAR:chart_id}
+div#VclGanttChartBox{VAR:chart_id}
 {
 	width: {VAR:chart_width}px;
+	overflow: visible;
 }
 
 .VclGanttColumn, .VclGanttSubdivision
