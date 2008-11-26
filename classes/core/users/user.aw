@@ -1042,6 +1042,8 @@ class user extends class_base
 		if ($grp_o->class_id() == CL_GROUP)
 		{
 			// sync manually here.
+			// Why manually??? -kaarel
+			/*
 			// remove alias from user to group
 			if ($real_user->is_connected_to(array("to" => $grp_o->id())))
 			{
@@ -1090,6 +1092,8 @@ class user extends class_base
 				));
 				$inside_ol->delete();
 			}
+			*/
+			get_instance(CL_GROUP)->remove_user_from_group($o, $grp_o);
 		}
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");
@@ -1308,6 +1312,7 @@ class user extends class_base
 
 	function callback_post_save($arr)
 	{
+		$group_inst = get_instance(CL_GROUP);
 		$go_to = false;
 		if ($arr["new"])
 		{
@@ -1319,18 +1324,7 @@ class user extends class_base
 			if (is_oid($aug_oid) && $aug_oid != $arr["obj_inst"]->parent())
 			{
 				$aug_o = obj($aug_oid);
-				$arr["obj_inst"]->connect(array(
-					"to" => $aug_o->id(),
-					"reltype" => "RELTYPE_GRP",
-				));
-
-				// add reverse alias to group
-				$aug_o->connect(array(
-					"to" => $arr["obj_inst"]->id(),
-					"reltype" => "RELTYPE_MEMBER" // from group
-				));
-
-				//$arr["obj_inst"]->create_brother($aug_o->id());
+				$group_inst->add_user_to_group($arr["obj_inst"], $aug_o);
 			}
 
 			post_message_with_param(
@@ -1352,17 +1346,7 @@ class user extends class_base
 
 				// and do the add to group thing
 				$user = $arr["obj_inst"];
-
-				$user->connect(array(
-					"to" => $parent->id(),
-					"reltype" => "RELTYPE_GRP",
-				));
-
-				// add reverse alias to group
-				$parent->connect(array(
-					"to" => $user->id(),
-					"reltype" => "RELTYPE_MEMBER" // from group
-				));
+				$group_inst->add_user_to_group($user, $parent);
 
 				// get groups
 				$grps = $parent->path();
@@ -1370,18 +1354,8 @@ class user extends class_base
 				{
 					if ($p_o->class_id() == CL_GROUP)
 					{
-						$user->connect(array(
-							"to" => $p_o->id(),
-							"reltype" => "RELTYPE_GRP",
-						));
+						$group_inst->add_user_to_group($user, $p_o);
 
-						// add reverse alias to group
-						$p_o->connect(array(
-							"to" => $user->id(),
-							"reltype" => "RELTYPE_MEMBER", // from group
-						));
-
-						$last_bro = $user->create_brother($p_o->id());
 						if ($p_o->id() == $parent->id())
 						{
 							$go_to = $last_bro;
@@ -1997,11 +1971,38 @@ class user extends class_base
 		if (is_oid($tmp) && $this->can("view", $tmp))
 		{
 			$user_obj = obj($tmp);
-			$groups_list = new object_list(
-				$user_obj->connections_from(array(
-					"type" => "RELTYPE_GRP",
-				))
-			);
+			if(aw_ini_get("users.use_group_membership") == 1)
+			{
+				$groups_list = new object_list(array(
+					"class_id" => CL_GROUP,
+					"status" => object::STAT_ACTIVE,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_GROUP.RELTYPE_MEMBERSHIP.RELTYPE_USER" => $tmp,
+					"CL_GROUP.RELTYPE_MEMBERSHIP.status" => object::STAT_ACTIVE,
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_GROUP.RELTYPE_MEMBERSHIP.membership_forever" => 1,
+							new object_list_filter(array(
+								"logic" => "AND",
+								"conditions" => array(
+									"CL_GROUP.RELTYPE_MEMBERSHIP.date_start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+									"CL_GROUP.RELTYPE_MEMBERSHIP.date_end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+								),
+							)),
+						),
+					)),
+				));
+			}
+			else
+			{
+				$groups_list = new object_list(
+					$user_obj->connections_from(array(
+						"type" => "RELTYPE_GRP",
+					))
+				);
+			}			
 		}
 		return $groups_list;
 	}

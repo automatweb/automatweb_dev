@@ -7,7 +7,7 @@ class group_membership_obj extends _int_object
 		if($s == object::STAT_ACTIVE)
 		{
 			// Damn double trouble! Gotta create brother.
-			if(is_oid(parent::prop("gms_user")) && is_oid(parent::prop("gms_group")) && (parent::prop("membership_forever") || parent::prop("date_start") <= time() && parent::prop("date_end") > time()))
+			if(is_oid(parent::prop("gms_user")) && is_oid(parent::prop("gms_group")) && (parent::prop("membership_forever") || parent::prop("date_start") <= time() && parent::prop("date_end") > time()) && obj(parent::prop("gms_user"))->has_brother(parent::prop("gms_group")) === false)
 			{
 				obj(parent::prop("gms_user"))->create_brother(parent::prop("gms_group"));
 			}
@@ -66,7 +66,7 @@ class group_membership_obj extends _int_object
 		}
 		if(!parent::prop("membership_forever") && parent::prop("date_end") > time())
 		{
-			$event = $this->mk_my_orb("brother_destroyer", array("id" => parent::id()), CL_GROUP_MEMBERSHIP);
+			$event = parent::instance()->mk_my_orb("brother_destroyer", array("id" => parent::id()), CL_GROUP_MEMBERSHIP);
 			$sche = get_instance("scheduler");
 			$sche->remove(array(
 				"event" => $event,
@@ -242,6 +242,49 @@ class group_membership_obj extends _int_object
 		}
 		// The damn thing won't go through save() on connect.
 		$this->brother_creator(array("id" => $arr["connection"]->prop("to")));
+	}
+
+	/** Returns the object_list of all valid memberships at the moment.
+
+	@attrib name=get_valid_memberships params=name
+
+	@param group optional type=array/oid
+
+	@param user optional type=array/oid
+
+	**/
+	function get_valid_memberships($arr)
+	{
+		enter_function("group_membership_obj::get_valid_memberships");
+		// $group, $user
+		extract($arr);
+
+		$group = (array) $group;
+		$user = (array) $user;
+
+		$r = new object_list(array(
+			"class_id" => CL_GROUP_MEMBERSHIP,
+			"status" => object::STAT_ACTIVE,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_GROUP_MEMBERSHIP.RELTYPE_USER" => $user,
+			"CL_GROUP_MEMBERSHIP.RELTYPE_GROUP" => $group,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"membership_forever" => 1,
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"date_start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+							"date_end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+						),
+					)),
+				),
+			)),
+		));
+		exit_function("group_membership_obj::get_valid_memberships");
+		return $r;
 	}
 }
 

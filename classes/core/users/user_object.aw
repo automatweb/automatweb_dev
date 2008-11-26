@@ -100,7 +100,7 @@ class user_object extends _int_object
 	**/
 	function get_groups_for_user()
 	{
-		$ol = new object_list($this->connections_from(array("type" => "RELTYPE_GRP")));
+		$ol = get_instance(CL_USER)->get_groups_for_user(parent::prop("uid"));
 		$rv = $ol->arr();
 		// now, the user's own group is not in this list probably, so we go get that as well
 		$ol = new object_list(array(
@@ -171,6 +171,17 @@ class user_object extends _int_object
 			$p .= $chars[$rand];
 		}
 		return $p;
+	}
+
+	function create_brother($p)
+	{
+		$rv = parent::create_brother($p);
+		if(obj($p)->class_id() == CL_GROUP)
+		{
+			// If you save user under group, the user must be added into that group!
+			get_instance(CL_GROUP)->add_user_to_group(obj(parent::id()), obj($p), array("brother_done" => true));
+		}
+		return $rv;
 	}
 
 	public function is_group_member($user, $group)

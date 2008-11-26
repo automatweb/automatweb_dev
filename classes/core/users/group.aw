@@ -171,6 +171,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 @reltype BOOKMARK value=8 clid=CL_EXTLINK,CL_MENU
 @caption Kohustuslik j&auml;rjehoidja
+
+@reltype MEMBERSHIP value=9 clid=CL_GROUP_MEMBERSHIP
+@caption Grupikuuluvus
 */
 
 class group extends class_base
@@ -728,6 +731,12 @@ class group extends class_base
 
 	function on_add_alias_to_group($arr)
 	{
+		if($arr["connection"]->prop("reltype") == 2 && $arr["connection"]->prop("from.class_id") == CL_USER && aw_ini_get("users.use_group_membership") == 1)
+		{
+			// Selliseid krdi seoseid ei tohiks yldse luua!
+			arr(debug_backtrace(), true);
+		}
+		
 		if ($arr["connection"]->prop("reltype") == 2) //RELTYPE_MEMBER
 		{
 			$group = $arr["connection"]->from();
@@ -850,6 +859,11 @@ class group extends class_base
 
 	function on_add_alias_for_group($arr)
 	{
+		if($arr["connection"]->prop("reltype") == RELTYPE_MEMBER  && $arr["connection"]->prop("from.class_id") == CL_GROUP && aw_ini_get("users.use_group_membership") == 1)
+		{
+			// Selliseid krdi seoseid ei tohiks yldse luua!
+			arr(debug_backtrace(), true);
+		}
 		if ($arr["connection"]->prop("reltype") == RELTYPE_ACL)
 		{
 			// handle acl add
@@ -877,14 +891,16 @@ class group extends class_base
 
 		@attrib params=pos api=1
 		@param user required type=object
-		User object to be added into group
+			User object to be added into group
 		@param group required type=object
-		Group object to what the user will be added
+			Group object to what the user will be added
+		@param args optional type=array
+			Array of arguments (start, end, brother_done)
 
 		@comment
 		Adds the $user to the $group.
 	**/
-	function add_user_to_group($user, $group)
+	function add_user_to_group($user, $group, $arr = array())
 	{
 		// for each group in path from the to-add group
 		foreach($group->path() as $p_o)
@@ -894,20 +910,76 @@ class group extends class_base
 				continue;
 			}
 
-			// connection from user to group
-			$user->connect(array(
-				"to" => $p_o->id(),
-				"reltype" => "RELTYPE_GRP",
-			));
-
-			// connection to group from user
-			$p_o->connect(array(
-				"to" => $user->id(),
-				"reltype" => "RELTYPE_MEMBER",
-			));
-
 			// brother under group
-			$user->create_brother($p_o->id());
+			if(!isset($arr["brother_done"]) || !$arr["brother_done"])
+			{
+				$brother_id = $user->create_brother($p_o->id());
+			}
+
+			if(aw_ini_get("users.use_group_membership") == 1)
+			{
+				// I can't see why we need two membership objects with EXACTLY the same attributes.
+				$ol_args = array(
+					"class_id" => CL_GROUP_MEMBERSHIP,
+					"status" => array(),	// If it's inactive, we'll activate it! ;)
+					"lang_id" => array(),	// The lang_id is never checked for these anyway.
+					"site_id" => array(),	// The site_id is never checked for these anyway.
+					"parent" => array(),	// The parent doesn't make a difference here.
+					"gms_user" => $user->id(),
+					"gms_group" => $group->id(),
+				);
+				if(isset($arr["start"]) && isset($arr["end"]))
+				{
+					$ol_args["date_start"] = $arr["start"];
+					$ol_args["date_end"] = $arr["end"];
+				}
+				else
+				{
+					$ol_args["membership_forever"] = 1;
+				}
+				$ol = new object_list($ol_args);
+				if($ol->count() > 0)
+				{
+					$gms = $ol->begin();
+					$gms->set_status(object::STAT_ACTIVE);
+					$gms->save();
+				}
+				else
+				{
+					$gms = obj();
+					$gms->set_class_id(CL_GROUP_MEMBERSHIP);
+					$gms->set_name(sprintf(t("%s kuulub gruppi %s"), $user->uid, $group->name));
+					$gms->set_parent($user->id());
+					$gms->set_status(object::STAT_ACTIVE);
+					$gms->gms_user = $user->id();
+					$gms->gms_group = $group->id();
+					if(isset($arr["start"]) && isset($arr["end"]))
+					{
+						$gms->date_start = $arr["start"];
+						$gms->date_end = $arr["end"];
+					}
+					else
+					{
+						$gms->membership_forever = 1;
+					}
+					$gms->save();
+				}
+//				die($gms->id());
+			}
+			else
+			{
+				// connection from user to group
+				$user->connect(array(
+					"to" => $p_o->id(),
+					"reltype" => "RELTYPE_GRP",
+				));
+
+				// connection to group from user
+				$p_o->connect(array(
+					"to" => $user->id(),
+					"reltype" => "RELTYPE_MEMBER",
+				));
+			}
 		}
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");
@@ -934,10 +1006,28 @@ class group extends class_base
 		));
 		$user_brothers->delete();
 
-		// delete alias from user to this group
 		$tmp = obj_set_opt("no_cache", 1);
+		if(aw_ini_get("users.use_group_membership") == 1)
+		{
+			// Deactivate all valid membership objects for this group
+			$ol = get_instance("group_membership_obj")->get_valid_memberships(array("group" => $group->id()));
+			foreach($ol->arr() as $o)
+			{
+				$o->set_status(object::STAT_NOTACTIVE);
+				$o->save();
+			}
+		}
+		else
+		// delete alias from user to this group
 		if ($group->id() && count($user->connections_from(array("to" => $group->id()))) > 0)
 		{
+			// delete alias from user to this group
+			if (count($user->connections_from(array("to" => $group->id()))) > 0)
+			{
+				$user->disconnect(array(
+					"from" => $group->id()
+				));
+			}
 			obj_set_opt("no_cache", $tmp);
 			$user->disconnect(array(
 				"from" => $group->id()
@@ -960,18 +1050,31 @@ class group extends class_base
 			));
 			$user_brothers->delete();
 
-			// remove all aliases from those groups
-			foreach($item->connections_from(array("to" => $user->id())) as $c)
+			if(aw_ini_get("users.use_group_membership") != 1)
 			{
-				$c->delete();
-			}
+				// remove all aliases from those groups
+				foreach($item->connections_from(array("to" => $user->id())) as $c)
+				{
+					$c->delete();
+				}
 
-			// also remove all aliases from user to the group
-			if (count($user->connections_from(array("to" => $item->id()))) > 0)
+				// also remove all aliases from user to the group
+				if (count($user->connections_from(array("to" => $item->id()))) > 0)
+				{
+					$user->disconnect(array(
+						"from" => $item->id()
+					));
+				}
+			}
+		}
+		if(aw_ini_get("users.use_group_membership") == 1)
+		{
+			// Deactivate all valid membership objects for subgroups
+			$ol = $user->get_valid_memberships(array("group" => $ol->ids()));
+			foreach($ol->arr() as $o)
 			{
-				$user->disconnect(array(
-					"from" => $item->id()
-				));
+				$o->set_status(object::STAT_NOTACTIVE);
+				$o->save();
 			}
 		}
 		$c = get_instance("cache");
@@ -984,12 +1087,38 @@ class group extends class_base
 	**/
 	function get_group_members($g)
 	{
-		$ol = new object_list(array(
-			"class_id" => CL_USER,
-			"parent" => $g->id(),
-			"lang_id" => array(),
-			"site_id" => array()
-		));
+		if(false && aw_ini_get("users.use_group_membership") == 1)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_USER,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).RELTYPE_GROUP" => $g->id(),
+				"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).status" => object::STAT_ACTIVE,
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).membership_forever" => 1,
+						new object_list_filter(array(
+							"logic" => "AND",
+							"conditions" => array(
+								"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).date_start" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+								"CL_USER.RELTYPETO_USER(CL_GROUP_MEMBERSHIP).date_end" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+							),
+						)),
+					),
+				)),
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_USER,
+				"parent" => $g->id(),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
 		return $ol->arr();
 	}
 

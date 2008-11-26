@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.15 2008/11/06 18:51:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.16 2008/11/26 20:51:01 instrumental Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -104,6 +104,32 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 	@layout vbox_ug_content type=vbox parent=ug_hbox_data
 
 		@property table_usergroups type=table store=no no_caption=1 parent=vbox_ug_content
+
+@groupinfo content_packages caption=Sisupaketid
+
+	@groupinfo packages caption=Paketid parent=content_packages
+	@default group=packages
+
+		@property packages_tlb type=toolbar no_caption=1 store=no
+
+		@property packages_tbl type=table no_caption=1 store=no
+
+	@groupinfo conditions caption=Tingimused parent=content_packages
+	@default group=conditions
+
+		@property conditions_tlb type=toolbar no_caption=1 store=no
+
+		@layout conditions_ type=hbox width=20%:80%
+
+			@layout conditions_left type=vbox parent=conditions_
+
+				@layout conditions_tree type=vbox parent=conditions_left closeable=1 area_caption=Sisupaketid
+
+					@property conditions_tree type=treeview no_caption=1 store=no parent=conditions_tree
+
+			@layout conditions_right type=vbox parent=conditions_
+
+				@property conditions_tbl type=table no_caption=1 store=no parent=conditions_right
 
 @reltype ROOT value=1 clid=CL_GROUP,CL_MENU
 @caption Juurkaust/-grupp
@@ -298,6 +324,34 @@ class user_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "conditions_tbl":
+				foreach($arr["request"]["conditions_tbl"] as $id => $data)
+				{
+					$u = obj($id);
+					$u->set_prop("price", $data["price"]);
+					$u->set_prop("acl_change", isset($data["acls"]["acl_change"]) ? 1 : 0);
+					$u->set_prop("acl_add", isset($data["acls"]["acl_add"]) ? 1 : 0);
+					$u->set_prop("acl_admin", isset($data["acls"]["acl_admin"]) ? 1 : 0);
+					$u->set_prop("acl_delete", isset($data["acls"]["acl_delete"]) ? 1 : 0);
+					$u->set_prop("acl_view", isset($data["acls"]["acl_view"]) ? 1 : 0);
+					$u->save();
+				}
+				break;
+
+			case "packages_tbl":
+				foreach($arr["request"]["packages_tbl"] as $id => $data)
+				{
+					$data["date_start"] = mktime(0, 0, 0, $data["date_start"]["month"], $data["date_start"]["day"], $data["date_start"]["year"]);
+					$data["date_end"] = mktime(0, 0, 0, $data["date_end"]["month"], $data["date_end"]["day"], $data["date_end"]["year"]);
+					$o = obj($id);
+					foreach($data as $k => $v)
+					{
+						$o->set_prop($k, $v);
+					}
+					$o->save();
+				}
+				break;
+
 			case "search_sbt":
 				$srch_prps = array("search_blocked", "search_active_time", "search_user", "search_person", "search_groups", "search_users_from");
 				$srch_data = array();
@@ -1756,6 +1810,131 @@ class user_manager extends class_base
 		}
 
 		return $pm;
+	}
+
+	function init_packages_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date_start",
+			"caption" => t("Tellimisaja algus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date_end",
+			"caption" => t("Tellimisaja l&otilde;pp"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "duration",
+			"caption" => t("Kasutusaja pikkus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+		));
+		return $t;
+	}
+
+	function _get_packages_tbl($arr)
+	{
+		$t = $this->init_packages_tbl($arr);
+		$odl = $this->get_content_packages();
+		foreach($odl->arr() as $id => $od)
+		{
+			$date_edit = new date_edit();
+			$date_edit->configure(array(
+				"day" => "",
+				"month" => "",
+				"year" => "",
+			));
+			$t->define_data(array(
+				"oid" => $id,
+				"name" => html::textbox(array(
+					"name" => "packages_tbl[".$id."][name]",
+					"value" => $od["name"],
+				)),
+				"price" => html::textbox(array(
+					"name" => "packages_tbl[".$id."][price]",
+					"value" => $od["duration"],
+					"size" => 4,
+				)),
+				"date_start" => $date_edit->gen_edit_form(
+					"packages_tbl[".$id."][date_start]",
+					$od["date_start"],
+					2003,
+					2010
+				),
+				"date_end" => $date_edit->gen_edit_form(
+					"packages_tbl[".$id."][date_end]",
+					$od["date_end"],
+					2003,
+					2010
+				),
+				"duration" => html::textbox(array(
+					"name" => "packages_tbl[".$id."][duration]",
+					"value" => $od["duration"],
+					"size" => 4,
+				)),
+				"change" => html::obj_change_url($id),
+			));
+		}
+	}
+
+	function _get_packages_tlb($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_new_button(array(CL_CONTENT_PACKAGE), $arr["obj_inst"]->id());
+		$t->add_save_button();
+		$t->add_delete_button();
+	}
+
+	function _get_conditions_tlb($arr)
+	{
+		return get_instance(CL_CONTENT_PACKAGE)->_get_conditions_tlb($arr, true);
+	}
+
+	function _get_conditions_tree($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		foreach($this->get_content_packages()->arr() as $id => $od)
+		{
+			$t->add_item(0, array(
+				"id" => $id,
+				"name" => $_GET["contpack"] == $id ? "<b>".$od["name"]."</b>" : $od["name"],
+				"url" => aw_url_change_var("contpack", $id),
+			));
+		}
+	}
+
+	function get_content_packages()
+	{
+		return new object_data_list(
+			array(
+				"class_id" => CL_CONTENT_PACKAGE,
+				"lang_id" => array(),
+				"site_id" => array(),
+			),
+			array(
+				CL_CONTENT_PACKAGE => array("name", "price", "date_start", "date_end", "duration"),
+			)
+		);
+	}
+
+	function _get_conditions_tbl($arr)
+	{
+		return get_instance(CL_CONTENT_PACKAGE)->_get_conditions_tbl($arr, true);
 	}
 }
 ?>
