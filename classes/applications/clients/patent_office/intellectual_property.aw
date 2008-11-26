@@ -480,23 +480,24 @@ abstract class intellectual_property extends class_base
 			</script>";
 		}
 		else
-		{
-			if (html2pdf::can_convert())
-			{
-				if($arr["alias"]["to"])
-				{
-					$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]));
-				}
-				else
-				{
-					$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"]));
-				}
-				$pdfurl = str_replace("https" , "http" , $pdfurl);
-				$data["pdf"] = "<input type='button' value='Salvesta pdf' class='nupp'  onclick='javascript:window.location.href=\"".$pdfurl."\";'><br />";
-			}
+            	{
+                        if (html2pdf::can_convert())
+                        {
+                                if($arr["alias"]["to"])
+                                {
+                                        $pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"], "sent_form" => $_GET["sent_form"]));
+                                }
+                                else
+                                {
+                                        $pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"] , "sent_form" => $_GET["sent_form"]));
+                                }
+                                $pdfurl = str_replace("https" , "http" , $pdfurl);
+                                $data["pdf"] = "<input type='button' value='Salvesta pdf' class='nupp'  onclick='javascript:window.location.href=\"".$pdfurl."\";'><br />";
+                        }
 
-			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onclick='javascript:document.changeform.submit();'>";
-		}
+                        $data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onclick='javascript:document.changeform.submit();'>";
+                }
+
 
 		if($this->can("view" , $arr["id"]))
 		{
