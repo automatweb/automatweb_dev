@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.165 2008/11/19 11:20:34 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.166 2008/11/26 10:52:20 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -2890,12 +2890,13 @@ class rfp extends class_base
 					"room" => $roomid,
 					"start" => $new_times["start1"],
 					"end" => $new_times["end"], // well, this has one setback actually, we need to calculate the minimum hours, but maybe these are already reservated ??? .. what then??
-					"people" => $people,
+					"people" => $rv->prop("people_count"),
 					"products" => $rv->meta("amount"),
 					"bron" => $rv,
+					"detailed_info" => true
 				));
 				// lets check for max hours and its extra prices
-				$sum = $this->alter_reservation_price_include_extra_max_hours($rv, $mgro, $sum);
+				$sum = $this->alter_reservation_price_include_extra_max_hours($rv, $mgro, $sum["room_price"]);
 				$price = $sum[$currency];
 				if($len >= 1 && $len <= 6)
 				{
