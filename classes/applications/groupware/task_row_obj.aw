@@ -33,6 +33,20 @@ class task_row_obj extends _int_object
 		return parent::prop($pn);
 	}
 
+	function set_comment($comment)
+	{
+		$this->set_prop("content" , $comment);
+	}
+
+	function comment()
+	{
+		if(parent::comment())
+		{
+			return parent::comment();
+		}
+		return $this->prop("content");
+	}
+
 	function set_prop($pn, $pv)
 	{
 		switch($pn)
