@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.48 2008/11/24 14:08:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.49 2008/11/26 09:46:02 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1 maintainer=kristo
@@ -864,6 +864,36 @@
 @property uservar85 type=classificator reltype=RELTYPE_VARUSER90 store=connect
 @caption User-defined var 85
 
+@property uservar86 type=classificator reltype=RELTYPE_VARUSER91 store=connect
+@caption User-defined var 86
+
+@property uservar87 type=classificator reltype=RELTYPE_VARUSER92 store=connect
+@caption User-defined var 87
+
+@property uservar88 type=classificator reltype=RELTYPE_VARUSER93 store=connect
+@caption User-defined var 88
+
+@property uservar89 type=classificator reltype=RELTYPE_VARUSER94 store=connect
+@caption User-defined var 89
+
+@property uservar90 type=classificator reltype=RELTYPE_VARUSER95 store=connect
+@caption User-defined var 90
+
+@property uservar91 type=classificator reltype=RELTYPE_VARUSER96 store=connect
+@caption User-defined var 91
+
+@property uservar92 type=classificator reltype=RELTYPE_VARUSER97 store=connect
+@caption User-defined var 92
+
+@property uservar93 type=classificator reltype=RELTYPE_VARUSER98 store=connect
+@caption User-defined var 93
+
+@property uservar94 type=classificator reltype=RELTYPE_VARUSER99 store=connect
+@caption User-defined var 94
+
+@property uservar95 type=classificator reltype=RELTYPE_VARUSER100 store=connect
+@caption User-defined var 95
+
 ---------------- text ----------------
 
 @groupinfo texts caption="Text"
@@ -1366,6 +1396,36 @@
 
 @reltype VARUSER90 value=90 clid=CL_META
 @caption kasutajadefineeritud muutuja 90
+
+@reltype VARUSER91 value=111 clid=CL_META
+@caption kasutajadefineeritud muutuja 91
+
+@reltype VARUSER92 value=112 clid=CL_META
+@caption kasutajadefineeritud muutuja 92
+
+@reltype VARUSER93 value=113 clid=CL_META
+@caption kasutajadefineeritud muutuja 93
+
+@reltype VARUSER94 value=114 clid=CL_META
+@caption kasutajadefineeritud muutuja 94
+
+@reltype VARUSER95 value=115 clid=CL_META
+@caption kasutajadefineeritud muutuja 95
+
+@reltype VARUSER96 value=116 clid=CL_META
+@caption kasutajadefineeritud muutuja 96
+
+@reltype VARUSER97 value=117 clid=CL_META
+@caption kasutajadefineeritud muutuja 97
+
+@reltype VARUSER98 value=118 clid=CL_META
+@caption kasutajadefineeritud muutuja 98
+
+@reltype VARUSER99 value=119 clid=CL_META
+@caption kasutajadefineeritud muutuja 909
+
+@reltype VARUSER100 value=120 clid=CL_META
+@caption kasutajadefineeritud muutuja 100
 
 
 @reltype REGISTER value=10 clid=CL_REGISTER
