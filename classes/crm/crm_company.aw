@@ -2989,7 +2989,7 @@ class crm_company extends class_base
 					"name" => "creab",
 					"img" => "save.gif",
 					"tooltip" => t("Loo arve"),
-					"action" => "create_bill"
+					"action" => "create_bill",
 				));
 				break;
 
@@ -3797,6 +3797,7 @@ class crm_company extends class_base
 		$arr["sbt_data2"] = 0;
 		$arr["search_tbl"] = 0;
 		$arr["sector"] = $_GET["sector"];
+		$arr["bunch_bugs"] = "";
 		if($_GET['set_buyer_status'] && $_GET['action'] == 'new')
 		{
 			$arr["set_buyer_status"] = $_GET['set_buyer_status'];
@@ -5873,12 +5874,18 @@ class crm_company extends class_base
 					"to" => $br->id(),
 					"type" => "RELTYPE_ROW"
 				));
-
 			}
 		}
 
 		//teeb bugide lisamise eraldi
-		$bill->add_bug_comments($_SESSION["ccbc_bug_comments"]);
+		if($arr["bunch_bugs"])
+		{
+			$bill->add_bug_comments($_SESSION["ccbc_bug_comments"]);
+		}
+		else
+		{
+			$bill->add_bug_comments_single_rows($_SESSION["ccbc_bug_comments"]);
+		}
 		unset($_SESSION["ccbc_bug_comments"]);
 
 		if($_SESSION["create_bill_ru"])

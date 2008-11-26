@@ -287,11 +287,11 @@ class crm_bill_obj extends _int_object
 				continue;
 			}
 			$o = obj($comment);
-			$data[mktime(0,0,0,date("m",$o->created()),date("d",$o->created()),date("Y",$o->created()))][$o->parent()][] = $o;
+			$data[$o->parent()][$o->parent()][] = $o;
+//			$data[mktime(0,0,0,date("m",$o->created()),date("d",$o->created()),date("Y",$o->created()))][$o->parent()][] = $o;
 		}
 		
 		ksort($data);
-		
 		foreach($data as $day => $day_array)
 		{
 			foreach($day_array as $bug => $bug_comments)
@@ -306,6 +306,43 @@ class crm_bill_obj extends _int_object
 
 		return $this->id();
 	}
+
+	/** Adds bug comments to bill... every comment to single row
+		@attrib api=1 params=pos
+		@param bugcomments required type=array
+			array(bug comment id, bug comment 2 id , ...)
+		@returns
+			bill oid
+	**/
+	public function add_bug_comments_single_rows($bugcomments)
+	{
+		$data = array();
+		foreach($bugcomments as $comment)
+		{
+			if(!$this->can("view" , $comment))
+			{
+				continue;
+			}
+			$o = obj($comment);
+			$data[$o->created()][$o->parent()][] = $o;
+		}
+
+		ksort($data);
+		foreach($data as $day => $day_array)
+		{
+			foreach($day_array as $bug => $bug_comments)
+			{
+				$b = obj($bug);
+				if(!$this->check_if_has_other_customers($b->prop("customer")))
+				{
+					$this->add_bug_row($bug_comments);
+				}
+			}
+		}
+
+		return $this->id();
+	}
+
 
 	/** Adds bug comments to bill row
 		@attrib api=1 params=pos

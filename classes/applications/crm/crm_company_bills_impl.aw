@@ -911,7 +911,20 @@ exit_function("bills_impl::_get_bill_task_list");
 				"name" => "create_bill",
 				"img" => "save.gif",
 				"tooltip" => t("Koosta arve"),
-				"action" => "create_bill"
+				"url" => "
+					javascript:var ansa = confirm('" . t("Kas koondada arendusulesannete kommentaarid?") . "');
+					var asd = document.getElementsByName('bunch_bugs');
+					if (ansa)
+					{
+						asd[0].value=1;
+					}
+					else
+					{
+						asd[0].value=0;
+					}
+					submit_changeform('create_bill');
+				",
+			//	"action" => "create_bill"
 			));
 		//}
 		$tb->add_button(array(
@@ -1113,6 +1126,17 @@ exit_function("bills_impl::_get_bill_task_list");
 			"numeric" => 1,
 			"align" => "right"
 		));
+		if($this->show_bill_balance)
+		{
+			$t->define_field(array(
+				"name" => "balance",
+				"caption" => t("Arve saldo"),
+				"sortable" => 1,
+				"numeric" => 1,
+				"align" => "right"
+			));
+		}
+
 /*
 		$t->define_field(array(
 			"name" => "paid",
@@ -1151,6 +1175,7 @@ exit_function("bills_impl::_get_bill_task_list");
 
 	function _get_bills_list($arr)
 	{
+		if($arr["request"]["show_bill_balance"]) $this->show_bill_balance = 1;
 		$t =& $arr["prop"]["vcl_inst"];
 		if($_GET["get_all_customers_without_client_relation"])
 		{
