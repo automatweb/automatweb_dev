@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.51 2008/11/06 14:34:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.52 2008/11/27 10:47:42 instrumental Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -22,7 +22,7 @@
 	@property mto type=textbox size=80
 	@caption Kellele
 
-	@property mto_relpicker type=relpicker reltype=RELTYPE_TO_MAIL_ADDRESS store=connect
+	@property mto_relpicker type=relpicker reltype=RELTYPE_TO_MAIL_ADDRESS multiple=1 store=connect
 	@caption Kellele
 
 	@property cc type=textbox field=mtargets1 size=80
@@ -277,6 +277,11 @@ class mail_message extends class_base
 		*/
 
 		$to_addr = $msgobj->prop("mto");
+		foreach($msgobj->connections_from(array("type" => "RELTYPE_TO_MAIL_ADDRESS")) as $conn)
+		{
+			$to_addr .= strlen($to_addr) > 0 ? "," : "";
+			$to_addr .= $conn->prop("to.name");
+		}
 		$from = $msgobj->prop("mfrom");
 
 		if($this->can("view", $from))
@@ -368,7 +373,7 @@ class mail_message extends class_base
 				"froma" => $address,
 				"fromn" => $name,
 				"subject" => $msgobj->name(),
-				"to" => $msgobj->prop("mto"),
+				"to" => $to_addr,//$msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
 				"bcc" => $msgobj->prop("bcc"),
 				"body" => t("Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"),
@@ -425,7 +430,7 @@ class mail_message extends class_base
 				"froma" => $address,
 				"fromn" => $name,
 				"subject" => $msgobj->name(),
-				"to" => $msgobj->prop("mto"),
+				"to" => $to_addr,//$msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
 				"bcc" => $msgobj->prop("bcc"),
 				"body" => $message,
@@ -470,6 +475,34 @@ class mail_message extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "mto_relpicker":
+				if(isset($_GET["mto_relpicker"]) && $arr["new"])
+				{
+					$ids = array();
+					// Security -kaarel 27.11.2008
+					foreach((array)$_GET["mto_relpicker"] as $id)
+					{
+						if(is_oid($id))
+						{
+							$ids[] = $id;
+						}
+					}
+					// End of security
+					$mls = $this->mails_from_persons_and_companies(array("ids" => $ids));
+					if(count($mls) > 0)
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_ML_MEMBER,
+							"oid" => $mls,
+							"site_id" => array(),
+							"lang_id" => array(),
+						));
+						$prop["value"] = $ol->ids();
+						$prop["options"] = $ol->names();
+					}
+				}
+				break;
+
 			case "edit_toolbar":
 				if($arr["request"]["form"] == "showmsg")
 				{
@@ -1509,9 +1542,12 @@ class mail_message extends class_base
 		// this messenger, but I need the textual value for it
 		// field, I'll resolve the numeric
 		$msgr = get_instance(CL_MESSENGER_V2);
-		$msgr->_connect_server(array(
-			"msgr_id" => $arr["msgrid"],
-		));
+		if(isset($arr["msgrid"]) && is_oid($arr["msgrid"]))
+		{
+			$msgr->_connect_server(array(
+				"msgr_id" => $arr["msgrid"],
+			));
+		}
 		// this is the place where I need to resolve the from address
 		if(!strlen($arr["msgid"]))
 		{
@@ -1560,7 +1596,9 @@ class mail_message extends class_base
 		}
 
 		//print t("saadetud<p>");
-		if($adr && $adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
+		// Why do we only return 'return_url' if we've got the $message->mfrom? -kaarel 26.11.2008
+//		if($adr && $adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
+		if(isset($arr["return_url"]))
 		{
 			return $arr["return_url"];
 		//	print '<script type="text/JavaScript">window.close();</script>';
@@ -1762,6 +1800,65 @@ class mail_message extends class_base
 			"include_part_body" => $arr["attach_id"],
 		));
 		return $ms["attachments"][$arr["attach_id"]];
+	}
+
+	/** Returns the OIDs of ml_members for a list of ml_member, crm_person and crm_company OIDs.
+		@attrib name=mails_from_persons_and_companies api=1 params=name
+
+		@param ids required type=array(oid)
+			The OIDs of ml_member, crm_person and crm_company objects.
+	**/
+	public function mails_from_persons_and_companies($arr)
+	{
+		$ids = isset($arr["ids"]) ? safe_array($arr["ids"]) : array();
+		$mls = array();
+		$orgs = array();
+		$persons = array();
+		if(count($ids) > 0)
+		{
+			$odl = new object_data_list(
+				array(
+					"oid" => $ids,
+					"lang_id" => array(),
+					"site_id" => array(),
+				),
+				array(
+					CL_CRM_COMPANY => array("class_id"),
+					CL_CRM_PERSON => array("class_id"),
+					CL_ML_MEMBER => array("class_id"),
+				)
+			);
+			foreach($odl->arr() as $oid => $o)
+			{
+				switch($o["class_id"])
+				{
+					case CL_CRM_COMPANY:
+						$orgs[] = $oid;
+						break;
+
+					case CL_CRM_PERSON:
+						$persons[] = $oid;
+						break;
+
+					case CL_ML_MEMBER:
+						$mls[] = $oid;
+						break;
+				}
+			}
+			if(count($orgs) > 0)
+			{
+				$mls = array_merge($mls, get_instance("crm_company_obj")->get_mails(array(
+					"id" => $orgs,
+				))->ids());
+			}
+			if(count($persons) > 0)
+			{
+				$mls = array_merge($mls, get_instance("crm_person_obj")->emails(array(
+					"id" => $persons,
+				))->ids());
+			}
+		}
+		return $mls;
 	}
 };
 ?>
