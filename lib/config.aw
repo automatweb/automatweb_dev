@@ -324,7 +324,7 @@ function load_config ($files = array(), $cache_file = null)
 					throw new aw_exception("Failed to write configuration file cache.");
 				}
 				// Make it rewritable for 'make ini'
-				chmod($cache_file, 0664);
+				chmod($cache_file, 0666);
 			}
 			else
 			{
