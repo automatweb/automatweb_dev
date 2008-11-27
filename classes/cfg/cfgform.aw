@@ -4752,8 +4752,8 @@ class cfgform extends class_base
 				$_GET["group"] = $this->cfgview_vars["group"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 			}
 
-			$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
-			$_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
+			$this->cfgview_vars["awcb_cfgform"] = $_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
+			$this->cfgview_vars["awcb_display_mode"] = $_GET["awcb_display_mode"] = $args["display_mode"];// sest $this->cfgview_vars-i ei kasutata tegelikult orbis miskip2rast
 
 			// make request
 			classload("core/orb/orb");
