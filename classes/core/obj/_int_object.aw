@@ -2362,7 +2362,7 @@ class _int_object
 				{
 					error::raise(array(
 						"id" => "ERR_ACL",
-						"msg" => sprintf(t("object::save(): no acess to save object %s under %s !"), $this->obj["oid"], $this->obj["parent"])
+						"msg" => sprintf(t("object::save(): no access to edit object %s!"), $this->obj["oid"])
 					));
 					return;
 				}
