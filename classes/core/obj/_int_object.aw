@@ -2538,8 +2538,9 @@ class _int_object
 		{
 			$this->_int_load_property_values();
 		}
+		$cur_v = null;
 		// if this is a complex thingie, then loopdaloop
-		if (strpos($prop, ".") !== false)
+		if (strpos($prop, ".") !== false || preg_match("/RELTYPE_(.*)\(CL_(.*)\)/", $prop, $mt))
 		{
 			$o = $this;
 			$bits = explode(".", $prop);
@@ -2547,15 +2548,35 @@ class _int_object
 			{
 				if (substr($part, 0, strlen("RELTYPE")) == "RELTYPE")
 				{
-					$prop_dat = array();
-					$tmp = $o->get_first_obj_by_reltype($part);
-					if ($tmp)
+					if (preg_match("/RELTYPE_(.*)\(CL_(.*)\)/", $part, $mt))
 					{
-						$cur_v = $tmp->id();
+						// relation from class $mt[2] with type $mt[1]
+						$c = new connection();
+						$finder = array(
+							"from.class_id" => constant("CL_".$mt[2]),
+							"reltype" => "RELTYPE_".$mt[1],
+							"to" => $cur_v ? $cur_v : $this->id()
+						);
+						$conns = $c->find($finder);
+						if (!count($conns))
+						{
+							return null;
+						}
+						$con = reset($conns);
+						$cur_v = $con["from"];
 					}
 					else
 					{
-						return null;
+						$prop_dat = array();
+						$tmp = $o->get_first_obj_by_reltype($part);
+						if ($tmp)
+						{
+							$cur_v = $tmp->id();
+						}
+						else
+						{
+							return null;
+						}
 					}
 				}
 				else
