@@ -525,5 +525,7 @@
 		
 		<image_verification>
 		</image_verification>
+		<google_chart>
+		</google_chart>
 	</property>
 </xml>

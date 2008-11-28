@@ -36,15 +36,6 @@
             <field>expl_txt</field>
       </property>
       <property>
-            <name>gchart</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>google_chart</type>
-            <store>no</store>
-            <field>gchart</field>
-            <caption>Graafik</caption>
-      </property>
-      <property>
             <name>bug_status</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -476,6 +467,26 @@
             <caption>Bugmail CC</caption>
       </property>
       <property>
+            <name>persons_chart</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>data_r_charts</parent>
+            <store>no</store>
+            <field>persons_chart</field>
+      </property>
+      <property>
+            <name>times_chart</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>google_chart</type>
+            <no_caption>1</no_caption>
+            <parent>data_r_charts</parent>
+            <store>no</store>
+            <field>times_chart</field>
+      </property>
+      <property>
             <name>submit2</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -671,7 +682,7 @@
             </BUGTYPE>
             <COMMENT>
                   <value>6</value>
-		  <clid>CL_TASK_ROW</clid>
+                  <clid>CL_TASK_ROW</clid>
                   <caption>Kommentaar</caption>
             </COMMENT>
             <TEAM>
@@ -894,6 +905,13 @@
                   <group>general</group>
                   <area_caption></area_caption>
             </data_r_bot_right>
+            <data_r_charts>
+                  <type>vbox</type>
+                  <parent>content_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>general</group>
+            </data_r_charts>
       </layout>
 </properties>
 

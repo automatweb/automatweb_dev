@@ -24,9 +24,6 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property name type=textbox table=objects parent=name_way no_caption=1
 	@property expl_txt type=text store=no no_caption=1 parent=name_way
-
-	@property gchart type=google_chart store=no
-	@caption Graafik
 	
 @layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
 @layout settings type=hbox parent=settings_wrap
@@ -188,6 +185,11 @@ define("BUG_STATUS_CLOSED", 5);
 					@property bug_mail type=textbox parent=data_r_bot_right captionside=top size=15
 					@caption Bugmail CC
 
+		@layout data_r_charts type=vbox parent=content_right closeable=1 area_caption=Graafikud
+
+				@property persons_chart type=google_chart no_caption=1 parent=data_r_charts store=no
+				
+				@property times_chart type=google_chart no_caption=1 parent=data_r_charts store=no
 
 
 	@property submit2 type=submit store=no no_caption=1
@@ -411,6 +413,151 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "persons_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_PIE_3D);
+				$c->set_size(array(
+					"width" => 400,
+					"height" => 100,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$conn = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_COMMENT",
+				));
+				$times = array();
+				$labels = array();
+				$ui = get_instance(CL_USER);
+				foreach($conn as $cn)
+				{
+					$cmo = $cn->to();
+					$times[$cmo->createdby()] += $cmo->prop("add_wh");
+				}
+				foreach($times as $uid => $time)
+				{
+					$pn = $ui->get_person_for_uid($uid)->name();
+					$labels[] = $pn." (".$time.")";
+				}
+				$c->add_data($times);
+				$c->set_labels($labels);
+				$c->set_title(array(
+					"text" => t("T&ouml;&ouml;tunnid isikute kaupa"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+			
+			case "times_chart":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$c = &$arr["prop"]["vcl_inst"];
+				$c->set_type(GCHART_LINE_CHART);
+				$c->set_size(array(
+					"width" => 400,
+					"height" => 150,
+				));
+				$c->add_fill(array(
+					"area" => GCHART_FILL_BACKGROUND,
+					"type" => GCHART_FILL_SOLID,
+					"colors" => array(
+						"color" => "e9e9e9",
+					),
+				));
+				$conn = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_COMMENT",
+				));
+				$times = array();
+				$crd = $arr["obj_inst"]->created();
+				$data = array();
+				$week = 24 * 60 * 60 * 7;
+				if(time() - $crd > $week * 2)
+				{
+					$time = $week;
+				}
+				else
+				{
+					$time = $week / 7;
+				}
+				$max = 0;
+				foreach($conn as $cn)
+				{
+					$cmo = $cn->to();
+					$cr = $cmo->created();
+					if($time == $week)
+					{
+						$wd = date('N', $cr);
+						$d = date('d', $cr) - ($wd - 1);
+					}
+					else
+					{
+						$d = date('d', $cr);
+					}
+					$key = mktime(0,0,0,date('m', $cr), $d, date('Y', $cr));
+					$times[$key] += $cmo->prop("add_wh");
+					if($times[$key] > $max)
+					{
+						$max = $times[$key];
+					}
+				}
+				if($time == $week)
+				{
+					$wd = date('N', $crd);
+					$d = date('d', $crd) - ($wd - 1);
+				}
+				else
+				{
+					$d = date('d', $crd);
+				}
+				$data = array();
+				for($i = mktime(0,0,0, date('m', $crd), $d, date('Y', $crd)); $i < time(); $i = mktime(0,0,0, date('m', $time + $i), date('d', $time + $i), date('Y', $time + $i)))
+				{
+					$data[] = $times[$i];
+				}
+				if(count($data) == 1)
+				{
+					$data[] = $data[0];
+				}
+				$c->add_data($data);
+				$c->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
+				$left_axis = array();
+				for($i = 0; $i <= $max; $i+= $max/4)
+				{
+					$left_axis[] = round($i, 2);
+				}
+				$c->add_axis_label(0, $left_axis);
+				$bot_axis = array();
+				for($i = $crd; $i < time(); $i += round((time() - $crd) / 3))
+				{
+					$bot_axis[] = date('d.m.Y', $i);
+				}
+				$c->add_axis_label(1, $bot_axis);
+				$c->add_axis_style(1, array(
+					"color" => "999999",
+					"font" => 11,
+					"align" => GCHART_ALIGN_CENTER,
+				));
+				$c->set_grid(array(
+					"xstep" => 33,
+					"ystep" => 25,
+				));
+				$c->set_title(array(
+					"text" => t("T&ouml;&ouml;tunnid aja l&otilde;ikes"),
+					"color" => "666666",
+					"size" => 11,
+				));
+				break;
+
 			case "is_order":
 				if(!$arr["new"])
 				{
