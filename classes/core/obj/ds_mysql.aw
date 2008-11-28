@@ -1429,6 +1429,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					else
 					{
+						foreach($multi_fetch_fields as $field)
+						{
+							if (!is_array($row[$field]))
+							{
+								if (empty($row[$field]))
+								{
+									$row[$field] = array();
+								}
+								else
+								{
+									$row[$field] = array($row[$field] => $row[$field]);
+								}
+							}
+						}
 						$ret2[$row["oid"]] = $row;
 					}
 
