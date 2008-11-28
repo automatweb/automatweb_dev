@@ -109,6 +109,8 @@ class users_user extends aw_template
 
 		// init acl
 		$this->request_startup();
+		// The above certainly doesn't initiate acl, but maybe it has some other purpose... -kaarel 28.11.2008
+		$this->init_acl();
 
 		// notify listeners
 		post_message("MSG_USER_LOGIN", array("uid" => $uid));

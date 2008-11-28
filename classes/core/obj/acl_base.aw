@@ -1,6 +1,8 @@
 <?php
 /*
 @classinfo  maintainer=kristo
+
+HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
 */
 
 lc_load("definition");
@@ -191,6 +193,8 @@ class acl_base extends db_connector
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
 			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
+			// If we change the ACL we have to change it in the cache also! -kaarel 28.11.2008
+			$GLOBALS["__obj_sys_acl_memc"][$oid]["acldata"][$g_oid] = $ad[$g_oid];
 		}
 
 
@@ -360,6 +364,11 @@ class acl_base extends db_connector
 
 		// and now return the highest found
 		return $max_acl;
+	}
+
+	function init_acl()
+	{
+		$GLOBALS["object_loader"]->set___aw_acl_cache();
 	}
 
 	// black magic follows.
@@ -693,6 +702,11 @@ class acl_base extends db_connector
 			}
 		}
 		return $aclarr;
+	}
+
+	function on_user_login()
+	{
+		$this->init_acl();
 	}
 }
 ?>

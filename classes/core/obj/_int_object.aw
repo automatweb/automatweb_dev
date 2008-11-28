@@ -565,6 +565,11 @@ class _int_object
 		return $this->_int_can($param);
 	}
 
+	function init_acl()
+	{
+		$GLOBALS["object_loader"]->set___aw_acl_cache();
+	}
+
 	function is_property($param)
 	{
 		if (!is_string($param) or empty($param))
@@ -1822,6 +1827,8 @@ class _int_object
 			$group->prop("gid"),
 			$acl
 		);
+
+		$this->init_acl();
 	}
 
 	public function get_first_conn_by_reltype($type = NULL)

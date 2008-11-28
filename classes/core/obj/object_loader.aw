@@ -731,6 +731,18 @@ class _int_object_loader extends core
 		$this->cache->file_clear_pt("storage_search");
 		$this->cache->file_clear_pt("storage_object_data");
 	}
+
+	public function set___aw_acl_cache($oid = NULL, $v = array())
+	{
+		if(isset($oid))
+		{
+			$this->__aw_acl_cache[$oid] = $v;
+		}
+		else
+		{
+			$this->__aw_acl_cache = $v;
+		}
+	}
 }
 
 $GLOBALS["object_loader"] = new _int_object_loader();
