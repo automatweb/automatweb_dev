@@ -19,9 +19,11 @@ class class_index
 	// collect and save ancestor hierarchies to imporve is_extension_of() performance. array(parent1 => array(child1, ...), ...)
 	private static $parent_index = array();
 
-	// initial solution. additional classes that can handle requests
+	// initial solution. additional classes that can handle requests.
+	// requestable classes should be those that contain methods that can be called through exec()
 	private static $requestable_classes = array(
-		"sys"
+		"sys",
+		"popup_search"
 	);
 
 	/**
