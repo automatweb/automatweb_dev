@@ -508,10 +508,6 @@ class bug extends class_base
 					}
 					$key = mktime(0,0,0,date('m', $cr), $d, date('Y', $cr));
 					$times[$key] += $cmo->prop("add_wh");
-					if($times[$key] > $max)
-					{
-						$max = $times[$key];
-					}
 				}
 				if($time == $week)
 				{
@@ -523,9 +519,11 @@ class bug extends class_base
 					$d = date('d', $crd);
 				}
 				$data = array();
-				for($i = mktime(0,0,0, date('m', $crd), $d, date('Y', $crd)); $i < time(); $i = mktime(0,0,0, date('m', $i), date('d', $i) + 1, date('Y', $i)))
+				$sum = 0;
+				for($i = mktime(0,0,0, date('m', $crd), $d, date('Y', $crd)); $i < time(); $i = mktime(0,0,0, date('m', $i), date('d', $i) + $time / (24 * 60 * 60), date('Y', $i)))
 				{
-					$data[] = $times[$i];
+					$sum += $times[$i];
+					$data[] = $sum;
 				}
 				if(count($data) == 1)
 				{
@@ -534,7 +532,7 @@ class bug extends class_base
 				$c->add_data($data);
 				$c->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
 				$left_axis = array();
-				for($i = 0; $i <= $max; $i+= $max/4)
+				for($i = 0; $i <= $sum; $i+= $sum/4)
 				{
 					$left_axis[] = round($i, 2);
 				}
