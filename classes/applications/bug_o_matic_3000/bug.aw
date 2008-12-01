@@ -793,13 +793,17 @@ class bug extends class_base
 
 			case "bug_app":
 				$ol = new object_list(array(
-					"parent" => $parent,
-					"class_id" => array(CL_BUG_APP_TYPE)
+					"class_id" => array(CL_BUG_APP_TYPE),
+					"site_id" => array(),
+					"lang_id" => array(),
 				));
-				$options = array(0=>" ");
-				foreach($ol->list as $oid)
+				$ol->sort_by(array(
+					"prop" => array("ord", "name"),
+					"order" => array("asc", "asc"),
+				));
+				$options = array(0 => t("--vali--"));
+				foreach($ol->arr() as $oid => $o)
 				{
-					$o = obj($oid);
 					$options[$oid] = $o->name();
 				}
 				$prop["options"] = $options;
@@ -1275,6 +1279,9 @@ class bug extends class_base
 
 			case "cust_status":
 				$bt = $this->_get_bt($arr["obj_inst"]);
+				$this->_cust_old_status = $arr["obj_inst"]->prop("cust_status");
+				$this->_cust_new_status = $prop["value"];
+				$this->_change_status = "cust";
 				if($bt)
 				{
 					$bcs = $bt->meta("bug_cust_status_conns");
@@ -1283,6 +1290,9 @@ class bug extends class_base
 						$change_bug_status = 1;
 					}
 				}
+				$com = sprintf(t("Kliendistaatus muudeti %s => %s"), $this->bug_statuses[$this->_cust_old_status], $this->bug_statuses[$prop["value"]]);
+				$this->add_comments[] = $com;
+				$this->notify_monitors = true;
 				if($change_bug_status && $prop["value"] != $arr["obj_inst"]->prop($prop["name"]))
 				{
 					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
@@ -1308,6 +1318,10 @@ class bug extends class_base
 				{
 					$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
 					$this->_ac_new_state = $prop["value"];
+				}
+				if(!$this->_change_status)
+				{
+					$this->_change_status = "bug";
 				}
 				if (!$arr["new"])
 				{
@@ -1617,16 +1631,38 @@ class bug extends class_base
 		{
 			$notify_addresses[] = $bt->prop("def_notify_list");
 		}
+
+		$bt_send = true;
+		if($bt && !$bt->prop("send_monitor_mails"))
+		{
+			$bt_send = false;
+		}
+
 		//development order sends mails from here too, and we need to get the right config from bugtrack
 		if($bug->class_id() == CL_BUG)
 		{
-			$mails_var = "st_mail_groups_bug";
+			if($this->_change_status)
+			{
+				$get_mg = true;
+				$mails_var = "st_mail_groups_".$this->_change_status;
+				if($this->_change_status == "bug")
+				{
+					$old_s = $this->_ac_old_state;
+					$new_s = $this->_ac_new_state;
+				}
+				else
+				{
+					$old_s = $this->_cust_old_status;
+					$new_s = $this->_cust_new_status;
+				}
+			}
 		}
 		elseif($bug->class_id() == CL_DEVELOPMENT_ORDER)
 		{
 			$mails_var = "st_mail_groups_devo";
+			$get_mg = true;
 		}
-		if($bt)
+		if($bt && $get_mg)
 		{
 			$mg = $bt->meta($mails_var);
 		}
@@ -1639,11 +1675,16 @@ class bug extends class_base
 			}
 			$person_obj = obj($person);
 			// don't send to the current user, cause, well, he knows he's just done it.
-			if ($person == $u->get_current_person())
+			if ($person != $u->get_current_person())
 			{
 				continue;
 			}
-			//if person is in a group that should only recieve mails on certain status changes, then continue
+			//if person is in a group that should recieve mails on certain status changes, then send the mail, even if otherwise shouldn't
+			$cont = false;
+			if(!$bt_send)
+			{
+				$cont = true;
+			}
 			if($mg && $uo = $pi->has_user($person_obj))
 			{
 				$conn = $uo->connections_from(array(
@@ -1656,10 +1697,6 @@ class bug extends class_base
 					$pgids[$gid] = $gid;
 				}
 				$send_mail_statuses = array();
-				if(count($mg[$this->_ac_old_state]) && $this->_ac_old_state != $this->_ac_new_state)
-				{
-					$send_mail_statuses[] = 0;
-				}
 				foreach($mg as $stid => $groups)
 				{
 					foreach($groups as $gid)
@@ -1673,10 +1710,18 @@ class bug extends class_base
 						}
 					}
 				}
-				if(count($send_mail_statuses) && (!$this->_ac_old_state || $this->_ac_old_state == $this->_ac_new_state || array_search($this->_ac_new_state, $send_mail_statuses) === false))
+				if(array_search($new_s, $send_mail_statuses) !== false)
 				{
-					continue;
+					$cont = false;
 				}
+				if(!$bt_send && (!$old_s || $old_s == $new_s || array_search($new_s, $send_mail_statuses) === false))
+				{
+					$cont = true;
+				}
+			}
+			if($cont)
+			{
+				continue;
 			}
 			$email = $person_obj->prop("email");
 			if ($this->can("view", $email))

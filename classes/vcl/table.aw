@@ -2814,7 +2814,7 @@ echo dbg::short_backtrace();
 		}
 
 		$filter = array_unique ($filter);
-		$filter = (count ($filter) > 1) ? $filter : array ();
+		$filter = (count ($filter) > 0) ? $filter : array ();
 		return $filter;
 	}
 

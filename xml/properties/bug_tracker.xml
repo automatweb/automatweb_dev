@@ -136,6 +136,16 @@
             <caption>Vaikimis kataloog meili bugidele</caption>
       </property>
       <property>
+            <name>send_monitor_mails</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <field>send_monitor_mails</field>
+            <caption>Saada j&amp;amp;auml;lgijatele meile</caption>
+      </property>
+      <property>
             <name>apps_tb</name>
             <table>objects</table>
             <group>bug_apps</group>
