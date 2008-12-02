@@ -92,7 +92,7 @@ class crm_skill_level extends class_base
 						$vals .= (strlen($vals) > 0) ? " || " : "";
 						$vals .= "this.value == '".$other_id."'";
 					}
-					$prop["onchange"] = "var id = this.id.replace('[skill]', '_other_').replace('[', '_').replace(']', '_'); if(".$vals.") { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
+					$prop["onchange"] = "var id = this.id.replace('_skill_', '_other_'); if(".$vals.") { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
 				}
 				//$this->ord_skills($prop["options"]);
 				break;

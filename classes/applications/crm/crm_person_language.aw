@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.10 2008/06/17 18:24:13 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.11 2008/12/02 09:03:59 instrumental Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -63,7 +63,7 @@ class crm_person_language extends class_base
 					$prop["options"][$lkey] = $lname;
 				}
 				$prop["options"]["other"] = t("muu keel");
-				$prop["onchange"] = "var id = this.id.replace('[language]', '_other_').replace('[', '_').replace(']', '_'); if(this.value == 'other') { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
+				$prop["onchange"] = "var id = this.id.replace('_language_', '_other_'); if(this.value == 'other') { $('#' + id).parent().parent().show(); } else { $('#' + id).parent().parent().hide(); }";
 				break;
 
 			case "talk":
