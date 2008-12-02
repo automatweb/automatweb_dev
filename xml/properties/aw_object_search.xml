@@ -227,6 +227,16 @@
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
       <property>
+            <name>login</name>
+            <table>objects</table>
+            <group>srch</group>
+            <store>no</store>
+            <type>select</type>
+            <parent>login</parent>
+            <field>login</field>
+            <caption>Logimise objekt</caption>
+      </property>
+      <property>
             <name>s_sbt</name>
             <table>objects</table>
             <group>srch</group>
@@ -616,6 +626,13 @@
                   <parent>right_side</parent>
                   <group>srch</group>
             </keywords>
+            <login>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>teise&amp;amp;nbsp;saiti&amp;amp;nbsp;sisse&amp;amp;nbsp;logimise&amp;amp;nbsp;objekt</area_caption>
+                  <parent>right_side</parent>
+                  <group>srch</group>
+            </login>
             <ver_split1>
                   <type>hbox</type>
                   <group>srch_complex</group>

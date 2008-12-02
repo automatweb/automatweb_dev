@@ -81,6 +81,11 @@
 				@property s_kws type=textbox parent=keywords
 				@caption M&auml;rks&otilde;nad
 
+			@layout login type=vbox closeable=1 area_caption=teise&nbsp;saiti&nbsp;sisse&nbsp;logimise&nbsp;objekt parent=right_side
+
+				@property login type=select parent=login
+				@caption Logimise objekt
+
 
 	@property s_sbt type=submit
 	@caption Otsi
@@ -225,6 +230,14 @@ class aw_object_search extends class_base
 		}
 		switch($nm)
 		{
+			case "login":
+				$ol = new object_list(array(
+					"site_id" => array(),
+					"lang_id" => array(),
+					"class_id" => CL_AW_LOGIN,
+				));
+				$prop["options"] = array("" => "") + $ol->names();
+				break;
 			case "s_parent_search":
 				$v = html::textbox(array(
 					"name" => "s_parent",
