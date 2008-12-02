@@ -621,6 +621,51 @@
             <caption>User-defined TA 8</caption>
       </property>
       <property>
+            <name>user_checkbox_1</name>
+            <table>kliendibaas_firma</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>user_checkbox_1</field>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>user_checkbox_2</name>
+            <table>kliendibaas_firma</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>user_checkbox_2</field>
+            <caption>User-defined checkbox 2</caption>
+      </property>
+      <property>
+            <name>user_checkbox_3</name>
+            <table>kliendibaas_firma</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>user_checkbox_3</field>
+            <caption>User-defined checkbox 3</caption>
+      </property>
+      <property>
+            <name>user_checkbox_4</name>
+            <table>kliendibaas_firma</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>user_checkbox_4</field>
+            <caption>User-defined checkbox 4</caption>
+      </property>
+      <property>
+            <name>user_checkbox_5</name>
+            <table>kliendibaas_firma</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>user_checkbox_5</field>
+            <caption>User-defined checkbox 5</caption>
+      </property>
+      <property>
             <name>description_doc</name>
             <table>objects</table>
             <group>add_info</group>
@@ -824,6 +869,18 @@
             <caption>Kas isikud on kasutajad</caption>
       </property>
       <property>
+<<<<<<< crm_company.xml
+            <name>use_only_wr_workers</name>
+            <table>objects</table>
+            <group>user_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasuta ainult t&amp;amp;ouml;&amp;amp;ouml;suhet omavaid isikuid</caption>
+      </property>
+      <property>
+=======
 	      <name>use_only_wr_workers</name>
 	      <table>objects</table>
 	      <group>user_settings</group>
@@ -834,6 +891,7 @@
 	      <caption>Kasuta ainult t&amp;amp;ouml;&amp;amp;ouml;suhet omavaid isikuid</caption>
       </property>
       <property>
+>>>>>>> 1.196
             <name>server_folder</name>
             <table>objects</table>
             <group>user_settings</group>

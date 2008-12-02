@@ -225,6 +225,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property userta8 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 8
 
+	@property user_checkbox_1 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_1
+	@caption User-defined checkbox 1
+
+	@property user_checkbox_2 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_2
+	@caption User-defined checkbox 2
+
+	@property user_checkbox_3 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_3
+	@caption User-defined checkbox 3
+
+	@property user_checkbox_4 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_4
+	@caption User-defined checkbox 4
+
+	@property user_checkbox_5 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_5
+	@caption User-defined checkbox 5
+
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
@@ -7469,6 +7484,11 @@ class crm_company extends class_base
 		{
 			switch($field)
 			{
+				case "user_checkbox_1":
+				case "user_checkbox_2":
+				case "user_checkbox_3":
+				case "user_checkbox_4":
+				case "user_checkbox_5":
 				case "cust":
 				case "cust_contract_date":
 				case "cust_contract_creator":
