@@ -502,6 +502,30 @@ class aw_object_search extends class_base
 		));
 	}
 
+	function _search_mk_call($filter, $arr)
+	{
+		$_parms = array(
+			"class" => "aw_object_search",
+			"action" => "search_object_list",
+			"params" => $filter,
+		);
+		if (!empty($arr["request"]["login"]))
+		{
+			$_parms["method"] = "xmlrpc";
+			$_parms["login_obj"] = $arr["request"]["login"];
+		}
+		$ret =  $this->do_orb_method_call($_parms);
+		return $ret;
+	}
+
+	/**
+		@attrib name=search_object_list params=name all_args=1
+	**/
+	function search_object_list($filter)
+	{
+		return new object_list($filter);
+	}
+
 	function _s_res($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -511,7 +535,10 @@ class aw_object_search extends class_base
 		{
 			return;
 		}
+		if(aw_global_get("uid") == "marko")$ol = $this->_search_mk_call($filt,$arr);//
+		else
 		$ol = new object_list($filt);
+		if(aw_global_get("uid") == "marko")$ol = $this->_search_mk_call($filt,$arr);//
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
 		$t->set_caption(sprintf(t("Leiti %s objekti"), $ol->count()));

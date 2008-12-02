@@ -33,6 +33,13 @@
 			</function>
 		</action>
 
+		<action name="search_object_list" all_args="1">
+			<function name="search_object_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="get_relation_types">
 			<function name="get_relation_types">
 				<arguments>
