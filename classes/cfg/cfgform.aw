@@ -2474,11 +2474,36 @@ class cfgform extends class_base
 									"stylenormal_caption" => t("Tavaline"),
 									"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
 									"styleac_caption" => t("Autocomplete"),
-									"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
+									// Are you sure, this is 'style' not 'mode'? vcl/relpicker.aw doesn't consist the word 'style'. :S -kaarel 2.12.2008
+									//"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
+									"styleac_ch" => ("autocomplete" === $property["mode"]) ? ' checked="1"' : "",
+									/*
+									"oit_caption" => t("option_is_tuple"),
+									"option_is_tuple_checked" => isset($property["option_is_tuple"]) && $property["option_is_tuple"] ? ' checked="1"' : "",
+									"option_is_tuple" => isset($property["option_is_tuple"]) ? $property["option_is_tuple"] : "",
+									*/
+									"multiple_caption" => t("Saab valida mitu"),
+									"multiple_checked" => isset($property["multiple"]) && $property["multiple"] ? ' checked="1"' : "",
+									"multiple" => isset($property["multiple"]) ? $property["multiple"] : "",
 									"size_caption" => t("K&otilde;rgus"),
 									"size" => $property["size"],
 									"prp_key" => $property["name"]
 								));
+								if($property["store"] == "connect")
+								{
+									$this->vars(array(
+										"rlp_ops_mult" => $this->parse("rlp_ops_mult"),
+									));
+								}
+								// I don't think we need this, so I'll not parse it. But I'll leave it here in case someone someday thinks it's necessary... -kaarel 3.12.2008
+								/*
+								if($property["mode"] == "autocomplete")
+								{
+									$this->vars(array(
+										"rlp_ops_oit" => $this->parse("rlp_ops_oit"),
+									));
+								}
+								*/
 								$property["cfgform_additional_options"] = $this->parse("relpicker_options");
 								$this->vars(array("relpicker_options" => ""));
 								break;

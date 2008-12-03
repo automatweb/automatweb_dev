@@ -643,6 +643,7 @@ class html extends aw_template
 	function checkbox($args = array())
 	{
 		extract($args);
+		$post_append_text = (!empty($post_append_text) ? $post_append_text : "");
 		$checked = isset($checked) ? checked($checked) : '';
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
 		$span = !empty($span) ? "<span>" : "";
@@ -692,12 +693,13 @@ class html extends aw_template
 				"checked" => $checked,
 				"disabled" => $disabled,
 				"caption" => $capt,
+				"post_append_text" => $post_append_text,
 			));
 			$rv = $tpl->parse("CHECKBOX");
 		}
 		else
 		{
-			$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}\n";
+			$rv = "$span<input class=\"checkbox\" type=\"checkbox\" id=\"{$name}\" name=\"{$name}\" value=\"{$value}\"{$onBlur}{$title}{$onc}{$checked}{$disabled} />{$capt}{$span_}{$post_append_text}\n";
 		}
 		return $rv;
 	}

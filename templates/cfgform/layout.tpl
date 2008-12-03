@@ -165,8 +165,14 @@ function cfgformToggleSelectProps(grpId)
 			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}"/><br/>
 			{VAR:displayradio_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="radio"{VAR:displayradio_ch}/>
 			{VAR:displayselect_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][display]" value="select"{VAR:displayselect_ch}/><br/>
-			{VAR:stylenormal_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][style]" value=""{VAR:stylenormal_ch}/>
-			{VAR:styleac_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][style]" value="autocomplete"{VAR:styleac_ch}/><br/>
+			{VAR:stylenormal_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][mode]" value=""{VAR:stylenormal_ch}/>
+			{VAR:styleac_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][mode]" value="autocomplete"{VAR:styleac_ch}/><br/>
+			<!-- SUB: rlp_ops_oit -->
+			{VAR:oit_caption} <input type="checkbox" name="prpconfig[{VAR:prp_key}][option_is_tuple]" value="1"{VAR:option_is_tuple_checked}/><input type="hidden" name="xconfig[{VAR:prp_key}][option_is_tuple]" value="{VAR:option_is_tuple}"/><br/>
+			<!-- END SUB: rlp_ops_oit -->
+			<!-- SUB: rlp_ops_mult -->
+			{VAR:multiple_caption} <input type="checkbox" name="prpconfig[{VAR:prp_key}][multiple]" value="1"{VAR:multiple_checked}/><input type="hidden" name="xconfig[{VAR:prp_key}][multiple]" value="{VAR:multiple}"/><br/>
+			<!-- END SUB: rlp_ops_mult -->
 			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"/><br/>
 <!-- END SUB: relpicker_options -->
 

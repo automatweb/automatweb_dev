@@ -38,6 +38,7 @@
 
 	<!-- SUB: CHECKBOX -->
 <input class="checkbox" type="checkbox" id="{VAR:name}" name="{VAR:name}" value="{VAR:value}"{VAR:onblur}{VAR:title}{VAR:onclick}{VAR:checked}{VAR:disabled} /> {VAR:caption}
+{VAR:post_append_text}
 	<!-- END SUB: CHECKBOX -->
 
 	<!-- SUB: HEADER -->

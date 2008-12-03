@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.168 2008/11/14 15:56:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.169 2008/12/03 14:41:51 instrumental Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -1825,7 +1825,7 @@ class releditor extends core
 						if (is_oid($cfg_cntrl_id))
 						{
 							$tmp = array("value" => &$arr[$propn][$num][$cntrl_prop]);
-							$retval_ = $controller_inst->check_property($cfg_cntrl_id, $arr["id"], &$tmp, &$request, NULL, obj($arr["id"]));
+							$retval_ = $controller_inst->check_property($cfg_cntrl_id, $arr["id"], &$tmp, &$arr[$propn][$num], NULL, obj($arr["id"]));
 							$retval = $retval_ != PROP_OK ? $retval_ : $retval;
 							if($retval_ != PROP_OK)
 							{
