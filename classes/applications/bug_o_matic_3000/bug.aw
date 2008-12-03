@@ -816,6 +816,7 @@ class bug extends class_base
 
 			case "bug_app":
 				$prop["options"] = array("" => t("--vali t&uuml;&uuml;p--"));
+				$this->bug_app_value = $prop["value"];
 				break;
 
 			case "bug_priority":
@@ -3529,7 +3530,15 @@ EOF;
 						bug_app.options[count++] = new Option( tmp[x], x)
 					}
 				}
-			}";
+			}
+			change_bug_app(document.forms.changeform.bug_type.value)
+			";
+		if($this->bug_app_value)
+		{
+			$type_app .= "
+			var bug_app = aw_get_el('bug_app')
+			bug_app.value = '".$this->bug_app_value."'";
+		}
 
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
 		{
