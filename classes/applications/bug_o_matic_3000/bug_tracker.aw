@@ -252,6 +252,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property fb_folder type=relpicker reltype=RELTYPE_FB_FOLDER field=meta method=serialize
 	@caption Tagasiside bugide kaust
 
+	@property bug_type_folder type=relpicker reltype=RELTYPE_BUG_TYPE_FOLDER field=meta method=serialize
+	@caption Bugi t&uuml;&uuml;pide kaust
+
 	@property def_notify_list type=textbox table=objects field=meta method=serialize
 	@caption Bugi kommentaaride CC
 
@@ -457,7 +460,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
 @groupinfo reminders caption="Teavitused" parent=general
 @groupinfo mail_settings caption="Meiliseaded" parent=general
-@groupinfo bug_apps caption="Rakendused" parent=general submit=no
+@groupinfo bug_apps caption="Rakendused" parent=general
 @groupinfo settings_statuses caption="Staatused" parent=general
 
 @groupinfo reqs_main caption="N&otilde;uded"
@@ -537,6 +540,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype OWNER value=12 clid=CL_CRM_COMPANY
 @caption Omanik
+
+@reltype BUG_TYPE_FOLDER value=13 clid=CL_META,CL_MENU
+@caption Bugi t&uuml;&uuml;pide kaust
 */
 
 classload("applications/bug_o_matic_3000/bug");
@@ -3079,6 +3085,7 @@ class bug_tracker extends class_base
 		$tb = &$arr["prop"]["vcl_inst"];
 		$tb->add_new_button(array(CL_BUG_APP_TYPE), $parent, '',array());
 		$tb->add_delete_button();
+		$tb->add_save_button();
 	}
 
 	function _get_apps_table($arr)
@@ -3095,20 +3102,62 @@ class bug_tracker extends class_base
 			"name" => "name",
 			"caption" => t("Nimi")
 		));
-
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Seotud bugi t&uuml;&uuml;p"),
+		));
+		$types = array("" => t("--vali--"));
+		if($f = $arr["obj_inst"]->prop("bug_type_folder"))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_META,
+				"parent" => $f,
+			));
+			$types += $ol->names();
+		}
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"class_id" => array(CL_BUG_APP_TYPE)
 		));
-		foreach($ol->list as $oid)
+		foreach($ol->arr() as $oid => $o)
 		{
-			$o = obj($oid);
+			$type = $o->get_first_obj_by_reltype("RELTYPE_TYPE");
+			if($type)
+			{
+				$tp = $type->id();
+			}
 			$t->define_data(array(
 				"oid" => $oid,
-				"name" => $o->name()
+				"name" => $o->name(),
+				"type" => html::select(array(
+					"options" => $types,
+					"value" => $tp,
+					"name" => "bug_app_types[".$oid."]",
+				)),
 			));
 		}
 	}
+
+	function _set_apps_table($arr)
+	{
+		foreach($arr["request"]["bug_app_types"] as $app => $type)
+		{
+			$o = obj($app);
+			$t = $o->get_first_obj_by_reltype("RELTYPE_TYPE");
+			if($t)
+			{
+				$o->disconnect(array(
+					"type" => "RELTYPE_TYPE",
+					"from" => $t,
+				));
+			}
+			$o->connect(array(
+				"to" => $type,
+				"type" => "RELTYPE_TYPE",
+			));
+		}
+	}
+
 	/**
 		@attrib name=save_search all_args=1
 	**/

@@ -685,14 +685,14 @@
             <caption>Tagasiside bugide kaust</caption>
       </property>
       <property>
-            <name>finance_required</name>
+            <name>bug_type_folder</name>
             <table>objects</table>
             <group>settings_g</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BUG_TYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kulude katmine tuleb m&amp;amp;auml;&amp;amp;auml;rata</caption>
+            <caption>Bugi t&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
       </property>
       <property>
             <name>def_notify_list</name>
@@ -1288,7 +1288,6 @@
             <bug_apps>
                   <caption>Rakendused</caption>
                   <parent>general</parent>
-                  <submit>no</submit>
             </bug_apps>
             <settings_statuses>
                   <caption>Staatused</caption>
@@ -1505,6 +1504,14 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Omanik</caption>
             </OWNER>
+            <BUG_TYPE_FOLDER>
+                  <value>13</value>
+                  <clid>
+                        <num_0>CL_META</num_0>
+                        <num_1>CL_MENU</num_1>
+                  </clid>
+                  <caption>Bugi t&amp;amp;uuml;&amp;amp;uuml;pide kaust</caption>
+            </BUG_TYPE_FOLDER>
       </reltypes>
       <layout>
             <bug>
