@@ -61,7 +61,7 @@ class languages extends aw_template implements request_startup
 		extract($arr);
 		$dat = $this->listall(isset($ignore_status) ? $ignore_status : false);
 
-
+//arr($dat);
 		if (isset($addempty))
 		{
 			$ret = array("0" => "");
@@ -97,12 +97,59 @@ class languages extends aw_template implements request_startup
 		return $ret;
 	}
 
+	function list_logged($ignore_status = false)
+	{
+		$lar = new aw_array(aw_cache_get_array("languages"));
+		$ret = array();
+		foreach($lar->get() as $row)
+		{
+			if ($row["show_logged"] == 1)
+			{
+				$ret[$row["id"]] = $row;
+			}
+		}
+		return $ret;
+	}
+
+	function list_not_logged($ignore_status = false)
+	{
+		$lar = new aw_array(aw_cache_get_array("languages"));
+		$ret = array();
+		foreach($lar->get() as $row)
+		{
+			if ($row["show_not_logged"] == 1)
+			{
+				$ret[$row["id"]] = $row;
+			}
+		}
+		return $ret;
+	}
+
+	function list_others()
+	{
+		$lar = new aw_array(aw_cache_get_array("languages"));
+		$ret = array();
+		foreach($lar->get() as $row)
+		{
+			if ($row["show_others"] == 1)
+			{
+				$ret[$row["id"]] = $row;
+			}
+		}
+		return $ret;
+	}
+
 	function listall($ignore_status = false)
 	{
 		$lar = new aw_array(aw_cache_get_array("languages"));
 		if (!$ignore_status)
 		{
 			$ret = array();
+			$ret = $this->list_logged();
+			if(sizeof($ret))
+			{
+				return $ret;
+			}
 			foreach($lar->get() as $row)
 			{
 				if ($row["status"] == 2)

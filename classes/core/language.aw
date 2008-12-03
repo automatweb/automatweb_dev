@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.28 2008/06/19 08:45:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.29 2008/12/03 09:32:59 markop Exp $
 // language.aw - Keel 
 /*
 
@@ -17,6 +17,18 @@
 
 @property lang_status table=languages type=status field=status
 @caption Aktiivne
+
+
+@property show_not_logged type=checkbox ch_value=1 no_caption=1 prop_cb=1 table=languages field=show_not_logged
+@caption N&auml;htav v&auml;lja loginud kasutajatele
+
+@property show_logged type=checkbox ch_value=1 no_caption=1 prop_cb=1 table=languages field=show_logged
+@caption N&auml;htav sisse loginud kasutajatele
+
+@property show_others type=checkbox ch_value=1 no_caption=1 prop_cb=1 table=languages field=show_others
+@caption N&auml;htav muudele applikatsioonidele
+
+
 
 @property lang_sel_lang type=select store=no
 @caption Keel
@@ -102,6 +114,7 @@ class language extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			
 			case "name":
 				return PROP_IGNORE;
 				break;
@@ -171,6 +184,18 @@ class language extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "show_not_logged":
+			case "show_logged":
+			case "show_others":
+				$tbl = $this->db_get_table("languages");
+				if (!isset($tbl["fields"][$prop["name"]]))
+				{
+					$this->db_add_col("languages", array(
+						"name" => $prop["name"],
+						"type" => "int"
+					));
+				}
+				break;
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
