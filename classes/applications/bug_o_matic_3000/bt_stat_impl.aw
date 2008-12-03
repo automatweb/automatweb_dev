@@ -674,31 +674,28 @@ class bt_stat_impl extends core
 		if($arr["request"]["stat_hr_calls"]) $classes[] = CL_CRM_CALL;
 		if($arr["request"]["stat_hr_meetings"]) $classes[] = CL_CRM_MEETING;
 		if($arr["request"]["stat_hr_bugs"]) $classes[] = CL_BUG;
-		$ol = new object_list(array(
+		$rows_filter = array(
 			"class_id" => CL_TASK_ROW,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"done" => 1,
 			"date" => $time_constraint,
 			"task.class_id" => $classes,
-		));
+			"time_real" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		);
+		$ol = new object_list($rows_filter);
 		foreach($ol->arr() as $o)
 		{
-			if(!$o->prop("time_real"))
+			$tp = $type["types"];
+			$impl = $o->prop("impl");
+			if (!($task_o = $o->task()))
 			{
 				continue;
 			}
-			$tp = $type["types"];
-			$impl = $o->prop("impl");
-			$conn = $o->connections_to(array(
-				"type" => "RELTYPE_ROW",
-				"from.class_id" => CL_TASK,
-			));
-			$c = reset($conn);
-			$task_o = $c->from();
+			$projects = array();
 			foreach($task_o->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
 			{
-				$sum_by_proj[$c->prop("to")] += $o->prop("time_real");
+				$sum_by_proj[$c->prop("to")] += ($task_o->class_id() == CL_BUG) ? $o->prop("time_real") : $task_o->get_time_for_project($c->prop("to"), $o->prop("time_real"));
 				$projects[$c->prop("to")] = $c->prop("to");
 			}
 			foreach($impl as $pid)

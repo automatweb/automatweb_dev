@@ -33,6 +33,55 @@ class task_row_obj extends _int_object
 		return parent::prop($pn);
 	}
 
+	/** returns row's task id
+		@attrib api=1
+		@returns oid
+	**/
+	public function task_id()
+	{
+		if($this->prop("task"))
+		{
+			return $this->prop("task");
+		}
+		$possible_task_classes = array(CL_BUG,CL_TASK,CL_CRM_MEETING,CL_CRM_CALL);
+		$conn = $this->connections_to(array(
+//			"type" => "RELTYPE_ROW",//erinevate klasside puhul ei paista toimivat
+			"from.class_id" => $possible_task_classes,
+		));
+		$c = reset($conn);
+		if ($c)
+		{
+			$task_o = $c->from();
+		}
+		else
+		{
+			$task_o = obj($this->parent());
+		}
+		if(!is_object($task_o) || !in_array($task_o->class_id(), $possible_task_classes))
+		{
+			print t("Toimetuse rea toimetust pole 6ieti:") ." ".$this->id();
+		}
+		$this->set_prop("task" , $task_o->id());
+		$this->save();
+		return $task_o->id();
+	}
+
+	/** returns row's task object
+		@attrib api=1
+		@returns object
+	**/
+	public function task()
+	{
+		if($this->task_id())
+		{
+			return obj($this->task_id());
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function set_comment($comment)
 	{
 		$this->set_prop("content" , $comment);

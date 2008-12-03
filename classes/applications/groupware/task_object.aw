@@ -535,6 +535,39 @@ class task_object extends _int_object
 		return reset($ol->arr());
 	}
 
+
+	/** returns spent time for project
+		@attrib api=1 params=pos
+		@param project required type=oid
+			project id
+		@param time optional type=double
+			full time spent
+		@returns double
+	**/
+	public function get_time_for_project($project, $time)
+	{
+		if(!$time)
+		{
+			;
+		}
+		if($party = $this->get_party_obj($project))
+		{
+			if($party->prop("hours"))
+			{
+				return $party->prop("hours");
+			}
+			if($party->prop("percentage"))
+			{
+				return ($party->prop("percentage") * $time) / 100;
+			}
+		}
+		else
+		{
+			return $time;
+		}
+
+	}
+
 	/** returns task lifespan
 		@attrib api=1 params=name
 		@returns int
