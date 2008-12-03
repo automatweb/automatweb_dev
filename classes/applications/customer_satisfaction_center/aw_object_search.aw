@@ -513,6 +513,16 @@ class aw_object_search extends class_base
 		{
 			$_parms["method"] = "xmlrpc";
 			$_parms["login_obj"] = $arr["request"]["login"];
+
+			if(!is_array($_parms["params"]["lang_id"]) || !sizeof($_parms["params"]["lang_id"]))
+			{
+				unset($_parms["params"]["lang_id"]);
+			}
+			if(!is_array($_parms["params"]["site_id"]) || !sizeof($_parms["params"]["site_id"]))
+			{
+				unset($_parms["params"]["site_id"]);
+			}
+			unset($_parms["params"]["brother_of"]);
 		}
 		$ret =  $this->do_orb_method_call($_parms);
 		return $ret;
@@ -523,7 +533,18 @@ class aw_object_search extends class_base
 	**/
 	function search_object_list($filter)
 	{
-		return new object_list($filter);
+		$rowsres = array(
+			array(
+				"parent" => "parent", 
+				"lang_id" => "lang",
+				"created" => "created",
+				"createdby" => "createdby",
+				"modified" => "modified",
+				"modifiedby" => "modifiedby",
+			),
+		);
+		$rows_arr = new object_data_list($filter , $rowsres);
+		return $rows_arr->list_data;
 	}
 
 	function _s_res($arr)
@@ -535,10 +556,60 @@ class aw_object_search extends class_base
 		{
 			return;
 		}
-		if(aw_global_get("uid") == "marko")$ol = $this->_search_mk_call($filt,$arr);//
-		else
-		$ol = new object_list($filt);
-		if(aw_global_get("uid") == "marko")$ol = $this->_search_mk_call($filt,$arr);//
+
+		if (!empty($arr["request"]["login"]))
+		{
+			$lo = get_instance(CL_AW_LOGIN);
+			$serv = $lo->get_server($arr["request"]["login"]);
+			$old_bu = $this->cfg["baseurl"];
+			$this->cfg["baseurl"] = "http://".$serv;
+			$is_remote = true;
+			aw_ini_set("baseurl" , $this->cfg["baseurl"]);
+		}
+
+//nyyd object data listi peal asi
+		$data = $this->_search_mk_call($filt,$arr);
+		classload("core/icons");
+		$clss = aw_ini_get("classes");
+		$t->set_caption(sprintf(t("Leiti %s objekti"), sizeof($data)));
+		$li = get_instance("languages");
+		
+		foreach($data as $id => $d)
+		{
+			if($d["class_id"] == CL_USER)
+			{
+				$this->u_oids[] = $id;
+			}
+			$t->define_data(array(
+				"oid" => $id,
+				"icon" => html::img(array(
+					"url" => icons::get_icon_url($d["class_id"]),
+					"alt" => sprintf(t("Objekti id on %s"), $id),
+					"title" => sprintf(t("Objekti id on %s"), $id),
+					"border" => 0
+				)),
+//				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),
+				"name" => html::href(array(
+					"caption" => $d["name"],
+					"url" => $this->mk_my_orb("change", array("id" => $d["oid"]), $d["class_id"])
+				)),
+				"lang" => $li->get_langid($d["lang"]),
+				"class_id" => $clss[$d["class_id"]]["name"],
+				"location" => $d["parent_name"],
+				"created" => $d["created"],
+				"createdby" => $d["createdby"],
+				"modified" => $d["modified"],
+				"modifiedby" => $d["modifiedby"],
+				"oppnar" => html::href(array(
+					"url" => $this->mk_my_orb("redir", array("parent" => $id), CL_ADMIN_IF),
+					"caption" => t("Ava")
+				))
+			));
+		}
+//		}
+//		else//**********
+//		{*/
+/*		$ol = new object_list($filt);
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
 		$t->set_caption(sprintf(t("Leiti %s objekti"), $ol->count()));
@@ -572,6 +643,13 @@ class aw_object_search extends class_base
 					"caption" => t("Ava")
 				))
 			));
+		}
+//		}//---------
+*/
+		if (!empty($arr["request"]["login"]))
+		{
+			aw_ini_set("baseurl" , $old_bu);
+			$this->cfg["baseurl"] = $old_bu;
 		}
 		$t->set_default_sortby("name");
 	}
