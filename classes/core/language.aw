@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.29 2008/12/03 09:32:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.30 2008/12/03 09:56:57 markop Exp $
 // language.aw - Keel 
 /*
 
@@ -184,18 +184,6 @@ class language extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "show_not_logged":
-			case "show_logged":
-			case "show_others":
-				$tbl = $this->db_get_table("languages");
-				if (!isset($tbl["fields"][$prop["name"]]))
-				{
-					$this->db_add_col("languages", array(
-						"name" => $prop["name"],
-						"type" => "int"
-					));
-				}
-				break;
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;

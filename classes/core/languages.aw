@@ -575,6 +575,9 @@ class languages extends aw_template implements request_startup
 		switch ($field)
 		{
 			case 'oid':
+			case "show_not_logged":
+			case "show_logged":
+			case "show_others":
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
