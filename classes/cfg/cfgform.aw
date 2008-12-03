@@ -2489,7 +2489,7 @@ class cfgform extends class_base
 									"size" => $property["size"],
 									"prp_key" => $property["name"]
 								));
-								if($property["store"] == "connect")
+								if($property["store"] == "connect" || $property["store"] == "no")
 								{
 									$this->vars(array(
 										"rlp_ops_mult" => $this->parse("rlp_ops_mult"),
@@ -4000,7 +4000,7 @@ class cfgform extends class_base
 		// also eval all controllers
 		foreach((array)$o->prop("cfg_groups") as $grpn => $grpdat)
 		{
-			if (isset($grpdat["grpctl"]) && $this->can("view", $grpdat["grpctl"]))
+			if (isset($grpdat["grpctl"]) && is_oid($grpdat["grpctl"]) && $this->can("view", $grpdat["grpctl"]))
 			{
 				$ctl = obj($grpdat["grpctl"]);
 				$ctl_i = $ctl->instance();
