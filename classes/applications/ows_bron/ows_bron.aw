@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.48 2008/11/25 12:01:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_bron.aw,v 1.49 2008/12/03 06:12:49 markop Exp $
 // ows_bron.aw - OWS Broneeringukeskus 
 /*
 
@@ -403,7 +403,8 @@ class ows_bron extends class_base
 			"ct_country" => null,
 			"ct_phone" => null,
 			"ct_phone_ext" => null,
-			"ct_email" => null
+			"ct_email" => null,
+			"bron_comment" => null,
 		));
 //$_SESSION["reval_fc"]["data"] = reval_customer::do_call("GetCustomerProfile", array("customerId" => 24419, "webLanguageId" => 1), "Customers");
 		if ($_SESSION["reval_fc"]["data"])
@@ -570,6 +571,7 @@ class ows_bron extends class_base
 			"ct_postalcode" => $arr["ct_postalcode"],
 			"ct_city" => $arr["ct_city"],
 			"ct_phone" => $arr["ct_phone"],
+			"bron_comment" => $arr["bron_comment"],
 			"ct_phone_ext" => $arr["ct_phone_ext"],
 			"ct_email" => $arr["ct_email"],
 			"step2_url" => $this->mk_my_orb("show_available_rooms", array(
@@ -641,6 +643,7 @@ class ows_bron extends class_base
 			"ct_city" => $arr["ct"]["city"],
 			"ct_country" => $arr["ct"]["country"],
 			"ct_phone" => $arr["ct"]["phone"],
+			"bron_comment" => $arr["bron_comment"],
 			"ct_phone_ext" => $arr["ct"]["phone_ext"],
 			"ct_email" => $arr["ct"]["email"]
 		), false, $arr["r_url"]);
@@ -967,6 +970,7 @@ class ows_bron extends class_base
 				"ct_city" => $arr["ct"]["city"],
 				"ct_country" => $arr["ct"]["country"],
 				"ct_phone" => $arr["ct"]["phone"],
+				"bron_comment" => $arr["bron_comment"],
 				"ct_phone_ext" => $arr["ct"]["phone_ext"],
 				"ct_email" => $arr["ct"]["email"],
 				"partnerWebsiteGuid" => $arr["partnerWebsiteGuid"],
