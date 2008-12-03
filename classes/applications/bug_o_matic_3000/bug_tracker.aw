@@ -56,7 +56,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@property mail_default_folder type=relpicker reltype=RELTYPE_MAIL_DEF_FOLDER field=meta method=serialize
 	@caption Vaikimis kataloog meili bugidele
 
-	@property send_monitor_mails type=checkbox ch_value=1 default=1
+	@property send_monitor_mails type=checkbox ch_value=1 default=1 field=meta method=serialize
 	@caption Saada j&auml;lgijatele meile
 	
 @default group=bug_apps

@@ -103,12 +103,9 @@
             <name>bug_type</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <type>classificator</type>
-            <store>connect</store>
-            <reltype>RELTYPE_BUGTYPE</reltype>
-            <parent>settings_col2</parent>
-            <captionside>top</captionside>
+            <type>select</type>
             <field>bug_type</field>
+            <captionside>top</captionside>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>

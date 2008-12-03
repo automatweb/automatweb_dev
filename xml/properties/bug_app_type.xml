@@ -8,5 +8,12 @@
             <prop_cb>1</prop_cb>
             <maintainer>robert</maintainer>
       </classinfo>
+      <reltypes>
+            <TYPE>
+                  <value>1</value>
+                  <clid>CL_META</clid>
+                  <caption>Bugi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </TYPE>
+      </reltypes>
 </properties>
 

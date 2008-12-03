@@ -142,7 +142,8 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <field>send_monitor_mails</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Saada j&amp;amp;auml;lgijatele meile</caption>
       </property>
       <property>

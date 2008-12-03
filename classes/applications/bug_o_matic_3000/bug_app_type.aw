@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_app_type.aw,v 1.3 2007/12/06 14:32:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_app_type.aw,v 1.4 2008/12/03 10:14:41 robert Exp $
 // bug_app_type.aw - Bugtracki rakendus 
 /*
 
@@ -8,6 +8,8 @@
 @default table=objects
 @default group=general
 
+@reltype TYPE value=1 clid=CL_META
+@caption Bugi t&uuml;&uuml;p
 */
 
 class bug_app_type extends class_base

@@ -50,7 +50,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@layout settings_col2 type=vbox parent=settings
 
 
-		@property bug_type type=classificator store=connect reltype=RELTYPE_BUGTYPE parent=settings_col2 captionside=top
+		@property bug_type type=select table=aw_bugs field=bug_type captionside=top
 		@caption T&uuml;&uuml;p
 
 		@property bug_app type=select field=meta method=serialize captionside=top parent=settings_col2 table=objects
@@ -791,22 +791,31 @@ class bug extends class_base
 				$prop["options"] = $statuses;
 				break;
 
-			case "bug_app":
-				$ol = new object_list(array(
-					"class_id" => array(CL_BUG_APP_TYPE),
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$ol->sort_by(array(
-					"prop" => array("ord", "name"),
-					"order" => array("asc", "asc"),
-				));
-				$options = array(0 => t("--vali--"));
-				foreach($ol->arr() as $oid => $o)
+			case "bug_type":
+				if (is_oid($arr["request"]["id"]))
 				{
-					$options[$oid] = $o->name();
+					$o = obj($arr["request"]["id"]);
+				}
+				else
+				{
+					$o = obj($arr["request"]["parent"]);
+				}
+				$bt = $this->_get_bt($o);
+				$options = array("" => t("--vali--"));
+				if($bt && $f = $bt->prop("bug_type_folder"))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_META,
+						"parent" => $f,
+					));
+					$options += $ol->names();
 				}
 				$prop["options"] = $options;
+				$prop["onchange"] = "change_bug_app(this.value);";
+				break;
+
+			case "bug_app":
+				$prop["options"] = array("" => t("--vali t&uuml;&uuml;p--"));
 				break;
 
 			case "bug_priority":
@@ -3460,9 +3469,71 @@ EOF;
 EOF;
 		}
 
+		if (is_oid($arr["request"]["id"]))
+		{
+			$o = obj($arr["request"]["id"]);
+		}
+		else
+		{
+			$o = obj($arr["request"]["parent"]);
+		}
+		$bt = $this->_get_bt($o);
+		if($bt)
+		{
+			$ol = new object_list(array(
+				"parent" => $bt->id(),
+				"class_id" => array(CL_BUG_APP_TYPE),
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+			$ol->sort_by(array(
+				"prop" => array("ord", "name"),
+				"order" => array("asc", "asc"),
+			));
+			$options = array(0 => t("--vali--"));
+			foreach($ol->arr() as $oid => $o)
+			{
+				$t = $o->get_first_obj_by_reltype("RELTYPE_TYPE");
+				if($t)
+				{
+					$options[$t->id()][$oid] = $o->name();
+				}
+			}
+		}
+		
+
+		$type_app = "
+			var opts = new Array()";
+		foreach($options as $t => $option)
+		{
+			$type_app .=  "
+ 				opts[$t] = new Array()";
+			foreach($option as $oid => $name)
+			{
+				$type_app .= "
+				opts[$t][$oid] = '$name'";
+			}
+		}
+		$type_app .= "
+			function change_bug_app(type)
+			{
+				var tmp = new Array();
+				if(opts[type].length)
+				{
+					tmp = opts[type]
+					var bug_app = aw_get_el('bug_app')
+					count = 1
+					bug_app.options.length = count;
+					for(x in tmp)
+					{
+						bug_app.options[count++] = new Option( tmp[x], x)
+					}
+				}
+			}";
+
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
 		{
-			return $hide_fb.$maintainers.$s_bug_stopper_watch_v2;
+			return $hide_fb.$maintainers.$s_bug_stopper_watch_v2.$type_app;
 		}
 		
 		if (!$arr["new"])
