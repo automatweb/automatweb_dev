@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.137 2008/11/10 10:54:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.138 2008/12/04 18:00:08 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -321,7 +321,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 ------------------------------------------------------------------------
 
-@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR,CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR,CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED,CL_CRM_COMPANY_STATUS
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -1907,7 +1907,21 @@ class ml_list extends class_base
 			"caption" => t("Allikas"),
 			"sortable" => 1,
 		));
-		
+
+		if($this->show_extra_cols)
+		{
+			$t->define_field(array(
+				"name" => "co",
+				"caption" => t("Organisatsioon"),
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+				"name" => "pro",
+				"caption" => t("Ametinimetus"),
+				"sortable" => 1,
+			));
+		}
+
 		$t->define_field(array(
 			"name" => "joined",
 			"caption" => t("Liitunud"),
@@ -1962,6 +1976,24 @@ class ml_list extends class_base
 		));
 
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
+
+		if($this->show_extra_cols)
+		{
+			$co_array = array();
+			$pro_array = array();
+			foreach($ml_list_members as $key => $val)
+			{
+				if($val["co"]) $co_array[$val["co"]] = $val["co"];
+				if($val["pro"]) $pro_array[$val["pro"]] = $val["pro"];
+			}
+			$pros = new object_list();
+			$pros->add($pro_array);
+			$pros = $pros->names();
+			$cos = new object_list();
+			$cos->add($co_array);
+			$cos = $cos->names();
+		}
+
 		if (is_array($ml_list_members))
 		{
 			foreach($ml_list_members as $key => $val)
@@ -2018,6 +2050,15 @@ class ml_list extends class_base
 					"name" => $name,
 					"oid" => $oid,
 				);
+				if($val["co"])
+				{
+					$tabledata["co"] = $cos[$val["co"]];
+				}
+				if($val["pro"])
+				{
+					$tabledata["pro"] = $pros[$val["pro"]];
+				}
+
 				if(is_oid($is_oid))
 				{
 					$member_obj = &obj($val["oid"]);
@@ -2046,16 +2087,15 @@ class ml_list extends class_base
 				$t->define_data($row);	
  			}
 		}
-		$t->d_row_cnt = $this->member_count;
-		$pageselector = "";
 
-		if($t->d_row_cnt > $perpage)
+		if($this->member_count > $perpage)
 		{
-			$pageselector = $t->draw_lb_pageselector(array(
-				"records_per_page" => $perpage
+			$t->define_pageselector (array (
+				"type" => "lb",
+				"d_row_cnt" => $this->member_count,
+				"records_per_page" => $perpage,
 			));
 		}
-		$t->table_header = $pageselector;
 		$t->sort_by();
 	}
 
@@ -2355,16 +2395,16 @@ class ml_list extends class_base
 			}
 			if(!$no_return)
 			{
-				if(!(array_key_exists($mail , $already_found)))
+				if(!(array_key_exists($mail , $this->already_found)))
 				{
-					if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
+					if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
 					{
 						$name = $o->name();
 						if($comb)
 						{
 							$name = "".$name." &lt;".$mail."&gt;";
 						}
-						$ret[]  = array(
+						$this->ml_members[]  = array(
 							"parent" => $ala->id(),
 							"name" => $name,
 							"mail" => $mail,
@@ -2372,18 +2412,67 @@ class ml_list extends class_base
 							"oid" => $o->id(),
 						);
 					}
-					$cnt++;
+					$this->member_count++;
 				}
 			}
 			if(!$all) 
 			{
-				$already_found[$mail] = $mail;
+				$this->already_found[$mail] = $mail;
 			}
 		}
-		$this->already_found = $already_found;
-		if(!$all)$this->member_count = sizeof($already_found);
-		else $this->member_count= $cnt;
-		return $ret;
+		if(!$all)$this->member_count = sizeof($this->already_found);
+		return $this->ml_members;
+	}
+
+	function get_members_from_category($args)
+	{
+		$this->show_extra_cols = 1;
+		extract($args);
+		$o = obj($id);
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name"  => "%spa%",
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+
+		foreach($ol->arr() as $co)
+		{
+			foreach($co->get_workers()->arr() as $worker)
+			{
+				$mail = $worker->get_mail($co->id());
+				if(!$no_return)
+				{
+					if(!(array_key_exists($mail , $this->already_found)))
+					{
+						if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
+						{
+							$name = $worker->name();
+							if($comb)
+							{
+								$name = "".$name." &lt;".$mail."&gt;";
+							}
+							$this->ml_members[]  = array(
+								"co" => $co->id(),
+								"pro" => $worker->get_rank(),
+								"parent" => $o->id(),
+								"name" => $name,
+								"mail" => $mail,
+								"parent_name" => $o->name(),
+								"oid" => $worker->id(),
+							);
+						}
+						$this->member_count++;
+					}
+				}
+				if(!$all) 
+				{
+					$this->already_found[$mail] = $mail;
+				}
+			}
+		}
+		if(!$all)$this->member_count = sizeof($this->already_found);
+		return $this->ml_members;
 	}
 
 	function get_members_from_file($args)
@@ -2407,16 +2496,16 @@ class ml_list extends class_base
 			$mail = trim($column[1]);
 			if(!$no_return)
 			{
-				if(!(array_key_exists($mail , $already_found)))
+				if(!(array_key_exists($mail , $this->already_found)))
 				{
-					if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
+					if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
 					{
 						$name = trim($column[0]);
 						if($comb)
 						{
 							$name = "".$name." &lt;".$mail."&gt;";
 						}
-						$ret[]  = array(
+						$this->ml_members[]  = array(
 							"parent" => $file_data["id"],
 							"name" => $name,
 							"mail" => $mail,
@@ -2424,16 +2513,14 @@ class ml_list extends class_base
 							"row_cnt" => $row_count,
 						);
 					}
-					$cnt++;
+					$this->member_count++;
 				}
 			}
-			if(!$all) $already_found[$mail] = $mail;
+			if(!$all) $this->already_found[$mail] = $mail;
 			$row_count++;
 		}
-		$this->already_found = $already_found;
-		if(!$all)$this->member_count = sizeof($already_found);
-		else $this->member_count= $cnt;
-		return $ret;
+		if(!$all)$this->member_count = sizeof($this->already_found);
+		return $this->ml_members;
 	}
 
 	function get_req_menus($src)
@@ -2512,10 +2599,10 @@ class ml_list extends class_base
 	function get_members($args)
 	{
 		extract($args);
-		$ret = array();
-		$cnt = 0;
+		$this->ml_members = array();
+		$this->member_count = 0;
 		$obj = obj($id);
-		$already_found = array();
+		$this->already_found = array();
 		if($obj->class_id() == CL_MESSAGE)
 		{;
 			$src = $obj->meta("list_source");
@@ -2540,17 +2627,14 @@ class ml_list extends class_base
 			{
 				if($to > 1)
 				{
-					if(($from - $cnt) < 0) $from_q = 0;
-					else $from_q = $from - $cnt;
-					if(($to - $from_q - $cnt) < 0) $to_q = 0;
-					else $to_q = $to - $from_q - $cnt;
+					if(($from - $this->member_count) < 0) $from_q = 0;
+					else $from_q = $from - $this->member_count;
+					if(($to - $from_q - $this->member_count) < 0) $to_q = 0;
+					else $to_q = $to - $from_q - $this->member_count;
 					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid , objects.brother_of FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from_q, $to_q);
 					$q_count = sprintf("SELECT COUNT(*) as cnt FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0" , $folder_id);
 					$cnt_all = $this->db_fetch_field($q_count , "cnt");
-				//	if(($cnt_all - $from) < $to){
-				//		$cnt_all = $cnt_all + ($to - ($cnt_all - $from));
-				//	}
-					$cnt = $cnt + $cnt_all;
+					$this->member_count = $this->member_count + $cnt_all;
 				}
 				else
 				{
@@ -2559,17 +2643,17 @@ class ml_list extends class_base
 				$this->db_query($q);
 				while($row = $this->db_next())
 				{
-					if(!(array_key_exists($row["mail"] , $already_found)))
+					if(!(array_key_exists($row["mail"] , $this->already_found)))
 					{
-						$ret[] = array(
+						$this->ml_members[] = array(
 							"oid" 		=> $row["oid"],
 							"parent"	=> $folder_id,
 							"name"		=> $row["name"],
 							"mail"		=> $row["mail"]
 						);
-						if(!($to > 1))$cnt++;
+						if(!($to > 1))$this->member_count++;
 					}
-					if(!$all) $already_found[$row["mail"]] = $row["mail"];
+					if(!$all) $this->already_found[$row["mail"]] = $row["mail"];
 				}
 			}
 			elseif ($source_obj->class_id() == CL_GROUP)
@@ -2587,57 +2671,52 @@ class ml_list extends class_base
 					}
 					if($email->prop("name")) $name = $email->prop("name");
 					else $name = $member->name();
-					if(!(array_key_exists($email->prop("mail") , $already_found)))
+					if(!(array_key_exists($email->prop("mail") , $this->already_found)))
 					{
-						if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
-						$ret[] = array(
+						if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
+						$this->ml_members[] = array(
 							"oid" 		=> $member->id(),
 							"parent"	=> $folder_id,
 							"name"		=> $name,
 							"mail"		=> $email->prop("mail"),
 						);
-						$cnt++;
+						$this->member_count++;
 					}
-					if(!$all) $already_found[$email->prop("mail")] = $email->prop("mail");
+					if(!$all) $this->already_found[$email->prop("mail")] = $email->prop("mail");
 				}
 			}
 			elseif($source_obj->class_id() == CL_USER)
 			{
 				if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 				{
-					if(!(array_key_exists($email->prop("mail") , $already_found)))
+					if(!(array_key_exists($email->prop("mail") , $this->already_found)))
 					{
-						if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
-						$ret[] = array(
+						if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
+						$this->ml_members[] = array(
 							"oid" 		=> $folder_id,
 							"parent" 	=> $folder_id,
 							"name"		=> $name,
 							"mail"		=> $email->prop("mail"),
 						);
-						$cnt++;
+						$this->member_count++;
 					}
-					if(!$all) $already_found[$email->prop("mail")] = $email->prop("mail");
+					if(!$all) $this->already_found[$email->prop("mail")] = $email->prop("mail");
 				}
 			}
 			elseif($source_obj->class_id() == CL_FILE)
 			{
-				$ret = $this->get_members_from_file(array(
+				$this->get_members_from_file(array(
 					"id" => $source_obj->id(),
-					"ret" => $ret ,
-					"cnt" => $cnt ,
 					"all" => $all ,
-					"already_found" => $already_found ,
 					"from" => $from ,
 					"to" => $to,
 					"no_return" => $no_return));
-				$cnt = $this->member_count;
-				$already_found = $this->already_found;
 			}
 			else
 			if ($source_obj->class_id() == CL_CRM_SELECTION)
 			{
 				$si = get_instance(CL_CRM_SELECTION);
-				$ret = array();
+				$this->ml_members = array();
 				foreach($si->get_selection($source_obj->id()) as $selection_item)
 				{
 					if (!$this->can("view", $selection_item["object"]))
@@ -2648,7 +2727,7 @@ class ml_list extends class_base
 					if ($this->can("view", $co->prop("email_id")))
 					{
 						$eml = obj($co->prop("email_id"));
-						$ret[] = array(
+						$this->ml_members[] = array(
 							"oid" => $eml->id(),
 							"parent" => $source_obj->id(),
 							"name" => $eml->prop("name"),
@@ -2656,21 +2735,25 @@ class ml_list extends class_base
 						);
 					}
 				}
-				$cnt += count($ret);
+				$this->member_count += count($this->ml_members);
 			}
 			elseif ($source_obj->class_id() == CL_CRM_SECTOR)
 			{
-				$ret = $this->get_members_from_sector(array(
+				$this->get_members_from_sector(array(
 					"id" => $source_obj->id(),
-					"ret" => $ret ,
-					"cnt" => $cnt ,
 					"all" => $all ,
-					"already_found" => $already_found ,
 					"from" => $from ,
 					"to" => $to,
 					"no_return" => $no_return));
-				$cnt = $this->member_count;
-				$already_found = $this->already_found;
+			}
+			elseif ($source_obj->class_id() == CL_CRM_COMPANY_STATUS)
+			{
+				$this->get_members_from_category(array(
+					"id" => $source_obj->id(),
+					"all" => $all ,
+					"from" => $from ,
+					"to" => $to,
+					"no_return" => $no_return));
 			}
 			elseif($source_obj->class_id() == CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED)
 			{
@@ -2687,23 +2770,22 @@ class ml_list extends class_base
 						$ml = $o->emails()->begin();
 						if(is_object($ml) && strlen($ml->mail))
 						{
-							$ret[] = array(
+							$this->ml_members[] = array(
 								"oid" => $ml->id(),
 								"parent" => $folder_id,
 								"name" => $ml->name(),
 								"mail" => $ml->mail,
 							);
-							$cnt++;
-							if(!$all) $already_found[$ml->prop("mail")] = $ml->prop("mail");
+							$this->member_count++;
+							if(!$all) $this->already_found[$ml->prop("mail")] = $ml->prop("mail");
 						}
 					}
 
 				}
 			}
 		}
-		if(!$all)$cnt = sizeof($already_found);
-		$this->member_count = $cnt;
-		return $ret;
+		if(!$all)$this->member_count = sizeof($this->already_found);
+		return $this->ml_members;
 	}
 
 	function parse_alias($args = array())
@@ -3829,6 +3911,21 @@ arr($msg_obj->prop("message"));
 				"caption" => t("Allikas"),
 				"sortable" => 1,
 			));
+
+			if($this->show_extra_cols)
+			{
+				$t->define_field(array(
+					"name" => "co",
+					"caption" => t("Organisatsioon"),
+					"sortable" => 1,
+				));
+
+				$t->define_field(array(
+					"name" => "profession",
+					"caption" => t("Ametinimetus"),
+					"sortable" => 1,
+				));
+			}
 			
 			$t->define_field(array(
 				"name" => "joined",
