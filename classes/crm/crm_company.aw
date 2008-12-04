@@ -182,7 +182,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property tooted type=relpicker reltype=RELTYPE_TOOTED automatic=1 method=serialize field=meta table=objects
 	@caption Tooted
 
-	@property pohitegevus type=popup_search clid=CL_CRM_SECTOR table=kliendibaas_firma style=relpicker reltype=RELTYPE_TEGEVUSALAD multiple=1 store=connect
+	@property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD multiple=1 store=connect
 	@caption P&otilde;hitegevus / Tegevusalad
 
 	@property activity_keywords type=textarea cols=65 rows=3 table=kliendibaas_firma

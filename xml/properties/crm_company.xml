@@ -471,11 +471,9 @@
       </property>
       <property>
             <name>pohitegevus</name>
-            <table>kliendibaas_firma</table>
+            <table>objects</table>
             <group>org_sections</group>
-            <type>popup_search</type>
-            <clid>CL_CRM_SECTOR</clid>
-            <style>relpicker</style>
+            <type>relpicker</type>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>
             <multiple>1</multiple>
             <store>connect</store>
