@@ -196,7 +196,11 @@ class euro_patent_et_desc extends intellectual_property
 
 			if(empty($err))
 			{
-				$_SESSION["patent"]["checked"][] = 18;
+				$_SESSION["patent"]["checked"]["12"] = "12";
+			}
+			else
+			{
+				unset($_SESSION["patent"]["checked"]["12"]);
 			}
 		}
 

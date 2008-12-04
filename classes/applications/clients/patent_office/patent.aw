@@ -712,7 +712,7 @@ class patent extends intellectual_property
 	{
 		$err = parent::check_fields();
 
-		if($_GET["data_type"] == 2)
+		if($_GET["data_type"] === "2")
 		{
 			if(!is_array($_POST["products"]) && !is_array($_SESSION["patent"]["prod_selection"]) && !(is_array($_SESSION["patent"]["products"] && sizeof($_SESSION["patent"]["products"]))))
 			{
@@ -720,7 +720,7 @@ class patent extends intellectual_property
 			}
 		}
 
-		if($_GET["data_type"] == 1)
+		if($_GET["data_type"] === "1")
 		{
 			if($_POST["type"] == 0 && !isset($_POST["word_mark"]))
 			{
@@ -744,7 +744,7 @@ class patent extends intellectual_property
 			}
 		}
 
-		if($_GET["data_type"] == 3 and ($_POST["convention_date"]["day"] || $_POST["exhibition_date"]["day"]))
+		if($_GET["data_type"] === "3" and ($_POST["convention_date"]["day"] || $_POST["exhibition_date"]["day"]))
 		{
 			if(
 				(
@@ -766,7 +766,11 @@ class patent extends intellectual_property
 
 		if(empty($err))
 		{
-			$_SESSION["patent"]["checked"][] = $_GET["data_type"];
+			$_SESSION["patent"]["checked"][$_GET["data_type"]] = $_GET["data_type"];
+		}
+		else
+		{
+			unset($_SESSION["patent"]["checked"][$_GET["data_type"]]);
 		}
 
 		return $err;

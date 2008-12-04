@@ -447,7 +447,11 @@ class patent_patent extends intellectual_property
 
 			if(empty($err))
 			{
-				$_SESSION["patent"]["checked"][] = 14;
+				$_SESSION["patent"]["checked"]["14"] = "14";
+			}
+			else
+			{
+				unset($_SESSION["patent"]["checked"]["14"]);
 			}
 		}
 

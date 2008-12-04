@@ -90,8 +90,8 @@ class industrial_design extends intellectual_property
 		2 => 16,
 		3 => 3,
 		4 => 17,
-		5 => 4,
-		6 => 18,
+		5 => 18,
+		6 => 4,
 		7 => 5
 	);
 
@@ -108,8 +108,8 @@ class industrial_design extends intellectual_property
 			16 => "industrial_design",
 			3 => "priority_ind",
 			17 => "process_postpone",
-			4 => "fee_ind",
 			18 => "docs",
+			4 => "fee_ind",
 			5 => "check_ind"
 		);
 		$this->pdf_file_name = "ToostusdisainiLahenduseTaotlus";
@@ -335,6 +335,11 @@ class industrial_design extends intellectual_property
 							}
 						}
 					}
+
+					if(count($file_data["name"]) < 2)
+					{
+						$err.= t("Reproduktsioon peab olema lisatud")."\n<br>";
+					}
 				}
 
 				if (is_uploaded_file($file_data["tmp_name"]))
@@ -356,7 +361,27 @@ class industrial_design extends intellectual_property
 
 			if(empty($err))
 			{
-				$_SESSION["patent"]["checked"][] = 18;
+				$_SESSION["patent"]["checked"]["18"] = "18";
+			}
+			else
+			{
+				unset($_SESSION["patent"]["checked"]["18"]);
+			}
+		}
+		elseif ($_POST["data_type"] === "16")
+		{
+			if(empty($_POST["industrial_design_name"]))
+			{
+				$err.= t("Nimetus on kohustuslik")."\n<br />";
+			}
+
+			if(empty($err))
+			{
+				$_SESSION["patent"]["checked"]["16"] = "16";
+			}
+			else
+			{
+				unset($_SESSION["patent"]["checked"]["16"]);
 			}
 		}
 

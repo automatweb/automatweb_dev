@@ -2581,12 +2581,12 @@ abstract class intellectual_property extends class_base
 
 			if(empty($err))
 			{
-				$_SESSION["patent"]["checked"][] = $_GET["data_type"];
+				$_SESSION["patent"]["checked"][$_GET["data_type"]] = $_GET["data_type"];
 			}
 		}
 		else
 		{
-			$_SESSION["patent"]["checked"][] = $_GET["data_type"];
+			$_SESSION["patent"]["checked"][$_GET["data_type"]] = $_GET["data_type"];
 		}
 
 		return $err;

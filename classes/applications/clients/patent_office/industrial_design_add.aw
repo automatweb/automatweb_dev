@@ -128,19 +128,19 @@ class industrial_design_add extends class_base
 				$o41->save();
 				$ol->add($o41);
 
-				$o5 = new object();
-				$o5->set_name("Riigil".chr(245)."iv");
-				$o5->set_class_id(CL_MENU);
-				$o5->set_parent($o->id());
-				$o5->save();
-				$ol->add($o5);
-
 				$o51 = new object();
 				$o51->set_name("Reproduktsioonid");
 				$o51->set_class_id(CL_MENU);
 				$o51->set_parent($o->id());
 				$o51->save();
 				$ol->add($o51);
+
+				$o5 = new object();
+				$o5->set_name("Riigil".chr(245)."iv");
+				$o5->set_class_id(CL_MENU);
+				$o5->set_parent($o->id());
+				$o5->save();
+				$ol->add($o5);
 
 				$o6 = new object();
 				$o6->set_name("Andmete kontroll/edastamine");
