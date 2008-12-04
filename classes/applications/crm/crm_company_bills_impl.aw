@@ -149,46 +149,54 @@ class crm_company_bills_impl extends class_base
 			$row->save();
 			}
 		}*/
-
-
+/*
+if(aw_global_get("uid") == "marko")
+{
+aw_set_exec_time(AW_LONG_PROCESS);
+ini_set("memory_limit", "800M");
 //bugi kommentaaride toimetuse ridadeks konvertimise algoritm
-/*		$all_tasks = new object_list(array(
+		$all_tasks = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
- 			"limit" => 1,
-		));*/
-/*$all_tasks = new object_list();
-$all_tasks->add(221302);
-
+ //			"limit" => 1,
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1212296400),
+		));
+//$all_tasks = new object_list();
+//$all_tasks->add(221302);
+arr($all_tasks->count());flush();
+$x = 0;
 		foreach($all_tasks->arr() as $bug_comment)
-		{
-	arr($bug_comment);
+		{//arr($bug_comment->properties()); die();
 			$tr = obj();
-			$tr->set_class_id(1050);arr(CL_TASK_ROW); arr($bug_comment->parent());arr($bug_comment->name());
-			$tr->set_parent(218341);
-			$tr->set_name("sdfsdfsdf");
+			$tr->set_class_id(1050);
+			$tr->set_parent($bug_comment->parent());
+			$tr->set_name("konverditudbugikommentaarist");
 			$tr->save();
 
-
 			$tr->set_prop("date" , $bug_comment->created());
-		$asd = array("status" , "name" ,"brother_of" , "parent", "class_id" ,"lang_id", "period", "created", "modified", "periodic", "createdby", "modifiedby");
+			$asd = array("acldata" , "meta","subclass" , "flags","site_id", "lang_id" , "alias" , "visible" , "jrk" , "last" , "hits" , "oid" , "status" , "name" ,"brother_of" , "parent", "class_id","metadata", "period", "created", "modified", "periodic", "createdby", "modifiedby");
 			foreach($bug_comment->properties() as $prop => $val)
-			{if(in_array($prop , $asd))continue;
+			{
+				if(in_array($prop , $asd))continue;
 				$tr->set_prop($prop , $val);
 			}
 
-
 			$bug = obj($bug_comment->parent());
-		if(is_oid($bug->id()))
+			if(is_oid($bug->id()))
 			$bug->connect(array(
 				"to" => $tr->id(),
 				"type" => "RELTYPE_COMMENT",
 			));
-			$tr->set_createdby($bug_comment->createdby());
-			$tr->save();arr($tr);
+			$tr->save();
+			$this->db_query("UPDATE objects set createdby='".$bug_comment->createdby()."' , created='".$bug_comment->created()."'  WHERE oid=".$tr->id());
+print $x."<br>";flush();
+	$bug_comment->delete();
+$x++;
+//arr($tr);
 		}
-*/
 
+}
+*/
 	enter_function("bills_impl::_get_bill_proj_list1");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->get_time_between($arr["request"]);
