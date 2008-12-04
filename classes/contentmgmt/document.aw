@@ -35,7 +35,7 @@ class document extends aw_template
 			"show_title","copyright","long_title","nobreaks","no_left_pane","no_right_pane",
 			"no_search","show_modified","frontpage_left","frontpage_center","frontpage_center_bottom",
 			"frontpage_right","frontpage_left_jrk","frontpage_center_jrk","frontpage_center_bottom_jrk",
-			"frontpage_right_jrk","no_last","dcache","moreinfo",
+			"frontpage_right_jrk","no_last","dcache","moreinfo","show_to_country"
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on

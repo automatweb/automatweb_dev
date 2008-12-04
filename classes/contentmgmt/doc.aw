@@ -235,6 +235,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 @default group=settings
 
+	@property show_to_country type=textbox
+	@caption N&auml;htav vaid nendest riikidest tulijatele
+
 	@property no_right_pane type=checkbox ch_value=1 trans=1
 	@caption Ilma parema paanita
 
@@ -383,6 +386,16 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "show_to_country":
+				$tbl = $this->db_get_table("documents");
+				if (!isset($tbl["fields"]["show_to_country"]))
+				{
+					$this->db_add_col("documents", array(
+						"name" => "show_to_country",
+						"type" => "varchar(255)"
+					));
+				}
+				break;
 			case "brother_warning":
 				if ($arr["obj_inst"]->is_brother())
 				{
