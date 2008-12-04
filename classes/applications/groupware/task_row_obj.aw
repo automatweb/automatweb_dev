@@ -165,7 +165,7 @@ class task_row_obj extends _int_object
 				$this->set_prop("impl",$cp->id());
 			}
 		}
-		parent::save();
+		$ret = parent::save();
 		if(is_oid($this->prop("task")))
 		{
 			$task = obj($this->prop("task"));
@@ -211,6 +211,7 @@ class task_row_obj extends _int_object
 				}
 			}
 		}
+		return $ret;
 	}
 
 }

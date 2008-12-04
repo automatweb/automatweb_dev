@@ -149,6 +149,7 @@ class crm_company_bills_impl extends class_base
 			$row->save();
 			}
 		}*/
+
 /*
 if(aw_global_get("uid") == "marko")
 {
@@ -174,6 +175,7 @@ $x = 0;
 			$tr->save();
 
 			$tr->set_prop("date" , $bug_comment->created());
+			$tr->set_prop("done" , 1);
 			$asd = array("acldata" , "meta","subclass" , "flags","site_id", "lang_id" , "alias" , "visible" , "jrk" , "last" , "hits" , "oid" , "status" , "name" ,"brother_of" , "parent", "class_id","metadata", "period", "created", "modified", "periodic", "createdby", "modifiedby");
 			foreach($bug_comment->properties() as $prop => $val)
 			{

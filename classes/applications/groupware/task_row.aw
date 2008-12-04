@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.22 2008/11/25 19:13:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.23 2008/12/04 16:39:06 markop Exp $
 
 // task_row.aw - Toimetuse rida 
 /*
@@ -125,6 +125,11 @@ class task_row extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "prev_state":
+			case "new_state":
+				$bi = get_instance(CL_BUG);
+				$prop["options"] = array("" => t("--vali--"))+ $bi->get_status_list();
+				break;
 			case "parent": return PROP_IGNORE;
 			case "skill_used":
 				if(!is_oid($arr["obj_inst"]))return PROP_IGNORE;
