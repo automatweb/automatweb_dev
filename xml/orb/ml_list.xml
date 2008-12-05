@@ -17,6 +17,13 @@
 			</function>
 		</action>
 
+		<action name="submit_choose_addresses" all_args="1">
+			<function name="submit_choose_addresses">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="subscribe" nologin="1">
 			<function name="subscribe">
 				<arguments>

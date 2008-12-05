@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.138 2008/12/04 18:00:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.139 2008/12/05 17:23:50 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -220,7 +220,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property mail_toolbar type=toolbar no_caption=1
 @caption Maili toolbar
 
-@layout mail_top type=hbox closeable=1 width=20%:20%:60%
+@layout mail_top type=hbox closeable=1 width=20%:20%:30%:30%
 	@property send_away type=checkbox ch_value=1 store=no parent=mail_top no_caption=1
 	@caption Saada peale salvestamist &auml;ra
 	
@@ -230,6 +230,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 	@property no_fck type=checkbox ch_value=1 parent=mail_top no_caption=1
 	@caption Maili kirjutamine plaintext vaates
 
+	@property take_out_adrr type=checkbox ch_value=1 parent=mail_top no_caption=1
+	@caption Enne saatmist lase m&otilde;ningad aadressid v&auml;lja praakida
 
 @layout write_message_layout type=hbox width=40%:60% 
 	@layout wml type=vbox parent=write_message_layout area_caption=&nbsp;
@@ -321,7 +323,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 ------------------------------------------------------------------------
 
-@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR,CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED,CL_CRM_COMPANY_STATUS
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR,CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED,CL_CRM_CATEGORY
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -411,8 +413,118 @@ class ml_list extends class_base
 		}
 	}
 
-	/** saadab teate $id listidesse $targets(array stringidest :listinimi:grupinimi)
+	function choose_addresses($arr)
+	{
+		$members = $this->get_members(array("id" => $arr["id"]));
+		classload("vcl/table");
+		$t = new vcl_table();
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name"
+		));
+
+		$t->define_field(array(
+			"caption" => t("Mailiaadress"),
+			"name" => "email"
+		));
+
+		$t->define_field(array(
+			"caption" => t("Organisatsioon"),
+			"name" => "org"
+		));
+
+		$t->define_field(array(
+			"caption" => t("Ametinimetus"),
+			"name" => "pro"
+		));
+
+		foreach($members as $member)
+		{
+			$t->define_data(array(
+				"oid" => $member["oid"],
+				"name" => $member["name"],
+				"email" => $member["mail"],
+				"org" => get_name($member["co"]),
+				"pro" => get_name($member["pro"]),
+			));
+		}
+
+		classload("cfg/htmlclient");
+		$htmlc = new htmlclient(array(
+			'template' => "default",
+		));
+		$htmlc->start_output();
+
+
+
+		$htmlc->add_property(array(
+			"name" => "table",
+			"type" => "text",
+			"value" => $t->draw(),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "submitb",
+			"type" => "submit",
+			"value" => "Saada",
+			"class" => "sbtbutton"
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "submit_choose_addresses",
+			"method" => "POST",
+			"data" => array(
+				"id" => $arr["id"],
+				"list_id" => $arr["list_id"],
+				"mfrom" => $mfrom,
+				"orb_class" => "ml_list",
+				"reforb" => 1
+			)
+		));
+		$html = $htmlc->get_result();
+
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"active" => true,
+			"caption" => t("Kirja saatmine"),
+			"link" => aw_global_get("REQUEST_URI")
+		));
+		return $tp->get_tabpanel(array(
+			"content" => $html
+		));
+
+
+	}
+
+
+	/** 
+		@attrib name=submit_choose_addresses all_args=1
 		
+	**/
+	function submit_choose_addresses($args)
+	{
+		extract($args);
+		$mail = obj($args["id"]);
+		$mail->set_meta("chosen_before_sent" , $args["sel"]);
+		$mail->set_meta("let_choose_addresses" , 0);
+		$mail->save();
+		$url = $this->mk_my_orb("post_message" , array(
+			"id" =>  $args["id"],
+			"targets" => $args["list_id"],
+		));
+		die("<script language='javascript'>
+			window.location = \"".$url."\";
+
+		</script>");
+	}
+
+
+	/** saadab teate $id listidesse $targets(array stringidest :listinimi:grupinimi)
 		@attrib name=post_message
 		@param id required 
 		@param targets optional 
@@ -421,12 +533,28 @@ class ml_list extends class_base
 	function post_message($args)
 	{
 		extract($args);
+
 		if($to_post)
 		{
 			return $this->submit_post_message(array(
 				"list_id" => $mto,
 				"id" => $targets,
 			));
+		}
+
+		$id = (int)$id;//teate id
+		$listinfo = new object($targets);
+		if(is_oid($id))
+		{
+			$msg = obj($id);
+			$mfrom = $msg->prop("mfrom");
+			if($msg->meta("let_choose_addresses"))
+			{
+				return $this->choose_addresses(array(
+					"list_id" => $targets,
+					"id" => $id,
+				));
+			}
 		}
 
 		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>".t("Tagasi")."</a>&nbsp;/&nbsp;".t("Saada teade"));
@@ -461,14 +589,6 @@ class ml_list extends class_base
 			"value" => "Saada",
 			"class" => "sbtbutton"
 		));
-
-		$id = (int)$id;//teate id
-		$listinfo = new object($targets);
-		if(is_oid($id))
-		{
-			$msg = obj($id);
-			$mfrom = $msg->prop("mfrom");
-		}
 
 		$htmlc->finish_output(array(
 			"action" => "submit_post_message",
@@ -882,6 +1002,8 @@ class ml_list extends class_base
 				$prop["caption"] = t("Asenduste legend");
 				$prop["value"] = t("Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />
 					#username# - AutomatWebi kasutajanimi<br />
+					#organisatsioon# - liikme organisatsioon<br />
+					#ametinimetus# - ametinimetus<br />
 					#name# - Listi liikme nimi<br />
 					#e-mail# - Listi liikme e-mail<br/>
 					#subject# - Kirja teema<br />
@@ -2429,16 +2551,21 @@ class ml_list extends class_base
 		$this->show_extra_cols = 1;
 		extract($args);
 		$o = obj($id);
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
-			"name"  => "%spa%",
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
 
-		foreach($ol->arr() as $co)
+		foreach($o->connections_from(array("type" => "RELTYPE_CUSTOMER")) as  $conn)
+//		foreach($ol->arr() as $co)
 		{
-			foreach($co->get_workers()->arr() as $worker)
+			$co = $conn->to();
+			if($co->class_id() == CL_CRM_PERSON)
+			{
+				$people = new object_list();
+				$people->add($co);
+			}
+			else
+			{
+				$people = $co->get_workers();
+			}
+			foreach($people->arr() as $worker)
 			{
 				$mail = $worker->get_mail($co->id());
 				if(!$no_return)
@@ -2454,7 +2581,7 @@ class ml_list extends class_base
 							}
 							$this->ml_members[]  = array(
 								"co" => $co->id(),
-								"pro" => $worker->get_rank(),
+								"pro" => $worker->get_rank($co->id()),
 								"parent" => $o->id(),
 								"name" => $name,
 								"mail" => $mail,
@@ -2746,7 +2873,7 @@ class ml_list extends class_base
 					"to" => $to,
 					"no_return" => $no_return));
 			}
-			elseif ($source_obj->class_id() == CL_CRM_COMPANY_STATUS)
+			elseif ($source_obj->class_id() == CL_CRM_CATEGORY)
 			{
 				$this->get_members_from_category(array(
 					"id" => $source_obj->id(),
@@ -3518,6 +3645,10 @@ class ml_list extends class_base
 			{
 				$msg_obj->set_prop($prop , $val);
 			}
+		}
+		if($arr["request"]["take_out_adrr"])
+		{
+			$msg_obj->set_meta("let_choose_addresses" , 1);
 		}
 		$msg_obj->save();
 		$message_id = $msg_obj->id();

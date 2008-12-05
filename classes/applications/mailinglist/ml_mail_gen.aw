@@ -32,7 +32,9 @@ class ml_mail_gen extends run_in_background
 	}
 	
 	function bg_run_step($o)
-	{//if (rand(1,20) < 5) {arr("die....!"); die(); }
+	{
+		arr($o);
+		//if (rand(1,20) < 5) {arr("die....!"); die(); }
 		// process step
 		if(!(is_array($this->mails_to_gen)))
 		{
@@ -98,10 +100,20 @@ class ml_mail_gen extends run_in_background
 		$member_list = $members["objects"];
 		$from_file = $members["from_file"];
 		set_time_limit(0);
+
 	print 'already generated mails:';arr($this->made_mails);
 		
+		$mail_object = obj($arr["mail_id"]);
+		$address_selection = $mail_object->meta("chosen_before_sent");
+
+	print 'selected oids:';arr($address_selection);
+
 		foreach($members as $member)
-		{arr($member["mail"]);
+		{
+			if(is_array($address_selection) && (in_array($member["oid"], $address_selection)))
+			{
+				continue;
+			}
 			if(array_key_exists($member["mail"], $this->made_mails))
 			{
 				continue;
@@ -249,6 +261,10 @@ class ml_mail_gen extends run_in_background
 			
 		}
 		$mail_obj = obj($arr["mail_id"]);
+
+		$add_co = substr_count($text, '#organisatsioon#');
+		$add_pro = substr_count($text, '#ametinimetus#');
+
 		$mail_meta = $mail_obj->meta();
 		$vars = $arr["vars"];
 		$data = array(
@@ -308,6 +324,19 @@ class ml_mail_gen extends run_in_background
 		$message = str_replace("#lahkumine#" , $html_mail_unsubscribe[0].$unsubscribe_link.$html_mail_unsubscribe[1] , $message);
 		$message = str_replace("#e-mail#" , $arr["mail"] , $message);
 		
+		if($add_pro || $add_co)
+		{
+			if($add_co)
+			{
+				//siia vaja karupersest saada organisatsioon
+			}
+			if($add_pro)
+			{
+				//siia karupersest vaja saada ametinimetus
+			}
+		}
+		
+
 		//parse stuff
 		$parser = get_instance("alias_parser");
 		$parser->parse_oo_aliases($arr["mail_id"], $message);
