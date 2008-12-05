@@ -247,6 +247,57 @@ class package_client extends class_base
 		return $arr["return_url"];
 	}
 
+	/**
+	@attrib name=uninstall_package api=1 params=name
+		@param package_id optional type=oid
+			package object oid
+		@param package_name optional type=oid
+			package object name
+		@param package_version optional type=oid
+			package version
+		@param client_id required type=oid
+			package object oid
+		@param return_url required type=string
+			Url to return
+	**/
+	public function uninstall_package($arr)
+	{
+		$o = obj($arr["client_id"]);
+		$o->uninstall_package(array(
+			"id" => $arr["package_id"],
+			"name" => $arr["package_name"],
+			"version" => $arr["package_version"],
+		));
+		return $arr["return_url"];
+	}
+
+	/**
+	@attrib name=restore_package api=1 params=name
+		@param package_id required type=oid
+			package object oid
+		@param package_id_server optional type=oid
+			package object id in server
+		@param package_name optional type=oid
+			package object name
+		@param package_version optional type=oid
+			package version
+		@param client_id required type=oid
+			package object oid
+		@param return_url required type=string
+			Url to return
+	**/
+	public function restore_package($arr)
+	{
+		$o = obj($arr["client_id"]);
+		$o->restore_package(array(
+			"server_id" => $arr["package_id_server"],
+			"id" => $arr["package_id"],
+			"name" => $arr["package_name"],
+			"version" => $arr["package_version"],
+		));
+		return $arr["return_url"];
+	}
+
 	function _get_list($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -367,10 +418,20 @@ class package_client extends class_base
 
 	function _get_my_list($arr)
 	{
+		$tbl = $this->db_get_table("site_file_index");
+		if (!isset($tbl["fields"]["package_id"]))
+		{
+			$this->db_add_col("site_file_index", array(
+				"name" => "package_id",
+				"type" => "int"
+			));
+		}
+
+
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
 
-		$t->set_caption(t('Minu pakkide nimekiri'));
+		$t->set_caption(t('Minu alla t&otilde;mmatud pakettide nimekiri'));
 
 		$t->define_chooser(array(
 			'name' => 'selected_ids',
@@ -408,12 +469,32 @@ class package_client extends class_base
 			"chgbgcolor" => "color",
 		));
 
+		$t->define_field(array(
+			'name' => 'actions',
+			'caption' => t('Tegevused'),
+			"chgbgcolor" => "color",
+		));
+
 		//see tuleks teha optimaalsemaks, praegu loeb k6ik sisse et uuemaid versioone leida
 		$available = $arr["obj_inst"]->get_packages($filter);
 
-		$packages = $arr["obj_inst"]->get_my_packages();
+		$packages = $arr["obj_inst"]->get_downloaded_packages();
+
+		$installed = $arr["obj_inst"]->get_installed_packages();
+
 		foreach ($packages as $data)
 		{
+			$color = $isinstalled = $actions = null;
+			foreach($installed as $i)
+			{
+				if($data["name"] == $i["package_name"] && $data["version"] == $i["package_version"])
+				{
+					$isinstalled = 1;
+					$p_object_id_in_our_system = $i["package_id"];
+					continue;
+				}
+			}
+
 			$server_data = $arr["obj_inst"]->download_package_properties($data["id"]);
 
 			$last_version = $server_data["version"];
@@ -428,21 +509,55 @@ class package_client extends class_base
 				}
 			}
 
-
+			$uninstalllink = $this->mk_my_orb("uninstall_package", array(
+				"package_id" =>  $p_object_id_in_our_system,
+				"package_name" =>  $data["name"],
+				"package_version" =>  $data["version"],
+				"client_id" => $arr["obj_inst"]->id(),
+				"return_url" => get_ru(),
+			));
+			$installlink = $this->mk_my_orb("restore_package", array(
+				"package_id" =>  $p_object_id_in_our_system,
+				"package_name" =>  $data["name"],
+				"package_version" =>  $data["version"],
+				"package_id_server" =>  $data["id"],
+				"client_id" => $arr["obj_inst"]->id(),
+				"return_url" => get_ru(),
+			));
 
 			$deps = array();
 			foreach($server_data["dependencies"] as $file => $version)
 			{
 				$deps[] = $file." - ".$version;
 			}
+
+			if($_GET["show_files"] == $data["id"])
+			{
+				$color = "grey";
+			}
+			else
+			{
+				$color = !$isinstalled ? "silver" :($last_version == $data["version"]?  "#CCFFCC" : "yellow");
+			}
+
+			if($isinstalled)
+			{
+				$actions = html::href(array("caption"=> t("Eemalda") , "url" => $uninstalllink));
+			}
+			else
+			{
+				$actions = html::href(array("caption"=> t("Paigalda") , "url" => $installlink));
+			}
+
 			$t->define_data(array(
 				'select' => $data["id"],
-				'color' => $_GET["show_files"] == $data["id"] ? "grey":($last_version == $data["version"]?  "#CCFFCC" : "") ,
+				'color' =>  $color,
 				'name' => html::href(array("caption"=> $data["name"] , "url" => aw_url_change_var("show_files" , $data["id"]))),
 				'version' => $server_data["version"],
 				'dep' => join("<br>" , $deps),
 				'description' =>  $server_data["description"],
 				'down' => $last_version,//'down' => html::href(array("caption"=> t("Download") , "url" => $down_url)),
+				'actions' => $actions,
 			));
 		}
 		return PROP_OK;

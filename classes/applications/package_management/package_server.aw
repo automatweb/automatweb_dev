@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.19 2008/10/31 12:08:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/package_management/package_server.aw,v 1.20 2008/12/05 13:15:58 markop Exp $
 // package_server.aw - Pakiserver 
 /*
 
@@ -431,7 +431,7 @@ class package_server extends class_base
 			$files = $package->get_package_file_names();
 			$pa[] = array(
 				"id" => $package->id(),
-				"name" => $package->name(),
+				"name" => $package->name()?$package->name():t("(Nimetu)"),
 				"version" => $package->prop("version"),
 			);
 

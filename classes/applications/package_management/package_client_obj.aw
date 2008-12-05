@@ -29,7 +29,7 @@ class package_client_obj extends _int_object
 		@attrib api=1
 		@return array
 	**/
-	public function get_my_packages()
+	public function get_downloaded_packages()
 	{
 		$filter = array("site_id" => $this->site_id());
 		$inst = $this->instance();
@@ -44,6 +44,27 @@ class package_client_obj extends _int_object
 				"no_errors" => true,
 				"params" => $filter,
 			));
+		}
+		return $packages;
+	}
+
+	/** Returns downloaded package list
+		@attrib api=1
+		@return array
+	**/
+	public function get_installed_packages()
+	{
+		$packages = array();
+		$files = $this->get_installed_files_data();
+		
+		foreach($files as $file)
+		{
+			$key = $file["package_id"].$file["package_name"].$file["package_version"];
+			$packages[$key] = array(
+				"package_id" => $file["package_id"],
+				"package_name" => $file["package_name"],
+				"package_version" => $file["package_version"],
+			);
 		}
 		return $packages;
 	}
@@ -126,14 +147,16 @@ class package_client_obj extends _int_object
 			fwrite($fp, $contents);
 			fclose($fp);
 
-			$this->add_installed_package(array(
+			$package_id = $this->add_installed_package(array(
 				"name" => $data["name"],
 				"version" => $data["version"],
 				"description" => $data["description"],
 				"file" => $fn,
 				"file_versions" => $data["file_versions"],
 			));
-			$this->install_package($data + array("file_name" => $fn));
+			$data["package_id"] = $package_id;
+			$data["file_name"] = $fn;
+			$this->install_package($data);
 		}
 	}
 
@@ -180,9 +203,10 @@ class package_client_obj extends _int_object
 				file_location varchar(31),
 				package_name varchar(255),
 				package_version varchar(31),
+				package_id int,
 				used int,
 				installed_date int,
-				dependences varchar(255)
+				dependences varchar(255),
 			)');//see viimane on niisama, 2kki leiab hea lahenduse selleks
 		}
 
@@ -224,6 +248,7 @@ class package_client_obj extends _int_object
 					file_location,
 					package_name,
 					package_version,
+					package_id,
 					used,
 					installed_date,
 					dependences
@@ -233,13 +258,14 @@ class package_client_obj extends _int_object
 					'".$location."',
 					'".$data["name"]."',
 					'".$data["version"]."',
+					'".$data["package_id"]."',
 					'1',
 					'".time()."',
 					'"."123"."'
 				)";
 //arr($sql);
 
-				$this->uninstall(array(
+				$this->uninstall_file(array(
 					"name" => $file_name,
 					"location" => $location,
 				));
@@ -279,11 +305,84 @@ class package_client_obj extends _int_object
 		die("all done...");
 	}
 
-	private function uninstall($arr)
+	private function uninstall_file($arr)
 	{
 		$pi = get_instance(CL_PACKAGE);
 		$sql = "UPDATE ".$this->db_table_name." SET used=0 where file_name='".$arr["name"]."' AND file_location='".$arr["location"]."'";
 		$pi->db_query($sql);
+	}
+
+
+	/** uninstalls package from system, id or name&&version must be set
+		@attrib api=1 params=name
+		@param server_id optional type=oid
+			package object id in server
+		@param id optional type=oid
+			package object id
+		@param name optional type=string
+			package object name
+		@param version optional type=string
+			package version
+	**/
+	public function restore_package($arr)
+	{
+		$this->db_table_name = "site_file_index";
+		$filter = array("class_id" => CL_PACKAGE);
+		if(is_oid($arr["id"]))
+		{
+			$filter["oid"] = $arr["id"];
+			$ol = new object_list($filter);
+			$o = reset($ol->arr());
+			$sql = "UPDATE ".$this->db_table_name." SET used=1 where package_id='".$arr["id"]."'";
+			$inst->db_query($sql);
+		}
+		elseif(strlen($arr["name"]) && strlen($arr["version"]))
+		{
+			$filter["name"] = $arr["name"];
+			$filter["version"] = $arr["version"];
+			$ol = new object_list($filter);
+			$o = reset($ol->arr());
+			$sql = "UPDATE ".$this->db_table_name." SET used=1 where package_name='".$arr["name"]."' AND package_version='".$arr["version"]."'";
+arr($sql); die();
+			$inst->db_query($sql);
+		}
+		else
+		{
+			//tahaks teha kudagi nii, et kui oma systeemis leiab paketi faili , siis kasutaks seda, a kui ei leia, siis uuendab serverist
+			arr($this->get_packages(array(
+				"id" => $id,
+			)));
+		}
+		return false;
+	}
+
+	/** uninstalls package from system, id or name&&version must be set
+		@attrib api=1 params=name
+		@param id optional type=oid
+			package object id
+		@param name optional type=string
+			package object name
+		@param version optional type=string
+			package version
+	**/
+	public function uninstall_package($arr)
+	{
+		$this->db_table_name = "site_file_index";
+		$inst = $this->instance();
+		if(is_oid($arr["id"]))
+		{
+			$sql = "UPDATE ".$this->db_table_name." SET used=0 where package_id='".$arr["id"]."'";
+		}
+		elseif(strlen($arr["name"]) && strlen($arr["version"]))
+		{
+			$sql = "UPDATE ".$this->db_table_name." SET used=0 where package_name='".$arr["name"]."' AND package_version='".$arr["version"]."'";
+		}
+		else
+		{
+			return false;
+		}
+		$inst->db_query($sql);
+		return true;
 	}
 
 	/** Adds installed package object to the system
