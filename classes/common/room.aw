@@ -2177,8 +2177,15 @@ class room extends class_base
 		}
 		else
 		if($last_bron->prop("verified"))
-		{
-			$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
+		{//arr($last_bron->prop("type") == "food" && $settings->prop("col_food") != "");
+			if($last_bron->prop("type") == "food" && $settings->prop("col_food") != "")
+			{
+				$col[$x] = "#".$settings->prop("col_food");
+			}
+			else
+			{
+				$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
+			}
 		}
 		else
 		{
@@ -5582,6 +5589,10 @@ class room extends class_base
 		if(!empty($arr["type"]) && strlen($arr["type"]))
 		{
 			$filt["type"] = $arr["type"];
+		}
+		else
+		{
+			$filt["type"] = new obj_predicate_compare(OBJ_COMP_EQUAL, '');
 		}
 
 		if (!empty($arr["ignore_booking"]))

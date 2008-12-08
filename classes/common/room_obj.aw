@@ -508,6 +508,13 @@ class room_obj extends _int_object
 		}
 		$arr["room"] = $this->id();
 		$room_inst = get_instance(CL_ROOM);
+
+		if(is_oid($arr["ignore_booking"]))
+		{
+			$to_ignore = obj($arr["ignore_booking"]);
+			$arr["type"] = $to_ignore->prop("type");
+		}
+
 		$ret = $room_inst->check_if_available($arr);
 		//ruumi instantsist saab kinnise aja ka siis kui on peale pandud et n2idata kalendris kinnitamata vaateid
 		//global $this->last_bron_id;

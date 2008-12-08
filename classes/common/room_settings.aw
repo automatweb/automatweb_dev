@@ -153,6 +153,16 @@
 	@property col_slave type=colorpicker 
 	@caption Alam-reserveeringu v&auml;rv
 
+	@property col_food type=colorpicker 
+	@caption Toitlustus-reserveeringu v&auml;rv
+
+@groupinfo calendar_view caption="Kalendrivaade"
+@default group=calendar_view
+
+	@property bron_props type=table save=no no_caption=1
+	@caption Broneeringu omaduste tabel
+
+
 @groupinfo settings caption="Muud seaded"
 	@groupinfo settings_gen caption="Muud seaded" parent=settings
 	
