@@ -149,6 +149,32 @@ class crm_company_bills_impl extends class_base
 			$row->save();
 			}
 		}*/
+/*
+if(aw_global_get("uid") == "marko")
+{
+aw_set_exec_time(AW_LONG_PROCESS);
+ini_set("memory_limit", "800M");
+	$all_tasks = new object_list(array(
+		"class_id" => CL_TASK_ROW,
+		"lang_id" => array(),
+		"name" => "konverditudbugikommentaarist",
+//		"limit" => 100,
+	));
+	$u = get_instance(CL_USER);
+
+	arr($all_tasks->count());flush();
+	foreach($all_tasks->arr() as $bug_comment)
+	{
+		foreach($bug_comment->connections_from(array("type" => 2,)) as $delconnection)
+		{
+			$delconnection->delete();
+		}
+		$person = $u->get_person_for_uid($bug_comment->createdby());
+		$bug_comment->set_prop("impl",$person->id());
+		$bug_comment->save();
+	}
+}
+*/
 
 /*
 if(aw_global_get("uid") == "marko")
@@ -210,6 +236,7 @@ $x++;
 		$this->rows_for_project = array();
 		$this->bugs_for_project = array();
 		$this->task_hour_prices = array();
+		$this->tasks_hours = array();
 
 //--------------------------kokkuleppehinnaga taskid
 		$deal_task_ol = new object_list(array(
@@ -255,6 +282,7 @@ $x++;
 				"task" => "task",
 				"project" => "project",
 				"time_to_cust" => "time_to_cust",
+				"time_real" => "time_real",
 				"task.class_id" => "type",
 			),
 		);
@@ -262,7 +290,14 @@ $x++;
 
 		foreach($rows_arr->list_data as $bcs)
 		{
-			$tasks_sum[$bcs["task"]]+= $bcs["time_to_cust"];
+			if($bcs["time_to_cust"])
+			{
+				$this->tasks_hours[$bcs["task"]]+= $bcs["time_to_cust"];
+			}
+			else
+			{
+				$this->tasks_hours[$bcs["task"]]+= $bcs["time_real"];
+			}
 			if(!is_array($bcs["project"]))
 			{
 				$bcs["project"] = array($bcs["project"]);
@@ -285,7 +320,7 @@ $x++;
 		$tasks_data = array();
 		$tasks_filter = array(
 			"class_id" => array(CL_TASK),
-			"oid" => array_keys($tasks_sum)
+			"oid" => array_keys($this->tasks_hours)
 		);
 		$tasksres = array(
 			CL_TASK => array(
@@ -298,7 +333,7 @@ $x++;
 
 		$tasks_filter = array(
 			"class_id" => array(CL_BUG),
-			"oid" => array_keys($tasks_sum)
+			"oid" => array_keys($this->tasks_hours)
 		);
 		$tasksres = array(
 			CL_BUG => array(
@@ -311,7 +346,7 @@ $x++;
 
 		$tasks_filter = array(
 			"class_id" => array(CL_CRM_MEETING),
-			"oid" => array_keys($tasks_sum)
+			"oid" => array_keys($this->tasks_hours)
 		);
 		$tasksres = array(
 			CL_CRM_MEETING => array(
@@ -324,7 +359,7 @@ $x++;
 
 		$tasks_filter = array(
 			"class_id" => array(CL_CRM_CALL),
-			"oid" => array_keys($tasks_sum)
+			"oid" => array_keys($this->tasks_hours)
 		);
 		$tasksres = array(
 			CL_CRM_CALL => array(
@@ -344,7 +379,7 @@ $x++;
 			}
 			foreach($bcs["project"] as $project)
 			{
-				$this->sum2proj[$project]+= $tasks_sum[$bcs["oid"]] * $bcs["hr_price"];
+				$this->sum2proj[$project]+= $this->tasks_hours[$bcs["oid"]] * $bcs["hr_price"];
 			}
 		}
 		exit_function("bills_impl::_get_bill_proj_list2");
@@ -647,7 +682,7 @@ $x++;
 
 		exit_function("bills_impl::_get_bill_task_list2");
 		enter_function("bills_impl::_get_bill_task_list3");
-
+		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
 		foreach($rows-> arr() as $row)
 		{
 			if($row->class_id() == CL_CRM_EXPENSE)
@@ -667,7 +702,7 @@ $x++;
 					$t->define_data(array(
 						"oid" => $row->id(),
 						"name" => $row->prop("content"),
-						"hrs" => number_format(str_replace(",", ".", $row->prop("time_to_cust")), 3),
+						"hrs" => $co_stat_inst->hours_format($row->prop("time_to_cust")),
 						"hr_price" => number_format($this->task_hour_prices[$id],2),
 						"sum" => number_format(str_replace(",", ".", $row->prop("time_to_cust")) * $this->task_hour_prices[$row->prop("task")],2),
 						"set_date" => $row->prop("to_bill_date"),
@@ -824,7 +859,7 @@ enter_function("bills_impl::_get_bill_task_list5");
 			{
 				if (isset($this->bug_comments[$id]))
 				{
-					$bt = $this->bug_hours[$id];
+					$bt = $this->tasks_hours[$id];
 					$bug = obj($id);
 					$hr_price = $bug->get_hour_price();
 					$t->define_data(array(

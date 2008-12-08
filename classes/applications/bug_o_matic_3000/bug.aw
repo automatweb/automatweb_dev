@@ -532,9 +532,12 @@ class bug extends class_base
 				$c->add_data($data);
 				$c->set_axis(array(GCHART_AXIS_LEFT, GCHART_AXIS_BOTTOM));
 				$left_axis = array();
-				for($i = 0; $i <= $sum; $i+= $sum/4)
+				if ($sum > 0)
 				{
-					$left_axis[] = round($i, 2);
+					for($i = 0; $i <= $sum; $i+= $sum/4)
+					{
+						$left_axis[] = round($i, 2);
+					}
 				}
 				$c->add_axis_label(0, $left_axis);
 				$bot_axis = array();
@@ -1502,6 +1505,12 @@ class bug extends class_base
 					$com->set_prop("add_wh", $hrs);
 					$com->set_comment($arr["request"]["comment"][$oid]);
 					$com->save();
+					if($com->class_id() == CL_TASK_ROW)$com->set_prop("on_bill", isset($arr["request"]["on_bill"][$oid]) ? 1 : 0);//arr($arr["request"]);
+					if($arr["request"]["time_to_cust"][$oid])
+					{
+						$com->set_prop("time_to_cust", $arr["request"]["time_to_cust"][$oid]);
+					}
+					$com->save();
 					$total += $hrs;
 				}
 				$arr["obj_inst"]->set_prop("bug_content", $arr["request"]["comment"]["bug"]);
@@ -2165,11 +2174,20 @@ class bug extends class_base
 			"caption" => t("Tunnid"),
 		));
 		$t->define_field(array(
+			"name" => "time_to_cust",
+			"caption" => t("Tunde kliendile"),
+		));
+		$t->define_field(array(
 			"name" => "date",
 			"type" => "time",
 			"numeric" => 1,
 			"format" => "d.m.Y H:i",
 			"caption" => t("Aeg"),
+		));
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>".t("Arvele")."</a>",
+			"align" => "center",
 		));
 		$t->set_sortable(false);
 		$t->define_data(array(
@@ -2188,6 +2206,20 @@ class bug extends class_base
 		foreach($comments as $c)
 		{
 			$comm = obj($c->prop("to"));
+			$onbill = "";
+			if ($comm->prop("bill_id"))
+			{
+				$onbill = sprintf(t("Arve nr %s"), $comm->prop("bill_id.bill_no"));
+			}
+			else
+			{
+				$onbill = html::checkbox(array(
+					"name" => "on_bill[".$comm->id()."]",
+					"value" => 1,
+					"checked" => $comm->prop("on_bill")
+				));
+			}
+
 			$t->define_data(array(
 				"comment" => html::textarea(array(
 					"value" => $comm->comment(),
@@ -2201,7 +2233,13 @@ class bug extends class_base
 					"value" => $comm->prop("add_wh"),
 					"size" => "4",
 				)),
+				"time_to_cust" => html::textbox(array(
+					"name" => "time_to_cust[".$comm->id()."]",
+					"value" => $comm->prop("time_to_cust"),
+					"size" => "4",
+				)),
 				"date" => $comm->created(),
+				"on_bill" => $onbill,
 			));
 		}
 		
