@@ -115,6 +115,16 @@
             <method>serialize</method>
             <group>advanced_settings</group>
             <caption>Vaikimisi piltide kataloog</caption>
+    </property>
+    <property>
+	    <name>short_alias</name>
+	    <table>objects</table>
+	    <type>checkbox</type>
+	    <ch_value>1</ch_value>
+	    <field>meta</field>
+	    <method>serialize</method>
+	    <group>advanced_settings</group>
+	    <caption>Struktuurist sltumatu alias</caption>
       </property>
       <property>
             <name>default_image_folder_is_inherited</name>

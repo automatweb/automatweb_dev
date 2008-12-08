@@ -286,6 +286,11 @@ class menuedit extends aw_template implements request_startup
 				$clist = new object_list($flt);
 				for($check_obj = $clist->begin(); !$clist->end(); $check_obj = $clist->next())
 				{
+					if($check_obj->prop("short_alias"))//shortcut
+					{
+						$obj = $check_obj;
+						continue;
+					}
 					// put it in correct order and remove the first element (object itself)
 					$path = array_reverse($check_obj->path());
 					$curr_id = $check_obj->id();
@@ -314,6 +319,10 @@ class menuedit extends aw_template implements request_startup
 				{
 					aw_ini_set("rootmenu", $tmp);
 				}
+
+				if(!$obj)//edasi oleks nagu ainult selle sektsioooni objekti otsimine, seda pole vaja kui see olemas
+				{
+
 
 				if (aw_ini_get("user_interface.full_content_trans") && !count($candidates))
 				{
@@ -363,15 +372,15 @@ class menuedit extends aw_template implements request_startup
 					$path_for_obj = substr($cand_path,0,-1);
 					if ($path_for_obj == $section)
 					{
-                                                if ($obj)
-                                                {
-                                                        $tmp = obj($cand_id);
-                                                        if ($tmp->ord() < $obj->ord())
-                                                        {
-                                                                continue;
-                                                        }
-                                                }
-
+						if ($obj)
+						{
+							$tmp = obj($cand_id);
+							if ($tmp->ord() < $obj->ord())
+							{
+								continue;
+							}
+						}
+	
 						$obj = new object($cand_id);
 						if ($obj->id() != $obj->brother_of() && $this->can("view", $obj->brother_of()))
 						{
@@ -380,6 +389,7 @@ class menuedit extends aw_template implements request_startup
 					};
 				};
 
+				}
 			}
 			else
 			{

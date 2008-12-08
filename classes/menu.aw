@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.245 2008/11/07 09:44:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.246 2008/12/08 16:29:57 markop Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -51,6 +51,9 @@
 
 		@property default_image_folder type=relpicker reltype=RELTYPE_DEFAULT_IMAGE_FOLDER field=meta method=serialize group=advanced_settings
 		@caption Vaikimisi piltide kataloog
+
+		@property short_alias type=checkbox ch_value=1 field=meta method=serialize group=advanced_settings
+		@caption Struktuurist s&otilde;ltumatu alias
 
 		@property default_image_folder_is_inherited type=checkbox ch_value=1 field=meta method=serialize group=advanced_settings
 		@caption Vaikimisi piltide kataloog p&auml;ritav
