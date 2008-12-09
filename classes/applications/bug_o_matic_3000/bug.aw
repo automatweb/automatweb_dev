@@ -1694,7 +1694,7 @@ class bug extends class_base
 			}
 			$person_obj = obj($person);
 			// don't send to the current user, cause, well, he knows he's just done it.
-			if ($person != $u->get_current_person())
+			if ($person == $u->get_current_person())
 			{
 				continue;
 			}
