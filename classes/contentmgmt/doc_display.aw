@@ -41,7 +41,10 @@ class doc_display extends aw_template
 		{
 			$doc->load_version($_GET["docversion"]);
 		}
-
+		if(!$doc->is_visible_to())
+		{
+			return t("Ei ole &otilde;igust n&auml;ha");
+		}
 		$doc_parent = obj($doc->parent());
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");

@@ -1166,13 +1166,9 @@ class site_show extends class_base
 				}
 
 				//dokumentide mitte n2itamine yleliigsetest riikidest tulevatele p2ringutele
-				if(strlen($o->prop("show_to_country")) > 1)
+				if($o->class_id() == CL_DOCUMENT && !$o->is_visible_to())
 				{
-					$aproved_countries = explode("," , $o->prop("show_to_country"));
-					if(!in_array($this->detect_country() , $aproved_countries))
-					{
-						continue;
-					}
+					return t("Ei ole &otilde;igust n&auml;ha");
 				}
 
 				if (!($no_fp_document && $o->prop("esilehel") == 1))
@@ -1214,19 +1210,6 @@ class site_show extends class_base
 			}
 		}
 		return $docid;
-	}
-
-	function detect_country()
-	{
-		$ipl = get_instance("core/util/ip_locator/ip_locator");
-		$v = $ipl->search(get_ip());
-		if ($v == false)
-		{
-			$adr = inet::gethostbyaddr(get_ip());
-			$domain = strtoupper(substr($adr, strrpos($adr, ".")));
-			return $domain;
-		}
-		return $v["country_code2"];
 	}
 
 	function show_periodic_documents(&$arr)

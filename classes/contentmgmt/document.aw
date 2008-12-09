@@ -140,6 +140,11 @@ class document extends aw_template
 			$doc_o = obj($doc["docid"]);
 		}
 
+		if(!$doc_o->is_visible_to())
+		{
+			return "";
+		}
+
 		if (!empty($params["no_link_if_not_act"]) && $doc_o->status() == STAT_NOTACTIVE)
 		{
 			$doc["title_clickable"] = 0;
