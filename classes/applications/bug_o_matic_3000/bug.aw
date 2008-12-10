@@ -104,13 +104,19 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_content type=textarea rows=23 cols=60 parent=bc_lay1 captionside=top no_caption=1
 		@caption Sisu
 
-		@layout bug_add_times type=hbox width=50%:50% parent=bc
+		@property bug_comments type=text no_caption=1 parent=bc_lay1 store=no
+		@caption Kommentaarid
+
+		@layout bug_add_times type=hbox parent=bc
 
 			@property bug_add_guess type=textbox size=5 parent=bug_add_times captionside=top store=no
 			@caption Prognoosile lisanduv aeg
 
 			@property bug_add_real type=textbox size=5 parent=bug_add_times captionside=top store=no
 			@caption Kulunud aeg
+
+			@property bug_comment_for_all type=checkbox ch_value=1 parent=bug_add_times store=no no_caption=1
+			@caption Kuva k&otilde;igile
 
 		@layout bc_lay2 parent=bc type=hbox
 
@@ -230,6 +236,8 @@ define("BUG_STATUS_CLOSED", 5);
 	@property cust_budget type=textbox field=aw_cust_budget size=5
 	@caption Eelarve
 
+	@property cust_comments type=text store=no
+	@caption Kliendipoolsed kommentaarid
 
 @default group=problems
 
@@ -772,8 +780,7 @@ class bug extends class_base
 			case "bug_content":
 				if (!$arr["new"])
 				{
-					$prop["value"] = "<br>".$this->_get_comment_list($arr["obj_inst"])."<br>";
-					$prop["type"] = "text";
+					return PROP_IGNORE;
 				}
 				if ($arr["request"]["from_req"])
 				{
@@ -785,6 +792,22 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_problem"]);
 					$prop["value"] = $r->prop("content");
 				}
+				break;
+
+			case "cust_comments":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = "<br>".$this->_get_comment_list($arr["obj_inst"], "asc", true, 1, true)."<br>";
+				break;
+
+			case "bug_comments":
+				if($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = "<br>".$this->_get_comment_list($arr["obj_inst"])."<br>";
 				break;
 
 			case "bug_status":
@@ -1287,6 +1310,13 @@ class bug extends class_base
 					//$this->_add_comment($arr["obj_inst"], $prop["value"]);
 					$this->add_comments[] = $prop["value"];
 					$this->notify_monitors = true;
+				}
+				break;
+
+			case "bug_comment_for_all":
+				if($prop["value"])
+				{
+					$this->comment_for_all = 1;
 				}
 				break;
 
@@ -2028,17 +2058,30 @@ class bug extends class_base
 		}
 	}
 
-	function _get_comment_list($o, $so = "asc", $nl2br = true, $base_com = 1)
+	function _get_comment_list($o, $so = "asc", $nl2br = true, $base_com = 1, $hide_others = false)
 	{
 		$this->read_template("comment_list.tpl");
 
-		$ol = new object_list(array(
+		$params = array(
 			"class_id" => array(CL_TASK_ROW,CL_BUG_COMMENT),
 			"parent" => $o->id(),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"sort_by" => "objects.created $so"
-		));
+		);
+
+		if($hide_others)
+		{
+			$params[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"createdby" => aw_global_get("uid"),
+					"CL_TASK_ROW.show_to_all" => 1,
+				),
+			));
+		}
+	
+		$ol = new object_list($params);
 		$com_str = "";
 		$u = get_instance(CL_USER);
 		foreach($ol->arr() as $com)
@@ -2137,6 +2180,7 @@ class bug extends class_base
 		$o->set_prop("add_wh", $add_wh);
 		$o->set_prop("add_wh_cust", $add_wh_cust);
 		$o->set_prop("add_wh_guess", $add_wh_guess);
+		$o->set_prop("show_to_all", $this->comment_for_all);
 		$o->save();
 		$bug->connect(array(
 			"to" => $o->id(),
@@ -3557,7 +3601,7 @@ EOF;
 			function change_bug_app(type)
 			{
 				var tmp = new Array();
-				if(opts[type].length)
+				if(opts[type] && opts[type].length)
 				{
 					tmp = opts[type]
 					var bug_app = aw_get_el('bug_app')

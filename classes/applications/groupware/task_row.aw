@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.23 2008/12/04 16:39:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.24 2008/12/10 11:33:19 robert Exp $
 
 // task_row.aw - Toimetuse rida 
 /*
@@ -80,7 +80,8 @@
 @property activity_stats_type type=hidden table=aw_task_rows field=aw_activity_stats_type
 @caption Statistika t&uuml;&uuml;p
 
-
+@property show_to_all type=hidden table=aw_task_rows field=aw_show_to_all
+@caption N&auml;ita k&otilde;igile
 
 
 @default group=comments
@@ -198,6 +199,7 @@ class task_row extends class_base
 			case "aw_prev_state":
 			case "aw_new_state":
 			case "aw_activity_stats_type":
+			case "aw_show_to_all":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

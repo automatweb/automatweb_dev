@@ -262,6 +262,17 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>bug_comments</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>bc_lay1</parent>
+            <store>no</store>
+            <field>bug_comments</field>
+            <caption>Kommentaarid</caption>
+      </property>
+      <property>
             <name>bug_add_guess</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -284,6 +295,18 @@
             <store>no</store>
             <field>bug_add_real</field>
             <caption>Kulunud aeg</caption>
+      </property>
+      <property>
+            <name>bug_comment_for_all</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>bug_add_times</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bug_comment_for_all</field>
+            <caption>Kuva k&amp;amp;otilde;igile</caption>
       </property>
       <property>
             <name>bug_content_comm</name>
@@ -592,6 +615,15 @@
             <caption>Eelarve</caption>
       </property>
       <property>
+            <name>cust_comments</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>text</type>
+            <store>no</store>
+            <field>cust_comments</field>
+            <caption>Kliendipoolsed kommentaarid</caption>
+      </property>
+      <property>
             <name>problems_tb</name>
             <group>problems</group>
             <table>aw_bugs</table>
@@ -819,7 +851,6 @@
             </bc_lay1>
             <bug_add_times>
                   <type>hbox</type>
-                  <width>50%:50%</width>
                   <parent>bc</parent>
                   <group>general</group>
                   <area_caption></area_caption>

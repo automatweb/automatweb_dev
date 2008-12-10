@@ -173,7 +173,6 @@
             <group>general</group>
             <type>relpicker</type>
             <field>aw_task</field>
-            <no_caption>1</no_caption>
             <reltype>RELTYPE_TASK</reltype>
             <caption>Toimetus</caption>
       </property>
@@ -200,6 +199,14 @@
             <type>hidden</type>
             <field>aw_activity_stats_type</field>
             <caption>Statistika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>show_to_all</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>aw_show_to_all</field>
+            <caption>N&amp;amp;auml;ita k&amp;amp;otilde;igile</caption>
       </property>
       <property>
             <name>comments</name>
