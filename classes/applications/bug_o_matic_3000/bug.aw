@@ -50,7 +50,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@layout settings_col2 type=vbox parent=settings
 
 
-		@property bug_type type=select table=aw_bugs field=bug_type captionside=top
+		@property bug_type type=select table=aw_bugs field=bug_type captionside=top parent=settings_col2
 		@caption T&uuml;&uuml;p
 
 		@property bug_app type=select field=meta method=serialize captionside=top parent=settings_col2 table=objects

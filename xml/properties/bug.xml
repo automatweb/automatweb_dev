@@ -106,6 +106,7 @@
             <type>select</type>
             <field>bug_type</field>
             <captionside>top</captionside>
+            <parent>settings_col2</parent>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
