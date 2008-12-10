@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.12 2008/06/30 10:25:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.13 2008/12/10 19:24:33 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -32,6 +32,18 @@
 
 @property balance type=hidden table=aw_account_balances field=aw_balance
 
+@groupinfo import caption="Import"
+@default group=import
+
+	@property file type=fileupload store=no form=+emb
+	@caption Fail
+
+	@property import_tb type=toolbar no_caption=1 store=no
+	@property import_tbl type=table no_caption=1 store=no
+
+	@property import_button type=button store=no no_caption=1 parent=import
+	@caption Impordi
+
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Pilt
 
@@ -59,6 +71,10 @@ class crm_category extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "file":
+				if(isset($_SESSION["cust_import"]["file"]))
+				return PROP_IGNORE;
+				break;
 			case "list_tb":
 				$t = &$prop["vcl_inst"];
 				$t->add_search_button(array(
@@ -74,12 +90,349 @@ class crm_category extends class_base
 					"confirm" => t("Oled kindel, et soovid valitud seosed kustutada?"),
 				));
 				break;
-
 			case "list_tbl":
 				$this->_get_list_tbl($arr);
 				break;
+			case "import_tbl":
+				if(!isset($_SESSION["cust_import"]["file"]))
+				{
+					return PROP_IGNORE;
+				}
+				$this->_get_import_tbl($arr);
+				break;
+			case "import_button":
+				if(!$this->change_data_set())
+				return PROP_IGNORE;
+				$prop["value"] = t("Impordi kliendid!");
+				$prop["onclick"] = "javascript:submit_changeform('do_import');";
+				break;
 		};
 		return $retval;
+	}
+
+	function dbg($text)
+	{
+		print $text."<br>";
+		flush();
+	}
+
+	var $separator = "\";\"";
+
+
+	/** Customer import
+		@attrib name=do_import all_args=1
+	**/
+	function do_import($arr)
+	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+		ini_set("memory_limit", "800M");
+		$cd = $arr["set_row_data_prop"];//data to be changed
+		$data = $this->get_import_data();
+ 		$data_array = explode("\n" , $data);
+		$u = get_instance(CL_USER);
+		$parent = $u->get_current_company();
+
+		$row = 0;
+
+		$reg_field = $this->get_field_by_name("reg_nr");
+		arr("kokku: ".sizeof($data_array));
+		foreach($data_array as $row => $d)
+		{
+			if(!$_SESSION["cust_import"]["set_rows"][$row])//pole valitud muutmiseks
+			{
+				continue;
+			}
+			$prop_list = explode($this->separator , $d);
+
+			$customer = "";
+
+			if($prop_list[$reg_field])
+			{
+				$cust_id = $this->seach_cust_by_reg_code($prop_list[$reg_field]);
+				if($this->can("view" , $cust_id))
+				{
+					$customer = obj($cust_id);
+				}
+			}
+		
+			if(!is_object($customer))
+			{
+				$customer = new object();
+				$customer->set_class_id(CL_CRM_COMPANY);
+				$customer->set_parent($parent);
+				$customer->save();
+			}
+			
+			$rel = $customer->get_customer_relation(null, true);
+			foreach($prop_list as $prop_id => $val)
+			{
+				if($cd[$row][$prop_id])
+				{
+					$val = trim($val, "\"");
+					$pn = $_SESSION["cust_import"]["field_props"][$prop_id];
+					$this->dbg("salvestab ".$val. " propiks ".$pn);
+					$sec_name = $sec_code = $county = $city = $address = "";
+					switch($pn)
+					{
+						case "name":
+							$customer->set_name($val);
+							break;
+						case "sector.code":
+							$sec_code = $val;
+							break;
+						case "sector.name":
+							$sec_name = $val;
+							break;
+						case "reg_nr":
+							$customer->set_prop("reg_nr" , $val);
+							break;
+						case "county":
+							$county = $val;
+							break;
+						case "city":
+							$city = $val;
+							break;
+						case "address":
+							$address = $val;
+							break;
+						case "mail":
+							if($cd[$row][$prop_id] == "2")
+							{
+								$customer->add_mail($val);
+							}
+							else
+							{
+								$customer->change_mail($val);
+							}
+							break;
+						case "url":
+							if($cd[$row][$prop_id] == "2")
+							{
+								$customer->add_url($val);
+							}
+							else
+							{
+								$customer->change_url($val);
+							}
+							break;
+					}
+					if($sec_name || $sec_code)
+					{
+						$customer->add_sector(array(
+							"name" => $sec_name,
+							"sec_code" => $sec_code,
+							"parent" => $parent,
+						));
+					}
+					if($county || $city || $address)
+					{//oleks vaja kuidagi m22rata aadressi elementidele kataloogi kus neid ei kustutata 2ra lambist
+						$customer->add_address(array(
+							"county" => $county,
+							"city" => $city,
+							"address" => $address,
+						));
+					}
+				}
+			}
+			$customer->save();arr($customer); arr($customer->prop("reg_nr"));
+			$customer->add_category($arr["id"]);
+			$row++;
+
+			if($row>30)
+			{
+				break;
+			}
+		}
+
+		echo "<!--\n";
+		print get_time_stats();
+		echo "-->\n";
+
+		arr($arr["post_ru"]);
+		$this->reset_import_data();
+		die();
+	}
+
+	function import_prop_caption($x)
+	{
+		$options =array(
+			"name" => t("Nimi"),
+			"sector.code" => t("Tegevusala kood"),
+			"reg_nr" => t("Registri_kood"),
+			"sector.name" => t("Tegevusala nimi"),
+			"county" => t("Maakond"),
+			"city" => t("Linn"),
+			"address" => t("Aadress"),
+			"mail" => t("E-mail"),
+			"url" => t("Veebiaadress"),
+		);
+		if($this->prop_names_set())
+		{
+			return $options[$_SESSION["cust_import"]["field_props"][$x]]."<br>".
+				(!$this->change_data_set() ? html::checkbox(array(
+					"name" => "set_data_prop[".$x."]",
+					"chvalue" => 1,
+					"checked" => 1,
+				)) : "");
+		}
+		return html::select(array(
+			"options" => $options,
+			"name" => "data_prop_name[".$x."]",
+		));
+	}
+
+	function get_row_prop_chooser_options($prop_id)
+	{
+		$addable_props = array("mail" ,"url");
+		if(in_array($_SESSION["cust_import"]["field_props"][$prop_id] , $addable_props))
+		{
+			return array(
+				t("EI"), t("Muuda"), t("Lisa")
+			);
+		}
+		else return array(
+				t("EI"), t("Muuda")
+		);
+		
+	}
+
+	function get_row_prop_chooser($x , $y , $data , $ex = null)
+	{
+		if(!$this->change_data_set() || !strlen($data)) return "";
+		if(!isset($_SESSION["cust_import"]["set_rows"][$x])|| !isset($_SESSION["cust_import"]["set_props"][$y]))
+		{
+			return "";
+		}
+		$options = $this->get_row_prop_chooser_options($y);
+		return "<br>".html::select(array(
+			"name" => "set_row_data_prop[".$x."][".$y."]",
+			"options" => $options,
+			"value" => $ex ? 0 : max(array_keys($options)),
+		));
+	}
+
+	function prop_names_set()
+	{
+		if(isset($_SESSION["cust_import"]["field_props"]))
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function get_field_by_name($fn)
+	{
+		if(isset($_SESSION["cust_import"]["field_props"]))
+		{
+			foreach($_SESSION["cust_import"]["field_props"] as $key => $name)
+			{
+				if($name == $fn)
+				{
+					return $key;
+				}
+			}
+			
+		}
+		return null;
+	}
+
+	function change_data_set()
+	{
+		if(isset($_SESSION["cust_import"]["set_props"]) && isset($_SESSION["cust_import"]["set_rows"]))
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	function get_row_color($x,$exists)
+	{
+		if(isset($_SESSION["cust_import"]["set_rows"]))
+		{
+			if(isset($_SESSION["cust_import"]["set_rows"][$x]))
+			{
+				return "green";
+			}
+			return "grey";
+		}
+		elseif($exists)
+		{
+			return "grey";
+		}
+
+		return "";
+	}
+
+	function _get_import_tbl($arr)
+	{
+		$data = $this->get_import_data();
+		$data_array = explode("\n" , $data);
+		$prop_list = explode($this->separator , $data_array[0]);
+		$x = 0;
+		$t = &$arr["prop"]["vcl_inst"];
+
+		if($this->prop_names_set() && !$this->change_data_set())
+		{
+			$t->define_chooser(array(
+				"name" => "set_row",
+				"caption" => t("Lisa"),
+				"field" => "row_id",
+			));
+		}
+		while ($x < sizeof($prop_list))
+		{
+			$t->define_field(array(
+				"name" => "prop_".$x,
+				"caption" => $this->import_prop_caption($x),
+				"chgbgcolor" => "color",
+			));
+			
+			$prop_name = $_SESSION["cust_import"]["field_props"][$x];
+			if($prop_name == "reg_code")
+			{
+				$reg_code_x = $x;
+			}
+			$x++;
+		}
+		$reg_field = $this->get_field_by_name("reg_nr");
+		$x = 0;
+		$to = 30;
+		if($this->prop_names_set())
+		{
+		//	$to = sizeof($data_array);
+		}
+
+		while ($x < $to)
+		{
+			$data = array();
+			$y = 0;
+			$prop_list = explode($this->separator , $data_array[$x]);
+			$customer_exists = $this->seach_cust_by_reg_code(trim($prop_list[$reg_field] , "\""));
+			while ($y < sizeof($prop_list))
+			{
+				$row_data["prop_".$y] = trim($prop_list[$y] , "\"").$this->get_row_prop_chooser($x , $y , trim($prop_list[$y] , "\""), $customer_exists);
+				$y++;
+			}
+			$row_data["color"] = $this->get_row_color($x,$customer_exists);
+			$row_data["row_id"] = $x;
+			$t->define_data($row_data);
+			$x++;
+		}
+	}
+
+	private function seach_cust_by_reg_code($reg)
+	{
+		if(!$reg)
+		{
+			return 0;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"site_id" => array(),
+			"lang_id" => array(),
+ 			"reg_nr" => $reg,
+		));
+		return reset($ol->ids());
 	}
 
 	function _get_list_tbl($arr)
@@ -94,6 +447,8 @@ class crm_category extends class_base
 			"caption" => t("Nimi"),
 			"align" => "center",
 		));
+		$co_list = $arr["obj_inst"]->get_category_orgs();
+
 		$conns = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => "RELTYPE_CATEGORY",		// RELTYPE_CATEGORY
@@ -106,6 +461,17 @@ class crm_category extends class_base
 				"name" => html::href(array(
 					"caption" => $from->name(),
 					"url" => $this->mk_my_orb("change", array("id" => $from->id(), "return_url" => get_ru()), CL_CRM_PERSON),
+				)),
+			));
+		}
+
+		foreach($co_list->arr() as $co)
+		{
+			$t->define_data(array(
+				"oid" => $co->id(),
+				"name" => html::href(array(
+					"caption" => $co->name(),
+					"url" => $this->mk_my_orb("change", array("id" => $co->id(), "return_url" => get_ru()), CL_CRM_COMPANY),
 				)),
 			));
 		}
@@ -129,9 +495,45 @@ class crm_category extends class_base
 					$c->save();
 				}
 				break;
+			case "file":
+				if(isset($_FILES["file"]["tmp_name"]) && file_exists($_FILES["file"]["tmp_name"]))
+				{
+					$_SESSION["cust_import"]["file"] = file_get_contents($_FILES["file"]["tmp_name"]);
+				}
+				break;
+			case "import_tbl":
+				if(isset($arr["request"]["data_prop_name"]))
+				{
+					$_SESSION["cust_import"]["field_props"] = $arr["request"]["data_prop_name"];
+				}
+				if(isset($arr["request"]["set_data_prop"]))
+				{
+					$_SESSION["cust_import"]["set_props"] = $arr["request"]["set_data_prop"];
+				}
+				if(isset($arr["request"]["set_row"]))
+				{
+					$_SESSION["cust_import"]["set_rows"] = $arr["request"]["set_row"];
+				}
+				break;
 		}
 		return $retval;
-	}	
+	}
+
+	private function get_import_data()
+	{
+		if(isset($_SESSION["cust_import"]["file"]))
+		{
+			return $_SESSION["cust_import"]["file"];
+		}
+		else return "";
+	}
+
+	private function reset_import_data()
+	{
+		unset($_SESSION["cust_import"]["field_props"]);
+		unset($_SESSION["cust_import"]["set_rows"]);
+		unset($_SESSION["cust_import"]["file"]);
+	}
 
 	function parse_alias($arr)
 	{

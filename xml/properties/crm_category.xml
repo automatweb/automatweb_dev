@@ -63,6 +63,49 @@
             <type>hidden</type>
             <field>aw_balance</field>
       </property>
+      <property>
+            <name>file</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>fileupload</type>
+            <store>no</store>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <field>file</field>
+            <caption>Fail</caption>
+      </property>
+      <property>
+            <name>import_tb</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>import_tb</field>
+      </property>
+      <property>
+            <name>import_tbl</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>import_tbl</field>
+      </property>
+      <property>
+            <name>import_button</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>button</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>import</parent>
+            <field>import_button</field>
+            <caption>Impordi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CATEGORY</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -73,6 +116,9 @@
                   <caption>Nimekiri</caption>
                   <submit>no</submit>
             </list>
+            <import>
+                  <caption>Import</caption>
+            </import>
       </groupinfo>
       <tableinfo>
             <aw_account_balances>

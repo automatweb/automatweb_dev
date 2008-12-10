@@ -399,6 +399,170 @@ class crm_company_obj extends _int_object
 		return $ret;
 	}
 
+	public function add_mail($address)
+	{
+		$mo = new object();
+		$mo->set_class_id(CL_ML_MEMBER);
+		$mo->set_parent($this->id());
+		$mo->set_name($address);
+		$mo->set_prop("mail" , $address);
+		$mo->save();
+
+		$conns = $this->connections_from(array("type" => "RELTYPE_EMAIL"));
+		if(!sizeof($conns))
+		{
+			$this->set_prop("email_id" , $mo->id());
+			$this->save();
+		}
+
+		$this->connect(array("to" =>$mo->id(),  "type" => "RELTYPE_EMAIL"));
+		return $mo->id();
+	}
+
+	public function change_mail($address)
+	{
+		$conns = $this->connections_from(array("type" => "RELTYPE_EMAIL"));
+		foreach($conns as $conn)
+		{
+			$conn->delete();
+		}
+		$mid = $this->add_mail($address);
+		return $mid;
+	}
+
+	/** Adds sector
+		@attrib api=1 params=name
+		@param id optional type=oid
+			sector object id
+		@param name optional type=string
+			sector name
+		@param code optional type=string
+			sector code
+		@param parent optional type=oid
+			parent for new sector object
+		@return oid
+			sector object id
+	**/
+	public function add_sector($arr)
+	{
+		$filter = array();
+		$filter["class_id"] = CL_CRM_SECTOR;
+		$filter["lang_id"] = array();
+		$filter["site_id"] = array();
+		if($arr["id"])
+		{
+			$filter["oid"] = $arr["id"];
+			$ol = new object_list($filter);
+		}
+		elseif($arr["code"] || $arr["name"])
+		{
+			if($arr["code"])
+			{
+				$filter["kood"] = $arr["code"];
+			}
+			else
+			{
+				$filter["name"] = $arr["name"];
+			}
+			$ol = new object_list($filter);
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+		if(!is_object($o = reset($ol->arr())))
+		{
+			if(!$arr["parent"])
+			{
+				$arr["parent"] = $this->id();
+			}
+			$o = new object();
+			$o->set_class_id(CL_CRM_SECTOR);
+			$o->set_parent($arr["parent"]);
+			$o->set_name($arr["name"]);
+			$o->set_prop("kood" , $arr["code"]);
+			$o->save();
+		}
+		$this->connect(array("to" => $o->id(),  "type" => "RELTYPE_TEGEVUSALAD"));
+	}
+
+	/** Adds category
+		@attrib api=1 params=pos
+		@param id optional type=oid
+			category object id
+	**/
+	public function add_category($id)
+	{
+		$cat = obj($id);
+		$cat->connect(array("to" => $this->id(),  "type" => "RELTYPE_CUSTOMER"));
+	}
+
+	/** Adds address
+		@attrib api=1 params=name
+		@param county optional type=string/oid
+			county
+		@param city optional type=string/oid
+			city
+		@param address optional type=string
+			street/village etc
+		@param parent optional type=oid
+			parent for new address object
+		@return oid
+			address object id
+	**/
+	public function add_address($arr)
+	{
+		if(!$arr["parent"])
+		{
+			$arr["parent"] = $this->id();
+		}
+		$o = new object();
+		$o->set_class_id(CL_CRM_ADDRESS);
+		$o->set_parent($arr["parent"]);
+		$o->set_name($arr["address"]);
+		$o->set_prop("aadress" , $arr["address"]);
+		$o->save();
+		$this->connect(array("to" => $o->id(),  "type" => "RELTYPE_ADDRESS"));
+		if($arr["county"])
+		{
+			$o->set_county($arr["county"]);
+		}
+		if($arr["city"])
+		{
+			$o->set_city($arr["city"]);
+		}
+		return $o->id();
+	}
+
+	public function add_url($address)
+	{
+		$mo = new object();
+		$mo->set_class_id(CL_EXTLINK);
+		$mo->set_parent($this->id());
+		$mo->set_name($address);
+		$mo->set_prop("url" , $address);
+		$mo->save();
+
+		$conns = $this->connections_from(array("type" => "RELTYPE_URL"));
+		if(!sizeof($conns))
+		{
+			$this->set_prop("url_id" , $mo->id());
+			$this->save();
+		}
+		$this->connect(array("to" =>$mo->id(), "type" => "RELTYPE_URL"));
+		return $mo->id();
+	}
+
+	public function change_url($address)
+	{
+		$conns = $this->connections_from(array("type" => "RELTYPE_URL"));
+		foreach($conns as $conn)
+		{
+			$conn->delete();
+		}
+		$urlid = $this->add_url($address);
+		return $urlid;
+	}
 	function get_faxes()
 	{
 		$ret = array();
