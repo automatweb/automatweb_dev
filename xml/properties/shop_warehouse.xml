@@ -409,6 +409,121 @@
             <caption>Pakettide nimekiri </caption>
       </property>
       <property>
+            <name>arrivals_tb</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>arrivals_tb</field>
+      </property>
+      <property>
+            <name>arrival_company_folder</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ARRIVAL_COMPANY_FOLDER</reltype>
+            <multiple>1</multiple>
+            <size>3</size>
+            <parent>arrival_prod_set_lay</parent>
+            <captionside>top</captionside>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Organisatsioonide kaust</caption>
+      </property>
+      <property>
+            <name>arrival_prod_tree</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>treeview</type>
+            <parent>arrival_prod_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>arrival_prod_tree</field>
+      </property>
+      <property>
+            <name>arrival_prod_cat_tree</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>treeview</type>
+            <parent>arrival_prod_tree_lay</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>arrival_prod_cat_tree</field>
+      </property>
+      <property>
+            <name>arrival_prod_s_name</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>20</size>
+            <parent>arrival_prod_s_top_box</parent>
+            <field>arrival_prod_s_name</field>
+            <caption>Nimi </caption>
+      </property>
+      <property>
+            <name>arrival_prod_s_code</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>20</size>
+            <parent>arrival_prod_s_top_box</parent>
+            <field>arrival_prod_s_code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>arrival_prod_s_barcode</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>20</size>
+            <parent>arrival_prod_s_top_box</parent>
+            <field>arrival_prod_s_barcode</field>
+            <caption>Ribakood</caption>
+      </property>
+      <property>
+            <name>arrival_prod_s_cat</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>arrival_prod_s_top_box</parent>
+            <field>arrival_prod_s_cat</field>
+            <caption>Kategooria</caption>
+      </property>
+      <property>
+            <name>arrival_prod_s_sbt</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>submit</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>prod_left_search</parent>
+            <value>
+            <![CDATA["Otsi"]]>
+            </value>
+            <field>arrival_prod_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>arrival_products_list</name>
+            <table>objects</table>
+            <group>arrivals</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>arrival_prod_split</parent>
+            <field>arrival_products_list</field>
+            <caption>Toodete nimekiri </caption>
+      </property>
+      <property>
             <name>storage_income_toolbar</name>
             <table>objects</table>
             <group>storage_income</group>
@@ -2103,6 +2218,11 @@
                   <submit>no</submit>
                   <parent>articles</parent>
             </packets>
+            <arrivals>
+                  <caption>Tarneajad</caption>
+                  <submit>no</submit>
+                  <parent>articles</parent>
+            </arrivals>
             <storage>
                   <caption>Muutused</caption>
             </storage>
@@ -2248,6 +2368,11 @@
                   <clid>CL_SHOP_WAREHOUSE_INVENTORY</clid>
                   <caption>Inventuur</caption>
             </INVENTORY>
+            <ARRIVAL_COMPANY_FOLDER>
+                  <value>13</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Organisatsioonide kaust</caption>
+            </ARRIVAL_COMPANY_FOLDER>
       </reltypes>
       <layout>
             <productgroups_c>
@@ -2333,6 +2458,45 @@
                   <closeable>1</closeable>
                   <group>packets</group>
             </packets_left_search>
+            <arrival_prod_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>arrivals</group>
+                  <area_caption></area_caption>
+            </arrival_prod_split>
+            <arrival_prod_left>
+                  <type>vbox</type>
+                  <parent>arrival_prod_split</parent>
+                  <group>arrivals</group>
+                  <area_caption></area_caption>
+            </arrival_prod_left>
+            <arrival_prod_set_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Seaded</area_caption>
+                  <parent>arrival_prod_left</parent>
+                  <group>arrivals</group>
+            </arrival_prod_set_lay>
+            <arrival_prod_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Toodete&amp;amp;nbsp;puu</area_caption>
+                  <parent>arrival_prod_left</parent>
+                  <group>arrivals</group>
+            </arrival_prod_tree_lay>
+            <arrival_prod_left_search>
+                  <type>vbox</type>
+                  <parent>arrival_prod_left</parent>
+                  <area_caption>Otsing</area_caption>
+                  <closeable>1</closeable>
+                  <group>arrivals</group>
+            </arrival_prod_left_search>
+            <arrival_prod_s_top_box>
+                  <type>vbox</type>
+                  <parent>arrival_prod_left_search</parent>
+                  <group>arrivals</group>
+                  <area_caption></area_caption>
+            </arrival_prod_s_top_box>
             <storage_income_split>
                   <type>hbox</type>
                   <width>20%:80%</width>

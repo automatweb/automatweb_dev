@@ -167,7 +167,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 			@layout arrival_prod_set_lay type=vbox closeable=1 area_caption=Seaded parent=arrival_prod_left
 		
-				@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 parent=arrival_prod_set_lay captionside=top
+				@property arrival_company_folder type=relpicker reltype=RELTYPE_ARRIVAL_COMPANY_FOLDER multiple=1 size=3 parent=arrival_prod_set_lay captionside=top field=meta method=serialize
 				@caption Organisatsioonide kaust
 
 			@layout arrival_prod_tree_lay type=vbox closeable=1 area_caption=Toodete&nbsp;puu parent=arrival_prod_left
@@ -1679,6 +1679,12 @@ class shop_warehouse extends class_base
 		}
 	}
 
+	function _get_arrivals_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_save_button();
+	}
+
 	function _get_arrival_products_list($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -1693,16 +1699,86 @@ class shop_warehouse extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
-			"name" => "time",
-			"caption" => t("Tarneaeg"),
+			"name" => "weekday",
+			"caption" => t("Tarnep&auml;ev"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "days",
+			"caption" => t("Tarneaeg p&auml;evades"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date1",
+			"caption" => t("Kuup&auml;ev 1"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "date2",
+			"caption" => t("Kuup&auml;ev 2"),
+			"align" => "center",
+		));
+		$c_ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $arr["obj_inst"]->prop("arrival_company_folder"),
+			"sort_by" => "name asc",
+		));
+		$companies = array(0 => t("--vali--")) + $c_ol->names();
+		$weekdays = array(
+			0 => t("--vali--"),
+			1 => t("Esmasp&auml;ev"),
+			2 => t("Teisip&auml;ev"),
+			3 => t("Kolmap&auml;ev"),
+			4 => t("Neljap&auml;ev"),
+			5 => t("Reede"),
+			6 => t("Laup&auml;ev"),
+			7 => t("P&uuml;hap&auml;ev"),
+		);
 		$res = $this->get_products_list_ol($arr);
-		foreach($res["ol"]->arr() as $o)
+		foreach($res["ol"]->arr() as $oid => $o)
 		{
 			$t->define_data(array(
 				"prod" => $o->name(),
+				"company" => html::select(array(
+					"options" => $companies,
+					"name" => "arrivals[".$oid."][org]",
+					"value" => $o->prop("purveyor_org"),
+				)),
+				"weekday" => html::select(array(
+					"options" => $weekdays,
+					"name" => "arrivals[".$oid."][weekday]",
+					"value" => $o->prop("purveyance_wd"),
+				)),
+				"days" => html::textbox(array(
+					"size" => 3,
+					"name" => "arrivals[".$oid."][days]",
+					"value" => $o->prop("purveyance_days"),
+				)),
+				"date1" => html::date_select(array(
+					"name" => "arrivals[".$oid."][date1]",
+					"value" => ($d = $o->prop("purveyance_date1"))? $d : -1,
+				)),
+				"date2" => html::date_select(array(
+					"name" => "arrivals[".$oid."][date2]",
+					"value" => ($d = $o->prop("purveyance_date2"))? $d : -1,
+				)),
 			));
+		}
+	}
+
+	function _set_arrival_products_list($arr)
+	{
+		foreach($arr["request"]["arrivals"] as $oid => $data)
+		{
+			$o = obj($oid);
+			$o->set_prop("purveyor_org", $data["org"]);
+			$o->set_prop("purveyance_wd", $data["weekday"]);
+			$o->set_prop("purveyance_days", $data["days"]);
+			$o->set_prop("purveyance_date1", date_edit::get_timestamp($data["date1"]));
+			$o->set_prop("purveyance_date2", date_edit::get_timestamp($data["date2"]));
+			$o->save();
 		}
 	}
 

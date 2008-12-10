@@ -1066,6 +1066,41 @@
             <caption>User-defined var (multiple) 10</caption>
       </property>
       <property>
+            <name>purveyor_org</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>hidden</type>
+            <field>purveyor_org</field>
+      </property>
+      <property>
+            <name>purveyance_wd</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>hidden</type>
+            <field>purveyance_wd</field>
+      </property>
+      <property>
+            <name>purveyance_days</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>hidden</type>
+            <field>purveyance_days</field>
+      </property>
+      <property>
+            <name>purveyance_date1</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>hidden</type>
+            <field>purveyance_date1</field>
+      </property>
+      <property>
+            <name>purveyance_date2</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>hidden</type>
+            <field>purveyance_date2</field>
+      </property>
+      <property>
             <name>images</name>
             <table>objects</table>
             <group>img</group>
