@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.77 2008/11/13 18:47:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.78 2008/12/11 10:05:08 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -1402,7 +1402,11 @@ class spa_bookings_overview extends class_base
 			));
 		}
 		$tb->add_separator();
-		$url = $this->mk_my_orb("show_cals_pop", array("id" => $arr["obj_inst"]->id(), "rooms" => "0"));
+		$url = $this->mk_my_orb("show_cals_pop", array(
+			"id" => $arr["obj_inst"]->id(),
+			"in_popup" => "1",
+			"rooms" => "0"//see peab olema massiivis viimane
+		));
 		$tb->add_button(array(
 			"name" => "cal",
 			"tooltip" => t("Kalender"),
@@ -1431,6 +1435,7 @@ class spa_bookings_overview extends class_base
 			$extra["person"] = $arr["request"]["rs_booker_name"];
 		}
 		$submenu_link = $this->mk_my_orb("room_booking_printer", array(
+			"in_popup" => "1",
 			"from" => date_edit::get_timestamp($arr["request"]["rs_booking_from"]),
 			"to" => date_edit::get_timestamp($arr["request"]["rs_booking_to"]),
 			"group" => $grp,
@@ -1457,6 +1462,7 @@ class spa_bookings_overview extends class_base
 			$go = obj($grp_id);
 
 			$submenu_link = $this->mk_my_orb("room_booking_printer", array(
+				"in_popup" => "1",
 				"from" => date_edit::get_timestamp($arr["request"]["rs_booking_from"]),
 				"to" => date_edit::get_timestamp($arr["request"]["rs_booking_to"]),
 				"group" => $grp_id,
@@ -1489,7 +1495,7 @@ class spa_bookings_overview extends class_base
 				$.sup("rs_name",$("#rs_name").val());
 				$.sup("person",$("#rs_booker_name").val());
 				$.sup("group",group);
-
+				$.sup("in_popup","1");
 				unconfirmed = 0;
 
 				$("#rs_unconfirmed").each(function(){
@@ -1764,6 +1770,7 @@ class spa_bookings_overview extends class_base
 					"parent" => "print",
 					"text" => t("K&otilde;ik"),
 					"link" => $this->mk_my_orb("room_booking_printer", array(
+						"in_popup" => "1",
 						"rooms" => $r_ol->ids(),
 						"from" => $start,
 						"to" => $end
@@ -1779,6 +1786,7 @@ class spa_bookings_overview extends class_base
 							"parent" => "print",
 							"text" => $go->name(),
 							"link" => $this->mk_my_orb("room_booking_printer", array(
+								"in_popup" => "1",
 								"rooms" => $r_ol->ids(),
 								"from" => $_GET["start"],
 								"to" => $_GET["end"],
@@ -2138,6 +2146,7 @@ class spa_bookings_overview extends class_base
 		));
 */
 		$link = $this->mk_my_orb("room_booking_printer", array(
+			"in_popup" => "1",
 			"from" => get_day_start()-DAY_LENGTH,
 			"to" => get_day_start(),
 			"group" => $grp
@@ -2149,6 +2158,7 @@ class spa_bookings_overview extends class_base
 		));
 
 		$link = $this->mk_my_orb("room_booking_printer", array(
+			"in_popup" => "1",
 			"from" => get_day_start(),
 			"to" => get_day_start()+DAY_LENGTH,
 			"group" => $grp
@@ -2160,6 +2170,7 @@ class spa_bookings_overview extends class_base
 		));
 
 		$link = $this->mk_my_orb("room_booking_printer", array(
+			"in_popup" => "1",
 			"from" => get_day_start()+DAY_LENGTH,
 			"to" => get_day_start()+DAY_LENGTH+DAY_LENGTH,
 			"group" => $grp
