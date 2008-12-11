@@ -473,6 +473,15 @@
             <caption>Alam-reserveeringu v&amp;amp;auml;rv</caption>
       </property>
       <property>
+	      <name>col_food</name>
+	      <table>objects</table>
+	      <group>colours</group>
+	      <field>meta</field>
+	      <method>serialize</method>
+	      <type>colorpicker</type>
+	      <caption>Toitlustus-reserveeringu v&amp;amp;auml;rv</caption>
+      </property>
+      <property>
             <name>bron_props</name>
             <name>col_slave</name>
             <table>objects</table>
