@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.14 2008/12/11 17:06:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.15 2008/12/11 18:26:38 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -132,7 +132,6 @@ class crm_category extends class_base
 		$u = get_instance(CL_USER);
 		$parent = $u->get_current_company();
 
-		$row = 1;
 
 		$name_field = $this->get_field_by_name("name");arr($name_field);
 		$reg_field = $this->get_field_by_name("reg_nr");
@@ -422,8 +421,8 @@ class crm_category extends class_base
 	function _get_import_tbl($arr)
 	{
 		$data = $this->get_import_data();
-		$data_array = explode("\n" , $data);
-		$prop_list = explode($this->separator , $data_array[0]);
+		$data_array = array("" => "") + explode("\n" , $data);
+		$prop_list = explode($this->separator , $data_array[1]);
 		$x = 0;
 		$t = &$arr["prop"]["vcl_inst"];
 
@@ -467,10 +466,14 @@ class crm_category extends class_base
 
 		$x = 1;
 		$to = 10;
+		if(sizeof($data_array)-2 < 10)
+		{
+			$to = sizeof($data_array) - 2;
+		}
 		if($this->prop_names_set())
 		{
 		//	$to = 100;
-			$to = sizeof($data_array) - 1;
+			$to = sizeof($data_array) - 2;
 		}
 
 		while ($x < $to)
