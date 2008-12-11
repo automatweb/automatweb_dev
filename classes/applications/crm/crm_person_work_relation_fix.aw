@@ -125,6 +125,10 @@ class crm_person_work_relation_fix extends _int_object
 				$o->set_name($section);
 				$o->save();
 				$id = $o->id();
+				if($org)
+				{
+					$org->connect(array("to" =>$o->id(), "type" => "RELTYPE_SECTION"));
+				}
 			}
 		}
 
