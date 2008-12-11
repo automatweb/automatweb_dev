@@ -30,7 +30,19 @@ class task_row_obj extends _int_object
 				$pn = "task";
 				break;
 		}
-		return parent::prop($pn);
+		$val =  parent::prop($pn);
+	
+		switch($pn)
+		{
+			case "date":
+				if(!$val)
+				{
+					$val = $this->created();
+				}
+				break;
+		}
+
+		return $val;
 	}
 
 	/** returns row's task id

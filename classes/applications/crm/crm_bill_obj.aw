@@ -377,10 +377,15 @@ class crm_bill_obj extends _int_object
 				arr($err);
 				arr($err2);
 			}
-			if(!$date || $date < $comment->created())
+			$comment_date = $comment->prop("date");
+			if(!($date > 0) || $date < $comment_date)
 			{
-				$date = $comment->created();
+				$date = $comment_date;
 			}
+			$row->connect(array(
+				"to" => $comment->id(),
+				"type" => "RELTYPE_TASK_ROW"
+			));
 		}
 
 		$amt = ((int)(($amt * 4)+1)) / 4;//ymardab yles 0.25listeni
@@ -410,7 +415,6 @@ class crm_bill_obj extends _int_object
 			"to" => $row->id(),
 			"type" => "RELTYPE_ROW"
 		));
-
 		return $row->id();
 	}
 
@@ -463,10 +467,8 @@ class crm_bill_obj extends _int_object
 
 		$this->connect(array("to"=> $bug->id(), "type" => "RELTYPE_BUG"));
 		$bug->connect(array("to"=> $this->id(), "type" => "RELTYPE_BILL"));
-
-
 		
-		$obj ->set_prop("bill" , $this->id());
+		$obj ->set_prop("bill_id" , $this->id());
 		$obj->save();
 		return 0;
 	}
