@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.15 2008/12/11 18:26:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.16 2008/12/11 18:29:40 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -127,8 +127,8 @@ class crm_category extends class_base
 		aw_set_exec_time(AW_LONG_PROCESS);
 		ini_set("memory_limit", "800M");
 		$cd = $arr["set_row_data_prop"];//data to be changed
-		$data = $this->get_import_data();
- 		$data_array = explode("\n" , $data);
+		$data =  $this->get_import_data();
+ 		$data_array = array("" => "") + explode("\n" , $data);
 		$u = get_instance(CL_USER);
 		$parent = $u->get_current_company();
 
@@ -421,7 +421,7 @@ class crm_category extends class_base
 	function _get_import_tbl($arr)
 	{
 		$data = $this->get_import_data();
-		$data_array = array("" => "") + explode("\n" , $data);
+		$data_array =  array("" => "") + explode("\n" , $data);
 		$prop_list = explode($this->separator , $data_array[1]);
 		$x = 0;
 		$t = &$arr["prop"]["vcl_inst"];
