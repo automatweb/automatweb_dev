@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.13 2008/12/10 19:24:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.14 2008/12/11 17:06:02 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -132,10 +132,12 @@ class crm_category extends class_base
 		$u = get_instance(CL_USER);
 		$parent = $u->get_current_company();
 
-		$row = 0;
+		$row = 1;
 
+		$name_field = $this->get_field_by_name("name");arr($name_field);
 		$reg_field = $this->get_field_by_name("reg_nr");
 		arr("kokku: ".sizeof($data_array));
+		$shorts = $this->get_corform_shorts();
 		foreach($data_array as $row => $d)
 		{
 			if(!$_SESSION["cust_import"]["set_rows"][$row])//pole valitud muutmiseks
@@ -146,15 +148,14 @@ class crm_category extends class_base
 
 			$customer = "";
 
-			if($prop_list[$reg_field])
+			if($prop_list[$reg_field] || $prop_list[$name_field])
 			{
-				$cust_id = $this->seach_cust_by_reg_code($prop_list[$reg_field]);
+				$cust_id = $this->seach_cust_by_reg_code($prop_list[$reg_field] , $prop_list[$name_field]);
 				if($this->can("view" , $cust_id))
 				{
 					$customer = obj($cust_id);
 				}
 			}
-		
 			if(!is_object($customer))
 			{
 				$customer = new object();
@@ -162,8 +163,10 @@ class crm_category extends class_base
 				$customer->set_parent($parent);
 				$customer->save();
 			}
-			
+			arr("Klient " . $customer->id());
 			$rel = $customer->get_customer_relation(null, true);
+			$sec_name = $sec_code = $county = $city = $address = $contact_name = $contact_phone = $contact_mail = $contact_section = $contact_rank = "";
+
 			foreach($prop_list as $prop_id => $val)
 			{
 				if($cd[$row][$prop_id])
@@ -171,10 +174,14 @@ class crm_category extends class_base
 					$val = trim($val, "\"");
 					$pn = $_SESSION["cust_import"]["field_props"][$prop_id];
 					$this->dbg("salvestab ".$val. " propiks ".$pn);
-					$sec_name = $sec_code = $county = $city = $address = "";
 					switch($pn)
 					{
 						case "name":
+//							$tail = substr($val, $last_ent);
+//							if(in_array(trim($tail) , $shorts))
+//							{
+//								
+//							}
 							$customer->set_name($val);
 							break;
 						case "sector.code":
@@ -215,48 +222,90 @@ class crm_category extends class_base
 								$customer->change_url($val);
 							}
 							break;
-					}
-					if($sec_name || $sec_code)
-					{
-						$customer->add_sector(array(
-							"name" => $sec_name,
-							"sec_code" => $sec_code,
-							"parent" => $parent,
-						));
-					}
-					if($county || $city || $address)
-					{//oleks vaja kuidagi m22rata aadressi elementidele kataloogi kus neid ei kustutata 2ra lambist
-						$customer->add_address(array(
-							"county" => $county,
-							"city" => $city,
-							"address" => $address,
-						));
+						case "contact.name":
+							$contact_name = $val;
+							break;
+						case "contact.rank":
+							$contact_rank = $val;
+							break;
+						case "contact.section":
+							$contact_section = $val;
+							break;
+						case "contact.mail":
+							$contact_mail = $val;
+							break;
+						case "contact.phone":
+							$contact_phone = $val;
+							break;
+						case "phone":
+							if($cd[$row][$prop_id] == "2")
+							{
+								$customer->add_phone($val);
+							}
+							else
+							{
+								$customer->change_phone($val);
+							}
+							break;
 					}
 				}
+			}
+
+			if($sec_name || $sec_code)
+			{
+				$customer->add_sector(array(
+					"name" => $sec_name,
+					"sec_code" => $sec_code,
+					"parent" => $parent,
+					));
+					}
+			if($county || $city || $address)
+			{//oleks vaja kuidagi m22rata aadressi elementidele kataloogi kus neid ei kustutata 2ra lambist
+				$customer->add_address(array(
+					"county" => $county,
+					"city" => $city,
+					"address" => $address,
+				));
+			}
+			if($contact_name || $contact_phone || $contact_mail || $contact_section || $contact_rank)
+			{
+				$cp = $customer->add_worker_data(array(
+					"worker" =>  $contact_name,
+					"profession" =>  $contact_rank,
+					"section" =>  $contact_section,
+					"mail" => $contact_mail,
+					"phone" => $contact_phone,
+					"parent" => $parent,
+				));
+				$rel->set_prop("buyer_contact_person" , $cp);
+				$rel->save();
 			}
 			$customer->save();arr($customer); arr($customer->prop("reg_nr"));
 			$customer->add_category($arr["id"]);
 			$row++;
 
-			if($row>30)
-			{
-				break;
-			}
+//			if($row>100)
+//			{
+//				break;
+//			}
 		}
 
 		echo "<!--\n";
 		print get_time_stats();
 		echo "-->\n";
-
-		arr($arr["post_ru"]);
 		$this->reset_import_data();
+
+		
+
+		print html::href(array("url" => $arr["post_ru"] , "caption" => t("Tagasi")));
 		die();
 	}
 
 	function import_prop_caption($x)
 	{
 		$options =array(
-			"name" => t("Nimi"),
+			"" => t("-- Vali omadus --"),
+			"name" => t("Kliendi Nimi"),
 			"sector.code" => t("Tegevusala kood"),
 			"reg_nr" => t("Registri_kood"),
 			"sector.name" => t("Tegevusala nimi"),
@@ -265,15 +314,22 @@ class crm_category extends class_base
 			"address" => t("Aadress"),
 			"mail" => t("E-mail"),
 			"url" => t("Veebiaadress"),
+			"contact.name" => t("Kontaktisiku nimi"),
+			"contact.rank" => t("Kontaktisiku amet"),
+			"contact.section" => t("Kontaktisiku osakond"),
+			"contact.mail" => t("Kontaktisiku E-post"),
+			"contact.phone" => t("Kontaktisiku telefon"),
+			"phone" => t("Telefon"),
 		);
 		if($this->prop_names_set())
 		{
-			return $options[$_SESSION["cust_import"]["field_props"][$x]]."<br>".
-				(!$this->change_data_set() ? html::checkbox(array(
-					"name" => "set_data_prop[".$x."]",
-					"chvalue" => 1,
-					"checked" => 1,
-				)) : "");
+			return $options[$_SESSION["cust_import"]["field_props"][$x]]."<br><br>".
+				(!$this->change_data_set() ? 
+					t("Vaikimisi:")."<br>".html::select(array(
+						"name" => "set_data_prop[".$x."]",
+						"options" => $this->get_row_prop_chooser_options($x),
+					))
+				 : "");
 		}
 		return html::select(array(
 			"options" => $options,
@@ -283,15 +339,15 @@ class crm_category extends class_base
 
 	function get_row_prop_chooser_options($prop_id)
 	{
-		$addable_props = array("mail" ,"url");
+		$addable_props = array("mail" ,"url", "phone");
 		if(in_array($_SESSION["cust_import"]["field_props"][$prop_id] , $addable_props))
 		{
 			return array(
-				t("EI"), t("Muuda"), t("Lisa")
+				t("Ignoreeri"), t("Muuda"), t("Lisa")
 			);
 		}
 		else return array(
-				t("EI"), t("Muuda")
+				t("Ignoreeri"), t("Muuda")
 		);
 		
 	}
@@ -307,7 +363,7 @@ class crm_category extends class_base
 		return "<br>".html::select(array(
 			"name" => "set_row_data_prop[".$x."][".$y."]",
 			"options" => $options,
-			"value" => $ex ? 0 : max(array_keys($options)),
+			"value" => $_SESSION["cust_import"]["set_props"][$y],
 		));
 	}
 
@@ -351,13 +407,13 @@ class crm_category extends class_base
 		{
 			if(isset($_SESSION["cust_import"]["set_rows"][$x]))
 			{
-				return "green";
+				return "#CCFF66";
 			}
-			return "grey";
+			return "#BBBBBB";
 		}
 		elseif($exists)
 		{
-			return "grey";
+			return "#BBBBBB";
 		}
 
 		return "";
@@ -371,35 +427,50 @@ class crm_category extends class_base
 		$x = 0;
 		$t = &$arr["prop"]["vcl_inst"];
 
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+			"chgbgcolor" => "color",
+		));
+
 		if($this->prop_names_set() && !$this->change_data_set())
 		{
 			$t->define_chooser(array(
 				"name" => "set_row",
 				"caption" => t("Lisa"),
 				"field" => "row_id",
+				"chgbgcolor" => "color",
+			));
+		}
+		if($this->prop_names_set())
+		{
+			$t->define_field(array(
+				"name" => "oid",
+				"caption" => t("ID"),
+				"chgbgcolor" => "color",
 			));
 		}
 		while ($x < sizeof($prop_list))
 		{
-			$t->define_field(array(
-				"name" => "prop_".$x,
-				"caption" => $this->import_prop_caption($x),
-				"chgbgcolor" => "color",
-			));
-			
-			$prop_name = $_SESSION["cust_import"]["field_props"][$x];
-			if($prop_name == "reg_code")
+			if(!$this->prop_names_set() || $_SESSION["cust_import"]["field_props"][$x])
 			{
-				$reg_code_x = $x;
+				$t->define_field(array(
+					"name" => "prop_".$x,
+					"caption" => $this->import_prop_caption($x),
+					"chgbgcolor" => "color",
+				));
 			}
 			$x++;
 		}
 		$reg_field = $this->get_field_by_name("reg_nr");
-		$x = 0;
-		$to = 30;
+		$name_field = $this->get_field_by_name("name");
+
+		$x = 1;
+		$to = 10;
 		if($this->prop_names_set())
 		{
-		//	$to = sizeof($data_array);
+		//	$to = 100;
+			$to = sizeof($data_array) - 1;
 		}
 
 		while ($x < $to)
@@ -407,7 +478,7 @@ class crm_category extends class_base
 			$data = array();
 			$y = 0;
 			$prop_list = explode($this->separator , $data_array[$x]);
-			$customer_exists = $this->seach_cust_by_reg_code(trim($prop_list[$reg_field] , "\""));
+			$customer_exists = $this->seach_cust_by_reg_code(trim($prop_list[$reg_field] , "\""), trim($prop_list[$name_field] , "\""));
 			while ($y < sizeof($prop_list))
 			{
 				$row_data["prop_".$y] = trim($prop_list[$y] , "\"").$this->get_row_prop_chooser($x , $y , trim($prop_list[$y] , "\""), $customer_exists);
@@ -415,23 +486,54 @@ class crm_category extends class_base
 			}
 			$row_data["color"] = $this->get_row_color($x,$customer_exists);
 			$row_data["row_id"] = $x;
+			$row_data["jrk"] = $x;
+			$row_data["oid"] = $customer_exists;
 			$t->define_data($row_data);
 			$x++;
 		}
+		$t->set_sortable(false);
 	}
 
-	private function seach_cust_by_reg_code($reg)
+	private function get_corform_shorts()
 	{
-		if(!$reg)
-		{
-			return 0;
-		}
 		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
+			"class_id" => CL_CRM_COMPFORM,
 			"site_id" => array(),
 			"lang_id" => array(),
- 			"reg_nr" => $reg,
 		));
+
+		$ret = array();
+		foreach($ol->arr() as $o)
+		{
+			$ret[$o->id()] = $o->prop("shortname");
+		}
+		return $ret;
+	}
+
+	private function seach_cust_by_reg_code($reg , $name)
+	{
+		if(!($reg || $name))
+		{
+			return null;
+		}
+		if($reg)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"reg_nr" => $reg,
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $name,
+			));
+		}
 		return reset($ol->ids());
 	}
 

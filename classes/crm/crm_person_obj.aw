@@ -767,7 +767,7 @@ class crm_person_obj extends _int_object
 				continue;
 			}
 
-			$mail = $current_job->get_first_obj_by_reltype("RELTYPE_MAIL");
+			$mail = $current_job->get_first_obj_by_reltype("RELTYPE_EMAIL");
 			if(is_object($mail))
 			{
 				return $mail->prop("mail");
@@ -1179,7 +1179,7 @@ class crm_person_obj extends _int_object
 			"to" => $wr->id(),
 			"reltype" => "RELTYPE_CURRENT_JOB",
 		));
-
+		unset($this->current_jobs);
 		return $wr->id();
 	}
 

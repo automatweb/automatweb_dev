@@ -308,6 +308,90 @@ class crm_company_obj extends _int_object
 
 	}
 
+	/** Adds worker to company
+		@attrib api=1 params=name
+		@param worker required type=string/oid
+			person name or object id
+		@param profession optional type=string/oid
+			worker profession in company
+		@param section optional type=string/oid
+			worker section in company
+		@param mail optional type=string
+			work e-mail address
+		@param phone optional type=string
+			work phone
+		@param parent optional type=oid
+			new person parent
+		@return 
+	**/
+	public function add_worker_data($arr = array())
+	{
+		extract($arr);
+		if(!$parent)
+		{
+			$parent = $this->id();
+		}
+		if(is_oid($worker) && $GLOBALS["object_loader"]->can("view" , $worker))
+		{
+			$worker = obj($worker);
+		}
+		else
+		{//tegelikult oleks vaja isikukoodi ka vist.. mille j2rgi otsida, et kas tegelt see inimene kuskil 2kki
+			$wn = $worker;
+			if(!($worker = $this->get_worker_by_name($worker)))
+			{
+				$worker = new object();
+				$worker->set_class_id(CL_CRM_PERSON);
+				$worker->set_name($wn);
+				$worker->set_parent($parent);
+				$worker->save();
+			}
+		}
+
+		if(!($wrid = $worker->get_work_relation_id(array(
+			"company" => $this->id(),
+		))))
+		{
+			$wrid = $worker->add_work_relation(array(
+				"org" => $this->id(),
+			));
+		}
+
+		$wr = obj($wrid);
+		
+		if($profession)
+		{
+			$wr->set_profession($profession);
+		}
+		if($section)
+		{
+			$wr->set_section($section);
+		}
+
+		if($mail)
+		{
+			$wr->set_mail($mail);
+		}
+
+		if($phone)
+		{
+			$wr->set_phone($phone);
+		}
+		return $worker->id();
+	}
+
+	private function get_worker_by_name($name)
+	{
+		$sel = $this->get_worker_selection();
+		foreach($sel as $id => $n)
+		{
+			if($n == $name)
+			{
+				return obj($id);
+			}
+		}
+		return 0;
+	}
 
 	/** Adds new eployee
 		@attrib api=1 params=name
@@ -429,6 +513,38 @@ class crm_company_obj extends _int_object
 		$mid = $this->add_mail($address);
 		return $mid;
 	}
+
+
+	public function add_phone($phone)
+	{
+		$mo = new object();
+		$mo->set_class_id(CL_CRM_PHONE);
+		$mo->set_parent($this->id());
+		$mo->set_name($phone);
+		$mo->save();
+
+		$conns = $this->connections_from(array("type" => "RELTYPE_PHONE"));
+		if(!sizeof($conns))
+		{
+			$this->set_prop("phone_id" , $mo->id());
+			$this->save();
+		}
+
+		$this->connect(array("to" =>$mo->id(),  "type" => "RELTYPE_PHONE"));
+		return $mo->id();
+	}
+
+	public function change_phone($phone)
+	{
+		$conns = $this->connections_from(array("type" => "RELTYPE_PHONE"));
+		foreach($conns as $conn)
+		{
+			$conn->delete();
+		}
+		$mid = $this->add_phone($phone);
+		return $mid;
+	}
+
 
 	/** Adds sector
 		@attrib api=1 params=name
