@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.17 2008/12/12 12:39:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.18 2008/12/12 12:51:23 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -88,6 +88,20 @@ class crm_category extends class_base
 					"img" => "delete.gif",
 					"action" => "delete_rels_to",
 					"confirm" => t("Oled kindel, et soovid valitud seosed kustutada?"),
+				));
+				break;
+			case "import_tb":
+				if(!isset($_SESSION["cust_import"]))
+				{
+					return PROP_IGNORE;
+				}
+				$t = &$prop["vcl_inst"];
+				$t->add_button(array(
+					"name" => "restart_import",
+					"tooltip" => t("Alusta importi uuesti"),
+					"img" => "left_r_arr.png",
+					"action" => "reset_import_data",
+				//	"confirm" => t("Oled kindel, et soovid valitud seosed kustutada?"),
 				));
 				break;
 			case "list_tbl":
@@ -633,11 +647,16 @@ class crm_category extends class_base
 		else return "";
 	}
 
-	private function reset_import_data()
+	/**
+		@attrib name=reset_import_data
+	**/
+	public function reset_import_data($arr = array())
 	{
-		unset($_SESSION["cust_import"]["field_props"]);
-		unset($_SESSION["cust_import"]["set_rows"]);
-		unset($_SESSION["cust_import"]["file"]);
+		unset($_SESSION["cust_import"]);
+		if(isset($arr["post_ru"]))
+		{
+			return $arr["post_ru"];
+		}
 	}
 
 	function parse_alias($arr)

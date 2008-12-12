@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="reset_import_data">
+			<function name="reset_import_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_rels_to">
 			<function name="delete_rels_to">
 				<arguments>
