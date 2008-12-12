@@ -97,6 +97,18 @@
             <caption>Listi liikmete seadetevorm</caption>
       </property>
       <property>
+            <name>senders</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SENDER</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <caption>V&amp;amp;otilde;imalikud saatjad</caption>
+      </property>
+      <property>
             <name>register_data_cgfform_id</name>
             <table>objects</table>
             <field>meta</field>
@@ -592,16 +604,16 @@
             <caption>Maili kirjutamine plaintext vaates</caption>
       </property>
       <property>
-	      <name>take_out_adrr</name>
-	      <table>objects</table>
-	      <field>meta</field>
-	      <method>serialize</method>
-	      <group>write_mail</group>
-	      <type>checkbox</type>
-	      <ch_value>1</ch_value>
-	      <parent>mail_top</parent>
-	      <no_caption>1</no_caption>
-	      <caption>Enne saatmist lase m6ningad aadressid v2lja praakida</caption>
+            <name>take_out_adrr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <parent>mail_top</parent>
+            <no_caption>1</no_caption>
+            <caption>Enne saatmist lase m&amp;amp;otilde;ningad aadressid v&amp;amp;auml;lja praakida</caption>
       </property>
       <property>
             <name>write_user_folder</name>
@@ -943,8 +955,8 @@
                         <num_4>CL_CRM_SELECTION</num_4>
                         <num_5>CL_CRM_SECTOR</num_5>
                         <num_6>CL_PERSONNEL_MANAGEMENT_CV_SEARCH_SAVED</num_6>
-			<num_7>CL_CRM_CATEGORY</num_7>
-	          </clid>
+                        <num_7>CL_CRM_CATEGORY</num_7>
+                  </clid>
                   <caption>Listi liikmete allikas</caption>
             </MEMBER_PARENT>
             <REDIR_OBJECT>
@@ -1007,7 +1019,7 @@
             <mail_top>
                   <type>hbox</type>
                   <closeable>1</closeable>
-                  <width>20%:20%:60%</width>
+                  <width>20%:20%:30%:30%</width>
                   <group>write_mail</group>
                   <area_caption></area_caption>
             </mail_top>

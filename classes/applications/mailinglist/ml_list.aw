@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.139 2008/12/05 17:23:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.140 2008/12/12 12:57:53 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -39,6 +39,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 @caption Listi liikmete seadetevorm
+
+@property senders type=relpicker reltype=RELTYPE_SENDER store=connect multiple=1
+@caption V&otilde;imalikud saatjad
 
 @property register_data_cgfform_id type=relpicker reltype=RELTYPE_RD_CONFIG
 @caption Registri andmete seadetevorm
