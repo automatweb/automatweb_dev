@@ -472,6 +472,26 @@ class crm_company_obj extends _int_object
 		return $ol;
 	}
 
+	function get_mail()
+	{
+		$inst = $this->instance();
+		if($inst->can("view" , $this->prop("email_id")))
+		{
+			$mail = obj($this->prop("email_id"));
+		}
+		else
+		{
+			$mail = $this->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		}
+
+		if(is_object($mail))
+		{
+			return $mail->prop("mail");
+		}
+
+		return "";
+	}
+
 	function get_mails()
 	{
 		$ret = array();

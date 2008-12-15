@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.140 2008/12/12 12:57:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.141 2008/12/15 19:22:49 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -445,7 +445,11 @@ class ml_list extends class_base
 			"caption" => t("Ametinimetus"),
 			"name" => "pro"
 		));
-
+		$t->define_field(array(
+			"caption" => t("Osakond"),
+			"name" => "sec"
+		));
+		$t->set_header(t("Praagi isikud kirja saajate nimekirjast v&auml;lja"));
 		foreach($members as $member)
 		{
 			$t->define_data(array(
@@ -454,6 +458,7 @@ class ml_list extends class_base
 				"email" => $member["mail"],
 				"org" => get_name($member["co"]),
 				"pro" => get_name($member["pro"]),
+				"sec" => get_name($member["section"]),
 			));
 		}
 
@@ -1006,6 +1011,7 @@ class ml_list extends class_base
 				$prop["value"] = t("Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />
 					#username# - AutomatWebi kasutajanimi<br />
 					#organisatsioon# - liikme organisatsioon<br />
+					#osakond# - Osakond<br />
 					#ametinimetus# - ametinimetus<br />
 					#name# - Listi liikme nimi<br />
 					#e-mail# - Listi liikme e-mail<br/>
@@ -1246,6 +1252,14 @@ class ml_list extends class_base
 				$prop["value"] = "tab'i eraldajana kasutamiseks m&auml;rgi tekstikasti /t";
 				break;
 			case "list_status_table":
+				$tbl = $this->db_get_table("ml_sent_mails");
+/*				if (!isset($tbl["fields"]["oid"]))
+				{
+					$this->db_add_col("ml_sent_mails", array(
+						"name" => "oid",
+						"type" => "int"
+					));
+				}*/
 				$this->gen_list_status_table($arr);
 				break;
 				
@@ -2001,7 +2015,34 @@ class ml_list extends class_base
 	}
 
 	function gen_member_list($arr)
-	{
+	{/*
+		if(aw_global_get("uid") == "marko")
+		{		//$GLOBALS["DUKE"] = 1;
+
+			$ol = new object_list(array(
+				"class_id" => CL_ML_MEMBER,
+				"mail" => "%&quot;%",
+				"lang_id" => array(),
+				"site_id" => array(),
+				//"created" =>  new obj_predicate_compare(OBJ_COMP_GREATER, 1228111200),
+			));
+
+foreach($ol->arr() as $o)
+		{
+
+
+
+
+			$mailaddress = str_replace("&quot;" , "" , $o->prop("mail"));
+
+			$q = "UPDATE ml_users SET mail = '".$mailaddress."' WHERE id = '".$o->id()."'";
+			//arr($q); 
+//$this->db_query($q);
+
+		}arr($ol->count());
+
+
+		}*/
 		$perpage = 100;
 		$ft_page = (int)$GLOBALS["ft_page"];
 		$ml_list_members = $this->get_members(array(
@@ -2038,6 +2079,11 @@ class ml_list extends class_base
 			$t->define_field(array(
 				"name" => "co",
 				"caption" => t("Organisatsioon"),
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+				"name" => "section",
+				"caption" => t("Osakond"),
 				"sortable" => 1,
 			));
 			$t->define_field(array(
@@ -2106,10 +2152,12 @@ class ml_list extends class_base
 		{
 			$co_array = array();
 			$pro_array = array();
+			$sec_array = array();
 			foreach($ml_list_members as $key => $val)
 			{
 				if($val["co"]) $co_array[$val["co"]] = $val["co"];
 				if($val["pro"]) $pro_array[$val["pro"]] = $val["pro"];
+				if($val["section"]) $sec_array[$val["section"]] = $val["section"];
 			}
 			$pros = new object_list();
 			$pros->add($pro_array);
@@ -2117,6 +2165,9 @@ class ml_list extends class_base
 			$cos = new object_list();
 			$cos->add($co_array);
 			$cos = $cos->names();
+			$secs = new object_list();
+			$secs->add($sec_array);
+			$secs = $secs->names();
 		}
 
 		if (is_array($ml_list_members))
@@ -2182,6 +2233,10 @@ class ml_list extends class_base
 				if($val["pro"])
 				{
 					$tabledata["pro"] = $pros[$val["pro"]];
+				}
+				if($val["section"])
+				{
+					$tabledata["section"] = $secs[$val["section"]];
 				}
 
 				if(is_oid($is_oid))
@@ -2567,32 +2622,72 @@ class ml_list extends class_base
 			else
 			{
 				$people = $co->get_workers();
+				$people->add($co);
 			}
 			foreach($people->arr() as $worker)
 			{
-				$mail = $worker->get_mail($co->id());
-				if(!$no_return)
+				if($worker->class_id() == CL_CRM_COMPANY)
 				{
-					if(!(array_key_exists($mail , $this->already_found)))
+					$mail = $worker->get_mail();
+					if(!$mail)
 					{
-						if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
+						continue;
+					}
+					if(!$no_return)
+					{
+						if(!(array_key_exists($mail , $this->already_found)))
 						{
-							$name = $worker->name();
-							if($comb)
+							if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
 							{
-								$name = "".$name." &lt;".$mail."&gt;";
+								$name = $worker->name();
+								if($comb)
+								{
+									$name = "".$name." &lt;".$mail."&gt;";
+								}
+								$this->ml_members[]  = array(
+									"co" => $co->id(),
+									"parent" => $o->id(),
+									"name" => $name,
+									"mail" => $mail,
+									"parent_name" => $o->name(),
+									"oid" => $worker->id(),
+								);
 							}
-							$this->ml_members[]  = array(
-								"co" => $co->id(),
-								"pro" => $worker->get_rank($co->id()),
-								"parent" => $o->id(),
-								"name" => $name,
-								"mail" => $mail,
-								"parent_name" => $o->name(),
-								"oid" => $worker->id(),
-							);
+							$this->member_count++;
 						}
-						$this->member_count++;
+					}
+				}
+				else
+				{
+					$mail = $worker->get_mail($co->id());
+					if(!$mail)
+					{
+						continue;
+					}
+					if(!$no_return)
+					{
+						if(!(array_key_exists($mail , $this->already_found)))
+						{
+							if(!($to > 1) || (!($this->member_count < $from) && ($to > $this->member_count)))
+							{
+								$name = $worker->name();
+								if($comb)
+								{
+									$name = "".$name." &lt;".$mail."&gt;";
+								}
+								$this->ml_members[]  = array(
+									"co" => $co->id(),
+									"pro" => $worker->get_rank($co->id()),
+									"section" => $worker->get_section_id($co->id()),
+									"parent" => $o->id(),
+									"name" => $name,
+									"mail" => $mail,
+									"parent_name" => $o->name(),
+									"oid" => $worker->id(),
+								);
+							}
+							$this->member_count++;
+						}
 					}
 				}
 				if(!$all) 
@@ -3844,7 +3939,11 @@ arr($msg_obj->prop("message"));
 			if(is_oid($member_id) && $this->can("delete", $member_id))
 			{
 				$member_obj = new object($member_id);
-				$member_obj->delete();
+				if($member_obj->class_id() == CL_ML_MEMBER)
+				{
+					$member_obj->delete();
+				}
+				//teistele allikatele kustutamine peaks olema seose eemaldamine v6i muu sarnane
 			}
 			else $del_from_file[] = $member_id;
 		}
@@ -4051,6 +4150,12 @@ arr($msg_obj->prop("message"));
 				$t->define_field(array(
 					"name" => "co",
 					"caption" => t("Organisatsioon"),
+					"sortable" => 1,
+				));
+
+				$t->define_field(array(
+					"name" => "section",
+					"caption" => t("Osakond"),
 					"sortable" => 1,
 				));
 

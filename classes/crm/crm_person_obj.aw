@@ -40,19 +40,22 @@ class crm_person_obj extends _int_object
 		return $sp;
 	}
 
-	function get_rank()
+	function get_rank($org = null)
 	{
 		// It won't work with new object, so we need to check the oid.
-		if(!is_oid($this->id()))
-			return false;
+		if(!is_oid($this->id())) return false;
 
-		$o = obj($this->id());
-		$org_rel = $o->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
-		if (!$org_rel)
+		$rank = null;
+		foreach($this->connections_from(array("type" => "RELTYPE_CURRENT_JOB")) as $conn)
 		{
-			return false;
+			$org_rel = $conn->to();
+ 			$rank = $org_rel->prop("profession");
+			if(!$org || $org == $org_rel->prop("org"))
+			{
+				break;
+			}
 		}
-		return $org_rel->prop("profession");
+		return $rank;
 	}
 
 	function set_name($v)
@@ -686,6 +689,22 @@ class crm_person_obj extends _int_object
 	}
 
 	/**
+	@attrib name=get_sections api=1
+	**/
+	public function get_section_id($co)
+	{
+		$this->set_current_jobs();
+		foreach($this->current_jobs->arr() as $o)
+		{
+			if((!$co || $co == $o->prop("org")) && $o->prop("section"))
+			{
+				return $o->prop("section");
+			}
+		}
+		return null;
+	}
+
+	/**
 	@attrib name=get_companies api=1
 	**/
 	function get_companies()
@@ -920,6 +939,22 @@ class crm_person_obj extends _int_object
 		return null;
 	}
 
+	/** returns one company name where person works
+		@attrib api=1
+		@return string
+			company name
+	**/
+	public function company_name()
+	{
+		$co_id = $this->company_id();
+		if(is_oid($co_id))
+		{
+			$obj = obj($co_id);
+			return $obj->name();
+		}
+		return "";
+	}
+
 	/** returns one company id
 		@attrib api=1
 		@return oid
@@ -1086,6 +1121,18 @@ class crm_person_obj extends _int_object
 		}
 
 		return $sections;
+	}
+
+	/** returns person section name
+		@attrib api=1 params=pos
+		@param co optional type=oid
+			company id
+		@return array
+			section names
+	**/
+	public function get_section_name($co = null, $sec = array())
+	{
+		return reset($this->get_section_names($co, $sec));
 	}
 
 	/** returns person profession names

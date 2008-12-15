@@ -328,8 +328,9 @@ class ml_mail_gen extends run_in_background
 		
 		$add_co = substr_count($message, '#organisatsioon#');
 		$add_pro = substr_count($message, '#ametinimetus#');
+		$add_sec = substr_count($message, '#osakond#');
 arr($obj); arr($arr["member_id"]); arr($add_co); arr($add_pro);
-		if($obj && ($add_pro || $add_co))
+		if($obj && ($add_pro || $add_co || $add_sec))
 		{
 			$member = obj($arr["member_id"]);
 			if($add_co)
@@ -350,6 +351,15 @@ arr($obj); arr($arr["member_id"]); arr($add_co); arr($add_pro);
 					$profession_name = reset($obj->get_profession_names());
 				}
 				$message = str_replace("#ametinimetus#" , $profession_name , $message);
+			}
+			if($add_sec)
+			{
+				$sector_name = "";
+				if($obj->class_id() == CL_CRM_PERSON)
+				{
+					$sector_name = $obj->get_section_name();
+				}
+				$message = str_replace("#osakond#" , $sector_name , $message);
 			}
 		}
 		
