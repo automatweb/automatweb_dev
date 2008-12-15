@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.26 2008/10/06 11:30:43 kristo Exp $
 // mrp_prisma_import.aw - Prisma import
 /*
 
@@ -20,30 +19,30 @@ class mrp_prisma_import extends class_base
 		));
 
 		$this->prj_flds = array(
-			"comment" => "TööNimetus",
-			"starttime" => "TööAlgus",
-			"due_date" => "TellimuseTähtaeg",
+			"comment" => "T".chr(246).chr(246)."Nimetus",
+			"starttime" => "T".chr(246).chr(246)."Algus",
+			"due_date" => "TellimuseT".chr(228)."htaeg",
 			"project_priority" => "TellimusePrioriteet",
 			"format" => "Formaat",
 			"sisu_lk_arv" => "Sisu lk arv",
 			"kaane_lk_arv" => "Kaane lk arv",
-			"sisu_varvid" => "Sisu värvid",
-			"sisu_varvid_notes" => "Sisu värvid Notes",
+			"sisu_varvid" => "Sisu v".chr(228)."rvid",
+			"sisu_varvid_notes" => "Sisu v".chr(228)."rvid Notes",
 			"sisu_lakk_muu" => "Sisu lakk/muu",
-			"kaane_varvid" => "Kaane värvid",
-			"kaane_varvid_notes" => "Kaane värvid Notes",
+			"kaane_varvid" => "Kaane v".chr(228)."rvid",
+			"kaane_varvid_notes" => "Kaane v".chr(228)."rvid Notes",
 			"kaane_lakk_muu" => "Kaane lakk/muu",
 			"sisu_paber" => "Sisu paber",
 			"kaane_paber" => "Kaane paber",
-			"trykiarv" => "Trükiarv",
-			"trykise_ehitus" => "Trükise ehitus",
+			"trykiarv" => "Tr".chr(252)."kiarv",
+			"trykise_ehitus" => "Tr".chr(252)."kise ehitus",
 			"kromaliin" => "Kromalin",
 			"makett" => "Makett",
-			"naidis" => "Näidis",
+			"naidis" => "N".chr(228)."idis",
 			"plaate" => "Plaate",
 			"transport" => "Transport",
 			"soodustus" => "Soodustus",
-			"markused" => "Märkused",
+			"markused" => "M".chr(228)."rkused",
 			"allahindlus" => "Allahindlus",
 			"vahendustasu" => "Vahendustasu",
 			"myygi_hind" => "Muugi hind",
@@ -85,7 +84,7 @@ class mrp_prisma_import extends class_base
 	{
 		aw_disable_messages();
 		aw_set_exec_time(AW_LONG_PROCESS);
-		
+
 		$db = $this->_get_conn();
 
 		// now. sync from them to us
@@ -112,7 +111,7 @@ class mrp_prisma_import extends class_base
 		$db->db_query("SELECT * FROM kliendituup");
 		while ($row = $db->db_next())
 		{
-			$cats[$row["KliendiTüüpID"]] = $row["KliendiTüüp"];
+			$cats[$row["KliendiT".chr(252).chr(252)."pID"]] = $row["KliendiT".chr(252).chr(252)."p"];
 		}
 
 		// get existing
@@ -228,11 +227,11 @@ class mrp_prisma_import extends class_base
 		foreach($cust as $id => $dat)
 		{
 			// find category
-			if ($dat["KliendiTüüpID"] != "")
+			if ($dat["KliendiT".chr(252).chr(252)."pID"] != "")
 			{
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_CATEGORY,
-					"extern_id" => $dat["KliendiTüüpID"]
+					"extern_id" => $dat["KliendiT".chr(252).chr(252)."pID"]
 				));
 			}
 			else
@@ -332,7 +331,7 @@ class mrp_prisma_import extends class_base
 		$this->_set_rel_prop($o, "telefax_id", CL_CRM_PHONE, $dat["Fax"]);
 		$this->_set_rel_prop($o, "email_id", CL_ML_MEMBER, $dat["e-mail"]);
 
-		$o->set_prop("reg_nr", $dat["Kood"]);
+		$o->set_prop("code", $dat["Kood"]);
 		$o->set_comment($dat["Info"]);
 
 		$o->set_prop("cust_priority", $dat["KliendiPrioriteet"]);
@@ -365,30 +364,30 @@ class mrp_prisma_import extends class_base
 		$db->db_query("
 			SELECT
 				*,
-				unix_timestamp(TööAlgus) as TööAlgus,
-				unix_timestamp(TellimuseTähtaeg) as TellimuseTähtaeg
+				unix_timestamp(T".chr(246).chr(246)."Algus) as T".chr(246).chr(246)."Algus,
+				unix_timestamp(TellimuseT".chr(228)."htaeg) as TellimuseT".chr(228)."htaeg
 			FROM
 				tellimused
 		");
 		while ($row = $db->db_next())
 		{
-			if ($row["TööAlgus"] < 100000)
+			if ($row["T".chr(246).chr(246)."Algus"] < 100000)
 			{
-				$row["TööAlgus"] = -1;
+				$row["T".chr(246).chr(246)."Algus"] = -1;
 			}
-			if ($row["TellimuseTähtaeg"] < 100000)
+			if ($row["TellimuseT".chr(228)."htaeg"] < 100000)
 			{
-				$row["TellimuseTähtaeg"] = -1;
+				$row["TellimuseT".chr(228)."htaeg"] = -1;
 			}
 
 			// if date is at 00:00 hrs, make it 16:00 hrs
-			if ((get_day_start($row["TööAlgus"]) - $row["TööAlgus"]) < 120)
+			if ((get_day_start($row["T".chr(246).chr(246)."Algus"]) - $row["T".chr(246).chr(246)."Algus"]) < 120)
 			{
-				$row["TööAlgus"] = get_day_start($row["TööAlgus"]) + 16 * 3600;
+				$row["T".chr(246).chr(246)."Algus"] = get_day_start($row["T".chr(246).chr(246)."Algus"]) + 16 * 3600;
 			}
-			if ((get_day_start($row["TellimuseTähtaeg"]) - $row["TellimuseTähtaeg"]) < 120)
+			if ((get_day_start($row["TellimuseT".chr(228)."htaeg"]) - $row["TellimuseT".chr(228)."htaeg"]) < 120)
 			{
-				$row["TellimuseTähtaeg"] = get_day_start($row["TellimuseTähtaeg"]) + 16 * 3600;
+				$row["TellimuseT".chr(228)."htaeg"] = get_day_start($row["TellimuseT".chr(228)."htaeg"]) + 16 * 3600;
 			}
 			$proj[$row["TellimuseNr"]] = $row;
 		}
@@ -553,7 +552,7 @@ class mrp_prisma_import extends class_base
 			}
 			$val = $o->prop($prop);
 			$this->quote(&$val);
-			if ($fld == "TööAlgus" || $fld == "TellimuseTähtaeg")
+			if ($fld == "T".chr(246).chr(246)."Algus" || $fld == "TellimuseT".chr(228)."htaeg")
 			{
 				// conv to date
 				$val = " FROM_UNIXTIME($val) ";
@@ -592,31 +591,31 @@ class mrp_prisma_import extends class_base
 		$dat = $db->db_fetch_row("
 			SELECT
 				*,
-				unix_timestamp(TööAlgus) as TööAlgus,
-                                unix_timestamp(TellimuseTähtaeg) as TellimuseTähtaeg
+				unix_timestamp(T".chr(246).chr(246)."Algus) as T".chr(246).chr(246)."Algus,
+                                unix_timestamp(TellimuseT".chr(228)."htaeg) as TellimuseT".chr(228)."htaeg
 			FROM
 				tellimused
 			WHERE
 				TellimuseNr = '$id'
 		");
-		if ($dat["TööAlgus"] < 100000)
+		if ($dat["T".chr(246).chr(246)."Algus"] < 100000)
 		{
-			$dat["TööAlgus"] = -1;
+			$dat["T".chr(246).chr(246)."Algus"] = -1;
 		}
-		if ($dat["TellimuseTähtaeg"] < 100000)
+		if ($dat["TellimuseT".chr(228)."htaeg"] < 100000)
 		{
-			$dat["TellimuseTähtaeg"] = -1;
+			$dat["TellimuseT".chr(228)."htaeg"] = -1;
 		}
 
 		classload("core/date/date_calc");
 		// if date is at 00:00 hrs, make it 16:00 hrs
-		if ((get_day_start($dat["TööAlgus"]) - $dat["TööAlgus"]) < 120)
+		if ((get_day_start($dat["T".chr(246).chr(246)."Algus"]) - $dat["T".chr(246).chr(246)."Algus"]) < 120)
 		{
-			$dat["TööAlgus"] = get_day_start($dat["TööAlgus"]) + 16 * 3600;
+			$dat["T".chr(246).chr(246)."Algus"] = get_day_start($dat["T".chr(246).chr(246)."Algus"]) + 16 * 3600;
 		}
-		if ((get_day_start($dat["TellimuseTähtaeg"]) - $dat["TellimuseTähtaeg"]) < 120)
+		if ((get_day_start($dat["TellimuseT".chr(228)."htaeg"]) - $dat["TellimuseT".chr(228)."htaeg"]) < 120)
 		{
-			$dat["TellimuseTähtaeg"] = get_day_start($dat["TellimuseTähtaeg"]) + 16 * 3600;
+			$dat["TellimuseT".chr(228)."htaeg"] = get_day_start($dat["TellimuseT".chr(228)."htaeg"]) + 16 * 3600;
 		}
 
 		// check if we got it
@@ -755,7 +754,7 @@ class mrp_prisma_import extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"] = $c->db_fetch_field("SELECT TrükiseEhitus as e FROM `trykise_ehitus` WHERE EhitusID = '$prop[value]'", "e");
+				$prop["value"] = $c->db_fetch_field("SELECT Tr".chr(252)."kiseEhitus as e FROM `trykise_ehitus` WHERE EhitusID = '$prop[value]'", "e");
 				return PROP_OK;
 				break;
 
