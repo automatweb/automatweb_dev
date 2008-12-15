@@ -68,22 +68,25 @@ class rfp_obj extends _int_object
 				break;
 
 			case "confirmed":
-				$bron_verified = 0;
-				if($pv == RFP_STATUS_CONFIRMED)
+				if(is_oid($this->id()))
 				{
-					$bron_verified = 1;
-				}
-				foreach($this->connections_from(array("type" => "RELTYPE_RESERVATION")) as $c)
-				{
-					$rvo = $c->to();
-					$rvo->set_prop("verified", $bron_verified);
-					$rvo->save();
-				}
-				foreach($this->connections_from(array("type" => "RELTYPE_CATERING_RESERVATION")) as $c)
-				{
-					$rvo = $c->to();
-					$rvo->set_prop("verified", $bron_verified);
-					$rvo->save();
+					$bron_verified = 0;
+					if($pv == RFP_STATUS_CONFIRMED)
+					{
+						$bron_verified = 1;
+					}
+					foreach($this->connections_from(array("type" => "RELTYPE_RESERVATION")) as $c)
+					{
+						$rvo = $c->to();
+						$rvo->set_prop("verified", $bron_verified);
+						$rvo->save();
+					}
+					foreach($this->connections_from(array("type" => "RELTYPE_CATERING_RESERVATION")) as $c)
+					{
+						$rvo = $c->to();
+						$rvo->set_prop("verified", $bron_verified);
+						$rvo->save();
+					}
 				}
 				break;
 		}
