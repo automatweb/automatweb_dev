@@ -3116,7 +3116,7 @@ class forum_v2 extends class_base implements site_search_content_group_interface
 				$user = obj(aw_global_get("uid_oid"));
 				if($obj_inst->prop("post_name"))
 				{
-					$ui = get_instance("CL_USER");
+					$ui = get_instance(CL_USER);
 					$p = obj($ui->get_current_person());
 					$arr["author_name"] = $p->name();
 				}
