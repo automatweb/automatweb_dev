@@ -703,7 +703,7 @@ $x++;
 						"oid" => $row->id(),
 						"name" => $row->prop("content"),
 						"hrs" => $co_stat_inst->hours_format($row->prop("time_to_cust")),
-						"hr_price" => number_format($this->task_hour_prices[$id],2),
+						"hr_price" => number_format($this->task_hour_prices[$row->prop("task")],2),
 						"sum" => number_format(str_replace(",", ".", $row->prop("time_to_cust")) * $this->task_hour_prices[$row->prop("task")],2),
 						"set_date" => $row->prop("to_bill_date"),
 						"count" => html::hidden(array("name" => "count[".$row->prop("task")."]" , "value" => count($rs))),//mis jama see on?
@@ -1044,7 +1044,17 @@ exit_function("bills_impl::_get_bill_task_list");
 			$_SESSION["bill_id"] = $_GET["bill_id"];
 			die("
 				<html><body><script language='javascript'>
-					window.opener.submit_changeform('create_bill');
+					javascript:var ansa = confirm('" . t("Kas koondada arendusulesannete kommentaarid?") . "');
+					var asd = window.opener.document.getElementsByName('bunch_bugs');
+					if (ansa)
+					{
+						asd[0].value=1;
+					}
+					else
+					{
+						asd[0].value=0;
+					}
+					window.opener.submit_changeform('create_bill'); 
 					window.close();
 				</script></body></html>
 			");
