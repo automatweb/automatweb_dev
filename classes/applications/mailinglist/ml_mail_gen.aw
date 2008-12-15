@@ -36,11 +36,13 @@ class ml_mail_gen extends run_in_background
 		arr($o);
 		//if (rand(1,20) < 5) {arr("die....!"); die(); }
 		// process step
+		aw_disable_acl();
 		if(!(is_array($this->mails_to_gen)))
 		{
 			$this->make_send_list($o);
 		}
 		$arr = $o->meta("mail_data");
+		aw_restore_acl();
 		extract($arr);
 		$qid = (int)$qid;
 		if(!(sizeof($this->mails_to_gen) > 0))
@@ -55,9 +57,11 @@ class ml_mail_gen extends run_in_background
 			$this->d = get_instance(CL_MESSAGE);
 		};
 		$ml_list_inst = get_instance(CL_ML_LIST);
+		aw_disable_acl();
 		$list_obj = new object($arr["list_id"]);
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
 		$this->no_mails_to_base = $list_obj->prop("no_mails_to_base");
+		aw_restore_acl();
 		$this->qid = $arr["qid"];
 		$this->preprocess_one_message(array(
 			"name" => $tmp["name"],
@@ -92,7 +96,7 @@ class ml_mail_gen extends run_in_background
 			$this->d = get_instance(CL_MESSAGE);
 		};
 		$ml_list_inst = get_instance(CL_ML_LIST);
-		$list_obj = new object($arr["list_id"]);
+//		$list_obj = new object($arr["list_id"]);
 
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
 		$members = $ml_list_inst->get_members($msg);
@@ -245,6 +249,7 @@ class ml_mail_gen extends run_in_background
 	//mail_id, vars, name , mail, member_id, - esimene on nagu olulisim, teised tulevad kas baasist valmis maili juurest voi kui asi alles tegemisel, siis lambist
 	function get_changed_message($arr)
 	{
+		$obj = null;
 		if(!$arr["msg"])
 		{
 			if (!isset($this->d))
@@ -261,9 +266,6 @@ class ml_mail_gen extends run_in_background
 			
 		}
 		$mail_obj = obj($arr["mail_id"]);
-
-		$add_co = substr_count($text, '#organisatsioon#');
-		$add_pro = substr_count($text, '#ametinimetus#');
 
 		$mail_meta = $mail_obj->meta();
 		$vars = $arr["vars"];
@@ -324,15 +326,30 @@ class ml_mail_gen extends run_in_background
 		$message = str_replace("#lahkumine#" , $html_mail_unsubscribe[0].$unsubscribe_link.$html_mail_unsubscribe[1] , $message);
 		$message = str_replace("#e-mail#" , $arr["mail"] , $message);
 		
-		if($add_pro || $add_co)
+		$add_co = substr_count($message, '#organisatsioon#');
+		$add_pro = substr_count($message, '#ametinimetus#');
+arr($obj); arr($arr["member_id"]); arr($add_co); arr($add_pro);
+		if($obj && ($add_pro || $add_co))
 		{
+			$member = obj($arr["member_id"]);
 			if($add_co)
 			{
+				$company_name = "";
+				if($obj->class_id() == CL_CRM_PERSON)
+				{
+					$company_name = $obj->company_name();
+				}
 				//siia vaja karupersest saada organisatsioon
+				$message = str_replace("#organisatsioon#" , $company_name, $message);
 			}
 			if($add_pro)
 			{
-				//siia karupersest vaja saada ametinimetus
+				$profession_name = "";
+				if($obj->class_id() == CL_CRM_PERSON)
+				{
+					$profession_name = reset($obj->get_profession_names());
+				}
+				$message = str_replace("#ametinimetus#" , $profession_name , $message);
 			}
 		}
 		
