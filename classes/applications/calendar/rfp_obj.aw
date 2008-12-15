@@ -66,6 +66,26 @@ class rfp_obj extends _int_object
 				$tt[$this->prop("default_language")][$pn] = $pv;
 				$this->set_meta("trans_terms", $tt);
 				break;
+
+			case "confirmed":
+				$bron_verified = 0;
+				if($pv == RFP_STATUS_CONFIRMED)
+				{
+					$bron_verified = 1;
+				}
+				foreach($this->connections_from(array("type" => "RELTYPE_RESERVATION")) as $c)
+				{
+					$rvo = $c->to();
+					$rvo->set_prop("verified", $bron_verified);
+					$rvo->save();
+				}
+				foreach($this->connections_from(array("type" => "RELTYPE_CATERING_RESERVATION")) as $c)
+				{
+					$rvo = $c->to();
+					$rvo->set_prop("verified", $bron_verified);
+					$rvo->save();
+				}
+				break;
 		}
 		return parent::set_prop($pn, $pv);
 	}
