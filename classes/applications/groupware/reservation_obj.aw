@@ -83,6 +83,7 @@ class reservation_obj extends _int_object
 			case "start1":
 			case "end":
 			case "resource":
+			case "customer":
 				$this->set_correct_name();
 		}
 		return $retval;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.150 2008/11/11 09:36:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.151 2008/12/15 12:58:50 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1765,9 +1765,11 @@ class reservation extends class_base
 				"value" => $o->prop("special_discount"),
 				"size" => 5
 			));
+			$ssum = $o->get_special_sum();
+			$cur = $arr["request"]["default_currency"] ? $arr["request"]["default_currency"] : 0;
 			$d["custom"] = html::textbox(array(
 				"name" => "custom_".$o->id(),
-				"value" => $o->prop("special_sum"),
+				"value" => $ssum[$cur],
 				"size" => 5
 			));
 			$d["tables"] = html::select(array(

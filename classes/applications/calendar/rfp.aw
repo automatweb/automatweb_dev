@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.167 2008/12/15 11:14:24 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.168 2008/12/15 12:58:41 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1771,6 +1771,7 @@ class rfp extends class_base
 					$o->set_meta("rfp_catering_var", $add["prod_var"]);
 					$o->set_prop("customer", $arr["obj_inst"]->prop("data_subm_organisation"));
 					$o->set_prop("type", "food");
+					$o->set_prop("people_count", $arr["obj_inst"]->prop("data_gen_attendees_no"));
 					$o->save();
 					if(is_array($add["prod"]))
 					{
@@ -2907,9 +2908,10 @@ class rfp extends class_base
 					$unitprice = "-";
 				}
 			}
-			if($ssum = $rv->prop("special_sum"))
+			$ssum = $rv->get_special_sum();
+			if($ssum[$currency])
 			{
-				$price = $ssum;
+				$price = $ssum[$currency];
 				$unitprice = "-";
 			}
 			$comment = $rv->trans_get_val("comment");
@@ -2939,7 +2941,8 @@ class rfp extends class_base
 			if($package)
 			{
 				$price_set = false;
-				if($this->can("view", $mgrid) && !$rv->prop("special_sum"))
+				$ssum = $rv->get_special_sum();
+				if($this->can("view", $mgrid) && !$ssum[$currency])
 				{
 					$mgr = obj($mgrid);
 					$pk_prices = $mgr->meta("pk_prices");
@@ -2976,7 +2979,7 @@ class rfp extends class_base
 					$unitprice = $prices_for_calculator[$room_price_oid];
 					
 				}
-				elseif($sp = $rv->prop("special_sum"))
+				elseif($sp = $ssum[$currency])
 				{
 					$price = $sp;
 					$price_set = true;
@@ -3502,8 +3505,7 @@ class rfp extends class_base
 					elseif($tmp[0] == "custom")
 					{
 						$o = obj($tmp[1]);
-						$o->set_prop("special_sum", $val);	
-						$o->save();
+						$o->set_special_sum( array($arr["obj_inst"]->prop("default_currency") => $val));
 					}
 					elseif($tmp[0] == "tables")
 					{
@@ -4110,7 +4112,8 @@ class rfp extends class_base
 				{
 					$rv = $conn->to();
 					unset($tot_add);
-					if($sp = $rv->prop("special_sum"))
+					$ssum = $rv->get_special_sum();
+					if($sp = $ssum[$currency])
 					{
 						$tot_add = $sp;
 						$rv_prices[$rv->id()]["special"] = $tot_add;

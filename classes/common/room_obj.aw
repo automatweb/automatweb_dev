@@ -512,7 +512,7 @@ class room_obj extends _int_object
 		if(is_oid($arr["ignore_booking"]))
 		{
 			$to_ignore = obj($arr["ignore_booking"]);
-			$arr["type"] = $to_ignore->prop("type");
+			//$arr["type"] = $to_ignore->prop("type");
 		}
 
 		$ret = $room_inst->check_if_available($arr);
