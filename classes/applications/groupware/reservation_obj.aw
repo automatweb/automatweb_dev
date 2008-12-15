@@ -160,7 +160,7 @@ class reservation_obj extends _int_object
 				$ret[$price->prop("currency")] = $price->prop("sum");
 			}
 		}
-		if(!sizeof($ret))
+		if(!sizeof($ret) || !$this->id())
 		{
 			return null;
 		}
