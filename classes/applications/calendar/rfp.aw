@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.166 2008/11/26 10:52:20 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.167 2008/12/15 11:14:24 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3371,7 +3371,7 @@ class rfp extends class_base
 				));
 			}
 		}
-		$totalprice = round($totalprice);
+		$totalprice = number_format($totalprice, 2);
 		$this->vars(array(
 			"cancel_and_payment_terms" => $arr["obj_inst"]->prop("show_payment_terms") ? $arr["obj_inst"]->prop("cancel_and_payment_terms") : "",
 			"accomondation_terms" => $arr["obj_inst"]->prop("show_acommondation_terms") ? $arr["obj_inst"]->prop("accomondation_terms") : "",
