@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.19 2008/11/19 12:38:19 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.20 2008/12/15 12:36:08 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -775,10 +775,13 @@ class bugtrack_display extends class_base
 		}
 		foreach($view_sects as $sect)
 		{
-			$sect = obj($sect);
-			foreach($co_i->get_employee_picker($sect) as $_id => $nm)
+			if($this->can("view", $sect))
 			{
-				$cp_ppl[$_id] = $_id;
+				$sect = obj($sect);
+				foreach($co_i->get_employee_picker($sect) as $_id => $nm)
+				{
+					$cp_ppl[$_id] = $_id;
+				}
 			}
 		}
 		$cur_u = array();
@@ -859,8 +862,12 @@ class bugtrack_display extends class_base
 		$sect_id = $p->prop("org_section");
 		$sects = array(aw_url_change_var("sect_filter", "all", get_ru()) => t("K&otilde;ik"),
 			aw_url_change_var("sect_filter", null, get_ru()) => t("Minu lisatud"),
-			aw_url_change_var("sect_filter", $sect_id, get_ru()) => obj($sect_id)->name(),
 		);
+		if($sect_id)
+		{
+			$sects[aw_url_change_var("sect_filter", $sect_id, get_ru())] = obj($sect_id)->name();
+		}
+		arr($sects);
 		if ($this->can("view", $sect_id))
 		{
 			$this->_recur_sect_list($sects, obj($sect_id));
@@ -895,10 +902,14 @@ class bugtrack_display extends class_base
 	{
 		$p = get_current_person();
 		$sect_id = $p->prop("org_section");
-		$sects = array($sect_id);
 		if ($this->can("view", $sect_id))
 		{
+			$sects = array($sect_id);
 			$this->_recur_get_all_sects($sects, obj($sect_id));
+		}
+		else
+		{
+			$sects = array(-1);
 		}
 		return $sects;
 	}

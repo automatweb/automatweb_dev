@@ -80,6 +80,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property s_name type=textbox store=no parent=s_name_lay size=15 captionside=top
 		@caption Nimi
 
+		@property s_oid type=textbox store=no parent=s_name_lay size=10 captionside=top
+		@caption ID
+
 		@property s_bug_content type=textbox store=no parent=s_name_lay captionside=top
 		@caption Sisu
 
@@ -2292,6 +2295,11 @@ class bug_tracker extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+		));
+
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"sortable" => 1
@@ -2858,7 +2866,7 @@ class bug_tracker extends class_base
 			"site_id" => array()
 		);
 
-		$txtf = array("name", "bug_url", "bug_component", "bug_mail");
+		$txtf = array("oid", "name", "bug_url", "bug_component", "bug_mail");
 		foreach($txtf as $field)
 		{
 			if (trim($r["s_".$field]) != "")
@@ -3585,6 +3593,7 @@ class bug_tracker extends class_base
 			"row_height" => 10,
 			"column_length" => $col_length,
 			"timespan_range" => $col_length,
+			"row_dfn" => t("&Uuml;lesanne"),
 		));
 
 		### define columns

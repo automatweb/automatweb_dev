@@ -196,6 +196,18 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>s_oid</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>s_name_lay</parent>
+            <size>10</size>
+            <captionside>top</captionside>
+            <field>s_oid</field>
+            <caption>ID</caption>
+      </property>
+      <property>
             <name>s_bug_content</name>
             <table>objects</table>
             <group>search</group>
