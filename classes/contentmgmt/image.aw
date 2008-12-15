@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.33 2008/09/04 08:28:42 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.34 2008/12/15 13:06:32 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
 
 	@tableinfo images index=id master_table=objects master_index=oid
+	@tableinfo img_d index=aw_oid master_table=objects master_index=oid
 
 
 @default group=general
@@ -40,6 +41,11 @@
 
 	@property no_apply_gal_conf type=checkbox table=objects field=meta method=serialize ch_value=1
 	@caption &Auml;ra kasuta galerii seadeid
+
+
+	@property dg type=datagrid table=img_d field=row_id fields=a,b,c captions=1,2,3
+	@caption Datagrid
+	
 
 	/@property file_show type=text store=no editonly=1
 	/@caption Eelvaade 

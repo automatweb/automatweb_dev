@@ -7,18 +7,20 @@
 				</arguments>
 			</function>
 		</action>
-                <action name="send_template_log_data" nologin="1" all_args="1">
-                        <function name="send_template_log_data">
-                                <arguments>
-                                </arguments>
-                        </function>
-                </action>
-                <action name="fetch_logs" nologin="1" all_args="1">
-                        <function name="fetch_logs">
-                                <arguments>
-                                </arguments>
-                        </function>
-                </action>
+
+		<action name="send_template_log_data" nologin="1" all_args="1">
+			<function name="send_template_log_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="fetch_logs">
+			<function name="fetch_logs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 	</class>
 </orb>

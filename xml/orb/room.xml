@@ -20,9 +20,9 @@
 		<action name="admin_add_bron_popup" all_args="1">
 			<function name="admin_add_bron_popup">
 				<arguments>
-					<required name="start1"/>
+					<required name="start1" />
 					<required name="parent" type="oid" />
-					<required name="end"/>
+					<required name="end" />
 					<required name="resource" type="int" />
 					<optional name="product" />
 					<optional name="return_url" type="string" />

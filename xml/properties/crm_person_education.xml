@@ -33,6 +33,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FACULTY</reltype>
+            <no_edit>1</no_edit>
             <store>connect</store>
             <field>faculty</field>
             <caption>Teaduskond</caption>

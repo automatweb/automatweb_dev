@@ -226,6 +226,53 @@
             <parent>vbox_ug_content</parent>
             <field>table_usergroups</field>
       </property>
+      <property>
+            <name>packages_tlb</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>packages_tlb</field>
+      </property>
+      <property>
+            <name>packages_tbl</name>
+            <table>objects</table>
+            <group>packages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>packages_tbl</field>
+      </property>
+      <property>
+            <name>conditions_tlb</name>
+            <table>objects</table>
+            <group>conditions</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>conditions_tlb</field>
+      </property>
+      <property>
+            <name>conditions_tree</name>
+            <table>objects</table>
+            <group>conditions</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>conditions_tree</parent>
+            <field>conditions_tree</field>
+      </property>
+      <property>
+            <name>conditions_tbl</name>
+            <table>objects</table>
+            <group>conditions</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>conditions_right</parent>
+            <field>conditions_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_USER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -240,6 +287,17 @@
             <usergroups>
                   <caption>Kasutajagrupid</caption>
             </usergroups>
+            <content_packages>
+                  <caption>Sisupaketid</caption>
+            </content_packages>
+            <packages>
+                  <caption>Paketid</caption>
+                  <parent>content_packages</parent>
+            </packages>
+            <conditions>
+                  <caption>Tingimused</caption>
+                  <parent>content_packages</parent>
+            </conditions>
       </groupinfo>
       <reltypes>
             <ROOT>
@@ -367,6 +425,31 @@
                   <group>usergroups</group>
                   <area_caption></area_caption>
             </vbox_ug_content>
+            <conditions_>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>conditions</group>
+                  <area_caption></area_caption>
+            </conditions_>
+            <conditions_left>
+                  <type>vbox</type>
+                  <parent>conditions_</parent>
+                  <group>conditions</group>
+                  <area_caption></area_caption>
+            </conditions_left>
+            <conditions_tree>
+                  <type>vbox</type>
+                  <parent>conditions_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Sisupaketid</area_caption>
+                  <group>conditions</group>
+            </conditions_tree>
+            <conditions_right>
+                  <type>vbox</type>
+                  <parent>conditions_</parent>
+                  <group>conditions</group>
+                  <area_caption></area_caption>
+            </conditions_right>
       </layout>
 </properties>
 

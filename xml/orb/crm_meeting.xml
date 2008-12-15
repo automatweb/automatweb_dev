@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_meeting" folder="crm" extends="class_base">
+	<class name="crm_meeting" folder="crm" extends="task">
 		<action name="submit_delete_participants_from_calendar">
 			<function name="submit_delete_participants_from_calendar">
 				<arguments>

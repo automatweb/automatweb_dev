@@ -37,7 +37,8 @@
 		<action name="room_booking_printer">
 			<function name="room_booking_printer">
 				<arguments>
-					<required name="rooms" />
+					<optional name="rooms" />
+					<optional name="rs_name" />
 					<optional name="from" />
 					<optional name="to" />
 					<optional name="group" />

@@ -53,6 +53,7 @@
             <table>messages</table>
             <type>relpicker</type>
             <reltype>RELTYPE_TO_MAIL_ADDRESS</reltype>
+            <multiple>1</multiple>
             <store>connect</store>
             <field>mto_relpicker</field>
             <caption>Kellele</caption>

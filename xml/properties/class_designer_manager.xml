@@ -185,15 +185,26 @@
             <parent>cl_usage_props_stats_right_split</parent>
       </property>
       <property>
-            <name>site_usage_props_stats_list</name>
+            <name>cl_usage_stats_tms_tree</name>
             <table>objects</table>
-            <group>cl_usage_stats_props</group>
+            <group>cl_usage_stats_tms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>cl_usage_stats_tms_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cl_usage_stats_tms_list</name>
+            <table>objects</table>
+            <group>cl_usage_stats_tms</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>cl_usage_props_stats_right_split</parent>
+            <parent>cl_usage_stats_tms_right_split</parent>
       </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER_MANAGER</syslog_type>
@@ -228,6 +239,11 @@
                   <parent>cl_usage_stats</parent>
                   <submit>no</submit>
             </cl_usage_stats_props>
+            <cl_usage_stats_tms>
+                  <caption>Ajad</caption>
+                  <parent>cl_usage_stats</parent>
+                  <submit>no</submit>
+            </cl_usage_stats_tms>
       </groupinfo>
       <layout>
             <mgr_hbox>
@@ -343,6 +359,37 @@
                   <group>cl_usage_stats_props</group>
                   <area_caption></area_caption>
             </cl_usage_props_stats_right_split>
+            <cl_usage_stats_tms_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>cl_usage_stats_tms</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_tms_split>
+            <cl_usage_stats_tms_left>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_tms_split</parent>
+                  <group>cl_usage_stats_tms</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_tms_left>
+            <cl_usage_stats_tms_tree>
+                  <type>vbox</type>
+                  <area_caption>Saidid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cl_usage_stats_tms_left</parent>
+                  <group>cl_usage_stats_tms</group>
+            </cl_usage_stats_tms_tree>
+            <cl_usage_stats_tms_right>
+                  <type>vbox</type>
+                  <parent>cl_usage_stats_tms_split</parent>
+                  <group>cl_usage_stats_tms</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_tms_right>
+            <cl_usage_stats_tms_right_split>
+                  <type>hbox</type>
+                  <parent>cl_usage_stats_tms_right</parent>
+                  <group>cl_usage_stats_tms</group>
+                  <area_caption></area_caption>
+            </cl_usage_stats_tms_right_split>
       </layout>
 </properties>
 

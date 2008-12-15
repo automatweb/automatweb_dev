@@ -103,7 +103,7 @@ class languages extends aw_template implements request_startup
 		$ret = array();
 		foreach($lar->get() as $row)
 		{
-			if ($row["show_logged"] == 1)
+			if (ifset($row, "show_logged") == 1)
 			{
 				$ret[$row["id"]] = $row;
 			}

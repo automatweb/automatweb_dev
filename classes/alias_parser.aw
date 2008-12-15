@@ -152,7 +152,7 @@ class alias_parser extends core
 					$emb_obj_name = "emb" . $clid;
 					$cldat = $classlist[$clid];
 					$class_name = !empty($cldat["alias_class"]) ? $cldat["alias_class"] : $cldat["file"];
-
+					$class_name_base = basename($class_name);
 					if ($class_name)
 					{
 						// load and create the class needed for that alias type
@@ -181,7 +181,9 @@ class alias_parser extends core
 								"data" => isset($args["data"]) ? $args["data"] : null
 							);
 							enter_function("aliasmgr::parse_oo_aliases::loop::do_palias");
+							tm::s($class_name_base, "parse_alias");
 							$repl = $$emb_obj_name->parse_alias($parm);
+							tm::e($class_name_base, "parse_alias");
 							exit_function("aliasmgr::parse_oo_aliases::loop::do_palias");
 
 							$inplace = false;

@@ -491,6 +491,7 @@ class site_show extends class_base
 
 	function do_sub_callbacks($sub_callbacks, $after = false)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		if ($after)
 		{
 			$sub_callbacks = false;
@@ -555,13 +556,16 @@ class site_show extends class_base
 				}
 			}
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function get_default_document($arr = array())
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$docid = null;
 		if (isset($arr["docid"]) && $arr["docid"])
 		{
+			tm::e(__CLASS__, __FUNCTION__);
 			return $arr["docid"];
 		}
 		if (isset($arr["obj"]))
@@ -575,12 +579,14 @@ class site_show extends class_base
 
 		if (!is_oid($obj->id()))
 		{
+			tm::e(__CLASS__, __FUNCTION__);
 			return false;
 		}
 
 		// if it is a document, use this one.
 		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION) || $obj->class_id() == CL_BROTHER_DOCUMENT)
 		{
+			tm::e(__CLASS__, __FUNCTION__);
 			return $obj->id();	// most important not to change this, it is!
 		}
 
@@ -686,6 +692,7 @@ class site_show extends class_base
 			{
 				$docid = reset($docid);
 			}
+			tm::e(__CLASS__, __FUNCTION__);
 			return $docid;
 		}
 
@@ -1196,20 +1203,40 @@ class site_show extends class_base
 			if ($cnt > 1)
 			{
 				// a list of documents
+				tm::e(__CLASS__, __FUNCTION__);
 				return $docid;
 			}
 			else
 			if ($cnt == 1)
 			{
 				// the correct id
+				tm::e(__CLASS__, __FUNCTION__);
 				return $docid[0];
 			}
 			else
 			{
+				tm::e(__CLASS__, __FUNCTION__);
 				return false;
 			}
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 		return $docid;
+	}
+
+	function detect_country()
+	{
+		tm::s(__CLASS__, __FUNCTION__);
+		$ipl = get_instance("core/util/ip_locator/ip_locator");
+		$v = $ipl->search(get_ip());
+		if ($v == false)
+		{
+			$adr = inet::gethostbyaddr(get_ip());
+			$domain = strtoupper(substr($adr, strrpos($adr, ".")));
+			tm::e(__CLASS__, __FUNCTION__);
+			return $domain;
+		}
+		tm::e(__CLASS__, __FUNCTION__);
+		return $v["country_code2"];
 	}
 
 	function show_periodic_documents(&$arr)
@@ -1235,6 +1262,7 @@ class site_show extends class_base
 
 	function _int_show_documents($docid)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		global $awt;
 		$awt->start("int-show-doc");
 		$d = get_instance(CL_DOCUMENT);
@@ -1382,6 +1410,7 @@ class site_show extends class_base
 		};
 		$this->vars($vars);
 
+		tm::e(__CLASS__, __FUNCTION__);
 		return $ct;
 	}
 
@@ -1420,6 +1449,7 @@ class site_show extends class_base
 
 	function do_show_documents(&$arr)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$disp = !empty($GLOBALS["real_no_menus"]) || !empty($_REQUEST["only_document_content"]) || ($this->sel_section_obj->prop("no_menus") == 1 || !empty($GLOBALS["print"]) || !empty($arr["content_only"]));
 
 		if (!$disp)
@@ -1460,6 +1490,7 @@ class site_show extends class_base
 				"charset" => aw_global_get("charset")
 			));
 			$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
+			tm::e(__CLASS__, __FUNCTION__);
 			return $this->parse();
 		}
 
@@ -1475,6 +1506,7 @@ class site_show extends class_base
 
 				return $this->parse();
 			}
+			tm::e(__CLASS__, __FUNCTION__);
 			return $docc;
 		}
 
@@ -1501,10 +1533,12 @@ class site_show extends class_base
 				"NO_DOC_CONTENT" => $this->parse("NO_DOC_CONTENT")
 			));
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function do_menu_images()
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$si_parent = $this->sel_section;
 		$imgs = false;
 		$smi = "";
@@ -1708,12 +1742,14 @@ class site_show extends class_base
 		{
 			$this->parse("NO_SEL_MENU_IMAGE_URL");
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	////
 	// !build "you are here" links from the path
 	function make_yah()
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$path = $this->path;
 		$ya = "";
 		$cnt = count($path);
@@ -1899,10 +1935,12 @@ class site_show extends class_base
 				"HAS_YAH" => $this->parse("HAS_YAH")
 			));
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function make_langs()
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$lang_id = aw_global_get("lang_id");
 		$var = "set_lang_id";
 		if (aw_ini_get("user_interface.full_content_trans"))
@@ -1925,6 +1963,7 @@ class site_show extends class_base
 				"se_lang_id" => $lang_id,
 				"lang_code" => $sel_lang["acceptlang"]
 			));
+			tm::e(__CLASS__, __FUNCTION__);
 			return "";
 		}
 		$num = 0;
@@ -2072,6 +2111,7 @@ class site_show extends class_base
 			"se_lang_id" => $lang_id,
 			"lang_code" => $sel_lang["acceptlang"]
 		));
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 
@@ -2219,6 +2259,7 @@ class site_show extends class_base
 
 	function do_draw_menus($arr, $filename = NULL, $tpldir = NULL, $tpl = NULL)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		if ($filename == NULL)
 		{
 			$filename = $this->compiled_filename;
@@ -2274,12 +2315,15 @@ class site_show extends class_base
 
 		if ($filename !== NULL)
 		{
+			tm::e(__CLASS__, __FUNCTION__);
 			return $this->parse();
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function exec_subtemplate_handlers($arr)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		// go over all class defs and check if that class is the handler for any subtemplates
 		$promo_done = false;
 		$tmp = aw_ini_get("classes");
@@ -2308,6 +2352,7 @@ class site_show extends class_base
 					}
 					$fl = $cldef["file"];
 					enter_function("mainc-$fl");
+					tm::s(__CLASS__, __FUNCTION__, $fl);
 					if (!$inst instanceof main_subtemplate_handler)
 					{
 						error::raise(array(
@@ -2321,6 +2366,7 @@ class site_show extends class_base
 						"request" => $_REQUEST
 					));
 					exit_function("mainc-$fl");
+					tm::e(__CLASS__, __FUNCTION__, $fl);
 				}
 				$awt->stop("mainc");
 			}
@@ -2346,14 +2392,17 @@ class site_show extends class_base
 				if ($has_tpl)
 				{
 					$awt->start("after-mainc-promo");
+					tm::s(__CLASS__, __FUNCTION__, "promo");
 					$inst = get_instance(CL_PROMO);
 					$inst->on_get_subtemplate_content(array(
 						"inst" => &$this,
 					));
 					$awt->stop("after-mainc-promo");
+					tm::e(__CLASS__, __FUNCTION__, "promo");
 				}
 			}
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function is_in_path($s)
@@ -2377,6 +2426,7 @@ class site_show extends class_base
 			return;
 		}
 
+		tm::s(__CLASS__, __FUNCTION__);
 		$banner_server = aw_ini_get("menuedit.banner_server");
 		$ext = $this->cfg["ext"];
 		$uid = aw_global_get("uid");
@@ -2403,10 +2453,12 @@ class site_show extends class_base
 				"banner_".$name => $fc
 			));
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function make_final_vars()
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$section = $this->section_obj->id();
 		$frontpage = $this->cfg["frontpage"];
 
@@ -2622,6 +2674,7 @@ class site_show extends class_base
 				"HAS_ACTIVE_DOC" => $this->parse("HAS_ACTIVE_DOC")
 			));
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	// builds HTML popups
@@ -2687,6 +2740,7 @@ class site_show extends class_base
 	// !Creates a link for the menu
 	function make_menu_link($o, $lc = null)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		$this->skip = false;
 		$link_str = $o->trans_get_val("link");
 		if ($this->can("view", $o->meta("linked_obj")))
@@ -2913,6 +2967,7 @@ class site_show extends class_base
 			$su = aw_url_change_var("docid", null, $su);
 			$link = aw_url_change_var("set_doc_content_type", $sdct, $su);
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 		return $link;
 	}
 
@@ -2953,6 +3008,7 @@ class site_show extends class_base
 
 	function do_show_template($arr)
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		global $awt;
 
 		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
@@ -2987,6 +3043,7 @@ class site_show extends class_base
 		if (($docc = $this->do_show_documents($arr)) != "")
 		{
 			$awt->stop("do-show-template");
+			tm::e(__CLASS__, __FUNCTION__);
 			return $docc;
 		}
 
@@ -3030,6 +3087,7 @@ class site_show extends class_base
 		$rv = $this->parse();
 
 		$rv .= $this->build_popups();
+		tm::e(__CLASS__, __FUNCTION__);
 		return $rv;
 	}
 
@@ -3160,6 +3218,7 @@ class site_show extends class_base
 
 	function do_seealso_items()
 	{
+		tm::s(__CLASS__, __FUNCTION__);
 		foreach(aw_ini_get("menuedit.menu_defs") as $id => $_name)
 		{
 			if (!$this->can("view", $id))
@@ -3206,6 +3265,7 @@ class site_show extends class_base
 				));
 			}
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 	}
 
 	function __helper_menu_edit($menu)
@@ -3221,6 +3281,7 @@ class site_show extends class_base
 		{
 			return;
 		}
+		tm::s(__CLASS__, __FUNCTION__);
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("site_edit_".$menu->id());
 		if ($this->can("add", $menu->parent()))
@@ -3282,6 +3343,7 @@ class site_show extends class_base
 				"link" => $this->mk_my_orb("paste_menu", array("after" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
 			));
 		}
+		tm::e(__CLASS__, __FUNCTION__);
 		return $pm->get_menu();
 	}
 

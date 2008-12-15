@@ -494,6 +494,8 @@ EMIT_MESSAGE(MSG_MAIL_SENT)
 	**/
 	function get_class_picker($arr = array())
 	{
+		$addempty = null;
+		$only_addable = null;
 		extract($arr);
 		$cls = aw_ini_get("classes");
 		$clfs = aw_ini_get("classfolders");

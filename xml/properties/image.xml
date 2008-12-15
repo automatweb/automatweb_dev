@@ -106,6 +106,24 @@
             <caption>&amp;amp;Auml;ra kasuta galerii seadeid</caption>
       </property>
       <property>
+            <name>dg</name>
+            <group>general</group>
+            <type>datagrid</type>
+            <table>img_d</table>
+            <field>row_id</field>
+            <fields>
+                  <num_0>a</num_0>
+                  <num_1>b</num_1>
+                  <num_2>c</num_2>
+            </fields>
+            <captions>
+                  <num_0>1</num_0>
+                  <num_1>2</num_1>
+                  <num_2>3</num_2>
+            </captions>
+            <caption>Datagrid</caption>
+      </property>
+      <property>
             <name>show_conditions</name>
             <group>show_def</group>
             <type>chooser</type>
@@ -307,6 +325,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </images>
+            <img_d>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </img_d>
       </tableinfo>
       <reltypes>
             <MOD_COMMENT>

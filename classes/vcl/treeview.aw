@@ -1355,10 +1355,14 @@ class treeview extends class_base
 	**/
 	function tree_from_objects($arr)
 	{
+		$node_actions = null;
+		$item_name_props = null;
+		$show_num_child = null;
+		$add_change_url = null;
 		extract($arr);
 		$tv = get_instance(CL_TREEVIEW);
 		$aw_classes = get_class_picker (array ("field" => "def"));
-		$item_name_props = (array) $arr["item_name_props"];
+		$item_name_props = (array) ifset($arr, "item_name_props");
 
 		if (!isset($target_url))
 		{
@@ -1396,7 +1400,7 @@ class treeview extends class_base
 		}
 
 		$tv->start_tree($tree_opts);
-		if (!$arr["no_root_item"])
+		if (!ifset($arr, "no_root_item"))
 		{
 			if (array_key_exists($root_item->class_id(), $item_name_props))
 			{
@@ -1410,7 +1414,7 @@ class treeview extends class_base
 				$nm = parse_obj_name($root_item->trans_get_val("name"));
 			}
 
-			if ($var && $_GET[$var] == "")
+			if ($var && ifset($_GET, $var) == "")
 			{
 				$nm = "<b>".$nm."</b>";
 			}
@@ -1445,7 +1449,7 @@ class treeview extends class_base
 			$oid = $o->id();
 			$class_id = $o->class_id();
 
-			if ($var && $_GET[$var] == $oid)
+			if ($var && ifset($_GET, $var) == $oid)
 			{
 				$oname = "<b>".$oname."</b>";
 			}
@@ -1482,11 +1486,11 @@ class treeview extends class_base
 			}
 
 			$parent = $o->parent();
-			if ($arr["no_root_item"] && $parent == $root_item->id())
+			if (ifset($arr, "no_root_item") && $parent == $root_item->id())
 			{
 				$parent = 0;
 			}
-			if (!$arr["icon"])
+			if (!ifset($arr, "icon"))
 			{
 				$icon = (($class_id == CL_MENU) ? NULL : $ic->get_icon_url($class_id,""));
 			}

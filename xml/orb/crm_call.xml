@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_call" folder="crm" extends="class_base">
+	<class name="crm_call" folder="crm" extends="task">
 		<action name="search_contacts">
 			<function name="search_contacts">
 				<arguments>

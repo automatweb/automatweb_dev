@@ -3,4 +3,3 @@
 	<class name="sm_class_stats_group" folder="applications/clients/sm/class_stats" extends="class_base">
 	</class>
 </orb>
-		

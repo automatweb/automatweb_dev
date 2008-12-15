@@ -11,6 +11,7 @@
 		<action name="download_package_list" nologin="1" is_public="1" all_args="1">
 			<function name="download_package_list">
 				<arguments>
+					<required name="filter" type="array" />
 				</arguments>
 			</function>
 		</action>
@@ -18,6 +19,7 @@
 		<action name="download_package_properties" nologin="1" is_public="1" all_args="1">
 			<function name="download_package_properties">
 				<arguments>
+					<required name="id" type="oid" />
 				</arguments>
 			</function>
 		</action>
@@ -25,6 +27,7 @@
 		<action name="download_package_files" nologin="1" is_public="1" all_args="1">
 			<function name="download_package_files">
 				<arguments>
+					<required name="id" type="oid" />
 				</arguments>
 			</function>
 		</action>
@@ -46,12 +49,22 @@
 		<action name="download_package" nologin="1" is_public="1" all_args="1">
 			<function name="download_package">
 				<arguments>
+					<required name="pid" type="oid" />
 				</arguments>
 			</function>
 		</action>
 
 		<action name="upload_package" nologin="1" is_public="1" all_args="1">
 			<function name="upload_package">
+				<arguments>
+					<required name="id" type="oid" />
+					<required name="site_id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_package_server">
+			<function name="get_package_server">
 				<arguments>
 				</arguments>
 			</function>
@@ -60,6 +73,8 @@
 		<action name="download_package_file" nologin="1" is_public="1" all_args="1">
 			<function name="download_package_file">
 				<arguments>
+					<required name="id" type="oid" />
+					<required name="site_id" type="int" />
 				</arguments>
 			</function>
 		</action>

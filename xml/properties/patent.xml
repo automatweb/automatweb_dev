@@ -395,8 +395,7 @@
             <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <size>4</size>
+            <type>text</type>
             <caption>Lisaklasside l&amp;amp;otilde;iv</caption>
       </property>
       <classinfo>

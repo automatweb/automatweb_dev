@@ -927,8 +927,7 @@
             <min_prices>
                   <type>vbox</type>
                   <closeable>1</closeable>
-                  <area_caption>Kogu&amp;amp;nbsp;ruumi&amp;amp;nbsp;broneeringu&amp;amp;nbsp;miinimumhind</area_caption>
-                  <parent>middle_split</parent>
+                  <area_caption>Ruumibroneeringu&amp;amp;nbsp;miinimum-&amp;amp;nbsp;ja&amp;amp;nbsp;maksimumhind</area_caption>
                   <group>prices_general</group>
             </min_prices>
             <oh>

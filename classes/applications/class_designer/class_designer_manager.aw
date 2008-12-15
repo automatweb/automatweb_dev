@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.15 2008/11/20 13:56:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.16 2008/12/15 13:06:28 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -88,6 +88,22 @@
 
 				@property cl_usage_props_stats_list type=table no_caption=1 store=no parent=cl_usage_props_stats_right_split
 
+@default group=cl_usage_stats_tms
+
+	@layout cl_usage_stats_tms_split type=hbox width=20%:80%
+
+		@layout cl_usage_stats_tms_left type=vbox parent=cl_usage_stats_tms_split
+
+			@layout cl_usage_stats_tms_tree type=vbox area_caption=Saidid closeable=1 parent=cl_usage_stats_tms_left
+	
+				@property cl_usage_stats_tms_tree type=treeview no_caption=1 parent=cl_usage_stats_tms_tree store=no
+
+		@layout cl_usage_stats_tms_right type=vbox parent=cl_usage_stats_tms_split
+
+			@layout cl_usage_stats_tms_right_split type=hbox parent=cl_usage_stats_tms_right
+
+				@property cl_usage_stats_tms_list type=table no_caption=1 store=no parent=cl_usage_stats_tms_right_split
+
 
 @groupinfo mgr caption="Manager" submit=no
 @groupinfo rels caption="Seosed" submit=no
@@ -95,6 +111,7 @@
 @groupinfo cl_usage_stats caption="Statistika"
 	@groupinfo cl_usage_stats_clids caption="Klasside TOP" parent=cl_usage_stats submit=no
 	@groupinfo cl_usage_stats_props caption="Omadused" parent=cl_usage_stats submit=no
+	@groupinfo cl_usage_stats_tms caption="Ajad" parent=cl_usage_stats submit=no
 */
 
 class class_designer_manager extends class_base
@@ -154,7 +171,7 @@ class class_designer_manager extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["tf"] = $_REQUEST["tf"];
+		$arr["tf"] = ifset($_REQUEST, "tf");
 		$arr["classf_name"] = "";
 		$arr["ch_classf_name"] = "";
 		$arr["ch_classf_id"] = "";
@@ -1468,7 +1485,7 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			$clss = aw_ini_get("classes");
 			foreach($clss as $clid => $cld)
 			{
-				$pts = $this->make_keys(explode(",", $cld["parents"]));
+				$pts = $this->make_keys(explode(",", ifset($cld, "parents")));
 				if (isset($pts[$id]))
 				{
 					$arr["prop"]["vcl_inst"]->add_item($id, array(
@@ -1484,7 +1501,8 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		$clss = aw_ini_get("classes");
 		foreach($clss as $clid => $cld)
 		{
-			if ($cld["can_add"] == 1 && ($cld["parents"] == "" || $cld["parents"] == 0))
+			$ps = ifset($cld, "parents");
+			if (ifset($cld, "can_add") == 1 && ($ps == "" || $ps == 0))
 			{
 				$arr["prop"]["vcl_inst"]->add_item(0, array(
 					"name" => $cld["name"],
@@ -1568,6 +1586,162 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"align" => "left",
 			"sortable" => 1
 		));
+	}
+
+	function _get_cl_usage_stats_tms_tree($arr)
+	{
+		// tree by server / site
+		$server_list = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "orb_get_server_list",
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com"
+		));
+
+		$tv = $arr["prop"]["vcl_inst"];
+
+		$used_servers = array();
+		$site_list = get_instance("install/site_list")->get_local_list();
+		foreach($site_list as $site)
+		{
+			if ($site["site_used"] == 1)
+			{
+				if ($site["server_id"] == 0)
+				{
+					$site["server_id"] = -1;
+				}
+				$tv->add_item($site["server_id"], array(
+					"id" => "site_".$site["id"],
+					"name" => ifset($arr, "request", "site") == $site["id"] ? html::strong($site["url"]) : $site["url"],
+					"url" => aw_url_change_var("site", $site["id"])
+				));
+				$used_servers[$site["server_id"]] = $site["server_id"];
+			}
+		}
+
+		foreach($used_servers as $server_id)
+		{
+			if ($server_id == -1)
+			{
+				$tv->add_item(0, array(
+					"id" => $server_id,
+					"name" => ifset($arr, "request", "server") == $server_id ? html::strong(t("Tundmatu")) : t("Tundmatu"),
+					"url" => aw_url_change_var("server", $server_id)
+				));
+				continue;
+			}
+
+			foreach($server_list as $server)
+			{
+				if ($server["id"] == $server_id)
+				{
+					$tv->add_item(0, array(
+						"id" => $server_id,
+						"name" => ifset($arr, "request", "server") == $server_id ? html::strong($server["name"]) : $server["name"],
+						"url" => aw_url_change_var("server", $server_id)
+					));
+				}
+			}
+		}
+	}
+
+	private function _init_t2($t)
+	{	
+		$t->define_field(array(
+			"name" => "server",
+			"caption" => t("Server"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "site",
+			"caption" => t("Sait"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "pageviews",
+			"caption" => t("Lehevaatamisi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "avg_time",
+			"caption" => t("Keskmine lehe aeg"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "max_time",
+			"caption" => t("Pikim lehe aeg"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "min_time",
+			"caption" => t("V&auml;ikseim lehe aeg"),
+			"align" => "center",
+			"sortable" => 1
+		));
+	}
+
+	function _get_cl_usage_stats_tms_list($arr)
+	{	
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_t2($t);
+
+		$wh = array();
+		if (!empty($arr["request"]["server"]))
+		{
+			$this->quote(&$arr["request"]["server"]);
+			$wh[] = " server_id = ".$arr["request"]["server"];
+		}
+		if (!empty($arr["request"]["site"]))
+		{
+			$this->quote(&$arr["request"]["site"]);
+			$wh[] = " site_id = ".$arr["request"]["site"];
+		}
+
+		$whs = join(" AND ", $wh);
+		if ($whs != "")
+		{
+			$whs = " WHERE ".$whs;
+		}
+		$this->db_query("SELECT server_id as server, site_id as site, count(*) as pageviews, AVG(exec_time) as avg_time, max(exec_time) as max_time, min(exec_time) as min_time FROM aw_timing_stats $whs GROUP BY server_id, site_id");
+		while ($row = $this->db_next())
+		{
+			$row["site"] = get_instance("install/site_list")->get_url_for_site($row["site"]);
+			$t->define_data($row);
+		}
+		$t->set_default_sortby("pageviews");
+		$t->set_default_sorder("desc");
+	}
+
+	/**
+		@attrib name=import_logs nologin="1"
+	**/
+	function import_logs($arr)
+	{
+		$base = aw_ini_get("site_basedir")."/files/timers/";
+		foreach(glob($base."tm-*") as $file)
+		{
+			echo "process $file <br>\n";
+			flush();
+			foreach(file($file) as $line)
+			{
+				if (preg_match("/(.*) request (.*)/", $line, $mt))
+				{	
+					list($d, $tm) = explode(" ", $mt[1]);
+					list($d, $m, $y) = explode(".", $d);
+					list($h, $i, $s) = explode(":", $tm);
+
+					$q = "INSERT INTO aw_timing_stats(server_id, site_id, exec_time, tm) values(1, ".aw_ini_get("site_id").", '".$mt[2]."', ".mktime($h, $i, $s, $m, $d, $y).")";
+					$this->db_query($q);
+				}
+			}
+			unlink($file);
+		}	
+		die("all done");
 	}
 }
 ?>

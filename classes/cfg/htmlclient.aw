@@ -1488,6 +1488,10 @@ class htmlclient extends aw_template
 				}
 
 				//miski errori n2itamise v6imalus layouti sisse
+				if (!isset($_SESSION["layout_error"]))
+				{
+					$_SESSION["layout_error"] = null;
+				}
 				$this->vars(array("layout_error" => $_SESSION["layout_error"][$layout_name] ? $_SESSION["layout_error"][$layout_name] : ""));
  				$this->vars(array("LAYOUT_ERROR_SUB" => $_SESSION["layout_error"][$layout_name] ? $this->parse("LAYOUT_ERROR_SUB") : ""));
 				unset($_SESSION["layout_error"][$layout_name]);

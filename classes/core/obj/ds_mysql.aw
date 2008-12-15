@@ -168,6 +168,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tables = array();
 		$tbl2prop = array();
 		$objtblprops = array();
+		$datagrids = array();
 		foreach($properties as $prop => $data)
 		{
 			if (isset($data["store"]) && $data["store"] === "no")
@@ -180,6 +181,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$data["table"] = "objects";
 			}
 
+			if ($data["type"] == "datagrid")
+			{
+				$datagrids[$prop] = $data;
+			}
+			else
 			if ($data["table"] !== "objects")
 			{
 				$tables[$data["table"]] = $data["table"];
@@ -191,7 +197,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 		$conn_prop_vals = array();
-          $conn_prop_fetch = array();
+		$conn_prop_fetch = array();
 
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
@@ -239,8 +245,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// fix old broken databases where brother_of may be 0 for non-brother objects
 		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
 
-///		$conn_prop_vals = array();
-//		$conn_prop_fetch = array();
+		foreach($datagrids as $g_pn => $g_prop)
+		{
+			// fetch all rows from the table
+			$q = "SELECT * FROM ".$g_prop["table"]." WHERE ".$tableinfo[$g_prop["table"]]["index"]." = ".$object_id." ORDER BY ".$g_prop["field"];
+			$this->db_query($q);
+			$val = array();
+			while ($row = $this->db_next())
+			{
+				$val[$row[$g_prop["field"]]] = $row;
+			}
+			$ret[$g_pn] = $val;
+		}
 
 		// do a query for each table
 		foreach($tables as $table)
@@ -919,6 +935,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
 				if (isset($propvalues[$prop['name']]))
 				{
+					if ($prop["type"] == "datagrid")
+					{
+						continue;
+					}
 					if ($prop['method'] == "serialize")
 					{
 						if ($prop['field'] == "meta" && $prop["table"] == "objects")
@@ -991,6 +1011,47 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
+		// make datagrid inserts
+		foreach($tbls as $tbl => $tbld)
+		{
+			if ($tbl == "")
+			{
+				continue;
+			}
+
+			foreach($tbld as $prop)
+			{
+				if ($prop["type"] == "datagrid")
+				{
+					$data_qs[] = "DELETE FROM ".$prop["table"]." WHERE ".$tableinfo[$prop["table"]]["index"]." = ".$objdata["oid"];
+					// insert data back
+					$data = $propvalues[$prop["name"]];
+					if (is_array($data))
+					{
+						foreach($data as $idx => $data_row)
+						{
+							$tmp = array();
+							foreach($prop["fields"] as $field_name)
+							{
+								$this->quote(&$data_row[$field_name]);
+								$tmp[$field_name] = $data_row[$field_name];
+							}
+
+							if ($idx < 1)
+							{
+								$data_qs[] = "INSERT INTO ".$prop["table"]."(".$tableinfo[$prop["table"]]["index"].",".join(",", map('`%s%``', $prop["fields"])).") VALUES(".$objdata["oid"].",".join(",", map("'%s'", $tmp)).") ";
+							}
+							else
+							{
+								$data_qs[] = "INSERT INTO ".$prop["table"]."(".$prop["field"].",".$tableinfo[$prop["table"]]["index"].",".join(",", map('`%s%``', $prop["fields"])).") VALUES(".$idx.",".$objdata["oid"].",".join(",", map("'%s'", $tmp)).") ";
+							}
+						}
+					}
+				}
+			}
+		}
+		
+//echo (dbg::dump($data_qs));
 		// check exclusivity
 		if ($arr["exclusive_save"])
 		{

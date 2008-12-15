@@ -3947,7 +3947,7 @@ class class_base extends aw_template
 				$ot = get_instance($reginst);
 				if (is_callable(array($ot,"process_vcl_property")))
 				{
-					$argblock["prop"] = $property;
+					$argblock["prop"] = &$property;
 					$argblock["clid"] = $this->clid;
 					$res = $ot->process_vcl_property($argblock);
 

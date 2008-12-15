@@ -162,13 +162,15 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="gt_change" all_args="1">
+
+		<action name="gt_change">
 			<function name="gt_change">
 				<arguments>
-					<optional name="return_url" />
-					<required name="id" />
+					<required name="id" type="oid" />
+					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
 		</action>
+
 	</class>
 </orb>

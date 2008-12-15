@@ -15,5 +15,14 @@
 			</function>
 		</action>
 
+		<action name="handle_show_cnt">
+			<function name="handle_show_cnt">
+				<arguments>
+					<required name="action" type="string" />
+					<required name="id" type="OID" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

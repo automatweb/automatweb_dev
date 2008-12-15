@@ -181,5 +181,26 @@
 			</function>
 		</action>
 
+		<action name="on_connect_to_meeting">
+			<function name="on_connect_to_task">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="phones">
+			<function name="phones">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="emails">
+			<function name="emails">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

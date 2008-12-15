@@ -21,7 +21,18 @@
             <store>connect</store>
             <sort_callback>CL_PERSONNEL_MANAGEMENT::cmp_function</sort_callback>
             <field>field</field>
-            <caption>Tegevusala</caption>
+            <caption>Tegevusala (muutuja)</caption>
+      </property>
+      <property>
+            <name>sector</name>
+            <table>personnel_management_job_wanted</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTOR</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>sector</field>
+            <caption>Tegevusala (tegevusala objekt)</caption>
       </property>
       <property>
             <name>job_type</name>
@@ -237,6 +248,11 @@
                   </clid>
                   <caption>Asukoht (teine valik)</caption>
             </LOCATION2>
+            <SECTOR>
+                  <value>8</value>
+                  <clid>CL_CRM_SECTOR</clid>
+                  <caption>Tegevusvaldkond</caption>
+            </SECTOR>
       </reltypes>
 </properties>
 

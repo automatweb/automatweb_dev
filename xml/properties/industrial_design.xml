@@ -352,7 +352,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>4</size>
-            <caption>Variandid (alates 3-ndast)</caption>
+            <caption>Variandid (alates 3-dast)</caption>
       </property>
       <classinfo>
             <syslog_type>ST_INDUSTRIAL_DESIGN</syslog_type>

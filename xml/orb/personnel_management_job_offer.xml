@@ -55,6 +55,13 @@
 			</function>
 		</action>
 
+		<action name="autocomp_company" all_args="1">
+			<function name="autocomp_company">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="autocomp_profession" all_args="1">
 			<function name="autocomp_profession">
 				<arguments>

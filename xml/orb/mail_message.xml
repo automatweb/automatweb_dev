@@ -96,5 +96,13 @@
 			</function>
 		</action>
 
+		<action name="mails_from_persons_and_companies">
+			<function name="mails_from_persons_and_companies">
+				<arguments>
+					<required name="ids" type="array(oid)" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

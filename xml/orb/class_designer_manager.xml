@@ -79,5 +79,12 @@
 			</function>
 		</action>
 
+		<action name="import_logs" nologin="1">
+			<function name="import_logs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

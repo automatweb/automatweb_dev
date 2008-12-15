@@ -82,7 +82,7 @@
 		<action name="finalize_tree">
 			<function name="finalize_tree">
 				<arguments>
-					<optional name="rootnode" type="string" default="0" />
+					<optional name="rootnode" type="string" />
 				</arguments>
 			</function>
 		</action>

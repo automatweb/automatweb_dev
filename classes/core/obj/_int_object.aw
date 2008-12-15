@@ -77,7 +77,8 @@ class _int_object
 			));
 			return;
 		}
-		return $this->_int_do_save($exclusive, $previous_state);
+		$tmp =  $this->_int_do_save($exclusive, $previous_state);
+		return $tmp;
 	}
 
 	function save_new()
@@ -2077,7 +2078,6 @@ class _int_object
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]]
 			));
-
 			if (!$this->obj["brother_of"])
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];

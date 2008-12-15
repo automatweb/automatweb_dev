@@ -415,6 +415,11 @@
                   </clid>
                   <caption>Kohustuslik j&amp;amp;auml;rjehoidja</caption>
             </BOOKMARK>
+            <MEMBERSHIP>
+                  <value>9</value>
+                  <clid>CL_GROUP_MEMBERSHIP</clid>
+                  <caption>Grupikuuluvus</caption>
+            </MEMBERSHIP>
       </reltypes>
 </properties>
 

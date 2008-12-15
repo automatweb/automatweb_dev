@@ -122,6 +122,9 @@ class automatweb
 		self::$instance = $aw;
 		self::$request = $request;
 		self::$result = $result;
+
+//		require_once(aw_ini_get("classdir")."/core/tm.aw");
+		tm::request_start();
 	}
 
 	/**
