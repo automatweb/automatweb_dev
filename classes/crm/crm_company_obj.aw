@@ -655,13 +655,29 @@ class crm_company_obj extends _int_object
 		{
 			$arr["parent"] = $this->id();
 		}
-		$o = new object();
-		$o->set_class_id(CL_CRM_ADDRESS);
-		$o->set_parent($arr["parent"]);
+		if($arr["use_existing"])
+		{
+			$o = $this->get_first_obj_by_reltype("RELTYPE_ADDRESS");
+		}
+		if(!$o)
+		{
+			$o = new object();
+			$o->set_class_id(CL_CRM_ADDRESS);
+			$o->set_parent($arr["parent"]);
+		}
+
 		$o->set_name($arr["address"]);
 		$o->set_prop("aadress" , $arr["address"]);
 		$o->set_prop("postiindeks" , $arr["index"]);
 		$o->save();
+
+		$conns = $this->connections_from(array("type" => "RELTYPE_ADDRESS"));
+		if(!sizeof($conns))
+		{
+			$this->set_prop("address_id" , $o->id());
+			$this->save();
+		}
+
 		$this->connect(array("to" => $o->id(),  "type" => "RELTYPE_ADDRESS"));
 		if($arr["county"])
 		{
@@ -672,6 +688,26 @@ class crm_company_obj extends _int_object
 			$o->set_city($arr["city"]);
 		}
 		return $o->id();
+	}
+
+	/** Adds address
+		@attrib api=1 params=name
+		@param county optional type=string/oid
+			county
+		@param city optional type=string/oid
+			city
+		@param address optional type=string
+			street/village etc
+		@param index optional type=string
+		@param parent optional type=oid
+			parent for new address object
+		@return oid
+			address object id
+	**/
+	public function set_address($arr)
+	{
+		$arr["use_existing"] = 1; 
+		return $this->add_address($arr);
 	}
 
 	public function add_url($address)

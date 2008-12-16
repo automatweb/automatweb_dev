@@ -29,7 +29,7 @@ class crm_address_obj extends _int_object
 			$filter["class_id"] = CL_CRM_COUNTY;
 			$filter["lang_id"] = array();
 			$filter["site_id"] = array();
-			$filter["name"] = array();
+			$filter["name"] = $county;
 			$ol = new object_list($filter);
 			$o = reset($ol->arr());
 		}
@@ -57,7 +57,6 @@ class crm_address_obj extends _int_object
 	**/
 	public function set_city($city)
 	{
-
 		if(!$city)
 		{
 			return null;
@@ -72,7 +71,7 @@ class crm_address_obj extends _int_object
 			$filter["class_id"] = CL_CRM_CITY;
 			$filter["lang_id"] = array();
 			$filter["site_id"] = array();
-			$filter["name"] = array();
+			$filter["name"] = $city;
 			$ol = new object_list($filter);
 			$o = reset($ol->arr());
 		}
