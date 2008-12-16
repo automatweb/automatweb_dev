@@ -283,7 +283,7 @@ class add_tree_conf extends class_base
 		$ret = array();
 
 		$this->get_meta_classes($o, $r, $v, &$ret);
-		return $ret;	
+		return $ret;
 	}
 
 	private function get_meta_classes($o, $r, $v, $ret)
@@ -632,7 +632,7 @@ class add_tree_conf extends class_base
 		$o->set_meta("alias_add", $alias_add);
 	}
 
-	/** sets access to a single class 
+	/** sets access to a single class
 		@attrib api=1 params=pos
 
 		@param o required type=cl_add_tree_conf
@@ -770,9 +770,9 @@ class add_tree_conf extends class_base
 			};
 
 			$parens = explode(",", $cldata["parents"]);
-			if ($this->visible["obj"][$clid])
+			if (!empty($this->visible["obj"][$clid]))
 			{
-				if ($this->usable[$clid])
+				if (!empty($this->usable[$clid]))
 				{
 					foreach($parens as $paren)
 					{
@@ -804,7 +804,7 @@ class add_tree_conf extends class_base
 
 		foreach($folders as $folder_id => $folder_data)
 		{
-			if (!$this->visible["fld"][$folder_id])
+			if (empty($this->visible["fld"][$folder_id]))
 			{
 				continue;
 			}
@@ -840,8 +840,6 @@ class add_tree_conf extends class_base
 			};
 
 		}
-
-		//arr($by_parent);
 
 		return $by_parent;
 	}

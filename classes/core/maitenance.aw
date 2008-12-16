@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.5 2008/04/15 07:08:28 kristo Exp $
-// maitenance.aw - Saidi hooldus 
+// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.6 2008/12/16 11:56:18 voldemar Exp $
+// maitenance.aw - Saidi hooldus
 /*
 
 @classinfo syslog_type=ST_MAITENANCE relatiomgr=yes maintainer=kristo
@@ -20,16 +20,16 @@ class maitenance extends class_base
 		));
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=cache_clear params=name default="0" nologin="1"
-		
+
 		@param clear optional
 		@param list optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 		id - the id of the object where the alias will be attached
 		alias - the id of the object to attach as an alias
@@ -40,9 +40,9 @@ class maitenance extends class_base
 	function cache_clear($args)
 	{
 		echo "<br />
-		<input type='button' value='clear cache' 
+		<input type='button' value='clear cache'
 		onclick=\"document.location='".$this->mk_my_orb('cache_clear', array('clear' => '1'))."'\"><br />";
-		
+
 		$this->files = array();
 		$this->files_from_sd(aw_ini_get("cache.page_cache"));
 		echo 'about to delete '.count($this->files).'files<br />';
@@ -56,17 +56,17 @@ class maitenance extends class_base
 			echo '<br />'.count($this->files).' files deleted!!<br />';
 		}
 
-		if (!$args["no_die"])
+		if (empty($args["no_die"]))
 		{
 			die();
 		}
 	}
-	
+
 	function files_from_sd($dir)
 	{
-		if ($dh = opendir($dir)) 
+		if ($dh = opendir($dir))
 		{
-			while (($file = readdir($dh)) !== false) 
+			while (($file = readdir($dh)) !== false)
 			{
 				$fp = $dir."/".$file;
 				if (!($file == "." || $file == ".."))
@@ -112,9 +112,9 @@ class maitenance extends class_base
 	function _req_cupd($dir)
 	{
 		$files = array();
-		if ($DH = @opendir($dir)) 
+		if ($DH = @opendir($dir))
 		{
-			while (false !== ($file = readdir($DH))) 
+			while (false !== ($file = readdir($DH)))
 			{
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))

@@ -1163,7 +1163,7 @@ class orb extends aw_template
 		}
 
 		error::raise_if(!$atc->can_access_class(obj($conf), $class),array(
-			"id" => ERR_ACL,
+			"id" => "ERR_ACL",
 			"msg" => sprintf(t("orb::check_class_access(%s): no permissions to access the class! (denied by %s)"), $class, $conf)
 		));
 	}
