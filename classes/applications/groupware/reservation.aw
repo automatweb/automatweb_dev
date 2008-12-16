@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.151 2008/12/15 12:58:50 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.152 2008/12/16 14:03:48 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -788,6 +788,27 @@ class reservation extends class_base
 				{
 					$prop["error"] = t("Broneeringu l&ouml;pp peab olema hiljem kui algus");
 					return PROP_FATAL_ERROR;
+				}
+				if(!$arr["new"])
+				{
+					$rdata = $this->get_resources_data($arr["obj_inst"]->id());
+					if(is_array($rdata) && count($rdata))
+					{
+						$s_o = $arr["obj_inst"]->prop("start1");
+						$e_o = $arr["obj_inst"]->prop("end");
+						foreach($rdata as $res => $data)
+						{
+							if(date("H.i",$s_o) == date("H.i", $data["start1"]) && date("H.i",$e_o) == date("H.i", $data["end"]))
+							{
+								$rdata[$res]["start1"] = date_edit::get_timestamp($s);
+								$rdata[$res]["end"] = date_edit::get_timestamp($e);
+							}
+						}
+						$this->set_resources_data(array(
+							"reservation" => $arr["obj_inst"]->id(),
+							"resources_info" => $rdata,
+						));
+					}
 				}
 				break;
 				
