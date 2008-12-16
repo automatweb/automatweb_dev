@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo  maintainer=kristo
+@classinfo maintainer=voldemar
 */
 
 if (!defined("AW_DIR"))

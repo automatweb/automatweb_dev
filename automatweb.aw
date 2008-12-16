@@ -1,5 +1,9 @@
 <?php
 
+/*
+@classinfo maintainer=voldemar
+*/
+
 $__FILE__ = __FILE__;//!!! to check if works with zend encoder (__FILE__)
 $aw_dir = str_replace("\\", "/", dirname($__FILE__)) . "/";
 $aw_dir = str_replace("//", "/", $aw_dir);
