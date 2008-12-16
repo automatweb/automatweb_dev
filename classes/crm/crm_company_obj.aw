@@ -671,12 +671,12 @@ class crm_company_obj extends _int_object
 		$o->set_prop("postiindeks" , $arr["index"]);
 		$o->save();
 
-		$conns = $this->connections_from(array("type" => "RELTYPE_ADDRESS"));
+/*		$conns = $this->connections_from(array("type" => "RELTYPE_ADDRESS"));
 		if(!sizeof($conns))
 		{
 			$this->set_prop("address_id" , $o->id());
 			$this->save();
-		}
+		}*/
 
 		$this->connect(array("to" => $o->id(),  "type" => "RELTYPE_ADDRESS"));
 		if($arr["county"])

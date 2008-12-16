@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.20 2008/12/16 16:25:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.21 2008/12/16 19:28:17 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -65,7 +65,7 @@ class crm_category extends class_base
 		));
 	}
 
-	var $per_page = 300;
+	var $per_page = 500;
 
 	function get_property($arr)
 	{
@@ -128,7 +128,7 @@ class crm_category extends class_base
 
 	function dbg($text)
 	{
-		print $text."<br>";
+		print $text.", ";
 		flush();
 	}
 
@@ -154,10 +154,6 @@ class crm_category extends class_base
 		$shorts = $this->get_corform_shorts();
 		foreach($data_array as $row => $d)
 		{
-			if($row > $this->per_page)
-			{
-				break;
-			}
 			if(!(isset($_SESSION["cust_import"]["set_rows"][$row]) && $_SESSION["cust_import"]["set_rows"][$row]))//pole valitud muutmiseks
 			{
 				continue;
@@ -191,15 +187,38 @@ class crm_category extends class_base
 				{
 					$val = trim($val, "\";");
 					$pn = $_SESSION["cust_import"]["field_props"][$prop_id];
-					$this->dbg("salvestab ".$val. " propiks ".$pn);
+					$this->dbg($pn . " = ".$val);
 					switch($pn)
 					{
 						case "name":
-//							$tail = substr($val, $last_ent);
-//							if(in_array(trim($tail) , $shorts))
-//							{
-//								
-//							}
+							$name_array = explode(" " , $val);
+							if(sizeof($name_array) > 1)
+							{
+								$tail = end($name_array);
+								$last_ent = strpos($val , $tail, (strlen($val)-5));
+								$lf = null;
+								if(in_array($tail , $shorts))
+								{
+									$val = trim(substr($val, 0 , $last_ent));
+									
+									foreach($shorts as $key => $v)
+									{
+										if($v == $tail)
+										{
+											$lf = $key;
+										}
+									}
+									if(!$val)
+									{
+										$this->dbg("org sisaldab vaid 6iguslikku vormi");die();
+									}
+								}
+								$this->dbg("nimi l2ks ".$val. " , 6iguslik vorm: ".$lf." - ".$tail);
+								if($lf)
+								{
+									$customer->set_legal_form($lf);
+								}
+							}
 							$customer->set_name($val);
 							break;
 						case "sector.code":
@@ -283,7 +302,7 @@ class crm_category extends class_base
 					"sec_code" => $sec_code,
 					"parent" => $parent,
 					));
-					}
+			}
 			if($county || $city || $address || $post_index)
 			{//oleks vaja kuidagi m22rata aadressi elementidele kataloogi kus neid ei kustutata 2ra lambist
 				$customer->set_address(array(
@@ -306,23 +325,24 @@ class crm_category extends class_base
 				$rel->set_prop("buyer_contact_person" , $cp);
 				$rel->save();
 			}
-			$customer->save();arr($customer); arr($customer->prop("reg_nr"));
+			$customer->save();
 			$customer->add_category($arr["id"]);
 			$row++;
 
-//			if($row>100)
-//			{
-//				break;
-//			}
+			if($row > $this->per_page)
+			{
+				$this->end_import($arr);
+			}
 		}
+		$this->end_import($arr);
+	}
 
+	function end_import($arr)
+	{
 		echo "<!--\n";
 		print get_time_stats();
 		echo "-->\n";
 		$this->reset_import_data(array("only_first_ones" => 1));
-
-		
-
 		print html::href(array("url" => $arr["post_ru"] , "caption" => t("J&auml;rgmised")));
 		die();
 	}
@@ -453,8 +473,12 @@ class crm_category extends class_base
 		$per_page = $this->per_page;
 		$page = isset($_GET["ft_page"]) ? $_GET["ft_page"] : 0;
 		$data = $this->get_import_data();
-		$data_array =  array_merge(array(" ") , explode("\n" , $data));//arr($data_array);
+		$data_array =  array_merge(array(" ") , explode("\n" , $data));
 		$prop_list = explode($this->separator , $data_array[1]);
+		if(!(sizeof($prop_list) > 1))
+		{
+			$prop_list = explode($this->separator , $data_array[3]);
+		}
 		$x = 0;
 		$t = &$arr["prop"]["vcl_inst"];
 
@@ -509,15 +533,16 @@ class crm_category extends class_base
 
 		while ($x < $to)
 		{
-			if($x > ($page+1) * $per_page || $x < $page * $per_page)
+			if(!isset($data_array[$x]))
+			{
+				break;
+			}
+			if($x > ($page+1) * $per_page || $x < $page * $per_page || !$data_array[$x])
 			{
 				$x++;
 				continue;
 			}
-			if(!$data_array[$x])
-			{
-				break;
-			}
+
 			unset($row_data);
 			$data = array();
 			$y = 0;
