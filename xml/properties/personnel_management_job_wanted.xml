@@ -70,8 +70,18 @@
             <name>load</name>
             <table>personnel_management_job_wanted</table>
             <group>general</group>
-            <type>select</type>
+            <type>hidden</type>
             <field>koormus</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
+      </property>
+      <property>
+            <name>load2</name>
+            <table>personnel_management_job_wanted</table>
+            <group>general</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_LOAD</reltype>
+            <store>connect</store>
+            <field>load2</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
       </property>
       <property>
@@ -82,7 +92,15 @@
             <size>5</size>
             <datatype>int</datatype>
             <field>palgasoov</field>
-            <caption>Palgasoov</caption>
+            <caption>Palgasoov (arv)</caption>
+      </property>
+      <property>
+            <name>pay_text</name>
+            <table>personnel_management_job_wanted</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>palgasoov_txt</field>
+            <caption>Palgasoov (tekst)</caption>
       </property>
       <property>
             <name>work_by_schedule</name>

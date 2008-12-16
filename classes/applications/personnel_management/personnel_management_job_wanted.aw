@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.19 2008/11/25 13:18:52 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.20 2008/12/16 13:37:35 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov
 /*
 
@@ -31,14 +31,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @property professions type=textarea field=ametinimetus
 @caption Soovitavad ametid
 
-@property load type=select field=koormus
+@property load type=hidden field=koormus
+@caption T&ouml;&ouml;koormus
+
+@property load2 type=classificator reltype=RELTYPE_LOAD store=connect
 @caption T&ouml;&ouml;koormus
 
 @property pay type=textbox size=5 datatype=int field=palgasoov
-@caption Palgasoov
+@caption Palgasoov (arv)
 
 #@property pay2 type=textbox size=5 datatype=int field=palgasoov2
-#@caption Palgasoov kuni
+#@caption Palgasoov kuni (arv)
+
+@property pay_text type=textbox field=palgasoov_txt
+@caption Palgasoov (tekst)
 
 @property work_by_schedule type=checkbox ch_value=1
 @caption Olen n&otilde;us t&ouml;&ouml;tama graafiku alusel
@@ -148,6 +154,15 @@ class personnel_management_job_wanted extends class_base
 				}
 				break;
 
+			case "load":
+				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
+					"clid" => CL_PERSONNEL_MANAGEMENT,
+					"name" => "cv_load",
+					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
+				));
+				$prop["options"] = $r[4]["list_names"];
+				break;
+
 			case "start_working":
 				$prop["options"] = $this->start_working_options;
 				break;
@@ -177,15 +192,6 @@ class personnel_management_job_wanted extends class_base
 						}
 					}
 				}
-				break;
-
-			case "load":
-				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
-					"clid" => CL_PERSONNEL_MANAGEMENT,
-					"name" => "cv_load",
-					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
-				));
-				$prop["options"] = $r[4]["list_names"];
 				break;
 
 			case "sbutton":
@@ -241,6 +247,7 @@ class personnel_management_job_wanted extends class_base
 			case "hobbies_vs_work":
 			case "handicaps":
 			case "additional_skills":
+			case "palgasoov_txt":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "text"
