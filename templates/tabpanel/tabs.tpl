@@ -107,11 +107,13 @@ function showhide_help(layer)
 	help_layerv = document.getElementById(layer);
 	if (help_layerv.style.display == 'none')
 	{
-			show_help(layer);
+		$(".help").EnablePropHelp();
+		show_help(layer);
 	}
 	else
 	{
-			close_help(layer);
+		$(".help").DisablePropHelp();
+		close_help(layer);
 	};
 }
 
