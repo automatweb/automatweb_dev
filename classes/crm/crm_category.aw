@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.19 2008/12/16 15:47:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.20 2008/12/16 16:25:44 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -286,7 +286,7 @@ class crm_category extends class_base
 					}
 			if($county || $city || $address || $post_index)
 			{//oleks vaja kuidagi m22rata aadressi elementidele kataloogi kus neid ei kustutata 2ra lambist
-				$customer->add_address(array(
+				$customer->set_address(array(
 					"county" => $county,
 					"city" => $city,
 					"address" => $address,
