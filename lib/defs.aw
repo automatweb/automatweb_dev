@@ -2394,4 +2394,41 @@ function eval_buffer($res)
 	}
 
 
+	function detect_country()
+	{
+		$ipl = get_instance("core/util/ip_locator/ip_locator");
+		$ip = get_ip();
+		$v = $ipl->search($ip);
+		if ($v == false)
+		{
+			$adr = inet::gethostbyaddr($ip);
+			$domain = strtoupper(substr($adr, strrpos($adr, ".")));
+			return $domain;
+		}
+		return $v["country_code2"];
+	}
+
+	function get_time_stats()
+	{
+		global $awt;
+		$ret = "";
+		if (is_object($awt) && !empty($GLOBALS["cfg"]["debug"]["profile"]))
+		{
+			$sums = $awt->summaries();
+			
+			while(list($k,$v) = each($sums))
+			{
+				$ret.= "$k = $v\n";
+			};
+			$ret.=" querys = ".aw_global_get("qcount")." \n";
+			if (function_exists("get_time"))
+			{
+				$ret.="total  = ".(get_time()-$GLOBALS["__START"])."\n";
+				$ret.="proc  = ".($GLOBALS["__END_DISP"]-$GLOBALS["__START"])."\n";
+				$ret.="print  = ".(get_time()-$GLOBALS["__END_DISP"])."\n";
+			}
+		}
+		return $ret;
+	}
+
 ?>
