@@ -518,8 +518,10 @@ class crm_company_obj extends _int_object
 			$this->set_prop("email_id" , $mo->id());
 			$this->save();
 		}
-
-		$this->connect(array("to" =>$mo->id(),  "type" => "RELTYPE_EMAIL"));
+		if(is_oid($mo->id()))//mul pole hetkel 6rna aimugi miks see m6nikord tyhja tulemuse annab
+		{
+			$this->connect(array("to" =>$mo->id(),  "type" => "RELTYPE_EMAIL"));
+		}
 		return $mo->id();
 	}
 
@@ -641,6 +643,7 @@ class crm_company_obj extends _int_object
 			city
 		@param address optional type=string
 			street/village etc
+		@param index optional type=string
 		@param parent optional type=oid
 			parent for new address object
 		@return oid
@@ -657,6 +660,7 @@ class crm_company_obj extends _int_object
 		$o->set_parent($arr["parent"]);
 		$o->set_name($arr["address"]);
 		$o->set_prop("aadress" , $arr["address"]);
+		$o->set_prop("postiindeks" , $arr["index"]);
 		$o->save();
 		$this->connect(array("to" => $o->id(),  "type" => "RELTYPE_ADDRESS"));
 		if($arr["county"])
@@ -815,6 +819,51 @@ class crm_company_obj extends _int_object
 			);
 		}
 		return $r;
+	}
+
+	/** returns customer relation object
+		@attrib api=1 params=pos
+		@param form optional
+			form oid or name
+		@returns object
+	**/	
+	public function set_legal_form($form)
+	{
+		if(!$form)
+		{
+			return false;
+		}
+		if(is_oid($form))
+		{
+			$form_id = $form;
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_CORPFORM,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"name" => $form,
+			));
+	
+			if($ol->count())
+			{
+				$form_id = reset($ol->ids());
+			}
+			else
+			{
+				$o = new object();
+				$o->set_class_id(CL_CRM_CORPFORM);
+				$o->set_parent($this->parent());
+				$o->set_name($form);
+				$o->save();
+				$form_id = $o->id();
+			}
+		}
+
+		$this->set_prop("ettevotlusvorm" , $form_id); 
+		$this->save();
+		return $form_id;
 	}
 }
 
