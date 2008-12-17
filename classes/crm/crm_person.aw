@@ -477,6 +477,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 	@property previous_job_edit type=releditor store=no mode=manager2 reltype=RELTYPE_PREVIOUS_JOB props=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop table_fields=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop
 	@caption Endised t&ouml;&ouml;kohad
 
+	@property previous_praxis_edit type=releditor store=no mode=manager2 reltype=RELTYPE_PREVIOUS_PRAXIS props=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop table_fields=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop
+	@caption Praktikakogemus
+
 	@property current_job_edit type=releditor store=no mode=manager2 reltype=RELTYPE_CURRENT_JOB props=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop table_fields=org,section2,profession,field,start,end,tasks,load,salary,salary_currency,benefits,directive_link,directive,contract_stop
 	@caption Praegused t&ouml;&ouml;kohad
 
@@ -915,7 +918,6 @@ caption S&otilde;bragrupid
 @reltype VARUSER10 value=65 clid=CL_META
 @caption kasutajadefineeritud muutuja 10
 
-
 @reltype PREVIOUS_JOB value=66 clid=CL_CRM_PERSON_WORK_RELATION
 @caption Eelnev t&ouml;&ouml;kogemus
 
@@ -993,6 +995,9 @@ caption S&otilde;bragrupid
 
 @reltype EDUCATION_2 value=92 clid=CL_CRM_PERSON_EDUCATION
 @caption Haridus (teine releditor)
+
+@reltype PREVIOUS_PRAXIS value=93 clid=CL_CRM_PERSON_WORK_RELATION
+@caption Eelnev praktikakogemus
 
 */
 
@@ -4004,9 +4009,12 @@ class crm_person extends class_base
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
-			$target_obj->disconnect(array(
-				"from" => $conn->prop("from"),
-			));
+			if($target_obj->is_connected_to(array('to'=>$conn->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $conn->prop("from"),
+				));
+			}
 		};
 	}
 
@@ -5329,15 +5337,14 @@ class crm_person extends class_base
 
 	/**
 		@attrib name=gen_job_pdf nologin="1"
-		@param id required type=int
-		@param cv_tpl optional type=int
+		@param id optional type=int
+		@param cv_tpl optional type=string
 	**/
 	function gen_job_pdf($arr)
 	{
-		$job = &obj($arr["id"]);
 		$pdf_gen = get_instance("core/converters/html2pdf");
 		//session_cache_limiter("public");
-		$tpl = $arr["request"]["cv_tpl"]?("cv/".basename($v[$arr["request"]["cv_tpl"]])):false;
+		$tpl = $arr["cv_tpl"] ? ("cv/".basename($arr["cv_tpl"])) : false;
 		die($pdf_gen->gen_pdf(array(
 			"filename" => $arr["id"],
 			"source" => $this->show_cv(array(
@@ -5377,7 +5384,7 @@ class crm_person extends class_base
 	/**
 		@attrib name=show_cv all_args=1 params=name
 
-		@parem id required type=oid acl=view
+		@parem id optional type=oid acl=view
 			The oid of the person viewed.
 
 		@param cv optional type=string
@@ -5392,6 +5399,14 @@ class crm_person extends class_base
 	**/
 	function show_cv($arr)
 	{
+		if(!is_oid($arr["id"]))
+		{
+			$arr["id"] = get_instance(CL_USER)->get_current_person();
+		}
+		if(!is_oid($arr["id"]))
+		{
+			return "";
+		}
 		get_instance("crm_person_obj")->handle_show_cnt(array(
 			"action" => "view",
 			"id" => $arr["alias"]["target"],
