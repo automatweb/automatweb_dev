@@ -22,7 +22,8 @@ class site_loginmenu extends class_base
 		$login_menu_id = site_show::_helper_get_login_menu_id();
 		$ol = new object_list(array(
 			"class_id" => CL_MENU,
-			"parent" => $login_menu_id
+			"parent" => $login_menu_id,
+			"status" => 2,
 		));
 		$tmp_L1 = "";
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
