@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.21 2008/12/16 19:28:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.22 2008/12/17 17:06:07 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -180,7 +180,7 @@ class crm_category extends class_base
 			arr("Klient " . $customer->id(). " - ".$row);
 			$rel = $customer->get_customer_relation(null, true);
 			$sec_name = $sec_code = $county = $city = $address = $contact_name = $contact_phone = $contact_mail = $contact_section = $contact_rank = "";
-
+			$contact_person2 = $contact_person3 = array();
 			foreach($prop_list as $prop_id => $val)
 			{
 				if($cd[$row][$prop_id])
@@ -281,6 +281,39 @@ class crm_category extends class_base
 						case "contact.phone":
 							$contact_phone = $val;
 							break;
+
+						case "contact.name2":
+							$contact_person2["name"] = $val;
+							break;
+						case "contact.rank2":
+							$contact_person2["rank"] = $val;
+							break;
+						case "contact.section2":
+							$contact_person2["section"] = $val;
+							break;
+						case "contact.mail2":
+							$contact_person2["mail"] = $val;
+							break;
+						case "contact.phone2":
+							$contact_person2["phone"] = $val;
+							break;
+
+						case "contact.name3":
+							$contact_person3["name"] = $val;
+							break;
+						case "contact.rank3":
+							$contact_person3["rank"] = $val;
+							break;
+						case "contact.section3":
+							$contact_person3["section"] = $val;
+							break;
+						case "contact.mail3":
+							$contact_person3["mail"] = $val;
+							break;
+						case "contact.phone3":
+							$contact_person3["phone"] = $val;
+							break;
+
 						case "phone":
 							if($cd[$row][$prop_id] == "2")
 							{
@@ -325,6 +358,34 @@ class crm_category extends class_base
 				$rel->set_prop("buyer_contact_person" , $cp);
 				$rel->save();
 			}
+
+			if(sizeof($contact_person2))
+			{
+				$cp = $customer->add_worker_data(array(
+					"worker" =>  $contact_person2["name"],
+					"profession" =>  $contact_person2["rank"],
+					"section" =>  $$contact_person2["section"],
+					"mail" => $contact_person2["mail"],
+					"phone" => $contact_person2["phone"],
+					"parent" => $parent,
+				));
+				$rel->set_prop("buyer_contact_person2" , $cp);
+				$rel->save();
+			}
+			if(sizeof($contact_person3))
+			{
+				$cp = $customer->add_worker_data(array(
+					"worker" =>  $contact_person3["name"],
+					"profession" =>  $contact_person3["rank"],
+					"section" =>  $$contact_person3["section"],
+					"mail" => $contact_person3["mail"],
+					"phone" => $contact_person3["phone"],
+					"parent" => $parent,
+				));
+				$rel->set_prop("buyer_contact_person3" , $cp);
+				$rel->save();
+			}
+
 			$customer->save();
 			$customer->add_category($arr["id"]);
 			$row++;
@@ -351,23 +412,37 @@ class crm_category extends class_base
 	{
 		$options =array(
 			"" => t("-- Vali omadus --"),
-			"name" => t("Kliendi Nimi"),
-			"sector.code" => t("Tegevusala kood"),
-			"reg_nr" => t("Registri_kood"),
-			"sector.name" => t("Tegevusala nimi"),
-			"county" => t("Maakond"),
-			"city" => t("Linn"),
-			"address" => t("Aadress"),
-			"index" => t("Postiindeks"),
-			"mail" => t("E-mail"),
-			"url" => t("Veebiaadress"),
-			"contact.name" => t("Kontaktisiku nimi"),
-			"contact.rank" => t("Kontaktisiku amet"),
-			"contact.section" => t("Kontaktisiku osakond"),
-			"contact.mail" => t("Kontaktisiku E-post"),
-			"contact.phone" => t("Kontaktisiku telefon"),
-			"phone" => t("Telefon"),
-			"legal_form" => t("&Otilde;iguslik vorm"),
+			"0" => t("ORGANISATSIOON"),
+			"name" => "- ".t("Organisatsiooni nimi"),
+			"reg_nr" => "- ".t("Registri_kood"),
+			"sector.code" => "- ".t("Tegevusala kood"),
+			"sector.name" => "- ".t("Tegevusala nimi"),
+			"county" => "- ".t("Maakond"),
+			"city" => "- ".t("Linn"),
+			"address" => "- ".t("Aadress"),
+			"index" => "- ".t("Postiindeks"),
+			"mail" => "- ".t("E-mail"),
+			"url" => "- ".t("Veebiaadress"),
+			"phone" => "- ".t("Telefon"),
+			"legal_form" => "- ".t("&Otilde;iguslik vorm"),
+			"1" => t("KONTAKTISIK 1"),
+			"contact.name" => "- ".t("Kontaktisiku nimi"),
+			"contact.rank" => "- ".t("Kontaktisiku amet"),
+			"contact.section" => "- ".t("Kontaktisiku osakond"),
+			"contact.mail" => "- ".t("Kontaktisiku E-mail"),
+			"contact.phone" => "- ".t("Kontaktisiku telefon"),
+			"2" => t("KONTAKTISIK 2"),
+			"contact.name2" => "- ".t("Kontaktisiku 2 nimi"),
+			"contact.rank2" => "- ".t("Kontaktisiku 2 amet"),
+			"contact.section2" => "- ".t("Kontaktisiku 2 osakond"),
+			"contact.mail2" => "- ".t("Kontaktisiku 2 E-mail"),
+			"contact.phone2" => "- ".t("Kontaktisiku 2 telefon"),
+			"3" => t("KONTAKTISIK 3"),
+			"contact.name3" => "- ".t("Kontaktisiku 3 nimi"),
+			"contact.rank3" => "- ".t("Kontaktisiku 3 amet"),
+			"contact.section3" => "- ".t("Kontaktisiku 3 osakond"),
+			"contact.mail3" => "- ".t("Kontaktisiku 3 E-mail"),
+			"contact.phone3" => "- ".t("Kontaktisiku 3 telefon"),
 		);
 		if($this->prop_names_set())
 		{
