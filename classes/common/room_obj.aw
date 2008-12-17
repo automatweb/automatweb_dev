@@ -567,13 +567,13 @@ class room_obj extends _int_object
 	}
 
 	//leiab p2eva reserveeringud massiivi...sorteeritult jne
-	private function get_day_res_data($time,$to)
+	private function get_day_res_data($time,$to,$active)
 	{
 		if($this->day_reservations[get_day_start($time)])
 		{
 			return $this->day_reservations[get_day_start($time)];
 		}
-		$reservations = $this->get_day_reservations($time, $to, 1);
+		$reservations = $this->get_day_reservations($time, $to, $active);
 		$data = array();
 		foreach($reservations->arr() as $key =>  $res)
 		{
@@ -604,9 +604,9 @@ class room_obj extends _int_object
 		@returns int
 			max reservations at the same time
 	 **/
-	function get_max_reservations_atst($time,$to)
+	function get_max_reservations_atst($time,$to,$active)
 	{
-		$data = $this->get_day_res_data($time,$to);
+		$data = $this->get_day_res_data($time,$to,$active);
 
 		//teeb massiivi mille elemendil on kirjas aeg ja see kas on l6pp v6i algus
 		//sorteerib aja j2rgi 2ra ja liidab alguseid ja lahutab l6ppe, mis iganes maksimum summa tuleb ongi tulemus
@@ -691,7 +691,7 @@ class room_obj extends _int_object
 
 	function get_time_reservations($start, $end)
 	{
-		$data = $this->get_day_res_data($start, $end);
+		$data = $this->get_day_res_data($start, $end, 1);
 		$res = array();
 		//suht keeruline osa nyyd see, et aru saaks mitmendasse tulpa on ta enne l2inud
 		//korjab need variandid kokku, kuhu juba on m6ni m2rgitud

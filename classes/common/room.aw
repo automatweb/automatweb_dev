@@ -1864,6 +1864,8 @@ class room extends class_base
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len , $settings->prop("show_unverified"));
 		$this->multi = $arr["obj_inst"]->prop("allow_multiple");
 		$this->extra_row = $arr["obj_inst"]->has_extra_row($this->start, $this->start + 24*3600*$len);
+		$this->show_unverified = $settings->prop("show_unverified");
+
 
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
@@ -3087,7 +3089,7 @@ class room extends class_base
 				if($this->multi && is_oid($this->id))
 				{
 					$room = obj($this->id);
-					$max = $room->get_max_reservations_atst($tm , $tm + 24*3600);
+					$max = $room->get_max_reservations_atst($tm , $tm + 24*3600 , !($this->show_unverified));
 					//$this->calendar_colspan[$i] = $max + 1;
 					$x = 0;
 					while ($x < $max)
