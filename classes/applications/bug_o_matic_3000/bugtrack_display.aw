@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.20 2008/12/15 12:36:08 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.21 2008/12/17 13:17:14 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -867,7 +867,6 @@ class bugtrack_display extends class_base
 		{
 			$sects[aw_url_change_var("sect_filter", $sect_id, get_ru())] = obj($sect_id)->name();
 		}
-		arr($sects);
 		if ($this->can("view", $sect_id))
 		{
 			$this->_recur_sect_list($sects, obj($sect_id));
