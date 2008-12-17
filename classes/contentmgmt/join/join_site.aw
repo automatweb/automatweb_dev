@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.77 2008/11/06 18:51:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.78 2008/12/17 16:14:47 markop Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -828,7 +828,8 @@ class join_site extends class_base
 								"name" => "p_adr_ctry",
 								"caption" => t("Maa"),
 								"type" => "select",
-								"options" => $adr_inst->get_country_list()
+								"options" => $adr_inst->get_country_list(),
+								"value" => detect_country(),
 							);
 							$tp["p_adr_zip"] = array(
 								"name" => "p_adr_zip",
