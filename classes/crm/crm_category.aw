@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.22 2008/12/17 17:06:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.23 2008/12/17 18:15:51 markop Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -183,7 +183,7 @@ class crm_category extends class_base
 			$contact_person2 = $contact_person3 = array();
 			foreach($prop_list as $prop_id => $val)
 			{
-				if($cd[$row][$prop_id])
+				if(isset($cd[$row][$prop_id]) && $cd[$row][$prop_id] && $val)
 				{
 					$val = trim($val, "\";");
 					$pn = $_SESSION["cust_import"]["field_props"][$prop_id];
@@ -196,8 +196,8 @@ class crm_category extends class_base
 							{
 								$tail = end($name_array);
 								$last_ent = strpos($val , $tail, (strlen($val)-5));
-								$lf = null;
-								if(in_array($tail , $shorts))
+								$lf = null;arr($tail);
+								if($tail && in_array($tail , $shorts))
 								{
 									$val = trim(substr($val, 0 , $last_ent));
 									
@@ -385,7 +385,6 @@ class crm_category extends class_base
 				$rel->set_prop("buyer_contact_person3" , $cp);
 				$rel->save();
 			}
-
 			$customer->save();
 			$customer->add_category($arr["id"]);
 			$row++;

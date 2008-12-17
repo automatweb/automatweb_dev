@@ -169,7 +169,11 @@ class crm_person_work_relation_fix extends _int_object
 		{
 			$conn->delete();
 		}
-		$this->connect(array("to" =>$o->id(), "type" => "RELTYPE_PHONE"));
+		//mis kuradi jama see on - m6nikord ei saa just tehtud objekti id'd k2tte
+		if($o->id())
+		{
+			$this->connect(array("to" =>$o->id(), "type" => "RELTYPE_PHONE"));
+		}
 		return $o->id();
 	}
 
