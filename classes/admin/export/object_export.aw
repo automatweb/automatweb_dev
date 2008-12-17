@@ -366,7 +366,7 @@ class object_export extends class_base
 				if (substr($pn, 0, 6) == "userim")
 				{
 					$imgo = $o->get_first_obj_by_reltype("RELTYPE_IMAGE".substr($pn, 6));
-					if ($imgo)
+					if ($imgo && $imgo->class_id() == CL_IMAGE)
 					{
 						$imgi = $imgo->instance();
 						$dat[$pn] = $imgi->get_url_by_id($imgo->id());
@@ -377,7 +377,7 @@ class object_export extends class_base
 				{
 					// link to file
 					$fileo = $o->get_first_obj_by_reltype("RELTYPE_FILE".substr($pn, 8));
-					if ($fileo)
+					if ($fileo && $fileo->class_id() == CL_FILE)
 					{
 						$filei = $fileo->instance();
 						$dat[$pn] = $filei->get_url($fileo->id(), $fileo->name());
