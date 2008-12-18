@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.89 2008/11/25 16:33:47 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.90 2008/12/18 11:12:33 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -373,6 +373,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 				@property cv_schl type=textbox size=18 parent=haridus captionside=top store=no
 				@caption Kool
 
+				@property cv_faculty type=textbox size=18 parent=haridus captionside=top store=no
+				@caption Teaduskond
+
+				@property cv_speciality type=textbox size=18 parent=haridus captionside=top store=no
+				@caption Eriala
+
 				@property cv_schl_area type=textbox size=18 parent=haridus captionside=top store=no
 				@caption Valdkond
 
@@ -454,6 +460,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 				@property cv_wrk_load type=select multiple=1 parent=t88kogemus captionside=top store=no
 				@caption T&ouml;&ouml;koormus
 
+				@property cv_praxis type=chechbox ch_value=1 parent=t88kogemus captionside=top store=no
+				@caption Otsi ka praktikakogemusi
+
 			@layout cv_search_buttons type=hbox parent=employee_search
 
 				@property cv_search_button type=submit parent=cv_search_buttons store=no
@@ -516,10 +525,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 						@property os_pr type=textbox parent=os_top captionside=top store=no size=18
 						@caption Ametikoht
 
-						@property os_county type=textbox parent=os_top captionside=top store=no size=18
+						@property os_county type=relpicker reltype=RELTYPE_SEARCH_COUNTY mode=autocomplete parent=os_top captionside=top store=no size=18
 						@caption Maakond
 
-						@property os_city type=textbox parent=os_top captionside=top store=no size=18
+						@property os_city type=relpicker reltype=RELTYPE_SEARCH_CITY mode=autocomplete parent=os_top captionside=top store=no size=18
 						@caption Linn
 
 					@layout os_dl_layout type=vbox parent=offers_search
@@ -548,13 +557,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_PERSON, on_add_person)
 					@property os_salary_to type=textbox size=4 store=no parent=offers_search captionside=top
 					@caption Palk kuni
 
-					@property os_field type=select store=no parent=offers_search captionside=top
+					@property os_field type=select multiple=1 store=no parent=offers_search captionside=top
 					@caption Valdkond
 
-					@property os_jobtype type=select store=no parent=offers_search captionside=top
+					@property os_jobtype type=select multiple=1 store=no parent=offers_search captionside=top
 					@caption T&ouml;&ouml; liik
 
-					@property os_load type=select store=no parent=offers_search captionside=top
+					@property os_load type=select multiple=1 store=no parent=offers_search captionside=top
 					@caption T&ouml&ouml;koormus
 
 					@property os_workinfo type=textbox size=18 store=no parent=offers_search captionside=top
@@ -733,6 +742,29 @@ class personnel_management extends class_base
 
 	function callback_on_load($arr)
 	{
+		// Kids, don't do this!
+		// We want a tab for every job offer type.
+		$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
+			"clid" => CL_PERSONNEL_MANAGEMENT,
+			"name" => "os_type",
+			"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
+		));
+		foreach($r[4]["list_names"] as $jo_type_id => $jo_type_name)
+		{
+			$this->groupinfo["offers_type_".$jo_type_id] = array(
+				"caption" => $jo_type_name,
+				"parent" => "offers",
+				"submit" => "no",
+			);
+			$this->grpmap["offers"]["offers_type_".$jo_type_id] = $this->groupinfo["offers_type_".$jo_type_id];
+			$this->_cfg_props["offers_tree"]["groups"][] = "offers_type_".$jo_type_id;
+			$this->prop_by_group["offers_type_".$jo_type_id] = 1;
+		}
+		// Set archive the last one!
+		$tmp = $this->grpmap["offers"]["offers_archive"];
+		unset($this->grpmap["offers"]["offers_archive"]);
+		$this->grpmap["offers"]["offers_archive"] = $tmp;
+
 		if(!$arr["new"] && $this->can("view", $arr["request"]["id"]))
 		{
 			$obj = obj($arr["request"]["id"]);
@@ -1035,29 +1067,69 @@ class personnel_management extends class_base
 			case "cv_age_from":
 			case "cv_age_to":
 			case "cv_previous_rank":
+			case "cv_praxis":
 			case "cv_edu_exact":
 			case "cv_edulvl_in_eduobj":
+			case "cv_faculty":
+			case "cv_speciality":
 			case "cv_other_skills":
 
 			case "os_type":
 			case "os_pr":
-			case "os_county":
-			case "os_city":
 			case "os_dl_from":
 			case "os_dl_to":
 			case "os_endless":
 			case "os_employer":
 			case "os_salary_from":
 			case "os_salary_to":
-			case "os_field":
-			case "os_jobtype":
-			case "os_load":
 			case "os_workinfo":
 			case "os_requirements":
 			case "os_info":
 			case "os_contact":
 
 			case "vs_name":
+				$s = $arr['request'][$prop["name"]];
+				$this->dequote(&$s);
+				$prop['value'] = $s;
+				break;
+
+			case "os_jobtype":
+				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
+					"clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+					"name" => "job_type",
+					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
+				));
+				$prop["options"] = $r[4]["list_names"];
+				$s = $arr['request'][$prop["name"]];
+				$this->dequote(&$s);
+				$prop['value'] = $s;
+				break;
+
+			case "os_load":
+				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
+					"clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+					"name" => "load",
+					"sort_callback" => "CL_PERSONNEL_MANAGEMENT::cmp_function",
+				));
+				$prop["options"] = $r[4]["list_names"];
+				$s = $arr['request'][$prop["name"]];
+				$this->dequote(&$s);
+				$prop['value'] = $s;
+				break;
+
+			case "os_field":
+				$prop["options"] = $this->get_sectors();
+				$s = $arr['request'][$prop["name"]];
+				$this->dequote(&$s);
+				$prop['value'] = $s;
+				break;
+
+			case "os_county":
+			case "os_city":
+				if($prop["type"] != "textbox")
+				{
+					$prop["options"] = $this->get_locations(constant("CL_CRM".strtoupper(substr($prop["name"], 2))));
+				}
 				$s = $arr['request'][$prop["name"]];
 				$this->dequote(&$s);
 				$prop['value'] = $s;
@@ -1842,6 +1914,7 @@ class personnel_management extends class_base
 
 	function _get_employers_tbl($arr)
 	{
+		enter_function("kaarel");
 		if(!isset($_GET["branch_id"]) && !$arr["obj_inst"]->show_all_employers)
 		{
 			return false;
@@ -1892,6 +1965,7 @@ class personnel_management extends class_base
 				"created_tm" => $o["created"],
 			));
 		}
+		exit_function("kaarel");
 	}
 
 	function employers_tbl_data($arr)
@@ -2099,12 +2173,37 @@ class personnel_management extends class_base
 			"action" => "delete_employers",
 		));
 
-		$t->add_button(array(
-			"name" => "email",
-			"img" => "mail_send.gif",
-			"tooltip" => t("Saada e-kiri"),
-			"action" => "send_email",
-		));
+		$cv_array = safe_array(aw_unserialize(aw_global_get("cv_for_employer_".$arr["obj_inst"]->id())));
+		if(count($cv_array) > 0)
+		{
+			$t->add_menu_button(array(
+				"name" => "email",
+				"img" => "mail_send.gif",
+				"tooltip" => t("Saada e-kiri"),
+				"action" => "send_email",
+			));
+			$t->add_menu_item(array(
+				"parent" => "email",
+				"name" => "email_email",
+				"text" => t("Sisesta e-kiri"),
+				"action" => "send_email",
+			));
+			$t->add_menu_item(array(
+				"parent" => "email",
+				"name" => "email_cv",
+				"text" => t("Saada valitud CVd"),
+				"action" => "send_cv_to_employer",
+			));
+		}
+		else
+		{
+			$t->add_button(array(
+				"name" => "email",
+				"img" => "mail_send.gif",
+				"tooltip" => t("Saada e-kiri"),
+				"action" => "send_email",
+			));
+		}
 
 		// A - Z filters
 		$c = get_instance("vcl/popup_menu");
@@ -2685,8 +2784,26 @@ class personnel_management extends class_base
 		$t->add_button(array(
 			"name" => "email",
 			"img" => "mail_send.gif",
+			"tooltip" => t("Saada e-kiri"),
+			"action" => "send_email",
+		));
+		$t->add_menu_button(array(
+			"name" => "send_cv",
+			"img" => "mail_send.gif",
 			"tooltip" => t("Saada CV e-postiga"),
-			"action" => "send_cv2email",
+		));
+		$t->add_menu_item(array(
+			"parent" => "send_cv",
+			"name" => "send_cv_email",
+			"text" => t("E-postile"),
+			"action" => "send_cv_email",
+			"onClick" => "aw_get_el('email_to_send_cv_to').value = prompt('".t("Sisesta e-posti aadress(id), millele valitud CVd saata.")."');",
+		));
+		$t->add_menu_item(array(
+			"parent" => "send_cv",
+			"name" => "send_cv_employer",
+			"text" => t("T&ouml;&ouml;pakkujale"),
+			"action" => "send_cv_employer",
 		));
 		$t->add_button(array(
 			'name' => 'csv',
@@ -4181,6 +4298,7 @@ class personnel_management extends class_base
 		$arr["list_id"] = 0;
 		$arr["cv_search_saved_name"] = "";
 		$arr["branch_id"] = $_GET["branch_id"];
+		$arr["email_to_send_cv_to"] = "";
 	}
 
 	/**
@@ -4343,6 +4461,7 @@ class personnel_management extends class_base
 			$arr["args"]["cv_udef_chbox2"] = $arr["request"]["cv_udef_chbox2"];
 			$arr["args"]["cv_udef_chbox3"] = $arr["request"]["cv_udef_chbox3"];
 			$arr["args"]["cv_previous_rank"] = $arr["request"]["cv_previous_rank"];
+			$arr["args"]["cv_praxis"] = $arr["request"]["cv_praxis"];
 			$arr["args"]["cv_driving_licence"] = $arr["request"]["cv_driving_licence"];
 			$arr["args"]["cv_other_skills"] = $arr["request"]["cv_other_skills"];
 			$arr["args"]["cv_tel"] = $arr["request"]["cv_tel"];
@@ -4357,6 +4476,8 @@ class personnel_management extends class_base
 			$arr["args"]["cv_edulvl_in_eduobj"] = $arr["request"]["cv_edulvl_in_eduobj"];
 			$arr["args"]["cv_acdeg"] = $arr["request"]["cv_acdeg"];
 			$arr["args"]["cv_schl"] = $arr["request"]["cv_schl"];
+			$arr["args"]["cv_faculty"] = $arr["request"]["cv_faculty"];
+			$arr["args"]["cv_speciality"] = $arr["request"]["cv_speciality"];
 			$arr["args"]["cv_schl_start_from"] = $arr["request"]["cv_schl_start_from"];
 			$arr["args"]["cv_schl_start_to"] = $arr["request"]["cv_schl_start_to"];
 			$arr["args"]["cv_schl_area"] = $arr["request"]["cv_schl_area"];
@@ -4979,6 +5100,14 @@ class personnel_management extends class_base
 				),
 			));
 		}
+		if($r["cv_faculty"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_FACULTY.name"] = "%".$r["cv_faculty"]."%";
+		}
+		if($r["cv_speciality"])
+		{
+			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.speciality"] = "%".$r["cv_speciality"]."%";
+		}
 		if($r["cv_schl_area"])
 		{
 			$odl_prms["CL_CRM_PERSON.RELTYPE_EDUCATION.RELTYPE_FIELD.name"] = "%".$r["cv_schl_area"]."%";
@@ -5204,47 +5333,67 @@ class personnel_management extends class_base
 		// T88KOGEMUS
 		if($r["cv_previous_rank"])
 		{
+			$conditions = array(
+				"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+				//"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
+			);
+			if($r["cv_praxis"])
+			{
+				$conditions["CL_CRM_PERSON.RELTYPE_PREVIOUS_PRAXIS.RELTYPE_PROFESSION.name"] = "%".$r["cv_previous_rank"]."%";
+			}
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
-					//"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_PROFESSION.name" => "%".$r["cv_previous_rank"]."%",
-				),
+				"conditions" => $conditions,
 			));
 		}
 		if($r["cv_previous_field"])
 		{
+			$conditions = array(
+				"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
+				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
+			);
+			if($r["cv_praxis"])
+			{
+				$conditions["CL_CRM_PERSON.RELTYPE_PREVIOUS_PRAXIS.RELTYPE_FIELD.name"] = "%".$r["cv_previous_field"]."%";
+			}
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.RELTYPE_FIELD.name" => "%".$r["cv_previous_field"]."%",
-				),
+				"conditions" => $conditions,
 			));
 		}
 		if($r["cv_company"])
 		{
+			$conditions = array(
+				"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$r["cv_company"]."%",
+				"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
+				"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_company"]."%",
+				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_company"]."%",
+				"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
+				// Dunno if keepin' the company's name in the 'name' field of additional education object is the best idea...
+				"CL_CRM_PERSON.RELTYPE_ADD_EDUCATION.name" => "%".$r["cv_company"]."%",
+			);
+			if($r["cv_praxis"])
+			{
+				$conditions["CL_CRM_PERSON.RELTYPE_PREVIOUS_PRAXIS.org.name"] = "%".$r["cv_company"]."%";
+			}
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_ORG_RELATION.org.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.org.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.org.name" => "%".$r["cv_company"]."%",
-					"CL_CRM_PERSON.RELTYPE_COMPANY_RELATION.org.name" => "%".$r["cv_company"]."%",
-					// Dunno if keepin' the company's name in the 'name' field of additional education object is the best idea...
-					"CL_CRM_PERSON.RELTYPE_ADD_EDUCATION.name" => "%".$r["cv_company"]."%",
-				),
+				"conditions" => $conditions,
 			));
 		}
 		if($r["cv_wrk_load"])
 		{
+			$conditions = array(
+				"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.load" => $r["cv_wrk_load"],
+				"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.load" => $r["cv_wrk_load"],
+			);
+			if($r["cv_praxis"])
+			{
+				$conditions["CL_CRM_PERSON.RELTYPE_PREVIOUS_PRAXIS.load"] = $r["cv_wrk_load"];
+			}
 			$odl_prms[] = new object_list_filter(array(
 				"logic" => "OR",
-				"conditions" => array(
-					"CL_CRM_PERSON.RELTYPE_PREVIOUS_JOB.load" => $r["cv_wrk_load"],
-					"CL_CRM_PERSON.RELTYPE_CURRENT_JOB.load" => $r["cv_wrk_load"],
-				),
+				"conditions" => $conditions,
 			));
 		}
 		if($r["cv_recommenders"])
@@ -5330,6 +5479,12 @@ class personnel_management extends class_base
 	**/
 	function send_email($arr)
 	{
+		$sel = safe_array($arr["sel"]);
+		if(count($sel) > 0)
+		{
+			$pt = $arr["id"];
+			return $this->mk_my_orb("new", array("mto_relpicker" => $sel, "parent" => $pt, "return_url" => $arr["post_ru"]), CL_MESSAGE);
+		}
 		return $arr["post_ru"];
 	}
 
@@ -5442,9 +5597,53 @@ class personnel_management extends class_base
 		}
 		if($r["os_salary_from"])
 		{
+			$ol_arr[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"salary" => new obj_predicate_compare(
+						OBJ_COMP_GREATER_OR_EQ,
+						$r["os_salary_from"],
+						null,
+						"int"
+					),
+				),
+			));
 		}
 		if($r["os_salary_to"])
 		{
+			$ol_arr[] = new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"salary" => new obj_predicate_compare(
+						OBJ_COMP_LESS_OR_EQ,
+						$r["os_salary_from"],
+						null,
+						"int"
+					),
+				),
+			));
+		}
+		if($r["os_county"])
+		{
+			if(is_oid($r["os_county"]) || is_array($r["os_county"]))
+			{
+				$ol_arr["loc_county"] = $r["os_county"];
+			}
+			else
+			{
+				$ol_arr["loc_county.name"] = "%".$r["os_county"]."%";
+			}
+		}
+		if($r["os_city"])
+		{
+			if(is_oid($r["os_city"]) || is_array($r["os_city"]))
+			{
+				$ol_arr["loc_city"] = $r["os_city"];
+			}
+			else
+			{
+				$ol_arr["loc_city.name"] = "%".$r["os_city"]."%";
+			}
 		}
 		if($r["os_field"])
 		{
@@ -5452,9 +5651,11 @@ class personnel_management extends class_base
 		}
 		if($r["os_jobtype"])
 		{
+			$ol_arr["job_type"] = $r["os_jobtype"];
 		}
 		if($r["os_load"])
 		{
+			$ol_arr["load"] = $r["os_load"];
 		}
 		if($r["os_workinfo"])
 		{
@@ -5472,6 +5673,7 @@ class personnel_management extends class_base
 		{
 			$ol_arr["contact.name"] = "%".$r["os_contact"]."%";
 		}
+		$ol = new object_list($ol_arr);
 		return $ol;
 	}
 
@@ -5696,6 +5898,74 @@ class personnel_management extends class_base
 		}
 		$ol = new object_list($prms);
 		return $ol->names();
+	}
+
+	/** Sends cv by e-mail to the e-mail address(es) entered to js prompt box.
+		@attrib name=send_cv_email params=name all_args=1
+	**/
+	public function send_cv_email($arr)
+	{
+		$sel = safe_array($arr["sel"]);
+		$pm = obj($arr["id"]);
+		foreach($sel as $pid)
+		{
+			$pm->send_cv_by_email(array(
+				"person_obj" => obj($pid),
+				"to" => $arr["email_to_send_cv_to"],
+			));
+		}
+		return $arr["post_ru"];
+	}
+
+	/** 
+		@attrib name=send_cv_employer params=name all_args=1
+	**/
+	public function send_cv_employer($arr)
+	{
+		$sel = safe_array($arr["sel"]);
+		aw_session_set("cv_for_employer_".$arr["id"], aw_serialize($sel));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "employers", "return_url" => $arr["return_url"]));
+	}
+
+	/** Sends the previously picked CVs to selected employers.
+		@attrib name=send_cv_to_employer params=name
+
+		@param sel required type=array(oid) acl=view
+			The array of OIDs of the employers.
+	**/
+	public function send_cv_to_employer($arr)
+	{
+		$sel = safe_array($arr["sel"]);
+		$cv_array = safe_array(aw_unserialize(aw_global_get("cv_for_employer_".$arr["id"])));
+		$pm_obj = obj($arr["id"]);
+		if(count($sel) > 0)
+		{
+			$receiver_ids = get_instance(CL_MESSAGE)->mails_from_persons_and_companies(array("ids" => $sel));
+			$receivers_ol = new object_data_list(
+				array(
+					"class_id" => CL_ML_MEMBER,
+					"oid" => $receiver_ids,
+					"site_id" => array(),
+					"lang_id" => array(),
+				),
+				array(
+					CL_ML_MEMBER => array("mail"),
+				)
+			);
+			$receivers = $receivers_ol->get_element_from_all("mail");
+			foreach($cv_array as $cv)
+			{
+				$person_obj = obj($cv);
+				foreach($receivers as $to)
+				{
+					$pm_obj->send_cv_by_email(array(
+						"person_obj" => $person_obj,
+						"to" => $to,
+					));
+				}
+			}
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>
