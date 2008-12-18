@@ -1472,7 +1472,8 @@ class trademark_manager extends class_base
 
 			// write file
 			$cl = empty($arr["test_id"]) ? $clidx[$clid] : "test_tmp_";// file name prefix
-			$fn = aw_ini_get("site_basedir")."/patent_xml/" . $cl . date("Ymd") . ".xml";
+			$date = empty($arr["to"]) ? date("Ymd") : ("_tmp" . date("Ymd", (get_day_start($to)+(30*3600))));
+			$fn = aw_ini_get("site_basedir")."/patent_xml/" . $cl . $date . ".xml";
 			$f = fopen($fn, "w");
 
 			if (!is_resource($f))
