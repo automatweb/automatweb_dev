@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.90 2008/12/18 11:12:33 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.91 2008/12/18 11:34:58 instrumental Exp $
 // personnel_management.aw - Personalikeskkond
 /*
 
@@ -3890,6 +3890,11 @@ class personnel_management extends class_base
 		));
 		foreach($vars as $name => $caption)
 		{
+			if($name == "modtime")
+			{
+				// Have to change it here, cuz we can't use the same caption for employee table.
+				$caption = t("Kandideerimise aeg");
+			}
 			if(!$conf[$name]["disabled"])
 			{
 				$t->define_field(array(
@@ -3931,6 +3936,9 @@ class personnel_management extends class_base
 				));
 			}
 		}
+		$t->set_default_sortby("modtime");
+		$t->set_default_sorder("desc");
+		$t->sort_by();
 	}
 
 	function _init_offers_table(&$t)
