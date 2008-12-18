@@ -1,10 +1,10 @@
 <?php
 /*
 
-@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 confirm_save_data=1 maintainer=voldemar
+@classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 maintainer=voldemar
 
 @groupinfo general caption="Seaded"
-	@groupinfo grp_settings_def caption="Seaded" parent=general
+	@groupinfo grp_settings_def caption="Seaded" parent=general confirm_save_data=1
 	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=general
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=general submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=general submit=no
@@ -12,7 +12,7 @@
 	@groupinfo grp_worksheet caption="T&ouml;&ouml;lehed" parent=general submit_method=get
 
 @groupinfo grp_customers caption="Kliendid" submit=no submit_method=get
-@groupinfo grp_projects caption="Projektid"
+@groupinfo grp_projects caption="Projektid" confirm_save_data=1
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
@@ -84,19 +84,19 @@
 		@property sp_comment type=textbox view_element=1 parent=projects_search_box store=no
 		@caption Nimetus
 
-		@property sp_starttime type=datetime_select view_element=1 parent=projects_search_box store=no
-		@caption Alustamisaeg (materjalide saabumine) alates
-
-		@property sp_due_date type=datetime_select view_element=1 parent=projects_search_box store=no
-		@caption T&auml;htaeg alates
-
 		@property sp_customer type=textbox view_element=1 parent=projects_search_box store=no
 		@caption Klient
 
-		@property sp_status type=chooser multiple=1 view_element=1 parent=projects_search_box store=no
+		@property sp_starttime type=date_select view_element=1 parent=projects_search_box store=no default=-1
+		@caption Alustamisaeg (materjalide saabumine) alates
+
+		@property sp_due_date type=date_select view_element=1 parent=projects_search_box store=no default=-1
+		@caption T&auml;htaeg alates
+
+		@property sp_status type=select multiple=1 size=5 view_element=1 parent=projects_search_box store=no
 		@caption Staatus
 
-		@property sp_submit type=button value=Otsi view_element=1 parent=projects_search_box store=no
+		@property sp_submit type=button view_element=1 parent=projects_search_box store=no
 		@caption Otsi
 
 
@@ -108,26 +108,20 @@
 
 
 @default group=grp_schedule
-	@property replan type=text
-	@caption Planeeri
-
-	@property chart_navigation type=text store=no no_caption=1
 	@property master_schedule_chart type=text store=no no_caption=1
 
-	@property chart_legend type=text store=no
-	@caption Legend
+	@layout schedule_search_box type=vbox closeable=1 area_caption=Otsing
+		@property chart_project_hilight_gotostart type=checkbox store=no parent=schedule_search_box
+		@caption Mine valitud projekti algusesse
 
-	@property chart_project_hilight_gotostart type=checkbox store=no
-	@caption Mine valitud projekti algusesse
+		@property chart_search type=text store=no parent=schedule_search_box
+		@caption Otsi
 
-	@property chart_search type=text store=no
-	@caption Otsi
+		@property chart_start_date type=date_select store=no parent=schedule_search_box
+		@caption N&auml;idatava perioodi algus
 
-	@property chart_start_date type=date_select store=no
-	@caption N&auml;idatava perioodi algus
-
-	@property chart_submit type=submit store=no
-	@caption N&auml;ita
+		@property chart_submit type=submit store=no parent=schedule_search_box
+		@caption N&auml;ita
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1
@@ -237,8 +231,8 @@
 
 
 @default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
-	@property printer_legend type=text no_caption=1
-	@caption Legend
+	@layout printer_legend_box type=vbox no_caption=1 closeable=0
+	@property printer_legend type=text no_caption=1 parent=printer_legend_box
 
 	@property printer_jobs_prev_link type=text store=no no_caption=1
 
@@ -500,16 +494,15 @@ class mrp_workspace extends class_base
 	{
 		$this_object = $arr["obj_inst"];
 
-		if (!empty($arr["group"]) and ("grp_search" === $arr["group"] or "grp_search_proj" === $arr["group"]))
-		{
-			$this->list_request = "search";
-		}
-
 		if (!empty($arr["group"]) and $arr["group"] === "grp_projects")
 		{
 			if (isset($arr["list_request"]))
 			{
 				$this->list_request = $arr["list_request"];
+			}
+			elseif (!empty($arr["request"]["sp_search"]))
+			{
+				$this->list_request = "search";
 			}
 			else
 			{
@@ -617,7 +610,7 @@ class mrp_workspace extends class_base
 			### project list args
 			#### limit
 			$perpage = $this_object->prop ("projects_list_objects_perpage") ? $this_object->prop ("projects_list_objects_perpage") : 30;
-			$limit = ((isset($_GET["ft_page"]) ? (int) $_GET["ft_page"] : 0) * $perpage) . "," . $perpage;
+			$limit = ((isset($arr["request"]["ft_page"]) ? (int) $arr["request"]["ft_page"] : 0) * $perpage) . "," . $perpage;
 
 			#### sort
 			switch ($this->list_request)
@@ -964,7 +957,7 @@ class mrp_workspace extends class_base
 
 					default:
 						$prop["value"] = $job->prop($rpn);
-						if ($prop["value"] == "" && $prop["name"] != "pj_change_comment")
+						if ($prop["value"] == "" && $prop["name"] !== "pj_change_comment")
 						{
 							return PROP_IGNORE;
 						}
@@ -981,6 +974,59 @@ class mrp_workspace extends class_base
 		switch($prop["name"])
 		{
 			### projects tab
+			case "sp_submit":
+				$uri = automatweb::$request->get_uri();
+				$uri->set_arg(array(
+					"sp_search",
+					"sp_name",
+					"sp_starttime[day]",
+					"sp_starttime[month]",
+					"sp_starttime[year]",
+					"sp_due_date[day]",
+					"sp_due_date[month]",
+					"sp_due_date[year]",
+					"sp_customer",
+					"sp_status"
+				), null);
+				$prop["onclick"] = 'window.location=\'' . $uri->get() .
+					'&sp_search=1&sp_name=\'+document.forms[\'changeform\'].sp_name.value+\''.
+					'&sp_starttime[day]=\'+document.forms[\'changeform\'][\'sp_starttime[day]\'][\'value\']+\''.
+					'&sp_starttime[month]=\'+document.forms[\'changeform\'][\'sp_starttime[month]\'][\'value\']+\''.
+					'&sp_starttime[year]=\'+document.forms[\'changeform\'][\'sp_starttime[year]\'][\'value\']+\''.
+					'&sp_due_date[day]=\'+document.forms[\'changeform\'][\'sp_due_date[day]\'][\'value\']+\''.
+					'&sp_due_date[month]=\'+document.forms[\'changeform\'][\'sp_due_date[month]\'][\'value\']+\''.
+					'&sp_due_date[year]=\'+document.forms[\'changeform\'][\'sp_due_date[year]\'][\'value\']+\''.
+					'&sp_status=\'+document.forms[\'changeform\'].sp_status.value+\''.
+					'&sp_customer=\'+document.forms[\'changeform\'].sp_customer.value'
+				;
+				break;
+
+			// project search parameters
+			case "sp_status":
+				$prop["options"] = array("" => t("K&otilde;ik")) + $this->states;
+				$prop["value"] = isset($arr["request"]["sp_status"]) ? $arr["request"]["sp_status"] : array();
+				break;
+
+			case "sp_name":
+				$prop["value"] = isset($arr["request"]["sp_name"]) ? $arr["request"]["sp_name"] : "";
+				break;
+
+			case "sp_comment":
+				$prop["value"] = isset($arr["request"]["sp_comment"]) ? $arr["request"]["sp_comment"] : "";
+				break;
+
+			case "sp_customer":
+				$prop["value"] = isset($arr["request"]["sp_customer"]) ? $arr["request"]["sp_customer"] : "";
+				break;
+
+			case "sp_starttime":
+				$prop["value"] = isset($arr["request"]["sp_starttime"]) ? $arr["request"]["sp_starttime"] : -1;
+				break;
+
+			case "sp_due_date":
+				$prop["value"] = isset($arr["request"]["sp_due_date"]) ? $arr["request"]["sp_due_date"] : -1;
+				break;
+
 			case "projects_toolbar":
 				$this->create_projects_toolbar ($arr);
 				break;
@@ -990,34 +1036,41 @@ class mrp_workspace extends class_base
 				break;
 
 			case "projects_list":
-				$tree_active_item = isset($arr["request"]["mrp_tree_active_item"]) ? $arr["request"]["mrp_tree_active_item"] : null;
-				switch ($tree_active_item)
+				if (empty($arr["request"]["sp_search"]))
 				{
-					case "subcontracts":
-						### update schedule
-						$schedule = get_instance (CL_MRP_SCHEDULE);
-						$schedule->create (array("mrp_workspace" => $this_object->id()));
+					$tree_active_item = isset($arr["request"]["mrp_tree_active_item"]) ? $arr["request"]["mrp_tree_active_item"] : null;
+					switch ($tree_active_item)
+					{
+						case "subcontracts":
+							### update schedule
+							$schedule = get_instance (CL_MRP_SCHEDULE);
+							$schedule->create (array("mrp_workspace" => $this_object->id()));
 
-						$this->create_subcontract_jobs_list ($arr);
-						break;
+							$this->create_subcontract_jobs_list ($arr);
+							break;
 
-					case "aborted_jobs":
-						$this->create_aborted_jobs_list ($arr);
-						break;
+						case "aborted_jobs":
+							$this->create_aborted_jobs_list ($arr);
+							break;
 
-					case "all":
-					case "planned":
-					case "inwork":
-					case "planned_overdue":
-					case "overdue":
-					case "subcontracts":
-						### update schedule
-						$schedule = get_instance (CL_MRP_SCHEDULE);
-						$schedule->create (array("mrp_workspace" => $this_object->id()));
+						case "all":
+						case "planned":
+						case "inwork":
+						case "planned_overdue":
+						case "overdue":
+						case "subcontracts":
+							### update schedule
+							$schedule = get_instance (CL_MRP_SCHEDULE);
+							$schedule->create (array("mrp_workspace" => $this_object->id()));
 
-					default:
-						$this->create_projects_list ($arr);
-						break;
+						default:
+							$this->create_projects_list ($arr);
+							break;
+					}
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				}
 				break;
 
@@ -1074,14 +1127,6 @@ class mrp_workspace extends class_base
 				$schedule->create (array("mrp_workspace" => $this_object->id()));
 
 				$prop["value"] = $this->create_schedule_chart($arr);
-				break;
-
-			case "chart_navigation":
-				$prop["value"] = $this->create_chart_navigation($arr);
-				break;
-
-			case "chart_legend":
-				$prop["value"] = $this->draw_colour_legend();
 				break;
 
 			case "chart_start_date":
@@ -1473,6 +1518,29 @@ class mrp_workspace extends class_base
 
 	function callback_mod_retval ($arr)
 	{
+		// delete justsaved msg where needed
+		$applicable_groups =  array(
+			"grp_printer",
+			"grp_printer_current",
+			"groupinfo grp_printer_old",
+			"grp_printer_done",
+			"grp_printer_aborted",
+			"grp_printer_in_progress",
+			"grp_printer_startable",
+			"grp_printer_notstartable"
+		);
+		if (!empty($arr["args"]["group"]))
+		{
+			if (in_array($arr["args"]["group"], $applicable_groups))
+			{
+				unset($arr["args"]["just_saved"]);
+			}
+			elseif ("grp_projects" === $arr["args"]["group"])
+			{
+				unset($arr["args"]["just_saved"]);
+			}
+		}
+
 		$arr["args"]["mrp_tree_active_item"] = $arr["request"]["mrp_tree_active_item"];
 
 		### gantt chart start selection
@@ -1809,20 +1877,26 @@ class mrp_workspace extends class_base
 		$add_project_url = $this->mk_my_orb("new", array(
 			"return_url" => get_ru(),
 			"mrp_workspace" => $this_object->id (),
-			"parent" => $this_object->prop ("projects_folder"),
+			"parent" => $this_object->prop ("projects_folder")
 		), "mrp_case");
 		$toolbar->add_button(array(
 			"name" => "add",
 			"img" => "new.gif",
 			"tooltip" => t("Lisa uus projekt"),
-			"url" => $add_project_url,
+			"url" => $add_project_url
 		));
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta valitud projekt(id)"),
 			"confirm" => t("Kustutada k&otilde;ik valitud projektid?"),
-			"action" => "delete",
+			"action" => "delete"
+		));
+		$toolbar->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta"),
+			"action" => ""
 		));
 	}
 
@@ -1831,6 +1905,16 @@ class mrp_workspace extends class_base
 		$this_object = $arr["obj_inst"];
 		$projects_folder = $this_object->prop ("projects_folder");
 		$open_path = NULL;
+		$url = automatweb::$request->get_uri();
+		$url->unset_arg(array(
+			"ft_page",
+			"sp_search",
+			"sp_name",
+			"sp_starttime",
+			"sp_customer",
+			"sp_due_date",
+			"sp_status"
+		));
 
 		if (!empty($arr["request"]["mrp_tree_active_item"]) and strstr($arr["request"]["mrp_tree_active_item"], "archived_"))
 		{
@@ -1863,84 +1947,68 @@ class mrp_workspace extends class_base
 		));
 		$tree->set_only_one_level_opened (true);
 
+		$url->set_arg("mrp_tree_active_item", "planned");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["planned"] . " (" . $this->projects_planned_count . ")",
 			"id" => "planned",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "planned",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "inwork");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["inwork"] . " (" . $this->projects_in_work_count . ")",
 			"id" => "inwork",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "inwork",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "planned_overdue");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["planned_overdue"] . " (" . $this->projects_planned_overdue_count . ")",
 			"id" => "planned_overdue",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "planned_overdue",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "overdue");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["overdue"] . " (" . $this->projects_overdue_count . ")",
 			"id" => "overdue",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "overdue",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "new");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["new"] . " (" . $this->projects_new_count . ")",
 			"id" => "new",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "new",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "aborted");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["aborted"] . " (" . $this->projects_aborted_count . ")",
 			"id" => "aborted",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "aborted",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "onhold");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["onhold"] . " (" . $this->projects_onhold_count . ")",
 			"id" => "onhold",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "onhold",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "done");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["done"] . " (" . $this->projects_done_count . ")",
 			"id" => "done",
 			"parent" => 0,
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "done",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
 		$tree->add_item (0, array (
@@ -1962,29 +2030,28 @@ class mrp_workspace extends class_base
 			));
 		}
 
+		$url->set_arg("mrp_tree_active_item", "subcontracts");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["subcontracts"] . " (" . $this->jobs_subcontracted_count . ")",
 			"parent" => 0,
 			"id" => "subcontracts",
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "subcontracts",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
+		$url->set_arg("mrp_tree_active_item", "aborted_jobs");
 		$tree->add_item (0, array (
 			"name" => $this->project_list_categories["aborted_jobs"] . " (" . $this->jobs_aborted_count . ")",
 			"parent" => 0,
 			"id" => "aborted_jobs",
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "aborted_jobs",
-				"ft_page" => 0
-			)),
+			"url" => $url->get()
 		));
 
-		$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planned" : $arr["request"]["mrp_tree_active_item"];
-		$active_node = (isset($arr["request"]["mrp_tree_active_item"]) and "all" === $arr["request"]["mrp_tree_active_item"]) ? 0 : $active_node;
-		$tree->set_selected_item ($active_node);
+		if ("search" !== $this->list_request)
+		{
+			$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planned" : $arr["request"]["mrp_tree_active_item"];
+			$active_node = (isset($arr["request"]["mrp_tree_active_item"]) and "all" === $arr["request"]["mrp_tree_active_item"]) ? 0 : $active_node;
+			$tree->set_selected_item ($active_node);
+		}
 		$arr["prop"]["value"] = $tree->finalize_tree(0);
 	}
 
@@ -2082,7 +2149,7 @@ class mrp_workspace extends class_base
 			// "sortable" => 1,
 		));
 
-		if ($this->list_request != "search")
+		if ($this->list_request !== "search")
 		{
 			$table->define_chooser(array(
 				"name" => "selection",
@@ -2482,17 +2549,22 @@ class mrp_workspace extends class_base
 			"class_id" => CL_MENU,
 			"parent" => $this_object->prop ("resources_folder"),
 		));
+		$toplevel_categories->add(new object($this_object->prop ("resources_folder")));
 
 		$mrp_schedule = get_instance(CL_MRP_SCHEDULE);
 
-		for ($category = $toplevel_categories->begin (); !$toplevel_categories->end (); $category = $toplevel_categories->next ())
+		for ($category = $toplevel_categories->begin(); !$toplevel_categories->end(); $category = $toplevel_categories->next())
 		{
-			$id = $category->id ();
-			$chart->add_row (array (
-				"name" => $id,
-				"title" => $category->name(),
-				"type" => "separator",
-			));
+			$id = $category->id();
+
+			if ($id !== $this_object->prop ("resources_folder"))
+			{
+				$chart->add_row (array (
+					"name" => $id,
+					"title" => $category->name(),
+					"type" => "separator",
+				));
+			}
 
 			$resource_tree = new object_tree(array(
 				"parent" => $id,
@@ -2847,10 +2919,13 @@ class mrp_workspace extends class_base
 			"start" => $range_start,
 			"end" => $range_end,
 			"columns" => $columns,
+			"caption" => t("Voop&otilde;hine tootmisgraafik"),
+			"footer" => $this->draw_colour_legend(),
 			"subdivisions" => $subdivisions,
 			"timespans" => $subdivisions,
 			"width" => 850,
 			"row_height" => 10,
+			"navigation" => $this->create_chart_navigation($arr)
 		));
 
 		### define columns
@@ -2945,57 +3020,59 @@ class mrp_workspace extends class_base
 		foreach ($arr["request"] as $name => $value)
 		{
 			$prop = explode ("-", $name);
-			$name = $prop[0];
-			$oid = $prop[1];
 
-			if (!is_oid ($oid))
+			if (2 === count($prop))
 			{
-				continue;
-			}
+				$name = $prop[0];
+				$oid = $prop[1];
 
-			switch ($name)
-			{
-				case "mrp_project_priority":
-					$project = obj ($oid);
-					$project->set_prop ("project_priority", $this->safe_settype_float ($value));
-					$project->save ();
-					break;
-
-				case "mrp_job_minstart":
-					$job = obj ($oid);
-					$minstart = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
-					$job->set_prop ("minstart", $minstart);
-					$job->save ();
-					break;
-
-				case "mrp_job_advisedstart":
-					$job = obj ($oid);
-					$advised_starttime = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
-					$job->set_prop ("advised_starttime", $advised_starttime);
-					$job->save ();
-					break;
-
-				case "mrp_job_reschedule":
-					if ($value)
+				if ($this->can("edit", $oid))
+				{
+					switch ($name)
 					{
-						$applicable_states = array (
-							MRP_STATUS_ABORTED,
-						);
-						$job = obj ($oid);
+						case "mrp_project_priority":
+							$project = obj ($oid);
+							$project->set_prop ("project_priority", $this->safe_settype_float ($value));
+							$project->save ();
+							break;
 
-						if (in_array ($job->prop ("state"), $applicable_states))
-						{
-							$job->set_prop ("state", MRP_STATUS_PLANNED);
+						case "mrp_job_minstart":
+							$job = obj ($oid);
+							$minstart = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
+							$job->set_prop ("minstart", $minstart);
 							$job->save ();
-						}
-					}
-					break;
+							break;
 
-				case "mrp_resource_order":
-					$resource = obj ($oid);
-					$resource->set_ord ((int) $value);
-					$resource->save ();
-					break;
+						case "mrp_job_advisedstart":
+							$job = obj ($oid);
+							$advised_starttime = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
+							$job->set_prop ("advised_starttime", $advised_starttime);
+							$job->save ();
+							break;
+
+						case "mrp_job_reschedule":
+							if ($value)
+							{
+								$applicable_states = array (
+									MRP_STATUS_ABORTED,
+								);
+								$job = obj ($oid);
+
+								if (in_array ($job->prop ("state"), $applicable_states))
+								{
+									$job->set_prop ("state", MRP_STATUS_PLANNED);
+									$job->save ();
+								}
+							}
+							break;
+
+						case "mrp_resource_order":
+							$resource = obj ($oid);
+							$resource->set_ord ((int) $value);
+							$resource->save ();
+							break;
+					}
+				}
 			}
 		}
 
@@ -3651,7 +3728,7 @@ class mrp_workspace extends class_base
 	function create_customers_tree($arr)
 	{
 		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		if (!$co)
+		if (!is_object($co))
 		{
 			return;
 		}
@@ -3668,10 +3745,9 @@ class mrp_workspace extends class_base
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
 			$nm = $c->prop("to.name");
-
 			$t->add_item(0, array(
 				"id" => $c->prop("to"),
-				"name" => (isset($_GET["cat"]) and $_GET["cat"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
+				"name" => (isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
 				"url" => aw_url_change_var(array(
 					"cat" => $c->prop("to"),
 					"cust" => null
@@ -3693,7 +3769,7 @@ class mrp_workspace extends class_base
 			$nm = $c->prop("to.name");
 			$t->add_item($co->id(), array(
 				"id" => $c->prop("to"),
-				"name" => (isset($_GET["cat"]) and $_GET["cat"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
+				"name" => (isset($arr["request"]["cat"]) and $arr["request"]["cat"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
 				"url" => aw_url_change_var(array(
 					"cat" => $c->prop("to"),
 					"cust" => null
@@ -3707,7 +3783,7 @@ class mrp_workspace extends class_base
 			$nm = $c->prop("to.name");
 			$t->add_item($co->id(), array(
 				"id" => $c->prop("to"),
-				"name" => (isset($_GET["cust"]) and $_GET["cust"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
+				"name" => (isset($arr["request"]["cust"]) and $arr["request"]["cust"] == $c->prop("to")) ? "<b>".$nm."</b>" : $nm,
 				"url" => aw_url_change_var(array(
 					"cust" => $c->prop("to"),
 					"cat" => null
@@ -4006,6 +4082,7 @@ class mrp_workspace extends class_base
 		$per_page = $arr["obj_inst"]->prop("pv_per_page");
 		$proj_states = false;
 		$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",".$per_page;
+
 		switch ($arr["request"]["group"])
 		{
 			case "grp_printer_done":
@@ -4053,8 +4130,8 @@ class mrp_workspace extends class_base
 				break;
 		}
 
-		$sby = $arr["request"]["sortby"];
-		if ($sby == "")
+		$sby = isset($arr["request"]["sortby"]) ? $arr["request"]["sortby"] : "";
+		if ($sby === "")
 		{
 			$sby = $default_sortby;
 		}
@@ -4097,17 +4174,20 @@ class mrp_workspace extends class_base
 			}
 		}
 
-		if ($sby != "" && $arr["request"]["sort_order"] != "")
+		if ($sby !== "" && !empty($arr["request"]["sort_order"]))
 		{
-			$sby .= " ".$arr["request"]["sort_order"];
+			$sort_order = strtoupper($arr["request"]["sort_order"]);
+			$sort_order = "ASC" === $sort_order ? "ASC" : "DESC";
+			$sby .= " " . $sort_order;
 		}
+
 		classload("core/date/date_calc");
 
 		// now, if the session contans [mrp][do_pv_proj_s] then we must get a list of all the jobs in the current view
 		// then iterate them until we find a job with the requested project
 		// and then figure out the page number and finally, redirect the user to that page.
 		// this sort of sucks, but I can't figure out how to do the count in sql..
-		if ($_SESSION["mrp"]["do_pv_proj_s"] != "")
+		if (!empty($_SESSION["mrp"]["do_pv_proj_s"]))
 		{
 			// this needs to get done abit differently - we need to find all the jobs
 			// that are part of this project for the current resource(s)
@@ -4124,20 +4204,23 @@ class mrp_workspace extends class_base
 					project = '".$s_proj->id()."' AND
 					resource IN (".join(",", $res).")";
 				$this->db_query($q);
+
 				$f_j_state = NULL;
-				$view = null;
+				$view = "";
 				while ($row = $this->db_next())
 				{
-					if ($f_j_state == NULL)
+					if ($f_j_state === NULL)
 					{
 						$f_j_state = $row["state"];
 					}
+
 					if (in_array($row["state"], $states))
 					{
 						$view = $_GET["group"];
 					}
 				}
-				if ($view == null)
+
+				if ($view === "")
 				{
 					switch($f_j_state)
 					{
@@ -4153,7 +4236,8 @@ class mrp_workspace extends class_base
 							$view = "grp_printer";
 					}
 				}
-				if ($view != $_GET["group"])
+
+				if ($view !== $_GET["group"])
 				{
 					header("Location: ".aw_url_change_var("group", $view));
 					die();
@@ -4183,6 +4267,7 @@ class mrp_workspace extends class_base
 				}
 			}
 		}
+
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => $limit,
@@ -4205,22 +4290,15 @@ class mrp_workspace extends class_base
 			}
 			$cnt++;
 			$res = obj($job->prop("resource"));
-			if (!$this->can("view", $job->prop("project")))
-			{
-				$proj = obj();
-			}
-			else
-			{
-				$proj = obj($job->prop("project"));
-			}
+			$proj = obj($job->prop("project"));
 
 			$workers_str = array();
 			foreach(safe_array($workers[$res->id()]) as $person)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-				$workers_str[] = html::obj_change_url($person);
-			}
+					$workers_str[] = html::obj_change_url($person);
+				}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -4233,8 +4311,8 @@ class mrp_workspace extends class_base
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-				$custo = html::obj_change_url($cust);
-			}
+					$custo = html::obj_change_url($cust);
+				}
 				else
 				{
 					$custo = $cust->name();
@@ -4247,13 +4325,11 @@ class mrp_workspace extends class_base
 				// dark green
 				$bgcol = $this->pj_colors["done"];
 			}
-			else
-			if ($job->prop("state") == MRP_STATUS_INPROGRESS)
+			elseif ($job->prop("state") == MRP_STATUS_INPROGRESS)
 			{
 				$bgcol = $this->pj_colors["can_not_start"];
 			}
-			else
-			if ($mrp_job->can_start(array("job" => $job->id())))
+			elseif ($mrp_job->can_start(array("job" => $job->id())))
 			{
 				// light green
 				$bgcol = $this->pj_colors["can_start"];
@@ -4266,17 +4342,17 @@ class mrp_workspace extends class_base
 				}
 				else
 				{
-				// light red
-				$bgcol = $this->pj_colors["can_not_start"];
-			}
+					// light red
+					$bgcol = $this->pj_colors["can_not_start"];
+				}
 			}
 
-			if ($arr["request"]["group"] == "grp_printer_startable" && $bgcol == $this->pj_colors["can_not_start"])
+			if ($arr["request"]["group"] === "grp_printer_startable" && $bgcol == $this->pj_colors["can_not_start"])
 			{
 				continue;
 			}
 
-			if ($arr["request"]["group"] == "grp_printer_notstartable" && ($bgcol == $this->pj_colors["can_start"] || $cnt > 5))
+			if ($arr["request"]["group"] === "grp_printer_notstartable" && ($bgcol == $this->pj_colors["can_start"] || $cnt > 5))
 			{
 				continue;
 			}
@@ -4367,7 +4443,7 @@ class mrp_workspace extends class_base
 			));
 		}
 
-		if ("grp_printer_done" == $grp)
+		if ("grp_printer_done" === $grp)
 		{
 			$t->set_default_sortby("tm_end");
 			if (aw_global_get("sortby") == "tm")
@@ -4380,7 +4456,7 @@ class mrp_workspace extends class_base
 			$t->set_default_sortby("tm");
 		}
 
-		if ($arr["request"]["sort_order"] == "desc")
+		if (isset($arr["request"]["sort_order"]) and $arr["request"]["sort_order"] === "desc")
 		{
 			$t->set_default_sorder("desc");
 		}
@@ -4573,16 +4649,18 @@ class mrp_workspace extends class_base
 			limit - limit number of returned data
 			ws - workspace object
 	**/
-	function get_next_jobs_for_resources($arr)
+	private function get_next_jobs_for_resources($arr)
 	{
-		if (!is_array($arr["resources"]) || count($arr["resources"]) == 0)
+		if (!isset($arr["resources"]) || !is_array($arr["resources"]) || count($arr["resources"]) == 0)
 		{
 			return array();
 		}
+
 		if (empty($arr["minstart"]))
 		{
 			$arr["minstart"] = 100;
 		}
+
 		$filt = array(
 			"resource" => $arr["resources"],
 			"limit" => $arr["limit"],
@@ -4591,11 +4669,11 @@ class mrp_workspace extends class_base
 			"lang_id" => array(),
 			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, -1),
 //!!!
-			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_schedule.starttime",
+			"sort_by" => isset($arr["sort_by"]) ? $arr["sort_by"] : "mrp_schedule.starttime",
 //!!!
 		);
 
-		if ($arr["states"])
+		if (!empty($arr["states"]))
 		{
 			$filt["state"] = $arr["states"];
 		}
@@ -4990,7 +5068,7 @@ class mrp_workspace extends class_base
 			return false;
 		}
 
-		if ($_GET["group"] === "grp_login_select_res")
+		if ($arr["request"]["group"] === "grp_login_select_res")
 		{
 			unset($arr["classinfo"]["relationmgr"]);
 			return false;
@@ -5058,44 +5136,67 @@ class mrp_workspace extends class_base
 	{
 		$retval = PROP_IGNORE;
 
-		if (isset($arr["request"]["sp_name"]))
+		if (!empty($arr["request"]["sp_search"]))
 		{
-			if (empty($arr["request"]["MAX_FILE_SIZE"]))
+			$filt = array("class_id" => CL_MRP_CASE);
+
+			// parse search args
+			/// name
+			if (!empty($arr["request"]["sp_name"]))
+			{
+				$filt["name"] = "%".$arr["request"]["sp_name"]."%";
+			}
+
+			/// comment
+			if (!empty($arr["request"]["sp_comment"]))
+			{
+				$filt["comment"] = "%".$arr["request"]["sp_comment"]."%";
+			}
+
+			/// customer
+			if (!empty($arr["request"]["sp_customer"]))
+			{
+				$filt["CL_MRP_CASE.customer.name"] = "%".$arr["request"]["sp_customer"]."%";
+			}
+
+			/// min due date
+			if (!empty($arr["request"]["sp_due_date"]))
+			{
+				$tmp = date_edit::get_timestamp($arr["request"]["sp_due_date"]);
+				if ($tmp > 100)
+				{
+					$filt["due_date"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $tmp);
+				}
+			}
+
+			/// min starttime
+			if (!empty($arr["request"]["sp_starttime"]))
+			{
+				$tmp = date_edit::get_timestamp($arr["request"]["sp_starttime"]);
+				if ($tmp > 100)
+				{
+					$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $tmp);
+				}
+			}
+
+			/// prj status
+			if (!empty($arr["request"]["sp_status"]))
+			{
+				$filt["state"] = $arr["request"]["sp_status"];
+			}
+
+			// create objlist
+			if (1 === count($filt))
 			{
 				$results = new object_list();
 			}
 			else
 			{
-				$filt = array(
-					"class_id" => CL_MRP_CASE,
-					"name" => "%".$arr["request"]["sp_name"]."%",
-					"comment" => "%".$arr["request"]["sp_comment"]."%",
-				);
-				$st = date_edit::get_timestamp($arr["request"]["sp_starttime"]);
-				if ($st > 100)
-				{
-					$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $st);
-				}
-
-				$dd = date_edit::get_timestamp($arr["request"]["sp_due_date"]);
-				if ($dd > 100)
-				{
-					$filt["due_date"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $dd);
-				}
-
-				if ($arr["request"]["sp_customer"] != "")
-				{
-					$filt["CL_MRP_CASE.customer.name"] = "%".$arr["request"]["sp_customer"]."%";
-				}
-
-				if ($arr["request"]["sp_status"])
-				{
-					$filt["state"] = $arr["request"]["sp_status"];
-				}
 				$results = new object_list($filt);
 			}
 
-			$arr["list_request"] = "search";
+			$this->list_request = "search";
+			$this->projects_list_objects_count = $results->count();
 			$arr["search_res"] = $results;
 			$this->create_projects_list($arr);
 			$retval = PROP_OK;
@@ -5176,13 +5277,12 @@ class mrp_workspace extends class_base
 		$states["hilighted"] = t("Valitud projekt");
 		$states["unavailable"] = t("Kinnine aeg");
 
-
 		foreach ($state_colours as $state => $colour)
 		{
 			$name = $states[$state];
 			$dfn .= '<td class="awmenuedittabletext" style="background-color: ' . $colour . '; width: 30px;">&nbsp;</td><td class="awmenuedittabletext" style="padding: 0px 15px 0px 6px;">' . $name . '</td>';
 
-			if (!(($i++)%3))
+			if (!(($i++)%5))
 			{
 				$rows .= '<tr>' . $dfn . '</tr>';
 				$dfn = "";
@@ -5258,7 +5358,7 @@ class mrp_workspace extends class_base
 			$o = obj($arr["request"]["mrp_hilight"]);
 			$arr["request"]["chart_project_hilight"] = $o->name();
 		}
-		$str  = t("Valitud projekt");
+		$str  = t("<i>Valitud projekt</i>");
 		$str .= " ";
 		$str .= html::textbox(array(
 			"name" => "chart_project_hilight",
@@ -5266,7 +5366,7 @@ class mrp_workspace extends class_base
 			"size" => 6
 		));
 		$str .= " ";
-		$str .= t("Klient");
+		$str .= t("<i>Klient</i>");
 		$str .= " ";
 		$str .= html::textbox(array(
 			"name" => "chart_customer",

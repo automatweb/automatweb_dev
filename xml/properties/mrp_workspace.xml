@@ -214,30 +214,6 @@
             <caption>Nimetus</caption>
       </property>
       <property>
-            <name>sp_starttime</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_projects</group>
-            <type>datetime_select</type>
-            <view_element>1</view_element>
-            <parent>projects_search_box</parent>
-            <store>no</store>
-            <caption>Alustamisaeg (materjalide saabumine) alates</caption>
-      </property>
-      <property>
-            <name>sp_due_date</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_projects</group>
-            <type>datetime_select</type>
-            <view_element>1</view_element>
-            <parent>projects_search_box</parent>
-            <store>no</store>
-            <caption>T&amp;amp;auml;htaeg alates</caption>
-      </property>
-      <property>
             <name>sp_customer</name>
             <table>objects</table>
             <field>meta</field>
@@ -250,13 +226,40 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>sp_starttime</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_projects</group>
+            <type>date_select</type>
+            <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
+            <default>-1</default>
+            <caption>Alustamisaeg (materjalide saabumine) alates</caption>
+      </property>
+      <property>
+            <name>sp_due_date</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_projects</group>
+            <type>date_select</type>
+            <view_element>1</view_element>
+            <parent>projects_search_box</parent>
+            <store>no</store>
+            <default>-1</default>
+            <caption>T&amp;amp;auml;htaeg alates</caption>
+      </property>
+      <property>
             <name>sp_status</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>grp_projects</group>
-            <type>chooser</type>
+            <type>select</type>
             <multiple>1</multiple>
+            <size>5</size>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
@@ -269,11 +272,20 @@
             <method>serialize</method>
             <group>grp_projects</group>
             <type>button</type>
-            <value>Otsi</value>
             <view_element>1</view_element>
             <parent>projects_search_box</parent>
             <store>no</store>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>sp_search</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_projects</group>
+            <type>hidden</type>
+            <value>0</value>
+            <store>no</store>
       </property>
       <property>
             <name>resources_toolbar</name>
@@ -308,25 +320,6 @@
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>replan</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>text</type>
-            <caption>Planeeri</caption>
-      </property>
-      <property>
-            <name>chart_navigation</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
             <name>master_schedule_chart</name>
             <table>objects</table>
             <field>meta</field>
@@ -337,16 +330,6 @@
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>chart_legend</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Legend</caption>
-      </property>
-      <property>
             <name>chart_project_hilight_gotostart</name>
             <table>objects</table>
             <field>meta</field>
@@ -354,6 +337,7 @@
             <group>grp_schedule</group>
             <type>checkbox</type>
             <store>no</store>
+            <parent>schedule_search_box</parent>
             <caption>Mine valitud projekti algusesse</caption>
       </property>
       <property>
@@ -364,6 +348,7 @@
             <group>grp_schedule</group>
             <type>text</type>
             <store>no</store>
+            <parent>schedule_search_box</parent>
             <caption>Otsi</caption>
       </property>
       <property>
@@ -374,6 +359,7 @@
             <group>grp_schedule</group>
             <type>date_select</type>
             <store>no</store>
+            <parent>schedule_search_box</parent>
             <caption>N&amp;amp;auml;idatava perioodi algus</caption>
       </property>
       <property>
@@ -384,6 +370,7 @@
             <group>grp_schedule</group>
             <type>submit</type>
             <store>no</store>
+            <parent>schedule_search_box</parent>
             <caption>N&amp;amp;auml;ita</caption>
       </property>
       <property>
@@ -763,7 +750,7 @@
             </group>
             <type>text</type>
             <no_caption>1</no_caption>
-            <caption>Legend</caption>
+            <parent>printer_legend_box</parent>
       </property>
       <property>
             <name>printer_jobs_prev_link</name>
@@ -1454,7 +1441,6 @@
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
-            <confirm_save_data>1</confirm_save_data>
             <maintainer>voldemar</maintainer>
       </classinfo>
       <groupinfo>
@@ -1464,6 +1450,7 @@
             <grp_settings_def>
                   <caption>Seaded</caption>
                   <parent>general</parent>
+                  <confirm_save_data>1</confirm_save_data>
             </grp_settings_def>
             <grp_settings_salesman>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe seaded</caption>
@@ -1495,6 +1482,7 @@
             </grp_customers>
             <grp_projects>
                   <caption>Projektid</caption>
+                  <confirm_save_data>1</confirm_save_data>
             </grp_projects>
             <grp_schedule>
                   <caption>Kalender</caption>
@@ -1621,6 +1609,12 @@
                   <parent>vsplitbox</parent>
                   <group>grp_resources</group>
             </resources_tree_box>
+            <schedule_search_box>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <group>grp_schedule</group>
+            </schedule_search_box>
             <userlist_tree_box>
                   <type>vbox</type>
                   <closeable>1</closeable>
@@ -1655,6 +1649,20 @@
                   <parent>vsplitbox2</parent>
                   <group>grp_settings_def</group>
             </right_column>
+            <printer_legend_box>
+                  <type>vbox</type>
+                  <no_caption>1</no_caption>
+                  <closeable>0</closeable>
+                  <group>
+                        <num_0>grp_printer_current</num_0>
+                        <num_1>grp_printer_done</num_1>
+                        <num_2>grp_printer_aborted</num_2>
+                        <num_3>grp_printer_in_progress</num_3>
+                        <num_4>grp_printer_startable</num_4>
+                        <num_5>grp_printer_notstartable</num_5>
+                  </group>
+                  <area_caption></area_caption>
+            </printer_legend_box>
             <comment_hbox>
                   <type>hbox</type>
                   <width>40%:60%</width>
