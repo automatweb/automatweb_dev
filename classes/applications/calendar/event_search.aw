@@ -1441,7 +1441,8 @@ class event_search extends class_base
 							// V6i kui syndmust ei taheta rohkem kui 1 kord kuvada.
 							break;
 						}
-						if($i < $start_tm || $i > $end_tm + (24*3600 - 1))
+						// Kui syndmust p2ritakse OID j2rgi, siis ajalisi piiranguid ei kontrolli.
+						if(($i < $start_tm || $i > $end_tm + (24*3600 - 1)) && !isset($_GET["evt_id"]))
 						{
 							continue;
 						}
