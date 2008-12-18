@@ -9,7 +9,7 @@
 //
 // Common properties for all classes
 /*
-	@classinfo  maintainer=kristo
+	@classinfo  maintainer=voldemar
 
 	@default table=objects
 	@default group=general
@@ -455,7 +455,7 @@ class class_base extends aw_template
 		{
 			$this->no_rte = 1;
 		}
-		
+
 		// and, if we are in fixed toolbar layout mode, then we should
 		// probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
@@ -558,9 +558,9 @@ class class_base extends aw_template
 		// aga mis siis, kui see on sama aken?
 		$cbtrans = get_instance("applications/cb_trans/cb_translate");
 		$trans_default_id = $cbtrans->get_sysdefault();
-	
+
 		if ($trans_default_id)
-		{	
+		{
 			$translate_url = html::href(array(
 				"caption" => t("T&otilde;lgi"),
 				"url" => $this->mk_my_orb("change",array(
@@ -573,8 +573,8 @@ class class_base extends aw_template
 			"cb_translate"),
 		));
 	}
-		
-		
+
+
 
 		$add_txt = "";
 		if (method_exists($this->inst,"callback_get_add_txt"))
@@ -1019,7 +1019,7 @@ class class_base extends aw_template
 	**/
 	function submit($args = array())
 	{
-		if ($args["posted_by_js"] == 1)
+		if (!empty($args["posted_by_js"]))
 		{
 			$args = iconv_array("utf-8", aw_global_get("charset"), $args);
 		}
@@ -1037,11 +1037,11 @@ class class_base extends aw_template
 		//$this->quote($args);
 
 		$request = $args;
-		$id = $args["id"];
-		$group = $args["group"];
-		$extraids = $args["extraids"];
-		$action = $args["action"];
-		$all_trans_status = $args["all_trans_status"];
+		$id = isset($args["id"]) ? $args["id"] : null;
+		$group = isset($args["group"]) ? $args["group"] : null;
+		$extraids = isset($args["extraids"]) ? $args["extraids"] : null;
+		$action = isset($args["action"]) ? $args["action"] : null;
+		$all_trans_status = isset($args["all_trans_status"]) ? $args["all_trans_status"] : null;
 
 		// I need to know the id of the configuration form, so that I
 		// can load it. Reason being, the properties can be grouped
@@ -1055,28 +1055,30 @@ class class_base extends aw_template
 			if ($_tmp->class_id() == CL_RELATION)
 			{
 				$this->is_rel = true;
-			};
-		};
+			}
+		}
 
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
 
-		if ($args["submit_and_forward"] != "")
+		if (!empty($args["submit_and_forward"]))
 		{
 			$gd = $this->groupinfo[$group];
-			if ($gd["forward_button"] != "")
+			if (!empty($gd["forward_button"]))
 			{
 				$group = $gd["forward_button"];
 			}
 		}
-		if ($args["submit_and_back"] != "")
+
+		if (!empty($args["submit_and_back"]))
 		{
 			$gd = $this->groupinfo[$group];
-			if ($gd["back_button"] != "")
+			if (!empty($gd["back_button"]))
 			{
 				$group = $gd["back_button"];
 			}
 		}
+
 		$args = array(
 			"id" => $this->id,
 			"group" => $group,
@@ -1825,7 +1827,7 @@ class class_base extends aw_template
 		$cli_args = array(
 			"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 			"content" => $args["content"],
-			"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
+			"confirm_save_data" => (isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]) || !empty($this->groupinfo[$this->use_group]["confirm_save_data"])),
 			"save_message" => $this->just_saved ? $just_saved_msg : null
 		);
 
@@ -2549,7 +2551,7 @@ class class_base extends aw_template
 				$val = is_array($value) ? $value : array($value);
 				foreach($val as $value)
 				{
-					
+
 					foreach($parse_props as $prop)
 					{
 						// &$properties[$key], $value, $argblock
@@ -3483,51 +3485,51 @@ class class_base extends aw_template
 			$arr["cfgform_id"] = aw_ini_get("document.default_cfgform");
 		}
 
-
+		$controllers = array();
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]) )
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
-		};
+		}
 
 		$res = array();
 
 		if (!is_array($arr["request"]))
 		{
 			return $res;
-		};
+		}
 
 		foreach($props as $key => $tmp)
 		{
 			// skiping text controllers.. you can't save anything with them, aight? -- ahz
 			// seems that i need to do that --dragut
 			// seems it CANNOT be removed! --dragut
-			if($tmp["type"] == "text")
+			if($tmp["type"] === "text")
 			{
 				continue;
 			}
 
-			$val = $arr["request"][$key];
+			$val = isset($arr["request"][$key]) ? $arr["request"][$key] : null;
 			$prpdata = &$props[$key];
-			if (1 == $prpdata["required"] && !$val)
+			if (!empty($prpdata["required"]) && strlen($val) < 1)
 			{
 				$res[$key] = array(
 					"msg" => t("See v&auml;li ei tohi olla t&uuml;hi!"),
 				);
-			};
+			}
 
-			if ("email" == $prpdata["validate"])
+			if (isset($prpdata["validate"]) and "email" === $prpdata["validate"])
 			{
 				if (!is_email($val))
 				{
 					$res[$key] = array(
 						"msg" => t("See pole korrektne e-posti aadress!"),
 					);
-				};
-			};
+				}
+			}
 
 			$rvs = array();
-			if($controllers[$key])
+			if(isset($controllers[$key]))
 			{
 				$controller = is_array($controllers[$key]) ? $controllers[$key] : array($controllers[$key]);
 				foreach($controller as $contr)
@@ -3552,28 +3554,30 @@ class class_base extends aw_template
 						"obj_inst" => &$this->obj_inst,
 					));
 					*/
-					if ($controller_ret != PROP_OK && is_oid($controller_id))
+					if ($controller_ret !== PROP_OK && is_oid($controller_id))
 					{
 						if ($this->cfg_debug)
 						{
 							print "validation failed!<br>";
-						};
+						}
+
 						$ctrl_obj = new object($controller_id);
 						$errmsg = $ctrl_obj->trans_get_val("errmsg");
 						if (empty($errmsg))
 						{
 							$errmsg = "Entry was blocked by a controller, but no error message is available";
-						};
+						}
 						$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
 						$rvs[] = $errmsg;
-					};
+					}
 				}
+
 				if(!empty($rvs))
 				{
 					$res[$key]["msg"] = implode("<br />\n", $rvs);
 				}
 			}
-		};
+		}
 		return $res;
 	}
 
@@ -3581,8 +3585,6 @@ class class_base extends aw_template
 	// !Processes and saves form data
 	function process_data($args = array())
 	{
-		extract($args);
-
 		$this->init_class_base();
 		if (method_exists($this->inst,"callback_on_load"))
 		{
@@ -3594,11 +3596,11 @@ class class_base extends aw_template
 		// and this of course should handle both creating new objects and updating existing ones
 
 		$callback = method_exists($this->inst,"set_property");
-
 		$class_methods = get_class_methods($this->inst);
 
 		$new = false;
-		$this->id = isset($id) ? $id : "";
+		$this->id = isset($args["id"]) ? $args["id"] : "";
+		$group = isset($args["group"]) ? $args["group"] : "";
 
 		// basically, if this is a new object, then I need to load all the properties
 		// that have default values and add them to the bunch.
@@ -3608,26 +3610,28 @@ class class_base extends aw_template
 
 		// this object creation thingie should also only be defined in the forminfo
 
-		if (empty($id))
+		if (empty($this->id) and !empty($args["parent"]) and is_oid($args["parent"]))
 		{
+			$parent = $args["parent"];
 			$o = new object;
 			$o->set_class_id($this->clid);
 			$o->set_parent($parent);
-			$o->set_status($status ? $status : STAT_ACTIVE);
-			if ($args["period"])
+			$o->set_status(isset($args["status"]) ? $args["status"] : object::STAT_ACTIVE);
+
+			if (isset($args["period"]))
 			{
 				$o->set_period($args["period"]);
 			}
-			if (isset($rawdata["lang_id"]))
+
+			if (isset($args["rawdata"]["lang_id"]))
 			{
 				$lg = get_instance("languages");
-				$o->set_lang($lg->get_langid($rawdata["lang_id"]));
+				$o->set_lang($lg->get_langid($args["rawdata"]["lang_id"]));
 			}
 
 			$new = true;
 			$this->id = $id;
-
-		};
+		}
 
 		$args["new"] = $this->new = $new;
 
@@ -3640,13 +3644,13 @@ class class_base extends aw_template
 		else
 		{
 			$this->obj_inst = $o;
-		};
+		}
 
-		if (is_oid($args["_object_type"]) && $this->can("view",$this->request["_object_type"]))
+		if (isset($args["_object_type"]) and $this->can("view", $args["_object_type"]))
 		{
-			$ot_obj = new object($this->request["_object_type"]);
+			$ot_obj = new object($args["_object_type"]);
 			$o->set_meta("object_type",$args["_object_type"]);
-		};
+		}
 
 		$filter = array();
 		$filter["clfile"] = $this->clfile;
@@ -3654,6 +3658,7 @@ class class_base extends aw_template
 		$filter["group"] = $group;
 		$filter["rel"] = $this->is_rel;
 		$filter["ignore_layout"] = 1;
+
 		if ($args["cfgform"])
 		{
 			$filter["cfgform_id"] = $args["cfgform"];
@@ -3664,16 +3669,16 @@ class class_base extends aw_template
 			$filter["cfgform_id"] = $this->obj_inst->meta("cfgform_id");
 		}
 
-		if ($args["cb_existing_props_only"] || $is_paste)
+		if (!empty($args["cb_existing_props_only"]) || !empty($args["is_paste"]))
 		{
 			$properties = $this->load_defaults();
 		}
 		else
 		{
 			$properties = $this->get_property_group($filter, $args);
-		};
+		}
 
-		if ($this->groupinfo[$group]["save"] == "no")
+		if (isset($this->groupinfo[$group]["save"]) and $this->groupinfo[$group]["save"] === "no")
 		{
 			return true;
 		}
@@ -3685,11 +3690,10 @@ class class_base extends aw_template
 				if (!empty($val["default"]))
 				{
 					$o->set_prop($key,$val["default"]);
-				};
-			};
+				}
+			}
+		}
 
-		};
-		
 		$errors = $this->validate_data(array(
 			"request" => $args,
 			"cfgform_id" => $args["cfgform"],
@@ -3709,22 +3713,24 @@ class class_base extends aw_template
 		{
 			// XXX: temporary workaround to save only these properties which were present in the form
 			// required by releditor
-			if ($args["cb_existing_props_only"] && !isset($args[$key]))
+			if (!empty($args["cb_existing_props_only"]) && !isset($args[$key]))
 			{
 				continue;
-			};
+			}
 
 			//do not call set_property for edit_only properties when a new
 			// object is created.
 			if ($new && isset($property["editonly"]))
 			{
 				continue;
-			};
+			}
+
 			// and also skip the properties that are newonly
 			if(!$new && isset($property["newonly"]))
 			{
 				continue;
 			}
+
 			// status has already been written out, no need to do this again
 			/*
 			if ($property["name"] == "status")
@@ -3732,13 +3738,13 @@ class class_base extends aw_template
 				continue;
 			};
 			*/
+
 			// don't save or display un-translatable fields if we are editing a translated object
-			if (!$this->is_translated && $property["name"] == "is_translated")
+			if (!$this->is_translated && $property["name"] === "is_translated")
 			{
 				$xval = 1;
 			}
-			else
-			if ($this->is_translated && $property["trans"] != 1)
+			elseif ($this->is_translated && $property["trans"] != 1)
 			{
 				continue;
 			}
@@ -3746,7 +3752,7 @@ class class_base extends aw_template
 			$name = $property["name"];
 			$type = $property["type"];
 
-			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
+			$xval = isset($args["rawdata"][$name]) ? $args["rawdata"][$name] : "";
 
 			/* the following is bogus, storage takes care of default values anyway
 				but if something breaks by creation of new objects, then this
@@ -3760,9 +3766,9 @@ class class_base extends aw_template
 			if (isset($property["value"]))
 			{
 				$xval = $property["value"];
-			};
+			}
 
-			if ($property["type"] == "checkbox")
+			if ($property["type"] === "checkbox")
 			{
 				// set value to 0 for unchecked checkboxes
 				// well, shit, I need to figure out another way to do checkboxes
@@ -3773,12 +3779,12 @@ class class_base extends aw_template
 				// fields .. those will then not have a value either and saving
 				// such a form would case a disaster.
 				$xval = (int)$xval;
-			};
+			}
 
-			if ($method == "bitmask" && empty($pvalues[$name]))
+			if (isset($property["method"]) && $property["method"] === "bitmask" && empty($pvalues[$name]))
 			{
 				$pvalues[$name] = $this->obj_inst->prop($name);
-			};
+			}
 
 			$property["value"] = $xval;
 
@@ -3788,18 +3794,8 @@ class class_base extends aw_template
 				"value" => $property["value"],
 			);
 		}
-		
+
 		$realprops = $tmp;
-
-		// this seems not to be neccessary, because the real checking is done lightyears before -- ahz
-		/*
-		$controller_inst = get_instance(CL_CFGCONTROLLER);
-
-		if($args["cfgform"])
-		{
-			$controllers = $this->get_all_controllers($args["cfgform"]);
-		}
-		*/
 
 		// now do the real job.
 		foreach($realprops as $key => $property)
@@ -3808,16 +3804,12 @@ class class_base extends aw_template
 			$type = $property["type"];
 			$argblock = array(
 				"prop" => &$property,
-				"request" => &$rawdata,
+				"request" => &$args["rawdata"],
 				"new" => $new,
 				"obj_inst" => &$this->obj_inst,
 				"relinfo" => $this->relinfo,
 			);
-
 			$status = PROP_OK;
-
-
-
 
 			// give the class a possiblity to execute some action
 			// while we are saving it.
@@ -3831,14 +3823,13 @@ class class_base extends aw_template
 			{
 				$status = $this->inst->$setter($argblock);
 			}
-			else
-			if ($callback)
+			elseif ($callback)
 			{
 				$status = $this->inst->set_property($argblock);
 				// XXX: what if one set_property changes a value and
 				// other raises an error. Then we will have the original
 				// value in the session. Is that a problem?
-			};
+			}
 
 			// what the duke is going on here? errors?
 			if (isset($errors[$name]["msg"]))
@@ -3890,33 +3881,34 @@ class class_base extends aw_template
 				else
 				{
 					$propvalues[$name]["error"] = $argblock["prop"]["error"];
-				};
-                                foreach($realprops as $k => $v)
-                                {
-                                        $propvalues[$k]["edit_data"] = $args[$k."_data"];
-                                }
+				}
+
+				foreach($realprops as $k => $v)
+				{
+					$propvalues[$k]["edit_data"] = $args[$k."_data"];
+				}
+
 				$this->cb_values = $propvalues;
 				aw_session_set("cb_values",$propvalues);
 				$this->stop_processing = true;
-				//return false;
-			};
+			}
 
 			// oh well, bail out then.
-			if ($status != PROP_OK)
+			if ($status !== PROP_OK)
 			{
 				continue;
-			};
+			}
 
 			// don't care about text elements
 			// but i do --dragut
 			// seems that it CANNOT be removed! --dragut
 			// why? -- duke
-			if ($type == "text")
+			if ($type === "text")
 			{
 				continue;
-			};
+			}
 
-			if ($property["type"] == "releditor")
+			if ($property["type"] === "releditor")
 			{
 				/// XXX: right now I can only have one type of rel editor
 				classload("vcl/releditor");
@@ -3969,20 +3961,20 @@ class class_base extends aw_template
 				}
 			};
 
-			if (isset($property["store"]) && $property["store"] == "no")
+			if (isset($property["store"]) && $property["store"] === "no")
 			{
 				continue;
-			};
+			}
 
 			// XXX: create a VCL component out of this
 			// would be nice if one VCL component could handle multiple property types
-			if (($type == "date_select") || ($type == "datetime_select"))
+			if (($type === "date_select") || ($type === "datetime_select"))
 			{
-				if (is_array($rawdata[$name]))
+				if (is_array($args["rawdata"][$name]))
 				{
-					if ($property["save_format"] == "iso8601")
+					if ($property["save_format"] === "iso8601")
 					{
-						$dt = $rawdata[$name];
+						$dt = $args["rawdata"][$name];
 						if ($dt["year"] < 1 || $dt["month"] < 1 || $dt["day"] < 1)
 						{
 							$property["value"] = "";
@@ -3995,12 +3987,12 @@ class class_base extends aw_template
 					else
 					{
 						classload("vcl/date_edit");
-						$property["value"] = date_edit::get_timestamp($rawdata[$name]);
+						$property["value"] = date_edit::get_timestamp($args["rawdata"][$name]);
 					};
 				};
 			};
 
-			if ($type == "relmanager")
+			if ($type === "relmanager")
 			{
 				$argblock["prop"] = &$property;
 				//$target_reltype = $this->relinfo[$property["reltype"]];
@@ -4014,38 +4006,39 @@ class class_base extends aw_template
 				$vcl_inst->process_relmanager($argblock);
 			};
 
-			if (($type == "select") && isset($property["multiple"]))
+			if (($type === "select") && isset($property["multiple"]))
 			{
-				$property["value"] = $this->make_keys($rawdata[$name]);
-			};
+				$property["value"] = $this->make_keys($args["rawdata"][$name]);
+			}
 
-			if (isset($property["method"]) && $property["method"] == "bitmask")
+			if (isset($property["method"]) && $property["method"] === "bitmask")
 			{
 				// shift to the left, shift to the right
 				// pop, push, pop, push
-				if ( ($pvalues[$name] & $property["ch_value"]) && !($rawdata[$name] & $property["ch_value"]))
+				if ( ($pvalues[$name] & $property["ch_value"]) && !($args["rawdata"][$name] & $property["ch_value"]))
 				{
 					$pvalues[$name] -= $property["ch_value"];
 				}
-				elseif (!($pvalues[$name] & $property["ch_value"]) && ($rawdata[$name] & $property["ch_value"]))
+				elseif (!($pvalues[$name] & $property["ch_value"]) && ($args["rawdata"][$name] & $property["ch_value"]))
 				{
 					$pvalues[$name] += $property["ch_value"];
 				};
-			};
+			}
+
 			if ($this->is_rel)
 			{
-				if ($name == "name")
+				if ($name === "name")
 				{
 					$this->obj_inst->set_name($property["value"]);
 				}
 				else
 				{
 					$values[$name] = $property["value"];
-				};
+				}
 			}
 			else
 			{
-				if (isset($property["method"]) && $property["method"] == "bitmask")
+				if (isset($property["method"]) && $property["method"] === "bitmask")
 				{
 					$val = ($property["ch_value"] == $property["value"]) ? $property["ch_value"] : 0;
 					if ($this->obj_inst->is_property($name))
@@ -4053,18 +4046,17 @@ class class_base extends aw_template
 						$this->obj_inst->set_prop($name,$val);
 					}
 				}
-				else
-				if ($type != "releditor" && $this->obj_inst->is_property($name))	// cause it submits CRAP
+				elseif ($type !== "releditor" && $this->obj_inst->is_property($name))	// cause it submits CRAP
 				{
 					$this->obj_inst->set_prop($name,$property["value"]);
-				};
-			};
-		};
+				}
+			}
+		}
 
 		if ($this->stop_processing)
 		{
 			return false;
-		};
+		}
 
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
 		{
@@ -4080,8 +4072,7 @@ class class_base extends aw_template
 		}
 
 		// translation. if the object is is_translated or needs_translation, it gets the has_translation flag
-		if ($this->obj_inst->flag(OBJ_NEEDS_TRANSLATION) || $this->obj_inst->flag(OBJ_IS_TRANSLATED) ||
-			$this->obj_inst->prop("needs_translation") || $this->obj_inst->prop("is_translated"))
+		if ($this->obj_inst->flag(OBJ_NEEDS_TRANSLATION) || $this->obj_inst->flag(OBJ_IS_TRANSLATED) || $this->obj_inst->prop("needs_translation") || $this->obj_inst->prop("is_translated"))
 		{
 			$this->obj_inst->set_flag(OBJ_HAS_TRANSLATION, true);
 		}
@@ -4089,7 +4080,7 @@ class class_base extends aw_template
 		// gee, I wonder how many pre_save handlers do I have to fix to get this thing working
 		// properly
 
-		if (method_exists($this->inst,"callback_pre_save"))
+		if (method_exists($this->inst, "callback_pre_save"))
 		{
 			$this->inst->callback_pre_save(array(
 				"new" => $new,
@@ -4103,7 +4094,7 @@ class class_base extends aw_template
 		if (isset($this->cfgform_id))
 		{
 			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
-		};
+		}
 
 		// this is here to solve the line break problems with RTE
 		if (isset($args["cb_nobreaks"]) && is_array($args["cb_nobreaks"]))
@@ -4117,7 +4108,7 @@ class class_base extends aw_template
 		if ($this->obj_inst->prop("status") == 0 || !empty($this->classinfo["no_status"]))
 		{
 			$this->obj_inst->set_status(STAT_ACTIVE);
-		};
+		}
 
 		$this->just_saved = 1;
 		$this->obj_inst->save();
@@ -4128,12 +4119,12 @@ class class_base extends aw_template
 		{
 			aw_session_set("added_object",$id);//axel h&auml;kkis
 
-			if ($alias_to || $rawdata["alias_to"])
+			if ($alias_to || $args["rawdata"]["alias_to"])
 			{
-				$_to = obj(($rawdata["alias_to"] ? $rawdata["alias_to"] : $alias_to));
+				$_to = obj(($args["rawdata"]["alias_to"] ? $args["rawdata"]["alias_to"] : $alias_to));
 
 				// XXX: reltype in the url is numeric, it probably should not be
-				$reltype = $rawdata["reltype"] ? $rawdata["reltype"] : $reltype;
+				$reltype = $args["rawdata"]["reltype"] ? $args["rawdata"]["reltype"] : $reltype;
 				$_to->connect(array(
 					"to" => $this->obj_inst->id(),
 					"reltype" => $reltype,
@@ -4155,7 +4146,7 @@ class class_base extends aw_template
 				// figure out symbolic name for numeric reltype
 				foreach($this->relinfo as $key => $val)
 				{
-					if (substr($key,0,7) == "RELTYPE")
+					if (substr($key,0,7) === "RELTYPE")
 					{
 						if ($reltype == $val["value"])
 						{
@@ -4169,7 +4160,7 @@ class class_base extends aw_template
 				foreach($bt as $item_key => $item)
 				{
 					// double check just in case
-					if (!empty($symname) && ($item["type"] == "popup_search" || $item["type"] == "relpicker" || $item["type"] == "relmanager") && ($item["reltype"] == $symname))
+					if (!empty($symname) && ($item["type"] === "popup_search" || $item["type"] === "relpicker" || $item["type"] === "relmanager") && ($item["reltype"] == $symname))
 					{
 						$target_prop = $item_key;
 					};
@@ -4192,15 +4183,16 @@ class class_base extends aw_template
 				// this is after the new connection has been made
 				if ($target_prop != "" && ($conn_count == 1 || !$bt[$target_prop]["multiple"] ))
 				{
-					if (!($alias_to_prop || $rawdata["alias_to_prop"])) // avoid double save
+					if (!($alias_to_prop || $args["rawdata"]["alias_to_prop"])) // avoid double save
 					{
 						$_to->set_prop($target_prop,$this->obj_inst->id());
 						$_to->save();
 					}
 				}
-				if ($alias_to_prop || $rawdata["alias_to_prop"])
+
+				if ($alias_to_prop || $args["rawdata"]["alias_to_prop"])
 				{
-					$altp = $alias_to_prop ? $alias_to_prop : $rawdata["alias_to_prop"];
+					$altp = $alias_to_prop ? $alias_to_prop : $args["rawdata"]["alias_to_prop"];
 					$curpv = $_to->prop($altp);
 					$property_info = $_to->get_property_list();
 
@@ -4235,7 +4227,7 @@ class class_base extends aw_template
 		foreach($properties as $key => $prop)
 		{
 			// load callback_post_save in multifile upload if not done allready
-			$inst = $prop["vcl_inst"];
+			$inst = isset($prop["vcl_inst"]) ? $prop["vcl_inst"] : null;
 			if (!is_object($inst))
 			{
 				switch($prop["type"])
@@ -4299,7 +4291,7 @@ class class_base extends aw_template
 			}
 		}
 
-		if ($_POST["pseh"] != "" && isset($_SESSION["ps_event_handlers"][$_POST["pseh"]]) && $_SESSION["ps_event_handlers"][$_POST["pseh"]][3] == $this->obj_inst->class_id())
+		if (!empty($_POST["pseh"]) && isset($_SESSION["ps_event_handlers"][$_POST["pseh"]]) && $_SESSION["ps_event_handlers"][$_POST["pseh"]][3] == $this->obj_inst->class_id())
 		{
 			$pseh_dat = $_SESSION["ps_event_handlers"][$_POST["pseh"]];
 			$pseh_i = get_instance($pseh_dat[0]);
@@ -4844,9 +4836,9 @@ class class_base extends aw_template
 				unset($propdata["default"]);
 			}
 
-			$propgroups = $property_groups[$key];
+			$propgroups = isset($property_groups[$key]) ? $property_groups[$key] : array();
 
-			if (!is_array($propgroups))
+			if (count($propgroups) < 1)
 			{
 				continue;
 			}
