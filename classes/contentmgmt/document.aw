@@ -1059,7 +1059,7 @@ class document extends aw_template
 						'name' => $row['name'],
 						'email' => $row['email'],
 						'subject' => $row['subj'],
-						'comment' => nl2br(htmlspecialchars(stripslashes($row['comment']))), 
+						'comment' => nl2br(htmlspecialchars(stripslashes($row['comment']))),
 						'time' => date('d.m.Y / H:i', $row['time']),
 						'site_id' => $row['site_id'],
 						'ip' => $row['ip']
@@ -2693,7 +2693,7 @@ class document extends aw_template
 						"/href\s*=\s*[\"']{1}(\/.*)[\"']{1}(.*)>(.*)</U",
 						"/href\s*=\s*[\"']{1}([^h][^t][^t][^p][^:].*)[\"']{1}(.*)>(.*)<|href\s*=\s*[\"']{1}([^h][^t][^t][^p][^s][^:].*)[\"']{1}(.*)>(.*)</U",
 					);
-		
+
 					$a_print_link_replace = array(
 						"href=\"".aw_ini_get("baseurl")."\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."\\1)</span><",
 						"href=\"".aw_ini_get("baseurl")."/\\1\"\\2>\\3 <span class=\"url\">(".aw_ini_get("baseurl")."/\\1)</span><",
@@ -2706,7 +2706,7 @@ class document extends aw_template
 					$a_print_link_find = array(
 						"/href\s*=\s*[\"']{1}(http.*)[\"']{1}(.*)>(.*)</U",
 					);
-		
+
 					if (strpos($a_link_matches[1][$key], "http") === false)
 					{
 						$a_print_link_replace = array(
@@ -2719,7 +2719,7 @@ class document extends aw_template
 							"href=\"\\1\"\\2>\\3 <span class=\"url\">(\\1)</span><",
 						);
 					}
-					
+
 					$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
 					$str = str_replace($a_link_matches[0][$key], $tmp, $str);
 				}
@@ -2728,13 +2728,13 @@ class document extends aw_template
 					$a_print_link_find = array(
 						"/<a.*href\s*=\s*[\"']{1}\mailto:(.*)[\"']{1}.*a>/U",
 					);
-		
+
 					$a_print_link_replace = array(
 						"\\1",
 					);
 					$tmp = preg_replace ($a_print_link_find, $a_print_link_replace, $a_link_matches[0][$key]);
 					$str = str_replace($a_link_matches[0][$key], $tmp, $str);
-		
+
 				}
 			}
 		}
@@ -3298,6 +3298,13 @@ class document extends aw_template
 					"type" => "text"
 				));
 				return true;
+
+			case "show_to_country":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "varchar(255)"
+				));
+				return true;
 		}
 		return false;
 	}
@@ -3389,8 +3396,8 @@ class document extends aw_template
 		{
 			$docs[$crow["oid"]] = $crow["id"];
 		}
-		
-		$result = array(); 
+
+		$result = array();
 		$months = array();
 		$q = "SELECT time,board_id FROM comments  WHERE time > '".$start."'";
 		$this->db_query($q);
@@ -3399,7 +3406,7 @@ class document extends aw_template
 			if(array_key_exists($crow["board_id"] , $docs))
 			{
 			$cnt++;
-			$result[date("Y" , $crow["time"])][date("m" , $crow["time"])]++; 
+			$result[date("Y" , $crow["time"])][date("m" , $crow["time"])]++;
 			}
 		}
 		return $result;

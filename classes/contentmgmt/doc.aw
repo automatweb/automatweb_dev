@@ -386,16 +386,6 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "show_to_country":
-				$tbl = $this->db_get_table("documents");
-				if (!isset($tbl["fields"]["show_to_country"]))
-				{
-					$this->db_add_col("documents", array(
-						"name" => "show_to_country",
-						"type" => "varchar(255)"
-					));
-				}
-				break;
 			case "brother_warning":
 				if ($arr["obj_inst"]->is_brother())
 				{
@@ -812,7 +802,7 @@ class doc extends class_base
 				}
 			}
 		}
-		
+
 		if(!$args["request"]["no_rte"])
 		{
 			$props = $this->get_property_group($args);
@@ -835,7 +825,7 @@ class doc extends class_base
 					if($setval)
 					{
 						$args["obj_inst"]->set_prop($prop["name"], $val);
-						$args["obj_inst"]->save();	
+						$args["obj_inst"]->save();
 					}
 				}
 			}
@@ -901,12 +891,12 @@ class doc extends class_base
 
 	/** Returns array of addable document types
 		@attrib api=1 params=pos
-		
+
 		@param parent required type=oid
-			The object the add links point to 
+			The object the add links point to
 
 		@param period required type=int
-			The period the add links point to 
+			The period the add links point to
 
 		@returns
 			array { doc_type => array { name => type name , link => add link }, ... } for all doc types in the system. or a default type if none found
@@ -1576,27 +1566,28 @@ class doc extends class_base
         }
 
 
-	function do_db_upgrade($t, $f)
-	{
-		switch($f)
-		{
-			case "user7":
-			case "user8":
-			case "user9":
-			case "user10":
-			case "user11":
-			case "user12":
-			case "user13":
-			case "user14":
-			case "user15":
-			case "user16":
-				$this->db_add_col($t, array(
-					"name" => $f,
-					"type" => "varchar(255)"
-				));
-			return true;
-		}
-	}
+	// function do_db_upgrade($t, $f)
+	// {
+		// switch($f)
+		// {
+			// case "user7":
+			// case "user8":
+			// case "user9":
+			// case "user10":
+			// case "user11":
+			// case "user12":
+			// case "user13":
+			// case "user14":
+			// case "user15":
+			// case "user16":
+			// case "show_to_country":
+				// $this->db_add_col($t, array(
+					// "name" => $f,
+					// "type" => "varchar(255)"
+				// ));
+			// return true;
+		// }
+	// }
 
 	private function _get_simultaneous_key($o)
 	{
@@ -1646,7 +1637,7 @@ class doc extends class_base
 		if (count($data) == 1)
 		{
 			$data = reset($data);
-			$arr["prop"]["value"] = html::strong(sprintf(t("Hoiatus, seda dokumenti muudab hetkel kasutaja %s, muutmisvaate avas %s"), 
+			$arr["prop"]["value"] = html::strong(sprintf(t("Hoiatus, seda dokumenti muudab hetkel kasutaja %s, muutmisvaate avas %s"),
 				obj($data["person"])->name,
 				date("d.m.Y H:i:s", $data["tm"])
 			));
@@ -1664,7 +1655,7 @@ class doc extends class_base
 	}
 
 	function callback_pre_edit($arr)
-	{	
+	{
 		if (is_oid($arr["obj_inst"]->id()))
 		{
 			$key = $this->_get_simultaneous_key($arr["obj_inst"]);
@@ -1700,7 +1691,7 @@ class doc extends class_base
 
 			$this->set_cval($key, serialize($data));
 		}
-		
+
 		die();
 	}
 
