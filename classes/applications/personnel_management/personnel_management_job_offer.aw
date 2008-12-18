@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.65 2008/11/25 15:17:59 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.66 2008/12/18 11:15:20 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -65,7 +65,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @caption T&ouml;&ouml;koormus
 
 @property field type=relpicker reltype=RELTYPE_FIELD store=connect
-@caption Valdkond
+@caption Valdkond (muutuja)
+
+@property sector type=relpicker reltype=RELTYPE_SECTOR multiple=1 store=connect
+@caption Tegevusala (tegevusala objekt)
 
 #@property location type=relpicker reltype=RELTYPE_LOCATION store=connect
 #@caption Asukoht
@@ -290,6 +293,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT
 @reltype JOB_TYPE value=24 clid=CL_META
 @caption Positsioon
 
+@reltype SECTOR value=25 clid=CL_CRM_SECTOR
+@caption Tegevusala
+
+@reltype NOTIFY_ME_OF_CONFIRMATION value=26 clid=CL_ML_MEMBER
+@caption E-postiaadress, kuhu teatada aktiveerimisest
+
 */
 
 class personnel_management_job_offer extends class_base
@@ -313,6 +322,10 @@ class personnel_management_job_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "sector":
+				$prop["options"] = get_instance(CL_PERSONNEL_MANAGEMENT)->get_sectors();
+				break;
+
 			case "jo_type":
 				$r = get_instance(CL_CLASSIFICATOR)->get_choices(array(
 					"clid" => CL_PERSONNEL_MANAGEMENT,
@@ -620,6 +633,23 @@ class personnel_management_job_offer extends class_base
 			case "loc_area":
 			case "loc_county":
 			case "loc_city":
+				if((!isset($prop["mode"]) || $prop["mode"] != "autocomplete") && $prop["type"] != "textbox")
+				{
+					if(substr($prop["name"], 0, 4) == "loc_")
+					{
+						$prop["options"] = get_instance(CL_PERSONNEL_MANAGEMENT)->get_locations(constant("CL_CRM_".strtoupper(substr($prop["name"], 4))));
+					}
+					elseif($prop["name"] == "profession")
+					{
+						$prop["options"] = get_instance(CL_PERSONNEL_MANAGEMENT)->get_professions();
+					}
+					elseif($prop["name"] == "company")
+					{
+						$cp = get_instance(CL_USER)->get_person_for_uid(aw_global_get("uid"));
+						$org = obj($cp->company_id());
+						$prop["options"][$org->id()] = $org->name();
+					}
+				}
 				$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_".$prop["name"]);
 				$prop["autocomplete_params"] = array($prop["name"]);
 				$prop["option_is_tuple"] = true;
@@ -1166,7 +1196,7 @@ class personnel_management_job_offer extends class_base
 				break;
 
 			case "profession":
-				if(!is_oid($prop["value"]) && strlen($prop["value"]) > 0)
+				if(!is_array($prop["value"]) && !is_oid($prop["value"]) && strlen($prop["value"]) > 0)
 				{
 					$pm = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
 					$ol = new object_list(array(

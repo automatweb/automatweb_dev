@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.20 2008/12/16 13:37:35 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.21 2008/12/18 11:15:20 instrumental Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov
 /*
 
@@ -149,7 +149,7 @@ class personnel_management_job_wanted extends class_base
 					if(is_array($conf) && count($conf))
 					{
 						$ops = $pm_inst->get_locations($conf);
-						$prop["options"] = array_merge(safe_array($prop["options"]), $ops);
+						$prop["options"] = safe_array($prop["options"]) + safe_array($ops);
 					}
 				}
 				break;

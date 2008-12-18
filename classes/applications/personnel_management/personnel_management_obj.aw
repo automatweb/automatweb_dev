@@ -11,22 +11,57 @@ class personnel_management_obj extends _int_object
 		return parent::prop($k);
 	}
 
-	/** Sends CV to e-mail.
-	@attrib name=notify_of_new_cv api=1 params=name
+	/**
+	@attrib name=notify_of_new_cv params=name
 
 	@param person_obj required type=object acl=view
 
-	@param to required type=string acl=view
+	@param to required type=string
 
 	@param pm_obj optional type=object acl=view
 
 	**/
 	function notify_of_new_cv($arr)
 	{
-		// $person_obj, $to, $pm_obj
+		$arr["lang"] = is_object($pm_obj) && is_oid($pm_obj->prop("notify_lang")) ? $pm_obj->prop("notify_lang.lang_acceptlang") : aw_ini_get("user_interface.default_language");
+		$this->send_cv_by_email($arr);
+	}
+
+	/** Sends CV to e-mail.
+		@attrib name=send_cv_by_email api=1 params=name
+
+		@param person_obj required type=object
+			The person object to be sent.
+		@param pm_obj optional type=object
+			The personnel management object to be used. If not set, the system default will be used.
+		@param to optional type=string
+			The e-mail addresses to send the CV to.
+		@param cc optional type=string
+			The e-mail addresses to send the CV to.
+		@param bcc optional type=string
+			The e-mail addresses to send the CV to.
+		@param lang optional type=string
+			The language code. A'la en, ru, et, jp etc..
+	**/
+	function send_cv_by_email($arr)
+	{
 		extract($arr);
-		$cv_lang = is_object($pm_obj) && is_oid($pm_obj->prop("notify_lang")) ? $pm_obj->prop("notify_lang.lang_acceptlang") : aw_ini_get("user_interface.default_language");
-		aw_ini_set("user_interface.default_language", $cv_lang);
+		if(isset($lang))
+		{
+			aw_ini_set("user_interface.default_language", $lang);
+		}
+		if(!isset($pm_obj) || !is_object($pm_obj))
+		{
+			if(is_oid(parent::id()))
+			{
+				$pm_obj = obj(parent::id());
+			}
+			else
+			{
+				$pm_obj = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+			}
+		}
+
 		$message = get_instance(CL_CRM_PERSON)->show_cv(array(
 			"id" => $person_obj->id(),
 			"cv" => "cv/".basename($pm_obj->prop("cv_tpl")),
@@ -34,19 +69,22 @@ class personnel_management_obj extends _int_object
 		$real_lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
 		$lang_id = aw_global_get("lang_id");
 		aw_session_set("lang_id", $real_lang_id);
-		// Don't ask me what the next 15 lines do, copy-paste from ml_queue.aw -kaarel
-		$subject = is_object($pm_obj) ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud");
-		$subject = $msg["subject"]="=?".aw_global_get("charset")."?B?".base64_encode($subject)."?=\n";
+
+		$subject = strlen($pm_obj->prop("notify_subject")) > 0 ? $pm_obj->prop("notify_subject") : t("Uus CV on lisatud");
+		$subject = "=?".aw_global_get("charset")."?B?".base64_encode($subject)."?=\n";
+
 		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->set_header("Content-Type","text/plain; charset=\"".aw_global_get("charset")."\"");
 		$awm->create_message(array(
 			"froma" => $pm_obj->prop("notify_froma"),
 			"fromn" => $pm_obj->prop("notify_fromn"),
 			"subject" => $subject,
-			"To" => $to,
+			"to" => $to,
+			"cc" => $cc,
+			"bcc" => $bcc,
 		));
 		$message = str_replace("<br />", "<br />\n" ,$message);
-		$message = str_replace("<br>", "<br>\n" ,$message);
+		$message = str_replace("<br>", "<br />\n" ,$message);
 		$message = str_replace("</p>", "</p>\n" ,$message);
 		$awm->htmlbodyattach(array(
 			"data" => $message,

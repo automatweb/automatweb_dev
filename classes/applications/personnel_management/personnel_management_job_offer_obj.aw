@@ -66,8 +66,7 @@ class personnel_management_job_offer_obj extends _int_object
 				return 0;
 			}
 		}
-		else
-		if($k == "end" && $this->prop("endless"))
+		elseif($k == "end" && $this->prop("endless"))
 		{
 			// Endless - as BIG as possible!
 			return pow(2, 31) - 1;
@@ -122,6 +121,41 @@ class personnel_management_job_offer_obj extends _int_object
 			$o->save();
 			aw_restore_acl();
 		}
+	}
+
+	function notify_me_of_confirmation()
+	{
+		$pm_obj = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		foreach($this->connections_from(array("type" => "RELTYPE_NOTIFY_ME_OF_CONFIRMATION")) as $conn)
+		{
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->set_header("Content-Type","text/plain; charset=\"".aw_global_get("charset")."\"");
+			$awm->create_message(array(
+				"froma" => $pm_obj->prop("notify_froma"),
+				"fromn" => $pm_obj->prop("notify_fromn"),
+				"subject" => sprintf(t("Job offer '%s' is confirmed!"), $this->name()),
+				"body" => sprintf(t("To whom it may concerne,
+
+Job offer '%s' has been confirmed.
+
+Regards,
+Your Personnel Management"), $this->name()),
+				"to" => $conn->to()->mail,
+				"cc" => $cc,
+				"bcc" => $bcc,
+			));
+			$awm->gen_mail();
+		}
+	}
+
+	function save()
+	{
+		if(parent::prop("confirmed") && !parent::meta("confirmation_mail_sent"))
+		{
+			$this->notify_me_of_confirmation();
+			parent::set_meta("confirmation_mail_sent", 1);
+		}
+		return parent::save();
 	}
 }
 
