@@ -399,7 +399,7 @@ class crm_person_obj extends _int_object
 		if($return_as_odl === true)
 		{
 			$ret = new object_data_list($prms, array(
-				CL_CRM_PHONE => array("oid", "mail"),
+				CL_ML_MEMBER => array("oid", "mail"),
 			));
 		}
 		else
@@ -631,7 +631,14 @@ class crm_person_obj extends _int_object
 			case "fake_address_county":
 			case "fake_address_city":
 			case "fake_address_country":
-				$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				if($GLOBALS["object_loader"]->cache->can("view", $v))
+				{
+					$eo->set_prop($pmap[$k], $v);
+				}
+				else
+				{
+					$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				}
 				break;
 
 			case "fake_address_postal_code":

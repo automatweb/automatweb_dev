@@ -1900,7 +1900,7 @@ class crm_company extends class_base
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				if(is_oid($pm_inst->get_sysdefault()))
 				{
-					$data["options"] = array_merge(array(0 => t("--vali--")), $pm_inst->get_legal_forms());
+					$data["options"] = array(0 => t("--vali--")) + safe_array($pm_inst->get_legal_forms());
 				}
 				break;
 
@@ -8204,7 +8204,7 @@ class crm_company extends class_base
 
 	function _get_pohitegevus($arr)
 	{
-		$arr["prop"]["options"] = array_merge(array("" => t("--Vali--")), get_instance(CL_PERSONNEL_MANAGEMENT)->get_sectors());
+		$arr["prop"]["options"] = array("" => t("--Vali--")) + safe_array(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sectors());
 		if ($arr["new"] && $arr["request"]["sector"])
 		{
 			$arr["prop"]["value"] = $arr["request"]["sector"];

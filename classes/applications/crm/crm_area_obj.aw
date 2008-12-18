@@ -47,6 +47,15 @@ class crm_area_obj extends _int_object
 			The status of the crm_person objects.
 
 		@param by_jobwish optional type=bool
+
+		@param childs optional type=boolean default=true
+			If set true all objects that's parent is either the parent folder or subfolder of the parent folder is returned. Has effect only if parent folder is set. (folder = CL_MENU object)
+
+		@param props optional type=array
+			The second parameter for object_data_list. Used if return_as_odl is set.
+
+		@param return_as_odl optional type=bool default=false
+			If this is set, object_data_list is returned instead of object_list.
 			
 	**/
 	function get_residents($arr)
@@ -93,7 +102,14 @@ class crm_area_obj extends _int_object
 			));
 		}
 
-		return new object_list($ol_prms);
+		if($arr["return_as_odl"] && is_array($arr["props"]))
+		{
+			return new object_data_list($ol_prms, $arr["props"]);
+		}
+		else
+		{
+			return new object_list($ol_prms);
+		}
 	}
 
 	function prms($arr)

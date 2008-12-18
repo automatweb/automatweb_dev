@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.36 2008/11/25 16:15:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.37 2008/12/18 11:28:08 instrumental Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -119,7 +119,7 @@ class crm_address extends class_base
 						"piirkond" => CL_CRM_AREA,
 						"riik" => CL_CRM_COUNTRY,
 					);
-					$data["options"] = array_merge(array(0 => t("--vali--")), $pm_inst->get_locations($clid[$data["name"]]));
+					$data["options"] = array(0 => t("--vali--")) + safe_array($pm_inst->get_locations($clid[$data["name"]]));
 				}
 				break;
 		};

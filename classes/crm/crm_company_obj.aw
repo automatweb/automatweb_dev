@@ -492,13 +492,38 @@ class crm_company_obj extends _int_object
 		return "";
 	}
 
-	function get_mails()
+	function get_mails($arr = array("return_as_names" => true))
 	{
-		$ret = array();
-		$conns = $this->connections_from(array("type" => "RELTYPE_EMAIL"));
-		foreach($conns as $conn)
+		extract($arr);
+		// $type, $id, $return_as_odl, $return_as_names
+
+		$prms = array(
+			"class_id" => CL_ML_MEMBER,
+			"status" => array(),
+			"parent" => array(),
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_ML_MEMBER.RELTYPE_EMAIL(CL_CRM_COMPANY)" => isset($id) ? $id : parent::id(),
+		);
+
+		if(isset($return_as_names) && $return_as_names)
 		{
-			$ret[]= $conn->prop("to.name");
+			$ret = array();
+			$conns = $this->connections_from(array("type" => "RELTYPE_EMAIL"));
+			foreach($conns as $conn)
+			{
+				$ret[]= $conn->prop("to.name");
+			}
+		}
+		elseif(isset($return_as_odl) && $return_as_odl)
+		{
+			$ret = new object_data_list($prms, array(
+				CL_ML_MEMBER => array("oid", "mail"),
+			));
+		}
+		else
+		{
+			$ret = new object_list($prms);
 		}
 		return $ret;
 	}
