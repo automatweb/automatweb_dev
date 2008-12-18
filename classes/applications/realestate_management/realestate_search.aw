@@ -2258,83 +2258,9 @@ exit_function("jigaboo");
 			$search_admin_units = false;
 		}
 
-		// if (count ($search_a1) or count ($search_a2) or count ($search_a3))
-		// {
-			// $search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
-
-			// if ($search_ci_clstr)
-			// {
-				// $address_constraint = new object_list_filter (array (
-					// "logic" => "OR",
-					// "conditions" => array (
-						// $search_ci_clstr . ".RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-					// )
-				// ));
-			// }
-			// else
-			// {
-				// $address_constraint = new object_list_filter (array (
-					// "logic" => "OR",
-					// "conditions" => array (
-						// "CL_REALESTATE_APARTMENT.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_COMMERCIAL.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_COTTAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_GARAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_HOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_HOUSEPART.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_LAND.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-						// "CL_REALESTATE_ROWHOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units, // RELTYPE_ADMINISTRATIVE_UNIT deprecated
-					// )
-				// ));
-				// $address_constraint = NULL;
-			// }
-		// }
-
-		// ### search addresses
-		// $search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
-		// $address_ids = NULL;
-
-		// if (count ($search_admin_units))
-		// {
-			// $ids = array ();
-			// $applicable_classes = array (
-				// CL_ADDRESS,
-				// CL_ADDRESS_STREET,
-				// CL_COUNTRY,
-				// CL_COUNTRY_ADMINISTRATIVE_STRUCTURE,
-				// CL_COUNTRY_ADMINISTRATIVE_UNIT,
-				// CL_COUNTRY_CITY,
-				// CL_COUNTRY_CITYDISTRICT,
-			// );
-
-			// foreach ($search_admin_units as $admin_unit)
-			// {
-				// if (is_oid ($admin_unit))
-				// {
-					// $tree = new object_tree (array (
-						// "parent" => $admin_unit,
-						// "class_id" => $applicable_classes,
-					// ));
-					// $list = $tree->to_list ();
-					// $ids = array_merge ($ids, $list->ids ());
-				// }
-			// }
-
-			// $list = new object_list (array (
-				// "oid" => $ids,
-				// "class_id" => CL_ADDRESS,
-				// "site_id" => array (),
-				// "lang_id" => array (),
-			// ));
-
-			// if ($list->count ())
-			// {
-				// $address_ids = $list->ids ();
-			// }
-		// }
-		//$search_sort_by = "class_id";  $search_sort_ord ="ASC"; //testimiseks
 		### sorting
 		$sort = $search_sort_by ? $search_sort_by . " " . ($search_sort_ord ? $search_sort_ord : "ASC") : NULL;
+
 		### class specific arguments
 		$class_specific_args = array();
 		if (
@@ -2385,7 +2311,7 @@ exit_function("jigaboo");
 			// "address_connection" => $address_ids,
 			// $address_constraint,
 			$agent_constraint,
-			"sort_by" => $sort,
+			"sort_by" => $sort
 		);
 		if ($search_c24id)
 		{
@@ -2402,6 +2328,7 @@ exit_function("jigaboo");
 		$tmp_list = new object_list();
 		if($search_owp)
 		{
+/* dbg */ enter_function ("re_search::search - owp");
 			foreach ($result_list->arr() as $obj)
 			{
 				$conns = $obj->connections_from(array(
@@ -2413,6 +2340,7 @@ exit_function("jigaboo");
 				}
 			}
 			$result_list = $tmp_list;
+/* dbg */ exit_function ("re_search::search - owp");
 		}
 		//kui saidilt tuleb otsing
 		if($_GET["per_page"]) $this->result_table_recordsperpage = (int) ($_GET["per_page"]);
@@ -2484,35 +2412,46 @@ exit_function("jigaboo");
 
 			$administrative_structure = new object($administrative_structure);
 
+/* dbg */ enter_function ("re_search::search - address 1");
 			foreach ($search_admin_units as $unit_id)
 			{
 				if ($this->can("view", $unit_id))
 				{
+/* dbg */ enter_function ("re_search::search - address 1.1");
 					$unit = new object($unit_id);
 					$addrs = $administrative_structure->prop(array("prop" => "addresses_by_unit", "unit" => $unit));
+/* dbg */ exit_function ("re_search::search - address 1.1");
+/* dbg */ enter_function ("re_search::search - address 1.2");
 					$addr_ids = array_merge(
 						$addr_ids,
 						$addrs->ids()
 					);
+/* dbg */ exit_function ("re_search::search - address 1.2");
 				}
 			}
+/* dbg */ exit_function ("re_search::search - address 1");
 
+/* dbg */ enter_function ("re_search::search - address 2");
 			$address_connections = connection::find(array(
 				"from" => $prop_ids,
 				"to" => $addr_ids,
 				"type" => 1,
 			));
+/* dbg */ exit_function ("re_search::search - address 2");
 
 			### search by adminunit
 			if (count ($address_connections))
 			{
+/* dbg */ enter_function ("re_search::search - address 3");
 				$applicable_prop_ids = array();
 
 				foreach ($address_connections as $connection)
 				{
 					$applicable_prop_ids[] = $connection["from"];
 				}
+/* dbg */ exit_function ("re_search::search - address 3");
 
+/* dbg */ enter_function ("re_search::search - address 4");
 				### filter out properties not under specified admin units
 				$start_offset = (int) $_GET["ft_page"] * $this->result_table_recordsperpage;
 				$end_offset = $start_offset + $this->result_table_recordsperpage;
@@ -2534,6 +2473,7 @@ exit_function("jigaboo");
 						$result_list->remove ($oid);
 					}
 				}
+/* dbg */ exit_function ("re_search::search - address 4");
 
 				$this->result_count = $result_count;
 			}
@@ -2545,6 +2485,7 @@ exit_function("jigaboo");
 		}
 		else
 		{
+			enter_function ("re_search::search - tbl page filter");
 			### count all
 			$this->result_count = $result_list->count ();
 			if($this_object->prop("max_results") >0  && $this->result_count > $this_object->prop("max_results"))
@@ -2569,8 +2510,16 @@ exit_function("jigaboo");
 			{
 				foreach ($result_list->arr() as $obj)
 				{
-					if($cnt >= (((int) $_GET["ft_page"] + 1) * $this->result_table_recordsperpage)) break;
-					if($max_limit && $cnt > $this_object->prop("max_results")) break;
+					if($cnt >= (((int) $_GET["ft_page"] + 1) * $this->result_table_recordsperpage))
+					{
+						break;
+					}
+
+					if($max_limit && $cnt > $this_object->prop("max_results"))
+					{
+						break;
+					}
+
 					if($cnt >= ((int) $_GET["ft_page"] * $this->result_table_recordsperpage))
 					{
 						$tmp_list->add($obj);
@@ -2579,7 +2528,11 @@ exit_function("jigaboo");
 				}
 				$result_list = $tmp_list;
 			}
-			else $result_list->filter ($args);
+			else
+			{
+				$result_list->filter ($args);
+			}
+			exit_function ("re_search::search - tbl page filter");
 		}
 		if($this_object->prop("max_results") >0  && $this->result_count > $this_object->prop("max_results"))
 		{
