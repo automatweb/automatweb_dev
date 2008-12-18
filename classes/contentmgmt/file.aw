@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.18 2008/11/06 18:52:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.19 2008/12/18 15:27:39 kristo Exp $
 /*
 
 
@@ -700,7 +700,7 @@ class file extends class_base
 			// n2itame kohe
 			// kontrollime koigepealt, kas headerid on ehk v&auml;ljastatud juba.
 			// dokumendi preview vaatamisel ntx on.
-			if (trim($fi["type"]) == "text/html")
+			if (false && trim($fi["type"]) == "text/html")
 			{
 				if (!headers_sent())
 				{
@@ -720,6 +720,7 @@ class file extends class_base
 				{
 					$replacement = $fi["content"];
 				};
+
 			}
 			// embed xml files
 			elseif (trim($fi["type"]) == "text/xml")
