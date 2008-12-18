@@ -649,11 +649,27 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 
 		$imported_object_ids = array ();
 		$duplicates = array ();
+		$this->db_query (
+		"SELECT p.city24_object_id as city24_object_id, count(p.city24_object_id) as `count` FROM realestate_property p " .
+		"LEFT JOIN objects o ON o.oid = p.oid " .
+		"WHERE " .
+			"p.city24_object_id > 0 AND " .
+			"o.status > 0 AND " .
+			"o.class_id IN (" . implode (",", $realestate_classes) . ") AND " .
+			"o.parent IN (" . implode (",", $realestate_folders) . ")" .
+		"GROUP BY p.city24_object_id HAVING (count(p.city24_object_id) > 1)" .
+		"");
+
+		while ($duplicate = $this->db_next ())
+		{
+			$duplicates[] = $duplicate["city24_object_id"];
+		}
+
+
 		$list = new object_list (array (
 			"class_id" => $realestate_classes,
 			"parent" => $realestate_folders,
-			"city24_object_id" => new obj_predicate_prop (OBJ_COMP_GREATER, 0),
-			"is_archived" => 0,
+			"city24_object_id" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -716,6 +732,34 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 			{ ### finish last processed property import
 				if (is_object ($property))
 				{
+					$tmp_agent = aw_global_get("uid");
+					if (empty($tmp_agent))
+					{
+						$tmp_agent = $property->prop ("realestate_agent1");
+						if (is_oid($tmp_agent))
+						{
+							### get agent uid
+							$connection = new connection();
+							$connections = $connection->find(array(
+								"to" => $tmp_agent,
+								"from.class_id" => CL_USER,
+								"type" => "RELTYPE_PERSON",
+							));
+
+							if (count ($connections))
+							{
+								$connection = reset ($connections);
+
+								if (is_oid ($connection["from"]))
+								{
+									$from_obj = obj($connection["from"]);
+									$tmp_agent = $from_obj->prop("uid");
+									aw_switch_user (array ("uid" => $tmp_agent));
+								}
+							}
+						}
+					}
+
 					$property->save ();
 					if (1 != $quiet) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s."), $this->property_data["ID"], $property->id ()) . REALESTATE_NEWLINE; flush(); }
 
@@ -759,15 +803,26 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 					$this->property_data["ID"] = $city24_id;
 
 					### load existing object corresponding to city24 id
-					if (array_key_exists($city24_id, $imported_object_ids))
+					$prop_list = new object_list (array (
+						"class_id" => $realestate_classes,
+						"parent" => $realestate_folders,
+						"city24_object_id" => $city24_id,
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					$property = $prop_list->begin();
+					if ($city24_id and is_object($property))
 					{
-						$property = new object($imported_object_ids[$city24_id]);
 						$new_property = false;
 
 						if (!$property->prop("is_visible"))
 						{
 							$property->set_prop("is_visible", 1);
 						}
+					}
+					else
+					{
+						$property = null;
 					}
 				}
 				elseif ("EDIT_DATE" === $data["tag"] and is_object($property))
@@ -895,23 +950,39 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 					#### city24 agent priority
 					if (isset($this->property_data["MAAKLER_NIMI"]))
 					{
-						$agent_data = split (" ", $this->property_data["MAAKLER_NIMI"]);
+						$agent_data = split (" ", iconv (REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, $this->property_data["MAAKLER_NIMI"]));
 						$agent_data_parsed = array ();
 
 						foreach ($agent_data as $string)
 						{
 							$string = trim ($string);
 
-							if ($string)
+							if (strlen($string))
 							{
 								$agent_data_parsed[] = $string;
 							}
 						}
 
-						$agent_data = iconv (REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, join (" ", $agent_data_parsed));
+						$agent_data = join (" ", $agent_data_parsed);
 						$agent_oid = (int) reset (array_keys ($employees, $agent_data));
 
-	// /* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "maakler: [{$agent_data}]"; }
+						if (!is_oid($agent_oid))
+						{
+							$agent_data_parsed1 = $agent_data_parsed;
+							$agent_data = array_shift($agent_data_parsed1);
+							$agent_data = $agent_data . " " . join("-", $agent_data_parsed1);
+							$agent_oid = (int) reset(array_keys($employees, $agent_data));
+
+							if (!is_oid($agent_oid))
+							{
+								$agent_data_parsed1 = $agent_data_parsed;
+								$agent_data = array_pop($agent_data_parsed1);
+								$agent_data = join("-", $agent_data_parsed1) . " " . $agent_data;
+								$agent_oid = (int) reset(array_keys($employees, $agent_data));
+							}
+						}
+
+// /* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "maakler: [{$agent_data}]"; }
 
 						#### aw agent priority
 						// if (!$new_property)
@@ -2287,7 +2358,9 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 			}
 
 		//	$realestate_objects->set_prop ("is_visible", 0);
+			aw_disable_acl();
 			$realestate_objects->save ();
+			aw_restore_acl();
 		}
 
 		### save log
@@ -2303,7 +2376,9 @@ arr("deaktiviveerimiseks objekte :".sizeof($realestate_objects->ids()));
 		$this_object->set_meta ("city24_log", $logs);
 
 		### fin.
+		aw_disable_acl();
 		$this_object->save ();
+		aw_restore_acl();
 		xml_parser_free ($parser);
 		$cl_cache = get_instance ("cache");
 		$cl_cache->full_flush ();
