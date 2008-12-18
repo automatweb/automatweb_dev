@@ -182,6 +182,7 @@ class obj_xml_gen
 
 		if (is_string($v))
 		{
+			$v = htmlentities($v);
 			$len = strlen($v);
 			for($i = 0; $i < $len; $i++)
 			{
@@ -259,6 +260,7 @@ echo "<pre>".htmlentities($xml)."</pre>";
 		xml_parser_free($parser);
 		// create objects
 //echo dbg::dump($this->objects);
+
 		$oid = $this->_crea_obj($this->objects[$this->start_object], $parent);
 		unset($this->objects[$this->start_object]);
 		$old2new = array($this->start_object => $oid);
@@ -326,9 +328,9 @@ echo "<pre>".htmlentities($xml)."</pre>";
 		$o = obj();
 		$o->set_class_id($data["ot_flds"]["class_id"]);
 		$o->set_parent($parent);
-		$o->set_name($data["ot_flds"]["name"]);
+		$o->set_name(html_entity_decode($data["ot_flds"]["name"]));
 		$o->set_status($data["ot_flds"]["status"]);
-		$o->set_comment($data["ot_flds"]["comment"]);
+		$o->set_comment(html_entity_decode($data["ot_flds"]["comment"]));
 		$o->set_ord($data["ot_flds"]["ord"]);
 		$o->set_alias($data["ot_flds"]["alias"]);
 
@@ -344,10 +346,11 @@ echo "<pre>".htmlentities($xml)."</pre>";
 			{
 				continue;
 			}
-
+			
 			// we need to skip metadata props, because they are serialized and we didn't do that here
 			if ($o->is_property($k) && $pl[$k]["field"] != "metadata" && $pl[$k]["table"] != "objects")
 			{
+				$v = html_entity_decode($v);
 				$o->set_prop($k, $v);
 			}
 		}
@@ -357,6 +360,7 @@ echo "<pre>".htmlentities($xml)."</pre>";
 		{
 			foreach($md as $k => $v)
 			{
+				$v = html_entity_decode($v);
 				$o->set_meta($k, $v);
 			}
 		}
