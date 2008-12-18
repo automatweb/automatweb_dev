@@ -110,13 +110,13 @@ class crm_phone_obj extends _int_object
 		// New
 		if(!is_oid($oid))
 		{
-			return $this->parent_save();
+			return $this->parent_save($conn_ids);
 		}
 
 		// If no connections remain with the old phone obj, there's no point in keeping it. So we'll just change the current one.
 		if(count($this->conns_remain_unchanged($conn_ids)) == 0)
 		{
-			return $this->parent_save();
+			return $this->parent_save($conn_ids);
 		}
 
 		// Getting the current name..
@@ -137,6 +137,7 @@ class crm_phone_obj extends _int_object
 				"site_id" => array(),
 				"limit" => 1,
 			));
+			send_mail("kaarel@struktuur.ee", "conns_remain_unchanged ".parent::id()." ".parent::name(), aw_serialize($ol->ids()));
 			if($ol->count() > 0)
 			{
 				$pho = $ol->begin();
@@ -195,7 +196,7 @@ class crm_phone_obj extends _int_object
 		return $r;
 	}
 
-	private function parent_save()
+	private function parent_save($conn_ids)
 	{		
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_PHONE,
@@ -206,8 +207,28 @@ class crm_phone_obj extends _int_object
 		));
 		if($ol->count() > 0)
 		{
-			parent::load(reset($ol->ids()));
-			return reset($ol->ids());
+			$id = reset($ol->ids());
+			// If it's connected to anything, we have to change to connections also!
+			if(is_oid(parent::id()))
+			{
+				foreach($conn_ids as $conn_id)
+				{
+					try
+					{
+						$c = new connection();
+						$c->load($conn_id);
+						$c->change(array(
+							"from" => $c->prop("from") == parent::id() ? $id : $c->prop("from"),
+							"to" => $c->prop("to") == parent::id() ? $id : $c->prop("to"),
+						));
+					}
+					catch (Exception $e)
+					{
+					}
+				}
+			}
+			parent::load($id);
+			return $id;
 		}
 		else
 		{

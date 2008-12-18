@@ -77,13 +77,13 @@ class ml_member_obj extends _int_object
 		// New
 		if(!is_oid($oid))
 		{
-			return $this->parent_save();
+			return $this->parent_save($conn_ids);
 		}
 
 		// If no connections remain with the old e-mail obj, there's no point in keeping it. So we'll just change the current one.
 		if(count($this->conns_remain_unchanged($conn_ids)) == 0)
 		{
-			return $this->parent_save();
+			return $this->parent_save($conn_ids);
 		}
 
 		// Getting the current name..
@@ -190,7 +190,7 @@ class ml_member_obj extends _int_object
 		return $r;
 	}
 
-	private function parent_save()
+	private function parent_save($conn_ids)
 	{
 		// Check if we already have an e-mail address with the same parent and mail property.
 		// If so, return this instead of creating new one (or changing the current one).
@@ -220,9 +220,29 @@ class ml_member_obj extends _int_object
 				"limit" => 1,
 				"parent" => array(),
 			));
-			if($ol->count > 0)
+			if($ol->count() > 0)
 			{
+				$o = $ol->begin();
 				$oid = $o->create_brother(parent::parent());
+				// If it's connected to anything, we have to change to connections also!
+				if(is_oid(parent::id()))
+				{
+					foreach($conn_ids as $conn_id)
+					{
+						try
+						{
+							$c = new connection();
+							$c->load($conn_id);
+							$c->change(array(
+								"from" => $c->prop("from") == parent::id() ? $oid : $c->prop("from"),
+								"to" => $c->prop("to") == parent::id() ? $oid : $c->prop("to"),
+							));
+						}
+						catch (Exception $e)
+						{
+						}
+					}
+				}
 				parent::load($oid);
 				return $oid;
 			}
