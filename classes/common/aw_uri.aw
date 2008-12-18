@@ -23,9 +23,8 @@ class aw_uri
 	private $user;
 	private $pass;
 	private $path;
-	private $query;
 	private $fragment;
-	private $args = array();
+	private $args = array(); // values are internally stored urldecoded
 	private $string;
 
 	// uri character classes
@@ -60,6 +59,16 @@ class aw_uri
 	/**
 	@attrib api=1
 	@returns string
+		Returns uri witout query and fragment parts.
+	**/
+	public function get_base()
+	{
+		return $this->get_string(true, true, true, true, true, true, false, false);
+	}
+
+	/**
+	@attrib api=1
+	@returns string
 		Returns uri as string with xml reserved characters converted to entities
 	**/
 	public function get_xml()
@@ -68,7 +77,7 @@ class aw_uri
 	}
 
 	/**
-	@attrib api=1
+	@attrib api=1 params=pos
 	@param uri required type=string
 		URI to load
 	@returns void
@@ -84,16 +93,9 @@ class aw_uri
 			throw new awex_uri_arg("Not a URI.");
 		}
 
-		$args = array();
 		if (!empty($tmp["query"]))
 		{
-			$tmp2 = explode("&", $tmp["query"]);
-
-			foreach ($tmp2 as $arg)
-			{
-				$tmp3 = explode("=", $arg, 2);
-				$args[$tmp3[0]] = isset($tmp3[1]) ? urldecode($tmp3[1]) : null;
-			}
+			parse_str($tmp["query"], $this->args); //!!! kontrollida kuidas urlencoded asjadega k2itutakse
 		}
 
 		$this->scheme = isset($tmp["scheme"]) ? $tmp["scheme"] : null;
@@ -102,15 +104,27 @@ class aw_uri
 		$this->user = isset($tmp["user"]) ? $tmp["user"] : null;
 		$this->pass = isset($tmp["pass"]) ? $tmp["pass"] : null;
 		$this->path = isset($tmp["path"]) ? $tmp["path"] : null;
-		$this->query = isset($tmp["query"]) ? $tmp["query"] : null;
 		$this->fragment = isset($tmp["fragment"]) ? $tmp["fragment"] : null;
-		$this->args = $args;
 		$this->string = $uri;
 		$this->updated = true;
 	}
 
+	/** Sets host part
+	@attrib api=1 params=pos
+	@param host required type=string
+		host name
+	@returns void
+	@errors
+		Throws awex_uri_type if $host is not a valid URI host name.
+	**/
+	public function set_host($host)
+	{
+		$this->host = $host;
+		$this->updated = false;
+	}
+
 	/**
-	@attrib api=1
+	@attrib api=1 params=pos
 	@param name required type=string
 		URI query argument/parameter name
 	@returns string
@@ -122,60 +136,194 @@ class aw_uri
 	}
 
 	/**
-	@attrib api=1
-	@param name required type=string
-		URI query argument/parameter name
-	@param val required type=string
-		New value for argument
+	@attrib api=1 params=pos
+	@param arg required type=string,array
+		URI query arguments to set. String argument name or associative array of argument name/value string pairs or array of argument names to set value for.
+	@param val optional type=string
+		Argument value. If $arg is array, then it is handled as array of argument names and this value will be set for all of those. Required in that case and when $arg is argument name. Other scalar types are type-cast to string.
 	@returns void
 	@comment
-		Sets query parameter value to $val
+		Sets query parameter value(s).
+	@throws
+		awex_uri_arg when $arg parameter is not valid -- name(s) not string value(s).
+		awex_uri_arg when $arg parameter is string argument name and no second argument given.
+		awex_uri_type when a query argument value is non-scalar.
+		awex_uri_type with code awex_uri_type::RESERVED_CHR when an argument name contains reserved characters.
 	**/
-	public function set_arg($name, $val)
+	public function set_arg($arg)
 	{
-		if (!is_scalar($val))
+		$sa = (2 === func_num_args());
+		$args = $this->args;
+
+		if (is_array($arg) and count($arg))
 		{
-			throw new awex_uri_type("Tried to assing non-scalar value to URI query argument");
+			if ($sa)
+			{
+				$val = func_get_arg(1);
+
+				foreach ($arg as $name)
+				{
+					$this->_set_arg($name, $val, $args);
+				}
+			}
+			else
+			{
+				foreach ($arg as $name => $val)
+				{
+					$this->_set_arg($name, $val, $args);
+				}
+			}
+		}
+		elseif (is_string($arg) and strlen($arg))
+		{
+			if ($sa)
+			{
+				$val = func_get_arg(1);
+				$this->_set_arg($arg, $val, $args);
+			}
+			else
+			{
+				throw new awex_uri_arg("No value specified to set '{$arg}'.");
+			}
+		}
+		else
+		{
+			throw new awex_uri_arg("Invalid parameter value '" . var_export($arg, true) . "'. Array or argument name expected.");
 		}
 
-		if (str_replace($this->reserved_chars, "a", $name) !== $name) // !!! a asemele midagi
-		{
-			throw new awex_uri_type("Reserved character(s) in argument name");
-		}
-
-		$this->args[$name] = (string) $val;
+		$this->args = $args;
 		$this->updated = false;
 	}
 
+	private function _set_arg($name, $val, &$args)
+	{
+		if (!is_string($name) or !strlen($name))
+		{
+			throw new awex_uri_arg("Invalid parameter value '" . var_export($name, true) . "'. Argument name expected.");
+		}
+
+		if (str_replace($this->reserved_chars, "a", $name) !== $name)
+		{
+			throw new awex_uri_type("Reserved character(s) in argument name", awex_uri_type::RESERVED_CHR);
+		}
+
+		if (is_object($val) and method_exists($val, "__toString"))
+		{
+			$val = $val->__toString();
+		}
+		elseif (is_array($val))
+		{
+			$args2 = array();
+
+			foreach ($val as $key => $value)
+			{
+				$this->_set_arg($key, $value, $args2);
+			}
+
+			$val = $args2;
+		}
+		elseif (is_scalar($val) or is_null($val))
+		{
+		}
+		else
+		{
+			throw new awex_uri_type("Tried to assign non-scalar, non-null value to URI query argument. Conversion attempts failed.");
+		}
+
+		$args[$name] = (string) $val;
+	}
+
+	/**
+	@attrib api=1 params=pos
+	@param name optional type=string,array
+		Name(s) of URI query argument(s) to unset.
+	@returns array
+		Argument names that weren't set in the first place.
+	@comment
+		Unsets argument(s). If no arguments given, unsets all query arguments.
+	**/
+	public function unset_arg()
+	{
+		$not_found_args = array();
+		if (func_num_args())
+		{
+			$name = func_get_arg(0);
+
+			if (is_array($name))
+			{
+				foreach ($name as $arg)
+				{
+					if (isset($this->args[$arg]))
+					{
+						unset($this->args[$arg]);
+					}
+					else
+					{
+						$not_found_args[] = $arg;
+					}
+				}
+			}
+			else
+			{
+				if (isset($this->args[$name]))
+				{
+					unset($this->args[$name]);
+				}
+				else
+				{
+					$not_found_args[] = $name;
+				}
+			}
+		}
+		else
+		{
+			$this->args = array();
+		}
+
+		$this->updated = false;
+		return $not_found_args;
+	}
+
+	/* Rebuilds full string representation */
 	private function update_string()
+	{
+		$this->string = $this->get_string();
+		$this->updated = true;
+	}
+
+	/* Reads required parts and builds string representation */
+	private function get_string($scheme = true, $host = true, $port = true, $user = true, $pass = true, $path = true, $query = true, $fragment = true)
 	{
 		$uri = "";
 
 		if ($this->host)
 		{
-			if ($this->scheme)
+			if ($this->scheme and $scheme)
 			{
 				$uri .= $this->scheme . "://";
 			}
 
-			if ($this->user and $this->pass)
+			if ($this->user and $this->pass and $user and $pass)
 			{
 				$uri .= $this->user . ":" . $this->pass . "@";
 			}
-			elseif ($this->user)
+			elseif ($this->user and $user)
 			{
 				$uri .= $this->user . "@";
 			}
 
-			$uri .= $this->host;
+			if ($host)
+			{
+				$uri .= $this->host;
+			}
 
-			if ($this->port)
+			if ($this->port and $port)
 			{
 				$uri .= ":" . $this->port;
 			}
 		}
 
-		if ($this->path)
+		if ($this->path and $path)
 		{
 			$uri .= $this->path;
 		}
@@ -184,32 +332,17 @@ class aw_uri
 			$uri .= "/";
 		}
 
-		if (count($this->args))
+		if (count($this->args) and $query)
 		{
-			$uri .= "?";
-			$first = true;
-
-			foreach ($this->args as $name => $value)
-			{
-				if ($first)
-				{
-					$uri .= $name . "=" . urlencode($value);
-					$first = false;
-				}
-				else
-				{
-					$uri .= "&" . $name . "=" . urlencode($value);
-				}
-			}
+			$uri .= "?" . http_build_query($this->args);
 		}
 
-		if ($this->fragment)
+		if ($this->fragment and $fragment)
 		{
 			$uri .= "#" . $this->fragment;
 		}
 
-		$this->string = $uri;
-		$this->updated = true;
+		return $uri;
 	}
 
 	public function __toString()
@@ -225,6 +358,9 @@ class awex_uri extends aw_exception {}
 class awex_uri_arg extends awex_uri {}
 
 /* Method argument type not what expected */
-class awex_uri_type extends awex_uri {}
+class awex_uri_type extends awex_uri
+{
+	const RESERVED_CHR = 1;
+}
 
 ?>

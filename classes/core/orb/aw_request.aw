@@ -32,17 +32,13 @@ class aw_request
 	@attrib api=1 params=pos
 	@returns aw_uri
 		Request uri if available.
-	@throws awex_request_na
-		When uri is not available in current request type
+	@throws
+		awex_request_na when uri is not available in current request type
 	**/
 	public function get_uri()
 	{
-		if (!isset($this->args[$name]))
-		{
-			throw new awex_request_na("Argument not available");
-		}
-
-		return $this->args;
+		$this->update_uri();
+		return clone $this->uri;
 	}
 
 
@@ -88,49 +84,58 @@ class aw_request
 
 	/**
 	@attrib api=1 params=pos
-	@param args required type=array
-		New arguments to set. Associative array of argument name/value pairs.
+	@param arg required type=string,array
+		Arguments to set. String argument name or associative array of argument name/value pairs or array of argument names to set value for.
+	@param val optional type=mixed
+		Argument value. If $arg is array, then it is handled as array of argument names and this value will be set for all of those. Required in that case and when $arg is argument name.
 	@returns void
 	@comment
-		Sets arguments array. Old arguments are all discarded.
-	@throws awex_request_param
-		when $args parameter is not valid
+		Sets argument values.
+	@throws
+		awex_request_param when $arg parameter is not valid.
+		awex_request_param with code 2 when $arg parameter is string argument name and no second argument given.
 	**/
-	public function set_args($args)
+	public function set_arg($arg)
 	{
-		if (!is_array($args))
+		$sa = (2 === func_num_args());
+
+		if (is_array($arg) and count($arg))
 		{
-			throw new awex_request_param("Parameter must be an array");
+			if ($sa)
+			{
+				$args = array();
+				$val = func_get_arg(1);
+				foreach ($arg as $name)
+				{
+					if (!is_string($name) or !strlen($name))
+					{
+						throw new awex_request_param("Invalid parameter value '" . var_export($name, true) . "'. Argument name expected.");
+					}
+
+					$args[$name] = $val;
+				}
+
+				$this->args = $args + $this->args;
+			}
+			else
+			{
+				$this->args = $arg + $this->args;
+			}
 		}
-
-		$this->args = $args;
-		$this->parse_args();
-	}
-
-	/**
-	@attrib api=1 params=pos
-	@param args required type=array
-		New arguments to set. Associative array of argument name/value pairs.
-	@param overwrite optional type=boolean default=true
-		If false, new arguments specified in $args will not overwrite already defined ones.
-	@returns void
-	@throws awex_request_param
-		when $args parameter is not valid
-	**/
-	public function add_args($args, $overwrite = true)
-	{
-		if (!is_array($args))
+		elseif (is_string($arg) and strlen($arg))
 		{
-			throw new awex_request_param("Parameter must be an array");
-		}
-
-		if ($overwrite)
-		{
-			$this->args = $args + $this->args;
+			if ($sa)
+			{
+				$this->args[$arg] = func_get_arg(1);
+			}
+			else
+			{
+				throw new awex_request_param("No value specified to set '{$arg}'.", 2);
+			}
 		}
 		else
 		{
-			$this->args = $this->args + $args;
+			throw new awex_request_param("Invalid parameter value '" . var_export($arg, true) . "'. Array or argument name expected.");
 		}
 
 		$this->parse_args();
@@ -138,20 +143,51 @@ class aw_request
 
 	/**
 	@attrib api=1 params=pos
-	@param name required type=string
-		Request argument name to unset.
-	@returns void
+	@param name optional type=string,array
+		Name(s) of request argument(s) to unset.
+	@returns array
+		Argument names that weren't set in the first place.
 	@comment
-		Unsets a request argument.
+		Unsets request argument(s). If no arguments given, unsets all request arguments.
 	**/
-	public function unset_arg($name)
+	public function unset_arg()
 	{
-		if (!isset($this->args[$name]))
+		$not_found_args = array();
+		if (func_num_args())
 		{
-			throw new awex_request("Argument '" . $name . "' doesn't exist");
+			$name = func_get_arg(0);
+
+			if (is_array($name))
+			{
+				foreach ($name as $arg)
+				{
+					if (isset($this->args[$arg]))
+					{
+						unset($this->args[$arg]);
+					}
+					else
+					{
+						$not_found_args[] = $arg;
+					}
+				}
+			}
+			else
+			{
+				if (!isset($this->args[$name]))
+				{
+					unset($this->args[$name]);
+				}
+				else
+				{
+					$not_found_args[] = $name;
+				}
+			}
+		}
+		else
+		{
+			$this->args = array();
 		}
 
-		unset($this->args[$name]);
 		$this->parse_args();
 	}
 
@@ -233,6 +269,34 @@ class aw_request
 		// no name validation because requests can be formed and sent to other servers where different classes, methods, etc. defined
 		$this->class = empty($this->args["class"]) ? $this->default_class : $this->args["class"];
 		$this->action = empty($this->args["action"]) ? $this->default_action : $this->args["action"];
+	}
+
+	private function update_uri()
+	{
+		$this->uri->unset_arg();
+
+		try
+		{
+			$this->uri->set_arg($this->args);
+		}
+		catch (Exception $e)
+		{
+			if (is_a($e, "awex_uri_type"))
+			{
+				if (awex_uri_type::RESERVED_CHR === $e->getCode())
+				{
+					throw new awex_request_na("This request contains arguments that can't be converted to URI argument names.");
+				}
+				else
+				{
+					throw new awex_request_na("This request contains argument values that can't be converted to URI arguments.");
+				}
+			}
+			else
+			{
+				throw $e;
+			}
+		}
 	}
 }
 
