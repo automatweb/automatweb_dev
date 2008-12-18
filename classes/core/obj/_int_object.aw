@@ -2692,8 +2692,10 @@ class _int_object
 			return;
 		}
 
+		$properties = $this->load_properties_considering_cfgform();
+
 		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
-			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+			"properties" => $properties,
 			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 			"objdata" => $this->obj,
 		));
@@ -2727,6 +2729,48 @@ class _int_object
 			}
 		}
 		return $ret;
+	}
+
+	private function load_properties_considering_cfgform()
+	{
+		enter_function("load_properties_considering_cfgform");
+		$properties = $GLOBALS["properties"][$this->obj["class_id"]];
+		// Mys-fucking-terious things are happening with these classes.
+		$restricted_classes = array(CL_DOCUMENT, CL_MENU);
+		if(!in_array($this->obj["class_id"], $restricted_classes) && is_oid($this->obj["oid"]))
+		{
+			/* Sorry, but somewhy obj() sometimes goes to infinite cycle.
+			$cff = $this->instance()->get_cfgform_for_object(array(
+				"obj_inst" => obj($this->obj["oid"]),
+				"args" => array(
+					"action" => "change",
+				),
+			));
+			*/
+			if(isset($this->obj["meta"]["cfgform_id"]) && is_oid($this->obj["meta"]["cfgform_id"]))
+			{
+				$cff = $this->obj["meta"]["cfgform_id"];
+			}
+			else
+			{
+				$cff = cfgform::get_sysdefault(array("clid" => $this->obj["class_id"]));
+			}
+			if($GLOBALS["object_loader"]->cache->can("view", $cff))
+			{
+				$cfg_proplist = array();
+				if(isset($GLOBALS["cfg_proplist"][$cff]))
+				{
+					$cfg_proplist = $GLOBALS["cfg_proplist"][$cff];
+				}
+				else
+				{
+					$cfg_proplist = $GLOBALS["cfg_proplist"][$cff] = cfgform::get_cfg_proplist($cff);
+				}
+				$properties = array_merge($properties, $cfg_proplist);
+			}
+		}
+		exit_function("load_properties_considering_cfgform");
+		return $properties;
 	}
 }
 
