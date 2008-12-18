@@ -77,6 +77,7 @@ class acl_manager extends class_base
 	**/
 	function disp_manager($arr)
 	{
+		$_GET["in_popup"] = 1;
 		$this->read_template("show.tpl");
 		classload("core/icons");
 		$this->_get_tree($arr);
