@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.16 2008/05/27 15:14:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.17 2008/12/18 11:18:48 instrumental Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -288,6 +288,8 @@ class aw_mail {
 	@param to required type=string
 		mail to (adresses)
 	@param cc optional type=string
+		mail to (adresses)
+	@param bcc optional type=string
 		mail to (adresses)
 	@param subject optional type=string
 		mail subject
