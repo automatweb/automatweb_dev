@@ -5,7 +5,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 /*
 
-@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes maintainer=robert confirm_save_data=1
+@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes maintainer=robert
 
 @tableinfo aw_bugs index=aw_id master_index=brother_of master_table=objects
 
@@ -116,7 +116,7 @@ define("BUG_STATUS_CLOSED", 5);
 			@caption Kulunud aeg
 
 			@property bug_comment_for_all type=checkbox ch_value=1 parent=bug_add_times store=no no_caption=1
-			@caption Kuva k&otilde;igile
+			@caption Kuva k&otilde;igile ja saada e-mail
 
 		@layout bc_lay2 parent=bc type=hbox
 
@@ -1107,7 +1107,7 @@ class bug extends class_base
 				{
 					$url = "http://" . $url;
 				}
-				$prop["post_append_text"] = ' <a href="' . $url . '" target="_blank">Ava</a>';
+				$prop["post_append_text"] = ' <a href="' . $url . '">Ava</a>';
 				break;
 
 			case "bug_property":
@@ -1133,10 +1133,6 @@ class bug extends class_base
 				break;
 
 			case "bug_add_real":
-				if(!$prop["value"])
-				{
-					$prop["value"] = 0.00;
-				}
 				$prop["post_append_text"] = html::span(array(
 					"id" => "bug_stopper_pause_link",
 					"content" => "<a href=''>".t("Paus")."</a>",
@@ -1466,26 +1462,22 @@ class bug extends class_base
 					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
 					$this->notify_monitors = true;
-					if(!$arr["new"])
-					{
-						$mon = $arr["obj_inst"]->prop("monitors");
-						if(!$mon[$prop["value"]])
-						{
-							$mon[$prop["value"]] = $prop["value"];
-							$this->set_mon = $mon;
-						}
-					}
 				}
 				if($this->who_set)
 				{
 					return PROP_IGNORE;
-				}//die();
+				}
 				break;
 
 			case "monitors":
-				if($this->set_mon)
+				if (!$arr["new"] && $arr["request"]["who"])
 				{
-					$prop["value"] = $this->set_mon;
+					$mon = $arr["obj_inst"]->prop("monitors");
+					if(!$mon[$arr["request"]["who"]])
+					{
+						$mon[$arr["request"]["who"]] = $arr["request"]["who"];
+						$prop["value"] = $mon;
+					}
 				}
 				break;
 
@@ -3379,8 +3371,8 @@ die($email);
 			var thisdate = new Date();
 			var timestamp_start = thisdate.getTime();
 			var seconds_start = 0;
-			var time_before_pause = parseFloat($("#bug_add_real").val());
-
+			var time_before_pause = 0;
+			
 			_start_stopper();
 			_handlers();
 			// + stop visual jumping
@@ -3418,7 +3410,7 @@ die($email);
 					}
 					time = (time_before_pause+tmp).toFixed(4)*1.0;
 					object.children().html("<a href=''>"+_return_normal_clock(seconds_start)+" ("+time+")</a>")
-					seconds_start = Math.round((time_before_pause + tmp) * 60 * 60);
+					seconds_start++;
 					tmp = time.toFixed(2)*1.0
 					$("#bug_add_real").val(r2(tmp));
 				})
@@ -3431,7 +3423,6 @@ die($email);
 					pause = false;
 					thisdate = new Date();
 					timestamp_start = thisdate.getTime();
-					time_before_pause = parseFloat($("#bug_add_real").val())
 					_start_stopper();
 					$("#bug_stopper_pause_link").children().html("Paus")
 				}
