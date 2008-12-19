@@ -59,6 +59,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@property send_monitor_mails type=checkbox ch_value=1 default=1 field=meta method=serialize
 	@caption Saada j&auml;lgijatele meile
 	
+	@property dorder_mail_contents type=textarea rows=10 cols=50 field=meta method=serialize
+	@caption Arendustellimuse loomise meil
+
 @default group=bug_apps
 
 		@property apps_tb type=toolbar no_caption=1 store=no
@@ -273,6 +276,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property bug_only_bt_ppl type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption J&auml;lgijateks ainult valitud inimesed
+
+	@property finance_required type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kulude katmine tuleb m&auml;&auml;rata
 
 	@property combined_priority_formula type=textarea rows=30 cols=60 table=objects field=meta method=serialize
 	@caption Prioriteedivalem

@@ -147,6 +147,17 @@
             <caption>Saada j&amp;amp;auml;lgijatele meile</caption>
       </property>
       <property>
+            <name>dorder_mail_contents</name>
+            <table>objects</table>
+            <group>mail_settings</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Arendustellimuse loomise meil</caption>
+      </property>
+      <property>
             <name>apps_tb</name>
             <table>objects</table>
             <group>bug_apps</group>

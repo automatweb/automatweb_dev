@@ -2411,7 +2411,9 @@ class bug extends class_base
 
 	function create_dev_order($arr)
 	{
+		
 		$o = new object();
+
 		$bt = $this->_get_bt($arr["obj_inst"]);
 		$parent = $arr["obj_inst"]->parent();
 		$o->set_parent($parent);
@@ -2484,6 +2486,7 @@ class bug extends class_base
 			}
 			$o->set_prop("orderer_unit", $sect);
 		}
+
 		$o->save();
 		$o->connect(array(
 			"to" => $arr["obj_inst"]->id(),
@@ -2503,6 +2506,49 @@ class bug extends class_base
 				"type" => "RELTYPE_FILE"
 			));
 		}
+		
+		$creator = obj(get_instance(CL_USER)->get_person_for_uid($arr["obj_inst"]->createdby()));
+
+		$devo_url = 
+		$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
+		$pt = $po->path();
+		$bt_obj = null;
+		foreach($pt as $pi)
+		{
+			if ($pi->class_id() == CL_BUG_TRACKER)
+			{
+				$bt = $pi;
+			}
+		}
+
+		$mail = $bt->prop("dorder_mail_contents");
+		
+		$find = array(
+			"#added_by#",
+			"#confirmation_by#",
+			"#dev_url#",
+			"#dev_id#",
+		);
+		$replace = array(
+			$creator->name(),
+			$person->name(),
+			$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER),
+			$o->id(),
+		);
+		$mail_contents = str_replace($find, $replace, $mail);
+
+		$mails = array($creator->prop("email"), $person->prop("email"));
+
+		foreach($mails as $mail)
+		{
+			if($this->can("view", $mail))
+			{
+				$adr = obj($mail)->prop("mail");
+				send_mail($adr, "Lisati arendustellimus", $mail_contents, "From: bugtrack@".substr(strstr(aw_ini_get("baseurl"), "//"), 2));
+			}
+			
+		}
+
 		die("<script> window.location = '".$this->mk_my_orb("change", array("id" => $o->id()), CL_DEVELOPMENT_ORDER)."' </script>");
 	}
 
