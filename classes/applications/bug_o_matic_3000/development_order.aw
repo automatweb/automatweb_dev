@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.20 2008/11/21 14:16:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.21 2008/12/19 10:59:26 robert Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -249,18 +249,22 @@ class development_order extends class_base
 				}
 				else
 				{
-					$people = $c->find(array(
-						"from.class_id" => CL_CRM_PERSON,
-     						"type" => "RELTYPE_RANK",
-       						"to" => $highest->id()
-					));
-					foreach($people as $p)
+					if($highest)
 					{
-						$person = obj($p["from"]);
-					}
-					if($person)
-					{
-						$prop["value"] = array($person->id()=>$person->id());
+						$people = $c->find(array(
+							"from.class_id" => CL_CRM_PERSON,
+							"type" => "RELTYPE_RANK",
+							"to" => $highest->id()
+						));
+						$person = null;
+						foreach($people as $p)
+						{
+							$person = obj($p["from"]);
+						}
+						if($person)
+						{
+							$prop["value"] = array($person->id()=>$person->id());
+						}
 					}
 				}
 				$prop["options"] += $ppl;
@@ -394,14 +398,15 @@ class development_order extends class_base
 			case "bug_app":
 				$ol = new object_list(array(
 					"parent" => $parent,
-					"class_id" => array(CL_BUG_APP_TYPE)
+					"class_id" => array(CL_BUG_APP_TYPE),
+					"sort_by" => "objects.name"
 				));
-				$options = array(0=>" ");
-				foreach($ol->list as $oid)
+				$options = array(0=>" ")+$ol->names();;
+	/*			foreach($ol->list as $oid)
 				{
 					$o = obj($oid);
 					$options[$oid] = $o->name();
-				}
+				}*/
 				$prop["options"] = $options;
 				break;
 			
