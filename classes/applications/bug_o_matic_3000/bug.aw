@@ -1284,6 +1284,8 @@ class bug extends class_base
 				if ($ev > 100 && $estend > ($ev+24*3600))
 				{
 					$prop["error"] = sprintf(t("Bugi ei ole v&otilde;imalik valmis saada enne %s!"), date("d.m.Y H:i", $estend));
+					$arr["obj_inst"]->set_prop("name", $prop["value"]);
+					$arr["obj_inst"]->save();
 					return PROP_ERROR;
 				}
 				break;
