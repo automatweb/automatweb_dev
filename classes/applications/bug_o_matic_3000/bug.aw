@@ -1466,10 +1466,26 @@ class bug extends class_base
 					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
 					$this->notify_monitors = true;
+					if(!$arr["new"])
+					{
+						$mon = $arr["obj_inst"]->prop("monitors");
+						if(!$mon[$prop["value"]])
+						{
+							$mon[$prop["value"]] = $prop["value"];
+							$this->set_mon = $mon;
+						}
+					}
 				}
 				if($this->who_set)
 				{
 					return PROP_IGNORE;
+				}//die();
+				break;
+
+			case "monitors":
+				if($this->set_mon)
+				{
+					$prop["value"] = $this->set_mon;
 				}
 				break;
 
