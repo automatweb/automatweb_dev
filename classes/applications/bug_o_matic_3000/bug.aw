@@ -1746,7 +1746,7 @@ class bug extends class_base
 			{
 				$cont = true;
 			}
-			if($mg && $uo = $pi->has_user($person_obj))
+			if(!$this->comment_for_all && $mg && $uo = $pi->has_user($person_obj))
 			{
 				$conn = $uo->connections_from(array(
 					"type" => "RELTYPE_GRP",
@@ -1779,6 +1779,10 @@ class bug extends class_base
 				{
 					$cont = true;
 				}
+			}
+			elseif($this->comment_for_all)
+			{
+				$cont = false;
 			}
 			if($cont)
 			{
