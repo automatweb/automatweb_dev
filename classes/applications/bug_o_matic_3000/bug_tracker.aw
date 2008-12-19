@@ -2209,6 +2209,7 @@ class bug_tracker extends class_base
 		$t->define_field(array(
 			"name" => "id",
 			"caption" => t("Id"),
+			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "name",
@@ -2303,6 +2304,7 @@ class bug_tracker extends class_base
 		$t->define_field(array(
 			"name" => "id",
 			"caption" => t("ID"),
+			"sortable" => 1,
 		));
 
 		$t->define_field(array(
