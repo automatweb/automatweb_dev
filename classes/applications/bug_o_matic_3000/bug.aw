@@ -1774,7 +1774,7 @@ class bug extends class_base
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
-			{arr("no can see");
+			{
 				continue;
 			}
 			$person_obj = obj($person);
