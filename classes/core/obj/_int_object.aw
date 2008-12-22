@@ -2755,6 +2755,9 @@ class _int_object
 			{
 				$cff = cfgform::get_sysdefault(array("clid" => $this->obj["class_id"]));
 			}
+			// make sure the acl is on
+			$tmp = aw_ini_get("acl.no_check");
+			aw_ini_set("acl.no_check", 0);
 			if($GLOBALS["object_loader"]->cache->can("view", $cff))
 			{
 				$cfg_proplist = array();
@@ -2768,6 +2771,7 @@ class _int_object
 				}
 				$properties = array_merge($properties, $cfg_proplist);
 			}
+			aw_ini_set("acl.no_check", $tmp);
 		}
 		exit_function("load_properties_considering_cfgform");
 		return $properties;
