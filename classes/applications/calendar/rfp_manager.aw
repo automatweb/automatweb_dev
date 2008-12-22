@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.86 2008/11/25 11:05:05 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.87 2008/12/22 13:44:49 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -2125,11 +2125,6 @@ class rfp_manager extends class_base
 		foreach($result as $k => $data)
 		{
 			$rfp = null;
-			if($data["reservation"] && !obj($data["reservation"])->prop("verified"))
-			{
-				unset($result[$k]);
-				continue;
-			}
 			if($arr["from"] && $data["start1"] < $arr["from"])
 			{
 				unset($result[$k]);
