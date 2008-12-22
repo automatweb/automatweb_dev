@@ -2217,13 +2217,15 @@ class bug_tracker extends class_base
 			"sortable" => 1
 		));
 		$bugi = get_instance(CL_BUG);
+		$statuses = $bugi->get_status_list();
+		unset($statuses[5]);
 		$t->define_field(array(
 			"name" => "bug_status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
 //			"callback" => array(&$this, "show_status"),
 //			"callb_pass_row" => 1,
-			"filter" => $bugi->get_status_list()
+			"filter" => $statuses,
 		));
 
 		$t->define_field(array(
@@ -2314,15 +2316,16 @@ class bug_tracker extends class_base
 		));
 
 		$bugi = get_instance(CL_BUG);
+		$statuses = $bugi->get_status_list();
+		unset($statuses[5]);
 		$t->define_field(array(
 			"name" => "bug_status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
-		/*	"callback" => array(&$this, "show_status_no_edit"),
-			"callb_pass_row" => 1,*/
-			"filter" => $bugi->get_status_list()
+//			"callback" => array(&$this, "show_status"),
+//			"callb_pass_row" => 1,
+			"filter" => $statuses,
 		));
-
 		$t->define_field(array(
 			"name" => "who",
 			"caption" => t("Kellele"),
