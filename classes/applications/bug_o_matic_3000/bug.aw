@@ -1774,7 +1774,7 @@ class bug extends class_base
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
-			{
+			{arr("no can see");
 				continue;
 			}
 			$person_obj = obj($person);
@@ -1823,7 +1823,7 @@ class bug extends class_base
 					$cont = true;
 				}
 			}
-			elseif($this->comment_for_all)
+			elseif($this->comment_for_all  || $this->new_bug)
 			{
 				$cont = false;
 			}
@@ -2425,6 +2425,7 @@ class bug extends class_base
 
 		if ($arr["new"])
 		{
+			$this->new_bug = 1;
 			$this->notify_monitors($arr["obj_inst"], $arr["obj_inst"]->prop("bug_content"));
 			// if this is a new bug, then parse the content and create sub/subsub bugs from it
 			if ($arr["request"]["do_split"])
