@@ -390,7 +390,7 @@ class bug extends class_base
 			),
 		));
 		$this->parent_options = array();
-		$els = array("who", "monitors", "project", "customer");
+		$els = array("who", "monitors", "project", "customer", "customer_unit", "customer_person", "orderer", "orderer_unit", "orderer_person");
 		foreach($els as $el)
 		{
 			$this->parent_options[$el] = array();
@@ -408,6 +408,20 @@ class bug extends class_base
 			"monitors" => $props["monitors"],
 			"project" => $props["project"],
 			"customer" => $props["customer"],
+			"bug_status" => $props["bug_status"],
+			"bug_priority" => $props["bug_priority"],
+			"bug_type" => $props["bug_type"],
+			"bug_app" => $props["bug_app"],
+			"deadline" => $props["deadline"],
+			"prognosis" => $props["prognosis"],
+			"actual_live_date" => $props["actual_live_date"],
+			"orderer" => $props["orderer"],
+			"orderer_unit" => $props["orderer_unit"],
+			"orderer_person" => $props["orderer_person"],
+			"customer_unit" => $props["customer_unit"],
+			"customer_person" => $props["customer_person"],
+			"finance_type" => $props["finance_type"],
+			"wish_live_date" => $props["wish_live_date"],
 		);
 	}
 
@@ -415,9 +429,16 @@ class bug extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		if($arr["new"] && !empty($this->parent_data[$prop["name"]]) && !$prop["value"])
+		if($arr["new"] && !empty($this->parent_data[$prop["name"]]))
 		{
 			$prop["value"] = $this->parent_data[$prop["name"]];
+		}
+		if($arr["new"] && !empty($this->parent_options[$prop["name"]]))
+		{
+			foreach($this->parent_options[$prop["name"]] as $val => $n)
+			{
+				$prop["options"][$val] = $n;
+			}
 		}
 		switch($prop["name"])
 		{
@@ -599,6 +620,10 @@ class bug extends class_base
 				}
 				break;
 			case "customer_unit":
+				if($this->parent_data[$prop["name"]])
+				{
+					break;
+				}
 				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
 					$co = obj($arr["obj_inst"]->prop("customer"));
@@ -644,19 +669,35 @@ class bug extends class_base
 				break;
 
 			case "customer_person":
+				if($this->parent_data[$prop["name"]])
+				{
+					break;
+				}
 				return $this->_get_customer_person($arr);
 
 			case "orderer":
+				if($this->parent_data[$prop["name"]])
+				{
+					break;
+				}
 				return $this->_get_orderer($arr);
 
 			case "orderer_unit":
+				if($this->parent_data[$prop["name"]])
+				{
+					break;
+				}
 				return $this->_get_orderer_unit($arr);
 
 			case "orderer_person":
+				if($this->parent_data[$prop["name"]])
+				{
+					break;
+				}
 				return $this->_get_orderer_person($arr);
 
 			case "actual_live_date":
-				if($arr["new"])
+				if($arr["new"] && !$this->parent_data[$prop["name"]])
 				{
 					$prop["value"] = -1;
 				}
@@ -668,7 +709,7 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("planned_time");
 				}
-				if($arr["new"] && is_oid($arr["request"]["parent"]))
+				if($arr["new"] && is_oid($arr["request"]["parent"]) && !$this->parent_data[$prop["name"]])
 				{
 					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
 					$pt = $po->path();
@@ -3551,12 +3592,12 @@ EOF;
 		{
 			$url = $this->mk_my_orb("maintainer_ajax", array("id" => $bt->id()));
 			$maintainers = '
-			url = "'.$url.'"
+			s_url = "'.$url.'"
 			function check_class_maintainer()
 			{
 				cl_el = aw_get_el("bug_class")
 				cl = cl_el.value
-				geturl = url + "&clid=" + cl
+				geturl = s_url + "&clid=" + cl
 				data = aw_get_url_contents(geturl)
 				tmp = data.split("|")
 				if(tmp[0] == "found")
@@ -3683,7 +3724,7 @@ EOF;
 		{
 			$type_app .= "
 			var bug_app = aw_get_el('bug_app')
-			bug_app.value = '".$this->bug_app_value."'";
+			bug_app.value = '".$this->bug_app_value."';";
 		}
 
 		if ($arr["request"]["group"] == "" || $arr["request"]["general"] == "")
