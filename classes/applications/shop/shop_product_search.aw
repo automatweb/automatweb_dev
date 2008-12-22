@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.11 2008/07/24 10:23:13 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.12 2008/12/22 14:09:35 markop Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -307,6 +307,14 @@ class shop_product_search extends class_base
 			"caption" => t("Tekst"),
 			"align" => "center"
 		));
+		foreach($this->get_trans_languages() as $langid => $capt)
+		{
+			$t->define_field(array(
+				"name" => "caption_".$langid,
+				"caption" => t("Tekst")." - " . $capt,
+				"align" => "center",
+			));
+		}
 	}
 
 	function _s_form($arr)
@@ -328,9 +336,8 @@ class shop_product_search extends class_base
 				{
 					$capts[] = $real_pd["caption"];
 				}
-
 				
-				$t->define_data(array(
+				$data = array(
 					"class" => $clss[$clid]["name"],
 					"prop" => join("/", array_unique($capts))." ($pn)",
 					"in_form" => html::checkbox(array(
@@ -347,7 +354,15 @@ class shop_product_search extends class_base
 						"value" => $dat[$clid][$pn]["ord"],
 						"size" => 5
 					))
-				));
+				);
+				foreach($this->get_trans_languages() as $langid => $capt)
+				{
+					$data["caption_".$langid] = html::textbox(array(
+						"name" => "dat[$clid][$pn][caption_".$langid."]",
+						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption_".$langid] : $capts[0]
+					));
+				}
+				$t->define_data($data);
 			}
 		}
 		$t->set_sortable(false);
@@ -444,11 +459,40 @@ class shop_product_search extends class_base
 			"caption" => t("Tulba pealkiri"),
 			"align" => "center"
 		));
+
+
+		if(sizeof($this->get_trans_languages()))
+		{
+			foreach($this->get_trans_languages() as $langid => $capt)
+			{
+				$t->define_field(array(
+					"name" => "caption_".$langid,
+					"caption" => t("Tulba pealkiri")." - " . $capt,
+					"align" => "center",
+//					"parent" => "translations",
+				));
+			}
+		}
+
 		$t->define_field(array(
 			"name" => "transform",
 			"caption" => t("Muundaja"),
 			"align" => "center"
 		));
+	}
+
+	function get_trans_languages()
+	{
+		$res = array();
+		$lan = get_instance("languages");
+		foreach($lan->get_list() as $key => $val)
+		{
+			if($key != aw_global_get("lang_id"))
+			{
+				$res[$key] = $val;
+			}
+		}
+		return $res;
 	}
 
 	function _s_tbl($arr)
@@ -477,8 +521,7 @@ class shop_product_search extends class_base
 					$capts[] = $real_pd["caption"];
 				}
 
-				
-				$t->define_data(array(
+				$data = array(
 					"class" => $clss[$clid]["name"],
 					"prop" => join("/", array_unique($capts))." ($pn)",
 					"in_form" => html::checkbox(array(
@@ -500,7 +543,14 @@ class shop_product_search extends class_base
 						"value" => $dat[$clid][$pn]["transform"],
 						"options" => $transforms
 					))
-				));
+				);
+				foreach($this->get_trans_languages() as $langid => $capt)
+				{
+					$data["caption_".$langid] = html::textbox(array(
+						"name" => "dat[$clid][$pn][caption_".$langid."]",
+						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption_".$langid] : $capts[0]
+					));
+				}
 			}
 		}
 		$t->set_sortable(false);
@@ -531,7 +581,7 @@ class shop_product_search extends class_base
 					$ret[$nm] = array(
 						"name" => $nm,
 						"type" => $r_props[$pn]["type"] == "checkbox" ? "checkbox" : "textbox",
-						"caption" => $pd["caption"],
+						"caption" => $pd["caption_".aw_global_get("ct_lang_id")] ? $pd["caption_".aw_global_get("ct_lang_id")] : $pd["caption"],
 						"store" => "no",
 						"value" => $arr["request"]["s"][$clid][$pn],
 						"ch_value" => 1,
@@ -568,7 +618,7 @@ class shop_product_search extends class_base
 				{
 					$flds[] = array(
 						"name" => $clid."_".$coln,
-						"caption" => $coli["caption"],
+						"caption" => $coli["caption_".aw_global_get("ct_lang_id")] ? $coli["caption_".aw_global_get("ct_lang_id")] : $coli["caption"],
 						"_ord" => $coli["ord"]
 					);
 					if ($this->can("view", $coli["transform"]))
@@ -793,7 +843,8 @@ class shop_product_search extends class_base
 			}
 		}
 		$ol = new object_list($filt);
-		return $ol->arr();
+		$r = $ol->arr();
+		return $r;
 	}
 
 	function _get_filt_param($clid, $res_type, $pn, $v, &$filt)
