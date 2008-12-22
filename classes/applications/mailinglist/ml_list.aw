@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.141 2008/12/15 19:22:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.142 2008/12/22 18:06:53 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2600,7 +2600,6 @@ foreach($ol->arr() as $o)
 				$this->already_found[$mail] = $mail;
 			}
 		}
-		if(!$all)$this->member_count = sizeof($this->already_found);
 		return $this->ml_members;
 	}
 
@@ -2696,7 +2695,6 @@ foreach($ol->arr() as $o)
 				}
 			}
 		}
-		if(!$all)$this->member_count = sizeof($this->already_found);
 		return $this->ml_members;
 	}
 
@@ -2712,12 +2710,18 @@ foreach($ol->arr() as $o)
 			$separator = $list_obj->prop("file_separator");
 		}
 		if(!$separator) $separator=",";
-		if($separator[0] == "/") $separator = str_replace("/t", "\t" ,$separator);
+		if($separator[0] == "/")
+		{
+			$separator = str_replace("/t", "\t" ,$separator);
+		}
 		$row_count = 0;
 		foreach($rows as $row)
 		{
 			$column = explode($separator , $row);
-			if(!(strlen($column[1]) > 5)) continue;
+			if(!(strlen($column[1]) > 5))
+			{
+				continue;
+			}
 			$mail = trim($column[1]);
 			if(!$no_return)
 			{
@@ -2741,10 +2745,12 @@ foreach($ol->arr() as $o)
 					$this->member_count++;
 				}
 			}
-			if(!$all) $this->already_found[$mail] = $mail;
+			if(!$all)
+			{
+				$this->already_found[$mail] = $mail;
+			}
 			$row_count++;
 		}
-		if(!$all)$this->member_count = sizeof($this->already_found);
 		return $this->ml_members;
 	}
 
@@ -2823,6 +2829,8 @@ foreach($ol->arr() as $o)
 	**/
 	function get_members($args)
 	{
+		aw_set_exec_time(AW_LONG_PROCESS);
+		ini_set("memory_limit", "800M");
 		extract($args);
 		$this->ml_members = array();
 		$this->member_count = 0;
@@ -3009,7 +3017,10 @@ foreach($ol->arr() as $o)
 				}
 			}
 		}
-		if(!$all)$this->member_count = sizeof($this->already_found);
+		if(!$all)
+		{
+			$this->member_count = sizeof($this->already_found);
+		}
 		return $this->ml_members;
 	}
 
@@ -4221,6 +4232,7 @@ arr($msg_obj->prop("message"));
 			}
 	
 			$ml_member_inst = get_instance(CL_ML_MEMBER);
+
 			if (is_array($ml_list_members))
 			{
 				foreach($ml_list_members as $key => $val)
@@ -4290,8 +4302,11 @@ arr($msg_obj->prop("message"));
 					);
 					$t->define_data($tabledata);
 				}
+				$t->d_row_cnt = sizeof($ml_list_members);
+				$t->set_header($t->draw_text_pageselector(array(
+					"records_per_page" => $perpage,
+				)));
 			}
-			$t->set_header($pageselector);
 			$t->sort_by();
 		}
 	}
