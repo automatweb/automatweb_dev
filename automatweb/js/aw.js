@@ -62,6 +62,14 @@ function aw_get_el(name,form)
 			return el;
 		}
 	}
+	// here's a fix for IE because in search (class) names are removed from select boxes
+	return $("select", form).each(function(){
+		if (this.name_tmp == name)
+		{
+			this.name = this.name_tmp;
+			return this;
+		}
+	});
 }
 
 function list_preset(el,oid)
@@ -210,7 +218,7 @@ function aw_date_edit_show_cal(elname)
 	var y_obj = aw_get_el(elname+"[year]");
 	var m_obj = aw_get_el(elname+"[month]");
 	var d_obj = aw_get_el(elname+"[day]");
-	
+
 	if (y_obj.value > 0)
 	{
 		var y = y_obj.value;
