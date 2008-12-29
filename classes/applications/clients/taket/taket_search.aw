@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.1 2008/10/01 14:17:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/taket/taket_search.aw,v 1.2 2008/12/29 16:12:57 markop Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 
@@ -14,7 +14,7 @@
 
 */
 
-class taket_search extends class_base
+class taket_search extends class_base implements main_subtemplate_handler
 {
 	function taket_search()
 	{
@@ -82,7 +82,7 @@ class taket_search extends class_base
 		$hosts = aw_ini_get('taket.xmlrpchost');
 		$path = aw_ini_get("taket.xmlrpcpath");
 		$port = aw_ini_get("taket.xmlrpcport");
-		
+
 		if (aw_ini_get('taket_search_log'))
 		{
 			$location_names = aw_ini_get('taket.location_name');
@@ -116,7 +116,7 @@ class taket_search extends class_base
 			unset($tmpArr);
 		}
 
-		if ($arr['asukoht'] != -1)
+		if ($arr['asukoht'] && $arr['asukoht'] != -1)
 		{
 			$hosts = array($arr['asukoht'] => $hosts[$arr['asukoht']]);
 		}
@@ -155,7 +155,7 @@ class taket_search extends class_base
 			))
 			{
 				if(aw_global_get("uid") == 110)
-				{
+				{arr($host); arr($path[$key]);
 					echo('Something went wrong - '.$client->getErrorCode().' : '.
 					$client->getErrorMessage());
 					arr($client->getResponse());
