@@ -1,0 +1,93 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>main_tb</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>main_tb</field>
+      </property>
+      <property>
+            <name>name</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>warehouse</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>org_fld</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORG_FLD</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Organisatsioonide kaust</caption>
+      </property>
+      <property>
+            <name>amount</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>5000</default>
+            <caption>Mitu rida korraga importida</caption>
+      </property>
+      <property>
+            <name>code_ctrl</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CODE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>L&amp;amp;uuml;hikese koodi kontroller</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_TAKET_AFP_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+            <maintainer>robert</maintainer>
+      </classinfo>
+      <tableinfo>
+            <aw_taket_afp_import>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_taket_afp_import>
+      </tableinfo>
+      <reltypes>
+            <WAREHOUSE>
+                  <value>1</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
+            <CODE_CONTROLLER>
+                  <value>2</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>L&amp;amp;uuml;hikese koodi kontroller</caption>
+            </CODE_CONTROLLER>
+            <ORG_FLD>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Organisatsioonide kaust</caption>
+            </ORG_FLD>
+      </reltypes>
+</properties>
+
