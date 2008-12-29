@@ -158,6 +158,15 @@
             <caption>Kood</caption>
       </property>
       <property>
+            <name>short_code</name>
+            <table>aw_shop_products</table>
+            <group>general_general</group>
+            <type>textbox</type>
+            <field>short_code</field>
+            <parent>gen_right</parent>
+            <caption>L&amp;amp;uuml;hikood</caption>
+      </property>
+      <property>
             <name>barcode</name>
             <table>aw_shop_products</table>
             <group>general_general</group>
@@ -1064,6 +1073,13 @@
             <store>connect</store>
             <reltype>RELTYPE_VARUSERM10</reltype>
             <caption>User-defined var (multiple) 10</caption>
+      </property>
+      <property>
+            <name>search_term</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>hidden</type>
+            <field>search_term</field>
       </property>
       <property>
             <name>purveyor_org</name>
