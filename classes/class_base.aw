@@ -6390,6 +6390,10 @@ class class_base extends aw_template
 		}
 	}
 
+	public function microtime_float(){
+		list($usec, $sec) = explode(" ", microtime());
+		return ((float)$usec + (float)$sec);
+	}
 //----------------- END mailiga teavitamise komponentide orb funktsuoonid----------
 
 

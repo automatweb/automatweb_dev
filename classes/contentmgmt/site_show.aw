@@ -1858,7 +1858,7 @@ class site_show extends class_base
 			));
 
 			$show_always = false;
-			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT) && $show && $ref->class_id() != CL_DOCUMENT)
+			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() == CL_DOCUMENT  || $ref->class_id() == CL_CRM_SECTOR) && $show && $ref->class_id() != CL_DOCUMENT)
 			{
 				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
 				{
@@ -1921,7 +1921,9 @@ class site_show extends class_base
 		{
 			$ya.=$GLOBALS["yah_end"];
 		}
-
+		$this->vars(array(
+			"PRINTANDSEND" => $this->parse("PRINTANDSEND")
+		));
 		$this->vars(array(
 			"YAH_LINK" => $ya,
 			"YAH_LINK_END" => "",
