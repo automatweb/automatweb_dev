@@ -2405,7 +2405,21 @@ class shop_warehouse extends class_base
 		}
 		if($code = $arr["request"]["prod_s_code"])
 		{
-			$params["code"] = "%".$code."%";
+			if($cid = $this->config->prop("short_code_ctrl"))
+			{
+				$short_code = get_instance(CL_CFGCONTROLLER)->check_property($cid, null, $code, null, null, null);
+				$params[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"code" => "%".$code."%",
+						"short_code" => "%".$short_code."%",
+					),
+				));
+			}
+			else
+			{
+				$params["code"] = "%".$code."%";
+			}
 		}
 		if($barcode = $arr["request"]["prod_s_barcode"])
 		{

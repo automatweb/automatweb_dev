@@ -276,6 +276,17 @@
             <caption>Ostutellimuse meili kontroller</caption>
       </property>
       <property>
+            <name>short_code_ctrl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CODE_CONTROLLER</reltype>
+            <parent>right</parent>
+            <caption>Toote l&amp;amp;uuml;hikoodi kontroller</caption>
+      </property>
+      <property>
             <name>units_table</name>
             <table>objects</table>
             <group>units</group>
@@ -353,6 +364,11 @@
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
                   <caption>Ostutellimuse meili kontroller</caption>
             </PO_MAIL_CONTROLLER>
+            <CODE_CONTROLLER>
+                  <value>8</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Toote l&amp;amp;uuml;hikoodi kontroller</caption>
+            </CODE_CONTROLLER>
       </reltypes>
       <layout>
             <split>

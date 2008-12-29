@@ -92,6 +92,9 @@
 			@property purchase_order_mail_ctrl type=relpicker reltype=RELTYPE_PO_MAIL_CONTROLLER parent=right
 			@caption Ostutellimuse meili kontroller
 
+			@property short_code_ctrl type=relpicker reltype=RELTYPE_CODE_CONTROLLER parent=right
+			@caption Toote l&uuml;hikoodi kontroller
+
 @default group=units
 
 	@property units_table type=table store=no no_caption=1
@@ -129,6 +132,9 @@
 
 @reltype PO_MAIL_CONTROLLER value=7 clid=CL_CFG_VIEW_CONTROLLER
 @caption Ostutellimuse meili kontroller
+
+@reltype CODE_CONTROLLER value=8 clid=CL_CFGCONTROLLER
+@caption Toote l&uuml;hikoodi kontroller
 */
 
 define("SEND_AW_MAIL", 1);
