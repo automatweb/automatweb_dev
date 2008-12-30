@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.169 2008/12/22 13:48:59 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.170 2008/12/30 09:09:10 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3249,7 +3249,7 @@ class rfp extends class_base
 						"prod_room_name" => ($_t = $room_trans[$default_lang]["name"])?$_t:$room->trans_get_val("name"),
 					));
 					$pds .= $this->parse("PRODUCT_".($package?"":"NO_")."PACKAGE");
-					$prod_total += round($this->_format_price($prod["sum"]));
+					$prod_total += $this->_format_price($prod["sum"]);
 				}
 				$this->vars(array(
 					"PRODUCT_".($package?"":"NO_")."PACKAGE" => $pds,
