@@ -2845,7 +2845,7 @@ class bug_tracker extends class_base
 		$search_filt = $this->_get_bug_search_filt($arr["request"]);
 		$ol = new object_list($search_filt);
 		
-		if ($arr["request"]["s_find_parens"] != 1)
+		if ($arr["request"]["s_find_parens"] != 1 && $ol->count())
 		{
 			$bugs = $ol->arr();
 
