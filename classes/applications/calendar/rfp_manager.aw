@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.87 2008/12/22 13:44:49 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.88 2008/12/30 10:25:26 robert Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -1421,6 +1421,13 @@ class rfp_manager extends class_base
 		}
 
 		$tb->add_button(array(
+			"name" => "archive_prcs",
+			"img" => "archive_small.gif",
+			"action" => "archive_prices",
+			"tooltip" => t("Arhiveeri valitud hinnad"),
+		));
+
+		$tb->add_button(array(
 			"name" => "rem_prcs",
 			"img" => "delete.gif",
 			"action" => "remove_prices",
@@ -2400,6 +2407,23 @@ class rfp_manager extends class_base
 			}
 			$rfp_man->set_packages($pck);
 			$rfp_man->save();
+		}
+		return $arr["post_ru"];
+	}
+
+	/** For internal use, archives prices (deactivates them)
+		@attrib name=archive_prices params=name all_args=1
+	 **/
+	function archive_prices($arr)
+	{
+		foreach($arr["sel"] as $meta => $room_prices)
+		{
+			foreach(array_keys($room_prices) as $room_price)
+			{
+				$room_price = obj($room_price);
+				$room_price->set_status(1);
+				$room_price->save();
+			}
 		}
 		return $arr["post_ru"];
 	}

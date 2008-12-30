@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.170 2008/12/30 09:09:10 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.171 2008/12/30 10:25:26 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -705,6 +705,10 @@ class rfp extends class_base
 				{
 					$rp = obj($rp);
 					$prop["options"][$rp->id()] = $rp->name()." (".$prices[$dc->id()]." ".$dc->name().")";
+				}
+				if(!$prop["options"][$prop["value"]] && $this->can("view", $prop["value"]))
+				{
+					$prop["options"][$prop["value"]] = obj($prop["value"])->name();
 				}
 				break;
 			case "data_gen_arrival_date_admin":

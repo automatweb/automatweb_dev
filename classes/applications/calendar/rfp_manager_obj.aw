@@ -77,6 +77,14 @@ class rfp_manager_obj extends _int_object
 		$return = array();
 		foreach($ol->arr() as $oid => $obj)
 		{
+			foreach($metainfo[$oid]["prices"] as $pr_oid => $data)
+			{
+				$pr = obj($pr_oid);
+				if($pr->status() != STAT_ACTIVE)
+				{
+					unset($metainfo[$oid]["prices"][$pr_oid]);
+				}
+			}
 			$return[$oid] = $metainfo[$oid];
 		}
 		return $return;
@@ -87,7 +95,19 @@ class rfp_manager_obj extends _int_object
 	 **/
 	public function set_packages($data = array())
 	{
-		$this->set_meta("pk_prices", $data);
+		$old_data = $this->meta("pk_prices");
+		$new_data = $old_data;
+		foreach($data as $pk => $pkdata)
+		{
+			foreach($pkdata["prices"] as $pr => $prdata)
+			{
+				foreach($prdata as $cur => $price)
+				{
+					$new_data[$pk]["prices"][$pr][$cur] = $data[$pk]["prices"][$pr][$cur];
+				}
+			}
+		}
+		$this->set_meta("pk_prices", $new_data);
 	}
 
 	/** Returns event types for this manager

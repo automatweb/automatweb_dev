@@ -58,6 +58,13 @@
 			</function>
 		</action>
 
+		<action name="archive_prices" all_args="1">
+			<function name="archive_prices">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search_result_print_output" all_args="1">
 			<function name="search_result_print_output">
 				<arguments>
