@@ -1227,6 +1227,32 @@ class event_search extends class_base
 					"conditions" => $or_parts,
 				));
 			}
+
+			$ext_search = $search;
+			unset($ext_search["id"]);
+			$ext_search["limit"] = "0,1";
+			$ext_search["CL_CALENDAR_EVENT.utextvar1"] = array();
+			$ext_search["lang_id"] = array();
+			$ext_search["site_id"] = array();
+			$ext_s_search = $ext_search;
+			$ext_e_search = $ext_search;
+			$ext_s_search["sort_by"] = "planner.start asc";
+			$ext_e_search["sort_by"] = "planner.end desc";
+			$ext_s_ol = new object_list($ext_s_search);
+			$ext_s_o = $ext_s_ol->begin();
+			$ext_e_ol = new object_list($ext_e_search);
+			$ext_e_o = $ext_e_ol->begin();
+
+			if($ext_s_o && $ext_s_o->prop("start1") < $start_tm)
+			{
+				$is_before = true;
+			}
+
+			if($ext_e_o && $ext_e_o->prop("end") > $end_tm)
+			{
+				$is_after = true;
+			}
+
 			if ($search['class_id'] == CL_CALENDAR_EVENT)
 			{
 				if (!empty($arr['org']))
@@ -1931,6 +1957,22 @@ class event_search extends class_base
 				"next_month_url" => str_replace("event_search", "", $this->mk_my_orb("search", $next_month_args)),
 				"next_weeks" => $res_weeks,
 			));
+
+			if($is_before)
+			{
+				$pm = $this->parse("PREV_MONTH_URL");
+				$this->vars(array(
+					"PREV_MONTH_URL" => $pm,
+				));
+			}
+
+			if($is_after)
+			{
+				$nm = $this->parse("NEXT_MONTH_URL");
+				$this->vars(array(
+					"NEXT_MONTH_URL" => $nm,
+				));
+			}
 
 			$this->vars(array(
 				"EVENT" => $res,

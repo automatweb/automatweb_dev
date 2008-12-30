@@ -1,4 +1,12 @@
-<div><a href="{VAR:prev_month_url}">Eelmine kuu</a> {VAR:begin_month_name} {VAR:begin_year} <a href="{VAR:next_month_url}">J&auml;rgmine kuu</a></div>
+<div>
+<!-- SUB: PREV_MONTH_URL -->
+<a href="{VAR:prev_month_url}">Eelmine kuu</a>
+<!-- END SUB: PREV_MONTH_URL -->
+ {VAR:begin_month_name} {VAR:begin_year} 
+<!-- SUB: NEXT_MONTH_URL -->
+<a href="{VAR:next_month_url}">J&auml;rgmine kuu</a>
+<!-- END SUB: NEXT_MONTH_URL -->
+</div>
 <div>
    <!-- SUB: next_weeks --> 
    	<a href="{VAR:week_url}">{VAR:week_nr}. n&auml;dal</a> - 
