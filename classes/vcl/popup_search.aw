@@ -396,6 +396,7 @@ class popup_search extends aw_template
 	**/
 	function do_search($arr)
 	{
+		$_GET["in_popup"] = 1;
 		$form_html = $this->_get_form($arr);
 
 		$res_html = $this->_get_results($arr);
