@@ -168,6 +168,24 @@ class reservation_obj extends _int_object
 		return $ret;
 	}
 
+        /** returns reservation rfp object
+                @attrib api=1
+        **/
+	public function get_rfp()
+	{
+		 $rfps = new object_list(array(
+                       "class_id" => CL_RFP,
+                        "lang_id" => array(),
+                        "site_id" => array(),
+                        "CL_RFP.RELTYPE_RESERVATION" => $this->id(),
+                ));
+		if(sizeof($rfps->ids()))
+		{
+			return reset($rfps->arr());
+		}
+		return null;
+	}
+
 	/** sets reservation special price
 		@attrib api=1 params=pos
 		@param price_array type=array

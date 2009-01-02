@@ -2167,6 +2167,11 @@ class room extends class_base
 			$col[$x] = "#".$settings->prop("col_slave"); 
 		}
 		else
+		if(is_object($rfp = $last_bron->get_rfp() )&& $rfp->prop("confirmed") == 3 && $settings->prop("col_on_hold") != "")
+		{
+			$col[$x] = "#".$settings->prop("col_on_hold");
+		}
+		else
 		if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 		{
 			$col[$x] = "#".$settings->prop("col_recent"); 
