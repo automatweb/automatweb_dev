@@ -1,15 +1,15 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="trademark_manager" folder="applications/clients/patent_office" extends="class_base">
-		<action name="delete_applications">
-			<function name="delete_applications">
+		<action name="delete_procurators">
+			<function name="delete_procurators">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_procurators">
-			<function name="delete_procurators">
+		<action name="delete_applications">
+			<function name="delete_applications">
 				<arguments>
 				</arguments>
 			</function>

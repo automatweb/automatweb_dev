@@ -1551,7 +1551,6 @@ class user extends class_base
 			"type" => "RELTYPE_PERSON",
 		));
 		$person_c = reset($person_c);
-
 		if (!$person_c)
 		{
 			// create new person next to user

@@ -141,5 +141,27 @@
 			</function>
 		</action>
 
+		<action name="send_cv_email" all_args="1">
+			<function name="send_cv_email">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_cv_employer" all_args="1">
+			<function name="send_cv_employer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_cv_to_employer">
+			<function name="send_cv_to_employer">
+				<arguments>
+					<required name="sel" type="array(oid)" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

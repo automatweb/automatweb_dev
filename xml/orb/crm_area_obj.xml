@@ -17,6 +17,9 @@
 					<optional name="parent" type="oid,array(oid)" />
 					<optional name="status" type="int" />
 					<optional name="by_jobwish" type="bool" />
+					<optional name="childs" type="boolean" default="true" />
+					<optional name="props" type="array" />
+					<optional name="return_as_odl" type="bool" default="false" />
 				</arguments>
 			</function>
 		</action>

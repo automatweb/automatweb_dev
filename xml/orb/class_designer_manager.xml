@@ -86,5 +86,13 @@
 			</function>
 		</action>
 
+		<action name="showe">
+			<function name="showe">
+				<arguments>
+					<required name="err_id" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

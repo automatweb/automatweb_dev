@@ -2734,6 +2734,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$cur_prop = array("name" => "id", "table" => "objects", "field" => "oid");
 			}
 			else
+			if ($pp == "oid")
+			{
+				$cur_prop = array("name" => "oid", "table" => "objects", "field" => "oid");
+			}
+			else
 			if ($pp == "class_id")
 			{
 				$cur_prop = array("name" => "id", "table" => "objects", "field" => "class_id");

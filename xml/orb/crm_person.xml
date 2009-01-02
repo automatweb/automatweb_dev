@@ -93,8 +93,8 @@
 		<action name="gen_job_pdf" nologin="1">
 			<function name="gen_job_pdf">
 				<arguments>
-					<required name="id" type="int" />
-					<optional name="cv_tpl" type="int" />
+					<optional name="id" type="int" />
+					<optional name="cv_tpl" type="string" />
 				</arguments>
 			</function>
 		</action>

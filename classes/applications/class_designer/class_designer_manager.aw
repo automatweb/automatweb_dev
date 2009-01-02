@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.16 2008/12/15 13:06:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.17 2009/01/02 11:58:25 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -104,6 +104,22 @@
 
 				@property cl_usage_stats_tms_list type=table no_caption=1 store=no parent=cl_usage_stats_tms_right_split
 
+@default group=errors
+
+	@layout errors_split type=hbox width=20%:80%
+
+		@layout errors_left type=vbox parent=errors_split
+
+			@layout errors_tree type=vbox area_caption=Saidid closeable=1 parent=errors_left
+	
+				@property errors_tree type=treeview no_caption=1 parent=errors_tree store=no
+
+		@layout errors_right type=vbox parent=errors_split
+
+			@layout errors_right_split type=hbox parent=errors_right
+
+				@property errors_list type=table no_caption=1 store=no parent=errors_right_split
+
 
 @groupinfo mgr caption="Manager" submit=no
 @groupinfo rels caption="Seosed" submit=no
@@ -112,6 +128,7 @@
 	@groupinfo cl_usage_stats_clids caption="Klasside TOP" parent=cl_usage_stats submit=no
 	@groupinfo cl_usage_stats_props caption="Omadused" parent=cl_usage_stats submit=no
 	@groupinfo cl_usage_stats_tms caption="Ajad" parent=cl_usage_stats submit=no
+@groupinfo errors caption="Vead"
 */
 
 class class_designer_manager extends class_base
@@ -1742,6 +1759,227 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			unlink($file);
 		}	
 		die("all done");
+	}
+
+	function _get_errors_tree($arr)
+	{	
+		$t = $arr["prop"]["vcl_inst"];
+		$this->db_query("SELECT distinct(site) as site FROM bugtrack_errors");
+		$id = 1;
+		while ($row = $this->db_next())
+		{
+			$t->add_item(0, array(
+				"id" => ++$id,
+				"name" => ifset($arr["request"], "site") == $row["site"] ? html::strong($row["site"]) : $row["site"],
+				"url" => aw_url_change_var("site", $row["site"])
+			));	
+		}
+	}
+
+	function _get_errors_list_b($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+		$this->_init_errors_list_b($t);
+
+		$errors = aw_ini_get("errors");
+
+		$filt_site = ifset($arr["request"], "site");
+		$filt_type = ifset($arr["request"], "type");
+		$this->db_query("SELECT err_uid, tm, site, type_id, id FROM bugtrack_errors WHERE site = '$filt_site' AND type_id = '$filt_type' ");
+		while ($row = $this->db_next())
+		{
+			$t->define_data(array(
+				"uid" => $row["err_uid"],
+				"tm" => $row["tm"],
+				"site" => $row["site"],
+				"type_id" => isset($errors[$row["type_id"]]) ? $errors[$row["type_id"]]["name"] : $row["type_id"],
+				"view" => html::href(array(
+					"url" => "javascript:void(0)",
+					"caption" => t("Vaata"),
+					"onClick" => "aw_popup_scroll(\"".$this->mk_my_orb("showe", array("err_id" => $row["id"], "in_popup" => 1))."\", \"erp\", 1000, 900); return false;"
+				))
+			));
+		}
+	}
+
+	/**
+		@attrib name=showe
+		@param err_id required
+	**/
+	function showe($arr)
+	{	
+		$row = $this->db_fetch_row("SELECT * FROM bugtrack_errors WHERE id = $arr[err_id]");
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		
+		$htmlc->add_property(array(
+			"name" => "type_id",
+			"type" => "text",
+			"caption" => t("T&uuml;&uuml;p"),
+			"value" => isset($errors[$row["type_id"]]) ? $errors[$row["type_id"]]["name"] : $row["type_id"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "site",
+			"type" => "text",
+			"caption" => t("Sait"),
+			"value" => $row["site"],
+		));
+		$htmlc->add_property(array(
+			"name" => "uid",
+			"type" => "text",
+			"caption" => t("Kasutaja"),
+			"value" => $row["err_uid"],
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "tm",
+			"type" => "text",
+			"caption" => t("Millal"),
+			"value" => date("d.m.Y H:i:s", $row["tm"]),
+		));
+		
+		$htmlc->add_property(array(
+			"name" => "content",
+			"type" => "text",
+			"caption" => t("Sisu"),
+			"value" => nl2br($row["content"]),
+		));
+		
+		
+		$htmlc->finish_output(array(
+			"data" => array(
+				"class" => get_class($this),
+				"action" => "submit_change_site",
+			),
+			"submit" => "no"
+		));
+
+		$str =  $htmlc->get_result(array(
+			"form_only" => 1
+		));
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array("active" => true, "caption" => t("Viga")));
+		
+		return $tp->get_tabpanel(array("content" => $str));
+		
+	}
+
+	private function _init_errors_list_b($t)
+	{
+		$t->define_field(array(
+			"name" => "uid",
+			"caption" => t("Kasutaja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "tm",
+			"caption" => t("Millal"),
+			"align" => "center",
+			"type" => "time",
+			"sortable" => 1,
+			"numeric" => 1,
+			"format" => "d.m.Y H:i:s"
+		));
+		$t->define_field(array(
+			"name" => "site",
+			"caption" => t("Sait"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "type_id",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"align" => "center",
+		));
+	}
+
+	function _get_errors_list($arr)
+	{
+		$t = $arr["prop"]["vcl_inst"];
+
+		$filt_type = ifset($arr["request"], "type");
+		if ($filt_type != "")
+		{
+			return $this->_get_errors_list_b($arr);
+		}
+
+		$this->_init_errors_list($t);
+
+
+		$mintm = $this->db_fetch_field("SELECT min(tm) as tm FROM bugtrack_errors", "tm");
+		$maxtm = $this->db_fetch_field("SELECT max(tm) as tm FROM bugtrack_errors", "tm");
+		$days = ($maxtm - $mintm) / (24*3600);
+
+		$errors = aw_ini_get("errors");
+
+		$filt_site = ifset($arr["request"], "site");
+
+		if ($filt_site != "")
+		{
+			$this->db_query("SELECT site, type_id, count(*) as total FROM bugtrack_errors WHERE site = '$filt_site' GROUP BY site, type_id");
+		}
+		else
+		{
+			$this->db_query("SELECT site, type_id, count(*) as total FROM bugtrack_errors GROUP BY site, type_id");
+		}
+		while ($row = $this->db_next())
+		{
+			$t->define_data(array(
+				"site" => $row["site"],
+				"type_id" => isset($errors[$row["type_id"]]) ? $errors[$row["type_id"]]["name"] : $row["type_id"],
+				"total" => $row["total"],
+				"per_day" => number_format($row["total"] / $days, 2),
+				"view" => html::href(array(
+					"url" => aw_url_change_var("site", $row["site"], aw_url_change_var("type", $row["type_id"])),
+					"caption" => t("Vaata")
+				))
+			));
+		}
+		$t->set_default_sortby("total");
+		$t->set_default_sorder("desc");
+	}
+
+	private function _init_errors_list($t)
+	{
+		$t->define_field(array(
+			"name" => "site",
+			"caption" => t("Sait"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "type_id",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "total",
+			"caption" => t("Kokku"),
+			"align" => "right",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "per_day",
+			"caption" => t("P&auml;evas"),
+			"align" => "right",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"align" => "center",
+		));
 	}
 }
 ?>

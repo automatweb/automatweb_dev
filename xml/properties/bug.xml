@@ -306,7 +306,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>bug_comment_for_all</field>
-            <caption>Kuva k&amp;amp;otilde;igile</caption>
+            <caption>Kuva k&amp;amp;otilde;igile ja saada e-mail</caption>
       </property>
       <property>
             <name>bug_content_comm</name>

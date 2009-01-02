@@ -169,7 +169,18 @@
             <reltype>RELTYPE_FIELD</reltype>
             <store>connect</store>
             <field>field</field>
-            <caption>Valdkond</caption>
+            <caption>Valdkond (muutuja)</caption>
+      </property>
+      <property>
+            <name>sector</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTOR</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>sector</field>
+            <caption>Tegevusala (tegevusala objekt)</caption>
       </property>
       <property>
             <name>loc_country</name>
@@ -762,6 +773,16 @@
                   <clid>CL_META</clid>
                   <caption>Positsioon</caption>
             </JOB_TYPE>
+            <SECTOR>
+                  <value>25</value>
+                  <clid>CL_CRM_SECTOR</clid>
+                  <caption>Tegevusala</caption>
+            </SECTOR>
+            <NOTIFY_ME_OF_CONFIRMATION>
+                  <value>26</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-postiaadress, kuhu teatada aktiveerimisest</caption>
+            </NOTIFY_ME_OF_CONFIRMATION>
       </reltypes>
       <layout>
             <send_email_sms>

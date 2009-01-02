@@ -206,6 +206,28 @@
             <store>no</store>
             <parent>cl_usage_stats_tms_right_split</parent>
       </property>
+      <property>
+            <name>errors_tree</name>
+            <table>objects</table>
+            <group>errors</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>errors_tree</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>errors_list</name>
+            <table>objects</table>
+            <group>errors</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>errors_right_split</parent>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -244,6 +266,9 @@
                   <parent>cl_usage_stats</parent>
                   <submit>no</submit>
             </cl_usage_stats_tms>
+            <errors>
+                  <caption>Vead</caption>
+            </errors>
       </groupinfo>
       <layout>
             <mgr_hbox>
@@ -390,6 +415,37 @@
                   <group>cl_usage_stats_tms</group>
                   <area_caption></area_caption>
             </cl_usage_stats_tms_right_split>
+            <errors_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>errors</group>
+                  <area_caption></area_caption>
+            </errors_split>
+            <errors_left>
+                  <type>vbox</type>
+                  <parent>errors_split</parent>
+                  <group>errors</group>
+                  <area_caption></area_caption>
+            </errors_left>
+            <errors_tree>
+                  <type>vbox</type>
+                  <area_caption>Saidid</area_caption>
+                  <closeable>1</closeable>
+                  <parent>errors_left</parent>
+                  <group>errors</group>
+            </errors_tree>
+            <errors_right>
+                  <type>vbox</type>
+                  <parent>errors_split</parent>
+                  <group>errors</group>
+                  <area_caption></area_caption>
+            </errors_right>
+            <errors_right_split>
+                  <type>hbox</type>
+                  <parent>errors_right</parent>
+                  <group>errors</group>
+                  <area_caption></area_caption>
+            </errors_right_split>
       </layout>
 </properties>
 

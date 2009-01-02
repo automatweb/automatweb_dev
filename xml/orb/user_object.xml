@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="user_object" folder="core/users" extends="_int_object">
+		<action name="generate_password">
+			<function name="generate_password">
+				<arguments>
+					<optional name="lenght" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

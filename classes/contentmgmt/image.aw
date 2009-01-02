@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.34 2008/12/15 13:06:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/image.aw,v 1.35 2009/01/02 11:58:27 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo syslog_type=ST_IMAGE trans=1 maintainer=kristo
@@ -42,10 +42,6 @@
 	@property no_apply_gal_conf type=checkbox table=objects field=meta method=serialize ch_value=1
 	@caption &Auml;ra kasuta galerii seadeid
 
-
-	@property dg type=datagrid table=img_d field=row_id fields=a,b,c captions=1,2,3
-	@caption Datagrid
-	
 
 	/@property file_show type=text store=no editonly=1
 	/@caption Eelvaade 

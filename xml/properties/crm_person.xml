@@ -1303,6 +1303,49 @@
             <caption>Endised t&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
       </property>
       <property>
+            <name>previous_praxis_edit</name>
+            <table>objects</table>
+            <group>experiences</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager2</mode>
+            <reltype>RELTYPE_PREVIOUS_PRAXIS</reltype>
+            <props>
+                  <num_0>org</num_0>
+                  <num_1>section2</num_1>
+                  <num_2>profession</num_2>
+                  <num_3>field</num_3>
+                  <num_4>start</num_4>
+                  <num_5>end</num_5>
+                  <num_6>tasks</num_6>
+                  <num_7>load</num_7>
+                  <num_8>salary</num_8>
+                  <num_9>salary_currency</num_9>
+                  <num_10>benefits</num_10>
+                  <num_11>directive_link</num_11>
+                  <num_12>directive</num_12>
+                  <num_13>contract_stop</num_13>
+            </props>
+            <table_fields>
+                  <num_0>org</num_0>
+                  <num_1>section2</num_1>
+                  <num_2>profession</num_2>
+                  <num_3>field</num_3>
+                  <num_4>start</num_4>
+                  <num_5>end</num_5>
+                  <num_6>tasks</num_6>
+                  <num_7>load</num_7>
+                  <num_8>salary</num_8>
+                  <num_9>salary_currency</num_9>
+                  <num_10>benefits</num_10>
+                  <num_11>directive_link</num_11>
+                  <num_12>directive</num_12>
+                  <num_13>contract_stop</num_13>
+            </table_fields>
+            <field>previous_praxis_edit</field>
+            <caption>Praktikakogemus</caption>
+      </property>
+      <property>
             <name>current_job_edit</name>
             <table>objects</table>
             <group>experiences</group>
@@ -2503,6 +2546,11 @@
                   <clid>CL_CRM_PERSON_EDUCATION</clid>
                   <caption>Haridus (teine releditor)</caption>
             </EDUCATION_2>
+            <PREVIOUS_PRAXIS>
+                  <value>93</value>
+                  <clid>CL_CRM_PERSON_WORK_RELATION</clid>
+                  <caption>Eelnev praktikakogemus</caption>
+            </PREVIOUS_PRAXIS>
       </reltypes>
       <layout>
             <co_bottom_seller>

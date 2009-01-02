@@ -776,13 +776,12 @@
             <caption>Lisa fail</caption>
       </property>
       <property>
-	      <name>show_to_country</name>
-	      <table>documents</table>
-	      <group>settings</group>
-	      <type>textbox</type>
-	      <trans>1</trans>
-	      <field>show_to_country</field>
-	      <caption>N2htav vaid nendest riikidest tulijatele</caption>
+            <name>show_to_country</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <field>show_to_country</field>
+            <caption>N&amp;amp;auml;htav vaid nendest riikidest tulijatele</caption>
       </property>
       <property>
             <name>no_right_pane</name>

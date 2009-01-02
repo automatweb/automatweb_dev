@@ -1182,6 +1182,38 @@
             <caption>Kool</caption>
       </property>
       <property>
+            <name>cv_faculty</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Teaduskond</caption>
+      </property>
+      <property>
+            <name>cv_speciality</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>haridus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Eriala</caption>
+      </property>
+      <property>
             <name>cv_schl_area</name>
             <table>objects</table>
             <group>
@@ -1564,6 +1596,22 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;koormus</caption>
       </property>
       <property>
+            <name>cv_praxis</name>
+            <table>objects</table>
+            <group>
+                  <num_0>employee</num_0>
+                  <num_1>candidate</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chechbox</type>
+            <ch_value>1</ch_value>
+            <parent>t88kogemus</parent>
+            <captionside>top</captionside>
+            <store>no</store>
+            <caption>Otsi ka praktikakogemusi</caption>
+      </property>
+      <property>
             <name>cv_search_button</name>
             <table>objects</table>
             <group>
@@ -1672,7 +1720,9 @@
             </group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_COUNTY</reltype>
+            <mode>autocomplete</mode>
             <parent>os_top</parent>
             <captionside>top</captionside>
             <store>no</store>
@@ -1688,7 +1738,9 @@
             </group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_CITY</reltype>
+            <mode>autocomplete</mode>
             <parent>os_top</parent>
             <captionside>top</captionside>
             <store>no</store>
@@ -1840,6 +1892,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <multiple>1</multiple>
             <store>no</store>
             <parent>offers_search</parent>
             <captionside>top</captionside>
@@ -1855,6 +1908,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <multiple>1</multiple>
             <store>no</store>
             <parent>offers_search</parent>
             <captionside>top</captionside>
@@ -1870,6 +1924,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <multiple>1</multiple>
             <store>no</store>
             <parent>offers_search</parent>
             <captionside>top</captionside>

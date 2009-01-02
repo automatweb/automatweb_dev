@@ -2,7 +2,7 @@
 <orb>
 	<class name="crm_person_obj" folder="crm" extends="_int_object">
 		<action name="get_sections">
-			<function name="get_sections">
+			<function name="get_section_id">
 				<arguments>
 				</arguments>
 			</function>
