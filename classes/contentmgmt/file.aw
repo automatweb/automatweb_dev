@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/file.aw,v 1.19 2008/12/18 15:27:39 kristo Exp $
 /*
 
 
@@ -11,7 +10,7 @@
 
 	@property filename type=text store=no field=name form=+emb
 	@caption Faili nimi
-	
+
 	@property alias type=textbox size=60 table=objects field=alias
 	@caption Alias
 
@@ -288,7 +287,7 @@ class file extends class_base
 				break;
 
 			case "name":
-				if ($arr["called_from"] == "releditor")
+				if (isset($arr["called_from"]) and $arr["called_from"] === "releditor")
 				{
 					$data["type"] = "hidden";//arr($arr["obj_inst"]->name());
 					$data["value"] = html::href(array(
@@ -640,9 +639,9 @@ class file extends class_base
 				}
 
 				FCK=window.parent.opener.FCK;
-				
+
 				var eSelected = FCK.Selection.GetSelectedElement() ;
-				
+
 				if (eSelected)
 				{
 					if (eSelected.tagName == 'SPAN' && eSelected._awfileplaceholder  )
@@ -1124,13 +1123,14 @@ class file extends class_base
 		{
 			return array();
 		}
+
 		$ret = $tmpo->fetch();
 		$ret["id"] = $id;
-
 		$ret["file"] = basename($ret["file"]);
+
 		if ($fetch_file)
 		{
-			if ($ret["meta"]["file_url"] != "")
+			if (!empty($ret["meta"]["file_url"]))
 			{
 				$proto_find = get_instance("protocols/protocol_finder");
 				$proto_inst = $proto_find->inst($ret["meta"]["file_url"]);
@@ -1138,11 +1138,10 @@ class file extends class_base
 				$ret["content"] = $proto_inst->get($ret["meta"]["file_url"]);
 				$ret["type"] = $proto_inst->get_type();
 			}
-			else
-			if ($ret["file"] != "")
+			elseif (!empty($ret["file"]))
 			{
 				// file saved in filesystem - fetch it
-				if ($tmpo->meta("force_path") != "")
+				if ($tmpo->meta("force_path"))
 				{
 					$tmp = $this->get_file(array("file" => $tmpo->prop("file")));
 					if ($tmp !== false)
@@ -1184,13 +1183,7 @@ class file extends class_base
 	/** N&auml;itab faili. DUH.
 
 		@attrib name=preview params=name nologin="1" default="0"
-
 		@param id required
-
-		@returns
-
-
-		@comment
 
 	**/
 	function show($id)
@@ -1258,20 +1251,12 @@ class file extends class_base
 	}
 
 	/**
-
 		@attrib name=view params=name nologin="1" default="0"
-
 		@param id required
-
-		@returns
-
-
-		@comment
-
 	**/
 	function view($args = array())
 	{
-		extract($args);
+		$id = $args["id"];
 		$fc = $this->get_file_by_id($id);
 		if ($this->can_be_embedded($fc))
 		{
@@ -1280,7 +1265,7 @@ class file extends class_base
 		}
 		else
 		{
-			if ($fc["type"] == "")
+			if (empty($fc["type"]))
 			{
 				$pi = pathinfo($fc["name"]);
 				$mimeregistry = get_instance("core/aw_mime_types");
@@ -1290,9 +1275,7 @@ class file extends class_base
 			header("Content-Disposition: filename=$fc[name]");
 			header("Pragma: no-cache");
 			die($fc["content"]);
-		};
-
-
+		}
 	}
 
 	/** Returns the download url for the file.
@@ -1332,14 +1315,13 @@ class file extends class_base
 		// don't convert image class urls
 		if (strpos($url,"class=image") === false)
 		{
-			if (substr($url,0,6) == "/files")
+			if (substr($url,0,6) === "/files")
 			{
 				$fileid = (int)(substr($url,13));
 				$filename = urlencode(substr($url,strrpos($url,"/")));
 				$url = "/orb.".aw_ini_get("ext")."/class=file/action=show/id=".$fileid."/".$filename;
 			}
-			else
-			if (($sp = strpos($url,"fastcall=1")) !== false)
+			elseif (($sp = strpos($url,"fastcall=1")) !== false)
 			{
 				$url = substr($url,0,$sp).substr($url,$sp+10);
 			}
@@ -1379,8 +1361,6 @@ class file extends class_base
 					$output[] = array("id" => $id,"url" => $this->get_url($id,$fname), "orig_name" => $fname);
 				}
 			}
-
-
 		}
 		return $output;
 	}
@@ -1465,7 +1445,7 @@ class file extends class_base
 		// $o is file object
 		// assume it is a csv file
 		// parse it and return first row.
-		if ($o->prop("file_url") != "")
+		if ($o->prop("file_url"))
 		{
 			$fp = fopen($o->prop("file_url"),"r");
 		}
@@ -1473,15 +1453,18 @@ class file extends class_base
 		{
 			$fp = fopen($o->prop("file"),"r");
 		}
+
 		$delim = ",";
-		if ($params["separator"] != "")
+		if (!empty($params["separator"]))
 		{
 			$delim = $params["separator"];
 		}
-		if ($delim == "/t")
+
+		if ($delim === "/t")
 		{
 			$delim = "\t";
 		}
+
 		$line = fgetcsv($fp, 100000, $delim);
 		$ret = array();
 		if(is_array($line))
@@ -1506,15 +1489,18 @@ class file extends class_base
 		{
 			$fp = fopen($o->prop("file"),"r");
 		}
+
 		$delim = ",";
-		if ($params["separator"] != "")
+		if (!empty($params["separator"]))
 		{
 			$delim = $params["separator"];
 		}
-		if ($delim == "/t")
+
+		if ($delim === "/t")
 		{
 			$delim = "\t";
 		}
+
 		$first = true;
 		while ($line = fgetcsv($fp, 100000, $delim))
 		{
@@ -1540,6 +1526,7 @@ class file extends class_base
 	}
 
 	// static
+	// useless. deprecate
 	function get_file_size($fn)
 	{
 		return @filesize($fn);
@@ -1583,10 +1570,7 @@ class file extends class_base
 	}
 
 	/** saves editable fields (given in $ef) to object $id, data is in $data
-
 		@attrib api=1
-
-
 	**/
 	function update_object($ef, $id, $data)
 	{
@@ -1620,17 +1604,21 @@ class file extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["docid"] = $_GET["docid"];
+		if (isset($_GET["docid"]))
+		{
+			$arr["docid"] = $_GET["docid"];
+		}
 		$arr["post_ru"] = post_ru();
 	}
 
 	function callback_mod_tab($arr)
 	{
-		if ($_REQUEST["docid"])
+		if (!empty($_REQUEST["docid"]))
 		{
 			$arr["link"] = aw_url_change_var("docid", $_REQUEST["docid"], $arr["link"]);
 		}
-		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+
+		if ($arr["id"] === "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
 		}
@@ -1641,7 +1629,7 @@ class file extends class_base
 	{
 		$arr["args"]["docid"] = $arr["request"]["docid"];
 	}
-	
+
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
@@ -1659,7 +1647,7 @@ class file extends class_base
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(str_replace(aw_ini_get("baseurl"), "", $s));
 	}
-	
+
 	/**
 		@attrib name=fetch_file_alias_for_doc
 		@param doc_id required
@@ -1677,15 +1665,15 @@ class file extends class_base
 				die(str_replace("#", "", $alias_string));
 			}
 		}
-		
+
 		$this->gen_file_alias_for_doc(array(
 			"file_id" => $arr["file_id"],
 			"doc_id" => $arr["doc_id"],
 			"no_die" => true
 		));
-		
+
 		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
-		
+
 		foreach($alias_list as $obj_id => $alias_string)
 		{
 			if ($obj_id == $arr["file_id"])
@@ -1693,10 +1681,10 @@ class file extends class_base
 				die(str_replace("#", "", $alias_string));
 			}
 		}
-		
+
 		die();
 	}
-	
+
 	/**
 		@attrib name=fetch_file_name_for_alias
 		@param doc_id required
@@ -1706,7 +1694,7 @@ class file extends class_base
 	{
 		$alp = get_instance("alias_parser");
 		$alias_list = $alp->get_alias_list_for_obj_as_aliasnames($arr["doc_id"]);
-		
+
 		foreach($alias_list as $obj_id => $alias_string)
 		{
 			if ($obj_id == $arr["file_id"])
@@ -1714,7 +1702,7 @@ class file extends class_base
 				die(str_replace("#", "", $alias_string));
 			}
 		}
-		
+
 		die();
 	}
 
@@ -1745,7 +1733,7 @@ class file extends class_base
 			die($out);
 		}
 	}
-	
+
 	/**
 		@attrib name=get_connection_details_for_doc params=name
 		@param doc_id required type=int
@@ -1755,7 +1743,8 @@ class file extends class_base
 	function get_connection_details_for_doc($arr)
 	{
 		header("Content-type: application/javascript; charset=utf-8");
-		if ($arr["use_br"])
+
+		if (!empty($arr["use_br"]))
 		{
 			$sufix = "\n";
 		}
@@ -1813,8 +1802,8 @@ class file extends class_base
 			selection = FCK.EditorWindow.getSelection(); // after this, wont be a string
 			selection = "" + selection; // now a string again
     	}
-		
-		eSelected = FCK.Selection.GetSelectedElement(); 
+
+		eSelected = FCK.Selection.GetSelectedElement();
 		if (eSelected)
 		{
 			if (eSelected.tagName != "SPAN" && !eSelected._awfileplaceholder )
@@ -1826,19 +1815,19 @@ class file extends class_base
 		{
 			not_span = true;
 		}
-		
+
 		if (not_span && selection.length>0)
 		{
 			$("#comment").val(selection);
 		}
 		';
-		
+
 		return $rv;
 	}
 
-	function check_file_path($fname)
+	static function check_file_path($fname)
 	{
-		if ($fname == "")
+		if (strlen($fname) === 0)
 		{
 			return "";
 		}

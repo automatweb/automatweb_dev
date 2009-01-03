@@ -24,10 +24,10 @@ if (!defined("AW_DIR"))
 		try
 		{
 			automatweb::start();
-//			automatweb::$instance->mode(automatweb::MODE_DBG);
+			automatweb::$instance->mode(automatweb::MODE_DBG);
 			automatweb::$instance->bc();
 			automatweb::$instance->load_config_files($cfg_files, $cache_file);
-			$request = new aw_request(true);
+			$request = aw_request::autoload();
 			automatweb::$instance->set_request($request);
 			automatweb::$instance->exec();
 			automatweb::$result->send();

@@ -2,7 +2,6 @@
 
 // 1:42 PM 8/3/2008 - const.aw now contains only parts of old startup script that are to be moved to new appropriate files or deleted. const.aw file to be removed eventually.
 
-$awdir = AW_DIR;
 set_magic_quotes_runtime(0);
 
 foreach ($GLOBALS["cfg"] as $key => $value)
@@ -36,106 +35,6 @@ if (get_magic_quotes_gpc() && !defined("GPC_HANDLER"))
 	$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
 	define("GPC_HANDLER", 1);
 }
-
-$pi = "";
-
-$PATH_INFO = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : null;
-$QUERY_STRING = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : null;
-$REQUEST_URI = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : null;
-
-$PATH_INFO = isset($PATH_INFO) ? preg_replace("|\?automatweb=[^&]*|","", $PATH_INFO) : "";
-$QUERY_STRING = isset($QUERY_STRING) ? preg_replace("|\?automatweb=[^&]*|","", $QUERY_STRING) : "";
-
-if (($QUERY_STRING == "" && $PATH_INFO == "") && $REQUEST_URI != "")
-{
-        $QUERY_STRING = $REQUEST_URI;
-        $QUERY_STRING = str_replace("xmlrpc.aw", "", str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING)))));
-}
-
-if (strlen($PATH_INFO) > 1)
-{
-	$pi = $PATH_INFO;
-}
-
-if (strlen($QUERY_STRING) > 1)
-{
-	$pi .= "?".$QUERY_STRING;
-};
-
-$_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("|\?automatweb=[^&]*|","", $_SERVER["REQUEST_URI"]) : "";
-$pi = preg_replace("|\?automatweb=[^&]*|ims", "", $pi);
-
-if ($pi)
-{
-	if (($_pos = strpos($pi, "section=")) === false)
-	{
-		// ok, we need to check if section is followed by = then it is not really the section but
-		// for instance index.aw/set_lang_id=1
-		// we check for that like this:
-		// if there are no / or ? chars before = then we don't prepend
-
-		$qpos = strpos($pi, "?");
-		$slpos = strpos($pi, "/");
-		$eqpos = strpos($pi, "=");
-		$qpos = $qpos ? $qpos : 20000000;
-		$slpos = $slpos ? $slpos : 20000000;
-
-		if (!$eqpos || ($eqpos > $qpos || $slpos > $qpos))
-		{
-			// if no section is in url, we assume that it is the first part of the url and so prepend section = to it
-			$pi = str_replace("?", "&", "section=".substr($pi, 1));
-		}
-	}
-
-	if (($_pos = strpos($pi, "section=")) !== false)
-	{
-		// this here adds support for links like http://bla/index.aw/section=291/lcb=117
-		$t_pi = substr($pi, $_pos+strlen("section="));
-		if (($_eqp = strpos($t_pi, "="))!== false)
-		{
-			$t_pi = substr($t_pi, 0, $_eqp);
-			$_tpos1 = strpos($t_pi, "?");
-			$_tpos2 = strpos($t_pi, "&");
-			if ($_tpos1 !== false || $_tpos2 !== false)
-			{
-				// if the thing contains ? or & , then section is the part before it
-				if ($_tpos1 === false)
-				{
-					$_tpos = $_tpos2;
-				}
-				else
-				if ($_tpos2 === false)
-				{
-					$_tpos = $_tpos1;
-				}
-				else
-				{
-					$_tpos = min($_tpos1, $_tpos2);
-				}
-				$section = substr($t_pi, 0, $_tpos);
-			}
-			else
-			{
-				// if not, then te section is the part upto the last /
-				$_lslp = strrpos($t_pi, "/");
-				if ($_lslp !== false)
-				{
-					$section = substr($t_pi, 0, $_lslp);
-				}
-				else
-				{
-					$section = $t_pi;
-				}
-			}
-		}
-		else
-		{
-			$section = $t_pi;
-		}
-	}
-}
-
-$ext = "aw";  // filename extension
 
 if (empty($LC))
 {

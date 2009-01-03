@@ -5,42 +5,42 @@
 */
 class aw_request
 {
-	private $args = array(); // Request parameters. Associative array of argument name/value pairs. read-only
-	private $uri; // request uri aw_uri object if available, empty aw_uri object if not. read-only
-	private $type = ""; // request type. http|...
-	private $class; // requested class. aw_class.class_name
-	private $default_class = "admin_if";
-	private $action; // requested class action. one of aw_class.actions
-	private $default_action = "change";
-	private $method; // http request method.
-	private $is_fastcall = false; // boolean
+	protected $args = array(); // Request parameters. Associative array of argument name/value pairs. read-only
+	protected $type = ""; // request type. http|...
+	protected $class; // requested class. aw_class.class_name
+	protected $default_class = "admin_if";
+	protected $action; // requested class action. one of aw_class.actions
+	protected $default_action = "change";
+	protected $method; // http request method.
+	protected $is_fastcall = false; // boolean
 
 	public function __construct($autoload = false)
 	{
 		if ($autoload)
 		{
 			// load current/active request
-			$this->autoload();
+			$this->_autoload();
+		}
+	}
+
+	/** Determines request type, arguments and loads them returning the specific request object
+	@attrib api=1 params=pos
+	@returns aw_request object
+	**/
+	public static function autoload()
+	{
+		// determine request type and create instance
+		if (!empty($_SERVER["SERVER_PROTOCOL"]) and "http" === strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, 4)))
+		{
+			$request = new aw_http_request(true);
 		}
 		else
-		{ // do basic construction
-			$this->uri = new aw_uri();
+		{
+			$request = new aw_request(true);
 		}
-	}
 
-	/**
-	@attrib api=1 params=pos
-	@returns aw_uri
-		Request uri if available.
-	@throws
-		awex_request_na when uri is not available in current request type
-	**/
-	public function get_uri()
-	{
-		$this->update_uri();
-		return clone $this->uri;
+		return $request;
 	}
-
 
 	/**
 	@attrib api=1 params=pos
@@ -230,38 +230,13 @@ class aw_request
 		return $this->action;
 	}
 
-	private function autoload()
+	protected function _autoload()
 	{
-		// load arguments
-		if (!empty($_POST))
-		{
-			$this->args = $_POST;
-			$this->method = "POST";
-		}
-		elseif (!empty($_GET))
-		{
-			$this->args = $_GET;
-			$this->method = "GET";
-		}
-
-		// load uri
-		if (!empty($_SERVER["REQUEST_URI"]))
-		{
-			try
-			{
-				$this->uri = new aw_uri($_SERVER["REQUEST_URI"]);
-			}
-			catch (Exception $e)
-			{
-				$this->uri = new aw_uri();
-			}
-		}
-
 		// parse arguments
 		$this->parse_args();
 	}
 
-	private function parse_args()
+	protected function parse_args()
 	{
 		$this->type = "http"; // other types implemented later
 		$this->is_fastcall = !empty($this->args["fastcall"]);
@@ -269,34 +244,6 @@ class aw_request
 		// no name validation because requests can be formed and sent to other servers where different classes, methods, etc. defined
 		$this->class = empty($this->args["class"]) ? $this->default_class : $this->args["class"];
 		$this->action = empty($this->args["action"]) ? $this->default_action : $this->args["action"];
-	}
-
-	private function update_uri()
-	{
-		$this->uri->unset_arg();
-
-		try
-		{
-			$this->uri->set_arg($this->args);
-		}
-		catch (Exception $e)
-		{
-			if (is_a($e, "awex_uri_type"))
-			{
-				if (awex_uri_type::RESERVED_CHR === $e->getCode())
-				{
-					throw new awex_request_na("This request contains arguments that can't be converted to URI argument names.");
-				}
-				else
-				{
-					throw new awex_request_na("This request contains argument values that can't be converted to URI arguments.");
-				}
-			}
-			else
-			{
-				throw $e;
-			}
-		}
 	}
 }
 

@@ -60,7 +60,7 @@ class automatweb
 
 			automatweb::$instance->load_config_files(array($cfg_file), $cfg_cache_file);
 
-			$request = new aw_request(true);
+			$request = aw_request::autoload();
 			automatweb::$instance->set_request($request);
 			automatweb::$instance->exec();
 			echo automatweb::$result->send();
@@ -214,7 +214,7 @@ class automatweb
 	{
 		if (!$this->request_loaded)
 		{ // autoload request
-			$request = new aw_request(true);
+			$request = aw_request::autoload();
 			$this->set_request($request);
 		}
 
@@ -267,11 +267,6 @@ class automatweb
 				$GLOBALS["__START"] = microtime(true);
 
 				// parse vars
-				if (isset($_AW_GET_VARS) && is_array($_AW_GET_VARS))
-				{
-					$vars = $vars + $_AW_GET_VARS;
-				}
-
 				$class = self::$request->class_name();
 				$action = self::$request->action();
 
