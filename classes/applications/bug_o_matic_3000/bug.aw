@@ -3267,7 +3267,7 @@ die($email);
 		{
 			$co = obj($arr["obj_inst"]->prop("orderer"));
 		}
-		else
+		if(!isset($co) || $co->class_id() != CL_CRM_COMPANY)
 		{
 			$co = get_current_company();
 		}
