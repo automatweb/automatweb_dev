@@ -228,6 +228,26 @@
             <store>no</store>
             <parent>errors_right_split</parent>
       </property>
+      <property>
+            <name>sites_list</name>
+            <table>objects</table>
+            <group>sites_sites</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>sites_servers</name>
+            <table>objects</table>
+            <group>sites_servers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -246,7 +266,7 @@
                   <submit>no</submit>
             </rels>
             <classes>
-                  <caption>Omadused</caption>
+                  <caption>Klassid</caption>
             </classes>
             <cl_usage_stats>
                   <caption>Statistika</caption>
@@ -269,6 +289,17 @@
             <errors>
                   <caption>Vead</caption>
             </errors>
+            <sites>
+                  <caption>Saidid</caption>
+            </sites>
+            <sites_sites>
+                  <parent>sites</parent>
+                  <caption>Saidid</caption>
+            </sites_sites>
+            <sites_servers>
+                  <parent>sites</parent>
+                  <caption>Serverid</caption>
+            </sites_servers>
       </groupinfo>
       <layout>
             <mgr_hbox>

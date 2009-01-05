@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.17 2009/01/02 11:58:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.18 2009/01/05 10:27:50 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -120,15 +120,25 @@
 
 				@property errors_list type=table no_caption=1 store=no parent=errors_right_split
 
+@default group=sites_sites
+
+	@property sites_list type=table store=no no_caption=1
+
+@default group=sites_servers
+
+	@property sites_servers type=table store=no no_caption=1
 
 @groupinfo mgr caption="Manager" submit=no
 @groupinfo rels caption="Seosed" submit=no
-@groupinfo classes caption="Omadused"
+@groupinfo classes caption="Klassid"
 @groupinfo cl_usage_stats caption="Statistika"
 	@groupinfo cl_usage_stats_clids caption="Klasside TOP" parent=cl_usage_stats submit=no
 	@groupinfo cl_usage_stats_props caption="Omadused" parent=cl_usage_stats submit=no
 	@groupinfo cl_usage_stats_tms caption="Ajad" parent=cl_usage_stats submit=no
 @groupinfo errors caption="Vead"
+@groupinfo sites caption="Saidid"
+	@groupinfo sites_sites parent=sites caption="Saidid"
+	@groupinfo sites_servers parent=sites caption="Serverid"
 */
 
 class class_designer_manager extends class_base
@@ -1980,6 +1990,96 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 			"caption" => t("Vaata"),
 			"align" => "center",
 		));
+	}
+
+	function _get_sites_list($arr)
+	{	
+		// convert sites to objects
+		$this->_site_convert_check();
+
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list(array(
+				"class_id" => CL_AW_SITE_ENTRY,
+				"lang_id" => array(),
+				"site_id" => array()
+			)),
+			array("id", "name", "url", "server_oid", "site_used", "code_branch", "last_update", "modified"),
+			CL_AW_SITE_ENTRY
+		);
+	}
+
+	function _get_sites_servers($arr)
+	{	
+		// convert sites to objects
+		$this->_server_convert_check();
+
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			new object_list(array(
+				"class_id" => CL_AW_SERVER_ENTRY,
+				"lang_id" => array(),
+				"site_id" => array()
+			)),
+			array("id", "name", "ip"),
+			CL_AW_SERVER_ENTRY
+		);
+	}
+
+	private function _site_convert_check()
+	{
+		$this->_server_convert_check();
+
+		//$n1 = $this->db_fetch_field("SELECT count(*) as cnt FROM aw_site_list", "cnt");
+		if ($this->db_query("SELECT count(*) as cnt FROM aw_site_list WHERE aw_oid IS NOT NULL", false))
+		{
+			return;
+		}
+
+		$this->db_query("ALTER TABLE aw_site_list ADD aw_oid int", false);
+		$this->db_query("ALTER TABLE aw_site_list ADD server_oid int", false);
+		$this->db_query("SELECT * FROM aw_site_list WHERE aw_oid IS NULL");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$o = obj();
+			$o->set_class_id(CL_AW_SITE_ENTRY);
+			$o->set_parent(aw_ini_get("amenustart"));
+			$o->save();
+
+			$id = $o->id();
+			$this->db_query("DELETE FROM aw_site_list WHERE aw_oid = $id");
+			$this->db_query("UPDATE aw_site_list SET aw_oid = $id WHERE id = $row[id]");
+			$server_oid = $this->db_fetch_field("SELECT aw_oid FROM aw_server_list WHERE id = '$row[server_id]'", "aw_oid");
+			$this->db_query("UPDATE aw_site_list SET server_oid = '$server_oid' WHERE id = $row[id]");
+			$this->restore_handle();
+		}
+		$c = get_instance("maitenance");
+		$c->cache_clear(array("clear" => 1, "no_die" => 1));
+	}
+
+	private function _server_convert_check()
+	{
+		if ($this->db_query("SELECT count(*) as cnt FROM aw_server_list WHERE aw_oid IS NOT NULL", false))
+		{
+			return;
+		}
+
+		$this->db_query("ALTER TABLE aw_server_list ADD aw_oid int");
+		$this->db_query("SELECT * FROM aw_server_list WHERE aw_oid IS NULL");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$o = obj();
+			$o->set_class_id(CL_AW_SERVER_ENTRY);
+			$o->set_parent(aw_ini_get("amenustart"));
+			$o->save();
+
+			$id = $o->id();
+			$this->db_query("DELETE FROM aw_server_list WHERE aw_oid = $id");
+			$this->db_query("UPDATE aw_server_list SET aw_oid = $id WHERE id = $row[id]");
+			$this->restore_handle();
+		}
+		$c = get_instance("maitenance");
+		$c->cache_clear(array("clear" => 1, "no_die" => 1));
 	}
 }
 ?>

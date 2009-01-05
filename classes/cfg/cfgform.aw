@@ -4206,7 +4206,7 @@ class cfgform extends class_base
 		// doing the table
 		$active = false;
 		$ol = new object_list(array(
-			"class_id" => $this->clid,
+			"class_id" => CL_CFGFORM,
 			"subclass" => $arr["clid"],
 			"lang_id" => array(),
 			"flags" => array(

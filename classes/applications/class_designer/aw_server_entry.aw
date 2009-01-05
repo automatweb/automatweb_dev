@@ -1,10 +1,22 @@
 <?php
 /*
 @classinfo syslog_type=ST_AW_SERVER_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
-@tableinfo aw_aw_server_entry master_index=brother_of master_table=objects index=aw_oid
+@tableinfo aw_server_list master_index=brother_of master_table=objects index=aw_oid
 
-@default table=aw_aw_server_entry
+@default table=aw_server_list
 @default group=general
+
+@property id type=textbox
+@caption Serveri ID
+
+@property name type=textbox
+@caption Nimi
+
+@property ip type=textbox
+@caption IP
+
+@property comment type=textarea rows=30 cols=80
+@caption Kommentaar
 
 */
 

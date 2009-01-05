@@ -460,7 +460,7 @@ class propcollector extends aw_template
 		$this->validate_fields(array(
 			"type" => "tableinfo",
 			"name" => $id,
-			"fields" => $fields,
+			"fields" => null,
 		));
 		if (empty($attr["master_index"]) && $attr["master_table"] === "objects")
 		{

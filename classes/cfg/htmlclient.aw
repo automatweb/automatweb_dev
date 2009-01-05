@@ -305,6 +305,10 @@ class htmlclient extends aw_template
 			);
 		};
 
+		if (!isset($args["parent"]))
+		{
+			$args["parent"] = "";
+		}
 		if (empty($args["value"]) && isset($args["vcl_inst"]) && is_callable(array($args["vcl_inst"], "get_html")))
 		{
 			$args["value"] = $args["vcl_inst"]->get_html(!empty($this->layoutinfo[$args["parent"]]["closeable"]));

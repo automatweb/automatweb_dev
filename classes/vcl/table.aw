@@ -3057,17 +3057,17 @@ class vcl_table extends aw_table
 			$data = array("oid" => $o->id());
 			foreach($this->rowdefs as $k => $v)
 			{
-				if ($v["name"] == "oid")
+				if (isset($v["name"]) && $v["name"] == "oid")
 				{
 					$val = $o->id();
 				}
 				else
-				if ($v["name"] == "createdby")
+				if (isset($v["name"]) && $v["name"] == "createdby")
 				{
 					$val = $o->createdby();
 				}
 				else
-				if ($v["name"] == "createdby_person")
+				if (isset($v["name"]) && $v["name"] == "createdby_person")
 				{
 					$val = $o->createdby();
 					// get person for user
@@ -3078,12 +3078,12 @@ class vcl_table extends aw_table
 					}
 				}
 				else
-				if ($v["name"] == "modifiedby")
+				if (isset($v["name"]) && $v["name"] == "modifiedby")
 				{
 					$val = $o->modifiedby();
 				}
 				else
-				if ($v["name"] == "modifiedby_person")
+				if (isset($v["name"]) && $v["name"] == "modifiedby_person")
 				{
 					$val = $o->modifiedby();
 					// get person for user
@@ -3094,32 +3094,32 @@ class vcl_table extends aw_table
 					}
 				}
 				else
-				if ($v["name"] == "created")
+				if (isset($v["name"]) && $v["name"] == "created")
 				{
 					$val = $o->created();
 				}
 				else
-				if ($v["name"] == "modified")
+				if (isset($v["name"]) && $v["name"] == "modified")
 				{
 					$val = $o->modified();
 				}
 				else
-				if ($v["name"] == "class_id")
+				if (isset($v["name"]) && $v["name"] == "class_id")
 				{
 					$val = $clss[$o->class_id()]["name"];
 				}
 				else
-				if ($v["name"] == "ord")
+				if (isset($v["name"]) && $v["name"] == "ord")
 				{
 					$val = $o->ord();
 				}
 				else
-				if ($v["name"] == "change")
+				if (isset($v["name"]) && $v["name"] == "change")
 				{
 					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), "Muuda");
 				}
 				else
-				if ($v["_type"] == "rel")
+				if (isset($v["_type"]) && $v["_type"] == "rel")
 				{
 					$val = html::obj_change_url($o->prop($v["name"]));
 				}
@@ -3182,13 +3182,13 @@ class vcl_table extends aw_table
 				$d["format"] = "d.m.Y H:i";
 			}
 			else
-			if ($ps[$prop]["type"] == "date_select")
+			if (!empty($ps[$prop]["type"]) && $ps[$prop]["type"] == "date_select")
 			{
 				$d["type"] = "time";
 				$d["numeric"] = 1;
 				$d["format"] = "d.m.Y";
 			}
-			if ($ps[$prop]["type"] == "relpicker")
+			if (!empty($ps[$prop]["type"]) && $ps[$prop]["type"] == "relpicker")
 			{
 				$d["_type"] = "rel";
 			}

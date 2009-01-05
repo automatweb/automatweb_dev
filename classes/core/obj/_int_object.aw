@@ -1221,7 +1221,7 @@ class _int_object
 				$o = obj($cur_v);
 			}
 		}
-		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
+		$pd = isset($GLOBALS["properties"][$this->obj["class_id"]][$param]) ? $GLOBALS["properties"][$this->obj["class_id"]][$param] : null;
 		if (!$pd)
 		{
 			return $this->prop($param);

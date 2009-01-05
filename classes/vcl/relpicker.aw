@@ -487,7 +487,7 @@ class relpicker extends  core
 					$val["post_append_text"] .= " ".html::href(array(
 						"url" => html::get_new_url(
 							$_clid,
-							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(),
+							(!empty($arr["prop"]["parent"]) && $arr["prop"]["parent"] == "this.parent") ? $this->obj->parent() : $this->obj->id(),
 							array(
 								"alias_to_prop" => $arr["prop"]["name"],
 								"alias_to" => $this->obj->id(),

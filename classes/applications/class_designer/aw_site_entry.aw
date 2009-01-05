@@ -1,11 +1,52 @@
 <?php
 /*
-@classinfo syslog_type=ST_AW_SITE_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
-@tableinfo aw_aw_site_entry master_index=brother_of master_table=objects index=aw_oid
+@classinfo syslog_type=ST_AW_SITE_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo no_name=1
+@tableinfo aw_site_list master_index=brother_of master_table=objects index=aw_oid
 
-@default table=aw_aw_site_entry
+@default table=aw_site_list
 @default group=general
 
+@property id type=textbox
+@caption Saidi ID
+
+@property name type=textbox
+@caption Nimi
+
+@property url type=textbox
+@caption URL
+
+@property server_oid type=relpicker reltype=RELTYPE_AW_SERVER_ENTRY 
+@caption Server
+
+@property ip type=textbox
+@caption IP
+
+@property site_used type=checkbox ch_value=1
+@caption Sait kasutusel
+
+@property code_branch type=textbox
+@caption Koodiversioon
+
+@property basedir type=textbox
+@caption Kaust serveris
+
+@property updater_uid type=textbox
+@caption Uuendaja UID
+
+@property last_update type=datetime_select
+@caption Viimati uuendatud
+
+@property data type=textarea rows=30 cols=80
+@caption Andmed
+
+@property critical_services type=textarea rows=30 cols=80
+@caption Kriitilised teenused
+
+@property used_class_list type=textarea rows=30 cols=80
+@caption Kasutusel klassid
+
+@reltype AW_SERVER_ENTRY value=1 clid=CL_AW_SERVER_ENTRY
+@caption Server
 */
 
 class aw_site_entry extends class_base

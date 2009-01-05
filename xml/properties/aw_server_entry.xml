@@ -1,5 +1,39 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>id</name>
+            <table>aw_server_list</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>id</field>
+            <caption>Serveri ID</caption>
+      </property>
+      <property>
+            <name>name</name>
+            <table>aw_server_list</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>ip</name>
+            <table>aw_server_list</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>ip</field>
+            <caption>IP</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>aw_server_list</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>30</rows>
+            <cols>80</cols>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_AW_SERVER_ENTRY</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -9,11 +43,11 @@
             <maintainer>kristo</maintainer>
       </classinfo>
       <tableinfo>
-            <aw_aw_server_entry>
+            <aw_server_list>
                   <master_index>brother_of</master_index>
                   <master_table>objects</master_table>
                   <index>aw_oid</index>
-            </aw_aw_server_entry>
+            </aw_server_list>
       </tableinfo>
 </properties>
 
