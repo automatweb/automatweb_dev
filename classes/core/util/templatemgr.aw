@@ -1,7 +1,7 @@
 <?php
 /**
 A class to help manage template files. 
-$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.1 2008/03/13 20:38:33 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/util/templatemgr.aw,v 1.2 2009/01/05 13:10:44 hannes Exp $
 @classinfo  maintainer=kristo
 **/
 class templatemgr extends aw_template
@@ -70,7 +70,12 @@ class templatemgr extends aw_template
 				}
 			}
 
-			$result[$tpl["id"]] = $tpl["name"];
+			if ( !file_exists(aw_ini_get("site_basedir").'/templates/automatweb/documents/'.$tpl["filename"]) )
+			{
+				continue;
+			}
+
+			$result[$tpl["id"]] = $tpl["name"] . " (${tpl['filename']})";
 			if ($tpl["filename"] == $def)
 			{
 				$def_n = $tpl["name"];
