@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.21 2008/12/17 13:17:14 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bugtrack_display.aw,v 1.22 2009/01/05 13:37:23 robert Exp $
 // bugtrack_display.aw - &Uuml;lesannete kuvamine 
 /*
 
@@ -221,7 +221,7 @@ class bugtrack_display extends class_base
 							if($bug_doc)
 							{
 								$value = html::href(array(
-									"caption" => $value,
+									"caption" => $value?$value : t("Nimetu"),
 									"url" => $this->mk_my_orb("change",array(
 										"section" => $bug_doc,
 										"return_url" => get_ru(),
@@ -340,7 +340,8 @@ class bugtrack_display extends class_base
 								"monitors" => $cur,
 								"orderer" => $cur,
 								"bug_feedback_p" => $cur,
-								"createdby" => $cur_u
+								"createdby" => $cur_u,
+								"contactperson" => $cur,
 							)
 						)),
 						"orderer_unit" => $sects,
