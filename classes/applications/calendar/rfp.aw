@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.171 2008/12/30 10:25:26 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.172 2009/01/05 11:31:35 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -3413,7 +3413,7 @@ class rfp extends class_base
 
 	private function _sort_submission_housing($a, $b)
 	{
-		return $a["datefrom"].$a["dateto"] - $b["datefrom"].$b["dateto"];
+		return $a["datefrom"] - $b["datefrom"];
 	}
 
 	private function _sort_submission_resources($a, $b)
