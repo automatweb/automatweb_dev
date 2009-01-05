@@ -9076,7 +9076,7 @@ Bank accounts: yksteise all
 
 	private function move_comments_from_meta_to_objects($arr)
 	{
-		$comments = (array) $arr["obj_inst"]->prop("comment_history");
+		$comments = safe_array($arr["obj_inst"]->prop("comment_history"));
 
 		foreach ($comments as $t)
 		{
