@@ -992,6 +992,25 @@
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <property>
+            <name>comments_tb</name>
+            <table>documents</table>
+            <group>comments</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <no_rte_button>1</no_rte_button>
+            <field>comments_tb</field>
+      </property>
+      <property>
+            <name>comments_tbl</name>
+            <table>documents</table>
+            <group>comments</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>comments_tbl</field>
+      </property>
+      <property>
             <name>acl</name>
             <table>documents</table>
             <group>acl</group>
@@ -1019,6 +1038,10 @@
                   <caption>Seadistused</caption>
                   <icon>archive.gif</icon>
             </settings>
+            <comments>
+                  <caption>Kommentaarid</caption>
+                  <submit>no</submit>
+            </comments>
             <kws>
                   <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
             </kws>

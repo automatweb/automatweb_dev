@@ -26,6 +26,13 @@
 			</function>
 		</action>
 
+		<action name="delete_comments">
+			<function name="delete_comments">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_fckstyles_path">
 			<function name="get_fckstyles_path">
 				<arguments>

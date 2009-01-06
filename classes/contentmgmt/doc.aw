@@ -312,8 +312,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
+@default group=comments
+	
+	@property comments_tb type=toolbar store=no no_caption=1 no_rte_button=1
+	@property comments_tbl type=table store=no no_caption=1
+
 @groupinfo calendar caption=Kalender
 @groupinfo settings caption=Seadistused icon=archive.gif
+@groupinfo comments caption=Kommentaarid submit=no
 @groupinfo kws caption="V&otilde;tmes&otilde;nad"
 @groupinfo versions caption="Versioonid"
 @groupinfo transl caption=T&otilde;lgi
@@ -481,6 +487,14 @@ class doc extends class_base
 
 			case "simultaneous_warning":
 				return $this->_get_simultaneous_warning($arr);
+
+			case "comments_tb":
+				$this->_comments_tb($arr);
+				break;
+				
+			case "comments_tbl":
+				$this->_comments_tbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -1391,6 +1405,22 @@ class doc extends class_base
 		return $arr["post_ru"];
 	}
 
+	/**
+	@attrib name=delete_comments
+	**/
+	function delete_comments($arr)
+	{
+		if($this->can("edit", $arr["id"]))
+		{
+			foreach($arr["sel"] as $oid)
+			{
+				$q = sprintf("DELETE FROM comments WHERE board_id = '%s' AND id='%s'", mysql_real_escape_string($arr["id"]), mysql_real_escape_string($oid));
+				$this->db_query($q);
+			}
+		}
+		return $arr["post_ru"];
+	}
+
 	function callback_get_transl($arr)
 	{
 		$pl = $arr["obj_inst"]->get_property_list();
@@ -1448,6 +1478,46 @@ class doc extends class_base
 				"text" => t($lang["name"]),
 				"url" => $dd->get_doc_link($arr["obj_inst"], $lang["acceptlang"]),
 				"target" => "_blank"
+			));
+		}
+	}
+
+	private function _comments_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "delete_comment",
+			"action" => "delete_comments",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta valitud kommentaarid"),
+			"confirm" => t("Oled kindel, et soovid valitud kustutada?"),
+		));
+	}
+
+	private function _comments_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "content",
+			"caption" => t("Sisu"),
+		));
+		
+		$q = sprintf("SELECT * FROM comments WHERE board_id = '%s' ORDER BY time", $arr["obj_inst"]->id());;
+		$rows = $this->db_fetch_array($q);
+		foreach($rows as $row)
+		{
+			$t->define_data(array(
+				"oid" => $row["id"],
+				"name" => $row["name"],
+				"content" => nl2br(htmlspecialchars(stripslashes($row['comment']))),
 			));
 		}
 	}
