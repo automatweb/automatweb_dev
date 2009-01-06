@@ -7080,7 +7080,19 @@ class crm_company extends class_base
 				n_td.className=\"awmenuedittabletext\";
 				n_td.innerHTML=aw_get_url_contents(url);
 				n_td.colSpan=9;
-				}";
+				}
+				";
+				
+				$url_quick_task_entry = html::get_new_url(CL_TASK_QUICK_ENTRY, $arr["request"]["id"]);
+				$sc .= "
+				$.hotkeys.add('Ctrl+x',function(e){ 
+					if (e.target.tagName.toLowerCase() != 'textarea' &&
+						e.target.tagName.toLowerCase() != 'input')
+					{
+						aw_popup_scroll('$url_quick_task_entry', 'quick_task_entry', 1000,600);
+					}
+				});
+				";
 
 			if ($arr["request"]["group"] == "bills")
 			{
