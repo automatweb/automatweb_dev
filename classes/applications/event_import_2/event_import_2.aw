@@ -1149,7 +1149,7 @@ class event_import_2 extends class_base
 			$new_et = $ol->count() == 0;
 			if(!$new_et)
 			{
-				$t = obj($ol->begin()->obj);
+				$t = obj($ol->begin());
 			}
 			else
 			{
@@ -1195,6 +1195,10 @@ class event_import_2 extends class_base
 				$oc[$k] = $v;
 			}
 			$this->save_obj($t);
+			$o->connect(array(
+				"to" => $t->id(),
+				"type" => "RELTYPE_EVENT_TIMES",
+			));
 			if($new_et)
 			{
 				$this->add_to_impd_objs($t, $time["ext_id"], "event_time");
