@@ -1058,7 +1058,9 @@ class class_base extends aw_template
 			}
 		}
 
-		$args["rawdata"] = $args;
+			
+		$tmp = $args;	// avoid recursive structure
+		$args["rawdata"] = $tmp;
 		$save_ok = $this->process_data($args);
 
 		if (!empty($args["submit_and_forward"]))
