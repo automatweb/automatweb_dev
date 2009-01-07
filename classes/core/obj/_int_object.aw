@@ -2090,7 +2090,6 @@ class _int_object
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]]
 			));
-
 			if (!$this->obj["brother_of"])
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];
