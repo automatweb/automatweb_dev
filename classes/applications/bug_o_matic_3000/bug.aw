@@ -120,7 +120,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@layout bc_lay2 parent=bc type=hbox
 
-			@property bug_content_comm type=textarea rows=18 cols=60 parent=bc_lay2 store=no editonly=1 captionside=top
+			@property bug_content_comm type=textarea rows=18 cols=60 parent=bc_lay2 store=no editonly=1 captionside=top draft=1
 			@caption Lisa kommentaar
 
 	@layout content_right type=vbox parent=content

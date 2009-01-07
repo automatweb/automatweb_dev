@@ -319,6 +319,7 @@
             <store>no</store>
             <editonly>1</editonly>
             <captionside>top</captionside>
+            <draft>1</draft>
             <field>bug_content_comm</field>
             <caption>Lisa kommentaar</caption>
       </property>
