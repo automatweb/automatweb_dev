@@ -1736,33 +1736,42 @@ class shop_warehouse extends class_base
 			6 => t("Laup&auml;ev"),
 			7 => t("P&uuml;hap&auml;ev"),
 		);
+		$arr["warehouses"] = array($arr["obj_inst"]->id());
 		$res = $this->get_products_list_ol($arr);
-		foreach($res["ol"]->arr() as $oid => $o)
+		foreach($res["ol"]->arr() as $prodid => $prod)
 		{
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"warehouse" => $arr["obj_inst"]->id(),
+				"product" => $prodid,
+			));
+			$o = $ol->begin();
 			$t->define_data(array(
-				"prod" => $o->name(),
+				"prod" => $prod->name(),
 				"company" => html::select(array(
 					"options" => $companies,
-					"name" => "arrivals[".$oid."][org]",
-					"value" => $o->prop("purveyor_org"),
+					"name" => "arrivals[".$prodid."][org]",
+					"value" => $o ? $o->prop("company") : 0,
 				)),
 				"weekday" => html::select(array(
 					"options" => $weekdays,
-					"name" => "arrivals[".$oid."][weekday]",
-					"value" => $o->prop("purveyance_wd"),
+					"name" => "arrivals[".$prodid."][weekday]",
+					"value" => $o ? $o->prop("weekday") : 0,
 				)),
 				"days" => html::textbox(array(
 					"size" => 3,
-					"name" => "arrivals[".$oid."][days]",
-					"value" => $o->prop("purveyance_days"),
+					"name" => "arrivals[".$prodid."][days]",
+					"value" => $o ? $o->prop("days") : 0,
 				)),
 				"date1" => html::date_select(array(
-					"name" => "arrivals[".$oid."][date1]",
-					"value" => ($d = $o->prop("purveyance_date1"))? $d : -1,
+					"name" => "arrivals[".$prodid."][date1]",
+					"value" => $o ? (($d = $o->prop("date1"))? $d : -1) : -1,
 				)),
 				"date2" => html::date_select(array(
-					"name" => "arrivals[".$oid."][date2]",
-					"value" => ($d = $o->prop("purveyance_date2"))? $d : -1,
+					"name" => "arrivals[".$prodid."][date2]",
+					"value" => $o ? (($d = $o->prop("date2"))? $d : -1) : - 1,
 				)),
 			));
 		}
@@ -1772,12 +1781,28 @@ class shop_warehouse extends class_base
 	{
 		foreach($arr["request"]["arrivals"] as $oid => $data)
 		{
-			$o = obj($oid);
-			$o->set_prop("purveyor_org", $data["org"]);
-			$o->set_prop("purveyance_wd", $data["weekday"]);
-			$o->set_prop("purveyance_days", $data["days"]);
-			$o->set_prop("purveyance_date1", date_edit::get_timestamp($data["date1"]));
-			$o->set_prop("purveyance_date2", date_edit::get_timestamp($data["date2"]));
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PURVEYANCE,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"warehouse" => $arr["obj_inst"]->id(),
+				"product" => $oid,
+			));
+			$o = $ol->begin();
+			if(!$o)
+			{
+				$o = obj();
+				$o->set_class_id(CL_SHOP_PRODUCT_PURVEYANCE);
+				$o->set_parent($oid);
+				$o->set_name(sprintf(t("%s tarnetingimus"), obj($oid)->name()));
+				$o->set_prop("product", $oid);
+				$o->set_prop("warehouse", $arr["obj_inst"]->id());
+			}
+			$o->set_prop("company", $data["org"]);
+			$o->set_prop("weekday", $data["weekday"]);
+			$o->set_prop("days", $data["days"]);
+			$o->set_prop("date1", date_edit::get_timestamp($data["date1"]));
+			$o->set_prop("date2", date_edit::get_timestamp($data["date2"]));
 			$o->save();
 		}
 	}
