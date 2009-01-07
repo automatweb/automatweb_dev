@@ -1029,7 +1029,7 @@ class class_base extends aw_template
 			$o->set_class_id(constant("CL_".strtoupper($arr["class"])));
 		}
 		//return $o->draft($arr["prop"]);
-		die($o->draft($arr["prop"]));
+		die(iconv(aw_global_get("charset"), "UTF-8", $o->draft($arr["prop"])));
 	}
 
 	/**
@@ -1046,6 +1046,7 @@ class class_base extends aw_template
 	**/
 	function set_draft($arr)
 	{
+		$arr["value"] = iconv("UTF-8", aw_global_get("charset")."//IGNORE", $arr["value"]);
 		if(is_oid($arr["id"]))
 		{
 			$o = obj($arr["id"]);
@@ -6264,6 +6265,7 @@ class class_base extends aw_template
 					if(el.value != prop_vals[draftable_props[j]])
 					{
 						$.ajax({
+							type: 'POST',
 							url: '".$this->mk_my_orb("set_draft", array("id" => $arr["request"]["id"]))."',
 							data: 'prop='+draftable_props[j]+'&value='+el.value,
 						});
