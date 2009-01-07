@@ -680,13 +680,6 @@ class _int_object
 		return $prev;
 	}
 
-	//h2kk
-	function set_createdby($param)
-	{
-		$this->_int_set_of_value("createdby", $param);
-		$this->_int_do_implicit_save();
-	}
-
 	function status()
 	{
 		return isset($this->obj["status"]) ? $this->obj["status"] : null;
@@ -1160,6 +1153,18 @@ class _int_object
 	function get_classinfo()
 	{
 		return $GLOBALS["classinfo"][$this->obj["class_id"]];
+	}
+
+	function draft($param)
+	{
+		$retval = $this->_int_get_draft($param);
+		return $retval;
+	}
+
+	function set_draft($param, $value)
+	{
+		$retval = $this->_int_set_draft($param, $value);
+		return $retval;
 	}
 
 	function prop($param)
@@ -2085,6 +2090,7 @@ class _int_object
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]]
 			));
+
 			if (!$this->obj["brother_of"])
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];
@@ -2534,6 +2540,111 @@ class _int_object
 		$o->set_parent($o->parent());
 		$o->save();
 		return $rv;
+	}
+
+	function _int_check_draft($param)
+	{
+		// If no property specified, return NULL
+		if(strlen($prop) == 0)
+		{
+			return false;
+		}
+
+		$user_oid = get_instance("user")->get_current_user();
+		// If no user is set, return NULL.
+		if(!is_oid($user_oid))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function _int_set_draft($param, $value)
+	{
+		if($this->_int_check_draft($param))
+		{
+			return false;
+		}
+
+		$user_oid = get_instance("user")->get_current_user();
+
+		$params = array(
+			"class_id" => CL_DRAFT,
+			"draft_object" => $this->id(),
+			"draft_property" => $prop,
+			"draft_user" => $user_oid,
+			"limit" => 1,
+		);
+		if(!is_oid($this->id()))
+		{
+			unset($params["draft_object"]);
+			$params["draft_new"] = 1;
+		}
+		$ol = new object_list($params);
+
+		if($ol->count() > 0)
+		{
+			$o = $ol->begin();
+		}
+		else
+		{
+			$o = obj();
+			$o->set_class_id(CL_DRAFT);
+			$o->set_parent($user_oid);
+		}
+
+		$o->set_prop("draft_user", $user_oid);
+		$o->set_prop("draft_property", $param);
+		if(is_oid($this->id()))
+		{
+			$o->set_prop("draft_object", $this->id());
+		}
+		else
+		{
+			$o->set_prop("draft_new", $this->class_id());
+		}
+		$o->set_prop("draft_content", $value);
+		$o->save();
+
+		return true;
+	}
+
+	function _int_get_draft($prop)
+	{
+		if($this->_int_check_draft($param))
+		{
+			return NULL;
+		}
+		$user_oid = get_instance("user")->get_current_user();
+
+		$params = array(
+			"class_id" => CL_DRAFT,
+			"draft_object" => $this->id(),
+			"draft_property" => $prop,
+			"draft_user" => $user_oid,
+			"limit" => 1,
+		);
+		if(!is_oid($this->id()))
+		{
+			unset($params["draft_object"]);
+			$params["draft_new"] = $this->class_id();
+		}
+
+		$odl = new object_data_list(
+			$params,
+			array(
+				CL_DRAFT => array("draft_content"),
+			)
+		);
+		if($odl->count() > 0)
+		{
+			$o = reset($odl->arr());
+			return $o["draft_content"];
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 
 	function _int_set_prop($prop, $val)
