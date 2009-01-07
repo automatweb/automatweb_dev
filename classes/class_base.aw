@@ -6250,7 +6250,7 @@ class class_base extends aw_template
 				";
 			}
 			$function_draft .= "
-				setTimeout('set_drafts()', 6000);
+				setTimeout('set_drafts()', 60000);
 				for(var k = 0; k < draftable_props.length; k++)
 				{
 					prop_vals[draftable_props[k]] = aw_get_el(draftable_props[k]).value;
@@ -6270,7 +6270,7 @@ class class_base extends aw_template
 						prop_vals[draftable_props[j]] = el.value;
 					}
 				}
-				setTimeout('set_drafts()', 6000);
+				setTimeout('set_drafts()', 60000);
 			}";
 			$retval .= $function_draft;
 		}
