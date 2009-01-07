@@ -1264,9 +1264,10 @@ class class_base extends aw_template
 				}
 			}
 			// Remove drafts by the current user on save.
+			arr($this, true);
 			$this->remove_drafts(array(
-				"id" => $this->new ? 0 : $this->id(),
-				"class" => $this->class_id(),
+				"id" => $this->new ? 0 : $this->id,
+				"class" => $this->clid,
 			));
 		}
 
