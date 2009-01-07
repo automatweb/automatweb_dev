@@ -680,6 +680,13 @@ class _int_object
 		return $prev;
 	}
 
+	//h2kk
+	function set_createdby($param)
+	{
+		$this->_int_set_of_value("createdby", $param);
+		$this->_int_do_implicit_save();
+	}
+
 	function status()
 	{
 		return isset($this->obj["status"]) ? $this->obj["status"] : null;

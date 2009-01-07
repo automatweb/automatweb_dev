@@ -2341,7 +2341,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$filt = explode(".", $key);
 			$clid = constant($filt[0]);
 		}
-
 		if (!is_class_id($clid))
 		{
 			if (!is_array($params["class_id"]))
@@ -2366,7 +2365,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				if (substr($filt[1], 0, 7) != "RELTYPE")
 				{
-					// so just return the table and field for that class
+					// so just return the table and field for that clas
+					if (!isset($GLOBALS["properties"][$clid]))
+					{
+						$this->_do_add_class_id($clid);
+					}
 					if (isset($GLOBALS["properties"][$clid][$filt[1]]))
 					{
 						$prop = $GLOBALS["properties"][$clid][$filt[1]];
@@ -2903,7 +2906,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$js = array();
 			foreach($this->used_tables as $tbl)
 			{
-				if ($tbl != "objects")
+				if ($tbl != "objects" && $tbl != "")
 				{
 					$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
 				}
