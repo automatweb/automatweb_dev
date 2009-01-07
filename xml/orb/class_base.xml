@@ -28,6 +28,36 @@
 			</function>
 		</action>
 
+		<action name="draft">
+			<function name="draft">
+				<arguments>
+					<required name="prop" type="string" />
+					<optional name="id" type="int" />
+					<optional name="class" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="set_draft">
+			<function name="set_draft">
+				<arguments>
+					<required name="prop" type="string" />
+					<required name="value" type="string" />
+					<optional name="id" type="int" />
+					<optional name="class" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_drafts">
+			<function name="remove_drafts">
+				<arguments>
+					<optional name="id" type="int" />
+					<optional name="class" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit">
 			<function name="submit">
 				<arguments>

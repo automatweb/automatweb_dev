@@ -1603,6 +1603,27 @@ class object
 		}
 	}
 
+	/** Returns the value of drafted property, NULL on failure.
+		@attrib api=1
+
+		@errors none
+
+		@param param required type=string
+			The nam of the property whose draft is to be returned.
+
+		@returns
+			The drafted value of specified property. Drafts are kept for seperately for every user.
+			Return NULL on failure.
+
+		@exaples
+			$o = obj(56);
+			$drafted_foo = $o->draft("foo");
+	**/
+	function draft($param)
+	{
+		return $GLOBALS["objects"][$this->oid]->draft($param);
+	}
+
 	/** returns the value for the specified property for the current object, suitable for displaying to the user
 		@attrib api=1
 
