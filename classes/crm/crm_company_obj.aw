@@ -1027,9 +1027,9 @@ class crm_company_obj extends _int_object
 			"fake_address_address2" => "aadress2"
 		);
 		$n = false;
-		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("address")))
+		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("contact")))
 		{
-			$eo = obj($this->prop("address"));
+			$eo = obj($this->prop("contact"));
 		}
 		else
 		{
@@ -1044,7 +1044,14 @@ class crm_company_obj extends _int_object
 			case "fake_address_county":
 			case "fake_address_city":
 			case "fake_address_country":
-				$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				if(is_oid($v))
+				{
+					$eo->set_prop($pmap[$k], $v);
+				}
+				else
+				{
+					$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				}
 				break;
 
 			case "fake_address_postal_code":
@@ -1058,7 +1065,7 @@ class crm_company_obj extends _int_object
 		
 		if ($n)
 		{
-			$this->set_prop("address", $eo->id());
+			$this->set_prop("contact", $eo->id());
 			$this->save();
 		}
 	}
