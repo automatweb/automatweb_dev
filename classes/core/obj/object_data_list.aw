@@ -12,7 +12,7 @@ class object_data_list
 	/** Returns object_data_list.
 		@attrib params=pos name=object_data_list
 
-		@param params 
+		@param params
 
 		@param props
 
@@ -21,7 +21,7 @@ class object_data_list
 
 		@returns
 			object_data_list object.
-	
+
 		@comment
 			You can not rename the following fields in the fetch part: oid, parent, name, brother_of, status, class_id
 
@@ -34,7 +34,7 @@ class object_data_list
 					CL_FILE => array("oid", "name"),
 				)
 			);
-			
+
 			$odl = new object_data_list(
 				array(
 					"class_id" => array(CL_FILE, CL_MENU),
@@ -52,7 +52,7 @@ class object_data_list
 		{
 			error::raise(array(
 				"id" => "ERR_PARAM",
-				"msg" => t("object_data_list::object_data_list($param): parameter must be array!")
+				"msg" => sprintf(t("object_data_list::object_data_list(%s): parameter must be array!"), $param)
 			));
 		}
 
@@ -77,7 +77,7 @@ class object_data_list
 		}
 
 		$this->_int_load($param, $props);
-	}	
+	}
 
 	/** Returns an array of all the objects in the list.
 		@attrib api=
@@ -156,14 +156,14 @@ class object_data_list
 						if (is_object($mf_v))
 						{
 							error::raise(array(
-								"id" => "ERR_META_FILTER",	
+								"id" => "ERR_META_FILTER",
 								"msg" => sprintf(t("object_list::filter(%s => %s): can not complex searches on metadata fields!"), $mf_k, $mf_v)
 							));
 						}
 						if ($mf_v{0} == "%")
 						{
 							error::raise(array(
-								"id" => "ERR_META_FILTER",	
+								"id" => "ERR_META_FILTER",
 								"msg" => sprintf(t("object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"), $mf_k, $mf_v)
 							));
 						}

@@ -140,7 +140,7 @@ class _int_object_loader extends core
 			{
 				error::raise(array(
 					"id" => ERR_NO_ALIAS,
-					"msg" => sprintf(t("object_loader::param_to_oid(%s): no object with alias $param!"), $param)
+					"msg" => sprintf(t("object_loader::param_to_oid(%s): no object with alias %s!"), $param, $param)
 				));
 				return;
 			}
@@ -295,7 +295,7 @@ class _int_object_loader extends core
 		{
 			error::raise(array(
 				"id" => ERR_OBJECT,
-				"msg" => sprintf(t("object_loader::save(%s): no object with oid $oid exists in the global list"), $oid)
+				"msg" => sprintf(t("object_loader::save(%s): no object with oid %s exists in the global list"), $oid, $oid)
 			));
 			return;
 		}
@@ -522,6 +522,7 @@ class _int_object_loader extends core
 				return false;
 			}
 
+			// status and brother_of are not set when acl data is read from e.g. acl mem cache
 			if (isset($tmp["status"]))
 			{
 				if ($tmp["status"] == 0)
@@ -530,7 +531,7 @@ class _int_object_loader extends core
 				}
 			}
 
-			if ($cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0 && $cur_oid == $oid)
+			if (isset($tmp["brother_of"]) && $cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0 && $cur_oid == $oid)
 			{
 				$do_orig = $tmp["brother_of"];
 			}

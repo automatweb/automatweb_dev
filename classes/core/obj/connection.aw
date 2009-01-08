@@ -41,7 +41,7 @@ class connection
 	// private variables
 
 	var $conn;		// int connection data
-		
+
 
 	////////////////////////////
 	// public functions
@@ -174,7 +174,7 @@ class connection
 			    - [from|to].modifiedby - modifiedby of the from or to object of the connection
 			    - [from|to].name - name of the from or to object of the connection
 			    - [from|to].class_id - class_id of the from or to object of the connection
-			    - [from|to].jrk - order of the from or to object of the connection 
+			    - [from|to].jrk - order of the from or to object of the connection
 			    - [from|to].status - status of the from or to object of the connection
 			    - [from|to].parent - parent of the from or to object of the connection
 
@@ -256,7 +256,7 @@ class connection
 		$rv = array();
 		foreach($retval as $k => $v)
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $v["to"]) && 
+			if ($GLOBALS["object_loader"]->ds->can("view", $v["to"]) &&
 			    $GLOBALS["object_loader"]->ds->can("view", $v["from"]))
 			{
 				$rv[$k] = $v;
@@ -349,14 +349,14 @@ class connection
 		}
 
 		post_message(
-			MSG_STORAGE_ALIAS_DELETE, 
+			MSG_STORAGE_ALIAS_DELETE,
 			array(
 				"connection" => &$this
 			)
 		);
 
 		post_message_with_param(
-			MSG_STORAGE_ALIAS_DELETE_FROM, 
+			MSG_STORAGE_ALIAS_DELETE_FROM,
 			$this->conn["from.class_id"],
 			array(
 				"connection" => &$this
@@ -364,7 +364,7 @@ class connection
 		);
 
 		post_message_with_param(
-			MSG_STORAGE_ALIAS_DELETE_TO, 
+			MSG_STORAGE_ALIAS_DELETE_TO,
 			$this->conn["to.class_id"],
 			array(
 				"connection" => &$this
@@ -403,7 +403,7 @@ class connection
 	/** returns the specified propery of the connection
 		@attrib api=1
 
-		@param key optional 
+		@param key optional
 			- property name to return, defaults to null and returns all properties in that case
 			property names are:
 				- id
@@ -439,7 +439,7 @@ class connection
 		}
 		return $this->conn[$key];
 	}
-	
+
 	/** changes connection type to link and vice versa
 		@attrib api=1
 
@@ -463,7 +463,7 @@ class connection
 	{
 		$o_from = new object($this->prop("from"));
 		$a_aliaslinks = $o_from->meta("aliaslinks");
-		
+
 		if ($b_set==true)
 		{
 			$a_aliaslinks[$this->prop("to")] = 1;
@@ -497,7 +497,7 @@ class connection
 		}
 		return obj($this->conn["to"]);
 	}
-	
+
 	/** returns the object that the connection starts from
 		@attrib api=1
 
@@ -553,11 +553,11 @@ class connection
 		{
 			error::raise(array(
 				"id" => ERR_CONNECTION,
-				"msg" => sprintf(t("connection::load(%s): no connection with id $id!"), $id)
+				"msg" => sprintf(t("connection::load(%s): no connection with id %s!"), $id, $id)
 			));
 			return;
 		}
-		
+
 		// now, check acl - both ends must be visible for the connection to be shown
 		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
@@ -566,7 +566,7 @@ class connection
 				"msg" => sprintf(t("connection::load(%s): no view access for this connection!"), $id)
 			));
 			return;
-		}	
+		}
 	}
 
 	function _int_save()
