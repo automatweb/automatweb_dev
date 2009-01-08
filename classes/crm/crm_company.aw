@@ -237,6 +237,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property user_checkbox_5 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_5
 	@caption User-defined checkbox 5
 
+	@property user_classificator_1 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_1 store=connect
+	@caption User-defined classificator 1
+
+	@property user_classificator_2 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_2 store=connect
+	@caption User-defined classificator 2
+
+	@property user_classificator_3 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_3 store=connect
+	@caption User-defined classificator 3
+
+	@property user_classificator_4 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_4 store=connect
+	@caption User-defined classificator 4
+
+	@property user_classificator_5 type=classificator reltype=RELTYPE_USER_CLASSIFICATOR_5 store=connect
+	@caption User-defined classificator 5
+
 	@property fake_phone type=textbox store=no
 	@caption Fake phone
 
