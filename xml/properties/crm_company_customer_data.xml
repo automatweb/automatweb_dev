@@ -71,6 +71,15 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gi KM-kood</caption>
       </property>
       <property>
+            <name>show_in_webview</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_show_in_webview</field>
+            <caption>Kuva veebis</caption>
+      </property>
+      <property>
             <name>buyer_contract_creator</name>
             <table>aw_crm_customer_data</table>
             <group>buyer</group>
