@@ -708,12 +708,32 @@
             <caption>Fake city</caption>
       </property>
       <property>
+            <name>fake_address_city_relp</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_CITY</reltype>
+            <store>no</store>
+            <field>fake_address_city_relp</field>
+            <caption>Fake city</caption>
+      </property>
+      <property>
             <name>fake_address_county</name>
             <table>objects</table>
             <group>add_info</group>
             <type>textbox</type>
             <store>no</store>
             <field>fake_address_county</field>
+            <caption>Fake county</caption>
+      </property>
+      <property>
+            <name>fake_address_county_relp</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAKE_COUNTY</reltype>
+            <store>no</store>
+            <field>fake_address_county_relp</field>
             <caption>Fake county</caption>
       </property>
       <property>

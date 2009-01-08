@@ -255,7 +255,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_address_city type=textbox store=no
 	@caption Fake city
 
+	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY store=no
+	@caption Fake city
+
 	@property fake_address_county type=textbox store=no
+	@caption Fake county
+
+	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY store=no
 	@caption Fake county
 
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
@@ -1914,6 +1920,21 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			case "fake_email":
+			case "fake_phone":
+			case "fake_url":
+			case "fake_address_country":
+			case "fake_address_country_relp":
+			case "fake_address_county":
+			case "fake_address_county_relp":
+			case "fake_address_city":
+			case "fake_address_city_relp":
+			case "fake_address_postal_code":
+			case "fake_address_address":
+			case "fake_address_address2":
+				$data["value"] = $arr["obj_inst"]->prop($data["name"]);
+				break;
+
 			case "ettevotlusvorm":
 				$pm_inst = get_instance(CL_PERSONNEL_MANAGEMENT);
 				if(is_oid($pm_inst->get_sysdefault()))

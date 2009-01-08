@@ -2,6 +2,43 @@
 
 class crm_company_obj extends _int_object
 {
+	function prop($k)
+	{
+		if(substr($k, 0, 5) == "fake_")
+		{
+			switch(substr($k, 5))
+			{
+				case "url":
+					return is_oid(parent::prop("url_id")) ? parent::prop("url_id.url") : parent::prop("RELTYPE_URL.url");
+
+				case "email":
+					return is_oid(parent::prop("email_id")) ? parent::prop("email_id.mail") : parent::prop("RELTYPE_EMAIL.mail");
+
+				case "phone":
+					return is_oid(parent::prop("phone_id")) ? parent::prop("phone_id.name") : parent::prop("RELTYPE_PHONE.name");
+
+				case "address_country":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.riik.name") : parent::prop("RELTYPE_ADDRESS.riik.name");
+
+				case "address_county":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.maakond.name") : parent::prop("RELTYPE_ADDRESS.maakond.name");
+
+				case "address_city":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.linn.name") : parent::prop("RELTYPE_ADDRESS.linn.name");
+
+				case "address_postal_code":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.postiindeks") : parent::prop("RELTYPE_ADDRESS.postiindeks");
+
+				case "address_address":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.aadress") : parent::prop("RELTYPE_ADDRESS.aadress");
+
+				case "address_address2":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.aadress2") : parent::prop("RELTYPE_ADDRESS.aadress2");
+			}
+		}
+		return parent::prop($k);
+	}
+
 	function set_prop($name,$value)
 	{
 		if($name == "name")
@@ -12,11 +49,14 @@ class crm_company_obj extends _int_object
 		{
 			switch(substr($name, 5))
 			{
+				case "url":
+					return $this->set_fake_url($value);
+
 				case "email":
-					return $this->set_fake_email($v);
+					return $this->set_fake_email($value);
 
 				case "phone":
-					return $this->set_fake_phone($v);
+					return $this->set_fake_phone($value);
 
 				case "address_country":
 				case "address_county":
@@ -24,7 +64,7 @@ class crm_company_obj extends _int_object
 				case "address_postal_code":
 				case "address_address":
 				case "address_address2":
-					return $this->set_fake_address_prop($k, $v);
+					return $this->set_fake_address_prop($name, $value);
 			}
 		}
 		parent::set_prop($name,$value);
@@ -1016,12 +1056,48 @@ class crm_company_obj extends _int_object
 		}
 	}
 
+	private function set_fake_url($url)
+	{
+		$n = false;
+		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("url_id")))
+		{
+			$eo = obj($this->prop("url_id"));
+		}
+		else
+		{
+			$eo = $this->get_first_obj_by_reltype("RELTYPE_URL");
+			if($eo === false)
+			{
+				$eo = obj();
+				$eo->set_class_id(CL_EXTLINK);
+				$eo->set_parent($this->id());
+			}
+			$n = true;
+		}
+
+		$eo->set_prop("url", $url);
+		$eo->save();
+		
+		if ($n)
+		{
+			$this->set_prop("url_id", $eo->id());
+			$this->save();
+			$this->connect(array(
+				"type" => "RELTYPE_URL",
+				"to" => $eo->id()
+			));
+		}
+	}
+
 	private function set_fake_address_prop($k, $v)
 	{
 		$pmap = array(
 			"fake_address_country" => "riik",
+			"fake_address_country_relp" => "riik",
 			"fake_address_county" => "maakond",
+			"fake_address_county_relp" => "maakond",
 			"fake_address_city" => "linn",
+			"fake_address_city_relp" => "linn",
 			"fake_address_postal_code" => "postiindeks",
 			"fake_address_address" => "aadress",
 			"fake_address_address2" => "aadress2"
@@ -1044,13 +1120,15 @@ class crm_company_obj extends _int_object
 			case "fake_address_county":
 			case "fake_address_city":
 			case "fake_address_country":
+				$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				break;
+
+			case "fake_address_county_relp":
+			case "fake_address_city_relp":
+			case "fake_address_country_relp":
 				if(is_oid($v))
 				{
 					$eo->set_prop($pmap[$k], $v);
-				}
-				else
-				{
-					$this->_adr_set_via_rel($eo, $pmap[$k], $v);
 				}
 				break;
 
