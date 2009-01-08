@@ -20,16 +20,6 @@
             <caption>Jrk</caption>
       </property>
       <property>
-            <name>status</name>
-            <table>objects</table>
-            <group>general_sub</group>
-            <field>status</field>
-            <type>checkbox</type>
-            <display>none</display>
-            <default>2</default>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>name</name>
             <table>objects</table>
             <group>general_sub</group>
@@ -3716,6 +3706,7 @@
             <confirm_save_data>1</confirm_save_data>
             <versioned>1</versioned>
             <prop_cb>1</prop_cb>
+            <no_status>1</no_status>
             <maintainer>markop</maintainer>
       </classinfo>
       <groupinfo>
