@@ -3878,6 +3878,7 @@ class crm_company extends class_base
 	**/
 	function cust_bds($arr)
 	{
+		$_GET["in_popup"] = 1;
 		if(date('w') == 5)
 		{
 			$e_add = 2;
@@ -4196,11 +4197,11 @@ class crm_company extends class_base
 			$arr["args"]["customer_search_classif1"] = $arr["request"]["customer_search_classif1"];
 		}
 
-		if($arr["request"]["billable_search_button"])
-		{
+//		if($arr["request"]["billable_search_button"])
+//		{
 			$arr['args']['billable_start'] = ($arr['request']['billable_start']);
 			$arr['args']['billable_end'] = ($arr['request']['billable_end']);
-		}
+//		}
 
 		if ($arr["request"]["proj_search_sbt"])
 		{
@@ -7082,7 +7083,7 @@ class crm_company extends class_base
 				
 				$url_quick_task_entry = html::get_new_url(CL_TASK_QUICK_ENTRY, $arr["request"]["id"]);
 				$sc .= "
-				$.hotkeys.add('Ctrl+x',function(e){ 
+				$.hotkeys.add('x',function(e){ 
 					if (e.target.tagName.toLowerCase() != 'textarea' &&
 						e.target.tagName.toLowerCase() != 'input')
 					{
