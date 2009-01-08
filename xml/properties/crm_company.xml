@@ -1849,6 +1849,17 @@
             <caption>Pildid</caption>
       </property>
       <property>
+            <name>images_2</name>
+            <table>objects</table>
+            <group>org_images</group>
+            <type>multifile_upload</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <image>1</image>
+            <store>no</store>
+            <field>images_2</field>
+            <caption>Pildid</caption>
+      </property>
+      <property>
             <name>org_proj_tb</name>
             <table>objects</table>
             <group>my_projects</group>
