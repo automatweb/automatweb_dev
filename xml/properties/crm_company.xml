@@ -654,6 +654,56 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>user_classificator_1</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_USER_CLASSIFICATOR_1</reltype>
+            <store>connect</store>
+            <field>user_classificator_1</field>
+            <caption>User-defined classificator 1</caption>
+      </property>
+      <property>
+            <name>user_classificator_2</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_USER_CLASSIFICATOR_2</reltype>
+            <store>connect</store>
+            <field>user_classificator_2</field>
+            <caption>User-defined classificator 2</caption>
+      </property>
+      <property>
+            <name>user_classificator_3</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_USER_CLASSIFICATOR_3</reltype>
+            <store>connect</store>
+            <field>user_classificator_3</field>
+            <caption>User-defined classificator 3</caption>
+      </property>
+      <property>
+            <name>user_classificator_4</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_USER_CLASSIFICATOR_4</reltype>
+            <store>connect</store>
+            <field>user_classificator_4</field>
+            <caption>User-defined classificator 4</caption>
+      </property>
+      <property>
+            <name>user_classificator_5</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_USER_CLASSIFICATOR_5</reltype>
+            <store>connect</store>
+            <field>user_classificator_5</field>
+            <caption>User-defined classificator 5</caption>
+      </property>
+      <property>
             <name>fake_phone</name>
             <table>objects</table>
             <group>add_info</group>
