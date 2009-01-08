@@ -4565,6 +4565,31 @@
                   <clid>CL_CRM_CITY</clid>
                   <caption>Fake city</caption>
             </FAKE_CITY>
+            <USER_CLASSIFICATOR_1>
+                  <value>77</value>
+                  <clid>CL_META</clid>
+                  <caption>User-defined classificator 1</caption>
+            </USER_CLASSIFICATOR_1>
+            <USER_CLASSIFICATOR_2>
+                  <value>78</value>
+                  <clid>CL_META</clid>
+                  <caption>User-defined classificator 2</caption>
+            </USER_CLASSIFICATOR_2>
+            <USER_CLASSIFICATOR_3>
+                  <value>79</value>
+                  <clid>CL_META</clid>
+                  <caption>User-defined classificator 3</caption>
+            </USER_CLASSIFICATOR_3>
+            <USER_CLASSIFICATOR_4>
+                  <value>80</value>
+                  <clid>CL_META</clid>
+                  <caption>User-defined classificator 4</caption>
+            </USER_CLASSIFICATOR_4>
+            <USER_CLASSIFICATOR_5>
+                  <value>81</value>
+                  <clid>CL_META</clid>
+                  <caption>User-defined classificator 5</caption>
+            </USER_CLASSIFICATOR_5>
       </reltypes>
       <layout>
             <co_top>

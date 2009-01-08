@@ -1542,6 +1542,21 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype FAKE_CITY value=76 clid=CL_CRM_CITY
 @caption Fake city
 
+@reltype USER_CLASSIFICATOR_1 value=77 clid=CL_META
+@caption User-defined classificator 1
+
+@reltype USER_CLASSIFICATOR_2 value=78 clid=CL_META
+@caption User-defined classificator 2
+
+@reltype USER_CLASSIFICATOR_3 value=79 clid=CL_META
+@caption User-defined classificator 3
+
+@reltype USER_CLASSIFICATOR_4 value=80 clid=CL_META
+@caption User-defined classificator 4
+
+@reltype USER_CLASSIFICATOR_5 value=81 clid=CL_META
+@caption User-defined classificator 5
+
 
 */
 /*
