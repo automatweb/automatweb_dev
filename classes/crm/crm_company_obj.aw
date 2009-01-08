@@ -20,11 +20,20 @@ class crm_company_obj extends _int_object
 				case "address_country":
 					return is_oid(parent::prop("contact")) ? parent::prop("contact.riik.name") : parent::prop("RELTYPE_ADDRESS.riik.name");
 
+				case "address_country_relp":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.riik") : parent::prop("RELTYPE_ADDRESS.riik");
+
 				case "address_county":
 					return is_oid(parent::prop("contact")) ? parent::prop("contact.maakond.name") : parent::prop("RELTYPE_ADDRESS.maakond.name");
 
+				case "address_county":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.maakond") : parent::prop("RELTYPE_ADDRESS.maakond");
+
 				case "address_city":
 					return is_oid(parent::prop("contact")) ? parent::prop("contact.linn.name") : parent::prop("RELTYPE_ADDRESS.linn.name");
+
+				case "address_city":
+					return is_oid(parent::prop("contact")) ? parent::prop("contact.linn") : parent::prop("RELTYPE_ADDRESS.linn");
 
 				case "address_postal_code":
 					return is_oid(parent::prop("contact")) ? parent::prop("contact.postiindeks") : parent::prop("RELTYPE_ADDRESS.postiindeks");

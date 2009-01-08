@@ -255,13 +255,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_address_city type=textbox store=no
 	@caption Fake city
 
-	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY store=no
+	@property fake_address_city_relp type=relpicker reltype=RELTYPE_FAKE_CITY automatic=1 store=no
 	@caption Fake city
 
 	@property fake_address_county type=textbox store=no
 	@caption Fake county
 
-	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY store=no
+	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
 	@caption Fake county
 
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
@@ -1520,6 +1520,12 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype FIRMAJUHT value=74 clid=CL_CRM_PERSON
 @caption Firmajuht
+
+@reltype FAKE_COUNTY value=75 clid=CL_CRM_COUNTY
+@caption Fake county
+
+@reltype FAKE_CITY value=76 clid=CL_CRM_CITY
+@caption Fake city
 
 
 */

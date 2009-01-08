@@ -713,6 +713,7 @@
             <group>add_info</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_CITY</reltype>
+            <automatic>1</automatic>
             <store>no</store>
             <field>fake_address_city_relp</field>
             <caption>Fake city</caption>
@@ -732,6 +733,7 @@
             <group>add_info</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FAKE_COUNTY</reltype>
+            <automatic>1</automatic>
             <store>no</store>
             <field>fake_address_county_relp</field>
             <caption>Fake county</caption>
@@ -4503,6 +4505,16 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Firmajuht</caption>
             </FIRMAJUHT>
+            <FAKE_COUNTY>
+                  <value>75</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Fake county</caption>
+            </FAKE_COUNTY>
+            <FAKE_CITY>
+                  <value>76</value>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Fake city</caption>
+            </FAKE_CITY>
       </reltypes>
       <layout>
             <co_top>
