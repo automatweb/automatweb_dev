@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.15 2008/08/08 09:45:06 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.16 2009/01/08 10:14:44 instrumental Exp $
 // crm_company_customer_data.aw - Kliendi andmed
 /*
 
@@ -36,6 +36,9 @@ default method=serialize
 
 	@property tax_rate type=relpicker reltype=RELTYPE_TAX_RATE store=connect
 	@caption M&uuml;&uuml;gi KM-kood
+
+	@property show_in_webview type=checkbox ch_value=1 field= table=aw_crm_customer_data field=aw_show_in_webview
+	@caption Kuva veebis
 
 
 @groupinfo buyer caption="Ostja"
@@ -237,6 +240,7 @@ class crm_company_customer_data extends class_base
 			case "aw_buyer_priority":
 			case "aw_active_client":
 			case "aw_authorized_person_control":
+			case "aw_show_in_webview":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
