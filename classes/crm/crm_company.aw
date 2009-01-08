@@ -326,6 +326,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property insurance_table type=table no_caption=1 store=no
 	@caption Insurance table
 
+	@property external_links type=releditor reltype=RELTYPE_EXTERNAL_LINKS mode=manager2 props=name,url table_fields=name,url
+	@caption V&auml;lised lingid
+
 ------ Yldine - staatused grupp
 @default group=statuses
 
@@ -621,9 +624,6 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 ---------- PILDID ---------
 @default group=org_images
 	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment,cfgform table_fields=name,ord table_edit_fields=ord table=objects
-	@caption Pildid
-
-	@property images_2 type=multifile_upload reltype=RELTYPE_IMAGE image=1 store=no
 	@caption Pildid
 ---------- END PILDID ---------
 
@@ -1559,6 +1559,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype USER_CLASSIFICATOR_5 value=81 clid=CL_META
 @caption User-defined classificator 5
+
+@reltype EXTERNAL_LINKS value=82 clid=CL_EXTLINK
+@caption V&auml;lised lingid
 
 
 */

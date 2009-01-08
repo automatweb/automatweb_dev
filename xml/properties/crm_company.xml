@@ -943,6 +943,24 @@
             <caption>Insurance table</caption>
       </property>
       <property>
+            <name>external_links</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_EXTERNAL_LINKS</reltype>
+            <mode>manager2</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>url</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>url</num_1>
+            </table_fields>
+            <field>external_links</field>
+            <caption>V&amp;amp;auml;lised lingid</caption>
+      </property>
+      <property>
             <name>statuses_tb</name>
             <table>objects</table>
             <group>statuses</group>
@@ -4601,6 +4619,11 @@
                   <clid>CL_META</clid>
                   <caption>User-defined classificator 5</caption>
             </USER_CLASSIFICATOR_5>
+            <EXTERNAL_LINKS>
+                  <value>82</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>V&amp;amp;auml;lised lingid</caption>
+            </EXTERNAL_LINKS>
       </reltypes>
       <layout>
             <co_top>
