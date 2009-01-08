@@ -654,6 +654,69 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>fake_phone</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_phone</field>
+            <caption>Fake phone</caption>
+      </property>
+      <property>
+            <name>fake_email</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_email</field>
+            <caption>Fake e-mail</caption>
+      </property>
+      <property>
+            <name>fake_url</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_url</field>
+            <caption>Fake URL</caption>
+      </property>
+      <property>
+            <name>fake_address_address</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_address</field>
+            <caption>Fake address</caption>
+      </property>
+      <property>
+            <name>fake_address_postal_code</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_postal_code</field>
+            <caption>Fake ZIP code</caption>
+      </property>
+      <property>
+            <name>fake_address_city</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_city</field>
+            <caption>Fake city</caption>
+      </property>
+      <property>
+            <name>fake_address_county</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>fake_address_county</field>
+            <caption>Fake county</caption>
+      </property>
+      <property>
             <name>description_doc</name>
             <table>objects</table>
             <group>add_info</group>
