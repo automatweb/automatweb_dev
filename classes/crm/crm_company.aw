@@ -237,6 +237,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property user_checkbox_5 type=checkbox ch_value=1 table=kliendibaas_firma field=user_checkbox_5
 	@caption User-defined checkbox 5
 
+	@property fake_phone type=textbox store=no
+	@caption Fake phone
+
+	@property fake_email type=textbox store=no
+	@caption Fake e-mail
+
+	@property fake_url type=textbox store=no
+	@caption Fake URL
+
+	@property fake_address_address type=textbox store=no
+	@caption Fake address
+
+	@property fake_address_postal_code type=textbox store=no
+	@caption Fake ZIP code
+
+	@property fake_address_city type=textbox store=no
+	@caption Fake city
+
+	@property fake_address_county type=textbox store=no
+	@caption Fake county
+
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
