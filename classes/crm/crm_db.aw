@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.50 2008/07/14 18:13:41 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.51 2009/01/08 10:26:23 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -8,6 +8,9 @@
 
 @default field=meta
 @default method=serialize
+
+@property owner_org type=relpicker reltype=RELTYPE_OWNER_ORG store=connect
+@caption Omanikorganisatsioon
 
 @property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general
 @caption Vaikimisi valim
@@ -131,6 +134,9 @@ property search_table type=table parent=org no_caption=1
 
 @reltype PIIRKOND_CAT value=15 clid=CL_MENU
 @caption Piirkondade kaust
+
+@reltype OWNER_ORG value=16 clid=CL_CRM_COMPANY
+@caption Omanikorganisatsioon
 
 */
 
