@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.57 2008/10/01 10:22:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.58 2009/01/08 11:11:03 instrumental Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1106,6 +1106,7 @@ class crm_company_webview extends class_base
 		}
 		$this->vars(array(
 			"keywords" => $kw,
+			"PRINTANDSEND" => $this->parse("PRINTANDSEND"),
 		));
 		// Alrighty then, parse your arse away
 		return $this->parse('company_show');
@@ -1292,6 +1293,7 @@ class crm_company_webview extends class_base
 		if (!empty($arr['id']))
 		{
 			$ob = new object($arr["id"]);
+			$owner_id = $ob->prop("crm_db.owner_org");
 			$do_link = $ob->prop('clickable');
 			$show_title = $ob->prop('show_title');
 			if ($show_title)
@@ -1377,6 +1379,24 @@ class crm_company_webview extends class_base
 			{
 				continue;
 			}
+			enter_function("crm_company_webview::check.crm_company_customer_data.show_in_webview");
+			if(isset($ob) && is_object($ob) && $ob->prop("only_active") && isset($owner_id) || is_oid($owner_id))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+					"buyer" => $o->id(),
+					"seller" => $owner_id,
+					"show_in_webview" => 1,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"limit" => 1,
+				));
+				if($ol->count() == 0)
+				{
+					continue;
+				}
+			}
+			exit_function("crm_company_webview::check.crm_company_customer_data.show_in_webview");
 			$address = $phone = $fax = $openhours = $email = $web = "";
 			$name = $o->trans_get_val("name");
 			$tmp_ad = $this->can("view", $o->prop("contact"))?obj($o->prop("contact")):false;
