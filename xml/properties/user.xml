@@ -500,6 +500,14 @@
             <caption>Saada e-kiri, kui mind lisatakse toimetuse osalejaks</caption>
       </property>
       <property>
+            <name>draft_timeout</name>
+            <table>objects</table>
+            <group>settings_general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <caption>Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)</caption>
+      </property>
+      <property>
             <name>stoppers</name>
             <table>objects</table>
             <group>settings_general</group>

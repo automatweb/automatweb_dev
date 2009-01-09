@@ -1046,7 +1046,6 @@ class class_base extends aw_template
 	**/
 	function set_draft($arr)
 	{
-		arr($arr, true);
 		$arr["value"] = iconv("UTF-8", aw_global_get("charset")."//IGNORE", $arr["value"]);
 		if(is_oid($arr["id"]))
 		{
@@ -1061,7 +1060,7 @@ class class_base extends aw_template
 	}
 
 	/**
-		@attrib name=remove_drafts api=1 params=name
+		 @attrib name=remove_drafts api=1 params=name
 
 		@param id optional type=int
 			The OID of the object to remove the drafts for. Either OID or clid must be given!
@@ -1078,7 +1077,7 @@ class class_base extends aw_template
 		if(!is_oid($arr["id"]))
 		{
 			unset($params["draft_object"]);
-			$params["draft_new"] = constant("CL_".strtoupper($arr["class"]));
+			$params["draft_new"] = is_class_id($arr["class"]) ? $arr["class"] : constant("CL_".strtoupper($arr["class"]));
 		}
 		$ol = new object_list($params);
 		$ol->delete();
@@ -6190,9 +6189,7 @@ class class_base extends aw_template
 	function callback_generate_scripts_from_class_base($arr)
 	{
 		$retval = "";
-		if(aw_global_get("uid") == "kaarel")
-		{
-
+		// Drafting
 		$props = is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
 		foreach($props as $k => $prop)
 		{
@@ -6256,32 +6253,41 @@ class class_base extends aw_template
 				};
 				";
 			}
-			$function_draft .= "
-				setTimeout('set_drafts()', 6000);
-				for(var k = 0; k < draftable_props.length; k++)
-				{
-					prop_vals[draftable_props[k]] = aw_get_el(draftable_props[k]).value;
-				}
-			});
-			function set_drafts()
+			$user_obj = obj(aw_global_get("uid_oid"));
+			$timeout = (int) $user_obj->prop("draft_timeout") * 1000;
+			if($timeout > 0)
 			{
-				for(var j = 0; j < draftable_props.length; j++)
-				{
-					el = aw_get_el(draftable_props[j]);
-					if(el.value != prop_vals[draftable_props[j]])
+				$function_draft .= "
+					setTimeout('set_drafts()', ".$timeout.");
+					for(var k = 0; k < draftable_props.length; k++)
 					{
-						$.ajax({
-							type: 'POST',
-							url: '".$this->mk_my_orb("set_draft", array("id" => $arr["request"]["id"]))."',
-							data: 'prop='+draftable_props[j]+'&value='+el.value+'&id=".$arr["request"]["id"]."&class=bug',
-						});
-						prop_vals[draftable_props[j]] = el.value;
+						prop_vals[draftable_props[k]] = aw_get_el(draftable_props[k]).value;
 					}
-				}
-				setTimeout('set_drafts()', 6000);
-			}";
+				});
+				function set_drafts()
+				{
+					for(var j = 0; j < draftable_props.length; j++)
+					{
+						el = aw_get_el(draftable_props[j]);
+						if(el.value != prop_vals[draftable_props[j]])
+						{
+							$.ajax({
+								type: 'POST',
+								url: '".aw_ini_get("baseurl")."/automatweb/orb.aw',
+								data: 'action=set_draft&class=".$arr["request"]["class"]."&prop='+draftable_props[j]+'&value='+el.value+'&id=".$arr["request"]["id"]."',
+							});
+							prop_vals[draftable_props[j]] = el.value;
+						}
+					}
+					setTimeout('set_drafts()', ".$timeout.");
+				}";
+			}
+			else
+			{
+				$function_draft .= "
+				});";
+			}
 			$retval .= $function_draft;
-		}
 		}
 
 		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && @$arr["request"]["group"] != "relationmgr")

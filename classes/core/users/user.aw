@@ -201,6 +201,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property nfy_task type=checkbox ch_value=1 field=meta method=serialize table=objects
 	@caption Saada e-kiri, kui mind lisatakse toimetuse osalejaks
 
+	@property draft_timeout type=textbox field=meta method_serialize table=objects
+	@caption Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)
+
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
 	@default group=settings_shortcuts
