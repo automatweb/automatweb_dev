@@ -133,7 +133,7 @@ class class_base extends aw_template
 
 		if ("menu" !== $arr["class"] && empty($clss[$this->clid]["site_class"]) && $this->obj_inst->class_id() != CL_RELATION)
 		{
-			if (class_index::is_extension_of($arr["class"], "class_base"))
+			if (true || class_index::is_extension_of($arr["class"], "class_base"))
 			{
 				$clid = aw_ini_get("class_lut." . $arr["class"]);
 				$this->obj_inst->set_class_id($clid);
@@ -1046,6 +1046,7 @@ class class_base extends aw_template
 	**/
 	function set_draft($arr)
 	{
+		arr($arr, true);
 		$arr["value"] = iconv("UTF-8", aw_global_get("charset")."//IGNORE", $arr["value"]);
 		if(is_oid($arr["id"]))
 		{
@@ -5055,7 +5056,6 @@ class class_base extends aw_template
 
 			// get property cfg
 			$rv = $ci->get_cfg_proplist($cfgform_obj->id());
-
 			// get layout cfg
 			$layoutinfo = $ci->get_cfg_layout($cfgform_obj);
 
@@ -5554,6 +5554,13 @@ class class_base extends aw_template
 			{
 				$ppl = $pl;
 			}
+			else
+			{
+				foreach($ppl as $pn => $pd)
+				{
+					$ppl[$pn] = array_merge($pl[$pn], $pd);
+				}
+			}
 		}
 
 		$o = $arr["obj_inst"];
@@ -5581,7 +5588,6 @@ class class_base extends aw_template
 			}
 
 			$this->translation_lang_id = $lang["id"];
-
 			if ($lang["id"] != $original_lang_id)
 			{
 				$vals = $all_vals[$lang["id"]];
@@ -5607,7 +5613,6 @@ class class_base extends aw_template
 						$props[] = $p;
 					}
 				}
-
 				//
 				foreach($props as $p)
 				{
@@ -5728,7 +5733,6 @@ class class_base extends aw_template
 				"type" => "submit",
 			);
 		}
-
 		return $ret;
 	}
 
@@ -6186,6 +6190,8 @@ class class_base extends aw_template
 	function callback_generate_scripts_from_class_base($arr)
 	{
 		$retval = "";
+		if(aw_global_get("uid") == "kaarel")
+		{
 
 		$props = is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
 		foreach($props as $k => $prop)
@@ -6251,7 +6257,7 @@ class class_base extends aw_template
 				";
 			}
 			$function_draft .= "
-				setTimeout('set_drafts()', 60000);
+				setTimeout('set_drafts()', 6000);
 				for(var k = 0; k < draftable_props.length; k++)
 				{
 					prop_vals[draftable_props[k]] = aw_get_el(draftable_props[k]).value;
@@ -6267,14 +6273,15 @@ class class_base extends aw_template
 						$.ajax({
 							type: 'POST',
 							url: '".$this->mk_my_orb("set_draft", array("id" => $arr["request"]["id"]))."',
-							data: 'prop='+draftable_props[j]+'&value='+el.value,
+							data: 'prop='+draftable_props[j]+'&value='+el.value+'&id=".$arr["request"]["id"]."&class=bug',
 						});
 						prop_vals[draftable_props[j]] = el.value;
 					}
 				}
-				setTimeout('set_drafts()', 60000);
+				setTimeout('set_drafts()', 6000);
 			}";
 			$retval .= $function_draft;
+		}
 		}
 
 		if(aw_ini_get("user_interface.content_trans") && !$arr["new"] && @$arr["request"]["group"] != "relationmgr")
