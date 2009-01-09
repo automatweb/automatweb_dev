@@ -30,7 +30,7 @@ function keyPress(e) {
 			}
 			hname = hnamearr.join("_");
 			hfield = document.getElementById(hname);
-			eval("code = "+hname + "_codepress.getCode()");
+			eval("code = "+hnamearr[0] + ".getCode()");
 			hfield.value = code;
 		} 
 	}
@@ -38,7 +38,7 @@ function keyPress(e) {
 CodePress = function(obj) {
 	var self = document.createElement('iframe');
 	self.textarea = obj;
-	self.textarea.disabled = true;
+	//self.textarea.disabled = true;
 	self.textarea.style.overflow = 'hidden';
 	self.style.height = self.textarea.clientHeight +'px';
 	self.style.width = self.textarea.clientWidth +'px';
@@ -59,7 +59,7 @@ CodePress = function(obj) {
 		self.style.position = 'static';
 		self.style.visibility = 'visible';
 		self.style.display = 'inline';
-		if(self.contentWindow.attachEvent) self.contentWindow.document.attachEvent('keyup',keyPress);
+		if(self.contentWindow.attachEvent) self.contentWindow.document.attachEvent('onkeyup',keyPress);
 		else self.contentWindow.document.addEventListener('keyup',keyPress,false);
 
 	}
@@ -67,7 +67,7 @@ CodePress = function(obj) {
 	// obj can by a textarea id or a string (code)
 	self.edit = function(obj,language) {
 		if(obj) self.textarea.value = document.getElementById(obj) ? document.getElementById(obj).value : obj;
-		if(!self.textarea.disabled) return;
+		//if(!self.textarea.disabled) return;
 		self.language = language ? language : self.getLanguage();
 		self.src = CodePress.path+'codepress.html?language='+self.language+'&ts='+(new Date).getTime();
 		if(self.attachEvent) self.attachEvent('onload',self.initialize);
@@ -87,7 +87,8 @@ CodePress = function(obj) {
 	}
 	
 	self.getCode = function() {
-		return self.textarea.disabled ? self.editor.getCode() : self.textarea.value;
+		//return self.textarea.disabled ? self.editor.getCode() : self.textarea.value;
+		return self.editor.getCode();
 	}
 
 	self.setCode = function(code) {

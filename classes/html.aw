@@ -454,7 +454,9 @@ class html extends aw_template
 				{
 					$hval = htmlspecialchars($hval);
 				}
-				$retval = "<textarea class=\"codepress php\" id=\"{$name}_codepress\" name=\"{$name}_codepress\" cols=\"{$cols}\" rows=\"{$rows}\" wrap=\"off\" >{$value}</textarea> <input type=\"hidden\" value=\"{$hval}\" name=\"{$name}\" id=\"{$name}\" />\n";
+				$retval = "<textarea class=\"codepress php\" id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\" wrap=\"off\" >{$value}</textarea>
+				
+				<!--<input type=\"hidden\" value=\"{$hval}\" name=\"{$name}\" id=\"{$name}\" />-->\n";
 			}
 			else
 			{
