@@ -407,7 +407,7 @@ class htmlclient extends aw_template
 			$help_url = "javascript:void(0);";
 			$help_text = $args["comment"];
 			
-			$caption = '<span id="tooltip_'.$this->tooltip_index.'" class="help" title="'.$help_text.'">'.$caption.'</span>'.
+			$caption = '<span id="tooltip_'.$this->tooltip_index.'" class="help">'.$caption.'</span>'.
 						'<div class="tooltip_content">'.$help_text.'</div>';
 		};
 		$tpl_vars = array(
