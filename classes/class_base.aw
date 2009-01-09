@@ -6190,6 +6190,10 @@ class class_base extends aw_template
 	{
 		$retval = "";
 		// Drafting
+		if($arr["request"]["class"] == "doc")
+		{
+			$arr["request"]["class"] = "document";
+		}
 		$props = is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
 		foreach($props as $k => $prop)
 		{
