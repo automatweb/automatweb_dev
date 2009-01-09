@@ -167,7 +167,7 @@ if (isset($_GET["TPL"]) and $_GET["TPL"] === "1")
 	$str = preg_replace("/<body.*>/imsU", "\\0".aw_global_get("TPL=1"), $str);
 }
 
-if (aw_ini_get("content.compress") === "1")
+if (false && aw_ini_get("content.compress") === "1")
 {
 	ob_start( 'ob_gzhandler' );
 	echo $str;

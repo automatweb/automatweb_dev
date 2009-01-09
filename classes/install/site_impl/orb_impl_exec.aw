@@ -1,7 +1,6 @@
 <?php
 
 $vars = automatweb::$request->get_args();
-
 if (!empty($vars["class"]))
 {
 	$class = $vars["class"];
@@ -45,8 +44,8 @@ enter_function("orb_impl_exec::process_request");
 classload("core/orb/orb");
 $orb = new orb();
 $orb->process_request(array(
-	"class" => $class,
-	"action" => $action,
+	"class" => isset($_POST["class"]) ? $_POST["class"] : $_GET["class"],
+	"action" => isset($_POST["action"]) ? $_POST["action"] : $_GET["action"],
 	"reforb" => isset($vars["reforb"]) ? $vars["reforb"] : null,
 	"user"	=> 1,
 	"vars" => $vars,

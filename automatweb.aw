@@ -245,7 +245,6 @@ class automatweb
 		global $section;
 		include AW_DIR . "const" . AW_FILE_EXT;
 		$awt = new aw_timer();
-
 		if (strpos($_SERVER["REQUEST_URI"], "/automatweb") === false)
 		{
 			// can't use classload here, cause it will be included from within a function and then all kinds of nasty
@@ -261,8 +260,7 @@ class automatweb
 		{
 			aw_ini_set("in_admin", true);
 			$vars = self::$request->get_args();
-
-			if (isset($vars["class"]) and class_index::is_requestable($vars["class"]))
+			if (isset($vars["class"]) /*and class_index::is_requestable($vars["class"])*/)
 			{
 				$GLOBALS["__START"] = microtime(true);
 

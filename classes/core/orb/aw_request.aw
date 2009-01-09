@@ -79,6 +79,17 @@ class aw_request
 	**/
 	public function get_args()
 	{
+                if (!empty($_POST))
+                {
+                        $this->args = $_POST;
+                        $this->method = "POST";
+                }
+                elseif (!empty($_GET))
+                {
+                        $this->args = $_GET;
+                        $this->method = "GET";
+                }
+
 		return $this->args;
 	}
 
@@ -217,6 +228,10 @@ class aw_request
 	**/
 	public function class_name()
 	{
+		if (empty($this->class))
+		{
+			return isset($_POST["class"]) ? $_POST["class"] : $_GET["class"];
+		}
 		return $this->class;
 	}
 
@@ -227,11 +242,45 @@ class aw_request
 	**/
 	public function action()
 	{
+                if (empty($this->action))
+                {
+                        return isset($_POST["action"]) ? $_POST["action"] : $_GET["action"];
+                }
+
 		return $this->action;
 	}
 
 	protected function _autoload()
 	{
+		// load arguments
+		if (!empty($_POST))
+		{
+			$this->args = $_POST;
+			$this->method = "POST";
+			foreach(safe_array($_GET) as $k => $v)
+			{
+				$this->args[$k] = $v;
+				$_POST[$k] = $v;	
+			}
+		}
+		elseif (!empty($_GET))
+		{
+			$this->args = $_GET;
+			$this->method = "GET";
+		}
+		// load uri
+		if (!empty($_SERVER["REQUEST_URI"]))
+		{
+			try
+			{
+				$this->uri = new aw_uri($_SERVER["REQUEST_URI"]);
+			}
+			catch (Exception $e)
+			{
+				$this->uri = new aw_uri();
+			}
+		}
+
 		// parse arguments
 		$this->parse_args();
 	}
@@ -240,7 +289,6 @@ class aw_request
 	{
 		$this->type = "http"; // other types implemented later
 		$this->is_fastcall = !empty($this->args["fastcall"]);
-
 		// no name validation because requests can be formed and sent to other servers where different classes, methods, etc. defined
 		$this->class = empty($this->args["class"]) ? $this->default_class : $this->args["class"];
 		$this->action = empty($this->args["action"]) ? $this->default_action : $this->args["action"];
