@@ -1904,8 +1904,8 @@ class room extends class_base
 				$extra_col = array();
 			}
 			$x = 0;
-			$start_step = $today_start + $step * $step_length * $time_step;
-			$end_step = $start_step + $step_length * $time_step;
+			$start_step = $today_start + (int)($step * $step_length * $time_step);
+			$end_step = $start_step + (int)($step_length * $time_step);
 			$prev_dst = date("I", $start_step);
 			$visible = 0;
 			while($x<$len)
