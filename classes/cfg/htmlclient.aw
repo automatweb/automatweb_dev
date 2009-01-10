@@ -88,7 +88,7 @@ class htmlclient extends aw_template
 		$this->form_target = $target;
 		if (!empty($this->form_target))
 		{
-			if($this->tplmode == "group")
+			if($this->tplmode === "group")
 			{
 				$this->sub_tpl->vars(array(
 					"form_target" => "target='" . $this->form_target . "' ",
@@ -190,7 +190,7 @@ class htmlclient extends aw_template
 		// the (possibly bad) side effect is that the first added panel will be used
 		// as the main tab panel. OTOH, the first should always be the one that
 		// is added by class_base, so we should be covered
-		if ($args["type"] == "tabpanel" && !is_object($this->tabpanel))
+		if ($args["type"] === "tabpanel" && !is_object($this->tabpanel))
 		{
 			$this->tabpanel = &$args["vcl_inst"];
 			return false;
@@ -212,11 +212,13 @@ class htmlclient extends aw_template
 		{
 			$this->mod_property(&$args);
 		};
+
 		$type = isset($args["type"]) ? $args["type"] : "";
-		if ($type == "hidden")
+		if ($type === "hidden")
 		{
-			$this->orb_vars[$args["name"]] = $args["value"];
+			$this->orb_vars[$args["name"]] = isset($args["value"]) ? $args["value"] : null;
 		}
+
 		if (!empty($args["layout"]))
 		{
 			$lf = $this->layoutinfo[$args["layout"]];
@@ -291,7 +293,7 @@ class htmlclient extends aw_template
 		};
 
 		$val = "";
-		if ($args["type"] == "status")
+		if ($args["type"] === "status")
 		{
 			$args["type"] = "chooser";
 			$args["options"] = array(
@@ -300,18 +302,20 @@ class htmlclient extends aw_template
 			);
 		};
 
-		if (empty($args["value"]) && is_callable(array($args["vcl_inst"], "get_html")))
+		if (empty($args["value"]) && isset($args["vcl_inst"]) && is_callable(array($args["vcl_inst"], "get_html")))
 		{
-			$args["value"] = $args["vcl_inst"]->get_html(!empty($this->layoutinfo[$args["parent"]]["closeable"]));
+			$args["value"] = $args["vcl_inst"]->get_html(isset($args["parent"]) and !empty($this->layoutinfo[$args["parent"]]["closeable"]));
 		}
-		if($args["type"] == "reset" || $args["type"] == "button")
+
+		if($args["type"] === "reset" || $args["type"] === "button")
 		{
 			//$args["no_caption"] = 1;
 			$args["value"] = $args["caption"];
 			//$args["caption"] = "&nbsp;";
 			unset($args["caption"]);
 		}
-		if ($args["type"] == "s_status")
+
+		if ($args["type"] === "s_status")
 		{
 			if (empty($args["value"]))
 			{
@@ -328,7 +332,7 @@ class htmlclient extends aw_template
 			);
 		};
 
-		if ($args["type"] == "colorpicker")
+		if ($args["type"] === "colorpicker")
 		{
 			$val .= html::textbox(array(
 					"name" => $args["name"],
@@ -364,7 +368,7 @@ class htmlclient extends aw_template
 			$args["value"] = $val;
 		};
 
-		if ($args["type"] == "submit")
+		if ($args["type"] === "submit")
 		{
 			if (empty($args["value"]))
 			{
@@ -373,7 +377,7 @@ class htmlclient extends aw_template
 			unset($args["caption"]);
 		};
 
-		if ($args["type"] == "container")
+		if ($args["type"] === "container")
 		{
 			$args["type"] = "text";
 		};
@@ -403,10 +407,10 @@ class htmlclient extends aw_template
 			{
 				$this->tooltip_index = 1;
 			}
-		
+
 			$help_url = "javascript:void(0);";
 			$help_text = $args["comment"];
-			
+
 			$caption = '<span id="tooltip_'.$this->tooltip_index.'" class="help">'.$caption.'</span>'.
 						'<div class="tooltip_content">'.$help_text.'</div>';
 		};
@@ -422,8 +426,9 @@ class htmlclient extends aw_template
 		{
 			$add = strtoupper("_".$args["capt_ord"]);
 		}
+
 		$datesub = 0;
-		if($args["type"] == "date_select")
+		if($args["type"] === "date_select")
 		{
 			if(isset($this->tmp) && is_object($this->tmp))
 			{
@@ -440,6 +445,7 @@ class htmlclient extends aw_template
 				}
 			}
 		}
+
 		if($datesub)
 		{
 			$tpl_vars["element_name"] = $args["name"];
@@ -464,7 +470,7 @@ class htmlclient extends aw_template
 	// !Creates a submit button
 	function put_submit($arr)
 	{
-		if (aw_global_get("changeform_target") != "_blank")
+		if (aw_global_get("changeform_target") !== "_blank")
 		{
 			$this->vars(array(
 				"sbt_js" => $this->parse("SBT_JS")
@@ -478,7 +484,8 @@ class htmlclient extends aw_template
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
 			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : ""
 		);
-		if($arr["capt_ord"] == "right")
+
+		if($arr["capt_ord"] === "right")
 		{
 			 $name .= strtoupper("_".$arr["capt_ord"]);
 		}
@@ -608,7 +615,7 @@ class htmlclient extends aw_template
 			// I need to figure out whether I have a relation manager
 			$this->vars_safe($tpl_vars);
 
-			if (aw_global_get("changeform_target") != "_blank")
+			if (aw_global_get("changeform_target") !== "_blank")
 			{
 				$this->vars_safe(array(
 					"sbt_js" => $this->parse("SBT_JS")
@@ -673,7 +680,7 @@ class htmlclient extends aw_template
 
 				// this is what I was talking about before ...
 				// move submit button _before_ the aliasmgr
-				if (!empty($sbt) && $item["type"] == "aliasmgr")
+				if (!empty($sbt) && $item["type"] === "aliasmgr")
 				{
 					$res .= $sbt;
 					unset($sbt);
@@ -731,7 +738,7 @@ class htmlclient extends aw_template
 
 		$scripts = isset($scripts) ? $scripts : "";
 
-		if (!empty($arr["focus"]) && $_GET["action"] == 'new')
+		if (!empty($arr["focus"]) && automatweb::$request->arg("action") === "new")
 		{
 			$scripts .= "if (typeof(document.changeform['" . $arr["focus"] ."'].focus) != \"undefined\") { document.changeform['" . $arr["focus"] ."'].focus();\n}";
 		}
@@ -752,11 +759,13 @@ class htmlclient extends aw_template
 		if (empty($method))
 		{
 			$method = "POST";
-		};
-		if ("POST" != $method)
+		}
+
+		if ("POST" !== $method)
 		{
 			$data["no_reforb"] = 1;
-		};
+		}
+
 		$this->vars_safe(array(
 			"submit_handler" => $submit_handler,
 			"scripts" => $scripts,
@@ -785,7 +794,7 @@ class htmlclient extends aw_template
 
 	function get_result($arr = array())
 	{
-		if ($this->layout_mode == "fixed_toolbar")
+		if ($this->layout_mode === "fixed_toolbar")
 		{
 			// this will apply a new style to the BODY node, it's required
 			// to get the classbase layoyt with iframe working correctly
@@ -844,10 +853,11 @@ class htmlclient extends aw_template
 		}
 
 		// confirm save/discard on leave page
-		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
+		if (!empty($arr["confirm_save_data"]) && !(automatweb::$request->arg("action") === "check_leave_page" || automatweb::$request->arg("group") === "relationmgr"))
 		{
 			$this->vars_safe(array(
-				"confirm_unchanged_text" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?")
+				"msg_unload_leave_notice" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"),
+				"msg_unload_save_error" => html_entity_decode(t("Andmete salvestamine kahjuks ei &otilde;nnestunud"))
 			));
 			$this->vars_safe(array(
 				"CHECK_LEAVE_PAGE" => $this->parse("CHECK_LEAVE_PAGE")
@@ -1010,7 +1020,7 @@ class htmlclient extends aw_template
 			}
 		}
 
-		if ($this->form_layout == "boxed")
+		if ($this->form_layout === "boxed")
 		{
 			$this->read_template("boxed.tpl");
 			$this->vars_safe(array(
@@ -1031,7 +1041,7 @@ class htmlclient extends aw_template
 		$tmp = new aw_array($args);
 		$arr = $tmp->get();
 
-		if ($args["type"] == "submit")
+		if ($args["type"] === "submit")
 		{
 			$this->submit_done = true;
 		};
@@ -1049,15 +1059,16 @@ class htmlclient extends aw_template
 				foreach($options->get() as $key => $val)
 				{
 					$caption = $val;
-					if ($args["edit_links"])
+					if (!empty($args["edit_links"]))
 					{
 						$o = new object($key);
 						$caption = html::href(array(
 							"url" => $this->mk_my_orb("change",array("id" => $key),$o->class_id()),
 							"caption" => $caption,
 						));
-					};
-					if ($arr["multiple"])
+					}
+
+					if (!empty($arr["multiple"]))
 					{
 						$retval .= html::checkbox(array(
 							"label" => $caption,
@@ -1075,17 +1086,17 @@ class htmlclient extends aw_template
 							"name" => $arr["name"],
 							"checked" => isset($arr["value"]) && ($arr["value"] == $key),
 							"value" => $key,
-							"onclick" => $arr["onclick"],
-							"disabled" => $arr["disabled"][$key],
+							"onclick" => empty($arr["onclick"]) ? "" : $arr["onclick"],
+							"disabled" => empty($arr["disabled"][$key]) ? "" : $arr["disabled"][$key],
 						));
-					};
-					if ($arr["orient"] == "vertical")
+					}
+
+					if (isset($arr["orient"]) and $arr["orient"] === "vertical")
 					{
 						$retval .= "<br />";
 
-					};
-
-				};
+					}
+				}
 				break;
 
 			case "select":
@@ -1125,9 +1136,9 @@ class htmlclient extends aw_template
 				break;
 
 			case "checkbox":
-				$arr["checked"] = ($arr["value"] && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) );
+				$arr["checked"] = (!empty($arr["value"]) && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) );
 				$arr["value"] = isset($arr["ch_value"]) ? $arr["ch_value"] : "";
-				if (!$arr["no_caption"])
+				if (!empty($arr["no_caption"]))
 				{
 					unset($arr["caption"]);
 				}
@@ -1223,22 +1234,23 @@ class htmlclient extends aw_template
 	function create_element($item)
 	{
 		$type = isset($item["type"]) ? $item["type"] : "";
+		$value = isset($item["value"]) ? $item["value"] : null;
 		$item["html"] = "";
-		if ($type == "iframe")
+		if ($type === "iframe")
 		{
 			$src = $item["src"];
 			$item["html"] = "<iframe id='contentarea' name='contentarea' src='${src}' style='width: 100%; height: 95%; border-top: 1px solid black;' frameborder='no' scrolling='yes'></iframe>";
 		}
 		else if ($this->layout_mode == "fixed_toolbar")
 		{
-			$item["html"] = $item["value"];
+			$item["html"] = $value;
 		}
-		else if ($type == "hidden")
+		else if ($type === "hidden")
 		{
 			// hidden elements end up in the orb_vars
-			$this->orb_vars[$item["name"]] = $item["value"];
+			$this->orb_vars[$item["name"]] = $value;
 		}
-		else if ($item["type"] == "submit")
+		else if ($item["type"] === "submit")
 		{
 			$item["html"] = $this->put_submit($item);
 			$this->submit_done = true;
@@ -1301,7 +1313,7 @@ class htmlclient extends aw_template
 		$html = "";
 		$ldata = $this->layoutinfo[$layout_name];
 		$location = false;
-		if ($layout_name == "_main")
+		if ($layout_name === "_main")
 		{
 			// put already parsed layouts in their correct places
 			// first property in the layout sets the location
@@ -1310,10 +1322,11 @@ class htmlclient extends aw_template
 				if (!empty($pval["parent"]))
 				{
 					$gx = $this->lp_chain[$pval["parent"]];
-					while ($this->lp_chain[$gx] != "_main" && isset($this->lp_chain[$gx]))
+					while (isset($this->lp_chain[$gx]) and $this->lp_chain[$gx] != "_main")
 					{
 						$gx = $this->lp_chain[$gx];
 					}
+
 					if (!empty($sub_layouts[$gx]))
 					{
 						$this->proplist[$pkey]["value"] = $sub_layouts[$gx];
@@ -1329,7 +1342,7 @@ class htmlclient extends aw_template
 						if (empty($this->proplist[$pkey]["caption"]))
 						{
 							$this->proplist[$pkey]["no_caption"] = 1;
-						};
+						}
 						unset($this->proplist[$pkey]["__ignore"]);
 						unset($sub_layouts[$gx]);
 					}
@@ -1369,7 +1382,7 @@ class htmlclient extends aw_template
 		{
 			$html = "";
 		}
-		elseif ("hbox" == $ldata["type"])
+		elseif ("hbox" === $ldata["type"])
 		{
 			$cell_widths = array();
 			if (!empty($ldata["width"]))
@@ -1447,7 +1460,7 @@ class htmlclient extends aw_template
 				$html .= $this->parse("GRID_HBOX_OUTER");
 			}
 		}
-		elseif ("vbox" == $ldata["type"])
+		elseif ("vbox" === $ldata["type"])
 		{
 			$content = "";
 			foreach($layout_items as $cell_nr => $layout_item)
@@ -1521,7 +1534,7 @@ class htmlclient extends aw_template
 				$html .= $this->parse("GRID_VBOX_OUTER");
 			}
 		}
-		elseif ("vbox_sub" == $ldata["type"])
+		elseif ("vbox_sub" === $ldata["type"])
 		{
 			$content = "";
 			foreach($layout_items as $cell_nr => $layout_item)

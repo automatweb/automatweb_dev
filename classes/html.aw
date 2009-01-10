@@ -541,6 +541,7 @@ class html extends aw_template
 		$textsize = ($textsize ? " style=\"font-size: {$textsize};\"" : "");
 		$size = isset($size) ? $size : "40";
 		$maxlength = isset($maxlength) ? " maxlength=\"{$maxlength}\"" : "";
+		$value = isset($value) ? $value : '';
 		return "<input type=\"password\" id=\"{$name}\" name=\"{$name}\" size=\"{$size}\" value=\"{$value}\"{$maxlength}{$textsize} />\n";
 	}
 
@@ -681,6 +682,7 @@ class html extends aw_template
 		{
 			$onc = " onclick='{$onclick}'";
 		}
+
 		$onBlur = isset($onBlur) ? " onblur=\"{$onBlur}\"" : '';
 
 		$tpl = get_instance("htmlclient");
@@ -732,18 +734,16 @@ class html extends aw_template
 		extract($args);
 		$checked = checked($checked);
 		$disabled = (!empty($disabled) ? ' disabled="disabled"' : "");
+		$onc = empty($onclick) ? "" : " onclick=\"{$onclick}\"";
 
 		if (isset($textsize) && $textsize and isset($caption) && $caption)
 		{
 			$caption = '<span style="font-size: ' . $textsize . ';">' . $caption . '</span>';
 		}
+
 		if(!isset($id) || !$id)
 		{
 			$id = $name."_".$value;
-		}
-		if (isset($onclick))
-		{
-			$onc = " onclick=\"{$onclick}\"";
 		}
 
 		$tpl = get_instance("htmlclient");
@@ -909,23 +909,25 @@ class html extends aw_template
 		$selector = new date_edit($args["name"]);
 		$selector->set("minute_step", (isset($args["minute_step"]) ? $args["minute_step"] : 1));
 		$set = array();
-		if (!empty($args["day"]) && $args["day"] == "text")
+		if (!empty($args["day"]) && $args["day"] === "text")
 		{
 			$set["day_textbox"] = 1;
 		}
 		else
 		{
 			$set["day"] = 1;
-		};
-		if (!empty($args["month"]) && $args["month"] == "text")
+		}
+
+		if (!empty($args["month"]) && $args["month"] === "text")
 		{
 			$set["month_textbox"] = 1;
 		}
 		else
 		{
 			$set["month"] = 1;
-		};
-		if (!empty($args["year"]) && $args["year"] == "text")
+		}
+
+		if (!empty($args["year"]) && $args["year"] === "text")
 		{
 			$set["year_textbox"] = 1;
 		}
@@ -1027,7 +1029,7 @@ class html extends aw_template
 
 		$set = array();
 
-		if (isset($args['buttons']) && $args['buttons'])
+		if (!empty($args['buttons']))
 		{
 			$buttons = true;
 		}
@@ -1040,8 +1042,7 @@ class html extends aw_template
 			$buttons = false;
 		}
 
-
-		if (!empty($args["day"]) && $args["day"] == "text")
+		if (!empty($args["day"]) && $args["day"] === "text")
 		{
 			$set["day_textbox"] = 1;
 		}
@@ -1049,7 +1050,7 @@ class html extends aw_template
 		{
 			$set["day"] = 1;
 		}
-		if (!empty($args["month"]) && $args["month"] == "text")
+		if (!empty($args["month"]) && $args["month"] === "text")
 		{
 			$set["month_textbox"] = 1;
 		}
@@ -1059,7 +1060,7 @@ class html extends aw_template
 		};
 		$set["year"] = 1;
 
-		if (!empty($args["format"]) && is_array($args["format"]) && count($args["format"]))
+		if (!empty($args["format"]) && is_array($args["format"]))
 		{
 			$a = array();
 			foreach($args["format"] as $fldn)
@@ -1072,19 +1073,21 @@ class html extends aw_template
 		{
 			$selector->configure($set);
 		}
+
 		if(!empty($args["mon_for"]))
 		{
 			$selector->set("mon_for", $args["mon_for"]);
 		}
-		if (is_array($args["value"]))
+
+		if (isset($args["value"]) and is_array($args["value"]) and is_numeric($args["value"]["month"]) and is_numeric($args["value"]["day"]) and is_numeric($args["value"]["year"]))
 		{
 			$val = mktime(0, 0, 0, $args["value"]["month"], $args["value"]["day"], $args["value"]["year"]);
 		}
-		elseif($args["value"])
+		elseif(isset($args["value"]) and is_scalar($args["value"]))
 		{
 			$val = $args["value"];
 		}
-		elseif($args["default"])
+		elseif(isset($args["default"]))
 		{
 			$val = $args["default"];
 		}
@@ -1092,8 +1095,6 @@ class html extends aw_template
 		{
 			$val = time();
 		}
-
-
 
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
@@ -1242,7 +1243,7 @@ class html extends aw_template
 			$caption = $url;
 		}
 
-		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . $rel . $style. ">{$caption}</a>";
+		return "<a href=\"{$url}\"{$target}{$title}{$onClick}{$onMouseOver}{$onMouseOut}{$ti}{$textsize}{$class}{$id}{$rel}{$style}>{$caption}</a>";
 	}
 
 	/**Popup
@@ -1327,8 +1328,10 @@ class html extends aw_template
 		style class name
 	@param textsize optional type=string
 		examples: "10px", "0.7em", "smaller"
-	@param content optional type=int
-		fhtml to insert between span tags
+	@param fontweight optional type=string
+		examples: "bold", "normal"
+	@param content optional type=string
+		html to insert between span tags
 	@returns string/html
 
 	@comments
@@ -1339,9 +1342,11 @@ class html extends aw_template
 		extract($args);
 		$textsize = ($textsize ? 'font-size: ' . $textsize . ';' : "");
 		$fontweight = ($fontweight ? 'font-weight: ' . $fontweight . ';' : "");
-		$class = ($class ? 'class="' . $class . '"' : "");
-		$id = ($id ? 'id="' . $id . '"' : "");
-		return "<span $class style='$textsize $fontweight' $id>$content</span>";
+		$style = (!empty($textsize) or !empty($fontweight)) ? " style=\"{$textsize}{$fontweight}\"" : "";
+		$class = ($class ? ' class="' . $class . '"' : "");
+		$id = ($id ? " id=\"{$id}\"" : "");
+		$content = isset($content) ? $content : "";
+		return "<span{$class}{$style}{$id}>{$content}</span>";
 	}
 
 	/**
@@ -1470,7 +1475,7 @@ class html extends aw_template
 		$obj = obj($oid);
 		$params["id"] = $obj->id();
 
-		if ((!isset($_GET["action"]) || $_GET["action"] != "view") && $inst->can("edit", $oid))
+		if ((!isset($_GET["action"]) || $_GET["action"] !== "view") && $inst->can("edit", $oid))
 		{
 			$act = "change";
 		}

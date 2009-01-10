@@ -221,7 +221,9 @@ class cfgutils extends aw_template
 			// if only the XML file would have a bit saner structure, the following could be a lot easier
 			foreach($vals as $val)
 			{
-				if (2 == $val["level"] && "open" == $val["type"] && in_array($val["tag"],$containers))
+				$value = isset($val["value"]) ? $val["value"] : null;
+
+				if (2 == $val["level"] && "open" === $val["type"] && in_array($val["tag"],$containers))
 				{
 					$propkey = $val["tag"];
 				}
@@ -231,38 +233,38 @@ class cfgutils extends aw_template
 					$propkey = false;
 				}
 				else
-				if ("property" == $propkey && "complete" == $val["type"])
+				if ("property" === $propkey && "complete" === $val["type"])
 				{
-					if ("name" == $val["tag"])
+					if ("name" === $val["tag"])
 					{
-						$propname = $val["value"];
+						$propname = $value;
 						// new property, init def
 						if (!isset($propdef[$propkey][$propname]) && isset($defvals[$propkey]))
 						{
 							$propdef[$propkey][$propname] = $defvals[$propkey];
 						}
-					};
+					}
 					// if this tags parent is a 'container' (containing multiple values),
 					// then add to that, otherwise just use the name of the tag
 					if ($tagname)
 					{
-						$propdef[$propkey][$propname][$tagname][] = $val["value"];
+						$propdef[$propkey][$propname][$tagname][] = $value;
 					}
 					else
 					{
 						$tag = $val["tag"];
-						$propdef[$propkey][$propname][$tag] = $val["value"];
-					};
+						$propdef[$propkey][$propname][$tag] = $value;
+					}
 				}
 				else
 				/*** some attributes (props, table_fields) contain multiple values, the following 2
 					ifs deal with that **/
-				if ("property" == $propkey && "open" == $val["type"])
+				if ("property" === $propkey && "open" === $val["type"])
 				{
 					$tagname = $val["tag"];
 				}
 				else
-				if ("property" == $propkey && "close" == $val["type"])
+				if ("property" === $propkey && "close" === $val["type"])
 				{
 					$tagname = false;
 				}
@@ -272,39 +274,41 @@ class cfgutils extends aw_template
 						"layout" == $propkey || "forminfo" == $propkey)
 				{
 					// level 3 is the direct child of propkey
-					if (3 == $val["level"] && "open" == $val["type"])
+					if (3 == $val["level"] && "open" === $val["type"])
 					{
 						$propname = $val["tag"];
 					}
-					elseif (3 == $val["level"] && "close" == $val["type"])
+					elseif (3 == $val["level"] && "close" === $val["type"])
 					{
 						$propname = false;
 					}
 					// level 4 is the direct child of level 3 tag, this deals with multiple values
-					elseif (4 == $val["level"] && "open" == $val["type"])
+					elseif (4 == $val["level"] && "open" === $val["type"])
 					{
-						if ("open" == $val["type"]) $tagname = $val["tag"];
+						if ("open" === $val["type"]) $tagname = $val["tag"];
 					}
-					elseif (4 == $val["level"] && "close" == $val["type"])
+					elseif (4 == $val["level"] && "close" === $val["type"])
 					{
-						if ("close" == $val["type"]) $tagname = false;
-
+						if ("close" === $val["type"])
+						{
+							$tagname = false;
+						}
 					}
-					elseif ($val["level"] > 3 && $val["type"] == "complete" && isset($val["value"]))
+					elseif ($val["level"] > 3 && $val["type"] === "complete" && isset($val["value"]))
 					{
 						if ($tagname)
 						{
-							$propdef[$propkey][$propname][$tagname][] = $val["value"];
+							$propdef[$propkey][$propname][$tagname][] = $value;
 						}
 						else
 						{
-							$propdef[$propkey][$propname][$val["tag"]] = $val["value"];
+							$propdef[$propkey][$propname][$val["tag"]] = $value;
 						}
 					}
 				}
 				else if (!empty($val["value"]))
 				{
-					$propdef[$propkey][$val["tag"]] = $val["value"];
+					$propdef[$propkey][$val["tag"]] = $value;
 				}
 			}
 		}

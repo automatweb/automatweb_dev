@@ -84,6 +84,8 @@ class class_base extends aw_template
 	var $transl_grp_name;
 	var $is_translated;
 
+	protected $classconfig;
+
 	function class_base($args = array())
 	{
 		$this->init("");
@@ -2135,7 +2137,7 @@ class class_base extends aw_template
 	// DEPRECATED!!!!
 	function get_all_properties($args = array())
 	{
-		$filter = $args["rel"] ? array("rel" => 1) : "";
+		$filter = !empty($args["rel"]) ? array("rel" => 1) : "";
 
 		if (isset($this->cfgform["meta"]["cfg_proplist"]))
 		{
@@ -2156,7 +2158,7 @@ class class_base extends aw_template
 		}
 		else
 		// this handles some embedding cases
-		if ($args["classonly"])
+		if (!empty($args["classonly"]))
 		{
 			$_all_props = $cfgu->load_class_properties(array(
 				"clid" => $this->clid,
@@ -2198,10 +2200,10 @@ class class_base extends aw_template
 		$group_el_cnt = $this->all_props = array();
 
 		// use the group list defined in the config form, if we are indeed using a config form
-		if (!is_array($grplist))
+		if (!isset($grplist) or !is_array($grplist))
 		{
 			$grplist = $cfgu->get_groupinfo();
-		};
+		}
 
 		$this->grp_children = array();
 
@@ -2612,10 +2614,14 @@ class class_base extends aw_template
 			}
 		}
 
-		if (isset($property["method"]) && $property["method"] == "bitmask")
+		if (isset($property["method"]) && $property["method"] === "bitmask")
 		{
+			if (!isset($property["value"]))
+			{
+				$property["value"] = 0;
+			}
 			$property["value"] = $property["value"] & $property["ch_value"];
-		};
+		}
 	}
 
 	function process_view_controllers(&$properties, $controllers, $argblock)
@@ -4098,6 +4104,11 @@ class class_base extends aw_template
 			{
 				// shift to the left, shift to the right
 				// pop, push, pop, push
+				if (!isset($pvalues[$name]))
+				{
+					$pvalues[$name] = 0;
+				}
+
 				if ( ($pvalues[$name] & $property["ch_value"]) && !($args["rawdata"][$name] & $property["ch_value"]))
 				{
 					$pvalues[$name] -= $property["ch_value"];
@@ -4105,7 +4116,7 @@ class class_base extends aw_template
 				elseif (!($pvalues[$name] & $property["ch_value"]) && ($args["rawdata"][$name] & $property["ch_value"]))
 				{
 					$pvalues[$name] += $property["ch_value"];
-				};
+				}
 			}
 
 			if ($this->is_rel)

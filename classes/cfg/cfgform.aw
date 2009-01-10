@@ -187,7 +187,7 @@
 
 
 @default group=cfgview_settings
-	
+
 	@property cfgform_id_from_url type=checkbox field=meta method=serialize
 	@caption Seadetevormi ID URList
 
@@ -541,7 +541,7 @@ class cfgform extends class_base
 					foreach($ctrls as $ctrl)
 					{
 						$data["options"][$ctrl] = obj($ctrl)->name();
-						$data["value"][$ctrl] = $ctrl;	
+						$data["value"][$ctrl] = $ctrl;
 					}
 				}
 				else
@@ -1144,7 +1144,7 @@ class cfgform extends class_base
 	function _init_properties($class_id)
 	{
 		error::raise_if(empty($class_id),(array(
-			"id" => ERR_ABSTRACT,
+			"id" => "ERR_ABSTRACT",
 			"msg" => t("this is not a valid config form - class_id not specified")
 		)));
 
@@ -1305,7 +1305,7 @@ class cfgform extends class_base
 				$l = get_instance("languages");
 				$trans = safe_array($arr["obj_inst"]->meta("translations"));
 				foreach(safe_array($arr["request"]["dat"]) as $lid => $ldat)
-				{	
+				{
 					$ld = $l->fetch($l->get_langid_for_code($lid), false);
 					foreach(safe_array($ldat) as $pn => $c)
 					{
@@ -1461,7 +1461,7 @@ class cfgform extends class_base
 	function callback_mod_reforb($arr, $request)
 	{
 		$arr["post_ru"] = get_ru();
-		$arr["cfgform_add_grp"] = $request["cfgform_add_grp"];
+		$arr["cfgform_add_grp"] = isset($request["cfgform_add_grp"]) ? $request["cfgform_add_grp"] : "";
 	}
 
 	function callback_mod_retval($arr)
@@ -1478,7 +1478,7 @@ class cfgform extends class_base
 				$arr["args"]["cfgform_add_grp"] = $arr["request"]["cfgform_add_grp"];
 			}
 		}
-		
+
 		if ($arr["request"]["chtbl"])
 		{
 			$arr["args"]["chtbl"] = $arr["request"]["chtbl"];
@@ -2317,7 +2317,7 @@ class cfgform extends class_base
 				{
 					$layout_grp = "";
 
-					if (array_key_exists($property["parent"], $this->cfg_layout))
+					if (isset($property["parent"]) and array_key_exists($property["parent"], $this->cfg_layout))
 					{
 						$by_layout[$property["parent"]][] = $property;
 						$layout_grp = $this->cfg_layout[$property["parent"]]["group"];
@@ -2455,7 +2455,7 @@ class cfgform extends class_base
 							case "textbox":
 								$this->vars(array(
 									"size_caption" => t("Laius"),
-									"size" => $property["size"],
+									"size" => empty($property["size"]) ? "" : $property["size"],
 									"prp_key" => $property["name"],
 								));
 								$property["cfgform_additional_options"] = $this->parse("textbox_options");
@@ -2466,17 +2466,17 @@ class cfgform extends class_base
 								$this->vars(array(
 									"no_edit_caption" => t("Nuppudeta"),
 									"no_edit_checked" => checked($property["no_edit"] == 1),
-									"no_edit" => $property["no_edit"],
+									"no_edit" => isset($property["no_edit"]) ? $property["no_edit"] : "",
 									"displayradio_caption" => t("Valikud"),
-									"displayradio_ch" => ("radio" === $property["display"]) ? ' checked="1"' : "",
+									"displayradio_ch" => (isset($property["display"]) and "radio" === $property["display"]) ? ' checked="1"' : "",
 									"displayselect_caption" => t("Selectbox"),
-									"displayselect_ch" => ("select" === $property["display"]) ? ' checked="1"' : "",
+									"displayselect_ch" => (isset($property["display"]) and "select" === $property["display"]) ? ' checked="1"' : "",
 									"stylenormal_caption" => t("Tavaline"),
 									"stylenormal_ch" => (empty($property["display"])) ? ' checked="1"' : "",
 									"styleac_caption" => t("Autocomplete"),
 									// Are you sure, this is 'style' not 'mode'? vcl/relpicker.aw doesn't consist the word 'style'. :S -kaarel 2.12.2008
 									//"styleac_ch" => ("autocomplete" === $property["style"]) ? ' checked="1"' : "",
-									"styleac_ch" => ("autocomplete" === $property["mode"]) ? ' checked="1"' : "",
+									"styleac_ch" => (isset($property["mode"]) and "autocomplete" === $property["mode"]) ? ' checked="1"' : "",
 									/*
 									"oit_caption" => t("option_is_tuple"),
 									"option_is_tuple_checked" => isset($property["option_is_tuple"]) && $property["option_is_tuple"] ? ' checked="1"' : "",
@@ -2486,7 +2486,7 @@ class cfgform extends class_base
 									"multiple_checked" => isset($property["multiple"]) && $property["multiple"] ? ' checked="1"' : "",
 									"multiple" => isset($property["multiple"]) ? $property["multiple"] : "",
 									"size_caption" => t("K&otilde;rgus"),
-									"size" => $property["size"],
+									"size" => empty($property["size"]) ? "" : $property["size"],
 									"prp_key" => $property["name"]
 								));
 								if($property["store"] == "connect" || $property["store"] == "no")
@@ -2664,16 +2664,16 @@ class cfgform extends class_base
 							"prp_key" => $property["name"],
 							"no_caption_caption" => t("&Auml;ra n&auml;ita pealkirja"),
 							"no_caption_checked" => checked(!empty($property["no_caption"])),
-							"no_caption" => $property["no_caption"],
+							"no_caption" => empty($property["no_caption"]) ? "" : $property["no_caption"],
 							"captionside_l_caption" => t("Pealkiri vasakul"),
-							"captionside_l_ch" =>  ("left" === $property["captionside"]) ? ' checked="1"' : "",
+							"captionside_l_ch" =>  (isset($property["captionside"]) and "left" === $property["captionside"]) ? ' checked="1"' : "",
 							"captionside_t_caption" => t("Pealkiri &uuml;lal"),
-							"captionside_t_ch" =>  ("top" === $property["captionside"]) ? ' checked="1"' : "",
+							"captionside_t_ch" =>  (isset($property["captionside"]) and "top" === $property["captionside"]) ? ' checked="1"' : "",
 							"textsize_caption" => '<span title="' . t("CSS formaadis:") . ' 12px, 0.7em, ..." style="cursor: help;">' . t("Tekstisuurus") . '</span>',
-							"textsize" => $property["textsize"],
+							"textsize" => empty($property["textsize"]) ? "" : $property["textsize"],
 							"disabled_caption" => t("Mitteaktiivne (disabled)"),
 							"disabled_checked" => checked(!empty($property["disabled"])),
-							"disabled" => $property["disabled"],
+							"disabled" => empty($property["disabled"]) ? "" : $property["disabled"],
 							"prp_options" => $property["cfgform_additional_options"],
 							"prp_opts_caption" => t("Lisavalikud"),
 							"tmp_id" => $cnt,
@@ -2758,11 +2758,11 @@ class cfgform extends class_base
 
 					$this->vars(array(
 						"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
-						"prp_caption" => $property["caption"],
+						"prp_caption" => empty($property["caption"]) ? "" : $property["caption"],
 						"prp_type" => $type_selector,
 						"prp_mark_key" => $prpdata["name"] . "|" . $key,
 						"prp_key" => $prpdata["name"],
-						"prp_order" => $property["ord"],
+						"prp_order" => empty($property["ord"]) ? "" : $property["ord"],
 						"options" => $options,
 						"grp_id" => $grp_id
 					));
@@ -2915,10 +2915,10 @@ class cfgform extends class_base
 			}
 
 			$t->define_data(array(
-				"caption" => $property["caption"],
+				"caption" => empty($property["caption"]) ? "" : $property["caption"],
 				"type" => $property["type"],
 				"name" => $property["name"],
-				"default_grp" => $property["group"],
+				"default_grp" => empty($property["group"]) ? "" : $property["group"],
 				"in_use" => $groups ? html::img(array(
 					"url" => aw_ini_get("icons.server")."/check.gif",
 					"alt" => $groups,
@@ -5151,9 +5151,9 @@ class cfgform extends class_base
 
 	/** Returns default cfg form property list for the class id of the object/oid given. If no cfg form exists, returns the property list defined in the class header.
 	@attrib name=get_default_cfg_proplist api=1 params=name
-	
+
 	@param o optional type=object acl=view
-	
+
 	@param oid optional type=oid acl=view
 
 	@param clid optional type=class_id default=CL_CRM_PERSON
