@@ -296,7 +296,6 @@ body {
 
 <!-- SUB: CHECK_LEAVE_PAGE -->
 <script language="javascript">
-
 changed = 0;
 var disable_set_changed;
 function set_changed()
@@ -329,11 +328,17 @@ function generic_unloader()
 {
 	if (changed && !xchanged)
 	{
-		if (confirm("{VAR:confirm_unchanged_text}"))
+		if (confirm("{VAR:msg_unload_leave_notice}"))
 		{
 			document.changeform.submit();
 		}
 	}
 }
+/*
+$.aw_unload_handler({
+	msg_unload_leave_notice: "{VAR:msg_unload_leave_notice}",
+	msg_unload_save_error: "{VAR:msg_unload_save_error}"
+});
+*/
 </script>
 <!-- SUB: CHECK_LEAVE_PAGE -->

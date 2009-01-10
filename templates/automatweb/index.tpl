@@ -161,12 +161,5 @@ $.init_session_modal({
 
 {VAR:javascript_bottom}
 
-<script type="text/javascript">
-$.aw_unload_handler({
-	msg_unload_leave_notice: "{VAR:msg_unload_leave_notice}",
-	msg_unload_save_error: "{VAR:msg_unload_save_error}"
-});
-</script> 
-
 </body>
 </html>
