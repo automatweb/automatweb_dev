@@ -78,7 +78,7 @@
 				<arguments>
 					<optional name="o" type="object" acl="view" />
 					<optional name="oid" type="oid" acl="view" />
-					<optional name="clid" type="class_id" />
+					<optional name="clid" type="class_id" default="CL_CRM_PERSON" />
 				</arguments>
 			</function>
 		</action>

@@ -6195,6 +6195,7 @@ class class_base extends aw_template
 			$arr["request"]["class"] = "document";
 		}
 		$props = is_oid($arr["request"]["id"]) ? get_instance("cfgform")->get_default_proplist(array("oid" => $arr["request"]["id"])) : get_instance("cfgform")->get_default_proplist(array("clid" => constant("CL_".strtoupper($arr["request"]["class"]))));
+		$draftable_props = array();
 		foreach($props as $k => $prop)
 		{
 			if(isset($prop["draft"]) && $prop["draft"])

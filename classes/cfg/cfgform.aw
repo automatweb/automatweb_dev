@@ -5156,14 +5156,12 @@ class cfgform extends class_base
 	
 	@param oid optional type=oid acl=view
 
-	@param clid optional type=class_id
+	@param clid optional type=class_id default=CL_CRM_PERSON
 	**/
 	public function get_default_proplist($arr)
 	{
-		extract($arr);
-
-		$o = is_object($o) && $this->can("view", $o->id()) ? $o : obj($oid);
-		$clid = $this->can("view", $o->id()) ? $o->class_id() : $clid;
+		$o = isset($arr["o"]) && is_object($arr["o"]) && $this->can("view", $arr["o"]->id()) ? $arr["o"] : obj($arr["oid"]);
+		$clid = $this->can("view", $o->id()) ? $o->class_id() : (isset($arr["clid"]) && is_class_id($arr["clid"]) ? $arr["clid"] : CL_CRM_PERSON);
 		
 		if(!$this->can("view", $o->id()))
 		{
