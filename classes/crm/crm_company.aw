@@ -279,6 +279,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_COMPANY, on_delete_company)
 	@property fake_address_county_relp type=relpicker reltype=RELTYPE_FAKE_COUNTY automatic=1 store=no
 	@caption Fake county
 
+	@property show_on_web type=checkbox ch_value=1 store=no
+	@caption Kuva veebis
+
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
@@ -1974,7 +1977,10 @@ class crm_company extends class_base
 			case "fake_address_postal_code":
 			case "fake_address_address":
 			case "fake_address_address2":
-				$data["value"] = $arr["obj_inst"]->prop($data["name"]);
+				if(!isset($data["value"]) || strlen(trim($data["value"])) == 0)
+				{
+					$data["value"] = $arr["obj_inst"]->prop($data["name"]);
+				}
 				break;
 
 			case "ettevotlusvorm":
@@ -3132,6 +3138,21 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "fake_email":
+			case "fake_phone":
+			case "fake_url":
+			case "fake_address_country":
+			case "fake_address_country_relp":
+			case "fake_address_county":
+			case "fake_address_county_relp":
+			case "fake_address_city":
+			case "fake_address_city_relp":
+			case "fake_address_postal_code":
+			case "fake_address_address":
+			case "fake_address_address2":
+				$arr["obj_inst"]->set_prop($data["name"], $data["value"]);
+				break;
+
 			case "logo":
 				if(!is_oid($arr["obj_inst"]->id()))
 				{

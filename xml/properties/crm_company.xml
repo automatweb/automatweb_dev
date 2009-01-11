@@ -789,6 +789,16 @@
             <caption>Fake county</caption>
       </property>
       <property>
+            <name>show_on_web</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>show_on_web</field>
+            <caption>Kuva veebis</caption>
+      </property>
+      <property>
             <name>description_doc</name>
             <table>objects</table>
             <group>add_info</group>
@@ -1864,17 +1874,6 @@
                   <num_1>ord</num_1>
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
-            <caption>Pildid</caption>
-      </property>
-      <property>
-            <name>images_2</name>
-            <table>objects</table>
-            <group>org_images</group>
-            <type>multifile_upload</type>
-            <reltype>RELTYPE_IMAGE</reltype>
-            <image>1</image>
-            <store>no</store>
-            <field>images_2</field>
             <caption>Pildid</caption>
       </property>
       <property>

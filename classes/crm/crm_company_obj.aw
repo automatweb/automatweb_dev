@@ -4,7 +4,26 @@ class crm_company_obj extends _int_object
 {
 	function prop($k)
 	{
-		if(substr($k, 0, 5) == "fake_")
+		if($k == "show_on_web")
+		{
+			$org = get_instance(CL_USER)->get_current_company();
+			if(!is_oid($org) || !is_oid($this->id()))
+			{
+				return false;
+			}
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"seller" => $org,
+				"buyer" => $this->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"show_in_webview" => 1,
+				"limit" => 1,
+			));
+			return $ol->count() > 0;
+		}
+
+		if(substr($k, 0, 5) == "fake_" && is_oid($this->id()))
 		{
 			switch(substr($k, 5))
 			{
@@ -50,6 +69,38 @@ class crm_company_obj extends _int_object
 
 	function set_prop($name,$value)
 	{
+		if($k == "show_on_web")
+		{
+			$org = get_instance(CL_USER)->get_current_company();
+			if(is_oid($org) && is_oid($this->id()))
+			{
+			}
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"seller" => $org,
+				"buyer" => $this->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"show_in_webview" => 1,
+				"limit" => 1,
+			));
+			if($ol->count() > 0)
+			{
+				$o = $ol->begin();
+				$o->show_in_webview = $value;
+				$o->save();
+			}
+			elseif($value)
+			{
+				$o = obj();
+				$o->set_parent($org);
+				$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+				$o->buyer = $this->id();
+				$o->seller = $org;
+				$o->show_in_webview = $value;
+				$o->save();
+			}
+		}
 		if($name == "name")
 		{
 			$value = htmlspecialchars($value);
@@ -68,8 +119,11 @@ class crm_company_obj extends _int_object
 					return $this->set_fake_phone($value);
 
 				case "address_country":
+				case "address_country_relp":
 				case "address_county":
+				case "address_county_relp":
 				case "address_city":
+				case "address_city_relp":
 				case "address_postal_code":
 				case "address_address":
 				case "address_address2":
@@ -1000,9 +1054,9 @@ class crm_company_obj extends _int_object
 	{
 		$n = false;
 		
-		if($GLOBALS["object_loader"]->cache->can("view", $this->prop("phone_id")))
+		if($GLOBALS["object_loader"]->cache->can("view", $this->prop("email_id")))
 		{
-			$eo = obj($this->prop("phone_id"));
+			$eo = obj($this->prop("email_id"));
 		}
 		else
 		{
@@ -1022,7 +1076,7 @@ class crm_company_obj extends _int_object
 		
 		if ($n)
 		{
-			$this->set_prop("phone_id", $eo->id());
+			$this->set_prop("email_id", $eo->id());
 			$this->save();
 			$this->connect(array(
 				"type" => "RELTYPE_EMAIL",
@@ -1034,6 +1088,10 @@ class crm_company_obj extends _int_object
 	/** sets the default email adress content or creates it if needed **/
 	private function set_fake_phone($phone)
 	{
+		if(!is_oid($this->id()))
+		{
+			$this->save();
+		}
 		$n = false;
 		if ($GLOBALS["object_loader"]->cache->can("view", $this->prop("phone_id")))
 		{
@@ -1050,19 +1108,23 @@ class crm_company_obj extends _int_object
 			}
 			$n = true;
 		}
+		$conns = connection::find(array("from" => $this->id(), "to" => $eo->id(), "from.class_id" => CL_CRM_COMPANY, "reltype" => "RELTYPE_PHONE"));
+		if(count($conns) > 0)
+		{
+			$eo->conn_id = reset(array_keys($conns));
+		}
 
 		$eo->set_name($phone);
+		aw_disable_acl();
 		$eo->save();
-		
-		if ($n)
-		{
-			$this->set_prop("phone_id", $eo->id());
-			$this->save();
-			$this->connect(array(
-				"type" => "RELTYPE_PHONE",
-				"to" => $eo->id()
-			));
-		}
+		aw_restore_acl();
+
+		$this->set_prop("phone_id", $eo->id());
+		$this->save();
+		$this->connect(array(
+			"type" => "RELTYPE_PHONE",
+			"to" => $eo->id()
+		));
 	}
 
 	private function set_fake_url($url)
@@ -1129,7 +1191,10 @@ class crm_company_obj extends _int_object
 			case "fake_address_county":
 			case "fake_address_city":
 			case "fake_address_country":
-				$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				if(strlen(trim($v)) > 0)
+				{
+					$this->_adr_set_via_rel($eo, $pmap[$k], $v);
+				}
 				break;
 
 			case "fake_address_county_relp":
@@ -1159,21 +1224,27 @@ class crm_company_obj extends _int_object
 
 	private function _adr_set_via_rel($o, $prop, $val)
 	{
-		if ($GLOBALS["object_loader"]->cache->can("view", $o->prop($prop)))
+		$pl = $o->get_property_list();
+		$rl = $o->get_relinfo();
+
+		$ol = new object_list(array(
+			"class_id" => $rl[$pl[$prop]["reltype"]]["clid"][0],
+			"name" => $val,
+			"limit" => 1,
+		));
+		if ($ol->count() > 0)
 		{
-			$ro = obj($o->prop($prop));
+			$ro = $ol->begin();
 		}
 		else
 		{
-			$pl = $o->get_property_list();
-			$rl = $o->get_relinfo();
 
 			$ro = obj();
 			$ro->set_class_id($rl[$pl[$prop]["reltype"]]["clid"][0]);
 			$ro->set_parent(is_oid($o->id()) ? $o->id() : $o->parent());
+			$ro->set_name($val);
+			$ro->save();
 		}
-		$ro->set_name($val);
-		$ro->save();
 
 		$o->set_prop($prop, $ro->id());
 	}
