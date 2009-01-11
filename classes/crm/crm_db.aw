@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.51 2009/01/08 10:26:23 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.52 2009/01/11 09:32:22 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -54,13 +54,16 @@
 @property all_ct_data type=checkbox ch_value=1 
 @caption Kuva k&otilde;iki kontaktandmeid
 
+@property show_as_on_web type=checkbox ch_value=1
+@caption Kuva tabelites ainult organisatsioone, mida kuvatakse veebis
+
 -----------------------------------------------------------------------------
 @groupinfo org caption=Organisatsioonid
 
 @groupinfo f2 submit=no caption=Otsing parent=org
 @default group=f2
 	
-@property orgtoolbar type=toolbar no_caption=1 group=firmad,f2,tegevusalad
+@property orgtoolbar type=toolbar no_caption=1 group=firmad,f2,tegevusalad,not_on_web
 @caption Org. toolbar
 
 @layout org type=hbox width=20%:80%
@@ -89,6 +92,13 @@ property search_table type=table parent=org no_caption=1
 	@property sector_table type=table parent=ta no_caption=1
 
 ----------------------------------------------------------
+
+@groupinfo not_on_web submit=no caption=Organisatsioonid,&nbsp;mida&nbsp;veebis&nbsp;ei&nbsp;kuvata parent=org
+@default group=not_on_web
+
+	@property not_on_web_table type=table parent=not_on_web no_caption=1
+
+-----------------------------------------------------------------------
 
 @reltype SELECTIONS value=1 clid=CL_CRM_SELECTION
 @caption Valimid
@@ -155,6 +165,7 @@ class crm_db extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "not_on_web_table":
 			case "search_table":
 			case "sector_table":
 			case "company_table":
@@ -290,6 +301,11 @@ class crm_db extends class_base
 		$t->define_field(array(
 			"name" => "changed",
 			"caption" => t("Muudetud"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
 			"sortable" => 1,
 		));
 		$t->define_chooser(array(
@@ -470,7 +486,8 @@ class crm_db extends class_base
 				"phone" => $phs,
 				"org_leader" => $org_leader,
 				"cr_manager" => $cr_manager,
-				"changed" => date("j.m.Y H:i" , $com->modified()),
+				"changed" => date("Y.m.d H:i" , $com->modified()),
+				"created" => date("Y.m.d H:i" , $com->created()),
 			));
 		}
 		if (!$_GET["sortby"])

@@ -153,12 +153,23 @@
             <caption>Kuva k&amp;amp;otilde;iki kontaktandmeid</caption>
       </property>
       <property>
+            <name>show_as_on_web</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva tabelites ainult organisatsioone, mida kuvatakse veebis</caption>
+      </property>
+      <property>
             <name>orgtoolbar</name>
             <table>objects</table>
             <group>
                   <num_0>firmad</num_0>
                   <num_1>f2</num_1>
                   <num_2>tegevusalad</num_2>
+                  <num_3>not_on_web</num_3>
             </group>
             <field>meta</field>
             <method>serialize</method>
@@ -211,6 +222,17 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
+      <property>
+            <name>not_on_web_table</name>
+            <table>objects</table>
+            <group>not_on_web</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <parent>not_on_web</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_DB</syslog_type>
@@ -235,6 +257,11 @@
                   <caption>Tegevusalad</caption>
                   <parent>org</parent>
             </tegevusalad>
+            <not_on_web>
+                  <submit>no</submit>
+                  <caption>Organisatsioonid,&amp;amp;nbsp;mida&amp;amp;nbsp;veebis&amp;amp;nbsp;ei&amp;amp;nbsp;kuvata</caption>
+                  <parent>org</parent>
+            </not_on_web>
       </groupinfo>
       <reltypes>
             <SELECTIONS>
