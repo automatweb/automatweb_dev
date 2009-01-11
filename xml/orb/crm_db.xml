@@ -15,5 +15,19 @@
 			</function>
 		</action>
 
+		<action name="show_on_web" all_args="1">
+			<function name="show_on_web">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="hide_on_web" all_args="1">
+			<function name="hide_on_web">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
