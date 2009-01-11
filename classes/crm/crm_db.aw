@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.52 2009/01/11 09:32:22 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.53 2009/01/11 12:09:07 instrumental Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB maintainer=markop
@@ -385,7 +385,47 @@ class crm_db extends class_base
 		$ft_page = (int)$arr["request"]["ft_page"];
 		$vars["limit"] = (60*$ft_page).",".(60*$ft_page+60);
 		$t->table_header = $pageselector."<br />".$ps;
-		$companys = new object_list($vars);
+		if($arr["obj_inst"]->show_as_on_web && $companys->count() > 0 && is_oid($arr["obj_inst"]->owner_org))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"buyer" => $companys->ids(),
+				"seller" => $arr["obj_inst"]->owner_org,
+				"show_in_webview" => 1,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			if($ol->count() > 0)
+			{
+				// START - this should be done with RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).oid, but that doesn't seem to work. -kaarel 11.01.2009
+				$conns = connection::find(array(
+					"from.class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+					"from" => $ol->ids(),
+					"reltype" => "RELTYPE_BUYER",
+					"to" => $companys->ids(),
+				));
+				$ids = array();
+				if(count($conns) > 0)
+				{
+					foreach($conns as $conn)
+					{
+						$ids[] = $conn["to"];
+					}
+					$vars["oid"] = $arr["request"]["group"] == "not_on_web" ? new obj_predicate_not($ids) : $ids;
+					// END
+//					$vars["RELTYPE_BUYER(CL_CRM_COMPANY_CUSTOMER_DATA).oid"] = new obj_predicate_not($ol->ids());
+				}
+				$companys = count($ids) > 0 || $arr["request"]["group"] == "not_on_web" ? new object_list($vars) : new object_list();
+			}
+			else
+			{
+				$companys = new object_list();
+			}
+		}
+		else
+		{
+			$companys = new object_list($vars);
+		}
 		$coms = $companys->arr();
 		foreach($coms as $com)
 		{
@@ -575,6 +615,26 @@ class crm_db extends class_base
 			"confirm" => t("Kustutada valitud organisatsioonid?"),
 			"img" => "delete.gif",
 		));
+		$tb->add_separator();
+		if(is_oid($arr["obj_inst"]->owner_org))
+		{
+			if($arr["request"]["group"] == "not_on_web" || !$arr["obj_inst"]->show_as_on_web)
+			{
+				$tb->add_button(array(
+					"name" => "show_on_web",
+					"tooltip" => t("Kuva veebis"),
+					"action" => "show_on_web",
+				));
+			}
+			if($arr["request"]["group"] != "not_on_web")
+			{
+				$tb->add_button(array(
+					"name" => "hide_on_web",
+					"tooltip" => t("&Auml;ra kuva veebis"),
+					"action" => "hide_on_web",
+				));
+			}
+		}
 		
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"class" => CL_CRM_SELECTION,
@@ -665,6 +725,85 @@ class crm_db extends class_base
 		{
 			$args["search_form1"] = $arr["request"]["search_form1"];
 		}
-	}	
+	}
+
+	/**
+		@attrib name=show_on_web all_args=1
+	**/
+	public function show_on_web($arr)
+	{
+		$ids = safe_array($arr["sel"]);
+		if(count($ids) == 0 || !is_oid($arr["id"]) || !is_oid(obj($arr["id"])->owner_org))
+		{
+			return $arr["post_ru"];
+		}
+		$seller = obj($arr["id"])->owner_org;
+		
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"buyer" => $ids,
+			"seller" => $seller,
+		));
+
+		foreach($ol->arr() as $o)
+		{
+			if(!$o->show_in_webview)
+			{
+				$o->show_in_webview = 1;
+				$o->save();
+			}
+			unset($ids[$o->buyer]);
+		}
+
+		foreach(array_keys($ids) as $id)
+		{
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_parent($seller);
+			$o->seller = $seller;
+			$o->buyer = $id;
+			$o->show_in_webview = 1;
+			$o->save();
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=hide_on_web all_args=1
+	**/
+	public function hide_on_web($arr)
+	{
+		$ids = safe_array($arr["sel"]);
+		if(count($ids) == 0 || !is_oid($arr["id"]) || is_oid(obj($arr["id"])->owner_org))
+		{
+			return $arr["post_ru"];
+		}
+		$seller = obj($arr["id"])->owner_org;
+		
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"buyer" => $ids,
+			"seller" => $seller,
+		));
+
+		$ids = array_flip($ids);
+
+		foreach($ol->arr() as $o)
+		{
+			if($o->show_in_webview)
+			{
+				$o->show_in_webview = 0;
+				$o->save();
+			}
+			unset($ids[$o->buyer]);
+		}
+
+		return $arr["post_ru"];
+	}
 }
 ?>
