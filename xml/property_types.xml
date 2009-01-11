@@ -478,6 +478,14 @@
 		</acl_manager>
 	
 		<keyword_selector>
+			<no_header>
+			</no_header>
+			<no_folder_names>
+			</no_folder_names>
+			<keyword_per_row>
+			</keyword_per_row>
+			<hide_selected>
+			</hide_selected>
 			<reltype>
 			</reltype>
 		</keyword_selector>

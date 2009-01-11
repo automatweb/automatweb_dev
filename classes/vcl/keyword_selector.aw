@@ -14,7 +14,7 @@ class keyword_selector extends class_base
 		$tp = $arr["prop"];
 		$tp["type"] = "text";
 		
-		$content = $this->_draw_existing_kws($arr)."<br><br><br>";
+		$content = isset($arr["prop"]["hide_selected"]) && $arr["prop"]["hide_selected"] ? "" : $this->_draw_existing_kws($arr)."<br><br><br>";
 		$content .= $this->_draw_alphabet($arr);
 
 		$tp["value"] = $content;
@@ -74,52 +74,34 @@ class keyword_selector extends class_base
 		}
 	}
 
-	function _init_kw_t(&$t)
+	function _init_kw_t(&$t, $n)
 	{
-		$t->define_field(array(
-			"name" => "name_1",
-			"caption" => t("Nimi"),
-			"align" => "right"
-		));
+		for($i = 1; $i <= $n; $i++)
+		{
+			$t->define_field(array(
+				"name" => "name_".$i,
+				"caption" => t("Nimi"),
+				"align" => "right"
+			));
 
-/*		$t->define_field(array(
-			"name" => "sel_1",
-			"caption" => t("Vali"),
-			"align" => "center"
-		));*/
-
-		$t->define_field(array(
-			"name" => "name_2",
-			"caption" => t("Nimi"),
-			"align" => "right"
-		));
-
-/*		$t->define_field(array(
-			"name" => "sel_2",
-			"caption" => t("Vali"),
-			"align" => "center"
-		));*/
-
-		$t->define_field(array(
-			"name" => "name_3",
-			"caption" => t("Nimi"),
-			"align" => "right"
-		));
-
-/*		$t->define_field(array(
-			"name" => "sel_3",
-			"caption" => t("Vali"),
-			"align" => "center"
-		));*/
+	/*		$t->define_field(array(
+				"name" => "sel_1",
+				"caption" => t("Vali"),
+				"align" => "center"
+			));*/
+		}
 	}
 
 	function _draw_alphabet($arr)
 	{
 		classload("vcl/table");
 		$t = new aw_table();
-		$this->_init_kw_t($t);
+		$n = isset($arr["prop"]["keyword_per_row"]) && (int) $arr["prop"]["keyword_per_row"] > 0 ? (int) $arr["prop"]["keyword_per_row"] : 3;
+		$this->_init_kw_t($t, $n);
+		// That Nimi, Nimi, Nimi, Nimi isn't very informative anyway... -kaarel 11.01.2009
+		$t->set_titlebar_display(false);
 
-		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
+		if (!is_object($arr["obj_inst"]))
 		{
 			return;
 		}
@@ -137,8 +119,15 @@ class keyword_selector extends class_base
 		}
 		$filt["sort_by"] = "objects.parent,objects.jrk,objects.name";
 		$ol = new object_list($filt);
-		$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD")));
-		$used_kws = $this->make_keys($used_kws->ids());
+		if(is_oid($arr["obj_inst"]->id()))
+		{
+			$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD")));
+			$used_kws = $this->make_keys($used_kws->ids());
+		}
+		else
+		{
+			$user_keys = array();
+		}
 		$data = array_values($ol->arr());
 		$num = 0;
 		foreach($ol->arr() as $kw)
@@ -158,7 +147,7 @@ class keyword_selector extends class_base
 			}
 		
 			$num++;
-			if ($num > 3)
+			if ($num > $n)
 			{
 				$po = obj($kw->parent());
 				$t->define_data($cur_row);
@@ -182,11 +171,17 @@ class keyword_selector extends class_base
 			"parent" => "<b>".parse_obj_name($po->name())."</b>"
 		);
 
-		$t->set_header($this->_get_alpha_list($arr["request"]));
-		$t->sort_by(array(
-			"rgroupby" => array("parent" => "parent"),
-			"field" => array("row_num" => "row_num")
-		));
+		if(!isset($arr["prop"]["no_header"]) || !$arr["prop"]["no_header"])
+		{
+			$t->set_header($this->_get_alpha_list($arr["request"]));
+		}
+		if(!isset($arr["prop"]["no_folder_names"]) || !$arr["prop"]["no_folder_names"])
+		{
+			$t->sort_by(array(
+				"rgroupby" => array("parent" => "parent"),
+				"field" => array("row_num" => "row_num")
+			));
+		}
 		return $t->draw();
 	}
 

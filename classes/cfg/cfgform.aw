@@ -2633,6 +2633,21 @@ class cfgform extends class_base
 								$this->vars(array("table_options" => ""));
 								break;
 
+							case "keyword_selector":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"no_folder_names_caption" => t("&Auml;ra n&auml;ita kaustade nimesid"),
+									"no_folder_names_checked" => isset($property["no_folder_names"]) && $property["no_folder_names"] ? " checked=\"1\"" : "",
+									"no_header_caption" => t("&Auml;ra n&auml;ita tabeli p&auml;ist"),
+									"no_header_checked" => isset($property["no_header"]) && $property["no_header"] ? " checked=\"1\"" : "",
+									"hide_selected_caption" => t("&Auml;ra n&auml;ita valitud m&auml;rks&otilde;nu"),
+									"hide_selected_checked" => isset($property["hide_selected"]) && $property["hide_selected"] ? " checked=\"1\"" : "",
+									"keyword_per_row_caption" => t("Mitu v&otilde;tmes&otilde;na real"),
+									"keyword_per_row" => isset($property["keyword_per_row"]) ? (int) $property["keyword_per_row"] : 0,
+								));
+								$property["cfgform_additional_options"] = $this->parse("keyword_selector_options");
+								break;
+
 							default:
 								$property["cfgform_additional_options"] = "";
 						}

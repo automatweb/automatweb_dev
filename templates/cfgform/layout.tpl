@@ -230,3 +230,10 @@ function cfgformToggleSelectProps(grpId)
 			{VAR:orientv_caption} <input type="radio" name="prpconfig[{VAR:prp_key}][orient]" value="vertical"{VAR:orientv_ch}/><br/>
 <!-- END SUB: chooser_options -->
 
+<!-- SUB: keyword_selector_options -->
+			{VAR:no_folder_names_caption} <input type="checkbox" name="prpconfig[{VAR:prp_key}][no_folder_names]" value="1"{VAR:no_folder_names_checked}/><br/>
+			{VAR:no_header_caption} <input type="checkbox" name="prpconfig[{VAR:prp_key}][no_header]" value="1"{VAR:no_header_checked}/><br/>
+			{VAR:hide_selected_caption} <input type="checkbox" name="prpconfig[{VAR:prp_key}][hide_selected]" value="1"{VAR:hide_selected_checked}/><br/>
+			{VAR:keyword_per_row_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][keyword_per_row]" value="{VAR:keyword_per_row}"/>
+<!-- END SUB: keyword_selector_options -->
+
