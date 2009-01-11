@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.9 2008/10/14 10:08:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.10 2009/01/11 12:44:14 instrumental Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -31,6 +31,9 @@
 
 @property keywords_in_row type=textbox field=meta method=serialize
 @caption V&ouml;tmes&ouml;nu &uuml;hel real
+
+@property keywords_by_folder type=checkbox field=meta method=serialize
+@caption V&otilde;tmes&otilde;nad kaustade kaupa
 
 @reltype CRM_DB value=1 clid=CL_CRM_DB
 @caption Organisatsioonide andmebaas

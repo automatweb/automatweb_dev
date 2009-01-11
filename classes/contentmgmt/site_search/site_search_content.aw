@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.103 2008/07/31 12:35:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.104 2009/01/11 12:44:11 instrumental Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -674,16 +674,42 @@ class site_search_content extends class_base
 				}
 			}	
 		}
-		$keywords = explode("," , $cid->prop("keywords"));
+		$keywords_by_parent = array();
+		$keywords = $keywords_by_parent[0] = explode("," , $cid->prop("keywords"));
 		$kd = $cid->prop("keywords2");
 		if(sizeof($kd))
 		{
-			$kw_ol = new object_list(array(
-				"class_id" => CL_KEYWORD,
-				"lang_id" => array(),
-				"parent" => $kd,
-			));
-			$keywords = $kw_ol->names() + $keywords;
+			$kw_odl = new object_data_list(
+				array(
+					"class_id" => CL_KEYWORD,
+					"lang_id" => array(),
+					"parent" => $kd,
+				),
+				array(
+					CL_KEYWORD => array("name, parent"),
+				)
+			);
+			foreach($kw_odl->arr() as $kw_oid => $kw_data)
+			{
+				$keywords[$kw_oid] = $kw_data["name"];
+				$keywords_by_parent[$kw_data["parent"]][$kw_oid] = $kw_data["name"];
+			}
+			if($cid->keywords_by_folder && count($keywords_by_parent) > 0)
+			{
+				$kwp_ol = new object_list(array(
+					"class_id" => CL_MENU,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"oid" => array_keys($keywords_by_parent),
+					"sort_by" => "objects.jrk ASC"
+				));
+				$keyword_parents = $kwp_ol->names();
+			}
+			else
+			{
+				$keywords_by_parent[0] = $keywords;
+			}
+			$keyword_parents[o] = t("V&otilde;tmes&otilde;nad");
 		}
 				
 		$key_opt = "";
@@ -692,21 +718,38 @@ class site_search_content extends class_base
 			$in_row = $cid->prop("keywords_in_row");
 			$kw_cnt = 0;
 			$key_opt_row = "";
-			foreach($keywords as $key)
+			foreach($keyword_parents as $kwp_id => $kwp_name)
 			{
-				if(!trim(strtolower($key))) continue;
-				$selected = "";
-				if($arr["keyword"][strtolower(trim($key))])
+				$keywords = $keywords_by_parent[$kwp_id];
+				foreach($keywords as $key)
 				{
-					$selected = "checked";
+					if(!trim(strtolower($key)))
+					{
+						continue;
+					}
+					$selected = "";
+					if($arr["keyword"][strtolower(trim($key))])
+					{
+						$selected = "checked";
+					}
+					$this->vars(array(
+						"key_value" => trim(strtolower($key)),
+						"checked" => $selected,
+					));
+					$key_opt.= $this->parse("KEY_OPTION");
+					$kw_cnt++;
+					if($kw_cnt == $in_row)
+					{
+						$this->vars(array(
+							"KEY_OPTION" => $key_opt,
+						));
+						$key_opt_row.= $this->parse("KEY_OPTION_ROW");
+						$kw_cnt = 0;
+						$key_opt = "";
+					}
 				}
-				$this->vars(array(
-					"key_value" => trim(strtolower($key)),
-					"checked" => $selected,
-				));
-				$key_opt.= $this->parse("KEY_OPTION");
-				$kw_cnt++;
-				if($kw_cnt == $in_row)
+				//see siis viimaste yksikute jaoks
+				if($kw_cnt > 0)
 				{
 					$this->vars(array(
 						"KEY_OPTION" => $key_opt,
@@ -715,16 +758,6 @@ class site_search_content extends class_base
 					$kw_cnt = 0;
 					$key_opt = "";
 				}
-			}
-			//see siis viimaste yksikute jaoks
-			if($kw_cnt > 0)
-			{
-				$this->vars(array(
-					"KEY_OPTION" => $key_opt,
-				));
-				$key_opt_row.= $this->parse("KEY_OPTION_ROW");
-				$kw_cnt = 0;
-				$key_opt = "";
 			}
 		}
 		else
