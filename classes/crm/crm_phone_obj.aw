@@ -137,7 +137,6 @@ class crm_phone_obj extends _int_object
 				"site_id" => array(),
 				"limit" => 1,
 			));
-			send_mail("kaarel@struktuur.ee", "conns_remain_unchanged ".parent::id()." ".parent::name(), aw_serialize($ol->ids()));
 			if($ol->count() > 0)
 			{
 				$pho = $ol->begin();
@@ -171,6 +170,7 @@ class crm_phone_obj extends _int_object
 					}
 				}
 			}
+			parent::load($pho->id());
 			return $pho->id();
 		}
 		return parent::save();
