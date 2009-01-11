@@ -9280,6 +9280,26 @@ Bank accounts: yksteise all
 		return $arr["post_ru"];
 	}
 
+	/** Generate a form for adding or changing an object
+
+		@attrib name=new params=name all_args="1" nologin="1"
+
+		@param parent optional type=int acl="add"
+		@param period optional
+		@param alias_to optional
+		@param alias_to_prop optional
+		@param return_url optional
+		@param reltype optional type=int
+
+		@returns data formatted by the currently used output client. For example a HTML form if htmlclient is used
+
+		@comment
+
+	**/
+	function new_change($args)
+	{
+		return parent::change($args);
+	}
 }
 
 ?>
