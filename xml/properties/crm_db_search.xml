@@ -70,6 +70,15 @@
             <type>textbox</type>
             <caption>V&amp;amp;ouml;tmes&amp;amp;ouml;nu &amp;amp;uuml;hel real</caption>
       </property>
+      <property>
+            <name>keywords_by_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad kaustade kaupa</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DB_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
