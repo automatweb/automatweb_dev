@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.104 2009/01/11 12:44:11 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.105 2009/01/11 15:15:49 instrumental Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -684,6 +684,7 @@ class site_search_content extends class_base
 					"class_id" => CL_KEYWORD,
 					"lang_id" => array(),
 					"parent" => $kd,
+					"sort_by" => "objects.jrk, objects.name",
 				),
 				array(
 					CL_KEYWORD => array("name, parent"),
