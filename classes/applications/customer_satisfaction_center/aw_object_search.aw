@@ -222,7 +222,7 @@ class aw_object_search extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$prop["value"] = $arr["request"][$prop["name"]];
+		$prop["value"] = isset($arr["request"][$prop["name"]]) ? $arr["request"][$prop["name"]] : "";
 		$nm = $prop["name"];
 		if (substr($nm, -1) == "1")
 		{
@@ -242,7 +242,7 @@ class aw_object_search extends class_base
 				$v = html::textbox(array(
 					"name" => "s_parent",
 					"size" => 20,
-					"value" => $arr["request"]["s_parent"],
+					"value" => isset($arr["request"]["s_parent"]) ? $arr["request"]["s_parent"] : "",
 				));
 				$url = $this->mk_my_orb("do_search", array(
 					"pn" => "s_parent",
@@ -298,7 +298,7 @@ class aw_object_search extends class_base
 				$cldata = aw_ini_get("classes");
 				foreach($odl->arr() as $od)
 				{
-					if($cldata[$od["clid"]]["name"])
+					if(isset($cldata[$od["clid"]]["name"]))
 					{
 						$cls[$od["clid"]] = html_entity_decode($cldata[$od["clid"]]["name"]);
 					}
@@ -595,7 +595,7 @@ class aw_object_search extends class_base
 				)),
 				"lang" => $li->get_langid($d["lang"]),
 				"class_id" => $clss[$d["class_id"]]["name"],
-				"location" => $d["parent_name"],
+				"location" => isset($d["parent_name"]) ? $d["parent_name"] : "",
 				"created" => $d["created"],
 				"createdby" => $d["createdby"],
 				"modified" => $d["modified"],
@@ -731,13 +731,13 @@ class aw_object_search extends class_base
 		$nf = array("s_status" => "status", /*"s_oid" => "oid",*/ "s_site_id" => "site_id", "s_period" => "period", "s_language" => "lang_id");
 		foreach($nf as $pn => $ofn)
 		{
-			if ($arr["request"][$pn] > 0)
+			if (isset($arr["request"][$pn]) && $arr["request"][$pn] > 0)
 			{
 				$filt[$ofn] = $arr["request"][$pn];
 			}
 		}
 
-		if (!$arr["request"]["s_find_bros"])
+		if (!isset($arr["request"]["s_find_bros"]) || !$arr["request"]["s_find_bros"])
 		{
 			$filt["brother_of"] = new obj_predicate_prop("id");
 		}
@@ -747,12 +747,12 @@ class aw_object_search extends class_base
 			$filt["oid"] = $arr["request"]["s_oid"];
 		}
 		else
-		if ($arr["request"]["s_oid"][0] == "<")
+		if (isset($arr["request"]["s_oid"][0]) && $arr["request"]["s_oid"][0] == "<")
 		{
 			$filt["oid"] = new obj_predicate_compare(OBJ_COMP_LESS, substr($arr["request"]["s_oid"], 1));
 		}
 		else
-		if ($arr["request"]["s_oid"][0] == ">")
+		if (isset($arr["request"]["s_oid"][0]) && $arr["request"]["s_oid"][0] == ">")
 		{
 			$filt["oid"] = new obj_predicate_compare(OBJ_COMP_GREATER, substr($arr["request"]["s_oid"], 1));
 		}
@@ -766,7 +766,7 @@ class aw_object_search extends class_base
 			}
 		}
 
-		if ($arr["request"]["s_rel_type"] != "" && ($arr["request"]["s_rel_obj_oid"] != "" || $arr["request"]["s_rel_obj_name"] != "") && is_array($arr["request"]["s_clid"]))
+		if (isset($arr["request"]["s_rel_type"]) && $arr["request"]["s_rel_type"] != "" && ($arr["request"]["s_rel_obj_oid"] != "" || $arr["request"]["s_rel_obj_name"] != "") && is_array($arr["request"]["s_clid"]))
 		{
 			$clid = reset($arr["request"]["s_clid"]);
 			$clss = aw_ini_get("classes");

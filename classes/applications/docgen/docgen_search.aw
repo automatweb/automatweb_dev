@@ -20,13 +20,13 @@ class docgen_search extends class_base
 		$search[] = t("Search word(s)").":";
 		$search[] = html::textbox(array(
 			"name"=>"search", 
-			"value" => $arr["search"]
+			"value" => isset($arr["search"]) ? $arr["search"] : "",
 		));
 
 		// list all search interface classes and let them work it
 		foreach(class_index::get_classes_by_interface("docgen_search_module") as $class_name)
 		{
-			if (!isset($arr["from"]) && !$done)
+			if (!isset($arr["from"]) && (!isset($done) || $done !== true))
 			{
 				$arr["from"] = array($class_name);
 				$done = true;
@@ -53,7 +53,7 @@ class docgen_search extends class_base
 			"content" => implode('<br />', $search),
 		));
 
-		if ($arr["search"] != "")
+		if (isset($arr["search"]) && $arr["search"] != "")
 		{
 			$ret .= "<hr/>".$this->_fetch_search_results($arr);
 		}

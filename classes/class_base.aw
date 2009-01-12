@@ -3263,7 +3263,7 @@ class class_base extends aw_template
 
 					// if we are using rte, then add RTE buttons to the toolbar
 					//if (1 == $this->has_feature("has_rte"))
-					if (($has_rte || $this->no_rte == 1) && !$val["vcl_inst"]->closed && !$val["no_rte_button"])
+					if (($has_rte || $this->no_rte == 1) && (!isset($val["vcl_inst"]->closed) || !$val["vcl_inst"]->closed) && (!isset($val["no_rte_button"]) || !$val["no_rte_button"]))
 					{
 						if($this->classinfo(array("name" => "allow_rte")) == 2)
 						{

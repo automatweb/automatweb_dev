@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.4 2008/11/11 09:50:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.5 2009/01/12 11:16:26 instrumental Exp $
 // period.aw - periods
 /*
 
@@ -223,7 +223,7 @@ class period extends class_base implements request_startup
 			foreach($ochain as $chaino)
 			{
 				// now, if some periods exist for this object, use that object.
-				if (is_array($this->period_cache[$chaino->id()]))
+				if (isset($this->period_cache[$chaino->id()]) && is_array($this->period_cache[$chaino->id()]))
 				{
 					$valid_period = $chaino->id();
 					break;

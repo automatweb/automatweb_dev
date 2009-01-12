@@ -361,12 +361,12 @@ class relpicker extends  core
 			$oids = array();
 			$allow_delete = true;
 
-			if(is_oid($val["value"]))
+			if(isset($val["value"]) && is_oid($val["value"]))
 			{
 				$oids[] = $val["value"];
 			}
 			else
-			if(is_array($val["value"]))
+			if(isset($val["value"]) && is_array($val["value"]))
 			{
 				$oids = $val["value"];
 			}

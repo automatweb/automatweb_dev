@@ -480,12 +480,12 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"sbt_caption" => $arr["value"] ? $arr["value"] : t("Salvesta"),
 			"name" => $arr["name"] ? $arr["name"] : "",
-			"action" => $arr["action"] ? $arr["action"] : "",
+			"action" => isset($arr["action"]) ? $arr["action"] : "",
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
 			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : ""
 		);
 
-		if($arr["capt_ord"] === "right")
+		if(isset($arr["capt_ord"]) && $arr["capt_ord"] === "right")
 		{
 			 $name .= strtoupper("_".$arr["capt_ord"]);
 		}

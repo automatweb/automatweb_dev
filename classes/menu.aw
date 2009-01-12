@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.246 2008/12/08 16:29:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.247 2009/01/12 11:27:15 instrumental Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1034,7 +1034,7 @@ class menu extends class_base implements main_subtemplate_handler
 	function callback_generate_scripts ()
 	{
 		$output = "";
-		if ($_GET["group"] == "presentation")
+		if (isset($_GET["group"]) && $_GET["group"] == "presentation")
 		{
 			$id = $_GET["id"];
 			$menu_images_cnt = $this->menu_images_get_cnt(array("id"=>$id));
@@ -2416,7 +2416,7 @@ class menu extends class_base implements main_subtemplate_handler
 		$arr["_set_no_sss"] = "0";
 		$arr["sad_s"] = "0";
 		$arr["link_pops"] = "0";
-		if ($_GET["group"] == "relationmgr")
+		if (isset($_GET["group"]) && $_GET["group"] == "relationmgr")
 		{
 			$arr["return_url"] = $_GET["return_url"];
 		}

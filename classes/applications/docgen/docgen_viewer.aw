@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.29 2008/09/19 07:43:12 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.30 2009/01/12 11:16:32 instrumental Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -256,9 +256,9 @@ class docgen_viewer extends class_base
 		foreach($fc as $line)
 		{
 			$line = trim($line);
-			if ($line[0] == "*")
+			if (isset($line[0]) && $line[0] == "*")
 			{
-				if ($desc != "")
+				if (isset($desc) && $desc != "")
 				{
 					$classes[$l_path][basename($l_class)] = $desc;
 				}
@@ -552,7 +552,8 @@ class docgen_viewer extends class_base
 			}
 
 			$params = "";
-			foreach (safe_array($f_data['doc_comment']['params']) as $param_name => $param_data)
+			$f_data['doc_comment']['params'] = isset($f_data['doc_comment']['params']) ? safe_array($f_data['doc_comment']['params']) : array();
+			foreach ($f_data['doc_comment']['params'] as $param_name => $param_data)
 			{
 				$this->vars(array(
 					'param_name' => $param_name,
@@ -735,19 +736,20 @@ class docgen_viewer extends class_base
 		foreach($tmp as $var_name => $var_data)
 		{
 			$used = array();
-			foreach(safe_array($var_data["referenced"]) as $ref_data)
+			$var_data["referenced"] = isset($var_data["referenced"]) ? safe_array($var_data["referenced"]) : array();
+			foreach($var_data["referenced"] as $ref_data)
 			{
 				$used[] = html::href(array(
 					"url" => get_ru()."#fn.$ref_data[function]",
 					"caption" => $ref_data["function"]
 				));
 			}
-			$def = $data["member_var_defs"][$var_name];
+			$def = isset($data["member_var_defs"][$var_name]) ? $data["member_var_defs"][$var_name] : false;
 			$this->vars(array(
 				"memv_name" => $var_name,
 				"memv_used" => join(", ",array_unique($used)),
-				"memv_type" => $var_data["class"],
-				"memv_comment" => $data["member_var_defs"][$var_name]["comment"],
+				"memv_type" => isset($var_data["class"]) ? $var_data["class"] : "",
+				"memv_comment" => isset($data["member_var_defs"][$var_name]["comment"]) ? $data["member_var_defs"][$var_name]["comment"] : "",
 			));
 			if ($def)
 			{
@@ -1771,7 +1773,7 @@ class docgen_viewer extends class_base
 				}
 				else
 				{
-					if ($api_files[$fp])
+					if (isset($api_files[$fp]) && $api_files[$fp])
 					{
 						$fc[] = $file;
 					}

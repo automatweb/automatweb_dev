@@ -5,7 +5,7 @@
 	@classinfo  maintainer=kristo
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.19 2008/11/11 09:50:35 voldemar Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.20 2009/01/12 11:16:24 instrumental Exp $
 
 	@comment
 	analyses aw code
@@ -679,7 +679,7 @@ die();*/
 				while (list(, $line) = each($lines))
 				{
 					$line = trim($line);
-					if ($line{0} == "@")
+					if (isset($line{0}) && $line{0} == "@")
 					{
 						prev($lines);
 						break;
@@ -1573,7 +1573,7 @@ echo "ding<br>";*/
 						"type" => $assigned["type"],
 						"class" => $assigned["class"],
 						"assigned_at" => $this->get_line(),
-						"parameters" => $assigned["parameters"]
+						"parameters" => isset($assigned["parameters"]) ? $assigned["parameters"] : "",
 					));
 				}
 			}
