@@ -665,7 +665,7 @@ class html extends aw_template
 
 		if (isset($caption))
 		{
-			$capt .= ($nbsp ? "&nbsp;" : " ") . $caption;
+			$capt .= (isset($nbsp) && $nbsp ? "&nbsp;" : " ") . $caption;
 		}
 
 		if (!empty($textsize) and !empty($capt))
@@ -785,11 +785,11 @@ class html extends aw_template
 	**/
 	function submit($args = array())
 	{
-		extract($args);
-		$textsize = !empty($textsize) ? " style=\"font-size: {$textsize};\"" : "";
-		$class = !empty($class) ? " class=\"{$class}\"" : "";
-//		$onclick = !empty($onclick) ? " onclick=\"{$onclick}; return false;\"" : "";
-		$onclick = !empty($onclick) ? " onclick=\"{$onclick}; return this.value;\"" : "";
+		$name = isset($args["name"]) ? $args["name"] : "";
+		$value = isset($args["value"]) ? $args["value"] : "";
+		$textsize = isset($args["textsize"]) && !empty($args["textsize"]) ? " style=\"font-size: ".$args["textsize"].";\"" : "";
+		$class = isset($args["class"]) && !empty($args["class"]) ? " class=\"".$args["textsize"]."\"" : "";
+		$onclick = isset($args["onclick"]) && !empty($args["onclick"]) ? " onclick=\"".$args["onclick"]."; return this.value;\"" : "";
 
 		return "<input id=\"cbsubmit\" type=\"submit\" name=\"{$name}\" value='{$value}'{$class}{$onclick}{$textsize} />\n";
 	}
@@ -1317,7 +1317,11 @@ class html extends aw_template
 	**/
 	function form($args = array())
 	{
-		extract($args);
+		$action = isset($args["action"]) ? $args["action"] : "";
+		$method = isset($args["method"]) ? $args["method"] : "";
+		$name = isset($args["name"]) ? $args["name"] : "";
+		$content = isset($args["content"]) ? $args["content"] : "";
+
 		return '<form action="'.$action.'" method="'.$method.'" name="'.$name.'">'.$content.'</form>';
 	}
 
