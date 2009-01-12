@@ -1592,6 +1592,22 @@ class site_show extends class_base
 		if ($imgs)
 		{
 			$imgar = $o->meta("menu_images");
+			$imgsact = $o->meta("active_menu_images");//aktiivse menyy jaoks pilt
+			foreach($imgsact as $nr => $dat)
+			{
+				if ($dat["image_id"])
+				{
+					$dat["url"] = $this->image->get_url_by_id($dat["image_id"]);
+				}
+				else
+				{
+					continue;
+				}
+				$this->vars(array(
+					"sel_menu_active_image_".$nr => "<img name='sel_menu_active_image_".$nr."' src='".$dat["url"]."' border='0'>",
+					"sel_menu_active_image_".$nr."_url" => $dat["url"]
+				));
+			}
 			$smi = "";
 			foreach($imgar as $nr => $dat)
 			{

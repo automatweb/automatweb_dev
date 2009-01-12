@@ -85,6 +85,18 @@
             <caption>Pilt</caption>
       </property>
       <property>
+            <name>active_image</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Aktiivse men&amp;amp;uuml;&amp;amp;uuml; pilt</caption>
+      </property>
+      <property>
             <name>info_document</name>
             <table>objects</table>
             <group>general</group>

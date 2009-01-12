@@ -32,6 +32,9 @@
 	@property image type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
 	@caption Pilt
 
+	@property active_image type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
+	@caption Aktiivse men&uuml;&uuml; pilt
+
 	@property info_document type=relpicker reltype=RELTYPE_DOCUMENT field=meta method=serialize
 	@caption Tutvustus
 
@@ -191,6 +194,10 @@ class crm_sector extends class_base
 			"0" => array("image_id" => $arr["obj_inst"]->prop("image"))
 		);
 		$arr["obj_inst"]->set_meta("menu_images", $imgs);
+		$aimgs = array(
+			"0" => array("image_id" => $arr["obj_inst"]->prop("active_image"))
+		);
+		$arr["obj_inst"]->set_meta("active_menu_images", $aimgs);
 	}
 
 	function request_execute($o)
