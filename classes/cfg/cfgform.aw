@@ -2648,6 +2648,15 @@ class cfgform extends class_base
 								$property["cfgform_additional_options"] = $this->parse("keyword_selector_options");
 								break;
 
+							case "multifile_upload":
+								$this->vars(array(
+									"prp_key" => $property["name"],
+									"max_files_caption" => t("Maksimaalne failide arv"),
+									"max_files" => isset($property["max_files"]) ? $property["max_files"] : "",
+								));
+								$property["cfgform_additional_options"] = $this->parse("multifile_upload_options");
+								break;
+
 							default:
 								$property["cfgform_additional_options"] = "";
 						}

@@ -237,3 +237,7 @@ function cfgformToggleSelectProps(grpId)
 			{VAR:keyword_per_row_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][keyword_per_row]" value="{VAR:keyword_per_row}"/>
 <!-- END SUB: keyword_selector_options -->
 
+<!-- SUB: multifile_upload_options -->
+			{VAR:max_files_caption} <input type="text" size="10" name="prpconfig[{VAR:prp_key}][max_files]" value="{VAR:max_files}"/>
+<!-- END SUB: multifile_upload_options -->
+
