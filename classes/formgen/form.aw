@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.134 2008/09/03 09:05:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.135 2009/01/12 10:40:17 kristo Exp $
 // form.aw - Class for creating forms
 /*
 @classinfo  maintainer=kristo
@@ -3208,6 +3208,7 @@ class form extends form_base
 		}
 		while ($row = $this->db_next())
 		{
+			$this->save_handle();
 			/*
 			print "<pre>";
 			print_r($row);
@@ -3286,6 +3287,7 @@ class form extends form_base
 				$result.=$show_form->show(array("id" => $show_form->id,"entry_id" => $row["entry_id"], "op_id" => $show_form->output_id,"no_load_entry" => true, "no_load_op" => true));
 			}
 			$cur_row++;
+			$this->restore_handle();
 		}
 
 		// now if we are showing table, finish the table 
