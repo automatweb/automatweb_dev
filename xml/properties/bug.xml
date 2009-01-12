@@ -463,6 +463,7 @@
             <parent>data_r_bot_right</parent>
             <captionside>top</captionside>
             <store>no</store>
+            <max_files>99</max_files>
             <field>multifile_upload</field>
             <caption>Fail</caption>
       </property>

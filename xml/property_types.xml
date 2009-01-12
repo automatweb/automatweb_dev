@@ -433,6 +433,8 @@
 			</reltype>
 			<image>
 			</image>
+			<max_files>
+			</max_files>
 		</multifile_upload>
 	
 		<translator>
