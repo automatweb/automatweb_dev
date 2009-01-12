@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.172 2009/01/05 11:31:35 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.173 2009/01/12 12:17:34 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -1461,6 +1461,7 @@ class rfp extends class_base
 			$room_inst = get_instance(CL_ROOM);
 			$room_resources = $room_inst->get_room_resources($reservation_room);
 			// rows for every resource in reservations
+			uasort($room_resources, array($this, "__sort_resources"));
 			foreach($room_resources as $k => $resource)
 			{
 				$data = array(
@@ -1540,6 +1541,11 @@ class rfp extends class_base
 			$data["price[".$cur."]"] = $total_price[$cur];
 		}
 		$t->define_data($data);
+	}
+
+	function __sort_resources($a, $b)
+	{
+		return $a->ord() - $b->ord();
 	}
 
 	// well, as far as i can tell, this ins't used any more.. there's a getter method. but i leave it here for a while just in case...
@@ -2102,16 +2108,14 @@ class rfp extends class_base
 			}
 		}
 		$t->set_numeric_field("prod_ord");
-		/*$t->set_default_sortby("prod_ord");
-		$t->set_default_sorder("asc");*/
-		$t->sort_by(array(
-			"field" => "prod_ord",
-			"sorder" => "asc",
-			"rgroupby" => array(
-				"reserv_group" => "reserv_group",
-				"prod_parent" => "prod_parent"
-			)
+		$t->set_default_sortby(array("prod_parent" => "prod_parent", "prod_ord" => "prod_ord"));
+	//	$t->set_default_sorder(array("asc"));
+		$t->set_rgroupby(array(
+			"reserv_group" => "reserv_group",
+			"prod_parent" => "prod_parent"
 		));
+
+		$t->sort_by();
 		$t->set_sortable(false);
 		return $t->draw();
 	}
@@ -3267,6 +3271,7 @@ class rfp extends class_base
 				if(strlen($arr["obj_inst"]->prop($aip)))
 				{
 					$this->vars(array(
+						"prod_a_colspan" => $package ? 5 : 8,
 						$aip => $arr["obj_inst"]->prop($aip),
 					));
 					$this->vars(array(

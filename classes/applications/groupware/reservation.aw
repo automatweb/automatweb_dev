@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.153 2008/12/22 13:42:59 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.154 2009/01/12 12:17:30 robert Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1139,7 +1139,6 @@ class reservation extends class_base
 		$currency = $room?$room->prop("currency"):array();
 
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_sortable(false);
 
 		$t->define_header($arr["obj_inst"]->name());
 		$t->define_field(array(
@@ -1196,6 +1195,7 @@ class reservation extends class_base
 		$rdata = $this->get_resources_data($arr["obj_inst"]->id());
 		$rss = $room_inst->get_room_resources($room->id());
 		$rfp = get_instance(CL_RFP);
+		uasort($rss, array($rfp, "__sort_resources"));
 		foreach($rss as $res_obj)
 		{
 			$res = $res_obj->id();
@@ -1225,6 +1225,7 @@ class reservation extends class_base
 					"cols" => 20,
 					"rows" => 3,
 				)),
+				"res_ord" => $res_obj->ord(),
 			);
 			foreach($currency as $cur)
 			{
@@ -1279,7 +1280,7 @@ class reservation extends class_base
 			)),
 		));
 
-
+		$t->set_sortable(false);
 	}
 
 
