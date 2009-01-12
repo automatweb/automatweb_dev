@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.142 2008/12/22 18:06:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.143 2009/01/12 19:11:54 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -3834,6 +3834,35 @@ arr($msg_obj->prop("message"));
 	//teeb fck igasugu urlid mailile kohaseks, et mujal maailmas ka aru saaks kuhu asi viitab
 	function make_fck_urls_good($msg)
 	{
+		$x = 0;
+		$regs = array();
+		if ($asd = preg_match_all("/\/[0-9]+/", $msg, $regs)) 
+		{
+			if($x > 100) break;
+			foreach($regs[0] as $reg)
+			{
+				$reg = substr($reg , 1);
+				if($this->can("view" , $reg))
+				{
+					$link = obj($reg);
+					if($link->class_id() == CL_EXTLINK)
+					{
+						$msg = str_replace('href="/'.$link->id().'"', 'href="'.$link->prop("url").'"' , $msg);
+						$msg = str_replace("href='/".$link->id()."'", "href='".$link->prop("url")."'" , $msg);
+						$msg = str_replace('href="'.aw_ini_get("baseurl").'/'.$link->id().'"', 'href="'.$link->prop("url").'"' , $msg);
+						$msg = str_replace("href='".aw_ini_get("baseurl")."/".$link->id()."'", 'href="'.$link->prop("url").'"' , $msg);
+						continue;
+					}
+				}
+			}
+			if($reg > 1)
+			{
+				$msg = str_replace('href="/'.$reg.'"', 'href="'.aw_ini_get("baseurl").'/'.$reg.'"' , $msg);
+				$msg = str_replace("href='/".$reg."'", "href='".aw_ini_get("baseurl")."/".$reg."'" , $msg);
+			}
+ 			$x++;
+		}
+/*
 		$x = 0;//igaks juhuks, et mingi valemiga tsyklisse ei l2heks
 		while (ereg('^(.*href=\"/([0-9]+)\".*)+$', $msg, $regs)) 
 		{
@@ -3856,6 +3885,8 @@ arr($msg_obj->prop("message"));
 			}
 			$x++;
 		}
+
+		$x = 0;
 		while (ereg("^(.*href=\'/([0-9]+)\'.*)+$", $msg, $regs)) 
 		{
 			if($x > 100) break;
@@ -3877,6 +3908,8 @@ arr($msg_obj->prop("message"));
 			}
  			$x++;
 		}
+*/
+
 		return $msg;
 	}
 
