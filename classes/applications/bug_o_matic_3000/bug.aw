@@ -1148,7 +1148,7 @@ class bug extends class_base
 				{
 					$url = "http://" . $url;
 				}
-				$prop["post_append_text"] = ' <a href="' . $url . '">Ava</a>';
+				$prop["post_append_text"] = ' <a href="' . $url . '" target="_blank">Ava</a>';
 				break;
 
 			case "bug_property":
@@ -1174,6 +1174,10 @@ class bug extends class_base
 				break;
 
 			case "bug_add_real":
+				if(!$prop["value"])
+				{
+					$prop["value"] = 0.00;
+				}
 				$prop["post_append_text"] = html::span(array(
 					"id" => "bug_stopper_pause_link",
 					"content" => "<a href=''>".t("Paus")."</a>",
@@ -3465,7 +3469,7 @@ die($email);
 			var thisdate = new Date();
 			var timestamp_start = thisdate.getTime();
 			var seconds_start = 0;
-			var time_before_pause = 0;
+			var time_before_pause = parseFloat($("#bug_add_real").val());
 			
 			_start_stopper();
 			_handlers();
@@ -3504,7 +3508,7 @@ die($email);
 					}
 					time = (time_before_pause+tmp).toFixed(4)*1.0;
 					object.children().html("<a href=''>"+_return_normal_clock(seconds_start)+" ("+time+")</a>")
-					seconds_start++;
+					seconds_start = Math.round((time_before_pause + tmp) * 60 * 60);
 					tmp = time.toFixed(2)*1.0
 					$("#bug_add_real").val(r2(tmp));
 				})
@@ -3517,6 +3521,7 @@ die($email);
 					pause = false;
 					thisdate = new Date();
 					timestamp_start = thisdate.getTime();
+					time_before_pause = parseFloat($("#bug_add_real").val())
 					_start_stopper();
 					$("#bug_stopper_pause_link").children().html("Paus")
 				}
