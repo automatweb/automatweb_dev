@@ -57,6 +57,7 @@ function MultiSelector( list_target, max )
 	} else {
 		this.max = -1;
 	};
+	this.input_element;
 	
 	/**
 	 * Add a new file input element
@@ -65,7 +66,8 @@ function MultiSelector( list_target, max )
 
 		// Make sure it's a file input element
 		if( element.tagName == 'INPUT' && element.type == 'file' ){
-
+			this.input_element = element;
+		
 			// Element name -- what number am I?
 			element.name = 'file[]';
 			element.id = 'fail_input_'+this.count;
@@ -95,7 +97,7 @@ function MultiSelector( list_target, max )
 
 			};
 			// If we've reached maximum number, disable input element
-			if( this.max != -1 && this.count >= this.max ){
+			if( this.max != -1 && this.count >= this.max || this.counter >= this.max ){
 				element.disabled = true;
 			};
 
@@ -110,6 +112,14 @@ function MultiSelector( list_target, max )
 		};
 
 	};
+	
+	this.refresh = function()
+	{
+			// If we've reached maximum number, disable input element
+			if( this.counter >= this.max ){
+				this.input_element.disabled = true;
+			};
+	}
 
 	/**
 	 * Add a new row to the list of files
@@ -150,11 +160,13 @@ function MultiSelector( list_target, max )
 			this.parentNode.parentNode.parentNode.removeChild (this.parentNode.parentNode);
 
 			// Decrement counter
-			//this.parentNode.element.multi_selector.count--;
+			multi_selector.count--
+			multi_selector.counter--;
 
 			// Re-enable input element (if it's disabled)
 			//this.parentNode.element.multi_selector.current_element.disabled = false;
-
+			multi_selector.current_element.disabled = false;
+			
 			// Appease Safari
 			//    without it Safari wants to reload the browser window
 			//    which nixes your already queued uploads
@@ -173,6 +185,7 @@ function MultiSelector( list_target, max )
 	
 		// Add it to the list
 		this.list_target.appendChild( new_tr );
+		this.refresh();
 	};
 
 };
@@ -201,6 +214,9 @@ function multifile_delete(id)
 					parentDiv.removeChild (Div);
 					delete XMLHttpRequestObject;
 					XMLHttpRequestObject = null;
+					multi_selector.count--
+					multi_selector.counter--;
+					multi_selector.current_element.disabled = false;
 				}
 			}
 			XMLHttpRequestObject.send(null);
