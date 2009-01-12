@@ -628,6 +628,9 @@ Vaikimisi eesti keel. Keelele peab saama m22rata, milline on systeemi default. V
 @default group=org_images
 	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment,cfgform table_fields=name,ord table_edit_fields=ord table=objects
 	@caption Pildid
+
+	@property images_2 type=multifile_upload reltype=RELTYPE_IMAGE image=1 store=no
+	@caption Pildid
 ---------- END PILDID ---------
 
 ------------ ORGANISATSIOONI OBJEKTID ---------
