@@ -167,7 +167,7 @@ class menuedit extends aw_template implements request_startup
 			setcookie("ct_lang_lc", $_SESSION["ct_lang_lc"], time() + 3600, "/");
 		}
 
-		if ($set_lang_id)
+		if ($set_lang_id && aw_global_get("lang_id") != $set_lang_id)
 		{
 			$la = get_instance("languages");
 			if (!$la->set_active($set_lang_id))
