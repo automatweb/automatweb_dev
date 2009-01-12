@@ -182,7 +182,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 				@layout data_r_bot_right type=vbox parent=data_r_bot_s
 	
-					@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot_right captionside=top store=no
+					@property multifile_upload type=multifile_upload reltype=RELTYPE_FILE parent=data_r_bot_right captionside=top store=no max_files=99 
 					@caption Fail
 
 					@property bug_predicates type=textbox parent=data_r_bot_right captionside=top field=aw_bug_predicates size=15

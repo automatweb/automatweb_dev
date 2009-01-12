@@ -23,7 +23,7 @@
 </table>
 
 <script>
-	var multi_selector = new MultiSelector( document.getElementById( 'multifile_upload_files_list' ) );
+	var multi_selector = new MultiSelector( document.getElementById( 'multifile_upload_files_list' ), {VAR:max} );
 	multi_selector.counter = '{VAR:counter}';
 	multi_selector.addElement( document.getElementById( 'my_file_element' ) );
 </script>
