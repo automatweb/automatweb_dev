@@ -505,6 +505,7 @@
             <group>settings_general</group>
             <type>textbox</type>
             <field>meta</field>
+            <method>serialize</method>
             <caption>Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)</caption>
       </property>
       <property>
