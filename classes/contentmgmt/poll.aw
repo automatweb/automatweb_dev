@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.46 2008/03/06 09:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.47 2009/01/13 21:04:49 instrumental Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -338,7 +338,7 @@ class poll extends class_base implements main_subtemplate_handler
                         $answer_id = $_COOKIE["poll_set_answer_id"];
                 }
 
-		if ($answer_id && $GLOBALS["poll_id"] == $id)
+		if ($answer_id && ($GLOBALS["poll_id"] == $id || $_GET["poll_id"] == $id))
 		{
 			$this->add_click($answer_id);
 		}
