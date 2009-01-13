@@ -14,6 +14,9 @@
 	
 	@property fileupload type=fileupload store=no
 	@caption Fail
+	
+	@property preview_img type=relpicker reltype=RELTYPE_PREVIEWIMG store=connect
+	@caption Eelvaate pilt
 
 	@property width type=textbox field=meta method=serialize
 	@caption Laius (px)
@@ -44,6 +47,9 @@
 	
 	@property meta_creation_date type=text
 	@caption Loomisaeg	
+	
+	@reltype PREVIEWIMG value=1 clid=CL_IMAGE
+	@caption Eelvaate pilt
 	
 */
 
@@ -273,8 +279,23 @@ class flv_file extends class_base
 			"id" => $o->id(),
 			"action" => "view",
 		));
-		$s_url = str_replace("&", "/", $s_url)."/video.flv";
-		$s_url = str_replace("?", "orb.aw/", $s_url);
+		
+		if (aw_ini_get("image.imgbaseurl"))
+		{
+			$file_name = end(explode("/", $o->prop("file")));
+			$s_url = aw_ini_get("baseurl") . aw_ini_get("image.imgbaseurl") . "/" . substr($file_name, 0, 1) . "/" . $file_name;
+			$o_img = obj($o->prop("preview_img"));
+			$image_file_name = end(explode("/", $o_img->prop("file")));
+			$s_img_url = aw_ini_get("baseurl") . aw_ini_get("image.imgbaseurl") . "/" . substr($image_file_name, 0, 1) . "/" . $image_file_name;
+		}
+		else
+		{
+			$s_url = str_replace("&", "/", $s_url)."/video.flv";
+			$s_url = str_replace("?", "orb.aw/", $s_url);
+			$o_img = obj($o->prop("preview_img"));
+			$image_file_name = end(explode("/", $o_img->prop("file")));
+			$s_img_url = image::get_url($o_img->prop("file"));
+		}
 	
 		$this->read_template("show.tpl");
 		$this->vars(array(
@@ -285,6 +306,8 @@ class flv_file extends class_base
 			"file" => $s_url,
 			"width" => $o->prop("width")?$o->prop("width"):300,
 			"height" => $o->prop("height")?$o->prop("height"):250,
+			"image_url" => $s_img_url,
+			
 		));
 		return $this->parse();
 	}
