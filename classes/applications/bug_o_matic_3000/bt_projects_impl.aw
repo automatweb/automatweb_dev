@@ -221,6 +221,10 @@ class bt_projects_impl extends core
 				"name" => $c->prop("to.name"),
 				"url" => "#",
 			));
+			if($parent != 0)
+			{
+				break;
+			}
 			$this->__insert_category_subs($t, $c->to(), $c->prop("to"), $arr);
 		}
 		$conn = $o->connections_from(array(
@@ -261,26 +265,40 @@ class bt_projects_impl extends core
 		$owner = $this->__get_owner($arr);
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
-			"proj_mgr" => $owner->id(),
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		$ppl = array();
+		$set_ppl = array();
 		foreach($ol->arr() as $o)
 		{
 			$p = $o->prop("proj_mgr");
+			if($set_ppl[$p])
+			{
+				continue;
+			}
+			$set_ppl[$p] = $p;
+			unset($wrl);
 			if($this->can("view", $p))
 			{
 				$po = obj($p);
-				$wrl = $po->get_first_obj_by_reltype("RELTYPE_ORG_RELATION");
+				$wrl = $po->get_first_obj_by_reltype("RELTYPE_CURRENT_JOB");
 			}
 			if($wrl && $wrl->prop("org") == $owner->id())
 			{
 				$ppl[] = $p;
 			}
 		}
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_SECTION,
-			"CL_CRM_SECTION.RELTYPE_SECTION(CL_CRM_PERSON_WORK_RELATION).RELTYPE_CURRENT_JOB(CL_CRM_PERSON)" => $ppl,
-		));
+		$ol = new object_list();
+		if(count($ppl))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_SECTION,
+				"CL_CRM_SECTION.RELTYPE_SECTION(CL_CRM_PERSON_WORK_RELATION).RELTYPE_CURRENT_JOB(CL_CRM_PERSON)" => $ppl,
+				"site_id" => array(),
+				"lang_id" => array(),
+			));
+		}
 		foreach($ol->arr() as $o)
 		{
 			$t->add_item($parent, array(
@@ -301,10 +319,16 @@ class bt_projects_impl extends core
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 		));
-		$ppl = array();
+		$set_ppl = array();
 		foreach($ol->arr() as $o)
 		{
 			$p = $o->prop("proj_mgr");
+			if($set_ppl[$p])
+			{
+				continue;
+			}
+			$set_ppl[$p] = $p;
+			unset($wrl);
 			if($p)
 			{
 				$po = obj($p);
@@ -358,27 +382,31 @@ class bt_projects_impl extends core
 			"site_id" => array(),
 			"lang_id" => array(),
 			"code" => "%",
-			"sort_by" => "aw_projects.aw_".$prop." asc",
+			"sort_by" => "aw_projects.aw_".$prop." desc",
 		);
 		$ol = new object_list($param);
-		$start = $ol->begin();
-		$param["sort_by"] = "aw_projects.aw_".$prop." desc";
-		$ol = new object_list($param);
-		$end = $ol->begin();
-		if($start && $end)
+		$set_yrs = array();
+		foreach($ol->arr() as $o)
 		{
-			for($i = date('Y', $end->prop($prop)); $i >= date('Y', $start->prop($prop)); $i--)
+			$i = date("Y", $o->prop($prop));
+			if($set_yrs[$i])
 			{
-				$t->add_item($parent, array(
-					"id" => "y_".$prop."_".$i,
-					"name" => $i,
-					"url" => "#",
-				));
-				if($parent == 0)
-				{
-					$arr["year"] = $i;
-					$this->__insert_months($t, "y_".$prop."_".$i, $prop, $arr);
-				}
+				continue;
+			}
+			$t->add_item($parent, array(
+				"id" => "y_".$prop."_".$i,
+				"name" => $i,
+				"url" => "#",
+			));
+			$set_yrs[$i] = $i;
+			if($parent == 0)
+			{
+				$arr["year"] = $i;
+				$this->__insert_months($t, "y_".$prop."_".$i, $prop, $arr);
+			}
+			if($parent != 0)
+			{
+				break;
 			}
 		}
 	}
@@ -397,6 +425,10 @@ class bt_projects_impl extends core
 					"filt_value" => $id."-".$arr["year"],
 				), false, $arr["set_retu"]),
 			));
+			if($parent != 0)
+			{
+				break;
+			}
 		}
 	}
 
@@ -631,11 +663,9 @@ class bt_projects_impl extends core
 		if(!$arr["request"]["filt_type"] && !$arr["request"]["do_proj_search"])
 		{
 			$po = get_current_person();
-			$ol = new object_list(array(
-				"class_id" => CL_PROJECT,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"participants" => $po->id(),
+			$conn = $po->connections_to(array(
+				"from.class_id" => CL_PROJECT,
+				"type" => "RELTYPE_PARTICIPANT",
 			));
 			$t->set_caption(sprintf(t("Projektid, milles %s on osaleja"), $po->name()));
 		}
@@ -646,9 +676,10 @@ class bt_projects_impl extends core
 
 		$i = get_instance("applications/crm/crm_company_cust_impl");
 
-		foreach ($ol->arr() as $project_obj)
+		$data = array();
+		foreach ($conn as $c)
 		{
-			$i->_get_proj_data_row($project_obj, $data);
+			$i->_get_proj_data_row($c->from(), $data);
 		}
 		$i->do_projects_table_header($t, $data, isset($arr["prj"]));
 		foreach($data as $row)
