@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.132 2008/11/13 12:22:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.133 2009/01/13 11:45:47 robert Exp $
 // project.aw - Projekt
 /*
 
@@ -58,6 +58,8 @@
 			@property proj_mgr type=relpicker reltype=RELTYPE_PARTICIPANT field=meta method=serialize parent=left_bit clid=CL_CRM_PERSON
 			@caption Projekti juht
 
+			@property category type=relpicker reltype=RELTYPE_CATEGORY store=connect multiple=1 size=2 parent=left_bit
+			@caption Kategooria
 
 		@layout center_bit type=vbox parent=up_bit no_padding=1
 			@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=Ajad
@@ -393,6 +395,9 @@
 
 @reltype PRODUCT value=24 clid=CL_SHOP_PRODUCT
 @caption Toode
+
+@reltype CATEGORY value=25 clid=CL_PROJECT_CATEGORY
+@caption Kategooria
 
 */
 

@@ -148,15 +148,27 @@
       </property>
       <property>
             <name>proj_mgr</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>general2</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PARTICIPANT</reltype>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_proj_mgr</field>
             <parent>left_bit</parent>
             <clid>CL_CRM_PERSON</clid>
             <caption>Projekti juht</caption>
+      </property>
+      <property>
+            <name>category</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CATEGORY</reltype>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <size>2</size>
+            <parent>left_bit</parent>
+            <field>category</field>
+            <caption>Kategooria</caption>
       </property>
       <property>
             <name>start</name>
@@ -1104,6 +1116,11 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Toode</caption>
             </PRODUCT>
+            <CATEGORY>
+                  <value>25</value>
+                  <clid>CL_PROJECT_CATEGORY</clid>
+                  <caption>Kategooria</caption>
+            </CATEGORY>
       </reltypes>
       <layout>
             <up_bit>

@@ -187,37 +187,10 @@ class crm_company_cust_impl extends class_base
 			}
 		}
 
+		$data = array();
 		foreach ($conns_ol->arr() as $project_obj)
 		{
-			$orderer = $project_obj->get_first_obj_by_reltype("RELTYPE_ORDERER");
-			if(is_object($orderer)) $orderer = $orderer->id();
-			$roles = $this->_get_role_html(array(
-				"from_org" => $arr["request"]["id"],
-				"to_org" => $orderer,
-				"rc_by_co" => $rc_by_co,
-				"to_project" => $project_obj->id()
-			));
-
-			if (is_oid($cpi = $project_obj->prop("contact_person_implementor")) && $this->can("view", $cpi))
-			{
-				$impl = html::get_change_url($cpi, array("return_url" => get_ru()), parse_obj_name($project_obj->prop_str("contact_person_implementor")));
-			}
-			else
-			{
-				$impl = $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_IMPLEMENTOR")));
-			}
-			$data[] = array(
-				"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), parse_obj_name($project_obj->name())),
-				"project_code" => $project_obj->prop("code"),
-				"project_participants"	=> $this->_get_part_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
-				"project_created" => $project_obj->created(),
-				"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
-				"project_impl" => $impl,
-				"project_deadline" => $project_obj->prop("deadline"),
-				"project_end" => $project_obj->prop("end"),
-				"oid" => $project_obj->id(),
-				"roles" => $roles,
-			);
+			$this->_get_proj_data_row($project_obj, $data);
 		}
 		$this->do_projects_table_header($table, $data, isset($arr["prj"]));
 		foreach($data as $row)
@@ -225,6 +198,39 @@ class crm_company_cust_impl extends class_base
 			$table->define_data($row);
 		}
 		return PROP_OK;
+	}
+
+	function _get_proj_data_row($project_obj, &$data)
+	{
+		$orderer = $project_obj->get_first_obj_by_reltype("RELTYPE_ORDERER");
+		if(is_object($orderer)) $orderer = $orderer->id();
+		$roles = $this->_get_role_html(array(
+			"from_org" => $arr["request"]["id"],
+			"to_org" => $orderer,
+			"rc_by_co" => $rc_by_co,
+			"to_project" => $project_obj->id()
+		));
+
+		if (is_oid($cpi = $project_obj->prop("contact_person_implementor")) && $this->can("view", $cpi))
+		{
+			$impl = html::get_change_url($cpi, array("return_url" => get_ru()), parse_obj_name($project_obj->prop_str("contact_person_implementor")));
+		}
+		else
+		{
+			$impl = $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_IMPLEMENTOR")));
+		}
+		$data[] = array(
+			"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), parse_obj_name($project_obj->name())),
+			"project_code" => $project_obj->prop("code"),
+			"project_participants"	=> $this->_get_part_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
+			"project_created" => $project_obj->created(),
+			"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
+			"project_impl" => $impl,
+			"project_deadline" => $project_obj->prop("deadline"),
+			"project_end" => $project_obj->prop("end"),
+			"oid" => $project_obj->id(),
+			"roles" => $roles,
+		);
 	}
 
 	function _get_impl_projects($arr)

@@ -48,6 +48,203 @@
             <caption>Tellimuste puus kuvatakse</caption>
       </property>
       <property>
+            <name>proj_toolbar</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>proj_toolbar</field>
+      </property>
+      <property>
+            <name>proj_tree</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>proj_tree_lay</parent>
+            <store>no</store>
+            <field>proj_tree</field>
+      </property>
+      <property>
+            <name>proj_search_name</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>proj_search_name</field>
+            <caption>Projekti nimi</caption>
+      </property>
+      <property>
+            <name>proj_search_cust</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>proj_search_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>proj_search_part</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>text</type>
+            <size>28</size>
+            <parent>proj_search_lay</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>proj_search_part</field>
+            <caption>Osaleja</caption>
+      </property>
+      <property>
+            <name>proj_search_state</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <captionside>top</captionside>
+            <field>proj_search_state</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>proj_search_code</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>proj_search_code</field>
+            <caption>Projekti kood</caption>
+      </property>
+      <property>
+            <name>proj_search_arh_code</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>proj_search_arh_code</field>
+            <caption>Arhiveerimistunnus</caption>
+      </property>
+      <property>
+            <name>proj_search_proj_mgr</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>proj_search_proj_mgr</field>
+            <caption>Projektijuht</caption>
+      </property>
+      <property>
+            <name>proj_search_dl_from</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>proj_search_dl_from</field>
+            <caption>T&amp;amp;auml;htaeg alates</caption>
+      </property>
+      <property>
+            <name>proj_search_dl_to</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>proj_search_dl_to</field>
+            <caption>T&amp;amp;auml;htaeg kuni</caption>
+      </property>
+      <property>
+            <name>proj_search_end_from</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>proj_search_end_from</field>
+            <caption>L&amp;amp;otilde;pp alates</caption>
+      </property>
+      <property>
+            <name>proj_search_end_to</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>proj_search_lay</parent>
+            <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>proj_search_end_to</field>
+            <caption>L&amp;amp;otilde;pp kuni</caption>
+      </property>
+      <property>
+            <name>proj_search_sbt</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>submit</type>
+            <parent>proj_search_lay</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>proj_search_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>proj_tbl1</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>proj_right</parent>
+            <store>no</store>
+            <field>proj_tbl1</field>
+      </property>
+      <property>
+            <name>proj_tbl2</name>
+            <table>objects</table>
+            <group>projects</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>proj_right</parent>
+            <store>no</store>
+            <field>proj_tbl2</field>
+      </property>
+      <property>
             <name>bug_tb</name>
             <table>objects</table>
             <group>
@@ -770,6 +967,16 @@
             <caption>J&amp;amp;auml;lgijateks ainult valitud inimesed</caption>
       </property>
       <property>
+            <name>finance_required</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kulude katmine tuleb m&amp;amp;auml;&amp;amp;auml;rata</caption>
+      </property>
+      <property>
             <name>combined_priority_formula</name>
             <table>objects</table>
             <group>settings_g</group>
@@ -1317,6 +1524,9 @@
                   <caption>Staatused</caption>
                   <parent>general</parent>
             </settings_statuses>
+            <projects>
+                  <caption>Projektid</caption>
+            </projects>
             <reqs_main>
                   <caption>N&amp;amp;otilde;uded</caption>
             </reqs_main>
@@ -1538,6 +1748,38 @@
             </BUG_TYPE_FOLDER>
       </reltypes>
       <layout>
+            <proj_split>
+                  <type>hbox</type>
+                  <width>25%:75%</width>
+                  <group>projects</group>
+                  <area_caption></area_caption>
+            </proj_split>
+            <proj_left>
+                  <type>vbox</type>
+                  <parent>proj_split</parent>
+                  <group>projects</group>
+                  <area_caption></area_caption>
+            </proj_left>
+            <proj_tree_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektide&amp;amp;nbsp;puu</area_caption>
+                  <parent>proj_left</parent>
+                  <group>projects</group>
+            </proj_tree_lay>
+            <proj_search_lay>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Projektide&amp;amp;nbsp;otsing</area_caption>
+                  <parent>proj_left</parent>
+                  <group>projects</group>
+            </proj_search_lay>
+            <proj_right>
+                  <type>vbox</type>
+                  <parent>proj_split</parent>
+                  <group>projects</group>
+                  <area_caption></area_caption>
+            </proj_right>
             <bug>
                   <type>hbox</type>
                   <width>20%:80%</width>

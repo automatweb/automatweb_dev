@@ -26,6 +26,62 @@ define("BUG_STATUS_CLOSED", 5);
 	@property order_tree_conf type=select field=meta method=serialize table=objects
 	@caption Tellimuste puus kuvatakse
 
+@default group=projects
+
+	@property proj_toolbar type=toolbar no_caption=1
+	
+	@layout proj_split type=hbox width=25%:75%
+
+		@layout proj_left type=vbox parent=proj_split
+
+			@layout proj_tree_lay type=vbox closeable=1 area_caption=Projektide&nbsp;puu parent=proj_left
+				
+				@property proj_tree type=treeview no_caption=1 parent=proj_tree_lay
+	
+			@layout proj_search_lay type=vbox closeable=1 area_caption=Projektide&nbsp;otsing parent=proj_left
+	
+				@property proj_search_name type=textbox store=no parent=proj_search_lay size=33 captionside=top
+				@caption Projekti nimi
+	
+				@property proj_search_cust type=textbox store=no parent=proj_search_lay size=33 captionside=top
+				@caption Klient
+	
+				@property proj_search_part type=text size=28 parent=proj_search_lay store=no captionside=top
+				@caption Osaleja
+	
+				@property proj_search_state type=chooser store=no parent=proj_search_lay  captionside=top
+				@caption Staatus
+	
+				@property proj_search_code type=textbox store=no parent=proj_search_lay size=33 captionside=top
+				@caption Projekti kood
+	
+				@property proj_search_arh_code type=textbox store=no parent=proj_search_lay size=33 captionside=top
+				@caption Arhiveerimistunnus
+	
+				@property proj_search_proj_mgr type=textbox store=no parent=proj_search_lay size=33 captionside=top
+				@caption Projektijuht
+	
+				@property proj_search_dl_from type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
+				@caption T&auml;htaeg alates
+	
+				@property proj_search_dl_to type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
+				@caption T&auml;htaeg kuni
+	
+				@property proj_search_end_from type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
+				@caption L&otilde;pp alates
+	
+				@property proj_search_end_to type=date_select store=no parent=proj_search_lay  captionside=top format=day_textbox,month_textbox,year_textbox
+				@caption L&otilde;pp kuni
+	
+				@property proj_search_sbt type=submit  parent=proj_search_lay no_caption=1
+				@caption Otsi
+
+		@layout proj_right type=vbox parent=proj_split
+
+			@property proj_tbl1 type=table no_caption=1 parent=proj_right
+	
+			@property proj_tbl2 type=table no_caption=1 parent=proj_right
+
 @default group=by_default,by_project,by_who,by_class,by_cust,by_monitor
 
 	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who,by_class
@@ -472,6 +528,8 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo bug_apps caption="Rakendused" parent=general
 @groupinfo settings_statuses caption="Staatused" parent=general
 
+@groupinfo projects caption="Projektid"
+
 @groupinfo reqs_main caption="N&otilde;uded"
 
 	@groupinfo reqs parent=reqs_main caption="N&otilde;uete puu" submit=no
@@ -633,6 +691,28 @@ class bug_tracker extends class_base
 			}
 			$fn = "_get_".$prop["name"];
 			return $p_i->$fn($arr);
+		}
+
+		if($prop["group"] == "projects")
+		{
+			static $proj_i;
+			if (!$proj_i)
+			{
+				$proj_i = get_instance("applications/bug_o_matic_3000/bt_projects_impl");
+			}
+			$fn = "_get_".$prop["name"];
+			if(method_exists($proj_i, $fn))
+			{
+				return $proj_i->$fn($arr);
+			}
+			elseif(strpos($prop["name"], "proj_search") !== false && $prop["type"] != "submit")
+			{
+				$prop["value"] = $arr["request"][$prop["name"]];
+				if(!$prop["value"] && strpos($prop["type"], "date") !== false)
+				{
+					$prop["value"] = -1;
+				}
+			}
 		}
 
 		switch($prop["name"])
@@ -1885,6 +1965,14 @@ class bug_tracker extends class_base
 		die($node_tree->finalize_tree());
 	}
 
+	/**
+	@attrib name=proj_tree_level all_args=1
+	**/
+	function proj_tree_level($arr)
+	{
+		get_instance("applications/bug_o_matic_3000/bt_projects_impl")->proj_tree_level($arr);
+	}
+
 	function _bug_tree($arr)
 	{
 		classload("core/icons");
@@ -2711,6 +2799,24 @@ class bug_tracker extends class_base
 		if ("stat_hrs_overview" === $arr["args"]["group"])
 		{
 			$arr["args"]["just_saved"] = null;
+		}
+
+		if ($arr["request"]["proj_search_sbt"])
+		{
+			$arr["args"]["proj_search_cust"] = $arr["request"]["proj_search_cust"];
+			$arr["args"]["proj_search_part"] = $arr["request"]["proj_search_part"];
+			$arr["args"]["proj_search_name"] = $arr["request"]["proj_search_name"];
+			$arr["args"]["proj_search_code"] = $arr["request"]["proj_search_code"];
+			$arr["args"]["proj_search_arh_code"] = $arr["request"]["proj_search_code"];
+			$arr["args"]["proj_search_proj_mgr"] = $arr["request"]["proj_search_proj_mgr"];
+			$arr["args"]["proj_search_task_name"] = $arr["request"]["proj_search_task_name"];
+			$arr["args"]["proj_search_dl_from"] = $arr["request"]["proj_search_dl_from"];
+			$arr["args"]["proj_search_dl_to"] = $arr["request"]["proj_search_dl_to"];
+			$arr["args"]["proj_search_end_from"] = $arr["request"]["proj_search_end_from"];
+			$arr["args"]["proj_search_end_to"] = $arr["request"]["proj_search_end_to"];
+			$arr["args"]["proj_search_state"] = $arr["request"]["proj_search_state"];
+			$arr["args"]["proj_search_sbt"] = 1;
+			$arr["args"]["do_proj_search"] = 1;
 		}
 	}
 
