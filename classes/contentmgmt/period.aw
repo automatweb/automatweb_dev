@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.5 2009/01/12 11:16:26 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/period.aw,v 1.6 2009/01/13 13:31:07 instrumental Exp $
 // period.aw - periods
 /*
 
@@ -537,7 +537,7 @@ class period extends class_base implements request_startup
 			"per_img_link" => ($_t["data"]["image_link"] != "" ? $_t["data"]["image_link"] : aw_ini_get("baseurl"))
 		));
 
-		if ($_t["data"]["image"]["url"] != "")
+		if (isset($_t["data"]["image"]["url"]) && $_t["data"]["image"]["url"] != "")
 		{
 			// so this is where it's done... eh
 			// how do I convert this thing to an usual promo box?
