@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.66 2008/12/18 11:15:20 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.67 2009/01/13 15:52:40 instrumental Exp $
 // personnel_management_job_offer.aw - T&ouml;&ouml;pakkumine
 /*
 
@@ -653,6 +653,16 @@ class personnel_management_job_offer extends class_base
 				$prop["autocomplete_source"] = $this->mk_my_orb("autocomp_".$prop["name"]);
 				$prop["autocomplete_params"] = array($prop["name"]);
 				$prop["option_is_tuple"] = true;
+				$prop["value"] = $arr["obj_inst"]->prop($prop["name"]);
+				if(is_oid($prop["value"]) || is_array($prop["value"]) && count($prop["value"]) > 0)
+				{
+					$ol = new object_list(array(
+						"oid" => $prop["value"],
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$prop["selected"] = $ol->names();
+				}
 				break;
 
 			case "location":
@@ -1233,6 +1243,18 @@ class personnel_management_job_offer extends class_base
 				}
 				break;
 
+			case "company":
+			case "loc_country":
+			case "loc_city":
+			case "loc_area":
+			case "loc_county":
+				if(is_oid($prop["value"]) || is_array($prop["value"]))
+				{
+					$arr["obj_inst"]->set_prop($prop["name"], $prop["value"]);
+					$retval = PROP_IGNORE;
+				}
+				break;
+
 			case "status":
 				if(!$prop["value"])
 				{
@@ -1757,7 +1779,8 @@ class personnel_management_job_offer extends class_base
 
 		// CAPTIONS. Added first so we can use 'em in all the SUBs we want. :P
 		$cff = get_instance(CL_CFGFORM);
-		$cfgprops = $cff->get_cfg_proplist($cff->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER)));
+		//$cfgprops = $cff->get_cfg_proplist($cff->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER)));
+		$cfgprops = $cff->get_default_proplist(array("o" => $ob));
 		foreach($cfgprops as $prop)
 		{
 			$this->vars(array($prop["name"].".caption" => $prop["caption"]));
@@ -1927,7 +1950,8 @@ class personnel_management_job_offer extends class_base
 			"info" => $info,
 		));
 
-		$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
+		//$props = array_keys(get_instance(CL_CFGFORM)->get_cfg_proplist(get_instance(CL_CFGFORM)->get_sysdefault(array("clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER))));
+		$props = array_keys(get_instance(CL_CFGFORM)->get_default_proplist(array("o" => $ob)));
 		// Add SUBs
 		$props += array("apply");
 		if($ob->autoinfo)
@@ -2360,6 +2384,7 @@ class personnel_management_job_offer extends class_base
 	{
 		$ac = get_instance("vcl/autocomplete");
 		$clids = array(
+			"company" => CL_CRM_COMPANY,
 			"profession" => CL_CRM_PROFESSION,
 			"contact" => CL_CRM_PERSON,
 			"loc_country" => CL_CRM_COUNTRY,
@@ -2573,8 +2598,9 @@ class personnel_management_job_offer extends class_base
 	private function majic($o, $p, $trans_get_val = false)
 	{
 		// Need to iconv() first, cuz htmlentities() doesn't support ISO-8859-4 'n' stuff...
-		$v = iconv($this->llist[$o->prop(substr($p, 0, strrpos($p, ".")).".lang_id")]["charset"], "UTF-8", ($trans_get_val ? $o->trans_get_val($p) : $o->prop($p)));
-		return htmlentities($v, ENT_COMPAT, "UTF-8");
+		$v = $o->prop($p);
+//		$v = iconv($this->llist[$o->prop(substr($p, 0, strrpos($p, ".")).".lang_id")]["charset"], "UTF-8", ($trans_get_val ? $o->trans_get_val($p) : $o->prop($p)));
+		return htmlentities($v);//, ENT_COMPAT, "UTF-8");
 	}
 
 	public function callback_on_load($arr)

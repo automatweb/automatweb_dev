@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.12 2008/06/17 20:53:09 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.13 2009/01/13 15:52:40 instrumental Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
@@ -144,9 +144,9 @@ class personnel_management_candidate extends class_base
 		$intro = $obj->prop("intro");
 		if(!empty($intro))
 		{
-			return $intro;
+			die(nl2br($intro));
 		}
-		return "kaaskiri puudub";
+		die("kaaskiri puudub");
 	}
 
 	/**

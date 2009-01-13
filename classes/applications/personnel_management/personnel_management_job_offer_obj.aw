@@ -126,6 +126,10 @@ class personnel_management_job_offer_obj extends _int_object
 	function notify_me_of_confirmation()
 	{
 		$pm_obj = obj(get_instance(CL_PERSONNEL_MANAGEMENT)->get_sysdefault());
+		if(!is_oid($this->id()))
+		{
+			parent::save();
+		}
 		foreach($this->connections_from(array("type" => "RELTYPE_NOTIFY_ME_OF_CONFIRMATION")) as $conn)
 		{
 			$awm = get_instance("protocols/mail/aw_mail");
