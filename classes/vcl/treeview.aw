@@ -52,6 +52,7 @@ class treeview extends class_base
 	var $level;
 	var $selected_item;
 	var $rootnode;
+	protected $first_level_menu_is_last;
 
 	function treeview($args = array())
 	{
@@ -808,7 +809,7 @@ class treeview extends class_base
 		// ja nagu sellest veel kyllalt poleks .. I can have multiple opened nodes. yees!
 		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
 		{
-			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
+			$opened_nodes = empty($_COOKIE[$this->tree_id]) ? array() : explode("^", $_COOKIE[$this->tree_id]);
 			$r_path = array();
 
 			foreach($opened_nodes as $open_node)
@@ -819,11 +820,15 @@ class treeview extends class_base
 
 			$this->r_path = array_unique($r_path);
 		}
+		else
+		{
+			$opened_nodes = array();
+		}
 
 		$t = get_instance("languages");
 		$this->vars (array(
-			"target" => $this->tree_dat["url_target"],
-			"open_nodes" => is_array($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
+			"target" => empty($this->tree_dat["url_target"]) ? "" : $this->tree_dat["url_target"],
+			"open_nodes" => count($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
 			"tree_id" => $this->tree_id,
 			"charset" => $t->get_charset(),
 			"separator" => $this->separator,
@@ -861,7 +866,7 @@ class treeview extends class_base
 
 	// figures out the path from an item to the root of the tree
 	function _get_r_path($id)
-	{	
+	{
 		$rpath = array();
 		if (!isset($this->itemdata[$id]))
 		{
@@ -1104,14 +1109,9 @@ class treeview extends class_base
 
 	}
 
-	function draw_dhtml_tree_with_buttons ($parent)
+	function draw_dhtml_tree_with_buttons ($parent = 0)
 	{
-		$data = $this->items[$parent];
-
-		if (!is_array($data))
-		{
-			return "";
-		};
+		$data = isset($this->items[$parent]) ? $this->items[$parent] : array();
 
 		$this->level++;
 		$result = "";

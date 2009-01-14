@@ -303,7 +303,7 @@ class mrp_schedule extends class_base
 		}
 
 		### start scheduling only if input data has been altered
-		if ( $workspace->prop("rescheduling_needed") or ($arr["mrp_force_replan"] == 1) )
+		if ( $workspace->prop("rescheduling_needed") or !empty($arr["mrp_force_replan"]) )
 		{
 			### set scheduling not needed, and start scheduling
 			$workspace->set_prop("rescheduling_needed", 0);
@@ -1615,7 +1615,10 @@ class mrp_schedule extends class_base
 // /* timing */ timing ("find_range", "end");
 	}
 
-	function get_closest_unavailable_period ($resource_id, $time)
+	// param $resource_id
+	// param $time - int unix timestamp time for which to get the closest unavailable period
+	// returns resource's unavailable period that has a start closest to $time. array($period_start, $period_length)
+	protected function get_closest_unavailable_period ($resource_id, $time)
 	{
 // /* timing */ timing ("get_closest_unavailable_period", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1971,7 +1974,7 @@ class mrp_schedule extends class_base
 			$unavailable_start = $this->schedule_start + $unavailable_start;
 			$unavailable_end = $unavailable_start + $unavailable_length;
 
-			if ($unavailable_end > $this->unavailable_times[$unavailable_start])
+			if (!isset($this->unavailable_times[$unavailable_start]) or $unavailable_end > $this->unavailable_times[$unavailable_start])
 			{
 				$this->unavailable_times[$unavailable_start] = $unavailable_end;
 			}

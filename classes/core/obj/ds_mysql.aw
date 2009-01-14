@@ -176,17 +176,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ($data["table"] == "")
+			if (empty($data["table"]))
 			{
 				$data["table"] = "objects";
 			}
 
-			if ($data["type"] == "datagrid")
+			if ($data["type"] === "datagrid")
 			{
 				$datagrids[$prop] = $data;
 			}
-			else
-			if ($data["table"] !== "objects")
+			elseif ($data["table"] !== "objects")
 			{
 				$tables[$data["table"]] = $data["table"];
 				$tbl2prop[$data["table"]][] = $data;
@@ -220,14 +219,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$conn_prop_fetch[$prop["name"]] = $_co_reltype;
 				}
 			}
-			else
-			if ($prop["method"] === "serialize")
+			elseif ($prop["method"] === "serialize")
 			{
 				// metadata is unserialized in read_objprops
 				$ret[$prop["name"]] = isset($objdata[$prop['field']]) && isset($objdata[$prop["field"]][$prop["name"]]) ? $objdata[$prop["field"]][$prop["name"]] : "";
 			}
-			else
-			if ($prop["method"] === "bitmask")
+			elseif ($prop["method"] === "bitmask")
 			{
 				$ret[$prop["name"]] = ((int)$objdata[$prop["field"]]) & ((int)$prop["ch_value"]);
 			}
@@ -1050,7 +1047,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}
-		
+
 //echo (dbg::dump($data_qs));
 		// check exclusivity
 		if ($arr["exclusive_save"])

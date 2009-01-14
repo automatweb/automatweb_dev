@@ -535,7 +535,7 @@ class aw_object_search extends class_base
 	{
 		$rowsres = array(
 			array(
-				"parent" => "parent", 
+				"parent" => "parent",
 				"lang_id" => "lang",
 				"created" => "created",
 				"createdby" => "createdby",
@@ -573,7 +573,7 @@ class aw_object_search extends class_base
 		$clss = aw_ini_get("classes");
 		$t->set_caption(sprintf(t("Leiti %s objekti"), sizeof($data)));
 		$li = get_instance("languages");
-		
+
 		foreach($data as $id => $d)
 		{
 			if($d["class_id"] == CL_USER)
@@ -595,7 +595,7 @@ class aw_object_search extends class_base
 				)),
 				"lang" => $li->get_langid($d["lang"]),
 				"class_id" => $clss[$d["class_id"]]["name"],
-				"location" => $d["parent_name"],
+				"location" => isset($d["parent_name"]) ? $d["parent_name"] : "",
 				"created" => $d["created"],
 				"createdby" => $d["createdby"],
 				"modified" => $d["modified"],
@@ -731,13 +731,13 @@ class aw_object_search extends class_base
 		$nf = array("s_status" => "status", /*"s_oid" => "oid",*/ "s_site_id" => "site_id", "s_period" => "period", "s_language" => "lang_id");
 		foreach($nf as $pn => $ofn)
 		{
-			if ($arr["request"][$pn] > 0)
+			if (isset($arr["request"][$pn]) && $arr["request"][$pn] > 0)
 			{
 				$filt[$ofn] = $arr["request"][$pn];
 			}
 		}
 
-		if (!$arr["request"]["s_find_bros"])
+		if (!isset($arr["request"]["s_find_bros"]) || !$arr["request"]["s_find_bros"])
 		{
 			$filt["brother_of"] = new obj_predicate_prop("id");
 		}
@@ -747,12 +747,12 @@ class aw_object_search extends class_base
 			$filt["oid"] = $arr["request"]["s_oid"];
 		}
 		else
-		if ($arr["request"]["s_oid"][0] == "<")
+		if (isset($arr["request"]["s_oid"][0]) && $arr["request"]["s_oid"][0] == "<")
 		{
 			$filt["oid"] = new obj_predicate_compare(OBJ_COMP_LESS, substr($arr["request"]["s_oid"], 1));
 		}
 		else
-		if ($arr["request"]["s_oid"][0] == ">")
+		if (isset($arr["request"]["s_oid"][0]) && $arr["request"]["s_oid"][0] == ">")
 		{
 			$filt["oid"] = new obj_predicate_compare(OBJ_COMP_GREATER, substr($arr["request"]["s_oid"], 1));
 		}
@@ -766,7 +766,7 @@ class aw_object_search extends class_base
 			}
 		}
 
-		if ($arr["request"]["s_rel_type"] != "" && ($arr["request"]["s_rel_obj_oid"] != "" || $arr["request"]["s_rel_obj_name"] != "") && is_array($arr["request"]["s_clid"]))
+		if (isset($arr["request"]["s_rel_type"]) && $arr["request"]["s_rel_type"] != "" && ($arr["request"]["s_rel_obj_oid"] != "" || $arr["request"]["s_rel_obj_name"] != "") && is_array($arr["request"]["s_clid"]))
 		{
 			$clid = reset($arr["request"]["s_clid"]);
 			$clss = aw_ini_get("classes");
@@ -928,7 +928,29 @@ class aw_object_search extends class_base
 	function redir_search($arr)
 	{
 		$so = $this->init_search();
-		return html::get_change_url($so->id(), array("group" => "srch", "return_url" => $arr["url"], "s_name" => $arr["s_name"], "s_clid" => $arr["s_clid"], "MAX_FILE_SIZE" => $arr["MAX_FILE_SIZE"]));
+		$args = array("group" => "srch");
+
+		if (!empty($arr["url"]))
+		{
+			$args["return_url"] = $arr["url"];
+		}
+
+		if (!empty($arr["s_name"]))
+		{
+			$args["s_name"] = $arr["s_name"];
+		}
+
+		if (!empty($arr["s_clid"]))
+		{
+			$args["s_clid"] = $arr["s_clid"];
+		}
+
+		if (!empty($arr["MAX_FILE_SIZE"]))
+		{
+			$args["MAX_FILE_SIZE"] = $arr["MAX_FILE_SIZE"];
+		}
+
+		return html::get_change_url($so->id(), $args);
 	}
 
 	/** cuts the selected objects

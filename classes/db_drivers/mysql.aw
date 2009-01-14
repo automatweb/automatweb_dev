@@ -11,6 +11,8 @@ class mysql
 	var $errmsg; # where we keep our error messages
 	var $rec_count;
 
+	private $db_proc_error_last_fn = "";
+
 	function db_init()
 	{
 		lc_load('definition');
@@ -147,7 +149,7 @@ class mysql
 				}
 				$eri = new class_base;
 				$eri->init();
-				$eri->raise_error(ERR_DB_QUERY,LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
+				$eri->raise_error("ERR_DB_QUERY",LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
 			}
 		}
 		else
@@ -591,14 +593,27 @@ class mysql
 	function db_add_col($tbl,$coldat)
 	{
 		extract($coldat);
-		if ($extra == 'AUTO_INCREMENT')
+
+		if (isset($extra) and $extra === 'AUTO_INCREMENT')
 		{
 			$extra = 'PRIMARY KEY AUTO_INCREMENT';
 		}
-		if ($length)
+		else
+		{
+			$extra = empty($extra) ? "" : " {$extra}";
+		}
+
+		if (!empty($length))
 		{
 			$len = '('.$length.')';
 		}
+		else
+		{
+			$len = "";
+		}
+
+		$default = empty($default) ? "" : " default '{$default}'";
+		$null = empty($null) ? "" : " {$null}";
 
 		// quote column name
 		$col_name = explode(".", $name);
@@ -609,7 +624,7 @@ class mysql
 		$name = implode(".", $col_name);
 
 		// exec q
-		$q = "ALTER TABLE $tbl ADD $name $type $len $null ".($default == '' ? '' : "default '$default'")." $extra ";
+		$q = "ALTER TABLE {$tbl} ADD {$name} {$type}{$len}{$null}{$default}{$extra}";
 		$this->db_query($q);
 	}
 

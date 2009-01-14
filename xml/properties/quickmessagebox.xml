@@ -70,13 +70,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>Message</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-      </property>
-      <property>
             <name>msg_inbox_tbl</name>
             <table>objects</table>
             <field>meta</field>

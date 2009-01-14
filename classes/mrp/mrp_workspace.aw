@@ -204,8 +204,6 @@
 	@property parameter_priority_slope type=textbox default=0.8 parent=right_column
 	@caption Kliendi ja projektiprioriteedi suhtelise v&auml;&auml;rtuse t&otilde;us vrd. t&auml;htajaga
 
-	@property separator type=text store=no no_caption=1 parent=right_column
-
 	@property parameter_schedule_length type=textbox default=2 parent=right_column
 	@caption Ajaplaani ulatus (a)
 
@@ -789,19 +787,19 @@ class mrp_workspace extends class_base
 		### require remaining_length and minstart when job was aborted_jobs
 		if (is_oid (aw_global_get ("mrp_printer_aborted")))
 		{
-			if ($prop["name"] == "pj_remaining_length")
+			if ($prop["name"] === "pj_remaining_length")
 			{
 				$job = obj (aw_global_get ("mrp_printer_aborted"));
 				$len  = floor ($job->prop("remaining_length") / 3600);
 				$prop["value"] = $len;
 				return PROP_OK;
 			}
-			elseif ($prop["name"] == "pj_minstart")
+			elseif ($prop["name"] === "pj_minstart")
 			{
 				$prop["value"] = time ();
 				return PROP_OK;
 			}
-			elseif ($prop["name"] == "pj_submit")
+			elseif ($prop["name"] === "pj_submit")
 			{
 				return PROP_OK;
 			}
@@ -812,27 +810,28 @@ class mrp_workspace extends class_base
 		}
 		else
 		{
-			if (($prop["name"] == "pj_remaining_length") or ($prop["name"] == "pj_minstart") or ($prop["name"] == "pj_submit"))
+			if (($prop["name"] === "pj_remaining_length") or ($prop["name"] === "pj_minstart") or ($prop["name"] === "pj_submit"))
 			{
 				return PROP_IGNORE;
 			}
 		}
 
-		if (substr($prop["name"], 0, 3) == "pjp")
+		if (substr($prop["name"], 0, 3) === "pjp")
 		{
-			if (!$arr["request"]["pj_job"])
+			if (empty($arr["request"]["pj_job"]))
 			{
 				return PROP_IGNORE;
 			}
+
 			// get prop from project
-			if ($prop["subtitle"] != 1)
+			if (empty($prop["subtitle"]))
 			{
 				$job = obj($arr["request"]["pj_job"]);
 				$proj = obj($job->prop("project"));
 				$rpn = substr($prop["name"], 4);
 				$prop["value"] = $proj->prop($rpn);
 
-				if ($prop["name"] == "pjp_case_wf")
+				if ($prop["name"] === "pjp_case_wf")
 				{
 					$this->_pjp_case_wf($arr);
 					return PROP_OK;
@@ -846,14 +845,15 @@ class mrp_workspace extends class_base
 			}
 		}
 
-		if (substr($prop["name"], 0, 3) == "pj_")
+		if (substr($prop["name"], 0, 3) === "pj_")
 		{
-			if (!$arr["request"]["pj_job"])
+			if (empty($arr["request"]["pj_job"]))
 			{
 				return PROP_IGNORE;
 			}
+
 			// get prop from job
-			if ($prop["subtitle"] != 1)
+			if (empty($prop["subtitle"]))
 			{
 				$job = obj($arr["request"]["pj_job"]);
 				$rpn = substr($prop["name"], 3);
@@ -1225,7 +1225,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs":
-				if ($arr["request"]["pj_job"])
+				if (!empty($arr["request"]["pj_job"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -1238,7 +1238,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_legend":
-				if ($arr["request"]["pj_job"])
+				if (!empty($arr["request"]["pj_job"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -1318,7 +1318,7 @@ class mrp_workspace extends class_base
 					"ws" => $arr["obj_inst"],
 					"ign_glob" => true
 				));
-				if (count($resids) == 1)
+				if (count($resids) === 1)
 				{
 					$resid = reset($resids);
 					if ($resid)
@@ -1333,7 +1333,7 @@ class mrp_workspace extends class_base
 					header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "grp_printer_current")));
 					die();
 				}
-				elseif (count($resids))
+				elseif (count($resids) > 0)
 				{
 					$ol = new object_list(array("oid" => $resids));
 				}
@@ -1351,22 +1351,24 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_next_link":
-				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable" || $arr["request"]["group"] == "grp_printer_startable")
+				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["group"] === "grp_printer_notstartable" || $arr["request"]["group"] === "grp_printer_startable")
 				{
 					return PROP_IGNORE;
 				}
+				$page = isset($arr["request"]["printer_job_page"]) ? (int) $arr["request"]["printer_job_page"] : 0;
 				$prop["value"] = html::href(array(
-					"url" => aw_url_change_var("printer_job_page", $arr["request"]["printer_job_page"]+1),
+					"url" => aw_url_change_var("printer_job_page", $page+1),
 					"caption" => t("J&auml;rgmine lehek&uuml;lg")
 				));
 				break;
 
 			case "printer_jobs_prev_link":
-				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable" || $arr["request"]["group"] == "grp_printer_startable")
+				if (!empty($arr["request"]["pj_job"]) || $arr["request"]["group"] === "grp_printer_notstartable" || $arr["request"]["group"] === "grp_printer_startable")
 				{
 					return PROP_IGNORE;
 				}
-				if (!$arr["request"]["printer_job_page"])
+
+				if (empty($arr["request"]["printer_job_page"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -2528,10 +2530,10 @@ class mrp_workspace extends class_base
 		$time =  time();
 		$this_object = $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
-		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
-		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $this->get_week_start ());
+		$columns = (int) (isset($arr["request"]["mrp_chart_length"]) ? $arr["request"]["mrp_chart_length"] : 7);
+		$range_start = (int) (isset($arr["request"]["mrp_chart_start"]) ? $arr["request"]["mrp_chart_start"] : $this->get_week_start ());
 		$range_end = (int) ($range_start + $columns * 86400);
-		$hilighted_project = (int) ($arr["request"]["mrp_hilight"] ? $arr["request"]["mrp_hilight"] : false);
+		$hilighted_project = (int) (isset($arr["request"]["mrp_hilight"]) ? $arr["request"]["mrp_hilight"] : false);
 		$hilighted_jobs = array ();
 
 		switch ($columns)
@@ -2584,7 +2586,7 @@ class mrp_workspace extends class_base
 					)
 				));
 
-				if (!$arr["request"]["chart_customer"])
+				if (empty($arr["request"]["chart_customer"]))
 				{
 					### add reserved times for resources, cut off past
 					$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
@@ -2644,7 +2646,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_PAUSED,
 		);
 
-		if ($arr["request"]["chart_customer"])
+		if (!empty($arr["request"]["chart_customer"]))
 		{
 			$this->db_query (
 			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
@@ -2728,7 +2730,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_ABORTED,
 		);
 
-		if ($arr["request"]["chart_customer"])
+		if (!empty($arr["request"]["chart_customer"]))
 		{
 			$this->db_query (
 			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
@@ -2952,9 +2954,9 @@ class mrp_workspace extends class_base
 
 	function create_chart_navigation ($arr)
 	{
-		$start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : time ());
-		$columns = (int) ($arr["request"]["mrp_chart_length"] ? $arr["request"]["mrp_chart_length"] : 7);
-		$start = ($columns == 7) ? $this->get_week_start ($start) : $start;
+		$start = (int) (isset($arr["request"]["mrp_chart_start"]) ? $arr["request"]["mrp_chart_start"] : time ());
+		$columns = (int) (isset($arr["request"]["mrp_chart_length"]) ? $arr["request"]["mrp_chart_length"] : 7);
+		$start = ($columns === 7) ? $this->get_week_start ($start) : $start;
 		$period_length = $columns * 86400;
 		$length_nav = array ();
 		$start_nav = array ();
@@ -2999,7 +3001,7 @@ class mrp_workspace extends class_base
 
 		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;P&auml;evi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
 
-		if (is_oid ($arr["request"]["mrp_hilight"]))
+		if (isset($arr["request"]["mrp_hilight"]) and $this->can("view", $arr["request"]["mrp_hilight"]))
 		{
 			$project = obj ($arr["request"]["mrp_hilight"]);
 			$deselect = html::href (array (
@@ -3760,6 +3762,14 @@ class mrp_workspace extends class_base
 		{
 			$t->set_selected_item(0); // doesn't work here. cat&cust select clearing for search request solved by adding js in cs_submit get_prop call.
 		}
+		elseif (!empty($arr["request"]["cust"]))
+		{
+			$t->set_selected_item($arr["request"]["cust"]);
+		}
+		elseif (!empty($arr["request"]["cat"]))
+		{
+			$t->set_selected_item($arr["request"]["cat"]);
+		}
 	}
 
 	function _req_create_customers_tree($co, &$t)
@@ -4081,18 +4091,20 @@ class mrp_workspace extends class_base
 
 		$per_page = $arr["obj_inst"]->prop("pv_per_page");
 		$proj_states = false;
-		$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",".$per_page;
+		$page = isset($arr["request"]["printer_job_page"]) ? (int) $arr["request"]["printer_job_page"] : 0;
+		$limit = ($page*$per_page).",".$per_page;
 
 		switch ($arr["request"]["group"])
 		{
 			case "grp_printer_done":
 				$states = array(MRP_STATUS_DONE);
 				$default_sortby = "mrp_job.started";
-				if (!$arr["request"]["sort_order"])
+				if (empty($arr["request"]["sort_order"]))
 				{
 					$arr["request"]["sort_order"] = "desc";
 				}
-				if ($arr["request"]["sortby"] == "tm")
+
+				if (isset($arr["request"]["sortby"]) and $arr["request"]["sortby"] === "tm")
 				{
 					$arr["request"]["sortby"] = "started";
 				}
@@ -4651,7 +4663,7 @@ class mrp_workspace extends class_base
 	**/
 	private function get_next_jobs_for_resources($arr)
 	{
-		if (!isset($arr["resources"]) || !is_array($arr["resources"]) || count($arr["resources"]) == 0)
+		if (!isset($arr["resources"]) || !is_array($arr["resources"]) || count($arr["resources"]) === 0)
 		{
 			return array();
 		}
@@ -5351,18 +5363,19 @@ class mrp_workspace extends class_base
 		}
 	}
 
-	function _chart_search($arr)
+	protected function _chart_search($arr)
 	{
-		if ($arr["request"]["mrp_hilight"] && !$arr["request"]["chart_project_hilight"])
+		if (isset($arr["request"]["mrp_hilight"]) and $this->can("view", $arr["request"]["mrp_hilight"]) and empty($arr["request"]["chart_project_hilight"]))
 		{
 			$o = obj($arr["request"]["mrp_hilight"]);
 			$arr["request"]["chart_project_hilight"] = $o->name();
 		}
+
 		$str  = t("<i>Valitud projekt</i>");
 		$str .= " ";
 		$str .= html::textbox(array(
 			"name" => "chart_project_hilight",
-			"value" => $arr["request"]["chart_project_hilight"],
+			"value" => isset($arr["request"]["chart_project_hilight"]) ? $arr["request"]["chart_project_hilight"] : "",
 			"size" => 6
 		));
 		$str .= " ";
@@ -5370,7 +5383,7 @@ class mrp_workspace extends class_base
 		$str .= " ";
 		$str .= html::textbox(array(
 			"name" => "chart_customer",
-			"value" => $arr["request"]["chart_customer"]
+			"value" => isset($arr["request"]["chart_customer"]) ? $arr["request"]["chart_customer"] : ""
 		));
 
 		$spl = $this->mk_my_orb("cust_search_pop", array("id" => $arr["obj_inst"]->id()));

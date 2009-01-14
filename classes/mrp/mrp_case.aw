@@ -231,6 +231,20 @@ classload("mrp/mrp_header");
 
 class mrp_case extends class_base
 {
+	protected $workspace; // mrp_workspace object
+	protected $mrp_error = "";
+	protected $states = array();
+	protected $state_colours = array (
+		MRP_STATUS_NEW => MRP_COLOUR_NEW,
+		MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
+		MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
+		MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
+		MRP_STATUS_DONE => MRP_COLOUR_DONE,
+		MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
+		MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
+		MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
+	);
+
 	function mrp_case()
 	{
 		$this->states = array (
@@ -244,17 +258,6 @@ class mrp_case extends class_base
 			MRP_STATUS_DELETED => t("Kustutatud"),
 			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
-		);
-
-		$this->state_colours = array (
-			MRP_STATUS_NEW => MRP_COLOUR_NEW,
-			MRP_STATUS_PLANNED => MRP_COLOUR_PLANNED,
-			MRP_STATUS_INPROGRESS => MRP_COLOUR_INPROGRESS,
-			MRP_STATUS_ABORTED => MRP_COLOUR_ABORTED,
-			MRP_STATUS_DONE => MRP_COLOUR_DONE,
-			MRP_STATUS_PAUSED => MRP_COLOUR_PAUSED,
-			MRP_STATUS_ONHOLD => MRP_COLOUR_ONHOLD,
-			MRP_STATUS_ARCHIVED => MRP_COLOUR_ARCHIVED,
 		);
 
 		$this->init(array(
@@ -324,7 +327,11 @@ class mrp_case extends class_base
 				break;
 
 			case "workflow_errors":
-				if (!empty ($arr["request"]["errors"]))
+				if (empty ($arr["request"]["errors"]))
+				{
+					$prop["value"] = "";
+				}
+				else
 				{
 					$errors = $arr["request"]["errors"];
 					$this->dequote ($errors);
@@ -607,27 +614,34 @@ class mrp_case extends class_base
 		}
 	}
 
-	function &get_current_workspace ($arr)
+	/** Get mrp_workspace object associated with this project
+		@attrib api=1 params=name
+		@param id optional type=oid acl=view
+			this object id
+		@param obj_inst optional type=object
+			this object instance
+		@returns mrp_workspace object
+	**/
+	public function get_current_workspace ($arr)
 	{
-		if (is_oid ($arr["id"]))
+		if (isset($arr["id"]) and $this->can("view", $arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
 		}
 
-		if (is_object ($arr["obj_inst"]))
+		if (isset($arr["obj_inst"]) and is_object ($arr["obj_inst"]) and CL_MRP_CASE == $arr["obj_inst"]->class_id())
 		{
-			$this_object =& $arr["obj_inst"];
+			$this_object = $arr["obj_inst"];
 		}
 
 		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_OWNER", "class_id" => CL_MRP_WORKSPACE));
-
 		foreach ($connections as $connection)
 		{
-			$workspace = $connection->to ();
+			$workspace = $connection->to();
 			break;
 		}
 
-		if (!$workspace)
+		if (!isset($workspace))
 		{
 			$workspace = obj(aw_ini_get("prisma.ws"));
 		}
@@ -1221,7 +1235,7 @@ class mrp_case extends class_base
 			"caption" => t("T&ouml;&ouml;sse"),
 		));
 
-		if (!$arr["no_edit"])
+		if (empty($arr["no_edit"]))
 		{
 			$table->define_chooser(array(
 				"name" => "selection",
@@ -1292,7 +1306,7 @@ class mrp_case extends class_base
 			$starttime = $job->prop ("starttime");
 			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
 
-			if ($arr["no_edit"] == 1)
+			if (!empty($arr["no_edit"]))
 			{
 				$comment = htmlspecialchars($job->prop("comment"));
 			}
@@ -1312,44 +1326,44 @@ class mrp_case extends class_base
 			$t_minstart = (($job->prop ("minstart")) ? $job->prop ("minstart") : time());
 
 			$table->define_data(array(
-				"name" => $arr["no_edit"] == 1 ? ($this_object->name () . " - " . $resource_name) : html::get_change_url(
+				"name" => empty($arr["no_edit"]) ? html::get_change_url(
 					$job->id(),
 					array("return_url" => get_ru()),
 					$this_object->name () . " - " . $resource_name
-				),
-				"length" => $arr["no_edit"] == 1 ?  $t_length : html::textbox(array(
+				) : ($this_object->name () . " - " . $resource_name),
+				"length" => empty($arr["no_edit"]) ? html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
 					"size" => "1",
 					"textsize" => "11px",
 					"value" => $t_length,
 					"disabled" => $disabled,
 					)
-				),
-				"pre_buffer" => $arr["no_edit"] == 1 ? $t_pre_buffer : html::textbox(array(
+				) : $t_length,
+				"pre_buffer" => empty($arr["no_edit"]) ? html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-pre_buffer",
 					"size" => "1",
 					"textsize" => "11px",
 					"value" => $t_pre_buffer,
 					"disabled" => $disabled,
 					)
-				),
-				"post_buffer" => $arr["no_edit"] == 1 ? $t_post_buffer : html::textbox(array(
+				) : $t_pre_buffer,
+				"post_buffer" => empty($arr["no_edit"]) ? html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-post_buffer",
 					"size" => "1",
 					"textsize" => "11px",
 					"value" => $t_post_buffer,
 					"disabled" => $disabled,
 					)
-				),
-				"prerequisites" => $arr["no_edit"] == 1 ? $prerequisites : html::textbox(array(
+				) : $t_post_buffer,
+				"prerequisites" => empty($arr["no_edit"]) ? html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-prerequisites",
 					"size" => "5",
 					"textsize" => "11px",
 					"value" => $prerequisites,
 					"disabled" => $disabled,
 					)
-				),
-				"minstart" => $arr["no_edit"] == 1 ? date("d.m.Y H:i", $t_minstart) : '<span style="white-space: nowrap;">' . html::datetime_select(array(
+				) : $prerequisites,
+				"minstart" => empty($arr["no_edit"]) ? ('<span style="white-space: nowrap;">' . html::datetime_select(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-minstart",
 					"value" => $t_minstart,
 					"disabled" => $disabled,
@@ -1357,7 +1371,7 @@ class mrp_case extends class_base
 					"month" => "text",
 					"textsize" => "11px",
 					)
-				) . '</span>',
+				) . '</span>') : date("d.m.Y H:i", $t_minstart),
 				"exec_order" => $job->prop ("exec_order"),
 				"starttime" => $planned_start,
 				"status" => $state,
@@ -1400,7 +1414,7 @@ class mrp_case extends class_base
 		{
 			$property = explode ("-", $name);
 
-			if ($property[0] == "mrp_workflow_job")
+			if ($property[0] === "mrp_workflow_job")
 			{
 				if (is_oid ($property[1]))
 				{

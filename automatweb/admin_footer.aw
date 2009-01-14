@@ -419,11 +419,14 @@ if (isset($_SESSION["user_history_count"]) and $_SESSION["user_history_count"] >
 			foreach(safe_array($_SESSION["user_history"]) as $_url => $_t)
 			{
 				$_pu = parse_url($_url);
-				parse_str($_pu["query"], $_bits);
-				if (@$_bits["class"] == @$bits["class"] && @$_bits["id"] == @$bits["id"] && @$_bits["group"] == @$bits["group"])
+				if (isset($_pu["query"]))
 				{
-					$has = true;
-					break;
+					parse_str($_pu["query"], $_bits);
+					if (@$_bits["class"] == @$bits["class"] && @$_bits["id"] == @$bits["id"] && @$_bits["group"] == @$bits["group"])
+					{
+						$has = true;
+						break;
+					}
 				}
 			}
 
@@ -431,6 +434,7 @@ if (isset($_SESSION["user_history_count"]) and $_SESSION["user_history_count"] >
 			{
 				$_SESSION["user_history"][get_ru()] = strip_tags($st);
 			}
+
 			if (count($_SESSION["user_history"]) > $_SESSION["user_history_count"])
 			{
 				array_shift($_SESSION["user_history"]);

@@ -1,11 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.4 2008/01/31 13:53:49 kristo Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 /*
 @classinfo  maintainer=kristo
 */
-class xml 
+class xml
 {
 	////
 	// !Konstruktor
@@ -63,22 +62,22 @@ class xml
 	// !Genereerib parameetrige pohjal tag-i
 	function xml_gen_tag($args = array())
 	{
-		// nende märkide puhul kasutame tagi väärtuse esitamisel CDATA notatsiooni,
-		// vastasel juhul lihtsalt väljastame stringi
+		// nende m2rkide puhul kasutame tagi v22rtuse esitamisel CDATA notatsiooni,
+		// vastasel juhul lihtsalt v2ljastame stringi
 		$specials = array("<",">","\"");
 
-		$tag = $args["tag"];       
+		$tag = $args["tag"];
 		$value = $args["value"];
 		$spacer = $args["spacer"];
 
-		// tulem on soltuvalt spetsiaalmärkide olemasolust $value-s, kas
+		// tulem on soltuvalt spetsiaalm2rkide olemasolust $value-s, kas
 		//	<tag>
 		//	<![CDATA[
 		//	value
 		//	]]>
 		//	</tag>
 		//
-		//	või
+		//	v6i
 		//
 		// 	<tag>value</tag>
 		//
@@ -91,7 +90,7 @@ class xml
 			$pos = strpos($value,$spec_char);
 			if ($pos === false)
 			{
-	
+
 			}
 			else
 			{
@@ -112,7 +111,7 @@ class xml
 	}
 
 	////
-	// !Serialiseerib array XML-i. Kutsub ennast rekursiivselt välja
+	// !Serialiseerib array XML-i. Kutsub ennast rekursiivselt v2lja
 	// arg - array
 	function xml_serialize($arg = array())
 	{
@@ -137,14 +136,14 @@ class xml
 		{
 			return;
 		};
-	
+
 		$tmp = "";
 		$realval = "";
-	
+
 		reset($arg);
 		foreach($arg as $key => $val)
 		{
-			// kui $val on array, siis töötleme seda rekursiivselt,
+			// kui $val on array, siis t88tleme seda rekursiivselt,
 			// muidu salvestame tagi siia
 			$spacer = str_repeat("      ",$level);
 
@@ -155,8 +154,9 @@ class xml
 				if ($plen >= 1)
 				{
 					$pkey = $this->parents[$plen-1];
-				};
-				if ($this->child_id[$pkey])
+				}
+
+				if (!empty($this->child_id[$pkey]))
 				{
 					$xkey = $this->child_id[$pkey];
 				}
@@ -170,7 +170,7 @@ class xml
 				};
 				$key = $xkey;
 			};
-		
+
 			if (is_array($val))
 			{
 				$level++;
@@ -195,7 +195,7 @@ class xml
 	}
 
 	////
-	// !Võtab XML definitsiooni (mis peab olema korrektne), ning tagastab php array
+	// !V6tab XML definitsiooni (mis peab olema korrektne), ning tagastab php array
 	// source - xml
 	function xml_unserialize($args = array())
 	{
@@ -205,11 +205,11 @@ class xml
 
 		// parsimist enam kiiremaks ei saa, see toimub enivei PHP siseselt
 		$parser = xml_parser_create();
-		
-		// keerame tag-ide suurtähtedeks konvertimise maha
+
+		// keerame tag-ide suurt2htedeks konvertimise maha
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 
-		// kui tahad aru saada mida see funktsioon ja järgnevad read teevad, siis debuukimise ajal
+		// kui tahad aru saada mida see funktsioon ja j2rgnevad read teevad, siis debuukimise ajal
 		xml_parse_into_struct($parser,$source,&$keys,&$values);
 		/*{
 			echo "error! <br>";
@@ -232,7 +232,7 @@ echo "line = ".xml_get_current_line_number($parser);
 				continue;
 			};
 			$tag = $v1["tag"];
-		
+
 			$pref_idx = strpos($tag,$this->num_prefix);
 			if (not($pref_idx === false))
 			{
@@ -243,12 +243,12 @@ echo "line = ".xml_get_current_line_number($parser);
 				};
 			};
 
-			// kui lopetet tag, siis on meil väärtus käes, ja rohkem pole vaja midagi teha
+			// kui lopetet tag, siis on meil v22rtus k2es, ja rohkem pole vaja midagi teha
 			if ($v1["type"]	== "complete")
 			{
 				$path1 = $path . "[\"" . $tag . "\"]";
 
-				// value algusest ja lõpust liigne räga maha
+				// value algusest ja l6pust liigne r2ga maha
 				$value = trim(isset($v1["value"]) ? $v1["value"] : "");
 
 				// moodustame evali jaoks rea
@@ -266,7 +266,7 @@ echo "line = ".xml_get_current_line_number($parser);
 				$void = array_pop($ckeys);
 				$path = join("",$ckeys);
 			};
-			// ülejäänud tage ignoreeritakse
+			// ylej22nud tage ignoreeritakse
 		}
 		eval($datablock);
 		return $retval;

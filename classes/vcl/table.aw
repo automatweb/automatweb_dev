@@ -1999,7 +1999,7 @@ class aw_table extends aw_template
 			);
 			$this->filter_index[$filter_key] = $args["name"];
 
-			if (is_array ($args["filter_options"]))
+			if (isset($args["filter_options"]) and is_array ($args["filter_options"]))
 			{
 				if (!empty ($args["filter_options"]["selected"]))
 				{
@@ -2728,14 +2728,15 @@ echo dbg::short_backtrace();
 				$tbl2 .= "&nbsp;";
 				$tbl2 .= "</td>\n";
 			}
+
 			foreach($this->rowdefs as $k => $v)
 			{
 				$filter_style = "filter_normal";
-				$filter_key = $this->filters[$v['name']]['key'];
 
 				### add filter if defined for current column
-				if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "select")
+				if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] === "select")
 				{
+					$filter_key = $this->filters[$v['name']]['key'];
 					$filter_values = $this->get_filter ($v["name"]);
 					$filter_name = $this->filter_name;
 
@@ -2746,14 +2747,15 @@ echo dbg::short_backtrace();
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
-						"value" => $this->selected_filters[$filter_key]["filter_selection"],
+						"value" => isset($this->selected_filters[$filter_key]) ? $this->selected_filters[$filter_key]["filter_selection"] : "",
 						"class" => "filterSelect",
 						"onchange" => "xchanged=1;window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text"
 					);
 					$filter_contents = html::select ($args);
 				}
-				else if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "text")
+				elseif (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] === "text")
 				{
+					$filter_key = $this->filters[$v['name']]['key'];
 					$newurl = $url.$sep.$this->filter_name.'='.$filter_key;
 					$filter_contents = html::textbox(array(
 						'name' => $this->filter_name.'['.$v["name"].']',

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.25 2008/11/26 10:54:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.26 2009/01/14 08:53:27 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -16,6 +16,7 @@ class gantt_chart extends class_base
 {
 	protected $data = array ();
 	protected $rows = array ();
+	protected $pending_bars = array ();
 	protected $navigation = "";
 	protected $chart_caption = ""; // caption text (string)
 	protected $chart_footer = ""; // footer text (string)
@@ -306,6 +307,9 @@ class gantt_chart extends class_base
 		@param target optional type=string
 			URI target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 
+		@param id optional type=string
+			Bar id.
+
 		@examples
 			$wd_end = mktime($day_end, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
 			$tot_len = $length;
@@ -334,9 +338,10 @@ class gantt_chart extends class_base
 		$nostartmark = empty ($arr["nostartmark"]) ? false : true;
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
+		$id = isset($arr["id"]) ? $arr["id"] : "";
 
 		$this->data[$row][] = array (
-			"id" => $arr["id"],
+			"id" => $id,
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
@@ -393,7 +398,7 @@ class gantt_chart extends class_base
 					break;
 
 				case "separator":
-					if ( ($row["expanded"] == false) or (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) == "y") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] == "y") )//!!! kust siin _GET asemel v6tta see?
+					if ( ($row["expanded"] == false) or (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) === "y") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] === "y") )//!!! kust siin _GET asemel v6tta see?
 					{
 						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "y");
 						$collapsed = true;
@@ -404,7 +409,7 @@ class gantt_chart extends class_base
 						$collapsed = false;
 					}
 
-					if ( (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) == "n") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] == "n") )//!!! kust siin _GET asemel v6tta see?
+					if ( (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) === "n") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] === "n") )//!!! kust siin _GET asemel v6tta see?
 					{
 						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "n");
 						$collapsed = false;
@@ -520,7 +525,7 @@ class gantt_chart extends class_base
 							$pending_start = false;
 							$pending_length = 0;
 
-							while ($this->pending_bars)
+							while (count($this->pending_bars))
 							{
 								$pending_bar = array_shift ($this->pending_bars);
 								$pending_length += $pending_bar["length"];
@@ -570,7 +575,6 @@ class gantt_chart extends class_base
 
 				$columns--;
 			}
-			unset($this->pending_bars);
 
 			### parse row
 			$this->vars (array (
@@ -676,7 +680,7 @@ class gantt_chart extends class_base
 		return $chart;
 	}
 
-	function draw_bar ($bar, $cell_type, $bar_type, $bar_colour)
+	protected function draw_bar ($bar, $cell_type, $bar_type, $bar_colour)
 	{
 		$drawn_content = "";
 
@@ -729,7 +733,7 @@ class gantt_chart extends class_base
 	}
 
 	// draws given amount of times to the top of the graph, based on the start/end
-	function get_timespans()
+	protected function get_timespans()
 	{
 		if (!$this->timespans)
 		{
@@ -776,7 +780,7 @@ class gantt_chart extends class_base
 		return $ts;
 	}
 
-	function sort_data ()
+	protected function sort_data ()
 	{
 		$this->parsed_data = $this->data;
 
@@ -936,7 +940,7 @@ class gantt_chart extends class_base
 
 			while (isset($this->parsed_data[$row][$key]))
 			{
-/* dbg */ if ($this->parsed_data[$row][$key]["id"] == $_GET["mrp_gantt_dbg_job"] and $_GET["mrp_gantt_dbg_job"]) { $this->ganttdbg = 1;}
+// /* dbg */ if (isset($_GET["mrp_gantt_dbg_job"]) and $this->parsed_data[$row][$key]["id"] == $_GET["mrp_gantt_dbg_job"]) { $this->ganttdbg = 1;}
 // /* dbg */ if ($row == 1337) { $this->ganttdbg = 1;}
 
 				$key2 = $key + 1;
@@ -955,17 +959,17 @@ class gantt_chart extends class_base
 					$overlap_end = max ($overlap_end, ($this->parsed_data[$row][$key2]["start"] + $this->parsed_data[$row][$key2]["length"]));
 					$key2++;
 
-/* dbg */ if ($this->ganttdbg){
-/* dbg */ echo $key2 . ". overlap search length:" . round ($this->parsed_data[$row][$key2]["length"]/3600, 2) . "<br>";
-/* dbg */ echo $key2 . ". overlap search start:" . date (MRP_DATE_FORMAT, $this->parsed_data[$row][$key2]["start"]) . "<br>";
-/* dbg */ }
+// /* dbg */ if ($this->ganttdbg){
+// /* dbg */ echo $key2 . ". overlap search length:" . round ($this->parsed_data[$row][$key2]["length"]/3600, 2) . "<br>";
+// /* dbg */ echo $key2 . ". overlap search start:" . date (MRP_DATE_FORMAT, $this->parsed_data[$row][$key2]["start"]) . "<br>";
+// /* dbg */ }
 
 				}
 
-/* dbg */ if ($this->ganttdbg){
-/* dbg */ echo "overlap_end:" . date (MRP_DATE_FORMAT, $overlap_end) . "<br>";
-/* dbg */ echo "overlap_start:" . date (MRP_DATE_FORMAT, $overlap_start) . "<br>";
-/* dbg */ }
+// /* dbg */ if ($this->ganttdbg){
+// /* dbg */ echo "overlap_end:" . date (MRP_DATE_FORMAT, $overlap_end) . "<br>";
+// /* dbg */ echo "overlap_start:" . date (MRP_DATE_FORMAT, $overlap_start) . "<br>";
+// /* dbg */ }
 
 				if (isset ($overlap_end))
 				{
@@ -983,11 +987,11 @@ class gantt_chart extends class_base
 					### trim current bar to overlap start.
 					$this->parsed_data[$row][$key]["length"] = $overlap_start - $this->parsed_data[$row][$key]["start"];
 
-/* dbg */ if ($this->ganttdbg){
-/* dbg */ echo "trimmed bar:";
-/* dbg */ arr ($this->parsed_data[$row][$key]);
-/* dbg */ echo "remainder start:" . date (MRP_DATE_FORMAT, $remainder["start"]) . "<br>";
-/* dbg */ $this->ganttdbg = false;}
+// /* dbg */ if ($this->ganttdbg){
+// /* dbg */ echo "trimmed bar:";
+// /* dbg */ arr ($this->parsed_data[$row][$key]);
+// /* dbg */ echo "remainder start:" . date (MRP_DATE_FORMAT, $remainder["start"]) . "<br>";
+// /* dbg */ $this->ganttdbg = false;}
 				}
 
 				$key++;
@@ -995,7 +999,7 @@ class gantt_chart extends class_base
 		}
 	}
 
-	function bar_start_sort ($a, $b)
+	protected function bar_start_sort ($a, $b)
 	{
 		if ($a["start"] == $b["start"])
 		{

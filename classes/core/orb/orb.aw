@@ -70,7 +70,7 @@ class orb extends aw_template
 		// class defineeritud?
 		if (!isset($class))
 		{
-			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$silent);
+			$this->raise_error("ERR_ORB_NOCLASS",E_ORB_CLASS_UNDEF,true,$silent);
 		}
 
 		// damn, I'm smart
@@ -106,7 +106,7 @@ class orb extends aw_template
 		// action defineeritud?
 		if (!isset($action))
 		{
-			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,true,$silent);
+			$this->raise_error("ERR_ORB_AUNDEF",E_ORB_ACTION_UNDEF,true,$silent);
 		};
 
 		// create an array of class names that should be loaded.
@@ -170,7 +170,7 @@ class orb extends aw_template
 		// still not found?
 		if (!$found)
 		{
-			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),true,$silent);
+			$this->raise_error("ERR_ORB_CAUNDEF",sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),true,$silent);
 		};
 
 		// check acl
@@ -183,7 +183,7 @@ class orb extends aw_template
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
-				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),true,$silent);
+				$this->raise_error("ERR_ORB_MNOTFOUND",sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),true,$silent);
 			}
 
 			if ($orb_defs[$class][$action]["xmlrpc"] == 1)
@@ -604,14 +604,13 @@ class orb extends aw_template
 		}
 		else
 		{
-//die($this->cfg["site_basedir"]."/xml/orb/$class.xml");
 			if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml") && !file_exists($this->cfg["site_basedir"]."/xml/orb/$class.xml"))
 			{
-				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
+				$this->raise_error("ERR_ORB_NOTFOUND",sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 			}
 
 			$ret = $this->load_xml_orb_def($class);
-		};
+		}
 
 		if (isset($ret[$class]["_extends"]))
 		{
@@ -641,7 +640,7 @@ class orb extends aw_template
 
 			if (!class_exists($class))
 			{
-				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
+				$this->raise_error("ERR_ORB_NOTFOUND",sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 			}
 		};
 
@@ -737,12 +736,12 @@ class orb extends aw_template
 
 		if (!isset($class))
 		{
-			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,true,$this->silent);
+			$this->raise_error("ERR_ORB_NOCLASS",E_ORB_CLASS_UNDEF,true,$this->silent);
 		};
 
 		if (!isset($action))
 		{
-			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,true,$this->silent);
+			$this->raise_error("ERR_ORB_AUNDEF",E_ORB_ACTION_UNDEF,true,$this->silent);
 		};
 
 		// get orb defs for the class
@@ -773,7 +772,7 @@ class orb extends aw_template
 			$inst = get_instance("core/orb/".$method);
 			if (!is_object($inst))
 			{
-				$this->raise_error(ERR_ORB_RPC_NO_HANDLER,sprintf(t("Could not load request handler for request method '%s'"), $method), true,$this->silent);
+				$this->raise_error("ERR_ORB_RPC_NO_HANDLER",sprintf(t("Could not load request handler for request method '%s'"), $method), true,$this->silent);
 			}
 			// send the remote request and read the result
 			$data = $inst->do_request($arr);

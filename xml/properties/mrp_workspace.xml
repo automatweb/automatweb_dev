@@ -278,16 +278,6 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>sp_search</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_projects</group>
-            <type>hidden</type>
-            <value>0</value>
-            <store>no</store>
-      </property>
-      <property>
             <name>resources_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -644,17 +634,6 @@
             <default>0.8</default>
             <parent>right_column</parent>
             <caption>Kliendi ja projektiprioriteedi suhtelise v&amp;amp;auml;&amp;amp;auml;rtuse t&amp;amp;otilde;us vrd. t&amp;amp;auml;htajaga</caption>
-      </property>
-      <property>
-            <name>separator</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_settings_def</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>right_column</parent>
       </property>
       <property>
             <name>parameter_schedule_length</name>

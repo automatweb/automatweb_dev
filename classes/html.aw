@@ -455,7 +455,7 @@ class html extends aw_template
 					$hval = htmlspecialchars($hval);
 				}
 				$retval = "<textarea class=\"codepress php\" id=\"{$name}\" name=\"{$name}\" cols=\"{$cols}\" rows=\"{$rows}\" wrap=\"off\" >{$value}</textarea>
-				
+
 				<!--<input type=\"hidden\" value=\"{$hval}\" name=\"{$name}\" id=\"{$name}\" />-->\n";
 			}
 			else
@@ -637,7 +637,7 @@ class html extends aw_template
 		stuff what will happen if you click on checkbox - javascript
 	@param title optional
 		title
-	@param nbsp optional type=bool
+	@param nbsp optional type=bool default=false
 		If set, the caption is separated from checbox with non-breaking spaces.
 	@param span optional type=bool
 
@@ -652,6 +652,7 @@ class html extends aw_template
 		$span = !empty($span) ? "<span>" : "";
 		$span_ = !empty($span) ? "</span>" : "";
 		$capt = $onc = $title = '';
+		$nbsp = isset($args["nbsp"]) ? (bool) $args["nbsp"] : false;
 
 		if (empty($value))
 		{
