@@ -44,6 +44,16 @@ class automatweb
 		}
 	}
 
+	/** Shortcut method for running a typical http www request
+	@attrib api=1 params=pos
+	@param cfg_file required type=string
+		Configuration file absolute path. It is expected to be in an automatweb site directory! I.e. a 'pagecache' directory must be found in that same directory.
+	@returns void
+	@comment
+		A common web request execution script. Creates a server instance, autoloads request. Ends php script when done.
+	@errors
+		Displays critical errors in output. If cfg_file not found, or when a fatal server error occurred.
+	**/
 	public static function run_simple_web_request_bc($cfg_file)
 	{
 		if (!is_readable($cfg_file))
@@ -68,8 +78,6 @@ class automatweb
 		}
 		catch (Exception $e)
 		{
-			echo nl2br($e);
-
 			try
 			{
 				automatweb::shutdown();
@@ -83,7 +91,7 @@ class automatweb
 				header("HTTP/1.1 500 Server Error");
 			}
 
-			echo "<br /><br />" . nl2br($e);
+			echo "Server Error";
 		}
 
 		exit;
