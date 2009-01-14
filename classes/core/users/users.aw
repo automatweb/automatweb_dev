@@ -1,6 +1,6 @@
 <?php
 /*
-$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.12 2008/11/11 10:21:27 kristo Exp $
+$Header: /home/cvs/automatweb_dev/classes/core/users/users.aw,v 1.13 2009/01/14 09:06:08 voldemar Exp $
 @classinfo  maintainer=kristo
 */
 classload("core/users/users_user");
@@ -442,6 +442,11 @@ die();
 
 		if (($uid = aw_global_get("uid")) != "")
 		{
+			if(empty($_SESSION["uid_oid"]))
+			{
+				$_SESSION["uid_oid"] = users::get_oid_for_uid(aw_global_get("uid"));
+			}
+
 			$this->create_gidlists($_SESSION["uid_oid"]);
 			$gidlist_pri_oid = aw_global_get("gidlist_pri_oid");
 			if (count($gidlist_pri_oid) < 1)
@@ -948,7 +953,7 @@ die();
 					uid = '$arr[uid]'
 			";
 			$row = $this->db_fetch_row($q);
-			if ($row["hash"] == $arr["hash"])
+			if ($row["hash"] === $arr["hash"])
 			{
 				// do quick login
 				$_SESSION["uid"] = $arr["uid"];
