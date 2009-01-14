@@ -7,6 +7,10 @@ if (isset($_SERVER["DOCUMENT_ROOT"]))
 
 	// site path requested in uri
 	$path = $_SERVER["REQUEST_URI"];
+	if ($path[0] == "/")
+	{
+		$path = "http".($_SERVER["HTTPS"] ? "s" : "")."://".$_SERVER["HTTP_HOST"].$path;
+	}
 	$path = parse_url($path);
 	$path = pathinfo($path["path"]);
 	$path = dirname(strrev(strstr(strrev($path["dirname"]), "automatweb")));
