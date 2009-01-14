@@ -1495,7 +1495,7 @@ class trademark_manager extends class_base
 			}
 		}
 
-		exit("Done.");
+		exit("Done. " . date("F j, Y, H:i:s"));
 	}
 
 	//replace reserved characters

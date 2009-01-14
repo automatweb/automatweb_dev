@@ -3091,9 +3091,10 @@ abstract class intellectual_property extends class_base
 	{
 		$uid = aw_global_get("uid");
 
-		if($this->can("delete", $_GET["delete_patent"]))
+		$delete_patent = (int) $_GET["delete_patent"];
+		if($this->can("delete", $delete_patent))
 		{
-			$d = obj($_GET["delete_patent"]);
+			$d = obj($delete_patent);
 			$d->delete();
 		}
 
@@ -3167,6 +3168,7 @@ abstract class intellectual_property extends class_base
 				$objects_array[] = $patent;
 			}
 		}
+
 		if(!$arr["unsigned"])
 		{
 			krsort($objects_array);
