@@ -24,7 +24,11 @@ class aw_http_response extends aw_resource
 		{
 			trigger_error("Headers we're already sent", E_USER_WARNING);
 		}
-
+		
+		if ( aw_ini_get("content.compress") == true)
+		{
+			ob_start( 'ob_gzhandler' );
+		}
 		echo $this->data;
 	}
 }
