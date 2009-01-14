@@ -637,7 +637,8 @@ class file extends class_base
 						element.setAttribute( attName, attValue, 0 ) ;
 					}
 				}
-
+				if (window.parent && window.parent.opener)
+				{
 				FCK=window.parent.opener.FCK;
 
 				var eSelected = FCK.Selection.GetSelectedElement() ;
@@ -658,6 +659,7 @@ class file extends class_base
 						window.parent.opener.FCKAWFilePlaceholders.Add(FCK, data);
 						window.parent.close();
 					});
+				}
 				}
 			</script>
 			");
@@ -1791,6 +1793,8 @@ class file extends class_base
 		$rv .= '
 		var selection = "";
 		var not_span = false;
+		if (window.parent && window.parent.opener)
+		{
 		FCK=window.parent.opener.FCK;
 		if(FCK.EditorDocument.selection != null)
 		{
@@ -1819,6 +1823,7 @@ class file extends class_base
 		if (not_span && selection.length>0)
 		{
 			$("#comment").val(selection);
+		}
 		}
 		';
 
