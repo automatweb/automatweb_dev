@@ -79,9 +79,16 @@ class rfp_manager_obj extends _int_object
 		{
 			foreach($metainfo[$oid]["prices"] as $pr_oid => $data)
 			{
-				$pr = obj($pr_oid);
-				if($pr->status() != STAT_ACTIVE)
+				if(get_instance(CL_MENU)->can("view", $pr_oid))
 				{
+					$pr = obj($pr_oid);
+					if($pr->status() != STAT_ACTIVE)
+					{
+						unset($metainfo[$oid]["prices"][$pr_oid]);
+					}
+				}
+				else
+				{	
 					unset($metainfo[$oid]["prices"][$pr_oid]);
 				}
 			}
@@ -101,12 +108,9 @@ class rfp_manager_obj extends _int_object
 		{
 			foreach($pkdata["prices"] as $pr => $prdata)
 			{
-				foreach($prdata as $cur => $price)
-				{
-					$new_data[$pk]["prices"][$pr][$cur] = $data[$pk]["prices"][$pr][$cur];
-				}
+				$new_data[$pk]["prices"][$pr] = $prdata;
 			}
-		}
+		}arr($new_data);
 		$this->set_meta("pk_prices", $new_data);
 	}
 
