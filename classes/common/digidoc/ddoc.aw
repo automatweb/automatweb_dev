@@ -556,7 +556,7 @@ class ddoc extends class_base
 		@param oid required type=oid
 			ddoc object oid.
 		@param name optional type=string
-			new ddoc object name(default is:'Digidoc (dd/mm/yyyy hh:mm)')		
+			new ddoc object name(default is:'Digidoc (dd/mm/yyyy hh:mm)')
 	**/
 	function create_empty($oid, $name = false)
 	{
@@ -617,7 +617,7 @@ class ddoc extends class_base
 			file id in the ddoc container
 		@param oid required type=oid
 			ddoc object oid.
-			
+
 		@returns
 			true if given file was removed, false otherwise.
 		@errors
@@ -680,8 +680,8 @@ class ddoc extends class_base
 		@attrib params=pos api=1
 		@param ddoc required type=oid
 			the ddoc object oid
-			
-		@returns 
+
+		@returns
 			true if document is signed, false otherwise
 		@errors
 			error will be raised if oid is wrong.
@@ -705,7 +705,7 @@ class ddoc extends class_base
 		@attrib params=pos api=1
 		@param oid required type=oid
 			the ddoc object oid
-			
+
 		@returns
 			true or false depending on the success of the opertaion(true - succeeded)
 	**/
@@ -805,7 +805,7 @@ class ddoc extends class_base
 		@attrib api=1 params=pos
 		@param oid required type=oid
 			CL_DDOC object oid
-			
+
 		@returns
 			Retursn ddoc file contents.
 	**/
@@ -819,14 +819,14 @@ class ddoc extends class_base
 		$o = obj($oid);
 		return file_get_contents($o->prop("ddoc_location"));
 	}
-	
+
 	/** Sets ddoc object($oid) contents(overwrites). All the cache data is renrewed automagically.
 		@attrib api=1 params=pos
 		@param oid required type=oid
 			CL_DDOC objects oid
 		@param contents required type=string
 			DDoc file contents
-			
+
 		@returns
 			true/false depending if the operation succeeded or not.
 	**/
@@ -1079,12 +1079,12 @@ class ddoc extends class_base
 		}
 		return true;
 	}
-	
+
 	/** Get signers, signing times etc..
 		@attrib params=pos api=1
 		@param oid optional type=oid
 			ddoc object oid
-			
+
 	**/
 	function get_signatures($oid)
 	{
@@ -1302,8 +1302,8 @@ class ddoc extends class_base
 
 			$filter = array(
 				"class_id" => CL_CRM_PERSON,
-				"firstname" => ($fn = ucfirst(strtolower(mb_convert_encoding($name[1], "ISO-8859-1", "UTF-8")))),
-				"lastname" => ($ln = ucfirst(strtolower(mb_convert_encoding($name[0], "ISO-8859-1", "UTF-8")))),
+				"firstname" => ($fn = mb_convert_encoding(mb_convert_case($name[1], MB_CASE_TITLE, "UTF-8"), "ISO-8859-1", "UTF-8")),
+				"lastname" => ($ln = mb_convert_encoding(mb_convert_case($name[0], MB_CASE_TITLE, "UTF-8"), "ISO-8859-1", "UTF-8")),
 				"personal_id" => $sign["Signer"]["IDCode"],
 			);
 			$ol = new object_list($filter);
