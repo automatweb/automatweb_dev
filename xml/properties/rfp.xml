@@ -918,6 +918,17 @@
             <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
       </property>
       <property>
+            <name>final_foreign_countries</name>
+            <table>rfp</table>
+            <group>final_general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <multiple>1</multiple>
+            <size>3</size>
+            <field>final_foreign_countries</field>
+            <caption>V&amp;amp;auml;lisriigid</caption>
+      </property>
+      <property>
             <name>additional_information</name>
             <table>rfp</table>
             <group>final_general</group>
@@ -1443,6 +1454,11 @@
                   <value>18</value>
                   <caption>Arve saaja kontaktisik</caption>
             </DATA_BILLING_CONTACT>
+            <COUNTRY>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <value>19</value>
+                  <caption>Riik</caption>
+            </COUNTRY>
       </reltypes>
       <layout>
             <client_hsplit>
