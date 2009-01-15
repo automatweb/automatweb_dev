@@ -76,47 +76,59 @@ class taket_afp_import_obj extends _int_object
 			echo "Got ".count($prods)." products:<br>\n";
 			foreach($prods as $k => $v)
 			{
-				$o = obj();
-				$o->set_class_id(CL_SHOP_PRODUCT);
-				$o->set_parent($this->prod_fld);
-				$o->set_name(urldecode($v["product_name"]));
 				$code = urldecode($v["product_code"]);
-				$o->set_prop("code", $code);
-				if($ctrli)
-				{
-					$short_code = $ctrli->check_property($cid, null, $code, null, null, null);
-					$o->set_prop("short_code", $short_code);
-				}
-				$o->set_prop("search_term", urldecode($v["search_term"]));
-
-				$org_id = urldecode($v["supplier_id"]);
 				$ol = new object_list(array(
-					"class_id" => CL_CRM_COMPANY,
-					"site_id" => array(),
-					"lang_id" => array(),
-					"code" => $org_id,
+					"class_id" => CL_SHOP_PRODUCT,
+					"code" => $code,
 				));
-				$org = $ol->begin();
-
-				if(!$org)
+				$o = $ol->begin();
+				if(!$o)
 				{
-					$org = obj();
-					$org->set_class_id(CL_CRM_COMPANY);
-					$org->set_name(urldecode($v["supplier_name"]));
-					$org->set_parent($this->org_fld);
-					$org->set_prop("code", $org_id);
-					$org->save();
+					$o = obj();
+					$o->set_class_id(CL_SHOP_PRODUCT);
+					$o->set_parent($this->prod_fld);
+					$o->set_name(urldecode($v["product_name"]));
+					$o->set_prop("code", $code);
+					if($ctrli)
+					{
+						$short_code = $ctrli->check_property($cid, null, $code, null, null, null);
+						$o->set_prop("short_code", $short_code);
+					}
+					$o->set_prop("search_term", urldecode($v["search_term"]));
+
+					$org_id = urldecode($v["supplier_id"]);
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_COMPANY,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"code" => $org_id,
+					));
+					$org = $ol->begin();
+	
+					if(!$org)
+					{
+						$org = obj();
+						$org->set_class_id(CL_CRM_COMPANY);
+						$org->set_name(urldecode($v["supplier_name"]));
+						$org->set_parent($this->org_fld);
+						$org->set_prop("code", $org_id);
+						$org->save();
+					}
+	
+					$o->set_prop("purveyor_org", $org->id());
+	
+					$o->save();
+					$o->connect(array(
+						"type" => "RELTYPE_WAREHOUSE",
+						"to" => $this->warehouse,
+					));
+
+					echo $k.' -- '.urldecode($v['product_name']).' ('.$code.') created ...<br>'."\n";
 				}
-
-				$o->set_prop("purveyor_org", $org->id());
-
-				$o->save();
-				$o->connect(array(
-					"type" => "RELTYPE_WAREHOUSE",
-					"to" => $this->warehouse,
-				));
-
-				echo $k.' -- '.urldecode($v['product_name']).' ('.$code.') created ...<br>'."\n";
+				else
+				{
+					echo $k.' -- '.urldecode($v['product_name']).' ('.$code.') already existed ...<br>'."\n";
+				}
 				flush();
 			}
 			$end = $this->microtime_float();
