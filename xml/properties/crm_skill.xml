@@ -5,7 +5,7 @@
             <table>objects</table>
             <group>general</group>
             <type>checkbox</type>
-            <cb_value>1</cb_value>
+            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
             <caption>Vahepealkiri</caption>

@@ -14,7 +14,7 @@
             <group>general</group>
             <type>fileupload</type>
             <field>meta</field>
-            <mehtod>serialize</mehtod>
+            <method>serialize</method>
             <caption>Vali fail</caption>
       </property>
       <property>

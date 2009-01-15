@@ -44,9 +44,8 @@
             <group>xml_settings</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CFGFORM</reltype>
-            <fielt>meta</fielt>
+            <field>meta</field>
             <method>serialize</method>
-            <field>di_cfgform</field>
             <caption>Seadete vorm</caption>
       </property>
       <property>

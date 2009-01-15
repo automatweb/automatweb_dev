@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/event_import.aw,v 1.35 2008/09/23 17:03:52 instrumental Exp $
-// event_import.aw - S&uuml;ndmuste import 
+// event_import.aw - S&uuml;ndmuste import
 /*
 
 @classinfo syslog_type=ST_EVENT_IMPORT relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kaarel
@@ -23,10 +22,7 @@
 	@caption JSON allikad:
 	@comment JSON v&auml;ljundi allikad, mida kasutatakse importimisel
 
-#	@property cb_log_changes type=checkbox ch_value=1 field=meta mehtod=serialize
-#	@caption Muudatuste tegemiseks k&uuml;sin luba?
-
-	@property original_lang type=select field=meta mehtod=serialize
+	@property original_lang type=select field=meta method=serialize
 	@caption Keel
 	@comment Imporditavate objektide keel
 
@@ -44,14 +40,14 @@
 	@caption J&auml;rgmine automaatne import
 	@comment J&auml;rgmise automaatse alguse aeg
 
-	@property import_events_all type=checkbox ch_value=1 field=meta mehtod=serialize
+	@property import_events_all type=checkbox ch_value=1 field=meta method=serialize
 	@caption Impordi s&uuml;ndmused algusest
 
-	@property past_length type=textbox field=meta mehtod=serialize size=5
+	@property past_length type=textbox field=meta method=serialize size=5
 	@caption Imporditavate p&auml;evade arv (tagasi)
 	@comment Mitu p&auml;eva alates t&auml;nasest tagasi imporditakse
 
-	@property future_length type=textbox field=meta mehtod=serialize size=5
+	@property future_length type=textbox field=meta method=serialize size=5
 	@caption Imporditavate p&auml;evade arv (edasi)
 	@comment Mitu p&auml;eva alates t&auml;nasest edasi imporditakse
 
@@ -105,16 +101,16 @@
 
 @reltype XML_SOURCE value=1 clid=CL_XML_SOURCE
 @caption XML allikas
-	
+
 @reltype RECURRENCE value=5 clid=CL_RECURRENCE
 @caption Kordus
 
 @reltype EVENT_FORM value=10 clid=CL_CFGFORM
 @caption S&uuml;ndmuse vorm
-	
+
 @reltype JSON_SOURCE value=15 clid=CL_JSON_SOURCE
 @caption JSON allikas
-	
+
 @reltype EVENTS_MANAGER value=20 clid=CL_EVENTS_MANAGER
 @caption S&uuml;ndmuste halduse keskkond
 */
@@ -123,7 +119,7 @@ class event_import extends class_base
 {
 	function event_import()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "import/event_import",
@@ -151,17 +147,17 @@ class event_import extends class_base
 				$prop['value'] = (empty($next_import)) ? "0" : date("d-M-y / H:i", $next_import);
 				break;
 
-			case "original_lang":				
+			case "original_lang":
 				$lg = get_instance("languages");
 				$prop["options"] = $lg->get_list();
 				break;
-				
+
 			case "import_events":
 				$message = t("Alates viimasest impordist");
 				if ($arr['obj_inst']->prop("import_events_all"))
 				{
 					$message = t("K&otilde;ik s&uuml;ndmused");
-				}	
+				}
 				$prop['value'] = html::href(array(
 					"caption" => sprintf(t("Impordi s&uuml;ndmused (%s)"), $message),
 					"url" => $this->mk_my_orb("import_events", array(
@@ -276,7 +272,7 @@ class event_import extends class_base
 			));
 		}
 	}
-	
+
 	function subt_subt($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -294,7 +290,7 @@ class event_import extends class_base
 		$subtags = str_replace(" ", "", $subtags);
 		$subtags = explode(",", $subtags);
 		foreach($subtags as $subtag)
-		{		
+		{
 			if(!empty($subtag))
 			{
 				$t_ptn = $arr["parent_tag_name"];
@@ -309,7 +305,7 @@ class event_import extends class_base
 					$arr["parent_tag_name"] = $subtag;
 					$arr["parent_tag_caption"] = $subtag;
 				}
-						
+
 				$form_field = html::select(array(
 					"name" => "xml_conf[".$arr["parent_tag_source_id"]."_".$arr["parent_tag_name"]."]",
 					"options" => $arr["options"],
@@ -373,7 +369,7 @@ class event_import extends class_base
 					"place_field" => $place_field,
 					"category_field" => $category_field,
 					"time_format" => $time_format,
-				));	
+				));
 				$subt_args = $saved_arguement_table[$arr["parent_tag_name"]];
 				$subt_args = str_replace(" ", "", $subt_args);
 				$subt_args = explode(",", $subt_args);
@@ -445,10 +441,10 @@ class event_import extends class_base
 							"place_field" => $place_field,
 							"category_field" => $category_field,
 							"time_format" => $time_format,
-						));	
+						));
 					}
 				}
-				
+
 				$this->subt_subt($arr);
 				$arr["parent_tag_name"] = $t_ptn;
 				$arr["parent_tag_caption"] = $t_ptc;
@@ -458,7 +454,7 @@ class event_import extends class_base
 
 	function _get_xml_config_table($arr)
 	{
-		$t = &$arr["prop"]["vcl_inst"];		
+		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
 		$t->define_field(array(
 			"name" => "xml_source",
@@ -532,7 +528,7 @@ class event_import extends class_base
 
 			$saved_subtag_table = $xml_source->meta("subtag_table");
 			$saved_arguement_table = $xml_source->meta("arguement_table");
-				
+
 			$arr["parent_tag_source"] = $xml_source->name();
 			$arr["parent_tag_source_id"] = $xml_source->id();
 			$arr["parent_tag_name"] = "root";
@@ -562,11 +558,11 @@ class event_import extends class_base
 			"align" => "center"
 		));
 
-		$event_form = obj($arr["obj_inst"]->prop("event_form"));		
+		$event_form = obj($arr["obj_inst"]->prop("event_form"));
 		$event_form_inst = $event_form->instance();
 		$props = $event_form_inst->get_props_from_cfgform(array(
 			"id" => $event_form->id(),
-		)); 
+		));
 
 		$options = array(
 //			"log" => t("Muudatus allikas logitakse"),
@@ -624,7 +620,7 @@ class event_import extends class_base
 				"name" => "comment",
 				"caption" => t("Kirjeldus"),
 			),
-		); 
+		);
 
 		$options = array(
 //			"log" => t("Muudatus allikas logitakse"),
@@ -682,7 +678,7 @@ class event_import extends class_base
 				"name" => "comment",
 				"caption" => t("Kirjeldus"),
 			),
-		); 
+		);
 
 		$options = array(
 //			"log" => t("Muudatus allikas logitakse"),
@@ -752,7 +748,7 @@ class event_import extends class_base
 				"name" => "place_id",
 				"caption" => t("Toimumiskoha ID"),
 			),
-		); 
+		);
 
 		$options = array(
 //			"log" => t("Muudatus allikas logitakse"),
@@ -787,7 +783,7 @@ class event_import extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
-		{			
+		{
 			// save data from xml configuration table
 			case "xml_config_table":
 				if (!empty($arr['request']['xml_conf']))
@@ -864,7 +860,7 @@ class event_import extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -921,7 +917,7 @@ class event_import extends class_base
 		}
 		$source = obj($arr['UD_xml_source_id']);
 		$xml_file_url = $source->prop("url");
-		
+
 		if (empty($xml_file_url))
 		{
 			return false;
@@ -934,10 +930,10 @@ class event_import extends class_base
 		$start_timestamp_unix = $source->prop("start_timestamp_unix");
 		$end_timestamp = $source->prop("end_timestamp");
 		$end_timestamp_unix = $source->prop("end_timestamp_unix");
-		
+
 		// Language
 		$url_params .= (!empty($arr["UD_lang_param"]) && !empty($arr["UD_lang_value"])) ? $arr["UD_lang_param"] . "=" . $arr["UD_lang_value"] . "&" : "";
-		
+
 		// Start timestamp
 		$url_params .= (!empty($start_timestamp) && !empty($arr["UD_start_timestamp"])) ? $start_timestamp . "=" . $arr["UD_start_timestamp"] . "&" : "";
 		if($arr["UD_past_length"] > 0)
@@ -949,7 +945,7 @@ class event_import extends class_base
 			$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . $arr["UD_start_timestamp_unix"] . "&" : "";
 		}
 //		$url_params .= (!empty($start_timestamp_unix) && !empty($arr["UD_start_timestamp_unix"])) ? $start_timestamp_unix . "=" . mktime(15, 0, 0, 12, 14, 2007) . "&" : "";
-		
+
 		// End timestamp
 		$url_params .= (!empty($end_timestamp)) ? $end_timestamp . "=" . date("YmdHis", strtotime("+".$arr["UD_future_length"]." days")) . "&" : "";
 		$url_params .= (!empty($end_timestamp_unix)) ? $end_timestamp_unix . "=" . (time() + (3600*24*$arr["UD_future_length"])) . "&" : "";
@@ -957,10 +953,10 @@ class event_import extends class_base
 
 		$category = $source->prop("category");
 		$url_params .= (!empty($category) && !empty($arr["UD_category"])) ? $category . "=" . $arr["UD_category"] . "&" : "";
-		
+
 		// The last ? or & is always unnecessary
 		$url_params = substr($url_params, 0, strlen($url_params) - 1);
-		
+
 		print "<br> &nbsp; &nbsp; - URL used: ". $xml_file_url.$url_params . "<br><br>";
 		$f = fopen($xml_file_url.$url_params, "r");
 		if ($f === false)
@@ -1090,7 +1086,7 @@ class event_import extends class_base
 				$event_time_data[$time_i][$prefix."min"] = date("i", $attr_value);
 				$event_time_data[$time_i][$prefix."sec"] = date("s", $attr_value);
 			}
-			
+
 			if($mode % 3 != 0)
 			{
 				$event_time_data[$time_i][$prefix."year"] = date("Y", $attr_value);
@@ -1115,7 +1111,7 @@ class event_import extends class_base
 					$event_time_data[$time_i][$prefix."sec"] = substr($attr_value, strpos($format, "ss"), 2);
 				}
 			}
-			
+
 			if($mode % 3 != 0)
 			{
 				if(!(substr($attr_value, strpos($format, "aaaa")) === false || strpos($format, "aaaa") === false))
@@ -1129,7 +1125,7 @@ class event_import extends class_base
 				if(!(substr($attr_value, strpos($format, "pp")) === false || strpos($format, "pp") === false))
 				{
 					$event_time_data[$time_i][$prefix."day"] = substr($attr_value, strpos($format, "pp"), 2);
-				}	
+				}
 			}
 		}
 	}
@@ -1168,13 +1164,13 @@ class event_import extends class_base
 				"end_day" => 0,
 			);
 		}
-		
+
 		$format = $saved_xml_conf_time_format[$xml_source->id()."_".$curtag.$postfix];
 //		arr($format);
-		
+
 		switch($saved_xml_conf_time[$xml_source->id()."_".$curtag.$postfix])
 		{
-			case "start": 	
+			case "start":
 				$this->parse_part_of_date(&$format, &$attr_value, &$event_time_data, &$time_i, 1);
 				break;
 
@@ -1279,7 +1275,7 @@ class event_import extends class_base
 			return false;
 
 		print " &nbsp; - <strong>[STARTED]</strong> " . $xml_source->name() . " [".t(strtoupper($lg[$imp_lang_id]))."]" . "<br>";
-		flush();		
+		flush();
 
 		// <  POSSIBLE ERRORS  >
 
@@ -1319,7 +1315,7 @@ class event_import extends class_base
 		$tag_lang = $xml_source->prop("tag_lang");
 		$param_lang = $xml_source->prop("language");
 		// Languages we can get the translations in.
-		$saved_language_table = $xml_source->meta("language_table");		
+		$saved_language_table = $xml_source->meta("language_table");
 		// The IDs of external systems. We need those to check for objects previously imported.
 		$ext_sys_event = $xml_source->prop("external_system_event");
 		$ext_sys_location = $xml_source->prop("external_system_location");
@@ -1334,7 +1330,7 @@ class event_import extends class_base
 		$ext_sys_sector_name = $ext_sys_sector_obj->name();
 		$ext_sys_event_time_obj = obj($xml_source->prop("external_system_event_time"));
 		$ext_sys_event_time_name = $ext_sys_event_time_obj->name();
-		
+
 		// We need to know if the event time is deleted when we start saving the data. So that's how.
 		$i_conf = 0;
 		foreach($tag_delete_time as $tag_delete_time_e)
@@ -1355,7 +1351,7 @@ class event_import extends class_base
 			// If the event is not public we skip it. = iteinpwsi.
 			$saved_xml_conf[$xml_source->id()."_".$tag_public_event_e] = "iteinpwsi_".$i_conf;
 			$i_conf++;
-		}	
+		}
 		// We need to save the data about the language somewhere. (So far only used for V2lisministeeriumi kultuurikalender)
 		if($tag_lang != "tlidbup" && $tag_lang != "tijolatie")
 		{
@@ -1404,13 +1400,13 @@ class event_import extends class_base
 		{
 			print " &nbsp; &nbsp; - <strong>Could not get XML data!</strong><br>";
 		}
-		
+
 		foreach($xml_content[0] as $v)
 		{
 			// I have to solve this problem. What if someone uses <event_0>, <event_1> and so on..
 			// Start hacking.
 			if(strlen(str_replace("#", "", $tag_event)) != strlen($tag_event))
-			{				
+			{
 				$curtag = "";
 				for($a = 0; $a <= $v["level"] - 1; $a++)
 				{
@@ -1469,7 +1465,7 @@ class event_import extends class_base
 					"end_day" => 0,
 				);
 			}
-			
+
 			if(!($curtag == $tag_event && $v["type"] == "close"))
 			{
 				$cft = $saved_xml_conf_time[$xml_source->id()."_".$curtag];
@@ -1520,7 +1516,7 @@ class event_import extends class_base
 						if(!empty($saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix]) && $saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix] != "do_not_save_into_db")
 						{
 							if(!empty($event_place_data[$place_i][$saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix]]))
-							{									
+							{
 								$place_i++;
 							}
 							$event_place_data[$place_i][$saved_xml_conf_place[$xml_source->id()."_".$curtag.$postfix]] = $attr_value;
@@ -1709,10 +1705,10 @@ class event_import extends class_base
 				{ // existing event
 					$event_obj = new object($imps["event"][$ext_sys_event][$event_id]);
 					print "[ --- ][".$lg[$imp_lang_id]."] ".$event_data["name"].", ID - ".$event_obj->id()."<br>";
-					
+
 					// Don't wanna lose any translations alreay imported or entered.
 					$all_vals = $event_obj->meta("translations");
-					
+
 					$change_igno = $event_obj->meta("igno_fields");
 					$change_igno = str_replace(" ", "", $change_igno);
 					$change_igno = explode(",", $change_igno);
@@ -1721,7 +1717,7 @@ class event_import extends class_base
 					$change_auto = str_replace(" ", "", $change_auto);
 					$change_auto = explode(",", $change_auto);
 					$pmlinks = $event_obj->meta("pmlinks");
-					
+
 					foreach($event_data as $key => $value)
 					{
 						if(strpos($value, "piletimaailm.com") !== false)
@@ -1773,7 +1769,7 @@ class event_import extends class_base
 										$log->save();
 										print " &nbsp; &nbsp; &nbsp; -";
 										print "- property: ".$key." [change logged]<br>";
-									}										
+									}
 								}
 								elseif($jumper[$key] == "aut")
 								{
@@ -1790,15 +1786,15 @@ class event_import extends class_base
 									{
 										//print "Importing translated content -> ".$key."<br>";
 										if(in_array($key, $translatable_fields))
-										{	
+										{
 											$all_vals[$imp_lang_id][$key] = $value;
 											$event_obj->set_meta("translations", $all_vals);
 											if(!empty($value))
-											{								
+											{
 												$event_obj->set_meta("trans_".$imp_lang_id."_status", 1);
 											}
 										}
-										
+
 									}
 									// We update the original value field so next time it's changed we'll know, if it was changed in the source or in AW.
 									$event_obj->set_meta($orig_val.$key, $value);
@@ -1821,9 +1817,9 @@ class event_import extends class_base
 				flush();
 //				arr($event_obj->meta("translations"));
 
-				//saving the event place data					
+				//saving the event place data
 				foreach($event_place_data as $event_place)
-				{	
+				{
 //					if(!empty($event_place["id"]) || !empty($event_place["name"]))
 					if(!empty($event_place["id"]))
 					{
@@ -1876,14 +1872,14 @@ class event_import extends class_base
 							}
 						}
 						if(!$import_orig)
-						{							
+						{
 							$place_obj->set_meta("translations", $all_vals);
 						}
 						$place_obj->save();
 						print " &nbsp; &nbsp; &nbsp; -";
 						print "- event location: ".$event_place["id"]." - ".$event_place["tegevusala"]." [saved]<br></b>";
 						if($new)
-						{								
+						{
 							// We make a record of the location we just imported so we won't make a duplicate.
 							$extent_obj = new object;
 							$extent_obj->set_lang_id($li);
@@ -1909,7 +1905,7 @@ class event_import extends class_base
 
 				//saving the event category (sector) data
 				foreach($event_category_data as $event_category)
-				{	
+				{
 					if(!empty($event_category["id_multiple"]))
 					{
 						$event_cat_ids = explode(",", $event_category["id_multiple"]);
@@ -1983,7 +1979,7 @@ class event_import extends class_base
 							}
 							if($import_orig)
 								$category_obj->set_meta("translations", $all_vals);
-							$category_obj->save();		
+							$category_obj->save();
 							print " &nbsp; &nbsp; &nbsp; -";
 							print "- event category (aka section): ".$event_category["id"]." - ".$event_category["tegevusala"]." [saved]";
 
@@ -2008,9 +2004,9 @@ class event_import extends class_base
 								print "[connected]";
 							}
 							print "<br></b>";
-							
+
 							if($new)
-							{								
+							{
 								// We make a record of the category (aka sector) we just imported so we won't make a duplicate.
 								$extent_obj = new object;
 								$extent_obj->set_lang_id($li);
@@ -2034,7 +2030,7 @@ class event_import extends class_base
 						}
 					}
 				}
-				
+
 				$times_done = array();
 				$event_time_count = 0;
 				foreach($event_time_data as $event_time)
@@ -2047,7 +2043,7 @@ class event_import extends class_base
 						{
 							$deleted = true;
 						}
-					}	
+					}
 					if($deleted)
 					{
 						print " &nbsp; &nbsp; &nbsp; -";
@@ -2124,7 +2120,7 @@ class event_import extends class_base
 								else
 									$all_vals[$imp_lang_id]["comment"] = $value;
 							}
-							
+
 							if($key == "location_id" && $value != "")
 							{
 								$tmp["location_id"] = $value;
@@ -2132,7 +2128,7 @@ class event_import extends class_base
 						}
 
 						if($tmp["location_id"] != "")
-						{								
+						{
 							// connect to a location
 							if(!array_key_exists($tmp["location_id"], $imps["location"][$ext_sys_location]))
 							{	// That should never happen if the place is specified in the source.
@@ -2199,7 +2195,7 @@ class event_import extends class_base
 						if(!$import_orig)
 							$time_obj->set_meta("translations", $all_vals);
 
-						$time_obj->save();						
+						$time_obj->save();
 
 						if($new)
 						{
@@ -2235,7 +2231,7 @@ class event_import extends class_base
 				$tmp = array();
 			}
 		}
-		
+
 		print " &nbsp; - <strong>[ENDED]</strong> " . $xml_source->name() . "<br><br>";
 		flush();
 	}
@@ -2270,7 +2266,7 @@ class event_import extends class_base
 		);
 		$tmp["end"] = ($tmp["end"] > $tmp["start"]) ? $tmp["end"] : $tmp["start"];
 
-		
+
 		if(in_array($tmp["start"], $times_done))
 		{
 			print " &nbsp; &nbsp; &nbsp; -";
@@ -2410,7 +2406,7 @@ class event_import extends class_base
 
 		$o = obj($arr['id']);
 		$li = $o->prop("original_lang");
-		
+
 		$events_manager_id = $o->prop("events_manager");
 
 		if(!is_oid($events_manager_id))
@@ -2455,7 +2451,7 @@ class event_import extends class_base
 			"organizer" => &$dir_organizer,
 			"sector" => &$dir_category,
 		);
-		
+
 		$event_form_id = $o->prop("event_form");
 		if(!is_oid($event_form_id))
 		{
@@ -2473,7 +2469,7 @@ class event_import extends class_base
 
 		// <  GATHERING PREVIOUSLY IMPORTED DATA  >
 		// Gathering the IDs of events, locations, categories (aka sectors) and event times already imported...
-		
+
 		$imported_events = array();
 		$locations = array();
 		$categories = array();
@@ -2584,10 +2580,10 @@ class event_import extends class_base
 			*/
 		}
 
-		
+
 
 		print "<strong>..:: ".strtoupper($o->name())." EVENTS IMPORT ENDED ::..<br><br></strong>";
-		flush();		
+		flush();
 
 		$o->set_meta("last_import", time());
 		$o->save();
@@ -2602,7 +2598,7 @@ class event_import extends class_base
 		return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
 	}
 
-	// this function checks if there is a recurrence object configured 
+	// this function checks if there is a recurrence object configured
 	// to otv_ds_kultuuriaken import
 	// if it is then put it in scheduler
 	//
@@ -2634,7 +2630,7 @@ class event_import extends class_base
                                 }
                         }
                 }
-		
+
 		return $next;
 
 	}

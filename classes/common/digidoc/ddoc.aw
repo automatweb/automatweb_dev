@@ -1,6 +1,7 @@
 <?php
 // ddoc.aw - DigiDoc
 /*
+
 @classinfo syslog_type=ST_DDOC relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
@@ -9,7 +10,7 @@
 	@property name type=text field=name
 	@caption Nimi
 
-	@property ddoc type=fileupload field=meta mehtod=serialize
+	@property ddoc type=fileupload field=meta method=serialize
 	@caption Vali fail
 
 	@property ddoc_location type=hidden field=meta method=serialize

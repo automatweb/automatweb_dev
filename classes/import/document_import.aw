@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.10 2008/01/31 22:28:28 kristo Exp $
-// document_import.aw - Dokumentide import 
+// document_import.aw - Dokumentide import
 /*
-
 @classinfo syslog_type=ST_DOCUMENT_IMPORT relationmgr=yes prop_cb=1 maintainer=dragut
 
 @default table=objects
@@ -26,16 +24,16 @@
 	@groupinfo xml_settings caption="XML" parent=settings
 	@default group=xml_settings
 
-		@property di_cfgform type=relpicker reltype=RELTYPE_CFGFORM fielt=meta method=serialize
+		@property di_cfgform type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
 		@caption Seadete vorm
 
-		@property location_tags type=textbox field=meta method=serialize 
+		@property location_tags type=textbox field=meta method=serialize
 		@caption Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)
 
-		@property field_tags type=textbox field=meta method=serialize 
+		@property field_tags type=textbox field=meta method=serialize
 		@caption Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)
 
-		@property end_tag type=textbox field=meta method=serialize 
+		@property end_tag type=textbox field=meta method=serialize
 		@caption dokumenti l&otilde;petav tag
 
 		@property content_transform type=generated generator=generate_tag_fields
@@ -97,7 +95,7 @@ class document_import extends class_base
 					if ($tf !== false)
 					{
 						$doc_list = $this->_do_import_from_string($tf, $args["obj_inst"]);
-						
+
 						$prop["value"] = $this->_draw_document_list_from_arr($doc_list, $args["obj_inst"]->meta("orig_filename"));
 					}
 				}
@@ -166,7 +164,7 @@ class document_import extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function _get_scan_log($arr)
 	{
@@ -181,7 +179,7 @@ class document_import extends class_base
 			'name' => 'content',
 			'caption' => t('Sisu')
 		));
-		
+
 
 		$scan_result = $this->_scan_html_document(array(
 			'url' => $arr['obj_inst']->prop('file_url'),
@@ -230,7 +228,7 @@ class document_import extends class_base
 				$root_folder = $arr['obj_inst']->parent();
 			}
 			$url = $arr['obj_inst']->prop('file_url');
-						
+
 			$pathinfo = pathinfo($url);
 			$url_parts = parse_url($pathinfo['dirname']);
 			$folders = explode('/', $url_parts['path']);
@@ -275,7 +273,7 @@ class document_import extends class_base
 				$doc->set_class_id(CL_DOCUMENT);
 				$doc->set_parent($root_folder);
 				$doc->save();
-				
+
 			}
 			else
 			{
@@ -340,7 +338,7 @@ class document_import extends class_base
 					$content = str_replace($link, $aliases[$oid], $content);
 				}
 			}
-			
+
 			$doc->set_name($scan_result['title']);
 			$doc->set_prop('content', $content);
 			$doc->save();
@@ -469,7 +467,7 @@ class document_import extends class_base
 			$doc["content"] = str_replace("\n","<br><br>",trim($doc["lead"]))."<br>".str_replace("\n","<br><br>",trim($doc["content"]));
 			$t->define_data($doc);
 		}
-		
+
 		return "Fail: ".$orig_filename." <br>".$t->draw();
 	}
 
@@ -513,7 +511,7 @@ class document_import extends class_base
 	{
 		$obj = obj($arr["id"]);
 		$ret = array();
-		
+
 		$tags = $this->_explode_tags($obj->meta("field_tags"));
 		foreach($tags as $tag => $fld)
 		{
@@ -540,11 +538,11 @@ class document_import extends class_base
 				'method' => 'serialize',
 				'group' => 'settings'
 			);
-		
+
 		}
 		return $ret;
 	}
-	
+
 	function _explode_tags($str)
 	{
 		$tags = array();

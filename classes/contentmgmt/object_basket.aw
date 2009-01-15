@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.15 2008/10/14 13:19:48 markop Exp $
-// object_basket.aw - Objektide korv 
+// object_basket.aw - Objektide korv
 /*
 
 @classinfo syslog_type=ST_OBJECT_BASKET relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=robert
@@ -20,17 +19,18 @@
 	@property object_basket type=relpicker store=connect reltype=RELTYPE_OBJECT_BASKET
 	@caption Objektide korv
 
-	@property object_shop_product_show type=checkbox field=meta mothod=serialize default=0 ch_value=1
+	@property object_shop_product_show type=checkbox field=meta method=serialize default=0 ch_value=1
 	@caption Toote puhul kasuta tootekuva
 
 	@property object_shop_product_template type=textbox field=meta method=serialize
 	@caption Kasuta toote kuvamisek
-	
+
 @reltype EXPORT clid=CL_ICAL_EXPORT value=1
 @caption iCal eksport
 
 @reltype OBJECT_BASKET clid=CL_OBJECT_BASKET value=2
 @caption Objektide korv
+
 */
 
 define("OBJ_BASKET_SESSION", 1);
@@ -83,7 +83,7 @@ class object_basket extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -245,7 +245,7 @@ class object_basket extends class_base
 		@attrib name=add_object nologin="1"
 		@param oid required type=int acl=view
 		@param basket required type=int acl=view
-		@param ru required 
+		@param ru required
 	**/
 	function add_object($arr)
 	{
@@ -272,7 +272,7 @@ class object_basket extends class_base
 	/**
 		@attrib name=remove_all nologin="1"
 		@param basket required type=int acl=view
-		@param ru required 
+		@param ru required
 	**/
 	function remove_all($arr)
 	{
@@ -300,7 +300,7 @@ class object_basket extends class_base
 		@attrib name=remove_single nologin="1"
 		@param basket required type=int acl=view
 		@param item required type=int acl=view
-		@param ru required 
+		@param ru required
 	**/
 	function remove_single($arr)
 	{

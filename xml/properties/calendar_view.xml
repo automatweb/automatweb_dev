@@ -76,7 +76,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
-            <ch_valeu>1</ch_valeu>
+            <ch_value>1</ch_value>
             <caption>Kasuta toimumisaja objekte</caption>
       </property>
       <property>

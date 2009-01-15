@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ows_bron/ows_reservation.aw,v 1.25 2008/07/17 17:30:55 markop Exp $
-// ows_reservation.aw - OWS Broneering 
+// ows_reservation.aw - OWS Broneering
 /*
 
 @classinfo syslog_type=ST_OWS_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=kristo
@@ -153,7 +152,7 @@
 	@property cancel_type type=textbox field=aw_cancel_type
 	@caption T&uuml;histamise p&otilde;hjus
 
-	@property cancel_other type=textbox fidle=aw_cancel_other
+	@property cancel_other type=textbox field=aw_cancel_other
 	@caption Muu p&otilde;hjus
 
 @groupinfo cust_data caption="Sisestatud andmed"
@@ -193,7 +192,7 @@ class ows_reservation extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -227,18 +226,18 @@ class ows_reservation extends class_base
 		}
 		if ($f == "")
 		{
-			$this->db_query("CREATE TABLE aw_ows_reservations (aw_oid int primary key, 
-				aw_is_confirmed int, aw_hotel_id int, aw_rate_id int, 
+			$this->db_query("CREATE TABLE aw_ows_reservations (aw_oid int primary key,
+				aw_is_confirmed int, aw_hotel_id int, aw_rate_id int,
 				aw_arrival int, aw_departure int, aw_num_rooms int,
 				aw_adults_per_room int,aw_child_per_room int, aw_promo_code varchar(255),
 				aw_currency char(3), aw_guest_title varchar(255), aw_first_name varchar(255),
 				aw_last_name varchar(255), aw_country varchar(255), aw_state varchar(255),
-				aw_city varchar(255), aw_postal_code varchar(255), aw_adr_1 varchar(255), 
+				aw_city varchar(255), aw_postal_code varchar(255), aw_adr_1 varchar(255),
 				aw_adr_2 varchar(255), aw_phone varchar(255), aw_email varchar(255),
-				aw_comments varchar(255), aw_guarantee_type varchar(255), 
+				aw_comments varchar(255), aw_guarantee_type varchar(255),
 				aw_guarantee_cc_type varchar(255), aw_guarantee_cc_holder_name varchar(255), aw_guarantee_cc_num varchar(255),
 				aw_guarantee_cc_exp_date int, aw_payment_type varchar(255),
-				aw_confirmation_code varchar(255), aw_booking_id int, aw_cancel_deadline int, 
+				aw_confirmation_code varchar(255), aw_booking_id int, aw_cancel_deadline int,
 				aw_total_room_charge double, aw_total_tax_charge double, aw_total_charge double,
 				aw_charge_currency varchar(255)
 			)");
@@ -281,7 +280,7 @@ class ows_reservation extends class_base
 
 		return $arr["url"];
 	}
-	
+
 	function bank_return($arr)
 	{
 $f = fopen(aw_ini_get("site_basedir")."/files/ows.log", "a");

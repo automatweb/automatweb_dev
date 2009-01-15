@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.107 2008/11/10 10:00:04 robert Exp $
-// conference_planning.aw - Konverentsi planeerimine 
+// conference_planning.aw - Konverentsi planeerimine
 /*
-
 @classinfo syslog_type=ST_CONFERENCE_PLANNING relationmgr=yes no_comment=1 no_status=1 prop_cb=1 maintainer=tarvo
 
 @default table=objects
@@ -51,7 +49,7 @@
 @caption Konverentsiplaneerija dokument
 
 // metadata for views
-@property help_views type=hidden field=meta mehtod=serialize no_caption=1
+@property help_views type=hidden field=meta method=serialize no_caption=1
 @property help_props type=hidden field=meta method=serialize no_caption=1
 
 @groupinfo webform caption="Veebivorm"
@@ -60,7 +58,7 @@
 	@groupinfo webform_detail caption="Vaated" parent=webform
 	@default group=webform_detail
 		@property views_tb type=toolbar no_caption=1
-		@layout hsplit type=hbox width=15%:85% 
+		@layout hsplit type=hbox width=15%:85%
 			@layout treeview type=vbox closeable=1 area_caption=Vaated parent=hsplit
 				@property views_tree type=treeview no_caption=1 parent=treeview
 
@@ -101,7 +99,7 @@
 
 @groupinfo users_notification caption="Kasutaja teavitus"
 @default group=users_notification
-	
+
 	@property usr_send_mail type=checkbox ch_value=1 default=0 field=meta method=serialize
 	@caption Saada kasutajale teavitus
 
@@ -113,7 +111,7 @@
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -165,7 +163,7 @@ class conference_planning extends class_base
 		));
 
 		lc_site_load("conference_planning_new", &$this);
-		
+
 		$this->wd = array(
 			0 => t("Monday"),
 			1 => t("Tuesday"),
@@ -357,7 +355,7 @@ class conference_planning extends class_base
 				$ret["remove_link"] = true;
 				break;
 
-			
+
 			case "gen_open_for_alternative_dates":
 			case "gen_accommodation_requirements":
 			case "gen_dates_are_flexible":
@@ -404,7 +402,7 @@ class conference_planning extends class_base
 					"form" => "event_type",
 				);
 				break;
-			
+
 			case "subm_name":
 			case "subm_organisation":
 			case "subm_organizer":
@@ -420,7 +418,7 @@ class conference_planning extends class_base
 			case "mf_catering_start":
 			case "mf_catering_end":
 			case "mf_catering_attendees_no":
-			
+
 			case "billing_email":
 			case "billing_phone":
 			case "billing_name":
@@ -435,14 +433,14 @@ class conference_planning extends class_base
 				break;
 
 			case "subm_contact_preference":
-			
+
 			case "gen_single_rooms":
 			case "gen_double_rooms":
 			case "gen_suites":
 			case "gen_city":
 			case "gen_hotel":
 			case "gen_package":
-			
+
 			case "billing_country":
 			case "mf_table_form":
 			case "mf_breakout_room_setup":
@@ -532,7 +530,7 @@ class conference_planning extends class_base
 				$isv = strlen($view_no = $arr["request"]["view_no"]);
 				$ise = strlen($element = $arr["request"]["element"]);
 				$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
-				
+
 				// start add submenu
 				$tb->add_menu_button(array(
 					"name" => "add",
@@ -544,14 +542,14 @@ class conference_planning extends class_base
 					"text" => t("Vaade"),
 					"action" => "add_view",
 				));
-				
+
 				// add element to active view
 				if($isv) // a view is selected
 				{
 					$act_view_name = strlen($_t = $views[$view_no]["trans"][aw_global_get("ct_lang_lc")])?$_t:$views[$view_no]["trans"][CP_DEFAULT_LANG];
 					$to_view = sprintf(t("Vaatesse '%s', elemendi ette"), "<b>".$this->show_cs($act_view_name)."</b>");
 					$add_elem_to_view = sprintf(t("Vaatesse '%s'"), "<b>".$this->show_cs($act_view_name)."</b>");
-					
+
 					// add element to view
 					$tb->add_sub_menu(array(
 						"parent" => "add",
@@ -586,7 +584,7 @@ class conference_planning extends class_base
 							"text" => $this->show_cs($grinfo[$group]["caption"]),
 						));
 					}
-					
+
 					foreach($list as $prp => $data)
 					{
 						$tb->add_menu_item(array(
@@ -786,7 +784,7 @@ class conference_planning extends class_base
 						));
 						foreach($views[$view_no]["elements"] as $eid => $e)
 						{
-						
+
 							$self = ($eid == $element);
 							$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$_t:$e["trans"][CP_DEFAULT_LANG];
 							$name = $this->show_cs($name);
@@ -859,7 +857,7 @@ class conference_planning extends class_base
 						"link" => $this->mk_my_orb("remove_view", array(
 								"view_no" => $vid,
 								"planner" => $arr["obj_inst"]->id(),
-								"return_url" => get_ru(),						
+								"return_url" => get_ru(),
 						)),
 					));
 				}
@@ -951,7 +949,7 @@ class conference_planning extends class_base
 					"tree_id" => "views_tree",
 					"tree_type" => TREE_DHTML,
 				));
-				
+
 				$cfg = get_instance("cfg/cfgutils");
 				$list = $cfg->load_properties(array(
 					"clid" => CL_RFP
@@ -966,7 +964,7 @@ class conference_planning extends class_base
 					$request = $arr["request"];
 					unset($request["element"]);
 					$request["view_no"] = $id;
-					
+
 					$name = strlen($_t = $view["trans"][aw_global_get("ct_lang_lc")])?$_t:$view["trans"][CP_DEFAULT_LANG];
 					$name = $this->show_cs($name);
 					$name = strlen($name)?$name:t("Nimetu");
@@ -1125,13 +1123,13 @@ class conference_planning extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	function __callback_filter_prplist($a)
 	{
 		return substr($a["name"],0,5) == "data_";
 	}
-	
+
 	function __callback_sort_prplist($a, $b)
 	{
 		return strcasecmp($a["caption"],$b["caption"]);
@@ -1301,7 +1299,7 @@ class conference_planning extends class_base
 		{
 			$obj = obj($arr["planner"]);
 			$views = aw_unserialize($obj->prop("help_views"));
-			
+
 			foreach($views as $vid => $v)
 			{
 				if($arr["move_to"] >= 0 && $arr["move_to"] == $vid)
@@ -1397,7 +1395,7 @@ class conference_planning extends class_base
 			$elname = $views[$arr["request"]["view_no"]]["elements"][$arr["request"]["element"]]["name"];
 			$arr["area_caption"] =  sprintf("Elemendi '%s' konfiguratsioon", $elname);
 		}
-		
+
 		if(!strlen($arr["request"]["view_no"]) && $arr["name"] == "trans")
 		{
 			return false;
@@ -1428,7 +1426,7 @@ class conference_planning extends class_base
 			$arr["args"]["element"] = $arr["request"]["element"];
 		}
 	}
-	
+
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
@@ -1532,7 +1530,7 @@ class conference_planning extends class_base
 	**/
 	function get_stored_data($id, $convert = false)
 	{
-		
+
 		$data =  is_array($_t = aw_global_get("conference_planning_data_".$id))?$_t:array();
 		if($convert)
 		{
@@ -1569,20 +1567,20 @@ class conference_planning extends class_base
 		$elements = $arr["elem"];
 		unset($arr["elem"]);
 		$stored_data = $this->get_stored_data($cp->id(), true);
-		
+
 		$view_errors = array();
 		foreach($views[$view_id]["elements"] as $element_id => $data)
 		{
 			/*
 				I need to check the show controller here, don't i? .. i mean, when it returns prop_ignore, then i have to ignore it here also, or else... ka-Boom, and things are messed up.
 				For example, there are two same-type elements, both have show controller, which lets one of the elements be shon at once. so, when saving, i've got to ignore the one what isn't show on the web, or otherwise this is saved.. or smth..
-				
-				Worst part is, i have to give same parameters to controller that i give in the parse_form_element function.. 
+
+				Worst part is, i have to give same parameters to controller that i give in the parse_form_element function..
 				also, i can't pass them by reference, because they may alter the data, i we dont want that
 				God this sucks ..
 				Thing is, i really don't know if this thingie works 100% the way it should
 			*/
-			
+
 			$el_form_data = $this->get_form_elements_data($data["name"]);
 			$element = &$elements[$view_id][$element_id];
 			if($this->can("view", $data["show_controller"]))
@@ -1631,7 +1629,7 @@ class conference_planning extends class_base
 		return $this->store_data($cp->id(), $to_be_saved);
 	}
 
-	
+
 
 	/**
 		@attrib name=forward all_args=1 nologin=1
@@ -1733,7 +1731,7 @@ class conference_planning extends class_base
 		@param clid required type=int
 		@param name required type=string
 		@param parent required type=oid
-		@param conference_planner required type=oid 
+		@param conference_planner required type=oid
 		@param data required type=Array
 			array(
 				property_name => value
@@ -1751,7 +1749,7 @@ class conference_planning extends class_base
 			$obj->set_class_id($arr["clid"]);
 			$obj->set_prop("conference_planner", $arr["conference_planner"]);
 			$obj->set_prop("from_planner", 1);
-			// these are here just in case 
+			// these are here just in case
 			unset($data["conference_planner"]);
 			unset($data["name"]);
 			unset($data["parent"]);
@@ -1822,7 +1820,7 @@ class conference_planning extends class_base
 		$this->cp = $cp;
 		$active_view = $GLOBALS["_GET"]["view_no"];
 		$active_view = (!strlen($active_view) || $active_view < 1)?1:$active_view;
-	
+
 		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
 		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
 		//$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
@@ -1834,7 +1832,7 @@ class conference_planning extends class_base
 			"doc" => $arr["oid"],
 		);
 		$html["reforb"] = $this->mk_reforb("forward", array_merge($GLOBALS["_GET"], $reforb_arr));
-		
+
 		$this->read_template("webform.tpl");
 		$this->vars($html);
 		$html = $this->parse();
@@ -1862,7 +1860,7 @@ class conference_planning extends class_base
 
 	function parse_form_element($el, $view_no, $element, $views, $value, $values, $doc)
 	{
-		
+
 		$this->_init_vars();
 		lc_site_load("conference_planning_new", &$this);
 		$prop = $this->get_form_elements_data($el["name"]);
@@ -1871,7 +1869,7 @@ class conference_planning extends class_base
 			return "";
 		}
 		$lang = aw_global_get("ct_lang_lc");
-		
+
 		// get options
 		if($this->can("view", ($ch = $el["choices"])))
 		{
@@ -1884,9 +1882,9 @@ class conference_planning extends class_base
 			{
 				$trans = $obj->meta("tolge");
 				//$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->name();
-				// oh my god this metamgr trans thingi is stupidly done 
+				// oh my god this metamgr trans thingi is stupidly done
 				$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->trans_get_val("name");
-				
+
 			}
 		}
 		// get controller contents
@@ -2001,7 +1999,7 @@ class conference_planning extends class_base
 				{
 					$prop["form"] = "TEXT_NO_CAPTION";
 				}
-				
+
 				$this->vars(array(
 					"caption" => $caption,
 					//"caption" => $el["trans"][$lang],
@@ -2027,7 +2025,7 @@ class conference_planning extends class_base
 				$this->vars(array(
 					"HEADER_COL" => $header,
 				));
-				
+
 				$header = $this->parse("HEADER");
 				foreach($value_to_use as $rowid => $row)
 				{
@@ -2081,7 +2079,7 @@ class conference_planning extends class_base
 				));
 				break;
 		}
-		
+
 		$value = $this->pre_store($prop["form"], $value);
 		if($el["store_data"] === true)
 		{
@@ -2113,7 +2111,7 @@ class conference_planning extends class_base
 		$view = &$views[$act];
 
 		$stored_data = $this->get_stored_data($cp->id(), true);
-		
+
 		$ret = "<table class=\"form\">";
 		$this->store_data = false;
 		$errors = $this->get_errors($cp->id());
@@ -2131,7 +2129,7 @@ class conference_planning extends class_base
 			));
 			$this->error_html .= $this->parse("ERROR");
 		}
-		
+
 		if($this->store_data)
 		{
 			$this->store_data($cp->id(), $stored_data);
@@ -2216,7 +2214,7 @@ class conference_planning extends class_base
 		));
 		return $this->parse();
 	}
-	
+
 	function __show($arr)
 	{
 		$_GET = $GLOBALS["_GET"];
@@ -2243,7 +2241,7 @@ class conference_planning extends class_base
 		switch($no)
 		{
 			case 1:
-				$sc->read_template("sub_conference_rfp1.tpl");				
+				$sc->read_template("sub_conference_rfp1.tpl");
 				$acc_req = ($sd["single_count"] > 0 || $sd["double_count"] > 0 || $sd["suite_count"] > 0 || $sd["needs_rooms"])?"CHECKED":"";
 				$u = get_instance(CL_USER);
 				$org = $u->get_current_company();
@@ -2347,7 +2345,7 @@ class conference_planning extends class_base
 				));
 				break;
 			case 4:
-				$sc->read_template("sub_conference_rfp4.tpl");				
+				$sc->read_template("sub_conference_rfp4.tpl");
 				$c_inst = get_instance(CL_CONFERENCE);
 				$conference_types = $c_inst->conference_types();
 				$_GET["act_evt_no"] = ($sd["multi_day"] == "2")?$_GET["act_evt_no"]:"0";
@@ -2499,7 +2497,7 @@ class conference_planning extends class_base
 				));
 				break;
 			case 5:
-				$sc->read_template("sub_conference_rfp5.tpl");				
+				$sc->read_template("sub_conference_rfp5.tpl");
 				$c_inst = get_instance(CL_CONFERENCE);
 				$c_types = $c_inst->additional_conference_types();
 				$values = array();
@@ -2562,7 +2560,7 @@ class conference_planning extends class_base
 					$rows .= $sc->parse("ROW".$row_active);
 				}
 
-				// catering tab 
+				// catering tab
 				foreach($cat_values as $cat_no => $catering)
 				{
 					$cat_active = ($cat_no == $_GET["act_cat_no"])?"_ACTIVE":"";
@@ -2605,7 +2603,7 @@ class conference_planning extends class_base
 				));
 				break;
 			case 6:
-				$sc->read_template("sub_conference_rfp6.tpl");				
+				$sc->read_template("sub_conference_rfp6.tpl");
 				$addr = get_instance(CL_CRM_ADDRESS);
 
 				$ui = get_instance(CL_USER);
@@ -2684,7 +2682,7 @@ class conference_planning extends class_base
 						"suite_count" => $loc->prop("suite_count"),
 						"phone" => ($ph = $loc->prop_str("phone"))?$ph:t("-"),
 						"fax" => ($f = $loc->prop_str("fax"))?$f:t("-"),
-						"RES_EMAIL" => $email, 
+						"RES_EMAIL" => $email,
 						"photo_uri" => $img_inst->get_url_by_id($photo),
 						"map_uri" => $img_inst->get_url_by_id($map),
 						"value" => $loc_id,
@@ -2694,7 +2692,7 @@ class conference_planning extends class_base
 					));
 					$s_results .= $sc->parse("SEARCH_RESULT");
 					$hid_rows .= html::hidden(array(
-						"name" => "sub[6][all_search][".$loc_id."]", 
+						"name" => "sub[6][all_search][".$loc_id."]",
 						"value" => 1,
 					));
 					foreach($data["errors"] as $err)
@@ -2763,7 +2761,7 @@ class conference_planning extends class_base
 					));
 					$dates_rows .= $sc->parse("DATES_ROW");
 				}
-			
+
 				// flexible dates
 				if($sd["dates_are_flexible"])
 				{
@@ -2819,7 +2817,7 @@ class conference_planning extends class_base
 				foreach($days as $day_id => $day)
 				{
 					$evt_type = ($day["event_type_chooser"] == 1)?$conf_types[$day["event_type_select"]]:$day["event_type_text"];
-					unset($tech_equip);	
+					unset($tech_equip);
 					foreach($day["tech"] as $k => $capt)
 					{
 						$sc->vars(array("value" => $this->tech_equip[$k]));
@@ -2908,7 +2906,7 @@ class conference_planning extends class_base
 						));
 						$tech_html .= $sc->parse("ADD_FUN_TECH");
 					}
-					
+
 					$sc->vars(array(
 						"type" => ($_t = $cat_type)?$_t:t("-"),
 						"start_date" => $data["function_start_date"],
@@ -3023,7 +3021,7 @@ class conference_planning extends class_base
 					$o = obj($cnt);
 					$sc->vars(array(
 						"value" => $cnt,
-						"caption" => $o->trans_get_val("name"), 
+						"caption" => $o->trans_get_val("name"),
 						"country" => ($cnt == $sd["country"])?"SELECTED":"",
 					));
 					$countries .= $sc->parse("COUNTRY");
@@ -3142,7 +3140,7 @@ class conference_planning extends class_base
 
 		$act_evt_no = strlen($_GET["act_evt_no"])?$_GET["act_evt_no"]:-1;
 		$act_cat_no = strlen($_GET["act_cat_no"])?$_GET["act_cat_no"]:-1;
-		
+
 		// error managment
 		$error_data = aw_global_get("conference_required_errors");
 		if(is_array($error_data[$no]) && count($error_data[$no]))
@@ -3186,7 +3184,7 @@ class conference_planning extends class_base
 		$this->handle_required_fields($arr);
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]-1);
 	}
-	
+
 	function handle_required_fields($arr)
 	{
 		$error_data = aw_global_get("conference_required_errors");
@@ -3210,7 +3208,7 @@ class conference_planning extends class_base
 		}
 		//aw_session_set("conference_required_errors", $error_data);
 		$_SESSION["conference_required_errors"] = $error_data;
-		
+
 		$retval = true;
 		if(is_array($error_data[$arr["current_sub"]]) && count($error_data[$arr["current_sub"]]))
 		{
@@ -3227,10 +3225,10 @@ class conference_planning extends class_base
 		$this->save_form_data($arr);
 		if($arr["current_sub"] == 0 && strlen(trim(aw_global_get("uid"))) == 0)
 		{
-			// in case the user hasn't logged in yet.. 
+			// in case the user hasn't logged in yet..
 			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=qa";
 		}
-		
+
 		// requirements
 		if(!$this->handle_required_fields($arr))
 		{
@@ -3239,7 +3237,7 @@ class conference_planning extends class_base
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]+1);
 	}
 
-	
+
 	/**
 		@attrib params=name name=submit_final all_args=1 nologin=1
 	**/
@@ -3253,7 +3251,7 @@ class conference_planning extends class_base
 		$obj->set_parent($arr["conference_planner"]);
 		// do not save object here, because then you save it twice. and that means, that on the second save
 		// you need the "edit" acl for the object, on the first you only need the "add" acl to the parent
-		// and things like these are usually configured with only "add" and "view" access, so that 
+		// and things like these are usually configured with only "add" and "view" access, so that
 		// random people can not modify them later
 		//$obj->save();
 		$users = get_instance("users");
@@ -3308,7 +3306,7 @@ class conference_planning extends class_base
 		}
 
 		$obj->set_prop("flexible_dates", $flex);
-		
+
 		// main fun
 		/*
 		$conf_inst = get_instance(CL_CONFERENCE);
@@ -3468,7 +3466,7 @@ class conference_planning extends class_base
 		}
 		return $url;
 	}
-	
+
 	function gather_email_addresses($arr)
 	{
 		foreach($arr as $loc)
@@ -3543,7 +3541,7 @@ class conference_planning extends class_base
 			"password" => $password,
 			"real_name" => $data["firstname"]." ".$data["lastname"],
 		));
-		
+
 		$person_obj = new object();
 		$person_obj->set_class_id(145);
 		$person_obj->set_parent(2);
@@ -3575,7 +3573,7 @@ class conference_planning extends class_base
 //			));
 //			$person_obj->set_prop("work_contact", $org->id());
 		}
-		
+
 		if($data["phone_number"])
 		{
 			$phone = new object();
@@ -3707,7 +3705,7 @@ class conference_planning extends class_base
 					$val = $arr["sub"][$no];
 					if(is_numeric($val["no_dates_to_add"]) && $val["no_dates_to_add"] > 0)
 					{
-						for($i=0;$i<$val["no_dates_to_add"];$i++)	
+						for($i=0;$i<$val["no_dates_to_add"];$i++)
 						{
 							$data["dates"][] = array(
 								"type" => "1"
@@ -3903,7 +3901,7 @@ class conference_planning extends class_base
 					$no = $arr["act_event_no"];
 					$cat_no = $arr["act_cat_no"];
 
-					
+
 					$additional_function["event_type_chooser"] = $val["event_type_chooser"];
 					$additional_function["event_type_select"] = $val["event_type_select"];
 					$additional_function["event_type_text"] = $val["event_type_text"];
@@ -3982,7 +3980,7 @@ class conference_planning extends class_base
 	{
 		return aw_global_get("tmp_conference_data");
 	}
-	
+
 	function get_countries($oid)
 	{
 		if(!is_oid($oid))
@@ -4027,7 +4025,7 @@ class conference_planning extends class_base
 		$template = array(
 			"class_id" => CL_LOCATION,
 			"oid" => $from,
-			//"status" => STAT_ACTIVE,	
+			//"status" => STAT_ACTIVE,
 		);
 		$tmp = array(
 			"single_rooms" => "single_count",
@@ -4046,7 +4044,7 @@ class conference_planning extends class_base
 		}
 		$ol = new object_list($search);
 
-		// well, at first we search locations by the rooms, but if there aren't enough places (and room restrictions were set.. 
+		// well, at first we search locations by the rooms, but if there aren't enough places (and room restrictions were set..
 		// then we search some additional places which don't have as much rooms, sort them by room total counts and add as many as needed
 		$res = $ol->arr();
 		if($ol->count() < $obj->prop("search_result_max") && $search_crit)
@@ -4066,7 +4064,7 @@ class conference_planning extends class_base
 				{
 					break;
 				}
-				
+
 			}
 		}
 
@@ -4153,7 +4151,7 @@ class conference_planning extends class_base
 		$ol = new object_list(array(
 			"parent" => $el["choices"],
 		));
-		
+
 		$ce = $arr["obj_inst"]->meta("city_emails");
 
 		$from = $arr["obj_inst"]->prop("search_from");

@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.12 2008/01/31 13:52:37 kristo Exp $
-// otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
+// otv_ds_kultuuriaken.aw - Import Kultuuriaknast
 /*
-
 @classinfo syslog_type=ST_OTV_DS_KULTUURIAKEN relationmgr=yes no_comment=1 no_status=1 maintainer=dragut
 
 @default table=objects
@@ -24,7 +22,7 @@
 	@caption J&auml;rgmine automaatne import
 	@comment J&auml;rgmise automaatse impordi toimumise aeg
 
-	@property import_events_all type=checkbox ch_value=1 field=meta mehtod=serialize
+	@property import_events_all type=checkbox ch_value=1 field=meta method=serialize
 	@caption Impordi k&otilde;iik s&uuml;ndmused
 
 	@property import_events type=text store=no
@@ -41,7 +39,7 @@
 @default group=xml_view
 
 	@property xml_config type=table store=no
-	@caption XML vaate seaded 
+	@caption XML vaate seaded
 
 @groupinfo recurrence_config caption="Automaatne import"
 @default group=recurrence_config
@@ -118,7 +116,7 @@ class otv_ds_kultuuriaken extends class_base
 				if ($arr['obj_inst']->prop("import_events_all"))
 				{
 					$message = t("K&otilde;ik s&uuml;ndmused");
-				}	
+				}
 				$prop['value'] = html::href(array(
 					"caption" => sprintf(t("Impordi s&uuml;ndmused (%s)"), $message),
 					"url" => $this->mk_my_orb("import_events", array(
@@ -149,9 +147,9 @@ class otv_ds_kultuuriaken extends class_base
 				if (!empty($arr['request']['config_conf']))
 				{
 					$arr['obj_inst']->set_meta("config_conf", $arr['request']['config_conf']);
-				}	
+				}
 				break;
-			
+
 			// save data from xml configuration table
 			case "xml_config":
 				if (!empty($arr['request']['xml_conf']))
@@ -162,7 +160,7 @@ class otv_ds_kultuuriaken extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -203,7 +201,7 @@ class otv_ds_kultuuriaken extends class_base
 			"caption" => t("XML v&auml;lja sisu")
 		));
 
-		// let's get all parents 
+		// let's get all parents
 		$conns_to_parents = $arr['obj_inst']->connections_from(array(
 				"type" => "RELTYPE_PARENT",
 			));
@@ -212,7 +210,7 @@ class otv_ds_kultuuriaken extends class_base
 		foreach($conns_to_parents as $conn_to_parent)
 		{
 			$t->define_data(array(
-				"parent" => $conn_to_parent->prop("to.name"), 
+				"parent" => $conn_to_parent->prop("to.name"),
 				"xml_field_content" => html::textbox(array(
 					"name" => "config_conf[".$conn_to_parent->id()."][xml_field_content]",
 					"value" => $saved_config_conf[$conn_to_parent->id()]['xml_field_content'],
@@ -233,8 +231,8 @@ class otv_ds_kultuuriaken extends class_base
 			"name" => "form_field",
 			"caption" => t("Vormi v&auml;li"),
 		));
-		
-		
+
+
 		// getting properties from cfgform
 		$event_form_oid = $arr['obj_inst']->prop("event_form");
 		if (!is_oid($event_form_oid))
@@ -257,12 +255,12 @@ class otv_ds_kultuuriaken extends class_base
 		}
 
 		// getting and modifying the xml data to get all <event> element children
-		// i think i have to make an array with all those elements which are present under 
-		// event element, cause it surely is silly to load all the xml data file and only 
+		// i think i have to make an array with all those elements which are present under
+		// event element, cause it surely is silly to load all the xml data file and only
  		// to get those element names
 		// -- so it seems i created the class-wide xml fields array -dragut
-		
-		// a really good thing would be, if there is somekind of xml schema or dtd defined, 
+
+		// a really good thing would be, if there is somekind of xml schema or dtd defined,
 		// so i have to load only the schema/dtd file to acquire the data structure
 
 	/*
@@ -270,9 +268,9 @@ class otv_ds_kultuuriaken extends class_base
 		$xml_content = $this->load_xml_content(array(
 			"id" => $arr['obj_inst']->id(),
 			"owner" => 0,
-			"start" =>0, 
+			"start" =>0,
 		));
-		
+
 		$index_arr = $xml_content[1];
 		unset($index_arr['events'], $index_arr['event']);
 		$index_arr = array_keys($index_arr);
@@ -280,7 +278,7 @@ class otv_ds_kultuuriaken extends class_base
 
 		// get saved xml configuration data
 		$saved_xml_conf = $arr['obj_inst']->meta("xml_conf");
-		
+
 		// and lets put the data into table:
 		foreach($this->xml_fields as $value)
 		{
@@ -328,7 +326,7 @@ class otv_ds_kultuuriaken extends class_base
 		// if there is a better way to compose the url params, then
 		// it should be implmented here:
 		$url_params = (!empty($arr['owner'])) ? "?owner=".$arr['owner']."&" : "?";
-		$url_params = (!empty($arr['start'])) ? $url_params."start=".$arr['start'] : $url_params; 
+		$url_params = (!empty($arr['start'])) ? $url_params."start=".$arr['start'] : $url_params;
 		$f = fopen($xml_file_url.$url_params, "r");
 		if ($f === false)
 		{
@@ -381,7 +379,7 @@ class otv_ds_kultuuriaken extends class_base
 		$conns_to_parents = $o->connections_from(array(
 			"type" => "RELTYPE_PARENT",
 		));
-		
+
 		// checking if i have to import all objects or from the last import
 		$last_import = $o->meta("last_import");
 		if ($o->prop("import_events_all"))
@@ -393,18 +391,18 @@ class otv_ds_kultuuriaken extends class_base
 		{
 			$conn_id = $conn_to_parent->id();
 			$parent_id = $conn_to_parent->prop("to");
-			
+
 			$load_xml_content_params = array(
 				"id" => $arr['id'],
 				"owner" => $saved_config_conf[$conn_id]['xml_field_content'],
 				"start" => $last_import,
 			);
-			
+
 			if (empty($last_import))
 			{
 				unset($load_xml_params['start']);
 			}
-			
+
 			$xml_content = $this->load_xml_content($load_xml_content_params);
 
 			// so, it is possible, that we don't have anything from load_xml_content method
@@ -500,7 +498,7 @@ class otv_ds_kultuuriaken extends class_base
 			}
 		}
 
-		echo " <br>..:: IMPORT LÕPPENUD ::..<br>";
+		echo t(" <br>..:: IMPORT L6PPENUD ::..<br>");
 		flush();
 		$o->set_meta("last_import", time());
 
@@ -509,15 +507,15 @@ class otv_ds_kultuuriaken extends class_base
 		$this->activate_next_auto_import(array(
 			"object" => $o,
 		));
-	
+
 		$o->save();
 		return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
 	}
 
 	//// params:
-	// object => otv_ds_kultuuriaken object 
+	// object => otv_ds_kultuuriaken object
 	//
-	// this fn. checks if there is a recurrence object configured 
+	// this fn. checks if there is a recurrence object configured
 	// to otv_ds_kultuuriaken import
 	// if it is then put it in scheduler
 	//
@@ -549,7 +547,7 @@ class otv_ds_kultuuriaken extends class_base
                                 }
                         }
                 }
-		
+
 		return $next;
 
 	}

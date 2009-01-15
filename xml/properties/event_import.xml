@@ -51,7 +51,7 @@
             <group>general</group>
             <type>select</type>
             <field>meta</field>
-            <mehtod>serialize</mehtod>
+            <method>serialize</method>
             <caption>Keel</caption>
             <comment>Imporditavate objektide keel</comment>
       </property>
@@ -103,7 +103,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <mehtod>serialize</mehtod>
+            <method>serialize</method>
             <caption>Impordi s&amp;amp;uuml;ndmused algusest</caption>
       </property>
       <property>
@@ -112,7 +112,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>meta</field>
-            <mehtod>serialize</mehtod>
+            <method>serialize</method>
             <size>5</size>
             <caption>Imporditavate p&amp;amp;auml;evade arv (tagasi)</caption>
             <comment>Mitu p&amp;amp;auml;eva alates t&amp;amp;auml;nasest tagasi imporditakse</comment>
@@ -123,7 +123,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>meta</field>
-            <mehtod>serialize</mehtod>
+            <method>serialize</method>
             <size>5</size>
             <caption>Imporditavate p&amp;amp;auml;evade arv (edasi)</caption>
             <comment>Mitu p&amp;amp;auml;eva alates t&amp;amp;auml;nasest edasi imporditakse</comment>

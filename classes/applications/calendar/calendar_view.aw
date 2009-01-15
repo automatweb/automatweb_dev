@@ -1,7 +1,7 @@
 <?php
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
-// for showing calendars. 
+// for showing calendars.
 
 // also, all view related functions from CL_PLANNER will move over here
 
@@ -15,10 +15,10 @@
 @property use_template type=select
 @caption V&auml;limus
 
-@property num_next_events type=textbox size=5 
+@property num_next_events type=textbox size=5
 @caption Mitu j&auml;rgmist
 
-@property default_view type=select 
+@property default_view type=select
 @caption Vaade
 
 @property search_form type=relpicker reltype=RELTYPE_SEARCH
@@ -33,7 +33,7 @@
 @property default_urlobj type=relpicker reltype=RELTYPE_DEFAULT_URLOBJ store=connect
 @caption Default lingi objekt
 
-@property use_event_time_objs type=checkbox ch_valeu=1
+@property use_event_time_objs type=checkbox ch_value=1
 @caption Kasuta toimumisaja objekte
 
 @property show_days_with_events type=checkbox ch_value=1
@@ -99,7 +99,7 @@
 @property month_navigator type=checkbox ch_value=1 default=1
 @caption Kuu navigaator
 
-@property result_table type=table 
+@property result_table type=table
 @caption Tulemuste tabel
 
 @groupinfo show_events caption=S&uuml;ndmused submit=no
@@ -113,7 +113,7 @@
 
 @reltype OUTPUT value=2 clid=CL_RELATION,CL_DOCUMENT
 @caption v&auml;ljund
-	
+
 @reltype STYLE value=3 clid=CL_CSS
 @caption Stiil
 
@@ -242,7 +242,7 @@ class calendar_view extends class_base
 			"name" => "fields",
 			"caption" => t("Lisav&auml;ljad"),
 		));
-		
+
 		$oldvals = $o->meta("result_table");
 
 		$tc = get_instance(CL_CFGFORM);
@@ -325,11 +325,11 @@ class calendar_view extends class_base
 		};
 		$t->set_sortable(false);
 	}
-	
+
 	function gen_calendar_contents($arr)
 	{
 		$args = array();
-		
+
 		$arr["prop"]["vcl_inst"]->configure(array(
 			//"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
@@ -450,7 +450,7 @@ class calendar_view extends class_base
 					$item["url"] = aw_url_change_var("date",date("d-m-Y",$event["start"]),$item["url"]);
 				};
 				if($this->obj_inst->use_event_time_objs)
-				{					
+				{
 					foreach(connection::find(array("from" => $event["id"], "from.class_id" => CL_CALENDAR_EVENT, "type" => "RELTYPE_EVENT_TIMES")) as $et_conn)
 					{
 						$event_time_obj = obj($et_conn["to"]);
@@ -473,9 +473,9 @@ class calendar_view extends class_base
 								$tmp = $item;
 								$tmp["start"] = $tmp["timestamp"] = $i;
 								$tmp["end"] = $event_time_obj->end;
-								$rv[$i] = $tmp; 
+								$rv[$i] = $tmp;
 							}
-						}	
+						}
 					}
 				}
 				else
@@ -492,9 +492,9 @@ class calendar_view extends class_base
 							};
 							$tmp = $item;
 							$tmp["start"] = $tmp["timestamp"] = $i;
-							$rv[$i] = $tmp; 
+							$rv[$i] = $tmp;
 						}
-					}	
+					}
 				}
 			};
 		};
@@ -616,7 +616,7 @@ class calendar_view extends class_base
 			};
 		};
 	}
-	
+
 	function __sort_events_by_time($el1, $el2)
 	{
 		if($this->day_start > $el1["start1"] && $this->day_start < $el2["start1"]) return 1;
@@ -631,9 +631,9 @@ class calendar_view extends class_base
 		{
 			return $el1 - $el2;
 		}
-		
+
 		if(aw_global_get("uid") == "kix"){
-		
+
 		$e1 = obj($el1);
 		$e2 = obj($el2);
 		$e1_len = $e1->prop("end") - $e1->prop("start1");
@@ -645,18 +645,18 @@ class calendar_view extends class_base
 		{
 			return $e1->prop("start1") - $e2->prop("start1");
 		}
-		
+
 		$p1 = obj($e1->parent());
 		$p2 = obj($e2->parent());
 		return $p1->prop("jrk") - $p2->prop("jrk");
 
 		//arr($day);
 // 		if()
-// 		
+//
 // 		if()
 		}
-		
-		
+
+
 		return (int)($el1 - $el2);
 	}
 
@@ -728,7 +728,7 @@ class calendar_view extends class_base
 
 		return $events;
 	}
-	
+
 	function get_first_event($arr)
 	{
 		extract($arr);
@@ -748,7 +748,7 @@ class calendar_view extends class_base
 		));
 		return $obj->begin();
 	}
-	
+
 	function get_event_sources($o)
 	{
 		$sources = array();
@@ -773,7 +773,7 @@ class calendar_view extends class_base
 	}
 
 	////
-	//! 
+	//!
 	function parse_alias($arr)
 	{
 		if ($arr["obj_inst"])
@@ -784,24 +784,24 @@ class calendar_view extends class_base
 		{
 			$this->obj_inst = new object($arr["alias"]["target"]);
 		};
-		
+
 		if ($this->obj_inst)
 		{
 			$this->target_doc = $this->_get_output_doc($this->obj_inst);
 		}
-		
+
 		classload("vcl/calendar");
 
 		// figure out correct tpldir
 		$tpldir = "calendar/calendar_view";
 		$use_template = isset($arr["use_template"]) ? $arr["use_template"] : $this->obj_inst->prop("use_template");
-		
+
 		$use2dir = array(
 			"month" => "calendar/calendar_view/month",
 			"weekview" => "calendar/calendar_view/week",
 			"year" => "calendar/calendar_view/year",
 			"day" => "calendar/calendar_view/day",
-			"last_events" => "calendar/calendar_view/last_events", 
+			"last_events" => "calendar/calendar_view/last_events",
 			// BUG: this should be possible in ALL views
 			"grouped" => "calendar/calendar_view/day",
 			"relative" => "calendar/calendar_view/relative"
@@ -811,7 +811,7 @@ class calendar_view extends class_base
 		{
 			$tpldir = $use2dir[$use_template];
 		};
-		
+
 		// oookey .. I need a way to query the calendar whether it has to show images?
 		$vcal = new vcalendar(array(
 			"tpldir" => $tpldir,
@@ -847,7 +847,7 @@ class calendar_view extends class_base
 			$args["skip_empty"] = $arr["skip_empty"];
 		};
 
-		// this parse_alias is also being invoked directly from the project class, 
+		// this parse_alias is also being invoked directly from the project class,
 		// without an alias anywhere. I want to show full months if this is an alias
 		// and this it's done
 
@@ -892,7 +892,7 @@ class calendar_view extends class_base
 		{
 			$viewtype = $arr["viewtype"];
 		};
-		
+
 		if ($_GET["viewtype"])
 		{
 			$viewtype = $_GET["viewtype"];
@@ -1064,7 +1064,7 @@ class calendar_view extends class_base
 				$sources = $sources + $this->get_event_sources($to_o);
 			}
 		}
-		
+
 		$vcal->event_entry_classes = $this->event_entry_classes;
 		$vcal->event_sources = $sources;
 		if ($arr["start_from"])
@@ -1073,7 +1073,7 @@ class calendar_view extends class_base
 			$range["start"] = $arr["start_from"];
 		}
 
-		// this cycle creates the "big" calendar, minicalendar is done in the 
+		// this cycle creates the "big" calendar, minicalendar is done in the
 		// get_overview callback
 
 		// ookei .. ma saan template k2est kysida kas mul on vaja grupeerida asju?
@@ -1138,7 +1138,7 @@ class calendar_view extends class_base
 			"style" => $style,
 		);
 
-		
+
 		if ($this->obj_inst->prop("use_template") ==  "weekview")
 		{
 			$args["tpl"] = "week.tpl";
@@ -1164,7 +1164,7 @@ class calendar_view extends class_base
 			));
 
 			$rv .= " &nbsp; " . locale::get_lc_date($range["start"],6) . "&nbsp; ";
-			
+
 			$rv .= html::href(array(
 				"url" => aw_url_change_var("date",$range["next"]),
 				"caption" => t("&gt;&gt;"),
@@ -1175,7 +1175,7 @@ class calendar_view extends class_base
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
-		
+
 				$events = $this->get_events_from_object(array(
 					"obj_inst" => $to_o,
 					"range" => $range,

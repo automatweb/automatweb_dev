@@ -383,8 +383,7 @@
             <table>aw_ows_reservations</table>
             <group>cancel_data</group>
             <type>textbox</type>
-            <fidle>aw_cancel_other</fidle>
-            <field>cancel_other</field>
+            <field>aw_cancel_other</field>
             <caption>Muu p&amp;amp;otilde;hjus</caption>
       </property>
       <classinfo>
