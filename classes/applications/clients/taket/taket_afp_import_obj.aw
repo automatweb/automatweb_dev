@@ -42,6 +42,30 @@ class taket_afp_import_obj extends _int_object
 			die(t("Organisatsioonide kataloogi alla ei ole &otilde;igusi lisamiseks"));
 		}
 
+		$ol = new object_list(array(
+			"class_id" => CL_TAKET_SEARCH,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$s_o = $ol->begin();
+		if(!$s_o)
+		{
+			die(t("S&uuml;steemis puudub taketi otsingu objekt"));
+		}
+		$this->whs[0] = $s_o->prop("warehouse0");
+		$this->whs[1] = $s_o->prop("warehouse1");
+		$this->whs[2] = $s_o->prop("warehouse2");
+		$this->whs[3] = $s_o->prop("warehouse3");
+		$this->whs[4] = $s_o->prop("warehouse4");
+		$this->whs[5] = $s_o->prop("warehouse5");
+		for($i = 0; $i < 6; $i++)
+		{
+			if(!$this->can("view", $this->whs[$i]))
+			{
+				die(t("Taketi otsingu objektis on m&otilde;ni ladu seadistamata"));
+			}
+		}
+
 		$this->prod_fld = $prod_fld;
 		$this->org_fld = $org_fld;
 
@@ -115,13 +139,23 @@ class taket_afp_import_obj extends _int_object
 						$org->save();
 					}
 	
-					$o->set_prop("purveyor_org", $org->id());
-	
 					$o->save();
 					$o->connect(array(
 						"type" => "RELTYPE_WAREHOUSE",
 						"to" => $this->warehouse,
 					));
+
+					for($i = 0; $i < 6; $i++)
+					{
+						$p_o = obj();
+						$p_o->set_class_id(CL_SHOP_PRODUCT_PURVEYANCE);
+						$p_o->set_parent($o->id());
+						$p_o->set_name(sprintf(t("%s tarnetingimus"), $o->name()));
+						$p_o->set_prop("warehouse", $this->whs[$i]);
+						$p_o->set_prop("company", $org->id());
+						$p_o->set_prop("product", $o->id());
+						$p_o->save();
+					}
 
 					echo $k.' -- '.urldecode($v['product_name']).' ('.$code.') created ...<br>'."\n";
 				}
