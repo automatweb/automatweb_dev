@@ -1142,7 +1142,12 @@ class htmlclient extends aw_template
 				{
 					unset($arr["caption"]);
 				}
-				$retval = html::checkbox($arr);
+				$tmp = $arr;
+				if (!empty($tmp["parent"]))
+				{
+					unset($tmp["caption"]);
+				}
+				$retval = html::checkbox($tmp);
 				/*
 				$retval = html::checkbox(array(
 					"label" => isset($arr["label"]) ? $arr["label"] : "",
