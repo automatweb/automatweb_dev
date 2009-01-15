@@ -3197,7 +3197,7 @@ class class_base extends aw_template
 						{
 							$this->convert_element(&$rval);
 							$resprops[$rkey] = $rval;
-							$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
+							$resprops[$rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : "";
 							if ($resprops[$rkey]["type"] == "hidden")
 							{
 								unset($resprops[$rkey]["parent"]);
@@ -3363,7 +3363,7 @@ class class_base extends aw_template
 					}
 				}
 
-				$resprops[$args["name_prefix"] . "_" . $key]["autocomplete_params"] = $el["autocomplete_params"];
+				$resprops[$args["name_prefix"] . "_" . $key]["autocomplete_params"] = isset($el["autocomplete_params"]) ? $el["autocomplete_params"] : "";
 			}
 		}
 
@@ -5160,9 +5160,9 @@ class class_base extends aw_template
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$defaults = $cfgu->load_properties(array(
-			"file" => empty($arr["clid"]) ? $arr["clfile"] : "",
+			"file" => empty($arr["clid"]) ? (isset($arr["clfile"]) ? $arr["clfile"] : "" ) : "",
 			"clid" => !empty($arr["clid"]) ? $arr["clid"] : $this->clid,
-			"filter" => $arr["filter"],
+			"filter" => isset($arr["filter"]) ? $arr["filter"] : "",
 			"system" => 1,
 		));
 

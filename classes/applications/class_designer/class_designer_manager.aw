@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.18 2009/01/05 10:27:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.19 2009/01/15 14:47:12 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -128,6 +128,24 @@
 
 	@property sites_servers type=table store=no no_caption=1
 
+@default group=notifications_rules
+	
+	@property notifications_rules type=releditor mode=manager2 reltype=RELTYPE_NOTIFICATION_RULE store=no props=err_content,mail_to,mail_subj,mail_content table_fields=err_content,mail_to,mail_subj,mail_content
+	@caption Reeglid
+
+@default group=notifications_sent
+	
+	@property notifications_sent type=table store=no
+	@caption Saadetud teavitused
+
+@default group=notifications_status
+
+	@property ns_next type=text store=no
+	@caption J&auml;rgmine k&auml;ivitus	
+
+	@property ns_manual type=text store=no
+	@caption K&auml;ivita kohe
+
 @groupinfo mgr caption="Manager" submit=no
 @groupinfo rels caption="Seosed" submit=no
 @groupinfo classes caption="Klassid"
@@ -139,6 +157,15 @@
 @groupinfo sites caption="Saidid"
 	@groupinfo sites_sites parent=sites caption="Saidid"
 	@groupinfo sites_servers parent=sites caption="Serverid"
+@groupinfo notifications caption="Teavitus"
+	@groupinfo notifications_rules caption="Reeglid" parent=notifications
+	@groupinfo notifications_sent caption="Saadetud teavitused" parent=notifications
+	@groupinfo notifications_status caption="staatus" parent=notifications
+
+
+@reltype NOTIFICATION_RULE value=1 clid=CL_SITE_NOTIFICATION_RULE
+@caption Teavituse reegel
+
 */
 
 class class_designer_manager extends class_base
@@ -2080,6 +2107,185 @@ window.location.href='".html::get_new_url(CL_SM_CLASS_STATS_GROUP, $pt, array("r
 		}
 		$c = get_instance("maitenance");
 		$c->cache_clear(array("clear" => 1, "no_die" => 1));
+	}
+
+	private function _init_notify_table($t)
+	{
+		$t->define_field(array(
+			"name" => "site",
+			"caption" => t("Sait"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "when",
+			"caption" => t("Millal"),
+			"align" => "left",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i:s"
+		));
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Kellele"),
+			"align" => "left",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"align" => "center",
+		));
+	}
+
+	function _get_notifications_sent($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_notify_table($t);
+		
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_NOTIFICATION_SENT,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"site" => html::obj_change_url($o->prop("site")),
+				"when" => $o->prop("when"),
+				"who" => $o->prop("who"),
+				"view" => html::obj_change_url($o)
+			));
+		}
+		$t->set_default_sortby("when");
+		$t->set_default_sorder("desc");
+	}
+
+	function _get_ns_next($arr)
+	{
+		$h = date("H");
+		if (date("i") >= 30)
+		{
+			$h++;
+			$m = 0;
+		}
+		else
+		{
+			$m = 30;
+		}
+		$tm = mktime($h, $m, 0, date("m"), date("d"), date("Y"));
+		
+		$arr["prop"]["value"] = date("d.m.Y H:i", $tm);
+	}
+
+	function _get_ns_manual($arr)
+	{
+		$arr["prop"]["value"] = html::href(array(
+			"url" => aw_url_change_var("action", "scan_sites"),
+			"caption" => t("K&auml;ivita kohe")
+		));
+	}
+
+	/**
+		@attrib name=scan_sites nologin="1"
+		@param id required type=int
+	**/
+	function scan_sites($arr)
+	{	
+		aw_set_exec_time(AW_LONG_PROCESS);
+		echo "testing sites ... <br>\n";
+		flush();
+
+		$o = obj($arr["id"]);
+
+		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM aw_site_list WHERE site_used = 1 AND last_update > ".(time() - 24*3600*30), "cnt");
+
+		$errs = array();
+
+		$num = 1;
+		$this->db_query("SELECT * FROM aw_site_list WHERE site_used = 1 AND last_update > ".(time() - 24*3600*30));
+		while ($row = $this->db_next())
+		{
+			echo sprintf("%03d/%03d", $num, $cnt)." ".$row["url"]." .... \n";
+			flush();
+
+			ob_start();
+			$fc = strtolower(file_get_contents($row["url"]));
+			$ct = ob_get_contents();
+			ob_end_clean();
+
+			if (strpos($ct, "401") !== false)
+			{
+				// auth req, assume site is ok
+				$fc = "<html";
+				$ar = " (auth required) ";
+			}
+			else
+			{
+				echo $ct;
+				$ar = "";
+			}
+
+			if ((strpos($fc, "<html") !== false || strpos($fc, "<head") !== false || $fc == "") && strpos($fc, "Suhtuge veateadetesse rahulikult") === false)
+			{
+				echo " <font color=green>Success</font> $ar<br>\n";
+				flush();
+			}
+			else
+			{
+				echo " <font color=red>Failed</font><br>\n";
+				echo "<pre>".htmlentities($fc)."</pre>";
+				flush();
+				$errs[] = "sait $row[url] tundub maas olevat, esilehe sisu: \n".$fc."\n\n";
+				$this->_handle_scan_fail($row, $fc, $o);
+			}
+			$num++;
+		}
+
+		if (count($errs) > 0)
+		{
+			send_mail("kristo@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
+		}
+		die(t("All done"));
+	}
+
+	private function _handle_scan_fail($site, $content, $o)
+	{
+		// go over rules
+		foreach($o->connections_from(array("type" => "RELTYPE_NOTIFICATION_RULE")) as $c)
+		{
+			$t = $c->to();
+			if (preg_match("/".preg_quote($t->err_content)."/", $content, $mt))
+			{
+				$this->_apply_scan_rule($t, $site, $content, $o);
+			}
+		}
+
+		// check site entry for email
+		if ($this->can("view", $site["aw_oid"]))
+		{
+			$so = obj($site["aw_oid"]);
+			if ($so->mail_to != "")
+			{
+				send_mail(
+					$so->mail_to,
+					t("Sait maas!"),
+					"Sait ".$site["url"]." tundub maas olevat!\n\nEsilehel sisu:\n$content"
+				);
+			}
+		}
+	}
+
+	private function _apply_scan_rule($rule, $site, $content, $mgr)
+	{
+		$c = $rule->mail_content;
+		$c = str_replace("%site%", $site["url"], $c);
+		send_mail(
+			$rule->mail_to,
+			$rule->mail_subj,
+			$c
+		);
 	}
 }
 ?>

@@ -105,7 +105,7 @@
             <no_caption>1</no_caption>
             <parent>productgroups_r</parent>
             <field>productgroups_list</field>
-            <caption>Tootegruppide nimekiri </caption>
+            <caption>Tootegruppide nimekiri</caption>
       </property>
       <property>
             <name>products_toolbar</name>
@@ -146,7 +146,7 @@
             <size>20</size>
             <parent>prod_s_top_box</parent>
             <field>prod_s_name</field>
-            <caption>Nimi </caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>prod_s_code</name>
@@ -281,7 +281,7 @@
             <no_caption>1</no_caption>
             <parent>prod_split</parent>
             <field>products_list</field>
-            <caption>Toodete nimekiri </caption>
+            <caption>Toodete nimekiri</caption>
       </property>
       <property>
             <name>packets_toolbar</name>
@@ -312,7 +312,7 @@
             <size>30</size>
             <parent>packets_left_search</parent>
             <field>packets_s_name</field>
-            <caption>Nimi </caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>packets_s_code</name>
@@ -406,7 +406,7 @@
             <no_caption>1</no_caption>
             <parent>packets_split</parent>
             <field>packets_list</field>
-            <caption>Pakettide nimekiri </caption>
+            <caption>Pakettide nimekiri</caption>
       </property>
       <property>
             <name>arrivals_tb</name>
@@ -461,7 +461,7 @@
             <size>20</size>
             <parent>arrival_prod_s_top_box</parent>
             <field>arrival_prod_s_name</field>
-            <caption>Nimi </caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>arrival_prod_s_code</name>
@@ -521,7 +521,7 @@
             <no_caption>1</no_caption>
             <parent>arrival_prod_split</parent>
             <field>arrival_products_list</field>
-            <caption>Toodete nimekiri </caption>
+            <caption>Toodete nimekiri</caption>
       </property>
       <property>
             <name>storage_income_toolbar</name>

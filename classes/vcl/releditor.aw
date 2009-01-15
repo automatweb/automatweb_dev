@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.170 2009/01/09 10:26:28 instrumental Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.171 2009/01/15 14:47:19 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -113,7 +113,7 @@ class releditor extends core
 				{
 					$data[$idx-1][$_pn] = $target->prop($_pn);
 
-					if (!in_array($_pn,$tb_fields) || (!isset($_pd["show_in_emb_tbl"]) || $_pd["show_in_emb_tbl"] != 1) && is_oid($arr["prop"]["cfgform_id"]))
+					if (!in_array($_pn,$tb_fields) || (!isset($_pd["show_in_emb_tbl"]) || $_pd["show_in_emb_tbl"] != 1) && isset($arr["prop"]["cfgform_id"]) && is_oid($arr["prop"]["cfgform_id"]))
 					{
 						continue;
 					};
@@ -230,6 +230,8 @@ class releditor extends core
 
 	private function init_new_manager($arr)
 	{
+		$visual = "";
+		$edit_id = "";
 		//arr($arr);
 		enter_function("init-rel-editor-new");
 		$prop = $arr["prop"];
@@ -284,7 +286,7 @@ class releditor extends core
 		// and to customize table display in manager mode
 		$all_props = $t->load_defaults();
 		$act_props = array();
-		$use_form = $prop["use_form"];
+		$use_form = isset($prop["use_form"]) ? $prop["use_form"] : "";
 
 		if (!empty($use_form))
 		{
@@ -297,7 +299,7 @@ class releditor extends core
 			};
 		};
 
-		$form_type = $arr["request"][$this->elname];
+		$form_type = isset($arr["request"][$this->elname]) ? $arr["request"][$this->elname] : "";
 		if (isset($arr["prop"]["always_show_add"]) && $arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))
 		{
 			$form_type = "new";
@@ -322,7 +324,7 @@ class releditor extends core
 			$this->all_props[$key] = $_prop;
 		};
 
-		$cfgform_id = $arr["prop"]["cfgform_id"];
+		$cfgform_id = isset($arr["prop"]["cfgform_id"]) ? $arr["prop"]["cfgform_id"] : "";
 		if($this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
@@ -350,7 +352,7 @@ class releditor extends core
 			{
 				$obj_inst = new object($edit_id);
 			}
-			else if (!empty($prop["rel_id"]) || $prop["rel_id"] == "first")
+			else if (!empty($prop["rel_id"]) && $prop["rel_id"] == "first")
 			{
 				$o = $arr["obj_inst"];
 				if (is_object($o) && is_oid($o->id()))
@@ -478,7 +480,7 @@ class releditor extends core
 			"caption" => " ",//$this->elname."_add_button",
  		);
 
-		$arp = $arr["prop"]["parent"];
+		$arp = isset($arr["prop"]["parent"]) ? $arr["prop"]["parent"] : "";
 		foreach($xprops as $key => $prop)
 		{
 			$get_prop_arr = $arr;

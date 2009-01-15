@@ -184,6 +184,8 @@ class htmlclient extends aw_template
 
 	function add_property($args = array())
 	{
+		$args["name"] = isset($args["name"]) ? $args["name"] : "";
+		$args["type"] = isset($args["type"]) ? $args["type"] : "";
 		// if value is array, then try to interpret
 		// it as a list of elements.
 
@@ -538,7 +540,7 @@ class htmlclient extends aw_template
 	{
 		$tpl_vars = array(
 			//"value" => $args["value"],
-			"cell_id" => $args['name']."_cell",
+			"cell_id" => isset($args["name"]) ? $args['name']."_cell" : "_cell",
 			"value" => $this->draw_element($args),
 			"webform_content" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
@@ -594,7 +596,7 @@ class htmlclient extends aw_template
 				// track usage of submit button, if one does not exist in class properties
 				// then we add one ourself. This is not a good way to do this, but hey ..
 				// and it gets worse...
-				if ($item["type"] == "submit")
+				if (isset($item["type"]) && $item["type"] == "submit")
 				{
 					$this->submit_done = true;
 				}
@@ -663,7 +665,7 @@ class htmlclient extends aw_template
 				};
 
 				$this->vars_safe(array(
-					"property_name" => $item["name"],
+					"property_name" => isset($item["name"]) ? $item["name"] : "",
 					"property_caption" => isset($item["caption"]) ? $item["caption"] : "",
 					"property_comment" => isset($item["comment"]) ? $item["comment"] : "",
 					"property_help" => isset($item["help"]) ? $item["help"] : "",
@@ -680,7 +682,7 @@ class htmlclient extends aw_template
 
 				// this is what I was talking about before ...
 				// move submit button _before_ the aliasmgr
-				if (!empty($sbt) && $item["type"] === "aliasmgr")
+				if (!empty($sbt) && isset($item["type"]) && $item["type"] === "aliasmgr")
 				{
 					$res .= $sbt;
 					unset($sbt);
@@ -1038,6 +1040,10 @@ class htmlclient extends aw_template
 
 	function draw_element($args = array())
 	{
+		if (!isset($args["type"]))
+		{
+			$args["type"] = "";
+		}
 		$tmp = new aw_array($args);
 		$arr = $tmp->get();
 
@@ -1255,7 +1261,7 @@ class htmlclient extends aw_template
 			// hidden elements end up in the orb_vars
 			$this->orb_vars[$item["name"]] = $value;
 		}
-		else if ($item["type"] === "submit")
+		else if ($type === "submit")
 		{
 			$item["html"] = $this->put_submit($item);
 			$this->submit_done = true;

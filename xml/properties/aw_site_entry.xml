@@ -83,6 +83,14 @@
             <caption>Viimati uuendatud</caption>
       </property>
       <property>
+            <name>mail_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <caption>Kellele meil saata, kui sait maas</caption>
+      </property>
+      <property>
             <name>data</name>
             <table>aw_site_list</table>
             <group>general</group>

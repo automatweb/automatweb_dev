@@ -248,6 +248,60 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>notifications_rules</name>
+            <table>objects</table>
+            <group>notifications_rules</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <mode>manager2</mode>
+            <reltype>RELTYPE_NOTIFICATION_RULE</reltype>
+            <store>no</store>
+            <props>
+                  <num_0>err_content</num_0>
+                  <num_1>mail_to</num_1>
+                  <num_2>mail_subj</num_2>
+                  <num_3>mail_content</num_3>
+            </props>
+            <table_fields>
+                  <num_0>err_content</num_0>
+                  <num_1>mail_to</num_1>
+                  <num_2>mail_subj</num_2>
+                  <num_3>mail_content</num_3>
+            </table_fields>
+            <caption>Reeglid</caption>
+      </property>
+      <property>
+            <name>notifications_sent</name>
+            <table>objects</table>
+            <group>notifications_sent</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Saadetud teavitused</caption>
+      </property>
+      <property>
+            <name>ns_next</name>
+            <table>objects</table>
+            <group>notifications_status</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>J&amp;amp;auml;rgmine k&amp;amp;auml;ivitus	</caption>
+      </property>
+      <property>
+            <name>ns_manual</name>
+            <table>objects</table>
+            <group>notifications_status</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>K&amp;amp;auml;ivita kohe</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -300,7 +354,29 @@
                   <parent>sites</parent>
                   <caption>Serverid</caption>
             </sites_servers>
+            <notifications>
+                  <caption>Teavitus</caption>
+            </notifications>
+            <notifications_rules>
+                  <caption>Reeglid</caption>
+                  <parent>notifications</parent>
+            </notifications_rules>
+            <notifications_sent>
+                  <caption>Saadetud teavitused</caption>
+                  <parent>notifications</parent>
+            </notifications_sent>
+            <notifications_status>
+                  <caption>staatus</caption>
+                  <parent>notifications</parent>
+            </notifications_status>
       </groupinfo>
+      <reltypes>
+            <NOTIFICATION_RULE>
+                  <value>1</value>
+                  <clid>CL_SITE_NOTIFICATION_RULE</clid>
+                  <caption>Teavituse reegel</caption>
+            </NOTIFICATION_RULE>
+      </reltypes>
       <layout>
             <mgr_hbox>
                   <type>hbox</type>

@@ -94,5 +94,13 @@
 			</function>
 		</action>
 
+		<action name="scan_sites" nologin="1">
+			<function name="scan_sites">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

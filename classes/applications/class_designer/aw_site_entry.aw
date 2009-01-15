@@ -36,6 +36,9 @@
 @property last_update type=datetime_select
 @caption Viimati uuendatud
 
+@property mail_to type=textbox table=objects field=meta
+@caption Kellele meil saata, kui sait maas
+
 @property data type=textarea rows=30 cols=80
 @caption Andmed
 
