@@ -923,6 +923,7 @@
             <group>final_general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_COUNTRY</reltype>
+            <store>connect</store>
             <multiple>1</multiple>
             <size>3</size>
             <field>final_foreign_countries</field>

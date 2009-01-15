@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.174 2009/01/14 10:50:24 robert Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.175 2009/01/15 12:35:58 robert Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -317,7 +317,7 @@
 			@caption V&auml;lisk&uuml;laliste arv
 			@comment Konverentsil viibivate v&auml;lisk&uuml;aliste arv
 
-			@property final_foreign_countries type=relpicker reltype=RELTYPE_COUNTRY multiple=1 size=3
+			@property final_foreign_countries type=relpicker reltype=RELTYPE_COUNTRY store=connect multiple=1 size=3 store=connect
 			@caption V&auml;lisriigid
 
 			@property additional_information type=textarea rows=20
@@ -3814,6 +3814,7 @@ class rfp extends class_base
 			array("final_international", "int"),
 			array("final_native_guests", "int"),
 			array("final_foreign_guests", "int"),
+			array("final_foreign_countries", "varchar(255)"),
 			array("data_subm_name", "varchar(255)"),
 			array("data_subm_country", "varchar(255)"),
 			array("data_subm_state", "varchar(255)"),
