@@ -3123,7 +3123,7 @@ class site_show extends class_base
 		else
 		{
 			$this->section_obj = new object();
-			$this->section_obj->set_class_id("CL_MENU");
+			$this->section_obj->set_class_id(CL_MENU);
 		}
 
 		$clss = aw_ini_get("classes");
