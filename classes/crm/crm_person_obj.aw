@@ -272,7 +272,7 @@ class crm_person_obj extends _int_object
 			"from.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 			"type" => "RELTYPE_CANDIDATE"
 		));
-		
+
 		$pm = get_instance(CL_PERSONNEL_MANAGEMENT);
 		foreach($conns as $conn)
 		{
@@ -286,7 +286,7 @@ class crm_person_obj extends _int_object
 		exit_function("crm_person_obj::get_application");
 		return $ret;
 	}
-	
+
 	function prms($arr)
 	{
 		$arr["parent"] = !isset($arr["parent"]) ? array() : $arr["parent"];
@@ -478,7 +478,7 @@ class crm_person_obj extends _int_object
 		}
 		return 0;
 	}
-	
+
 	function has_ovrv_offers()
 	{
 		$filt = array(
@@ -487,7 +487,7 @@ class crm_person_obj extends _int_object
 			"lang_id" => array(),
 			"actor" => $this->id(),
 		);
-		
+
 		$ol = new object_list($filt);
 		if(sizeof($ol->ids()))
 		{
@@ -561,7 +561,7 @@ class crm_person_obj extends _int_object
 
 		$eo->set_prop("mail", $mail);
 		$eo->save();
-		
+
 		if ($n)
 		{
 			$this->set_prop("email", $eo->id());
@@ -591,7 +591,7 @@ class crm_person_obj extends _int_object
 
 		$eo->set_name($phone);
 		$eo->save();
-		
+
 		if ($n)
 		{
 			$this->set_prop("phone", $eo->id());
@@ -649,7 +649,7 @@ class crm_person_obj extends _int_object
 		}
 
 		$eo->save();
-		
+
 		if ($n)
 		{
 			$this->set_prop("address", $eo->id());
@@ -866,7 +866,7 @@ class crm_person_obj extends _int_object
 			}
 			return $sel;
 		}
-		
+
 		$this->set_all_jobs();
 		foreach($this->all_jobs->arr() as $job)
 		{
@@ -987,7 +987,7 @@ class crm_person_obj extends _int_object
 			}
 		}
 
-//-----vana systeeem 
+//-----vana systeeem
 		$ci = new connection();
 		$conns = $ci->find(array(
 			"from.class_id" => CL_CRM_COMPANY,
@@ -1284,14 +1284,14 @@ class crm_person_obj extends _int_object
 		}
 	}
 
-	private function event_notifications($arr, $type)
+	public function event_notifications($arr, $type, $modified = false)
 	{
 		$conn = $arr["connection"];
 		$person = $conn->from();
 		$user = $person->instance()->has_user($person);
 		if($user !== false)
 		{
-			if($user->prop("nfy_".$type))
+			if((int)$user->prop("nfy_".$type) === 1 || $modified !== true && (int)$user->prop("nfy_".$type) === 2)
 			{
 				$email = $person->email;
 				if (is_oid($email))
@@ -1300,18 +1300,23 @@ class crm_person_obj extends _int_object
 					$addr = $email_obj->prop("mail");
 					if (is_email($addr))
 					{
-						$this->send_nfy_mail($addr, $conn->to());
+						$this->send_nfy_mail($addr, $conn->to(), $modified);
 					};
 				};
 			};
 		};
 	}
 
-	public function send_nfy_mail($addr, $o)
+	public function send_nfy_mail($addr, $o, $modified = false)
 	{
 		$type = $o->class_id() == CL_TASK ? t("toimetuse") : t("kohtumise");
+		$type_modified = $o->class_id() == CL_TASK ? t("Toimetust") : t("Kohtumist");
 
-		$subject = sprintf(t("Teid on lisatud ".$type." '%s' osalejaks"), $o->name());
+		$subject = sprintf(t("Teid on lisatud %s '%s' osalejaks"), $type, $o->name());
+		if($modified === true)
+		{
+			$subject = sprintf(t("%s '%s', mille osaleja olete, on muudetud"), $type_modified, $o->name());
+		}
 
 		$msg = t("Link: ").get_instance($o->class_id())->mk_my_orb("change", array("id" => $o->id()))."\n\n";
 
@@ -1328,7 +1333,7 @@ class crm_person_obj extends _int_object
 	/** returns customer relation creator
 		@attrib api=1
 		@returns string
-	**/	
+	**/
 	public function get_cust_rel_creator_name()
 	{
 		$o = $this->get_customer_relation();
@@ -1345,7 +1350,7 @@ class crm_person_obj extends _int_object
 		@param crea_if_not_exists optional
 			if no customer relation object, makes one
 		@returns object
-	**/	
+	**/
 	public function get_customer_relation($my_co = null, $crea_if_not_exists = false)
 	{
 		if ($my_co === null)
@@ -1397,7 +1402,7 @@ class crm_person_obj extends _int_object
 	/** returns person sections selection
 		@attrib api=1
 		@returns array
-	**/	
+	**/
 	public function get_section_selection()
 	{
 		$sects = $this->get_sections();

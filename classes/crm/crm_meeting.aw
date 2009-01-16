@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.113 2008/11/24 21:24:42 markop Exp $
-// kohtumine.aw - Kohtumine 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.114 2009/01/16 15:55:26 instrumental Exp $
+// kohtumine.aw - Kohtumine
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
 
@@ -37,14 +37,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
-@layout center_bit type=hbox 
+@layout center_bit type=hbox
 	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
-	@layout center_bit_left type=vbox parent=center_bit 
+	@layout center_bit_left type=vbox parent=center_bit
 
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
-	@layout center_bit_right type=vbox parent=center_bit 
+	@layout center_bit_right type=vbox parent=center_bit
 
 		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
@@ -94,16 +94,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
 
-@property is_personal type=checkbox ch_value=1 field=meta method=serialize 
+@property is_personal type=checkbox ch_value=1 field=meta method=serialize
 @caption Isiklik
 
 @property is_work type=checkbox ch_value=1 field=aw_is_work table=planner
 @caption T&ouml;&ouml;aeg
 
-@property start1 type=datetime_select field=start table=planner 
-@caption Algab 
+@property start1 type=datetime_select field=start table=planner
+@caption Algab
 
-@property end type=datetime_select table=planner 
+@property end type=datetime_select table=planner
 @caption L&otilde;peb
 
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
@@ -125,22 +125,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @caption User-defined textbox 4
 
 @property udeftb5 type=textbox user=1 table=kliendibaas_kohtumine
-@caption User-defined textbox 5 
+@caption User-defined textbox 5
 
 @property udeftb6 type=textbox user=1 table=kliendibaas_kohtumine
-@caption User-defined textbox 6 
+@caption User-defined textbox 6
 
 @property udeftb7 type=textbox user=1 table=kliendibaas_kohtumine
 @caption User-defined textbox 7
- 
+
 @property udeftb8 type=textbox user=1 table=kliendibaas_kohtumine
-@caption User-defined textbox 8 
+@caption User-defined textbox 8
 
 @property udeftb9 type=textbox user=1 table=kliendibaas_kohtumine
-@caption User-defined textbox 9 
+@caption User-defined textbox 9
 
 @property udeftb10 type=textbox user=1 table=kliendibaas_kohtumine
-@caption User-defined textbox 10 
+@caption User-defined textbox 10
 
 @property udefta1 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 1
@@ -151,25 +151,25 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property udefta3 type=textarea user=1 table=kliendibaas_kohtumine
 @caption User-defined textarea 3
 
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill
 @caption Saata arve
 
-@property bill_no type=text table=planner 
+@property bill_no type=text table=planner
 @caption Arve number
 
 @property participants type=select multiple=1 table=objects field=meta method=serialize
 @caption Osalejad
 
-@property time_guess type=textbox size=5 field=meta method=serialize 
-@caption Prognoositav tundide arv 	
+@property time_guess type=textbox size=5 field=meta method=serialize
+@caption Prognoositav tundide arv
 
-@property time_real type=textbox size=5 field=meta method=serialize 
+@property time_real type=textbox size=5 field=meta method=serialize
 @caption Tegelik tundide arv
 
-@property time_to_cust type=textbox size=5 field=meta method=serialize 
+@property time_to_cust type=textbox size=5 field=meta method=serialize
 @caption Tundide arv kliendile
 
-@property hr_price type=textbox size=5 field=meta method=serialize 
+@property hr_price type=textbox size=5 field=meta method=serialize
 @caption Tunni hind
 
 @property in_budget type=checkbox ch_value=1 table=planner field=aw_in_budget
@@ -197,7 +197,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property summary type=textarea cols=80 rows=30 table=planner field=description
 @caption Kokkuv&otilde;te
 
-@property controller_disp type=text store=no 
+@property controller_disp type=text store=no
 @caption Kontrolleri v&auml;ljund
 
 @default field=meta
@@ -248,7 +248,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @default group=other_settings
 
-	
+
 	@property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 	@caption Kokkuv&otilde;te
 
@@ -257,10 +257,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 	@property userfile1 type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=meta method=serialize
 	@caption Failiupload 1
-	
+
 	@property userfile2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=meta method=serialize
 	@caption Failiupload 2
-	
+
 	@property userfile3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=meta method=serialize
 	@caption Failiupload 3
 
@@ -271,11 +271,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
 	@caption Eeldustegevused
 
-	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal 
+	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal
 	@caption Verstapost
 
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
@@ -288,10 +288,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad submit=no
-@groupinfo resources caption="Ressursid" 
-@groupinfo other_settings caption="Muud seaded" 
+@groupinfo resources caption="Ressursid"
+@groupinfo other_settings caption="Muud seaded"
 @groupinfo transl caption=T&otilde;lgi
-@groupinfo predicates caption="Eeldused" 
+@groupinfo predicates caption="Eeldused"
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -339,7 +339,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 class crm_meeting extends task
 {
 	var $return_url;
-	
+
 	function crm_meeting()
 	{
 		$this->init(array(
@@ -350,7 +350,7 @@ class crm_meeting extends task
 			"name", "comment", "content"
 		);
 	}
-	
+
 	function callback_on_load($arr)
 	{
 		if(isset($arr["request"]["msgid"]) && $arr["request"]["msgid"])
@@ -362,9 +362,9 @@ class crm_meeting extends task
 				"msgid" => $arr["request"]["msgid"],
 				"fullheaders" => "",
 			));
-		}	
+		}
 	}
-	
+
 	function get_property($arr)
 	{
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
@@ -387,7 +387,7 @@ class crm_meeting extends task
 			case "co_tb":
 				$this->_get_co_tb($arr);
 				break;
-	
+
 			case "project_tb":
 				$this->_get_project_tb($arr);
 				break;
@@ -546,7 +546,7 @@ class crm_meeting extends task
 					}
 				}
 				break;
-			
+
 			case "sel_resources":
 				$t = get_instance(CL_TASK);
 				$t->_get_sel_resources($arr);
@@ -655,7 +655,7 @@ class crm_meeting extends task
 				break;
 
 			case "participants":
-			
+
 				if($arr["new"] && $arr["request"]["participants"])
 				{
 					$_SESSION["event"]["participants"] = explode("," , $arr["request"]["participants"]);
@@ -699,10 +699,10 @@ class crm_meeting extends task
 				$i = get_instance(CL_CRM_COMPANY);
 				uasort($opts, array(&$i, "__person_name_sorter"));
 
-				$data["options"] = array("" => t("--Vali--")) + $opts;	
+				$data["options"] = array("" => t("--Vali--")) + $opts;
 				$data["value"] = $p;
 				break;
-		
+
 
 			case 'task_toolbar' :
 			{
@@ -791,7 +791,7 @@ class crm_meeting extends task
 				break;
 		}
 	}
-	
+
 
 	function parse_alias($arr)
 	{
@@ -821,7 +821,7 @@ class crm_meeting extends task
 			case "end":
 				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($data["value"]))
 				{
-					
+
 					$data["value"] = $arr["request"]["start1"];
 					$arr["request"]["end"] = $arr["request"]["start1"];
 				}
@@ -835,7 +835,7 @@ class crm_meeting extends task
 					$arr["request"][$data["name"]]["minute"] = "0";
 				}
 				break;
-		
+
 			case "add_clauses":
 				return PROP_IGNORE;
 				$this->save_add_clauses($arr);
@@ -921,6 +921,16 @@ class crm_meeting extends task
 		};
 		return $retval;
 	}
+
+	function callback_post_save($arr)
+	{
+		$inst = get_instance("crm_person_obj");
+		foreach($arr["obj_inst"]->connections_to(array(array("from.class_id" => CL_CRM_PERSON, "type" => "RELTYPE_PERSON_MEETING"))) as $conn)
+		{
+			$inst->event_notifications(array("connection" => $conn), "meeting", true);
+		}
+	}
+
 /*
 	function callback_post_save($arr)
 	{
@@ -936,7 +946,7 @@ class crm_meeting extends task
 			{
 				$this->add_participant($arr["obj_inst"], obj($person));
 			}
-			
+
 		}
 		if(!empty($arr['new']))
 		{
@@ -946,7 +956,7 @@ class crm_meeting extends task
 		{
 			$arr["obj_inst"]->create_brother($this->add_to_proj);
 		}
-		
+
 		if ($this->can("view", $_POST["orderer_h"]))
 		{
 			$arr["obj_inst"]->connect(array(
@@ -1004,7 +1014,7 @@ class crm_meeting extends task
 			unset($_SESSION["add_to_task"]);
 		}
 	}
-		
+
 */
 	/**
 	@attrib name=submit_delete_participants_from_calendar
@@ -1105,7 +1115,7 @@ class crm_meeting extends task
 			$arr['class']
 		);
 	}
-	
+
 	function request_execute($o)
 	{
 		return $this->show2(array("id" => $o->id()));
@@ -1184,7 +1194,7 @@ class crm_meeting extends task
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
-	
+
 		if ($has_tpl)
 		{
 			return $this->parse();
@@ -1283,7 +1293,7 @@ class crm_meeting extends task
 			if (!is_array($pv) && is_oid($pv))
 			{
 				$pv = array($pv => $pv);
-			}	
+			}
 			else
 			if (!is_array($pv) && !is_oid($pv))
 			{
@@ -1524,7 +1534,7 @@ class crm_meeting extends task
 				$o->set_prop("project", 0);
 				$o->save();
 			}
-		}	
+		}
 
 		if (is_array($arr["sel_part"]) && count($arr["sel_part"]))
 		{
@@ -1558,7 +1568,7 @@ class crm_meeting extends task
 		return $arr["post_ru"];
 	}
 
-	
+
 // stopper crap
 
 	function handle_stopper_stop($arr)
@@ -1608,7 +1618,7 @@ class crm_meeting extends task
 				"to" => $arr["data"]["project"]["value"],
 				"type" => "RELTYPE_PROJECT",
 			));
-			
+
 			$arr["oid"] = $o->id();
 		}
 		$o = obj($arr["oid"]);
@@ -1640,7 +1650,7 @@ class crm_meeting extends task
 				if(strlen($params["part"]))
 				{
 					$parts = split(",", $params["part"]);
-					
+
 					$c = new connection();
 					$conns = $c->find(array(
 						"from.class_id" => CL_PROJECT,
@@ -1673,7 +1683,7 @@ class crm_meeting extends task
 
 	function gen_stopper_addon($arr)
 	{
-		
+
 		$props = array(
 			array(
 				"name" => "name",

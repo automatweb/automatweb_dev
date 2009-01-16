@@ -483,21 +483,29 @@
             <name>nfy_meeting</name>
             <table>objects</table>
             <group>settings_general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Saada e-kiri, kui mind lisatakse kohtumise osalejaks</caption>
+            <caption>Kohtumine</caption>
       </property>
       <property>
             <name>nfy_task</name>
             <table>objects</table>
             <group>settings_general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Saada e-kiri, kui mind lisatakse toimetuse osalejaks</caption>
+            <caption>Toimetus</caption>
+      </property>
+      <property>
+            <name>draft_hd</name>
+            <table>users</table>
+            <group>settings_general</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>draft_hd</field>
+            <caption>Mustandi seaded</caption>
       </property>
       <property>
             <name>draft_timeout</name>

@@ -798,7 +798,7 @@ class task extends class_base
 			el = $(\'#stopdiv_\'+stopKey+\'_time\').html(_return_normal_clock(start_duration+duration));
 		}
 	});
-	
+
 	function _return_normal_clock(seconds)
 	{
 		var s = seconds;
@@ -894,9 +894,9 @@ class task extends class_base
 	function callback_mod_layout(&$arr)
 	{
 		$type = array(
-			CL_TASK => t("Toimetusele"),	
-			CL_CRM_MEETING => t("Kohtumisele"),	
-			CL_CRM_CALL => t("K&otilde;nele"),	
+			CL_TASK => t("Toimetusele"),
+			CL_CRM_MEETING => t("Kohtumisele"),
+			CL_CRM_CALL => t("K&otilde;nele"),
 		);
 		switch($arr["name"])
 		{
@@ -905,7 +905,7 @@ class task extends class_base
 				break;
 			case "project_bit":
 				$arr["area_caption"] = sprintf(t("Projektid: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
-				break; 
+				break;
 			case "impl_bit":
 				$arr["area_caption"] = sprintf(t("Osalejad: %s \"%s\""), $type[$arr["obj_inst"]->class_id()], $arr["obj_inst"]->name());
 				break;
@@ -945,7 +945,7 @@ class task extends class_base
 			case "co_tb":
 				$this->_get_co_tb($arr);
 				break;
-	
+
 			case "project_tb":
 				$this->_get_project_tb($arr);
 				break;
@@ -1214,7 +1214,7 @@ class task extends class_base
 						$data["value"] = $daystart;
 					}
 				}
-				
+
 				$p = get_instance(CL_PLANNER);
 				$cal = $p->get_calendar_for_user();//arr($data["value"]);
 				if ($cal && !($daystart > 0))
@@ -1625,7 +1625,7 @@ class task extends class_base
 				//$arr["obj_inst"]->set_prop("is_work", $prop["value"]["is_work"] ? 1 : 0);
 				if($prop["value"]["is_work"])
 				{
-					$rowdata = array("time_real" => $arr["obj_inst"]->prop("num_hrs_real"), 
+					$rowdata = array("time_real" => $arr["obj_inst"]->prop("num_hrs_real"),
 						"time_to_cust" => $arr["obj_inst"]->prop("num_hrs_to_cust"));
 					$arr["obj_inst"]->set_primary_row($rowdata);
 				}
@@ -1892,6 +1892,12 @@ class task extends class_base
 
 	function callback_post_save($arr)
 	{
+		$inst = get_instance("crm_person_obj");
+		foreach($arr["obj_inst"]->connections_to(array(array("from.class_id" => CL_CRM_PERSON, "type" => "RELTYPE_PERSON_TASK"))) as $conn)
+		{
+			$inst->event_notifications(array("connection" => $conn), "task", true);
+		}
+
 		if (is_oid($arr["request"]["predicates"]) && $this->can("view", $arr["request"]["predicates"]))
 		{
 			$arr["obj_inst"]->connect(array(
@@ -2073,28 +2079,28 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "bill",
 			"caption" => t("Arve nr.")
-		));	
+		));
 	}
 
 	function _other_expenses($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_other_exp_t($t);
-		
+
 		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
 // 		$dat = array();
 		$dat[] = array();
 		$dat[] = array();
 		$dat[] = array();
 		$nr = 1;
-		
+
 		$participians = $this->get_partipicants($arr);
 		$pa_list = new object_list();
 		if (is_oid($participians) || (is_array($participians) && count($participians)))
 		{
 			$pa_list->add($participians);
 		}
-		
+
 		$cs = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_EXPENSE",
 		));
@@ -2164,7 +2170,7 @@ class task extends class_base
 							"value" => 1,
 							"checked" => $ob->prop("has_tax")?1:0,
 						)),
-						
+
 					));
 		//			$nr++;
 				}
@@ -4073,7 +4079,7 @@ class task extends class_base
 		$o->set_prop("num_hrs_real", $o->prop("nuh_hrs_real") + $arr["hours"]);
 		$o->set_prop("num_hrs_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
 		$o->set_prop("end", time());
-		
+
 		$cp = get_current_person();
 
 //		$row = obj();
@@ -4084,7 +4090,7 @@ class task extends class_base
 		$row->set_prop("content", $arr["data"]["desc"]["value"]);
 		$row->set_prop("date", $arr["start"]);
 		$row->set_prop("impl", array($cp->id() => $cp->id()));
-		
+
 		$row->set_prop("time_guess", strlen($arr["data"]["timeguess"]["value"])?$arr["data"]["timeguess"]["value"]:$arr["hours"]);
 		$row->set_prop("time_real", strlen($arr["data"]["timereal"]["value"])?$arr["data"]["timereal"]["value"]:$arr["hours"]);
 		$row->set_prop("time_to_cust", strlen($arr["data"]["timetocust"]["value"])?$arr["data"]["timetocust"]["value"]:$arr["hours"]);
@@ -4230,7 +4236,7 @@ class task extends class_base
 					"parent" => "add_clauses",
 				));
 			}
-						
+
 			if($arr["obj_inst"]->class_id() == CL_TASK)$t->define_field(array(
 				"name" => "is_goal",
 				"caption" =>  t("Verstapost"),
@@ -4494,7 +4500,7 @@ class task extends class_base
 		return strcmp($a->name(), $b->name());
 	}
 
-	
+
 	function _get_co_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -4948,11 +4954,11 @@ class task extends class_base
 			"CL_PROJECT.RELTYPE_ORDERER.id" => $customers,
 			"site_id" => array(),
 		);
-	
+
 		if($arr["request"]["class"] == "crm_meeting")
 		{
 			$user = get_instance(CL_USER);
-			$person = $user->get_current_person();	
+			$person = $user->get_current_person();
 			$filter["CL_PROJECT.RELTYPE_PARTICIPANT"] = $person;
 		}
 
@@ -5428,7 +5434,7 @@ $types = array(
 
 		//syndmuste kiirlisamiseks teeb sellise h2ki
 		$this->fast_add_participants($arr,$types);
- 
+
 		if(!sizeof($c_conn = $arr["obj_inst"]->connections_to(array("type" => $types))))
 		{
 			return PROP_IGNORE;
@@ -5451,7 +5457,7 @@ $types = array(
 				"prof" => html::obj_change_url($c->prop("rank")),
 				"phone" => html::obj_change_url($c->prop("phone"))
 			);
-			
+
 			$row = $arr["obj_inst"]->get_primary_row_for_person($c->id());
 			$data["time_guess"] = html::textbox(array(
 				"name" => "rows[".$c->id()."][time_guess]",
@@ -5479,7 +5485,7 @@ $types = array(
 					"value" => 1,
 					"checked" => $row ? $row->prop("on_bill") : "",
 			));
-	
+
 			$t->define_data($data);
 		}
 	}
@@ -5767,7 +5773,7 @@ $types = array(
 	function _bills_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-	
+
 		if (!$arr["new"])
 		{
 
@@ -5817,7 +5823,7 @@ $types = array(
 		{
 			return PROP_IGNORE;
 		}
-		
+
 		$this->_init_bills_table($t);
 
 		foreach($ol->arr() as $c)

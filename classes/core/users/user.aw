@@ -87,7 +87,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property passwd_again type=password store=no
 	@caption Salas&otilde;na uuesti
 
-	@property password type=hidden table=users field=password 
+	@property password type=hidden table=users field=password
 
 	@property gen_pwd store=no type=text
 	@caption Genereeri parool
@@ -195,14 +195,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property nfy_hd type=text subtitle=1 store=no
 	@caption Teavituste seaded
 
-	@property nfy_meeting type=checkbox ch_value=1 field=meta method=serialize table=objects
-	@caption Saada e-kiri, kui mind lisatakse kohtumise osalejaks
+		@property nfy_meeting type=select field=meta method=serialize table=objects
+		@caption Kohtumine
 
-	@property nfy_task type=checkbox ch_value=1 field=meta method=serialize table=objects
-	@caption Saada e-kiri, kui mind lisatakse toimetuse osalejaks
+		@property nfy_task type=select field=meta method=serialize table=objects
+		@caption Toimetus
 
-	@property draft_timeout type=textbox field=meta method=serialize table=objects
-	@caption Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)
+	@property draft_hd type=text subtitle=1 store=no
+	@caption Mustandi seaded
+
+		@property draft_timeout type=textbox field=meta method=serialize table=objects
+		@caption Kui tihti omaduste mustandeid salvestatakse? (aeg sekundites)
 
 	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
@@ -222,7 +225,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 			@property settings_shortcuts_settings_shortcuts type=table parent=settings_shortcuts_bot_left no_caption=1
 			@caption Shortcutid
-		
+
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
 
@@ -265,6 +268,15 @@ class user extends class_base
 		$prop =& $arr["prop"];
 		switch($prop["name"])
 		{
+			case "nfy_meeting":
+			case "nfy_task":
+				$prop["options"] = array(
+					0 => t("&Auml;ra saada e-kirja"),
+					2 => t("Saada e-kiri, kui mind lisatakse osalejaks"),
+					1 => $prop["name"] == "nfy_meeting" ? t("Saada e-kiri, kui minu kohtumist muudetakse") : t("Saada e-kiri, kui minu toimetust muudetakse"),
+				);
+				break;
+
 			case "link_to_p":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
@@ -385,7 +397,7 @@ class user extends class_base
 			case "history_has_folders":
 				$_SESSION["user_history_has_folders"] = $arr["obj_inst"]->prop("history_has_folders");
 				break;
-			
+
 			case "settings_shortcuts_shortcut_sets":
 				$this->_get_settings_shortcuts_shortcut_sets($arr);
 				break;
@@ -516,11 +528,11 @@ class user extends class_base
 		$prop = & $arr["prop"];
 		$ou = obj(aw_global_get("uid_oid")); // temp
 		$p = get_current_person();
-		
+
 		$ol = new object_list(array(
 			"class_id" => CL_SHORTCUT_SET,
 		));
-		
+
 		$a_shortcut_sets = array();
 		$i = 0;
 		for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next())
@@ -530,7 +542,7 @@ class user extends class_base
 				$ou->set_prop("settings_shortcuts_shortcut_sets", $o->id());
 				$ou->save();
 			}
-			
+
 			$a_shortcut_sets[$o->id()] = html::href(array(
 				"url" => $this->mk_my_orb("change", array(
 					"id" => $o->id(),
@@ -540,18 +552,18 @@ class user extends class_base
 				));
 			$i++;
 		}
-		
+
 		$prop["options"] = $a_shortcut_sets;
 	}
-	
+
 	function _get_settings_shortcuts_settings_shortcuts($arr)
 	{
 		$prop = & $arr["prop"];
 		$t =& $this->_start_shortcuts_table();
 		$o = $arr["obj_inst"];
-		
+
 		$o_shortcut_set = obj($o->prop("settings_shortcuts_shortcut_sets"));
-		
+
 		$conns = $o_shortcut_set->connections_from(array(
 			"type" => "RELTYPE_SHORTCUT"
 		));
@@ -570,15 +582,15 @@ class user extends class_base
 			$data["keycombo"] = $o_shortcut->prop("keycombo");
 			$t->define_data($data);
 		}
-		
+
 		$t->set_default_sortby("keycombo");
 		$t->sort_by();
-		
+
 		$prop["value"] = $t->draw();
 	}
-	
-	
-	
+
+
+
 	function &_start_shortcuts_table()
 	{
 		load_vcl("table");
@@ -589,7 +601,7 @@ class user extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
-		
+
 		$t->define_field(array(
 			"name" => "keycombo",
 			"caption" => t("Shortcut"),
@@ -598,7 +610,7 @@ class user extends class_base
 
 		return $t;
 	}
-	
+
 	function _get_group_membership($o, $id)
 	{
 		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
@@ -663,7 +675,7 @@ class user extends class_base
 
 		// get a list of all groups, so we can throw out the dynamic groups
 		$gl = get_instance(CL_GROUP)->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
-		
+
 
 		// now, go over both lists and get rid of the dyn groups
 		$_member = array();
@@ -2004,7 +2016,7 @@ class user extends class_base
 						"type" => "RELTYPE_GRP",
 					))
 				);
-			}			
+			}
 		}
 		return $groups_list;
 	}
