@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.28 2009/01/16 11:37:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.29 2009/01/16 13:17:35 instrumental Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -23,90 +23,90 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON_WORK_RELA
 	@classinfo no_status=1 no_comment=1
 
 	@default group=udef_fields
-	
+
 	@property udef_txbox1 type=textbox field=meta method=serialize
 	@caption Textbox 1
-	
+
 	@property udef_txbox2 type=textbox field=meta method=serialize
 	@caption Textbox 2
-	
+
 	@property udef_txbox3 type=textbox field=meta method=serialize
 	@caption Textbox 3
-	
+
 	@property udef_txbox4 type=textbox field=meta method=serialize
 	@caption Textbox 4
-	
+
 	@property udef_txbox5 type=textbox field=meta method=serialize
 	@caption Textbox 5
-	
+
 	@property udef_txbox6 type=textbox field=meta method=serialize
 	@caption Textbox 6
-	
+
 	@property udef_txbox7 type=textbox field=meta method=serialize
 	@caption Textbox 7
-	
+
 	@property udef_txbox8 type=textbox field=meta method=serialize
 	@caption Textbox 8
-	
+
 	@property udef_txbox9 type=textbox field=meta method=serialize
 	@caption Textbox 9
-	
+
 	@property udef_txbox10 type=textbox field=meta method=serialize
 	@caption Textbox 10
-	
+
 	@property udef_txarea1 type=textarea field=meta method=serialize
 	@caption Textarea 1
-	
+
 	@property udef_txarea2 type=textarea field=meta method=serialize
 	@caption Textarea 2
-	
+
 	@property udef_txarea3 type=textarea field=meta method=serialize
 	@caption Textarea 3
-	
+
 	@property udef_txarea4 type=textarea field=meta method=serialize
 	@caption Textarea 4
-	
+
 	@property udef_txarea5 type=textarea field=meta method=serialize
 	@caption Textarea 5
-	
+
 	@property udef_checkbox1 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Checkbox 1
-	
+
 	@property udef_checkbox2 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Checkbox 2
-	
+
 	@property udef_checkbox3 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Checkbox 3
-	
+
 	@property udef_checkbox4 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Checkbox 4
-	
+
 	@property udef_checkbox5 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Checkbox 5
-	
+
 	@property udef_classificator1 type=classificator field=meta method=serialize
 	@caption Klassifikaator 1
-	
+
 	@property udef_classificator2 type=classificator field=meta method=serialize
 	@caption Klassifikaator 2
-	
+
 	@property udef_classificator3 type=classificator field=meta method=serialize
 	@caption Klassifikaator 3
-	
+
 	@property udef_classificator4 type=classificator field=meta method=serialize
 	@caption Klassifikaator 4
-	
+
 	@property udef_classificator5 type=classificator field=meta method=serialize
 	@caption Klassifikaator 5
 
 	@property udef_date1 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 1
-	
+
 	@property udef_date2 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 2
-	
+
 	@groupinfo udef_fields caption="Muud v&auml;ljad"
-	
+
 	@tableinfo ml_users index=id master_table=objects master_index=oid
 
 @reltype BELONGTO value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON,CL_CRM_PERSON_WORK_RELATION
@@ -136,14 +136,14 @@ class ml_member extends class_base
 		}
 	}*/
 
-	
+
 	////
 	// email(string) - email addy
 	// folder(string) - id of the folder to check
 	function check_member($args = array())
 	{
 		$this->quote($args);
-		extract($args); 
+		extract($args);
 		$ol = new object_list(array(
 			"class_id" => CL_ML_MEMBER,
 			"mail" => $email,
@@ -169,8 +169,7 @@ class ml_member extends class_base
 	// list_id - id of the list to use for subscribing
 	function subscribe_member_to_list($args = array())
 	{
-
-		// it would be _really_, _really_ nice if I could init 
+		// it would be _really_, _really_ nice if I could init
 		// the data from the class_base, but it's not yet possible
 		$this->quote($args);
 		$name = $args["name"];
@@ -185,25 +184,25 @@ class ml_member extends class_base
 		$user_folder = $list_obj->prop("def_user_folder");
 
 		$section = aw_global_get("section");
-		
+
 		if (empty($user_folder))
 		{
 			return $this->cfg["baseurl"] . "/" . $section;
 		};
 
 		$status = 2;
-		
+
 		// I need to validate that stuff as well
 		if ($list_obj->prop("confirm_subscribe") != "")
 		{
 			// generate the confirm code
-			$status = 1; 
+			$status = 1;
 			$ts = time();
 			$hash = substr(gen_uniq_id(),0,15);
 			// now I need to generate the confirm url
 			$url = $this->mk_my_orb("confirmsub",array("hash" => $hash,"addr" => $email));
 		};
-			
+
 		$objname = $name . " <" . $email . ">";
 
 		if (sizeof($args["use_folders"]) > 0)
@@ -239,12 +238,12 @@ class ml_member extends class_base
 				$member_obj->set_prop("name",$name);
 				$member_obj->set_prop("mail",$email);
 
-	
+
 	$member_obj->set_meta("name",$name);
 				$member_obj->set_meta("email",$email);
 				$member_obj->set_meta("hash",$hash);
 				$member_obj->set_meta("time",$ts);
-				
+
 				if(is_array($args["udef_fields"]["textboxes"]))
 				{
 					foreach($args["udef_fields"]["textboxes"] as $key => $value)
@@ -252,7 +251,7 @@ class ml_member extends class_base
 						$member_obj->set_prop("udef_txbox$key", $value);
 					}
 				}
-				
+
 				if(is_array($args["udef_fields"]["textareas"]))
 				{
 					foreach($args["udef_fields"]["textareas"] as $key => $value)
@@ -260,7 +259,7 @@ class ml_member extends class_base
 						$member_obj->set_prop("udef_txarea$key", $value);
 					}
 				}
-				
+
 				if(is_array($args["udef_fields"]["checkboxes"]))
 				{
 					foreach($args["udef_fields"]["checkboxes"] as $key => $value)
@@ -268,7 +267,7 @@ class ml_member extends class_base
 						$member_obj->set_prop("udef_checkbox$key", $value);
 					}
 				}
-				
+
 				if(is_array($args["udef_fields"]["classificators"]))
 				{
 					foreach($args["udef_fields"]["classificators"] as $key => $value)
@@ -276,19 +275,18 @@ class ml_member extends class_base
 						$member_obj->set_prop("udef_classificator$key", $value);
 					}
 				}
-				
+
 				$tmp_time = strtotime($args["udef_fields"]["date1"]["year"]."-".$args["udef_fields"]["date1"]["month"]."-".$args["udef_fields"]["date1"]["day"]);
 				$member_obj->set_prop("udef_date1", $tmp_time);
-						
 				$member_obj->save();
-		
+
 				$added = true;
 			}
 		}
 
 		$confirm_subscribe = $list_obj->prop("confirm_subscribe");
 		$confirm_subscribe_msg = $list_obj->prop("confirm_subscribe_msg");
-		
+
 		if ($added && $confirm_subscribe > 0 && $confirm_subscribe_msg > 0)
 		{
 			// now generate and send the bloody message
@@ -341,7 +339,7 @@ class ml_member extends class_base
 				};
 			}
 		}
-		else 
+		else
 		{
 			$check = $this->check_member(array(
 				"email" => $email,
@@ -351,7 +349,7 @@ class ml_member extends class_base
 			{
 				$check->delete();
 			};
-		}	
+		}
 		return isset($args["ret_status"]) ? $check : $this->cfg["baseurl"] . "/" . $section;
 	}
 
@@ -399,7 +397,7 @@ class ml_member extends class_base
 		{
 			$arr["obj_inst"]->set_name($request["mail"]);
 		}
-	}		
+	}
 
 	function parse_alias($arr)
 	{
