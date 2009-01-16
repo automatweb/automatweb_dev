@@ -612,6 +612,11 @@
                   <clid>CL_BUG</clid>
                   <caption>Bugi</caption>
             </BUG>
+            <PROJECT>
+                  <value>17</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
       </reltypes>
       <layout>
             <main_split>

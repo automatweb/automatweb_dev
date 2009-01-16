@@ -244,6 +244,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @reltype BUG value=16 clid=CL_BUG
 @caption Bugi
+
+@reltype PROJECT value=17 clid=CL_PROJECT
+@caption Projekt
 */
 
 define("BILL_SUM", 1);
