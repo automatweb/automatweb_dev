@@ -284,6 +284,14 @@ class crm_bill extends class_base
 		}
 	}
 
+	function callback_post_save($arr)
+	{
+		if($this->can("view" , $arr["request"]["project"]))
+		{
+			$arr["obj_inst"]->set_project($arr["request"]["project"]);
+		}
+	}
+
 	function get_bill_cust_data_object($bill)
 	{
 		if(!is_object($bill))
@@ -931,6 +939,10 @@ class crm_bill extends class_base
 		$arr["reconcile_price"] = -1;
 		$arr["new_payment"] = "";
 		$arr["add_dn"] = 0;
+		if($_GET["project"])
+		{
+			$arr["project"] = $_GET["project"];
+		}
 	}
 
 	function _dn_tb($arr)
@@ -3524,6 +3536,11 @@ class crm_bill extends class_base
 	{
 		if($nr < 0) return 0;
 		else return $nr;
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["project"] = $arr["request"]["project"];
 	}
 
 	function callback_mod_tab($arr)

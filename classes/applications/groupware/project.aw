@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.136 2009/01/16 18:20:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.137 2009/01/16 19:15:06 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -848,6 +848,10 @@ class project extends class_base
 
 			case "goal_tree":
 				$this->_goal_tree($arr);
+				break;
+
+			case "work_list":
+				$this->_get_work_list($arr);
 				break;
 
 			case "bills_tb":
@@ -3357,6 +3361,101 @@ class project extends class_base
 				"project" => $arr["obj_inst"]->id(),
 			))
 		));
+	}
+
+	function _get_work_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"caption" => t("Juhtumi nimi"),
+			"name" => "name",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Tunde"),
+			"name" => "hrs",
+			"align" => "right",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Tunni hind"),
+			"name" => "hr_price",
+			"align" => "right",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Summa"),
+			"name" => "sum",
+			"align" => "right",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Arvele m&auml;&auml;ramise kuup&auml;ev"),
+			"name" => "set_date",
+			"align" => "right",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y"
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+
+		$rows = new object_list();
+		$sum = 0;
+		$hrs = 0;
+		$co_stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+		
+		$deal_tasks = $arr["obj_inst"]->get_billable_deal_tasks();
+		$deal_tasks_ids = $deal_tasks->ids();
+
+		foreach($deal_tasks->arr() as $deal_task)
+		{
+			$row = obj($deal_task);
+			$t->define_data(array(
+				"oid" => $row->id(),
+				"name" => $row->name(),
+				"sum" => $row->prop("deal_price").t("(Kokkuleppehind)").($row->prop("deal_has_tax") ? t("KMga") : ""),
+				"set_date" => $row->prop("to_bill_date"),
+			));
+			$sum += $row->prop("deal_price");
+			$hrs += $row->prop("deal_amt");
+		}
+
+		foreach($arr["obj_inst"]->get_billable_expenses()->arr() as $row)
+		{
+			$date = $row->prop("date");
+			$t->define_data(array(
+				"oid" => $row->id(),
+				"name" => $ro->name(),
+				"sum" => number_format(str_replace(",", ".", $row->prop("cost")),2),
+				"set_date" => mktime(0,0,0, $date["month"], $date["day"], $date["year"]),
+			));
+		}
+
+		foreach($arr["obj_inst"]->get_billable_rows()->arr() as $row)
+		{
+			if(!in_array($row->prop("task"), $deal_tasks_ids))
+			{
+				$t->define_data(array(
+					"oid" => $row->id(),
+					"name" => $row->prop("content"),
+					"hrs" => $co_stat_inst->hours_format($row->prop("time_to_cust")),
+					"hr_price" => number_format($this->task_hour_prices[$row->prop("task")],2),
+					"sum" => number_format(str_replace(",", ".", $row->prop("time_to_cust")) * $this->task_hour_prices[$row->prop("task")],2),
+					"set_date" => $row->prop("to_bill_date"),
+					"count" => html::hidden(array("name" => "count[".$row->prop("task")."]" , "value" => count($rs))),//mis jama see on?
+				));
+			}
+		}
 	}
 
 	function _goal_tree($arr)

@@ -5730,6 +5730,7 @@ class crm_company extends class_base
 					$bill->set_prop("customer", $cust->id());
 				}
 				$bill->set_prop("impl", $impl);
+				$bill->set_project($arr["proj"]);
 			}
 		}
 
@@ -5863,6 +5864,7 @@ class crm_company extends class_base
 				}
 
 				$task_o = obj($task);
+
 				$br = obj();
 				$br->set_class_id(CL_CRM_BILL_ROW);
 				$br->set_parent($bill->id());
@@ -5935,7 +5937,10 @@ class crm_company extends class_base
 			}
 
 			$task_o->save();
-
+			foreach($task_o->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+			{
+				$bill->set_project($c->prop("to"));
+			}
 			if($class_id == CL_TASK)
 			{
 				//kokkuleppehinna puhul tahaks nyyd ka muudele kuludele arve kylge

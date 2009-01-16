@@ -466,5 +466,64 @@ exit_function("project::_get_billable_bugs");
 		return $ol;
 	}
 
+	function get_billable_deal_tasks()
+	{
+//---------------------------------------------uuele systeemile ka vaja... osalustega projektidele
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK, CL_CRM_MEETING,CL_CRM_CALL),
+			"send_bill" => 1,
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
+			"deal_price" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK.RELTYPE_PROJECT" => $this->id(),
+					"CL_CRM_MEETING.RELTYPE_PROJECT" => $this->id(),
+					"CL_CRM_CALL.RELTYPE_PROJECT" => $this->id(),
+
+				)
+			)),
+		));
+		return $ol;
+	}
+
+	function get_billable_expenses()
+	{
+/*		$ol = new object_list(array(
+			"class_id" => CL_CRM_EXPENSE,
+			"send_bill" => 1,
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id"),
+			"deal_price" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+		));*/
+
+		//---------------------------suht vigane on kulude m2rkimine arvele... see yle vaadata
+		$ol = new object_list();
+		return $ol;
+	}
+
+
+	function get_billable_rows()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK_ROW.task(CL_TASK).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_BUG).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_CRM_MEETING).send_bill" => 1,
+					"CL_TASK_ROW.task(CL_CRM_CALL).send_bill" => 1,
+				)
+			)),
+			"CL_TASK_ROW.RELTYPE_PROJECT" => $this->id(),
+		));
+		return $ol;
+	}
+
 }
 ?>
